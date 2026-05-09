@@ -4,18 +4,14 @@ import SiteBuilder, { POS_PARTNERS } from '../services/site-builder.js';
 import ProspectPipeline from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
 import { getRegistryHealth } from '../services/env-registry-map.js'; // Added import for env-registry-map
-
 let _siteBuilder = null;
 let _prospectPipeline = null;
-
 async function notifySlack(event, businessName, detail = '') {
   const url = process.env.SLACK_WEBHOOK_URL;
   if (!url) return;
-
   const emoji = event === 'replied' ? '💬' : '👀';
   const label = event === 'replied' ? 'REPLIED to cold email' : 'VIEWED preview';
   const text = `${emoji} Warm lead alert — ${label}\nBusiness: ${businessName}\n${detail}`;
-
   try {
     await fetch(url, {
       method: 'POST',
@@ -26,7 +22,6 @@ async function notifySlack(event, businessName, detail = '') {
     // Slack notify is best-effort
   }
 }
-
 function getSiteBuilder({ ccm, baseUrl }) {
   if (!_siteBuilder) {
     _siteBuilder = new SiteBuilder({
@@ -37,11 +32,9 @@ function getSiteBuilder({ ccm, baseUrl }) {
   }
   return _siteBuilder;
 }
-
 function getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl }) {
   if (!_prospectPipeline) {
     const builder = getSiteBuilder({ ccm, baseUrl });
-
     // Build sendEmail adapter — prefer NotificationService (Postmark + suppression),
     // fall back to outreachAutomation, then log-only.
     let sendEmail;
@@ -58,7 +51,6 @@ function getProspectPipeline({ ccm, pool, outreachAutomation, notificationServic
         logger.info('[PROSPECT] Email (no sender configured)', { to, subject });
       };
     }
-
     _prospectPipeline = new ProspectPipeline({
       siteBuilder: builder,
       pool,
@@ -69,13 +61,11 @@ function getProspectPipeline({ ccm, pool, outreachAutomation, notificationServic
   }
   return _prospectPipeline;
 }
-
 /**
  * Register siteBld routes on the Express app. Also registers static file serving for /previews/.
  */
 export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachAutomation, notificationService } = {}) {
   const router = Router();
-
   const buildLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 10, // max 10 site builds per IP per hour
@@ -83,7 +73,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
     standardHeaders: true,
     legacyHeaders: false,
   });
-
   const prospectLimiter = rateLimit({
     windowMs: 60 * 60 * 1000,
     max: 50, // max 50 prospects per IP per hour
@@ -91,7 +80,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
     standardHeaders: true,
     legacyHeaders: false,
   });
-
   // Serve preview sites statically at /previews/*
   app.use('/previews', async (req, res, next) => {
     const { default: path } = await import('path');
@@ -100,7 +88,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       if (err) next();
     });
   });
-
   /**
    * POST /api/v1/sites/build
    * Build a new site from a business URL.
@@ -108,20 +95,18 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
    */
   router.post('/build', rk, buildLimiter, async (req, res) => {
     try {
-      const { url, businessUrl, businessInfo } = body;
+      const { url, businessUrl, businessInfo } = req.body;
       const targetUrl = url || businessUrl;
-      if (!targetUrl) return j400({ ok: false, error: 'url or businessUrl is required' });
-
+      if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
       logger.info('[SITE] Build request', { url: targetUrl });
       const builder = getSiteBuilder({ ccm, baseUrl });
       const result = await builder.buildFromUrl(targetUrl, { businessInfo });
       res.json({ ok: result.success, ...result });
     } catch (err) {
       logger.error('[SITE] Build error', { error: err.message });
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * POST /api/v1/sites/prospect
    * Build a mock site for a prospect + send cold outreach email.
@@ -129,9 +114,8 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
    */
   router.post('/prospect', rk, prospectLimiter, async (req, res) => {
     try {
-      const { businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo } = body;
-      if (!businessUrl) return j400({ ok: false, error: 'businessUrl is required' });
-
+      const { businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo } = req.body;
+      if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
       logger.info('[SITE] Prospect request', { businessUrl, contactEmail });
       const pipeline = getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl });
       const result = await pipeline.processProspect({
@@ -145,10 +129,9 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       res.json({ ok: result.success, ...result });
     } catch (err) {
       logger.error('[SITE] Prospect pipeline error', { error: err.message });
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * POST /api/v1/sites/bulk-prospect
    * Process multiple prospects in batch.
@@ -156,10 +139,9 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
    */
   router.post('/bulk-prospect', rk, prospectLimiter, async (req, res) => {
     try {
-      const { prospects = [] } = body;
-      if (!prospects.length) return j400({ ok: false, error: 'prospects array required' });
-      if (prospects.length > 20) return j400({ ok: false, error: 'Max 20 prospects per batch' });
-
+      const { prospects = [] } = req.body;
+      if (!prospects.length) return res.status(400).json({ ok: false, error: 'prospects array required' });
+      if (prospects.length > 20) return res.status(400).json({ ok: false, error: 'Max 20 prospects per batch' });
       logger.info('[SITE] Bulk prospect request', { count: prospects.length });
       const pipeline = getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl });
       const results = [];
@@ -167,7 +149,7 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
         const result = await pipeline.processProspect(prospect);
         results.push(result);
       }
-      jok({
+      res.json({
         total: prospects.length,
         succeeded: results.filter(r => r.success).length,
         failed: prospects.length - results.filter(r => r.success).length,
@@ -175,10 +157,9 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       });
     } catch (err) {
       logger.error('[SITE] Bulk prospect error', { error: err.message });
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * POST /api/v1/sites/analyze
    * Score a prospect's EXISTING website to determine outreach priority.
@@ -186,19 +167,17 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
    */
   router.post('/analyze', rk, async (req, res) => {
     try {
-      const { businessUrl, url } = body;
+      const { businessUrl, url } = req.body;
       const targetUrl = businessUrl || url;
-      if (!targetUrl) return j400({ ok: false, error: 'businessUrl is required' });
-
+      if (!targetUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
       const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
       const result = await scoreProspectUrl(targetUrl);
-      jok({ ...result });
+      res.json({ ...result });
     } catch (err) {
       logger.error('[SITE] Analyze error', { error: err.message });
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * GET /api/v1/sites/previews
    * List all built preview sites.
@@ -207,12 +186,11 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
     try {
       const builder = getSiteBuilder({ ccm, baseUrl });
       const previews = await builder.listPreviews();
-      jok({ count: previews.length, previews });
+      res.json({ count: previews.length, previews });
     } catch (err) {
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * GET /api/v1/sites/prospects
    * List all prospects in DB.
@@ -220,13 +198,29 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
   router.get('/prospects', rk, async (req, res) => {
     try {
       const pipeline = getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl });
-      const prospects = await pipeline.listProspects(Number(qry.limit) || 100);
-      jok({ count: prospects.length, prospects });
+      const prospects = await pipeline.listProspects(Number(req.query.limit) || 100);
+      res.json({ count: prospects.length, prospects });
     } catch (err) {
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
+  /**
+   * GET /api/v1/sites/prospects/:clientId
+   * Returns single prospect detail with full metadata + qualityReport
+   */
+  router.get('/prospects/:clientId', rk, async (req, res) => {
+    try {
+      const { clientId } = req.params;
+      if (!clientId) return res.status(400).json({ ok: false, error: 'clientId required' });
+      const pipeline = getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl });
+      const prospect = await pipeline.getProspect(clientId);
+      if (!prospect) return res.status(404).json({ ok: false, error: 'Prospect not found' });
+      res.json({ ok: true, prospect });
+    } catch (err) {
+      logger.error('[SITE] Get prospect error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
   /**
    * PATCH /api/v1/sites/prospects/:clientId/status
    * Update prospect status (e.g. mark as converted).
@@ -234,54 +228,51 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
    */
   router.patch('/prospects/:clientId/status', rk, async (req, res) => {
     try {
-      const { clientId } = prm;
-      const { status, dealValue } = body;
-      await pq(
-        `UPDATE prospect_sites SET status = $1, deal_value = COALESCE($2, deal_value) WHERE client_id = $3`,
+      const { clientId } = req.params;
+      const { status, dealValue } = req.body;
+      await pool.query(
+        `UPDATE prospect_sites SET status = $1, deal_value = COALESCE($2, deal_value), updated_at = NOW() WHERE client_id = $3`,
         [status, dealValue || null, clientId]
       );
-      jok({ clientId, status });
+      res.json({ ok: true, clientId, status });
     } catch (err) {
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * POST /api/v1/sites/follow-up
    * Send follow-up email to a prospect.
    */
   router.post('/follow-up', rk, async (req, res) => {
     try {
-      const { clientId, followUpNumber = 2 } = body;
-      if (!clientId) return j400({ ok: false, error: 'clientId required' });
-
+      const { clientId, followUpNumber = 2 } = req.body;
+      if (!clientId) return res.status(400).json({ ok: false, error: 'clientId required' });
       const pipeline = getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl });
-      await pipeline.sendFollowUp(clientId, followUpNumber);
-      jok({ clientId, followUpNumber });
+      const result = await pipeline.sendFollowUp(clientId, followUpNumber);
+      if (!result.success) return res.status(500).json({ ok: false, error: result.error });
+      res.json({ ok: true, clientId, followUpNumber });
     } catch (err) {
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * GET /api/v1/sites/pos-partners
    * List POS commission partner names.
    */
   router.get('/pos-partners', rk, async (req, res) => {
     try {
-      jok({ partners: POS_PARTNERS });
+      res.json({ partners: POS_PARTNERS });
     } catch (err) {
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * GET /api/v1/sites/dashboard
    * Pipeline stats (total, built, qa_hold, sent, viewed, replied, converted, total_revenue).
    */
   router.get('/dashboard', rk, async (req, res) => {
     try {
-      const { rows } = await pq(`
+      const { rows } = await pool.query(`
         SELECT
           COUNT(*) FILTER (WHERE status = 'qa_hold') AS qa_hold,
           COUNT(*) FILTER (WHERE status = 'built') AS built,
@@ -295,15 +286,41 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
         FROM prospect_sites
       `);
       const stats = rows[0];
-      jok({ pipeline: stats });
+      res.json({ ok: true, pipeline: stats });
     } catch (err) {
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
+  /**
+   * GET /api/v1/sites/pipeline-report
+   * JSON pipeline summary for the command center.
+   * Returns discovered prospects, outreach sent, viewed, replied, converted, and revenue totals.
+   */
+  router.get('/pipeline-report', rk, async (req, res) => {
+    try {
+      const { rows } = await pool.query(`
+        SELECT
+          COUNT(*) FILTER (WHERE status = 'qa_hold') AS qa_hold,
+          COUNT(*) FILTER (WHERE status = 'built') AS built,
+          COUNT(*) FILTER (WHERE status = 'sent') AS sent,
+          COUNT(*) FILTER (WHERE status = 'viewed') AS viewed,
+          COUNT(*) FILTER (WHERE status = 'replied') AS replied,
+          COUNT(*) FILTER (WHERE status = 'converted') AS converted,
+          COUNT(*) FILTER (WHERE status = 'lost') AS lost,
+          COALESCE(SUM(deal_value) FILTER (WHERE status = 'converted'), 0) AS total_revenue,
+          COUNT(*) AS total
+        FROM prospect_sites
+      `);
+      const stats = rows[0];
+      res.json({ ok: true, pipeline: stats });
+    } catch (err) {
+      logger.error('[SITE] Pipeline report error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
   /**
    * GET /api/v1/sites/launch-readiness
-   * Returns GO/NO-GO truth for Site Builder based on environment variable configuration.
+   * Returns GO/NO-GO truth for Site Builder based on envVar configuration.
    */
   router.get('/launch-readiness', rk, async (req, res) => {
     try {
@@ -311,8 +328,7 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       const missingNeeded = healthReport.missingNeeded.map(v => v.name);
       const revenueBlockers = healthReport.revenueBlockers.map(v => v.name);
       const ready = healthReport.summary.healthy;
-
-      jok({
+      res.json({
         ready,
         missing_needed: missingNeeded,
         revenue_blockers: revenueBlockers,
@@ -320,10 +336,9 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       });
     } catch (err) {
       logger.error('[SITE] Launch readiness error', { error: err.message });
-      j500({ ok: false, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * GET /api/v1/sites/preview-view
    * Tracking pixel — called by generated preview sites when a prospect opens them.
@@ -331,4 +346,34 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
    * Updates prospect status to 'viewed' if currently 'sent'.
    */
   router.get('/preview-view', async (req, res) => {
-    const { id } = qry;
+    const { id } = req.query;
+    if (!id) return res.status(400).json({ ok: false, error: 'id is required' });
+    try {
+      const { rows } = await pool.query(
+        `UPDATE prospect_sites
+         SET status = 'viewed', last_viewed_at = NOW(), updated_at = NOW()
+         WHERE client_id = $1 AND status = 'sent'
+         RETURNING business_name`,
+        [id]
+      );
+      if (rows.length > 0) {
+        logger.info('[SITE] Prospect viewed preview', { clientId: id, businessName: rows[0].business_name });
+        notifySlack('viewed', rows[0].business_name, `Preview URL: ${baseUrl}/previews/${id}/index.html`);
+      }
+      // Return a 1x1 transparent pixel
+      res.writeHead(200, {
+        'Content-Type': 'image/gif',
+        'Content-Length': '43',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      });
+      res.end(Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64'));
+    } catch (err) {
+      logger.error('[SITE] Preview view tracking error', { clientId: id, error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+  /**
+   * POST /api/v1/sites/postmark-webhook
+   *
