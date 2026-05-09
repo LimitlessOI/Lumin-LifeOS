@@ -434,7 +434,7 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
                 id
                 status
                 createdAt
-                meta { commitHash commitMessage commitAuthor branch }
+                meta
                 url
               }
             }
@@ -468,7 +468,7 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
                 id
                 status
                 createdAt
-                meta { commitHash commitMessage commitAuthor branch }
+                meta
                 url
               }
             }
