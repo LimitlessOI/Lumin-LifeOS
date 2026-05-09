@@ -2,354 +2,378 @@
   let _container = null;
   let _user = null;
   let _commandKey = null;
-  let _abortController = null;
-  let _prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const API_BASE = '/api/v1/lifeos/commitments';
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function getCommandKey() {
-    return _commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
-  }
-
-  function createEl(tag, classes = [], attributes = {}, textContent = '') {
+  function createElement(tag, classes = [], attributes = {}, textContent = '') {
     const el = document.createElement(tag);
-    if (classes.length) el.classList.add(...classes);
+    if (classes.length) {
+      el.className = classes.join(' ');
+    }
     for (const key in attributes) {
       el.setAttribute(key, attributes[key]);
     }
-    if (textContent) el.textContent = textContent;
+    if (textContent) {
+      el.textContent = textContent;
+    }
     return el;
   }
 
-  function renderSkeleton() {
-    if (!_container) return;
-    _container.innerHTML = '';
-    _container.style.setProperty('background-color', 'var(--dash-surface)');
-    _container.style.setProperty('color', 'var(--dash-text)');
-    _container.style.setProperty('border', '1px solid var(--dash-border)');
-    _container.style.setProperty('border-radius', 'var(--dash-radius-lg)');
-    _container.style.setProperty('padding', 'calc(2 * var(--dash-space-unit))');
-    _container.style.setProperty('display', 'flex');
-    _container.style.setProperty('flex-direction', 'column');
-    _container.style.setProperty('gap', 'var(--dash-space-unit)');
+  function clearContainer() {
+    if (_container) {
+      _container.innerHTML = '';
+    }
+  }
 
-    const header = createEl('div', ['mit-widget-header']);
-    header.style.setProperty('display', 'flex');
-    header.style.setProperty('justify-content', 'space-between');
-    header.style.setProperty('align-items', 'center');
-    header.style.setProperty('margin-bottom', 'var(--dash-space-unit)');
+  function renderLoading() {
+    clearContainer();
+    const widget = createElement('div', ['lifeos-mit-widget'], {
+      style: `
+        background-color: var(--dash-surface, #111118);
+        color: var(--dash-text, #e8e8f0);
+        border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+        padding: 16px;
+        border-radius: var(--dash-radius-lg, 14px);
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-sizing: border-box;
+      `
+    });
+    widget.appendChild(createElement('h3', [], {
+      style: `
+        margin: 0 0 10px 0;
+        font-size: 1.2em;
+        color: var(--dash-text, #e8e8f0);
+      `
+    }, 'Today\'s MITs'));
 
-    const title = createEl('h3', [], {}, 'Today\'s MITs');
-    title.style.setProperty('margin', '0');
-    title.style.setProperty('font-size', '1.1em');
-    header.appendChild(title);
-
-    const countBadge = createEl('span', ['mit-count-badge']);
-    countBadge.style.setProperty('background-color', 'var(--dash-accent)');
-    countBadge.style.setProperty('color', 'var(--dash-text)');
-    countBadge.style.setProperty('padding', '2px 8px');
-    countBadge.style.setProperty('border-radius', '10px');
-    countBadge.style.setProperty('font-size', '0.8em');
-    countBadge.textContent = '.../...';
-    header.appendChild(countBadge);
-    _container.appendChild(header);
-
-    const list = createEl('ul', ['mit-list']);
-    list.style.setProperty('list-style', 'none');
-    list.style.setProperty('padding', '0');
-    list.style.setProperty('margin', '0');
-    _container.appendChild(list);
+    const loadingList = createElement('ul', [], {
+      style: `
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      `
+    });
 
     for (let i = 0; i < 3; i++) {
-      const listItem = createEl('li', ['mit-item', 'skeleton']);
-      listItem.style.setProperty('display', 'flex');
-      listItem.style.setProperty('align-items', 'center');
-      listItem.style.setProperty('gap', 'calc(1 * var(--dash-space-unit))');
-      listItem.style.setProperty('padding', 'calc(0.5 * var(--dash-space-unit)) 0');
-      listItem.style.setProperty('border-bottom', '1px solid var(--dash-border)');
-
-      const checkbox = createEl('div', ['skeleton-checkbox']);
-      checkbox.style.setProperty('width', '18px');
-      checkbox.style.setProperty('height', '18px');
-      checkbox.style.setProperty('border-radius', '4px');
-      checkbox.style.setProperty('background-color', 'var(--dash-muted)');
+      const listItem = createElement('li', [], {
+        style: `
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 0;
+          border-bottom: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+        `
+      });
+      const checkbox = createElement('div', ['skeleton-checkbox'], {
+        style: `
+          width: 18px;
+          height: 18px;
+          border: 1px solid var(--dash-muted, #555566);
+          border-radius: 4px;
+          background-color: var(--dash-muted, #555566);
+          ${prefersReducedMotion ? '' : 'animation: pulse 1.5s infinite ease-in-out;'}
+        `
+      });
+      const textLine = createElement('div', ['skeleton-text'], {
+        style: `
+          flex-grow: 1;
+          height: 1em;
+          background-color: var(--dash-muted, #555566);
+          border-radius: 4px;
+          width: ${70 + Math.random() * 20}%; /* Random width for visual variety */
+          ${prefersReducedMotion ? '' : 'animation: pulse 1.5s infinite ease-in-out;'}
+        `
+      });
       listItem.appendChild(checkbox);
-
-      const text = createEl('div', ['skeleton-text']);
-      text.style.setProperty('flex-grow', '1');
-      text.style.setProperty('height', '1em');
-      text.style.setProperty('background-color', 'var(--dash-muted)');
-      text.style.setProperty('border-radius', '4px');
-      text.style.setProperty('width', `${70 + Math.random() * 20}%`); // Vary width
-      listItem.appendChild(text);
-      list.appendChild(listItem);
+      listItem.appendChild(textLine);
+      loadingList.appendChild(listItem);
     }
+    widget.appendChild(loadingList);
 
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes pulse-skeleton {
-        0% { opacity: 0.6; }
-        50% { opacity: 1; }
-        100% { opacity: 0.6; }
-      }
-      .mit-item.skeleton > div {
-        animation: pulse-skeleton 1.5s infinite ease-in-out;
-      }
-      .mit-item.skeleton:nth-child(2) > div { animation-delay: 0.1s; }
-      .mit-item.skeleton:nth-child(3) > div { animation-delay: 0.2s; }
-    `;
-    _container.appendChild(style);
-  }
-
-  async function handleTaskCompletion(event) {
-    const checkbox = event.target;
-    const taskId = checkbox.dataset.taskId;
-    const isChecked = checkbox.checked;
-
-    // Optimistic UI update
-    const listItem = checkbox.closest('.mit-item');
-    if (listItem) {
-      listItem.classList.toggle('completed', isChecked);
-      const titleEl = listItem.querySelector('.mit-title');
-      if (titleEl) {
-        titleEl.style.textDecoration = isChecked ? 'line-through' : 'none';
-        titleEl.style.opacity = isChecked ? '0.6' : '1';
-      }
-    }
-
-    const currentCommandKey = getCommandKey();
-    if (!currentCommandKey) {
-      console.error('Command key is missing for task completion.');
-      checkbox.checked = !isChecked; // Revert UI
-      if (listItem) {
-        listItem.classList.toggle('completed', !isChecked);
-        const titleEl = listItem.querySelector('.mit-title');
-        if (titleEl) {
-          titleEl.style.textDecoration = !isChecked ? 'line-through' : 'none';
-          titleEl.style.opacity = !isChecked ? '0.6' : '1';
+    if (!prefersReducedMotion) {
+      const styleEl = document.createElement('style');
+      styleEl.textContent = `
+        @keyframes pulse {
+          0% { opacity: 0.6; }
+          50% { opacity: 1; }
+          100% { opacity: 0.6; }
         }
-      }
-      return;
+      `;
+      document.head.appendChild(styleEl);
     }
 
-    try {
-      const response = await fetch(`${API_BASE}/${taskId}/complete`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${currentCommandKey}`
-        },
-        body: JSON.stringify({ completed: isChecked })
-      });
+    _container.appendChild(widget);
+  }
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  function renderEmpty() {
+    clearContainer();
+    const widget = createElement('div', ['lifeos-mit-widget'], {
+      style: `
+        background-color: var(--dash-surface, #111118);
+        color: var(--dash-text, #e8e8f0);
+        border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+        padding: 16px;
+        border-radius: var(--dash-radius-lg, 14px);
+        font-family: sans-serif;
+        text-align: center;
+        box-sizing: border-box;
+      `
+    });
+    widget.appendChild(createElement('h3', [], {
+      style: `
+        margin: 0 0 10px 0;
+        font-size: 1.2em;
+        color: var(--dash-text, #e8e8f0);
+      `
+    }, 'Today\'s MITs'));
+    widget.appendChild(createElement('p', [], {
+      style: `
+        color: var(--dash-muted, #555566);
+        margin-top: 15px;
+      `
+    }, 'No MITs set — add one in Commitments'));
+    _container.appendChild(widget);
+  }
 
-      // Re-fetch to ensure count is accurate and list is up-to-date
-      // Or, more simply, just update the count badge if the API confirms success
-      refresh();
+  function renderError(retryCallback) {
+    clearContainer();
+    const widget = createElement('div', ['lifeos-mit-widget'], {
+      style: `
+        background-color: var(--dash-surface, #111118);
+        color: var(--dash-text, #e8e8f0);
+        border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+        padding: 16px;
+        border-radius: var(--dash-radius-lg, 14px);
+        font-family: sans-serif;
+        text-align: center;
+        box-sizing: border-box;
+      `
+    });
+    widget.appendChild(createElement('h3', [], {
+      style: `
+        margin: 0 0 10px 0;
+        font-size: 1.2em;
+        color: var(--dash-text, #e8e8f0);
+      `
+    }, 'Today\'s MITs'));
+    widget.appendChild(createElement('p', [], {
+      style: `
+        color: var(--dash-muted, #555566);
+        margin-top: 15px;
+      `
+    }, 'Could not load tasks'));
+    const retryButton = createElement('button', [], {
+      style: `
+        background-color: var(--dash-accent, #5b6af5);
+        color: var(--dash-text, #e8e8f0);
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+        font-size: 0.9em;
+      `
+    }, 'Retry');
+    retryButton.addEventListener('click', retryCallback);
+    widget.appendChild(retryButton);
+    _container.appendChild(widget);
+  }
 
-    } catch (error) {
-      console.error('Failed to update task completion status:', error);
-      // Revert UI on error
-      checkbox.checked = !isChecked;
-      if (listItem) {
-        listItem.classList.toggle('completed', !isChecked);
-        const titleEl = listItem.querySelector('.mit-title');
-        if (titleEl) {
-          titleEl.style.textDecoration = !isChecked ? 'line-through' : 'none';
-          titleEl.style.opacity = !isChecked ? '0.6' : '1';
-        }
-      }
-      // Optionally show a temporary error message to the user
+  async function fetchMITs(user, commandKey) {
+    if (!user || !commandKey) {
+      throw new Error('User handle or command key is missing.');
+    }
+    const url = `${API_BASE}?user=${encodeURIComponent(user)}&status=active&limit=5`;
+    const headers = {
+      'Authorization': `Bearer ${commandKey}`,
+      'Content-Type': 'application/json'
+    };
+
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async function completeMIT(id, commandKey) {
+    if (!id || !commandKey) {
+      throw new Error('Task ID or command key is missing.');
+    }
+    const url = `${API_BASE}/${encodeURIComponent(id)}/complete`;
+    const headers = {
+      'Authorization': `Bearer ${commandKey}`,
+      'Content-Type': 'application/json'
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: headers
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
   }
 
-  function renderErrorState() {
-    if (!_container) return;
-    _container.innerHTML = '';
-    _container.style.setProperty('background-color', 'var(--dash-surface)');
-    _container.style.setProperty('color', 'var(--dash-text)');
-    _container.style.setProperty('border', '1px solid var(--dash-border)');
-    _container.style.setProperty('border-radius', 'var(--dash-radius-lg)');
-    _container.style.setProperty('padding', 'calc(2 * var(--dash-space-unit))');
-    _container.style.setProperty('display', 'flex');
-    _container.style.setProperty('flex-direction', 'column');
-    _container.style.setProperty('align-items', 'center');
-    _container.style.setProperty('justify-content', 'center');
-    _container.style.setProperty('min-height', '120px');
+  function renderMITs(tasks) {
+    clearContainer();
+    const widget = createElement('div', ['lifeos-mit-widget'], {
+      style: `
+        background-color: var(--dash-surface, #111118);
+        color: var(--dash-text, #e8e8f0);
+        border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+        padding: 16px;
+        border-radius: var(--dash-radius-lg, 14px);
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-sizing: border-box;
+      `
+    });
 
-    const errorMessage = createEl('p', [], {}, 'Could not load tasks');
-    errorMessage.style.setProperty('margin-bottom', 'calc(1 * var(--dash-space-unit))');
-    _container.appendChild(errorMessage);
+    const header = createElement('div', [], {
+      style: `
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      `
+    });
+    header.appendChild(createElement('h3', [], {
+      style: `
+        margin: 0;
+        font-size: 1.2em;
+        color: var(--dash-text, #e8e8f0);
+      `
+    }, 'Today\'s MITs'));
 
-    const retryButton = createEl('button', ['mit-retry-button'], {}, 'Retry');
-    retryButton.style.setProperty('background-color', 'var(--dash-accent)');
-    retryButton.style.setProperty('color', 'var(--dash-text)');
-    retryButton.style.setProperty('border', 'none');
-    retryButton.style.setProperty('padding', 'calc(1 * var(--dash-space-unit)) calc(2 * var(--dash-space-unit))');
-    retryButton.style.setProperty('border-radius', 'var(--dash-radius-lg)');
-    retryButton.style.setProperty('cursor', 'pointer');
-    retryButton.style.setProperty('font-size', '0.9em');
-    retryButton.addEventListener('click', refresh);
-    _container.appendChild(retryButton);
-  }
+    const completedCount = tasks.filter(task => task.completed).length;
+    const totalCount = tasks.length;
+    const badge = createElement('span', ['mit-count-badge'], {
+      style: `
+        background-color: var(--dash-accent, #5b6af5);
+        color: var(--dash-text, #e8e8f0);
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        font-weight: bold;
+      `
+    }, `${completedCount}/${totalCount}`);
+    header.appendChild(badge);
+    widget.appendChild(header);
 
-  async function fetchAndRenderTasks() {
-    if (!_container || !_user) {
-      console.warn('MITs widget not mounted or user not set.');
-      return;
-    }
-
-    renderSkeleton(); // Show loading state
-
-    if (_abortController) {
-      _abortController.abort();
-    }
-    _abortController = new AbortController();
-    const { signal } = _abortController;
-
-    const currentCommandKey = getCommandKey();
-    if (!currentCommandKey) {
-      console.error('Command key is missing. Cannot fetch MITs.');
-      renderErrorState();
-      return;
-    }
-
-    try {
-      const url = `${API_BASE}?user=${encodeURIComponent(_user)}&status=active&limit=5`;
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${currentCommandKey}`
-        },
-        signal
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const tasks = await response.json();
-      renderTasks(tasks);
-
-    } catch (error) {
-      if (error.name === 'AbortError') {
-        console.log('Fetch aborted for MITs widget.');
-        return;
-      }
-      console.error('Failed to fetch MITs:', error);
-      renderErrorState();
-    }
-  }
-
-  function renderTasks(tasks) {
-    if (!_container) return;
-
-    _container.innerHTML = ''; // Clear skeleton/previous content
-
-    const header = createEl('div', ['mit-widget-header']);
-    header.style.setProperty('display', 'flex');
-    header.style.setProperty('justify-content', 'space-between');
-    header.style.setProperty('align-items', 'center');
-    header.style.setProperty('margin-bottom', 'calc(1 * var(--dash-space-unit))');
-
-    const title = createEl('h3', [], {}, 'Today\'s MITs');
-    title.style.setProperty('margin', '0');
-    title.style.setProperty('font-size', '1.1em');
-    header.appendChild(title);
-
-    const completedTasks = tasks.filter(task => task.status === 'completed').length;
-    const totalTasks = tasks.length;
-    const countBadge = createEl('span', ['mit-count-badge']);
-    countBadge.style.setProperty('background-color', 'var(--dash-accent)');
-    countBadge.style.setProperty('color', 'var(--dash-text)');
-    countBadge.style.setProperty('padding', '2px 8px');
-    countBadge.style.setProperty('border-radius', '10px');
-    countBadge.style.setProperty('font-size', '0.8em');
-    countBadge.textContent = `${completedTasks}/${totalTasks}`;
-    header.appendChild(countBadge);
-    _container.appendChild(header);
-
-    if (tasks.length === 0) {
-      const emptyState = createEl('p', ['mit-empty-state'], {}, 'No MITs set — add one in Commitments');
-      emptyState.style.setProperty('color', 'var(--dash-muted)');
-      emptyState.style.setProperty('text-align', 'center');
-      emptyState.style.setProperty('padding', 'calc(2 * var(--dash-space-unit))');
-      _container.appendChild(emptyState);
-      return;
-    }
-
-    const list = createEl('ul', ['mit-list']);
-    list.style.setProperty('list-style', 'none');
-    list.style.setProperty('padding', '0');
-    list.style.setProperty('margin', '0');
-    _container.appendChild(list);
+    const taskList = createElement('ul', [], {
+      style: `
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      `
+    });
 
     tasks.forEach(task => {
-      const listItem = createEl('li', ['mit-item']);
-      listItem.style.setProperty('display', 'flex');
-      listItem.style.setProperty('align-items', 'center');
-      listItem.style.setProperty('gap', 'calc(1 * var(--dash-space-unit))');
-      listItem.style.setProperty('padding', 'calc(0.5 * var(--dash-space-unit)) 0');
-      listItem.style.setProperty('border-bottom', '1px solid var(--dash-border)');
-      listItem.style.setProperty('transition', _prefersReducedMotion ? 'none' : 'opacity 0.3s ease');
-
-      const checkbox = createEl('input', ['mit-checkbox'], {
-        type: 'checkbox',
-        'data-task-id': task.id,
-        id: `mit-task-${task.id}`
+      const listItem = createElement('li', [], {
+        style: `
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 0;
+          border-bottom: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+          ${task.completed ? 'opacity: 0.7; text-decoration: line-through;' : ''}
+        `
       });
-      checkbox.checked = task.status === 'completed';
-      checkbox.style.setProperty('width', '18px');
-      checkbox.style.setProperty('height', '18px');
-      checkbox.style.setProperty('cursor', 'pointer');
-      checkbox.style.setProperty('accent-color', 'var(--dash-accent)'); // Use accent color for checkbox
-      checkbox.addEventListener('change', handleTaskCompletion);
-      listItem.appendChild(checkbox);
+      const checkbox = createElement('input', [], {
+        type: 'checkbox',
+        id: `mit-${task.id}`,
+        style: `
+          width: 18px;
+          height: 18px;
+          cursor: pointer;
+          accent-color: var(--dash-accent, #5b6af5);
+        `
+      });
+      checkbox.checked = task.completed;
+      checkbox.disabled = task.completed;
 
-      const titleLabel = createEl('label', ['mit-title'], { htmlFor: `mit-task-${task.id}` }, task.title);
-      titleLabel.style.setProperty('flex-grow', '1');
-      titleLabel.style.setProperty('font-size', '0.95em');
-      titleLabel.style.setProperty('cursor', 'pointer');
-      if (task.status === 'completed') {
-        titleLabel.style.setProperty('text-decoration', 'line-through');
-        titleLabel.style.setProperty('opacity', '0.6');
-      }
-      listItem.appendChild(titleLabel);
-      list.appendChild(listItem);
+      const label = createElement('label', [], {
+        for: `mit-${task.id}`,
+        style: `
+          flex-grow: 1;
+          cursor: ${task.completed ? 'default' : 'pointer'};
+          color: var(--dash-text, #e8e8f0);
+        `
+      }, task.title);
+
+      checkbox.addEventListener('change', async (e) => {
+        if (e.target.checked) {
+          e.target.disabled = true;
+          label.style.opacity = '0.7';
+          label.style.textDecoration = 'line-through';
+          try {
+            await completeMIT(task.id, _commandKey);
+            LifeOSWidgetMIT.refresh();
+          } catch (error) {
+            console.error('Failed to complete MIT:', error);
+            e.target.checked = false;
+            e.target.disabled = false;
+            label.style.opacity = '1';
+            label.style.textDecoration = 'none';
+            renderError(LifeOSWidgetMIT.refresh);
+          }
+        }
+      });
+
+      listItem.appendChild(checkbox);
+      listItem.appendChild(label);
+      taskList.appendChild(listItem);
     });
+    widget.appendChild(taskList);
+    _container.appendChild(widget);
   }
 
-  const mount = ({ container, user, commandKey }) => {
-    if (!container || !(container instanceof HTMLElement)) {
-      console.error('Invalid container element provided for LifeOS MIT widget.');
-      return;
+  const LifeOSWidgetMIT = {
+    mount: async function({ container, user, commandKey }) {
+      if (!container || !(container instanceof HTMLElement)) {
+        console.error('LifeOSWidgetMIT: Invalid container element provided.');
+        return;
+      }
+      _container = container;
+      _user = user;
+      _commandKey = commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
+
+      if (!_user || !_commandKey) {
+        console.error('LifeOSWidgetMIT: User handle or commandKey is missing. Cannot mount widget.');
+        renderError(LifeOSWidgetMIT.refresh);
+        return;
+      }
+
+      await this.refresh();
+    },
+
+    refresh: async function() {
+      if (!_container || !_user || !_commandKey) {
+        console.warn('LifeOSWidgetMIT: Widget not mounted or essential data missing. Cannot refresh.');
+        return;
+      }
+
+      renderLoading();
+      try {
+        const tasks = await fetchMITs(_user, _commandKey);
+        if (tasks && tasks.length > 0) {
+          renderMITs(tasks);
+        } else {
+          renderEmpty();
+        }
+      } catch (error) {
+        console.error('LifeOSWidgetMIT: Failed to fetch MITs:', error);
+        renderError(LifeOSWidgetMIT.refresh);
+      }
     }
-    _container = container;
-    _user = user;
-    _commandKey = commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
-
-    // Apply base styles to the container
-    _container.style.setProperty('background-color', 'var(--dash-surface)');
-    _container.style.setProperty('color', 'var(--dash-text)');
-    _container.style.setProperty('border', '1px solid var(--dash-border)');
-    _container.style.setProperty('border-radius', 'var(--dash-radius-lg)');
-    _container.style.setProperty('padding', 'calc(2 * var(--dash-space-unit))');
-    _container.style.setProperty('display', 'flex');
-    _container.style.setProperty('flex-direction', 'column');
-    _container.style.setProperty('gap', 'var(--dash-space-unit)');
-    _container.style.setProperty('box-sizing', 'border-box'); // Ensure padding is included in width/height
-
-    fetchAndRenderTasks();
   };
 
-  const refresh = () => {
-    fetchAndRenderTasks();
-  };
-
-  window.LifeOSWidgetMIT = {
-    mount,
-    refresh
-  };
+  window.LifeOSWidgetMIT = LifeOSWidgetMIT;
 })();
