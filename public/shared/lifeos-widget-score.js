@@ -1,268 +1,250 @@
-(function() {
-    let _container = null;
-    let _user = null;
-    let _commandKey = null;
-    const _isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+(function(){
+  const API_ENDPOINT = '/api/v1/lifeos/scorecard/today';
+  const CIRCLE_RADIUS = 40;
+  const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
+  const VIEWBOX_SIZE = 100; // SVG viewBox="0 0 100 100"
+  const TEXT_OFFSET_Y = 5; // For value text
+  const LABEL_OFFSET_Y = 25; // For metric name text
 
-    const RADIUS = 40;
-    const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+  // Score color thresholds
+  const COLOR_GREEN = '#4CAF50'; // Green
+  const COLOR_AMBER = '#FFC107'; // Amber
+  const COLOR_RED = '#F44336';   // Red
+  const COLOR_MUTED = 'var(--dash-muted, #555566)'; // Fallback for muted
 
-    // Helper to create and inject the style block into the document head
-    function createStyleBlock() {
-        const styleId = 'lifeos-score-widget-styles';
-        let style = document.getElementById(styleId);
-        if (style) return; // Style already exists, no need to re-add
+  let _container = null;
+  let _user = null;
+  let _commandKey = null;
+  let _isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        style = document.createElement('style');
-        style.id = styleId;
-        style.textContent = `
-            /* Widget specific styles */
-            .lifeos-score-widget {
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-                color: var(--dash-text);
-                background-color: var(--dash-surface);
-                border-radius: var(--dash-radius-lg);
-                padding: calc(var(--dash-space-unit) * 1.5);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: calc(var(--dash-space-unit) * 1.5);
-                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                min-width: 280px; /* Ensure it's not too small */
-            }
-            .score-date-heading {
-                font-size: 1.1em;
-                font-weight: 600;
-                margin: 0;
-                color: var(--dash-text);
-            }
-            .score-rings-container {
-                display: flex;
-                gap: calc(var(--dash-space-unit) * 2);
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .score-ring-item {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                width: 100px; /* Fixed width for each ring item */
-                position: relative; /* For shimmer */
-                overflow: hidden; /* For shimmer */
-                border-radius: var(--dash-radius-lg); /* For shimmer */
-            }
-            .score-ring-svg {
-                width: 100px;
-                height: 100px;
-                transform: rotate(-90deg); /* Start from top */
-            }
-            .score-ring-bg {
-                fill: none;
-                stroke: var(--dash-border);
-                stroke-width: 8;
-            }
-            .score-ring-progress {
-                fill: none;
-                stroke-width: 8;
-                stroke-linecap: round;
-                transform-origin: 50% 50%;
-                transition: stroke-dashoffset 0.8s ease-out; /* Smooth transition for score change */
-            }
-            .score-value {
-                font-size: 1.5em;
-                font-weight: bold;
-                fill: var(--dash-text);
-                transform: rotate(90deg); /* Counter-rotate text */
-            }
-            .score-metric-name {
-                margin-top: calc(var(--dash-space-unit) / 2);
-                font-size: 0.85em;
-                color: var(--dash-muted);
-            }
+  function getCommandKey() {
+    return window.lifeosCommandKey || localStorage.getItem('commandKey');
+  }
 
-            /* Color classes */
-            .score-ring-green { stroke: #4CAF50; } /* Green */
-            .score-ring-amber { stroke: #FFC107; } /* Amber */
-            .score-ring-red { stroke: #F44336; }   /* Red */
-            .score-ring-error { stroke: var(--dash-muted); } /* Grey for error */
+  function getScoreColor(score) {
+    if (score > 7) return COLOR_GREEN;
+    if (score >= 4) return COLOR_AMBER;
+    return COLOR_RED;
+  }
 
-            /* Loading animation for ring stroke */
-            .score-ring-progress.score-ring-loading {
-                stroke: var(--dash-accent);
-                animation: ring-loading-animation 1.5s infinite ease-in-out;
-            }
-            @keyframes ring-loading-animation {
-                0% { stroke-dashoffset: ${CIRCUMFERENCE * 0.75}; }
-                50% { stroke-dashoffset: ${CIRCUMFERENCE * 0.25}; }
-                100% { stroke-dashoffset: ${CIRCUMFERENCE * 0.75}; }
-            }
+  function createSvgElement(tag, attributes = {}) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const key in attributes) {
+      el.setAttribute(key, attributes[key]);
+    }
+    return el;
+  }
 
-            /* Shimmer effect for loading placeholder background */
-            .score-ring-item.shimmer-bg::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-                animation: shimmer-bg 1.5s infinite;
-            }
-            @keyframes shimmer-bg {
-                0% { left: -100%; }
-                100% { left: 100%; }
-            }
+  function createRing(score, metricName, maxScore, isLoading = false, isError = false) {
+    const svg = createSvgElement('svg', {
+      viewBox: `0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`,
+      class: 'lifeos-score-ring'
+    });
 
-            /* Reduced motion overrides */
-            @media (prefers-reduced-motion: reduce) {
-                .score-ring-progress {
-                    transition: none !important; /* Disable score change animation */
-                }
-                .score-ring-progress.score-ring-loading {
-                    animation: none;
-                    stroke-dashoffset: ${CIRCUMFERENCE * 0.5} !important; /* Static half-fill */
-                }
-                .score-ring-item.shimmer-bg::after {
-                    animation: none;
-                    background: none;
-                }
-            }
-        `;
-        document.head.appendChild(style);
+    const backgroundCircle = createSvgElement('circle', {
+      cx: VIEWBOX_SIZE / 2,
+      cy: VIEWBOX_SIZE / 2,
+      r: CIRCLE_RADIUS,
+      fill: 'none',
+      stroke: 'var(--dash-border, rgba(255,255,255,0.07))',
+      'stroke-width': '8'
+    });
+    svg.appendChild(backgroundCircle);
+
+    let displayScore = isError ? '—' : (score !== null ? score.toFixed(1) : '');
+    let ringColor = isError ? COLOR_MUTED : getScoreColor(score);
+    let dashOffset = CIRCLE_CIRCUMFERENCE;
+    let dashArray = `${CIRCLE_CIRCUMFERENCE} ${CIRCLE_CIRCUMFERENCE}`;
+
+    if (!isLoading && !isError && score !== null) {
+      const normalizedScore = Math.min(Math.max(score, 0), maxScore);
+      const progress = normalizedScore / maxScore;
+      dashArray = `${progress * CIRCLE_CIRCUMFERENCE} ${CIRCLE_CIRCUMFERENCE}`;
+      dashOffset = _isReducedMotion ? 0 : CIRCLE_CIRCUMFERENCE; // Start at full for animation
     }
 
-    function getScoreColorClass(score) {
-        if (score > 7) return 'score-ring-green';
-        if (score >= 4) return 'score-ring-amber';
-        return 'score-ring-red';
+    const arcCircle = createSvgElement('circle', {
+      cx: VIEWBOX_SIZE / 2,
+      cy: VIEWBOX_SIZE / 2,
+      r: CIRCLE_RADIUS,
+      fill: 'none',
+      stroke: ringColor,
+      'stroke-width': '8',
+      'stroke-linecap': 'round',
+      'stroke-dasharray': dashArray,
+      'stroke-dashoffset': dashOffset,
+      transform: `rotate(-90 ${VIEWBOX_SIZE / 2} ${VIEWBOX_SIZE / 2})`
+    });
+    svg.appendChild(arcCircle);
+
+    if (isLoading && !_isReducedMotion) {
+      arcCircle.style.animation = 'lifeos-shimmer 1.5s infinite linear';
+      arcCircle.style.stroke = COLOR_MUTED;
+    } else if (!isError && score !== null && !_isReducedMotion) {
+      arcCircle.style.transition = 'stroke-dashoffset 1s ease-out';
+      // Trigger reflow to ensure transition applies from initial dashOffset
+      void arcCircle.offsetWidth;
+      arcCircle.style.strokeDashoffset = '0';
     }
 
-    function createRing(metricName, score, maxScore, colorClass, isLoading, isError) {
-        let strokeDashoffset;
-        let displayScore = isError ? '—' : (score !== null ? score.toFixed(1) : '');
-        let ringProgressClass = colorClass;
-        let itemClasses = ['score-ring-item'];
+    const valueText = createSvgElement('text', {
+      x: VIEWBOX_SIZE / 2,
+      y: VIEWBOX_SIZE / 2 + TEXT_OFFSET_Y,
+      'text-anchor': 'middle',
+      'dominant-baseline': 'middle',
+      fill: 'var(--dash-text, #e8e8f0)',
+      'font-size': '20',
+      'font-weight': 'bold'
+    });
+    valueText.textContent = displayScore;
+    svg.appendChild(valueText);
 
-        if (isLoading) {
-            ringProgressClass = 'score-ring-loading';
-            itemClasses.push('shimmer-bg');
-            if (_isReducedMotion) {
-                strokeDashoffset = CIRCUMFERENCE * 0.5; // Static half-fill for reduced motion
-            } else {
-                strokeDashoffset = CIRCUMFERENCE * 0.75; // Initial state for animation
-            }
-        } else if (isError) {
-            ringProgressClass = 'score-ring-error';
-            strokeDashoffset = CIRCUMFERENCE; // Fully empty for error
-        } else {
-            const normalizedScore = (score / maxScore) * 10; // Normalize to 0-10 for dash calculation
-            strokeDashoffset = CIRCUMFERENCE - (normalizedScore / 10) * CIRCUMFERENCE;
+    const labelText = createSvgElement('div', {
+      class: 'lifeos-score-label'
+    });
+    labelText.textContent = metricName;
+
+    const ringWrapper = document.createElement('div');
+    ringWrapper.className = 'lifeos-score-ring-wrapper';
+    ringWrapper.appendChild(svg);
+    ringWrapper.appendChild(labelText);
+
+    return ringWrapper;
+  }
+
+  function renderScores(data, isLoading = false, isError = false) {
+    if (!_container) return;
+
+    _container.innerHTML = ''; // Clear previous content
+
+    const today = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateString = today.toLocaleDateString(undefined, options);
+
+    const heading = document.createElement('h3');
+    heading.className = 'lifeos-score-heading';
+    heading.textContent = isLoading ? 'Loading Scores...' : (isError ? 'Error Loading Scores' : dateString);
+    _container.appendChild(heading);
+
+    const ringsContainer = document.createElement('div');
+    ringsContainer.className = 'lifeos-score-rings-container';
+    _container.appendChild(ringsContainer);
+
+    const scores = [
+      { name: 'Joy Score', key: 'joy_score', max: 10 },
+      { name: 'Integrity Score', key: 'integrity_score', max: 10 },
+      { name: 'Energy Level', key: 'energy_level', max: 5, scale: 2 } // Scale 0-5 to 0-10
+    ];
+
+    scores.forEach(s => {
+      let scoreValue = null;
+      if (data && data[s.key] !== undefined) {
+        scoreValue = s.scale ? data[s.key] * s.scale : data[s.key];
+      }
+      ringsContainer.appendChild(createRing(scoreValue, s.name, s.max, isLoading, isError));
+    });
+  }
+
+  async function fetchAndRenderScores() {
+    if (!_user) {
+      console.error('LifeOSWidgetScore: User handle not set.');
+      renderScores(null, false, true);
+      return;
+    }
+
+    renderScores(null, true, false); // Show loading state
+
+    const currentCommandKey = _commandKey || getCommandKey();
+    if (!currentCommandKey) {
+      console.warn('LifeOSWidgetScore: commandKey not found. Fetching without authorization.');
+    }
+
+    try {
+      const url = `${API_ENDPOINT}?user=${encodeURIComponent(_user)}`;
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      if (currentCommandKey) {
+        headers['Authorization'] = `Bearer ${currentCommandKey}`;
+      }
+
+      const response = await fetch(url, { headers });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      renderScores(data, false, false);
+    } catch (error) {
+      console.error('LifeOSWidgetScore: Failed to fetch scores:', error);
+      renderScores(null, false, true); // Show error state
+    }
+  }
+
+  function mount({ container, user, commandKey }) {
+    _container = container || document.getElementById('lifeos-widget-score');
+    if (!_container) {
+      console.error('LifeOSWidgetScore: Container element not found.');
+      return;
+    }
+    _user = user;
+    _commandKey = commandKey; // Prioritize explicit commandKey from mount args
+
+    // Inject basic styles for the widget
+    if (!document.getElementById('lifeos-score-widget-styles')) {
+      const style = document.createElement('style');
+      style.id = 'lifeos-score-widget-styles';
+      style.textContent = `
+        .lifeos-score-heading {
+          font-family: var(--dash-font-family, sans-serif);
+          font-size: 1.2em;
+          color: var(--dash-text, #e8e8f0);
+          margin-bottom: calc(2 * var(--dash-space-unit, 4px));
+          text-align: center;
         }
-
-        const svg = `
-            <div class="${itemClasses.join(' ')}">
-                <svg viewBox="0 0 100 100" class="score-ring-svg">
-                    <circle class="score-ring-bg" cx="50" cy="50" r="${RADIUS}"></circle>
-                    <circle class="score-ring-progress ${ringProgressClass}"
-                            cx="50" cy="50" r="${RADIUS}"
-                            stroke-dasharray="${CIRCUMFERENCE}"
-                            stroke-dashoffset="${strokeDashoffset}"
-                    ></circle>
-                    <text x="50" y="50" text-anchor="middle" alignment-baseline="middle" class="score-value">${displayScore}</text>
-                </svg>
-                <div class="score-metric-name">${metricName}</div>
-            </div>
-        `;
-        return svg;
-    }
-
-    function renderSkeleton() {
-        const today = new Date();
-        const dateString = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-        createStyleBlock(); // Ensure style block is in the head
-
-        _container.innerHTML = `
-            <h3 class="score-date-heading">${dateString}</h3>
-            <div class="score-rings-container">
-                ${createRing('Joy Score', null, 10, '', true, false)}
-                ${createRing('Integrity Score', null, 10, '', true, false)}
-                ${createRing('Energy Level', null, 10, '', true, false)}
-            </div>
-        `;
-        _container.classList.add('lifeos-score-widget');
-    }
-
-    function renderScores(data) {
-        const joyScore = data.joy_score;
-        const integrityScore = data.integrity_score;
-        const energyLevel = data.energy_level * 2; // Scale 0-5 to 0-10
-
-        const ringsHtml = `
-            ${createRing('Joy Score', joyScore, 10, getScoreColorClass(joyScore), false, false)}
-            ${createRing('Integrity Score', integrityScore, 10, getScoreColorClass(integrityScore), false, false)}
-            ${createRing('Energy Level', energyLevel, 10, getScoreColorClass(energyLevel), false, false)}
-        `;
-        _container.querySelector('.score-rings-container').innerHTML = ringsHtml;
-    }
-
-    function renderErrorState() {
-        const ringsHtml = `
-            ${createRing('Joy Score', null, 10, '', false, true)}
-            ${createRing('Integrity Score', null, 10, '', false, true)}
-            ${createRing('Energy Level', null, 10, '', false, true)}
-        `;
-        _container.querySelector('.score-rings-container').innerHTML = ringsHtml;
-    }
-
-    async function fetchAndRenderScores() {
-        const today = new Date();
-        const dateString = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        // Update date heading even during loading/error states
-        const headingElement = _container.querySelector('.score-date-heading');
-        if (headingElement) {
-            headingElement.textContent = dateString;
+        .lifeos-score-rings-container {
+          display: flex;
+          justify-content: space-around;
+          gap: calc(4 * var(--dash-space-unit, 4px));
+          flex-wrap: wrap;
         }
-
-        try {
-            const headers = { 'Content-Type': 'application/json' };
-            if (_commandKey) {
-                headers['X-LifeOS-CommandKey'] = _commandKey;
-            }
-            const response = await fetch(`/api/v1/lifeos/scorecard/today?user=${_user}`, { headers });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            renderScores(data);
-        } catch (error) {
-            console.error('LifeOS Score Widget: Failed to fetch scores:', error);
-            renderErrorState();
+        .lifeos-score-ring-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: ${VIEWBOX_SIZE}px; /* Fixed width for each ring */
         }
+        .lifeos-score-ring {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+        .lifeos-score-label {
+          font-family: var(--dash-font-family, sans-serif);
+          font-size: 0.8em;
+          color: var(--dash-muted, #555566);
+          margin-top: calc(1 * var(--dash-space-unit, 4px));
+          text-align: center;
+        }
+        @keyframes lifeos-shimmer {
+          0% { opacity: 0.5; }
+          50% { opacity: 1; }
+          100% { opacity: 0.5; }
+        }
+      `;
+      document.head.appendChild(style);
     }
 
-    function mount({ container, user, commandKey }) {
-        _container = container || document.getElementById('lifeos-widget-score');
-        _user = user;
-        _commandKey = commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
+    fetchAndRenderScores();
+  }
 
-        if (!_container) {
-            console.error('LifeOS Score Widget: Container element not found.');
-            return;
-        }
-        renderSkeleton(); // Render skeleton and ensure styles are loaded
-        fetchAndRenderScores();
-    }
+  function refresh() {
+    fetchAndRenderScores();
+  }
 
-    function refresh() {
-        if (_container && _user) {
-            renderSkeleton(); // Re-render skeleton to show loading state again
-            fetchAndRenderScores();
-        } else {
-            console.warn('LifeOS Score Widget: Cannot refresh, widget not mounted or user not set.');
-        }
-    }
-
-    window.LifeOSWidgetScore = { mount, refresh };
+  window.LifeOSWidgetScore = {
+    mount,
+    refresh
+  };
 })();
