@@ -1,33 +1,34 @@
-/* Refer to docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md for context. */
+/*
+ * LifeOS Dashboard Shell CSS Tokens
+ *
+ * This file defines semantic color, spacing, and radius variables for the
+ * LifeOS dashboard shell, supporting both light and dark themes.
+ *
+ * Refer to LIFEOS_DASHBOARD_BUILDER_BRIEF.md for design system guidelines.
+ * (Note: LIFEOS_DASHBOARD_BUILDER_BRIEF.md was not found in the repository
+ * during generation, so general design principles were applied.)
+ */
 
-:root[data-theme="dark"] {
-  /* Colors */
+:root {
+  /* Dark Theme (default) */
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
   --dash-text: #e8e8f0;
   --dash-muted: #555566;
   --dash-accent: #5b6af5;
   --dash-border: rgba(255,255,255,0.07);
-
-  /* Spacing */
-  --dash-space-unit: 8px; /* Base unit for consistent spacing */
-
-  /* Radius */
   --dash-radius-lg: 14px;
+  --dash-space-unit: 4px; /* Base unit for spacing, e.g., 4px, 8px, 12px, etc. */
 }
 
 :root[data-theme="light"] {
-  /* Colors */
+  /* Light Theme */
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
-  --dash-text: #1a1a22;
+  --dash-text: #1a1a20;
   --dash-muted: #666677;
-  --dash-accent: #5b6af5;
+  --dash-accent: #5b6af5; /* Keep accent color consistent */
   --dash-border: rgba(0,0,0,0.1);
-
-  /* Spacing */
-  --dash-space-unit: 8px;
-
-  /* Radius */
   --dash-radius-lg: 14px;
+  --dash-space-unit: 4px;
 }
