@@ -1,59 +1,51 @@
-# Technical Contract: Persistent AI Rail
+# Contract: Persistent AI Rail (Lumin Rail)
 
-## Contract
+## Purpose
+To provide a ubiquitous, quick-access AI interaction surface across the LifeOS platform, evolving the existing Lumin quick-drawer into a persistent, dockable component. This rail will offer streamlined voice and text interaction, with a clear path to the full chat experience.
 
-This document outlines the technical contract for the "Persistent AI Rail," a new user interface component designed to provide continuous, context-aware AI interaction within the LifeOS dashboard. The rail will offer a consistent entry point for AI assistance, complementing existing Lumin and chat functionalities without replacing them.
-
-**Core Functionality:**
-- **Persistent UI Element:** A dedicated UI component that remains visible and accessible across various dashboard views.
-- **Docking:** The rail will be dockable to either the top or bottom of the primary dashboard viewport, allowing users to choose their preferred placement.
-- **Collapsed State:** When not actively in use, the rail will collapse into a compact, one-line strip, minimizing screen real estate usage. This strip will provide a clear visual indicator of its presence and a quick way to expand it.
-- **Expanded State:** Upon user interaction (e.g., click on the collapsed strip), the rail will expand to reveal a full transcript of the ongoing AI conversation, along with input controls.
-- **Voice/Text Parity:** Users will be able to interact with the AI using both voice input and text input, with full functional parity between the two modes. The system will seamlessly convert voice to text for processing and text to voice for output.
-- **Read-Aloud Functionality:** The AI's responses within the expanded transcript will include a "read-aloud" option, allowing users to listen to the AI's output.
-
-**Relationship to Existing Lumin/Chat Entry Points:**
-The Persistent AI Rail is an *additional* interaction modality. It is designed to provide a persistent, always-on assistant experience. It will leverage the same underlying AI services and models as existing Lumin and chat entry points but will offer a distinct user experience focused on continuity and accessibility. It will not replace or deprecate any existing Lumin or chat features.
-
-**What Must Not Break:**
-- **Existing Lumin Functionality:** All current Lumin features, including contextual suggestions, quick actions, and embedded AI interactions, must continue to function as designed.
-- **Existing Chat Entry Points:** Any dedicated chat interfaces or modals must remain fully operational and accessible.
-- **Builder Endpoints:** All existing `/api/v1/lifeos/builder/*` and `/api/v1/builder/*` endpoints and their associated functionality (build, execute, review, status, etc.) must remain unaffected and stable.
-- **Core Platform Stability:** The introduction of the AI rail must not introduce performance regressions, memory leaks, or instability to the core LifeOS platform.
-- **Authentication and Authorization:** Existing authentication and authorization mechanisms for AI interactions must be respected and enforced by the new rail.
-- **Configuration Integrity:** No changes to core platform configuration files (`config/*.js`) should be made without explicit architectural review and approval.
+## Key Capabilities
+*   **UI States:**
+    *   **Collapsed Strip:** A minimal, one-line UI element (e.g., status, quick input field).
+    *   **Expanded Transcript:** A larger view displaying recent conversation history within the rail.
+    *   **Docking:** Configurable positioning at the top or bottom of the screen.
+*   **Interaction Parity:**
+    *   **Voice Input:** Speech-to-text for user input, leveraging existing voice capabilities.
+    *   **Text Input:** Standard keyboard input.
+    *   **Voice Output:** Read-aloud (Text-to-Speech) for AI responses.
+*   **Integration:**
+    *   Seamless transition to the full `lifeos-chat.html` experience.
+    *   Utilize existing `/api/v1/lifeos/chat` backend endpoints.
+    *   Leverage `VM` (VoiceManager) from `lifeos-chat.html` or `LuminVoice` from `lifeos-app.html` for voice functionalities.
+    *   Extend or replace the current `lumin-drawer` implementation in `lifeos-app.html`.
 
 ## Non-goals
-
-- **Replacement of Existing Chat UIs:** The Persistent AI Rail is not intended to replace or deprecate existing, dedicated chat interfaces within LifeOS. It is a complementary feature.
-- **Offline Functionality:** Initial phases will not focus on offline AI interaction capabilities.
-- **Deep Integration with Every Dashboard Widget:** While context-aware, the rail is not intended to have direct, embedded control over every individual dashboard widget's state in its initial release. Its primary focus is conversational AI.
-- **Custom AI Model Training:** This project does not involve training new AI models; it focuses on the UI and interaction layer with existing models.
+*   Replicate all advanced features of `lifeos-chat.html` within the rail (e.g., full thread management, message search, build panel, message actions, detailed context bar, mode switching). The rail is a quick-access point, not a full replacement.
+*   Introduce new backend API endpoints for core chat functionality.
+*   Complex multi-thread management directly within the rail; focus on a single, dedicated "quick chat" thread initially.
+*   Deep customization of AI models or personas from the rail itself.
 
 ## Phases
 
-**Phase 1: UI Scaffolding and Basic Text Interaction**
-- Implement the persistent UI container for the rail.
-- Develop collapsed and expanded states with basic styling.
-- Integrate text input and display of AI text responses.
-- Connect to existing AI service endpoints for text-based conversation.
-- Implement docking mechanism (top/bottom).
+### Phase 1: Core UI & Text Interaction
+1.  **Refactor `lumin-drawer`:** Modify `public/overlay/lifeos-app.html` to transform the existing Lumin drawer into a persistent rail container.
+2.  **Implement UI States:** Develop CSS and JavaScript to support collapsed (one-line strip) and expanded (transcript view) states.
+3.  **Docking Mechanism:** Implement logic for positioning the rail at the top or bottom of the screen (e.g., via a user setting or dynamic detection).
+4.  **Text Input/Output:** Integrate existing `luminSend` and `_appendLuminMsg` logic for text-based conversation.
+5.  **Full Chat Link:** Add a prominent "Open Full Chat" button or link to navigate to `lifeos-chat.html`.
 
-**Phase 2: Voice Input and Read-Aloud**
-- Integrate browser-based speech-to-text for voice input.
-- Implement text-to-speech for AI response read-aloud functionality.
-- Ensure voice/text parity in interaction flow.
+### Phase 2: Voice Integration & Read-Aloud
+1.  **Voice Input Integration:** Integrate `LuminVoice` (from `lifeos-app.html`) or a simplified `VM` instance for speech-to-text input directly into the rail.
+2.  **Read-Aloud for AI:** Enable Text-to-Speech for AI responses within the rail, leveraging `VM.speak` or similar existing capabilities.
+3.  **Voice/Text Parity:** Ensure that voice input is transcribed and displayed in the text input field, and that AI responses are available in both text and audio.
 
-**Phase 3: Contextual Awareness and Refinements**
-- Implement basic contextual awareness (e.g., current dashboard view, active project).
-- UI/UX refinements based on user feedback and testing.
-- Performance optimizations.
+### Phase 3: Refinements & Context
+1.  **Minimal Context Display:** Explore displaying minimal, relevant context (e.g., a small status indicator, MIT count) in the collapsed rail state.
+2.  **UI/UX Refinement:** Enhance transitions between collapsed/expanded states and the full chat, ensuring a smooth user experience.
+3.  **Advanced Command Handling:** Evaluate how build intents (`/plan`, `/draft`) and other advanced commands are handled from the rail (e.g., direct execution or prompting the user to open the full chat).
 
 ## Open Questions
-
-- **Default Dock Position:** Should the rail default to top or bottom for new users? Is this configurable?
-- **Initial State:** Should the rail be collapsed or expanded by default on page load?
-- **Integration with Global State Management:** How will the rail's state (collapsed/expanded, conversation history) integrate with the existing global state management system (if any) to ensure persistence across navigation?
-- **Accessibility Requirements:** What are the specific accessibility (WCAG) requirements for voice interaction and read-aloud features?
-- **Error Handling and Feedback:** How will network errors, AI service errors, or input validation errors be communicated to the user within the rail?
-- **Conversation History Persistence:** How will conversation history be stored and retrieved across user sessions? (e.g., local storage, backend database).
+*   How will the user's preference for top vs. bottom docking be configured and persisted?
+*   What is the exact content and interaction model for the collapsed one-line strip (e.g., always-on input, status only, last message preview)?
+*   What is the strategy for thread management within the rail (e.g., a single dedicated "quick chat" thread, or a mechanism to switch/create threads)?
+*   How will build intents (`/plan`, `/draft`) and other specialized commands be supported or redirected from the persistent rail?
+*   What is the detailed interaction model for voice input in the rail (e.g., push-to-talk, continuous listening with silence detection, explicit send)?
