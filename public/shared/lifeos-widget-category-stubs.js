@@ -4,19 +4,22 @@
             emoji: '⚕️',
             name: 'Health',
             description: 'Track vitals, sleep, and energy',
-            category: 'health'
+            category: 'health',
+            overlay: '/overlay/lifeos-health.html'
         },
         {
             emoji: '👨‍👩‍👧‍👦',
             name: 'Family',
             description: 'Family commitments and household sync',
-            category: 'family'
+            category: 'family',
+            overlay: '/overlay/lifeos-family.html'
         },
         {
             emoji: '✨',
             name: 'Purpose',
             description: 'Purpose projects and growth milestones',
-            category: 'purpose'
+            category: 'growth',
+            overlay: '/overlay/lifeos-growth.html'
         }
     ];
 
@@ -26,22 +29,21 @@
             return;
         }
 
-        // Inject CSS for styling if not already present
         const styleId = 'lifeos-widget-category-stubs-style';
         if (!document.getElementById(styleId)) {
             const style = document.createElement('style');
             style.id = styleId;
             style.textContent = `
-                .lifeos-widget-category-stubs-grid {
+                .lifeos-stub-cards-grid {
                     display: grid;
-                    gap: calc(var(--dash-space-unit) * 4); /* 16px gap */
-                    grid-template-columns: 1fr; /* 1 column on mobile */
-                    padding: calc(var(--dash-space-unit) * 4); /* Padding around the grid */
+                    grid-template-columns: 1fr; /* 1 column for mobile */
+                    gap: calc(var(--dash-space-unit) * 4);
+                    padding: calc(var(--dash-space-unit) * 4);
                 }
 
                 @media (min-width: 768px) {
-                    .lifeos-widget-category-stubs-grid {
-                        grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+                    .lifeos-stub-cards-grid {
+                        grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
                     }
                 }
 
@@ -49,58 +51,52 @@
                     background-color: var(--dash-surface);
                     border: 1px solid var(--dash-border);
                     border-radius: var(--dash-radius-lg);
-                    padding: calc(var(--dash-space-unit) * 6); /* 24px padding */
-                    color: var(--dash-text);
+                    padding: calc(var(--dash-space-unit) * 4);
                     display: flex;
                     flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+                    align-items: flex-start;
+                    text-align: left;
+                    color: var(--dash-text);
+                    transition: transform 0.2s ease-in-out;
                 }
 
                 .lifeos-stub-card:hover {
-                    transform: translateY(-3px);
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                    transform: translateY(-2px);
                 }
 
                 .stub-emoji {
-                    font-size: 3em; /* Larger emoji */
-                    margin-bottom: calc(var(--dash-space-unit) * 4); /* 16px */
-                    line-height: 1; /* Prevent extra space */
+                    font-size: 2.5em;
+                    margin-bottom: calc(var(--dash-space-unit) * 2);
                 }
 
                 .stub-name {
-                    font-weight: 600; /* Slightly bolder */
-                    font-size: 1.3em;
-                    margin-bottom: calc(var(--dash-space-unit) * 2); /* 8px */
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    margin-bottom: calc(var(--dash-space-unit) * 1);
                     color: var(--dash-text);
                 }
 
                 .stub-desc {
+                    font-size: 0.9em;
                     color: var(--dash-muted);
-                    font-size: 0.95em;
-                    margin-bottom: calc(var(--dash-space-unit) * 6); /* 24px */
-                    flex-grow: 1; /* Push "Coming soon" to bottom */
+                    margin-bottom: calc(var(--dash-space-unit) * 4);
+                    flex-grow: 1;
                 }
 
                 .stub-coming-soon {
-                    background-color: var(--dash-muted);
-                    color: var(--dash-text); /* Use dash-text for contrast */
-                    padding: calc(var(--dash-space-unit) * 2) calc(var(--dash-space-unit) * 4); /* 8px 16px */
-                    border-radius: var(--dash-radius-lg);
                     font-size: 0.8em;
-                    text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                    font-weight: 500;
-                    opacity: 0.8;
+                    font-weight: bold;
+                    color: var(--dash-accent);
+                    padding: calc(var(--dash-space-unit) * 1) calc(var(--dash-space-unit) * 2);
+                    background-color: rgba(91, 106, 245, 0.1); /* Using RGB for --dash-accent */
+                    border-radius: calc(var(--dash-radius-lg) / 2);
                 }
             `;
             document.head.appendChild(style);
         }
 
-        container.classList.add('lifeos-widget-category-stubs-grid');
-        container.innerHTML = ''; // Clear existing content
+        const gridContainer = document.createElement('div');
+        gridContainer.className = 'lifeos-stub-cards-grid';
 
         categoriesData.forEach(data => {
             const card = document.createElement('div');
@@ -128,11 +124,13 @@
             card.appendChild(description);
             card.appendChild(comingSoon);
 
-            container.appendChild(card);
+            gridContainer.appendChild(card);
         });
+
+        container.appendChild(gridContainer);
     }
 
     window.LifeOSWidgetCategoryStubs = {
-        mount: mount
+        mount
     };
 })();
