@@ -1,246 +1,230 @@
-(function() {
-    const WIDGET_ID = 'lifeos-widget-lumin-quick';
-    const STORAGE_KEY_HISTORY = 'lifeos-lumin-quick-history';
-    const API_ENDPOINT = '/api/v1/lifeos/chat';
-    const MAX_HISTORY_ITEMS = 3;
+(function(){
+  const STORAGE_KEY = 'lifeos-lumin-quick-history';
+  const API_ENDPOINT = '/api/v1/lifeos/chat';
 
-    let _containerEl = null;
-    let _user = 'anonymous';
-    let _commandKey = null;
+  /**
+   * Helper to get state from sessionStorage.
+   * @param {string} key - The key for the sessionStorage item.
+   * @param {} defaultValue - The default value if the item is not found or parsing fails.
+   * @returns {} The parsed value from sessionStorage or the default value.
+   */
+  function getState(key, defaultValue) {
+    try {
+      const stored = sessionStorage.getItem(key);
+      return stored !== null ? JSON.parse(stored) : defaultValue;
+    } catch (e) {
+      console.error('Error reading sessionStorage:', e);
+      return defaultValue;
+    }
+  }
 
-    let _history = [];
-    let _isLoading = false;
-    let _error = null;
+  /**
+   * Helper to set state in sessionStorage.
+   * @param {string} key - The key for the sessionStorage item.
+   * @param {} value - The value to store.
+   */
+  function setState(key, value) {
+    try {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+      console.error('Error writing sessionStorage:', e);
+    }
+  }
 
-    // DOM elements
-    let _inputEl = null;
-    let _sendBtn = null;
-    let _historyEl = null;
-    let _loadingEl = null;
-    let _errorEl = null;
-    let _openFullChatLink = null;
-
-    function getHistory() {
-        try {
-            const stored = sessionStorage.getItem(STORAGE_KEY_HISTORY);
-            return stored ? JSON.parse(stored) : [];
-        } catch (e) {
-            console.error('Failed to read history from sessionStorage:', e);
-            return [];
-        }
+  /**
+   * Mounts the Lumin quick-entry widget into the specified container.
+   * @param {object} options - Configuration options.
+   * @param {HTMLElement} options.container - The DOM element to mount the widget into.
+   * @param {string} options.user - The current user identifier.
+   * @param {string} [options.commandKey] - Optional command key for the chat API.
+   */
+  function mount({ container, user, commandKey }) {
+    if (!container) {
+      console.error('Lumin Quick Widget: Container element not provided.');
+      return;
     }
 
-    function saveHistory(history) {
-        try {
-            sessionStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(history));
-        } catch (e) {
-            console.error('Failed to save history to sessionStorage:', e);
-        }
-    }
+    let history = getState(STORAGE_KEY, []);
 
-    function escapeHTML(str) {
+    container.innerHTML = `
+      <style>
+        .lifeos-lumin-quick-widget {
+          font-family: sans-serif;
+          font-size: 14px;
+          color: var(--dash-text, #e8e8f0);
+          background-color: var(--dash-surface, #111118);
+          border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+          border-radius: var(--dash-radius-lg, 14px);
+          padding: 10px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          max-width: 400px; /* Arbitrary max-width for better display */
+        }
+        .lifeos-lumin-quick-input-area {
+          display: flex;
+          gap: 5px;
+        }
+        .lifeos-lumin-quick-input {
+          flex-grow: 1;
+          padding: 8px;
+          border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+          border-radius: 6px;
+          background-color: var(--dash-bg, #0a0a0f);
+          color: var(--dash-text, #e8e8f0);
+        }
+        .lifeos-lumin-quick-input::placeholder {
+          color: var(--dash-muted, #555566);
+        }
+        .lifeos-lumin-quick-button {
+          padding: 8px 12px;
+          border: none;
+          border-radius: 6px;
+          background-color: var(--dash-accent, #5b6af5);
+          color: white;
+          cursor: pointer;
+          font-weight: bold;
+        }
+        .lifeos-lumin-quick-button:disabled {
+          background-color: var(--dash-muted, #555566);
+          cursor: not-allowed;
+        }
+        .lifeos-lumin-quick-history {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          max-height: 150px; /* Limit history height */
+          overflow-y: auto;
+          padding-right: 5px; /* For scrollbar */
+        }
+        .lifeos-lumin-quick-response {
+          background-color: var(--dash-bg, #0a0a0f);
+          padding: 6px 8px;
+          border-radius: 6px;
+          word-wrap: break-word;
+        }
+        .lifeos-lumin-quick-loading {
+          color: var(--dash-accent, #5b6af5);
+          font-style: italic;
+        }
+        .lifeos-lumin-quick-error {
+          color: red;
+          font-weight: bold;
+        }
+        .lifeos-lumin-quick-full-chat-link {
+          text-align: right;
+          font-size: 12px;
+        }
+        .lifeos-lumin-quick-full-chat-link a {
+          color: var(--dash-accent, #5b6af5);
+          text-decoration: none;
+        }
+        .lifeos-lumin-quick-full-chat-link a:hover {
+          text-decoration: underline;
+        }
+      </style>
+      <div class="lifeos-lumin-quick-widget">
+        <div class="lifeos-lumin-quick-history"></div>
+        <div class="lifeos-lumin-quick-input-area">
+          <input type="text" class="lifeos-lumin-quick-input" placeholder="Ask Lumin anything..." />
+          <button class="lifeos-lumin-quick-button">Send</button>
+        </div>
+        <div class="lifeos-lumin-quick-status"></div>
+        ${window.LifeOSDashboardAiRail && typeof window.LifeOSDashboardAiRail.expand === 'function' ?
+          `<div class="lifeos-lumin-quick-full-chat-link">
+            <a href="#" class="lifeos-lumin-quick-open-full-chat">Open full chat</a>
+          </div>` : ''
+        }
+      </div>
+    `;
+
+    const inputEl = container.querySelector('.lifeos-lumin-quick-input');
+    const sendBtn = container.querySelector('.lifeos-lumin-quick-button');
+    const historyEl = container.querySelector('.lifeos-lumin-quick-history');
+    const statusEl = container.querySelector('.lifeos-lumin-quick-status');
+    const openChatLink = container.querySelector('.lifeos-lumin-quick-open-full-chat');
+
+    function renderHistory() {
+      historyEl.innerHTML = '';
+      history.slice(-3).forEach(item => {
         const div = document.createElement('div');
-        div.appendChild(document.createTextNode(str));
-        return div.innerHTML;
-    }
-
-    function render() {
-        if (!_containerEl) return;
-
-        _containerEl.innerHTML = ''; // Clear existing content
-
-        const widgetWrapper = document.createElement('div');
-        widgetWrapper.className = 'lifeos-lumin-quick-widget';
-        widgetWrapper.style.fontFamily = 'sans-serif';
-        widgetWrapper.style.fontSize = '14px';
-        widgetWrapper.style.padding = '10px';
-        widgetWrapper.style.border = '1px solid var(--dash-border, #eee)';
-        widgetWrapper.style.borderRadius = '8px';
-        widgetWrapper.style.maxWidth = '300px';
-        widgetWrapper.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-        widgetWrapper.style.backgroundColor = 'var(--dash-surface, #fff)';
-        widgetWrapper.style.color = 'var(--dash-text, #333)';
-
-        // History display
-        _historyEl = document.createElement('div');
-        _historyEl.className = 'lifeos-lumin-quick-history';
-        _historyEl.style.marginBottom = '10px';
-        _historyEl.style.maxHeight = '150px';
-        _historyEl.style.overflowY = 'auto';
-        _historyEl.style.borderBottom = '1px solid var(--dash-border, #eee)';
-        _historyEl.style.paddingBottom = '10px';
-
-        _history.slice().reverse().forEach(item => {
-            const entry = document.createElement('div');
-            entry.style.marginBottom = '5px';
-            entry.innerHTML = `
-                <div style="font-weight: bold; color: var(--dash-accent, #5b6af5);">You:</div>
-                <div>${escapeHTML(item.message)}</div>
-                <div style="font-weight: bold; margin-top: 5px;">Lumin:</div>
-                <div>${escapeHTML(item.reply)}</div>
-            `;
-            _historyEl.appendChild(entry);
-        });
-        widgetWrapper.appendChild(_historyEl);
-
-        // Input area
-        const inputArea = document.createElement('div');
-        inputArea.style.display = 'flex';
-        inputArea.style.gap = '5px';
-
-        _inputEl = document.createElement('input');
-        _inputEl.type = 'text';
-        _inputEl.placeholder = 'Ask Lumin anything...';
-        _inputEl.style.flexGrow = '1';
-        _inputEl.style.padding = '8px';
-        _inputEl.style.border = '1px solid var(--dash-border, #ccc)';
-        _inputEl.style.borderRadius = '4px';
-        _inputEl.style.backgroundColor = 'var(--dash-bg, #f9f9f9)';
-        _inputEl.style.color = 'var(--dash-text, #333)';
-        _inputEl.disabled = _isLoading;
-        _inputEl.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-        inputArea.appendChild(_inputEl);
-
-        _sendBtn = document.createElement('button');
-        _sendBtn.textContent = 'Send';
-        _sendBtn.style.padding = '8px 12px';
-        _sendBtn.style.border = 'none';
-        _sendBtn.style.borderRadius = '4px';
-        _sendBtn.style.backgroundColor = 'var(--dash-accent, #5b6af5)';
-        _sendBtn.style.color = '#fff';
-        _sendBtn.style.cursor = 'pointer';
-        _sendBtn.style.fontWeight = 'bold';
-        _sendBtn.disabled = _isLoading;
-        _sendBtn.addEventListener('click', sendMessage);
-        inputArea.appendChild(_sendBtn);
-        widgetWrapper.appendChild(inputArea);
-
-        // Loading state
-        _loadingEl = document.createElement('div');
-        _loadingEl.className = 'lifeos-lumin-quick-loading';
-        _loadingEl.style.marginTop = '10px';
-        _loadingEl.style.color = 'var(--dash-muted, #666)';
-        _loadingEl.style.display = _isLoading ? 'block' : 'none';
-        _loadingEl.textContent = '...';
-        widgetWrapper.appendChild(_loadingEl);
-
-        // Error state
-        _errorEl = document.createElement('div');
-        _errorEl.className = 'lifeos-lumin-quick-error';
-        _errorEl.style.marginTop = '10px';
-        _errorEl.style.color = 'red';
-        _errorEl.style.display = _error ? 'block' : 'none';
-        _errorEl.textContent = _error || '';
-        widgetWrapper.appendChild(_errorEl);
-
-        // Open full chat link
-        if (window.LifeOSDashboardAiRail && typeof window.LifeOSDashboardAiRail.expand === 'function') {
-            _openFullChatLink = document.createElement('a');
-            _openFullChatLink.href = '#';
-            _openFullChatLink.textContent = 'Open full chat';
-            _openFullChatLink.style.display = 'block';
-            _openFullChatLink.style.marginTop = '10px';
-            _openFullChatLink.style.textAlign = 'center';
-            _openFullChatLink.style.color = 'var(--dash-accent, #5b6af5)';
-            _openFullChatLink.style.textDecoration = 'underline';
-            _openFullChatLink.style.cursor = 'pointer';
-            _openFullChatLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.LifeOSDashboardAiRail.expand();
-            });
-            widgetWrapper.appendChild(_openFullChatLink);
-        }
-
-        _containerEl.appendChild(widgetWrapper);
-
-        if (_historyEl) {
-            _historyEl.scrollTop = _historyEl.scrollHeight;
-        }
+        div.className = 'lifeos-lumin-quick-response';
+        div.textContent = item;
+        historyEl.appendChild(div);
+      });
+      historyEl.scrollTop = historyEl.scrollHeight; // Scroll to bottom
     }
 
     async function sendMessage() {
-        const message = _inputEl.value.trim();
-        if (!message || _isLoading) return;
+      const message = inputEl.value.trim();
+      if (!message) return;
 
-        _isLoading = true;
-        _error = null;
-        render(); // Update UI to show loading state
+      statusEl.className = 'lifeos-lumin-quick-loading';
+      statusEl.textContent = '...';
+      sendBtn.disabled = true;
+      inputEl.disabled = true;
+      inputEl.value = ''; // Clear input immediately
 
-        try {
-            const response = await fetch(API_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: message,
-                    user: _user,
-                    commandKey: _commandKey,
-                }),
-            });
+      try {
+        const response = await fetch(API_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message, user, commandKey }),
+        });
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
-                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            const reply = data.reply || data.message || data.response;
-
-            if (reply) {
-                _history.push({ message, reply });
-                if (_history.length > MAX_HISTORY_ITEMS) {
-                    _history.shift();
-                }
-                saveHistory(_history);
-            } else {
-                throw new Error('No reply received from Lumin.');
-            }
-
-            _inputEl.value = '';
-        } catch (e) {
-            console.error('Lumin chat error:', e);
-            _error = e.message || 'Failed to get a response from Lumin.';
-        } finally {
-            _isLoading = false;
-            render(); // Re-render to update history, error, and loading states
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+          throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
         }
-    }
 
-    /**
-     * Mounts the Lumin quick-entry widget into the specified container.
-     * @param {object} options
-     * @param {HTMLElement|string} [options.container] - The DOM element or ID string to mount into. Defaults to 'lifeos-widget-lumin-quick'.
-     * @param {string} [options.user] - The user identifier for chat messages.
-     * @param {string} [options.commandKey] - An optional command key for chat messages.
-     */
-    function mount({ container, user, commandKey } = {}) {
-        if (typeof container === 'string') {
-            _containerEl = document.getElementById(container);
-        } else if (container instanceof HTMLElement) {
-            _containerEl = container;
+        const data = await response.json();
+        const reply = data.reply || data.message || data.response;
+
+        if (reply) {
+          history.push(reply);
+          if (history.length > 3) {
+            history = history.slice(-3);
+          }
+          setState(STORAGE_KEY, history);
+          renderHistory();
+          statusEl.textContent = '';
         } else {
-            _containerEl = document.getElementById(WIDGET_ID);
+          statusEl.className = 'lifeos-lumin-quick-error';
+          statusEl.textContent = 'No reply received.';
         }
-
-        if (!_containerEl) {
-            console.error(`LifeOS Lumin Quick Widget: Container element with ID '${container || WIDGET_ID}' not found.`);
-            return;
-        }
-
-        _user = user || _user;
-        _commandKey = commandKey || _commandKey;
-        _history = getHistory();
-
-        render();
+      } catch (error) {
+        console.error('Lumin Quick Widget: Fetch error:', error);
+        statusEl.className = 'lifeos-lumin-quick-error';
+        statusEl.textContent = `Error: ${error.message}`;
+      } finally {
+        sendBtn.disabled = false;
+        inputEl.disabled = false;
+        inputEl.focus();
+      }
     }
 
-    window.LifeOSWidgetLuminQuick = {
-        mount
-    };
+    sendBtn.addEventListener('click', sendMessage);
+    inputEl.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !sendBtn.disabled) {
+        sendMessage();
+      }
+    });
 
+    if (openChatLink) {
+      openChatLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (window.LifeOSDashboardAiRail && typeof window.LifeOSDashboardAiRail.expand === 'function') {
+          window.LifeOSDashboardAiRail.expand();
+        }
+      });
+    }
+
+    renderHistory(); // Initial render
+  }
+
+  window.LifeOSWidgetLuminQuick = {
+    mount
+  };
 })();
