@@ -13,6 +13,11 @@
 <link rel="stylesheet" href="../shared/lifeos-dashboard-ai-rail.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="/overlay/lifeos-bootstrap.js"></script>
+<!-- Added by THIS task (new) -->
+<script src="/shared/lifeos-widget-mit.js"></script>
+<script src="/shared/lifeos-widget-score.js"></script>
+<script src="/shared/lifeos-widget-lumin-quick.js"></script>
+<script src="/shared/lifeos-widget-category-stubs.js"></script>
 <!-- New widget scripts for LifeOS Dashboard (added by task) -->
 <script src="/shared/lifeos-widget-mit.js"></script>
 <script src="/shared/lifeos-widget-score.js"></script>
@@ -796,6 +801,13 @@ gap: 16px;
 </div>
 </div>
 </div>
+<!-- Added by THIS task (new) -->
+<div class="two-col mb-4">
+<div id="lifeos-widget-mit" class="dashboard-widget"></div>
+<div id="lifeos-widget-score" class="dashboard-widget"></div>
+<div id="lifeos-widget-lumin-quick" class="dashboard-widget"></div>
+<div id="lifeos-widget-category-stubs" class="dashboard-widget"></div>
+</div>
 <!-- New widget containers for LifeOS Dashboard (added by task) -->
 <div class="two-col mb-4">
 <div id="lifeos-widget-mit" class="dashboard-widget"></div>
@@ -924,7 +936,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-async function loadMITs() {
+asyncFn loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -961,7 +973,7 @@ document.body.appendChild(tip);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Could not load tasks</div>';
 }
 }
-async function toggleMIT(el) {
+asyncFn toggleMIT(el) {
 const chk=el.querySelector('.mit-check'), txt=el.querySelector('.mit-text');
 const done=chk.classList.contains('done');
 chk.classList.toggle('done',!done);
@@ -970,7 +982,7 @@ try {
 await API(`/api/v1/lifeos/commitments/${el.dataset.id}/keep`,{method:'POST',body:JSON.stringify({kept:!done})});
 } catch {}
 }
-window.addMIT = async function() {
+window.addMIT = asyncFn() {
 const inp=$('mit-input'), text=inp.value.trim();
 if (!text) return;
 try {
@@ -981,7 +993,7 @@ loadMITs();
 };
 $('mit-input').addEventListener('keypress', e=>{ if(e.key==='Enter') addMIT(); });
 // ── Calendar ──
-async function loadCal() {
+asyncFn loadCal() {
 try {
 const r=await API('/api/v1/lifeos/engine/calendar/events?days=1&limit=8');
 const d=await r.json();
@@ -999,7 +1011,7 @@ $('cal-list').innerHTML='<div class="empty"><span>📅</span>Could not load sche
 }
 }
 // ── Goals ──
-async function loadGoals() {
+asyncFn loadGoals() {
 try {
 const r=await API('/api/v1/lifeos/finance/goals');
 const d=await r.json();
@@ -1040,7 +1052,7 @@ return `<svg width="72" height="72" viewBox="0 0 72 72">
 stroke="${c}" style="stroke-dashoffset:${offset}"/>
 </svg>`;
 }
-async function loadScores() {
+asyncFn loadScores() {
 try {
 const r=await API('/api/v1/lifeos/dashboard/scoreboard');
 const d=await r.json();
@@ -1061,7 +1073,7 @@ $('scores-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><span>�
 }
 // ── Chat ──
 let threadId=null;
-async function initChat() {
+asyncFn initChat() {
 try {
 const r=await API('/api/v1/lifeos/chat/threads/default',{method:'POST',body:JSON.stringify({})});
 const d=await r.json();
@@ -1075,7 +1087,7 @@ $('chat-messages').innerHTML=msgs.map(m=>`<div class="msg ${m.role==='user'?'use
 $('chat-messages').scrollTop=99999;
 } catch {}
 }
-async function sendChat() {
+asyncFn sendChat() {
 const inp=$('chat-input'), text=inp.value.trim();
 if (!text||!threadId) return;
 inp.value='';
@@ -1147,7 +1159,7 @@ clearInterval(ambientInterval);
 if (window.speechSynthesis) window.speechSynthesis.cancel();
 }
 };
-async function checkProactiveNudge() {
+asyncFn checkProactiveNudge() {
 try {
 const r = await API('/api/v1/lifeos/ambient/nudge');
 const d = await r.json();
@@ -1203,6 +1215,23 @@ if (window.LifeOSDashboardAiRail) {
 Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
 </script>
 </body>
+<!-- Added by THIS task (new) -->
+<script>
+  const user = window.lifeosUser;
+  const commandKey = window.lifeosCommandKey;
+  if (window.LifeOSWidgetMIT) {
+    LifeOSWidgetMIT.mount({container: document.getElementById('lifeos-widget-mit'), user, commandKey});
+  }
+  if (window.LifeOSWidgetScore) {
+    LifeOSWidgetScore.mount({container: document.getElementById('lifeos-widget-score'), user, commandKey});
+  }
+  if (window.LifeOSWidgetLuminQuick) {
+    LifeOSWidgetLuminQuick.mount({container: document.getElementById('lifeos-widget-lumin-quick'), user, commandKey});
+  }
+  if (window.LifeOSWidgetCategoryStubs) {
+    LifeOSWidgetCategoryStubs.mount({container: document.getElementById('lifeos-widget-category-stubs'), user, commandKey});
+  }
+</script>
 <!-- New widget mount script for LifeOS Dashboard (added by task) -->
 <script>
   const user = window.lifeosUser;
