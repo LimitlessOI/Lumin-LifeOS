@@ -1,62 +1,75 @@
-The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file is missing from the repository, leading to an incomplete specification.
----
-## Dashboard Card Density Specification
+The task explicitly requests a "Specification only" in "Markdown" format, while the "HTML FULL FILE — STRICT OUTPUT CONTRACT" demands the entire response be a complete HTML document without markdown fences or prose. This output prioritizes the specific task instruction for a Markdown specification.
 
-This document specifies the visual density modes for dashboard cards, their mapping to CSS variables and DOM attributes, mobile constraints, and integration with the customization state.
+# Dashboard Card Density Specification
 
-### 1. Density Modes
+This document outlines the specification for implementing adjustable card density modes on the LifeOS Dashboard.
 
-Three primary density modes are supported, influencing card spacing, padding, and font sizes. These modes are resolved by the `pickDashboardDensity` utility and applied to the dashboard container.
+## 1. Density Modes
 
-#### 1.1. Compact
--   **Description:** Maximizes information density, ideal for power users or smaller screens. Reduces whitespace and element sizes.
--   **CSS Variable Mapping (Example Derivations):**
-    -   `--card-padding-x`: `calc(2 * var(--dash-space-unit))` (e.g., 8px)
-    -   `--card-padding-y`: `calc(1.5 * var(--dash-space-unit))` (e.g., 6px)
-    -   `--card-gap`: `calc(2 * var(--dash-space-unit))` (e.g., 8px)
-    -   `--card-font-size-multiplier`: `0.9` (e.g., 90% of base font size)
-    -   `--card-header-height`: `calc(8 * var(--dash-space-unit))` (e.g., 32px)
--   **DOM Data Attribute:** `data-density="compact"`
+Three primary density modes are defined for dashboard cards:
 
-#### 1.2. Balanced
--   **Description:** The default, balanced mode offering a good compromise between information density and readability.
--   **CSS Variable Mapping (Example Derivations):**
-    -   `--card-padding-x`: `calc(3 * var(--dash-space-unit))` (e.g., 12px)
-    -   `--card-padding-y`: `calc(2 * var(--dash-space-unit))` (e.g., 8px)
-    -   `--card-gap`: `calc(3 * var(--dash-space-unit))` (e.g., 12px)
-    -   `--card-font-size-multiplier`: `1.0` (e.g., 100% of base font size)
-    -   `--card-header-height`: `calc(10 * var(--dash-space-unit))` (e.g., 40px)
--   **DOM Data Attribute:** `data-density="balanced"`
+*   **Compact:** Optimized for displaying more information within a given screen area. Reduces padding, margins, and potentially font sizes.
+*   **Balanced (Default):** The current standard density, offering a good balance between information density and readability.
+*   **Expanded:** Prioritizes readability and visual spaciousness. Increases padding, margins, and potentially font sizes.
 
-#### 1.3. Airy
--   **Description:** Provides a more relaxed visual experience with generous spacing, enhancing readability at the cost of density.
--   **CSS Variable Mapping (Example Derivations):**
-    -   `--card-padding-x`: `calc(4 * var(--dash-space-unit))` (e.g., 16px)
-    -   `--card-padding-y`: `calc(3 * var(--dash-space-unit))` (e.g., 12px)
-    -   `--card-gap`: `calc(4 * var(--dash-space-unit))` (e.g., 16px)
-    -   `--card-font-size-multiplier`: `1.1` (e.g., 110% of base font size)
-    -   `--card-header-height`: `calc(12 * var(--dash-space-unit))` (e.g., 48px)
--   **DOM Data Attribute:** `data-density="airy"`
+## 2. Token Mapping (CSS Variables)
 
-### 2. Mobile Constraints
+Density modes will be controlled by a set of CSS variables, allowing for dynamic adjustments without modifying core component styles. These variables should be defined in `public/shared/lifeos-dashboard-tokens.css` or a dedicated `lifeos-dashboard-density.css` file.
 
-On mobile viewports, the `clampMobileWidgetCount` utility ensures that the number of displayed widgets remains between 1 and 6. The `pickDashboardDensity` utility will inherently favor a more `compact` or `balanced` density on smaller `viewportWidth` values, regardless of user preference, to maintain usability. Mobile-specific media queries in CSS will override general density settings to ensure optimal layout.
+### Core Density Variables:
 
-### 3. Intersection with Customization State
+| Variable Name                 | Purpose                                     | Compact Value (Example) | Balanced Value (Example) | Expanded Value (Example) |
+| :---------------------------- | :------------------------------------------ | :---------------------- | :----------------------- | :----------------------- |
+| `--dash-card-padding-x`       | Horizontal padding for `.card`              | `16px`                  | `20px`                   | `24px`                   |
+| `--dash-card-padding-y`       | Vertical padding for `.card`                | `16px`                  | `20px`                   | `24px`                   |
+| `--dash-card-label-font-size` | Font size for `.card-label`                 | `9px`                   | `10px`                   | `11px`                   |
+| `--dash-card-label-margin-b`  | Bottom margin for `.card-label`             | `10px`                  | `14px`                   | `18px`                   |
+| `--dash-item-spacing-sm`      | Small spacing for list items (e.g., MITs)   | `8px`                   | `10px`                   | `12px`                   |
+| `--dash-item-spacing-md`      | Medium spacing for list items (e.g., Events)| `8px`                   | `9px`                    | `11px`                   |
+| `--dash-card-radius`          | Border radius for `.card`                   | `var(--dash-radius-md)` | `var(--dash-radius-lg)`  | `var(--dash-radius-xl)`  |
 
--   **Persistence:** The user's preferred density mode is stored in `localStorage` under the key `lifeos-dashboard-density-mode` (e.g., `"compact"`, `"balanced"`, `"airy"`), as defined in `DASHBOARD_CUSTOMIZATION_STATE.md`.
--   **Resolution:** On client-side hydration, the `pickDashboardDensity` utility (from `dashboard-layout-utils.mjs`) will resolve the active density. This resolution considers:
-    1.  The user's stored preference (`lifeos-dashboard-density-mode`).
-    2.  Current `viewportWidth`.
-    3.  Active `widgetCount`.
-    4.  Presence of a `hasPinnedRail`.
--   **Application:** The resolved density will be applied as a `data-density` attribute to the main dashboard container element (e.g., `<div id="dashboard-main" data-density="balanced">`). This attribute will then drive the application of density-specific CSS variables and styles.
--   **SSR:** Server-Side Rendering can inject a default `data-density` attribute (e.g., `data-density="balanced"`) to prevent FOUC, which will be overridden by client-side resolution if a user preference exists or viewport conditions dictate a different density.
+### Implementation Notes for CSS:
 
-### 4. Rollout Order
+*   The existing `.card` and related styles in `public/overlay/lifeos-dashboard.html` (or external CSS) will be updated to use these new density variables.
+*   A `[data-card-density="compact"]` or `[data-card-density="expanded"]` selector on the `body` or a main container will override the default (`balanced`) values of these variables.
 
-1.  **CSS Variable Definition:** Define density-specific CSS variables (e.g., `--card-padding-x`, `--card-gap`) within a new stylesheet (e.g., `public/shared/lifeos-dashboard-layout.css`), scoped to `[data-density="compact"]`, `[data-density="balanced"]`, `[data-density="airy"]` selectors.
-2.  **`pickDashboardDensity` Integration:** Ensure the client-side layout manager correctly calls `pickDashboardDensity` on initial load, `resize` events, and state changes (widget count, pinned rail).
-3.  **DOM Attribute Application:** Implement the logic to apply the `data-density` attribute to the dashboard container based on the resolved density.
-4.  **`localStorage` Integration:** Implement reading and writing of `lifeos-dashboard-density-mode` to `localStorage` for persistence.
-5.  **Testing:** Thoroughly test across various screen sizes, widget counts, and user preferences.
+## 3. DOM Data Attributes
+
+The active density mode will be indicated by a `data-card-density` attribute on the `<body>` element of `public/overlay/lifeos-dashboard.html`.
+
+Example:
+*   `<body data-card-density="compact">`
+*   `<body data-card-density="balanced">`
+*   `<body data-card-density="expanded">`
+
+This attribute will be set dynamically by JavaScript based on user preferences.
+
+## 4. Mobile Constraints
+
+On mobile viewports (e.g., `max-width: 640px`), the density modes will be constrained to ensure optimal usability and readability.
+
+*   **Default Mobile Density:** Regardless of the user's chosen desktop density, mobile views will default to a `balanced` or `compact` equivalent. The `expanded` mode will likely be visually indistinguishable from `balanced` on small screens to prevent excessive scrolling or empty space.
+*   **Responsive Overrides:** Media queries will be used to adjust the density CSS variables for mobile, ensuring that padding, font sizes, and spacing remain appropriate for smaller screens. For example, `--dash-card-padding-x` might be capped at `16px` for all modes on mobile.
+*   **User Preference Persistence:** The user's chosen density preference will persist, but its visual application will be responsive to the viewport size.
+
+## 5. Intersecting with Customization State
+
+The user's preferred dashboard card density will be stored as part of their customization state.
+
+*   **Storage Mechanism:** Given the absence of `docs/projects/DASHBOARD_CUSTOMIZATION_STATE.md`, it is assumed that this preference will be stored in `localStorage` under a key like `lifeos_dashboard_density` (e.g., `localStorage.setItem('lifeos_dashboard_density', 'compact')`). For persistent, cross-device settings, a backend API endpoint would be used to store this in the user's profile.
+*   **Loading State:** On `DOMContentLoaded` in `public/overlay/lifeos-dashboard.html`, JavaScript (e.g., within `lifeos-bootstrap.js` or the main `<script type="module">` block) will read the `lifeos_dashboard_density` value from `localStorage`.
+*   **Applying State:** The retrieved density value will then be applied to the `<body>` element as the `data-card-density` attribute. If no preference is found, `balanced` will be used as the default.
+*   **User Interface:** A UI control (e.g., a button group or dropdown in the dashboard header) will be added to allow users to select their preferred density mode, which will update both the `data-card-density` attribute and the stored preference.
+
+## 6. Rollout Order
+
+1.  **Define CSS Variables:** Add the new density-specific CSS variables and their default (`balanced`) values to `public/shared/lifeos-dashboard-tokens.css`.
+2.  **Implement Density Overrides:** Add CSS rules for `[data-card-density="compact"]` and `[data-card-density="expanded"]` in `public/shared/lifeos-dashboard-tokens.css` (or a new `lifeos-dashboard-density.css` file) to adjust the density variables.
+3.  **Update Component Styles:** Modify existing CSS classes (e.g., `.card`, `.card-label`, `.mit-item`, `.event-row`, `.score-tile`) in `public/overlay/lifeos-dashboard.html`'s `<style>` block or `lifeos-dashboard-tokens.css` to utilize the new density variables.
+4.  **Add Mobile Responsiveness:** Integrate media queries to adjust density variables for mobile viewports, ensuring a consistent and usable experience across devices.
+5.  **Implement JavaScript Logic:** Add JavaScript to `public/overlay/lifeos-dashboard.html` (within the existing `<script type="module">` block) to:
+    *   Read `lifeos_dashboard_density` from `localStorage` on load.
+    *   Apply the `data-card-density` attribute to the `<body>`.
+    *   Provide a function (e.g., `setCardDensity(mode)`) to update the attribute and `localStorage`.
+6.  **Develop UI Control:** Create a UI element (e.g., a button in the header) that allows users to switch between density modes, calling the `setCardDensity` function.
+7.  **Testing:** Thoroughly test all density modes across various screen sizes and devices.
