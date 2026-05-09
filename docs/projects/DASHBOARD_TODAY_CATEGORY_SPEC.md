@@ -1,125 +1,85 @@
-The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file is missing from the repository, leading to an incomplete specification for the overall dashboard context.
----
+The task requests a Markdown specification, but the "HTML FULL FILE — STRICT OUTPUT CONTRACT" section implies an HTML output. I will proceed with the Markdown specification as explicitly requested by the "SPECIFICATION" line for this task.
+
 # Today Category Specification
 
-This document outlines the layout blocks and API assumptions for the "Today" category on the LifeOS dashboard. This category aggregates immediate, actionable items relevant to the current day.
+This document outlines the layout blocks and API assumptions for the "Today" category on the LifeOS dashboard, referencing existing elements in `public/overlay/lifeos-dashboard.html`.
 
-## 1. Layout Blocks
+## 1. Most Important Tasks (MITs)
 
-The "Today" category will be rendered within a dedicated section of the main dashboard container, adapting to the global `data-density` attribute. Each functional area within "Today" will be represented as a distinct widget.
+### Layout Block
+- **Container**: `<div class="card accent-border-today fade-up delay-1">`
+- **Label**: `<div class="card-label">Today's MITs</div>`
+- **MITs List**: `<div id="mits-list">` (Populated with `.mit-item` elements)
+    - Each MIT item: `<div class="mit-item" data-id="..." data-desc="...">`
+        - Checkbox: `<div class="mit-check">` (with SVG for checkmark)
+        - Text: `<div class="mit-text">`
+- **Quick Add Section**: `<div class="quick-add">`
+    - Input field: `<input type="text" id="mit-input" placeholder="Add a most important task…">`
+    - Add button: `<button class="btn-add" onclick="addMIT()">Add</button>`
 
-### 1.1. Main Container
--   **DOM Element:** `<section id="today-category-section" class="dashboard-category-section">`
--   **Purpose:** Houses all "Today" related widgets. This section will be a direct child of the main dashboard container (e.g., `<div id="dashboard-main" data-density="...">`).
+### API Assumptions
+- **Load MITs**: `GET /api/v1/lifeos/commitments?limit=30`
+    - Expected response: `{"commitments": [{"id": "uuid", "text": "string", "description": "string", "is_mit": true, "kept_at": "ISO string | null"}]}`
+- **Toggle MIT Status**: `POST /api/v1/lifeos/commitments/{id}/keep`
+    - Request body: `{"kept": boolean}`
+- **Add New MIT**: `POST /api/v1/lifeos/commitments`
+    - Request body: `{"text": "string", "is_mit": true}`
 
-### 1.2. MITs (Most Important Tasks) Widget
--   **DOM Element:** `<div id="today-mits-widget" class="dashboard-widget" data-widget-type="mits">`
--   **Purpose:** Displays a prioritized list of the user's Most Important Tasks for the current day.
--   **Content:** Each MIT entry will typically include a title, status indicator (e.g., checkbox), and potentially a due time or priority level.
+## 2. Today's Schedule
 
-### 1.3. Schedule Widget
--   **DOM Element:** `<div id="today-schedule-widget" class="dashboard-widget" data-widget-type="schedule">`
--   **Purpose:** Presents a chronological list of upcoming appointments or events for the current day.
--   **Content:** Each schedule entry will include a time range, title, and optionally a location or participants.
+### Layout Block
+- **Container**: `<div class="card accent-border-today fade-up delay-2">`
+- **Label**: `<div class="card-label">Today's Schedule</div>`
+- **Events List**: `<div id="cal-list">` (Populated with `.event-row` elements)
+    - Each event item: `<div class="event-row">`
+        - Time: `<span class="event-time">` (optional)
+        - Title: `<span class="event-title">`
 
-### 1.4. Alerts Widget
--   **DOM Element:** `<div id="today-alerts-widget" class="dashboard-widget" data-widget-type="alerts">`
--   **Purpose:** Shows critical notifications, reminders, or system alerts requiring immediate attention.
--   **Content:** Each alert will display a message, type (e.g., info, warning, critical), and a timestamp.
+### API Assumptions
+- **Load Schedule**: `GET /api/v1/lifeos/engine/calendar/events?days=1&limit=8`
+    - Expected response: `{"events": [{"title": "string", "name": "string", "starts_at": "ISO string", "start_time": "ISO string"}]}`
 
-### 1.5. Quick Add Widget
--   **DOM Element:** `<div id="today-quick-add-widget" class="dashboard-widget" data-widget-type="quick-add">`
--   **Purpose:** Provides a streamlined interface for quickly adding new tasks, events, or notes directly from the dashboard.
--   **Content:** An input field, a submission button, and potentially a selector for the type of item being added.
+## 3. Alerts (New Section)
 
-### 1.6. Lumin Entry Widget
--   **DOM Element:** `<div id="today-lumin-widget" class="dashboard-widget" data-widget-type="lumin">`
--   **Purpose:** Offers a quick access point or a summary related to the "Lumin" feature, facilitating rapid interaction.
--   **Content:** Could be a button to initiate a new Lumin entry, or a brief summary of recent Lumin activity.
+### Layout Block
+- **Container**: `<div class="card accent-border-decisions fade-up delay-X">` (New card, `delay-X` to be determined based on placement)
+- **Label**: `<div class="card-label">Alerts</div>`
+- **Alerts List**: `<div id="alerts-list">` (New ID, populated with alert items)
+    - Each alert item: `<div class="alert-item">` (New class)
+        - Message: `<span class="alert-message">`
+        - Timestamp: `<span class="alert-timestamp">`
+        - Optional action: `<a href="..." class="alert-action">`
 
-## 2. API Assumptions
+### API Assumptions
+- **Load Alerts**: `GET /api/v1/lifeos/alerts/today` (New API endpoint)
+    - Expected response: `{"alerts": [{"id": "uuid", "type": "info|warning|critical", "message": "string", "timestamp": "ISO string", "action_url": "string | null"}]}`
 
-The following API endpoints are assumed for populating the "Today" category widgets. All endpoints are expected to return JSON data.
+## 4. Lumin Entry (Chat Interface)
 
-### 2.1. MITs API
--   **Endpoint:** `GET /api/v1/today/mits`
--   **Description:** Retrieves the list of Most Important Tasks for the current user for today.
--   **Expected Response Structure:**
-    ```json
-    [
-      {
-        "id": "string",
-        "title": "string",
-        "status": "pending" | "completed",
-        "dueDate": "string (ISO 8601 date-time)",
-        "priority": "number"
-      }
-    ]
-    ```
+### Layout Block
+- **Container**: `<div class="card accent-border-mirror fade-up delay-9">`
+- **Label**: `<div class="card-label">Chat with Lumin</div>`
+- **Messages Display**: `<div class="chat-messages" id="chat-messages">` (Populated with `.msg` elements)
+    - User message: `<div class="msg user">`
+    - Assistant message: `<div class="msg assistant">`
+    - Ambient message: `<div class="msg ambient">`
+- **Typing Indicator**: `<div class="typing" id="typing">` (Contains `.typing-dot` elements)
+- **Chat Input Row**: `<div class="chat-row">`
+    - Input field: `<input type="text" id="chat-input" placeholder="Ask Lumin anything… or tap 🎙 to talk">`
+    - Microphone button: `<button class="btn-mic" id="btn-mic">🎙</button>`
+    - Send button: `<button class="btn-send" id="send-btn">↑</button>`
+- **Voice Footer**: `<div class="voice-footer">`
+    - Speak replies toggle: `<label><input type="checkbox" id="speak-toggle"><span>Speak replies</span></label>`
+    - PTT hint: `<span class="ptt-hint">Hold Space to talk</span>`
+    - Voice status: `<span id="voice-status">`
 
-### 2.2. Schedule API
--   **Endpoint:** `GET /api/v1/today/schedule`
--   **Description:** Fetches the user's schedule entries for the current day.
--   **Expected Response Structure:**
-    ```json
-    [
-      {
-        "id": "string",
-        "title": "string",
-        "startTime": "string (ISO 8601 date-time)",
-        "endTime": "string (ISO 8601 date-time)",
-        "location": "string | null"
-      }
-    ]
-    ```
-
-### 2.3. Alerts API
--   **Endpoint:** `GET /api/v1/today/alerts`
--   **Description:** Retrieves active alerts and notifications for the user.
--   **Expected Response Structure:**
-    ```json
-    [
-      {
-        "id": "string",
-        "type": "info" | "warning" | "critical",
-        "message": "string",
-        "timestamp": "string (ISO 8601 date-time)"
-      }
-    ]
-    ```
-
-### 2.4. Quick Add API
--   **Endpoint:** `POST /api/v1/today/quick-add`
--   **Description:** Allows for rapid creation of new items (tasks, events, notes).
--   **Expected Request Body:**
-    ```json
-    {
-      "type": "task" | "event" | "note",
-      "content": "string",
-      "dueDate": "string (ISO 8601 date-time) | null",
-      "startTime": "string (ISO 8601 date-time) | null"
-    }
-    ```
--   **Expected Response Structure:**
-    ```json
-    {
-      "success": "boolean",
-      "id": "string | null",
-      "message": "string"
-    }
-    ```
-
-### 2.5. Lumin Summary API
--   **Endpoint:** `GET /api/v1/today/lumin-summary`
--   **Description:** Provides a brief summary or status related to the Lumin feature.
--   **Expected Response Structure:**
-    ```json
-    {
-      "latestEntry": {
-        "id": "string",
-        "title": "string",
-        "timestamp": "string (ISO 8601 date-time)"
-      } | null,
-      "unreadCount": "number"
-    }
-    ```
+### API Assumptions
+- **Initialize Chat Thread**: `POST /api/v1/lifeos/chat/threads/default`
+    - Expected response: `{"thread": {"id": "uuid"}}` or `{"id": "uuid"}`
+- **Load Chat History**: `GET /api/v1/lifeos/chat/threads/{threadId}/messages?limit=10`
+    - Expected response: `{"messages": [{"role": "user|assistant", "content": "string"}]}`
+- **Send Message**: `POST /api/v1/lifeos/chat/threads/{threadId}/messages`
+    - Request body: `{"message": "string"}`
+    - Expected response: `{"reply": "string"}` or `{"content": "string"}`
+- **Proactive Nudge**: `GET /api/v1/lifeos/ambient/nudge`
+    - Expected response: `{"speak": "string"}` (if a nudge is available) or `{}`
