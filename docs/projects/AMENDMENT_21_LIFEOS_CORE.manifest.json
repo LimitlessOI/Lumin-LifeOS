@@ -845,6 +845,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-05-11",
-  "ssot_receipt_tail": "builder: extractCssFromOutput() strips markdown fences from CSS targets; daemon CSS commit fixed; supervisor §2.6 truth labels"
+  "last_updated": "2026-05-09",
+  "ssot_receipt_tail": "cleanup: 231 orphaned files purged (frontend/, backend/, root junk JS, dead routes, stale screenshots); tsos-task-ledger-routes.js syntax fixed; test:smoke script removed"
 }
