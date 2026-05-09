@@ -4,11 +4,11 @@
  * This file defines semantic color, spacing, and radius variables for the
  * LifeOS dashboard shell, supporting both light and dark themes.
  *
- * Refer to LIFEOS_DASHBOARD_BUILDER_BRIEF.md for design specifications.
+ * Refer to: docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md
  */
 
 :root {
-  /* Dark Theme Defaults */
+  /* Dark Theme (Default) */
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
   --dash-text: #e8e8f0;
@@ -23,10 +23,10 @@
   /* Light Theme */
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
-  --dash-text: #1a1a2a;
+  --dash-text: #1a1a22;
   --dash-muted: #777788;
-  --dash-accent: #4a5af0;
-  --dash-border: rgba(0,0,0,0.1);
+  --dash-accent: #5b6af5; /* Keep accent consistent */
+  --dash-border: rgba(0,0,0,0.08);
   --dash-radius-lg: 14px;
   --dash-space-unit: 8px;
 }
