@@ -176,4 +176,187 @@ export async function getTCMorningDigest(pool) {
             JOIN tc_document_requests dr ON t.id = dr.transaction_id
             WHERE t.status IN ('active', 'pending')
               AND dr.status = 'pending'
-              AND dr.required = TRUE -- Assuming 'required' column exists in
+              AND dr.required = TRUE
+            GROUP BY t.id, t.address
+            HAVING COUNT(dr.id) > 0
+            ORDER BY count DESC;
+        `);
+        digest.missing_docs = missingDocs.map(row => ({
+            tx_id: row.tx_id,
+            address: row.address,
+            count: parseInt(row.count, 10),
+        }));
+    } catch (err) {
+        if (err.code === '42P01') { /* tc_transactions or tc_document_requests table missing, return empty array */ } else { throw err; }
+    }
+
+    // Generate summary string
+    const parts = [];
+    if (digest.urgent_deadlines.length > 0) {
+        parts.push(`${digest.urgent_deadlines.length} urgent deadline${digest.urgent_deadlines.length === 1 ? '' : 's'}`);
+    }
+    if (digest.critical_alerts.length > 0) {
+        parts.push(`${digest.critical_alerts.length} critical alert${digest.critical_alerts.length === 1 ? '' : 's'}`);
+    }
+    if (digest.pending_approvals.total > 0) {
+        parts.push(`${digest.pending_approvals.total} pending approval${digest.pending_approvals.total === 1 ? '' : 's'}`);
+    }
+    if (digest.stale_client_updates.length > 0) {
+        parts.push(`${digest.stale_client_updates.length} stale client update${digest.stale_client_updates.length === 1 ? '' : 's'}`);
+    }
+    if (digest.missing_docs.length > 0) {
+        const totalMissingDocs = digest.missing_docs.reduce((sum, item) => sum + item.count, 0);
+        parts.push(`${totalMissingDocs} missing doc${totalMissingDocs === 1 ? '' : 's'}`);
+    }
+
+    if (parts.length === 0) {
+        digest.summary = "All clear! No urgent items in your TC morning digest.";
+    } else {
+        digest.summary = `Morning Digest: ${parts.join(', ')}.`;
+    }
+
+    return digest;
+}
+
+/**
+ * Formats the TC digest for SMS (under 320 characters).
+ * @param {object} digest - The structured digest object.
+ * @returns {string} SMS-friendly string.
+ */
+export function formatTCDigestForSMS(digest) {
+    const lines = [];
+    lines.push("TC Morning Digest:");
+
+    if (digest.urgent_deadlines.length > 0) {
+        lines.push(`- ${digest.urgent_deadlines.length} urgent deadline${digest.urgent_deadlines.length === 1 ? '' : 's'}.`);
+    }
+    if (digest.critical_alerts.length > 0) {
+        lines.push(`- ${digest.critical_alerts.length} critical alert${digest.critical_alerts.length === 1 ? '' : 's'}.`);
+    }
+    if (digest.pending_approvals.total > 0) {
+        lines.push(`- ${digest.pending_approvals.total} pending approval${digest.pending_approvals.total === 1 ? '' : 's'}.`);
+    }
+    if (digest.stale_client_updates.length > 0) {
+        lines.push(`- ${digest.stale_client_updates.length} stale client update${digest.stale_client_updates.length === 1 ? '' : 's'}.`);
+    }
+    if (digest.missing_docs.length > 0) {
+        const totalMissingDocs = digest.missing_docs.reduce((sum, item) => sum + item.count, 0);
+        lines.push(`- ${totalMissingDocs} missing doc${totalMissingDocs === 1 ? '' : 's'}.`);
+    }
+
+    if (lines.length === 1) { // Only the "TC Morning Digest:" line
+        lines.push("All clear! No urgent items.");
+    }
+
+    let sms = lines.join('\n');
+    if (sms.length > 320) {
+        // Truncate and add a "..." if too long
+        sms = sms.substring(0, 317) + '...';
+    }
+    return sms;
+}
+
+/**
+ * Formats the TC digest for email (subject + html + text).
+ * @param {object} digest - The structured digest object.
+ * @returns {{subject: string, html: string, text: string}} Email-friendly object.
+ */
+export function formatTCDigestForEmail(digest) {
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = new Date(digest.generated_at).toLocaleDateString('en-US', dateOptions);
+    const subject = `TC Morning Digest - ${formattedDate}`;
+
+    let htmlContent = `
+        <p>Hello Adam,</p>
+        <p>Here is your Transaction Coordinator morning digest for <strong>${formattedDate}</strong>:</p>
+        <p><strong>Summary:</strong> ${digest.summary}</p>
+    `;
+
+    let textContent = `
+        Hello Adam,
+
+        Here is your Transaction Coordinator morning digest for ${formattedDate}:
+
+        Summary: ${digest.summary}
+    `;
+
+    if (digest.urgent_deadlines.length > 0) {
+        htmlContent += `
+            <h3>Urgent Deadlines (within 3 days)</h3>
+            <ul>
+                ${digest.urgent_deadlines.map(d => `<li><strong>${d.address}</strong>: ${d.deadline_label} in ${d.days_out} day${d.days_out === 1 ? '' : 's'}</li>`).join('')}
+            </ul>
+        `;
+        textContent += `
+            Urgent Deadlines (within 3 days):
+            ${digest.urgent_deadlines.map(d => `- ${d.address}: ${d.deadline_label} in ${d.days_out} day${d.days_out === 1 ? '' : 's'}`).join('\n')}
+        `;
+    }
+
+    if (digest.critical_alerts.length > 0) {
+        htmlContent += `
+            <h3>Critical/Urgent Alerts</h3>
+            <ul>
+                ${digest.critical_alerts.map(a => `<li><strong>${a.address}</strong>: ${a.message} (Severity: ${a.severity})</li>`).join('')}
+            </ul>
+        `;
+        textContent += `
+            Critical/Urgent Alerts:
+            ${digest.critical_alerts.map(a => `- ${a.address}: ${a.message} (Severity: ${a.severity})`).join('\n')}
+        `;
+    }
+
+    if (digest.pending_approvals.total > 0) {
+        htmlContent += `
+            <h3>Pending Approvals</h3>
+            <ul>
+                <li>Total: ${digest.pending_approvals.total}</li>
+                ${digest.pending_approvals.critical > 0 ? `<li>Critical: ${digest.pending_approvals.critical}</li>` : ''}
+                ${digest.pending_approvals.urgent > 0 ? `<li>Urgent: ${digest.pending_approvals.urgent}</li>` : ''}
+                ${digest.pending_approvals.normal > 0 ? `<li>Normal: ${digest.pending_approvals.normal}</li>` : ''}
+            </ul>
+        `;
+        textContent += `
+            Pending Approvals:
+            Total: ${digest.pending_approvals.total}
+            ${digest.pending_approvals.critical > 0 ? `Critical: ${digest.pending_approvals.critical}\n` : ''}
+            ${digest.pending_approvals.urgent > 0 ? `Urgent: ${digest.pending_approvals.urgent}\n` : ''}
+            ${digest.pending_approvals.normal > 0 ? `Normal: ${digest.pending_approvals.normal}\n` : ''}
+        `;
+    }
+
+    if (digest.stale_client_updates.length > 0) {
+        htmlContent += `
+            <h3>Stale Client Updates (over 3 days)</h3>
+            <ul>
+                ${digest.stale_client_updates.map(s => `<li><strong>${s.address}</strong>: Last update ${s.days_since_update} day${s.days_since_update === 1 ? '' : 's'} ago</li>`).join('')}
+            </ul>
+        `;
+        textContent += `
+            Stale Client Updates (over 3 days):
+            ${digest.stale_client_updates.map(s => `- ${s.address}: Last update ${s.days_since_update} day${s.days_since_update === 1 ? '' : 's'} ago`).join('\n')}
+        `;
+    }
+
+    if (digest.missing_docs.length > 0) {
+        htmlContent += `
+            <h3>Missing Documents</h3>
+            <ul>
+                ${digest.missing_docs.map(m => `<li><strong>${m.address}</strong>: ${m.count} document${m.count === 1 ? '' : 's'} missing</li>`).join('')}
+            </ul>
+        `;
+        textContent += `
+            Missing Documents:
+            ${digest.missing_docs.map(m => `- ${m.address}: ${m.count} document${m.count === 1 ? '' : 's'} missing`).join('\n')}
+        `;
+    }
+
+    htmlContent += `<p>Best regards,<br>The TC Service Team</p>`;
+    textContent += `\nBest regards,\nThe TC Service Team`;
+
+    return {
+        subject,
+        html: htmlContent.trim(),
+        text: textContent.trim(),
+    };
+}
