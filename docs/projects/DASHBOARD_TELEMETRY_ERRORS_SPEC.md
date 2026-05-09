@@ -1,70 +1,67 @@
-# Client-Visible Error Envelopes Specification
+# API Client Error Envelope Specification
 
-## 1. Purpose
+This document outlines the standard for client-visible error envelopes within the LifeOS platform, focusing on API failure copy, retry mechanisms, correlation ID surfacing, and privacy/fail-closed principles. This specification does not include instrumentation code.
 
-This document specifies the structure and content of client-visible error envelopes returned by the LifeOS platform APIs. The goal is to provide clear, actionable, and secure error information to clients, differentiating between internal debugging details and user-friendly messages.
+## 1. API Error Response Structure
 
-## 2. Error Envelope Structure
-
-All API errors will return a JSON object with the following top-level keys:
+All API endpoints returning an error should adhere to the following JSON structure:
 
 ```json
 {
-  "status": "error",
-  "code": "string",
-  "message": "string",
-  "details": "object | null",
-  "correlationId": "string | null",
-  "retryable": "boolean"
+  "error": {
+    "code": "STRING",          // A machine-readable error code (e.g., "INVALID_INPUT", "RESOURCE_NOT_FOUND", "SERVICE_UNAVAILABLE").
+    "message": "STRING",       // A user-friendly, non-technical message suitable for direct display to the end-user.
+    "detail": "STRING",        // (Adam-only) A more technical description of the error, including internal context or specific validation failures.
+    "correlationId": "UUID",   // (Adam-only) A unique identifier for the request, useful for tracing and debugging.
+    "retryable": BOOLEAN       // Indicates if the operation is potentially retryable by the client (e.g., network issues, temporary service unavailability).
+  }
 }
 ```
 
--   **`status`**: Always `"error"` for failure responses.
--   **`code`**: A machine-readable, internal error code (e.g., `AUTH_FAILED`, `INVALID_INPUT`, `SERVICE_UNAVAILABLE`). This should be consistent across the platform.
--   **`message`**: A human-readable message intended for the end-user. This message should be concise, clear, and avoid technical jargon.
--   **`details`**: An optional object containing additional context relevant to the error. This should generally be omitted or sanitized for public consumption. For Adam-only visibility, this can contain more technical specifics.
--   **`correlationId`**: A unique identifier for the request, allowing for tracing and debugging. This will be surfaced conditionally.
--   **`retryable`**: A boolean indicating whether the client can safely retry the request.
+**Principles:**
+*   `message` should be concise and actionable for the user.
+*   `detail` and `correlationId` must *never* be displayed to the general user.
+*   If `message` is omitted or empty, the client should fall back to a generic error message.
 
-## 3. API Failure Copy
+## 2. Client-Side Error Handling & Display
 
-### 3.1 User-Facing Copy (`message`)
+The client (e.g., `lifeos-dashboard.html`) must implement a consistent approach to handling API errors.
 
--   **Clarity**: Messages must be easy to understand for a non-technical user.
--   **Actionability**: Where possible, messages should suggest a next step (e.g., "Please check your credentials and try again.").
--   **Generality**: Avoid exposing internal system details, database errors, or specific file paths.
--   **Consistency**: Use consistent phrasing and tone across all error messages.
--   **Examples**:
-    -   "Authentication failed. Please ensure your API key is correct."
-    -   "The requested resource could not be found."
-    -   "An unexpected error occurred. Please try again later."
-    -   "Your input is invalid. Please review the provided data."
+### 2.1 User-Facing Error Copy
 
-### 3.2 Adam-Only Details (`details`)
+*   **Primary Display**: The `error.message` from the API response should be displayed to the user.
+*   **Generic Fallback**: If `error.message` is not provided or is empty, the client should display a generic message such as:
+    *   "Something went wrong. Please try again." (for retryable errors)
+    *   "We're experiencing a temporary issue. Your data is safe, please try again later." (for non-retryable, transient errors)
+    *   "An unexpected error occurred. Please contact support if the problem persists." (for unhandled or critical errors)
+*   **Privacy**: Raw backend error messages, stack traces, or internal system details must *never* be shown to the user.
 
--   The `details` field is intended for internal debugging and will only be surfaced to authenticated Adam accounts or internal monitoring systems.
--   It may contain more technical information such as:
-    -   Specific validation errors (e.g., "Field 'email' must be a valid email address").
-    -   Internal error codes or stack traces (sanitized for sensitive data).
-    -   Relevant request parameters that led to the error.
--   This field will be omitted or set to `null` for standard user responses.
+### 2.2 Adam-Only Debug Information
 
-## 4. Retry Mechanisms
+For users identified as "Adam" (e.g., via a `window.lifeosUser.isAdmin` flag or similar debug mode), additional error details should be made available:
+*   **Correlation ID**: The `error.correlationId` should be displayed in a developer console or a discreet, Adam-only debug overlay.
+*   **Technical Detail**: The `error.detail` and `error.code` should also be displayed in the Adam-only debug interface.
+*   **User-facing reference**: For all users, the generic error message *may* include a reference to the correlation ID for support purposes, e.g., "If the problem persists, please contact support and mention reference ID: [correlationId]". This should be carefully considered to avoid overwhelming the user.
 
--   The `retryable` boolean flag will explicitly indicate whether a client can safely retry a failed request.
--   **`retryable: true`**: Indicates transient errors (e.g., network issues, temporary service unavailability, rate limiting). Clients should implement exponential backoff.
--   **`retryable: false`**: Indicates permanent errors (e.g., invalid input, authentication failure, resource not found). Retrying without changing the request parameters is unlikely to succeed.
--   **HTTP Status Codes**: The `retryable` flag should align with standard HTTP status codes (e.g., 429 Too Many Requests, 503 Service Unavailable often imply `retryable: true`; 400 Bad Request, 401 Unauthorized, 404 Not Found imply `retryable: false`).
+### 2.3 Retry Mechanism
 
-## 5. Correlation ID
+*   **API-driven Retryability**: The `error.retryable` flag in the API response dictates if a retry action should be presented to the user.
+*   **User-Initiated Retry**: For `retryable: true` errors, a "Retry" button or link should be displayed alongside the error message.
+*   **Automatic Retries (Client-side)**: For transient network errors (e.g., `TypeError: Failed to fetch`), the client *may* implement a limited number of automatic retries with exponential backoff (e.g., 3 retries with 1s, 2s, 4s delays). This should be transparent to the user, with a loading indicator. If automatic retries fail, the user-facing error message and manual retry option should be presented.
 
--   A `correlationId` (UUID) will be generated for every incoming request via `mw/request-tracer.js`.
--   **Adam-Only Visibility**: The `correlationId` will be included in the error envelope for all requests originating from or authenticated as an Adam account. This allows Adam to quickly trace issues in logs.
--   **User Copy**: For non-Adam users, the `correlationId` will generally be omitted from the client-visible error envelope to prevent information leakage and reduce cognitive load. In rare cases of critical, unrecoverable errors, a generic reference ID might be provided to users with instructions to contact support, but this should not be the raw `correlationId`.
+## 3. Privacy and Fail-Closed Principles
 
-## 6. Privacy and Fail-Closed Principles
+*   **Default to Safe**: In any error scenario, the system must default to a "fail-closed" state. This means:
+    *   No sensitive user data or system internals are exposed.
+    *   Operations that could lead to data corruption or security vulnerabilities are halted.
+*   **Data Integrity**: Ensure that error handling does not compromise data integrity. If an operation fails, the system should revert to a known good state or clearly indicate the failure.
+*   **Graceful Degradation**: When an API call fails, the affected UI component should display an appropriate error message and potentially a retry option, rather than crashing the entire application or displaying stale/incorrect data without indication.
 
--   **Data Minimization**: Error messages will only contain the minimum information necessary for the user or Adam to understand and address the issue.
--   **No Sensitive Data**: Never expose sensitive user data, internal system configurations, database connection strings, API keys, or other confidential information in error messages, regardless of the `details` field.
--   **Fail-Closed**: In cases where an error occurs during the process of generating an error message itself, or if there's uncertainty about the safety of exposing certain details, the system will default to a generic, non-descriptive error message (e.g., "An unexpected error occurred.") rather than risking information leakage.
--   **No Instrumentation Code**: This specification defines the *output* of error handling, not the implementation of instrumentation. Instrumentation (e.g., logging, metrics) will be handled by separate middleware and services, ensuring a clean separation of concerns.
+## 4. No Instrumentation Code
+
+This specification focuses solely on the client-visible aspects of error envelopes. It explicitly excludes details regarding:
+*   Client-side logging of errors to analytics or monitoring systems.
+*   Error reporting mechanisms (e.g., Sentry, Bugsnag).
+*   Performance monitoring related to errors.
+
+These aspects are handled by separate instrumentation and monitoring specifications.
