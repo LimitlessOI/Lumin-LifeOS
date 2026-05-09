@@ -2,31 +2,80 @@
  * LifeOS Dashboard Shell CSS Tokens
  *
  * This file defines semantic color, spacing, and radius variables for the
- * LifeOS dashboard shell, supporting both light and dark themes.
+ * LifeOS dashboard, supporting both light and dark themes.
  *
- * Refer to: docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md
+ * Refer to: LIFEOS_DASHBOARD_BUILDER_BRIEF.md
  */
 
 :root {
-  /* Dark Theme (Default) */
+  /* Default (Dark) Theme */
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
+  --dash-surface-raised: #0d0d15; /* Used for --bg-raised and --bg-surface2 */
+  --dash-surface-overlay: #1e1e28;
   --dash-text: #e8e8f0;
+  --dash-text-secondary: #9999bb;
   --dash-muted: #555566;
-  --dash-accent: #5b6af5;
+  --dash-accent: #5b6af5; /* Today */
+  --dash-accent-health: #10b981;
+  --dash-accent-growth: #34d399;
+  --dash-accent-finance: #22d3ee;
+  --dash-accent-warning: #f59e0b; /* Decisions */
+  --dash-accent-mirror: #7c3aed;
+  --dash-accent-conflict: #e05555;
   --dash-border: rgba(255,255,255,0.07);
+  --dash-border-focus: rgba(255,255,255,0.18);
+  --dash-radius-sm: 6px;
+  --dash-radius-md: 10px;
   --dash-radius-lg: 14px;
-  --dash-space-unit: 8px;
+  --dash-radius-xl: 20px;
+  --dash-space-unit: 4px;
 }
 
-:root[data-theme="light"] {
-  /* Light Theme */
+[data-theme="dark"] {
+  --dash-bg: #0a0a0f;
+  --dash-surface: #111118;
+  --dash-surface-raised: #0d0d15;
+  --dash-surface-overlay: #1e1e28;
+  --dash-text: #e8e8f0;
+  --dash-text-secondary: #9999bb;
+  --dash-muted: #555566;
+  --dash-accent: #5b6af5;
+  --dash-accent-health: #10b981;
+  --dash-accent-growth: #34d399;
+  --dash-accent-finance: #22d3ee;
+  --dash-accent-warning: #f59e0b;
+  --dash-accent-mirror: #7c3aed;
+  --dash-accent-conflict: #e05555;
+  --dash-border: rgba(255,255,255,0.07);
+  --dash-border-focus: rgba(255,255,255,0.18);
+  --dash-radius-sm: 6px;
+  --dash-radius-md: 10px;
+  --dash-radius-lg: 14px;
+  --dash-radius-xl: 20px;
+  --dash-space-unit: 4px;
+}
+
+[data-theme="light"] {
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
+  --dash-surface-raised: #f0f1f5;
+  --dash-surface-overlay: #e0e1e5;
   --dash-text: #1a1a22;
-  --dash-muted: #777788;
-  --dash-accent: #5b6af5; /* Keep accent consistent */
+  --dash-text-secondary: #666677;
+  --dash-muted: #aaaaac;
+  --dash-accent: #5b6af5;
+  --dash-accent-health: #10b981;
+  --dash-accent-growth: #34d399;
+  --dash-accent-finance: #22d3ee;
+  --dash-accent-warning: #f59e0b;
+  --dash-accent-mirror: #7c3aed;
+  --dash-accent-conflict: #e05555;
   --dash-border: rgba(0,0,0,0.08);
+  --dash-border-focus: rgba(0,0,0,0.15);
+  --dash-radius-sm: 6px;
+  --dash-radius-md: 10px;
   --dash-radius-lg: 14px;
-  --dash-space-unit: 8px;
+  --dash-radius-xl: 20px;
+  --dash-space-unit: 4px;
 }
