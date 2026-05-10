@@ -20,4 +20,64 @@ async function searchGooglePlacesForApi(city, type, apiKey, count) {
     return { results: [], source: 'manual_guidance', error: 'GOOGLE_PLACES_KEY not set. Manual research guidance needed.' };
   }
   const query = encodeURIComponent(`${type} business in ${city}`);
-  const url = `
+  const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${apiKey}`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timer);
+    const json = await res.json();
+    if (json.status === 'REQUEST_DENIED') {
+      return { results: [], source: 'google_places', error: `Google Places apiKey rejected: ${json.error_message}` };
+    }
+    if (!json.results?.length) {
+      return { results: [], source: 'google_places', error: `No results found for "${type}" in "${city}".` };
+    }
+    const mappedResults = json.results.slice(0, count).map(place => ({
+      name: place.name,
+      website: place.website || null,
+      address: place.formatted_address || null,
+      rating: place.rating || null,
+      city,
+      type,
+      source: 'google_places',
+    }));
+    return { results: mappedResults, source: 'google_places', error: null };
+  } catch (err) {
+    clearTimeout(timer);
+    return { results: [], source: 'google_places', error: `Google Places fetch error: ${err.message}` };
+  }
+}
+
+// New route for one-click discovery from the command center
+// @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+router.post('/discover', rk, async (req, res) => {
+  let { city, niche, count } = req.body;
+
+  // Apply defaults and caps similar to the CLI script
+  city = city || 'San Diego, CA';
+  niche = niche || 'wellness';
+  count = Math.min(20, Math.max(1, parseInt(count, 10) || 10));
+
+  if (!SUPPORTED_TYPES.includes(niche)) {
+    return res.status(400).json({ ok: false, error: `Unsupported niche: "${niche}". Supported: ${SUPPORTED_TYPES.join(', ')}` });
+  }
+
+  const apiKey = process.env.GOOGLE_PLACES_KEY;
+  const { results, source, error } = await searchGooglePlacesForApi(city, niche, apiKey, count);
+
+  if (error && source === 'manual_guidance') {
+    // If API key is missing, return manual guidance message as a top-level message
+    return res.status(200).json({
+      ok: true,
+      discovered: 0,
+      prospects: [],
+      receipt: { source, city, niche },
+      message: error
+    });
+  } else if (error) {
+    // Other API errors
+    return res.status(500).json({ ok: false, error: `Discovery failed: ${error}` });
+  }
+
+  return res.status(200).json({
