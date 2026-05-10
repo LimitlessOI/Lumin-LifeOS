@@ -5,9 +5,9 @@ To establish a ubiquitous, quick-access AI interaction surface across the LifeOS
 
 ## Key Capabilities
 *   **UI States:**
+    *   **Docking:** User-configurable positioning at either the top or bottom of the screen. This preference will be persisted across sessions using `localStorage` (e.g., `lifeos_lumin_rail_dock_position`).
     *   **Collapsed Strip:** A minimal, one-line UI element (e.g., ~40px height) displaying a concise status (e.g., "Lumin: Ready", "Lumin: Thinking...") or a quick input field for immediate text/voice interaction.
     *   **Expanded Transcript:** A larger view within the rail (e.g., ~200-300px height), displaying a scrollable history of recent conversation messages (e.g., last 5-10 messages).
-    *   **Docking:** User-configurable positioning at either the top or bottom of the screen. This preference will be persisted across sessions using `localStorage` (e.g., `lifeos_lumin_rail_dock_position`).
 *   **Interaction Parity:**
     *   **Voice Input (Speech-to-Text - STT):** Leverage the existing `window.LuminVoice` utility to enable speech input directly into the rail's `lumin-input` field. This includes displaying interim transcript text and providing visual feedback (e.g., a pulsing mic icon) when active.
     *   **Text Input:** Utilize the existing `luminSend` function for sending messages and `luminAutoResize` for managing the input `textarea`'s height.
