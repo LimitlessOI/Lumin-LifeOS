@@ -1,63 +1,33 @@
 /*
  * LifeOS Dashboard Shell CSS Tokens
  *
- * This file defines semantic color, spacing, and radius variables for the
- * LifeOS dashboard shell, supporting both light and dark themes.
+ * This file defines semantic color, spacing, and radius variables for the LifeOS dashboard UI.
+ * It supports both light and dark themes using the data-theme attribute on the <html> element.
  *
- * The referenced LIFEOS_DASHBOARD_BUILDER_BRIEF.md was not found in the repository.
- * Design guidelines are inferred from existing styles in public/overlay/lifeos-dashboard.html.
+ * Refer to LIFEOS_DASHBOARD_BUILDER_BRIEF.md for design specifications.
+ * (Note: LIFEOS_DASHBOARD_BUILDER_BRIEF.md was not available in the provided repository context.)
  */
 
 :root {
-  /* Default (Dark) Theme Tokens */
+  /* Dark Theme (default) */
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
   --dash-text: #e8e8f0;
   --dash-muted: #555566;
-  --dash-accent: #5b6af5; /* Matches --c-today in existing styles */
+  --dash-accent: #5b6af5;
   --dash-border: rgba(255,255,255,0.07);
   --dash-radius-lg: 14px;
-  --dash-space-unit: 8px; /* Inferred base unit from existing spacing patterns */
-
-  /* Additional semantic tokens derived from existing styles for Dark Theme */
-  --dash-surface-raised: #0d0d15;
-  --dash-surface-overlay: #1e1e28;
-  --dash-border-focus: rgba(255,255,255,0.18);
-  --dash-text-secondary: #9999bb;
-  --dash-accent-health: #10b981;
-  --dash-accent-growth: #34d399;
-  --dash-accent-finance: #22d3ee;
-  --dash-accent-warning: #f59e0b;
-  --dash-accent-mirror: #7c3aed;
-  --dash-accent-conflict: #e05555;
-  --dash-radius-sm: 6px;
-  --dash-radius-md: 10px;
-  --dash-radius-xl: 20px;
+  --dash-space-unit: 8px; /* Base spacing unit */
 }
 
 :root[data-theme="light"] {
-  /* Light Theme Tokens */
+  /* Light Theme */
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
-  --dash-text: #1a1a22;
-  --dash-muted: #666677;
-  --dash-accent: #5b6af5; /* Keep accent consistent across themes */
+  --dash-text: #1a1a20;
+  --dash-muted: #888899;
+  --dash-accent: #5b6af5; /* Accent color remains consistent */
   --dash-border: rgba(0,0,0,0.1);
   --dash-radius-lg: 14px;
   --dash-space-unit: 8px;
-
-  /* Additional semantic tokens for Light Theme */
-  --dash-surface-raised: #f0f1f5;
-  --dash-surface-overlay: #e0e1e5;
-  --dash-border-focus: rgba(0,0,0,0.2);
-  --dash-text-secondary: #444455;
-  --dash-accent-health: #10b981; /* Keep accents consistent across themes */
-  --dash-accent-growth: #34d399;
-  --dash-accent-finance: #22d3ee;
-  --dash-accent-warning: #f59e0b;
-  --dash-accent-mirror: #7c3aed;
-  --dash-accent-conflict: #e05555;
-  --dash-radius-sm: 6px;
-  --dash-radius-md: 10px;
-  --dash-radius-xl: 20px;
 }
