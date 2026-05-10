@@ -29,16 +29,14 @@ async function searchGooglePlaces(city, type, apiKey, count) {
   }
 }
 
-// Add the new launch-readiness API endpoint
+// Add the new launch-readiness apiEP
 router.get('/launch-readiness', async (req, res) => {
   const checked_at = new Date().toISOString();
   try {
     const healthReport = getRegistryHealth();
     const revenueBlockers = healthReport.revenueBlockers.map(r => r.name);
     const missingNeeded = healthReport.missingNeeded.map(r => r.name);
-
     const ready = healthReport.summary.healthy;
-
     res.json({
       ok: true,
       ready,
@@ -55,6 +53,67 @@ router.get('/launch-readiness', async (req, res) => {
       revenue_blockers: ['internal_error'],
       checked_at,
       error: error.message,
+    });
+  }
+});
+
+/**
+ * GET /api/v1/sites/dashboard
+ * Returns a summary of the prospect pipeline, including counts for various statuses
+ * and total revenue from converted prospects.
+ */
+router.get('/dashboard', async (req, res) => {
+  try {
+    // ASSUMPTION: The PostgreSQL connection pool is available via req.app.locals.pool
+    const pool = req.app.locals.pool;
+    if (!pool) {
+      console.error('Database pool not available in req.app.locals');
+      return res.status(500).json({ ok: false, error: 'Database connection not established.' });
+    }
+
+    const result = await pool.query(`
+      SELECT
+          COUNT(*) AS total,
+          COUNT(CASE WHEN status = 'built' THEN 1 END) AS built,
+          COUNT(CASE WHEN status = 'qa_hold' THEN 1 END) AS qa_hold,
+          COUNT(CASE WHEN status = 'sent' THEN 1 END) AS sent,
+          COUNT(CASE WHEN status = 'viewed' THEN 1 END) AS viewed,
+          COUNT(CASE WHEN status = 'replied' THEN 1 END) AS replied,
+          COUNT(CASE WHEN status = 'converted' THEN 1 END) AS converted,
+          COALESCE(SUM(CASE WHEN status = 'converted' THEN deal_value ELSE 0 END), 0) AS total_revenue
+      FROM prospect_sites;
+    `);
+
+    const pipelineStats = result.rows[0] || {};
+
+    // Ensure all counts are numbers and default to 0 if null/undefined
+    const total = Number(pipelineStats.total || 0);
+    const built = Number(pipelineStats.built || 0);
+    const qa_hold = Number(pipelineStats.qa_hold || 0);
+    const sent = Number(pipelineStats.sent || 0);
+    const viewed = Number(pipelineStats.viewed || 0);
+    const replied = Number(pipelineStats.replied || 0);
+    const converted = Number(pipelineStats.converted || 0);
+    const total_revenue = Number(pipelineStats.total_revenue || 0);
+
+    res.json({
+      ok: true,
+      pipeline: {
+        total,
+        built,
+        qa_hold,
+        sent,
+        viewed,
+        replied,
+        converted,
+        total_revenue,
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching pipeline dashboard:', error);
+    res.status(500).json({
+      ok: false,
+      error: 'Failed to retrieve pipeline dashboard data.',
     });
   }
 });
