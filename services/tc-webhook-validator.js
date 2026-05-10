@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { URL } from 'url'; // For Twilio URL parsing
+import twilio from 'twilio'; // Assuming twilio package is available for signature validation
 
 // Internal helper to normalize provider events
 function normalizeProviderEvent(provider, payload = {}) {
@@ -11,4 +12,3 @@ function normalizeProviderEvent(provider, payload = {}) {
   let status = 'sent';
   if (['queued', 'accepted', 'scheduled', 'sending'].includes(event)) status = 'prepared';
   else if (['sent', 'delivered', 'success'].includes(event)) status = 'sent';
-  else if (['opened', 'read', 'seen'].includes(event))
