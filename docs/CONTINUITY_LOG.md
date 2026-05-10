@@ -32,6 +32,34 @@
 
 ---
 
+## [FIX] Update 2026-05-10 #12 — Fix 6/7/8 post-commit verification + daemon collision resolved
+
+### Files changed
+- **`scripts/lifeos-builder-daemon.mjs`** — Fix 8: `STATE_PATH`, `LOCK_PATH`, `LOG_PATH`, `QUEUE_LAST_RUN_PATH` changed from `const` to `let`; `main()` overrides all 4 with lane-slug suffix when `BUILDER_TASK_LANE` is set. TC and SiteBuilder daemons no longer collide with Nova's lock file.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Fix 8 receipt row added; Agent Handoff Notes updated.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json`** — `ssot_receipt_tail` updated to Fix 8.
+
+### Root cause discovered (Fix 8)
+Post-commit audit of Fixes 6+7 revealed: TC and SiteBuilder daemons were immediately dying on startup because they shared `builder-daemon.lock` with Nova. Every guardian restart cycle, TC and SiteBuilder daemons exited within seconds with "builder daemon already running (pid=Nova)". This meant their state files were stale from yesterday, auditor read 24h-old data, and grades stayed F.
+
+### State after this session
+- **Nova:** `status=healthy`, cycles=19, ok=8 (status improved from F→D; 4% is 24h historical; last 15min shows cycle_ok on every attempt). Supervise 413 → `supervise_degraded_continue` → queue → `cycle_ok` confirmed working. Static supervision passes (0 violations since CSS fix).
+- **Atlas/TC:** `status=healthy`, cycle_ok=53, own lock/state/log files working. Grade F→C (100% daemon success rate, 100% queue success rate; product_ratio=null because all tasks 413'd — infra blocker).
+- **Forge/Site:** `status=healthy`, cycle_ok=50, own lock/state/log files working. Grade F→C (same 413 infra blocker).
+- **Sentinel:** Auditor grade now C/C/D (up from F/F/F). 24h grade window means historical failures drag Nova for another ~20h.
+- **TSOS Overseer:** PID 14466 still running pre-Fix-4 code (started Saturday 1PM). Will self-update when guardian restarts it next cycle.
+- **Zombie guardian 54325** (Friday 10PM) killed; active guardian is 5763 (Saturday 1PM).
+
+### Remaining infra blocker (not yet fixed)
+All task commits (product_ratio) are blocked by HTTP 413 on Railway `POST /builder/build`. The council dispatch payload is too large. Fix requires Railway-side body parser limit increase or task spec trimming. Cannot fix from local. Grade ceiling for Atlas/Forge is C until this is resolved.
+
+### Next agent: start here
+1. Fix Railway 413: in `routes/lifeos-council-builder-routes.js`, check `express.json({ limit: '...' })` or increase in `startup/` middleware — the 413 is happening at council dispatch inside the route handler, not at express body parsing level. Look at the builder route's fetch to see if there's a request size limit.
+2. After 6h, the 24h grade window will shed most of the historical Nova failures. Run `npm run tsos:auditor:once` to verify Nova climbs from D toward B.
+3. Monitor for Overseer restart by guardian (PID 14466, running old pre-Fix-4 code since Saturday).
+
+---
+
 ## [FIX] Update 2026-05-10 #11 — 5-fix engineering: all 5 agents engineered toward A+ grade
 
 ### Files changed
