@@ -1,237 +1,242 @@
+import express from 'express';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs/promises';
 import crypto from 'crypto';
-import { validateRequest as twilioValidateRequest } from 'twilio/lib/webhooks/webhooks';
-
-/**
- * Normalizes delivery/reply callbacks into canonical TC communication state.
- * This function is exported as `normalizeDeliveryCallback`.
- * @param {string} provider - The name of the provider ('postmark' | 'twilio' | 'manual').
- * @param {object} payload - The raw payload from the webhook.
- * @returns {{provider: string, event_type: string, status: string, external_id: string|null, feedback_text: string|null, from: string|null, to: string|null, raw: object}} Normalized event.
- */
-export function normalizeDeliveryCallback(provider, payload = {}) {
-  const p = String(provider || 'manual').toLowerCase();
-  const event = String(
-    payload.event_type || payload.eventType || payload.status || payload.MessageStatus || payload.SmsStatus || payload.EmailEvent || 'delivered'
-  ).toLowerCase();
-
-  let status = 'sent';
-  if (['queued', 'accepted', 'scheduled', 'sending'].includes(event)) status = 'prepared';
-  else if (['sent', 'delivered', 'success'].includes(event)) status = 'sent';
-  else if (['opened', 'read', 'seen'].includes(event)) status = 'delivered';
-  else if (['replied', 'reply', 'inbound_reply', 'response_received'].includes(event)) status = 'replied';
-  else if (['failed', 'undelivered', 'bounced', 'error'].includes(event)) status = 'failed';
-
+import { createTCStatusEngine } from '../services/tc-status-engine.js';
+import { createTCPortalService } from '../services/tc-portal-service.js';
+import { createTCReportService } from '../services/tc-report-service.js';
+import { createTCAutomationService } from '../services/tc-automation-service.js';
+import { createTCApprovalService } from '../services/tc-approval-service.js';
+import { createTCAlertService } from '../services/tc-alert-service.js';
+import { createTCAsanaSyncService } from '../services/tc-asana-sync-service.js';
+import { createTCWorkflowService } from '../services/tc-workflow-service.js';
+import { createTCOfferPrepService } from '../services/tc-offer-prep-service.js';
+import { createTCInteractionService } from '../services/tc-interaction-service.js';
+import { createTCCommunicationCallbackService } from '../services/tc-communication-callback-service.js';
+import { createTCMobileLinkService } from '../services/tc-mobile-link-service.js';
+import { createTCFeedIngestService } from '../services/tc-feed-ingest-service.js';
+import { createTCInspectionService } from '../services/tc-inspection-service.js';
+import { createTCAccessService } from '../services/tc-access-service.js';
+import { createTCIntakeWorkspaceService } from '../services/tc-intake-workspace-service.js';
+import { createTCEmailDocumentService, deriveMailboxSearchFromTransactionAddress,
+} from '../services/tc-email-document-service.js';
+import { createTCInspectionForwardService } from '../services/tc-inspection-forward-service.js';
+import runTransactionDeskPartySync from '../services/tc-td-party-sync.js';
+import { createTDTDWorkflowRunner } from '../services/tc-td-workflow-runner.js';
+import { createTDTDFormKnowledgeService } from '../services/tc-td-form-knowledge-service.js';
+import { createTCAssistantService } from '../services/tc-assistant-service.js';
+import { classifyR4RAttachment } from '../services/tc-r4r-attachment-classify.js';
+const upload = multer({ dest: '/tmp/tc-uploads/' });
+const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
+/** In-memory status for async TD → SkySlope listing sync (browser automation can exceed HTTP timeouts). */
+const tdWorkflowJobs = new Map();
+function pruneTdWorkflowJobs() {
+  const now = Date.now();
+  for (const [id, job] of tdWorkflowJobs) {
+    const t = new Date(job.created_at || 0).getTime();
+    if (now - t > LISTING_SYNC_JOB_TTL_MS) tdWorkflowJobs.delete(id);
+  }
+  if (tdWorkflowJobs.size <= 100) return;
+  const sorted = [...tdWorkflowJobs.entries()].sort(
+    (a, b) => new Date(a[1].created_at).getTime() - new Date(b[1].created_at).getTime()
+  );
+  while (sorted.length > 80) tdWorkflowJobs.delete(sorted.shift()[0]);
+}
+const listingTdSkyslopeJobs = new Map();
+const LISTING_SYNC_JOB_TTL_MS = 2 * 60 * 60 * 1000;
+function pruneListingSyncJobs() {
+  const now = Date.now();
+  for (const [id, job] of listingTdSkyslopeJobs) {
+    const t = new Date(job.created_at || 0).getTime();
+    if (now - t > LISTING_SYNC_JOB_TTL_MS) listingTdSkyslopeJobs.delete(id);
+  }
+  if (listingTdSkyslopeJobs.size <= 100) return;
+  const sorted = [...listingTdSkyslopeJobs.entries()].sort(
+    (a, b) => new Date(a[1].created_at).getTime() - new Date(b[1].created_at).getTime()
+  );
+  while (sorted.length > 80) {
+    listingTdSkyslopeJobs.delete(sorted.shift()[0]);
+  }
+}
+const DEFAULT_BUYER_POSITION_BLURB = 'The buyer is not requesting seller repairs or closing credits based on the inspection findings. Confirm applicable state law, brokerage policy, and the contract for the exact forms and timelines—this notice is for transaction coordination only, not legal advice.';
+function buildInspectionMailboxSearch(tx, body = {}) {
+  const derived = deriveMailboxSearchFromTransactionAddress(tx.address);
+  const maxRaw = parseInt(body.max_results, 10);
+  const max_results = Number.isFinite(maxRaw) ? Math.max(1, Math.min(50, maxRaw)) : 20;
+  const daysRaw = parseInt(body.days, 10);
+  const days = Number.isFinite(daysRaw) ? Math.max(1, Math.min(365, daysRaw)) : 60;
+  // include_sent defaults true — TC docs are often in Adam's Sent folder (R4Rs, inspection responses)
+  const include_sent = body.include_sent !== false;
+  // address_hint lets the IMAP server pre-filter messages containing the property address
+  const address_hint = body.address_hint != null ? String(body.address_hint) : (tx.address || '');
   return {
-    provider: p,
-    event_type: event,
-    status,
-    external_id: payload.external_id || payload.externalId || payload.MessageID || payload.MessageId || payload.MessageSid || payload.SmsSid || payload.Sid || null,
-    feedback_text: payload.feedback_text || payload.feedbackText || payload.Body || payload.body || null,
-    from: payload.from || payload.From || null,
-    to: payload.to || payload.To || null,
-    raw: payload,
+    days,
+    subject_contains: body.subject_contains !== undefined && body.subject_contains !== null ? String(body.subject_contains) : derived.subject_contains,
+    filename_contains: body.filename_contains !== undefined && body.filename_contains !== null ? String(body.filename_contains) : derived.filename_contains,
+    from_contains: body.from_contains != null ? String(body.from_contains) : '',
+    latest_only: false,
+    max_results,
+    include_sent,
+    address_hint,
   };
 }
-
-/**
- * Extracts and normalizes showing feedback from a webhook payload.
- * @param {string} provider - The name of the provider ('postmark' | 'twilio').
- * @param {object} payload - The raw payload from the webhook.
- * @returns {{raw_feedback: string|null, source: string}} Normalized feedback.
- */
-export function normalizeShowingFeedbackReply(provider, payload = {}) {
-  const feedbackText = String(payload.feedback_text || payload.feedbackText || payload.Body || payload.body || '').trim();
+function buildInspectionForwardEmailBody({ recipientName, narrative, buyerPositionSummary, transaction }) {
+  const greet = recipientName?.trim() ? `Hi ${recipientName.trim()},` : 'Hi,';
+  const parts = [greet, '', `Property: ${transaction.address || '—'}`];
+  if (narrative?.trim()) parts.push('', narrative.trim());
+  parts.push('', (buyerPositionSummary && String(buyerPositionSummary).trim()) || DEFAULT_BUYER_POSITION_BLURB);
+  parts.push('', 'Attached: inspection-related PDFs gathered from the TC mailbox.');
+  parts.push('', '—');
+  return parts.join('\n');
+}
+const DEFAULT_R4R_SUBJECT_ANY = [
+  'repair', 'repairs', 'inspection', 'inspect', 'response', 'request', 'binsr', 'birr', 'b-insr', 'buyer', 'notice', 'credit', 'responding', 'counter', 'deficiency', 'home inspection',
+];
+function buildR4RMailboxSearch(tx, body = {}) {
+  const derived = deriveMailboxSearchFromTransactionAddress(tx.address);
+  const maxRaw = parseInt(body.max_results, 10);
+  const max_results = Number.isFinite(maxRaw) ? Math.max(1, Math.min(50, maxRaw)) : 30;
+  const daysRaw = parseInt(body.days, 10);
+  const days = Number.isFinite(daysRaw) ? Math.max(1, Math.min(365, daysRaw)) : 90;
+  const rawSubject = body.subject_contains != null && body.subject_contains !== '' ? String(body.subject_contains).trim() : derived.subject_contains || '';
+  const subject_tokens = body.subject_tokens != null
+    ? Array.isArray(body.subject_tokens)
+      ? body.subject_tokens.map((t) => String(t).trim()).filter(Boolean)
+      : String(body.subject_tokens)
+          .split(/[\s,]+/)
+          .map((s) => s.trim())
+          .filter(Boolean)
+    : rawSubject
+        .split(/\s+/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+  const subject_any_contains = body.subject_any_contains != null
+    ? Array.isArray(body.subject_any_contains)
+      ? body.subject_any_contains.map((s) => String(s).trim().toLowerCase()).filter(Boolean)
+      : String(body.subject_any_contains)
+          .split(/[\s,]+/)
+          .map((s) => s.trim().toLowerCase())
+          .filter(Boolean)
+    : DEFAULT_R4R_SUBJECT_ANY;
+  const filename_contains = body.filename_contains != null ? String(body.filename_contains) : '';
   return {
-    raw_feedback: feedbackText || null,
-    source: `${String(provider || 'manual').toLowerCase()}_callback`,
+    days,
+    subject_contains: subject_tokens.join(' ').trim(),
+    subject_tokens,
+    subject_any_contains,
+    filename_contains,
+    from_contains: body.from_contains != null ? String(body.from_contains) : '',
+    latest_only: false,
+    max_results,
   };
 }
-
-/**
- * Validates a Postmark webhook request signature.
- * @param {object} req - The Express request object.
- * @returns {{valid: boolean, payload: object|null, error: string|null}} Validation result.
- */
-export function validatePostmarkWebhook(req) {
-  const secret = process.env.EMAIL_WEBHOOK_SECRET;
-  if (!secret) {
-    return { valid: false, payload: null, error: 'EMAIL_WEBHOOK_SECRET not configured' };
-  }
-
-  const signatureHeader = req.headers['x-postmark-signature'];
-  if (!signatureHeader) {
-    return { valid: false, payload: null, error: 'Missing X-Postmark-Signature header' };
-  }
-
-  const parts = signatureHeader.split(',');
-  let timestamp = '';
-  let signature = '';
-
-  for (const part of parts) {
-    const [key, value] = part.split('=');
-    if (key === 't') {
-      timestamp = value;
-    } else if (key === 's') {
-      signature = value;
+async function writeSellerRejectionSummaryPdf({ address, transactionId, outPath }) {
+  const { PDFDocument, StandardFonts, rgb } = await import('pdf-lib');
+  const doc = await PDFDocument.create();
+  const page = doc.addPage([612, 792]);
+  const titleFont = await doc.embedFont(StandardFonts.HelveticaBold);
+  const bodyFont = await doc.embedFont(StandardFonts.Helvetica);
+  page.drawText('SELLER RESPONSE — REPAIR REQUEST REJECTED', {
+    x: 50,
+    y: 720,
+    size: 14,
+    font: titleFont,
+    color: rgb(0.15, 0.15, 0.15),
+  });
+  const addrLine = String(address || '(address on file)').slice(0, 120);
+  const lines = [
+    '',
+    `Property: ${addrLine}`,
+    `LifeOS transaction id: ${transactionId}`,
+    '',
+    'The seller declines the buyer repair request as presented.',
+    'This summary PDF was generated by LifeOS for filing in TransactionDesk.',
+    `Timestamp (UTC): ${new Date().toISOString()}`,
+  ];
+  let y = 690;
+  for (const line of lines) {
+    if (line === '') {
+      y -= 12;
+      continue;
     }
+    page.drawText(line, { x: 50, y, size: 11, font: bodyFont, color: rgb(0.2, 0.2, 0.2) });
+    y -= 18;
   }
-
-  if (!timestamp || !signature) {
-    return { valid: false, payload: null, error: 'Invalid X-Postmark-Signature header format' };
-  }
-
-  // Postmark signs the timestamp + raw body
-  const hmac = crypto.createHmac('sha256', secret);
-  hmac.update(timestamp);
-  hmac.update(req.rawBody || JSON.stringify(req.body)); // Use rawBody if available, otherwise stringify parsed body
-
-  const expectedSignature = hmac.digest('base64');
-
-  if (expectedSignature !== signature) {
-    return { valid: false, payload: null, error: 'Invalid Postmark signature' };
-  }
-
-  return { valid: true, payload: req.body, error: null };
+  const bytes = await doc.save();
+  await fs.writeFile(outPath, Buffer.from(bytes));
 }
-
-/**
- * Validates a Twilio webhook request signature.
- * @param {object} req - The Express request object.
- * @returns {{valid: boolean, payload: object|null, error: string|null}} Validation result.
- */
-export function validateTwilioWebhook(req) {
-  const authToken = process.env.TWILIO_AUTH_TOKEN || process.env.TWILIO_WEBHOOK_SECRET; // TWILIO_WEBHOOK_SECRET is also a valid alias
-  if (!authToken) {
-    return { valid: false, payload: null, error: 'TWILIO_AUTH_TOKEN or TWILIO_WEBHOOK_SECRET not configured' };
-  }
-
-  const twilioSignature = req.headers['x-twilio-signature'];
-  if (!twilioSignature) {
-    return { valid: false, payload: null, error: 'Missing X-Twilio-Signature header' };
-  }
-
-  // Twilio's validation function expects the full URL, the request body (as an object), and the signature.
-  // It also needs the auth token.
-  const requestUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-  const params = req.body; // For Twilio, the parsed body is used for validation
-
-  try {
-    const isValid = twilioValidateRequest(authToken, twilioSignature, requestUrl, params);
-    if (!isValid) {
-      return { valid: false, payload: null, error: 'Invalid Twilio signature' };
-    }
-  } catch (error) {
-    return { valid: false, payload: null, error: `Twilio validation error: ${error.message}` };
-  }
-
-  return { valid: true, payload: req.body, error: null };
-}
-
-export function createTCCommunicationCallbackService({ pool, portalService, reportService, coordinator, logger = console }) {
-  async function getCommunication(communicationId) {
-    const { rows } = await pool.query(`SELECT * FROM tc_communications WHERE id=$1`, [communicationId]);
-    return rows[0] || null;
-  }
-
-  async function getCommunicationByExternalId(externalId) {
-    if (!externalId) return null;
-    const { rows } = await pool.query(
-      `SELECT * FROM tc_communications
-       WHERE metadata->>'external_id' = $1
-          OR metadata->'delivery'->>'messageId' = $1
-          OR metadata->'delivery'->>'sid' = $1
-       ORDER BY created_at DESC
-       LIMIT 1`,
-      [String(externalId)]
-    );
-    return rows[0] || null;
-  }
-
-  async function handleCallback(communicationId, payload = {}) {
-    const communication = await getCommunication(communicationId);
-    if (!communication) return { ok: false, error: 'Communication not found' };
-
-    const normalized = normalizeDeliveryCallback(payload.provider, payload);
-
-    const metadata = {
-      ...(communication.metadata || {}),
-      last_callback: {
-        provider: normalized.provider,
-        event_type: normalized.event_type,
-        external_id: normalized.external_id,
-        at: new Date().toISOString(),
-      },
-      callback_history: [
-        ...((communication.metadata || {}).callback_history || []),
-        {
-          provider: normalized.provider,
-          event_type: normalized.event_type,
-          status: normalized.status,
-          external_id: normalized.external_id,
-          feedback_text: normalized.feedback_text,
-          at: new Date().toISOString(),
-        },
-      ].slice(-20), // Keep last 20 callbacks
-    };
-
-    const updated = await portalService.updateCommunication(communicationId, {
-      status: normalized.status,
-      sent_at: communication.sent_at || (normalized.status === 'sent' ? new Date().toISOString() : communication.sent_at),
-      metadata,
-    });
-
-    await coordinator.logEvent(communication.transaction_id, 'communication_callback', {
-      communication_id: communicationId,
-      provider: normalized.provider,
-      event_type: normalized.event_type,
-      status: normalized.status,
-      external_id: normalized.external_id,
-    });
-
-    let feedback = null;
-    if (normalized.feedback_text && communication.metadata?.showing_id) {
-      const feedbackText = String(normalized.feedback_text).trim();
-      if (feedbackText && feedbackText.length > 3) { // Minimum length for meaningful feedback
-        try {
-          feedback = await reportService.recordShowingFeedback(communication.metadata.showing_id, {
-            raw_feedback: feedbackText,
-            source: `${normalized.provider}_callback`,
-          });
-          await coordinator.logEvent(communication.transaction_id, 'showing_feedback_received', {
-            communication_id: communicationId,
-            showing_id: communication.metadata.showing_id,
-            source: `${normalized.provider}_callback`,
-          });
-        } catch (error) {
-          logger.warn?.({ err: error.message, communicationId }, '[TC-COMM-CALLBACK] feedback persistence failed');
-        }
-      }
-    }
-
-    return { ok: true, communication: updated, callback: normalized, feedback };
-  }
-
-  async function handleProviderWebhook(payload = {}) {
-    const externalId = payload.external_id || payload.externalId || payload.MessageID || payload.MessageId || payload.MessageSid || payload.SmsSid || payload.Sid || null;
-    const communicationId = payload.communication_id || payload.communicationId || payload.Metadata?.communication_id || payload.metadata?.communication_id || null;
-
-    let communication = null;
-    if (communicationId) communication = await getCommunication(Number(communicationId));
-    if (!communication && externalId) communication = await getCommunicationByExternalId(externalId);
-
-    if (!communication) return { ok: false, error: 'Communication not found for webhook' };
-
-    return handleCallback(communication.id, payload);
-  }
-
+function tdInspectionForwardPlaybook(recipientName) {
+  const who = recipientName?.trim() || 'your seller client';
   return {
-    handleCallback,
-    handleProviderWebhook,
-    validatePostmarkWebhook, // Exported for use in routes
-    validateTwilioWebhook,   // Exported for use in routes
-    normalizeDeliveryCallback, // Already exported, but good to list here for clarity
-    normalizeShowingFeedbackReply, // Exported for use in routes
+    disclaimer: 'LifeOS can search the mailbox, attach PDFs, optionally add your listing-agent acknowledgment page to PDFs after you approve, and push files into TransactionDesk. Use screenshots to confirm UI state; finish signing and coop distribution in TransactionDesk where required.',
+    known_plans: Object.keys(tcBrowser.TD_UI_PLANS || {}),
+    steps: [
+      'Open the TransactionDesk file for this property.',
+      'Confirm inspection report and any buyer repair-request / response paperwork is correct for Nevada and your broker.',
+      `Send or route signing to ${who} when those documents require client signature.`,
+      'After any required client signatures, deliver the executed package to the cooperating agent per brokerage policy.',
+    ],
   };
 }
-
-export default createTCCommunicationCallbackService;
+export function createTCRoutes(
+  app,
+  {
+    pool,
+    requireKey,
+    coordinator,
+    logger = console,
+    accountManager: injectedAccountManager = null,
+    notificationService: injectedNotificationService = null,
+    callCouncilMember = null,
+    sendSMS = null,
+    sendAlertSms = null,
+    sendAlertCall = null,
+    startAlertLoop = false,
+    managedEnvService = null,
+  } = {}
+) {
+  const router = express.Router();
+  const statusEngine = createTCStatusEngine();
+  const portalService = createTCPortalService({ pool, coordinator, logger });
+  const reportService = createTCReportService({ pool, coordinator, logger });
+  const automationService = createTCAutomationService({ pool, coordinator, portalService, reportService, logger, getNotificationService, sendSMS, });
+  const alertService = createTCAlertService({ pool, coordinator, logger, sendSMS, sendAlertSms, sendAlertCall });
+  const asanaSyncService = createTCAsanaSyncService({ pool, coordinator, portalService, logger });
+  const workflowService = createTCWorkflowService({ portalService, logger });
+  const offerPrepService = createTCOfferPrepService({ logger, callCouncilMember });
+  const inspectionService = createTCInspectionService({ pool, coordinator, alertService, logger });
+  const interactionService = createTCInteractionService({ pool, coordinator, callCouncilMember, logger });
+  const callbackService = createTCCommunicationCallbackService({ pool, portalService, reportService, coordinator, logger });
+  const mobileLinkService = createTCMobileLinkService({});
+  const feedIngestService = createTCFeedIngestService({ coordinator, reportService, pool, logger });
+  const accessService = createTCAccessService({
+    accountManager: {
+      getAccount: async (...args) => (await getAccountManager()).getAccount(...args),
+      upsertAccount: async (...args) => (await getAccountManager()).upsertAccount(...args),
+    },
+    managedEnvService,
+    logger,
+  });
+  const intakeWorkspaceService = createTCIntakeWorkspaceService({ pool, coordinator, accessService, logger, });
+  const emailDocumentService = createTCEmailDocumentService({
+    accountManager: {
+      getAccount: async (...args) => (await getAccountManager()).getAccount(...args),
+    },
+    getNotificationService,
+    portalService,
+    logger,
+  });
+  const inspectionForwardService = createTCInspectionForwardService({ coordinator, emailDocumentService, logger, getAccountManager, });
+  const approvalService = createTCApprovalService({
+    pool,
+    coordinator,
+    automationService,
+    logger,
+    customApprovalHandlers: {
+      forward_inspection_docs: (approvalRow, prepared, ctx) => inspectionForwardService.executeApprovedForward(approvalRow, prepared, ctx),
+    },
+  });
+  const tdFormKnowledgeService = createTDTDFormKnowledgeService({ pool, coordinator, logger });
+  const tdWorkflowRunner = createTDTDWorkflowRunner({ coordinator, logger, getAccountManager, formKnowledgeService: tdFormKnowledgeService, });
+  const tcAssistant = createTCAssistantService({ coordinator, getWorkspace: () => intakeWorkspaceService.getWorkspace(), callCouncilMember,
