@@ -1,12 +1,14 @@
-import express from 'express';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs/promises';
 import crypto from 'crypto';
-import { createTCStatusEngine } from '../services/tc-status-engine.js';
-import { createTCPortalService } from '../services/tc-portal-service.js';
-import { createTCReportService } from '../services/tc-report-service.js';
-import { createTCAutomationService } from '../services/tc-automation-service.js';
-import { createTCApprovalService } from '../services/tc-approval-service.js';
-import { createTCAlertService } from '../services/tc-alert-service.js';
-import { createTCAsanaSyncService } from '../services/tc-
+// Assuming 'twilio' package is installed and available for import
+import { validateRequest as twilioValidateRequest } from 'twilio/lib/webhooks/webhooks';
+
+/**
+ * Middleware to capture the raw request body.
+ * This is necessary for HMAC signature validation where the raw body is hashed.
+ * Should be placed before express.json() or express.urlencoded() middleware.
+ */
+function rawBodyMiddleware(req, res, next) {
+  // Only capture raw body for POST requests with relevant content types
+  if (req.method === 'POST' && (req.headers['content-type']?.startsWith('application/json') || req.headers['content-type']?.startsWith('application/x-www-form-urlencoded'))) {
+    let data = '';
+    req
