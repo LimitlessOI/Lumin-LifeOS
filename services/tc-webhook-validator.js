@@ -9,4 +9,4 @@ import { validateRequest as twilioValidateRequest } from 'twilio/lib/webhooks/we
  * @returns {{provider: string, event_type: string, status: string, external_id: string|null, feedback_text: string|null, from: string|null, to: string|null, raw: object}} Normalized event.
  */
 function normalizeDeliveryCallback(provider, payload = {}) {
-  const p = String(
+  const p = String(provider
