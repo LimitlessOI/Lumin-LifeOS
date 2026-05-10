@@ -16,4 +16,4 @@ const STRIPE_PRICE_MAP = {
         setup_price_id: 'price_FOUNDING_SETUP_500',     // $500 one-time
     },
     [PLANS.MONTHLY]: {
-        monthly_
+        monthly
