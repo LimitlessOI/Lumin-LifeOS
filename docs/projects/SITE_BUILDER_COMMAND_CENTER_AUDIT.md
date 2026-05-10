@@ -1,50 +1,35 @@
+The `AMENDMENT_05_SITE_BUILDER.md` file, a key source of truth, is missing from the repository.
+
 ### Shipped controls
 
-*   **Discover Prospects**: Initiate prospect discovery by city and niche (`POST /api/v1/sites/discover`, `npm run site-builder:discover`).
-*   **Analyze Existing Site**: Get an opportunity score and pain points for a prospect's existing site (`POST /api/v1/sites/analyze`).
-*   **Build & Send Outreach**: Build a preview site, score it, and send a personalized cold email (`POST /api/v1/sites/prospect`).
-*   **Bulk Prospecting**: Process up to 20 prospects in a batch (`POST /api/v1/sites/bulk-prospect`).
-*   **List Previews**: Retrieve a list of all built preview sites (`GET /api/v1/sites/previews`).
-*   **View CRM Pipeline**: Access a list of prospects with their current status (`GET /api/v1/sites/prospects`).
-*   **View Pipeline Dashboard**: Get aggregated pipeline statistics including total revenue (`GET /api/v1/sites/dashboard`).
-*   **Update Prospect Status**: Manually update a prospect's status and deal value (`PATCH /api/v1/sites/prospects/:clientId/status`).
-*   **Track Preview Views**: Automatically mark a prospect as 'viewed' when their preview site is opened (via injected pixel calling `GET ⟦P42⟧`).
-*   **Track Replies**: Automatically mark a prospect as 'replied' when they respond to a cold email (via Postmark webhook calling `POST ⟦P44⟧`).
-*   **Run Follow-Up Cron**: Execute automated day-3/day-7 follow-ups (`scripts/site-builder-follow-up-cron.mjs`).
-*   **Run Preview Expiry Cron**: Expire unsold previews after 30 days (`scripts/site-builder-preview-expiry-cron.mjs`).
-*   **Generate Pipeline Report**: View live pipeline analytics (`scripts/site-builder-pipeline-report.mjs`).
-*   **Check Launch Readiness**: Verify system health and identify blockers (`GET /api/v1/sites/launch-readiness`).
+Based on the provided `routes/site-builder-routes.js` file, the following operator action is currently implemented and available:
+
+*   **Discover Prospects (`POST /api/v1/sites/discover`)**: Allows operators to search for new wellness businesses by city and niche. This endpoint leverages Google Places API if `GOOGLE_PLACES_KEY` is configured, otherwise it indicates that manual research guidance would be provided (though the API response itself does not contain this guidance).
 
 ### Route dependencies
 
-The `public/overlay/site-builder-command-center.html` (Command Center) is assumed to depend on the following API endpoints for its functionality:
+The `public/overlay/site-builder-command-center.html` is described as an "Operator dashboard: analyze prospects, build & send, pipeline table". To fully function as intended, it would depend on the following API routes, which are defined in the domain context's API surface but are *not* present in the provided `routes/site-builder-routes.js` file:
 
-*   `/api/v1/sites/dashboard` for displaying overall pipeline metrics.
-*   `/api/v1/sites/prospects` for populating the main prospect table/list.
-*   `/api/v1/sites/discover` for initiating new prospect searches.
-*   `/api/v1/sites/analyze` for on-demand analysis of a single URL.
-*   `/api/v1/sites/prospect` for manually triggering a build and send for a single prospect.
-*   `/api/v1/sites/previews` for displaying a list of generated preview sites.
-*   `/api/v1/sites/prospects/:clientId/status` for updating individual prospect records.
-*   `/api/v1/sites/launch-readiness` for displaying system health status.
-*   **Implicit**: A route for viewing individual prospect details (e.g., `/api/v1/sites/prospects/:clientId`) is highly likely to be a dependency for any detailed view in the Command Center.
-*   **Implicit**: A route for manually sending a follow-up email to a specific prospect (e.g., `POST ⟦P40⟧`) would be expected for operator control.
-*   **Implicit**: A route for listing POS commission partners (e.g., `GET ⟦P41⟧`) would be needed if the Command Center allows selection or display of these.
-*   **Implicit**: The Command Center would need to know the paths for the tracking pixel (`GET ⟦P42⟧`) and Postmark webhook (`POST ⟦P44⟧`) to configure external systems or display relevant information.
+*   `GET /api/v1/sites/dashboard`: To display overall pipeline statistics (total, built, sent, viewed, replied, converted, revenue).
+*   `GET /api/v1/sites/prospects`: To populate the CRM pipeline table with a list of prospects.
+*   `POST /api/v1/sites/analyze`: To perform an opportunity score on a prospect's existing site.
+*   `POST /api/v1/sites/build`: To initiate the site building process for a given URL.
+*   `POST /api/v1/sites/prospect`: To trigger the full build, score, and cold outreach email process for a single prospect.
+*   `POST /api/v1/sites/bulk-prospect`: To process multiple prospects in a batch.
+*   `PATCH /api/v1/sites/prospects/:clientId/status`: To allow operators to manually update a prospect's status and deal value.
+*   `POST /api/v1/sites/follow-up`: To manually send a follow-up email to a specific prospect.
+*   `GET /api/v1/sites/previews`: To list all generated preview sites.
+*   `GET /api/v1/sites/pos-partners`: To display available POS commission partners.
 
 ### Risks
 
-*   **Incomplete Operator Control**: Key operator actions like manual follow-up (`POST ⟦P40⟧`) and viewing POS partner lists (`GET ⟦P41⟧`) are not yet exposed via dedicated API endpoints, limiting the Command Center's direct control.
-*   **Missing Detail View**: The absence of a `GET /api/v1/sites/prospects/:clientId` endpoint means the Command Center cannot display comprehensive details for a single prospect, including their full `metadata` and `qualityReport`.
-*   **Undefined External Integration Paths**: The specific paths for the tracking pixel (`GET ⟦P42⟧`) and Postmark webhook (`POST ⟦P44⟧`) are placeholders, posing a risk if not clearly defined and secured, especially for the webhook token verification.
-*   **Consent Tracking Enforcement**: While Rule 1 states "never email same address twice without consent," the API surface for `POST /prospect` and `POST /bulk-prospect` does not explicitly detail how `email_suppressions` are checked and enforced, which is a critical compliance risk.
-*   **Quality Gate Enforcement**: The `POST /prospect` endpoint must strictly enforce the quality gate (`quality score < 70` → `status = 'qa_hold'`) as per Rule 4 to prevent sending weak previews. The current API surface doesn't explicitly confirm this enforcement.
+*   **Incomplete Command Center Functionality**: The `site-builder-command-center.html` would be largely non-functional for core pipeline management (viewing, building, sending, updating) as most of its required API routes are not yet implemented in `routes/site-builder-routes.js`. Only prospect discovery is currently supported.
+*   **Missing Amendment Context**: The absence of `AMENDMENT_05_SITE_BUILDER.md` means there might be specific design or functional requirements for the Command Center that are not captured in the general domain context, leading to potential misalignments in future implementations.
+*   **`GOOGLE_PLACES_KEY` Dependency**: The `/discover` endpoint's reliance on `GOOGLE_PLACES_KEY` means that without it, the functionality degrades to "manual guidance," which is not explicitly handled in the API response, potentially leading to a poor user experience in the Command Center if the key is missing.
 
 ### Next queue slices
 
-1.  Implement `GET /api/v1/sites/prospects/:clientId` endpoint returning single prospect detail with full metadata + qualityReport.
-2.  Implement `POST /api/v1/sites/prospects/:clientId/follow-up` (P40) to allow operators to manually send follow-up emails.
-3.  Implement `GET /api/v1/sites/pos-partners` (P41) to retrieve the list of POS commission partners.
-4.  Define and implement `GET /api/v1/sites/track-view` (P42) with `clientId` (P43) query parameter for the tracking pixel.
-5.  Define and implement `POST /api/v1/sites/postmark-webhook` (P44) for inbound email replies, including `POSTMARK_WEBHOOK_TOKEN` verification.
-6.  Audit `POST /api/v1/sites/prospect` and `POST /api/v1/sites/bulk-prospect` to ensure strict enforcement of email consent (Rule 1) and the quality gate (Rule 4, P46, P47).
+The immediate next steps to enable the full functionality of the Site Builder Command Center, based on the missing routes and approved tasks, include:
+
+*   Implement all missing API routes from the domain context's API surface (e.g., `/dashboard`, `/prospects`, `/analyze`, `/build`, `/prospect`, `/bulk-prospect`, `/previews`, `/prospects/:clientId/status`, `/follow-up`, `/pos-partners`).
+*   Add `GET /api/v1/sites/prospects/:clientId` endpoint to provide detailed prospect information for the Command Center's individual prospect view.
