@@ -369,4 +369,38 @@ export function createTCStripeBilling({ pool, logger = console }) {
         }
 
         const agentClient = await _tcPricingService.getAgentClient(agentClientId);
-        if (!agentClient)
+        if (!agentClient) {
+            _logger.error('[TC-STRIPE] Agent client %s not found for subscription cancellation.', agentClientId);
+            return null;
+        }
+
+        if (!agentClient.stripe_subscription_id) {
+            _logger.info('[TC-STRIPE] Agent %s does not have an active Stripe subscription to cancel.', agentClient.email);
+            return null;
+        }
+
+        try {
+            const subscription = await stripe.subscriptions.cancel(agentClient.stripe_subscription_id);
+
+            // Clear the subscription ID in the database
+            await _pool.query(
+                `UPDATE tc_agent_clients SET stripe_subscription_id = NULL, updated_at = NOW() WHERE id = $1 RETURNING *`,
+                [agentClientId]
+            );
+
+            _logger.info({ subscriptionId: subscription.id, agentClientEmail: agentClient.email }, '[TC-STRIPE] Canceled Stripe subscription.');
+            return subscription;
+        } catch (error) {
+            _logger.error({ error, agentClientEmail: agentClient.email, subscriptionId: agentClient.stripe_subscription_id }, '[TC-STRIPE] Failed to cancel Stripe subscription.');
+            return null;
+        }
+    }
+
+    return {
+        createAgentStripeCustomer,
+        createTCSubscription,
+        recordClosingCharge,
+        getTCBillingRevenue,
+        cancelTCSubscription,
+    };
+}
