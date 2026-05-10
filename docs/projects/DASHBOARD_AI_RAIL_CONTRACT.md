@@ -1,1 +1,1 @@
-The task specifies implementing the persistent AI rail in `public/overlay/lifeos-app.html`, but only provides the content for `public/overlay/lifeos-chat.html`. I cannot implement the feature in the correct target file without its content.
+The task specifies implementing the persistent AI rail in `public/overlay/lifeos-app.html`, but the provided file content is for `public/overlay/lifeos-chat.html`. I cannot implement the feature in the correct target file without its content.
