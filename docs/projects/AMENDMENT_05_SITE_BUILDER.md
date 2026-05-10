@@ -270,3 +270,9 @@ The site generation template is a string in `services/site-builder.js` — if a 
 
 ### Gate 5 — How We Beat Them
 Every website agency requires the prospect to raise their hand first; LifeOS inverts the funnel — we identify businesses with weak sites, build their dream site automatically, and put the preview link in their inbox before they ever asked for it, turning cold outreach into a product demo.
+
+## Change Receipts
+
+| Date | What changed | Why | Status | Verified |
+|---|---|---|---|---|
+| 2026-05-10 | `routes/site-builder-routes.js` — restored from truncated 7-line builder commit to minimal valid state: `GET /launch-readiness` returns `getRegistryHealth()` output (revenue blockers + missing needed vars). Prior builder commits repeatedly truncated this file trying to add `getPipelineReportStats` from a function that does not exist in `prospect-pipeline.js` — each attempt left the file with a broken import statement. Removed the phantom import; file is now syntactically valid and exports the readiness check correctly. | NSSOT audit compliance gate: 3 syntax errors detected by compliance officer. This file was the root of one of them. `getPipelineReportStats` was never exported from prospect-pipeline.js. | ✅ | `node --check routes/site-builder-routes.js` |

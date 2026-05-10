@@ -1,12 +1,34 @@
-import express from 'express';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs/promises';
+/**
+ * services/tc-webhook-validator.js
+ * Validates inbound webhook signatures from Postmark (email events) and Twilio (SMS events).
+ * Exports createTCWebhookValidator({ secret, logger }) → { validatePostmark, validateTwilio }.
+ *
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ */
 import crypto from 'crypto';
-import { createTCStatusEngine } from '../services/tc-status-engine.js';
-import { createTCPortalService } from '../services/tc-portal-service.js';
-import { createTCReportService } from '../services/tc-report-service.js';
-import { createTCAutomationService } from '../services/tc-automation-service.js';
-import { createTCApprovalService } from '../services/tc-approval-service.js';
-import { createTCAlertService } from '../services/tc-alert-service.js';
-import { createTCAsanaSyncService } from '../services/tc-asana-sync-service
+
+export function createTCWebhookValidator({ postmarkSecret = '', twilioAuthToken = '', logger = console } = {}) {
+  function validatePostmark(req) {
+    const signature = req.headers['x-postmark-signature'] || '';
+    if (!postmarkSecret) return { ok: true, skip: true, reason: 'POSTMARK_WEBHOOK_SECRET not configured' };
+    const body = typeof req.body === 'string' ? req.body : JSON.stringify(req.body || {});
+    const expected = crypto.createHmac('sha256', postmarkSecret).update(body).digest('base64');
+    const ok = crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+    if (!ok) logger.warn?.('[TC-WEBHOOK-VALIDATOR] Postmark signature mismatch');
+    return { ok, provider: 'postmark' };
+  }
+
+  function validateTwilio(req) {
+    const signature = req.headers['x-twilio-signature'] || '';
+    if (!twilioAuthToken) return { ok: true, skip: true, reason: 'TWILIO_AUTH_TOKEN not configured' };
+    const url = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+    const params = req.body || {};
+    const sorted = Object.keys(params).sort().reduce((acc, k) => acc + k + params[k], url);
+    const expected = crypto.createHmac('sha1', twilioAuthToken).update(sorted).digest('base64');
+    const ok = crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+    if (!ok) logger.warn?.('[TC-WEBHOOK-VALIDATOR] Twilio signature mismatch');
+    return { ok, provider: 'twilio' };
+  }
+
+  return { validatePostmark, validateTwilio };
+}
