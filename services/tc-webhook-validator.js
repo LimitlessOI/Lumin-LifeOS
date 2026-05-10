@@ -1,12 +1,14 @@
-import express from 'express';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs/promises';
 import crypto from 'crypto';
-import { createTCStatusEngine } from '../services/tc-status-engine.js';
-import { createTCPortalService } from '../services/tc-portal-service.js';
-import { createTCReportService } from '../services/tc-report-service.js';
-import { createTCAutomationService } from '../services/tc-automation-service.js';
-import { createTCApprovalService } from '../services/tc-approval-service.js';
-import { createTCAlertService } from '../services/tc-alert-service.js';
-import { createTCAsanaSyncService } from '../services/tc-asana-sync
+import { URL } from 'url'; // For Twilio URL parsing
+
+// Internal helper to normalize provider events
+function normalizeProviderEvent(provider, payload = {}) {
+  const p = String(provider || 'manual').toLowerCase();
+  const event = String(
+    payload.event_type || payload.eventType || payload.status || payload.MessageStatus || payload.SmsStatus || payload.EmailEvent || 'delivered'
+  ).toLowerCase();
+
+  let status = 'sent';
+  if (['queued', 'accepted', 'scheduled', 'sending'].includes(event)) status = 'prepared';
+  else if (['sent', 'delivered', 'success'].includes(event)) status = 'sent';
+  else if (['opened', 'read', 'seen'].includes(
