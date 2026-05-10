@@ -222,6 +222,7 @@ export function formatTCDigestForEmail(digest) {
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
         .container { max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
         h2 { color: #0056b3; }
+        h3 { color: #0056b3; margin-top: 20px; }
         ul { list-style-type: none; padding: 0; }
         li { margin-bottom: 8px; }
         .critical { color: #d9534f; font-weight: bold; }
@@ -267,4 +268,53 @@ export function formatTCDigestForEmail(digest) {
   // Pending Approvals
   if (digest.pending_approvals.total > 0) {
     textBody += `\n--- Pending Approvals (${digest.pending_approvals.total}) ---\n`;
-    htmlBody += `<h3>Pending Approvals (${digest.pending_approvals
+    htmlBody += `<h3>Pending Approvals (${digest.pending_approvals.total})</h3><ul>`;
+    if (digest.pending_approvals.critical > 0) {
+      textBody += `- Critical: ${digest.pending_approvals.critical}\n`;
+      htmlBody += `<li class="critical">Critical: ${digest.pending_approvals.critical}</li>`;
+    }
+    if (digest.pending_approvals.urgent > 0) {
+      textBody += `- Urgent: ${digest.pending_approvals.urgent}\n`;
+      htmlBody += `<li class="urgent">Urgent: ${digest.pending_approvals.urgent}</li>`;
+    }
+    if (digest.pending_approvals.normal > 0) {
+      textBody += `- Normal: ${digest.pending_approvals.normal}\n`;
+      htmlBody += `<li class="normal">Normal: ${digest.pending_approvals.normal}</li>`;
+    }
+    htmlBody += `</ul>`;
+  }
+
+  // Stale Client Updates
+  if (digest.stale_client_updates.length > 0) {
+    textBody += `\n--- Stale Client Updates (${digest.stale_client_updates.length}) ---\n`;
+    htmlBody += `<h3>Stale Client Updates (${digest.stale_client_updates.length})</h3><ul>`;
+    digest.stale_client_updates.forEach(update => {
+      const label = `${update.address} - Last update ${update.days_since_update} days ago`;
+      textBody += `- ${label}\n`;
+      htmlBody += `<li>${label}</li>`;
+    });
+    htmlBody += `</ul>`;
+  }
+
+  // Missing Document Counts
+  if (digest.missing_docs.length > 0) {
+    textBody += `\n--- Missing Documents (${digest.missing_docs.length}) ---\n`;
+    htmlBody += `<h3>Missing Documents (${digest.missing_docs.length})</h3><ul>`;
+    digest.missing_docs.forEach(doc => {
+      const label = `${doc.address} - ${doc.count} missing document(s)`;
+      textBody += `- ${label}\n`;
+      htmlBody += `<li>${label}</li>`;
+    });
+    htmlBody += `</ul>`;
+  }
+
+  textBody += `\nBest,\nYour TC Service`;
+  htmlBody += `
+        <p>Best,</p>
+        <p>Your TC Service</p>
+    </div>
+</body>
+</html>`;
+
+  return { subject, html: htmlBody, text: textBody };
+}
