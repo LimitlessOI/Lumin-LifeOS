@@ -4,18 +4,17 @@ import 'dotenv/config'; // Ensure env vars are loaded for GOOGLE_PLACES_API_KEY
 import { getRegistryHealth } from '../services/env-registry-map.js';
 import { rk } from '../mw/auth.js'; // Assuming rk is from this path
 import { pool } from '../db/pool.js'; //
-
 const router = Router();
 
 // Rate limiting for public/unauthenticated routes (adjust as needed)
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  standardHeaders: true, // Return rateLimit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-// Apply rate limiting to all routes in this router by default, or selectively
+// Apply rateLimiting to all routes in this router by default, or selectively
 // router.use(apiLimiter); // Uncomment to apply to all routes
 
 // Placeholder for existing routes (as per domain context)
@@ -39,7 +38,6 @@ router.get('/launch-readiness', rk, (req, res) => {
   const missingNeeded = healthReport.missingNeeded.map(item => item.name);
   const revenueBlockers = healthReport.revenueBlockers.map(item => item.name);
   const checkedAt = new Date().toISOString();
-
   res.json({
     ok: true,
     ready,
@@ -49,4 +47,6 @@ router.get('/launch-readiness', rk, (req, res) => {
   });
 });
 
-export default router;
+// New endpoint: GET /api/v1/sites/pipeline-report
+// @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+// Returns a summary of the prospect pipeline for the command center
