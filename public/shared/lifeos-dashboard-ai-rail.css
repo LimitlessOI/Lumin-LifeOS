@@ -1,157 +1,203 @@
-/*
-Contract: Persistent AI Rail (Lumin Rail)
-Purpose: To establish a ubiquitous, quick-access AI interaction surface across the LifeOS platform, evolving the existing Lumin quick-drawer into a persistent, dockable component. This rail will offer streamlined voice and text interaction, providing a direct path to the full chat experience.
-*/
+/* Contract: DASHBOARD_AI_RAIL_CONTRACT.md */
 
-.lifeos-ai-rail-root {
+/* Root container for the AI Rail */
+#lifeos-ai-rail-root {
     position: fixed;
     left: 0;
     right: 0;
-    z-index: 1000; /* High z-index to ensure it's on top */
-    background: var(--dash-surface);
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease-out, height 0.3s ease-out, border-radius 0.3s ease-out;
+    z-index: 1000; /* Ensure it's above other dashboard content */
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Hide scrollbars when collapsed */
-    max-width: 100vw; /* Ensure it doesn't overflow viewport width */
+    background: var(--dash-surface);
+    border: 1px solid var(--dash-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out; /* Smooth transitions for height and position */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    color: var(--dash-text);
+    max-height: 90vh; /* Limit max height to prevent covering entire screen */
+    overflow: hidden; /* Hide content overflow when collapsed */
 }
 
-/* Default to dock-bottom */
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom {
+/* Docking variants */
+#lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom {
     bottom: 0;
+    top: auto; /* Ensure it's not also fixed to top */
     border-top-left-radius: var(--dash-radius-lg);
     border-top-right-radius: var(--dash-radius-lg);
-    padding-bottom: env(safe-area-inset-bottom); /* Internal padding for safe area */
-    border-top: 1px solid var(--dash-border); /* Consistent border */
-    border-bottom: none; /* No bottom border for bottom dock */
+    border-bottom: none; /* No bottom border when docked to bottom */
+    padding-bottom: env(safe-area-inset-bottom); /* Respect safe area insets */
 }
 
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-top {
+#lifeos-ai-rail-root.lifeos-ai-rail-dock-top {
     top: 0;
+    bottom: auto; /* Ensure it's not also fixed to bottom */
     border-bottom-left-radius: var(--dash-radius-lg);
     border-bottom-right-radius: var(--dash-radius-lg);
-    padding-top: env(safe-area-inset-top); /* Internal padding for safe area */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Adjust shadow for top */
-    border-bottom: 1px solid var(--dash-border); /* Border on bottom for top dock */
-    border-top: none; /* No top border for top dock */
+    border-top: none; /* No top border when docked to top */
+    padding-top: env(safe-area-inset-top); /* Respect safe area insets */
 }
 
-/* Collapsed state */
-.lifeos-ai-rail-root.lifeos-ai-rail-collapsed {
-    height: 56px; /* Visual height of the content area */
-}
-
-/* Expanded state */
-.lifeos-ai-rail-root.lifeos-ai-rail-expanded {
-    height: 400px; /* Visual height of the content area */
-    max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px); /* Max height, leaving some margin */
-    border-radius: var(--dash-radius-lg); /* Full radius when expanded */
-}
-
-/* Inner container for content, handles padding and actual height */
-.lifeos-ai-rail-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    /* No padding here, let header/transcript/input-row handle their own */
-}
-
-/* Header for collapsed state / general controls */
+/* Header: Always visible, contains title/status and toggle */
 .lifeos-ai-rail-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: calc(var(--dash-space-unit) * 1.5) var(--dash-space-unit); /* 12px vertical, 8px horizontal */
-    min-height: 56px; /* Ensure consistent height */
-    flex-shrink: 0;
-    gap: var(--dash-space-unit);
+    padding: var(--dash-space-unit) calc(var(--dash-space-unit) * 2);
+    background: var(--dash-surface);
+    border-bottom: 1px solid var(--dash-border);
+    flex-shrink: 0; /* Prevent header from shrinking */
+    height: 48px; /* Fixed height for the header */
 }
 
-.lifeos-ai-rail-header-text {
-    flex: 1;
-    color: var(--dash-text);
+.lifeos-ai-rail-title {
+    font-weight: 600;
     font-size: 15px;
-    font-weight: 500;
+    flex: 1; /* Takes available space */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: block; /* Default to visible */
 }
 
-.lifeos-ai-rail-header-status {
-    font-size: 12px;
+.lifeos-ai-rail-status-line {
+    display: none; /* Hidden by default, shown when collapsed */
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
     color: var(--dash-muted);
+    padding-left: var(--dash-space-unit);
 }
 
 .lifeos-ai-rail-toggle-btn {
-    background: var(--dash-surface);
-    border: 1px solid var(--dash-border);
-    border-radius: var(--dash-radius-lg);
-    color: var(--dash-text);
+    background: none;
+    border: none;
+    color: var(--dash-muted);
     font-size: 18px;
-    width: 40px;
-    height: 40px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, background 0.2s, color 0.2s;
+    padding: 0;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    border-radius: var(--dash-radius-lg);
     flex-shrink: 0;
-    transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
-
 .lifeos-ai-rail-toggle-btn:hover {
-    border-color: var(--dash-accent);
-    color: var(--dash-accent);
+    background: var(--dash-border);
+    color: var(--dash-text);
 }
 
-/* Transcript panel (expanded state) */
-.lifeos-ai-rail-transcript {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--dash-space-unit);
+/* Content area (transcript + input) */
+.lifeos-ai-rail-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Takes remaining vertical space */
+    overflow: hidden; /* Hide scrollbars when collapsed */
+}
+
+/* Transcript panel */
+.lifeos-ai-rail-transcript-panel {
+    flex: 1; /* Takes available space within content */
+    overflow-y: auto; /* Enable scrolling for messages */
+    padding: var(--dash-space-unit) calc(var(--dash-space-unit) * 2);
     display: flex;
     flex-direction: column;
     gap: var(--dash-space-unit);
     scrollbar-width: thin;
     scrollbar-color: var(--dash-muted) transparent;
-    border-top: 1px solid var(--dash-border); /* Separator from header */
-    margin-top: var(--dash-space-unit); /* Space from header */
 }
-
-.lifeos-ai-rail-transcript::-webkit-scrollbar {
+.lifeos-ai-rail-transcript-panel::-webkit-scrollbar {
     width: 4px;
 }
-
-.lifeos-ai-rail-transcript::-webkit-scrollbar-thumb {
+.lifeos-ai-rail-transcript-panel::-webkit-scrollbar-thumb {
     background: var(--dash-muted);
     border-radius: 2px;
 }
 
-/* Individual message styles, adapted from lifeos-dashboard.html chat */
+/* Input area */
+.lifeos-ai-rail-input-area {
+    display: flex;
+    padding: var(--dash-space-unit) calc(var(--dash-space-unit) * 2);
+    border-top: 1px solid var(--dash-border);
+    gap: var(--dash-space-unit);
+    flex-shrink: 0; /* Prevent input area from shrinking */
+}
+
+.lifeos-ai-rail-input {
+    flex: 1;
+    background: var(--dash-surface);
+    border: 1px solid var(--dash-border);
+    border-radius: var(--dash-radius-lg);
+    color: var(--dash-text);
+    font-size: 14px;
+    padding: var(--dash-space-unit) calc(var(--dash-space-unit) * 1.5);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none; /* Prevent manual resize */
+    min-height: 40px;
+    max-height: 120px; /* Limit input height */
+    line-height: 1.5;
+}
+.lifeos-ai-rail-input:focus {
+    border-color: var(--dash-accent);
+}
+.lifeos-ai-rail-input::placeholder {
+    color: var(--dash-muted);
+}
+
+.lifeos-ai-rail-mic-btn,
+.lifeos-ai-rail-send-btn {
+    background: var(--dash-accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--dash-radius-lg);
+    font-size: 20px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: opacity 0.15s, background 0.2s;
+}
+.lifeos-ai-rail-mic-btn {
+    background: var(--dash-surface);
+    border: 1px solid var(--dash-border);
+    color: var(--dash-muted);
+}
+.lifeos-ai-rail-mic-btn:hover {
+    border-color: var(--dash-accent);
+    color: var(--dash-accent);
+}
+.lifeos-ai-rail-send-btn:hover {
+    opacity: 0.85;
+}
+
+/* Message styles (similar to dashboard chat) */
 .lifeos-ai-rail-message {
-    max-width: 80%;
-    padding: 10px 14px;
+    max-width: 85%;
+    padding: calc(var(--dash-space-unit) * 1.25) calc(var(--dash-space-unit) * 1.75);
     border-radius: var(--dash-radius-lg);
     font-size: 14px;
     line-height: 1.5;
-    animation: lifeos-ai-rail-fadeUp 0.2s ease; /* Re-use fadeUp animation concept */
 }
-
 .lifeos-ai-rail-message.user {
     align-self: flex-end;
     background: var(--dash-accent);
     color: #fff;
-    border-bottom-right-radius: calc(var(--dash-radius-lg) / 2); /* Smaller radius for corner */
+    border-bottom-right-radius: calc(var(--dash-radius-lg) / 2);
 }
-
 .lifeos-ai-rail-message.assistant {
     align-self: flex-start;
     background: var(--dash-surface);
     color: var(--dash-text);
-    border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
     border: 1px solid var(--dash-border);
+    border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
 }
-
 .lifeos-ai-rail-message.ambient {
     align-self: flex-start;
     background: transparent;
@@ -164,21 +210,17 @@ Purpose: To establish a ubiquitous, quick-access AI interaction surface across t
 
 /* Typing indicator */
 .lifeos-ai-rail-typing {
-    display: none; /* Hidden by default, JS will show */
+    display: flex;
     align-self: flex-start;
     background: var(--dash-surface);
     border: 1px solid var(--dash-border);
     border-radius: var(--dash-radius-lg);
     border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
-    padding: 12px 16px;
+    padding: var(--dash-space-unit) calc(var(--dash-space-unit) * 1.5);
     gap: 5px;
     align-items: center;
+    width: fit-content;
 }
-
-.lifeos-ai-rail-typing.show {
-    display: flex;
-}
-
 .lifeos-ai-rail-typing-dot {
     width: 7px;
     height: 7px;
@@ -186,123 +228,12 @@ Purpose: To establish a ubiquitous, quick-access AI interaction surface across t
     border-radius: 50%;
     animation: lifeos-ai-rail-bounce-dot 1.2s infinite;
 }
-
-.lifeos-ai-rail-typing-dot:nth-child(1) { animation-delay: 0.0s; }
-.lifeos-ai-rail-typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.lifeos-ai-rail-typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-/* Input row (expanded state) */
-.lifeos-ai-rail-input-row {
-    display: flex;
-    gap: var(--dash-space-unit);
-    padding: var(--dash-space-unit);
-    border-top: 1px solid var(--dash-border); /* Separator from transcript */
-    flex-shrink: 0;
+.lifeos-ai-rail-typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
 }
-
-.lifeos-ai-rail-input-wrap {
-    flex: 1;
-    background: var(--dash-surface);
-    border: 1px solid var(--dash-border);
-    border-radius: var(--dash-radius-lg);
-    display: flex;
-    align-items: flex-end;
-    gap: calc(var(--dash-space-unit) / 2); /* 4px */
-    padding: calc(var(--dash-space-unit) / 2) calc(var(--dash-space-unit) / 2) calc(var(--dash-space-unit) / 2) var(--dash-space-unit); /* 4px top/bottom, 4px right, 8px left */
-    transition: border-color 0.2s;
+.lifeos-ai-rail-typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
 }
-
-.lifeos-ai-rail-input-wrap:focus-within {
-    border-color: var(--dash-accent);
-}
-
-.lifeos-ai-rail-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--dash-text);
-    font-size: 14px;
-    font-family: inherit;
-    resize: none;
-    padding: calc(var(--dash-space-unit) / 2) 0; /* 4px top/bottom */
-    min-height: 36px;
-    max-height: 120px; /* Limit input height */
-    line-height: 1.5;
-}
-
-.lifeos-ai-rail-input::placeholder {
-    color: var(--dash-muted);
-}
-
-.lifeos-ai-rail-input-tools {
-    display: flex;
-    gap: 2px;
-    padding-bottom: calc(var(--dash-space-unit) / 2); /* 4px */
-}
-
-.lifeos-ai-rail-mic-btn,
-.lifeos-ai-rail-send-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--dash-radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: opacity 0.15s, transform 0.1s, background 0.2s, border-color 0.2s, color 0.2s;
-    font-size: 20px;
-}
-
-.lifeos-ai-rail-mic-btn {
-    background: var(--dash-surface);
-    border: 1px solid var(--dash-border);
-    color: var(--dash-muted);
-}
-
-.lifeos-ai-rail-mic-btn:hover {
-    border-color: var(--dash-accent);
-    color: var(--dash-accent);
-}
-
-.lifeos-ai-rail-mic-btn.listening {
-    color: var(--dash-accent); /* Use accent for listening, or a specific mic color */
-    border-color: var(--dash-accent);
-    animation: lifeos-ai-rail-mic-pulse 1s ease infinite;
-}
-
-.lifeos-ai-rail-send-btn {
-    background: var(--dash-accent);
-    color: #fff;
-    border: none;
-}
-
-.lifeos-ai-rail-send-btn:hover {
-    opacity: 0.85;
-}
-
-.lifeos-ai-rail-send-btn:active {
-    transform: scale(0.95);
-}
-
-.lifeos-ai-rail-send-btn:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-}
-
-/* Animations (adapted from lifeos-dashboard.html) */
-@keyframes lifeos-ai-rail-fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 @keyframes lifeos-ai-rail-bounce-dot {
     0%, 80%, 100% {
         transform: scale(0.6);
@@ -314,25 +245,57 @@ Purpose: To establish a ubiquitous, quick-access AI interaction surface across t
     }
 }
 
-@keyframes lifeos-ai-rail-mic-pulse {
-    0%, 100% {
-        box-shadow: 0 0 0 0 rgba(91,106,245,0.4); /* Default (dark theme) accent for pulse */
+/* Collapsed state styles */
+#lifeos-ai-rail-root.lifeos-ai-rail-collapsed {
+    height: calc(48px + env(safe-area-inset-bottom)); /* Header height + bottom safe area */
+    /* Adjust for top docking */
+    &.lifeos-ai-rail-dock-top {
+        height: calc(48px + env(safe-area-inset-top)); /* Header height + top safe area */
     }
-    50% {
-        box-shadow: 0 0 0 8px rgba(91,106,245,0);
+    .lifeos-ai-rail-content {
+        display: none; /* Hide transcript and input */
+    }
+    .lifeos-ai-rail-toggle-btn {
+        transform: rotate(0deg); /* Icon for collapsed state (e.g., chevron up) */
+    }
+    .lifeos-ai-rail-header {
+        border-bottom: none; /* No border when content is hidden */
+    }
+    .lifeos-ai-rail-title {
+        display: none; /* Hide title when collapsed */
+    }
+    .lifeos-ai-rail-status-line {
+        display: block; /* Show status line when collapsed */
     }
 }
 
-/* Light theme specific mic pulse, using the light theme accent color */
-html[data-theme="light"] .lifeos-ai-rail-mic-btn.listening {
-    animation: lifeos-ai-rail-mic-pulse-light 1s ease infinite;
+/* Expanded state styles */
+#lifeos-ai-rail-root.lifeos-ai-rail-expanded {
+    height: 400px; /* Default expanded height */
+    /* Adjust for safe area in expanded state */
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
+
+    .lifeos-ai-rail-content {
+        display: flex; /* Show transcript and input */
+    }
+    .lifeos-ai-rail-toggle-btn {
+        transform: rotate(180deg); /* Icon for expanded state (e.g., chevron down) */
+    }
+    .lifeos-ai-rail-header {
+        border-bottom: 1px solid var(--dash-border); /* Restore border */
+    }
+    .lifeos-ai-rail-title {
+        display: block; /* Show title when expanded */
+    }
+    .lifeos-ai-rail-status-line {
+        display: none; /* Hide status line when expanded */
+    }
 }
 
-@keyframes lifeos-ai-rail-mic-pulse-light {
-    0%, 100% {
-        box-shadow: 0 0 0 0 rgba(74,90,224,0.4); /* Light theme accent for pulse */
-    }
-    50% {
-        box-shadow: 0 0 0 8px rgba(74,90,224,0);
+/* Small screen adjustments for expanded state */
+@media (max-width: 768px) {
+    #lifeos-ai-rail-root.lifeos-ai-rail-expanded {
+        height: 70vh; /* More screen space on mobile */
     }
 }
