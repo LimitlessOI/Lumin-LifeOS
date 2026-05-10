@@ -13,6 +13,8 @@
  *   GITHUB_DEPLOY_BRANCH   — Branch Railway watches for auto-deploy (default: main)
  *
  * Use createDeploymentService(deps) to get bound functions.
+ *
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
 import path from 'path';
@@ -163,8 +165,10 @@ export function createDeploymentService(deps) {
       throw new Error(msg);
     }
 
-    console.log(`✅ [DEPLOY] Committed ${filePath} → ${targetBranch}`);
-    return true;
+    const commitData = await commitRes.json().catch(() => ({}));
+    const commitSha = commitData?.commit?.sha || null;
+    console.log(`✅ [DEPLOY] Committed ${filePath} → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
+    return { ok: true, sha: commitSha };
   }
 
   // ── triggerDeployment ──────────────────────────────────────────────────────

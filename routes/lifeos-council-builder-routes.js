@@ -428,6 +428,13 @@ function validateGeneratedOutputForTarget(targetFile, output) {
       return 'generated HTML is missing required document structure (<html> wrapper OR <!DOCTYPE html> + <head> + <body>)';
     }
   }
+  // JS minimum line count — catches token-limit truncation before the syntax gate
+  if (target.endsWith('.js') || target.endsWith('.mjs') || target.endsWith('.cjs')) {
+    const lineCount = text.split('\n').length;
+    if (lineCount < 15) {
+      return `generated JS is too short (${lineCount} lines); likely token-limit truncation — refusing to commit; retry with a smaller spec or explicit target_file`;
+    }
+  }
   return null;
 }
 
@@ -460,6 +467,21 @@ export function createLifeOSCouncilBuilderRoutes({
   const cacheGet = typeof getCachedResponse === 'function' ? getCachedResponse : null;
   const cacheSet = typeof cacheResponse === 'function' ? cacheResponse : null;
   const memorySvc = pool?.query ? createMemoryIntelligenceService(pool, log) : null;
+
+  // Fire-and-forget: tag the commit SHA so we can roll back a bad autonomous night with
+  // `git checkout refs/tags/autonomy/golden-<sha>` without bisecting hundreds of commits.
+  async function createAutonomyGoldenTag(sha) {
+    const token = process.env.GITHUB_TOKEN?.trim();
+    const repoEnv = process.env.GITHUB_REPO;
+    if (!token || !repoEnv || !sha) return;
+    const [owner, repo] = repoEnv.split('/');
+    const tagName = `autonomy/golden-${sha.slice(0, 7)}`;
+    await fetch(`https://api.github.com/repos/${owner}/${repo}/git/refs`, {
+      method: 'POST',
+      headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: `refs/tags/${tagName}`, sha }),
+    }).catch(() => {});
+  }
 
   // ── GET /ready — machine-readable "can the system build & commit?" (for preflight + operators)
 
@@ -1300,6 +1322,25 @@ export function createLifeOSCouncilBuilderRoutes({
     if (!taskBody.task) {
       return res.status(400).json({ ok: false, error: 'task is required' });
     }
+
+    // Spec contamination gate — reject specs that contain raw HTML/code from a prior build output.
+    // Root cause: operators copy a previous /build response body and paste it into spec, causing the
+    // council to "re-generate" its own output rather than fresh code from requirements.
+    const specRaw = String(taskBody.spec || '');
+    if (specRaw.length > 200) {
+      const specTrim = specRaw.trimStart();
+      const hasHtmlDoc = /<!doctype\s+html/i.test(specRaw) || (/<html[\s>]/i.test(specRaw) && /<\/html>/i.test(specRaw));
+      const isCodeDump = /^(?:import |export |const |function |\{\s*\n)/.test(specTrim) && specRaw.length > 1200;
+      if (hasHtmlDoc || (specTrim.startsWith('<') && specRaw.length > 800) || isCodeDump) {
+        return res.status(400).json({
+          ok: false,
+          error: 'spec_contamination: spec field contains raw HTML or generated code rather than plain-language requirements',
+          hint: 'The spec field should describe WHAT to build (requirements + constraints), not contain generated code. Previous build output was likely pasted into spec — strip it down to the requirements text.',
+          committed: false,
+        });
+      }
+    }
+
     if (typeof commitToGitHub !== 'function') {
       const gapRecommendation = await recordBuilderGap({
         domain: taskBody.domain || null,
@@ -1601,8 +1642,12 @@ export function createLifeOSCouncilBuilderRoutes({
 
     const msg = commit_message || `[system-build] ${resolvedTarget}`;
     try {
-      await commitToGitHub(resolvedTarget, generatedOutput, msg, branch || undefined);
-      log.info({ resolvedTarget, msg, model_used }, '[BUILDER] /build committed generated file to GitHub');
+      const commitResult = await commitToGitHub(resolvedTarget, generatedOutput, msg, branch || undefined);
+      const goldenSha = commitResult?.sha || null;
+      log.info({ resolvedTarget, msg, model_used, goldenSha }, '[BUILDER] /build committed generated file to GitHub');
+      if (goldenSha) {
+        createAutonomyGoldenTag(goldenSha).catch(e => log.warn({ err: e.message }, '[BUILDER] golden tag failed (non-fatal)'));
+      }
       const mirrorBuild = await mirrorCommittedContentToRepoRoot(resolvedTarget, generatedOutput);
       if (!mirrorBuild.ok) {
         log.warn({ resolvedTarget, reason: mirrorBuild.reason }, '[BUILDER] Runtime repo mirror failed after /build — chained files[] may be stale until redeploy');
@@ -1677,6 +1722,7 @@ export function createLifeOSCouncilBuilderRoutes({
         target_file: resolvedTarget,
         committed: true,
         commit_message: msg,
+        commit_sha: goldenSha,
         model_used,
         domain_context_loaded,
         domain,
