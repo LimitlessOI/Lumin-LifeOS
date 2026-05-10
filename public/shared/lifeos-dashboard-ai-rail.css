@@ -40,6 +40,8 @@ DASHBOARD_AI_RAIL_CONTRACT.md
     border-bottom: 1px solid var(--dash-border); /* Add bottom border */
     padding-top: env(safe-area-inset-top);
     padding-bottom: 0; /* Remove bottom padding */
+    border-top-left-radius: 0; /* Reset top radii for top dock */
+    border-top-right-radius: 0; /* Reset top radii for top dock */
 }
 
 #lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom {
@@ -51,6 +53,8 @@ DASHBOARD_AI_RAIL_CONTRACT.md
     border-top: 1px solid var(--dash-border); /* Add top border */
     padding-bottom: env(safe-area-inset-bottom);
     padding-top: 0;
+    border-bottom-left-radius: 0; /* Reset bottom radii for bottom dock */
+    border-bottom-right-radius: 0; /* Reset bottom radii for bottom dock */
 }
 
 /* Expanded state */
@@ -59,21 +63,18 @@ DASHBOARD_AI_RAIL_CONTRACT.md
     max-height: 80vh; /* Don't take up too much screen on smaller devices */
     overflow: visible; /* Allow transcript to scroll */
     border-radius: var(--dash-radius-lg); /* Apply radius to all corners when expanded */
+    border: 1px solid var(--dash-border); /* Ensure all borders are present when expanded */
 }
 
 /* Override border-radius for expanded state when docked */
-#lifeos-ai-rail-root.lifeos-ai-rail-expanded.lifeos-ai-rail-dock-top {
-    border-bottom-left-radius: var(--dash-radius-lg);
-    border-bottom-right-radius: var(--dash-radius-lg);
-    border-top-left-radius: var(--dash-radius-lg);
-    border-top-right-radius: var(--dash-radius-lg);
-}
-
+/* If expanded, it should be a floating panel, so all corners are rounded. */
+/* The specific docking classes should not override the expanded state's full border-radius. */
+/* So, the expanded class should set all 4 radii. */
+#lifeos-ai-rail-root.lifeos-ai-rail-expanded.lifeos-ai-rail-dock-top,
 #lifeos-ai-rail-root.lifeos-ai-rail-expanded.lifeos-ai-rail-dock-bottom {
-    border-top-left-radius: var(--dash-radius-lg);
-    border-top-right-radius: var(--dash-radius-lg);
-    border-bottom-left-radius: var(--dash-radius-lg);
-    border-bottom-right-radius: var(--dash-radius-lg);
+    border-radius: var(--dash-radius-lg); /* All corners rounded when expanded, regardless of dock position */
+    border-top: 1px solid var(--dash-border); /* Ensure all borders are present */
+    border-bottom: 1px solid var(--dash-border);
 }
 
 
@@ -230,15 +231,27 @@ DASHBOARD_AI_RAIL_CONTRACT.md
         border-right: none;
         border-radius: 0; /* Remove corner radius for full-width on sides */
     }
+    /* Re-apply top/bottom radii for docked states on mobile */
     #lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom {
         border-top-left-radius: var(--dash-radius-lg);
         border-top-right-radius: var(--dash-radius-lg);
+        border-bottom-left-radius: 0; /* Ensure bottom corners are square when docked to bottom */
+        border-bottom-right-radius: 0;
     }
     #lifeos-ai-rail-root.lifeos-ai-rail-dock-top {
         border-bottom-left-radius: var(--dash-radius-lg);
         border-bottom-right-radius: var(--dash-radius-lg);
+        border-top-left-radius: 0; /* Ensure top corners are square when docked to top */
+        border-top-right-radius: 0;
     }
+    /* When expanded on mobile, it should take full width and height (or near full height) */
     #lifeos-ai-rail-root.lifeos-ai-rail-expanded {
         border-radius: 0; /* Full screen edges when expanded on mobile */
+        height: 100vh; /* Take full viewport height */
+        max-height: 100vh;
+        top: 0;
+        bottom: 0;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
     }
 }
