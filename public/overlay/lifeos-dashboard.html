@@ -1,3 +1,6 @@
+<html>` element by `lifeos-theme.js` for theme switching, as expected by the CSS tokens. No modifications are needed.
+
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -864,7 +867,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-async function loadMITs() {
+asyncFn loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
