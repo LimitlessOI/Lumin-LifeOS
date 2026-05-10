@@ -17,4 +17,4 @@ function diffInDays(future, now) {
 }
 
 // Initialize status engine once
-const statusEngine = createTCStatus
+const statusEngine =
