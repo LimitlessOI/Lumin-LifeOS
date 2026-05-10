@@ -11,4 +11,4 @@ function normalizeProviderEvent(provider, payload = {}) {
 
   let status = 'sent';
   if (['queued', 'accepted', 'scheduled', 'sending'].includes(event)) status = 'prepared';
-  else if (['sent', 'delivered', 'success'].includes(event)) status = '
+  else if (['sent', 'delivered', 'success'].includes(event)) status = 'sent';
