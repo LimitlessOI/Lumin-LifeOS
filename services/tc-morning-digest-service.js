@@ -16,5 +16,5 @@ function diffInDays(future, now) {
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
 
-/**
- * Generates a structured daily briefing for Adam
+// Initialize status engine once
+const statusEngine = createTCStatus
