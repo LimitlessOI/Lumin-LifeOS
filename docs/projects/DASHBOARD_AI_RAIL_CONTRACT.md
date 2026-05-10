@@ -11,7 +11,7 @@ To establish a ubiquitous, quick-access AI interaction surface across the LifeOS
 *   **Interaction Parity:**
     *   **Voice Input:** Speech-to-text (STT) for user input, leveraging existing `window.LuminVoice` capabilities and the `lumin-input` field.
     *   **Text Input:** Standard keyboard input for messages, utilizing existing `luminSend` and `luminAutoResize` functions.
-    *   **Voice Output:** Read-aloud (Text-to-Speech, TTS) for AI responses, leveraging the `VM.speak` function from `lifeos-chat.html` or an adapted TTS utility.
+    *   **Voice Output:** Read-aloud (Text-to-Speech, TTS) for AI responses, extending `window.LuminVoice` with a `speak` method, with a visual indicator when Lumin is speaking.
 *   **Integration:**
     *   Seamless transition to the full `lifeos-chat.html` experience via `openFullChat()`.
     *   Utilize existing `/api/v1/lifeos/chat` backend endpoints for message handling (`luminSend`).
@@ -35,7 +35,7 @@ To establish a ubiquitous, quick-access AI interaction surface across the LifeOS
 
 ### Phase 2: Voice Integration & Read-Aloud
 1.  **Voice Input (STT):** Integrate `window.LuminVoice` for speech-to-text input directly into the rail's `lumin-input` field, providing visual feedback (e.g., a pulsing mic icon, `lumin-voice-interim` event handling).
-2.  **Voice Output (TTS):** Enable Text-to-Speech for AI responses within the rail, leveraging `VM.speak` (or a dedicated `LuminVoice.speak` if `VM` is not directly accessible/suitable in `lifeos-app.html` context), with a visual indicator when Lumin is speaking.
+2.  **Voice Output (TTS):** Extend `window.LuminVoice` to include a `speak` method that utilizes `SpeechSynthesisUtterance` for Text-to-Speech, enabling read-aloud for AI responses within the rail. Provide a visual indicator when Lumin is speaking.
 3.  **Voice/Text Parity:** Ensure that voice input is transcribed and displayed in the text input field, and that AI responses are available in both text and audio.
 
 ### Phase 3: Refinements & Context
@@ -46,5 +46,4 @@ To establish a ubiquitous, quick-access AI interaction surface across the LifeOS
 ## Open Questions
 *   What is the exact content and interaction model for the collapsed one-line strip (e.g., always-on input, status only, last message preview, or a combination)?
 *   How will the rail handle multiple concurrent voice inputs if the user is also interacting with other voice-enabled parts of LifeOS?
-*   Should the rail maintain its own dedicated "quick chat" thread, or should it dynamically connect to the user's most recent active thread from `lifeos-chat.html`?
 *   What level of configuration (e.g., voice, silence timeout) should be exposed directly within the rail, versus requiring navigation to the full chat settings?
