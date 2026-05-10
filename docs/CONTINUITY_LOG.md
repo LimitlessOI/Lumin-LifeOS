@@ -32,6 +32,26 @@
 
 ---
 
+## [FIX] Update 2026-05-10 #10 — Critical builder-truncation repair (Site Builder + TC syntax)
+
+### Files changed
+- `routes/site-builder-routes.js` — restored the known-good 438-line module from `a3df15e7`; recent system-build commits had left only three import lines and no `createSiteBuilderRoutes` export, which reproduced as a Node ESM module-link crash from the `server.js` import path.
+- `services/prospect-pipeline.js` — restored the known-good `ProspectPipeline` service from `a3df15e7`; after the route restore, the import chain exposed an unterminated SQL string syntax error at line 147.
+- `services/tc-document-validator.js` — restored the known-good 313-line fail-closed validator from `dacd2808`; system-build commit `c8c55333` had truncated it to six lines ending inside `DATE_RE`, causing TC document QA imports to throw.
+- `services/tc-webhook-validator.js` — deleted the resurrected orphan broken file; it was already documented as removed in the 2026-05-09 cleanup, was never imported, and the reintroduced copy failed `node --check`.
+- `docs/projects/AMENDMENT_05_SITE_BUILDER.md` and `docs/projects/AMENDMENT_17_TC_SERVICE.md` — receipts and `Last Updated` fields updated with exact trigger, impact, current state, verification, and residual verifier failures.
+
+### State after this session
+- Critical startup/import blockers are fixed locally: Site Builder route import smoke prints `function`; touched runtime modules pass `node --check`; top-level runtime syntax sweep passes with deleted files skipped; `npm test` passes (2 passed, 4 skipped because no local server).
+- `npm run verify:site-builder` now has all syntax checks green and fails only the known local env checks `SITE_BASE_URL` + `EMAIL_FROM` (31 passed, 2 failed).
+- `node scripts/verify-project.mjs --project tc_service` has TC syntax checks green but still fails four pre-existing route-contract checks (400/500 from missing test payload/mailbox), not caused by the restored validator.
+
+### Next agent: start here
+- Watch for the builder reintroducing truncated existing files; the durable platform fix is to make the builder refuse partial overwrites of existing JS modules before commit.
+- Site Builder env residue remains `SITE_BASE_URL` + `EMAIL_FROM`; TC verifier route-contract failures remain separate follow-up work.
+
+---
+
 ## [FIX] Update 2026-05-09 #9 — Codebase cleanup (231 orphaned files purged)
 
 ### Files

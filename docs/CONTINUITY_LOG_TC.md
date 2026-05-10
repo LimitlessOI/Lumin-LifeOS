@@ -6,6 +6,24 @@
 
 ---
 
+## [FIX] Update 2026-05-10 #3 — TC syntax repair after builder truncation
+
+### Files changed
+- `services/tc-document-validator.js` — restored the last known-good fail-closed document validator from `dacd2808`; current file had been truncated by system-build commit `c8c55333` to six lines ending inside the `DATE_RE` regular expression. This service is dynamically imported by TC intake/upload/inspection routes, so affected endpoints would throw instead of validating documents.
+- `services/tc-webhook-validator.js` — deleted the resurrected orphan broken file. It had been removed in the 2026-05-09 cleanup as truncated and never imported, but system-build commits reintroduced a 12-line partial import file that failed syntax checks.
+- `docs/projects/AMENDMENT_17_TC_SERVICE.md` — `Last Updated` and Change Receipts now document both the restored validator and deleted orphan, with verification status and residual route-verifier failures.
+
+### State after this session
+- `node --check services/tc-document-validator.js` PASS; import smoke with `services/tc-doc-intake.js` PASS; top-level runtime syntax sweep PASS with deleted files skipped.
+- `node scripts/verify-project.mjs --project tc_service` still FAILS 4 route-contract checks (400/500 from missing test payload/mailbox), but syntax checks are green.
+
+### Next agent (TC lane): start here
+1. Keep `services/tc-webhook-validator.js` deleted unless a real mounted validator is built and added to Amendment 17 owned files/manifest.
+2. Treat TC verifier route-contract failures separately from this syntax repair; inspect verifier payload expectations before changing runtime routes.
+3. Durable platform follow-up: prevent builder from overwriting existing TC service files with partial fragments.
+
+---
+
 ## [BUILD] Update 2026-04-20 #2 — Lane handoff hardening (no runtime code)
 
 ### Files changed
