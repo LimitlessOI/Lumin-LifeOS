@@ -7,15 +7,16 @@ To establish a ubiquitous, quick-access AI interaction surface across the LifeOS
 *   **UI States:**
     *   **Collapsed Strip:** A minimal, one-line UI element displaying status or a quick input field.
     *   **Expanded Transcript:** A larger view within the rail, showing recent conversation history.
-    *   **Docking:** Configurable positioning at the top or bottom of the screen, persisting across sessions.
+    *   **Docking:** Configurable positioning at the top or bottom of the screen, persisting across sessions via `localStorage`.
 *   **Interaction Parity:**
-    *   **Voice Input:** Speech-to-text (STT) for user input, leveraging existing `window.LuminVoice` capabilities.
-    *   **Text Input:** Standard keyboard input for messages, utilizing existing `luminSend` and `luminAutoResize`.
-    *   **Voice Output:** Read-aloud (Text-to-Speech, TTS) for AI responses, leveraging existing `VM.speak` or an adapted TTS utility.
+    *   **Voice Input:** Speech-to-text (STT) for user input, leveraging existing `window.LuminVoice` capabilities and the `lumin-input` field.
+    *   **Text Input:** Standard keyboard input for messages, utilizing existing `luminSend` and `luminAutoResize` functions.
+    *   **Voice Output:** Read-aloud (Text-to-Speech, TTS) for AI responses, leveraging the `VM.speak` function from `lifeos-chat.html` or an adapted TTS utility.
 *   **Integration:**
-    *   Seamless transition to the full `lifeos-chat.html` experience.
-    *   Utilize existing `/api/v1/lifeos/chat` backend endpoints for message handling.
-    *   The global `Cmd/Ctrl+L` shortcut will toggle/focus the rail.
+    *   Seamless transition to the full `lifeos-chat.html` experience via `openFullChat()`.
+    *   Utilize existing `/api/v1/lifeos/chat` backend endpoints for message handling (`luminSend`).
+    *   The global `Cmd/Ctrl+L` shortcut will toggle/focus the rail, extending its current behavior for `openLuminDrawer()`.
+    *   The rail will manage its own dedicated "quick chat" thread, initialized by `luminBootThread()`.
 
 ## Non-goals
 *   Replicate all advanced features of `lifeos-chat.html` within the rail (e.g., full thread management, message search, message actions, detailed context bar, mode switching, build panel). The rail is a quick-access point, not a full replacement.
@@ -26,15 +27,15 @@ To establish a ubiquitous, quick-access AI interaction surface across the LifeOS
 ## Phases
 
 ### Phase 1: Core UI & Text Interaction
-1.  **Refactor `lumin-drawer`:** Transform the existing `lumin-drawer` in `public/overlay/lifeos-app.html` into the persistent rail container, adapting its CSS for the new UI states.
+1.  **Refactor `lumin-drawer`:** Transform the existing `lumin-drawer` in `public/overlay/lifeos-app.html` into the persistent rail container, adapting its CSS for the new UI states (collapsed, expanded, docked).
 2.  **Implement UI States:** Develop CSS and JavaScript to support collapsed (one-line strip) and expanded (transcript view) states, with smooth transitions.
 3.  **Docking Mechanism:** Implement logic for user-configurable positioning of the rail at the top or bottom of the screen, persisting this preference in `localStorage`.
 4.  **Text Input/Output:** Integrate existing `luminSend` and `_appendLuminMsg` logic for text-based conversation, displaying the last N messages in the expanded state.
-5.  **Full Chat Link:** Add a clear UI element (e.g., a button or icon) within the rail to navigate to the full `lifeos-chat.html` page.
+5.  **Full Chat Link:** Add a clear UI element (e.g., a button or icon) within the rail to navigate to the full `lifeos-chat.html` page using `openFullChat()`.
 
 ### Phase 2: Voice Integration & Read-Aloud
-1.  **Voice Input (STT):** Integrate `window.LuminVoice` for speech-to-text input directly into the rail's input field, providing visual feedback (e.g., a pulsing mic icon).
-2.  **Voice Output (TTS):** Enable Text-to-Speech for AI responses within the rail, leveraging `VM.speak` or a similar adapted TTS utility, with a visual indicator when Lumin is speaking.
+1.  **Voice Input (STT):** Integrate `window.LuminVoice` for speech-to-text input directly into the rail's `lumin-input` field, providing visual feedback (e.g., a pulsing mic icon, `lumin-voice-interim` event handling).
+2.  **Voice Output (TTS):** Enable Text-to-Speech for AI responses within the rail, leveraging `VM.speak` (or a dedicated `LuminVoice.speak` if `VM` is not directly accessible/suitable in `lifeos-app.html` context), with a visual indicator when Lumin is speaking.
 3.  **Voice/Text Parity:** Ensure that voice input is transcribed and displayed in the text input field, and that AI responses are available in both text and audio.
 
 ### Phase 3: Refinements & Context
