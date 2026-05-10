@@ -4,9 +4,12 @@ import 'dotenv/config'; // Ensure env vars are loaded for GOOGLE_PLACES_API_KEY
 import { getRegistryHealth } from '../services/env-registry-map.js';
 import { rk } from '../mw/auth.js'; // Assuming rk is from this path
 import { pool } from '../db/pool.js'; // ASSUMPTION: pool is available here for DB access
+
 const router = Router();
+
 // Inlined discovery logic from scripts/site-builder-prospect-discovery.mjs
 const SUPPORTED_TYPES = ['wellness', 'yoga', 'massage', 'midwife', 'chiropractor', 'acupuncture', 'naturopath', 'physical-therapy', 'pilates', 'reiki', 'nutrition', 'counseling'];
+
 /*
 - Adapted searchGooglePlaces function for API context.
 - @param {string} city - The city to search in.
@@ -49,11 +52,10 @@ async function searchGooglePlacesForApi(city, type, apiKey, count) {
   }
 }
 
-// New route for one-click discovery from the command center
+// New route for one-click discovery from the cmdCtr
 // @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
 router.post('/discover', rk, async (req, res) => {
   let { city, niche, count } = req.body;
-
   // Apply defaults and caps similar to the CLI script
   city = city || 'San Diego, CA';
   niche = niche || 'wellness';
@@ -67,17 +69,40 @@ router.post('/discover', rk, async (req, res) => {
   const { results, source, error } = await searchGooglePlacesForApi(city, niche, apiKey, count);
 
   if (error && source === 'manual_guidance') {
-    // If API key is missing, return manual guidance message as a top-level message
-    return res.status(200).json({
-      ok: true,
-      discovered: 0,
-      prospects: [],
-      receipt: { source, city, niche },
-      message: error
-    });
+    // If apiKey is missing, return manual guidance message as a top-level message
+    return res.status(200).json({ ok: true, discovered: 0, prospects: [], receipt: { source, city, niche }, message: error });
   } else if (error) {
     // Other API errors
     return res.status(500).json({ ok: false, error: `Discovery failed: ${error}` });
   }
 
   return res.status(200).json({
+    ok: true,
+    discovered: results.length,
+    prospects: results,
+    receipt: { source, city, niche },
+  });
+});
+
+// New route for Site Builder launch readiness
+// @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+router.get('/launch-readiness', rk, async (req, res) => {
+  try {
+    const health = getRegistryHealth();
+    const missingNeededNames = health.missingNeeded.map(v => v.name);
+    const revenueBlockerNames = health.revenueBlockers.map(v => v.name);
+
+    return res.status(200).json({
+      ok: true,
+      ready: health.summary.healthy,
+      missing_needed: missingNeededNames,
+      revenue_blockers: revenueBlockerNames,
+      checked_at: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('Error checking launch readiness:', error);
+    return res.status(500).json({ ok: false, error: 'Failed to retrieve launch readiness status.' });
+  }
+});
+
+export default router;
