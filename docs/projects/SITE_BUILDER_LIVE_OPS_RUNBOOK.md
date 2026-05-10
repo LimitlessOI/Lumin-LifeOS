@@ -7,7 +7,7 @@ This runbook outlines the essential procedures for operating and monitoring the 
 Before operating the Site Builder lane, ensure the following environment variables are correctly configured in the Railway environment:
 
 ### Required for Core Functionality
--   `PUBLIC_BASE_URL` (or `BUILDER_BASE_URL`, `SITE_BASE_URL`, `LUMIN_SMOKE_BASE_URL`): Base URL for the Site Builder API and generated preview links.
+-   `SITE_BASE_URL` (or `PUBLIC_BASE_URL`, `BUILDER_BASE_URL`, `LUMIN_SMOKE_BASE_URL`): Base URL for the Site Builder API and generated preview links.
 -   `COMMAND_CENTER_KEY` (or `COMMAND_KEY`, `LIFEOS_KEY`, `API_KEY`): API key for authenticating requests to the Site Builder API.
 -   `DATABASE_URL`: Connection string for the PostgreSQL database.
 
@@ -81,7 +81,7 @@ The Site Builder Command Center (`public/overlay/site-builder-command-center.htm
 These conditions indicate a critical failure that prevents the core functionality of the Site Builder lane and must be resolved before proceeding with outreach or new prospect processing:
 
 -   **Live Smoke Test Failure:** `npm run site-builder:live-smoke` fails to produce a valid `previewUrl` and `qualityReport`. This indicates the core `/api/v1/sites/build` endpoint is non-functional.
--   **Missing Required Environment Variables:** `PUBLIC_BASE_URL`, `COMMAND_CENTER_KEY`, `DATABASE_URL`, `EMAIL_FROM`, or `POSTMARK_SERVER_TOKEN` are not set or are invalid.
+-   **Missing Required Environment Variables:** `SITE_BASE_URL`, `COMMAND_CENTER_KEY`, `DATABASE_URL`, `EMAIL_FROM`, or `POSTMARK_SERVER_TOKEN` are not set or are invalid.
 -   **Database Connectivity Issues:** The application cannot connect to or query the `prospect_sites`, `email_suppressions`, or `outreach_log` tables.
 -   **Consistent `qa_hold` for all Builds:** If all generated sites consistently land in `qa_hold` with `qualityReport.readyToSend === false`, it suggests a systemic issue with the AI site generation or quality scoring, preventing any outreach.
 -   **Email Sending Failures:** Cold emails are consistently failing to send, indicating an issue with Postmark integration or `EMAIL_FROM` configuration.
