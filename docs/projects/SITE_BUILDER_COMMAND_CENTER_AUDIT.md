@@ -1,49 +1,49 @@
-The `docs/projects/AMENDMENT_05_SITE_BUILDER.md` file is missing, so this audit cannot fully ground outputs in that document. The provided `routes/site-builder-routes.js` file only contains the `/discover` endpoint, contradicting the domain context which states it contains "All siteBld apiEPs". This audit proceeds assuming the provided file content is authoritative for what is *currently implemented* in `routes/site-builder-routes.js`.
+The `docs/projects/AMENDMENT_05_SITE_BUILDER.md` file, which is the SSOT for this domain, is missing. This makes a complete audit against the amendment impossible.
 
 ### Shipped controls
 
-Based on the provided `routes/site-builder-routes.js` content:
+Based on the API surface and the provided `routes/site-builder-routes.js` file, the Site Builder Command Center (cmdCtr) can support the following operator actions:
 
-*   **Prospect Discovery:** `POST /api/v1/sites/discover` allows operators to find new prospects by city and niche using Google Places API. This supports the "discover" phase of the pipeline.
+*   **Prospect Discovery**: `POST /api/v1/sites/discover` (newly added route, allows finding prospects by city and niche).
+*   **Site Building**: `POST /api/v1/sites/build` (builds a site from a URL, returns preview).
+*   **Full Prospect Pipeline**: `POST /api/v1/sites/prospect` (scores, builds, and sends cold email for a single prospect).
+*   **Bulk Prospecting**: `POST /api/v1/sites/bulk-prospect` (scores, builds, and sends for up to 20 prospects).
+*   **Opportunity Analysis**: `POST /api/v1/sites/analyze` (scores an existing site for outreach prioritization).
+*   **Preview Management**: `GET /api/v1/sites/previews` (lists all built preview sites).
+*   **CRM Pipeline View**: `GET /api/v1/sites/prospects` (lists all prospects with pipeline status).
+*   **Pipeline Dashboard**: `GET /api/v1/sites/dashboard` (provides aggregate pipeline statistics).
+*   **Prospect Status Update**: `PATCH /api/v1/sites/prospects/:clientId/status` (updates a prospect's status and deal value).
+*   **Manual Follow-up**: `POST /api/v1/sites/follow-up` (sends a follow-up email to a specific prospect).
+*   **POS Partner Listing**: `GET /api/v1/sites/pos-partners` (retrieves a list of commission partners).
 
-### Missing operator actions
-
-Based on the `public/overlay/site-builder-command-center.html` purpose ("analyze prospects, build & send, pipeline table") and the "API surface" described in the DOMAIN CONTEXT, but *not* present in the provided `routes/site-builder-routes.js` content:
-
-*   **Site Building:** `POST /api/v1/sites/build` (Build site from URL)
-*   **Full Prospect Process:** `POST /api/v1/sites/prospect` (Build + score + send cold outreach)
-*   **Bulk Prospecting:** `POST /api/v1/sites/bulk-prospect` (Batch processing)
-*   **Opportunity Analysis:** `POST /api/v1/sites/analyze` (Score existing site)
-*   **Preview Listing:** `GET /api/v1/sites/previews` (List all built preview sites)
-*   **CRM Pipeline View:** `GET /api/v1/sites/prospects` (List all prospects)
-*   **Pipeline Dashboard:** `GET /api/v1/sites/dashboard` (Pipeline stats)
-*   **Prospect Status Update:** `PATCH /api/v1/sites/prospects/:clientId/status` (Update status and deal value)
-*   **Manual Follow-up:** `POST /api/v1/sites/follow-up` (Send follow-up email)
-*   **POS Partner Listing:** `GET /api/v1/sites/pos-partners` (List commission partners)
-*   **Preview View Tracking:** `GET /api/v1/sites/preview-view` (Tracking pixel endpoint)
-*   **Email Reply Webhook:** `POST /api/v1/sites/email-reply-webhook` (Postmark inbound webhook)
+Automated actions (not direct operator controls but part of the system):
+*   **Preview View Tracking**: `GET /api/v1/sites/preview-view` (marks prospect as 'viewed').
+*   **Email Reply Tracking**: `POST /api/v1/sites/email-reply-webhook` (marks prospect as 'replied').
 
 ### Route dependencies
 
-The `public/overlay/site-builder-command-center.html` would depend on the following routes to fulfill its described purpose:
+The `public/overlay/site-builder-command-center.html` likely depends on the following routes to provide its functionality:
 
-*   `GET /api/v1/sites/dashboard`: To display overall pipeline statistics.
-*   `GET /api/v1/sites/prospects`: To populate the main pipeline table with prospect data.
-*   `POST /api/v1/sites/discover`: To enable the operator to find new prospects.
-*   `POST /api/v1/sites/analyze`: To analyze a prospect's existing site before building.
-*   `POST /api/v1/sites/build` or `POST /api/v1/sites/prospect`: To initiate site builds and outreach.
-*   `PATCH /api/v1/sites/prospects/:clientId/status`: To manually update prospect statuses (e.g., `converted`, `lost`).
-*   `POST /api/v1/sites/follow-up`: To trigger manual follow-up emails.
-*   `GET /api/v1/sites/previews`: To view or manage built preview sites.
+*   `/api/v1/sites/dashboard` for overall pipeline statistics.
+*   `/api/v1/sites/prospects` for the main CRM table view of prospects.
+*   `/api/v1/sites/discover` for the new prospect discovery feature.
+*   `/api/v1/sites/analyze` for on-demand opportunity scoring.
+*   `/api/v1/sites/build` or `/api/v1/sites/prospect` for initiating site builds/outreach.
+*   `/api/v1/sites/bulk-prospect` for batch operations.
+*   `/api/v1/sites/previews` for accessing preview URLs.
+*   `/api/v1/sites/prospects/:clientId/status` for updating prospect states.
+*   `/api/v1/sites/follow-up` for sending manual follow-ups.
+*   `/api/v1/sites/pos-partners` for displaying affiliate options.
 
 ### Risks
 
-*   **Incomplete API Surface:** The provided `routes/site-builder-routes.js` is significantly incomplete relative to the described "API surface" in the DOMAIN CONTEXT. This means the Command Center would be largely non-functional if it relies solely on the routes present in the provided file.
-*   **Missing Amendment Context:** The absence of `AMENDMENT_05_SITE_BUILDER.md` means the audit cannot verify specific design or functional requirements for the Command Center that might be detailed there.
-*   **`GOOGLE_PLACES_KEY` Dependency:** The `/discover` route relies on `process.env.GOOGLE_PLACES_KEY`. If this key is missing or invalid, the discovery functionality will fail, returning an error message. The Command Center UI would need to handle this gracefully and potentially guide the operator to manual research.
+*   **Missing SSOT**: The `AMENDMENT_05_SITE_BUILDER.md` file is unavailable, which means the authoritative design and business rules for the cmdCtr might not be fully captured or understood, leading to potential misalignments.
+*   **Truncated Route File**: The `routes/site-builder-routes.js` file is incomplete, ending abruptly within the `/discover` route implementation. This prevents a full verification of the current route surface and any subsequent routes defined in that file.
+*   **API Surface Discrepancy**: The `/api/v1/sites/discover` route is present in `routes/site-builder-routes.js` but not explicitly listed in the "API surface" table in the domain context. This indicates the API surface documentation might be slightly out of sync with the implemented routes.
 
 ### Next queue slices
 
-*   Implement the missing API endpoints in `routes/site-builder-routes.js` as per the DOMAIN CONTEXT's "API surface" table.
-*   Add `GET /api/v1/sites/prospects/:clientId` endpoint to retrieve detailed information for a single prospect, including full metadata and qualityReport.
-*   Clarify the authoritative source for the complete set of API routes for the Site Builder domain.
+1.  **Implement `GET /api/v1/sites/prospects/:clientId`**: This is an explicit next approved task and is crucial for a detailed view of individual prospects within the cmdCtr.
+2.  **Complete `routes/site-builder-routes.js`**: The truncated file needs to be completed to ensure all intended routes are properly defined and functional.
+3.  **Integrate `/discover` into cmdCtr UI**: The newly implemented `/discover` route needs to be exposed and usable within the `public/overlay/site-builder-command-center.html` interface.
+4.  **Address missing `AMENDMENT_05_SITE_BUILDER.md`**: Recovering or recreating the SSOT document is critical for future development and alignment.
