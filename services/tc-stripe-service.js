@@ -315,4 +315,28 @@ export function createTCStripeBilling({ pool, logger = console }) {
       });
 
       const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
-      _logger.info({ agentClientId, transactionId, invoiceId: finalized
+      _logger.info({ agentClientId, transactionId, invoiceId: finalizedInvoice.id, status: finalizedInvoice.status }, '[TC-STRIPE-BILLING] Closing charge invoice created and finalized.');
+
+      // Optionally, update the local transaction record with the Stripe invoice ID
+      // if a column like `stripe_invoice_id` exists on `tc_transactions`.
+      // For now, we just log and return the Stripe invoice.
+      return finalizedInvoice;
+    } catch (error) {
+      _logger.error({ agentClientId, transactionId, error: error.message }, '[TC-STRIPE-BILLING] Failed to record closing charge.');
+      return null;
+    }
+  }
+
+  /**
+   * Retrieves a summary of TC billing revenue from Stripe and local database.
+   * @returns {Promise<object|null>} A structured object with MRR, ARR, and pending closing fees, or null if Stripe is not configured.
+   */
+  async function getTCBillingRevenue() {
+    if (!stripe) {
+      _logger.warn('[TC-STRIPE-BILLING] Stripe secret key not configured. Skipping Stripe operation.');
+      return null;
+    }
+
+    let mrr = 0;
+    let pendingClosingFees = 0;
+    let totalCollected = 0
