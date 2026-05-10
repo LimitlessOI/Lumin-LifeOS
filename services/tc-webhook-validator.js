@@ -9,4 +9,4 @@ import crypto from 'crypto';
  * This function serves as both `normalizeDeliveryCallback` and `normalizeShowingFeedbackReply`.
  * @param {string} provider - The name of the webhook provider ('postmark', 'twilio', etc.).
  * @param {object} payload - The raw payload received from the webhook.
- * @returns {{provider: string, event_type: string, status: string, external_id: string|null, feedback_text: string|null, from: string|null, to: string
+ * @returns {{provider: string, event_type: string, status: string, external_id: string|null, feedback_text: string|null, from: string|null, to
