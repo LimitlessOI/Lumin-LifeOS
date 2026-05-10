@@ -17,4 +17,4 @@ function diffInDays(future, now) {
 }
 
 /**
- * Generates a structured daily briefing for
+ * Generates a structured daily briefing for Adam
