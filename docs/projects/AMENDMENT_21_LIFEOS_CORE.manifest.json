@@ -846,5 +846,5 @@
     ]
   },
   "last_updated": "2026-05-10",
-  "ssot_receipt_tail": "Fix 6+7: queue runner LOG_PATH now lane-aware (auditor reads aligned); 413-in-500 council fail treated as skippable (quarantine+continue) — Atlas/Forge unblocked from looping on payload-too-large tasks"
+  "ssot_receipt_tail": "Fix 8: daemon STATE_PATH/LOCK_PATH/LOG_PATH/QUEUE_LAST_RUN_PATH now lane-aware — TC and SiteBuilder daemons no longer collide with Nova lock; Atlas F→C (100% success rate), Forge F→C on first post-fix cycle"
 }
