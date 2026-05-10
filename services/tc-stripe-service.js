@@ -1,9 +1,11 @@
 import Stripe from 'stripe';
 import { PLANS, PLAN_DETAILS } from './tc-pricing.js'; // Assuming tc-pricing.js is in the same directory
+import { createTCPricing } from './tc-pricing.js'; // Import to leverage existing pricing functions
 
 let stripe = null;
 let _pool = null;
 let _logger = console;
+let _tcPricingService = null; // To hold the initialized tc-pricing service
 
 // Placeholder Stripe Price/Product IDs. In a production system, these would be configured
 // in Stripe and their IDs stored in a configuration file or the database (e.g.,
@@ -33,6 +35,7 @@ async function getAgentClientById(agentClientId) {
 export function createTCStripeBilling({ pool, logger = console }) {
   _pool = pool;
   _logger = logger;
+  _tcPricingService = createTCPricing({ pool, logger }); // Initialize tc-pricing service
 
   if (process.env.STRIPE_SECRET_KEY) {
     stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -55,13 +58,17 @@ export function createTCStripeBilling({ pool, logger = console }) {
     }
 
     if (agentClient.stripe_customer_id) {
-      _logger.info({ agentClientId: agentClient.id, stripeCustomerId: agentClient.stripe_customer_id }, '[TC-STRIPE-BILLING] Agent already has a Stripe customer ID.');
+      _logger.info({ agentClientId: agentClient.id, stripeCustomerId: agentClient.stripe_customer_id }, '[TC-STRIPE-BILLING] Agent already has a Stripe customer ID. Attempting to retrieve.');
       try {
         const customer = await stripe.customers.retrieve(agentClient.stripe_customer_id);
-        return customer;
+        if (customer.deleted) {
+          _logger.warn({ agentClientId: agentClient.id, stripeCustomerId: agentClient.stripe_customer_id }, '[TC-STRIPE-BILLING] Existing Stripe customer is deleted. Creating new one.');
+        } else {
+          return customer;
+        }
       } catch (error) {
         _logger.error({ agentClientId: agentClient.id, error: error.message }, '[TC-STRIPE-BILLING] Failed to retrieve existing Stripe customer. Creating new one.');
-        // Fall through to create a new customer if retrieval fails
+        // Fall through to create a new customer if retrieval fails or customer is deleted
       }
     }
 
@@ -121,6 +128,11 @@ export function createTCStripeBilling({ pool, logger = console }) {
     } else {
       try {
         stripeCustomer = await stripe.customers.retrieve(agentClient.stripe_customer_id);
+        if (stripeCustomer.deleted) {
+          _logger.warn({ agentClientId: agentClient.id, stripeCustomerId: agentClient.stripe_customer_id }, '[TC-STRIPE-BILLING] Existing Stripe customer is deleted. Creating new one.');
+          stripeCustomer = await createAgentStripeCustomer(agentClient);
+          if (!stripeCustomer) return null;
+        }
       } catch (error) {
         _logger.error({ agentClientId: agentClient.id, error: error.message }, '[TC-STRIPE-BILLING] Failed to retrieve existing Stripe customer for subscription. Attempting to create new one.');
         stripeCustomer = await createAgentStripeCustomer(agentClient);
@@ -129,10 +141,14 @@ export function createTCStripeBilling({ pool, logger = console }) {
     }
 
     if (agentClient.stripe_subscription_id) {
-      _logger.info({ agentClientId, stripeSubscriptionId: agentClient.stripe_subscription_id }, '[TC-STRIPE-BILLING] Agent already has an active Stripe subscription. Skipping creation.');
+      _logger.info({ agentClientId, stripeSubscriptionId: agentClient.stripe_subscription_id }, '[TC-STRIPE-BILLING] Agent already has an active Stripe subscription. Attempting to retrieve.');
       try {
         const subscription = await stripe.subscriptions.retrieve(agentClient.stripe_subscription_id);
-        return subscription;
+        if (subscription.status === 'active' || subscription.status === 'trialing') {
+          return subscription;
+        } else {
+          _logger.warn({ agentClientId, stripeSubscriptionId: agentClient.stripe_subscription_id, status: subscription.status }, '[TC-STRIPE-BILLING] Existing subscription is not active. Proceeding to create new.');
+        }
       } catch (error) {
         _logger.warn({ agentClientId, error: error.message }, '[TC-STRIPE-BILLING] Existing subscription ID invalid. Proceeding to create new.');
       }
@@ -182,10 +198,7 @@ export function createTCStripeBilling({ pool, logger = console }) {
           },
         });
         // Mark setup as paid in our DB after creating the invoice item
-        await _pool.query(
-          `UPDATE tc_agent_clients SET setup_paid = true, setup_paid_at = NOW(), setup_paid_amt = $1 WHERE id = $2 RETURNING *`,
-          [planInfo.setup_fee, agentClient.id]
-        );
+        await _tcPricingService.markSetupPaid(agentClient.id, { amountPaid: planInfo.setup_fee });
       }
 
       await _pool.query(
@@ -202,11 +215,11 @@ export function createTCStripeBilling({ pool, logger = console }) {
 
   /**
    * Records a closing charge for a per-transaction agent.
-   * This creates a one-time invoice item or charge in Stripe.
+   * This creates a one-time invoice item and attempts to finalize an invoice in Stripe.
    * @param {number} agentClientId - The ID of the agent client.
    * @param {number} transactionId - The ID of the transaction.
    * @param {number} amountCents - The amount to charge in cents.
-   * @returns {Promise<Stripe.InvoiceItem|Stripe.Charge|null>} The created Stripe object or null.
+   * @returns {Promise<Stripe.Invoice|null>} The created Stripe Invoice object or null.
    */
   async function recordClosingCharge(agentClientId, transactionId, amountCents) {
     if (!stripe) {
@@ -230,6 +243,11 @@ export function createTCStripeBilling({ pool, logger = console }) {
     } else {
       try {
         stripeCustomer = await stripe.customers.retrieve(agentClient.stripe_customer_id);
+        if (stripeCustomer.deleted) {
+          _logger.warn({ agentClientId: agentClient.id, stripeCustomerId: agentClient.stripe_customer_id }, '[TC-STRIPE-BILLING] Existing Stripe customer is deleted. Creating new one.');
+          stripeCustomer = await createAgentStripeCustomer(agentClient);
+          if (!stripeCustomer) return null;
+        }
       } catch (error) {
         _logger.error({ agentClientId: agentClient.id, error: error.message }, '[TC-STRIPE-BILLING] Failed to retrieve existing Stripe customer for closing charge. Attempting to create new one.');
         stripeCustomer = await createAgentStripeCustomer(agentClient);
@@ -243,7 +261,7 @@ export function createTCStripeBilling({ pool, logger = console }) {
         customer: stripeCustomer.id,
         amount: amountCents,
         currency: 'usd',
-        description: `Closing fee for transaction ${transactionId}`,
+        description: `Closing fee for transaction ${transactionId} (${agentClient.plan} plan)`,
         metadata: {
           tc_agent_client_id: agentClient.id,
           tc_transaction_id: transactionId,
@@ -251,11 +269,13 @@ export function createTCStripeBilling({ pool, logger = console }) {
           type: 'closing_fee',
         },
       });
+      _logger.info({ agentClientId, transactionId, amountCents, invoiceItemId: invoiceItem.id }, '[TC-STRIPE-BILLING] Created Stripe invoice item for closing charge.');
 
-      // Immediately finalize the invoice to charge the customer
-      // This assumes the customer has a payment method on file.
-      // For "Pay-at-Closing", this might be a manual charge or a separate invoice flow.
-      // For simplicity, we'll create an invoice and attempt to finalize it.
+      // Create and finalize an invoice for the invoice item.
+      // This will attempt to charge the customer if a payment method is on file.
+      // "Closing fees for per-transaction clients are recorded from escrow only — never charged if deal falls."
+      // This implies that this function is called after* the deal closes and the fee is confirmed.
+      // The `charge_automatically` will attempt to collect. Adam reviews all billing events.
       const invoice = await stripe.invoices.create({
         customer: stripeCustomer.id,
         collection_method: 'charge_automatically',
@@ -266,8 +286,11 @@ export function createTCStripeBilling({ pool, logger = console }) {
           type: 'closing_fee_invoice',
         },
       });
+      _logger.info({ agentClientId, transactionId, invoiceId: invoice.id, invoiceStatus: invoice.status }, '[TC-STRIPE-BILLING] Created and attempted to finalize Stripe invoice for closing charge.');
 
-      // Update tc_transactions table
+      // Update tc_transactions table with Stripe invoice details and mark as collected
       await _pool.query(
         `UPDATE tc_transactions SET
-           fee_collected
+           fee_collected = true,
+           fee_collected_at = NOW(),
+           fee_collected_amt = $1,
