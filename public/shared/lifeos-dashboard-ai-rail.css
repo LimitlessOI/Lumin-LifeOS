@@ -1,194 +1,338 @@
 /*
- * LifeOS Dashboard AI Rail CSS
- * Contract: DASHBOARD_AI_RAIL_CONTRACT.md
- */
+Contract: Persistent AI Rail (Lumin Rail)
+Purpose: To establish a ubiquitous, quick-access AI interaction surface across the LifeOS platform, evolving the existing Lumin quick-drawer into a persistent, dockable component. This rail will offer streamlined voice and text interaction, providing a direct path to the full chat experience.
+*/
 
-/* Base container for the AI Rail */
 .lifeos-ai-rail-root {
-  position: fixed;
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Center horizontally */
-  width: clamp(300px, 90vw, 480px); /* Responsive width */
-  z-index: 1000; /* High z-index to overlay other content */
-  background: var(--dash-surface);
-  border: 1px solid var(--dash-border);
-  border-radius: var(--dash-radius-lg); /* Default fully rounded when floating */
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-  transition: all 0.3s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Hide scrollbars when collapsed */
-  color: var(--dash-text); /* Default text color */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* High z-index to ensure it's on top */
+    background: var(--dash-surface);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-out, height 0.3s ease-out, border-radius 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide scrollbars when collapsed */
+    max-width: 100vw; /* Ensure it doesn't overflow viewport width */
 }
 
-/* Dock-bottom variant */
+/* Default to dock-bottom */
 .lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom {
-  bottom: 0; /* Flush with the bottom edge */
-  top: auto; /* Ensure it's not also positioned from top */
-  border-bottom-left-radius: 0; /* Override default for docked */
-  border-bottom-right-radius: 0; /* Override default for docked */
-  padding-bottom: env(safe-area-inset-bottom); /* Safe area for notched devices */
+    bottom: 0;
+    border-top-left-radius: var(--dash-radius-lg);
+    border-top-right-radius: var(--dash-radius-lg);
+    padding-bottom: env(safe-area-inset-bottom); /* Internal padding for safe area */
+    border-top: 1px solid var(--dash-border); /* Consistent border */
+    border-bottom: none; /* No bottom border for bottom dock */
 }
 
-/* Dock-top variant */
 .lifeos-ai-rail-root.lifeos-ai-rail-dock-top {
-  top: 0; /* Flush with the top edge */
-  bottom: auto; /* Ensure it's not also positioned from bottom */
-  border-top-left-radius: 0; /* Override default for docked */
-  border-top-right-radius: 0; /* Override default for docked */
-  padding-top: env(safe-area-inset-top); /* Safe area for notched devices */
+    top: 0;
+    border-bottom-left-radius: var(--dash-radius-lg);
+    border-bottom-right-radius: var(--dash-radius-lg);
+    padding-top: env(safe-area-inset-top); /* Internal padding for safe area */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Adjust shadow for top */
+    border-bottom: 1px solid var(--dash-border); /* Border on bottom for top dock */
+    border-top: none; /* No top border for top dock */
 }
 
-/* Collapsed state (one-line strip) */
+/* Collapsed state */
 .lifeos-ai-rail-root.lifeos-ai-rail-collapsed {
-  height: 56px; /* Example height for a one-line strip */
-  max-height: 56px;
+    height: 56px; /* Visual height of the content area */
 }
 
-/* When collapsed and NOT docked, it floats with margin */
-.lifeos-ai-rail-root.lifeos-ai-rail-collapsed:not(.lifeos-ai-rail-dock-bottom):not(.lifeos-ai-rail-dock-top) {
-  bottom: var(--dash-space-unit);
-  top: auto;
-}
-
-/* Expanded state (transcript panel) */
+/* Expanded state */
 .lifeos-ai-rail-root.lifeos-ai-rail-expanded {
-  height: clamp(300px, 70vh, 600px); /* Example height for expanded panel */
+    height: 400px; /* Visual height of the content area */
+    max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px); /* Max height, leaving some margin */
+    border-radius: var(--dash-radius-lg); /* Full radius when expanded */
 }
 
-/* When expanded and NOT docked, it floats with margin */
-.lifeos-ai-rail-root.lifeos-ai-rail-expanded:not(.lifeos-ai-rail-dock-bottom):not(.lifeos-ai-rail-dock-top) {
-  bottom: var(--dash-space-unit);
-  top: auto;
-}
-
-/* Content within the rail */
+/* Inner container for content, handles padding and actual height */
 .lifeos-ai-rail-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: var(--dash-space-unit) calc(var(--dash-space-unit) * 2);
-  overflow-y: auto; /* Enable scrolling for transcript */
-  scrollbar-width: thin;
-  scrollbar-color: var(--dash-muted) transparent;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* No padding here, let header/transcript/input-row handle their own */
 }
 
-.lifeos-ai-rail-content::-webkit-scrollbar {
-  width: 4px;
+/* Header for collapsed state / general controls */
+.lifeos-ai-rail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(var(--dash-space-unit) * 1.5) var(--dash-space-unit); /* 12px vertical, 8px horizontal */
+    min-height: 56px; /* Ensure consistent height */
+    flex-shrink: 0;
+    gap: var(--dash-space-unit);
 }
 
-.lifeos-ai-rail-content::-webkit-scrollbar-thumb {
-  background: var(--dash-muted);
-  border-radius: 2px;
+.lifeos-ai-rail-header-text {
+    flex: 1;
+    color: var(--dash-text);
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Collapsed strip specific content */
-.lifeos-ai-rail-collapsed .lifeos-ai-rail-strip {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  padding: 0 calc(var(--dash-space-unit) * 2);
-  gap: var(--dash-space-unit);
+.lifeos-ai-rail-header-status {
+    font-size: 12px;
+    color: var(--dash-muted);
 }
 
-.lifeos-ai-rail-collapsed .lifeos-ai-rail-transcript,
-.lifeos-ai-rail-expanded .lifeos-ai-rail-strip {
-  display: none; /* Hide transcript in collapsed, hide strip in expanded */
+.lifeos-ai-rail-toggle-btn {
+    background: var(--dash-surface);
+    border: 1px solid var(--dash-border);
+    border-radius: var(--dash-radius-lg);
+    color: var(--dash-text);
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
-.lifeos-ai-rail-expanded .lifeos-ai-rail-transcript {
-  display: flex;
-  flex-direction: column;
-  gap: var(--dash-space-unit);
-  flex: 1;
-  padding-bottom: var(--dash-space-unit); /* Padding for scrollable content */
+.lifeos-ai-rail-toggle-btn:hover {
+    border-color: var(--dash-accent);
+    color: var(--dash-accent);
 }
 
-/* Input area for the rail */
-.lifeos-ai-rail-input-area {
-  display: flex;
-  gap: var(--dash-space-unit);
-  padding: var(--dash-space-unit) calc(var(--dash-space-unit) * 2);
-  border-top: 1px solid var(--dash-border);
-  flex-shrink: 0;
+/* Transcript panel (expanded state) */
+.lifeos-ai-rail-transcript {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--dash-space-unit);
+    display: flex;
+    flex-direction: column;
+    gap: var(--dash-space-unit);
+    scrollbar-width: thin;
+    scrollbar-color: var(--dash-muted) transparent;
+    border-top: 1px solid var(--dash-border); /* Separator from header */
+    margin-top: var(--dash-space-unit); /* Space from header */
+}
+
+.lifeos-ai-rail-transcript::-webkit-scrollbar {
+    width: 4px;
+}
+
+.lifeos-ai-rail-transcript::-webkit-scrollbar-thumb {
+    background: var(--dash-muted);
+    border-radius: 2px;
+}
+
+/* Individual message styles, adapted from lifeos-dashboard.html chat */
+.lifeos-ai-rail-message {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: var(--dash-radius-lg);
+    font-size: 14px;
+    line-height: 1.5;
+    animation: lifeos-ai-rail-fadeUp 0.2s ease; /* Re-use fadeUp animation concept */
+}
+
+.lifeos-ai-rail-message.user {
+    align-self: flex-end;
+    background: var(--dash-accent);
+    color: #fff;
+    border-bottom-right-radius: calc(var(--dash-radius-lg) / 2); /* Smaller radius for corner */
+}
+
+.lifeos-ai-rail-message.assistant {
+    align-self: flex-start;
+    background: var(--dash-surface);
+    color: var(--dash-text);
+    border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
+    border: 1px solid var(--dash-border);
+}
+
+.lifeos-ai-rail-message.ambient {
+    align-self: flex-start;
+    background: transparent;
+    color: var(--dash-muted);
+    font-style: italic;
+    font-size: 13px;
+    border: 1px dashed var(--dash-border);
+    border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
+}
+
+/* Typing indicator */
+.lifeos-ai-rail-typing {
+    display: none; /* Hidden by default, JS will show */
+    align-self: flex-start;
+    background: var(--dash-surface);
+    border: 1px solid var(--dash-border);
+    border-radius: var(--dash-radius-lg);
+    border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
+    padding: 12px 16px;
+    gap: 5px;
+    align-items: center;
+}
+
+.lifeos-ai-rail-typing.show {
+    display: flex;
+}
+
+.lifeos-ai-rail-typing-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--dash-muted);
+    border-radius: 50%;
+    animation: lifeos-ai-rail-bounce-dot 1.2s infinite;
+}
+
+.lifeos-ai-rail-typing-dot:nth-child(1) { animation-delay: 0.0s; }
+.lifeos-ai-rail-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.lifeos-ai-rail-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Input row (expanded state) */
+.lifeos-ai-rail-input-row {
+    display: flex;
+    gap: var(--dash-space-unit);
+    padding: var(--dash-space-unit);
+    border-top: 1px solid var(--dash-border); /* Separator from transcript */
+    flex-shrink: 0;
+}
+
+.lifeos-ai-rail-input-wrap {
+    flex: 1;
+    background: var(--dash-surface);
+    border: 1px solid var(--dash-border);
+    border-radius: var(--dash-radius-lg);
+    display: flex;
+    align-items: flex-end;
+    gap: calc(var(--dash-space-unit) / 2); /* 4px */
+    padding: calc(var(--dash-space-unit) / 2) calc(var(--dash-space-unit) / 2) calc(var(--dash-space-unit) / 2) var(--dash-space-unit); /* 4px top/bottom, 4px right, 8px left */
+    transition: border-color 0.2s;
+}
+
+.lifeos-ai-rail-input-wrap:focus-within {
+    border-color: var(--dash-accent);
 }
 
 .lifeos-ai-rail-input {
-  flex: 1;
-  background: var(--dash-bg);
-  border: 1px solid var(--dash-border);
-  border-radius: var(--dash-radius-lg);
-  color: var(--dash-text);
-  font-size: 14px;
-  padding: calc(var(--dash-space-unit) * 1.25) calc(var(--dash-space-unit) * 1.5);
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.lifeos-ai-rail-input:focus {
-  border-color: var(--dash-accent);
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--dash-text);
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    padding: calc(var(--dash-space-unit) / 2) 0; /* 4px top/bottom */
+    min-height: 36px;
+    max-height: 120px; /* Limit input height */
+    line-height: 1.5;
 }
 
 .lifeos-ai-rail-input::placeholder {
-  color: var(--dash-muted);
+    color: var(--dash-muted);
 }
 
-.lifeos-ai-rail-btn {
-  background: var(--dash-accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--dash-radius-lg);
-  font-size: 16px;
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: opacity 0.15s;
+.lifeos-ai-rail-input-tools {
+    display: flex;
+    gap: 2px;
+    padding-bottom: calc(var(--dash-space-unit) / 2); /* 4px */
 }
 
-.lifeos-ai-rail-btn:hover {
-  opacity: 0.85;
-}
-
-/* Example for a status text in collapsed mode */
-.lifeos-ai-rail-status-text {
-  flex: 1;
-  color: var(--dash-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.lifeos-ai-rail-mic-btn,
+.lifeos-ai-rail-send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--dash-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 0.15s, transform 0.1s, background 0.2s, border-color 0.2s, color 0.2s;
+    font-size: 20px;
 }
 
 .lifeos-ai-rail-mic-btn {
-  background: var(--dash-surface);
-  border: 1px solid var(--dash-border);
-  color: var(--dash-muted);
-  width: 40px;
-  height: 40px;
-  border-radius: var(--dash-radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
+    background: var(--dash-surface);
+    border: 1px solid var(--dash-border);
+    color: var(--dash-muted);
 }
 
 .lifeos-ai-rail-mic-btn:hover {
-  border-color: var(--dash-accent);
-  color: var(--dash-accent);
+    border-color: var(--dash-accent);
+    color: var(--dash-accent);
 }
 
-/* Mobile specific adjustments for width/position if needed, but clamp() handles much */
-@media (max-width: 768px) {
-  .lifeos-ai-rail-root {
-    width: calc(100% - (var(--dash-space-unit) * 2)); /* Full width minus some margin */
-    left: var(--dash-space-unit);
-    transform: translateX(0);
-  }
+.lifeos-ai-rail-mic-btn.listening {
+    color: var(--dash-accent); /* Use accent for listening, or a specific mic color */
+    border-color: var(--dash-accent);
+    animation: lifeos-ai-rail-mic-pulse 1s ease infinite;
+}
+
+.lifeos-ai-rail-send-btn {
+    background: var(--dash-accent);
+    color: #fff;
+    border: none;
+}
+
+.lifeos-ai-rail-send-btn:hover {
+    opacity: 0.85;
+}
+
+.lifeos-ai-rail-send-btn:active {
+    transform: scale(0.95);
+}
+
+.lifeos-ai-rail-send-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* Animations (adapted from lifeos-dashboard.html) */
+@keyframes lifeos-ai-rail-fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes lifeos-ai-rail-bounce-dot {
+    0%, 80%, 100% {
+        transform: scale(0.6);
+        opacity: 0.4;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes lifeos-ai-rail-mic-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(91,106,245,0.4); /* Default (dark theme) accent for pulse */
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(91,106,245,0);
+    }
+}
+
+/* Light theme specific mic pulse, using the light theme accent color */
+html[data-theme="light"] .lifeos-ai-rail-mic-btn.listening {
+    animation: lifeos-ai-rail-mic-pulse-light 1s ease infinite;
+}
+
+@keyframes lifeos-ai-rail-mic-pulse-light {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(74,90,224,0.4); /* Light theme accent for pulse */
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(74,90,224,0);
+    }
 }
