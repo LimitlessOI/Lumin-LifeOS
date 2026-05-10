@@ -9,4 +9,4 @@ const EMAIL_FROM = process.env.EMAIL_FROM;
 const POSTMARK_SERVER_TOKEN = process.env.POSTMARK_SERVER_TOKEN;
 
 /**
- * Creates a Prospect Pipeline service instance.
+ * Sends an outreach email to a prospect via
