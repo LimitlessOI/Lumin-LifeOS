@@ -845,6 +845,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-05-09",
-  "ssot_receipt_tail": "cleanup: 231 orphaned files purged (frontend/, backend/, root junk JS, dead routes, stale screenshots); tsos-task-ledger-routes.js syntax fixed; test:smoke script removed"
+  "last_updated": "2026-05-10",
+  "ssot_receipt_tail": "5-fix engineering: daemon supervise 413 continue-to-queue; queue runner syntax-fail self-quarantine-and-skip; auditor blended grading via proxyCycles+lastTaskOkAt; overseer required vs advisory checks + lastSuccessAt unblocked; all 4 scripts node --check PASS; GAP-FILL builder 413"
 }

@@ -30,6 +30,7 @@ const ROOT = process.cwd();
 const DEFAULT_TASKS_PATH = join(ROOT, 'docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json');
 const LOG_PATH = join(ROOT, 'data/builder-continuous-queue-log.jsonl');
 const LAST_RUN_PATH = join(ROOT, 'data/builder-continuous-queue-last-run.json');
+const QUARANTINE_PATH = join(ROOT, 'data/quarantined-tasks.json');
 const LEGACY_CURSOR_PATH = join(ROOT, 'data', 'builder-overnight-cursor.json');
 /** Pre-rename default queue lane — `loadCursor()` reads this once to preserve `nextStartIndex`. */
 const LEGACY_PRE_RENAME_QUEUE_CURSOR = join(
@@ -40,6 +41,18 @@ const LEGACY_PRE_RENAME_QUEUE_CURSOR = join(
 
 function retryableReady(status) {
   return status === 502 || status === 503 || status === 504 || status === 429;
+}
+
+/**
+ * When true (default), a task that fails with a JS syntax error is immediately self-quarantined
+ * and the queue continues to the next task rather than stopping the batch. The syntax gate already
+ * blocked the bad commit — stopping the whole batch compounds the damage by also blocking every
+ * subsequent task. Non-syntax failures (auth, 5xx, spec contamination) still stop the batch.
+ * Set BUILDER_QUEUE_SKIP_SYNTAX_FAILS=0 to restore the old hard-stop behaviour.
+ */
+function skipOnSyntaxFail() {
+  const raw = String(process.env.BUILDER_QUEUE_SKIP_SYNTAX_FAILS || "1").trim();
+  return !/^0|false|no$/i.test(raw);
 }
 
 function slugifyLane(value) {
@@ -106,6 +119,21 @@ async function loadCursor(cursorPath, tasksPath) {
     }
   }
   return { nextStartIndex: 0 };
+}
+
+async function loadQuarantinedTaskIds(laneName) {
+  try {
+    const raw = await readFile(QUARANTINE_PATH, 'utf8');
+    const rows = JSON.parse(raw);
+    if (!Array.isArray(rows)) return new Set();
+    return new Set(
+      rows
+        .filter((row) => row && typeof row.task_id === 'string' && String(row.lane || '') === String(laneName || ''))
+        .map((row) => row.task_id),
+    );
+  } catch {
+    return new Set();
+  }
 }
 
 const base = (
@@ -338,6 +366,38 @@ async function persistLastRun(payload) {
   await writeFile(LAST_RUN_PATH, `${JSON.stringify(body, null, 2)}\n`, 'utf8').catch(() => {});
 }
 
+/**
+ * Immediately adds a task to the quarantine file so subsequent queue runs skip it.
+ * Called when a syntax fail is detected at build time — prevents the same bad task
+ * from burning repeated build cycles. Sentinel's detectAndWriteQuarantinedTasks
+ * manages the authoritative list; this is a fast-path write that races it.
+ */
+async function selfQuarantineTask(task, lane, syntaxError) {
+  try {
+    const raw = await readFile(QUARANTINE_PATH, 'utf8').catch(() => '[]');
+    const existing = JSON.parse(raw);
+    const key = `${lane || 'default'}:${task.id}`;
+    const alreadyIn = Array.isArray(existing) && existing.some(
+      (e) => e.task_id === task.id && String(e.lane || '') === String(lane || ''),
+    );
+    if (!alreadyIn) {
+      const entry = {
+        task_id: task.id,
+        worker_id: lane,
+        lane: lane,
+        quarantined_at: new Date().toISOString(),
+        failure_count: 1,
+        last_error: String(syntaxError || 'syntax_fail').slice(0, 300),
+        source: 'self_quarantine_syntax_fail',
+      };
+      const updated = Array.isArray(existing) ? [...existing, entry] : [entry];
+      await writeFile(QUARANTINE_PATH, `${JSON.stringify(updated, null, 2)}\n`, 'utf8').catch(() => {});
+    }
+  } catch {
+    // quarantine write is best-effort — do not block queue progress
+  }
+}
+
 function baseLastRunSkeleton({
   lane,
   tasksPath,
@@ -372,6 +432,49 @@ function queueCursorAdvanceEnabled() {
   return !/^0|false|no$/i.test(String(raw).trim()) && !hasFlag('--no-cursor');
 }
 
+function selectQueueSlice(tasks, { startIdx, max, wrap, quarantinedIds }) {
+  const selected = [];
+  const skipped = [];
+  const total = tasks.length;
+  if (!total || max <= 0) {
+    return { selected, skipped, nextCursor: startIdx, wrapped: false };
+  }
+
+  let idx = Math.min(Math.max(0, startIdx), total);
+  let wrapped = false;
+  let inspected = 0;
+  let nextCursor = idx;
+  const hardLimit = wrap ? total * 2 : total;
+
+  while (selected.length < max && idx < total && inspected < hardLimit) {
+    const task = tasks[idx];
+    const wrappedPass = wrapped || idx < startIdx;
+
+    if (quarantinedIds.has(task.id)) {
+      skipped.push({ id: task.id, reason: 'quarantined', target_file: task.target_file || null });
+    } else if (wrappedPass && task.skip_on_wrap === true) {
+      skipped.push({ id: task.id, reason: 'skip_on_wrap', target_file: task.target_file || null });
+    } else {
+      selected.push(task);
+    }
+
+    idx += 1;
+    inspected += 1;
+    if (idx >= total) {
+      if (wrap && !wrapped) {
+        wrapped = true;
+        idx = 0;
+      } else {
+        break;
+      }
+    }
+    nextCursor = idx;
+    if (wrapped && idx >= startIdx) break;
+  }
+
+  return { selected, skipped, nextCursor, wrapped };
+}
+
 async function main() {
   const dry = hasFlag('--dry-run');
   const max = parseInt(
@@ -398,6 +501,7 @@ async function main() {
   const raw = await readFile(tasksPath, 'utf8');
   const parsed = JSON.parse(raw);
   const tasks = parsed.tasks || [];
+  const quarantinedIds = await loadQuarantinedTaskIds(lane);
 
   let startIdx = 0;
   if (hasExplicitStart) {
@@ -416,11 +520,19 @@ async function main() {
   }
 
   let selected = tasks;
+  let skipped = [];
+  let nextCursor = startIdx;
   if (singleId) {
     selected = tasks.filter((t) => t.id === singleId);
     if (selected.length === 0) throw new Error(`Unknown task id: ${singleId}`);
+    if (quarantinedIds.has(singleId)) {
+      throw new Error(`Task ${singleId} is quarantined for lane ${lane}; repair it before forcing a rerun.`);
+    }
   } else {
-    selected = tasks.slice(startIdx, startIdx + max);
+    const slice = selectQueueSlice(tasks, { startIdx, max, wrap, quarantinedIds });
+    selected = slice.selected;
+    skipped = slice.skipped;
+    nextCursor = slice.nextCursor;
   }
 
   const redeployAfter = hasFlag('--redeploy-after-success');
@@ -436,6 +548,9 @@ async function main() {
   console.log(
     `Lane=${lane} tasks=${tasksPath.replace(`${ROOT}/`, '')} selected=${selected.length} (dry-run=${dry}) startIdx=${startIdx} cursor=${useCursor} cursor-path=${cursorPath.replace(`${ROOT}/`, '')} sleep-ms=${sleepMs} redeploy-after=${redeployAfter}`,
   );
+  if (!singleId && skipped.length > 0) {
+    console.log(`Skipped ${skipped.length} task(s): ${skipped.map((s) => `${s.id}:${s.reason}`).join(', ')}`);
+  }
 
   if (dry) {
     for (const t of selected) {
@@ -461,6 +576,9 @@ async function main() {
     });
 
   if (selected.length === 0) {
+    if (useCursor && !singleId) {
+      await persistCursor(cursorPath, nextCursor);
+    }
     const wallMs = Date.now() - runnerT0;
     await persistLastRun({
       ...skeleton(),
@@ -472,6 +590,8 @@ async function main() {
       build_commits: 0,
       build_wall_ms_sum: 0,
       runner_wall_ms: wallMs,
+      queue_skipped_count: skipped.length,
+      queue_skipped: skipped,
       throughput_note:
         'Slice empty — supervised daemon cycles can idle in milliseconds. Append tasks to LIFEOS_DASHBOARD_BUILDER_QUEUE.json, run --reset-cursor, or set BUILDER_QUEUE_CURSOR_WRAP=1 (legacy OVERNIGHT_CURSOR_WRAP) when bounded/soak sessions should recycle the backlog.',
     });
@@ -483,6 +603,7 @@ async function main() {
       reason: 'queue_slice_empty',
       startIdx,
       taskCount: tasks.length,
+      skipped_count: skipped.length,
       runner_wall_ms: wallMs,
       last_run_path_relative: LAST_RUN_PATH.replace(`${ROOT}/`, ''),
       hint: `All tasks in JSON done for this cursor — add tasks, delete ${cursorPath.replace(`${ROOT}/`, '')}, BUILDER_QUEUE_CURSOR_WRAP=1, or npm run lifeos:builder:queue -- --reset-cursor`,
@@ -533,6 +654,8 @@ async function main() {
       strict_require_explicit: strictBranch,
       refine_doc: 'docs/BUILDER_IDEA_FILTERS_REFINEMENT.md',
     },
+    skipped_count: skipped.length,
+    skipped_task_ids: skipped.map((s) => s.id),
   });
 
   let failed = false;
@@ -574,7 +697,11 @@ async function main() {
       const buildWallMs = Date.now() - sliceT0;
       buildWallMsSum += buildWallMs;
       if (!ok) {
-        failed = true;
+        const isSyntaxFail = Boolean(
+          json?.syntax_error ||
+          String(json?.error || '').toLowerCase().includes('syntax') ||
+          String(json?.detail || '').toLowerCase().includes('syntax'),
+        );
         perTaskSlice.push({ id, build_wall_ms: buildWallMs, ok: false });
         await logLine({
           event: 'task_fail',
@@ -584,8 +711,23 @@ async function main() {
           http: res.status,
           model_resolution: modelResolution,
           build_wall_ms: buildWallMs,
+          is_syntax_fail: isSyntaxFail,
           json,
         });
+        if (isSyntaxFail && skipOnSyntaxFail()) {
+          await selfQuarantineTask(task, lane, json?.syntax_error || json?.error || 'syntax_fail');
+          await logLine({
+            event: 'task_skip_syntax_quarantine',
+            lane,
+            id,
+            target_file: task.target_file,
+            KNOW: 'syntax_fail_quarantined_continuing_queue_skip_on_syntax_fail=true',
+          });
+          console.warn(`⚠ Syntax fail on ${id} — quarantined, continuing queue.`);
+          // do NOT set failed=true; do NOT exit — advance to next task
+          continue;
+        }
+        failed = true;
         console.error(JSON.stringify(json, null, 2));
         console.error(`\nStopped after failure: ${id}. Fix gaps, redeploy if needed, then resume with --start <index>.`);
         await persistLastRun({
@@ -654,9 +796,15 @@ async function main() {
 
   if (!failed) {
     if (useCursor && !singleId && selected.length > 0) {
-      const next = startIdx + selected.length;
-      await persistCursor(cursorPath, next);
-      await logLine({ event: 'cursor_advanced', lane, nextStartIndex: next, sliceStart: startIdx, ran: selected.length });
+      await persistCursor(cursorPath, nextCursor);
+      await logLine({
+        event: 'cursor_advanced',
+        lane,
+        nextStartIndex: nextCursor,
+        sliceStart: startIdx,
+        ran: selected.length,
+        skipped_count: skipped.length,
+      });
     }
     await persistLastRun({
       ...skeleton(),
@@ -670,6 +818,8 @@ async function main() {
       build_ms_per_commit_avg:
         buildCommits > 0 ? Math.round(buildWallMsSum / buildCommits) : null,
       per_task_slice: perTaskSlice,
+      queue_skipped_count: skipped.length,
+      queue_skipped: skipped,
       commit_branch_receipt: {
         commits_on_implicit_default_branch: commitsOnImplicitDefault,
         commits_on_explicit_branch: commitsOnExplicitBranch,

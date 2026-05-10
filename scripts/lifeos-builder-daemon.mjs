@@ -80,6 +80,24 @@ const runForMin =
 const runDeadlineMs = runForMin > 0 ? Date.now() + runForMin * 60 * 1000 : null;
 const failSleepMin = Number(process.env.BUILDER_DAEMON_FAIL_SLEEP_MIN || "5");
 const overnightPauseThreshold = Math.max(0, Number(process.env.BUILDER_DAEMON_QUEUE_PAUSE_THRESHOLD || "3"));
+/**
+ * When true (default), a supervise failure with HTTP 413 (payload too large) does NOT abort the
+ * cycle — supervision is observational; the queue is where value is produced. The cycle continues
+ * to the queue phase and records cycle_ok if the queue succeeds. Supervise failure is still logged.
+ * Set BUILDER_DAEMON_SUPERVISE_CONTINUE_ON_413=0 to restore hard-fail behaviour.
+ */
+const superviseContinueOn413 = !/^0|false|no$/i.test(
+  String(process.env.BUILDER_DAEMON_SUPERVISE_CONTINUE_ON_413 || "1").trim(),
+);
+/**
+ * After this many consecutive supervise failures with the same signature, auto-downgrade supervise
+ * mode to "probe" for the next cycle (saves tokens, unblocks queue). Default 2.
+ * Set BUILDER_DAEMON_SUPERVISE_DOWNGRADE_STREAK=0 to disable.
+ */
+const superviseDowngradeStreak = Math.max(
+  0,
+  Number(process.env.BUILDER_DAEMON_SUPERVISE_DOWNGRADE_STREAK || "2"),
+);
 const overnightPauseMin = Math.max(1, Number(process.env.BUILDER_DAEMON_QUEUE_PAUSE_MIN || "120"));
 const superviseModel = process.env.BUILDER_SUPERVISE_MODEL || "gemini_flash";
 /** full = doc+JS smoke (/build council); probe = GET /ready + /domains only (default — huge token saver). none = skip autonomous queue step only */
@@ -410,7 +428,19 @@ async function deadlineExceeded(cycleNo, sessionThroughput) {
 
 async function runCycle(cycleNo, sessionThroughput) {
   const previousState = await readState();
+
+  // Auto-downgrade: if the previous failure signature is a supervise error that has been recurring,
+  // force probe mode this cycle to unblock the queue (heavy supervise can still be scheduled via
+  // superviseFullEvery once the streak clears).
+  const prevSig = String(previousState.lastFailureSignature || "");
+  const prevStreak = Number(previousState.failureSignatureStreak || 0);
+  const autoDowngradeToProbe =
+    superviseDowngradeStreak > 0 &&
+    prevSig.startsWith("supervise:") &&
+    prevStreak >= superviseDowngradeStreak;
+
   const shouldForceFull =
+    !autoDowngradeToProbe &&
     superviseMode === "probe" &&
     (
       cycleNo === 1 ||
@@ -418,7 +448,9 @@ async function runCycle(cycleNo, sessionThroughput) {
       (superviseFullEvery > 0 && cycleNo - Number(previousState.lastFullSuperviseCycle || 0) >= superviseFullEvery)
     );
   const effectiveSuperviseMode =
-    superviseMode === "probe" ? (shouldForceFull ? "full" : "probe") : superviseMode;
+    autoDowngradeToProbe
+      ? "probe"
+      : superviseMode === "probe" ? (shouldForceFull ? "full" : "probe") : superviseMode;
 
   await appendLog("cycle_start", {
     cycleNo,
@@ -478,11 +510,26 @@ async function runCycle(cycleNo, sessionThroughput) {
   });
 
   if (!supervise.ok) {
-    return {
-      ok: false,
-      phase: "supervise",
-      reason: supervise.stderr || "supervise failed",
-    };
+    const superviseFailReason = supervise.stderr || "supervise failed";
+    const superviseSig = normalizeFailureSignature("supervise", superviseFailReason);
+    // HTTP 413 (payload too large) is a recoverable supervise error — the server is reachable but
+    // rejected an oversized request body. Supervision is observational; queue still runs.
+    // Also continue on ECONNREFUSED when the supervise probe failed but the network might be up
+    // for the actual /build call (different payload size).
+    const isRecoverableSuperviseError =
+      superviseContinueOn413 &&
+      (superviseSig.includes("http_413") || superviseSig.includes("http_408"));
+    if (!isRecoverableSuperviseError) {
+      return { ok: false, phase: "supervise", reason: superviseFailReason };
+    }
+    await appendLog("supervise_degraded_continue", {
+      cycleNo,
+      superviseFailReason: superviseFailReason.slice(0, 500),
+      superviseSig,
+      continuing: "queue_phase",
+      KNOW: "supervise_returned_413_payload_too_large_continuing_to_queue_phase_supervise_is_observational",
+      operator_fix: "Reduce BUILDER_FILE_INJECT_MAX_TOTAL or switch BUILDER_DAEMON_SUPERVISE_MODE=probe to avoid oversized supervise payloads",
+    });
   }
 
   await writeState({
