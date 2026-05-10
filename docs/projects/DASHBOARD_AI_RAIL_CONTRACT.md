@@ -9,13 +9,12 @@ To establish a ubiquitous, quick-access AI interaction surface across the LifeOS
     *   **Expanded Transcript:** A larger view within the rail, showing recent conversation history.
     *   **Docking:** Configurable positioning at the top or bottom of the screen, persisting across sessions.
 *   **Interaction Parity:**
-    *   **Voice Input:** Speech-to-text (STT) for user input, leveraging existing voice capabilities.
-    *   **Text Input:** Standard keyboard input for messages.
-    *   **Voice Output:** Read-aloud (Text-to-Speech, TTS) for AI responses.
+    *   **Voice Input:** Speech-to-text (STT) for user input, leveraging existing `window.LuminVoice` capabilities.
+    *   **Text Input:** Standard keyboard input for messages, utilizing existing `luminSend` and `luminAutoResize`.
+    *   **Voice Output:** Read-aloud (Text-to-Speech, TTS) for AI responses, leveraging existing `VM.speak` or an adapted TTS utility.
 *   **Integration:**
     *   Seamless transition to the full `lifeos-chat.html` experience.
     *   Utilize existing `/api/v1/lifeos/chat` backend endpoints for message handling.
-    *   Leverage `window.LuminVoice` (from `lifeos-app.html`) for STT and `VM.speak` (from `lifeos-chat.html` or a similar adapted module) for TTS.
     *   The global `Cmd/Ctrl+L` shortcut will toggle/focus the rail.
 
 ## Non-goals
