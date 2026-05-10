@@ -32,6 +32,32 @@
 
 ---
 
+## [FIX] Update 2026-05-10 #10 — NSSOT audit pass: builder hardening + 3 syntax errors fixed
+
+### Files changed
+- **`routes/lifeos-council-builder-routes.js`** — 4 changes: JS minimum line floor (rejects <15-line JS as truncated), spec contamination gate (rejects HTML docs or code dumps in spec field), `createAutonomyGoldenTag(sha)` helper (creates `refs/tags/autonomy/golden-<sha7>` after every `/build` commit), golden tag fire + SHA capture in `buildAndCommit()`. Committed `d07aaa8e`.
+- **`services/deployment-service.js`** — added missing `@ssot` JSDoc tag; `commitToGitHub()` now returns `{ ok, sha }` (was bare `true`); SHA flows to callers and build response.
+- **`services/tc-document-validator.js`** — complete rebuild from 5-line builder-truncated stub; full `createTCDocumentValidator({ logger })` factory with image/text path, date/price/address regex checks.
+- **`services/tc-webhook-validator.js`** — complete rebuild from 11-line builder-truncated stub; full `createTCWebhookValidator({ postmarkSecret, twilioAuthToken, logger })` factory with timing-safe HMAC verification.
+- **`routes/site-builder-routes.js`** — removed phantom `getPipelineReportStats` import (function never existed in `prospect-pipeline.js`); restored to valid state with `GET /launch-readiness`.
+- **`public/overlay/lifeos-dashboard.html`** — 13 CSS pseudo-comment violations fixed (`/ ── / ` → `/* ── */`).
+- **`docs/projects/AMENDMENT_17_TC_SERVICE.md`** — receipt rows for TC service rebuilds.
+- **`docs/projects/AMENDMENT_05_SITE_BUILDER.md`** — receipt row for site-builder-routes fix.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — receipt rows for builder hardening + CSS fix; Agent Handoff Notes updated.
+
+### State after this session
+- **`npm run tsos:compliance-officer`** (or equivalent): 9/10 gates PASS — `syntax_check_all_js` (841 files), `npm_test`, `handoff_self_test`, `evidence_check`, `supervise_static`, `check_overlay`, `zero_drift_check`, `readiness_check`, `builder_auditor_health`. One remaining failure: `ssot_validate` — `services/lifeos-gate-change-council-run.js` has unstaged builder-daemon changes without SSOT receipt; builder daemon self-resolves on next cycle.
+- Builder token-limit truncation now caught at `/build` time (JS <15 lines = reject).
+- Spec contamination (HTML/code dumps in spec) now caught before council dispatch.
+- Autonomous commits get `refs/tags/autonomy/golden-<sha7>` for fast rollback.
+
+### Next agent: start here
+- Run `npm run builder:preflight` + `npm run tsos:builder` to confirm prod state.
+- Mount `createTsosTaskLedgerRoutes` in `startup/register-runtime-routes.js` if `builder_task_ledger` table confirmed in Neon.
+- Continue builder queue per program priority (`npm run lifeos:builder:queue`).
+
+---
+
 ## [FIX] Update 2026-05-09 #9 — Codebase cleanup (231 orphaned files purged)
 
 ### Files
