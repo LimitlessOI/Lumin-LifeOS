@@ -1,326 +1,53 @@
 /* Contract: DASHBOARD_AI_RAIL_CONTRACT.md */
 
 .lifeos-ai-rail-root {
-    position: fixed;
-    left: 0;
-    right: 0;
-    z-index: 1000; /* Ensure it's above other dashboard content */
-    display: flex;
-    justify-content: center;
-    pointer-events: none; /* Allow clicks to pass through the fixed container area */
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100vw;
+  z-index: 1000;
+  background: var(--dash-bg);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3); /* Default bottom dock shadow */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: height 0.3s ease, transform 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease;
+  /* Default to collapsed, bottom-docked */
+  bottom: 0;
+  border-top: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius-lg) var(--dash-radius-lg) 0 0;
+}
+
+.lifeos-ai-rail-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%; /* Occupy full height of root */
+  padding-bottom: env(safe-area-inset-bottom); /* Default for bottom dock */
 }
 
 /* Docking variants */
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom {
-    bottom: 0;
-    padding-bottom: env(safe-area-inset-bottom); /* Respect safe area insets */
+.lifeos-ai-rail-root--dock-top {
+  top: 0;
+  bottom: auto;
+  border-top: none;
+  border-bottom: 1px solid var(--dash-border);
+  border-radius: 0 0 var(--dash-radius-lg) var(--dash-radius-lg);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3); /* Top dock shadow */
+}
+.lifeos-ai-rail-root--dock-top .lifeos-ai-rail-content-wrapper {
+  padding-top: env(safe-area-inset-top); /* Safe area for top dock */
+  padding-bottom: 0; /* Reset default */
 }
 
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-top {
-    top: 0;
-    padding-top: env(safe-area-inset-top); /* Respect safe area insets */
+/* Collapsed state (default) */
+.lifeos-ai-rail-root--collapsed {
+  height: calc(var(--dash-space-unit) * 7 + env(safe-area-inset-bottom)); /* 56px + safe area */
+}
+.lifeos-ai-rail-root--dock-top.lifeos-ai-rail-root--collapsed {
+  height: calc(var(--dash-space-unit) * 7 + env(safe-area-inset-top));
 }
 
-.lifeos-ai-rail-container {
-    width: 100%;
-    max-width: 600px; /* Max width for desktop, full width on mobile */
-    background: var(--dash-surface);
-    border: 1px solid var(--dash-border);
-    border-radius: var(--dash-radius-lg);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: all 0.3s ease; /* Smooth transitions for expand/collapse */
-    pointer-events: auto; /* Enable interaction within the rail */
-    margin: var(--dash-space-unit); /* Default margin from edges */
-}
-
-/* Specific border-radius adjustments for docked states */
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom .lifeos-ai-rail-container {
-    border-bottom-left-radius: var(--dash-radius-lg);
-    border-bottom-right-radius: var(--dash-radius-lg);
-}
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-top .lifeos-ai-rail-container {
-    border-top-left-radius: var(--dash-radius-lg);
-    border-top-right-radius: var(--dash-radius-lg);
-}
-
-/* Collapsed state */
-.lifeos-ai-rail-container.lifeos-ai-rail-collapsed {
-    height: 56px; /* Fixed height for the one-line strip */
-    padding: 0 var(--dash-space-unit);
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-/* Expanded state */
-.lifeos-ai-rail-container.lifeos-ai-rail-expanded {
-    height: clamp(300px, 70vh, 600px); /* Dynamic height for expanded view */
-    padding: var(--dash-space-unit);
-    flex-direction: column;
-}
-
-/* Adjust border-radius when expanded and docked to edge */
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom .lifeos-ai-rail-container.lifeos-ai-rail-expanded {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    margin-bottom: 0; /* No margin when expanded to the bottom edge */
-}
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-top .lifeos-ai-rail-container.lifeos-ai-rail-expanded {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    margin-top: 0; /* No margin when expanded to the top edge */
-}
-
-/* Elements visible in collapsed state */
-.lifeos-ai-rail-status-strip {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: calc(var(--dash-space-unit) / 2);
-    font-size: 14px;
-    color: var(--dash-text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.lifeos-ai-rail-status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--dash-accent); /* Example status color */
-    flex-shrink: 0;
-}
-
-.lifeos-ai-rail-quick-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--dash-text);
-    font-size: 14px;
-    padding: 0;
-    margin-left: var(--dash-space-unit);
-}
-
-.lifeos-ai-rail-quick-input::placeholder {
-    color: var(--dash-muted);
-}
-
-.lifeos-ai-rail-full-chat-link {
-    font-size: 12px;
-    color: var(--dash-accent);
-    text-decoration: none;
-    padding: 4px 8px;
-    border-radius: 6px;
-    background: rgba(91,106,245,0.15); /* Using rgba for --dash-accent (#5b6af5) */
-    transition: background 0.15s;
-    flex-shrink: 0;
-}
-
-.lifeos-ai-rail-full-chat-link:hover {
-    background: rgba(91,106,245,0.25);
-}
-
-/* Elements hidden in collapsed state */
-.lifeos-ai-rail-collapsed .lifeos-ai-rail-transcript,
-.lifeos-ai-rail-collapsed .lifeos-ai-rail-input-row {
-    display: none;
-}
-
-/* Transcript area (visible in expanded state) */
-.lifeos-ai-rail-transcript {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--dash-space-unit);
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--dash-space-unit) / 2);
-    scrollbar-width: thin;
-    scrollbar-color: var(--dash-muted) transparent;
-}
-
-.lifeos-ai-rail-transcript::-webkit-scrollbar {
-    width: 4px;
-}
-
-.lifeos-ai-rail-transcript::-webkit-scrollbar-thumb {
-    background: var(--dash-muted);
-    border-radius: 2px;
-}
-
-/* Message styling (inspired by lifeos-chat.html) */
-.lifeos-ai-rail-message-group {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-.lifeos-ai-rail-message-group.user {
-    align-items: flex-end;
-}
-.lifeos-ai-rail-message-group.assistant {
-    align-items: flex-start;
-}
-.lifeos-ai-rail-message-sender {
-    font-size: 11px;
-    color: var(--dash-muted);
-    padding: 0 4px;
-    margin-bottom: 4px;
-}
-.lifeos-ai-rail-message-bubble {
-    max-width: 80%;
-    padding: 10px 14px;
-    border-radius: var(--dash-radius-lg);
-    font-size: 14px;
-    line-height: 1.5;
-}
-.lifeos-ai-rail-message-group.user .lifeos-ai-rail-message-bubble {
-    background: var(--dash-accent);
-    color: #fff;
-    border-bottom-right-radius: calc(var(--dash-radius-lg) / 2);
-}
-.lifeos-ai-rail-message-group.assistant .lifeos-ai-rail-message-bubble {
-    background: var(--dash-surface); /* Use surface for assistant bubble */
-    border: 1px solid var(--dash-border);
-    color: var(--dash-text);
-    border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
-}
-
-/* Input row (visible in expanded state) */
-.lifeos-ai-rail-input-row {
-    display: flex;
-    gap: calc(var(--dash-space-unit) / 2);
-    padding: var(--dash-space-unit);
-    border-top: 1px solid var(--dash-border);
-}
-
-.lifeos-ai-rail-input-wrap {
-    flex: 1;
-    background: var(--dash-surface);
-    border: 1px solid var(--dash-border);
-    border-radius: var(--dash-radius-lg);
-    display: flex;
-    align-items: flex-end;
-    gap: 4px;
-    padding: 4px 4px 4px 14px;
-    transition: border-color 0.15s;
-}
-
-.lifeos-ai-rail-input-wrap:focus-within {
-    border-color: var(--dash-accent);
-}
-
-.lifeos-ai-rail-input-wrap textarea {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--dash-text);
-    font-size: 14px;
-    font-family: inherit;
-    resize: none;
-    padding: 8px 0;
-    min-height: 36px;
-    max-height: 120px;
-    line-height: 1.5;
-}
-
-.lifeos-ai-rail-input-wrap textarea::placeholder {
-    color: var(--dash-muted);
-}
-
-/* Buttons */
-.lifeos-ai-rail-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--dash-radius-lg);
-    background: var(--dash-surface);
-    border: 1px solid var(--dash-border);
-    color: var(--dash-muted);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.15s ease;
-    font-size: 18px;
-}
-
-.lifeos-ai-rail-btn:hover {
-    border-color: var(--dash-accent);
-    color: var(--dash-text);
-}
-
-.lifeos-ai-rail-send-btn {
-    background: var(--dash-accent);
-    color: #fff;
-    border: none; /* Override default button border */
-}
-
-.lifeos-ai-rail-send-btn:hover {
-    opacity: 0.85;
-}
-
-/* Typing indicator (inspired by lifeos-chat.html) */
-.lifeos-ai-rail-typing-bubble {
-    background: var(--dash-surface);
-    border: 1px solid var(--dash-border);
-    border-radius: var(--dash-radius-lg);
-    border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
-    padding: 10px 14px;
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    width: fit-content;
-    margin-top: calc(var(--dash-space-unit) / 2);
-}
-
-.lifeos-ai-rail-typing-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--dash-muted);
-    animation: lifeos-ai-rail-pulse 1.3s infinite;
-}
-
-.lifeos-ai-rail-typing-dot:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.lifeos-ai-rail-typing-dot:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-@keyframes lifeos-ai-rail-pulse {
-    0%, 60%, 100% { transform: scale(1); opacity: 0.5; }
-    30% { transform: scale(1.3); opacity: 1; background: var(--dash-accent); }
-}
-
-/* Mic active state (inspired by lifeos-chat.html) */
-.lifeos-ai-rail-mic-btn.active {
-    color: var(--dash-accent);
-    animation: lifeos-ai-rail-mic-pulse 1s ease-in-out infinite;
-}
-
-@keyframes lifeos-ai-rail-mic-pulse {
-    0%,100%{transform:scale(1);opacity:1}
-    50%{transform:scale(1.1);opacity:0.7}
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-    .lifeos-ai-rail-container {
-        max-width: 100%;
-        margin: 0; /* No margin on mobile, full width */
-        border-radius: 0; /* No corner radius on mobile */
-    }
-
-    /* Ensure no radius when docked to edge on mobile */
-    .lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom .lifeos-ai-rail-container,
-    .lifeos-ai-rail-root.lifeos-ai-rail-dock-top .lifeos-ai-rail-container {
-        border-radius: 0;
-    }
-}
+.lifeos-ai-rail-root--collapsed .lifeos-ai-rail-header,
+.lifeos-ai
