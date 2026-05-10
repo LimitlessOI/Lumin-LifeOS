@@ -1,22 +1,11 @@
 import Stripe from 'stripe';
-import { PLANS, PLAN_DETAILS } from './tc-pricing.js'; // Assuming tc-pricing.js is in the same directory
+import { PLANS, PLAN_DETAILS } from './tc-pricing.js';
 
-// Initialize Stripe client
-let stripe;
-function getStripeClient(logger) {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    logger.warn('[TC-BILLING-STRIPE] STRIPE_SECRET_KEY is not set. Stripe operations will be no-ops.');
-    return null;
-  }
-  if (!stripe) {
-    stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2024-04-10', // Use a recent API version
-    });
-  }
-  return stripe;
-}
-
-// Assume these Stripe Price IDs are pre-configured in Stripe.
-// In a real scenario, these would be fetched from Stripe or stored in DB/config.
-// For this implementation, these are placeholders.
-const
+// Placeholder Stripe Price IDs. In a production system, these would be configured
+// in Stripe and their IDs stored in a configuration file or the database (e.g.,
+// within PLAN_DETAILS or a dedicated Stripe Price mapping table).
+// For this exercise, we define them here as examples.
+const STRIPE_PRICE_ID_FOUNDING_MONTHLY = 'price_1Pj123FoundingMonthly'; // Example Stripe Price ID for Founding Member monthly fee
+const STRIPE_PRICE_ID_MONTHLY = 'price_1Pj123Monthly'; // Example Stripe Price ID for Standard Monthly fee
+const STRIPE_PRICE_ID_FOUNDING_SETUP = 'price_1Pj123FoundingSetup'; // Example Stripe Price ID for Founding Member one-time setup fee
+const STRIPE_PRODUCT_ID_PER_TRANSACTION = 'prod_1Pj12
