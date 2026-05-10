@@ -38,7 +38,7 @@ These are the issues identified by the quality scorer that prevent a preview fro
 *   Missing Schema.org structured data
 *   Missing FAQ or objection-handling section
 *   Missing mobile sticky CTA treatment
-*   Missing Tailwind CSS classes or framework markers
+*   Missing TwCSS (Tailwind CSS)
 *   Missing footer element
 *   Missing visible keyboard focus styles
 *   Content too short (under 4500 characters)
@@ -49,7 +49,7 @@ These are issues that can potentially be addressed by programmatic post-processi
 
 *   **Missing DOCTYPE declaration:** Can be programmatically prepended to the HTML string.
 *   **Missing mobile viewport meta tag:** Can be injected into the `<head>` section.
-*   **Missing Tailwind CSS:** If this refers to the `<link>` tag for the Tailwind stylesheet, it can be injected into the `<head>`.
+*   **Missing TwCSS:** If this refers to the `<link>` tag for the Tailwind stylesheet, it can be injected into the `<head>`.
 *   **Missing Schema.org structured data:** A generic, templated JSON-LD script block (e.g., for `LocalBusiness`) can be injected into the `<head>` or `<body>`.
 *   **Missing footer element:** A basic, generic footer structure could be appended if no `<footer>` tag is detected.
 
