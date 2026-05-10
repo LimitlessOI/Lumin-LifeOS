@@ -28,7 +28,8 @@ const execFileAsync = promisify(execFile);
 
 const ROOT = process.cwd();
 const DEFAULT_TASKS_PATH = join(ROOT, 'docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json');
-const LOG_PATH = join(ROOT, 'data/builder-continuous-queue-log.jsonl');
+// Overridden in main() to a lane-specific path so the auditor's per-lane reads stay aligned.
+let LOG_PATH = join(ROOT, 'data/builder-continuous-queue-log.jsonl');
 const LAST_RUN_PATH = join(ROOT, 'data/builder-continuous-queue-last-run.json');
 const QUARANTINE_PATH = join(ROOT, 'data/quarantined-tasks.json');
 const LEGACY_CURSOR_PATH = join(ROOT, 'data', 'builder-overnight-cursor.json');
@@ -487,6 +488,11 @@ async function main() {
   const tasksPath = resolveTasksPath(argValue('--tasks-file', process.env.BUILDER_TASKS_PATH || DEFAULT_TASKS_PATH));
   const lane = inferLaneName(tasksPath, argValue('--lane', process.env.BUILDER_TASK_LANE || ''));
   const cursorPath = cursorPathForLane(lane);
+  // Route log to lane-specific file so the auditor's per-lane reads are aligned with the writer.
+  // Default lane (LIFEOS_DASHBOARD_BUILDER_QUEUE) keeps the legacy default path unchanged.
+  if (lane && lane !== 'LIFEOS_DASHBOARD_BUILDER_QUEUE') {
+    LOG_PATH = join(ROOT, 'data', `builder-continuous-queue-log.${slugifyLane(lane)}.jsonl`);
+  }
 
   const resetRequested = hasFlag("--reset-cursor") || hasFlag("--reset-cursor-only");
   if (resetRequested) {
@@ -702,6 +708,14 @@ async function main() {
           String(json?.error || '').toLowerCase().includes('syntax') ||
           String(json?.detail || '').toLowerCase().includes('syntax'),
         );
+        // HTTP 413 (payload too large) wrapped inside a 500 means the task spec or file
+        // injection is permanently too large for this council endpoint. Treat like syntax
+        // fail: quarantine + skip so the queue advances past it rather than looping forever.
+        const is413Payload = Boolean(
+          String(json?.detail || '').includes('413') ||
+          (res.status === 413),
+        );
+        const isSkippableFail = isSyntaxFail || is413Payload;
         perTaskSlice.push({ id, build_wall_ms: buildWallMs, ok: false });
         await logLine({
           event: 'task_fail',
@@ -712,18 +726,23 @@ async function main() {
           model_resolution: modelResolution,
           build_wall_ms: buildWallMs,
           is_syntax_fail: isSyntaxFail,
+          is_413_payload: is413Payload,
           json,
         });
-        if (isSyntaxFail && skipOnSyntaxFail()) {
-          await selfQuarantineTask(task, lane, json?.syntax_error || json?.error || 'syntax_fail');
+        if (isSkippableFail && skipOnSyntaxFail()) {
+          const skipReason = isSyntaxFail
+            ? (json?.syntax_error || json?.error || 'syntax_fail')
+            : `payload_too_large_413 detail=${json?.detail || '413'}`;
+          await selfQuarantineTask(task, lane, skipReason);
           await logLine({
             event: 'task_skip_syntax_quarantine',
             lane,
             id,
             target_file: task.target_file,
-            KNOW: 'syntax_fail_quarantined_continuing_queue_skip_on_syntax_fail=true',
+            skip_reason: isSyntaxFail ? 'syntax_fail' : 'payload_413',
+            KNOW: 'skippable_fail_quarantined_continuing_queue',
           });
-          console.warn(`⚠ Syntax fail on ${id} — quarantined, continuing queue.`);
+          console.warn(`⚠ ${isSyntaxFail ? 'Syntax' : '413-payload'} fail on ${id} — quarantined, continuing queue.`);
           // do NOT set failed=true; do NOT exit — advance to next task
           continue;
         }

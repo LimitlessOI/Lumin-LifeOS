@@ -846,5 +846,5 @@
     ]
   },
   "last_updated": "2026-05-10",
-  "ssot_receipt_tail": "5-fix engineering: daemon supervise 413 continue-to-queue; queue runner syntax-fail self-quarantine-and-skip; auditor blended grading via proxyCycles+lastTaskOkAt; overseer required vs advisory checks + lastSuccessAt unblocked; all 4 scripts node --check PASS; GAP-FILL builder 413"
+  "ssot_receipt_tail": "Fix 6+7: queue runner LOG_PATH now lane-aware (auditor reads aligned); 413-in-500 council fail treated as skippable (quarantine+continue) — Atlas/Forge unblocked from looping on payload-too-large tasks"
 }
