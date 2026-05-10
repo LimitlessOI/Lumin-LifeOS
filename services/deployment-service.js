@@ -16,7 +16,19 @@
  */
 
 import path from 'path';
+import { execFile as execFileCb } from 'node:child_process';
+import { promisify } from 'node:util';
+import { tmpdir } from 'node:os';
 import { promises as fsPromises } from 'fs';
+
+const execFile = promisify(execFileCb);
+
+// Directories that are not part of the Express server.
+// commitToGitHub hard-blocks any path whose first segment is in this set.
+const COMMIT_FORBIDDEN_TOP_DIRS = new Set([
+  'src', 'frontend', 'backend', 'apps',
+  '.worktrees', 'backups', 'node_modules', '.git',
+]);
 
 const RAILWAY_GQL = 'https://backboard.railway.app/graphql/v2';
 
@@ -68,6 +80,43 @@ export function createDeploymentService(deps) {
 
     const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
     const [owner, repo] = GITHUB_REPO.split('/');
+
+    // ── Forbidden path guard ───────────────────────────────────────────────────
+    // Prevents the builder from accumulating dead code in orphaned directories
+    // (src/, frontend/, backend/, etc.) that have zero server imports.
+    const topDir = filePath.split('/')[0];
+    if (COMMIT_FORBIDDEN_TOP_DIRS.has(topDir)) {
+      throw new Error(
+        `commitToGitHub BLOCKED: "${filePath}" targets forbidden directory "${topDir}/". ` +
+        `Valid roots: routes/ services/ db/ startup/ config/ scripts/ public/ docs/ prompts/ core/ middleware/. ` +
+        `Re-scope target_file to a valid server path.`
+      );
+    }
+
+    // ── JS syntax pre-check ───────────────────────────────────────────────────
+    // Catches builder-truncated output (token-limit cutoff) before it reaches
+    // Railway and causes a boot crash. Root cause of the 2026-05-09 crash loop:
+    // site-builder-routes.js was committed at 336 lines (truncated), causing
+    // SyntaxError: Unexpected end of input on every Railway boot.
+    if (filePath.endsWith('.js')) {
+      const tmpDir = await fsPromises.mkdtemp(path.join(tmpdir(), 'deploy-check-'));
+      const tmpFile = path.join(tmpDir, 'check.js');
+      try {
+        await fsPromises.writeFile(tmpFile, content, 'utf8');
+        await execFile(process.execPath, ['--check', tmpFile]);
+      } catch (e) {
+        const detail = String(e?.stderr || e?.message || '').split('\n').slice(0, 3).join(' ');
+        await fsPromises.unlink(tmpFile).catch(() => {});
+        await fsPromises.rmdir(tmpDir).catch(() => {});
+        throw new Error(
+          `commitToGitHub BLOCKED: JS syntax check failed for "${filePath}" — not pushing broken code to GitHub.\n` +
+          `Detail: ${detail}\n` +
+          `Likely cause: builder hit token limit mid-generation. Retry with a smaller spec or explicit target_file.`
+        );
+      }
+      await fsPromises.unlink(tmpFile).catch(() => {});
+      await fsPromises.rmdir(tmpDir).catch(() => {});
+    }
 
     // Get current SHA so we can update (not create duplicate)
     const getRes = await fetch(

@@ -87,6 +87,26 @@ In `"max"` mode the council is instructed to make best-guess assumptions and con
 
 ---
 
+## FORBIDDEN `target_file` paths — HARD STOP
+
+`commitToGitHub()` **rejects** commits to these directories at the server level. Choosing them wastes a full build round-trip and the token budget with it.
+
+| Forbidden root | Why |
+|---|---|
+| `src/` | Orphaned early-dev dir — zero Express server imports |
+| `frontend/` | Orphaned React experiments — zero server imports |
+| `backend/` | Orphaned sub-project — zero server imports |
+| `apps/` | CLI sub-app with its own `package.json` — separate scope |
+| `.worktrees/` | Git working-tree artifacts — not source |
+| `backups/` | Builder sandbox backups — never server code |
+| `node_modules/` | Package dir — never commit here |
+
+**Valid `target_file` roots:** `routes/` · `services/` · `db/migrations/` · `startup/` · `config/` · `scripts/` · `public/overlay/` · `docs/` · `prompts/` · `core/` · `middleware/`
+
+If a spec seems to require a forbidden path, re-scope to the correct server directory (e.g. a "frontend component" → `public/overlay/` HTML/JS; a "src/util" → `services/` or `core/`).
+
+---
+
 ## Task Dispatch Format
 
 ```json
