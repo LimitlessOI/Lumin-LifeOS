@@ -34,10 +34,10 @@ import { promisify } from "node:util";
 const execFileAsync = promisify(execFile);
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, "data");
-const STATE_PATH = path.join(DATA_DIR, "builder-daemon-state.json");
-const LOG_PATH = path.join(DATA_DIR, "builder-daemon-log.jsonl");
-const LOCK_PATH = path.join(DATA_DIR, "builder-daemon.lock");
-const QUEUE_LAST_RUN_PATH = path.join(DATA_DIR, "builder-continuous-queue-last-run.json");
+let STATE_PATH = path.join(DATA_DIR, "builder-daemon-state.json");
+let LOG_PATH = path.join(DATA_DIR, "builder-daemon-log.jsonl");
+let LOCK_PATH = path.join(DATA_DIR, "builder-daemon.lock");
+let QUEUE_LAST_RUN_PATH = path.join(DATA_DIR, "builder-continuous-queue-last-run.json");
 const LEGACY_QUEUE_LAST_RUN_PATH = path.join(DATA_DIR, "builder-overnight-last-run.json");
 const MEMORY_BASE = (
   process.env.BUILDER_BASE_URL ||
@@ -690,6 +690,16 @@ async function runCycle(cycleNo, sessionThroughput) {
 }
 
 async function main() {
+  // Fix 8: lane-aware file paths — each lane daemon gets its own state, lock, and last-run files
+  // so TC/SiteBuilder daemons don't collide with Nova's lock or overwrite Nova's state.
+  if (queueLane && queueLane !== "LIFEOS_DASHBOARD_BUILDER_QUEUE") {
+    const laneSlug = queueLane.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    STATE_PATH = path.join(DATA_DIR, `builder-daemon-state.${laneSlug}.json`);
+    LOG_PATH = path.join(DATA_DIR, `builder-daemon-log.${laneSlug}.jsonl`);
+    LOCK_PATH = path.join(DATA_DIR, `builder-daemon.${laneSlug}.lock`);
+    QUEUE_LAST_RUN_PATH = path.join(DATA_DIR, `builder-continuous-queue-last-run.${laneSlug}.json`);
+  }
+
   await acquireLock();
   process.on("SIGINT", async () => {
     await appendLog("signal", { type: "SIGINT" });
