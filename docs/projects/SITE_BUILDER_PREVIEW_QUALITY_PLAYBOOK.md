@@ -4,7 +4,7 @@ This playbook outlines the quality standards and remediation strategies for AI-g
 
 ## Score Bands
 
-The `site-builder-quality-scorer.js` service evaluates generated HTML against a set of criteria, producing a score, grade, and readiness status.
+The `services/site-builder-quality-scorer.js` service evaluates generated HTML against a set of criteria, producing a score, grade, and readiness status.
 
 *   **Maximum Score:** 100 points (sum of all criteria points).
 *   **`minReadyScore`:** Default 72%. Previews scoring at or above this threshold are considered `readyToSend`.
@@ -32,16 +32,16 @@ These are the issues identified by the quality scorer that prevent a preview fro
 *   Missing enough H2 sections to structure the page
 *   Missing strong call-to-action language
 *   CTA does not repeat enough through the page
-*   Missing a trust or proof section (e.g., testimonials, reviews)
+*   Missing a trust or proof section
 *   Missing offer or pricing clarity
 *   Missing phone number or email address
 *   Missing Schema.org structured data
 *   Missing FAQ or objection-handling section
 *   Missing mobile sticky CTA treatment
-*   Missing TwCSS (Tailwind CSS)
+*   Missing TwCSS
 *   Missing footer element
 *   Missing visible keyboard focus styles
-*   Content too short (under 4500 characters)
+*   Content too short (under 4500 chars)
 
 ## Deterministic Fixes (Platform-level)
 
