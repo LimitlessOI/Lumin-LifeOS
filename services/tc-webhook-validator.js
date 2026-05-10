@@ -182,3 +182,39 @@ async function writeSellerRejectionSummaryPdf({ address, transactionId, outPath 
       y -= 12;
       continue;
     }
+    page.drawText(line, { x: 50, y, size: 11, font: bodyFont, color: rgb(0.2, 0.2, 0.2) });
+    y -= 18;
+  }
+  const bytes = await doc.save();
+  await fs.writeFile(outPath, Buffer.from(bytes));
+}
+
+function tdInspectionForwardPlaybook(recipientName) {
+  const who = recipientName?.trim() || 'your seller client';
+  return {
+    disclaimer: 'LifeOS can search the mailbox, attach PDFs, optionally add your listing-agent acknowledgment page to PDFs after you approve, and push files into TransactionDesk. Use screenshots to confirm UI state; finish signing and coop distribution in TransactionDesk where required.',
+    known_plans: Object.keys(tcBrowser.TD_UI_PLANS || {}),
+    steps: [
+      'Open the TransactionDesk file for this property.',
+      'Confirm inspection report and any buyer repair-request / response paperwork is correct for Nevada and your broker.',
+      `Send or route signing to ${who} when those documents require client signature.`,
+      'After any required client signatures, deliver the executed package to the cooperating agent per brokerage policy.',
+    ],
+  };
+}
+
+export function createTCRoutes(
+  app,
+  {
+    pool,
+    requireKey,
+    coordinator,
+    logger = console,
+    accountManager: injectedAccountManager = null,
+    notificationService: injectedNotificationService = null,
+    callCouncilMember = null,
+    sendSMS = null,
+    sendAlertSms = null,
+    sendAlertCall = null,
+    startAlertLoop = false,
+    managedEnvService = null,
