@@ -1,11 +1,11 @@
 /*
  * LifeOS Dashboard Shell CSS Tokens
  *
- * This file defines semantic color, spacing, and radius variables for the LifeOS dashboard UI.
- * It supports both light and dark themes using the data-theme attribute on the <html> element.
+ * This file defines semantic color, spacing, and radius variables for the LifeOS dashboard.
+ * It supports both light and dark themes using the `data-theme` attribute on the `html` element.
  *
- * Refer to LIFEOS_DASHBOARD_BUILDER_BRIEF.md for design specifications.
- * (Note: LIFEOS_DASHBOARD_BUILDER_BRIEF.md was not available in the provided repository context.)
+ * Refer to docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md for design specifications.
+ * (Note: LIFEOS_DASHBOARD_BUILDER_BRIEF.md was not available during generation.)
  */
 
 :root {
@@ -24,9 +24,9 @@
   /* Light Theme */
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
-  --dash-text: #1a1a20;
-  --dash-muted: #888899;
-  --dash-accent: #5b6af5; /* Accent color remains consistent */
+  --dash-text: #1a1a22;
+  --dash-muted: #666677;
+  --dash-accent: #5b6af5; /* Keep accent consistent */
   --dash-border: rgba(0,0,0,0.1);
   --dash-radius-lg: 14px;
   --dash-space-unit: 8px;
