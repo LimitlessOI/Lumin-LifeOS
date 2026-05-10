@@ -288,3 +288,33 @@ export function formatTCDigestForEmail(digest) {
   if (digest.stale_client_updates.length > 0) {
     textBody += `\n--- Stale Client Updates (${digest.stale_client_updates.length}) ---\n`;
     htmlBody += `<h3>Stale Client Updates (${digest.stale_client_updates.length})</h3><ul>`;
+    digest.stale_client_updates.forEach(update => {
+      const label = `${update.address} - Last update ${update.days_since_update} days ago`;
+      textBody += `- ${label}\n`;
+      htmlBody += `<li>${label}</li>`;
+    });
+    htmlBody += `</ul>`;
+  }
+
+  // Missing Document Counts
+  if (digest.missing_docs.length > 0) {
+    textBody += `\n--- Missing Documents (${digest.missing_docs.length}) ---\n`;
+    htmlBody += `<h3>Missing Documents (${digest.missing_docs.length})</h3><ul>`;
+    digest.missing_docs.forEach(doc => {
+      const label = `${doc.address} - ${doc.count} missing document(s)`;
+      textBody += `- ${label}\n`;
+      htmlBody += `<li>${label}</li>`;
+    });
+    htmlBody += `</ul>`;
+  }
+
+  textBody += `\nBest,\nYour TC Service`;
+  htmlBody += `
+        <p>Best,</p>
+        <p>Your TC Service</p>
+    </div>
+</body>
+</html>`;
+
+  return { subject, html: htmlBody, text: textBody };
+}
