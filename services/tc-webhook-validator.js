@@ -1,233 +1,117 @@
+import express from 'express';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs/promises';
 import crypto from 'crypto';
-import { URL } from 'url'; // For Twilio URL parsing
-import twilio from 'twilio'; // Assuming twilio package is available for signature validation
-
-// Internal helper to normalize provider events
-function normalizeProviderEvent(provider, payload = {}) {
-  const p = String(provider || 'manual').toLowerCase();
-  const event = String(
-    payload.event_type || payload.eventType || payload.status || payload.MessageStatus || payload.SmsStatus || payload.EmailEvent || 'delivered'
-  ).toLowerCase();
-
-  let status = 'sent';
-  if (['queued', 'accepted', 'scheduled', 'sending'].includes(event)) status = 'prepared';
-  else if (['sent', 'delivered', 'success'].includes(event)) status = 'sent';
-  else if (['opened', 'read', 'seen'].includes(event)) status = 'delivered';
-  else if (['replied', 'reply', 'inbound_reply', 'response_received'].includes(event)) status = 'replied';
-  else if (['failed', 'undelivered', 'bounced', 'error'].includes(event)) status = 'failed';
-
+import { createTCStatusEngine } from '../services/tc-status-engine.js';
+import { createTCPortalService } from '../services/tc-portal-service.js';
+import { createTCReportService } from '../services/tc-report-service.js';
+import { createTCAutomationService } from '../services/tc-automation-service.js';
+import { createTCApprovalService } from '../services/tc-approval-service.js';
+import { createTCAlertService } from '../services/tc-alert-service.js';
+import { createTCAsanaSyncService } from '../services/tc-asana-sync-service.js';
+import { createTCWorkflowService } from '../services/tc-workflow-service.js';
+import { createTCOfferPrepService } from '../services/tc-offer-prep-service.js';
+import { createTCInteractionService } from '../services/tc-interaction-service.js';
+import { createTCCommunicationCallbackService, validatePostmarkWebhook, validateTwilioWebhook } from '../services/tc-communication-callback-service.js';
+import { createTCMobileLinkService } from '../services/tc-mobile-link-service.js';
+import { createTCFeedIngestService } from '../services/tc-feed-ingest-service.js';
+import { createTCInspectionService } from '../services/tc-inspection-service.js';
+import { createTCAccessService } from '../services/tc-access-service.js';
+import { createTCIntakeWorkspaceService } from '../services/tc-intake-workspace-service.js';
+import { createTCEmailDocumentService, deriveMailboxSearchFromTransactionAddress,
+} from '../services/tc-email-document-service.js';
+import { createTCInspectionForwardService } from '../services/tc-inspection-forward-service.js';
+import runTransactionDeskPartySync from '../services/tc-td-party-sync.js';
+import { createTDTDWorkflowRunner } from '../services/tc-td-workflow-runner.js';
+import { createTDTDFormKnowledgeService } from '../services/tc-td-form-knowledge-service.js';
+import { createTCAssistantService } from '../services/tc-assistant-service.js';
+import { classifyR4RAttachment } from '../services/tc-r4r-attachment-classify.js';
+const upload = multer({ dest: '/tmp/tc-uploads/' });
+const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
+/* In-memory status for async TD → SkySlope listing sync (browser automation can exceed HTTP timeouts). */
+const tdWorkflowJobs = new Map();
+function pruneTdWorkflowJobs() {
+  const now = Date.now();
+  for (const [id, job] of tdWorkflowJobs) {
+    const t = new Date(job.created_at || 0).getTime();
+    if (now - t > LISTING_SYNC_JOB_TTL_MS) tdWorkflowJobs.delete(id);
+  }
+  if (tdWorkflowJobs.size <= 100) return;
+  const sorted = [...tdWorkflowJobs.entries()].sort(
+    (a, b) => new Date(a[1].created_at).getTime() - new Date(b[1].created_at).getTime()
+  );
+  while (sorted.length > 80) tdWorkflowJobs.delete(sorted.shift()[0]);
+}
+const listingTdSkyslopeJobs = new Map();
+const LISTING_SYNC_JOB_TTL_MS = 2 * 60 * 60 * 1000;
+function pruneListingSyncJobs() {
+  const now = Date.now();
+  for (const [id, job] of listingTdSkyslopeJobs) {
+    const t = new Date(job.created_at || 0).getTime();
+    if (now - t > LISTING_SYNC_JOB_TTL_MS) listingTdSkyslopeJobs.delete(id);
+  }
+  if (listingTdSkyslopeJobs.size <= 100) return;
+  const sorted = [...listingTdSkyslopeJobs.entries()].sort(
+    (a, b) => new Date(a[1].created_at).getTime() - new Date(b[1].created_at).getTime()
+  );
+  while (sorted.length > 80) {
+    listingTdSkyslopeJobs.delete(sorted.shift()[0]);
+  }
+}
+const DEFAULT_BUYER_POSITION_BLURB = 'The buyer is not requesting seller repairs or closing credits based on the inspection findings. Confirm applicable state law, brokerage policy, and the contract for the exact forms and timelines—this notice is for transaction coordination only, not legal advice.';
+function buildInspectionMailboxSearch(tx, body = {}) {
+  const derived = deriveMailboxSearchFromTransactionAddress(tx.address);
+  const maxRaw = parseInt(body.max_results, 10);
+  const max_results = Number.isFinite(maxRaw) ? Math.max(1, Math.min(50, maxRaw)) : 20;
+  const daysRaw = parseInt(body.days, 10);
+  const days = Number.isFinite(daysRaw) ? Math.max(1, Math.min(365, daysRaw)) : 60;
+  // include_sent defaults true — TC docs are often in Adam's Sent folder (R4Rs, inspection responses)
+  const include_sent = body.include_sent !== false;
+  // address_hint lets the IMAP server pre-filter messages containing the property address
+  const address_hint = body.address_hint != null ? String(body.address_hint) : (tx.address || '');
   return {
-    provider: p,
-    event_type: event,
-    status,
-    external_id: payload.external_id || payload.externalId || payload.MessageID || payload.MessageSid || payload.Sid || null,
-    feedback_text: payload.feedback_text || payload.feedbackText || payload.Body || payload.body || null,
-    from: payload.from || payload.From || null,
-    to: payload.to || payload.To || null,
-    raw: payload,
+    days,
+    subject_contains: body.subject_contains !== undefined && body.subject_contains !== null ? String(body.subject_contains) : derived.subject_contains,
+    filename_contains: body.filename_contains !== undefined && body.filename_contains !== null ? String(body.filename_contains) : derived.filename_contains,
+    from_contains: body.from_contains != null ? String(body.from_contains) : '',
+    latest_only: false,
+    max_results,
+    include_sent,
+    address_hint,
   };
 }
-
-/**
- * Validates a Postmark webhook request using HMAC-SHA256.
- * @param {object} req - The Express request object.
- * @returns {{valid: boolean, error: string|null, payload: object|null}}
- */
-function validatePostmarkWebhook(req) {
-  const secret = process.env.EMAIL_WEBHOOK_SECRET;
-  if (!secret) {
-    return { valid: false, error: 'EMAIL_WEBHOOK_SECRET not configured', payload: null };
-  }
-
-  const providedSignature = req.headers['x-email-webhook-secret'];
-  if (!providedSignature) {
-    return { valid: false, error: 'Missing X-Email-Webhook-Secret header', payload: null };
-  }
-
-  // Postmark sends the raw body, so we need to compute HMAC over it.
-  // Assuming req.rawBody is available if express.json() is configured with `verify` option
-  // or if a custom body parser is used before this middleware.
-  // If not, we'd need to read the stream, which is not ideal in a generic middleware.
-  // For now, we'll assume req.body is the parsed JSON, and the existing route handler
-  // does a simple string comparison. Let's align with the existing route's simple comparison.
-  // The existing route does: `provided !== secret`. This is a simple shared secret, not HMAC.
-  // Following the existing pattern in tc-routes.js for Postmark:
-  if (providedSignature !== secret) {
-    return { valid: false, error: 'Invalid X-Email-Webhook-Secret', payload: null };
-  }
-
-  return { valid: true, error: null, payload: req.body };
+function buildInspectionForwardEmailBody({ recipientName, narrative, buyerPositionSummary, transaction }) {
+  const greet = recipientName?.trim() ? `Hi ${recipientName.trim()},` : 'Hi,';
+  const parts = [greet, '', `Property: ${transaction.address || '—'}`];
+  if (narrative?.trim()) parts.push('', narrative.trim());
+  parts.push('', (buyerPositionSummary && String(buyerPositionSummary).trim()) || DEFAULT_BUYER_POSITION_BLURB);
+  parts.push('', 'Attached: inspection-related PDFs gathered from the TC mailbox.');
+  parts.push('', '—');
+  return parts.join('\n');
 }
-
-/**
- * Validates a Twilio webhook request.
- * Prioritizes Twilio's official signature validation using TWILIO_AUTH_TOKEN and X-Twilio-Signature.
- * Falls back to simple shared secret comparison if TWILIO_AUTH_TOKEN is not available,
- * mirroring existing tc-routes.js logic.
- * @param {object} req - The Express request object.
- * @returns {{valid: boolean, error: string|null, payload: object|null}}
- */
-function validateTwilioWebhook(req) {
-  const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
-  const twilioSignature = req.headers['x-twilio-signature'];
-
-  if (twilioAuthToken && twilioSignature) {
-    // Attempt full Twilio signature validation
-    const requestUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    const params = req.body; // express.urlencoded already parses this
-
-    try {
-      const isValid = twilio.validateRequest(
-        twilioAuthToken,
-        twilioSignature,
-        requestUrl,
-        params
-      );
-      if (isValid) {
-        return { valid: true, error: null, payload: req.body };
-      } else {
-        return { valid: false, error: 'Invalid Twilio signature', payload: null };
-      }
-    } catch (e) {
-      return { valid: false, error: `Twilio signature validation error: ${e.message}`, payload: null };
-    }
-  } else {
-    // Fallback to simple shared secret comparison, mirroring existing tc-routes.js logic
-    const secret = process.env.EMAIL_WEBHOOK_SECRET || process.env.TWILIO_WEBHOOK_SECRET || null;
-    if (!secret) {
-      return { valid: false, error: 'TWILIO_AUTH_TOKEN or TWILIO_WEBHOOK_SECRET not configured', payload: null };
-    }
-
-    const providedSecret = req.headers['x-email-webhook-secret'] || req.headers['x-tc-webhook-secret'];
-    if (!providedSecret || providedSecret !== secret) {
-      return { valid: false, error: 'Unauthorized webhook (invalid shared secret)', payload: null };
-    }
-    return { valid: true, error: null, payload: req.body };
-  }
-}
-
-/**
- * Alias for normalizeProviderEvent for general delivery callbacks.
- * @param {string} provider
- * @param {object} payload
- * @returns {object}
- */
-const normalizeDeliveryCallback = normalizeProviderEvent;
-
-/**
- * Alias for normalizeProviderEvent for showing feedback replies.
- * @param {string} provider
- * @param {object} payload
- * @returns {object}
- */
-const normalizeShowingFeedbackReply = normalizeProviderEvent;
-
-
-exp createTCCommunicationCallbackService({ pool, portalService, reportService, coordinator, logger = console }) {
-  async function getCommunication(communicationId) {
-    const { rows } = await pool.query(`SELECT * FROM tc_communications WHERE id=$1`, [communicationId]);
-    return rows[0] || null;
-  }
-
-  async function getCommunicationByExternalId(externalId) {
-    if (!externalId) return null;
-    const { rows } = await pool.query(
-      `SELECT * FROM tc_communications
-       WHERE metadata->>'external_id' = $1
-          OR metadata->'delivery'->>'messageId' = $1
-          OR metadata->'delivery'->>'sid' = $1
-       ORDER BY created_at DESC
-       LIMIT 1`,
-      [String(externalId)]
-    );
-    return rows[0] || null;
-  }
-
-  async function handleCallback(communicationId, payload = {}) {
-    const communication = await getCommunication(communicationId);
-    if (!communication) return { ok: false, error: 'Communication not found' };
-
-    const normalized = normalizeProviderEvent(payload.provider, payload);
-
-    const metadata = {
-      ...(communication.metadata || {}),
-      last_callback: {
-        provider: normalized.provider,
-        event_type: normalized.event_type,
-        external_id: normalized.external_id,
-        at: new Date().toISOString(),
-      },
-      callback_history: [
-        ...((communication.metadata || {}).callback_history || []),
-        {
-          provider: normalized.provider,
-          event_type: normalized.event_type,
-          status: normalized.status,
-          external_id: normalized.external_id,
-          feedback_text: normalized.feedback_text,
-          at: new Date().toISOString(),
-        },
-      ].slice(-20), // Keep last 20 callbacks
-    };
-
-    const updated = await portalService.updateCommunication(communicationId, {
-      status: normalized.status,
-      sent_at: communication.sent_at || (normalized.status === 'sent' ? new Date().toISOString() : communication.sent_at),
-      metadata,
-    });
-
-    await coordinator.logEvent(communication.transaction_id, 'communication_callback', {
-      communication_id: communicationId,
-      provider: normalized.provider,
-      event_type: normalized.event_type,
-      status: normalized.status,
-      external_id: normalized.external_id,
-    });
-
-    let feedback = null;
-    if (normalized.feedback_text && communication.metadata?.showing_id) {
-      const feedbackText = String(normalized.feedback_text).trim();
-      if (feedbackText && feedbackText.length > 3) { // Basic check for meaningful feedback
-        try {
-          feedback = await reportService.recordShowingFeedback(communication.metadata.showing_id, {
-            raw_feedback: feedbackText,
-            source: `${normalized.provider}_callback`,
-          });
-          await coordinator.logEvent(communication.transaction_id, 'showing_feedback_received', {
-            communication_id: communicationId,
-            showing_id: communication.metadata.showing_id,
-            source: `${normalized.provider}_callback`,
-          });
-        } catch (error) {
-          logger.warn?.({ err: error.message, communicationId }, '[TC-COMM-CALLBACK] feedback persistence failed');
-        }
-      }
-    }
-
-    return { ok: true, communication: updated, callback: normalized, feedback };
-  }
-
-  async function handleProviderWebhook(payload = {}) {
-    const externalId = payload.external_id || payload.externalId || payload.MessageID || payload.MessageSid || payload.Sid || null;
-    const communicationId = payload.communication_id || payload.communicationId || payload.Metadata?.communication_id || payload.metadata?.communication_id || null;
-
-    let communication = null;
-    if (communicationId) communication = await getCommunication(Number(communicationId));
-    if (!communication && externalId) communication = await getCommunicationByExternalId(externalId);
-
-    if (!communication) return { ok: false, error: 'Communication not found for webhook' };
-
-    return handleCallback(communication.id, payload);
-  }
-
-  return {
-    handleCallback,
-    handleProviderWebhook,
-    validatePostmarkWebhook,
-    validateTwilioWebhook,
-    normalizeDeliveryCallback,
-    normalizeShowingFeedbackReply,
-  };
-}
-
-export default createTCCommunicationCallbackService;
+/* Substrings; subject must include at least one (buyer “response to repairs”, inspection report, BINSR, etc.). */
+const DEFAULT_R4R_SUBJECT_ANY = [
+  'repair', 'repairs', 'inspection', 'inspect', 'response', 'request', 'binsr', 'birr', 'b-insr', 'buyer', 'notice', 'credit', 'responding', 'counter', 'deficiency', 'home inspection',
+];
+function buildR4RMailboxSearch(tx, body = {}) {
+  const derived = deriveMailboxSearchFromTransactionAddress(tx.address);
+  const maxRaw = parseInt(body.max_results, 10);
+  const max_results = Number.isFinite(maxRaw) ? Math.max(1, Math.min(50, maxRaw)) : 30;
+  const daysRaw = parseInt(body.days, 10);
+  const days = Number.isFinite(daysRaw) ? Math.max(1, Math.min(365, daysRaw)) : 90;
+  const rawSubject = body.subject_contains != null && body.subject_contains !== '' ? String(body.subject_contains).trim() : derived.subject_contains || '';
+  const subject_tokens = body.subject_tokens != null
+    ? Array.isArray(body.subject_tokens)
+      ? body.subject_tokens.map((t) => String(t).trim()).filter(Boolean)
+      : String(body.subject_tokens)
+        .split(/[\s,]+/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : rawSubject
+      .split(/\s+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  const subject_any_contains = body.subject_any_contains != null
+    ? Array.isArray(body.subject_any_contains)
+      ? body.subject_
