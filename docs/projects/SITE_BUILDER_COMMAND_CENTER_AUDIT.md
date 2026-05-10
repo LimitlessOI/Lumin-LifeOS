@@ -1,10 +1,9 @@
-The `docs/projects/AMENDMENT_05_SITE_BUILDER.md` file is missing, which limits the ability to audit against the full SSOT. The provided `routes/site-builder-routes.js` snippet is also incomplete, requiring reliance on the "API surface" table in the DOMAIN CONTEXT for available routes.
+The `docs/projects/AMENDMENT_05_SITE_BUILDER.md` file is missing, making a full audit against the amendment impossible. The instruction to output only code contradicts the task's specification for Markdown output.
 
-### Shipped controls
+---
+**Shipped controls (inferred from API surface):**
 
-Based on the defined API surface and domain context, the Site Builder Command Center (cmdCtr) currently supports the following operator actions:
+Based on the documented API surface, the Site Builder Command Center (`public/overlay/site-builder-command-center.html`) is designed to support the following operator actions:
 
-*   **Prospect Management:**
-    *   Initiate a new prospect build and outreach (`POST /api/v1/sites/prospect`).
-    *   Process multiple prospects in a batch (`POST /api/v1/sites/bulk-prospect`).
-    *   Analyze an existing prospect's site for opportunity scoring (`POST /
+*   **Build Site:** Triggering a site build from a URL (`POST /api/v1/sites/build`).
+*   **Prospect & Outreach:** Initiating the full prospect pipeline (score, build, email) for a single prospect (`POST /api/v1/sites/prospect`) or in bulk (`POST /api/v1/sites
