@@ -113,4 +113,288 @@ export function createTCStripeBilling({ pool, logger = console }) {
       return null;
     }
 
-    if (planTier ===
+    if (planTier === PLANS.PER_TRANSACTION) {
+      _logger.info({ agentClientId, planTier }, '[TC-STRIPE-BILLING] Per-transaction plan does not require a Stripe subscription.');
+      return null;
+    }
+
+    let stripeCustomer = null;
+    if (!agentClient.stripe_customer_id) {
+      stripeCustomer = await createAgentStripeCustomer(agentClient);
+      if (!stripeCustomer) {
+        _logger.error({ agentClientId }, '[TC-STRIPE-BILLING] Failed to create Stripe customer for subscription.');
+        return null;
+      }
+    } else {
+      try {
+        stripeCustomer = await stripe.customers.retrieve(agentClient.stripe_customer_id);
+        if (stripeCustomer.deleted) {
+          _logger.warn({ agentClientId: agentClient.id, stripeCustomerId: agentClient.stripe_customer_id }, '[TC-STRIPE-BILLING] Existing Stripe customer is deleted. Creating new one.');
+          stripeCustomer = await createAgentStripeCustomer(agentClient);
+          if (!stripeCustomer) return null;
+        }
+      } catch (error) {
+        _logger.error({ agentClientId: agentClient.id, error: error.message }, '[TC-STRIPE-BILLING] Failed to retrieve existing Stripe customer for subscription. Attempting to create new one.');
+        stripeCustomer = await createAgentStripeCustomer(agentClient);
+        if (!stripeCustomer) return null;
+      }
+    }
+
+    if (agentClient.stripe_subscription_id) {
+      _logger.info({ agentClientId, stripeSubscriptionId: agentClient.stripe_subscription_id }, '[TC-STRIPE-BILLING] Agent already has an active Stripe subscription. Attempting to retrieve.');
+      try {
+        const subscription = await stripe.subscriptions.retrieve(agentClient.stripe_subscription_id);
+        if (subscription.status === 'active' || subscription.status === 'trialing') {
+          _logger.info({ agentClientId, stripeSubscriptionId: subscription.id }, '[TC-STRIPE-BILLING] Existing active subscription found. Returning it.');
+          return subscription;
+        } else {
+          _logger.warn({ agentClientId, stripeSubscriptionId: subscription.id, status: subscription.status }, '[TC-STRIPE-BILLING] Existing subscription is not active. Creating a new one.');
+          // Optionally cancel the old one here if it's not active but not cancelled
+          await stripe.subscriptions.cancel(subscription.id);
+        }
+      } catch (error) {
+        _logger.error({ agentClientId, stripeSubscriptionId: agentClient.stripe_subscription_id, error: error.message }, '[TC-STRIPE-BILLING] Failed to retrieve existing Stripe subscription. Creating a new one.');
+      }
+    }
+
+    let priceId;
+    const items = [];
+    const planInfo = PLAN_DETAILS[planTier];
+
+    if (!planInfo) {
+      _logger.error({ agentClientId, planTier }, '[TC-STRIPE-BILLING] Unknown plan tier for subscription creation.');
+      return null;
+    }
+
+    switch (planTier) {
+      case PLANS.FOUNDING:
+        priceId = STRIPE_PRICE_ID_FOUNDING_MONTHLY;
+        items.push({ price: priceId });
+        break;
+      case PLANS.MONTHLY:
+        priceId = STRIPE_PRICE_ID_MONTHLY_STANDARD;
+        items.push({ price: priceId });
+        break;
+      default:
+        _logger.error({ agentClientId, planTier }, '[TC-STRIPE-BILLING] Invalid plan tier for subscription creation.');
+        return null;
+    }
+
+    try {
+      const subscription = await stripe.subscriptions.create({
+        customer: stripeCustomer.id,
+        items: items,
+        collection_method: 'charge_automatically', // Or 'send_invoice' if Adam wants to review
+        metadata: {
+          tc_agent_client_id: agentClient.id,
+          tc_agent_client_plan: planTier,
+        },
+      });
+
+      // Handle one-time setup fee for Founding members if not already paid
+      if (planTier === PLANS.FOUNDING && planInfo.setup_fee > 0 && !agentClient.setup_paid) {
+        _logger.info({ agentClientId, setupFee: planInfo.setup_fee }, '[TC-STRIPE-BILLING] Creating one-time setup fee invoice item for Founding Member.');
+        const setupInvoiceItem = await stripe.invoiceItems.create({
+          customer: stripeCustomer.id,
+          price: STRIPE_PRICE_ID_FOUNDING_SETUP, // Use a specific price for the setup fee
+          quantity: 1,
+          description: `${planInfo.label} Setup Fee`,
+          metadata: {
+            tc_agent_client_id: agentClient.id,
+            tc_agent_client_plan: planTier,
+            fee_type: 'setup_fee',
+          },
+        });
+
+        // Immediately finalize the invoice for the setup fee
+        const invoice = await stripe.invoices.create({
+          customer: stripeCustomer.id,
+          collection_method: 'charge_automatically',
+          auto_advance: true, // Automatically attempt to collect payment
+          metadata: {
+            tc_agent_client_id: agentClient.id,
+            tc_agent_client_plan: planTier,
+            invoice_type: 'setup_fee',
+          },
+        });
+
+        // Finalize the invoice
+        const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
+        _logger.info({ agentClientId, invoiceId: finalizedInvoice.id, status: finalizedInvoice.status }, '[TC-STRIPE-BILLING] Setup fee invoice created and finalized.');
+
+        // Mark setup fee as paid in local DB
+        await _tcPricingService.markSetupPaid(agentClientId, { amountPaid: planInfo.setup_fee });
+      }
+
+      await _pool.query(
+        `UPDATE tc_agent_clients SET stripe_subscription_id = $1, stripe_customer_id = $2, updated_at = NOW() WHERE id = $3 RETURNING *`,
+        [subscription.id, stripeCustomer.id, agentClientId]
+      );
+      _logger.info({ agentClientId, stripeSubscriptionId: subscription.id, status: subscription.status }, '[TC-STRIPE-BILLING] Stripe subscription created and linked.');
+
+      return subscription;
+    } catch (error) {
+      _logger.error({ agentClientId, planTier, error: error.message }, '[TC-STRIPE-BILLING] Failed to create Stripe subscription.');
+      return null;
+    }
+  }
+
+  /**
+   * Records a closing charge for a per-transaction agent.
+   * This creates a one-off invoice item and an invoice in Stripe.
+   * @param {number} agentClientId - The ID of the agent client in the database.
+   * @param {number} transactionId - The ID of the transaction in the database.
+   * @param {number} amountCents - The amount to charge in cents.
+   * @returns {Promise<Stripe.Invoice|null>} The created Stripe Invoice object or null if Stripe is not configured.
+   */
+  async function recordClosingCharge(agentClientId, transactionId, amountCents) {
+    if (!stripe) {
+      _logger.warn('[TC-STRIPE-BILLING] Stripe secret key not configured. Skipping Stripe operation.');
+      return null;
+    }
+
+    const agentClient = await getAgentClientById(agentClientId);
+    if (!agentClient) {
+      _logger.error({ agentClientId }, '[TC-STRIPE-BILLING] Agent client not found for closing charge.');
+      return null;
+    }
+
+    if (agentClient.plan !== PLANS.PER_TRANSACTION) {
+      _logger.warn({ agentClientId, plan: agentClient.plan }, '[TC-STRIPE-BILLING] Closing charge requested for non-per-transaction plan. This should be handled by subscription or is an override.');
+      // Still proceed to record if explicitly called, but log a warning.
+    }
+
+    let stripeCustomer = null;
+    if (!agentClient.stripe_customer_id) {
+      stripeCustomer = await createAgentStripeCustomer(agentClient);
+      if (!stripeCustomer) {
+        _logger.error({ agentClientId }, '[TC-STRIPE-BILLING] Failed to create Stripe customer for closing charge.');
+        return null;
+      }
+    } else {
+      try {
+        stripeCustomer = await stripe.customers.retrieve(agentClient.stripe_customer_id);
+        if (stripeCustomer.deleted) {
+          _logger.warn({ agentClientId: agentClient.id, stripeCustomerId: agentClient.stripe_customer_id }, '[TC-STRIPE-BILLING] Existing Stripe customer is deleted. Creating new one.');
+          stripeCustomer = await createAgentStripeCustomer(agentClient);
+          if (!stripeCustomer) return null;
+        }
+      } catch (error) {
+        _logger.error({ agentClientId: agentClient.id, error: error.message }, '[TC-STRIPE-BILLING] Failed to retrieve existing Stripe customer for closing charge. Attempting to create new one.');
+        stripeCustomer = await createAgentStripeCustomer(agentClient);
+        if (!stripeCustomer) return null;
+      }
+    }
+
+    try {
+      // Create an invoice item for the closing fee
+      await stripe.invoiceItems.create({
+        customer: stripeCustomer.id,
+        amount: amountCents,
+        currency: 'usd',
+        description: `TC Closing Fee for Transaction ID: ${transactionId}`,
+        metadata: {
+          tc_agent_client_id: agentClientId,
+          tc_transaction_id: transactionId,
+          fee_type: 'closing_fee',
+        },
+        // Optionally link to a product if one exists for per-transaction fees
+        // price: STRIPE_PRODUCT_ID_PER_TRANSACTION, // If using a Price object for one-off charges
+      });
+
+      // Create and finalize an invoice for the customer
+      const invoice = await stripe.invoices.create({
+        customer: stripeCustomer.id,
+        collection_method: 'charge_automatically', // Or 'send_invoice' if Adam wants to review
+        auto_advance: true, // Automatically attempt to collect payment
+        metadata: {
+          tc_agent_client_id: agentClientId,
+          tc_transaction_id: transactionId,
+          invoice_type: 'closing_fee',
+        },
+      });
+
+      const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
+      _logger.info({ agentClientId, transactionId, invoiceId: finalizedInvoice.id, status: finalizedInvoice.status }, '[TC-STRIPE-BILLING] Closing charge invoice created and finalized.');
+
+      // Optionally, update the local transaction record with the Stripe invoice ID
+      // if a column like `stripe_invoice_id` exists on `tc_transactions`.
+      // For now, we just log and return the Stripe invoice.
+      return finalizedInvoice;
+    } catch (error) {
+      _logger.error({ agentClientId, transactionId, error: error.message }, '[TC-STRIPE-BILLING] Failed to record closing charge.');
+      return null;
+    }
+  }
+
+  /**
+   * Retrieves a summary of TC billing revenue from Stripe and local database.
+   * @returns {Promise<object|null>} A structured object with MRR, ARR, and pending closing fees, or null if Stripe is not configured.
+   */
+  async function getTCBillingRevenue() {
+    if (!stripe) {
+      _logger.warn('[TC-STRIPE-BILLING] Stripe secret key not configured. Skipping Stripe operation.');
+      return null;
+    }
+
+    let mrr = 0;
+    let arr = 0;
+    let setupCollected = 0;
+    let setupOutstanding = 0;
+    let totalClosingCollected = 0;
+    let closingOutstanding = 0;
+
+    try {
+      // Get MRR from active Stripe subscriptions
+      const subscriptions = await stripe.subscriptions.list({
+        status: 'active',
+        limit: 100, // Adjust limit as needed, handle pagination for larger datasets
+      });
+
+      for (const sub of subscriptions.data) {
+        for (const item of sub.items.data) {
+          // Assuming monthly prices are directly on the item's price object
+          // Stripe prices are in cents, convert to dollars
+          mrr += item.price.unit_amount / 100;
+        }
+      }
+      arr = mrr * 12;
+
+      // Get revenue details from local DB using tc-pricing service
+      const pricingRevenueSummary = await _tcPricingService.getRevenueSummary();
+      if (pricingRevenueSummary) {
+        setupCollected = pricingRevenueSummary.setup_collected;
+        setupOutstanding = pricingRevenueSummary.setup_outstanding;
+        totalClosingCollected = pricingRevenueSummary.transactions.total_closing_collected;
+        closingOutstanding = pricingRevenueSummary.transactions.closing_outstanding;
+      }
+
+    } catch (error) {
+      _logger.error({ error: error.message }, '[TC-STRIPE-BILLING] Failed to retrieve Stripe revenue summary.');
+      return null;
+    }
+
+    return {
+      mrr,
+      arr,
+      setupCollected,
+      setupOutstanding,
+      totalClosingCollected,
+      closingOutstanding,
+    };
+  }
+
+  /**
+   * Cancels an active Stripe subscription for an agent client.
+   * @param {number} agentClientId - The ID of the agent client in the database.
+   * @returns {Promise<Stripe.Subscription|null>} The cancelled Stripe Subscription object or null if Stripe is not configured or no subscription found.
+   */
+  async function cancelTCSubscription(agentClientId) {
+    if (!stripe) {
+      _logger.warn('[TC-STRIPE-BILLING] Stripe secret key not configured. Skipping Stripe operation.');
+      return null;
+    }
+
+    const agentClient = await getAgentClientById(agentClientId);
+    if (!agentClient) {
+      _logger
