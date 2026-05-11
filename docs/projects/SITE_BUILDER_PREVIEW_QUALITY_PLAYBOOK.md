@@ -4,7 +4,7 @@ This playbook outlines the quality standards and remediation strategies for AI-g
 
 ## Score Bands
 
-The `services/site-builder-quality-scorer.js` service evaluates generated HTML against a set of criteria, producing a score, grade, and readiness status.
+The `site-builder-quality-scorer.js` service evaluates generated HTML against a set of criteria, producing a score, grade, and readiness status.
 
 *   **Maximum Score:** 100 points (sum of all criteria points).
 *   **`minReadyScore`:** Default 72%. Previews scoring at or above this threshold are considered `readyToSend`.
@@ -32,16 +32,16 @@ These are the issues identified by the quality scorer that prevent a preview fro
 *   Missing enough H2 sections to structure the page
 *   Missing strong call-to-action language
 *   CTA does not repeat enough through the page
-*   Missing a trust or proof section
+*   Missing a trust or proof section (e.g., testimonials, reviews)
 *   Missing offer or pricing clarity
 *   Missing phone number or email address
 *   Missing Schema.org structured data
 *   Missing FAQ or objection-handling section
 *   Missing mobile sticky CTA treatment
-*   Missing TwCSS
+*   Missing Tailwind CSS classes or framework markers
 *   Missing footer element
 *   Missing visible keyboard focus styles
-*   Content too short (under 4500 chars)
+*   Content too short (under 4500 characters)
 
 ## Deterministic Fixes (Platform-level)
 
@@ -49,7 +49,7 @@ These are issues that can potentially be addressed by programmatic post-processi
 
 *   **Missing DOCTYPE declaration:** Can be programmatically prepended to the HTML string.
 *   **Missing mobile viewport meta tag:** Can be injected into the `<head>` section.
-*   **Missing TwCSS:** If this refers to the `<link>` tag for the Tailwind stylesheet, it can be injected into the `<head>`.
+*   **Missing Tailwind CSS:** If this refers to the `<link>` tag for the Tailwind stylesheet, it can be injected into the `<head>`.
 *   **Missing Schema.org structured data:** A generic, templated JSON-LD script block (e.g., for `LocalBusiness`) can be injected into the `<head>` or `<body>`.
 *   **Missing footer element:** A basic, generic footer structure could be appended if no `<footer>` tag is detected.
 
