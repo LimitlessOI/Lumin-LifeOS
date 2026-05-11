@@ -193,5 +193,5 @@
   "last_verified_at": null,
   "verification_passed": null,
   "last_updated": "2026-05-11",
-  "ssot_receipt_tail": "2026-05-11: Emergency restore createSiteBuilderRoutes factory — server crash fix. Builder repeatedly overwrote routes file with stripped export-default-only version."
+  "ssot_receipt_tail": "2026-05-11: Mounted site-builder-pipeline-report-routes.js (GET /api/v1/sites/pipeline-report) and site-builder-discovery-routes.js (POST /api/v1/sites/discover) in core/two-tier-system-init.js. CSS pseudo-comments fixed in lifeos-dashboard.html (15 single-slash dividers → /* */ blocks) to stop all daemon cycles from failing at static_code_supervise."
 }

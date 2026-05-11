@@ -2,12 +2,15 @@
  * Two-Tier AI Council System Initialization
  * Initializes the full two-tier (Tier 0 Ollama + Tier 1 Claude) council system,
  * model router, execution queue, self-programming service, and all dependent modules.
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  */
 
 import { createSelfProgrammingService } from '../services/self-programming.js';
 import { createExecutionQueue } from '../services/execution-queue.js';
 import { registerEnhancedCouncilRoutes } from '../routes/enhanced-council-routes.js';
 import { createSiteBuilderRoutes } from '../routes/site-builder-routes.js';
+import createPipelineReportRoutes from '../routes/site-builder-pipeline-report-routes.js';
+import createDiscoveryRoutes from '../routes/site-builder-discovery-routes.js';
 import TCOTracker from '../core/tco-tracker.js';
 import initTCORoutes from '../routes/tco-routes.js';
 import TCOSalesAgent from '../core/tco-sales-agent.js';
@@ -264,6 +267,10 @@ export async function initializeTwoTierSystem(deps) {
       notificationService,
     });
     logger.info("✅ [STARTUP] Site Builder routes registered");
+    createPipelineReportRoutes(app, { pool, requireKey: requireKeyFn });
+    logger.info("✅ [STARTUP] Site Builder pipeline report routes registered");
+    app.use('/api/v1/sites', createDiscoveryRoutes(app, { pool, requireKey: requireKeyFn }));
+    logger.info("✅ [STARTUP] Site Builder discovery routes registered");
     logger.info("   - Dynamic Council Expansion (3→5 agents)");
     logger.info("   - Enhanced Consensus Protocol (5-phase with steel-manning)");
     logger.info("   - Decision Filters (7 wisdom lenses)");
