@@ -18,6 +18,15 @@
     "last_error": "/tmp/builder-check-iILpzj/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
   },
   {
+    "task_id": "tc-webhook-validator",
+    "worker_id": "atlas",
+    "worker_name": "Atlas",
+    "lane": "TC_SERVICE_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-11T05:00:00.000Z",
+    "failure_count": 37,
+    "last_error": "Repeated builder-generated truncated/syntax-error versions (37+ commits). Last remote version was 164-line truncated TC routes mashup with syntax error at line 164. Task generates wrong content every time — overwrites good 34-line webhook validator."
+  },
+  {
     "task_id": "site-builder-prospect-ranker",
     "worker_id": "forge",
     "worker_name": "Forge",
@@ -133,6 +142,33 @@
     "quarantined_at": "2026-05-11T00:26:31.800Z",
     "failure_count": 2,
     "last_error": "Council call failed"
+  },
+  {
+    "task_id": "site-builder-launch-readiness-route",
+    "worker_id": "forge",
+    "worker_name": "Forge",
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "quarantined_at": "2026-05-11T05:00:00.000Z",
+    "failure_count": 99,
+    "last_error": "DANGEROUS: target_file=routes/site-builder-routes.js overwrites the createSiteBuilderRoutes factory export — crashes Railway on every deploy. Task must target a new file, not the main routes factory."
+  },
+  {
+    "task_id": "site-builder-pipeline-report-route",
+    "worker_id": "forge",
+    "worker_name": "Forge",
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "quarantined_at": "2026-05-11T05:00:00.000Z",
+    "failure_count": 99,
+    "last_error": "DANGEROUS: target_file=routes/site-builder-routes.js overwrites the createSiteBuilderRoutes factory export — crashes Railway on every deploy. Task must target a new file, not the main routes factory."
+  },
+  {
+    "task_id": "site-builder-discovery-run-action",
+    "worker_id": "forge",
+    "worker_name": "Forge",
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "quarantined_at": "2026-05-11T05:00:00.000Z",
+    "failure_count": 99,
+    "last_error": "DANGEROUS: target_file=routes/site-builder-routes.js overwrites the createSiteBuilderRoutes factory export — crashes Railway on every deploy. Task must target a new file, not the main routes factory."
   },
   {
     "task_id": "dashboard-ai-rail-css",
