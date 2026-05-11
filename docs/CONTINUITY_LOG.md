@@ -32,6 +32,23 @@
 
 ---
 
+## [FIX] Update 2026-05-11 #13 — Site Builder discovery route command-injection hardening
+
+### Files changed
+- **`routes/site-builder-discovery-routes.js`** — Critical security GAP-FILL: restored `@ssot`, replaced request-built shell string `exec(command)` with `execFile(process.execPath, argv)`, and added bounded validation for `city`, `niche`, and `count`. Existing `POST /api/v1/sites/discover` response shape is preserved.
+- **`tests/site-builder-discovery-routes.test.js`** — New regression test posts a malicious `city` payload that would create a temp marker file if shell interpolation still executed.
+- **`package.json`** — `npm test` now includes the new Site Builder discovery route regression test.
+- **`docs/projects/AMENDMENT_05_SITE_BUILDER.md`** and **`.manifest.json`** — Receipts updated with exact GAP-FILL reason, affected files, current state, and verification commands.
+
+### State after this session
+- `npm run builder:preflight` passed, but `POST /api/v1/lifeos/builder/build` for `routes/site-builder-discovery-routes.js` on branch `cursor/critical-bug-inspection-11a6` failed with HTTP 500 / council dispatch `HTTP 413`; direct patch is recorded as GAP-FILL.
+- The concrete bug was recent and live after `core/two-tier-system-init.js` mounted the route: any caller with the command key could inject shell syntax via `city` or `niche` and run arbitrary commands on the server.
+
+### Next agent: start here
+- If more Site Builder security hardening is requested, inspect `routes/site-builder-routes.js` webhook/token behavior next; this session only fixed the confirmed recent `/discover` shell execution bug.
+
+---
+
 ## [FIX] Update 2026-05-10 #12 — Fix 6/7/8 post-commit verification + daemon collision resolved
 
 ### Files changed
