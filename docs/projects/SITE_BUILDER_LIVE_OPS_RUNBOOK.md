@@ -7,20 +7,20 @@ This runbook outlines the essential procedures for operating and monitoring the 
 Before operating the Site Builder lane, ensure the following environment variables are correctly configured in the Railway environment:
 
 ### Required for Core Functionality
-- `PUBLIC_BASE_URL` (or `BUILDER_BASE_URL`, `SITE_BASE_URL`, `LUMIN_SMOKE_BASE_URL`): Base URL for the Site Builder API and generated preview links.
-- `COMMAND_CENTER_KEY` (or `COMMAND_KEY`, `LIFEOS_KEY`, `API_KEY`): API key for authenticating requests to the Site Builder API.
-- `DATABASE_URL`: Connection string for the PostgreSQL database.
+-   `PUBLIC_BASE_URL` (or `BUILDER_BASE_URL`, `SITE_BASE_URL`, `LUMIN_SMOKE_BASE_URL`): Base URL for the Site Builder API and generated preview links.
+-   `COMMAND_CENTER_KEY` (or `COMMAND_KEY`, `LIFEOS_KEY`, `API_KEY`): API key for authenticating requests to the Site Builder API.
+-   `DATABASE_URL`: Connection string for the PostgreSQL database.
 
 ### Required for Email Outreach
-- `EMAIL_FROM`: The sender email address for cold outreach.
-- `POSTMARK_SERVER_TOKEN`: Postmark API key for sending cold emails.
+-   `EMAIL_FROM`: The sender email address for cold outreach.
+-   `POSTMARK_SERVER_TOKEN`: Postmark API key for sending cold emails.
 
 ### Optional for Enhanced Operations
-- `POSTMARK_WEBHOOK_TOKEN`: Secret token to verify Postmark inbound webhooks for reply tracking.
-- `SLACK_WEBHOOK_URL`: Slack incoming webhook URL for warm lead alerts (viewed/replied).
-- `AFFILIATE_JANE_APP_URL`: Jane App referral link for commission tracking.
-- `AFFILIATE_MINDBODY_URL`: Mindbody referral link for commission tracking.
-- `AFFILIATE_SQUARE_URL`: Square referral link for commission tracking.
+-   `POSTMARK_WEBHOOK_TOKEN`: Secret token to verify Postmark inbound webhooks for reply tracking.
+-   `SLACK_WEBHOOK_URL`: Slack incoming webhook URL for warm lead alerts (viewed/replied).
+-   `AFFILIATE_JANE_APP_URL`: Jane App referral link for commission tracking.
+-   `AFFILIATE_MINDBODY_URL`: Mindbody referral link for commission tracking.
+-   `AFFILIATE_SQUARE_URL`: Square referral link for commission tracking.
 
 ## Daily Checks
 
@@ -60,7 +60,7 @@ node scripts/site-builder-live-smoke.mjs
 ```
 
 **Success Criteria:**
-The script should output `ok: true` and include a `previewUrl` and a `qualityReport` with `readyToSend` status. A successful run indicates that the `/api/v1/sites/build` endpoint is operational and can generate a preview site with a quality assessment.
+The script should output `ok: true` and include a `previewUrl` and a `qualityReport` with `readyToSend` status. A successful run indicates that the core `/api/v1/sites/build` endpoint is operational and can generate a preview site with a quality assessment.
 
 **Failure Indication:**
 Any output other than the success criteria, including `ok: false`, missing `previewUrl`, or missing `qualityReport`, indicates a critical issue.
@@ -100,4 +100,35 @@ These conditions are operational concerns that do not block the core functionali
 This outlines the end-to-end process for acquiring and converting a prospect using the Site Builder lane:
 
 1.  **Prospect Discovery:**
-    Identify potential wellness businesses in a target city.
+    Identify potential wellness businesses in a target city using the discovery script.
+    ```bash
+    npm run site-builder:discover --city='Austin, TX' --type=yoga > discovered.json
+    ```
+
+2.  **Prospect Ranking:**
+    Batch-score the discovered prospects and rank them by opportunity score.
+    ```bash
+    npm run site-builder:rank --input=discovered.json --top=10 > ranked.json
+    ```
+
+3.  **Site Build & Outreach:**
+    For each ranked prospect, trigger the site build and personalized cold email send via the API.
+    ```bash
+    POST /api/v1/sites/prospect { businessUrl, contactEmail, contactName }
+    ```
+    This scores their existing site, builds a preview, sends the email, and records it in the database.
+
+4.  **Engagement Tracking (Automated):**
+    -   **Preview Viewed:** When a prospect opens the preview site, the injected tracking pixel fires, and their status automatically updates to `viewed`.
+    -   **Reply Received:** When a prospect replies to the cold email, the Postmark inbound webhook fires, and their status automatically updates to `replied`.
+
+5.  **Pipeline Monitoring & Follow-Up:**
+    -   **Monitor Pipeline:** Regularly check the pipeline health report for overall performance and warm leads.
+        ```bash
+        npm run site-builder:report
+        ```
+    -   **Automated Follow-Ups:** The follow-up cron sends day-3/day-7 follow-up emails to eligible prospects.
+        ```bash
+        node scripts/site-builder-follow-up-cron.mjs
+        ```
+    -   **Manual Follow-Ups/Status Updates:** Use the Command Center (`public/overlay/site-builder-command-center.html`) to manually send follow-ups, review `qa_hold` sites, or update prospect statuses (e.g., `converted`, `lost`) and `deal_value`.
