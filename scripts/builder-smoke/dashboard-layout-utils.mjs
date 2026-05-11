@@ -6,16 +6,11 @@
 /**
  * Clamps a given count to be within the range of 1 to 6, inclusive.
  * Rounds the input to the nearest integer before clamping.
- * If the input is not a valid number, it defaults to the minimum value (1).
  * @param {number} count - The number to clamp.
  * @returns {number} The clamped integer count.
  */
 export function clampMobileWidgetCount(count) {
-  const num = Number(count);
-  if (isNaN(num)) {
-    return 1; // Default to min if input is not a valid number
-  }
-  return Math.max(1, Math.min(6, Math.round(num)));
+  return Math.max(1, Math.min(6, Math.round(count)));
 }
 
 /**
