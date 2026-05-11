@@ -896,6 +896,10 @@ const existingTip = document.querySelector('body > div[style*="position:fixed"]'
 if (existingTip) existingTip.remove();
 });
 });
+} catch (e) {
+console.error('Error loading MITs:', e);
+$('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load MITs</div>';
+}
 }
 async function toggleMIT(el) {
 const id = el.dataset.id;

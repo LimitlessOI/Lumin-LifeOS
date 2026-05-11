@@ -477,6 +477,10 @@ async function runCycle(cycleNo, sessionThroughput) {
   });
 
   const superviseLensArgs = consequenceLens ? ["--consequence-lens"] : [];
+  // Non-LIFEOS_DASHBOARD lanes skip the doc smoke so they don't race to commit
+  // to the same BUILDER_DASHBOARD_SMOKE_RECEIPT.md and produce SHA-mismatch failures.
+  const superviseSkipDocArgs =
+    queueLane && queueLane !== "LIFEOS_DASHBOARD_BUILDER_QUEUE" ? ["--skip-doc"] : [];
   let supervise;
   if (effectiveSuperviseMode === "none") {
     supervise = { ok: true, exitCode: 0, elapsedMs: 0, stderr: "", stdout: "(supervise skipped)" };
@@ -485,11 +489,13 @@ async function runCycle(cycleNo, sessionThroughput) {
       "--model",
       superviseModel,
       ...superviseLensArgs,
+      ...superviseSkipDocArgs,
     ]);
   } else {
     supervise = await runNodeScript(path.join(ROOT, "scripts", "lifeos-builder-supervisor.mjs"), [
       "--probe-only",
       ...superviseLensArgs,
+      ...superviseSkipDocArgs,
     ]);
   }
   await appendLog("supervise_result", {
