@@ -32,6 +32,7 @@ const DEFAULT_TASKS_PATH = join(ROOT, 'docs/projects/LIFEOS_DASHBOARD_BUILDER_QU
 let LOG_PATH = join(ROOT, 'data/builder-continuous-queue-log.jsonl');
 const LAST_RUN_PATH = join(ROOT, 'data/builder-continuous-queue-last-run.json');
 const QUARANTINE_PATH = join(ROOT, 'data/quarantined-tasks.json');
+const QUARANTINE_CLEARED_PATH = join(ROOT, 'data/quarantine-cleared-tasks.json');
 const LEGACY_CURSOR_PATH = join(ROOT, 'data', 'builder-overnight-cursor.json');
 /** Pre-rename default queue lane — `loadCursor()` reads this once to preserve `nextStartIndex`. */
 const LEGACY_PRE_RENAME_QUEUE_CURSOR = join(
@@ -375,9 +376,26 @@ async function persistLastRun(payload) {
  */
 async function selfQuarantineTask(task, lane, syntaxError) {
   try {
+    // Load supervisor-cleared exemptions — never re-quarantine tasks the supervisor explicitly cleared.
+    const clearedKeys = new Set();
+    try {
+      const clearedRaw = await readFile(QUARANTINE_CLEARED_PATH, 'utf8');
+      const clearedList = JSON.parse(clearedRaw);
+      if (Array.isArray(clearedList)) {
+        for (const e of clearedList) {
+          if (e.worker_id && e.task_id) clearedKeys.add(`${e.worker_id}:${e.task_id}`);
+          if (e.lane && e.task_id) clearedKeys.add(`${e.lane}:${e.task_id}`);
+        }
+      }
+    } catch { /* cleared list is optional */ }
+
+    // Skip quarantine if this task was explicitly cleared by the supervisor.
+    if (clearedKeys.has(`${lane}:${task.id}`) || clearedKeys.has(`${lane || 'default'}:${task.id}`)) {
+      return;
+    }
+
     const raw = await readFile(QUARANTINE_PATH, 'utf8').catch(() => '[]');
     const existing = JSON.parse(raw);
-    const key = `${lane || 'default'}:${task.id}`;
     const alreadyIn = Array.isArray(existing) && existing.some(
       (e) => e.task_id === task.id && String(e.lane || '') === String(lane || ''),
     );
