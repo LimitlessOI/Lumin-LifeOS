@@ -40,6 +40,8 @@ const OPENAI_COMPATIBLE_PROVIDERS = new Set([
   "openrouter",
   "mistral",
   "together",
+  "github_models",  // GitHub Models — uses GITHUB_TOKEN, free daily quota
+  "fireworks",      // Fireworks AI — $1 free credit on signup
 ]);
 
 /**
@@ -411,6 +413,10 @@ export function createCouncilService({
         );
       case "openai":
         return process.env.OPENAI_API_KEY?.trim();
+      case "github_models":
+        return process.env.GITHUB_TOKEN?.trim();
+      case "fireworks":
+        return process.env.FIREWORKS_API_KEY?.trim();
       default:
         return null;
     }
@@ -635,6 +641,10 @@ export function createCouncilService({
         return "https://api.mistral.ai/v1/chat/completions";
       case "together":
         return "https://api.together.xyz/v1/chat/completions";
+      case "github_models":
+        return "https://models.inference.ai.azure.com/chat/completions";
+      case "fireworks":
+        return "https://api.fireworks.ai/inference/v1/chat/completions";
       default:
         return null;
     }

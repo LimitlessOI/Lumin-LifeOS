@@ -61,6 +61,20 @@ const PROVIDER_LIMITS = {
     councilMembers: ['together', 'together_free'],
     label: 'Together (free/shared)',
   },
+  github_models: {
+    dailyRequests: 4850,     // actual: ~5,000 — buffer: 150 (3%) — GitHub Pro/free quota
+    rpm: 14,                  // actual: 15 — conservative
+    dailyTokens: null,
+    councilMembers: ['github_llama'],
+    label: 'GitHub Models (free)',
+  },
+  fireworks: {
+    dailyRequests: 97,       // $1 credit — ~100 req conservative daily cap until credit verified
+    rpm: 9,
+    dailyTokens: null,
+    councilMembers: ['fireworks_llama'],
+    label: 'Fireworks AI (credit)',
+  },
   ollama: {
     dailyRequests: null,    // unlimited — local
     rpm: null,
@@ -71,7 +85,7 @@ const PROVIDER_LIMITS = {
 };
 
 // Ordered priority — first available wins
-export const PROVIDER_PRIORITY = ['groq', 'gemini', 'cerebras', 'openrouter', 'mistral', 'together', 'ollama'];
+export const PROVIDER_PRIORITY = ['groq', 'gemini', 'cerebras', 'openrouter', 'mistral', 'together', 'github_models', 'fireworks', 'ollama'];
 
 // Build reverse map: councilMember → providerKey
 const MEMBER_TO_PROVIDER = {};

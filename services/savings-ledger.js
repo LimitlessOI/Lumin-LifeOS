@@ -23,11 +23,13 @@ const COST_PER_M = {
   'mistral':    { input: 0.00,  output: 0.00  }, // free tier
   'together':   { input: 0.00,  output: 0.00  }, // free tier
   'ollama':     { input: 0.00,  output: 0.00  }, // local
+  'github_models': { input: 0.00, output: 0.00 }, // GitHub Models free quota
+  'fireworks':     { input: 0.00, output: 0.00 }, // Fireworks $1 credit treated as free
   'logic':      { input: 0.00,  output: 0.00  }, // deterministic no-AI path
   'default':    { input: 3.00,  output: 10.00 },
 };
 
-const FREE_PROVIDERS = new Set(['groq','gemini','cerebras','openrouter','mistral','together','ollama','logic']);
+const FREE_PROVIDERS = new Set(['groq','gemini','cerebras','openrouter','mistral','together','ollama','logic','github_models','fireworks']);
 
 function estimateCost(tokens, type, provider, model) {
   const rates = COST_PER_M[provider?.toLowerCase()] || COST_PER_M.default;
