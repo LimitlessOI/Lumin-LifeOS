@@ -28,16 +28,16 @@ The following issues are detected by the quality scorer and contribute to a lowe
 *   Missing enough H2 sections to structure the page
 *   Missing strong call-to-action language
 *   CTA does not repeat enough through the page
-*   Missing a trust or proof section (e.g., testimonials)
+*   Missing a trust or proof section
 *   Missing offer or pricing clarity
 *   Missing phone number or email address
 *   Missing Schema.org structured data
 *   Missing FAQ or objection-handling section
 *   Missing mobile sticky CTA treatment
-*   Missing Tailwind CSS classes/structure
+*   Missing TwCSS
 *   Missing footer element
 *   Missing visible keyboard focus styles
-*   Content too short (under 4500 characters)
+*   Content too short (under 4500 chars)
 
 ## Deterministic Fixes (Platform-level)
 
@@ -45,7 +45,7 @@ These issues can often be resolved by modifying the base template, injecting sta
 
 *   **Missing DOCTYPE declaration:** Ensure the base HTML template always includes `<!DOCTYPE html>`.
 *   **Missing mobile viewport meta tag:** Ensure the base HTML template always includes `<meta name="viewport" content="width=device-width, initial-scale=1.0">`.
-*   **Missing Tailwind CSS:** Verify the base template uses Tailwind or ensure the AI generates Tailwind classes. If not, consider injecting Tailwind CDN or a minimal CSS framework.
+*   **Missing TwCSS:** Verify the base template uses Tailwind or ensure the AI generates Tailwind classes. If not, consider injecting Tailwind CDN or a minimal CSS framework.
 *   **Missing footer element:** Ensure the base template includes a `<footer>` element, potentially with boilerplate content.
 *   **Missing visible keyboard focus styles:** Inject a global CSS rule or a utility class to ensure `:focus-visible` styles are present.
 *   **Missing Schema.org structured data:** Programmatically generate and inject basic `WebSite` or `LocalBusiness` JSON-LD based on `businessInfo` into the `<head>`.
