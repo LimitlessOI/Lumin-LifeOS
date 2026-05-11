@@ -1,3 +1,7 @@
+/**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * TC Stripe billing service — plan tiers and closing fee recording.
+ */
 import Stripe from 'stripe';
 import { PLANS, PLAN_DETAILS, createTCPricing } from './tc-pricing.js';
 

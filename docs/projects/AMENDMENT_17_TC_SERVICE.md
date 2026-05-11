@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-20 — TC lane continuity: `docs/CONTINUITY_LOG_TC.md` + **Agent Handoff Notes (TC lane)** + Owned Files block synced to manifest; no runtime code in this slice |
+| **Last Updated** | 2026-05-11 — NSSOT audit: added @ssot tags to `services/tc-morning-digest-service.js` and `services/tc-stripe-service.js` (builder-committed, tags missing); `tc-webhook-validator` task spec fixed — removed `routes/tc-routes.js` (3463 lines) from context; completed truncated `tc-morning-digest-service.js` formatTCDigestForEmail function body. |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 

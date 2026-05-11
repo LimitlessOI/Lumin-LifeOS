@@ -1,3 +1,8 @@
+/**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ * TC morning digest service — daily briefing aggregator for Adam.
+ */
+
 const CLIENT_UPDATE_EVENTS = new Set([
     'party_intro_sent', 'deadline_reminder_sent', 'welcome_sent',
     'client_update_sent', 'seller_update_sent', 'approval_request_sent',
