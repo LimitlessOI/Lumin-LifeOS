@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { PLANS, PLAN_DETAILS } from './tc-pricing.js'; // Assuming tc-pricing.js is in the same directory
+import { PLANS, PLAN_DETAILS, createTCPricing } from './tc-pricing.js';
 
 // Initialize Stripe client
 let stripe;
@@ -16,7 +16,6 @@ function getStripeClient(logger) {
   return stripe;
 }
 
-// Assume these Stripe Price IDs are pre-configured in Stripe.
-// In a real scenario, these would be fetched from Stripe or stored in DB/config.
-// For this implementation, these are placeholders.
-const
+// Placeholder Stripe Price/Product IDs. In a real system, these would be configured or fetched.
+// ASSUMPTION: These Stripe Price/Product IDs are pre-configured in the Stripe dashboard.
+const STRIPE_PRICE_IDS = {
