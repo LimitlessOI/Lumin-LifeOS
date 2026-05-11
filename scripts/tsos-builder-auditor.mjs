@@ -280,11 +280,29 @@ async function checkLastCommittedFileSyntax(queueLogLines) {
 /**
  * Quarantine detection: scans 24h of task_fail events per worker.
  * Tasks failing 2+ times are written to data/quarantined-tasks.json so the queue runner skips them.
+ *
+ * Respects data/quarantine-cleared-tasks.json — a supervisor override list. Any task_id+lane
+ * in that file is never re-quarantined and is purged from the quarantine file on each audit run.
+ * This prevents transient 413/Council-call failures from permanently blocking queue progress.
  */
 async function detectAndWriteQuarantinedTasks(workers) {
   const quarantinePath = path.join(ROOT, "data", "quarantined-tasks.json");
+  const clearedPath = path.join(ROOT, "data", "quarantine-cleared-tasks.json");
   const repairQueuePath = path.join(ROOT, "data", "tsos-repair-queue.json");
   const now = new Date().toISOString();
+
+  // Load supervisor-cleared exemptions — never re-quarantine these tasks.
+  const clearedKeys = new Set();
+  try {
+    const clearedRaw = await fs.readFile(clearedPath, "utf8");
+    const clearedList = JSON.parse(clearedRaw);
+    if (Array.isArray(clearedList)) {
+      for (const e of clearedList) {
+        if (e.worker_id && e.task_id) clearedKeys.add(`${e.worker_id}:${e.task_id}`);
+        if (e.lane && e.task_id) clearedKeys.add(`${e.lane}:${e.task_id}`);
+      }
+    }
+  } catch {}
 
   let existing = [];
   try {
@@ -292,6 +310,14 @@ async function detectAndWriteQuarantinedTasks(workers) {
     existing = JSON.parse(raw);
     if (!Array.isArray(existing)) existing = [];
   } catch {}
+
+  // Purge any cleared entries that were re-added by self-quarantine since the last audit.
+  const purgeBefore = existing.length;
+  existing = existing.filter(
+    (e) =>
+      !clearedKeys.has(`${e.worker_id}:${e.task_id}`) && !clearedKeys.has(`${e.lane}:${e.task_id}`),
+  );
+  const purgedCount = purgeBefore - existing.length;
 
   const existingKeys = new Set(existing.map((e) => `${e.worker_id}:${e.task_id}`));
   const newEntries = [];
@@ -315,7 +341,9 @@ async function detectAndWriteQuarantinedTasks(workers) {
       }
     }
     for (const [taskId, info] of Object.entries(failsByTask)) {
-      if (info.count >= 2 && !existingKeys.has(`${worker.id}:${taskId}`)) {
+      const isCleared =
+        clearedKeys.has(`${worker.id}:${taskId}`) || clearedKeys.has(`${worker.lane_name}:${taskId}`);
+      if (info.count >= 2 && !existingKeys.has(`${worker.id}:${taskId}`) && !isCleared) {
         newEntries.push({
           task_id: taskId,
           worker_id: worker.id,
@@ -345,10 +373,15 @@ async function detectAndWriteQuarantinedTasks(workers) {
     }
   }
 
-  if (newEntries.length > 0) {
-    await fs.mkdir(path.join(ROOT, "data"), { recursive: true });
+  await fs.mkdir(path.join(ROOT, "data"), { recursive: true });
+  if (newEntries.length > 0 || purgedCount > 0) {
     await fs.writeFile(quarantinePath, JSON.stringify([...existing, ...newEntries], null, 2), "utf8");
-    console.log(`[Sentinel] Quarantined ${newEntries.length} new task(s): ${newEntries.map((e) => e.task_id).join(", ")}`);
+    if (newEntries.length > 0) {
+      console.log(`[Sentinel] Quarantined ${newEntries.length} new task(s): ${newEntries.map((e) => e.task_id).join(", ")}`);
+    }
+    if (purgedCount > 0) {
+      console.log(`[Sentinel] Purged ${purgedCount} cleared task(s) from quarantine.`);
+    }
   }
 
   await fs.mkdir(path.join(ROOT, "data"), { recursive: true });

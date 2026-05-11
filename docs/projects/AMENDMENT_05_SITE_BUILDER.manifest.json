@@ -192,5 +192,6 @@
   ],
   "last_verified_at": null,
   "verification_passed": null,
-  "last_updated": "2026-05-09"
+  "last_updated": "2026-05-11",
+  "ssot_receipt_tail": "2026-05-11: Emergency restore createSiteBuilderRoutes factory — server crash fix. Builder repeatedly overwrote routes file with stripped export-default-only version."
 }

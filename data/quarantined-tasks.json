@@ -1,0 +1,173 @@
+[
+  {
+    "task_id": "tc-agent-portal-polish",
+    "worker_id": "atlas",
+    "worker_name": "Atlas",
+    "lane": "TC_SERVICE_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T11:50:10.534Z",
+    "failure_count": 4,
+    "last_error": "generated HTML appears truncated before <body> (output token budget too small for full-file regeneration, or provider cut off). Retry with BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP or split CSS/markup into a smaller target file."
+  },
+  {
+    "task_id": "tc-document-qa-validator",
+    "worker_id": "atlas",
+    "worker_name": "Atlas",
+    "lane": "TC_SERVICE_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T11:50:10.534Z",
+    "failure_count": 3,
+    "last_error": "/tmp/builder-check-iILpzj/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
+  },
+  {
+    "task_id": "site-builder-prospect-ranker",
+    "worker_id": "forge",
+    "worker_name": "Forge",
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "quarantined_at": "2026-05-09T11:50:10.534Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-2iakYf/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
+  },
+  {
+    "task_id": "site-builder-revenue-service",
+    "worker_id": "forge",
+    "worker_name": "Forge",
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "quarantined_at": "2026-05-09T11:50:10.534Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-Aj0Qke/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
+  },
+  {
+    "task_id": "site-builder-quality-scorer-v2",
+    "worker_id": "forge",
+    "worker_name": "Forge",
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "quarantined_at": "2026-05-09T19:56:26.357Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-LqJ0xL/.js:4\n  { key: 'hasSingleH1', pts: 6, test: h => (h.match(/<h1[\\s>]/gi) || []).\n                                                                         \n\nSyntaxError: Unexpected end of input\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (nod"
+  },
+  {
+    "task_id": "site-builder-command-center-v2",
+    "worker_id": "forge",
+    "worker_name": "Forge",
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "quarantined_at": "2026-05-09T20:26:26.388Z",
+    "failure_count": 2,
+    "last_error": "generated HTML is too short; refusing to commit likely truncated output"
+  },
+  {
+    "task_id": "site-builder-revenue-service",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T21:56:26.553Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-NK1uif/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
+  },
+  {
+    "task_id": "dashboard-ai-rail-wire",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T22:56:26.704Z",
+    "failure_count": 9,
+    "last_error": "generated HTML is too short; refusing to commit likely truncated output"
+  },
+  {
+    "task_id": "tc-morning-digest-service",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T22:56:26.704Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-AKKmys/.js:19\n  'party\n  ^^^^^^\n\nSyntaxError: Invalid or unexpected token\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
+  },
+  {
+    "task_id": "tc-document-qa-validator",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T22:56:26.704Z",
+    "failure_count": 8,
+    "last_error": "/tmp/builder-check-UnC8vh/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
+  },
+  {
+    "task_id": "site-builder-pipeline-report-route",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-10T00:26:26.819Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-LdjOVE/.js:1\n/\n^\n\nSyntaxError: Invalid regular expression: missing /\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
+  },
+  {
+    "task_id": "tc-agent-portal-polish",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-10T00:56:26.908Z",
+    "failure_count": 2,
+    "last_error": "generated HTML appears truncated before <body> (output token budget too small for full-file regeneration, or provider cut off). Retry with BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP or split CSS/markup into a smaller target file."
+  },
+  {
+    "task_id": "dashboard-ai-rail-js",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-10T01:26:26.968Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-TyZhgY/.js:1\nThe `public/overlay/lifeos-dashboard.html` file relies on `getLifeOSContext()` from `public/shared/lifeos-bootstrap.js`, but `public/shared/lifeos-bootstrap.js` is missing from the provided `REPO FILE CONTENTS`. This makes the provided `lifeos-dashboard.html` code unr"
+  },
+  {
+    "task_id": "tc-stripe-billing-service",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-10T02:26:27.118Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-OxMrdc/.js:3\n         WHERE id = $4\n               ^^\n\nSyntaxError: Unexpected identifier 'id'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
+  },
+  {
+    "task_id": "site-builder-launch-readiness-route",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-11T00:26:31.800Z",
+    "failure_count": 2,
+    "last_error": "Council call failed"
+  },
+  {
+    "task_id": "dashboard-ai-rail-css",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-11T00:26:31.800Z",
+    "failure_count": 2,
+    "last_error": "Council call failed"
+  },
+  {
+    "task_id": "tc-webhook-validator",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-11T00:26:31.800Z",
+    "failure_count": 37,
+    "last_error": "Council call failed"
+  },
+  {
+    "task_id": "dashboard-theme-foundation",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-11T00:26:31.800Z",
+    "failure_count": 2,
+    "last_error": "Council call failed"
+  },
+  {
+    "task_id": "site-builder-postmark-send",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-11T00:26:31.800Z",
+    "failure_count": 13,
+    "last_error": "Council call failed"
+  }
+]
