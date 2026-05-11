@@ -1,7 +1,3 @@
-/**
- * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
- * Standalone site discovery action route — triggers prospect discovery runs.
- */
 import { Router } from 'express';
 import { exec } from 'child_process';
 import logger from '../services/logger.js';
