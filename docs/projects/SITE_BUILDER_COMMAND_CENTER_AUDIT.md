@@ -1,10 +1,14 @@
-The `docs/projects/AMENDMENT_05_SITE_BUILDER.md` file is missing, making a complete audit against the SSOT impossible. The task specification requests Markdown output, which contradicts the final instruction block's demand for JS/ESM code output.
+`docs/projects/AMENDMENT_05_SITE_BUILDER.md` is missing, preventing a full audit against the amendment.
 
-### Shipped Controls (Operator Actions)
+**Shipped controls**
+The Site Builder Command Center (cmdCtr) is supported by the following operator actions, derived from the API surface and CLI scripts:
 
-Based on the DOMAIN CONTEXT and API surface, the following operator actions are available:
-
-*   **Prospect Discovery:** CLI script `scripts/site-builder-prospect-discovery.mjs` for finding businesses.
-*   **Prospect Ranking:** CLI script `scripts/site-builder-batch-rank.mjs` for scoring and prioritizing prospects.
-*   **Existing Site Analysis:** `POST /api/v1/sites/analyze` to get an opportunity score, grade, pain points, and flags (`isChain`, `isSpa`) for a prospect's existing site.
-*   **Site Preview
+*   **Prospect Discovery & Ranking:**
+    *   `scripts/site-builder-prospect-discovery.mjs`: CLI for finding wellness businesses.
+    *   `scripts/site-builder-batch-rank.mjs`: CLI for batch-scoring and ranking prospects.
+    *   `POST /api/v1/sites/analyze`: API for scoring an existing prospect's site.
+*   **Site Building & Outreach:**
+    *   `POST /api/v1/sites/build`: API for building a site from a URL.
+    *   `POST /api/v1/sites/prospect`: API for processing a single prospect (score, build, send email).
+    *   `POST /api/v1/sites/bulk-prospect`: API for processing multiple prospects in a batch.
+    *   `POST
