@@ -5,18 +5,16 @@
     {
       "id": "site-builder-postmark-send",
       "domain": "lifeos-site-builder",
-      "target_file": "services/prospect-pipeline.js",
+      "target_file": "services/site-builder-postmark-helper.js",
       "files": [
-        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
-        "services/prospect-pipeline.js",
-        "services/site-builder.js"
+        "docs/projects/AMENDMENT_05_SITE_BUILDER.md"
       ],
-      "task": "Enhance the prospect pipeline service to actually send outreach emails via Postmark when POSTMARK_SERVER_TOKEN is set. Currently the pipeline generates emails but does not send them. Add: (1) sendProspectOutreach(prospect) function that calls Postmark API, (2) graceful no-op when POSTMARK_SERVER_TOKEN absent (log warn, skip send), (3) dry_run option that returns email payload without sending, (4) track sent_at and delivery_status on the prospect record. Revenue-blocking task — without this the pipeline never reaches real prospects.",
-      "spec": "JS ES module. Enhance existing prospect-pipeline.js. Add export: sendProspectOutreach(prospect, opts) async -> { sent: boolean, message_id: string|null, error: string|null }. opts.dry_run=true returns payload without sending. Graceful when POSTMARK_SERVER_TOKEN absent: return { sent: false, error: 'POSTMARK_SERVER_TOKEN not set' }. Uses fetch to call Postmark /email endpoint. Updates prospect_sites table: sent_at, delivery_status. @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md",
-      "commit_message": "[system-build] Site Builder prospect outreach — Postmark email send integration",
+      "task": "Create a NEW standalone Postmark email helper for the site builder. Do NOT modify prospect-pipeline.js (it is complete). Create services/site-builder-postmark-helper.js with: sendProspectOutreach(prospect, opts) async — calls Postmark API when POSTMARK_SERVER_TOKEN is set, no-op when absent, dry_run mode returns payload. Under 60 lines total.",
+      "spec": "JS ES module. NEW file only — do not touch prospect-pipeline.js. Export: sendProspectOutreach(prospect, opts). opts.dry_run=true returns payload without sending. Graceful when POSTMARK_SERVER_TOKEN absent: return { sent: false, error: 'POSTMARK_SERVER_TOKEN not set' }. Uses fetch to call https://api.postmarkapp.com/email. @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md. Keep under 60 lines.",
+      "commit_message": "[system-build] Site Builder Postmark helper — standalone email send utility",
       "branch": "main",
       "model": "gemini_flash",
-      "max_output_tokens": 5500
+      "max_output_tokens": 2000
     },
     {
       "id": "site-builder-quality-scorer-v2",
