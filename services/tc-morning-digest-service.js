@@ -1,8 +1,8 @@
-import { createTCStatusEngine } from './tc-status-engine.js';
-import { createTCAlertService } from './tc-alert-service.js';
+const CLIENT_UPDATE_EVENTS = new Set([
+    'party_intro_sent', 'deadline_reminder_sent', 'welcome_sent',
+    'client_update_sent', 'seller_update_sent', 'approval_request_sent',
+]);
 
-// Re-implementing necessary helpers from tc-status-engine.js and tc-alert-service.js
-// to avoid direct dependency on their internal state/deps and ensure self-containment.
 function asDate(value) {
     if (!value) return null;
     const date = value instanceof Date ? value : new Date(value);
@@ -13,3 +13,7 @@ function diffInDays(future, now) {
     if (!future || !now) return null;
     const diffTime = future.getTime() - now.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
+export async function getTCMorningDigest(pool) {
+    const generated_at = new
