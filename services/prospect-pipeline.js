@@ -11,4 +11,4 @@ const PRICING = {
   full: { name: 'Full Service', price: '$297/mo', description: 'Everything managed: site, SEO, blogs, social, POS setup + booking system' },
 };
 
-// Environment variables
+// Environment
