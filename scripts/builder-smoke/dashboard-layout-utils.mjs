@@ -1,9 +1,6 @@
 export function clampMobileWidgetCount(count) {
-  const num = Number(count);
-  if (isNaN(num)) {
-    return 1; // Default to minimum if input is not a valid number
-  }
-  return Math.max(1, Math.min(6, Math.round(num)));
+  const num = Math.round(count);
+  return Math.max(1, Math.min(6, num));
 }
 
 export function resolveThemeMode(value) {
