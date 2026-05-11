@@ -28,6 +28,9 @@
     "scripts/site-builder-live-smoke.mjs",
     "scripts/verify-site-builder-lane.mjs",
     "routes/site-builder-routes.js",
+    "routes/site-builder-discovery-routes.js",
+    "routes/site-builder-pipeline-report-routes.js",
+    "tests/site-builder-discovery-routes.test.js",
     "db/migrations/20260313_site_builder_prospect_pipeline.sql",
     "public/overlay/site-builder-landing.html",
     "public/overlay/site-builder-command-center.html"
@@ -50,6 +53,18 @@
       "path": "/overlay/site-builder-command-center.html",
       "expected_status": 200,
       "description": "Operator command center — analyze prospects, build & send, view pipeline table"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sites/pipeline-report",
+      "expected_status": 200,
+      "description": "Command-key protected pipeline totals for dashboard/reporting"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/sites/discover",
+      "expected_status": 200,
+      "description": "Command-key protected prospect discovery; request fields are passed to the discovery script via execFile argv, never shell interpolation"
     }
   ],
   "required_tables": [
@@ -179,6 +194,18 @@
     {
       "type": "node_check",
       "check": "scripts/site-builder-pipeline-report.mjs"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/site-builder-discovery-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/site-builder-pipeline-report-routes.js"
+    },
+    {
+      "type": "node_test",
+      "check": "tests/site-builder-discovery-routes.test.js"
     }
   ],
   "completion_checks": [
@@ -193,5 +220,5 @@
   "last_verified_at": null,
   "verification_passed": null,
   "last_updated": "2026-05-11",
-  "ssot_receipt_tail": "2026-05-11: Mounted site-builder-pipeline-report-routes.js (GET /api/v1/sites/pipeline-report) and site-builder-discovery-routes.js (POST /api/v1/sites/discover) in core/two-tier-system-init.js. CSS pseudo-comments fixed in lifeos-dashboard.html (15 single-slash dividers → /* */ blocks) to stop all daemon cycles from failing at static_code_supervise."
+  "ssot_receipt_tail": "2026-05-11: Critical security GAP-FILL hardened routes/site-builder-discovery-routes.js: POST /api/v1/sites/discover now uses execFile(process.execPath, argv) instead of shell-string exec(command), validates bounded inputs, and has tests/site-builder-discovery-routes.test.js regression coverage. Builder attempt for this target failed with HTTP 500 / dispatch HTTP 413."
 }

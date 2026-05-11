@@ -1,11 +1,54 @@
+/**
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * Standalone site discovery action route — triggers prospect discovery runs.
+ */
 import { Router } from 'express';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
 import logger from '../services/logger.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const execFileAsync = promisify(execFile);
+
+const MAX_CITY_LENGTH = 200;
+const MAX_NICHE_LENGTH = 80;
+
+function normalizeBoundedString(value, fieldName, maxLength, { required = false } = {}) {
+  if (value === undefined || value === null || value === '') {
+    return required
+      ? { error: `${fieldName} is required` }
+      : { value: null };
+  }
+
+  if (typeof value !== 'string') {
+    return { error: `${fieldName} must be a string` };
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return required
+      ? { error: `${fieldName} is required` }
+      : { value: null };
+  }
+
+  if (trimmed.length > maxLength) {
+    return { error: `${fieldName} must be ${maxLength} characters or fewer` };
+  }
+
+  return { value: trimmed };
+}
+
+function normalizeCount(value) {
+  if (value === undefined || value === null || value === '') return { value: null };
+  const parsed = Number.parseInt(String(value), 10);
+  if (!Number.isFinite(parsed) || parsed < 1) {
+    return { error: 'count must be a positive integer' };
+  }
+  return { value: Math.min(20, parsed) };
+}
 
 export default function createDiscoveryRoutes(app, { pool, requireKey }) {
   const router = Router();
@@ -13,31 +56,38 @@ export default function createDiscoveryRoutes(app, { pool, requireKey }) {
   router.post('/discover', requireKey, async (req, res) => {
     const { city, niche, count } = req.body;
 
-    if (!city) {
-      return res.status(400).json({ ok: false, error: 'city is required' });
-    }
+    const cityInput = normalizeBoundedString(city, 'city', MAX_CITY_LENGTH, { required: true });
+    if (cityInput.error) return res.status(400).json({ ok: false, error: cityInput.error });
+
+    const nicheInput = normalizeBoundedString(niche, 'niche', MAX_NICHE_LENGTH);
+    if (nicheInput.error) return res.status(400).json({ ok: false, error: nicheInput.error });
+
+    const countInput = normalizeCount(count);
+    if (countInput.error) return res.status(400).json({ ok: false, error: countInput.error });
+
+    const normalizedCity = cityInput.value;
+    const normalizedNiche = nicheInput.value;
+    const normalizedCount = countInput.value;
 
     const scriptPath = join(__dirname, '../scripts/site-builder-prospect-discovery.mjs');
-    let command = `node ${scriptPath} --city="${city}"`;
-    if (niche) {
-      command += ` --type="${niche}"`;
+    const args = [scriptPath, `--city=${normalizedCity}`];
+    if (normalizedNiche) {
+      args.push(`--type=${normalizedNiche}`);
     }
-    if (count) {
-      command += ` --count=${count}`;
+    if (normalizedCount) {
+      args.push(`--count=${normalizedCount}`);
     }
 
-    logger.info('[DISCOVERY] Running discovery script', { command, city, niche, count });
+    logger.info('[DISCOVERY] Running discovery script', {
+      scriptPath,
+      city: normalizedCity,
+      niche: normalizedNiche,
+      count: normalizedCount,
+    });
 
     try {
-      const { stdout, stderr } = await new Promise((resolve, reject) => {
-        exec(command, { maxBuffer: 1024 * 1024 * 5 }, (error, stdout, stderr) => {
-          if (error) {
-            error.stderr = stderr;
-            reject(error);
-          } else {
-            resolve({ stdout, stderr });
-          }
-        });
+      const { stdout, stderr } = await execFileAsync(process.execPath, args, {
+        maxBuffer: 1024 * 1024 * 5,
       });
 
       let prospects = [];
@@ -66,7 +116,7 @@ export default function createDiscoveryRoutes(app, { pool, requireKey }) {
         return res.status(400).json({
           ok: false,
           error: stderr.trim(),
-          receipt: { source, city: city || null, niche: niche || null }
+          receipt: { source, city: normalizedCity || null, niche: normalizedNiche || null }
         });
       }
 
@@ -76,8 +126,8 @@ export default function createDiscoveryRoutes(app, { pool, requireKey }) {
         prospects,
         receipt: {
           source,
-          city: city || null,
-          niche: niche || null,
+          city: normalizedCity || null,
+          niche: normalizedNiche || null,
         },
       });
 
@@ -107,8 +157,8 @@ export default function createDiscoveryRoutes(app, { pool, requireKey }) {
         error: errorMessage,
         receipt: {
           source,
-          city: city || null,
-          niche: niche || null,
+          city: normalizedCity || null,
+          niche: normalizedNiche || null,
         },
       });
     }
