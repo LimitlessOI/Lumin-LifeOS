@@ -1,210 +1,150 @@
-/*
-- DASHBOARD_AI_RAIL_CONTRACT.md
-*/
+/* Refer to: docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md */
 
 .lifeos-ai-rail-root {
     position: fixed;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: var(--dash-bg);
-    color: var(--dash-text);
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3); /* Default bottom shadow */
+    right: calc(var(--dash-space-unit) * 4); /* Example: 16px from right */
+    width: 360px; /* Default width for desktop */
+    background: var(--dash-surface);
+    border: 1px solid var(--dash-border);
+    border-radius: var(--dash-radius-lg);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Crucial for hiding content when collapsed */
-
-    /* Default: Dock-bottom, collapsed */
-    bottom: 0;
-    border-top: 1px solid var(--dash-border);
-    border-top-left-radius: var(--dash-radius-lg);
-    border-top-right-radius: var(--dash-radius-lg);
-    height: calc(var(--dash-space-unit) * 6 + env(safe-area-inset-bottom)); /* Collapsed height */
-    padding-left: calc(var(--dash-space-unit) * 2);
-    padding-right: calc(var(--dash-space-unit) * 2);
-    padding-top: var(--dash-space-unit);
-    padding-bottom: env(safe-area-inset-bottom);
+    overflow: hidden;
+    transition: height 0.3s ease, width 0.3s ease, top 0.3s ease, bottom 0.3s ease, border-radius 0.3s ease;
+    z-index: 1000;
+    /* Default: dock-bottom, collapsed state */
+    bottom: env(safe-area-inset-bottom);
+    height: calc(var(--dash-space-unit) * 14); /* 56px collapsed height */
 }
 
 /* Dock-top variant */
-.lifeos-ai-rail-root[data-dock="top"] {
-    top: 0;
-    bottom: auto;
-    border-top: none;
-    border-bottom: 1px solid var(--dash-border);
-    border-bottom-left-radius: var(--dash-radius-lg);
-    border-bottom-right-radius: var(--dash-radius-lg);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Top shadow */
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: var(--dash-space-unit);
-    height: calc(var(--dash-space-unit) * 6 + env(safe-area-inset-top)); /* Collapsed height for top */
+.lifeos-ai-rail-root--dock-top {
+    top: env(safe-area-inset-top);
+    bottom: auto; /* Override default bottom */
 }
 
-/* Expanded state */
-.lifeos-ai-rail-root[data-state="expanded"] {
-    height: 70vh; /* Example height for expanded panel */
-    max-height: 800px; /* Max height for desktop */
-    padding-top: env(safe-area-inset-top); /* Always respect safe area when expanded */
-    padding-bottom: env(safe-area-inset-bottom); /* Always respect safe area when expanded */
-}
-
-/* Collapsed content (e.g., a single line of text, an icon) */
-.lifeos-ai-rail-collapsed-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 100%; /* Occupy full height of the collapsed rail */
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--dash-text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Hide collapsed content when expanded */
-.lifeos-ai-rail-root[data-state="expanded"] .lifeos-ai-rail-collapsed-content {
-    display: none;
-}
-
-/* Expanded panel content */
-.lifeos-ai-rail-expanded-panel {
-    display: flex;
-    flex-direction: column;
-    flex: 1; /* Takes remaining space in the column flex container */
-    width: 100%;
-    height: 100%; /* Ensure it fills the expanded rail */
-}
-
-/* Hide expanded content when collapsed */
-.lifeos-ai-rail-root[data-state="collapsed"] .lifeos-ai-rail-expanded-panel {
-    display: none;
-}
-
+/* Collapsed strip (header) */
 .lifeos-ai-rail-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-bottom: var(--dash-space-unit);
-    border-bottom: 1px solid var(--dash-border);
-    margin-bottom: var(--dash-space-unit);
-    flex-shrink: 0; /* Prevent header from shrinking */
+    padding: calc(var(--dash-space-unit) * 3) calc(var(--dash-space-unit) * 4); /* 12px 16px */
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dash-text);
+    cursor: pointer; /* Implies it's clickable to expand/collapse */
+    flex-shrink: 0;
+    user-select: none; /* Prevent text selection on header */
 }
 
-.lifeos-ai-rail-title {
-    font-size: 16px;
-    font-weight: 600;
+.lifeos-ai-rail-header-title {
+    flex-grow: 1;
+}
+
+.lifeos-ai-rail-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--dash-muted);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: calc(var(--dash-space-unit) * 2); /* 8px */
+    line-height: 1; /* Ensure button icon is centered */
+    transition: color 0.2s;
+}
+
+.lifeos-ai-rail-toggle-btn:hover {
     color: var(--dash-text);
 }
 
-.lifeos-ai-rail-close-btn {
-    background: var(--dash-surface);
-    border: 1px solid var(--dash-border);
-    border-radius: var(--dash-radius-lg);
-    color: var(--dash-muted);
-    width: calc(var(--dash-space-unit) * 4);
-    height: calc(var(--dash-space-unit) * 4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 18px;
-    line-height: 1;
-    transition: all 0.2s ease;
-    flex-shrink: 0; /* Prevent button from shrinking */
-}
-.lifeos-ai-rail-close-btn:hover {
-    border-color: var(--dash-accent);
-    color: var(--dash-accent);
+/* Expanded transcript panel */
+.lifeos-ai-rail-root.is-expanded {
+    height: 60vh; /* Example: 60% of viewport height when expanded */
+    max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - calc(var(--dash-space-unit) * 8)); /* Max height considering safe areas and some margin */
 }
 
-.lifeos-ai-rail-transcript {
-    flex: 1; /* Takes all available vertical space */
+.lifeos-ai-rail-content {
+    flex-grow: 1;
     overflow-y: auto;
-    padding-right: var(--dash-space-unit); /* For scrollbar spacing */
+    padding: 0 calc(var(--dash-space-unit) * 4); /* Horizontal padding */
     color: var(--dash-text);
     font-size: 14px;
     line-height: 1.6;
-    scrollbar-width: thin;
-    scrollbar-color: var(--dash-muted) transparent;
+    display: none; /* Hidden by default */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--dash-muted) transparent; /* Firefox */
 }
-.lifeos-ai-rail-transcript::-webkit-scrollbar {
-    width: 6px;
+
+.lifeos-ai-rail-root.is-expanded .lifeos-ai-rail-content {
+    display: flex; /* Use flex for message alignment */
+    flex-direction: column;
+    padding-top: calc(var(--dash-space-unit) * 2); /* Small gap from header */
+    padding-bottom: calc(var(--dash-space-unit) * 4); /* Bottom padding for content */
 }
-.lifeos-ai-rail-transcript::-webkit-scrollbar-thumb {
+
+/* Message styling within the transcript panel */
+.lifeos-ai-rail-message {
+    max-width: 85%; /* Messages don't take full width */
+    padding: calc(var(--dash-space-unit) * 2) calc(var(--dash-space-unit) * 3); /* 8px 12px */
+    margin-bottom: calc(var(--dash-space-unit) * 2); /* 8px between messages */
+    border-radius: calc(var(--dash-radius-lg) - var(--dash-space-unit)); /* e.g., 10px */
+    line-height: 1.4;
+    animation: lifeos-ai-rail-fade-in 0.2s ease-out forwards; /* Simple fade-in for new messages */
+}
+
+.lifeos-ai-rail-message--assistant {
+    background: var(--dash-surface);
+    border: 1px solid var(--dash-border);
+    color: var(--dash-text);
+    align-self: flex-start;
+    border-bottom-left-radius: calc(var(--dash-space-unit) * 2); /* Smaller radius for bottom-left corner */
+}
+
+.lifeos-ai-rail-message--user {
+    background: var(--dash-accent);
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: calc(var(--dash-space-unit) * 2); /* Smaller radius for bottom-right corner */
+}
+
+/* Scrollbar styling for content (Webkit) */
+.lifeos-ai-rail-content::-webkit-scrollbar {
+    width: 4px;
+}
+.lifeos-ai-rail-content::-webkit-scrollbar-thumb {
     background: var(--dash-muted);
-    border-radius: 3px;
+    border-radius: 2px;
 }
-.lifeos-ai-rail-transcript::-webkit-scrollbar-track {
+.lifeos-ai-rail-content::-webkit-scrollbar-track {
     background: transparent;
 }
 
-/* Example message styling within transcript */
-.lifeos-ai-rail-message {
-    margin-bottom: var(--dash-space-unit);
-    padding: var(--dash-space-unit);
-    background: var(--dash-surface);
-    border-radius: var(--dash-radius-lg);
-    border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
-    border: 1px solid var(--dash-border);
-}
-.lifeos-ai-rail-message.user {
-    background: var(--dash-accent);
-    color: white;
-    border-color: var(--dash-accent);
-    border-bottom-right-radius: calc(var(--dash-radius-lg) / 2);
-    border-bottom-left-radius: var(--dash-radius-lg); /* Reset for user */
-}
-.lifeos-ai-rail-message.assistant {
-    background: var(--dash-surface);
-    color: var(--dash-text);
-    border: 1px solid var(--dash-border);
-    border-bottom-left-radius: calc(var(--dash-radius-lg) / 2);
-    border-bottom-right-radius: var(--dash-radius-lg); /* Reset for assistant */
-}
-
-/* Desktop-specific styles for wider screens */
-@media (min-width: 768px) {
+/* Mobile adjustments */
+@media (max-width: 768px) {
     .lifeos-ai-rail-root {
-        left: auto; /* Align to right on desktop */
-        right: 0;
-        width: 360px; /* Fixed width for desktop rail */
-        border-left: 1px solid var(--dash-border);
-        border-top: none; /* Remove top border for bottom dock */
-        border-bottom: none; /* Remove bottom border for top dock */
-        border-top-left-radius: var(--dash-radius-lg);
-        border-bottom-left-radius: var(--dash-radius-lg);
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3); /* Left shadow */
-        padding-left: calc(var(--dash-space-unit) * 2);
-        padding-right: calc(var(--dash-space-unit) * 2);
+        width: calc(100vw - calc(var(--dash-space-unit) * 8)); /* Full width minus margin */
+        right: calc(var(--dash-space-unit) * 4);
+        left: calc(var(--dash-space-unit) * 4);
     }
 
-    /* Collapsed state on desktop */
-    .lifeos-ai-rail-root[data-state="collapsed"] {
-        top: auto; /* Default bottom dock */
-        bottom: 0;
-        height: calc(var(--dash-space-unit) * 6); /* Collapsed height on desktop (no safe area) */
-        padding-top: var(--dash-space-unit);
-        padding-bottom: var(--dash-space-unit);
-    }
-    .lifeos-ai-rail-root[data-state="collapsed"][data-dock="top"] {
-        top: 0;
-        bottom: auto;
+    .lifeos-ai-rail-root.is-expanded {
+        height: 80vh; /* More screen space on mobile */
+        max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - calc(var(--dash-space-unit) * 8));
     }
 
-    /* Expanded state on desktop */
-    .lifeos-ai-rail-root[data-state="expanded"] {
-        top: 0;
-        bottom: 0;
-        height: 100vh; /* Full height on desktop */
-        max-height: none;
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
+    .lifeos-ai-rail-message {
+        max-width: 90%; /* Slightly wider messages on smaller screens */
+    }
+}
+
+/* Basic animation for messages */
+@keyframes lifeos-ai-rail-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
