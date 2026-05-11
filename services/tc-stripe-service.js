@@ -1,9 +1,5 @@
-/**
- * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
- * TC Stripe billing service — plan tiers and closing fee recording.
- */
 import Stripe from 'stripe';
-import { PLANS, PLAN_DETAILS, createTCPricing } from './tc-pricing.js';
+import { PLANS, PLAN_DETAILS } from './tc-pricing.js'; // Assuming tc-pricing.js is in the same directory
 
 // Initialize Stripe client
 let stripe;
@@ -20,6 +16,7 @@ function getStripeClient(logger) {
   return stripe;
 }
 
-// Placeholder Stripe Price IDs. In a real system, these would be configured or fetched from Stripe.
-// ASSUMPTION: These Stripe Price IDs are pre-configured in the Stripe dashboard.
-// The actual values would be obtained from Stripe after creating
+// Assume these Stripe Price IDs are pre-configured in Stripe.
+// In a real scenario, these would be fetched from Stripe or stored in DB/config.
+// For this implementation, these are placeholders.
+const
