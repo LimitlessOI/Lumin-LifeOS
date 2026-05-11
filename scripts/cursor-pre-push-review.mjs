@@ -189,6 +189,18 @@ async function main() {
     process.exit(0);
   }
 
+  // If the range contains a SHA we don't have locally (remote moved ahead of us),
+  // the git diff will crash. Detect this and skip gracefully so push isn't blocked.
+  const [baseSha] = range.split('..');
+  if (baseSha && baseSha !== range) {
+    try {
+      execFileSync('git', ['cat-file', '-e', baseSha], { cwd: ROOT });
+    } catch {
+      warn(`Cursor pre-push review skipped: remote SHA ${baseSha} not in local repo (fetch needed)`);
+      process.exit(0);
+    }
+  }
+
   const changedFiles = getChangedFiles(range);
   if (!changedFiles.length) {
     log(`Cursor pre-push review: no changed files in ${range}`);
