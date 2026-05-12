@@ -1,103 +1,98 @@
 # Site Builder Lane Operator Runbook
 
-This runbook outlines the essential procedures for operating and monitoring the Site Builder lane, covering setup, daily checks, troubleshooting, and the full prospect pipeline flow.
+This runbook outlines the essential procedures for operating and monitoring the Site Builder lane, covering prerequisites, daily checks, live smoke testing, critical failure conditions, and the end-to-end first-customer path.
 
 ## Preconditions
 
 Before operating the Site Builder lane, ensure the following environment variables are correctly configured in the Railway environment:
 
-### Required for Core Functionality
-- `PUBLIC_BASE_URL` (or `BUILDER_BASE_URL`, `SITE_BASE_URL`, `LUMIN_SMOKE_BASE_URL`): Base URL for the Site Builder API and generated preview links.
-- `COMMAND_CENTER_KEY` (or `COMMAND_KEY`, `LIFEOS_KEY`, `API_KEY`): API key for authenticating requests to the Site Builder API.
-- `DATABASE_URL`: Connection string for the PostgreSQL database.
+*   `SITE_BASE_URL`: The base URL for generated preview links and the tracking pixel (e.g., `https://yourdomain.com`).
+*   `COMMAND_CENTER_KEY`: The API key for authenticating requests to the `/api/v1/sites` endpoints.
+*   `EMAIL_FROM`: The sender email address for cold outreach (e.g., `outreach@yourdomain.com`).
+*   `POSTMARK_SERVER_TOKEN`: The Postmark API key required for sending cold emails.
+*   `POSTMARK_WEBHOOK_TOKEN` (Optional): Secret token for verifying Postmark inbound webhooks for reply tracking.
+*   `SLACK_WEBHOOK_URL` (Optional): For warm lead alerts (viewed/replied events).
 
-### Required for Email Outreach
-- `EMAIL_FROM`: The sender email address for cold outreach.
-- `POSTMARK_SERVER_TOKEN`: Postmark API key for sending cold emails.
-
-### Optional for Enhanced Operations
-- `POSTMARK_WEBHOOK_TOKEN`: Secret token to verify Postmark inbound webhooks for reply tracking.
-- `SLACK_WEBHOOK_URL`: Slack incoming webhook URL for warm lead alerts (viewed/replied).
-- `AFFILIATE_JANE_APP_URL`: Jane App referral link for commission tracking.
-- `AFFILIATE_MINDBODY_URL`: Mindbody referral link for commission tracking.
-- `AFFILIATE_SQUARE_URL`: Square referral link for commission tracking.
+All database tables (`prospect_sites`, `email_suppressions`, `outreach_log`) are confirmed to be present and operational in Neon production.
 
 ## Daily Checks
 
-Perform these checks daily to ensure the pipeline is healthy and progressing:
+Perform these checks daily to ensure pipeline health and identify immediate actions:
 
-1.  **Pipeline Health Report:**
-    Run the pipeline report to get an overview of funnel stages, conversion rates, and warm leads.
-    ```bash
-    npm run site-builder:report
-    # or
-    node scripts/site-builder-pipeline-report.mjs
-    ```
-    Review the output for any `Next action:` suggestions or critical issues.
-
-2.  **Follow-Up Cron:**
-    Ensure the automated follow-up cron is running or manually trigger it for eligible prospects.
-    ```bash
-    node scripts/site-builder-follow-up-cron.mjs
-    ```
-    This script sends day-3/day-7 follow-up emails.
-
-3.  **Preview Expiry Cron:**
-    Ensure the preview expiry cron is running or manually trigger it to expire unsold previews after 30 days.
-    ```bash
-    node scripts/site-builder-preview-expiry-cron.mjs
-    ```
+1.  **Pipeline Report**: Run `npm run site-builder:report` to get a summary of the pipeline funnel, conversion rates, and warm leads.
+2.  **Warm Leads**: Review the "Warm Leads" section of the pipeline report. Prioritize manual follow-ups for prospects marked `viewed` or `replied`.
+3.  **Follow-Up Cron**: Ensure the `scripts/site-builder-follow-up-cron.mjs` script is running as scheduled (e.g., daily) to send automated day-3/day-7 follow-ups.
+4.  **QA Hold Review**: Check the Command Center for any prospects in `qa_hold` status. These require manual review and potential repair before they can be sent.
 
 ## Live Smoke Test
 
-The live smoke test verifies the core site building functionality on the deployed Railway environment.
+The live smoke test verifies the core site building functionality on the deployed Railway instance.
 
 **Command:**
-```bash
-npm run site-builder:live-smoke
-# or
-node scripts/site-builder-live-smoke.mjs
+`npm run site-builder:live-smoke`
+or
+`node scripts/site-builder-live-smoke.mjs`
+
+**Expected Output (JSON):**
+A successful run will output JSON similar to this, indicating `ok: true`, a `previewUrl`, and a `qualityReport` with `readyToSend: true` (or `false` if the generated site quality is low, but the report itself must be present).
+
+```json
+{
+  "ok": true,
+  "status": 200,
+  "previewUrl": "https://...",
+  "scorePct": 85,
+  "grade": "A",
+  "readyToSend": true,
+  "recommendedAction": "..."
+}
 ```
 
-**Success Criteria:**
-The script should output `ok: true` and include a `previewUrl` and a `qualityReport` with `readyToSend` status. A successful run indicates that the `/api/v1/sites/build` endpoint is operational and can generate a preview site with a quality assessment.
+**Failure Conditions (Red):**
+*   The script exits with an error (`ok: false`).
+*   The response is not valid JSON.
+*   `previewUrl` is missing from the response.
+*   `qualityReport` is missing from the response.
 
-**Failure Indication:**
-Any output other than the success criteria, including `ok: false`, missing `previewUrl`, or missing `qualityReport`, indicates a critical issue.
+## Red Conditions (Launch-Blocking)
 
-## Command Center Usage
+These conditions indicate a critical failure preventing the core functionality of the Site Builder lane and require immediate attention:
 
-The Site Builder Command Center (`public/overlay/site-builder-command-center.html`) is the primary operator dashboard for managing the pipeline:
-
--   **Analyze Prospects:** View opportunity scores and pain points for existing sites.
--   **Build & Send:** Manually trigger site builds and send personalized cold outreach emails.
--   **Pipeline Table:** Monitor the status of all prospects (`built`, `sent`, `viewed`, `replied`, `converted`, `qa_hold`, `lost`, `expired`).
--   **Update Status:** Manually update prospect statuses (e.g., `converted`, `lost`) and `deal_value`.
-
-## Red Conditions
-
-### Launch-Blocking Red (Requires Immediate Attention)
-
-These conditions indicate a critical failure that prevents the core functionality of the Site Builder lane and must be resolved before proceeding with outreach or new prospect processing:
-
--   **Live Smoke Test Failure:** `npm run site-builder:live-smoke` fails to produce a valid `previewUrl` and `qualityReport`. This indicates the core `/api/v1/sites/build` endpoint is non-functional.
--   **Missing Required Environment Variables:** `PUBLIC_BASE_URL`, `COMMAND_CENTER_KEY`, `DATABASE_URL`, `EMAIL_FROM`, or `POSTMARK_SERVER_TOKEN` are not set or are invalid.
--   **Database Connectivity Issues:** The application cannot connect to or query the `prospect_sites`, `email_suppressions`, or `outreach_log` tables.
--   **Consistent `qa_hold` for all Builds:** If all generated sites consistently land in `qa_hold` with `qualityReport.readyToSend === false`, it suggests a systemic issue with the AI site generation or quality scoring, preventing any outreach.
--   **Email Sending Failures:** Cold emails are consistently failing to send, indicating an issue with Postmark integration or `EMAIL_FROM` configuration.
-
-### Operator-Only Setup / Non-Blocking
-
-These conditions are operational concerns that do not block the core functionality but require operator action or indicate an early stage in the pipeline:
-
--   **Missing Optional Environment Variables:** `SLACK_WEBHOOK_URL`, `POSTMARK_WEBHOOK_TOKEN`, or affiliate URLs are not configured. This impacts enhanced features but not core build/send.
--   **No Warm Leads:** The pipeline report shows no prospects in `viewed` or `replied` status. This is normal for a new pipeline or if outreach has just begun.
--   **Individual `qa_hold` Sites:** Some generated sites landing in `qa_hold` is expected. These require manual review and potential repair before sending.
--   **Cron Jobs Not Automated:** If `site-builder-follow-up-cron.mjs` or `site-builder-preview-expiry-cron.mjs` are not yet set up as automated cron jobs, they can be run manually.
+*   **Live Smoke Test Failure**: The `site-builder-live-smoke.mjs` script fails to build a preview site or does not return a valid `qualityReport`.
+*   **Missing Environment Variables**: Any of `SITE_BASE_URL`, `COMMAND_CENTER_KEY`, `EMAIL_FROM`, or `POSTMARK_SERVER_TOKEN` are missing or invalid.
+*   **API Endpoint Failures**: The `/api/v1/sites/build` or `/api/v1/sites/prospect` endpoints consistently return errors (e.g., 500s, malformed responses).
+*   **Email Sending Failure**: Cold emails are not being sent, or Postmark reports consistent delivery failures.
+*   **Quality Gate Failure**: Generated sites consistently result in `qualityReport.readyToSend === false`, preventing automated outreach.
+*   **Command Center Unresponsive**: The `public/overlay/site-builder-command-center.html` dashboard fails to load or display pipeline data.
 
 ## First-Customer Path
 
-This outlines the end-to-end process for acquiring and converting a prospect using the Site Builder lane:
+This outlines the end-to-end flow for a prospect through the Site Builder pipeline:
 
-1.  **Prospect Discovery:**
-    Identify potential wellness businesses in a target city.
+1.  **Prospect Discovery**:
+    *   Identify potential wellness businesses using `npm run site-builder:discover --city='Austin, TX' --type=yoga`.
+    *   This generates a JSON array of businesses.
+
+2.  **Prospect Ranking**:
+    *   Prioritize discovered prospects by opportunity score using `npm run site-builder:rank --input=discovered.json --top=10`.
+    *   This ranks prospects, flags chains/SPAs, and helps select the best targets.
+
+3.  **Site Build & Outreach**:
+    *   Initiate the build and outreach process for a prospect via the Command Center or directly using the API:
+        `POST /api/v1/sites/prospect { businessUrl, contactEmail, contactName }`
+    *   **Process**: The system scores the prospect's existing site (opportunity score), builds a modern preview site, generates a personalized cold email, and attempts to send it.
+    *   **Quality Gate**: If the generated site's `qualityReport.readyToSend` is `false`, the prospect's status will be set to `qa_hold`, and the email will *not* be sent automatically. Manual review is required.
+
+4.  **Tracking & Alerts**:
+    *   **Viewed**: When the prospect opens the preview site, the injected tracking pixel fires, automatically updating the prospect's status to `viewed`. A Slack alert (if `SLACK_WEBHOOK_URL` is configured) is sent.
+    *   **Replied**: If the prospect replies to the cold email, the Postmark inbound webhook automatically updates their status to `replied`. A Slack alert is sent.
+
+5.  **Follow-Up**:
+    *   **Automated**: The `scripts/site-builder-follow-up-cron.mjs` script runs periodically to send day-3/day-7 follow-up emails to eligible prospects.
+    *   **Manual**: Operators can send manual follow-ups via the Command Center or `POST /api/v1/sites/follow-up`.
+
+6.  **Conversion**:
+    *   Once a prospect converts, their status is manually updated to `converted` via the Command Center or `PATCH /api/v1/sites/prospects/:clientId/status`. This also records the `deal_value`.
+
+7.  **Preview Expiry**:
+    *   The `scripts/site-builder-preview-expiry-cron.mjs` script runs periodically to expire unsold preview sites after 30 days, setting their status to `expired`.
