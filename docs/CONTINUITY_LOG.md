@@ -32,6 +32,24 @@
 
 ---
 
+## [FIX] Update 2026-05-12 #9 — Governance correction: PENDING_CONFIRMATION marker + prove-the-loop rule
+
+### Files changed
+- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — (1) **Prove-the-loop rule** added to Pre-Flight / Post-Flight Rules: do not start the next repair/build slice until the previous slice has at least one live runtime confirmation or is explicitly marked `PENDING_CONFIRMATION` by the operator. (2) Two new Change Receipts rows: `⚠️ PENDING_CONFIRMATION — SIS1 not yet verified live on Forge` (Forge resumes 22:15 UTC; confirmation target is `task_skip_already_shipped` event in daemon log) + `FPM1 known risks` (spec hint pollution, quarantine mislabel, JSON vs Neon). (3) Agent Handoff Notes updated to show PENDING_CONFIRMATION state and blocked next-task order.
+- **`docs/CONTINUITY_LOG.md`** — this entry.
+
+### State after this session
+- SIS1: committed, on `main`, Railway should deploy before 22:15 UTC. **PENDING_CONFIRMATION** — not yet verified on Forge.
+- FPM1: committed, on `main`. Three flagged risks documented (not yet fixed): spec hint pollution, quarantine source mislabel, JSON-not-Neon.
+- Prove-the-loop rule is now in SSOT. Future agents must not proceed to the next loop until the current one is confirmed.
+
+### Next agent: start here
+- **22:15 UTC 2026-05-12**: Check `data/builder-daemon-log.site-builder-autonomous-queue.jsonl` — look for `{"event":"task_skip_already_shipped","id":"site-builder-postmark-send"}`. If present: SIS1 confirmed, remove/update the PENDING_CONFIRMATION receipt row.
+- Also verify FPM1 logs are clean: `task_fail` entries should include `failure_memory_count` + `failure_memory_level` fields. No task should be marked green by FPM1 alone.
+- **After confirmation**: fix FPM1 risks (1) quarantine source label (pass distinct `source` to `selfQuarantineTask` for pattern-based quarantine) and (2) escalation hint as separate field rather than merged into spec. Then: post-commit smoke router.
+
+---
+
 ## [BUILD] Update 2026-05-12 #8 — FPM1 failure-pattern memory for autonomous builder queue
 
 ### Files changed
