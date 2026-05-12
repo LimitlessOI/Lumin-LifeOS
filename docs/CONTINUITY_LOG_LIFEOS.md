@@ -6,6 +6,64 @@
 
 ---
 
+## [BUILD] Update 2026-05-12 — SC1 compliance receipt severity persistence
+
+### What changed
+- **`scripts/tsos-compliance-officer.mjs`** — `writeReceipt()` now adds `severity: "critical"` or `severity: "advisory"` to each step before writing `data/tsos-compliance-officer-last-run.json`. Purely additive — zero logic change.
+- **Mixed-scope recovery (operator-approved waiver):** 5 prior unstaged hunks also committed in the same diff: JSDoc header updates, `import { writeOperatorDashboard/writeRuntimeRealitySnapshot }`, `repo:sync-check` conditional block, `lifeos:verify:ui-map` step, post-receipt snapshot/dashboard writes. All were already running on disk.
+- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — SC1 Change Receipt row added.
+- **`docs/CONTINUITY_LOG_LIFEOS.md`** — this entry.
+
+### Verification results
+- `npm run tsos:compliance-officer`: 12/12 pass (8 critical + 4 advisory), `exit_fail=false`, `local_critical_fail=false`
+- `npm test`: 8 pass, 0 fail
+- `operator:status`: snapshot FRESH (4s), `fail_closed=2` (pre-existing `tc-stripe-billing-service`, unchanged)
+- `data/tsos-compliance-officer-last-run.json`: 12/12 steps have `severity` field — VERIFIED
+
+### Hunk audit note
+Pre-commit hunk audit rule detected the mixed-scope condition before staging. Reported to operator. Operator issued explicit written waiver approving the combined commit. This confirms the rule is working. Future mixed-scope commits still require STOP + approval.
+
+### What stays blocked
+- RL4 (`tc-stripe-billing-service` repair) — FAIL_CLOSED gate not waived
+- Mission Control / Mechanic / Sentinel daemons — §2.12 council vote required
+- Post-commit smoke router — SIS1 confirmation still pending (check Forge log for `task_skip_already_shipped` after 22:15 UTC)
+
+### Next live check
+Did Forge log `task_skip_already_shipped` after 22:15 UTC? If yes: SIS1 confirmed. If no: deployment/runtime alignment is the next repair.
+
+---
+
+## [BUILD] Update 2026-05-12 — NSSOT §2.10 ¶8–10 constitutional clarification
+
+### What changed
+- **`docs/SSOT_NORTH_STAR.md`** version updated to 2026-05-12; three paragraphs added to **§2.10** after ¶7 (no existing text removed or weakened):
+  - **¶8 Audit epistemic format** — every audit finding must be classified VERIFIED/KNOW, THINK, or UNKNOWN; blending tiers or implying states without evidence is a §2.6 violation.
+  - **¶9 Improvement-idea council rule** — improvement brainstorming is a separate phase from auditing; up to 25+25 ranked ideas; smallest winning slice; no implementation while `FAIL_CLOSED` or `PENDING_CONFIRMATION` unresolved without a receipted operator waiver.
+  - **¶10 Truth-first order** — audit → ideas → vote/rank → implement, non-collapsible, non-reorderable; skipping or reordering is a §2.6 violation.
+- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — Last Updated + Change Receipts row added.
+- **`docs/CONTINUITY_LOG_LIFEOS.md`** — this entry.
+- `npm test`: 8 pass, 0 fail (unchanged by this constitutional edit).
+
+### Why
+Adam requested these three clarifications be codified as law to prevent: (1) audits that blend KNOW/THINK/UNKNOWN into a single verdict, (2) improvement ideas being generated before or simultaneously with audits, and (3) implementation starting while FAIL_CLOSED or PENDING_CONFIRMATION states are active.
+
+### Next
+- Active FAIL_CLOSED wound: `tc-stripe-billing-service` quarantine (UNKNOWN_TRUNCATION_CLASS per SF1). Must resolve before any new implementation slice unless operator issues explicit waiver receipt.
+- SIS1 PENDING_CONFIRMATION still unresolved — see Amendment 36 Change Receipts.
+
+---
+
+## [BUILD] Update 2026-05-11 #2 — Privacy & AI governance SSOT wired (navigation only)
+
+### Doc / SSOT
+- **`docs/projects/AMENDMENT_40_PRIVACY_MENTAL_SOVEREIGNTY.md`**, **`docs/AI_MANAGEMENT_SYSTEM_SSOT.md`** — now linked from **`docs/projects/INDEX.md`**, **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`**, **`docs/QUICK_LAUNCH.md`** LifeOS lane, and **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** (**Constitutional LifeOS UX SSOT** bullet **4**, **Agent Handoff** row, **Change Receipts**).
+- Cross-cutting receipt: **`docs/CONTINUITY_LOG.md`** — **[BUILD] Update 2026-05-11 #8**.
+
+### Next
+- Product work unchanged: follow **Agent Handoff** for modes v1 / queue; when shipping **voice, ambient, ranking, or commerce-adjacent** surfaces, implement consent + **manipulation firewall** disclosure fields per Amendment 40 + AI Management SSOT (still **⚠️ INCOMPLETE** until `verify-*` hooks exist).
+
+---
+
 ## [BUILD] Update 2026-04-29 #1 — **Overnight dashboard: `dashboard-theme-foundation` + receipts**
 
 ### Shipped / verified (system path)

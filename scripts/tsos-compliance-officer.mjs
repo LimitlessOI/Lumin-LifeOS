@@ -19,9 +19,10 @@
  *   Remote tier: `PUBLIC_BASE_URL`, `COMMAND_CENTER_KEY` (see `docs/BUILDER_OPERATOR_ENV.md`).
  *   `TSOS_COMPLIANCE_REMOTE=1` same as `--remote`.
  *   `COMPLIANCE_DEEP=1` same as `--deep`.
+ *   `TSOS_COMPLIANCE_SKIP_REPO_SYNC=1` — skip **`npm run repo:sync-check`** (airgap / intentional detached HEAD).
  *   Default remote observe: `TSOS_ENFORCE_OPERATIONAL_GRADE=0`, `TSOS_ENFORCE_TOKEN_GRADE=0` unless already set.
  *
- * Writes: `data/tsos-compliance-officer-last-run.json`
+ * Writes: `data/tsos-compliance-officer-last-run.json` — then **`data/runtime-reality-snapshot.json`** + **`data/operator-dashboard.json`** (gitignored) via **`writeRuntimeRealitySnapshot()`** / **`writeOperatorDashboard()`** (`docs/RUNTIME_REALITY_SNAPSHOT.md`, `docs/OPERATOR_DASHBOARD_JSON.md`).
  *
  * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
  */
@@ -34,6 +35,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
+
+import { writeOperatorDashboard } from "./generate-operator-dashboard-json.mjs";
+import { writeRuntimeRealitySnapshot } from "./generate-runtime-reality-snapshot.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -83,7 +87,17 @@ function writeReceipt(payload) {
   const last = path.join(dir, "tsos-compliance-officer-last-run.json");
   try {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(last, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+    // Enrich each step with a human-readable severity label so stored receipts
+    // are self-explanatory: agents and humans can distinguish critical vs advisory
+    // failures without needing to know the internal exit_fail logic.
+    const enriched = {
+      ...payload,
+      steps: (payload.steps || []).map((s) => ({
+        ...s,
+        severity: s.critical ? "critical" : "advisory",
+      })),
+    };
+    fs.writeFileSync(last, `${JSON.stringify(enriched, null, 2)}\n`, "utf8");
   } catch (e) {
     console.warn("[tsos-compliance-officer] could not write receipt:", e?.message || e);
   }
@@ -224,6 +238,11 @@ async function main() {
 
   console.log("Platform Compliance Officer — local deterministic gates (all lanes / amendments)\n");
 
+  // Single commit graph vs origin/main — prevents audits on a stale laptop mirror (Amendment 36 / OPERATIONAL_REALITY_SYNC).
+  if (!/^1|true|yes$/i.test(String(process.env.TSOS_COMPLIANCE_SKIP_REPO_SYNC || "").trim())) {
+    steps.push(await runNpmScript("repo:sync-check", { id: "repo_sync_check", tier: "local" }));
+  }
+
   // Full JS syntax check — catches truncated builder commits before they reach Railway.
   // Inline (not verify:ci) to avoid the slow evidence-recording side effect.
   // This is the check that would have prevented the 2026-05-09 crash loop.
@@ -235,6 +254,7 @@ async function main() {
   steps.push(await runNpmScript("evidence:check", { id: "evidence_check", tier: "local", critical: false }));
   steps.push(await runNpmScript("lifeos:supervise:static", { id: "supervise_static", tier: "local" }));
   steps.push(await runNpmScript("check:overlay", { id: "check_overlay", tier: "local" }));
+  steps.push(await runNpmScript("lifeos:verify:ui-map", { id: "dashboard_ui_map", tier: "local" }));
   steps.push(await runNpmScript("zero-drift:check", { id: "zero_drift_check", tier: "local", critical: false }));
   steps.push(await runNpmScript("readiness:check", { id: "readiness_check", tier: "local", critical: false }));
 
@@ -299,6 +319,24 @@ async function main() {
   };
 
   writeReceipt(payload);
+
+  try {
+    const snap = await writeRuntimeRealitySnapshot();
+    console.log(
+      `\n[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=WROTE | runtime-reality-snapshot | data/runtime-reality-snapshot.json | DRIFT_SEVERITY_HINT=${snap.DRIFT_SEVERITY_HINT}\n`,
+    );
+  } catch (e) {
+    console.warn("[tsos-compliance-officer] runtime-reality-snapshot failed:", e?.message || e);
+  }
+
+  try {
+    const dash = await writeOperatorDashboard();
+    console.log(
+      `[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=WROTE | operator-dashboard | data/operator-dashboard.json | repo=${dash.repo.sync_status} | next_action=${dash.next_required_human_action.length > 120 ? `${dash.next_required_human_action.slice(0, 120)}…` : dash.next_required_human_action}\n`,
+    );
+  } catch (e) {
+    console.warn("[tsos-compliance-officer] operator-dashboard failed:", e?.message || e);
+  }
 
   console.log("\n════════════════════════════════════════════════════════════════");
   console.log(" Summary");
