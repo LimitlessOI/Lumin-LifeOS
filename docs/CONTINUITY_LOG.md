@@ -32,6 +32,23 @@
 
 ---
 
+## [FIX] Update 2026-05-12 #7 — Receipt correction: SIS1 commit `5f6d5ebb` is mixed-scope + standing pre-commit hunk-audit rule
+
+### Files changed
+- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — New Change Receipts row documenting that commit `5f6d5ebb` (SIS1) is mixed-scope: 2 SIS1 hunks (`checkIfAlreadyShipped` function + pre-build block) + 4 previously-unstaged LA1 hunks (`DASHBOARD_UI_GROUNDING_FILES`, `loadQuarantinedTaskIds` lane-scoping, `runBuild` files merge). All hunks are functionally valid; only the causality trail was unclear. New **Pre-commit hunk audit** rule added to the Pre-Flight / Post-Flight Rules section: before every commit, run `git diff --cached`, report staged files + hunk categories + whether any hunk is outside the current slice + pure vs mixed-scope; STOP if mixed-scope unless operator approves or commit is split.
+- **`docs/CONTINUITY_LOG.md`** — this entry.
+
+### State after this session
+- Receipt trail is now accurate. Commit `5f6d5ebb` content is fully explained in Amendment 36.
+- Standing hunk-audit rule is in SSOT — future agents must apply it before every commit.
+- No rollback required; no functional regression.
+
+### Next agent: start here
+- Confirm `task_skip_already_shipped` appears in `data/builder-daemon-log.site-builder-autonomous-queue.jsonl` once Forge resumes (circuit-breaker lifted at 22:15 UTC).
+- Then build **failure-pattern memory**: store repeated truncation failure signatures in Neon so the daemon can escalate (try different model, split spec, alert operator) instead of circuit-breaking every 2h.
+
+---
+
 ## [BUILD] Update 2026-05-12 #6 — SIS1 skip-if-shipped + new free providers + repo sync
 
 ### Files changed
