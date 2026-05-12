@@ -860,7 +860,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-asyncFn loadMITs() {
+async function loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -901,7 +901,7 @@ console.error('Error loading MITs:', e);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load MITs</div>';
 }
 }
-asyncFn toggleMIT(el) {
+async function toggleMIT(el) {
 const id = el.dataset.id;
 const isDone = el.querySelector('.mit-check').classList.contains('done');
 const method = isDone ? 'DELETE' : 'POST';
@@ -918,7 +918,7 @@ console.error('Failed to toggle MIT:', await r.text());
 console.error('Error toggling MIT:', e);
 }
 }
-asyncFn addMIT() {
+async function addMIT() {
 const input = $('mit-input');
 const text = input.value.trim();
 if (!text) return;
@@ -938,7 +938,7 @@ console.error('Error adding MIT:', e);
 }
 }
 // ── Calendar ──
-asyncFn loadCalendar() {
+async function loadCalendar() {
 try {
 const r = await API('/api/v1/lifeos/calendar/today');
 const d = await r.json();
@@ -958,7 +958,7 @@ $('cal-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load ca
 }
 }
 // ── Goals ──
-asyncFn loadGoals() {
+async function loadGoals() {
 try {
 const r = await API('/api/v1/lifeos/goals?limit=3');
 const d = await r.json();
@@ -986,7 +986,7 @@ $('goals-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load 
 // ── Scores ──
 function makeRing(value, max, color) {
 const radius = 33;
-const circumference = 2  Math.PI  radius;
+const circumference = 2 * Math.PI * radius;
 const offset = circumference - (value / max) * circumference;
 return `
 <svg width="72" height="72" viewBox="0 0 72 72">
@@ -996,7 +996,7 @@ stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
 </svg>
 `;
 }
-asyncFn loadScores() {
+async function loadScores() {
 try {
 const r = await API('/api/v1/lifeos/scores');
 const d = await r.json();
@@ -1036,7 +1036,7 @@ chatMessages.appendChild(msgEl);
 chatMessages.scrollTop = chatMessages.scrollHeight;
 chatHistory.push({ role, content });
 }
-asyncFn sendMessage() {
+async function sendMessage() {
 const text = chatInput.value.trim();
 if (!text) return;
 addMessage('user', text);
