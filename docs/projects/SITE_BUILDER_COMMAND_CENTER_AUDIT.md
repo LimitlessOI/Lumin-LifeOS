@@ -1,51 +1,50 @@
-# Site Builder Command Center Audit
+### Shipped controls
 
-## Shipped Controls
+The `routes/site-builder-routes.js` file implements the following operator actions, enabling the Command Center to:
 
-The following operator actions are supported by the existing API routes, enabling functionality within the Command Center:
+*   **Initiate Site Builds:**
+    *   `POST /api/v1/sites/build`: Manually trigger a site build from a given URL.
+    *   `POST /api/v1/sites/prospect`: Trigger the full prospect pipeline (opportunity score, site build, cold email send) for a single prospect.
+    *   `POST /api/v1/sites/bulk-prospect`: Trigger the full prospect pipeline for a batch of up to 20 prospects.
+*   **Prospect Analysis & Management:**
+    *   `POST /api/v1/sites/analyze`: Score a prospect's existing website to determine outreach priority.
+    *   `GET /api/v1/sites/previews`: List all generated preview sites.
+    *   `GET /api/v1/sites/prospects`: Retrieve a list of all prospects in the CRM pipeline.
+    *   `PATCH /api/v1/sites/prospects/:clientId/status`: Update a prospect's status (e.g., `converted`, `lost`, `qa_hold`) and `deal_value`.
+    *   `POST /api/v1/sites/follow-up`: Manually send a follow-up email to a specific prospect.
+*   **Pipeline Monitoring & System Health:**
+    *   `GET /api/v1/sites/dashboard`: Retrieve aggregated pipeline statistics (total, built, sent, viewed, replied, converted, total revenue).
+    *   `GET /api/v1/sites/launch-readiness`: Check the system's readiness for revenue generation, identifying missing environment variables or blockers.
+    *   `GET /api/v1/sites/pos-partners`: List supported POS commission partners.
+*   **Automated Tracking:**
+    *   `GET /api/v1/sites/preview-view`: Automatically marks a prospect as 'viewed' when their preview site is opened (triggered by injected pixel).
+    *   `POST /api/v1/sites/email-reply-webhook`: Automatically marks a prospect as 'replied' when they respond to a cold email (Postmark webhook).
 
-*   **Build Site from URL**: `POST /api/v1/sites/build` allows operators to manually build a preview site from a given URL.
-*   **Prospect & Outreach**: `POST /api/v1/sites/prospect` enables processing a single prospect, including opportunity scoring, site building, and sending a cold outreach email.
-*   **Bulk Prospecting**: `POST /api/v1/sites/bulk-prospect` supports processing multiple prospects in a single batch.
-*   **Analyze Existing Site**: `POST /api/v1/sites/analyze` provides the opportunity score, grade, pain points, and other details for a prospect's existing website.
-*   **List Preview Sites**: `GET /api/v1/sites/previews` retrieves a list of all generated preview sites.
-*   **List Prospects (CRM View)**: `GET /api/v1/sites/prospects` provides a paginated list of prospects in the pipeline, suitable for a CRM-style table.
-*   **Update Prospect Status**: `PATCH /api/v1/sites/prospects/:clientId/status` allows operators to manually update a prospect's status (e.g., mark as `converted`) and `deal_value`.
-*   **Send Follow-up Email**: `POST /api/v1/sites/follow-up` triggers a follow-up email for a specific prospect.
-*   **List POS Partners**: `GET /api/v1/sites/pos-partners` provides the list of supported POS commission partners.
-*   **Pipeline Dashboard Stats**: `GET /api/v1/sites/dashboard` delivers aggregated statistics for the entire prospect pipeline (total, built, sent, viewed, replied, converted, total revenue).
-*   **Launch Readiness Check**: `GET /api/v1/sites/launch-readiness` reports on critical environment variables and configuration blockers.
+### Route dependencies
 
-Automated actions that contribute to the pipeline state, but are not direct operator controls:
+The `public/overlay/site-builder-command-center.html` (Operator dashboard) would depend on the following routes to fulfill its described purpose ("analyze prospects, build & send, pipeline table"):
 
-*   **Preview View Tracking**: `GET /api/v1/sites/preview-view` automatically updates a prospect's status to `viewed` when their preview site is opened.
-*   **Email Reply Webhook**: `POST /api/v1/sites/email-reply-webhook` automatically updates a prospect's status to `replied` upon receiving a reply to a cold email.
+*   **Dashboard Overview:** `GET /api/v1/sites/dashboard`
+*   **Prospect Table:** `GET /api/v1/sites/prospects`
+*   **New Prospect Entry:** `POST /api/v1/sites/prospect`, `POST /api/v1/sites/bulk-prospect`
+*   **Pre-pipeline Analysis:** `POST /api/v1/sites/analyze`
+*   **Status Updates:** `PATCH /api/v1/sites/prospects/:clientId/status`
+*   **Manual Follow-ups:** `POST /api/v1/sites/follow-up`
+*   **Preview Links:** `GET /api/v1/sites/previews` (to retrieve a list of previews, likely for linking)
+*   **System Configuration:** `GET /api/v1/sites/pos-partners`, `GET /api/v1/sites/launch-readiness`
 
-## Route Dependencies
+### Risks
 
-The `public/overlay/site-builder-command-center.html` likely depends on the following routes to render its UI and enable operator actions:
+*   **Missing Amendment Document:** The `docs/projects/AMENDMENT_05_SITE_BUILDER.md` file is referenced as the SSOT but was not found (`ENOENT`). This means the audit is based on an incomplete specification, risking misinterpretation of intended features or missing critical requirements.
+*   **Lack of Single Prospect Detail Endpoint:** There is no `GET /api/v1/sites/prospects/:clientId` endpoint. This prevents operators from viewing detailed information for a single prospect, such as their full `metadata`, `qualityReport`, `opportunityReport`, or `outreach_log` entries, which is crucial for QA, troubleshooting, and personalized engagement.
+*   **Limited QA Workflow for `qa_hold`:** While `PATCH /api/v1/sites/prospects/:clientId/status` allows changing a prospect's status out of `qa_hold`, there's no explicit API to trigger a *rebuild* or *repair* for a specific `clientId` if a site is in `qa_hold`. Operators would need to use generic build routes, potentially leading to manual data reconciliation.
+*   **No Direct Email Send for QA-Approved Sites:** If a site is manually moved from `qa_hold` to `sent` status, there's no dedicated API to *just send the initial cold email* for that specific `clientId` without re-running the entire `/prospect` pipeline. The `/prospect` route has `skipEmail`, but no `sendOnlyEmail` option for existing prospects.
+*   **Limited `outreach_log` Visibility:** The `outreach_log` table exists, but there is no API endpoint to query its contents, either generally or for a specific prospect. This limits an operator's ability to review communication history.
 
-*   **Pipeline Table**: `GET /api/v1/sites/prospects`
-*   **Pipeline Summary/Dashboard**: `GET /api/v1/sites/dashboard`
-*   **Manual Site Build Form**: `POST /api/v1/sites/build`
-*   **Single Prospect Outreach Form**: `POST /api/v1/sites/prospect`
-*   **Bulk Prospect Upload**: `POST /api/v1/sites/bulk-prospect`
-*   **Prospect Analysis Tool**: `POST /api/v1/sites/analyze`
-*   **Prospect Detail/Action Buttons**: `PATCH /api/v1/sites/prospects/:clientId/status`, `POST /api/v1/sites/follow-up`
-*   **Preview Site Links/List**: `GET /api/v1/sites/previews`
-*   **POS Partner Selection**: `GET /api/v1/sites/pos-partners`
-*   **System Health Indicator**: `GET /api/v1/sites/launch-readiness`
+### Next queue slices
 
-## Risks
-
-*   **Missing Amendment Document**: The `docs/projects/AMENDMENT_05_SITE_BUILDER.md` file was not found (`ENOENT`). This means the audit relies on the `routes/site-builder-routes.js` header and domain context, which may not fully capture all amendment details or specific operator requirements.
-*   **Rate Limiting for Operators**: The `buildLimiter` (10 builds/hour) and `prospectLimiter` (50 prospects/hour) are applied per IP. While necessary for public API protection, operators using the Command Center from a single IP might encounter these limits during intensive work, potentially impacting workflow.
-*   **Lack of Single Prospect Detail Route**: There is no `GET /api/v1/sites/prospects/:clientId` route. This means the Command Center cannot efficiently fetch detailed information for a single prospect without either loading the entire `/prospects` list and filtering client-side, or making multiple calls to other routes to piece together the data. This is explicitly listed as a next approved task.
-*   **Generic Error Messages**: API error responses (`*j500`) often return only `err.message`. For an operator-facing tool, more structured or user-friendly error codes and messages could improve debugging and user experience.
-
-## Next Queue Slices
-
-1.  **Implement `GET /api/v1/sites/prospects/:clientId`**: Add an endpoint to retrieve full details for a single prospect, including `metadata` and `qualityReport`.
-2.  **Add A/B Email Subject Line Tracking**: Integrate `variant` field into `outreach_log` and track open/reply rates by variant.
-3.  **Improve Quality Scorer**: Enhance `site-builder-quality-scorer.js` with checks for visible phone numbers, Google Maps embeds, and SSL trust badges.
-4.  **Add Preview Site Video Embed**: Wire the `youtubeChannelId` from discovery to `site-builder.js` to embed the latest YouTube video on preview sites.
+*   **Add Single Prospect Detail Endpoint:** Implement `GET /api/v1/sites/prospects/:clientId` to return comprehensive details for a specific prospect, including `metadata`, `qualityReport`, and `opportunityReport`. This directly addresses a critical gap for operator analysis and QA.
+*   **Implement Targeted Email Send:** Add an endpoint or extend an existing one to allow operators to send the initial cold email for a prospect that has already been built (e.g., after manual QA approval from `qa_hold`).
+*   **Expose Outreach Log:** Create an endpoint (e.g., `GET /api/v1/sites/prospects/:clientId/outreach-log`) to retrieve the communication history for a given prospect.
+*   **Preview Site Video Embed:** (As per existing next approved tasks) Wire the `youtubeChannelId` from discovery into `site-builder.js` to embed the latest video on preview sites.
+*   **A/B Email Subject Line Tracking:** (As per existing next approved tasks) Implement `variant` field tracking in `outreach_log` and associated reporting.
