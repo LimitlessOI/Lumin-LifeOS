@@ -53,9 +53,20 @@ data/token-efficiency-log.jsonl
 data/lifeos-operational-grade-log.jsonl
 data/lifeos-operational-grade-last-run.json
 data/tsos-doctor-last-run.json
+# Single Source Runtime Reality v1 (regenerated; schema in docs/RUNTIME_REALITY_SNAPSHOT.md)
+data/runtime-reality-snapshot.json
+data/operator-dashboard.json
+data/operator-runtime-status.html
+data/operator-status-log.jsonl
+data/system-watch-log.jsonl
+data/operator-repair-loop-log.jsonl
+data/operator-stale-failure-log.jsonl
+data/builder-failure-patterns.json
 data/tsos-builder-suite-last-run.json
 data/cursor-pre-push-review*.json
 # Lane cursors for lifeos-builder-continuous-queue.mjs (`BUILDER_QUEUE_USE_CURSOR`; legacy OVERNIGHT_*).
 data/builder-overnight-cursor*.json
 # Env certification probes (hostnames, pass/fail — never paste secret values into this file)
 data/env-certification-log.jsonl
+# Operator IDE / rollup ledger (usage counts — local only; not committed)
+data/operator-consumption-ledger.jsonl

@@ -23,6 +23,11 @@ import { appendFile, readFile, writeFile } from 'fs/promises';
 import { basename, isAbsolute, join } from 'path';
 import { promisify } from 'util';
 import { execFile } from 'child_process';
+import {
+  getEscalationHint,
+  recordFailure as recordBuilderFailure,
+  resolveTask as resolveBuilderTask,
+} from './lib/builder-failure-memory.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -833,7 +838,23 @@ async function main() {
 
     try {
       buildAttempts += 1;
-      const { res, json, ok, modelResolution } = await runBuild(task);
+      // Check failure-pattern memory: inject escalation hint into spec if this task
+      // has failed multiple times across prior circuit-breaker cycles.
+      const escalation = await getEscalationHint(id);
+      const taskToRun = escalation
+        ? { ...task, spec: (task.spec ? task.spec + '\n\n' : '') + escalation.hint }
+        : task;
+      if (escalation) {
+        await logLine({
+          event: 'task_escalation_hint_injected',
+          lane,
+          id,
+          escalation_level: escalation.level,
+          prior_failure_count: escalation.count,
+          KNOW: 'spec_appended_with_escalation_hint_from_failure_memory',
+        });
+      }
+      const { res, json, ok, modelResolution } = await runBuild(taskToRun);
       const buildWallMs = Date.now() - sliceT0;
       buildWallMsSum += buildWallMs;
       if (!ok) {
@@ -851,6 +872,13 @@ async function main() {
         );
         const isSkippableFail = isSyntaxFail || is413Payload;
         perTaskSlice.push({ id, build_wall_ms: buildWallMs, ok: false });
+        // Record failure in persistent memory before deciding what to do with it.
+        const failureRecord = await recordBuilderFailure(
+          id,
+          lane,
+          String(json?.error || json?.detail || '').slice(0, 200),
+          task.target_file,
+        );
         await logLine({
           event: 'task_fail',
           lane,
@@ -861,8 +889,25 @@ async function main() {
           build_wall_ms: buildWallMs,
           is_syntax_fail: isSyntaxFail,
           is_413_payload: is413Payload,
+          failure_memory_count: failureRecord.count,
+          failure_memory_level: failureRecord.escalationLevel,
           json,
         });
+        // Level 3 (10+ cumulative failures): auto-quarantine regardless of failure type.
+        if (failureRecord.escalationLevel >= 3 && !isSkippableFail) {
+          const reason = `failure_pattern_level3_count_${failureRecord.count}_auto_quarantine`;
+          await selfQuarantineTask(task, lane, reason);
+          await logLine({
+            event: 'task_skip_failure_pattern_quarantine',
+            lane,
+            id,
+            target_file: task.target_file,
+            failure_count: failureRecord.count,
+            KNOW: 'level3_escalation_auto_quarantined_operator_review_needed',
+          });
+          console.warn(`⚠ Level-3 escalation on ${id} (${failureRecord.count} cumulative failures) — auto-quarantined.`);
+          continue;
+        }
         if (isSkippableFail && skipOnSyntaxFail()) {
           const skipReason = isSyntaxFail
             ? (json?.syntax_error || json?.error || 'syntax_fail')
@@ -901,6 +946,8 @@ async function main() {
       if (branchResolved) commitsOnExplicitBranch += 1;
       else commitsOnImplicitDefault += 1;
       perTaskSlice.push({ id, build_wall_ms: buildWallMs, ok: true });
+      // Successful build: clear failure-pattern history so future runs start fresh.
+      await resolveBuilderTask(id);
       await logLine({
         event: 'task_ok',
         lane,

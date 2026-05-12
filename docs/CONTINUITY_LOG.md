@@ -32,6 +32,26 @@
 
 ---
 
+## [BUILD] Update 2026-05-12 #8 — FPM1 failure-pattern memory for autonomous builder queue
+
+### Files changed
+- **`scripts/lib/builder-failure-memory.mjs`** (new) — reads/writes `data/builder-failure-patterns.json`; tracks cumulative failure count per task across daemon restarts and circuit-breaker cycles. Exports: `recordFailure(taskId, lane, sig, targetFile)`, `getEscalationHint(taskId)`, `resolveTask(taskId)`. Escalation ladder: level 0 (0–2 fails) = normal; level 1 (3–5) = TOKEN_HINT in spec; level 2 (6–9) = SCOPE_HINT; level 3 (10+) = OPERATOR_ALERT + auto-quarantine.
+- **`scripts/lifeos-builder-continuous-queue.mjs`** — imports the three functions; checks escalation before `runBuild` (hint appended to spec copy); records failure after `!ok`; level-3 path auto-quarantines + continues; resolves after `ok`. New log events: `task_escalation_hint_injected`, `task_skip_failure_pattern_quarantine`. `failure_memory_count` + `failure_memory_level` added to `task_fail` log.
+- **`.gitignore`** — `data/builder-failure-patterns.json` added.
+- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — FPM1 Done backlog entry + Change Receipt row.
+
+### State after this session
+- `npm test`: 8 pass, 0 fail. `node --check` passes on both modified files.
+- FPM1 ships to Railway on next deploy. Forge will have it active when circuit breaker lifts at 22:15 UTC (along with SIS1).
+- `site-builder-postmark-send` will still auto-skip via SIS1 (the `task_skip_already_shipped` path fires first, before any failure check).
+- Failure patterns file does not exist yet — first daemon failure creates it automatically.
+
+### Next agent: start here
+- At 22:15 UTC, check `data/builder-daemon-log.site-builder-autonomous-queue.jsonl` for `task_skip_already_shipped` on `site-builder-postmark-send` — confirms SIS1 is live on Railway.
+- Next build slice: **post-commit smoke router** — after a task commits successfully, run a fast sanity check on the committed file (`node --check` + custom verifier) and log `smoke_pass`/`smoke_fail` before the queue proceeds to the next task.
+
+---
+
 ## [FIX] Update 2026-05-12 #7 — Receipt correction: SIS1 commit `5f6d5ebb` is mixed-scope + standing pre-commit hunk-audit rule
 
 ### Files changed
