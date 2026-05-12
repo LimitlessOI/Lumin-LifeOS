@@ -1,58 +1,23 @@
-/*
- * LifeOS Dashboard Shell CSS Tokens
- *
- * This file defines semantic color, spacing, and radius variables for the LifeOS dashboard shell,
- * supporting both light and dark themes.
- *
- * For more details, refer to: docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md
- */
+/* Refer to LIFEOS_DASHBOARD_BUILDER_BRIEF.md for context. */
 
-:root {
-  /* Dark Theme (Default) */
+:root[data-theme="dark"] {
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
-  --dash-surface-raised: #0d0d15;
-  --dash-surface-overlay: #1e1e28;
   --dash-text: #e8e8f0;
-  --dash-text-secondary: #9999bb;
   --dash-muted: #555566;
-  --dash-accent: #5b6af5; /* Today */
-  --dash-accent-health: #10b981;
-  --dash-accent-growth: #34d399;
-  --dash-accent-finance: #22d3ee;
-  --dash-accent-warning: #f59e0b; /* Decisions */
-  --dash-accent-mirror: #7c3aed;
-  --dash-accent-conflict: #e05555;
+  --dash-accent: #5b6af5;
   --dash-border: rgba(255,255,255,0.07);
-  --dash-border-focus: rgba(255,255,255,0.18);
-  --dash-radius-sm: 6px;
-  --dash-radius-md: 10px;
   --dash-radius-lg: 14px;
-  --dash-radius-xl: 20px;
-  --dash-space-unit: 8px;
+  --dash-space-unit: 4px;
 }
 
-html[data-theme="light"] {
-  /* Light Theme */
+:root[data-theme="light"] {
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
-  --dash-surface-raised: #f0f2f7;
-  --dash-surface-overlay: #e8ebf2;
   --dash-text: #1a1a22;
-  --dash-text-secondary: #555566;
-  --dash-muted: #9999aa;
+  --dash-muted: #666677;
   --dash-accent: #5b6af5;
-  --dash-accent-health: #10b981;
-  --dash-accent-growth: #34d399;
-  --dash-accent-finance: #22d3ee;
-  --dash-accent-warning: #f59e0b;
-  --dash-accent-mirror: #7c3aed;
-  --dash-accent-conflict: #e05555;
-  --dash-border: rgba(0,0,0,0.1);
-  --dash-border-focus: rgba(0,0,0,0.2);
-  --dash-radius-sm: 6px;
-  --dash-radius-md: 10px;
+  --dash-border: rgba(0,0,0,0.07);
   --dash-radius-lg: 14px;
-  --dash-radius-xl: 20px;
-  --dash-space-unit: 8px;
+  --dash-space-unit: 4px;
 }
