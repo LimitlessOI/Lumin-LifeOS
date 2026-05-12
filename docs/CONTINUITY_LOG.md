@@ -32,6 +32,310 @@
 
 ---
 
+## [BUILD] Update 2026-05-12 #6 — SIS1 skip-if-shipped + new free providers + repo sync
+
+### Files changed
+- **`scripts/lifeos-builder-continuous-queue.mjs`** — `checkIfAlreadyShipped(task)` + pre-build check block (SIS1). For `.js` targets: disk read + line count ≥ 10 + `node --check`; if all pass, logs `task_skip_already_shipped`, advances cursor, no builder call.
+- **`services/council-service.js`** — `github_models` + `fireworks` added to `OPENAI_COMPATIBLE_PROVIDERS`, `getChatCompletionUrl()`, `getApiKeyForProvider()`.
+- **`config/council-members.js`** — `github_llama` (DeepSeek-V3-0324 via GitHub Models) + `fireworks_llama` added.
+- **`services/free-tier-governor.js`** — `github_models` (4850 req/day) + `fireworks` (97 req/day) in `PROVIDER_LIMITS` + `PROVIDER_PRIORITY`.
+- **`services/savings-ledger.js`** — both new providers in `COST_PER_M` + `FREE_PROVIDERS`.
+- **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** — SIS1 receipt + Done backlog entry.
+- **`docs/projects/AMENDMENT_01_AI_COUNCIL.md`** — new provider integration receipt.
+
+### State after this session
+- Compliance officer: all 12 gates GREEN (`exit_fail=false`), `DRIFT_SEVERITY_HINT=INFO`, repo aligned.
+- Nova: Grade A. Atlas: Grade C (queue_paused until 20:58). Forge: Grade B (queue_paused until 22:15).
+- At 22:15, Forge will resume and `site-builder-postmark-send` will be auto-skipped (file exists, 55 lines, syntax OK). Cursor advances to next task.
+- `GITHUB_TOKEN` already on Railway — `github_llama` (DeepSeek-V3-0324) usable immediately after deploy. `FIREWORKS_API_KEY` not yet set.
+
+### Next agent: start here
+- Wait for Forge to resume at 22:15 UTC and confirm `task_skip_already_shipped` in daemon log.
+- Next build slice: **failure-pattern memory** — when builder returns truncation error for a task N times, store the pattern + flag in Neon so the daemon can escalate (try different model, split spec, or alert operator) rather than circuit-breaking every 2h.
+
+---
+
+## [BUILD] Update 2026-05-12 #5 — SF1 stale-failure detector (read-only, pre-RLn)
+
+### Files changed
+- **`scripts/operator-stale-failure-detect.mjs`**, **`npm run operator:stale-failure-detect`** — quarantine vs queue **`target_file`** + **`node --check`** for **`.js`**; verdicts **STALE_LIKELY_SYNTAX_GHOST** / **REAL_*** / **UNKNOWN_***; append **`data/operator-stale-failure-log.jsonl`** (gitignored) unless **`--no-log`**; **`--json`** for machine output.
+- **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`package.json`**, **`.gitignore`**.
+
+### State after this session
+- Operator can run **`npm run operator:stale-failure-detect`** before spending builder/council tokens to see whether a quarantine row still matches disk reality (heuristic; **UNKNOWN** stays unknown).
+
+### Next agent: start here
+- **`RL3`:** use **`operator:stale-failure-detect`** + **`operator:status`**, then one narrow repair script if evidence is strong.
+
+---
+
+## [BUILD] Update 2026-05-12 #4 — RL2 closed repair loop (TC morning digest quarantine vs on-disk truth)
+
+### Files changed
+- **`scripts/operator-repair-loop-r2-once.mjs`**, **`npm run operator:repair-loop:r2`** — detect stale **`tc-morning-digest-service`** quarantine (`'party…` / **`Invalid or unexpected token`**) while **`services/tc-morning-digest-service.js`** is shipped → **`node --check`** → prune matching **`data/quarantined-tasks.json`** rows → **`quarantine-cleared-tasks.json`** → **`npm test`** → **`data/operator-repair-loop-log.jsonl`**.
+- **`tests/tc-morning-digest-service-module.test.js`** — regression: module imports (**`getTCMorningDigest`**, **`formatTCDigestForEmail`**, **`formatTCDigestForSMS`**) without DB.
+- **`package.json`** — **`test`** list + **`operator:repair-loop:r2`** script.
+- **`docs/OPERATOR_DASHBOARD_JSON.md`** (Heart monitor row, execution **2e**, changelog), **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`docs/projects/AMENDMENT_17_TC_SERVICE.md`**, **`docs/SYSTEM_CAPABILITIES.md`**.
+
+### State after this session
+- **`npm test`** and **`npm run operator:repair-loop:r2`** exit **0**; **`quarantine_removed=2`**. **`npm run operator:status`** — **`last_failed_task`** advances past digest (e.g. to **`tc-stripe-billing-service`**). **`fail_closed`** may still reflect compliance/overseer rows until **`git pull`** / compliance re-run when appropriate.
+
+### Next agent: start here
+- **`RL3`:** next dominant quarantine or **`fail_closed`** driver from fresh **`operator:status`** + **`data/quarantined-tasks.json`** — new **`scripts/operator-repair-loop-r3-once.mjs`** (or scoped name) + amendment receipt; do not extend RL1/RL2 scripts with new patterns.
+
+---
+
+## [BUILD] Update 2026-05-12 #3 — RL1 closed repair loop (OH1-linked) + verify gate fix
+
+### Files changed
+- **`services/site-builder-postmark-helper.js`** — Postmark **`sendProspectOutreach`** (GAP-FILL for truncated builder output on **`site-builder-postmark-send`**).
+- **`scripts/operator-repair-loop-once.mjs`**, **`npm run operator:repair-loop`** — detect matching quarantine → **`node --check`** → prune **`data/quarantined-tasks.json`** → **`quarantine-cleared-tasks.json`** → **`npm test`** → **`data/operator-repair-loop-log.jsonl`** (gitignored).
+- **`tests/site-builder-postmark-helper.test.js`** — regression (no-token + **`dry_run`**); follow-up: **`import path from "node:path"`** + **`@ssot`** so **`npm test`** passes.
+- **`docs/projects/AMENDMENT_05_SITE_BUILDER.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`** ( **`Last Updated`** chain: SW1 vs OH1 restored), **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`package.json`**, **`.gitignore`**.
+
+### State after this session
+- **RL1** is the first finished **detect → diagnose → repair → verify → receipt → regression** slice tied to **`operator:status`** / quarantine receipts; **`npm test`** green after **`path`** import fix. Next dominant wound from status is **`RL2`** (separate narrow script per Amendment **36** — no grab-bag **`elseif`** in RL1).
+
+### Next agent: start here
+- Run **`npm run operator:status`**; pick the next repeated **`fail_closed`** / quarantine pattern; ship **`RL2`** with the same receipt discipline.
+
+---
+
+## [FIX] Update 2026-05-12 #2 — TC webhook validator hardening
+
+### Files changed
+- **`services/tc-webhook-validator.js`** — **`timingSafeEqualUtf8`** (length check before **`crypto.timingSafeEqual`**); **`missing_signature`** when secret configured but header absent.
+- **`docs/projects/AMENDMENT_17_TC_SERVICE.md`** — **Last Updated** + Audit Pass change receipt row.
+
+### State after this session
+- **`node --check`** + **`npm test`** pass. TC builder lane may still show **`queue_paused`** until operator clears pause / queue; overseer **`degraded_warn`** unchanged until lane healthy.
+
+### Next agent: start here
+- Optional: mark **`tc-webhook-validator`** queue task **done** or skip in queue JSON if product owner accepts shipped file (avoid daemon burning tokens re-attempting same target).
+
+---
+
+## [FIX] Update 2026-05-12 #1 — Overseer PATH false-red + system watch (SW1)
+
+### Files changed
+- **`scripts/tsos-overseer-daemon.mjs`** — **`childEnvForChecks()`**; **ENOENT** stderr hint; JSDoc.
+- **`scripts/tsos-system-watch.mjs`**, **`npm run tsos:system-watch`**, **`data/system-watch-log.jsonl`** (gitignored).
+- **`package.json`**, **`.gitignore`**, **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/QUICK_LAUNCH.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**.
+
+### State after this session
+- **`TSOS_OVERSEER_STRICT=0 node scripts/tsos-overseer-daemon.mjs --once`** — all **`npm`** checks show realistic **`elapsedMs`**; **`overall_status`** **`degraded_warn`** only for **`degraded_lanes`** (**`tc`**), not bogus required-check failures.
+- **`npm run tsos:system-watch -- --minutes 1 --interval-sec 25`** — two ticks, all probes **ok** (log gitignored).
+
+### Next agent: start here
+- **Adam:** leave **`npm run tsos:system-watch`** running in a terminal for a long soak (default **60** min); inspect **`data/system-watch-log.jsonl`**. **Closed repair loop** still pending on real **`fail_closed`** (not PATH noise).
+
+---
+
+## [BUILD] Update 2026-05-11 #14 — Operator runtime status CLI (OH1) — heart monitor
+
+### Files changed
+- **`scripts/operator-runtime-status.mjs`**, **`npm run operator:status`** / **`tsos:operator-status`**, optional **`--html`** → **`data/operator-runtime-status.html`**; append-only **`data/operator-status-log.jsonl`** (gitignored).
+- **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/RUNTIME_REALITY_SNAPSHOT.md`**, **`docs/TSOS_COMPLIANCE_OFFICER.md`**, **`docs/QUICK_LAUNCH.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`.gitignore`**, **`package.json`**.
+
+### State after this session
+- Read-only: reads **`data/runtime-reality-snapshot.json`** (or in-memory snapshot if missing); uses **`buildOperatorDashboard()`** in memory only (does not write **`operator-dashboard.json`**).
+
+### Next agent: start here
+- **One closed repair loop** on top **`fail_closed`** pattern; then packet-level hash gates per program order — not before Adam-visible status is stable.
+
+---
+
+## [BUILD] Update 2026-05-11 #13 — Operator dashboard JSON (OD1) + CI overseer strict (OS1)
+
+### Files changed
+- **`scripts/generate-operator-dashboard-json.mjs`**, **`npm run operator:dashboard`**, **`npm run tsos:operator-dashboard`** — **`data/operator-dashboard.json`** (gitignored): repo, compliance, overseer, daemons, queues, quarantine, **`failures_by_class`**, token tail, **`next_required_human_action`**.
+- **`scripts/tsos-compliance-officer.mjs`** — **`writeOperatorDashboard()`** after runtime snapshot.
+- **`scripts/tsos-overseer-daemon.mjs`** — **`TSOS_OVERSEER_STRICT`**, **`resolveCheckSeverities()`**, **`--once`** + strict → exit **1** on required failures; **`@ssot`**.
+- **`.github/workflows/ci.yml`**, **`.github/workflows/ci-cd.yml`** — overseer step after compliance.
+- **`docs/OPERATOR_DASHBOARD_JSON.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`**, **`docs/QUICK_LAUNCH.md`**, **`docs/TSOS_COMPLIANCE_OFFICER.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/RUNTIME_REALITY_SNAPSHOT.md`** (triage row), **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`.gitignore`**, **`package.json`**.
+
+### State after this session
+- **`npm run operator:dashboard`** writes JSON; **`npm run tsos:compliance-officer`** refreshes it. Local **`overseer --once`** fails if another overseer holds the lock (expected on dev laptops; CI is clean).
+
+### Next agent: start here
+- Optional: CI **artifact** upload of **`operator-dashboard.json`**; overlay reader; **FSAR** only after Amendment **36** backlog **#8** gate.
+
+---
+
+## [BUILD] Update 2026-05-11 #12 — Single Source Runtime Reality (RRS1)
+
+### Files changed
+- **`scripts/lib/git-origin-alignment.mjs`** — shared **`getGitOriginAlignment()`** for **`repo:sync-check`** + snapshot.
+- **`scripts/generate-runtime-reality-snapshot.mjs`**, **`npm run runtime:reality-snapshot`** — **`data/runtime-reality-snapshot.json`** (gitignored): **`SYSTEM_STATE_ID`**, **`COMMIT_SHA`**, **`SSOT_VERSION`**, **`DICT_VERSION`**, **`SCHEMA_VERSION`**, **`QUEUE_VERSION`**, **`DEPLOY_VERSION`**, **`DRIFT_SEVERITY_HINT`** (includes compliance **`exit_fail`**).
+- **`scripts/repo-sync-check.mjs`**, **`scripts/tsos-compliance-officer.mjs`** — compliance calls **`writeRuntimeRealitySnapshot()`** after receipt.
+- **`docs/RUNTIME_REALITY_SNAPSHOT.md`**, **`docs/OPERATIONAL_REALITY_SYNC.md`** §5, **`docs/QUICK_LAUNCH.md`** 6b, **`docs/SYSTEM_CAPABILITIES.md`** **RRS1** + **CO1** note + changelog, **`docs/TSOS_COMPLIANCE_OFFICER.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`.gitignore`**, **`package.json`**.
+
+### State after this session
+- **`npm run runtime:reality-snapshot`** generates snapshot; **`npm run tsos:compliance-officer`** refreshes it at end of run.
+
+### Next agent: start here
+- Operator dashboard (**GPT #4**): consume **`runtime-reality-snapshot.json`** + compliance receipt; defer packet **`CONST_HASH`** locks until transport SSOT (**GPT #2**).
+
+---
+
+## [BUILD] Update 2026-05-11 #11 — Operational reality sync + `main` fast-forward
+
+### Files changed
+- **`git pull --ff-only origin main`** — this clone was **hundreds of commits behind** `origin/main`; now **`main...origin/main`** (no behind) **KNOW** after fetch + FF pull.
+- **`docs/OPERATIONAL_REALITY_SYNC.md`** — single commit-graph rule, governance tier vocabulary (1 advisory / 2 degraded / 3 fail-closed), compliance hook.
+- **`scripts/repo-sync-check.mjs`**, **`package.json`** **`repo:sync-check`**.
+- **`scripts/tsos-compliance-officer.mjs`** — first gate **`repo:sync-check`**; **`TSOS_COMPLIANCE_SKIP_REPO_SYNC`**.
+- **`docs/QUICK_LAUNCH.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**.
+
+### State after this session
+- **`npm run tsos:compliance-officer`** includes **`repo_sync_check`**; **`npm run repo:sync-check`** **0** when aligned.
+
+### Next agent: start here
+- Commit or stash local deltas, then keep **`git fetch` + `repo:sync-check`** rhythm before audits; optional **`TSOS_OVERSEER_STRICT`**-style env still backlog.
+
+---
+
+## [FIX] Update 2026-05-11 #10 — `ssot-check` amendment date probe (governance / INDEX)
+
+### Files changed
+- **`scripts/ssot-check.js`** — **`getAmendmentLastUpdated()`** uses amendment **head** (table **Last Updated** row, else first **`**Last Updated:**`** in first **120** lines) instead of first match file-wide.
+- **`docs/projects/INDEX.md`**, **`docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`** — receipts / **Last Updated** table row.
+
+### State after this session
+- **`npm run ssot:validate`** and **`npm run tsos:compliance-officer`** **PASS** on current tree.
+
+### Next agent: start here
+- **`main`** is **far behind `origin/main`** in this clone (**KNOW** from **`git status`**); merge or rebase when operator-ready so daemon/CI and local SSOT agree.
+
+---
+
+## [FIX] Update 2026-05-11 #9 — Dashboard overlay static gates + gate-change SSOT co-touch
+
+### Files changed
+- **`public/overlay/lifeos-dashboard.html`** — **`asyncFn`** → **`async function`**; **`makeRing`** circumference formula; **`<style>`** **`/* */`** comments (invalid **`/ … /`**).
+- **`docs/projects/AMENDMENT_01_AI_COUNCIL.md`** — Change Receipt (**`protocolLabel`** / idea-generation path); **Pre-Build Readiness** **`Last Updated`** synced (**`ssot-check`** first-match).
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Change Receipt + Agent Handoff (**`ssot_validate`** / overlay **`KNOW`**).
+
+### State after this session
+- **`npm run check:overlay`**, **`npm run lifeos:supervise:static`**, **`npm test`** (local unit pass; HTTP skipped) verified; **~5 min** watch all green on overlay gates.
+- **`npm run tsos:compliance-officer`** requires **`ssot:validate`** — passes when **`lifeos-gate-change-council-run.js`** + **`AMENDMENT_01`** ship together.
+
+### Next agent: start here
+- Commit **`services/lifeos-gate-change-council-run.js`** with **`docs/projects/AMENDMENT_01_AI_COUNCIL.md`** + dashboard overlay in one slice so **`ssot:validate`** stays green; continue **modes v1** UX slice per Amendment **21** handoff when ready.
+
+---
+
+## [BUILD] Update 2026-05-11 #8 — Privacy & AI management SSOT wired into navigation
+
+### Files changed
+- **`docs/projects/INDEX.md`** — Last Updated, HOW THIS WORKS bullets, PROJECT REGISTRY row **40** (Privacy & Mental Sovereignty).
+- **`docs/AI_MANAGEMENT_SYSTEM_SSOT.md`** — change log row for navigation wiring.
+- **`docs/projects/AMENDMENT_40_PRIVACY_MENTAL_SOVEREIGNTY.md`** — Last Updated + Change Receipt (wiring pass).
+- **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** — Related index rows for Amendment 40, AI Management SSOT, INDEX.
+- **`docs/QUICK_LAUNCH.md`** — LifeOS lane: Amendment 40 + AI Management SSOT before new capture/consent/training/ranking surfaces.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Constitutional LifeOS UX SSOT bullet **4**; **Last Updated**; **Agent Handoff** row **Privacy & AI governance**; **Change Receipt** row.
+- **`docs/CONTINUITY_LOG_LIFEOS.md`** — LifeOS lane pointer to cross-cutting **[BUILD] #8**.
+
+### State after this session
+- **KNOW:** Governance docs from the advisor thread are discoverable from INDEX, program map, quick launch, and Amendment 21 — no code or builder changes.
+- **THINK:** Product implementation of consent UI and recommendation disclosure remains backlog per Amendment 40.
+
+### Next agent: start here
+- Continue LifeOS queue / modes v1 slice per **Agent Handoff**; when touching voice, ambient, or recommendations, implement against **Amendment 40** + **AI_MANAGEMENT_SYSTEM_SSOT** disclosure fields.
+
+---
+
+## [BUILD] Update 2026-05-11 #7 — v1 modes spec anchor (Calm / Focus / Family / Operator)
+
+### Files changed
+- **`docs/projects/LIFEOS_UX_ARCHITECTURE.md`** — **## v1 modes (spec anchor — four only)** wide table + NSSOT alignment + persistence **THINK** note; Layer B text points to v1 four; **v1 build guidance** bullet 1 updated.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Change Receipt row, **Last Updated**, **Agent Handoff Notes** new **Next UX slice (modes v1)** row.
+- **`docs/QUICK_LAUNCH.md`** — LifeOS lane pointer to **`LIFEOS_UX_ARCHITECTURE.md`**.
+- **`docs/CONTINUITY_LOG.md`** — this entry.
+
+### State after this session
+- Builders and Cursor sessions have a **single table** defining the first four modes without expanding to nine UIs or rewriting **`DASHBOARD_UI_MAP.md`**.
+
+### Next agent: start here
+- Execute **Next UX slice (modes v1)** in **`AMENDMENT_21` → Agent Handoff Notes** (preflight → `/build`, one mode pair, receipts). Optional: add queue **`tasks[]`** row with spec excerpt pointing to **`LIFEOS_UX_ARCHITECTURE.md` § v1 modes**.
+
+---
+
+## [BUILD] Update 2026-05-11 #6 — Lumin-first UX architecture SSOT + wiring
+
+### Files changed
+- **`docs/projects/LIFEOS_UX_ARCHITECTURE.md`** — already present from prior slice; confirmed as principles hub.
+- **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`**, **`docs/mockups/DASHBOARD_UI_MAP.md`**, **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`** — pointers and **LifeOS interaction model (2026+)** summary.
+- **`scripts/lifeos-builder-continuous-queue.mjs`**, **`scripts/verify-dashboard-ui-map.mjs`** — UX doc in dashboard UI grounding + verifier.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Constitutional UX bullet, Visual SSOT row, Change Receipt, Last Updated.
+
+### State after this session
+- Cold agents and **`lifeos:verify:ui-map`** treat Lumin-first hierarchy as required reading alongside the pixel map and brief.
+
+### Next agent: start here
+- Optional vertical slice per **`LIFEOS_UX_ARCHITECTURE.md`** v1 (e.g. Morning vs Evening or Calm vs Operator: saved context + density only). If pixel checklist changes materially, **`npm run lifeos:gate-change-run`** on the live app before editing **`DASHBOARD_UI_MAP.md`** law.
+
+---
+
+## [BUILD] Update 2026-05-11 #5 — Dashboard UI map + mockup URLs (no invented chrome)
+
+### Files changed
+- **`docs/mockups/DASHBOARD_UI_MAP.md`**, placeholder **`lifeos-dashboard-density-study-light-dark-mobile-desktop.png`**, **`routes/lifeos-council-builder-routes.js`** (binary `files[]` injection + **`MOCKUP_VIEW_URL`**), **`routes/public-routes.js`** (`GET /overlay/ui-mockups/:file`), **`scripts/lifeos-builder-continuous-queue.mjs`** (auto UI grounding `files[]`), **`scripts/verify-dashboard-ui-map.mjs`**, **`scripts/tsos-compliance-officer.mjs`**, **`package.json`**, **`public/overlay/lifeos-dashboard.html`** (SSOT comment), **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`**, **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/BUILDER_OPERATOR_ENV.md`**, **`AMENDMENT_12`**, **`AMENDMENT_21`**.
+
+### State after this session
+- Builder council prompts now carry **textual IA map** + **stable board URLs** when **`PUBLIC_BASE_URL`** is set; queue prepends the same bundle for dashboard/shell targets by default (**`BUILDER_ENFORCE_UI_MAP`**).
+
+### Next agent: start here
+- Replace density PNG placeholder with final art when ready; optional Playwright golden screenshots later.
+
+## [BUILD] Update 2026-05-11 #4 — OCL1 Neon + HTTP (system-backed ledger)
+
+### Files changed
+- **`db/migrations/20260511_operator_consumption_ledger.sql`**, **`services/operator-consumption-ledger-service.js`**, **`routes/operator-consumption-ledger-routes.js`**, **`startup/register-runtime-routes.js`**, **`scripts/operator-consumption-ledger.mjs`**, **`docs/OPERATOR_CONSUMPTION_LEDGER.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`**.
+
+### State after this session
+- **`POST /api/v1/lifeos/operator-consumption/entries`** and **`GET .../summary?days=N`** persist/query **`operator_consumption_ledger`** (same JSON shape as CLI). CLI uses API when **`PUBLIC_BASE_URL`** + command key; otherwise local JSONL.
+
+### Next agent: start here
+- After deploy: confirm migration applied (Neon) then smoke **`npm run operator:consumption -- append --json '…'`** with prod URL + key.
+
+---
+
+## [BUILD] Update 2026-05-11 #3 — Operator consumption ledger (OCL1)
+
+### Files changed
+- **`scripts/operator-consumption-ledger.mjs`**, **`package.json`** (`operator:consumption`), **`docs/OPERATOR_CONSUMPTION_LEDGER.md`**, **`data/operator-consumption-ledger.example.jsonl`**, **`.gitignore`**, **`docs/SYSTEM_CAPABILITIES.md`** (OCL1), **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**.
+
+### State after this session
+- **Local append-only ledger** for Cursor (or other) dashboard numbers — **`data/operator-consumption-ledger.jsonl`** is **gitignored**; use **`npm run operator:consumption -- summary`** / **`append --json '…'`**. Grading rubric: **split** integrity (compliance-officer / preflight) vs consumption (DONT_KNOW until enough KNOW rows) per doc.
+
+### Next agent: start here
+- Nothing blocking. Optional: one-line pointer in **`docs/QUICK_LAUNCH.md`** verify section to OCL1 if operators keep missing it.
+
+---
+
+## [REVIEW] Update 2026-05-11 #2 — NSSOT audit (read NSSOT + verifiers + CI repair)
+
+### Files changed
+- **`services/lifeos-gate-change-council-run.js`** — **`@ssot`** **Amendment 21 → Amendment 01** (council gate-change).
+- **`package.json`** — **`tsos:compliance-officer`**, **`compliance-officer`**, **`lifeos:compliance-officer`**.
+- **`.github/workflows/ci.yml`** — root **`npm test`** + **`npm run compliance-officer`**, Node **22** (removed deleted **frontend/backend** paths).
+- **`.github/workflows/ci-cd.yml`** — Node **22**, **`npm ci`**, **`compliance-officer`** step.
+- **`docs/projects/AMENDMENT_01_AI_COUNCIL.md`**, **`docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/QUICK_LAUNCH.md`**.
+
+### Audit evidence (KNOW)
+- **`npm run compliance-officer`** — **exit 0** after **`@ssot`** fix + receipts in same diff (**`ssot:validate`** green).
+- **Audit doc inventory:** **`docs/AUDIT_SYSTEM.md`** exists (FSAR / drift / regression loops). Older **`AUDIT_AND_AUTONOMOUS_IMPROVEMENT_PROTOCOL`** filename **not** in tree — **THINK:** reconcile in NSSOT only via **Article VII** if still referenced elsewhere.
+
+### Grade (§2.11b)
+- **Before:** **6/10** — CI **`ci.yml`** referenced removed dirs; Compliance Officer not on **`npm run`**; **`ssot:validate`** coupling false positive on council file.
+- **After:** **9/10** — CI honest; **`CO1`** documented; **`@ssot`** aligned. **Residue:** if a future NSSOT revision still cites a missing **100-idea** audit filename, add stub forwarder or restore that doc under **`docs/`**.
+
+### Next agent
+- Run **`npm run compliance-officer`** once merged; optional **`npm run gen:rules`** if companion text for **CO1** should appear in **`AGENT_RULES.compact.md`** (watch **`.compact-rules-baseline`**).
+
+---
+
 ## [FIX] Update 2026-05-10 #12 — Fix 6/7/8 post-commit verification + daemon collision resolved
 
 ### Files changed

@@ -100,6 +100,52 @@ function legacyCursorCandidatesForMigration(tasksPath, cursorPath) {
   return out.filter((p, i, a) => a.indexOf(p) === i && p !== cursorPath);
 }
 
+/** Prepended to `files[]` for LifeOS shell/dashboard targets so council always sees the UI map + boards. */
+const DASHBOARD_UI_GROUNDING_FILES = [
+  'docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md',
+  'docs/LIFEOS_PROGRAM_MAP_SSOT.md',
+  'docs/projects/LIFEOS_UX_ARCHITECTURE.md',
+  'docs/mockups/DASHBOARD_UI_MAP.md',
+  'docs/mockups/lifeos-system-map-board-2x.png',
+  'docs/mockups/lifeos-shell-dashboard-architecture-board-2x.png',
+  'docs/mockups/lifeos-expansion-stack-board-2x.png',
+  'docs/mockups/lifeos-dashboard-density-study-light-dark-mobile-desktop.png',
+];
+
+function dashboardUiGroundingEnabled() {
+  const raw = String(process.env.BUILDER_ENFORCE_UI_MAP || '1').trim();
+  return !/^0|false|no$/i.test(raw);
+}
+
+function taskWantsDashboardUiGrounding(task) {
+  if (!dashboardUiGroundingEnabled()) return false;
+  const tf = String(task.target_file || '')
+    .toLowerCase()
+    .replace(/\\/g, '/');
+  if (!tf) return false;
+  if (tf.includes('lifeos-dashboard')) return true;
+  if (tf.includes('lifeos-app.html')) return true;
+  if (tf.includes('lifeos-bootstrap')) return true;
+  if (tf.includes('public/shared/') && tf.includes('lifeos-dashboard')) return true;
+  if (tf.includes('public/overlay/lifeos-dashboard')) return true;
+  if (tf.includes('public/overlay/lifeos-app')) return true;
+  if (tf.includes('public/overlay/lifeos-login')) return true;
+  return false;
+}
+
+function mergeDashboardUiGroundingFiles(files) {
+  const base = Array.isArray(files) ? [...files] : [];
+  const seen = new Set(base.map((f) => String(f).trim().replace(/^[/\\]+/, '')));
+  const prefix = [];
+  for (const p of DASHBOARD_UI_GROUNDING_FILES) {
+    if (!seen.has(p)) {
+      seen.add(p);
+      prefix.push(p);
+    }
+  }
+  return [...prefix, ...base];
+}
+
 async function persistCursor(cursorPath, nextStartIndex) {
   await writeFile(
     cursorPath,
@@ -123,14 +169,25 @@ async function loadCursor(cursorPath, tasksPath) {
   return { nextStartIndex: 0 };
 }
 
-async function loadQuarantinedTaskIds(laneName) {
+async function loadQuarantinedTaskIds(laneName, tasks = []) {
+  const validTaskIds = new Set(
+    (Array.isArray(tasks) ? tasks : [])
+      .map((task) => task?.id)
+      .filter((id) => typeof id === 'string' && id.length > 0),
+  );
   try {
     const raw = await readFile(QUARANTINE_PATH, 'utf8');
     const rows = JSON.parse(raw);
     if (!Array.isArray(rows)) return new Set();
     return new Set(
       rows
-        .filter((row) => row && typeof row.task_id === 'string' && String(row.lane || '') === String(laneName || ''))
+        .filter(
+          (row) =>
+            row &&
+            typeof row.task_id === 'string' &&
+            String(row.lane || '') === String(laneName || '') &&
+            validTaskIds.has(row.task_id),
+        )
         .map((row) => row.task_id),
     );
   } catch {
@@ -291,13 +348,16 @@ async function runBuild(task) {
         : `task_override_blocked:${requestedModel}`;
   const branchEffective = resolveQueueTaskCommitBranch(task);
 
+  const rawFiles = task.files || [];
+  const files = taskWantsDashboardUiGrounding(task) ? mergeDashboardUiGroundingFiles(rawFiles) : rawFiles;
+
   const body = {
     domain: task.domain || 'lifeos-platform',
     mode: 'code',
     model,
     autonomy_mode: 'max',
     internet_research: false,
-    files: task.files || [],
+    files,
     task: task.task,
     spec: task.spec,
     target_file: task.target_file,
@@ -417,6 +477,39 @@ async function selfQuarantineTask(task, lane, syntaxError) {
   }
 }
 
+/**
+ * Returns { skip: true, lineCount } when a .js target_file already exists on disk,
+ * has enough lines, and passes `node --check`. Non-.js files always return skip=false
+ * — no deterministic verifier exists here for HTML/CSS/MD.
+ *
+ * Purpose: prevent the daemon from re-calling the builder for a file that a GAP-FILL
+ * or prior successful builder cycle already wrote. Saves tokens and stops the
+ * repeated-truncation loop (file exists → builder truncates → circuit breaker fires).
+ */
+async function checkIfAlreadyShipped(task) {
+  const targetFile = task.target_file;
+  if (!targetFile || !targetFile.endsWith('.js')) return { skip: false };
+  const absPath = isAbsolute(targetFile) ? targetFile : join(ROOT, targetFile);
+  let content;
+  try {
+    content = await readFile(absPath, 'utf8');
+  } catch {
+    return { skip: false }; // file not on disk — normal, proceed with build
+  }
+  const lineCount = content.split('\n').length;
+  const minLines = Math.max(
+    5,
+    parseInt(process.env.BUILDER_SKIP_IF_SHIPPED_MIN_LINES || '10', 10) || 10,
+  );
+  if (lineCount < minLines) return { skip: false, detail: `too_short_${lineCount}` };
+  try {
+    await execFileAsync(process.execPath, ['--check', absPath], { timeout: 8000 });
+  } catch {
+    return { skip: false, detail: 'syntax_fail' };
+  }
+  return { skip: true, lineCount };
+}
+
 function baseLastRunSkeleton({
   lane,
   tasksPath,
@@ -525,7 +618,7 @@ async function main() {
   const raw = await readFile(tasksPath, 'utf8');
   const parsed = JSON.parse(raw);
   const tasks = parsed.tasks || [];
-  const quarantinedIds = await loadQuarantinedTaskIds(lane);
+  const quarantinedIds = await loadQuarantinedTaskIds(lane, tasks);
 
   let startIdx = 0;
   if (hasExplicitStart) {
@@ -715,6 +808,29 @@ async function main() {
       task_force_model: task.force_model === true,
     });
     const sliceT0 = Date.now();
+
+    // ── Skip-if-shipped ───────────────────────────────────────────────────────
+    // If the .js target already exists on disk with adequate line count and clean
+    // syntax, skip the builder call entirely. No tokens spent. Cursor still advances.
+    // Covers GAP-FILL files and any task the builder already completed in a prior run.
+    const shipped = await checkIfAlreadyShipped(task);
+    if (shipped.skip) {
+      await logLine({
+        event: 'task_skip_already_shipped',
+        auto_skip: 'target_file_already_valid',
+        lane,
+        id,
+        target_file: task.target_file,
+        line_count: shipped.lineCount,
+        KNOW: 'file_exists_passes_node_check_no_builder_call_no_tokens_spent',
+      });
+      console.log(`⏭  ${id} — skip-if-shipped: ${task.target_file} (${shipped.lineCount} lines, syntax OK)`);
+      perTaskSlice.push({ id, build_wall_ms: 0, ok: true, auto_skip: 'target_file_already_valid' });
+      if (sleepMs > 0 && i < selected.length - 1) await sleep(sleepMs);
+      continue;
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     try {
       buildAttempts += 1;
       const { res, json, ok, modelResolution } = await runBuild(task);
