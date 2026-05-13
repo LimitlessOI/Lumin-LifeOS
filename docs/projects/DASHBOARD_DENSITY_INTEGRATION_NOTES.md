@@ -1,86 +1,120 @@
-**Integration of Dashboard Layout Utilities**
+# Dashboard Layout Utilities Integration
 
-This document outlines the integration of the `dashboard-layout-utils.mjs` functions into the `lifeos-dashboard.html` shell, focusing on client-side execution and DOM interaction. (Note: The referenced mockup PNG for density study was not provided.)
+This document outlines the integration of `scripts/builder-smoke/dashboard-layout-utils.mjs` into the `public/overlay/lifeos-dashboard.html` shell. These utilities provide client-side logic for dynamic layout adjustments based on user preferences and viewport characteristics.
 
-### `resolveThemeMode` Integration
+## 1. `resolveThemeMode` Integration
 
-The `resolveThemeMode` utility normalizes theme values to 'light', 'dark', or 'system'. This ensures consistent theme application by processing values retrieved from `localStorage`.
+The `resolveThemeMode` function provides a robust way to determine the user's preferred theme, including support for system-level preferences.
 
-**DOM Hook Suggestion:**
-*   **Client-side**: Within the main `<script type="module">` block in `lifeos-dashboard.html`, use `resolveThemeMode` when initializing the theme on `DOMContentLoaded`. This will sanitize the `localStorage.getItem('lifeos_theme')` value before applying it to `document.documentElement.dataset.theme`.
+**Integration Point:** `public/overlay/lifeos-dashboard.html` - within the `<script type="module">` block, specifically in the `DOMContentLoaded` event listener for initial theme setup.
 
-**Example Client-side Usage (within `DOMContentLoaded`):**
-```javascript
-import { resolveThemeMode } from './scripts/builder-smoke/dashboard-layout-utils.mjs';
+**Proposed Changes:**
 
-// ...
-const savedTheme = localStorage.getItem('lifeos_theme');
-const resolvedTheme = resolveThemeMode(savedTheme);
+1.  **Import:** Add an import statement for `resolveThemeMode` at the top of the `<script type="module">` block:
+    ```javascript
+    import { resolveThemeMode } from '../scripts/builder-smoke/dashboard-layout-utils.mjs';
+    ```
+2.  **Initial Theme Resolution:** Modify the existing theme initialization logic within the `DOMContentLoaded` listener to use `resolveThemeMode`. This allows for a 'system' theme option, which the current `toggleTheme` does not explicitly support for initial load.
 
-if (resolvedTheme === 'system') {
-  // Default to dark if 'system' is resolved and no specific system preference logic is implemented yet
-  document.documentElement.dataset.theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-} else {
-  document.documentElement.dataset.theme = resolvedTheme;
-}
-localStorage.setItem('lifeos_theme', document.documentElement.dataset.theme); // Store the normalized theme
-// ... rest of theme application logic
-```
+    *Current `DOMContentLoaded` theme logic:*
+    ```javascript
+    const savedTheme = localStorage.getItem('lifeos_theme');
+    if (savedTheme) {
+        document.documentElement.dataset.theme = savedTheme;
+        // ... update meta tag and button text ...
+    } else {
+        // Default to dark if no theme saved
+        document.documentElement.dataset.theme = 'dark';
+        localStorage.setItem('lifeos_theme', 'dark');
+        $('btn-theme').textContent = '☀︎';
+    }
+    ```
 
-### `clampMobileWidgetCount` Integration
+    *Proposed `DOMContentLoaded` theme logic:*
+    ```javascript
+    const savedThemePref = localStorage.getItem('lifeos_theme');
+    const initialTheme = resolveThemeMode(savedThemePref); // 'light', 'dark', or 'system'
 
-The `clampMobileWidgetCount` function ensures a widget count is within a predefined range (1-6). This is useful for controlling the number of widgets displayed, particularly on smaller viewports, to optimize layout and prevent excessive content.
+    let effectiveTheme = initialTheme;
+    if (initialTheme === 'system') {
+        effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
 
-**DOM Hook Suggestion:**
-*   **Client-side**: This function would be applied conceptually when a dynamic widget rendering system determines how many widgets to display in the `NEW WIDGETS ROW` or similar containers. It acts as a guard for the number of items to render.
+    document.documentElement.dataset.theme = effectiveTheme;
+    localStorage.setItem('lifeos_theme', effectiveTheme); // Store the resolved theme, not 'system'
+    const mc = document.getElementById('theme-color-meta');
+    if (mc) mc.setAttribute('content', effectiveTheme === 'light' ? '#f6f7fb' : '#0a0a0f');
+    $('btn-theme').textContent = effectiveTheme === 'light' ? '☾' : '☀︎';
+    ```
+    *(Note: The `toggleTheme` function itself would remain as-is, toggling between 'light' and 'dark' explicitly, unless a UI element for 'system' preference is introduced.)*
 
-**Example Client-side Usage (Conceptual):**
-```javascript
-import { clampMobileWidgetCount } from './scripts/builder-smoke/dashboard-layout-utils.mjs';
+**DOM Hook:** The `document.documentElement.dataset.theme` attribute will continue to be the primary mechanism for applying the theme via CSS.
 
-// ... when a future dynamic widget loader determines how many widgets to show
-const availableWidgets = /* array of widgets */;
-const desiredDisplayCount = /* user preference or AI suggestion */;
-const actualDisplayCount = clampMobileWidgetCount(desiredDisplayCount);
-// Render 'actualDisplayCount' widgets into the DOM, e.g., into the <div class="two-col mb-4"> container
-```
+**SSR/Client Boundary:** This is a client-side operation, as theme preference is typically managed by the user's browser or OS settings.
 
-### `pickDashboardDensity` Integration
+## 2. `clampMobileWidgetCount` Integration
 
-The `pickDashboardDensity` function determines the optimal visual density ('compact', 'airy', 'balanced') based on `viewportWidth`, `widgetCount`, and `hasPinnedRail`. This enables a more nuanced adaptive layout than traditional media queries alone.
+The `clampMobileWidgetCount` function ensures that the number of widgets displayed on mobile devices remains within a sensible range (1-6). This is particularly relevant for responsive layouts where too many widgets can overwhelm small screens.
 
-**Client-side Execution:**
-This function should be executed client-side on initial page load (`DOMContentLoaded`) and whenever the viewport size changes (`window.onresize`).
+**Integration Point:** `public/overlay/lifeos-dashboard.html` - within the `<script type="module">` block, as part of a new client-side function responsible for dynamically managing widget visibility.
 
-**Determining Inputs:**
-1.  **`viewportWidth`**: Obtain directly from `window.innerWidth`.
-2.  **`widgetCount`**: This refers to the *actual number of visible dashboard widgets* currently rendered in the DOM. This can be determined by counting elements with the `dashboard-widget` class that are not hidden.
-3.  **`hasPinnedRail`**: This state should be exposed by the AI rail script (`lifeos-dashboard-ai-rail.js`). A concrete DOM hook would be to check for a specific class on the AI rail root element, e.g., `document.getElementById('lifeos-ai-rail-root')?.classList.contains('pinned')`.
+**Proposed Changes:**
 
-**Applying Density Styles (DOM Hook Suggestion):**
-*   **HTML `data-density` attribute**: Set a `data-density` attribute on the `<body>` element (e.g., `<body data-density="compact">`).
-*   **CSS Styling**: Define CSS rules that target this attribute to adjust layout properties (e.g., padding, margins, font sizes) for each density state.
+1.  **Import:** Add an import statement for `clampMobileWidgetCount`:
+    ```javascript
+    import { clampMobileWidgetCount, resolveThemeMode, pickDashboardDensity } from '../scripts/builder-smoke/dashboard-layout-utils.mjs';
+    ```
+2.  **Dynamic Widget Rendering/Visibility:** Introduce a function (e.g., `updateWidgetVisibility()`) that runs on `DOMContentLoaded` and `window.onresize`. This function would:
+    *   Identify all dashboard widgets (e.g., elements with class `dashboard-widget` or `card`).
+    *   Get the current `window.innerWidth`.
+    *   Determine a base widget count (e.g., total available widgets).
+    *   Call `clampMobileWidgetCount(baseWidgetCount)` to get the effective number of widgets to display.
+    *   Iterate through the widgets, showing only those up to the clamped count and hiding the rest.
 
-**Example Client-side Usage (within `<script type="module">`):**
-```javascript
-import { pickDashboardDensity } from './scripts/builder-smoke/dashboard-layout-utils.mjs';
+**DOM Hook:**
+*   Assign a unique identifier or `data-index` to each widget element (e.g., `<div id="lifeos-widget-mit" class="dashboard-widget card accent-border-today fade-up delay-3" data-widget-index="1">`).
+*   Use CSS classes (e.g., `hidden-on-mobile`) or direct `style.display = 'none'` to control visibility based on the clamped count.
 
-function applyDashboardDensity() {
-  const viewportWidth = window.innerWidth;
-  const widgetCount = document.querySelectorAll('.dashboard-widget:not(.hidden)').length; // Count visible widgets
-  const hasPinnedRail = document.getElementById('lifeos-ai-rail-root')?.classList.contains('pinned') || false; // Assumes AI rail manages 'pinned' class
+**SSR/Client Boundary:** This is a client-side operation, as it depends on the dynamic viewport width. Initial server-side rendering could include all widgets, with client-side JavaScript then hiding those beyond the clamped limit.
 
-  const density = pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail });
-  document.body.dataset.density = density;
-}
+## 3. `pickDashboardDensity` Integration
 
-document.addEventListener('DOMContentLoaded', () => {
-  // ... existing load functions
-  applyDashboardDensity();
-});
-window.addEventListener('resize', applyDashboardDensity);
-```
+The `pickDashboardDensity` function dynamically determines the appropriate visual density ('compact', 'airy', 'balanced') for the dashboard based on viewport size, widget count, and the state of the AI rail.
 
-### SSR/Client Boundaries
+**Integration Point:** `public/overlay/lifeos-dashboard.html` - within the `<script type="module">` block, as part of a new client-side function that runs on `DOMContentLoaded` and `window.onresize`.
 
-All three utility functions (`clampMobileWidgetCount`, `resolveThemeMode`, `pickDashboardDensity`) are designed for client-side execution. They rely on browser-specific APIs (e.g., `window.innerWidth`, `localStorage`, DOM manipulation) and dynamic runtime conditions. The `lifeos-dashboard.html` is served as a static file, with all dynamic behavior handled by client-side JavaScript. Therefore, there are no SSR integration points for these specific utilities; their integration is entirely within the client-side JavaScript bundle.
+**Proposed Changes:**
+
+1.  **Import:** Ensure `pickDashboardDensity` is imported (as shown in section 2).
+2.  **Density Calculation Function:** Create a function (e.g., `updateDashboardDensity()`) that:
+    *   Gets `window.innerWidth` for `viewportWidth`.
+    *   Counts the number of visible `card` elements for `widgetCount`.
+    *   Determines `hasPinnedRail`. This state would need to be exposed by the `lifeos-dashboard-ai-rail.js` script (e.g., via a global variable, a custom event, or by checking a class on `#lifeos-ai-rail-root`). For initial integration, a placeholder or default value can be used (e.g., `false`).
+    *   Calls `pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail })`.
+    *   Applies the resulting density string as a `data-density` attribute to the `<body>` element (e.g., `document.body.dataset.density = 'compact'`).
+3.  **CSS Styling:** Add new CSS rules that respond to the `data-density` attribute to adjust spacing, font sizes, and other layout properties. These would augment or override existing styles.
+
+    *Example CSS:*
+    ```css
+    body[data-density="compact"] .page { padding: 16px; }
+    body[data-density="compact"] .card { padding: 16px; border-radius: var(--radius-md); }
+    body[data-density="compact"] .greeting { font-size: clamp(22px, 4vw, 32px); }
+    body[data-density="airy"] .page { padding: 40px; }
+    body[data-density="airy"] .card { padding: 32px; border-radius: var(--radius-xl); }
+    body[data-density="airy"] .greeting { font-size: clamp(30px, 6vw, 50px); }
+    /* 'balanced' would typically be the default or current styling */
+    ```
+4.  **Event Listeners:** Call `updateDashboardDensity()` on `DOMContentLoaded` and `window.addEventListener('resize', ...)` with a debounce mechanism for performance.
+
+**DOM Hook:**
+*   The `<body>` element will receive a `data-density` attribute (e.g., `<body data-density="balanced">`).
+*   Existing CSS classes (e.g., `.page`, `.card`, `.two-col`, `.greeting`) will need to be augmented with density-specific styles.
+
+**SSR/Client Boundary:** This is primarily a client-side operation due to its reliance on `window.innerWidth`. An initial density could be inferred on the server based on user-agent, but dynamic adjustments require client-side JavaScript.
+
+---
+**Mockup PNG Reference for Density Study:**
+(Note: The mockup PNG was not provided, so the specific visual implications of 'compact', 'airy', and 'balanced' are inferred based on common UI patterns for density adjustments.)
+*   **Compact:** Characterized by reduced padding, smaller font sizes, and tighter spacing between elements, optimizing for information density on smaller screens or when more content needs to be visible.
+*   **Airy:** Features increased padding, slightly larger font sizes, and more generous spacing, providing a more relaxed and spacious visual experience, often preferred on larger displays.
+*   **Balanced:** Represents the default or intermediate state, providing a comfortable balance between information density and visual breathing room, similar to the dashboard's current styling.
