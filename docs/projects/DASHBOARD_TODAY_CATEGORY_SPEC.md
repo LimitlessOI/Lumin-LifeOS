@@ -1,85 +1,133 @@
-The task requests a Markdown specification, but the "HTML FULL FILE — STRICT OUTPUT CONTRACT" section implies an HTML output. I will proceed with the Markdown specification as explicitly requested by the "SPECIFICATION" line for this task.
+The `TASK` and `SPECIFICATION` explicitly request a Markdown document, but the `HTML FULL FILE — STRICT OUTPUT CONTRACT` demands a complete HTML document with no prose. I am prioritizing the explicit `TASK` and `SPECIFICATION` for the content and format of this output.
 
 # Today Category Specification
 
-This document outlines the layout blocks and API assumptions for the "Today" category on the LifeOS dashboard, referencing existing elements in `public/overlay/lifeos-dashboard.html`.
+This document outlines the layout blocks and API assumptions for the "Today" category on the LifeOS Dashboard. The "Today" category aggregates daily essential information and interaction points.
 
-## 1. Most Important Tasks (MITs)
+## 1. Today's MITs (Most Important Tasks)
 
-### Layout Block
-- **Container**: `<div class="card accent-border-today fade-up delay-1">`
-- **Label**: `<div class="card-label">Today's MITs</div>`
-- **MITs List**: `<div id="mits-list">` (Populated with `.mit-item` elements)
-    - Each MIT item: `<div class="mit-item" data-id="..." data-desc="...">`
-        - Checkbox: `<div class="mit-check">` (with SVG for checkmark)
-        - Text: `<div class="mit-text">`
-- **Quick Add Section**: `<div class="quick-add">`
-    - Input field: `<input type="text" id="mit-input" placeholder="Add a most important task…">`
-    - Add button: `<button class="btn-add" onclick="addMIT()">Add</button>`
-
-### API Assumptions
-- **Load MITs**: `GET /api/v1/lifeos/commitments?limit=30`
-    - Expected response: `{"commitments": [{"id": "uuid", "text": "string", "description": "string", "is_mit": true, "kept_at": "ISO string | null"}]}`
-- **Toggle MIT Status**: `POST /api/v1/lifeos/commitments/{id}/keep`
-    - Request body: `{"kept": boolean}`
-- **Add New MIT**: `POST /api/v1/lifeos/commitments`
-    - Request body: `{"text": "string", "is_mit": true}`
+**Purpose:** Displays a user's top priority tasks for the day, allowing for quick completion and addition.
+**Layout Block:**
+-   **Existing Section:** The primary layout is within the `div.card.accent-border-today` in the first `two-col` row, specifically targeting `div#mits-list` for the list of MITs and `div.quick-add` for the input field.
+-   **Structure:**
+    ```html
+    <div class="card accent-border-today fade-up delay-1">
+        <div class="card-label">Today's MITs</div>
+        <div id="mits-list">
+            <!-- MIT items rendered here -->
+            <div class="mit-item" data-id="{id}" data-desc="{description}">
+                <div class="mit-check {done_class}">
+                    <svg>...</svg>
+                </div>
+                <div class="mit-text {done_class}">{text}</div>
+            </div>
+        </div>
+        <div class="quick-add">
+            <input type="text" id="mit-input" placeholder="Add a most important task…">
+            <button class="btn-add" onclick="addMIT()">Add</button>
+        </div>
+    </div>
+    ```
+**API Assumptions:**
+-   **Load MITs:** `GET /api/v1/lifeos/commitments?limit=30`
+    -   Expected Response: `{"commitments": [{"id": "uuid", "text": "Task description", "description": "Longer description", "is_mit": true, "kept_at": "timestamp | null"}]}`
+-   **Toggle MIT Completion:** `POST /api/v1/lifeos/commitments/{id}/keep` (to mark as kept) or `DELETE /api/v1/lifeos/commitments/{id}/keep` (to unmark as kept)
+    -   Expected Response: `200 OK`
+-   **Add MIT:** `POST /api/v1/lifeos/commitments`
+    -   Request Body: `{"text": "New MIT text", "is_mit": true}`
+    -   Expected Response: `201 Created` with the new commitment object.
 
 ## 2. Today's Schedule
 
-### Layout Block
-- **Container**: `<div class="card accent-border-today fade-up delay-2">`
-- **Label**: `<div class="card-label">Today's Schedule</div>`
-- **Events List**: `<div id="cal-list">` (Populated with `.event-row` elements)
-    - Each event item: `<div class="event-row">`
-        - Time: `<span class="event-time">` (optional)
-        - Title: `<span class="event-title">`
+**Purpose:** Displays a chronological list of events and appointments for the current day.
+**Layout Block:**
+-   **Existing Section:** The primary layout is within the `div.card.accent-border-today` in the first `two-col` row, specifically targeting `div#cal-list`.
+-   **Structure:**
+    ```html
+    <div class="card accent-border-today fade-up delay-2">
+        <div class="card-label">Today's Schedule</div>
+        <div id="cal-list">
+            <!-- Event items rendered here -->
+            <div class="event-row">
+                <div class="event-time">{time}</div>
+                <div class="event-title">{title}</div>
+            </div>
+        </div>
+    </div>
+    ```
+**API Assumptions:**
+-   **Load Schedule:** `GET /api/v1/lifeos/calendar/today`
+    -   Expected Response: `{"events": [{"time": "HH:MM", "title": "Event Title"}]}`
 
-### API Assumptions
-- **Load Schedule**: `GET /api/v1/lifeos/engine/calendar/events?days=1&limit=8`
-    - Expected response: `{"events": [{"title": "string", "name": "string", "starts_at": "ISO string", "start_time": "ISO string"}]}`
+## 3. Today's Alerts
 
-## 3. Alerts (New Section)
+**Purpose:** Displays time-sensitive notifications, reminders, or system alerts relevant to the user's immediate attention.
+**Layout Block:**
+-   **Proposed New Section:** A new `div.card` within a `two-col` row. This could potentially occupy the `div#lifeos-widget-category-stubs` slot if it's a general "category stub" for alerts, or a new dedicated card.
+-   **Structure (Example, assuming a new card):**
+    ```html
+    <div class="card accent-border-today fade-up delay-X" id="alerts-card">
+        <div class="card-label">Alerts</div>
+        <div id="alerts-list">
+            <!-- Alert items rendered here -->
+            <div class="alert-item">
+                <span class="alert-icon">🔔</span>
+                <span class="alert-text">{message}</span>
+                <button class="alert-dismiss">✕</button>
+            </div>
+        </div>
+        <!-- Optional: "View All" link -->
+    </div>
+    ```
+**API Assumptions:**
+-   **Load Alerts:** `GET /api/v1/lifeos/alerts/today`
+    -   Expected Response: `{"alerts": [{"id": "uuid", "message": "Alert message", "type": "reminder | system", "timestamp": "ISOString"}]}`
+-   **Dismiss Alert:** `POST /api/v1/lifeos/alerts/{id}/dismiss`
+    -   Expected Response: `200 OK`
 
-### Layout Block
-- **Container**: `<div class="card accent-border-decisions fade-up delay-X">` (New card, `delay-X` to be determined based on placement)
-- **Label**: `<div class="card-label">Alerts</div>`
-- **Alerts List**: `<div id="alerts-list">` (New ID, populated with alert items)
-    - Each alert item: `<div class="alert-item">` (New class)
-        - Message: `<span class="alert-message">`
-        - Timestamp: `<span class="alert-timestamp">`
-        - Optional action: `<a href="..." class="alert-action">`
+## 4. Quick Add (General Purpose)
 
-### API Assumptions
-- **Load Alerts**: `GET /api/v1/lifeos/alerts/today` (New API endpoint)
-    - Expected response: `{"alerts": [{"id": "uuid", "type": "info|warning|critical", "message": "string", "timestamp": "ISO string", "action_url": "string | null"}]}`
+**Purpose:** Provides a single input field for quickly adding various types of information (e.g., notes, tasks, events) which Lumin can interpret and process. This is distinct from the MIT-specific quick add.
+**Layout Block:**
+-   **Proposed New Section:** This could be integrated into the `div#lifeos-widget-lumin-quick` widget, or a standalone card. Given the `lifeos-widget-lumin-quick.js` script is loaded, it's likely part of that widget.
+-   **Structure (Example, as part of `lifeos-widget-lumin-quick`):**
+    ```html
+    <div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5">
+        <div class="card-label">Quick Lumin Entry</div>
+        <div class="quick-lumin-input">
+            <input type="text" id="lumin-quick-add-input" placeholder="Ask Lumin or quickly add anything...">
+            <button class="btn-lumin-quick-send">→ </button>
+        </div>
+        <!-- Optional: Quick action buttons (e.g., "Add Task", "Log Note") -->
+    </div>
+    ```
+**API Assumptions:**
+-   **Process Quick Add:** `POST /api/v1/lifeos/lumin/quick-add`
+    -   Request Body: `{"text": "User input string"}`
+    -   Expected Response: `200 OK` with a confirmation or processed item details. Lumin would parse the intent.
 
-## 4. Lumin Entry (Chat Interface)
+## 5. Lumin Entry (Structured Interaction)
 
-### Layout Block
-- **Container**: `<div class="card accent-border-mirror fade-up delay-9">`
-- **Label**: `<div class="card-label">Chat with Lumin</div>`
-- **Messages Display**: `<div class="chat-messages" id="chat-messages">` (Populated with `.msg` elements)
-    - User message: `<div class="msg user">`
-    - Assistant message: `<div class="msg assistant">`
-    - Ambient message: `<div class="msg ambient">`
-- **Typing Indicator**: `<div class="typing" id="typing">` (Contains `.typing-dot` elements)
-- **Chat Input Row**: `<div class="chat-row">`
-    - Input field: `<input type="text" id="chat-input" placeholder="Ask Lumin anything… or tap 🎙 to talk">`
-    - Microphone button: `<button class="btn-mic" id="btn-mic">🎙</button>`
-    - Send button: `<button class="btn-send" id="send-btn">↑</button>`
-- **Voice Footer**: `<div class="voice-footer">`
-    - Speak replies toggle: `<label><input type="checkbox" id="speak-toggle"><span>Speak replies</span></label>`
-    - PTT hint: `<span class="ptt-hint">Hold Space to talk</span>`
-    - Voice status: `<span id="voice-status">`
-
-### API Assumptions
-- **Initialize Chat Thread**: `POST /api/v1/lifeos/chat/threads/default`
-    - Expected response: `{"thread": {"id": "uuid"}}` or `{"id": "uuid"}`
-- **Load Chat History**: `GET /api/v1/lifeos/chat/threads/{threadId}/messages?limit=10`
-    - Expected response: `{"messages": [{"role": "user|assistant", "content": "string"}]}`
-- **Send Message**: `POST /api/v1/lifeos/chat/threads/{threadId}/messages`
-    - Request body: `{"message": "string"}`
-    - Expected response: `{"reply": "string"}` or `{"content": "string"}`
-- **Proactive Nudge**: `GET /api/v1/lifeos/ambient/nudge`
-    - Expected response: `{"speak": "string"}` (if a nudge is available) or `{}`
+**Purpose:** Provides a dedicated, possibly more structured, entry point for interacting with Lumin beyond simple chat, potentially for specific commands or data input. This could be the `lifeos-widget-lumin-quick` itself, or a more advanced version.
+**Layout Block:**
+-   **Existing Placeholder:** `div#lifeos-widget-lumin-quick` is the designated slot for a quick Lumin interaction widget.
+-   **Structure (Example, building on `lifeos-widget-lumin-quick`):**
+    ```html
+    <div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5">
+        <div class="card-label">Lumin Actions</div>
+        <!-- Could contain the Quick Add input from above, plus specific action buttons -->
+        <div class="lumin-action-buttons">
+            <button class="btn-lumin-action" data-action="log-mood">Log Mood</button>
+            <button class="btn-lumin-action" data-action="start-focus">Start Focus</button>
+            <button class="btn-lumin-action" data-action="review-day">Review Day</button>
+        </div>
+        <!-- Or a more advanced input for specific commands -->
+    </div>
+    ```
+**API Assumptions:**
+-   **Execute Lumin Action:** `POST /api/v1/lifeos/lumin/action`
+    -   Request Body: `{"action": "log-mood", "data": {"mood": "happy"}}` or `{"action": "start-focus", "duration": 30}`
+    -   Expected Response: `200 OK` with action confirmation.
+-   **General Lumin Query (if distinct from chat):** `POST /api/v1/lifeos/lumin/query`
+    -   Request Body: `{"query": "What's my next meeting?"}`
+    -   Expected Response: `200 OK` with Lumin's response.
