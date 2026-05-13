@@ -6,6 +6,31 @@
 
 ---
 
+## [FIX] Update 2026-05-13 — GOVERNANCE_LOCK_CONTINUOUS_OPERATION cycle 1
+
+### What happened
+- **Repo sync gap discovered and closed.** Local was 32 commits behind `origin/main` (Railway autonomous builders had been pushing while we were working on SC1). `git pull --rebase origin main` applied cleanly — zero file conflicts.
+- **13 working-tree files were never pushed to git.** Created during RL1/RL2/OF1/RRS1/OD1 sessions, these scripts, test files, and mockups existed only in the stash: `scripts/operator-runtime-status.mjs`, `scripts/generate-operator-dashboard-json.mjs`, `scripts/generate-runtime-reality-snapshot.mjs`, `scripts/repo-sync-check.mjs`, `scripts/lib/git-origin-alignment.mjs`, `scripts/verify-dashboard-ui-map.mjs`, `services/site-builder-postmark-helper.js`, 3 test files, 3 mockup docs. All committed and pushed as `c60e1c64`.
+- **SIS1 status unchanged.** Still PENDING_CONFIRMATION — Forge cursor at position 9, not yet wrapped to position 0 (`site-builder-postmark-send`). Cannot confirm Railway instance from local logs.
+
+### Verification
+- `npm test`: 8/8 pass, 0 fail
+- Compliance: 12/12 pass (all 8 critical + 4 advisory), `exit_fail=false`
+- `git push origin main`: clean push, head now `c60e1c64`
+
+### Decision rule applied
+Pull + recovery was low-risk, reversible, non-constitutional, directly restored repo truth → AI Council approved and implemented without Adam per GOVERNANCE_LOCK_CONTINUOUS_OPERATION protocol.
+
+### Blockers unchanged
+- `tc-stripe-billing-service` quarantine (`fail_closed=2`) — operator decision needed
+- SIS1 PENDING_CONFIRMATION — Forge cursor must wrap to pos 0 for log event
+- Mission Control / Mechanic / Sentinel daemons — §2.12 gate not cleared
+
+### Next smallest safe step
+Run `npm run operator:status` to confirm FRESH snapshot after push. Then watch for `task_skip_already_shipped` event in Forge log when cursor wraps.
+
+---
+
 ## [BUILD] Update 2026-05-12 — SC1 compliance receipt severity persistence
 
 ### What changed
