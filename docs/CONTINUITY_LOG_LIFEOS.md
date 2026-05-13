@@ -6,6 +6,26 @@
 
 ---
 
+## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 3
+
+### What happened
+- **Test script stripped again** after pulling 3 new Railway commits. Fixed in `0071d8cd`. This has now happened 3+ times — root cause is Railway builder templates generating a 2-file test script.
+- **package.json protected-scripts guard shipped** (`d1c72926`). Added content-aware check to `commitToGitHub` in `services/deployment-service.js`. Any commit to `package.json` that removes `repo:sync-check`, `lifeos:verify:ui-map`, or the 3 regression test files is rejected with a descriptive error. PROVISIONAL — monitored.
+- **TC Stripe service rebuilt** via `POST /api/v1/lifeos/builder/build`. Was 24-line truncated stub (ended mid-sentence). Now 90 lines with complete Stripe integration. `ok:true committed:true`.
+- **SIS1 still PENDING_CONFIRMATION**. Forge cursor at pos 10, expected to fire at pos 0 (`site-builder-postmark-send`) within the next two Forge cycles (~04:37 UTC).
+- **Nova throughput confirmed healthy**: 2 commits/cycle (CSS/HTML), cycles 194–196 all clean.
+
+### Verification
+- `npm test`: 8/8 pass
+- Compliance: 12/12 pass
+- `node --check services/tc-stripe-service.js`: PASS (90 lines)
+- `node --check services/deployment-service.js`: PASS
+
+### Next step
+Confirm SIS1. Then tc-webhook-validator quality review. Then post-commit smoke router.
+
+---
+
 ## [FIX] Update 2026-05-13 — GOVERNANCE_LOCK_CONTINUOUS_OPERATION cycle 1
 
 ### What happened
