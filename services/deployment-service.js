@@ -95,6 +95,46 @@ export function createDeploymentService(deps) {
       );
     }
 
+    // ── package.json protected-scripts guard ──────────────────────────────────
+    // Railway autonomous builders can commit a new package.json (e.g. to add an
+    // npm script for a new feature) but generate it from a template that omits
+    // the compliance-gating test and operator scripts. This guard rejects any
+    // package.json commit that removes a required script entry.
+    // Root cause of the 2026-05-13 triple-strip: stash-only scripts, then each
+    // rebase + Railway rebuild lost them. Guard fires at the API level so even
+    // Railway autonomous builds cannot silently strip them.
+    if (filePath === 'package.json') {
+      const REQUIRED_PACKAGE_SCRIPTS = [
+        'repo:sync-check',
+        'lifeos:verify:ui-map',
+      ];
+      const REQUIRED_TEST_FILES = [
+        'tests/site-builder-postmark-helper.test.js',
+        'tests/tc-morning-digest-service-module.test.js',
+        'tests/operator-runtime-status-freshness.test.js',
+      ];
+      let pkg;
+      try { pkg = JSON.parse(content); } catch {
+        throw new Error(
+          `commitToGitHub BLOCKED: package.json content is not valid JSON. Refusing to commit.`
+        );
+      }
+      const scripts = pkg?.scripts || {};
+      const missingScripts = REQUIRED_PACKAGE_SCRIPTS.filter(s => !(s in scripts));
+      const testScript = scripts['test'] || '';
+      const missingTests = REQUIRED_TEST_FILES.filter(f => !testScript.includes(f));
+      if (missingScripts.length > 0 || missingTests.length > 0) {
+        const msg = [
+          `commitToGitHub BLOCKED: package.json is missing required compliance entries.`,
+          missingScripts.length ? `  Missing npm scripts: ${missingScripts.join(', ')}` : '',
+          missingTests.length ? `  Missing test files in "test" script: ${missingTests.join(', ')}` : '',
+          `  Add the missing entries to the proposed package.json before committing.`,
+          `  These scripts are required for compliance gates and regression tests.`,
+        ].filter(Boolean).join('\n');
+        throw new Error(msg);
+      }
+    }
+
     // ── JS syntax pre-check ───────────────────────────────────────────────────
     // Catches builder-truncated output (token-limit cutoff) before it reaches
     // Railway and causes a boot crash. Root cause of the 2026-05-09 crash loop:
