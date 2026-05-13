@@ -1,67 +1,72 @@
+# Dashboard Local State Contract
+
+This document defines the contract for managing the local state of the LifeOS Dashboard, specifically focusing on user preferences for widget visibility, order, density mode, and pinned status. This contract aims to provide a clear, versioned structure for client-side persistence, with consideration for future server-side synchronization and SSR compatibility.
+
 ## Goals
-- Define a standardized structure for client-side dashboard state.
-- Support user customization of widget visibility, order, and pinning.
-- Implement adaptive density mode based on user preference and viewport.
-- Establish a clear path for state versioning and migration.
-- Prepare for eventual server-side persistence.
 
-## Keys & shapes
-The dashboard state will be stored as a single JSON object under a `localStorage` key.
+*   **Client-Side Persistence:** Enable users to retain their dashboard layout and display preferences across sessions using `localStorage`.
+*   **Clear Schema:** Define explicit keys and data shapes for all persisted dashboard preferences.
+*   **Versioning & Migration:** Support schema evolution with a mechanism for versioning and graceful migration or reset.
+*   **SSR Compatibility:** Ensure the contract supports a smooth hydration process, minimizing client-side layout shifts.
+*   **Future-Proofing:** Design the contract to be compatible with a future server-side persistence API.
 
-**Key**: `lifeos_dashboard_state`
+## Keys & Shapes
 
-**Shape**:
-```json
-{
-  "version": "1.0.0",
-  "widgets": {
-    "order": [
-      "lifeos-widget-mit",
-      "lifeos-widget-score",
-      "lifeos-widget-lumin-quick",
-      "lifeos-widget-category-stubs"
-    ],
-    "visibility": {
-      "lifeos-widget-mit": true,
-      "lifeos-widget-score": true,
-      "lifeos-widget-lumin-quick": true,
-      "lifeos-widget-category-stubs": true
-    },
-    "pinned": []
-  },
-  "density": "balanced"
-}
-```
-- `version`: (string) Semantic version of the state schema.
-- `widgets.order`: (string[]) An ordered array of widget IDs, reflecting the user's preferred layout. Default order matches `lifeos-dashboard.html`.
-- `widgets.visibility`: (Record<string, boolean>) A map where keys are widget IDs and values are `true` if the widget is visible, `false` if hidden. All widgets are visible by default.
-- `widgets.pinned`: (string[]) An array of widget IDs that are "pinned" to a specific location or state, overriding dynamic layout.
-- `density`: (string) The user's preferred or system-determined dashboard density. See "Density enum" section.
+All keys will be prefixed with `lifeos_dashboard_` to avoid collisions.
 
-## Density enum
-The `density` field will accept one of the following string values:
-- `compact`: Optimized for high information density, smaller elements, less spacing.
-- `balanced`: A default, moderate density.
-- `airy`: Optimized for readability and larger touch targets, more spacing.
+### Widget Visibility
 
-## Versioning & Migration
-- The `version` field in the stored JSON object will be used to manage schema changes.
-- On application boot, the stored state's `version` will be compared against the current application's expected version.
-- If the stored version is older or missing, a migration function will be invoked.
-- Migration logic will involve:
-    - Applying default values for newly introduced fields.
-    - Transforming data structures from older schemas to the current one.
-    - Example: If `widgets.order` is missing, it will be initialized with the default widget order from the HTML. If `widgets.visibility` is missing, all widgets will be set to `true`.
+*   **Key:** `lifeos_dashboard_widget_visibility`
+*   **Storage:** `localStorage` (client-side), future server API.
+*   **Shape:** `Record<string, boolean>`
+    *   A JavaScript object where keys are unique widget identifiers (e.g., `lifeos-widget-mit`, `lifeos-widget-score`) and values are `boolean` indicating if the widget is visible (`true`) or hidden (`false`).
+    *   **Example:** `{"lifeos-widget-mit": true, "lifeos-widget-score": false}`
 
-## SSR/Client Boundaries
-- This contract defines client-side state only.
-- All state management (loading, saving, applying) will occur within client-side JavaScript.
-- State will be loaded from `localStorage` on `DOMContentLoaded` and applied to the DOM.
-- No server-side rendering of this dynamic, user-specific dashboard layout state is planned.
-- The `public/overlay/lifeos-dashboard.html` is served statically, and client-side scripts hydrate the dynamic elements.
+### Widget Order
+
+*   **Key:** `lifeos_dashboard_widget_order`
+*   **Storage:** `localStorage` (client-side), future server API.
+*   **Shape:** `string[]`
+    *   A JavaScript array of unique widget identifiers, representing the desired display order. The order in the array dictates the rendering order.
+    *   **Example:** `["lifeos-widget-score", "lifeos-widget-mit", "lifeos-widget-lumin-quick"]`
+
+### Density Mode
+
+*   **Key:** `lifeos_dashboard_density_mode`
+*   **Storage:** `localStorage` (client-side), future server API.
+*   **Shape:** `string` (from `DensityMode` enum)
+    *   A string representing the user's preferred display density for widgets.
+    *   **Example:** `"comfortable"`
+
+### Pinned Widgets
+
+*   **Key:** `lifeos_dashboard_pinned_widgets`
+*   **Storage:** `localStorage` (client-side), future server API.
+*   **Shape:** `string[]`
+    *   A JavaScript array of unique widget identifiers that the user has chosen to "pin." Pinned widgets typically appear at the top or in a fixed section, regardless of the general order.
+    *   **Example:** `["lifeos-widget-mit"]`
+
+### State Version
+
+*   **Key:** `lifeos_dashboard_state_version`
+*   **Storage:** `localStorage` (client-side), future server API.
+*   **Shape:** `number`
+    *   An integer representing the schema version of the stored dashboard state. This allows for future migrations.
+    *   **Current Version:** `1`
+
+## Density Enum
+
+The `DensityMode` enum defines the available display density settings for the dashboard widgets.
+
+*   **`compact`**: Minimal spacing, smaller fonts, more information visible at once.
+*   **`comfortable`**: Default spacing, balanced information density.
+*   **`spacious`**: Increased spacing, larger elements, less information visible.
 
 ## Risks
-- **`localStorage` limitations**: While generally sufficient for this scope, excessive data could impact performance or hit storage limits.
-- **Data corruption**: `localStorage` is not robust against manual user tampering or browser issues, potentially leading to unexpected dashboard layouts.
-- **Migration complexity**: As the schema evolves, migration logic can become intricate, requiring careful testing.
-- **Lack of server-side sync**: Without server-side persistence, user preferences are tied to a single device/browser, leading to inconsistent experiences across different access points. This is a known limitation for the current phase.
+
+*   **Schema Mismatch:** If a user's `localStorage` contains an older schema version, the application must gracefully handle it (e.g., migrate, reset to default, or log an error).
+*   **Data Corruption:** Malformed or invalid data in `localStorage` could lead to rendering issues or application crashes. Robust parsing and validation are required.
+*   **Performance Overhead:** Storing excessively large or frequently updated state in `localStorage` can impact client-side performance. This contract focuses on small, preference-based data.
+*   **SSR Hydration Mismatch:** If the server renders a default layout and the client immediately applies a different `localStorage` layout, a visible "flicker" or layout shift can occur. Strategies like pre-fetching state on the server or applying client state after initial render are needed.
+*   **Security (Low):** While dashboard preferences are generally not sensitive, `localStorage` is client-side and can be manipulated. No sensitive user data should be stored here.
+*   **Concurrency:** Multiple browser tabs/windows accessing and modifying `localStorage` simultaneously could lead to race conditions and inconsistent state.
