@@ -1,11 +1,29 @@
+/**
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * Site Builder prospect discovery action route.
+ */
 import { Router } from 'express';
-import { exec } from 'child_process';
+import { execFile as execFileCb } from 'node:child_process';
+import { promisify } from 'node:util';
 import logger from '../services/logger.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const execFile = promisify(execFileCb);
+
+function buildDiscoveryArgs({ city, niche, count }) {
+  const scriptPath = join(__dirname, '../scripts/site-builder-prospect-discovery.mjs');
+  const args = [scriptPath, `--city=${String(city)}`];
+  if (niche) {
+    args.push(`--type=${String(niche)}`);
+  }
+  if (count) {
+    args.push(`--count=${String(count)}`);
+  }
+  return args;
+}
 
 export default function createDiscoveryRoutes(app, { pool, requireKey }) {
   const router = Router();
@@ -17,38 +35,28 @@ export default function createDiscoveryRoutes(app, { pool, requireKey }) {
       return res.status(400).json({ ok: false, error: 'city is required' });
     }
 
-    const scriptPath = join(__dirname, '../scripts/site-builder-prospect-discovery.mjs');
-    let command = `node ${scriptPath} --city="${city}"`;
-    if (niche) {
-      command += ` --type="${niche}"`;
-    }
-    if (count) {
-      command += ` --count=${count}`;
-    }
-
-    logger.info('[DISCOVERY] Running discovery script', { command, city, niche, count });
+    const args = buildDiscoveryArgs({ city, niche, count });
+    logger.info('[DISCOVERY] Running discovery script', { script: args[0], city, niche, count });
 
     try {
-      const { stdout, stderr } = await new Promise((resolve, reject) => {
-        exec(command, { maxBuffer: 1024 * 1024 * 5 }, (error, stdout, stderr) => {
-          if (error) {
-            error.stderr = stderr;
-            reject(error);
-          } else {
-            resolve({ stdout, stderr });
-          }
-        });
+      const { stdout, stderr } = await execFile(process.execPath, args, {
+        maxBuffer: 1024 * 1024 * 5,
+        timeout: 30000,
       });
 
       let prospects = [];
       try {
         prospects = JSON.parse(stdout);
         if (!Array.isArray(prospects)) {
-          logger.warn('[DISCOVERY] Script stdout was not a JSON array, treating as empty', { stdout });
-          prospects = [];
+          throw new Error('script stdout was not a JSON array');
         }
       } catch (parseError) {
         logger.error('[DISCOVERY] Failed to parse script stdout as JSON', { parseError: parseError.message, stdout });
+        return res.status(502).json({
+          ok: false,
+          error: 'Discovery script returned malformed output.',
+          receipt: { source: 'Error: Malformed Discovery Output', city: city || null, niche: niche || null }
+        });
       }
 
       let source = 'Unknown';

@@ -32,6 +32,25 @@
 
 ---
 
+## [FIX] Update 2026-05-13 #10 — Site Builder discovery command injection blocked
+
+### Files changed
+- **`routes/site-builder-discovery-routes.js`** — **GAP-FILL after builder failure:** `POST /api/v1/lifeos/builder/build` was attempted against branch `cursor/critical-correctness-bugs-dbd5` for this target file and returned HTTP 500 with `detail:"HTTP 413"`. Local fix replaced shell-string `child_process.exec(command)` with `execFile(process.execPath, args)` so `/api/v1/sites/discover` treats `city`, `niche`, and `count` as argv data, not shell syntax. Added missing `@ssot` header and changed malformed script stdout from silent `ok:true`/empty results to explicit `502`.
+- **`tests/site-builder-discovery-routes.test.js`** — new in-process Express regression: malicious `count` payload that would create a temp marker file under the old shell path must leave no marker file.
+- **`package.json`** — `npm test` now includes `tests/site-builder-discovery-routes.test.js`.
+- **`docs/projects/AMENDMENT_05_SITE_BUILDER.md`** — Last Updated + Change Receipts updated with builder-failure evidence, fix detail, current state, and verification.
+
+### State after this session
+- Concrete bug fixed: recent builder commit `6cd63cd4` introduced authenticated command injection in `POST /api/v1/sites/discover` by interpolating request fields into a shell command. Anyone with the command key could execute shell commands as the Node process user via `city`, `niche`, or unquoted `count`.
+- Verification: `node --check routes/site-builder-discovery-routes.js`; `node --check tests/site-builder-discovery-routes.test.js`; `npm test` → 15 pass, 0 fail, 4 skipped.
+- Branch state: first fix commit `3a46c4c6` pushed before verification per Cloud branch workflow; this entry and the AM05 verification receipt are the follow-up documentation commit.
+
+### Next agent: start here
+- Platform follow-up: builder `/build` still hit HTTP 413 on a small route repair with `files[]` context. Queue/track the builder dispatch 413 gap if it recurs; do not claim the builder authored this route fix.
+- If continuing this branch, start with the builder dispatch 413 platform gap; this security fix itself is complete and verified.
+
+---
+
 ## [FIX] Update 2026-05-12 #9 — Governance correction: PENDING_CONFIRMATION marker + prove-the-loop rule
 
 ### Files changed
