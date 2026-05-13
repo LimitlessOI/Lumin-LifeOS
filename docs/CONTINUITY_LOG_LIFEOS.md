@@ -6,6 +6,24 @@
 
 ---
 
+## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 4
+
+### What happened
+- **SIS1 mechanism confirmed.** `task_skip_already_shipped` events found in the queue log (not daemon log). Cycle 180 fired at 03:07:20 UTC on `site-builder-pipeline-report-route`; cycle 181 fired at 03:52:22 UTC on `site-builder-discovery-run-action`. Forge cursor now at pos 0 = `site-builder-postmark-send`. SIS1 is operating correctly — one more cycle (~04:37 UTC) will confirm the original RL1 target task specifically.
+- **`tc-webhook-validator.js` audited: complete, not a stub.** 34 lines, both `validatePostmark` (HMAC-SHA256) and `validateTwilio` (HMAC-SHA1) fully implemented with timing-safe compare, graceful unconfigured-key skip. Clean `node --check`. No rebuild.
+- **package.json guard regression test shipped.** `tests/deployment-service-package-guard.test.js` — 6 tests, all pass. Guard now self-protecting: file added to `REQUIRED_TEST_FILES` in `deployment-service.js` and to `package.json` test script.
+
+### Verification
+- `npm test`: **14 pass, 0 fail, 4 skipped** (4 smoke tests require live server)
+- All 6 guard contract tests pass
+- `node --check services/tc-webhook-validator.js`: PASS
+- `node --check services/deployment-service.js`: PASS
+
+### Next step
+Watch for `task_skip_already_shipped site-builder-postmark-send` in `data/builder-continuous-queue-log.site-builder-autonomous-queue.jsonl`. When it appears, mark SIS1 fully confirmed and clear the PENDING_CONFIRMATION row in AM36 receipts. Then roadmap slice.
+
+---
+
 ## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 3
 
 ### What happened

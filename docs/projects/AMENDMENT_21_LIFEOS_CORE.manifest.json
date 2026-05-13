@@ -845,6 +845,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-05-10",
-  "ssot_receipt_tail": "Fix 8: daemon STATE_PATH/LOCK_PATH/LOG_PATH/QUEUE_LAST_RUN_PATH now lane-aware — TC and SiteBuilder daemons no longer collide with Nova lock; Atlas F→C (100% success rate), Forge F→C on first post-fix cycle"
+  "last_updated": "2026-05-13",
+  "ssot_receipt_tail": "Fix 8: daemon STATE_PATH/LOCK_PATH/LOG_PATH/QUEUE_LAST_RUN_PATH now lane-aware \u2014 TC and SiteBuilder daemons no longer collide with Nova lock; Atlas F\u2192C (100% success rate), Forge F\u2192C on first post-fix cycle"
 }

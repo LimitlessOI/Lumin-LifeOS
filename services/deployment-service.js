@@ -112,6 +112,7 @@ export function createDeploymentService(deps) {
         'tests/site-builder-postmark-helper.test.js',
         'tests/tc-morning-digest-service-module.test.js',
         'tests/operator-runtime-status-freshness.test.js',
+        'tests/deployment-service-package-guard.test.js',
       ];
       let pkg;
       try { pkg = JSON.parse(content); } catch {
