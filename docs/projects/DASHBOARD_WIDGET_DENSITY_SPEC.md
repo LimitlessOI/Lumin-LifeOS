@@ -1,1 +1,1 @@
-The specification is contradictory: the task requests a Markdown specification document and states "No HTML rewrite", but the instruction and output contract demand a complete HTML file as implementation code.
+The specification for dashboard card density modes, token mapping, and rollout order cannot be generated as the required source documents (`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`, `docs/projects/DASHBOARD_DENSITY_INTEGRATION_NOTES.md`, and `docs/projects/DASHBOARD_CUSTOMIZATION_STATE.md`) are missing from the repository.
