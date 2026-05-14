@@ -45,6 +45,6 @@
   ],
   "last_verified_at": "2026-04-26",
   "verification_passed": null,
-  "last_updated": "2026-05-13",
-  "ssot_receipt_tail": "gen:rules TOKENS+HISTORY; MEMORY/IDEAVAULT compress; baseline \u21933081B"
+  "last_updated": "2026-05-14",
+  "ssot_receipt_tail": "C21 AUTONOMY_WRITE_LOCK shipped; SIS1 confirmed; Forge overlay fix; brainstorm Phase 2 complete"
 }

@@ -1,8 +1,13 @@
-// scripts/lib/autonomy-write-lock.mjs
+/**
+ * AUTONOMY_WRITE_LOCK (C21) — manages data/autonomy.lock.
+ * When locked, the builder daemon routes commits to autonomy/staging instead of main.
+ * Lock absent = isLocked() returns false = normal operation. No side effects on import.
+ *
+ * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+ */
 
 import { join } from 'path';
 import { readFile, writeFile, unlink } from 'fs/promises';
-import { console } from 'console';
 
 const LOCK_PATH = join(process.cwd(), 'data/autonomy.lock');
 

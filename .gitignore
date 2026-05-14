@@ -49,6 +49,7 @@ data/builder-overnight-last-run.json
 data/builder-daemon-log.jsonl
 data/builder-daemon-state.json
 data/builder-daemon.lock
+data/autonomy.lock
 data/token-efficiency-log.jsonl
 data/lifeos-operational-grade-log.jsonl
 data/lifeos-operational-grade-last-run.json

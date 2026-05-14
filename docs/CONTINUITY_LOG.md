@@ -32,6 +32,55 @@
 
 ---
 
+## [BUILD] Update 2026-05-14 #13 — C21 AUTONOMY_WRITE_LOCK + Forge overlay fix + Phase 2 finalized
+
+### Files changed
+- `scripts/lib/autonomy-write-lock.mjs` — new (builder-generated, committed true, model: groq_llama). Exports `readLock`, `isLocked`, `getLock`, `acquireLock`, `releaseLock` for `data/autonomy.lock`. No side effects on import. node --check: PASS.
+- `scripts/lifeos-builder-continuous-queue.mjs` — wired C21: imports lock lib; after `assertReady()` checks lock; if locked → logs `autonomy_write_lock_active` + sets `lockStagingBranch = "autonomy/staging"`; per-task `branchResolved = lockStagingBranch || resolveQueueTaskCommitBranch(task)`; `autonomy_lock_active` field on `task_start` log.
+- `public/overlay/lifeos-dashboard.html` — fixed builder output corruption: 7x `asyncFn funcName()` → `async function funcName()`, 1x `2  Math.PI  radius` → `2 * Math.PI * radius`. Restores `check:overlay` PASS. Unblocks Forge from 9-cycle failure streak.
+- `.gitignore` — added `data/autonomy.lock`.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — SIS1 CONFIRMED receipt, C21 receipt, Agent Handoff Notes updated.
+- `docs/projects/BRAINSTORM_SESSIONS/.../11_IDEAS_CLAUDE_CODE_PHASE1.md` — new: C01–C25 Claude Code independent ideas.
+- `docs/projects/BRAINSTORM_SESSIONS/.../20_RANKINGS_PHASE2.md` — C-series populated, §9 global rank with ICS scores, §10 operator-finalized 6-slice sequence.
+
+### State after this session
+- C21 is on `main` and syntactically valid. Not yet tested live — lock file has never been written by a governance event. Prove-the-loop: write `data/autonomy.lock` and trigger daemon → look for `autonomy_write_lock_active` in queue log.
+- Forge overlay check: PASS. Daemon `failureSignatureStreak` should reset on next cycle.
+- SIS1: FULLY CONFIRMED. FPM1: LIVE. C21: SHIPPED/PENDING_CONFIRMATION.
+- Brainstorm Phase 2: COMPLETE — agreed sequence: C21 → C02+reader → C09 → Task DNA → Prediction loop → Founder Decoder.
+
+### Next agent: start here
+- **S2: C02 Memory bootstrap** — write `npm run memory:seed` script (or check if it exists) that backfills `lessons_learned` from existing receipts + CONTINUITY_LOG. After seeding, confirm at least one consumer reads from AM39 tables before adding more writes (C17 reader-first contract).
+- Gate: wait for C21 live proof first (one `autonomy_write_lock_active` event in daemon log after writing lock file).
+
+## [PLAN] Update 2026-05-13 #12 — Phase 2 cross-council ranking scaffold (A/C/N/G/O)
+
+### Files changed
+- `docs/projects/BRAINSTORM_SESSIONS/tsos-platform/2026-05-13_capsule-ssot-convergence/20_RANKINGS_PHASE2.md` — CAI instruction block; **`independent_convergence_score`** rubric; overlap clusters; **N01–N25** + **G01–G10** + **O01–O02**; **C01–C25** import stub; draft rank + first-build default.
+- `…/00_CHARTER.md` — Phase 2 row.
+- `…/10_IDEAS_OPERATOR_PHASE1.md` — crosswalk + next steps updated.
+- `…/01_CONVERGENCE_CHRONICLE.md` — §17 dedupe language → Phase 2 preserve-authorship.
+
+### State after this session
+- Brainstorm / ranking scaffold only; no product implementation.
+
+### Next agent: start here
+- Paste **Claude Code C01–C25** into **`20_RANKINGS_PHASE2.md` §6** (or add `11_IDEAS_CLAUDE_CODE_PHASE1.md` + link), then complete **§4** worksheet rows and replace **§9** draft rank.
+
+## [PLAN] Update 2026-05-13 #11 — Operator Phase-1 ideas A01–A25 preserved (convergence session)
+
+### Files changed
+- `docs/projects/BRAINSTORM_SESSIONS/tsos-platform/2026-05-13_capsule-ssot-convergence/10_IDEAS_OPERATOR_PHASE1.md` — Adam’s 25 long-horizon governed-cognition ideas + industry framing; `[SYS]` / `[PRODUCT:LifeOS]` / `[NEW]` tags; crosswalk to chronicle §4/§9.
+- `…/00_CHARTER.md` — row linking Phase-1 artifact.
+- `…/01_CONVERGENCE_CHRONICLE.md` — **§17** pointer + dedupe note vs chat `N01–N25`.
+- `docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md` — header pointer to chronicle + `10_IDEAS_OPERATOR_PHASE1.md`.
+
+### State after this session
+- Brainstorm preservation only; no implementation.
+
+### Next agent: start here
+- If Adam wants protocol closure: complete **`20_RANKINGS_PHASE2.md`** (import **C01–C25**, fill worksheet) → **`30_META_25_PHASE3.md`** → **`50_TRIAGE.md`** in the same session folder.
+
 ## [FIX] Update 2026-05-12 #9 — Governance correction: PENDING_CONFIRMATION marker + prove-the-loop rule
 
 ### Files changed

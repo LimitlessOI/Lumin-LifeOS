@@ -28,6 +28,7 @@ import {
   recordFailure as recordBuilderFailure,
   resolveTask as resolveBuilderTask,
 } from './lib/builder-failure-memory.mjs';
+import { isLocked, getLock } from './lib/autonomy-write-lock.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -759,6 +760,25 @@ async function main() {
 
   await assertReady();
 
+  // C21 AUTONOMY_WRITE_LOCK — when locked, route all commits to staging branch.
+  const lockActive = await isLocked();
+  let lockStagingBranch = null;
+  if (lockActive) {
+    const lockData = await getLock();
+    lockStagingBranch = lockData?.staging_branch || 'autonomy/staging';
+    await logLine({
+      event: 'autonomy_write_lock_active',
+      lane,
+      locked_by: lockData?.locked_by,
+      locked_at: lockData?.locked_at,
+      reason: lockData?.reason,
+      confirmation_event_needed: lockData?.confirmation_event_needed,
+      staging_branch: lockStagingBranch,
+      KNOW: 'all_commits_routed_to_staging_branch_not_main',
+    });
+    console.warn(`\n🔒 AUTONOMY_WRITE_LOCK active — commits routing to ${lockStagingBranch} (reason: ${lockData?.reason})\n`);
+  }
+
   await logLine({
     event: 'queue_batch_start',
     legacy_event_aliases: ['overnight_start'],
@@ -799,7 +819,8 @@ async function main() {
         : requestedModel && LEGACY_TASK_MODELS.has(requestedModel) && process.env.BUILDER_ALLOW_LEGACY_TASK_MODEL !== '1'
           ? DEFAULT_MODEL
           : requestedModel || DEFAULT_MODEL;
-    const branchResolved = resolveQueueTaskCommitBranch(task);
+    // C21: if lock active, staging branch overrides per-task branch (lock wins).
+    const branchResolved = lockStagingBranch || resolveQueueTaskCommitBranch(task);
     await logLine({
       event: 'task_start',
       lane,
@@ -808,6 +829,7 @@ async function main() {
       slice_profile: sliceProfileFromTargetFile(task.target_file),
       commit_branch: branchResolved,
       implicit_default_branch: !branchResolved,
+      autonomy_lock_active: lockActive || false,
       requested_model: requestedModel || null,
       effective_model: effectiveModel,
       task_force_model: task.force_model === true,
