@@ -1,21 +1,147 @@
 [
-  {"lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "worker_id": "nova", "task_id": "dashboard-theme-foundation", "cleared_reason": "transient_413", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "worker_id": "nova", "task_id": "dashboard-import-tokens", "cleared_reason": "transient_council_call_failed", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "worker_id": "nova", "task_id": "dashboard-ai-rail-css", "cleared_reason": "transient_413", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "worker_id": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "task_id": "dashboard-theme-foundation", "cleared_reason": "transient_413", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "worker_id": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "task_id": "dashboard-ai-rail-css", "cleared_reason": "transient_413", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "SITE_BUILDER_AUTONOMOUS_QUEUE", "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE", "task_id": "site-builder-live-ops-runbook", "cleared_reason": "transient_413", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "SITE_BUILDER_AUTONOMOUS_QUEUE", "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE", "task_id": "site-builder-command-center-audit", "cleared_reason": "transient_413", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "SITE_BUILDER_AUTONOMOUS_QUEUE", "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE", "task_id": "site-builder-preview-quality-playbook", "cleared_reason": "transient_413", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "worker_id": "nova", "task_id": "tc-webhook-validator", "cleared_reason": "cross_lane_orphan_pre_fix8", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "worker_id": "nova", "task_id": "site-builder-launch-readiness-route", "cleared_reason": "cross_lane_orphan_pre_fix8", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE", "worker_id": "nova", "task_id": "site-builder-postmark-send", "cleared_reason": "cross_lane_orphan_pre_fix8", "cleared_at": "2026-05-11T00:12:00.000Z"},
-  {"lane": "TC_SERVICE_BUILDER_QUEUE", "worker_id": "atlas", "task_id": "tc-webhook-validator", "cleared_reason": "spec_fixed_removed_tc_routes_context_2026_05_11", "cleared_at": "2026-05-11T05:30:00.000Z"},
-  {"lane": "TC_SERVICE_BUILDER_QUEUE", "worker_id": "TC_SERVICE_BUILDER_QUEUE", "task_id": "tc-webhook-validator", "cleared_reason": "spec_fixed_removed_tc_routes_context_2026_05_11", "cleared_at": "2026-05-11T05:30:00.000Z"},
-  {"lane": "SITE_BUILDER_AUTONOMOUS_QUEUE", "worker_id": "forge", "task_id": "site-builder-launch-readiness-route", "cleared_reason": "target_file_fixed_to_routes/site-builder-launch-readiness-routes.js_2026_05_11", "cleared_at": "2026-05-11T05:30:00.000Z"},
-  {"lane": "SITE_BUILDER_AUTONOMOUS_QUEUE", "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE", "task_id": "site-builder-launch-readiness-route", "cleared_reason": "target_file_fixed_to_routes/site-builder-launch-readiness-routes.js_2026_05_11", "cleared_at": "2026-05-11T05:30:00.000Z"},
-  {"lane": "SITE_BUILDER_AUTONOMOUS_QUEUE", "worker_id": "forge", "task_id": "site-builder-pipeline-report-route", "cleared_reason": "target_file_fixed_to_routes/site-builder-pipeline-report-routes.js_2026_05_11", "cleared_at": "2026-05-11T05:30:00.000Z"},
-  {"lane": "SITE_BUILDER_AUTONOMOUS_QUEUE", "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE", "task_id": "site-builder-pipeline-report-route", "cleared_reason": "target_file_fixed_to_routes/site-builder-pipeline-report-routes.js_2026_05_11", "cleared_at": "2026-05-11T05:30:00.000Z"},
-  {"lane": "SITE_BUILDER_AUTONOMOUS_QUEUE", "worker_id": "forge", "task_id": "site-builder-discovery-run-action", "cleared_reason": "target_file_fixed_to_routes/site-builder-discovery-routes.js_2026_05_11", "cleared_at": "2026-05-11T05:30:00.000Z"},
-  {"lane": "SITE_BUILDER_AUTONOMOUS_QUEUE", "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE", "task_id": "site-builder-discovery-run-action", "cleared_reason": "target_file_fixed_to_routes/site-builder-discovery-routes.js_2026_05_11", "cleared_at": "2026-05-11T05:30:00.000Z"}
+  {
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "worker_id": "nova",
+    "task_id": "dashboard-theme-foundation",
+    "cleared_reason": "transient_413",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "worker_id": "nova",
+    "task_id": "dashboard-import-tokens",
+    "cleared_reason": "transient_council_call_failed",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "worker_id": "nova",
+    "task_id": "dashboard-ai-rail-css",
+    "cleared_reason": "transient_413",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "worker_id": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "task_id": "dashboard-theme-foundation",
+    "cleared_reason": "transient_413",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "worker_id": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "task_id": "dashboard-ai-rail-css",
+    "cleared_reason": "transient_413",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "task_id": "site-builder-live-ops-runbook",
+    "cleared_reason": "transient_413",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "task_id": "site-builder-command-center-audit",
+    "cleared_reason": "transient_413",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "task_id": "site-builder-preview-quality-playbook",
+    "cleared_reason": "transient_413",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "worker_id": "nova",
+    "task_id": "tc-webhook-validator",
+    "cleared_reason": "cross_lane_orphan_pre_fix8",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "worker_id": "nova",
+    "task_id": "site-builder-launch-readiness-route",
+    "cleared_reason": "cross_lane_orphan_pre_fix8",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "worker_id": "nova",
+    "task_id": "site-builder-postmark-send",
+    "cleared_reason": "cross_lane_orphan_pre_fix8",
+    "cleared_at": "2026-05-11T00:12:00.000Z"
+  },
+  {
+    "lane": "TC_SERVICE_BUILDER_QUEUE",
+    "worker_id": "atlas",
+    "task_id": "tc-webhook-validator",
+    "cleared_reason": "spec_fixed_removed_tc_routes_context_2026_05_11",
+    "cleared_at": "2026-05-11T05:30:00.000Z"
+  },
+  {
+    "lane": "TC_SERVICE_BUILDER_QUEUE",
+    "worker_id": "TC_SERVICE_BUILDER_QUEUE",
+    "task_id": "tc-webhook-validator",
+    "cleared_reason": "spec_fixed_removed_tc_routes_context_2026_05_11",
+    "cleared_at": "2026-05-11T05:30:00.000Z"
+  },
+  {
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "worker_id": "forge",
+    "task_id": "site-builder-launch-readiness-route",
+    "cleared_reason": "target_file_fixed_to_routes/site-builder-launch-readiness-routes.js_2026_05_11",
+    "cleared_at": "2026-05-11T05:30:00.000Z"
+  },
+  {
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "task_id": "site-builder-launch-readiness-route",
+    "cleared_reason": "target_file_fixed_to_routes/site-builder-launch-readiness-routes.js_2026_05_11",
+    "cleared_at": "2026-05-11T05:30:00.000Z"
+  },
+  {
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "worker_id": "forge",
+    "task_id": "site-builder-pipeline-report-route",
+    "cleared_reason": "target_file_fixed_to_routes/site-builder-pipeline-report-routes.js_2026_05_11",
+    "cleared_at": "2026-05-11T05:30:00.000Z"
+  },
+  {
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "task_id": "site-builder-pipeline-report-route",
+    "cleared_reason": "target_file_fixed_to_routes/site-builder-pipeline-report-routes.js_2026_05_11",
+    "cleared_at": "2026-05-11T05:30:00.000Z"
+  },
+  {
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "worker_id": "forge",
+    "task_id": "site-builder-discovery-run-action",
+    "cleared_reason": "target_file_fixed_to_routes/site-builder-discovery-routes.js_2026_05_11",
+    "cleared_at": "2026-05-11T05:30:00.000Z"
+  },
+  {
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "worker_id": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "task_id": "site-builder-discovery-run-action",
+    "cleared_reason": "target_file_fixed_to_routes/site-builder-discovery-routes.js_2026_05_11",
+    "cleared_at": "2026-05-11T05:30:00.000Z"
+  },
+  {
+    "task_id": "tc-stripe-billing-service",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-10T02:26:27.118Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-OxMrdc/.js:3\n         WHERE id = $4\n               ^^\n\nSyntaxError: Unexpected identifier 'id'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n",
+    "cleared_at": "2026-05-14T08:40:01.113Z",
+    "cleared_by": "conductor-rl3",
+    "cleared_reason": "Builder-generated output had self-import + dbPool-before-declaration bugs. File fixed directly (GAP-FILL: builder failed x2 with SQL-in-JS syntax error). node --check PASS. 90 lines rebuilt."
+  }
 ]

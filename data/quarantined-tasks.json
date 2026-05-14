@@ -117,15 +117,6 @@
     "last_error": "/tmp/builder-check-TyZhgY/.js:1\nThe `public/overlay/lifeos-dashboard.html` file relies on `getLifeOSContext()` from `public/shared/lifeos-bootstrap.js`, but `public/shared/lifeos-bootstrap.js` is missing from the provided `REPO FILE CONTENTS`. This makes the provided `lifeos-dashboard.html` code unr"
   },
   {
-    "task_id": "tc-stripe-billing-service",
-    "worker_id": "nova",
-    "worker_name": "Nova",
-    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
-    "quarantined_at": "2026-05-10T02:26:27.118Z",
-    "failure_count": 2,
-    "last_error": "/tmp/builder-check-OxMrdc/.js:3\n         WHERE id = $4\n               ^^\n\nSyntaxError: Unexpected identifier 'id'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
-  },
-  {
     "task_id": "site-builder-launch-readiness-route",
     "worker_id": "nova",
     "worker_name": "Nova",

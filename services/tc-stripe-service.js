@@ -1,8 +1,8 @@
 // services/tc-stripe-service.js
-import { getStripeClient } from './tc-stripe-service.js';
+// @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+import Stripe from 'stripe';
 import { PLANS, PLAN_DETAILS } from './tc-pricing.js';
 import { Pool } from 'pg';
-import { logger } from '../logger';
 
 const STRIPE_PRICE_IDS = {
   founding_member: 'price_123456789',
@@ -10,17 +10,21 @@ const STRIPE_PRICE_IDS = {
   per_transaction: 'price_111111111',
 };
 
+function getStripeClient() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY);
+}
+
 async function createSubscription(pool, agentId, planKey, logger) {
   if (!process.env.STRIPE_SECRET_KEY) {
     logger.warn('Stripe secret key not set, skipping subscription creation');
     return null;
   }
 
-  const stripeClient = await getStripeClient();
-  const customer = await stripeClient.customers.create({
+  const stripe = getStripeClient();
+  const customer = await stripe.customers.create({
     email: `agent${agentId}@example.com`,
   });
-  const subscription = await stripeClient.subscriptions.create({
+  const subscription = await stripe.subscriptions.create({
     customer: customer.id,
     items: [{ plan: STRIPE_PRICE_IDS[planKey] }],
   });
@@ -31,7 +35,8 @@ async function createSubscription(pool, agentId, planKey, logger) {
     [customer.id, agentId]
   );
   await dbPool.query(
-    `INSERT INTO tc_agent_clients (id, stripe_subscription_id) VALUES ($1, $2)`,
+    `INSERT INTO tc_agent_clients (id, stripe_subscription_id) VALUES ($1, $2)
+     ON CONFLICT (id) DO UPDATE SET stripe_subscription_id = $2`,
     [agentId, subscription.id]
   );
   return subscription;
@@ -43,13 +48,13 @@ async function recordClosingFee(pool, transactionId, agentId, logger) {
     return null;
   }
 
-  const stripeClient = await getStripeClient();
-  const paymentIntent = await stripeClient.paymentIntents.create({
+  const stripe = getStripeClient();
+  const paymentIntent = await stripe.paymentIntents.create({
     amount: 34900,
     currency: 'usd',
     payment_method_types: ['card'],
   });
-  await stripeClient.paymentIntents.confirm(paymentIntent.id, {
+  await stripe.paymentIntents.confirm(paymentIntent.id, {
     payment_method: 'pm_card_visa',
   });
 
@@ -59,7 +64,8 @@ async function recordClosingFee(pool, transactionId, agentId, logger) {
     [transactionId]
   );
   await dbPool.query(
-    `INSERT INTO tc_transactions (id, closing_fee_status, closing_fee_amount) VALUES ($1, 'paid', 34900)`,
+    `INSERT INTO tc_transactions (id, closing_fee_status, closing_fee_amount) VALUES ($1, 'paid', 34900)
+     ON CONFLICT (id) DO UPDATE SET closing_fee_status = 'paid', closing_fee_amount = 34900`,
     [transactionId]
   );
   return paymentIntent;
@@ -71,16 +77,18 @@ async function cancelSubscription(pool, agentId, logger) {
     return null;
   }
 
-  const stripeClient = await getStripeClient();
-  const subscription = await stripeClient.subscriptions.retrieve(
-    (await dbPool.query(
-      `SELECT stripe_subscription_id FROM tc_agent_clients WHERE id = $1`,
-      [agentId]
-    )).rows[0].stripe_subscription_id
-  );
-  await stripeClient.subscriptions.del(subscription.id);
-
   const dbPool = new Pool(pool);
+  const stripe = getStripeClient();
+
+  const { rows } = await dbPool.query(
+    `SELECT stripe_subscription_id FROM tc_agent_clients WHERE id = $1`,
+    [agentId]
+  );
+  const subscriptionId = rows[0]?.stripe_subscription_id;
+  if (!subscriptionId) return null;
+
+  const subscription = await stripe.subscriptions.cancel(subscriptionId);
+
   await dbPool.query(
     `UPDATE tc_agent_clients SET status = 'cancelled' WHERE id = $1`,
     [agentId]
