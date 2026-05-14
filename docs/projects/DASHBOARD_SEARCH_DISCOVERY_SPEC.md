@@ -1,84 +1,53 @@
 # Cross-Surface Discovery Specification
 
-This document specifies features for enhancing user discovery and navigation across the LifeOS Dashboard and Lumin chat interfaces, focusing on contextual jumps, a command palette, and searchable entities.
-
 ## 1. Jumping from Dashboard to Lumin with Context Hints
 
-**Goal:** Enable seamless transitions from the LifeOS Dashboard to the Lumin chat, carrying relevant contextual information to pre-populate or inform the conversation.
+**Goal:** Enable seamless transitions from specific dashboard widgets to Lumin chat, carrying relevant context to facilitate deeper interaction or follow-up.
 
-**Description:**
-Users will be able to initiate a chat with Lumin directly from the Dashboard, and the Lumin interface will automatically display or suggest prompts based on the user's current view or interactions on the Dashboard.
-
-**Contextual Data Points to Transfer:**
-*   **Most Important Tasks (MITs):** Currently displayed MITs, especially those recently interacted with (e.g., marked complete, long-pressed for description).
-*   **Today's Schedule/Events:** Upcoming events from the calendar widget.
-*   **Life Scores:** Current scores and their associated categories (e.g., Health, Integrity).
-*   **Goals:** Progress and details of active goals.
-*   **General Dashboard State:** A high-level summary of the dashboard's current data (e.g., "You have 2 pending MITs and a Health Score of 75").
-
-**Mechanism:**
-1.  **Dashboard Trigger:** A dedicated "Chat with Lumin" button or icon will be added to the Dashboard, likely near the existing chat widget or header controls.
-2.  **URL Parameter / Local Storage:** When the trigger is activated, the Dashboard will construct a payload of relevant context. This payload will be encoded and passed to `public/overlay/lifeos-chat.html` either as a URL query parameter (e.g., `?context=...`) or stored temporarily in `localStorage` with a unique key.
-3.  **Lumin Context Parsing:** `public/overlay/lifeos-chat.html` will include new JavaScript logic to:
-    *   Check for and parse the incoming context payload on `DOMContentLoaded`.
-    *   If context is present, populate the existing `context-bar` (`#context-bar`) with "context pills" representing the transferred data (e.g., "MIT: 'Finish Project X'", "Health Score: 75").
-    *   Optionally, pre-fill the `#chat-input` with a suggested prompt based on the context (e.g., "Tell me more about my MIT 'Finish Project X'").
-    *   Clear the temporary context from `localStorage` or URL after use to prevent stale data.
-
-**Example Flow:**
-*   User long-presses an MIT on the Dashboard.
-*   A "Chat about this MIT" option appears.
-*   Clicking it opens `lifeos-chat.html` with `?context=mit_id:123,mit_text:'Finish Project X'`.
-*   Lumin's chat input is pre-filled with "Lumin, tell me more about 'Finish Project X'." and a context pill "MIT: Finish Project X" appears in the context bar.
+**Proposed Mechanism:**
+*   **Dashboard Integration:** Interactive elements (e.g., MIT items, Calendar events, Goal rows, Score tiles) on `public/overlay/lifeos-dashboard.html` will gain a mechanism (e.g., a click, long-press action, or dedicated icon) to "Discuss in Lumin" or "Explore in Lumin".
+*   **Contextual URL Parameters:** When activated, the dashboard will navigate to `public/overlay/lifeos-chat.html` with URL parameters encoding the context.
+    *   **Format:** `/overlay/lifeos-chat.html?contextType=<type>&contextId=<id>[&contextHint=<encoded_text>]`
+    *   **Examples:**
+        *   `/overlay/lifeos-chat.html?contextType=mit&contextId=123`
+        *   `/overlay/lifeos-chat.html?contextType=goal&contextId=456&contextHint=Review%20Q3%20Revenue%20Goal`
+        *   `/overlay/lifeos-chat.html?contextType=event&contextId=789&contextHint=Meeting%20with%20Sarah`
+*   **Lumin Behavior on Context Load:**
+    1.  **Thread Creation/Selection:** Lumin will check for an existing relevant thread (e.g., a thread previously linked to this MIT/Goal). If none exists, a new thread will be created, potentially in a specific mode (e.g., `planning` for goals, `general` for events).
+    2.  **Initial Message/Prompt:** Lumin will automatically generate an initial message or prompt based on the `contextType` and `contextId`, potentially using `contextHint` for richer detail.
+        *   Example for MIT: "Let's discuss MIT #123: 'Finish Q3 Report'. What's on your mind about this?"
+        *   Example for Goal: "You've jumped here from Goal #456: 'Q3 Revenue Goal'. How can I help you with this?"
+    3.  **Pre-populated Input (Optional):** The chat input might be pre-filled with a suggested follow-up question.
 
 ## 2. Command Palette Feasibility
 
-**Goal:** Evaluate the feasibility of implementing a system-wide command palette for rapid access to actions and information.
+**Goal:** Provide a fast, keyboard-driven interface for searching LifeOS entities and triggering common actions across all overlays.
 
-**Description:**
-A command palette (e.g., activated by `Cmd+K` or `Ctrl+K`) would provide a quick, searchable interface for users to execute common actions, navigate, or retrieve information without needing to click through menus.
-
-**Initial Scope (Feasibility Study):**
-*   **Activation:** Global keyboard shortcut (`Cmd+K` / `Ctrl+K`).
-*   **Interface:** A modal overlay that appears centered on the screen with a search input.
-*   **Searchable Actions/Entities:**
-    *   **Dashboard Actions:** "Add MIT", "Toggle Theme", "Toggle Ambient Mode".
-    *   **Lumin Actions:** "New Chat", "Change Mode (General, Mirror, Coach, etc.)", "Toggle Build Panel".
-    *   **Navigation:** "Go to Dashboard", "Go to Lumin".
-    *   **Search Entities:** (See Section 3) "Search MITs", "Search Goals", "Search Events".
-*   **Technical Considerations:**
-    *   **Global Event Listener:** A single listener for the keyboard shortcut.
-    *   **UI Component:** A reusable modal component for the palette.
-    *   **Fuzzy Search:** Client-side fuzzy matching for commands and entities.
-    *   **Action Dispatch:** A centralized mechanism to map search results to JavaScript functions or URL navigations.
-    *   **Context Awareness:** Potentially, the palette could offer context-sensitive actions based on the active page (e.g., more Dashboard-specific actions when on the Dashboard).
-
-**Deferral:** This task focuses on specifying the concept and feasibility. Implementation of the command palette itself is deferred.
+**Proposed Functionality:**
+*   **Global Trigger:** A standard keyboard shortcut (e.g., `Cmd+K` on macOS, `Ctrl+K` on Windows/Linux) will open a modal command palette.
+*   **Search & Filter:** The palette will allow users to type and instantly filter a list of:
+    *   **LifeOS Entities:** MITs, Goals, Calendar Events, Scores (by name/title/description).
+    *   **Lumin Threads:** Existing chat conversations (by title, mode, recent messages).
+    *   **System Actions:** "Add MIT", "New Lumin Chat", "Open Dashboard", "Toggle Theme", "View Settings", "Run Build Plan", etc.
+*   **Action Execution:** Selecting an item from the filtered list will either:
+    *   Navigate to the relevant LifeOS overlay/page (e.g., clicking an MIT takes you to the dashboard, clicking a Lumin thread opens it in `lifeos-chat.html`).
+    *   Execute a direct action (e.g., "Add MIT" opens the MIT quick-add input on the dashboard or a modal).
+*   **Deferral Note:** Implementation requires a global UI component, robust search indexing, and a centralized action dispatcher.
 
 ## 3. Searchable Entities List (MITs/Goals/Events)
 
-**Goal:** Provide a unified search capability for key user entities (MITs, Goals, Events) across the platform.
+**Goal:** Establish a unified, platform-wide search capability for core LifeOS entities, accessible via Lumin and the Command Palette.
 
-**Description:**
-Users need a way to quickly find specific commitments, objectives, or scheduled items. This search could be integrated into the command palette (Section 2) or offered as a dedicated search feature within the Dashboard or Lumin.
+**Proposed Scope of Searchable Entities:**
+*   **Most Important Tasks (MITs):** Searchable by `text`, `description`, `status`.
+*   **Goals:** Searchable by `name`, `description`, `current_value`, `target_value`, `unit`.
+*   **Calendar Events:** Searchable by `title`, `description`, `time`, `location`.
+*   **Life Scores:** Searchable by `name`, `description`.
+*   **Lumin Chat Messages/Threads:** Searchable by `content` (messages), `title` (threads), `mode`.
 
-**Search Scope and Data Sources:**
-*   **Most Important Tasks (MITs):**
-    *   **Searchable Fields:** `text`, `description`, `status` (e.g., "done", "pending").
-    *   **API Endpoint:** Leverage or extend `/api/v1/lifeos/commitments` with search parameters.
-*   **Goals:**
-    *   **Searchable Fields:** `name`, `description`, `category`.
-    *   **API Endpoint:** Leverage or extend `/api/v1/lifeos/finance/goals` with search parameters.
-*   **Calendar Events:**
-    *   **Searchable Fields:** `title`, `description`, `location`, `starts_at` (date range).
-    *   **API Endpoint:** Leverage or extend `/api/v1/lifeos/engine/calendar/events` with search parameters.
+**Proposed Data Exposure/Indexing:**
+*   **API Extension:** Existing APIs (`/api/v1/lifeos/commitments`, `/api/v1/lifeos/goals`, `/api/v1/lifeos/calendar/today`, `/api/v1/lifeos/scores`, `/api/v1/lifeos/chat/threads`, `/api/v1/lifeos/chat/messages`) would need to be augmented or a new `/api/v1/lifeos/search` endpoint created to support full-text search across these entity types.
+*   **Search Service:** A dedicated search service (e.g., using a search index like Elasticsearch or a database full-text search) would be required to efficiently query across diverse entity types and return unified results.
+*   **Result Format:** Search results should include `entityType`, `entityId`, `title/summary`, and a `link` to the relevant overlay/detail view.
 
-**Integration Points:**
-*   **Command Palette:** Search results from these entities would appear directly in the command palette, allowing users to jump to details or interact with the found item.
-*   **Lumin Chat:** The existing message search panel (`#search-panel` in `public/overlay/lifeos-chat.html`) could be extended to include these entity types, or a new dedicated entity search panel could be introduced.
-*   **Dashboard:** A search input could be added to the Dashboard header, providing quick access to these entities.
-
-**Technical Considerations:**
-*   **Backend API:** New or extended API endpoints will be required to perform efficient server-side searches across these entity types, returning relevant metadata.
-*   **Client-Side Rendering:** Display search results clearly, indicating the entity type (MIT, Goal, Event) and providing a link or action to view/interact with the full entity.
-*   **Result Prioritization:** Consider how to prioritize results when a search query matches multiple entity types.
+**Deferral Note:** This requires significant backend work for indexing and a new search API, as well as frontend integration into the command palette and potentially Lumin's existing search.
