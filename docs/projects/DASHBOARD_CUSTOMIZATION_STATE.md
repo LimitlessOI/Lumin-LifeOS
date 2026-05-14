@@ -1,42 +1,66 @@
-## Dashboard State Contract
+## Goals
 
-This document defines the client-side contract for persisting user preferences related to the LifeOS Dashboard layout and display. These preferences are initially stored in `localStorage` and are designed to be compatible with future server-side persistence.
+This contract defines the structure and management principles for client-side dashboard state, enabling user customization and preparing for future server-side persistence.
 
-### Goals
+1.  **Establish a Clear Schema:** Define a versioned, predictable schema for storing user preferences related to dashboard layout and widget configuration.
+2.  **Enable User Customization:** Support user-driven changes to widget visibility, display order, pinning status, and overall dashboard density.
+3.  **Plan for Persistence:** Outline the transition from client-side `localStorage` to a server-side user preferences API.
+4.  **Ensure Data Integrity:** Provide mechanisms for schema versioning and migration to prevent data loss or corruption on updates.
+5.  **Manage Rendering Boundaries:** Address how this state interacts with Server-Side Rendering (SSR) and client-side hydration.
 
-- Define a clear, versioned schema for dashboard layout preferences.
-- Enable user customization of widget visibility, order, density, and pinning.
-- Establish a foundation for seamless migration of user preferences across schema updates.
-- Outline the interaction between client-side storage (`localStorage`) and potential future server-side persistence, ensuring client-side hydration.
+## Keys & shapes
 
-### Keys & Shapes
+The dashboard state will be stored as a single JSON object under a root key.
 
-All keys will be prefixed with `lifeos_dashboard_` to prevent collisions.
+-   **Root Key (Client-side):** `lifeos_dashboard_state`
+-   **Shape:**
 
-| Preference | `localStorage` Key | Shape | Description | Example |
-|---|---|---|---|---|
-| **Schema Version** | `lifeos_dashboard_state_version` | `number` | Incremental version of the dashboard state schema. Used for migration. | `1` |
-| **Widget Visibility** | `lifeos_dashboard_widget_visibility` | `{ [widgetId: string]: boolean }` | A map indicating whether a widget is visible (`true`) or hidden (`false`). | `{ "lifeos-widget-mit": true, "lifeos-widget-score": false }` |
-| **Widget Order** | `lifeos_dashboard_widget_order` | `string[]` | An ordered array of widget IDs, defining their display sequence. | `["lifeos-widget-mit", "lifeos-widget-lumin-quick", "lifeos-widget-score", "lifeos-widget-category-stubs"]` |
-| **Density Mode** | `lifeos_dashboard_density_mode` | `DensityEnum` | The preferred display density for widgets. | `"compact"` |
-| **Pinned Widgets** | `lifeos_dashboard_pinned_widgets` | `string[]` | An array of widget IDs that are "pinned" to a specific position or state. | `["lifeos-widget-mit"]` |
+    ```json
+    {
+      "version": "1.0.0",
+      "widgets": {
+        "visibility": {
+          "lifeos-widget-mit": true,
+          "lifeos-widget-score": true,
+          "lifeos-widget-lumin-quick": true,
+          "lifeos-widget-category-stubs": true
+          // ... additional widget IDs, boolean indicates visible (true) or hidden (false)
+        },
+        "order": [
+          "lifeos-widget-mit",
+          "lifeos-widget-score",
+          "lifeos-widget-lumin-quick",
+          "lifeos-widget-category-stubs"
+          // ... ordered array of all widget IDs, regardless of visibility.
+          // Widgets not in 'visibility' or set to false will not render.
+        ],
+        "pinned": [
+          // Array of widget IDs that are "pinned" to a specific, non-reorderable position.
+          // Pinned widgets should appear at the beginning of the 'order' array.
+        ]
+      },
+      "layout": {
+        "density": "balanced" // See Density Enum
+      }
+    }
+    ```
 
-### Density Enum
+-   **Storage Location:**
+    -   **Client-side (initial):** `localStorage` (key: `lifeos_dashboard_state`).
+    -   **Server-side (future):** User preferences API endpoint (e.g., `/api/v1/user/preferences/dashboard`). The client will fetch this state on boot and persist changes back to the server.
 
-The `DensityEnum` defines the available display density modes for the dashboard.
+## Density enum
 
-```typescript
-type DensityEnum = 'comfortable' | 'compact' | 'minimal';
-```
+The `layout.density` field will use one of the following string values:
 
-- **`comfortable`**: Default, spacious layout.
-- **`compact`**: Reduced padding and spacing for more information density.
-- **`minimal`**: Highly condensed, potentially hiding non-essential elements.
+-   `"compact"`: Optimized for high information density, minimal spacing, and smaller element sizes.
+-   `"balanced"`: The default density, offering a moderate balance between information density and readability.
+-   `"airy"`: Prioritizes readability and larger touch targets, with increased spacing and element sizes.
 
-### Risks
+## Risks
 
-- **Schema Drift:** Without a robust versioning and migration strategy, changes to the state contract could lead to broken user experiences or loss of preferences.
-- **`localStorage` Limitations:** `localStorage` is synchronous and has a limited storage capacity (typically 5-10MB). While sufficient for preferences, it's not suitable for large datasets.
-- **SSR/Client Hydration Mismatch:** If server-side rendering (SSR) is introduced, a mismatch between the initial server-rendered state and the client-hydrated state (from `localStorage`) could cause a "flash of unstyled content" or layout shifts.
-- **Data Integrity:** Malicious client-side scripts could tamper with `localStorage` values, leading to unexpected UI behavior.
-- **Future Server-Side Sync:** Transitioning from `localStorage` to server-side persistence will require careful synchronization logic to merge or prioritize preferences.
+1.  **Schema Drift & Migration:** Changes to the state schema (`version` bump) without a robust client-side migration strategy can lead to broken layouts or lost preferences for existing users. A clear migration function (e.g., `migrateDashboardState(oldState)`) will be required.
+2.  **`localStorage` Performance/Limits:** Storing large or frequently updated state in `localStorage` can impact client-side performance and potentially hit browser storage limits. This contract assumes the dashboard state remains relatively compact.
+3.  **Client-Server Desynchronization:** Once server-side persistence is introduced, ensuring the client-side state is consistently synchronized with the server will be critical. Conflicts or stale data could lead to a poor user experience.
+4.  **Hydration Mismatch:** If SSR renders a default dashboard layout and the client-side state from `localStorage` (or server API) is different, a "flash of unstyled content" (FOUC) or layout shift may occur during client-side hydration.
+5.  **Widget ID Consistency:** Maintaining unique and consistent widget IDs across the platform is paramount. Any mismatch between the stored IDs and available widgets will result in rendering errors or missing content.
