@@ -1,7 +1,7 @@
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`
-> Generated: 2026-05-14T01:38:04.820Z
+> Generated: 2026-05-14T01:51:06.226Z
 
 ## Read order (mandatory)
 
@@ -80,24 +80,33 @@ Example first line of an update:
 
 ---
 
-## [BUILD] Update 2026-05-14 #14 — C21 CONFIRMED LIVE + auto-expiry hardened + lock released
+## [BUILD] Update 2026-05-14 #16 — S3/C09 Build Closure Contract
 
 ### Files changed
-- `scripts/lib/autonomy-write-lock.mjs` — auto-expiry added: `expires_at` + `ttl_minutes` written by `acquireLock()`; `DEFAULT_TTL_MINUTES=120` (env `AUTONOMY_LOCK_TTL_MINUTES`). `readLock()` auto-deletes and returns null if expired. `releaseLock()` now ENOENT-tolerant (idempotent). Error message improved: includes `locked_by`, `locked_at`, `reason`. Uncommitted from prior session — now committed.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — C21 handoff row updated to CONFIRMED LIVE; new receipt row added for proof run + auto-expiry; PENDING_CONFIRMATION row removed.
-- `docs/CONTINUITY_LOG.md` — this entry.
+- `scripts/lib/closure-contract.mjs` — NEW. Pure function `buildClosureRecord()` + `validateClosureRecord()`. Three legal closure types: `committed_success`, `skipped_already_valid`, `explicit_noncommit_reason`. Each validates proof structure and throws on contract violation.
+- `scripts/lifeos-builder-continuous-queue.mjs` — Wired C09 at 6 exit points: SIS1 skip, FPM1 level-3 quarantine, syntax/413 quarantine, hard fail, exception throw, build ok. Every task exit now emits `closure_contract_result` event.
+- `tests/closure-contract.test.js` — NEW. 14 tests: all closure types, all violation paths, synthetic proof event round-trip.
+- `package.json` — Added test to suite.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Receipt + handoff updated.
+- `docs/CONTINUITY_LOG.md` — This entry.
 
 ### State after this session
-- **C21: CONFIRMED LIVE.** Supervised proof run at 2026-05-14 ~01:17 UTC. Events confirmed: `autonomy_write_lock_active` ✅, `task_start` with `commit_branch:"autonomy/staging"` + `autonomy_lock_active:true` ✅. Lock released immediately (`data/autonomy.lock` deleted, `getLock()` → null). Auto-expiry now in library (prevents forgotten-lock silent-staging).
-- **No PENDING_CONFIRMATION items.** All gates clear: SIS1 ✅, C21 ✅. Only blocker is `tc-stripe-billing-service` quarantine (fail_closed=2) — not a gate for S2.
-- Tests: 14 pass, 0 fail, 4 skipped. `node --check` on lock lib: PASS.
+- `closure_contract_result` event emitted at every task exit point in the queue ✅
+- `buildClosureRecord()` throws on contract violation — cannot produce malformed records
+- `npm test`: 28 pass, 0 fail, 4 skipped (+14 from C09). `node --check`: PASS all files.
+- Synthetic proof event: `closure_type:committed_success, ok_to_advance:true, proof.synthetic:true` confirmed in test output.
+- No task advances without a typed, structured proof record in the JSONL log.
 
 ### Next agent: start here
-- **S2: C02 Memory bootstrap** — write `npm run memory:seed` (or check if it exists) to backfill `lessons_learned` from existing receipts + CONTINUITY_LOG. After seeding, confirm at least one consumer reads from AM39 tables (C17 reader-first contract). All prove-the-loop gates are now clear — begin S2 immediately.
+- **S4 — Task DNA v0** (per Phase 2 agreed sequence). Adam to confirm scope before starting.
+- C09 logs are JSONL — a future Sentinel can scan for tasks missing `closure_contract_result` events. That audit tooling is S4+ work.
 
 ---
 
-## [BUILD] Update 2026-05-14 #13 — C21 AUTONOMY_WRITE_LOCK + Forge overlay fix + Phase 2 
+## [BUILD] Update 2026-05-14 #15 — S2 Memory Bootstrap: lessons_learned seeded + reader wired
+
+### Files changed
+- `scripts/seed-lessons-learned.mjs` — NEW.
 
 ## Snippet — LifeOS lane
 

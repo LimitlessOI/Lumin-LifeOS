@@ -29,6 +29,7 @@ import {
   resolveTask as resolveBuilderTask,
 } from './lib/builder-failure-memory.mjs';
 import { isLocked, getLock } from './lib/autonomy-write-lock.mjs';
+import { buildClosureRecord } from './lib/closure-contract.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -851,6 +852,14 @@ async function main() {
         line_count: shipped.lineCount,
         KNOW: 'file_exists_passes_node_check_no_builder_call_no_tokens_spent',
       });
+      // C09: closure contract — SIS1 path
+      await logLine(buildClosureRecord({
+        closureType: 'skipped_already_valid',
+        taskId: id,
+        lane,
+        proof: { target_file: task.target_file, line_count: shipped.lineCount, validator: 'node_check' },
+        okToAdvance: true,
+      }));
       console.log(`⏭  ${id} — skip-if-shipped: ${task.target_file} (${shipped.lineCount} lines, syntax OK)`);
       perTaskSlice.push({ id, build_wall_ms: 0, ok: true, auto_skip: 'target_file_already_valid' });
       if (sleepMs > 0 && i < selected.length - 1) await sleep(sleepMs);
@@ -927,6 +936,19 @@ async function main() {
             failure_count: failureRecord.count,
             KNOW: 'level3_escalation_auto_quarantined_operator_review_needed',
           });
+          // C09: closure contract — FPM1 level-3 auto-quarantine
+          await logLine(buildClosureRecord({
+            closureType: 'explicit_noncommit_reason',
+            taskId: id,
+            lane,
+            proof: {
+              committed: false,
+              reason: 'fpm1_level3_auto_quarantine',
+              failure_count: failureRecord.count,
+              advance_justified: true,
+            },
+            okToAdvance: true,
+          }));
           console.warn(`⚠ Level-3 escalation on ${id} (${failureRecord.count} cumulative failures) — auto-quarantined.`);
           continue;
         }
@@ -943,11 +965,31 @@ async function main() {
             skip_reason: isSyntaxFail ? 'syntax_fail' : 'payload_413',
             KNOW: 'skippable_fail_quarantined_continuing_queue',
           });
+          // C09: closure contract — syntax/413 quarantine
+          await logLine(buildClosureRecord({
+            closureType: 'explicit_noncommit_reason',
+            taskId: id,
+            lane,
+            proof: {
+              committed: false,
+              reason: isSyntaxFail ? 'syntax_fail_quarantined' : 'payload_413_quarantined',
+              advance_justified: true,
+            },
+            okToAdvance: true,
+          }));
           console.warn(`⚠ ${isSyntaxFail ? 'Syntax' : '413-payload'} fail on ${id} — quarantined, continuing queue.`);
           // do NOT set failed=true; do NOT exit — advance to next task
           continue;
         }
         failed = true;
+        // C09: closure contract — hard fail, queue stops
+        await logLine(buildClosureRecord({
+          closureType: 'explicit_noncommit_reason',
+          taskId: id,
+          lane,
+          proof: { committed: false, reason: 'hard_fail_queue_stop', http: res.status },
+          okToAdvance: false,
+        }));
         console.error(JSON.stringify(json, null, 2));
         console.error(`\nStopped after failure: ${id}. Fix gaps, redeploy if needed, then resume with --start <index>.`);
         await persistLastRun({
@@ -981,6 +1023,19 @@ async function main() {
         build_wall_ms: buildWallMs,
         ...summarizeBuildResponse(json),
       });
+      // C09: closure contract — committed success
+      await logLine(buildClosureRecord({
+        closureType: 'committed_success',
+        taskId: id,
+        lane,
+        proof: {
+          ok: true,
+          committed: true,
+          commit_sha: json?.commit_sha || null,
+          model_used: json?.model_used || null,
+        },
+        okToAdvance: true,
+      }));
       console.log(`✅ ${id} committed model=${json?.model_used || '?'}`);
       if (sleepMs > 0 && i < selected.length - 1) {
         await sleep(sleepMs);
@@ -998,6 +1053,14 @@ async function main() {
         error: err.message,
         build_wall_ms: errWallMs,
       });
+      // C09: closure contract — unhandled exception, queue stops
+      await logLine(buildClosureRecord({
+        closureType: 'explicit_noncommit_reason',
+        taskId: id,
+        lane,
+        proof: { committed: false, reason: 'exception_queue_stop', error: String(err.message || err).slice(0, 200) },
+        okToAdvance: false,
+      }));
       console.error(err);
       await persistLastRun({
         ...skeleton(),

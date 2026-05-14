@@ -46,5 +46,5 @@
   "last_verified_at": "2026-04-26",
   "verification_passed": null,
   "last_updated": "2026-05-14",
-  "ssot_receipt_tail": "C21 CONFIRMED LIVE — proof run produced autonomy_write_lock_active + task_start with commit_branch:autonomy/staging; auto-expiry added; lock released; no PENDING_CONFIRMATION items remain; S2 unblocked"
+  "ssot_receipt_tail": "S3/C09 Build Closure Contract: closure-contract.mjs + 6 queue exit points + 14 tests; 28 pass. S2/C02 complete. C21 confirmed. S4 Task DNA next."
 }

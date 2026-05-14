@@ -32,6 +32,29 @@
 
 ---
 
+## [BUILD] Update 2026-05-14 #16 — S3/C09 Build Closure Contract
+
+### Files changed
+- `scripts/lib/closure-contract.mjs` — NEW. Pure function `buildClosureRecord()` + `validateClosureRecord()`. Three legal closure types: `committed_success`, `skipped_already_valid`, `explicit_noncommit_reason`. Each validates proof structure and throws on contract violation.
+- `scripts/lifeos-builder-continuous-queue.mjs` — Wired C09 at 6 exit points: SIS1 skip, FPM1 level-3 quarantine, syntax/413 quarantine, hard fail, exception throw, build ok. Every task exit now emits `closure_contract_result` event.
+- `tests/closure-contract.test.js` — NEW. 14 tests: all closure types, all violation paths, synthetic proof event round-trip.
+- `package.json` — Added test to suite.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Receipt + handoff updated.
+- `docs/CONTINUITY_LOG.md` — This entry.
+
+### State after this session
+- `closure_contract_result` event emitted at every task exit point in the queue ✅
+- `buildClosureRecord()` throws on contract violation — cannot produce malformed records
+- `npm test`: 28 pass, 0 fail, 4 skipped (+14 from C09). `node --check`: PASS all files.
+- Synthetic proof event: `closure_type:committed_success, ok_to_advance:true, proof.synthetic:true` confirmed in test output.
+- No task advances without a typed, structured proof record in the JSONL log.
+
+### Next agent: start here
+- **S4 — Task DNA v0** (per Phase 2 agreed sequence). Adam to confirm scope before starting.
+- C09 logs are JSONL — a future Sentinel can scan for tasks missing `closure_contract_result` events. That audit tooling is S4+ work.
+
+---
+
 ## [BUILD] Update 2026-05-14 #15 — S2 Memory Bootstrap: lessons_learned seeded + reader wired
 
 ### Files changed
