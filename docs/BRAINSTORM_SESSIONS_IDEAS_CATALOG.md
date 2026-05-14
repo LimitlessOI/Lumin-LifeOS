@@ -2,7 +2,8 @@
 
 **Owning registry:** [`projects/AMENDMENT_38_IDEA_VAULT.md`](projects/AMENDMENT_38_IDEA_VAULT.md) — streams, routing, **§6** step **5** (verbatim brainstorm vs coding churn).  
 **Session map + line spans:** [`CONVERSATION_DUMP_IDEAS_INDEX.md`](CONVERSATION_DUMP_IDEAS_INDEX.md) **§12**.  
-**Raw exports:** `•`+TAB+`Lumin-Memory/00_INBOX/raw/` (see Amendment 38).
+**Raw exports:** `•`+TAB+`Lumin-Memory/00_INBOX/raw/` (see Amendment 38).  
+**Capsule ⇄ SSOT / TSOS convergence (2026-05-13):** [`projects/BRAINSTORM_SESSIONS/tsos-platform/2026-05-13_capsule-ssot-convergence/01_CONVERGENCE_CHRONICLE.md`](projects/BRAINSTORM_SESSIONS/tsos-platform/2026-05-13_capsule-ssot-convergence/01_CONVERGENCE_CHRONICLE.md) + operator Phase-1 **A01–A25** [`10_IDEAS_OPERATOR_PHASE1.md`](projects/BRAINSTORM_SESSIONS/tsos-platform/2026-05-13_capsule-ssot-convergence/10_IDEAS_OPERATOR_PHASE1.md) + Phase-2 cross-council ranking [`20_RANKINGS_PHASE2.md`](projects/BRAINSTORM_SESSIONS/tsos-platform/2026-05-13_capsule-ssot-convergence/20_RANKINGS_PHASE2.md) (**preserve sources A/C/N/G/O**; import **C01–C25** when ready).
 
 **Honesty (required):** This file **does not** reproduce every byte of multi‑MB dumps. Ideas below are **extracted** and **cross-walked** to SSOT so cold agents see **nuance and conflicts**, not only lists. Sources: **Amendment 38** Streams **A–S**; **Amendment 21** § Idea Vault → LifeOS-native consolidation; **Amendment 39** + [`MEMORY_FRAMEWORK_DESIGN_BRIEF.md`](MEMORY_FRAMEWORK_DESIGN_BRIEF.md); brainstorm-dense regions **M–R**; **§A.1** **L4-001**–**003**. For **word-for-word** preservation, use **raw files** + [`conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md`](conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md). **Route** implementation to domain amendments, not this doc.
 

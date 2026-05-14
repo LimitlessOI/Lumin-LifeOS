@@ -310,4 +310,14 @@ The system is **architecturally complete and governance-strong but operationally
 
 ---
 
+## 17. Operator Phase-1 ideas — A01–A25 (2026-05-13)
+
+Adam supplied a **second** Phase-1 block (25 ideas + industry insight) aimed at **long-horizon governed cognition** (accumulation, consequence, drift observatory, wisdom graph, calm ops, etc.). Preserved per **`docs/BRAINSTORM_SESSIONS_PROTOCOL.md`** as:
+
+- **`10_IDEAS_OPERATOR_PHASE1.md`** — full text, `[SYS]` / `[PRODUCT:LifeOS]` / `[NEW]` tags, and **chronicle crosswalk** (VERIFIED / PARTIAL / MISSING / INERT).
+
+**Deduping:** Any earlier **`N01–N25`** list from a Conductor pass in chat is **not** duplicated in-repo; merge at **Phase 2 ranking** only — see **`20_RANKINGS_PHASE2.md`**: **preserve authorship**, score overlap, **`independent_convergence_score`**, **do not** collapse before scoring. **C01–C25** stub pending Claude Code import.
+
+---
+
 *End of chronicle — brainstorming preservation pass.*

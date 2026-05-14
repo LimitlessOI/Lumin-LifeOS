@@ -32,6 +32,23 @@
 
 ---
 
+## [BUILD] Update 2026-05-14 #14 — C21 CONFIRMED LIVE + auto-expiry hardened + lock released
+
+### Files changed
+- `scripts/lib/autonomy-write-lock.mjs` — auto-expiry added: `expires_at` + `ttl_minutes` written by `acquireLock()`; `DEFAULT_TTL_MINUTES=120` (env `AUTONOMY_LOCK_TTL_MINUTES`). `readLock()` auto-deletes and returns null if expired. `releaseLock()` now ENOENT-tolerant (idempotent). Error message improved: includes `locked_by`, `locked_at`, `reason`. Uncommitted from prior session — now committed.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — C21 handoff row updated to CONFIRMED LIVE; new receipt row added for proof run + auto-expiry; PENDING_CONFIRMATION row removed.
+- `docs/CONTINUITY_LOG.md` — this entry.
+
+### State after this session
+- **C21: CONFIRMED LIVE.** Supervised proof run at 2026-05-14 ~01:17 UTC. Events confirmed: `autonomy_write_lock_active` ✅, `task_start` with `commit_branch:"autonomy/staging"` + `autonomy_lock_active:true` ✅. Lock released immediately (`data/autonomy.lock` deleted, `getLock()` → null). Auto-expiry now in library (prevents forgotten-lock silent-staging).
+- **No PENDING_CONFIRMATION items.** All gates clear: SIS1 ✅, C21 ✅. Only blocker is `tc-stripe-billing-service` quarantine (fail_closed=2) — not a gate for S2.
+- Tests: 14 pass, 0 fail, 4 skipped. `node --check` on lock lib: PASS.
+
+### Next agent: start here
+- **S2: C02 Memory bootstrap** — write `npm run memory:seed` (or check if it exists) to backfill `lessons_learned` from existing receipts + CONTINUITY_LOG. After seeding, confirm at least one consumer reads from AM39 tables (C17 reader-first contract). All prove-the-loop gates are now clear — begin S2 immediately.
+
+---
+
 ## [BUILD] Update 2026-05-14 #13 — C21 AUTONOMY_WRITE_LOCK + Forge overlay fix + Phase 2 finalized
 
 ### Files changed

@@ -46,5 +46,5 @@
   "last_verified_at": "2026-04-26",
   "verification_passed": null,
   "last_updated": "2026-05-14",
-  "ssot_receipt_tail": "C21 AUTONOMY_WRITE_LOCK shipped; SIS1 confirmed; Forge overlay fix; brainstorm Phase 2 complete"
+  "ssot_receipt_tail": "C21 CONFIRMED LIVE — proof run produced autonomy_write_lock_active + task_start with commit_branch:autonomy/staging; auto-expiry added; lock released; no PENDING_CONFIRMATION items remain; S2 unblocked"
 }
