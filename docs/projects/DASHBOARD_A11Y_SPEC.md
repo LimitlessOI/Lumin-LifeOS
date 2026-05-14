@@ -1,71 +1,41 @@
-The output contract for "HTML FULL FILE" at the end of the prompt directly contradicts the explicit "TASK: Specification only" and "SPECIFICATION: Markdown sections" instructions. I will proceed with generating a Markdown specification as per the task, noting the contradiction.
+The task specification is contradictory regarding the expected output format. The primary task instruction explicitly asks for a "Specification only" in "Markdown sections" with "no HTML rewrite," while the final "INSTRUCTION" and "HTML FULL FILE — STRICT OUTPUT CONTRACT" demand a full HTML file as output. I am proceeding with a markdown specification as per the explicit task description for content, noting the contradiction.
 
-# LifeOS Dashboard Shell Accessibility Specification
+### LifeOS Dashboard Accessibility Specification
 
-This document outlines the accessibility requirements for the LifeOS Dashboard shell, focusing on WCAG 2.1 AA principles for core interactive elements and structural components. This specification does not include HTML rewrites but provides guidelines for implementation.
+This document outlines the accessibility requirements for the LifeOS Dashboard shell, focusing on key WCAG principles to ensure an inclusive user experience. These guidelines apply to the overall structure and interactive elements of `public/overlay/lifeos-dashboard.html` and any components integrated within it.
 
-## 1. Focus Management and Traps (WCAG 2.1 Success Criterion 2.4.3 Focus Order, 2.1.1 Keyboard)
+#### 1. Focus Management and Traps (WCAG 2.1.1 Keyboard, 2.4.3 Focus Order, 2.4.7 Focus Visible)
 
-### 1.1 Keyboard Focus Order
-- **Requirement**: All interactive elements (buttons, input fields, links, custom widgets) must be reachable and operable via keyboard alone. The tab order (`tabindex`) must be logical and intuitive, following the visual flow of the page.
-- **Current State (based on `lifeos-dashboard.html`)**:
-    - Header controls (`btn-ambient`, `btn-theme`)
-    - MITs section: `mit-input`, `btn-add`
-    - Chat section: `chat-input`, `btn-mic`, `send-btn`, `speak-toggle` checkbox
-- **Guidance**: Ensure custom interactive elements (e.g., `mit-item` if it becomes interactive beyond simple click, `score-tile` for long-press) are properly focusable and operable via keyboard.
+*   **Focus Order:** All interactive elements (buttons, input fields, links, custom controls) must be reachable and operable via keyboard in a logical and predictable order that follows the visual layout.
+*   **Focus Visible:** A clear and distinct visual indicator must be present for the element currently in focus. This indicator should meet a contrast ratio of at least 3:1 against adjacent colors. The existing `:focus` styles should be reviewed and enhanced if necessary.
+*   **Focus Traps:** When modal dialogs or other temporary overlays are introduced (e.g., for settings, confirmations, or AI rail interactions), focus must be programmatically trapped within the active overlay. Users must be able to escape the trap (e.g., via `Escape` key) to return focus to the underlying content. Focus should return to the element that triggered the overlay upon its dismissal.
+*   **No Keyboard Traps:** Users must not be trapped within any content or component, meaning they can navigate away from any element using standard keyboard commands.
 
-### 1.2 Focus Traps
-- **Requirement**: Users must not be trapped within any subsection of content. If a modal dialog or custom component creates a temporary focus trap, there must be a clear and keyboard-operable mechanism (e.g., `Escape` key, a close button) to release focus and return to the previous position in the tab order.
-- **Guidance**: Currently, no explicit modal dialogs are present. If future components introduce such patterns (e.g., a detailed view for a score tile), ensure focus management prevents trapping.
+#### 2. Semantic Structure and Landmarks (WCAG 1.3.1 Info and Relationships, 2.4.1 Bypass Blocks)
 
-### 1.3 Visible Focus Indicator
-- **Requirement**: A clear and visible focus indicator must be present for all interactive elements when they receive keyboard focus.
-- **Current State**: CSS includes `:focus` styles for `quick-add input`, `chat-row input`.
-- **Guidance**: Extend focus styles to all interactive elements, including `hdr-btn`, `mit-item`, `btn-add`, `btn-mic`, `btn-send`, `speak-toggle` checkbox, and `score-tile` (if interactive).
+*   **HTML5 Semantic Elements:** The dashboard structure must utilize appropriate HTML5 semantic elements (`<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>`, `<section>`, `<article>`) to convey the purpose and structure of content to assistive technologies.
+*   **ARIA Landmarks:** Where native HTML5 semantics are insufficient or for custom components, ARIA landmark roles (e.g., `role="banner"`, `role="navigation"`, `role="main"`, `role="complementary"`, `role="contentinfo"`) should be applied to define regions of the page.
+*   **Heading Structure:** Content must be organized with a logical heading hierarchy (`<h1>` through `<h6>`) to provide an outline for screen reader users. Headings should accurately describe the section they introduce.
+*   **Skip Links:** A "Skip to main content" link should be provided as the first focusable element on the page, allowing keyboard and screen reader users to bypass repetitive navigation and header content. This link should be visually hidden until focused.
 
-## 2. Semantic Structure and Landmarks (WCAG 2.1 Success Criterion 1.3.1 Info and Relationships, 2.4.1 Bypass Blocks)
+#### 3. Keyboard Accessibility (WCAG 2.1.1 Keyboard, 2.1.2 No Keyboard Trap, 2.4.3 Focus Order)
 
-### 2.1 HTML5 Semantic Elements
-- **Requirement**: Utilize HTML5 semantic elements (`<header>`, `<main>`, `<nav>`, `<section>`, `<footer>`, `<form>`, `<button>`, `<input>`) to convey the structure and purpose of content to assistive technologies.
-- **Current State**:
-    - `<header>` is used for the main page header.
-    - `div.page` wraps the main content.
-    - `div.card` elements are used for widgets.
-- **Guidance**:
-    - Wrap the main content within a `<main>` element (e.g., `div.page` could be `<main class="page">`).
-    - Ensure `div.card` elements, especially those acting as distinct sections (e.g., "Today's MITs", "Chat with Lumin"), are semantically marked up, potentially using `<section>` with an `aria-labelledby` attribute pointing to their respective labels.
-    - The `hdr-controls` could be wrapped in a `<nav>` if they represent primary navigation, or simply remain as buttons within the header.
-    - The chat input area (`chat-row`) and its associated controls should be within a `<form>` element.
+*   **All Functionality Operable by Keyboard:** All interactive functionality available via mouse must also be operable via keyboard alone, without requiring specific timings for individual keystrokes. This includes buttons, links, form controls, and custom widgets.
+*   **Standard Keyboard Interactions:** Standard keyboard conventions should be followed (e.g., `Tab` for next focusable element, `Shift+Tab` for previous, `Enter`/`Space` for activation, `Escape` for closing modals/menus).
+*   **Custom Controls:** Any custom interactive controls (e.g., custom checkboxes, radio buttons, sliders, tabs) must implement appropriate ARIA roles, states, and properties (e.g., `role="checkbox"`, `aria-checked`, `aria-label`) and respond to standard keyboard input.
 
-### 2.2 ARIA Roles and Attributes
-- **Requirement**: Where native HTML semantics are insufficient, use ARIA roles and attributes to enhance accessibility, ensuring they are used correctly and do not duplicate native semantics.
-- **Guidance**:
-    - For custom interactive elements like `mit-item` or `score-tile`, consider `role="button"` or `role="gridcell"` with appropriate `aria-label` or `aria-describedby` if they perform complex actions or convey additional information.
-    - The `pulse-dot` could have `aria-hidden="true"` if purely decorative.
-    - The `score-tile`'s long-press tip could use `aria-describedby` or `aria-labelledby` to associate the tip content with the tile.
+#### 4. Contrast Ratios (WCAG 1.4.3 Contrast (Minimum), 1.4.11 Non-text Contrast)
 
-## 3. Color Contrast (WCAG 2.1 Success Criterion 1.4.3 Contrast (Minimum), 1.4.11 Non-text Contrast)
+*   **Text Contrast:** All essential text content must have a contrast ratio of at least 4.5:1 against its background. Large text (18pt or 14pt bold) requires a minimum of 3:1.
+*   **Non-text Contrast:** Graphical objects (e.g., icons conveying information, parts of user interface components like input borders, focus indicators) must have a contrast ratio of at least 3:1 against adjacent colors.
+*   **Color Not Sole Means:** Color should not be the sole visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element. Redundant cues (e.g., text labels, icons, patterns) should be used.
 
-### 3.1 Text Contrast
-- **Requirement**: Ensure a minimum contrast ratio of 4.5:1 for normal text and 3:1 for large text (18pt/24px regular or 14pt/18.66px bold) against its background.
-- **Current State (based on CSS variables)**:
-    - `var(--text-primary)` on `var(--bg-base)` or `var(--bg-surface)`
-    - `var(--text-secondary)` on `var(--bg-surface2)`
-    - `var(--text-muted)` on various backgrounds
-- **Guidance**: Systematically check all text colors against their backgrounds to ensure they meet WCAG AA contrast ratios. Pay particular attention to `var(--text-muted)` and text on accent colors.
+#### 5. Motion and Animation (WCAG 2.3.3 Animation from Interactions, 2.2.2 Pause, Stop, Hide)
 
-### 3.2 Non-Text Contrast
-- **Requirement**: Ensure a minimum contrast ratio of 3:1 for graphical objects (e.g., icons, input borders, focus indicators) and UI components (e.g., buttons, checkboxes) against adjacent colors.
-- **Current State**:
-    - `hdr-btn` borders, `mit-check` borders, `quick-add input` borders, `btn-mic` borders, `score-ring` circles.
-- **Guidance**: Verify contrast for all interactive element borders, icons, and states (e.g., `hdr-btn:hover`, `mit-check.done`, `btn-mic.listening`) to ensure they are clearly distinguishable.
+*   **`prefers-reduced-motion`:** The dashboard must respect the user's `prefers-reduced-motion` media query setting. When `reduce` is preferred, non-essential animations, transitions, and parallax effects should be minimized or removed. This includes:
+    *   Disabling or significantly reducing the duration of `fadeUp` animations.
+    *   Minimizing or removing `pulse-ring`, `shimmer`, `bounce-dot`, `ring-fill`, `bar-grow`, `check-draw`, and `mic-pulse` animations.
+    *   Ensuring any remaining motion is subtle and does not cause discomfort.
+*   **Controllable Motion:** Any essential animations that cannot be removed (e.g., for conveying status) must be short, non-blinking, and provide a mechanism for users to pause, stop, or hide them if they last longer than five seconds.
 
-## 4. Motion and Animation (WCAG 2.1 Success Criterion 2.3.3 Animation from Interactions)
-
-### 4.1 Respect `prefers-reduced-motion`
-- **Requirement**: Provide a mechanism to reduce or eliminate non-essential animations for users who have indicated a preference for reduced motion via their operating system settings (`@media (prefers-reduced-motion: reduce)`).
-- **Current State**: Several animations are present (`pulse-ring`, `fadeUp`, `shimmer`, `bounce-dot`, `ring-fill`, `bar-grow`, `check-draw`, `mic-pulse`).
-- **Guidance**:
-    - Implement CSS media queries for `prefers-reduced-motion: reduce` to disable or significantly reduce the intensity of non-essential animations (e.g., `fadeUp`, `shimmer`, `bounce-dot`, `pulse-ring`).
-    - Essential animations (e.g., progress indicators like `ring-fill`, `bar-grow`) may be retained but should be subtle.
-    - Ensure any animation that conveys critical information also has a non-animated alternative.
+This specification serves as a guide for future development and auditing of the LifeOS Dashboard to ensure it meets a high standard of accessibility.
