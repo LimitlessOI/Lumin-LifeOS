@@ -49,7 +49,7 @@ export function pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail
     return 'compact';
   }
 
-  // Rule: return "airy" when viewportWidth >= 1280 and widgetCount <= 3 and hasPinnedRail is false
+  // Rule: return "airy" when viewportWidth >= 1280 and widgetCount <= 3 and !hasPinnedRail
   if (viewportWidth >= 1280 && widgetCount <= 3 && !hasPinnedRail) {
     return 'airy';
   }
