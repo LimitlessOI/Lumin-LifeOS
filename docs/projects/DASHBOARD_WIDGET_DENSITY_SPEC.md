@@ -1,1 +1,1 @@
-The task explicitly requested a Markdown specification, which conflicts with the general HTML output contract. Proceeding with Markdown as per specific task instruction.
+The specification for dashboard card density modes, token mapping, and rollout order cannot be generated as the required source documents (`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`, `docs/projects/DASHBOARD_DENSITY_INTEGRATION_NOTES.md`, and `docs/projects/DASHBOARD_CUSTOMIZATION_STATE.md`) are missing from the repository.
