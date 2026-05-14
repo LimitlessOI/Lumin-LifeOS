@@ -1,5 +1,3 @@
-The specification is incomplete regarding the data structure for "overdue" and "recurring" MIT states, and contradictory in asking for "Contract only" while also requiring "complete implementation code". I am proceeding by defining the DOM/CSS contract for these states and making necessary code corrections for functionality and existing pattern adherence.
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +13,7 @@ The specification is incomplete regarding the data structure for "overdue" and "
 <link rel="stylesheet" href="../shared/lifeos-dashboard-ai-rail.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="/overlay/lifeos-bootstrap.js"></script>
-<!-- Widget scripts -->
+<!-- (1) New script tags added by current task -->
 <script src="/shared/lifeos-widget-mit.js"></script>
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
@@ -65,7 +63,7 @@ max-width: 860px;
 margin: 0 auto;
 padding: 24px 16px;
 }
-/* ── Cards ── */
+/ ── Cards ── /
 .card {
 background: var(--bg-surface);
 border: 1px solid var(--border);
@@ -97,7 +95,7 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-/* ── Header ── */
+/ ── Header ── /
 .hdr-row {
 display: flex;
 align-items: flex-start;
@@ -132,10 +130,6 @@ color: var(--text-primary);
 .hdr-btn.active {
 color: var(--c-health);
 border-color: var(--c-health);
-}
-.hdr-btn.ambient-active {
-color: var(--c-health);
-border-color: var(--c-health);
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
 .greeting {
@@ -162,7 +156,7 @@ margin-left: 8px;
 vertical-align: middle;
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-/* ── Animations ── */
+/ ── Animations ── /
 @keyframes pulse-ring {
 0%, 100% {
 opacity: 1;
@@ -201,7 +195,7 @@ transform: scale(1);
 opacity: 1;
 }
 }
-/* Progress uses inline stroke-dashoffset from makeRing(); animate opacity only */
+/ Progress uses inline stroke-dashoffset from makeRing(); animate opacity only /
 @keyframes ring-fill {
   from { opacity: 0.2; }
   to { opacity: 1; }
@@ -257,7 +251,7 @@ animation-delay: 0.40s;
 .delay-9 {
 animation-delay: 0.45s;
 }
-/* ── Skeleton ── */
+/ ── Skeleton ── /
 .skeleton {
 background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
 background-size: 400px 100%;
@@ -271,34 +265,34 @@ margin-bottom: 10px;
 .skel-line:last-child {
 width: 60%;
 }
-/* ── MIT ── */
+/ ── MIT ── /
 .mit-item {
-display: flex;
-align-items: flex-start;
-gap: 12px;
-padding: 10px 0;
-border-bottom: 1px solid var(--border);
-cursor: pointer;
-user-select: none;
--webkit-user-select: none;
+  position: relative; /* For absolute positioning of swipe actions */
+  overflow: hidden; /* Hide swipe actions initially */
+  border-bottom: 1px solid var(--border); /* Keep border on parent */
 }
 .mit-item:last-of-type {
-border-bottom: none;
+  border-bottom: none;
 }
 .mit-item.overdue {
-    border-left: 3px solid var(--c-conflict); /* Red accent for overdue */
-    padding-left: 9px; /* Adjust padding due to border */
+  border-left: 3px solid var(--c-conflict); /* Visual cue for overdue */
+  padding-left: 12px; /* Space for the border */
 }
 .mit-item.overdue .mit-text {
-    color: var(--c-conflict);
-    font-weight: 600;
+  color: var(--c-conflict);
 }
-.mit-item.recurring {
-    background: rgba(91,106,245,0.05); /* Subtle background for recurring */
-    border-radius: var(--radius-sm);
-}
-.mit-item.recurring .mit-text {
-    font-style: italic;
+.mit-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0; /* Apply original mit-item padding here */
+  cursor: pointer; /* Move cursor and user-select here */
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.2s ease-out; /* For swipe animation */
+  background: var(--bg-surface); /* Ensure content has a background over swipe actions */
+  position: relative; /* To stack above swipe actions */
+  z-index: 1;
 }
 .mit-check {
 flex-shrink: 0;
@@ -338,7 +332,50 @@ transition: color 0.2s;
 color: var(--text-muted);
 text-decoration: line-through;
 }
-/* ── Quick add ── */
+.mit-recurring-icon {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: auto; /* Push to the right */
+  opacity: 0.7;
+  padding-left: 8px; /* Space from text */
+}
+.mit-swipe-actions {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px; /* Width of the revealed action area */
+  z-index: 0; /* Behind the content */
+}
+.mit-swipe-left {
+  left: 0;
+  background: var(--c-conflict); /* Red for delete */
+  transform: translateX(-100%); /* Hidden off-screen */
+}
+.mit-swipe-right {
+  right: 0;
+  background: var(--c-today); /* Blue for complete */
+  transform: translateX(100%); /* Hidden off-screen */
+}
+.mit-swipe-actions button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 10px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mit-swipe-actions button:hover {
+  opacity: 0.8;
+}
+/ ── Quick add ── /
 .quick-add {
 display: flex;
 gap: 8px;
@@ -378,7 +415,7 @@ transition: opacity 0.15s;
 .btn-add:hover {
 opacity: 0.85;
 }
-/* ── Calendar ── */
+/ ── Calendar ── /
 .event-row {
 display: flex;
 align-items: center;
@@ -404,7 +441,7 @@ flex-shrink: 0;
 font-size: 14px;
 color: var(--text-primary);
 }
-/* ── Goals ── */
+/ ── Goals ── /
 .goal-row {
 margin-bottom: 16px;
 }
@@ -444,7 +481,7 @@ font-size: 11px;
 color: var(--text-muted);
 margin-top: 4px;
 }
-/* ── Scores ── */
+/ ── Scores ── /
 .scores-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -521,7 +558,7 @@ box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 .score-tile.tip-open .score-tile-tip {
 display: block;
 }
-/* ── Chat ── */
+/ ── Chat ── /
 .chat-messages {
 height: 240px;
 overflow-y: auto;
@@ -598,7 +635,7 @@ animation: bounce-dot 1.2s 0.2s infinite;
 .typing-dot:nth-child(3) {
 animation: bounce-dot 1.2s 0.4s infinite;
 }
-/* ── Chat input row ── */
+/ ── Chat input row ── /
 .chat-row {
 display: flex;
 gap: 8px;
@@ -659,7 +696,7 @@ transition: opacity 0.15s;
 .btn-send:hover {
 opacity: 0.85;
 }
-/* ── Voice footer ── */
+/ ── Voice footer ── /
 .voice-footer {
 display: flex;
 align-items: center;
@@ -693,7 +730,7 @@ font-size: 11px;
 color: var(--text-muted);
 opacity: 0.6;
 }
-/* ── Empty ── */
+/ ── Empty ── /
 .empty {
 text-align: center;
 padding: 20px 0;
@@ -712,10 +749,10 @@ grid-template-columns: 1fr 1fr;
 gap: 16px;
 }
 }
-/* Desktop-specific styles for wider screens */
+/ Desktop-specific styles for wider screens /
 @media (min-width: 1000px) {
   .page {
-    max-width: 1000px; /* wider content area */
+    max-width: 1000px; / wider content area /
     padding: 40px 32px;
   }
   .hdr-row {
@@ -791,197 +828,4 @@ gap: 16px;
 <!-- NEW WIDGETS ROW -->
 <div class="two-col mb-4">
 <div id="lifeos-widget-mit" class="dashboard-widget card accent-border-today fade-up delay-3"></div>
-<div id="lifeos-widget-score" class="dashboard-widget card accent-border-health fade-up delay-4"></div>
-<div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5"></div>
-<div id="lifeos-widget-category-stubs" class="dashboard-widget card accent-border-finance fade-up delay-6"></div>
-</div>
-<!-- ROW 2: Goals + Scores -->
-<div class="two-col mb-4">
-<div class="card accent-border-finance fade-up delay-7">
-<div class="card-label">Goals</div>
-<div id="goals-list">
-<div class="skel-line skeleton w-full"></div>
-<div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;margin-bottom:14px;border-radius:3px"></div>
-<div class="skel-line skeleton w-4/5"></div>
-<div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;border-radius:3px"></div>
-</div>
-</div>
-<div class="card accent-border-health fade-up delay-8">
-<div class="card-label">Life Scores <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text-muted)">— hold to see what each means</span></div>
-<div class="scores-grid" id="scores-grid">
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
-</div>
-</div>
-</div>
-<!-- CHAT -->
-<div class="card accent-border-mirror fade-up delay-9">
-<div class="card-label">Chat with Lumin</div>
-<div class="chat-messages" id="chat-messages">
-<div class="msg assistant">Hey Adam 👋 — what's on your mind today?</div>
-</div>
-<div class="typing" id="typing">
-<div class="typing-dot"></div>
-<div class="typing-dot"></div>
-<div class="typing-dot"></div>
-</div>
-<div class="chat-row">
-<input type="text" id="chat-input" placeholder="Ask Lumin anything… or tap 🎙 to talk">
-<button class="btn-mic" id="btn-mic" title="Push to talk (or hold Space)">🎙</button>
-<button class="btn-send" id="send-btn">↑</button>
-</div>
-<div class="voice-footer">
-<label>
-<input type="checkbox" id="speak-toggle">
-<span>Speak replies</span>
-</label>
-<span class="ptt-hint">Hold Space to talk</span>
-<span id="voice-status"></span>
-</div>
-</div>
-</div>
-<div id="lifeos-ai-rail-root"></div>
-<!-- Voice module must be non-module (IIFE) -->
-<script src="/shared/lifeos-voice-chat.js"></script>
-<script src="../shared/lifeos-dashboard-ai-rail.js"></script>
-<script type="module">
-const HDR = () => ({ 'x-lifeos-key': localStorage.getItem('lifeos_api_key') || '', 'Content-Type': 'application/json' });
-const API = (p, o={}) => fetch(p, { headers: HDR(), ...o });
-const $ = id => document.getElementById(id);
-// ── Clock ──
-function tick() {
-const now = new Date();
-const h = now.getHours();
-$('greeting').innerHTML = (h<12?'Good morning':h<18?'Good afternoon':'Good evening') + '<span class="pulse-dot"></span>';
-$('clock').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}) + ' · ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-}
-tick();
-setInterval(tick, 30000);
-// ── Theme toggle ──
-function toggleTheme() {
-const curr = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
-const next = curr === 'light' ? 'dark' : 'light';
-document.documentElement.dataset.theme = next;
-localStorage.setItem('lifeos_theme', next);
-const mc = document.getElementById('theme-color-meta');
-if (mc) mc.setAttribute('content', next === 'light' ? '#f6f7fb' : '#0a0a0f');
-$('btn-theme').textContent = next === 'light' ? '☾' : '☀︎';
-}
-// ── Long-press ──
-let pressTimer;
-function bindLongPress(el, onHold, onRelease) {
-const start = e => { pressTimer = setTimeout(() => onHold(e), 500); };
-const end = () => { clearTimeout(pressTimer); onRelease && onRelease(); };
-el.addEventListener('mousedown', start);
-el.addEventListener('touchstart', start, { passive: true });
-el.addEventListener('mouseup', end);
-el.addEventListener('mouseleave', end);
-el.addEventListener('touchend', end);
-}
-// ── MITs ──
-async function loadMITs() {
-try {
-const r = await API('/api/v1/lifeos/commitments?limit=30');
-const d = await r.json();
-const mits = (d.commitments||[]).filter(c=>c.is_mit).slice(0,3);
-if (!mits.length) {
-$('mits-list').innerHTML='<div class="empty"><span>✅</span>No MITs — add one below</div>';
-return;
-}
-$('mits-list').innerHTML = mits.map(m => {
-    // Contract for future API fields:
-    // const isOverdue = m.due_date && new Date(m.due_date) < new Date() && !m.kept_at;
-    // const isRecurring = m.recurrence_pattern; // e.g., 'daily', 'weekly'
-
-    const itemClasses = [
-        'mit-item',
-        m.kept_at ? 'done' : '',
-        // isOverdue ? 'overdue' : '', // Apply 'overdue' class if applicable
-        // isRecurring ? 'recurring' : '' // Apply 'recurring' class if applicable
-    ].filter(Boolean).join(' ');
-
-    // Contract for future data attributes:
-    // const dataOverdue = isOverdue ? 'data-overdue="true"' : '';
-    // const dataRecurring = isRecurring ? 'data-recurring="true"' : '';
-
-    return `
-        <div class="${itemClasses}" data-id="${m.id}" data-desc="${(m.description||m.text||'').replace(/"/g,'&quot;')}"
-             /* ${''} ${''} */>
-            <div class="mit-check ${m.kept_at?'done':''}">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <div class="mit-text ${m.kept_at?'done':''}">${m.text||m.title||'Untitled'}</div>
-        </div>`;
-}).join('');
-$('mits-list').querySelectorAll('.mit-item').forEach(el => {
-el.addEventListener('click', ()=>toggleMIT(el));
-bindLongPress(el, e => {
-const tip = document.createElement('div');
-tip.style.cssText='position:fixed;background:var(--bg-overlay);border:1px solid var(--border-focus);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text-secondary);max-width:240px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.6);pointer-events:none;';
-const desc = el.dataset.desc || 'No description added yet';
-tip.textContent = desc;
-const cx = e.touches?e.touches[0].clientX:e.clientX;
-const cy = e.touches?e.touches[0].clientY:e.clientY;
-tip.style.left = Math.min(cx, window.innerWidth-260)+'px';
-tip.style.top = Math.max(10, cy-70)+'px';
-tip.id='mit-tip';
-document.body.appendChild(tip);
-}, () => { const t=$('mit-tip'); t&&t.remove(); } );
-});
-} catch {
-$('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Could not load tasks</div>';
-}
-}
-async function toggleMIT(el) {
-const chk=el.querySelector('.mit-check'), txt=el.querySelector('.mit-text');
-const done=chk.classList.contains('done');
-chk.classList.toggle('done',!done);
-txt.classList.toggle('done',!done);
-try {
-await API(`/api/v1/lifeos/commitments/${el.dataset.id}/keep`,{method:'POST',body:JSON.stringify({kept:!done})});
-} catch {}
-}
-window.addMIT = async function() {
-const inp=$('mit-input'), text=inp.value.trim();
-if (!text) return;
-try {
-await API('/api/v1/lifeos/commitments',{method:'POST',body:JSON.stringify({text,is_mit:true})});
-inp.value='';
-loadMITs();
-} catch {}
-};
-$('mit-input').addEventListener('keypress', e=>{ if(e.key==='Enter') addMIT(); });
-// ── Calendar ──
-async function loadCal() {
-try {
-const r=await API('/api/v1/lifeos/engine/calendar/events?days=1&limit=8');
-const d=await r.json();
-const evs=d.events||[];
-if (!evs.length) {
-$('cal-list').innerHTML='<div class="empty"><span>📅</span>Nothing scheduled today</div>';
-return;
-}
-$('cal-list').innerHTML=evs.map(ev=>{
-const t=ev.starts_at||ev.start_time?new Date(ev.starts_at||ev.start_time).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'';
-return `<div class="event-row">${t?`<span class="event-time">${t}</span>`:''}<span class="event-title">${ev.title||ev.name||'Event'}</span></div>`;
-}).join('');
-} catch {
-$('cal-list').innerHTML='<div class="empty"><span>📅</span>Could not load schedule</div>';
-}
-}
-// ── Goals ──
-async function loadGoals() {
-try {
-const r=await API('/api/v1/lifeos/finance/goals');
-const d=await r.json();
-const goals=(d.goals||[]).slice(0,3);
-if (!goals.length) {
-$('goals-list').innerHTML='<div class="empty"><span>🎯</span>No goals set yet</div>';
-return;
-}
-$('goals-list').innerHTML=goals.map(g=>{
-const pct=g.target_amount>0?Math.min(1
+<div id="lifeos-widget-score"
