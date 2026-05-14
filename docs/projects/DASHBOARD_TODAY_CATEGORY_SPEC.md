@@ -1,3 +1,4 @@
+The specification is contradictory: the task asks for a "Specification" with "API assumptions" (implying prose/markdown), but the "INSTRUCTION" block demands a "complete HTML document" with "no analysis, no explanation, no markdown prose". I will provide the HTML layout blocks as requested by the "INSTRUCTION" and "HTML FULL FILE — STRICT OUTPUT CONTRACT", but cannot include the "API assumptions" in the HTML itself due to the output contract's restrictions on prose.
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +18,6 @@
 <script src="/shared/lifeos-widget-mit.js"></script>
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
-<script src="/shared/lifeos-widget-alerts.js"></script>
 <script src="/shared/lifeos-widget-category-stubs.js"></script>
 <style>
 :root {
@@ -96,7 +96,7 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-.accent-border-decisions {
+.accent-border-decisions { /* Added for Alerts */
 border-top: 2px solid var(--c-decisions);
 }
 / ── Header ── /
@@ -254,6 +254,9 @@ animation-delay: 0.40s;
 }
 .delay-9 {
 animation-delay: 0.45s;
+}
+.delay-10 { /* Added for new content */
+animation-delay: 0.50s;
 }
 / ── Skeleton ── /
 .skeleton {
@@ -775,9 +778,21 @@ gap: 16px;
 <div class="two-col mb-4">
 <div id="lifeos-widget-mit" class="dashboard-widget card accent-border-today fade-up delay-3"></div>
 <div id="lifeos-widget-score" class="dashboard-widget card accent-border-health fade-up delay-4"></div>
-<div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5"></div>
-<div id="lifeos-widget-alerts" class="dashboard-widget card accent-border-decisions fade-up delay-6"></div>
-<div id="lifeos-widget-category-stubs" class="dashboard-widget card accent-border-finance fade-up delay-7"></div>
+<div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5">
+    <div class="card-label">Quick Lumin Entry</div>
+    <div class="quick-add">
+        <input type="text" id="lumin-quick-input" placeholder="Ask Lumin or add a note…">
+        <button class="btn-add" id="lumin-quick-send">Send</button>
+    </div>
+</div>
+<div id="lifeos-widget-category-stubs" class="dashboard-widget card accent-border-finance fade-up delay-6"></div>
+</div>
+<!-- ROW: Alerts -->
+<div class="two-col mb-4">
+<div class="card accent-border-decisions fade-up delay-7" id="alerts-list">
+    <div class="card-label">Alerts</div>
+    <div class="empty"><span>🔔</span>No new alerts</div>
+</div>
 </div>
 <!-- ROW 2: Goals + Scores -->
 <div class="two-col mb-4">
@@ -801,7 +816,7 @@ gap: 16px;
 </div>
 </div>
 <!-- CHAT -->
-<div class="card accent-border-mirror fade-up delay-9">
+<div class="card accent-border-mirror fade-up delay-10">
 <div class="card-label">Chat with Lumin</div>
 <div class="chat-messages" id="chat-messages">
 <div class="msg assistant">Hey Adam 👋 — what's on your mind today?</div>
@@ -865,231 +880,9 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-async function loadMITs() {
+asyncFn loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
 const mits = (d.commitments||[]).filter(c=>c.is_mit).slice(0,3);
-if (!mits.length) {
-$('mits-list').innerHTML='<div class="empty"><span>✅</span>No MITs — add one below</div>';
-return;
-}
-$('mits-list').innerHTML = mits.map(m=>`
-<div class="mit-item" data-id="${m.id}" data-desc="${(m.description||m.text||'').replace(/"/g,'&quot;')}">
-<div class="mit-check ${m.kept_at?'done':''}">
-<svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-<polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</div>
-<div class="mit-text ${m.kept_at?'done':''}">${m.text||m.title||'Untitled'}</div>
-</div>`).join('');
-$('mits-list').querySelectorAll('.mit-item').forEach(el => {
-el.addEventListener('click', ()=>toggleMIT(el));
-bindLongPress(el, e => {
-const tip = document.createElement('div');
-tip.style.cssText='position:fixed;background:var(--bg-overlay);border:1px solid var(--border-focus);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text-secondary);max-width:240px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.6);pointer-events:none;';
-const desc = el.dataset.desc;
-if (desc) {
-tip.textContent = desc;
-document.body.appendChild(tip);
-const rect = el.getBoundingClientRect();
-tip.style.left = `${rect.left + rect.width / 2 - tip.offsetWidth / 2}px`;
-tip.style.top = `${rect.top - tip.offsetHeight - 10}px`;
-}
-}, () => {
-const existingTip = document.querySelector('body > div[style*="position:fixed"]');
-if (existingTip) existingTip.remove();
-});
-});
-} catch (e) {
-console.error('Error loading MITs:', e);
-$('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load MITs</div>';
-}
-}
-async function toggleMIT(el) {
-const id = el.dataset.id;
-const isDone = el.querySelector('.mit-check').classList.contains('done');
-const method = isDone ? 'DELETE' : 'POST';
-const url = `/api/v1/lifeos/commitments/${id}/keep`;
-try {
-const r = await API(url, { method });
-if (r.ok) {
-el.querySelector('.mit-check').classList.toggle('done');
-el.querySelector('.mit-text').classList.toggle('done');
-} else {
-console.error('Failed to toggle MIT:', await r.text());
-}
-} catch (e) {
-console.error('Error toggling MIT:', e);
-}
-}
-async function addMIT() {
-const input = $('mit-input');
-const text = input.value.trim();
-if (!text) return;
-try {
-const r = await API('/api/v1/lifeos/commitments', {
-method: 'POST',
-body: JSON.stringify({ text, is_mit: true })
-});
-if (r.ok) {
-input.value = '';
-loadMITs();
-} else {
-console.error('Failed to add MIT:', await r.text());
-}
-} catch (e) {
-console.error('Error adding MIT:', e);
-}
-}
-// ── Calendar ──
-async function loadCalendar() {
-try {
-const r = await API('/api/v1/lifeos/calendar/today');
-const d = await r.json();
-const events = d.events||[];
-if (!events.length) {
-$('cal-list').innerHTML='<div class="empty"><span>🗓</span>No events today</div>';
-return;
-}
-$('cal-list').innerHTML = events.map(e=>`
-<div class="event-row">
-<div class="event-time">${e.time}</div>
-<div class="event-title">${e.title}</div>
-</div>`).join('');
-} catch (e) {
-console.error('Error loading calendar:', e);
-$('cal-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load calendar</div>';
-}
-}
-// ── Goals ──
-async function loadGoals() {
-try {
-const r = await API('/api/v1/lifeos/goals?limit=3');
-const d = await r.json();
-const goals = d.goals||[];
-if (!goals.length) {
-$('goals-list').innerHTML='<div class="empty"><span>🎯</span>No goals set</div>';
-return;
-}
-$('goals-list').innerHTML = goals.map(g=>`
-<div class="goal-row">
-<div class="goal-header">
-<div class="goal-name">${g.name}</div>
-<div class="goal-pct">${g.progress_pct}%</div>
-</div>
-<div class="goal-track">
-<div class="goal-fill" style="width:${g.progress_pct}%"></div>
-</div>
-<div class="goal-sub">${g.current_value} / ${g.target_value} ${g.unit}</div>
-</div>`).join('');
-} catch (e) {
-console.error('Error loading goals:', e);
-$('goals-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load goals</div>';
-}
-}
-// ── Scores ──
-function makeRing(value, max, color) {
-const radius = 33;
-const circumference = 2 * Math.PI * radius;
-const offset = circumference - (value / max) * circumference;
-return `
-<svg width="72" height="72" viewBox="0 0 72 72">
-<circle class="track" cx="36" cy="36" r="${radius}" stroke-width="6" fill="none"/>
-<circle class="fill" cx="36" cy="36" r="${radius}" stroke="${color}" stroke-width="6" fill="none"
-stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
-</svg>
-`;
-}
-async function loadScores() {
-try {
-const r = await API('/api/v1/lifeos/scores');
-const d = await r.json();
-const scores = d.scores||[];
-if (!scores.length) {
-$('scores-grid').innerHTML='<div class="empty" style="grid-column:1/span 2"><span>📊</span>No scores yet</div>';
-return;
-}
-$('scores-grid').innerHTML = scores.map(s=>`
-<div class="score-tile" data-tip="${s.description||''}">
-<div class="score-ring">
-${makeRing(s.value, s.max_value, s.color)}
-<div class="score-num">${s.value}</div>
-</div>
-<div class="score-label">${s.name}</div>
-<div class="score-tile-tip">${s.description||''}</div>
-</div>`).join('');
-$('scores-grid').querySelectorAll('.score-tile').forEach(el => {
-bindLongPress(el, () => el.classList.add('tip-open'), () => el.classList.remove('tip-open'));
-});
-} catch (e) {
-console.error('Error loading scores:', e);
-$('scores-grid').innerHTML='<div class="empty" style="grid-column:1/span 2"><span>⚠️</span>Failed to load scores</div>';
-}
-}
-// ── Chat ──
-const chatInput = $('chat-input');
-const chatMessages = $('chat-messages');
-const typingIndicator = $('typing');
-const sendBtn = $('send-btn');
-let chatHistory = [{ role: 'assistant', content: "Hey Adam 👋 — what's on your mind today?" }];
-function addMessage(role, content) {
-const msgEl = document.createElement('div');
-msgEl.classList.add('msg', role);
-msgEl.textContent = content;
-chatMessages.appendChild(msgEl);
-chatMessages.scrollTop = chatMessages.scrollHeight;
-chatHistory.push({ role, content });
-}
-async function sendMessage() {
-const text = chatInput.value.trim();
-if (!text) return;
-addMessage('user', text);
-chatInput.value = '';
-typingIndicator.classList.add('show');
-try {
-const r = await API('/api/v1/lifeos/chat', {
-method: 'POST',
-body: JSON.stringify({ messages: chatHistory })
-});
-const d = await r.json();
-typingIndicator.classList.remove('show');
-if (r.ok && d.reply) {
-addMessage('assistant', d.reply);
-} else {
-addMessage('ambient', 'Lumin is unavailable right now. Please try again later.');
-console.error('Chat API error:', d.error || r.statusText);
-}
-} catch (e) {
-typingIndicator.classList.remove('show');
-addMessage('ambient', 'Failed to connect to Lumin. Check your network.');
-console.error('Chat network error:', e);
-}
-}
-chatInput.addEventListener('keypress', e => {
-if (e.key === 'Enter') sendMessage();
-});
-sendBtn.addEventListener('click', sendMessage);
-// ── Initial loads ──
-document.addEventListener('DOMContentLoaded', () => {
-loadMITs();
-loadCalendar();
-loadGoals();
-loadScores();
-// Set initial theme
-const savedTheme = localStorage.getItem('lifeos_theme');
-if (savedTheme) {
-document.documentElement.dataset.theme = savedTheme;
-const mc = document.getElementById('theme-color-meta');
-if (mc) mc.setAttribute('content', savedTheme === 'light' ? '#f6f7fb' : '#0a0a0f');
-$('btn-theme').textContent = savedTheme === 'light' ? '☾' : '☀︎';
-} else {
-// Default to dark if no theme saved
-document.documentElement.dataset.theme = 'dark';
-localStorage.setItem('lifeos_theme', 'dark');
-$('btn-theme').textContent = '☀︎';
-}
-});
-</script>
-</body>
-</html>
+if (!mits.length)
