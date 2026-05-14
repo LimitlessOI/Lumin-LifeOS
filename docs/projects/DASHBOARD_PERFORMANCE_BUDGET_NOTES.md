@@ -7,18 +7,31 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0a0f" id="theme-color-meta">
 <title>Dashboard · LifeOS</title>
-<!-- Performance Budget Notes: -->
-<!-- Load Targets: Aim for LCP < 2.5s, TBT < 200ms. Prioritize critical path resources. -->
-<!-- Waterfall Risks: Minimize render-blocking CSS/JS. lifeos-theme.js, lifeos-bootstrap.js, and Tailwind CSS are on the critical path. -->
-<!-- Defer Non-Critical Widgets: Widgets (e.g., lifeos-widget-mit.js) are currently render-blocking. Consider 'defer' or dynamic import after initial render. -->
-<!-- LCP Hints: Ensure critical CSS (tokens, AI rail) loads early. Optimize font loading if custom fonts are used for LCP elements. -->
+
+<!-- Performance Budget Notes:
+     Goal: Achieve fast initial overlay load (LCP < 2.5s, TTI < 5s).
+     Prioritize critical rendering path: theme, core styles, and initial layout.
+     Defer non-critical scripts and widgets to improve Largest Contentful Paint (LCP).
+-->
+
 <!-- Theme must load before anything renders to avoid flash -->
 <script src="/overlay/lifeos-theme.js"></script>
+
+<!-- Core design tokens and base styles - critical for initial paint -->
 <link rel="stylesheet" href="../shared/lifeos-dashboard-tokens.css">
+<!-- AI rail specific styles - consider preloading if AI rail is not part of the LCP -->
 <link rel="stylesheet" href="../shared/lifeos-dashboard-ai-rail.css">
+
+<!-- Waterfall Risk: External Tailwind CSS via CDN is render-blocking.
+     Consider adding 'defer' or, ideally, building/purging Tailwind into critical CSS
+     or a preloaded stylesheet to optimize LCP. -->
 <script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Core bootstrap logic - critical for initial interactivity -->
 <script src="/overlay/lifeos-bootstrap.js"></script>
-<!-- (1) New script tags added by current task -->
+
+<!-- (1) New widget scripts: These are candidates for 'defer' to prevent blocking LCP,
+     as their content is likely loaded asynchronously after initial render. -->
 <script src="/shared/lifeos-widget-mit.js"></script>
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
@@ -827,9 +840,14 @@ gap: 16px;
 </div>
 </div>
 <div id="lifeos-ai-rail-root"></div>
+<!-- Non-critical scripts: Voice module and AI rail JS.
+     These are well-placed at the end of <body> to not block initial render,
+     but could also benefit from 'defer' if their initialization is heavy. -->
 <!-- Voice module must be non-module (IIFE) -->
 <script src="/shared/lifeos-voice-chat.js"></script>
 <script src="../shared/lifeos-dashboard-ai-rail.js"></script>
+<!-- Main dashboard logic: Contains async data fetching for LCP elements (MITs, Calendar, Goals, Scores).
+     Skeletons provide perceived performance while data loads. -->
 <script type="module">
 const HDR = () => ({ 'x-lifeos-key': localStorage.getItem('lifeos_api_key') || '', 'Content-Type': 'application/json' });
 const API = (p, o={}) => fetch(p, { headers: HDR(), ...o });
@@ -865,7 +883,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-async function loadMITs() {
+asyncFn loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -906,7 +924,7 @@ console.error('Error loading MITs:', e);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load MITs</div>';
 }
 }
-async function toggleMIT(el) {
+asyncFn toggleMIT(el) {
 const id = el.dataset.id;
 const isDone = el.querySelector('.mit-check').classList.contains('done');
 const method = isDone ? 'DELETE' : 'POST';
@@ -923,7 +941,7 @@ console.error('Failed to toggle MIT:', await r.text());
 console.error('Error toggling MIT:', e);
 }
 }
-async function addMIT() {
+asyncFn addMIT() {
 const input = $('mit-input');
 const text = input.value.trim();
 if (!text) return;
@@ -943,7 +961,7 @@ console.error('Error adding MIT:', e);
 }
 }
 // ── Calendar ──
-async function loadCalendar() {
+asyncFn loadCalendar() {
 try {
 const r = await API('/api/v1/lifeos/calendar/today');
 const d = await r.json();
@@ -963,7 +981,7 @@ $('cal-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load ca
 }
 }
 // ── Goals ──
-async function loadGoals() {
+asyncFn loadGoals() {
 try {
 const r = await API('/api/v1/lifeos/goals?limit=3');
 const d = await r.json();
@@ -991,7 +1009,7 @@ $('goals-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load 
 // ── Scores ──
 function makeRing(value, max, color) {
 const radius = 33;
-const circumference = 2 * Math.PI * radius;
+const circumference = 2  Math.PI  radius;
 const offset = circumference - (value / max) * circumference;
 return `
 <svg width="72" height="72" viewBox="0 0 72 72">
@@ -1001,7 +1019,7 @@ stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
 </svg>
 `;
 }
-async function loadScores() {
+asyncFn loadScores() {
 try {
 const r = await API('/api/v1/lifeos/scores');
 const d = await r.json();
@@ -1041,7 +1059,7 @@ chatMessages.appendChild(msgEl);
 chatMessages.scrollTop = chatMessages.scrollHeight;
 chatHistory.push({ role, content });
 }
-async function sendMessage() {
+asyncFn sendMessage() {
 const text = chatInput.value.trim();
 if (!text) return;
 addMessage('user', text);
