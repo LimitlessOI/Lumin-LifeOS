@@ -1,78 +1,46 @@
-# LifeOS Dashboard Notification System Specification
+### Dashboard Notification System Specification
 
-This document outlines the specification for a dashboard-level notification, toast, and snackbar system within the LifeOS platform. The system will be owned by Platform Core (the dashboard shell) and will provide a standardized interface for other domains to push notifications. This specification focuses on design and behavior, not implementation code.
+#### 1. Surfaces
+The LifeOS Dashboard will implement a unified notification system to deliver timely, contextual feedback to the user. Notifications will primarily render within the `public/overlay/lifeos-dashboard.html` shell.
 
-## 1. Surfaces
+**Types of Notifications:**
+-   **Toast/Snackbar:** Ephemeral, non-blocking messages for success, informational updates, or minor warnings. These will typically appear in a fixed, non-intrusive corner of the viewport (e.g., top-right or bottom-center). They may include a single, optional action button.
+-   **Persistent Banner:** Designed for critical errors, important system status updates, or actions requiring immediate user attention. These will appear at the top of the main content area, pushing existing content downwards. Persistent banners require explicit user dismissal.
 
-Notifications will appear in designated areas of the dashboard, ensuring they are visible but do not obstruct critical content or user interaction.
+**Ownership & Pushing:**
+-   **Shell Ownership:** The `Platform Core` (specifically the dashboard shell) is the authoritative owner of the notification UI rendering, positioning logic, stacking management, and global state. This ensures a consistent user experience across the platform.
+-   **Domain Pushes:** Feature domains will push notification *data* (e.g., message content, severity level, optional action details, display duration) to a dedicated API endpoint or a shared client-side service provided by Platform Core. The shell will then consume and render these notifications according to this specification, decoupling content from presentation.
 
-### 1.1 Toast/Snackbar Notifications
--   **Location**: Bottom-right corner of the viewport on desktop, or bottom-center on mobile.
--   **Purpose**: Ephemeral, non-critical feedback (e.g., "MIT added successfully", "Settings saved").
--   **Appearance**: Small, rectangular, with an optional icon and brief text.
--   **Interaction**: Can be dismissed manually or auto-dismiss after a short duration.
--   **Severity Visuals**:
-    -   **Info**: Subtle background (e.g., `var(--bg-surface2)`), `var(--text-secondary)` text.
-    -   **Success**: Green accent (e.g., `var(--c-health)`), white text.
-    -   **Warning**: Orange accent (e.g., `var(--c-decisions)`), dark text.
-    -   **Error**: Red accent (e.g., `var(--c-conflict)`), white text.
+#### 2. Stacking
+To effectively manage multiple concurrent notifications, a clear stacking mechanism will be implemented.
 
-### 1.2 Persistent Banner Notifications
--   **Location**: Top of the main content area, below the header, spanning the full width of the `page` container.
--   **Purpose**: Important, actionable, or system-wide alerts that require user attention (e.g., "API key missing", "New update available").
--   **Appearance**: More prominent than toasts, with a clear background color indicating severity, an icon, and more detailed text. May include action buttons.
--   **Interaction**: Must be manually dismissed by the user via a close button.
--   **Severity Visuals**:
-    -   **Info**: Light blue background, dark text.
-    -   **Warning**: Yellow/orange background, dark text.
-    -   **Error**: Red background, white text.
+-   **Toast/Snackbar Stacking:** Notifications of this type will stack vertically within their designated viewport corner. Newest notifications will appear at the top of the stack, pushing older ones downwards.
+-   **Visibility Limit:** A maximum of 3-5 toast/snackbar notifications will be visible simultaneously. If more notifications are pushed, older ephemeral notifications will be automatically dismissed, while others may be moved to a hidden queue or a future "notification center" for later review.
+-   **Persistent Banners:** Only one persistent banner can be active and displayed at the top of the content area at any given time. If a new critical banner is pushed while another is active, the new banner will either replace the existing one or be queued for display upon the dismissal of the current banner, based on a defined severity hierarchy.
 
-## 2. Stacking
+#### 3. Persistence
+Notification persistence will be determined by its type and severity.
 
-The system must handle multiple concurrent notifications gracefully.
+-   **Dismissal:**
+    -   **Toast/Snackbar:** These will auto-dismiss after a predefined duration (e.g., 5-7 seconds for informational/success messages, 10-15 seconds for warnings). All toast/snackbar notifications will also include an explicit "X" or "Dismiss" button for manual user dismissal.
+    -   **Persistent Banner:** These require explicit user dismissal via a prominent "X" or an action button. They will not auto-dismiss.
+-   **Logging:** All notifications, regardless of their type or dismissal method, will be logged to an internal audit trail. This log will capture the timestamp, message content, severity, and dismissal method for diagnostic and historical purposes.
 
-### 2.1 Toast/Snackbar Stacking
--   **Behavior**: New toasts will appear above existing ones, pushing older toasts upwards.
--   **Limit**: A maximum of 3-5 toasts will be visible at any given time. Older toasts will fade out or be removed from the stack if the limit is exceeded.
--   **Order**: Most recent notification is always at the top of the stack.
+#### 4. Accessibility
+The notification system will adhere to Web Content Accessibility Guidelines (WCAG) to ensure usability for all users.
 
-### 2.2 Persistent Banner Stacking
--   **Behavior**: Only one persistent banner notification will be displayed at a time. If a new banner is triggered while one is active, the new banner will replace the old one, or be queued if the existing one is critical and non-dismissible until an action is taken.
--   **Priority**: A priority system will determine which banner takes precedence if multiple are active. Critical errors override warnings, which override info.
+-   **ARIA Roles:** Notifications will utilize appropriate ARIA live region roles (`role="alert"` for critical, `role="status"` for less urgent) to ensure screen readers announce changes without interrupting the user's current task flow.
+-   **Keyboard Navigation:** All dismissible notifications will be keyboard-accessible. Users must be able to navigate to and dismiss notifications using standard keyboard interactions (e.g., Tab key to focus the close button, Enter/Space to activate). The Escape key should dismiss the topmost toast/snackbar if it is currently focused.
+-   **Visual Design:** High contrast ratios for text and background colors will be enforced to meet WCAG contrast requirements. Clear visual indicators for severity (e.g., distinct color coding, universally recognized icons) will be employed.
+-   **Motion:** Animations (e.g., fade-in/out, slide-in) will be subtle and non-distracting. A user preference to reduce motion will be respected, disabling or simplifying these animations when active.
 
-## 3. Persistence
+#### 5. Do Not Disturb Hook
+The notification system will integrate with a global "Do Not Disturb" (DND) setting to manage user interruptions effectively.
 
-Notifications will have defined lifecycles and dismissal mechanisms.
+-   **DND State:** The dashboard shell will expose a clear DND state (e.g., `isDNDActive: boolean`) that the notification system can query.
+-   **Suppression:** When DND is active, all non-critical toast/snackbar notifications will be suppressed from immediate visual display. These suppressed notifications may be silently logged or queued for display once DND is deactivated, or summarized in a less intrusive manner (e.g., a small badge icon on a notification center).
+-   **Critical Bypass:** Critical system alerts (e.g., security breaches, data corruption warnings, urgent system health notifications) will be designed to bypass DND to ensure essential information reaches the user. This bypass mechanism will be used sparingly and with clear, documented justification.
+-   **User Preferences:** Users will have granular control over DND settings, including the ability to schedule DND periods and define which specific types of notifications (if any) are permitted to bypass the DND state.
 
-### 3.1 Auto-Dismissal
--   **Duration**: Toasts will auto-dismiss after a configurable duration (e.g., 3-5 seconds for info/success, 7-10 seconds for warnings).
--   **Hover/Focus**: Auto-dismissal timers will pause when the user hovers over or focuses on a toast.
-
-### 3.2 Manual Dismissal
--   **Mechanism**: All notifications (toasts and banners) will include a clear "X" or "Dismiss" button for manual dismissal.
--   **State**: Dismissed notifications will not reappear unless triggered again by a new event.
-
-### 3.3 Persistent Notifications
--   **Requirement**: Certain critical system alerts (e.g., "API key invalid") may be non-dismissible until the underlying issue is resolved or a specific action is taken. These will typically be banner notifications.
-
-### 3.4 Do Not Disturb (DND) Hook
--   **Mechanism**: A user setting (e.g., accessible via the header controls or a dedicated settings page) will allow users to enable a "Do Not Disturb" mode.
--   **Behavior**:
-    -   In DND mode, low-severity (info, success) toasts will be suppressed or appear in a less intrusive manner (e.g., a subtle icon badge on a dedicated notification center, if implemented).
-    -   Warning and error notifications will still appear but may be visually de-emphasized or queued for later review, depending on criticality.
-    -   Critical system alerts will always bypass DND.
--   **Integration**: The DND state will be accessible by the notification system to modify display behavior.
-
-## 4. Accessibility
-
-The notification system will adhere to WCAG guidelines to ensure usability for all users.
-
--   **ARIA Roles**: Notifications will utilize appropriate ARIA roles (e.g., `role="alert"` for critical, `role="status"` for less urgent) to convey their purpose to screen readers. Live regions will be used to announce dynamic content changes.
--   **Keyboard Navigation**: Users must be able to navigate to and dismiss notifications using keyboard controls (e.g., Tab to focus, Enter/Space to dismiss).
--   **Color Contrast**: All text and background colors will meet minimum WCAG contrast ratios.
--   **Motion**: Animations (e.g., fade-in/out, slide-up) will be subtle and respect `prefers-reduced-motion` user settings.
--   **Focus Management**: When a critical banner appears, focus may be programmatically moved to it, or a live region update will be used to announce its presence without stealing focus, depending on the level of interruption desired.
-
-## 5. Deferred Implementation
-
-This document serves as a specification. The actual implementation of the notification system will be undertaken in a future task. The dashboard shell (Platform Core) will own the UI components and logic for rendering and managing notifications. Other domains will interact with this system via a simple API (e.g., `LifeOS.notify({ type: 'success', message: 'MIT added' })`) provided by the shell, pushing notification data to it. The shell will be responsible for all rendering, stacking, dismissal, and DND logic.
+#### 6. Deferred Implementation
+This document serves as a high-level specification for the LifeOS Dashboard notification system. No production code for this feature is to be implemented or shipped as part of the current task. Implementation details, including specific API endpoints for pushing notifications, client-side rendering components, detailed styling, and comprehensive testing strategies, will be addressed in subsequent development tasks following the approval of this specification.
