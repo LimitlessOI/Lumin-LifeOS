@@ -1,3 +1,4 @@
+The specification is incomplete due to the missing `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file, which prevents referencing "brief/handoff notes" for API assumptions regarding Victory Vault endpoints.
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,7 +64,7 @@ max-width: 860px;
 margin: 0 auto;
 padding: 24px 16px;
 }
-/* ── Cards ── */
+/ ── Cards ── /
 .card {
 background: var(--bg-surface);
 border: 1px solid var(--border);
@@ -95,7 +96,7 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-/* ── Header ── */
+/ ── Header ── /
 .hdr-row {
 display: flex;
 align-items: flex-start;
@@ -156,7 +157,7 @@ margin-left: 8px;
 vertical-align: middle;
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-/* ── Animations ── */
+/ ── Animations ── /
 @keyframes pulse-ring {
 0%, 100% {
 opacity: 1;
@@ -195,7 +196,7 @@ transform: scale(1);
 opacity: 1;
 }
 }
-/* Progress uses inline stroke-dashoffset from makeRing(); animate opacity only */
+/ Progress uses inline stroke-dashoffset from makeRing(); animate opacity only /
 @keyframes ring-fill {
   from { opacity: 0.2; }
   to { opacity: 1; }
@@ -251,7 +252,7 @@ animation-delay: 0.40s;
 .delay-9 {
 animation-delay: 0.45s;
 }
-/* ── Skeleton ── */
+/ ── Skeleton ── /
 .skeleton {
 background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
 background-size: 400px 100%;
@@ -265,7 +266,7 @@ margin-bottom: 10px;
 .skel-line:last-child {
 width: 60%;
 }
-/* ── MIT ── */
+/ ── MIT ── /
 .mit-item {
 display: flex;
 align-items: flex-start;
@@ -317,7 +318,7 @@ transition: color 0.2s;
 color: var(--text-muted);
 text-decoration: line-through;
 }
-/* ── Quick add ── */
+/ ── Quick add ── /
 .quick-add {
 display: flex;
 gap: 8px;
@@ -357,7 +358,7 @@ transition: opacity 0.15s;
 .btn-add:hover {
 opacity: 0.85;
 }
-/* ── Calendar ── */
+/ ── Calendar ── /
 .event-row {
 display: flex;
 align-items: center;
@@ -383,7 +384,7 @@ flex-shrink: 0;
 font-size: 14px;
 color: var(--text-primary);
 }
-/* ── Goals ── */
+/ ── Goals ── /
 .goal-row {
 margin-bottom: 16px;
 }
@@ -423,7 +424,7 @@ font-size: 11px;
 color: var(--text-muted);
 margin-top: 4px;
 }
-/* ── Scores ── */
+/ ── Scores ── /
 .scores-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -500,7 +501,7 @@ box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 .score-tile.tip-open .score-tile-tip {
 display: block;
 }
-/* ── Chat ── */
+/ ── Chat ── /
 .chat-messages {
 height: 240px;
 overflow-y: auto;
@@ -577,7 +578,7 @@ animation: bounce-dot 1.2s 0.2s infinite;
 .typing-dot:nth-child(3) {
 animation: bounce-dot 1.2s 0.4s infinite;
 }
-/* ── Chat input row ── */
+/ ── Chat input row ── /
 .chat-row {
 display: flex;
 gap: 8px;
@@ -638,7 +639,7 @@ transition: opacity 0.15s;
 .btn-send:hover {
 opacity: 0.85;
 }
-/* ── Voice footer ── */
+/ ── Voice footer ── /
 .voice-footer {
 display: flex;
 align-items: center;
@@ -672,7 +673,7 @@ font-size: 11px;
 color: var(--text-muted);
 opacity: 0.6;
 }
-/* ── Empty ── */
+/ ── Empty ── /
 .empty {
 text-align: center;
 padding: 20px 0;
@@ -691,10 +692,10 @@ grid-template-columns: 1fr 1fr;
 gap: 16px;
 }
 }
-/* Desktop-specific styles for wider screens */
+/ Desktop-specific styles for wider screens /
 @media (min-width: 1000px) {
   .page {
-    max-width: 1000px; /* wider content area */
+    max-width: 1000px; / wider content area /
     padding: 40px 32px;
   }
   .hdr-row {
