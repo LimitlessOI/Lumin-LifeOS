@@ -1,7 +1,7 @@
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`
-> Generated: 2026-05-02T00:44:33.555Z
+> Generated: 2026-05-14T01:38:04.820Z
 
 ## Read order (mandatory)
 
@@ -80,83 +80,70 @@ Example first line of an update:
 
 ---
 
-## [BUILD] Update 2026-04-30 #3 — LifeOS program map SSOT hub (`LIFEOS_PROGRAM_MAP_SSOT.md`)
+## [BUILD] Update 2026-05-14 #14 — C21 CONFIRMED LIVE + auto-expiry hardened + lock released
 
 ### Files changed
-- **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** — single authority: mockup table, runtime URLs, authority stack, honest shipped-vs-mockup gap, **next queue slice** pointer, anti-drift rules.
-- **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**, **`AMENDMENT_21`** (Constitutional UX + handoff), **`docs/QUICK_LAUNCH.md`**, **`prompts/lifeos-council-builder.md`**, **`manifest`**.
+- `scripts/lib/autonomy-write-lock.mjs` — auto-expiry added: `expires_at` + `ttl_minutes` written by `acquireLock()`; `DEFAULT_TTL_MINUTES=120` (env `AUTONOMY_LOCK_TTL_MINUTES`). `readLock()` auto-deletes and returns null if expired. `releaseLock()` now ENOENT-tolerant (idempotent). Error message improved: includes `locked_by`, `locked_at`, `reason`. Uncommitted from prior session — now committed.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — C21 handoff row updated to CONFIRMED LIVE; new receipt row added for proof run + auto-expiry; PENDING_CONFIRMATION row removed.
+- `docs/CONTINUITY_LOG.md` — this entry.
 
-### Next agent
-- Any dashboard/nav/queue work: read **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** first.
+### State after this session
+- **C21: CONFIRMED LIVE.** Supervised proof run at 2026-05-14 ~01:17 UTC. Events confirmed: `autonomy_write_lock_active` ✅, `task_start` with `commit_branch:"autonomy/staging"` + `autonomy_lock_active:true` ✅. Lock released immediately (`data/autonomy.lock` deleted, `getLock()` → null). Auto-expiry now in library (prevents forgotten-lock silent-staging).
+- **No PENDING_CONFIRMATION items.** All gates clear: SIS1 ✅, C21 ✅. Only blocker is `tc-stripe-billing-service` quarantine (fail_closed=2) — not a gate for S2.
+- Tests: 14 pass, 0 fail, 4 skipped. `node --check` on lock lib: PASS.
+
+### Next agent: start here
+- **S2: C02 Memory bootstrap** — write `npm run memory:seed` (or check if it exists) to backfill `lessons_learned` from existing receipts + CONTINUITY_LOG. After seeding, confirm at least one consumer reads from AM39 tables (C17 reader-first contract). All prove-the-loop gates are now clear — begin S2 immediately.
 
 ---
 
-## [BUILD] Update 2026-04-30 #2 — Per-leg 10/10 mandate + `TSOS_ENFORCE_ALL_LEGS_10`
-
-### Files changed
-- **`scripts/builder-operator-suite.mjs`** — **`ALL SIX LEGS AT 10/10: YES/NO`**, lists legs below 10; receipt schema **`tsos_builder_suite_last_run_v2`**; optional **`TSOS_ENFORCE_ALL_LEGS_10=1`** → exit **3** when base green but any leg &lt; 10.
-- **`docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`** — *Per-leg excellence* (compound builds, no shortcuts).
-- **`docs/BUILDER_OPERATOR_ENV.md`** — operator notes for enforce gate.
-- **`AMENDMENT_21`** — handoff + receipts.
-
-### Next agent
-- CI wanting strict excellence: export **`TSOS_ENFORCE_ALL_LEGS_10=1`** with **`npm run tsos:builder`**.
-
----
-
-## [BUILD] Update 2026-04-30 #1 — `tsos:builder` per-step 1–10 self-grade (machine receipts)
-
-### Files changed
-- **`scripts/tsos-suite-self-grade.mjs`** — maps 0–100 scores and exit codes to 1–10; reads token/doctor/operational receipts.
-- **`scripts/builder-operator-suite.mjs`** — prints self-grade after each of six legs + composite + lowest leg; writes **`data/tsos-builder-suite-last-run.json`**.
-- **`scripts/tsos-doctor.mjs`** — writes **`data/tsos-doctor-last-run.json`** for doctor-based grade.
-- **`.gi
+## [BUILD] Update 2026-05-14 #13 — C21 AUTONOMY_WRITE_LOCK + Forge overlay fix + Phase 2 
 
 ## Snippet — LifeOS lane
 
-## [BUILD] Update 2026-04-29 #1 — **Overnight dashboard: `dashboard-theme-foundation` + receipts**
+## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 4
 
-### Shipped / verified (system path)
-- **`public/shared/lifeos-dashboard-tokens.css`** — **`POST /api/v1/lifeos/builder/build`** via **`npm run lifeos:builder:overnight -- --task dashboard-theme-foundation`** (`claude_via_openrouter`, **`committed:true`**). Prod **`GET /shared/lifeos-dashboard-tokens.css`** **200**, **2607** bytes (= local).
+### What happened
+- **SIS1 mechanism confirmed.** `task_skip_already_shipped` events found in the queue log (not daemon log). Cycle 180 fired at 03:07:20 UTC on `site-builder-pipeline-report-route`; cycle 181 fired at 03:52:22 UTC on `site-builder-discovery-run-action`. Forge cursor now at pos 0 = `site-builder-postmark-send`. SIS1 is operating correctly — one more cycle (~04:37 UTC) will confirm the original RL1 target task specifically.
+- **`tc-webhook-validator.js` audited: complete, not a stub.** 34 lines, both `validatePostmark` (HMAC-SHA256) and `validateTwilio` (HMAC-SHA1) fully implemented with timing-safe compare, graceful unconfigured-key skip. Clean `node --check`. No rebuild.
+- **package.json guard regression test shipped.** `tests/deployment-service-package-guard.test.js` — 6 tests, all pass. Guard now self-protecting: file added to `REQUIRED_TEST_FILES` in `deployment-service.js` and to `package.json` test script.
 
-### Related platform (local amendment of prior gap)
-- **`routes/lifeos-council-builder-routes.js`** — **`mirrorCommittedContentToRepoRoot`** after **`autoWireRoute`** register commit (**chained **`files[]`** FS parity).
+### Verification
+- `npm test`: **14 pass, 0 fail, 4 skipped** (4 smoke tests require live server)
+- All 6 guard contract tests pass
+- `node --check services/tc-webhook-validator.js`: PASS
+- `node --check services/deployment-service.js`: PASS
 
-### Doc / SSOT
-- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — receipts + **`## Agent Handoff Notes`**: next **`dashboard-import-tokens`**. **`docs/CONTINUITY_LOG.md`** **`[BUILD]`** block.
-
-### Next
-- **`npm run lifeos:builder:overnight -- --task dashboard-import-tokens`** (minimal `<link>` in **`lifeos-dashboard.html`**).
-
----
-
-## [BUILD] Update 2026-04-27 #18 — Victory Vault root API contract now exists on the runtime spine
-
-**Shipped:**
-- `routes/lifeos-victory-vault-routes.js` — top-level LifeOS compatibility router for POST/GET `/api/v1/lifeos/victories` and POST/GET `/api/v1/lifeos/victories/reels`, backed by the existing `createVictoryVault()` service and `makeLifeOSUserResolver()`.
-- `startup/register-runtime-routes.js` — imports + mounts the new router at `/api/v1/lifeos` and logs the mount distinctly from `/api/v1/lifeos/growth`.
-- `scripts/lifeos-verify.mjs` — route inventory now fails if `routes/lifeos-victory-vault-routes.js` disappears.
-
-**State after this session:**
-- Live diagnosis before fix was concrete: `GET /api/v1/lifeos/victories?user=adam` returned `404`, while `GET /api/v1/lifeos/growth/victories?user=adam` returned `200`.
-- Lumin build bridge was used for reconnaissance first: `/api/v1/lifeos/chat/build/plan` correctly identified the Victory Vault mismatch as the highest-value LifeOS defect, but its plan text truncated and the draft suggested a weaker proxy pattern.
-- The council builder then produced the actual runtime fix. After Railway redeployed, both `GET /api/v1/lifeos/victories?user=adam` and `GET /api/v1/lifeos/victories/reels?user=adam` returned `200`.
-
-**Next:** Run the builder HTML smoke on a real LifeOS target, then do the household invite E2E flow. After those verification items, the next real product build is the first vertical slice of Commitment -> execution desk.
+### Next step
+Watch for `task_skip_already_shipped site-builder-postmark-send` in `data/builder-continuous-queue-log.site-builder-autonomous-queue.jsonl`. When it appears, mark SIS1 fully confirmed and clear the PENDING_CONFIRMATION row in AM36 receipts. Then roadmap slice.
 
 ---
 
-## [BUILD] Update 2026-04-26 #17 — LifeOS build lanes now obey Memory Intelligence authority
+## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 3
 
-**Files changed:**
-- `services/lifeos-lumin-build.js` — plan/draft now consult Memory Intelligence routing before selecting a model; blocked tasks fail closed instead of silently falling back.
-- `routes/lifeos-gate-change-routes.js` — gate-change debate persists structured debate memory and filters unauthorized models before council runs.
-- `startup/register-runtime-routes.js`, `routes/memory-intelligence-routes.js` — `/api/v1/memory/*` mounted into runtime so LifeOS lanes can log debates, intent drift, authority, and violations.
-- `docs/SSOT_COMPANION.md`, `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — future-back and anti-corner-cutting rules now part of the operating law, not just the brainstorm brief.
+### What happened
+- **Test script stripped again** after pulling 3 new Railway commits. Fixed in `0071d8cd`. This has now happened 3+ times — root cause is Railway builder templates generating a 2-file test script.
+- **package.json protected-scripts guard shipped** (`d1c72926`). Added content-aware check to `commitToGitHub` in `services/deployment-service.js`. Any commit to `package.json` that removes `repo:sync-check`, `lifeos:verify:ui-map`, or the 3 regression test files is rejected with a descriptive error. PROVISIONAL — monitored.
+- **TC Stripe service rebuilt** via `POST /api/v1/lifeos/builder/build`. Was 24-line truncated stub (ended mid-sentence). Now 90 lines with complete Stripe integration. `ok:true committed:true`.
+- **SIS1 still PENDING_CONFIRMATION**. Forge cursor at pos 10, expected to fire at pos 0 (`site-builder-postmark-send`) within the next two Forge cycles (~04:37 UTC).
+- **Nova throughput confirmed healthy**: 2 commits/cycle (CSS/HTML), cycles 194–196 all clean.
 
-**State after this session:**
-- Lumin plan/draft and gate-change flows now use the same evidence/routing system instead of static model preference only.
-- Debate memory i
+### Verification
+- `npm test`: 8/8 pass
+- Compliance: 12/12 pass
+- `node --check services/tc-stripe-service.js`: PASS (90 lines)
+- `node --check services/deployment-service.js`: PASS
+
+### Next step
+Confirm SIS1. Then tc-webhook-validator quality review. Then post-commit smoke router.
+
+---
+
+## [FIX] Update 2026-05-13 — GOVERNANCE_LOCK_CONTINUOUS_OPERATION cycle 1
+
+### What happened
+- **Repo sync gap discovered and closed.** Local was 32 commits behind `origin/main` (Railway autonomous builders had been pushing while we were working on SC1). `git pull --rebase origin main` applied cleanly — zero file conflicts.
+- **13 working-tree files were never pushed to git.** Created during RL1/RL2/OF1/RRS1/OD1 sessions, these scripts, test files, and mockups existed only in the stash: `scripts/operator-runtime-status.mjs`, `scripts/generate-operator-dashboard-json.mjs`, `scripts/generate-runtime-reality-snapsho
 
 ## Snippet — Council lane
 
@@ -207,17 +194,7 @@ Example first line of an update:
 | **Lifecycle** | `infrastructure` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `operational` |
-| **Last Updated** | 2026-04-30 — **`generate-agent-rules.mjs`**: tight **TOKENS+HISTORY** block (useful-work-guard, probe/`/gaps`, append-only receipts, GAP-FILL); MEMORY/IDEA-VAULT lines compressed to satisfy **token budget law** (`AGENT_RULES.compact.md` regen, baseline **↓**). Prior: repo-backed Cursor review path promoted beyond one laptop: tracked **`githooks/pre-push`** template + **`scripts/install-git-hooks.mjs`** installer + `npm run hooks:install`; **`scripts/cursor-pre-push-review.mjs`** now optionally posts review receipts into AM39 memory when `PUBLIC_BASE_URL` + command key are present. Prior: 2026-04-30 — local pre-push AI bug review path: tracked **`scripts/cursor-pre-push-review.mjs`** + **`.cursor/BUGBOT.md`** review rules + `package.json` script + `.gitignore` allowlist for tracked Bugbot config / local review artifacts; local `.git/hooks/pre-push` may call the tracked script in `warn` or `strict` mode. Prior: 2026-04-25 — **`scripts/generate-agent-rules.mjs`** — new **IDEA VAULT (Lane A/B)** block in **`docs/AGENT_RULES.compact.md`**: vault = map/routes only; source threads + **`raw/`** = nuance; promote via chunk → **38** §A or **`import-dumps-to-twin`**; tools + **INDEX** queue order; MEMORY/COUNCIL/SSOT/PROHIBITED lines tightened (token budget law). Prior: **`AMENDMENT_38_IDEA_VAULT.md`** + manifest; **`REPO_MASTER_INDEX`**; **`CONVERSATION_DUMP_IDEAS_INDEX`**. Prior: **`CONVERSATION_DUMP`** + **`INDEX.md`** candidates. Prior: **`REPO_BUCKET_INDEX`**. Prior: **`REPO_DEEP_AUDIT`**. Prior: **`npm run repo:catalog`**. Prior: **TSOS** in **`prompts/00`**. Prior: **`SSOT_DUAL_CHANNEL`**. Prior: **§2.11c**. Prior: **§2.15** + §2.14. |
-| **Manifest** | _(none — this amendment is documentation + scripts; machine hooks live in `package.json` and `.github/workflows`)_ |
-| **Verification** | `npm run handoff:self-test` → exit 0; `npm run cold-start:gen` regenerates `docs/AI_COLD_START.md` |
-
-**Parent:** `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `CLAUDE.md`
-
----
-
-## Mission
-
-Make every AI session **bounded**, **auditable**, and **non-hallucinatory** by forcing reads and writes through explicit lane manifests, generated cold-start packets, and optional strict git gates — without compressing human-readable SSOT markdown into LCL (tha
+| **Last Updated** | 2026-05-12 — **NSSOT §2.10 ¶8–10** (audit epistemic format, improvement-idea council rule, truth-first order — constitutional clarification, no existing law changed). Prior: **OF1 + QP1 + LA1** — operator freshness fail-closed (`scripts/operator-runtime-status.mjs`, `scripts/generate-operator-dashboard-json.mjs`, `tests/operator-runtime-status-freshness.test.js`, `package.json` test list); LifeOS product queue split (`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` code-only, docs/spec backlog in `LIFEOS_DOCS_QUEUE.json`); lane accountability hardening (`scripts/lifeos-builder-continuous-queue.mjs`, `scripts/tsos-builder-auditor.mjs`, `scripts/operator-stale-failure-detect.mjs`, RL1/RL2 lane scoping) plus quarantine normalization so Nova no longer inherits TC / Site Builder rows. Prior: **SF1** — **`npm run operator:stale-failure-detect`** → **`scripts/operator-stale-failure-detect.mjs`**; **`data/operator-stale-failure-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2f**; **`package.json`**; **`.gitignore`** — Prior: **RL2** — **`npm run operator:repair-loop:r2`** → **`scripts/operator-repair-loop-r2-once.mjs`**; **`tests/tc-morning-digest-service-module.test.js`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2e**; **`docs/projects/AMENDMENT_17_TC_SERVICE.md`**; **`package.json`** — Prior: **RL1 + RL1-test-verify** — **`npm run operator:repair-loop`** → **`scripts/operator-repair-loop-once.mjs`**; **`services/site-builder-postmark-helper.js`** + **`tests/site-builder-postmark-helper.test.js`** (**`node:path`** import — **`npm test`** gate); **`data/operator-repair-loop-log.jsonl`**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2d**; **`docs/projects/AMENDMENT_05_SITE_BUILDER.md`**; **`docs/CONTINUITY_LOG.md`**; **`package.json`** — Prior: **SW1 + OS1 PATH** — **`npm run tsos:system-watch`** → **`scripts/tsos-system-watch.mjs`**; **`data/system-watch-log.jsonl`**; **`scripts/tsos-overseer-daemon.mjs`** — **`childEnvForChecks()`** (Homebrew **`PATH`** for **`npm`**); **`SYSTEM_CAPABILITIES`** **SW1**; **`docs/OPERATOR_DASHBOARD_JSON.md`** § **2c**; **`docs/OPERATIONAL_REALITY_SYNC.md`** §5 — Prior: **OH1** — **`npm run operator:status`** / **`tsos:operator-status`** → **`scripts/operator-runtime-status.mjs`**; **`data/operator-s
 
 ## Amendment 21 — Agent Handoff Notes region
 
@@ -244,3 +221,62 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 **Supreme law:** This section **implements** `docs/SSOT_NORTH_STAR.md` → **Article II §2.6 System Epistemic Oath**, **Article II §2.10**, **Article II §2.11 (code the system / gaps; the system programs amendments & projects; `GAP-FILL` on the platform only)**, **Article II §2.11c (Conductor as supervisor — system codes at scale; audit, debate, report; not default IDE product authorship)**, **Article II §2.12 (technical decisions → AI Council + best-practice research; consensus / full debate if split; Conductor/Construction supervisor SSOT re-read and drift detection; non-derogable)**, **Article II §2.14 (TSOS machine-channel lexicon: `docs/TSOS_SYSTEM_LANGUAGE.md` — machinery only; not §2.11b)**, and **Article II §2.15 (operator instruction supremacy; anti-steering; honest limits of paper law on external LLMs)** for the LifeOS lane and Adam-facing agents. It may add detail; it may **not** weaken §2.6, §2.10, §2.11, **§2.11c**, **§2.12**, **§2.14**, or **§2.15**.
 
 **§2.6 is mandatory:** law cannot be skipped for speed; **cutting corners** and **laziness** (skipped reads, sk
+
+## Institutional Memory — top lessons (RECEIPT-class, not FACT)
+
+> Source: `docs/INSTITUTIONAL_MEMORY_DIGEST.md` — generated from `lessons_learned` DB table.
+> Confidence: low-to-medium. Do not treat as INVARIANT without runtime evidence.
+
+## agent-workflow
+
+### MEDIUM: Local repo was 32 commits behind origin/main during a governance session; operat...
+
+**Problem:** Local repo was 32 commits behind origin/main during a governance session; operator:status showed stale snapshot as if current. 13 files existed on disk untracked — never committed, invisible to Railway.
+
+**Solution:** Run `git pull --rebase origin main` at session start when autonomous builders are active. Check git status for untracked files that belong to the system. OF1 freshness check in operator-runtime-status.mjs now flags stale snapshots as STALE/FAIL_CLOSED.
+
+**How novel:** known but hard  
+**Source:** AM36 receipt 2026-05-13 — GOVERNANCE_LOCK c60e1c64; 13 untracked files  
+**Tags:** operator-status, stale-snapshot, git-sync, recovery, confidence:medium
+
+---
+
+### SMALL: Railway autonomous builders push commits continuously during human sessions; loc...
+
+**Problem:** Railway autonomous builders push commits continuously during human sessions; local branches diverge within minutes. Non-fast-forward push failures occur on nearly every human-session push.
+
+**Solution:** `git fetch origin && git rebase origin/main` immediately before every push attempt. May need multiple rounds if builders push between rebase and push. Do not use git merge — rebase preserves linear history expected by the build system.
+
+**How novel:** standard  
+**Source:** CONTINUITY_LOG 2026-05-13/14 — push failures, C21 proof  
+**Tags:** git, rebase, railway-autonomy, push, confidence:medium
+
+---
+
+## autonomy
+
+### LARGE: Forge daemon retried a file that was already valid on disk across circuit-breake...
+
+**Problem:** Forge daemon retried a file that was already valid on disk across circuit-breaker cycles — no mechanism to detect the file existed. Truncation loop: builder produces 7 lines → circuit breaker → 2h pause → retry → repeat.
+
+**Solution:** SIS1: pre-builder disk check — if .js target_file exists + line count ≥ 10 + node --check passes → log task_skip_already_shipped and continue without an HTTP builder call. Confirmed live: multiple tasks skipped in site-builder-autonomous-queue.
+
+**How novel:** first known solution  
+**Source:** AM36 receipt 2026-05-12 — SIS1; checkIfAlreadyShipped()  
+**Tags:** sis1, forge, circuit-breaker, builder, skip-if-shipped, confidence:medium
+
+---
+
+### MEDIUM: A write-lock with no expiry silently routes all autonomous commits to staging in...
+
+**Problem:** A write-lock with no expiry silently routes all autonomous commits to staging indefinitely if the operator forgets to release it.
+
+**Solution:** acquireLock() writes expires_at + ttl_minutes; readLock() auto-deletes expired file and returns null. Default TTL: 120 minutes via AUTONOMY_LOCK_TTL_MINUTES env.
+
+**How novel:** first known solution  
+**Source:** Adam directive 2026-05-14; AM36 C21 receipt  
+**Tags:** c21, autonomy-write-lock, expiry, ttl, confidence:medium
+
+---
+
+### MEDIUM: data/builder-failure-patterns.json lives on Railway ephemeral filesystem

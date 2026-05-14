@@ -6,10 +6,11 @@
   "status": "active",
   "priority": "high",
   "owner": "adam",
-  "phase": "phase_1_complete",
+  "phase": "phase_2_adoption",
   "stability_class": "stable",
-  "last_updated": "2026-04-26",
-  "current_focus": "Phase 1 built + builder integration; awaiting memory:seed run against Railway",
+  "last_updated": "2026-05-14",
+  "current_focus": "S2 memory bootstrap complete — lessons_learned seeded (10 rows), reader wired in cold-start. Next: S3 C09 Build Closure Contract.",
+  "ssot_receipt_tail": "S2: seed-lessons-learned.mjs created; 10 lessons in Neon; digest committed; cold-start reader confirmed",
   "owned_files": [
     "db/migrations/20260426_memory_intelligence.sql",
     "db/migrations/20260426_memory_intelligence_hardening.sql",
@@ -17,8 +18,10 @@
     "services/memory-intelligence-service.js",
     "routes/memory-intelligence-routes.js",
     "scripts/seed-epistemic-facts.mjs",
+    "scripts/seed-lessons-learned.mjs",
     "scripts/record-ci-evidence.mjs",
-    "prompts/lifeos-memory-intelligence.md"
+    "prompts/lifeos-memory-intelligence.md",
+    "docs/INSTITUTIONAL_MEMORY_DIGEST.md"
   ],
   "required_env": [],
   "required_routes": [

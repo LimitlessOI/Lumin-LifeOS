@@ -32,6 +32,29 @@
 
 ---
 
+## [BUILD] Update 2026-05-14 #15 — S2 Memory Bootstrap: lessons_learned seeded + reader wired
+
+### Files changed
+- `scripts/seed-lessons-learned.mjs` — NEW. Seeds 10 real lessons from AM36/CONTINUITY_LOG repair-loop receipts into `lessons_learned` Neon table. Each lesson cites source path + evidence. All tagged confidence:medium or confidence:low. Also writes `docs/INSTITUTIONAL_MEMORY_DIGEST.md`.
+- `scripts/generate-cold-start.mjs` — Modified. Reads `docs/INSTITUTIONAL_MEMORY_DIGEST.md`; cold-start packet now includes "Institutional Memory — top lessons (RECEIPT-class, not FACT)" section at line 225.
+- `docs/INSTITUTIONAL_MEMORY_DIGEST.md` — NEW (generated). Auto-generated digest from DB rows. Committed so cold agents can read without DB.
+- `package.json` — Added `memory:seed-lessons` script.
+- `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — Agent Handoff + Change Receipts updated.
+- `docs/CONTINUITY_LOG.md` — This entry.
+
+### State after this session
+- `lessons_learned`: **10 rows in Neon production** (VERIFIED via direct query). All tagged confidence:medium or confidence:low. Not promoted to FACT.
+- `epistemic_facts`: 3678 rows (unchanged).
+- Reader: `generate-cold-start.mjs` confirmed to include lessons in `docs/AI_COLD_START.md` ✅.
+- No hallucinated lessons — every lesson cites `surfaced_by` with AM36 receipt date and commit reference.
+- `npm test`: 14 pass, 0 fail. `node --check` on new script: PASS.
+
+### Next agent: start here
+- **S3: C09 Build Closure Contract** — per Phase 2 agreed sequence: C21 ✅ → S2/C02 ✅ → C09 next. Adam to confirm scope before starting.
+- **Optional housekeeping:** wire `memory:ci-evidence` into CI workflow; add `memory:seed-lessons` to a post-deploy hook so digest stays current.
+
+---
+
 ## [BUILD] Update 2026-05-14 #14 — C21 CONFIRMED LIVE + auto-expiry hardened + lock released
 
 ### Files changed

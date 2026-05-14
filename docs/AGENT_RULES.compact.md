@@ -1,5 +1,5 @@
 # AGENT RULES — COMPACT ENFORCEMENT
-> Generated: 2026-05-10T20:38:41.703Z | Regenerate: `npm run gen:rules`
+> Generated: 2026-05-14T01:38:04.824Z | Regenerate: `npm run gen:rules`
 > Read this instead of full NSSOT for routine work. Full NSSOT only for constitutional edits/conflicts/onboarding.
 
 ## HIERARCHY

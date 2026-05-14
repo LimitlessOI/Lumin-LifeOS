@@ -66,6 +66,7 @@
     "operator-corpus:pipeline": "node scripts/operator-corpus-pipeline.mjs",
     "handoff:self-test": "node scripts/handoff-self-test.mjs",
     "memory:seed": "node scripts/seed-epistemic-facts.mjs",
+    "memory:seed-lessons": "node scripts/seed-lessons-learned.mjs",
     "memory:ci-evidence": "node scripts/record-ci-evidence.mjs --all-js",
     "verify:ci": "node --check $(find . -name '*.js' -not -path './node_modules/*' -not -path './.git/*') && node scripts/record-ci-evidence.mjs --pass --all-js",
     "evidence:check": "node scripts/evidence-required-check.mjs",

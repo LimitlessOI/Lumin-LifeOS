@@ -240,20 +240,23 @@ This turns long-horizon regret into present-tense monitoring.
 
 ## Agent Handoff Notes
 
-**Current state (2026-04-26, session 2):**
-Phase 1 fully built + extended:
+**Current state (2026-05-14, S2 complete):**
+Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 - All 7 tables + 2 views auto-apply on deploy
-- `npm run memory:seed` — seeds from SSOT sources (run once against Railway DB to populate initial facts)
-- `npm run memory:ci-evidence` — records node --check results as fact_evidence (also part of `verify:ci`)
-- Builder `/build` has a pre-commit syntax gate: broken JS returns 422 and logs a protocol violation
-- Builder `/history` surfaces the conductor_builder_audit trail (NEW — added this session)
-- Domain prompt files for builder: `prompts/lifeos-memory-intelligence.md`, `prompts/lifeos-platform.md`
-- Tables are still empty on Railway until `memory:seed` is run
+- `epistemic_facts`: 3678 rows (seeded 2026-04-26 from SSOT receipts + ENV_REGISTRY + architectural invariants)
+- `lessons_learned`: **10 rows** (seeded 2026-05-14, S2 — real repair-loop lessons from AM36/CONTINUITY_LOG)
+- `npm run memory:seed` — seeds epistemic_facts (SSOT sources)
+- `npm run memory:seed-lessons` — seeds lessons_learned (repair-loop receipts); also writes `docs/INSTITUTIONAL_MEMORY_DIGEST.md`
+- `npm run memory:ci-evidence` — records node --check results as fact_evidence
+- `docs/INSTITUTIONAL_MEMORY_DIGEST.md` — committed static digest generated from lessons_learned DB rows
+- `docs/AI_COLD_START.md` — now includes an "Institutional Memory" section with top lessons (reader confirmed)
+- Builder `/build` has pre-commit syntax gate; `/history` surfaces conductor_builder_audit trail
+- Domain prompt files: `prompts/lifeos-memory-intelligence.md`, `prompts/lifeos-platform.md`
 
 **Next priority (in order):**
-1. **Run `npm run memory:seed` against Railway** — tables are empty until this runs
-2. **Wire `memory:ci-evidence` into `.github/workflows/smoke-test.yml`** — auto-record CI results as evidence
-3. **Add auto-seed on boot** — check if `epistemic_facts` is empty, run seed automatically (Platform domain)
+1. **Wire `memory:ci-evidence` into `.github/workflows/smoke-test.yml`** — auto-record CI results as evidence
+2. **Regenerate digest on lesson updates** — add `memory:seed-lessons` to CI or a post-seed hook so INSTITUTIONAL_MEMORY_DIGEST.md stays current
+3. **S3: C09 Build Closure Contract** — per Phase 2 agreed sequence: C21 ✅ → C02 ✅ → C09 next
 4. **Add SQL validation gate** — validate `.sql` files before builder commits them
 5. **Add HTML validation gate** — basic structure check for `.html` files
 
@@ -284,3 +287,7 @@ Phase 1 fully built + extended:
 | 2026-04-26 | `prompts/lifeos-memory-intelligence.md` | Created — domain context file for Memory Intelligence System (builder can now target this domain) | Builder needs domain context to generate correct code in this domain |
 | 2026-04-26 | `prompts/lifeos-platform.md` | Created — domain context file for Platform Core infrastructure | Builder needs platform domain context for middleware, startup, and build system work |
 | 2026-04-26 | `docs/AGENT_RULES.compact.md` | Regenerated — added MEMORY + ANTI-CORNER-CUTTING section with design question, evidence ladder, INVARIANT gate, violation endpoints | Memory enforcement rules must be in the compact rules file every agent reads first |
+| 2026-05-14 | `scripts/seed-lessons-learned.mjs` | **S2 — Memory Bootstrap.** Created — seeds `lessons_learned` table with 10 real lessons from AM36 change receipts + CONTINUITY_LOG repair-loop history. Each lesson cites exact source path (surfaced_by). All tagged confidence:medium or confidence:low. Script also writes `docs/INSTITUTIONAL_MEMORY_DIGEST.md` (committed static digest). `npm run memory:seed-lessons`. `node --check`: PASS. Seed confirmed: 10 rows in Neon production. | lessons_learned was at 0 rows (S1 only seeded epistemic_facts). S2 is the first real population of institutional memory from receipts. |
+| 2026-05-14 | `scripts/generate-cold-start.mjs` | **S2 — Reader wired.** Added `docs/INSTITUTIONAL_MEMORY_DIGEST.md` as an input source; cold-start packet now includes an "Institutional Memory — top lessons (RECEIPT-class, not FACT)" section. Reader proof: `node scripts/generate-cold-start.mjs` → `docs/AI_COLD_START.md` confirmed to contain lesson content at line 225. | C17 reader-first contract: no active read path existed for lessons_learned before S2. Cold-start is the primary reader — every cold agent reads it. |
+| 2026-05-14 | `docs/INSTITUTIONAL_MEMORY_DIGEST.md` | **S2 — Generated digest.** Auto-generated from DB rows by `seed-lessons-learned.mjs`. 10 lessons in 4 domains: agent-workflow, autonomy, build-governance, platform. Committed to repo so cold agents can read without DB connection. Regenerate: `npm run memory:seed-lessons`. | Static committed copy of lessons_learned for offline/cold-start access. |
+| 2026-05-14 | `package.json` | Added `memory:seed-lessons` script | Expose S2 lesson seeding as standard npm command. |

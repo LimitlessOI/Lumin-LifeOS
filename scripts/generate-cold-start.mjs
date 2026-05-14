@@ -44,6 +44,7 @@ async function main() {
   const council = await readSafe('docs/CONTINUITY_LOG_COUNCIL.md');
   const amd36 = await readSafe('docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md');
   const amd21h = await readSafe('docs/projects/AMENDMENT_21_LIFEOS_CORE.md');
+  const memoryDigest = await readSafe('docs/INSTITUTIONAL_MEMORY_DIGEST.md');
 
   const handoff = amd21h.includes('## Agent Handoff Notes')
     ? amd21h.slice(amd21h.indexOf('## Agent Handoff Notes'), amd21h.indexOf('## Agent Handoff Notes') + 2500)
@@ -98,6 +99,13 @@ ${amd36.slice(0, 2500)}
 ## Amendment 21 — Agent Handoff Notes region
 
 ${handoff}
+
+## Institutional Memory — top lessons (RECEIPT-class, not FACT)
+
+> Source: \`docs/INSTITUTIONAL_MEMORY_DIGEST.md\` — generated from \`lessons_learned\` DB table.
+> Confidence: low-to-medium. Do not treat as INVARIANT without runtime evidence.
+
+${memoryDigest.includes('AUTO-GENERATED') ? memoryDigest.slice(memoryDigest.indexOf('---\n\n') + 5, memoryDigest.indexOf('---\n\n') + 3000) : memoryDigest.slice(0, 2500)}
 `;
 
   await fs.writeFile(path.join(ROOT, 'docs/AI_COLD_START.md'), out, 'utf8');
