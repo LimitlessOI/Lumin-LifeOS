@@ -301,7 +301,7 @@ function extractJavaScriptFromOutput(rawText) {
     if (/^(async\s+)?function\s+[$A-Z_a-z]/.test(t)) return true;
     if (/^(class)\s+[$A-Z_a-z]/.test(t)) return true;
     if (/^(if|for|while|switch|try)\s*\(/.test(t)) return true;
-    if (/^(\/\/|\/\*|\*\/|\{|\(|\[)/.test(t)) return true;
+    if (/^(\/\/|\/\*|\{|\(|\[)/.test(t)) return true; // */ is never a valid file start — it means /** was dropped
     if (/^[$A-Z_a-z][\w$]*\s*=/.test(t)) return true;
     return false;
   });

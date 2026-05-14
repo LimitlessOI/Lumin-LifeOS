@@ -143,5 +143,77 @@
     "cleared_at": "2026-05-14T08:40:01.113Z",
     "cleared_by": "conductor-rl3",
     "cleared_reason": "Builder-generated output had self-import + dbPool-before-declaration bugs. File fixed directly (GAP-FILL: builder failed x2 with SQL-in-JS syntax error). node --check PASS. 90 lines rebuilt."
+  },
+  {
+    "task_id": "tc-document-qa-validator",
+    "worker_id": "atlas",
+    "worker_name": "Atlas",
+    "lane": "TC_SERVICE_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T11:50:10.534Z",
+    "failure_count": 3,
+    "last_error": "/tmp/builder-check-iILpzj/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n",
+    "cleared_at": "2026-05-14T09:29:58.715Z",
+    "cleared_by": "conductor-builder-bug-fix",
+    "cleared_reason": "Root cause: extractJavaScriptFromOutput() regex included */ as valid code-start; model output with dropped /** produced files starting with */. Fixed in routes/lifeos-council-builder-routes.js:304. Re-queue to retry."
+  },
+  {
+    "task_id": "site-builder-prospect-ranker",
+    "worker_id": "forge",
+    "worker_name": "Forge",
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "quarantined_at": "2026-05-09T11:50:10.534Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-2iakYf/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n",
+    "cleared_at": "2026-05-14T09:29:58.715Z",
+    "cleared_by": "conductor-builder-bug-fix",
+    "cleared_reason": "Root cause: extractJavaScriptFromOutput() regex included */ as valid code-start; model output with dropped /** produced files starting with */. Fixed in routes/lifeos-council-builder-routes.js:304. Re-queue to retry."
+  },
+  {
+    "task_id": "site-builder-revenue-service",
+    "worker_id": "forge",
+    "worker_name": "Forge",
+    "lane": "SITE_BUILDER_AUTONOMOUS_QUEUE",
+    "quarantined_at": "2026-05-09T11:50:10.534Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-Aj0Qke/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n",
+    "cleared_at": "2026-05-14T09:29:58.715Z",
+    "cleared_by": "conductor-builder-bug-fix",
+    "cleared_reason": "Root cause: extractJavaScriptFromOutput() regex included */ as valid code-start; model output with dropped /** produced files starting with */. Fixed in routes/lifeos-council-builder-routes.js:304. Re-queue to retry."
+  },
+  {
+    "task_id": "site-builder-revenue-service",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T21:56:26.553Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-NK1uif/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n",
+    "cleared_at": "2026-05-14T09:29:58.715Z",
+    "cleared_by": "conductor-builder-bug-fix",
+    "cleared_reason": "Root cause: extractJavaScriptFromOutput() regex included */ as valid code-start; model output with dropped /** produced files starting with */. Fixed in routes/lifeos-council-builder-routes.js:304. Re-queue to retry."
+  },
+  {
+    "task_id": "tc-document-qa-validator",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T22:56:26.704Z",
+    "failure_count": 8,
+    "last_error": "/tmp/builder-check-UnC8vh/.js:1\n*/\n^\n\nSyntaxError: Unexpected token '*'\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n",
+    "cleared_at": "2026-05-14T09:29:58.715Z",
+    "cleared_by": "conductor-builder-bug-fix",
+    "cleared_reason": "Root cause: extractJavaScriptFromOutput() regex included */ as valid code-start; model output with dropped /** produced files starting with */. Fixed in routes/lifeos-council-builder-routes.js:304. Re-queue to retry."
+  },
+  {
+    "task_id": "tc-agent-portal-polish",
+    "worker_id": "atlas",
+    "worker_name": "Atlas",
+    "lane": "TC_SERVICE_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-09T11:50:10.534Z",
+    "failure_count": 4,
+    "last_error": "generated HTML appears truncated before <body> (output token budget too small for full-file regeneration, or provider cut off). Retry with BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP or split CSS/markup into a smaller target file.",
+    "cleared_at": "2026-05-14T09:31:06.657Z",
+    "cleared_by": "conductor-token-fix",
+    "cleared_reason": "Root cause: max_output_tokens=9000 too small for full HTML regen before <body>. Fixed to 32000 in TC_SERVICE_BUILDER_QUEUE.json. Re-queue to retry."
   }
 ]

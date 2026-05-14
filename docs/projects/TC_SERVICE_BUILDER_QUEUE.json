@@ -16,7 +16,7 @@
       "commit_message": "[system-build] TC document validator — missing-signature + required-field detection",
       "branch": "main",
       "model": "gemini_flash",
-      "max_output_tokens": 6000
+      "max_output_tokens": 16000
     },
     {
       "id": "tc-stripe-billing-service",
@@ -62,7 +62,7 @@
       "commit_message": "[system-build] TC agent portal UI polish — sticky header, alerts banner, approval queue",
       "branch": "main",
       "model": "gemini_flash",
-      "max_output_tokens": 9000
+      "max_output_tokens": 32000
     },
     {
       "id": "tc-morning-digest-service",
