@@ -1,98 +1,42 @@
-# Dashboard Widget State Contract
+## Dashboard State Contract
 
-This document outlines the contract for managing the local state of dashboard widgets, covering visibility, order, density mode, and pinned status. It defines the structure and keys for client-side storage, with considerations for future server-side persistence, versioning, and SSR/client boundaries.
+This document defines the client-side contract for persisting user preferences related to the LifeOS Dashboard layout and display. These preferences are initially stored in `localStorage` and are designed to be compatible with future server-side persistence.
 
-## Goals
+### Goals
 
-1.  **Define State Structure:** Establish clear data shapes for widget visibility, display order, density, and pinned status.
-2.  **Specify Storage Keys:** Identify unique keys for storing this state, initially in `localStorage`.
-3.  **Enable Versioning:** Provide a mechanism for schema versioning to support future migrations.
-4.  **Address SSR/Client:** Outline considerations for how this state interacts with Server-Side Rendering and client-side hydration.
-5.  **Support Dynamic Layout:** Allow users to customize their dashboard experience through these state parameters.
+- Define a clear, versioned schema for dashboard layout preferences.
+- Enable user customization of widget visibility, order, density, and pinning.
+- Establish a foundation for seamless migration of user preferences across schema updates.
+- Outline the interaction between client-side storage (`localStorage`) and potential future server-side persistence, ensuring client-side hydration.
 
-## Keys & Shapes
+### Keys & Shapes
 
-All keys will be prefixed with `lifeos_dashboard_` to ensure namespace isolation.
+All keys will be prefixed with `lifeos_dashboard_` to prevent collisions.
 
-### 1. Widget Visibility
+| Preference | `localStorage` Key | Shape | Description | Example |
+|---|---|---|---|---|
+| **Schema Version** | `lifeos_dashboard_state_version` | `number` | Incremental version of the dashboard state schema. Used for migration. | `1` |
+| **Widget Visibility** | `lifeos_dashboard_widget_visibility` | `{ [widgetId: string]: boolean }` | A map indicating whether a widget is visible (`true`) or hidden (`false`). | `{ "lifeos-widget-mit": true, "lifeos-widget-score": false }` |
+| **Widget Order** | `lifeos_dashboard_widget_order` | `string[]` | An ordered array of widget IDs, defining their display sequence. | `["lifeos-widget-mit", "lifeos-widget-lumin-quick", "lifeos-widget-score", "lifeos-widget-category-stubs"]` |
+| **Density Mode** | `lifeos_dashboard_density_mode` | `DensityEnum` | The preferred display density for widgets. | `"compact"` |
+| **Pinned Widgets** | `lifeos_dashboard_pinned_widgets` | `string[]` | An array of widget IDs that are "pinned" to a specific position or state. | `["lifeos-widget-mit"]` |
 
-*   **Purpose:** Determines which widgets are currently displayed on the dashboard.
-*   **Storage Key:** `lifeos_dashboard_widget_visibility`
-*   **Shape:** An object where keys are widget identifiers (strings) and values are booleans indicating visibility (`true` for visible, `false` for hidden).
-*   **Example:**
-    ```json
-    {
-      "lifeos-widget-mit": true,
-      "lifeos-widget-score": true,
-      "lifeos-widget-lumin-quick": false,
-      "lifeos-widget-category-stubs": true,
-      "mits-list": true,
-      "cal-list": true,
-      "goals-list": true,
-      "scores-grid": true,
-      "chat-messages": true
-    }
-    ```
+### Density Enum
 
-### 2. Widget Order
+The `DensityEnum` defines the available display density modes for the dashboard.
 
-*   **Purpose:** Defines the sequential display order of widgets on the dashboard.
-*   **Storage Key:** `lifeos_dashboard_widget_order`
-*   **Shape:** An array of widget identifiers (strings). The order of elements in the array dictates the display order. Widgets not present in this array will default to a predefined order or be appended.
-*   **Example:**
-    ```json
-    [
-      "lifeos-widget-mit",
-      "lifeos-widget-score",
-      "mits-list",
-      "cal-list",
-      "lifeos-widget-lumin-quick",
-      "goals-list",
-      "scores-grid",
-      "lifeos-widget-category-stubs",
-      "chat-messages"
-    ]
-    ```
+```typescript
+type DensityEnum = 'comfortable' | 'compact' | 'minimal';
+```
 
-### 3. Density Mode
+- **`comfortable`**: Default, spacious layout.
+- **`compact`**: Reduced padding and spacing for more information density.
+- **`minimal`**: Highly condensed, potentially hiding non-essential elements.
 
-*   **Purpose:** Controls the visual density (spacing, padding, font sizes) of widgets and the overall dashboard layout.
-*   **Storage Key:** `lifeos_dashboard_density_mode`
-*   **Shape:** A string representing one of the defined `DensityMode` enum values.
-*   **Example:** `"STANDARD"`
+### Risks
 
-### 4. Pinned Widgets
-
-*   **Purpose:** Identifies widgets that should remain in a fixed position or be prioritized, regardless of general ordering rules.
-*   **Storage Key:** `lifeos_dashboard_pinned_widgets`
-*   **Shape:** An array of widget identifiers (strings).
-*   **Example:**
-    ```json
-    [
-      "lifeos-widget-mit",
-      "chat-messages"
-    ]
-    ```
-
-### 5. State Version
-
-*   **Purpose:** Tracks the schema version of the stored dashboard state to facilitate migrations.
-*   **Storage Key:** `lifeos_dashboard_state_version`
-*   **Shape:** A number representing the current schema version.
-*   **Example:** `1`
-
-## Density Enum
-
-The `DensityMode` enum defines the available display density settings for the dashboard.
-
-*   `COMPACT`: Minimal spacing, smaller fonts, maximizing information density.
-*   `STANDARD`: Default spacing and font sizes, balanced information and readability.
-*   `SPACIOUS`: Increased spacing, larger fonts, prioritizing readability and visual comfort.
-
-## Risks
-
-1.  **Schema Migration Complexity:** As the dashboard evolves, changes to the state shapes (e.g., adding new properties, renaming keys) will require robust migration logic to prevent breaking existing user layouts. Failure to implement this carefully could lead to data loss or unexpected UI behavior for returning users.
-2.  **LocalStorage Limitations:** While suitable for initial client-side state, `localStorage` has size limits and does not roam across devices. A future server-side persistence layer will be necessary for a complete solution, introducing potential synchronization challenges.
-3.  **SSR/Client Hydration Mismatch:** If the initial server-rendered HTML does not reflect the user's saved `localStorage` state, a "flash of unstyled content" (FOUC) or layout shift may occur as the client-side JavaScript applies the user's preferences. This requires careful handling to ensure a smooth user experience.
-4.  **Performance Overhead:** Frequent reads/writes to `localStorage` on every page load or state change could introduce minor performance overhead, though for typical dashboard layout changes, this is generally negligible.
-5.  **Widget ID Stability:** The contract relies on stable and unique widget identifiers. Any changes to these IDs without corresponding migration logic will break user preferences for those widgets.
+- **Schema Drift:** Without a robust versioning and migration strategy, changes to the state contract could lead to broken user experiences or loss of preferences.
+- **`localStorage` Limitations:** `localStorage` is synchronous and has a limited storage capacity (typically 5-10MB). While sufficient for preferences, it's not suitable for large datasets.
+- **SSR/Client Hydration Mismatch:** If server-side rendering (SSR) is introduced, a mismatch between the initial server-rendered state and the client-hydrated state (from `localStorage`) could cause a "flash of unstyled content" or layout shifts.
+- **Data Integrity:** Malicious client-side scripts could tamper with `localStorage` values, leading to unexpected UI behavior.
+- **Future Server-Side Sync:** Transitioning from `localStorage` to server-side persistence will require careful synchronization logic to merge or prioritize preferences.
