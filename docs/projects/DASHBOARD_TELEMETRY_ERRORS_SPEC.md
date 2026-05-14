@@ -1,70 +1,55 @@
-# Client-Visible API Error Envelopes Specification
+**Client-Visible Error Envelopes Specification**
 
-## 1. Purpose
-This specification defines the standard structure, content, and behavior for client-visible error messages resulting from API failures within the LifeOS Dashboard. The goal is to provide clear, actionable feedback to users while maintaining privacy and facilitating debugging for authorized personnel.
+This document outlines the standard for presenting API errors to the user within the LifeOS Dashboard. The goal is to provide clear, actionable feedback while adhering to privacy and fail-closed principles.
 
-## 2. General Principles
-*   **User-Centric Copy**: Error messages must be clear, concise, and actionable for the end-user. Avoid technical jargon.
-*   **Privacy (Fail-Closed)**: No sensitive system details (e.g., stack traces, internal error codes, database messages) shall be exposed to the general user. In case of failure, the system should default to a secure, non-informative state.
-*   **Adam-Only Debugging**: A correlation ID and potentially more detailed (but still non-sensitive) error information will be available only to users identified as "Adam" (or in a designated debug mode) to aid in troubleshooting.
-*   **No Instrumentation**: This specification focuses solely on client-visible aspects and does not include requirements for logging, monitoring, or backend instrumentation.
+### 1. General Principles
 
-## 3. Error Envelope Structure
+*   **User-Centric Copy**: Error messages must be clear, concise, and understandable by a non-technical user. Avoid jargon.
+*   **Privacy (Fail-Closed)**: Never expose internal server errors, stack traces, or sensitive data directly to the user. Generic messages are preferred for end-users.
+*   **Actionability**: Where possible, error messages should suggest a next step (e.g., "Please try again," "Check your network connection").
+*   **Consistency**: Error presentation should be consistent across all dashboard widgets and features.
 
-When an API call fails, the client-side UI should present an error envelope with the following components:
+### 2. Error Envelope Structure (Client-Side)
 
-### 3.1. User-Facing Message
-*   **Content**: A concise, human-readable message indicating what went wrong.
-    *   **Generic Fallback**: "Something went wrong. Please try again."
-    *   **Specific Context**: Where possible, provide context (e.g., "Failed to load your Most Important Tasks.", "Lumin is unavailable right now.").
-*   **Placement**: Errors should typically appear inline within the affected widget or section, replacing the content that failed to load or update. For critical, global failures, a temporary overlay or toast might be considered, but inline is preferred for localized issues.
-*   **Visuals**: Use a clear visual indicator (e.g., a warning icon, distinct styling) to denote an error state. The existing `.empty` class styling with a `⚠️` emoji is a suitable starting point.
+When an API call fails, the client-side UI should present an error in a dedicated area (e.g., within a widget, or as an ambient chat message). The error presentation should include:
 
-### 3.2. Retry Mechanism
-*   **Action**: A clearly labeled button or link, typically "Retry" or "Try Again".
-*   **Behavior**: Clicking the retry action should re-initiate the specific API call that failed.
-*   **Placement**: Adjacent to the user-facing message within the error envelope.
+*   **User Message**: A concise, user-friendly description of the problem.
+*   **Retry Option**: A clear mechanism for the user to re-attempt the failed operation.
+*   **Correlation ID (Adam-only)**: A unique identifier for the request, visible to the dashboard user for debugging and support purposes. This should be presented in a way that is accessible but not intrusive.
 
-### 3.3. Adam-Only Debug Details (Correlation ID)
-*   **Visibility**: This section is only visible if the client is operating in a designated "Adam-only" or debug mode (e.g., `localStorage.getItem('lifeos_debug_mode') === 'true'`).
-*   **Content**:
-    *   **Correlation ID**: Display the `x-request-id` (or similar) header value received from the backend in the error response. This ID is critical for tracing issues in backend logs.
-    *   **Optional API Error Message**: A sanitized, non-sensitive error message directly from the API response, if available and deemed useful for debugging without exposing internal details.
-*   **Placement**: Below the user-facing message and retry button, clearly demarcated as debug information.
+### 3. User-Facing Messages
 
-## 4. Display Mechanism Examples
+Standardized messages for common API failure scenarios:
 
-### 4.1. Widget-Specific Error (e.g., MITs, Calendar, Goals, Scores)
-If an API call for a specific widget fails (e.g., `/api/v1/lifeos/commitments`), the widget's content area should be replaced with the error envelope.
+*   **Generic API Error**:
+    *   **Message**: "Something went wrong. Please try again."
+    *   **Context**: Used for unhandled server errors (e.g., 500-level errors without specific messages), or when a specific error message is not available from the backend.
+*   **Network/Connectivity Error**:
+    *   **Message**: "Failed to connect. Please check your network connection and try again."
+    *   **Context**: Used when `fetch` fails due to network issues (e.g., `TypeError` for network errors).
+*   **Service Unavailable/Temporary Issue**:
+    *   **Message**: "Lumin is currently unavailable. Please try again in a few moments."
+    *   **Context**: Used for specific backend service unavailability (e.g., 503 Service Unavailable, or explicit backend message indicating temporary service issues).
+*   **Data Loading Failure**:
+    *   **Message**: "Failed to load [Item Type]. Please try again." (e.g., "Failed to load MITs.")
+    *   **Context**: Used when a specific data fetch operation fails.
 
-**Example HTML structure (conceptual):**
-```html
-<div class="card accent-border-today">
-    <div class="card-label">Today's MITs</div>
-    <div class="error-envelope empty">
-        <span>⚠️</span>
-        <p>Failed to load your Most Important Tasks.</p>
-        <button class="btn-add btn-retry">Retry</button>
-        <!-- Adam-only debug info -->
-        <div class="debug-info" style="display: none;">
-            <p>Correlation ID: [UUID]</p>
-            <p>API Error: [Sanitized API message]</p>
-        </div>
-    </div>
-</div>
-```
+### 4. Correlation ID Handling
 
-### 4.2. Chat Error (e.g., `/api/v1/lifeos/chat`)
-For chat interactions, errors should be added as an `ambient` message within the chat history. A retry mechanism for chat might be more complex, potentially re-sending the last user message. For initial implementation, the existing `ambient` message pattern is sufficient, with the user manually re-typing or re-initiating.
+*   **Backend Requirement**: All API error responses from the backend *must* include a `x-request-id` header or a `correlationId` field in the JSON body.
+*   **Client Display**:
+    *   The correlation ID should be displayed alongside the user message, but in a less prominent style (e.g., smaller font, muted color).
+    *   It should be clearly labeled, e.g., "Error ID: [correlation_id]".
+    *   For chat messages, it can be appended to the ambient error message.
+    *   For widget errors, it can be placed below the primary error message.
+*   **Adam-only Context**: Since this is a single-user dashboard, "Adam-only" means the correlation ID is always visible to the user for debugging. There is no distinction between "Adam" and "other users" in this context.
 
-**Example (existing pattern, extended):**
-```javascript
-// ... inside sendMessage() catch block or if !r.ok
-addMessage('ambient', 'Lumin is unavailable right now. Please try again later.');
-// If the last message was a failed user send, consider adding a retry button next to the ambient message.
-```
+### 5. Retry Behavior
 
-## 5. Implementation Considerations
-*   **Centralized Error Handling**: Consider a utility function or class to standardize the creation and display of error envelopes across different widgets to ensure consistency.
-*   **API Client Enhancement**: The `API` fetch wrapper should be enhanced to parse error responses, extract correlation IDs, and provide a consistent error object to the UI.
-*   **Adam-Only Toggle**: Implement a simple client-side mechanism (e.g., `localStorage.setItem('lifeos_debug_mode', 'true')` in the console) to enable/disable the display of Adam-only debug details.
+*   **Manual Retry Button**: For user-initiated actions (e.g., adding an MIT, sending a chat message), a "Retry" button should be presented alongside the error message.
+*   **Automatic Reload (for data widgets)**: For passive data loading widgets (e.g., MITs, Calendar, Goals, Scores), the error message should include a "Reload" button or a link that triggers `loadX()` again.
+*   **No Automatic Retries**: The client should not implement automatic retry logic with backoff. This responsibility lies with the backend or a dedicated client-side retry library if explicitly introduced. The user should be in control of retrying.
+
+### 6. No Instrumentation Code
+
+This specification focuses solely on the client-visible aspects of error handling. It does not include details on how errors are logged, monitored, or reported to backend systems. The `console.error` calls in the existing code are acceptable for development debugging but should not be considered the primary error reporting mechanism for production.
