@@ -1,7 +1,7 @@
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`
-> Generated: 2026-05-14T01:51:06.226Z
+> Generated: 2026-05-14T02:02:51.732Z
 
 ## Read order (mandatory)
 
@@ -289,3 +289,19 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 ---
 
 ### MEDIUM: data/builder-failure-patterns.json lives on Railway ephemeral filesystem
+
+## Task DNA coverage (S4 — warn-only)
+
+> Fields: why_created, source_receipt, depends_on, blocks, proof_required_to_close
+> Missing DNA does not block execution. This section is informational only.
+
+[task-dna] S4 Task DNA v0 — field coverage report
+
+  LIFEOS_DASHBOARD_BUILDER_QUEUE: 28 tasks | 1 with DNA (4%) | 27 missing
+    → next DNA task: lifeos-alpha-consensus-pack
+       present: why_created, source_receipt, depends_on, blocks, proof_required_to_close
+  SITE_BUILDER_AUTONOMOUS_QUEUE: 11 tasks | 0 with DNA (0%) | 11 missing
+  TC_SERVICE_BUILDER_QUEUE: 5 tasks | 0 with DNA (0%) | 5 missing
+
+  TOTAL: 44 tasks | 1 with DNA (2%) | 43 missing
+  (warn-only — missing DNA does not block queue execution)

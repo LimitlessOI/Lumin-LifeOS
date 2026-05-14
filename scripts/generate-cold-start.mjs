@@ -8,6 +8,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { validateTaskDNA, formatReport } from './validate-task-dna.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -38,6 +39,7 @@ function extractOperatorDirectiveKnowLine(amd21) {
 }
 
 async function main() {
+  const dnaSummary = await validateTaskDNA().catch(() => null);
   const index = await readSafe('docs/CONTINUITY_INDEX.md');
   const mainLog = await readSafe('docs/CONTINUITY_LOG.md');
   const lifeos = await readSafe('docs/CONTINUITY_LOG_LIFEOS.md');
@@ -106,6 +108,13 @@ ${handoff}
 > Confidence: low-to-medium. Do not treat as INVARIANT without runtime evidence.
 
 ${memoryDigest.includes('AUTO-GENERATED') ? memoryDigest.slice(memoryDigest.indexOf('---\n\n') + 5, memoryDigest.indexOf('---\n\n') + 3000) : memoryDigest.slice(0, 2500)}
+
+## Task DNA coverage (S4 — warn-only)
+
+> Fields: why_created, source_receipt, depends_on, blocks, proof_required_to_close
+> Missing DNA does not block execution. This section is informational only.
+
+${dnaSummary ? formatReport(dnaSummary) : '_(validate-task-dna.mjs unavailable)_'}
 `;
 
   await fs.writeFile(path.join(ROOT, 'docs/AI_COLD_START.md'), out, 'utf8');

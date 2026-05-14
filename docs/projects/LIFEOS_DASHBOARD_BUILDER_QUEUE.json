@@ -18,7 +18,12 @@
       "task": "Write the LifeOS ALPHA consensus pack after reading injected SSOT + overlays. Sections required: (1) NEEDS ASSESSMENT — what Adam needs to use the prototype today (shell, dashboard, auth, chat/Lumin paths). (2) Alpha bar = MUST (launchable URLs, single happy path flow) vs NICE (density, stubs, telemetry). (3) TWO-AI consensus rule: Conductor supervisor + Railway multi-model council; load-bearing disagreement → POST /api/v1/lifeos/gate-change/run-preset (preset maturity OR program-start) with saved receipt — never IDE-only \"council agrees.\" (4) KNOWN shipped facts: lifeos-dashboard-tokens.css AND lifeos-dashboard-ai-rail.css/js exist and lifeos-dashboard.html already links them and has #lifeos-ai-rail-root — say explicitly so queue does not waste tokens re-emitting the same artifacts first. (5) List the NEXT FIVE queue task IDs that should execute after this file lands (mirror the backlog order already in LIFEOS_DASHBOARD_BUILDER_QUEUE.json after supervisor reorder). Keep under 350 lines.",
       "spec": "Markdown. Headings ###. End with ---METADATA--- JSON: { consensus_models_min: 2, alpha_date_target: string, queue_next_five: string[] }.",
       "commit_message": "[system-build] Alpha consensus pack + dual-AI needs assessment",
-      "notes": "Queue head — doc before autonomous runs; anchors council + supervise."
+      "notes": "Queue head — doc before autonomous runs; anchors council + supervise.",
+      "why_created": "AM21 backlog re-order 2026-05-05: consensus doc must land before any autonomous builder run to anchor dual-AI rule",
+      "source_receipt": "AM21 receipt 2026-05-05 alpha-reorder; AM36 S4 Task DNA v0 2026-05-13",
+      "depends_on": [],
+      "blocks": ["lifeos-alpha-operator-one-pager", "dashboard-density-commentary"],
+      "proof_required_to_close": "target_file committed AND contains ---METADATA--- JSON block with queue_next_five array"
     },
     {
       "id": "lifeos-alpha-operator-one-pager",

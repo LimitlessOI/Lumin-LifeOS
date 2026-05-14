@@ -32,6 +32,29 @@
 
 ---
 
+## [BUILD] Update 2026-05-13 #17 — S4/Task DNA v0
+
+### Files changed
+- `scripts/validate-task-dna.mjs` (NEW) — warn-only scanner. Exports `validateTaskDNA()` (reads 3 lane queue JSON files, counts tasks with/without DNA fields) and `formatReport()`. 5 DNA fields tracked: `why_created`, `source_receipt`, `depends_on`, `blocks`, `proof_required_to_close`. Never exits non-zero on missing DNA.
+- `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` — `lifeos-alpha-consensus-pack` (task 0) populated with all 5 DNA fields as proof of format. Other 43 tasks unchanged.
+- `scripts/generate-cold-start.mjs` — imports `validateTaskDNA` + `formatReport`; adds "Task DNA coverage" section to `docs/AI_COLD_START.md` at line 293.
+- `docs/AI_COLD_START.md` — regenerated; now includes per-lane DNA coverage counts.
+- `tests/validate-task-dna.test.js` (NEW) — 6 tests covering lane presence, grandTotal, populated ≥ 1, nextTaskDNA structure, math identity, formatReport string shape.
+- `package.json` — added `tests/validate-task-dna.test.js` to test script + `dna:validate` shortcut.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S4 receipt row added; Agent Handoff Notes updated (S4 ✅, next = S5 Prediction loop).
+
+### State after this session
+- `npm test`: **34 pass, 0 fail, 4 skipped**. `node --check`: PASS all files.
+- 3 lanes audited: 44 tasks total, 1 with DNA (2%), 43 missing.
+- DNA is optional and non-blocking — no queue behavior changed.
+- Cold-start now shows DNA coverage summary automatically.
+
+### Next agent: start here
+- **S5 — Prediction loop** (per Phase 2 agreed sequence). Adam to confirm scope before starting.
+- Brainstorm sequence: C21 ✅ → S2/C02 ✅ → S3/C09 ✅ → S4/DNA ✅ → Prediction loop → Founder Decoder.
+
+---
+
 ## [BUILD] Update 2026-05-14 #16 — S3/C09 Build Closure Contract
 
 ### Files changed

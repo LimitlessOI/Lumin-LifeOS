@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node server.js",
     "cli": "node apps/cli/index.js",
-    "test": "node --test tests/smoke.test.js tests/insurance-card-parse.test.js tests/site-builder-postmark-helper.test.js tests/tc-morning-digest-service-module.test.js tests/operator-runtime-status-freshness.test.js tests/deployment-service-package-guard.test.js tests/closure-contract.test.js",
+    "test": "node --test tests/smoke.test.js tests/insurance-card-parse.test.js tests/site-builder-postmark-helper.test.js tests/tc-morning-digest-service-module.test.js tests/operator-runtime-status-freshness.test.js tests/deployment-service-package-guard.test.js tests/closure-contract.test.js tests/validate-task-dna.test.js",
+    "dna:validate": "node scripts/validate-task-dna.mjs",
     "test:insurance-card-ocr": "node scripts/test-insurance-card-ocr.mjs",
     "clientcare:run-pipeline": "node scripts/run-clientcare-vob-pipeline.mjs",
     "test:auto-builder": "node --test tests/auto-builder-scheduler.test.js",

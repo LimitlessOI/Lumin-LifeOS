@@ -45,6 +45,6 @@
   ],
   "last_verified_at": "2026-04-26",
   "verification_passed": null,
-  "last_updated": "2026-05-14",
-  "ssot_receipt_tail": "S3/C09 Build Closure Contract: closure-contract.mjs + 6 queue exit points + 14 tests; 28 pass. S2/C02 complete. C21 confirmed. S4 Task DNA next."
+  "last_updated": "2026-05-13",
+  "ssot_receipt_tail": "S4/Task DNA v0: validate-task-dna.mjs + 1 task populated + cold-start reader + 6 tests; 34 pass. S3/C09 complete. S2/C02 complete. C21 confirmed. S5 Prediction loop next."
 }
