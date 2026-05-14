@@ -32,6 +32,23 @@
 
 ---
 
+## [FIX] Update 2026-05-14 #20 — DB Migration Audit + All Repair Phases (P1+P2+P3)
+
+### Files changed
+- `db/migrations/20260513_repair_phase1_syntax.sql` (NEW) — conflict_interrupts (BIGINT FK, metadata removed) + sleep_logs (CAST).
+- `db/migrations/20260513_repair_phase2_model_performance_chain.sql` (NEW) — build_outcomes, model_verdict_log (INT not UUID for segment_id FK mismatch), dissent_tracking columns+views, capability_map (INT).
+- `db/migrations/20260513_repair_phase3_users_monetization.sql` (NEW) — assessment_results, decision_review_queue, dashboard_widgets/preferences, client_metrics_cache, monetization_paths status column, monetization_outreach (full table — original transaction aborted before creating it).
+- `db/migrations/20260427_lifeos_conflict_interrupts.sql` — users→lifeos_users BIGINT, metadata block removed.
+- `db/migrations/20260427_lifeos_sleep_logs.sql` — `::INT` → `CAST(... AS INTEGER)`.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — full receipt + handoff updated.
+
+### State after this session
+- All 12 failed migrations have repair migrations. On next Railway deploy, the 3 repair migration files will apply and all 12 failed tables/columns will exist.
+- Tests: **49 pass, 0 fail, 4 skipped**. `node --check`: PASS.
+
+### Next agent: start here
+- **S7 — Adam to confirm scope.** DB migration layer is clean. Phase 2 brainstorm sequence complete. All known blockers cleared except `tc-stripe-billing-service` quarantine (fail_closed=2, pre-existing).
+
 ## [BUILD] Update 2026-05-13 #19 — S6/Founder Decoder v0
 
 ### Files changed

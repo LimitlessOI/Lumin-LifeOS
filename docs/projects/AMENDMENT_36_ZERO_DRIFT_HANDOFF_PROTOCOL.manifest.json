@@ -45,6 +45,6 @@
   ],
   "last_verified_at": "2026-04-26",
   "verification_passed": null,
-  "last_updated": "2026-05-13",
-  "ssot_receipt_tail": "S6/Founder Decoder v0: founder-decoder.mjs 4 modes + 5 tests; 49 pass. Phase 2 sequence COMPLETE: C21→S2→S3→S4→S5→S6. S7 next: Adam to confirm scope."
+  "last_updated": "2026-05-14",
+  "ssot_receipt_tail": "DB migration repair P1+P2+P3: 3 repair migrations cover all 12 Railway failures. 49 tests pass. S7 next: Adam to confirm scope."
 }
