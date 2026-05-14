@@ -1,87 +1,78 @@
-The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `public/shared/lifeos-bootstrap.js` files are missing from the repository, limiting grounding in their specific content.
+# LifeOS Dashboard Notification System Specification
 
----
-Notification Specification for LifeOS Dashboard
+This document outlines the specification for a dashboard-level notification, toast, and snackbar system within the LifeOS platform. The system will be owned by Platform Core (the dashboard shell) and will provide a standardized interface for other domains to push notifications. This specification focuses on design and behavior, not implementation code.
 
-This document outlines the design patterns for dashboard-level notifications, toasts, and snackbars within the LifeOS platform. The goal is to provide a consistent, user-friendly, and accessible notification experience without shipping production code at this stage.
+## 1. Surfaces
 
-### Surfaces
+Notifications will appear in designated areas of the dashboard, ensuring they are visible but do not obstruct critical content or user interaction.
 
-Notifications will appear as transient, non-blocking elements in the top-right corner of the LifeOS Dashboard.
+### 1.1 Toast/Snackbar Notifications
+-   **Location**: Bottom-right corner of the viewport on desktop, or bottom-center on mobile.
+-   **Purpose**: Ephemeral, non-critical feedback (e.g., "MIT added successfully", "Settings saved").
+-   **Appearance**: Small, rectangular, with an optional icon and brief text.
+-   **Interaction**: Can be dismissed manually or auto-dismiss after a short duration.
+-   **Severity Visuals**:
+    -   **Info**: Subtle background (e.g., `var(--bg-surface2)`), `var(--text-secondary)` text.
+    -   **Success**: Green accent (e.g., `var(--c-health)`), white text.
+    -   **Warning**: Orange accent (e.g., `var(--c-decisions)`), dark text.
+    -   **Error**: Red accent (e.g., `var(--c-conflict)`), white text.
 
--   **Placement**: Fixed position, `top: 20px`, `right: 20px` (adjusting for safe areas on mobile).
--   **Visuals**:
-    -   Utilize existing dashboard theme variables (`--bg-overlay`, `--text-primary`, `--border`, `--radius-md`).
-    -   Each notification will be a `card`-like element with rounded corners and a subtle shadow.
-    -   **Severity Indicators**:
-        -   **Info**: Default styling, potentially a subtle blue accent (e.g., `var(--c-today)`).
-        -   **Success**: Green accent (e.g., `var(--c-health)`).
-        -   **Warning**: Orange accent (e.g., `var(--c-decisions)`).
-        -   **Error**: Red accent (e.g., `var(--c-conflict)`).
-    -   **Content**: A concise message, optionally with an icon representing severity or source.
-    -   **Dismissal**: An 'x' button for user-initiated dismissal.
+### 1.2 Persistent Banner Notifications
+-   **Location**: Top of the main content area, below the header, spanning the full width of the `page` container.
+-   **Purpose**: Important, actionable, or system-wide alerts that require user attention (e.g., "API key missing", "New update available").
+-   **Appearance**: More prominent than toasts, with a clear background color indicating severity, an icon, and more detailed text. May include action buttons.
+-   **Interaction**: Must be manually dismissed by the user via a close button.
+-   **Severity Visuals**:
+    -   **Info**: Light blue background, dark text.
+    -   **Warning**: Yellow/orange background, dark text.
+    -   **Error**: Red background, white text.
 
-### Stacking
+## 2. Stacking
 
-Notifications will stack vertically, with newer notifications appearing above older ones.
+The system must handle multiple concurrent notifications gracefully.
 
--   **Order**: LIFO (Last-In, First-Out) visual order. New notifications push existing ones down.
--   **Maximum Visible**: A configurable maximum number of notifications visible at once (e.g., 3-5). If this limit is exceeded, the oldest non-critical notification will automatically dismiss or be hidden, or a "more notifications" indicator will appear.
--   **Animations**: Use `fadeUp` or a similar subtle animation for appearance, and a fade-out/slide-out animation for dismissal.
+### 2.1 Toast/Snackbar Stacking
+-   **Behavior**: New toasts will appear above existing ones, pushing older toasts upwards.
+-   **Limit**: A maximum of 3-5 toasts will be visible at any given time. Older toasts will fade out or be removed from the stack if the limit is exceeded.
+-   **Order**: Most recent notification is always at the top of the stack.
 
-### Persistence
+### 2.2 Persistent Banner Stacking
+-   **Behavior**: Only one persistent banner notification will be displayed at a time. If a new banner is triggered while one is active, the new banner will replace the old one, or be queued if the existing one is critical and non-dismissible until an action is taken.
+-   **Priority**: A priority system will determine which banner takes precedence if multiple are active. Critical errors override warnings, which override info.
 
-Notifications are primarily transient, but their dismissal behavior varies by criticality.
+## 3. Persistence
 
--   **Auto-Dismiss**: Non-critical notifications (Info, Success) will automatically dismiss after a predefined duration (e.g., 5-8 seconds).
--   **Manual Dismissal**: Warning and Error notifications will require explicit user dismissal via an 'x' button.
--   **Hover Behavior**: Hovering over a notification will pause its auto-dismiss timer.
--   **No History**: At this stage, there is no persistent "Notification Center" or history log. Once dismissed (manually or automatically), a notification is gone from the UI.
+Notifications will have defined lifecycles and dismissal mechanisms.
 
-### Accessibility
+### 3.1 Auto-Dismissal
+-   **Duration**: Toasts will auto-dismiss after a configurable duration (e.g., 3-5 seconds for info/success, 7-10 seconds for warnings).
+-   **Hover/Focus**: Auto-dismissal timers will pause when the user hovers over or focuses on a toast.
 
-The notification system must adhere to accessibility best practices.
+### 3.2 Manual Dismissal
+-   **Mechanism**: All notifications (toasts and banners) will include a clear "X" or "Dismiss" button for manual dismissal.
+-   **State**: Dismissed notifications will not reappear unless triggered again by a new event.
 
--   **ARIA Live Regions**: Notifications will be implemented using ARIA live regions (`aria-live="polite"` for most, `aria-live="assertive"` for critical errors) to ensure screen readers announce new content.
--   **Keyboard Navigation**: Dismissal buttons must be keyboard-focusable and operable (e.g., via Enter/Space key).
--   **Color Contrast**: Ensure sufficient color contrast for text and icons against their backgrounds, especially for severity indicators.
--   **Reduced Motion**: Respect `prefers-reduced-motion` system settings by disabling or simplifying animations.
+### 3.3 Persistent Notifications
+-   **Requirement**: Certain critical system alerts (e.g., "API key invalid") may be non-dismissible until the underlying issue is resolved or a specific action is taken. These will typically be banner notifications.
 
-### Do Not Disturb Hook
+### 3.4 Do Not Disturb (DND) Hook
+-   **Mechanism**: A user setting (e.g., accessible via the header controls or a dedicated settings page) will allow users to enable a "Do Not Disturb" mode.
+-   **Behavior**:
+    -   In DND mode, low-severity (info, success) toasts will be suppressed or appear in a less intrusive manner (e.g., a subtle icon badge on a dedicated notification center, if implemented).
+    -   Warning and error notifications will still appear but may be visually de-emphasized or queued for later review, depending on criticality.
+    -   Critical system alerts will always bypass DND.
+-   **Integration**: The DND state will be accessible by the notification system to modify display behavior.
 
-A mechanism to suppress non-critical notifications will be integrated.
+## 4. Accessibility
 
--   **Control**: A toggle in the dashboard header controls the "Do Not Disturb" (DND) state. This could be part of the existing `hdr-controls` or a new dedicated button.
--   **Behavior**: When DND is active, only critical notifications (e.g., `severity: 'error'`) will be displayed. Info, Success, and Warning notifications will be suppressed.
--   **Visual Indicator**: A clear visual indicator (e.g., an icon change on the DND toggle, or a small banner) will show when DND is active.
+The notification system will adhere to WCAG guidelines to ensure usability for all users.
 
-### Shell Ownership vs. Domain Pushes
+-   **ARIA Roles**: Notifications will utilize appropriate ARIA roles (e.g., `role="alert"` for critical, `role="status"` for less urgent) to convey their purpose to screen readers. Live regions will be used to announce dynamic content changes.
+-   **Keyboard Navigation**: Users must be able to navigate to and dismiss notifications using keyboard controls (e.g., Tab to focus, Enter/Space to dismiss).
+-   **Color Contrast**: All text and background colors will meet minimum WCAG contrast ratios.
+-   **Motion**: Animations (e.g., fade-in/out, slide-up) will be subtle and respect `prefers-reduced-motion` user settings.
+-   **Focus Management**: When a critical banner appears, focus may be programmatically moved to it, or a live region update will be used to announce its presence without stealing focus, depending on the level of interruption desired.
 
-The dashboard shell is responsible for the UI rendering and lifecycle management of notifications, while other domains are responsible for generating and pushing notification data.
+## 5. Deferred Implementation
 
--   **Shell Ownership**: The `public/overlay/lifeos-dashboard.html` and its associated client-side JavaScript will own the presentation layer, including CSS styling, DOM manipulation, stacking logic, and dismissal handling.
--   **Domain Pushes**: Other LifeOS domains will push notification data to a dedicated API endpoint (e.g., `POST /api/v1/lifeos/notifications`).
--   **Notification Data Structure**:
-    ```json
-    {
-      "id": "unique-notification-id",
-      "message": "A concise message for the user.",
-      "severity": "info" | "success" | "warning" | "error",
-      "dismissible": true, // true for manual dismissal, false for auto-dismiss (if duration is set)
-      "duration": 5000,    // Optional: milliseconds for auto-dismiss. Overrides dismissible=false if present.
-      "action": {          // Optional: a primary action button within the notification
-        "label": "View Details",
-        "url": "/dashboard/details/123"
-      }
-    }
-    ```
--   **Delivery Mechanism**: The dashboard will poll the `/api/v1/lifeos/notifications` endpoint or subscribe via WebSockets (future consideration) to receive new notifications.
-
-### Deferred Implementation
-
-This specification serves as a blueprint. No production code for the notification system will be implemented or shipped as part of this task. Future tasks will cover:
-
-1.  Development of the client-side JavaScript module for notification management.
-2.  Creation of the necessary CSS for styling notifications.
-3.  Implementation of the `POST /api/v1/lifeos/notifications` API endpoint.
-4.  Integration of DND settings into user preferences.
+This document serves as a specification. The actual implementation of the notification system will be undertaken in a future task. The dashboard shell (Platform Core) will own the UI components and logic for rendering and managing notifications. Other domains will interact with this system via a simple API (e.g., `LifeOS.notify({ type: 'success', message: 'MIT added' })`) provided by the shell, pushing notification data to it. The shell will be responsible for all rendering, stacking, dismissal, and DND logic.
