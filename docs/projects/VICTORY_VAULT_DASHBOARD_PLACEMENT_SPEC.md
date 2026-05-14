@@ -1,11 +1,3 @@
-The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file is missing, preventing specific API assumptions from brief/handoff notes. The existing `public/overlay/lifeos-dashboard.html` contains numerous duplicate script imports, widget container divs, and widget mount scripts. The task is interpreted as consolidating these duplicates and confirming the placement of the Victory Vault widgets within the "Today vs Growth" areas of the dashboard. The `NEW WIDGETS ROW` already present in the HTML, with its associated styling and positioning, is the intended location for these widgets. The existing API calls in the dashboard are assumed to be the "existing Victory Vault endpoints" for data fetching by the widgets.
-
----
-ASSUMPTIONS:
-- The `NEW WIDGETS ROW` block (with `card` and `accent-border` classes) is the intended and correctly styled placement for the Victory Vault widgets.
-- All other duplicate script imports for `lifeos-widget-*.js`, duplicate `div` containers for these widgets, and duplicate mount scripts at the end of the `<body>` are redundant and should be removed.
-- The existing API endpoints used by the dashboard (`/api/v1/lifeos/commitments`, `/api/v1/lifeos/dashboard/scoreboard`, etc.) are the "existing Victory Vault endpoints" referenced in the task, and no new routes should be invented.
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,7 +63,7 @@ max-width: 860px;
 margin: 0 auto;
 padding: 24px 16px;
 }
-/ ── Cards ── /
+/* ── Cards ── */
 .card {
 background: var(--bg-surface);
 border: 1px solid var(--border);
@@ -103,7 +95,7 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-/ ── Header ── /
+/* ── Header ── */
 .hdr-row {
 display: flex;
 align-items: flex-start;
@@ -138,10 +130,6 @@ color: var(--text-primary);
 .hdr-btn.active {
 color: var(--c-health);
 border-color: var(--c-health);
-}
-.hdr-btn.ambient-active {
-color: var(--c-health);
-border-color: var(--c-health);
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
 .greeting {
@@ -168,7 +156,7 @@ margin-left: 8px;
 vertical-align: middle;
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-/ ── Animations ── /
+/* ── Animations ── */
 @keyframes pulse-ring {
 0%, 100% {
 opacity: 1;
@@ -207,7 +195,7 @@ transform: scale(1);
 opacity: 1;
 }
 }
-/ Progress uses inline stroke-dashoffset from makeRing(); animate opacity only /
+/* Progress uses inline stroke-dashoffset from makeRing(); animate opacity only */
 @keyframes ring-fill {
   from { opacity: 0.2; }
   to { opacity: 1; }
@@ -263,7 +251,7 @@ animation-delay: 0.40s;
 .delay-9 {
 animation-delay: 0.45s;
 }
-/ ── Skeleton ── /
+/* ── Skeleton ── */
 .skeleton {
 background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
 background-size: 400px 100%;
@@ -277,7 +265,7 @@ margin-bottom: 10px;
 .skel-line:last-child {
 width: 60%;
 }
-/ ── MIT ── /
+/* ── MIT ── */
 .mit-item {
 display: flex;
 align-items: flex-start;
@@ -329,7 +317,7 @@ transition: color 0.2s;
 color: var(--text-muted);
 text-decoration: line-through;
 }
-/ ── Quick add ── /
+/* ── Quick add ── */
 .quick-add {
 display: flex;
 gap: 8px;
@@ -369,7 +357,7 @@ transition: opacity 0.15s;
 .btn-add:hover {
 opacity: 0.85;
 }
-/ ── Calendar ── /
+/* ── Calendar ── */
 .event-row {
 display: flex;
 align-items: center;
@@ -395,7 +383,7 @@ flex-shrink: 0;
 font-size: 14px;
 color: var(--text-primary);
 }
-/ ── Goals ── /
+/* ── Goals ── */
 .goal-row {
 margin-bottom: 16px;
 }
@@ -435,7 +423,7 @@ font-size: 11px;
 color: var(--text-muted);
 margin-top: 4px;
 }
-/ ── Scores ── /
+/* ── Scores ── */
 .scores-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -512,7 +500,7 @@ box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 .score-tile.tip-open .score-tile-tip {
 display: block;
 }
-/ ── Chat ── /
+/* ── Chat ── */
 .chat-messages {
 height: 240px;
 overflow-y: auto;
@@ -589,7 +577,7 @@ animation: bounce-dot 1.2s 0.2s infinite;
 .typing-dot:nth-child(3) {
 animation: bounce-dot 1.2s 0.4s infinite;
 }
-/ ── Chat input row ── /
+/* ── Chat input row ── */
 .chat-row {
 display: flex;
 gap: 8px;
@@ -650,7 +638,7 @@ transition: opacity 0.15s;
 .btn-send:hover {
 opacity: 0.85;
 }
-/ ── Voice footer ── /
+/* ── Voice footer ── */
 .voice-footer {
 display: flex;
 align-items: center;
@@ -684,7 +672,7 @@ font-size: 11px;
 color: var(--text-muted);
 opacity: 0.6;
 }
-/ ── Empty ── /
+/* ── Empty ── */
 .empty {
 text-align: center;
 padding: 20px 0;
@@ -703,10 +691,10 @@ grid-template-columns: 1fr 1fr;
 gap: 16px;
 }
 }
-/ Desktop-specific styles for wider screens /
+/* Desktop-specific styles for wider screens */
 @media (min-width: 1000px) {
   .page {
-    max-width: 1000px; / wider content area /
+    max-width: 1000px; /* wider content area */
     padding: 40px 32px;
   }
   .hdr-row {
@@ -752,4 +740,351 @@ gap: 16px;
 </div>
 <div class="hdr-controls">
 <button class="hdr-btn" id="btn-ambient" title="Ambient voice — Lumin speaks proactively when you have time" onclick="toggleAmbient()">🎙</button>
-<button class="hdr-btn" id="btn-theme" title="Toggle light/
+<button class="hdr-btn" id="btn-theme" title="Toggle light/dark" onclick="toggleTheme()">☀︎</button>
+</div>
+</div>
+</header>
+<!-- ROW 1: MITs + Calendar -->
+<div class="two-col mb-4">
+<div class="card accent-border-today fade-up delay-1">
+<div class="card-label">Today's MITs</div>
+<div id="mits-list">
+<div class="skel-line skeleton w-full"></div>
+<div class="skel-line skeleton w-4/5"></div>
+<div class="skel-line skeleton w-3/5"></div>
+</div>
+<div class="quick-add">
+<input type="text" id="mit-input" placeholder="Add a most important task…">
+<button class="btn-add" onclick="addMIT()">Add</button>
+</div>
+</div>
+<div class="card accent-border-today fade-up delay-2">
+<div class="card-label">Today's Schedule</div>
+<div id="cal-list">
+<div class="skel-line skeleton w-full"></div>
+<div class="skel-line skeleton w-3/4"></div>
+<div class="skel-line skeleton w-4/5"></div>
+</div>
+</div>
+</div>
+<!-- NEW WIDGETS ROW -->
+<div class="two-col mb-4">
+<div id="lifeos-widget-mit" class="dashboard-widget card accent-border-today fade-up delay-3"></div>
+<div id="lifeos-widget-score" class="dashboard-widget card accent-border-health fade-up delay-4"></div>
+<div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5"></div>
+<div id="lifeos-widget-category-stubs" class="dashboard-widget card accent-border-finance fade-up delay-6"></div>
+</div>
+<!-- ROW 2: Goals + Scores -->
+<div class="two-col mb-4">
+<div class="card accent-border-finance fade-up delay-7">
+<div class="card-label">Goals</div>
+<div id="goals-list">
+<div class="skel-line skeleton w-full"></div>
+<div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;margin-bottom:14px;border-radius:3px"></div>
+<div class="skel-line skeleton w-4/5"></div>
+<div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;border-radius:3px"></div>
+</div>
+</div>
+<div class="card accent-border-health fade-up delay-8">
+<div class="card-label">Life Scores <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text-muted)">— hold to see what each means</span></div>
+<div class="scores-grid" id="scores-grid">
+<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
+<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
+<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
+<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
+</div>
+</div>
+</div>
+<!-- CHAT -->
+<div class="card accent-border-mirror fade-up delay-9">
+<div class="card-label">Chat with Lumin</div>
+<div class="chat-messages" id="chat-messages">
+<div class="msg assistant">Hey Adam 👋 — what's on your mind today?</div>
+</div>
+<div class="typing" id="typing">
+<div class="typing-dot"></div>
+<div class="typing-dot"></div>
+<div class="typing-dot"></div>
+</div>
+<div class="chat-row">
+<input type="text" id="chat-input" placeholder="Ask Lumin anything… or tap 🎙 to talk">
+<button class="btn-mic" id="btn-mic" title="Push to talk (or hold Space)">🎙</button>
+<button class="btn-send" id="send-btn">↑</button>
+</div>
+<div class="voice-footer">
+<label>
+<input type="checkbox" id="speak-toggle">
+<span>Speak replies</span>
+</label>
+<span class="ptt-hint">Hold Space to talk</span>
+<span id="voice-status"></span>
+</div>
+</div>
+</div>
+<div id="lifeos-ai-rail-root"></div>
+<!-- Voice module must be non-module (IIFE) -->
+<script src="/shared/lifeos-voice-chat.js"></script>
+<script src="../shared/lifeos-dashboard-ai-rail.js"></script>
+<script type="module">
+const HDR = () => ({ 'x-lifeos-key': localStorage.getItem('lifeos_api_key') || '', 'Content-Type': 'application/json' });
+const API = (p, o={}) => fetch(p, { headers: HDR(), ...o });
+const $ = id => document.getElementById(id);
+// ── Clock ──
+function tick() {
+const now = new Date();
+const h = now.getHours();
+$('greeting').innerHTML = (h<12?'Good morning':h<18?'Good afternoon':'Good evening') + '<span class="pulse-dot"></span>';
+$('clock').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}) + ' · ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+}
+tick();
+setInterval(tick, 30000);
+// ── Theme toggle ──
+function toggleTheme() {
+const curr = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+const next = curr === 'light' ? 'dark' : 'light';
+document.documentElement.dataset.theme = next;
+localStorage.setItem('lifeos_theme', next);
+const mc = document.getElementById('theme-color-meta');
+if (mc) mc.setAttribute('content', next === 'light' ? '#f6f7fb' : '#0a0a0f');
+$('btn-theme').textContent = next === 'light' ? '☾' : '☀︎';
+}
+// ── Long-press ──
+let pressTimer;
+function bindLongPress(el, onHold, onRelease) {
+const start = e => { pressTimer = setTimeout(() => onHold(e), 500); };
+const end = () => { clearTimeout(pressTimer); onRelease && onRelease(); };
+el.addEventListener('mousedown', start);
+el.addEventListener('touchstart', start, { passive: true });
+el.addEventListener('mouseup', end);
+el.addEventListener('mouseleave', end);
+el.addEventListener('touchend', end);
+}
+// ── MITs ──
+async function loadMITs() {
+try {
+const r = await API('/api/v1/lifeos/commitments?limit=30');
+const d = await r.json();
+const mits = (d.commitments||[]).filter(c=>c.is_mit).slice(0,3);
+if (!mits.length) {
+$('mits-list').innerHTML='<div class="empty"><span>✅</span>No MITs — add one below</div>';
+return;
+}
+$('mits-list').innerHTML = mits.map(m=>`
+<div class="mit-item" data-id="${m.id}" data-desc="${(m.description||m.text||'').replace(/"/g,'&quot;')}">
+<div class="mit-check ${m.kept_at?'done':''}">
+<svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+<polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</div>
+<div class="mit-text ${m.kept_at?'done':''}">${m.text||m.title||'Untitled'}</div>
+</div>`).join('');
+$('mits-list').querySelectorAll('.mit-item').forEach(el => {
+el.addEventListener('click', ()=>toggleMIT(el));
+bindLongPress(el, e => {
+const tip = document.createElement('div');
+tip.style.cssText='position:fixed;background:var(--bg-overlay);border:1px solid var(--border-focus);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text-secondary);max-width:240px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.6);pointer-events:none;';
+const desc = el.dataset.desc;
+if (desc) {
+tip.textContent = desc;
+document.body.appendChild(tip);
+const rect = el.getBoundingClientRect();
+tip.style.left = `${rect.left + rect.width / 2 - tip.offsetWidth / 2}px`;
+tip.style.top = `${rect.top - tip.offsetHeight - 10}px`;
+}
+}, () => {
+const existingTip = document.querySelector('body > div[style*="position:fixed"]');
+if (existingTip) existingTip.remove();
+});
+});
+} catch (e) {
+console.error('Error loading MITs:', e);
+$('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load MITs</div>';
+}
+}
+async function toggleMIT(el) {
+const id = el.dataset.id;
+const isDone = el.querySelector('.mit-check').classList.contains('done');
+const method = isDone ? 'DELETE' : 'POST';
+const url = `/api/v1/lifeos/commitments/${id}/keep`;
+try {
+const r = await API(url, { method });
+if (r.ok) {
+el.querySelector('.mit-check').classList.toggle('done');
+el.querySelector('.mit-text').classList.toggle('done');
+} else {
+console.error('Failed to toggle MIT:', await r.text());
+}
+} catch (e) {
+console.error('Error toggling MIT:', e);
+}
+}
+async function addMIT() {
+const input = $('mit-input');
+const text = input.value.trim();
+if (!text) return;
+try {
+const r = await API('/api/v1/lifeos/commitments', {
+method: 'POST',
+body: JSON.stringify({ text, is_mit: true })
+});
+if (r.ok) {
+input.value = '';
+loadMITs();
+} else {
+console.error('Failed to add MIT:', await r.text());
+}
+} catch (e) {
+console.error('Error adding MIT:', e);
+}
+}
+// ── Calendar ──
+async function loadCalendar() {
+try {
+const r = await API('/api/v1/lifeos/calendar/today');
+const d = await r.json();
+const events = d.events||[];
+if (!events.length) {
+$('cal-list').innerHTML='<div class="empty"><span>🗓</span>No events today</div>';
+return;
+}
+$('cal-list').innerHTML = events.map(e=>`
+<div class="event-row">
+<div class="event-time">${e.time}</div>
+<div class="event-title">${e.title}</div>
+</div>`).join('');
+} catch (e) {
+console.error('Error loading calendar:', e);
+$('cal-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load calendar</div>';
+}
+}
+// ── Goals ──
+async function loadGoals() {
+try {
+const r = await API('/api/v1/lifeos/goals?limit=3');
+const d = await r.json();
+const goals = d.goals||[];
+if (!goals.length) {
+$('goals-list').innerHTML='<div class="empty"><span>🎯</span>No goals set</div>';
+return;
+}
+$('goals-list').innerHTML = goals.map(g=>`
+<div class="goal-row">
+<div class="goal-header">
+<div class="goal-name">${g.name}</div>
+<div class="goal-pct">${g.progress_pct}%</div>
+</div>
+<div class="goal-track">
+<div class="goal-fill" style="width:${g.progress_pct}%"></div>
+</div>
+<div class="goal-sub">${g.current_value} / ${g.target_value} ${g.unit}</div>
+</div>`).join('');
+} catch (e) {
+console.error('Error loading goals:', e);
+$('goals-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load goals</div>';
+}
+}
+// ── Scores ──
+function makeRing(value, max, color) {
+const radius = 33;
+const circumference = 2 * Math.PI * radius;
+const offset = circumference - (value / max) * circumference;
+return `
+<svg width="72" height="72" viewBox="0 0 72 72">
+<circle class="track" cx="36" cy="36" r="${radius}" stroke-width="6" fill="none"/>
+<circle class="fill" cx="36" cy="36" r="${radius}" stroke="${color}" stroke-width="6" fill="none"
+stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
+</svg>
+`;
+}
+async function loadScores() {
+try {
+const r = await API('/api/v1/lifeos/scores');
+const d = await r.json();
+const scores = d.scores||[];
+if (!scores.length) {
+$('scores-grid').innerHTML='<div class="empty" style="grid-column:1/span 2"><span>📊</span>No scores yet</div>';
+return;
+}
+$('scores-grid').innerHTML = scores.map(s=>`
+<div class="score-tile" data-tip="${s.description||''}">
+<div class="score-ring">
+${makeRing(s.value, s.max_value, s.color)}
+<div class="score-num">${s.value}</div>
+</div>
+<div class="score-label">${s.name}</div>
+<div class="score-tile-tip">${s.description||''}</div>
+</div>`).join('');
+$('scores-grid').querySelectorAll('.score-tile').forEach(el => {
+bindLongPress(el, () => el.classList.add('tip-open'), () => el.classList.remove('tip-open'));
+});
+} catch (e) {
+console.error('Error loading scores:', e);
+$('scores-grid').innerHTML='<div class="empty" style="grid-column:1/span 2"><span>⚠️</span>Failed to load scores</div>';
+}
+}
+// ── Chat ──
+const chatInput = $('chat-input');
+const chatMessages = $('chat-messages');
+const typingIndicator = $('typing');
+const sendBtn = $('send-btn');
+let chatHistory = [{ role: 'assistant', content: "Hey Adam 👋 — what's on your mind today?" }];
+function addMessage(role, content) {
+const msgEl = document.createElement('div');
+msgEl.classList.add('msg', role);
+msgEl.textContent = content;
+chatMessages.appendChild(msgEl);
+chatMessages.scrollTop = chatMessages.scrollHeight;
+chatHistory.push({ role, content });
+}
+async function sendMessage() {
+const text = chatInput.value.trim();
+if (!text) return;
+addMessage('user', text);
+chatInput.value = '';
+typingIndicator.classList.add('show');
+try {
+const r = await API('/api/v1/lifeos/chat', {
+method: 'POST',
+body: JSON.stringify({ messages: chatHistory })
+});
+const d = await r.json();
+typingIndicator.classList.remove('show');
+if (r.ok && d.reply) {
+addMessage('assistant', d.reply);
+} else {
+addMessage('ambient', 'Lumin is unavailable right now. Please try again later.');
+console.error('Chat API error:', d.error || r.statusText);
+}
+} catch (e) {
+typingIndicator.classList.remove('show');
+addMessage('ambient', 'Failed to connect to Lumin. Check your network.');
+console.error('Chat network error:', e);
+}
+}
+chatInput.addEventListener('keypress', e => {
+if (e.key === 'Enter') sendMessage();
+});
+sendBtn.addEventListener('click', sendMessage);
+// ── Initial loads ──
+document.addEventListener('DOMContentLoaded', () => {
+loadMITs();
+loadCalendar();
+loadGoals();
+loadScores();
+// Set initial theme
+const savedTheme = localStorage.getItem('lifeos_theme');
+if (savedTheme) {
+document.documentElement.dataset.theme = savedTheme;
+const mc = document.getElementById('theme-color-meta');
+if (mc) mc.setAttribute('content', savedTheme === 'light' ? '#f6f7fb' : '#0a0a0f');
+$('btn-theme').textContent = savedTheme === 'light' ? '☾' : '☀︎';
+} else {
+// Default to dark if no theme saved
+document.documentElement.dataset.theme = 'dark';
+localStorage.setItem('lifeos_theme', 'dark');
+$('btn-theme').textContent = '☀︎';
+}
+});
+</script>
+</body>
+</html>
