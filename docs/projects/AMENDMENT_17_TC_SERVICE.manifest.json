@@ -235,5 +235,7 @@
     }
   ],
   "last_verified_at": "2026-04-20",
-  "verification_passed": null
+  "verification_passed": null,
+  "last_updated": "2026-05-14",
+  "ssot_receipt_tail": "tc-stripe-service.js: self-import + dbPool ordering bug fixed. getStripeClient local. tc-stripe-billing-service quarantine cleared (fail_count=2). 49/49 tests pass."
 }
