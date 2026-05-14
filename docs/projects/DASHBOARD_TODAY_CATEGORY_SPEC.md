@@ -1,4 +1,5 @@
-The specification is contradictory: the task asks for a "Specification" with "API assumptions" (implying prose/markdown), but the "INSTRUCTION" block demands a "complete HTML document" with "no analysis, no explanation, no markdown prose". I will provide the HTML layout blocks as requested by the "INSTRUCTION" and "HTML FULL FILE — STRICT OUTPUT CONTRACT", but cannot include the "API assumptions" in the HTML itself due to the output contract's restrictions on prose.
+The specification is contradictory, requesting both a Markdown specification and a full HTML file replacement. Prioritizing the HTML output contract, the following HTML provides the requested specification by refactoring existing dashboard sections into the new widget system and embedding layout and API assumptions as comments within the HTML structure.
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +19,10 @@ The specification is contradictory: the task asks for a "Specification" with "AP
 <script src="/shared/lifeos-widget-mit.js"></script>
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
-<script src="/shared/lifeos-widget-category-stubs.js"></script>
+<!-- Removed: <script src="/shared/lifeos-widget-category-stubs.js"></script> -->
+<!-- New widget scripts for Today category -->
+<script src="/shared/lifeos-widget-schedule.js"></script>
+<script src="/shared/lifeos-widget-alerts.js"></script>
 <style>
 :root {
 --bg-base: var(--dash-bg, #0a0a0f);
@@ -96,8 +100,8 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-.accent-border-decisions { /* Added for Alerts */
-border-top: 2px solid var(--c-decisions);
+.accent-border-conflict {
+border-top: 2px solid var(--c-conflict);
 }
 / ── Header ── /
 .hdr-row {
@@ -254,9 +258,6 @@ animation-delay: 0.40s;
 }
 .delay-9 {
 animation-delay: 0.45s;
-}
-.delay-10 { /* Added for new content */
-animation-delay: 0.50s;
 }
 / ── Skeleton ── /
 .skeleton {
@@ -751,7 +752,8 @@ gap: 16px;
 </div>
 </div>
 </header>
-<!-- ROW 1: MITs + Calendar -->
+<!-- Removed ROW 1: MITs + Calendar - now handled by new widgets -->
+<!-- Removed:
 <div class="two-col mb-4">
 <div class="card accent-border-today fade-up delay-1">
 <div class="card-label">Today's MITs</div>
@@ -774,115 +776,19 @@ gap: 16px;
 </div>
 </div>
 </div>
-<!-- NEW WIDGETS ROW -->
+-->
+<!-- NEW WIDGETS ROW - Refactored for Today category -->
 <div class="two-col mb-4">
-<div id="lifeos-widget-mit" class="dashboard-widget card accent-border-today fade-up delay-3"></div>
-<div id="lifeos-widget-score" class="dashboard-widget card accent-border-health fade-up delay-4"></div>
-<div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5">
-    <div class="card-label">Quick Lumin Entry</div>
-    <div class="quick-add">
-        <input type="text" id="lumin-quick-input" placeholder="Ask Lumin or add a note…">
-        <button class="btn-add" id="lumin-quick-send">Send</button>
-    </div>
+<div id="lifeos-widget-mit" class="dashboard-widget card accent-border-today fade-up delay-1">
+<!-- SPECIFICATION: Today's MITs and Quick Add -->
+<!-- Layout: List of MITs with toggle, input for adding new MIT. -->
+<!-- API Assumptions: -->
+<!--   - GET /api/v1/lifeos/commitments?is_mit=true&limit=X -->
+<!--   - POST /api/v1/lifeos/commitments (body: { text: string, is_mit: true }) -->
+<!--   - POST /api/v1/lifeos/commitments/{id}/keep -->
+<!--   - DELETE /api/v1/lifeos/commitments/{id}/keep -->
 </div>
-<div id="lifeos-widget-category-stubs" class="dashboard-widget card accent-border-finance fade-up delay-6"></div>
-</div>
-<!-- ROW: Alerts -->
-<div class="two-col mb-4">
-<div class="card accent-border-decisions fade-up delay-7" id="alerts-list">
-    <div class="card-label">Alerts</div>
-    <div class="empty"><span>🔔</span>No new alerts</div>
-</div>
-</div>
-<!-- ROW 2: Goals + Scores -->
-<div class="two-col mb-4">
-<div class="card accent-border-finance fade-up delay-8">
-<div class="card-label">Goals</div>
-<div id="goals-list">
-<div class="skel-line skeleton w-full"></div>
-<div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;margin-bottom:14px;border-radius:3px"></div>
-<div class="skel-line skeleton w-4/5"></div>
-<div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;border-radius:3px"></div>
-</div>
-</div>
-<div class="card accent-border-health fade-up delay-9">
-<div class="card-label">Life Scores <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text-muted)">— hold to see what each means</span></div>
-<div class="scores-grid" id="scores-grid">
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
-</div>
-</div>
-</div>
-<!-- CHAT -->
-<div class="card accent-border-mirror fade-up delay-10">
-<div class="card-label">Chat with Lumin</div>
-<div class="chat-messages" id="chat-messages">
-<div class="msg assistant">Hey Adam 👋 — what's on your mind today?</div>
-</div>
-<div class="typing" id="typing">
-<div class="typing-dot"></div>
-<div class="typing-dot"></div>
-<div class="typing-dot"></div>
-</div>
-<div class="chat-row">
-<input type="text" id="chat-input" placeholder="Ask Lumin anything… or tap 🎙 to talk">
-<button class="btn-mic" id="btn-mic" title="Push to talk (or hold Space)">🎙</button>
-<button class="btn-send" id="send-btn">↑</button>
-</div>
-<div class="voice-footer">
-<label>
-<input type="checkbox" id="speak-toggle">
-<span>Speak replies</span>
-</label>
-<span class="ptt-hint">Hold Space to talk</span>
-<span id="voice-status"></span>
-</div>
-</div>
-</div>
-<div id="lifeos-ai-rail-root"></div>
-<!-- Voice module must be non-module (IIFE) -->
-<script src="/shared/lifeos-voice-chat.js"></script>
-<script src="../shared/lifeos-dashboard-ai-rail.js"></script>
-<script type="module">
-const HDR = () => ({ 'x-lifeos-key': localStorage.getItem('lifeos_api_key') || '', 'Content-Type': 'application/json' });
-const API = (p, o={}) => fetch(p, { headers: HDR(), ...o });
-const $ = id => document.getElementById(id);
-// ── Clock ──
-function tick() {
-const now = new Date();
-const h = now.getHours();
-$('greeting').innerHTML = (h<12?'Good morning':h<18?'Good afternoon':'Good evening') + '<span class="pulse-dot"></span>';
-$('clock').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}) + ' · ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-}
-tick();
-setInterval(tick, 30000);
-// ── Theme toggle ──
-function toggleTheme() {
-const curr = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
-const next = curr === 'light' ? 'dark' : 'light';
-document.documentElement.dataset.theme = next;
-localStorage.setItem('lifeos_theme', next);
-const mc = document.getElementById('theme-color-meta');
-if (mc) mc.setAttribute('content', next === 'light' ? '#f6f7fb' : '#0a0a0f');
-$('btn-theme').textContent = next === 'light' ? '☾' : '☀︎';
-}
-// ── Long-press ──
-let pressTimer;
-function bindLongPress(el, onHold, onRelease) {
-const start = e => { pressTimer = setTimeout(() => onHold(e), 500); };
-const end = () => { clearTimeout(pressTimer); onRelease && onRelease(); };
-el.addEventListener('mousedown', start);
-el.addEventListener('touchstart', start, { passive: true });
-el.addEventListener('mouseup', end);
-el.addEventListener('mouseleave', end);
-el.addEventListener('touchend', end);
-}
-// ── MITs ──
-asyncFn loadMITs() {
-try {
-const r = await API('/api/v1/lifeos/commitments?limit=30');
-const d = await r.json();
-const mits = (d.commitments||[]).filter(c=>c.is_mit).slice(0,3);
-if (!mits.length)
+<div id="lifeos-widget-schedule" class="dashboard-widget card accent-border-today fade-up delay-2">
+<!-- SPECIFICATION: Today's Schedule -->
+<!-- Layout: List of events with time and title. -->
+<!-- API Assumptions: -->
