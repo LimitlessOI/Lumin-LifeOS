@@ -1,49 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Dashboard Gap Audit</title>
-    <style>
-        body { font-family: sans-serif; line-height: 1.6; color: #e8e8f0; background-color: #0a0a0f; padding: 20px; }
-        h1, h2, h3 { color: #5b6af5; }
-        section { margin-bottom: 30px; padding: 15px; border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; background-color: #111118; }
-        ul { list-style-type: disc; margin-left: 20px; }
-        li { margin-bottom: 5px; }
-        code { background-color: #1e1e28; padding: 2px 4px; border-radius: 4px; font-family: monospace; color: #e05555; }
-        .warning { color: #f59e0b; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <h1>LifeOS Dashboard Gap Audit</h1>
+Summary
+A gap audit against the `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_BUILDER_QUEUE.md` cannot be performed. The injected file contents indicate that both brief documents are missing from the repository (`READ ERROR: ENOENT`). Without the authoritative brief, a comparison of `lifeos-dashboard.html` and `lifeos-app.html` against the specified design intent (sidebar, bottom tabs, AI rail direction, light/dark intent, mobile vs desktop) is not possible.
 
-    <section>
-        <h2>Summary</h2>
-        <p class="warning">The requested gap audit against <code>LIFEOS_DASHBOARD_BUILDER_BRIEF.md</code> and <code>LIFEOS_DASHBOARD_BUILDER_QUEUE.md</code> cannot be performed.</p>
-        <p>The injected file contents for both <code>docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md</code> and <code>docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md</code> indicate a <code>READ ERROR: ENOENT: no such file or directory</code>. Per the epistemic laws, this means the brief documents are not available for comparison, despite the task wording stating they exist.</p>
-        <p>Without the authoritative brief, it is not possible to identify concrete gaps in <code>lifeos-dashboard.html</code> and <code>lifeos-app.html</code> against the specified design intent (sidebar, bottom tabs, AI rail direction, light/dark intent, mobile vs desktop).</p>
-    </section>
+Gaps vs brief
+This section cannot be completed as the source of truth for the brief (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`) is unavailable. Therefore, no concrete gaps can be identified relative to the brief's requirements.
 
-    <section>
-        <h2>Gaps vs brief</h2>
-        <p>This section cannot be completed as the authoritative brief documents (<code>LIFEOS_DASHBOARD_BUILDER_BRIEF.md</code> and <code>LIFEOS_DASHBOARD_BUILDER_QUEUE.md</code>) are unavailable due to <code>ENOENT</code> errors in the injected file contents.</p>
-    </section>
+Recommended next queued builds
+1.  **Recreate/Retrieve `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**: This document is essential for defining the design intent and requirements for the dashboard and app shell.
+2.  **Recreate/Retrieve `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md`**: This document is needed to understand the planned feature queue and prioritize development.
+3.  **Re-run gap audit**: Once the brief documents are available, re-run this audit to compare the current HTML implementations against the defined specifications.
 
-    <section>
-        <h2>Recommended next queued builds</h2>
-        <p>Based on the "Next approved tasks" from the prompt, the following builds are recommended:</p>
-        <ul>
-            <li>Add SQL validation gate for <code>.sql</code> files before builder commits them.</li>
-            <li>Wire <code>npm run memory:ci-evidence</code> into <code>.github/workflows/smoke-test.yml</code>.</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>Open questions</h2>
-        <ul>
-            <li>What is the correct source of truth for <code>LIFEOS_DASHBOARD_BUILDER_BRIEF.md</code> and <code>LIFEOS_DASHBOARD_BUILDER_QUEUE.md</code>, given the <code>ENOENT</code> errors in the injected file contents?</li>
-            <li>Should the audit proceed with assumptions about the brief's content, or is the brief's availability a hard blocker? (Assuming the latter, as per "trust injected bodies first").</li>
-        </ul>
-    </section>
-</body>
-</html>
+Open questions if any
+1.  What is the authoritative source for the `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_BUILDER_QUEUE.md` content?
+2.  Are there alternative sources or stakeholders who can provide the missing brief information?
+3.  Should the builder proceed with any dashboard/app shell changes without a clear, documented brief?
