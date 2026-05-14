@@ -4,7 +4,7 @@
   "amendment": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
   "status": "founding",
   "build_ready": true,
-  "council_persona": "purpose-first personal OS \u2014 sovereignty is constitutional",
+  "council_persona": "purpose-first personal OS — sovereignty is constitutional",
   "segment_schema_version": 1,
   "owned_files": [
     "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
@@ -789,7 +789,7 @@
       "segments": [
         {
           "id": "seg_finance_migration",
-          "name": "DB migration \u2014 accounts, budgets, transactions, IPS",
+          "name": "DB migration — accounts, budgets, transactions, IPS",
           "status": "complete",
           "review_tier": "needs-review"
         },
@@ -845,6 +845,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-05-13",
-  "ssot_receipt_tail": "Fix 8: daemon STATE_PATH/LOCK_PATH/LOG_PATH/QUEUE_LAST_RUN_PATH now lane-aware \u2014 TC and SiteBuilder daemons no longer collide with Nova lock; Atlas F\u2192C (100% success rate), Forge F\u2192C on first post-fix cycle"
+  "last_updated": "2026-05-14",
+  "ssot_receipt_tail": "extractJavaScriptFromOutput */ bug fixed; token caps raised; 6 quarantine entries cleared; TC + site-builder queues unblocked."
 }
