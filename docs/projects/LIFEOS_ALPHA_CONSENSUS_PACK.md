@@ -1,22 +1,23 @@
-### (1) NEEDS ASSESSMENT
+### NEEDS ASSESSMENT
 
-Adam needs the following core components to effectively use the LifeOS prototype today:
+Adam needs the following to effectively use the LifeOS prototype today:
 
-*   **Shell**: A functional application shell (`lifeos-app.html`) providing consistent navigation (sidebar/bottom nav), access to settings, and a container for feature pages. This includes theme toggling.
-*   **Dashboard**: A primary landing page (`lifeos-dashboard.html`) that offers an at-a-glance overview of daily commitments (MITs), schedule, personal goals, life scores, and a quick entry point for Lumin chat.
-*   **Authentication**: A secure mechanism to sign in and maintain a session, allowing access to personalized data and features, managed via `lifeos-bootstrap.js` and the settings panel for API key input.
-*   **Chat/Lumin Paths**: Direct and persistent access to Lumin, the AI assistant, for quick queries and deeper conversations, available through the floating action button (FAB), quick bar, persistent drawer, and a full chat history page (`lifeos-chat.html`).
+*   **Shell**: The core application framework (`lifeos-app.html`) provides navigation via a persistent sidebar (desktop) or mobile bottom tabs, allowing Adam to switch between different LifeOS sections like Dashboard, Today, Chat, and Mirror.
+*   **Dashboard**: The primary landing page (`lifeos-dashboard.html`) offers a consolidated view of Adam's Most Important Tasks (MITs), daily schedule, goals, and life scores. It also includes an embedded chat interface for quick interactions with Lumin.
+*   **Authentication**: Adam requires a `COMMAND_CENTER_KEY` (also referred to as `x-lifeos-key` or `lifeos_api_key`) to authenticate with the LifeOS backend. This key, along with a user handle and display name, is managed through the Settings panel.
+*   **Chat/Lumin Paths**:
+    *   **Quick Access**: Lumin is readily available through a floating action button (FAB), a quick-access bar at the top of the content area, or a `Cmd/Ctrl+L` keyboard shortcut, opening a persistent drawer for immediate conversation.
+    *   **Full History**: A "Full history" link within the Lumin drawer allows Adam to transition to a dedicated chat page (`lifeos-chat.html`) for more extensive conversations and review.
+    *   **Voice Interaction**: Both the quick-access Lumin drawer and the dashboard chat support voice input, with an "always-on" listening option available via a toggle in the topbar/mobile topbar.
+    *   **Ambient Sense**: Lumin can provide proactive, low-power ambient hints, configurable in the Settings panel and indicated by a button on the dashboard.
 
-### (5) NEXT FIVE queue task IDs
-
-The next five task IDs that should execute are:
-
-1.  `SQL_VALIDATION_GATE`
-2.  `WIRE_CI_EVIDENCE`
-3.  `IMPROVE_BUILDER_HISTORY`
-4.  `AUTO_SEED_MEMORY`
-5.  `IMPLEMENT_DASHBOARD_WIDGET_MIT`
-
-To run a gate-change preset, use the following CLI command (ensure `COMMAND_CENTER_KEY` and `PUBLIC_BASE_URL` are set in your shell):
-
+To execute CLI commands, Adam needs `COMMAND_CENTER_KEY` and `PUBLIC_BASE_URL` set in their shell environment. For example:
 `npm run lifeos:gate-change-run -- --preset program-start`
+
+### NEXT FIVE queue task IDs
+
+1.  Add SQL validation gate for `.sql` files before builder commits them
+2.  Add HTML validation (basic structure check) for `.html` files
+3.  Wire `npm run memory:ci-evidence` into `.github/workflows/smoke-test.yml`
+4.  Add auto-seed on boot (check if epistemic_facts is empty, run seed)
+5.  Improve `GET /api/v1/lifeos/builder/history` to return more audit data
