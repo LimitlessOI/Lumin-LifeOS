@@ -1,149 +1,57 @@
-# API Error Envelope Specification
+The task asks for a specification in Markdown, but the final instruction asks for implementation code. I am providing the specification as requested by the explicit task and specification sections.
+---
+# Client-Visible Error Envelopes Specification
 
-### 1. Purpose
-This document defines the standard structure for API error responses and the guidelines for handling and displaying these errors on the client-side, specifically within the LifeOS Dashboard. The goal is to provide clear, actionable feedback to users while exposing necessary debugging information to Adam (the developer/power user) and maintaining privacy.
+## 1. Overview
+This specification defines the behavior and presentation of API failure messages within the LifeOS Dashboard (`public/overlay/lifeos-dashboard.html`). The primary goals are to provide clear, actionable feedback to the user, ensure privacy, and surface sufficient debugging details to authorized personnel (Adam).
 
-### 2. API Error Response Structure
-All API endpoints returning an error (e.g., HTTP status codes 4xx, 5xx) MUST return a JSON body conforming to the following structure:
+## 2. Core Principles
+*   **Fail-Closed**: In case of API failures, the system defaults to a secure and private state. No sensitive internal details are exposed to the end-user.
+*   **User-Centric Messaging**: Error messages for general users are concise, empathetic, and suggest clear next steps (e.g., "Please try again later").
+*   **Developer-Centric Details**: For Adam (when `lifeos_debug_mode` is enabled in `localStorage`), additional technical details, including correlation IDs, are available for debugging.
+*   **No Instrumentation**: This specification explicitly excludes any logging or monitoring instrumentation code.
 
-```json
-{
-  "error": {
-    "code": "string",         // A machine-readable error code (e.g., "VALIDATION_ERROR", "INTERNAL_SERVER_ERROR", "UNAUTHORIZED")
-    "message": "string",      // A developer-friendly error message (e.g., "Invalid input for 'text' field")
-    "user_message": "string", // (Optional) A user-friendly message, if different from 'message'. Prioritized for display.
-    "correlation_id": "string", // A unique identifier for this request, useful for tracing in logs.
-    "details": {              // (Optional) An object containing additional technical details.
-      // e.g., for validation errors:
-      "field_errors": [
-        { "field": "text", "reason": "cannot be empty" }
-      ]
-    }
-  }
-}
+## 3. Client-Side Error Handling
+
+### 3.1. Generic API Failure Handling
+All `fetch` calls wrapped by the `API` helper function will be augmented to catch network errors and non-`ok` HTTP responses. A centralized error display function (`displayAPIError(widgetId, error, response)`) will be used.
+
+#### User-Facing Messages:
+*   **Network Error (e.g., `TypeError: Failed to fetch`)**: "Failed to connect to LifeOS. Please check your internet connection and try again."
+*   **Server Error (HTTP 5xx)**: "LifeOS is experiencing technical difficulties. Please try again in a few minutes."
+*   **Client Error (HTTP 4xx, generic)**: "Something went wrong with your request. Please try again."
+*   **Specific Widget Fallback**: If a widget has a more specific, user-friendly error message (e.g., "No MITs — add one below"), that takes precedence for non-critical data loading failures. For critical API failures, the generic messages apply.
+
+#### Adam-Only Details (when `localStorage.getItem('lifeos_debug_mode') === 'true'`):
+*   **Correlation ID**: The `x-request-id` header from the API response will be extracted and displayed. If absent, "N/A" will be shown.
+*   **Technical Error**: The raw HTTP status (`response.status`), status text (`response.statusText`), and any `error` field from the JSON response body (`d.error`) will be displayed.
+*   **Display**: These details will be appended to the user-facing error message within the affected widget, clearly marked as `[DEBUG]`.
+
+### 3.2. Retry Mechanism
+*   **User-Initiated**: The primary retry mechanism is user-initiated (e.g., page refresh, re-submission, or explicit "Try Again" button if implemented).
+*   **No Automatic Retries**: The dashboard will not implement automatic API call retries with backoff.
+
+### 3.3. Correlation ID Display
+*   **User**: Correlation IDs are never displayed to the general user.
+*   **Adam**: Displayed as part of the `[DEBUG]` information when `lifeos_debug_mode` is active.
+
+## 4. Example Error Messages (DOM Structure)
+
+### User (Generic Network Error)
+```html
+<div class="empty"><span>⚠️</span>Failed to connect to LifeOS. Please check your internet connection and try again.</div>
 ```
 
-**HTTP Status Codes:**
--   `400 Bad Request`: Client-side input validation errors.
--   `401 Unauthorized`: Authentication required or failed.
--   `403 Forbidden`: Authenticated but not authorized to perform the action.
--   `404 Not Found`: Resource not found.
--   `422 Unprocessable Entity`: Semantic errors in request (e.g., business logic validation).
--   `500 Internal Server Error`: Unexpected server-side errors.
--   `503 Service Unavailable`: Temporary server overload or maintenance.
-
-### 3. Client-Side Error Handling Guidelines (LifeOS Dashboard)
-
-#### 3.1. User-Facing Error Copy
--   **Prioritization**:
-    1.  If `error.user_message` is present, display that to the user.
-    2.  If `error.user_message` is absent, display a generic, user-friendly message based on the HTTP status code or `error.code`.
-    3.  **NEVER** display `error.message` directly to the end-user unless it's explicitly designed to be user-friendly.
--   **Generic Fallbacks**:
-    *   `400/422`: "There was an issue with your request. Please check your input and try again."
-    *   `401/403`: "You don't have permission to do that. Please ensure you are logged in."
-    *   `404`: "The requested item could not be found."
-    *   `5xx`: "Something went wrong on our end. Please try again in a moment."
-    *   Network/Fetch error (no API response): "Failed to connect to LifeOS. Please check your network connection."
--   **Privacy**: Error messages should be fail-closed. Avoid exposing sensitive data, internal system details, or stack traces to the user.
-
-#### 3.2. Adam-Only Correlation ID
--   The `correlation_id` MUST be logged to the browser's console (`console.error`) for every API error.
--   For critical errors displayed in the UI (e.g., a persistent "Failed to load X" message), the correlation ID SHOULD be made accessible to Adam via a subtle UI element (e.g., a small, clickable icon next to the error message, or a tooltip on hover) that reveals the ID. This allows Adam to easily report issues with a traceable ID.
--   The correlation ID should NOT be prominently displayed to regular users.
-
-#### 3.3. Retry Guidance
--   For transient errors (e.g., `503 Service Unavailable`, network errors), the user message SHOULD suggest retrying.
--   For persistent errors (e.g., `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`, `422 Unprocessable Entity`), the user message SHOULD guide the user on how to correct their input or action, rather than simply suggesting a retry.
--   The client-side code should NOT implement automatic retries without explicit design and user feedback mechanisms.
-
-### 4. Example Client-Side Display Logic
-
-```javascript
-async function handleApiError(response) {
-  let userMessage = "An unexpected error occurred.";
-  let correlationId = "N/A";
-  let errorDetails = null;
-
-  try {
-    const errorBody = await response.json();
-    if (errorBody && errorBody.error) {
-      const apiError = errorBody.error;
-      correlationId = apiError.correlation_id || correlationId;
-      errorDetails = apiError.details;
-
-      if (apiError.user_message) {
-        userMessage = apiError.user_message;
-      } else {
-        // Fallback based on status code or generic message
-        switch (response.status) {
-          case 400:
-          case 422:
-            userMessage = "There was an issue with your request. Please check your input and try again.";
-            break;
-          case 401:
-          case 403:
-            userMessage = "You don't have permission to do that. Please ensure you are logged in.";
-            break;
-          case 404:
-            userMessage = "The requested item could not be found.";
-            break;
-          case 503:
-            userMessage = "LifeOS is temporarily unavailable. Please try again in a moment.";
-            break;
-          default:
-            userMessage = "Something went wrong on our end. Please try again in a moment.";
-        }
-      }
-      console.error(`API Error [${response.status}] (Correlation ID: ${correlationId}):`, apiError.message, errorDetails);
-    } else {
-      console.error(`API Error [${response.status}]: Unexpected error format.`, errorBody);
-      userMessage = "An unexpected API error occurred.";
-    }
-  } catch (e) {
-    console.error("Failed to parse API error response:", e, response);
-    userMessage = "Failed to process the server's response.";
-  }
-
-  // Display userMessage in UI, potentially with correlationId for Adam
-  // Example: update a specific error div, or show a toast
-  displayUserError(userMessage, correlationId);
-}
-
-function displayUserError(message, correlationId) {
-  const errorDiv = document.getElementById('global-error-display'); // Assuming such a div exists
-  if (errorDiv) {
-    errorDiv.innerHTML = `
-      <span class="error-message">${message}</span>
-      <span class="correlation-id-toggle" title="Click to copy Correlation ID"
-            onclick="navigator.clipboard.writeText('${correlationId}'); alert('Correlation ID copied!');">
-        (ID: ${correlationId.substring(0, 8)}...)
-      </span>
-    `;
-    errorDiv.style.display = 'block';
-  } else {
-    // Fallback for no dedicated error div
-    alert(`${message}\n(Correlation ID: ${correlationId})`);
-  }
-}
-
-// Example usage in fetch wrapper:
-const API_WITH_ERROR_HANDLING = async (p, o={}) => {
-  const response = await fetch(p, { headers: HDR(), ...o });
-  if (!response.ok) {
-    await handleApiError(response);
-    throw new Error("API call failed"); // Re-throw to stop further processing
-  }
-  return response;
-};
-
-// Then in existing code:
-// try {
-//   const r = await API_WITH_ERROR_HANDLING('/api/v1/lifeos/commitments');
-//   const d = await r.json();
-//   // ... success handling
-// } catch (e) {
-//   // Error already handled by API_WITH_ERROR_HANDLING, just prevent further UI updates
-//   console.log("Caught API call failure, UI update prevented.");
-// }
+### User (Generic Server Error)
+```html
+<div class="empty"><span>⚠️</span>LifeOS is experiencing technical difficulties. Please try again in a few minutes.</div>
 ```
+
+### Adam (Debug Mode, Server Error)
+```html
+<div class="empty">
+    <span>⚠️</span>LifeOS is experiencing technical difficulties. Please try again in a few minutes.<br>
+    <small style="color:var(--text-muted);">[DEBUG] Status: 500 Internal Server Error. Correlation ID: abc-123-xyz.</small>
+</div>
+```
+The task asks for a specification, but the final instruction asks for implementation code.
