@@ -1,1 +1,1 @@
-The task asks for a specification in Markdown, but the final instruction asks for implementation code in HTML. The brief for empty states copy tone is also missing.
+The specification is incomplete as the project brief file is missing.
