@@ -7,11 +7,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0a0f" id="theme-color-meta">
 <title>Dashboard · LifeOS</title>
-<!-- Performance Budget Notes: -->
-<!-- Load Targets: Aim for LCP < 2.5s, TBT < 200ms. Prioritize critical path resources. -->
-<!-- Waterfall Risks: Minimize render-blocking CSS/JS. lifeos-theme.js, lifeos-bootstrap.js, and Tailwind CSS are on the critical path. -->
-<!-- Defer Non-Critical Widgets: Widgets (e.g., lifeos-widget-mit.js) are currently render-blocking. Consider 'defer' or dynamic import after initial render. -->
-<!-- LCP Hints: Ensure critical CSS (tokens, AI rail) loads early. Optimize font loading if custom fonts are used for LCP elements. -->
 <!-- Theme must load before anything renders to avoid flash -->
 <script src="/overlay/lifeos-theme.js"></script>
 <link rel="stylesheet" href="../shared/lifeos-dashboard-tokens.css">
@@ -23,6 +18,24 @@
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
 <script src="/shared/lifeos-widget-category-stubs.js"></script>
+<!--
+PERFORMANCE BUDGET NOTES:
+- Overlay Load Target: Aim for <1.5s Time To Interactive (TTI) on mobile, <0.8s on desktop.
+- Waterfall Risks:
+    - `cdn.tailwindcss.com`: External blocking script. Consider self-hosting or critical CSS extraction for faster initial render.
+    - Multiple synchronous script tags (`lifeos-theme.js`, `lifeos-bootstrap.js`, widget scripts): These block parsing and rendering.
+      Evaluate `defer` or `async` attributes for non-critical scripts, especially widget scripts.
+- Defer Non-Critical Widgets:
+    - Widgets (`lifeos-widget-mit.js`, `lifeos-widget-score.js`, etc.) are currently loaded synchronously in the head.
+    - For optimal LCP and TTI, these should be deferred (e.g., `defer` attribute, dynamic import after DOMContentLoaded)
+      if their content is not immediately visible or critical for the initial viewport.
+    - Consider lazy-loading widget content or even the widget scripts themselves.
+- Largest Contentful Paint (LCP) Hints:
+    - The primary LCP element is likely the "Good morning" greeting or the main content cards.
+    - Ensure critical CSS for these elements is inlined or loaded very early.
+    - Avoid render-blocking resources that delay the display of these key elements.
+    - Prioritize API calls for the top-most visible widgets (MITs, Calendar) to populate content quickly.
+-->
 <style>
 :root {
 --bg-base: var(--dash-bg, #0a0a0f);
