@@ -46,5 +46,5 @@
   "last_verified_at": "2026-04-26",
   "verification_passed": null,
   "last_updated": "2026-05-13",
-  "ssot_receipt_tail": "S5/Prediction Loop v0: prediction-loop.mjs + validate-predictions.mjs + 5 exit points + cold-start reader + 10 tests; 44 pass. S4/DNA complete. S3/C09 complete. S2/C02 complete. C21 confirmed. S6 Founder Decoder next."
+  "ssot_receipt_tail": "S6/Founder Decoder v0: founder-decoder.mjs 4 modes + 5 tests; 49 pass. Phase 2 sequence COMPLETE: C21→S2→S3→S4→S5→S6. S7 next: Adam to confirm scope."
 }

@@ -32,6 +32,25 @@
 
 ---
 
+## [BUILD] Update 2026-05-13 #19 — S6/Founder Decoder v0
+
+### Files changed
+- `scripts/founder-decoder.mjs` (NEW) — reads existing runtime data, renders plain-English in 4 modes. No new schema, no daemon, no governance logic. Handles list/object quarantine format difference. Coalesces daemons sharing same root cause in --calm mode.
+- `tests/founder-decoder.test.js` (NEW) — 5 tests, all modes + no-args usage.
+- `package.json` — 4 `founder:*` shortcuts + test wired.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S6 receipt + handoff (Phase 2 sequence complete).
+
+### State after this session
+- `npm test`: **49 pass, 0 fail, 4 skipped**. `node --check`: PASS.
+- Live output confirmed: 3 daemons all failing on same CSS comment syntax in lifeos-dashboard.html, 95% prediction match, 13 active quarantine (7 cleared).
+- Phase 2 brainstorm sequence: C21 ✅ → S2/C02 ✅ → S3/C09 ✅ → S4/DNA ✅ → S5/Prediction ✅ → S6/Decoder ✅ — **COMPLETE.**
+
+### Next agent: start here
+- **S7 — Adam to confirm scope.** The Phase 2 agreed sequence is done. Adam decides what comes next.
+- The CSS comment issue in `lifeos-dashboard.html` (streak 38) is a live blocker for daemon health — worth fixing before S7.
+
+---
+
 ## [BUILD] Update 2026-05-13 #18 — S5/Prediction Loop v0
 
 ### Files changed

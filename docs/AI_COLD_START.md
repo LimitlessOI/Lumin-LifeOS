@@ -1,7 +1,7 @@
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`
-> Generated: 2026-05-14T03:02:07.125Z
+> Generated: 2026-05-14T04:11:16.036Z
 
 ## Read order (mandatory)
 
@@ -80,30 +80,31 @@ Example first line of an update:
 
 ---
 
-## [BUILD] Update 2026-05-13 #17 — S4/Task DNA v0
+## [BUILD] Update 2026-05-13 #19 — S6/Founder Decoder v0
 
 ### Files changed
-- `scripts/validate-task-dna.mjs` (NEW) — warn-only scanner. Exports `validateTaskDNA()` (reads 3 lane queue JSON files, counts tasks with/without DNA fields) and `formatReport()`. 5 DNA fields tracked: `why_created`, `source_receipt`, `depends_on`, `blocks`, `proof_required_to_close`. Never exits non-zero on missing DNA.
-- `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` — `lifeos-alpha-consensus-pack` (task 0) populated with all 5 DNA fields as proof of format. Other 43 tasks unchanged.
-- `scripts/generate-cold-start.mjs` — imports `validateTaskDNA` + `formatReport`; adds "Task DNA coverage" section to `docs/AI_COLD_START.md` at line 293.
-- `docs/AI_COLD_START.md` — regenerated; now includes per-lane DNA coverage counts.
-- `tests/validate-task-dna.test.js` (NEW) — 6 tests covering lane presence, grandTotal, populated ≥ 1, nextTaskDNA structure, math identity, formatReport string shape.
-- `package.json` — added `tests/validate-task-dna.test.js` to test script + `dna:validate` shortcut.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S4 receipt row added; Agent Handoff Notes updated (S4 ✅, next = S5 Prediction loop).
+- `scripts/founder-decoder.mjs` (NEW) — reads existing runtime data, renders plain-English in 4 modes. No new schema, no daemon, no governance logic. Handles list/object quarantine format difference. Coalesces daemons sharing same root cause in --calm mode.
+- `tests/founder-decoder.test.js` (NEW) — 5 tests, all modes + no-args usage.
+- `package.json` — 4 `founder:*` shortcuts + test wired.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S6 receipt + handoff (Phase 2 sequence complete).
 
 ### State after this session
-- `npm test`: **34 pass, 0 fail, 4 skipped**. `node --check`: PASS all files.
-- 3 lanes audited: 44 tasks total, 1 with DNA (2%), 43 missing.
-- DNA is optional and non-blocking — no queue behavior changed.
-- Cold-start now shows DNA coverage summary automatically.
+- `npm test`: **49 pass, 0 fail, 4 skipped**. `node --check`: PASS.
+- Live output confirmed: 3 daemons all failing on same CSS comment syntax in lifeos-dashboard.html, 95% prediction match, 13 active quarantine (7 cleared).
+- Phase 2 brainstorm sequence: C21 ✅ → S2/C02 ✅ → S3/C09 ✅ → S4/DNA ✅ → S5/Prediction ✅ → S6/Decoder ✅ — **COMPLETE.**
 
 ### Next agent: start here
-- **S5 — Prediction loop** (per Phase 2 agreed sequence). Adam to confirm scope before starting.
-- Brainstorm sequence: C21 ✅ → S2/C02 ✅ → S3/C09 ✅ → S4/DNA ✅ → Prediction loop → Founder Decoder.
+- **S7 — Adam to confirm scope.** The Phase 2 agreed sequence is done. Adam decides what comes next.
+- The CSS comment issue in `lifeos-dashboard.html` (streak 38) is a live blocker for daemon health — worth fixing before S7.
 
 ---
 
-## [BUILD] Update 2026-05-14 #16 — S3/C09 Build Closure 
+## [BUILD] Update 2026-05-13 #18 — S5/Prediction Loop v0
+
+### Files changed
+- `scripts/lib/prediction-loop.mjs` (NEW) — pure library. `makePrediction({ taskId, lane, sis1WillSkip })` builds prediction_recorded record. `evaluatePrediction(prediction, { actual_ok, actual_duration_ms, actual_closure_type })` compares prediction to actual, sets `prediction_match` + `miss_reason`. No I/O.
+- `scripts/validate-predictions.mjs` (NEW) — warn-only scanner for `data/prediction-loop.jsonl`. Reports predictions, evaluations, matches, misses, miss_reason breakdown. Never exits non-zero.
+- `scrip
 
 ## Snippet — LifeOS lane
 
@@ -310,8 +311,10 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 
 [prediction-loop] S5 Prediction Loop v0 — coverage report
 
-  Predictions recorded: 2
-  Evaluations:          1
-  Matches:              1 (100%)
-  Misses:               0
+  Predictions recorded: 44
+  Evaluations:          43
+  Matches:              41 (95%)
+  Misses:               2
+  Miss reasons:
+    2x ok_mismatch(predicted:true got:false); closure_mismatch(predicted:committed_success got:explicit_noncommit_reason)
   (warn-only — misses do not block queue execution)
