@@ -846,5 +846,5 @@
     ]
   },
   "last_updated": "2026-05-14",
-  "ssot_receipt_tail": "extractJavaScriptFromOutput */ bug fixed; token caps raised; 6 quarantine entries cleared; TC + site-builder queues unblocked."
+  "ssot_receipt_tail": "CC TICKET 001: extractJavaScriptFromOutput bare-slash guard added; site-builder-pipeline-report-route quarantine cleared; node --check PASS; 49 tests pass."
 }

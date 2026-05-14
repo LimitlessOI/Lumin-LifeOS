@@ -36,15 +36,6 @@
     "last_error": "/tmp/builder-check-AKKmys/.js:19\n  'party\n  ^^^^^^\n\nSyntaxError: Invalid or unexpected token\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
   },
   {
-    "task_id": "site-builder-pipeline-report-route",
-    "worker_id": "nova",
-    "worker_name": "Nova",
-    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
-    "quarantined_at": "2026-05-10T00:26:26.819Z",
-    "failure_count": 2,
-    "last_error": "/tmp/builder-check-LdjOVE/.js:1\n/\n^\n\nSyntaxError: Invalid regular expression: missing /\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n"
-  },
-  {
     "task_id": "tc-agent-portal-polish",
     "worker_id": "nova",
     "worker_name": "Nova",

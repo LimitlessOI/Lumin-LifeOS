@@ -215,5 +215,17 @@
     "cleared_at": "2026-05-14T09:31:06.657Z",
     "cleared_by": "conductor-token-fix",
     "cleared_reason": "Root cause: max_output_tokens=9000 too small for full HTML regen before <body>. Fixed to 32000 in TC_SERVICE_BUILDER_QUEUE.json. Re-queue to retry."
+  },
+  {
+    "task_id": "site-builder-pipeline-report-route",
+    "worker_id": "nova",
+    "worker_name": "Nova",
+    "lane": "LIFEOS_DASHBOARD_BUILDER_QUEUE",
+    "quarantined_at": "2026-05-10T00:26:26.819Z",
+    "failure_count": 2,
+    "last_error": "/tmp/builder-check-LdjOVE/.js:1\n/\n^\n\nSyntaxError: Invalid regular expression: missing /\n    at wrapSafe (node:internal/modules/cjs/loader:1464:18)\n    at checkSyntax (node:internal/main/check_syntax:78:3)\n\nNode.js v20.20.2\n",
+    "cleared_at": "2026-05-14T20:46:00.000Z",
+    "cleared_by": "conductor-cc-ticket-001",
+    "cleared_reason": "CC TICKET 001. Root cause: extractJavaScriptFromOutput() when codeStartIndex===-1 (no recognized JS start line found), the full raw output was used as-is including any leading lines that start with a bare / (not // or /*). Model output starting with a regex literal like /^pattern or a lone / was passed directly to node --check, which parsed it as an unterminated regex literal. Fix: added post-extraction guard in routes/lifeos-council-builder-routes.js that strips leading lines starting with / (but not // or /*) before returning. GAP-FILL: this is builder-pipeline infrastructure — the extractor cannot fix itself via /build. node --check PASS; npm test 49 pass 0 fail."
   }
 ]

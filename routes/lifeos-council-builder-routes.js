@@ -313,6 +313,30 @@ function extractJavaScriptFromOutput(rawText) {
     s = rawLines.join('\n').trim();
   }
 
+  // Guard: strip any leading lines that start with a bare `/` (not `//` comment or `/*` block-comment).
+  // A lone `/` at line 1 is an unterminated regex literal — Node.js throws
+  // "SyntaxError: Invalid regular expression: missing /". This can happen when
+  // codeStartIndex === -1 (no recognized JS start found) and the model output
+  // begins with a stray `/` or an incomplete regex literal like `/^pattern`.
+  // CC TICKET 001 — quarantine evidence: site-builder-pipeline-report-route failure.
+  {
+    const sLines = s.split(/\r?\n/);
+    let stripCount = 0;
+    while (stripCount < sLines.length) {
+      const tl = sLines[stripCount].trim();
+      // Allow empty lines to pass (they'll be trimmed later)
+      if (!tl) { stripCount++; continue; }
+      // Allow `//` and `/*` — those are valid JS comment openers
+      if (/^(\/\/|\/\*)/.test(tl)) break;
+      // A line starting with `/` but not `//` or `/*` is an invalid file opener — strip it
+      if (tl.startsWith('/')) { stripCount++; continue; }
+      break;
+    }
+    if (stripCount > 0) {
+      s = sLines.slice(stripCount).join('\n').trim();
+    }
+  }
+
   const looksHtml = /<!DOCTYPE\s+html/i.test(s) || /<html[\s>]/i.test(s);
   if (looksHtml) {
     const blocks = [];
