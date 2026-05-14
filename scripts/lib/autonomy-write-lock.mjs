@@ -25,7 +25,7 @@ async function readLock() {
 
 async function isLocked() {
   const lock = await readLock();
-  return lock && lock.locked;
+  return lock !== null && lock.locked === true;
 }
 
 async function getLock() {
