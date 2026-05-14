@@ -1,57 +1,47 @@
-The task asks for a specification in Markdown, but the final instruction asks for implementation code. I am providing the specification as requested by the explicit task and specification sections.
----
-# Client-Visible Error Envelopes Specification
+The task asks for a specification, but the final instruction block implies generating code. I am proceeding with a Markdown specification as requested by the task's explicit wording for a "Spec".
 
-## 1. Overview
-This specification defines the behavior and presentation of API failure messages within the LifeOS Dashboard (`public/overlay/lifeos-dashboard.html`). The primary goals are to provide clear, actionable feedback to the user, ensure privacy, and surface sufficient debugging details to authorized personnel (Adam).
+# Client-Visible API Error Envelopes Specification
 
-## 2. Core Principles
-*   **Fail-Closed**: In case of API failures, the system defaults to a secure and private state. No sensitive internal details are exposed to the end-user.
-*   **User-Centric Messaging**: Error messages for general users are concise, empathetic, and suggest clear next steps (e.g., "Please try again later").
-*   **Developer-Centric Details**: For Adam (when `lifeos_debug_mode` is enabled in `localStorage`), additional technical details, including correlation IDs, are available for debugging.
-*   **No Instrumentation**: This specification explicitly excludes any logging or monitoring instrumentation code.
+This document outlines the standard for presenting API failure information to the user in the LifeOS Dashboard, balancing transparency for Adam (the developer/power user) with user-friendliness and privacy.
 
-## 3. Client-Side Error Handling
+## 1. General Principles
 
-### 3.1. Generic API Failure Handling
-All `fetch` calls wrapped by the `API` helper function will be augmented to catch network errors and non-`ok` HTTP responses. A centralized error display function (`displayAPIError(widgetId, error, response)`) will be used.
+*   **User-Centric Messaging**: Error messages displayed directly to the end-user must be clear, concise, and actionable. They should avoid technical jargon and focus on what the user can do or what the system is doing to resolve the issue.
+*   **Fail-Closed & Graceful Degradation**: API failures should not crash the application. Individual widgets or components should display an error state, but the rest of the dashboard must remain functional. No sensitive data should be exposed in error messages.
+*   **Privacy by Default**: No internal system details, stack traces, or sensitive data should ever be exposed to the end-user.
+*   **No Instrumentation**: This specification does not include client-side error instrumentation or telemetry.
 
-#### User-Facing Messages:
-*   **Network Error (e.g., `TypeError: Failed to fetch`)**: "Failed to connect to LifeOS. Please check your internet connection and try again."
-*   **Server Error (HTTP 5xx)**: "LifeOS is experiencing technical difficulties. Please try again in a few minutes."
-*   **Client Error (HTTP 4xx, generic)**: "Something went wrong with your request. Please try again."
-*   **Specific Widget Fallback**: If a widget has a more specific, user-friendly error message (e.g., "No MITs — add one below"), that takes precedence for non-critical data loading failures. For critical API failures, the generic messages apply.
+## 2. Error Types and Handling
 
-#### Adam-Only Details (when `localStorage.getItem('lifeos_debug_mode') === 'true'`):
-*   **Correlation ID**: The `x-request-id` header from the API response will be extracted and displayed. If absent, "N/A" will be shown.
-*   **Technical Error**: The raw HTTP status (`response.status`), status text (`response.statusText`), and any `error` field from the JSON response body (`d.error`) will be displayed.
-*   **Display**: These details will be appended to the user-facing error message within the affected widget, clearly marked as `[DEBUG]`.
+### 2.1. Network Errors (Client-Side)
 
-### 3.2. Retry Mechanism
-*   **User-Initiated**: The primary retry mechanism is user-initiated (e.g., page refresh, re-submission, or explicit "Try Again" button if implemented).
-*   **No Automatic Retries**: The dashboard will not implement automatic API call retries with backoff.
+These occur when the client fails to connect to the API (e.g., `fetch` promise rejection due to network down, CORS issues, DNS failure).
 
-### 3.3. Correlation ID Display
-*   **User**: Correlation IDs are never displayed to the general user.
-*   **Adam**: Displayed as part of the `[DEBUG]` information when `lifeos_debug_mode` is active.
+*   **User-Visible Copy**:
+    *   **Generic**: "Failed to connect to LifeOS. Please check your network connection and try again."
+    *   **Contextual (e.g., Chat)**: "Failed to connect to Lumin. Check your network." (as per existing `lifeos-dashboard.html` pattern).
+*   **Adam-Only Details**: The full `Error` object (including message, stack trace if available) should be logged to the browser's developer console (`console.error`).
+*   **Correlation ID**: Not applicable for client-side network errors as no server request was successfully initiated.
+*   **Retry**: Manual retry by refreshing the page or re-attempting the action (e.g., clicking a "Retry" button if implemented, or re-sending a chat message). No automatic client-side retries are specified at this time.
 
-## 4. Example Error Messages (DOM Structure)
+### 2.2. API Errors (Server-Side)
 
-### User (Generic Network Error)
-```html
-<div class="empty"><span>⚠️</span>Failed to connect to LifeOS. Please check your internet connection and try again.</div>
-```
+These occur when the API responds with a non-2xx HTTP status code (e.g., 4xx, 5xx) or returns a malformed/unexpected response body.
 
-### User (Generic Server Error)
-```html
-<div class="empty"><span>⚠️</span>LifeOS is experiencing technical difficulties. Please try again in a few minutes.</div>
-```
+*   **User-Visible Copy**:
+    *   **Generic**: "LifeOS is currently unavailable. Please try again later."
+    *   **Contextual (e.g., Chat)**: "Lumin is unavailable right now. Please try again later." (as per existing `lifeos-dashboard.html` pattern).
+    *   **Specific (if applicable and safe)**: If the API provides a user-safe error message (e.g., "Invalid input provided for X"), this *may* be displayed, but only after strict sanitization and review. By default, prefer generic messages.
+*   **Adam-Only Details**:
+    *   The full HTTP response (status code, headers, response body) should be logged to the browser's developer console (`console.error`).
+    *   If the server provides a `x-request-id` or `x-correlation-id` header, this value **must** be logged to the console alongside the error details.
+*   **Correlation ID**:
+    *   **User Copy**: NEVER displayed to the end-user.
+    *   **Adam-Only**: Displayed in the browser's developer console (`console.error`) for debugging purposes. This allows Adam to correlate client-side errors with server-side logs.
+*   **Retry**: Manual retry by refreshing the page or re-attempting the action. No automatic client-side retries are specified at this time.
 
-### Adam (Debug Mode, Server Error)
-```html
-<div class="empty">
-    <span>⚠️</span>LifeOS is experiencing technical difficulties. Please try again in a few minutes.<br>
-    <small style="color:var(--text-muted);">[DEBUG] Status: 500 Internal Server Error. Correlation ID: abc-123-xyz.</small>
-</div>
-```
-The task asks for a specification, but the final instruction asks for implementation code.
+## 3. Implementation Guidance
+
+*   **Centralized Error Handling**: Where possible, implement a common utility function or middleware for `fetch` calls to standardize error processing (e.g., checking `response.ok`, parsing JSON, logging).
+*   **UI Integration**: Error messages should be displayed within the context of the failing widget/component (e.g., replacing content with an error message, or a small banner). Global toasts/modals should be reserved for critical, app-wide failures.
+*   **Existing Patterns**: Adhere to the existing error display patterns found in `public/overlay/lifeos-dashboard.html` (e.g., `<div class="empty"><span>⚠️</span>Failed to load MITs</div>`).
