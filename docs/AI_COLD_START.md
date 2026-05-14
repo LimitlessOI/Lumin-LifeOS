@@ -1,7 +1,7 @@
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`
-> Generated: 2026-05-14T02:02:51.732Z
+> Generated: 2026-05-14T03:02:07.125Z
 
 ## Read order (mandatory)
 
@@ -80,33 +80,30 @@ Example first line of an update:
 
 ---
 
-## [BUILD] Update 2026-05-14 #16 — S3/C09 Build Closure Contract
+## [BUILD] Update 2026-05-13 #17 — S4/Task DNA v0
 
 ### Files changed
-- `scripts/lib/closure-contract.mjs` — NEW. Pure function `buildClosureRecord()` + `validateClosureRecord()`. Three legal closure types: `committed_success`, `skipped_already_valid`, `explicit_noncommit_reason`. Each validates proof structure and throws on contract violation.
-- `scripts/lifeos-builder-continuous-queue.mjs` — Wired C09 at 6 exit points: SIS1 skip, FPM1 level-3 quarantine, syntax/413 quarantine, hard fail, exception throw, build ok. Every task exit now emits `closure_contract_result` event.
-- `tests/closure-contract.test.js` — NEW. 14 tests: all closure types, all violation paths, synthetic proof event round-trip.
-- `package.json` — Added test to suite.
-- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Receipt + handoff updated.
-- `docs/CONTINUITY_LOG.md` — This entry.
+- `scripts/validate-task-dna.mjs` (NEW) — warn-only scanner. Exports `validateTaskDNA()` (reads 3 lane queue JSON files, counts tasks with/without DNA fields) and `formatReport()`. 5 DNA fields tracked: `why_created`, `source_receipt`, `depends_on`, `blocks`, `proof_required_to_close`. Never exits non-zero on missing DNA.
+- `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` — `lifeos-alpha-consensus-pack` (task 0) populated with all 5 DNA fields as proof of format. Other 43 tasks unchanged.
+- `scripts/generate-cold-start.mjs` — imports `validateTaskDNA` + `formatReport`; adds "Task DNA coverage" section to `docs/AI_COLD_START.md` at line 293.
+- `docs/AI_COLD_START.md` — regenerated; now includes per-lane DNA coverage counts.
+- `tests/validate-task-dna.test.js` (NEW) — 6 tests covering lane presence, grandTotal, populated ≥ 1, nextTaskDNA structure, math identity, formatReport string shape.
+- `package.json` — added `tests/validate-task-dna.test.js` to test script + `dna:validate` shortcut.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S4 receipt row added; Agent Handoff Notes updated (S4 ✅, next = S5 Prediction loop).
 
 ### State after this session
-- `closure_contract_result` event emitted at every task exit point in the queue ✅
-- `buildClosureRecord()` throws on contract violation — cannot produce malformed records
-- `npm test`: 28 pass, 0 fail, 4 skipped (+14 from C09). `node --check`: PASS all files.
-- Synthetic proof event: `closure_type:committed_success, ok_to_advance:true, proof.synthetic:true` confirmed in test output.
-- No task advances without a typed, structured proof record in the JSONL log.
+- `npm test`: **34 pass, 0 fail, 4 skipped**. `node --check`: PASS all files.
+- 3 lanes audited: 44 tasks total, 1 with DNA (2%), 43 missing.
+- DNA is optional and non-blocking — no queue behavior changed.
+- Cold-start now shows DNA coverage summary automatically.
 
 ### Next agent: start here
-- **S4 — Task DNA v0** (per Phase 2 agreed sequence). Adam to confirm scope before starting.
-- C09 logs are JSONL — a future Sentinel can scan for tasks missing `closure_contract_result` events. That audit tooling is S4+ work.
+- **S5 — Prediction loop** (per Phase 2 agreed sequence). Adam to confirm scope before starting.
+- Brainstorm sequence: C21 ✅ → S2/C02 ✅ → S3/C09 ✅ → S4/DNA ✅ → Prediction loop → Founder Decoder.
 
 ---
 
-## [BUILD] Update 2026-05-14 #15 — S2 Memory Bootstrap: lessons_learned seeded + reader wired
-
-### Files changed
-- `scripts/seed-lessons-learned.mjs` — NEW.
+## [BUILD] Update 2026-05-14 #16 — S3/C09 Build Closure 
 
 ## Snippet — LifeOS lane
 
@@ -305,3 +302,16 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 
   TOTAL: 44 tasks | 1 with DNA (2%) | 43 missing
   (warn-only — missing DNA does not block queue execution)
+
+## Prediction loop (S5 — warn-only)
+
+> Source: `data/prediction-loop.jsonl` — written by queue at each task exit.
+> Mismatches are informational only and do not block queue execution.
+
+[prediction-loop] S5 Prediction Loop v0 — coverage report
+
+  Predictions recorded: 2
+  Evaluations:          1
+  Matches:              1 (100%)
+  Misses:               0
+  (warn-only — misses do not block queue execution)

@@ -32,6 +32,30 @@
 
 ---
 
+## [BUILD] Update 2026-05-13 #18 — S5/Prediction Loop v0
+
+### Files changed
+- `scripts/lib/prediction-loop.mjs` (NEW) — pure library. `makePrediction({ taskId, lane, sis1WillSkip })` builds prediction_recorded record. `evaluatePrediction(prediction, { actual_ok, actual_duration_ms, actual_closure_type })` compares prediction to actual, sets `prediction_match` + `miss_reason`. No I/O.
+- `scripts/validate-predictions.mjs` (NEW) — warn-only scanner for `data/prediction-loop.jsonl`. Reports predictions, evaluations, matches, misses, miss_reason breakdown. Never exits non-zero.
+- `scripts/lifeos-builder-continuous-queue.mjs` — `PREDICTION_LOG_PATH` + `logPrediction()` added. Import of `makePrediction` + `evaluatePrediction`. Prediction recorded after SIS1 check result. Evaluation at all 5 exit paths (SIS1 skip, FPM1 quarantine, syntax/413 quarantine, hard fail, exception, build success).
+- `scripts/generate-cold-start.mjs` — prediction summary section wired (line 306 of AI_COLD_START.md).
+- `tests/prediction-loop.test.js` (NEW) — 10 tests: pure function coverage, synthetic proof round-trip, validator structure tests.
+- `package.json` — test script + `predictions:validate` shortcut added.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — S5 receipt + handoff notes updated (S5 ✅, next = S6 Founder Decoder).
+
+### State after this session
+- `npm test`: **44 pass, 0 fail, 4 skipped**. `node --check`: PASS all files.
+- `data/prediction-loop.jsonl`: will be written by first real queue run. Not yet populated — no queue ran in this session.
+- Cold-start shows "No prediction records yet" until first queue cycle writes to the JSONL.
+- No queue behavior changes beyond JSONL logging.
+
+### Next agent: start here
+- **S6 — Founder Decoder** (per Phase 2 agreed sequence). Adam to confirm scope.
+- Brainstorm sequence: C21 ✅ → S2/C02 ✅ → S3/C09 ✅ → S4/DNA ✅ → S5/Prediction ✅ → Founder Decoder.
+- `data/prediction-loop.jsonl` will accumulate real data once the next queue cycle runs.
+
+---
+
 ## [BUILD] Update 2026-05-13 #17 — S4/Task DNA v0
 
 ### Files changed

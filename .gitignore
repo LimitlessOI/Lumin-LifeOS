@@ -71,3 +71,17 @@ data/builder-overnight-cursor*.json
 data/env-certification-log.jsonl
 # Operator IDE / rollup ledger (usage counts — local only; not committed)
 data/operator-consumption-ledger.jsonl
+# S5 Prediction Loop runtime log (written by queue; regenerated; not committed)
+data/prediction-loop.jsonl
+# Lane-specific builder daemon logs/state (written by builder-daemon.mjs)
+data/builder-daemon-log.*.jsonl
+data/builder-daemon-state.*.json
+data/builder-continuous-queue-log.*.jsonl
+# TSOS overseer runtime state
+data/tsos-overseer-log.jsonl
+data/tsos-overseer-state.json
+data/tsos-overseer-summary.json
+data/tsos-runtime-guardian-log.jsonl
+data/tsos-runtime-guardian-state.json
+data/tsos-compliance-officer-last-run.json
+data/builder-daemon-state.*.json

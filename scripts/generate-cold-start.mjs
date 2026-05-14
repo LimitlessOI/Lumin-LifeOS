@@ -9,6 +9,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { validateTaskDNA, formatReport } from './validate-task-dna.mjs';
+import { validatePredictions, formatPredictionReport } from './validate-predictions.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -40,6 +41,7 @@ function extractOperatorDirectiveKnowLine(amd21) {
 
 async function main() {
   const dnaSummary = await validateTaskDNA().catch(() => null);
+  const predictionSummary = await validatePredictions().catch(() => null);
   const index = await readSafe('docs/CONTINUITY_INDEX.md');
   const mainLog = await readSafe('docs/CONTINUITY_LOG.md');
   const lifeos = await readSafe('docs/CONTINUITY_LOG_LIFEOS.md');
@@ -115,6 +117,13 @@ ${memoryDigest.includes('AUTO-GENERATED') ? memoryDigest.slice(memoryDigest.inde
 > Missing DNA does not block execution. This section is informational only.
 
 ${dnaSummary ? formatReport(dnaSummary) : '_(validate-task-dna.mjs unavailable)_'}
+
+## Prediction loop (S5 — warn-only)
+
+> Source: \`data/prediction-loop.jsonl\` — written by queue at each task exit.
+> Mismatches are informational only and do not block queue execution.
+
+${predictionSummary ? formatPredictionReport(predictionSummary) : '_(validate-predictions.mjs unavailable)_'}
 `;
 
   await fs.writeFile(path.join(ROOT, 'docs/AI_COLD_START.md'), out, 'utf8');

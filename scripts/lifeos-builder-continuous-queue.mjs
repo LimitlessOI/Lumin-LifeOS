@@ -30,6 +30,7 @@ import {
 } from './lib/builder-failure-memory.mjs';
 import { isLocked, getLock } from './lib/autonomy-write-lock.mjs';
 import { buildClosureRecord } from './lib/closure-contract.mjs';
+import { makePrediction, evaluatePrediction } from './lib/prediction-loop.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -40,6 +41,7 @@ let LOG_PATH = join(ROOT, 'data/builder-continuous-queue-log.jsonl');
 const LAST_RUN_PATH = join(ROOT, 'data/builder-continuous-queue-last-run.json');
 const QUARANTINE_PATH = join(ROOT, 'data/quarantined-tasks.json');
 const QUARANTINE_CLEARED_PATH = join(ROOT, 'data/quarantine-cleared-tasks.json');
+const PREDICTION_LOG_PATH = join(ROOT, 'data/prediction-loop.jsonl');
 const LEGACY_CURSOR_PATH = join(ROOT, 'data', 'builder-overnight-cursor.json');
 /** Pre-rename default queue lane — `loadCursor()` reads this once to preserve `nextStartIndex`. */
 const LEGACY_PRE_RENAME_QUEUE_CURSOR = join(
@@ -423,6 +425,11 @@ async function logLine(obj) {
   const line = `${JSON.stringify({ ts: new Date().toISOString(), ...obj })}\n`;
   await appendFile(LOG_PATH, line, 'utf8').catch(() => {});
   console.log(line.trimEnd());
+}
+
+async function logPrediction(obj) {
+  const line = `${JSON.stringify({ ts: new Date().toISOString(), ...obj })}\n`;
+  await appendFile(PREDICTION_LOG_PATH, line, 'utf8').catch(() => {});
 }
 
 /** Machine receipt for daemon / operators — wall clock vs `/build` time (answers “was 7h busy?”). */
@@ -842,6 +849,11 @@ async function main() {
     // syntax, skip the builder call entirely. No tokens spent. Cursor still advances.
     // Covers GAP-FILL files and any task the builder already completed in a prior run.
     const shipped = await checkIfAlreadyShipped(task);
+
+    // S5: prediction — made after SIS1 check so sis1WillSkip is known at prediction time
+    const prediction = makePrediction({ taskId: id, lane, sis1WillSkip: shipped.skip });
+    await logPrediction(prediction);
+
     if (shipped.skip) {
       await logLine({
         event: 'task_skip_already_shipped',
@@ -859,6 +871,12 @@ async function main() {
         lane,
         proof: { target_file: task.target_file, line_count: shipped.lineCount, validator: 'node_check' },
         okToAdvance: true,
+      }));
+      // S5: evaluate prediction — SIS1 outcome
+      await logPrediction(evaluatePrediction(prediction, {
+        actual_ok: true,
+        actual_duration_ms: Date.now() - sliceT0,
+        actual_closure_type: 'skipped_already_valid',
       }));
       console.log(`⏭  ${id} — skip-if-shipped: ${task.target_file} (${shipped.lineCount} lines, syntax OK)`);
       perTaskSlice.push({ id, build_wall_ms: 0, ok: true, auto_skip: 'target_file_already_valid' });
@@ -949,6 +967,12 @@ async function main() {
             },
             okToAdvance: true,
           }));
+          // S5: evaluate prediction — FPM1 quarantine (advance_justified=true → ok_to_advance)
+          await logPrediction(evaluatePrediction(prediction, {
+            actual_ok: false,
+            actual_duration_ms: buildWallMs,
+            actual_closure_type: 'explicit_noncommit_reason',
+          }));
           console.warn(`⚠ Level-3 escalation on ${id} (${failureRecord.count} cumulative failures) — auto-quarantined.`);
           continue;
         }
@@ -977,6 +1001,12 @@ async function main() {
             },
             okToAdvance: true,
           }));
+          // S5: evaluate prediction — syntax/413 quarantine
+          await logPrediction(evaluatePrediction(prediction, {
+            actual_ok: false,
+            actual_duration_ms: buildWallMs,
+            actual_closure_type: 'explicit_noncommit_reason',
+          }));
           console.warn(`⚠ ${isSyntaxFail ? 'Syntax' : '413-payload'} fail on ${id} — quarantined, continuing queue.`);
           // do NOT set failed=true; do NOT exit — advance to next task
           continue;
@@ -989,6 +1019,12 @@ async function main() {
           lane,
           proof: { committed: false, reason: 'hard_fail_queue_stop', http: res.status },
           okToAdvance: false,
+        }));
+        // S5: evaluate prediction — hard fail
+        await logPrediction(evaluatePrediction(prediction, {
+          actual_ok: false,
+          actual_duration_ms: buildWallMs,
+          actual_closure_type: 'explicit_noncommit_reason',
         }));
         console.error(JSON.stringify(json, null, 2));
         console.error(`\nStopped after failure: ${id}. Fix gaps, redeploy if needed, then resume with --start <index>.`);
@@ -1036,6 +1072,12 @@ async function main() {
         },
         okToAdvance: true,
       }));
+      // S5: evaluate prediction — committed success
+      await logPrediction(evaluatePrediction(prediction, {
+        actual_ok: true,
+        actual_duration_ms: buildWallMs,
+        actual_closure_type: 'committed_success',
+      }));
       console.log(`✅ ${id} committed model=${json?.model_used || '?'}`);
       if (sleepMs > 0 && i < selected.length - 1) {
         await sleep(sleepMs);
@@ -1060,6 +1102,12 @@ async function main() {
         lane,
         proof: { committed: false, reason: 'exception_queue_stop', error: String(err.message || err).slice(0, 200) },
         okToAdvance: false,
+      }));
+      // S5: evaluate prediction — unhandled exception
+      await logPrediction(evaluatePrediction(prediction, {
+        actual_ok: false,
+        actual_duration_ms: errWallMs,
+        actual_closure_type: 'explicit_noncommit_reason',
       }));
       console.error(err);
       await persistLastRun({

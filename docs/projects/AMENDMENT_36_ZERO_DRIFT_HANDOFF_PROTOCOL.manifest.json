@@ -46,5 +46,5 @@
   "last_verified_at": "2026-04-26",
   "verification_passed": null,
   "last_updated": "2026-05-13",
-  "ssot_receipt_tail": "S4/Task DNA v0: validate-task-dna.mjs + 1 task populated + cold-start reader + 6 tests; 34 pass. S3/C09 complete. S2/C02 complete. C21 confirmed. S5 Prediction loop next."
+  "ssot_receipt_tail": "S5/Prediction Loop v0: prediction-loop.mjs + validate-predictions.mjs + 5 exit points + cold-start reader + 10 tests; 44 pass. S4/DNA complete. S3/C09 complete. S2/C02 complete. C21 confirmed. S6 Founder Decoder next."
 }
