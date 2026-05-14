@@ -1,15 +1,12 @@
-Summary
-A gap audit against the `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_BUILDER_QUEUE.md` cannot be performed. The injected file contents indicate that both brief documents are missing from the repository (`READ ERROR: ENOENT`). Without the authoritative brief, a comparison of `lifeos-dashboard.html` and `lifeos-app.html` against the specified design intent (sidebar, bottom tabs, AI rail direction, light/dark intent, mobile vs desktop) is not possible.
+Summary:
+The requested gap audit cannot be completed as the authoritative `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file, which is essential for comparison, is reported as missing (`ENOENT`). Without the brief, it is impossible to identify concrete gaps in `lifeos-dashboard.html` and `lifeos-app.html` against the specified design intent (sidebar, bottom tabs, AI rail direction, light/dark intent, mobile vs desktop).
 
-Gaps vs brief
-This section cannot be completed as the source of truth for the brief (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`) is unavailable. Therefore, no concrete gaps can be identified relative to the brief's requirements.
+Gaps vs brief:
+This section cannot be populated because the `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file is not available.
 
-Recommended next queued builds
-1.  **Recreate/Retrieve `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**: This document is essential for defining the design intent and requirements for the dashboard and app shell.
-2.  **Recreate/Retrieve `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md`**: This document is needed to understand the planned feature queue and prioritize development.
-3.  **Re-run gap audit**: Once the brief documents are available, re-run this audit to compare the current HTML implementations against the defined specifications.
+Recommended next queued builds:
+1. Restore or create `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` with the detailed design specifications for the dashboard and app shell.
+2. Restore or create `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md` if it contains relevant context for this audit.
 
-Open questions if any
-1.  What is the authoritative source for the `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_BUILDER_QUEUE.md` content?
-2.  Are there alternative sources or stakeholders who can provide the missing brief information?
-3.  Should the builder proceed with any dashboard/app shell changes without a clear, documented brief?
+Open questions:
+1. Can the `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file be provided or restored?
