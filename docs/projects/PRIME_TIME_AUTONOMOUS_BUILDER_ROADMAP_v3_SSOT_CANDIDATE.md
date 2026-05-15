@@ -134,18 +134,18 @@ Lock state: locked, owner, reason, created_at, expires_at, allowed_paths, blocke
 
 **Done when:** a protected-path autonomous write is blocked under lock and a receipt records the block without allowing direct `main` promotion.
 
-### Slice 2.2 — Branch promotion ladder
+### Slice 2.2 — Per-file ownership registry
+
+Every runtime/product file has **one** owning lane. Two lanes target same file → **halt before execution**.
+
+**Done when:** every protected runtime/product file has exactly one owner and duplicate ownership claims fail before task start.
+
+### Slice 2.3 — Branch promotion ladder
 
 **draft → staging → reviewed → verified → mergeable → `main`**  
 No direct `main` unless gate explicitly allows.
 
 **Done when:** every autonomous code path can be mapped to one ladder state and no path can promote from `draft` or `staging` directly to `main`.
-
-### Slice 2.3 — Per-file ownership registry
-
-Every runtime/product file has **one** owning lane. Two lanes target same file → **halt before execution**.
-
-**Done when:** every protected runtime/product file has exactly one owner and duplicate ownership claims fail before task start.
 
 ### Slice 2.4 — Collision receipt
 
@@ -627,7 +627,7 @@ Before CC changes **`routes/`** (and other protected paths per **`CLAUDE.md`**):
 - [ ] Council = **HTTP** path only, documented.  
 - [ ] No duplicate metrics / ETA definitions (registry complete).  
 - [ ] Truth enforcement = **5 levels** + AM39 pointer; no second “law” ladder.  
-- [ ] Burn-in denominator + suspension numbers **filled or UNKNOWN**.  
+- [ ] Burn-in suspension thresholds: all N_/T_ values set, **or** each unset value has an explicit Adam waiver on file (decision receipt + expiration date + CAI audit receipt). "UNKNOWN" without a waiver does not satisfy this item.  
 - [ ] `builder:preflight` / protected-path rules **referenced**.  
 - [ ] Confidence promotion ≠ self-score merge.
 
