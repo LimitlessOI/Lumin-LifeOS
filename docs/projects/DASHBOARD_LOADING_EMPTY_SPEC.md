@@ -1,64 +1,102 @@
-The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file was not found. This specification is derived from the task prompt and the provided `public/overlay/lifeos-dashboard.html` file.
+## Dashboard UI State Specification
 
-### Skeletons
-*   **Purpose**: Provide visual feedback during data loading, indicating that content is on its way without showing a blank screen.
-*   **Existing Pattern**:
-    *   Base class: `.skeleton` (applies shimmer animation, background gradient, border-radius).
-    *   Line class: `.skel-line` (sets height, margin-bottom, default width).
-    *   Width variations: `w-full`, `w-4/5`, `w-3/5` (Tailwind classes), or inline styles for specific dimensions (e.g., `width:72px;height:72px;border-radius:50%` for score rings).
-    *   Examples: MITs list, Calendar, Goals list, Scores grid.
-*   **Rules for New Skeletons**:
-    1.  Apply `.skeleton` to the container or individual elements.
-    2.  Use `.skel-line` for text-like content placeholders.
-    3.  Vary `width` (e.g., `w-full`, `w-4/5`, `w-3/5`) to simulate varying text lengths.
-    4.  For non-rectangular elements (e.g., circular loaders), use inline styles for `width`, `height`, and `border-radius: 50%` in conjunction with `.skeleton`.
-    5.  Ensure skeletons match the layout and approximate dimensions of the content they replace.
+This document outlines the patterns for skeletons, shimmer effects, optimistic UI considerations, and empty state copy tone for the LifeOS Dashboard, based on existing implementations in `public/overlay/lifeos-dashboard.html`.
 
-### Shimmer Rules
-*   **Purpose**: Enhance the visual appeal of skeleton loaders, indicating active loading.
-*   **Existing Pattern**:
-    *   `@keyframes shimmer` defined in CSS.
-    *   Applied via `.skeleton` class: `animation: shimmer 1.4s infinite;`.
-    *   Background gradient: `linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);`
-    *   Background size: `400px 100%`.
-*   **Rules for Shimmer Application**:
-    1.  The shimmer effect is automatically applied to any element with the `.skeleton` class.
-    2.  No additional classes or specific timing are required beyond applying `.skeleton`.
-    3.  Ensure the `var(--bg-surface2)` and `var(--bg-overlay)` CSS variables are correctly defined in the theme for consistent appearance.
+### 1. Skeletons
 
-### Optimistic UI Risks
-*   **Purpose**: Improve perceived performance and responsiveness by updating the UI immediately after a user action, before server confirmation.
-*   **Identified Opportunities & Risks**:
-    1.  **MITs (Add/Toggle)**:
-        *   **Opportunity**: Immediately show a new MIT added or an existing MIT toggled (checked/unchecked).
-        *   **Risk**: Network failure, server error (e.g., validation failed, database write failed).
-        *   **Mitigation**:
-            *   **Add**: Temporarily add the new MIT to the UI with a "pending" or "saving" visual state. If API fails, remove it and show an error.
-            *   **Toggle**: Immediately update the checkmark/text style. If API fails, revert the UI state and show an error.
-            *   **General**: Implement a robust rollback mechanism. Display clear, non-intrusive error messages (e.g., a small toast notification).
-    2.  **Chat Messages (Send)**:
-        *   **Opportunity**: Immediately display the user's sent message in the chat history.
-        *   **Risk**: Network failure, server error (Lumin unavailable).
-        *   **Mitigation**:
-            *   Display the user's message immediately.
-            *   Show a typing indicator for the assistant.
-            *   If the API call fails, replace the assistant's typing indicator with an "ambient" error message (e.g., "Lumin is unavailable right now.") and potentially allow the user to retry.
-*   **General Principles**:
-    1.  **Immediate Feedback**: Update UI instantly for user actions.
-    2.  **Pending State**: Use subtle visual cues (e.g., reduced opacity, spinner, "saving..." text) for items awaiting server confirmation.
-    3.  **Error Handling & Rollback**: Always have a mechanism to revert the UI to its previous state if the server operation fails. Clearly communicate errors to the user.
+Skeletons are used to indicate loading states for data-driven components, providing a visual placeholder before actual content is rendered.
 
-### Empty States Copy Tone
-*   **Purpose**: Guide users when a section has no data, encouraging interaction or providing context.
-*   **Existing Tone Analysis**:
-    *   **MITs**: `<span>✅</span>No MITs — add one below` (Positive, encouraging, clear call to action, uses emoji).
-    *   **Calendar**: `<span>🗓</span>No events today` (Neutral, informative, uses emoji).
-    *   **Goals**: `<span>🎯</span>No goals set` (Neutral, informative, implies action, uses emoji).
-    *   **Scores**: `<span>📊</span>No scores yet` (Neutral, informative, uses emoji).
-    *   **Chat (Error)**: `<span>⚠️</span>Failed to load MITs`, `Lumin is unavailable right now. Please try again later.`, `Failed to connect to Lumin. Check your network.` (Informative, slightly apologetic, suggests troubleshooting, uses emoji for general errors).
-*   **Recommended Tone for New Empty States**:
-    1.  **Informative & Concise**: Clearly state why the section is empty.
-    2.  **Action-Oriented (where applicable)**: If the user can add data, provide a gentle call to action.
-    3.  **Positive/Encouraging**: Avoid negative language. Frame emptiness as an opportunity or a temporary state.
-    4.  **Use Emojis**: Leverage relevant emojis (e.g., ✅, 🗓, 🎯, 📊) to add visual appeal and reinforce meaning, consistent with existing patterns.
-    5.  **Error States**: For API failures, be direct about the problem, suggest a simple solution if possible (e.g., "check network"), and maintain a helpful, non-blaming tone. Use `⚠️` for general loading errors.
+**Existing Patterns:**
+*   **General Skeleton Class**: The `.skeleton` class applies the base loading animation and background.
+    ```css
+    .skeleton {
+        background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
+        background-size: 400px 100%;
+        animation: shimmer 1.4s infinite;
+        border-radius: var(--radius-sm);
+    }
+    ```
+*   **Line Skeletons**: For text-based lists or blocks, `.skel-line` is used.
+    ```css
+    .skel-line {
+        height: 14px;
+        margin-bottom: 10px;
+    }
+    .skel-line:last-child {
+        width: 60%; /* Tapered last line for visual variety */
+    }
+    ```
+*   **Custom Skeletons**: For specific shapes like circular score rings, inline styles are used to override dimensions and border-radius.
+    *   Example (Score Tile): `<div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div>`
+    *   Example (Goal Progress Bar): `<div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;margin-bottom:14px;border-radius:3px"></div>`
+
+**Rules for New Skeletons:**
+*   Always use the `.skeleton` class as the base.
+*   For linear content, prefer `.skel-line` with appropriate `w-` (Tailwind width) classes.
+*   For non-linear or custom shapes (e.g., circles, specific bars), apply inline `style` attributes for `width`, `height`, and `border-radius` directly to an element with `.skeleton` and `.skel-line` (if applicable for height/margin).
+*   Ensure skeletons roughly match the dimensions and layout of the content they replace to minimize layout shifts.
+
+### 2. Shimmer Rules
+
+The shimmer effect provides a visual indication of active loading within a skeleton.
+
+**Existing Pattern:**
+*   **Animation Definition**:
+    ```css
+    @keyframes shimmer {
+        0% { background-position: -400px 0; }
+        100% { background-position: 400px 0; }
+    }
+    ```
+*   **Application**: The `shimmer` animation is applied via the `.skeleton` class with a duration of `1.4s` and `infinite` iteration.
+*   **Background Properties**: The `background-size: 400px 100%` on `.skeleton` ensures the gradient covers the element and allows the `background-position` animation to create the moving "shimmer" effect.
+
+**Rules for New Shimmer Effects:**
+*   The existing `.skeleton` class already includes the shimmer animation. No new CSS or animation definitions are typically required.
+*   If a custom shimmer effect is needed for a unique component, it should follow the `background-position` animation pattern and be defined in the dashboard's stylesheet.
+
+### 3. Optimistic UI Risks
+
+Optimistic UI updates involve immediately reflecting a user's action in the UI before receiving confirmation from the server. This improves perceived responsiveness but carries the risk of displaying an incorrect state if the server operation fails.
+
+**Identified Risks & Current Handling:**
+*   **MIT Toggle (`toggleMIT`)**:
+    *   **Risk**: The UI (`.mit-check`, `.mit-text` classes) is updated *before* the API call completes. If the API call fails, the UI will show the MIT as toggled (kept/unkept) when the backend state is unchanged.
+    *   **Current Handling**: No explicit rollback or error state for the UI update itself. A console error is logged.
+    *   **Recommendation**: For future optimistic updates, consider a temporary visual state (e.g., a subtle loading spinner on the item) or a mechanism to revert the UI change and display an error message if the API call fails.
+*   **MIT Add (`addMIT`)**:
+    *   **Risk**: Input is cleared *before* API call completes. If API fails, input is cleared but MIT isn't added.
+    *   **Current Handling**: Input is cleared and `loadMITs()` is called *only after* a successful API response. This is *not* an optimistic update for the list itself, mitigating the risk. If the API fails, the input is not cleared, and an error is logged.
+*   **Chat Send (`sendMessage`)**:
+    *   **Risk**: The user's message is immediately added to the chat history and displayed in the UI. If the API call to Lumin fails, the user's message remains, but no assistant reply is received, and an "ambient" error message is displayed.
+    *   **Current Handling**: This is a reasonable optimistic approach. The user's message is considered "sent" from their perspective. The failure is for the *reply*, which is handled by displaying an ambient error message. The typing indicator provides feedback while waiting for the reply.
+    *   **Recommendation**: This pattern is acceptable for chat.
+
+**General Optimistic UI Principles:**
+*   **Prioritize User Feedback**: If an action is critical and failure is common, avoid optimistic updates or provide clear, immediate feedback on failure.
+*   **Revert on Failure**: If an optimistic update is used, implement a mechanism to revert the UI to the correct state and display an error message if the backend operation fails.
+*   **Loading Indicators**: Use subtle loading indicators on the specific element being updated to bridge the gap between optimistic update and server confirmation.
+
+### 4. Empty States Copy Tone
+
+Empty states provide guidance and context when a component has no data to display.
+
+**Existing Patterns & Tone:**
+*   **MITs**: `<span>✅</span>No MITs — add one below`
+    *   **Tone**: Friendly, action-oriented, instructional. Uses a relevant emoji.
+*   **Calendar**: `<span>🗓</span>No events today`
+    *   **Tone**: Factual, neutral. Uses a relevant emoji.
+*   **Goals**: `<span>🎯</span>No goals set`
+    *   **Tone**: Factual, neutral. Uses a relevant emoji.
+*   **Scores**: `<span>📊</span>No scores yet`
+    *   **Tone**: Factual, neutral. Uses a relevant emoji.
+*   **Error States**: `<span>⚠️</span>Failed to load MITs`
+    *   **Tone**: Factual, warning. Uses a relevant emoji.
+
+**Rules for New Empty States:**
+*   **Concise and Direct**: Messages should be brief and to the point.
+*   **Relevant Emoji**: Use a single, relevant emoji to visually reinforce the message.
+*   **Action-Oriented (where appropriate)**: If the user can take an action to populate the state, suggest it (e.g., "add one below").
+*   **Factual and Neutral**: For states where no immediate action is implied, simply state the current situation.
+*   **Error Tone**: For loading failures, use a warning emoji (⚠️) and a clear "Failed to load [Component Name]" message.
+*   **Styling**: Use the `.empty` class for consistent styling.
