@@ -63,6 +63,8 @@ Prime-time does **not** mean unlimited autonomy. It means **bounded, measured, r
 
 No slice starts unless: **phase**, **owner**, **target files**, **verifier**, **halt condition**, **receipt path**, **rollback path**.
 
+**Done when:** every roadmap slice template includes these fields and CAI can reject a slice definition that omits any of them.
+
 ### Slice 0.3 — Metrics registry (v3)
 
 | Column | Description |
@@ -75,11 +77,24 @@ No slice starts unless: **phase**, **owner**, **target files**, **verifier**, **
 
 **Purpose:** `builder:eta`, `throughput-meter`, `tsos:builder`, `operational-grade`, compliance JSON — **one row each**, no duplicate KPI definitions.
 
+**Done when:** all Prime-Time-critical metrics have a single registry row and no duplicate metric has conflicting sources or cadences.
+
 ### Slice 0.4 — Council threshold rules (v3)
 
 **Council** = **`POST …/gate-change/...`** or **`run-council`** on **running** Railway with receipts — per **`AMENDMENT_01`** + NSSOT **§2.12**.
 
-**Table (minimum):** architecture fork · autonomy tier ↑ · constitutional / NSSOT interpretation · money/legal/health · self-modification · deploy-policy change → **council required** vs **verifier-only**.
+| decision class | council required? | verifier-only allowed? | human required? | evidence required |
+|---|---|---|---|---|
+| architecture fork | yes | no | no | live council receipt + decision summary + residue risk |
+| autonomy tier increase | yes | no | no | live council receipt + risk review + rollback path |
+| constitutional / NSSOT interpretation | yes | no | yes | live council receipt + Adam decision receipt + cited NSSOT section |
+| money / legal / health risk | yes | no | yes | live council receipt + Adam decision receipt + risk statement |
+| self-modification | yes | no | no | live council receipt + rollback path + verifier plan |
+| deploy-policy change | yes | no | no | live council receipt + deploy truth impact note |
+| bounded bug-fix within existing slice law | no | yes | no | verifier receipt + change receipt |
+| deterministic gate addition without policy change | no | yes | no | verifier receipt + regression proof |
+
+**Done when:** this matrix is the only allowed threshold reference in the roadmap and any decision class not covered by the table defaults to council-required until explicitly added.
 
 ---
 
@@ -89,17 +104,25 @@ No slice starts unless: **phase**, **owner**, **target files**, **verifier**, **
 
 Compare **with receipts:** GitHub HEAD · Railway deployed SHA · queue state · active quarantine · compliance / gate JSON · **not** ungrounded “Decoder says healthy.”
 
+**Done when:** scanner output can show agreement or divergence across all listed truth surfaces with a cited receipt or explicit UNKNOWN.
+
 ### Slice 1.2 — Deploy truth contract
 
 No production claim unless: deployed SHA **known** · runtime route responds · required env **verified or UNKNOWN labeled** · drift explicit.
+
+**Done when:** any production-health or deployment claim fails closed when one required field is missing, stale, or contradictory.
 
 ### Slice 1.3 — Migration truth
 
 Latest applied migration · failed migrations · repair migrations · **UNKNOWN** (no Neon reachability) with **proof path** or HALT for load-bearing claims.
 
+**Done when:** migration status always resolves to known-good, known-bad, or explicit UNKNOWN with proof path and never silently omits migration state.
+
 ### Slice 1.4 — Operator truth consistency
 
 Operator-facing summaries **must** consume the **same** machine receipts as gates (single graph of truth).
+
+**Done when:** `operator:status`, Founder Decoder, and gate outputs agree on health or fail closed on contradiction.
 
 ---
 
@@ -109,18 +132,26 @@ Operator-facing summaries **must** consume the **same** machine receipts as gate
 
 Lock state: locked, owner, reason, created_at, expires_at, allowed_paths, blocked_paths. When active: **no autonomous push to `main`**; staging only; read-only checks allowed.
 
+**Done when:** a protected-path autonomous write is blocked under lock and a receipt records the block without allowing direct `main` promotion.
+
 ### Slice 2.2 — Branch promotion ladder
 
 **draft → staging → reviewed → verified → mergeable → `main`**  
 No direct `main` unless gate explicitly allows.
 
+**Done when:** every autonomous code path can be mapped to one ladder state and no path can promote from `draft` or `staging` directly to `main`.
+
 ### Slice 2.3 — Per-file ownership registry
 
 Every runtime/product file has **one** owning lane. Two lanes target same file → **halt before execution**.
 
+**Done when:** every protected runtime/product file has exactly one owner and duplicate ownership claims fail before task start.
+
 ### Slice 2.4 — Collision receipt
 
 Every blocked push: `task_id`, lane, attempted branch, reason, next action — **Founder Decoder** can explain in plain English.
+
+**Done when:** every collision or lock block produces a receipt that can be rendered in Founder Decoder without manual reconstruction.
 
 ---
 
@@ -131,21 +162,31 @@ Every blocked push: `task_id`, lane, attempted branch, reason, next action — *
 Fields: `task_id`, `lane`, `why_created`, `source_doc`, `source_decision_id`, `target_files`, `depends_on`, `blocks`, `proof_required_to_close`, `risk_tier`, `autonomy_tier`, `expected_duration`, `expected_output_type`.  
 **No DNA → no autonomous run.**
 
+**Done when:** a validator can reject any autonomous task missing one required DNA field.
+
 ### Slice 3.2 — Queue schema versioning (v3)
 
 `queue_schema_version` · DNA validator **semver** · **legacy grandfathering** (`legacy_pending_dna`) with migration path.
+
+**Done when:** active queues declare a schema version and legacy rows are explicitly marked rather than silently treated as current.
 
 ### Slice 3.3 — Buildability score
 
 Spec clarity · verifier readiness · dependency readiness · runtime risk · **target ownership** · proof quality. Low score → **rewrite spec**, do not burn builder cycles.
 
+**Done when:** every autonomous task receives a buildability score before run and low-score tasks are blocked from execution.
+
 ### Slice 3.4 — Anti-zombie queue logic
 
 Repeated skip / stale / orphan / unverifiable → shipped · superseded · rewritten · quarantined · **tombstoned** — no silent linger.
 
+**Done when:** no task can remain in repeated stale/skip state without being reclassified into one terminal or repairable outcome.
+
 ### Slice 3.5 — Cross-lane target conflict
 
 Duplicate `target_files` across **active** tasks (any lane) → **halt** before run (complements per-file ownership).
+
+**Done when:** duplicate active targets across lanes are detected before execution and emit a halt reason.
 
 ### Slice 3.6 — Environment snapshot per task
 
@@ -175,13 +216,19 @@ Every task run records: which `prompts/` file(s) were read, their content hash, 
 
 Already-shipped: target exists · required output present · verifier passes · `task_skip_already_shipped` **with proof** — **no false skip**.
 
+**Done when:** a shipped task can be skipped only when all three proof conditions are present in the receipt.
+
 ### Slice 4.2 — FPM1 failure pattern memory
 
 Families: `syntax_ghost`, `truncation`, `missing_context`, `bad_spec`, `route_unmounted`, `env_disconnect`, `model_failure`, `verifier_gap` — **retry by class**; **failure_family_id** in quarantine JSON (taxonomy).
 
+**Done when:** repeated failures are grouped by family id and retry behavior changes based on the family, not raw string matching alone.
+
 ### Slice 4.3 — Extractor golden pack
 
 Permanent tests: leading `*/`, bare `/`, markdown fences, HTML-as-JS, self-import, CSS pseudo-comments, truncation, spec contamination. **No extractor change without green pack.**
+
+**Done when:** reverting any covered extractor fix causes the golden pack to fail and current extractor changes pass the same suite.
 
 ### Slice 4.4 — Adversarial spec injection test
 
@@ -210,21 +257,31 @@ Periodically inject a deliberately flawed spec into the builder to verify verifi
 
 By artifact: route → mount + HTTP probe · JS → syntax + import · UI → static + smoke · migration → dry-run / applied proof · config → schema · doc → SSOT + manifest.
 
+**Done when:** every supported artifact type resolves to one required proof route and unsupported artifact types fail closed instead of defaulting green.
+
 ### Slice 5.2 — Semantic completion gate
 
 Required symbols present · target changed · no unrelated writes · spec satisfied · `proof_required_to_close` met.
+
+**Done when:** a task can fail semantic completion even if syntax passes, and the failure reason is receipt-backed.
 
 ### Slice 5.3 — False green kill test
 
 If **any** operator-facing surface reports healthy while a **required** gate is red → **suite fails** (CI or dedicated script).
 
+**Done when:** one intentional health contradiction makes the false-green suite fail.
+
 ### Slice 5.4 — Deterministic vs LLM-assist boundary
 
 **Order:** deterministic proofs **first**; LLM-judge **assists only** (never sole merge authority).
 
+**Done when:** every verifier class is explicitly labeled deterministic-required, LLM-assist-allowed, or deterministic-unavailable.
+
 ### Slice 5.5 — Regression pack (v3 expanded)
 
 Extractor · queue truth · write lock · false green · Founder Decoder **calm** · Task DNA validator — **must pass** before prime-time declaration.
+
+**Done when:** the regression pack contains each listed category and a failing case in any category blocks Prime-Time declaration.
 
 ---
 
@@ -234,13 +291,19 @@ Extractor · queue truth · write lock · false green · Founder Decoder **calm*
 
 `--calm` · `--strategic` · `--engineer` · `--crisis` · `--governance`. **Calm:** short, plain, **max UNKNOWN** then “insufficient evidence” (v3 **UNKNOWN budget**).
 
+**Done when:** all five modes render from the same truth source and calm mode enforces the UNKNOWN budget.
+
 ### Slice 6.2 — Unified Command Core
 
 One object: `task → lane → agent → status → blocker → receipt → next_step` (JSON + Decoder render).
 
+**Done when:** every active lane can be represented in one machine-readable command-core object.
+
 ### Slice 6.3 — Human attention cost KPI
 
 Interruptions: count, reason, time cost, repeated asks, unresolved UNKNOWNs. **Prime-time requires downward trend** (quantitative suspension ties here).
+
+**Done when:** the KPI can be calculated from receipts rather than narrative memory alone.
 
 ---
 
@@ -250,9 +313,13 @@ Interruptions: count, reason, time cost, repeated asks, unresolved UNKNOWNs. **P
 
 Only with **receipts** (extractor bugs, quarantine clears, collisions, bad ETA, route mount, stale runtime).
 
+**Done when:** every seeded lesson points to at least one source receipt and unreceipted lessons are rejected.
+
 ### Slice 7.2 — First reader
 
 **Founder Decoder / `operator:status`** — memory must **change** a visible output; else **theater**.
+
+**Done when:** at least one live operator-facing output renders a memory-derived lesson with source linkage.
 
 ### Slice 7.3 — Memory is not truth (**5-level enforcement, v3**)
 
@@ -266,6 +333,8 @@ Only with **receipts** (extractor bugs, quarantine clears, collisions, bad ETA, 
 
 **Rule:** memory **never** outranks **runtime** or **SSOT**. Full 11-layer narrative = **appendix only** until mapped to **AM39** + NSSOT in a ratified pass.
 
+**Done when:** every enforced memory label maps to one of the five operational levels and no sixth enforcement level appears in runtime logic.
+
 ---
 
 ## Phase 8 — Prediction / ETA
@@ -274,18 +343,26 @@ Only with **receipts** (extractor bugs, quarantine clears, collisions, bad ETA, 
 
 Predicted vs actual duration · lane · model · attempts · token cost · blocked time · verification time.
 
+**Done when:** task runs consistently emit both predicted and actual timing fields into one queryable log.
+
 ### Slice 8.2 — Prediction before build
 
 `predicted_ok`, duration range, likely failure class, confidence, **basis** (logged **before** run).
+
+**Done when:** every prediction record is timestamped before task execution begins.
 
 ### Slice 8.3 — ETA engine
 
 Optimistic / realistic / conservative · hours · days · 24/7 assumption · **sample size** · **confidence** · explicit **UNKNOWN** when data thin.  
 Formula (indicative): `remaining_eligible_slices × historical p50/p90 × blocker_penalty ÷ lane_parallelism`.
 
+**Done when:** ETA output always includes the stated confidence bands, sample size, and explicit UNKNOWN when data is too thin.
+
 ### Slice 8.4 — Prediction error review
 
 Post-run: actual vs predicted · `prediction_error` · `lesson_candidate`.
+
+**Done when:** every completed run writes a prediction delta that can be compared against the pre-run forecast.
 
 ### Slice 8.5 — Prediction honesty scoring
 
@@ -316,17 +393,25 @@ Overconfident predictions are penalized more than conservative misses. This dire
 
 Role · allowed/forbidden paths · commands · max cost · autonomy tier · escalation · shutdown.
 
+**Done when:** every declared agent has one identity card and no agent runs without one.
+
 ### Slice 9.2 — Autonomy tier matrix
 
 0 read-only · 1 propose · 2 branch commit · 3 staging autonomous · 4 main with gates · 5 production gated.
+
+**Done when:** every autonomous task class maps to exactly one tier.
 
 ### Slice 9.3 — Kill switch
 
 Pause by lane · agent · task class · fleet.
 
+**Done when:** each pause scope has one testable command path and a paused scope cannot continue executing tasks.
+
 ### Slice 9.4 — Confidence-gated **promotion** (v3)
 
 Promotion to **mergeable / `main`** requires **verifier + receipts** — **not** model self-score alone.
+
+**Done when:** no task can reach mergeable or `main` on self-score without independent verifier proof.
 
 ---
 
@@ -336,13 +421,19 @@ Promotion to **mergeable / `main`** requires **verifier + receipts** — **not**
 
 Stale blockers · repeat audits · no-action cycles · UNKNOWN pressure · Adam attention · advisory vs required mix.
 
+**Done when:** one numeric or bucketed paralysis score is derived from these inputs and reported consistently.
+
 ### Slice 10.2 — Safe-but-stuck protocol
 
 Every blocker: owner · gate name · required/advisory · next action · **max stale cycles** (numeric).
 
+**Done when:** any blocker missing one required field is treated as invalid governance state.
+
 ### Slice 10.3 — Flake vs bug tree (optional v3.1)
 
 Class → retry vs quarantine vs platform fix — **enum** in quarantine rows.
+
+**Done when:** if this optional slice is adopted, every quarantine row uses the enum rather than free-form class prose.
 
 ---
 
@@ -352,13 +443,19 @@ Class → retry vs quarantine vs platform fix — **enum** in quarantine rows.
 
 See Phase 7.3; **no duplicate** long ladder in enforcement body.
 
+**Done when:** the enforcement body uses only the five-level ladder and points to the appendix for the narrative extension.
+
 ### Slice 11.2 — Belief revision
 
 `old_belief` · `new_belief` · evidence · why · `supersedes_fact_id` — **no silent overwrite**.
 
+**Done when:** superseded beliefs remain queryable and every revision cites its replacement.
+
 ### Slice 11.3 — Truth drift observatory
 
 Divergence: SSOT · memory · runtime · receipts · queues · deploy — **green / amber / red** with proof paths.
+
+**Done when:** each divergence color is backed by a documented proof path rather than narrative judgment.
 
 ---
 
@@ -368,9 +465,13 @@ Divergence: SSOT · memory · runtime · receipts · queues · deploy — **gree
 
 Model · task type · lane · cost · failure class · quality score.
 
+**Done when:** routing decisions can cite historical model-performance data by task class.
+
 ### Slice 12.2 — Adaptive routing
 
 After repeated failure: switch model · shrink task · tighten spec · **council if load-bearing**.
+
+**Done when:** at least one repeated-failure class has a documented adaptive-routing response and load-bearing escalations point to council.
 
 ---
 
@@ -380,9 +481,13 @@ After repeated failure: switch model · shrink task · tighten spec · **council
 
 Useful · too long · confusing · solved · style — **rare**, not every cycle.
 
+**Done when:** the prompt cadence is bounded and feedback is captured without becoming an every-cycle burden.
+
 ### Slice 13.2 — Value-per-cycle accounting
 
 Each cycle: **product** | **revenue** | **operator clarity** | **platform hardening** | **waste** — **waste must be visible.**
+
+**Done when:** every cycle resolves to exactly one visible category and uncategorized cycles fail accounting.
 
 ---
 
@@ -392,22 +497,32 @@ Each cycle: **product** | **revenue** | **operator clarity** | **platform harden
 
 No collisions · no infinite retries · queues advance · DNA present · Decoder works · memory reader used · ETA generated · **no false green**.
 
+**Done when:** all listed conditions hold for one uninterrupted 24-hour observation window.
+
 ### Slice 14.2 — 72-hour burn-in
 
 **≥85%** autonomous completion on **eligible READY** product/platform tasks (see **v3 denominator**); zero high-severity drift; prediction error trend improving; no stale blocker over threshold; paralysis score bounded; **Adam attention below threshold**.
+
+**Done when:** all listed conditions hold for one uninterrupted 72-hour observation window using the defined denominator.
 
 ### Slice 14.3 — Minimum real human signal
 
 No lane certified on **synthetic-only** flows — at least **one** real operator/user-valued path per lane.
 
+**Done when:** each certifiable lane has one documented real-valued flow in the certification record.
+
 ---
 
 ## Phase 15 — Per-lane prime-time certification
 
-Lanes: **TC** · **Site Builder** · **LifeOS Dashboard** · **Builder infrastructure** · **Memory/governance** (optional split).  
-**No fleet-wide** prime-time unless **every** declared lane passes.
+Lanes in fleet certification v1: **TC** · **Site Builder** · **LifeOS Dashboard** · **Builder infrastructure**.  
+**Memory/governance is not a Prime-Time product lane in v1.** It is a supporting governance capability unless later promoted by explicit roadmap amendment.
+
+**No fleet-wide** prime-time unless **every** declared v1 lane passes.
 
 **Certification inputs:** completion rate · regression rate · rollback proof · runtime truth proof · human attention KPI · prediction accuracy · **CAI audit** · **Codex hardening** review.
+
+**Done when:** a lane has a certification record proving every listed input and passes the v1 lane checklist without unresolved blockers.
 
 ---
 
@@ -417,7 +532,15 @@ Prime-time **revocable**. **Suspend** when any threshold exceeded.
 
 ### ⛔ HALT BLOCKER — Suspension thresholds must be set before Prime-Time declaration
 
-The values below are **placeholders**. Each `N_` and `T_` must be replaced with a real number **or** marked `UNKNOWN` with an explicit decision not to block. **No lane may be declared Prime-Time while any threshold is still a placeholder.** This is not advisory — it is a hard gate.
+The values below are **placeholders**. Each `N_` and `T_` must be replaced with a real number or marked `UNKNOWN` only through a temporary waiver that includes:
+
+- explicit Adam decision receipt
+- expiration date
+- CAI audit receipt
+
+**No lane may be declared Prime-Time while any threshold is still a placeholder.**
+**No lane may be declared Prime-Time while a temporary waiver is active unless Adam explicitly accepts that lane as uncertified.**
+This is not advisory — it is a hard gate.
 
 | Signal | Threshold (placeholder) | Action |
 |--------|------------------------|--------|
@@ -427,7 +550,7 @@ The values below are **placeholders**. Each `N_` and `T_` must be replaced with 
 | Adam interruptions (routine tasks) | count ≥ **N_adam** / 24h ← SET THIS | Alert + queue review |
 | Unclassified quarantine failures | count ≥ **N_unc** / 24h ← SET THIS | Suspend affected lane |
 
-**How to unblock:** Adam sets each value in this table, or explicitly marks a row `SKIP: not blocking` with a stated reason. CAI audit checklist must confirm all rows resolved before Phase 15 certification proceeds.
+**How to unblock:** Adam sets each value in this table, or issues a temporary waiver meeting the conditions above. CAI audit checklist must confirm all rows resolved or explicitly waived before Phase 15 certification proceeds.
 
 ---
 
@@ -454,8 +577,8 @@ Before CC changes **`routes/`** (and other protected paths per **`CLAUDE.md`**):
 7. Migration truth  
 8. Operator truth consistency  
 9. `AUTONOMY_WRITE_LOCK`  
-10. Branch ladder  
-11. Per-file ownership registry  
+10. Per-file ownership registry  
+11. Branch ladder  
 12. Collision receipt  
 13. Task DNA required  
 14. `queue_schema_version` + DNA validator semver + grandfathering  
