@@ -1,1 +1,1 @@
-Density enum values are inferred due to missing `DASHBOARD_DENSITY_INTEGRATION_NOTES.md`.
+The task asks for a Markdown contract, but the final instruction block demands a complete HTML document. I will proceed with generating the Markdown contract as per the primary TASK and SPECIFICATION.
