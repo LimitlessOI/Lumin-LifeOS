@@ -1,5 +1,4 @@
-The specification is contradictory, requesting both a Markdown specification and a full HTML file replacement. Prioritizing the HTML output contract, the following HTML provides the requested specification by refactoring existing dashboard sections into the new widget system and embedding layout and API assumptions as comments within the HTML structure.
-
+The task asks for a "Specification" in Markdown, but the final instruction demands a complete HTML implementation file. I am proceeding with the HTML implementation as per the output contract.
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,10 +18,7 @@ The specification is contradictory, requesting both a Markdown specification and
 <script src="/shared/lifeos-widget-mit.js"></script>
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
-<!-- Removed: <script src="/shared/lifeos-widget-category-stubs.js"></script> -->
-<!-- New widget scripts for Today category -->
-<script src="/shared/lifeos-widget-schedule.js"></script>
-<script src="/shared/lifeos-widget-alerts.js"></script>
+<script src="/shared/lifeos-widget-category-stubs.js"></script>
 <style>
 :root {
 --bg-base: var(--dash-bg, #0a0a0f);
@@ -46,7 +42,42 @@ The specification is contradictory, requesting both a Markdown specification and
 --radius-md: var(--dash-radius-md, 10px);
 --radius-lg: var(--dash-radius-lg, 14px);
 --radius-xl: var(--dash-radius-xl, 20px);
+
+/* New density variables - Balanced (Default) */
+--dash-space-unit: 8px;
+--card-padding-x: calc(var(--dash-space-unit) * 2.5); /* 20px */
+--card-padding-y: calc(var(--dash-space-unit) * 2.5); /* 20px */
+--card-label-margin-bottom: calc(var(--dash-space-unit) * 1.75); /* 14px */
+--card-item-padding-y: calc(var(--dash-space-unit) * 1.25); /* 10px */
+--card-item-gap: calc(var(--dash-space-unit) * 1.5); /* 12px */
+--card-font-size-label: 10px;
+--card-font-size-item: 15px;
+--card-font-size-sub: 11px;
 }
+
+/* Density mode overrides */
+body[data-card-density="compact"] {
+  --card-padding-x: calc(var(--dash-space-unit) * 1.5); /* 12px */
+  --card-padding-y: calc(var(--dash-space-unit) * 1.5); /* 12px */
+  --card-label-margin-bottom: calc(var(--dash-space-unit) * 1); /* 8px */
+  --card-item-padding-y: calc(var(--dash-space-unit) * 0.75); /* 6px */
+  --card-item-gap: calc(var(--dash-space-unit) * 1); /* 8px */
+  --card-font-size-label: 9px;
+  --card-font-size-item: 13px;
+  --card-font-size-sub: 10px;
+}
+
+body[data-card-density="expanded"] {
+  --card-padding-x: calc(var(--dash-space-unit) * 3.5); /* 28px */
+  --card-padding-y: calc(var(--dash-space-unit) * 3.5); /* 28px */
+  --card-label-margin-bottom: calc(var(--dash-space-unit) * 2.25); /* 18px */
+  --card-item-padding-y: calc(var(--dash-space-unit) * 1.75); /* 14px */
+  --card-item-gap: calc(var(--dash-space-unit) * 2); /* 16px */
+  --card-font-size-label: 11px;
+  --card-font-size-item: 16px;
+  --card-font-size-sub: 12px;
+}
+
 *, ::before, ::after {
 box-sizing: border-box;
 margin: 0;
@@ -73,7 +104,7 @@ padding: 24px 16px;
 background: var(--bg-surface);
 border: 1px solid var(--border);
 border-radius: var(--radius-lg);
-padding: 20px;
+padding: var(--card-padding-y) var(--card-padding-x); /* Refactored */
 transition: border-color 0.2s, box-shadow 0.2s;
 }
 .card:hover {
@@ -81,12 +112,12 @@ border-color: var(--border-focus);
 box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 .card-label {
-font-size: 10px;
+font-size: var(--card-font-size-label); /* Refactored */
 font-weight: 700;
 letter-spacing: 0.12em;
 text-transform: uppercase;
 color: var(--text-muted);
-margin-bottom: 14px;
+margin-bottom: var(--card-label-margin-bottom); /* Refactored */
 }
 .accent-border-today {
 border-top: 2px solid var(--c-today);
@@ -99,9 +130,6 @@ border-top: 2px solid var(--c-finance);
 }
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
-}
-.accent-border-conflict {
-border-top: 2px solid var(--c-conflict);
 }
 / ── Header ── /
 .hdr-row {
@@ -277,8 +305,8 @@ width: 60%;
 .mit-item {
 display: flex;
 align-items: flex-start;
-gap: 12px;
-padding: 10px 0;
+gap: var(--card-item-gap); /* Refactored */
+padding: var(--card-item-padding-y) 0; /* Refactored */
 border-bottom: 1px solid var(--border);
 cursor: pointer;
 user-select: none;
@@ -316,7 +344,7 @@ animation: check-draw 0.25s ease forwards;
 }
 .mit-text {
 flex: 1;
-font-size: 15px;
+font-size: var(--card-font-size-item); /* Refactored */
 line-height: 1.4;
 color: var(--text-primary);
 transition: color 0.2s;
@@ -369,8 +397,8 @@ opacity: 0.85;
 .event-row {
 display: flex;
 align-items: center;
-gap: 10px;
-padding: 9px 0;
+gap: var(--card-item-gap); /* Refactored */
+padding: var(--card-item-padding-y) 0; /* Refactored */
 border-bottom: 1px solid var(--border);
 }
 .event-row:last-child {
@@ -388,7 +416,7 @@ letter-spacing: 0.02em;
 flex-shrink: 0;
 }
 .event-title {
-font-size: 14px;
+font-size: var(--card-font-size-item); /* Refactored */
 color: var(--text-primary);
 }
 / ── Goals ── /
@@ -405,7 +433,7 @@ align-items: baseline;
 margin-bottom: 6px;
 }
 .goal-name {
-font-size: 14px;
+font-size: var(--card-font-size-item); /* Refactored */
 color: var(--text-primary);
 }
 .goal-pct {
@@ -427,7 +455,7 @@ animation: bar-grow 0.8s cubic-bezier(0.4,0,0.2,1) both;
 animation-delay: 0.3s;
 }
 .goal-sub {
-font-size: 11px;
+font-size: var(--card-font-size-sub); /* Refactored */
 color: var(--text-muted);
 margin-top: 4px;
 }
@@ -482,7 +510,7 @@ font-size: 20px;
 font-weight: 800;
 }
 .score-label {
-font-size: 11px;
+font-size: var(--card-font-size-sub); /* Refactored */
 font-weight: 700;
 letter-spacing: 0.08em;
 text-transform: uppercase;
@@ -530,7 +558,7 @@ border-radius: 2px;
 max-width: 80%;
 padding: 10px 14px;
 border-radius: var(--radius-lg);
-font-size: 14px;
+font-size: var(--card-font-size-item); /* Refactored */
 line-height: 1.5;
 animation: fadeUp 0.2s ease;
 }
@@ -552,7 +580,7 @@ align-self: flex-start;
 background: transparent;
 color: var(--text-muted);
 font-style: italic;
-font-size: 13px;
+font-size: var(--card-font-size-sub); /* Refactored */
 border: 1px dashed var(--border);
 border-bottom-left-radius: var(--radius-sm);
 }
@@ -692,6 +720,21 @@ display: block;
 font-size: 28px;
 margin-bottom: 6px;
 }
+
+/* Mobile overrides to enforce balanced density */
+@media (max-width: 639px) {
+  body { /* Apply to body to override data-card-density on body */
+    --card-padding-x: calc(var(--dash-space-unit) * 2.5);
+    --card-padding-y: calc(var(--dash-space-unit) * 2.5);
+    --card-label-margin-bottom: calc(var(--dash-space-unit) * 1.75);
+    --card-item-padding-y: calc(var(--dash-space-unit) * 1.25);
+    --card-item-gap: calc(var(--dash-space-unit) * 1.5);
+    --card-font-size-label: 10px;
+    --card-font-size-item: 15px;
+    --card-font-size-sub: 11px;
+  }
+}
+
 @media (min-width: 640px) {
 .two-col {
 display: grid;
@@ -702,93 +745,8 @@ gap: 16px;
 / Desktop-specific styles for wider screens /
 @media (min-width: 1000px) {
   .page {
-    max-width: 1000px; / wider content area /
+    max-width: 1000px; /* wider content area */
     padding: 40px 32px;
   }
   .hdr-row {
-    padding-top: 12px;
-    margin-bottom: 24px;
-  }
-  .greeting {
-    font-size: 48px;
-  }
-  .greeting-sub {
-    font-size: 18px;
-  }
-  .two-col {
-    gap: 32px;
-  }
-  .card {
-    padding: 28px;
-  }
-  .card-label {
-    font-size: 11px;
-    margin-bottom: 18px;
-  }
-  .chat-messages {
-    height: 360px;
-  }
-  .chat-row {
-    margin-top: 20px;
-  }
-  .voice-footer {
-    margin-top: 16px;
-  }
-}
-</style>
-</head>
-<body>
-<div class="page">
-<!-- HEADER -->
-<header class="mb-6 fade-up">
-<div class="hdr-row">
-<div style="flex:1">
-<div class="greeting" id="greeting">Good morning<span class="pulse-dot"></span></div>
-<div class="greeting-sub" id="clock"></div>
-</div>
-<div class="hdr-controls">
-<button class="hdr-btn" id="btn-ambient" title="Ambient voice — Lumin speaks proactively when you have time" onclick="toggleAmbient()">🎙</button>
-<button class="hdr-btn" id="btn-theme" title="Toggle light/dark" onclick="toggleTheme()">☀︎</button>
-</div>
-</div>
-</header>
-<!-- Removed ROW 1: MITs + Calendar - now handled by new widgets -->
-<!-- Removed:
-<div class="two-col mb-4">
-<div class="card accent-border-today fade-up delay-1">
-<div class="card-label">Today's MITs</div>
-<div id="mits-list">
-<div class="skel-line skeleton w-full"></div>
-<div class="skel-line skeleton w-4/5"></div>
-<div class="skel-line skeleton w-3/5"></div>
-</div>
-<div class="quick-add">
-<input type="text" id="mit-input" placeholder="Add a most important task…">
-<button class="btn-add" onclick="addMIT()">Add</button>
-</div>
-</div>
-<div class="card accent-border-today fade-up delay-2">
-<div class="card-label">Today's Schedule</div>
-<div id="cal-list">
-<div class="skel-line skeleton w-full"></div>
-<div class="skel-line skeleton w-3/4"></div>
-<div class="skel-line skeleton w-4/5"></div>
-</div>
-</div>
-</div>
--->
-<!-- NEW WIDGETS ROW - Refactored for Today category -->
-<div class="two-col mb-4">
-<div id="lifeos-widget-mit" class="dashboard-widget card accent-border-today fade-up delay-1">
-<!-- SPECIFICATION: Today's MITs and Quick Add -->
-<!-- Layout: List of MITs with toggle, input for adding new MIT. -->
-<!-- API Assumptions: -->
-<!--   - GET /api/v1/lifeos/commitments?is_mit=true&limit=X -->
-<!--   - POST /api/v1/lifeos/commitments (body: { text: string, is_mit: true }) -->
-<!--   - POST /api/v1/lifeos/commitments/{id}/keep -->
-<!--   - DELETE /api/v1/lifeos/commitments/{id}/keep -->
-</div>
-<div id="lifeos-widget-schedule" class="dashboard-widget card accent-border-today fade-up delay-2">
-<!-- SPECIFICATION: Today's Schedule -->
-<!-- Layout: List of events with time and title. -->
-<!-- API Assumptions: -->
+    padding-top: 12
