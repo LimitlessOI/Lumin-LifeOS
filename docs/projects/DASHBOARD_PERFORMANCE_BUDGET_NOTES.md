@@ -18,31 +18,23 @@
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
 <script src="/shared/lifeos-widget-category-stubs.js"></script>
-<!-- PERFORMANCE BUDGET NOTES -->
 <!--
-  Load Targets:
-  - First Contentful Paint (FCP): < 1.0s
-  - Largest Contentful Paint (LCP): < 2.5s
-  - Total Blocking Time (TBT): < 100ms
-  - Cumulative Layout Shift (CLS): < 0.1
-  - Intent: Provide a snappy, responsive feel for core dashboard elements.
-
-  Waterfall Risks:
-  - `lifeos-theme.js`: Render-blocking by design to prevent flash of unstyled content (FOUC). Acceptable.
-  - `https://cdn.tailwindcss.com`: External, render-blocking script. Consider self-hosting or extracting critical CSS for improved LCP.
-  - Multiple widget scripts (`lifeos-widget-mit.js`, etc.): Loaded synchronously in <head>. These block parsing and rendering.
-    Consider adding `defer` or `async` attributes, or dynamically loading them after initial content render.
-
-  Defer Non-Critical Widgets:
-  - All `lifeos-widget-*.js` scripts are currently blocking. They should be refactored to load with `defer` or dynamically
-    after the primary dashboard content (greeting, MITs, calendar) is visible.
-  - The `NEW WIDGETS ROW` section could be progressively enhanced.
-
-  Largest Contentful Paint (LCP) Hints:
-  - The "Good morning" greeting and the first few MIT/Calendar items are likely LCP candidates.
-  - Ensure their rendering is prioritized. Inline critical CSS (already done for core styles).
-  - Optimize image loading if any large images become LCP candidates (none currently visible).
-  - Minimize blocking resources before LCP elements. The Tailwind CDN is a primary concern here.
+PERFORMANCE BUDGET NOTES:
+- Overlay Load Target: Aim for <1.5s Time To Interactive (TTI) on mobile, <0.8s on desktop.
+- Waterfall Risks:
+    - `cdn.tailwindcss.com`: External blocking script. Consider self-hosting or critical CSS extraction for faster initial render.
+    - Multiple synchronous script tags (`lifeos-theme.js`, `lifeos-bootstrap.js`, widget scripts): These block parsing and rendering.
+      Evaluate `defer` or `async` attributes for non-critical scripts, especially widget scripts.
+- Defer Non-Critical Widgets:
+    - Widgets (`lifeos-widget-mit.js`, `lifeos-widget-score.js`, etc.) are currently loaded synchronously in the head.
+    - For optimal LCP and TTI, these should be deferred (e.g., `defer` attribute, dynamic import after DOMContentLoaded)
+      if their content is not immediately visible or critical for the initial viewport.
+    - Consider lazy-loading widget content or even the widget scripts themselves.
+- Largest Contentful Paint (LCP) Hints:
+    - The primary LCP element is likely the "Good morning" greeting or the main content cards.
+    - Ensure critical CSS for these elements is inlined or loaded very early.
+    - Avoid render-blocking resources that delay the display of these key elements.
+    - Prioritize API calls for the top-most visible widgets (MITs, Calendar) to populate content quickly.
 -->
 <style>
 :root {
@@ -886,7 +878,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-asyncFn loadMITs() {
+async function loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -927,7 +919,7 @@ console.error('Error loading MITs:', e);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load MITs</div>';
 }
 }
-asyncFn toggleMIT(el) {
+async function toggleMIT(el) {
 const id = el.dataset.id;
 const isDone = el.querySelector('.mit-check').classList.contains('done');
 const method = isDone ? 'DELETE' : 'POST';
@@ -944,7 +936,7 @@ console.error('Failed to toggle MIT:', await r.text());
 console.error('Error toggling MIT:', e);
 }
 }
-asyncFn addMIT() {
+async function addMIT() {
 const input = $('mit-input');
 const text = input.value.trim();
 if (!text) return;
@@ -964,7 +956,7 @@ console.error('Error adding MIT:', e);
 }
 }
 // ── Calendar ──
-asyncFn loadCalendar() {
+async function loadCalendar() {
 try {
 const r = await API('/api/v1/lifeos/calendar/today');
 const d = await r.json();
@@ -984,7 +976,7 @@ $('cal-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load ca
 }
 }
 // ── Goals ──
-asyncFn loadGoals() {
+async function loadGoals() {
 try {
 const r = await API('/api/v1/lifeos/goals?limit=3');
 const d = await r.json();
@@ -1012,7 +1004,7 @@ $('goals-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load 
 // ── Scores ──
 function makeRing(value, max, color) {
 const radius = 33;
-const circumference = 2  Math.PI  radius;
+const circumference = 2 * Math.PI * radius;
 const offset = circumference - (value / max) * circumference;
 return `
 <svg width="72" height="72" viewBox="0 0 72 72">
@@ -1022,7 +1014,7 @@ stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
 </svg>
 `;
 }
-asyncFn loadScores() {
+async function loadScores() {
 try {
 const r = await API('/api/v1/lifeos/scores');
 const d = await r.json();
@@ -1062,7 +1054,7 @@ chatMessages.appendChild(msgEl);
 chatMessages.scrollTop = chatMessages.scrollHeight;
 chatHistory.push({ role, content });
 }
-asyncFn sendMessage() {
+async function sendMessage() {
 const text = chatInput.value.trim();
 if (!text) return;
 addMessage('user', text);
