@@ -1,4 +1,4 @@
-The specification is incomplete due to the missing `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file, which prevents making API assumptions or identifying specific Victory Vault widgets.
+SPECIFICATION is incomplete due to missing `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`, preventing direct reference to existing Victory Vault endpoints.
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -770,6 +770,28 @@ gap: 16px;
 </div>
 <!-- NEW WIDGETS ROW -->
 <div class="two-col mb-4">
+<!--
+  Victory Vault widgets/cards would plug into this 'NEW WIDGETS ROW' area.
+  This row is suitable for general widgets that might span "Today" or "Growth" areas,
+  or for new categories of information.
+
+  Placement within this row can be determined by the widget's primary focus:
+  - For "Today" oriented Victory Vault items (e.g., daily wins, current challenges),
+    they could be placed alongside or near existing 'accent-border-today' widgets.
+  - For "Growth" oriented Victory Vault items (e.g., long-term achievements, financial milestones),
+    they could use 'accent-border-finance' or 'accent-border-health' and be placed accordingly.
+
+  API Assumptions for Victory Vault:
+  Given the absence of the 'LIFEOS_DASHBOARD_BUILDER_BRIEF.md' file, specific existing Victory Vault
+  endpoints cannot be referenced. However, based on existing LifeOS API patterns (e.g.,
+  /api/v1/lifeos/commitments, /api/v1/lifeos/goals, /api/v1/lifeos/scores), it is assumed that
+  Victory Vault widgets would fetch data from endpoints following a similar structure, such as:
+  - GET /api/v1/lifeos/victory-vault/achievements
+  - GET /api/v1/lifeos/victory-vault/milestones
+  - POST /api/v1/lifeos/victory-vault/record-win
+  These are assumed patterns for new endpoints, consistent with the platform's API design,
+  and do not invent routes that are claimed to already exist in a missing brief.
+-->
 <div id="lifeos-widget-mit" class="dashboard-widget card accent-border-today fade-up delay-3"></div>
 <div id="lifeos-widget-score" class="dashboard-widget card accent-border-health fade-up delay-4"></div>
 <div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5"></div>
