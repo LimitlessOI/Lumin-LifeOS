@@ -1,85 +1,75 @@
-# Dashboard Notification Patterns Specification
+# LifeOS Dashboard Notification Specification
 
-This document outlines the desired patterns for dashboard-level notifications, toasts, and snackbars within the LifeOS platform. The goal is to provide a consistent, accessible, and non-intrusive mechanism for communicating important information to the user.
+This document outlines the specification for dashboard-level notification, toast, and snackbar patterns within the LifeOS platform. The goal is to establish a consistent, accessible, and user-friendly system for communicating transient and persistent information to the user without disrupting their workflow.
 
 ## 1. Surfaces
 
-Notifications will appear as ephemeral or persistent overlays on the dashboard.
+Notifications will primarily appear in two forms:
 
-### 1.1. Placement
-Notifications will primarily appear in a fixed position, typically the top-right or bottom-center of the viewport, ensuring they do not obstruct primary content or interactive elements.
+### 1.1 Toast/Snackbar Notifications
+-   **Placement**: Fixed position, typically bottom-right of the viewport on desktop, or bottom-center on mobile, ensuring it does not obscure critical dashboard content or the AI rail.
+-   **Visibility**: Ephemeral, non-blocking. Designed for transient feedback, confirmations, or low-priority alerts.
+-   **Styling**: Consistent with LifeOS design tokens for background, text, and border. Distinct visual cues for severity levels (info, success, warning, error).
 
-### 1.2. Types
-*   **Toast:** A small, non-blocking, ephemeral message that appears briefly and then fades away. Ideal for confirmations or minor informational updates.
-*   **Snackbar:** A slightly larger, ephemeral message that may contain a single action button. Appears briefly, then fades. Suitable for actions that can be undone or require a quick follow-up.
-*   **Persistent Notification:** A message that remains visible until explicitly dismissed by the user. Reserved for critical information, errors, or tasks requiring immediate attention.
-
-### 1.3. Severity
-Notifications will visually differentiate based on severity:
-*   **Info:** General information (e.g., "Settings saved").
-*   **Success:** Positive feedback (e.g., "Task completed").
-*   **Warning:** Non-critical issues or potential problems (e.g., "Low battery").
-*   **Error:** Critical issues or failures (e.g., "Failed to sync data").
-*   **Accent:** Domain-specific accent color for specific contexts (e.g., `var(--c-today)` for MITs).
+### 1.2 Persistent Banner Notifications
+-   **Placement**: Fixed position at the top of the main content area, below the header, spanning the full width of the `page` container.
+-   **Visibility**: Persistent until explicitly dismissed by the user or resolved by the system. Designed for critical alerts, system status, or important announcements requiring user attention.
+-   **Styling**: Distinct from toast notifications, potentially with a more prominent background and icon.
 
 ## 2. Stacking
 
-When multiple notifications are active, they must stack gracefully without overlapping.
+### 2.1 Toast/Snackbar Stacking
+-   **Behavior**: Multiple toast notifications will stack vertically. New notifications appear at the bottom of the stack, pushing older ones upwards.
+-   **Limit**: A maximum of 3 toast notifications will be visible at any given time. If a new notification arrives when the stack is full, the oldest visible notification will be automatically dismissed to make room.
+-   **Order**: Most recent notification is always visible at the bottom of the stack.
 
-### 2.1. Order
-Newest notifications will appear at the top of the stack (if positioned at the top of the screen) or bottom of the stack (if positioned at the bottom of the screen).
-
-### 2.2. Limit
-A maximum number of visible notifications will be enforced (e.g., 3-5). If more notifications are pending, a mechanism (e.g., a "show all" button or a counter) will indicate their presence without cluttering the UI.
-
-### 2.3. Animation
-Notifications will animate into and out of view smoothly (e.g., fade and slide) to avoid jarring transitions.
+### 2.2 Persistent Banner Stacking
+-   **Behavior**: Only one persistent banner notification will be displayed at a time. If multiple critical issues arise, the system will prioritize the most urgent or combine them into a single, actionable banner.
+-   **Priority**: A new critical banner will replace an existing one if it is deemed higher priority.
 
 ## 3. Persistence
 
-The duration and visibility of notifications will vary based on their type and importance.
+### 3.1 Toast/Snackbar Persistence
+-   **Auto-Dismissal**:
+    -   `info`, `success`: Automatically dismiss after 5 seconds.
+    -   `warning`, `error`: Automatically dismiss after 8 seconds.
+-   **User Dismissal**: All toast notifications will include a small, accessible close button (e.g., an "X" icon) allowing immediate dismissal.
+-   **Session**: Toast notifications are transient and will not persist across page reloads or browser sessions.
 
-### 3.1. Auto-Dismissal
-Toasts and Snackbars will automatically dismiss after a configurable timeout (e.g., 3-7 seconds). The timeout may be paused on hover or focus.
-
-### 3.2. User Dismissal
-All non-critical notifications should be dismissible by the user via a clear close button (e.g., an "X" icon). Persistent notifications *must* be explicitly dismissed.
-
-### 3.3. Session-Based
-Dismissed ephemeral notifications will not reappear within the same user session.
-
-### 3.4. Cross-Session
-Critical system-level notifications (e.g., API key invalid, major service outage) may persist across sessions until the underlying issue is resolved or explicitly acknowledged by the user.
+### 3.2 Persistent Banner Persistence
+-   **User Dismissal**: Banners must be explicitly dismissed by the user via a prominent close button.
+-   **System Resolution**: Banners may also be automatically dismissed by the system once the underlying condition they represent has been resolved.
+-   **Session**: Persistent banners will persist across page reloads and browser sessions until dismissed or resolved.
 
 ## 4. Accessibility
 
-Notifications must be accessible to all users, including those using assistive technologies.
+-   **ARIA Live Regions**: Toast and banner notifications will be implemented using ARIA live regions (`aria-live="polite"` for toasts, `aria-live="assertive"` for critical banners) to ensure screen readers announce their content without interrupting the user's current task.
+-   **Keyboard Navigation**:
+    -   Toast notifications: Focusable close buttons, dismissible via `Escape` key when focused.
+    -   Banner notifications: Focusable close buttons, dismissible via `Escape` key when focused.
+-   **Color Contrast**: All notification elements (text, background, icons) will meet WCAG 2.1 AA contrast standards.
+-   **Reduced Motion**: Animations (e.g., fade-in/fade-out, stacking movement) will respect the `prefers-reduced-motion` media query.
 
-### 4.1. ARIA Roles
-Appropriate ARIA live regions (`aria-live="polite"` for non-critical, `aria-live="assertive"` for critical) and `role="status"` or `role="alert"` will be used to announce notifications to screen readers.
+## 5. Do Not Disturb (DND) Hook
 
-### 4.2. Keyboard Navigation
-Users must be able to dismiss actionable or persistent notifications using keyboard controls (e.g., Tab to focus a close button, Enter/Space to activate). The Escape key should dismiss the most recently focused or active notification if applicable.
+-   **Integration**: A global `doNotDisturb` state will be maintained by the Platform Core.
+-   **Behavior**:
+    -   When DND is active, `info` and `success` toast notifications will be suppressed entirely.
+    -   `warning` and `error` toast notifications will be displayed but without sound alerts, and their auto-dismissal time may be extended or require manual dismissal.
+    -   Persistent banner notifications will always be displayed, regardless of DND status, due to their critical nature.
+-   **User Control**: The DND state will be toggleable via a dashboard setting (e.g., a button in the header controls, similar to the theme toggle).
 
-### 4.3. Color Contrast
-All text and interactive elements within notifications will meet WCAG 2.1 AA contrast standards.
+## 6. Shell Ownership vs. Domain Pushes
 
-### 4.4. Reduced Motion
-The system will respect user preferences for reduced motion (e.g., `prefers-reduced-motion` media query) by providing simpler, less animated transitions.
+-   **Shell Ownership**: The LifeOS Platform Core (shell) will own the notification rendering and management system. This ensures consistency, centralized control over stacking, persistence, and DND integration.
+-   **Domain Interface**: Individual domains will not directly render notifications. Instead, they will interact with a standardized `NotificationService` API exposed by the Platform Core.
+-   **API Contract**: The `NotificationService` will provide methods such as `showToast(severity, message, options)` and `showBanner(severity, message, options)` where `options` can include `dismissible`, `duration`, `actionButton`, etc. This decouples notification content from presentation logic.
+-   **Rationale**: This approach prevents UI fragmentation, ensures adherence to accessibility standards, and simplifies the implementation of cross-cutting concerns like DND.
 
-### 4.5. Focus Management
-Notifications should generally not steal focus unless they are critical and require immediate user interaction.
+## 7. Deferred Implementation
 
-## 5. Deferred Implementation
-
-This specification serves as a blueprint. The actual implementation will involve:
-*   A dedicated front-end component (e.g., a custom element or framework component) for rendering individual notifications.
-*   A centralized notification manager module within the dashboard shell (`public/overlay/lifeos-dashboard.html` context) responsible for queuing, stacking, and displaying notifications.
-*   A clear API for other dashboard widgets and backend services to "push" notification data to the manager.
-*   Integration with a "Do Not Disturb" (DND) or "Focus Mode" setting.
-
-### 5.1. Shell Ownership vs. Domain Pushes
-The dashboard shell (`public/overlay/lifeos-dashboard.html`) will own the UI/UX and rendering logic for all notifications. Individual domains (e.g., MITs, Calendar, Chat, backend services) will push notification payloads (message, type, actions, etc.) to the shell's notification manager. The shell will then handle the display according to these patterns.
-
-### 5.2. Do Not Disturb Hook
-A global user setting will allow suppression of non-critical notifications. Critical system alerts (e.g., API errors) will bypass this setting. When DND is active, a subtle visual indicator may be present on the dashboard.
+The following features are acknowledged but will be deferred to future iterations:
+-   **Actionable Notifications**: Notifications containing interactive elements such as buttons for immediate actions (e.g., "Undo", "View Details").
+-   **Notification Center**: A dedicated UI component or page to view a history of all notifications, including those that have been dismissed or auto-removed.
+-   **Granular Domain Settings**: User-configurable settings to control notification preferences on a per-domain or per-type basis.
+-   **Sound Alerts**: Audio cues for notifications, which will be integrated with DND settings.
