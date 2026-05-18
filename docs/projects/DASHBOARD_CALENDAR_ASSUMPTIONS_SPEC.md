@@ -1,54 +1,77 @@
-# LifeOS Dashboard Calendar Tile Brief
+# Calendar Tile Specification
 
-This document specifies the expected data shape and behavior for the calendar tile displayed on the LifeOS Dashboard (`public/overlay/lifeos-dashboard.html`). It outlines the current implementation's expectations and provides guidance for future enhancements, particularly regarding timezone handling, all-day events, and ICS integration.
+This document outlines the expected data shape and current handling for calendar events displayed in the LifeOS Dashboard's "Today's Schedule" tile, based on the `public/overlay/lifeos-dashboard.html` implementation. It also includes considerations for future enhancements like timezone management and ICS integration.
 
-## API Endpoint
+## 1. Data Shape
 
-The calendar tile currently fetches its data from the following API endpoint:
-
-`GET /api/v1/lifeos/calendar/today`
-
-## Calendar Event Data Shape (API Response)
-
-The `/api/v1/lifeos/calendar/today` endpoint is expected to return a JSON array of event objects. Each object should conform to the following structure to support current rendering and future enhancements:
+The `/api/v1/lifeos/calendar/today` endpoint is expected to return a JSON object with an `events` array. Each object within this array represents a calendar event and must conform to the following minimal structure:
 
 ```json
-[
-  {
-    "id": "string", // Unique identifier for the event (e.g., UUID, external system ID)
-    "title": "string", // The primary title or name of the event
-    "description": "string | null", // Optional: detailed description of the event
-    "start_time_iso": "string", // ISO 8601 formatted datetime string (e.g., "2024-07-20T09:00:00Z" or "2024-07-20T14:00:00-04:00")
-    "end_time_iso": "string | null", // Optional: ISO 8601 formatted end datetime string. If null, event is assumed to be instantaneous or duration derived from start_time_iso.
-    "is_all_day": "boolean", // True if the event spans the entire day(s) without specific start/end times within the day.
-    "timezone": "string", // IANA timezone name (e.g., "America/New_York", "UTC") for the event's start/end times.
-    "location": "string | null", // Optional: physical address or virtual meeting link
-    "url": "string | null", // Optional: URL for more information about the event
-    "ics_uid": "string | null", // Optional: Unique identifier from an ICS file, for future linking and synchronization.
-    "display_time": "string" // Formatted time string for direct display in the UI (e.g., "9:00 AM", "10:30 AM - 11:00 AM", "All Day"). This is what the current frontend consumes.
-  }
-]
+{
+  "events": [
+    {
+      "time": "string",
+      "title": "string"
+    },
+    // ... more events
+  ]
+}
 ```
 
-## Timezone Handling
+**Field Descriptions:**
 
-*   **Backend Responsibility:** The backend (`/api/v1/lifeos/calendar/today`) is responsible for:
-    *   Storing event times with explicit timezone information (preferably UTC or the event's original IANA timezone).
-    *   Converting event times to the user's preferred timezone (or a system default) when querying for "today's" events.
-    *   Generating the `display_time` string, ensuring it reflects the event's time in the context of the user's timezone.
-*   **Frontend Behavior:** The current dashboard frontend consumes the `display_time` string directly, relying on the backend for correct timezone formatting. The `start_time_iso`, `end_time_iso`, and `timezone` fields are provided for future client-side rendering logic that might require more granular timezone control (e.g., displaying events in different timezones, or allowing user-selected timezone overrides).
+*   `time`: A formatted string representing the event's start time or status (e.g., "9:00 AM", "1:30 PM", "All Day"). The frontend displays this string directly.
+*   `title`: A string representing the event's name or description.
 
-## All-Day Event Handling
+**Example Payload:**
 
-*   **Backend Responsibility:** The backend determines if an event is an all-day event and sets the `is_all_day` boolean field accordingly. For all-day events, `start_time_iso` typically represents the start of the day (e.g., `YYYY-MM-DDT00:00:00` in the event's timezone), and `end_time_iso` (if present) would represent the end of the last day.
-*   **Frontend Behavior:** The current dashboard frontend relies on the `display_time` field to indicate all-day events (e.g., `display_time: "All Day"`). The `is_all_day` boolean provides a programmatic flag for future UI enhancements to render all-day events with distinct visual treatments (e.g., a dedicated "All Day" section).
+```json
+{
+  "events": [
+    {
+      "time": "9:00 AM",
+      "title": "Daily Standup"
+    },
+    {
+      "time": "1:00 PM",
+      "title": "Project Sync with Team Alpha"
+    },
+    {
+      "time": "All Day",
+      "title": "Company Holiday"
+    }
+  ]
+}
+```
 
-## ICS Future Hook
+## 2. Timezone Handling
 
-The `ics_uid` field is reserved for future integration with iCalendar (`.ics`) files and external calendar systems. This unique identifier can be used to:
+The current dashboard implementation (`public/overlay/lifeos-dashboard.html`) displays the `time` string for events exactly as it is received from the `/api/v1/lifeos/calendar/today` API. There is no client-side timezone conversion or explicit timezone information processing.
 
-*   **External Linking:** Provide a stable reference to the original event in an external calendar service (e.g., Google Calendar, Outlook Calendar).
-*   **Synchronization:** Facilitate bi-directional synchronization or one-way imports/exports of events in `.ics` format.
-*   **Detailed View:** Allow the dashboard to fetch or link to the full `.ics` data for an event, enabling more detailed views or actions.
+**Current Assumption:** The backend API is responsible for providing the `time` string already formatted and localized to the user's preferred timezone, or a consistent timezone that the user understands.
 
-This field is currently for data storage and API expansion; the dashboard UI does not yet expose functionality directly related to `.ics` files.
+**Future Consideration:** For more robust timezone handling, the API could provide event timestamps in ISO 8601 format (e.g., `2024-07-20T09:00:00Z` or `2024-07-20T09:00:00-05:00`), allowing the client to perform precise timezone conversions based on the user's local settings.
+
+## 3. All-Day Event Handling
+
+The dashboard's UI does not currently have a distinct visual treatment for all-day events. All events are rendered using the same `event-row` structure.
+
+**Current Assumption:** All-day events are represented by a descriptive string in the `time` field, such as "All Day" or an empty string, which is then displayed directly in the `event-time` element.
+
+**Future Consideration:** To provide a clearer distinction, the event data shape could be extended with an `is_all_day: boolean` property. This would enable the frontend to apply specific styling (e.g., no time displayed, different background) or group all-day events separately.
+
+## 4. ICS Future Hook
+
+Integration with external calendar systems via ICS (iCalendar) files is a backend concern. The dashboard frontend consumes a normalized event data shape, abstracting away the source of the events.
+
+**Proposed Backend Integration Points:**
+
+*   **New API Endpoint:** A `POST /api/v1/lifeos/calendar/subscribe-ics` endpoint could be introduced to allow users to provide an ICS URL.
+*   **Backend Service:** A dedicated backend service would be responsible for:
+    *   Periodically fetching ICS files from registered URLs.
+    *   Parsing ICS data (e.g., using a library like `ical.js` or similar).
+    *   Normalizing parsed events into the internal LifeOS event data model.
+    *   Storing these events in the database, potentially with metadata linking them back to their ICS source.
+*   **Existing API Enhancement:** The `/api/v1/lifeos/calendar/today` endpoint would then be enhanced to aggregate and return events from all sources, including those imported from ICS feeds, ensuring they conform to the specified data shape.
+
+This approach keeps the frontend simple and focused on display, while centralizing complex data integration logic in the backend.
