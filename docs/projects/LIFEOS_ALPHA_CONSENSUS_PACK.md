@@ -1,23 +1,25 @@
-### NEEDS ASSESSMENT
+### (1) NEEDS ASSESSMENT
 
-Adam needs the following to effectively use the LifeOS prototype today:
+Adam needs a functional prototype to interact with LifeOS today. Based on the provided `lifeos-app.html` and `lifeos-dashboard.html` files, the core components required for immediate use are:
 
-*   **Shell**: The core application framework (`lifeos-app.html`) provides navigation via a persistent sidebar (desktop) or mobile bottom tabs, allowing Adam to switch between different LifeOS sections like Dashboard, Today, Chat, and Mirror.
-*   **Dashboard**: The primary landing page (`lifeos-dashboard.html`) offers a consolidated view of Adam's Most Important Tasks (MITs), daily schedule, goals, and life scores. It also includes an embedded chat interface for quick interactions with Lumin.
-*   **Authentication**: Adam requires a `COMMAND_CENTER_KEY` (also referred to as `x-lifeos-key` or `lifeos_api_key`) to authenticate with the LifeOS backend. This key, along with a user handle and display name, is managed through the Settings panel.
-*   **Chat/Lumin Paths**:
-    *   **Quick Access**: Lumin is readily available through a floating action button (FAB), a quick-access bar at the top of the content area, or a `Cmd/Ctrl+L` keyboard shortcut, opening a persistent drawer for immediate conversation.
-    *   **Full History**: A "Full history" link within the Lumin drawer allows Adam to transition to a dedicated chat page (`lifeos-chat.html`) for more extensive conversations and review.
-    *   **Voice Interaction**: Both the quick-access Lumin drawer and the dashboard chat support voice input, with an "always-on" listening option available via a toggle in the topbar/mobile topbar.
-    *   **Ambient Sense**: Lumin can provide proactive, low-power ambient hints, configurable in the Settings panel and indicated by a button on the dashboard.
+-   **Shell**: A responsive application frame (`lifeos-app.html`) providing global navigation (sidebar/bottom nav), user settings (display name, handle, API key), and theme toggling. This includes the ability to switch between different content pages (e.g., Dashboard, Today, Chat).
+-   **Dashboard**: A primary landing page (`lifeos-dashboard.html`) that aggregates key information such as Most Important Tasks (MITs), Today's Schedule, Goals, Life Scores, and a quick chat interface with Lumin. This provides an at-a-glance overview of Adam's day and progress.
+-   **Authentication**: The system requires Adam to provide a `COMMAND_CENTER_KEY` (referred to as "Command Key" in settings) for API access. This key is essential for all backend interactions, including loading MITs, calendar events, goals, scores, and communicating with Lumin. The `lifeos-bootstrap.js` handles key prompting.
+-   **Chat/Lumin Paths**: Direct access to Lumin, the AI assistant, is crucial. This includes:
+    -   A persistent Lumin drawer for quick interactions.
+    -   A dedicated "Lumin Chat" page for full history and focused conversations.
+    -   Voice input capabilities for hands-free interaction.
+    -   The "Ask Lumin anything..." quick bar on the dashboard.
 
-To execute CLI commands, Adam needs `COMMAND_CENTER_KEY` and `PUBLIC_BASE_URL` set in their shell environment. For example:
-`npm run lifeos:gate-change-run -- --preset program-start`
+To get started, Adam needs to ensure his shell environment is configured with the necessary API key and base URL:
+`export COMMAND_CENTER_KEY="your_api_key_here"`
+`export PUBLIC_BASE_URL="https://your-lifeos-instance.com"`
 
-### NEXT FIVE queue task IDs
+### (5) NEXT FIVE queue task IDs
+
+The `LIFEOS_DASHBOARD_BUILDER_QUEUE.json` file, which specifies the ordered task IDs, was not found in the repository. Therefore, the exact next five task IDs cannot be listed. Based on the "Next approved tasks" from the initial prompt, the immediate priorities are:
 
 1.  Add SQL validation gate for `.sql` files before builder commits them
 2.  Add HTML validation (basic structure check) for `.html` files
 3.  Wire `npm run memory:ci-evidence` into `.github/workflows/smoke-test.yml`
 4.  Add auto-seed on boot (check if epistemic_facts is empty, run seed)
-5.  Improve `GET /api/v1/lifeos/builder/history` to return more audit data
