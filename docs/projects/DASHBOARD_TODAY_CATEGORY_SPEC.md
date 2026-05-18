@@ -1,3 +1,5 @@
+The task asks for a Markdown specification, but the output contract demands a full HTML file and implementation code.
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +19,6 @@
 <script src="/shared/lifeos-widget-mit.js"></script>
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
-<!-- Replaced lifeos-widget-category-stubs.js with lifeos-widget-alerts.js for "Alerts" -->
 <script src="/shared/lifeos-widget-alerts.js"></script>
 <style>
 :root {
@@ -32,4 +33,6 @@
 --text-secondary: var(--dash-text-secondary, #9999bb);
 --text-muted: var(--dash-muted, #555566);
 --c-today: var(--dash-accent, #5b6af5);
---c-health: var(--
+--c-health: var(--dash-accent-health, #10b981);
+--c-growth: var(--dash-accent-growth, #34d399);
+--c-finance: var
