@@ -1,41 +1,23 @@
-The specification is incomplete as `docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md` is missing, which the task states should be the basis for the checklist if injected files are missing. Proceeding with the explicit checklist items provided in the "Else" clause.
----
-1.  **Dock Toggle Functionality**
-    *   Verify the "↕" button (`#lifeos-ai-rail-dock-toggle`) is present in the AI Rail header.
-    *   Click the "↕" button: Observe if the AI Rail smoothly transitions between `data-dock="bottom"` and `data-dock="top"` positions.
-    *   Visually confirm the rail's position and styling (e.g., border, shadow) correctly update for both top and bottom docks.
+The specification is contradictory: it instructs to "produce checklist only against contract Markdown" if injected files are missing, but the contract Markdown itself is missing, making it impossible to produce a checklist *against* it. I am proceeding with the assumption that the "Else" clause provides the intended fallback checklist items.
 
-2.  **Persistence Keys (Session Storage)**
-    *   Set the AI Rail to an expanded state and a specific dock position (e.g., expanded, docked top).
-    *   Refresh the browser page.
-    *   Verify that the AI Rail retains its expanded state and dock position after the refresh.
-    *   Close the browser tab/window and reopen it (or clear session storage).
-    *   Verify that the AI Rail reverts to its default state (collapsed, docked bottom) as session storage would be cleared.
+1.  **Dock Toggle Functionality & Visuals:**
+    *   Verify clicking the "↕" button toggles the AI Rail between 'bottom' and 'top' dock positions.
+    *   **Critical:** Observe if the visual styling (e.g., `border-top`, `border-bottom`, `border-radius`, `box-shadow`) correctly updates according to the dock position. (Note: The JavaScript applies classes `lifeos-ai-rail-dock-top`/`bottom`, but the CSS targets `data-dock="top"`/`bottom` attributes, which is a mismatch and will likely prevent correct styling).
 
-3.  **Keyboard Interaction**
-    *   **Collapsed Input:**
-        *   Focus the "Quick chat with Lumin..." input field (`.lifeos-ai-rail-input-collapsed`) using keyboard navigation (e.g., Tab key).
-        *   Press Enter or click the input: Verify that the main dashboard chat input (`#chat-input`) gains focus, or the full chat page (`/overlay/lifeos-chat.html`) opens if `_focusChatInputCallback` is not set.
-        *   Type text into the collapsed input: Verify that no message is sent directly from the rail itself.
-    *   **Expanded Input:**
-        *   Expand the AI Rail.
-        *   Focus the "Chat with Lumin..." textarea (`.lifeos-ai-rail-input-expanded`) using keyboard navigation.
-        *   Press Enter or click the textarea: Verify that the main dashboard chat input (`#chat-input`) gains focus, or the full chat page (`/overlay/lifeos-chat.html`) opens.
-        *   Type text into the expanded input: Verify that no message is sent directly from the rail itself.
-    *   Verify that all interactive elements within the AI Rail (toggle buttons, inputs) are reachable and operable via keyboard navigation.
+2.  **Persistence of State:**
+    *   Toggle the AI Rail's expanded/collapsed state. Refresh the page. Verify the state persists.
+    *   Toggle the AI Rail's dock position. Refresh the page. Verify the dock position persists.
+    *   (Note: Persistence is expected within the same browser session as `sessionStorage` is used).
 
-4.  **Reduced Motion Preference**
-    *   Enable "Reduce motion" in the operating system or browser accessibility settings.
-    *   Interact with the AI Rail (expand/collapse, toggle dock position).
-    *   Observe if the transitions (`transform`, `height`, `border-color`, `box-shadow`) are either removed or significantly reduced in duration/intensity. (Based on current CSS, transitions are present and not explicitly reduced, so the expected outcome is that motion is *not* reduced).
-    *   Confirm that the UI remains functional and readable without motion.
+3.  **Keyboard Interaction (Input Redirection):**
+    *   Click or focus the "Quick chat with Lumin..." input field in the collapsed rail. Verify it either focuses the main dashboard chat input or opens the full chat page (`/overlay/lifeos-chat.html`).
+    *   Click or focus the "Chat with Lumin..." textarea in the expanded rail. Verify it either focuses the main dashboard chat input or opens the full chat page.
+    *   Confirm that typing in the rail's input fields does *not* directly send messages within the rail itself, but rather redirects to the main chat.
 
-5.  **Mobile Safe-Area Insets**
-    *   Open the dashboard on a mobile device or in a browser's developer tools with a mobile viewport (e.g., iPhone X, with notch/dynamic island).
-    *   **Docked Bottom:**
-        *   Set the AI Rail to `data-dock="bottom"`.
-        *   Verify that the rail's content is not obscured by the device's safe area (e.g., home indicator on iOS) and `padding-bottom: env(safe-area-inset-bottom);` is correctly applied.
-    *   **Docked Top:**
-        *   Set the AI Rail to `data-dock="top"`.
-        *   Verify that the rail's content is not obscured by the device's safe area (e.g., status bar, notch) and `padding-top: env(safe-area-inset-top);` is correctly applied.
-    *   Rotate the device/viewport: Verify that safe area adjustments update dynamically.
+4.  **Reduced Motion Preference:**
+    *   Enable "Reduce motion" in system accessibility settings.
+    *   Verify that transitions for expanding/collapsing the rail and changing its dock position are either removed or significantly reduced. (Note: Based on current CSS, no `@media (prefers-reduced-motion)` is implemented, so transitions will likely still occur).
+
+5.  **Mobile Safe-Area Insets:**
+    *   On a mobile device with a notch or dynamic island (or using browser developer tools to simulate one), set the AI Rail to `data-dock="bottom"` and `data-dock="top"`.
+    *   **Critical:** Verify that the rail's content correctly pads itself to avoid being obscured by the safe areas (i.e., `padding-bottom: env(safe-area-inset-bottom)` and `padding-top: env(safe-area-inset-top)` are effective). (Note: This depends on the `data-dock` attribute being correctly applied, which is currently a mismatch with JS classes).
