@@ -15,6 +15,8 @@ import { createAutonomyRoutes } from "../routes/autonomy-routes.js";
 import { createRailwayManagedEnvRoutes } from "../routes/railway-managed-env-routes.js";
 import { createProjectGovernanceRoutes } from "../routes/project-governance-routes.js";
 import { createBuilderSupervisorRoutes } from "../routes/builder-supervisor-routes.js";
+import { createBuilderWriteLockRoutes } from "../routes/builder-write-lock-routes.js";
+import { createBuilderOilAuditProbeRoutes } from "../routes/builder-oil-audit-probe-routes.js";
 import { createCapabilityMapRouter } from "../routes/capability-map-routes.js";
 import { createModelPerformanceRouter } from "../routes/model-performance-routes.js";
 import { createAccountManagerRoutes } from "../routes/account-manager-routes.js";
@@ -151,7 +153,9 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [PROJECT-GOVERNANCE] Routes mounted at /api/v1/projects, /api/v1/pending-adam, /api/v1/estimation/accuracy");
 
   app.use("/api/v1/builder", createBuilderSupervisorRoutes({ requireKey, pool }));
-  logger.info("✅ [BUILDER-SUPERVISOR] Routes mounted at /api/v1/builder/{run,status,queue,pause,resume}");
+  app.use("/api/v1/builder", createBuilderWriteLockRoutes({ requireKey, pool }));
+  app.use("/api/v1/builder", createBuilderOilAuditProbeRoutes({ requireKey, pool }));
+  logger.info("✅ [BUILDER-SUPERVISOR] Routes mounted at /api/v1/builder/{run,status,queue,pause,resume,locks,oil-probe}");
 
   app.use("/api/v1/capability-map", requireKey, createCapabilityMapRouter(pool));
   logger.info("✅ [CAPABILITY-MAP] Routes mounted at /api/v1/capability-map/{analyze,list,act}");
