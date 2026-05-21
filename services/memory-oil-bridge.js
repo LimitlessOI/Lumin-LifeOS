@@ -1,6 +1,5 @@
 // services/memory-oil-bridge.js
-import { Pool } from 'pg';
-import { LEVEL } from '../memory-intelligence-service.js';
+/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 
 const OIL_TRUST_MAP = {
   UNTRUSTED: {
@@ -26,29 +25,39 @@ const OIL_TRUST_MAP = {
   TRUSTED_FOR_CONTEXT: {
     memory_state: 'TRUSTED_FOR_CONTEXT',
     evidence_floor: 'VERIFIED',
-    retrieval_ceiling: 'decision_support',
+    retrieval_ceiling: 'action_authority',
   },
 };
 
+// Permission values ordered from most restricted to least restricted.
+const PERMISSION_ORDER = ['blocked', 'context_only', 'decision_support', 'action_authority'];
+
 const validateOILMemoryAlignment = async (capsuleId, oilTrustLevel, pool) => {
   const dbTrustLevel = await pool.query(
-    'SELECT trust_level FROM memory_capsules WHERE id = $1',
+    'SELECT trust_level FROM memory_capsules WHERE capsule_id = $1',
     [capsuleId]
   );
+  if (!dbTrustLevel.rows[0]) {
+    throw { halt_code: 'TRUST_BRIDGE_MISMATCH' };
+  }
   if (oilTrustLevel !== dbTrustLevel.rows[0].trust_level) {
     throw { halt_code: 'TRUST_BRIDGE_MISMATCH' };
   }
 };
 
-const enforceRetrievalCeiling = (capsuleTrustLevel, requestedLane) => {
-  const ceiling = OIL_TRUST_MAP[capsuleTrustLevel].retrieval_ceiling;
-  const ceilings = ['blocked', 'context_only', 'decision_support', 'action_authority'];
-  const index = ceilings.indexOf(ceiling);
-  return requestedLane <= ceilings[index + 1];
+// Returns true if requestedPermission is within the capsule's retrieval ceiling.
+const enforceRetrievalCeiling = (capsuleTrustLevel, requestedPermission) => {
+  const ceiling = OIL_TRUST_MAP[capsuleTrustLevel]?.retrieval_ceiling;
+  const ceilingIndex = PERMISSION_ORDER.indexOf(ceiling);
+  const requestedIndex = PERMISSION_ORDER.indexOf(requestedPermission);
+  if (ceilingIndex === -1 || requestedIndex === -1) {
+    throw { halt_code: 'RETRIEVAL_LANE_CEILING_EXCEEDED' };
+  }
+  return requestedIndex <= ceilingIndex;
 };
 
 const getRetrievalCeiling = (trustLevel) => {
-  return OIL_TRUST_MAP[trustLevel].retrieval_ceiling;
+  return OIL_TRUST_MAP[trustLevel]?.retrieval_ceiling ?? 'blocked';
 };
 
 export { OIL_TRUST_MAP, validateOILMemoryAlignment, enforceRetrievalCeiling, getRetrievalCeiling };

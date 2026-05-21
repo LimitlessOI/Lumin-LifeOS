@@ -32,6 +32,32 @@
 
 ---
 
+## [BUILD] Update 2026-05-21 #21 — Memory Capsule Alpha: Steps 4+5 (OIL Governance Pass + Pressure Test)
+
+### Files changed
+- `services/memory-oil-bridge.js` — Fixed: removed dead `Pool`+`LEVEL` imports (wrong path `../memory-intelligence-service.js`), fixed `WHERE id = $1` → `WHERE capsule_id = $1`, fixed `enforceRetrievalCeiling` from broken string comparison to `indexOf`-based numeric comparison, fixed `TRUSTED_FOR_CONTEXT` ceiling from `decision_support` to `action_authority` (now consistent with memory-retrieval.js TRUST_TO_PERMISSION)
+- `services/memory-trust-bridge.js` — Fixed: removed dead pool import (`db/pool.js` DNE), fixed LEVEL import path to `./memory-intelligence-service.js`, rebuilt TRUST_MAP ceiling values (were using undefined `LEVEL.BLOCKED`/`LEVEL.CONTEXT_ONLY` etc., now string permission values), fixed `WHERE id = $1` → `WHERE capsule_id = $1` in assignTrust, fixed `factLevel.level` → `factLevel.rows[0].level`, fixed INSERT target `capsule_receipts` → `memory_use_receipts`, CANONICAL guard now checks string `'CANONICAL'` not undefined `LEVEL.CANONICAL`
+- `services/memory-explanation.js` — Fixed: removed dead `LEVEL` import with wrong `../memory-intelligence-service.js` path; LEVEL was unused in this file
+- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` — Last Updated, Change Receipts, Agent Handoff Notes updated with pressure test results and gap tracking
+- `scripts/memory-pressure-test.mjs` — Pre-existing; re-ran after import fixes. 18/20 PASS, 2 PARTIAL (MC-F22 gap + intermediate promotion gate), 0 FAIL
+
+### State after this session
+- Memory Capsule Alpha 5-step pipeline: **ALL 5 STEPS COMPLETE**
+- Steps 1–2: Governing docs + BUILD_QUEUE.json ✅ (prior session)
+- Step 3: Council build MC-F01–F21 ✅ (prior session, GAP-FILL documented)
+- Step 4: OIL Governance Pass — 11 blockers resolved ✅ (prior session)
+- Step 5: Pressure test — 18/20 PASS, 2 PARTIAL, 0 FAIL — ALPHA_PASS_WITH_GAPS ✅
+- `node --check` PASS on all Alpha service/route files
+- Two open gaps (non-blocking, tracked): MC-F22 (REALITY_ANCHOR_MEMORY_MISMATCH not implemented), MC-BENCH-04 (intermediate trust promotion receipt check missing)
+- Branch: `phase7-railway-probe`
+
+### Next agent: start here
+Two options (Adam decides):
+1. **Deploy phase7-railway-probe to Railway** for live pressure test (live mode of `node scripts/memory-pressure-test.mjs`) — confirms the schema migrations apply and routes are reachable
+2. **Close MC-F22 gap**: add `validateRealityAnchor(capsuleId, liveValue, pool)` to `services/memory-capsule.js` + halt code `REALITY_ANCHOR_MEMORY_MISMATCH` + close MC-BENCH-04 (add `audit_completion_receipt` check to `updateCapsuleTrust` before RECEIPT_BACKED→TRUSTED_FOR_CONTEXT promotion)
+
+---
+
 ## [FIX] Update 2026-05-14 #20 — DB Migration Audit + All Repair Phases (P1+P2+P3)
 
 ### Files changed

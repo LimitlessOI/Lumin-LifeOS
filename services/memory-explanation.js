@@ -1,9 +1,5 @@
 // services/memory-explanation.js
-import { LEVEL } from '../memory-intelligence-service.js';
-
-/**
- * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
- */
+/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 export function buildExplanation(capsuleId, influenceType, decisionContext) {
   if (!['classification', 'routing', 'bounded_action', 'trusted_state_mutation', 'escalation'].includes(influenceType)) {
     throw new Error(`Invalid influenceType: ${influenceType}`);
