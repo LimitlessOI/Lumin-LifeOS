@@ -1,7 +1,7 @@
 # AMENDMENT 02 — Memory System
 **Status:** LIVE
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-21 — Railway boot blocker fixed: memory-capsule-routes imported empty authMiddleware.js (no default export). Fixed to auth.js. Deploy in progress.
+**Last Updated:** 2026-05-23 — Railway constraint repair migration added (20260523). source_type CHECK excluded user_input because CREATE TABLE IF NOT EXISTS was a no-op on redeploy after f962de86 changed the constraint. Pending deploy.
 
 ---
 
@@ -154,6 +154,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 | 2026-05-21 | MC-BENCH Pressure Test (Step 5): 18/20 PASS, 2 PARTIAL, 0 FAIL. VERDICT: ALPHA_PASS_WITH_GAPS. Gaps: MC-BENCH-02 (REALITY_ANCHOR_MEMORY_MISMATCH not implemented — MC-F22 gap) + MC-BENCH-04 (intermediate promotion blocking RECEIPT_BACKED→TRUSTED_FOR_CONTEXT needs explicit receipt check in updateCapsuleTrust). | Step 5 of Memory Capsule Alpha 5-step pipeline. | `node scripts/memory-pressure-test.mjs --dry-run` exit 0 |
 | 2026-05-21 | Gap-closure patch for Memory Capsule Alpha: `services/memory-capsule.js` now implements `validateRealityAnchor(capsuleId, liveValue, pool)` with quarantine + `halt_receipt` on mismatch and adds explicit `audit_completion_receipt` gate for `RECEIPT_BACKED -> TRUSTED_FOR_CONTEXT` in `updateCapsuleTrust`. `scripts/memory-pressure-test.mjs` now executes both checks in dry-run mode instead of marking them partial by comment. | Close MC-BENCH-02 and MC-BENCH-04 without redesigning Alpha. | `node --check services/memory-capsule.js`; `node --check scripts/memory-pressure-test.mjs`; `node scripts/memory-pressure-test.mjs --dry-run` => 20/20 PASS, 0 PARTIAL, 0 FAIL |
 | 2026-05-21 | routes/memory-capsule-routes.js: fixed `import authMiddleware from '../middleware/authMiddleware.js'` → `../middleware/auth.js`. authMiddleware.js is an empty stub (no exports); auth.js has the proper default export (passthrough next()). This was the Railway boot-crash blocker preventing the server from starting on the f962de86 deploy. | Railway deploy FAILED with `SyntaxError: does not provide an export named 'default'` on server boot. Smallest bounded fix. | `node --check routes/memory-capsule-routes.js` PASS |
+| 2026-05-23 | NEW migration 20260523_memory_capsule_constraint_repair.sql — drops and recreates memory_capsules_source_type_check to include user_input; adds working_memory_entries.entry_content and promoted_to_candidate columns; guards epistemic_facts.review_by. Root cause: 20260521 migration ran initially without user_input; f962de86 patched the CREATE TABLE IF NOT EXISTS but node-pg-migrate won't re-run already-applied migrations, so the constraint was never updated on Neon. | POST /api/v1/memory/signal returned 500 with PG error 23514 (check constraint violation on source_type=user_input). | Pending Railway deploy |
 
 ## Agent Handoff Notes
 
