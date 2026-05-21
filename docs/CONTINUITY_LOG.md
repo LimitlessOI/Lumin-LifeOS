@@ -32,6 +32,34 @@
 
 ---
 
+## [BUILD] Update 2026-05-21 #22 — Memory Capsule Alpha: Railway Deploy Cutover + Live ALPHA_PASS
+
+### Files changed
+- `routes/memory-capsule-routes.js` — Fixed import from empty `authMiddleware.js` stub → `auth.js` (proper default export). Was causing Railway boot crash: `SyntaxError: does not provide an export named 'default'`
+- `db/migrations/20260523_memory_capsule_constraint_repair.sql` (NEW) — Dropped and recreated `memory_capsules_source_type_check` to include `user_input`; added `working_memory_entries.entry_content` and `promoted_to_candidate`; guarded `epistemic_facts.review_by`. Root cause: the `CREATE TABLE IF NOT EXISTS` in f962de86 was a no-op (table existed); node-pg-migrate won't re-run applied migrations so the constraint never applied to Neon.
+- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` — Last Updated, Change Receipts, Agent Handoff Notes updated with live proof.
+
+### Deploy cutover diagnosis (OIL BLOCKED → CERTIFIED)
+- Railway watches `main` only; 7 governance commits were exclusively on `phase7-railway-probe`
+- Fast-forward pushed to `main` (no merge commit) → triggered Railway auto-deploy
+- `f962de86` FAILED: boot crash `authMiddleware.js has no default export`
+- `ae3459cc` SUCCESS boot: `/signal` returned 500 PG-23514 (source_type check violation)
+- `4ae51f49` SUCCESS boot + migration: all endpoints live
+
+### State after this session
+- **OIL verdict: CERTIFIED — ALPHA_PASS (LIVE)**
+- Railway runtime SHA: `4ae51f49049b`
+- 20/20 MC-BENCH PASS against Railway/Neon (live mode); 0 PARTIAL
+- `/health` ✅ `/signal` ✅ `/retrieve` ✅ `/capsule/:id` ✅
+- `phase7-railway-probe` HEAD = `4ae51f49` (also on `main` via fast-forward)
+
+### Next agent: start here
+Memory Capsule Alpha is LIVE and CERTIFIED. No remaining blockers.
+1. The fast-forward to main was a Railway deploy test, not a formal reviewed PR merge. Adam may want a GitHub PR entry documenting the full change set.
+2. Post-Alpha work tracked in AMENDMENT_02 Approved Backlog.
+
+---
+
 ## [BUILD] Update 2026-05-21 #21 — Memory Capsule Alpha: Steps 4+5 (OIL Governance Pass + Pressure Test)
 
 ### Files changed
