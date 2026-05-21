@@ -1,6 +1,6 @@
 // services/memory-legacy-bridge.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 const allowedImportMethods = ['conversation_memory_migration', 'knowledge_base_upload', 'ssot_doc_sync'];
 
@@ -19,7 +19,7 @@ async function importLegacyRow(sourceTable, sourceRowId, importMethod, content, 
     throw new Error(`Invalid import method: ${importMethod}`);
   }
 
-  const factId = uuidv4();
+  const factId = randomUUID();
   await pool.query(
     `INSERT INTO epistemic_facts (id, statement, domain, level, source_count, created_by, created_at)
      VALUES ($1, $2, $3, $4, $5, $6, NOW())`,

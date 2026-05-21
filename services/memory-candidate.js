@@ -1,6 +1,6 @@
 // services/memory-candidate.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 const detectDuplicate = async (statement, domain, pool) => {
   const result = await pool.query(
@@ -20,7 +20,7 @@ const createCandidate = async (signal, pool) => {
     return { fact_id, candidate_id: fact_id, deduplicated: true };
   }
 
-  const newFactId = uuidv4();
+  const newFactId = randomUUID();
   await pool.query(
     'INSERT INTO epistemic_facts (id, statement, domain, level, source_count, created_by, created_at, decay_rate, review_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
     [

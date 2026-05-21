@@ -1,5 +1,5 @@
 // services/memory-links.js
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 /**
  * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
@@ -19,7 +19,7 @@ export async function createLink(fromId, toId, linkType, pool) {
     throw new Error(`Capsule not found: ${toId}`);
   }
 
-  const linkId = uuidv4();
+  const linkId = randomUUID();
   await pool.query(
     'INSERT INTO associative_links (id, capsule_id_from, capsule_id_to, link_type, created_at) VALUES ($1, $2, $3, $4, $5)',
     [linkId, fromId, toId, linkType, new Date()]

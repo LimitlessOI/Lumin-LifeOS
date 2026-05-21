@@ -1,7 +1,7 @@
 # AMENDMENT 02 — Memory System
 **Status:** LIVE
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-21 — Step 5 pressure test complete. 18/20 MC-BENCH signals PASS, 2 PARTIAL (MC-F22 gap + intermediate promotion gate). VERDICT: ALPHA_PASS_WITH_GAPS. Three import-path bugs fixed in oil-bridge, trust-bridge, explanation.
+**Last Updated:** 2026-05-21 — Step 5 complete. ALPHA_PASS_WITH_GAPS (18/20). Import bugs fixed in oil-bridge, trust-bridge, explanation, candidate, legacy-bridge, links (uuid→randomUUID; uuid pkg not installed).
 
 ---
 
