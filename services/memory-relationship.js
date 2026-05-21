@@ -25,7 +25,10 @@ const requireFounderConfirmation = async (capsuleId, targetTrustLevel, pool) => 
     'SELECT * FROM memory_use_receipts WHERE capsule_id = $1',
     [capsuleId]
   );
-  if (!memoryUseReceipts.rows.find((receipt) => receipt.receipt_type === 'founder_confirmation')) {
+  if (!memoryUseReceipts.rows.find((receipt) =>
+    receipt.receipt_type === 'founder_confirmation_receipt' ||
+    (receipt.receipt_type === 'memory_use_receipt' && receipt.use_type === 'founder_confirmation')
+  )) {
     throw { halt_code: 'RELATIONSHIP_MEMORY_OVERREACH' };
   }
 };

@@ -24,7 +24,7 @@ const getContestedCapsules = async (pool) => {
   const result = await pool.query(`
     SELECT COUNT(*)
     FROM contradiction_records
-    WHERE status IN ('open', 'contested')
+    WHERE status IN ('open', 'contested', 'CONTESTED')
   `);
   return result.rows[0].count;
 };

@@ -7,9 +7,9 @@
   "priority": "high",
   "owner": "adam",
   "phase": "alpha",
-  "next_task": "Close 2 open gaps: (1) MC-F22 — validateRealityAnchor + REALITY_ANCHOR_MEMORY_MISMATCH halt code; (2) MC-BENCH-04 — add audit_completion_receipt gate to updateCapsuleTrust for RECEIPT_BACKED→TRUSTED_FOR_CONTEXT. OR: deploy phase7-railway-probe to Railway for live mode pressure test.",
-  "stability_class": "alpha-pass-with-gaps",
-  "current_focus": "Memory Capsule Alpha complete. 5-step pipeline done. 18/20 MC-BENCH PASS, 2 PARTIAL (MC-F22 + intermediate promotion gate). Next: close gaps or deploy for live test.",
+  "next_task": "Deploy phase7-railway-probe to Railway and run live mode of scripts/memory-pressure-test.mjs against Neon to confirm static 20/20 PASS holds in runtime.",
+  "stability_class": "alpha-pass-static",
+  "current_focus": "Memory Capsule Alpha complete. Static pressure test now 20/20 PASS after closing MC-BENCH-02 (reality anchor halt) and MC-BENCH-04 (audit_completion_receipt gate). Next: live Railway/Neon pressure test.",
   "owned_files": [
     "routes/memory-capsule-routes.js",
     "services/memory-signal-intake.js",
@@ -77,7 +77,7 @@
     },
     {
       "name": "epistemic_facts",
-      "required_columns": ["id", "statement", "domain", "level"]
+      "required_columns": ["id", "text", "domain", "level"]
     },
     {
       "name": "retrieval_events",

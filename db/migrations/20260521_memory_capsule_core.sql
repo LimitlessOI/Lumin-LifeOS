@@ -1,8 +1,10 @@
 -- db/migrations/20260521_memory_capsule_core.sql
 
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 -- epistemic_facts (ALTER only — add missing columns)
 ALTER TABLE epistemic_facts
-ADD COLUMN IF NOT EXISTS decay_rate INTEGER DEFAULT 30;
+ADD COLUMN IF NOT EXISTS decay_rate VARCHAR(10) DEFAULT 'normal';
 ALTER TABLE epistemic_facts
 ADD COLUMN IF NOT EXISTS review_by TIMESTAMPTZ;
 
@@ -16,7 +18,7 @@ CREATE TABLE IF NOT EXISTS memory_capsules (
     trust_level TEXT NOT NULL DEFAULT 'PROPOSED' CHECK (trust_level IN ('UNTRUSTED','PROPOSED','SCOPED','RECEIPT_BACKED','TRUSTED_FOR_CONTEXT','CANONICAL','QUARANTINED','DEPRECATED')),
     evidence_level TEXT NOT NULL DEFAULT 'CLAIM' CHECK (evidence_level IN ('CLAIM','HYPOTHESIS','TESTED','RECEIPT','VERIFIED','FACT','INVARIANT')),
     sensitivity TEXT NOT NULL DEFAULT 'STANDARD' CHECK (sensitivity IN ('STANDARD','HIGH','SENSITIVE')),
-    source_type TEXT NOT NULL CHECK (source_type IN ('founder_input','system_observation','legacy_import','council_output','external_signal','working_memory_entry','institutional_record')),
+    source_type TEXT NOT NULL CHECK (source_type IN ('founder_input','user_input','system_observation','legacy_import','council_output','external_signal','working_memory_entry','institutional_record')),
     source_ref TEXT,
     retrieval_permission TEXT NOT NULL DEFAULT 'context_only' CHECK (retrieval_permission IN ('context_only','decision_support','action_authority','blocked')),
     task_scope TEXT,
@@ -38,8 +40,10 @@ CREATE TABLE IF NOT EXISTS working_memory_entries (
     capsule_id UUID REFERENCES memory_capsules(capsule_id),
     task_scope TEXT,
     retrieval_lane TEXT,
+    entry_content TEXT,
     injected_at TIMESTAMPTZ DEFAULT NOW(),
     used_in_decision BOOLEAN DEFAULT FALSE,
     decision_ref TEXT,
+    promoted_to_candidate BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );

@@ -51,7 +51,7 @@ const {
 } = await import('../services/memory-signal-intake.js');
 
 const { createCandidate } = await import('../services/memory-candidate.js');
-const { createCapsule, getCapsule, updateCapsuleTrust } = await import('../services/memory-capsule.js');
+const { createCapsule, getCapsule, updateCapsuleTrust, validateRealityAnchor } = await import('../services/memory-capsule.js');
 const { buildProvenanceChain, validateProvenance } = await import('../services/memory-provenance.js');
 const { retrieveCapsules, checkZombieLane, enforceLaneCeiling } = await import('../services/memory-retrieval.js');
 const { isZombie, quarantineCapsule, checkZombieForAction } = await import('../services/memory-zombie.js');
@@ -140,10 +140,71 @@ if (DRY_RUN) {
 // MC-BENCH-02: REALITY_ANCHOR_MEMORY_MISMATCH
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Static analysis: REALITY_ANCHOR_MEMORY_MISMATCH halt code is NOT implemented
-// in any Alpha service file. Feature MC-F22 was in Alpha scope per FEATURE_MAP.md
-// but no memory-reality-anchor.js was built in BT-001 to BT-021.
-staticPartial('MC-BENCH-02', 'REALITY_ANCHOR_MEMORY_MISMATCH halt code not implemented — MC-F22 gap. Required for full Alpha pass.');
+if (DRY_RUN) {
+  const mismatchQueries = [];
+  const mismatchPool = {
+    async query(sql, params) {
+      mismatchQueries.push({ sql, params });
+      if (sql.includes('SELECT mc.capsule_id')) {
+        return {
+          rows: [
+            {
+              capsule_id: params[0],
+              title: 'committed: true',
+              status: 'RECEIPT_BACKED',
+              text: 'committed: true',
+            },
+          ],
+        };
+      }
+      if (sql.includes("UPDATE memory_capsules")) return { rows: [] };
+      if (sql.includes('INSERT INTO memory_use_receipts')) return { rows: [] };
+      return { rows: [] };
+    },
+  };
+  const result = await expectHalt(
+    () => validateRealityAnchor('mc-bench-02', 'committed: false', mismatchPool),
+    'REALITY_ANCHOR_MEMORY_MISMATCH'
+  );
+  const quarantineReached = mismatchQueries.some((q) => q.sql.includes("UPDATE memory_capsules") && q.sql.includes("QUARANTINED"));
+  const haltReceiptReached = mismatchQueries.some((q) => q.sql.includes('INSERT INTO memory_use_receipts') && q.params?.[0] === 'halt_receipt');
+  if (result.halted && quarantineReached && haltReceiptReached) {
+    staticPass('MC-BENCH-02', 'validateRealityAnchor quarantines capsule, writes halt_receipt, and throws REALITY_ANCHOR_MEMORY_MISMATCH');
+  } else {
+    staticFail('MC-BENCH-02', `expected quarantine + halt receipt + halt code; got ${JSON.stringify({ result, quarantineReached, haltReceiptReached })}`);
+  }
+} else {
+  try {
+    const signal = await normalizeSignal({
+      source_type: 'user_input',
+      content: 'committed: true',
+      domain: 'builder_receipt',
+      signal_type: 'receipt_assertion',
+    }, { pool });
+    const candidate = await createCandidate(signal, pool);
+    const capsule = await createCapsule(candidate, {
+      title: 'committed: true',
+      capsule_type: 'knowledge',
+      truth_class: 'objective',
+      source_type: 'user_input',
+      trust_level: 'RECEIPT_BACKED',
+      evidence_level: 'RECEIPT',
+      retrieval_permission: 'decision_support',
+    }, pool);
+    const result = await expectHalt(
+      () => validateRealityAnchor(capsule.capsule_id, 'committed: false', pool),
+      'REALITY_ANCHOR_MEMORY_MISMATCH'
+    );
+    const row = await getCapsule(capsule.capsule_id, pool);
+    if (result.halted && row.status === 'QUARANTINED' && row.retrieval_permission === 'blocked') {
+      report('MC-BENCH-02', 'PASS', 'reality anchor mismatch quarantined capsule and blocked retrieval/action');
+    } else {
+      report('MC-BENCH-02', 'FAIL', `expected halt + quarantine, got halt=${JSON.stringify(result)} row=${JSON.stringify(row)}`);
+    }
+  } catch (err) {
+    report('MC-BENCH-02', 'FAIL', `unexpected error: ${err.message}`);
+  }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MC-BENCH-03: Zombie decay — stale capsule quarantined on retrieval attempt
@@ -197,10 +258,68 @@ if (DRY_RUN) {
 console.log('\n── Category 2: False-Green Receipt Gap ──');
 
 // MC-BENCH-04: Promotion to TRUSTED_FOR_CONTEXT blocked without audit_completion_receipt
-// Alpha updateCapsuleTrust only blocks CANONICAL — intermediate promotion blocking
-// via receipt check is not implemented in Alpha (RECEIPT_BACKED → TRUSTED_FOR_CONTEXT
-// requires VERIFIED evidence + no contradiction but not an explicit receipt gate).
-staticPartial('MC-BENCH-04', 'Intermediate promotion blocking (RECEIPT_BACKED→TRUSTED_FOR_CONTEXT) requires explicit receipt check not yet in updateCapsuleTrust. CANONICAL is blocked. Partial coverage.');
+if (DRY_RUN) {
+  const promotionQueries = [];
+  const promotionPool = {
+    async query(sql, params) {
+      promotionQueries.push({ sql, params });
+      if (sql.includes('SELECT trust_level FROM memory_capsules')) {
+        return { rows: [{ trust_level: 'RECEIPT_BACKED' }] };
+      }
+      if (sql.includes("receipt_type = 'audit_completion_receipt'")) {
+        return { rows: [] };
+      }
+      if (sql.includes('UPDATE memory_capsules')) {
+        return { rows: [] };
+      }
+      if (sql.includes('INSERT INTO memory_use_receipts')) {
+        return { rows: [] };
+      }
+      return { rows: [] };
+    },
+  };
+  const result = await updateCapsuleTrust('mc-bench-04', 'TRUSTED_FOR_CONTEXT', 'dry-run', promotionPool);
+  const trustUpdated = promotionQueries.some((q) => q.sql.includes('UPDATE memory_capsules'));
+  if (result?.blocked === true && result.blocked_by === 'audit_completion_receipt_missing' && !trustUpdated) {
+    staticPass('MC-BENCH-04', 'updateCapsuleTrust blocks RECEIPT_BACKED→TRUSTED_FOR_CONTEXT without audit_completion_receipt');
+  } else {
+    staticFail('MC-BENCH-04', `expected blocked promotion with no update; got ${JSON.stringify({ result, trustUpdated })}`);
+  }
+} else {
+  try {
+    const signal = await normalizeSignal({
+      source_type: 'user_input',
+      content: 'OIL Builder Test passed static audit',
+      domain: 'builder_audit',
+      signal_type: 'audit_status',
+    }, { pool });
+    const candidate = await createCandidate(signal, pool);
+    const capsule = await createCapsule(candidate, {
+      title: 'OIL Builder Test passed static audit',
+      capsule_type: 'knowledge',
+      truth_class: 'objective',
+      source_type: 'user_input',
+      trust_level: 'RECEIPT_BACKED',
+      evidence_level: 'RECEIPT',
+      retrieval_permission: 'decision_support',
+    }, pool);
+    await pool.query(
+      `UPDATE memory_capsules
+       SET trust_level = 'RECEIPT_BACKED', evidence_level = 'RECEIPT', retrieval_permission = 'decision_support'
+       WHERE capsule_id = $1`,
+      [capsule.capsule_id]
+    );
+    const result = await updateCapsuleTrust(capsule.capsule_id, 'TRUSTED_FOR_CONTEXT', 'missing-completion', pool);
+    const row = await getCapsule(capsule.capsule_id, pool);
+    if (result?.blocked === true && result.blocked_by === 'audit_completion_receipt_missing' && row.trust_level === 'RECEIPT_BACKED') {
+      report('MC-BENCH-04', 'PASS', 'promotion blocked without audit_completion_receipt; no silent trust promotion');
+    } else {
+      report('MC-BENCH-04', 'FAIL', `expected blocked promotion at RECEIPT_BACKED, got result=${JSON.stringify(result)} row=${JSON.stringify(row)}`);
+    }
+  } catch (err) {
+    report('MC-BENCH-04', 'FAIL', `unexpected error: ${err.message}`);
+  }
+}
 
 // MC-BENCH-05: ZOMBIE_MEMORY_USED_FOR_ACTION on QUARANTINED capsule
 if (DRY_RUN) {
@@ -261,7 +380,11 @@ if (DRY_RUN) {
     // Check both capsules are contested
     const rowA = await getCapsule(capsuleA.capsule_id, pool);
     const rowB = await getCapsule(capsuleB.capsule_id, pool);
-    if (rowA.status === 'contested' && rowB.status === 'contested' && contradictionResult.contradiction_id) {
+    if (
+      ['contested', 'CONTESTED'].includes(rowA.status) &&
+      ['contested', 'CONTESTED'].includes(rowB.status) &&
+      contradictionResult.contradiction_id
+    ) {
       report('MC-BENCH-08', 'PASS', `contradiction_id=${contradictionResult.contradiction_id}; both capsules contested`);
     } else {
       report('MC-BENCH-08', 'FAIL', `status A=${rowA.status}, B=${rowB.status}, contradiction=${JSON.stringify(contradictionResult)}`);
@@ -447,7 +570,7 @@ if (DRY_RUN) {
 } else {
   try {
     const result = await expectHalt(
-      () => checkCitationPresent('capsule-abc', []),
+      () => checkCitationPresent({}, ['capsule-abc']),
       'MEMORY_INFLUENCE_UNCITED'
     );
     if (result.halted) {
@@ -502,16 +625,8 @@ if (DRY_RUN) {
   staticPass('MC-BENCH-20', 'resolveContradiction requires receipt_type=contradiction_resolution_receipt before updating contradiction_records.status');
 } else {
   try {
-    const result = await expectHalt(
-      () => resolveContradiction('fake-contradiction-id', 'winning-id', 'losing-id', 'nonexistent-receipt-id', pool),
-      null // throws Error not halt_code
-    );
-    if (!result.halted && result.halt_code === null) {
-      // Check if it threw an error about missing receipt
-      report('MC-BENCH-20', 'PASS', 'resolveContradiction blocked — resolution requires valid receipt');
-    } else {
-      report('MC-BENCH-20', 'FAIL', 'unexpected halt code or no error thrown');
-    }
+    await resolveContradiction('fake-contradiction-id', 'winning-id', 'losing-id', 'nonexistent-receipt-id', pool);
+    report('MC-BENCH-20', 'FAIL', 'unexpected halt code or no error thrown');
   } catch (err) {
     if (err.message && err.message.includes('receipt')) {
       report('MC-BENCH-20', 'PASS', `resolveContradiction correctly requires receipt: ${err.message}`);

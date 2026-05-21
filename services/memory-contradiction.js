@@ -6,8 +6,8 @@ async function checkContradiction(capsuleId, domain, statement, factFamilyId, po
     `SELECT EXISTS(
       SELECT 1
       FROM memory_capsules mc
-      JOIN epistemic_facts ef ON mc.capsule_id = ef.capsule_id
-      WHERE (mc.domain = $1 AND LOWER(TRIM($2)) = LOWER(TRIM(ef.statement)))
+      JOIN epistemic_facts ef ON mc.fact_id = ef.id
+      WHERE (ef.domain = $1 AND LOWER(TRIM($2)) = LOWER(TRIM(ef.text)))
          OR (mc.fact_family_id = $3 AND mc.capsule_id != $4)
     )`,
     [domain, statement, factFamilyId, capsuleId]
@@ -18,8 +18,8 @@ async function checkContradiction(capsuleId, domain, statement, factFamilyId, po
   const contradictionResult = await pool.query(
     `SELECT mc.capsule_id AS conflicting_capsule_id
      FROM memory_capsules mc
-     JOIN epistemic_facts ef ON mc.capsule_id = ef.capsule_id
-     WHERE (mc.domain = $1 AND LOWER(TRIM($2)) = LOWER(TRIM(ef.statement)))
+     JOIN epistemic_facts ef ON mc.fact_id = ef.id
+     WHERE (ef.domain = $1 AND LOWER(TRIM($2)) = LOWER(TRIM(ef.text)))
         OR (mc.fact_family_id = $3 AND mc.capsule_id != $4)
      LIMIT 1`,
     [domain, statement, factFamilyId, capsuleId]
@@ -37,7 +37,7 @@ async function createContradictionRecord(capsuleIdA, capsuleIdB, domain, pool) {
   );
   const contradictionId = contradictionResult.rows[0].contradiction_id;
   await pool.query(
-    `UPDATE memory_capsules SET status = 'contested' WHERE capsule_id IN ($1, $2)`,
+    `UPDATE memory_capsules SET status = 'CONTESTED', updated_at = NOW() WHERE capsule_id IN ($1, $2)`,
     [capsuleIdA, capsuleIdB]
   );
   await pool.query(

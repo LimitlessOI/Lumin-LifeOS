@@ -2,10 +2,10 @@
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { randomUUID } from 'crypto';
 
-const detectDuplicate = async (statement, domain, pool) => {
+const detectDuplicate = async (text, domain, pool) => {
   const result = await pool.query(
-    'SELECT id FROM epistemic_facts WHERE LOWER(TRIM(statement)) = LOWER(TRIM($1)) AND domain = $2 LIMIT 1',
-    [statement, domain]
+    'SELECT id FROM epistemic_facts WHERE LOWER(TRIM(text)) = LOWER(TRIM($1)) AND domain = $2 LIMIT 1',
+    [text, domain]
   );
   return { exists: result.rowCount > 0, fact_id: result.rows[0]?.id };
 };
@@ -22,7 +22,7 @@ const createCandidate = async (signal, pool) => {
 
   const newFactId = randomUUID();
   await pool.query(
-    'INSERT INTO epistemic_facts (id, statement, domain, level, source_count, created_by, created_at, decay_rate, review_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+    'INSERT INTO epistemic_facts (id, text, domain, level, source_count, created_by, created_at, decay_rate, review_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
     [
       newFactId,
       signal.content,
@@ -31,14 +31,15 @@ const createCandidate = async (signal, pool) => {
       0,
       'system',
       new Date(),
-      30,
+      'normal',
       new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     ]
   );
 
   await pool.query(
-    'INSERT INTO memory_use_receipts (receipt_type, capsule_id, created_by, created_at) VALUES ($1, $2, $3, NOW())',
-    ['candidate_memory_receipt', newFactId, 'system']
+    `INSERT INTO memory_use_receipts (receipt_type, decision_ref, source_ref, created_by, created_at)
+     VALUES ($1, $2, $3, $4, NOW())`,
+    ['candidate_memory_receipt', `candidate:${newFactId}`, newFactId, 'system']
   );
 
   return { fact_id: newFactId, candidate_id: newFactId, deduplicated: false };

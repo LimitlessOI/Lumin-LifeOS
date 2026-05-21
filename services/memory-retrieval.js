@@ -10,6 +10,14 @@ const TRUST_TO_PERMISSION = {
   TRUSTED_FOR_CONTEXT: 'action_authority',
 };
 
+const LANE_TO_PERMISSION = {
+  context_lane: 'context_only',
+  decision_support_lane: 'decision_support',
+  action_authority_lane: 'action_authority',
+  relationship_sensitive_lane: 'decision_support',
+  review_lane: 'blocked',
+};
+
 async function assignRetrievalPermission(capsuleId, pool) {
   const result = await pool.query(
     `SELECT trust_level FROM memory_capsules WHERE capsule_id = $1`,
@@ -29,12 +37,25 @@ async function assignRetrievalPermission(capsuleId, pool) {
 }
 
 async function enforceLaneCeiling(capsule, requestedLane) {
+  if (
+    (capsule.status === 'QUARANTINED' || capsule.status === 'DEPRECATED') &&
+    requestedLane !== 'review_lane'
+  ) {
+    return { allowed: false, reason: 'Blocked capsule in non-review lane' };
+  }
   if (capsule.retrieval_permission === 'blocked' && requestedLane !== 'review_lane') {
     return { allowed: false, reason: 'Blocked capsule in non-review lane' };
   }
   const ceilingOrder = ['blocked', 'context_only', 'decision_support', 'action_authority'];
   const currentIndex = ceilingOrder.indexOf(capsule.retrieval_permission);
-  const requestedIndex = ceilingOrder.indexOf(requestedLane);
+  const requestedPermission = LANE_TO_PERMISSION[requestedLane];
+  const requestedIndex = ceilingOrder.indexOf(requestedPermission);
+  if (requestedLane === 'review_lane') {
+    return { allowed: true, reason: 'Review lane bypass allowed' };
+  }
+  if (requestedIndex === -1) {
+    throw { halt_code: 'RETRIEVAL_LANE_CEILING_EXCEEDED' };
+  }
   if (currentIndex > requestedIndex) {
     return { allowed: false, reason: 'Lane ceiling exceeded' };
   }
@@ -73,6 +94,9 @@ async function retrieveCapsules(query, lane, taskScope, whyRetrieved, allowedUse
 async function checkZombieLane(capsule, lane) {
   if (capsule.status === 'QUARANTINED' && lane !== 'review_lane') {
     throw { halt_code: 'ZOMBIE_MEMORY_USED_FOR_ACTION' };
+  }
+  if (capsule.status === 'DEPRECATED' && lane !== 'review_lane') {
+    throw { halt_code: 'DEPRECATED_MEMORY_USED_FOR_ACTION' };
   }
 }
 

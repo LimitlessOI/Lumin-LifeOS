@@ -21,7 +21,7 @@ async function importLegacyRow(sourceTable, sourceRowId, importMethod, content, 
 
   const factId = randomUUID();
   await pool.query(
-    `INSERT INTO epistemic_facts (id, statement, domain, level, source_count, created_by, created_at)
+    `INSERT INTO epistemic_facts (id, text, domain, level, source_count, created_by, created_at)
      VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
     [factId, content, domain || 'general', 0, 0, 'legacy_import']
   );

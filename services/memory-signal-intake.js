@@ -1,4 +1,5 @@
 // services/memory-signal-intake.js
+/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { Pool } from 'pg';
 import crypto from 'node:crypto';
 
@@ -7,7 +8,7 @@ const normalizeSignal = async (rawInput, context) => {
   const sourceType = rawInput.source_type || 'system_observation';
   const quarantineFlag = rawInput.content
     .toLowerCase()
-    .match(/(system:|canonical:|trust override|promote to canonical|bypass|explicit authority escalation)/i)
+    .match(/(system(?:\s+instruction)?\s*:|canonical\s*:|trust override|promote to canonical|bypass|explicit authority escalation|override trust rules)/i)
     ? true
     : false;
 
@@ -21,6 +22,10 @@ const normalizeSignal = async (rawInput, context) => {
     received_at: new Date(),
     quarantine_flag: quarantineFlag,
   };
+
+  if (quarantineFlag) {
+    throw { halt_code: 'MEMORY_INJECTION_ATTEMPT', signal: signalObject };
+  }
 
   return signalObject;
 };

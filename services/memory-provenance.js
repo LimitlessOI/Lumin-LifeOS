@@ -23,8 +23,20 @@ const buildProvenanceChain = async (capsuleId, retrievalLane, whyRetrieved, allo
   }
 
   const retrievalEvent = await pool.query(
-    'INSERT INTO retrieval_events (capsule_id, retrieval_lane, why_retrieved, allowed_use, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING id',
-    [capsuleId, retrievalLane, whyRetrieved, allowedUse]
+    `INSERT INTO retrieval_events
+       (fact_id, capsule_id, retrieved_by, context, acted_on, retrieved_at, task_scope, retrieval_lane, why_retrieved, allowed_use, created_at)
+     VALUES ($1, $2, $3, $4, FALSE, NOW(), $5, $6, $7, $8, NOW())
+     RETURNING id`,
+    [
+      fact.rows[0].id,
+      capsuleId,
+      'system',
+      whyRetrieved,
+      null,
+      retrievalLane,
+      whyRetrieved,
+      allowedUse,
+    ]
   );
   const retrievalEventId = retrievalEvent.rows[0].id;
 

@@ -3913,6 +3913,62 @@ Full spec in `AMENDMENT_21 → ## Approved Product Backlog → Conflict Intellig
 
 **Next priorities:** (1) Build `/api/v1/lifeos/victories` routes + `victory_logs` table to back the Victory Vault overlay. (2) Re-run a Victory Vault build with the fixed builder to verify the platform fixes work end-to-end. (3) Wire `memory:ci-evidence` into CI smoke test. (4) Continue with remaining LifeOS backlog items.
 
+## Update 2026-05-21 #102 — Memory Capsule Alpha Gap Closure (20/20 Static Pass)
+- Closed the two remaining Memory Capsule Alpha pressure-test gaps on branch `phase7-railway-probe`.
+- `services/memory-capsule.js`
+  - added `validateRealityAnchor(capsuleId, liveValue, pool)`:
+    - compares capsule claim against a live anchor value
+    - quarantines the capsule on mismatch
+    - blocks retrieval/action by setting `retrieval_permission = 'blocked'`
+    - writes `halt_receipt`
+    - throws `REALITY_ANCHOR_MEMORY_MISMATCH`
+  - hardened `updateCapsuleTrust()`:
+    - still blocks `CANONICAL`
+    - now also blocks `RECEIPT_BACKED -> TRUSTED_FOR_CONTEXT` unless `audit_completion_receipt` exists in `memory_use_receipts`
+- `scripts/memory-pressure-test.mjs`
+  - replaced both prior partial/comment-only checks with executable dry-run assertions using mock pools
+  - `MC-BENCH-02` now verifies mismatch -> quarantine + halt receipt + halt code
+  - `MC-BENCH-04` now verifies intermediate promotion is blocked without `audit_completion_receipt`
+- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md`
+  - updated Change Receipts and Agent Handoff Notes
+- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.manifest.json`
+  - advanced stability from `alpha-pass-with-gaps` to `alpha-pass-static`
+- Verification:
+  - `node --check services/memory-capsule.js`
+  - `node --check scripts/memory-pressure-test.mjs`
+  - `node scripts/memory-pressure-test.mjs --dry-run`
+  - result: `20/20 PASS`, `0 PARTIAL`, `0 FAIL`, verdict `ALPHA_PASS`
+- Remaining operational next step:
+  - deploy `phase7-railway-probe` to Railway
+  - run live mode of `scripts/memory-pressure-test.mjs` against real Neon/runtime state before merge
+
+## Update 2026-05-21 #103 — Memory Capsule Alpha Live Contract Repair
+- OIL-bounded repair loop closed the first live-proof blockers without redesigning Memory Capsule Alpha.
+- Neon schema contract repaired:
+  - completed `db/migrations/20260521_memory_capsule_receipts.sql`
+  - applied `db/migrations/20260521_memory_capsule_core.sql`
+  - live Neon now has:
+    - `memory_capsules`
+    - `working_memory_entries`
+    - `memory_use_receipts`
+    - `memory_import_receipts`
+    - `contradiction_records`
+  - `retrieval_events` extended in place with capsule/retrieval-lane/provenance fields
+- Code/schema drift repaired:
+  - memory services now use canonical `epistemic_facts.text` instead of `statement`
+  - capsule creation now persists `fact_id` linkage
+  - candidate-memory receipts no longer write fact IDs into `memory_use_receipts.capsule_id`
+  - contradiction service now joins `memory_capsules.fact_id -> epistemic_facts.id`
+  - founder confirmation accepts explicit `founder_confirmation_receipt` and governed `memory_use_receipt(use_type=founder_confirmation)`
+  - injection screening now halts on `MEMORY_INJECTION_ATTEMPT`
+- Live Neon verification:
+  - `node scripts/memory-pressure-test.mjs`
+  - result: `20/20 PASS`, `0 PARTIAL`, `0 FAIL`, verdict `ALPHA_PASS`
+- Remaining operational next step:
+  - push branch commit to origin
+  - redeploy Railway so runtime SHA matches branch HEAD
+  - verify `/api/v1/memory/{health,signal,retrieve}` live before merge
+
 ## Update 2026-01-30 #1
 - Hardware: MacBook Pro M2 Max, 32 GB RAM, 2 TB SSD running server-only mode; machine doubles as development host but being stripped down for LifeOS server.
 - Models: Ollama hosts gemma2:27b-instruct-q4_0, deepseek variants (coder v2, v3, r1 70b/32b, coder 33b/6.7b, latest), qwen2.5 variants, qwen3-coder, llama3.3/3.2 70b/vision/1b, llava 7b, codestral, gpt-oss 20b/120b, phi3 mini, qllama reranker, nomic embed.
