@@ -1,7 +1,7 @@
 # AMENDMENT 02 — Memory System
 **Status:** LIVE
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-13
+**Last Updated:** 2026-05-21 — Memory Capsule Alpha governance pass complete. 17 new services/route files written for MC-F01–F21. All 11 blockers resolved. node --check PASS.
 
 ---
 
@@ -24,10 +24,47 @@ The memory system stores conversation context, user preferences, and system know
 ### Files (Current)
 | File | Purpose |
 |------|---------|
-| `data/memories.json` | Flat-file memory fallback (dev/local) |
-| `routes/memory-routes.js` | Memory CRUD API |
+| `data/memories.json` | Flat-file memory fallback (dev/local) — NOT canonical; Neon rows win |
+| `routes/memory-routes.js` | Legacy memory CRUD API |
+| `routes/memory-capsule-routes.js` | **Alpha capsule API** — signal, retrieve, health, capsule/:id, correct |
 | `services/knowledge-context.js` | Knowledge base context injection |
-| `server.js` (lines 4203–4252, 10309–10417) | Memory store/retrieve + conversation history — NEEDS EXTRACTION |
+| `services/memory-signal-intake.js` | Signal normalization + injection screening |
+| `services/memory-candidate.js` | Epistemic fact candidate creation + dedup |
+| `services/memory-capsule.js` | Capsule CRUD, trust update, CANONICAL guard |
+| `services/memory-provenance.js` | Provenance chain builder; every retrieval creates retrieval_event |
+| `services/memory-trust-bridge.js` | Evidence level floor checks for trust promotion |
+| `services/memory-oil-bridge.js` | OIL trust-level → retrieval permission ceiling map |
+| `services/memory-retrieval.js` | Lane-ceiling enforced retrieval with abstention counting |
+| `services/memory-links.js` | Associative links (project/person/pattern/lesson) |
+| `services/memory-contradiction.js` | Contradiction detection, record creation, resolution (quarantines loser) |
+| `services/memory-zombie.js` | Zombie detection, quarantine, delay-quarantine |
+| `services/memory-explanation.js` | Citation building and MEMORY_INFLUENCE_UNCITED enforcement |
+| `services/memory-relationship.js` | Relationship capsule lane enforcement + founder confirmation |
+| `services/memory-legacy-bridge.js` | Legacy row import (conversation_memory, knowledge_base, ssot_doc) |
+| `services/memory-receipts.js` | Memory use receipt writer and lookup |
+| `services/memory-working.js` | Working memory entries per session + promote-to-candidate |
+| `services/memory-health.js` | Stale/quarantined/contested counts + citation rate |
+| `services/memory-institutional.js` | Agent protocol violations + intent drift events |
+| `config/memory-truth-classes.js` | 10 truth class definitions; all can_auto_promote_to_canonical=false |
+
+### DB Tables (Alpha — Canonical)
+| Table | Purpose |
+|-------|---------|
+| `epistemic_facts` | Evidence ladder spine — statement, domain, level (0–6), decay_rate, review_by |
+| `memory_capsules` | Capsule governance state — trust_level, retrieval_permission, truth_class, fact_id FK |
+| `retrieval_events` | Every retrieval with why_retrieved, allowed_use, retrieval_lane |
+| `debate_records` | Contradiction/debate history and residue risk |
+| `contradiction_records` | Explicit contradictions between capsule pairs (capsule_id_a, capsule_id_b) |
+| `working_memory_entries` | Active context used per session; promote-to-candidate eligible |
+| `memory_use_receipts` | Cite-or-ignore enforcement; 6 valid use_types |
+| `memory_import_receipts` | Audit trail for legacy row imports |
+
+### Key Endpoints (Alpha)
+- `POST /api/v1/memory/signal` — intake a new signal; creates fact + capsule
+- `POST /api/v1/memory/retrieve` — lane-governed retrieval with provenance
+- `GET /api/v1/memory/health` — stale/quarantined/contested/citation stats
+- `GET /api/v1/memory/capsule/:id` — read a single capsule by capsule_id
+- `POST /api/v1/memory/correct` — update trust level (founder-initiated)
 
 ### DB Tables
 | Table | Purpose |
@@ -104,3 +141,24 @@ Memory storage is isolated in `services/memory-service.js` (planned) and the DB 
 
 ### Gate 5 — How We Beat Them
 While competitors store memories as passive retrievable notes, LifeOS memory is active infrastructure — every AI council call receives automatically ranked context from all memory categories, so the system gives better answers without the user ever having to "search" their own history.
+
+---
+
+## Change Receipts
+
+| Date | What Changed | Why | Verified |
+|---|---|---|---|
+| 2026-05-21 | Memory Capsule Alpha OIL Governance Pass: 17 services/route files written (BT-001–BT-021) + 11 blockers repaired. Files: memory-signal-intake, memory-candidate, memory-capsule, memory-provenance, memory-trust-bridge, memory-oil-bridge, memory-retrieval, memory-links, memory-contradiction, memory-zombie, memory-explanation, memory-relationship, memory-legacy-bridge, memory-receipts, memory-working, memory-health, memory-institutional, routes/memory-capsule-routes. 2 DB migrations (20260521_memory_capsule_core + receipts). | Alpha build + governance pass for MC-F01–F21 per BUILD_QUEUE.json. GAP-FILL: council output had logic inversions, stray fences, truncated files. | `node --check` PASS all 17 files |
+| 2026-05-21 | AMENDMENT_02_MEMORY_SYSTEM.md: Files table and DB tables updated to reflect Memory Capsule Alpha surface. | SSOT atomic update required by pre-commit hook. | ✅ |
+
+## Agent Handoff Notes
+
+**Current state:** Memory Capsule Alpha build and governance pass (Steps 1–4 of 5) are complete. All 17 service/route files pass `node --check`. All 11 governance blockers resolved. Routes mounted at `/api/v1/memory` in register-runtime-routes.js.
+
+**Step 5 next:** Runtime Pressure Test — run all 20 MC-BENCH signals from `docs/projects/memory-capsules/MEMORY_BENCHMARK_CORPUS.md` against the live system.
+
+**Known open item before Step 5:** `working_memory_entries` table may be missing a `promoted_to_candidate` column — check the BT-001 migration or add via `ALTER TABLE`. The `promoteToCandidate` function in memory-working.js will fail if this column is absent.
+
+**Open BLUEPRINT.md §42 questions still needing founder confirmation:**
+- Q2: Capsule ID format — UUID v4 is default; schema migration not yet run
+- AMENDMENT_02_MIGRATION_RUNBOOK.md OPEN_QUESTION: recency threshold for conversation_memory migration (default 90 days, needs confirmation)

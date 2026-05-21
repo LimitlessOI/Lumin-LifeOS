@@ -1,6 +1,6 @@
 # AMENDMENT 19 — Project Governance
 
-**Last Updated:** 2026-04-27 — Railway boot fix: `register-runtime-routes.js` imports `createAssessmentBatteryRoutes` (was mounted but undefined). Prior: 2026-04-26 — mount Memory Intelligence routes at /api/v1/memory. Prior: wire savingsLedger into registerRuntimeRoutes.
+**Last Updated:** 2026-05-21 — Mount Memory Capsule Alpha routes at `/api/v1/memory` (before memory-intelligence-routes). Prior: 2026-04-27 — Railway boot fix: `register-runtime-routes.js` imports `createAssessmentBatteryRoutes`. Prior: 2026-04-26 — mount Memory Intelligence routes at /api/v1/memory.
 
 | Field | Value |
 |---|---|
@@ -202,6 +202,7 @@ Required runtime truths:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-05-21 | `startup/register-runtime-routes.js` — import + mount `memoryCapsuleRoutes` (default export from `routes/memory-capsule-routes.js`) at `/api/v1/memory`, before memory-intelligence-routes so capsule routes take precedence for any overlapping paths. | Wire Memory Capsule Alpha API surface (BT-021) into the running app; composition-only change. | ✅ `node --check startup/register-runtime-routes.js` |
 | 2026-05-20c | `startup/register-runtime-routes.js` — unmount missing `builder-write-lock-routes.js` (not on main lineage); fixes Railway boot `ERR_MODULE_NOT_FOUND` on deploy a3d58712. | Oil-probe slice must boot without Phase 6 route file. | ✅ | pending | Railway deploy SUCCESS + probe 200 |
 | 2026-05-20b | `services/builder-audit-before-done.js`, `services/builder-truth-surface.js` (build_session_id columns), `db/migrations/20260519_builder_trust_spine.sql`, `db/migrations/20260522_builder_audit_before_done_phase7.sql` — restored Phase 7 audit-before-done stack missing from git (probe import would 500). | Commit 79be8659 shipped probe without never-committed audit service. | ✅ | pending | `node --check`; Railway probe after deploy |
 | 2026-05-20 | `services/builder-oil-phase7-probe.js`, `routes/builder-oil-audit-probe-routes.js`, `startup/register-runtime-routes.js` — OIL-only `POST /api/v1/builder/oil-probe/phase7-gemini-live` runs live Gemini audit-before-done inside Railway (`GEMINI_API_KEY`); `scripts/oil-invoke-phase7-railway-probe.mjs` invokes from operator shell. No key in response. | Close Phase 7 live Gemini blocker without local secret export. | ✅ | pending | `node --check` on probe files; Railway invoke after deploy |

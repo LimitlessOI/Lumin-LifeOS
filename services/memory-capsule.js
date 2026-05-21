@@ -1,14 +1,5 @@
 // services/memory-capsule.js
-import { Pool } from 'pg';
-import { LEVEL } from '../memory-intelligence-service.js';
-
-const pool = new Pool({
-  user: 'your_username',
-  host: 'your_host',
-  database: 'your_database',
-  password: 'your_password',
-  port: 5432,
-});
+/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 
 const createCapsule = async (candidate, fields, pool) => {
   if (!fields.title || !fields.capsule_type || !fields.truth_class || !fields.source_type) {
@@ -24,7 +15,7 @@ const createCapsule = async (candidate, fields, pool) => {
     evidence_level: 'CLAIM',
     sensitivity: 'STANDARD',
     retrieval_permission: 'context_only',
-    review_by: new Date(Date.now() + 302460601000).toISOString(),
+    review_by: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
   };
 
   const capsuleFields = { ...defaults, ...fields };
@@ -83,13 +74,3 @@ const writeReceipt = async (capsuleId, receiptType, createdBy, createdAt, pool) 
 };
 
 export { createCapsule, getCapsule, updateCapsuleTrust };
-```
-
-```json
----
-METADATA---
-{
-  "target_file": "services/memory-capsule.js",
-  "insert_after_line": null,
-  "confidence": 0.9
-}

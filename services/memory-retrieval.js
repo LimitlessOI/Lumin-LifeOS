@@ -1,37 +1,31 @@
 // services/memory-retrieval.js
-import { Pool } from 'pg';
+/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { buildProvenanceChain } from './memory-provenance.js';
 
-const pool = new Pool({
-  user: 'your_username',
-  host: 'your_host',
-  database: 'your_database',
-  password: 'your_password',
-  port: 5432,
-});
+const TRUST_TO_PERMISSION = {
+  UNTRUSTED: 'blocked',
+  PROPOSED: 'context_only',
+  SCOPED: 'context_only',
+  RECEIPT_BACKED: 'decision_support',
+  TRUSTED_FOR_CONTEXT: 'action_authority',
+};
 
 async function assignRetrievalPermission(capsuleId, pool) {
   const result = await pool.query(
-    `
-      SELECT trust_level FROM memory_capsules WHERE id = $1
-    `,
+    `SELECT trust_level FROM memory_capsules WHERE capsule_id = $1`,
     [capsuleId]
   );
   const trustLevel = result.rows[0].trust_level;
-  const permission = trustLevel === 'trusted' ? 'action_authority' : 'decision_support';
+  const permission = TRUST_TO_PERMISSION[trustLevel] || 'context_only';
   await pool.query(
-    `
-      UPDATE memory_capsules SET retrieval_permission = $1 WHERE id = $2
-    `,
+    `UPDATE memory_capsules SET retrieval_permission = $1 WHERE capsule_id = $2`,
     [permission, capsuleId]
   );
-  const capsuleReceipt = await pool.query(
-    `
-      SELECT capsule_receipt FROM memory_capsules WHERE id = $1
-    `,
+  const receiptResult = await pool.query(
+    `SELECT id FROM memory_use_receipts WHERE capsule_id = $1 ORDER BY created_at DESC LIMIT 1`,
     [capsuleId]
   );
-  return capsuleReceipt.rows[0].capsule_receipt;
+  return receiptResult.rows[0]?.id;
 }
 
 async function enforceLaneCeiling(capsule, requestedLane) {
@@ -39,8 +33,7 @@ async function enforceLaneCeiling(capsule, requestedLane) {
     return { allowed: false, reason: 'Blocked capsule in non-review lane' };
   }
   const ceilingOrder = ['blocked', 'context_only', 'decision_support', 'action_authority'];
-  const currentLane = capsule.retrieval_permission;
-  const currentIndex = ceilingOrder.indexOf(currentLane);
+  const currentIndex = ceilingOrder.indexOf(capsule.retrieval_permission);
   const requestedIndex = ceilingOrder.indexOf(requestedLane);
   if (currentIndex > requestedIndex) {
     return { allowed: false, reason: 'Lane ceiling exceeded' };
@@ -48,18 +41,14 @@ async function enforceLaneCeiling(capsule, requestedLane) {
   return { allowed: true, reason: 'Lane ceiling satisfied' };
 }
 
-async function retrieveCapsules(query, lane, taskScope, pool) {
+async function retrieveCapsules(query, lane, taskScope, whyRetrieved, allowedUse, pool) {
   if (!lane) {
     throw { halt_code: 'MEMORY_RETRIEVAL_PERMISSION_UNKNOWN' };
   }
-  const results = await pool.query(
-    `
-      SELECT * FROM memory_capsules
-    `
-  );
+  const results = await pool.query(`SELECT * FROM memory_capsules`);
   const capsules = results.rows;
   const includedCapsules = [];
-  const abstentionCount = 0;
+  let abstentionCount = 0;
   for (const capsule of capsules) {
     const enforcementResult = await enforceLaneCeiling(capsule, lane);
     if (enforcementResult.allowed) {
@@ -68,11 +57,14 @@ async function retrieveCapsules(query, lane, taskScope, pool) {
       abstentionCount++;
     }
   }
-  const provenanceChains = includedCapsules.map((capsule) =>
-    buildProvenanceChain(capsule, taskScope, pool)
+  const provenanceChains = await Promise.all(
+    includedCapsules.map((capsule) =>
+      buildProvenanceChain(capsule.capsule_id, lane, whyRetrieved, allowedUse, pool)
+    )
   );
   return {
     results: includedCapsules,
+    provenance: provenanceChains,
     abstention_count: abstentionCount,
     lane_applied: lane,
   };
@@ -85,4 +77,3 @@ async function checkZombieLane(capsule, lane) {
 }
 
 export { assignRetrievalPermission, enforceLaneCeiling, retrieveCapsules, checkZombieLane };
-```

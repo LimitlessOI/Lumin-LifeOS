@@ -1,14 +1,5 @@
 // services/memory-institutional.js
-import { Pool } from 'pg';
-import { LEVEL } from '../memory-intelligence-service.js';
-
-const pool = new Pool({
-  user: 'your_username',
-  host: 'your_host',
-  database: 'your_database',
-  password: 'your_password',
-  port: 5432,
-});
+/** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 
 async function recordViolation(incidentType, details, capsuleRef, pool) {
   const result = await pool.query(
@@ -37,7 +28,10 @@ async function getRepeatedViolations(incidentType, pool) {
 }
 
 async function getRecentIncidents(limit, pool) {
-  const result = await pool.query(`SELECT * FROM agent_protocol_violations ORDER BY created_at DESC LIMIT $1`, [limit]);
+  const result = await pool.query(
+    `SELECT * FROM agent_protocol_violations ORDER BY created_at DESC LIMIT $1`,
+    [limit]
+  );
   return result.rows;
 }
 
