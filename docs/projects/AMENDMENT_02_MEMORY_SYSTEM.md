@@ -1,7 +1,7 @@
 # AMENDMENT 02 — Memory System
 **Status:** LIVE
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-21 — Static pressure test complete. ALPHA_PASS (20/20 dry-run). Live Railway/Neon proof still required before merge.
+**Last Updated:** 2026-05-21 — Railway boot blocker fixed: memory-capsule-routes imported empty authMiddleware.js (no default export). Fixed to auth.js. Deploy in progress.
 
 ---
 
@@ -153,6 +153,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 | 2026-05-21 | Fixed import-path bugs in 3 files: (1) memory-oil-bridge.js — removed dead `Pool`+`LEVEL` imports, fixed `WHERE id` → `WHERE capsule_id`, fixed enforceRetrievalCeiling to use indexOf comparison, fixed TRUSTED_FOR_CONTEXT ceiling from `decision_support` to `action_authority`; (2) memory-trust-bridge.js — removed dead pool import (db/pool.js DNE), fixed LEVEL import path to `./memory-intelligence-service.js`, fixed TRUST_MAP ceiling values (was using undefined LEVEL.BLOCKED etc., now string permission values), fixed WHERE clauses, fixed factLevel.rows[0].level, fixed INSERT to memory_use_receipts (was capsule_receipts), CANONICAL guard now string-checks; (3) memory-explanation.js — removed dead `LEVEL` import with wrong `../` path. | These broken imports prevented Step 5 pressure test from loading. | `node --check` PASS all 3; pressure test 18/20 PASS 2 PARTIAL |
 | 2026-05-21 | MC-BENCH Pressure Test (Step 5): 18/20 PASS, 2 PARTIAL, 0 FAIL. VERDICT: ALPHA_PASS_WITH_GAPS. Gaps: MC-BENCH-02 (REALITY_ANCHOR_MEMORY_MISMATCH not implemented — MC-F22 gap) + MC-BENCH-04 (intermediate promotion blocking RECEIPT_BACKED→TRUSTED_FOR_CONTEXT needs explicit receipt check in updateCapsuleTrust). | Step 5 of Memory Capsule Alpha 5-step pipeline. | `node scripts/memory-pressure-test.mjs --dry-run` exit 0 |
 | 2026-05-21 | Gap-closure patch for Memory Capsule Alpha: `services/memory-capsule.js` now implements `validateRealityAnchor(capsuleId, liveValue, pool)` with quarantine + `halt_receipt` on mismatch and adds explicit `audit_completion_receipt` gate for `RECEIPT_BACKED -> TRUSTED_FOR_CONTEXT` in `updateCapsuleTrust`. `scripts/memory-pressure-test.mjs` now executes both checks in dry-run mode instead of marking them partial by comment. | Close MC-BENCH-02 and MC-BENCH-04 without redesigning Alpha. | `node --check services/memory-capsule.js`; `node --check scripts/memory-pressure-test.mjs`; `node scripts/memory-pressure-test.mjs --dry-run` => 20/20 PASS, 0 PARTIAL, 0 FAIL |
+| 2026-05-21 | routes/memory-capsule-routes.js: fixed `import authMiddleware from '../middleware/authMiddleware.js'` → `../middleware/auth.js`. authMiddleware.js is an empty stub (no exports); auth.js has the proper default export (passthrough next()). This was the Railway boot-crash blocker preventing the server from starting on the f962de86 deploy. | Railway deploy FAILED with `SyntaxError: does not provide an export named 'default'` on server boot. Smallest bounded fix. | `node --check routes/memory-capsule-routes.js` PASS |
 
 ## Agent Handoff Notes
 

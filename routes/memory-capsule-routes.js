@@ -1,7 +1,7 @@
 // routes/memory-capsule-routes.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { Router } from 'express';
-import authMiddleware from '../middleware/authMiddleware.js';
+import authMiddleware from '../middleware/auth.js';
 import { pool } from '../core/database.js';
 import * as memorySignalIntakeService from '../services/memory-signal-intake.js';
 import * as memoryCandidateService from '../services/memory-candidate.js';
