@@ -7,7 +7,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-27 — `register-runtime-routes.js` assessment battery import restored (Railway boot). Prior: 2026-04-22 — `ssot-check.js` `checkChangedFiles` skips non-existent paths (deleted files in diff). Prior: Lumin `pending_adam` bridge, `required_routes` method + 401 retry, remote verify. |
+| **Last Updated** | 2026-05-21 — Mount Memory Capsule Alpha routes at `/api/v1/memory`; OIL phase7 probe wired. Prior: 2026-04-27 — assessment battery import restored (Railway boot). Prior: Lumin pending_adam bridge, required_routes method + 401 retry. |
 | **Verification Command** | `node scripts/verify-project.mjs --project project_governance` |
 | **Manifest** | `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json` |
 
