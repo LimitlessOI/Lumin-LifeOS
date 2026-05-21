@@ -7,9 +7,9 @@
   "priority": "high",
   "owner": "adam",
   "phase": "alpha",
-  "next_task": "Step 5 — Runtime Pressure Test: run 20 MC-BENCH signals from MEMORY_BENCHMARK_CORPUS.md against the live system",
-  "stability_class": "needs-review",
-  "current_focus": "Memory Capsule Alpha — 17 service/route files built and governance pass complete. Routes live at /api/v1/memory. Step 5 runtime pressure test is next.",
+  "next_task": "Close 2 open gaps: (1) MC-F22 — validateRealityAnchor + REALITY_ANCHOR_MEMORY_MISMATCH halt code; (2) MC-BENCH-04 — add audit_completion_receipt gate to updateCapsuleTrust for RECEIPT_BACKED→TRUSTED_FOR_CONTEXT. OR: deploy phase7-railway-probe to Railway for live mode pressure test.",
+  "stability_class": "alpha-pass-with-gaps",
+  "current_focus": "Memory Capsule Alpha complete. 5-step pipeline done. 18/20 MC-BENCH PASS, 2 PARTIAL (MC-F22 + intermediate promotion gate). Next: close gaps or deploy for live test.",
   "owned_files": [
     "routes/memory-capsule-routes.js",
     "services/memory-signal-intake.js",
