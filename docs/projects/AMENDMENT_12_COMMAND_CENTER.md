@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-25 |
+| **Last Updated** | 2026-05-21 |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -44,7 +44,9 @@ Autonomy Amplifier — every feature in the system is only useful if Adam can se
 ## Owned Files
 ```
 routes/command-center-routes.js
-public/overlay/command-center.html
+routes/lifeos-command-center-routes.js    ← NEW (v2 aggregate endpoints)
+public/overlay/command-center.html        ← operational admin dashboard (do not replace)
+public/overlay/lifeos-command-center.html ← NEW: executive oversight cockpit (v2)
 public/overlay/command-center.js
 public/overlay/index.html
 public/shared/lifeos-voice-chat.js
@@ -72,6 +74,9 @@ are owned by AMENDMENT_18 and read by this project's dashboard panels.
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
 | GET | `/api/health` | none | Health check for uptime monitors |
+| GET | `/api/v1/lifeos/command-center/phase14` | requireKey | Latest Phase 14 Alpha-Ready cert from builder_audit_receipts |
+| GET | `/api/v1/lifeos/command-center/mode` | requireKey | Current compiled builder release mode (MANUAL/SUPERVISED/AUTONOMOUS) |
+| POST | `/api/v1/lifeos/command-center/mode` | requireKey | NOT_WIRED — returns 501; Stage 2 will add runtime switching |
 | GET | `/api/v1/admin/ai/status` | requireKey | AI on/off + reason |
 | POST | `/api/v1/admin/ai/enable` | requireKey | Enable AI |
 | POST | `/api/v1/admin/ai/disable` | requireKey | Disable AI |
@@ -115,7 +120,11 @@ are owned by AMENDMENT_18 and read by this project's dashboard panels.
 - [x] **Fix key mismatch (Key2026LifeOSLimitlessOS! with !)** *(est: 0.5h \| actual: 1h)* `[safe]`
 - [x] **Builder Control Panel** — running/paused badge, Run Now/Dry Run/Pause/Resume, 4 stat cards, last run results, queue detail, Adam accuracy section *(est: 4h | actual: 3h)* `[needs-review]`
 - [x] **Operator Chat voice input and spoken replies** *(est: 2h | actual: 2h)* `[safe]`
-- [ ] **→ NEXT: Projects Dashboard panel drill-down** — hover tooltip + click drawer with build plan, estimates, verification status *(est: 4h)* `[needs-review]`
+- [x] **Command & Control Center v2 (`lifeos-command-center.html`)** — 10-section executive cockpit: snapshot, builder panel, OIL phase wheel, Adam queue, council hub, project map, infra health, security alpha, token economics, model leaderboard *(2026-05-21)* `[GAP-FILL: builder output truncated]`
+- [x] **`routes/lifeos-command-center-routes.js`** — `/phase14` + `/mode` GET/POST aggregate endpoints *(2026-05-21)* `[GAP-FILL: builder used wrong import paths]`
+- [ ] **→ NEXT: Stage 2 — runtime mode switching** — `builder_runtime_config` table + BUILDER_MODE_CHANGE receipt path; wire `POST /command-center/mode` live *(est: 3h)* `[needs-review]`
+- [ ] **→ NEXT: Phase 14 cert endpoint** — `GET /api/v1/builder/cert/phase14` with `phase_ledger` from `findingsJson`; update cert script to write `phase_ledger` *(est: 2h)* `[safe]`
+- [ ] **Projects Dashboard panel drill-down** — hover tooltip + click drawer with build plan, estimates, verification status *(est: 4h)* `[needs-review]`
 - [ ] **Pending Adam panel** — priority-sorted, type badges, one-click resolve *(est: 2h)* `[safe]`
 - [ ] **Mobile-responsive layout** *(est: 3h)* `[safe]`
 - [ ] **Role-based access (admin vs client vs agent views)** *(est: 6h)* `[high-risk]`
@@ -237,6 +246,9 @@ node --check public/overlay/command-center.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-05-21 | **`routes/lifeos-command-center-routes.js`** (NEW): `GET /api/v1/lifeos/command-center/phase14` — latest Phase 14 Alpha-Ready cert from `builder_audit_receipts`; `GET /api/v1/lifeos/command-center/mode` — current compiled builder mode; `POST /api/v1/lifeos/command-center/mode` — returns 501 NOT_WIRED (Stage 2). Named export `createCommandCenterAggregateRoutes({ requireKey })`. Correct imports: `../core/database.js`, `../config/builder-release-modes.js`. GAP-FILL: builder commit 79c9bd04 had wrong import paths (`../core/db.js`, `../mw/auth.js`). | C&C v2 cockpit backend. Builder output had wrong import paths and wrong export signature. | ✅ | pending | `node --check routes/lifeos-command-center-routes.js` |
+| 2026-05-21 | **`startup/register-runtime-routes.js`**: added import `createCommandCenterAggregateRoutes` + `app.use(createCommandCenterAggregateRoutes({ requireKey }))` after OIL receipts mount. | Wire the new aggregate routes for Railway deploy. | ✅ | pending | `node --check startup/register-runtime-routes.js` |
+| 2026-05-21 | **`public/overlay/lifeos-command-center.html`** (NEW): 10-section executive cockpit — Section A (7-card snapshot with SVG rings), B (builder control panel), C (OIL phase wheel SVG, 13 segments), D (Adam decision queue, full-width), E (AI council hub), F (product/project progress map), G (infrastructure health node map), H (OIL security receipt stream), I (token economics sparkline), J (model performance leaderboard). Dark design tokens, vanilla JS, mobile responsive, all 12 real API endpoints, NOT_WIRED/ERROR/UNKNOWN states, detail drawer, confirm overlay. GAP-FILL: builder `POST /build` with gemini_flash returned truncated output. | C&C v2 cockpit executive oversight UI per blueprint `COMMAND_CENTER_V2_BLUEPRINT.md`. | ✅ | pending | Open in browser after Railway deploy |
 | 2026-04-25 | **`docs/ENV_REGISTRY.md`:** legend — **OPTIONAL** = role (not “absent”); **vault name list** vs **runtime** `process.env` (e.g. `GET /api/v1/lifeos/builder/ready` → `github_token`). GitHub section — if vault mirror shows **`GITHUB_TOKEN` ✅ SET** but `/ready` is false, diagnose wrong `PUBLIC_BASE_URL`, local vs prod service, redeploy/scope — not “operator must add token again” without machine contradiction. Optional AI keys **GROQ/MISTRAL/TOGETHER/OPENROUTER** marked **✅ SET** where deploy inventory (2026-04-25) shows presence. Changelog row appended. | Prior thread conflated builder preflight/runtime with Railway UI; Adam’s screenshots already proved names in vault — align human registry with **`docs/ENV_DIAGNOSIS_PROTOCOL.md`** and truth-channel **§2.3**. | ✅ | pending | Human: registry + inventory still match current vault |
 | 2026-04-25 | **`scripts/system-rotate-command-key.mjs`:** added `@ssot` and stopped printing the new `COMMAND_CENTER_KEY` value in stdout/stderr; output now confirms rotation while hiding the secret. | Remaining 401 repair path may require key rotation via `RAILWAY_TOKEN`; the tool must not leak the newly generated command key into terminal logs or transcripts. | ✅ | pending | `node --check scripts/system-rotate-command-key.mjs` |
 | 2026-04-24 | **`src/server/auth/requireKey.js`:** trim `API_KEY` / `LIFEOS_KEY` / `COMMAND_CENTER_KEY` and request-provided key before compare (fixes 401 when Railway or `.env` has trailing newline/whitespace). Accept **`Authorization: Bearer <same key>`** in addition to `x-command-key` / `x-api-key` / query. `@ssot` in file. | Operators and builder scripts often matched keys “visually” but failed strict `===` after copy/paste or vault formatting. | ✅ | pending | `node --check src/server/auth/requireKey.js` |

@@ -55,6 +55,7 @@ import { createLifeOSAuthRoutes } from "../routes/lifeos-auth-routes.js";
 import { createLifeOSCouncilBuilderRoutes } from "../routes/lifeos-council-builder-routes.js";
 import { createGeminiProofRoutes } from "../routes/gemini-proof-routes.js";
 import { createOILSecurityReceiptRoutes } from "../routes/oil-security-receipt-routes.js";
+import { createCommandCenterAggregateRoutes } from "../routes/lifeos-command-center-routes.js";
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
 import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
@@ -374,6 +375,8 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [OIL-GEMINI-PROOF] Routes mounted at /api/v1/gemini/proof');
   app.use(createOILSecurityReceiptRoutes());
   logger.info('✅ [OIL-RECEIPTS] Routes mounted at /api/v1/oil/receipts');
+  app.use(createCommandCenterAggregateRoutes({ requireKey }));
+  logger.info('✅ [CMD-CENTER-AGG] Routes mounted at /api/v1/lifeos/command-center/{phase14,mode}');
 
   return {
     tcCoordinator,
