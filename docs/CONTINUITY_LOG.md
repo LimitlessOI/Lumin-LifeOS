@@ -32,6 +32,37 @@
 
 ---
 
+## [BUILD] Update 2026-05-21 #23 — OIL Security Alpha: Builder Supervised Mode
+
+### Files changed
+- `db/migrations/20260524_oil_security_receipts.sql` — append-only security_receipts table (PG RULE blocks UPDATE/DELETE); 9 receipt types
+- `services/oil-security-receipts.js` — SECURITY_RECEIPT_TYPES enum + writeSecurityReceipt + readRecentReceipts + readReceiptsByType. Builder committed f08875d4, Conductor repaired key/value validation bug + trailing fence + @ssot tag
+- `routes/gemini-proof-routes.js` — POST /api/v1/gemini/proof (calls gemini_flash, writes gemini_live_proof receipt, returns latency/confirmed/sha), GET /status. Builder committed a486a407, Conductor repaired import paths + factory pattern + callCouncilMember signature
+- `routes/oil-security-receipt-routes.js` — GET /api/v1/oil/receipts, GET /type/:type, POST. Builder committed e643e4ff, Conductor repaired import paths + receipt double-unwrap
+- `services/oil-daily-summary.js` — generateDailyOILSummary (24h SQL aggregation + by_type map + write daily_oil_summary receipt). Builder committed ed4fc096, Conductor repaired import path + COUNT(*) + call signature
+- `config/builder-release-modes.js` — MANUAL/SUPERVISED/AUTONOMOUS constants + rules per mode; DEFAULT_BUILDER_MODE=SUPERVISED
+- `config/builder-safe-scope.js` — SAFE_WRITE_PATHS, BLOCKED_WRITE_PATHS, isSafeTarget() — server.js/startup/middleware/core/.env/SSOT docs all blocked
+- `routes/lifeos-council-builder-routes.js` — GAP-FILL surgical edits: 4 imports + releaseMode extraction + isSafeTarget gate + BUILDER_SUPERVISED_BUILD fire-and-forget receipt in buildAndCommit. GAP-FILL reason: Groq HTTP 413 on 1920-line injection
+- `startup/boot-domains.js` — bootOILDailySummary via createUsefulWorkGuard (24h interval, 60s initial delay)
+- `startup/register-runtime-routes.js` — mount createGeminiProofRoutes + createOILSecurityReceiptRoutes
+
+### State after this session
+- All 9 files: `node --check` PASS
+- Pushed to main (SHA 0364c709) — Railway deploy in progress
+- Builder is in SUPERVISED mode by default (DEFAULT_BUILDER_MODE=SUPERVISED)
+- security_receipts table migration will auto-apply on next Railway boot
+- Gemini proof endpoint wired but not yet live-tested against Railway (deploy not confirmed yet)
+- OIL daily summary will run 60s after boot, then every 24h
+
+### Next agent: start here
+1. Verify Railway deployed 0364c709 (check `/api/v1/lifeos/builder/ready` → `deploy_commit_sha`)
+2. Test `POST /api/v1/gemini/proof` with x-command-key — should return `{ confirmed: true, latency_ms, receipt_id }`
+3. Test `GET /api/v1/oil/receipts` — should return receipts array (may be empty until proof runs)
+4. If gemini_flash returns bad response (not "CONFIRMED"), check that GEMINI_API_KEY is set on Railway
+5. Platform fix needed: builder /build on files > 500 lines should prefer gemini_flash (add to task-model-routing.js for large file targets)
+
+---
+
 ## [BUILD] Update 2026-05-21 #22 — Memory Capsule Alpha: Railway Deploy Cutover + Live ALPHA_PASS
 
 ### Files changed
