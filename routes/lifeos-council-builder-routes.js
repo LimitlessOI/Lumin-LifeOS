@@ -36,6 +36,10 @@ import { tmpdir } from 'os';
 import { getModelForTask, getCandidateModelsForTask, TASK_MODEL_MAP } from '../config/task-model-routing.js';
 import { createMemoryIntelligenceService } from '../services/memory-intelligence-service.js';
 import { filterAvailableCouncilMembers } from '../services/council-model-availability.js';
+import { BUILDER_MODE, BUILDER_MODE_RULES, DEFAULT_BUILDER_MODE } from '../config/builder-release-modes.js';
+import { isSafeTarget } from '../config/builder-safe-scope.js';
+import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
+import { pool as dbPool } from '../core/database.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -1341,7 +1345,8 @@ export function createLifeOSCouncilBuilderRoutes({
   // Returns: { ok, output, target_file, committed, model_used, route_wired? }
 
   async function buildAndCommit(req, res) {
-    const { target_file, commit_message, branch, mount_path, ...taskBody } = req.body || {};
+    const { target_file, commit_message, branch, mount_path, release_mode, ...taskBody } = req.body || {};
+    const releaseMode = release_mode || DEFAULT_BUILDER_MODE;
 
     if (!taskBody.task) {
       return res.status(400).json({ ok: false, error: 'task is required' });
@@ -1664,6 +1669,15 @@ export function createLifeOSCouncilBuilderRoutes({
       log.info({ resolvedTarget }, '[BUILDER] HTML validation passed');
     }
 
+    if (!isSafeTarget(resolvedTarget)) {
+      return res.status(403).json({
+        ok: false,
+        error: 'Target file is outside the Builder safe-scope policy',
+        target_file: resolvedTarget,
+        committed: false,
+      });
+    }
+
     const msg = commit_message || `[system-build] ${resolvedTarget}`;
     try {
       const commitResult = await commitToGitHub(resolvedTarget, generatedOutput, msg, branch || undefined);
@@ -1671,6 +1685,13 @@ export function createLifeOSCouncilBuilderRoutes({
       log.info({ resolvedTarget, msg, model_used, goldenSha }, '[BUILDER] /build committed generated file to GitHub');
       if (goldenSha) {
         createAutonomyGoldenTag(goldenSha).catch(e => log.warn({ err: e.message }, '[BUILDER] golden tag failed (non-fatal)'));
+      }
+      if (releaseMode === BUILDER_MODE.SUPERVISED) {
+        writeSecurityReceipt(
+          SECURITY_RECEIPT_TYPES.BUILDER_SUPERVISED_BUILD,
+          { target_file: resolvedTarget, commit_sha: goldenSha, model_used, task: String(taskBody.task || '').slice(0, 200) },
+          dbPool
+        ).catch(() => {});
       }
       const mirrorBuild = await mirrorCommittedContentToRepoRoot(resolvedTarget, generatedOutput);
       if (!mirrorBuild.ok) {

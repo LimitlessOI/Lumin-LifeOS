@@ -1,5 +1,5 @@
 // services/oil-security-receipts.js
-import { Pool } from 'pg';
+/** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 
 const SECURITY_RECEIPT_TYPES = Object.freeze({
   GEMINI_LIVE_PROOF: "gemini_live_proof",
@@ -14,7 +14,7 @@ const SECURITY_RECEIPT_TYPES = Object.freeze({
 });
 
 async function writeSecurityReceipt(receiptType, payload, pool) {
-  if (!SECURITY_RECEIPT_TYPES[receiptType]) {
+  if (!Object.values(SECURITY_RECEIPT_TYPES).includes(receiptType)) {
     throw new Error(`Invalid receipt type: ${receiptType}`);
   }
   const result = await pool.query(
@@ -33,7 +33,7 @@ async function readRecentReceipts(limit = 50, pool) {
 }
 
 async function readReceiptsByType(receiptType, limit = 20, pool) {
-  if (!SECURITY_RECEIPT_TYPES[receiptType]) {
+  if (!Object.values(SECURITY_RECEIPT_TYPES).includes(receiptType)) {
     throw new Error(`Invalid receipt type: ${receiptType}`);
   }
   const result = await pool.query(
@@ -44,4 +44,3 @@ async function readReceiptsByType(receiptType, limit = 20, pool) {
 }
 
 export { SECURITY_RECEIPT_TYPES, writeSecurityReceipt, readRecentReceipts, readReceiptsByType };
-```

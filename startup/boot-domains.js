@@ -14,6 +14,7 @@
 
 import { execSync } from 'child_process';
 import { createUsefulWorkGuard, requireTableRows } from '../services/useful-work-guard.js';
+import { generateDailyOILSummary } from '../services/oil-daily-summary.js';
 
 // ── GLVAR Monitor (dues + violations) ────────────────────────────────────────
 async function bootGLVARMonitor(deps) {
@@ -235,6 +236,27 @@ async function autoSeedEpistemicFacts(pool, logger) {
   }
 }
 
+async function bootOILDailySummary(deps) {
+  const { pool, logger } = deps;
+  const INTERVAL_MS = 24 * 60 * 60 * 1000;
+  const run = createUsefulWorkGuard({
+    taskName: 'OIL Daily Summary',
+    purpose: 'Aggregate 24h security receipt activity and write a daily_oil_summary receipt',
+    prerequisites: () => ({ ok: Boolean(pool?.query) }),
+    workCheck: requireTableRows(pool, 'SELECT COUNT(*) FROM security_receipts'),
+    execute: async () => {
+      const { summary, receipt_id } = await generateDailyOILSummary(pool);
+      logger?.info({ receipt_id, total: summary.total_receipts }, '[OIL] Daily summary written');
+    },
+    logger,
+  });
+  setTimeout(() => {
+    run();
+    setInterval(run, INTERVAL_MS);
+  }, 60 * 1000);
+  logger?.info('[BOOT] OIL daily summary scheduler registered (runs every 24h after 60s delay)');
+}
+
 export async function bootAllDomains(deps) {
   const { pool, logger } = deps;
   await autoSeedEpistemicFacts(pool, logger);
@@ -245,5 +267,6 @@ export async function bootAllDomains(deps) {
     bootLifeOSScheduled(deps),
     bootLaneIntel(deps),
     bootTwinAutoIngest(deps),
+    bootOILDailySummary(deps),
   ]);
 }

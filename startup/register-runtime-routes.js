@@ -53,6 +53,8 @@ import { createLifeOSAmbientIntelligenceRoutes } from "../routes/lifeos-ambient-
 import { createLifeOSCycleRoutes } from "../routes/lifeos-cycle-routes.js";
 import { createLifeOSAuthRoutes } from "../routes/lifeos-auth-routes.js";
 import { createLifeOSCouncilBuilderRoutes } from "../routes/lifeos-council-builder-routes.js";
+import { createGeminiProofRoutes } from "../routes/gemini-proof-routes.js";
+import { createOILSecurityReceiptRoutes } from "../routes/oil-security-receipt-routes.js";
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
 import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
@@ -366,6 +368,12 @@ export async function registerRuntimeRoutes(app, deps) {
   // Memory Intelligence — epistemic facts, debates, lessons, agent performance, intent drift (AMENDMENT_39)
   app.use('/api/v1/memory', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
   logger.info('✅ [MEMORY-INTELLIGENCE] Routes mounted at /api/v1/memory/{facts,debates,lessons,agents,authority,violations,routing,intent-drift,health}');
+
+  // OIL Security Alpha — Gemini live proof + security receipts (AMENDMENT_19)
+  app.use(createGeminiProofRoutes({ callCouncilMember }));
+  logger.info('✅ [OIL-GEMINI-PROOF] Routes mounted at /api/v1/gemini/proof');
+  app.use(createOILSecurityReceiptRoutes());
+  logger.info('✅ [OIL-RECEIPTS] Routes mounted at /api/v1/oil/receipts');
 
   return {
     tcCoordinator,
