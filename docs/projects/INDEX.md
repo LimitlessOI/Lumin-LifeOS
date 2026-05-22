@@ -79,6 +79,7 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 37 | [Universal Overlay Platform](AMENDMENT_37_UNIVERSAL_OVERLAY.md) | active-build | Infrastructure — browser extension, iframe overlay, form fill, real-time updates | High |
 | 38 | [Idea Vault — Captured Conversation Backlog](AMENDMENT_38_IDEA_VAULT.md) | LIVE | **Documentation SSOT** — all mined multi-model ideas, provenance, amendment routing; relieves operator memory load | Medium (curation) |
 | 39 | [Memory Intelligence System](AMENDMENT_39_MEMORY_INTELLIGENCE.md) | LIVE (Phase 1) | **Evidence engine** — epistemic facts, debates, lessons, agent accuracy, intent drift; `/api/v1/memory`; design brief in `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | High (adoption Phases 2–4) |
+| 40 | [OIL Security Divisions](AMENDMENT_40_OIL_SECURITY_DIVISIONS.md) | **PROPOSED** | **Infrastructure** — Red Team / Verification / Crypto-Harvest lanes; receipt-native find→fix→verify; `docs/projects/oil/SECURITY_ALPHA_SCOPE.md` | Medium (Stage 1 after Adam freeze) |
 
 ---
 

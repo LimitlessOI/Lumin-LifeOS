@@ -13,11 +13,25 @@ import { runPhase7GeminiLiveProbe } from '../services/builder-oil-phase7-probe.j
 export function createBuilderOilAuditProbeRoutes({ requireKey, pool }) {
   const router = Router();
 
+  function requireCommandCenterKeyOnly(req, res, next) {
+    const provided = req.get('x-command-center-key');
+    const expected = process.env.COMMAND_CENTER_KEY;
+    if (!expected || !provided || provided !== expected) {
+      return res.status(401).json({
+        ok: false,
+        phase: 7,
+        status: 'FAIL',
+        error: 'Unauthorized: x-command-center-key required',
+      });
+    }
+    return next();
+  }
+
   /**
    * POST /api/v1/builder/oil-probe/phase7-gemini-live
    * Live Gemini audit-before-done: bad output → AUDIT_FAILED (Railway runtime only).
    */
-  router.post('/oil-probe/phase7-gemini-live', requireKey, async (req, res) => {
+  router.post('/oil-probe/phase7-gemini-live', requireCommandCenterKeyOnly, async (req, res) => {
     try {
       const report = await runPhase7GeminiLiveProbe(pool);
       if (!report.ok) {
@@ -28,7 +42,9 @@ export function createBuilderOilAuditProbeRoutes({ requireKey, pool }) {
           phase: 7,
           status: 'FAIL',
           error: report.error || 'Phase 7 live probe failed',
+          audit_receipt_id: report.audit_receipt_id || null,
           checks: report.checks,
+          lineage: report.lineage || null,
         });
       }
       res.json({
@@ -41,6 +57,7 @@ export function createBuilderOilAuditProbeRoutes({ requireKey, pool }) {
         fail_audit_receipt_id: report.fail_audit_receipt_id,
         task_receipt_id: report.task_receipt_id,
         checks: report.checks,
+        lineage: report.lineage,
       });
     } catch (err) {
       res.status(500).json({
