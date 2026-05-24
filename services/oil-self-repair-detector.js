@@ -743,24 +743,119 @@ export function inferRepairChannel(findingsJson = {}) {
   if (findingsJson.detected_by === 'C2') return 'GAP-FILL';
   if (findingsJson.security_receipt_fallback_reason) return 'OIL';
   if (findingsJson.type === 'oil_missed_issue') return 'OIL';
+  if (findingsJson.type === 'self_repair_audit') return findingsJson.triggered_by || 'C2';
   return 'UNKNOWN';
+}
+
+const VALID_AUDIT_TRIGGERS = ['C2', 'Builder', 'OIL'];
+
+/** Build stored self-repair audit-run payload — no secrets, SHAs only. */
+export function buildSelfRepairAuditRunPayload({
+  auditStatus,
+  activeMismatches = [],
+  proofStoreStatus,
+  proofStoreId = null,
+  githubMainSha,
+  railwayDeploySha,
+  receiptCommitSha,
+  repairNeeded,
+  triggeredBy = 'C2',
+  proofFreshnessOverall = null,
+  blocksBuild = false,
+  oilMissedActiveCount = 0,
+}) {
+  const trigger = VALID_AUDIT_TRIGGERS.includes(triggeredBy) ? triggeredBy : 'C2';
+  return {
+    type: 'self_repair_audit',
+    status: auditStatus,
+    subject: 'self_repair_audit_run',
+    summary: `Self-repair audit: ${auditStatus}${repairNeeded ? ' — repair needed' : ''}`.slice(0, 240),
+    audit_status: auditStatus,
+    active_mismatches: activeMismatches,
+    proof_store_status: proofStoreStatus,
+    proof_store_id: proofStoreId,
+    github_main_sha: normalizeSha(githubMainSha),
+    railway_deploy_sha: normalizeSha(railwayDeploySha),
+    receipt_commit_sha: normalizeSha(receiptCommitSha),
+    repair_needed: Boolean(repairNeeded),
+    triggered_by: trigger,
+    proof_freshness_overall: proofFreshnessOverall,
+    blocks_build: Boolean(blocksBuild),
+    oil_missed_active_count: oilMissedActiveCount,
+    runtime: { proof_source: 'oil_self_repair_detector' },
+  };
+}
+
+/** Persist self-repair audit-run receipt — security_receipts first, builder_audit_receipts fallback. */
+export async function writeSelfRepairAuditRunReceipt(pool, payload) {
+  if (!payload || payload.type !== 'self_repair_audit') {
+    throw new Error('self_repair_audit_run_payload_invalid');
+  }
+  try {
+    return await writeSecurityReceipt(SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, payload, pool);
+  } catch (secErr) {
+    const buildId = createBuildSessionId(99702);
+    const auditId = createAuditSessionId(99702, buildId);
+    const auditReceiptId = await writeOILAuditReceipt(pool, OIL_AUDITOR_ROLE, {
+      projectSlug: 'oil-self-repair',
+      verdict: payload.status === 'VERIFIED' ? 'PASS' : 'CONDITIONAL_PASS',
+      confidencePct: payload.status === 'VERIFIED' ? 95 : 80,
+      findings: `Self-repair audit: ${payload.status}`.slice(0, 500),
+      findingsJson: {
+        ...payload,
+        security_receipt_fallback_reason: secErr.message?.slice(0, 200),
+      },
+      auditSessionId: auditId,
+      buildSessionId: buildId,
+    });
+    return {
+      receipt_id: auditReceiptId,
+      channel: 'builder_audit_receipts',
+      fallback_reason: secErr.message?.slice(0, 200),
+    };
+  }
 }
 
 export function shapeSelfRepairHistoryRow(row, source) {
   const fj = row.findings_json || row.payload?.details || row.payload || {};
   const ts = row.audited_at || row.created_at;
-  return {
+  const base = {
     receipt_id: row.id,
     timestamp: ts,
-    audit_status: fj.status || row.verdict || 'UNKNOWN',
+    audit_status: fj.audit_status || fj.status || row.verdict || 'UNKNOWN',
     active_mismatches: fj.active_mismatches || [],
-    repair_attempt: fj.what_oil_missed || fj.required_repair || row.findings || fj.summary || null,
+    repair_attempt:
+      fj.type === 'self_repair_audit'
+        ? fj.summary || row.findings || `Self-repair audit: ${fj.status || fj.audit_status}`
+        : fj.what_oil_missed || fj.required_repair || row.findings || fj.summary || null,
     repair_channel: inferRepairChannel(fj),
     type: fj.type || row.receipt_type || 'self_repair',
     source,
     finding_id: fj.finding_id || null,
     severity: fj.severity || null,
   };
+  if (fj.type === 'self_repair_audit') {
+    return {
+      ...base,
+      github_main_sha: fj.github_main_sha || null,
+      railway_deploy_sha: fj.railway_deploy_sha || null,
+      receipt_commit_sha: fj.receipt_commit_sha || null,
+      proof_store_status: fj.proof_store_status || null,
+      proof_store_id: fj.proof_store_id || null,
+      repair_needed: fj.repair_needed ?? null,
+      triggered_by: fj.triggered_by || null,
+      proof_freshness_overall: fj.proof_freshness_overall || null,
+      blocks_build: fj.blocks_build ?? null,
+      oil_missed_active_count: fj.oil_missed_active_count ?? null,
+    };
+  }
+  return base;
+}
+
+/** Latest stored self-repair audit-run receipt, if any. */
+export async function readLatestSelfRepairAuditRun(pool) {
+  const history = await readSelfRepairHistory(pool, 50);
+  return history.find((h) => h.type === 'self_repair_audit') || null;
 }
 
 /** Read self-repair history from DB receipts only — no invented rows. */
@@ -791,7 +886,8 @@ export async function readSelfRepairHistory(pool, limit = 20) {
     (r) =>
       r.payload?.type === 'oil_missed_issue' ||
       r.payload?.type === 'self_repair_audit' ||
-      r.payload?.details?.type === 'oil_missed_issue'
+      r.payload?.details?.type === 'oil_missed_issue' ||
+      r.payload?.details?.type === 'self_repair_audit'
   );
 
   const merged = [
