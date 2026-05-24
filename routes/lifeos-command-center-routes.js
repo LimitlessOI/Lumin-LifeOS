@@ -47,6 +47,7 @@ import {
   normalizeSha,
   evaluateKnownOilMisses,
   writeOilMissedIssueReceipt,
+  fetchGitHubMainSha,
 } from '../services/oil-self-repair-detector.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -143,7 +144,9 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
       const railwayDeploySha = normalizeSha(
         process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
       );
+      const githubMain = await fetchGitHubMainSha();
       const geminiRows = await readReceiptsByType(SECURITY_RECEIPT_TYPES.GEMINI_LIVE_PROOF, 1, pool);
+      const oilRecent = await readRecentReceipts(1, pool, { coreOnly: true });
       const lp = geminiRows[0];
       const receiptCommitSha =
         normalizeSha(lp?.payload?.runtime?.commit_sha) ||
@@ -151,7 +154,7 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
 
       const runtimeProof = detectRuntimeProofMismatch({
         localHead: req.query.local_head || null,
-        githubMainSha: req.query.github_main_sha || null,
+        githubMainSha: req.query.github_main_sha || githubMain.sha || null,
         railwayDeploySha,
         receiptCommitSha,
       });
@@ -170,8 +173,11 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
         proof_store: proofStore,
         oil_missed_issues_active: activeMisses,
         railway_deploy_sha: railwayDeploySha,
+        github_main_sha: githubMain.sha || null,
         receipt_commit_sha: receiptCommitSha,
         latest_gemini_receipt_id: lp?.id || null,
+        oil_receipts_present: oilRecent.length > 0,
+        missing_oil_receipts: oilRecent.length === 0,
         write_receipt_path: 'POST /api/v1/lifeos/command-center/self-repair/oil-missed-issue',
       });
     } catch (err) {
