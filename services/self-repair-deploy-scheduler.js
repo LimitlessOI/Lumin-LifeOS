@@ -9,6 +9,8 @@
 import { buildSupervisedAutonomyReadiness } from './supervised-autonomy-readiness.js';
 import { normalizeSha } from './oil-self-repair-detector.js';
 import { runSelfRepairExecutor, EXECUTOR_MAX_ATTEMPTS } from './self-repair-executor.js';
+import { findDeployDriftHookPlan } from './self-repair-prevention-hook-planner.js';
+import { appendPreventionHookLog } from './self-repair-prevention-hook-log.js';
 
 export function isSelfRepairBootCheckEnabled() {
   return process.env.SELF_REPAIR_BOOT_CHECK !== '0';
@@ -33,16 +35,34 @@ export function detectDeployProofDrift(readiness = {}) {
 
 /**
  * Run deploy repair check — dry_run plans only; live invokes executor (max_attempts=2).
+ * When viaPreventionHook=true, logs skip/execute to prevention hook JSONL (CAND-001 path).
  */
-export async function runDeployRepairCheck(pool, { dryRun = false, triggeredBy = 'deploy-check' } = {}) {
+export async function runDeployRepairCheck(pool, {
+  dryRun = false,
+  triggeredBy = 'deploy-check',
+  viaPreventionHook = false,
+} = {}) {
+  const started = Date.now();
+  const hookPlan = viaPreventionHook ? await findDeployDriftHookPlan(pool) : null;
   const railwayDeploySha = normalizeSha(
     process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
   );
   const readiness = await buildSupervisedAutonomyReadiness(pool, { railwayDeploySha });
   const drift = detectDeployProofDrift(readiness);
 
+  const hookMeta = hookPlan
+    ? {
+        hook_id: hookPlan.hook_id,
+        candidate_rule_id: hookPlan.candidate_rule_id,
+        classification: hookPlan.classification,
+        confidence: hookPlan.confidence,
+        source_receipt_ids: hookPlan.source_receipt_ids,
+        verification_path: hookPlan.verification_path,
+      }
+    : null;
+
   if (!drift.should_repair) {
-    return {
+    const outcome = {
       ok: true,
       action: 'skip',
       reason: drift.stale ? 'stale_without_deploy_drift' : 'proof_current',
@@ -53,7 +73,20 @@ export async function runDeployRepairCheck(pool, { dryRun = false, triggeredBy =
         repair_queue_open: readiness.repair_queue_open,
       },
       executor_result: null,
+      prevention_hook: hookMeta,
     };
+    if (viaPreventionHook && hookPlan?.hook_id) {
+      appendPreventionHookLog({
+        ...hookMeta,
+        action: 'skip',
+        reason: outcome.reason,
+        triggered_by: triggeredBy,
+        deploy_sha: drift.deploy_sha,
+        proof_status: readiness.proof_freshness_overall,
+        duration_ms: Date.now() - started,
+      });
+    }
+    return outcome;
   }
 
   if ((readiness.adam_required_actions || []).length > 0) {
@@ -80,7 +113,7 @@ export async function runDeployRepairCheck(pool, { dryRun = false, triggeredBy =
       repairId,
       triggeredBy,
     });
-    return {
+    const outcome = {
       ok: plan.audit_result === 'DRY_RUN',
       action: 'dry_run',
       reason: plan.stopped_reason || 'planned',
@@ -88,7 +121,20 @@ export async function runDeployRepairCheck(pool, { dryRun = false, triggeredBy =
       repair_id: repairId,
       max_attempts: EXECUTOR_MAX_ATTEMPTS,
       executor_result: plan,
+      prevention_hook: hookMeta,
     };
+    if (viaPreventionHook && hookPlan?.hook_id) {
+      appendPreventionHookLog({
+        ...hookMeta,
+        action: 'dry_run',
+        reason: outcome.reason,
+        triggered_by: triggeredBy,
+        deploy_sha: drift.deploy_sha,
+        proof_status: readiness.proof_freshness_overall,
+        duration_ms: Date.now() - started,
+      });
+    }
+    return outcome;
   }
 
   const result = await runSelfRepairExecutor({
@@ -98,7 +144,7 @@ export async function runDeployRepairCheck(pool, { dryRun = false, triggeredBy =
     triggeredBy,
   });
 
-  return {
+  const outcome = {
     ok: result.audit_result === 'PASS',
     action: 'execute',
     reason: result.stopped_reason || result.audit_result,
@@ -106,5 +152,29 @@ export async function runDeployRepairCheck(pool, { dryRun = false, triggeredBy =
     repair_id: repairId,
     max_attempts: EXECUTOR_MAX_ATTEMPTS,
     executor_result: result,
+    prevention_hook: hookMeta,
   };
+  if (viaPreventionHook && hookPlan?.hook_id) {
+    appendPreventionHookLog({
+      ...hookMeta,
+      action: outcome.action,
+      reason: outcome.reason,
+      triggered_by: triggeredBy,
+      deploy_sha: drift.deploy_sha,
+      proof_status:
+        result.verification_result?.readiness?.proof_freshness_overall ||
+        result.verification_result?.proof_freshness?.freshness?.overall ||
+        readiness.proof_freshness_overall,
+      duration_ms: Date.now() - started,
+    });
+  }
+  return outcome;
+}
+
+/** Governed deploy_drift prevention hook — wraps deploy-check with hook logging. */
+export async function runDeployDriftPreventionHook(pool, options = {}) {
+  return runDeployRepairCheck(pool, {
+    ...options,
+    viaPreventionHook: true,
+  });
 }

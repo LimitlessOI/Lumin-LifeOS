@@ -297,6 +297,9 @@
       <div id="repair-lessons-panel" style="margin-bottom:10px">
         <div class="not-wired">Loading repair lessons / prevention…</div>
       </div>
+      <div id="prevention-hooks-panel" style="margin-bottom:10px">
+        <div class="not-wired">Loading prevention hooks…</div>
+      </div>
       <div id="self-repair-history-panel">
         <div class="not-wired">Loading...</div>
       </div>
@@ -1264,7 +1267,7 @@ async function runSelfRepairExecute() {
     body: JSON.stringify({ dry_run: false, repair_id: 'DR-003-RECEIPT-STALE', triggered_by: 'CC_V2' }),
   });
   renderExecutorResult(el, r, false);
-  await Promise.all([loadSupervisedReadiness(), loadProofIntegrity(), loadRepairQueue(), loadSelfRepairHistory(), loadLastSelfRepairExecution(), loadRepairLessons()]);
+  await Promise.all([loadSupervisedReadiness(), loadProofIntegrity(), loadRepairQueue(), loadSelfRepairHistory(), loadLastSelfRepairExecution(), loadRepairLessons(), loadPreventionHooks()]);
 }
 
 function renderExecutorResult(el, r, isDryRun) {
@@ -1421,6 +1424,50 @@ async function loadRepairLessons() {
     ${lessonRows}
     <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:12px 0 6px">Candidate prevention rules (${rules.length}) — not promoted to invariant</div>
     ${ruleRows}`;
+}
+
+async function loadPreventionHooks() {
+  const el = document.getElementById('prevention-hooks-panel');
+  if (!el) return;
+  const r = await safeFetch('/api/v1/lifeos/command-center/self-repair/prevention/hooks');
+  if (r.status === 404 || r.data?.status === 'NOT_WIRED') {
+    el.innerHTML = `<div class="not-wired">NOT_WIRED<span>GET /self-repair/prevention/hooks — no governed hooks yet</span></div>`;
+    return;
+  }
+  const hooks = r.data?.hooks || [];
+  if (!hooks.length) {
+    el.innerHTML = `<div class="not-wired">NO_DATA<span>No prevention hooks returned</span></div>`;
+    return;
+  }
+  const statusPill = (s) => s === 'WIRED'
+    ? '<span class="pill pill-success">WIRED</span>'
+    : '<span class="pill pill-muted">NOT_WIRED</span>';
+  const rows = hooks.map(h => {
+    const last = h.last_run;
+    const lastLine = last
+      ? `${last.action || '—'} · ${last.reason || '—'} · ${last.ts ? new Date(last.ts).toLocaleString() : '—'}`
+      : 'never run on this host';
+    return `
+    <div class="q-card" style="margin-bottom:8px;border-left:3px solid ${h.hook_status==='WIRED'?'var(--success)':'var(--text-muted)'}">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:4px">
+        ${statusPill(h.hook_status)}
+        <span class="pill pill-accent">${h.classification||'—'}</span>
+        <span class="pill pill-muted">${h.hook_id||'—'}</span>
+        <span class="pill pill-warning">${h.candidate_rule_id||'—'}</span>
+        <span class="pill pill-muted">conf ${h.confidence != null ? h.confidence : '—'}</span>
+      </div>
+      <div class="q-desc" style="font-size:11px"><strong>Trigger:</strong> ${(h.trigger||'—').slice(0,120)}</div>
+      <div class="q-desc" style="font-size:11px;margin-top:4px"><strong>Action:</strong> ${(h.proposed_action||'—').slice(0,180)}</div>
+      ${h.endpoint ? `<div style="font-size:10px;color:var(--text-muted);margin-top:4px">Endpoint: ${h.endpoint}</div>` : ''}
+      ${h.verification_path ? `<div style="font-size:10px;color:var(--text-muted);margin-top:4px">Verify: ${h.verification_path}</div>` : ''}
+      <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Rollback: ${(h.rollback_no_op||'—').slice(0,160)}</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Last run: ${lastLine}</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Receipts: ${(h.source_receipt_ids||[]).slice(0,8).join(', ')||'—'}</div>
+    </div>`;
+  }).join('');
+  el.innerHTML = `
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Prevention Hooks (read-only) · ${r.data.wired_count||0} wired · not promoted to invariant</div>
+    ${rows}`;
 }
 
 async function loadLastSelfRepairExecution() {
@@ -2069,6 +2116,7 @@ async function loadAll() {
     loadInfra(),
     loadLastSelfRepairExecution(),
     loadRepairLessons(),
+    loadPreventionHooks(),
     loadSelfRepairHistory(),
     loadRepairQueue(),
     loadOilMisses(),

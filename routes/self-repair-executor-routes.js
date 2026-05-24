@@ -9,13 +9,17 @@
 import express from 'express';
 import { pool } from '../core/database.js';
 import { runSelfRepairExecutor, EXECUTOR_MAX_ATTEMPTS } from '../services/self-repair-executor.js';
-import { runDeployRepairCheck } from '../services/self-repair-deploy-scheduler.js';
+import { runDeployDriftPreventionHook } from '../services/self-repair-deploy-scheduler.js';
 import { readLatestSelfRepairExecution, readLastPassExecutionLogEntry } from '../services/self-repair-execution-log.js';
 import { readLatestRepairMemory } from '../services/self-repair-memory.js';
 import {
   buildPreventionRegistry,
   readPreventionRegistrySnapshot,
 } from '../services/self-repair-prevention-registry.js';
+import {
+  buildPreventionHookPlans,
+  buildPreventionHooksStatus,
+} from '../services/self-repair-prevention-hook-planner.js';
 
 export function createSelfRepairExecutorRoutes({ requireKey }) {
   const router = express.Router();
@@ -65,7 +69,7 @@ export function createSelfRepairExecutorRoutes({ requireKey }) {
     try {
       const dryRun = req.body?.dry_run === true;
       const triggeredBy = req.body?.triggered_by || 'deploy-check';
-      const outcome = await runDeployRepairCheck(pool, { dryRun, triggeredBy });
+      const outcome = await runDeployDriftPreventionHook(pool, { dryRun, triggeredBy });
       res.status(outcome.ok ? 200 : outcome.action === 'halt' ? 409 : 200).json({
         ok: outcome.ok,
         action: outcome.action,
@@ -74,6 +78,7 @@ export function createSelfRepairExecutorRoutes({ requireKey }) {
         repair_id: outcome.repair_id || null,
         max_attempts: EXECUTOR_MAX_ATTEMPTS,
         dry_run: dryRun,
+        prevention_hook: outcome.prevention_hook || null,
         executor_result: outcome.executor_result
           ? {
               audit_result: outcome.executor_result.audit_result,
@@ -169,6 +174,62 @@ export function createSelfRepairExecutorRoutes({ requireKey }) {
           ? { path: snapshot.registry_path, generated_at: snapshot.generated_at }
           : registry.registry,
         read_path: 'GET /api/v1/lifeos/command-center/self-repair/prevention/candidates',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/api/v1/lifeos/command-center/self-repair/prevention/hooks', requireKey, async (req, res, next) => {
+    try {
+      const status = await buildPreventionHooksStatus(pool);
+      if (!status.wired_count) {
+        return res.status(status.candidate_count ? 200 : 404).json({
+          ok: false,
+          status: status.candidate_count ? 'CANDIDATES_ONLY' : 'NOT_WIRED',
+          promoted_to_invariant: false,
+          hooks: status.hooks,
+          wired_count: status.wired_count,
+          note: status.candidate_count
+            ? 'Candidate rules exist but no governed hook is wired for execution'
+            : 'No prevention hooks or candidates yet',
+          read_path: 'GET /api/v1/lifeos/command-center/self-repair/prevention/hooks',
+        });
+      }
+      res.json({
+        ok: true,
+        status: 'WIRED',
+        promoted_to_invariant: false,
+        hooks: status.hooks,
+        wired_count: status.wired_count,
+        candidate_count: status.candidate_count,
+        generated_at: status.generated_at,
+        read_path: 'GET /api/v1/lifeos/command-center/self-repair/prevention/hooks',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/api/v1/lifeos/command-center/self-repair/prevention/plan', requireKey, async (req, res, next) => {
+    try {
+      const planResult = await buildPreventionHookPlans(pool);
+      if (!planResult.plans.length) {
+        return res.status(404).json({
+          ok: false,
+          status: 'NOT_WIRED',
+          note: 'No CANDIDATE_RULE plans available',
+          read_path: 'GET /api/v1/lifeos/command-center/self-repair/prevention/plan',
+        });
+      }
+      res.json({
+        ok: true,
+        status: planResult.status,
+        promoted_to_invariant: false,
+        plans: planResult.plans,
+        lesson_count_scanned: planResult.lesson_count_scanned,
+        generated_at: planResult.generated_at,
+        read_path: 'GET /api/v1/lifeos/command-center/self-repair/prevention/plan',
       });
     } catch (err) {
       next(err);

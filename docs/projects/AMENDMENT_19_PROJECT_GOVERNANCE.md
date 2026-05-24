@@ -1,6 +1,6 @@
 # AMENDMENT 19 — Project Governance
 
-**Last Updated:** 2026-05-24 — `startup/boot-domains.js` wired `bootSelfRepairDeployCheck` — fires once 45s after boot via `createUsefulWorkGuard` to repair SHA drift without Adam action.
+**Last Updated:** 2026-05-24 — boot deploy check now runs `runDeployDriftPreventionHook` once per boot (skip+log if CURRENT).
 
 | Field | Value |
 |---|---|

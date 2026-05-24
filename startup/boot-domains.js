@@ -277,26 +277,21 @@ async function bootSelfRepairDeployCheck(deps) {
       }
       return { ok: true };
     },
-    workCheck: async () => {
-      const { buildSupervisedAutonomyReadiness } = await import('../services/supervised-autonomy-readiness.js');
-      const { detectDeployProofDrift } = await import('../services/self-repair-deploy-scheduler.js');
-      const { normalizeSha } = await import('../services/oil-self-repair-detector.js');
-      const deploySha = normalizeSha(process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || '');
-      const readiness = await buildSupervisedAutonomyReadiness(pool, { railwayDeploySha: deploySha });
-      const drift = detectDeployProofDrift(readiness);
-      return {
-        count: drift.should_repair ? 1 : 0,
-        description: drift.should_repair
-          ? `deploy drift ${drift.deploy_sha?.slice(0, 7)} vs receipt ${drift.receipt_sha?.slice(0, 7)}`
-          : 'proof current — no deploy repair needed',
-      };
-    },
+    workCheck: async () => ({
+      count: 1,
+      description: 'post-deploy prevention hook — deploy-check once per boot (skip+log if CURRENT)',
+    }),
     execute: async () => {
-      const { runDeployRepairCheck } = await import('../services/self-repair-deploy-scheduler.js');
-      const outcome = await runDeployRepairCheck(pool, { dryRun: false, triggeredBy: 'boot' });
+      const { runDeployDriftPreventionHook } = await import('../services/self-repair-deploy-scheduler.js');
+      const outcome = await runDeployDriftPreventionHook(pool, { dryRun: false, triggeredBy: 'boot-prevention-hook' });
       logger?.info?.(
-        { action: outcome.action, reason: outcome.reason, ok: outcome.ok },
-        '[BOOT] Self-repair deploy check complete'
+        {
+          action: outcome.action,
+          reason: outcome.reason,
+          ok: outcome.ok,
+          hook: outcome.prevention_hook?.hook_id || null,
+        },
+        '[BOOT] Deploy drift prevention hook complete'
       );
     },
     logger,
