@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build
  * would fail (auth, GITHUB_TOKEN, DB, etc.). Run before any Conductor work on product paths.
@@ -23,6 +22,13 @@ dotenv.config({ path: new URL('../.env.local', import.meta.url).pathname, overri
 import { mkdir, appendFile } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  detectRuntimeProofMismatch,
+  detectProofStoreMismatch,
+  fetchRailwayProofStore,
+  fetchLatestReceiptCommitSha,
+  readLocalGitShas,
+} from '../services/oil-self-repair-detector.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PREFLIGHT_LOG = path.join(ROOT, 'data', 'builder-preflight-log.jsonl');
@@ -314,6 +320,46 @@ async function main() {
   }
 
   tsosMachine('KNOW', 'PREFLIGHT_OK', 'PROBE', `builder domains+ready OK domains=${n}`, 'BUILD');
+
+  // Self-repair audit (non-blocking unless P0 + BUILDER_PREFLIGHT=strict)
+  if (key && !readyMissing) {
+    try {
+      const git = readLocalGitShas(ROOT);
+      const deploySha = json?.codegen?.deploy_commit_sha || null;
+      const [storeRemote, receipt] = await Promise.all([
+        fetchRailwayProofStore(base, key),
+        fetchLatestReceiptCommitSha(base, key),
+      ]);
+      const runtimeProof = detectRuntimeProofMismatch({
+        localHead: git.localHead,
+        githubMainSha: git.githubMainSha,
+        railwayDeploySha: deploySha,
+        receiptCommitSha: receipt.commitSha,
+      });
+      const proofStore = detectProofStoreMismatch(process.env.DATABASE_URL, storeRemote.store);
+      const warnLines = [];
+      if (!runtimeProof.verified) {
+        for (const m of runtimeProof.mismatches) {
+          warnLines.push(`  [${m.severity}] ${m.rule}: ${m.detail}`);
+        }
+      }
+      if (proofStore.local_proof_only) {
+        warnLines.push(`  [P1] LOCAL_PROOF_ONLY: ${proofStore.detail}`);
+      }
+      if (warnLines.length) {
+        printBlock(
+          '⚠️ Self-repair audit (non-blocking unless P0 + strict)',
+          warnLines.join('\n') + '\n\nRun: node scripts/oil-self-repair-audit.mjs',
+        );
+        if (runtimeProof.blocks_build && /^1|true|strict$/i.test(String(process.env.BUILDER_PREFLIGHT || ''))) {
+          await finish(1, 'self_repair_p0', topology);
+        }
+      }
+    } catch (e) {
+      printBlock('ℹ️ Self-repair audit (skipped)', e?.message || String(e));
+    }
+  }
+
   printBlock(
     '✅ OK',
     `GET /domains: ${n} domain prompt file(s) visible.\n` +
