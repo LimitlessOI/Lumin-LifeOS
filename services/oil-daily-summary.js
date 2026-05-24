@@ -2,18 +2,19 @@
 /** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 
 import { pool } from '../core/database.js';
-import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from './oil-security-receipts.js';
+import {
+  writeSecurityReceipt,
+  SECURITY_RECEIPT_TYPES,
+  SEC_F01_CORE_RECEIPT_TYPES,
+} from './oil-security-receipts.js';
 
 const TYPE_DEFAULTS = {
   gemini_live_proof: 0,
+  runtime_proof: 0,
   oil_audit_run: 0,
-  red_team_finding: 0,
   security_fix_verified: 0,
+  audit_verification: 0,
   daily_oil_summary: 0,
-  honeypot_probe: 0,
-  canary_trip: 0,
-  builder_supervised_build: 0,
-  builder_mode_change: 0,
 };
 
 export async function generateDailyOILSummary(poolOverride) {
@@ -33,16 +34,37 @@ export async function generateDailyOILSummary(poolOverride) {
     WHERE created_at > NOW() - INTERVAL '24 hours'
   `);
 
+  const { rows: coreRows } = await db.query(
+    `SELECT COUNT(*)::int AS total
+       FROM security_receipts
+      WHERE created_at > NOW() - INTERVAL '24 hours'
+        AND receipt_type = ANY($1::text[])`,
+    [SEC_F01_CORE_RECEIPT_TYPES]
+  );
+
   const by_type = { ...TYPE_DEFAULTS };
   for (const { receipt_type, count } of byTypeRows) {
     if (receipt_type in by_type) by_type[receipt_type] = count;
   }
 
+  const compat_total = Math.max((totalRows[0]?.total ?? 0) - (coreRows[0]?.total ?? 0), 0);
+
   const summary = {
+    status: 'PASS',
+    subject: 'security_receipts_24h',
+    summary: 'Daily security receipt summary generated from live receipt data.',
     date: new Date().toISOString(),
     window_hours: 24,
     total_receipts: totalRows[0]?.total ?? 0,
+    sec_f01_core_receipts: coreRows[0]?.total ?? 0,
+    compat_receipts: compat_total,
     by_type,
+    not_wired: {
+      active_defense: true,
+      deception: true,
+      credential_rotation: true,
+      auto_remediation: true,
+    },
   };
 
   const { receipt_id } = await writeSecurityReceipt(

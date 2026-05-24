@@ -65,6 +65,12 @@
       "path": "/api/v1/pending-adam",
       "expected_status": 200,
       "description": "Pending items for Adam"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/lifeos/command-center/security",
+      "expected_status": 200,
+      "description": "SEC-F01 security aggregate"
     }
   ],
   "required_tables": [

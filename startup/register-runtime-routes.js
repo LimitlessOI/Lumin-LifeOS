@@ -371,12 +371,12 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [MEMORY-INTELLIGENCE] Routes mounted at /api/v1/memory/{facts,debates,lessons,agents,authority,violations,routing,intent-drift,health}');
 
   // OIL Security Alpha — Gemini live proof + security receipts (AMENDMENT_19)
-  app.use(createGeminiProofRoutes({ callCouncilMember }));
+  app.use(createGeminiProofRoutes({ callCouncilMember, requireKey }));
   logger.info('✅ [OIL-GEMINI-PROOF] Routes mounted at /api/v1/gemini/proof');
-  app.use(createOILSecurityReceiptRoutes());
+  app.use(createOILSecurityReceiptRoutes({ requireKey }));
   logger.info('✅ [OIL-RECEIPTS] Routes mounted at /api/v1/oil/receipts');
   app.use(createCommandCenterAggregateRoutes({ requireKey }));
-  logger.info('✅ [CMD-CENTER-AGG] Routes mounted at /api/v1/lifeos/command-center/{phase14,mode}');
+  logger.info('✅ [CMD-CENTER-AGG] Routes mounted at /api/v1/lifeos/command-center/{phase14,mode,security}');
 
   return {
     tcCoordinator,

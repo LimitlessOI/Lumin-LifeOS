@@ -3,28 +3,29 @@
 
 import express from 'express';
 import { pool } from '../core/database.js';
-import authMiddleware from '../middleware/auth.js';
 import {
   writeSecurityReceipt,
   readRecentReceipts,
   readReceiptsByType,
+  readLatestDailySummary,
   SECURITY_RECEIPT_TYPES,
 } from '../services/oil-security-receipts.js';
 
-export function createOILSecurityReceiptRoutes() {
+export function createOILSecurityReceiptRoutes({ requireKey }) {
   const router = express.Router();
 
-  router.get('/api/v1/oil/receipts', authMiddleware, async (req, res, next) => {
+  router.get('/api/v1/oil/receipts', requireKey, async (req, res, next) => {
     try {
       const limit = parseInt(req.query.limit) || 50;
-      const receipts = await readRecentReceipts(limit, pool);
+      const coreOnly = String(req.query.core_only || '').toLowerCase() === 'true';
+      const receipts = await readRecentReceipts(limit, pool, { coreOnly });
       res.json({ receipts });
     } catch (error) {
       next(error);
     }
   });
 
-  router.get('/api/v1/oil/receipts/type/:type', authMiddleware, async (req, res, next) => {
+  router.get('/api/v1/oil/receipts/type/:type', requireKey, async (req, res, next) => {
     try {
       const { type } = req.params;
       const limit = parseInt(req.query.limit) || 20;
@@ -38,7 +39,19 @@ export function createOILSecurityReceiptRoutes() {
     }
   });
 
-  router.post('/api/v1/oil/receipts', authMiddleware, async (req, res, next) => {
+  router.get('/api/v1/oil/receipts/summary/latest', requireKey, async (req, res, next) => {
+    try {
+      const latest = await readLatestDailySummary(pool);
+      res.json({
+        status: latest ? 'OK' : 'NOT_WIRED',
+        receipt: latest,
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post('/api/v1/oil/receipts', requireKey, async (req, res, next) => {
     try {
       const { receipt_type, payload } = req.body;
       const { receipt_id } = await writeSecurityReceipt(receipt_type, payload || {}, pool);

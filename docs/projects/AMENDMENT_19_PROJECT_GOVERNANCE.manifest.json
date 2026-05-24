@@ -9,7 +9,7 @@
   "phase": "core-infrastructure",
   "next_task": "Wire estimation accuracy, readiness queue, and deeper governance/env-awareness drill-down into the Command Center overlay",
   "stability_class": "needs-review",
-  "current_focus": "Governance data is seeded and live; next step is surfacing estimation accuracy, timing truth, and drill-downs in the Command Center, including env-registry awareness so builders know what configuration exists before they assume runtime capability",
+  "current_focus": "Governance data is seeded and live; SEC-F01 receipt-spine hardening is wired through runtime composition and Command Center aggregate routes; next step is surfacing estimation accuracy, timing truth, drill-downs, and runtime-verifiable governance/security views without fake state",
   "owned_files": [
     "routes/project-governance-routes.js",
     "startup/register-runtime-routes.js",
@@ -185,7 +185,7 @@
       "resolved": false
     }
   ],
-  "last_verified_at": "2026-04-06",
+  "last_verified_at": "2026-05-23",
   "verification_passed": null,
-  "last_updated": "2026-05-21"
+  "last_updated": "2026-05-23"
 }

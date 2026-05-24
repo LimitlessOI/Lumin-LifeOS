@@ -10,6 +10,12 @@
 import express from 'express';
 import { pool } from '../core/database.js';
 import { DEFAULT_BUILDER_MODE, BUILDER_MODE, BUILDER_MODE_RULES } from '../config/builder-release-modes.js';
+import {
+  readLatestDailySummary,
+  readRecentReceipts,
+  readReceiptsByType,
+  SECURITY_RECEIPT_TYPES,
+} from '../services/oil-security-receipts.js';
 
 export function createCommandCenterAggregateRoutes({ requireKey }) {
   const router = express.Router();
@@ -77,6 +83,39 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
       status: 'NOT_WIRED',
       note: 'Runtime mode switching not yet implemented. Mode is compiled in config/builder-release-modes.js. Stage 2 will add a builder_runtime_config table and a BUILDER_MODE_CHANGE security receipt write.',
     });
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/security
+   * Read-only SEC-F01 aggregate for live security state. Real receipt data only.
+   */
+  router.get('/api/v1/lifeos/command-center/security', requireKey, async (req, res, next) => {
+    try {
+      const [latestSummary, recentReceipts, geminiProof] = await Promise.all([
+        readLatestDailySummary(pool),
+        readRecentReceipts(20, pool, { coreOnly: true }),
+        readReceiptsByType(SECURITY_RECEIPT_TYPES.GEMINI_LIVE_PROOF, 1, pool),
+      ]);
+
+      const lastProof = geminiProof[0] || null;
+
+      res.json({
+        status: latestSummary ? 'LIVE' : 'NOT_WIRED',
+        receipt_spine_only: true,
+        live_data_only: true,
+        latest_summary: latestSummary,
+        last_gemini_proof: lastProof,
+        recent_receipts: recentReceipts,
+        not_wired: {
+          active_defense: true,
+          deception: true,
+          credential_rotation: true,
+          auto_remediation: true,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
   });
 
   return router;

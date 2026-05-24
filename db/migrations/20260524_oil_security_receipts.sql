@@ -6,10 +6,12 @@ CREATE TABLE IF NOT EXISTS security_receipts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     receipt_type TEXT NOT NULL CHECK (receipt_type IN (
         'gemini_live_proof',
+        'runtime_proof',
         'oil_audit_run',
-        'red_team_finding',
         'security_fix_verified',
+        'audit_verification',
         'daily_oil_summary',
+        'red_team_finding',
         'honeypot_probe',
         'canary_trip',
         'builder_supervised_build',
@@ -38,6 +40,25 @@ BEGIN
             ON DELETE TO security_receipts DO INSTEAD NOTHING;
     END IF;
 END$$;
+
+ALTER TABLE security_receipts
+    DROP CONSTRAINT IF EXISTS security_receipts_receipt_type_check;
+
+ALTER TABLE security_receipts
+    ADD CONSTRAINT security_receipts_receipt_type_check
+    CHECK (receipt_type IN (
+        'gemini_live_proof',
+        'runtime_proof',
+        'oil_audit_run',
+        'security_fix_verified',
+        'audit_verification',
+        'daily_oil_summary',
+        'red_team_finding',
+        'honeypot_probe',
+        'canary_trip',
+        'builder_supervised_build',
+        'builder_mode_change'
+    ));
 
 -- Index for type-filtered queries (OIL daily summary, Red Team findings).
 CREATE INDEX IF NOT EXISTS idx_security_receipts_type_created

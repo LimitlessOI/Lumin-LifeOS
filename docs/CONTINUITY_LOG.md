@@ -32,6 +32,33 @@
 
 ---
 
+## [BUILD] Update 2026-05-23 #24 — SEC-F01 Freeze Hardening
+
+### Files changed
+- `db/migrations/20260524_oil_security_receipts.sql` — expanded canonical receipt type constraint to include `runtime_proof` and `audit_verification` while preserving compatibility types already referenced by Builder; append-only rules unchanged
+- `services/oil-security-receipts.js` — added canonical `sec-f01.v1` payload shaping, secret-safe sanitization on write/read, typed SEC-F01 core categories, runtime-proof/audit-verification helpers, and latest-summary reader
+- `routes/gemini-proof-routes.js` — moved from stub auth to real `requireKey`; Gemini live proof now writes canonical runtime-proof receipt payloads and status endpoint returns flattened live-proof fields
+- `routes/oil-security-receipt-routes.js` — moved from stub auth to real `requireKey`; added builder-safe latest summary endpoint and optional core-only receipt reads
+- `routes/lifeos-command-center-routes.js` — added read-only `/api/v1/lifeos/command-center/security` aggregate returning only real receipt-backed state plus explicit `NOT_WIRED` placeholders for unfrozen security lanes
+- `startup/register-runtime-routes.js` — now passes `requireKey` into OIL security route factories and exposes `/security` in the aggregate route log line
+- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` + manifest — documented the new SEC-F01 security aggregate endpoint
+- `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` — added SEC-F01 freeze change receipt
+- `docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.md` + manifest — narrowed Security Alpha to receipt spine only; active defense/deception remains `NOT_WIRED`
+
+### State after this session
+- SEC-F01 remains receipt-spine only: no kill switches, no auto-remediation, no fake data, no new Builder mutations
+- `security_receipts` is still the canonical append-only store, but the service contract is now explicit and secret-safe
+- Command Center has a dedicated read-only security aggregate path backed by real receipts
+- Existing compatibility receipt types remain readable/writable so supervised Builder flow is not broken by the freeze
+
+### Next agent: start here
+1. Run `node --check` on the touched runtime files and `node scripts/oil-proof-phase14-alpha-certification.mjs`
+2. Verify `POST /api/v1/gemini/proof` writes a canonical `sec-f01.v1` receipt in Railway/Neon
+3. Verify `GET /api/v1/lifeos/command-center/security` returns `LIVE` or `NOT_WIRED` from real data only
+4. If any failure appears, patch only the receipt spine or route auth boundary — do not broaden Security Alpha
+
+---
+
 ## [BUILD] Update 2026-05-21 #23 — OIL Security Alpha: Builder Supervised Mode
 
 ### Files changed
