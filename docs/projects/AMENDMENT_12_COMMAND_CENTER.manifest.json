@@ -9,7 +9,7 @@
   "phase": "stabilization",
   "next_task": "Make the overlay mobile-responsive, add role-based access controls, and continue expanding governance/env-awareness drill-downs",
   "stability_class": "needs-review",
-  "current_focus": "Governance panels are live, Operator Chat now has browser voice input/spoken replies, Secrets Vault now exposes env-registry health, and public overlay HTML now ships no-cache with versioned scripts so browsers stop serving stale broken builds; next step is mobile responsiveness and access control",
+  "current_focus": "Governance panels and bounded self-repair are live; the current hardening focus is truthful proof freshness so post-cert self-repair audits do not falsely re-stale Phase 14 after Railway-runtime repair completes",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",
@@ -170,6 +170,6 @@
       "resolved": true
     }
   ],
-  "last_verified_at": "2026-04-24",
+  "last_verified_at": "2026-05-24",
   "verification_passed": null
 }
