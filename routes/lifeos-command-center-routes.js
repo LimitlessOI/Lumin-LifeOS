@@ -41,6 +41,13 @@ import {
   proofStoreFingerprint,
   readLatestPhase14Cert,
 } from '../services/builder-phase14-ledger.js';
+import {
+  detectRuntimeProofMismatch,
+  detectProofStoreMismatch,
+  normalizeSha,
+  evaluateKnownOilMisses,
+  writeOilMissedIssueReceipt,
+} from '../services/oil-self-repair-detector.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -121,6 +128,78 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
           ? Boolean(cert.findings_json?.alpha_ready) === alphaReady
           : null,
       });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/self-repair/audit
+   * Runtime proof parity + proof-store + known OIL miss evaluation (no secrets).
+   * Optional query: local_head, github_main_sha (operator shell comparison).
+   */
+  router.get('/api/v1/lifeos/command-center/self-repair/audit', requireKey, async (req, res, next) => {
+    try {
+      const railwayDeploySha = normalizeSha(
+        process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
+      );
+      const geminiRows = await readReceiptsByType(SECURITY_RECEIPT_TYPES.GEMINI_LIVE_PROOF, 1, pool);
+      const lp = geminiRows[0];
+      const receiptCommitSha =
+        normalizeSha(lp?.payload?.runtime?.commit_sha) ||
+        normalizeSha(lp?.payload?.details?.runtime?.commit_sha);
+
+      const runtimeProof = detectRuntimeProofMismatch({
+        localHead: req.query.local_head || null,
+        githubMainSha: req.query.github_main_sha || null,
+        railwayDeploySha,
+        receiptCommitSha,
+      });
+
+      const railwayStore = proofStoreFingerprint(process.env.DATABASE_URL);
+      const proofStore = detectProofStoreMismatch(process.env.DATABASE_URL, railwayStore);
+
+      const context = { runtimeProof, proofStore };
+      const activeMisses = evaluateKnownOilMisses(context);
+
+      res.json({
+        ok: true,
+        audited_at: new Date().toISOString(),
+        proof_source: 'railway_runtime',
+        runtime_proof: runtimeProof,
+        proof_store: proofStore,
+        oil_missed_issues_active: activeMisses,
+        railway_deploy_sha: railwayDeploySha,
+        receipt_commit_sha: receiptCommitSha,
+        latest_gemini_receipt_id: lp?.id || null,
+        write_receipt_path: 'POST /api/v1/lifeos/command-center/self-repair/oil-missed-issue',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * POST /api/v1/lifeos/command-center/self-repair/oil-missed-issue
+   * Record an OIL missed-issue finding (C2/conductor only — requires key).
+   */
+  router.post('/api/v1/lifeos/command-center/self-repair/oil-missed-issue', requireKey, async (req, res, next) => {
+    try {
+      const { finding_id, severity, what_oil_missed, how_found, required_repair, verification_path } =
+        req.body || {};
+      if (!what_oil_missed || !how_found) {
+        return res.status(400).json({ ok: false, error: 'what_oil_missed and how_found required' });
+      }
+      const w = await writeOilMissedIssueReceipt(pool, {
+        findingId: finding_id || `OIL-MISS-${Date.now()}`,
+        severity: severity || 'P2',
+        whatMissed: what_oil_missed,
+        howFound: how_found,
+        requiredRepair: required_repair || '',
+        verificationPath: verification_path || '',
+        detectedBy: 'C2',
+      });
+      res.json({ ok: true, receipt_id: w.receipt_id, type: 'oil_missed_issue' });
     } catch (err) {
       next(err);
     }
