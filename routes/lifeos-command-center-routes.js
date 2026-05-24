@@ -58,6 +58,7 @@ import {
   mergeRuntimeProofWithFreshness,
   PROOF_FRESHNESS_RULES,
 } from '../services/oil-proof-freshness.js';
+import { buildSupervisedAutonomyReadiness } from '../services/supervised-autonomy-readiness.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -238,6 +239,25 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
         runtime_proof: mergeRuntimeProofWithFreshness(runtimeProof, freshness),
         rules: PROOF_FRESHNESS_RULES,
         blocks_build: runtimeProof.p0_blockers?.length > 0,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/supervised-autonomy/readiness
+   * Read-only supervised autonomy readiness — aggregates preflight, OIL, Phase 14, freshness.
+   */
+  router.get('/api/v1/lifeos/command-center/supervised-autonomy/readiness', requireKey, async (req, res, next) => {
+    try {
+      const railwayDeploySha = normalizeSha(
+        process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
+      );
+      const report = await buildSupervisedAutonomyReadiness(pool, { railwayDeploySha });
+      res.json({
+        read_path: 'GET /api/v1/lifeos/command-center/supervised-autonomy/readiness',
+        ...report,
       });
     } catch (err) {
       next(err);
