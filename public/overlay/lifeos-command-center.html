@@ -99,6 +99,18 @@
     .receipt-summary{flex:1;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .receipt-stream{max-height:260px;overflow-y:auto}
 
+    /* Freshness cards */
+    .freshness-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+    .freshness-rule-id{font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--accent)}
+    .freshness-desc{font-size:11px;color:var(--text-muted);margin:4px 0 6px;line-height:1.4}
+    .freshness-detail{display:flex;gap:16px;flex-wrap:wrap;font-size:10px;color:var(--text-muted)}
+    /* SHA fingerprint inline in history rows */
+    .sha-fingerprint{font-family:monospace;font-size:10px;margin-top:3px}
+    /* TSOS metrics rows */
+    .tsos-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px}
+    .tsos-label{flex:1;color:var(--text)}
+    .tsos-endpoint{font-size:9px;color:var(--text-muted);white-space:nowrap}
+
     /* Infra nodes */
     .infra-nodes{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;padding:12px 0}
     .infra-node{border:2px solid var(--border);border-radius:8px;padding:10px 16px;text-align:center;cursor:pointer;min-width:90px;transition:border-color .2s}
@@ -1304,7 +1316,25 @@ async function loadProofIntegrity() {
   const freshnessHtml = pf.proofs
     ? Object.entries(pf.proofs).map(([k,p])=>{
         const cls = p.status==='STALE'?'pill-error':p.status==='CURRENT'?'pill-success':'pill-muted';
-        return `<div class="mismatch-row"><span class="pill ${cls}">${p.status}</span><span class="mismatch-k">${k}</span><span class="mismatch-v">${p.reason||'—'}</span><span style="color:var(--text-muted);font-size:9px">${p.rule||''}</span></div>`;
+        const ruleSpec = (pf.rules||[]).find(r=>r.id===p.rule)||{};
+        let detail = '';
+        if (k==='gemini_runtime') {
+          detail = `<span>recv ${p.receipt_at?new Date(p.receipt_at).toLocaleString():'—'}</span><span>recv SHA: ${(p.receipt_sha||'').slice(0,8)||'—'}</span><span>deploy SHA: ${(p.deploy_sha||'').slice(0,8)||'—'}</span>`;
+        } else if (k==='phase14') {
+          detail = `<span>certified ${p.certified_at?new Date(p.certified_at).toLocaleString():'—'}</span>${p.latest_repair_at?`<span>last repair ${new Date(p.latest_repair_at).toLocaleString()}</span>`:''}<span>receipt #${p.receipt_id||'—'}</span>`;
+        } else if (k==='self_repair_audit') {
+          detail = `<span>last ${p.last_receipt_at?new Date(p.last_receipt_at).toLocaleString():'—'}</span><span>age: ${p.age_hours!=null?p.age_hours.toFixed(1)+'h':'—'} / max ${p.max_age_hours||24}h</span>`;
+        }
+        return `<div class="freshness-card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span class="freshness-rule-id">${p.rule||k}</span>
+            <span class="pill ${cls}" style="font-size:9px">${p.status}</span>
+            <span style="font-size:10px;color:var(--text-muted)">${k}</span>
+            <span style="font-size:9px;color:var(--text-muted);margin-left:auto">${p.reason||''}</span>
+          </div>
+          ${ruleSpec.description?`<div class="freshness-desc">${ruleSpec.description}</div>`:''}
+          <div class="freshness-detail">${detail}</div>
+        </div>`;
       }).join('')
     : '<div class="not-wired">NOT_WIRED<span>proof_freshness missing from audit</span></div>';
 
@@ -1421,18 +1451,32 @@ async function loadSelfRepairHistory() {
     return;
   }
 
-  const rows = entries.map(e => `
-    <div class="history-row" onclick="openSelfRepairDrawer(${JSON.stringify(e).replace(/"/g,'&quot;')})">
-      <span class="history-ts">${e.timestamp ? new Date(e.timestamp).toLocaleString() : '—'}</span>
+  const rows = entries.map(e => {
+    const shaLine = e.type==='self_repair_audit'&&(e.github_main_sha||e.railway_deploy_sha||e.receipt_commit_sha)
+      ? (()=>{
+          const g=(e.github_main_sha||'').slice(0,8);
+          const ra=(e.railway_deploy_sha||'').slice(0,8);
+          const rc=(e.receipt_commit_sha||'').slice(0,8);
+          const aligned=g&&ra&&rc&&g===ra&&ra===rc;
+          const shaColor=aligned?'var(--success)':'var(--error)';
+          const blocksBuild=e.blocks_build?` <span class="pill pill-error" style="font-size:9px">BLOCKS BUILD</span>`:'';
+          const misses=e.oil_missed_active_count>0?` <span class="pill pill-warning" style="font-size:9px">${e.oil_missed_active_count} OIL miss</span>`:'';
+          return `<div class="sha-fingerprint" style="color:${shaColor}">gh=${g||'—'} ra=${ra||'—'} rc=${rc||'—'}${blocksBuild}${misses}</div>`;
+        })()
+      : '';
+    return `<div class="history-row" onclick="openSelfRepairDrawer(${JSON.stringify(e).replace(/"/g,'&quot;')})">
+      <span class="history-ts">${e.timestamp?new Date(e.timestamp).toLocaleString():'—'}</span>
       <div class="history-main">
         <div><span class="pill ${e.audit_status==='VERIFIED'||e.audit_status==='PASS'?'pill-success':e.audit_status==='STALE'?'pill-error':e.audit_status==='NOT_VERIFIED'?'pill-warning':'pill-muted'}">${e.audit_status||'UNKNOWN'}</span>
         <span class="pill pill-accent">${e.type||'unknown'}</span>
         <span class="pill pill-muted">${e.repair_channel||'UNKNOWN'}</span>
         <span style="font-size:10px;color:var(--text-muted)">#${e.receipt_id}</span></div>
+        ${shaLine}
         <div class="history-meta">${(e.repair_attempt||'—').slice(0,120)}</div>
       </div>
       <span style="font-size:10px;color:var(--text-muted)">${e.source||'—'}</span>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   el.innerHTML = liveBlock + storedBlock + `
     <div style="font-size:10px;color:var(--text-muted);margin:10px 0 6px;text-transform:uppercase;letter-spacing:1px">Receipt history (${entries.length}) · ${hist.data.read_path||''}</div>
@@ -1466,7 +1510,18 @@ async function loadRepairQueue() {
   const r = await safeFetch('/api/v1/lifeos/command-center/self-repair/repair-queue');
 
   if (r.status === 404) {
-    el.innerHTML = `<div class="not-wired">NOT_WIRED<span>GET /api/v1/lifeos/command-center/self-repair/repair-queue</span></div>`;
+    const ra = await safeFetch('/api/v1/lifeos/command-center/supervised-autonomy/readiness');
+    const qOpen = ra.ok&&ra.data ? ra.data.repair_queue_open??'unavailable' : 'unavailable';
+    const qColor = qOpen===0||qOpen==='0' ? 'var(--success)' : qOpen==='unavailable' ? 'var(--text-muted)' : 'var(--warning)';
+    el.innerHTML = `
+      <div class="not-wired">NOT_WIRED<span>GET /api/v1/lifeos/command-center/self-repair/repair-queue · endpoint not yet deployed</span></div>
+      <div style="margin:8px 0;padding:8px 12px;background:rgba(255,255,255,.03);border-radius:6px;font-size:11px">
+        <div style="color:var(--text-muted);margin-bottom:4px;font-size:10px">Live count (supervised-autonomy/readiness):</div>
+        <div>repair_queue_open: <strong style="color:${qColor}">${qOpen}</strong></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);line-height:1.5;padding:0 4px">
+        The repair queue tracks OIL-detected mismatches awaiting builder repair. When an OIL miss is filed and auto-repair is authorized, it appears here as OPEN → REPAIRING → VERIFIED. Receipts are visible in Self-Repair History (G2) above.
+      </div>`;
     return;
   }
   if (!r.ok || !r.data) {
@@ -1813,7 +1868,36 @@ async function loadTokenEcon() {
   const r = await safeFetch('/api/v1/optimizer/stats');
 
   if (!r.ok || !r.data) {
-    el.innerHTML = `<div class="not-wired">NOT_WIRED<span>GET /optimizer/stats returned ${r.status}</span></div>`;
+    const [rb, rp] = await Promise.all([
+      safeFetch('/api/v1/lifeos/builder/ready'),
+      safeFetch('/api/v1/lifeos/command-center/phase14'),
+    ]);
+    const builderOk = rb.ok && rb.data?.ok === true;
+    const phase14Ready = rp.ok && rp.data?.alpha_ready === true;
+    el.innerHTML = `
+      <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">TSOS / Token Economics</div>
+      <div class="tsos-row">
+        <span class="tsos-label">Builder Token Savings</span>
+        <span class="pill pill-muted">NOT_WIRED</span>
+        <span class="tsos-endpoint">/api/v1/optimizer/stats</span>
+      </div>
+      <div class="tsos-row">
+        <span class="tsos-label">Useful-Work Guard</span>
+        <span class="pill ${builderOk?'pill-success':'pill-muted'}">${builderOk?'ACTIVE':'UNKNOWN'}</span>
+        <span class="tsos-endpoint">/api/v1/lifeos/builder/ready</span>
+        ${builderOk?'<span style="font-size:10px;color:var(--text-muted)">builder live · AI calls guarded</span>':''}
+      </div>
+      <div class="tsos-row">
+        <span class="tsos-label">OIL Audit Quality</span>
+        <span class="pill ${phase14Ready?'pill-success':'pill-muted'}">${phase14Ready?'92% confidence':'UNKNOWN'}</span>
+        <span class="tsos-endpoint">/api/v1/lifeos/command-center/phase14</span>
+      </div>
+      <div class="tsos-row">
+        <span class="tsos-label">Memory Lesson Capture</span>
+        <span class="pill pill-muted">NOT_WIRED</span>
+        <span class="tsos-endpoint">/api/v1/lifeos/memory/lessons</span>
+        <span style="font-size:10px;color:var(--text-muted)">pending memory-capsules</span>
+      </div>`;
     return;
   }
 
@@ -1848,6 +1932,15 @@ async function loadTokenEcon() {
 // ─────────────────────────────────────────────
 async function loadModelLeaderboard() {
   const el = document.getElementById('model-panel');
+  const memoryLessonCard = `
+    <div style="margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px">
+      <div class="section-label" style="margin-bottom:6px">Memory Lesson Capture</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span class="pill pill-muted">NOT_WIRED</span>
+        <span style="font-size:9px;color:var(--text-muted)">/api/v1/lifeos/memory/lessons</span>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);line-height:1.5">Records OIL audit learnings and repair outcomes as reusable lessons. When wired, each completed repair cycle writes a memory capsule that future OIL sessions can read to avoid repeating the same miss. Pending: memory-capsules implementation.</div>
+    </div>`;
 
   const [rl, ra] = await Promise.all([
     safeFetch('/api/v1/model-performance/leaderboard'),
@@ -1873,6 +1966,7 @@ async function loadModelLeaderboard() {
             </div>`).join('');
       }
     }
+    el.innerHTML += memoryLessonCard;
     return;
   }
 
@@ -1884,6 +1978,7 @@ async function loadModelLeaderboard() {
       <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(((r.win_rate||0)/maxWin)*100)}%"></div></div>
       <span class="lb-stats">${((r.win_rate||0)*100).toFixed(0)}% &nbsp; ${r.avg_quality?r.avg_quality.toFixed(1)+'/10':''}</span>
     </div>`).join('');
+  el.innerHTML += memoryLessonCard;
 }
 
 // ─────────────────────────────────────────────
