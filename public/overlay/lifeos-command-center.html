@@ -1202,7 +1202,76 @@ async function loadSupervisedReadiness() {
     <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:10px 0 4px">ADAM_REQUIRED only (${(d.adam_required_actions||[]).length})</div>
     ${adamHtml}
     <div style="font-size:10px;color:var(--text-muted);margin-top:10px">Latest receipts: gemini #${d.latest_receipts?.gemini_runtime_proof?.receipt_id||'—'} · phase14 #${d.latest_receipts?.phase14_cert?.receipt_id||'—'} · self-repair #${d.latest_receipts?.self_repair?.receipt_id||'—'}</div>
+    ${renderExecutorControls(d)}
+    <div id="executor-result" style="margin-top:10px"></div>
   `;
+}
+
+function renderExecutorControls(d) {
+  const stale = d.proof_freshness_overall === 'STALE' || d.runtime_proof_status === 'STALE';
+  const openRepairs = (d.repair_queue_open ?? 0) > 0;
+  const canRun = d.can_continue_under_approved_pb || stale || openRepairs;
+  const idle = d.ready_for_supervised === true && !canRun;
+  if (idle) {
+    return `<div style="margin-top:12px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg)">
+      <span class="pill pill-success">EXECUTOR IDLE</span>
+      <span style="font-size:11px;color:var(--text-muted);margin-left:8px">Proof CURRENT — no authorized repair queued (§2.16)</span>
+    </div>`;
+  }
+  return `<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <span class="pill pill-accent">SELF-REPAIR EXECUTOR</span>
+    <button class="btn btn-ghost btn-sm" onclick="runSelfRepairPlan()">Plan cycle (dry-run)</button>
+    <button class="btn btn-primary btn-sm" onclick="runSelfRepairExecute()">Execute authorized</button>
+    <span style="font-size:10px;color:var(--text-muted)">POST /self-repair/execute · PB-authorized · no Adam for PF-001/002/003</span>
+  </div>`;
+}
+
+async function runSelfRepairPlan() {
+  const el = document.getElementById('executor-result');
+  el.innerHTML = '<div style="font-size:11px;color:var(--text-muted)">Planning…</div>';
+  const r = await safeFetch('/api/v1/lifeos/command-center/self-repair/execute', {
+    method: 'POST',
+    body: JSON.stringify({ dry_run: true, repair_id: 'DR-003-RECEIPT-STALE', triggered_by: 'CC_V2' }),
+  });
+  renderExecutorResult(el, r, true);
+  if (r.ok) await loadSupervisedReadiness();
+}
+
+async function runSelfRepairExecute() {
+  const el = document.getElementById('executor-result');
+  if (!confirm('Execute authorized self-repair cycle on Railway? (PF-001 → PF-002 → PF-003)')) return;
+  el.innerHTML = '<div style="font-size:11px;color:var(--accent)">Executing authorized repair chain…</div>';
+  const r = await safeFetch('/api/v1/lifeos/command-center/self-repair/execute', {
+    method: 'POST',
+    body: JSON.stringify({ dry_run: false, repair_id: 'DR-003-RECEIPT-STALE', triggered_by: 'CC_V2' }),
+  });
+  renderExecutorResult(el, r, false);
+  await Promise.all([loadSupervisedReadiness(), loadProofIntegrity(), loadRepairQueue(), loadSelfRepairHistory()]);
+}
+
+function renderExecutorResult(el, r, isDryRun) {
+  if (!r.data) {
+    el.innerHTML = `<div class="not-wired">ERROR<span>execute returned ${r.status}</span></div>`;
+    return;
+  }
+  const d = r.data;
+  const statusCls = r.ok ? 'mismatch-ok' : d.stopped_reason ? 'mismatch-stale' : 'mismatch-err';
+  const steps = (d.steps_planned || []).map(s => `<li>${s.code}: ${s.description || s.endpoint}</li>`).join('');
+  const executed = (d.steps_executed || []).map(s =>
+    `<div class="mismatch-row"><span class="pill ${s.ok?'pill-success':'pill-error'}">${s.code}</span><span class="mismatch-v">${s.status} ${s.summary?.status||''}</span></div>`
+  ).join('') || '<div style="font-size:11px;color:var(--text-muted)">No steps executed</div>';
+  const receipts = (d.receipts_written || []).map(x => `#${x.receipt_id}`).join(', ') || '—';
+  const ver = d.verification_result || {};
+  const fresh = ver.proof_freshness?.freshness?.overall || ver.proof_freshness?.overall || '—';
+  el.innerHTML = `
+    <div class="mismatch-banner ${statusCls}">
+      <strong>${isDryRun ? 'DRY RUN' : 'EXECUTE'}: ${r.ok ? 'OK' : (d.stopped_reason || 'BLOCKED')}</strong>
+      ${d.stopped_reason ? `<span class="pill pill-warning" style="margin-left:8px">${d.stopped_reason}</span>` : ''}
+    </div>
+    <div style="font-size:10px;color:var(--text-muted);margin:6px 0">Planned steps:<ul style="margin:4px 0 0 16px">${steps || '<li>—</li>'}</ul></div>
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;margin:8px 0 4px">Executed</div>
+    ${executed}
+    <div style="font-size:10px;color:var(--text-muted);margin-top:8px">Receipts: ${receipts} · Freshness after: ${fresh}</div>`;
 }
 
 async function loadProofIntegrity() {
