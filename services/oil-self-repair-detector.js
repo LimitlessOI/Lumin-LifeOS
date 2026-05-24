@@ -270,6 +270,7 @@ export function buildOilMissedIssuePayload({
   requiredRepair,
   verificationPath,
   detectedBy = 'C2',
+  missCategory = null,
 }) {
   return {
     status: 'NOT_VERIFIED',
@@ -284,12 +285,268 @@ export function buildOilMissedIssuePayload({
     verification_path: verificationPath,
     detected_by: detectedBy,
     repair_channel: detectedBy === 'C2' ? 'GAP-FILL' : 'BUILDER_OIL',
+    miss_category: missCategory,
     runtime: { proof_source: 'oil_self_repair_detector' },
+  };
+}
+
+/** Required fields per docs/projects/oil/SELF_REPAIR_DETECTION_RULES.md DR-010 */
+export const OIL_MISSED_ISSUE_REQUIRED_FIELDS = [
+  'type',
+  'finding_id',
+  'severity',
+  'what_oil_missed',
+  'how_found',
+  'required_repair',
+  'verification_path',
+];
+
+export const VALID_OIL_MISSED_SEVERITIES = ['P0', 'P1', 'P2'];
+
+export function extractOilMissedIssuePayload(raw = {}) {
+  const fj = raw.findings_json || {};
+  const payload = raw.payload || {};
+  const details = payload.details || {};
+  return {
+    ...details,
+    ...payload,
+    ...fj,
+    type: fj.type || details.type || payload.type,
+  };
+}
+
+/** Validate stored or inbound oil_missed_issue payload — fail-closed for tracked failures. */
+export function validateOilMissedIssuePayload(payload) {
+  const missing = [];
+  const errors = [];
+  if (!payload || typeof payload !== 'object') {
+    return {
+      valid: false,
+      missing: OIL_MISSED_ISSUE_REQUIRED_FIELDS.slice(1),
+      errors: ['payload_not_object'],
+    };
+  }
+  if (payload.type !== 'oil_missed_issue') {
+    errors.push('type_must_be_oil_missed_issue');
+  }
+  for (const field of [
+    'finding_id',
+    'what_oil_missed',
+    'how_found',
+    'required_repair',
+    'verification_path',
+  ]) {
+    const val = payload[field];
+    if (val == null || String(val).trim() === '') missing.push(field);
+  }
+  if (!payload.severity || !VALID_OIL_MISSED_SEVERITIES.includes(String(payload.severity))) {
+    missing.push('severity');
+    if (payload.severity) errors.push('severity_invalid');
+  }
+  const valid = missing.length === 0 && !errors.includes('type_must_be_oil_missed_issue');
+  return { valid, missing, errors };
+}
+
+/** Validate write-path input (camelCase) before persisting a tracked failure receipt. */
+export function validateOilMissedIssueInput(input = {}) {
+  const payload = buildOilMissedIssuePayload({
+    findingId: input.findingId,
+    severity: input.severity,
+    whatMissed: input.whatMissed,
+    howFound: input.howFound,
+    requiredRepair: input.requiredRepair,
+    verificationPath: input.verificationPath,
+    detectedBy: input.detectedBy,
+    missCategory: input.missCategory,
+  });
+  return validateOilMissedIssuePayload(payload);
+}
+
+const MISS_CATEGORY_BY_FINDING = {
+  'OIL-SEC-FIND-20260524-001': 'proof_store',
+  'OIL-SEC-FIND-20260524-002': 'ui_truth',
+  'OIL-SEC-FIND-20260523-003': 'deploy_drift',
+};
+
+export function inferOilMissCategory(record = {}) {
+  if (record.miss_category) return record.miss_category;
+  if (MISS_CATEGORY_BY_FINDING[record.finding_id]) return MISS_CATEGORY_BY_FINDING[record.finding_id];
+  const fid = String(record.finding_id || '');
+  if (/proof|store|phase14/i.test(fid) || /proof.?store/i.test(record.what_oil_missed || '')) {
+    return 'proof_store';
+  }
+  if (/deploy|stale|sha/i.test(fid) || /deploy|stale/i.test(record.what_oil_missed || '')) {
+    return 'deploy_drift';
+  }
+  if (/fake.?green|ui|command.?center/i.test(record.what_oil_missed || '')) return 'ui_truth';
+  return 'uncategorized';
+}
+
+/** Read oil_missed_issue receipts with full tracked-failure fields + validation. */
+export async function readOilMissedIssueReceipts(pool, limit = 50) {
+  const cap = Math.max(1, Math.min(Number(limit) || 50, 100));
+  const { rows: oilRows } = await pool.query(
+    `SELECT id, verdict, findings, findings_json, audited_at, project_slug, written_by
+     FROM builder_audit_receipts
+     WHERE findings_json->>'type' = 'oil_missed_issue'
+        OR (written_by = 'OIL' AND project_slug = 'oil-self-repair' AND findings ILIKE 'OIL missed issue:%')
+     ORDER BY audited_at DESC LIMIT $1`,
+    [cap]
+  );
+
+  let secRows = [];
+  try {
+    secRows = await readReceiptsByType(SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, cap, pool);
+  } catch {
+    secRows = [];
+  }
+  const secFiltered = secRows.filter(
+    (r) =>
+      r.payload?.type === 'oil_missed_issue' || r.payload?.details?.type === 'oil_missed_issue'
+  );
+
+  const merged = [
+    ...oilRows.map((r) => ({
+      receipt_id: r.id,
+      timestamp: r.audited_at,
+      source: 'builder_audit_receipts',
+      raw: r,
+    })),
+    ...secFiltered.map((r) => ({
+      receipt_id: r.id,
+      timestamp: r.created_at || r.audited_at,
+      source: 'security_receipts',
+      raw: r,
+    })),
+  ].sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+
+  const byFinding = new Map();
+  for (const row of merged) {
+    const payload = extractOilMissedIssuePayload(row.raw);
+    if (payload.type !== 'oil_missed_issue' && !payload.what_oil_missed) continue;
+    const validation = validateOilMissedIssuePayload(payload);
+    const findingId = payload.finding_id || null;
+    const shaped = {
+      receipt_id: row.receipt_id,
+      timestamp: row.timestamp,
+      source: row.source,
+      finding_id: findingId,
+      severity: payload.severity || null,
+      what_oil_missed: payload.what_oil_missed || null,
+      how_found: payload.how_found || null,
+      required_repair: payload.required_repair || null,
+      verification_path: payload.verification_path || null,
+      miss_category: inferOilMissCategory(payload),
+      validation,
+      audit_status: payload.status || row.raw.verdict || 'UNKNOWN',
+      repair_channel: payload.repair_channel || null,
+    };
+    if (!findingId || !byFinding.has(findingId)) {
+      byFinding.set(findingId || `__anon_${row.receipt_id}`, shaped);
+    }
+  }
+
+  return [...byFinding.values()].slice(0, cap);
+}
+
+/** Summarize tracked OIL misses: active, repaired, repeated categories — receipts + live detect only. */
+export async function summarizeOilMisses(pool, auditContext = {}) {
+  if (!pool?.query) {
+    return {
+      ok: false,
+      validation_wired: false,
+      status: 'NOT_WIRED',
+      error: 'database_pool_unavailable',
+    };
+  }
+
+  let receipts;
+  try {
+    receipts = await readOilMissedIssueReceipts(pool, 100);
+  } catch (err) {
+    return {
+      ok: false,
+      validation_wired: false,
+      status: 'NOT_WIRED',
+      error: err.message?.slice(0, 200),
+    };
+  }
+
+  const active = [];
+  const repaired = [];
+  const categoryTotals = {};
+
+  for (const rec of receipts) {
+    const cat = rec.miss_category || 'uncategorized';
+    categoryTotals[cat] = (categoryTotals[cat] || 0) + 1;
+    const known = KNOWN_OIL_MISSED_ISSUES.find((k) => k.findingId === rec.finding_id);
+    let stillActive = false;
+    if (known) {
+      try {
+        stillActive = Boolean(known.detect(auditContext));
+      } catch {
+        stillActive = false;
+      }
+    }
+    const item = { ...rec, tracking_status: stillActive ? 'ACTIVE' : 'REPAIRED' };
+    if (stillActive) active.push(item);
+    else repaired.push(item);
+  }
+
+  const receiptFindingIds = new Set(receipts.map((r) => r.finding_id).filter(Boolean));
+  const liveMisses = evaluateKnownOilMisses(auditContext);
+  for (const miss of liveMisses) {
+    if (receiptFindingIds.has(miss.findingId)) continue;
+    const cat = inferOilMissCategory({ finding_id: miss.findingId, what_oil_missed: miss.whatMissed });
+    categoryTotals[cat] = (categoryTotals[cat] || 0) + 1;
+    active.push({
+      finding_id: miss.findingId,
+      severity: miss.severity,
+      what_oil_missed: miss.whatMissed,
+      how_found: miss.howFound,
+      required_repair: miss.requiredRepair,
+      verification_path: miss.verificationPath,
+      miss_category: cat,
+      tracking_status: 'ACTIVE',
+      has_receipt: false,
+      validation: { valid: false, missing: ['receipt'], errors: ['no_receipt_yet'] },
+    });
+  }
+
+  const repeated_categories = Object.entries(categoryTotals)
+    .filter(([, count]) => count > 1)
+    .map(([category, count]) => ({ category, count }))
+    .sort((a, b) => b.count - a.count);
+
+  const invalid_receipt_count = receipts.filter((r) => !r.validation?.valid).length;
+
+  return {
+    ok: true,
+    validation_wired: true,
+    read_only: true,
+    status: receipts.length === 0 && active.length === 0 ? 'NO_DATA' : 'OK',
+    proof_source: 'oil_missed_issue_receipts_and_detectors',
+    generated_at: new Date().toISOString(),
+    receipt_count: receipts.length,
+    active_count: active.length,
+    repaired_count: repaired.length,
+    invalid_receipt_count,
+    validation_schema: OIL_MISSED_ISSUE_REQUIRED_FIELDS,
+    active,
+    repaired,
+    repeated_categories,
+    category_totals: categoryTotals,
   };
 }
 
 /** Write OIL missed-issue — security_receipts when schema allows, else builder_audit_receipts. */
 export async function writeOilMissedIssueReceipt(pool, finding) {
+  const validation = validateOilMissedIssueInput(finding);
+  if (!validation.valid) {
+    const err = new Error(`oil_missed_issue_validation_failed: ${validation.missing.join(',')}`);
+    err.validation = validation;
+    throw err;
+  }
   const payload = buildOilMissedIssuePayload(finding);
   try {
     return await writeSecurityReceipt(SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, payload, pool);
@@ -441,6 +698,7 @@ export const KNOWN_OIL_MISSED_ISSUES = [
   {
     findingId: 'OIL-SEC-FIND-20260524-001',
     severity: 'P1',
+    missCategory: 'proof_store',
     whatMissed: 'Dual Phase14 cert paths; local proof_store vs Railway neondb/lifeos-sandbox mismatch',
     howFound: 'C2 runtime audit: GET phase14 NOT_ALPHA_READY while local cert claimed ALPHA_READY',
     requiredRepair: 'Shared buildPhaseLedger + proof-store endpoint + railway-canonical script',
@@ -450,6 +708,7 @@ export const KNOWN_OIL_MISSED_ISSUES = [
   {
     findingId: 'OIL-SEC-FIND-20260524-002',
     severity: 'P1',
+    missCategory: 'ui_truth',
     whatMissed: 'Command Center V2 fake green: phase wheel READY, DEFAULT_LANES, SSOT node ok',
     howFound: 'C2 Phase 0 HTML audit of lifeos-command-center.html',
     requiredRepair: 'Remove fake fallbacks; endpoint-only health labels',
@@ -459,6 +718,7 @@ export const KNOWN_OIL_MISSED_ISSUES = [
   {
     findingId: 'OIL-SEC-FIND-20260523-003',
     severity: 'P1',
+    missCategory: 'deploy_drift',
     whatMissed: 'Railway stale deploy served 404 on SEC-F01 routes after local-only GAP-FILL',
     howFound: 'C2 runtime probe: /command-center/security 404 until redeploy',
     requiredRepair: 'Builder execute + redeploy; compare railway_deploy vs github_main',
@@ -581,6 +841,7 @@ export async function runSelfRepairAudit({
           howFound: miss.howFound,
           requiredRepair: miss.requiredRepair,
           verificationPath: miss.verificationPath,
+          missCategory: miss.missCategory,
         });
         receiptWrites.push({ findingId: miss.findingId, receipt_id: w.receipt_id });
       } catch (err) {
