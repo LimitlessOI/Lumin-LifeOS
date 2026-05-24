@@ -9,7 +9,7 @@
   "phase": "stabilization",
   "next_task": "Make the overlay mobile-responsive, add role-based access controls, and continue expanding governance/env-awareness drill-downs",
   "stability_class": "needs-review",
-  "current_focus": "Governance panels and bounded self-repair are live; the current hardening focus is truthful proof freshness so post-cert self-repair audits do not falsely re-stale Phase 14 after Railway-runtime repair completes",
+  "current_focus": "Self-repair memory → prevention: lesson classifier + CANDIDATE_RULE registry surfaced in CC V2; no invariant auto-promotion",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",

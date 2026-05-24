@@ -12,6 +12,10 @@ import { runSelfRepairExecutor, EXECUTOR_MAX_ATTEMPTS } from '../services/self-r
 import { runDeployRepairCheck } from '../services/self-repair-deploy-scheduler.js';
 import { readLatestSelfRepairExecution, readLastPassExecutionLogEntry } from '../services/self-repair-execution-log.js';
 import { readLatestRepairMemory } from '../services/self-repair-memory.js';
+import {
+  buildPreventionRegistry,
+  readPreventionRegistrySnapshot,
+} from '../services/self-repair-prevention-registry.js';
 
 export function createSelfRepairExecutorRoutes({ requireKey }) {
   const router = express.Router();
@@ -118,13 +122,53 @@ export function createSelfRepairExecutorRoutes({ requireKey }) {
           read_path: 'GET /api/v1/lifeos/command-center/self-repair/memory/latest',
         });
       }
+      const registry = buildPreventionRegistry({ lessonLimit: 50, persist: true });
+      const snapshot = readPreventionRegistrySnapshot();
       res.json({
         ok: true,
         source: memory.source,
         lessons: memory.lessons,
         count: memory.count,
+        candidate_rules: registry.candidate_rules,
+        prevention_registry: {
+          status: snapshot.ok ? snapshot.status : registry.status,
+          path: snapshot.registry_path || registry.registry?.path || null,
+          rule_count: registry.candidate_rules.length,
+          generated_at: registry.generated_at,
+          not_wired: !snapshot.ok && registry.candidate_rules.length === 0,
+        },
         last_pass_execution: readLastPassExecutionLogEntry(),
         read_path: 'GET /api/v1/lifeos/command-center/self-repair/memory/latest',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/api/v1/lifeos/command-center/self-repair/prevention/candidates', requireKey, async (req, res, next) => {
+    try {
+      const lessonLimit = Math.min(parseInt(req.query.lesson_limit, 10) || 50, 100);
+      const registry = buildPreventionRegistry({ lessonLimit, persist: true });
+      const snapshot = readPreventionRegistrySnapshot();
+      if (!registry.candidate_rules.length) {
+        return res.status(404).json({
+          ok: false,
+          status: registry.status === 'NO_DATA' ? 'NO_DATA' : 'NOT_WIRED',
+          note: 'No receipt-backed lessons with known classification and prevention_rule yet',
+          lesson_count_scanned: registry.lesson_count_scanned,
+          read_path: 'GET /api/v1/lifeos/command-center/self-repair/prevention/candidates',
+        });
+      }
+      res.json({
+        ok: true,
+        status: 'CANDIDATE_RULES',
+        promoted_to_invariant: false,
+        candidate_rules: registry.candidate_rules,
+        lesson_count_scanned: registry.lesson_count_scanned,
+        registry: snapshot.ok
+          ? { path: snapshot.registry_path, generated_at: snapshot.generated_at }
+          : registry.registry,
+        read_path: 'GET /api/v1/lifeos/command-center/self-repair/prevention/candidates',
       });
     } catch (err) {
       next(err);

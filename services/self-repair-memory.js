@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createMemoryIntelligenceService, LEVEL } from './memory-intelligence-service.js';
+import { classifyRepairLesson, enrichLessonsWithClassification } from './self-repair-lesson-classifier.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const SELF_REPAIR_MEMORY_LOG_PATH = path.join(ROOT, 'data', 'self-repair-memory.jsonl');
@@ -164,15 +165,17 @@ async function readRepairMemoryFromPool(pool, limit = 5) {
   });
 }
 
-/** Latest repair lessons — JSONL preferred, DB fallback. */
+/** Latest repair lessons — JSONL preferred, DB fallback; classifications attached at read time. */
 export async function readLatestRepairMemory(pool, limit = 5) {
   const fromFile = readRepairMemoryLogTail(limit);
   if (fromFile.length) {
-    return { ok: true, source: 'jsonl', lessons: fromFile, count: fromFile.length };
+    const lessons = enrichLessonsWithClassification(fromFile);
+    return { ok: true, source: 'jsonl', lessons, count: lessons.length };
   }
   const fromDb = await readRepairMemoryFromPool(pool, limit);
   if (fromDb.length) {
-    return { ok: true, source: 'epistemic_facts', lessons: fromDb, count: fromDb.length };
+    const lessons = enrichLessonsWithClassification(fromDb);
+    return { ok: true, source: 'epistemic_facts', lessons, count: lessons.length };
   }
   return { ok: false, status: 'NO_DATA', lessons: [], count: 0 };
 }
@@ -210,7 +213,7 @@ export async function writeRepairMemoryFromExecution(pool, {
   }
 
   const receipts = (receiptsWritten || []).map((r) => r.receipt_id).filter(Boolean);
-  const event = {
+  const draftEvent = {
     ts: new Date().toISOString(),
     trigger: lesson.trigger,
     issue_detected: lesson.issue_detected,
@@ -228,6 +231,13 @@ export async function writeRepairMemoryFromExecution(pool, {
     duration_ms: durationMs ?? null,
     repair_id: repairId,
     stopped_reason: stoppedReason || null,
+  };
+  const { classification, signals, verification_path } = classifyRepairLesson(draftEvent);
+  const event = {
+    ...draftEvent,
+    classification,
+    classification_signals: signals,
+    verification_path,
   };
 
   try {

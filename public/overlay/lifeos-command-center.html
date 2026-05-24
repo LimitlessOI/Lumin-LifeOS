@@ -295,7 +295,7 @@
         <div class="not-wired">Loading last execution…</div>
       </div>
       <div id="repair-lessons-panel" style="margin-bottom:10px">
-        <div class="not-wired">Loading repair lessons…</div>
+        <div class="not-wired">Loading repair lessons / prevention…</div>
       </div>
       <div id="self-repair-history-panel">
         <div class="not-wired">Loading...</div>
@@ -1377,21 +1377,50 @@ async function loadRepairLessons() {
     return;
   }
   const lessons = r.data.lessons.slice(0, 5);
-  const rows = lessons.map(l => `
+  const rules = r.data.candidate_rules || [];
+  const reg = r.data.prevention_registry || {};
+  const classPill = (c) => c && c !== 'UNKNOWN'
+    ? `<span class="pill pill-accent">${c}</span>`
+    : `<span class="pill pill-muted">UNKNOWN</span>`;
+  const lessonRows = lessons.map(l => `
     <div class="q-card" style="margin-bottom:8px">
       <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:4px">
         <span class="pill ${l.result==='PASS'?'pill-success':l.result==='FAILED'?'pill-error':'pill-warning'}">${l.result||'?'}</span>
+        ${classPill(l.classification)}
         <span class="pill pill-muted">${l.trigger||'—'}</span>
         <span style="font-size:10px;color:var(--text-muted)">${l.ts ? new Date(l.ts).toLocaleString() : '—'}</span>
       </div>
       <div class="q-desc" style="font-size:11px"><strong>Issue:</strong> ${(l.issue_detected||'—').slice(0,160)}</div>
       <div class="q-desc" style="font-size:11px;margin-top:4px"><strong>Lesson:</strong> ${(l.lesson_learned||'—').slice(0,200)}</div>
       ${l.prevention_rule ? `<div class="q-desc" style="font-size:10px;margin-top:4px;color:var(--accent)"><strong>Prevention:</strong> ${l.prevention_rule.slice(0,180)}</div>` : ''}
+      ${l.verification_path ? `<div style="font-size:10px;color:var(--text-muted);margin-top:4px">Verify: ${l.verification_path}</div>` : ''}
       <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Chain: ${l.repair_chain_run||'—'} · Receipts: ${(l.receipts_written||[]).join(', ')||'—'}</div>
     </div>`).join('');
+  const ruleRows = rules.length ? rules.slice(0, 5).map(rule => `
+    <div class="q-card" style="margin-bottom:8px;border-left:3px solid var(--accent)">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:4px">
+        <span class="pill pill-warning">${rule.status||'CANDIDATE_RULE'}</span>
+        <span class="pill pill-accent">${rule.classification||'—'}</span>
+        <span class="pill pill-muted">conf ${rule.confidence != null ? rule.confidence : '—'}</span>
+        <span style="font-size:10px;color:var(--text-muted)">${rule.id||'—'} · ${rule.lesson_count||1} lesson(s)</span>
+      </div>
+      <div class="q-desc" style="font-size:11px"><strong>Trigger:</strong> ${(rule.trigger||'—').slice(0,120)}</div>
+      <div class="q-desc" style="font-size:11px;margin-top:4px"><strong>Action:</strong> ${(rule.prevention_action||'—').slice(0,200)}</div>
+      ${rule.verification_path ? `<div style="font-size:10px;color:var(--text-muted);margin-top:4px">Verify: ${rule.verification_path}</div>` : ''}
+      <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Receipts: ${(rule.source_receipt_ids||[]).join(', ')||'—'}</div>
+    </div>`).join('') : `<div class="not-wired">NO_CANDIDATE_RULES<span>Lessons exist but none yet qualify (need classification ≠ UNKNOWN + prevention_rule + receipts)</span></div>`;
+  const registryBanner = reg.not_wired
+    ? `<div class="not-wired" style="margin-bottom:8px">NOT_WIRED<span>Durable prevention registry not persisted on this host — rules derived at read time only</span></div>`
+    : reg.path
+      ? `<div style="font-size:10px;color:var(--text-muted);margin-bottom:8px">Registry: ${reg.path} · ${reg.rule_count||0} rule(s) · ${reg.generated_at ? new Date(reg.generated_at).toLocaleString() : '—'}</div>`
+      : '';
   el.innerHTML = `
-    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Repair Lessons (${lessons.length}) · source: ${r.data.source||'—'}</div>
-    ${rows}`;
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Repair Lessons / Prevention · source: ${r.data.source||'—'}</div>
+    ${registryBanner}
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:8px 0 6px">Latest lessons (${lessons.length})</div>
+    ${lessonRows}
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:12px 0 6px">Candidate prevention rules (${rules.length}) — not promoted to invariant</div>
+    ${ruleRows}`;
 }
 
 async function loadLastSelfRepairExecution() {

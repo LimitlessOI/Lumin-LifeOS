@@ -8,9 +8,9 @@
   "owner": "adam",
   "phase": "phase_2_adoption",
   "stability_class": "stable",
-  "last_updated": "2026-05-14",
-  "current_focus": "S2 memory bootstrap complete — lessons_learned seeded (10 rows), reader wired in cold-start. Next: S3 C09 Build Closure Contract.",
-  "ssot_receipt_tail": "S2: seed-lessons-learned.mjs created; 10 lessons in Neon; digest committed; cold-start reader confirmed",
+  "last_updated": "2026-05-24",
+  "current_focus": "Self-repair lesson classification on write/read; prevention candidate rules from receipt-backed executor lessons only",
+  "ssot_receipt_tail": "2026-05-24: self-repair-memory.js classification + prevention registry slice (AM12)",
   "owned_files": [
     "db/migrations/20260426_memory_intelligence.sql",
     "db/migrations/20260426_memory_intelligence_hardening.sql",
