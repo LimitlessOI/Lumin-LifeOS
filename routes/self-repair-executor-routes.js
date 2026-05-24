@@ -122,7 +122,7 @@ export function createSelfRepairExecutorRoutes({ requireKey }) {
           read_path: 'GET /api/v1/lifeos/command-center/self-repair/memory/latest',
         });
       }
-      const registry = buildPreventionRegistry({ lessonLimit: 50, persist: true });
+      const registry = await buildPreventionRegistry(pool, { lessonLimit: 50, persist: true });
       const snapshot = readPreventionRegistrySnapshot();
       res.json({
         ok: true,
@@ -148,7 +148,7 @@ export function createSelfRepairExecutorRoutes({ requireKey }) {
   router.get('/api/v1/lifeos/command-center/self-repair/prevention/candidates', requireKey, async (req, res, next) => {
     try {
       const lessonLimit = Math.min(parseInt(req.query.lesson_limit, 10) || 50, 100);
-      const registry = buildPreventionRegistry({ lessonLimit, persist: true });
+      const registry = await buildPreventionRegistry(pool, { lessonLimit, persist: true });
       const snapshot = readPreventionRegistrySnapshot();
       if (!registry.candidate_rules.length) {
         return res.status(404).json({

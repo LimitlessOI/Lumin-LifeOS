@@ -13,7 +13,7 @@ import {
   classifyRepairLesson,
   getVerificationPathForClassification,
 } from './self-repair-lesson-classifier.js';
-import { readRepairMemoryLogTail } from './self-repair-memory.js';
+import { readRepairMemoryLogTail, readLatestRepairMemory } from './self-repair-memory.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const PREVENTION_REGISTRY_PATH = path.join(ROOT, 'data', 'self-repair-prevention-registry.json');
@@ -135,9 +135,14 @@ export function readPreventionRegistrySnapshot() {
   }
 }
 
-/** Load lessons from log, build candidates, optionally persist snapshot. */
-export function buildPreventionRegistry({ lessonLimit = 50, persist = true } = {}) {
-  const lessons = readRepairMemoryLogTail(lessonLimit);
+/** Load lessons (JSONL + DB fallback), build candidates, optionally persist snapshot. */
+export async function buildPreventionRegistry(pool, { lessonLimit = 50, persist = true } = {}) {
+  const fromLog = readRepairMemoryLogTail(lessonLimit);
+  let lessons = fromLog;
+  if (!lessons.length && pool) {
+    const memory = await readLatestRepairMemory(pool, lessonLimit);
+    lessons = memory.lessons || [];
+  }
   const rules = buildCandidateRulesFromLessons(lessons);
   const snapshot = persist ? writePreventionRegistrySnapshot(rules) : { written: false };
 
@@ -146,6 +151,7 @@ export function buildPreventionRegistry({ lessonLimit = 50, persist = true } = {
     status: rules.length ? 'CANDIDATE_RULES' : 'NO_DATA',
     candidate_rules: rules,
     lesson_count_scanned: lessons.length,
+    lesson_source: fromLog.length ? 'jsonl' : lessons.length ? 'epistemic_facts' : 'none',
     registry: snapshot.written
       ? { path: 'data/self-repair-prevention-registry.json', count: rules.length }
       : { path: null, count: rules.length, note: 'ephemeral — snapshot not persisted on this host' },
