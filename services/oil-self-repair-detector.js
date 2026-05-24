@@ -418,6 +418,8 @@ export async function readSelfRepairHistory(pool, limit = 20) {
 
   return merged.slice(0, cap);
 }
+
+export async function runSelfRepairAudit({
   pool = null,
   baseUrl = process.env.PUBLIC_BASE_URL || process.env.BUILDER_BASE_URL,
   commandKey = process.env.COMMAND_CENTER_KEY,
