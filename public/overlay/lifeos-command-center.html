@@ -279,6 +279,9 @@
     <!-- Section G2: Self-Repair History (full width) -->
     <div class="card full-width" id="section-g2">
       <div class="section-title">&#128220; Self-Repair History</div>
+      <div id="last-execution-panel" style="margin-bottom:10px">
+        <div class="not-wired">Loading last execution…</div>
+      </div>
       <div id="self-repair-history-panel">
         <div class="not-wired">Loading...</div>
       </div>
@@ -1246,7 +1249,7 @@ async function runSelfRepairExecute() {
     body: JSON.stringify({ dry_run: false, repair_id: 'DR-003-RECEIPT-STALE', triggered_by: 'CC_V2' }),
   });
   renderExecutorResult(el, r, false);
-  await Promise.all([loadSupervisedReadiness(), loadProofIntegrity(), loadRepairQueue(), loadSelfRepairHistory()]);
+  await Promise.all([loadSupervisedReadiness(), loadProofIntegrity(), loadRepairQueue(), loadSelfRepairHistory(), loadLastSelfRepairExecution()]);
 }
 
 function renderExecutorResult(el, r, isDryRun) {
@@ -1326,6 +1329,37 @@ async function loadProofIntegrity() {
     <div style="margin-top:8px;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">SHA mismatches</div>
     ${mismatchHtml}
     ${oilMisses ? `<div style="margin-top:8px;font-size:10px;color:var(--text-muted)">Active OIL missed issues</div>${oilMisses}` : ''}
+  `;
+}
+
+async function loadLastSelfRepairExecution() {
+  const el = document.getElementById('last-execution-panel');
+  const r = await safeFetch('/api/v1/lifeos/command-center/self-repair/execution/latest');
+  if (r.status === 404 || r.data?.status === 'NOT_WIRED') {
+    el.innerHTML = `<div class="not-wired">NOT_WIRED<span>GET /self-repair/execution/latest — no execution log yet</span></div>`;
+    return;
+  }
+  if (!r.ok || !r.data?.entry) {
+    el.innerHTML = `<div class="not-wired">ERROR<span>GET /self-repair/execution/latest returned ${r.status}</span></div>`;
+    return;
+  }
+  const e = r.data.entry;
+  const src = r.data.source || 'unknown';
+  const resCls = e.result === 'PASS' ? 'mismatch-ok' : e.result === 'DRY_RUN' ? 'mismatch-warn' : 'mismatch-stale';
+  el.innerHTML = `
+    <div class="mismatch-banner ${resCls}">
+      <strong>Last self-repair execution: ${e.result || 'UNKNOWN'}</strong>
+      <span class="pill pill-accent" style="margin-left:6px">${src}</span>
+      <span style="margin-left:8px;font-size:10px;color:var(--text-muted)">${e.ts ? new Date(e.ts).toLocaleString() : '—'} · ${e.duration_ms != null ? e.duration_ms + 'ms' : '—'}</span>
+    </div>
+    <div style="font-size:10px;color:var(--text-muted);margin-top:6px;display:flex;flex-wrap:wrap;gap:6px">
+      <span class="queue-cat-pill">deploy ${shaShort(e.deploy_sha)}</span>
+      <span class="queue-cat-pill">proof ${e.proof_status || '—'}</span>
+      <span class="queue-cat-pill">repair ${e.repair_id || '—'}</span>
+      <span class="queue-cat-pill">by ${e.triggered_by || '—'}</span>
+    </div>
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Steps: ${(e.steps||[]).join(' → ') || '—'} · Receipts: ${(e.receipts||[]).join(', ') || '—'}</div>
+    ${e.stopped_reason ? `<div style="font-size:10px;color:var(--warning);margin-top:4px">Stopped: ${e.stopped_reason}</div>` : ''}
   `;
 }
 
@@ -1877,6 +1911,7 @@ async function loadAll() {
     loadPhasePanel(),
     loadQueue(),
     loadInfra(),
+    loadLastSelfRepairExecution(),
     loadSelfRepairHistory(),
     loadRepairQueue(),
     loadOilMisses(),
