@@ -1396,6 +1396,7 @@ async function loadRepairQueue() {
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">
         <span class="pill ${statusPill(it.status)}">${it.status||'UNKNOWN'}</span>
         <span class="pill ${it.severity==='P0'?'pill-error':it.severity==='P1'?'pill-warning':'pill-muted'}">${it.severity||'?'}</span>
+        ${it.authority ? `<span class="pill ${it.authority==='ADAM_REQUIRED'?'pill-error':'pill-success'}" style="font-size:9px">${it.authority==='ADAM_REQUIRED'?'ADAM_REQUIRED':'PB-AUTH'}</span>` : ''}
         <span class="q-title" style="font-size:11px">${it.issueId||'—'}</span>
       </div>
       <div class="q-desc"><strong style="color:var(--text-muted);font-size:10px">Detector:</strong> ${it.sourceDetector||'—'} · ${it.detectRule||'—'}</div>
