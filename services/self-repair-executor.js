@@ -18,6 +18,7 @@ import {
   createBuildSessionId,
   createAuditSessionId,
 } from './builder-audit-before-done.js';
+import { appendSelfRepairExecutionLog } from './self-repair-execution-log.js';
 
 export const EXECUTOR_MAX_ATTEMPTS = 2;
 
@@ -59,20 +60,32 @@ function nowIso() {
 function getBaseUrl(req) {
   const explicit = process.env.PUBLIC_BASE_URL || process.env.BASE_URL;
   if (explicit) return explicit.replace(/\/+$/, '');
-  const proto = req.get?.('x-forwarded-proto') || req.protocol || 'http';
-  const host = req.get?.('host');
-  if (!host) throw new Error('executor_base_url_unavailable');
-  return `${proto}://${host}`;
+  if (req) {
+    const proto = req.get?.('x-forwarded-proto') || req.protocol || 'http';
+    const host = req.get?.('host');
+    if (host) return `${proto}://${host}`;
+  }
+  throw new Error('executor_base_url_unavailable');
 }
 
 function getCommandKey(req) {
+  const fromReq =
+    req?.get?.('x-command-key') ||
+    null;
   return (
-    req.get?.('x-command-key') ||
+    fromReq ||
     process.env.COMMAND_CENTER_KEY ||
     process.env.LIFEOS_KEY ||
     process.env.API_KEY ||
     null
   );
+}
+
+export function resolveExecutorContext(req) {
+  return {
+    baseUrl: getBaseUrl(req),
+    commandKey: getCommandKey(req),
+  };
 }
 
 function sanitizeStepResult(step, response) {
@@ -108,6 +121,8 @@ function buildExecutorReceiptPayload({
   verification,
   stoppedReason = null,
   attemptsUsed = 0,
+  triggeredBy = 'C2',
+  durationMs = null,
 }) {
   return {
     type: 'self_repair_executor_run',
@@ -124,6 +139,8 @@ function buildExecutorReceiptPayload({
     verification,
     stopped_reason: stoppedReason,
     runtime: { proof_source: 'self_repair_executor' },
+    triggered_by: triggeredBy,
+    duration_ms: durationMs,
   };
 }
 
@@ -143,16 +160,28 @@ function buildPlan(repairId, readiness) {
   if (!SUPPORTED_REPAIR_IDS.has(repairId)) {
     return { ok: false, stoppedReason: 'repair_id_not_supported', steps: [] };
   }
-  if (!readiness?.can_continue_under_approved_pb) {
-    return { ok: false, stoppedReason: 'pb_boundary_not_authorized', steps: [] };
-  }
   if (hasP0OrAdamStop(readiness)) {
     return { ok: false, stoppedReason: 'adam_required_or_p0_stop', steps: [] };
+  }
+
+  const staleProof =
+    readiness?.proof_freshness_overall === 'STALE' ||
+    readiness?.runtime_proof_status === 'STALE';
+
+  if (repairId === 'all_authorized') {
+    if (!staleProof) {
+      return { ok: false, stoppedReason: 'proof_not_stale', steps: [] };
+    }
+    return { ok: true, stoppedReason: null, steps: [...CHAIN_STEPS] };
+  }
+
+  if (!readiness?.can_continue_under_approved_pb) {
+    return { ok: false, stoppedReason: 'pb_boundary_not_authorized', steps: [] };
   }
   if (!containsRequiredAuthorityCodes(readiness)) {
     return { ok: false, stoppedReason: 'required_authority_codes_missing', steps: [] };
   }
-  if ((readiness?.repair_queue_open ?? 0) < 1 && repairId !== 'all_authorized') {
+  if ((readiness?.repair_queue_open ?? 0) < 1) {
     return { ok: false, stoppedReason: 'authorized_repair_not_open', steps: [] };
   }
   return { ok: true, stoppedReason: null, steps: [...CHAIN_STEPS] };
@@ -241,14 +270,52 @@ async function writeMissedIssueIfNeeded(pool, verification) {
   });
 }
 
+function finalizeExecutorRun({
+  result,
+  repairId,
+  dryRun,
+  triggeredBy,
+  railwayDeploySha,
+  startedAt,
+}) {
+  const duration_ms = Date.now() - startedAt;
+  const proof_status =
+    result.verification_result?.readiness?.proof_freshness_overall ||
+    result.verification_result?.proof_freshness?.freshness?.overall ||
+    result.audit_before?.proof_freshness_overall ||
+    null;
+  const steps = (result.steps_executed || []).map((s) => s.code).filter(Boolean);
+  const receipts = (result.receipts_written || []).map((r) => r.receipt_id).filter(Boolean);
+
+  try {
+    appendSelfRepairExecutionLog({
+      ts: nowIso(),
+      deploy_sha: railwayDeploySha,
+      proof_status,
+      repair_id: repairId,
+      steps,
+      receipts,
+      duration_ms,
+      result: result.audit_result,
+      triggered_by: triggeredBy,
+      stopped_reason: result.stopped_reason,
+    });
+  } catch {
+    // JSONL is best-effort on ephemeral FS — DB receipts remain canonical
+  }
+
+  return { ...result, duration_ms };
+}
+
 export async function runSelfRepairExecutor({
   pool,
-  req,
+  req = null,
   dryRun = true,
   repairId = 'DR-003-RECEIPT-STALE',
+  triggeredBy = 'C2',
 }) {
-  const baseUrl = getBaseUrl(req);
-  const commandKey = getCommandKey(req);
+  const startedAt = Date.now();
+  const { baseUrl, commandKey } = resolveExecutorContext(req);
   if (!commandKey) {
     throw new Error('self_repair_executor_missing_command_key');
   }
@@ -277,18 +344,26 @@ export async function runSelfRepairExecutor({
       stepsExecuted: [],
       verification,
       stoppedReason: plan.stoppedReason,
+      triggeredBy,
     });
     const { receipt_id } = await writeExecutorReceipt(pool, payload);
-    return {
-      authority,
-      steps_planned: plan.steps,
-      steps_executed: [],
-      receipts_written: [{ receipt_id, type: SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, purpose: 'executor_run' }],
-      verification_result: verification,
-      stopped_reason: plan.stoppedReason,
-      audit_before: initialReadiness,
-      audit_result: 'BLOCKED',
-    };
+    return finalizeExecutorRun({
+      result: {
+        authority,
+        steps_planned: plan.steps,
+        steps_executed: [],
+        receipts_written: [{ receipt_id, type: SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, purpose: 'executor_run' }],
+        verification_result: verification,
+        stopped_reason: plan.stoppedReason,
+        audit_before: initialReadiness,
+        audit_result: 'BLOCKED',
+      },
+      repairId,
+      dryRun,
+      triggeredBy,
+      railwayDeploySha,
+      startedAt,
+    });
   }
 
   if (dryRun) {
@@ -301,18 +376,26 @@ export async function runSelfRepairExecutor({
       stepsPlanned: plan.steps,
       stepsExecuted: [],
       verification,
+      triggeredBy,
     });
     const { receipt_id } = await writeExecutorReceipt(pool, payload);
-    return {
-      authority,
-      steps_planned: plan.steps,
-      steps_executed: [],
-      receipts_written: [{ receipt_id, type: SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, purpose: 'executor_run' }],
-      verification_result: verification,
-      stopped_reason: null,
-      audit_before: initialReadiness,
-      audit_result: 'DRY_RUN',
-    };
+    return finalizeExecutorRun({
+      result: {
+        authority,
+        steps_planned: plan.steps,
+        steps_executed: [],
+        receipts_written: [{ receipt_id, type: SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, purpose: 'executor_run' }],
+        verification_result: verification,
+        stopped_reason: null,
+        audit_before: initialReadiness,
+        audit_result: 'DRY_RUN',
+      },
+      repairId,
+      dryRun,
+      triggeredBy,
+      railwayDeploySha,
+      startedAt,
+    });
   }
 
   const headers = {
@@ -328,8 +411,19 @@ export async function runSelfRepairExecutor({
   for (let attempt = 1; attempt <= EXECUTOR_MAX_ATTEMPTS; attempt += 1) {
     attemptsUsed = attempt;
     const readiness = await buildSupervisedAutonomyReadiness(pool, { railwayDeploySha });
-    if (hasP0OrAdamStop(readiness) || !readiness.can_continue_under_approved_pb) {
-      stoppedReason = hasP0OrAdamStop(readiness) ? 'adam_required_or_p0_stop' : 'pb_boundary_not_authorized';
+    if (hasP0OrAdamStop(readiness)) {
+      stoppedReason = 'adam_required_or_p0_stop';
+      break;
+    }
+    const stillStale =
+      readiness.proof_freshness_overall === 'STALE' ||
+      readiness.runtime_proof_status === 'STALE';
+    if (
+      repairId !== 'all_authorized' &&
+      !readiness.can_continue_under_approved_pb &&
+      !stillStale
+    ) {
+      stoppedReason = 'pb_boundary_not_authorized';
       break;
     }
 
@@ -391,6 +485,8 @@ export async function runSelfRepairExecutor({
     verification,
     stoppedReason,
     attemptsUsed,
+    triggeredBy,
+    durationMs: Date.now() - startedAt,
   });
   const { receipt_id } = await writeExecutorReceipt(pool, payload);
   receiptsWritten.unshift({
@@ -399,14 +495,21 @@ export async function runSelfRepairExecutor({
     purpose: 'executor_run',
   });
 
-  return {
-    authority,
-    steps_planned: plan.steps,
-    steps_executed: stepsExecuted,
-    receipts_written: receiptsWritten,
-    verification_result: verification,
-    stopped_reason: stoppedReason,
-    audit_before: initialReadiness,
-    audit_result: status,
-  };
+  return finalizeExecutorRun({
+    result: {
+      authority,
+      steps_planned: plan.steps,
+      steps_executed: stepsExecuted,
+      receipts_written: receiptsWritten,
+      verification_result: verification,
+      stopped_reason: stoppedReason,
+      audit_before: initialReadiness,
+      audit_result: status,
+    },
+    repairId,
+    dryRun: false,
+    triggeredBy,
+    railwayDeploySha,
+    startedAt,
+  });
 }
