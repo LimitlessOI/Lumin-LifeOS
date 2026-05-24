@@ -32,6 +32,23 @@
 
 ---
 
+## [PLAN] Update 2026-05-24 #26 — Phase 0 bounded autonomous self-repair
+
+### Files changed
+- `docs/projects/oil/PHASE0_BOUNDED_AUTONOMY_AUDIT.md` — live Railway + local audit; observer vs executor gap
+- `docs/projects/oil/BOUNDED_AUTONOMY_BRAINSTORM_25.md` — 25 ideas (Conductor synthesis; Council groq passes insufficient)
+
+### State after this session
+- **KNOW:** Self-repair is read-only (`auto_repair: false`); `can_continue_under_approved_pb: true` but no executor
+- **KNOW:** Proof STALE (receipt 380d84dd vs deploy 762f90c9); 3 SYSTEM_AUTHORIZED actions idle
+- Phase 1 next: `services/self-repair-executor.js` + `POST /self-repair/execute`
+
+### Next agent: start here
+- Builder `/build` Idea 01–02–05–06–07–08 (executor + PF chain) on `services/` safe-scope paths
+- Do not ask Adam for gemini proof / phase14 refresh — SYSTEM_AUTHORIZED_UNDER_PB
+
+---
+
 ## [BUILD] Update 2026-05-24 #25 — PB execution authority (§2.16 governance correction)
 
 ### Files changed
