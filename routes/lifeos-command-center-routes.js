@@ -48,6 +48,7 @@ import {
   evaluateKnownOilMisses,
   writeOilMissedIssueReceipt,
   fetchGitHubMainSha,
+  readSelfRepairHistory,
 } from '../services/oil-self-repair-detector.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -179,6 +180,27 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
         oil_receipts_present: oilRecent.length > 0,
         missing_oil_receipts: oilRecent.length === 0,
         write_receipt_path: 'POST /api/v1/lifeos/command-center/self-repair/oil-missed-issue',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/self-repair/history
+   * Receipt-backed self-repair history only (builder_audit_receipts + security_receipts).
+   */
+  router.get('/api/v1/lifeos/command-center/self-repair/history', requireKey, async (req, res, next) => {
+    try {
+      const limit = Math.min(Number(req.query.limit) || 20, 50);
+      const entries = await readSelfRepairHistory(pool, limit);
+      res.json({
+        ok: true,
+        proof_source: 'receipts_only',
+        read_path: 'GET /api/v1/lifeos/command-center/self-repair/history',
+        live_audit_path: 'GET /api/v1/lifeos/command-center/self-repair/audit',
+        count: entries.length,
+        entries,
       });
     } catch (err) {
       next(err);
