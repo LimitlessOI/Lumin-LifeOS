@@ -277,6 +277,20 @@ Use **plain language** (no acronym smuggling):
 
 **See also:** `docs/QUICK_LAUNCH.md` → *When you send the Conductor…* (expect the ask to be followed or explicitly blocked).
 
+## 0.5J PB execution authority — no unnecessary Adam bottlenecks (supreme: North Star **Article II §2.16**)
+
+**What this section is:** **Who may act** inside an **approved PB** without per-step operator re-approval — *not* a waiver of **§2.6** honesty or **ADAM_REQUIRED** true stops.
+
+### Mandatory
+1. **Approved PB → system executes.** PB / amendment / build-objective approval authorizes Builder, OIL, Council, TSOS, Memory to run **inside** the boundary: build, repair, gap-fill, audit, re-plan, receipt writes, proof refresh, deploy verify.
+2. **Labeling.** Readiness, Command Center, repair queue, and OIL summaries **must** use **`SYSTEM_AUTHORIZED_UNDER_PB`** for routine internal repairs (gemini proof refresh, phase14 run-proofs, stale SHA repair, registry repair-queue items, audit-run receipts). **`ADAM_REQUIRED`** only for §2.16 true stops.
+3. **Implementation.** `services/pb-execution-authority.js` — `classifyExecutionAuthority`, `deriveExecutionActions`; consumed by supervised readiness and CC V2.
+
+### ADAM_REQUIRED (true stops)
+Exposed secrets; destructive DB; money/legal/medical/high-stakes external; autonomy beyond PB; irreversible public launch; product intent ambiguity; proof chain unrepairable; outside PB boundary.
+
+**See also:** `services/pb-execution-authority.js`; `GET /api/v1/lifeos/command-center/supervised-autonomy/readiness`.
+
 ## 0.6 Directed Mode Rule (NEW)
 - Default operating posture is now directed mode: the system does not autonomously build, research, self-improve, market, or spend unless explicitly instructed or explicitly re-enabled.
 - Hidden/self-starting timers in subsystems are not trusted by default and must remain off unless their behavior has been reviewed and explicitly approved.
