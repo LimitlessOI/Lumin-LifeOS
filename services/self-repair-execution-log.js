@@ -49,6 +49,21 @@ export function readSelfRepairExecutionLogTail(limit = 1) {
   }).filter(Boolean);
 }
 
+/** Newest PASS entry from JSONL tail scan (up to 50 lines). */
+export function readLastPassExecutionLogEntry() {
+  if (!fs.existsSync(SELF_REPAIR_EXECUTION_LOG_PATH)) return null;
+  const lines = fs.readFileSync(SELF_REPAIR_EXECUTION_LOG_PATH, 'utf8').split('\n').filter(Boolean);
+  for (let i = lines.length - 1; i >= 0 && i >= lines.length - 50; i -= 1) {
+    try {
+      const entry = JSON.parse(lines[i]);
+      if (entry.result === 'PASS') return entry;
+    } catch {
+      // skip bad line
+    }
+  }
+  return null;
+}
+
 /** Fallback: latest executor receipt from builder_audit_receipts. */
 export async function readLatestExecutorReceiptFromPool(pool) {
   if (!pool?.query) return null;
