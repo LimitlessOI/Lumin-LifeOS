@@ -20,6 +20,7 @@ import {
   createBuildSessionId,
   createAuditSessionId,
 } from './builder-audit-before-done.js';
+import { classifyExecutionAuthority } from './pb-execution-authority.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -663,10 +664,18 @@ export async function buildRepairQueue(pool, context, probes = {}) {
       probeOk,
       probeRequired,
     });
+    const { authority, reason: authority_reason } = classifyExecutionAuthority({
+      code: entry.detectRule || entry.issueId,
+      issue_id: entry.issueId,
+      source: 'repair_queue',
+      severity: entry.severity,
+    });
     return {
       ...meta,
       status,
       active,
+      authority,
+      authority_reason,
       receipt_id: receipt?.receipt_id ?? null,
       receipt_at: receipt?.timestamp ?? null,
       detail: active
