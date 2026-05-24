@@ -35,117 +35,15 @@ import {
   writeFailureLog,
   assertTrustSpineReady,
 } from '../services/builder-truth-surface.js';
+import {
+  buildPhaseLedger,
+  phase14StatusFromLedger,
+  proofStoreFingerprint,
+  readLatestPhase14Cert,
+} from '../services/builder-phase14-ledger.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-
-// ── Shared helper: DB fallback query for certify and run-proofs ──────────────
-const PHASE_FALLBACK_PATTERNS = {
-  1:  ['Phase 1 live serial-lock:%', 'Phase 1 serial-lock verification passed:%'],
-  2:  ['Phase 2 OIL:%', 'Tracker exceeded budget at 100 tokens%'],
-  3:  ['Phase 3 allowed-files enforcement:%', 'Violation detected and worktree rolled back%'],
-  4:  ['Post-exec truncation detected%', 'Pre-exec halt when injected > 120% of estimate%'],
-  5:  ['Phase 5 blocker remediation:%', 'All terminal tasks trigger QUEUE_EXHAUSTED%'],
-  6:  ['Second segment blocked WAIT via supervisor lock gate%', 'Phase 6 %'],
-  8:  ['OUT_OF_SCOPE_WRITE produces scope_violation%', 'Phase 8 failure taxonomy%'],
-  9:  ['Interrupted execution → PARTIAL%', 'Phase 9 partial recovery%', 'founder safe mode enter%'],
-  10: ['Phase 10 two-lane canon:%'],
-  11: ['Phase 11 Rollback Drill:%'],
-  12: ['Phase 12 receipt federation:%'],
-  13: ['Phase 13 legacy demotion:%'],
-};
-
-async function dbFallbackReceipt(phaseNum) {
-  const patterns = PHASE_FALLBACK_PATTERNS[phaseNum];
-  if (!patterns) return null;
-  const { rows } = await pool.query(
-    `SELECT id, verdict, confidence_pct, findings, findings_json, audit_session_id, audited_at
-     FROM builder_audit_receipts
-     WHERE written_by = 'OIL' AND findings ILIKE ANY($1::text[])
-     ORDER BY audited_at DESC, id DESC LIMIT 1`,
-    [patterns]
-  );
-  return rows[0] || null;
-}
-
-async function phase7ProofReceipt() {
-  const { rows } = await pool.query(
-    `SELECT id, verdict, confidence_pct, findings, findings_json, audit_session_id, audited_at
-     FROM builder_audit_receipts
-     WHERE project_slug = 'builder-final-synthesis-rerun'
-       AND written_by = 'OIL'
-       AND (
-         kill_test_scenario IN ('GEMINI_LIVE_AUDIT_FAILED', 'GEMINI_LIVE_AUDIT_FAILED_BLOCKED_RUNTIME')
-         OR findings_json->>'scenario' IN ('GEMINI_LIVE_AUDIT_FAILED', 'GEMINI_LIVE_AUDIT_FAILED_BLOCKED_RUNTIME')
-         OR audit_session_id LIKE 'OIL-phase7-railway-%'
-       )
-     ORDER BY audited_at DESC, id DESC LIMIT 1`
-  );
-  return rows[0] || null;
-}
-
-function resolvePhase7Status(proof) {
-  if (!proof) return { status: 'MISSING', notes: 'No canonical Railway Phase 7 runtime proof in builder_audit_receipts' };
-  const scenario = proof.findings_json?.scenario || null;
-  const blocked = scenario === 'GEMINI_LIVE_AUDIT_FAILED_BLOCKED_RUNTIME';
-  const ok = (proof.verdict === 'PASS' && scenario === 'GEMINI_LIVE_AUDIT_FAILED')
-    || (blocked && (proof.verdict === 'CONDITIONAL_PASS' || proof.verdict === 'PASS'));
-  return {
-    status: ok ? 'VERIFIED' : 'CONDITIONAL',
-    notes: ok
-      ? (blocked ? 'BLOCKED_RUNTIME accepted as VERIFIED (platform constraint)' : 'Canonical runtime proof receipt recorded')
-      : (proof.findings_json?.blocker || proof.findings || 'Not verified'),
-    confidence: proof.confidence_pct,
-    audit_id: proof.id,
-  };
-}
-
-/**
- * Build the phase ledger from current DB state (used by certify).
- */
-async function buildPhaseLedger() {
-  const phaseSpecs = [
-    { phase: 1,  label: 'Serial Execution Enforcement + Truth Surface Schema',  fallback: true },
-    { phase: 2,  label: 'Token Budget Governance',                               fallback: true },
-    { phase: 3,  label: 'Allowed-Files Runtime Enforcement',                     fallback: true },
-    { phase: 4,  label: 'Context Overflow Detection',                            fallback: true },
-    { phase: 5,  label: 'Queue DB Migration + Exhaustion Handler',               fallback: true },
-    { phase: 6,  label: 'Write Lock (AUTONOMY_WRITE_LOCK)',                      fallback: true },
-    { phase: 7,  label: 'Audit-Before-Done (independent OIL audit)',             p7: true },
-    { phase: 8,  label: 'Failure Taxonomy + Prompt Hash',                        fallback: true },
-    { phase: 9,  label: 'Partial Recovery + Founder Safe Mode',                  fallback: true },
-    { phase: 10, label: 'Two-Lane Canon / Prevent Chaos',                        fallback: true },
-    { phase: 11, label: 'Rollback Drill + Replay Baselines',                     fallback: true },
-    { phase: 12, label: 'Receipt Federation',                                    fallback: true },
-    { phase: 13, label: 'Legacy Builder Demotion / Parts-Car Integration',       fallback: true },
-  ];
-
-  const phases = [];
-  for (const spec of phaseSpecs) {
-    if (spec.p7) {
-      const proof = await phase7ProofReceipt();
-      const result = resolvePhase7Status(proof);
-      phases.push({ phase: spec.phase, label: spec.label, ...result });
-      continue;
-    }
-    if (spec.fallback) {
-      const rec = await dbFallbackReceipt(spec.phase);
-      if (!rec) {
-        phases.push({ phase: spec.phase, label: spec.label, status: 'MISSING', notes: `No proof receipt for phase ${spec.phase}` });
-      } else {
-        phases.push({
-          phase: spec.phase,
-          label: spec.label,
-          status: rec.verdict === 'PASS' ? 'VERIFIED' : 'CONDITIONAL',
-          notes: rec.findings || '',
-          confidence: rec.confidence_pct,
-          audit_id: rec.id,
-        });
-      }
-    }
-  }
-  return phases;
-}
 
 export function createCommandCenterAggregateRoutes({ requireKey }) {
   const router = express.Router();
@@ -156,19 +54,15 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
    */
   router.get('/api/v1/lifeos/command-center/phase14', requireKey, async (req, res, next) => {
     try {
-      const { rows } = await pool.query(
-        `SELECT id, verdict, findings, findings_json, audited_at
-         FROM builder_audit_receipts
-         WHERE written_by = 'OIL'
-           AND findings ILIKE 'Phase 14 Alpha-Ready Certification%'
-         ORDER BY audited_at DESC LIMIT 1`
-      );
-      if (!rows.length) {
+      const row = await readLatestPhase14Cert(pool);
+      if (!row) {
         return res.json({ found: false, status: 'UNKNOWN', alpha_ready: null });
       }
-      const row = rows[0];
       const fj = row.findings_json || {};
       const alphaReady = Boolean(fj.alpha_ready);
+      const store = proofStoreFingerprint(process.env.DATABASE_URL);
+      const ledger = req.query.reconcile === '1' ? await buildPhaseLedger(pool) : null;
+      const reconciled = ledger ? phase14StatusFromLedger(ledger) : null;
       return res.json({
         found: true,
         alpha_ready: alphaReady,
@@ -181,6 +75,51 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
         verified_phases: fj.verified_phases ?? [],
         conditional_phases: fj.conditional_phases ?? [],
         blockers_detail: fj.blockers ?? [],
+        proof_store_id: store.proof_store_id,
+        proof_source: 'builder_audit_receipts',
+        ledger_reconciled: reconciled
+          ? {
+              alpha_ready: reconciled.alphaReady,
+              matches_cert: reconciled.alphaReady === alphaReady,
+              blockers: reconciled.hardBlockers,
+            }
+          : undefined,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/phase14/proof-store
+   * Exposes which Neon store Railway reads/writes — no secret values.
+   */
+  router.get('/api/v1/lifeos/command-center/phase14/proof-store', requireKey, async (req, res, next) => {
+    try {
+      const store = proofStoreFingerprint(process.env.DATABASE_URL);
+      const cert = await readLatestPhase14Cert(pool);
+      const ledger = await buildPhaseLedger(pool);
+      const { alphaReady, hardBlockers } = phase14StatusFromLedger(ledger);
+      res.json({
+        ...store,
+        proof_source: 'builder_audit_receipts',
+        canonical_repair: 'POST /api/v1/lifeos/command-center/phase14/run-proofs',
+        read_path: 'GET /api/v1/lifeos/command-center/phase14',
+        latest_cert: cert
+          ? {
+              receipt_id: cert.id,
+              alpha_ready: Boolean(cert.findings_json?.alpha_ready),
+              certified_at: cert.audited_at,
+            }
+          : null,
+        ledger_now: {
+          alpha_ready: alphaReady,
+          verified_count: ledger.filter((p) => p.status === 'VERIFIED').length,
+          blockers: hardBlockers,
+        },
+        cert_matches_ledger: cert
+          ? Boolean(cert.findings_json?.alpha_ready) === alphaReady
+          : null,
       });
     } catch (err) {
       next(err);
@@ -580,13 +519,8 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
       }
 
       // ── Run certify to write Phase 14 cert row ────────────────────────────
-      const phases = await buildPhaseLedger();
-      const verified = phases.filter(p => p.status === 'VERIFIED');
-      const conditional = phases.filter(p => p.status === 'CONDITIONAL');
-      const hardBlockers = phases
-        .filter(p => p.status === 'MISSING' || p.status === 'FAIL')
-        .map(p => ({ phase: p.phase, label: p.label, blocker: p.notes || p.status }));
-      const alphaReady = hardBlockers.length === 0;
+      const phases = await buildPhaseLedger(pool);
+      const { verified, conditional, hardBlockers, alphaReady } = phase14StatusFromLedger(phases);
 
       const buildId = createBuildSessionId(99814);
       const auditId = createAuditSessionId(99814, buildId);
@@ -637,13 +571,8 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
    */
   router.post('/api/v1/lifeos/command-center/phase14/certify', requireKey, async (req, res, next) => {
     try {
-      const phases = await buildPhaseLedger();
-      const verified = phases.filter(p => p.status === 'VERIFIED');
-      const conditional = phases.filter(p => p.status === 'CONDITIONAL');
-      const hardBlockers = phases
-        .filter(p => p.status === 'MISSING' || p.status === 'FAIL')
-        .map(p => ({ phase: p.phase, label: p.label, blocker: p.notes || p.status }));
-      const alphaReady = hardBlockers.length === 0;
+      const phases = await buildPhaseLedger(pool);
+      const { verified, conditional, hardBlockers, alphaReady } = phase14StatusFromLedger(phases);
 
       const buildId = createBuildSessionId(99814);
       const auditId = createAuditSessionId(99814, buildId);
