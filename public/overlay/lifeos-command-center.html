@@ -1,4 +1,3 @@
-<!-- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -407,6 +406,10 @@ function renderSnapRow(cards) {
 const snapData = {};
 
 function openSnapDrawer(key) {
+  if (key === 'builder-mode') return openProofDrawer('builder');
+  if (key === 'alpha-cert') return openProofDrawer('phase14');
+  if (key === 'oil-health') return openProofDrawer('oil');
+  if (key === 'gemini-live') return openProofDrawer('gemini');
   const d = snapData[key] || {};
   const kv = Object.entries(d).map(([k,v]) =>
     `<div class="drawer-kv"><span class="k">${k}</span><span class="v">${v}</span></div>`
@@ -552,6 +555,7 @@ async function loadBuilder() {
       <button class="btn btn-warning btn-sm" onclick="pauseBuilder()" ${!KEY?'disabled':''}>Pause</button>
       <button class="btn btn-success btn-sm" onclick="resumeBuilder()" ${!KEY?'disabled':''}>Resume</button>
       <button class="btn btn-ghost btn-sm" onclick="openBuilderTaskPanel()">Send Direction</button>
+      <button class="btn btn-ghost btn-sm" onclick="openProofDrawer('builder')">Status Detail</button>
     </div>
     <div id="builder-task-panel" style="display:none;margin-top:12px">
       <textarea id="builder-task-text" placeholder="Describe the task / direction for the builder..." style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px;font-size:12px;resize:vertical;min-height:60px;font-family:inherit"></textarea>
@@ -625,7 +629,7 @@ function phaseColor(status) {
   return 'var(--missing)';
 }
 
-function buildPhaseWheel(phases) {
+function buildPhaseWheel(phases, alphaReady) {
   const N = 13;
   const cx = 90, cy = 90, outerR = 78, innerR = 44;
   const angleStep = (2 * Math.PI) / N;
@@ -644,10 +648,12 @@ function buildPhaseWheel(phases) {
       <title>Phase ${i+1}: ${PHASE_LABELS[i+1]||''} — ${phase.status||'MISSING'}\n${phase.notes||''}</title>
     </path>`;
   }
+  const centerLine = alphaReady === true ? 'READY' : alphaReady === false ? 'NOT READY' : 'UNKNOWN';
+  const centerColor = alphaReady === true ? 'var(--success)' : alphaReady === false ? 'var(--warning)' : 'var(--missing)';
   return `<svg viewBox="0 0 180 180" width="180" height="180">${paths}
     <circle cx="${cx}" cy="${cy}" r="${innerR-2}" fill="var(--card-bg)"/>
     <text x="${cx}" y="${cy-6}" text-anchor="middle" fill="var(--accent)" font-size="11" font-weight="bold">ALPHA</text>
-    <text x="${cx}" y="${cy+8}" text-anchor="middle" fill="var(--success)" font-size="10">READY</text>
+    <text x="${cx}" y="${cy+8}" text-anchor="middle" fill="${centerColor}" font-size="9" font-weight="bold">${centerLine}</text>
     <text x="${cx}" y="${cy+20}" text-anchor="middle" fill="var(--text-muted)" font-size="9">${phases.filter(p=>p.status==='VERIFIED').length}/${N}</text>
   </svg>`;
 }
@@ -655,28 +661,21 @@ function buildPhaseWheel(phases) {
 async function loadPhasePanel() {
   const el = document.getElementById('phase-panel');
 
-  // Try the new cert endpoint first, fall back to command-center/phase14
   let phases = [];
   let certData = null;
 
-  const r1 = await safeFetch('/api/v1/builder/cert/phase14');
-  if (r1.ok && r1.data?.phase_ledger?.length) {
-    certData = r1.data;
-    phases = r1.data.phase_ledger;
-  } else {
-    const r2 = await safeFetch('/api/v1/lifeos/command-center/phase14');
-    if (r2.ok && r2.data?.found) {
-      certData = r2.data;
-      const vphases = r2.data.verified_phases || [];
-      const cphases = r2.data.conditional_phases || [];
-      const bphases = r2.data.blockers_detail || [];
-      for (let i = 1; i <= 13; i++) {
-        let status = 'MISSING';
-        if (vphases.some(p => (p.phase||p) === i)) status = 'VERIFIED';
-        else if (cphases.some(p => (p.phase||p) === i)) status = 'CONDITIONAL';
-        else if (bphases.some(p => (p.phase||p) === i)) status = 'BLOCKER';
-        phases.push({ phase:i, status, label:PHASE_LABELS[i]||`Phase ${i}`, notes:'' });
-      }
+  const r2 = await safeFetch('/api/v1/lifeos/command-center/phase14?reconcile=1');
+  if (r2.ok && r2.data?.found) {
+    certData = { ...r2.data, _endpoint: '/api/v1/lifeos/command-center/phase14' };
+    const vphases = r2.data.verified_phases || [];
+    const cphases = r2.data.conditional_phases || [];
+    const bphases = r2.data.blockers_detail || [];
+    for (let i = 1; i <= 13; i++) {
+      let status = 'MISSING';
+      if (vphases.some(p => (p.phase||p) === i)) status = 'VERIFIED';
+      else if (cphases.some(p => (p.phase||p) === i)) status = 'CONDITIONAL';
+      else if (bphases.some(p => (p.phase||p) === i)) status = 'BLOCKER';
+      phases.push({ phase:i, status, label:PHASE_LABELS[i]||`Phase ${i}`, notes:'', receipt_id: r2.data.receipt_id });
     }
   }
 
@@ -719,8 +718,14 @@ async function loadPhasePanel() {
       <span style="font-size:10px;color:var(--text-muted);margin-left:auto">${certData.certified_at ? new Date(certData.certified_at).toLocaleString() : ''}</span>
     </div>
     <div class="phase-wheel-wrap">
-      ${buildPhaseWheel(phases)}
+      ${buildPhaseWheel(phases, alphaReady)}
       <div class="phase-list">${list}</div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="openProofDrawer('phase14')">Phase 14 Receipt</button>
+      <button class="btn btn-ghost btn-sm" onclick="openProofDrawer('builder')">Builder Status</button>
+      <button class="btn btn-ghost btn-sm" onclick="openProofDrawer('oil')">Latest OIL Receipt</button>
+      <button class="btn btn-ghost btn-sm" onclick="openProofDrawer('gemini')">Gemini Proof</button>
     </div>
     ${summaryStrip}
   `;
@@ -731,49 +736,154 @@ function openPhaseDrawer(p) {
     <div class="drawer-kv"><span class="k">Status</span><span class="v" style="color:${phaseColor(p.status)}">${p.status}</span></div>
     <div class="drawer-kv"><span class="k">Notes</span><span class="v">${p.notes||'—'}</span></div>
     <div class="drawer-kv"><span class="k">Confidence</span><span class="v">${p.confidence!=null?p.confidence+'%':'—'}</span></div>
-    <div class="drawer-kv"><span class="k">Receipt ID</span><span class="v">${p.receipt_id||'—'}</span></div>
+    <div class="drawer-kv"><span class="k">Receipt ID</span><span class="v">${p.receipt_id||p.audit_id||'—'}</span></div>
     <div class="drawer-kv"><span class="k">Audit session</span><span class="v">${p.audit_session_id||'—'}</span></div>
     ${p._raw ? `<div class="drawer-pre">${JSON.stringify(p._raw,null,2)}</div>` : ''}
   `);
 }
 
 // ─────────────────────────────────────────────
-// Section D: Adam Decision Queue
+// Phase 2: Builder/OIL proof drilldown drawers
 // ─────────────────────────────────────────────
+const PROOF_ENDPOINTS = {
+  builder: '/api/v1/lifeos/builder/ready',
+  oil: '/api/v1/oil/receipts?limit=1',
+  gemini: '/api/v1/gemini/proof/status',
+  phase14: '/api/v1/lifeos/command-center/phase14?reconcile=1',
+};
+
+async function openProofDrawer(kind) {
+  const endpoint = PROOF_ENDPOINTS[kind] || 'UNKNOWN';
+  openDrawer(`Proof: ${kind}`, '<div style="color:var(--text-muted);font-size:12px">Loading...</div>');
+  const r = await safeFetch(endpoint);
+  let status = 'UNKNOWN';
+  let receiptId = '—';
+  let ts = '—';
+  let summary = '';
+
+  if (!r.ok) {
+    status = r.status === 404 ? 'NOT_WIRED' : 'ERROR';
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="drawer-kv"><span class="k">Status</span><span class="v" style="color:var(--error)">${status}</span></div>
+      <div class="drawer-kv"><span class="k">Source</span><span class="v">${endpoint}</span></div>
+      <div class="drawer-kv"><span class="k">HTTP</span><span class="v">${r.status}</span></div>
+      <div class="drawer-pre">${JSON.stringify(r.data,null,2)}</div>`;
+    return;
+  }
+
+  const d = r.data;
+  if (kind === 'builder') {
+    status = d.ok ? 'LIVE' : 'ERROR';
+    receiptId = d.codegen?.deploy_commit_sha ? (d.codegen.deploy_commit_sha+'').slice(0,12) : '—';
+    ts = d.builder?.checked_at || 'runtime';
+    summary = `mode=${d.builder?.mode||'?'} github=${d.builder?.github_token}`;
+  } else if (kind === 'oil') {
+    const rows = Array.isArray(d) ? d : d.receipts || d.rows || [];
+    const row = rows[0];
+    if (!row) { status = 'UNKNOWN'; summary = 'No receipts'; }
+    else {
+      status = 'LIVE';
+      receiptId = row.id || row.receipt_id || '—';
+      ts = row.created_at || row.audited_at || '—';
+      summary = row.receipt_type || row.type || JSON.stringify(row.payload||row.findings||'').slice(0,80);
+    }
+  } else if (kind === 'gemini') {
+    const lp = d.last_proof;
+    if (!lp) { status = 'UNKNOWN'; summary = 'No proof recorded'; }
+    else {
+      status = lp.confirmed ? 'LIVE' : 'ERROR';
+      receiptId = lp.id || lp.receipt_id || '—';
+      ts = lp.created_at || lp.audited_at || '—';
+      summary = `confirmed=${lp.confirmed} latency=${lp.latency_ms}ms`;
+    }
+  } else if (kind === 'phase14') {
+    if (!d.found) { status = 'UNKNOWN'; summary = 'No certification receipt'; }
+    else {
+      status = d.status || (d.alpha_ready ? 'ALPHA_READY' : 'NOT_ALPHA_READY');
+      receiptId = d.receipt_id || '—';
+      ts = d.certified_at || '—';
+      summary = `verified=${d.verified} conditional=${d.conditional} blockers=${d.blockers} store=${d.proof_store_id||'?'}`;
+    }
+  }
+
+  document.getElementById('drawer-body').innerHTML = `
+    <div class="drawer-kv"><span class="k">Status</span><span class="v">${status}</span></div>
+    <div class="drawer-kv"><span class="k">Receipt ID</span><span class="v">${receiptId}</span></div>
+    <div class="drawer-kv"><span class="k">Source</span><span class="v">${endpoint}</span></div>
+    <div class="drawer-kv"><span class="k">Timestamp</span><span class="v">${ts}</span></div>
+    <div class="drawer-kv"><span class="k">Summary</span><span class="v">${summary||'—'}</span></div>
+    <div class="drawer-pre">${JSON.stringify(d,null,2)}</div>`;
+}
+
+// ─────────────────────────────────────────────
+// Section D: Adam Decision Queue (read-only)
+// ─────────────────────────────────────────────
+function queueCategory(item) {
+  if (item.priority === 'urgent') return 'P0';
+  if (item.priority === 'normal') return 'P1';
+  if (item.priority === 'low') return 'P2';
+  if (item.type === 'other' || item.type === 'idea') return 'Idea';
+  return 'P1';
+}
+
+function adamReason(item) {
+  const ctx = item.context && typeof item.context === 'object' ? item.context : {};
+  return ctx.reason || ctx.why || item.description || '—';
+}
+
+function recommendedAction(item) {
+  const ctx = item.context && typeof item.context === 'object' ? item.context : {};
+  return ctx.recommended_action || ctx.recommendedAction || null;
+}
+
 async function loadQueue() {
   const el = document.getElementById('queue-panel');
   const r = await safeFetch('/api/v1/pending-adam');
 
   if (!r.ok) {
-    el.innerHTML = `<div class="not-wired">ERROR<span>${r.error||r.status}</span></div>`;
+    el.innerHTML = `<div class="not-wired">ERROR<span>${r.error||r.status} — GET /api/v1/pending-adam</span></div>`;
     return;
   }
 
   const items = Array.isArray(r.data) ? r.data : r.data?.items || [];
   if (!items.length) {
-    el.innerHTML = `<div class="empty-state">&#10003; No pending decisions — system is operating cleanly.</div>`;
+    el.innerHTML = `<div class="empty-state">&#10003; No pending decisions — system is operating cleanly.<div style="font-size:10px;margin-top:6px;color:var(--text-muted)">Source: GET /api/v1/pending-adam (${r.data?.total ?? 0} items)</div></div>`;
     return;
   }
 
-  const priorityClass = p => p==='urgent'?'pill-error':p==='normal'?'pill-warning':'pill-muted';
-  const priorityLabel = p => p==='urgent'?'P0':p==='normal'?'P1':p==='low'?'P2':'IDEA';
+  const groups = { P0: [], P1: [], P2: [], Idea: [] };
+  items.forEach(item => groups[queueCategory(item)].push(item));
 
-  const cards = items.map(item => `
+  const priorityClass = c => c==='P0'?'pill-error':c==='P1'?'pill-warning':c==='P2'?'pill-muted':'pill-accent';
+
+  const renderCard = item => {
+    const cat = queueCategory(item);
+    const rec = recommendedAction(item);
+    return `
     <div class="q-card" id="qcard-${item.id}">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
-        <span class="pill ${priorityClass(item.priority)}">${priorityLabel(item.priority)}</span>
+        <span class="pill ${priorityClass(cat)}">${cat}</span>
         <span class="q-title">${item.title||'Untitled'}</span>
       </div>
-      <div class="q-desc">${item.description||''}</div>
+      <div class="q-desc"><strong style="color:var(--text-muted);font-size:10px">Why Adam:</strong> ${adamReason(item)}</div>
+      ${rec ? `<div class="q-desc" style="margin-top:4px"><strong style="color:var(--accent);font-size:10px">Recommended:</strong> ${rec}</div>` : ''}
+      <div class="q-desc" style="font-size:10px;margin-top:4px">${item.project_name||item.project_slug||''} · ${item.type||'—'}</div>
       <div class="q-actions">
-        <button class="btn btn-success btn-sm" onclick="resolveItem('${item.id}','approve')">&#10003; Approve</button>
-        <button class="btn btn-danger btn-sm" onclick="resolveItem('${item.id}','reject')">&#10007; Reject</button>
-        <button class="btn btn-ghost btn-sm" onclick="deferItem('${item.id}')">&#8594; Defer</button>
+        <button class="btn btn-success btn-sm" disabled title="Read-only — resolve via API when enabled">Approve</button>
+        <button class="btn btn-danger btn-sm" disabled title="Read-only — resolve via API when enabled">Reject</button>
+        <button class="btn btn-ghost btn-sm" disabled title="Read-only — defer not wired in cockpit">Defer</button>
         <button class="btn btn-ghost btn-sm" onclick="openQueueDrawer(${JSON.stringify(item).replace(/"/g,'&quot;')})">Detail</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  };
 
-  el.innerHTML = `<div class="queue-grid">${cards}</div>`;
+  const sections = ['P0','P1','P2','Idea'].map(cat => {
+    const list = groups[cat];
+    if (!list.length) return '';
+    return `<div style="margin-bottom:14px"><div class="section-label">${cat} (${list.length})</div><div class="queue-grid">${list.map(renderCard).join('')}</div></div>`;
+  }).join('');
+
+  el.innerHTML = sections || `<div class="empty-state">No categorized items.</div>`;
 }
 
 async function resolveItem(id, choice) {
@@ -801,11 +911,15 @@ function deferItem(id) {
 }
 
 function openQueueDrawer(item) {
+  const rec = recommendedAction(item);
   openDrawer(`Decision: ${item.title||'Untitled'}`, `
+    <div class="drawer-kv"><span class="k">Category</span><span class="v">${queueCategory(item)}</span></div>
     <div class="drawer-kv"><span class="k">Priority</span><span class="v">${item.priority||'—'}</span></div>
     <div class="drawer-kv"><span class="k">Type</span><span class="v">${item.type||'—'}</span></div>
+    <div class="drawer-kv"><span class="k">Why Adam</span><span class="v">${adamReason(item)}</span></div>
+    ${rec ? `<div class="drawer-kv"><span class="k">Recommended</span><span class="v">${rec}</span></div>` : ''}
     <div class="drawer-kv"><span class="k">Created</span><span class="v">${item.created_at?new Date(item.created_at).toLocaleString():'—'}</span></div>
-    <div class="drawer-kv"><span class="k">Description</span><span class="v">${item.description||'—'}</span></div>
+    <div class="drawer-kv"><span class="k">Source</span><span class="v">GET /api/v1/pending-adam</span></div>
     <div class="drawer-pre">${JSON.stringify(item.context||{},null,2)}</div>
   `);
 }
@@ -867,42 +981,39 @@ async function loadCouncilHistory() {
 // ─────────────────────────────────────────────
 // Section F: Product / Project Progress Map
 // ─────────────────────────────────────────────
-const DEFAULT_LANES = [
-  { slug:'builder-oil-governance', name:'Builder / OIL Governance', pct:75, phase:'Phase 14: ALPHA_READY', next:'cockpit wire + stage 2' },
-  { slug:'lifeos-core', name:'LifeOS Core Domains', pct:60, phase:'18 phases built', next:'user auth system' },
-  { slug:'memory-capsules', name:'Memory Capsule Alpha', pct:40, phase:'Alpha scoped', next:'provenance spec' },
-  { slug:'command-center', name:'Command Center v2', pct:55, phase:'Backend done', next:'HTML cockpit wire' },
-  { slug:'tc-coordinator', name:'Transaction Coordinator', pct:50, phase:'Routes live', next:'Boldtrail data sync' },
-  { slug:'tsos', name:'TokenSaverOS', pct:45, phase:'Optimizer live', next:'Leaderboard endpoint' },
-  { slug:'security-alpha', name:'OIL Security Alpha', pct:80, phase:'Receipts live', next:'Honeypot probes' },
-];
+const DEFAULT_LANES = null; // removed — no fake fallback data
 
 async function loadProjects() {
   const el = document.getElementById('projects-panel');
   const r = await safeFetch('/api/v1/projects');
 
-  let lanes = DEFAULT_LANES;
-  if (r.ok && r.data) {
-    const projects = Array.isArray(r.data) ? r.data : r.data.projects || r.data.rows || [];
-    if (projects.length) {
-      lanes = projects.map(p => ({
-        slug: p.slug || p.id,
-        name: p.name,
-        pct: p.completion_pct || p.pct || 0,
-        phase: p.phase || p.current_phase || '',
-        next: p.next_task || p.next || '',
-        status: p.status,
-      }));
-    }
+  if (!r.ok) {
+    el.innerHTML = `<div class="not-wired">NOT_WIRED<span>GET /api/v1/projects returned ${r.status}</span></div>`;
+    return;
   }
+
+  const projects = Array.isArray(r.data) ? r.data : r.data.projects || r.data.rows || [];
+  if (!projects.length) {
+    el.innerHTML = `<div class="not-wired">NO_DATA<span>GET /api/v1/projects returned empty list</span></div>`;
+    return;
+  }
+
+  const lanes = projects.map(p => ({
+    slug: p.slug || p.id,
+    name: p.name,
+    pct: p.completion_pct ?? p.pct ?? null,
+    phase: p.current_focus || p.phase || p.current_phase || '—',
+    next: p.next_task || p.next || '—',
+    status: p.status,
+  }));
 
   el.innerHTML = lanes.map(l => `
     <div class="proj-card" onclick="openProjectDrawer('${l.slug}','${(l.name+'').replace(/'/g,"\\'")}')">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <span style="font-size:13px;font-weight:600">${l.name}</span>
-        <span style="margin-left:auto;font-size:11px;color:var(--accent)">${l.pct}%</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--accent)">${l.pct != null ? l.pct+'%' : '—'}</span>
       </div>
-      <div class="proj-bar-wrap"><div class="proj-bar" style="width:${Math.min(l.pct,100)}%"></div></div>
+      ${l.pct != null ? `<div class="proj-bar-wrap"><div class="proj-bar" style="width:${Math.min(l.pct,100)}%"></div></div>` : ''}
       <div style="font-size:10px;color:var(--text-muted)">${l.phase} &nbsp;·&nbsp; Next: ${l.next||'—'}</div>
     </div>`).join('');
 }
@@ -925,62 +1036,102 @@ async function openProjectDrawer(slug, name) {
 }
 
 // ─────────────────────────────────────────────
-// Section G: Infrastructure Health
+// Section G: Infrastructure Health (endpoint truth only)
 // ─────────────────────────────────────────────
+const infraNodeCache = {};
+
+function infraStateLabel(ok, httpOk) {
+  if (!httpOk) return 'ERROR';
+  if (ok === true) return 'LIVE';
+  if (ok === false) return 'ERROR';
+  return 'UNKNOWN';
+}
+
+function infraCssClass(label) {
+  if (label === 'LIVE') return 'ok';
+  if (label === 'ERROR') return 'err';
+  if (label === 'NOT_WIRED') return 'miss';
+  return 'warn';
+}
+
 async function loadInfra() {
   const el = document.getElementById('infra-panel');
 
-  const [rh, rb, rg, ro] = await Promise.all([
-    safeFetch('/api/health'),
-    safeFetch('/api/v1/lifeos/builder/ready'),
-    safeFetch('/api/v1/gemini/proof/status'),
-    safeFetch('/api/v1/oil/receipts?limit=1'),
-  ]);
+  const checks = [
+    { key:'github', label:'GitHub', endpoint:'/api/v1/lifeos/builder/ready', run: async () => {
+      const r = await safeFetch('/api/v1/lifeos/builder/ready');
+      const ok = r.data?.builder?.github_token === true || r.data?.github_token === true;
+      return { label: infraStateLabel(ok, r.ok), endpoint: '/api/v1/lifeos/builder/ready', sub: ok ? 'token OK' : 'token missing', raw: r.data, http: r.status };
+    }},
+    { key:'railway', label:'Railway', endpoint:'/api/v1/lifeos/builder/ready', run: async () => {
+      const r = await safeFetch('/api/v1/lifeos/builder/ready');
+      const sha = r.data?.codegen?.deploy_commit_sha || r.data?.sha;
+      const ok = !!sha;
+      return { label: ok ? 'LIVE' : 'UNKNOWN', endpoint: '/api/v1/lifeos/builder/ready', sub: ok ? (sha+'').slice(0,8) : 'no SHA', raw: r.data?.codegen || r.data, http: r.status };
+    }},
+    { key:'neon', label:'Neon DB', endpoint:'/api/health', run: async () => {
+      const r = await safeFetch('/api/health');
+      const connected = r.ok && (r.data?.database === 'connected' || r.data?.status === 'ok');
+      return { label: infraStateLabel(connected, r.ok), endpoint: '/api/health', sub: connected ? 'connected' : 'disconnected', raw: r.data, http: r.status };
+    }},
+    { key:'builder', label:'Builder', endpoint:'/api/v1/lifeos/builder/ready', run: async () => {
+      const r = await safeFetch('/api/v1/lifeos/builder/ready');
+      const ok = r.ok && r.data?.ok === true;
+      return { label: infraStateLabel(ok, r.ok), endpoint: '/api/v1/lifeos/builder/ready', sub: ok ? 'ready' : 'not ready', raw: r.data, http: r.status };
+    }},
+    { key:'oil', label:'OIL', endpoint:'/api/v1/oil/receipts?limit=1', run: async () => {
+      const r = await safeFetch('/api/v1/oil/receipts?limit=1');
+      const rows = Array.isArray(r.data) ? r.data : r.data?.receipts || r.data?.rows || [];
+      const ok = r.ok && rows.length > 0;
+      return { label: ok ? 'LIVE' : (r.ok ? 'UNKNOWN' : 'ERROR'), endpoint: '/api/v1/oil/receipts?limit=1', sub: ok ? `${rows.length}+ receipt` : 'no data', raw: r.data, http: r.status };
+    }},
+    { key:'council', label:'AI Council', endpoint:'/api/v1/gemini/proof/status', run: async () => {
+      const r = await safeFetch('/api/v1/gemini/proof/status');
+      const ok = r.ok && !!r.data?.last_proof;
+      return { label: ok ? 'LIVE' : (r.ok ? 'UNKNOWN' : 'ERROR'), endpoint: '/api/v1/gemini/proof/status', sub: ok ? 'gemini proof' : 'no proof', raw: r.data, http: r.status };
+    }},
+    { key:'ssot', label:'SSOT Docs', endpoint:null, run: async () => {
+      return { label: 'NOT_WIRED', endpoint: '—', sub: 'no health endpoint', raw: null, http: null };
+    }},
+  ];
 
-  const nodeStatus = (ok, fallback='miss') => ok ? 'ok' : fallback;
-  const nodeColor = s => s==='ok'?'var(--success)':s==='warn'?'var(--warning)':s==='err'?'var(--error)':'var(--missing)';
+  const results = [];
+  for (const c of checks) {
+    const res = await c.run();
+    infraNodeCache[c.key] = res;
+    results.push({ key:c.key, label:c.label, state: res.label, ...res });
+  }
 
-  const github = rb.data?.builder?.github_token === true || rb.data?.github_token === true;
-  const railway = !!(rb.data?.codegen?.deploy_commit_sha || rb.data?.sha);
-  const neon = rh.ok && (rh.data?.database === 'connected' || rh.data?.status === 'ok');
-  const gemini = rg.ok && !!rg.data?.last_proof;
-  const oilReceipts = ro.ok && (Array.isArray(ro.data) ? ro.data.length > 0 : !!(ro.data?.rows?.length));
-
-  function node(label, status, sub, raw) {
-    return `<div class="infra-node ${status}" onclick='openInfraDrawer(${JSON.stringify({label,status,raw}).replace(/'/g,"\\'")})'">
-      <div class="infra-node-label" style="color:${nodeColor(status)}">${label}</div>
-      <div class="infra-node-sub">${sub}</div>
+  function node(n) {
+    const cls = infraCssClass(n.state);
+    return `<div class="infra-node ${cls}" onclick="openInfraDrawer('${n.key}')">
+      <div class="infra-node-label">${n.label}</div>
+      <div class="infra-node-sub" style="color:${n.state==='LIVE'?'var(--success)':n.state==='ERROR'?'var(--error)':n.state==='NOT_WIRED'?'var(--missing)':'var(--warning)'}">${n.state} · ${n.sub}</div>
     </div>`;
   }
 
+  const row1 = results.filter(n => ['github','railway','neon'].includes(n.key));
+  const row2 = results.filter(n => ['builder','oil','council','ssot'].includes(n.key));
+
   el.innerHTML = `
-    <div class="infra-nodes">
-      ${node('GitHub', nodeStatus(github,'err'), github?'token OK':'token missing', rb.data)}
-      <span class="infra-arrow">&#8594;</span>
-      ${node('Railway', nodeStatus(railway,'warn'), railway?'SHA present':'no SHA', rb.data?.codegen)}
-      <span class="infra-arrow">&#8594;</span>
-      ${node('Neon DB', nodeStatus(neon,'err'), neon?'connected':'error', rh.data)}
-    </div>
-    <div class="infra-nodes">
-      ${node('SSOT Docs', 'ok', 'static — page loaded', null)}
-      <span class="infra-arrow">&#8594;</span>
-      ${node('Builder', nodeStatus(railway&&github,'warn'), 'preflight', rb.data)}
-      <span class="infra-arrow">&#8594;</span>
-      ${node('OIL Receipts', nodeStatus(oilReceipts,'warn'), oilReceipts?'active':'no data', ro.data)}
-    </div>
-    <div class="infra-nodes">
-      ${node('AI Council', nodeStatus(gemini,'warn'), gemini?'Gemini live':'checking...', rg.data)}
-    </div>
+    <div class="infra-nodes">${row1.map((n,i)=>node(n)+(i<row1.length-1?'<span class="infra-arrow">&#8594;</span>':'')).join('')}</div>
+    <div class="infra-nodes">${row2.map(node).join('')}</div>
     <div style="text-align:center;margin-top:8px">
-      <span style="font-size:10px;color:var(--text-muted)">Click a node for full detail</span>
+      <span style="font-size:10px;color:var(--text-muted)">Click a node — endpoint + last response in drawer</span>
     </div>
   `;
 }
 
-function openInfraDrawer(d) {
-  openDrawer(d.label, `
-    <div class="drawer-kv"><span class="k">Status</span><span class="v" style="color:${d.status==='ok'?'var(--success)':d.status==='err'?'var(--error)':'var(--warning)'}">${d.status.toUpperCase()}</span></div>
-    ${d.raw ? `<div class="drawer-pre">${JSON.stringify(d.raw,null,2)}</div>` : '<div style="color:var(--text-muted);font-size:11px">No additional data</div>'}
+function openInfraDrawer(key) {
+  const d = infraNodeCache[key] || {};
+  const NAMES = { github:'GitHub', railway:'Railway', neon:'Neon DB', builder:'Builder', oil:'OIL', council:'AI Council', ssot:'SSOT Docs' };
+  const summary = d.raw ? JSON.stringify(d.raw).slice(0, 200) : 'No response body';
+  openDrawer(NAMES[key] || key, `
+    <div class="drawer-kv"><span class="k">Status</span><span class="v">${d.label||'UNKNOWN'}</span></div>
+    <div class="drawer-kv"><span class="k">Endpoint</span><span class="v">${d.endpoint||'NOT_WIRED'}</span></div>
+    <div class="drawer-kv"><span class="k">HTTP</span><span class="v">${d.http ?? '—'}</span></div>
+    <div class="drawer-kv"><span class="k">Summary</span><span class="v">${summary}</span></div>
+    ${d.raw ? `<div class="drawer-pre">${JSON.stringify(d.raw,null,2)}</div>` : '<div class="not-wired">NOT_WIRED<span>No endpoint for this node</span></div>'}
   `);
 }
 
