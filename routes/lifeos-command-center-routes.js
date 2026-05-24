@@ -52,6 +52,9 @@ import {
   buildRepairQueue,
   summarizeOilMisses,
   validateOilMissedIssueInput,
+  buildSelfRepairAuditRunPayload,
+  writeSelfRepairAuditRunReceipt,
+  readLatestSelfRepairAuditRun,
 } from '../services/oil-self-repair-detector.js';
 import {
   evaluateProofFreshnessFromPool,
@@ -197,6 +200,91 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
         oil_receipts_present: oilRecent.length > 0,
         missing_oil_receipts: oilRecent.length === 0,
         write_receipt_path: 'POST /api/v1/lifeos/command-center/self-repair/oil-missed-issue',
+        audit_run_path: 'POST /api/v1/lifeos/command-center/self-repair/audit/run',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * POST /api/v1/lifeos/command-center/self-repair/audit/run
+   * Run self-repair audit and persist audit-run receipt (no auto-repair).
+   */
+  router.post('/api/v1/lifeos/command-center/self-repair/audit/run', requireKey, async (req, res, next) => {
+    try {
+      const triggeredBy = req.body?.triggered_by || 'C2';
+      const railwayDeploySha = normalizeSha(
+        process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
+      );
+      const githubMain = await fetchGitHubMainSha();
+      const geminiRows = await readReceiptsByType(SECURITY_RECEIPT_TYPES.GEMINI_LIVE_PROOF, 1, pool);
+      const lp = geminiRows[0];
+      const receiptCommitSha =
+        normalizeSha(lp?.payload?.runtime?.commit_sha) ||
+        normalizeSha(lp?.payload?.details?.runtime?.commit_sha);
+
+      const runtimeProof = detectRuntimeProofMismatch({
+        localHead: req.body?.local_head || null,
+        githubMainSha: req.body?.github_main_sha || githubMain.sha || null,
+        railwayDeploySha,
+        receiptCommitSha,
+      });
+
+      const railwayStore = proofStoreFingerprint(process.env.DATABASE_URL);
+      const proofStore = detectProofStoreMismatch(process.env.DATABASE_URL, railwayStore);
+      const context = { runtimeProof, proofStore };
+      const activeMisses = evaluateKnownOilMisses(context);
+
+      const freshness = await evaluateProofFreshnessFromPool(pool, {
+        railwayDeploySha,
+        geminiReceiptRow: lp || null,
+      });
+      const runtimeProofMerged = mergeRuntimeProofWithFreshness(runtimeProof, freshness);
+
+      const repairNeeded =
+        (runtimeProofMerged.mismatches?.length ?? 0) > 0 ||
+        activeMisses.length > 0 ||
+        freshness.stale === true;
+
+      const payload = buildSelfRepairAuditRunPayload({
+        auditStatus: runtimeProofMerged.status,
+        activeMismatches: runtimeProofMerged.mismatches || [],
+        proofStoreStatus: proofStore.status,
+        proofStoreId: railwayStore.proof_store_id,
+        githubMainSha: githubMain.sha,
+        railwayDeploySha,
+        receiptCommitSha,
+        repairNeeded,
+        triggeredBy,
+        proofFreshnessOverall: freshness.overall,
+        blocksBuild: runtimeProofMerged.blocks_build === true,
+        oilMissedActiveCount: activeMisses.length,
+      });
+
+      const writeResult = await writeSelfRepairAuditRunReceipt(pool, payload);
+
+      res.json({
+        ok: true,
+        audited_at: new Date().toISOString(),
+        proof_source: 'railway_runtime_receipted',
+        auto_repair: false,
+        runtime_proof: runtimeProofMerged,
+        proof_freshness: freshness,
+        proof_store: proofStore,
+        oil_missed_issues_active: activeMisses,
+        railway_deploy_sha: railwayDeploySha,
+        github_main_sha: githubMain.sha || null,
+        receipt_commit_sha: receiptCommitSha,
+        repair_needed: repairNeeded,
+        triggered_by: payload.triggered_by,
+        receipt: {
+          receipt_id: writeResult.receipt_id || writeResult.id,
+          channel: writeResult.channel || 'security_receipts',
+          fallback_reason: writeResult.fallback_reason || writeResult.security_receipt_fallback_reason || null,
+          type: 'self_repair_audit',
+        },
+        write_path: 'POST /api/v1/lifeos/command-center/self-repair/audit/run',
       });
     } catch (err) {
       next(err);
@@ -272,12 +360,15 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
     try {
       const limit = Math.min(Number(req.query.limit) || 20, 50);
       const entries = await readSelfRepairHistory(pool, limit);
+      const latestAuditRun = await readLatestSelfRepairAuditRun(pool);
       res.json({
         ok: true,
         proof_source: 'receipts_only',
         read_path: 'GET /api/v1/lifeos/command-center/self-repair/history',
         live_audit_path: 'GET /api/v1/lifeos/command-center/self-repair/audit',
+        audit_run_path: 'POST /api/v1/lifeos/command-center/self-repair/audit/run',
         count: entries.length,
+        latest_audit_run: latestAuditRun,
         entries,
       });
     } catch (err) {
