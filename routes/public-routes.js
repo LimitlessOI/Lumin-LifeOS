@@ -65,6 +65,13 @@ export function registerPublicRoutes(app, {
       .send("Command center not found. Please ensure command-center.html exists.");
   });
 
+  // V2 executive cockpit — governed by AMENDMENT_12, backed by /api/v1/lifeos/command-center/*
+  app.get("/lifeos-command-center", (req, res) => {
+    const filePath = path.join(__dirname, "public", "overlay", "lifeos-command-center.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("LifeOS Command Center v2 not found.");
+  });
+
   app.get("/tc", (req, res) => {
     const filePath = path.join(__dirname, "public", "tc", "agent-portal.html");
     if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);

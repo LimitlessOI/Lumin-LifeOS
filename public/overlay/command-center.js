@@ -1,5 +1,7 @@
 /**
  * Command & Control - Enhanced cockpit with Now Bar, Queue, and Chat.
+ * LEGACY NOTICE: This script powers the older operational admin dashboard.
+ * It is not the canonical Command Center V2 client.
  */
 
 const workItems = [];

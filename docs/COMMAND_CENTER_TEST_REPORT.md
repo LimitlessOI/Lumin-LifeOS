@@ -1,3 +1,15 @@
+# LEGACY / REFERENCE ONLY
+
+This report describes an older Command Center test pass and older command/control assumptions.
+It is retained for historical context, not as the canonical Command Center V2 runtime status.
+
+Canonical Command Center V2 target:
+- `public/overlay/lifeos-command-center.html`
+
+Canonical Command Center V2 backend:
+- `/api/v1/lifeos/command-center/*`
+- OIL receipt endpoints
+
 # Command Center Test Report
 **Date:** 2026-01-10
 **Tester:** Claude (Automated Testing)

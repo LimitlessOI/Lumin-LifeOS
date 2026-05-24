@@ -1003,27 +1003,55 @@ function receiptPill(type) {
 async function loadSecurity() {
   const el = document.getElementById('security-panel');
 
-  const [rr, rg] = await Promise.all([
-    safeFetch('/api/v1/oil/receipts?limit=20'),
-    safeFetch('/api/v1/gemini/proof/status'),
-  ]);
+  // SEC-F01 aggregate — canonical source; falls back to individual receipts endpoint if not wired
+  const rs = await safeFetch('/api/v1/lifeos/command-center/security');
 
-  const receipts = Array.isArray(rr.data) ? rr.data : rr.data?.rows || [];
+  let receipts = [], lastProof = null, summaryData = null, notWired = {};
 
-  // Gemini proof status card
+  if (rs.ok && rs.data && rs.data.status !== 'NOT_WIRED') {
+    receipts = rs.data.recent_receipts || [];
+    lastProof = rs.data.last_gemini_proof || null;
+    summaryData = rs.data.latest_summary || null;
+    notWired = rs.data.not_wired || {};
+  } else {
+    // Fallback: read directly from individual endpoints
+    const [rr, rg] = await Promise.all([
+      safeFetch('/api/v1/oil/receipts?limit=20'),
+      safeFetch('/api/v1/gemini/proof/status'),
+    ]);
+    receipts = Array.isArray(rr.data) ? rr.data : rr.data?.rows || [];
+    lastProof = rg.data?.last_proof || null;
+  }
+
+  // Gemini proof card
   let geminiCard = '';
-  if (rg.ok && rg.data?.last_proof) {
-    const lp = rg.data.last_proof;
-    const ageMs = Date.now() - new Date(lp.created_at||lp.audited_at||0).getTime();
+  if (lastProof) {
+    const ageMs = Date.now() - new Date(lastProof.created_at||lastProof.audited_at||0).getTime();
     const ageH = ageMs/36e5;
     const gs = ageH < 4 ? 'ok' : ageH < 12 ? 'warn' : 'err';
     const ageStr = ageH < 1 ? `${Math.round(ageMs/6e4)}m ago` : `${Math.round(ageH)}h ago`;
     geminiCard = `
       <div style="padding:10px;background:rgba(0,0,0,.2);border-radius:6px;margin-bottom:10px;font-size:11px">
-        <div style="color:var(--accent);font-weight:700;margin-bottom:4px">Gemini Proof Status</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span style="color:var(--accent);font-weight:700">Gemini Proof</span>
+          <span class="pill ${gs==='ok'?'pill-success':gs==='warn'?'pill-warning':'pill-error'}">${gs.toUpperCase()}</span>
+          <span style="color:var(--text-muted);margin-left:auto;font-size:10px">SEC-F01</span>
+        </div>
         <div style="color:var(--text-muted)">Last proof: <strong style="color:${gs==='ok'?'var(--success)':gs==='warn'?'var(--warning)':'var(--error)'}">${ageStr}</strong></div>
-        <div style="color:var(--text-muted)">Latency: ${lp.latency_ms||'?'}ms &nbsp;·&nbsp; Receipt: ${(lp.receipt_id||lp.id||'').toString().slice(0,8)}</div>
+        <div style="color:var(--text-muted)">Latency: ${lastProof.latency_ms||'?'}ms &nbsp;·&nbsp; Receipt: ${(lastProof.receipt_id||lastProof.id||'').toString().slice(0,8)}</div>
       </div>`;
+  }
+
+  // Daily summary strip
+  let summaryStrip = '';
+  if (summaryData?.payload) {
+    const p = summaryData.payload;
+    summaryStrip = `<div style="padding:8px 10px;background:rgba(79,195,247,.06);border-radius:6px;margin-bottom:10px;font-size:10px;color:var(--text-muted)">
+      <strong style="color:var(--accent)">24h Summary</strong> &nbsp;·&nbsp;
+      Total receipts: ${p.total_receipts||'?'} &nbsp;·&nbsp;
+      Gemini proofs: ${p.by_type?.gemini_live_proof||0} &nbsp;·&nbsp;
+      Supervised builds: ${p.by_type?.builder_supervised_build||0}
+    </div>`;
   }
 
   const streamHtml = receipts.length
@@ -1035,14 +1063,20 @@ async function loadSecurity() {
         </div>`).join('')}</div>`
     : `<div class="not-wired">NO_DATA<span>No OIL receipts found</span></div>`;
 
+  // NOT_WIRED flags from SEC-F01
+  const nwItems = Object.entries(notWired).filter(([,v])=>v).map(([k])=>
+    `<div class="not-wired" style="margin:4px 0 0;padding:6px 8px">${k.replace(/_/g,' ')}<span>NOT_WIRED — Stage 2</span></div>`
+  ).join('') || `<div class="not-wired" style="margin:0;padding:8px">Honeypot probes<span>Coming Stage 2</span></div>
+    <div class="not-wired" style="margin:4px 0 0;padding:8px">Red team findings<span>Coming Stage 2</span></div>`;
+
   el.innerHTML = `
     ${geminiCard}
-    <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Receipt stream (newest first):</div>
+    ${summaryStrip}
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Receipt stream (canonical receipts only):</div>
     ${streamHtml}
-    <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,.15);border-radius:6px;font-size:11px">
-      <div style="color:var(--text-muted);margin-bottom:6px">Stage 1 placeholders:</div>
-      <div class="not-wired" style="margin:0;padding:8px">Honeypot probes<span>Coming Stage 2</span></div>
-      <div class="not-wired" style="margin:4px 0 0;padding:8px">Red team findings<span>Coming Stage 2</span></div>
+    <div style="margin-top:10px;padding:8px;background:rgba(0,0,0,.15);border-radius:6px;font-size:11px">
+      <div style="color:var(--text-muted);margin-bottom:4px">Stage 1 placeholders:</div>
+      ${nwItems}
     </div>
   `;
 }

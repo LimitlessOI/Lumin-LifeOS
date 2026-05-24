@@ -1,6 +1,11 @@
 /**
  * Command Center Routes
  * Extracted from server.js
+ *
+ * LEGACY NOTICE: This file backs the older operational admin dashboard.
+ * Canonical V2 backend: routes/lifeos-command-center-routes.js
+ *
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 import logger from '../services/logger.js';
 

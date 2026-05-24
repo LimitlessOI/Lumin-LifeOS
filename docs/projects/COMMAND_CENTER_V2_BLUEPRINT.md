@@ -5,6 +5,24 @@
 **SSOT:** `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`
 **Governs:** Adam's executive oversight cockpit for Builder, OIL, AI Council, queues, runtime health, and product progress
 
+## Canonical Boundary
+
+Older command/control/dashboard attempts are legacy or reference material only unless explicitly called out here.
+
+Canonical Command Center V2 frontend target:
+- `public/overlay/lifeos-command-center.html`
+
+Canonical Command Center V2 backend sources:
+- `/api/v1/lifeos/command-center/*`
+- OIL receipt endpoints
+
+Non-canonical legacy surfaces:
+- `public/overlay/command-center.html`
+- `routes/command-center-routes.js`
+- older quick-start/test-report docs
+
+Those legacy surfaces may remain live for operator continuity, but they are not the source of truth for V2 design or Builder implementation.
+
 ---
 
 ## What Already Exists (Do Not Duplicate)

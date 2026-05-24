@@ -1,3 +1,15 @@
+# LEGACY / REFERENCE ONLY
+
+This guide documents an older Command Center workflow and message-routing model.
+It is not the canonical source for Command Center V2.
+
+Canonical Command Center V2 target:
+- `public/overlay/lifeos-command-center.html`
+
+Canonical Command Center V2 backend:
+- `/api/v1/lifeos/command-center/*`
+- OIL receipt endpoints
+
 # 🚀 Command Center Quick Start Guide
 
 ## Open It
