@@ -222,6 +222,26 @@ export async function fetchRailwayProofStore(baseUrl, commandKey) {
   }
 }
 
+/** GitHub main SHA via server GITHUB_TOKEN — never exposes token. */
+export async function fetchGitHubMainSha() {
+  const token = process.env.GITHUB_TOKEN?.trim();
+  const repo = process.env.GITHUB_REPO?.trim();
+  if (!token || !repo || !repo.includes('/')) {
+    return { ok: false, sha: null, reason: 'GITHUB_TOKEN or GITHUB_REPO unset' };
+  }
+  const [owner, name] = repo.split('/');
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${name}/commits/main`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+      signal: AbortSignal.timeout(12000),
+    });
+    const j = await r.json().catch(() => ({}));
+    return { ok: r.ok, sha: normalizeSha(j?.sha), http: r.status };
+  } catch (err) {
+    return { ok: false, sha: null, error: err.message };
+  }
+}
+
 export async function fetchLatestReceiptCommitSha(baseUrl, commandKey) {
   const base = (baseUrl || '').replace(/\/$/, '');
   if (!base) return { ok: false, commitSha: null };
@@ -342,6 +362,7 @@ export async function runSelfRepairAudit({
   writeReceipts = false,
 } = {}) {
   const git = readLocalGitShas(root);
+  const githubRemote = await fetchGitHubMainSha();
   const [deploy, proofStoreRemote, receipt] = await Promise.all([
     fetchRailwayDeploySha(baseUrl, commandKey),
     fetchRailwayProofStore(baseUrl, commandKey),
@@ -350,7 +371,7 @@ export async function runSelfRepairAudit({
 
   const runtimeProof = detectRuntimeProofMismatch({
     localHead: git.localHead,
-    githubMainSha: git.githubMainSha,
+    githubMainSha: git.githubMainSha || githubRemote.sha,
     railwayDeploySha: deploy.deploySha,
     receiptCommitSha: receipt.commitSha,
   });
@@ -390,6 +411,7 @@ export async function runSelfRepairAudit({
       deploy: { ok: deploy.ok, http: deploy.http, deploy_sha: deploy.deploySha },
       proof_store_endpoint: { ok: proofStoreRemote.ok, http: proofStoreRemote.http },
       gemini_receipt: { ok: receipt.ok, receipt_id: receipt.receiptId, commit_sha: receipt.commitSha },
+      github_main: { ok: githubRemote.ok, sha: githubRemote.sha, http: githubRemote.http },
       git,
     },
   };
