@@ -10,7 +10,8 @@ import express from 'express';
 import { pool } from '../core/database.js';
 import { runSelfRepairExecutor, EXECUTOR_MAX_ATTEMPTS } from '../services/self-repair-executor.js';
 import { runDeployRepairCheck } from '../services/self-repair-deploy-scheduler.js';
-import { readLatestSelfRepairExecution } from '../services/self-repair-execution-log.js';
+import { readLatestSelfRepairExecution, readLastPassExecutionLogEntry } from '../services/self-repair-execution-log.js';
+import { readLatestRepairMemory } from '../services/self-repair-memory.js';
 
 export function createSelfRepairExecutorRoutes({ requireKey }) {
   const router = express.Router();
@@ -49,6 +50,7 @@ export function createSelfRepairExecutorRoutes({ requireKey }) {
         dry_run: dryRun,
         repair_id: repairId,
         duration_ms: result.duration_ms,
+        memory_event: result.memory_event || null,
       });
     } catch (err) {
       next(err);
@@ -98,6 +100,31 @@ export function createSelfRepairExecutorRoutes({ requireKey }) {
         source: latest.source,
         entry: latest.entry,
         read_path: 'GET /api/v1/lifeos/command-center/self-repair/execution/latest',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/api/v1/lifeos/command-center/self-repair/memory/latest', requireKey, async (req, res, next) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit, 10) || 5, 20);
+      const memory = await readLatestRepairMemory(pool, limit);
+      if (!memory.ok || memory.count === 0) {
+        return res.status(404).json({
+          ok: false,
+          status: 'NO_DATA',
+          note: 'No self-repair memory lessons recorded yet',
+          read_path: 'GET /api/v1/lifeos/command-center/self-repair/memory/latest',
+        });
+      }
+      res.json({
+        ok: true,
+        source: memory.source,
+        lessons: memory.lessons,
+        count: memory.count,
+        last_pass_execution: readLastPassExecutionLogEntry(),
+        read_path: 'GET /api/v1/lifeos/command-center/self-repair/memory/latest',
       });
     } catch (err) {
       next(err);
