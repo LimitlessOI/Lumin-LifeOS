@@ -157,6 +157,17 @@
     .not-wired{text-align:center;padding:20px;color:var(--text-muted);font-size:12px;border:1px dashed var(--border);border-radius:6px;margin:8px 0}
     .not-wired span{display:block;font-size:10px;margin-top:4px;color:var(--missing)}
 
+    /* Proof mismatch indicators */
+    .mismatch-banner{border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:11px;border:1px solid var(--border)}
+    .mismatch-ok{border-color:rgba(129,199,132,.4);background:rgba(129,199,132,.08)}
+    .mismatch-warn{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08)}
+    .mismatch-err{border-color:rgba(229,57,53,.4);background:rgba(229,57,53,.08)}
+    .mismatch-row{display:flex;gap:8px;align-items:center;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(255,255,255,.04)}
+    .mismatch-k{min-width:140px;color:var(--text-muted)}
+    .mismatch-v{font-family:monospace;font-size:10px}
+    .queue-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;font-size:11px}
+    .queue-cat-pill{padding:4px 10px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid var(--border)}
+
     /* Scrollbar */
     ::-webkit-scrollbar{width:4px;height:4px}
     ::-webkit-scrollbar-track{background:transparent}
@@ -244,6 +255,9 @@
     <!-- Section G: Infrastructure Health -->
     <div class="card" id="section-g">
       <div class="section-title">&#127760; Infrastructure Health Map</div>
+      <div id="proof-mismatch-panel" style="margin-bottom:12px">
+        <div class="not-wired">Loading proof integrity...</div>
+      </div>
       <div id="infra-panel">
         <div class="not-wired">Loading...</div>
       </div>
@@ -846,13 +860,25 @@ async function loadQueue() {
   }
 
   const items = Array.isArray(r.data) ? r.data : r.data?.items || [];
-  if (!items.length) {
-    el.innerHTML = `<div class="empty-state">&#10003; No pending decisions — system is operating cleanly.<div style="font-size:10px;margin-top:6px;color:var(--text-muted)">Source: GET /api/v1/pending-adam (${r.data?.total ?? 0} items)</div></div>`;
-    return;
-  }
+  const total = r.data?.total ?? items.length;
 
   const groups = { P0: [], P1: [], P2: [], Idea: [] };
   items.forEach(item => groups[queueCategory(item)].push(item));
+
+  const summaryHtml = `<div class="queue-summary">
+    <span class="queue-cat-pill">P0: ${groups.P0.length}</span>
+    <span class="queue-cat-pill">P1: ${groups.P1.length}</span>
+    <span class="queue-cat-pill">P2: ${groups.P2.length}</span>
+    <span class="queue-cat-pill">Idea: ${groups.Idea.length}</span>
+    <span style="margin-left:auto;color:var(--text-muted)">Total: ${total} · GET /api/v1/pending-adam</span>
+  </div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:10px">Read-only cockpit. Resolve API exists (POST /api/v1/pending-adam/:id/resolve) — buttons disabled until enabled.</div>`;
+
+  if (!items.length) {
+    el.innerHTML = summaryHtml + `<div class="empty-state">&#10003; No pending decisions — system is operating cleanly.</div>
+      <div style="margin-top:12px">${['P0','P1','P2','Idea'].map(c=>`<div class="section-label">${c} (0)</div><div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">No items — not fake zero</div>`).join('')}</div>`;
+    return;
+  }
 
   const priorityClass = c => c==='P0'?'pill-error':c==='P1'?'pill-warning':c==='P2'?'pill-muted':'pill-accent';
 
@@ -879,11 +905,14 @@ async function loadQueue() {
 
   const sections = ['P0','P1','P2','Idea'].map(cat => {
     const list = groups[cat];
-    if (!list.length) return '';
-    return `<div style="margin-bottom:14px"><div class="section-label">${cat} (${list.length})</div><div class="queue-grid">${list.map(renderCard).join('')}</div></div>`;
+    return `<div style="margin-bottom:14px"><div class="section-label">${cat} (${list.length})</div>` +
+      (list.length
+        ? `<div class="queue-grid">${list.map(renderCard).join('')}</div>`
+        : `<div style="font-size:11px;color:var(--text-muted);padding:8px 0">No ${cat} items</div>`) +
+      `</div>`;
   }).join('');
 
-  el.innerHTML = sections || `<div class="empty-state">No categorized items.</div>`;
+  el.innerHTML = summaryHtml + sections;
 }
 
 async function resolveItem(id, choice) {
@@ -913,14 +942,18 @@ function deferItem(id) {
 function openQueueDrawer(item) {
   const rec = recommendedAction(item);
   openDrawer(`Decision: ${item.title||'Untitled'}`, `
+    <div class="drawer-kv"><span class="k">ID</span><span class="v">${item.id||'—'}</span></div>
     <div class="drawer-kv"><span class="k">Category</span><span class="v">${queueCategory(item)}</span></div>
     <div class="drawer-kv"><span class="k">Priority</span><span class="v">${item.priority||'—'}</span></div>
     <div class="drawer-kv"><span class="k">Type</span><span class="v">${item.type||'—'}</span></div>
+    <div class="drawer-kv"><span class="k">Project</span><span class="v">${item.project_name||item.project_slug||'—'}</span></div>
     <div class="drawer-kv"><span class="k">Why Adam</span><span class="v">${adamReason(item)}</span></div>
-    ${rec ? `<div class="drawer-kv"><span class="k">Recommended</span><span class="v">${rec}</span></div>` : ''}
+    <div class="drawer-kv"><span class="k">Description</span><span class="v">${item.description||'—'}</span></div>
+    ${rec ? `<div class="drawer-kv"><span class="k">Recommended</span><span class="v">${rec}</span></div>` : '<div class="drawer-kv"><span class="k">Recommended</span><span class="v">— (not provided by API)</span></div>'}
+    <div class="drawer-kv"><span class="k">Resolved</span><span class="v">${item.is_resolved ? 'yes' : 'no'}</span></div>
     <div class="drawer-kv"><span class="k">Created</span><span class="v">${item.created_at?new Date(item.created_at).toLocaleString():'—'}</span></div>
     <div class="drawer-kv"><span class="k">Source</span><span class="v">GET /api/v1/pending-adam</span></div>
-    <div class="drawer-pre">${JSON.stringify(item.context||{},null,2)}</div>
+    <div class="drawer-pre">${JSON.stringify(item,null,2)}</div>
   `);
 }
 
@@ -1054,8 +1087,52 @@ function infraCssClass(label) {
   return 'warn';
 }
 
+function shaShort(s) { return s ? (s+'').slice(0,12) : '—'; }
+
+async function loadProofIntegrity() {
+  const el = document.getElementById('proof-mismatch-panel');
+  const r = await safeFetch('/api/v1/lifeos/command-center/self-repair/audit');
+  if (!r.ok || !r.data) {
+    el.innerHTML = `<div class="mismatch-banner mismatch-err">NOT_WIRED<span>GET /self-repair/audit returned ${r.status}</span></div>`;
+    return;
+  }
+  const d = r.data;
+  const rp = d.runtime_proof || {};
+  const ps = d.proof_store || {};
+  const verified = rp.status === 'VERIFIED';
+  const bannerCls = verified ? 'mismatch-ok' : (rp.p0_blockers?.length ? 'mismatch-err' : 'mismatch-warn');
+
+  const rows = [
+    ['GitHub main SHA', d.github_main_sha, '/github commits/main'],
+    ['Railway deploy SHA', d.railway_deploy_sha, '/builder/ready'],
+    ['Receipt commit SHA', d.receipt_commit_sha, '/gemini/proof/status'],
+    ['Proof store', ps.proof_store_id ? `${ps.status} · ${ps.proof_store_id}` : ps.status, '/phase14/proof-store'],
+    ['OIL receipts', d.missing_oil_receipts ? 'MISSING' : 'present', '/oil/receipts'],
+  ];
+
+  const mismatchHtml = (rp.mismatches||[]).length
+    ? (rp.mismatches||[]).map(m=>`<div class="mismatch-row"><span class="pill ${m.severity==='P0'?'pill-error':m.severity==='P1'?'pill-warning':'pill-muted'}">${m.severity}</span><span class="mismatch-k">${m.rule}</span><span class="mismatch-v">${m.detail}</span></div>`).join('')
+    : '<div style="font-size:11px;color:var(--success)">No runtime mismatches detected</div>';
+
+  const oilMisses = (d.oil_missed_issues_active||[]).length
+    ? d.oil_missed_issues_active.map(i=>`<div class="mismatch-row"><span class="pill pill-warning">${i.severity}</span><span class="mismatch-k">${i.findingId}</span><span class="mismatch-v">${i.whatMissed.slice(0,80)}</span></div>`).join('')
+    : '';
+
+  el.innerHTML = `
+    <div class="mismatch-banner ${bannerCls}">
+      <strong>Runtime proof: ${rp.status||'UNKNOWN'}</strong>
+      <span style="margin-left:8px;color:var(--text-muted)">Source: GET /api/v1/lifeos/command-center/self-repair/audit</span>
+    </div>
+    ${rows.map(([k,v,src])=>`<div class="mismatch-row"><span class="mismatch-k">${k}</span><span class="mismatch-v">${typeof v==='string'&&v.length>20?shaShort(v): (v||'UNKNOWN')}</span><span style="color:var(--text-muted);font-size:9px">${src}</span></div>`).join('')}
+    <div style="margin-top:8px;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Mismatches</div>
+    ${mismatchHtml}
+    ${oilMisses ? `<div style="margin-top:8px;font-size:10px;color:var(--text-muted)">Active OIL missed issues</div>${oilMisses}` : ''}
+  `;
+}
+
 async function loadInfra() {
   const el = document.getElementById('infra-panel');
+  await loadProofIntegrity();
 
   const checks = [
     { key:'github', label:'GitHub', endpoint:'/api/v1/lifeos/builder/ready', run: async () => {
