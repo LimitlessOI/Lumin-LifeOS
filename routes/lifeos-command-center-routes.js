@@ -50,6 +50,8 @@ import {
   fetchGitHubMainSha,
   readSelfRepairHistory,
   buildRepairQueue,
+  summarizeOilMisses,
+  validateOilMissedIssueInput,
 } from '../services/oil-self-repair-detector.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -249,27 +251,88 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
   });
 
   /**
+   * GET /api/v1/lifeos/command-center/self-repair/oil-misses
+   * Tracked OIL missed-issue summary: active, repaired, repeated categories, validation.
+   */
+  router.get('/api/v1/lifeos/command-center/self-repair/oil-misses', requireKey, async (req, res, next) => {
+    try {
+      const railwayDeploySha = normalizeSha(
+        process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
+      );
+      const githubMain = await fetchGitHubMainSha();
+      const geminiRows = await readReceiptsByType(SECURITY_RECEIPT_TYPES.GEMINI_LIVE_PROOF, 1, pool);
+      const lp = geminiRows[0];
+      const receiptCommitSha =
+        normalizeSha(lp?.payload?.runtime?.commit_sha) ||
+        normalizeSha(lp?.payload?.details?.runtime?.commit_sha);
+
+      const runtimeProof = detectRuntimeProofMismatch({
+        localHead: req.query.local_head || null,
+        githubMainSha: req.query.github_main_sha || githubMain.sha || null,
+        railwayDeploySha,
+        receiptCommitSha,
+      });
+
+      const railwayStore = proofStoreFingerprint(process.env.DATABASE_URL);
+      const proofStore = detectProofStoreMismatch(process.env.DATABASE_URL, railwayStore);
+      const context = { runtimeProof, proofStore };
+
+      const summary = await summarizeOilMisses(pool, context);
+      res.json({
+        read_path: 'GET /api/v1/lifeos/command-center/self-repair/oil-misses',
+        ...summary,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
    * POST /api/v1/lifeos/command-center/self-repair/oil-missed-issue
    * Record an OIL missed-issue finding (C2/conductor only — requires key).
    */
   router.post('/api/v1/lifeos/command-center/self-repair/oil-missed-issue', requireKey, async (req, res, next) => {
     try {
-      const { finding_id, severity, what_oil_missed, how_found, required_repair, verification_path } =
+      const { finding_id, severity, what_oil_missed, how_found, required_repair, verification_path, miss_category } =
         req.body || {};
-      if (!what_oil_missed || !how_found) {
-        return res.status(400).json({ ok: false, error: 'what_oil_missed and how_found required' });
-      }
-      const w = await writeOilMissedIssueReceipt(pool, {
-        findingId: finding_id || `OIL-MISS-${Date.now()}`,
-        severity: severity || 'P2',
+      const input = {
+        findingId: finding_id,
+        severity,
         whatMissed: what_oil_missed,
         howFound: how_found,
-        requiredRepair: required_repair || '',
-        verificationPath: verification_path || '',
+        requiredRepair: required_repair,
+        verificationPath: verification_path,
+        missCategory: miss_category,
         detectedBy: 'C2',
-      });
-      res.json({ ok: true, receipt_id: w.receipt_id, type: 'oil_missed_issue' });
+      };
+      const validation = validateOilMissedIssueInput(input);
+      if (!validation.valid) {
+        return res.status(400).json({
+          ok: false,
+          error: 'oil_missed_issue_validation_failed',
+          missing: validation.missing,
+          errors: validation.errors,
+          required_fields: [
+            'finding_id',
+            'severity',
+            'what_oil_missed',
+            'how_found',
+            'required_repair',
+            'verification_path',
+          ],
+        });
+      }
+      const w = await writeOilMissedIssueReceipt(pool, input);
+      res.json({ ok: true, receipt_id: w.receipt_id, type: 'oil_missed_issue', validation });
     } catch (err) {
+      if (err.validation) {
+        return res.status(400).json({
+          ok: false,
+          error: err.message,
+          missing: err.validation.missing,
+          errors: err.validation.errors,
+        });
+      }
       next(err);
     }
   });
