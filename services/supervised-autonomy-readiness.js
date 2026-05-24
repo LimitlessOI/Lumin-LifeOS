@@ -22,69 +22,11 @@ import {
 } from './oil-proof-freshness.js';
 import { readReceiptsByType, SECURITY_RECEIPT_TYPES } from './oil-security-receipts.js';
 
+import { deriveExecutionActions } from './pb-execution-authority.js';
+
 function pushUnique(list, item) {
   const key = `${item.code}:${item.detail}`;
   if (!list.some((x) => `${x.code}:${x.detail}` === key)) list.push(item);
-}
-
-/** Derive Adam decisions from blockers/warnings — no invented tasks. */
-export function deriveAdamDecisions({ blockers, warnings, oilMisses, freshness, repairQueue }) {
-  const decisions = [];
-
-  for (const b of blockers.filter((x) => x.severity === 'P0')) {
-    decisions.push({
-      priority: 'P0',
-      decision: `Resolve blocker ${b.code}: ${b.detail}`,
-      source: b.source,
-    });
-  }
-
-  if (freshness?.proofs?.gemini_runtime?.status === 'STALE') {
-    decisions.push({
-      priority: 'P1',
-      decision: 'Approve POST /api/v1/gemini/proof to refresh runtime proof at current deploy SHA',
-      source: 'proof_freshness',
-      rule: 'PF-001',
-    });
-  }
-
-  if (freshness?.proofs?.phase14?.status === 'STALE') {
-    decisions.push({
-      priority: 'P1',
-      decision:
-        'Approve POST /api/v1/lifeos/command-center/phase14/run-proofs (Railway-canonical) after gemini proof refresh',
-      source: 'proof_freshness',
-      rule: 'PF-002',
-    });
-  }
-
-  for (const miss of oilMisses?.active || []) {
-    decisions.push({
-      priority: miss.severity || 'P1',
-      decision: `Review active OIL miss ${miss.finding_id}: ${miss.required_repair || miss.what_oil_missed}`,
-      source: 'oil_misses',
-      finding_id: miss.finding_id,
-    });
-  }
-
-  for (const item of (repairQueue?.items || []).filter((i) => i.status === 'OPEN')) {
-    decisions.push({
-      priority: item.severity || 'P2',
-      decision: `Repair queue OPEN — ${item.issueId}: ${item.recommendedBuilderTask}`,
-      source: 'repair_queue',
-      issue_id: item.issueId,
-    });
-  }
-
-  if (!decisions.length && (warnings.length || blockers.length)) {
-    decisions.push({
-      priority: 'P2',
-      decision: 'Review warnings before expanding supervised autonomy scope',
-      source: 'readiness_aggregate',
-    });
-  }
-
-  return decisions;
 }
 
 /** Build read-only supervised autonomy readiness from live runtime signals. */
@@ -265,7 +207,7 @@ export async function buildSupervisedAutonomyReadiness(pool, { railwayDeploySha 
     self_repair: selfRepairHistory[0] || null,
   };
 
-  const adam_must_decide = deriveAdamDecisions({
+  const execution = deriveExecutionActions({
     blockers,
     warnings,
     oilMisses,
@@ -273,12 +215,16 @@ export async function buildSupervisedAutonomyReadiness(pool, { railwayDeploySha 
     repairQueue,
   });
 
+  const can_continue_under_approved_pb =
+    execution.adam_required_actions.length === 0 && execution.system_authorized_actions.length > 0;
+
   return {
     ok: true,
     read_only: true,
     proof_source: 'supervised_autonomy_readiness_aggregate',
     generated_at: new Date().toISOString(),
     ready_for_supervised,
+    can_continue_under_approved_pb,
     blocks_build: runtimeMerged.blocks_build === true,
     blockers,
     warnings,
@@ -293,7 +239,13 @@ export async function buildSupervisedAutonomyReadiness(pool, { railwayDeploySha 
     builder_github_token: Boolean(process.env.GITHUB_TOKEN),
     oil_misses_active: oilMisses.active_count ?? 0,
     repair_queue_open: repairQueue.open_count ?? 0,
-    what_adam_must_decide: adam_must_decide,
+    system_authorized_actions: execution.system_authorized_actions,
+    adam_required_actions: execution.adam_required_actions,
+    what_adam_must_decide: execution.adam_required_actions,
+    pb_execution_authority: {
+      rule: execution.governance_rule,
+      boundary: execution.pb_boundary,
+    },
     checks: {
       builder_preflight: deploySha && process.env.GITHUB_TOKEN ? 'PASS' : 'WARN',
       self_repair_audit: runtimeMerged.status,
