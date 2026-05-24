@@ -9,7 +9,7 @@ NSSOT `docs/SSOT_NORTH_STAR.md` > Companion `docs/SSOT_COMPANION.md` > `CLAUDE.m
 - §2.6: no lies/mislead; KNOW/THINK/GUESS/UNKNOWN; no silent failed checks.
 - Improve only; QUICK_LAUNCH stays current.
 - §2.11a: builder-first. §2.11b: Adam gets score+evidence, why A>B, residue. §2.11c: supervisor = maximize verified system output, not IDE authorship.
-- §2.14: TSOS machine-channel only. Remote truth: GitHub=source, Railway=runtime, Neon=data; local is mirror. §2.15: clear ask → do it or HALT; drift → log INTENT DRIFT.
+- §2.14: TSOS machine-channel only. Remote truth: GitHub=source, Railway=runtime, Neon=data; local is mirror. §2.15: clear ask → do it or HALT; drift → log INTENT DRIFT. §2.16: approved PB → SYSTEM_AUTHORIZED_UNDER_PB for routine repair; ADAM_REQUIRED only for true stops (secrets, destructive DB, money/legal, escalation beyond PB, irreversible launch, intent ambiguity, unrepairable proof, outside PB).
 
 ## BUILDER-FIRST
 1. `npm run builder:preflight`
