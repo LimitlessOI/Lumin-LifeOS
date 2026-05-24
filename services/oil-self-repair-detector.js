@@ -12,6 +12,7 @@ import { proofStoreFingerprint } from './builder-phase14-ledger.js';
 import {
   SECURITY_RECEIPT_TYPES,
   writeSecurityReceipt,
+  readReceiptsByType,
 } from './oil-security-receipts.js';
 import {
   OIL_AUDITOR_ROLE,
@@ -282,6 +283,7 @@ export function buildOilMissedIssuePayload({
     required_repair: requiredRepair,
     verification_path: verificationPath,
     detected_by: detectedBy,
+    repair_channel: detectedBy === 'C2' ? 'GAP-FILL' : 'BUILDER_OIL',
     runtime: { proof_source: 'oil_self_repair_detector' },
   };
 }
@@ -353,7 +355,69 @@ export function evaluateKnownOilMisses(context) {
   }).map(({ detect, ...rest }) => rest);
 }
 
-export async function runSelfRepairAudit({
+export function inferRepairChannel(findingsJson = {}) {
+  if (findingsJson.repair_channel) return findingsJson.repair_channel;
+  if (findingsJson.detected_by === 'C2') return 'GAP-FILL';
+  if (findingsJson.security_receipt_fallback_reason) return 'OIL';
+  if (findingsJson.type === 'oil_missed_issue') return 'OIL';
+  return 'UNKNOWN';
+}
+
+export function shapeSelfRepairHistoryRow(row, source) {
+  const fj = row.findings_json || row.payload?.details || row.payload || {};
+  const ts = row.audited_at || row.created_at;
+  return {
+    receipt_id: row.id,
+    timestamp: ts,
+    audit_status: fj.status || row.verdict || 'UNKNOWN',
+    active_mismatches: fj.active_mismatches || [],
+    repair_attempt: fj.what_oil_missed || fj.required_repair || row.findings || fj.summary || null,
+    repair_channel: inferRepairChannel(fj),
+    type: fj.type || row.receipt_type || 'self_repair',
+    source,
+    finding_id: fj.finding_id || null,
+    severity: fj.severity || null,
+  };
+}
+
+/** Read self-repair history from DB receipts only — no invented rows. */
+export async function readSelfRepairHistory(pool, limit = 20) {
+  const cap = Math.max(1, Math.min(Number(limit) || 20, 50));
+  const { rows: oilRows } = await pool.query(
+    `SELECT id, verdict, findings, findings_json, audited_at, project_slug, written_by
+     FROM builder_audit_receipts
+     WHERE written_by = 'OIL'
+       AND (
+         project_slug = 'oil-self-repair'
+         OR findings_json->>'type' = 'oil_missed_issue'
+         OR findings_json->>'type' = 'self_repair_audit'
+         OR findings ILIKE 'OIL missed issue:%'
+         OR findings ILIKE 'Self-repair audit:%'
+       )
+     ORDER BY audited_at DESC LIMIT $1`,
+    [cap]
+  );
+
+  let secRows = [];
+  try {
+    secRows = await readReceiptsByType(SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, cap, pool);
+  } catch {
+    secRows = [];
+  }
+  const secFiltered = secRows.filter(
+    (r) =>
+      r.payload?.type === 'oil_missed_issue' ||
+      r.payload?.type === 'self_repair_audit' ||
+      r.payload?.details?.type === 'oil_missed_issue'
+  );
+
+  const merged = [
+    ...oilRows.map((r) => shapeSelfRepairHistoryRow({ ...r, findings_json: r.findings_json || {} }, 'builder_audit_receipts')),
+    ...secFiltered.map((r) => shapeSelfRepairHistoryRow(r, 'security_receipts')),
+  ].sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+
+  return merged.slice(0, cap);
+}
   pool = null,
   baseUrl = process.env.PUBLIC_BASE_URL || process.env.BUILDER_BASE_URL,
   commandKey = process.env.COMMAND_CENTER_KEY,
