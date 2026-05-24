@@ -1283,9 +1283,27 @@ async function loadSelfRepairHistory() {
     return;
   }
 
+  const latestStored = hist.data.latest_audit_run || null;
+  let storedBlock = '';
+  if (latestStored) {
+    const stCls = latestStored.audit_status === 'VERIFIED' ? 'mismatch-ok' : latestStored.audit_status === 'STALE' ? 'mismatch-stale' : 'mismatch-warn';
+    const mism = latestStored.active_mismatches || [];
+    storedBlock = `
+      <div class="mismatch-banner ${stCls}" style="margin:10px 0">
+        <strong>Latest stored audit-run: ${latestStored.audit_status || 'UNKNOWN'}</strong>
+        <span class="pill pill-accent" style="margin-left:6px">${latestStored.type||'self_repair_audit'}</span>
+        <span style="margin-left:8px;color:var(--text-muted);font-size:10px">Receipt #${latestStored.receipt_id} · ${latestStored.timestamp ? new Date(latestStored.timestamp).toLocaleString() : '—'}</span>
+        <div style="margin-top:6px;font-size:10px;color:var(--text-muted)">Triggered by: ${latestStored.triggered_by||'—'} · repair_needed: ${latestStored.repair_needed ? 'yes' : 'no'}</div>
+        <div style="margin-top:4px;font-size:10px;font-family:monospace">github=${shaShort(latestStored.github_main_sha)} railway=${shaShort(latestStored.railway_deploy_sha)} receipt=${shaShort(latestStored.receipt_commit_sha)}</div>
+        ${mism.length ? mism.map(m=>`<div class="mismatch-row"><span class="pill pill-warning">${m.severity||'?'}</span><span class="mismatch-k">${m.rule||'mismatch'}</span><span class="mismatch-v">${m.detail||''}</span></div>`).join('') : '<div style="font-size:11px;color:var(--text-muted);margin-top:4px">No mismatches in stored receipt</div>'}
+      </div>`;
+  } else {
+    storedBlock = `<div class="not-wired" style="margin:10px 0">NO_DATA<span>No stored self_repair_audit receipt — use POST /self-repair/audit/run</span></div>`;
+  }
+
   const entries = hist.data.entries || [];
   if (!entries.length) {
-    el.innerHTML = liveBlock + `<div class="not-wired" style="margin-top:10px">NO_DATA<span>No self-repair receipts in builder_audit_receipts or security_receipts</span></div>`;
+    el.innerHTML = liveBlock + storedBlock + `<div class="not-wired" style="margin-top:10px">NO_DATA<span>No self-repair receipts in builder_audit_receipts or security_receipts</span></div>`;
     return;
   }
 
@@ -1293,15 +1311,16 @@ async function loadSelfRepairHistory() {
     <div class="history-row" onclick="openSelfRepairDrawer(${JSON.stringify(e).replace(/"/g,'&quot;')})">
       <span class="history-ts">${e.timestamp ? new Date(e.timestamp).toLocaleString() : '—'}</span>
       <div class="history-main">
-        <div><span class="pill ${e.audit_status==='VERIFIED'||e.audit_status==='PASS'?'pill-success':e.audit_status==='NOT_VERIFIED'?'pill-warning':'pill-muted'}">${e.audit_status||'UNKNOWN'}</span>
-        <span class="pill pill-accent">${e.repair_channel||'UNKNOWN'}</span>
+        <div><span class="pill ${e.audit_status==='VERIFIED'||e.audit_status==='PASS'?'pill-success':e.audit_status==='STALE'?'pill-error':e.audit_status==='NOT_VERIFIED'?'pill-warning':'pill-muted'}">${e.audit_status||'UNKNOWN'}</span>
+        <span class="pill pill-accent">${e.type||'unknown'}</span>
+        <span class="pill pill-muted">${e.repair_channel||'UNKNOWN'}</span>
         <span style="font-size:10px;color:var(--text-muted)">#${e.receipt_id}</span></div>
         <div class="history-meta">${(e.repair_attempt||'—').slice(0,120)}</div>
       </div>
       <span style="font-size:10px;color:var(--text-muted)">${e.source||'—'}</span>
     </div>`).join('');
 
-  el.innerHTML = liveBlock + `
+  el.innerHTML = liveBlock + storedBlock + `
     <div style="font-size:10px;color:var(--text-muted);margin:10px 0 6px;text-transform:uppercase;letter-spacing:1px">Receipt history (${entries.length}) · ${hist.data.read_path||''}</div>
     <div>${rows}</div>`;
 }
@@ -1317,6 +1336,13 @@ function openSelfRepairDrawer(e) {
     <div class="drawer-kv"><span class="k">Finding</span><span class="v">${e.finding_id||'—'}</span></div>
     <div class="drawer-kv"><span class="k">Repair attempt</span><span class="v">${e.repair_attempt||'—'}</span></div>
     <div class="drawer-kv"><span class="k">Severity</span><span class="v">${e.severity||'—'}</span></div>
+    ${e.type==='self_repair_audit' ? `
+    <div class="drawer-kv"><span class="k">Triggered by</span><span class="v">${e.triggered_by||'—'}</span></div>
+    <div class="drawer-kv"><span class="k">Repair needed</span><span class="v">${e.repair_needed ? 'yes' : 'no'}</span></div>
+    <div class="drawer-kv"><span class="k">GitHub SHA</span><span class="v">${e.github_main_sha||'—'}</span></div>
+    <div class="drawer-kv"><span class="k">Railway SHA</span><span class="v">${e.railway_deploy_sha||'—'}</span></div>
+    <div class="drawer-kv"><span class="k">Receipt SHA</span><span class="v">${e.receipt_commit_sha||'—'}</span></div>
+    <div class="drawer-kv"><span class="k">Proof store</span><span class="v">${e.proof_store_status||'—'} ${e.proof_store_id||''}</span></div>` : ''}
     <div class="drawer-pre">${JSON.stringify(e,null,2)}</div>
   `);
 }
