@@ -313,6 +313,129 @@ export async function writeOilMissedIssueReceipt(pool, finding) {
   }
 }
 
+/** Predefined repair queue — tasks come only from this registry (no invention). */
+export const REPAIR_QUEUE_REGISTRY = [
+  {
+    issueId: 'OIL-SEC-FIND-20260524-001',
+    severity: 'P1',
+    sourceDetector: 'detectProofStoreMismatch',
+    detectRule: 'LOCAL_PROOF_ONLY',
+    recommendedBuilderTask:
+      'Align operator DATABASE_URL to Railway Neon (lifeos-sandbox) via POST /api/v1/railway/env/bulk — or always use scripts/oil-phase14-railway-canonical.mjs',
+    requiredOilProof:
+      'GET /api/v1/lifeos/command-center/phase14/proof-store — proof_store status SHARED, local_proof_only=false',
+    detect: (ctx) => ctx.proofStore?.local_proof_only === true,
+    probeKey: 'proof_store_endpoint',
+  },
+  {
+    issueId: 'OIL-SEC-FIND-20260523-003',
+    severity: 'P1',
+    sourceDetector: 'detectRuntimeProofMismatch',
+    detectRule: 'RAILWAY_STALE_DEPLOY',
+    recommendedBuilderTask:
+      'POST /api/v1/railway/deploy after Builder /execute commits; verify github_main_sha === railway_deploy_sha',
+    requiredOilProof: 'GET /api/v1/lifeos/command-center/self-repair/audit — no RAILWAY_STALE_DEPLOY mismatch',
+    detect: (ctx) =>
+      ctx.runtimeProof?.mismatches?.some((m) => m.rule === 'RAILWAY_STALE_DEPLOY') ?? false,
+    probeKey: 'deploy',
+  },
+  {
+    issueId: 'DR-003-RECEIPT-STALE',
+    severity: 'P2',
+    sourceDetector: 'detectRuntimeProofMismatch',
+    detectRule: 'RECEIPT_STALE_RUNTIME_SHA',
+    recommendedBuilderTask:
+      'POST /api/v1/gemini/proof to refresh runtime proof receipt at current deploy SHA',
+    requiredOilProof:
+      'GET /api/v1/lifeos/command-center/self-repair/audit — receipt_commit_sha matches railway_deploy_sha',
+    detect: (ctx) =>
+      ctx.runtimeProof?.mismatches?.some((m) => m.rule === 'RECEIPT_STALE_RUNTIME_SHA') ?? false,
+    probeKey: 'gemini_receipt',
+  },
+  {
+    issueId: 'DR-001-LOCAL-GITHUB',
+    severity: 'P2',
+    sourceDetector: 'detectRuntimeProofMismatch',
+    detectRule: 'LOCAL_VS_GITHUB_MAIN',
+    recommendedBuilderTask: 'Operator: git fetch && git pull origin main on workbench',
+    requiredOilProof:
+      'node scripts/oil-self-repair-audit.mjs — no LOCAL_VS_GITHUB_MAIN mismatch',
+    detect: (ctx) =>
+      ctx.runtimeProof?.mismatches?.some((m) => m.rule === 'LOCAL_VS_GITHUB_MAIN') ?? false,
+    probeKey: 'git',
+  },
+  {
+    issueId: 'OIL-SEC-FIND-20260524-002',
+    severity: 'P1',
+    sourceDetector: 'evaluateKnownOilMisses',
+    detectRule: 'UI_FAKE_GREEN',
+    recommendedBuilderTask:
+      'Builder /execute public/overlay/lifeos-command-center.html — remove fake fallbacks (completed)',
+    requiredOilProof:
+      'GET /lifeos-command-center — no DEFAULT_LANES, phase wheel reflects cert status',
+    detect: () => false,
+    probeKey: null,
+  },
+];
+
+export function resolveRepairQueueStatus({ active, hasReceipt, probeOk, probeRequired }) {
+  if (probeRequired && probeOk === false) return 'NOT_WIRED';
+  if (!active) return 'VERIFIED';
+  if (hasReceipt) return 'REPAIRING';
+  return 'OPEN';
+}
+
+/** Build read-only repair queue from detectors + receipt cross-check — no auto-run. */
+export async function buildRepairQueue(pool, context, probes = {}) {
+  const history = pool?.query ? await readSelfRepairHistory(pool, 50) : [];
+
+  const items = REPAIR_QUEUE_REGISTRY.map((entry) => {
+    const { detect, probeKey, ...meta } = entry;
+    let active = false;
+    try {
+      active = Boolean(detect(context));
+    } catch {
+      active = false;
+    }
+    const receipt = history.find((h) => h.finding_id === entry.issueId);
+    const probeRequired = Boolean(probeKey);
+    const probeOk = probeKey ? probes[probeKey]?.ok !== false : true;
+    const status = resolveRepairQueueStatus({
+      active,
+      hasReceipt: Boolean(receipt),
+      probeOk,
+      probeRequired,
+    });
+    return {
+      ...meta,
+      status,
+      active,
+      receipt_id: receipt?.receipt_id ?? null,
+      receipt_at: receipt?.timestamp ?? null,
+      detail: active
+        ? context.runtimeProof?.mismatches?.find((m) => m.rule === entry.detectRule)?.detail ||
+          context.proofStore?.detail ||
+          null
+        : null,
+    };
+  });
+
+  const open = items.filter((i) => i.status === 'OPEN').length;
+  const repairing = items.filter((i) => i.status === 'REPAIRING').length;
+
+  return {
+    ok: true,
+    proof_source: 'detector_registry_only',
+    read_only: true,
+    auto_repair: false,
+    generated_at: new Date().toISOString(),
+    total: items.length,
+    open_count: open,
+    repairing_count: repairing,
+    items,
+  };
+}
+
 /** Registry of known misses from recent repairs — for automated re-detection. */
 export const KNOWN_OIL_MISSED_ISSUES = [
   {
