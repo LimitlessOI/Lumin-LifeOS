@@ -13,6 +13,12 @@ import {
   SECURITY_RECEIPT_TYPES,
   writeSecurityReceipt,
 } from './oil-security-receipts.js';
+import {
+  OIL_AUDITOR_ROLE,
+  writeOILAuditReceipt,
+  createBuildSessionId,
+  createAuditSessionId,
+} from './builder-audit-before-done.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -260,10 +266,29 @@ export function buildOilMissedIssuePayload({
   };
 }
 
-/** Write OIL missed-issue as audit_verification receipt (payload.type=oil_missed_issue). */
+/** Write OIL missed-issue — security_receipts when schema allows, else builder_audit_receipts. */
 export async function writeOilMissedIssueReceipt(pool, finding) {
   const payload = buildOilMissedIssuePayload(finding);
-  return writeSecurityReceipt(SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, payload, pool);
+  try {
+    return await writeSecurityReceipt(SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, payload, pool);
+  } catch (secErr) {
+    const buildId = createBuildSessionId(99701);
+    const auditId = createAuditSessionId(99701, buildId);
+    const auditReceiptId = await writeOILAuditReceipt(pool, OIL_AUDITOR_ROLE, {
+      projectSlug: 'oil-self-repair',
+      verdict: 'CONDITIONAL_PASS',
+      confidencePct: 90,
+      findings: `OIL missed issue: ${finding.whatMissed}`.slice(0, 500),
+      findingsJson: {
+        type: 'oil_missed_issue',
+        ...payload,
+        security_receipt_fallback_reason: secErr.message?.slice(0, 200),
+      },
+      auditSessionId: auditId,
+      buildSessionId: buildId,
+    });
+    return { receipt_id: auditReceiptId, channel: 'builder_audit_receipts' };
+  }
 }
 
 /** Registry of known misses from recent repairs — for automated re-detection. */
