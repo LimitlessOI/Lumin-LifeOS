@@ -19,6 +19,7 @@ import {
   createAuditSessionId,
 } from './builder-audit-before-done.js';
 import { appendSelfRepairExecutionLog } from './self-repair-execution-log.js';
+import { writeRepairMemoryFromExecution } from './self-repair-memory.js';
 
 export const EXECUTOR_MAX_ATTEMPTS = 2;
 
@@ -307,6 +308,31 @@ function finalizeExecutorRun({
   return { ...result, duration_ms };
 }
 
+async function finishExecutorRun(pool, finalizeArgs, result) {
+  const finalized = finalizeExecutorRun({ ...finalizeArgs, result });
+  let memory_event = null;
+  if (pool) {
+    try {
+      memory_event = await writeRepairMemoryFromExecution(pool, {
+        auditResult: result.audit_result,
+        dryRun: finalizeArgs.dryRun,
+        stoppedReason: result.stopped_reason,
+        repairId: finalizeArgs.repairId,
+        triggeredBy: finalizeArgs.triggeredBy,
+        auditBefore: result.audit_before,
+        verificationResult: result.verification_result,
+        stepsExecuted: result.steps_executed,
+        receiptsWritten: result.receipts_written,
+        deploySha: finalizeArgs.railwayDeploySha,
+        durationMs: finalized.duration_ms,
+      });
+    } catch {
+      memory_event = { written: false, reason: 'memory_write_error' };
+    }
+  }
+  return { ...finalized, memory_event };
+}
+
 export async function runSelfRepairExecutor({
   pool,
   req = null,
@@ -333,6 +359,8 @@ export async function runSelfRepairExecutor({
     system_authorized_actions: initialReadiness.system_authorized_actions || [],
   };
 
+  const finishArgs = { repairId, dryRun, triggeredBy, railwayDeploySha, startedAt };
+
   if (!plan.ok) {
     const verification = await verifyState(baseUrl, commandKey);
     const payload = buildExecutorReceiptPayload({
@@ -347,22 +375,15 @@ export async function runSelfRepairExecutor({
       triggeredBy,
     });
     const { receipt_id } = await writeExecutorReceipt(pool, payload);
-    return finalizeExecutorRun({
-      result: {
-        authority,
-        steps_planned: plan.steps,
-        steps_executed: [],
-        receipts_written: [{ receipt_id, type: SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, purpose: 'executor_run' }],
-        verification_result: verification,
-        stopped_reason: plan.stoppedReason,
-        audit_before: initialReadiness,
-        audit_result: 'BLOCKED',
-      },
-      repairId,
-      dryRun,
-      triggeredBy,
-      railwayDeploySha,
-      startedAt,
+    return finishExecutorRun(pool, finishArgs, {
+      authority,
+      steps_planned: plan.steps,
+      steps_executed: [],
+      receipts_written: [{ receipt_id, type: SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, purpose: 'executor_run' }],
+      verification_result: verification,
+      stopped_reason: plan.stoppedReason,
+      audit_before: initialReadiness,
+      audit_result: 'BLOCKED',
     });
   }
 
@@ -379,22 +400,15 @@ export async function runSelfRepairExecutor({
       triggeredBy,
     });
     const { receipt_id } = await writeExecutorReceipt(pool, payload);
-    return finalizeExecutorRun({
-      result: {
-        authority,
-        steps_planned: plan.steps,
-        steps_executed: [],
-        receipts_written: [{ receipt_id, type: SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, purpose: 'executor_run' }],
-        verification_result: verification,
-        stopped_reason: null,
-        audit_before: initialReadiness,
-        audit_result: 'DRY_RUN',
-      },
-      repairId,
-      dryRun,
-      triggeredBy,
-      railwayDeploySha,
-      startedAt,
+    return finishExecutorRun(pool, finishArgs, {
+      authority,
+      steps_planned: plan.steps,
+      steps_executed: [],
+      receipts_written: [{ receipt_id, type: SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION, purpose: 'executor_run' }],
+      verification_result: verification,
+      stopped_reason: null,
+      audit_before: initialReadiness,
+      audit_result: 'DRY_RUN',
     });
   }
 
@@ -495,21 +509,14 @@ export async function runSelfRepairExecutor({
     purpose: 'executor_run',
   });
 
-  return finalizeExecutorRun({
-    result: {
-      authority,
-      steps_planned: plan.steps,
-      steps_executed: stepsExecuted,
-      receipts_written: receiptsWritten,
-      verification_result: verification,
-      stopped_reason: stoppedReason,
-      audit_before: initialReadiness,
-      audit_result: status,
-    },
-    repairId,
-    dryRun: false,
-    triggeredBy,
-    railwayDeploySha,
-    startedAt,
+  return finishExecutorRun(pool, finishArgs, {
+    authority,
+    steps_planned: plan.steps,
+    steps_executed: stepsExecuted,
+    receipts_written: receiptsWritten,
+    verification_result: verification,
+    stopped_reason: stoppedReason,
+    audit_before: initialReadiness,
+    audit_result: status,
   });
 }
