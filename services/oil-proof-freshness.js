@@ -189,7 +189,10 @@ export async function gatherProofFreshnessContext(pool, {
   const history = pool?.query ? await readSelfRepairHistory(pool, 50) : [];
 
   const latestSelfRepairReceiptAt = history[0]?.timestamp ?? null;
-  const latestRepairReceiptAt = history.reduce((max, row) => {
+  const latestProofAffectingRepairAt = history.reduce((max, row) => {
+    const isProofAffectingRepair =
+      row?.type === 'self_repair_audit' && row?.repair_needed === true;
+    if (!isProofAffectingRepair) return max;
     const ts = parseTs(row.timestamp);
     if (!ts) return max;
     return !max || ts > max ? ts : max;
@@ -221,7 +224,8 @@ export async function gatherProofFreshnessContext(pool, {
     geminiReceipt,
     phase14Cert,
     latestSelfRepairReceiptAt,
-    latestRepairReceiptAt: latestRepairReceiptAt?.toISOString?.() ?? latestRepairReceiptAt,
+    latestRepairReceiptAt:
+      latestProofAffectingRepairAt?.toISOString?.() ?? latestProofAffectingRepairAt,
   };
 }
 
