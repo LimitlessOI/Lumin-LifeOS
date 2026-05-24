@@ -161,6 +161,7 @@
     .mismatch-banner{border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:11px;border:1px solid var(--border)}
     .mismatch-ok{border-color:rgba(129,199,132,.4);background:rgba(129,199,132,.08)}
     .mismatch-warn{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08)}
+    .mismatch-stale{border-color:rgba(255,152,0,.55);background:rgba(255,152,0,.12)}
     .mismatch-err{border-color:rgba(229,57,53,.4);background:rgba(229,57,53,.08)}
     .mismatch-row{display:flex;gap:8px;align-items:center;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(255,255,255,.04)}
     .mismatch-k{min-width:140px;color:var(--text-muted)}
@@ -486,11 +487,17 @@ async function loadSnapshot() {
   }
 
   // Alpha cert — use the command-center endpoint since builder/cert/phase14 may not exist yet
-  const rc = await safeFetch('/api/v1/lifeos/command-center/phase14');
+  const [rc, rf] = await Promise.all([
+    safeFetch('/api/v1/lifeos/command-center/phase14'),
+    safeFetch('/api/v1/lifeos/command-center/proof-freshness'),
+  ]);
   if (rc.ok && rc.data?.found) {
     const ar = rc.data.alpha_ready;
-    cards[1] = { key:'alpha-cert', label:'Alpha Cert', pct:ar?100:40, status:ar?'ok':'warn', value:rc.data.status };
-    snapData['alpha-cert'] = { status:rc.data.status, verified:rc.data.verified, blockers:rc.data.blockers, certified_at:rc.data.certified_at, receipt_id:rc.data.receipt_id, _raw:rc.data };
+    const p14Stale = rf.ok && rf.data?.freshness?.proofs?.phase14?.status === 'STALE';
+    const certLabel = p14Stale ? 'STALE' : rc.data.status;
+    const certStatus = p14Stale ? 'err' : ar ? 'ok' : 'warn';
+    cards[1] = { key:'alpha-cert', label:'Alpha Cert', pct:p14Stale?20:ar?100:40, status:certStatus, value:certLabel };
+    snapData['alpha-cert'] = { status:certLabel, verified:rc.data.verified, blockers:rc.data.blockers, certified_at:rc.data.certified_at, receipt_id:rc.data.receipt_id, freshness:rf.data?.freshness?.proofs?.phase14, _raw:rc.data };
   } else if (rc.ok && rc.data) {
     cards[1] = { key:'alpha-cert', label:'Alpha Cert', pct:0, status:'miss', value:'UNKNOWN' };
     snapData['alpha-cert'] = { note:'No cert receipt found', _raw:rc.data };
@@ -514,12 +521,13 @@ async function loadSnapshot() {
   if (rg.ok && rg.data) {
     const lp = rg.data.last_proof;
     if (lp) {
+      const gemStale = rf.ok && rf.data?.freshness?.proofs?.gemini_runtime?.status === 'STALE';
       const ageMs = Date.now() - new Date(lp.created_at||lp.audited_at||0).getTime();
       const ageH = ageMs / 36e5;
-      const gs = ageH < 2 ? 'ok' : ageH < 12 ? 'warn' : 'err';
-      const ageStr = ageH < 1 ? `${Math.round(ageMs/6e4)}m ago` : `${Math.round(ageH)}h ago`;
-      cards[4] = { key:'gemini-live', label:'Gemini Live', pct:gs==='ok'?100:gs==='warn'?60:20, status:gs, value:ageStr };
-      snapData['gemini-live'] = { confirmed:lp.confirmed, latency:lp.latency_ms, age:ageStr, _raw:lp };
+      const gs = gemStale ? 'err' : ageH < 2 ? 'ok' : ageH < 12 ? 'warn' : 'err';
+      const ageStr = gemStale ? 'STALE' : ageH < 1 ? `${Math.round(ageMs/6e4)}m ago` : `${Math.round(ageH)}h ago`;
+      cards[4] = { key:'gemini-live', label:'Gemini Live', pct:gemStale?15:gs==='ok'?100:gs==='warn'?60:20, status:gs, value:ageStr };
+      snapData['gemini-live'] = { confirmed:lp.confirmed, latency:lp.latency_ms, age:ageStr, freshness:rf.data?.freshness?.proofs?.gemini_runtime, _raw:lp };
     } else {
       cards[4] = { key:'gemini-live', label:'Gemini Live', pct:0, status:'warn', value:'NO_PROOF' };
     }
@@ -707,6 +715,7 @@ async function loadPhasePanel() {
   let certData = null;
 
   const r2 = await safeFetch('/api/v1/lifeos/command-center/phase14?reconcile=1');
+  const rf = await safeFetch('/api/v1/lifeos/command-center/proof-freshness');
   if (r2.ok && r2.data?.found) {
     certData = { ...r2.data, _endpoint: '/api/v1/lifeos/command-center/phase14' };
     const vphases = r2.data.verified_phases || [];
@@ -727,7 +736,11 @@ async function loadPhasePanel() {
   }
 
   const alphaReady = certData.alpha_ready;
-  const statusPill = alphaReady
+  const p14Fresh = rf.ok ? rf.data?.freshness?.proofs?.phase14 : null;
+  const p14Stale = p14Fresh?.status === 'STALE';
+  const statusPill = p14Stale
+    ? '<span class="pill pill-error">STALE</span><span class="pill pill-warning">NOT CURRENT</span>'
+    : alphaReady
     ? '<span class="pill pill-success">ALPHA_READY</span>'
     : '<span class="pill pill-warning">NOT_ALPHA_READY</span>';
 
@@ -1126,21 +1139,31 @@ async function loadProofIntegrity() {
   }
   const d = r.data;
   const rp = d.runtime_proof || {};
+  const pf = d.proof_freshness || {};
   const ps = d.proof_store || {};
+  const isStale = rp.status === 'STALE';
   const verified = rp.status === 'VERIFIED';
-  const bannerCls = verified ? 'mismatch-ok' : (rp.p0_blockers?.length ? 'mismatch-err' : 'mismatch-warn');
+  const bannerCls = isStale ? 'mismatch-stale' : verified ? 'mismatch-ok' : (rp.p0_blockers?.length ? 'mismatch-err' : 'mismatch-warn');
 
   const rows = [
     ['GitHub main SHA', d.github_main_sha, '/github commits/main'],
     ['Railway deploy SHA', d.railway_deploy_sha, '/builder/ready'],
     ['Receipt commit SHA', d.receipt_commit_sha, '/gemini/proof/status'],
+    ['Gemini receipt at', d.latest_gemini_receipt_at ? new Date(d.latest_gemini_receipt_at).toLocaleString() : '—', '/gemini/proof/status'],
     ['Proof store', ps.proof_store_id ? `${ps.status} · ${ps.proof_store_id}` : ps.status, '/phase14/proof-store'],
     ['OIL receipts', d.missing_oil_receipts ? 'MISSING' : 'present', '/oil/receipts'],
   ];
 
+  const freshnessHtml = pf.proofs
+    ? Object.entries(pf.proofs).map(([k,p])=>{
+        const cls = p.status==='STALE'?'pill-error':p.status==='CURRENT'?'pill-success':'pill-muted';
+        return `<div class="mismatch-row"><span class="pill ${cls}">${p.status}</span><span class="mismatch-k">${k}</span><span class="mismatch-v">${p.reason||'—'}</span><span style="color:var(--text-muted);font-size:9px">${p.rule||''}</span></div>`;
+      }).join('')
+    : '<div class="not-wired">NOT_WIRED<span>proof_freshness missing from audit</span></div>';
+
   const mismatchHtml = (rp.mismatches||[]).length
     ? (rp.mismatches||[]).map(m=>`<div class="mismatch-row"><span class="pill ${m.severity==='P0'?'pill-error':m.severity==='P1'?'pill-warning':'pill-muted'}">${m.severity}</span><span class="mismatch-k">${m.rule}</span><span class="mismatch-v">${m.detail}</span></div>`).join('')
-    : '<div style="font-size:11px;color:var(--success)">No runtime mismatches detected</div>';
+    : '<div style="font-size:11px;color:var(--success)">No runtime SHA mismatches detected</div>';
 
   const oilMisses = (d.oil_missed_issues_active||[]).length
     ? d.oil_missed_issues_active.map(i=>`<div class="mismatch-row"><span class="pill pill-warning">${i.severity}</span><span class="mismatch-k">${i.findingId}</span><span class="mismatch-v">${i.whatMissed.slice(0,80)}</span></div>`).join('')
@@ -1149,10 +1172,14 @@ async function loadProofIntegrity() {
   el.innerHTML = `
     <div class="mismatch-banner ${bannerCls}">
       <strong>Runtime proof: ${rp.status||'UNKNOWN'}</strong>
+      ${isStale ? '<span class="pill pill-error" style="margin-left:8px">STALE</span>' : ''}
+      ${pf.overall === 'STALE' ? '<span style="margin-left:6px;font-size:10px;color:var(--warning)">Proof freshness: STALE — not VERIFIED</span>' : ''}
       <span style="margin-left:8px;color:var(--text-muted)">Source: GET /api/v1/lifeos/command-center/self-repair/audit</span>
     </div>
     ${rows.map(([k,v,src])=>`<div class="mismatch-row"><span class="mismatch-k">${k}</span><span class="mismatch-v">${typeof v==='string'&&v.length>20?shaShort(v): (v||'UNKNOWN')}</span><span style="color:var(--text-muted);font-size:9px">${src}</span></div>`).join('')}
-    <div style="margin-top:8px;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Mismatches</div>
+    <div style="margin-top:8px;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Proof freshness (PF-001..003)</div>
+    ${freshnessHtml}
+    <div style="margin-top:8px;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">SHA mismatches</div>
     ${mismatchHtml}
     ${oilMisses ? `<div style="margin-top:8px;font-size:10px;color:var(--text-muted)">Active OIL missed issues</div>${oilMisses}` : ''}
   `;
@@ -1174,10 +1201,11 @@ async function loadSelfRepairHistory() {
   if (live.ok && live.data) {
     const rp = live.data.runtime_proof || {};
     const miss = rp.mismatches || live.data.oil_missed_issues_active || [];
-    const liveCls = rp.status === 'VERIFIED' ? 'mismatch-ok' : 'mismatch-warn';
+    const liveCls = rp.status === 'VERIFIED' ? 'mismatch-ok' : rp.status === 'STALE' ? 'mismatch-stale' : 'mismatch-warn';
     liveBlock = `
       <div class="mismatch-banner ${liveCls}" style="margin-bottom:10px">
         <strong>Latest audit (live): ${rp.status || 'UNKNOWN'}</strong>
+        ${rp.status === 'STALE' ? '<span class="pill pill-error" style="margin-left:6px">STALE</span>' : ''}
         <span style="margin-left:8px;color:var(--text-muted);font-size:10px">GET /self-repair/audit · ${live.data.audited_at ? new Date(live.data.audited_at).toLocaleString() : '—'}</span>
         <div style="margin-top:6px;font-size:10px;color:var(--text-muted)">Not a stored receipt — ephemeral runtime snapshot</div>
         ${miss.length ? miss.map(m=>`<div class="mismatch-row"><span class="pill pill-warning">${m.severity||'?'}</span><span class="mismatch-k">${m.rule||m.findingId||'mismatch'}</span><span class="mismatch-v">${m.detail||m.whatMissed||''}</span></div>`).join('') : '<div style="font-size:11px;color:var(--success);margin-top:4px">No active mismatches</div>'}
