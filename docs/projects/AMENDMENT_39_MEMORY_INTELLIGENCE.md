@@ -271,6 +271,8 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-05-24 | `services/self-repair-memory.js` | Phase 2+3 hardening: `writeRepairMemoryFromExecution` now writes to `self_repair_memory_events` table first (DB-first), reports `{db_written, jsonl_written, fallback_used}`; back-fills `fact_id` FK. Added `readRepairMemoryFromDedicatedTable(pool, limit)` — queries `self_repair_memory_events` with all named columns, `source='db'`. `readLatestRepairMemory` priority: JSONL → DB (self_repair_memory_events) → epistemic_facts. | Durable per-field schema for self-repair memory — prior state stored lessons as JSON blob in epistemic_facts.context_required with no queryable fields |
+| 2026-05-24 | `services/self-repair-memory.js` | Added `classifyRepairLesson` on write (classification, signals, verification_path); `enrichLessonsWithClassification` on read via `self-repair-lesson-classifier.js` — lessons remain derived from executor only, no invented prevention text | Adam slice: self-repair memory → prevention; classification attached to JSONL + epistemic_facts context |
 | 2026-04-26 | `db/migrations/20260426_memory_intelligence.sql` | Created — 7 tables, 2 views, full Phase 1 schema | Memory Intelligence Phase 1 foundation |
 | 2026-04-26 | `services/memory-intelligence-service.js` | Created — full evidence engine: recordFact, addEvidence, promoteFact, demoteFact, recordDebate, recordLesson, recordAgentPerformance, recordIntentDrift | Core business logic for epistemic fact store |
 | 2026-04-26 | `routes/memory-intelligence-routes.js` | Created — facts, debates, lessons, routing, authority, protocol-violation, intent-drift endpoints | API surface for the evidence engine |

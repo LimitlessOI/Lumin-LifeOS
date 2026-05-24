@@ -41,6 +41,6 @@ COMMENT ON COLUMN self_repair_memory_events.triggered_by IS 'Triggered by for th
 
 COMMENT ON COLUMN self_repair_memory_events.fact_id IS 'Foreign key referencing epistemic_facts table';
 
-ALTER TABLE self_repair_memory_events ADD CONSTRAINT ssot_tag CHECK (ssot_tag = 'AMENDMENT_12_COMMAND_CENTER.md');
+-- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
 
 COMMIT;

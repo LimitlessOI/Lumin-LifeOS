@@ -137,6 +137,49 @@ export function readRepairMemoryLogTail(limit = 5) {
     .reverse();
 }
 
+async function readRepairMemoryFromDedicatedTable(pool, limit = 5) {
+  if (!pool?.query) return [];
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, created_at, trigger, issue_detected, repair_chain_run, result,
+              receipts_written, lesson_learned, prevention_rule, confidence,
+              source_execution_id, repair_id, deploy_sha, proof_status_before,
+              proof_status_after, duration_ms, classification, classification_signals,
+              verification_path, triggered_by, fact_id
+       FROM self_repair_memory_events
+       ORDER BY created_at DESC
+       LIMIT $1`,
+      [limit]
+    );
+    return rows.map((row) => ({
+      ts: row.created_at,
+      fact_id: row.fact_id,
+      id: row.id,
+      trigger: row.trigger,
+      issue_detected: row.issue_detected,
+      repair_chain_run: row.repair_chain_run,
+      result: row.result,
+      receipts_written: row.receipts_written || [],
+      lesson_learned: row.lesson_learned,
+      prevention_rule: row.prevention_rule,
+      confidence: row.confidence,
+      source_execution_id: row.source_execution_id,
+      repair_id: row.repair_id,
+      deploy_sha: row.deploy_sha,
+      proof_status_before: row.proof_status_before,
+      proof_status_after: row.proof_status_after,
+      duration_ms: row.duration_ms,
+      classification: row.classification,
+      classification_signals: row.classification_signals,
+      verification_path: row.verification_path,
+      triggered_by: row.triggered_by,
+      source: 'db',
+    }));
+  } catch {
+    return [];
+  }
+}
+
 async function readRepairMemoryFromPool(pool, limit = 5) {
   if (!pool?.query) return [];
   const { rows } = await pool.query(
@@ -165,12 +208,17 @@ async function readRepairMemoryFromPool(pool, limit = 5) {
   });
 }
 
-/** Latest repair lessons — JSONL preferred, DB fallback; classifications attached at read time. */
+/** Latest repair lessons — JSONL → dedicated DB → epistemic_facts fallback chain. */
 export async function readLatestRepairMemory(pool, limit = 5) {
   const fromFile = readRepairMemoryLogTail(limit);
   if (fromFile.length) {
     const lessons = enrichLessonsWithClassification(fromFile);
     return { ok: true, source: 'jsonl', lessons, count: lessons.length };
+  }
+  const fromDedicated = await readRepairMemoryFromDedicatedTable(pool, limit);
+  if (fromDedicated.length) {
+    const lessons = enrichLessonsWithClassification(fromDedicated);
+    return { ok: true, source: 'db', lessons, count: lessons.length };
   }
   const fromDb = await readRepairMemoryFromPool(pool, limit);
   if (fromDb.length) {
@@ -240,44 +288,87 @@ export async function writeRepairMemoryFromExecution(pool, {
     verification_path,
   };
 
-  try {
-    appendMemoryLog(event);
-  } catch {
-    // best-effort on ephemeral FS
-  }
-
+  let dbWritten = false;
+  let jsonlWritten = false;
   let factId = null;
+
+  // Phase 2: DB first — write to dedicated self_repair_memory_events table
   if (pool?.query) {
     try {
-      const memory = createMemoryIntelligenceService(pool);
-      const fact = await memory.recordFact({
-        text: lesson.lesson_learned.slice(0, 2000),
-        domain: 'self_repair',
-        level: auditResult === 'PASS' ? LEVEL.RECEIPT : LEVEL.CLAIM,
-        contextRequired: JSON.stringify({
-          ...event,
-          prevention_rule: lesson.prevention_rule,
-        }).slice(0, 4000),
-        falseWhen: lesson.prevention_rule
-          ? `When ${lesson.prevention_rule} is followed, this failure mode should not recur`
-          : null,
-        createdBy: 'self_repair_executor',
-        visibilityClass: 'internal',
-      });
-      factId = fact?.id || null;
-      if (factId && receipts.length) {
-        await memory.addEvidence(factId, {
-          eventType: 'confirmation',
-          result: 'confirmed',
-          evidenceText: `Self-repair receipts: ${receipts.slice(0, 5).join(', ')}`.slice(0, 500),
-          source: 'self_repair_executor',
-          sourceIsIndependent: false,
+      const { rows: ins } = await pool.query(
+        `INSERT INTO self_repair_memory_events (
+           trigger, issue_detected, repair_chain_run, result, receipts_written,
+           lesson_learned, prevention_rule, confidence, repair_id, deploy_sha,
+           proof_status_before, proof_status_after, duration_ms,
+           classification, classification_signals, verification_path, triggered_by
+         ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+         RETURNING id`,
+        [
+          event.trigger, event.issue_detected, event.repair_chain_run, event.result,
+          JSON.stringify(receipts), event.lesson_learned, event.prevention_rule,
+          null, event.repair_id, event.deploy_sha,
+          event.proof_status_before, event.proof_status_after, event.duration_ms,
+          event.classification, event.classification_signals ? JSON.stringify(event.classification_signals) : null,
+          event.verification_path, event.trigger,
+        ]
+      );
+      factId = ins[0]?.id || null;
+      dbWritten = true;
+
+      // Also write to epistemic_facts for broader memory intelligence integration
+      try {
+        const memory = createMemoryIntelligenceService(pool);
+        const fact = await memory.recordFact({
+          text: lesson.lesson_learned.slice(0, 2000),
+          domain: 'self_repair',
+          level: auditResult === 'PASS' ? LEVEL.RECEIPT : LEVEL.CLAIM,
+          contextRequired: JSON.stringify({ ...event, prevention_rule: lesson.prevention_rule }).slice(0, 4000),
+          falseWhen: lesson.prevention_rule
+            ? `When ${lesson.prevention_rule} is followed, this failure mode should not recur`
+            : null,
+          createdBy: 'self_repair_executor',
+          visibilityClass: 'internal',
         });
+        const epicFactId = fact?.id || null;
+        if (epicFactId && receipts.length) {
+          await memory.addEvidence(epicFactId, {
+            eventType: 'confirmation',
+            result: 'confirmed',
+            evidenceText: `Self-repair receipts: ${receipts.slice(0, 5).join(', ')}`.slice(0, 500),
+            source: 'self_repair_executor',
+            sourceIsIndependent: false,
+          });
+        }
+        // back-fill fact_id link on the dedicated row
+        if (epicFactId && ins[0]?.id) {
+          await pool.query(
+            'UPDATE self_repair_memory_events SET fact_id=$1 WHERE id=$2',
+            [epicFactId, ins[0].id]
+          );
+        }
+      } catch {
+        // epistemic_facts write is best-effort
       }
-    } catch {
-      // DB memory is best-effort — JSONL + lesson object still returned
+    } catch (dbErr) {
+      // DB write failed — JSONL is the fallback
     }
   }
 
-  return { written: true, event: { ...event, fact_id: factId } };
+  // Phase 2: JSONL fallback (always attempted on ephemeral FS; graceful on Railway)
+  try {
+    appendMemoryLog(event);
+    jsonlWritten = true;
+  } catch {
+    // ephemeral FS may not be writable
+  }
+
+  const fallbackUsed = !dbWritten && jsonlWritten;
+
+  return {
+    written: dbWritten || jsonlWritten,
+    db_written: dbWritten,
+    jsonl_written: jsonlWritten,
+    fallback_used: fallbackUsed,
+    event: { ...event, fact_id: factId },
+  };
 }
