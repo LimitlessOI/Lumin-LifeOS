@@ -257,6 +257,59 @@ async function bootOILDailySummary(deps) {
   logger?.info('[BOOT] OIL daily summary scheduler registered (runs every 24h after 60s delay)');
 }
 
+// ── Self-repair deploy check (once per boot — no constant polling) ─────────────
+async function bootSelfRepairDeployCheck(deps) {
+  const { pool, logger } = deps;
+
+  const guarded = createUsefulWorkGuard({
+    taskName: 'Self-Repair Deploy Check',
+    purpose: 'Refresh stale runtime proof after deploy SHA drift (PF-001→PF-002→PF-003)',
+    prerequisites: async () => {
+      const { isSelfRepairBootCheckEnabled } = await import('../services/self-repair-deploy-scheduler.js');
+      if (!isSelfRepairBootCheckEnabled()) {
+        return { ok: false, reason: 'SELF_REPAIR_BOOT_CHECK=0' };
+      }
+      if (!process.env.COMMAND_CENTER_KEY && !process.env.LIFEOS_KEY && !process.env.API_KEY) {
+        return { ok: false, reason: 'command key missing on runtime' };
+      }
+      if (!process.env.PUBLIC_BASE_URL && !process.env.RAILWAY_GIT_COMMIT_SHA) {
+        return { ok: false, reason: 'deploy context unavailable' };
+      }
+      return { ok: true };
+    },
+    workCheck: async () => {
+      const { buildSupervisedAutonomyReadiness } = await import('../services/supervised-autonomy-readiness.js');
+      const { detectDeployProofDrift } = await import('../services/self-repair-deploy-scheduler.js');
+      const { normalizeSha } = await import('../services/oil-self-repair-detector.js');
+      const deploySha = normalizeSha(process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || '');
+      const readiness = await buildSupervisedAutonomyReadiness(pool, { railwayDeploySha: deploySha });
+      const drift = detectDeployProofDrift(readiness);
+      return {
+        count: drift.should_repair ? 1 : 0,
+        description: drift.should_repair
+          ? `deploy drift ${drift.deploy_sha?.slice(0, 7)} vs receipt ${drift.receipt_sha?.slice(0, 7)}`
+          : 'proof current — no deploy repair needed',
+      };
+    },
+    execute: async () => {
+      const { runDeployRepairCheck } = await import('../services/self-repair-deploy-scheduler.js');
+      const outcome = await runDeployRepairCheck(pool, { dryRun: false, triggeredBy: 'boot' });
+      logger?.info?.(
+        { action: outcome.action, reason: outcome.reason, ok: outcome.ok },
+        '[BOOT] Self-repair deploy check complete'
+      );
+    },
+    logger,
+  });
+
+  setTimeout(() => {
+    guarded().catch((err) => {
+      logger?.warn?.(`[BOOT] Self-repair deploy check failed: ${err.message}`);
+    });
+  }, 45 * 1000);
+  logger?.info('[BOOT] Self-repair deploy check scheduled once (45s after boot if stale drift)');
+}
+
 export async function bootAllDomains(deps) {
   const { pool, logger } = deps;
   await autoSeedEpistemicFacts(pool, logger);
@@ -268,5 +321,6 @@ export async function bootAllDomains(deps) {
     bootLaneIntel(deps),
     bootTwinAutoIngest(deps),
     bootOILDailySummary(deps),
+    bootSelfRepairDeployCheck(deps),
   ]);
 }
