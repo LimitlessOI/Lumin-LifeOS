@@ -203,6 +203,14 @@
     </div>
   </div>
 
+  <!-- Section A2: Supervised Autonomy Readiness (read-only) -->
+  <div class="card full-width" id="section-readiness">
+    <div class="section-title">&#9881; Supervised Autonomy Readiness</div>
+    <div id="readiness-panel">
+      <div class="not-wired">Loading...</div>
+    </div>
+  </div>
+
   <!-- Main 2-col grid -->
   <div class="main-grid">
 
@@ -1130,6 +1138,62 @@ function infraCssClass(label) {
 
 function shaShort(s) { return s ? (s+'').slice(0,12) : '—'; }
 
+async function loadSupervisedReadiness() {
+  const el = document.getElementById('readiness-panel');
+  const r = await safeFetch('/api/v1/lifeos/command-center/supervised-autonomy/readiness');
+
+  if (r.status === 404) {
+    el.innerHTML = `<div class="not-wired">NOT_WIRED<span>GET /api/v1/lifeos/command-center/supervised-autonomy/readiness</span></div>`;
+    return;
+  }
+  if (!r.ok || !r.data) {
+    el.innerHTML = `<div class="not-wired">NOT_WIRED<span>readiness endpoint returned ${r.status}</span></div>`;
+    return;
+  }
+
+  const d = r.data;
+  const ready = d.ready_for_supervised === true;
+  const bannerCls = ready ? 'mismatch-ok' : d.blockers?.some(b=>b.severity==='P0') ? 'mismatch-err' : 'mismatch-stale';
+
+  const blockerHtml = (d.blockers||[]).length
+    ? d.blockers.map(b=>`<div class="mismatch-row"><span class="pill ${b.severity==='P0'?'pill-error':'pill-warning'}">${b.severity}</span><span class="mismatch-k">${b.code}</span><span class="mismatch-v">${(b.detail||'').slice(0,100)}</span></div>`).join('')
+    : '<div style="font-size:11px;color:var(--success)">No blockers</div>';
+
+  const warnHtml = (d.warnings||[]).length
+    ? d.warnings.map(w=>`<div class="mismatch-row"><span class="pill pill-muted">${w.severity||'P2'}</span><span class="mismatch-k">${w.code}</span><span class="mismatch-v">${(w.detail||'').slice(0,100)}</span></div>`).join('')
+    : '<div style="font-size:11px;color:var(--text-muted)">No warnings</div>';
+
+  const adamHtml = (d.what_adam_must_decide||[]).length
+    ? d.what_adam_must_decide.map(a=>`<div class="mismatch-row"><span class="pill ${a.priority==='P0'?'pill-error':a.priority==='P1'?'pill-warning':'pill-muted'}">${a.priority}</span><span class="mismatch-v">${a.decision}</span></div>`).join('')
+    : '<div style="font-size:11px;color:var(--text-muted)">No decisions queued — system operating within supervised bounds</div>';
+
+  const checks = d.checks || {};
+  const checkRow = Object.entries(checks).map(([k,v])=>`<span class="queue-cat-pill">${k.replace(/_/g,' ')}: ${v}</span>`).join(' ');
+
+  el.innerHTML = `
+    <div class="mismatch-banner ${bannerCls}">
+      <strong>ready_for_supervised: ${ready ? 'true' : 'false'}</strong>
+      ${!ready ? '<span class="pill pill-error" style="margin-left:8px">NOT READY</span>' : '<span class="pill pill-success" style="margin-left:8px">READY</span>'}
+      <span style="margin-left:auto;font-size:10px;color:var(--text-muted)">${d.read_path||''}</span>
+    </div>
+    <div class="queue-summary" style="margin:10px 0">
+      <span class="queue-cat-pill">Deploy: ${shaShort(d.deployed_sha)}</span>
+      <span class="queue-cat-pill">Runtime proof SHA: ${shaShort(d.latest_runtime_proof_sha)}</span>
+      <span class="queue-cat-pill">Proof store: ${d.proof_store_id||'—'}</span>
+      <span class="queue-cat-pill">Runtime: ${d.runtime_proof_status||'—'}</span>
+      <span class="queue-cat-pill">Freshness: ${d.proof_freshness_overall||'—'}</span>
+    </div>
+    <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px">${checkRow}</div>
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:8px 0 4px">Blockers (${(d.blockers||[]).length})</div>
+    ${blockerHtml}
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:10px 0 4px">Warnings (${(d.warnings||[]).length})</div>
+    ${warnHtml}
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:10px 0 4px">What Adam must decide</div>
+    ${adamHtml}
+    <div style="font-size:10px;color:var(--text-muted);margin-top:10px">Latest receipts: gemini #${d.latest_receipts?.gemini_runtime_proof?.receipt_id||'—'} · phase14 #${d.latest_receipts?.phase14_cert?.receipt_id||'—'} · self-repair #${d.latest_receipts?.self_repair?.receipt_id||'—'}</div>
+  `;
+}
+
 async function loadProofIntegrity() {
   const el = document.getElementById('proof-mismatch-panel');
   const r = await safeFetch('/api/v1/lifeos/command-center/self-repair/audit');
@@ -1701,6 +1765,7 @@ async function loadAll() {
   document.getElementById('last-refresh').textContent = 'Loading...';
   await Promise.allSettled([
     loadSnapshot(),
+    loadSupervisedReadiness(),
     loadBuilder(),
     loadPhasePanel(),
     loadQueue(),
