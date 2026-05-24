@@ -49,6 +49,7 @@ import {
   writeOilMissedIssueReceipt,
   fetchGitHubMainSha,
   readSelfRepairHistory,
+  buildRepairQueue,
 } from '../services/oil-self-repair-detector.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -202,6 +203,46 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
         count: entries.length,
         entries,
       });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/self-repair/repair-queue
+   * Read-only queue from detector registry + live audit context. No auto-repair.
+   */
+  router.get('/api/v1/lifeos/command-center/self-repair/repair-queue', requireKey, async (req, res, next) => {
+    try {
+      const railwayDeploySha = normalizeSha(
+        process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
+      );
+      const githubMain = await fetchGitHubMainSha();
+      const geminiRows = await readReceiptsByType(SECURITY_RECEIPT_TYPES.GEMINI_LIVE_PROOF, 1, pool);
+      const lp = geminiRows[0];
+      const receiptCommitSha =
+        normalizeSha(lp?.payload?.runtime?.commit_sha) ||
+        normalizeSha(lp?.payload?.details?.runtime?.commit_sha);
+
+      const runtimeProof = detectRuntimeProofMismatch({
+        localHead: req.query.local_head || null,
+        githubMainSha: req.query.github_main_sha || githubMain.sha || null,
+        railwayDeploySha,
+        receiptCommitSha,
+      });
+
+      const railwayStore = proofStoreFingerprint(process.env.DATABASE_URL);
+      const proofStore = detectProofStoreMismatch(process.env.DATABASE_URL, railwayStore);
+      const context = { runtimeProof, proofStore };
+
+      const queue = await buildRepairQueue(pool, context, {
+        deploy: { ok: Boolean(railwayDeploySha) },
+        proof_store_endpoint: { ok: true },
+        gemini_receipt: { ok: Boolean(lp) },
+        git: { ok: githubMain.ok !== false },
+      });
+
+      res.json(queue);
     } catch (err) {
       next(err);
     }
