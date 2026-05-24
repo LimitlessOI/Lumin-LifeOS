@@ -246,6 +246,18 @@ Full philosophical foundation: `docs/NORTH_STAR_EDUCATION_HEALING.md`
 
 5. **Only Article VII amends §2.15.** Human Guardian must explicitly authorize any relaxation of this law.
 
+### 2.16 No unnecessary Adam bottlenecks (PB execution authority)
+
+1. **Approved boundary authorizes execution.** When Adam approves a **PB**, **amendment**, **product boundary**, or **build objective**, that approval **authorizes** Builder, OIL, Council, TSOS, and Memory to **execute, repair, gap-fill, audit, re-plan, and continue** **inside** that approved boundary **without** per-step Human Guardian re-approval for **routine** internal work.
+
+2. **System-authorized under PB (non-exhaustive).** Proof refreshes (`POST /api/v1/gemini/proof`), deploy verification, receipt writes, import fixes, stale runtime proof repair, missing-endpoint gap-fill, Phase 14 Railway-canonical re-cert, self-repair audit-run receipts, and repair-queue items **clearly inside** the approved PB **shall not** be labeled **“Adam approval required”** in readiness, Command Center, or OIL reports. They **shall** be labeled **`SYSTEM_AUTHORIZED_UNDER_PB`**.
+
+3. **ADAM_REQUIRED (true stops only).** Stop and ask Adam only for: **exposed secrets**; **destructive DB risk**; **money / legal / medical / high-stakes external action**; **autonomy escalation beyond the approved PB**; **irreversible public or user-facing launch**; **product intent ambiguity**; **proof chain cannot be honestly repaired**; **work outside the PB boundary**.
+
+4. **Honesty.** **`ready_for_supervised`** may remain **false** while **`can_continue_under_approved_pb`** is **true** — technical proof state and Human Guardian stops are **separate**. **§2.6** applies: never fake green; never claim Adam must approve routine PB-internal repair.
+
+5. **Only Article VII amends §2.16.**
+
 ## ARTICLE III: HUMAN GUARDIAN AUTHORITY
 
 ### 3.1 Human Veto Power
