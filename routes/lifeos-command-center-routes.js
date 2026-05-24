@@ -53,6 +53,11 @@ import {
   summarizeOilMisses,
   validateOilMissedIssueInput,
 } from '../services/oil-self-repair-detector.js';
+import {
+  evaluateProofFreshnessFromPool,
+  mergeRuntimeProofWithFreshness,
+  PROOF_FRESHNESS_RULES,
+} from '../services/oil-proof-freshness.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -169,20 +174,70 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
       const context = { runtimeProof, proofStore };
       const activeMisses = evaluateKnownOilMisses(context);
 
+      const freshness = await evaluateProofFreshnessFromPool(pool, {
+        railwayDeploySha,
+        geminiReceiptRow: lp || null,
+      });
+      const runtimeProofMerged = mergeRuntimeProofWithFreshness(runtimeProof, freshness);
+
       res.json({
         ok: true,
         audited_at: new Date().toISOString(),
         proof_source: 'railway_runtime',
-        runtime_proof: runtimeProof,
+        runtime_proof: runtimeProofMerged,
+        proof_freshness: freshness,
         proof_store: proofStore,
         oil_missed_issues_active: activeMisses,
         railway_deploy_sha: railwayDeploySha,
         github_main_sha: githubMain.sha || null,
         receipt_commit_sha: receiptCommitSha,
         latest_gemini_receipt_id: lp?.id || null,
+        latest_gemini_receipt_at: lp?.created_at || null,
         oil_receipts_present: oilRecent.length > 0,
         missing_oil_receipts: oilRecent.length === 0,
         write_receipt_path: 'POST /api/v1/lifeos/command-center/self-repair/oil-missed-issue',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/proof-freshness
+   * Proof freshness rules PF-001..PF-003 — STALE never reported as VERIFIED.
+   */
+  router.get('/api/v1/lifeos/command-center/proof-freshness', requireKey, async (req, res, next) => {
+    try {
+      const railwayDeploySha = normalizeSha(
+        process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
+      );
+      const geminiRows = await readReceiptsByType(SECURITY_RECEIPT_TYPES.GEMINI_LIVE_PROOF, 1, pool);
+      const lp = geminiRows[0];
+      const receiptCommitSha =
+        normalizeSha(lp?.payload?.runtime?.commit_sha) ||
+        normalizeSha(lp?.payload?.details?.runtime?.commit_sha);
+
+      const freshness = await evaluateProofFreshnessFromPool(pool, {
+        railwayDeploySha,
+        geminiReceiptRow: lp || null,
+      });
+
+      const runtimeProof = detectRuntimeProofMismatch({
+        railwayDeploySha,
+        receiptCommitSha,
+      });
+
+      res.json({
+        ok: true,
+        read_path: 'GET /api/v1/lifeos/command-center/proof-freshness',
+        railway_deploy_sha: railwayDeploySha,
+        receipt_commit_sha: receiptCommitSha,
+        latest_gemini_receipt_id: lp?.id || null,
+        latest_gemini_receipt_at: lp?.created_at || null,
+        freshness,
+        runtime_proof: mergeRuntimeProofWithFreshness(runtimeProof, freshness),
+        rules: PROOF_FRESHNESS_RULES,
+        blocks_build: runtimeProof.p0_blockers?.length > 0,
       });
     } catch (err) {
       next(err);
