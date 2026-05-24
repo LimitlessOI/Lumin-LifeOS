@@ -32,6 +32,26 @@
 
 ---
 
+## [BUILD] Update 2026-05-24 #25 — PB execution authority (§2.16 governance correction)
+
+### Files changed
+- `docs/SSOT_NORTH_STAR.md` — Article II **§2.16** No unnecessary Adam bottlenecks
+- `docs/SSOT_COMPANION.md` — **§0.5J** PB execution authority
+- `docs/AGENT_RULES.compact.md` — §2.16 one-line enforcement
+- `services/pb-execution-authority.js` — `SYSTEM_AUTHORIZED_UNDER_PB` vs `ADAM_REQUIRED` classifier
+- `services/supervised-autonomy-readiness.js` — `system_authorized_actions`, `adam_required_actions`, `can_continue_under_approved_pb`
+- `public/overlay/lifeos-command-center.html` — readiness panel split (PB vs ADAM_REQUIRED)
+
+### State after this session
+- Readiness no longer says "Approve POST …" for routine proof refresh inside approved PB
+- `what_adam_must_decide` now only ADAM_REQUIRED items (backward compat field name)
+
+### Next agent: start here
+- System may execute gemini proof + phase14 run-proofs under PB without Adam per-step approval
+- Adam Decision Queue (`pending_adam`) unchanged — still for true human decisions
+
+---
+
 ## [BUILD] Update 2026-05-23 #24 — SEC-F01 Freeze Hardening
 
 ### Files changed
