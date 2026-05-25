@@ -51,6 +51,7 @@ public/overlay/command-center.js
 public/overlay/index.html
 public/shared/lifeos-voice-chat.js
 services/env-registry-map.js
+services/builderos-system-alpha-readiness.js ← NEW: BuilderOS Alpha readiness scorer
 ```
 
 ## Protected Files (read-only for this project)
@@ -77,6 +78,7 @@ are owned by AMENDMENT_18 and read by this project's dashboard panels.
 | GET | `/api/v1/lifeos/command-center/phase14` | requireKey | Latest Phase 14 Alpha-Ready cert from builder_audit_receipts |
 | GET | `/api/v1/lifeos/command-center/mode` | requireKey | Current compiled builder release mode (MANUAL/SUPERVISED/AUTONOMOUS) |
 | GET | `/api/v1/lifeos/command-center/security` | requireKey | SEC-F01 live security aggregate from canonical receipts only |
+| GET | `/api/v1/lifeos/command-center/system-alpha-readiness` | requireKey | BuilderOS Alpha readiness from runtime truth + structural consolidation docs |
 | POST | `/api/v1/lifeos/command-center/mode` | requireKey | NOT_WIRED — returns 501; Stage 2 will add runtime switching |
 | GET | `/api/v1/admin/ai/status` | requireKey | AI on/off + reason |
 | POST | `/api/v1/admin/ai/enable` | requireKey | Enable AI |
@@ -100,6 +102,7 @@ are owned by AMENDMENT_18 and read by this project's dashboard panels.
 - **Pending Adam panel** — items blocked on Adam
 - **Free Cloud Providers panel** — free tier usage status
 - **Builder Control Panel** ← NEW — running/paused state badge; Run Now / Dry Run / Pause / Resume buttons; 4 stat cards (Safe & Ready, In Progress, Needs Review, Blocked); last run results; queue detail table; Adam Decision Accuracy section
+- **BuilderOS System Alpha panel** ← NEW — read-only BuilderOS Alpha % / blockers / active-proven-live counts sourced only from `/api/v1/lifeos/command-center/system-alpha-readiness`
 
 ### External Dependencies
 | Dependency | Env Var | Required? |
@@ -124,6 +127,7 @@ are owned by AMENDMENT_18 and read by this project's dashboard panels.
 - [x] **Command & Control Center v2 (`lifeos-command-center.html`)** — 10-section executive cockpit: snapshot, builder panel, OIL phase wheel, Adam queue, council hub, project map, infra health, security alpha, token economics, model leaderboard *(2026-05-21)* `[GAP-FILL: builder output truncated]`
 - [x] **`routes/lifeos-command-center-routes.js`** — `/phase14` + `/mode` GET/POST aggregate endpoints *(2026-05-21)* `[GAP-FILL: builder used wrong import paths]`
 - [ ] **→ NEXT: Stage 2 — runtime mode switching** — `builder_runtime_config` table + BUILDER_MODE_CHANGE receipt path; wire `POST /command-center/mode` live *(est: 3h)* `[needs-review]`
+- [x] **BuilderOS Structural Consolidation + System Alpha panel** — structural blueprint, inventory, authority map, topology audit, salvage registry, classification lock, `GET /api/v1/lifeos/command-center/system-alpha-readiness`, read-only cockpit panel *(2026-05-25)* `[safe]`
 - [ ] **→ NEXT: Phase 14 cert endpoint** — `GET /api/v1/builder/cert/phase14` with `phase_ledger` from `findingsJson`; update cert script to write `phase_ledger` *(est: 2h)* `[safe]`
 - [ ] **Projects Dashboard panel drill-down** — hover tooltip + click drawer with build plan, estimates, verification status *(est: 4h)* `[needs-review]`
 - [ ] **Pending Adam panel** — priority-sorted, type badges, one-click resolve *(est: 2h)* `[safe]`

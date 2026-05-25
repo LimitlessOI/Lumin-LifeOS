@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "stabilization",
-  "next_task": "Make the overlay mobile-responsive, add role-based access controls, and continue expanding governance/env-awareness drill-downs",
+  "next_task": "Use the BuilderOS structural consolidation package to quarantine legacy cockpit drift, then continue mobile/role-based improvements from a governed alpha surface",
   "stability_class": "needs-review",
-  "current_focus": "Overnight autonomy — idle analysis batches, deploy stabilization, proof context auto-load for honest telemetry",
+  "current_focus": "BuilderOS structural consolidation — system alpha readiness, canonical cockpit truth, and runtime-backed status classification",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",
@@ -18,7 +18,8 @@
     "public/overlay/command-center.js",
     "public/overlay/index.html",
     "public/shared/lifeos-voice-chat.js",
-    "docs/ENV_REGISTRY.md"
+    "docs/ENV_REGISTRY.md",
+    "services/builderos-system-alpha-readiness.js"
   ],
   "protected_files": [
     "server.js",
@@ -71,6 +72,12 @@
       "path": "/api/v1/lifeos/command-center/security",
       "expected_status": 200,
       "description": "SEC-F01 security aggregate"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/lifeos/command-center/system-alpha-readiness",
+      "expected_status": 200,
+      "description": "BuilderOS Alpha readiness from runtime truth + structural consolidation docs"
     }
   ],
   "required_tables": [
@@ -170,6 +177,6 @@
       "resolved": true
     }
   ],
-  "last_verified_at": "2026-05-24",
+  "last_verified_at": "2026-05-25",
   "verification_passed": null
 }

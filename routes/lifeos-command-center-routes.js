@@ -62,6 +62,7 @@ import {
   PROOF_FRESHNESS_RULES,
 } from '../services/oil-proof-freshness.js';
 import { buildSupervisedAutonomyReadiness } from '../services/supervised-autonomy-readiness.js';
+import { buildBuilderOSSystemAlphaReadiness } from '../services/builderos-system-alpha-readiness.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -345,6 +346,25 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
       const report = await buildSupervisedAutonomyReadiness(pool, { railwayDeploySha });
       res.json({
         read_path: 'GET /api/v1/lifeos/command-center/supervised-autonomy/readiness',
+        ...report,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/system-alpha-readiness
+   * BuilderOS Alpha readiness from runtime truth plus structural expectations.
+   */
+  router.get('/api/v1/lifeos/command-center/system-alpha-readiness', requireKey, async (req, res, next) => {
+    try {
+      const railwayDeploySha = normalizeSha(
+        process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
+      );
+      const report = await buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySha });
+      res.json({
+        read_path: 'GET /api/v1/lifeos/command-center/system-alpha-readiness',
         ...report,
       });
     } catch (err) {
