@@ -11,6 +11,7 @@ import { normalizeSha } from './oil-self-repair-detector.js';
 import { runSelfRepairExecutor, EXECUTOR_MAX_ATTEMPTS } from './self-repair-executor.js';
 import { findDeployDriftHookPlan } from './self-repair-prevention-hook-planner.js';
 import { appendPreventionHookLog } from './self-repair-prevention-hook-log.js';
+import { emitPreventionHookTelemetry } from './autonomous-telemetry-instrumentation.js';
 
 export function isSelfRepairBootCheckEnabled() {
   return process.env.SELF_REPAIR_BOOT_CHECK !== '0';
@@ -85,6 +86,11 @@ export async function runDeployRepairCheck(pool, {
         proof_status: readiness.proof_freshness_overall,
         duration_ms: Date.now() - started,
       });
+      await emitPreventionHookTelemetry(pool, {
+        outcome,
+        triggeredBy,
+        durationMs: Date.now() - started,
+      }).catch(() => {});
     }
     return outcome;
   }
@@ -133,6 +139,11 @@ export async function runDeployRepairCheck(pool, {
         proof_status: readiness.proof_freshness_overall,
         duration_ms: Date.now() - started,
       });
+      await emitPreventionHookTelemetry(pool, {
+        outcome,
+        triggeredBy,
+        durationMs: Date.now() - started,
+      }).catch(() => {});
     }
     return outcome;
   }
@@ -167,6 +178,11 @@ export async function runDeployRepairCheck(pool, {
         readiness.proof_freshness_overall,
       duration_ms: Date.now() - started,
     });
+    await emitPreventionHookTelemetry(pool, {
+      outcome,
+      triggeredBy,
+      durationMs: Date.now() - started,
+    }).catch(() => {});
   }
   return outcome;
 }

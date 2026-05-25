@@ -329,6 +329,14 @@
       </div>
     </div>
 
+    <!-- Section I2: Autonomous Efficiency (read-only) -->
+    <div class="card full-width" id="section-i2">
+      <div class="section-title">&#128200; Autonomous Efficiency</div>
+      <div id="autonomous-telemetry-panel">
+        <div class="not-wired">Loading autonomous telemetry…</div>
+      </div>
+    </div>
+
     <!-- Section I: Token Economics -->
     <div class="card" id="section-i">
       <div class="section-title">&#128176; Token Economics</div>
@@ -1971,6 +1979,51 @@ function sparkline(data, width=200, height=40) {
   </svg>`;
 }
 
+async function loadAutonomousTelemetry() {
+  const el = document.getElementById('autonomous-telemetry-panel');
+  if (!el) return;
+  const eff = await safeFetch('/api/v1/lifeos/autonomous-telemetry/efficiency?since_hours=168');
+  const ev = await safeFetch('/api/v1/lifeos/autonomous-telemetry/events?limit=8');
+  if (eff.status === 404 || eff.data?.status === 'NO_DATA') {
+    el.innerHTML = `<div class="not-wired">NO_DATA<span>GET /autonomous-telemetry/efficiency — run POST /session/run first</span></div>`;
+    return;
+  }
+  if (!eff.ok || !eff.data?.ok) {
+    el.innerHTML = `<div class="not-wired">ERROR<span>efficiency API ${eff.status}</span></div>`;
+    return;
+  }
+  const m = eff.data.metrics || {};
+  const ph = eff.data.phase_latency || {};
+  const recs = (eff.data.recommendations || []).slice(0, 4);
+  const events = ev.ok && ev.data?.events ? ev.data.events.slice(0, 5) : [];
+  const bottlenecks = (eff.data.bottlenecks || []).slice(0, 3);
+  const topFail = bottlenecks.length ? bottlenecks[0] : null;
+  const eventRows = events.map(e => `
+    <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px">
+      ${e.task_type} · ${e.success ? 'OK' : 'FAIL'} · ${e.wall_clock_ms != null ? e.wall_clock_ms + 'ms' : '—'}
+      · tokens~${e.total_token_estimate ?? '—'} (${e.token_estimate_method || '—'})
+    </div>`).join('') || '<div class="not-wired">No recent events</div>';
+  const recRows = recs.map(r => `<div class="q-desc" style="font-size:11px;margin-bottom:4px">• ${r.message} <span style="color:var(--text-muted)">(${r.evidence})</span></div>`).join('') || '<div style="font-size:10px;color:var(--text-muted)">No recommendations yet</div>';
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px">
+      <div class="q-card"><div style="font-size:10px;color:var(--text-muted)">Events (168h)</div><div style="font-size:18px;font-weight:600">${eff.data.event_count||0}</div></div>
+      <div class="q-card"><div style="font-size:10px;color:var(--text-muted)">Build success %</div><div style="font-size:18px;font-weight:600">${m.build_success_pct != null ? m.build_success_pct + '%' : '—'}</div></div>
+      <div class="q-card"><div style="font-size:10px;color:var(--text-muted)">Repair success %</div><div style="font-size:18px;font-weight:600">${m.repair_success_pct != null ? m.repair_success_pct + '%' : '—'}</div></div>
+      <div class="q-card"><div style="font-size:10px;color:var(--text-muted)">Avg cycle ms</div><div style="font-size:18px;font-weight:600">${m.avg_cycle_duration_ms ?? '—'}</div></div>
+      <div class="q-card"><div style="font-size:10px;color:var(--text-muted)">Useful work avg</div><div style="font-size:18px;font-weight:600">${m.avg_useful_work_score ?? '—'}</div></div>
+      <div class="q-card"><div style="font-size:10px;color:var(--text-muted)">Tokens (est 168h)</div><div style="font-size:18px;font-weight:600">${m.total_token_estimate_sum ?? 0}</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--text-muted);margin-bottom:6px">Phase latency (avg ms): decision ${ph.decision_ms ?? '—'} · build ${ph.build_ms ?? '—'} · verify ${ph.verify_ms ?? '—'} · repair ${ph.repair_ms ?? '—'}</div>
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:8px 0 4px">Useful work / 1k tokens (est): ${m.useful_work_per_1k_tokens_estimate ?? '—'} · retry waste: ${m.retry_waste_pct != null ? m.retry_waste_pct + '%' : '—'}</div>
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:8px 0 4px">Bottlenecks</div>
+    ${topFail ? `<div class="q-desc" style="font-size:11px">${topFail.task_type} avg ${topFail.avg_wall_ms}ms (${topFail.evidence})</div>` : '<div class="not-wired">NOT_WIRED<span>Need more telemetry rows</span></div>'}
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:12px 0 4px">Recommendations (receipt-backed)</div>
+    ${recRows}
+    <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin:12px 0 4px">Recent events</div>
+    ${eventRows}
+    <div style="font-size:10px;color:var(--text-muted);margin-top:8px">${eff.data.token_note || 'Token figures are estimates'}</div>`;
+}
+
 async function loadTokenEcon() {
   const el = document.getElementById('token-panel');
   const r = await safeFetch('/api/v1/optimizer/stats');
@@ -2122,6 +2175,7 @@ async function loadAll() {
     loadOilMisses(),
     loadSecurity(),
     loadTokenEcon(),
+    loadAutonomousTelemetry(),
     loadModelLeaderboard(),
     loadProjects(),
     loadCouncilDomains(),

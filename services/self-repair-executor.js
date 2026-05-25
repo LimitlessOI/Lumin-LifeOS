@@ -20,6 +20,7 @@ import {
 } from './builder-audit-before-done.js';
 import { appendSelfRepairExecutionLog } from './self-repair-execution-log.js';
 import { writeRepairMemoryFromExecution } from './self-repair-memory.js';
+import { emitSelfRepairTelemetry } from './autonomous-telemetry-instrumentation.js';
 
 export const EXECUTOR_MAX_ATTEMPTS = 2;
 
@@ -328,6 +329,18 @@ async function finishExecutorRun(pool, finalizeArgs, result) {
       });
     } catch {
       memory_event = { written: false, reason: 'memory_write_error' };
+    }
+    try {
+      await emitSelfRepairTelemetry(pool, {
+        result,
+        repairId: finalizeArgs.repairId,
+        dryRun: finalizeArgs.dryRun,
+        triggeredBy: finalizeArgs.triggeredBy,
+        deploySha: finalizeArgs.railwayDeploySha,
+        durationMs: finalized.duration_ms,
+      });
+    } catch {
+      // telemetry is best-effort
     }
   }
   return { ...finalized, memory_event };

@@ -707,6 +707,21 @@ export function createLifeOSCouncilBuilderRoutes({
         ]
       )
       .catch(() => {});
+    await import('../services/autonomous-telemetry-instrumentation.js')
+      .then(({ emitBuilderTelemetry }) =>
+        emitBuilderTelemetry(pool, {
+          domain,
+          task,
+          model_used,
+          rawOutput,
+          placement,
+          status,
+          failureStage,
+          failureReason,
+          committed,
+        })
+      )
+      .catch(() => {});
   }
 
   /** GitHub commits do not update the Railway container FS — files[] injection reads disk. Mirror so chained /build steps see newest content without redeploy between tasks. */

@@ -57,6 +57,7 @@ import { createGeminiProofRoutes } from "../routes/gemini-proof-routes.js";
 import { createOILSecurityReceiptRoutes } from "../routes/oil-security-receipt-routes.js";
 import { createCommandCenterAggregateRoutes } from "../routes/lifeos-command-center-routes.js";
 import { createSelfRepairExecutorRoutes } from "../routes/self-repair-executor-routes.js";
+import { createAutonomousTelemetryRoutes } from "../routes/autonomous-telemetry-routes.js";
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
 import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
@@ -380,6 +381,8 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [CMD-CENTER-AGG] Routes mounted at /api/v1/lifeos/command-center/{phase14,mode,security}');
   app.use(createSelfRepairExecutorRoutes({ requireKey }));
   logger.info('✅ [SELF-REPAIR-EXECUTOR] Routes mounted at /api/v1/lifeos/command-center/self-repair/execute');
+  app.use(createAutonomousTelemetryRoutes({ requireKey }));
+  logger.info('✅ [AUTONOMOUS-TELEMETRY] Routes mounted at /api/v1/lifeos/autonomous-telemetry/*');
 
   return {
     tcCoordinator,
