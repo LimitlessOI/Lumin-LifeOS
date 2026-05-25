@@ -9,7 +9,7 @@
   "phase": "stabilization",
   "next_task": "Make the overlay mobile-responsive, add role-based access controls, and continue expanding governance/env-awareness drill-downs",
   "stability_class": "needs-review",
-  "current_focus": "Autonomous telemetry + efficiency layer — durable autonomous_telemetry_events, governed session runner, CC read-only dashboard",
+  "current_focus": "Governed overnight autonomy test — telemetry measurement accuracy + C2 orchestrator loop",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",
