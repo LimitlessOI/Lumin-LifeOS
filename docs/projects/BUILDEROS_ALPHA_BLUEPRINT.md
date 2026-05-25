@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-05-25
+**Last Updated:** 2026-05-25 (Instrumentation Consolidation + Legacy Quarantine phase)
 
 ---
 
@@ -447,4 +447,16 @@ The real Alpha milestone is not “AI coding.”
 It is:
 
 Adam sleeps, BuilderOS continues useful governed work, repairs itself when needed, avoids waste, and is measurably better by morning.
+
+---
+
+## Change Receipts
+
+| Date | File | What | Why |
+|---|---|---|---|
+| 2026-05-25 | `services/builderos-system-alpha-readiness.js` | Removed hardcoded `usefulWork = 0.321`. Now computes live `avg_useful_work_score` from `autonomous_telemetry_events` over 168h window. Returns `NO_DATA` when no scored events exist. Exposes `useful_work_score_live` and `useful_work_score_source` in `scoring_method`. | Alpha % was partly computed from a frozen literal — fake-green risk. Score now reflects runtime truth. |
+| 2026-05-25 | `services/autonomous-telemetry-session.js` | Renamed two cycle def `task_type` values to canonical names: `prevention_hook.deploy_check` → `prevention_hook.deploy_drift`; `self_repair.executor_dry_run` → `self_repair.dry_run`. | Duplicate task_type pairs confirmed across all 9 overnight batches. Efficiency analysis was counting same event under two names. Unified to canonical names used by `autonomous-telemetry-instrumentation.js`. |
+| 2026-05-25 | `services/autonomy-scheduler.js` | Added `@legacy PRODUCT-LEVEL` header. Changed gate from confusing `LIFEOS_DIRECTED_MODE !== 'false'` to explicit `LEGACY_SCHEDULER_ENABLED=true` opt-in. Backward compat preserved via OR condition. | 12 ungoverned AI calls without useful-work-guard. File is product-level (BoldTrail, Digital Twin, Pipeline). BuilderOS governed runtime must not start these automatically. |
+| 2026-05-25 | `routes/command-center-routes.js` | Upgraded LEGACY NOTICE with `@legacy STATUS: LEGACY` tag, canonical replacement pointer, and full inventory of 27 routes that remain callable and why. | Operators needed to know which routes have canonical replacements and which must remain callable. Quarantine without deletion. |
+| 2026-05-25 | `services/autonomy-orchestrator.js` | Added `@legacy STATUS: LEGACY_INACTIVE` header with evidence: `.start()` is never called anywhere in the codebase. Only two utility methods are called via HTTP routes (`completeProject`, `skipProject`). | Resolved UNKNOWN classification from structural audit. Autonomous loop verified inactive. |
 

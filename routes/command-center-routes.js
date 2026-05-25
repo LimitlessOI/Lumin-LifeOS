@@ -1,9 +1,45 @@
 /**
- * Command Center Routes
- * Extracted from server.js
+ * Command Center Routes — LEGACY
+ * Extracted from server.js. Mounted via core/two-tier-system-init.js.
  *
- * LEGACY NOTICE: This file backs the older operational admin dashboard.
- * Canonical V2 backend: routes/lifeos-command-center-routes.js
+ * @legacy STATUS: LEGACY — non-canonical operator surface.
+ * Canonical replacement: routes/lifeos-command-center-routes.js
+ * Canonical cockpit URL: /lifeos-command-center
+ * Canonical API prefix: /api/v1/lifeos/command-center/
+ *
+ * DO NOT add new BuilderOS governance routes here. This file contains product-level
+ * and pre-governance admin surfaces that have no exact counterpart in the canonical
+ * command center. Routes are preserved as-is to avoid breaking active callers.
+ *
+ * Routes in this file with NO canonical replacement (must remain callable):
+ *   GET  /api/v1/tasks/queue               — execution queue status
+ *   GET  /api/v1/ai/performance            — AI scoring history
+ *   POST /api/v1/ai/self-evaluate          — manual eval trigger
+ *   POST /api/v1/system/re-examine-costs   — cost re-examination
+ *   POST /api/v1/system/monitor-logs       — log monitor trigger
+ *   GET  /api/v1/system/fix-history        — fix history
+ *   GET  /api/v1/admin/ai/status           — AI enable/disable state
+ *   POST /api/v1/admin/ai/enable           — enable AI
+ *   POST /api/v1/admin/ai/disable          — disable AI
+ *   GET  /api/v1/reality/snapshot          — system snapshot
+ *   GET  /api/health                       — health check
+ *   GET  /api/v1/ai/effectiveness          — effectiveness stats
+ *   GET  /api/v1/user/simulation/accuracy  — simulation accuracy
+ *   GET  /internal/cron/autopilot          — cron trigger surface
+ *   POST /internal/autopilot/build-now     — manual build trigger
+ *   POST /api/overlay/:sid/state           — overlay state write
+ *   GET  /api/overlay/status               — overlay status read
+ *   POST /api/v1/trial/start               — trial start
+ *   POST /api/v1/phone/call                — phone call
+ *   POST /api/v1/phone/sms                 — SMS
+ *   POST /api/v1/phone/call-handler        — call webhook
+ *   POST /api/v1/phone/call-process        — call processing
+ *   GET  /api/v1/optimizer/stats           — optimizer stats
+ *   GET  /api/v1/projects/backlog          — backlog list (uses autonomyOrchestrator utility)
+ *   POST /api/v1/projects/backlog          — backlog create
+ *   POST /api/v1/projects/backlog/:id/complete — backlog complete (calls autonomyOrchestrator.completeProject)
+ *   POST /api/v1/projects/backlog/:id/skip    — backlog skip (calls autonomyOrchestrator.skipProject)
+ *   POST /api/v1/projects/backlog/:id/reactivate — backlog reactivate
  *
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */

@@ -1,6 +1,15 @@
 /**
  * Autonomy scheduler: registers all scheduleAutonomyLoop / scheduleAutonomyOnce tasks.
  * getDeps() returns current refs (pool, crmSequenceRunner, logMonitor, etc.) so server.js only wires once at startup.
+ *
+ * @legacy PRODUCT-LEVEL — This file contains product-lane schedulers (BoldTrail, Digital Twin,
+ * Pipeline, Self-Improvement) that are NOT BuilderOS governed runtime components. They include
+ * direct callCouncilWithFailover calls without useful-work-guard coverage.
+ *
+ * DISABLED BY DEFAULT in BuilderOS governed runtime.
+ * Requires explicit opt-in: set LEGACY_SCHEDULER_ENABLED=true in Railway env.
+ * Backward compat: LIFEOS_DIRECTED_MODE=false also enables (legacy gate preserved).
+ *
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import path from "path";
@@ -97,9 +106,16 @@ async function checkBoldTrailFollowUps(getDeps) {
  *   continuousSelfImprovement, rotateAIsBasedOnPerformance, tcoSalesAgent, enhancedConversationScraper }.
  */
 export function startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOnce, getDeps) {
-  const directedMode = process.env.LIFEOS_DIRECTED_MODE !== 'false';
-  if (directedMode) {
-    console.log("🛑 [AUTONOMY] Directed mode active — autonomous schedulers disabled by default");
+  // Explicit opt-in required — legacy product schedulers are disabled in BuilderOS governed runtime.
+  // Set LEGACY_SCHEDULER_ENABLED=true to enable. Backward compat: LIFEOS_DIRECTED_MODE=false also works.
+  const legacyEnabled =
+    process.env.LEGACY_SCHEDULER_ENABLED === 'true' ||
+    process.env.LIFEOS_DIRECTED_MODE === 'false';
+  if (!legacyEnabled) {
+    console.log(
+      '✅ [AUTONOMY-SCHEDULER] Legacy product schedulers disabled.' +
+      ' Set LEGACY_SCHEDULER_ENABLED=true to enable (not recommended in BuilderOS governed runtime).'
+    );
     return;
   }
 

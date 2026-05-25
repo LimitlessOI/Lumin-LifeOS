@@ -1,22 +1,22 @@
 /**
  * services/autonomy-orchestrator.js
  *
- * The brain of autonomous self-programming.
- * Adam is never the bottleneck for routine work.
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ * @legacy STATUS: LEGACY_INACTIVE
  *
- * Runs every 15 minutes. Does this in order:
- *   1. Pull pending improvement proposals from DB
- *   2. Risk-score each one
- *   3. Risk 1-2 → auto-approve + generate components + build
- *   4. Risk 3-4 → SMS Adam with Y/N code — wait for reply via /autonomy/sms
- *   5. Risk 5-6 → log + notify, skip until manual action
- *   6. After each build attempt → health-check the server
- *   7. If health fails → auto-create rollback idea + SMS Adam
+ * The autonomous loop described below (runCycle, 15-min interval) is NEVER STARTED.
+ * Verified 2026-05-25: .start() is not called in server.js, startup/, or any registered route.
+ * The orchestrator is instantiated in server.js and passed to routeCtx only to serve two
+ * utility methods called from routes/command-center-routes.js:
+ *   - completeProject(id) — POST /api/v1/projects/backlog/:id/complete
+ *   - skipProject(id)     — POST /api/v1/projects/backlog/:id/skip
  *
- * Also runs the "component generator" — takes plain English idea → structured
- * {id, name, file, type, prompt} components[] the auto-builder needs.
+ * Pre-governance design (no useful-work-guard, direct AI calls, SMS approval).
+ * Superseded by governed overnight session (autonomous-telemetry-session.js) + PB authority.
+ * Do not call .start() without governance review.
  *
- * Exports: createAutonomyOrchestrator(deps) → { start, stop, getStatus, approvePendingSMS }
+ * Exports: createAutonomyOrchestrator(deps) → { start, stop, getStatus, approvePendingSMS,
+ *                                               completeProject, skipProject }
  */
 
 import { scoreIdea } from './risk-scorer.js';

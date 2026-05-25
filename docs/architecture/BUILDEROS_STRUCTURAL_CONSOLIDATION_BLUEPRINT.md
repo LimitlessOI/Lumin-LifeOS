@@ -3,7 +3,7 @@
 **Status:** `DRAFT`  
 **Owner:** Adam  
 **Verifier:** BuilderOS / OIL / PBB  
-**Last Updated:** 2026-05-25
+**Last Updated:** 2026-05-25 (Instrumentation Consolidation + Legacy Quarantine phase)
 
 ## Purpose
 
@@ -322,3 +322,15 @@ BuilderOS must learn from each phase by recording:
 - whether all legacy route stacks are still reachable from runtime bootstrap paths
 - whether BuilderOS-internal TSOS hooks should remain a separate scored component or a guarded dependency
 - whether memory should earn `LIVE` from self-repair memory alone or wait for full memory-capsule consolidation
+
+---
+
+## Change Receipts
+
+| Date | File | What | Why |
+|---|---|---|---|
+| 2026-05-25 | `services/builderos-system-alpha-readiness.js` | Alpha score `usefulWork` now live from telemetry, not hardcoded. | Fake-green risk eliminated from scoring path. |
+| 2026-05-25 | `services/autonomous-telemetry-session.js` | Duplicate task_type names resolved: `prevention_hook.deploy_check` → `prevention_hook.deploy_drift`; `self_repair.executor_dry_run` → `self_repair.dry_run`. | Telemetry data was structurally noisy. Efficiency analysis was flagging both pairs as duplicates across all 9 overnight batches. |
+| 2026-05-25 | `services/autonomy-scheduler.js` | Explicit `LEGACY_SCHEDULER_ENABLED=true` gate added. File classified LEGACY PRODUCT-LEVEL. | Ungoverned AI calls in BuilderOS runtime are a Zero-Waste + PB governance violation. |
+| 2026-05-25 | `routes/command-center-routes.js` | Full LEGACY quarantine inventory added to file header. 27 routes documented as callable with explanation. | Duplicate command center surfaces were a known fake-green risk. Quarantine without deletion. |
+| 2026-05-25 | `services/autonomy-orchestrator.js` | Classified `LEGACY_INACTIVE`. `.start()` confirmed never called. | Resolved UNKNOWN status from structural audit. |

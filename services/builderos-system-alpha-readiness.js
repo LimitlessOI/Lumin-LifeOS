@@ -276,8 +276,16 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
   const loopIntegrityScore = pct(average(loopNodes.map((n) => n.score)));
   const componentMaturityScore = pct(average(components.map((c) => scoreForStatuses(c.statuses))));
   const rawPercent = 0.4 * loopIntegrityScore + 0.6 * componentMaturityScore;
-  const usefulWork = 0.321;
-  const bonus = usefulWork > 0.5 ? 5 : 0;
+
+  // Live useful_work_score from telemetry — never hardcoded.
+  const scoredEvents = telemetryEvents.filter((e) => e.useful_work_score != null);
+  const usefulWork = scoredEvents.length > 0
+    ? scoredEvents.reduce((sum, e) => sum + Number(e.useful_work_score), 0) / scoredEvents.length
+    : null;
+  const usefulWorkSource = scoredEvents.length > 0
+    ? `live_avg_${scoredEvents.length}_events_168h`
+    : 'NO_DATA';
+  const bonus = usefulWork != null && usefulWork > 0.5 ? 5 : 0;
   const percentComplete = Math.min(100, Math.round((rawPercent + bonus) * 10) / 10);
 
   const activeComponents = components.filter((c) => c.statuses.includes('ACTIVE')).map((c) => c.component_id);
@@ -358,6 +366,8 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       loop_integrity_weight_pct: 40,
       component_maturity_weight_pct: 60,
       useful_work_bonus_pct: bonus,
+      useful_work_score_live: usefulWork,
+      useful_work_score_source: usefulWorkSource,
       component_scale: STATUS_SCORE,
       docs_do_not_raise_runtime_maturity: true,
     },
