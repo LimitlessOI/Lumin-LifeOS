@@ -28,6 +28,11 @@ Thumbs.db
 # Docs: slim image — exclude direct children of docs/ except SOURCE_OF_TRUTH (server.js memory bootstrap).
 docs/*
 !docs/SOURCE_OF_TRUTH.md
+!docs/architecture/
+!docs/architecture/**
+!docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+!docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+!docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json
 • Lumin-Memory/
 
 # Tests
