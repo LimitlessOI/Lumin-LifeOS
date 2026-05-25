@@ -7,6 +7,7 @@
 import { normalizeSha, shasEqual } from './oil-self-repair-detector.js';
 import { readLatestPhase14Cert } from './builder-phase14-ledger.js';
 import { readSelfRepairHistory } from './oil-self-repair-detector.js';
+import { readReceiptsByType, SECURITY_RECEIPT_TYPES } from './oil-security-receipts.js';
 
 /** Self-repair stored receipt max age before STALE (PF-003). */
 export const SELF_REPAIR_AUDIT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
@@ -185,6 +186,12 @@ export async function gatherProofFreshnessContext(pool, {
   railwayDeploySha,
   geminiReceiptRow = null,
 } = {}) {
+  let geminiRow = geminiReceiptRow;
+  if (!geminiRow && pool?.query) {
+    const geminiRows = await readReceiptsByType(SECURITY_RECEIPT_TYPES.GEMINI_LIVE_PROOF, 1, pool);
+    geminiRow = geminiRows[0] || null;
+  }
+
   const phase14Row = pool?.query ? await readLatestPhase14Cert(pool) : null;
   const history = pool?.query ? await readSelfRepairHistory(pool, 50) : [];
 
@@ -208,14 +215,14 @@ export async function gatherProofFreshnessContext(pool, {
       }
     : { found: false };
 
-  const geminiReceipt = geminiReceiptRow
+  const geminiReceipt = geminiRow
     ? {
-        id: geminiReceiptRow.id,
-        created_at: geminiReceiptRow.created_at || geminiReceiptRow.audited_at,
+        id: geminiRow.id,
+        created_at: geminiRow.created_at || geminiRow.audited_at,
         commit_sha:
-          geminiReceiptRow.payload?.runtime?.commit_sha ||
-          geminiReceiptRow.payload?.details?.runtime?.commit_sha,
-        payload: geminiReceiptRow.payload,
+          geminiRow.payload?.runtime?.commit_sha ||
+          geminiRow.payload?.details?.runtime?.commit_sha,
+        payload: geminiRow.payload,
       }
     : null;
 

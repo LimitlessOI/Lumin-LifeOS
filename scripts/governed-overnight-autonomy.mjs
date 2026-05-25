@@ -11,6 +11,7 @@ import dotenv from 'dotenv';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { runIdleAutonomyAnalysis } from './governed-autonomy-idle-analysis.mjs';
 
 dotenv.config({ path: path.join(process.cwd(), '.env.local'), override: true });
 
@@ -70,6 +71,25 @@ async function api(method, apiPath, body) {
   return { status: res.status, body: parsed };
 }
 
+async function waitForDeployStabilization(maxWaitMs = 180000, pollMs = 15000) {
+  const deadline = Date.now() + maxWaitMs;
+  while (Date.now() < deadline) {
+    const ready = await api('GET', '/api/v1/lifeos/command-center/supervised-autonomy/readiness');
+    const r = ready.body || {};
+    const staleDeploy = (r.blockers || []).some((b) => b.code === 'RAILWAY_STALE_DEPLOY');
+    if (!staleDeploy) {
+      return { stabilized: true, deployed_sha: r.deployed_sha, waited_ms: maxWaitMs - (deadline - Date.now()) };
+    }
+    await appendLog('deploy_stabilization_wait', {
+      github_sha: r.github_main_sha?.slice(0, 12),
+      railway_sha: r.deployed_sha?.slice(0, 12),
+      poll_ms: pollMs,
+    });
+    await sleep(pollMs);
+  }
+  return { stabilized: false, reason: 'deploy_stabilization_timeout' };
+}
+
 async function runBatch(batchNo) {
   const t0 = Date.now();
   const readiness = await api('GET', '/api/v1/lifeos/command-center/supervised-autonomy/readiness');
@@ -81,10 +101,47 @@ async function runBatch(batchNo) {
     ready: r.ready_for_supervised,
     repair_queue: r.repair_queue_open,
     adam_required: (r.adam_required_actions || []).length,
+    blockers: (r.blockers || []).map((b) => b.code),
   });
 
   if ((r.adam_required_actions || []).length > 0) {
     return { halt: true, reason: 'adam_required_stop', adam_required: r.adam_required_actions };
+  }
+
+  const staleDeploy = (r.blockers || []).some((b) => b.code === 'RAILWAY_STALE_DEPLOY');
+  if (staleDeploy) {
+    await appendLog('deploy_drift_detected', { batch_no: batchNo, action: 'wait_then_deploy_check' });
+    const stab = await waitForDeployStabilization(120000, 15000);
+    if (!stab.stabilized) {
+      const analysis = await runIdleAutonomyAnalysis({ batchNo, triggeredBy: 'C2-overnight-deploy-wait' });
+      await appendLog('batch_idle_analysis', { batch_no: batchNo, ...analysis, wall_ms: Date.now() - t0 });
+      return { halt: false, mode: 'idle_analysis', deploy_pending: true, analysis };
+    }
+    await api('POST', '/api/v1/lifeos/command-center/self-repair/deploy-check', { dry_run: false });
+  }
+
+  const analysis = await runIdleAutonomyAnalysis({ batchNo, triggeredBy: 'C2-governed-overnight-autonomy' });
+
+  const shouldSkipSession =
+    analysis.skip_session_recommended &&
+    r.proof_freshness_overall !== 'STALE' &&
+    (r.repair_queue_open ?? 0) === 0;
+
+  if (shouldSkipSession) {
+    await appendLog('batch_idle_skip_session', {
+      batch_no: batchNo,
+      idle_reason: analysis.idle_reason,
+      recommendations: analysis.recommendations?.slice(0, 5),
+      wall_ms: Date.now() - t0,
+    });
+    const eff = await api('GET', '/api/v1/lifeos/autonomous-telemetry/efficiency?since_hours=6');
+    return {
+      halt: false,
+      mode: 'idle_analysis_only',
+      idle_reason: analysis.idle_reason,
+      analysis,
+      event_count: eff.body?.event_count,
+    };
   }
 
   if (r.proof_freshness_overall === 'STALE') {
@@ -125,6 +182,7 @@ async function runBatch(batchNo) {
     halt: session.body?.halted === true,
     reason: session.body?.reason || null,
     no_op: noOp,
+    mode: 'full_session',
     session_id: session.body?.session_id,
   };
 }
