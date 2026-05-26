@@ -49,21 +49,8 @@ export function registerPublicRoutes(app, {
     }
   });
 
-  app.get("/command-center", (req, res) => {
-    console.log("🎯 [ROUTE] /command-center accessed");
-    const filePath = path.join(
-      __dirname,
-      "public",
-      "overlay",
-      "command-center.html"
-    );
-    if (fs.existsSync(filePath)) {
-      return sendPublicFileNoCache(res, filePath);
-    }
-    return res
-      .status(404)
-      .send("Command center not found. Please ensure command-center.html exists.");
-  });
+  // Phase 26 — Legacy surface redirected to canonical cockpit (LEGACY_AUTHORITY_SURFACES_STILL_LIVE)
+  app.get("/command-center", (_req, res) => res.redirect(301, "/lifeos-command-center"));
 
   // V2 executive cockpit — governed by AMENDMENT_12, backed by /api/v1/lifeos/command-center/*
   app.get("/lifeos-command-center", (req, res) => {
