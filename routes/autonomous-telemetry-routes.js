@@ -12,6 +12,7 @@ import {
 } from '../services/autonomous-telemetry-service.js';
 import { computeEfficiencyIntelligence } from '../services/autonomous-efficiency-intelligence.js';
 import { runGovernedTelemetrySession } from '../services/autonomous-telemetry-session.js';
+import { computeAllBuilderOSMetrics } from '../services/builderos-metrics-reporter.js';
 
 export function createAutonomousTelemetryRoutes({ requireKey }) {
   const router = express.Router();
@@ -84,6 +85,21 @@ export function createAutonomousTelemetryRoutes({ requireKey }) {
         summary,
         efficiency: efficiency.ok ? efficiency : { status: efficiency.status || 'NO_DATA' },
         read_path: 'GET /api/v1/lifeos/autonomous-telemetry/session/:sessionId/summary',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/api/v1/lifeos/autonomous-telemetry/metrics', requireKey, async (req, res, next) => {
+    try {
+      const sinceHours = Math.min(parseInt(req.query.since_hours, 10) || 168, 720);
+      const metrics = await computeAllBuilderOSMetrics(pool, { sinceHours });
+      res.json({
+        ok: true,
+        since_hours: sinceHours,
+        metrics,
+        read_path: 'GET /api/v1/lifeos/autonomous-telemetry/metrics',
       });
     } catch (err) {
       next(err);

@@ -1,149 +1,139 @@
-// @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+/**
+ * services/builderos-metrics-reporter.js
+ * Compute all 15 required BuilderOS metrics from autonomous_telemetry_events.
+ * All 15 fields always present in return value — null means NO_DATA, not absent.
+ *
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
 
-import { Pool } from 'pg';
-import { pool } from '../startup/db.js';
-
-async function computeAllBuilderOSMetrics(pool, { sinceHours = 168 } = {}) {
-  const metrics = {
-    avg_useful_work_score: null,
-    total_token_estimate_sum: null,
-    useful_work_per_1k_tokens_estimate: null,
-    average_repair_cost_ms: null,
-    average_successful_build_latency_ms: null,
-    retry_waste_pct: null,
-    failed_build_pct: null,
-    hallucination_frequency: null,
-    pb_violation_attempts_prevented: null,
-    context_growth_rate: null,
-    build_success_pct: null,
-    repair_success_pct: null,
-    avg_cycle_duration_ms: null,
-    proof_recovery_time_ms: null,
-    drift_frequency: null,
-    overnight_throughput: null,
-    autonomous_continuation_rate: null,
-  };
-
-  try {
-    const since = new Date(Date.now() - sinceHours * 60 * 60 * 1000);
-    const sinceEpoch = Math.floor(since.getTime() / 1000);
-
-    const avgUsefulWorkScoreQuery = `
-      SELECT AVG(useful_work_score) 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.avg_useful_work_score = await pool.query(avgUsefulWorkScoreQuery, [sinceEpoch]);
-
-    const totalTokenEstimateSumQuery = `
-      SELECT SUM(token_estimate) 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.total_token_estimate_sum = await pool.query(totalTokenEstimateSumQuery, [sinceEpoch]);
-
-    const usefulWorkPer1kTokensEstimateQuery = `
-      SELECT SUM(useful_work_score) / SUM(token_estimate) * 1000 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.useful_work_per_1k_tokens_estimate = await pool.query(usefulWorkPer1kTokensEstimateQuery, [sinceEpoch]);
-
-    const averageRepairCostMsQuery = `
-      SELECT AVG(wall_time_ms) 
-      FROM autonomous_telemetry_events 
-      WHERE task_type LIKE 'self_repair%' AND created_at >= $1
-    `;
-    metrics.average_repair_cost_ms = await pool.query(averageRepairCostMsQuery, [sinceEpoch]);
-
-    const averageSuccessfulBuildLatencyMsQuery = `
-      SELECT AVG(wall_time_ms) 
-      FROM autonomous_telemetry_events 
-      WHERE task_type LIKE 'build%' AND success = TRUE AND created_at >= $1
-    `;
-    metrics.average_successful_build_latency_ms = await pool.query(averageSuccessfulBuildLatencyMsQuery, [sinceEpoch]);
-
-    const retryWastePctQuery = `
-      SELECT COUNT(retry_count > 0) / COUNT(*) * 100 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.retry_waste_pct = await pool.query(retryWastePctQuery, [sinceEpoch]);
-
-    const failedBuildPctQuery = `
-      SELECT COUNT(success = FALSE AND task_type LIKE 'build%') / COUNT(task_type LIKE 'build%') * 100 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.failed_build_pct = await pool.query(failedBuildPctQuery, [sinceEpoch]);
-
-    const hallucinationFrequencyQuery = `
-      SELECT COUNT(task_type = 'hallucination_detected') 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.hallucination_frequency = await pool.query(hallucinationFrequencyQuery, [sinceEpoch]);
-
-    const pbViolationAttemptsPreventedQuery = `
-      SELECT COUNT(task_type = 'pb_violation_prevented') 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.pb_violation_attempts_prevented = await pool.query(pbViolationAttemptsPreventedQuery, [sinceEpoch]);
-
-    const buildSuccessPctQuery = `
-      SELECT 100 - COUNT(success = FALSE AND task_type LIKE 'build%') / COUNT(task_type LIKE 'build%') * 100 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.build_success_pct = await pool.query(buildSuccessPctQuery, [sinceEpoch]);
-
-    const repairSuccessPctQuery = `
-      SELECT COUNT(success = TRUE AND task_type LIKE 'self_repair%') / COUNT(task_type LIKE 'self_repair%') * 100 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.repair_success_pct = await pool.query(repairSuccessPctQuery, [sinceEpoch]);
-
-    const avgCycleDurationMsQuery = `
-      SELECT AVG(wall_time_ms) 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.avg_cycle_duration_ms = await pool.query(avgCycleDurationMsQuery, [sinceEpoch]);
-
-    const proofRecoveryTimeMsQuery = `
-      SELECT AVG(wall_time_ms) 
-      FROM autonomous_telemetry_events 
-      WHERE task_type LIKE 'proof%' AND created_at >= $1
-    `;
-    metrics.proof_recovery_time_ms = await pool.query(proofRecoveryTimeMsQuery, [sinceEpoch]);
-
-    const driftFrequencyQuery = `
-      SELECT COUNT(drift_detected = TRUE) / COUNT(*) 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.drift_frequency = await pool.query(driftFrequencyQuery, [sinceEpoch]);
-
-    const overnightThroughputQuery = `
-      SELECT COUNT(*) / $1 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.overnight_throughput = await pool.query(overnightThroughputQuery, [sinceHours, sinceEpoch]);
-
-    const autonomousContinuationRateQuery = `
-      SELECT COUNT(DISTINCT session_id WHERE session_id IS NOT NULL) / NULLIF(COUNT(DISTINCT session_id), 0) 
-      FROM autonomous_telemetry_events 
-      WHERE created_at >= $1
-    `;
-    metrics.autonomous_continuation_rate = await pool.query(autonomousContinuationRateQuery, [sinceEpoch]);
-  } catch (error) {
-    console.error(error);
-  }
-
-  return metrics;
+function round3(v) {
+  if (v == null || isNaN(v)) return null;
+  return Math.round(Number(v) * 1000) / 1000;
 }
 
-export { computeAllBuilderOSMetrics };
+async function tryQuery(pool, sql, params) {
+  try {
+    const { rows } = await pool.query(sql, params);
+    return rows[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Compute all BuilderOS metrics from telemetry events over [sinceHours] window.
+ * @param {import('pg').Pool} pool
+ * @param {{ sinceHours?: number }} opts
+ * @returns {Promise<Record<string, number|null>>}
+ */
+export async function computeAllBuilderOSMetrics(pool, { sinceHours = 168 } = {}) {
+  const since = new Date(Date.now() - sinceHours * 60 * 60 * 1000).toISOString();
+
+  // ── Core aggregates (single pass) ────────────────────────────────────────
+  const core = await tryQuery(pool, `
+    SELECT
+      AVG(useful_work_score)                                                   AS avg_useful_work_score,
+      SUM(total_token_estimate)                                                AS total_token_estimate_sum,
+      CASE WHEN SUM(total_token_estimate) > 0
+        THEN SUM(useful_work_score) / SUM(total_token_estimate) * 1000.0
+        ELSE NULL
+      END                                                                      AS useful_work_per_1k_tokens_estimate,
+      AVG(wall_clock_ms)                                                       AS avg_cycle_duration_ms,
+      COUNT(*)                                                                 AS total_events,
+
+      -- retry waste
+      COUNT(*) FILTER (WHERE retries > 0) * 100.0 / NULLIF(COUNT(*), 0)       AS retry_waste_pct,
+
+      -- hallucination frequency (proportion)
+      COUNT(*) FILTER (WHERE hallucination_detected = true) * 1.0
+        / NULLIF(COUNT(*), 0)                                                  AS hallucination_frequency,
+
+      -- drift frequency (proportion)
+      COUNT(*) FILTER (WHERE drift_detected = true) * 1.0
+        / NULLIF(COUNT(*), 0)                                                  AS drift_frequency,
+
+      -- overnight throughput (events per hour)
+      COUNT(*) * 1.0 / $2                                                      AS overnight_throughput
+    FROM autonomous_telemetry_events
+    WHERE created_at >= $1
+  `, [since, sinceHours]);
+
+  // ── Build metrics ─────────────────────────────────────────────────────────
+  const build = await tryQuery(pool, `
+    SELECT
+      COUNT(*) FILTER (WHERE success = false) * 100.0
+        / NULLIF(COUNT(*), 0)                                                  AS failed_build_pct,
+      AVG(build_latency_ms) FILTER (WHERE success = true AND build_latency_ms IS NOT NULL)
+                                                                               AS average_successful_build_latency_ms
+    FROM autonomous_telemetry_events
+    WHERE task_type LIKE 'build%'
+      AND created_at >= $1
+  `, [since]);
+
+  // ── Repair metrics ────────────────────────────────────────────────────────
+  const repair = await tryQuery(pool, `
+    SELECT
+      AVG(wall_clock_ms)                                                       AS average_repair_cost_ms,
+      COUNT(*) FILTER (WHERE success = true) * 100.0
+        / NULLIF(COUNT(*), 0)                                                  AS repair_success_pct
+    FROM autonomous_telemetry_events
+    WHERE task_type LIKE 'self_repair%'
+      AND created_at >= $1
+  `, [since]);
+
+  // ── Proof recovery time ───────────────────────────────────────────────────
+  const proofRow = await tryQuery(pool, `
+    SELECT AVG(wall_clock_ms) AS proof_recovery_time_ms
+    FROM autonomous_telemetry_events
+    WHERE task_type LIKE '%proof%'
+      AND created_at >= $1
+  `, [since]);
+
+  // ── PB violation counter ──────────────────────────────────────────────────
+  const pbRow = await tryQuery(pool, `
+    SELECT COUNT(*) AS pb_violation_attempts_prevented
+    FROM autonomous_telemetry_events
+    WHERE stopped_reason = 'pb_violation_prevented'
+      AND created_at >= $1
+  `, [since]);
+
+  // ── Autonomous continuation rate ──────────────────────────────────────────
+  // Sessions with >1 event / total sessions with session_id
+  const contRow = await tryQuery(pool, `
+    SELECT
+      COUNT(DISTINCT CASE WHEN cnt > 1 THEN session_id END) * 1.0
+        / NULLIF(COUNT(DISTINCT session_id), 0)                                AS autonomous_continuation_rate
+    FROM (
+      SELECT session_id, COUNT(*) AS cnt
+      FROM autonomous_telemetry_events
+      WHERE created_at >= $1
+        AND session_id IS NOT NULL
+      GROUP BY session_id
+    ) sub
+  `, [since]);
+
+  // ── Assemble all 15 metrics ───────────────────────────────────────────────
+  const failedBuildPct = round3(build?.failed_build_pct);
+
+  return {
+    avg_useful_work_score:                round3(core?.avg_useful_work_score),
+    total_token_estimate_sum:             core?.total_token_estimate_sum != null
+                                            ? Number(core.total_token_estimate_sum) : null,
+    useful_work_per_1k_tokens_estimate:   round3(core?.useful_work_per_1k_tokens_estimate),
+    average_repair_cost_ms:               round3(repair?.average_repair_cost_ms),
+    average_successful_build_latency_ms:  round3(build?.average_successful_build_latency_ms),
+    retry_waste_pct:                      round3(core?.retry_waste_pct),
+    failed_build_pct:                     failedBuildPct,
+    hallucination_frequency:              round3(core?.hallucination_frequency),
+    pb_violation_attempts_prevented:      pbRow?.pb_violation_attempts_prevented != null
+                                            ? Number(pbRow.pb_violation_attempts_prevented) : null,
+    context_growth_rate:                  null, // no context_size_bytes column in schema
+    build_success_pct:                    failedBuildPct != null ? round3(100 - failedBuildPct) : null,
+    repair_success_pct:                   round3(repair?.repair_success_pct),
+    avg_cycle_duration_ms:                round3(core?.avg_cycle_duration_ms),
+    proof_recovery_time_ms:               round3(proofRow?.proof_recovery_time_ms),
+    drift_frequency:                      round3(core?.drift_frequency),
+    overnight_throughput:                 round3(core?.overnight_throughput),
+    autonomous_continuation_rate:         round3(contRow?.autonomous_continuation_rate),
+  };
+}
