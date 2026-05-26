@@ -1,0 +1,97 @@
+{
+  "generated_at": "2026-05-26T21:48:35.392Z",
+  "summary": {
+    "total_components": 12,
+    "active_count": 5,
+    "proven_count": 6,
+    "live_count": 1,
+    "wired_only_count": 0,
+    "not_wired_count": 0
+  },
+  "gaps": [
+    {
+      "component_id": "tsos_internal_hooks",
+      "current_maturity": "LIVE",
+      "next_needed": "PROVEN",
+      "gap_score": 2,
+      "known_blocker": "no PROVEN condition in alpha readiness service — needs service edit (Zone 3)"
+    },
+    {
+      "component_id": "builder",
+      "current_maturity": "PROVEN",
+      "next_needed": "ACTIVE",
+      "gap_score": 1,
+      "known_blocker": "no ACTIVE condition wired in alpha readiness service"
+    },
+    {
+      "component_id": "council",
+      "current_maturity": "PROVEN",
+      "next_needed": "ACTIVE",
+      "gap_score": 1,
+      "known_blocker": "no ACTIVE condition wired in alpha readiness service"
+    },
+    {
+      "component_id": "memory",
+      "current_maturity": "PROVEN",
+      "next_needed": "ACTIVE",
+      "gap_score": 1,
+      "known_blocker": null
+    },
+    {
+      "component_id": "pb_authority",
+      "current_maturity": "PROVEN",
+      "next_needed": "ACTIVE",
+      "gap_score": 1,
+      "known_blocker": null
+    },
+    {
+      "component_id": "self_repair",
+      "current_maturity": "PROVEN",
+      "next_needed": "ACTIVE",
+      "gap_score": 1,
+      "known_blocker": null
+    },
+    {
+      "component_id": "command_center",
+      "current_maturity": "PROVEN",
+      "next_needed": "ACTIVE",
+      "gap_score": 1,
+      "known_blocker": "legacy /command-center surface noted in fake_green_risk"
+    },
+    {
+      "component_id": "oil",
+      "current_maturity": "ACTIVE",
+      "next_needed": null,
+      "gap_score": 0,
+      "known_blocker": null
+    },
+    {
+      "component_id": "proof_freshness",
+      "current_maturity": "ACTIVE",
+      "next_needed": null,
+      "gap_score": 0,
+      "known_blocker": null
+    },
+    {
+      "component_id": "prevention",
+      "current_maturity": "ACTIVE",
+      "next_needed": null,
+      "gap_score": 0,
+      "known_blocker": null
+    },
+    {
+      "component_id": "telemetry",
+      "current_maturity": "ACTIVE",
+      "next_needed": null,
+      "gap_score": 0,
+      "known_blocker": null
+    },
+    {
+      "component_id": "overnight_runner",
+      "current_maturity": "ACTIVE",
+      "next_needed": null,
+      "gap_score": 0,
+      "known_blocker": null
+    }
+  ]
+}
