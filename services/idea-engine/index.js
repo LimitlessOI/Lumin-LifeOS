@@ -1,13 +1,18 @@
 /**
- * Idea Engine Service
- * Continuous autonomous idea generation and prioritization
- * 
+ * Idea Engine Service — autonomous idea generation (NOT imported in production boot path).
+ *
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @legacy STATUS: LEGACY_INACTIVE
+ *
+ * Verified 2026-05-26: this file is not imported by server.js, startup/, or any route file.
+ * The production idea engine is services/idea-engine.js (DB-backed).
+ * startScheduler() is guarded by IDEA_ENGINE_SCHEDULER_ENABLED env var (fail-closed).
+ *
  * Features:
  * - Generates 20 ideas every 30 minutes
  * - Clusters/dedupes ideas using embeddings
  * - Multi-model voting system
  * - Outputs to markdown + JSONL
- * - Creates GitHub issues (optional)
  */
 
 import fs from 'fs';
@@ -515,6 +520,13 @@ Return as JSON:
    * Start scheduler (runs every 30 minutes)
    */
   startScheduler(intervalMinutes = 30) {
+    // Fail-closed: this engine is LEGACY_INACTIVE and not in the production boot path.
+    // Require explicit opt-in before allowing scheduled AI calls.
+    if (process.env.IDEA_ENGINE_SCHEDULER_ENABLED !== 'true') {
+      console.warn('[IDEA ENGINE] startScheduler() called but IDEA_ENGINE_SCHEDULER_ENABLED !== "true" — scheduler blocked (LEGACY_INACTIVE).');
+      return;
+    }
+
     if (this.scheduler) {
       console.log('⚠️ [IDEA ENGINE] Scheduler already running');
       return;
