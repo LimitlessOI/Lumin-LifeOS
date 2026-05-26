@@ -112,6 +112,19 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
   const overnightLogTail = readJsonlTail('data/governed-autonomy-overnight-log.jsonl', 3);
   const queueLogTail = readJsonlTail('data/builder-continuous-queue-log.jsonl', 3);
 
+  // Phase B — live DB query for memory runtime proof (GAP-FILL: large file, surgical edit)
+  let memoryDb = { total: 0, latest: null, error: null };
+  try {
+    const [totalRes, latestRes] = await Promise.all([
+      pool.query('SELECT COUNT(*) FROM self_repair_memory_events'),
+      pool.query('SELECT created_at, trigger, result FROM self_repair_memory_events ORDER BY created_at DESC LIMIT 1'),
+    ]);
+    memoryDb.total = parseInt(totalRes.rows[0].count, 10);
+    memoryDb.latest = latestRes.rows[0] || null;
+  } catch (err) {
+    memoryDb.error = err.message;
+  }
+
   const telemetryEvents = recentTelemetry.events || [];
   const hasCouncilTelemetry = telemetryEvents.some((e) => e.model_used);
   const hasPreventionTelemetry = telemetryEvents.some((e) => e.task_type?.startsWith('prevention_hook.'));
@@ -159,11 +172,18 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     {
       component_id: 'memory',
       label: 'Memory',
-      statuses: hasStatuses('WIRED'),
+      statuses: hasStatuses('WIRED', memoryDb.error ? null : 'LIVE'),
       runtime_proof: [
-        proofSource('structural only', 'memory routes/services exist but are not yet in approved BuilderOS runtime proof set'),
+        proofSource(
+          'GET /api/v1/lifeos/command-center/memory/status',
+          memoryDb.error
+            ? `DB_ERROR: ${memoryDb.error}`
+            : memoryDb.total > 0
+              ? `${memoryDb.total} events in self_repair_memory_events; latest=${memoryDb.latest?.created_at}`
+              : 'self_repair_memory_events queryable — NO_DATA (0 rows yet)'
+        ),
       ],
-      fake_green_risk: 'Memory documentation is ahead of BuilderOS runtime proof.',
+      fake_green_risk: 'Memory LIVE requires the endpoint to return 200 from DB — not structural file existence.',
     },
     {
       component_id: 'pb_authority',

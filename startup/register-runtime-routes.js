@@ -68,6 +68,7 @@ import { createIntegrityEngine as createWKIntegrityEngine } from "../services/in
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createMemoryIntelligenceRoutes } from "../routes/memory-intelligence-routes.js";
 import memoryCapsuleRoutes from "../routes/memory-capsule-routes.js";
+import createMemoryStatusRoutes from "../routes/memory-status-routes.js";
 
 export async function registerRuntimeRoutes(app, deps) {
   const {
@@ -383,6 +384,8 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [SELF-REPAIR-EXECUTOR] Routes mounted at /api/v1/lifeos/command-center/self-repair/execute');
   app.use(createAutonomousTelemetryRoutes({ requireKey }));
   logger.info('✅ [AUTONOMOUS-TELEMETRY] Routes mounted at /api/v1/lifeos/autonomous-telemetry/*');
+  app.use(createMemoryStatusRoutes({ pool, requireKey }));
+  logger.info('✅ [MEMORY-STATUS] Routes mounted at /api/v1/lifeos/command-center/memory/status');
 
   return {
     tcCoordinator,
