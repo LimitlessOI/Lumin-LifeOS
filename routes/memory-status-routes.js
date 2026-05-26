@@ -34,13 +34,14 @@ const createMemoryStatusRoutes = ({ pool, requireKey }) => {
         queried_at: new Date().toISOString(),
       });
     } catch (error) {
-      console.error(error);
+      console.error('[memory-status]', error);
       res.status(500).json({
         ok: false,
         memory_enabled: false,
         proof_status: 'ERROR',
         proof_source: 'self_repair_memory_events',
         runtime_verdict: 'MEMORY_ERROR',
+        error_detail: error.message,
         queried_at: new Date().toISOString(),
       });
     }
