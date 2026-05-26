@@ -357,6 +357,12 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     }
   } catch { /* absent or malformed — fail closed */ }
 
+  let legacyRedirectDeployed = false;
+  try {
+    const prc = fs.readFileSync(path.join(ROOT, 'routes', 'public-routes.js'), 'utf8');
+    legacyRedirectDeployed = prc.includes('redirect(301');
+  } catch { /* fail closed */ }
+
   const blockers = [
     ...(tsosTokenCount === 0 ? [{ code: 'TSOS_INTERNAL_HOOKS_NOT_WIRED', detail: 'BuilderOS-internal TSOS hooks have no approved runtime proof source yet.' }] : []),
     ...(memoryDb.total === 0 ? [{ code: 'MEMORY_NOT_RUNTIME_PROVEN', detail: 'Memory is structurally wired but not yet proven through approved BuilderOS runtime truth sources.' }] : []),
@@ -368,10 +374,10 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       code: 'TELEMETRY_GAPS_REMAIN',
       detail: `${nullMetricCount} required metrics remain NOT_WIRED — architectural schema gaps not yet provisioned.`,
     }] : []),
-    {
+    ...(legacyRedirectDeployed ? [] : [{
       code: 'LEGACY_AUTHORITY_SURFACES_STILL_LIVE',
-      detail: 'Legacy command-center and compatibility aliases remain reachable and can confuse operators.',
-    },
+      detail: 'Legacy /command-center HTML surface redirect not detected — Phase 26 not yet deployed.',
+    }]),
   ];
 
   const next10 = [
