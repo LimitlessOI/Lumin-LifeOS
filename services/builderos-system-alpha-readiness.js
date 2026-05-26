@@ -15,6 +15,7 @@ import { listAutonomousTelemetry } from './autonomous-telemetry-service.js';
 import { readLatestPhase14Cert } from './builder-phase14-ledger.js';
 import { evaluateProofFreshnessFromPool } from './oil-proof-freshness.js';
 import { normalizeSha } from './oil-self-repair-detector.js';
+import { computeAllBuilderOSMetrics } from './builderos-metrics-reporter.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -131,6 +132,13 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     const tsosRes = await pool.query('SELECT COUNT(*) FROM autonomous_telemetry_events WHERE total_token_estimate > 0');
     tsosTokenCount = parseInt(tsosRes.rows[0].count, 10);
   } catch {}
+
+  // Phase B.3 — count null metrics to make TELEMETRY_GAPS_REMAIN conditional
+  let nullMetricCount = 17;
+  try {
+    const mr = await computeAllBuilderOSMetrics(pool, { sinceHours: 168 });
+    nullMetricCount = Object.values(mr).filter((v) => v === null).length;
+  } catch { /* fail closed — treat as all null */ }
 
   const telemetryEvents = recentTelemetry.events || [];
   const hasCouncilTelemetry = telemetryEvents.some((e) => e.model_used);
@@ -356,10 +364,10 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       code: 'USEFUL_WORK_GUARD_COVERAGE_AUDIT_INCOMPLETE',
       detail: 'Useful-work-guard has evidence, but a full autonomous-path coverage audit is still missing.',
     }]),
-    {
+    ...(nullMetricCount > 2 ? [{
       code: 'TELEMETRY_GAPS_REMAIN',
-      detail: 'Several required metrics remain intentionally NOT_WIRED.',
-    },
+      detail: `${nullMetricCount} required metrics remain NOT_WIRED — architectural schema gaps not yet provisioned.`,
+    }] : []),
     {
       code: 'LEGACY_AUTHORITY_SURFACES_STILL_LIVE',
       detail: 'Legacy command-center and compatibility aliases remain reachable and can confuse operators.',
