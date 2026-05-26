@@ -338,6 +338,8 @@ async function finishExecutorRun(pool, finalizeArgs, result) {
         triggeredBy: finalizeArgs.triggeredBy,
         deploySha: finalizeArgs.railwayDeploySha,
         durationMs: finalized.duration_ms,
+        sessionId: finalizeArgs.sessionId,
+        cycleId: finalizeArgs.cycleId,
       });
     } catch {
       // telemetry is best-effort
@@ -352,6 +354,8 @@ export async function runSelfRepairExecutor({
   dryRun = true,
   repairId = 'DR-003-RECEIPT-STALE',
   triggeredBy = 'C2',
+  sessionId = null,
+  cycleId = null,
 }) {
   const startedAt = Date.now();
   const { baseUrl, commandKey } = resolveExecutorContext(req);
@@ -372,7 +376,7 @@ export async function runSelfRepairExecutor({
     system_authorized_actions: initialReadiness.system_authorized_actions || [],
   };
 
-  const finishArgs = { repairId, dryRun, triggeredBy, railwayDeploySha, startedAt };
+  const finishArgs = { repairId, dryRun, triggeredBy, railwayDeploySha, startedAt, sessionId, cycleId };
 
   if (!plan.ok) {
     const verification = await verifyState(baseUrl, commandKey);

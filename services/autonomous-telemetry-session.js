@@ -71,11 +71,13 @@ export async function runGovernedTelemetrySession(pool, {
       task_type: 'prevention_hook.deploy_drift',
       task_goal: 'Run deploy-check prevention hook once',
       emitsOwnTelemetry: true,
-      run: async () => {
+      run: async ({ sessionId: sid, cycleId: cid } = {}) => {
         const t0 = Date.now();
         const outcome = await runDeployDriftPreventionHook(pool, {
           dryRun: false,
           triggeredBy: `${triggeredBy}:cycle-deploy`,
+          sessionId: sid,
+          cycleId: cid,
         });
         const useful = usefulScoreFromOutcome({
           success: outcome.ok,
@@ -129,13 +131,15 @@ export async function runGovernedTelemetrySession(pool, {
       task_type: 'self_repair.dry_run',
       task_goal: 'Plan PF chain without execution',
       emitsOwnTelemetry: true,
-      run: async () => {
+      run: async ({ sessionId: sid, cycleId: cid } = {}) => {
         const t0 = Date.now();
         const result = await runSelfRepairExecutor({
           pool,
           dryRun: true,
           repairId: 'DR-003-RECEIPT-STALE',
           triggeredBy: `${triggeredBy}:cycle-dry-run`,
+          sessionId: sid,
+          cycleId: cid,
         });
         const proofBefore = result.audit_before?.proof_freshness_overall || null;
         const blockedNoRepair =

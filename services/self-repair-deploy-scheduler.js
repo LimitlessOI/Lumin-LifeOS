@@ -42,6 +42,8 @@ export async function runDeployRepairCheck(pool, {
   dryRun = false,
   triggeredBy = 'deploy-check',
   viaPreventionHook = false,
+  sessionId = null,
+  cycleId = null,
 } = {}) {
   const started = Date.now();
   const hookPlan = viaPreventionHook ? await findDeployDriftHookPlan(pool) : null;
@@ -90,6 +92,8 @@ export async function runDeployRepairCheck(pool, {
         outcome,
         triggeredBy,
         durationMs: Date.now() - started,
+        sessionId,
+        cycleId,
       }).catch(() => {});
     }
     return outcome;
@@ -143,6 +147,8 @@ export async function runDeployRepairCheck(pool, {
         outcome,
         triggeredBy,
         durationMs: Date.now() - started,
+        sessionId,
+        cycleId,
       }).catch(() => {});
     }
     return outcome;
