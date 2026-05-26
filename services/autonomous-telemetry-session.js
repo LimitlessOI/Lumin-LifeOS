@@ -68,7 +68,7 @@ export async function runGovernedTelemetrySession(pool, {
   const cycleDefs = [
     {
       name: 'deploy_prevention_hook',
-      task_type: 'prevention_hook.deploy_check',
+      task_type: 'prevention_hook.deploy_drift',
       task_goal: 'Run deploy-check prevention hook once',
       emitsOwnTelemetry: true,
       run: async () => {
@@ -126,7 +126,7 @@ export async function runGovernedTelemetrySession(pool, {
     },
     {
       name: 'self_repair_dry_run',
-      task_type: 'self_repair.executor_dry_run',
+      task_type: 'self_repair.dry_run',
       task_goal: 'Plan PF chain without execution',
       emitsOwnTelemetry: true,
       run: async () => {
