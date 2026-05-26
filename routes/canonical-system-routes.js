@@ -3,10 +3,10 @@ import express from 'express';
 /**
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
-export function createCanonicalSystemRoutes({ rk, pool }) {
+export function createCanonicalSystemRoutes({ requireKey, pool }) {
   const router = express.Router();
 
-  router.use(rk);
+  router.use(requireKey);
 
   router.get('/api/v1/lifeos/optimizer/stats', async (req, res, next) => {
     try {
@@ -19,7 +19,7 @@ export function createCanonicalSystemRoutes({ rk, pool }) {
         `,
       };
 
-      const rows = await pool.query(query);
+      const { rows } = await pool.query(query);
 
       const totals = rows.reduce((acc, row) => {
         acc.total_requests += row.total_requests;
@@ -59,7 +59,7 @@ export function createCanonicalSystemRoutes({ rk, pool }) {
         `,
       };
 
-      const rows = await pool.query(query);
+      const { rows } = await pool.query(query);
 
       const response = {
         ok: true,
@@ -84,7 +84,7 @@ export function createCanonicalSystemRoutes({ rk, pool }) {
         `,
       };
 
-      const rows = await pool.query(query);
+      const { rows } = await pool.query(query);
 
       const total = Number(rows[0].total) || 0;
       const successes = Number(rows[0].successes) || 0;
