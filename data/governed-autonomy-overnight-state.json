@@ -1,0 +1,122 @@
+{
+  "status": "running",
+  "batch_no": 22,
+  "last_outcome": {
+    "halt": false,
+    "mode": "idle_analysis_only",
+    "idle_reason": "healthy_idle_no_authorized_work",
+    "analysis": {
+      "ok": true,
+      "batch_no": 22,
+      "triggered_by": "C2-governed-overnight-autonomy",
+      "idle_reason": "healthy_idle_no_authorized_work",
+      "wall_ms": 961,
+      "deploy": {
+        "railway_sha": "f473e70c868337228f6a672f55cfb53aa5364a51",
+        "github_sha": "f473e70c868337228f6a672f55cfb53aa5364a51",
+        "drift": false,
+        "deploy_check_action": "skip"
+      },
+      "readiness": {
+        "proof": "CURRENT",
+        "ready": true,
+        "repair_queue": 0,
+        "blockers": [],
+        "system_authorized": 0
+      },
+      "throughput": {
+        "event_count": 80,
+        "avg_useful_work_score": 0.46,
+        "token_estimate_sum": 3702,
+        "repair_success_pct": 68.8,
+        "avg_cycle_duration_ms": 1481
+      },
+      "bottlenecks": [
+        {
+          "task_type": "self_repair.execute",
+          "avg_wall_ms": 4855,
+          "count": 4,
+          "evidence": "4 telemetry row(s)"
+        },
+        {
+          "task_type": "session.summary",
+          "avg_wall_ms": 4762,
+          "count": 5,
+          "evidence": "5 telemetry row(s)"
+        },
+        {
+          "task_type": "prevention_hook.deploy_check",
+          "avg_wall_ms": 2578,
+          "count": 5,
+          "evidence": "5 telemetry row(s)"
+        },
+        {
+          "task_type": "prevention_hook.deploy_drift",
+          "avg_wall_ms": 1482,
+          "count": 31,
+          "evidence": "31 telemetry row(s)"
+        },
+        {
+          "task_type": "self_repair.executor_dry_run",
+          "avg_wall_ms": 1329,
+          "count": 5,
+          "evidence": "5 telemetry row(s)"
+        }
+      ],
+      "wasted_tasks": [],
+      "duplicate_instrumentation": [
+        "self_repair.executor_dry_run vs self_repair.dry_run",
+        "prevention_hook.deploy_check vs prevention_hook.deploy_drift"
+      ],
+      "missing_measurements": [
+        {
+          "field": "pb_violation_attempts_prevented",
+          "note": "No counter table — would need halt_log join"
+        },
+        {
+          "field": "context_growth_rate",
+          "note": "No context_size_bytes captured yet"
+        },
+        {
+          "field": "average_successful_build_latency_ms",
+          "note": "Requires build success filter with build_latency_ms populated"
+        }
+      ],
+      "telemetry_gaps": [
+        "build_latency_ms_not_populated_on_success",
+        "pb_violation_counter_not_wired",
+        "context_size_bytes_not_captured"
+      ],
+      "prevention_hooks": {
+        "wired": 1,
+        "candidates": 1
+      },
+      "recommendations": [
+        {
+          "type": "drift",
+          "message": "12 drift event(s) in window — prioritize deploy-check after redeploy",
+          "evidence": "drift_detected=true rows"
+        },
+        {
+          "type": "latency",
+          "message": "Slowest phase: self_repair.execute avg 4855ms",
+          "evidence": "4 telemetry row(s)"
+        },
+        {
+          "type": "model",
+          "message": "Best avg useful_work among models with data: groq_llama (0.625)",
+          "evidence": "8 row(s)"
+        },
+        {
+          "type": "idle_posture",
+          "message": "Proof CURRENT, repair queue empty — run analysis-only batches; skip full session until authorized work exists",
+          "evidence": "can_continue_under_approved_pb false with empty system_authorized_actions"
+        }
+      ],
+      "skip_session_recommended": true
+    },
+    "event_count": 50
+  },
+  "updated_at": "2026-05-26T00:55:17.702Z",
+  "started_at": "2026-05-25T17:54:09.792Z"
+}
