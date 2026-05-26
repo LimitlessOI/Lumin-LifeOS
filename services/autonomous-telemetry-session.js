@@ -18,6 +18,7 @@ import {
 } from './autonomous-telemetry-service.js';
 import { computeEfficiencyIntelligence } from './autonomous-efficiency-intelligence.js';
 import { normalizeSha } from './oil-self-repair-detector.js';
+import { shouldSkipOuterEmit, buildSuppressedOuterTelemetryResult } from './telemetry-cycle-guard.js';
 
 const DEFAULT_MAX_CYCLES = 5;
 const DEFAULT_MAX_MINUTES = 45;
@@ -69,6 +70,7 @@ export async function runGovernedTelemetrySession(pool, {
       name: 'deploy_prevention_hook',
       task_type: 'prevention_hook.deploy_check',
       task_goal: 'Run deploy-check prevention hook once',
+      emitsOwnTelemetry: true,
       run: async () => {
         const t0 = Date.now();
         const outcome = await runDeployDriftPreventionHook(pool, {
@@ -126,6 +128,7 @@ export async function runGovernedTelemetrySession(pool, {
       name: 'self_repair_dry_run',
       task_type: 'self_repair.executor_dry_run',
       task_goal: 'Plan PF chain without execution',
+      emitsOwnTelemetry: true,
       run: async () => {
         const t0 = Date.now();
         const result = await runSelfRepairExecutor({
@@ -207,7 +210,7 @@ export async function runGovernedTelemetrySession(pool, {
 
     let outcome;
     try {
-      outcome = await def.run();
+      outcome = await def.run({ sessionId, cycleId });
     } catch (err) {
       outcome = {
         wall_clock_ms: 0,
@@ -219,20 +222,22 @@ export async function runGovernedTelemetrySession(pool, {
       };
     }
 
-    const tel = await emitCycleTelemetry(pool, {
-      run_id: runId,
-      cycle_id: cycleId,
-      session_id: sessionId,
-      task_type: def.task_type,
-      task_goal: def.task_goal,
-      token_input_estimate: 0,
-      token_output_estimate: 0,
-      total_token_estimate: 0,
-      token_estimate_method: 'not_available',
-      deploy_sha: deploySha,
-      pb_boundary: 'SYSTEM_AUTHORIZED_UNDER_PB',
-      ...outcome,
-    });
+    const tel = shouldSkipOuterEmit(def)
+      ? buildSuppressedOuterTelemetryResult(`${def.name} emits own telemetry`)
+      : await emitCycleTelemetry(pool, {
+          run_id: runId,
+          cycle_id: cycleId,
+          session_id: sessionId,
+          task_type: def.task_type,
+          task_goal: def.task_goal,
+          token_input_estimate: 0,
+          token_output_estimate: 0,
+          total_token_estimate: 0,
+          token_estimate_method: 'not_available',
+          deploy_sha: deploySha,
+          pb_boundary: 'SYSTEM_AUTHORIZED_UNDER_PB',
+          ...outcome,
+        });
 
     cycles.push({
       cycle_id: cycleId,
