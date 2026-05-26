@@ -19,7 +19,7 @@ export function createCanonicalSystemRoutes({ requireKey, pool }) {
         `,
       };
 
-      const { rows } = await pool.query(query);
+      const { rows } = await pool.query(query).catch(() => ({ rows: [] }));
 
       const totals = rows.reduce((acc, row) => {
         acc.total_requests += row.total_requests;
@@ -52,9 +52,9 @@ export function createCanonicalSystemRoutes({ requireKey, pool }) {
     try {
       const query = {
         text: `
-          SELECT id, session_id, pattern_type, lesson_text, confidence_score, created_at 
-          FROM self_repair_memory_events 
-          ORDER BY created_at DESC 
+          SELECT id, repair_id, trigger, result, lesson_learned, confidence, created_at
+          FROM self_repair_memory_events
+          ORDER BY created_at DESC
           LIMIT 50
         `,
       };
