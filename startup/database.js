@@ -74,10 +74,12 @@ export async function initDatabase(pool, logger) {
       logger.info(`[DB] ✅ Applied migration: ${filename}`);
       ran++;
     } catch (err) {
-      // Log but continue — a broken migration shouldn't crash other migrations
-      logger.warn(`[DB] ⚠️  Migration ${filename} failed (may already be applied): ${err.message}`);
-      // Still mark it so we don't retry on every boot — investigate manually if needed
-      await markApplied(pool, filename).catch(() => {});
+      // Log and continue — a broken migration does NOT block others.
+      // Do NOT call markApplied() here: a failed migration must retry on next boot.
+      // Silently marking it applied was the root cause of the self_repair_memory_events
+      // table never being created (the migration failed but was permanently skipped).
+      // Migrations should be idempotent (IF NOT EXISTS) so retrying is safe.
+      logger.error(`[DB] ❌ Migration ${filename} FAILED — will retry on next boot: ${err.message}`);
     }
   }
 

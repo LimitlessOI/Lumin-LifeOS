@@ -1,7 +1,7 @@
 # AMENDMENT 03 — Financial & Revenue System
 **Status:** LIVE (partial)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-13
+**Last Updated:** 2026-05-26
 
 ---
 
@@ -118,3 +118,11 @@ The financial ledger is schema-defined and append-only, which means adding new r
 
 ### Gate 5 — How We Beat Them
 Every other financial tool tracks what you earned and spent after the fact; LifeOS tracks ROI per AI task in real time and uses that data to gate further AI spending — so the system pays for itself or it stops spending, automatically.
+
+---
+
+## Change Receipts
+
+| Date | What Changed | Why | Verified |
+|---|---|---|---|
+| 2026-05-26 | **Phase 13 (BuilderOS) — Migration failure detection fix:** `startup/database.js` (+3 lines, ~4 line change in catch block). Removed `await markApplied(pool, filename).catch(() => {})` from the catch block in `initDatabase()`. Failed migrations now log at `error` level with "will retry on next boot" message and do NOT get inserted into `schema_migrations`. This means failed migrations retry on every boot until they succeed. Root cause of this fix: the `self_repair_memory_events` table was never created because all 3 migration attempts failed (FK reference to `epistemic_facts` table which didn't exist, then BEGIN/COMMIT wrapping issues) but were silently marked as applied — so the failure was permanently hidden. Migrations must be idempotent (`IF NOT EXISTS`) for retry to be safe; most existing migrations already are. `node --check` PASS. Zone 4 file (startup/ path) — GAP-FILL: direct surgical fix, not builder. | Failed migrations silently skipped on every subsequent boot. Phase 13 directive: "stop failed migrations from being marked applied." | `node --check` PASS |
