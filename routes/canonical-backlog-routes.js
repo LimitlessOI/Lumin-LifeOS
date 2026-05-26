@@ -3,10 +3,10 @@ import express from 'express';
 /**
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
-export function createCanonicalBacklogRoutes({ rk, pool }) {
+export function createCanonicalBacklogRoutes({ requireKey, pool }) {
   const router = express.Router();
 
-  router.use(rk);
+  router.use(requireKey);
 
   router.get('/api/v1/lifeos/projects/backlog', async (req, res, next) => {
     try {
@@ -61,7 +61,7 @@ export function createCanonicalBacklogRoutes({ rk, pool }) {
 
   router.patch('/api/v1/lifeos/projects/backlog/:id', async (req, res, next) => {
     try {
-      if (!req.body?.priority && !req.body?.notes) return res.status(400).json({ ok: false, error: 'nothing to update' });
+      if (req.body?.priority === undefined && req.body?.notes === undefined) return res.status(400).json({ ok: false, error: 'nothing to update' });
       const updates = [];
       const vals = [];
       let i = 1;

@@ -60,6 +60,7 @@ import { createSelfRepairExecutorRoutes } from "../routes/self-repair-executor-r
 import { createAutonomousTelemetryRoutes } from "../routes/autonomous-telemetry-routes.js";
 import { createCanonicalAdminRoutes } from "../routes/canonical-admin-routes.js";
 import { createCanonicalExecutionRoutes } from "../routes/canonical-execution-routes.js";
+import { createCanonicalBacklogRoutes } from "../routes/canonical-backlog-routes.js";
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
 import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
@@ -390,6 +391,8 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [CANONICAL-ADMIN] Routes mounted at /api/v1/lifeos/admin/ai/{status,effectiveness} + /api/v1/lifeos/system/{snapshot,health}');
   app.use(createCanonicalExecutionRoutes({ pool, requireKey }));
   logger.info('✅ [CANONICAL-EXECUTION] Routes mounted at /api/v1/lifeos/tasks/queue + /api/v1/lifeos/admin/ai/{performance,enable,disable}');
+  app.use(createCanonicalBacklogRoutes({ pool, requireKey }));
+  logger.info('✅ [CANONICAL-BACKLOG] Routes mounted at /api/v1/lifeos/projects/backlog + /:id/{complete,skip,reactivate} + PATCH /:id');
   app.use(createMemoryStatusRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-STATUS] Routes mounted at /api/v1/lifeos/command-center/memory/status');
 
