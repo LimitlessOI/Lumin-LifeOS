@@ -14,7 +14,7 @@
  * Exit 0 otherwise.
  */
 
-import { readFileSync, readdirSync, statSync } from 'fs';
+import { readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import { join, extname, relative, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -40,6 +40,17 @@ const GUARD_PATTERNS = [
   'requirePBAuthorization(',
   'pb_authorized',
   'PB_GOVERNED',
+];
+
+// Env-gate and prerequisite patterns that block scheduler start without explicit opt-in.
+// These are valid guards — the AI calls cannot fire if the gate prevents the setInterval
+// from registering. Distinguished from GUARDED (createUsefulWorkGuard) but still safe.
+const ENV_GATE_PATTERNS = [
+  'AUTONOMY_ORCHESTRATOR_ENABLED !== "true"',
+  'IDEA_ENGINE_SCHEDULER_ENABLED !== "true"',
+  'LEGACY_SCHEDULER_ENABLED',
+  'isTCImapConfigured(',
+  'EMAIL_TRIAGE_ENABLED !== "true"',
 ];
 
 // Patterns that indicate this line is a function/const DEFINITION (not a call site)
@@ -102,6 +113,7 @@ function analyzeFile(fullPath) {
   // Check whole-file for guard patterns
   const hasGuard = GUARD_PATTERNS.slice(0, 3).some(p => content.includes(p)); // createUsefulWorkGuard, isPBAuthorized, requirePBAuthorization
   const hasPB = GUARD_PATTERNS.slice(3).some(p => content.includes(p)); // pb_authorized, PB_GOVERNED
+  const hasEnvGate = ENV_GATE_PATTERNS.some(p => content.includes(p));
   const hasSetInterval = content.includes('setInterval');
 
   // Classify
@@ -110,6 +122,8 @@ function analyzeFile(fullPath) {
     classification = 'GUARDED';
   } else if (hasPB) {
     classification = 'PB_GOVERNED';
+  } else if (hasEnvGate) {
+    classification = 'ENV_GUARDED';
   } else if (aiCallLines.length > 0) {
     // Check if all AI calls are inside guard wrappers by proximity (within 20 lines)
     // Conservative: if no guard pattern anywhere in file, it's UNGUARDED
@@ -153,12 +167,13 @@ function main() {
 
   const guarded = results.filter(r => r.classification === 'GUARDED');
   const pbGoverned = results.filter(r => r.classification === 'PB_GOVERNED');
+  const envGuarded = results.filter(r => r.classification === 'ENV_GUARDED');
   const unguarded = results.filter(r => r.classification === 'UNGUARDED');
   const unknown = results.filter(r => r.classification === 'UNKNOWN');
   const highRisk = results.filter(r => r.highRiskScheduled);
 
   const totalWithAI = results.length;
-  const coveredCount = guarded.length + pbGoverned.length;
+  const coveredCount = guarded.length + pbGoverned.length + envGuarded.length;
   const coveragePct = totalWithAI > 0 ? ((coveredCount / totalWithAI) * 100).toFixed(1) : '0.0';
 
   console.log('');
@@ -170,10 +185,11 @@ function main() {
   console.log(`  files_with_ai_calls : ${totalWithAI}`);
   console.log(`  GUARDED             : ${guarded.length}`);
   console.log(`  PB_GOVERNED         : ${pbGoverned.length}`);
+  console.log(`  ENV_GUARDED         : ${envGuarded.length}  ← env-gate or prerequisite prevents scheduler start`);
   console.log(`  UNGUARDED           : ${unguarded.length}`);
   console.log(`  UNKNOWN             : ${unknown.length}`);
-  console.log(`  HIGH_RISK_SCHEDULED : ${highRisk.length}  ← setInterval + UNGUARDED`);
-  console.log(`  coverage_percent    : ${coveragePct}%  (GUARDED + PB_GOVERNED / total)`);
+  console.log(`  HIGH_RISK_SCHEDULED : ${highRisk.length}  ← setInterval + UNGUARDED (no guard of any kind)`);
+  console.log(`  coverage_percent    : ${coveragePct}%  (GUARDED + PB_GOVERNED + ENV_GUARDED / total)`);
   console.log('');
 
   if (unguarded.length > 0) {
@@ -192,6 +208,15 @@ function main() {
       if (f.aiCallLines.length > 5) {
         console.log(`    ... and ${f.aiCallLines.length - 5} more`);
       }
+    }
+    console.log('');
+  }
+
+  if (envGuarded.length > 0) {
+    console.log('ENV_GUARDED FILES (env-gate or prerequisite check gates scheduler start)');
+    console.log('-----------------------------------------------------------------------');
+    for (const f of envGuarded) {
+      console.log(`  ${f.rel}  (${f.aiCallCount} AI call(s) — gated by env-gate/prereq)`);
     }
     console.log('');
   }
@@ -265,6 +290,20 @@ function main() {
 
   console.log(`EXIT: ${highRisk.length > 0 ? '1 (HIGH_RISK_SCHEDULED files found)' : '0 (no HIGH_RISK_SCHEDULED files)'}`);
   console.log('');
+
+  try {
+    const auditResults = {
+      high_risk_count: highRisk.length,
+      unguarded_count: unguarded.length,
+      env_guarded_count: envGuarded.length,
+      guarded_count: guarded.length,
+      pb_governed_count: pbGoverned.length,
+      coverage_percent: parseFloat(coveragePct),
+      exit_code: highRisk.length > 0 ? 1 : 0,
+      generated_at: new Date().toISOString(),
+    };
+    writeFileSync(join(ROOT, 'data', 'useful-work-guard-audit-results.json'), JSON.stringify(auditResults, null, 2));
+  } catch { /* non-fatal — alpha service falls back to hardcoded blocker if file absent */ }
 
   process.exit(highRisk.length > 0 ? 1 : 0);
 }

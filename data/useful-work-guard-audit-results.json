@@ -1,0 +1,10 @@
+{
+  "high_risk_count": 0,
+  "unguarded_count": 110,
+  "env_guarded_count": 4,
+  "guarded_count": 2,
+  "pb_governed_count": 0,
+  "coverage_percent": 5.2,
+  "exit_code": 0,
+  "generated_at": "2026-05-26T18:58:57.548Z"
+}

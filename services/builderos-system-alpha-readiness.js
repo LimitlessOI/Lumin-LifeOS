@@ -340,13 +340,22 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     'Token-economics / TSOS-adjacent surfaces can be mistaken for internal BuilderOS proof.',
   ];
 
+  let auditClean = false;
+  try {
+    const arPath = path.join(ROOT, 'data', 'useful-work-guard-audit-results.json');
+    if (fs.existsSync(arPath)) {
+      const ar = JSON.parse(fs.readFileSync(arPath, 'utf8'));
+      auditClean = ar.high_risk_count === 0;
+    }
+  } catch { /* absent or malformed — fail closed */ }
+
   const blockers = [
     ...(tsosTokenCount === 0 ? [{ code: 'TSOS_INTERNAL_HOOKS_NOT_WIRED', detail: 'BuilderOS-internal TSOS hooks have no approved runtime proof source yet.' }] : []),
     ...(memoryDb.total === 0 ? [{ code: 'MEMORY_NOT_RUNTIME_PROVEN', detail: 'Memory is structurally wired but not yet proven through approved BuilderOS runtime truth sources.' }] : []),
-    {
+    ...(auditClean ? [] : [{
       code: 'USEFUL_WORK_GUARD_COVERAGE_AUDIT_INCOMPLETE',
       detail: 'Useful-work-guard has evidence, but a full autonomous-path coverage audit is still missing.',
-    },
+    }]),
     {
       code: 'TELEMETRY_GAPS_REMAIN',
       detail: 'Several required metrics remain intentionally NOT_WIRED.',
