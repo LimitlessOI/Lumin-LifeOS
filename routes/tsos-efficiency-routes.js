@@ -3,22 +3,20 @@ import express from 'express';
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-export function createTsosEfficiencyRoutes({ rk, pool }) {
+export function createTsosEfficiencyRoutes({ requireKey, pool }) {
   const router = express.Router();
 
-  router.use(rk);
+  router.use(requireKey);
 
   router.get('/api/v1/lifeos/builderos/tsos-efficiency', async (req, res, next) => {
     try {
-      const { rows } = await pool.query(
-        text`
-          SELECT COUNT()::int AS token_tracked_events,
+      const { rows } = await pool.query(`
+          SELECT COUNT(*)::int AS token_tracked_events,
                  COALESCE(SUM(total_token_estimate),0)::int AS total_token_estimate_sum,
-                 ROUND((SUM(useful_work_score::numeric)/NULLIF(SUM(total_token_estimate::numeric),0))1000,3) AS useful_work_per_1k_tokens
+                 ROUND((SUM(useful_work_score::numeric)/NULLIF(SUM(total_token_estimate::numeric),0))*1000,3) AS useful_work_per_1k_tokens
           FROM autonomous_telemetry_events
           WHERE total_token_estimate > 0
-        `,
-      );
+        `);
 
       const response = {
         ok: true,

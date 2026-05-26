@@ -62,6 +62,7 @@ import { createCanonicalAdminRoutes } from "../routes/canonical-admin-routes.js"
 import { createCanonicalExecutionRoutes } from "../routes/canonical-execution-routes.js";
 import { createCanonicalBacklogRoutes } from "../routes/canonical-backlog-routes.js";
 import { createCanonicalSystemRoutes } from "../routes/canonical-system-routes.js";
+import { createTsosEfficiencyRoutes } from "../routes/tsos-efficiency-routes.js";
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
 import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
@@ -396,6 +397,8 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [CANONICAL-BACKLOG] Routes mounted at /api/v1/lifeos/projects/backlog + /:id/{complete,skip,reactivate} + PATCH /:id');
   app.use(createCanonicalSystemRoutes({ pool, requireKey }));
   logger.info('✅ [CANONICAL-SYSTEM] Routes mounted at /api/v1/lifeos/optimizer/stats + /api/v1/lifeos/system/fix-history + /api/v1/lifeos/user/simulation/accuracy');
+  app.use(createTsosEfficiencyRoutes({ pool, requireKey }));
+  logger.info('✅ [TSOS-EFFICIENCY] Routes mounted at /api/v1/lifeos/builderos/tsos-efficiency');
   app.use(createMemoryStatusRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-STATUS] Routes mounted at /api/v1/lifeos/command-center/memory/status');
 
