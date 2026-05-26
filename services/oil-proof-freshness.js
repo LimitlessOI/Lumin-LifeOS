@@ -12,6 +12,12 @@ import { readReceiptsByType, SECURITY_RECEIPT_TYPES } from './oil-security-recei
 /** Self-repair stored receipt max age before STALE (PF-003). */
 export const SELF_REPAIR_AUDIT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
+/**
+ * PF-002 tolerance: cert and repair receipt from the SAME cycle are typically
+ * written ~500ms apart. A gap > 60s means a new repair ran AFTER the cert.
+ */
+const PF002_SAME_CYCLE_TOLERANCE_MS = 60_000;
+
 export const PROOF_FRESHNESS_RULES = [
   {
     id: 'PF-001',
@@ -99,7 +105,10 @@ export function evaluateProofFreshness({
   let phase14Status = 'UNKNOWN';
   let phase14Reason = 'no_phase14_cert';
   if (certifiedAt) {
-    if (repairAt && certifiedAt.getTime() < repairAt.getTime()) {
+    // Only mark STALE when repairAt is significantly newer than cert — same-cycle
+    // ordering (cert written ~500ms before receipt) must not trigger false stale.
+    const repairGapMs = repairAt ? repairAt.getTime() - certifiedAt.getTime() : 0;
+    if (repairAt && repairGapMs > PF002_SAME_CYCLE_TOLERANCE_MS) {
       phase14Status = 'STALE';
       phase14Reason = 'certified_before_latest_repair';
     } else if (geminiStatus === 'STALE') {
