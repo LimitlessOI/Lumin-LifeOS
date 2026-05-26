@@ -610,6 +610,12 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
 
   function startTriageCron() {
     setTimeout(async () => {
+      // Prerequisite: IMAP must be configured. If not, don't register the interval
+      // at all — avoids periodic vault queries and log noise when triage is not set up.
+      if (!(await isTCImapConfigured({ accountManager, logger }))) {
+        logger.info?.('[EMAIL-TRIAGE] IMAP not configured at startup — triage cron not started. Set TC_IMAP_HOST / TC_IMAP_USER / TC_IMAP_PASS to enable.');
+        return;
+      }
       await scanInbox();
       setInterval(() => scanInbox(), SCAN_INTERVAL_MS);
     }, 60_000); // 1-min startup delay
