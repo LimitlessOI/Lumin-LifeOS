@@ -1,45 +1,85 @@
-// routes/canonical-admin-routes.js
-import express from 'express';
-import { Pool } from 'pg';
-import { createUsefulWorkGuard } from 'startup/register-schedulers.js';
-
-const router = express.Router();
-
 /**
+ * routes/canonical-admin-routes.js
+ * Phase 17 — Canonical system admin + status routes (H-2 strategy).
+ * Provides canonical equivalents for legacy command-center-routes.js admin surfaces.
+ *
+ * Canonical prefix: /api/v1/lifeos/
+ * Legacy routes being replaced (H-2 — new file first, redirect in Phase 26-28):
+ *   GET /api/v1/admin/ai/status          → GET /api/v1/lifeos/admin/ai/status
+ *   GET /api/v1/reality/snapshot         → GET /api/v1/lifeos/system/snapshot
+ *   GET /api/health                      → GET /api/v1/lifeos/system/health
+ *   GET /api/v1/ai/effectiveness         → GET /api/v1/lifeos/admin/ai/effectiveness
+ *
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
-export function createCanonicalAdminRoutes({ rk, pool }) {
-  // 1. GET /api/v1/lifeos/admin/ai/status
-  router.get('/admin/ai/status', async (req, res, next) => {
-    const aiDisabled = process.env.LIFEOS_AI_DISABLED === 'true';
-    res.json({ ok: true, aiEnabled: !aiDisabled, source: 'env', env_var: 'LIFEOS_AI_DISABLED', note: 'canonical read-only; write via Railway env' });
+
+import express from 'express';
+
+export function createCanonicalAdminRoutes({ requireKey, pool }) {
+  const router = express.Router();
+
+  // AI kill switch — canonical read path (env-based; write via Railway env vars)
+  router.get('/api/v1/lifeos/admin/ai/status', requireKey, (req, res) => {
+    const aiEnabled = process.env.LIFEOS_AI_DISABLED !== 'true';
+    res.json({
+      ok: true,
+      aiEnabled,
+      source: 'env',
+      env_var: 'LIFEOS_AI_DISABLED',
+      note: 'canonical read-only; set LIFEOS_AI_DISABLED=true in Railway env to disable',
+    });
   });
 
-  // 2. GET /api/v1/lifeos/system/snapshot
-  router.get('/system/snapshot', async (req, res, next) => {
+  // System snapshot — latest receipt timestamp + deploy SHA
+  router.get('/api/v1/lifeos/system/snapshot', requireKey, async (req, res, next) => {
     try {
-      const result = await pool.query('SELECT MAX(created_at) FROM builder_audit_receipts');
-      const snapshotAt = result.rows[0].max;
-      const deploySha = process.env.RAILWAY_GIT_COMMIT_SHA || null;
-      res.json({ ok: true, snapshot_at: snapshotAt.toISOString(), deploy_sha: deploySha, source: 'db_latest_receipt' });
-    } catch (error) {
-      res.json({ ok: true, snapshot_at: new Date().toISOString(), deploy_sha: null, source: 'no_db' });
+      const { rows } = await pool.query(
+        'SELECT MAX(created_at) AS latest FROM builder_audit_receipts'
+      );
+      const snapshotAt = rows[0]?.latest
+        ? new Date(rows[0].latest).toISOString()
+        : new Date().toISOString();
+      res.json({
+        ok: true,
+        snapshot_at: snapshotAt,
+        deploy_sha: process.env.RAILWAY_GIT_COMMIT_SHA || null,
+        source: rows[0]?.latest ? 'db_latest_receipt' : 'no_receipts',
+      });
+    } catch (err) {
+      next(err);
     }
   });
 
-  // 3. GET /api/v1/lifeos/system/health
-  router.get('/system/health', (req, res, next) => {
+  // Simple health check — canonical equivalent of GET /api/health
+  router.get('/api/v1/lifeos/system/health', (req, res) => {
     res.json({ ok: true, server: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // 4. GET /api/v1/lifeos/admin/ai/effectiveness
-  router.get('/admin/ai/effectiveness', async (req, res, next) => {
+  // AI effectiveness by model — reads from autonomous_telemetry_events
+  router.get('/api/v1/lifeos/admin/ai/effectiveness', requireKey, async (req, res, next) => {
     try {
-      const result = await pool.query('SELECT model_used, AVG(useful_work_score) as avg_score, COUNT(*) as total FROM autonomous_telemetry_events WHERE created_at > NOW()-INTERVAL 168h GROUP BY model_used ORDER BY avg_score DESC');
-      const ratings = result.rows.map((row) => ({ model: row.model_used, avg_score: row.avg_score, total: row.total }));
-      res.json({ ok: true, ratings });
-    } catch (error) {
-      res.json({ ok: true, ratings: [] });
+      const { rows } = await pool.query(`
+        SELECT
+          model_used,
+          AVG(useful_work_score)   AS avg_score,
+          COUNT(*)::int            AS total
+        FROM autonomous_telemetry_events
+        WHERE created_at > NOW() - INTERVAL '168 hours'
+          AND model_used IS NOT NULL
+        GROUP BY model_used
+        ORDER BY avg_score DESC NULLS LAST
+      `);
+      res.json({
+        ok: true,
+        ratings: rows.map(r => ({
+          model: r.model_used,
+          avg_score: r.avg_score != null ? Math.round(Number(r.avg_score) * 1000) / 1000 : null,
+          total: r.total,
+        })),
+        read_path: 'GET /api/v1/lifeos/admin/ai/effectiveness',
+      });
+    } catch (err) {
+      next(err);
     }
   });
 
