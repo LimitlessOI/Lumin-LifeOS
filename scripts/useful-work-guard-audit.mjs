@@ -1,219 +1,272 @@
-// scripts/useful-work-guard-audit.mjs
-import * as fs from 'fs';
-import * as path from 'path';
+/**
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * BuilderOS Phase 01 — Useful-Work-Guard Coverage Audit
+ *
+ * READ-ONLY static analysis. No AI calls. No DB writes. No runtime mutations.
+ * Scans services/, routes/, startup/, scripts/ for AI call sites and classifies
+ * each file as GUARDED / PB_GOVERNED / UNGUARDED / UNKNOWN.
+ *
+ * GAP-FILL repair: builder committed broken version (patterns used .includes() with
+ * regex-escaped strings like 'ccm\\(' which match literal backslash — zero matches;
+ * classifyFile() defined but never called; classification never set on result objects).
+ *
+ * Exit 1 if any UNGUARDED file also contains setInterval (HIGH_RISK_SCHEDULED).
+ * Exit 0 otherwise.
+ */
 
+import { readFileSync, readdirSync, statSync } from 'fs';
+import { join, extname, relative, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..');
+
+const SCAN_DIRS = ['services', 'routes', 'startup', 'scripts'];
+
+// Plain-string patterns — no regex escaping; matched with line.includes(p)
 const AI_CALL_PATTERNS = [
-  'ccm\\(',
-  'callCouncilWithFailover\\(',
-  'callAI\\(',
-  'anthropic\\.messages\\.create\\(',
-  'openai\\.chat\\.completions\\.create\\(',
-  'generateContent\\(',
-  'ccmWithFallback\\(',
+  'callCouncilMember(',
+  'callCouncilWithFailover(',
+  'callAI(',
+  'anthropic.messages.create(',
+  'openai.chat.completions.create(',
+  'generateContent(',
+  'callCouncilMemberWithFallback(',
 ];
 
 const GUARD_PATTERNS = [
-  'createUsefulWorkGuard\\(',
-  'isPBAuthorized\\(',
-  'requirePBAuthorized\\(',
+  'createUsefulWorkGuard(',
+  'isPBAuthorized(',
+  'requirePBAuthorization(',
   'pb_authorized',
   'PB_GOVERNED',
 ];
 
-const CLASSIFICATIONS = {
-  GUARDED: 'GUARDED',
-  PB_GOVERNED: 'PB_GOVERNED',
-  UNGUARDED: 'UNGUARDED',
-  UNKNOWN: 'UNKNOWN',
-};
+// Patterns that indicate this line is a function/const DEFINITION (not a call site)
+const DEFINITION_PATTERNS = [
+  'function callCouncilMember',
+  'const callCouncilMember',
+  'export function callCouncilMember',
+  'function callCouncilWithFailover',
+  'const callCouncilWithFailover',
+  'export function callCouncilWithFailover',
+  'export const callCouncilMember',
+  'export const callCouncilWithFailover',
+];
 
-const RISK_LEVELS = {
-  HIGH_RISK_SCHEDULED: 'HIGH_RISK_SCHEDULED',
-};
+const SKIP_DIRS = ['node_modules', '.git', 'coverage', 'dist', '.nyc_output'];
 
-const SUMMARY_HEADER = '=== USEFUL-WORK-GUARD COVERAGE AUDIT ===';
-
-const scanDirectory = (directory) => {
-  const files = fs.readdirSync(directory);
-  const results = [];
-
-  files.forEach((file) => {
-    const filePath = path.join(directory, file);
-    const stats = fs.statSync(filePath);
-
-    if (stats.isDirectory()) {
-      results.push(...scanDirectory(filePath));
-    } else if (stats.isFile() && ['.js', '.mjs'].includes(path.extname(file))) {
-      const content = fs.readFileSync(filePath, 'utf8');
-      const lines = content.split('\n');
-
-      let aiCalls = 0;
-      let guards = 0;
-      let pbGoverned = 0;
-      let unguarded = 0;
-      let unknown = 0;
-      let highRiskScheduled = false;
-
-      lines.forEach((line, index) => {
-        const trimmedLine = line.trim();
-
-        if (AI_CALL_PATTERNS.some((pattern) => trimmedLine.includes(pattern))) {
-          aiCalls++;
-          if (GUARD_PATTERNS.some((pattern) => trimmedLine.includes(pattern))) {
-            guards++;
-          } else if (trimmedLine.includes('setInterval')) {
-            highRiskScheduled = true;
-          } else {
-            unguarded++;
-          }
-        } else if (GUARD_PATTERNS.some((pattern) => trimmedLine.includes(pattern))) {
-          pbGoverned++;
-        }
-      });
-
-      if (aiCalls > 0) {
-        results.push({
-          filename: file,
-          aiCalls,
-          guards,
-          pbGoverned,
-          unguarded,
-          unknown,
-          highRiskScheduled,
-        });
-      }
+function walkDir(dir) {
+  const entries = readdirSync(dir);
+  const files = [];
+  for (const entry of entries) {
+    if (SKIP_DIRS.includes(entry)) continue;
+    const full = join(dir, entry);
+    const stat = statSync(full);
+    if (stat.isDirectory()) {
+      files.push(...walkDir(full));
+    } else if (stat.isFile() && (extname(entry) === '.js' || extname(entry) === '.mjs')) {
+      files.push(full);
     }
-  });
+  }
+  return files;
+}
 
-  return results;
-};
-
-const classifyFile = (file) => {
-  if (file.aiCalls > 0 && file.guards > 0) {
-    return CLASSIFICATIONS.GUARDED;
-  } else if (file.aiCalls > 0 && file.pbGoverned > 0) {
-    return CLASSIFICATIONS.PB_GOVERNED;
-  } else if (file.aiCalls > 0 && file.unguarded > 0) {
-    return CLASSIFICATIONS.UNGUARDED;
-  } else if (file.aiCalls > 0 && file.unknown > 0) {
-    return CLASSIFICATIONS.UNKNOWN;
-  } else {
+function analyzeFile(fullPath) {
+  const rel = relative(ROOT, fullPath);
+  let content;
+  try {
+    content = readFileSync(fullPath, 'utf8');
+  } catch {
     return null;
   }
-};
 
-const getSummary = (results) => {
-  const summary = {
-    totalFilesScanned: results.length,
-    filesWithAiCalls: results.filter((file) => file.aiCalls > 0).length,
-    GUARDED: results.filter((file) => file.classification === CLASSIFICATIONS.GUARDED).length,
-    PB_GOVERNED: results.filter((file) => file.classification === CLASSIFICATIONS.PB_GOVERNED).length,
-    UNGUARDED: results.filter((file) => file.classification === CLASSIFICATIONS.UNGUARDED).length,
-    UNKNOWN: results.filter((file) => file.classification === CLASSIFICATIONS.UNKNOWN).length,
-    coveragePercent: (results.filter((file) => file.classification === CLASSIFICATIONS.GUARDED || file.classification === CLASSIFICATIONS.PB_GOVERNED).length / results.filter((file) => file.aiCalls > 0).length) * 100,
+  const lines = content.split('\n');
+
+  // Collect AI call lines (excluding definition lines and comment lines)
+  const aiCallLines = [];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) continue;
+    const isDefinition = DEFINITION_PATTERNS.some(p => trimmed.includes(p));
+    if (isDefinition) continue;
+    const pattern = AI_CALL_PATTERNS.find(p => line.includes(p));
+    if (pattern) {
+      aiCallLines.push({ lineNum: i + 1, text: trimmed.slice(0, 120), pattern });
+    }
+  }
+
+  if (aiCallLines.length === 0) return null;
+
+  // Check whole-file for guard patterns
+  const hasGuard = GUARD_PATTERNS.slice(0, 3).some(p => content.includes(p)); // createUsefulWorkGuard, isPBAuthorized, requirePBAuthorization
+  const hasPB = GUARD_PATTERNS.slice(3).some(p => content.includes(p)); // pb_authorized, PB_GOVERNED
+  const hasSetInterval = content.includes('setInterval');
+
+  // Classify
+  let classification;
+  if (hasGuard) {
+    classification = 'GUARDED';
+  } else if (hasPB) {
+    classification = 'PB_GOVERNED';
+  } else if (aiCallLines.length > 0) {
+    // Check if all AI calls are inside guard wrappers by proximity (within 20 lines)
+    // Conservative: if no guard pattern anywhere in file, it's UNGUARDED
+    const guardNearby = aiCallLines.some(cl => {
+      const start = Math.max(0, cl.lineNum - 25);
+      const end = Math.min(lines.length - 1, cl.lineNum + 5);
+      const window = lines.slice(start, end).join('\n');
+      return GUARD_PATTERNS.some(p => window.includes(p));
+    });
+    classification = guardNearby ? 'UNKNOWN' : 'UNGUARDED';
+  } else {
+    classification = 'UNKNOWN';
+  }
+
+  const highRiskScheduled = classification === 'UNGUARDED' && hasSetInterval;
+
+  return {
+    rel,
+    classification,
+    aiCallLines,
+    aiCallCount: aiCallLines.length,
+    hasGuard,
+    hasPB,
+    hasSetInterval,
+    highRiskScheduled,
   };
+}
 
-  return summary;
-};
+function main() {
+  const allFiles = [];
+  for (const d of SCAN_DIRS) {
+    const dir = join(ROOT, d);
+    try {
+      allFiles.push(...walkDir(dir));
+    } catch {
+      // Directory may not exist
+    }
+  }
 
-const getTopRiskFiles = (results) => {
-  const topRiskFiles = results
-    .filter((file) => file.highRiskScheduled)
+  const results = allFiles.map(analyzeFile).filter(Boolean);
+
+  const guarded = results.filter(r => r.classification === 'GUARDED');
+  const pbGoverned = results.filter(r => r.classification === 'PB_GOVERNED');
+  const unguarded = results.filter(r => r.classification === 'UNGUARDED');
+  const unknown = results.filter(r => r.classification === 'UNKNOWN');
+  const highRisk = results.filter(r => r.highRiskScheduled);
+
+  const totalWithAI = results.length;
+  const coveredCount = guarded.length + pbGoverned.length;
+  const coveragePct = totalWithAI > 0 ? ((coveredCount / totalWithAI) * 100).toFixed(1) : '0.0';
+
+  console.log('');
+  console.log('=== USEFUL-WORK-GUARD COVERAGE AUDIT ===');
+  console.log(`Scanned: ${allFiles.length} files across ${SCAN_DIRS.join(', ')}`);
+  console.log('');
+  console.log('SUMMARY');
+  console.log('-------');
+  console.log(`  files_with_ai_calls : ${totalWithAI}`);
+  console.log(`  GUARDED             : ${guarded.length}`);
+  console.log(`  PB_GOVERNED         : ${pbGoverned.length}`);
+  console.log(`  UNGUARDED           : ${unguarded.length}`);
+  console.log(`  UNKNOWN             : ${unknown.length}`);
+  console.log(`  HIGH_RISK_SCHEDULED : ${highRisk.length}  ← setInterval + UNGUARDED`);
+  console.log(`  coverage_percent    : ${coveragePct}%  (GUARDED + PB_GOVERNED / total)`);
+  console.log('');
+
+  if (unguarded.length > 0) {
+    console.log('UNGUARDED FILES (highest risk first)');
+    console.log('------------------------------------');
+    const sorted = [...unguarded].sort((a, b) => {
+      if (a.highRiskScheduled !== b.highRiskScheduled) return a.highRiskScheduled ? -1 : 1;
+      return b.aiCallCount - a.aiCallCount;
+    });
+    for (const f of sorted) {
+      const tag = f.highRiskScheduled ? ' ⚠ HIGH_RISK_SCHEDULED' : '';
+      console.log(`  ${f.rel}${tag}`);
+      for (const cl of f.aiCallLines.slice(0, 5)) {
+        console.log(`    L${cl.lineNum}: ${cl.text}`);
+      }
+      if (f.aiCallLines.length > 5) {
+        console.log(`    ... and ${f.aiCallLines.length - 5} more`);
+      }
+    }
+    console.log('');
+  }
+
+  if (pbGoverned.length > 0) {
+    console.log('PB_GOVERNED FILES');
+    console.log('-----------------');
+    for (const f of pbGoverned) {
+      console.log(`  ${f.rel}  (${f.aiCallCount} AI call(s))`);
+    }
+    console.log('');
+  }
+
+  if (guarded.length > 0) {
+    console.log('GUARDED FILES');
+    console.log('-------------');
+    for (const f of guarded) {
+      console.log(`  ${f.rel}`);
+    }
+    console.log('');
+  }
+
+  if (unknown.length > 0) {
+    console.log('UNKNOWN FILES (guard proximity detected — verify manually)');
+    console.log('-----------------------------------------------------------');
+    for (const f of unknown) {
+      console.log(`  ${f.rel}  (${f.aiCallCount} AI call(s), guard found nearby)`);
+    }
+    console.log('');
+  }
+
+  // Top 10 risk files by: HIGH_RISK first, then aiCallCount desc
+  const top10 = [...results]
     .sort((a, b) => {
-      if (a.highRiskScheduled && !b.highRiskScheduled) return -1;
-      if (!a.highRiskScheduled && b.highRiskScheduled) return 1;
-      if (a.callCouncilWithFailover && !b.callCouncilWithFailover) return -1;
-      if (!a.callCouncilWithFailover && b.callCouncilWithFailover) return 1;
-      if (a.ccm && !b.ccm) return -1;
-      if (!a.ccm && b.ccm) return 1;
-      return 0;
+      if (a.highRiskScheduled !== b.highRiskScheduled) return a.highRiskScheduled ? -1 : 1;
+      const aRisk = a.classification === 'UNGUARDED' ? 2 : a.classification === 'UNKNOWN' ? 1 : 0;
+      const bRisk = b.classification === 'UNGUARDED' ? 2 : b.classification === 'UNKNOWN' ? 1 : 0;
+      if (aRisk !== bRisk) return bRisk - aRisk;
+      return b.aiCallCount - a.aiCallCount;
     })
     .slice(0, 10);
 
-  return topRiskFiles;
-};
-
-const getRecommendedNextFixes = (results) => {
-  const recommendedFixes = results
-    .filter((file) => file.classification === CLASSIFICATIONS.UNGUARDED && file.highRiskScheduled)
-    .sort((a, b) => b.highRiskScheduled - a.highRiskScheduled)
-    .slice(0, 5)
-    .map((file) => ({
-      filename: file.filename,
-      fix: `Add ${GUARD_PATTERNS.join(' or ')} to protect AI call site in ${file.filename}`,
-    }));
-
-  return recommendedFixes;
-};
-
-const main = () => {
-  const results = scanDirectory('services/');
-  const results2 = scanDirectory('routes/');
-  const results3 = scanDirectory('startup/');
-  const results4 = scanDirectory('scripts/');
-
-  const allResults = [...results, ...results2, ...results3, ...results4];
-
-  const summary = getSummary(allResults);
-  const topRiskFiles = getTopRiskFiles(allResults);
-  const recommendedFixes = getRecommendedNextFixes(allResults);
-
-  console.log(SUMMARY_HEADER);
-  console.log(`total_files_scanned: ${summary.totalFilesScanned}`);
-  console.log(`files_with_ai_calls: ${summary.filesWithAiCalls}`);
-  console.log(`GUARDED: ${summary.GUARDED}`);
-  console.log(`PB_GOVERNED: ${summary.PB_GOVERNED}`);
-  console.log(`UNGUARDED: ${summary.UNGUARDED}`);
-  console.log(`UNKNOWN: ${summary.UNKNOWN}`);
-  console.log(`coverage_percent: ${summary.coveragePercent}%`);
-
-  console.log('UNGUARDED files:');
-  allResults
-    .filter((file) => file.classification === CLASSIFICATIONS.UNGUARDED)
-    .forEach((file) => {
-      console.log(`  ${file.filename}`);
-      console.log(`    ai_calls: ${file.aiCalls}`);
-      console.log(`    high_risk_scheduled: ${file.highRiskScheduled}`);
-    });
-
-  console.log('PB_GOVERNED files:');
-  allResults
-    .filter((file) => file.classification === CLASSIFICATIONS.PB_GOVERNED)
-    .forEach((file) => {
-      console.log(`  ${file.filename}`);
-      console.log(`    ai_calls: ${file.aiCalls}`);
-      console.log(`    pb_governed: ${file.pbGoverned}`);
-    });
-
-  console.log('GUARDED files:');
-  allResults
-    .filter((file) => file.classification === CLASSIFICATIONS.GUARDED)
-    .forEach((file) => {
-      console.log(`  ${file.filename}`);
-    });
-
-  console.log('UNKNOWN files:');
-  allResults
-    .filter((file) => file.classification === CLASSIFICATIONS.UNKNOWN)
-    .forEach((file) => {
-      console.log(`  ${file.filename} - ${file.unknownReason}`);
-    });
-
-  console.log('TOP RISK FILES:');
-  topRiskFiles.forEach((file) => {
-    console.log(`  ${file.filename}`);
-  });
-
-  console.log('RECOMMENDED NEXT FIXES:');
-  recommendedFixes.forEach((fix) => {
-    console.log(`  ${fix.filename} - ${fix.fix}`);
-  });
-
-  if (allResults.some((file) => file.classification === CLASSIFICATIONS.UNGUARDED && file.highRiskScheduled)) {
-    process.exit(1);
-  } else {
-    process.exit(0);
+  console.log('TOP 10 RISK FILES');
+  console.log('-----------------');
+  for (const f of top10) {
+    const tag = f.highRiskScheduled ? '[HIGH_RISK_SCHEDULED]' : `[${f.classification}]`;
+    console.log(`  ${tag} ${f.rel}  (${f.aiCallCount} AI call(s))`);
   }
-};
+  console.log('');
+
+  // Recommended next fixes — top 5 unguarded, sorted by highRisk then aiCallCount
+  const fixes = [...unguarded]
+    .sort((a, b) => {
+      if (a.highRiskScheduled !== b.highRiskScheduled) return a.highRiskScheduled ? -1 : 1;
+      return b.aiCallCount - a.aiCallCount;
+    })
+    .slice(0, 5);
+
+  if (fixes.length > 0) {
+    console.log('RECOMMENDED NEXT FIXES');
+    console.log('----------------------');
+    for (const f of fixes) {
+      const reason = f.highRiskScheduled
+        ? 'setInterval + AI call — wrap setInterval body in createUsefulWorkGuard() with workCheck'
+        : `${f.aiCallCount} unguarded AI call(s) — wrap in createUsefulWorkGuard() with prereqs + workCheck`;
+      console.log(`  ${f.rel}`);
+      console.log(`    → ${reason}`);
+    }
+    console.log('');
+  }
+
+  console.log(`EXIT: ${highRisk.length > 0 ? '1 (HIGH_RISK_SCHEDULED files found)' : '0 (no HIGH_RISK_SCHEDULED files)'}`);
+  console.log('');
+
+  process.exit(highRisk.length > 0 ? 1 : 0);
+}
 
 main();
