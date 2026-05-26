@@ -34,7 +34,7 @@ export function createCanonicalAdminRoutes({ requireKey, pool }) {
   router.get('/api/v1/lifeos/system/snapshot', requireKey, async (req, res, next) => {
     try {
       const { rows } = await pool.query(
-        'SELECT MAX(created_at) AS latest FROM builder_audit_receipts'
+        'SELECT MAX(audited_at) AS latest FROM builder_audit_receipts'
       );
       const snapshotAt = rows[0]?.latest
         ? new Date(rows[0].latest).toISOString()
