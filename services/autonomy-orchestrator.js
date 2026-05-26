@@ -256,6 +256,11 @@ export function createAutonomyOrchestrator({
 
   // ── Start / stop ──────────────────────────────────────────────────────────
   function start(opts = {}) {
+    // Fail-closed: this orchestrator is LEGACY_INACTIVE. Require explicit opt-in.
+    if (process.env.AUTONOMY_ORCHESTRATOR_ENABLED !== 'true') {
+      console.warn('[AUTONOMY] start() called but AUTONOMY_ORCHESTRATOR_ENABLED !== "true" — orchestrator is LEGACY_INACTIVE. Start blocked.');
+      return;
+    }
     const interval = opts.interval ?? CYCLE_INTERVAL_MS;
     if (timer) return;
 
