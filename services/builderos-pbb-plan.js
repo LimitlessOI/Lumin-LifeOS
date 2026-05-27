@@ -19,11 +19,9 @@ function isJsTarget(targetFile) {
 
 function extractExportNames(instruction) {
   const names = [];
-  const exportFn = instruction.match(/export(?:ing)?\s+(?:a\s+)?function\s+([A-Za-z0-9_]+)/i);
-  if (exportFn) names.push(exportFn[1]);
-  const exports = instruction.match(/exports?\s+([A-Za-z0-9_]+)/gi) || [];
-  for (const match of exports) {
-    const name = match.replace(/exports?\s+/i, '');
+  const fnMatch = instruction.match(/function\s+([A-Za-z0-9_]+)/gi) || [];
+  for (const match of fnMatch) {
+    const name = match.replace(/^function\s+/i, '');
     if (name && !names.includes(name)) names.push(name);
   }
   return names;
@@ -40,6 +38,7 @@ function buildJsOutputRequirements(targetFile) {
     '- Every exported function must contain real logic — not a one-line console.log stub.',
     '- Add a CLI entry at file bottom using import.meta.url guard and process.argv[1] check.',
     '- Do NOT emit ---METADATA--- blocks for this governed loop job.',
+    '- File must be syntactically complete: every { ( [ opened must close; no truncated tail.',
   ].join('\n');
 }
 
@@ -158,6 +157,7 @@ export function generatePbbPlanFromOilAudit(job, oilAudit, options = {}) {
     domain,
     mode: 'code',
     commit_message: commitMessage,
+    model: isJsTarget(targetFile || '') ? 'gemini_flash' : undefined,
     builder_scope: 'builderos-only',
     repair_attempt: repairAttempt,
     planned_at: new Date().toISOString(),

@@ -42,6 +42,7 @@ async function dispatchBuilderPlan(plan, { baseUrl, commandKey }) {
     target_file: plan.target_file || undefined,
     commit_message: plan.commit_message,
     release_mode: 'supervised',
+    ...(plan.model ? { model: plan.model } : {}),
   };
 
   const response = await fetch(url, {
@@ -74,26 +75,25 @@ async function dispatchBuilderPlan(plan, { baseUrl, commandKey }) {
 }
 
 async function verifyBuilderOutput(targetFile, output) {
+  if (output) {
+    const tempDir = mkdtempSync(join(tmpdir(), 'builderos-loop-verify-'));
+    const tempFile = join(tempDir, targetFile ? targetFile.split('/').pop() : 'builder-output.js');
+    try {
+      writeFileSync(tempFile, output, 'utf8');
+      return runVerification(tempFile);
+    } finally {
+      if (existsSync(tempFile)) unlinkSync(tempFile);
+    }
+  }
   if (targetFile && existsSync(targetFile)) {
     return runVerification(targetFile);
   }
-  if (!output) {
-    return {
-      ok: false,
-      first_failure: 'missing_output',
-      syntax_error: 'No builder output available for verification',
-      gates: { syntax: false, antipattern: false, stub: false, runtime: false },
-    };
-  }
-
-  const tempDir = mkdtempSync(join(tmpdir(), 'builderos-loop-verify-'));
-  const tempFile = join(tempDir, targetFile ? targetFile.split('/').pop() : 'builder-output.js');
-  try {
-    writeFileSync(tempFile, output, 'utf8');
-    return runVerification(tempFile);
-  } finally {
-    if (existsSync(tempFile)) unlinkSync(tempFile);
-  }
+  return {
+    ok: false,
+    first_failure: 'missing_output',
+    syntax_error: 'No builder output available for verification',
+    gates: { syntax: false, antipattern: false, stub: false, runtime: false },
+  };
 }
 
 export async function executeCommandControlJob(pool, jobId, options = {}) {
