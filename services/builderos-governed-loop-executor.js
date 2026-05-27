@@ -43,6 +43,7 @@ async function dispatchBuilderPlan(plan, { baseUrl, commandKey }) {
     commit_message: plan.commit_message,
     release_mode: 'supervised',
     ...(plan.model ? { model: plan.model } : {}),
+    ...(plan.max_output_tokens ? { max_output_tokens: plan.max_output_tokens } : {}),
   };
 
   const response = await fetch(url, {
