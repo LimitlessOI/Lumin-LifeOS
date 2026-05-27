@@ -1,5 +1,4 @@
-// services/builderos-patch-mode-policy.js
-import { statSync, existsSync, readFileSync } from 'fs';
+import { existsSync, statSync, readFileSync } from 'fs';
 import { join, resolve, basename } from 'path';
 
 const ZONE4_PATH_PREFIXES = ['startup/', 'mw/', 'core/', 'config/'];
