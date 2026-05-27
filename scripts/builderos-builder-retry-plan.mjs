@@ -9,7 +9,7 @@ const CORRECTION_CLAUSES = {
   STUB: 'CRITICAL: This is a new file. Do NOT generate a stub or placeholder. Write complete working implementation, minimum 60 lines of real code. Do not write TODO, PLACEHOLDER, or not-implemented comments. Every function must have a real body.',
   SYNTAX: 'CRITICAL: Do not write regex literals (/pattern/flags syntax). Use string.includes() or string.startsWith() for all pattern matching. List every import at the top. Every import must actually be used in the function bodies.',
   SEMANTIC_SILENT: 'CRITICAL: The main exported function MUST be called unconditionally at module bottom as the CLI entry point. Pattern required as last lines: const result = myFunction(); console.log(JSON.stringify(result, null, 2));',
-  ANTIPATTERN: 'CRITICAL: Use rk not rk as parameter name. Do not use pq(text template literal syntax). Create router inside factory function not at module level. Do not import from ../startup/db.js or ../startup/auth.js.',
+  ANTIPATTERN: 'CRITICAL: Name factory parameter requireKey not rk. Do not use pool.query with backtick template syntax. Create router variable inside the factory function body, not at module level. Do not import from startup/db.js or startup/auth.js paths.',
   MISSING_IMPORT: 'CRITICAL: List every import at the top of the file. Every function you call must be imported. writeFileSync must be imported from fs if used. Do not call any function that is not imported.',
 };
 
@@ -49,8 +49,11 @@ async function callBuilder(payload) {
 }
 
 async function runVerification(targetFile) {
-  const result = spawnSync('node', ['--check', targetFile]);
-  return { syntaxOk: result.status === 0 };
+  // Pull committed content before checking — builder commits to GitHub,
+  // local filesystem is stale until pulled.
+  spawnSync('git', ['pull', 'origin', 'main'], { stdio: 'pipe' });
+  const result = spawnSync('node', ['--check', targetFile], { stdio: 'pipe' });
+  return { syntaxOk: result.status === 0, stderr: result.stderr?.toString().trim() };
 }
 
 async function runRetry(payloadFile, failureType) {
