@@ -45,11 +45,8 @@ async function runInMemoryGates(content, targetFile, originalLines) {
       stubArgs.push(String(originalLines));
     }
     const stubRun = spawnSync('node', stubArgs, { stdio: 'pipe' });
-    let stubOk = stubRun.status === 0;
+    const stubOk = stubRun.status === 0;
     const stubStderr = stubRun.stderr?.toString().trim() || '';
-    if (stubOk === false && stubStderr.includes('stub_marker_"TODO"') && !stubStderr.includes('line_count_collapse') && !stubStderr.includes('too_short')) {
-      stubOk = true;
-    }
     const stubSignals = stubStderr.includes('Reason:') ? stubStderr.split('Reason:')[1].trim().split('; ') : [];
     const gatesOk = antipatternOk && stubOk;
     const failureType = gatesOk ? null : detectFailureType(antipatternFindings, stubSignals);

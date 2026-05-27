@@ -43,7 +43,11 @@ export function detectBuilderStub(filePath, originalLines = null) {
   }
 
   // Signal 3: stub content markers anywhere in file (case-insensitive)
-  const lowerContent = content.toLowerCase();
+  const contentWithoutStrings = content
+    .replace(/`(?:\\.|[^`])*`/gs, '``')
+    .replace(/"(?:\\.|[^"])*"/gs, '""')
+    .replace(/'(?:\\.|[^'])*'/gs, "''");
+  const lowerContent = contentWithoutStrings.toLowerCase();
   for (const marker of STUB_CONTENT_MARKERS) {
     if (lowerContent.includes(marker.toLowerCase())) {
       signals.push(`stub_marker_"${marker}"`);

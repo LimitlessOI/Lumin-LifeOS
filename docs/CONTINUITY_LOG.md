@@ -2,6 +2,34 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] Update 2026-05-26 #28 — BuilderOS stub gate repaired after false commit
+
+### Files changed
+- `services/builderos-build-pipeline.js` — removed the blanket `TODO` stub override that allowed placeholder-heavy files to pass the live `/builder/build` pipeline.
+- `scripts/builderos-builder-output-verifier.mjs` — removed the same blanket `TODO` override so the standalone verifier matches the live pipeline again.
+- `scripts/verify-builder-output.mjs` — narrowed stub-marker detection by stripping string literals before scanning, so real `TODO` comments still fail but correction strings do not create false positives.
+
+### State after this session
+- Live verification proved `/builder/build` could commit a `TODO`-heavy stub file (`services/builderos-stub-test.js`) with `committed:true`; this was a real repair-loop enforcement bug.
+- The bug root cause was the global `TODO` bypass in both the live pipeline helper and the standalone verifier.
+- Local verifier checks now pass on the repaired pipeline files, while broken CLI and tiny fence samples still fail honestly.
+
+### Next agent: start here
+- Rebase onto `origin/main`, remove the committed test artifact `services/builderos-stub-test.js`, deploy the repaired pipeline, then rerun the failing stub test plus one good-build test on Railway before starting BuilderOS Command & Control.
+
+## [REVIEW] Update 2026-05-26 #27 — BuilderOS build-pipeline wiring audit
+
+### Files changed
+- `docs/projects/BUILDEROS_BUILD_PIPELINE_WIRING_PLAN.md` — BuilderOS-only next-phase plan after live audit found the unified verifier and retry-plan are still partly standalone from `/api/v1/lifeos/builder/build`; wrapper-service phase chosen.
+
+### State after this session
+- Live Railway SHA `e169ee6d38df0c4b75f505b5258ae84d6399c11c`; proof freshness remains `STALE` with open `DR-003-RECEIPT-STALE`.
+- `/builder/build` already uses `runBuildPipeline()` for JS targets, but `scripts/builderos-builder-output-verifier.mjs` is still not the canonical pre-commit gate and `committed:true` still precedes any explicit OIL approval gate.
+- Builder failed twice with `HTTP 413` while trying to generate the plan doc, so GAP-FILL created the document manually; `/api/v1/oil/receipts` also returned 500 on two audit-verification attempts.
+
+### Next agent: start here
+- Build the wrapper-service phase first: make the unified verifier the canonical pre-commit gate, keep route edits small, and fix the failing `/api/v1/oil/receipts` audit-write path separately if it is still needed.
+
 ## ⚠️ AGENT CONTINUITY PROTOCOL
 
 **Adam hits usage limits frequently. Every session, a new agent starts cold with no memory.**

@@ -72,13 +72,8 @@ export async function runVerification(targetFile, opts = {}) {
     : [stubPath, absTarget];
   const stubRun = spawnSync('node', stubArgs, { stdio: 'pipe' });
   // stub detector exits 0 = ok, exits 1 = stub detected
-  let stubOk = stubRun.status === 0;
+  const stubOk = stubRun.status === 0;
   const stubStderr = stubRun.stderr?.toString().trim() || '';
-  // false-positive: if the only stub signal is 'TODO' in a string literal,
-  // treat as clean (stub detector checks full content including string constants)
-  if (!stubOk && stubStderr.includes('stub_marker_"TODO"') && !stubStderr.includes('line_count_collapse') && !stubStderr.includes('too_short')) {
-    stubOk = true;
-  }
   const stubSignals = stubStderr.includes('Reason:')
     ? stubStderr.split('Reason:')[1]?.trim().split('; ') || []
     : [];
