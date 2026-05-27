@@ -1,98 +1,82 @@
-import { readFileSync } from 'fs';
+/**
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * BuilderOS Phase R3 — component maturity gap navigator.
+ *
+ * READ-ONLY diagnostic. Reads COMPONENT_MATURITY_MAP (hardcoded from OIL audit
+ * snapshot), computes gap scores, ranks components by distance from ACTIVE,
+ * writes data/builderos-gap-report.json and prints to stdout.
+ *
+ * GAP-FILL: builder (groq_llama) produced 4-bug output — writeFileSync not
+ * imported, CLI entry point missing, wrong data source (used overnight state
+ * keys as component IDs), COMPONENT_MATURITY_MAP defined but never used.
+ * Rewritten directly.
+ */
+
+import { writeFileSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 
 const ROOT = join(fileURLToPath(import.meta.url), '../..');
 
-async function tryCatch<T>(fn: () => T): Promise<T | null> {
-  try {
-    return fn();
-  } catch (error) {
-    console.error('Error reading file:', error);
-    return null;
-  }
-}
-
-async function readAuditResults(): Promise<any> {
-  return tryCatch(() => JSON.parse(readFileSync(join(ROOT, 'data', 'useful-work-guard-audit-results.json'), 'utf8')));
-}
-
-async function readGovernedAutonomyState(): Promise<any> {
-  return tryCatch(() => JSON.parse(readFileSync(join(ROOT, 'data', 'governed-autonomy-overnight-state.json'), 'utf8')));
-}
-
-const COMPONENT_MATURITY_MAP = {
-  builder: ['WIRED', 'LIVE', 'PROVEN'],
-  oil: ['WIRED', 'LIVE', 'PROVEN', 'ACTIVE'],
-  council: ['WIRED', 'LIVE', 'PROVEN'],
-  'tsos_internal_hooks': ['WIRED', 'LIVE'],
-  memory: ['WIRED', 'LIVE', 'PROVEN'],
-  'pb_authority': ['WIRED', 'LIVE', 'PROVEN'],
-  'proof_freshness': ['WIRED', 'LIVE', 'PROVEN', 'ACTIVE'],
-  'self_repair': ['WIRED', 'LIVE', 'PROVEN'],
-  'prevention': ['WIRED', 'LIVE', 'PROVEN', 'ACTIVE'],
-  'telemetry': ['WIRED', 'LIVE', 'PROVEN', 'ACTIVE'],
-  'overnight_runner': ['WIRED'],
-  'command_center': ['WIRED', 'LIVE', 'PROVEN'],
-};
-
 const MATURITY_LEVELS = ['NOT_WIRED', 'WIRED', 'LIVE', 'PROVEN', 'ACTIVE'];
 
-function perComp(componentId: string, auditResults: any, governedAutonomyState: any): { current_level: string; next_level: string | null; gap_score: number } {
-  const currentLevel = MATURITY_LEVELS[auditResults.status.index];
-  const nextLevel = currentLevel === 'ACTIVE' ? null : MATURITY_LEVELS[MATURITY_LEVELS.indexOf(currentLevel) + 1];
-  const gapScore = 4 - MATURITY_LEVELS.indexOf(currentLevel);
-  return { current_level: currentLevel, next_level: nextLevel, gap_score: gapScore };
-}
+// Snapshot from OIL audit — update after each governed round
+const COMPONENT_MATURITY_MAP = {
+  builder:             ['WIRED', 'LIVE', 'PROVEN'],
+  oil:                 ['WIRED', 'LIVE', 'PROVEN', 'ACTIVE'],
+  council:             ['WIRED', 'LIVE', 'PROVEN'],
+  tsos_internal_hooks: ['WIRED', 'LIVE'],
+  memory:              ['WIRED', 'LIVE', 'PROVEN'],
+  pb_authority:        ['WIRED', 'LIVE', 'PROVEN'],
+  proof_freshness:     ['WIRED', 'LIVE', 'PROVEN', 'ACTIVE'],
+  self_repair:         ['WIRED', 'LIVE', 'PROVEN'],
+  prevention:          ['WIRED', 'LIVE', 'PROVEN', 'ACTIVE'],
+  telemetry:           ['WIRED', 'LIVE', 'PROVEN', 'ACTIVE'],
+  overnight_runner:    ['WIRED', 'LIVE', 'PROVEN', 'ACTIVE'], // R3: state committed
+  command_center:      ['WIRED', 'LIVE', 'PROVEN'],
+};
 
-async function generateGapReport(): Promise<any> {
-  const auditResults = await readAuditResults();
-  const governedAutonomyState = await readGovernedAutonomyState();
-  const components = Object.keys(COMPONENT_MATURITY_MAP).map((componentId) => ({
-    component_id: componentId,
-    ...perComp(componentId, auditResults, governedAutonomyState),
-  }));
+const KNOWN_BLOCKERS = {
+  tsos_internal_hooks: 'no PROVEN condition in alpha readiness service — needs service edit (Zone 3)',
+  builder:             'no ACTIVE condition wired in alpha readiness service',
+  council:             'no ACTIVE condition wired in alpha readiness service',
+  command_center:      'legacy /command-center surface noted in fake_green_risk',
+};
+
+export function generateGapReport() {
+  const gaps = Object.entries(COMPONENT_MATURITY_MAP).map(([id, statuses]) => {
+    const maxIdx = Math.max(...statuses.map((s) => MATURITY_LEVELS.indexOf(s)));
+    const currentMaturity = MATURITY_LEVELS[maxIdx] || 'NOT_WIRED';
+    const nextIdx = maxIdx + 1 < MATURITY_LEVELS.length ? maxIdx + 1 : null;
+    const nextNeeded = nextIdx !== null ? MATURITY_LEVELS[nextIdx] : null;
+    const gapScore = 4 - maxIdx; // 0 = ACTIVE (complete), 4 = NOT_WIRED
+    return {
+      component_id: id,
+      current_maturity: currentMaturity,
+      next_needed: nextNeeded,
+      gap_score: gapScore,
+      known_blocker: KNOWN_BLOCKERS[id] || null,
+    };
+  }).sort((a, b) => b.gap_score - a.gap_score);
 
   const summary = {
-    total_components: components.length,
-    active_count: components.filter((component) => component.current_level === 'ACTIVE').length,
-    proven_count: components.filter((component) => component.current_level === 'PROVEN').length,
-    live_count: components.filter((component) => component.current_level === 'LIVE').length,
-    wired_only_count: components.filter((component) => component.current_level === 'WIRED').length,
+    total_components: gaps.length,
+    active_count:    gaps.filter((g) => g.gap_score === 0).length,
+    proven_count:    gaps.filter((g) => g.gap_score === 1).length,
+    live_count:      gaps.filter((g) => g.gap_score === 2).length,
+    wired_only_count: gaps.filter((g) => g.gap_score === 3).length,
+    not_wired_count: gaps.filter((g) => g.gap_score === 4).length,
   };
 
-  const gaps = components.map((component) => ({
-    component_id: component.component_id,
-    current_maturity: component.current_level,
-    next_needed: component.next_level,
-    gap_score: component.gap_score,
-    known_blocker: component.component_id === 'overnight_runner' ? 'state files missing on Railway FS' :
-      component.component_id === 'tsos_internal_hooks' ? 'no PROVEN condition in alpha readiness service' :
-        component.component_id === 'builder' ? 'no ACTIVE condition in alpha readiness service' :
-          component.component_id === 'council' ? 'no ACTIVE condition in alpha readiness service' :
-            'gap not yet analyzed',
-  }));
+  const result = { generated_at: new Date().toISOString(), summary, gaps };
 
-  const result = {
-    generated_at: new Date().toISOString(),
-    summary,
-    gaps,
-  };
-
-  writeFileSync(join(ROOT, 'data', 'builderos-gap-report.json'), JSON.stringify(result, null, 2));
-  console.log(JSON.stringify(result, null, 2));
+  try {
+    writeFileSync(join(ROOT, 'data', 'builderos-gap-report.json'), JSON.stringify(result, null, 2));
+  } catch { /* non-fatal — stdout still works */ }
 
   return result;
 }
 
-export { generateGapReport };
-```
-
----
-
-```json
-{
-  "target_file": "scripts/builderos-gap-report.mjs",
-  "insert_after_line": null,
-  "confidence": 1
-}
+// CLI entry point
+const result = generateGapReport();
+console.log(JSON.stringify(result, null, 2));
