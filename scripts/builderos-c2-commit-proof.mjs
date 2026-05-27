@@ -1,80 +1,66 @@
 /**
+ * @file scripts/builderos-c2-commit-proof.mjs
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
- * BuilderOS Command & Control Commit Proof Module.
- * Provides an internal smoke proof for the BuilderOS C2 commit path verification.
- * This module generates a simple, self-contained proof object with a timestamp.
- * It includes internal validation and formatting utilities to ensure consistency
- * and adherence to BuilderOS internal standards.
+ * @description Provides a smoke proof for BuilderOS Command & Control commit-path verification.
+ * This module generates a simple object indicating successful generation and supports CLI execution.
  */
 
 // --- Module Constants ---
 const BUILDEROS_C2_PROOF_VERSION = '1.0.0';
-const PROOF_SOURCE_IDENTIFIER = 'builderos-command-control';
-const PROOF_OK_STATUS = true;
+const BUILDEROS_C2_PROOF_SOURCE = 'builderos-command-control';
+const BUILDEROS_C2_PROOF_OK_STATUS = true;
 
 /**
- * Validates the structure and content of a BuilderOS C2 commit proof object.
- * Ensures that the object contains the expected fields with correct types and formats.
+ * Validates the shape and basic types of a BuilderOS C2 commit proof object.
+ * This helper ensures the generated proof adheres to expected structure.
  *
- * @param {object} proofObject - The proof object to validate.
- * @returns {boolean} True if the proof object is valid, false otherwise.
+ * @param {object} proofObject The proof object to validate.
+ * @returns {boolean} True if the object has the expected shape, false otherwise.
  */
 function validateProofShape(proofObject) {
   if (typeof proofObject !== 'object' || proofObject === null) {
-    console.error('Validation Error: Proof object is not an object or is null.');
     return false;
   }
-
-  if (!('ok' in proofObject) || typeof proofObject.ok !== 'boolean') {
-    console.error('Validation Error: Proof object missing "ok" field or it is not a boolean.');
+  if (typeof proofObject.ok !== 'boolean') {
     return false;
   }
-
-  if (!('source' in proofObject) || typeof proofObject.source !== 'string' || proofObject.source.length === 0) {
-    console.error('Validation Error: Proof object missing "source" field, it is not a string, or is empty.');
+  if (typeof proofObject.source !== 'string' || proofObject.source.length === 0) {
     return false;
   }
-
-  if (!('generated_at' in proofObject) || typeof proofObject.generated_at !== 'string') {
-    console.error('Validation Error: Proof object missing "generated_at" field or it is not a string.');
+  if (typeof proofObject.generated_at !== 'string' || proofObject.generated_at.length === 0) {
     return false;
   }
-
-  // Validate ISO 8601 format for generated_at
-  try {
-    const date = new Date(proofObject.generated_at);
-    if (isNaN(date.getTime()) || date.toISOString() !== proofObject.generated_at) {
-      console.error('Validation Error: "generated_at" is not a valid ISO 8601 string.');
-      return false;
-    }
-  } catch (e) {
-    console.error('Validation Error: "generated_at" parsing failed.', e);
+  // Basic ISO 8601 format check (starts with YYYY-MM-DDTHH:MM:SS.sssZ)
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(proofObject.generated_at)) {
     return false;
   }
-
   return true;
 }
 
 /**
- * Formats a given JavaScript object into a human-readable JSON string with 2-space indentation.
+ * Formats a given object into a pretty-printed JSON string.
+ * This helper is used for consistent output formatting, especially for CLI.
  *
- * @param {object} data - The object to be formatted.
- * @returns {string} A JSON string representation of the object.
+ * @param {object} data The object to stringify.
+ * @returns {string} The JSON string representation of the object.
  */
 function formatProofJson(data) {
   return JSON.stringify(data, null, 2);
 }
 
 /**
- * Generates a BuilderOS C2 commit proof object.
- * This function creates an object indicating successful proof generation,
- * specifying the source and the exact time of generation in ISO 8601 format.
+ * Generates a BuilderOS Command & Control commit proof object.
+ * This function creates a simple object indicating successful generation
+ * with a timestamp.
  *
- * @returns {{ok: boolean, source: string, generated_at: string}} The generated proof object.
- * @exp getBuilderOSC2CommitProof
+ * @returns {object} An object containing the proof details.
+ *   - ok: boolean indicating success.
+ *   - source: string identifying the proof source.
+ *   - generated_at: ISO 8601 string of the generation timestamp.
  */
 export function getBuilderOSC2CommitProof() {
   const proof = {
-    ok: PROOF_OK_STATUS,
-    source: PROOF_SOURCE_IDENT
+    ok: BUILDEROS_C2_PROOF_OK_STATUS,
+    source: BUILDEROS_C2_PROOF_SOURCE,
+    generated_at: new Date().toISOString(),
+    version: BUILDEROS_C2
