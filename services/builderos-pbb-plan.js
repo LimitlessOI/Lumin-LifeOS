@@ -7,8 +7,106 @@
 
 import { randomUUID } from 'crypto';
 
+const MIN_JS_LINES = 40;
+
 function normalizeText(value) {
   return String(value || '').trim();
+}
+
+function isJsTarget(targetFile) {
+  return /\.(mjs|cjs|js)$/i.test(normalizeText(targetFile));
+}
+
+function extractExportNames(instruction) {
+  const names = [];
+  const exportFn = instruction.match(/export(?:ing)?\s+(?:a\s+)?function\s+([A-Za-z0-9_]+)/i);
+  if (exportFn) names.push(exportFn[1]);
+  const exports = instruction.match(/exports?\s+([A-Za-z0-9_]+)/gi) || [];
+  for (const match of exports) {
+    const name = match.replace(/exports?\s+/i, '');
+    if (name && !names.includes(name)) names.push(name);
+  }
+  return names;
+}
+
+function buildJsOutputRequirements(targetFile) {
+  return [
+    'BUILDER OUTPUT REQUIREMENTS (mandatory — /builder/build rejects files below 15 lines):',
+    `- Deliver at least ${MIN_JS_LINES} lines of real executable code in ${targetFile}.`,
+    '- Plain JavaScript ESM only: no TypeScript types, no ": void", no generics, no markdown fences.',
+    '- No external npm package imports. Node built-ins (node:path, node:url) allowed if needed.',
+    '- No TODO, PLACEHOLDER, stub bodies, or "not implemented" comments.',
+    '- Include a file-level JSDoc with @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md.',
+    '- Every exported function must contain real logic — not a one-line console.log stub.',
+    '- Add a CLI entry at file bottom using import.meta.url guard and process.argv[1] check.',
+    '- Do NOT emit ---METADATA--- blocks for this governed loop job.',
+  ].join('\n');
+}
+
+function buildProofFileSpec(instruction, targetFile, exportNames) {
+  const primaryExport = exportNames[0] || 'getBuilderOSC2CommitProof';
+  const lines = [
+    'TARGET: new Zone 1 proof module for BuilderOS Command & Control commit-path verification.',
+    `FILE: ${targetFile}`,
+    '',
+    buildJsOutputRequirements(targetFile),
+    '',
+    'REQUIRED EXPORTS AND BEHAVIOR:',
+    `1. export function ${primaryExport}()`,
+    "   - returns plain object: { ok: true, source: 'builderos-command-control', generated_at: ISO8601 string }",
+    '   - generated_at must be new Date().toISOString() at call time',
+    '2. CLI behavior when executed directly:',
+    '   - print JSON.stringify(result, null, 2) to stdout',
+    '   - exit 0 on success',
+    '3. Add at least two small internal helper functions with real logic, e.g.:',
+    '   - validateProofShape(obj) — checks ok/source/generated_at fields',
+    '   - formatProofJson(obj) — returns formatted JSON string',
+    '4. Add module constants documenting purpose (BUILDEROS_C2_PROOF_VERSION, etc.)',
+    '',
+    'FORBIDDEN:',
+    '- No fetch, no AI calls, no network I/O, no pool/database usage',
+    '- No LifeOS product routes, no TSOS customer surfaces',
+    '',
+    `OPERATOR INSTRUCTION (must satisfy exactly): ${instruction}`,
+  ];
+  return lines.join('\n');
+}
+
+function buildGenericJsSpec(instruction, targetFile, exportNames) {
+  const exportLines = exportNames.length
+    ? exportNames.map((name, i) => `${i + 1}. export function ${name}(...) with complete implementation`).join('\n')
+    : '1. Export every function named in the instruction with complete implementations';
+
+  return [
+    buildJsOutputRequirements(targetFile),
+    '',
+    'REQUIRED EXPORTS:',
+    exportLines,
+    '',
+    'Include helper functions, constants, and CLI entry so the file is complete — not a stub.',
+    '',
+    `OPERATOR INSTRUCTION: ${instruction}`,
+  ].join('\n');
+}
+
+function buildBaseSpec(instruction, targetFile) {
+  const exportNames = extractExportNames(instruction);
+  const lower = instruction.toLowerCase();
+  const isProofFile =
+    /proof/.test(lower) &&
+    (targetFile.includes('proof') || targetFile.startsWith('scripts/builderos-'));
+
+  if (isJsTarget(targetFile)) {
+    if (isProofFile) return buildProofFileSpec(instruction, targetFile, exportNames);
+    return buildGenericJsSpec(instruction, targetFile, exportNames);
+  }
+
+  return [
+    'BuilderOS-only governed loop execution.',
+    'Do not modify LifeOS user features or TSOS customer-facing surfaces.',
+    'Implement exactly what the instruction asks for inside approved builder safe scope.',
+    `Instruction: ${instruction}`,
+  ].join('\n');
 }
 
 export function generatePbbPlanFromOilAudit(job, oilAudit, options = {}) {
@@ -27,21 +125,21 @@ export function generatePbbPlanFromOilAudit(job, oilAudit, options = {}) {
   const repairAttempt = Number(options.repairAttempt || 0);
   const verifierResult = options.verifierResult || null;
 
-  let spec = [
-    'BuilderOS-only governed loop execution.',
-    'Do not modify LifeOS user features or TSOS customer-facing surfaces.',
-    'Implement exactly what the instruction asks for inside approved builder safe scope.',
-    `Instruction: ${instruction}`,
-  ].join('\n');
+  let spec = buildBaseSpec(instruction, targetFile || 'scripts/builderos-output.mjs');
 
   if (repairAttempt > 0 && verifierResult) {
-    spec += `\n\nOIL verifier rejection (attempt ${repairAttempt}):\n`;
+    spec += '\n\nOIL VERIFIER REJECTION (repair attempt):\n';
     spec += `- first_failure: ${verifierResult.first_failure || 'unknown'}\n`;
     if (verifierResult.syntax_error) spec += `- syntax_error: ${verifierResult.syntax_error}\n`;
     if (Array.isArray(verifierResult.stub_signals) && verifierResult.stub_signals.length) {
       spec += `- stub_signals: ${verifierResult.stub_signals.join('; ')}\n`;
     }
-    spec += 'Revise the output to pass syntax, antipattern, and stub gates with complete working code.';
+    if (targetFile && isJsTarget(targetFile)) {
+      spec += `\nREPAIR REQUIREMENTS:\n`;
+      spec += `- Rewrite ${targetFile} to at least ${MIN_JS_LINES} lines.\n`;
+      spec += '- Remove TypeScript syntax, external imports, and stub bodies.\n';
+      spec += '- Pass node --check and builder stub/antipattern gates.\n';
+    }
   }
 
   const task = repairAttempt > 0
@@ -63,5 +161,6 @@ export function generatePbbPlanFromOilAudit(job, oilAudit, options = {}) {
     builder_scope: 'builderos-only',
     repair_attempt: repairAttempt,
     planned_at: new Date().toISOString(),
+    spec_lines: spec.split('\n').length,
   };
 }
