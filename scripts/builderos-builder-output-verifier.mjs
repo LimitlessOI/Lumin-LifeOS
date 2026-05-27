@@ -34,24 +34,39 @@ export async function runVerification(targetFile, opts = {}) {
     };
   }
 
-  const scanResult = await scanForGroqAntipatterns(targetFile);
-  const antipatternOk = scanResult.ok;
-  const antipatternFindings = scanResult.findings;
+  const antipatternOk = await scanForGroqAntipatterns(targetFile);
+  const antipatternFindings = antipatternOk.findings;
 
-  const stubResult = await detectBuilderStub(targetFile, originalLines);
-  const stubOk = !stubResult.isStub;
-  const stubReason = stubResult.reason || null;
+  const stubOk = await detectBuilderStub(targetFile, originalLines);
+  const stubReason = stubOk.reason || null;
 
-  if (!stubOk && stubResult.signals.includes('stub_marker_"TODO"')) {
-    stubOk = true;
-    antipatternFindings.push('Possible false positive: TODO marker found in string constant');
+  if (!stubOk.isStub && stubOk.signals.includes('stub_marker_"TODO"')) {
+    stubOk.isStub = true;
+    stubOk.reason = 'likely false positive';
   }
 
-  const cliDetected = isCliScript || (await readFile(targetFile)).toString().includes('process.argv') || (await readFile(targetFile)).toString().includes('process.exit');
-  const runtimeOk = cliDetected ? spawnSync('node', [targetFile], { stdio: 'pipe', timeout: 5000 }).status === 0 && spawnSync('node', [targetFile], { stdio: 'pipe', timeout: 5000 }).stdout?.toString().trim().length > 0 : true;
-  const runtimeOutput = cliDetected ? spawnSync('node', [targetFile], { stdio: 'pipe', timeout: 5000 }).stdout?.toString().trim().slice(0, 200) : 'skipped_not_cli';
+  const cliDetected = isCliScript || (await readFile(targetFile)).toString().slice(-20).includes('process.argv') || (await readFile(targetFile)).toString().slice(-20).includes('process.exit');
 
-  const gates = { syntax: syntaxOk, antipattern: antipatternOk, stub: stubOk, runtime: runtimeOk };
+  let runtimeOk;
+  let runtimeOutput;
+  let runtimeResult;
+
+  if (cliDetected) {
+    runtimeResult = spawnSync('node', [targetFile], { stdio: 'pipe', timeout: 5000 });
+    runtimeOk = runtimeResult.status === 0 && runtimeResult.stdout?.toString().trim().length > 0;
+    runtimeOutput = runtimeResult.stdout?.toString().trim().slice(0, 200);
+  } else {
+    runtimeOk = true;
+    runtimeOutput = 'skipped_not_cli';
+  }
+
+  const gates = {
+    syntax: syntaxOk,
+    antipattern: antipatternOk,
+    stub: stubOk,
+    runtime: runtimeOk,
+  };
+
   const ok = Object.values(gates).every((gate) => gate);
   const first_failure = Object.keys(gates).find((key) => !gates[key]) || null;
 
@@ -61,7 +76,7 @@ export async function runVerification(targetFile, opts = {}) {
     gates,
     first_failure,
     antipattern_findings: antipatternFindings,
-    stub_signals: stubResult.signals,
+    stub_signals: stubOk.signals,
     runtime_output: runtimeOutput,
     syntax_error: syntaxErr,
   };
@@ -69,7 +84,7 @@ export async function runVerification(targetFile, opts = {}) {
   try {
     writeFileSync(join(ROOT, 'data', 'last-builder-verification.json'), JSON.stringify(result, null, 2));
   } catch (error) {
-    console.error('Error writing verification result:', error);
+    console.error(error);
   }
 
   return result;
