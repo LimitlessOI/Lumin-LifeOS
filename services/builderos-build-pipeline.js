@@ -4,7 +4,8 @@ import { spawnSync } from 'child_process';
 import { writeFileSync, unlinkSync, existsSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-urlimport 'url';
+import { fileURLToPath } from 'url';
+import { classifyBuildTarget } from './builderos-patch-mode-policy.js';
 
 const __file = fileURLToPath(import.meta.url);
 const ROOT = join(__file, '../..');
@@ -14,7 +15,7 @@ const CORRECTION_CLAUSES = {
   STUB: 'CRITICAL: Do NOT generate a stub or placeholder. Write complete working implementation, minimum 60 lines of real code. Every function must have a real body with real logic.',
   SYNTAX: 'CRITICAL: Do not write regex literals. Use string.includes() or string.startsWith() for all pattern matching. List every import at the top. Every import must be used.',
   SEMANTIC_SILENT: 'CRITICAL: The main exported function MUST be called at module bottom as the CLI entry point with if(process.argv[2]) guard.',
-  ANTIPATTERN: 'CRITICAL: Name factory parameter rk not rk. Do not use pq with backtick template syntax. Create router variable inside the factory function body, not at module level.',
+  ANTIPATTERN: 'CRITICAL: Name factory parameter requireKey not rk. Do not use pool.query with backtick template syntax. Create router variable inside the factory function body, not at module level.',
   MISSING_IMPORT: 'CRITICAL: List every import at the top of the file. Every function you call must be imported. writeFileSync must be imported from fs if used. Do not call any function that is not imported.',
 };
 

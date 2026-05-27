@@ -40,6 +40,7 @@ import { BUILDER_MODE, BUILDER_MODE_RULES, DEFAULT_BUILDER_MODE } from '../confi
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
 import { pool as dbPool } from '../core/database.js';
+import { runBuildPipeline } from '../services/builderos-build-pipeline.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -1617,6 +1618,42 @@ export function createLifeOSCouncilBuilderRoutes({
         });
       }
       log.info({ resolvedTarget }, '[BUILDER] pre-commit syntax check passed');
+
+      // ── Anti-pattern + stub gate with automatic retry ─────────────────────
+      const pipelineResult = await runBuildPipeline({
+        generatedOutput,
+        resolvedTarget,
+        originalLines: null,
+        taskBody,
+        retryFn: async (retryBody) => {
+          let retryCapture = null;
+          const mockRetryRes = {
+            status(c) { return { json(d) { retryCapture = { code: c, data: d }; } }; },
+            json(d) { retryCapture = { code: 200, data: d }; },
+          };
+          await dispatchTask({ body: { ...retryBody, mode: retryBody.mode || 'code', useCache: false } }, mockRetryRes);
+          if (!retryCapture?.data?.ok) return { ok: false, error: retryCapture?.data?.error || 'council_failed' };
+          return { ok: true, output: retryCapture.data.output, model_used: retryCapture.data.model_used };
+        },
+        log,
+      });
+      if (!pipelineResult.shouldCommit) {
+        log.error({ resolvedTarget, failureType: pipelineResult.failureType, retryAttempted: pipelineResult.retryAttempted }, '[BUILDER] pipeline gate blocked commit');
+        const gapRec = await recordBuilderGap({
+          domain, task: taskBody.task, modelUsed: model_used, rawOutput: generatedOutput,
+          status: 'failed', stage: 'pipeline_gate', reason: pipelineResult.failureType || 'pipeline_gate_failed',
+          targetFile: resolvedTarget, routingKey: routing_key, mode: taskBody.mode || 'code',
+          executionOnly: taskBody.execution_only === true, placement,
+        });
+        return res.status(422).json({
+          ok: false, committed: false, error: 'Pipeline gate failed — anti-pattern or stub detected',
+          pipeline: pipelineResult, gap_recommendation: gapRec,
+        });
+      }
+      if (pipelineResult.retryAttempted && pipelineResult.ok && pipelineResult.retryOutput) {
+        generatedOutput = pipelineResult.retryOutput;
+        log.info({ resolvedTarget, retryModel: pipelineResult.retryModel }, '[BUILDER] Pipeline retry passed — using retry output');
+      }
     }
 
     // ── SQL validation gate ───────────────────────────────────────────────────
