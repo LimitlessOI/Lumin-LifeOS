@@ -8,6 +8,7 @@ import {
   setCommandControlHalt,
   getCommandControlHaltState,
 } from '../services/builderos-command-control-service.js';
+import { executeCommandControlJob } from '../services/builderos-governed-loop-executor.js';
 
 export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) {
   const router = express.Router();
@@ -37,6 +38,20 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
       const job = await cancelCommandControlJob(pool, req.params.id, req.body || {});
       if (!job) return res.status(409).json({ ok: false, error: 'job_not_cancellable' });
       res.json({ ok: true, job });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post('/jobs/:id/execute', async (req, res, next) => {
+    try {
+      const result = await executeCommandControlJob(pool, req.params.id, {
+        baseUrl: req.body?.base_url,
+        commandKey: req.headers['x-command-key'],
+      });
+      const job = await getCommandControlJob(pool, req.params.id);
+      const status = result.ok ? 200 : result.error === 'job_not_executable' ? 409 : 422;
+      res.status(status).json({ ok: result.ok, result, job });
     } catch (error) {
       next(error);
     }

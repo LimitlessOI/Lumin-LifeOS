@@ -2,6 +2,26 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] Update 2026-05-27 — BuilderOS governed loop Phase 3 bridge
+
+### Files changed
+- `services/builderos-oil-job-audit.js` — deterministic OIL boundary audit
+- `services/builderos-pbb-plan.js` — BP/PBB plan from OIL findings
+- `services/builderos-governed-loop-executor.js` — single-job executor glue
+- `services/builderos-command-control-service.js` — execution status/receipt helpers
+- `routes/lifeos-builderos-command-control-routes.js` — POST `/jobs/:id/execute`
+- `docs/architecture/BUILDEROS_COMMAND_CONTROL_PROTOCOL.md` — Phase 3 execute spec
+
+### State after this session
+- C2 unchanged as intake/control; execute is explicit single-job bridge
+- Local E2E: queued → OIL PASS → PBB plan → Builder dispatch → honest `failed` (short output rejected)
+- No daemon, no fake deployed/proof_current transitions
+
+### Next agent: start here
+- Council-based OIL critique (beyond deterministic boundary audit)
+- Multi-job scheduling only after single-job loop proven with `committed` path
+- Deploy/proof transitions only when actually implemented
+
 ## [BUILD] Update 2026-05-27 — BuilderOS Command & Control Phase 2 complete
 
 ### Files changed

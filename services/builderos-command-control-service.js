@@ -116,3 +116,41 @@ export async function cancelCommandControlJob(pool, jobId, payload = {}) {
   );
   return result.rows[0] || null;
 }
+
+export async function updateCommandControlJobExecution(pool, jobId, patch = {}) {
+  const fields = [];
+  const values = [];
+  let idx = 1;
+
+  if (patch.status) {
+    fields.push(`status = $${idx++}`);
+    values.push(patch.status);
+  }
+  if (Object.prototype.hasOwnProperty.call(patch, 'blocker')) {
+    fields.push(`blocker = $${idx++}`);
+    values.push(patch.blocker);
+  }
+  if (patch.result_json && typeof patch.result_json === 'object') {
+    fields.push(`result_json = COALESCE(result_json, '{}'::jsonb) || $${idx++}::jsonb`);
+    values.push(JSON.stringify(patch.result_json));
+  }
+
+  if (patch.receipt && typeof patch.receipt === 'object') {
+    fields.push(`receipts_json = COALESCE(receipts_json, '[]'::jsonb) || $${idx++}::jsonb`);
+    values.push(JSON.stringify([{ ...patch.receipt, at: patch.receipt.at || new Date().toISOString() }]));
+  }
+
+  if (!fields.length) return null;
+
+  fields.push('updated_at = NOW()');
+  values.push(jobId);
+
+  const result = await pool.query(
+    `UPDATE builderos_command_control_jobs
+        SET ${fields.join(', ')}
+      WHERE id = $${idx}::uuid
+    RETURNING id, status, blocker, metadata_json, result_json, receipts_json, updated_at`,
+    values
+  );
+  return result.rows[0] || null;
+}

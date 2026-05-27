@@ -20,6 +20,7 @@ It does not bypass PB or useful-work guard expectations.
 - `POST /api/v1/lifeos/builderos/command-control/jobs`
 - `GET /api/v1/lifeos/builderos/command-control/jobs/:id`
 - `POST /api/v1/lifeos/builderos/command-control/jobs/:id/cancel`
+- `POST /api/v1/lifeos/builderos/command-control/jobs/:id/execute`
 - `POST /api/v1/lifeos/builderos/command-control/halt`
 - `GET /api/v1/lifeos/builderos/command-control/halt`
 
@@ -39,11 +40,27 @@ The minimum safe version:
 
 It does not yet:
 
-- run OIL audit automatically
-- generate a PBB plan automatically
-- dispatch Builder automatically
-- run retry or proof verification automatically
-- transition jobs beyond stored state without an executor phase
+- run OIL audit automatically on submit
+- generate a PBB plan automatically on submit
+- dispatch Builder automatically on submit
+- run retry or proof verification automatically on submit
+
+## Phase 3 — Governed Loop Execute (explicit trigger)
+
+`POST /api/v1/lifeos/builderos/command-control/jobs/:id/execute`
+
+Single-job executor bridge only. No background daemon.
+
+Flow for one `queued` job:
+
+1. OIL deterministic boundary audit
+2. BP/PBB plan generation
+3. Builder dispatch via `POST /api/v1/lifeos/builder/build`
+4. OIL verifier (4-gate builder output verifier)
+5. One repair retry if verifier fails (replan → builder → verifier)
+6. Honest status update: `committed`, `failed`, `verifier_failed`, or `blocked`
+
+C2 remains intake/control. This endpoint is explicit runtime glue, not an autonomous brain.
 
 ## Statuses
 
@@ -53,8 +70,8 @@ It does not yet:
 - `retrying`
 - `blocked`
 - `committed`
-- `deployed`
-- `proof_current`
+- `deployed` (reserved — not set by Phase 3 bridge)
+- `proof_current` (reserved — not set by Phase 3 bridge)
 - `cancelled`
 - `halted`
 - `failed`
@@ -68,12 +85,6 @@ It does not yet:
 - no fake success states
 - halt flag must stop new queued work from being accepted as runnable
 
-## Next Phase
+## Future Phase
 
-The next phase is a governed executor bridge:
-
-1. take a queued command
-2. run OIL/PB validation
-3. dispatch Builder
-4. run repair-loop verification
-5. update job status with receipts
+Multi-job scheduling, deploy/proof transitions, and council-based OIL critique — not Phase 3.
