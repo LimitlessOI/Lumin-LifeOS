@@ -2,6 +2,24 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] Update 2026-05-27 — BuilderOS Command & Control Phase 2 complete
+
+### Files changed
+- `services/builderos-command-control-service.js` — GAP-FILL complete service (halt, submit, get, cancel)
+- `routes/lifeos-builderos-command-control-routes.js` — NEW authenticated API routes
+- `db/migrations/builderos_command_control.sql` — fixed invalid `//` comment; idempotent IF NOT EXISTS
+- `startup/register-runtime-routes.js` — mount at `/api/v1/lifeos/builderos/command-control`
+- `docs/architecture/BUILDEROS_COMMAND_CONTROL_PROTOCOL.md` — protocol doc
+
+### State after this session
+- Phase 2 C2 API live-ready: submit/get/cancel jobs + global halt; no executor yet
+- Local integration tests ALL_PASS (auth 401, blocked instructions, halt blocks new jobs)
+- Migration applied to Neon; tables `builderos_command_control_jobs` + `builderos_command_control_state` exist
+
+### Next agent: start here
+- Phase 3: governed executor bridge (queued job → OIL/PB → Builder → verify → receipts)
+- Do not build UI or LifeOS features in BuilderOS lane
+
 ## [FIX] Update 2026-05-26 #28 — BuilderOS stub gate repaired after false commit
 
 ### Files changed
