@@ -54,7 +54,7 @@ export async function setCommandControlHalt(pool, payload = {}) {
 export async function createCommandControlJob(pool, input = {}) {
   const instruction = normalizeText(input.instruction);
   const requestedBy = normalizeText(input.requested_by) || 'adam_remote';
-  const metadata = normalizeMetadata(input.metadata);
+  const metadata = normalizeMetadata(input.metadata_json || input.metadata);
   const halt = await getCommandControlHaltState(pool);
 
   let status = 'queued';
