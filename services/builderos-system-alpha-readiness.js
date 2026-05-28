@@ -118,24 +118,30 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
   const overnightLogTail = readJsonlTail('data/governed-autonomy-overnight-log.jsonl', 3);
   const queueLogTail = readJsonlTail('data/builder-continuous-queue-log.jsonl', 3);
 
-  // Phase B — live DB query for memory runtime proof (GAP-FILL: large file, surgical edit)
-  let memoryDb = { total: 0, latest: null, error: null };
+  // Phase B — canonical memory proof: epistemic_facts (BR-07, MEMORY_PROOF_CONTRACT.md)
+  // self_repair_memory_events is a repair log, not the governed memory architecture.
+  let memoryDb = { total: 0, provenCount: 0, repairEventCount: 0, error: null };
   try {
-    const [totalRes, latestRes] = await Promise.all([
-      pool.query('SELECT COUNT(*) FROM self_repair_memory_events'),
-      pool.query('SELECT created_at, trigger, result FROM self_repair_memory_events ORDER BY created_at DESC LIMIT 1'),
+    const [totalRes, provenRes] = await Promise.all([
+      pool.query('SELECT COUNT(*) FROM epistemic_facts'),
+      pool.query('SELECT COUNT(*) FROM epistemic_facts WHERE level >= 2 AND source_count > 1'),
     ]);
     memoryDb.total = parseInt(totalRes.rows[0].count, 10);
-    memoryDb.latest = latestRes.rows[0] || null;
+    memoryDb.provenCount = parseInt(provenRes.rows[0].count, 10);
   } catch (err) {
-    memoryDb.error = err.message;
+    memoryDb.error = err.message; // table may not exist yet
   }
-
-  // Phase B.2 — TSOS-internal: count telemetry events with token_estimate data
-  let tsosTokenCount = 0;
   try {
-    const tsosRes = await pool.query('SELECT COUNT(*) FROM autonomous_telemetry_events WHERE total_token_estimate > 0');
-    tsosTokenCount = parseInt(tsosRes.rows[0].count, 10);
+    const repairRes = await pool.query('SELECT COUNT(*) FROM self_repair_memory_events');
+    memoryDb.repairEventCount = parseInt(repairRes.rows[0].count, 10);
+  } catch {}
+
+  // Phase B.2 — TSOS-internal: dedicated hook events only (BR-09, TSOS_HOOK_BOUNDARY.md)
+  // Generic token telemetry cannot prove a dedicated TSOS internal hook is wired.
+  let tsosHookCount = 0;
+  try {
+    const tsosRes = await pool.query("SELECT COUNT(*) FROM autonomous_telemetry_events WHERE task_type = 'tsos_internal_hook'");
+    tsosHookCount = parseInt(tsosRes.rows[0].count, 10);
   } catch {}
 
   // Phase B.3 — count null metrics to make TELEMETRY_GAPS_REMAIN conditional
@@ -183,24 +189,24 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     {
       component_id: 'tsos_internal_hooks',
       label: 'BuilderOS-internal TSOS hooks',
-      statuses: hasStatuses(tsosTokenCount > 0 ? 'WIRED' : 'NOT_WIRED', tsosTokenCount > 0 ? 'LIVE' : null),
+      statuses: hasStatuses(tsosHookCount > 0 ? 'WIRED' : 'NOT_WIRED', tsosHookCount > 0 ? 'LIVE' : null),
       runtime_proof: [
-        proofSource('autonomous_telemetry_events.total_token_estimate', tsosTokenCount > 0 ? `${tsosTokenCount} token-tracked events` : 'no dedicated TSOS-internal BuilderOS proof source yet'),
+        proofSource("autonomous_telemetry_events WHERE task_type='tsos_internal_hook'", tsosHookCount > 0 ? `${tsosHookCount} dedicated hook events` : 'no dedicated TSOS-internal hook events yet (generic token telemetry excluded per TSOS_HOOK_BOUNDARY.md)'),
       ],
       fake_green_risk: 'Token-economics UI can imply TSOS maturity not proven for BuilderOS.',
     },
     {
       component_id: 'memory',
       label: 'Memory',
-      statuses: hasStatuses('WIRED', memoryDb.error ? null : 'LIVE', (!memoryDb.error && memoryDb.total > 0) ? 'PROVEN' : null),
+      statuses: hasStatuses('WIRED', (!memoryDb.error && memoryDb.total > 0) ? 'LIVE' : null, (!memoryDb.error && memoryDb.provenCount > 0) ? 'PROVEN' : null),
       runtime_proof: [
         proofSource(
-          'GET /api/v1/lifeos/command-center/memory/status',
+          'epistemic_facts (Amendment 39 canonical path)',
           memoryDb.error
-            ? `DB_ERROR: ${memoryDb.error}`
+            ? `DB_ERROR: ${memoryDb.error} — epistemic_facts table may not exist yet`
             : memoryDb.total > 0
-              ? `${memoryDb.total} events in self_repair_memory_events; latest=${memoryDb.latest?.created_at}`
-              : 'self_repair_memory_events queryable — NO_DATA (0 rows yet)'
+              ? `${memoryDb.total} facts total; ${memoryDb.provenCount} at level>=2 with source_count>1; repair_events=${memoryDb.repairEventCount} (supplementary)`
+              : `epistemic_facts queryable but empty; repair_events=${memoryDb.repairEventCount} (non-canonical, not scored)`
         ),
       ],
       fake_green_risk: 'Memory LIVE requires the endpoint to return 200 from DB — not structural file existence.',
@@ -370,8 +376,8 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
 
   const blockers = [
     ...buildFailClosedReadinessBlockers({ proofFreshness, readiness }),
-    ...(tsosTokenCount === 0 ? [{ code: 'TSOS_INTERNAL_HOOKS_NOT_WIRED', detail: 'BuilderOS-internal TSOS hooks have no approved runtime proof source yet.' }] : []),
-    ...(memoryDb.total === 0 ? [{ code: 'MEMORY_NOT_RUNTIME_PROVEN', detail: 'Memory is structurally wired but not yet proven through approved BuilderOS runtime truth sources.' }] : []),
+    ...(tsosHookCount === 0 ? [{ code: 'TSOS_INTERNAL_HOOKS_NOT_WIRED', detail: 'No dedicated tsos_internal_hook events found — generic token telemetry does not count (TSOS_HOOK_BOUNDARY.md).' }] : []),
+    ...(memoryDb.provenCount === 0 ? [{ code: 'MEMORY_NOT_RUNTIME_PROVEN', detail: 'Memory not PROVEN — epistemic_facts has no level>=2 facts with source_count>1 (MEMORY_PROOF_CONTRACT.md canonical path).' }] : []),
     ...(auditClean ? [] : [{
       code: 'USEFUL_WORK_GUARD_COVERAGE_AUDIT_INCOMPLETE',
       detail: 'Useful-work-guard has evidence, but a full autonomous-path coverage audit is still missing.',

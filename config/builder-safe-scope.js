@@ -11,6 +11,7 @@ export const SAFE_WRITE_PATHS = Object.freeze([
   'prompts/',
   'public/overlay/',
   'scripts/',
+  'docs/projects/builderos-remediation/',
 ]);
 
 // Paths that are always blocked regardless of mode.
