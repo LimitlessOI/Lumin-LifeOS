@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "stabilization",
-  "next_task": "Use the BuilderOS structural consolidation package to quarantine legacy cockpit drift, then continue mobile/role-based improvements from a governed alpha surface",
+  "next_task": "Keep command-center runtime proof surfaces aligned with BuilderOS canonical scoring, then continue structural consolidation and mobile/role-based improvements from a governed alpha surface",
   "stability_class": "needs-review",
-  "current_focus": "BuilderOS structural consolidation — system alpha readiness, canonical cockpit truth, and runtime-backed status classification",
+  "current_focus": "BuilderOS structural consolidation — command-center proof-surface hardening, canonical cockpit truth, and runtime-backed status classification",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",
@@ -177,6 +177,6 @@
       "resolved": true
     }
   ],
-  "last_verified_at": "2026-05-26",
+  "last_verified_at": "2026-05-28",
   "verification_passed": null
 }

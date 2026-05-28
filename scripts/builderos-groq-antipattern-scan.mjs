@@ -97,7 +97,8 @@ export function scanForGroqAntipatterns(filePath) {
 
   // PATTERN 9: import-merge bug (groq concatenates consecutive import lines)
   // e.g. "import { X } from 'path'\nimport { Y } from 'url'" → "pathimport 'path'; urlimport 'url'"
-  const importMergeRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+import[\s{(]/;
+  // Match identifier+import glued together anywhere on the line, not just at column 0.
+  const importMergeRe = /(^|[^a-zA-Z0-9_$])([a-zA-Z_$][a-zA-Z0-9_$]*import)(?=[\s{(;'"])/;
   for (let i = 0; i < lines.length; i++) {
     const l = lines[i].trim();
     if (l.startsWith('//') || l.startsWith('*')) continue;

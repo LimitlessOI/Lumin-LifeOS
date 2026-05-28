@@ -2,6 +2,33 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] Update 2026-05-28 — Phase A/B/C proof-surface hardening
+
+### Files changed
+- `scripts/builderos-groq-antipattern-scan.mjs` — strengthened PATTERN 9 import-merge detection so glued `identifierimport` tokens are detected anywhere on the line, not only at column 0
+- `routes/tsos-efficiency-routes.js` — switched runtime proof surface to dedicated `task_type='tsos_internal_hook'` events; generic token telemetry retained only as supplementary context
+- `routes/memory-status-routes.js` — switched runtime proof surface to canonical `epistemic_facts` counts and proven-fact status; `self_repair_memory_events` retained as supplementary diagnostic context
+
+### State after this session
+- BuilderOS scanner attempt failed first with an unrelated 11-line stub, then retry failed with Railway `502`; GAP-FILL applied to the PATTERN 9 block
+- Scanner test now catches the known merged-import failures:
+  - `pathimport`
+  - `urlimport`
+  - `fsimport`
+  - `expressimport`
+- Local runtime-route files now reflect the same canonical proof contracts already used by alpha readiness scoring:
+  - TSOS primary proof: dedicated `tsos_internal_hook`
+  - Memory primary proof: `epistemic_facts`
+- No product features or UI changes were introduced
+
+### Next agent: start here
+- Push these proof-surface fixes, deploy, and verify:
+  - `GET /api/v1/lifeos/builderos/tsos-efficiency`
+  - `GET /api/v1/lifeos/command-center/memory/status`
+  - `GET /api/v1/lifeos/command-center/system-alpha-readiness`
+- Confirm live routes match the canonical proof sources and that BuilderOS maturity is still truthful
+
+---
 ## [MILESTONE] 2026-05-27 — Phase D complete: BuilderOS reaches ALPHA_READY 94.3%, zero blockers
 
 ### What happened
