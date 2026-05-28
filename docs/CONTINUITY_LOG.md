@@ -2,6 +2,44 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [MILESTONE] 2026-05-27 — Phase D complete: BuilderOS reaches ALPHA_READY 94.3%, zero blockers
+
+### What happened
+Phase D mission: run one real governed job, prove TSOS hook fires, clear TSOS_INTERNAL_HOOKS_NOT_WIRED blocker.
+
+**Two bugs discovered and fixed before hook could fire:**
+1. `builderos-tsos-hook-service.js` — INSERT used wrong column `task_description` (actual: `task_goal`) and omitted required `run_id NOT NULL`. Every call silently failed via try/catch. Fix: correct column names + `run_id=$1 (jobId)`.
+2. `builderos-command-control-service.js` — job creation read `input.metadata` but POST body sends `input.metadata_json` — key never matched, `metadata_json` stored as `{}` on every job submission. Fix: `normalizeMetadata(input.metadata_json || input.metadata)`.
+
+**Governed loop run proof:**
+- Job `701e182c` submitted with `target_file: scripts/builderos-zone-audit.mjs`
+- OIL audit: PASS
+- PBB plan: generated, target_file carried through correctly
+- Builder: gemini_flash, committed=true, verifier_pass_first_attempt
+- TSOS hook: `tsos_internal_hook` row written to `autonomous_telemetry_events` at `2026-05-28T02:57:17Z`
+- `TSOS_INTERNAL_HOOKS_NOT_WIRED` blocker: CLEARED
+- Alpha: 80.9% → 94.3%, status=ALPHA_READY, 0 blockers
+
+### Commits this session (in order)
+- `ab95dbc3` — [system-build] governed loop job 10bcc00a (scripts/builderos-component-registry.mjs) — committed but hook INSERT failed silently
+- `8d90cb97` — GAP-FILL: fix TSOS hook INSERT (task_description→task_goal + run_id)
+- `aa807086` — GAP-FILL: fix C2 metadata_json key mismatch
+- `e30e9163` — [system-build] governed loop job 701e182c (scripts/builderos-zone-audit.mjs) — first successful hook emit
+
+### Current state (end of session)
+- Railway SHA: `e30e9163`, proof: CURRENT, readiness: true, repair_queue: 0
+- Alpha: ALPHA_READY, 94.3%, 0 blockers
+- `tsos_internal_hooks`: WIRED + LIVE, 1 dedicated hook event proven
+- BuilderOS skill rating: 5/10 (gemini_flash reliably produces Zone 1 files; groq_llama has systematic import-merge + TypeScript stub patterns)
+- All Phase A/B/C/D objectives complete
+
+### Next agent: start here
+- ALPHA_READY is achieved. No active blockers.
+- Optional next work: push `tsos_internal_hooks` from LIVE → PROVEN by accumulating more hook events (need autonomous jobs to run), or start tending to useful_work_score (currently 0.375, bonus triggers at >0.50)
+- Self-repair will continue automatically; proof will go STALE after each new deploy and auto-repair in ~45s via `bootSelfRepairDeployCheck()`
+- No further Phase D work needed
+
+---
 ## [FIX] Update 2026-05-27 — BR-04 precommit governance wrapper
 
 ### Files changed
