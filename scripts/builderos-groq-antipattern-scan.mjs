@@ -1,130 +1,102 @@
-import { scanForGroqAntipatterns } from './builderos-groq-antipattern-utils.mjs';
-
 /**
- * Scan for 9 confirmed groq_llama failure patterns
- * @param {string[]} lines - lines of code to scan
- * @returns {Object[]} findings - list of antipatterns found
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * BuilderOS Phase R2 — groq_llama anti-pattern scanner.
+ *
+ * READ-ONLY. Scans a JS file for the 9 confirmed groq_llama failure patterns.
+ * Used to validate builder output before accepting committed:true as clean.
+ *
+ * GAP-FILL: builder (groq_llama) produced 7-bug output — invalid regex escapes
+ * (\pq), unescaped / terminating regex literal (../startup), wrong stub detector,
+ * duplicate function declaration. Rewritten with line.includes() instead of
+ * complex regex for reliability.
+ *
+ * Phase A (2026-05-27): Added PATTERN 9 (import-merge detection) and
+ * PATTERN 8 json-fence fix. Builder (groq) rewrote entire file with wrong
+ * patterns and syntax errors — GAP-FILL repair applied.
+ *
+ * Exit 0 = no HIGH findings. Exit 1 = HIGH findings detected.
  */
-export function scanForGroqAntipatterns(lines) {
+
+import { readFileSync } from 'fs';
+
+export function scanForGroqAntipatterns(filePath) {
+  let content;
+  try {
+    content = readFileSync(filePath, 'utf8');
+  } catch (e) {
+    return { ok: false, filePath, lineCount: 0, findings: [{ pattern: 'READ_ERROR', line: e.message, lineNum: 0, severity: 'HIGH' }] };
+  }
+
+  const lines = content.split('\n');
   const findings = [];
 
-  // PATTERN 1: missing import
-  // Examples: import 'fs' is missing
-  const importRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+import[\s{(]/;
+  // PATTERN 1: factory param named rk instead of requireKey
   for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (importRe.test(l)) {
-      findings.push({ pattern: 'MISSING_IMPORT', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
+    const l = lines[i];
+    if ((l.includes('function create') || l.includes('export function create')) &&
+        (l.includes('{ rk,') || l.includes('{ rk }') || l.includes(', rk,') || l.includes(', rk }'))) {
+      findings.push({ pattern: 'RK_NOT_REQUIREKEY', line: l.trim().slice(0, 100), lineNum: i + 1, severity: 'HIGH' });
     }
   }
 
-  // PATTERN 2: missing export
-  // Examples: export 'fs' is missing
-  const exportRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+export[\s{(]/;
+  // PATTERN 2: pool.query(text`...`) — template-tagged literal (text is not a function)
   for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (exportRe.test(l)) {
-      findings.push({ pattern: 'MISSING_EXPORT', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
+    const l = lines[i];
+    if (l.includes('pool.query(text`') || l.includes('.query(text`')) {
+      findings.push({ pattern: 'TEXT_TEMPLATE_TAG', line: l.trim().slice(0, 100), lineNum: i + 1, severity: 'HIGH' });
     }
   }
 
-  // PATTERN 3: unused import
-  // Examples: import 'fs' is unused
-  const unusedImportRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+import[\s{(]/;
-  const usedImportRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+import[\s{(]/;
-  const usedExportRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+export[\s{(]/;
-  const usedRe = new RegExp(`(${usedImportRe.source})|(${usedExportRe.source})`);
-  const unusedRe = new RegExp(`(${unusedImportRe.source})`);
-  const usedImports = new Set();
+  // PATTERN 3: COUNT() without * — invalid SQL
   for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (usedRe.test(l)) {
-      usedImports.add(l);
-    }
-  }
-  for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (unusedRe.test(l) && !usedImports.has(l)) {
-      findings.push({ pattern: 'UNUSED_IMPORT', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
+    const l = lines[i];
+    if (l.includes('COUNT()') && !l.trim().startsWith('//')) {
+      findings.push({ pattern: 'COUNT_NO_STAR', line: l.trim().slice(0, 100), lineNum: i + 1, severity: 'MEDIUM' });
     }
   }
 
-  // PATTERN 4: unused export
-  // Examples: export 'fs' is unused
-  const unusedExportRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+export[\s{(]/;
-  const usedExportRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+export[\s{(]/;
-  const usedRe = new RegExp(`(${usedExportRe.source})`);
-  const usedExports = new Set();
+  // PATTERN 4: wrong import paths — nonexistent files
   for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (usedRe.test(l)) {
-      usedExports.add(l);
-    }
-  }
-  for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (unusedExportRe.test(l) && !usedExports.has(l)) {
-      findings.push({ pattern: 'UNUSED_EXPORT', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
+    const l = lines[i];
+    if (l.includes("'../startup/db.js'") || l.includes("'../startup/auth.js'") ||
+        l.includes('"../startup/db.js"') || l.includes('"../startup/auth.js"')) {
+      findings.push({ pattern: 'WRONG_IMPORT_PATH', line: l.trim().slice(0, 100), lineNum: i + 1, severity: 'HIGH' });
     }
   }
 
-  // PATTERN 5: missing return
-  // Examples: function foo() { } is missing return
-  const functionRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+function[\s{(]/;
+  // PATTERN 5: const rows = await pool.query — QueryResult not destructured
   for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (functionRe.test(l)) {
-      findings.push({ pattern: 'MISSING_RETURN', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
+    const l = lines[i];
+    if ((l.includes('const rows = await') || l.includes('const result = await')) &&
+        l.includes('pool.query') && !l.trim().startsWith('//')) {
+      findings.push({ pattern: 'QUERY_NOT_DESTRUCTURED', line: l.trim().slice(0, 100), lineNum: i + 1, severity: 'MEDIUM' });
     }
   }
 
-  // PATTERN 6: missing semicolon
-  // Examples: console.log('hello' is missing semicolon
-  const consoleRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+console[\s{(]/;
-  const semicolonRe = /[^;]$/
+  // PATTERN 6: module-level router (outside factory) — duplicate mount bug
+  const hasFactory = content.includes('export function create');
   for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (consoleRe.test(l) && semicolonRe.test(l)) {
-      findings.push({ pattern: 'MISSING_SEMICOLON', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
+    const l = lines[i];
+    if (l.includes('const router = express.Router()') && !hasFactory) {
+      findings.push({ pattern: 'MODULE_LEVEL_ROUTER', line: l.trim().slice(0, 100), lineNum: i + 1, severity: 'HIGH' });
     }
   }
 
-  // PATTERN 7: missing space after comma
-  // Examples: console.log('hello', 'world' is missing space after comma
-  const commaRe = /,[^ ]/
-  for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (commaRe.test(l)) {
-      findings.push({ pattern: 'MISSING_SPACE_AFTER_COMMA', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
-    }
+  // PATTERN 7: stub (line count collapse — original >100 lines, builder produced <30)
+  if (lines.length < 30 && lines.length > 0) {
+    findings.push({ pattern: 'STUB_LINE_COUNT', line: `${lines.length} lines`, lineNum: 0, severity: 'HIGH' });
   }
 
-  // PATTERN 8: json fence
-  // Examples: console.log('{"key": "value"}' is json fence
-  const jsonRe = /"[^"]*"/
+  // PATTERN 8: markdown fences embedded in JS (builder sometimes injects ```)
   for (let i = 0; i < lines.length; i++) {
     const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (jsonRe.test(l)) {
-      findings.push({ pattern: 'JSON_FENCE', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
+    if (l === '```' || l === '```javascript' || l === '```js' || l === '```json') {
+      findings.push({ pattern: 'MARKDOWN_FENCE_IN_JS', line: l, lineNum: i + 1, severity: 'HIGH' });
     }
-  }
-  // PATTERN 8 fix: Find the existing check on the line that reads: `if (l === '' || l === '' || l === '')`. Add `|| l === ''` before the closing paren, so all four fence types are detected.
-  if (l === '' || l === '' || l === '' || l === '') {
-    findings.push({ pattern: 'JSON_FENCE', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
   }
 
   // PATTERN 9: import-merge bug (groq concatenates consecutive import lines)
-  // Examples: pathimport 'path', urlimport 'url', fsimport 'fs'
+  // e.g. "import { X } from 'path'\nimport { Y } from 'url'" → "pathimport 'path'; urlimport 'url'"
   const importMergeRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+import[\s{(]/;
   for (let i = 0; i < lines.length; i++) {
     const l = lines[i].trim();
@@ -134,32 +106,12 @@ export function scanForGroqAntipatterns(lines) {
     }
   }
 
-  // PATTERN 10: unused variable
-  // Examples: let x = 5; is unused
-  const letRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+let[\s{(]/;
-  const usedRe = new RegExp(`(${usedImportRe.source})|(${usedExportRe.source})`);
-  const usedVars = new Set();
-  for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (usedRe.test(l)) {
-      usedVars.add(l);
-    }
-  }
-  for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    if (l.startsWith('//') || l.startsWith('*')) continue;
-    if (letRe.test(l) && !usedVars.has(l)) {
-      findings.push({ pattern: 'UNUSED_VARIABLE', line: l.slice(0, 100), lineNum: i + 1, severity: 'LOW' });
-    }
-  }
-
-  return findings;
+  const highCount = findings.filter(f => f.severity === 'HIGH').length;
+  return { ok: highCount === 0, filePath, lineCount: lines.length, findings };
 }
 
-// PATTERN 11: unused function
-// Examples: function foo() { } is unused
-const functionRe = /^[a-zA-Z_$][a-zA-Z0-9_$]+function[\s{(]/;
-const usedRe = new RegExp(`(${usedImportRe.source})|(${usedExportRe.source})`);
-const usedFuncs = new Set();
-for (let i = 0; i < lines.length; i
+if (process.argv[2]) {
+  const result = scanForGroqAntipatterns(process.argv[2]);
+  console.log(JSON.stringify(result, null, 2));
+  process.exit(result.ok ? 0 : 1);
+}
