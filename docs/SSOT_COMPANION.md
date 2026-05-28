@@ -1,8 +1,8 @@
 # LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT
 ## Zero-Context Operational Manual + Enforcement Contract
-**Platform (canonical name):** **TokenSaverOS (TSOS)** — same stack as `docs/SSOT_NORTH_STAR.md`: council, token savings, builder, LifeOS, business lanes, governance.
+**System (canonical machine name):** **BuilderOS** — same stack as `docs/SSOT_NORTH_STAR.md`: council, builder, memory, governance, proof chain, and runtime machinery. **TSOS** is the external efficiency/routing product; **LifeOS** is a product built by BuilderOS.
 
-**Version:** 2026-04-26 (**§5.2 / §5.5** — mandatory **future-back** consensus artifact; **§6.4 / §7.2** anti-corner-cutting + evidence-engine memory enforcement). Prior: 2026-04-25 (**§0.5D** — new **supervisor mandate** / North Star **§2.11c**; Conductor = audit + system `/build`, not default IDE product authorship). Prior: **§0.5I** operator instruction + **§2.15**; **§0.5H** TSOS machine-channel (**§2.14**); **§0.4** `SYSTEM_CAPABILITIES.md`. Prior: 2026-04-22 self-serve ops + `ENV_REGISTRY`; **§2.3**; prior **§0.5F** / **§0.5G**; **§0.5D**; **§2.12** + **§2.11**)  
+**Version:** 2026-05-27 (**BuilderOS machine identity correction** — Companion now matches North Star: BuilderOS is the autonomous machine; TSOS is the external efficiency/routing product and retained machine-channel lexicon name). Prior: 2026-04-26 (**§5.2 / §5.5** — mandatory **future-back** consensus artifact; **§6.4 / §7.2** anti-corner-cutting + evidence-engine memory enforcement). Prior: 2026-04-25 (**§0.5D** — new **supervisor mandate** / North Star **§2.11c**; Conductor = audit + system `/build`, not default IDE product authorship). Prior: **§0.5I** operator instruction + **§2.15**; **§0.5H** TSOS machine-channel (**§2.14**); **§0.4** `SYSTEM_CAPABILITIES.md`. Prior: 2026-04-22 self-serve ops + `ENV_REGISTRY`; **§2.3**; prior **§0.5F** / **§0.5G**; **§0.5D**; **§2.12** + **§2.11**)  
 **Status:** CANONICAL COMPANION (SSOT-adjacent)  
 **Purpose:** Ensure any AI can operate with zero prior exposure without drift or hallucinations.
 
@@ -45,11 +45,11 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - TC core runtime wiring: inbox intake, deadline reminders, GLVAR monitoring, SkySlope/BoldTrail browser paths, pricing/fees
 
 **Active Build Priority (updated 2026-04-24):**
-0. **TokenSaverOS (TSOS) — builder P0** (North Star **§2.11a**): preflight, `GET /ready`; governed path to **self-extend** the build pipeline. **Outranks unverified feature churn** until builder output is **proven**. **Conductor → Adam reporting** (grade, why A vs B, plain summary) is **§2.11b / §0.5G** — *separate* from the TSOS name.
+0. **BuilderOS — builder P0** (North Star **§2.11a**): preflight, `GET /ready`; governed path to **self-extend** the build pipeline. **Outranks unverified feature churn** until builder output is **proven**. **Conductor → Adam reporting** (grade, why A vs B, plain summary) is **§2.11b / §0.5G** — *separate* from product naming.
 1. LifeOS E2E household invite + ambient smoke test (Amendment 21)
 2. TC Service / Transaction Coordinator (Amendment 17) — hold state
 3. ClientCare Billing Recovery (Amendment 18)
-4. API Cost Savings / TokenOS (Amendment 10) — B2B layer **on TSOS** (see amendment header)
+4. API Cost Savings / TokenOS (Amendment 10) — B2B efficiency product lane in the TSOS business surface (built by BuilderOS)
 5. BoldTrail (Amendment 11)
 
 > **Canonical priority is in `docs/QUICK_LAUNCH.md`** — if this section conflicts, QUICK_LAUNCH wins and this section needs updating.
@@ -222,11 +222,11 @@ Every session in those roles:
 
 **Maturity program (rolling “10/10” plan):** `docs/SYSTEM_MATURITY_PROGRAM.md` + `npm run verify:maturity` + `npm run lifeos:gate-change-run -- --preset program-start` for **recorded** council review of the plan.
 
-## 0.5F TokenSaverOS (TSOS); builder as meta-product; governed self-build (supreme: North Star **Article II §2.11a**)
+## 0.5F BuilderOS machine identity; builder as meta-product; governed self-build (supreme: North Star **Article II §2.11a**)
 
-**What this section is:** **Platform name + what we build first.** It is **not** the Conductor’s reporting style to Adam (that is **§0.5G** / North Star **§2.11b**).
+**What this section is:** **Machine identity + what we build first.** It is **not** the Conductor’s reporting style to Adam (that is **§0.5G** / North Star **§2.11b**).
 
-**What TSOS is:** The unified platform name for this repository’s runtime — not a separate codebase. **LifeOS**, **LimitlessOS**, **TokenOS** (Amendment 10 B2B), and other `AMENDMENT_*` lanes are **products inside TSOS**.
+**What BuilderOS is:** The internal autonomous programming machine for this repository’s runtime — not a customer product. **LifeOS**, **LimitlessOS**, **TokenOS**, and **TSOS** are product or business surfaces built by, or connected to, BuilderOS. **TSOS** remains the external efficiency/routing product and the retained name of the machine-channel lexicon file, not the machine identity.
 
 ### Builder-first (operational)
 - The **council builder** and its **integrity** (preflight, `GET /api/v1/lifeos/builder/ready`, verifiers, council on load-bearing forks) are **P0** until the system can **prove** what it ships. **If the builder path is unknown or red → HALT** and fix the platform before chasing secondary lanes.
@@ -236,7 +236,7 @@ Every session in those roles:
 
 ## 0.5G Conductor → Adam: evaluation and reporting (supreme: North Star **Article II §2.11b**)
 
-**What this section is:** **How the Conductor performs and what Adam gets back** when you direct a session to **build, supervise, or review** — *not* the definition of TSOS (**§0.5F**) and *not* a replacement for **§2.11** (system authors product) or **§2.12** (council on forks).
+**What this section is:** **How the Conductor performs and what Adam gets back** when you direct a session to **build, supervise, or review** — *not* the definition of BuilderOS (**§0.5F**) and *not* a replacement for **§2.11** (system authors product) or **§2.12** (council on forks).
 
 ### Mandatory package (end of any slice where you need Adam to trust quality without reading every line)
 Use **plain language** (no acronym smuggling):

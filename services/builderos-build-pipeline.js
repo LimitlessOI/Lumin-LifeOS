@@ -2,13 +2,14 @@
 
 import { spawnSync } from 'child_process';
 import { writeFileSync, unlinkSync, existsSync } from 'fs';
-import { join } from 'path';
+import { dirname, join, resolve } from 'path';
 import { tmpdir } from 'os';
 import { fileURLToPath } from 'url';
 import { classifyBuildTarget } from './builderos-patch-mode-policy.js';
 
 const __file = fileURLToPath(import.meta.url);
-const ROOT = join(__file, '../..');
+const __dirname = dirname(__file);
+const ROOT = resolve(__dirname, '..');
 const SCRIPTS = join(ROOT, 'scripts');
 
 const CORRECTION_CLAUSES = {

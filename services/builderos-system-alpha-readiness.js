@@ -16,6 +16,11 @@ import { readLatestPhase14Cert } from './builder-phase14-ledger.js';
 import { evaluateProofFreshnessFromPool } from './oil-proof-freshness.js';
 import { normalizeSha } from './oil-self-repair-detector.js';
 import { computeAllBuilderOSMetrics } from './builderos-metrics-reporter.js';
+import {
+  buildFailClosedReadinessBlockers,
+  canReportAlphaReady,
+  buildFakeGreenStatusNote,
+} from './builderos-alpha-readiness-guards.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -278,7 +283,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
   const loopNodes = [
     {
       node: 'detect',
-      score: proofFreshness.overall === 'CURRENT' || readiness.repair_queue_open >= 0 ? 1 : 0.5,
+      score: proofFreshness.overall === 'CURRENT' || readiness.repair_queue_open > 0 ? 1 : 0.5,
       proof_sources: ['GET /api/v1/lifeos/command-center/proof-freshness', 'GET /api/v1/lifeos/command-center/self-repair/repair-queue'],
     },
     {
@@ -364,6 +369,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
   } catch { /* fail closed */ }
 
   const blockers = [
+    ...buildFailClosedReadinessBlockers({ proofFreshness, readiness }),
     ...(tsosTokenCount === 0 ? [{ code: 'TSOS_INTERNAL_HOOKS_NOT_WIRED', detail: 'BuilderOS-internal TSOS hooks have no approved runtime proof source yet.' }] : []),
     ...(memoryDb.total === 0 ? [{ code: 'MEMORY_NOT_RUNTIME_PROVEN', detail: 'Memory is structurally wired but not yet proven through approved BuilderOS runtime truth sources.' }] : []),
     ...(auditClean ? [] : [{
@@ -402,9 +408,18 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     classification_lock: fileExists('docs/architecture/BUILDEROS_CLASSIFICATION_LOCK.md'),
   };
 
+  const fakeGreenStatusNote = buildFakeGreenStatusNote({
+    proofFreshness,
+    readiness,
+    percentComplete,
+  });
+  if (fakeGreenStatusNote) fakeGreenRisks.push(fakeGreenStatusNote);
+  const alphaReady = canReportAlphaReady({ proofFreshness, readiness, blockers }) &&
+    percentComplete >= 85;
+
   return {
     ok: true,
-    system_alpha_status: percentComplete >= 85 && blockers.length === 0 ? 'ALPHA_READY' : 'ALPHA_IN_PROGRESS',
+    system_alpha_status: alphaReady ? 'ALPHA_READY' : 'ALPHA_IN_PROGRESS',
     percent_complete: percentComplete,
     scoring_method: {
       loop_integrity_weight_pct: 40,
@@ -428,6 +443,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       'Memory still lacks BuilderOS-approved runtime proof maturity.',
       'BuilderOS-internal TSOS hook boundary remains undefined operationally.',
     ],
+    fake_green_explanation: fakeGreenStatusNote,
     fake_green_risks: fakeGreenRisks,
     duplicate_authority_paths: [
       {

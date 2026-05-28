@@ -2,6 +2,73 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] Update 2026-05-27 — BR-03 build pipeline root fix
+
+### Files changed
+- `services/builderos-build-pipeline.js` — replaced brittle file-path join root resolution with dirname/resolve-based repo-root calculation so verifier and scan scripts resolve deterministically in local and Railway contexts
+
+### State after this session
+- BuilderOS first attempt reached `/api/v1/lifeos/builder/build` but returned non-committable placeholder output without `target_file`
+- BuilderOS retry failed with Railway `502 Application failed to respond`
+- GAP-FILL applied after two honest Builder failures; local `node --check`, Builder verifier, anti-pattern scan, and direct script-path smoke all passed
+
+### Next agent: start here
+- Commit and deploy `br-01` through `br-03` together, then verify live Railway no longer reports `ALPHA_READY` under stale proof
+- After live verification passes, continue to `br-04-precommit-governance-wrapper`
+
+---
+## [FIX] Update 2026-05-27 — BR-02 fail-closed alpha readiness
+
+### Files changed
+- `services/builderos-alpha-readiness-guards.js` — new pure helper for fail-closed alpha blockers, alpha-ready gate, and fake-green explanation
+- `services/builderos-system-alpha-readiness.js` — now imports fail-closed guard helper, adds hard blockers for stale proof / supervised readiness false / active stale-proof repair queue item, fixes detect-node score from always-true `repair_queue_open >= 0`, adds `fake_green_explanation`, and blocks `ALPHA_READY` unless runtime truth is actually current and supervised-ready
+
+### State after this session
+- Live Railway before deploy still showed the known fake-green bug: `proof_freshness=STALE`, `ready_for_supervised=false`, but `system_alpha_status=ALPHA_READY`
+- BuilderOS first attempt on `services/builderos-system-alpha-readiness.js` was blocked honestly by `ZONE3_PATCH_REQUIRED`
+- BuilderOS retry generated a remote helper commit but it was invalid for this repo style and not usable locally; GAP-FILL applied after retry failure
+- Local fail-closed proof now returns three blockers (`RUNTIME_PROOF_NOT_CURRENT`, `SUPERVISED_READINESS_FALSE`, `STALE_PROOF_REPAIR_QUEUE_ACTIVE`) and `alphaReady=false` for the exact stale runtime scenario
+
+### Next agent: start here
+- Deploy this BR-02 patch, verify live `system-alpha-readiness` no longer returns `ALPHA_READY` under stale proof, then execute `br-03-build-pipeline-root-fix`
+
+---
+## [FIX] Update 2026-05-27 — BR-01 constitutional alignment (BuilderOS machine identity)
+
+### Files changed
+- `docs/SSOT_NORTH_STAR.md` — BuilderOS is now the canonical autonomous machine identity; TSOS retained only as the external efficiency/routing product and machine-channel lexicon file name
+- `docs/SSOT_COMPANION.md` — aligned machine identity, build priority wording, and §0.5F/§0.5G references to BuilderOS
+- `docs/AGENT_RULES.compact.md` — compact rule summary updated so cold agents no longer inherit TSOS-as-machine drift
+
+### State after this session
+- Top-level constitutional identity drift is removed from the primary SSOT stack
+- BuilderOS is the internal machine; LifeOS and TSOS are product/business surfaces
+- `docs/TSOS_SYSTEM_LANGUAGE.md` remains the machine-channel lexicon file name, but no longer defines machine identity
+- `npm run ssot:validate` passes after the correction
+
+### Next agent: start here
+- Execute `br-02-fail-closed-alpha-readiness`
+- Do not expand scope into product work; keep the next fix bounded to stale-proof/readiness truthfulness
+
+---
+## [PLAN] Update 2026-05-27 — BuilderOS remediation package from full-system audit
+
+### Files changed
+- `docs/projects/builderos-remediation/BLUEPRINT.md` — bounded remediation blueprint for constitutional drift, fake-green alpha, post-commit verification gap, memory proof-source fragmentation, TSOS overclaim, path fragility, and structural drift proof
+- `docs/projects/builderos-remediation/FEATURE_MAP.md` — BR-F01..BR-F09 feature map and dependency order
+- `docs/projects/builderos-remediation/ALPHA_SCOPE.md` — alpha-only pass/fail scope for the remediation program
+- `docs/projects/builderos-remediation/BUILD_QUEUE.json` — executable Builder queue for the remediation phases
+
+### State after this session
+- Full-system audit produced a concrete BuilderOS remediation package instead of ad hoc fixes
+- The package is explicitly BuilderOS-only; no LifeOS or TSOS product work is mixed into the queue
+- Queue order is now: authority coherence → fail-closed readiness → pre-commit governance → memory/TSOS scoring honesty → structural proof freshness
+
+### Next agent: start here
+- Execute `docs/projects/builderos-remediation/BUILD_QUEUE.json` from `br-01-constitutional-alignment`
+- Keep fixes bounded; no deletion before classification and no product drift while repairing BuilderOS
+
+---
 ## [BUILD] Update 2026-05-27 — BuilderOS governed loop Phase 3 bridge
 
 ### Files changed

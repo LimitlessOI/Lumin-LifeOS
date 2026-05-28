@@ -1,0 +1,175 @@
+{
+  "$comment": "BuilderOS remediation queue from full-system audit 2026-05-27. Scope: fix authority drift, fake-green readiness, pre-commit governance, memory proof-source scoring, TSOS boundary overclaim, pipeline path fragility, and structural proof freshness. No product feature work.",
+  "brief": "docs/projects/builderos-remediation/BLUEPRINT.md",
+  "tasks": [
+    {
+      "id": "br-01-constitutional-alignment",
+      "domain": "builderos-platform",
+      "target_file": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+      "files": [
+        "docs/SSOT_NORTH_STAR.md",
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+        "docs/projects/builderos-remediation/BLUEPRINT.md",
+        "docs/projects/builderos-remediation/FEATURE_MAP.md",
+        "docs/projects/builderos-remediation/ALPHA_SCOPE.md"
+      ],
+      "task": "Write the minimum constitutional alignment patch plan and exact wording changes needed so BuilderOS is the autonomous machine, TSOS is the external efficiency/routing product, and LifeOS is a product lane. Do not redesign the system; remove only definition drift. Output must cite the conflicting lines and propose the narrowest ratified correction path.",
+      "spec": "Markdown only. No code. Include sections: conflict, canonical definition, exact docs to patch, pass/fail. Keep under 220 lines.",
+      "commit_message": "[system-build] BuilderOS remediation BR-01 constitutional alignment plan",
+      "proof_required_to_close": "All top-level docs define BuilderOS, TSOS, and LifeOS consistently."
+    },
+    {
+      "id": "br-02-fail-closed-alpha-readiness",
+      "domain": "builderos-platform",
+      "target_file": "services/builderos-system-alpha-readiness.js",
+      "files": [
+        "services/builderos-system-alpha-readiness.js",
+        "services/supervised-autonomy-readiness.js",
+        "services/oil-proof-freshness.js",
+        "docs/projects/builderos-remediation/BLUEPRINT.md",
+        "docs/projects/builderos-remediation/ALPHA_SCOPE.md"
+      ],
+      "task": "Patch BuilderOS system-alpha-readiness so stale proof, readiness false, or an active stale-proof repair item hard-block ALPHA_READY. Preserve scoring, but status must fail closed on runtime truth. Add explicit fake-green explanation when percent is high but runtime is stale.",
+      "spec": "JavaScript ESM. Small surgical edit preferred. No product work. Must preserve existing endpoint contract except for corrected status/blockers.",
+      "commit_message": "[system-build] BuilderOS remediation BR-02 fail-closed alpha readiness",
+      "proof_required_to_close": "Live system-alpha-readiness cannot return ALPHA_READY when proof freshness is STALE or ready_for_supervised=false."
+    },
+    {
+      "id": "br-03-build-pipeline-root-fix",
+      "domain": "builderos-platform",
+      "target_file": "services/builderos-build-pipeline.js",
+      "files": [
+        "services/builderos-build-pipeline.js",
+        "services/builderos-patch-mode-policy.js",
+        "scripts/builderos-builder-output-verifier.mjs",
+        "scripts/builderos-groq-antipattern-scan.mjs",
+        "scripts/verify-builder-output.mjs"
+      ],
+      "task": "Repair brittle repo-root/script resolution in the BuilderOS build pipeline. Use dirname-based resolution so verifier and scan scripts resolve deterministically in local and Railway contexts. No other behavioral changes in this task.",
+      "spec": "JavaScript ESM. Small bounded fix only.",
+      "commit_message": "[system-build] BuilderOS remediation BR-03 build pipeline root fix",
+      "proof_required_to_close": "node --check passes and pipeline resolves verifier/scan scripts deterministically."
+    },
+    {
+      "id": "br-04-precommit-governance-wrapper",
+      "domain": "builderos-platform",
+      "target_file": "services/builderos-precommit-governance.js",
+      "files": [
+        "services/builderos-build-pipeline.js",
+        "services/pb-execution-authority.js",
+        "services/self-repair-executor.js",
+        "scripts/builderos-builder-output-verifier.mjs",
+        "docs/projects/builderos-remediation/BLUEPRINT.md"
+      ],
+      "task": "Create a new BuilderOS pre-commit governance wrapper service. It must call the current build pipeline, run the unified verifier before final commit approval, and return one canonical result: allow_commit, retry_once, or block_commit. Do not edit the large builder route in this task.",
+      "spec": "New JavaScript ESM service. No route edits yet. No product behavior.",
+      "commit_message": "[system-build] BuilderOS remediation BR-04 precommit governance wrapper",
+      "proof_required_to_close": "Wrapper returns deterministic allow_commit/retry_once/block_commit results on local verification inputs."
+    },
+    {
+      "id": "br-05-builder-route-precommit-enforcement",
+      "domain": "builderos-platform",
+      "target_file": "routes/lifeos-council-builder-routes.js",
+      "files": [
+        "routes/lifeos-council-builder-routes.js",
+        "services/builderos-precommit-governance.js",
+        "services/builderos-build-pipeline.js",
+        "docs/projects/builderos-remediation/ALPHA_SCOPE.md"
+      ],
+      "task": "Apply the smallest possible route patch so /api/v1/lifeos/builder/build uses the precommit governance wrapper before any final committed:true path. Retry must happen before commit. Failed verifier paths must return committed:false.",
+      "spec": "Tiny surgical patch only. No large rewrite. Preserve existing route contract where possible.",
+      "commit_message": "[system-build] BuilderOS remediation BR-05 enforce precommit governance in builder route",
+      "proof_required_to_close": "Live bad-output tests cannot produce committed:true before verifier/OIL pass."
+    },
+    {
+      "id": "br-06-memory-proof-contract",
+      "domain": "builderos-platform",
+      "target_file": "docs/projects/builderos-remediation/MEMORY_PROOF_CONTRACT.md",
+      "files": [
+        "services/builderos-system-alpha-readiness.js",
+        "startup/register-runtime-routes.js",
+        "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+        "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md",
+        "docs/projects/builderos-remediation/BLUEPRINT.md"
+      ],
+      "task": "Define the canonical BuilderOS memory proof contract. Separate BuilderOS operational memory from governed user/system memory, state the canonical runtime proof source for alpha scoring, and mark legacy/non-canonical memory paths explicitly. Include exact code/doc changes needed, but do not redesign the memory architecture.",
+      "spec": "Markdown. Must include canonical proof source, non-canonical sources, scoring rule, and pass/fail checks.",
+      "commit_message": "[system-build] BuilderOS remediation BR-06 memory proof contract",
+      "proof_required_to_close": "BuilderOS memory maturity is not sourced from self_repair_memory_events alone."
+    },
+    {
+      "id": "br-07-memory-scoring-fix",
+      "domain": "builderos-platform",
+      "target_file": "services/builderos-system-alpha-readiness.js",
+      "files": [
+        "services/builderos-system-alpha-readiness.js",
+        "docs/projects/builderos-remediation/MEMORY_PROOF_CONTRACT.md"
+      ],
+      "task": "Patch BuilderOS alpha scoring to use the canonical memory proof contract. If the governed memory proof is not present, memory must remain not proven even if convenience/self-repair memory tables are queryable.",
+      "spec": "JavaScript ESM. Small bounded edit. Depends on BR-06.",
+      "commit_message": "[system-build] BuilderOS remediation BR-07 memory scoring fix",
+      "proof_required_to_close": "Live readiness no longer marks memory PROVEN from convenience proof sources."
+    },
+    {
+      "id": "br-08-tsos-hook-boundary-contract",
+      "domain": "builderos-platform",
+      "target_file": "docs/projects/builderos-remediation/TSOS_HOOK_BOUNDARY.md",
+      "files": [
+        "services/builderos-system-alpha-readiness.js",
+        "routes/tsos-efficiency-routes.js",
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+        "docs/projects/builderos-remediation/BLUEPRINT.md"
+      ],
+      "task": "Define the BuilderOS-internal TSOS hook boundary. State what counts as a real internal hook, what generic token telemetry proves, what it does not prove, and how maturity should be scored until a dedicated proof surface exists.",
+      "spec": "Markdown. No TSOS customer product work.",
+      "commit_message": "[system-build] BuilderOS remediation BR-08 TSOS hook boundary contract",
+      "proof_required_to_close": "TSOS internal hook maturity is not inferred from generic token telemetry alone."
+    },
+    {
+      "id": "br-09-tsos-scoring-fix",
+      "domain": "builderos-platform",
+      "target_file": "services/builderos-system-alpha-readiness.js",
+      "files": [
+        "services/builderos-system-alpha-readiness.js",
+        "docs/projects/builderos-remediation/TSOS_HOOK_BOUNDARY.md"
+      ],
+      "task": "Patch BuilderOS alpha scoring so tsos_internal_hooks stays NOT_WIRED or WIRED until a dedicated internal hook proof source exists. Generic token-estimated telemetry must not elevate it to mature runtime status by itself.",
+      "spec": "JavaScript ESM. Small bounded edit. Depends on BR-08.",
+      "commit_message": "[system-build] BuilderOS remediation BR-09 TSOS scoring fix",
+      "proof_required_to_close": "Live readiness no longer credits TSOS internal hooks from token telemetry alone."
+    },
+    {
+      "id": "br-10-structural-proof-freshness",
+      "domain": "builderos-platform",
+      "target_file": "services/builderos-structural-proof.js",
+      "files": [
+        "docs/architecture/BUILDEROS_AUTHORITY_MAP.md",
+        "docs/architecture/BUILDEROS_TOPOLOGY_AUDIT.md",
+        "startup/register-runtime-routes.js",
+        "services/builderos-system-alpha-readiness.js",
+        "docs/projects/builderos-remediation/BLUEPRINT.md"
+      ],
+      "task": "Create the first BuilderOS structural proof freshness service. It must compare canonical expected authority paths against live/runtime-known paths and return duplicate authority paths, legacy-live conflicts, and blueprint/runtime drift signals. Keep it read-only.",
+      "spec": "New JavaScript ESM service. Read-only. No route deletions.",
+      "commit_message": "[system-build] BuilderOS remediation BR-10 structural proof freshness",
+      "proof_required_to_close": "Duplicate authority paths become visible in runtime-derived BuilderOS readiness output."
+    },
+    {
+      "id": "br-11-remediation-certification-pass",
+      "domain": "builderos-platform",
+      "target_file": "docs/projects/builderos-remediation/REMEDIATION_CERT_REPORT.md",
+      "files": [
+        "docs/projects/builderos-remediation/BLUEPRINT.md",
+        "docs/projects/builderos-remediation/FEATURE_MAP.md",
+        "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
+        "services/builderos-system-alpha-readiness.js",
+        "services/builderos-precommit-governance.js",
+        "services/builderos-structural-proof.js"
+      ],
+      "task": "Run the BuilderOS remediation certification pass. Report what is fixed, what remains blocked, live runtime truth, and whether BuilderOS is safer for autonomous project building after this package. Findings first. No redesign.",
+      "spec": "Markdown audit report. Findings first with exact file references and live runtime truth.",
+      "commit_message": "[system-build] BuilderOS remediation BR-11 certification pass",
+      "proof_required_to_close": "Live runtime audit confirms fake-green removed and first-pass bad commit path blocked."
+    }
+  ]
+}
