@@ -1,49 +1,84 @@
-import { fileURLToPath } from 'url';
-import { join } from 'path';
-import { tmpdir } from 'os';
-import { spawnSync } from 'child_process';
-import { readFileSync } from 'fs';
+/**
+ * BuilderOS pre-commit governance wrapper.
+ *
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/projects/builderos-remediation/BLUEPRINT.md
+ */
 
-const scriptsDir = join(fileURLToPath(import.meta.url).replace(/\.js$/, ""), 'scripts');
+import { spawnSync } from 'child_process';
+import { existsSync, unlinkSync, writeFileSync } from 'fs';
+import { tmpdir } from 'os';
+import { dirname, join, resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { runBuildPipeline } from './builderos-build-pipeline.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(__dirname, '..');
+const VERIFIER_SCRIPT = join(ROOT, 'scripts', 'builderos-builder-output-verifier.mjs');
 
 function runUnifiedVerifierOnContent(content, originalLines = null) {
-  const tempPath = join(tmpdir(), 'temp.js');
-  const writer = fs.createWriteStream(tempPath);
-  writer.write(content);
-  writer.end();
-  const result = spawnSync('node', [join(scriptsDir, 'builderos-builder-output-verifier.mjs'), tempPath]);
-  const stdout = result.stdout.toString();
-  const stderr = result.stderr.toString();
-  const ok = result.status === 0;
+  const tempPath = join(tmpdir(), `builderos-precommit-${Date.now()}.js`);
+  try {
+    writeFileSync(tempPath, content, 'utf8');
+    const args = [VERIFIER_SCRIPT, tempPath];
+    if (originalLines !== null && originalLines !== undefined) {
+      args.push(String(originalLines));
+    }
+    const run = spawnSync('node', args, { stdio: 'pipe' });
+    let body = null;
+    try {
+      body = JSON.parse(run.stdout?.toString() || '{}');
+    } catch {
+      body = null;
+    }
+    return {
+      ok: run.status === 0,
+      status: run.status,
+      stdout: run.stdout?.toString().trim() || '',
+      stderr: run.stderr?.toString().trim() || '',
+      tempPath,
+      body,
+    };
+  } finally {
+    if (existsSync(tempPath)) unlinkSync(tempPath);
+  }
+}
+
+async function runPrecommitGovernance(opts) {
+  const pipelineResult = await runBuildPipeline(opts);
+  const finalOutput = pipelineResult.retryOutput || opts.generatedOutput;
+
+  if (!pipelineResult.ok) {
+    return {
+      decision: pipelineResult.retryAttempted ? 'block_commit' : 'retry_once',
+      shouldCommit: false,
+      pipeline: pipelineResult,
+      verifier: null,
+      finalOutput: null,
+    };
+  }
+
+  const verifier = runUnifiedVerifierOnContent(finalOutput, opts.originalLines ?? null);
+  if (!verifier.ok) {
+    return {
+      decision: 'block_commit',
+      shouldCommit: false,
+      pipeline: pipelineResult,
+      verifier,
+      finalOutput,
+    };
+  }
+
   return {
-    ok,
-    status: result.status,
-    stdout,
-    stderr,
-    tempPath,
+    decision: 'allow_commit',
+    shouldCommit: true,
+    pipeline: pipelineResult,
+    verifier,
+    finalOutput,
   };
 }
 
-function runBuildPipeline(opts) {
-  const result = spawnSync('node', [join(scriptsDir, 'builderos-builder.mjs'), ...opts]);
-  return {
-    ok: result.status === 0,
-    status: result.status,
-    stdout: result.stdout.toString(),
-    stderr: result.stderr.toString(),
-  };
-}
-
-function runPrecommitGovernance(opts) {
-  const buildResult = runBuildPipeline(opts);
-  if (!buildResult.ok) {
-    return { decision: 'block_commit', ...buildResult };
-  }
-  const verifierResult = runUnifiedVerifierOnContent(readFileSync('temp.txt', 'utf8'));
-  if (!verifierResult.ok) {
-    return { decision: 'block_commit', ...verifierResult, finalOutput: readFileSync('temp.txt', 'utf8') };
-  }
-  return { decision: 'allow_commit', finalOutput: readFileSync('temp.txt', 'utf8') };
-}
-
-export { runUnifiedVerifierOnContent, runPrecommitGovernance };
+export {
+  runPrecommitGovernance,
+  runUnifiedVerifierOnContent,
+};

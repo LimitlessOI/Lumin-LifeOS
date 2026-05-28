@@ -2,6 +2,24 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] Update 2026-05-27 — BR-04 precommit governance wrapper
+
+### Files changed
+- `services/builderos-precommit-governance.js` — new BuilderOS wrapper service that calls `runBuildPipeline()`, runs the unified verifier on the final candidate output, and returns one canonical decision: `allow_commit`, `retry_once`, or `block_commit`
+
+### State after this session
+- BuilderOS first attempt committed a non-working wrapper (`f7daf561`) that did not call the real pipeline contract and could not verify content correctly
+- BuilderOS retry committed a second non-working wrapper (`eb5011a7`) with a different broken contract
+- GAP-FILL replaced the file after two honest Builder attempts; local proof now shows:
+  - `allow_commit` for a valid small candidate
+  - `retry_once` for a Zone 3 target without a retry function
+- No route edits yet; runtime behavior is unchanged until `br-05`
+
+### Next agent: start here
+- Execute `br-05-builder-route-precommit-enforcement`
+- Use the new wrapper, keep the route edit surgical, and prove that bad first-pass output can no longer land as `committed:true`
+
+---
 ## [FIX] Update 2026-05-27 — BR-03 build pipeline root fix
 
 ### Files changed

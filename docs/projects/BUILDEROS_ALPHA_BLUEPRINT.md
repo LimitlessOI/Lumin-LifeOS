@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-05-27 (BuilderOS remediation BR-03 root fix / BR-02 fail-closed readiness)
+**Last Updated:** 2026-05-27 (BuilderOS remediation BR-04 wrapper / BR-03 root fix / BR-02 fail-closed readiness)
 
 ---
 
@@ -454,6 +454,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-05-27 | `services/builderos-precommit-governance.js` | BuilderOS remediation BR-04. Added a new pre-commit governance wrapper service that calls `runBuildPipeline()`, then runs the unified verifier on the final candidate output, and returns one canonical decision: `allow_commit`, `retry_once`, or `block_commit`. Builder first attempt committed `f7daf561` but did not call the real pipeline contract or verifier path; retry committed `eb5011a7` with a different broken contract. GAP-FILL replaced the file after two verified Builder failures. Local proof now returns `allow_commit` for a valid small candidate and `retry_once` for a Zone 3 target without a retry function. | BuilderOS needs a pre-commit governance boundary before the large route can be hardened. The wrapper creates that boundary without touching product routes yet. |
 | 2026-05-27 | `services/builderos-system-alpha-readiness.js` + `services/builderos-alpha-readiness-guards.js` | BuilderOS remediation BR-02. Added fail-closed runtime blockers so stale proof, `ready_for_supervised=false`, or an active stale-proof repair item hard-block `ALPHA_READY`. Preserved scoring, but moved final status behind runtime truth and added explicit `fake_green_explanation` for high-score/stale-runtime cases. Builder first attempt was blocked by Zone 3 policy; retry emitted unusable helper output; GAP-FILL applied after retry failure. Local proof shows `alphaReady=false` under the exact stale Railway scenario. | BuilderOS cannot claim Alpha from docs or partial runtime. High maturity scoring must never outrank stale proof or false supervised readiness. |
 | 2026-05-27 | `services/builderos-build-pipeline.js` | BuilderOS remediation BR-03. Replaced brittle repo-root resolution (`join(__file, '../..')`) with dirname/resolve-based calculation so verifier and anti-pattern scan scripts resolve deterministically in local and Railway contexts. Builder first attempt returned placeholder output with no commit target; retry failed with Railway 502; bounded GAP-FILL applied afterward. `node --check`, unified verifier, anti-pattern scan, and direct script-path smoke all passed locally. | The repair loop depends on deterministic verifier/script resolution. Path fragility in the pipeline is a platform integrity issue, not cosmetic cleanup. |
 | 2026-05-27 | `scripts/builderos-c2-commit-proof.mjs` (GAP-FILL) + `services/builderos-pbb-plan.js` + `services/builderos-governed-loop-executor.js` | GAP-FILL: replace truncated council commits with complete proof module (46 lines). PBB: skeleton template + max_output_tokens 4096 for JS targets. | Council truncated new-file output twice; fix repo state before commit-path re-test. |
