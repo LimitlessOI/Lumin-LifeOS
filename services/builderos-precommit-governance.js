@@ -17,7 +17,7 @@ const ROOT = resolve(__dirname, '..');
 const VERIFIER_SCRIPT = join(ROOT, 'scripts', 'builderos-builder-output-verifier.mjs');
 
 function runUnifiedVerifierOnContent(content, originalLines = null) {
-  const tempPath = join(tmpdir(), `builderos-precommit-${Date.now()}.js`);
+  const tempPath = join(tmpdir(), `builderos-precommit-${Date.now()}.mjs`);
   try {
     writeFileSync(tempPath, content, 'utf8');
     const args = [VERIFIER_SCRIPT, tempPath];

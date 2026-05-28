@@ -36,7 +36,7 @@ function buildJsOutputRequirements(targetFile) {
     '- No TODO, PLACEHOLDER, stub bodies, or "not implemented" comments.',
     '- Include a file-level JSDoc with @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md.',
     '- Every exported function must contain real logic — not a one-line console.log stub.',
-    '- Add a CLI entry at file bottom using import.meta.url guard and process.argv[1] check.',
+    '- Do NOT add a process.argv / process.exit CLI entry — no CLI scaffolding in governed loop output.',
     '- Do NOT emit ---METADATA--- blocks for this governed loop job.',
     '- File must be syntactically complete: every { ( [ opened must close; no truncated tail.',
   ].join('\n');
@@ -63,7 +63,7 @@ function buildProofFileSpec(instruction, targetFile, exportNames) {
     `  /* IMPLEMENT return { ok: true, source: PROOF_SOURCE, generated_at: new Date().toISOString() } */`,
     `}`,
     '',
-    `/* IMPLEMENT CLI entry with import.meta.url guard */`,
+    `/* No CLI entry — governed loop modules do not require a CLI entry point */`,
     '---',
     '',
     'REQUIRED EXPORTS AND BEHAVIOR:',
