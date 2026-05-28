@@ -15,10 +15,10 @@ export async function emitTSOSHookReading(pool, data) {
   try {
     const { rows } = await pool.query(
       `INSERT INTO autonomous_telemetry_events
-         (task_type, model_used, total_token_estimate, task_description, metadata)
-       VALUES ('tsos_internal_hook', $1, 0, 'builderos_governed_loop_commit', $2)
+         (run_id, task_type, model_used, total_token_estimate, task_goal, metadata)
+       VALUES ($1, 'tsos_internal_hook', $2, 0, 'builderos_governed_loop_commit', $3)
        RETURNING id`,
-      [modelUsed || null, JSON.stringify({ job_id: jobId, output_bytes: outputBytes, repair_attempts: repairAttempts, duration_ms: durationMs, committed })]
+      [jobId, modelUsed || null, JSON.stringify({ job_id: jobId, output_bytes: outputBytes, repair_attempts: repairAttempts, duration_ms: durationMs, committed })]
     );
     return { ok: true, row_id: rows[0].id };
   } catch (error) {
