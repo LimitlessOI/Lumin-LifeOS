@@ -107,6 +107,30 @@ export function scanForGroqAntipatterns(filePath) {
     }
   }
 
+  // PATTERN 10: CommonJS bleed in ESM targets.
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i].trim();
+    if (l.startsWith('//') || l.startsWith('*')) continue;
+    if (l.includes('module.exports') || l.includes('exports.') || l.includes('require(')) {
+      findings.push({ pattern: 'COMMONJS_BLEED', line: l.slice(0, 100), lineNum: i + 1, severity: 'HIGH' });
+    }
+  }
+
+  // PATTERN 11: partial-edit corruption markers and "unchanged remainder" placeholders.
+  const partialEditMarkers = [
+    'rest of file unchanged',
+    'existing code unchanged',
+    '... unchanged',
+    'other code remains unchanged',
+    'same as above',
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i].trim().toLowerCase();
+    if (partialEditMarkers.some((marker) => l.includes(marker))) {
+      findings.push({ pattern: 'PARTIAL_EDIT_CORRUPTION', line: lines[i].trim().slice(0, 100), lineNum: i + 1, severity: 'MEDIUM' });
+    }
+  }
+
   const highCount = findings.filter(f => f.severity === 'HIGH').length;
   return { ok: highCount === 0, filePath, lineCount: lines.length, findings };
 }

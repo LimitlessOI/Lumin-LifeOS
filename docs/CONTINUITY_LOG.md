@@ -2,6 +2,28 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] Update 2026-05-28 — BuilderOS execution-control hardening
+
+### Files changed
+- `services/builderos-routing-policy.js` — NEW BuilderOS routing policy helper that classifies builder tasks, blocks cheap-model use on risky code paths, and returns task-class + escalation metadata
+- `routes/lifeos-council-builder-routes.js` — Builder route now applies the routing policy before model selection and surfaces `routing_task_class` in builder responses
+- `scripts/builderos-groq-antipattern-scan.mjs` — added `COMMONJS_BLEED` and `PARTIAL_EDIT_CORRUPTION` failure-family detection
+- `scripts/builderos-autonomy-guard-audit.mjs` — NEW BuilderOS-only autonomy audit that measures useful-work guard coverage on the actual autonomous/system paths instead of broad product AI usage
+- `docs/projects/builderos-remediation/EXECUTION_CONTROL_PLAN.md` — recorded the useful-work, routing, failure-family, telemetry, escalation, and anti-complexity findings for the next remediation slice
+
+### State after this session
+- BuilderOS still fails often on bounded patch work; first builder attempt returned unrelated/truncated output, retry committed a non-usable stub, so GAP-FILL was required after two honest attempts
+- Cheap-model routing is no longer implicit for risky BuilderOS code tasks on the builder route; policy now classifies task classes and blocks `groq_llama` for bounded patching, architecture-sensitive work, governance review, verifier conflict resolution, autonomous retry, and high-risk repo edits
+- The BuilderOS-only guard audit found two autonomous scheduled paths that still lack a first-class useful-work contract:
+  - `scripts/lifeos-builder-continuous-queue.mjs`
+  - `scripts/governed-overnight-autonomy.mjs`
+- No Alpha score inflation work was added; this slice tightened governance and observability instead of broadening autonomy
+
+### Next agent: start here
+- Deploy and verify the routing-policy changes live, then close the two remaining `UNGUARDED_SCHEDULED` BuilderOS paths with a small useful-work contract layer rather than a broad scheduler rewrite
+- After guard coverage is honest, add cost telemetry + escalation receipts on top of the new routing task classes
+
+---
 ## [FIX] Update 2026-05-28 — Phase A/B/C proof-surface hardening
 
 ### Files changed

@@ -41,6 +41,7 @@ import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
 import { pool as dbPool } from '../core/database.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
+import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -832,9 +833,20 @@ export function createLifeOSCouncilBuilderRoutes({
         : `council.builder.${mode}`;
     const requestedModel = model || getModelForTask(routingKey) || 'gemini_flash';
     const rawCandidateModels = model ? [model] : getCandidateModelsForTask(routingKey);
-    const availability = filterAvailableCouncilMembers(rawCandidateModels);
+    const routingPolicy = applyBuilderRoutingPolicy({
+      candidateModels: rawCandidateModels,
+      requestedModel,
+      routingKey,
+      mode,
+      executionOnly,
+      targetFile: bodyTargetFile || null,
+    });
+    const availability = filterAvailableCouncilMembers(routingPolicy.filteredCandidateModels);
     const candidateModels = availability.available;
-    const unavailableCandidates = availability.unavailable;
+    const unavailableCandidates = [
+      ...availability.unavailable,
+      ...routingPolicy.blockedCandidates.map((candidate) => ({ model: candidate, reason: 'builderos_policy_blocked' })),
+    ];
     const preferredModel = availability.availabilityByModel[requestedModel]?.available
       ? requestedModel
       : (candidateModels[0] || null);
@@ -846,7 +858,13 @@ export function createLifeOSCouncilBuilderRoutes({
         : 'No runtime-available model is currently configured for this builder task',
     };
     if (model) {
-      if (availability.availabilityByModel[model]?.available) {
+      if (routingPolicy.requestedModelBlocked) {
+        routingRecommendation = {
+          selectedModel: null,
+          blockedCandidates: unavailableCandidates.map((row) => row.model),
+          reason: routingPolicy.reason,
+        };
+      } else if (availability.availabilityByModel[model]?.available) {
         routingRecommendation = {
           selectedModel: model,
           blockedCandidates: unavailableCandidates.map((row) => row.model),
@@ -990,6 +1008,7 @@ export function createLifeOSCouncilBuilderRoutes({
             placement,
             model_used: memberKey,
             routing_key: routingKey,
+            routing_task_class: routingPolicy.taskClass,
             routing_reason: routingRecommendation.reason,
             blocked_candidates: routingRecommendation.blockedCandidates || [],
             execution_only: executionOnly,
@@ -1063,6 +1082,7 @@ export function createLifeOSCouncilBuilderRoutes({
         placement,
         model_used: memberKey,
         routing_key: routingKey,
+        routing_task_class: routingPolicy.taskClass,
         routing_reason: routingRecommendation.reason,
         blocked_candidates: routingRecommendation.blockedCandidates || [],
         execution_only: executionOnly,
