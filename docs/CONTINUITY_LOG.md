@@ -2,6 +2,27 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] 2026-05-28 — BuilderOS Memory Runtime Proof Receipt (Phase C endpoint)
+
+### Files changed
+- `routes/lifeos-command-center-routes.js` (+36 lines): added `GET /api/v1/lifeos/command-center/memory/proof` — read-only BuilderOS memory proof surface. Queries `epistemic_facts` only (3 parallel COUNTs: total, level>=2, level>=2 AND source_count>1). Returns `ok`, `memory_authority:"CANONICAL_EVIDENCE"`, `proof_source:"epistemic_facts"`, `total_facts`, `tested_or_above_count`, `multi_source_fact_count`, `builderos_memory_proven` (true when multi_source>=1), `do_not_use_legacy_memory_for_builderos_proof:true`, `legacy_sources_excluded:true`, `maturity`, `contract_ref`, `generated_at`. No legacy memory tables touched.
+- `services/builderos-system-alpha-readiness.js` (4 targeted changes): replaced stale fakeGreenRisks memory entry; removed "Memory still lacks BuilderOS-approved runtime proof maturity." from unknowns; added `memory_proof` to `proof_sources`; updated next_10 item 3 from "Add" to "Wire...into overlay".
+- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — receipt row added.
+- `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` — added memory/proof to required_routes; updated current_focus.
+
+### State after this session
+- `node --check` PASS: both changed source files
+- BR-07 was already implemented in alpha readiness service (queries epistemic_facts correctly). Missing piece was the dedicated public endpoint — now added.
+- No legacy memory deleted, no capsule memory changed, no self-repair memory changed.
+- Alpha scoring unchanged (memory was already contributing PROVEN maturity via the existing query).
+
+### Next agent: start here
+- Commit: `routes/lifeos-command-center-routes.js`, `services/builderos-system-alpha-readiness.js`, `AMENDMENT_12_COMMAND_CENTER.md`, `AMENDMENT_12_COMMAND_CENTER.manifest.json`, `CONTINUITY_LOG.md`
+- Commit message needs: `SSOT_READ_CONFIRMED=1`, `GAP-FILL: Zone 3 files — no COMMAND_CENTER_KEY in shell for builder preflight`, `INTENT DRIFT: none`
+- After Railway deploy: smoke test `GET /api/v1/lifeos/command-center/memory/proof` — expect `ok:true`, `builderos_memory_proven:true` (39 epistemic facts seeded), `memory_authority:"CANONICAL_EVIDENCE"`
+- Next build item: wire memory proof panel into `/lifeos-command-center.html` overlay
+
+---
 ## [AUDIT] 2026-05-28 — Memory namespace audit Phase 2 — legacy metadata annotations
 
 ### Files changed

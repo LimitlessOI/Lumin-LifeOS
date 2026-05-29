@@ -373,6 +373,43 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
   });
 
   /**
+   * GET /api/v1/lifeos/command-center/memory/proof
+   * Read-only BuilderOS memory proof receipt. Canonical proof source: epistemic_facts only.
+   * BR-04 / BR-07 / MEMORY_PROOF_CONTRACT.md — legacy memory excluded from BuilderOS proof.
+   */
+  router.get('/api/v1/lifeos/command-center/memory/proof', requireKey, async (req, res, next) => {
+    try {
+      const [totalRes, testedRes, provenRes] = await Promise.all([
+        pool.query('SELECT COUNT(*) FROM epistemic_facts'),
+        pool.query('SELECT COUNT(*) FROM epistemic_facts WHERE level >= 2'),
+        pool.query('SELECT COUNT(*) FROM epistemic_facts WHERE level >= 2 AND source_count > 1'),
+      ]);
+      const totalFacts = parseInt(totalRes.rows[0].count, 10);
+      const testedOrAbove = parseInt(testedRes.rows[0].count, 10);
+      const multiSource = parseInt(provenRes.rows[0].count, 10);
+      const proven = multiSource >= 1;
+
+      res.json({
+        ok: true,
+        memory_authority: 'CANONICAL_EVIDENCE',
+        proof_source: 'epistemic_facts',
+        total_facts: totalFacts,
+        tested_or_above_count: testedOrAbove,
+        multi_source_fact_count: multiSource,
+        builderos_memory_proven: proven,
+        do_not_use_legacy_memory_for_builderos_proof: true,
+        legacy_sources_excluded: true,
+        maturity: proven ? 'PROVEN' : totalFacts >= 1 ? 'LIVE' : 'WIRED',
+        contract_ref: 'docs/projects/builderos-remediation/MEMORY_PROOF_CONTRACT.md',
+        read_path: 'GET /api/v1/lifeos/command-center/memory/proof',
+        generated_at: new Date().toISOString(),
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
    * GET /api/v1/lifeos/command-center/self-repair/history
    * Receipt-backed self-repair history only (builder_audit_receipts + security_receipts).
    */

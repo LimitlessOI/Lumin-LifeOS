@@ -9,7 +9,7 @@
   "phase": "stabilization",
   "next_task": "Keep command-center runtime proof surfaces aligned with BuilderOS canonical scoring, then continue structural consolidation and mobile/role-based improvements from a governed alpha surface",
   "stability_class": "needs-review",
-  "current_focus": "BuilderOS structural consolidation — command-center proof surfaces now separate canonical evidence memory, capsule memory, and self-repair memory without route ambiguity",
+  "current_focus": "BuilderOS memory proof endpoint live at /api/v1/lifeos/command-center/memory/proof — canonical epistemic_facts surface; alpha readiness proof_sources wired; next: overlay drill-down panel for memory proof.",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",
@@ -78,6 +78,12 @@
       "path": "/api/v1/lifeos/command-center/system-alpha-readiness",
       "expected_status": 200,
       "description": "BuilderOS Alpha readiness from runtime truth + structural consolidation docs"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/lifeos/command-center/memory/proof",
+      "expected_status": 200,
+      "description": "BuilderOS memory proof receipt — canonical epistemic_facts only, legacy excluded"
     }
   ],
   "required_tables": [

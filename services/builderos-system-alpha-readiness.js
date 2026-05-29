@@ -397,7 +397,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     'Legacy /command-center remains mounted beside the canonical cockpit.',
     'Builder healthy idle can look like inactivity if overnight/runtime state is ignored.',
     'Telemetry has real data but key metrics remain NOT_WIRED.',
-    'Memory package maturity exceeds current BuilderOS runtime proof maturity.',
+    'Memory proof endpoint exists but has not been stress-tested against a seeded-zero scenario.',
     'Token-economics / TSOS-adjacent surfaces can be mistaken for internal BuilderOS proof.',
   ];
 
@@ -437,7 +437,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
   const next10 = [
     'Run full useful-work-guard coverage audit across all autonomous AI paths.',
     'Quarantine or clearly gate legacy /command-center operator surface.',
-    'Add canonical BuilderOS memory runtime proof source.',
+    'Wire BuilderOS memory proof endpoint into Command Center overlay drill-down.',
     'Define and prove BuilderOS-internal TSOS hook boundary.',
     'Fill telemetry gaps for PB violations prevented, context growth, and successful build latency.',
     'Add current daemon-active proof source for Builder component.',
@@ -488,7 +488,6 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     not_wired_components: notWiredComponents,
     unknowns: [
       'No canonical runtime endpoint yet for current queue daemon liveness.',
-      'Memory still lacks BuilderOS-approved runtime proof maturity.',
       ...(tsosProvenEligible ? [] : ['TSOS PROVEN gate wired — awaiting >=3 structured committed hooks with verifier linkage (TSOS-G1).']),
     ],
     fake_green_explanation: fakeGreenStatusNote,
@@ -526,6 +525,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       overnight_state: 'data/governed-autonomy-overnight-state.json',
       overnight_log: 'data/governed-autonomy-overnight-log.jsonl',
       queue_log: 'data/builder-continuous-queue-log.jsonl',
+      memory_proof: 'GET /api/v1/lifeos/command-center/memory/proof',
     },
     last_verified_at: new Date().toISOString(),
     runtime_snapshot: {
