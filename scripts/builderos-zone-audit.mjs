@@ -1,11 +1,9 @@
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
- * This utility provides functionality to audit zone mutations within the BuilderOS platform.
+ * - This utility provides functionality to audit zone mutations within the BuilderOS platform.
  * It processes a collection of zone mutation records and categorizes them by their
  * classification, returning a count for each classification found.
  */
-
 // Define a constant for the default classification when one cannot be determined.
 const UNKNOWN_CLASSIFICATION = 'unknown';
 
@@ -65,13 +63,19 @@ export function auditZoneMutations(zoneMutations) {
     console.warn('auditZoneMutations received non-array input. Returning empty counts.');
     return {};
   }
-
   const classificationCounts = {};
-
   for (const mutation of zoneMutations) {
     const classification = getZoneClassification(mutation);
     classificationCounts[classification] = (classificationCounts[classification] || 0) + 1;
   }
-
   return classificationCounts;
+}
+
+/**
+ * Returns the current version string for the Zone Audit utility.
+ *
+ * @returns {string} The version string.
+ */
+export function getZoneAuditVersion() {
+  return "1.0.1-stability-run-2";
 }
