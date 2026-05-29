@@ -9,7 +9,7 @@
   "phase": "stabilization",
   "next_task": "Keep command-center runtime proof surfaces aligned with BuilderOS canonical scoring, then continue structural consolidation and mobile/role-based improvements from a governed alpha surface",
   "stability_class": "needs-review",
-  "current_focus": "Memory proof snap card live in Executive Snapshot row — 8th card, green PROVEN ring, click-to-drawer with fact counts + authority + disclaimer. Both snap card and drill-down panel deployed.",
+  "current_focus": "Project Governance drill-down live in Section F — build-ready/blocked/Adam counts, top-5 readiness queue, estimation accuracy, pending-adam slice. Read-only; no backend scoring changes.",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",

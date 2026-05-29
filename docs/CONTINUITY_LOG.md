@@ -2,6 +2,18 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] 2026-05-29 — Command Center Project Governance Drill-Down
+
+### Files changed
+- `public/overlay/lifeos-command-center.html` — `#project-governance-panel` + `loadProjectGovernance()` in Section F; read-only counts, top-5 readiness queue, pending-adam slice, estimation accuracy
+
+### State after this session
+- No backend / alpha / memory / TSOS changes
+- Endpoints: `/api/v1/projects/readiness/queue`, `/api/v1/pending-adam`, `/api/v1/estimation/accuracy`
+- No decision-debt endpoint exists yet (UI gap documented)
+- Next: project drawer nested-object fix; builder supervisor status in CC
+
+---
 ## [BUILD] 2026-05-29 — TSOS-G3.3 Shadow Hypothetical Routing Deltas
 
 ### Files changed
