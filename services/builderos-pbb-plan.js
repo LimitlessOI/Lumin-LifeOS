@@ -68,6 +68,77 @@ function buildJsOutputRequirements(targetFile) {
   ].join('\n');
 }
 
+/** Zone-1 scripts/*.mjs new-file targets used for read-only audits/diagnostics. */
+function isZone1NewScriptTarget(targetFile) {
+  const normalized = normalizeText(targetFile).replace(/\\/g, '/');
+  if (!/^scripts\/[^/]+\.mjs$/i.test(normalized)) return false;
+  return !existsSync(resolve(normalized));
+}
+
+const AUDIT_INSTRUCTION_MARKERS = /\b(read[- ]only|audit|investigate|diagnostic|dry[- ]run|report|summary|query)\b/i;
+const CONTRADICTORY_IMPORT_MARKERS = /\b(pg\b|dotenv|process\.argv|read-only cli\b|export main\b|token_usage_log)/i;
+
+function isZone1AuditScriptJob(instruction, targetFile) {
+  if (!isZone1NewScriptTarget(targetFile)) return false;
+  const text = normalizeText(instruction);
+  return AUDIT_INSTRUCTION_MARKERS.test(text) || CONTRADICTORY_IMPORT_MARKERS.test(text);
+}
+
+/**
+ * Rewrite operator wording that conflicts with governed-loop safety rules.
+ * Audit scripts must use internal API fetch + process.env — never pg/dotenv/CLI.
+ */
+export function canonicalizeZone1AuditInstruction(instruction, targetFile) {
+  let text = normalizeText(instruction);
+  text = text.replace(/\bread-only cli\b/gi, 'read-only audit module');
+  text = text.replace(/\buse pg pool \+ dotenv\b/gi, 'use fetch() against PUBLIC_BASE_URL with x-command-key from process.env');
+  text = text.replace(/\bpg pool\b/gi, 'fetch() to internal LifeOS API');
+  text = text.replace(/\bdotenv\b/gi, 'process.env reads only');
+  text = text.replace(/\bexport main\s*\(\s*\)/gi, 'export async function runAudit() returning structured JSON');
+  text = text.replace(/\bqueries?\s+token_usage_log\b/gi, 'calls GET /api/v1/lifeos/admin/ai/performance (or equivalent read-only API)');
+  text = text.replace(/\bcli\b/gi, 'exported audit module');
+  if (!/fetch\s*\(/i.test(text)) {
+    text += ' Use fetch() to internal read-only API endpoints; no direct DB access; no npm imports.';
+  }
+  return text;
+}
+
+function buildZone1AuditJsRequirements(targetFile) {
+  return [
+    'ZONE-1 READ-ONLY AUDIT MODULE REQUIREMENTS (governed loop — overrides generic npm/CLI bans for this job only):',
+    `- Deliver at least ${MIN_JS_LINES} lines of real executable code in ${targetFile}.`,
+    '- Plain JavaScript ESM only: no TypeScript, no markdown fences, no ---METADATA---.',
+    '- NO npm package imports (no pg, dotenv, axios, etc.). Node built-ins only (node:path, node:url if needed).',
+    '- Read data via fetch() to PUBLIC_BASE_URL + internal API paths; pass x-command-key from process.env.COMMAND_CENTER_KEY.',
+    '- Prefer read-only GET endpoints (e.g. GET /api/v1/lifeos/admin/ai/performance, /api/v1/lifeos/autonomous-telemetry/metrics).',
+    '- NO direct database connections, NO SQL, NO production DB writes, NO mutations.',
+    '- Export async functions that return structured JSON objects — NOT console.log stubs.',
+    '- Do NOT add process.argv / process.exit CLI scaffolding — orchestrator invokes exports directly.',
+    '- Include file-level JSDoc with @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md.',
+    '- File must be syntactically complete: every brace/bracket/paren closed; no truncated tail.',
+  ].join('\n');
+}
+
+function buildZone1AuditJsSpec(instruction, targetFile, exportNames) {
+  const canonicalInstruction = canonicalizeZone1AuditInstruction(instruction, targetFile);
+  const exportLines = exportNames.length
+    ? exportNames.map((name, i) => `${i + 1}. export async function ${name}(...) returning structured audit JSON`).join('\n')
+    : '1. export async function runAudit(...) returning structured audit JSON with ok, summary, generated_at';
+
+  return [
+    buildZone1AuditJsRequirements(targetFile),
+    '',
+    'REQUIRED EXPORTS:',
+    exportLines,
+    '',
+    'Include helper functions for fetchJson(baseUrl, path, key), env validation, and error shaping.',
+    'No CLI entry — governed loop modules export functions only.',
+    '',
+    'CANONICAL INTERPRETATION (this overrides contradictory phrases in the raw operator text):',
+    canonicalInstruction,
+  ].join('\n');
+}
+
 function buildProofFileSpec(instruction, targetFile, exportNames) {
   const primaryExport = exportNames[0] || 'getBuilderOSC2CommitProof';
   const lines = [
@@ -95,7 +166,7 @@ function buildProofFileSpec(instruction, targetFile, exportNames) {
     'REQUIRED EXPORTS AND BEHAVIOR:',
     `1. export function ${primaryExport}() with real logic (not stub)`,
     "2. returns { ok: true, source: 'builderos-command-control', generated_at: ISO8601 }",
-    '3. CLI prints JSON to stdout when executed directly',
+    '3. No CLI entry — export functions only (governed loop invokes exports)',
     '',
     `OPERATOR INSTRUCTION: ${instruction}`,
   ];
@@ -162,6 +233,9 @@ function buildBaseSpec(instruction, targetFile) {
       return buildUpdateJsSpec(instruction, targetFile, exportNames, existingContent, zone.lineCount || 0);
     }
     if (isProofFile) return buildProofFileSpec(instruction, targetFile, exportNames);
+    if (isZone1AuditScriptJob(instruction, targetFile)) {
+      return buildZone1AuditJsSpec(instruction, targetFile, exportNames);
+    }
     return buildGenericJsSpec(instruction, targetFile, exportNames);
   }
 
