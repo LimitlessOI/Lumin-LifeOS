@@ -19,6 +19,7 @@ import {
 } from './builderos-command-control-service.js';
 import { runVerification } from '../scripts/builderos-builder-output-verifier.mjs';
 import { emitTSOSHookReading } from './builderos-tsos-hook-service.js';
+import { scheduleProofParityAfterGovernedCommit } from './builderos-governed-proof-parity.js';
 
 function resolveBaseUrl(explicit) {
   return (
@@ -211,6 +212,7 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     });
     trace.repair_loop_result = { attempted: false, reason: 'verifier_pass_first_attempt' };
     await emitTSOSHookReading(pool, { jobId, modelUsed: builderResult.model_used, outputBytes: builderResult.output ? builderResult.output.length : 0, repairAttempts: 0, durationMs: Date.now() - new Date(job.created_at).getTime(), committed: true });
+    scheduleProofParityAfterGovernedCommit(pool, { jobId, triggeredBy: `governed-loop-${jobId}` });
     return { ok: true, status: 'committed', trace };
   }
 
@@ -282,6 +284,7 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     });
     trace.repair_loop_result.result = 'verifier_pass_after_retry';
     await emitTSOSHookReading(pool, { jobId, modelUsed: builderResult.model_used, outputBytes: builderResult.output ? builderResult.output.length : 0, repairAttempts: 1, durationMs: Date.now() - new Date(job.created_at).getTime(), committed: true });
+    scheduleProofParityAfterGovernedCommit(pool, { jobId, triggeredBy: `governed-loop-${jobId}` });
     return { ok: true, status: 'committed', trace };
   }
 

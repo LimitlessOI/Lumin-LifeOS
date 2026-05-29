@@ -2,6 +2,20 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] 2026-05-28 — Governed automatic proof parity after BuilderOS commits
+
+### Root cause
+Deploy-check + self-repair executor already existed (`bootSelfRepairDeployCheck` at +45s, `POST /self-repair/deploy-check`) but only ran once per boot. Mid-session deploys from governed loop commits left proof STALE until manual `POST /api/v1/gemini/proof`.
+
+### Fix
+- `services/builderos-governed-proof-parity.js` (NEW) — debounced post-commit scheduler calls existing `runDeployDriftPreventionHook` after 90s settle; verifies CURRENT via `evaluateProofFreshnessFromPool`; fail-closed on failure
+- `services/builderos-governed-loop-executor.js` — calls `scheduleProofParityAfterGovernedCommit()` on both committed paths (after TSOS hook)
+
+### Next agent: start here
+- Deploy and run one governed job; wait ~100s; confirm proof restores without manual gemini/proof
+- TSOS LIVE→PROVEN still needs more hook events
+
+---
 ## [FIX] 2026-05-28 — GAP-FILL: governed loop truncation fix (PBB patch-mode + files[] + token scale)
 
 ### Files changed
