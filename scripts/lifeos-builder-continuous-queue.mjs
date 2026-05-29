@@ -28,6 +28,7 @@ import {
   recordFailure as recordBuilderFailure,
   resolveTask as resolveBuilderTask,
 } from './lib/builder-failure-memory.mjs';
+import { validateQueueContract } from '../services/builderos-useful-work-contracts.js';
 import { isLocked, getLock } from './lib/autonomy-write-lock.mjs';
 import { buildClosureRecord } from './lib/closure-contract.mjs';
 import { makePrediction, evaluatePrediction } from './lib/prediction-loop.mjs';
@@ -764,6 +765,12 @@ async function main() {
     console.warn(
       `\n⚠️  COMMIT BRANCH — ${implicitBranchTasks.length}/${selected.length} task(s) use the repo default branch (often main). Review-first: export BUILDER_QUEUE_COMMIT_BRANCH=lifeos/autonomy-review. Refine constraints (don’t discard ambition): docs/BUILDER_IDEA_FILTERS_REFINEMENT.md\n`,
     );
+  }
+
+  const contractCheck = validateQueueContract({ hasQueuedWork: selected.length > 0, hasKey: Boolean(key) });
+  await logLine({ event: 'contract_check', lane, ...contractCheck });
+  if (!contractCheck.ok && contractCheck.halt) {
+    process.exit(1);
   }
 
   await assertReady();

@@ -117,6 +117,7 @@ function read(path) {
 
 function classify(entry, content) {
   const hasUsefulGuard = content.includes('createUsefulWorkGuard(');
+  const contractGoverned = content.includes('builderos-useful-work-contracts');
   const pbGoverned =
     content.includes('SYSTEM_AUTHORIZED_UNDER_PB') ||
     content.includes('auditCommandControlJobBoundary(') ||
@@ -129,6 +130,7 @@ function classify(entry, content) {
 
   let status = 'UNKNOWN';
   if (hasUsefulGuard) status = 'GUARDED';
+  else if (contractGoverned) status = 'CONTRACT_GOVERNED';
   else if (pbGoverned) status = 'PB_GOVERNED';
   else if (envGuarded) status = 'ENV_GUARDED';
   else if (hasScheduler) status = 'UNGUARDED_SCHEDULED';
@@ -138,6 +140,7 @@ function classify(entry, content) {
     status,
     evidence: {
       hasUsefulGuard,
+      contractGoverned,
       pbGoverned,
       envGuarded,
       hasScheduler,
@@ -148,6 +151,7 @@ function classify(entry, content) {
 const results = PATHS.map((entry) => classify(entry, read(entry.path)));
 const summary = {
   guarded: results.filter((r) => r.status === 'GUARDED').length,
+  contract_governed: results.filter((r) => r.status === 'CONTRACT_GOVERNED').length,
   pb_governed: results.filter((r) => r.status === 'PB_GOVERNED').length,
   env_guarded: results.filter((r) => r.status === 'ENV_GUARDED').length,
   unguarded_scheduled: results.filter((r) => r.status === 'UNGUARDED_SCHEDULED').length,

@@ -12,6 +12,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { runIdleAutonomyAnalysis } from './governed-autonomy-idle-analysis.mjs';
+import { validateOvernightContract } from '../services/builderos-useful-work-contracts.js';
 
 dotenv.config({ path: path.join(process.cwd(), '.env.local'), override: true });
 
@@ -103,6 +104,21 @@ async function runBatch(batchNo) {
     adam_required: (r.adam_required_actions || []).length,
     blockers: (r.blockers || []).map((b) => b.code),
   });
+
+  const contractCheck = validateOvernightContract({
+    hasKey: Boolean(key),
+    readinessReady: Boolean(r.ready_for_supervised),
+    adamRequired: (r.adam_required_actions || []).length > 0,
+    repairQueueOpen: r.repair_queue_open ?? 0,
+    proofStale: r.proof_freshness_overall === 'STALE',
+  });
+  await appendLog('batch_contract_check', { batch_no: batchNo, ...contractCheck });
+  if (contractCheck.halt) {
+    return { halt: true, reason: contractCheck.reason };
+  }
+  if (!contractCheck.ok && contractCheck.idle) {
+    return { halt: false, mode: 'contract_idle', idle_reason: contractCheck.reason };
+  }
 
   if ((r.adam_required_actions || []).length > 0) {
     return { halt: true, reason: 'adam_required_stop', adam_required: r.adam_required_actions };
