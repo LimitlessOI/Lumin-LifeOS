@@ -1,7 +1,7 @@
 # TSOS LIVE → PROVEN Advancement Plan
 
 **Created:** 2026-05-29  
-**Status:** G1 IMPLEMENTED (2026-05-29) — PROVEN gate wired in alpha readiness service; pending Railway deploy verification  
+**Status:** G2 IMPLEMENTED (2026-05-29) — hook metadata enrichment + tsos-evidence route; pending deploy + evidence cycles  
 **Scope:** BuilderOS-internal TSOS hooks only (`tsos_internal_hooks` component)  
 **Out of scope:** Memory systems (Codex mission), customer-facing TSOS features, new model integrations
 

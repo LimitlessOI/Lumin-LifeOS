@@ -1,4 +1,5 @@
 import express from 'express';
+import { buildTsosEvidenceQuality } from '../services/builderos-tsos-evidence.js';
 
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
@@ -7,6 +8,15 @@ export function createTsosEfficiencyRoutes({ requireKey, pool }) {
   const router = express.Router();
 
   router.use(requireKey);
+
+  router.get('/api/v1/lifeos/builderos/tsos-evidence', async (req, res, next) => {
+    try {
+      const evidence = await buildTsosEvidenceQuality(pool);
+      res.json(evidence);
+    } catch (err) {
+      next(err);
+    }
+  });
 
   router.get('/api/v1/lifeos/builderos/tsos-efficiency', async (req, res, next) => {
     try {
