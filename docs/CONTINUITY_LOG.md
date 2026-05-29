@@ -2,6 +2,20 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] 2026-05-29 — TSOS-G3.3 Shadow Hypothetical Routing Deltas
+
+### Files changed
+- `services/builderos-tsos-routing.js` — `computeTsosHypotheticalRouting()` with 3 fail-open rules; actual dispatch unchanged; `metadata_version: tsos-g3.3`
+- `services/builderos-tsos-evidence.js` — `global_avg_token_estimate`, `prefix_cheaper_model_verifier_success`
+- `routes/tsos-efficiency-routes.js` — `hypothetical_only` query filter; response labels `shadow_only`, `actual_dispatch_changed`
+
+### State after this session
+- Hypothetical deltas logged in comparator snapshot only
+- `decision_changed=false` on all actual dispatch rows
+- TSOS remains PROVEN (not ACTIVE); no alpha/memory/proof changes
+- Next: TSOS-G3.4 — apply adjustments in active mode with ACTIVE gate
+
+---
 ## [BUILD] 2026-05-29 — TSOS-G3.2 Baseline Comparator Refinement (SHADOW)
 
 ### Files changed

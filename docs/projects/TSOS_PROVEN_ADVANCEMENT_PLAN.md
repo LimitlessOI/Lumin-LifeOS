@@ -332,9 +332,26 @@ Stored in `comparator_snapshot_json` + merged into GET response:
 
 **Evidence snapshot expansion (G3.2):** global hooks + prefix-scoped aggregates in `evidence_snapshot_json` — see `buildEvidenceSnapshot()` in `builderos-tsos-routing.js`.
 
-### 9.4 Next: TSOS-G3.3
+### 9.4 G3.3 hypothetical shadow deltas (2026-05-29)
 
-Pre-dispatch TSOS adjustment rules in **shadow** — log hypothetical `decision_changed=true` deltas without applying to dispatch.
+**Status:** IMPLEMENTED — shadow only; actual dispatch unchanged.
+
+`computeTsosHypotheticalRouting()` applies three fail-open rules:
+
+| Rule code | Trigger | Hypothetical effect |
+|-----------|---------|---------------------|
+| `tsos_target_prefix_risk` | `services/` or `routes/` prefix AND prefix `repair_count > 0` | Task class → `high_risk_repo_edit` |
+| `tsos_repair_rate_escalation` | Prefix avg repair ≥ 1.5 AND verifier linkage ≥ 80% | Model escalate one tier within allowed set |
+| `tsos_token_efficiency_downgrade` | Prefix token > global avg AND cheaper model verifier-passed success | Model downgrade one tier (skipped if escalation applied) |
+
+**Hard rules (G3.3):**
+- `decision_changed` column always `false` — actual dispatch uses baseline only
+- Hypothetical fields stored in `comparator_snapshot_json`: `hypothetical_task_class`, `hypothetical_model`, `hypothetical_decision_changed`, `hypothetical_change_reason_code`, `hypothetical_change_reason_detail`, `hypothetical_policy_allowed`
+- GET route labels: `shadow_only: true`, `actual_dispatch_changed: false`
+
+### 9.5 Next: TSOS-G3.4
+
+Apply TSOS adjustments in `mode=active` on bounded task classes only — still requires ACTIVE gate + verifier script before maturity promotion.
 
 ---
 

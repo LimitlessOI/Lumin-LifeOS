@@ -214,6 +214,20 @@ export async function buildTsosEvidenceForPrefix(pool, targetFile) {
       [TSOS_HOOK_TASK_TYPE, `${prefix}%`],
     );
 
+    const globalTokenRes = await pool.query(
+      `
+        SELECT ROUND(AVG(NULLIF(
+          COALESCE(total_token_estimate, (metadata->>'total_token_estimate')::int), 0
+        )), 1) AS global_avg_token_estimate
+        FROM autonomous_telemetry_events
+        WHERE task_type = $1
+      `,
+      [TSOS_HOOK_TASK_TYPE],
+    );
+    const globalAvgToken = globalTokenRes.rows[0]?.global_avg_token_estimate != null
+      ? Number(globalTokenRes.rows[0].global_avg_token_estimate)
+      : null;
+
     const prefixHooks = prefixRes.rows || [];
     let repairSum = 0;
     let repairCount = 0;
@@ -223,10 +237,18 @@ export async function buildTsosEvidenceForPrefix(pool, targetFile) {
     let tokenCount = 0;
     let g2Complete = 0;
     let prefixTokenEstimateCount = 0;
+    let prefixCheaperVerifierSuccess = false;
+    const cheaperModels = new Set(['groq_llama', 'deepseek', 'cerebras_llama']);
 
     for (const row of prefixHooks) {
       const meta = row.metadata || {};
       if (rowHasRequiredMetadata(meta)) g2Complete += 1;
+      if (meta.verifier_ok === true || meta.verifier_ok === 'true') {
+        const builderModel = String(meta.builder_model || meta.model_used || '').trim();
+        if (builderModel && cheaperModels.has(builderModel)) {
+          prefixCheaperVerifierSuccess = true;
+        }
+      }
       const repair = Number(meta.repair_count ?? meta.repair_attempts);
       if (Number.isFinite(repair)) {
         repairSum += repair;
@@ -247,6 +269,7 @@ export async function buildTsosEvidenceForPrefix(pool, targetFile) {
 
     const matchingPrefixAvgRepair = repairCount ? Math.round((repairSum / repairCount) * 10) / 10 : null;
     const matchingPrefixAvgDuration = durationCount ? Math.round(durationSum / durationCount) : null;
+    const matchingPrefixAvgToken = tokenCount ? Math.round(tokenSum / tokenCount) : null;
 
     return {
       ok: true,
@@ -263,7 +286,10 @@ export async function buildTsosEvidenceForPrefix(pool, targetFile) {
       avg_duration_ms: globalEvidence.avg_duration_ms,
       matching_prefix_avg_duration_ms: matchingPrefixAvgDuration,
       avg_output_bytes: globalEvidence.avg_output_bytes,
-      avg_token_estimate: tokenCount ? Math.round(tokenSum / tokenCount) : null,
+      avg_token_estimate: matchingPrefixAvgToken,
+      matching_prefix_avg_token_estimate: matchingPrefixAvgToken,
+      global_avg_token_estimate: globalAvgToken,
+      prefix_cheaper_model_verifier_success: prefixCheaperVerifierSuccess,
       token_estimate_availability_pct: globalEvidence.token_estimate_availability_pct,
       matching_prefix_token_estimate_availability_pct: pct(prefixTokenEstimateCount, prefixHooks.length),
       read_path: 'buildTsosEvidenceForPrefix',

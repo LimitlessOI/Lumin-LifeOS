@@ -24,6 +24,7 @@ export function createTsosEfficiencyRoutes({ requireKey, pool }) {
       const result = await listRoutingDecisions(pool, {
         limit: req.query.limit,
         changedOnly: req.query.changed_only === 'true',
+        hypotheticalOnly: req.query.hypothetical_only === 'true',
         mode: req.query.mode,
       });
       res.json(result);

@@ -110,3 +110,4 @@ This is the minimum viable proof surface. No product UI required. No customer-fa
 - **ACTIVE proof** requires rows with `mode='active'` AND `decision_changed=true` — shadow rows do **not** count.
 - **Hook count alone** cannot elevate to ACTIVE (§4 scoring rule unchanged).
 - G3.2 comparator captures baseline policy path inputs for future routing delta proof — see `docs/projects/TSOS_PROVEN_ADVANCEMENT_PLAN.md` §9.
+- **G3.3 (shadow):** `hypothetical_*` fields in `comparator_snapshot_json` record what TSOS **would** change; `decision_changed` on actual dispatch remains `false` until G3.4+ active mode with ACTIVE gate proof.

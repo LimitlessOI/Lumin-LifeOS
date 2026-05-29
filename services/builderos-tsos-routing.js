@@ -1,14 +1,29 @@
 /**
- * TSOS-G3 routing decision log — shadow/active infrastructure (G3.2: comparator refinement).
+ * TSOS-G3 routing decision log — shadow/active infrastructure (G3.3: hypothetical deltas).
  *
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
 import { buildTsosEvidenceForPrefix } from './builderos-tsos-evidence.js';
+import { getBuilderRoutingPolicy } from './builderos-routing-policy.js';
 
-export const TSOS_ROUTING_METADATA_VERSION = 'tsos-g3.2';
+export const TSOS_ROUTING_METADATA_VERSION = 'tsos-g3.3';
 export const TSOS_ROUTING_MODES = ['shadow', 'active'];
 const BASELINE_POLICY_SOURCE = 'builderos_routing_policy + task_model_map + availability';
+
+const MODEL_TIER_ORDER = [
+  'groq_llama',
+  'gemini_flash',
+  'deepseek',
+  'cerebras_llama',
+  'claude_via_openrouter',
+  'claude_sonnet',
+  'gpt-5.1-codex',
+  'gpt-5.2-codex',
+  'ollama_qwen_coder_32b',
+  'ollama_deepseek_coder_v2',
+  'ollama_deepseek_coder_33b',
+];
 
 function routingModeFromEnv() {
   const raw = String(process.env.BUILDEROS_TSOS_ROUTING_MODE || 'shadow').trim().toLowerCase();
@@ -36,11 +51,59 @@ function uniqueStrings(values = []) {
   return [...new Set((values || []).filter(Boolean).map(String))];
 }
 
+function normalizeTargetPath(targetFile) {
+  return String(targetFile || '').trim().replace(/^[/\\]+/, '').toLowerCase();
+}
+
+function modelTierIndex(model) {
+  const idx = MODEL_TIER_ORDER.indexOf(model);
+  return idx === -1 ? null : idx;
+}
+
+function escalateOneTier(model, allowedModels) {
+  const idx = modelTierIndex(model);
+  if (idx === null) return null;
+  const allowed = new Set(allowedModels || []);
+  for (let i = idx + 1; i < MODEL_TIER_ORDER.length; i += 1) {
+    if (allowed.has(MODEL_TIER_ORDER[i])) return MODEL_TIER_ORDER[i];
+  }
+  return null;
+}
+
+function downgradeOneTier(model, allowedModels) {
+  const idx = modelTierIndex(model);
+  if (idx === null) return null;
+  const allowed = new Set(allowedModels || []);
+  for (let i = idx - 1; i >= 0; i -= 1) {
+    if (allowed.has(MODEL_TIER_ORDER[i])) return MODEL_TIER_ORDER[i];
+  }
+  return null;
+}
+
+function allowedModelsForTaskClass(taskClass, routingKey, targetFile) {
+  const policy = getBuilderRoutingPolicy({
+    routingKey: routingKey || 'council.builder.code',
+    mode: 'code',
+    executionOnly: false,
+    targetFile: targetFile || 'services/example.js',
+  });
+  if (policy.taskClass === taskClass) {
+    return uniqueStrings(policy.allowedModels);
+  }
+  if (taskClass === 'high_risk_repo_edit') {
+    const hr = getBuilderRoutingPolicy({
+      routingKey: 'council.builder.code',
+      mode: 'code',
+      executionOnly: false,
+      targetFile: targetFile || 'services/example.js',
+    });
+    return uniqueStrings(hr.allowedModels);
+  }
+  return uniqueStrings(policy.allowedModels);
+}
+
 /**
  * Explicit baseline routing comparator — policy + task map + availability only (no memory, no TSOS).
- * G3.2: selected path always equals baseline path; observability only.
- * @param {object} input
- * @returns {object}
  */
 export function computeBaselineRouting({
   routingKey,
@@ -66,33 +129,143 @@ export function computeBaselineRouting({
     operator_override: operatorOverride === true,
     decision_changed: false,
     change_reason_code: null,
-    change_reason_detail: 'G3.2 shadow — baseline comparator observability only; selected path equals baseline path',
+    change_reason_detail: 'G3.3 shadow — actual dispatch uses baseline path only',
   };
 }
 
 /**
- * G3.2 stub — returns unchanged baseline (no TSOS routing adjustments yet).
- * @param {object} input
- * @returns {object}
+ * G3.3 — compute hypothetical TSOS routing delta (shadow only; never applied to dispatch).
+ */
+export function computeTsosHypotheticalRouting({
+  baselineComparator,
+  evidence = null,
+  targetFile = null,
+  routingKey = null,
+}) {
+  const baselineTaskClass = pickString(baselineComparator?.task_class_baseline) || 'classification';
+  const baselineModel = pickString(baselineComparator?.baseline_model) || 'gemini_flash';
+  const allowedBaseline = uniqueStrings(baselineComparator?.baseline_allowed_models || []);
+
+  const unchanged = (detail) => ({
+    hypothetical_task_class: baselineTaskClass,
+    hypothetical_model: baselineModel,
+    hypothetical_decision_changed: false,
+    hypothetical_change_reason_code: null,
+    hypothetical_change_reason_detail: detail,
+    hypothetical_policy_allowed: allowedBaseline,
+  });
+
+  if (!evidence?.ok || evidence.error) {
+    return unchanged('G3.3 shadow — no hypothetical delta (evidence missing or unreadable)');
+  }
+  if (!allowedBaseline.length) {
+    return unchanged('G3.3 shadow — no hypothetical delta (allowed model list missing)');
+  }
+
+  let hypotheticalTaskClass = baselineTaskClass;
+  let hypotheticalModel = baselineModel;
+  let reasonCode = null;
+  let reasonDetail = null;
+  let modelRuleApplied = null;
+
+  const path = normalizeTargetPath(targetFile);
+  const repairCount = Number(evidence.matching_prefix_avg_repair_count ?? 0);
+  const verifierPct = Number(evidence.verifier_linkage_pct ?? 0);
+
+  if ((path.startsWith('services/') || path.startsWith('routes/')) && repairCount > 0) {
+    hypotheticalTaskClass = 'high_risk_repo_edit';
+    reasonCode = 'tsos_target_prefix_risk';
+    reasonDetail = `Target prefix ${evidence.target_prefix || path.split('/')[0] + '/'} has repair_count ${repairCount} > 0`;
+  }
+
+  let hypotheticalAllowed = hypotheticalTaskClass === baselineTaskClass
+    ? allowedBaseline
+    : allowedModelsForTaskClass(hypotheticalTaskClass, routingKey, targetFile);
+
+  if (!hypotheticalAllowed.length) {
+    return unchanged('G3.3 shadow — no hypothetical delta (hypothetical allowed model list empty)');
+  }
+
+  const avgRepair = Number(evidence.matching_prefix_avg_repair_count ?? 0);
+  if (avgRepair >= 1.5 && verifierPct >= 80) {
+    const escalated = escalateOneTier(hypotheticalModel, hypotheticalAllowed);
+    if (escalated && escalated !== hypotheticalModel) {
+      hypotheticalModel = escalated;
+      reasonCode = 'tsos_repair_rate_escalation';
+      reasonDetail = `Prefix avg repair ${avgRepair} >= 1.5 with verifier linkage ${verifierPct}%`;
+      modelRuleApplied = 'escalation';
+    }
+  }
+
+  if (modelRuleApplied !== 'escalation') {
+    const prefixTok = evidence.matching_prefix_avg_token_estimate ?? evidence.avg_token_estimate;
+    const globalTok = evidence.global_avg_token_estimate;
+    const cheaperSuccess = evidence.prefix_cheaper_model_verifier_success === true;
+    if (
+      prefixTok != null &&
+      globalTok != null &&
+      Number(prefixTok) > Number(globalTok) &&
+      cheaperSuccess
+    ) {
+      const downgraded = downgradeOneTier(hypotheticalModel, hypotheticalAllowed);
+      if (downgraded && downgraded !== hypotheticalModel) {
+        hypotheticalModel = downgraded;
+        reasonCode = 'tsos_token_efficiency_downgrade';
+        reasonDetail = `Prefix token ${prefixTok} > global ${globalTok} with cheaper verifier-passed success`;
+      }
+    }
+  }
+
+  if (!hypotheticalAllowed.includes(hypotheticalModel)) {
+    hypotheticalModel = baselineModel;
+    hypotheticalTaskClass = baselineTaskClass;
+    return unchanged('G3.3 shadow — hypothetical model rejected (violates policy allowed set)');
+  }
+
+  const hypotheticalChanged =
+    hypotheticalTaskClass !== baselineTaskClass || hypotheticalModel !== baselineModel;
+
+  return {
+    hypothetical_task_class: hypotheticalTaskClass,
+    hypothetical_model: hypotheticalModel,
+    hypothetical_decision_changed: hypotheticalChanged,
+    hypothetical_change_reason_code: hypotheticalChanged ? reasonCode : null,
+    hypothetical_change_reason_detail: hypotheticalChanged
+      ? reasonDetail
+      : 'G3.3 shadow — no hypothetical delta (evidence thresholds not met)',
+    hypothetical_policy_allowed: hypotheticalAllowed,
+  };
+}
+
+/**
+ * Actual dispatch path unchanged; hypothetical delta computed for shadow audit only.
  */
 export function computeTsosRoutingAdjustment({
   baselineComparator,
   evidence = null,
+  targetFile = null,
+  routingKey = null,
 }) {
   const baseline = baselineComparator || {};
   const taskClass = pickString(baseline.task_class_baseline) || 'classification';
   const model = pickString(baseline.baseline_model) || 'gemini_flash';
   const evidenceOk = evidence?.ok === true && !evidence?.error;
 
+  const hypothetical = computeTsosHypotheticalRouting({
+    baselineComparator,
+    evidence,
+    targetFile,
+    routingKey,
+  });
+
   return {
     taskClassSelected: taskClass,
     selectedModel: model,
     decisionChanged: false,
     changeReasonCode: null,
-    changeReasonDetail: evidenceOk
-      ? 'G3.2 shadow — TSOS evidence read; comparator records baseline only'
-      : 'G3.2 shadow — baseline unchanged (evidence missing or unreadable)',
+    changeReasonDetail: 'G3.3 shadow — actual dispatch unchanged; see hypothetical_* fields',
     evidenceReadOk: evidenceOk,
+    ...hypothetical,
   };
 }
 
@@ -113,14 +286,26 @@ function buildEvidenceSnapshot(evidence) {
     matching_prefix_avg_repair_count: evidence.matching_prefix_avg_repair_count ?? evidence.avg_repair_count ?? null,
     matching_prefix_token_estimate_availability_pct:
       evidence.matching_prefix_token_estimate_availability_pct ?? null,
+    matching_prefix_avg_token_estimate: evidence.matching_prefix_avg_token_estimate ?? null,
+    global_avg_token_estimate: evidence.global_avg_token_estimate ?? null,
+    prefix_cheaper_model_verifier_success: evidence.prefix_cheaper_model_verifier_success ?? false,
+  };
+}
+
+function buildEvidenceSummary(evidenceSnapshot) {
+  if (!evidenceSnapshot) return null;
+  return {
+    total_hooks: evidenceSnapshot.total_hooks,
+    target_prefix: evidenceSnapshot.target_prefix,
+    matching_prefix_hook_count: evidenceSnapshot.matching_prefix_hook_count,
+    matching_prefix_avg_repair_count: evidenceSnapshot.matching_prefix_avg_repair_count,
+    verifier_linkage_pct: evidenceSnapshot.verifier_linkage_pct,
+    g2_metadata_completeness_pct: evidenceSnapshot.g2_metadata_completeness_pct,
   };
 }
 
 /**
  * Persist one routing decision row (fail-open on DB errors).
- * @param {import('pg').Pool} pool
- * @param {object} payload
- * @returns {Promise<{ ok: boolean, id?: number, dispatch_id?: string, error?: string }>}
  */
 export async function insertRoutingDecision(pool, payload = {}) {
   if (!pool?.query) {
@@ -231,22 +416,27 @@ export async function insertRoutingDecision(pool, payload = {}) {
 
 function mergeComparatorIntoDecision(row = {}) {
   const comparator = row.comparator_snapshot_json || {};
-  const { comparator_snapshot_json: _drop, ...rest } = row;
+  const evidence = row.evidence_snapshot_json || {};
+  const { comparator_snapshot_json: _c, evidence_snapshot_json: _e, ...rest } = row;
+
   return {
     ...rest,
     ...comparator,
     comparator_snapshot_json: comparator,
+    evidence_snapshot_json: evidence,
+    evidence_summary: buildEvidenceSummary(evidence),
+    shadow_only: true,
+    actual_dispatch_changed: rest.decision_changed === true,
   };
 }
 
 /**
  * Read recent routing decisions (read-only audit surface).
- * @param {import('pg').Pool} pool
- * @param {{ limit?: number, changedOnly?: boolean, mode?: string }} options
  */
 export async function listRoutingDecisions(pool, options = {}) {
   const limit = Math.min(Math.max(Number(options.limit) || 50, 1), 200);
   const changedOnly = options.changedOnly === true || options.changed_only === 'true';
+  const hypotheticalOnly = options.hypotheticalOnly === true || options.hypothetical_only === 'true';
   const mode = pickString(options.mode);
 
   if (!pool?.query) {
@@ -258,6 +448,9 @@ export async function listRoutingDecisions(pool, options = {}) {
     const where = [];
     if (changedOnly) {
       where.push('decision_changed = true');
+    }
+    if (hypotheticalOnly) {
+      where.push("(comparator_snapshot_json->>'hypothetical_decision_changed') = 'true'");
     }
     if (mode && TSOS_ROUTING_MODES.includes(mode)) {
       params.push(mode);
@@ -291,9 +484,12 @@ export async function listRoutingDecisions(pool, options = {}) {
       total: countRes.rows[0]?.total || 0,
       limit,
       changed_only: changedOnly,
+      hypothetical_only: hypotheticalOnly,
       mode: mode || null,
       read_path: 'GET /api/v1/lifeos/builderos/tsos-routing-decisions',
       metadata_version: TSOS_ROUTING_METADATA_VERSION,
+      shadow_only: true,
+      actual_dispatch_changed: false,
       decisions: rowsRes.rows.map(mergeComparatorIntoDecision),
     };
   } catch (error) {
@@ -331,15 +527,23 @@ export async function logShadowRoutingDecision(pool, {
   const adjustment = computeTsosRoutingAdjustment({
     baselineComparator,
     evidence,
+    targetFile,
+    routingKey,
   });
 
   const comparatorSnapshot = {
     ...baselineComparator,
-    task_class_selected: adjustment.taskClassSelected,
-    selected_model: adjustment.selectedModel,
-    decision_changed: adjustment.decisionChanged,
-    change_reason_code: adjustment.changeReasonCode,
+    task_class_selected: baselineComparator.task_class_baseline,
+    selected_model: baselineComparator.baseline_model,
+    decision_changed: false,
+    change_reason_code: null,
     change_reason_detail: adjustment.changeReasonDetail,
+    hypothetical_task_class: adjustment.hypothetical_task_class,
+    hypothetical_model: adjustment.hypothetical_model,
+    hypothetical_decision_changed: adjustment.hypothetical_decision_changed,
+    hypothetical_change_reason_code: adjustment.hypothetical_change_reason_code,
+    hypothetical_change_reason_detail: adjustment.hypothetical_change_reason_detail,
+    hypothetical_policy_allowed: adjustment.hypothetical_policy_allowed,
   };
 
   const evidenceSnapshot = buildEvidenceSnapshot(evidence);
@@ -349,11 +553,11 @@ export async function logShadowRoutingDecision(pool, {
     routingKey,
     targetFile,
     taskClassBaseline: baselineComparator.task_class_baseline,
-    taskClassSelected: adjustment.taskClassSelected,
+    taskClassSelected: baselineComparator.task_class_baseline,
     baselineModel: baselineComparator.baseline_model,
-    selectedModel: adjustment.selectedModel,
-    decisionChanged: adjustment.decisionChanged,
-    changeReasonCode: adjustment.changeReasonCode,
+    selectedModel: baselineComparator.baseline_model,
+    decisionChanged: false,
+    changeReasonCode: null,
     changeReasonDetail: adjustment.changeReasonDetail,
     evidenceReadOk: adjustment.evidenceReadOk,
     evidenceSnapshotJson: evidenceSnapshot,
