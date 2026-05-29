@@ -42,6 +42,7 @@ import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-se
 import { pool as dbPool } from '../core/database.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
+import { logShadowRoutingDecision } from '../services/builderos-tsos-routing.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -850,6 +851,18 @@ export function createLifeOSCouncilBuilderRoutes({
     const preferredModel = availability.availabilityByModel[requestedModel]?.available
       ? requestedModel
       : (candidateModels[0] || null);
+
+    if (pool?.query) {
+      logShadowRoutingDecision(pool, {
+        routingKey,
+        targetFile: bodyTargetFile || null,
+        taskClassBaseline: routingPolicy.taskClass,
+        baselineModel: preferredModel || requestedModel || 'gemini_flash',
+      }).catch((shadowErr) => {
+        log.warn({ err: shadowErr?.message || shadowErr, routingKey }, '[BUILDER] TSOS shadow routing log failed (fail-open)');
+      });
+    }
+
     let routingRecommendation = {
       selectedModel: preferredModel,
       blockedCandidates: unavailableCandidates.map((row) => row.model),

@@ -20,6 +20,14 @@ function rowHasRequiredMetadata(metadata = {}) {
   });
 }
 
+function normalizeTargetPrefix(targetFile) {
+  const normalized = String(targetFile || '').trim().replace(/^[/\\]+/, '').toLowerCase();
+  if (!normalized) return null;
+  const slash = normalized.indexOf('/');
+  if (slash === -1) return normalized.endsWith('.js') ? 'scripts/' : `${normalized}/`;
+  return normalized.slice(0, slash + 1);
+}
+
 /**
  * @returns {Promise<object>} TSOS evidence quality snapshot
  */
@@ -123,5 +131,117 @@ export async function buildTsosEvidenceQuality(pool) {
     };
   } catch (error) {
     return { ...empty, ok: false, error: error.message };
+  }
+}
+
+/**
+ * Prefix-scoped TSOS evidence for pre-dispatch routing reads (TSOS-G3).
+ * Fail-open: returns ok:false with empty aggregates when pool/prefix missing.
+ * @param {import('pg').Pool} pool
+ * @param {string|null|undefined} targetFile
+ */
+export async function buildTsosEvidenceForPrefix(pool, targetFile) {
+  const prefix = normalizeTargetPrefix(targetFile);
+  const empty = {
+    ok: false,
+    prefix,
+    prefix_hook_count: 0,
+    total_hooks: 0,
+    g2_metadata_completeness_pct: 0,
+    verifier_linkage_pct: 0,
+    avg_repair_count: null,
+    avg_duration_ms: null,
+    avg_token_estimate: null,
+    read_path: 'buildTsosEvidenceForPrefix',
+    proof_source: `autonomous_telemetry_events WHERE task_type='${TSOS_HOOK_TASK_TYPE}' AND target_file prefix`,
+  };
+
+  if (!pool?.query) {
+    return { ...empty, error: 'no_pool' };
+  }
+
+  try {
+    const globalEvidence = await buildTsosEvidenceQuality(pool);
+    if (!globalEvidence.ok) {
+      return { ...empty, error: globalEvidence.error || 'global_evidence_failed' };
+    }
+
+    if (!prefix) {
+      return {
+        ok: true,
+        prefix: null,
+        prefix_hook_count: 0,
+        total_hooks: globalEvidence.total_hooks,
+        g2_metadata_completeness_pct: globalEvidence.g2_metadata_completeness_pct,
+        verifier_linkage_pct: globalEvidence.verifier_linkage_pct,
+        avg_repair_count: null,
+        avg_duration_ms: null,
+        avg_token_estimate: null,
+        read_path: 'buildTsosEvidenceForPrefix',
+        proof_source: empty.proof_source,
+        error: null,
+      };
+    }
+
+    const prefixRes = await pool.query(
+      `
+        SELECT
+          metadata,
+          total_token_estimate,
+          created_at
+        FROM autonomous_telemetry_events
+        WHERE task_type = $1
+          AND LOWER(COALESCE(metadata->>'target_file', '')) LIKE $2
+        ORDER BY created_at DESC
+        LIMIT 20
+      `,
+      [TSOS_HOOK_TASK_TYPE, `${prefix}%`],
+    );
+
+    const prefixHooks = prefixRes.rows || [];
+    let repairSum = 0;
+    let repairCount = 0;
+    let durationSum = 0;
+    let durationCount = 0;
+    let tokenSum = 0;
+    let tokenCount = 0;
+    let g2Complete = 0;
+
+    for (const row of prefixHooks) {
+      const meta = row.metadata || {};
+      if (rowHasRequiredMetadata(meta)) g2Complete += 1;
+      const repair = Number(meta.repair_count ?? meta.repair_attempts);
+      if (Number.isFinite(repair)) {
+        repairSum += repair;
+        repairCount += 1;
+      }
+      const duration = Number(meta.duration_ms);
+      if (Number.isFinite(duration) && duration > 0) {
+        durationSum += duration;
+        durationCount += 1;
+      }
+      const tokens = Number(row.total_token_estimate ?? meta.total_token_estimate);
+      if (Number.isFinite(tokens) && tokens > 0) {
+        tokenSum += tokens;
+        tokenCount += 1;
+      }
+    }
+
+    return {
+      ok: true,
+      prefix,
+      prefix_hook_count: prefixHooks.length,
+      total_hooks: globalEvidence.total_hooks,
+      g2_metadata_completeness_pct: pct(g2Complete, prefixHooks.length),
+      verifier_linkage_pct: globalEvidence.verifier_linkage_pct,
+      avg_repair_count: repairCount ? Math.round((repairSum / repairCount) * 10) / 10 : null,
+      avg_duration_ms: durationCount ? Math.round(durationSum / durationCount) : null,
+      avg_token_estimate: tokenCount ? Math.round(tokenSum / tokenCount) : null,
+      read_path: 'buildTsosEvidenceForPrefix',
+      proof_source: empty.proof_source,
+      error: null,
+    };
+  } catch (error) {
+    return { ...empty, error: error.message };
   }
 }

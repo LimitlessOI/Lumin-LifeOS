@@ -1,5 +1,6 @@
 import express from 'express';
 import { buildTsosEvidenceQuality } from '../services/builderos-tsos-evidence.js';
+import { listRoutingDecisions } from '../services/builderos-tsos-routing.js';
 
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
@@ -13,6 +14,19 @@ export function createTsosEfficiencyRoutes({ requireKey, pool }) {
     try {
       const evidence = await buildTsosEvidenceQuality(pool);
       res.json(evidence);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/api/v1/lifeos/builderos/tsos-routing-decisions', async (req, res, next) => {
+    try {
+      const result = await listRoutingDecisions(pool, {
+        limit: req.query.limit,
+        changedOnly: req.query.changed_only === 'true',
+        mode: req.query.mode,
+      });
+      res.json(result);
     } catch (err) {
       next(err);
     }
