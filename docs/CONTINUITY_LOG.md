@@ -11,8 +11,13 @@ Deploy-check + self-repair executor already existed (`bootSelfRepairDeployCheck`
 - `services/builderos-governed-proof-parity.js` (NEW) — debounced post-commit scheduler calls existing `runDeployDriftPreventionHook` after 90s settle; verifies CURRENT via `evaluateProofFreshnessFromPool`; fail-closed on failure
 - `services/builderos-governed-loop-executor.js` — calls `scheduleProofParityAfterGovernedCommit()` on both committed paths (after TSOS hook)
 
+### Fix (iteration 2 — redeploy-safe)
+- Durable `builderos_proof_parity_pending` receipt on schedule (survives container replace)
+- Boot passes at +45s, +120s, +240s via `runGovernedProofParityRefresh`
+- v1 in-memory timer alone failed controlled test (redeploy killed setTimeout)
+
 ### Next agent: start here
-- Deploy and run one governed job; wait ~100s; confirm proof restores without manual gemini/proof
+- Deploy iteration 2; controlled test: governed job → wait 240s → proof CURRENT without manual gemini/proof
 - TSOS LIVE→PROVEN still needs more hook events
 
 ---

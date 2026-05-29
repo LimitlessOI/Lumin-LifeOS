@@ -9,6 +9,7 @@
 import { evaluateProofFreshnessFromPool } from './oil-proof-freshness.js';
 import { runDeployDriftPreventionHook } from './self-repair-deploy-scheduler.js';
 import { normalizeSha } from './oil-self-repair-detector.js';
+import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from './oil-security-receipts.js';
 
 const SETTLE_MS = Number(process.env.BUILDEROS_PROOF_PARITY_SETTLE_MS || 90_000);
 const POLL_MS = Number(process.env.BUILDEROS_PROOF_PARITY_POLL_MS || 15_000);
@@ -22,12 +23,34 @@ function currentDeploySha() {
   return normalizeSha(process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || '');
 }
 
+async function writeProofParityPendingReceipt(pool, meta = {}) {
+  try {
+    await writeSecurityReceipt(
+      SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION,
+      {
+        type: 'builderos_proof_parity_pending',
+        status: 'PENDING',
+        subject: meta.jobId || 'governed-loop-commit',
+        summary: 'Governed commit awaiting deploy-settled proof parity refresh',
+        job_id: meta.jobId || null,
+        triggered_by: meta.triggeredBy || null,
+        deploy_sha_at_schedule: currentDeploySha(),
+      },
+      pool,
+    );
+  } catch {
+    // Receipt is audit-only; boot passes still detect STALE proof directly.
+  }
+}
+
 /**
  * Schedule governed proof parity refresh after a successful governed commit.
  * Waits for deploy settle before invoking deploy-check (no mid-rollout repair).
  */
 export function scheduleProofParityAfterGovernedCommit(pool, meta = {}) {
   if (!pool) return { scheduled: false, reason: 'no_pool' };
+
+  writeProofParityPendingReceipt(pool, meta).catch(() => {});
 
   debounceMeta = {
     jobId: meta.jobId || null,
@@ -86,6 +109,24 @@ export async function runGovernedProofParityRefresh(pool, meta = {}) {
     const afterFreshness = await evaluateProofFreshnessFromPool(pool, { railwayDeploySha: afterDeploySha });
 
     if (afterFreshness.overall === 'CURRENT' && lastOutcome.ok) {
+      try {
+        await writeSecurityReceipt(
+          SECURITY_RECEIPT_TYPES.AUDIT_VERIFICATION,
+          {
+            type: 'builderos_proof_parity_resolved',
+            status: 'PASS',
+            subject: meta.jobId || 'governed-loop-commit',
+            summary: 'Proof parity restored after governed commit deploy drift',
+            job_id: meta.jobId || null,
+            deploy_sha: afterDeploySha,
+            receipt_sha: afterFreshness.proofs?.gemini_runtime?.receipt_sha || null,
+            triggered_by: triggeredBy,
+          },
+          pool,
+        );
+      } catch {
+        // resolution already verified via freshness evaluation
+      }
       return {
         ok: true,
         action: lastOutcome.action || 'execute',

@@ -282,27 +282,30 @@ async function bootSelfRepairDeployCheck(deps) {
       description: 'post-deploy prevention hook — deploy-check once per boot (skip+log if CURRENT)',
     }),
     execute: async () => {
-      const { runDeployDriftPreventionHook } = await import('../services/self-repair-deploy-scheduler.js');
-      const outcome = await runDeployDriftPreventionHook(pool, { dryRun: false, triggeredBy: 'boot-prevention-hook' });
+      const { runGovernedProofParityRefresh } = await import('../services/builderos-governed-proof-parity.js');
+      const outcome = await runGovernedProofParityRefresh(pool, { triggeredBy: 'boot-prevention-hook' });
       logger?.info?.(
         {
+          ok: outcome.ok,
           action: outcome.action,
           reason: outcome.reason,
-          ok: outcome.ok,
-          hook: outcome.prevention_hook?.hook_id || null,
+          freshness: outcome.freshness,
+          attempts: outcome.attempts,
         },
-        '[BOOT] Deploy drift prevention hook complete'
+        '[BOOT] Governed proof parity pass complete'
       );
     },
     logger,
   });
 
-  setTimeout(() => {
-    guarded().catch((err) => {
-      logger?.warn?.(`[BOOT] Self-repair deploy check failed: ${err.message}`);
-    });
-  }, 45 * 1000);
-  logger?.info('[BOOT] Self-repair deploy check scheduled once (45s after boot if stale drift)');
+  for (const delaySec of [45, 120, 240]) {
+    setTimeout(() => {
+      guarded().catch((err) => {
+        logger?.warn?.(`[BOOT] Self-repair deploy check failed (+${delaySec}s): ${err.message}`);
+      });
+    }, delaySec * 1000);
+  }
+  logger?.info('[BOOT] Governed proof parity scheduled at +45s, +120s, +240s after boot');
 }
 
 export async function bootAllDomains(deps) {
