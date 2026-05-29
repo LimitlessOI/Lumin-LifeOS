@@ -1,4 +1,4 @@
-/**
+/*
  * @file This module provides functionality to retrieve the current TSOS (Time-Sliced Operating System) cycle marker.
  * It is an integral part of the Zone 1 BuilderOS system, designed to provide consistent
  * cycle identification across various platform components and operational phases.
@@ -18,10 +18,10 @@
 // and represent the active operational phase. They are subject to updates
 // as the BuilderOS system progresses through different development and
 // stability milestones.
-const CURRENT_TSOS_CYCLE_NUMBER = 4;
-const CURRENT_TSOS_CYCLE_MARKER_STRING = "stability-run-4-g2";
+const CURRENT_TSOS_CYCLE_NUMBER = 6;
+const CURRENT_TSOS_CYCLE_MARKER_STRING = "stability-run-6-g2";
 
-/**
+/*
  * Generates an ISO 8601 formatted timestamp string for the current moment in UTC.
  * This helper function ensures consistent date and time formatting across the module's
  * output, adhering to widely accepted standards for machine-readable timestamps.
@@ -38,7 +38,7 @@ function generateIso8601Timestamp() {
   return now.toISOString();
 }
 
-/**
+/*
  * Retrieves the current TSOS (Time-Sliced Operating System) cycle marker.
  * This function provides a standardized object containing the current cycle
  * number, a descriptive marker string, and the timestamp when this information
