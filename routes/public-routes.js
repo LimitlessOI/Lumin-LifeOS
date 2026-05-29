@@ -59,6 +59,15 @@ export function registerPublicRoutes(app, {
     return res.status(404).send("LifeOS Command Center v2 not found.");
   });
 
+  // LifeOS Communication OS — conversation-first primary interface (AMENDMENT_21)
+  app.get("/lifeos-communication", (req, res) => {
+    const filePath = path.join(__dirname, "public", "overlay", "lifeos-communication.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("LifeOS Communication hub not found.");
+  });
+
+  app.get("/communicate", (_req, res) => res.redirect(301, "/lifeos-communication"));
+
   app.get("/tc", (req, res) => {
     const filePath = path.join(__dirname, "public", "tc", "agent-portal.html");
     if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);

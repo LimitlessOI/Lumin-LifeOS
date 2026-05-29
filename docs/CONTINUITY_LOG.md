@@ -2,7 +2,21 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
-## [BUILD] 2026-05-24 — Command Center Communication UX + Trust Guard
+## [BUILD] 2026-05-24 — LifeOS Communication OS Phase 2
+
+### Files changed
+- Communication hub: `/lifeos-communication` + `/communicate` redirect
+- `services/lifeos-communication-os-service.js`, `routes/lifeos-communication-routes.js`
+- Identity layer: speaker, contributors, VERIFIED/PARTIAL/UNVERIFIED, confidence %, disagreements
+- 10 modes, meeting boardroom, revenue brief, comm memory search (tags: tsos, site-builder, revenue, disagreement)
+- `public/shared/lifeos-comm-help.js` — snap cards + hub explainability on dashboard
+
+### State after this session
+- Verify: `node scripts/verify-lifeos-communication.mjs` PASS
+- No BuilderOS proof memory pollution; no alpha scoring changes
+- Next Phase 3: wire `/lifeos` shell default to Communication hub; expand panel-level help on all C&C sections; live revenue scores from Site Builder pipeline
+
+---
 
 ### Files changed
 - `db/migrations/20260529_command_center_communications.sql` — `command_center_communications` table (NOT epistemic_facts)

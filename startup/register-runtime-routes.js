@@ -56,6 +56,7 @@ import { createLifeOSCouncilBuilderRoutes } from "../routes/lifeos-council-build
 import { createGeminiProofRoutes } from "../routes/gemini-proof-routes.js";
 import { createOILSecurityReceiptRoutes } from "../routes/oil-security-receipt-routes.js";
 import { createCommandCenterAggregateRoutes } from "../routes/lifeos-command-center-routes.js";
+import { createLifeOSCommunicationRoutes } from "../routes/lifeos-communication-routes.js";
 import { createSelfRepairExecutorRoutes } from "../routes/self-repair-executor-routes.js";
 import { createAutonomousTelemetryRoutes } from "../routes/autonomous-telemetry-routes.js";
 import { createCanonicalAdminRoutes } from "../routes/canonical-admin-routes.js";
@@ -395,6 +396,8 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [OIL-RECEIPTS] Routes mounted at /api/v1/oil/receipts');
   app.use(createCommandCenterAggregateRoutes({ requireKey }));
   logger.info('✅ [CMD-CENTER-AGG] Routes mounted at /api/v1/lifeos/command-center/{phase14,mode,security}');
+  app.use(createLifeOSCommunicationRoutes({ pool, requireKey, callCouncilMember }));
+  logger.info('✅ [LIFEOS-COMM-OS] Routes mounted at /api/v1/lifeos/communication/*');
   app.use(createSelfRepairExecutorRoutes({ requireKey }));
   logger.info('✅ [SELF-REPAIR-EXECUTOR] Routes mounted at /api/v1/lifeos/command-center/self-repair/execute');
   app.use(createAutonomousTelemetryRoutes({ requireKey }));

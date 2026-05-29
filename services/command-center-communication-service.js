@@ -83,6 +83,7 @@ export function buildCommunicationEvidence({
   ]);
 
   const missingFiles = filesChecked.filter((f) => !f.exists);
+  const verifiedFiles = filesChecked.filter((f) => f.exists);
   const hasRepoFileClaims = filesChecked.length > 0;
   const advisoryOnly = builderMeta.advisory_only === true
     || builderMeta.execution_only === false && !builderMeta.committed
@@ -97,6 +98,13 @@ export function buildCommunicationEvidence({
     && !advisoryOnly
   ) {
     evidence_status = 'VERIFIED';
+  } else if (
+    placeholderWarnings.length === 0
+    && verifiedFiles.length > 0
+    && missingFiles.length > 0
+    && endpointsUsed.length > 0
+  ) {
+    evidence_status = 'PARTIAL';
   }
 
   const warnings = [];

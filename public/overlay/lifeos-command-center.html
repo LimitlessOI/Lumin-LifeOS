@@ -220,6 +220,7 @@
     <input type="password" id="key-input" placeholder="COMMAND_CENTER_KEY" autocomplete="off">
     <button class="btn btn-primary btn-sm" onclick="saveKey()">Save</button>
     <button class="btn btn-ghost btn-sm" onclick="loadAll()">&#8635; Refresh</button>
+    <a href="/lifeos-communication" class="btn btn-ghost btn-sm" style="text-decoration:none;color:var(--accent)">Communication →</a>
     <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);cursor:pointer">
       <input type="checkbox" id="auto-refresh" onchange="toggleAuto()" style="width:auto">
       Auto 60s
@@ -426,6 +427,7 @@
   </div>
 </div>
 
+<script src="/shared/lifeos-comm-help.js"></script>
 <script src="/overlay/command-center-communication.js"></script>
 <script>
 // ─────────────────────────────────────────────
@@ -549,7 +551,7 @@ const SNAP_DEFS = [
 
 function renderSnapRow(cards) {
   return cards.map(c => `
-    <div class="snap-card" onclick="openSnapDrawer('${c.key}')">
+    <div class="snap-card" data-comm-help="snap-${c.key}" onclick="openSnapDrawer('${c.key}')">
       ${ring(c.pct, ringColor(c.status))}
       <div class="snap-label">${c.label}</div>
       <div class="snap-value ${c.status}">${c.value}</div>
@@ -2447,6 +2449,7 @@ async function loadAll() {
 // Init
 // ─────────────────────────────────────────────
 if (window.CcComm) CcComm.init();
+if (window.LifeOSCommHelp) LifeOSCommHelp.initHelp(document);
 loadAll();
 </script>
 </body>

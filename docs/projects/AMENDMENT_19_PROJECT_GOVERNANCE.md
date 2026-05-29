@@ -203,6 +203,7 @@ Required runtime truths:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-05-24 | **`startup/register-runtime-routes.js`:** mount `createLifeOSCommunicationRoutes({ pool, requireKey, callCouncilMember })` at `/api/v1/lifeos/communication/*`. | LifeOS Communication OS Phase 2 — conversation-first API surface (AMENDMENT_21). | AM19 wiring | pending | `node --check` PASS |
 | 2026-05-29 | **`routes/project-governance-routes.js`**: moved `GET /projects/readiness/queue` before `/projects/:id`; guard `id=readiness` with helpful 404. | Prevent `/projects/readiness` hitting slug lookup ("Project not found"). | AM19 routes | pending | `node --check` PASS |
 | 2026-05-29 | **7 manifest JSON files** — added missing `name` and/or `amendment_path` only: AMENDMENT_16, 21, 31, 32, 33, 34, 35. No `verification_passed` changes. Audit: 29/29 valid after patch. | Builder repair mission Phase 5 — governance manifest completeness after 3/3 governed commits proved. | AM19 manifest schema | each file receipt | ✅ local JSON validation 29/29 |
 | 2026-05-29 | **`public/overlay/lifeos-command-center.html`**: Project Governance drill-down in Section F — `loadProjectGovernance()` reads `/projects/readiness/queue`, `/pending-adam`, `/estimation/accuracy`; shows build-ready/blocked/Adam counts, top-5 queue with reasons, disclaimer. HTML-only; no backend scoring changes. | Close AMENDMENT_19 backlog item — operators see project readiness in Command Center. | AM19 UI wired | AM12 receipt | pending Railway deploy |
