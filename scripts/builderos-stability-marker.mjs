@@ -1,3 +1,7 @@
+/**
+ * @file Provides a standardized, versioned stability marker for LifeOS Zone 1 operations.
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
 // --- Core Constants for the Stability Marker ---
 // Defines the current schema version for the stability marker.
 // This allows for future evolution of the marker's structure without breaking existing consumers.
@@ -9,7 +13,6 @@ const CURRENT_STABILITY_RUN_ID = "stability-run-1";
  * Generates a high-precision ISO 8601 formatted timestamp string in UTC.
  * This internal helper function ensures consistency in timestamp generation across the module,
  * providing a reliable point-in-time reference for the stability marker.
- *
  * @returns {string} The current UTC timestamp formatted according to the ISO 8601 standard
  *   (e.g., "2023-10-27T10:00:00.000Z").
  */
@@ -23,7 +26,6 @@ function _generateIsoTimestamp() {
  * This internal helper function enhances data integrity by verifying the format
  * of the 'generated_at' field before the marker is returned. It specifically
  * checks for the `YYYY-MM-DDTHH:mm:ss.sssZ` format.
- *
  * @param {string} timestampString The string to be validated against the ISO 8601 pattern.
  * @returns {boolean} True if the string matches the expected ISO 8601 format, false otherwise.
  */
@@ -44,11 +46,9 @@ function _isValidIso8601(timestampString) {
  * about the system's operational state for a specific stability run.
  * The marker includes its schema version, a unique identifier for the run,
  * and the precise UTC timestamp of its generation.
- *
  * The returned object is designed to be a consistent data structure for
  * system health reporting, enabling easy integration with monitoring tools
  * and correlation engines.
- *
  * @returns {{ version: string, marker: string, generated_at: string }} An object
  *   containing the stability marker details:
  *   - `version`: The schema version of this stability marker (e.g., "1.0.0").
