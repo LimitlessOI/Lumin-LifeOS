@@ -1,6 +1,8 @@
 {
   "project": "lifeos_core",
   "project_id": "lifeos_core",
+  "name": "LifeOS Core",
+  "amendment_path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
   "amendment": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
   "status": "founding",
   "build_ready": true,

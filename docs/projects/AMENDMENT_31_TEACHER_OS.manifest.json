@@ -1,6 +1,7 @@
 {
   "project_id": "AMENDMENT_31_TEACHER_OS",
   "name": "Teacher OS",
+  "amendment_path": "docs/projects/AMENDMENT_31_TEACHER_OS.md",
   "lifecycle": "in_progress",
   "status": "foundation_built",
   "priority": "high",

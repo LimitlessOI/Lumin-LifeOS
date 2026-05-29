@@ -1,6 +1,7 @@
 {
   "project_id": "AMENDMENT_32_MUSIC_TALENT_STUDIO",
   "name": "Music Talent Studio",
+  "amendment_path": "docs/projects/AMENDMENT_32_MUSIC_TALENT_STUDIO.md",
   "lifecycle": "candidate",
   "status": "specification",
   "priority": "high",

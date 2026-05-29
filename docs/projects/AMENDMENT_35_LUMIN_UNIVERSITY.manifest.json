@@ -1,6 +1,7 @@
 {
   "project_id": "AMENDMENT_35_LUMIN_UNIVERSITY",
   "name": "Lumin University",
+  "amendment_path": "docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.md",
   "lifecycle": "candidate",
   "status": "long-range-specification",
   "priority": "high",

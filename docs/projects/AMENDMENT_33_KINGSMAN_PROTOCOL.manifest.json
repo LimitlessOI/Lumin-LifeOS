@@ -1,5 +1,7 @@
 {
   "project_id": "AMENDMENT_33_KINGSMAN_PROTOCOL",
+  "name": "The Kingsman Protocol",
+  "amendment_path": "docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md",
   "title": "The Kingsman Protocol",
   "category": "AI Safety / Constitutional",
   "lifecycle": "constitutional",

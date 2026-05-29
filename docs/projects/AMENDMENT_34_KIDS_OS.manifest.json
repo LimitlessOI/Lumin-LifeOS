@@ -1,6 +1,7 @@
 {
   "project_id": "AMENDMENT_34_KIDS_OS",
   "name": "Kids OS",
+  "amendment_path": "docs/projects/AMENDMENT_34_KIDS_OS.md",
   "lifecycle": "active",
   "status": "foundation_built",
   "last_updated": "2026-04-05",
