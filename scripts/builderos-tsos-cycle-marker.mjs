@@ -13,14 +13,13 @@
  *
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-
 // Define constants for the current TSOS cycle.
 // These values are hardcoded as per the current specification for Zone 1
 // and represent the active operational phase. They are subject to updates
 // as the BuilderOS system progresses through different development and
 // stability milestones.
-const CURRENT_TSOS_CYCLE_NUMBER = 3;
-const CURRENT_TSOS_CYCLE_MARKER_STRING = "stability-run-3";
+const CURRENT_TSOS_CYCLE_NUMBER = 4;
+const CURRENT_TSOS_CYCLE_MARKER_STRING = "stability-run-4-g2";
 
 /**
  * Generates an ISO 8601 formatted timestamp string for the current moment in UTC.
