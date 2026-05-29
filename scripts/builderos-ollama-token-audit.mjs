@@ -1,27 +1,46 @@
+import 'dotenv/config';
+import { URL } from 'node:url';
+import { Pool } from 'pg';
+
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  *
  * Read-only audit module for summarizing Ollama provider token usage via internal API.
- * This module fetches AI performance data and aggregates token usage specifically for the 'ollama' provider.
+ * @throws {Error} If any required envVar is missing or invalid.
+ * @param {Error} error - The error object.
+ * @returns {object} A structured error audit result.
  */
-
-// Node.js built-in modules only
-import { URL } from 'node:url';
+function shapeError(error) {
+  return {
+    ok: false,
+    summary: `Audit failed: ${error.message}`,
+    generated_at: new Date().toISOString(),
+    error_details: {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    },
+  };
+}
 
 /**
- * Validates required environment variables.
- * @returns {object} An object containing validated environment variables.
- * @throws {Error} If any required environment variable is missing or invalid.
+ * Validates required envVars.
+ * @returns {object} An object containing validated envVars.
+ * @throws {Error} If any required envVar is missing or invalid.
  */
 function validateEnv() {
   const publicBaseUrl = process.env.PUBLIC_BASE_URL;
   const commandCenterKey = process.env.COMMAND_CENTER_KEY;
+  const databaseUrl = process.env.DATABASE_URL; // Added for pg Pool
 
   if (!publicBaseUrl) {
-    throw new Error('Missing required environment variable: PUBLIC_BASE_URL');
+    throw new Error('Missing required envVar: PUBLIC_BASE_URL');
   }
   if (!commandCenterKey) {
-    throw new Error('Missing required environment variable: COMMAND_CENTER_KEY');
+    throw new Error('Missing required envVar: COMMAND_CENTER_KEY');
+  }
+  if (!databaseUrl) {
+    throw new Error('Missing required envVar: DATABASE_URL');
   }
 
   try {
@@ -29,15 +48,21 @@ function validateEnv() {
   } catch (e) {
     throw new Error(`Invalid PUBLIC_BASE_URL format: ${e.message}`);
   }
+  try {
+    new URL(databaseUrl); // Validate DATABASE_URL format (though pg Pool handles this)
+  } catch (e) {
+    // This is a common pattern for DB URLs, but not strictly a web URL.
+    // We'll allow it to pass if it's not a valid web URL, as pg handles it.
+  }
 
-  return { publicBaseUrl, commandCenterKey };
+  return { publicBaseUrl, commandCenterKey, databaseUrl };
 }
 
 /**
  * Fetches JSON data from a specified internal API path.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
- * @param {string} commandKey - The x-command-key for authentication.
+ * @param {string} path - The apiEP path.
+ * @param {string} commandKey - The x-command-key for auth.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the fetch operation fails or returns a non-OK status.
  */
@@ -69,37 +94,24 @@ async function fetchJson(baseUrl, path, commandKey) {
 }
 
 /**
- * Shapes an error into a consistent audit result format.
- * @param {Error} error - The error object.
- * @returns {object} A structured error audit result.
- */
-function shapeError(error) {
-  return {
-    ok: false,
-    summary: `Audit failed: ${error.message}`,
-    generated_at: new Date().toISOString(),
-    error_details: {
-      name: error.name,
-      message: error.message,
-      stack: error.stack,
-    },
-  };
-}
-
-/**
- * Runs a read-only audit to summarize Ollama provider token usage.
- * It fetches AI performance data and aggregates token counts for the 'ollama' provider.
+ * Runs a read-only audit to summarize Ollama provider token usage from the database.
+ * This module queries AI performance data from the database and aggregates token usage specifically for the 'ollama' provider.
+ * @param {Pool} pool - The PostgreSQL connection pool.
  * @returns {Promise<object>} A structured JSON object with audit results.
  */
-export async function runAudit() {
+export async function runAudit(pool) {
   try {
-    const { publicBaseUrl, commandCenterKey } = validateEnv();
+    // The original validateEnv and fetchJson are no longer used for the core data fetching
+    // as the audit now directly queries the database via pg Pool.
+    // validateEnv() is still called by main() to ensure DATABASE_URL is present.
 
-    const performanceData = await fetchJson(
-      publicBaseUrl,
-      '/api/v1/lifeos/admin/ai/performance', // Assumed endpoint for AI performance metrics
-      commandCenterKey
-    );
+    const query = `
+      SELECT provider, input_tokens, output_tokens
+      FROM ai_performance_metrics
+      WHERE provider = 'ollama';
+    `;
+    const result = await pool.query(query);
+    const performanceData = result.rows;
 
     let totalOllamaInputTokens = 0;
     let totalOllamaOutputTokens = 0;
@@ -115,8 +127,8 @@ export async function runAudit() {
         }
       }
     } else {
-      // Log a warning if the API response structure is not as expected
-      console.warn('API /api/v1/lifeos/admin/ai/performance did not return an array. Processing skipped.');
+      // Log a warning if the DB response structure is not as expected
+      console.warn('Database query for ai_performance_metrics did not return an array of records. Processing skipped.');
     }
 
     const totalOllamaTokens = totalOllamaInputTokens + totalOllamaOutputTokens;
@@ -136,5 +148,33 @@ export async function runAudit() {
     };
   } catch (error) {
     return shapeError(error);
+  }
+}
+
+/**
+ * Main entry point for the Ollama token audit.
+ * Initializes the PostgreSQL connection pool, runs the audit, and cleans up the pool.
+ * @returns {Promise<object>} A structured JSON object with audit results or error details.
+ */
+export async function main() {
+  let pool;
+  try {
+    // Validate environment variables, including DATABASE_URL
+    const { databaseUrl } = validateEnv();
+
+    // Initialize pg Pool
+    pool = new Pool({
+      connectionString: databaseUrl,
+    });
+
+    // Run the audit using the pool
+    const auditResult = await runAudit(pool);
+    return auditResult;
+  } catch (error) {
+    return shapeError(error);
+  } finally {
+    if (pool) {
+      await pool.end(); // Ensure the pool is closed
+    }
   }
 }
