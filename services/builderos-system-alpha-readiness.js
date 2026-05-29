@@ -139,10 +139,44 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
   // Phase B.2 — TSOS-internal: dedicated hook events only (BR-09, TSOS_HOOK_BOUNDARY.md)
   // Generic token telemetry cannot prove a dedicated TSOS internal hook is wired.
   let tsosHookCount = 0;
+  let tsosStructuredCommittedCount = 0;
+  let tsosVerifierLinkedCount = 0;
   try {
     const tsosRes = await pool.query("SELECT COUNT(*) FROM autonomous_telemetry_events WHERE task_type = 'tsos_internal_hook'");
     tsosHookCount = parseInt(tsosRes.rows[0].count, 10);
   } catch {}
+  try {
+    const structuredRes = await pool.query(`
+      SELECT COUNT(DISTINCT run_id) AS cnt
+      FROM autonomous_telemetry_events
+      WHERE task_type = 'tsos_internal_hook'
+        AND metadata->>'committed' = 'true'
+        AND metadata->>'job_id' IS NOT NULL
+        AND metadata->>'output_bytes' IS NOT NULL
+        AND metadata->>'duration_ms' IS NOT NULL
+        AND metadata->>'repair_attempts' IS NOT NULL
+    `);
+    tsosStructuredCommittedCount = parseInt(structuredRes.rows[0].cnt, 10);
+  } catch {}
+  try {
+    const linkedRes = await pool.query(`
+      SELECT COUNT(DISTINCT j.id) AS cnt
+      FROM builderos_command_control_jobs j
+      INNER JOIN autonomous_telemetry_events e
+        ON e.run_id = j.id::text AND e.task_type = 'tsos_internal_hook'
+      WHERE j.status = 'committed'
+        AND (j.result_json->'oil_audit_result'->>'ok') = 'true'
+        AND (j.result_json->'oil_audit_result'->'gates'->>'syntax') = 'true'
+        AND (j.result_json->'oil_audit_result'->'gates'->>'antipattern') = 'true'
+        AND (j.result_json->'oil_audit_result'->'gates'->>'stub') = 'true'
+    `);
+    tsosVerifierLinkedCount = parseInt(linkedRes.rows[0].cnt, 10);
+  } catch {}
+
+  const tsosProvenEligible =
+    tsosHookCount >= 3 &&
+    tsosStructuredCommittedCount >= 3 &&
+    tsosVerifierLinkedCount >= 3;
 
   // Phase B.3 — count null metrics to make TELEMETRY_GAPS_REMAIN conditional
   let nullMetricCount = 17;
@@ -189,11 +223,19 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     {
       component_id: 'tsos_internal_hooks',
       label: 'BuilderOS-internal TSOS hooks',
-      statuses: hasStatuses(tsosHookCount > 0 ? 'WIRED' : 'NOT_WIRED', tsosHookCount > 0 ? 'LIVE' : null),
+      statuses: hasStatuses(
+        tsosHookCount > 0 ? 'WIRED' : 'NOT_WIRED',
+        tsosHookCount > 0 ? 'LIVE' : null,
+        tsosProvenEligible ? 'PROVEN' : null,
+      ),
       runtime_proof: [
         proofSource("autonomous_telemetry_events WHERE task_type='tsos_internal_hook'", tsosHookCount > 0 ? `${tsosHookCount} dedicated hook events` : 'no dedicated TSOS-internal hook events yet (generic token telemetry excluded per TSOS_HOOK_BOUNDARY.md)'),
+        proofSource('TSOS structured committed hooks', `${tsosStructuredCommittedCount} distinct run_ids with committed=true + output_bytes/duration_ms/repair_attempts metadata`),
+        proofSource('TSOS verifier-linked hooks', `${tsosVerifierLinkedCount} committed jobs with oil_audit_result.gates pass joined to hook run_id`),
       ],
-      fake_green_risk: 'Token-economics UI can imply TSOS maturity not proven for BuilderOS.',
+      fake_green_risk: tsosHookCount >= 3 && !tsosProvenEligible
+        ? `PROVEN_PENDING_VERIFIER_LINKAGE: hooks=${tsosHookCount} structured=${tsosStructuredCommittedCount} verifier_linked=${tsosVerifierLinkedCount} — need all >=3 for PROVEN (TSOS-G1).`
+        : 'Token-economics UI can imply TSOS maturity not proven for BuilderOS.',
     },
     {
       component_id: 'memory',
@@ -447,7 +489,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     unknowns: [
       'No canonical runtime endpoint yet for current queue daemon liveness.',
       'Memory still lacks BuilderOS-approved runtime proof maturity.',
-      'BuilderOS-internal TSOS hook boundary remains undefined operationally.',
+      ...(tsosProvenEligible ? [] : ['TSOS PROVEN gate wired — awaiting >=3 structured committed hooks with verifier linkage (TSOS-G1).']),
     ],
     fake_green_explanation: fakeGreenStatusNote,
     fake_green_risks: fakeGreenRisks,
