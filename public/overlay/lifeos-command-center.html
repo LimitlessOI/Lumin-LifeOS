@@ -60,7 +60,7 @@
 
     /* Section A: Snapshot */
     #section-a{grid-column:1/-1}
-    .snap-row{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
+    .snap-row{display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
     @media(max-width:1400px){.snap-row{grid-template-columns:repeat(4,1fr)}}
     @media(max-width:700px){.snap-row{grid-template-columns:repeat(2,1fr)}}
     .snap-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:14px 10px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
@@ -488,6 +488,7 @@ const SNAP_DEFS = [
   { key:'gemini-live',  label:'Gemini Live',  pct:0,   status:'miss', value:'...' },
   { key:'neon-db',      label:'Neon DB',      pct:0,   status:'miss', value:'...' },
   { key:'adam-queue',   label:'Adam Queue',   pct:100, status:'miss', value:'...' },
+  { key:'memory-proof', label:'Memory Proof', pct:0,   status:'miss', value:'...' },
 ];
 
 function renderSnapRow(cards) {
@@ -609,6 +610,30 @@ async function loadSnapshot() {
     snapData['adam-queue'] = { count:cnt, urgent:items.filter(i=>i.priority==='urgent').length, _raw:items.slice(0,3) };
   } else {
     cards[6] = { key:'adam-queue', label:'Adam Queue', pct:0, status:'err', value:'ERROR' };
+  }
+
+  // Memory proof snap card
+  const rmp = await safeFetch('/api/v1/lifeos/command-center/memory/proof');
+  if (rmp.ok && rmp.data?.ok) {
+    const mp = rmp.data;
+    const proven = mp.builderos_memory_proven === true;
+    const mpStatus = proven ? 'ok' : 'warn';
+    cards[7] = { key:'memory-proof', label:'Memory Proof', pct:proven?100:30, status:mpStatus, value:proven?'PROVEN':'NOT PROVEN' };
+    snapData['memory-proof'] = {
+      proven: proven ? 'PROVEN' : 'NOT PROVEN',
+      maturity: mp.maturity,
+      total_facts: mp.total_facts,
+      tested_above: mp.tested_or_above_count,
+      multi_source: mp.multi_source_fact_count,
+      authority: mp.memory_authority,
+      legacy_excluded: String(mp.legacy_sources_excluded),
+      generated_at: mp.generated_at ? new Date(mp.generated_at).toLocaleString() : 'N/A',
+      note: 'Memory proof uses epistemic_facts only. Legacy memory excluded from BuilderOS proof.',
+      _raw: mp,
+    };
+  } else {
+    cards[7] = { key:'memory-proof', label:'Memory Proof', pct:0, status:'err', value:'ERROR' };
+    snapData['memory-proof'] = { note: 'Memory proof endpoint unavailable.', _raw: rmp.data || {} };
   }
 
   row.innerHTML = renderSnapRow(cards);

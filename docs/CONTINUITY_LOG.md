@@ -2,6 +2,26 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] 2026-05-28 — Memory Proof Snap Card in Executive Snapshot
+
+### Files changed
+- `public/overlay/lifeos-command-center.html` (+25 lines): (1) CSS snap-row `repeat(7,1fr)` → `repeat(8,1fr)`. (2) 8th SNAP_DEFS entry `memory-proof`. (3) `rmp` fetch in `loadSnapshot()` updates `cards[7]`: green PROVEN (100%/ok) when `builderos_memory_proven:true`, yellow NOT PROVEN (30%/warn) when reachable-but-false, red ERROR (0%/err) on endpoint failure. `snapData['memory-proof']` stores all proof fields + disclaimer. Click-to-drawer via existing generic path. 9/9 sanity checks pass.
+- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — receipt row added.
+- `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` — current_focus updated.
+- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — receipt row added.
+
+### State after this session
+- No JS files changed — HTML only
+- No backend changes, no maturity changes, no scoring changes
+- `loadSnapshot()` now makes 8 parallel/sequential card fetches; new card is last (no effect on other cards)
+
+### Next agent: start here
+- Commit + push: `public/overlay/lifeos-command-center.html`, `AMENDMENT_12*`, `BUILDEROS_ALPHA_BLUEPRINT.md`, `CONTINUITY_LOG.md`
+- After Railway deploy: open `/lifeos-command-center` — verify "Memory Proof" 8th card in snapshot row shows green PROVEN ring
+- Click card → drawer should show proven/maturity/total_facts/authority/legacy_excluded/note fields
+- Drill-down panel (section-memory-proof, loadMemoryProof) still loads below System Alpha panel
+
+---
 ## [BUILD] 2026-05-28 — BuilderOS Memory Proof UI Panel (Phase C overlay)
 
 ### Files changed
