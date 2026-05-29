@@ -2,6 +2,22 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] 2026-05-24 — Command Center Communication UX + Trust Guard
+
+### Files changed
+- `db/migrations/20260529_command_center_communications.sql` — `command_center_communications` table (NOT epistemic_facts)
+- `services/command-center-communication-service.js` — proof guard + insert/list
+- `routes/lifeos-command-center-routes.js` — GET/POST communications + proof-guard
+- `public/overlay/command-center-communication.js` — modes, tooltips, voice prototype, CcComm.askCouncil
+- `public/overlay/lifeos-command-center.html` — Section E wired; CSS for evidence/tooltips/voice
+- `scripts/verify-cc-communication.mjs` — smoke checks (16/16 PASS locally)
+
+### State after this session
+- Local verify PASS; Railway routes 404 until deploy (was `e09e5157`)
+- No alpha/memory/TSOS maturity backend changes
+- Next: deploy → smoke POST proof-guard on Railway; expand `data-cc-help` to all snap cards; optional builder `/build` for remaining panel tooltips
+
+---
 ## [BUILD] 2026-05-29 — Command Center Project Governance Drill-Down
 
 ### Files changed

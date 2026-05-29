@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-05-26 |
+| **Last Updated** | 2026-05-24 |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -47,9 +47,11 @@ routes/command-center-routes.js
 routes/lifeos-command-center-routes.js    ← NEW (v2 aggregate endpoints)
 public/overlay/command-center.html        ← operational admin dashboard (do not replace)
 public/overlay/lifeos-command-center.html ← NEW: executive oversight cockpit (v2)
+public/overlay/command-center-communication.js ← NEW: C&C comm UX, proof guard UI, tooltips, voice prototype
 public/overlay/command-center.js
 public/overlay/index.html
 public/shared/lifeos-voice-chat.js
+services/command-center-communication-service.js ← NEW: proof guard + comm history (NOT epistemic_facts)
 services/env-registry-map.js
 services/builderos-system-alpha-readiness.js ← NEW: BuilderOS Alpha readiness scorer
 ```
@@ -79,6 +81,9 @@ are owned by AMENDMENT_18 and read by this project's dashboard panels.
 | GET | `/api/v1/lifeos/command-center/mode` | requireKey | Current compiled builder release mode (MANUAL/SUPERVISED/AUTONOMOUS) |
 | GET | `/api/v1/lifeos/command-center/security` | requireKey | SEC-F01 live security aggregate from canonical receipts only |
 | GET | `/api/v1/lifeos/command-center/system-alpha-readiness` | requireKey | BuilderOS Alpha readiness from runtime truth + structural consolidation docs |
+| GET | `/api/v1/lifeos/command-center/communications` | requireKey | Communication history (command_center_communications — NOT proof memory) |
+| POST | `/api/v1/lifeos/command-center/communications/record` | requireKey | Persist exchange + server-side proof guard on response text |
+| POST | `/api/v1/lifeos/command-center/communications/proof-guard` | requireKey | Dry-run proof guard without persisting |
 | POST | `/api/v1/lifeos/command-center/mode` | requireKey | NOT_WIRED — returns 501; Stage 2 will add runtime switching |
 | GET | `/api/v1/admin/ai/status` | requireKey | AI on/off + reason |
 | POST | `/api/v1/admin/ai/enable` | requireKey | Enable AI |
@@ -251,6 +256,7 @@ node --check public/overlay/command-center.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-05-24 | **C&C Communication UX + Trust Guard (7 files):** `db/migrations/20260529_command_center_communications.sql` — table `command_center_communications` (speaker, council_member, mode, domain, transcript, response_text, evidence_json, builder_job_id, commit_sha, railway_sha, created_at); explicitly NOT `epistemic_facts`. `services/command-center-communication-service.js` (NEW) — `buildCommunicationEvidence()`, placeholder detection (`currentRepo/`, bare `chatInterface.js`, `path/to/`, etc.), `verifyRepoFilePaths()`, `insertCommunication()`, `listCommunications()`; sets `do_not_use_for_builderos_memory_proof: true`. `routes/lifeos-command-center-routes.js` — GET `/communications`, POST `/communications/record`, POST `/communications/proof-guard`. `public/overlay/command-center-communication.js` (NEW) — 6 communication modes, universal help (hover/focus/long-press + More), voice UI prototype (Web Speech API + SpeechSynthesis), `CcComm.askCouncil()` with evidence envelope + persistence. `public/overlay/lifeos-command-center.html` — Section E wired to CcComm (mode selector, voice row, evidence box CSS, comm vs build history). `scripts/verify-cc-communication.mjs` (NEW) — HTML + proof-guard smoke. GAP-FILL: overlay/routes/service; builder preflight OK; `/build` not used for coordinated slice. INTENT DRIFT: none. | Adam mission: best AI communication cockpit — proof-backed, mode-based, voice-capable, no fake file paths, no BuilderOS memory pollution. | `node scripts/verify-cc-communication.mjs` PASS | pending deploy | POST proof-guard → UNVERIFIED on placeholder; page loads Section E |
 | 2026-05-29 | **`public/overlay/lifeos-command-center.html` + `activate.html`:** V2 auth now reads/writes `cc_key` plus legacy keys (`lifeos_cmd_key`, `COMMAND_CENTER_KEY`, `LIFEOS_KEY`) so `/activate` and cockpit share credentials. Council domain dropdown renders object `.name` (was `[object Object]`). Project drawer uses `r.data.project` + segments. Progress bars use `pct_complete`. Builder panel shows **DIRECTED** when `supervisor.directedMode` and safe-segment count. Activate redirects to `/lifeos-command-center` and stores `cc_key`. | After activation, V2 cockpit had empty key → all panels ERROR; domain select broken; project drawer empty fields. | HTML only | pending deploy | pending |
 | 2026-05-29 | **Project Governance drill-down — `public/overlay/lifeos-command-center.html`:** Added `#project-governance-panel` inside Section F (Product / Project Progress Map). New `loadProjectGovernance()` fetches `GET /api/v1/projects/readiness/queue`, `GET /api/v1/pending-adam`, `GET /api/v1/estimation/accuracy` in parallel. Renders build-ready / blocked / waiting-on-Adam counts, estimation accuracy when available, top 5 readiness queue items with per-item reason, up to 3 pending-adam items. Disclaimer: "Project Governance shows build readiness only. It does not authorize autonomous work by itself." Read-only — no backend scoring/alpha/memory/TSOS changes. Wired into `loadAll()`. | Expose project governance readiness in Command Center per AMENDMENT_19 backlog item — operators see build-ready vs blocked vs Adam decisions without new backend architecture. | HTML only | pending Railway deploy | `/lifeos-command-center` Section F shows governance panel |
 | 2026-05-28 | **Memory proof snap card — `public/overlay/lifeos-command-center.html` (+25 lines):** (1) CSS: snap-row `repeat(7,1fr)` → `repeat(8,1fr)`. (2) SNAP_DEFS: added 8th entry `{ key:'memory-proof', label:'Memory Proof', pct:0, status:'miss', value:'...' }`. (3) `loadSnapshot()`: added `rmp` fetch of `/api/v1/lifeos/command-center/memory/proof`; updates `cards[7]` with `status:'ok'`/`pct:100`/`value:'PROVEN'` when `builderos_memory_proven:true`, `status:'warn'`/`pct:30`/`value:'NOT PROVEN'` when endpoint reachable but not proven, `status:'err'` on error. `snapData['memory-proof']` stores: proven, maturity, total_facts, tested_above, multi_source, authority, legacy_excluded, generated_at, and disclaimer note. Clicking card opens generic key-value drawer showing all fields + note. 9/9 sanity checks pass, 2356 lines. | Make memory proof state visible at the top of Command Center without requiring operators to read the drill-down panel or JSON endpoint. Card follows existing snap card pattern — ring, label, value, click-to-drawer. | HTML sanity PASS | pending Railway deploy | Memory Proof snap card renders green PROVEN in Executive Snapshot row |

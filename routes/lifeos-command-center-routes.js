@@ -63,6 +63,11 @@ import {
 } from '../services/oil-proof-freshness.js';
 import { buildSupervisedAutonomyReadiness } from '../services/supervised-autonomy-readiness.js';
 import { buildBuilderOSSystemAlphaReadiness } from '../services/builderos-system-alpha-readiness.js';
+import {
+  buildCommunicationEvidence,
+  insertCommunication,
+  listCommunications,
+} from '../services/command-center-communication-service.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -1075,6 +1080,94 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
           auto_remediation: true,
         },
       });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/communications
+   * Communication history only — NOT BuilderOS epistemic proof memory.
+   */
+  router.get('/api/v1/lifeos/command-center/communications', requireKey, async (req, res, next) => {
+    try {
+      const rows = await listCommunications(pool, { limit: req.query.limit });
+      res.json({ ok: true, count: rows.length, communications: rows });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * POST /api/v1/lifeos/command-center/communications/record
+   * Persist exchange + server-side proof guard on response text.
+   */
+  router.post('/api/v1/lifeos/command-center/communications/record', requireKey, async (req, res, next) => {
+    try {
+      const {
+        speaker = 'adam',
+        council_member = 'council',
+        mode = 'quick_ask',
+        domain = null,
+        transcript,
+        response_text = '',
+        endpoints_used = [],
+        builder_meta = {},
+        deploy_sha = null,
+        builder_job_id = null,
+      } = req.body || {};
+
+      if (!transcript || typeof transcript !== 'string') {
+        return res.status(400).json({ ok: false, error: 'transcript is required' });
+      }
+
+      const evidence = buildCommunicationEvidence({
+        responseText: response_text,
+        endpointsUsed: Array.isArray(endpoints_used) ? endpoints_used : [],
+        builderMeta: builder_meta && typeof builder_meta === 'object' ? builder_meta : {},
+        deploySha: deploy_sha,
+      });
+
+      const row = await insertCommunication(pool, {
+        speaker,
+        council_member,
+        mode,
+        domain,
+        transcript,
+        response_text,
+        evidence_json: evidence,
+        builder_job_id,
+        commit_sha: evidence.commit_sha,
+        railway_sha: evidence.railway_sha,
+      });
+
+      res.status(201).json({ ok: true, communication: row, evidence });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * POST /api/v1/lifeos/command-center/communications/proof-guard
+   * Run proof guard without persisting (dry-run / preview).
+   */
+  router.post('/api/v1/lifeos/command-center/communications/proof-guard', requireKey, async (req, res, next) => {
+    try {
+      const {
+        response_text = '',
+        endpoints_used = [],
+        builder_meta = {},
+        deploy_sha = null,
+      } = req.body || {};
+
+      const evidence = buildCommunicationEvidence({
+        responseText: response_text,
+        endpointsUsed: Array.isArray(endpoints_used) ? endpoints_used : [],
+        builderMeta: builder_meta && typeof builder_meta === 'object' ? builder_meta : {},
+        deploySha: deploy_sha,
+      });
+
+      res.json({ ok: true, evidence });
     } catch (err) {
       next(err);
     }

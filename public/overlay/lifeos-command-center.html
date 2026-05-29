@@ -136,8 +136,22 @@
     .lb-stats{width:80px;text-align:right;font-size:10px;color:var(--text-muted)}
 
     /* Council hub */
-    .council-domain-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-    .council-response{background:rgba(0,0,0,.2);border-radius:6px;padding:10px;font-size:12px;min-height:60px;max-height:200px;overflow-y:auto;color:var(--text);line-height:1.6}
+    .council-domain-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center}
+    .council-response{background:rgba(0,0,0,.2);border-radius:6px;padding:10px;font-size:12px;min-height:60px;max-height:320px;overflow-y:auto;color:var(--text);line-height:1.6}
+    .cc-evidence-box{margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:8px;background:rgba(0,0,0,.15)}
+    .cc-evidence-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:10px}
+    @media(max-width:700px){.cc-evidence-grid{grid-template-columns:1fr}}
+    .cc-evidence-grid ul{margin:4px 0 0;padding-left:16px;color:var(--text-muted)}
+    .cc-voice-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+    .cc-voice-transcript{flex:1;min-width:140px;min-height:36px;font-size:11px;padding:6px 8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text)}
+    .cc-recording{box-shadow:0 0 0 2px var(--error)!important;animation:cc-pulse 1.2s infinite}
+    @keyframes cc-pulse{50%{opacity:.7}}
+    .cc-help-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;margin-left:4px;border-radius:50%;background:rgba(79,195,247,.2);color:var(--accent);font-size:9px;font-weight:700;cursor:help;vertical-align:middle}
+    .cc-tooltip{display:none;position:absolute;z-index:9999;max-width:280px;padding:10px 12px;background:#1e2640;border:1px solid var(--accent);border-radius:8px;font-size:11px;line-height:1.5;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+    .cc-tooltip-more{margin-top:8px;color:var(--text-muted);font-size:10px}
+    .cc-tooltip-more-btn{margin-top:6px;padding:2px 8px;font-size:10px;background:transparent;border:1px solid var(--border);color:var(--accent);border-radius:4px;cursor:pointer}
+    [data-cc-help]{position:relative}
+    .cc-loading{color:var(--text-muted);font-style:italic}
     .history-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px}
 
     /* Projects */
@@ -215,7 +229,7 @@
 
   <!-- Section A: Executive Snapshot (full width) -->
   <div class="card" id="section-a">
-    <div class="section-title">&#9632; Executive System Snapshot</div>
+    <div class="section-title" data-cc-help="cc-snapshot">&#9632; Executive System Snapshot</div>
     <div class="snap-row" id="snap-row">
       <!-- populated by JS -->
     </div>
@@ -250,7 +264,7 @@
 
     <!-- Section B: Builder Control -->
     <div class="card" id="section-b">
-      <div class="section-title">&#9776; Builder Control Panel</div>
+      <div class="section-title" data-cc-help="cc-builder">&#9776; Builder Control Panel</div>
       <div id="builder-panel">
         <div class="not-wired">Loading...</div>
       </div>
@@ -266,7 +280,7 @@
 
     <!-- Section D: Adam Decision Queue (full width) -->
     <div class="card full-width" id="section-d">
-      <div class="section-title">&#9888; Adam Decision Queue</div>
+      <div class="section-title" data-cc-help="cc-queue">&#9888; Adam Decision Queue</div>
       <div id="queue-panel">
         <div class="not-wired">Loading...</div>
       </div>
@@ -274,20 +288,30 @@
 
     <!-- Section E: AI Council Hub -->
     <div class="card" id="section-e">
-      <div class="section-title">&#9673; AI Council Communication Hub</div>
+      <div class="section-title" data-cc-help="cc-ask">&#9673; AI Council Communication Hub</div>
       <div id="council-panel">
         <div class="council-domain-row">
-          <select id="council-domain" style="background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:5px;padding:5px 8px;font-size:12px;flex:1">
+          <label style="font-size:11px;color:var(--text-muted)" data-cc-help="cc-mode">Mode</label>
+          <select id="cc-comm-mode" style="background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:5px;padding:5px 8px;font-size:12px;min-width:160px"></select>
+          <select id="council-domain" data-cc-help="cc-domain" style="background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:5px;padding:5px 8px;font-size:12px;flex:1">
             <option value="">Loading domains...</option>
           </select>
         </div>
         <textarea id="council-msg" placeholder="What should we build next? / Review this plan..." style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px;font-size:12px;resize:vertical;min-height:60px;margin-bottom:8px;font-family:inherit"></textarea>
+        <div class="cc-voice-row" data-cc-help="cc-voice-record">
+          <button type="button" class="btn btn-warning btn-sm" id="cc-voice-record">&#127908; Record</button>
+          <textarea id="cc-voice-transcript" class="cc-voice-transcript" placeholder="Live transcript…" readonly rows="2"></textarea>
+          <button type="button" class="btn btn-ghost btn-sm" id="cc-voice-send">Send</button>
+          <span id="cc-voice-status" style="font-size:10px;color:var(--text-muted)">Voice idle</span>
+        </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
-          <button class="btn btn-primary btn-sm" onclick="askCouncil()">Ask Council</button>
-          <button class="btn btn-ghost btn-sm" onclick="loadCouncilHistory()">&#128203; History</button>
+          <button type="button" class="btn btn-primary btn-sm" data-cc-help="cc-ask" onclick="CcComm.askCouncil()">Ask Council</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="CcComm.loadCommHistory()">&#128172; Comm History</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="CcComm.loadBuildHistory()">&#128203; Recent Builds</button>
         </div>
         <div class="council-response" id="council-response" style="display:none"></div>
         <div id="council-history" style="margin-top:10px"></div>
+        <div id="cc-build-history" style="margin-top:10px"></div>
       </div>
     </div>
 
@@ -402,6 +426,7 @@
   </div>
 </div>
 
+<script src="/overlay/command-center-communication.js"></script>
 <script>
 // ─────────────────────────────────────────────
 // Core state + auth
@@ -1230,68 +1255,7 @@ function openQueueDrawer(item) {
   `);
 }
 
-// ─────────────────────────────────────────────
-// Section E: AI Council Hub
-// ─────────────────────────────────────────────
-function domainOptionLabel(d) {
-  if (typeof d === 'string') return d;
-  return d.name || d.path || d.file || 'unknown';
-}
-
-async function loadCouncilDomains() {
-  const sel = document.getElementById('council-domain');
-  const r = await safeFetch('/api/v1/lifeos/builder/domains');
-  if (r.ok && r.data) {
-    const domains = Array.isArray(r.data) ? r.data : r.data.domains || [];
-    if (domains.length) {
-      sel.innerHTML = domains.map(d => {
-        const label = domainOptionLabel(d);
-        const value = (typeof d === 'string' ? d : (d.name || label)).replace(/"/g, '&quot;');
-        return `<option value="${value}">${label.replace(/</g, '&lt;')}</option>`;
-      }).join('');
-      return;
-    }
-  }
-  sel.innerHTML = '<option value="lifeos-core">lifeos-core (default)</option>';
-}
-
-async function askCouncil() {
-  const msg = document.getElementById('council-msg').value.trim();
-  const domain = document.getElementById('council-domain').value;
-  const resp = document.getElementById('council-response');
-  if (!msg) return;
-  resp.style.display = 'block';
-  resp.textContent = 'Asking council...';
-  const r = await safeFetch('/api/v1/lifeos/builder/task', {
-    method:'POST',
-    body: JSON.stringify({ task: msg, domain }),
-  });
-  if (r.ok) {
-    const out = r.data?.output || r.data?.result || JSON.stringify(r.data, null, 2);
-    resp.innerHTML = `<strong style="color:var(--accent)">Council Response:</strong><br>${(out+'').replace(/\n/g,'<br>')}`;
-  } else {
-    resp.innerHTML = `<span style="color:var(--error)">Error: ${r.status} — ${JSON.stringify(r.data)}</span>`;
-  }
-}
-
-async function loadCouncilHistory() {
-  const el = document.getElementById('council-history');
-  el.innerHTML = '<div style="font-size:11px;color:var(--text-muted)">Loading history...</div>';
-  const r = await safeFetch('/api/v1/lifeos/builder/history?limit=5');
-  if (!r.ok || !r.data) {
-    el.innerHTML = `<div class="not-wired">NOT_WIRED<span>GET /lifeos/builder/history not available</span></div>`;
-    return;
-  }
-  const rows = Array.isArray(r.data) ? r.data : r.data.history || [];
-  if (!rows.length) { el.innerHTML = '<div class="empty-state">No history yet.</div>'; return; }
-  el.innerHTML = `<div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Recent builds:</div>` +
-    rows.map(h => `
-      <div class="history-row">
-        <span class="pill ${h.committed?'pill-success':'pill-muted'}">${h.committed?'COMMITTED':'DRAFT'}</span>
-        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.task||h.domain||'—'}</span>
-        <span style="color:var(--text-muted);white-space:nowrap">${h.created_at?new Date(h.created_at).toLocaleDateString():''}</span>
-      </div>`).join('');
-}
+// Section E: AI Council Hub — see /overlay/command-center-communication.js (CcComm)
 
 // ─────────────────────────────────────────────
 // Section F: Product / Project Progress Map
@@ -2470,15 +2434,19 @@ async function loadAll() {
     loadModelLeaderboard(),
     loadProjectGovernance(),
     loadProjects(),
-    loadCouncilDomains(),
   ]);
-  loadCouncilHistory();
+  if (window.CcComm) {
+    CcComm.loadDomains();
+    CcComm.loadCommHistory();
+    CcComm.loadBuildHistory();
+  }
   document.getElementById('last-refresh').textContent = 'Last: ' + new Date().toLocaleTimeString();
 }
 
 // ─────────────────────────────────────────────
 // Init
 // ─────────────────────────────────────────────
+if (window.CcComm) CcComm.init();
 loadAll();
 </script>
 </body>

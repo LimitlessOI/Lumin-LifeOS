@@ -9,15 +9,19 @@
   "phase": "stabilization",
   "next_task": "Keep command-center runtime proof surfaces aligned with BuilderOS canonical scoring, then continue structural consolidation and mobile/role-based improvements from a governed alpha surface",
   "stability_class": "needs-review",
-  "current_focus": "Project Governance drill-down live in Section F — build-ready/blocked/Adam counts, top-5 readiness queue, estimation accuracy, pending-adam slice. Read-only; no backend scoring changes.",
+  "current_focus": "Communication UX + Trust Guard — Section E modes, proof guard (VERIFIED/UNVERIFIED), tooltips, voice prototype, command_center_communications history (NOT epistemic_facts). Deploy pending.",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",
+    "routes/lifeos-command-center-routes.js",
     "routes/public-routes.js",
     "public/overlay/command-center.html",
+    "public/overlay/lifeos-command-center.html",
+    "public/overlay/command-center-communication.js",
     "public/overlay/command-center.js",
     "public/overlay/index.html",
     "public/shared/lifeos-voice-chat.js",
+    "services/command-center-communication-service.js",
     "docs/ENV_REGISTRY.md",
     "services/builderos-system-alpha-readiness.js"
   ],
@@ -78,6 +82,12 @@
       "path": "/api/v1/lifeos/command-center/system-alpha-readiness",
       "expected_status": 200,
       "description": "BuilderOS Alpha readiness from runtime truth + structural consolidation docs"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/lifeos/command-center/communications",
+      "expected_status": 200,
+      "description": "Command Center communication history (not proof memory)"
     },
     {
       "method": "GET",
@@ -183,7 +193,7 @@
       "resolved": true
     }
   ],
-  "last_verified_at": "2026-05-28",
-  "last_updated": "2026-05-28",
+  "last_verified_at": "2026-05-24",
+  "last_updated": "2026-05-24",
   "verification_passed": null
 }
