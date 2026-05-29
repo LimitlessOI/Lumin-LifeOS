@@ -858,6 +858,8 @@ export function createLifeOSCouncilBuilderRoutes({
         targetFile: bodyTargetFile || null,
         taskClassBaseline: routingPolicy.taskClass,
         baselineModel: preferredModel || requestedModel || 'gemini_flash',
+        routingPolicy,
+        operatorOverride: Boolean(model),
       }).catch((shadowErr) => {
         log.warn({ err: shadowErr?.message || shadowErr, routingKey }, '[BUILDER] TSOS shadow routing log failed (fail-open)');
       });

@@ -2,6 +2,23 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] 2026-05-29 — TSOS-G3.2 Baseline Comparator Refinement (SHADOW)
+
+### Files changed
+- `db/migrations/20260529_builderos_tsos_routing_g3_2_comparator.sql` — `comparator_snapshot_json JSONB` column
+- `services/builderos-tsos-routing.js` — `computeBaselineRouting()`, expanded evidence/comparator snapshots, metadata_version `tsos-g3.2`
+- `services/builderos-tsos-evidence.js` — global + prefix evidence fields for G3.2 snapshot
+- `routes/lifeos-council-builder-routes.js` — pass `routingPolicy` + `operatorOverride` to shadow logger
+- `docs/projects/TSOS_PROVEN_ADVANCEMENT_PLAN.md` §9 — baseline routing audit + G3.2 fields
+- `docs/projects/builderos-remediation/TSOS_HOOK_BOUNDARY.md` §8 — G3 cross-reference
+
+### State after this session
+- Shadow mode only; `decision_changed=false` on all new rows
+- TSOS remains WIRED+LIVE+PROVEN (not ACTIVE)
+- No alpha scoring / memory / proof freshness logic changes
+- Next: TSOS-G3.3 — hypothetical TSOS adjustments logged in shadow without applying
+
+---
 ## [BUILD] 2026-05-28 — Memory Proof Snap Card in Executive Snapshot
 
 ### Files changed

@@ -100,3 +100,13 @@ To advance `tsos_internal_hooks` from NOT_WIRED to WIRED:
 2. Emit at least one `autonomous_telemetry_events` row with `task_type = 'tsos_internal_hook'`
 
 This is the minimum viable proof surface. No product UI required. No customer-facing TSOS feature required.
+
+---
+
+## 8. TSOS-G3 routing decision log (cross-reference)
+
+**G3.1–G3.2 (shadow):** `builderos_tsos_routing_decisions` table + `GET /api/v1/lifeos/builderos/tsos-routing-decisions`.
+
+- **ACTIVE proof** requires rows with `mode='active'` AND `decision_changed=true` — shadow rows do **not** count.
+- **Hook count alone** cannot elevate to ACTIVE (§4 scoring rule unchanged).
+- G3.2 comparator captures baseline policy path inputs for future routing delta proof — see `docs/projects/TSOS_PROVEN_ADVANCEMENT_PLAN.md` §9.

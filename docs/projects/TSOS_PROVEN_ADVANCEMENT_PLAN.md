@@ -1,7 +1,7 @@
 # TSOS LIVE → PROVEN Advancement Plan
 
 **Created:** 2026-05-29  
-**Status:** G2 IMPLEMENTED (2026-05-29) — hook metadata enrichment + tsos-evidence route; pending deploy + evidence cycles  
+**Status:** G3.2 IMPLEMENTED (2026-05-29) — baseline comparator refinement in SHADOW mode; G3.1 decision log live  
 **Scope:** BuilderOS-internal TSOS hooks only (`tsos_internal_hooks` component)  
 **Out of scope:** Memory systems (Codex mission), customer-facing TSOS features, new model integrations
 
@@ -282,6 +282,59 @@ POST /api/v1/lifeos/builderos/command-control/jobs/:id/execute
 2. After deploy + proof parity auto-repair, verify `tsos_internal_hooks.statuses` includes `PROVEN` when ≥3 linked hooks exist.
 3. Submit governed job **TSOS-G2-HOOK-METADATA** to enrich hook rows.
 4. Run **3** Zone 1 governed execute cycles; re-read alpha readiness after each.
+
+---
+
+## 9. TSOS-G3 routing decision log (G3.1 + G3.2)
+
+### 9.1 G3.1 complete (2026-05-29)
+
+- Table: `builderos_tsos_routing_decisions`
+- Service: `services/builderos-tsos-routing.js` — `logShadowRoutingDecision`, `insertRoutingDecision`, `listRoutingDecisions`
+- Hook: `routes/lifeos-council-builder-routes.js` after baseline policy + availability
+- Read path: `GET /api/v1/lifeos/builderos/tsos-routing-decisions`
+- Verified: 3 shadow rows, `decision_changed=false`, TSOS remains PROVEN (not ACTIVE)
+
+### 9.2 G3.2 baseline routing audit (Phase 1)
+
+**Baseline routing inputs** (observed in `dispatchTask`):
+
+| Input | Source | Role |
+|-------|--------|------|
+| `mode`, `execution_only`, `model` | POST body | Mode + optional operator override |
+| `target_file` | POST body | Task-class risk + prefix evidence |
+| `routingKey` | Derived | `council.builder.{mode}` or `council.builder.code_execute` when execution-only |
+| `requestedModel` | `model \|\| getModelForTask(routingKey) \|\| gemini_flash` | Static task map preference |
+| `rawCandidateModels` | `getCandidateModelsForTask(routingKey)` or `[model]` | Candidate pool |
+| `routingPolicy` | `applyBuilderRoutingPolicy()` | Task class + allowed/blocked models |
+| `availability` | `filterAvailableCouncilMembers(filtered)` | Runtime provider availability |
+| `preferredModel` | First available requested or first candidate | **Baseline model** (pre-memory) |
+
+**Routing key generation:** `mode === 'code' && executionOnly && !model` → `council.builder.code_execute`; else `council.builder.${mode}`.
+
+**Task classification path:** `classifyBuilderRoutingTask()` in `services/builderos-routing-policy.js` — uses routingKey, mode, executionOnly, targetFile extension/prefix.
+
+**Model selection path (baseline):** `getModelForTask` → `applyBuilderRoutingPolicy` → `filterAvailableCouncilMembers` → `preferredModel`. Memory routing runs **after** shadow log (not part of G3.2 baseline).
+
+**Policy filtering path:** `getBuilderRoutingPolicy()` returns `allowedModels`, `blockedModels`, escalation triggers per task class; `applyBuilderRoutingPolicy` filters candidates and blocks explicit overrides.
+
+### 9.3 G3.2 comparator fields (shadow only)
+
+Stored in `comparator_snapshot_json` + merged into GET response:
+
+- `routing_key`, `task_class_baseline`, `task_class_selected`
+- `baseline_model`, `selected_model` (equal in G3.2)
+- `baseline_allowed_models`, `selected_allowed_models`
+- `baseline_policy_source`, `selected_policy_source` — `builderos_routing_policy + task_model_map + availability`
+- `operator_override` — true when explicit `model` in POST body
+- `decision_changed` — always `false` in G3.2
+- `change_reason_code` — always `null` in G3.2
+
+**Evidence snapshot expansion (G3.2):** global hooks + prefix-scoped aggregates in `evidence_snapshot_json` — see `buildEvidenceSnapshot()` in `builderos-tsos-routing.js`.
+
+### 9.4 Next: TSOS-G3.3
+
+Pre-dispatch TSOS adjustment rules in **shadow** — log hypothetical `decision_changed=true` deltas without applying to dispatch.
 
 ---
 

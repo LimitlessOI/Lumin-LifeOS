@@ -145,13 +145,21 @@ export async function buildTsosEvidenceForPrefix(pool, targetFile) {
   const empty = {
     ok: false,
     prefix,
+    target_prefix: prefix,
     prefix_hook_count: 0,
+    matching_prefix_hook_count: 0,
     total_hooks: 0,
+    committed_hooks: 0,
     g2_metadata_completeness_pct: 0,
     verifier_linkage_pct: 0,
     avg_repair_count: null,
+    matching_prefix_avg_repair_count: null,
     avg_duration_ms: null,
+    matching_prefix_avg_duration_ms: null,
+    avg_output_bytes: null,
     avg_token_estimate: null,
+    token_estimate_availability_pct: 0,
+    matching_prefix_token_estimate_availability_pct: 0,
     read_path: 'buildTsosEvidenceForPrefix',
     proof_source: `autonomous_telemetry_events WHERE task_type='${TSOS_HOOK_TASK_TYPE}' AND target_file prefix`,
   };
@@ -170,13 +178,21 @@ export async function buildTsosEvidenceForPrefix(pool, targetFile) {
       return {
         ok: true,
         prefix: null,
+        target_prefix: null,
         prefix_hook_count: 0,
+        matching_prefix_hook_count: 0,
         total_hooks: globalEvidence.total_hooks,
+        committed_hooks: globalEvidence.committed_hooks,
         g2_metadata_completeness_pct: globalEvidence.g2_metadata_completeness_pct,
         verifier_linkage_pct: globalEvidence.verifier_linkage_pct,
         avg_repair_count: null,
-        avg_duration_ms: null,
+        matching_prefix_avg_repair_count: null,
+        avg_duration_ms: globalEvidence.avg_duration_ms,
+        matching_prefix_avg_duration_ms: null,
+        avg_output_bytes: globalEvidence.avg_output_bytes,
         avg_token_estimate: null,
+        token_estimate_availability_pct: globalEvidence.token_estimate_availability_pct,
+        matching_prefix_token_estimate_availability_pct: 0,
         read_path: 'buildTsosEvidenceForPrefix',
         proof_source: empty.proof_source,
         error: null,
@@ -206,6 +222,7 @@ export async function buildTsosEvidenceForPrefix(pool, targetFile) {
     let tokenSum = 0;
     let tokenCount = 0;
     let g2Complete = 0;
+    let prefixTokenEstimateCount = 0;
 
     for (const row of prefixHooks) {
       const meta = row.metadata || {};
@@ -224,19 +241,31 @@ export async function buildTsosEvidenceForPrefix(pool, targetFile) {
       if (Number.isFinite(tokens) && tokens > 0) {
         tokenSum += tokens;
         tokenCount += 1;
+        prefixTokenEstimateCount += 1;
       }
     }
+
+    const matchingPrefixAvgRepair = repairCount ? Math.round((repairSum / repairCount) * 10) / 10 : null;
+    const matchingPrefixAvgDuration = durationCount ? Math.round(durationSum / durationCount) : null;
 
     return {
       ok: true,
       prefix,
+      target_prefix: prefix,
       prefix_hook_count: prefixHooks.length,
+      matching_prefix_hook_count: prefixHooks.length,
       total_hooks: globalEvidence.total_hooks,
+      committed_hooks: globalEvidence.committed_hooks,
       g2_metadata_completeness_pct: pct(g2Complete, prefixHooks.length),
       verifier_linkage_pct: globalEvidence.verifier_linkage_pct,
-      avg_repair_count: repairCount ? Math.round((repairSum / repairCount) * 10) / 10 : null,
-      avg_duration_ms: durationCount ? Math.round(durationSum / durationCount) : null,
+      avg_repair_count: matchingPrefixAvgRepair,
+      matching_prefix_avg_repair_count: matchingPrefixAvgRepair,
+      avg_duration_ms: globalEvidence.avg_duration_ms,
+      matching_prefix_avg_duration_ms: matchingPrefixAvgDuration,
+      avg_output_bytes: globalEvidence.avg_output_bytes,
       avg_token_estimate: tokenCount ? Math.round(tokenSum / tokenCount) : null,
+      token_estimate_availability_pct: globalEvidence.token_estimate_availability_pct,
+      matching_prefix_token_estimate_availability_pct: pct(prefixTokenEstimateCount, prefixHooks.length),
       read_path: 'buildTsosEvidenceForPrefix',
       proof_source: empty.proof_source,
       error: null,

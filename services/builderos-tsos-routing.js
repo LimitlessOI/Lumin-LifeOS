@@ -1,13 +1,14 @@
 /**
- * TSOS-G3 routing decision log — shadow/active infrastructure (G3.1: shadow only).
+ * TSOS-G3 routing decision log — shadow/active infrastructure (G3.2: comparator refinement).
  *
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
 import { buildTsosEvidenceForPrefix } from './builderos-tsos-evidence.js';
 
-export const TSOS_ROUTING_METADATA_VERSION = 'tsos-g3';
+export const TSOS_ROUTING_METADATA_VERSION = 'tsos-g3.2';
 export const TSOS_ROUTING_MODES = ['shadow', 'active'];
+const BASELINE_POLICY_SOURCE = 'builderos_routing_policy + task_model_map + availability';
 
 function routingModeFromEnv() {
   const raw = String(process.env.BUILDEROS_TSOS_ROUTING_MODE || 'shadow').trim().toLowerCase();
@@ -31,18 +32,56 @@ function pickInt(value) {
   return Number.isFinite(n) ? Math.round(n) : null;
 }
 
+function uniqueStrings(values = []) {
+  return [...new Set((values || []).filter(Boolean).map(String))];
+}
+
 /**
- * G3.1 stub — returns unchanged baseline (no routing adjustments yet).
+ * Explicit baseline routing comparator — policy + task map + availability only (no memory, no TSOS).
+ * G3.2: selected path always equals baseline path; observability only.
+ * @param {object} input
+ * @returns {object}
+ */
+export function computeBaselineRouting({
+  routingKey,
+  taskClassBaseline,
+  baselineModel,
+  routingPolicy = null,
+  operatorOverride = false,
+}) {
+  const taskClass = pickString(taskClassBaseline) || 'classification';
+  const model = pickString(baselineModel) || 'gemini_flash';
+  const allowedModels = uniqueStrings(routingPolicy?.policy?.allowedModels || []);
+
+  return {
+    routing_key: pickString(routingKey) || 'unknown',
+    task_class_baseline: taskClass,
+    task_class_selected: taskClass,
+    baseline_model: model,
+    selected_model: model,
+    baseline_allowed_models: allowedModels,
+    selected_allowed_models: allowedModels,
+    baseline_policy_source: BASELINE_POLICY_SOURCE,
+    selected_policy_source: BASELINE_POLICY_SOURCE,
+    operator_override: operatorOverride === true,
+    decision_changed: false,
+    change_reason_code: null,
+    change_reason_detail: 'G3.2 shadow — baseline comparator observability only; selected path equals baseline path',
+  };
+}
+
+/**
+ * G3.2 stub — returns unchanged baseline (no TSOS routing adjustments yet).
  * @param {object} input
  * @returns {object}
  */
 export function computeTsosRoutingAdjustment({
-  baselineTaskClass,
-  baselineModel,
+  baselineComparator,
   evidence = null,
 }) {
-  const taskClass = pickString(baselineTaskClass) || 'classification';
-  const model = pickString(baselineModel) || 'gemini_flash';
+  const baseline = baselineComparator || {};
+  const taskClass = pickString(baseline.task_class_baseline) || 'classification';
+  const model = pickString(baseline.baseline_model) || 'gemini_flash';
   const evidenceOk = evidence?.ok === true && !evidence?.error;
 
   return {
@@ -51,9 +90,29 @@ export function computeTsosRoutingAdjustment({
     decisionChanged: false,
     changeReasonCode: null,
     changeReasonDetail: evidenceOk
-      ? 'G3.1 stub — TSOS evidence read; no adjustment applied'
-      : 'G3.1 stub — baseline unchanged (evidence missing or unreadable)',
+      ? 'G3.2 shadow — TSOS evidence read; comparator records baseline only'
+      : 'G3.2 shadow — baseline unchanged (evidence missing or unreadable)',
     evidenceReadOk: evidenceOk,
+  };
+}
+
+function buildEvidenceSnapshot(evidence) {
+  if (!evidence || evidence.ok !== true) return null;
+
+  return {
+    total_hooks: evidence.total_hooks ?? null,
+    committed_hooks: evidence.committed_hooks ?? null,
+    verifier_linkage_pct: evidence.verifier_linkage_pct ?? null,
+    g2_metadata_completeness_pct: evidence.g2_metadata_completeness_pct ?? null,
+    avg_duration_ms: evidence.avg_duration_ms ?? null,
+    avg_output_bytes: evidence.avg_output_bytes ?? null,
+    token_estimate_availability_pct: evidence.token_estimate_availability_pct ?? null,
+    target_prefix: evidence.target_prefix ?? evidence.prefix ?? null,
+    matching_prefix_hook_count: evidence.matching_prefix_hook_count ?? evidence.prefix_hook_count ?? null,
+    matching_prefix_avg_duration_ms: evidence.matching_prefix_avg_duration_ms ?? evidence.avg_duration_ms ?? null,
+    matching_prefix_avg_repair_count: evidence.matching_prefix_avg_repair_count ?? evidence.avg_repair_count ?? null,
+    matching_prefix_token_estimate_availability_pct:
+      evidence.matching_prefix_token_estimate_availability_pct ?? null,
   };
 }
 
@@ -88,6 +147,7 @@ export async function insertRoutingDecision(pool, payload = {}) {
           change_reason_detail,
           evidence_read_ok,
           evidence_snapshot_json,
+          comparator_snapshot_json,
           evidence_hook_count,
           evidence_g2_pct,
           evidence_verifier_link_pct,
@@ -115,7 +175,7 @@ export async function insertRoutingDecision(pool, payload = {}) {
           $11,
           $12,
           $13::jsonb,
-          $14,
+          $14::jsonb,
           $15,
           $16,
           $17,
@@ -123,11 +183,12 @@ export async function insertRoutingDecision(pool, payload = {}) {
           $19,
           $20,
           $21,
-          $22::uuid,
-          $23,
+          $22,
+          $23::uuid,
           $24,
           $25,
-          $26
+          $26,
+          $27
         )
         RETURNING id, dispatch_id
       `,
@@ -145,6 +206,7 @@ export async function insertRoutingDecision(pool, payload = {}) {
         pickString(payload.changeReasonDetail),
         payload.evidenceReadOk === true,
         payload.evidenceSnapshotJson ? JSON.stringify(payload.evidenceSnapshotJson) : null,
+        payload.comparatorSnapshotJson ? JSON.stringify(payload.comparatorSnapshotJson) : null,
         pickInt(payload.evidenceHookCount),
         payload.evidenceG2Pct != null ? Number(payload.evidenceG2Pct) : null,
         payload.evidenceVerifierLinkPct != null ? Number(payload.evidenceVerifierLinkPct) : null,
@@ -165,6 +227,16 @@ export async function insertRoutingDecision(pool, payload = {}) {
   } catch (error) {
     return { ok: false, error: error.message };
   }
+}
+
+function mergeComparatorIntoDecision(row = {}) {
+  const comparator = row.comparator_snapshot_json || {};
+  const { comparator_snapshot_json: _drop, ...rest } = row;
+  return {
+    ...rest,
+    ...comparator,
+    comparator_snapshot_json: comparator,
+  };
 }
 
 /**
@@ -202,7 +274,8 @@ export async function listRoutingDecisions(pool, options = {}) {
             id, created_at, dispatch_id, mode, routing_key, target_file,
             task_class_baseline, task_class_selected, baseline_model, selected_model,
             decision_changed, change_reason_code, change_reason_detail,
-            evidence_read_ok, evidence_hook_count, evidence_g2_pct, evidence_verifier_link_pct,
+            evidence_read_ok, evidence_snapshot_json, comparator_snapshot_json,
+            evidence_hook_count, evidence_g2_pct, evidence_verifier_link_pct,
             metadata_version
           FROM builderos_tsos_routing_decisions
           ${whereSql}
@@ -220,7 +293,8 @@ export async function listRoutingDecisions(pool, options = {}) {
       changed_only: changedOnly,
       mode: mode || null,
       read_path: 'GET /api/v1/lifeos/builderos/tsos-routing-decisions',
-      decisions: rowsRes.rows,
+      metadata_version: TSOS_ROUTING_METADATA_VERSION,
+      decisions: rowsRes.rows.map(mergeComparatorIntoDecision),
     };
   } catch (error) {
     return { ok: false, error: error.message, decisions: [], total: 0 };
@@ -235,6 +309,8 @@ export async function logShadowRoutingDecision(pool, {
   targetFile,
   taskClassBaseline,
   baselineModel,
+  routingPolicy = null,
+  operatorOverride = false,
 }) {
   const started = Date.now();
   let evidence = null;
@@ -244,39 +320,45 @@ export async function logShadowRoutingDecision(pool, {
     evidence = { ok: false, error: 'evidence_read_failed' };
   }
 
-  const adjustment = computeTsosRoutingAdjustment({
-    baselineTaskClass: taskClassBaseline,
+  const baselineComparator = computeBaselineRouting({
+    routingKey,
+    taskClassBaseline,
     baselineModel,
+    routingPolicy,
+    operatorOverride,
+  });
+
+  const adjustment = computeTsosRoutingAdjustment({
+    baselineComparator,
     evidence,
   });
 
-  const snapshot = evidence?.ok
-    ? {
-        prefix: evidence.prefix,
-        prefix_hook_count: evidence.prefix_hook_count,
-        total_hooks: evidence.total_hooks,
-        g2_metadata_completeness_pct: evidence.g2_metadata_completeness_pct,
-        verifier_linkage_pct: evidence.verifier_linkage_pct,
-        avg_repair_count: evidence.avg_repair_count,
-        avg_duration_ms: evidence.avg_duration_ms,
-        avg_token_estimate: evidence.avg_token_estimate,
-      }
-    : null;
+  const comparatorSnapshot = {
+    ...baselineComparator,
+    task_class_selected: adjustment.taskClassSelected,
+    selected_model: adjustment.selectedModel,
+    decision_changed: adjustment.decisionChanged,
+    change_reason_code: adjustment.changeReasonCode,
+    change_reason_detail: adjustment.changeReasonDetail,
+  };
+
+  const evidenceSnapshot = buildEvidenceSnapshot(evidence);
 
   return insertRoutingDecision(pool, {
     mode: 'shadow',
     routingKey,
     targetFile,
-    taskClassBaseline,
+    taskClassBaseline: baselineComparator.task_class_baseline,
     taskClassSelected: adjustment.taskClassSelected,
-    baselineModel,
+    baselineModel: baselineComparator.baseline_model,
     selectedModel: adjustment.selectedModel,
     decisionChanged: adjustment.decisionChanged,
     changeReasonCode: adjustment.changeReasonCode,
     changeReasonDetail: adjustment.changeReasonDetail,
     evidenceReadOk: adjustment.evidenceReadOk,
-    evidenceSnapshotJson: snapshot,
-    evidenceHookCount: evidence?.prefix_hook_count ?? evidence?.total_hooks ?? null,
+    evidenceSnapshotJson: evidenceSnapshot,
+    comparatorSnapshotJson: comparatorSnapshot,
+    evidenceHookCount: evidence?.matching_prefix_hook_count ?? evidence?.prefix_hook_count ?? evidence?.total_hooks ?? null,
     evidenceG2Pct: evidence?.g2_metadata_completeness_pct ?? null,
     evidenceVerifierLinkPct: evidence?.verifier_linkage_pct ?? null,
     durationMs: Date.now() - started,

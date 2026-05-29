@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-05-29 (TSOS-G3.1 shadow routing decision log infrastructure)
+**Last Updated:** 2026-05-29 (TSOS-G3.2 baseline comparator refinement — shadow only)
 
 ---
 
@@ -454,6 +454,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-05-29 | `db/migrations/20260529_builderos_tsos_routing_g3_2_comparator.sql` (NEW) + `services/builderos-tsos-routing.js` (computeBaselineRouting + comparator_snapshot_json) + `services/builderos-tsos-evidence.js` (expanded prefix/global evidence fields) + `routes/lifeos-council-builder-routes.js` (pass routingPolicy + operatorOverride) + `docs/projects/TSOS_PROVEN_ADVANCEMENT_PLAN.md` §9 + `TSOS_HOOK_BOUNDARY.md` §8 | TSOS-G3.2 — baseline comparator refinement SHADOW only. Extended comparator output (allowed models, policy source, operator_override); expanded evidence snapshot (global + prefix aggregates). decision_changed remains false; no routing/ACTIVE/alpha changes. GAP-FILL: builder preflight dotenv missing locally. | Observability for future routing delta proof before G3.3 hypothetical adjustments. |
 | 2026-05-29 | `db/migrations/20260529_builderos_tsos_routing_decisions.sql` (NEW) + `services/builderos-tsos-routing.js` (NEW) + `services/builderos-tsos-evidence.js` (+buildTsosEvidenceForPrefix) + `routes/lifeos-council-builder-routes.js` (shadow log after baseline policy) + `routes/tsos-efficiency-routes.js` (+GET tsos-routing-decisions) | TSOS-G3.1 — routing decision log infrastructure in SHADOW mode only. Table `builderos_tsos_routing_decisions` (mode shadow/active, baseline vs selected model/task_class, evidence snapshot). `computeTsosRoutingAdjustment()` stub returns unchanged baseline; `logShadowRoutingDecision()` fail-open on builder `/task` dispatch. Read-only GET `/api/v1/lifeos/builderos/tsos-routing-decisions`. No ACTIVE gate, no alpha scoring / memory / proof / supervised readiness changes. GAP-FILL: builder preflight exit 1 (dotenv missing locally). | TSOS-G3 foundation — audit trail before any routing adjustments (G3.2+). |
 | 2026-05-28 | `public/overlay/lifeos-command-center.html` (+25 lines, memory-proof snap card in Executive Snapshot row) | CSS `repeat(7→8,1fr)` + 8th SNAP_DEFS entry + `rmp` fetch in `loadSnapshot()`. Green PROVEN ring when proven, yellow when reachable-but-false, red on error. Click-to-drawer: proven, maturity, total_facts, tested_above, multi_source, authority, legacy_excluded, generated_at, disclaimer. 9/9 sanity checks pass, 2356 lines. | Expose memory proof state in Executive Snapshot without requiring scroll or JSON read. |
 | 2026-05-28 | `public/overlay/lifeos-command-center.html` (+63 lines, `section-memory-proof` panel + `loadMemoryProof()`) | Phase C memory proof UI. Renders maturity pill (PROVEN/LIVE/WIRED), proven/not-proven pill, fact counts (total/tested/multi-source), authority, legacy-excluded status, generated_at, and disclaimer. `loadMemoryProof()` added to `loadAll()` Promise.allSettled. 7/7 sanity checks pass. | Command Center must visibly surface memory proof so the operator doesn't need to read JSON from the alpha readiness endpoint. |
