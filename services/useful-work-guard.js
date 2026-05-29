@@ -26,9 +26,18 @@
  * @param {Function} opts.workCheck       — async () => { count: number, description: string }
  * @param {Function} opts.execute         — async () => result — only called if above pass
  * @param {object}   [opts.logger]        — pino-compatible logger
+ * @param {boolean}  [opts.allowInDirectedMode] — PB-authorized repair tasks (e.g. deploy proof parity) may run when LIFEOS_DIRECTED_MODE=true
  * @returns {Function} — wrapped async function safe to call on any schedule
  */
-export function createUsefulWorkGuard({ taskName, purpose, prerequisites, workCheck, execute, logger = console }) {
+export function createUsefulWorkGuard({
+  taskName,
+  purpose,
+  prerequisites,
+  workCheck,
+  execute,
+  logger = console,
+  allowInDirectedMode = false,
+}) {
   const log = {
     info:  (...a) => logger.info?.(...a)  ?? console.log(...a),
     warn:  (...a) => logger.warn?.(...a)  ?? console.warn(...a),
@@ -38,7 +47,9 @@ export function createUsefulWorkGuard({ taskName, purpose, prerequisites, workCh
 
   return async function guardedExecute() {
     // ── 1. Directed mode check (global kill switch) ──────────────────────────
-    if (process.env.LIFEOS_DIRECTED_MODE === 'true' || process.env.PAUSE_AUTONOMY === '1') {
+    const directedBlocked =
+      process.env.LIFEOS_DIRECTED_MODE === 'true' || process.env.PAUSE_AUTONOMY === '1';
+    if (directedBlocked && !allowInDirectedMode) {
       log.debug(`[USEFUL-WORK-GUARD] ${taskName} skipped — directed mode active`);
       return { skipped: true, reason: 'directed_mode' };
     }

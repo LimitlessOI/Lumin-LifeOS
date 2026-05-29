@@ -4,20 +4,19 @@
 ---
 ## [FIX] 2026-05-28 — Governed automatic proof parity after BuilderOS commits
 
-### Root cause
-Deploy-check + self-repair executor already existed (`bootSelfRepairDeployCheck` at +45s, `POST /self-repair/deploy-check`) but only ran once per boot. Mid-session deploys from governed loop commits left proof STALE until manual `POST /api/v1/gemini/proof`.
+### Root cause (3 layers)
+1. Deploy-check existed but only once per boot; mid-session deploys left proof STALE until manual gemini/proof
+2. In-memory post-commit timer lost on Railway redeploy (iteration 2: durable receipt + 3 boot passes)
+3. **Iteration 3:** `LIFEOS_DIRECTED_MODE=true` + `PAUSE_AUTONOMY=1` on Railway caused `createUsefulWorkGuard` to skip boot proof parity passes entirely
 
 ### Fix
-- `services/builderos-governed-proof-parity.js` (NEW) — debounced post-commit scheduler calls existing `runDeployDriftPreventionHook` after 90s settle; verifies CURRENT via `evaluateProofFreshnessFromPool`; fail-closed on failure
-- `services/builderos-governed-loop-executor.js` — calls `scheduleProofParityAfterGovernedCommit()` on both committed paths (after TSOS hook)
-
-### Fix (iteration 2 — redeploy-safe)
-- Durable `builderos_proof_parity_pending` receipt on schedule (survives container replace)
-- Boot passes at +45s, +120s, +240s via `runGovernedProofParityRefresh`
-- v1 in-memory timer alone failed controlled test (redeploy killed setTimeout)
+- `services/builderos-governed-proof-parity.js` — debounced scheduler + `runGovernedProofParityRefresh`
+- Boot +45s/+120s/+240s via `runGovernedProofParityRefresh`
+- `services/useful-work-guard.js` — `allowInDirectedMode` for PB-authorized deploy proof repair
+- `startup/boot-domains.js` — boot check uses `allowInDirectedMode` (default on unless `SELF_REPAIR_OVERRIDE_DIRECTED_MODE=0`)
 
 ### Next agent: start here
-- Deploy iteration 2; controlled test: governed job → wait 240s → proof CURRENT without manual gemini/proof
+- Verify controlled test v3: deploy iteration 3 → proof STALE → wait 240s → CURRENT without manual refresh
 - TSOS LIVE→PROVEN still needs more hook events
 
 ---

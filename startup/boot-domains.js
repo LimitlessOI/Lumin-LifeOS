@@ -264,6 +264,7 @@ async function bootSelfRepairDeployCheck(deps) {
   const guarded = createUsefulWorkGuard({
     taskName: 'Self-Repair Deploy Check',
     purpose: 'Refresh stale runtime proof after deploy SHA drift (PF-001→PF-002→PF-003)',
+    allowInDirectedMode: process.env.SELF_REPAIR_OVERRIDE_DIRECTED_MODE !== '0',
     prerequisites: async () => {
       const { isSelfRepairBootCheckEnabled } = await import('../services/self-repair-deploy-scheduler.js');
       if (!isSelfRepairBootCheckEnabled()) {
