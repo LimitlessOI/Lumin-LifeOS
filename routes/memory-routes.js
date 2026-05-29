@@ -11,6 +11,12 @@
 import { Router } from 'express';
 import memorySystem from '../core/memory-system.js';
 
+const LEGACY_META = {
+  memory_authority: 'LEGACY_COMPAT',
+  canonical_replacement: '/api/v1/memory/evidence or /api/v1/memory/capsules',
+  do_not_use_for_builderos_proof: true,
+};
+
 function createLegacyMemoryRoutes() {
   const legacyRouter = Router();
 
@@ -30,7 +36,8 @@ function createLegacyMemoryRoutes() {
       ok: true,
       category: req.params.category,
       count: memories.length,
-      memories
+      memories,
+      ...LEGACY_META,
     });
   } catch (error) {
     console.error('❌ [MEMORY] Retrieve error:', error.message);
@@ -73,7 +80,8 @@ function createLegacyMemoryRoutes() {
     
     res.json({
       ok: true,
-      memory
+      memory,
+      ...LEGACY_META,
     });
   } catch (error) {
     console.error('❌ [MEMORY] Store error:', error.message);
@@ -101,7 +109,8 @@ function createLegacyMemoryRoutes() {
     
     res.json({
       ok: true,
-      memory
+      memory,
+      ...LEGACY_META,
     });
   } catch (error) {
     console.error('❌ [MEMORY] Confirm error:', error.message);
@@ -129,7 +138,8 @@ function createLegacyMemoryRoutes() {
     
     res.json({
       ok: true,
-      deleted: memory
+      deleted: memory,
+      ...LEGACY_META,
     });
   } catch (error) {
     console.error('❌ [MEMORY] Delete error:', error.message);
@@ -149,7 +159,8 @@ function createLegacyMemoryRoutes() {
     const context = await memorySystem.buildContextForPrompt();
     res.json({
       ok: true,
-      context
+      context,
+      ...LEGACY_META,
     });
   } catch (error) {
     console.error('❌ [MEMORY] Context error:', error.message);

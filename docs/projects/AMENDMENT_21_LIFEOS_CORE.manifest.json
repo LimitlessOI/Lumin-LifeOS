@@ -846,5 +846,5 @@
     ]
   },
   "last_updated": "2026-05-28",
-  "ssot_receipt_tail": "BuilderOS execution-control hardening: builder route now applies routing policy and emits routing_task_class; BuilderOS-only useful-work audit added; COMMONJS_BLEED and PARTIAL_EDIT_CORRUPTION scanner families added; two scheduled BuilderOS paths remain unguarded follow-up."
+  "ssot_receipt_tail": "Memory namespace audit Phase 2: /api/v1/memory/search in api-v1-core.js annotated LEGACY_COMPAT (recallConversationMemory). BuilderOS execution-control hardening: routing policy + routing_task_class + guard audit + scanner families."
 }

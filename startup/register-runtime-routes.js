@@ -379,8 +379,10 @@ export async function registerRuntimeRoutes(app, deps) {
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
   logger.info('✅ [MEMORY-INTELLIGENCE] Routes mounted at /api/v1/memory/evidence/{facts,debates,lessons,agents,authority,violations,routing,intent-drift,health}');
+  // CANONICAL_EVIDENCE compat path — scripts call /api/v1/memory/* (no /evidence prefix).
+  // Same handler as /evidence; not a legacy route. do_not_use_for_builderos_proof: false.
   app.use('/api/v1/memory', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
-  logger.info('✅ [MEMORY-INTELLIGENCE-COMPAT] Legacy evidence alias mounted at /api/v1/memory/* while capsule routes stay isolated under /capsules');
+  logger.info('✅ [MEMORY-INTELLIGENCE-COMPAT] CANONICAL_EVIDENCE alias at /api/v1/memory/* — same handler as /evidence; capsule routes isolated under /capsules');
 
   // Self-repair memory — read-only diagnostics and latest lessons
   app.use('/api/v1/memory/self-repair', createMemorySelfRepairRoutes({ pool, requireKey }));

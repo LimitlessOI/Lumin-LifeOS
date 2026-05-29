@@ -2,6 +2,34 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [AUDIT] 2026-05-28 — Memory namespace audit Phase 2 — legacy metadata annotations
+
+### Files changed
+- `routes/memory-routes.js` — added `LEGACY_META` constant (`memory_authority: 'LEGACY_COMPAT'`, `canonical_replacement: '/api/v1/memory/evidence or /api/v1/memory/capsules'`, `do_not_use_for_builderos_proof: true`) spread into all 5 legacy route success responses. Routes at `/api/memories/*` and `/api/v1/memory/legacy/*` now self-report authority class to callers.
+- `routes/api-v1-core.js` — added same three authority fields to `/api/v1/memory/search` inline route response (uses `recallConversationMemory` / `conversation_memory` table → LEGACY_COMPAT).
+- `startup/register-runtime-routes.js` — clarified comment on `/api/v1/memory` compat alias: CANONICAL_EVIDENCE compat path (same handler as `/evidence`; not a legacy route; `do_not_use_for_builderos_proof: false`). Logger message updated to match.
+- `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` — receipt row added (memory namespace audit Phase 2).
+- `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` — receipt row added (register-runtime-routes.js compat alias comment update).
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipt row added (api-v1-core.js memory search metadata annotation).
+
+### Memory authority classification (confirmed)
+- `/api/v1/memory/capsules` → CANONICAL_CAPSULE (Amendment 02)
+- `/api/v1/memory/evidence` and `/api/v1/memory` compat alias → CANONICAL_EVIDENCE (Amendment 39)
+- `/api/v1/memory/self-repair` → CANONICAL_SELF_REPAIR
+- `/api/memories/*` and `/api/v1/memory/legacy/*` → LEGACY_COMPAT (memory-routes.js)
+- `/api/v1/memory/search` → LEGACY_COMPAT (api-v1-core.js inline)
+
+### State after this session
+- Alpha: ALPHA_READY, 95.6%, 0 blockers (unchanged — audit only, no route deletions)
+- `node --check` PASS: all 3 changed source files
+- No routes deleted; legacy surfaces preserved per Phase 3 instruction
+- All SSOT amendments updated atomically
+
+### Next agent: start here
+- All memory namespace annotations are in place. No blockers remain from this audit.
+- Next: commit all changed files (memory-routes.js, api-v1-core.js, register-runtime-routes.js, AMENDMENT_02, AMENDMENT_19, AMENDMENT_21, CONTINUITY_LOG.md)
+
+---
 ## [FIX] 2026-05-28 — Governed automatic proof parity after BuilderOS commits
 
 ### Root cause (3 layers)

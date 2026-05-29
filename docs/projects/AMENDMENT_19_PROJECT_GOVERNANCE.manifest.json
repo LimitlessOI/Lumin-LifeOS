@@ -9,7 +9,7 @@
   "phase": "core-infrastructure",
   "next_task": "Wire estimation accuracy, readiness queue, and deeper governance/env-awareness drill-down into the Command Center overlay",
   "stability_class": "needs-review",
-  "current_focus": "Governance data is seeded and live; runtime composition now isolates capsule memory, BuilderOS evidence memory, self-repair memory, and legacy memory into explicit namespaces without shared route ownership",
+  "current_focus": "Governance data is seeded and live; runtime composition isolates capsule/evidence/self-repair/legacy memory into explicit namespaces. /api/v1/memory compat alias confirmed CANONICAL_EVIDENCE (same handler as /evidence; not a legacy route).",
   "owned_files": [
     "routes/project-governance-routes.js",
     "startup/register-runtime-routes.js",

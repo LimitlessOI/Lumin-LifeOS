@@ -101,7 +101,14 @@ export function registerApiV1CoreRoutes(app, getDeps) {
       const d = getDeps();
       const { q = "", limit = 50 } = req.query;
       const memories = await d.recallConversationMemory(q, parseInt(limit));
-      res.json({ ok: true, count: memories.length, memories });
+      res.json({
+        ok: true,
+        count: memories.length,
+        memories,
+        memory_authority: 'LEGACY_COMPAT',
+        canonical_replacement: '/api/v1/memory/evidence/facts',
+        do_not_use_for_builderos_proof: true,
+      });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }
