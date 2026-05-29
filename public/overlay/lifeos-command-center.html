@@ -231,6 +231,14 @@
     </div>
   </div>
 
+  <!-- Section A4: BuilderOS Memory Proof (read-only, epistemic_facts only) -->
+  <div class="card full-width" id="section-memory-proof">
+    <div class="section-title">&#128113; BuilderOS Memory Proof</div>
+    <div id="memory-proof-panel">
+      <div class="not-wired">Loading...</div>
+    </div>
+  </div>
+
   <!-- Main 2-col grid -->
   <div class="main-grid">
 
@@ -724,6 +732,59 @@ async function loadSystemAlpha() {
           ${next.slice(0,10).map((item, idx) => `<div class="q-card"><div class="q-title">${idx + 1}. Next Item</div><div class="q-desc">${item}</div></div>`).join('')}
         </div>
         <div style="font-size:10px;color:var(--text-muted);margin-top:10px">Scoring: loop ${score.loop_integrity_weight_pct ?? 40}% / components ${score.component_maturity_weight_pct ?? 60}% · last verified ${d.last_verified_at ? new Date(d.last_verified_at).toLocaleString() : '—'}</div>
+      </div>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────
+// Section A4: BuilderOS Memory Proof (read-only)
+// ─────────────────────────────────────────────
+async function loadMemoryProof() {
+  const el = document.getElementById('memory-proof-panel');
+  if (!el) return;
+  const r = await safeFetch('/api/v1/lifeos/command-center/memory/proof');
+  if (!r.ok || !r.data?.ok) {
+    el.innerHTML = `<div class="not-wired">ERROR<span>GET /command-center/memory/proof returned ${r.status}</span></div>`;
+    return;
+  }
+  const d = r.data;
+  const provenClass = d.builderos_memory_proven ? 'pill-success' : 'pill-error';
+  const provenLabel = d.builderos_memory_proven ? 'PROVEN' : 'NOT PROVEN';
+  const maturityClass = d.maturity === 'PROVEN' ? 'pill-success' : d.maturity === 'LIVE' ? 'pill-warning' : 'pill-muted';
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start">
+      <div class="q-card" style="text-align:center;min-width:160px">
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Memory Maturity</div>
+        <div style="margin-bottom:8px"><span class="pill ${maturityClass}">${d.maturity || 'UNKNOWN'}</span></div>
+        <div><span class="pill ${provenClass}">${provenLabel}</span></div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:10px">${d.proof_source}</div>
+      </div>
+      <div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:12px">
+          <div class="q-card"><div style="font-size:10px;color:var(--text-muted)">Total Facts</div><div style="font-size:18px;font-weight:700">${d.total_facts ?? '—'}</div></div>
+          <div class="q-card"><div style="font-size:10px;color:var(--text-muted)">Tested+</div><div style="font-size:18px;font-weight:700">${d.tested_or_above_count ?? '—'}</div></div>
+          <div class="q-card"><div style="font-size:10px;color:var(--text-muted)">Multi-Source</div><div style="font-size:18px;font-weight:700">${d.multi_source_fact_count ?? '—'}</div></div>
+        </div>
+        <div class="tsos-row">
+          <span class="tsos-label">Authority</span>
+          <span class="pill pill-accent" style="font-size:10px">${d.memory_authority}</span>
+        </div>
+        <div class="tsos-row">
+          <span class="tsos-label">Legacy excluded</span>
+          <span class="pill ${d.legacy_sources_excluded ? 'pill-success' : 'pill-error'}" style="font-size:10px">${d.legacy_sources_excluded ? 'true' : 'false'}</span>
+        </div>
+        <div class="tsos-row">
+          <span class="tsos-label">Legacy-free for proof</span>
+          <span class="pill ${d.do_not_use_legacy_memory_for_builderos_proof ? 'pill-success' : 'pill-error'}" style="font-size:10px">${d.do_not_use_legacy_memory_for_builderos_proof ? 'true — legacy excluded' : 'false'}</span>
+        </div>
+        <div class="tsos-row">
+          <span class="tsos-label">Generated</span>
+          <span class="tsos-endpoint">${d.generated_at ? new Date(d.generated_at).toLocaleString() : '—'}</span>
+        </div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:10px;padding:8px;background:rgba(255,255,255,.03);border-left:3px solid var(--text-muted);border-radius:3px">
+          BuilderOS Memory Proof uses <strong>epistemic_facts only</strong>. Legacy memory is preserved but excluded from BuilderOS proof.
+        </div>
       </div>
     </div>`;
 }
@@ -2238,6 +2299,7 @@ async function loadAll() {
     loadSnapshot(),
     loadSupervisedReadiness(),
     loadSystemAlpha(),
+    loadMemoryProof(),
     loadBuilder(),
     loadPhasePanel(),
     loadQueue(),

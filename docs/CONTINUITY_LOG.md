@@ -2,6 +2,26 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] 2026-05-28 — BuilderOS Memory Proof UI Panel (Phase C overlay)
+
+### Files changed
+- `public/overlay/lifeos-command-center.html` (+63 lines): added `section-memory-proof` full-width card and `loadMemoryProof()` async function. Renders: maturity pill, proven/not-proven pill, 3 stat cards (Total Facts, Tested+, Multi-Source), authority row, legacy-excluded row, legacy-free-for-proof row, generated_at, and disclaimer. Added `loadMemoryProof()` to `Promise.allSettled` in `loadAll()`.
+- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — receipt row added.
+- `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` — `current_focus` updated.
+- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — receipt row added.
+
+### State after this session
+- HTML sanity: 7/7 presence checks pass, 2331 lines
+- No JS files changed — HTML only
+- No backend maturity changes, no scoring changes, no route changes
+- Panel calls `GET /api/v1/lifeos/command-center/memory/proof` (verified live in prior session)
+
+### Next agent: start here
+- Commit + push this change: `public/overlay/lifeos-command-center.html`, `AMENDMENT_12_COMMAND_CENTER.md`, `AMENDMENT_12_COMMAND_CENTER.manifest.json`, `BUILDEROS_ALPHA_BLUEPRINT.md`, `CONTINUITY_LOG.md`
+- After Railway deploy: open `/lifeos-command-center` — verify "BuilderOS Memory Proof" section renders with PROVEN + 42 facts
+- Next: consider adding the memory proof panel to the executive snapshot ring row (snap card)
+
+---
 ## [BUILD] 2026-05-28 — BuilderOS Memory Runtime Proof Receipt (Phase C endpoint)
 
 ### Files changed
