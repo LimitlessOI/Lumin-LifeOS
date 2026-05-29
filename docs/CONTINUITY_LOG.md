@@ -2,6 +2,25 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] 2026-05-28 — GAP-FILL: governed loop truncation fix (PBB patch-mode + files[] + token scale)
+
+### Files changed
+- `services/builderos-pbb-plan.js` — false-positive proof spec fix; UPDATE patch-mode spec with embedded existing file; scaled max_output_tokens 8192–16384; files[] in plan
+- `services/builderos-governed-loop-executor.js` — forward plan.files to /builder/build
+- `tests/builderos-import-merge-patterns.test.js` — PATTERN 8/9 regression tests (4/4 pass)
+
+### Root causes closed
+1. `isProofFile` matched `proof` inside `alpha-stability-proof` on any `scripts/builderos-*` file
+2. UPDATE jobs forced full 40+ line rewrites → token truncation
+3. Missing `files[]` → no token estimator context
+4. Fixed 4096 output token cap too low
+
+### Next agent: start here
+- Deploy landed → run 3 governed Zone 1 jobs; each must commit + verifier pass + tsos_internal_hook
+- Refresh gemini proof if deploy drift makes proof STALE
+- TSOS LIVE→PROVEN needs ≥2 more dedicated hook events from real commits
+
+---
 ## [BUILD] 2026-05-28 — Phases 2/3/4: useful-work contract layer, unguarded_scheduled=0
 
 ### Files changed

@@ -6,8 +6,12 @@
  */
 
 import { randomUUID } from 'crypto';
+import { existsSync, readFileSync } from 'fs';
+import { resolve } from 'path';
+import { classifyBuildTarget } from './builderos-patch-mode-policy.js';
 
 const MIN_JS_LINES = 40;
+const MIN_JS_LINES_UPDATE = 15;
 
 function normalizeText(value) {
   return String(value || '').trim();
@@ -24,7 +28,29 @@ function extractExportNames(instruction) {
     const name = match.replace(/^function\s+/i, '');
     if (name && !names.includes(name)) names.push(name);
   }
+  const exportFnMatch = instruction.match(/export\s+function\s+([A-Za-z0-9_]+)/gi) || [];
+  for (const match of exportFnMatch) {
+    const name = match.replace(/^export\s+function\s+/i, '');
+    if (name && !names.includes(name)) names.push(name);
+  }
   return names;
+}
+
+function isUpdateInstruction(instruction, targetFile) {
+  const lower = instruction.toLowerCase();
+  if (/\bupdate\b/.test(lower) || /\bpatch\b/.test(lower) || /\bmodify\b/.test(lower)) return true;
+  if (targetFile && existsSync(resolve(targetFile))) return true;
+  return false;
+}
+
+function readExistingFileSnippet(targetFile, maxChars = 6000) {
+  try {
+    const content = readFileSync(resolve(targetFile), 'utf8');
+    if (content.length <= maxChars) return content;
+    return `${content.slice(0, maxChars)}\n/* ... truncated for prompt — preserve remaining file unchanged ... */`;
+  } catch {
+    return null;
+  }
 }
 
 function buildJsOutputRequirements(targetFile) {
@@ -87,7 +113,36 @@ function buildGenericJsSpec(instruction, targetFile, exportNames) {
     'REQUIRED EXPORTS:',
     exportLines,
     '',
-    'Include helper functions, constants, and CLI entry so the file is complete — not a stub.',
+    'Include helper functions and constants so the file is complete — not a stub. No CLI entry.',
+    '',
+    `OPERATOR INSTRUCTION: ${instruction}`,
+  ].join('\n');
+}
+
+function buildUpdateJsSpec(instruction, targetFile, exportNames, existingContent, lineCount) {
+  const exportLines = exportNames.length
+    ? exportNames.map((name, i) => `${i + 1}. preserve or add export function ${name}(...) per instruction`).join('\n')
+    : '1. Apply only the instruction delta — preserve unrelated exports and logic';
+
+  return [
+    'PATCH MODE — EXISTING FILE UPDATE (mandatory):',
+    `- Target ${targetFile} already exists (${lineCount} lines).`,
+    '- Output the COMPLETE updated file — not a diff, not a fragment.',
+    '- Apply ONLY the operator change. Do NOT rewrite unrelated logic or add new subsystems.',
+    '- Preserve every existing export and behavior unless the instruction explicitly changes it.',
+    '- Plain JavaScript ESM only. No TypeScript. No markdown fences. No ---METADATA---.',
+    '- File must be syntactically complete: every brace/bracket/paren closed; no truncated tail.',
+    `- Minimum ${MIN_JS_LINES_UPDATE} lines (match or exceed current ${lineCount} lines unless instruction removes code).`,
+    '- Include file-level JSDoc with @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md.',
+    '- Do NOT add process.argv CLI scaffolding.',
+    '',
+    'REQUIRED EXPORTS / CHANGES:',
+    exportLines,
+    '',
+    'EXISTING FILE (preserve unless instruction overrides):',
+    '---',
+    existingContent || '(could not read existing file — apply minimal safe change only)',
+    '---',
     '',
     `OPERATOR INSTRUCTION: ${instruction}`,
   ].join('\n');
@@ -97,10 +152,15 @@ function buildBaseSpec(instruction, targetFile) {
   const exportNames = extractExportNames(instruction);
   const lower = instruction.toLowerCase();
   const isProofFile =
-    /proof/.test(lower) &&
-    (targetFile.includes('proof') || targetFile.startsWith('scripts/builderos-'));
+    /\bproof\b/.test(lower) &&
+    (targetFile.includes('proof') || /builderos-.*-proof\.mjs$/i.test(targetFile));
 
   if (isJsTarget(targetFile)) {
+    if (isUpdateInstruction(instruction, targetFile)) {
+      const zone = classifyBuildTarget(targetFile);
+      const existingContent = readExistingFileSnippet(targetFile);
+      return buildUpdateJsSpec(instruction, targetFile, exportNames, existingContent, zone.lineCount || 0);
+    }
     if (isProofFile) return buildProofFileSpec(instruction, targetFile, exportNames);
     return buildGenericJsSpec(instruction, targetFile, exportNames);
   }
@@ -129,6 +189,7 @@ export function generatePbbPlanFromOilAudit(job, oilAudit, options = {}) {
   const repairAttempt = Number(options.repairAttempt || 0);
   const verifierResult = options.verifierResult || null;
 
+  const isUpdate = targetFile ? isUpdateInstruction(instruction, targetFile) : false;
   let spec = buildBaseSpec(instruction, targetFile || 'scripts/builderos-output.mjs');
 
   if (repairAttempt > 0 && verifierResult) {
@@ -140,7 +201,11 @@ export function generatePbbPlanFromOilAudit(job, oilAudit, options = {}) {
     }
     if (targetFile && isJsTarget(targetFile)) {
       spec += `\nREPAIR REQUIREMENTS:\n`;
-      spec += `- Rewrite ${targetFile} to at least ${MIN_JS_LINES} lines.\n`;
+      if (/truncat|unexpected end of input|syntaxerror/i.test(String(verifierResult.syntax_error || ''))) {
+        spec += '- PRIOR OUTPUT WAS TRUNCATED. Emit the COMPLETE file with all braces closed.\n';
+        spec += '- Do NOT expand scope — apply only the operator instruction.\n';
+      }
+      spec += `- Rewrite ${targetFile} to at least ${isUpdate ? MIN_JS_LINES_UPDATE : MIN_JS_LINES} lines.\n`;
       spec += '- Remove TypeScript syntax, external imports, and stub bodies.\n';
       spec += '- Pass node --check and builder stub/antipattern gates.\n';
     }
@@ -153,17 +218,26 @@ export function generatePbbPlanFromOilAudit(job, oilAudit, options = {}) {
   const commitSuffix = repairAttempt > 0 ? ` repair-${repairAttempt}` : '';
   const commitMessage = `[system-build] BuilderOS governed loop job ${job.id}${commitSuffix}`;
 
+  const jsTarget = isJsTarget(targetFile || '');
+  const zoneInfo = targetFile && existsSync(resolve(targetFile)) ? classifyBuildTarget(targetFile) : null;
+  const lineCount = zoneInfo?.lineCount || 0;
+  const maxOutputTokens = jsTarget
+    ? Math.min(16384, Math.max(8192, Math.ceil(lineCount * 80) + 4096))
+    : undefined;
+
   return {
     ok: true,
     plan_id: randomUUID(),
     task,
     spec,
     target_file: targetFile,
+    files: targetFile && existsSync(resolve(targetFile)) ? [targetFile] : undefined,
     domain,
     mode: 'code',
     commit_message: commitMessage,
-    model: isJsTarget(targetFile || '') ? 'gemini_flash' : undefined,
-    max_output_tokens: isJsTarget(targetFile || '') ? 4096 : undefined,
+    model: jsTarget ? 'gemini_flash' : undefined,
+    max_output_tokens: maxOutputTokens,
+    patch_mode: isUpdate,
     builder_scope: 'builderos-only',
     repair_attempt: repairAttempt,
     planned_at: new Date().toISOString(),

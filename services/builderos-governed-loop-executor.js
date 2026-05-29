@@ -43,6 +43,7 @@ async function dispatchBuilderPlan(plan, { baseUrl, commandKey }) {
     target_file: plan.target_file || undefined,
     commit_message: plan.commit_message,
     release_mode: 'supervised',
+    ...(Array.isArray(plan.files) && plan.files.length ? { files: plan.files } : {}),
     ...(plan.model ? { model: plan.model } : {}),
     ...(plan.max_output_tokens ? { max_output_tokens: plan.max_output_tokens } : {}),
   };
