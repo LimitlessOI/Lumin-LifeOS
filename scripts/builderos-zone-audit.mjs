@@ -63,11 +63,13 @@ export function auditZoneMutations(zoneMutations) {
     console.warn('auditZoneMutations received non-array input. Returning empty counts.');
     return {};
   }
+
   const classificationCounts = {};
   for (const mutation of zoneMutations) {
     const classification = getZoneClassification(mutation);
     classificationCounts[classification] = (classificationCounts[classification] || 0) + 1;
   }
+
   return classificationCounts;
 }
 
@@ -77,5 +79,5 @@ export function auditZoneMutations(zoneMutations) {
  * @returns {string} The version string.
  */
 export function getZoneAuditVersion() {
-  return "1.0.1-stability-run-2";
+  return "1.0.2-auto-parity-test";
 }
