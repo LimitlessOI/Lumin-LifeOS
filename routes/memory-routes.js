@@ -1,18 +1,25 @@
 /**
- * MEMORY ROUTES - API endpoints for memory system
+ * MEMORY ROUTES - LEGACY CRUD MEMORY
+ *
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
+ * @legacy STATUS: LEGACY_KEEP — non-canonical pre-capsule memory surface.
+ * Preserved for historical compatibility and migration reference.
+ * Canonical BuilderOS evidence memory is Amendment 39.
+ * Canonical governed product memory is the capsule surface.
  */
 
-import express from 'express';
+import { Router } from 'express';
 import memorySystem from '../core/memory-system.js';
 
-const router = express.Router();
+function createLegacyMemoryRoutes() {
+  const legacyRouter = Router();
 
 /**
  * GET /api/memories/:category
  * Get all memories for a category
  * Query params: ?minConfidence=0.8&type=user_stated&limit=10
  */
-router.get('/memories/:category', async (req, res) => {
+  legacyRouter.get('/memories/:category', async (req, res) => {
   try {
     const memories = await memorySystem.retrieveMemories(req.params.category, {
       minConfidence: parseFloat(req.query.minConfidence) || 0.5,
@@ -39,7 +46,7 @@ router.get('/memories/:category', async (req, res) => {
  * Store a new memory
  * Body: { category, content, type, confidence, conversationId, userConfirmed }
  */
-router.post('/memories', async (req, res) => {
+  legacyRouter.post('/memories', async (req, res) => {
   try {
     const { category, content, type, confidence, conversationId, userConfirmed } = req.body;
     
@@ -81,7 +88,7 @@ router.post('/memories', async (req, res) => {
  * POST /api/memories/:id/confirm
  * Confirm an inferred memory (upgrades to USER_CONFIRMED, confidence = 1.0)
  */
-router.post('/memories/:id/confirm', async (req, res) => {
+  legacyRouter.post('/memories/:id/confirm', async (req, res) => {
   try {
     const memory = await memorySystem.confirmMemory(req.params.id);
     
@@ -109,7 +116,7 @@ router.post('/memories/:id/confirm', async (req, res) => {
  * DELETE /api/memories/:id
  * Delete a memory (user says it's wrong)
  */
-router.delete('/memories/:id', async (req, res) => {
+  legacyRouter.delete('/memories/:id', async (req, res) => {
   try {
     const memory = await memorySystem.deleteMemory(req.params.id);
     
@@ -137,7 +144,7 @@ router.delete('/memories/:id', async (req, res) => {
  * GET /api/memories/context/prompt
  * Get formatted context for AI prompt (high-confidence memories only)
  */
-router.get('/memories/context/prompt', async (req, res) => {
+  legacyRouter.get('/memories/context/prompt', async (req, res) => {
   try {
     const context = await memorySystem.buildContextForPrompt();
     res.json({
@@ -153,4 +160,7 @@ router.get('/memories/context/prompt', async (req, res) => {
   }
 });
 
-export default router;
+  return legacyRouter;
+}
+
+export default createLegacyMemoryRoutes;

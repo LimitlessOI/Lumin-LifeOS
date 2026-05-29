@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ */
 import fs from "fs";
 import path from "path";
 import process from "node:process";
@@ -24,7 +27,8 @@ export function registerServerRoutes(app, deps) {
     podManager,
   } = deps;
 
-  app.use("/api", memoryRoutes);
+  app.use("/api", memoryRoutes());
+  app.use("/api/v1/memory/legacy", memoryRoutes());
 
   app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     const sig = req.headers["stripe-signature"];

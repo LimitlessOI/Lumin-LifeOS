@@ -29,7 +29,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   // ─── System health ──────────────────────────────────────────────────────
 
   /**
-   * GET /api/v1/memory/health
+ * GET /api/v1/memory/evidence/health
    * System summary: total facts, invariants, debates, lessons, open drifts, stale hypotheses
    */
   router.get('/health', requireKey, async (req, res) => {
@@ -45,7 +45,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   // ─── Epistemic facts ────────────────────────────────────────────────────
 
   /**
-   * GET /api/v1/memory/facts
+   * GET /api/v1/memory/evidence/facts
    * Query facts with context-weighted scoring.
    * Query params: context, domain, minLevel (0–6), limit, visibilityClass
    */
@@ -74,7 +74,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * POST /api/v1/memory/facts
+   * POST /api/v1/memory/evidence/facts
    * Record a new epistemic fact.
    * Body: { text, domain?, level?, contextRequired?, falseWhen?, disproofRecipe?,
    *         visibilityClass?, residueRisk?, reviewBy?, createdBy? }
@@ -103,7 +103,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * GET /api/v1/memory/facts/:id
+   * GET /api/v1/memory/evidence/facts/:id
    * Get a single fact with full metadata.
    */
   router.get('/facts/:id', requireKey, async (req, res) => {
@@ -118,7 +118,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * POST /api/v1/memory/facts/:id/evidence
+   * POST /api/v1/memory/evidence/facts/:id/evidence
    * Add evidence to a fact (may trigger automatic promotion or demotion).
    * Body: { eventType, result, evidenceText, source?, sourceIsIndependent?,
    *         adversarialQuality?, overrideReason? }
@@ -153,7 +153,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * POST /api/v1/memory/facts/:id/promote
+   * POST /api/v1/memory/evidence/facts/:id/promote
    * Manually promote a fact one level (requires reason; INVARIANT requires adversarial gate).
    * Body: { reason, evidenceId?, promotedBy? }
    */
@@ -172,7 +172,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * POST /api/v1/memory/facts/:id/demote
+   * POST /api/v1/memory/evidence/facts/:id/demote
    * Demote a fact (immediate; any exception should trigger this).
    * Body: { toLevel, reason, evidenceId?, demotedBy? }
    */
@@ -195,7 +195,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   // ─── Debates ────────────────────────────────────────────────────────────
 
   /**
-   * GET /api/v1/memory/debates
+   * GET /api/v1/memory/evidence/debates
    * Query debates by problem class.
    * Query params: problemClass, limit
    */
@@ -211,7 +211,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * POST /api/v1/memory/debates
+   * POST /api/v1/memory/evidence/debates
    * Record a full debate with positions, arguments, consensus, and residue.
    * Body: { subject, relatedFactId?, initialPositions, arguments, whatMovedMinds?,
    *         consensus?, consensusMethod?, consensusReachedBy?, lessonsLearned?,
@@ -233,7 +233,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   // ─── Lessons ────────────────────────────────────────────────────────────
 
   /**
-   * GET /api/v1/memory/lessons
+   * GET /api/v1/memory/evidence/lessons
    * Get lessons by domain (sorted by retrieval frequency × impact).
    * Query params: domain (required), limit
    */
@@ -251,7 +251,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * GET /api/v1/memory/lessons/roi
+   * GET /api/v1/memory/evidence/lessons/roi
    * Lesson ROI report — cost to write vs retrieval value. Surfaces low-ROI categories.
    */
   router.get('/lessons/roi', requireKey, async (req, res) => {
@@ -265,7 +265,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * POST /api/v1/memory/lessons
+   * POST /api/v1/memory/evidence/lessons
    * Record a lesson learned.
    * Body: { domain, problem, solution, impactClass?, howNovel?, surfacedBy?, tags?, writeCostTokens? }
    */
@@ -287,7 +287,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   // ─── Agent performance ──────────────────────────────────────────────────
 
   /**
-   * GET /api/v1/memory/agents/:agentId/accuracy
+   * GET /api/v1/memory/evidence/agents/:agentId/accuracy
    * Agent accuracy by task type (includes "adam" as an agent).
    * Query params: taskType (optional)
    */
@@ -303,7 +303,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * POST /api/v1/memory/agents/performance
+   * POST /api/v1/memory/evidence/agents/performance
    * Record an agent performance event (correct / incorrect / partial / overridden).
    * Body: { agentId, taskType, prediction?, outcome, confidenceAtTime?, notes? }
    */
@@ -323,7 +323,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * GET /api/v1/memory/agents/violations
+   * GET /api/v1/memory/evidence/agents/violations
    * List protocol violations by agent/task.
    * Query params: agentId?, taskType?, limit?
    */
@@ -343,7 +343,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * POST /api/v1/memory/agents/violations
+   * POST /api/v1/memory/evidence/agents/violations
    * Record a protocol violation and optionally auto-demote authority.
    * Body: { agentId, taskType, violationType, severity?, details?, evidenceText?,
    *         detectedBy?, sourceRoute?, relatedFactId?, relatedDebateId?, asked?, delivered?,
@@ -365,7 +365,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * GET /api/v1/memory/agents/authority
+   * GET /api/v1/memory/evidence/agents/authority
    * List active authority rows.
    * Query params: agentId?, taskType?, limit?
    */
@@ -385,7 +385,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * GET /api/v1/memory/agents/:agentId/authority
+   * GET /api/v1/memory/evidence/agents/:agentId/authority
    * Current authority for a given task type.
    * Query params: taskType (required)
    */
@@ -403,7 +403,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * POST /api/v1/memory/agents/authority
+   * POST /api/v1/memory/evidence/agents/authority
    * Explicitly set authority for an agent on a task type.
    * Body: { agentId, taskType, authorityStatus, reason, notes?, metadata?, setBy?, expiresAt? }
    */
@@ -429,7 +429,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   });
 
   /**
-   * GET /api/v1/memory/routing/recommendation
+   * GET /api/v1/memory/evidence/routing/recommendation
    * Recommend the best currently-authorized model for a task type.
    * Query params: taskType (required), preferredModel?, candidates? (csv)
    */
@@ -457,7 +457,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   // ─── Intent drift ───────────────────────────────────────────────────────
 
   /**
-   * POST /api/v1/memory/intent-drift
+   * POST /api/v1/memory/evidence/intent-drift
    * Log a §2.11b intent drift event (asked vs shipped).
    * Body: { asked, delivered, driftReason?, agentId?, relatedFactId? }
    */
@@ -479,7 +479,7 @@ export function createMemoryIntelligenceRoutes(deps) {
   // ─── Maintenance ────────────────────────────────────────────────────────
 
   /**
-   * GET /api/v1/memory/stale-hypotheses
+   * GET /api/v1/memory/evidence/stale-hypotheses
    * All HYPOTHESIS facts past their review_by date.
    */
   router.get('/stale-hypotheses', requireKey, async (req, res) => {

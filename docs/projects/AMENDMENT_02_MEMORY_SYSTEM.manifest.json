@@ -9,7 +9,7 @@
   "phase": "alpha",
   "next_task": "Deploy phase7-railway-probe to Railway and run live mode of scripts/memory-pressure-test.mjs against Neon to confirm static 20/20 PASS holds in runtime.",
   "stability_class": "alpha-pass-static",
-  "current_focus": "Memory Capsule Alpha complete. Static pressure test now 20/20 PASS after closing MC-BENCH-02 (reality anchor halt) and MC-BENCH-04 (audit_completion_receipt gate). Next: live Railway/Neon pressure test.",
+  "current_focus": "Memory Capsule Alpha remains the canonical governed product-memory layer. Route ownership is now isolated under /api/v1/memory/capsules to avoid overlap with Amendment 39 evidence memory.",
   "owned_files": [
     "routes/memory-capsule-routes.js",
     "services/memory-signal-intake.js",
@@ -53,19 +53,19 @@
   "required_routes": [
     {
       "method": "POST",
-      "path": "/api/v1/memory/signal",
+      "path": "/api/v1/memory/capsules/signal",
       "expected_status": 200,
       "description": "Signal intake — creates fact + capsule"
     },
     {
       "method": "POST",
-      "path": "/api/v1/memory/retrieve",
+      "path": "/api/v1/memory/capsules/retrieve",
       "expected_status": 400,
       "description": "Retrieve capsules — 400 expected without required fields"
     },
     {
       "method": "GET",
-      "path": "/api/v1/memory/health",
+      "path": "/api/v1/memory/capsules/health",
       "expected_status": 200,
       "description": "Memory health report"
     }

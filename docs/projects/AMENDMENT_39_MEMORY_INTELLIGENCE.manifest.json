@@ -25,8 +25,8 @@
   ],
   "required_env": [],
   "required_routes": [
-    { "method": "GET", "path": "/api/v1/memory/health" },
-    { "method": "GET", "path": "/api/v1/memory/facts" },
-    { "method": "POST", "path": "/api/v1/memory/facts" }
+    { "method": "GET", "path": "/api/v1/memory/evidence/health" },
+    { "method": "GET", "path": "/api/v1/memory/evidence/facts" },
+    { "method": "POST", "path": "/api/v1/memory/evidence/facts" }
   ]
 }

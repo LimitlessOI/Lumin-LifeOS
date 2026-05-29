@@ -74,6 +74,7 @@ import { createIntegrityEngine as createWKIntegrityEngine } from "../services/in
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createMemoryIntelligenceRoutes } from "../routes/memory-intelligence-routes.js";
 import memoryCapsuleRoutes from "../routes/memory-capsule-routes.js";
+import { createMemorySelfRepairRoutes } from "../routes/memory-self-repair-routes.js";
 import createMemoryStatusRoutes from "../routes/memory-status-routes.js";
 
 export async function registerRuntimeRoutes(app, deps) {
@@ -371,13 +372,19 @@ export async function registerRuntimeRoutes(app, deps) {
 
   createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
 
-  // Memory Capsule Alpha — signal intake, capsule CRUD, retrieval, health (AMENDMENT_02)
-  app.use('/api/v1/memory', memoryCapsuleRoutes);
-  logger.info('✅ [MEMORY-CAPSULE] Routes mounted at /api/v1/memory/{signal,retrieve,health,capsule/:id,correct}');
+  // Memory Capsule Alpha — governed product memory (AMENDMENT_02)
+  app.use('/api/v1/memory/capsules', memoryCapsuleRoutes);
+  logger.info('✅ [MEMORY-CAPSULE] Routes mounted at /api/v1/memory/capsules/{signal,retrieve,health,capsule/:id,correct}');
 
-  // Memory Intelligence — epistemic facts, debates, lessons, agent performance, intent drift (AMENDMENT_39)
+  // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
+  app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
+  logger.info('✅ [MEMORY-INTELLIGENCE] Routes mounted at /api/v1/memory/evidence/{facts,debates,lessons,agents,authority,violations,routing,intent-drift,health}');
   app.use('/api/v1/memory', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
-  logger.info('✅ [MEMORY-INTELLIGENCE] Routes mounted at /api/v1/memory/{facts,debates,lessons,agents,authority,violations,routing,intent-drift,health}');
+  logger.info('✅ [MEMORY-INTELLIGENCE-COMPAT] Legacy evidence alias mounted at /api/v1/memory/* while capsule routes stay isolated under /capsules');
+
+  // Self-repair memory — read-only diagnostics and latest lessons
+  app.use('/api/v1/memory/self-repair', createMemorySelfRepairRoutes({ pool, requireKey }));
+  logger.info('✅ [MEMORY-SELF-REPAIR] Routes mounted at /api/v1/memory/self-repair/{health,latest}');
 
   // OIL Security Alpha — Gemini live proof + security receipts (AMENDMENT_19)
   app.use(createGeminiProofRoutes({ callCouncilMember, requireKey }));

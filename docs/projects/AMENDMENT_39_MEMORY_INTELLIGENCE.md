@@ -124,7 +124,7 @@ All HYPOTHESIS facts past their `review_by` date.
 
 ---
 
-## API Routes (mounted at `/api/v1/memory`)
+## API Routes (mounted at `/api/v1/memory/evidence`)
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -199,7 +199,7 @@ This turns long-horizon regret into present-tense monitoring.
 - ✅ All 7 tables + 2 views
 - ✅ Core service: record, query, promote, demote, evidence
 - ✅ Full route surface (16+ endpoints)
-- ✅ Mounted in startup/register-runtime-routes.js
+- ✅ Mounted in startup/register-runtime-routes.js at `/api/v1/memory/evidence`
 - ✅ Syntax verified
 - ✅ `scripts/seed-epistemic-facts.mjs` — seeds from SSOT receipts + ENV_REGISTRY + architectural invariants (`npm run memory:seed`)
 - ✅ `scripts/record-ci-evidence.mjs` — records `node --check` outcomes as `fact_evidence` rows; auto-promotes to TESTED after 3 passes (`npm run memory:ci-evidence`)

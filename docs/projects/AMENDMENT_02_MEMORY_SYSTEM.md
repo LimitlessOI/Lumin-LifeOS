@@ -1,14 +1,26 @@
-# AMENDMENT 02 — Memory System
-**Status:** LIVE
+# AMENDMENT 02 — Memory Capsule System
+**Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-21 — ALPHA_PASS LIVE. 20/20 MC-BENCH signals pass against Railway/Neon. Runtime SHA 4ae51f49. OIL verdict: CERTIFIED.
+**Last Updated:** 2026-05-28 — memory authority cleanup: capsule memory isolated from Amendment 39 evidence memory and legacy CRUD memory.
 
 ---
 
 ## WHAT THIS IS
-The memory system stores conversation context, user preferences, and system knowledge across sessions. It enables the AI council to remember what was discussed, what decisions were made, and what the user cares about — turning a stateless API into a persistent intelligent assistant.
+This amendment now governs the **capsule-memory layer only**:
 
-**Mission:** Give the system persistent memory so it improves over time and never asks the same question twice.
+- signal intake
+- governed retrieval
+- capsule correction
+- provenance
+- contradiction quarantine
+
+It is not the umbrella SSOT for all memory anymore.
+
+**Memory authority split:**
+- Capsule memory: this amendment
+- Evidence memory: `AMENDMENT_39_MEMORY_INTELLIGENCE`
+- Self-repair memory: `services/self-repair-memory.js`
+- Legacy CRUD/session memory: `routes/memory-routes.js` + `core/memory-system.js`
 
 ---
 
@@ -59,43 +71,32 @@ The memory system stores conversation context, user preferences, and system know
 | `memory_use_receipts` | Cite-or-ignore enforcement; 6 valid use_types |
 | `memory_import_receipts` | Audit trail for legacy row imports |
 
-### Key Endpoints (Alpha)
-- `POST /api/v1/memory/signal` — intake a new signal; creates fact + capsule
-- `POST /api/v1/memory/retrieve` — lane-governed retrieval with provenance
-- `GET /api/v1/memory/health` — stale/quarantined/contested/citation stats
-- `GET /api/v1/memory/capsule/:id` — read a single capsule by capsule_id
-- `POST /api/v1/memory/correct` — update trust level (founder-initiated)
+### Key Endpoints (Canonical Capsule Surface)
+- `POST /api/v1/memory/capsules/signal` — intake a new signal; creates fact + capsule
+- `POST /api/v1/memory/capsules/retrieve` — lane-governed retrieval with provenance
+- `GET /api/v1/memory/capsules/health` — stale/quarantined/contested/citation stats
+- `GET /api/v1/memory/capsules/capsule/:id` — read a single capsule by capsule_id
+- `POST /api/v1/memory/capsules/correct` — update trust level (founder-initiated)
 
-### DB Tables
-| Table | Purpose |
-|-------|---------|
-| `conversation_memory` | Stores AI conversation context (orchestrator msg + AI response) |
-| `knowledge_base_files` | Uploaded files for domain context |
-| `system_source_of_truth` | DB-backed SSOT documents |
-
-### Key Endpoints (Current)
-- `POST /api/v1/memory/store` — save a memory
-- `GET /api/v1/memory/search` — semantic search memories
-- `GET /api/v1/conversation/history` — get conversation history
-- `POST /api/v1/knowledge/upload` — upload a knowledge file
+### Archived Legacy Context
+The following older memory surfaces are preserved for historical reference only and are no longer canonical under this amendment:
+- `conversation_memory`
+- `knowledge_base_files`
+- `system_source_of_truth`
+- legacy `/api/memories*` CRUD routes
 
 ---
 
 ## CURRENT STATE
-- **KNOW:** `conversation_memory` table exists and is written to on each AI call
-- **KNOW:** `data/memories.json` is committed to git — this is a security concern if it ever contains sensitive data
-- **KNOW:** `routes/memory-routes.js` exists and is separate from server.js
-- **THINK:** Semantic search may not be properly indexed (no vector embeddings visible, likely full-text only)
-- **DON'T KNOW:** Whether conversation history has a retention/cleanup policy
+- **KNOW:** capsule memory is canonical for governed product-memory flows
+- **KNOW:** Amendment 39 evidence memory is a separate canonical system
+- **KNOW:** legacy CRUD memory still exists and is preserved under legacy naming
+- **DON'T KNOW:** whether legacy CRUD memory still serves an active product need or only migration/history
 
 ---
 
-## REFACTOR PLAN
-1. Move all inline memory functions from server.js → `services/memory-service.js`
-2. Add vector embeddings for semantic search (pgvector on Neon, or Pinecone)
-3. Add memory TTL — stale memories auto-archived after 90 days
-4. Add memory categories: `user_preference`, `decision`, `context`, `fact`
-5. Ensure `data/memories.json` is in `.gitignore` if it may contain PII
+## CLEANUP NOTE
+Legacy CRUD/session memory is no longer described here as canonical architecture. It should remain preserved for migration/history, but it must not influence BuilderOS proof maturity or capsule-memory route ownership.
 
 ---
 
@@ -149,6 +150,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
 | 2026-05-21 | Memory Capsule Alpha OIL Governance Pass: 17 services/route files written (BT-001–BT-021) + 11 blockers repaired. Files: memory-signal-intake, memory-candidate, memory-capsule, memory-provenance, memory-trust-bridge, memory-oil-bridge, memory-retrieval, memory-links, memory-contradiction, memory-zombie, memory-explanation, memory-relationship, memory-legacy-bridge, memory-receipts, memory-working, memory-health, memory-institutional, routes/memory-capsule-routes. 2 DB migrations (20260521_memory_capsule_core + receipts). | Alpha build + governance pass for MC-F01–F21 per BUILD_QUEUE.json. GAP-FILL: council output had logic inversions, stray fences, truncated files. | `node --check` PASS all 17 files |
+| 2026-05-28 | Memory authority cleanup: Amendment 02 narrowed to capsule-memory scope only; canonical capsule routes moved to `/api/v1/memory/capsules/*`; legacy CRUD/session-memory narrative archived from canonical sections. | Remove overlap with Amendment 39 evidence memory and legacy CRUD memory while preserving historical receipts. | ✅ |
 | 2026-05-21 | AMENDMENT_02_MEMORY_SYSTEM.md: Files table and DB tables updated to reflect Memory Capsule Alpha surface. | SSOT atomic update required by pre-commit hook. | ✅ |
 | 2026-05-21 | Fixed import-path bugs in 3 files: (1) memory-oil-bridge.js — removed dead `Pool`+`LEVEL` imports, fixed `WHERE id` → `WHERE capsule_id`, fixed enforceRetrievalCeiling to use indexOf comparison, fixed TRUSTED_FOR_CONTEXT ceiling from `decision_support` to `action_authority`; (2) memory-trust-bridge.js — removed dead pool import (db/pool.js DNE), fixed LEVEL import path to `./memory-intelligence-service.js`, fixed TRUST_MAP ceiling values (was using undefined LEVEL.BLOCKED etc., now string permission values), fixed WHERE clauses, fixed factLevel.rows[0].level, fixed INSERT to memory_use_receipts (was capsule_receipts), CANONICAL guard now string-checks; (3) memory-explanation.js — removed dead `LEVEL` import with wrong `../` path. | These broken imports prevented Step 5 pressure test from loading. | `node --check` PASS all 3; pressure test 18/20 PASS 2 PARTIAL |
 | 2026-05-21 | MC-BENCH Pressure Test (Step 5): 18/20 PASS, 2 PARTIAL, 0 FAIL. VERDICT: ALPHA_PASS_WITH_GAPS. Gaps: MC-BENCH-02 (REALITY_ANCHOR_MEMORY_MISMATCH not implemented — MC-F22 gap) + MC-BENCH-04 (intermediate promotion blocking RECEIPT_BACKED→TRUSTED_FOR_CONTEXT needs explicit receipt check in updateCapsuleTrust). | Step 5 of Memory Capsule Alpha 5-step pipeline. | `node scripts/memory-pressure-test.mjs --dry-run` exit 0 |

@@ -9,7 +9,7 @@
   "phase": "core-infrastructure",
   "next_task": "Wire estimation accuracy, readiness queue, and deeper governance/env-awareness drill-down into the Command Center overlay",
   "stability_class": "needs-review",
-  "current_focus": "Governance data is seeded and live; SEC-F01 receipt-spine hardening is wired through runtime composition and Command Center aggregate routes; next step is surfacing estimation accuracy, timing truth, drill-downs, and runtime-verifiable governance/security views without fake state",
+  "current_focus": "Governance data is seeded and live; runtime composition now isolates capsule memory, BuilderOS evidence memory, self-repair memory, and legacy memory into explicit namespaces without shared route ownership",
   "owned_files": [
     "routes/project-governance-routes.js",
     "startup/register-runtime-routes.js",

@@ -1,12 +1,10 @@
 /**
- * MEMORY SYSTEM - Anti-Hallucination Edition
- * 
- * Rules:
- * 1. All memories must have a source (conversation_id, timestamp, user confirmation)
- * 2. Memories are validated before storage
- * 3. Memories have confidence scores
- * 4. Memories can be marked as "user confirmed" vs "inferred"
- * 5. Retrieval includes confidence and source
+ * MEMORY SYSTEM - LEGACY CRUD MEMORY STORE
+ *
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
+ * @legacy STATUS: LEGACY_KEEP — flat-file memory store preserved for historical
+ * compatibility and migration reference only. Not canonical for BuilderOS alpha
+ * proof, capsule governance, or Amendment 39 evidence memory.
  */
 
 import fs from 'fs/promises';
