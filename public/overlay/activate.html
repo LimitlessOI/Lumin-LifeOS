@@ -197,12 +197,13 @@
 
     // Check if already activated
     const savedKey =
+      localStorage.getItem('cc_key') ||
       sessionStorage.getItem('lifeos_cmd_key') ||
       localStorage.getItem('lifeos_cmd_key') ||
       localStorage.getItem('COMMAND_CENTER_KEY') ||
       localStorage.getItem('LIFEOS_KEY');
     if (savedKey) {
-      window.location.href = '/command-center';
+      window.location.href = '/lifeos-command-center';
       return;
     }
 
@@ -249,6 +250,7 @@
         // can use the same credential without another prompt.
         sessionStorage.setItem('lifeos_cmd_key', key);
         localStorage.setItem('lifeos_cmd_key', key);
+        localStorage.setItem('cc_key', key);
         localStorage.setItem('COMMAND_CENTER_KEY', key);
         localStorage.setItem('LIFEOS_KEY', key);
 
@@ -256,7 +258,7 @@
         showSuccess('Activation successful! Redirecting to Command Center...');
         
         setTimeout(() => {
-          window.location.href = '/command-center';
+          window.location.href = '/lifeos-command-center';
         }, 1000);
 
       } catch (error) {

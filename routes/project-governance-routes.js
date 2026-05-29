@@ -61,9 +61,44 @@ export function createProjectGovernanceRoutes({ requireKey, pool }) {
     }
   });
 
+  // ── GET /api/v1/projects/readiness/queue ─────────────────────────────────
+  // Static path before /projects/:id — avoids "readiness" slug collision
+  router.get('/projects/readiness/queue', requireKey, async (req, res) => {
+    try {
+      const { rows } = await pool.query(`
+        SELECT
+          p.id, p.slug, p.name, p.priority, p.lifecycle,
+          p.build_ready, p.readiness_checked_at, p.adaptability_score,
+          p.readiness_notes, p.amendment_path,
+          COUNT(CASE WHEN ps.status = 'pending' AND ps.stability_class = 'safe' THEN 1 END) AS safe_pending,
+          COUNT(CASE WHEN ps.status = 'pending' AND ps.stability_class = 'needs-review' THEN 1 END) AS review_pending,
+          COUNT(CASE WHEN ps.status = 'pending' AND ps.stability_class = 'high-risk' THEN 1 END) AS highrisk_pending
+        FROM projects p
+        LEFT JOIN project_segments ps ON ps.project_id = p.id
+        WHERE p.status = 'active'
+        GROUP BY p.id
+        ORDER BY p.build_ready DESC,
+          CASE p.priority WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END
+      `);
+
+      const ready    = rows.filter(r => r.build_ready);
+      const notReady = rows.filter(r => !r.build_ready);
+
+      res.json({ ok: true, ready, notReady, checklist_doc: 'docs/projects/AMENDMENT_READINESS_CHECKLIST.md' });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // ── GET /api/v1/projects/:id ──────────────────────────────────────────────
   // Full project detail including segments, next task, verification state
   router.get('/projects/:id', requireKey, async (req, res) => {
+    if (req.params.id === 'readiness') {
+      return res.status(404).json({
+        ok: false,
+        error: 'Use GET /api/v1/projects/readiness/queue',
+      });
+    }
     try {
       const { rows: [project] } = await pool.query(`
         SELECT * FROM projects WHERE slug = $1 OR id::text = $1
@@ -431,35 +466,6 @@ export function createProjectGovernanceRoutes({ requireKey, pool }) {
 
       await pool.query(`UPDATE projects SET build_ready = FALSE WHERE id = $1`, [project.id]);
       res.json({ ok: true, message: `${project.slug} removed from build queue` });
-    } catch (err) {
-      res.status(500).json({ ok: false, error: err.message });
-    }
-  });
-
-  // ── GET /api/v1/projects/readiness/queue ─────────────────────────────────
-  // What's build_ready vs not — the "is it ready to build?" dashboard view
-  router.get('/projects/readiness/queue', requireKey, async (req, res) => {
-    try {
-      const { rows } = await pool.query(`
-        SELECT
-          p.id, p.slug, p.name, p.priority, p.lifecycle,
-          p.build_ready, p.readiness_checked_at, p.adaptability_score,
-          p.readiness_notes, p.amendment_path,
-          COUNT(CASE WHEN ps.status = 'pending' AND ps.stability_class = 'safe' THEN 1 END) AS safe_pending,
-          COUNT(CASE WHEN ps.status = 'pending' AND ps.stability_class = 'needs-review' THEN 1 END) AS review_pending,
-          COUNT(CASE WHEN ps.status = 'pending' AND ps.stability_class = 'high-risk' THEN 1 END) AS highrisk_pending
-        FROM projects p
-        LEFT JOIN project_segments ps ON ps.project_id = p.id
-        WHERE p.status = 'active'
-        GROUP BY p.id
-        ORDER BY p.build_ready DESC,
-          CASE p.priority WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END
-      `);
-
-      const ready    = rows.filter(r => r.build_ready);
-      const notReady = rows.filter(r => !r.build_ready);
-
-      res.json({ ok: true, ready, notReady, checklist_doc: 'docs/projects/AMENDMENT_READINESS_CHECKLIST.md' });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

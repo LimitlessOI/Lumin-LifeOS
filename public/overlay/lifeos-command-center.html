@@ -406,16 +406,38 @@
 // ─────────────────────────────────────────────
 // Core state + auth
 // ─────────────────────────────────────────────
-let KEY = localStorage.getItem('cc_key') || '';
+function resolveStoredKey() {
+  return (
+    localStorage.getItem('cc_key') ||
+    localStorage.getItem('lifeos_cmd_key') ||
+    localStorage.getItem('COMMAND_CENTER_KEY') ||
+    localStorage.getItem('LIFEOS_KEY') ||
+    sessionStorage.getItem('lifeos_cmd_key') ||
+    ''
+  );
+}
+
+function persistKey(value) {
+  const key = String(value || '').trim();
+  if (!key) return;
+  localStorage.setItem('cc_key', key);
+  localStorage.setItem('lifeos_cmd_key', key);
+  localStorage.setItem('COMMAND_CENTER_KEY', key);
+  localStorage.setItem('LIFEOS_KEY', key);
+  sessionStorage.setItem('lifeos_cmd_key', key);
+}
+
+let KEY = resolveStoredKey();
 let autoTimer = null;
 let confirmCallback = null;
 const cache = {};
 
 document.getElementById('key-input').value = KEY;
+if (KEY) persistKey(KEY);
 
 function saveKey() {
   KEY = document.getElementById('key-input').value.trim();
-  localStorage.setItem('cc_key', KEY);
+  persistKey(KEY);
   loadAll();
 }
 
@@ -659,31 +681,35 @@ async function loadBuilder() {
     safeFetch('/api/v1/builder/status'),
   ]);
 
-  const mode = rb.data?.builder?.mode || rb.data?.mode || 'UNKNOWN';
   const sha = rb.data?.codegen?.deploy_commit_sha || rb.data?.sha || 'N/A';
   const ghOk = rb.data?.builder?.github_token === true || rb.data?.github_token === true;
-  const paused = rs.data?.paused ?? null;
-  const lastRun = rs.data?.last_run || rs.data?.lastRun;
-  const queueDepth = rs.data?.queue_depth ?? rs.data?.queueDepth ?? 'N/A';
+  const paused = rs.data?.supervisor?.paused ?? rs.data?.paused ?? null;
+  const directedMode = rs.data?.supervisor?.directedMode === true;
+  const pendingSafe = rs.data?.pendingSafeSegments ?? rs.data?.pending_safe_segments ?? 'N/A';
+  const lastRun = rs.data?.lastRun || rs.data?.last_run;
 
-  // Mode pill class
-  const modeClass = mode === 'SUPERVISED' ? 'pill-success' : mode === 'MANUAL' ? 'pill-warning' : mode === 'AUTONOMOUS' ? 'pill-error' : 'pill-muted';
-
-  // Mode from compiled endpoint
   const rm = await safeFetch('/api/v1/lifeos/command-center/mode');
-  const compiledMode = rm.data?.mode || mode;
-  const modeNote = rm.data?.note || '';
+  const compiledMode = rm.data?.mode || 'UNKNOWN';
+  const displayMode = directedMode ? 'DIRECTED' : compiledMode;
+  const modeClass = directedMode ? 'pill-warning'
+    : displayMode === 'SUPERVISED' ? 'pill-success'
+    : displayMode === 'MANUAL' ? 'pill-warning'
+    : displayMode === 'AUTONOMOUS' ? 'pill-error' : 'pill-muted';
+  const modeNote = directedMode
+    ? 'LIFEOS_DIRECTED_MODE=true — legacy supervisor /builder/run disabled. Use governed command-control or /lifeos/builder/build.'
+    : (rm.data?.note || '');
 
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-      <span class="pill ${modeClass}">${compiledMode}</span>
+      <span class="pill ${modeClass}">${displayMode}</span>
       <span style="font-size:10px;color:var(--text-muted)">${ghOk?'&#128279; GitHub: OK':'&#9888; GitHub: MISSING'}</span>
       ${paused === true ? '<span class="pill pill-error">PAUSED</span>' : paused === false ? '<span class="pill pill-success">RUNNING</span>' : ''}
+      ${directedMode ? '<span class="pill pill-muted">SUPERVISOR OFF</span>' : ''}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;font-size:12px">
       <div><span style="color:var(--text-muted)">SHA: </span><span style="font-family:monospace">${(sha+'').slice(0,8)}</span></div>
-      <div><span style="color:var(--text-muted)">Queue: </span>${queueDepth}</div>
-      <div><span style="color:var(--text-muted)">Last build: </span>${lastRun?.status || 'N/A'}</div>
+      <div><span style="color:var(--text-muted)">Safe segments: </span>${pendingSafe}</div>
+      <div><span style="color:var(--text-muted)">Last supervisor run: </span>${lastRun?.finishedAt || lastRun?.status || 'none'}</div>
       <div><span style="color:var(--text-muted)">Mode note: </span>${modeNote ? '&#9432;' : ''}</div>
     </div>
     <div style="font-size:10px;color:var(--text-muted);margin-bottom:10px">${modeNote}</div>
@@ -1207,13 +1233,22 @@ function openQueueDrawer(item) {
 // ─────────────────────────────────────────────
 // Section E: AI Council Hub
 // ─────────────────────────────────────────────
+function domainOptionLabel(d) {
+  if (typeof d === 'string') return d;
+  return d.name || d.path || d.file || 'unknown';
+}
+
 async function loadCouncilDomains() {
   const sel = document.getElementById('council-domain');
   const r = await safeFetch('/api/v1/lifeos/builder/domains');
   if (r.ok && r.data) {
     const domains = Array.isArray(r.data) ? r.data : r.data.domains || [];
     if (domains.length) {
-      sel.innerHTML = domains.map(d => `<option value="${d}">${d}</option>`).join('');
+      sel.innerHTML = domains.map(d => {
+        const label = domainOptionLabel(d);
+        const value = (typeof d === 'string' ? d : (d.name || label)).replace(/"/g, '&quot;');
+        return `<option value="${value}">${label.replace(/</g, '&lt;')}</option>`;
+      }).join('');
       return;
     }
   }
@@ -1359,7 +1394,7 @@ async function loadProjects() {
   const lanes = projects.map(p => ({
     slug: p.slug || p.id,
     name: p.name,
-    pct: p.completion_pct ?? p.pct ?? null,
+    pct: p.pct_complete ?? p.completion_pct ?? p.pct ?? null,
     phase: p.current_focus || p.phase || p.current_phase || '—',
     next: p.next_task || p.next || '—',
     status: p.status,
@@ -1378,15 +1413,22 @@ async function loadProjects() {
 
 async function openProjectDrawer(slug, name) {
   openDrawer(name, '<div style="color:var(--text-muted);font-size:12px">Loading...</div>');
-  const r = await safeFetch(`/api/v1/projects/${slug}`);
-  if (r.ok && r.data) {
-    const p = r.data;
+  const r = await safeFetch(`/api/v1/projects/${encodeURIComponent(slug)}`);
+  if (r.ok && r.data?.ok !== false) {
+    const p = r.data.project || r.data;
+    const segments = r.data.segments || [];
+    const nextSeg = segments.find(s => s.is_next_task) || segments.find(s => s.status === 'pending');
+    const segHtml = segments.length
+      ? segments.slice(0, 8).map(s => `<div class="drawer-kv"><span class="k">${s.status}</span><span class="v">${s.title || '—'}</span></div>`).join('')
+      : '<div class="drawer-kv"><span class="k">Segments</span><span class="v">None loaded</span></div>';
     document.getElementById('drawer-body').innerHTML = `
       <div class="drawer-kv"><span class="k">Status</span><span class="v">${p.status||'—'}</span></div>
-      <div class="drawer-kv"><span class="k">Phase</span><span class="v">${p.phase||p.current_phase||'—'}</span></div>
-      <div class="drawer-kv"><span class="k">Next task</span><span class="v">${p.next_task||'—'}</span></div>
-      <div class="drawer-kv"><span class="k">Blockers</span><span class="v">${p.blockers||'None'}</span></div>
-      <div class="drawer-pre">${JSON.stringify(p,null,2)}</div>
+      <div class="drawer-kv"><span class="k">Focus</span><span class="v">${p.current_focus||p.phase||'—'}</span></div>
+      <div class="drawer-kv"><span class="k">Next task</span><span class="v">${nextSeg?.title || p.next_task || '—'}</span></div>
+      <div class="drawer-kv"><span class="k">Verification</span><span class="v">${p.verification_passed === true ? 'passed' : p.verification_passed === false ? 'failed' : 'not run'}</span></div>
+      <div style="font-size:11px;font-weight:600;margin:10px 0 6px;color:var(--text-muted)">Segments (${segments.length})</div>
+      ${segHtml}
+      <div class="drawer-pre">${JSON.stringify(r.data,null,2)}</div>
     `;
   } else {
     document.getElementById('drawer-body').innerHTML = `<div class="not-wired">NOT_WIRED<span>GET /projects/${slug} returned ${r.status}</span></div>`;
