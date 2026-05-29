@@ -16,8 +16,8 @@
 - `startup/boot-domains.js` — boot check uses `allowInDirectedMode` (default on unless `SELF_REPAIR_OVERRIDE_DIRECTED_MODE=0`)
 
 ### Next agent: start here
-- Verify controlled test v3: deploy iteration 3 → proof STALE → wait 240s → CURRENT without manual refresh
-- TSOS LIVE→PROVEN still needs more hook events
+- Controlled test v3 **PASSED**: deploy `d28fe9dc` → STALE → boot-prevention-hook auto-repair ~90s → CURRENT, ALPHA_READY
+- TSOS LIVE→PROVEN still needs more hook events (currently 5)
 
 ---
 ## [FIX] 2026-05-28 — GAP-FILL: governed loop truncation fix (PBB patch-mode + files[] + token scale)
