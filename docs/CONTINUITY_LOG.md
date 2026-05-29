@@ -2,6 +2,27 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [BUILD] 2026-05-28 — Phases 2/3/4: useful-work contract layer, unguarded_scheduled=0
+
+### Files changed
+- `services/builderos-useful-work-contracts.js` — NEW contract definitions + validators for both autonomous paths (Builder `8df84d78`, gemini_flash, 50 lines)
+- `scripts/builderos-autonomy-guard-audit.mjs` — added CONTRACT_GOVERNED detection and contract_governed summary count
+- `scripts/governed-overnight-autonomy.mjs` — surgical: import + validateOvernightContract call in runBatch()
+- `scripts/lifeos-builder-continuous-queue.mjs` — surgical: import + validateQueueContract call before assertReady()
+
+### State after this session
+- Guard audit: `unguarded_scheduled: 0`, `contract_governed: 2` — both autonomous paths now CONTRACT_GOVERNED
+- Alpha: ALPHA_READY, 94.3%, 0 blockers, proof CURRENT, deploy `f10db5df`
+- BuilderOS skill: gemini_flash succeeded Zone 1 on first attempt; groq_llama blocked from risky code
+- Commits: `8df84d78` (builder), `f10db5df` (GAP-FILL patch + audit)
+
+### Next agent: start here
+- Both autonomous paths guarded. No blockers.
+- Optional next: push tsos_internal_hooks LIVE→PROVEN (more hook events needed from overnight runs)
+- Optional next: improve useful_work_score from 0.375 toward 0.50 for the +5% bonus
+- Structural risks remaining: legacy /command-center surface still mounted alongside canonical cockpit
+
+---
 ## [FIX] Update 2026-05-28 — BuilderOS execution-control hardening
 
 ### Files changed
