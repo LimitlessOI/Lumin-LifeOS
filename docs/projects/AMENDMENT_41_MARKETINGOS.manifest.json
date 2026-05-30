@@ -10,8 +10,8 @@
   "parent_system": "LimitlessOS",
   "first_module": "SocialMediaOS",
   "stability_class": "draft",
-  "current_focus": "A-to-Z blueprint written. Phase 0 (manual revenue) starts immediately. Phase 1 code starts after manifest validated + Adam resolves decisions in §12.",
-  "next_task": "1. Create Stripe payment links ($250 + $997 from Amendment 27). 2. Run first manual session. 3. Resolve §12 decisions. 4. Write db/migrations/[date]_marketing_schema.sql.",
+  "current_focus": "6 BuilderOS decision gaps closed (R2 storage, autosave, user identity, English-only, download-first export, team accounts Phase 2). 5 Adam decisions still open in §12. Phase 0 revenue starts today. Phase 1 code starts after §12 OPEN decisions resolved.",
+  "next_task": "1. Create Stripe payment links ($250 + $997 from Amendment 27). 2. Set up Cloudflare R2 bucket + 6 Railway env vars. 3. Resolve §12 OPEN decisions (pricing lead, first vertical, Amendment 23 relationship). 4. Write db/migrations/[date]_marketing_schema.sql.",
   "owned_files": [
     "routes/marketing-routes.js",
     "services/marketing-coach.js",
@@ -116,10 +116,19 @@
     "DATABASE_URL",
     "COMMAND_CENTER_KEY",
     "STORAGE_PROVIDER",
+    "STORAGE_ENDPOINT",
     "STORAGE_BUCKET",
-    "STORAGE_KEY_ID",
-    "STORAGE_KEY_SECRET"
+    "STORAGE_ACCESS_KEY_ID",
+    "STORAGE_SECRET_ACCESS_KEY",
+    "STORAGE_PUBLIC_URL"
   ],
+  "storage_decision": {
+    "provider": "cloudflare_r2",
+    "decided_at": "2026-05-30",
+    "reason": "Lower egress risk, simpler cost control for audio/video assets, better fit for future media-heavy workflows",
+    "alternative": "AWS S3 — future optional, not Phase 1",
+    "sdk": "@aws-sdk/client-s3 with endpoint override (R2 is S3-compatible)"
+  },
   "assertions": [
     {
       "type": "env_any",

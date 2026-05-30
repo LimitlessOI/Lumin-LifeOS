@@ -258,7 +258,7 @@ Listed in logical build order. Phase assignments are in Section 5.
 - Consent record created before session starts
 - Brand voice profile (basic — manual input for niche/tone)
 
-**Features excluded:** Video, calendar, scheduling, publishing, analytics, phone recording quality checks, likeness features, multi-person, funnel/ad copy.
+**Features excluded:** Video, calendar, scheduling, publishing, analytics, phone recording quality checks, likeness features, multi-person, funnel/ad copy, team/multi-user accounts (Phase 2), email delivery of exports (Phase 2), multi-language transcription/coaching/generation (Phase 2+). **Phase 1 is English-only. Export is download-only.**
 
 **Database tables:** `marketing_sessions`, `marketing_content_extractions`, `marketing_content_pieces`, `marketing_channel_profiles`, `marketing_consent_records` (see Section 6 for exact schema).
 
@@ -277,7 +277,7 @@ Listed in logical build order. Phase assignments are in Section 5.
 - OpenAI Whisper-1 — VERIFIED (`services/word-keeper-transcriber.js` in production)
 - Anthropic (Haiku + Sonnet) — VERIFIED (AI council operational)
 - Google Gemini Flash — VERIFIED (AI council operational)
-- Storage (audio upload) — UNVERIFIED (need R2 or S3 configured)
+- Cloudflare R2 (audio upload/storage) — UNVERIFIED pending Railway env vars; **DECIDED: R2 is the Phase 1 storage provider**. AWS S3 is a future optional alternative, not a Phase 1 decision. Required env vars: `STORAGE_PROVIDER=r2`, `STORAGE_ENDPOINT`, `STORAGE_BUCKET`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`, `STORAGE_PUBLIC_URL`.
 
 **Cost control:** ~$0.46/session total (see Section 6). Route through cheapest capable model at each stage.
 
@@ -288,7 +288,7 @@ Listed in logical build order. Phase assignments are in Section 5.
 - Consent record created before every session
 - Export delivers complete pack
 
-**Readiness gate:** Storage env vars set. Whisper key confirmed. At least 1 beta user.
+**Readiness gate:** Cloudflare R2 bucket created and env vars set (`STORAGE_PROVIDER`, `STORAGE_ENDPOINT`, `STORAGE_BUCKET`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`). Whisper key confirmed. At least 1 beta user. `node scripts/verify-marketing-phase1.mjs` passes all 9 tests.
 
 **Exit criteria:** 5 paying users at $49/session OR 2 users at $199/month. Content quality validated by real founders (not Adam).
 
@@ -803,6 +803,8 @@ with third parties or used beyond generating my content without separate consent
 
 ### Export Format
 
+**Phase 1: Download-only.** The export endpoint returns a file download (Content-Disposition: attachment). No email delivery in Phase 1. Email delivery of content packs moves to Phase 2, using existing email infrastructure only after it is confirmed VERIFIED and safe for this use case.
+
 Plain text file, UTF-8, structured as:
 ```
 CONTENT PACK — [Session Date]
@@ -829,6 +831,7 @@ All pieces approved by you on [approval_date].
 - Extraction returns empty JSON → retry once with temperature 0; if still empty → return 422 with raw transcript for manual review
 - Generation model error → retry with fallback model (Haiku); flag `generated_by_model: 'fallback'` in piece record
 - Audio upload too large → 413 with size limit message (50MB max for Phase 1)
+- Browser close / connection drop mid-coaching → session is NOT lost. Every coach exchange is persisted to `coach_messages_json` immediately after the AI responds. On reload, the session resumes from last saved exchange. No data is held only in memory.
 
 ### Acceptance Tests
 
@@ -836,13 +839,15 @@ All pieces approved by you on [approval_date].
 # scripts/verify-marketing-phase1.mjs
 # 1. Create consent record → assert consent_record_id returned
 # 2. Create session without consent → assert 400
-# 3. Send coach message → assert response contains text
-# 4. Upload 30-second audio → assert transcript_text populated
-# 5. Run extraction → assert ≥3 extractions created
-# 6. Run generation → assert ≥5 pieces created in draft status
-# 7. Approve piece → assert status changes to 'approved'
-# 8. Export → assert file download with ≥1 piece
-# 9. Attempt to revoke consent → assert revoked_at set, session flagged
+# 3. Send coach message → assert response contains text AND exchange saved to DB immediately
+# 4. Simulate disconnect (send message, check DB before response confirmed) → assert message persisted
+# 5. Upload 30-second audio → assert transcript_text populated
+# 6. Run extraction → assert ≥3 extractions created
+# 7. Run generation → assert ≥5 pieces created in draft status
+# 8. Approve piece → assert status changes to 'approved'
+# 9. Export → assert Content-Disposition: attachment header (file download, not email)
+# 10. Attempt to revoke consent → assert revoked_at set, session flagged
+# 11. Attempt session with non-English text → assert extraction handles gracefully (English-only warning)
 ```
 
 ---
@@ -1024,7 +1029,11 @@ In every service file that calls an external API, the first comment block must i
 // External dependencies:
 // - OpenAI Whisper-1: VERIFIED (production use in word-keeper-transcriber.js)
 // - Claude Haiku: VERIFIED (AI council operational)
-// - Storage provider: UNVERIFIED — set STORAGE_PROVIDER, STORAGE_BUCKET, STORAGE_KEY_ID, STORAGE_KEY_SECRET in Railway
+// - Cloudflare R2 (storage): UNVERIFIED pending Railway env vars — DECIDED provider.
+//   Required: STORAGE_PROVIDER=r2, STORAGE_ENDPOINT, STORAGE_BUCKET,
+//             STORAGE_ACCESS_KEY_ID, STORAGE_SECRET_ACCESS_KEY, STORAGE_PUBLIC_URL
+//   SDK: @aws-sdk/client-s3 with endpoint override (R2 is S3-compatible)
+//   AWS S3: future optional alternative — not a Phase 1 decision
 ```
 
 **Rule 9 — Every phase requires proof receipts before the next phase begins.**
@@ -1035,6 +1044,15 @@ The Change Receipts table in this amendment must have an entry for every Phase 1
 
 **Rule 11 — `@ssot` tag required on every file.**
 Every new `routes/marketing-*.js` and `services/marketing-*.js` file must include `@ssot docs/projects/AMENDMENT_41_MARKETINGOS.md` in its JSDoc header. Commits without this tag are blocked by pre-commit hook.
+
+**Rule 12 — Every coaching exchange must be persisted immediately (autosave).**
+The `POST /api/v1/marketing/sessions/:id/coach` handler must write the user message and AI response to `coach_messages_json` (or its future normalized messages table) synchronously before returning the HTTP response. No exchange may be held only in server memory. Sessions must support resume-on-refresh: a GET on the session returns all prior exchanges. BuilderOS must not implement a "save on session completion only" pattern — that pattern is explicitly forbidden.
+
+**Rule 13 — Phase 1 user identity uses API-key flow with DB fields for future auth migration.**
+Phase 1 does not require full user auth (no registration, no sessions, no JWT). Use the existing `requireKey` middleware. The `owner_id` and `business_id` fields in every Phase 1 table must be populated at session creation using a `business_profile_id` resolved from the request context (API key + explicit parameter). These UUID fields must not be hard-coded or omitted — they are the migration path to full auth in Phase 2+. BuilderOS must not use a string key or email address as the primary owner identifier in any table.
+
+**Rule 14 — Phase 1 is English-only. No silent multi-language behavior.**
+All coaching prompts, extraction prompts, and generation prompts are written and tested for English. If a non-English transcript is detected (Whisper returns a detected language other than `en`), the system must return a clear user-facing notice: `{ warning: "english_only", message: "Phase 1 supports English content only. Multi-language support is planned for Phase 2." }` — it must not silently attempt generation in another language or silently fail. Multi-language transcription, coaching, and generation are Phase 2 scope.
 
 ---
 
@@ -1080,7 +1098,7 @@ Complete in this exact order. Do not start a task until all its dependencies are
 | 12 | `public/overlay/marketing-session.html` | Session UI — coaching + audio | Task 9 | Manual: create session, have conversation | Consent flow → coaching → transcript visible |
 | 13 | `public/overlay/marketing-content.html` | Content review and approval UI | Task 12 | Manual: approve ≥3 pieces | Status changes to approved; export available |
 | 14 | `public/overlay/marketing-export.html` | Download content pack | Task 13 | Manual: download and verify format | File downloads with all approved pieces |
-| 15 | Railway env vars set | Storage, model keys | Tasks 6–14 | `npm run builder:preflight` → all STORAGE_* vars shown | `STORAGE_PROVIDER`, `STORAGE_BUCKET`, `STORAGE_KEY_ID`, `STORAGE_KEY_SECRET` in Railway |
+| 15 | Railway env vars set | Cloudflare R2 storage config + model keys | Tasks 6–14 | `npm run builder:preflight` → all STORAGE_* vars shown | `STORAGE_PROVIDER=r2`, `STORAGE_ENDPOINT`, `STORAGE_BUCKET`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`, `STORAGE_PUBLIC_URL` set in Railway. AWS S3 is NOT required for Phase 1. |
 | 16 | Phase 0: Run first manual session | Validate product before beta | Task 4 | Session transcript + content pack delivered | 1 paying customer receives deliverable |
 | 17 | Phase 1 beta: 3 users | Validate platform | Tasks 10–15 | 3 users complete a session end-to-end | 3 complete sessions in production DB |
 | 18 | Upgrade `docs/roadmap/social-media.md` | Remove DEFERRED status | Task 1 | `grep -c DEFERRED docs/roadmap/social-media.md` returns 0 | File reflects ACTIVE status with Amendment 41 reference |
@@ -1091,30 +1109,49 @@ Complete in this exact order. Do not start a task until all its dependencies are
 
 These are genuine founder decisions. BuilderOS cannot answer them from the blueprint.
 
+### RESOLVED — Closed by Adam 2026-05-30
+
+**✅ Storage provider → Cloudflare R2.**
+Phase 1 uses R2. AWS S3 is a future optional alternative. Required env vars: `STORAGE_PROVIDER=r2`, `STORAGE_ENDPOINT`, `STORAGE_BUCKET`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`, `STORAGE_PUBLIC_URL`.
+
+**✅ Mid-session autosave → required, every exchange.**
+Every coaching exchange persisted immediately. Session must support resume-on-refresh. No save-on-completion-only patterns. Rule 12 added to §9.
+
+**✅ Phase 1 user identity → API-key flow, DB fields future-ready.**
+Phase 1 uses `requireKey` middleware. `owner_id` and `business_id` populated from `business_profile_id` in request context. UUID fields retained for future auth migration. No hard-coded keys as primary identifiers. Rule 13 added to §9.
+
+**✅ Language scope → English-only in Phase 1.**
+Multi-language transcription, coaching, and generation are Phase 2+. Non-English detection returns a clear user-facing warning. Rule 14 added to §9.
+
+**✅ Export delivery → download-first in Phase 1.**
+`GET /api/v1/marketing/sessions/:id/export` returns `Content-Disposition: attachment`. No email delivery in Phase 1. Email delivery moves to Phase 2, using only confirmed VERIFIED email infrastructure.
+
+**✅ Team accounts → Phase 1 owner-only.**
+Phase 2 introduces team accounts and multi-collaborator support. `business_id` field is in Phase 1 schema for future readiness but team membership logic is deferred.
+
+---
+
+### OPEN — Still requires Adam decision before code starts
+
 **1. Amendment 23 relationship: sibling or child?**
 The audit found Amendment 23 (Creator Media OS) is 0% built and its owned files don't exist. Do you want to:
-- (A) Keep Amendment 23 as a separate sibling under LimitlessOS for avatar/likeness content
+- (A) Keep Amendment 23 as a separate sibling under LimitlessOS for avatar/likeness content — **recommended**
 - (B) Absorb Amendment 23 into Amendment 41 as a later phase (Phase X — Likeness Studio)
 - (C) Deprecate Amendment 23 and rebuild its scope inside Amendment 41
 
-Recommendation: Keep as sibling (A). Different buyer, different consent model.
+Recommendation: Keep as sibling (A). Different buyer, different consent model, different technical stack.
 
 **2. Pricing lead: $49/session or $199/month?**
-$49/session is easier to buy but captures less recurring value. $199/month creates commitment and recurring revenue. Which do we lead with on the first landing page?
+$49/session is easier to buy. $199/month creates recurring commitment. Which do we lead with on the first landing page? This determines the Phase 1 funnel copy and Stripe product setup.
 
 **3. First vertical to target: real estate agents, wellness coaches, or SaaS founders?**
-Each needs different coaching prompts, different content formats, and different platform emphasis. Picking one vertical first lets us build a sharper product and a better case study.
+Each needs different coaching prompts, different content format emphasis (video-heavy vs. LinkedIn-heavy vs. Twitter-heavy), and different case study positioning. Picking one vertical first enables sharper coaching prompts and a better first case study.
 
-**4. Team/multi-user accounts in Phase 1?**
-Phase 1 spec assumes single-owner sessions. If a marketing agency or team wants to use MarketingOS for multiple client brands, we need a `business_id` and team membership model. Build it in Phase 1 or defer to Phase 2?
+**4. Phase 5 publishing: Buffer API or Publer API?**
+Buffer is more established; Publer is cheaper and newer. Both require a paid plan. Adam must evaluate and decide before Phase 5 development begins. This does not block Phase 1–4.
 
-Recommendation: Defer to Phase 2. Phase 1 is owner-only. Simpler schema, faster launch.
-
-**5. Phase 5 publishing: Buffer API or Publer API?**
-Buffer is more established; Publer is cheaper and newer. Adam needs to evaluate both and decide before Phase 5 development begins. Both require a paid plan for API access.
-
-**6. Phase 0 intake: Google Form or Typeform?**
-Either works. Google Form is free. Typeform is prettier. Pick one in the next 24 hours so Phase 0 can launch.
+**5. Phase 0 intake: Google Form or Typeform?**
+Either works. Google Form is free. Typeform is prettier. Must pick before Phase 0 launches. Recommended: Google Form — free, instant, no extra account needed.
 
 ---
 
@@ -1130,24 +1167,33 @@ Either works. Google Form is free. Typeform is prettier. Pick one in the next 24
 - AI council (Haiku, Sonnet, Gemini Flash) — VERIFIED operational
 
 ### What Is Blocked
-- Asset storage (R2/S3) — UNVERIFIED: `STORAGE_PROVIDER`, `STORAGE_BUCKET`, `STORAGE_KEY_ID`, `STORAGE_KEY_SECRET` not confirmed in Railway
-- FFmpeg on Railway — UNVERIFIED: blocks Phase 3 video export
-- Buffer/Publer API — UNVERIFIED: blocks Phase 5 publishing
-- YouTube OAuth app — UNVERIFIED: blocks Phase 6
-- Phase 1 code — BLOCKED until Adam resolves decisions 2, 3, 4 from Section 12
-- Phase 0 revenue — BLOCKED only by Stripe payment links and intake form (30-minute setup)
+- Cloudflare R2 env vars — DECIDED (R2) but UNVERIFIED pending Railway setup: `STORAGE_PROVIDER=r2`, `STORAGE_ENDPOINT`, `STORAGE_BUCKET`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`, `STORAGE_PUBLIC_URL` not yet set
+- FFmpeg on Railway — UNVERIFIED: blocks Phase 3 video export (does not block Phase 1)
+- Buffer/Publer API — UNVERIFIED: blocks Phase 5 publishing (does not block Phase 1)
+- YouTube OAuth app — UNVERIFIED: blocks Phase 6 (does not block Phase 1)
+- Phase 1 code — BLOCKED until Adam resolves 3 remaining open questions in §12: pricing lead, first vertical, Amendment 23 relationship
+- Phase 0 revenue — BLOCKED only by Stripe payment links and intake form (30-minute setup, no code)
+
+### Decision Gaps Closed (2026-05-30)
+- ✅ Storage: Cloudflare R2 decided
+- ✅ Autosave: every exchange persisted immediately, resume-on-refresh required
+- ✅ User identity: API-key flow, UUID fields future-ready for auth migration
+- ✅ Language: English-only Phase 1, non-English returns warning
+- ✅ Export delivery: download-first Phase 1, email delivery Phase 2
+- ✅ Team accounts: Phase 1 owner-only, Phase 2 for teams
 
 ### What Is Ready
-- Phase 0: start today — Stripe links + form + 1 Zoom session = first revenue
-- Phase 1 code: starts after manifest is created (Task 2) and decisions 2, 3, 4 are made
-- Transcription backbone: ready to use as-is
-- AI council routing: ready to use as-is
+- Phase 0: start today — Stripe links + Google Form intake + 1 Zoom session = first revenue
+- Phase 1 code: starts after decisions 1 (Amendment 23 relationship), 2 (pricing), 3 (vertical) from §12 OPEN section
+- Transcription backbone: ready to use as-is (`services/word-keeper-transcriber.js`)
+- AI council routing: ready to use as-is (`services/council-service.js`)
+- Amendment + manifest: both exist and committed
 
 ### First Exact Task
-Create `docs/projects/AMENDMENT_41_MARKETINGOS.manifest.json` — the machine-readable companion to this document. Without it, the verify script cannot run and the pre-commit hook will block commits to MarketingOS files.
+Set up Cloudflare R2 bucket (free tier covers Phase 1 volume). Add 6 R2 env vars to Railway. This unblocks audio upload and makes the Phase 1 readiness gate passable.
 
 ### First Exact Revenue Action
-Set up Stripe payment link for $997 "Build My Thing — 30-Day Content System." Send it to 3 people in Adam's existing network today. This requires zero code, zero infrastructure, and generates real cash while Phase 1 is being built.
+Create Stripe payment link for $997 "Build My Thing — 30-Day Content System" (Amendment 27). Send to 3 people in Adam's network today. Zero code, zero infrastructure. First revenue in days.
 
 ---
 
@@ -1165,9 +1211,10 @@ Set up Stripe payment link for $997 "Build My Thing — 30-Day Content System." 
 - [x] BuilderOS execution contract explicit
 - [x] Revenue plan per phase with realistic numbers
 - [x] Build order checklist with verification commands
-- [ ] Manifest not yet created (Task 2)
-- [ ] Adam decisions in §12 not yet resolved
-- [ ] Storage env vars not yet set on Railway
+- [x] Manifest created (Task 2 complete)
+- [x] 6 of 11 decision gaps closed (storage provider, autosave, user identity, language, export delivery, team accounts)
+- [ ] 5 remaining Adam decisions in §12 OPEN section (pricing lead, first vertical, Amendment 23 relationship, Phase 5 publisher, Phase 0 intake form)
+- [ ] Cloudflare R2 bucket and Railway env vars not yet set — blocks audio upload
 
 ### Gate 2 — Competitor Landscape
 | Competitor | Strengths | Weaknesses | Our Edge |
@@ -1252,4 +1299,5 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
-| 2026-05-30 | Created AMENDMENT_41_MARKETINGOS.md — full A-to-Z blueprint, Phase 0-10, MVP technical spec, consent contract, BuilderOS execution contract, revenue plan, build order checklist | SSOT foundation for MarketingOS / SocialMediaOS before any code is written | ✅ | ⬜ pending | pending |
+| 2026-05-30 | Created AMENDMENT_41_MARKETINGOS.md — full A-to-Z blueprint, Phase 0-10, MVP technical spec, consent contract, BuilderOS execution contract, revenue plan, build order checklist | SSOT foundation for MarketingOS / SocialMediaOS before any code is written | ✅ | ✅ | pending |
+| 2026-05-30 | Closed 6 BuilderOS decision gaps: storage→R2, autosave rule (Rule 12), user identity rule (Rule 13), English-only rule (Rule 14), export→download-first, team accounts→Phase 2. Updated §5 Phase 1, §6 export/error handling/acceptance tests, §9 execution contract (+3 rules), §11 build order task 15, §12 resolved/open split, §13 final summary | Decision gaps audit required before coding begins | ✅ | ✅ | pending |

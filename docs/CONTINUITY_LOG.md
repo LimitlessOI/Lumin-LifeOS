@@ -2,7 +2,53 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
-## [SSOT] 2026-05-30 — AMENDMENT_41_MARKETINGOS.md — A-to-Z Blueprint
+## [SSOT] 2026-05-30 — AMENDMENT_41_MARKETINGOS.md — Decision Gap Closure (Session 2)
+
+### What was done
+Closed 6 of 11 BuilderOS decision gaps in Amendment 41 and manifest. No code written — documentation only.
+
+**Gap 1 — Storage Provider:** Cloudflare R2 decided as Phase 1 provider. AWS S3 deferred. Required env vars locked in: `STORAGE_PROVIDER=r2`, `STORAGE_ENDPOINT`, `STORAGE_BUCKET`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`, `STORAGE_PUBLIC_URL`. SDK: `@aws-sdk/client-s3` with endpoint override.
+
+**Gap 2 — Mid-Session Autosave:** Rule added (Rule 12): every coaching exchange persisted to `coach_messages_json` immediately after AI response. Sessions support resume-on-refresh. No save-on-completion-only pattern allowed.
+
+**Gap 3 — User Identity:** Rule added (Rule 13): Phase 1 uses `requireKey` middleware. Every session belongs to `owner_id` + `business_id`. UUID fields only — no email/API-key as primary identifier. Full auth is Phase 2.
+
+**Gap 4 — Language Scope:** Rule added (Rule 14): Phase 1 is English-only. Non-English transcription returns `{ warning: "english_only", message: "..." }`. No silent generation in other languages.
+
+**Gap 5 — Export Delivery:** Phase 1 export is download-first only. `Content-Disposition: attachment`. Email delivery deferred to Phase 2.
+
+**Gap 6 — Team Accounts:** Phase 1 is owner-only. `business_id` UUID field included in schema for future migration readiness. Multi-user deferred to Phase 2.
+
+**Files changed:**
+- `docs/projects/AMENDMENT_41_MARKETINGOS.md` — 12 edits: features-excluded list, storage API entry, readiness gate, export format header, autosave error-handling bullet, acceptance tests expanded to 11, Rule 8 storage comment, Rules 12–13–14 added, Task 15 env vars, §12 split into RESOLVED/OPEN, §13 blockers + gaps-closed subsection, Gate 1 checklist updated, Change Receipts row appended
+- `docs/projects/AMENDMENT_41_MARKETINGOS.manifest.json` — current_focus, next_task, required_env (R2 naming), storage_decision block added
+
+### State after this session
+- Amendment 41: 6 gaps RESOLVED, 5 remaining OPEN (require Adam input)
+- Manifest: machine-readable and sync'd with amendment decisions
+- Phase 1 code is BLOCKED until §12 OPEN decisions resolved
+- Phase 0 revenue is UNBLOCKED — no code needed, Stripe links and Google Form only
+
+### Blockers
+- **5 remaining Adam decisions (§12 OPEN):**
+  1. Amendment 23 relationship — keep as sibling or absorb into Amendment 41?
+  2. Pricing lead — $49/session or $199/month?
+  3. First vertical — real estate agents, wellness coaches, or SaaS founders?
+  4. Phase 5 publisher — Buffer API or Publer API?
+  5. Phase 0 intake — Google Form or Typeform?
+- **R2 env vars not set** — `STORAGE_PROVIDER`, `STORAGE_ENDPOINT`, `STORAGE_BUCKET`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`, `STORAGE_PUBLIC_URL` — blocks audio upload in Phase 1
+- **Stripe payment links not created** — blocks Phase 0 revenue ($250 Speed Fix, $997 Build My Thing)
+- **FFmpeg on Railway UNCONFIRMED** — blocks Phase 3 video export
+
+### Next
+1. Create Stripe payment links ($250 + $997 from Amendment 27 links)
+2. Set up Cloudflare R2 bucket + 6 Railway env vars
+3. Resolve §12 OPEN decisions (pricing lead, first vertical, Amendment 23 relationship)
+4. After decisions resolved: write `db/migrations/[date]_marketing_schema.sql`
+
+---
+
+## [SSOT] 2026-05-30 — AMENDMENT_41_MARKETINGOS.md — A-to-Z Blueprint (Session 1)
 
 ### What was done
 - Full SSOT alignment audit of MarketingOS / SocialMediaOS against all existing amendments
@@ -23,7 +69,7 @@
 - BuilderOS safe-scope policy blocks docs/projects/ writes — expected and correct; Conductor writes amendment documents directly
 
 ### Blockers
-- Storage env vars (`STORAGE_PROVIDER`, `STORAGE_BUCKET`, `STORAGE_KEY_ID`, `STORAGE_KEY_SECRET`) not set on Railway — blocks audio upload in Phase 1
+- Storage env vars not yet set — blocks audio upload in Phase 1
 - Adam's §12 decisions not yet resolved — blocks Phase 1 pricing, vertical targeting, and team account scope
 - FFmpeg on Railway UNCONFIRMED — blocks Phase 3 video export
 
