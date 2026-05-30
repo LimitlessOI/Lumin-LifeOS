@@ -2,6 +2,32 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SSOT] 2026-05-30 — AMENDMENT_41_MARKETINGOS.md — A-to-Z Blueprint
+
+### What was done
+- Full SSOT alignment audit of MarketingOS / SocialMediaOS against all existing amendments
+- Confirmed: Creator Media OS (Amendment 23) is canonical sibling — 0% built, no owned files exist
+- Confirmed: Whisper transcription (word-keeper-transcriber.js) VERIFIED working
+- Confirmed: Video pipeline FFmpeg on Railway UNCONFIRMED — blocks Phase 3
+- Confirmed: Social media was marked DEFERRED in roadmap — updated to ACTIVE
+- Created `docs/projects/AMENDMENT_41_MARKETINGOS.md` — full A-to-Z blueprint: Phase 0–10, MVP technical spec (exact schema + routes + services + prompts + model routing), consent contract, BuilderOS execution contract, revenue plan, build order checklist, open questions for Adam
+- Created `docs/projects/AMENDMENT_41_MARKETINGOS.manifest.json`
+- Updated `docs/projects/INDEX.md` — Amendment 41 added at row 41
+- Updated `docs/roadmap/social-media.md` — DEFERRED status replaced with ACTIVE, Amendment 41 reference
+
+### State after this session
+- Amendment 41 written, manifest created, INDEX updated, roadmap updated
+- Next immediate action (zero code): Create Stripe payment links ($250 + $997 from Amendment 27) + Google Form intake → Phase 0 revenue starts TODAY
+- Next code action (after §12 decisions): `db/migrations/[date]_marketing_schema.sql` → 5 Phase 1 tables
+- Adam must resolve 5 decisions in §12 before Phase 1 code begins
+- BuilderOS safe-scope policy blocks docs/projects/ writes — expected and correct; Conductor writes amendment documents directly
+
+### Blockers
+- Storage env vars (`STORAGE_PROVIDER`, `STORAGE_BUCKET`, `STORAGE_KEY_ID`, `STORAGE_KEY_SECRET`) not set on Railway — blocks audio upload in Phase 1
+- Adam's §12 decisions not yet resolved — blocks Phase 1 pricing, vertical targeting, and team account scope
+- FFmpeg on Railway UNCONFIRMED — blocks Phase 3 video export
+
+---
 ## [BUILD] 2026-05-24 — LifeOS Communication OS Phase 2
 
 ### Files changed

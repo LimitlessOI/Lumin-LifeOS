@@ -80,6 +80,7 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 38 | [Idea Vault — Captured Conversation Backlog](AMENDMENT_38_IDEA_VAULT.md) | LIVE | **Documentation SSOT** — all mined multi-model ideas, provenance, amendment routing; relieves operator memory load | Medium (curation) |
 | 39 | [Memory Intelligence System](AMENDMENT_39_MEMORY_INTELLIGENCE.md) | LIVE (Phase 1) | **Evidence engine** — epistemic facts, debates, lessons, agent accuracy, intent drift; `/api/v1/memory`; design brief in `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | High (adoption Phases 2–4) |
 | 40 | [OIL Security Divisions](AMENDMENT_40_OIL_SECURITY_DIVISIONS.md) | **PROPOSED** | **Infrastructure** — Red Team / Verification / Crypto-Harvest lanes; receipt-native find→fix→verify; `docs/projects/oil/SECURITY_ALPHA_SCOPE.md` | Medium (Stage 1 after Adam freeze) |
+| 41 | [MarketingOS / SocialMediaOS](AMENDMENT_41_MARKETINGOS.md) | **planning** | **LimitlessOS revenue lane** — AI coaching interview → transcript → story extraction → content pack → social/YouTube/podcast/funnel/campaign engine. Phase 0 (manual revenue) starts immediately. Phase 1 code starts after §12 decisions resolved. | **High (Phase 0 revenue today)** |
 
 ---
 
