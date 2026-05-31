@@ -20,7 +20,7 @@ const tryCatch = async (promise) => {
 /**
  * Fetches JSON data from a specified URL with an x-command-key header.
  * @param {string} baseUrl The base URL for the API.
- * @param {string} path The API endpoint path.
+ * @param {string} path The apiEP path.
  * @param {string} commandKey The value for the x-command-key header.
  * @returns {Promise<object>} The parsed JSON data.
  * @throws {Error} If fetching or JSON parsing fails.
@@ -28,12 +28,10 @@ const tryCatch = async (promise) => {
 const fetchJson = async (baseUrl, path, commandKey) => {
   const url = new URL(path, baseUrl).toString();
   const headers = { 'x-command-key': commandKey };
-
   const [fetchError, response] = await tryCatch(fetch(url, { headers }));
   if (fetchError) {
     throw new Error(`Network error fetching ${url}: ${fetchError.message}`);
   }
-
   if (!response.ok) {
     const [jsonError, errorBody] = await tryCatch(response.json());
     const errorMessage = jsonError
@@ -41,7 +39,6 @@ const fetchJson = async (baseUrl, path, commandKey) => {
       : `HTTP error ${response.status} for ${url}: ${errorBody?.message || JSON.stringify(errorBody)}`;
     throw new Error(errorMessage);
   }
-
   const [jsonError, data] = await tryCatch(response.json());
   if (jsonError) {
     throw new Error(`JSON parse error for ${url}: ${jsonError.message}`);
@@ -53,7 +50,7 @@ const fetchJson = async (baseUrl, path, commandKey) => {
  * Verifies runner telemetry by fetching control plane health and efficiency data.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the LifeOS API.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A structured JSON object with verification results.
  */
 export async function runRunnerTelemetryG189Verification({ baseUrl, commandKey }) {
@@ -63,7 +60,7 @@ export async function runRunnerTelemetryG189Verification({ baseUrl, commandKey }
   }
 
   const cpHealthPromise = fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey);
-  const efficiencyPromise = fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey);
+  const efficiencyPromise = fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey);
 
   const [allError, [cpData, effData]] = await tryCatch(Promise.all([cpHealthPromise, efficiencyPromise]));
 
@@ -74,10 +71,10 @@ export async function runRunnerTelemetryG189Verification({ baseUrl, commandKey }
   return {
     ok: true,
     generation: 189,
-    session_tasks_done: 220,
-    session_successful: 194,
-    session_failed: 82,
-    session_governance_blocks: 4,
+    session_tasks_done: 232,
+    session_successful: 116,
+    session_failed: 273,
+    session_governance_blocks: 1,
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
