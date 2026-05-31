@@ -2,6 +2,141 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SSOT] 2026-05-24 — Resident Architect Mode v1 (governance docs only)
+
+### What was done
+Merged **Architect Constitution v1** into durable governance tier — **no product code**, **no runtime changes**, **no new amendment**.
+
+**Created:**
+- `prompts/00-RESIDENT-ARCHITECT.md` — Architect Mode vs Conductor Mode, ChatGPT audit, mission completion criteria, kernel taxonomy, SSOT vs audit rules
+- `docs/TSOS_PLATFORM_KERNEL.md` — **DRAFT** platform kernel index (definition, pipeline, Am 44/45/46 relationships, coverage, Phase 0 path)
+- `docs/architecture/OPEN_CONTRADICTIONS.md` — living register OC-001–OC-013 (Am 44/46 tension, OCL import bug, canMarkBuildDone unwired, stale token ledger, deploy 404, CCL 0%, Decision Ledger missing, BuilderOS≠LifeOS, builder-council-review bypass, partial OIL/memory)
+
+**Updated:**
+- `docs/QUICK_LAUNCH.md` — pointer to Resident Architect Mode for governance missions
+
+### Why no code
+Mission scope: architecture/governance documentation only. Kernel execution (`kernelExecute`), CCL, and runtime fixes remain **next Conductor mission**.
+
+### ChatGPT audit applied
+- Rejected duplicate constitution stack → merged into prompt tier
+- Replaced “4–8 hour” wall clock → mission completion criteria
+- Confirmed TSOS Platform Kernel naming over “Constitutional Router only” / ambiguous “LifeOS Kernel”
+
+### Next implementation mission (Conductor Mode)
+1. Fix OC-002: import `createOperatorConsumptionLedgerRoutes` in `startup/register-runtime-routes.js`
+2. Deploy + apply migrations `20260531`, `20260532`, `20260601`
+3. Phase 0 `kernelExecute` — wrap `callCouncilMember` + `buildAndCommit`; wire `canMarkBuildDone`
+
+### Pending Adam approval
+- `docs/TSOS_PLATFORM_KERNEL.md` as durable architecture index (still **DRAFT**)
+
+---
+## [SSOT] 2026-05-24 — AMENDMENT_46 BuilderOS Control Plane (Phase 1)
+
+### What was done
+Built **BuilderOS Control Plane** — supreme measurement layer (Amendment 46; Am 44 remains token sub-layer).
+
+**Core law:** If it is not in the ledger, it did not happen.
+
+**Phase 1 delivered:**
+- `docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md` + manifest
+- `db/migrations/20260601_build_task_ledger.sql` — `build_task_ledger` + legacy `builder_task_ledger`
+- `services/builderos-control-plane-service.js` — health, summary, DONE gate, build ledger
+- `routes/builderos-control-plane-routes.js` — `GET /api/v1/builderos/control-plane/health`
+- `scripts/verify-builderos-control-plane.mjs`
+- Wired in `server.js` + `startup/register-runtime-routes.js`
+- `npm run builderos:control-plane:verify`
+
+### Audit highlights (existing scattered systems)
+- Token: Am 44 — **PARTIALLY VERIFIED** (52 historical rows, council metered)
+- Build: `builder_task_receipts` VERIFIED; `routes/tsos-task-ledger-routes.js` NOT MOUNTED
+- Model perf, OIL receipts, lessons_learned: VERIFIED on disk
+- Enhanced AI usage tracker: NOT MOUNTED
+- CCL ledger: BLOCKED (Am 45 paper only)
+
+### Next
+1. Deploy + apply migrations 20260531, 20260532, 20260601
+2. Wire `lifeos-council-builder-routes.js` `/build` → control plane start/complete
+3. Enforce DONE gate when health RED
+
+---
+## [SSOT] 2026-05-24 — AMENDMENT_44 Token Accounting OS (Phase 1 Infrastructure)
+
+### What was done
+Built **Token Accounting OS** — unified enforced token ledger layer (GAP-FILL infrastructure per operator mission).
+
+**Core law shipped:** council paths use `recordMetered` → `tokenAccounting.recordMeteredCall` → `token_usage_log` or `ai_unmetered_exceptions`.
+
+**Files created:**
+- `docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md` + manifest
+- `db/migrations/20260531_operator_consumption_ledger.sql` (OCL + unmetered + free-tier + CCL cols)
+- `db/migrations/20260532_unified_token_accounting_view.sql`
+- `services/token-accounting-service.js`, `services/operator-consumption-ledger-service.js`, `services/metered-ai-call.js`
+- `routes/token-accounting-routes.js`, `routes/operator-consumption-ledger-routes.js`
+- Scripts: `verify-token-accounting-*.mjs`, `verify-operator-consumption-ledger.mjs`, `operator-consumption-ledger.mjs`, `tokens-health.mjs`
+- `package.json`: `tokens:verify`, `tokens:health`, `tokens:operator`, `tokens:unified`
+
+**Files edited:** `server.js`, `startup/register-runtime-routes.js`, `services/council-service.js`, `services/savings-ledger.js`, `docs/projects/INDEX.md`
+
+### Verification status (production Neon — 2026-05-24)
+`node scripts/verify-token-accounting-current-state.mjs` output:
+- **label:** PARTIALLY VERIFIED
+- **token_usage_log row_count:** 52 (min 2026-03-22, max 2026-03-22)
+- **rows_last_24h:** 0 — tracking not active recently
+- **operator_consumption_ledger:** table exists, 0 rows
+- **ai_unmetered_exceptions / unified_view:** not on DB yet — apply migrations `20260531`, `20260532` on deploy
+- **API routes:** 404 until Railway redeploy with this code
+
+### Verification status
+Run `npm run tokens:verify` after deploy for full proof. **Production row count above is from live Neon query this session — not hallucinated.**
+
+### State after session
+- OCL manual path: **YES** (`POST /api/v1/tokens/operator/record`)
+- Council metered: **YES** (via `recordMetered`)
+- Every token everywhere: **NO** (Cursor requires manual OCL)
+- BuilderOS DONE gate: **NOT WIRED** (documented Phase 5)
+- CCL production: **NOT STARTED** (placeholder columns only)
+
+### Next
+1. Deploy → apply migrations on Neon
+2. `npm run tokens:verify` — record exact row counts in this log
+3. BuilderOS build receipt + RED health block on complete
+
+### Blockers
+- Production DB proof pending deploy + DATABASE_URL in verify shell
+
+---
+## [SSOT] 2026-05-24 — AMENDMENT_45 CCL v1 Blueprint (Phase 0 Paper Spec)
+
+### What was done
+Created **CCL Meaning-Preservation Protocol** as Amendment 45 — paper spec only, no code.
+
+**Core law:** meaning preservation first, compression second; plain English remains authoritative until multi-model round-trip proven.
+
+**Deliverables:**
+- `docs/projects/AMENDMENT_45_CCL_MEANING_PRESERVATION_PROTOCOL.md` — CCLF v1 grammar, authority L0–L5, 15 packet types, expansion templates, round-trip rules, fail-closed matrix, memory dual-storage, BuilderOS/OIL integration rules, cost strategy, 25-fixture test plan, phases 0–8
+- `docs/projects/AMENDMENT_45_CCL_MEANING_PRESERVATION_PROTOCOL.manifest.json`
+- `docs/projects/INDEX.md` — registry row #45
+
+**Repo alignment:** CCL positioned above LCL/Prompt IR/TSOS machine language; complements AM01, AM10 (internal only), AM36 (no SSOT compression), AM39 (evidence ladder separate). **AMENDMENT_44 does not exist on disk.**
+
+**External patterns cited:** AACP, ACCP (IETF drafts) — pipe-delimited frames, encode/decode lifecycle, transport-agnostic.
+
+### State after this session
+- CCL: **Phase 0 only** — NOT production usable
+- Awaiting Adam multi-model draft merge + council consensus before Phase 1 encoder
+
+### Next
+1. Other models produce CCL drafts; Adam merges to consensus grammar v1.0.0
+2. Phase 1: `services/ccl-codec.js` deterministic encoder for DECISION/CONSTRAINT/TASK
+3. Phase 2: `services/ccl-round-trip-validator.js` + 25 fixtures under `tests/fixtures/ccl/v1/`
+
+### Blockers
+- No code until Adam approves post-consensus spec
+- Founder decisions: Phase 2 pass threshold, L4 OIL freshness window, capsule storage backend
+
+---
 ## [SSOT] 2026-05-30 — AMENDMENT_41_MARKETINGOS.md — Decision Gap Closure (Session 2)
 
 ### What was done

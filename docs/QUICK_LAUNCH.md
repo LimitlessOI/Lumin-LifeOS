@@ -66,6 +66,12 @@ Then: read this file (`docs/QUICK_LAUNCH.md`) for lane routing and execution, an
 
 If task lane is unclear: read `docs/CONTINUITY_INDEX.md`, choose lane, then proceed.
 
+## Resident Architect Mode (governance / architecture missions)
+
+For **architecture review, drift audits, kernel/ledger planning, or ChatGPT cross-audit** — not product implementation — read **`prompts/00-RESIDENT-ARCHITECT.md`** first, then **`docs/TSOS_PLATFORM_KERNEL.md`** and **`docs/architecture/OPEN_CONTRADICTIONS.md`**.
+
+Architect Mode does **not** authorize product hand-authoring; implementation sessions use **Conductor Mode** below (builder-first, §2.11).
+
 ## Conductor Roles
 
 - **SSOT (brain/blueprint):** Source of truth and build order.
