@@ -1,12 +1,12 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
 /**
  * Fetches JSON data from a specified URL with an x-command-key header.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
- * @param {string} commandKey - The command key for authentication.
+ * @param {string} path - The apiEP path.
+ * @param {string} commandKey - The command key for auth.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the fetch operation fails or the response is not OK.
  */
@@ -33,14 +33,13 @@ async function fetchJson(baseUrl, path, commandKey) {
  * Verifies the status of OC-009 by checking kernel and control plane health.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the LifeOS API.
- * @param {string} params.commandKey - The command key for API authentication.
+ * @param {string} params.commandKey - The command key for API auth.
  * @returns {Promise<object>} An object indicating the verification status and details.
  */
 export async function runOC009StatusVerification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
     return { ok: false, error: 'Missing baseUrl or commandKey in input parameters.' };
   }
-
   try {
     const [kernelData, cpData] = await Promise.all([
       fetchJson(baseUrl, '/api/v1/kernel/health', commandKey),
