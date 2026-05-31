@@ -5,7 +5,7 @@
 /**
  * Helper function to fetch JSON data from a given URL path.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} commandKey - The x-command-key header value.
  * @returns {Promise<object>} The JSON response data.
  * @throws {Error} If the fetch operation fails or the response is not OK.
@@ -14,7 +14,6 @@ async function fetchJson(baseUrl, path, commandKey) {
     const url = `${baseUrl}${path}`;
     const headers = { 'x-command-key': commandKey, 'Content-Type': 'application/json' };
     const response = await fetch(url, { headers });
-
     if (!response.ok) {
         const errorBody = await response.text();
         throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText} - ${errorBody}`);
@@ -26,8 +25,8 @@ async function fetchJson(baseUrl, path, commandKey) {
  * Verifies GAP-017: Founder decision chain missing — SSOT receipts not queryable as ledger.
  * Checks the health status of Kernel and BuilderOS Control Plane.
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the API endpoints.
- * @param {string} params.commandKey - The command key for authentication (x-command-key header).
+ * @param {string} params.baseUrl - The base URL for the apiEPs.
+ * @param {string} params.commandKey - The command key for auth (x-command-key header).
  * @returns {Promise<object>} An audit result object indicating success or failure and relevant GAP details.
  */
 export async function runGAP017GapVerification({ baseUrl, commandKey }) {
