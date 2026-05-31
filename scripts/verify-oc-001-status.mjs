@@ -1,7 +1,6 @@
 /*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-
 /**
  * Fetches JSON data from a given URL path with a command key header.
  * @param {string} baseUrl - The base URL for the API.
@@ -37,6 +36,7 @@ export async function runOC001StatusVerification({ baseUrl, commandKey }) {
       fetchJson(baseUrl, '/api/v1/kernel/health', commandKey),
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
     ]);
+
     return {
       ok: true,
       contradiction_id: 'OC-001',
