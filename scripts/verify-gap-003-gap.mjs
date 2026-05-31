@@ -1,11 +1,3 @@
-/**
- * Fetches JSON data from a specified URL with a command key header.
- * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The apiEP path.
- * @param {string} commandKey - The command key for auth.
- * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If the network request fails or the response is not OK.
- */
 async function fetchJson(baseUrl, path, commandKey) {
   const url = new URL(path, baseUrl).toString();
   const response = await fetch(url, {
@@ -20,6 +12,7 @@ async function fetchJson(baseUrl, path, commandKey) {
   }
   return response.json();
 }
+
 /**
  * A utility function to wrap an async promise in a try-catch block,
  * returning an array [error, result].
@@ -34,6 +27,7 @@ async function tryCatch(promise) {
     return [e, null];
   }
 }
+
 /**
  * Verifies GAP-003 by fetching health statuses from Kernel and BuilderOS Control Plane.
  * @param {object} params - The parameters for verification.
@@ -45,16 +39,20 @@ export async function runGAP003GapVerification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
     return { ok: false, error: 'Missing baseUrl or commandKey' };
   }
+
   const [error, results] = await tryCatch(
     Promise.all([
       fetchJson(baseUrl, '/api/v1/kernel/health', commandKey),
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
     ])
   );
+
   if (error) {
     return { ok: false, error: error.message };
   }
+
   const [kernelData] = results; // controlPlaneData is fetched but not used in the return object per spec.
+
   return {
     ok: true,
     gap_id: 'GAP-003',
