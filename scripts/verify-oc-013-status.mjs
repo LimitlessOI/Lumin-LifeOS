@@ -1,11 +1,6 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- */
-
-/**
  * Fetches JSON data from a specified API endpoint.
  * Handles constructing the URL and setting necessary headers.
- *
  * @param {string} baseUrl - The base URL of the API.
  * @param {string} path - The specific API path to fetch.
  * @param {string} commandKey - The command key for authentication.
@@ -15,7 +10,6 @@
 async function fetchJson(baseUrl, path, commandKey) {
   // Construct the full URL for the API request.
   const requestUrl = `${baseUrl}${path}`;
-
   // Define the headers for the fetch request, including the command key.
   const requestHeaders = {
     'x-command-key': commandKey,
@@ -41,7 +35,6 @@ async function fetchJson(baseUrl, path, commandKey) {
 /**
  * Verifies the status of OC-013 by checking kernel and control plane health.
  * This function fetches health data from two distinct API endpoints concurrently.
- *
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the API calls.
  * @param {string} params.commandKey - The command key to be used in 'x-command-key' header.
