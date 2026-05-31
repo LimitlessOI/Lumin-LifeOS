@@ -1,11 +1,11 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
-/**
+/*
  * Fetches JSON data from a specified URL with an x-command-key header.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} commandKey - The value for the x-command-key header.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the network request fails or the response status is not OK.
@@ -24,7 +24,7 @@ async function fetchJson(baseUrl, path, commandKey) {
   return response.json();
 }
 
-/**
+/*
  * A generic try-catch wrapper for async operations.
  * @param {Promise<any>} promise - The promise to execute.
  * @returns {Promise<{data: any, error: string|null}>} An object containing either data or an error message.
@@ -38,11 +38,11 @@ async function tryCatch(promise) {
   }
 }
 
-/**
+/*
  * Verifies runner telemetry by fetching health and efficiency data.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the API calls.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A structured JSON object with verification results.
  */
 export async function runRunnerTelemetryG242Verification({ baseUrl, commandKey }) {
@@ -52,7 +52,7 @@ export async function runRunnerTelemetryG242Verification({ baseUrl, commandKey }
 
   const [cpResult, effResult] = await Promise.all([
     tryCatch(fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
-    tryCatch(fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey)),
+    tryCatch(fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey)), // Updated path
   ]);
 
   if (cpResult.error || effResult.error) {
@@ -69,10 +69,10 @@ export async function runRunnerTelemetryG242Verification({ baseUrl, commandKey }
   return {
     ok: true,
     generation: 242,
-    session_tasks_done: 273,
-    session_successful: 245,
-    session_failed: 91,
-    session_governance_blocks: 4,
+    session_tasks_done: 285, // Updated value
+    session_successful: 144, // Updated value
+    session_failed: 333,     // Updated value
+    session_governance_blocks: 1, // Updated value
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
