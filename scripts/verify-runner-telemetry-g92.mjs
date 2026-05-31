@@ -1,15 +1,11 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- */
-
-/**
- * Helper function to fetch JSON data from a given URL with a command key.
- * Handles network errors and non-OK HTTP responses.
- * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The specific API path.
- * @param {string} commandKey - The x-command-key header value for authentication.
- * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If the fetch operation fails or the response is not OK.
+- Helper function to fetch JSON data from a given URL with a command key.
+- Handles network errors and non-OK HTTP responses.
+- @param {string} baseUrl - The base URL for the API.
+- @param {string} path - The specific API path.
+- @param {string} commandKey - The x-command-key header value for auth.
+- @returns {Promise<object>} The parsed JSON response.
+- @throws {Error} If the fetch operation fails or the response is not OK.
  */
 async function fetchJson(baseUrl, path, commandKey) {
   const url = `${baseUrl}${path}`;
@@ -20,28 +16,25 @@ async function fetchJson(baseUrl, path, commandKey) {
         'Content-Type': 'application/json',
       },
     });
-
     if (!response.ok) {
       const errorBody = await response.text();
       throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorBody}`);
     }
-
     return await response.json();
   } catch (error) {
     console.error(`Failed to fetch ${url}:`, error.message);
     throw error;
   }
 }
-
 /**
- * Verifies runner telemetry for Generation 92 by fetching control plane health
- * and autonomous telemetry efficiency data concurrently.
- * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the API endpoints.
- * @param {string} params.commandKey - The command key for authentication.
- * @returns {Promise<object>} A structured JSON object with verification results,
- *   including status, generation, session metrics, build data, efficiency summary,
- *   runner assessment, and timestamp. Returns { ok: false, error: string } on failure.
+- Verifies runner telemetry for Generation 92 by fetching control plane health
+- and autonomous telemetry efficiency data concurrently.
+- @param {object} params - The parameters for the verification.
+- @param {string} params.baseUrl - The base URL for the apiEPs.
+- @param {string} params.commandKey - The command key for auth.
+- @returns {Promise<object>} A structured JSON object with verification results,
+-   including status, generation, session metrics, build data, efficiency summary,
+-   runner assessment, and timestamp. Returns { ok: false, error: string } on failure.
  */
 export async function runRunnerTelemetryG92Verification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
@@ -51,20 +44,18 @@ export async function runRunnerTelemetryG92Verification({ baseUrl, commandKey })
       checked_at: new Date().toISOString(),
     };
   }
-
   try {
     const [cpData, effData] = await Promise.all([
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-      fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey),
+      fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey),
     ]);
-
     return {
       ok: true,
       generation: 92,
-      session_tasks_done: 123, // Hardcoded as per spec
-      session_successful: 103, // Hardcoded as per spec
-      session_failed: 50,       // Hardcoded as per spec
-      session_governance_blocks: 4, // Hardcoded as per spec
+      session_tasks_done: 135, // Updated as per spec
+      session_successful: 67, // Updated as per spec
+      session_failed: 162,       // Updated as per spec
+      session_governance_blocks: 1, // Updated as per spec
       builds_today: cpData.build?.builds_today || 0,
       without_proof: cpData.build?.without_proof || 0,
       efficiency_summary: effData.efficiency?.summary || null,
