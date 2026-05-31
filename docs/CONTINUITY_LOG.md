@@ -2,6 +2,97 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [MISSION] 2026-05-31 — C2 Live Test: Make BuilderOS Do the Work
+
+### Mission result: PARTIAL PASS — wiring proven; one structural gap discovered
+
+**Agent:** Claude Sonnet 4.6 / Claude Code VSCode Extension / main branch / Conductor role
+
+**Commands run:**
+- `npm run builder:preflight` → PREFLIGHT_OK, 23 domains, GITHUB_TOKEN live
+- `npm run kernel:verify` → all routes PASS (kernel/token/control-plane HTTP 200)
+- `npm run builderos:control-plane:verify` → db_proof all tables present
+- `npm run tokens:verify` → token tables exist, tracking_active confirmed
+- `npm run platform:coverage` → top blockers: GAP-001 (builder-council-review bypass), GAP-002 (Decision Ledger stub)
+
+**Governance drift audit:**
+- Amendment 44 (Token Accounting OS): EXISTS ✅
+- Amendment 46 (BuilderOS Control Plane): EXISTS ✅
+- docs/TSOS_PLATFORM_KERNEL.md: EXISTS ✅
+- docs/architecture/PLATFORM_GAP_REGISTER.md: EXISTS ✅ (GAP-001 through GAP-025 current)
+- docs/architecture/OPEN_CONTRADICTIONS.md: EXISTS ✅ (OC-001 through OC-013)
+- docs/SYSTEM_COVERAGE_REPORT.md: EXISTS at docs/SYSTEM_COVERAGE_REPORT.md
+- prompts/00-RESIDENT-ARCHITECT.md: EXISTS ✅
+- ChatGPT drift: none detected — all referenced files and amendments exist
+
+**Phase 0 preflight:** PREFLIGHT_OK. LOCAL_PROOF_ONLY warning (P1 non-blocking).
+
+**Phase 1 route audit (KNOW):**
+- C2 job create: `POST /api/v1/lifeos/builderos/command-control/jobs` → `createCommandControlJob()` ✅
+- C2 job execute: `POST /api/v1/lifeos/builderos/command-control/jobs/:id/execute` → `executeCommandControlJob()` ✅
+- Execution calls `/api/v1/lifeos/builder/build` ✅
+- Passes `task_id` as `cc-{jobId}` ✅
+- Passes `blueprint_id` when present ✅
+- Returns `kernel_receipts` ✅ (token, build, CCL, OIL, authority, control_plane_health)
+- Writes `build_task_ledger` rows ✅ (ids 1, 2, 3, 4 confirmed in kernel_receipts)
+- Writes `token_usage_log` ✅ (ids 20443–20446, 12 rows today)
+- OIL receipts: NOT generated (reason: no_oil_receipt) ⚠️
+- Memory/performance writes: NOT confirmed ⚠️
+
+**Phase 2 — Read-only C2 job (job d02b7524):**
+- Created: ✅ status=queued
+- Executed: ✅ pipeline ran (OIL audit → PBB plan → builder dispatch)
+- Builder called: ✅ HTTP 200 from builder
+- Builder output: 352 bytes (valid code produced)
+- Committed: ❌ — `committed=false`, target_file=null
+- Job result: FAILED with BUILDER_DISPATCH_FAILED
+- Receipts: oil_boundary_audit PASS, pbb_plan generated, builder_dispatch HTTP 200 but not committed
+
+**Phase 3 — Tiny safe build (two attempts):**
+- Job 4493090b via C2: FAILED same reason — BUILDER_DISPATCH_FAILED
+- Direct `/builder/build` with explicit `target_file: scripts/verify-c2-live-test.mjs`: ✅ COMMITTED (SHA a098959b0d)
+- Builder used: gemini_flash
+- Token row: 20445 ✅
+- Build ledger id: 3 ✅
+- Script verified running against Railway: `{ ok: true, c2_halt_active: false, kernel_status: "YELLOW", checked_at: "..." }`
+
+**Phase 4 — Self-improvement:**
+- Gap identified: OC-014 (C2 executor /execute fallback missing)
+- Receipt write to `data/` and `tests/fixtures/`: 403 (outside safe-scope — expected)
+- Manual gap receipt written to OPEN_CONTRADICTIONS.md as OC-014
+
+**Phase 5 — Gap updates:**
+- OPEN_CONTRADICTIONS.md: OC-004 RESOLVED, OC-014 NEW ✅
+- PLATFORM_GAP_REGISTER.md: NOT updated this session (requires separate read-before-write)
+
+**Key findings:**
+- Token ledger IS active (OC-004 RESOLVED) — 12 rows today, last write 05:51 UTC
+- Build task ledger IS writing rows (ids 1–4 in this session)
+- C2 job creation and routing: WORKS
+- C2 job execution through /builder/build: WORKS
+- Kernel receipts (token, build): VERIFIED in production
+- C2-to-commit: BLOCKED by OC-014 (target_file placement gap in executor)
+- OIL receipts: NOT generated on any test (no_oil_receipt)
+- Direct /build with explicit target_file: WORKS and commits
+- Control plane status: YELLOW (builds_today=5, without_proof=5)
+
+**Blockers:**
+- OC-014: C2 executor needs /execute fallback when builder returns committed=false + output non-empty
+- GAP-001: 8 builder-council-review direct fetch bypasses (P0)
+- GAP-003: Build ledger proof_status=pending (wrapBuild completes but OIL not wiring)
+- OIL receipts: 0 on all test builds — oil verification path incomplete
+
+**Deployed SHA:** a098959b0d (post-git-pull, BuilderOS committed the verifier script)
+**Local SHA:** a098959b0d (in sync)
+**Files changed this session:** scripts/verify-c2-live-test.mjs (BuilderOS-committed), docs/architecture/OPEN_CONTRADICTIONS.md, docs/CONTINUITY_LOG.md
+
+**Next priority:**
+1. Fix OC-014: add /execute fallback in `services/builderos-governed-loop-executor.js` (P1)
+2. Wire OIL receipts on build path — currently `no_oil_receipt` on every build (P0)
+3. Fix GAP-001: route builder-council-review through callCouncilMember (P0)
+4. Run a C2 job again after OC-014 fix to prove full end-to-end commit via C2
+
+---
 ## [SSOT] 2026-05-24 — TSOS Platform Kernel Phase 0 (A-to-Z implementation slice)
 
 ### Mission

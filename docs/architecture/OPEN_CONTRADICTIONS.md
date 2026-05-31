@@ -4,7 +4,7 @@
 |-------|--------|
 | **Purpose** | Living register of architecture drift, unresolved tensions, and blockers |
 | **Authority** | Subordinate to SSOT; **audit tier** — not constitutional law |
-| **Last Updated** | 2026-05-24 |
+| **Last Updated** | 2026-05-31 |
 | **Maintainer** | Resident Architect missions (`prompts/00-RESIDENT-ARCHITECT.md`) |
 | **Kernel index** | `docs/TSOS_PLATFORM_KERNEL.md` |
 
@@ -52,8 +52,8 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | **OPEN** |
-| **Evidence** | Neon: 52 rows, last `2026-03-22`, 0 / 24h (post-migration verify) |
+| **Status** | **RESOLVED** (2026-05-31) |
+| **Evidence** | Live test mission: `token_usage_log` had 12 rows today (2026-05-31), last write `05:51:27 UTC`. Token rows verified in kernel_receipts for build tasks 20443–20446. Council AI calls metered (7 rows verified earlier, 12 by mission end). |
 | **Label** | **KNOW** |
 
 ---
@@ -62,10 +62,9 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | **BLOCKED** — deploy drift until Railway picks up post-push SHA |
-| **Evidence** | `npm run kernel:verify` — HTTP 404 on `/api/v1/kernel/*`, `/api/v1/tokens/*`, `/api/v1/builderos/control-plane/*` |
-| **Neon migrations** | **PARTIAL RESOLVED** — `20260602`, `20260603` applied; unified view exists |
-| **Label** | **KNOW** (404); **UNVERIFIED** (deploy SHA after push) |
+| **Status** | **RESOLVED** (2026-05-31) |
+| **Proof** | Deploy SHA `240982b809`; `npm run kernel:verify` PASS — all health routes HTTP 200 |
+| **Label** | **KNOW** |
 
 ---
 
@@ -146,12 +145,27 @@
 
 ---
 
+### OC-014 — C2 executor fails with BUILDER_DISPATCH_FAILED when builder returns committed=false+null target_file (NEW — 2026-05-31)
+
+| Field | Value |
+|-------|--------|
+| **Status** | **OPEN** |
+| **Severity** | P1 — C2 cannot autonomously commit code; requires explicit target_file in /build call |
+| **Evidence** | Jobs `d02b7524` and `4493090b` both returned BUILDER_DISPATCH_FAILED despite HTTP 200 + valid builder output. Root cause: `dispatchBuilderPlan` sends `target_file: plan.target_file` which is null when PBB plan does not inject it. Executor treats `committed=false` as total failure with no /execute fallback. |
+| **Proposed fix** | When builder returns `ok:true AND committed=false AND output non-empty AND plan.target_file non-null`, call `POST /api/v1/lifeos/builder/execute` with `{ output, target_file, commit_message }` before declaring failure. |
+| **File** | `services/builderos-governed-loop-executor.js` |
+| **Label** | **KNOW** |
+
+---
+
 ## Resolved (append only)
 
 | ID | Resolved | Receipt |
 |----|----------|---------|
 | OC-002 | 2026-05-24 | OCL import in `register-runtime-routes.js` |
 | OC-012 | 2026-05-24 | Kernel council wrap in `server.js` |
+| OC-005 | 2026-05-31 | Railway deploy SHA `240982b809`; kernel/token/control-plane health 200 |
+| OC-004 | 2026-05-31 | 12 token rows today; kernel_receipt token IDs 20443–20446; last write 05:51 UTC |
 
 ---
 
@@ -168,4 +182,5 @@
 | Date | Change |
 |------|--------|
 | 2026-05-24 | v1 — seeded OC-001 through OC-013 |
+| 2026-05-31 | v2 — OC-004 RESOLVED (token ledger active; 12 rows today). OC-014 NEW — C2 /execute fallback gap. Mission: C2 Live Test. |
 | 2026-05-24 | v2 — Phase 0 kernel slice: OC-002/012 RESOLVED; OC-003/005/009/010 PARTIAL/BLOCKED |
