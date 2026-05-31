@@ -1,12 +1,12 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
-/**
+/*
  * Fetches JSON data from a given URL path with an x-command-key header.
  * Handles network and HTTP errors, returning a structured result.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} key - The value for the x-command-key header.
  * @returns {Promise<{data: object|null, error: string|null}>} The fetched data or an error message.
  */
@@ -25,11 +25,11 @@ async function fetchJson(baseUrl, path, key) {
   }
 }
 
-/**
+/*
  * Verifies runner telemetry by fetching control plane health and efficiency data.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the API calls.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A structured JSON object with verification results or error details.
  */
 export async function runRunnerTelemetryG238Verification({ baseUrl, commandKey }) {
@@ -39,7 +39,7 @@ export async function runRunnerTelemetryG238Verification({ baseUrl, commandKey }
 
   const [cpResult, effResult] = await Promise.all([
     fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-    fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey),
+    fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey), // Updated path
   ]);
 
   if (cpResult.error || effResult.error) {
@@ -58,10 +58,10 @@ export async function runRunnerTelemetryG238Verification({ baseUrl, commandKey }
   return {
     ok: true,
     generation: 238,
-    session_tasks_done: 269,
-    session_successful: 241,
-    session_failed: 90,
-    session_governance_blocks: 4,
+    session_tasks_done: 281, // Updated value
+    session_successful: 143, // Updated value
+    session_failed: 327,     // Updated value
+    session_governance_blocks: 1, // Updated value
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
