@@ -1,10 +1,10 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * @file scripts/verify-runner-telemetry-g17.mjs
  * @description Verifies runner telemetry for Generation 17 by fetching control plane health and efficiency data.
  */
 
-/**
+/*
  * Fetches JSON data from a specified URL with an x-command-key header.
  * @param {string} baseUrl - The base URL for the API.
  * @param {string} path - The apiEP path.
@@ -27,7 +27,7 @@ async function fetchJson(baseUrl, path, key) {
   return response.json();
 }
 
-/**
+/*
  * Runs Generation 17 runner telemetry verification.
  * Fetches control plane health and autonomous telemetry efficiency data concurrently.
  * @param {object} params - The parameters for the verification.
