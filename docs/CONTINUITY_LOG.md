@@ -2,6 +2,64 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [MISSION] 2026-05-31 — Overnight C2 Backlog Stress Test
+
+### Mission result: COMPLETE — All 11 tasks processed; 8 committed, 2 Z3 blocked (expected), 1 governance blocked
+
+**Agent:** Claude Sonnet 4.6 / Claude Code VSCode Extension / main branch / Conductor role
+
+**Session scope:** Build and execute `scripts/governed-overnight-backlog-run.mjs` — a pre-authorized C2 overnight runner that processes open contradictions + platform gaps from the backlog through the BuilderOS C2 pipeline.
+
+**Runner commit:** `288272c5eb` — `scripts/governed-overnight-backlog-run.mjs` + BUILDEROS_ALPHA_BLUEPRINT.md receipt
+
+**Runner execution:**
+- Command: `nohup node scripts/governed-overnight-backlog-run.mjs --run-for-min 420 > data/overnight-backlog-stdout.log 2>&1 &`
+- PID: 39569 (completed cleanly — all 11 tasks done in 3.7 minutes)
+- Log: `data/overnight-backlog-stdout.log`
+- State: `data/governed-autonomy-backlog-state.json` — `status: done`
+
+**Autonomous metrics:**
+- Tasks total: 11 / Tasks done: 11
+- Autonomous decisions: 8
+- Successful repairs: 8
+- Failed repairs: 4 (2 expected Z3 blocks + 1 governance block + 1 transient HTTP_502 that retried to success)
+- Governance prevented drift: 4 (Zone 3 self-modification correctly blocked)
+
+**Committed by C2 (all oil.verified=true, token.verified=true, syntax_ok=true):**
+
+| # | Job ID | File | Token ID |
+|---|--------|------|----------|
+| 1 | 13d71882 | `scripts/verify-proof-status-chain.mjs` | 20458 |
+| 2 | 2f0b3ed9 | `scripts/verify-council-bypass-audit.mjs` | 20459 |
+| 3 | 7bcb2ccd | `scripts/verify-strict-mode-gate.mjs` | 20460 |
+| 4 | 34a61f17 | `services/kernel-token-linker.js` | 20461 |
+| 5 | 59e263c4 | `scripts/verify-full-receipt-chain.mjs` (retry after 502) | 20462 |
+| 6 | 6a014697 | `scripts/verify-architecture-health-composite.mjs` (retry after 502) | 20464 |
+| 7 | 6f158794 | `scripts/verify-token-receipt-linkage.mjs` | 20467 |
+| 8 | 6854e32c | `scripts/verify-overnight-autonomy-metrics.mjs` | 20468 |
+
+**All 8 commits landed on GitHub:** Verified via `git fetch origin` — SHAs `39329012cf` through `f80c433202` on origin/main.
+
+**Expected governance blocks (KNOW — correct behavior):**
+- `OC-015-patch-attempt` → `services/builderos-control-plane-service.js` — ZONE3_PATCH_REQUIRED (Z3, expected)
+- `kernel-token-link-patch` → `services/tsos-platform-kernel.js` — ZONE3_PATCH_REQUIRED (Z3, expected)
+
+**Unexpected failure:**
+- `autonomy-maturity-verify` → pre-commit governance blocked (anti-pattern or stub failure on first attempt), then HTTP_502 on retry — not committed; no hard stop triggered
+
+**Lessons captured:**
+- Zone 3 self-modification governance is working correctly — builder refuses to modify its own execution engine or kernel without GAP-FILL annotation
+- HTTP_502 transient failures are recoverable via single retry — retry succeeded on tasks 5 and 6
+- OC-015 Z3 patch still requires Conductor GAP-FILL for `services/builderos-control-plane-service.js` (canMarkBuildDone ordering fix)
+- `autonomy-maturity-verify` pre-commit block: council output for that task failed anti-pattern/stub gate — needs spec refinement on next attempt
+
+**Next priority:**
+1. GAP-001: 8 `builder-council-review.js` direct provider fetch bypasses — still P0 outstanding
+2. OC-015: `canMarkBuildDone` ordering fix — Zone 3 GAP-FILL required in `services/builderos-control-plane-service.js`
+3. `services/kernel-token-linker.js` (committed this session) — wire into kernel to enable `token_receipt_id` direct linkage
+4. `autonomy-maturity-verify` — retry with refined spec
+
+---
 ## [MISSION] 2026-05-31 — C2 Live Test: Make BuilderOS Do the Work
 
 ### Mission result: PARTIAL PASS — wiring proven; one structural gap discovered
