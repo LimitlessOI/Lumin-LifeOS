@@ -1,13 +1,12 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
- * Verifies the status of critical kernel and BuilderOS control plane health endpoints
- * to assess the operational status related to GAP-018.
- * GAP-018: Contradiction resolution system manual only — no automated OC closure verifier.
+ * - Verifies the status of critical kernel and BuilderOS control plane health endpoints
+ *   to assess the operational status related to GAP-018.
+ * - GAP-018: Contradiction resolution system manual only — no automated OC closure verifier.
  */
 
-/**
- * Wraps an asynchronous function in a try-catch block to standardize error handling.
+/*
+ * Wraps an asynchronous function in a try-catch block to standardize errHdl.
  * @param {function(): Promise<any>} asyncFn - The asynchronous function to execute.
  * @returns {Promise<{ok: true, data: any} | {ok: false, error: string}>} The result of the function or an error object.
  */
@@ -19,7 +18,7 @@ const tryCatch = async (asyncFn) => {
   }
 };
 
-/**
+/*
  * Fetches JSON data from a specified API path, including an x-command-key header.
  * @param {string} baseUrl - The base URL for the API.
  * @param {string} path - The specific API path to fetch.
@@ -35,7 +34,6 @@ const fetchJson = async (baseUrl, path, commandKey) => {
       'Content-Type': 'application/json',
     },
   });
-
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
@@ -43,12 +41,12 @@ const fetchJson = async (baseUrl, path, commandKey) => {
   return response.json();
 };
 
-/**
+/*
  * Executes GAP-018 verification by checking kernel and BuilderOS control plane health.
  * This function fetches health statuses from two critical endpoints concurrently.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for API requests (e.g., "http://localhost:3000").
- * @param {string} params.commandKey - The x-command-key header value for authentication.
+ * @param {string} params.commandKey - The x-command-key header value for auth.
  * @returns {Promise<object>} A structured JSON object indicating verification status.
  */
 export async function runGAP018GapVerification({ baseUrl, commandKey }) {
