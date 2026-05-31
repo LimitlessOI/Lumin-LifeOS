@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Content Review</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f7f6; color: #333; }
+        .container { max-width: 800px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .content-item { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 5px; background-color: #fafafa; }
+        .content-item h2 { margin-top: 0; color: #34495e; }
+        .content-item p { line-height: 1.6; color: #555; }
+        .actions { text-align: right; margin-top: 20px; }
+        .btn { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s ease; }
+        .btn:hover { background-color: #218838; }
+        .status { margin-top: 15px; font-weight: bold; color: #007bff; }
+        .status.approved { color: #28a745; }
+        .export-available { margin-top: 10px; font-style: italic; color: #6c757d; display: none; } /* Hidden by default */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Marketing Content Review & Approval</h1>
+
+        <div id="content-review-area">
+            <!-- Placeholder for content to be loaded dynamically -->
+            <div class="content-item" data-content-id="1">
+                <h2>Proposed Social Media Post - Campaign Alpha</h2>
+                <p><strong>Type:</strong> Text Post</p>
+                <p><strong>Content:</strong> "Exciting news! Our new feature is launching next week. Get ready to experience unparalleled efficiency. #Innovation #FutureTech"</p>
+                <p><strong>Target Audience:</strong> Tech Enthusiasts</p>
+                <div class="actions">
+                    <button class="btn approve-btn" onclick="approveContent(1)">Approve</button>
+                </div>
+                <div class="status" id="status-1">Status: Pending Review</div>
+                <div class="export-available" id="export-1">Export available.</div>
+            </div>
+
+            <div class="content-item" data-content-id="2">
+                <h2>Proposed Ad Creative - Product Beta</h2>
+                <p><strong>Type:</strong> Image Ad</p>
+                <p><strong>Content:</strong> <img src="https://via.placeholder.com/300x150?text=Product+Beta+Ad" alt="Product Beta Ad Creative" style="max-width: 100%; height: auto; display: block; margin-top: 10px;"></p>
+                <p><strong>Caption:</strong> "Unlock your potential with Product Beta. Sign up today for early access!"</p>
+                <div class="actions">
+                    <button class="btn approve-btn" onclick="approveContent(2)">Approve</button>
+                </div>
+                <div class="status" id="status-2">Status: Pending Review</div>
+                <div class="export-available" id="export-2">Export available.</div>
+            </div>
+
+            <div class="content-item" data-content-id="3">
+                <h2>Proposed Blog Snippet - Q3 Report</h2>
+                <p><strong>Type:</strong> Text Snippet</p>
+                <p><strong>Content:</strong> "Our Q3 performance exceeded expectations, driven by strong user engagement and strategic partnerships. Read the full report on our blog."</p>
+                <p><strong>Call to Action:</strong> "Learn more"</p>
+                <div class="actions">
+                    <button class="btn approve-btn" onclick="approveContent(3)">Approve</button>
+                </div>
+                <div class="status" id="status-3">Status: Pending Review</div>
+                <div class="export-available" id="export-3">Export available.</div>
+            </div>
+            <!-- More content items would be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        function approveContent(contentId) {
+            const statusElement = document.getElementById(`status-${contentId}`);
+            const exportElement = document.getElementById(`export-${contentId}`);
+            const approveButton = statusElement.previousElementSibling.querySelector('.approve-btn');
+
+            if (statusElement && exportElement && approveButton) {
+                statusElement.textContent = 'Status: Approved';
+                statusElement.classList.add('approved');
+                exportElement.style.display = 'block';
+                approveButton.disabled = true; // Disable button after approval
+                approveButton.textContent = 'Approved';
+                approveButton.style.backgroundColor = '#6c757d'; // Grey out button
+            }
+            // In a real application, this would trigger an API call to update the backend
+            console.log(`Content ID ${contentId} approved.`);
+        }
+    </script>
+</body>
+</html>
