@@ -3,90 +3,61 @@
  */
 
 /**
- * A utility function to wrap an async promise in a try-catch block,
- * returning an array `[error, data]` similar to Node.js style callbacks.
- * @param {Promise<any>} promise The promise to execute.
- * @returns {Promise<[Error | null, any]>} An array containing an error object (if any) and the data.
+ * Fetches JSON data from a given URL with an x-command-key header, handling errors.
+ * @param {string} baseUrl - The base URL for the API.
+ * @param {string} path - The API endpoint path.
+ * @param {string} commandKey - The value for the x-command-key header.
+ * @returns {Promise<{data: any | null, error: Error | null}>} An object containing the fetched data or an error.
  */
-const tryCatch = async (promise) => {
+async function fetchJson(baseUrl, path, commandKey) {
   try {
-    const result = await promise;
-    return [null, result];
+    const url = `${baseUrl}${path}`;
+    const response = await fetch(url, {
+      headers: {
+        'x-command-key': commandKey,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
+    }
+
+    const data = await response.json();
+    return { data, error: null };
   } catch (error) {
-    return [error, null];
+    return { data: null, error: error instanceof Error ? error : new Error(String(error)) };
   }
-};
+}
 
 /**
- * Fetches JSON data from a specified URL path using the native fetch API.
- * Includes an x-command-key header for authentication.
- * @param {string} baseUrl The base URL for the API.
- * @param {string} path The API endpoint path.
- * @param {string} commandKey The key for the x-command-key header.
- * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If the fetch operation fails or the response is not OK.
- */
-const fetchJson = async (baseUrl, path, commandKey) => {
-  const url = `${baseUrl}${path}`;
-  const headers = {
-    'x-command-key': commandKey,
-    'Content-Type': 'application/json',
-  };
-
-  const [fetchError, response] = await tryCatch(fetch(url, { headers }));
-
-  if (fetchError) {
-    throw new Error(`Network error fetching ${url}: ${fetchError.message}`);
-  }
-
-  if (!response.ok) {
-    const [errorBodyReadError, errorBody] = await tryCatch(response.text());
-    const bodyText = errorBodyReadError ? 'Failed to read error body' : errorBody;
-    throw new Error(`HTTP error fetching ${url}: ${response.status} ${response.statusText} - ${bodyText}`);
-  }
-
-  const [jsonParseError, data] = await tryCatch(response.json());
-  if (jsonParseError) {
-    throw new Error(`Failed to parse JSON from ${url}: ${jsonParseError.message}`);
-  }
-  return data;
-};
-
-/**
- * Verifies runner telemetry by fetching health and efficiency data from LifeOS.
- * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the LifeOS API.
- * @param {string} params.commandKey - The command key for authentication.
- * @returns {Promise<object>} A structured JSON object with telemetry verification results.
+ * Runs telemetry verification for runner generation 422.
+ * Fetches health and efficiency data from BuilderOS and LifeOS control planes.
+ * @param {{baseUrl: string, commandKey: string}} params - Parameters for the verification.
+ * @returns {Promise<object>} A structured JSON object with verification results.
  */
 export async function runRunnerTelemetryG422Verification({ baseUrl, commandKey }) {
-  if (!baseUrl || !commandKey) {
+  const [cpResponse, effResponse] = await Promise.all([
+    fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
+    fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey),
+  ]);
+
+  if (cpResponse.error || effResponse.error) {
     return {
       ok: false,
-      error: 'Missing baseUrl or commandKey parameter.',
+      generation: 422,
+      runner_assessment: 'telemetry_fetch_failed',
+      errors: {
+        control_plane: cpResponse.error?.message || null,
+        efficiency: effResponse.error?.message || null,
+      },
       checked_at: new Date().toISOString(),
     };
   }
 
-  const controlPlaneHealthPath = '/api/v1/builderos/control-plane/health';
-  const autonomousTelemetryEfficiencyPath = '/api/v1/lifeos/autonomous-telemetry/efficiency';
-
-  const [error, results] = await tryCatch(
-    Promise.all([
-      fetchJson(baseUrl, controlPlaneHealthPath, commandKey),
-      fetchJson(baseUrl, autonomousTelemetryEfficiencyPath, commandKey),
-    ])
-  );
-
-  if (error) {
-    return {
-      ok: false,
-      error: `Telemetry verification failed: ${error.message}`,
-      checked_at: new Date().toISOString(),
-    };
-  }
-
-  const [cpData, effData] = results;
+  const cpData = cpResponse.data;
+  const effData = effResponse.data;
 
   return {
     ok: true,
