@@ -1,11 +1,3 @@
-/**
-- Fetches JSON data from a specified URL path with a command key header.
-- @param {string} baseUrl - The base URL for the API.
-- @param {string} path - The apiEP path.
-- @param {string} commandKey - The value for the 'x-command-key' header.
-- @returns {Promise<object>} The parsed JSON response.
-- @throws {Error} If the network request fails or the response is not OK.
- */
 async function fetchJson(baseUrl, path, commandKey) {
   const url = `${baseUrl}${path}`;
   const response = await fetch(url, {
@@ -22,9 +14,9 @@ async function fetchJson(baseUrl, path, commandKey) {
 }
 
 /**
-- Wraps an async function call in a try-catch block to return a structured result.
-- @param {function(): Promise<any>} promiseFn - An async function that returns a Promise.
-- @returns {Promise<{ok: true, data: any} | {ok: false, error: string}>}
+ * Wraps an async function call in a try-catch block to return a structured result.
+ * @param {function(): Promise<any>} promiseFn - An async function that returns a Promise.
+ * @returns {Promise<{ok: true, data: any} | {ok: false, error: string}>}
  */
 async function tryCatch(promiseFn) {
   try {
@@ -35,11 +27,11 @@ async function tryCatch(promiseFn) {
 }
 
 /**
-- Verifies GAP-006 by checking the health status of Kernel and BuilderOS Control Plane.
-- @param {object} params - The parameters for the verification.
-- @param {string} params.baseUrl - The base URL for the API calls.
-- @param {string} params.commandKey - The command key to be used in the 'x-command-key' header.
-- @returns {Promise<object>} A structured JSON object indicating the verification result.
+ * Verifies GAP-006 by checking the health status of Kernel and BuilderOS Control Plane.
+ * @param {object} params - The parameters for the verification.
+ * @param {string} params.baseUrl - The base URL for the API calls.
+ * @param {string} params.commandKey - The command key to be used in the 'x-command-key' header.
+ * @returns {Promise<object>} A structured JSON object indicating the verification result.
  */
 export async function runGAP006GapVerification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
