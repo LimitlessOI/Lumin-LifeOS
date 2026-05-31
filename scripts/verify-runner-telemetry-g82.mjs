@@ -1,7 +1,3 @@
-/**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- */
-
 // Helper for fetching JSON data with errHdl
 async function fetchJson(baseUrl, path, commandKey) {
   const url = `${baseUrl}${path}`;
@@ -12,7 +8,6 @@ async function fetchJson(baseUrl, path, commandKey) {
         'Content-Type': 'application/json'
       }
     });
-
     if (!response.ok) {
       let errorBody = '';
       try {
@@ -22,7 +17,6 @@ async function fetchJson(baseUrl, path, commandKey) {
       }
       return { error: true, message: `HTTP error! Status: ${response.status}`, details: errorBody, url, status: response.status };
     }
-
     return await response.json();
   } catch (error) {
     return { error: true, message: `Fetch operation failed: ${error.message}`, url };
@@ -54,8 +48,8 @@ export async function runRunnerTelemetryG82Verification({ baseUrl, commandKey })
       ok: false,
       error: true,
       message: 'Failed to retrieve all required telemetry data.',
-      control_plane_data_error: cpDataResult.error ? cpDataResult : undefined, // Corrected
-      efficiency_data_error: effDataResult.error ? effDataResult : undefined, // Added
+      control_plane_data_error: cpDataResult.error ? cpDataResult : undefined, // Corrected error assignment
+      efficiency_data_error: effDataResult.error ? effDataResult : undefined, // Added for clarity
       checked_at: new Date().toISOString()
     };
   }
