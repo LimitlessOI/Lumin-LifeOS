@@ -1,10 +1,8 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
- * Verifies GAP-015: "No trust coverage map (OIL + build + token joint view)"
- * by checking the health status of Kernel and BuilderOS Control Plane.
+ * - Verifies GAP-015: "No trust coverage map (OIL + build + token joint view)"
+ *   by checking the health status of Kernel and BuilderOS Control Plane.
  */
-
 const tryCatch = async (promise) => {
   try {
     const result = await promise;
@@ -22,7 +20,6 @@ const fetchJson = async (baseUrl, path, commandKey) => {
       'Content-Type': 'application/json',
     },
   });
-
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
