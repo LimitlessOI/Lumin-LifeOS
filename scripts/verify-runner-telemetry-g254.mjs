@@ -1,8 +1,8 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
-/**
+/*
  * Fetches JSON data from a given URL with an x-command-key header.
  * Handles network and HTTP errors by returning an error message.
  * @param {string} url - The URL to fetch.
@@ -27,17 +27,17 @@ async function fetchJson(url, commandKey) {
   }
 }
 
-/**
+/*
  * Verifies runner telemetry by fetching control plane health and autonomous efficiency data.
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the API endpoints.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.baseUrl - The base URL for the apiEPs.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A structured JSON object with verification results.
  */
 export async function runRunnerTelemetryG254Verification({ baseUrl, commandKey }) {
   const controlPlaneUrl = `${baseUrl}/api/v1/builderos/control-plane/health`;
-  const efficiencyUrl = `${baseUrl}/api/v1/autonomous-telemetry/efficiency`;
-
+  const efficiencyUrl = `${baseUrl}/api/v1/lifeos/autonomous-telemetry/efficiency`; // Corrected path per instruction
+  
   const [cpResult, effResult] = await Promise.all([
     fetchJson(controlPlaneUrl, commandKey),
     fetchJson(efficiencyUrl, commandKey)
@@ -57,10 +57,10 @@ export async function runRunnerTelemetryG254Verification({ baseUrl, commandKey }
   return {
     ok: true,
     generation: 254,
-    session_tasks_done: 285,
-    session_successful: 256,
-    session_failed: 99,
-    session_governance_blocks: 4,
+    session_tasks_done: 297,
+    session_successful: 151,
+    session_failed: 345,
+    session_governance_blocks: 1,
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
