@@ -2,78 +2,78 @@
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
-/**
- * Helper function to fetch JSON data from a given URL with an x-command-key header.
- * Handles network errors and non-2xx HTTP responses.
- * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
- * @param {string} commandKey - The value for the 'x-command-key' header.
- * @returns {Promise<{data: object|null, error: string|null}>} An object containing either the parsed JSON data or an error message.
- */
-async function fetchJson(baseUrl, path, commandKey) {
-    const url = `${baseUrl}${path}`;
-    try {
-        const response = await fetch(url, {
-            headers: { 'x-command-key': commandKey }
-        });
-        if (!response.ok) {
-            const errorText = await response.text();
-            return { data: null, error: `HTTP error! Status: ${response.status}, Body: ${errorText}` };
-        }
-        const data = await response.json();
-        return { data, error: null };
-    } catch (e) {
-        return { data: null, error: `Network or parsing error: ${e.message}` };
-    }
+async function tryCatch(promise) {
+  try {
+    const data = await promise;
+    return { data, error: null };
+  } catch (error) {
+    return { data: null, error };
+  }
 }
 
-/**
- * Verifies runner telemetry by fetching health and efficiency data concurrently.
- * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for API requests.
- * @param {string} params.commandKey - The command key for authentication.
- * @returns {Promise<object>} A promise that resolves to a structured audit JSON object.
- *   On success: { ok: true, generation: 688, ... }
- *   On failure: { ok: false, generation: 688, error: "...", checked_at: "..." }
- */
+async function fetchJson(baseUrl, path, commandKey) {
+  const url = `${baseUrl}${path}`;
+  const response = await fetch(url, {
+    headers: {
+      'x-command-key': commandKey,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
 export async function runRunnerTelemetryG688Verification({ baseUrl, commandKey }) {
-    if (!baseUrl || !commandKey) {
-        return {
-            ok: false,
-            generation: 688,
-            error: 'Missing baseUrl or commandKey parameter.',
-            checked_at: new Date().toISOString()
-        };
-    }
+  const checked_at = new Date().toISOString();
 
-    const [cpResult, effResult] = await Promise.all([
-        fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-        fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey)
-    ]);
+  if (!baseUrl || !commandKey) {
+    return {
+      ok: false,
+      error: 'Missing baseUrl or commandKey',
+      generation: 688,
+      runner_assessment: 'input_validation_failed',
+      checked_at
+    };
+  }
 
-    if (cpResult.error || effResult.error) {
-        return {
-            ok: false,
-            generation: 688,
-            error: `Failed to fetch data: Control Plane: ${cpResult.error || 'OK'}, Efficiency: ${effResult.error || 'OK'}`,
-            checked_at: new Date().toISOString()
-        };
-    }
+  const [cpResult, effResult] = await Promise.all([
+    tryCatch(fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
+    tryCatch(fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey))
+  ]);
 
-    const cpData = cpResult.data;
-    const effData = effResult.data;
+  if (cpResult.error || effResult.error) {
+    const errorMessages = [];
+    if (cpResult.error) errorMessages.push(`Control Plane Health: ${cpResult.error.message}`);
+    if (effResult.error) errorMessages.push(`Autonomous Telemetry Efficiency: ${effResult.error.message}`);
 
     return {
-        ok: true,
-        generation: 688,
-        session_tasks_done: 731,
-        session_successful: 557,
-        session_failed: 522,
-        session_governance_blocks: 1,
-        builds_today: cpData.build?.builds_today || 0,
-        without_proof: cpData.build?.without_proof || 0,
-        efficiency_summary: effData.efficiency?.summary || null,
-        runner_assessment: 'continuous_autonomous_operation_verified',
-        checked_at: new Date().toISOString()
+      ok: false,
+      error: errorMessages.join('; '),
+      generation: 688,
+      runner_assessment: 'telemetry_fetch_failed',
+      checked_at
     };
+  }
+
+  const cpData = cpResult.data;
+  const effData = effResult.data;
+
+  return {
+    ok: true,
+    generation: 688,
+    session_tasks_done: 731,
+    session_successful: 557,
+    session_failed: 522,
+    session_governance_blocks: 1,
+    builds_today: cpData.build?.builds_today || 0,
+    without_proof: cpData.build?.without_proof || 0,
+    efficiency_summary: effData.efficiency?.summary || null,
+    runner_assessment: 'continuous_autonomous_operation_verified',
+    checked_at
+  };
 }
