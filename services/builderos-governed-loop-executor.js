@@ -34,7 +34,7 @@ function resolveCommandKey(explicit) {
   return explicit || process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY || '';
 }
 
-async function dispatchBuilderPlan(plan, { baseUrl, commandKey }) {
+async function dispatchBuilderPlan(plan, { baseUrl, commandKey, task_id, blueprint_id }) {
   const url = `${baseUrl}/api/v1/lifeos/builder/build`;
   const body = {
     domain: plan.domain,
@@ -44,6 +44,8 @@ async function dispatchBuilderPlan(plan, { baseUrl, commandKey }) {
     target_file: plan.target_file || undefined,
     commit_message: plan.commit_message,
     release_mode: 'supervised',
+    task_id: task_id || plan.task_id || `cc-job-${Date.now()}`,
+    blueprint_id: blueprint_id || plan.blueprint_id || undefined,
     ...(Array.isArray(plan.files) && plan.files.length ? { files: plan.files } : {}),
     ...(plan.model ? { model: plan.model } : {}),
     ...(plan.max_output_tokens ? { max_output_tokens: plan.max_output_tokens } : {}),
@@ -105,6 +107,24 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   const commandKey = resolveCommandKey(options.commandKey);
   if (!commandKey) {
     return { ok: false, error: 'command_key_missing', stage: 'preflight' };
+  }
+
+  if (options.controlPlaneHealthCheck !== false && options.fetchControlPlaneHealth) {
+    try {
+      const cpHealth = await options.fetchControlPlaneHealth({ baseUrl, commandKey });
+      if (cpHealth?.status === 'RED' && !options.allow_red_health) {
+        return {
+          ok: false,
+          error: 'control_plane_health_red',
+          stage: 'preflight',
+          health: cpHealth,
+        };
+      }
+    } catch (healthErr) {
+      if (options.strict_health) {
+        return { ok: false, error: 'control_plane_health_check_failed', stage: 'preflight', detail: healthErr.message };
+      }
+    }
   }
 
   const job = await getCommandControlJob(pool, jobId);
@@ -171,7 +191,12 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     repair_attempt: 0,
   };
 
-  let builderResult = await dispatchBuilderPlan(plan, { baseUrl, commandKey });
+  let builderResult = await dispatchBuilderPlan(plan, {
+    baseUrl,
+    commandKey,
+    task_id: `cc-${jobId}`,
+    blueprint_id: job.blueprint_id || plan.blueprint_id,
+  });
   trace.builder_output = {
     committed: builderResult.committed,
     target_file: builderResult.target_file,
@@ -179,6 +204,8 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     http_status: builderResult.http_status,
     error: builderResult.error,
     output_bytes: builderResult.output ? builderResult.output.length : 0,
+    task_id: `cc-${jobId}`,
+    kernel_receipts: builderResult.raw?.kernel_receipts || null,
   };
   await updateCommandControlJobExecution(pool, jobId, {
     receipt: { stage: 'builder_dispatch', repair_attempt: 0, ...trace.builder_output },
@@ -247,7 +274,12 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     repair_attempt: 1,
   };
 
-  builderResult = await dispatchBuilderPlan(plan, { baseUrl, commandKey });
+  builderResult = await dispatchBuilderPlan(plan, {
+    baseUrl,
+    commandKey,
+    task_id: `cc-${jobId}-retry`,
+    blueprint_id: job.blueprint_id || plan.blueprint_id,
+  });
   trace.builder_output = {
     committed: builderResult.committed,
     target_file: builderResult.target_file,
@@ -256,6 +288,8 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     error: builderResult.error,
     output_bytes: builderResult.output ? builderResult.output.length : 0,
     repair_attempt: 1,
+    task_id: `cc-${jobId}-retry`,
+    kernel_receipts: builderResult.raw?.kernel_receipts || null,
   };
   await updateCommandControlJobExecution(pool, jobId, {
     receipt: { stage: 'builder_dispatch', repair_attempt: 1, ...trace.builder_output },

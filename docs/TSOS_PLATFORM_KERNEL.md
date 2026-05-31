@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | **DRAFT — pending Adam approval** |
+| **Status** | **Phase 0 IMPLEMENTED on disk — deploy proof BLOCKED until Railway redeploy** |
 | **Authority** | Subordinate to `docs/SSOT_NORTH_STAR.md`; does **not** amend North Star |
 | **Last Updated** | 2026-05-24 |
 | **Operating prompt** | `prompts/00-RESIDENT-ARCHITECT.md` |

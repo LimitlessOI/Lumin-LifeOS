@@ -18,12 +18,11 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | Medium — naming/governance, not runtime break |
-| **Evidence** | Am 44 §1: “supreme accounting layer”; Am 46 §1: “supreme measurement/control plane” |
-| **Contradiction** | Two amendments claim supremacy in overlapping territory |
-| **Resolution direction** | **THINK:** TSOS Platform Kernel orchestrates both as drivers; neither is the full kernel |
-| **Label** | **KNOW** (text); **THINK** (resolution) |
+| **Status** | **PARTIAL** — kernel orchestrates both (`services/tsos-platform-kernel.js`) |
+| **Severity** | Medium |
+| **Resolution direction** | TSOS Platform Kernel orchestrates Am 44 + Am 46 as drivers |
+| **Proof** | `docs/TSOS_PLATFORM_KERNEL.md`, `server.js` platformKernel wiring |
+| **Label** | **KNOW** |
 
 ---
 
@@ -31,10 +30,8 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | High — boot crash when `tokenAccounting` is set |
-| **Evidence** | `startup/register-runtime-routes.js:334` calls `createOperatorConsumptionLedgerRoutes`; no import in lines 1–81 |
-| **Expected fix** | `import { createOperatorConsumptionLedgerRoutes } from "../routes/operator-consumption-ledger-routes.js"` |
+| **Status** | **RESOLVED** (2026-05-24) |
+| **Proof** | `startup/register-runtime-routes.js` imports `createOperatorConsumptionLedgerRoutes` |
 | **Label** | **KNOW** |
 
 ---
@@ -43,10 +40,11 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | High — DONE gate exists but builder bypasses it |
-| **Evidence** | `services/builderos-control-plane-service.js:249` implements gate; `routes/lifeos-council-builder-routes.js:1398` `buildAndCommit` has no `canMarkBuildDone` call; `docs/SYSTEM_COVERAGE_REPORT.md` confirms |
-| **Label** | **KNOW** |
+| **Status** | **PARTIAL** — wired via `platformKernel.wrapBuild()` → `recordBuildComplete` + `canMarkBuildDone` |
+| **Severity** | Medium until live build proof |
+| **Proof** | `routes/lifeos-council-builder-routes.js` mounts `platformKernel.wrapBuild(buildAndCommit)` |
+| **Next** | Prove on committed `/build` with OIL + token receipts when `TOKEN_ACCOUNTING_STRICT=true` |
+| **Label** | **KNOW** (wiring); **UNVERIFIED** (live build gate) |
 
 ---
 
@@ -54,22 +52,20 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | Medium — accounting exists but inactive |
-| **Evidence** | `token_usage_log`: 52 rows, last `2026-03-22`, 0 rows last 24h (`verify-token-accounting-current-state.mjs`) |
-| **Label** | **KNOW** (counts); **UNVERIFIED** (whether production traffic should exist now) |
+| **Status** | **OPEN** |
+| **Evidence** | Neon: 52 rows, last `2026-03-22`, 0 / 24h (post-migration verify) |
+| **Label** | **KNOW** |
 
 ---
 
-### OC-005 — Token / control-plane APIs 404 on deployed URL
+### OC-005 — Token / control-plane / kernel APIs 404 on deployed URL
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | High — deploy drift |
-| **Evidence** | `docs/SYSTEM_COVERAGE_REPORT.md` — `/api/v1/tokens/*`, `/api/v1/builderos/control-plane/*` return 404 until deploy + migrations |
-| **Migrations not on Neon** | `20260532` unified view, `20260601` build_task_ledger; partial `20260531` |
-| **Label** | **KNOW** (404); **UNVERIFIED** (current Railway SHA vs local main) |
+| **Status** | **BLOCKED** — deploy drift until Railway picks up post-push SHA |
+| **Evidence** | `npm run kernel:verify` — HTTP 404 on `/api/v1/kernel/*`, `/api/v1/tokens/*`, `/api/v1/builderos/control-plane/*` |
+| **Neon migrations** | **PARTIAL RESOLVED** — `20260602`, `20260603` applied; unified view exists |
+| **Label** | **KNOW** (404); **UNVERIFIED** (deploy SHA after push) |
 
 ---
 
@@ -77,9 +73,8 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN (expected — Phase 0) |
-| **Severity** | Low until kernel meaning layer needed |
-| **Evidence** | Am 45 `DRAFT` / Phase 0 paper only; placeholder cols on `token_usage_log` |
+| **Status** | **OPEN** (expected Phase 0) |
+| **Evidence** | Kernel `cclPlaceholder()` no-op only |
 | **Label** | **KNOW** |
 
 ---
@@ -88,10 +83,7 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | High for kernel authority chain |
-| **Evidence** | Am 46 §4.4 Phase 3 `founder_decision_ledger`; today: `pending_adam`, gate-change, SSOT receipts scattered |
-| **Impact** | Kernel cannot answer “who authorized this under which SSOT version?” |
+| **Status** | **OPEN** — kernel stub only (`decisionLedgerStub`) |
 | **Label** | **KNOW** |
 
 ---
@@ -100,10 +92,7 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN (recurring drift risk) |
-| **Severity** | Medium — naming and priority confusion |
-| **Evidence** | `BUILDEROS_ALPHA_BLUEPRINT.md` §0: “BuilderOS is not LifeOS”; Am 21 LifeOS consumer scope |
-| **Risk** | Agents implement product in wrong lane or name “LifeOS Kernel” for platform |
+| **Status** | **OPEN** (recurring drift risk) |
 | **Label** | **KNOW** |
 
 ---
@@ -112,10 +101,9 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | High — unmetered direct provider fetch |
-| **Evidence** | `services/builder-council-review.js` — direct `fetch` to Anthropic, Groq, Perplexity, Cerebras (lines ~168–403); used from supervisor path |
-| **Impact** | No token receipt, no kernel choke, no OIL |
+| **Status** | **BLOCKED** — documented; 8 P0 hits in bypass report |
+| **Evidence** | `docs/architecture/AI_CALL_BYPASS_REPORT.md`; header warning in service |
+| **Next** | Phase 2 — route through `callCouncilMember` or unmetered exception receipts |
 | **Label** | **KNOW** |
 
 ---
@@ -124,10 +112,9 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | Medium |
-| **Evidence** | OIL receipts in ~3 route files per constitutional router audit; not all AI/build paths |
-| **Label** | **THINK** (audit estimate); **KNOW** (not universal) |
+| **Status** | **PARTIAL** — build path writes OIL receipt with `task_id` when supervised |
+| **Proof** | `lifeos-council-builder-routes.js` `writeSecurityReceipt` includes `task_id` |
+| **Label** | **KNOW** (partial) |
 
 ---
 
@@ -135,9 +122,7 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | Medium |
-| **Evidence** | Builder `/build` writes some performance memory; `lessons_learned` mostly via `/api/v1/memory/evidence/*` manual path |
+| **Status** | **OPEN** |
 | **Label** | **THINK** |
 
 ---
@@ -146,10 +131,9 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | Low — pre-kernel placeholder |
-| **Evidence** | Prior audit: `_origCallCouncil` saved ~line 1183; kernel wrap not applied |
-| **Label** | **UNVERIFIED** (exact line — confirm in Conductor session) |
+| **Status** | **RESOLVED** — `platformKernel.wrapCouncilMember(rawCallCouncilMember)` |
+| **Proof** | `server.js` Phase 0 kernel block |
+| **Label** | **KNOW** |
 
 ---
 
@@ -157,9 +141,7 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | OPEN |
-| **Severity** | Medium — legacy build ledger path orphaned |
-| **Evidence** | Am 46 audit; `20260601` adds `build_task_ledger` + legacy compat |
+| **Status** | **OPEN** — superseded by `build_task_ledger` via control plane |
 | **Label** | **KNOW** |
 
 ---
@@ -168,7 +150,8 @@
 
 | ID | Resolved | Receipt |
 |----|----------|---------|
-| — | — | — |
+| OC-002 | 2026-05-24 | OCL import in `register-runtime-routes.js` |
+| OC-012 | 2026-05-24 | Kernel council wrap in `server.js` |
 
 ---
 
@@ -176,7 +159,7 @@
 
 - **Every Architect Mode mission** — scan for new contradictions
 - **Every Conductor session** touching Am 44/45/46 — update if evidence changes
-- **After deploy** — re-run `npm run tokens:verify`, `npm run builderos:control-plane:verify`
+- **After deploy** — re-run `npm run kernel:verify`, `npm run tokens:verify`, `npm run builderos:control-plane:verify`
 
 ---
 
@@ -184,4 +167,5 @@
 
 | Date | Change |
 |------|--------|
-| 2026-05-24 | v1 — seeded OC-001 through OC-013 from token accounting + kernel audits |
+| 2026-05-24 | v1 — seeded OC-001 through OC-013 |
+| 2026-05-24 | v2 — Phase 0 kernel slice: OC-002/012 RESOLVED; OC-003/005/009/010 PARTIAL/BLOCKED |

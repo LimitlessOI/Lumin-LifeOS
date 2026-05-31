@@ -60,6 +60,15 @@ export function createSavingsLedger(pool) {
     fallbackTriggered = false,
     driftDetected = false,
     costUSD = null,
+    product_lane = null,
+    blueprint_id = null,
+    oil_result = null,
+    ccl_used = false,
+    ccl_packet_id = null,
+    ccl_authority_level = null,
+    ccl_round_trip_status = null,
+    ccl_estimated_savings_tokens = 0,
+    ccl_quality_result = null,
   } = {}) {
     if (!pool) return null;
 
@@ -101,10 +110,14 @@ export function createSavingsLedger(pool) {
           quality_score, quality_method,
           compression_layers,
           fallback_triggered, drift_detected,
+          product_lane, blueprint_id, oil_result,
+          ccl_used, ccl_packet_id, ccl_authority_level,
+          ccl_round_trip_status, ccl_estimated_savings_tokens, ccl_quality_result,
           logged_at
         ) VALUES (
           $1,$2,$3, $4,$5,$6, $7,$8,$9, $10,$11,$12,
-          $13,$14, $15,$16, $17,$18, $19, $20,$21, NOW()
+          $13,$14, $15,$16, $17,$18, $19, $20,$21,
+          $22,$23,$24, $25,$26,$27, $28,$29,$30, NOW()
         ) RETURNING id
       `, [
         sessionId || null, requestId || null, clientId || null,
@@ -116,6 +129,9 @@ export function createSavingsLedger(pool) {
         qualityScore, qualityMethod || 'savings-ledger',
         compressionLayers ? JSON.stringify(compressionLayers) : null,
         fallbackTriggered, driftDetected,
+        product_lane || taskType || null, blueprint_id || null, oil_result || null,
+        Boolean(ccl_used), ccl_packet_id || null, ccl_authority_level || null,
+        ccl_round_trip_status || null, ccl_estimated_savings_tokens || 0, ccl_quality_result || null,
       ]);
       return result.rows[0]?.id;
     } catch (err) {

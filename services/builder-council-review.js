@@ -17,6 +17,10 @@
  *   - Still no consensus    → NEEDS_HUMAN → logged to pending_adam
  *
  * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ *
+ * ⚠️ KERNEL BYPASS (OC-009): This module uses direct provider fetch — NOT wrapped by
+ * `services/tsos-platform-kernel.js`. See `docs/architecture/AI_CALL_BYPASS_REPORT.md`.
+ * Phase 2: route through `callCouncilMember` or record unmetered exceptions.
  */
 
 import fs from 'node:fs';

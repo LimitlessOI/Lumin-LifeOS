@@ -2,6 +2,56 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SSOT] 2026-05-24 — TSOS Platform Kernel Phase 0 (A-to-Z implementation slice)
+
+### Mission
+**TSOS Platform Kernel — A-to-Z Implementation, Deployment, Verification, and Receipts**
+
+Moved from documented kernel → **Phase 0 implementation**: syscall layer, council wrap, build wrap, migrations, verification scripts, bypass report.
+
+### Files created
+- `services/tsos-platform-kernel.js` — `kernelExecute`, `wrapCouncilMember`, `wrapBuild`, `getKernelHealth`
+- `routes/tsos-platform-kernel-routes.js` — `/api/v1/kernel/{health,verify}`
+- `routes/token-accounting-routes.js`, `routes/operator-consumption-ledger-routes.js`, `routes/builderos-control-plane-routes.js`
+- `services/token-accounting-service.js`, `services/builderos-control-plane-service.js`, `services/operator-consumption-ledger-service.js`, `services/metered-ai-call.js`
+- Migrations: `20260531`, `20260532`, `20260601`, `20260602` (repair), `20260603` (unified view v2)
+- Scripts: `verify-tsos-platform-kernel.mjs`, `verify-ai-call-bypasses.mjs`, `kernel-health.mjs`, token/control-plane verify scripts
+- `docs/architecture/AI_CALL_BYPASS_REPORT.md` (generated)
+
+### Files edited
+- `server.js` — kernel after council; `platformKernel` in route deps
+- `startup/register-runtime-routes.js` — OCL import fix; kernel/token/control-plane mounts; `platformKernel` to builder
+- `routes/lifeos-council-builder-routes.js` — `wrapBuild` on `/build`; task_id on council calls; OIL receipt task_id
+- `services/builderos-governed-loop-executor.js` — task_id/blueprint_id on governed `/build` fetch
+- `services/builder-council-review.js` — bypass warning header
+- `package.json` — `kernel:verify`, `kernel:health`, `ai:bypasses`, token scripts
+- `docs/architecture/OPEN_CONTRADICTIONS.md` — OC status updates
+
+### Verification results (local Neon + repo)
+| Script | Result |
+|--------|--------|
+| `tokens:verify` | PARTIAL — unified view **exists**; 52 token rows; 0 / 24h |
+| `builderos:control-plane:verify` | PARTIAL — 11/12 (api_health 404 deploy) |
+| `kernel:verify` | PARTIAL — repo wiring PASS; deploy routes 404 |
+| `ai:bypasses` | PARTIAL — 27 hits, 8 P0 (builder-council-review) |
+
+### DB state (Neon after migrations)
+- `operator_consumption_ledger`, `ai_unmetered_exceptions`, `build_task_ledger`, `unified_token_accounting_report` — **KNOW exists**
+- `token_usage_log` — 52 rows, last 2026-03-22
+
+### Deploy
+- Routes 404 on current Railway until redeploy after push — **BLOCKED** (expected)
+
+### Remaining bypasses (top)
+- `services/builder-council-review.js` — direct provider fetch (P0)
+- Scripts / TCO / premium-api — see `AI_CALL_BYPASS_REPORT.md`
+
+### Next mission
+1. Railway redeploy after push → re-run `npm run kernel:verify`
+2. Phase 2 — eliminate builder-council-review bypass
+3. Live `/build` proof with kernel receipts under supervised mode
+
+---
 ## [SSOT] 2026-05-24 — Resident Architect Mode v1 (governance docs only)
 
 ### What was done

@@ -76,6 +76,7 @@ export function createCouncilService({
   trackAIPerformance,
   notifyCriticalIssue,
   savingsLedger,  // TCO-E01 — injected from server.js
+  tokenAccounting, // Token Accounting OS — metered enforcement layer
 }) {
   // Both backed by Neon — stats survive Railway deploys
   const tokenOptimizer = createTokenOptimizer(pool);
@@ -95,6 +96,51 @@ export function createCouncilService({
     COUNCIL_MEMBERS,
     timeZone: process.env.TZ || "America/Los_Angeles",
   });
+
+  async function recordMetered(payload = {}) {
+    const base = {
+      sessionId: payload.sessionId,
+      requestId: payload.requestId,
+      clientId: payload.clientId,
+      provider: payload.provider,
+      model: payload.model,
+      taskType: payload.taskType,
+      originalTokens: payload.originalTokens,
+      compressedTokens: payload.compressedTokens,
+      outputTokens: payload.outputTokens,
+      savedTokens: payload.savedTokens,
+      savedOutputPct: payload.savedOutputPct,
+      cacheHit: payload.cacheHit,
+      qualityScore: payload.qualityScore,
+      qualityMethod: payload.qualityMethod || "token-accounting-os",
+      compressionLayers: payload.compressionLayers,
+      fallbackTriggered: payload.fallbackTriggered,
+      driftDetected: payload.driftDetected,
+      costUSD: payload.costUSD,
+      product_lane: payload.product_lane,
+      blueprint_id: payload.blueprint_id,
+      oil_result: payload.oil_result,
+      ccl_used: payload.ccl_used,
+      ccl_packet_id: payload.ccl_packet_id,
+      ccl_authority_level: payload.ccl_authority_level,
+      ccl_round_trip_status: payload.ccl_round_trip_status,
+      ccl_estimated_savings_tokens: payload.ccl_estimated_savings_tokens,
+      ccl_quality_result: payload.ccl_quality_result,
+    };
+    if (tokenAccounting?.recordMeteredCall) {
+      return tokenAccounting.recordMeteredCall({ source: "council", ...base });
+    }
+    if (savingsLedger) {
+      try {
+        const id = await savingsLedger.record(base);
+        return { ok: Boolean(id), ledger_id: id };
+      } catch (err) {
+        console.warn("[COUNCIL] ledger record failed:", err.message);
+        return { ok: false, error: err.message };
+      }
+    }
+    return { ok: false, error: "no_ledger" };
+  }
 
   const ollamaCouncilOff = COUNCIL_OLLAMA_MODE === "off";
   const ollamaDisabled = ollamaCouncilOff ||
@@ -863,6 +909,18 @@ export function createCouncilService({
       );
     }
 
+    if (tokenAccounting) {
+      const gate = await tokenAccounting.checkBudgetGate();
+      if (!gate.allowed && tokenAccounting.strict) {
+        throw new Error(
+          `Token Accounting hard limit: ${gate.reason} (spend=$${gate.spend.toFixed(4)})`
+        );
+      }
+      if (gate.warning) {
+        console.warn(`⚠️ [TOKEN-ACCT] ${gate.warning} — spend=$${gate.spend.toFixed(4)}`);
+      }
+    }
+
     // SOT context is now injected into the system prompt via buildSystemContext().
     // Removed: duplicate SOT injection into user prompt that caused double-billing.
 
@@ -946,8 +1004,7 @@ export function createCouncilService({
         savedCostUSD: estimatedBaseline * 0.000003,
       }).catch(() => {});
 
-      if (savingsLedger) {
-        savingsLedger.record({
+      recordMetered({
           provider: "logic",
           model: "rules-engine-v1",
           taskType,
@@ -967,7 +1024,6 @@ export function createCouncilService({
           },
           qualityMethod: "rules-engine",
         }).catch(() => {});
-      }
 
       return text;
     }
@@ -1003,8 +1059,7 @@ export function createCouncilService({
           costUSD: 0,
           savedCostUSD: estimatedTokens * 0.000003,
         }).catch(() => {});
-        if (savingsLedger) {
-          savingsLedger.record({
+        recordMetered({
             provider: COUNCIL_MEMBERS[member]?.provider || member,
             model: COUNCIL_MEMBERS[member]?.model || member,
             taskType,
@@ -1015,7 +1070,6 @@ export function createCouncilService({
             cacheHit: true,
             costUSD: 0,
           }).catch(() => {});
-        }
         return cached;
       }
     }
@@ -1302,9 +1356,8 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           savedCostUSD: realTokensSaved * 0.000003,
         }).catch(() => {});
 
-        // TCO-E01: Savings ledger — fire-and-forget, never blocks the response
-        if (savingsLedger) {
-          savingsLedger.record({
+        // TCO-E01: Token Accounting OS — metered ledger receipt
+        recordMetered({
             provider,
             model: config.model || member,
             taskType,
@@ -1317,7 +1370,6 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             cacheHit: false,
             compressionLayers: buildRecordedCompressionLayers(compressionLayers, outputTokens, codSavedOutputPct),
           }).catch(() => {});
-        }
 
         if (updateROI) {
           await updateROI(0, cost, 0, realTokensSaved);
@@ -1407,8 +1459,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           savedCostUSD: totalSavedInputTokens * 0.000003,
         }).catch(() => {});
 
-        if (savingsLedger) {
-          savingsLedger.record({
+        recordMetered({
             provider: "gemini",
             model: config.model || member,
             taskType,
@@ -1421,7 +1472,6 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             cacheHit: false,
             compressionLayers: buildRecordedCompressionLayers(compressionLayers, outputTokens, codSavedOutputPct),
           }).catch(() => {});
-        }
 
         if (options.useCache !== false) {
           await cacheResponse(prompt, member, cleanForCache(text), taskType);
@@ -1475,10 +1525,10 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         // TCO-E01: ledger for Ollama (free/local — cost $0)
-        if (savingsLedger) {
+        {
           const ollamaIn = estimateTokens(finalPrompt);
           const ollamaOut = estimateTokens(text);
-          savingsLedger.record({
+          recordMetered({
             provider: 'ollama',
             model: currentConfig.model || member,
             taskType,
@@ -1544,10 +1594,10 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         // TCO-E01: ledger for DeepSeek
-        if (savingsLedger) {
+        {
           const dsIn = json.usage?.prompt_tokens || estimateTokens(finalPrompt);
           const dsOut = json.usage?.completion_tokens || estimateTokens(text);
-          savingsLedger.record({
+          recordMetered({
             provider: 'deepseek',
             model: config.model || member,
             taskType,
@@ -1619,8 +1669,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           savedCostUSD: totalSavedInputTokens * 0.000003,
         }).catch(() => {});
 
-        if (savingsLedger) {
-          savingsLedger.record({
+        recordMetered({
             provider: "anthropic",
             model: config.model || member,
             taskType,
@@ -1633,7 +1682,6 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             cacheHit: false,
             compressionLayers: buildRecordedCompressionLayers(compressionLayers, outputTokens, codSavedOutputPct),
           }).catch(() => {});
-        }
 
         if (options.useCache !== false) {
           await cacheResponse(prompt, member, cleanForCache(text), taskType);

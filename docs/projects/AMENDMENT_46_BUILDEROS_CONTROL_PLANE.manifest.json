@@ -1,0 +1,13 @@
+{
+  "amendment_id": "AMENDMENT_46_BUILDEROS_CONTROL_PLANE",
+  "title": "BuilderOS Control Plane",
+  "status": "IN_BUILD",
+  "last_updated": "2026-05-24",
+  "supersedes_partial": ["AMENDMENT_44_TOKEN_ACCOUNTING_OS"],
+  "owned_files": [
+    "services/builderos-control-plane-service.js",
+    "routes/builderos-control-plane-routes.js",
+    "db/migrations/20260601_build_task_ledger.sql",
+    "scripts/verify-builderos-control-plane.mjs"
+  ]
+}

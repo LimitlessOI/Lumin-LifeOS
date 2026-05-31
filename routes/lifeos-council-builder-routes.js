@@ -493,6 +493,7 @@ export function createLifeOSCouncilBuilderRoutes({
   getCachedResponse,
   cacheResponse,
   commitToGitHub,
+  platformKernel,
 }) {
   const log = logger || console;
   const cacheGet = typeof getCachedResponse === 'function' ? getCachedResponse : null;
@@ -1067,6 +1068,10 @@ export function createLifeOSCouncilBuilderRoutes({
         allowModelDowngrade: false,
         taskType: mode === 'code' ? 'codegen' : mode,
         maxOutputTokens,
+        requestId: req.body?.task_id || undefined,
+        task_id: req.body?.task_id || undefined,
+        product_lane: domain || 'builderos',
+        source_route: '/api/v1/lifeos/builder/task',
       });
       const raw = typeof result === 'string' ? result : result?.content || result?.text || '';
       const { output, placement } = splitBuilderOutput(raw);
@@ -1776,7 +1781,14 @@ export function createLifeOSCouncilBuilderRoutes({
       if (releaseMode === BUILDER_MODE.SUPERVISED) {
         writeSecurityReceipt(
           SECURITY_RECEIPT_TYPES.BUILDER_SUPERVISED_BUILD,
-          { target_file: resolvedTarget, commit_sha: goldenSha, model_used, task: String(taskBody.task || '').slice(0, 200) },
+          {
+            target_file: resolvedTarget,
+            commit_sha: goldenSha,
+            model_used,
+            task: String(taskBody.task || '').slice(0, 200),
+            task_id: taskBody.task_id || null,
+            build_task_id: taskBody.task_id || null,
+          },
           dbPool
         ).catch(() => {});
       }
@@ -2022,7 +2034,11 @@ export function createLifeOSCouncilBuilderRoutes({
     app.get(`${base}/gaps`, requireKey, getBuilderGaps);
     // §2.11 execution endpoints — the system writes and commits code
     app.post(`${base}/execute`, requireKey, executeOutput);
-    app.post(`${base}/build`, requireKey, buildAndCommit);
+    app.post(
+      `${base}/build`,
+      requireKey,
+      platformKernel?.wrapBuild ? platformKernel.wrapBuild(buildAndCommit) : buildAndCommit
+    );
     log.info('✅ [LIFEOS-BUILDER] Council builder routes mounted at /api/v1/lifeos/builder (incl. /execute + /build + /history + /gaps)');
   };
 }

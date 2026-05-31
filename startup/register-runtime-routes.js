@@ -69,6 +69,10 @@ import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-route
 import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
 import { createTokenOSRoutes } from "../routes/tokenos-routes.js";
+import { createTokenAccountingRoutes } from "../routes/token-accounting-routes.js";
+import { createOperatorConsumptionLedgerRoutes } from "../routes/operator-consumption-ledger-routes.js";
+import { createBuilderOSControlPlaneRoutes } from "../routes/builderos-control-plane-routes.js";
+import { createTSOSPlatformKernelRoutes } from "../routes/tsos-platform-kernel-routes.js";
 import { getCachedResponse, cacheResponse } from "../services/response-cache.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
@@ -298,6 +302,7 @@ export async function registerRuntimeRoutes(app, deps) {
     getCachedResponse,
     cacheResponse,
     commitToGitHub,
+    platformKernel: deps.platformKernel,
   })(app);
 
   app.use(
@@ -320,6 +325,43 @@ export async function registerRuntimeRoutes(app, deps) {
 
   // TokenOS — B2B API token savings product
   createTokenOSRoutes({ pool, requireKey, callCouncilMember, logger })(app);
+
+  // Token Accounting OS — unified ledger + OCL + health
+  if (deps.tokenAccounting) {
+    app.use(
+      "/api/v1/tokens",
+      createTokenAccountingRoutes({ pool, requireKey, tokenAccounting: deps.tokenAccounting, savingsLedger: deps.savingsLedger })
+    );
+    app.use(
+      "/api/v1/tokens",
+      createOperatorConsumptionLedgerRoutes({ pool, requireKey, tokenAccounting: deps.tokenAccounting })
+    );
+    logger.info("✅ [TOKEN-ACCOUNTING] Routes mounted at /api/v1/tokens/{unified,operator,health,verify}");
+  } else {
+    logger.warn("⚠️ [TOKEN-ACCOUNTING] tokenAccounting service missing — routes not mounted");
+  }
+
+  if (deps.builderOSControlPlane) {
+    app.use(
+      "/api/v1/builderos/control-plane",
+      createBuilderOSControlPlaneRoutes({
+        pool,
+        requireKey,
+        controlPlane: deps.builderOSControlPlane,
+      })
+    );
+    logger.info("✅ [BUILDEROS-CONTROL-PLANE] Routes mounted at /api/v1/builderos/control-plane/{health,summary,builds}");
+  } else {
+    logger.warn("⚠️ [BUILDEROS-CONTROL-PLANE] control plane service missing — routes not mounted");
+  }
+
+  if (deps.platformKernel) {
+    app.use(
+      "/api/v1/kernel",
+      createTSOSPlatformKernelRoutes({ requireKey, platformKernel: deps.platformKernel })
+    );
+    logger.info("✅ [TSOS-KERNEL] Routes mounted at /api/v1/kernel/{health,verify}");
+  }
 
   // Optional LifeOS / Kids / Teacher modules remain degradable.
   async function importOptionalRoute(modulePath, exportName) {

@@ -73,6 +73,9 @@ import {
 } from "./services/knowledge-context.js";
 import { createCouncilService } from "./services/council-service.js";
 import { createSavingsLedger } from "./services/savings-ledger.js";
+import { createTokenAccountingService } from "./services/token-accounting-service.js";
+import { createBuilderOSControlPlaneService } from "./services/builderos-control-plane-service.js";
+import { createTSOSPlatformKernel } from "./services/tsos-platform-kernel.js";
 import { AdminModule } from "./modules/admin/admin-module.js";
 import { ToolsModule } from "./modules/system/tools-module.js";
 import { KnowledgeModule } from "./modules/system/knowledge-module.js";
@@ -531,26 +534,11 @@ const providerCooldowns = new Map();
 
 // ==================== SAVINGS LEDGER ====================
 const savingsLedger = createSavingsLedger(pool);
+const tokenAccounting = createTokenAccountingService({ pool, savingsLedger, logger });
+const builderOSControlPlane = createBuilderOSControlPlaneService({ pool, tokenAccounting, logger });
 
 // ==================== COUNCIL SERVICE INITIALIZATION ====================
-const {
-  compressPrompt,
-  decompressResponse,
-  decodeMicroBody,
-  buildMicroResponse,
-  getApiKeyForProvider,
-  getProviderPingConfig,
-  pingCouncilMember,
-  calculateCost,
-  getDailySpend,
-  updateDailySpend,
-  resolveCouncilMember,
-  callCouncilMember,
-  callCouncilWithFailover,
-  detectBlindSpots,
-  tokenOptimizer,
-  lclMonitor,
-} = createCouncilService({
+const councilService = createCouncilService({
   pool,
   COUNCIL_MEMBERS,
   COUNCIL_ALIAS_MAP,
@@ -572,7 +560,38 @@ const {
   trackAIPerformance,
   notifyCriticalIssue,
   savingsLedger, // TCO-E01 — created above as standalone var
+  tokenAccounting,
 });
+
+const {
+  compressPrompt,
+  decompressResponse,
+  decodeMicroBody,
+  buildMicroResponse,
+  getApiKeyForProvider,
+  getProviderPingConfig,
+  pingCouncilMember,
+  calculateCost,
+  getDailySpend,
+  updateDailySpend,
+  resolveCouncilMember,
+  callCouncilMember: rawCallCouncilMember,
+  callCouncilWithFailover,
+  detectBlindSpots,
+  tokenOptimizer,
+  lclMonitor,
+} = councilService;
+
+// ==================== TSOS PLATFORM KERNEL (Phase 0) ====================
+const platformKernel = createTSOSPlatformKernel({
+  pool,
+  tokenAccounting,
+  builderControlPlane: builderOSControlPlane,
+  savingsLedger,
+  logger,
+});
+
+const callCouncilMember = platformKernel.wrapCouncilMember(rawCallCouncilMember);
 
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 // resolveCouncilMember, callCouncilMember, callCouncilWithFailover provided by createCouncilService above
@@ -1006,6 +1025,9 @@ const { tcCoordinator, wkIntegrityEngine } = await registerRuntimeRoutes(app, {
   makePhoneCall,
   commitToGitHub,
   savingsLedger,
+  tokenAccounting,
+  builderOSControlPlane,
+  platformKernel,
 });
 
 // ==================== AI COUNCIL CONSENSUS MODE ====================
