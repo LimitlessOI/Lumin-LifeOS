@@ -1,10 +1,10 @@
--- db/migrations/YYYYMMDDHHMMSS_marketing_schema.sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Table: campaigns
-CREATE TABLE campaigns (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    start_date TIMESTAMP WITH TIME ZONE,
-    end_date TIMESTAMP WITH TIME ZONE,
-    status VARCHAR(50
+-- Drop tables in reverse order of dependency to ensure clean recreation
+DROP TABLE IF EXISTS marketing_analytics CASCADE;
+DROP TABLE IF EXISTS marketing_interactions CASCADE;
+DROP TABLE IF EXISTS marketing_posts CASCADE;
+DROP TABLE IF EXISTS marketing_campaigns CASCADE;
+DROP TABLE IF EXISTS marketing_sessions CASCADE;
+
+--
