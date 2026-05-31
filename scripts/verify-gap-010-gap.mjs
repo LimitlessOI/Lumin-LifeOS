@@ -1,8 +1,3 @@
-/**
- * A generic helper to wrap an async operation in a tryCatch block.
- * @param {Promise<any>} promise The promise to execute.
- * @returns {Promise<{success: true, data: any} | {success: false, error: Error}>}
- */
 const tryCatch = async (promise) => {
   try {
     const data = await promise;
@@ -11,6 +6,7 @@ const tryCatch = async (promise) => {
     return { success: false, error };
   }
 };
+
 /**
  * Fetches JSON data from a specified URL with a command key header.
  * @param {string} baseUrl The base URL of the API.
@@ -33,6 +29,7 @@ const fetchJson = async (baseUrl, path, commandKey) => {
   }
   return response.json();
 };
+
 /**
  * Verifies the GAP-010 condition by checking the health of kernel and control plane APIs.
  * @param {{baseUrl: string, commandKey: string}} params
