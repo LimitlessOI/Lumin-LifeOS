@@ -1779,7 +1779,7 @@ export function createLifeOSCouncilBuilderRoutes({
         createAutonomyGoldenTag(goldenSha).catch(e => log.warn({ err: e.message }, '[BUILDER] golden tag failed (non-fatal)'));
       }
       if (releaseMode === BUILDER_MODE.SUPERVISED) {
-        writeSecurityReceipt(
+        await writeSecurityReceipt(
           SECURITY_RECEIPT_TYPES.BUILDER_SUPERVISED_BUILD,
           {
             target_file: resolvedTarget,
