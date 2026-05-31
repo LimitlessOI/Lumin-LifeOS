@@ -7,7 +7,7 @@
 /**
  * Fetches JSON data from a specified URL with an x-command-key header.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} key - The x-command-key header value.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the fetch fails or the response is not OK.
@@ -20,12 +20,10 @@ async function fetchJson(baseUrl, path, key) {
       'Content-Type': 'application/json',
     },
   });
-
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
   }
-
   return response.json();
 }
 
@@ -42,16 +40,15 @@ export async function runRunnerTelemetryG17Verification({ baseUrl, commandKey })
   try {
     const [cpData, effData] = await Promise.all([
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-      fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey),
+      fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey),
     ]);
-
     return {
       ok: true,
       generation: 17,
-      session_tasks_done: 48,
-      session_successful: 34,
-      session_failed: 21,
-      session_governance_blocks: 4,
+      session_tasks_done: 60,
+      session_successful: 28,
+      session_failed: 76,
+      session_governance_blocks: 1,
       builds_today: cpData.build?.builds_today || 0,
       without_proof: cpData.build?.without_proof || 0,
       efficiency_summary: effData.efficiency?.summary || null,
