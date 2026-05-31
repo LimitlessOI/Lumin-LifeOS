@@ -28,10 +28,14 @@ const STATE_PATH = path.join(ROOT, 'data', 'governed-autonomy-backlog-state.json
 const LOCK_PATH = path.join(ROOT, 'data', 'governed-autonomy-backlog.lock');
 
 const DRY_RUN = process.argv.includes('--dry-run');
-const durationArg = process.argv.indexOf('--run-for-min');
-const RUN_FOR_MIN = Math.max(
+// --run-for-min / --report-every-min = checkpoint interval only, NOT a stop condition.
+// The runner never stops due to time. It runs until operator kills it or capacity is gone.
+const checkpointArg = process.argv.indexOf('--run-for-min') >= 0
+  ? process.argv.indexOf('--run-for-min')
+  : process.argv.indexOf('--report-every-min');
+const CHECKPOINT_EVERY_MIN = Math.max(
   10,
-  Number(durationArg >= 0 ? process.argv[durationArg + 1] : process.env.BACKLOG_RUN_FOR_MIN || 420) || 420,
+  Number(checkpointArg >= 0 ? process.argv[checkpointArg + 1] : process.env.CHECKPOINT_EVERY_MIN || 60) || 60,
 );
 const BASE_URL = (process.env.PUBLIC_BASE_URL || '').replace(/\/+$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY || '';
@@ -421,11 +425,15 @@ async function main() {
     process.exit(0);
   });
 
-  const deadline = Date.now() + RUN_FOR_MIN * 60 * 1000;
+  // Checkpoint interval — write state and log progress every N minutes.
+  // This is NOT a stop condition. The runner continues after every checkpoint.
+  const CHECKPOINT_MS = CHECKPOINT_EVERY_MIN * 60 * 1000;
+  let nextCheckpoint = Date.now() + CHECKPOINT_MS;
+
   const state = {
     status: 'running',
     started_at: new Date().toISOString(),
-    run_for_min: RUN_FOR_MIN,
+    checkpoint_every_min: CHECKPOINT_EVERY_MIN,
     dry_run: DRY_RUN,
     tasks_total: 0,
     tasks_done: 0,
@@ -439,26 +447,47 @@ async function main() {
     lessons: [],
     current_task: null,
     stop_reason: null,
+    stop_law: 'ONLY: operator_stop | capacity_exhausted | service_outage | safety_boundary | repo_corruption. Time limits are checkpoints only.',
   };
 
   await appendLog('orchestrator_start', {
-    run_for_min: RUN_FOR_MIN,
+    checkpoint_every_min: CHECKPOINT_EVERY_MIN,
     seed_tasks: SEED_TASKS.length,
     dry_run: DRY_RUN,
     base_url: BASE_URL.slice(0, 50),
     key_len: KEY.length,
-    stop_policy: 'ONLY_ON: operator_stop | capacity_exhausted | service_outage | safety_boundary | repo_corruption | deadline',
+    stop_policy: 'ONLY: operator_stop | capacity_exhausted | service_outage | safety_boundary | repo_corruption',
+    time_limit_policy: 'TIME_IS_CHECKPOINT_ONLY — runner does not stop at checkpoint, continues forever',
     queue_exhaustion_policy: 'FAILURE_QUEUE_EXHAUSTED_WITH_WORK_REMAINING — generate_next_batch_immediately',
   });
   await writeState(state);
 
-  // Work queue — seeded then continuously replenished
+  // Work queue — seeded then continuously replenished forever
   const workQueue = [...SEED_TASKS].sort((a, b) => a.priority - b.priority);
   const attemptedTargets = new Set(SEED_TASKS.map(t => t.target_file));
   const completedIds = new Set();
 
-  // ── Main loop — deadline is the ONLY natural exit ──
-  while (Date.now() < deadline) {
+  // ── Main loop — runs forever until valid hard stop ──
+  let hardStop = false;
+  while (!hardStop) {
+    // Checkpoint: write state + log progress, then CONTINUE
+    if (Date.now() >= nextCheckpoint) {
+      const wallMin = ((Date.now() - new Date(state.started_at).getTime()) / 60000).toFixed(1);
+      await appendLog('checkpoint_reached_continue', {
+        wall_min: wallMin,
+        tasks_done: state.tasks_done,
+        generation_count: state.generation_count,
+        autonomous_decisions: state.autonomous_decisions,
+        successful_repairs: state.successful_repairs,
+        failed_repairs: state.failed_repairs,
+        governance_prevented_drift: state.governance_prevented_drift,
+        queue_depth: workQueue.length,
+        action: 'CONTINUING — checkpoint is NOT a stop condition',
+      });
+      await writeState(state);
+      nextCheckpoint = Date.now() + CHECKPOINT_MS;
+    }
+
     // Check for service outage via consecutive 502s
     if (consecutive502s >= MAX_CONSECUTIVE_502) {
       await appendLog('orchestrator_hard_stop', {
@@ -467,10 +496,11 @@ async function main() {
       });
       state.status = 'hard_stop';
       state.stop_reason = 'SERVICE_OUTAGE';
+      hardStop = true;
       break;
     }
 
-    // Queue exhaustion — NOT a success state
+    // Queue exhaustion — NOT a success state, generate more work immediately
     if (workQueue.length === 0) {
       state.generation_count++;
       await appendLog('FAILURE_QUEUE_EXHAUSTED_WITH_WORK_REMAINING', {
@@ -482,31 +512,23 @@ async function main() {
 
       const newBatch = await generateNextTaskBatch(state.generation_count, attemptedTargets, state);
       if (newBatch.length === 0) {
-        // Extremely rare: all known gaps have verify scripts, all self-improvement covered
-        // In this case, increment generation and try again — generation counter makes targets unique
         await appendLog('generator_found_no_new_tasks', {
           generation: state.generation_count,
           attempted_targets: attemptedTargets.size,
-          action: 'incrementing_generation_and_retrying',
+          action: 'clearing_attempted_set_and_incrementing_generation',
         });
-        // Clear attempted targets for next generation so we can regenerate unique scripts
-        // Keep completed IDs to avoid re-running the exact same task ID
-        const prevAttempted = new Set(attemptedTargets);
         attemptedTargets.clear();
-        for (const id of completedIds) attemptedTargets.add(id); // re-seed with only completed IDs
         state.generation_count++;
         const retryBatch = await generateNextTaskBatch(state.generation_count, attemptedTargets, state);
         if (retryBatch.length === 0) {
-          // True dead end — nothing generatable at all
-          await appendLog('orchestrator_hard_stop', {
-            blocker: 'NO_GENERATABLE_WORK',
-            reason: 'Generator returned 0 tasks on two consecutive generations with cleared attempted set',
+          // Should be impossible with open OCs and gaps in the docs.
+          // Log and pause briefly before trying again — never exit.
+          await appendLog('generator_temporarily_empty', {
             generation: state.generation_count,
-            message: 'This should be impossible with open contradictions and platform gaps in the docs',
+            message: 'Generator returned 0 tasks twice. Pausing 60s before retry. Will not stop.',
           });
-          state.status = 'hard_stop';
-          state.stop_reason = 'NO_GENERATABLE_WORK';
-          break;
+          await new Promise(r => setTimeout(r, 60000));
+          continue;
         }
         workQueue.push(...retryBatch);
         for (const t of retryBatch) attemptedTargets.add(t.target_file);
@@ -526,7 +548,7 @@ async function main() {
       continue;
     }
 
-    // Dequeue next task
+    // Dequeue and run next task
     const task = workQueue.shift();
     if (completedIds.has(task.id)) continue;
     completedIds.add(task.id);
@@ -541,11 +563,11 @@ async function main() {
       await appendLog('orchestrator_hard_stop', { blocker: result.blocker, task_id: task.id });
       state.status = 'hard_stop';
       state.stop_reason = result.blocker;
+      hardStop = true;
       break;
     }
 
     if (!result.ok && !result.dry_run) {
-      // Retry once with simplified instruction
       const retryTask = {
         ...task,
         id: `${task.id}_retry`,
@@ -558,28 +580,17 @@ async function main() {
         await appendLog('orchestrator_hard_stop', { blocker: retryResult.blocker, task_id: retryTask.id });
         state.status = 'hard_stop';
         state.stop_reason = retryResult.blocker;
+        hardStop = true;
         break;
       }
     }
 
     state.tasks_done++;
     await writeState(state);
-
-    // Brief pause between tasks
-    if (workQueue.length > 0 || Date.now() < deadline) {
-      await new Promise(r => setTimeout(r, 3000));
-    }
+    await new Promise(r => setTimeout(r, 3000));
   }
 
-  // Determine exit reason
-  const isHardStop = state.status === 'hard_stop';
-  const isDeadline = Date.now() >= deadline && !isHardStop;
-
-  if (isDeadline) {
-    state.status = 'deadline_reached';
-    state.stop_reason = 'deadline_reached';
-  }
-
+  // Only reach here on valid hard stop
   state.completed_at = new Date().toISOString();
   await appendLog('orchestrator_stop', {
     stop_reason: state.stop_reason,
@@ -590,10 +601,9 @@ async function main() {
     failed_repairs: state.failed_repairs,
     governance_prevented_drift: state.governance_prevented_drift,
     wall_min: ((Date.now() - new Date(state.started_at).getTime()) / 60000).toFixed(1),
-    valid_stop: isHardStop || isDeadline,
+    valid_stop: true,
   });
   await writeState(state);
-
   try { await fs.unlink(LOCK_PATH); } catch {}
 }
 
