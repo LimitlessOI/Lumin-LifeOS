@@ -3,78 +3,75 @@
  */
 
 /**
- * A generic try-catch wrapper for async operations.
- * @param {Promise<any>} promise The promise to execute.
- * @returns {Promise<{success: true, data: any} | {success: false, error: string}>}
+ * Fetches JSON data from a given URL with an x-command-key header.
+ * Handles network and HTTP errors, returning a structured result.
+ *
+ * @param {string} baseUrl - The base URL for the API.
+ * @param {string} path - The API endpoint path.
+ * @param {string} commandKey - The value for the x-command-key header.
+ * @returns {Promise<{data: object|null, error: string|null}>} A promise that resolves to an object
+ *   containing either the parsed JSON data or an error message.
  */
-const tryCatch = async (promise) => {
+async function fetchJson(baseUrl, path, commandKey) {
   try {
-    const result = await promise;
-    return { success: true, data: result };
-  } catch (error) {
-    return { success: false, error: error instanceof Error ? error.message : String(error) };
-  }
-};
+    const url = `${baseUrl}${path}`;
+    const response = await fetch(url, {
+      headers: {
+        'x-command-key': commandKey,
+        'Content-Type': 'application/json',
+      },
+    });
 
-/**
- * Fetches JSON data from a specified URL with a command key header.
- * @param {string} baseUrl The base URL for the API.
- * @param {string} path The API endpoint path.
- * @param {string} commandKey The x-command-key header value.
- * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If the network request fails or the response is not OK.
- */
-const fetchJson = async (baseUrl, path, commandKey) => {
-  const url = `${baseUrl}${path}`;
-  const response = await fetch(url, {
-    headers: {
-      'x-command-key': commandKey,
-      'Content-Type': 'application/json'
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
     }
-  });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
+    return { data: await response.json(), error: null };
+  } catch (error) {
+    return { data: null, error: error.message };
   }
-
-  return response.json();
-};
+}
 
 /**
- * Verifies runner telemetry for generation 469 by fetching health and efficiency data.
+ * Verifies runner telemetry for generation 469 by fetching control plane health and autonomous telemetry efficiency data.
+ *
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the LifeOS API.
  * @param {string} params.commandKey - The command key for authentication.
- * @returns {Promise<object>} A structured audit JSON object indicating success or failure and telemetry data.
+ * @returns {Promise<object>} A structured JSON object containing telemetry verification results.
  */
 export async function runRunnerTelemetryG469Verification({ baseUrl, commandKey }) {
-  // Validate input parameters
-  if (!baseUrl || typeof baseUrl !== 'string') {
-    return { ok: false, error: 'Invalid or missing baseUrl parameter.' };
-  }
-  if (!commandKey || typeof commandKey !== 'string') {
-    return { ok: false, error: 'Invalid or missing commandKey parameter.' };
+  // Validate required arguments
+  if (!baseUrl || !commandKey) {
+    return {
+      ok: false,
+      error: 'Missing baseUrl or commandKey argument.',
+      runner_assessment: 'configuration_error',
+      checked_at: new Date().toISOString(),
+    };
   }
 
-  // Fetch data concurrently using Promise.all and tryCatch for robust error handling
-  const [cpResult, effResult] = await Promise.all([
-    tryCatch(fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
-    tryCatch(fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey))
+  // Fetch data concurrently using Promise.all
+  const [cpResponse, effResponse] = await Promise.all([
+    fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
+    fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey),
   ]);
 
-  // Handle fetch failures
-  if (!cpResult.success) {
-    return { ok: false, error: `Control Plane Health fetch failed: ${cpResult.error}` };
-  }
-  if (!effResult.success) {
-    return { ok: false, error: `Efficiency Telemetry fetch failed: ${effResult.error}` };
+  // Handle any fetch errors
+  if (cpResponse.error || effResponse.error) {
+    return {
+      ok: false,
+      error: cpResponse.error || effResponse.error,
+      runner_assessment: 'api_fetch_failed',
+      checked_at: new Date().toISOString(),
+    };
   }
 
-  const cpData = cpResult.data;
-  const effData = effResult.data;
+  const cpData = cpResponse.data;
+  const effData = effResponse.data;
 
-  // Return the structured audit JSON object
+  // Return the specified success shape
   return {
     ok: true,
     generation: 469,
@@ -86,6 +83,6 @@ export async function runRunnerTelemetryG469Verification({ baseUrl, commandKey }
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
     runner_assessment: 'continuous_autonomous_operation_verified',
-    checked_at: new Date().toISOString()
+    checked_at: new Date().toISOString(),
   };
 }
