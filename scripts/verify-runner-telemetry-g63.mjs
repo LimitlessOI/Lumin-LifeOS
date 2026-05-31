@@ -1,7 +1,6 @@
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-
 /**
  * Wraps an async promise in a try-catch block to return an error-first tuple.
  * @template T
@@ -20,8 +19,8 @@ const tryCatch = async (promise) => {
 /**
  * Fetches JSON data from a specified URL with an x-command-key header.
  * @param {string} baseUrl The base URL for the API.
- * @param {string} path The API endpoint path.
- * @param {string} key The command key for authentication.
+ * @param {string} path The apiEP path.
+ * @param {string} key The command key for auth.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the network request fails or the response status is not OK.
  */
@@ -33,7 +32,6 @@ const fetchJson = async (baseUrl, path, key) => {
       'Content-Type': 'application/json',
     },
   });
-
   if (!response.ok) {
     let errorBody = null;
     try {
@@ -44,7 +42,6 @@ const fetchJson = async (baseUrl, path, key) => {
     const errorMessage = errorBody ? JSON.stringify(errorBody) : response.statusText;
     throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorMessage}`);
   }
-
   return response.json();
 };
 
@@ -52,7 +49,7 @@ const fetchJson = async (baseUrl, path, key) => {
  * Verifies runner telemetry by fetching health and efficiency data from BuilderOS.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the BuilderOS API.
- * @param {string} params.commandKey - The command key for API authentication.
+ * @param {string} params.commandKey - The command key for API auth.
  * @returns {Promise<object>} A structured JSON object with verification results.
  */
 export async function runRunnerTelemetryG63Verification({ baseUrl, commandKey }) {
@@ -66,7 +63,7 @@ export async function runRunnerTelemetryG63Verification({ baseUrl, commandKey })
 
   const [cpResult, effResult] = await Promise.all([
     tryCatch(fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
-    tryCatch(fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey)),
+    tryCatch(fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey)),
   ]);
 
   const [cpError, cpData] = cpResult;
@@ -86,10 +83,10 @@ export async function runRunnerTelemetryG63Verification({ baseUrl, commandKey })
   return {
     ok: true,
     generation: 63,
-    session_tasks_done: 94,
-    session_successful: 78,
-    session_failed: 39,
-    session_governance_blocks: 4,
+    session_tasks_done: 106,
+    session_successful: 49,
+    session_failed: 134,
+    session_governance_blocks: 1,
     builds_today: controlPlaneData.build?.builds_today || 0,
     without_proof: controlPlaneData.build?.without_proof || 0,
     efficiency_summary: efficiencyData.efficiency?.summary || null,
