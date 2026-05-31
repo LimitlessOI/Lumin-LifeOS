@@ -43,7 +43,7 @@ async function dispatchBuilderPlan(plan, { baseUrl, commandKey, task_id, bluepri
     spec: plan.spec,
     target_file: plan.target_file || undefined,
     commit_message: plan.commit_message,
-    release_mode: 'supervised',
+    release_mode: 'SUPERVISED',
     task_id: task_id || plan.task_id || `cc-job-${Date.now()}`,
     blueprint_id: blueprint_id || plan.blueprint_id || undefined,
     ...(Array.isArray(plan.files) && plan.files.length ? { files: plan.files } : {}),
@@ -100,6 +100,32 @@ async function verifyBuilderOutput(targetFile, output) {
     syntax_error: 'No builder output available for verification',
     gates: { syntax: false, antipattern: false, stub: false, runtime: false },
   };
+}
+
+async function tryExecuteFallback(builderResult, plan, { baseUrl, commandKey, jobId }) {
+  if (!builderResult.ok || !builderResult.output || builderResult.committed) return builderResult;
+  const effectiveTargetFile = builderResult.target_file || plan.target_file;
+  if (!effectiveTargetFile) return builderResult;
+  const url = `${baseUrl}/api/v1/lifeos/builder/execute`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-command-key': commandKey },
+    body: JSON.stringify({
+      output: builderResult.output,
+      target_file: effectiveTargetFile,
+      commit_message: plan.commit_message || `[system-build] cc-${jobId}`,
+    }),
+  });
+  let json = null;
+  try {
+    json = await response.json();
+  } catch {
+    json = { ok: false, error: 'non_json_execute_response' };
+  }
+  if (response.ok && json?.ok && json?.committed) {
+    return { ...builderResult, committed: true, target_file: json.target_file || effectiveTargetFile, execute_fallback_used: true };
+  }
+  return { ...builderResult, execute_fallback_attempted: true, execute_fallback_error: json?.error || `http_${response.status}` };
 }
 
 export async function executeCommandControlJob(pool, jobId, options = {}) {
@@ -211,10 +237,25 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     receipt: { stage: 'builder_dispatch', repair_attempt: 0, ...trace.builder_output },
   });
 
+  if (builderResult.ok && !builderResult.committed && builderResult.output) {
+    builderResult = await tryExecuteFallback(builderResult, plan, { baseUrl, commandKey, jobId });
+    trace.builder_output = {
+      ...trace.builder_output,
+      execute_fallback_attempted: builderResult.execute_fallback_attempted || false,
+      execute_fallback_used: builderResult.execute_fallback_used || false,
+      execute_fallback_error: builderResult.execute_fallback_error || null,
+    };
+    if (builderResult.execute_fallback_attempted || builderResult.execute_fallback_used) {
+      await updateCommandControlJobExecution(pool, jobId, {
+        receipt: { stage: 'execute_fallback', repair_attempt: 0, ok: builderResult.committed, target_file: builderResult.target_file || null },
+      });
+    }
+  }
+
   if (!builderResult.ok || !builderResult.committed) {
     await updateCommandControlJobExecution(pool, jobId, {
       status: 'failed',
-      blocker: builderResult.error || 'BUILDER_DISPATCH_FAILED',
+      blocker: builderResult.execute_fallback_error || builderResult.error || 'BUILDER_DISPATCH_FAILED',
       result_json: { builder_output: trace.builder_output, builder_raw: builderResult.raw },
     });
     return { ok: false, error: 'builder_failed', stage: 'builder_dispatch', trace };
@@ -295,10 +336,25 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     receipt: { stage: 'builder_dispatch', repair_attempt: 1, ...trace.builder_output },
   });
 
+  if (builderResult.ok && !builderResult.committed && builderResult.output) {
+    builderResult = await tryExecuteFallback(builderResult, plan, { baseUrl, commandKey, jobId });
+    trace.builder_output = {
+      ...trace.builder_output,
+      execute_fallback_attempted: builderResult.execute_fallback_attempted || false,
+      execute_fallback_used: builderResult.execute_fallback_used || false,
+      execute_fallback_error: builderResult.execute_fallback_error || null,
+    };
+    if (builderResult.execute_fallback_attempted || builderResult.execute_fallback_used) {
+      await updateCommandControlJobExecution(pool, jobId, {
+        receipt: { stage: 'execute_fallback', repair_attempt: 1, ok: builderResult.committed, target_file: builderResult.target_file || null },
+      });
+    }
+  }
+
   if (!builderResult.ok || !builderResult.committed) {
     await updateCommandControlJobExecution(pool, jobId, {
       status: 'failed',
-      blocker: builderResult.error || 'BUILDER_RETRY_FAILED',
+      blocker: builderResult.execute_fallback_error || builderResult.error || 'BUILDER_RETRY_FAILED',
       result_json: { repair_loop_result: trace.repair_loop_result, builder_output: trace.builder_output },
     });
     trace.repair_loop_result.result = 'builder_retry_failed';

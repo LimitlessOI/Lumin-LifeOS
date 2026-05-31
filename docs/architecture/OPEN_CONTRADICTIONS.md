@@ -4,7 +4,7 @@
 |-------|--------|
 | **Purpose** | Living register of architecture drift, unresolved tensions, and blockers |
 | **Authority** | Subordinate to SSOT; **audit tier** — not constitutional law |
-| **Last Updated** | 2026-05-31 |
+| **Last Updated** | 2026-05-31 (OC-014 RESOLVED; OIL race condition RESOLVED) |
 | **Maintainer** | Resident Architect missions (`prompts/00-RESIDENT-ARCHITECT.md`) |
 | **Kernel index** | `docs/TSOS_PLATFORM_KERNEL.md` |
 
@@ -145,15 +145,15 @@
 
 ---
 
-### OC-014 — C2 executor fails with BUILDER_DISPATCH_FAILED when builder returns committed=false+null target_file (NEW — 2026-05-31)
+### OC-014 — C2 executor fails with BUILDER_DISPATCH_FAILED when builder returns committed=false+null target_file
 
 | Field | Value |
 |-------|--------|
-| **Status** | **OPEN** |
+| **Status** | **RESOLVED** (2026-05-31) |
 | **Severity** | P1 — C2 cannot autonomously commit code; requires explicit target_file in /build call |
 | **Evidence** | Jobs `d02b7524` and `4493090b` both returned BUILDER_DISPATCH_FAILED despite HTTP 200 + valid builder output. Root cause: `dispatchBuilderPlan` sends `target_file: plan.target_file` which is null when PBB plan does not inject it. Executor treats `committed=false` as total failure with no /execute fallback. |
-| **Proposed fix** | When builder returns `ok:true AND committed=false AND output non-empty AND plan.target_file non-null`, call `POST /api/v1/lifeos/builder/execute` with `{ output, target_file, commit_message }` before declaring failure. |
-| **File** | `services/builderos-governed-loop-executor.js` |
+| **Fix applied** | `tryExecuteFallback()` added to `services/builderos-governed-loop-executor.js`. When builder returns `ok=true, committed=false, output non-empty`, calls `POST /builder/execute` with resolved target_file (from builderResult or plan). Also fixed `release_mode: 'supervised'` → `'SUPERVISED'` (case mismatch that prevented OIL receipts from being written for all C2 builds). Fallback wired in both repair_attempt 0 and 1 paths. |
+| **Proof** | node --check PASS; GAP-FILL Zone 3 — builder governance correctly blocked self-modification. |
 | **Label** | **KNOW** |
 
 ---
@@ -166,6 +166,7 @@
 | OC-012 | 2026-05-24 | Kernel council wrap in `server.js` |
 | OC-005 | 2026-05-31 | Railway deploy SHA `240982b809`; kernel/token/control-plane health 200 |
 | OC-004 | 2026-05-31 | 12 token rows today; kernel_receipt token IDs 20443–20446; last write 05:51 UTC |
+| OC-014 | 2026-05-31 | `tryExecuteFallback()` + `release_mode: 'SUPERVISED'` fix in `builderos-governed-loop-executor.js`; `await writeSecurityReceipt` race fix in `lifeos-council-builder-routes.js` |
 
 ---
 
