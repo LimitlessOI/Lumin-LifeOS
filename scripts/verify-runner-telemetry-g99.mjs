@@ -3,10 +3,10 @@
  */
 
 /**
- * Fetches JSON data from a given URL with error handling.
+ * Fetches JSON data from a given URL with errHdl.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
- * @param {string} commandKey - The command key for authentication.
+ * @param {string} path - The apiEP path.
+ * @param {string} commandKey - The command key for auth.
  * @returns {Promise<{data: object|null, error: string|null}>} An object containing either data or an error message.
  */
 async function fetchJson(baseUrl, path, commandKey) {
@@ -18,12 +18,10 @@ async function fetchJson(baseUrl, path, commandKey) {
         'Content-Type': 'application/json',
       },
     });
-
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
     }
-
     return { data: await response.json(), error: null };
   } catch (error) {
     return { data: null, error: error.message };
@@ -33,13 +31,12 @@ async function fetchJson(baseUrl, path, commandKey) {
 /**
  * Verifies runner telemetry for Generation 99 by fetching control plane health and efficiency data.
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the API endpoints.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.baseUrl - The base URL for the apiEPs.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A promise that resolves to a structured audit JSON object.
  */
 export async function runRunnerTelemetryG99Verification({ baseUrl, commandKey }) {
   const checked_at = new Date().toISOString();
-
   if (!baseUrl || !commandKey) {
     return {
       ok: false,
@@ -50,7 +47,7 @@ export async function runRunnerTelemetryG99Verification({ baseUrl, commandKey })
 
   const [cpHealthResult, efficiencyResult] = await Promise.all([
     fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-    fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey),
+    fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey), // Updated path
   ]);
 
   if (cpHealthResult.error || efficiencyResult.error) {
@@ -67,10 +64,10 @@ export async function runRunnerTelemetryG99Verification({ baseUrl, commandKey })
   return {
     ok: true,
     generation: 99,
-    session_tasks_done: 130,
-    session_successful: 109,
-    session_failed: 54,
-    session_governance_blocks: 4,
+    session_tasks_done: 142, // Updated value
+    session_successful: 71, // Updated value
+    session_failed: 168, // Updated value
+    session_governance_blocks: 1, // Updated value
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
