@@ -1,7 +1,6 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-
 async function tryCatch(promiseFn) {
   try {
     const value = await promiseFn();
@@ -21,17 +20,17 @@ async function fetchJson(baseUrl, path, key) {
   return response.json();
 }
 
-/**
+/*
  * Verifies runner telemetry by fetching control plane health and autonomous telemetry efficiency.
  * @param {object} params - The parameters for verification.
  * @param {string} params.baseUrl - The base URL for API requests.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A structured JSON object with verification results.
  */
 export async function runRunnerTelemetryG176Verification({ baseUrl, commandKey }) {
   const [cpHealthResult, efficiencyResult] = await Promise.all([
     tryCatch(() => fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
-    tryCatch(() => fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey))
+    tryCatch(() => fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey))
   ]);
 
   const checked_at = new Date().toISOString();
@@ -47,8 +46,8 @@ export async function runRunnerTelemetryG176Verification({ baseUrl, commandKey }
   const effData = efficiencyResult.value;
 
   return {
-    ok: true, generation: 176, session_tasks_done: 207, session_successful: 181,
-    session_failed: 82, session_governance_blocks: 4,
+    ok: true, generation: 176, session_tasks_done: 219, session_successful: 111,
+    session_failed: 255, session_governance_blocks: 1,
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
