@@ -2,74 +2,40 @@
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
-/**
- * Fetches JSON from a given URL path with an x-command-key header.
- * Handles network and HTTP errors, returning a structured error object on failure.
- * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
- * @param {string} commandKey - The value for the x-command-key header.
- * @returns {Promise<object>} A promise that resolves to the parsed JSON data or an error object.
- */
-async function fetchJson(baseUrl, path, commandKey) {
-  const url = `${baseUrl}${path}`;
-  try {
-    const response = await fetch(url, {
-      headers: {
-        'x-command-key': commandKey,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      return { error: `HTTP error! Status: ${response.status}, Body: ${errorText}`, url };
-    }
-
-    return await response.json();
-  } catch (error) {
-    return { error: error.message, url };
-  }
+async function tryCatch(promise) {
+  try { return [null, await promise]; }
+  catch (error) { return [error, null]; }
 }
 
-/**
- * Verifies runner telemetry for generation 365 by fetching control plane health
- * and autonomous telemetry efficiency.
- * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the API endpoints.
- * @param {string} params.commandKey - The command key for authentication.
- * @returns {Promise<object>} A structured JSON object indicating verification status and telemetry data.
- */
+async function fetchJson(baseUrl, path, commandKey) {
+  const response = await fetch(`${baseUrl}${path}`, { headers: { 'x-command-key': commandKey } });
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}, Body: ${await response.text()}`);
+  }
+  return response.json();
+}
+
 export async function runRunnerTelemetryG365Verification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
+    return { ok: false, error: 'Missing baseUrl or commandKey', checked_at: new Date().toISOString() };
+  }
+
+  const [error, [cpData, effData]] = await tryCatch(
+    Promise.all([
+      fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
+      fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey)
+    ])
+  );
+
+  if (error) {
     return {
       ok: false,
       generation: 365,
-      error: 'Missing baseUrl or commandKey parameter.',
+      error: error.message,
+      runner_assessment: 'telemetry_fetch_failed',
       checked_at: new Date().toISOString()
     };
   }
-
-  const controlPlaneHealthPath = '/api/v1/builderos/control-plane/health';
-  const autonomousTelemetryEfficiencyPath = '/api/v1/lifeos/autonomous-telemetry/efficiency';
-
-  const [cpDataResult, effDataResult] = await Promise.all([
-    fetchJson(baseUrl, controlPlaneHealthPath, commandKey),
-    fetchJson(baseUrl, autonomousTelemetryEfficiencyPath, commandKey)
-  ]);
-
-  if (cpDataResult.error || effDataResult.error) {
-    return {
-      ok: false,
-      generation: 365,
-      error: 'Failed to retrieve all required telemetry data.',
-      control_plane_error: cpDataResult.error || null,
-      efficiency_error: effDataResult.error || null,
-      checked_at: new Date().toISOString()
-    };
-  }
-
-  const cpData = cpDataResult;
-  const effData = effDataResult;
 
   return {
     ok: true,
