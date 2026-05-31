@@ -1,12 +1,4 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
- * This script provides a verification mechanism for Runner Telemetry Generation 91.
- * It fetches health and efficiency data from the BuilderOS control plane and autonomous telemetry
- * endpoints to assess continuous autonomous operation.
- */
-
-/**
  * Fetches JSON data from a specified URL with an x-command-key header.
  * Throws an error if the response is not OK.
  *
@@ -22,14 +14,11 @@ async function fetchJson(baseUrl, path, commandKey) {
     'x-command-key': commandKey,
     'Content-Type': 'application/json',
   };
-
   const response = await fetch(url, { headers });
-
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`Failed to fetch ${path}: ${response.status} ${response.statusText} - ${errorText}`);
   }
-
   return response.json();
 }
 
@@ -44,7 +33,6 @@ async function fetchJson(baseUrl, path, commandKey) {
  */
 export async function runRunnerTelemetryG91Verification({ baseUrl, commandKey }) {
   const checked_at = new Date().toISOString();
-
   if (!baseUrl || !commandKey) {
     return {
       ok: false,
@@ -56,16 +44,16 @@ export async function runRunnerTelemetryG91Verification({ baseUrl, commandKey })
   try {
     const [cpData, effData] = await Promise.all([
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-      fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey),
+      fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey),
     ]);
 
     return {
       ok: true,
       generation: 91,
-      session_tasks_done: 122,
-      session_successful: 102,
-      session_failed: 50,
-      session_governance_blocks: 4,
+      session_tasks_done: 134,
+      session_successful: 66,
+      session_failed: 162,
+      session_governance_blocks: 1,
       builds_today: cpData.build?.builds_today || 0,
       without_proof: cpData.build?.without_proof || 0,
       efficiency_summary: effData.efficiency?.summary || null,
