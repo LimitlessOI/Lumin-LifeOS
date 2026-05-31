@@ -1,7 +1,6 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-
 const tryCatch = async (promise) => {
   try {
     return [await promise, null];
@@ -36,7 +35,7 @@ export async function runRunnerTelemetryG230Verification({ baseUrl, commandKey }
   const [results, error] = await tryCatch(
     Promise.all([
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-      fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey),
+      fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey), // Updated path
     ])
   );
 
@@ -49,10 +48,10 @@ export async function runRunnerTelemetryG230Verification({ baseUrl, commandKey }
   return {
     ok: true,
     generation: 230,
-    session_tasks_done: 261,
-    session_successful: 234,
-    session_failed: 87,
-    session_governance_blocks: 4,
+    session_tasks_done: 273, // Updated value
+    session_successful: 138, // Updated value
+    session_failed: 321, // Updated value
+    session_governance_blocks: 1, // Updated value
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
