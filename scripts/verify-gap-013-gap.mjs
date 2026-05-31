@@ -3,8 +3,8 @@
  */
 
 /**
- * A generic helper to wrap an async function and return its result or caught error.
- * @param {function(): Promise<any>} promiseFn The async function to execute.
+ * A generic helper to wrap an asyncFn and return its result or caught error.
+ * @param {function(): Promise<any>} promiseFn The asyncFn to execute.
  * @returns {Promise<{data: any, error: Error | null}>} An object containing either data or an error.
  */
 const tryCatch = async (promiseFn) => {
@@ -19,8 +19,8 @@ const tryCatch = async (promiseFn) => {
 /**
  * Fetches JSON data from a specified URL with an x-command-key header.
  * @param {string} baseUrl The base URL of the API.
- * @param {string} path The API endpoint path.
- * @param {string} commandKey The command key for authentication.
+ * @param {string} path The apiEP path.
+ * @param {string} commandKey The command key for auth.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the network request fails or the response status is not OK.
  */
@@ -32,12 +32,10 @@ const fetchJson = async (baseUrl, path, commandKey) => {
       'Content-Type': 'application/json',
     },
   });
-
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
   }
-
   return response.json();
 };
 
