@@ -1,11 +1,11 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
 /**
  * Fetches JSON data from a specified path relative to the base URL.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} commandKey - The x-command-key header value.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the fetch operation fails or the response is not OK.
@@ -32,7 +32,7 @@ async function fetchJson(baseUrl, path, commandKey) {
  * Verifies GAP-020 status by checking kernel and control plane health endpoints.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the API calls.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} An object indicating the verification result.
  */
 export async function runGAP020GapVerification({ baseUrl, commandKey }) {
