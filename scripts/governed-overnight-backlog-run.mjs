@@ -1,18 +1,20 @@
 #!/usr/bin/env node
 /**
- * Overnight BuilderOS backlog runner — C2-governed, evidence-first, NEVER STOPS.
+ * Overnight BuilderOS backlog runner — blueprint-first, C2-governed, never stops.
  *
- * The runner stops ONLY when:
- *   1. Operator explicitly stops it (SIGTERM/SIGINT)
- *   2. Free token/API capacity is exhausted (hard blocker from server)
- *   3. Credentials/service outage prevents ALL useful work
- *   4. Safety boundary blocks ALL possible work
- *   5. Repo corruption or data-loss risk requires human intervention
+ * Canonical workflow:
+ * SSOT / Amendment / Blueprint
+ *   -> PBB expansion
+ *   -> ranked build task
+ *   -> C2 job
+ *   -> BuilderOS build
+ *   -> verify
+ *   -> receipts
+ *   -> update continuity
+ *   -> next blueprint task
  *
- * Queue exhaustion is FAILURE_QUEUE_EXHAUSTED_WITH_WORK_REMAINING — NOT success.
- * When the queue empties, generateNextTaskBatch() reads the live docs and produces
- * new tasks. There is ALWAYS more work: open contradictions, platform gaps, missing
- * verify scripts, self-improvement telemetry, SSOT audits, receipt chain proofs.
+ * Gap/contradiction verifier scripts are fallback support work only. They are
+ * not the primary queue while blueprint work exists.
  *
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
@@ -23,13 +25,12 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 
 const ROOT = process.cwd();
+const PROJECTS_DIR = path.join(ROOT, 'docs', 'projects');
 const LOG_PATH = path.join(ROOT, 'data', 'governed-autonomy-overnight-log.jsonl');
 const STATE_PATH = path.join(ROOT, 'data', 'governed-autonomy-backlog-state.json');
 const LOCK_PATH = path.join(ROOT, 'data', 'governed-autonomy-backlog.lock');
 
 const DRY_RUN = process.argv.includes('--dry-run');
-// --run-for-min / --report-every-min = checkpoint interval only, NOT a stop condition.
-// The runner never stops due to time. It runs until operator kills it or capacity is gone.
 const checkpointArg = process.argv.indexOf('--run-for-min') >= 0
   ? process.argv.indexOf('--run-for-min')
   : process.argv.indexOf('--report-every-min');
@@ -40,7 +41,6 @@ const CHECKPOINT_EVERY_MIN = Math.max(
 const BASE_URL = (process.env.PUBLIC_BASE_URL || '').replace(/\/+$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY || '';
 
-// ── Hard stops — these are the ONLY valid reasons to exit ───────────────────
 const HARD_BLOCKERS = new Set([
   'GLOBAL_HALT',
   'MISSING_SECRET_CREDENTIAL',
@@ -49,61 +49,422 @@ const HARD_BLOCKERS = new Set([
   'REPO_CORRUPTION',
   'CAPACITY_EXHAUSTED',
 ]);
-// If we get this many consecutive 502s, declare SERVICE_OUTAGE
 const MAX_CONSECUTIVE_502 = 15;
 let consecutive502s = 0;
 
-// ── Seed task list — first-pass work from last session receipts ──────────────
-// These are Z3 attempts (expected ZONE3_PATCH_REQUIRED) + new Z1 scripts not
-// yet committed. After this batch, generateNextTaskBatch() takes over forever.
-const SEED_TASKS = [
-  // OC-015 patch attempt #2 (Z3 evidence collection)
-  {
-    id: 'OC-015-proof-status-patch-v2',
-    priority: 1,
-    category: 'open_contradiction',
-    ref: 'OC-015',
-    zone: 'Z3',
-    expected_blocker: 'ZONE3_PATCH_REQUIRED',
-    target_file: 'services/builderos-control-plane-service.js',
-    instruction: `In services/builderos-control-plane-service.js, fix canMarkBuildDone so it accepts an optional resolvedEndTime parameter. When provided, use resolvedEndTime instead of querying build.end_time from DB. Update the single call site inside recordBuildComplete to pass new Date() as resolvedEndTime. This fixes OC-015 where proof_status is always 'exception' because canMarkBuildDone reads DB before the UPDATE sets end_time. Preserve all existing exports and logic.`,
-  },
-  // Wire kernel-token-linker into kernel (Z3 evidence collection)
-  {
-    id: 'kernel-token-linker-wire-v1',
-    priority: 2,
-    category: 'receipt_chain',
-    ref: 'OC-015',
-    zone: 'Z3',
-    expected_blocker: 'ZONE3_PATCH_REQUIRED',
-    target_file: 'services/tsos-platform-kernel.js',
-    instruction: `In services/tsos-platform-kernel.js, after verifyOilReceipt is called and result is committed=true, import and call linkTokenReceiptToTask from './kernel-token-linker.js'. Add the import at the top. After the oil verify block: if (committed && tokenProof?.verified) { try { await linkTokenReceiptToTask(pool, task_id, startedAt - 10000); } catch(e) { /* fail-open */ } }. This closes the token_receipt_id linkage gap in build_task_ledger. Preserve all existing code exactly.`,
-  },
-  // GAP-001 bypass audit service (Z1 new file)
-  {
-    id: 'GAP-001-bypass-audit-service',
-    priority: 3,
-    category: 'platform_gap',
-    ref: 'GAP-001',
-    zone: 'Z1',
-    target_file: 'services/council-bypass-audit.js',
-    instruction: `Write services/council-bypass-audit.js. Include @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md in JSDoc. Export async function auditCouncilBypasses(projectRoot) where projectRoot defaults to process.cwd(). Try to run grep via execSync to find direct provider fetches in services/ routes/ excluding builder-council-review.js and metered-ai-call.js. Return { bypass_count: number, bypass_files: string[], known_p0_file: 'services/builder-council-review.js', known_p0_bypass_count: 8, audit_source: 'grep', audited_at: new Date().toISOString() }. Wrap exec in try/catch — return { bypass_count: -1, error: e.message } on failure. Import execSync from 'child_process'. No CLI. 50-70 lines.`,
-  },
-  // Autonomy maturity verify — previous attempt was blocked by pre-commit governance; retry with tighter spec
-  {
-    id: 'autonomy-maturity-verify-v2',
-    priority: 4,
-    category: 'builderos_autonomy',
-    zone: 'Z1',
-    target_file: 'scripts/verify-builderos-autonomy-maturity.mjs',
-    instruction: `Write scripts/verify-builderos-autonomy-maturity.mjs. Export async function runBuilderOSAutonomyMaturityVerification({ baseUrl, commandKey }) that fetches GET /api/v1/builderos/control-plane/health and GET /api/v1/kernel/health with x-command-key header using Promise.all. Returns { ok: true, autonomous_decisions_evidence: 'C2 jobs da7e9c4d and 1cf7aa3f committed 2026-05-31 with oil.verified=true', oil_verified: true, token_verified: true, known_gaps: ['OC-015 proof_status exception', 'GAP-001 builder-council-review 8 bypasses', 'OC-015 token_receipt_id null'], maturity_level: 'ALPHA', builds_today: cpData.build?.builds_today || 0, without_proof: cpData.build?.without_proof || 0, kernel_status: kernelData.health?.status || 'unknown', checked_at: new Date().toISOString() }. Use native fetch only. No npm. No DB. No process.argv. 40-55 lines.`,
-  },
-];
+const SAFE_TARGET_PREFIXES = Object.freeze([
+  'routes/',
+  'services/',
+  'config/',
+  'db/migrations/',
+  'prompts/',
+  'public/overlay/',
+  'scripts/',
+  'docs/projects/builderos-remediation/',
+]);
 
-// ── Instruction builders for dynamic task generation ─────────────────────────
+const BLOCKED_TARGET_PREFIXES = Object.freeze([
+  'server.js',
+  'startup/',
+  'middleware/',
+  'core/',
+  '.env',
+  '.github/',
+  'docs/SSOT_NORTH_STAR.md',
+  'docs/SSOT_COMPANION.md',
+]);
+
+const PRIORITY_RULES = Object.freeze([
+  {
+    lane: 'c2_command_control',
+    rank: 1,
+    patterns: [/AMENDMENT_46_BUILDEROS_CONTROL_PLANE/i, /AMENDMENT_12_COMMAND_CENTER/i, /BUILDEROS_ALPHA_BLUEPRINT/i],
+  },
+  {
+    lane: 'socialmediaos',
+    rank: 2,
+    patterns: [/AMENDMENT_41_MARKETINGOS/i, /SOCIALMEDIAOS/i, /MARKETINGOS/i],
+  },
+  {
+    lane: 'lifeos_limitlessos',
+    rank: 3,
+    patterns: [/LIFEOS/i, /LIMITLESSOS/i],
+  },
+  {
+    lane: 'tc',
+    rank: 4,
+    patterns: [/AMENDMENT_17_TC_SERVICE/i, /\bTC SERVICE\b/i, /TRANSACTION COORDINATOR/i],
+  },
+  {
+    lane: 'tsos_platform',
+    rank: 5,
+    patterns: [/TSOS/i, /TOKEN_ACCOUNTING_OS/i, /CCL/i, /PLATFORM KERNEL/i],
+  },
+]);
+
+function normalizeText(value) {
+  return String(value || '').trim();
+}
+
+function slugify(value) {
+  return normalizeText(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80);
+}
+
+function clampSummary(text, max = 220) {
+  const normalized = normalizeText(text).replace(/\s+/g, ' ');
+  return normalized.length > max ? `${normalized.slice(0, max - 3)}...` : normalized;
+}
+
+function isBuilderSafeTarget(targetFile) {
+  const normalized = normalizeText(targetFile).replace(/^\//, '');
+  if (!normalized) return false;
+  for (const blocked of BLOCKED_TARGET_PREFIXES) {
+    if (normalized === blocked || normalized.startsWith(blocked)) return false;
+  }
+  return SAFE_TARGET_PREFIXES.some((prefix) => normalized.startsWith(prefix));
+}
+
+function targetLineCount(targetFile) {
+  try {
+    const resolved = path.resolve(ROOT, targetFile);
+    const content = execSync(`wc -l < ${JSON.stringify(resolved)}`, { stdio: 'pipe', shell: '/bin/zsh' }).toString().trim();
+    return Number(content) || 0;
+  } catch {
+    return 0;
+  }
+}
+
+function classifyLocalTarget(targetFile) {
+  if (!targetFile) return { zone: 0, safe: false, exists: false, lineCount: 0 };
+  const normalized = normalizeText(targetFile).replace(/^\//, '');
+  const resolved = path.resolve(ROOT, normalized);
+  let exists = false;
+  try {
+    execSync(`test -f ${JSON.stringify(resolved)}`, { stdio: 'pipe', shell: '/bin/zsh' });
+    exists = true;
+  } catch {
+    exists = false;
+  }
+  const lineCount = exists ? targetLineCount(normalized) : 0;
+  if (!isBuilderSafeTarget(normalized)) {
+    return { zone: 4, safe: false, exists, lineCount, reason: 'outside builder safe scope' };
+  }
+  if (!exists) {
+    return { zone: 1, safe: true, exists, lineCount, reason: 'new file in safe scope' };
+  }
+  if (lineCount > 150) {
+    return { zone: 3, safe: true, exists, lineCount, reason: 'large file update likely to trip patch-mode guard' };
+  }
+  if (lineCount >= 50) {
+    return { zone: 2, safe: true, exists, lineCount, reason: 'medium file update; verify immediately' };
+  }
+  return { zone: 1, safe: true, exists, lineCount, reason: 'small safe target' };
+}
+
+function extractSectionAfterHeading(markdown, headingPattern) {
+  const lines = markdown.split('\n');
+  let startIndex = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (headingPattern.test(lines[i])) {
+      startIndex = i + 1;
+      break;
+    }
+  }
+  if (startIndex < 0) return '';
+
+  let endIndex = lines.length;
+  for (let i = startIndex; i < lines.length; i++) {
+    if (/^##\s+/.test(lines[i]) || /^###\s+/.test(lines[i])) {
+      endIndex = i;
+      break;
+    }
+  }
+  return normalizeText(lines.slice(startIndex, endIndex).join('\n'));
+}
+
+function extractOpenDecisionSection(markdown) {
+  return extractSectionAfterHeading(markdown, /^### OPEN — Still requires Adam decision before code starts/i);
+}
+
+function extractFirstExactCodingTask(markdown) {
+  return extractSectionAfterHeading(markdown, /^## \d+\. First exact coding task(?: \(next\))?/i);
+}
+
+function extractBuildOrderRows(markdown) {
+  const rows = [];
+  for (const line of markdown.split('\n')) {
+    const match = line.match(/^\|\s*(\d+)\s*\|\s*`([^`]+)`\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|/);
+    if (!match) continue;
+    rows.push({
+      order: Number(match[1]),
+      file: normalizeText(match[2]),
+      purpose: clampSummary(match[3], 120),
+      dependency: clampSummary(match[4], 80),
+      verification: clampSummary(match[5], 120),
+      doneCriteria: clampSummary(match[6], 140),
+    });
+  }
+  return rows;
+}
+
+function detectLane(fileName, content) {
+  const haystack = `${fileName}\n${content.slice(0, 5000)}`;
+  for (const rule of PRIORITY_RULES) {
+    if (rule.patterns.some((pattern) => pattern.test(haystack))) return rule;
+  }
+  return { lane: 'other', rank: 9, patterns: [] };
+}
+
+function buildBlueprintQueueKey(blueprintPath, label) {
+  return `${blueprintPath}::${label}`;
+}
+
+function buildPatchPlanTask(blueprint, sourceTask, generation, reason) {
+  const targetFile = `docs/projects/builderos-remediation/${slugify(path.basename(blueprint.path, '.md'))}-${slugify(path.basename(sourceTask.target_file || 'unknown'))}-patch-plan-g${generation}.md`;
+  return {
+    id: `${sourceTask.id}-patch-plan-g${generation}`,
+    priority: sourceTask.priority + 1,
+    category: 'blueprint_patch_plan',
+    lane: blueprint.lane,
+    ref: blueprint.path,
+    zone: 'Z1',
+    target_file: targetFile,
+    blueprint_path: blueprint.path,
+    blueprint_title: blueprint.title,
+    blueprint_section: sourceTask.blueprint_section || 'build task',
+    instruction: [
+      `Write ${targetFile}.`,
+      `Source blueprint: ${blueprint.path}.`,
+      `Source section: ${sourceTask.blueprint_section || 'build task'}.`,
+      `Blocked target: ${sourceTask.target_file}.`,
+      `Reason: ${reason}.`,
+      'Create a blueprint-first patch plan in markdown with these sections:',
+      '1. Goal in plain English.',
+      '2. Why the original target is blocked or high-risk.',
+      '3. Exact controlling blueprint excerpt summary.',
+      '4. Smallest safe helper-extraction or surgical patch strategy.',
+      '5. Required verifier checks.',
+      '6. What BuilderOS should attempt next through C2.',
+      '7. What must not be changed.',
+      'Do not touch product features. 60-120 lines. Include @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md in the opening note.',
+    ].join(' '),
+  };
+}
+
+function buildEnhancementTask(blueprint, generation, reason, sectionSummary) {
+  const targetFile = `docs/projects/builderos-remediation/${slugify(path.basename(blueprint.path, '.md'))}-enhancement-g${generation}.md`;
+  return {
+    id: `${slugify(path.basename(blueprint.path, '.md'))}-enhancement-g${generation}`,
+    priority: blueprint.rank * 100 + 80,
+    category: 'blueprint_enhancement',
+    lane: blueprint.lane,
+    ref: blueprint.path,
+    zone: 'Z1',
+    target_file: targetFile,
+    blueprint_path: blueprint.path,
+    blueprint_title: blueprint.title,
+    blueprint_section: 'enhancement',
+    instruction: [
+      `Write ${targetFile}.`,
+      `Source blueprint: ${blueprint.path}.`,
+      `Reason this blueprint is not yet directly buildable: ${reason}.`,
+      sectionSummary ? `Relevant section summary: ${sectionSummary}.` : '',
+      'Produce a builder-ready blueprint enhancement memo with:',
+      '1. blocking ambiguity or founder decision list,',
+      '2. already-settled constraints,',
+      '3. the smallest buildable next slice that does not violate the blueprint,',
+      '4. exact safe-scope files BuilderOS should touch first,',
+      '5. required verifier/runtime checks,',
+      '6. stop conditions.',
+      'Keep it implementation-oriented, not marketing. 60-120 lines.',
+    ].filter(Boolean).join(' '),
+  };
+}
+
+function buildBlueprintBuildTask(blueprint, label, sectionText, targetFile, priorityOffset = 0) {
+  const classification = classifyLocalTarget(targetFile);
+  const safeTarget = classification.safe ? targetFile : `docs/projects/builderos-remediation/${slugify(path.basename(blueprint.path, '.md'))}-${slugify(path.basename(targetFile))}-redirect.md`;
+  const instructionParts = [
+    `Blueprint-first BuilderOS task from ${blueprint.path}.`,
+    `Blueprint title: ${blueprint.title}.`,
+    `Founder priority lane: ${blueprint.lane}.`,
+    `Section: ${label}.`,
+  ];
+
+  if (classification.safe) {
+    instructionParts.push(
+      `Implement the blueprint work in ${targetFile}.`,
+      `Target classification: Zone ${classification.zone} (${classification.reason}).`,
+      'Use the controlling blueprint section below as the source of truth. Do not broaden scope.',
+      `Blueprint section summary: ${clampSummary(sectionText, 900)}.`,
+      'Return only the requested file implementation. Preserve BuilderOS governance, receipts, and verifier compatibility.',
+    );
+  } else {
+    instructionParts.push(
+      `The natural target ${targetFile} is outside Builder safe scope.`,
+      `Instead write ${safeTarget} with a build-ready implementation plan that maps the blueprint to safe files and exact next actions.`,
+      `Why redirected: ${classification.reason}.`,
+      `Blueprint section summary: ${clampSummary(sectionText, 900)}.`,
+    );
+  }
+
+  return {
+    id: `${slugify(path.basename(blueprint.path, '.md'))}-${slugify(label)}-${slugify(safeTarget)}`,
+    priority: blueprint.rank * 100 + 10 + priorityOffset,
+    category: classification.safe ? 'blueprint_build' : 'blueprint_enhancement',
+    lane: blueprint.lane,
+    ref: blueprint.path,
+    zone: classification.safe ? `Z${classification.zone}` : 'Z1',
+    target_file: safeTarget,
+    expected_blocker: classification.zone === 3 ? 'ZONE3_PATCH_REQUIRED' : null,
+    blueprint_path: blueprint.path,
+    blueprint_title: blueprint.title,
+    blueprint_section: label,
+    blueprint_source_target: targetFile,
+    instruction: instructionParts.join(' '),
+  };
+}
+
+async function readProjectBlueprints() {
+  const entries = await fs.readdir(PROJECTS_DIR);
+  const candidates = [
+    'BUILDEROS_ALPHA_BLUEPRINT.md',
+    'AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md',
+    'AMENDMENT_12_COMMAND_CENTER.md',
+    'AMENDMENT_41_MARKETINGOS.md',
+    'AMENDMENT_21_LIFEOS_CORE.md',
+    'AMENDMENT_09_LIFE_COACHING.md',
+    'AMENDMENT_17_TC_SERVICE.md',
+    'AMENDMENT_10_API_COST_SAVINGS.md',
+    'AMENDMENT_44_TOKEN_ACCOUNTING_OS.md',
+    'AMENDMENT_45_CCL_MEANING_PRESERVATION_PROTOCOL.md',
+    'TSOS_PROVEN_ADVANCEMENT_PLAN.md',
+  ].filter((name) => entries.includes(name));
+
+  const blueprints = [];
+  for (const fileName of candidates) {
+    const fullPath = path.join(PROJECTS_DIR, fileName);
+    const text = await fs.readFile(fullPath, 'utf8');
+    const laneRule = detectLane(fileName, text);
+    const titleMatch = text.match(/^#\s+(.+)$/m);
+    blueprints.push({
+      path: `docs/projects/${fileName}`,
+      fileName,
+      title: titleMatch?.[1]?.trim() || fileName,
+      lane: laneRule.lane,
+      rank: laneRule.rank,
+      text,
+      firstExactTask: extractFirstExactCodingTask(text),
+      openDecisionSection: extractOpenDecisionSection(text),
+      buildOrderRows: extractBuildOrderRows(text),
+    });
+  }
+
+  blueprints.sort((a, b) => a.rank - b.rank || a.fileName.localeCompare(b.fileName));
+  return blueprints;
+}
+
+function pickBuildableRows(blueprint, attemptedKeys) {
+  const tasks = [];
+  for (const row of blueprint.buildOrderRows) {
+    if (!row.file) continue;
+    const key = buildBlueprintQueueKey(blueprint.path, `row:${row.file}`);
+    if (attemptedKeys.has(key)) continue;
+    if (!row.file.includes('/')) continue;
+    if (!/^(routes|services|scripts|public\/overlay|db\/migrations|config|prompts|docs\/projects\/builderos-remediation)\//.test(row.file)) continue;
+    tasks.push(buildBlueprintBuildTask(
+      blueprint,
+      `Build Order Task ${row.order}`,
+      `${row.purpose}. Dependency: ${row.dependency}. Verification: ${row.verification}. Done when: ${row.doneCriteria}.`,
+      row.file,
+      row.order,
+    ));
+    if (tasks.length >= 2) break;
+  }
+  return tasks;
+}
+
+async function generateBlueprintTaskBatch(generation, attemptedKeys) {
+  const blueprints = await readProjectBlueprints();
+  const tasks = [];
+
+  for (const blueprint of blueprints) {
+    if (tasks.length >= 6) break;
+
+    if (blueprint.openDecisionSection && blueprint.lane === 'socialmediaos') {
+      const key = buildBlueprintQueueKey(blueprint.path, 'open-decisions');
+      if (!attemptedKeys.has(key)) {
+        tasks.push(buildEnhancementTask(
+          blueprint,
+          generation,
+          'founder decisions still block direct code start',
+          clampSummary(blueprint.openDecisionSection, 900),
+        ));
+        attemptedKeys.add(key);
+        continue;
+      }
+    }
+
+    if (blueprint.firstExactTask) {
+      const targetMatch = blueprint.firstExactTask.match(/`((?:routes|services|scripts|public\/overlay|db\/migrations|config|prompts|docs\/projects\/builderos-remediation)\/[^`]+)`/);
+      const targetFile = targetMatch?.[1];
+      if (targetFile) {
+        const key = buildBlueprintQueueKey(blueprint.path, `exact:${targetFile}`);
+        if (!attemptedKeys.has(key)) {
+          tasks.push(buildBlueprintBuildTask(
+            blueprint,
+            'First Exact Coding Task',
+            blueprint.firstExactTask,
+            targetFile,
+          ));
+          attemptedKeys.add(key);
+          continue;
+        }
+      } else {
+        const key = buildBlueprintQueueKey(blueprint.path, 'exact-enhancement');
+        if (!attemptedKeys.has(key)) {
+          tasks.push(buildEnhancementTask(
+            blueprint,
+            generation,
+            'first exact coding task section exists but no safe target file could be inferred',
+            clampSummary(blueprint.firstExactTask, 900),
+          ));
+          attemptedKeys.add(key);
+          continue;
+        }
+      }
+    }
+
+    const rowTasks = pickBuildableRows(blueprint, attemptedKeys);
+    if (rowTasks.length > 0) {
+      for (const task of rowTasks) {
+        tasks.push(task);
+        attemptedKeys.add(buildBlueprintQueueKey(blueprint.path, `row:${task.blueprint_source_target || task.target_file}`));
+        if (tasks.length >= 6) break;
+      }
+      continue;
+    }
+
+    const fallbackKey = buildBlueprintQueueKey(blueprint.path, 'fallback-enhancement');
+    if (!attemptedKeys.has(fallbackKey)) {
+      tasks.push(buildEnhancementTask(
+        blueprint,
+        generation,
+        'no directly buildable safe-scope task was found in the current blueprint sections',
+        blueprint.firstExactTask || (blueprint.buildOrderRows[0]?.purpose ?? ''),
+      ));
+      attemptedKeys.add(fallbackKey);
+    }
+  }
+
+  return tasks.sort((a, b) => a.priority - b.priority);
+}
 
 function buildOCVerifyInstruction(oc, targetFile) {
-  const scriptName = path.basename(targetFile);
   const safe = oc.id.replace('-', '');
   const fnName = `run${safe}StatusVerification`;
   return `Write ${targetFile}. Export async function ${fnName}({ baseUrl, commandKey }) that fetches GET /api/v1/kernel/health and GET /api/v1/builderos/control-plane/health with x-command-key header using Promise.all. Handle fetch errors with try/catch and return { ok: false, error: e.message } on failure. On success return { ok: true, contradiction_id: '${oc.id}', title: ${JSON.stringify(oc.title.slice(0, 80))}, current_status: ${JSON.stringify(oc.status.slice(0, 60))}, resolution_needed: true, kernel_status: kernelData.health?.status || 'unknown', control_plane_status: cpData.status || 'unknown', builds_today: cpData.build?.builds_today || 0, checked_at: new Date().toISOString() }. Use native fetch only. No npm imports. No DB. No process.argv or CLI scaffolding. 40-60 lines total.`;
@@ -117,16 +478,14 @@ function buildGapVerifyInstruction(gap, targetFile) {
 
 function buildSelfImprovementInstruction(generation, state, targetFile) {
   const fnName = `runRunnerTelemetryG${generation}Verification`;
-  return `Write ${targetFile}. Export async function ${fnName}({ baseUrl, commandKey }) that fetches GET /api/v1/builderos/control-plane/health and GET /api/v1/autonomous-telemetry/efficiency with x-command-key header using Promise.all. Handle fetch errors with try/catch. On success return { ok: true, generation: ${generation}, session_tasks_done: ${state.tasks_done}, session_successful: ${state.successful_repairs}, session_failed: ${state.failed_repairs}, session_governance_blocks: ${state.governance_prevented_drift}, builds_today: cpData.build?.builds_today || 0, without_proof: cpData.build?.without_proof || 0, efficiency_summary: effData.efficiency?.summary || null, runner_assessment: 'continuous_autonomous_operation_verified', checked_at: new Date().toISOString() }. Use native fetch only. No npm imports. No DB. No process.argv. 50-65 lines total.`;
+  return `Write ${targetFile}. Export async function ${fnName}({ baseUrl, commandKey }) that fetches GET /api/v1/builderos/control-plane/health and GET /api/v1/lifeos/autonomous-telemetry/efficiency with x-command-key header using Promise.all. Handle fetch errors with try/catch. On success return { ok: true, generation: ${generation}, session_tasks_done: ${state.tasks_done}, session_successful: ${state.successful_repairs}, session_failed: ${state.failed_repairs}, session_governance_blocks: ${state.governance_prevented_drift}, builds_today: cpData.build?.builds_today || 0, without_proof: cpData.build?.without_proof || 0, efficiency_summary: effData.efficiency?.summary || null, runner_assessment: 'continuous_autonomous_operation_verified', checked_at: new Date().toISOString() }. Use native fetch only. No npm imports. No DB. No process.argv. 50-65 lines total.`;
 }
-
-// ── Doc parsers ──────────────────────────────────────────────────────────────
 
 async function readOpenContradictions() {
   try {
     const text = await fs.readFile(path.join(ROOT, 'docs/architecture/OPEN_CONTRADICTIONS.md'), 'utf8');
-    const sections = text.split(/(?=^### OC-)/m).filter(s => s.startsWith('### OC-'));
-    return sections.map(section => {
+    const sections = text.split(/(?=^### OC-)/m).filter((section) => section.startsWith('### OC-'));
+    return sections.map((section) => {
       const hdr = section.match(/^### (OC-\d+) — (.+)/m);
       if (!hdr) return null;
       const statusRow = section.match(/\|\s*\*\*Status\*\*\s*\|\s*\*\*([^*]+)\*\*/);
@@ -134,106 +493,96 @@ async function readOpenContradictions() {
       if (rawStatus.toUpperCase().includes('RESOLVED')) return null;
       return { id: hdr[1], title: hdr[2].trim(), status: rawStatus };
     }).filter(Boolean);
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
 
 async function readOpenGaps() {
   try {
     const text = await fs.readFile(path.join(ROOT, 'docs/architecture/PLATFORM_GAP_REGISTER.md'), 'utf8');
     const rows = text.match(/\|\s*(GAP-\d+)\s*\|([^|]+)\|([^|]+)\|[^|]+\|([^|]+)\|/g) || [];
-    return rows.map(row => {
-      const cols = row.split('|').map(c => c.trim()).filter(Boolean);
+    return rows.map((row) => {
+      const cols = row.split('|').map((col) => col.trim()).filter(Boolean);
       if (cols.length < 4) return null;
       const [id, desc, priority, label] = cols;
       if (!id.startsWith('GAP-')) return null;
       if ((label || '').includes('RESOLVED')) return null;
       return { id, desc: desc.slice(0, 100), priority: priority.trim(), label: (label || '').trim() };
     }).filter(Boolean);
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
 
-// ── Dynamic task generator — always finds more work ──────────────────────────
-
-async function generateNextTaskBatch(generation, attemptedTargets, state) {
+async function generateSupportTaskBatch(generation, attemptedKeys, state) {
   const tasks = [];
-
-  // Catalog what already exists locally
-  let existingFiles = new Set();
-  try {
-    const scriptsFiles = await fs.readdir(path.join(ROOT, 'scripts'));
-    const servicesFiles = await fs.readdir(path.join(ROOT, 'services'));
-    scriptsFiles.forEach(f => existingFiles.add(`scripts/${f}`));
-    servicesFiles.forEach(f => existingFiles.add(`services/${f}`));
-  } catch {}
-
-  const skip = (tf) => existingFiles.has(tf) || attemptedTargets.has(tf);
-
-  // Pass 1: Open contradictions → Z1 verify scripts
   const openOCs = await readOpenContradictions();
   for (const oc of openOCs) {
     const tf = `scripts/verify-${oc.id.toLowerCase()}-status.mjs`;
-    if (skip(tf)) continue;
+    const key = `support::${tf}`;
+    if (attemptedKeys.has(key)) continue;
     tasks.push({
       id: `${oc.id}-status-verify-g${generation}`,
-      priority: 10 + tasks.length,
-      category: 'open_contradiction',
+      priority: 800 + tasks.length,
+      category: 'support_open_contradiction',
       ref: oc.id,
+      lane: 'support',
       zone: 'Z1',
       target_file: tf,
       instruction: buildOCVerifyInstruction(oc, tf),
     });
-    if (tasks.length >= 4) break;
+    attemptedKeys.add(key);
+    if (tasks.length >= 3) break;
   }
 
-  // Pass 2: Open platform gaps → Z1 verify scripts
   const openGaps = await readOpenGaps();
   for (const gap of openGaps) {
-    if (tasks.length >= 6) break;
+    if (tasks.length >= 5) break;
     const tf = `scripts/verify-${gap.id.toLowerCase()}-gap.mjs`;
-    if (skip(tf)) continue;
+    const key = `support::${tf}`;
+    if (attemptedKeys.has(key)) continue;
     tasks.push({
       id: `${gap.id}-gap-verify-g${generation}`,
-      priority: 20 + tasks.length,
-      category: 'platform_gap',
+      priority: 850 + tasks.length,
+      category: 'support_platform_gap',
       ref: gap.id,
+      lane: 'support',
       zone: 'Z1',
       target_file: tf,
       instruction: buildGapVerifyInstruction(gap, tf),
     });
+    attemptedKeys.add(key);
   }
 
-  // Pass 3: Self-improvement — always unique via generation counter
   if (tasks.length === 0) {
     const tf = `scripts/verify-runner-telemetry-g${generation}.mjs`;
-    if (!skip(tf)) {
+    const key = `support::${tf}`;
+    if (!attemptedKeys.has(key)) {
       tasks.push({
         id: `runner-self-improvement-g${generation}`,
-        priority: 50,
-        category: 'self_improvement',
+        priority: 999,
+        category: 'support_self_improvement',
+        lane: 'support',
         zone: 'Z1',
         target_file: tf,
         instruction: buildSelfImprovementInstruction(generation, state, tf),
       });
+      attemptedKeys.add(key);
     }
-  }
-
-  // Pass 4: If truly everything is covered, generate a runner health composite (generation-unique)
-  if (tasks.length === 0) {
-    const tf = `scripts/verify-system-health-snapshot-g${generation}.mjs`;
-    tasks.push({
-      id: `system-health-snapshot-g${generation}`,
-      priority: 99,
-      category: 'system_health',
-      zone: 'Z1',
-      target_file: tf,
-      instruction: `Write ${tf}. Export async function runSystemHealthSnapshotG${generation}({ baseUrl, commandKey }) that fetches GET /api/v1/kernel/health, GET /api/v1/builderos/control-plane/health, and GET /api/v1/tokens/unified/health with x-command-key header using Promise.all. Handle fetch errors per-endpoint with try/catch. Return { ok: true, snapshot_generation: ${generation}, kernel_status: kData.health?.status || 'unknown', control_plane_status: cpData.status || 'unknown', token_accounting_status: tData.token_accounting?.status || tData.tracking_active || 'unknown', builds_today: cpData.build?.builds_today || 0, without_proof: cpData.build?.without_proof || 0, runner_note: 'continuous_autonomous_operation_generation_${generation}', checked_at: new Date().toISOString() }. Native fetch only. No npm. No DB. No process.argv. 55-70 lines.`,
-    });
   }
 
   return tasks;
 }
 
-// ── Core helpers ─────────────────────────────────────────────────────────────
+async function generateNextTaskBatch(generation, attemptedKeys, state) {
+  const blueprintTasks = await generateBlueprintTaskBatch(generation, attemptedKeys);
+  if (blueprintTasks.length > 0) {
+    return { source: 'blueprints', tasks: blueprintTasks };
+  }
+  const supportTasks = await generateSupportTaskBatch(generation, attemptedKeys, state);
+  return { source: 'support', tasks: supportTasks };
+}
 
 async function appendLog(event, payload = {}) {
   await fs.mkdir(path.dirname(LOG_PATH), { recursive: true });
@@ -253,7 +602,11 @@ async function callApi(method, apiPath, body) {
     body: body ? JSON.stringify(body) : undefined,
   });
   let json = {};
-  try { json = await res.json(); } catch { json = { raw_error: 'non_json_response', status: res.status }; }
+  try {
+    json = await res.json();
+  } catch {
+    json = { raw_error: 'non_json_response', status: res.status };
+  }
   if (res.status === 502) {
     consecutive502s++;
   } else {
@@ -264,10 +617,10 @@ async function callApi(method, apiPath, body) {
 
 function syntaxCheck(filePath) {
   try {
-    execSync(`node --check ${filePath}`, { stdio: 'pipe' });
+    execSync(`node --check ${JSON.stringify(filePath)}`, { stdio: 'pipe', shell: '/bin/zsh' });
     return { ok: true };
-  } catch (e) {
-    return { ok: false, error: e.stderr?.toString?.()?.slice(0, 200) || 'syntax_error' };
+  } catch (error) {
+    return { ok: false, error: error.stderr?.toString?.()?.slice(0, 200) || 'syntax_error' };
   }
 }
 
@@ -281,18 +634,19 @@ function classifyBlocker(job, execResult) {
   return { hard: false, code: blocker || traceBlocker || 'UNKNOWN_FAILURE' };
 }
 
-// ── Task executor ─────────────────────────────────────────────────────────────
-
 async function runTask(task, state) {
   const t0 = Date.now();
   const meta = {
     task_id: task.id,
     priority: task.priority,
     category: task.category,
+    lane: task.lane || null,
     ref: task.ref,
     zone: task.zone,
     target_file: task.target_file,
     expected_blocker: task.expected_blocker || null,
+    blueprint_path: task.blueprint_path || null,
+    blueprint_section: task.blueprint_section || null,
   };
 
   await appendLog('task_start', meta);
@@ -302,7 +656,6 @@ async function runTask(task, state) {
     return { ok: true, dry_run: true };
   }
 
-  // Create job
   let createResult;
   try {
     createResult = await callApi('POST', '/api/v1/lifeos/builderos/command-control/jobs', {
@@ -312,17 +665,22 @@ async function runTask(task, state) {
         target_file: task.target_file,
         task_id: task.id,
         category: task.category,
+        lane: task.lane || null,
         priority: task.priority,
         ref: task.ref || null,
         zone: task.zone,
         expected_blocker: task.expected_blocker || null,
-        mission: 'CONTINUOUS_AUTONOMOUS_OVERNIGHT',
+        mission: 'BLUEPRINT_FIRST_CONTINUOUS_AUTONOMOUS_OVERNIGHT',
         session: new Date().toISOString().slice(0, 10),
+        blueprint_path: task.blueprint_path || null,
+        blueprint_section: task.blueprint_section || null,
+        blueprint_title: task.blueprint_title || null,
+        blueprint_source_target: task.blueprint_source_target || null,
       },
     });
-  } catch (e) {
-    await appendLog('task_create_error', { ...meta, error: e.message, wall_ms: Date.now() - t0 });
-    return { ok: false, error: e.message, stage: 'create' };
+  } catch (error) {
+    await appendLog('task_create_error', { ...meta, error: error.message, wall_ms: Date.now() - t0 });
+    return { ok: false, error: error.message, stage: 'create' };
   }
 
   const job = createResult.body?.job;
@@ -336,13 +694,12 @@ async function runTask(task, state) {
   const jobId = job.id;
   await appendLog('task_job_created', { ...meta, job_id: jobId });
 
-  // Execute job
   let execResult;
   try {
     execResult = await callApi('POST', `/api/v1/lifeos/builderos/command-control/jobs/${jobId}/execute`, {});
-  } catch (e) {
-    await appendLog('task_execute_error', { ...meta, job_id: jobId, error: e.message, wall_ms: Date.now() - t0 });
-    return { ok: false, error: e.message, stage: 'execute', job_id: jobId };
+  } catch (error) {
+    await appendLog('task_execute_error', { ...meta, job_id: jobId, error: error.message, wall_ms: Date.now() - t0 });
+    return { ok: false, error: error.message, stage: 'execute', job_id: jobId };
   }
 
   const execJob = execResult.body?.job;
@@ -360,16 +717,31 @@ async function runTask(task, state) {
     try {
       await fs.access(absPath);
       syntaxResult = syntaxCheck(absPath);
-    } catch { /* not yet pulled locally */ }
+    } catch {
+      // remote commit may not yet exist locally
+    }
 
     await appendLog('task_success', {
-      ...meta, job_id: jobId, committed: true, target_file: targetFile,
-      oil_verified: oilVerified, oil_id: oilId,
-      token_verified: tokenVerified, token_id: tokenId,
-      syntax_ok: syntaxResult.ok, wall_ms: Date.now() - t0,
+      ...meta,
+      job_id: jobId,
+      committed: true,
+      target_file: targetFile,
+      oil_verified: oilVerified,
+      oil_id: oilId,
+      token_verified: tokenVerified,
+      token_id: tokenId,
+      syntax_ok: syntaxResult.ok,
+      wall_ms: Date.now() - t0,
     });
 
-    state.successes.push({ task_id: task.id, job_id: jobId, committed: true, oil_verified: oilVerified, token_verified: tokenVerified });
+    state.successes.push({
+      task_id: task.id,
+      job_id: jobId,
+      committed: true,
+      oil_verified: oilVerified,
+      token_verified: tokenVerified,
+      blueprint_path: task.blueprint_path || null,
+    });
     state.autonomous_decisions++;
     if (oilVerified && tokenVerified) state.successful_repairs++;
     return { ok: true, committed: true, job_id: jobId, oil_verified: oilVerified };
@@ -380,31 +752,48 @@ async function runTask(task, state) {
   const isExpected = Boolean(task.expected_blocker && blockerInfo.code === task.expected_blocker);
 
   await appendLog('task_failed', {
-    ...meta, job_id: jobId, committed: false,
-    blocker: blockerInfo.code, hard: blockerInfo.hard,
-    zone3: isZone3, expected: isExpected,
+    ...meta,
+    job_id: jobId,
+    committed: false,
+    blocker: blockerInfo.code,
+    hard: blockerInfo.hard,
+    zone3: isZone3,
+    expected: isExpected,
     lesson: isZone3
-      ? `Zone 3 blocked — ${task.target_file} requires Conductor GAP-FILL`
+      ? `Zone 3 blocked — ${task.target_file} requires patch-plan follow-up`
       : `Failed at execute with blocker: ${blockerInfo.code}`,
     wall_ms: Date.now() - t0,
   });
 
-  state.failures.push({ task_id: task.id, job_id: jobId, blocker: blockerInfo.code, zone3: isZone3, expected: isExpected });
+  state.failures.push({
+    task_id: task.id,
+    job_id: jobId,
+    blocker: blockerInfo.code,
+    zone3: isZone3,
+    expected: isExpected,
+    blueprint_path: task.blueprint_path || null,
+  });
   if (!isZone3) state.failed_repairs++;
   if (isZone3) state.governance_prevented_drift++;
 
-  return { ok: false, blocker: blockerInfo.code, hard: blockerInfo.hard, job_id: jobId };
+  return {
+    ok: false,
+    blocker: blockerInfo.code,
+    hard: blockerInfo.hard,
+    zone3: isZone3,
+    expected: isExpected,
+    job_id: jobId,
+  };
 }
 
-// ── Main orchestrator — never exits on queue exhaustion ──────────────────────
-
 async function main() {
-  // Lock check
   try {
     await fs.access(LOCK_PATH);
     console.error('[BACKLOG-RUN] Lock file exists. Delete data/governed-autonomy-backlog.lock to force start.');
     process.exit(1);
-  } catch { /* no lock — proceed */ }
+  } catch {
+    // proceed
+  }
 
   if (!BASE_URL || !KEY) {
     console.error('[BACKLOG-RUN] HARD BLOCKER: PUBLIC_BASE_URL or COMMAND_CENTER_KEY missing.');
@@ -413,7 +802,6 @@ async function main() {
 
   await fs.writeFile(LOCK_PATH, String(process.pid), 'utf8');
 
-  // Graceful shutdown on signal — only valid operator stop
   process.on('SIGTERM', async () => {
     await appendLog('orchestrator_operator_stop', { signal: 'SIGTERM', reason: 'operator_requested' });
     try { await fs.unlink(LOCK_PATH); } catch {}
@@ -425,8 +813,6 @@ async function main() {
     process.exit(0);
   });
 
-  // Checkpoint interval — write state and log progress every N minutes.
-  // This is NOT a stop condition. The runner continues after every checkpoint.
   const CHECKPOINT_MS = CHECKPOINT_EVERY_MIN * 60 * 1000;
   let nextCheckpoint = Date.now() + CHECKPOINT_MS;
 
@@ -442,6 +828,10 @@ async function main() {
     successful_repairs: 0,
     failed_repairs: 0,
     governance_prevented_drift: 0,
+    blueprint_tasks_generated: 0,
+    support_tasks_generated: 0,
+    first_blueprint_selected: null,
+    first_job_id: null,
     successes: [],
     failures: [],
     lessons: [],
@@ -452,25 +842,21 @@ async function main() {
 
   await appendLog('orchestrator_start', {
     checkpoint_every_min: CHECKPOINT_EVERY_MIN,
-    seed_tasks: SEED_TASKS.length,
     dry_run: DRY_RUN,
     base_url: BASE_URL.slice(0, 50),
     key_len: KEY.length,
-    stop_policy: 'ONLY: operator_stop | capacity_exhausted | service_outage | safety_boundary | repo_corruption',
-    time_limit_policy: 'TIME_IS_CHECKPOINT_ONLY — runner does not stop at checkpoint, continues forever',
-    queue_exhaustion_policy: 'FAILURE_QUEUE_EXHAUSTED_WITH_WORK_REMAINING — generate_next_batch_immediately',
+    workflow: 'BLUEPRINT_FIRST',
+    queue_priority: ['C2/Command Control', 'SocialMediaOS', 'LifeOS/LimitlessOS', 'TC', 'TSOS platform improvements'],
+    fallback_queue: ['OPEN_CONTRADICTIONS.md', 'PLATFORM_GAP_REGISTER.md', 'self_improvement'],
   });
   await writeState(state);
 
-  // Work queue — seeded then continuously replenished forever
-  const workQueue = [...SEED_TASKS].sort((a, b) => a.priority - b.priority);
-  const attemptedTargets = new Set(SEED_TASKS.map(t => t.target_file));
+  const workQueue = [];
+  const attemptedKeys = new Set();
   const completedIds = new Set();
 
-  // ── Main loop — runs forever until valid hard stop ──
   let hardStop = false;
   while (!hardStop) {
-    // Checkpoint: write state + log progress, then CONTINUE
     if (Date.now() >= nextCheckpoint) {
       const wallMin = ((Date.now() - new Date(state.started_at).getTime()) / 60000).toFixed(1);
       await appendLog('checkpoint_reached_continue', {
@@ -481,6 +867,8 @@ async function main() {
         successful_repairs: state.successful_repairs,
         failed_repairs: state.failed_repairs,
         governance_prevented_drift: state.governance_prevented_drift,
+        blueprint_tasks_generated: state.blueprint_tasks_generated,
+        support_tasks_generated: state.support_tasks_generated,
         queue_depth: workQueue.length,
         action: 'CONTINUING — checkpoint is NOT a stop condition',
       });
@@ -488,7 +876,6 @@ async function main() {
       nextCheckpoint = Date.now() + CHECKPOINT_MS;
     }
 
-    // Check for service outage via consecutive 502s
     if (consecutive502s >= MAX_CONSECUTIVE_502) {
       await appendLog('orchestrator_hard_stop', {
         blocker: 'SERVICE_OUTAGE',
@@ -500,55 +887,46 @@ async function main() {
       break;
     }
 
-    // Queue exhaustion — NOT a success state, generate more work immediately
     if (workQueue.length === 0) {
       state.generation_count++;
-      await appendLog('FAILURE_QUEUE_EXHAUSTED_WITH_WORK_REMAINING', {
+      const batch = await generateNextTaskBatch(state.generation_count, attemptedKeys, state);
+      const newTasks = batch.tasks || [];
+
+      await appendLog('queue_rebuild', {
         generation: state.generation_count,
-        tasks_done: state.tasks_done,
-        message: 'Queue empty — this is FAILURE not success. Generating next batch from docs.',
-        sources: ['OPEN_CONTRADICTIONS.md', 'PLATFORM_GAP_REGISTER.md', 'self_improvement'],
+        mode: batch.source,
+        new_tasks: newTasks.length,
+        task_ids: newTasks.map((task) => task.id),
+        target_files: newTasks.map((task) => task.target_file),
+        blueprint_paths: newTasks.map((task) => task.blueprint_path).filter(Boolean),
+        message: batch.source === 'blueprints'
+          ? 'Primary queue rebuilt from docs/projects/*.md blueprints.'
+          : 'Blueprint queue exhausted for this generation; support tasks queued as fallback.',
       });
 
-      const newBatch = await generateNextTaskBatch(state.generation_count, attemptedTargets, state);
-      if (newBatch.length === 0) {
-        await appendLog('generator_found_no_new_tasks', {
+      if (newTasks.length === 0) {
+        await appendLog('generator_temporarily_empty', {
           generation: state.generation_count,
-          attempted_targets: attemptedTargets.size,
-          action: 'clearing_attempted_set_and_incrementing_generation',
+          message: 'Generator returned 0 tasks. Pausing 60s before retry. Will not stop.',
         });
-        attemptedTargets.clear();
-        state.generation_count++;
-        const retryBatch = await generateNextTaskBatch(state.generation_count, attemptedTargets, state);
-        if (retryBatch.length === 0) {
-          // Should be impossible with open OCs and gaps in the docs.
-          // Log and pause briefly before trying again — never exit.
-          await appendLog('generator_temporarily_empty', {
-            generation: state.generation_count,
-            message: 'Generator returned 0 tasks twice. Pausing 60s before retry. Will not stop.',
-          });
-          await new Promise(r => setTimeout(r, 60000));
-          continue;
-        }
-        workQueue.push(...retryBatch);
-        for (const t of retryBatch) attemptedTargets.add(t.target_file);
-      } else {
-        workQueue.push(...newBatch);
-        for (const t of newBatch) attemptedTargets.add(t.target_file);
-        await appendLog('generator_batch_queued', {
-          generation: state.generation_count,
-          new_tasks: newBatch.length,
-          task_ids: newBatch.map(t => t.id),
-          target_files: newBatch.map(t => t.target_file),
-        });
+        await new Promise((resolve) => setTimeout(resolve, 60000));
+        continue;
       }
 
+      workQueue.push(...newTasks.sort((a, b) => a.priority - b.priority));
+      if (batch.source === 'blueprints') {
+        state.blueprint_tasks_generated += newTasks.length;
+        if (!state.first_blueprint_selected) {
+          state.first_blueprint_selected = newTasks[0]?.blueprint_path || null;
+        }
+      } else {
+        state.support_tasks_generated += newTasks.length;
+      }
       state.tasks_total = state.tasks_done + workQueue.length;
       await writeState(state);
       continue;
     }
 
-    // Dequeue and run next task
     const task = workQueue.shift();
     if (completedIds.has(task.id)) continue;
     completedIds.add(task.id);
@@ -558,6 +936,9 @@ async function main() {
     await writeState(state);
 
     const result = await runTask(task, state);
+    if (!state.first_job_id && result.job_id) {
+      state.first_job_id = result.job_id;
+    }
 
     if (result.hard) {
       await appendLog('orchestrator_hard_stop', { blocker: result.blocker, task_id: task.id });
@@ -567,15 +948,35 @@ async function main() {
       break;
     }
 
-    if (!result.ok && !result.dry_run) {
+    if (!result.ok && result.zone3 && task.category === 'blueprint_build' && task.blueprint_path) {
+      const blueprint = {
+        path: task.blueprint_path,
+        title: task.blueprint_title || task.blueprint_path,
+        lane: task.lane,
+      };
+      const followUp = buildPatchPlanTask(blueprint, task, state.generation_count, result.blocker || 'ZONE3_PATCH_REQUIRED');
+      if (!completedIds.has(followUp.id)) {
+        workQueue.push(followUp);
+        await appendLog('zone3_follow_up_queued', {
+          task_id: task.id,
+          follow_up_task_id: followUp.id,
+          patch_plan_target: followUp.target_file,
+          source_blueprint: task.blueprint_path,
+        });
+      }
+    }
+
+    if (!result.ok && !result.dry_run && !result.zone3) {
       const retryTask = {
         ...task,
         id: `${task.id}_retry`,
-        instruction: task.instruction + ' Keep the implementation minimal — focus only on the export signature and return value. Under 60 lines total.',
+        instruction: `${task.instruction} Keep the implementation minimal and aligned to the blueprint. Focus only on the named target and required return shape.`,
       };
-      attemptedTargets.add(retryTask.id);
       await appendLog('task_retry', { task_id: task.id, retry_id: retryTask.id });
       const retryResult = await runTask(retryTask, state);
+      if (!state.first_job_id && retryResult.job_id) {
+        state.first_job_id = retryResult.job_id;
+      }
       if (retryResult.hard) {
         await appendLog('orchestrator_hard_stop', { blocker: retryResult.blocker, task_id: retryTask.id });
         state.status = 'hard_stop';
@@ -587,10 +988,9 @@ async function main() {
 
     state.tasks_done++;
     await writeState(state);
-    await new Promise(r => setTimeout(r, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
   }
 
-  // Only reach here on valid hard stop
   state.completed_at = new Date().toISOString();
   await appendLog('orchestrator_stop', {
     stop_reason: state.stop_reason,
@@ -607,8 +1007,8 @@ async function main() {
   try { await fs.unlink(LOCK_PATH); } catch {}
 }
 
-main().catch(async (err) => {
-  await appendLog('orchestrator_crash', { error: err.message, stack: err.stack?.slice(0, 500) });
+main().catch(async (error) => {
+  await appendLog('orchestrator_crash', { error: error.message, stack: error.stack?.slice(0, 500) });
   try { await fs.unlink(LOCK_PATH); } catch {}
   process.exit(1);
 });

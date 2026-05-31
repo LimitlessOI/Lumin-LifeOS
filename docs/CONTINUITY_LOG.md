@@ -2,6 +2,41 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [MISSION] 2026-05-31 — Blueprint-First Overnight Runner Repair
+
+### Mission result: COMPLETE — queue source repaired from verifier-first fallback to amendment/blueprint-first execution
+
+**Agent:** Codex / GPT-5 / local repo shell / `main` / Conductor + co-governor
+
+**Root break (KNOW):**
+- `scripts/governed-overnight-backlog-run.mjs` treated `OPEN_CONTRADICTIONS.md`, `PLATFORM_GAP_REGISTER.md`, and self-improvement scripts as the authoritative queue.
+- When the queue emptied it regenerated `verify-gap-*`, `verify-oc-*`, and `verify-runner-telemetry-*` jobs forever.
+- Live evidence before repair: running PID `74831` had reached generation `248`; `data/governed-autonomy-backlog-state.json` showed hundreds of verifier/self-improvement jobs and no blueprint/amendment queue.
+
+**Repair applied:**
+- Replaced the runner queue generator so it now:
+  - reads ranked blueprint sources from `docs/projects/*.md`
+  - prioritizes founder lanes in this order: C2 / Command & Control, SocialMediaOS, LifeOS / LimitlessOS, TC, TSOS platform
+  - turns “First Exact Coding Task”, build-order rows, and unresolved decision sections into C2 jobs
+  - uses contradiction/gap verifier scripts only as fallback support work
+  - creates patch-plan follow-up tasks in `docs/projects/builderos-remediation/` when a blueprint build hits Zone 3
+
+**Receipts / files:**
+- `scripts/governed-overnight-backlog-run.mjs` — blueprint-first queue logic
+- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — change receipt row
+- `docs/CONTINUITY_LOG.md` — this receipt
+
+**Verification status before restart:**
+- `node --check scripts/governed-overnight-backlog-run.mjs` → PASS
+- `node scripts/builderos-groq-antipattern-scan.mjs scripts/governed-overnight-backlog-run.mjs` → PASS
+- unified builder verifier runtime gate failed only because the prior runner still held `data/governed-autonomy-backlog.lock`
+
+**Next action in-session:**
+1. stop the old verifier-loop runner
+2. start the repaired blueprint-first runner with the same nohup command
+3. capture first selected blueprint + first C2 job ID + live-running proof
+
+---
 ## [MISSION] 2026-05-31 — Overnight C2 Backlog Stress Test
 
 ### Mission result: COMPLETE — All 11 tasks processed; 8 committed, 2 Z3 blocked (expected), 1 governance blocked
