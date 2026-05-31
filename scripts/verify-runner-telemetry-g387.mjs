@@ -3,8 +3,7 @@
  */
 
 /**
- * A generic helper to wrap an async promise in a try-catch block,
- * returning an object indicating success or failure.
+ * A simple try-catch wrapper for async operations.
  * @param {Promise<any>} promise The promise to execute.
  * @returns {Promise<{success: boolean, data?: any, error?: string}>}
  */
@@ -13,7 +12,7 @@ async function tryCatch(promise) {
     const data = await promise;
     return { success: true, data };
   } catch (error) {
-    return { success: false, error: error.message || String(error) };
+    return { success: false, error: error.message || 'Unknown error' };
   }
 }
 
@@ -23,7 +22,7 @@ async function tryCatch(promise) {
  * @param {string} path The API endpoint path.
  * @param {string} commandKey The value for the x-command-key header.
  * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If the fetch operation fails or the response is not OK.
+ * @throws {Error} If the network request fails or the response is not OK.
  */
 async function fetchJson(baseUrl, path, commandKey) {
   const url = `${baseUrl}${path}`;
@@ -38,51 +37,33 @@ async function fetchJson(baseUrl, path, commandKey) {
     const errorText = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
   }
-
   return response.json();
 }
 
 /**
  * Verifies runner telemetry by fetching health and efficiency data.
- * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the API calls.
- * @param {string} params.commandKey - The command key for authentication.
- * @returns {Promise<object>} A structured JSON object with verification results.
+ * @param {{baseUrl: string, commandKey: string}} params
+ * @returns {Promise<object>} A structured audit JSON object.
  */
 export async function runRunnerTelemetryG387Verification({ baseUrl, commandKey }) {
-  const checked_at = new Date().toISOString();
-
   if (!baseUrl || !commandKey) {
+    return { ok: false, error: 'Missing baseUrl or commandKey' };
+  }
+
+  const [cpResult, effResult] = await Promise.all([
+    tryCatch(fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
+    tryCatch(fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey))
+  ]);
+
+  if (!cpResult.success || !effResult.success) {
     return {
       ok: false,
-      error: 'Missing baseUrl or commandKey parameter.',
-      checked_at
+      error: `Failed to fetch data: CP Error: ${cpResult.error || 'N/A'}, EFF Error: ${effResult.error || 'N/A'}`
     };
   }
 
-  const healthPromise = tryCatch(fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey));
-  const efficiencyPromise = tryCatch(fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey));
-
-  const [healthResult, efficiencyResult] = await Promise.all([healthPromise, efficiencyPromise]);
-
-  if (!healthResult.success) {
-    return {
-      ok: false,
-      error: `Failed to fetch control plane health: ${healthResult.error}`,
-      checked_at
-    };
-  }
-
-  if (!efficiencyResult.success) {
-    return {
-      ok: false,
-      error: `Failed to fetch autonomous telemetry efficiency: ${efficiencyResult.error}`,
-      checked_at
-    };
-  }
-
-  const cpData = healthResult.data;
-  const effData = efficiencyResult.data;
+  const cpData = cpResult.data;
+  const effData = effResult.data;
 
   return {
     ok: true,
@@ -95,6 +76,6 @@ export async function runRunnerTelemetryG387Verification({ baseUrl, commandKey }
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
     runner_assessment: 'continuous_autonomous_operation_verified',
-    checked_at
+    checked_at: new Date().toISOString()
   };
 }
