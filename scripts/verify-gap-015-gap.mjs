@@ -1,7 +1,7 @@
 /*
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- * - Verifies GAP-015: "No trust coverage map (OIL + build + token joint view)"
- *   by checking the health status of Kernel and BuilderOS Control Plane.
+- @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+- - Verifies GAP-015: "No trust coverage map (OIL + build + token joint view)"
+-   by checking the health status of Kernel and BuilderOS Control Plane.
  */
 const tryCatch = async (promise) => {
   try {
@@ -11,7 +11,6 @@ const tryCatch = async (promise) => {
     return [error, null];
   }
 };
-
 const fetchJson = async (baseUrl, path, commandKey) => {
   const url = `${baseUrl}${path}`;
   const response = await fetch(url, {
@@ -26,25 +25,20 @@ const fetchJson = async (baseUrl, path, commandKey) => {
   }
   return response.json();
 };
-
 export async function runGAP015GapVerification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
     return { ok: false, error: 'baseUrl and commandKey are required.' };
   }
-
   const [error, results] = await tryCatch(
     Promise.all([
       fetchJson(baseUrl, '/api/v1/kernel/health', commandKey),
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
     ])
   );
-
   if (error) {
     return { ok: false, error: error.message };
   }
-
   const [kernelData, controlPlaneData] = results; // controlPlaneData is fetched but not used in the final return object per spec.
-
   return {
     ok: true,
     gap_id: 'GAP-015',
