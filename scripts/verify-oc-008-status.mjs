@@ -1,6 +1,5 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
  * This module provides functionality to verify the status of BuilderOS and Kernel
  * health endpoints to audit the product boundary contradiction OC-008.
  */
@@ -24,12 +23,10 @@ async function fetchJson(baseUrl, path, commandKey) {
       'Content-Type': 'application/json',
     },
   });
-
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
   }
-
   return response.json();
 }
 
@@ -39,7 +36,7 @@ async function fetchJson(baseUrl, path, commandKey) {
  * BuilderOS product boundary contradiction (OC-008).
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the API calls.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} An object indicating the verification result,
  *   including health statuses and build metrics on success, or an error on failure.
  */
@@ -49,7 +46,6 @@ export async function runOC008StatusVerification({ baseUrl, commandKey }) {
       fetchJson(baseUrl, '/api/v1/kernel/health', commandKey),
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
     ]);
-
     return {
       ok: true,
       contradiction_id: 'OC-008',
