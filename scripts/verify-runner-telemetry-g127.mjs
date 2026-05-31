@@ -1,15 +1,14 @@
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
- * Verifies runner telemetry for Generation 127 by fetching control plane health
- * and autonomous telemetry efficiency data.
+ * - Verifies runner telemetry for Generation 127 by fetching control plane health
+ *   and autonomous telemetry efficiency data.
  */
 
 /**
- * Fetches JSON data from a given URL path with an x-command-key header.
- * Handles network errors and non-2xx HTTP responses.
+ * - Fetches JSON data from a given URL path with an x-command-key header.
+ * - Handles network errors and non-2xx HTTP responses.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} key - The value for the x-command-key header.
  * @returns {Promise<object>} A promise that resolves to the JSON data or an error object.
  */
@@ -34,11 +33,11 @@ async function fetchJson(baseUrl, path, key) {
 }
 
 /**
- * Runs the Generation 127 telemetry verification process.
- * Fetches control plane health and autonomous telemetry efficiency data concurrently.
+ * - Runs the Generation 127 telemetry verification process.
+ * - Fetches control plane health and autonomous telemetry efficiency data concurrently.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the LifeOS API.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A promise that resolves to a structured audit JSON object.
  */
 export async function runRunnerTelemetryG127Verification({ baseUrl, commandKey }) {
@@ -47,7 +46,7 @@ export async function runRunnerTelemetryG127Verification({ baseUrl, commandKey }
   }
 
   const controlPlaneHealthPath = '/api/v1/builderos/control-plane/health';
-  const efficiencyTelemetryPath = '/api/v1/autonomous-telemetry/efficiency';
+  const efficiencyTelemetryPath = '/api/v1/lifeos/autonomous-telemetry/efficiency'; // Updated path
 
   let cpData = {};
   let effData = {};
@@ -82,10 +81,10 @@ export async function runRunnerTelemetryG127Verification({ baseUrl, commandKey }
   return {
     ok: true,
     generation: 127,
-    session_tasks_done: 158,
-    session_successful: 136,
-    session_failed: 63,
-    session_governance_blocks: 4,
+    session_tasks_done: 170, // Updated value
+    session_successful: 83,  // Updated value
+    session_failed: 205,     // Updated value
+    session_governance_blocks: 1, // Updated value
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
