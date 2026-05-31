@@ -1,3 +1,7 @@
-# BuilderOS Remediation: TSOS Proven Advancement Plan Enhancement (G2)
+# BuilderOS Blueprint Enhancement Memo: TSOS Proven Advancement Plan (G2)
 
-This memo addresses the current unbuildable state of the `TSOS_PROVEN_ADVANCEMENT_PLAN.md` blueprint by providing a builder-ready enhancement. The core issue is the lack of a directly buildable, safe-scope task within the existing blueprint sections. This enhancement defines the smallest actionable
+This memo enhances the `TSOS_PROVEN_ADVANCEMENT_PLAN.md` blueprint by identifying a minimal, buildable next slice, addressing the current lack of directly buildable safe-scope tasks.
+
+## 1. Blocking Ambiguity or Founder Decision List
+
+*   **Definition of "Advancement Stages
