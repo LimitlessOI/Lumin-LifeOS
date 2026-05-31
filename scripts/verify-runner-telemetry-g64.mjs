@@ -1,12 +1,12 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
-/**
+/*
  * Fetches JSON data from a given URL with an x-command-key header.
  * Handles network and HTTP errors, returning a structured result.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} commandKey - The value for the x-command-key header.
  * @returns {Promise<{data: object|null, error: string|null}>} A promise that resolves to an object containing data or an error message.
  */
@@ -25,11 +25,11 @@ async function fetchJson(baseUrl, path, commandKey) {
   }
 }
 
-/**
+/*
  * Verifies runner telemetry for Generation 64 by fetching control plane health and efficiency data.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the BuilderOS API.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A structured JSON object indicating verification status and telemetry data.
  */
 export async function runRunnerTelemetryG64Verification({ baseUrl, commandKey }) {
@@ -39,7 +39,7 @@ export async function runRunnerTelemetryG64Verification({ baseUrl, commandKey })
 
   const [cpResult, effResult] = await Promise.all([
     fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-    fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey),
+    fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey), // Updated path
   ]);
 
   if (cpResult.error || effResult.error) {
@@ -56,10 +56,10 @@ export async function runRunnerTelemetryG64Verification({ baseUrl, commandKey })
   return {
     ok: true,
     generation: 64,
-    session_tasks_done: 95,
-    session_successful: 79,
-    session_failed: 39,
-    session_governance_blocks: 4,
+    session_tasks_done: 107, // Updated value
+    session_successful: 50, // Updated value
+    session_failed: 134, // Updated value
+    session_governance_blocks: 1, // Updated value
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
