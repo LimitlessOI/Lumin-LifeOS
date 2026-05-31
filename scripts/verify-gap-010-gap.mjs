@@ -1,9 +1,5 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- */
-
-/**
- * A generic helper to wrap an async operation in a try/catch block.
+ * A generic helper to wrap an async operation in a tryCatch block.
  * @param {Promise<any>} promise The promise to execute.
  * @returns {Promise<{success: true, data: any} | {success: false, error: Error}>}
  */
@@ -15,11 +11,10 @@ const tryCatch = async (promise) => {
     return { success: false, error };
   }
 };
-
 /**
  * Fetches JSON data from a specified URL with a command key header.
  * @param {string} baseUrl The base URL of the API.
- * @param {string} path The API endpoint path.
+ * @param {string} path The apiEP path.
  * @param {string} commandKey The x-command-key header value.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the network request fails or the response is not OK.
@@ -32,15 +27,12 @@ const fetchJson = async (baseUrl, path, commandKey) => {
       'Content-Type': 'application/json'
     }
   });
-
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
   }
-
   return response.json();
 };
-
 /**
  * Verifies the GAP-010 condition by checking the health of kernel and control plane APIs.
  * @param {{baseUrl: string, commandKey: string}} params
