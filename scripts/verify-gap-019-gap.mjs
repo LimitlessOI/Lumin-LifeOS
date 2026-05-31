@@ -1,4 +1,4 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
@@ -6,8 +6,8 @@
  * Fetches JSON data from a specified URL with an x-command-key header.
  * Throws an error if the HTTP response is not OK.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
- * @param {string} commandKey - The command key for authentication.
+ * @param {string} path - The apiEP path.
+ * @param {string} commandKey - The command key for auth.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the network request fails or the HTTP response is not OK.
  */
@@ -19,13 +19,11 @@ const fetchJson = async (baseUrl, path, commandKey) => {
       'Content-Type': 'application/json' // Standard practice for JSON APIs
     }
   });
-
   if (!response.ok) {
     const errorText = await response.text();
     // Include URL in error message for better debugging
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText} for URL: ${url}`);
   }
-
   return response.json();
 };
 
@@ -35,7 +33,7 @@ const fetchJson = async (baseUrl, path, commandKey) => {
  * Fetches data concurrently using Promise.all and handles potential fetch errors.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the LifeOS API.
- * @param {string} params.commandKey - The command key for API authentication.
+ * @param {string} params.commandKey - The command key for API auth.
  * @returns {Promise<object>} A structured JSON object indicating the verification result.
  *   On success: { ok: true, gap_id, gap_description, gap_priority, gap_status, resolution_required, kernel_status, token_accounting, checked_at }
  *   On failure: { ok: false, error: string }
@@ -52,7 +50,6 @@ export async function runGAP019GapVerification({ baseUrl, commandKey }) {
     // The 'controlPlaneData' is fetched as required but its content is not
     // explicitly used in the final return object structure for GAP-019,
     // which primarily focuses on 'kernelData' for status reporting.
-
     return {
       ok: true,
       gap_id: 'GAP-019',
