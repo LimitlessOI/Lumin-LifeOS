@@ -1,14 +1,7 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
- * Governed loop health preflight verification for GAP-023.
- * This module verifies the health status of the kernel and BuilderOS control plane.
- */
-
-/**
  * Fetches JSON data from a specified API path.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} commandKey - The x-command-key header value.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the fetch operation fails or the response is not OK.
@@ -21,12 +14,10 @@ async function fetchJson(baseUrl, path, commandKey) {
       'Content-Type': 'application/json',
     },
   });
-
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
   }
-
   return response.json();
 }
 
@@ -43,7 +34,6 @@ export async function runGAP023GapVerification({ baseUrl, commandKey }) {
       fetchJson(baseUrl, '/api/v1/kernel/health', commandKey),
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
     ]);
-
     return {
       ok: true,
       gap_id: 'GAP-023',
