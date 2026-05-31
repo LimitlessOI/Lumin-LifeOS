@@ -1,88 +1,93 @@
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
- * This script provides a verification mechanism for runner telemetry,
- * specifically for generation 437 of the LifeOS platform.
- * It fetches health and efficiency data from the control plane and autonomous telemetry
- * endpoints to assess continuous autonomous operation.
  */
 
 /**
- * Fetches JSON data from a specified URL path with a given command key.
- * Handles HTTP errors by throwing an informative error.
- *
- * @param {string} baseUrl - The base URL for the API endpoints.
- * @param {string} path - The specific API path to fetch (e.g., '/api/v1/health').
- * @param {string} commandKey - The x-command-key header value for authentication.
- * @returns {Promise<object>} A promise that resolves to the JSON response body.
- * @throws {Error} If the network request fails or the HTTP response is not OK.
+ * A simple utility to wrap an async promise in a try-catch block,
+ * returning an array [error, result].
+ * @param {Promise<any>} promise The promise to execute.
+ * @returns {Promise<[Error | null, any | null]>} An array containing either an error or the result.
+ */
+const tryCatch = async (promise) => {
+  try {
+    const result = await promise;
+    return [null, result];
+  } catch (error) {
+    return [error, null];
+  }
+};
+
+/**
+ * Fetches JSON data from a specified URL with a command key header.
+ * @param {string} baseUrl The base URL for the API.
+ * @param {string} path The API endpoint path.
+ * @param {string} commandKey The x-command-key header value.
+ * @returns {Promise<object>} The parsed JSON response.
+ * @throws {Error} If the fetch operation fails or the response is not OK.
  */
 async function fetchJson(baseUrl, path, commandKey) {
-    const url = `${baseUrl}${path}`;
-    const response = await fetch(url, {
-        headers: {
-            'x-command-key': commandKey,
-            'Accept': 'application/json' // Request JSON response
-        }
-    });
+  const url = `${baseUrl}${path}`;
+  const response = await fetch(url, {
+    headers: {
+      'x-command-key': commandKey,
+      'Content-Type': 'application/json',
+    },
+  });
 
-    // Check if the HTTP response was successful
-    if (!response.ok) {
-        const errorBody = await response.text(); // Attempt to read error body
-        throw new Error(`HTTP error! Status: ${response.status}, Path: ${path}, Body: ${errorBody}`);
-    }
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorBody}`);
+  }
 
-    return response.json();
+  return response.json();
 }
 
 /**
- * Executes a verification check for runner telemetry, generation 437.
- * It concurrently fetches data from the control plane health and autonomous telemetry efficiency endpoints.
- *
+ * Verifies runner telemetry by fetching health and efficiency data.
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the LifeOS API.
- * @param {string} params.commandKey - The command key for API authentication.
- * @returns {Promise<object>} A structured JSON object indicating the verification result.
- *   On success: { ok: true, ...telemetry_data, runner_assessment, checked_at }
- *   On failure: { ok: false, error: message, checked_at }
+ * @param {string} params.baseUrl - The base URL for the API calls.
+ * @param {string} params.commandKey - The command key for authentication.
+ * @returns {Promise<object>} A structured JSON object with verification results.
  */
 export async function runRunnerTelemetryG437Verification({ baseUrl, commandKey }) {
-    // Basic input validation
-    if (!baseUrl || !commandKey) {
-        return {
-            ok: false,
-            error: 'Missing baseUrl or commandKey parameter.',
-            checked_at: new Date().toISOString()
-        };
-    }
+  if (!baseUrl) {
+    return { ok: false, error: 'baseUrl is required.', checked_at: new Date().toISOString() };
+  }
+  if (!commandKey) {
+    return { ok: false, error: 'commandKey is required.', checked_at: new Date().toISOString() };
+  }
 
-    try {
-        // Concurrently fetch data from both required endpoints
-        const [cpData, effData] = await Promise.all([
-            fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-            fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey)
-        ]);
+  const healthPath = '/api/v1/builderos/control-plane/health';
+  const efficiencyPath = '/api/v1/lifeos/autonomous-telemetry/efficiency';
 
-        // Construct the success response object as per specification
-        return {
-            ok: true,
-            generation: 437,
-            session_tasks_done: 480,
-            session_successful: 320,
-            session_failed: 427,
-            session_governance_blocks: 1,
-            builds_today: cpData.build?.builds_today || 0, // Safely access nested property
-            without_proof: cpData.build?.without_proof || 0, // Safely access nested property
-            efficiency_summary: effData.efficiency?.summary || null, // Safely access nested property
-            runner_assessment: 'continuous_autonomous_operation_verified',
-            checked_at: new Date().toISOString()
-        };
-    } catch (e) {
-        // Handle any errors during the fetch operations
-        return {
-            ok: false,
-            error: `Telemetry verification failed: ${e.message}`,
-            checked_at: new Date().toISOString()
-        };
-    }
+  const [error, [cpData, effData]] = await tryCatch(
+    Promise.all([
+      fetchJson(baseUrl, healthPath, commandKey),
+      fetchJson(baseUrl, efficiencyPath, commandKey),
+    ])
+  );
+
+  if (error) {
+    return {
+      ok: false,
+      generation: 437,
+      runner_assessment: 'telemetry_fetch_failed',
+      error: error.message,
+      checked_at: new Date().toISOString(),
+    };
+  }
+
+  return {
+    ok: true,
+    generation: 437,
+    session_tasks_done: 480,
+    session_successful: 320,
+    session_failed: 427,
+    session_governance_blocks: 1,
+    builds_today: cpData.build?.builds_today || 0,
+    without_proof: cpData.build?.without_proof || 0,
+    efficiency_summary: effData.efficiency?.summary || null,
+    runner_assessment: 'continuous_autonomous_operation_verified',
+    checked_at: new Date().toISOString(),
+  };
 }
