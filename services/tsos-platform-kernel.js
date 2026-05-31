@@ -86,6 +86,7 @@ export function createTSOSPlatformKernel({
       .query(
         `SELECT id::text AS id FROM security_receipts
          WHERE payload->>'task_id' = $1 OR payload->>'build_task_id' = $1
+            OR payload->'details'->>'task_id' = $1 OR payload->'details'->>'build_task_id' = $1
          ORDER BY created_at DESC LIMIT 1`,
         [task_id]
       )
@@ -236,7 +237,7 @@ export function createTSOSPlatformKernel({
             token_receipt_id,
             oil_receipt_id: oilProof.verified ? oilProof.id : null,
             unmetered_exception_id,
-            files_changed: result?.body?.target_file ? 1 : null,
+            files_changed: result?.body?.target_file ? [result.body.target_file] : null,
             metadata: { kernel: 'phase0', committed, ...(spec.metadata || {}) },
             enforce: strict,
             allow_exception: !strict,

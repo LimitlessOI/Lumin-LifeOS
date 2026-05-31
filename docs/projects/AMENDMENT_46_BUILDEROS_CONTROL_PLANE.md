@@ -1,7 +1,7 @@
 # AMENDMENT 46 — BuilderOS Control Plane (Measure Everything)
 **Status:** IN_BUILD — Phase 1 infrastructure on disk
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-24
+**Last Updated:** 2026-05-31 — kernel OIL JSONB path fix + files_changed type fix
 
 > **Core law:** If it is not in the ledger, it did not happen.
 > **Priority:** Higher than MarketingOS, SalesOS, CCL production integration.
@@ -202,3 +202,4 @@ Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy m
 |------|--------|-----|
 | 2026-05-24 | Amendment 46 + `build_task_ledger` + control plane service/routes + verify script | Measure everything before more product build |
 | 2026-05-24 | `services/tsos-platform-kernel.js` + `/api/v1/kernel/*` + `wrapBuild` DONE gate wiring | TSOS Platform Kernel Phase 0 orchestrates control plane + token accounting |
+| 2026-05-31 | GAP-FILL: `verifyOilReceipt` query now also checks `payload->'details'->>'task_id'` (canonical OIL payload nests task_id under `details`, not top-level). `files_changed` fixed from integer `1` to `[target_file]` array (column is TEXT[]). Both fixes in `services/tsos-platform-kernel.js`. Root cause: OIL receipts were being written correctly but never found by verifier. |
