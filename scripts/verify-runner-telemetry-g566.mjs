@@ -1,21 +1,19 @@
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- * Verifies runner telemetry for Generation 566 by fetching health and efficiency data.
+ * Verifies runner telemetry by fetching health and efficiency data.
+ * This module provides a read-only audit function for the LifeOS platform.
  */
 
-// Helper to wrap async operations in a try-catch block
-const tryCatch = async (promiseFn) => {
-  try {
-    const result = await promiseFn();
-    return { success: true, data: result };
-  } catch (error) {
-    return { success: false, error: error.message || String(error) };
-  }
-};
-
-// Helper to fetch JSON data from a given URL with a command key header
-const fetchJson = async (baseUrl, path, commandKey) => {
-  const url = new URL(path, baseUrl).toString();
+/**
+ * Fetches JSON from a given URL and path, applying an x-command-key header.
+ * @param {string} baseUrl - The base URL for the API.
+ * @param {string} path - The API path.
+ * @param {string} commandKey - The value for the x-command-key header.
+ * @returns {Promise<object>} The parsed JSON response.
+ * @throws {Error} If the fetch fails or the response is not OK.
+ */
+async function fetchJson(baseUrl, path, commandKey) {
+  const url = `${baseUrl}${path}`;
   const response = await fetch(url, {
     headers: {
       'x-command-key': commandKey,
@@ -29,32 +27,42 @@ const fetchJson = async (baseUrl, path, commandKey) => {
   }
 
   return response.json();
-};
+}
 
 /**
- * Runs the runner telemetry verification for Generation 566.
- * Fetches control plane health and autonomous telemetry efficiency.
+ * Executes a telemetry verification for runner generation G566.
+ * Fetches control plane health and autonomous telemetry efficiency data.
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for API calls.
+ * @param {string} params.baseUrl - The base URL for the API endpoints.
  * @param {string} params.commandKey - The command key for authentication.
- * @returns {Promise<object>} A promise that resolves to a structured audit JSON object.
+ * @returns {Promise<object>} A structured audit JSON object indicating verification status and data.
  */
 export async function runRunnerTelemetryG566Verification({ baseUrl, commandKey }) {
-  const [cpResult, effResult] = await Promise.all([
-    tryCatch(() => fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
-    tryCatch(() => fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey))
-  ]);
+  const healthPath = '/api/v1/builderos/control-plane/health';
+  const efficiencyPath = '/api/v1/lifeos/autonomous-telemetry/efficiency';
 
-  if (!cpResult.success || !effResult.success) {
+  let cpData = {};
+  let effData = {};
+  let fetchError = null;
+
+  try {
+    [cpData, effData] = await Promise.all([
+      fetchJson(baseUrl, healthPath, commandKey),
+      fetchJson(baseUrl, efficiencyPath, commandKey)
+    ]);
+  } catch (error) {
+    fetchError = error;
+  }
+
+  if (fetchError) {
     return {
       ok: false,
-      error: `Failed to fetch data: CP: ${cpResult.error || 'OK'}, EFF: ${effResult.error || 'OK'}`,
+      generation: 566,
+      error: fetchError.message,
+      runner_assessment: 'telemetry_fetch_failed',
       checked_at: new Date().toISOString()
     };
   }
-
-  const cpData = cpResult.data;
-  const effData = effResult.data;
 
   return {
     ok: true,
