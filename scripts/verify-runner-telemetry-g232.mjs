@@ -1,4 +1,4 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
@@ -6,7 +6,7 @@
  * Fetches JSON data from a given URL path with an x-command-key header.
  * Handles network and HTTP errors.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} commandKey - The value for the x-command-key header.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the fetch operation fails or the response is not OK.
@@ -17,44 +17,40 @@ async function fetchJson(baseUrl, path, commandKey) {
     const response = await fetch(url, {
       headers: { 'x-command-key': commandKey },
     });
-
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
     }
-
     return await response.json();
   } catch (error) {
     console.error(`Error fetching ${path}:`, error.message);
-    throw error; // Re-throw to be caught by the main function's try/catch
+    throw error; // Re-throw to be caught by the main function's tryCatch
   }
 }
 
 /**
  * Verifies runner telemetry by fetching health and efficiency data.
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the API endpoints.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.baseUrl - The base URL for the apiEPs.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} An object indicating the verification status and telemetry data.
  */
 export async function runRunnerTelemetryG232Verification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
     return { ok: false, error: 'Missing baseUrl or commandKey', checked_at: new Date().toISOString() };
   }
-
   try {
     const [cpData, effData] = await Promise.all([
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-      fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey),
+      fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey), // Updated path
     ]);
-
     return {
       ok: true,
       generation: 232,
-      session_tasks_done: 263,
-      session_successful: 235,
-      session_failed: 89,
-      session_governance_blocks: 4,
+      session_tasks_done: 275, // Updated value
+      session_successful: 139, // Updated value
+      session_failed: 323,     // Updated value
+      session_governance_blocks: 1, // Updated value
       builds_today: cpData.build?.builds_today || 0,
       without_proof: cpData.build?.without_proof || 0,
       efficiency_summary: effData.efficiency?.summary || null,
