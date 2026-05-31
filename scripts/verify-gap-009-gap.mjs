@@ -1,13 +1,12 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
 /**
  * Fetches JSON data from a specified URL with a command key header.
  * Handles network and HTTP errors, throwing an error if the response is not OK.
- *
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} commandKey - The command key to be sent in the 'x-command-key' header.
  * @returns {Promise<object>} A promise that resolves to the JSON response body.
  * @throws {Error} If the fetch operation fails or the HTTP response is not OK.
@@ -18,7 +17,6 @@ async function fetchJson(baseUrl, path, commandKey) {
     'x-command-key': commandKey,
     'Content-Type': 'application/json',
   };
-
   const response = await fetch(url, { headers });
   if (!response.ok) {
     const errorText = await response.text();
@@ -30,10 +28,9 @@ async function fetchJson(baseUrl, path, commandKey) {
 /**
  * Verifies the health status of Kernel and BuilderOS Control Plane APIs.
  * Fetches health data from two endpoints concurrently using Promise.all.
- *
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the API calls (e.g., 'http://localhost:3000').
- * @param {string} params.commandKey - The command key for authentication via 'x-command-key' header.
+ * @param {string} params.commandKey - The command key for auth via 'x-command-key' header.
  * @returns {Promise<object>} An object indicating the verification result.
  *   On success: { ok: true, gap_id, gap_description, gap_priority, gap_status, resolution_required, kernel_status, token_accounting, checked_at }
  *   On failure: { ok: false, error: string }
@@ -45,7 +42,7 @@ export async function runGAP009GapVerification({ baseUrl, commandKey }) {
       throw new Error('baseUrl is required for API calls.');
     }
     if (!commandKey) {
-      throw new Error('commandKey is required for authentication.');
+      throw new Error('commandKey is required for auth.');
     }
 
     // Fetch health data from both services concurrently
