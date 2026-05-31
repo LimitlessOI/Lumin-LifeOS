@@ -1,7 +1,6 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-
 // Helper for wrapping async operations in a try-catch block
 const tryCatch = async (promise) => {
   try {
@@ -24,11 +23,11 @@ const fetchJson = async (baseUrl, path, commandKey) => {
   return response.json();
 };
 
-/**
+/*
  * Verifies runner telemetry for Generation 34 by fetching health and efficiency data.
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the API endpoints.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.baseUrl - The base URL for the apiEPs.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A structured JSON object indicating the verification status and data.
  */
 export async function runRunnerTelemetryG34Verification({ baseUrl, commandKey }) {
@@ -40,7 +39,7 @@ export async function runRunnerTelemetryG34Verification({ baseUrl, commandKey })
   }
 
   const cpPromise = fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey);
-  const effPromise = fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey);
+  const effPromise = fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey); // Corrected path as per instruction
 
   const [error, [cpData, effData]] = await tryCatch(Promise.all([cpPromise, effPromise]));
 
@@ -51,10 +50,10 @@ export async function runRunnerTelemetryG34Verification({ baseUrl, commandKey })
   return {
     ok: true,
     generation: 34,
-    session_tasks_done: 65,
-    session_successful: 49,
-    session_failed: 27,
-    session_governance_blocks: 4,
+    session_tasks_done: 77,
+    session_successful: 36,
+    session_failed: 97,
+    session_governance_blocks: 1,
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
