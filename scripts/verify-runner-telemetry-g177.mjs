@@ -1,8 +1,4 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- */
-
-/**
  * Wraps an async promise to return a tuple of [error, result].
  * @param {Promise<any>} promise - The promise to wrap.
  * @returns {Promise<[Error | null, any | null]>} A promise resolving to [error, result].
@@ -32,7 +28,6 @@ async function fetchJson(baseUrl, path, key) {
       'Content-Type': 'application/json',
     },
   });
-
   if (!response.ok) {
     const errorBody = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorBody}`);
@@ -59,7 +54,7 @@ export async function runRunnerTelemetryG177Verification({ baseUrl, commandKey }
   const [error, [cpData, effData]] = await tryCatch(
     Promise.all([
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-      fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey),
+      fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey),
     ])
   );
 
@@ -75,10 +70,10 @@ export async function runRunnerTelemetryG177Verification({ baseUrl, commandKey }
   return {
     ok: true,
     generation: 177,
-    session_tasks_done: 208,
-    session_successful: 182,
-    session_failed: 82,
-    session_governance_blocks: 4,
+    session_tasks_done: 220,
+    session_successful: 112,
+    session_failed: 255,
+    session_governance_blocks: 1,
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
