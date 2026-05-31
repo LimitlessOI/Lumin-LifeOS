@@ -1,9 +1,10 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- db/migrations/YYYYMMDDHHMMSS_marketing_schema.sql
 
--- Table: marketing_campaigns
-CREATE TABLE IF NOT EXISTS marketing_campaigns (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+-- Table: campaigns
+CREATE TABLE campaigns (
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     start_date TIMESTAMP WITH TIME ZONE,
-    end_date TIMESTAMP WITH TIME
+    end_date TIMESTAMP WITH TIME ZONE,
+    status VARCHAR(50
