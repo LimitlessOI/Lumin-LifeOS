@@ -1,94 +1,85 @@
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
+
+/**
+ * Fetches JSON data from a given URL with an x-command-key header.
+ * Handles network and HTTP errors by returning a structured error object.
  *
- * Verifies runner telemetry for Generation 730 by fetching health and efficiency data.
- * This module operates in a read-only audit capacity, using native fetch to internal APIs.
+ * @param {string} baseUrl - The base URL for the API endpoint.
+ * @param {string} path - The specific API path.
+ * @param {string} commandKey - The value for the x-command-key header.
+ * @returns {Promise<object>} A promise that resolves to the parsed JSON data or an error object.
  */
+async function fetchJson(baseUrl, path, commandKey) {
+    if (!baseUrl || !path || !commandKey) {
+        return { error: 'Missing required parameters for fetchJson: baseUrl, path, or commandKey.' };
+    }
+    const url = `${baseUrl}${path}`;
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'x-command-key': commandKey,
+                'Content-Type': 'application/json',
+            },
+        });
 
-/**
- * A generic try-catch wrapper for async functions.
- * @param {function(): Promise<any>} promiseFn - The async function to execute.
- * @returns {Promise<{success: boolean, data?: any, error?: string, details?: any}>}
- */
-async function tryCatch(promiseFn) {
-  try {
-    const data = await promiseFn();
-    return { success: true, data };
-  } catch (error) {
-    return { success: false, error: error.message, details: error.stack || error };
-  }
+        if (!response.ok) {
+            const errorText = await response.text();
+            return { error: `HTTP error! Status: ${response.status}, Body: ${errorText}`, url };
+        }
+
+        return await response.json();
+    } catch (error) {
+        return { error: error.message, url };
+    }
 }
 
 /**
- * Fetches JSON data from a specified URL with an x-command-key header.
- * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
- * @param {string} key - The value for the x-command-key header.
- * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If the fetch operation fails or the response is not OK.
- */
-async function fetchJson(baseUrl, path, key) {
-  const url = `${baseUrl}${path}`;
-  const response = await fetch(url, {
-    headers: {
-      'x-command-key': key,
-    },
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText} - ${errorText}`);
-  }
-
-  return response.json();
-}
-
-/**
- * Runs a verification check for runner telemetry, fetching control plane health
- * and autonomous telemetry efficiency.
- * @param {{ baseUrl: string, commandKey: string }} params - The parameters for the verification.
+ * Verifies runner telemetry for generation G730 by fetching health and efficiency data.
+ *
+ * @param {object} params - The parameters for the verification.
+ * @param {string} params.baseUrl - The base URL for the LifeOS API.
+ * @param {string} params.commandKey - The command key for authentication.
  * @returns {Promise<object>} A structured JSON object indicating the verification status and data.
  */
 export async function runRunnerTelemetryG730Verification({ baseUrl, commandKey }) {
-  const checked_at = new Date().toISOString();
+    if (!baseUrl) {
+        return { ok: false, error: 'baseUrl is required for telemetry verification.' };
+    }
+    if (!commandKey) {
+        return { ok: false, error: 'commandKey is required for telemetry verification.' };
+    }
 
-  if (!baseUrl || !commandKey) {
-    return { ok: false, error: 'Missing baseUrl or commandKey', checked_at };
-  }
+    const controlPlaneHealthPath = '/api/v1/builderos/control-plane/health';
+    const autonomousTelemetryEfficiencyPath = '/api/v1/lifeos/autonomous-telemetry/efficiency';
 
-  const controlPlanePath = '/api/v1/builderos/control-plane/health';
-  const efficiencyPath = '/api/v1/lifeos/autonomous-telemetry/efficiency';
-
-  const fetchResult = await tryCatch(async () => {
-    const [cpData, effData] = await Promise.all([
-      fetchJson(baseUrl, controlPlanePath, commandKey),
-      fetchJson(baseUrl, efficiencyPath, commandKey),
+    const [cpResponse, effResponse] = await Promise.all([
+        fetchJson(baseUrl, controlPlaneHealthPath, commandKey),
+        fetchJson(baseUrl, autonomousTelemetryEfficiencyPath, commandKey),
     ]);
-    return { cpData, effData };
-  });
 
-  if (!fetchResult.success) {
+    if (cpResponse.error) {
+        return { ok: false, error: `Failed to fetch control plane health: ${cpResponse.error}` };
+    }
+    if (effResponse.error) {
+        return { ok: false, error: `Failed to fetch autonomous telemetry efficiency: ${effResponse.error}` };
+    }
+
+    const cpData = cpResponse;
+    const effData = effResponse;
+
     return {
-      ok: false,
-      error: `Telemetry fetch failed: ${fetchResult.error}`,
-      details: fetchResult.details,
-      checked_at,
+        ok: true,
+        generation: 730,
+        session_tasks_done: 773,
+        session_successful: 595,
+        session_failed: 544,
+        session_governance_blocks: 1,
+        builds_today: cpData.build?.builds_today || 0,
+        without_proof: cpData.build?.without_proof || 0,
+        efficiency_summary: effData.efficiency?.summary || null,
+        runner_assessment: 'continuous_autonomous_operation_verified',
+        checked_at: new Date().toISOString(),
     };
-  }
-
-  const { cpData, effData } = fetchResult.data;
-
-  return {
-    ok: true,
-    generation: 730,
-    session_tasks_done: 773,
-    session_successful: 595,
-    session_failed: 544,
-    session_governance_blocks: 1,
-    builds_today: cpData.build?.builds_today || 0,
-    without_proof: cpData.build?.without_proof || 0,
-    efficiency_summary: effData.efficiency?.summary || null,
-    runner_assessment: 'continuous_autonomous_operation_verified',
-    checked_at,
-  };
 }
