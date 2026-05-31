@@ -1,7 +1,6 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-
 const tryCatch = async (promise) => {
   try {
     const data = await promise;
@@ -10,7 +9,6 @@ const tryCatch = async (promise) => {
     return { success: false, error: error.message || 'Unknown fetch error' };
   }
 };
-
 const fetchJson = async (baseUrl, path, key) => {
   const url = `${baseUrl}${path}`;
   const response = await fetch(url, {
@@ -24,17 +22,14 @@ const fetchJson = async (baseUrl, path, key) => {
   }
   return response.json();
 };
-
 export async function runRunnerTelemetryG220Verification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
     return { ok: false, error: 'Missing baseUrl or commandKey', checked_at: new Date().toISOString() };
   }
-
   const [cpResult, effResult] = await Promise.all([
     tryCatch(fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
-    tryCatch(fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey)),
+    tryCatch(fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey)),
   ]);
-
   if (!cpResult.success || !effResult.success) {
     return {
       ok: false,
@@ -42,17 +37,15 @@ export async function runRunnerTelemetryG220Verification({ baseUrl, commandKey }
       checked_at: new Date().toISOString(),
     };
   }
-
   const cpData = cpResult.data;
   const effData = effResult.data;
-
   return {
     ok: true,
     generation: 220,
-    session_tasks_done: 251,
-    session_successful: 225,
-    session_failed: 84,
-    session_governance_blocks: 4,
+    session_tasks_done: 263,
+    session_successful: 131,
+    session_failed: 313,
+    session_governance_blocks: 1,
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
