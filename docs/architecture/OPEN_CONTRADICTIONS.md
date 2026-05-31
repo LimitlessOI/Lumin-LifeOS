@@ -4,7 +4,7 @@
 |-------|--------|
 | **Purpose** | Living register of architecture drift, unresolved tensions, and blockers |
 | **Authority** | Subordinate to SSOT; **audit tier** — not constitutional law |
-| **Last Updated** | 2026-05-31 (OC-014 RESOLVED; OIL race condition RESOLVED) |
+| **Last Updated** | 2026-05-31 (OC-014 RESOLVED; OIL race + JSONB path RESOLVED; OC-015 NEW) |
 | **Maintainer** | Resident Architect missions (`prompts/00-RESIDENT-ARCHITECT.md`) |
 | **Kernel index** | `docs/TSOS_PLATFORM_KERNEL.md` |
 
@@ -111,9 +111,9 @@
 
 | Field | Value |
 |-------|--------|
-| **Status** | **PARTIAL** — build path writes OIL receipt with `task_id` when supervised |
-| **Proof** | `lifeos-council-builder-routes.js` `writeSecurityReceipt` includes `task_id` |
-| **Label** | **KNOW** (partial) |
+| **Status** | **RESOLVED** (2026-05-31) |
+| **Proof** | C2 job `1cf7aa3f` → `oil.verified: true`, `id: e72fce8a`. Two root causes found and fixed: (1) race condition — `await writeSecurityReceipt` fix; (2) JSONB path mismatch — `buildCanonicalReceiptPayload` stores `task_id` under `details`, `verifyOilReceipt` now queries both `payload->>'task_id'` AND `payload->'details'->>'task_id'` in `services/tsos-platform-kernel.js`. |
+| **Label** | **KNOW** |
 
 ---
 
@@ -158,6 +158,19 @@
 
 ---
 
+### OC-015 — `proof_status` stuck at `exception` — `canMarkBuildDone` ordering issue
+
+| Field | Value |
+|-------|--------|
+| **Status** | **OPEN** — `proof_status` always `exception`, never `complete` |
+| **Severity** | Low (non-blocking — `allow_exception=true` gates pass; builds still commit) |
+| **Root cause** | `recordBuildComplete` calls `canMarkBuildDone` BEFORE the UPDATE that sets `end_time`. `canMarkBuildDone` reads DB state where `end_time IS NULL` → returns `complete = false` → `proof_status = 'exception'`. The UPDATE then writes `end_time = NOW()` but with `proof_status = 'exception'`. |
+| **Also** | `token_receipt_id` in build_task_ledger is null for `token_recent` matches (time-window tokens have no direct row linkage). So `hasToken = false` in the done gate even when token accounting verified. |
+| **Next** | Phase 2: Pass `end_time: new Date()` as a param to `recordBuildComplete` and use it in `canMarkBuildDone`'s logic rather than reading from DB. Or compute `proof_status = 'complete'` directly when `hasOil && hasToken_verified`. |
+| **Label** | **KNOW** |
+
+---
+
 ## Resolved (append only)
 
 | ID | Resolved | Receipt |
@@ -167,6 +180,7 @@
 | OC-005 | 2026-05-31 | Railway deploy SHA `240982b809`; kernel/token/control-plane health 200 |
 | OC-004 | 2026-05-31 | 12 token rows today; kernel_receipt token IDs 20443–20446; last write 05:51 UTC |
 | OC-014 | 2026-05-31 | `tryExecuteFallback()` + `release_mode: 'SUPERVISED'` fix in `builderos-governed-loop-executor.js`; `await writeSecurityReceipt` race fix in `lifeos-council-builder-routes.js` |
+| OC-010 | 2026-05-31 | `verifyOilReceipt` now queries `payload->'details'->>'task_id'` path; C2 job `1cf7aa3f` → `oil.verified: true, id: e72fce8a` |
 
 ---
 
@@ -184,4 +198,5 @@
 |------|--------|
 | 2026-05-24 | v1 — seeded OC-001 through OC-013 |
 | 2026-05-31 | v2 — OC-004 RESOLVED (token ledger active; 12 rows today). OC-014 NEW — C2 /execute fallback gap. Mission: C2 Live Test. |
+| 2026-05-31 | v3 — OC-010 RESOLVED (OIL JSONB path fix + race fix). OC-015 NEW (proof_status ordering). Mission: C2 End-to-End Proof. |
 | 2026-05-24 | v2 — Phase 0 kernel slice: OC-002/012 RESOLVED; OC-003/005/009/010 PARTIAL/BLOCKED |

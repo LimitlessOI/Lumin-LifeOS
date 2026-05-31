@@ -135,6 +135,69 @@
 **Commits:** e896a68a95 (executor), 31672bb8b1 (routes)
 
 ---
+## [MISSION] 2026-05-31 — C2 End-to-End Proof: OIL JSONB Path Fix + Full Receipt Chain
+
+### Mission result: COMPLETE — C2 now commits with full OIL verification end-to-end
+
+**Agent:** Claude Sonnet 4.6 / Claude Code VSCode Extension / main branch / Conductor role
+
+**Phase 0 — Deploy parity (KNOW):**
+- Local HEAD + Railway deploy SHA both `96b6992b76` → `29dcde0e44` → `58d36da75b` across session
+- `npm run builder:preflight` → PREFLIGHT_OK, 23 domains, all keys green
+- `npm run kernel:verify` → 12/12 PASS (build_wrapped, all routes HTTP 200)
+- `npm run builderos:control-plane:verify` → 12/12 VERIFIED
+- `npm run tokens:verify` → tables_present, 52 total rows, not blocked
+
+**Phase 1 — First C2 proof job (job da7e9c4d):**
+- Created: ✅ `POST /api/v1/lifeos/builderos/command-control/jobs` → queued
+- Executed: ✅ `POST /jobs/da7e9c4d/execute` → `status: committed`
+- `committed: true` ✅ — `tryExecuteFallback` not needed (builder committed directly)
+- `oil.verified: false, reason: no_oil_receipt` ⚠️ — new bug found
+- `build.complete_error: "malformed array literal: \"1\""` ⚠️ — new bug found
+- File committed: `scripts/verify-c2-executor-fallback.mjs` (SHA `921eadc77b`)
+- Proof function runs: `{ ok: true, checked_at: "..." }`
+
+**Root causes of remaining failures (KNOW):**
+1. **OIL JSONB path mismatch**: `buildCanonicalReceiptPayload` stores `task_id` under `payload.details.task_id` but `verifyOilReceipt` queried `payload->>'task_id'` (top-level only) → OIL receipt written but never found
+2. **`files_changed` type error**: `build_task_ledger.files_changed` is `TEXT[]` but kernel passed integer `1` → `"malformed array literal"` SQL error in `recordBuildComplete`
+
+**Phase 2 — Kernel fixes (GAP-FILL, Zone 3):**
+- `services/tsos-platform-kernel.js`: `verifyOilReceipt` query now also checks `payload->'details'->>'task_id'` and `payload->'details'->>'build_task_id'` — commit `29dcde0e44`
+- `services/tsos-platform-kernel.js`: `files_changed: [result.body.target_file]` (array) instead of `1` — same commit
+- Railway deployed `29dcde0e44` in ~1 minute after push
+
+**Phase 3 — Second C2 proof job (job 1cf7aa3f):**
+- `oil.verified: true` ✅ — OIL fix confirmed
+- `oil.id: e72fce8a-0752-45af-a061-1d645ac51ed8` ✅ — security_receipts row UUID
+- `build.complete_error: undefined` ✅ — files_changed fix confirmed
+- `done_gate.hasOil: true` ✅
+- `done_gate.proof_status: exception` ⚠️ — pre-existing ordering issue (see OC-015)
+- `token.verified: true` ✅
+- File committed: `scripts/verify-oil-receipt-chain.mjs` (SHA `58d36da75b`)
+- Proof function runs: `{ ok: true, kernel_status: 'YELLOW', checked_at: "..." }`
+
+**Known remaining issue (OC-015):**
+- `proof_status` = `'exception'` not `'complete'` — `canMarkBuildDone` reads DB before UPDATE sets `end_time`; also `token_receipt_id` null for `token_recent` matches. Low severity — `allowed: true`, builds complete.
+
+**SSOT updates:**
+- `docs/architecture/OPEN_CONTRADICTIONS.md`: OC-010 RESOLVED, OC-015 NEW, v3 history entry
+- `docs/architecture/PLATFORM_GAP_REGISTER.md`: GAP-003/005/013 RESOLVED, v2 history entry
+- `docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md`: 2 change receipt rows added
+
+**Commits this session:**
+- `e896a68a95` — OC-014 executor fix (tryExecuteFallback + SUPERVISED case)
+- `31672bb8b1` — OIL race fix (await writeSecurityReceipt)
+- `96b6992b76` — session receipt (prior session)
+- `921eadc77b` — [system-build] C2 committed verify-c2-executor-fallback.mjs
+- `29dcde0e44` — GAP-FILL: kernel OIL JSONB path + files_changed TEXT[] fix
+- `58d36da75b` — [system-build] C2 committed verify-oil-receipt-chain.mjs
+
+**Next priority:**
+1. GAP-001: 8 `builder-council-review.js` direct provider fetches bypass kernel (P0 outstanding)
+2. OC-015: Fix `canMarkBuildDone` pre-update ordering → `proof_status: 'complete'`
+3. `token_receipt_id` linkage: `token_recent` matches don't link to build_task_ledger row
+
+---
 ## [SSOT] 2026-05-24 — TSOS Platform Kernel Phase 0 (A-to-Z implementation slice)
 
 ### Mission
