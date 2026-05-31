@@ -1,11 +1,7 @@
 /**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- */
-
-/**
  * Fetches JSON data from a given URL path with a command key header.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
+ * @param {string} path - The apiEP path.
  * @param {string} commandKey - The x-command-key header value.
  * @returns {Promise<object>} The JSON response data.
  * @throws {Error} If baseUrl or commandKey are missing, or if the fetch request fails.
@@ -13,7 +9,6 @@
 async function fetchJson(baseUrl, path, commandKey) {
   if (!baseUrl) throw new Error('baseUrl is required for fetchJson.');
   if (!commandKey) throw new Error('commandKey is required for fetchJson.');
-
   const url = `${baseUrl}${path}`;
   const response = await fetch(url, {
     headers: {
