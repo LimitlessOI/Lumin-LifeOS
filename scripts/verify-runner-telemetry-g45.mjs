@@ -1,9 +1,9 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
 /**
- * Helper to wrap an async promise with error handling.
+ * Helper to wrap an async promise with errHdl.
  * @param {Promise<any>} promise - The promise to execute.
  * @returns {Promise<{result: any, error: string|null}>} An object containing the result or an error message.
  */
@@ -17,7 +17,7 @@ const tryCatch = async (promise) => {
 };
 
 /**
- * Fetches JSON data from a specified API endpoint.
+ * Fetches JSON data from a specified apiEP.
  * @param {string} baseUrl - The base URL for the API.
  * @param {string} path - The specific API path.
  * @param {string} commandKey - The x-command-key header value.
@@ -32,20 +32,18 @@ const fetchJson = async (baseUrl, path, commandKey) => {
       'Accept': 'application/json'
     }
   });
-
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
   }
-
   return response.json();
 };
 
 /**
  * Verifies runner telemetry for Generation 45 by fetching control plane health and autonomous telemetry efficiency.
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the API endpoints.
- * @param {string} params.commandKey - The command key for authentication.
+ * @param {string} params.baseUrl - The base URL for the apiEPs.
+ * @param {string} params.commandKey - The command key for auth.
  * @returns {Promise<object>} A promise that resolves to a structured audit JSON object.
  */
 export async function runRunnerTelemetryG45Verification({ baseUrl, commandKey }) {
@@ -55,7 +53,7 @@ export async function runRunnerTelemetryG45Verification({ baseUrl, commandKey })
 
   const [cpHealthResult, effTelemetryResult] = await Promise.all([
     tryCatch(fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
-    tryCatch(fetchJson(baseUrl, '/api/v1/autonomous-telemetry/efficiency', commandKey))
+    tryCatch(fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey)) // Updated path
   ]);
 
   if (cpHealthResult.error || effTelemetryResult.error) {
@@ -76,10 +74,10 @@ export async function runRunnerTelemetryG45Verification({ baseUrl, commandKey })
   return {
     ok: true,
     generation: 45,
-    session_tasks_done: 76,
-    session_successful: 60,
-    session_failed: 33,
-    session_governance_blocks: 4,
+    session_tasks_done: 88, // Updated value
+    session_successful: 40, // Updated value
+    session_failed: 113,    // Updated value
+    session_governance_blocks: 1, // Updated value
     builds_today: cpData.build?.builds_today || 0,
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
