@@ -1,9 +1,3 @@
-# BuilderOS Remediation: Amendment 12 Command Center - TODO 9 G3
+# Blueprint Enhancement Memo: AMENDMENT_12_COMMAND_CENTER - Chat 401 Remediation (TODO-9-G3)
 
-**Source Blueprint:** `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`
-**Reason Blueprint Not Directly Buildable:** Unchecked blueprint task remains open.
-**Relevant Section Summary:** Chat returns 401 without key.
-
----
-
-This memo addresses the immediate blocking issue of
+This memo addresses the "Chat returns 401 without key" issue identified in the AMENDMENT_12_COMMAND_CENTER blueprint, specifically for task TODO-9-G3. The goal is to enable the chat functionality to proceed past the
