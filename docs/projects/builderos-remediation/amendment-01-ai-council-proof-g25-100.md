@@ -1,9 +1,9 @@
-# Amendment 01 AI Council - Proof G25-100
+# AMENDMENT_01_AI_COUNCIL - Proof G25-100: Core Type Definition
 
-## Blueprint Note: Proof-Closing for G25-100
+This document serves as a proof-closing blueprint note for the initial build slice of the AMENDMENT_01_AI_COUNCIL project.
 
-This note closes the proof for build slice G25-100, focusing on defining core interfaces and initial class structures for the `AICouncil` module.
+---
 
-### 1. Exact Missing Implementation or Proof Gap
+### 1. Exact missing implementation or proof gap
 
-The current gap
+The foundational TypeScript type definitions for `AICouncilPolicy` and `
