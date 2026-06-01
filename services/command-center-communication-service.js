@@ -331,6 +331,43 @@ export async function getThreadWithJobStatus(pool, threadId) {
   return result.rows;
 }
 
+const THREAD_CTX_PAIRS = 5;
+const THREAD_CTX_MSG_CHARS = 300;
+const THREAD_CTX_MAX_CHARS = 3000;
+
+async function getRecentThreadContext(pool, threadId, beforeMessageId) {
+  if (!threadId) return [];
+  const result = await pool.query(
+    `SELECT speaker, message_type, transcript, response_text
+       FROM command_center_communications
+      WHERE thread_id = $1::uuid
+        AND id != $2::uuid
+      ORDER BY created_at DESC
+      LIMIT $3`,
+    [threadId, beforeMessageId, THREAD_CTX_PAIRS * 2],
+  );
+  return result.rows.reverse();
+}
+
+function buildThreadContextBlock(messages) {
+  if (!messages || messages.length === 0) return '';
+  let total = 0;
+  const lines = [];
+  for (const m of messages) {
+    const label = m.speaker === 'adam' ? 'Adam' : 'System';
+    const raw = m.speaker === 'adam'
+      ? (m.transcript || '')
+      : (m.response_text || m.transcript || '');
+    const clipped = raw.slice(0, THREAD_CTX_MSG_CHARS);
+    const line = `[${label}] ${clipped}${raw.length > THREAD_CTX_MSG_CHARS ? '…' : ''}`;
+    total += line.length;
+    if (total > THREAD_CTX_MAX_CHARS) break;
+    lines.push(line);
+  }
+  if (lines.length === 0) return '';
+  return `=== PRIOR CONVERSATION (${lines.length} message${lines.length === 1 ? '' : 's'}) ===\n${lines.join('\n')}\n\n=== CURRENT ===\n`;
+}
+
 function buildBuilderMetaFromJob(job, deploySha) {
   const trace = job?.result_json?.trace || {};
   const builderOutput = trace.builder_output || {};
@@ -385,7 +422,18 @@ export async function sendCommunicationViaC2(pool, payload = {}, options = {}) {
     },
   });
 
-  const instruction = buildCommunicationPrompt(mode, text);
+  // Inject prior thread messages as context when continuing an existing thread.
+  // Skip for c2_command — builder needs unambiguous single-shot instructions.
+  const isExistingThread = Boolean(normalizeText(payload.thread_id));
+  let contextBlock = '';
+  let contextMessageCount = 0;
+  if (isExistingThread && mode !== 'c2_command') {
+    const priorMessages = await getRecentThreadContext(pool, threadId, userMessage.id);
+    contextBlock = buildThreadContextBlock(priorMessages);
+    contextMessageCount = priorMessages.length;
+  }
+
+  const instruction = contextBlock + buildCommunicationPrompt(mode, text);
   const job = await createCommandControlJob(pool, {
     instruction,
     requested_by: 'adam_remote_c2_communication',
@@ -396,6 +444,7 @@ export async function sendCommunicationViaC2(pool, payload = {}, options = {}) {
       communication_message_id: userMessage.id,
       communication_mode: mode,
       target_file: payload.target_file || null,
+      thread_context_count: contextMessageCount,
     },
   });
 
@@ -494,6 +543,7 @@ export async function sendCommunicationViaC2(pool, payload = {}, options = {}) {
     execution: null,
     evidence,
     async_execute: willExecute,
+    thread_context_count: contextMessageCount,
     poll: {
       communications: `/api/v1/lifeos/command-center/communications?thread_id=${threadId}`,
       job_status: `/api/v1/lifeos/builderos/command-control/jobs/${job.id}`,

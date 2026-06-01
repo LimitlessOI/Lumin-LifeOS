@@ -532,6 +532,7 @@
         <span class="pill pill-accent" style="font-size:9px">${escapeHtml(COMM_MODES[getMode()]?.label || getMode())}</span>
         <span class="pill pill-muted" id="cc-job-status-pill" style="font-size:9px">${escapeHtml(initialStatus)}</span>
         <span id="cc-job-poll-indicator" style="font-size:9px;color:var(--text-muted,#888);margin-left:4px">${data.async_execute ? 'updating…' : ''}</span>
+        ${(data.thread_context_count > 0) ? `<span style="font-size:9px;color:var(--text-muted,#888);margin-left:6px" title="Prior thread messages included as context">↩ ${data.thread_context_count} prior</span>` : ''}
       </div>
       <div class="cc-response-body" id="cc-response-text" data-text="${escapeHtml(initialText)}">${escapeHtml(initialText).replace(/\n/g, '<br>')}</div>
       ${renderEvidence(data.evidence)}
