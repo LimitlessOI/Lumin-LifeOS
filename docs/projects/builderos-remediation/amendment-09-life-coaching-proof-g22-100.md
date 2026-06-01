@@ -1,7 +1,3 @@
-# Amendment 09: Life Coaching - Proof G22-100
+# AMENDMENT_09_LIFE_COACHING: Proof G22-100 - Core Coaching Session Data Model
 
-## Proof-Closing Blueprint Note
-
-This document serves as a proof-closing note for build slice `G22-100` within the Amendment 09: Life Coaching project.
-
-### 1. Exact Missing Implementation or Proof Gap (for G22-100)
+This proof-closing blueprint note addresses the foundational data model for a `CoachingSession` within the LifeOS platform, as part of Amendment 09 for Life Coaching features. This slice establishes the minimal viable type definition required to represent a coaching session, enabling subsequent
