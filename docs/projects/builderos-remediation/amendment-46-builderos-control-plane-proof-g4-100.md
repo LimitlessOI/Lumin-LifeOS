@@ -1,9 +1,7 @@
-# Amendment 46: BuilderOS Control Plane Proof Gap G4-100
+# Amendment 46: BuilderOS Control Plane Proof Gap G4-100 Remediation
 
-## Proof-Closing Blueprint Note
+This document outlines the proof-closing blueprint note for addressing the identified gap in the BuilderOS Control Plane, specifically regarding the wiring of build start and complete events within `routes/lifeos-council-builder-routes.js`.
 
-This note addresses the implementation gap for wiring the BuilderOS control plane routes as specified in Amendment 46.
+## 1. Exact Missing Implementation or Proof Gap
 
-### 1. Exact Missing Implementation or Proof Gap
-
-The primary gap is the absence of the `/build/start` and `/build/complete`
+The core
