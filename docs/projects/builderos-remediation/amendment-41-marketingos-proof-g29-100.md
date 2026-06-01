@@ -1,32 +1,49 @@
-# Amendment 41 MarketingOS Proof G29-100: Proof-Closing Blueprint Note
+# AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G29-100 Marketing Proof Data Sync
 
-**SSOT Foundation Document**
-
-This document outlines the necessary steps to close the proof gap identified for Amendment 41, specifically concerning MarketingOS integration, as per verification G29-100.
+This document serves as the proof-closing blueprint note for the implementation of the G29-100 Marketing Proof Data synchronization, as defined by `AMENDMENT_41_MARKETINGOS.md`. It outlines the necessary steps to close the implementation gap and verify its correctness.
 
 ## 1. Exact Missing Implementation or Proof Gap
 
-The primary gap identified is the lack of a verifiable, runtime-attested link between the `MarketingOS` campaign activation signal and the `BuilderOS` execution log for `Amendment 41` specific build parameters. The current system allows `MarketingOS` to trigger `Amendment 41` builds, but there is no direct, immutable record within `BuilderOS` that explicitly ties a specific `MarketingOS` campaign ID to a `BuilderOS` job ID and its resulting build artifacts, preventing auditable proof of execution alignment.
+The core gap is the absence of an active, production-ready service responsible for extracting, transforming, and securely transmitting the "G29-100 Marketing Proof Data" from LifeOS to MarketingOS. This includes:
+*   Identification and retrieval of relevant G29-100 proof data points within LifeOS.
+*   Transformation of this data into the schema expected by MarketingOS for G29-100 proofs.
+*   Secure API integration (e.g., REST, GraphQL, message queue) to push this data to the designated MarketingOS endpoint.
+*   Error handling, retry mechanisms, and logging for the synchronization process.
 
 ## 2. Smallest Safe Build Slice to Close It
 
-Introduce a new `BuilderOS` internal logging mechanism that captures `MarketingOS` campaign metadata (specifically `campaignId` and `triggerEventId`) upon `Amendment 41` build initiation. This metadata must be persisted alongside the `BuilderOS` job ID and build artifact references. This slice focuses solely on internal `BuilderOS` logging and does not expose new APIs or modify existing `LifeOS` user features or `TSOS` customer-facing surfaces.
+The smallest safe build slice involves creating a dedicated, isolated service module for the G29-100 proof data synchronization. This module will encapsulate all logic related to this specific data flow, minimizing impact on existing LifeOS features or other MarketingOS integrations.
+
+The slice includes:
+*   A new `G29ProofSyncService` responsible for the end-to-end sync.
+*   A new data accessor/query for G29-100 specific data.
+*   Configuration for the MarketingOS G29-100 endpoint and authentication.
+*   An integration point (e.g., a scheduled cron job or an event listener) to trigger the sync.
 
 ## 3. Exact Safe-Scope Files to Touch First
 
-*   `services/builder-os/src/jobs/amendment41Processor.js`: Modify the `processAmendment41Build` function to accept and log `marketingCampaignId` and `marketingTriggerEventId` parameters.
-*   `services/builder-os/src/data/buildLogRepository.js`: Update the `createBuildLogEntry` function to include new fields for `marketingCampaignId` and `marketingTriggerEventId`.
-*   `services/builder-os/src/schemas/buildLogSchema.js`: Add `marketingCampaignId` (string) and `marketingTriggerEventId` (string) to the build log schema.
+*   `src/services/marketingos/G29ProofSyncService.js`: New service file containing the core sync logic.
+*   `src/data/queries/getG29ProofData.js`: New data query function to retrieve G29-100 specific data.
+*   `src/config/marketingos.js`: Extend existing config or add new entries for `MARKETINGOS_G29_PROOF_ENDPOINT` and related credentials.
+*   `src/jobs/syncG29ProofData.js`: New cron job definition to schedule the sync (if applicable).
+*   `src/types/marketingos/G29ProofData.js`: New type definition for the data payload sent to MarketingOS.
 
 ## 4. Verifier/Runtime Checks
 
-*   **Unit Test:** Verify that `amendment41Processor.js` correctly passes `marketingCampaignId` and `marketingTriggerEventId` to `buildLogRepository.js`.
-*   **Integration Test:** Simulate a `MarketingOS` trigger for an `Amendment 41` build. Query the `BuilderOS` build log for the resulting job ID and assert that the `marketingCampaignId` and `marketingTriggerEventId` fields are populated correctly and match the input.
-*   **Runtime Observation:** Monitor `BuilderOS` logs for `Amendment 41` builds. Confirm that new log entries contain the expected `marketingCampaignId` and `marketingTriggerEventId` values.
+Upon deployment, the following checks will be performed:
+*   **Log Monitoring:** Verify `G29ProofSyncService` logs indicate successful data extraction, transformation, and transmission without errors.
+*   **MarketingOS Data Validation:** Directly inspect the MarketingOS platform to confirm receipt of G29-100 proof data.
+    *   Check for correct data format and schema adherence.
+    *   Verify data integrity (e.g., correct values, no truncation).
+    *   Confirm expected volume and frequency of data updates.
+*   **LifeOS Performance Metrics:** Monitor LifeOS CPU, memory, and database load during sync operations to ensure no adverse performance impact.
+*   **Error Reporting:** Trigger known edge cases (e.g., missing data, API rate limits) to verify error handling and retry mechanisms function as designed.
 
 ## 5. Stop Conditions if Runtime Truth Disagrees
 
-*   If `marketingCampaignId` or `marketingTriggerEventId` are consistently missing or malformed in `BuilderOS` build logs for `Amendment 41` jobs.
-*   If the recorded `marketingCampaignId` or `marketingTriggerEventId` values do not accurately reflect the originating `MarketingOS` trigger events.
-*   If the introduction of these fields causes any regression in existing `BuilderOS` build processing or logging functionality.
-*   If database schema migration for `buildLogSchema.js` fails or causes data integrity issues.
+The implementation will be halted or rolled back if any of the following conditions are met:
+*   **Data Inaccuracy/Loss:** G29-100 proof data arriving in MarketingOS is consistently incorrect, incomplete, or missing.
+*   **API Failures:** Persistent API errors (e.g., 4xx, 5xx status codes) when communicating with MarketingOS, indicating a fundamental integration issue.
+*   **LifeOS Instability:** The `G29ProofSyncService` or its dependencies cause measurable performance degradation, resource exhaustion, or service interruptions within LifeOS.
+*   **MarketingOS Rejection:** MarketingOS consistently rejects the data payload due to schema mismatches or validation failures, indicating a misunderstanding of the target API.
+*   **Security Vulnerabilities:** Any identified security flaw in the data transmission or storage related to G29-100 proof data.
