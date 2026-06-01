@@ -1,3 +1,6 @@
-# Blueprint Proof: G6-100 BuilderOS Command Remediation Integration
+### Proof-Closing Blueprint Note: G6-100 - `command-center-web` Initial Dashboard Display
 
-This document serves as a proof-closing note for the `g6-100: BuilderOS Command Remediation Integration` phase of the Command Center V2 blueprint. It identifies the current implementation gap and proposes the smallest, safest build slice to close it, preparing for the next C2 build
+This note closes the G6 build slice, focusing on the initial implementation of the `command-center-web` application to display basic operational data.
+
+1.  **Exact Missing Implementation or Proof Gap:**
+    The `command-center-web` application requires scaffolding,
