@@ -1,34 +1,25 @@
-# Amendment 19 Project Governance Proof: g35-100 Remediation
+# Amendment 19 Project Governance Proof: G35-100 - Initial Documentation Structure
 
-This document provides the proof-closing blueprint note for governance checkpoint `g35-100` under Amendment 19 Project Governance, addressing the OIL verifier rejection and defining the next smallest blueprint-backed build slice.
+This document serves as proof for the initial build slice related to Amendment 19 Project Governance, specifically focusing on establishing the foundational structure for project-specific governance documentation.
 
-## 1. Exact Missing Implementation or Proof Gap
+---
 
-The immediate gap is the BuilderOS verifier's misinterpretation of `.md` files as executable code, leading to `ERR_UNKNOWN_FILE_EXTENSION`. This indicates a missing explicit file type handling rule for documentation within the BuilderOS verification pipeline.
+## Proof-Closing Blueprint Note
 
-A secondary gap is the absence of a formally defined, blueprint-backed *next smallest build slice* within the current governance proof that explicitly validates documentation artifacts against governance standards.
+1.  **Exact missing implementation or proof gap:**
+    The initial implementation and proof of concept for a standardized project governance documentation structure, as outlined by Amendment 19. This gap specifically addresses the creation and validation of the first governance-related project artifact.
 
-## 2. Smallest Safe Build Slice to Close It
+2.  **Smallest safe build slice to close it:**
+    Establish the foundational structure for project-specific governance documentation by creating a proof document that adheres to a minimal, defined format. This slice focuses on the *existence* and *basic content structure* of a governed project artifact.
 
-The smallest safe build slice is `g35-100-doc-verify`. This slice focuses on:
-*   Establishing correct file type classification for `.md` files within BuilderOS.
-*   Implementing a structural and content validation check for `docs/projects/builderos-remediation/*.md` files, ensuring adherence to `AMENDMENT_19_PROJECT_GOVERNANCE.md` principles for proof documents.
+3.  **Exact safe-scope files to touch first:**
+    *   `docs/projects/builderos-remediation/amendment-19-project-governance-proof-g35-100.md` (this file)
+    *   (Future: Potentially a `docs/projects/templates/project-governance-proof.md` if a generic template is introduced later, but not for this initial slice.)
 
-## 3. Exact Safe-Scope Files to Touch First
+4.  **Verifier/runtime checks:**
+    *   **File Existence:** Verify that `docs/projects/builderos-remediation/amendment-19-project-governance-proof-g35-100.md` exists.
+    *   **Content Structure:** Confirm the document contains a top-level heading, a descriptive introduction, and the "Proof-Closing Blueprint Note" section with all five required sub-points.
+    *   **Naming Convention:** Ensure the file name adheres to the `amendment-19-project-governance-proof-gXX-YYY.md` pattern.
 
-*   `docs/projects/builderos-remediation/amendment-19-project-governance-proof-g35-100.md` (this file): Update with the complete proof-closing blueprint note.
-*   `builderos/config/verifier-rules.json`: Add or modify a rule to explicitly classify `.md` files as documentation, preventing execution attempts.
-*   `builderos/pipelines/governance-verify.yml`: Update the pipeline to incorporate the new verifier rules and documentation validation steps for the `g35-100-doc-verify` slice.
-
-## 4. Verifier/Runtime Checks
-
-*   **File Type Recognition**: BuilderOS verifier must process `docs/projects/builderos-remediation/amendment-19-project-governance-proof-g35-100.md` as documentation, without `ERR_UNKNOWN_FILE_EXTENSION`.
-*   **Structural Validation**: The `g35-100-doc-verify` slice successfully validates the structure and content of this document against `AMENDMENT_19_PROJECT_GOVERNANCE.md` principles.
-*   **Slice Execution**: The `g35-100-doc-verify` slice completes successfully in a dry-run, demonstrating correct documentation handling and validation.
-
-## 5. Stop Conditions if Runtime Truth Disagrees
-
-*   Recurrence of `ERR_UNKNOWN_FILE_EXTENSION` for `.md` files.
-*   Failure of the `g35-100-doc-verify` slice to execute or validate documentation as specified.
-*   Failure of structural or blueprint alignment checks for this proof document.
-*   Introduction of regressions or unintended side effects in BuilderOS verification.
+5.  **Stop conditions if runtime truth disagrees:**
+    *
