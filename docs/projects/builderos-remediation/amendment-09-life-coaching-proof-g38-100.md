@@ -1,7 +1,14 @@
 # Amendment 09: Life Coaching - Proof G38-100 Remediation
 
-This document outlines the next smallest build slice to close the proof gap G38-100 for the Life Coaching amendment, focusing on establishing the foundational data model and API for `CoachingRelationship` entities.
+**Document ID:** amendment-09-life-coaching-proof-g38-100.md
+**Date:** 2024-07-30
+**Author:** Gemini Flash
+**Status:** Proof-of-Concept for C2 Build Pass
 
-## 1. Exact Missing Implementation or Proof Gap
+## 1. Purpose
 
-The current gap is the absence of
+This document provides the proof-of-concept and remediation plan for build slice G38-100, a foundational component of Amendment 09: Life Coaching. It addresses the initial data model definition for coaching session metadata within the BuilderOS-governed scope.
+
+## 2. Reference Blueprint
+
+*   `docs/projects/AMENDMENT_09_LIFE_COACH
