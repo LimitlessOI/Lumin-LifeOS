@@ -1,34 +1,67 @@
-Amendment 12 Command Center Proof: G19-100 - System Health Status Endpoint
-Blueprint Note: Proof Closure
-This note closes proof G19-100 by defining the smallest, safest build slice to establish a foundational backend capability for the Command Center.
+# Amendment 12 Command Center Proof G19-100: Status Ingestion Endpoint Proof-Closing Note
 
-1.  **Exact Missing Implementation or Proof Gap**
-    The initial backend apiEP for retrieving a high-level system health status for BuilderOS is missing. This endpoint is crucial for the Command Center to monitor the operational state of BuilderOS components without impacting LifeOS user features. The gap is the implementation of a dedicated, read-only HTTP GET endpoint that returns a concise JSON object detailing BuilderOS's current health.
+This document serves as a proof-closing note for the initial build slice related to establishing foundational data ingestion for the Amendment 12 Command Center, specifically addressing proof gap G19-100.
 
-2.  **Smallest Safe Build Slice to Close It**
-    Implement a new, internal BuilderOS API endpoint: `GET /builder-os/v1/health`. This endpoint will return a static or minimally dynamic JSON response indicating `status: "operational"` and a `timestamp`. This slice focuses solely on establishing the endpoint's existence and basic response structure, deferring complex health checks to subsequent build passes.
+---
 
-3.  **Exact Safe-Scope Files to Touch First**
-    *   `src/api/builder-os/v1/health.js`: Define the new route and link to its handler.
-    *   `src/controllers/builder-os/v1/healthController.js`: Implement the handler logic to return the health status.
-    *   `src/app.js` (or equivalent main entry point): Register the new `/builder-os/v1/health` route. (Assuming `app.js` is the central router registration point for BuilderOS internal APIs).
+### 1. Exact Missing Implementation or Proof Gap
 
-4.  **Verifier/Runtime Checks**
-    *   **HTTP GET Request:** `curl -X GET http://localhost:<BUILDEROS_PORT>/builder-os/v1/health`
-    *   **Expected Status Code:** `200 OK`
-    *   **Expected Response Body (JSON):**
+The initial proof-of-concept (G19) for the Amendment 12 Command Center requires a foundational API endpoint to ingest component status updates from various LifeOS services. This critical endpoint is currently undefined and unimplemented, preventing the Command Center from receiving any operational data necessary for its core function. The gap is the absence of a secure, validated entry point for status telemetry.
+
+### 2. Smallest Safe Build Slice to Close It
+
+Implement a minimal, authenticated POST API endpoint at `/api/v1/command-center/status`. This endpoint will accept a JSON payload containing `componentId` (string), `status` (string), and `timestamp` (ISO 8601 string). The primary function of this slice is to perform basic input validation and log the received status, confirming the data flow. Persistence mechanisms are explicitly excluded from this slice to maintain minimal scope.
+
+### 3. Exact Safe-Scope Files to Touch First
+
+*   `src/routes/commandCenterRoutes.js` (New file: Defines the `/api/v1/command-center/status` route and its handler.)
+*   `src/app.js` (Modification: Integrates `commandCenterRoutes.js` into the main application router.)
+*   `src/middleware/auth.js` (Modification/Verification: Ensure existing authentication middleware can be applied to the new route.)
+*   `src/utils/logger.js` (Modification/Verification: Ensure existing logging utility can be used to record incoming status.)
+*   `src/validators/commandCenterValidators.js` (New file: Defines Joi or similar schema for status payload validation.)
+
+### 4. Verifier/Runtime Checks
+
+1.  **Successful Ingestion:**
+    *   **Action:** Send a POST request to `https://[your-api-host]/api/v1/command-center/status` with a valid LifeOS JWT in the `Authorization` header.
+    *   **Payload:**
         ```json
         {
+          "componentId": "lifeos-core-scheduler",
           "status": "operational",
-          "timestamp": "YYYY-MM-DDTHH:MM:SS.sssZ",
-          "service": "BuilderOS-Health"
+          "timestamp": "2023-10-27T10:30:00Z"
         }
         ```
-    *   **No Impact Check:** Verify no new logs or errors appear in LifeOS or TSOS customer-facing services after deploying this change.
+    *   **Expected Outcome:** API returns `HTTP 202 Accepted` or `HTTP 200 OK`. Server logs show a message indicating successful ingestion of the status update, including `componentId` and `status`.
 
-5.  **Stop Conditions if Runtime Truth Disagrees**
-    *   The endpoint returns any status code other than `200 OK`.
-    *   The response body is not valid JSON or does not contain the `status`, `timestamp`, and `service` fields as specified.
-    *   The endpoint is not reachable (e.g., `404 Not Found`).
-    *   Any observed degradation or unexpected behavior in existing BuilderOS, LifeOS, or TSOS functionalities.
-    *   The endpoint exposes sensitive information or allows write operations.
+2.  **Authentication Failure:**
+    *   **Action:** Send the same POST request without an `Authorization` header or with an invalid JWT.
+    *   **Expected Outcome:** API returns `HTTP 401 Unauthorized`.
+
+3.  **Invalid Payload (Missing Field):**
+    *   **Action:** Send a POST request with a valid JWT but omit `componentId` from the payload.
+    *   **Payload:**
+        ```json
+        {
+          "status": "degraded",
+          "timestamp": "2023-10-27T10:35:00Z"
+        }
+        ```
+    *   **Expected Outcome:** API returns `HTTP 400 Bad Request` with a clear error message indicating the missing field.
+
+4.  **Invalid Payload (Incorrect Type):**
+    *   **Action:** Send a POST request with a valid JWT but provide a non-string `componentId`.
+    *   **Payload:**
+        ```json
+        {
+          "componentId": 123,
+          "status": "operational",
+          "timestamp": "2023-10-27T10:40:00Z"
+        }
+        ```
+    *   **Expected Outcome:** API returns `HTTP 400 Bad Request` with a clear error message indicating the type mismatch.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+*   **Endpoint Unreachable (404 Not Found):** Indicates a fundamental routing configuration error in `src/app.js` or `src/routes/commandCenterRoutes.js`.
+*   **Internal
