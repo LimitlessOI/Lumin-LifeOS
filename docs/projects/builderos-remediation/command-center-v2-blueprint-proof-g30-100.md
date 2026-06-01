@@ -1,8 +1,6 @@
-# Command Center V2 Blueprint Proof: G30-100
+### Blueprint Proof Note: Command Center V2 - G30-100 - Initial Status Endpoint
 
-## Proof-Closing Blueprint Note
-
-This note addresses the initial implementation slice for the Command Center V2 blueprint, focusing on establishing the core registry mechanism.
+This note addresses the next smallest build slice for the Command Center V2 blueprint, focusing on establishing a foundational operational status endpoint.
 
 1.  **Exact missing implementation or proof gap:**
-    The foundational `CommandCenterRegistry` class, responsible for managing all registered Command Centers,
+    The blueprint specifies the need for a `/api/v2/command-center/status` endpoint
