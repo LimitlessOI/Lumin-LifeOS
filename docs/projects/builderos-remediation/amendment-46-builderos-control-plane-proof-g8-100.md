@@ -1,0 +1,1 @@
+The specification is contradictory: the general instruction asks for "complete implementation code" and "Output ONLY the code first", but the specific task asks to "Write docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g8-100.md" and "Produce a proof-closing blueprint note with: [5 specific sections]". I
