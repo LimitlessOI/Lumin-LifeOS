@@ -1,6 +1,11 @@
 # Amendment 09: Life Coaching - Proof G30-100
 
-## Objective
-This document outlines the proof strategy and current status for the initial definition and foundational data structures related to Life Coaching, as specified in Amendment 09. The scope `G30-100` specifically targets the establishment of core session parameters and participant identification.
+## Blueprint Note: Prompt Generation Core Logic
 
-## Scope (G30-
+This note outlines the next smallest build slice for the G30 milestone, focusing on the initial implementation of prompt generation within the LifeCoachService.
+
+---
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The core logic within `src/services/LifeCoach
