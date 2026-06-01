@@ -1,28 +1,34 @@
-Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Integration (G11-100)
-Source Blueprint: `docs/projects/AMENDMENT_41_MARKETINGOS.md`
-Signal: This document — SSOT foundation.
-This note addresses the proof gap for the G11-100 segment synchronization as outlined in Amendment 41, focusing on the "Engaged Users" segment.
----
-1. Exact Missing Implementation or Proof Gap
-The core gap is the implementation of the data transformation and secure API invocation logic to push the "Engaged Users" segment data from LifeOS's internal segment store to the designated MarketingOS apiEP. Specifically, the proof requires demonstrating that a defined segment can be successfully transmitted and acknowledged by MarketingOS.
-2. Smallest Safe Build Slice to Close It
+# Amendment 41: MarketingOS Proof - G11-100
+
+## 1. Exact Missing Implementation or Proof Gap
+
+The core proof gap for G11-100 is the programmatic transmission of the `user_engagement_score` from LifeOS to MarketingOS via the specified API endpoint. As defined in `AMENDMENT_41_MARKETINGOS.md`, the `POST /api/v1/marketingos/user-engagement` endpoint is not yet invoked with the required `userId` and `engagementScore` payload upon a user's engagement score update within LifeOS. This constitutes the final integration point for G11-100 data flow.
+
+## 2. Smallest Safe Build Slice to Close It
+
 The smallest safe build slice involves:
--   Creating a dedicated service function for MarketingOS API interaction.
--   Integrating this service function into the existing segment processing pipeline, specifically for the "Engaged Users" segment.
--   Ensuring secure handling of MarketingOS API credentials and endpoint configuration.
-3. Exact Safe-Scope Files to Touch First
--   `src/services/marketingosSyncService.js` (New file): Will encapsulate the logic for formatting segment data and making the HTTP POST request to MarketingOS.
--   `src/jobs/segmentSyncJob.js` (Existing or New file, depending on current segment processing): Will be modified or created to orchestrate the retrieval of the "Engaged Users" segment and invoke `marketingosSyncService.js`.
--   `src/config/env.js` (Existing file): Add `MARKETINGOS_API_URL` and `MARKETINGOS_API_KEY` envVars.
--   `src/utils/logger.js` (Existing file): Ensure proper logging of sync operations and errors.
-4. Verifier/Runtime Checks
--   API Response Check: Monitor the HTTP response status code from MarketingOS. A `200 OK` or `202 Accepted` indicates successful receipt.
--   Payload Verification: Log the outgoing payload to ensure it matches the schema expected by MarketingOS (as defined in Amendment 41).
--   MarketingOS Internal Check: Verify, via MarketingOS's internal tooling or logs, that the "Engaged Users" segment has been created/updated and contains a representative sample of users.
--   Idempotency Test: Run the sync process multiple times with the same segment data to ensure MarketingOS handles duplicate submissions gracefully without creating redundant entries or errors.
-5. Stop Conditions if Runtime Truth Disagrees
--   Consistent API Errors: Repeated `4xx` (client error) or `5xx` (server error) responses from MarketingOS, indicating a fundamental issue with the request or the MarketingOS service itself.
--   Data Schema Mismatch: MarketingOS consistently rejects payloads due to schema validation failures, even when the LifeOS-generated payload appears correct per the blueprint.
--   Segment Data Absence: Despite successful API calls, the "Engaged Users" segment or its members do not appear in MarketingOS after a reasonable propagation delay.
--   Performance Degradation: The segment synchronization process introduces unacceptable latency or resource consumption within LifeOS, impacting core user features.
--   Security Violation: Any indication of apiKey leakage or unauthorized access attempts during the sync process.
+1.  Creating a new `MarketingOSIntegrationService` responsible for encapsulating the HTTP client and making calls to the MarketingOS API.
+2.  Modifying the existing `UserService` (or the service responsible for calculating/updating `user_engagement_score`) to trigger a call to this new `MarketingOSIntegrationService` whenever a user's engagement score is updated or recalculated.
+3.  Ensuring the payload (`userId`, `engagementScore`) is correctly formatted and transmitted.
+
+## 3. Exact Safe-Scope Files to Touch First
+
+*   `src/services/UserService.js`: Introduce a call to `MarketingOSIntegrationService.sendUserEngagementScore(userId, score)` within the `updateUserEngagementScore` method (or equivalent).
+*   `src/services/MarketingOSIntegrationService.js`: (New file) Implement a class with a `sendUserEngagementScore` method that uses an HTTP client to `POST` data to the MarketingOS endpoint.
+*   `src/config/marketingos.js`: (New file, if not existing) Define `MARKETINGOS_API_URL` and any necessary API keys or authentication headers.
+*   `src/utils/apiClient.js`: (Existing file) Ensure a generic HTTP client utility is available and properly configured for external API calls, or extend it to include MarketingOS-specific headers if needed.
+
+## 4. Verifier/Runtime Checks
+
+*   **LifeOS Logs:** Monitor LifeOS service logs for successful HTTP 200/202 responses from the MarketingOS API following `user_engagement_score` updates. Log any non-2xx responses with full error details.
+*   **MarketingOS Platform:** Verify that the `user_engagement_score` for a set of test users appears correctly and with expected values within the MarketingOS platform's user profiles or analytics dashboards.
+*   **Data Consistency:** Cross-reference `user_engagement_score` values in LifeOS with those observed in MarketingOS for a sample set of users to ensure data consistency and correct mapping.
+*   **Performance Monitoring:** Observe LifeOS service performance metrics (latency, CPU, memory) to ensure the new integration does not introduce regressions.
+
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+*   **API Errors:** Consistent non-2xx responses from the MarketingOS API (e.g., 4xx client errors, 5xx server errors) indicating integration failure or misconfiguration.
+*   **Data Mismatch:** The `user_engagement_score` in MarketingOS does not match the expected value from LifeOS for test users, or the data is malformed/missing.
+*   **Performance Degradation:** The integration causes a measurable and sustained increase in latency, error rates, or resource utilization in LifeOS services beyond acceptable thresholds.
+*   **Schema Validation:** MarketingOS platform reports schema validation errors for the received `user_engagement_score` payload, indicating incorrect data formatting from LifeOS.
+*   **Irreversible Data Corruption:** Any indication that the integration is causing incorrect or corrupted data to be stored in either LifeOS or MarketingOS.
