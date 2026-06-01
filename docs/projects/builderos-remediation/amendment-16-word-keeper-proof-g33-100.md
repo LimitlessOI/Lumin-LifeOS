@@ -1,25 +1,34 @@
-# AMENDMENT_16_WORD_KEEPER Proof-Closing Note: G33-100
+# Amendment 16: Word Keeper - Proof G33-100
 
-This note addresses the next smallest blueprint-backed build slice for the AMENDMENT_16_WORD_KEEPER blueprint, focusing on establishing the foundational data model.
+## Blueprint Note: Core Word Model Definition
 
-## 1. Exact Missing Implementation or Proof Gap
+This document outlines the next smallest build slice for Amendment 16, focusing on establishing the foundational data model for the "Word Keeper" functionality.
 
-The core data model for the `Word` entity is not yet defined or implemented. This gap prevents any further progress on storing, retrieving, or managing words as per the blueprint's intent.
+### 1. Exact Missing Implementation or Proof Gap
 
-## 2. Smallest Safe Build Slice to Close It
+The core data model for a `Word` entity, including its properties and persistence schema, is currently undefined. This gap prevents any further implementation of word storage, retrieval, or management features.
 
-Define and implement the database schema and corresponding ORM model for the `Word` entity. This includes:
-*   A database migration to create the `words` table.
-*   An ORM model definition (`Word.js`) to interact with this table.
+### 2. Smallest Safe Build Slice to Close It
 
-## 3. Exact Safe-Scope Files to Touch First
+Define the `Word` entity interface/class and its corresponding database schema. Implement a minimal repository interface and a basic concrete implementation capable of creating and retrieving a single `Word` entry. This slice establishes the fundamental data structure and persistence mechanism without exposing any user-facing features.
 
-*   `src/db/migrations/YYYYMMDDHHMMSS_create_word_table.js` (e.g., `20231027100000_create_word_table.js`)
-*   `src/models/Word.js`
+### 3. Exact Safe-Scope Files to Touch First
 
-## 4. Verifier/Runtime Checks
+*   `src/domain/word/Word.ts`: Define the `Word` interface/type.
+*   `src/infrastructure/persistence/schemas/WordSchema.ts`: Define the database schema for `Word` (e.g., Mongoose schema, TypeORM entity).
+*   `src/infrastructure/persistence/repositories/IWordRepository.ts`: Define the `IWordRepository` interface with `create` and `findById` methods.
+*   `src/infrastructure/persistence/repositories/WordRepository.ts`: Implement `WordRepository` using the chosen persistence layer.
 
-*   **Migration Success**: Run `npx knex migrate:latest` (or equivalent, assuming Knex.js for migrations) and verify that the `create_word_table` migration applies successfully without errors.
-*   **Model Instantiation & Basic CRUD**:
-    *   Verify that `import Word from '../models/Word.js'` works.
-    *   Attempt to create a new `Word` record: `await Word.query().insert
+### 4. Verifier/Runtime Checks
+
+*   **Unit Test:** Verify that `WordRepository.create()` successfully persists a new `Word` object to the database.
+*   **Unit Test:** Verify that `WordRepository.findById()` successfully retrieves a previously created `Word` object by its ID, and that its properties match the original.
+*   **Integration Test:** Spin up a minimal application context, create a `Word` via the repository, and then retrieve it, asserting data integrity.
+*   **Schema Validation:** Ensure that attempts to create `Word` objects with missing required fields (e.g., `text`) are rejected by the persistence layer.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+*   If `WordRepository.create()` throws an unexpected error during persistence.
+*   If `WordRepository.findById()` returns `null` or an empty object for a `Word` that was confirmed to be created.
+*   If the retrieved `Word` object's properties (e.g., `id`, `text`, `createdAt`) do not match the values provided during creation.
+*   If schema validation errors prevent basic `Word` creation, indicating an issue with `WordSchema.ts`.
