@@ -1,7 +1,3 @@
-# BuilderOS Remediation: Amendment 01 AI Council - Proof G22-100
+# Amendment 01 AI Council Proof G22-100: Initial Recommendation Recording Mechanism
 
-This document addresses the remediation required to close proof point G22-100 as outlined in `docs/projects/AMENDMENT_01_AI_COUNCIL.md`. The focus is on establishing the foundational data structure for AI Council members.
-
----
-
-## Blueprint Note:
+This document serves as a proof-closing blueprint note for the G22-100 build slice, derived from `docs/projects/AMENDMENT_01_AI_COUNCIL.md`. It outlines the initial implementation step to establish a foundational mechanism for recording AI Council recommendations within the
