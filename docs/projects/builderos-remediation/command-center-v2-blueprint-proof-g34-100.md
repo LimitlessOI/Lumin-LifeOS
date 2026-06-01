@@ -1,27 +1,16 @@
-Command Center V2 Blueprint Proof - G34-100
-This document outlines the next smallest blueprint-backed build slice for the Command Center V2, focusing on establishing the core command registration and routing mechanism with a foundational `PingCommand`.
+# Command Center V2 Blueprint Proof: G34-100 - UMS Core CRUD Implementation
+
+This document serves as a proof-closing blueprint note, deriving the next smallest blueprint-backed build slice for the Command Center V2 re-platforming effort, specifically focusing on the User Management Service (UMS).
+
 ---
-Blueprint Note: Core Command Infrastructure & Ping
-1. Exact Missing Implementation or Proof Gap
-The `COMMAND_CENTER_` module lacks the foundational command registration mechanism and the initial `PingCommand` implementation. Specifically, the `CommandRegistry` is not yet defined or initialized, and the `PingCommand` class is not implemented or registered.
 
-2. Smallest Safe Build Slice to Close It
-Implement the `ICommand` interface, a `CommandRegistry` class, and the `PingCommand` class. Register `PingCommand` with the `CommandRegistry` upon `CommandCenter` initialization.
+### Blueprint Note: UMS Core CRUD Implementation
 
-3. Exact Safe-Scope Files to Touch First
-- `src/command-center/interfaces/ICommand.ts`: Define the `ICommand` interface with `name: string` and `execute(...args: any[]): Promise<any>` methods.
-- `src/command-center/CommandRegistry.ts`: Implement `CommandRegistry` class with `register(command: ICommand)` and `get(name: string): ICommand` methods.
-- `src/commands/PingCommand.ts`: Implement `PingCommand` class adhering to `ICommand`, returning a simple "pong" response.
-- `src/command-center/index.ts`: Initialize `CommandRegistry` and register `PingCommand` during `CommandCenter` setup.
+**1. Exact Missing Implementation or Proof Gap:**
+The User Management Service (UMS) has an initial Proof of Concept (PoC) but lacks a formally defined API specification and a production-ready implementation of core Create, Read, Update, and Delete (CRUD) operations for user entities. This gap prevents other services from reliably interacting with user data and delays foundational integration.
 
-4. Verifier/Runtime Checks
-- Unit test `PingCommand` execution to ensure it returns "pong".
-- Unit test `CommandRegistry` to verify commands can be registered and retrieved by name.
-- Integration test: Instantiate `CommandCenter`, retrieve `PingCommand` via the registry, execute it, and assert the "pong" response.
-- Runtime check: Execute `CommandCenter.execute('ping')` and verify the output is "pong".
+**2. Smallest Safe Build Slice to Close It:**
+Formalize the UMS API specification for user management and implement the core CRUD operations (Create User, Get User by ID, Get All Users, Update User, Delete User). This slice establishes a stable, testable, and documented foundation for user data management, enabling subsequent integrations and feature development.
 
-5. Stop Conditions if Runtime Truth Disagrees
-- `PingCommand` execution fails or returns any value other than "pong".
-- `CommandRegistry` fails to register `PingCommand` or `CommandCenter.getCommand('ping')` returns `undefined` or throws an error.
-- `CommandCenter.execute('ping')` throws an error or returns a non-"pong" response.
-- Any new or modified file introduces a type error, linter warning, or fails existing tests.
+**3. Exact Safe-Scope Files to Touch First:**
+*   `services/ums/src/api/v1/user.routes.js`: Define
