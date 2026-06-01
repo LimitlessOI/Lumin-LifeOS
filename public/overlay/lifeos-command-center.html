@@ -298,17 +298,40 @@
             <option value="">Loading domains...</option>
           </select>
         </div>
+        <div class="council-domain-row">
+          <label style="font-size:11px;color:var(--text-muted)">Voice</label>
+          <select id="cc-voice-mode" style="background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:5px;padding:5px 8px;font-size:12px;min-width:140px">
+            <option value="dictation">Dictation</option>
+            <option value="push_to_talk">Push-to-Talk</option>
+          </select>
+          <select id="cc-voice-select" style="background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:5px;padding:5px 8px;font-size:12px;min-width:180px;flex:1">
+            <option value="">Default system voice</option>
+          </select>
+          <label style="font-size:11px;color:var(--text-muted)">Speed</label>
+          <select id="cc-playback-rate" style="background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:5px;padding:5px 8px;font-size:12px;min-width:90px">
+            <option value="0.85">0.85x</option>
+            <option value="1" selected>1.0x</option>
+            <option value="1.15">1.15x</option>
+            <option value="1.3">1.3x</option>
+          </select>
+        </div>
         <textarea id="council-msg" placeholder="What should we build next? / Review this plan..." style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px;font-size:12px;resize:vertical;min-height:60px;margin-bottom:8px;font-family:inherit"></textarea>
         <div class="cc-voice-row" data-cc-help="cc-voice-record">
-          <button type="button" class="btn btn-warning btn-sm" id="cc-voice-record">&#127908; Record</button>
+          <button type="button" class="btn btn-warning btn-sm" id="cc-voice-record">&#127908; Start Mic</button>
           <textarea id="cc-voice-transcript" class="cc-voice-transcript" placeholder="Live transcript…" readonly rows="2"></textarea>
+          <button type="button" class="btn btn-ghost btn-sm" id="cc-voice-stop">Stop</button>
           <button type="button" class="btn btn-ghost btn-sm" id="cc-voice-send">Send</button>
-          <span id="cc-voice-status" style="font-size:10px;color:var(--text-muted)">Voice idle</span>
+          <span id="cc-voice-status" style="font-size:10px;color:var(--text-muted)">Voice idle · explicit send only</span>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
-          <button type="button" class="btn btn-primary btn-sm" data-cc-help="cc-ask" onclick="CcComm.askCouncil()">Ask Council</button>
-          <button type="button" class="btn btn-ghost btn-sm" onclick="CcComm.loadCommHistory()">&#128172; Comm History</button>
+          <button type="button" class="btn btn-primary btn-sm" data-cc-help="cc-ask" onclick="CcComm.askCouncil()">Send to C2</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="CcComm.loadCommHistory()">&#128172; Full History</button>
           <button type="button" class="btn btn-ghost btn-sm" onclick="CcComm.loadBuildHistory()">&#128203; Recent Builds</button>
+        </div>
+        <div class="council-domain-row">
+          <input id="cc-history-search" type="search" placeholder="Search communication history…" style="flex:1;min-width:180px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:6px 8px;font-size:12px">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="CcComm.loadCommHistory()">Search</button>
+          <span id="cc-thread-status" style="font-size:10px;color:var(--text-muted)">Thread not started</span>
         </div>
         <div class="council-response" id="council-response" style="display:none"></div>
         <div id="council-history" style="margin-top:10px"></div>

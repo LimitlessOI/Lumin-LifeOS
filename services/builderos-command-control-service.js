@@ -100,6 +100,32 @@ export async function getCommandControlJob(pool, jobId) {
   return result.rows[0] || null;
 }
 
+export async function listCommandControlJobs(pool, { limit = 20, status = '' } = {}) {
+  const capped = Math.min(Math.max(parseInt(limit, 10) || 20, 1), 100);
+  const params = [];
+  const clauses = [];
+  let idx = 1;
+
+  if (String(status || '').trim()) {
+    clauses.push(`status = $${idx}`);
+    params.push(String(status).trim());
+    idx += 1;
+  }
+
+  params.push(capped);
+  const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
+  const result = await pool.query(
+    `SELECT id, instruction, requested_by, status, blocker, metadata_json, result_json, receipts_json,
+            created_at, updated_at, cancelled_at
+       FROM builderos_command_control_jobs
+      ${where}
+      ORDER BY updated_at DESC, created_at DESC
+      LIMIT $${idx}`,
+    params
+  );
+  return result.rows;
+}
+
 export async function cancelCommandControlJob(pool, jobId, payload = {}) {
   const cancelledBy = normalizeText(payload.cancelled_by) || 'adam_remote';
   const result = await pool.query(

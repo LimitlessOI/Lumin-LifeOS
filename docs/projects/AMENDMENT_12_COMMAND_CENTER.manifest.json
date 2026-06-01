@@ -9,7 +9,7 @@
   "phase": "stabilization",
   "next_task": "Keep command-center runtime proof surfaces aligned with BuilderOS canonical scoring, then continue structural consolidation and mobile/role-based improvements from a governed alpha surface",
   "stability_class": "needs-review",
-  "current_focus": "Communication UX + Trust Guard — Section E modes, proof guard (VERIFIED/UNVERIFIED), tooltips, voice prototype, command_center_communications history (NOT epistemic_facts). Deploy pending.",
+  "current_focus": "C2 communication layer v1 — typed/threaded history, explicit-send voice/text controls, recent governed C2 jobs, and real /communications/send job bridge. Deploy proof pending.",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",
@@ -193,7 +193,7 @@
       "resolved": true
     }
   ],
-  "last_verified_at": "2026-05-24",
-  "last_updated": "2026-05-24",
+  "last_verified_at": "2026-05-31",
+  "last_updated": "2026-05-31",
   "verification_passed": null
 }

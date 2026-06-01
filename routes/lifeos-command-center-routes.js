@@ -67,6 +67,7 @@ import {
   buildCommunicationEvidence,
   insertCommunication,
   listCommunications,
+  sendCommunicationViaC2,
 } from '../services/command-center-communication-service.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1091,7 +1092,13 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
    */
   router.get('/api/v1/lifeos/command-center/communications', requireKey, async (req, res, next) => {
     try {
-      const rows = await listCommunications(pool, { limit: req.query.limit });
+      const rows = await listCommunications(pool, {
+        limit: req.query.limit,
+        q: req.query.q,
+        threadId: req.query.thread_id,
+        mode: req.query.mode,
+        messageType: req.query.message_type,
+      });
       res.json({ ok: true, count: rows.length, communications: rows });
     } catch (err) {
       next(err);
@@ -1168,6 +1175,30 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
       });
 
       res.json({ ok: true, evidence });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * POST /api/v1/lifeos/command-center/communications/send
+   * Persist user/system typed records and route execution through real C2 jobs.
+   */
+  router.post('/api/v1/lifeos/command-center/communications/send', requireKey, async (req, res, next) => {
+    try {
+      const result = await sendCommunicationViaC2(pool, {
+        ...req.body,
+        deploy_sha: process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || null,
+      }, {
+        baseUrl: `${req.protocol}://${req.get('host')}`,
+        commandKey: req.headers['x-command-key'],
+      });
+
+      if (!result.ok) {
+        return res.status(422).json(result);
+      }
+
+      res.status(201).json(result);
     } catch (err) {
       next(err);
     }

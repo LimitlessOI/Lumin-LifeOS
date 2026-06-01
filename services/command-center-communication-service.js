@@ -1,5 +1,5 @@
 /**
- * Command Center communication history + response proof guard.
+ * Command Center communication history + C2-backed operator messaging.
  * NOT canonical BuilderOS memory — separate from epistemic_facts.
  *
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
@@ -8,10 +8,43 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { randomUUID } from 'node:crypto';
+import {
+  createCommandControlJob,
+  getCommandControlJob,
+} from './builderos-command-control-service.js';
+import { executeCommandControlJob } from './builderos-governed-loop-executor.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-const PLACEHOLDER_PATTERNS = [
+export const C2_COMMUNICATION_MODES = Object.freeze({
+  quick_ask: {
+    label: 'Quick Ask',
+    frame: (text) => `QUICK ASK — answer clearly, state uncertainty, and keep only verified repo/runtime claims.\n\n${text}`,
+  },
+  brainstorm: {
+    label: 'Brainstorming',
+    frame: (text) => `BRAINSTORM — list options, tradeoffs, and unknowns. No invented file paths.\n\n${text}`,
+  },
+  step_build: {
+    label: 'Step-by-step Build',
+    frame: (text) => `STEP-BY-STEP BUILD — smallest safe diffs first, cite controlling blueprint, verified repo paths only.\n\n${text}`,
+  },
+  audit: {
+    label: 'Audit / Verify',
+    frame: (text) => `AUDIT — verify against runtime and repo truth only. Mark UNVERIFIED when proof is missing.\n\n${text}`,
+  },
+  meeting: {
+    label: 'Meeting Mode',
+    frame: (text) => `MEETING — structure as Context / Options / Recommendation / Decision needed.\n\n${text}`,
+  },
+  c2_command: {
+    label: 'C2 Command',
+    frame: (text) => `C2 COMMAND — execute through governed BuilderOS Command & Control. Preserve OIL/PBB/verifier gates.\n\n${text}`,
+  },
+});
+
+const TEMPLATE_PATH_PATTERNS = [
   { re: /currentRepo\//i, reason: 'placeholder prefix currentRepo/' },
   { re: /\bchatInterface\.js\b(?![\s\S]{0,40}(?:public\/|overlay\/))/i, reason: 'bare chatInterface.js without verified overlay path' },
   { re: /path\/to\//i, reason: 'template path path/to/' },
@@ -21,11 +54,56 @@ const PLACEHOLDER_PATTERNS = [
 ];
 
 const FILE_PATH_RE = /\b(?:scripts|routes|services|public|docs|config|startup|db|middleware|core|prompts)\/[A-Za-z0-9._\-/]+\.(?:js|mjs|cjs|ts|tsx|sql|md|html|json)\b/g;
-
 const ROUTE_RE = /\b(?:GET|POST|PUT|PATCH|DELETE)\s+\/api\/v1\/[^\s'"`,]+/gi;
 
 function unique(arr) {
   return [...new Set(arr)];
+}
+
+function normalizeText(value) {
+  return String(value || '').trim();
+}
+
+function deriveThreadTitle(text) {
+  const normalized = normalizeText(text).replace(/\s+/g, ' ');
+  if (!normalized) return 'Command Center Thread';
+  return normalized.length > 90 ? `${normalized.slice(0, 87)}...` : normalized;
+}
+
+export function buildCommunicationPrompt(mode, text) {
+  const def = C2_COMMUNICATION_MODES[mode] || C2_COMMUNICATION_MODES.quick_ask;
+  return def.frame(normalizeText(text));
+}
+
+function summarizeExecution(trace = {}, job = {}) {
+  const builderOutput = trace.builder_output || {};
+  const kernelReceipts = builderOutput.kernel_receipts || {};
+  const parts = [
+    `C2 job ${job.id || 'unknown'} finished with status ${job.status || 'unknown'}.`,
+  ];
+
+  if (builderOutput.target_file) {
+    parts.push(`Target: ${builderOutput.target_file}.`);
+  }
+  if (builderOutput.model_used) {
+    parts.push(`Model: ${builderOutput.model_used}.`);
+  }
+  if (builderOutput.committed === true || job.status === 'committed') {
+    parts.push('BuilderOS committed the change.');
+  } else if (job.blocker) {
+    parts.push(`Blocked by ${job.blocker}.`);
+  }
+  if (kernelReceipts.oil?.verified === true) {
+    parts.push(`OIL verified (${kernelReceipts.oil.id || 'receipt'}).`);
+  }
+  if (kernelReceipts.token?.verified === true) {
+    parts.push(`Token receipt linked (${kernelReceipts.token.id || 'receipt'}).`);
+  }
+  if (trace.repair_loop_result?.retry_used) {
+    parts.push('Repair loop used one retry.');
+  }
+
+  return parts.join(' ');
 }
 
 export function extractCandidateFilePaths(text) {
@@ -37,13 +115,13 @@ export function extractCandidateFilePaths(text) {
 export function extractCandidateRoutes(text) {
   const raw = String(text || '');
   const matches = raw.match(ROUTE_RE) || [];
-  return unique(matches.map((r) => r.trim()));
+  return unique(matches.map((route) => route.trim()));
 }
 
 export function detectPlaceholderClaims(text) {
   const raw = String(text || '');
   const hits = [];
-  for (const { re, reason } of PLACEHOLDER_PATTERNS) {
+  for (const { re, reason } of TEMPLATE_PATH_PATTERNS) {
     if (re.test(raw)) hits.push(reason);
   }
   return hits;
@@ -63,11 +141,6 @@ export function verifyRepoFilePaths(paths) {
   });
 }
 
-/**
- * Build evidence envelope for a council/builder response.
- * VERIFIED only when no placeholder claims, every cited repo file exists,
- * and at least one endpoint was used in this request chain.
- */
 export function buildCommunicationEvidence({
   responseText = '',
   endpointsUsed = [],
@@ -86,7 +159,7 @@ export function buildCommunicationEvidence({
   const verifiedFiles = filesChecked.filter((f) => f.exists);
   const hasRepoFileClaims = filesChecked.length > 0;
   const advisoryOnly = builderMeta.advisory_only === true
-    || builderMeta.execution_only === false && !builderMeta.committed
+    || (builderMeta.execution_only === false && !builderMeta.committed)
     || (hasRepoFileClaims && missingFiles.length > 0)
     || placeholderWarnings.length > 0;
 
@@ -101,7 +174,6 @@ export function buildCommunicationEvidence({
   } else if (
     placeholderWarnings.length === 0
     && verifiedFiles.length > 0
-    && missingFiles.length > 0
     && endpointsUsed.length > 0
   ) {
     evidence_status = 'PARTIAL';
@@ -144,35 +216,213 @@ export function buildCommunicationEvidence({
 export async function insertCommunication(pool, row) {
   const result = await pool.query(
     `INSERT INTO command_center_communications
-       (speaker, council_member, mode, domain, transcript, response_text,
-        evidence_json, builder_job_id, commit_sha, railway_sha)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+       (thread_id, thread_title, speaker, council_member, mode, domain,
+        transcript, response_text, evidence_json, builder_job_id, commit_sha, railway_sha,
+        message_type, transport, status, selected_voice, playback_rate, explicit_send,
+        parent_message_id, command_control_job_id)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
      RETURNING *`,
     [
+      row.thread_id || randomUUID(),
+      row.thread_title || deriveThreadTitle(row.transcript || row.response_text || ''),
       row.speaker || 'adam',
       row.council_member || null,
       row.mode || 'quick_ask',
       row.domain || null,
-      row.transcript,
+      row.transcript || '',
       row.response_text || null,
       row.evidence_json || {},
       row.builder_job_id || null,
       row.commit_sha || null,
       row.railway_sha || null,
+      row.message_type || 'exchange',
+      row.transport || 'text',
+      row.status || 'recorded',
+      row.selected_voice || null,
+      row.playback_rate ?? 1.0,
+      row.explicit_send !== false,
+      row.parent_message_id || null,
+      row.command_control_job_id || null,
     ],
   );
   return result.rows[0];
 }
 
-export async function listCommunications(pool, { limit = 50 } = {}) {
+export async function listCommunications(pool, {
+  limit = 50,
+  q = '',
+  threadId = '',
+  mode = '',
+  messageType = '',
+} = {}) {
   const capped = Math.min(Math.max(parseInt(limit, 10) || 50, 1), 200);
+  const clauses = [];
+  const params = [];
+  let idx = 1;
+
+  if (q) {
+    clauses.push(`(transcript ILIKE $${idx} OR response_text ILIKE $${idx} OR COALESCE(thread_title, '') ILIKE $${idx})`);
+    params.push(`%${q}%`);
+    idx += 1;
+  }
+  if (threadId) {
+    clauses.push(`thread_id = $${idx}::uuid`);
+    params.push(threadId);
+    idx += 1;
+  }
+  if (mode) {
+    clauses.push(`mode = $${idx}`);
+    params.push(mode);
+    idx += 1;
+  }
+  if (messageType) {
+    clauses.push(`message_type = $${idx}`);
+    params.push(messageType);
+    idx += 1;
+  }
+
+  params.push(capped);
+  const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
   const result = await pool.query(
-    `SELECT id, speaker, council_member, mode, domain, transcript, response_text,
-            evidence_json, builder_job_id, commit_sha, railway_sha, created_at
+    `SELECT id, thread_id, thread_title, speaker, council_member, mode, domain,
+            transcript, response_text, evidence_json, builder_job_id, commit_sha, railway_sha,
+            message_type, transport, status, selected_voice, playback_rate, explicit_send,
+            parent_message_id, command_control_job_id, created_at
        FROM command_center_communications
+      ${where}
       ORDER BY created_at DESC
-      LIMIT $1`,
-    [capped],
+      LIMIT $${idx}`,
+    params,
   );
   return result.rows;
+}
+
+function buildBuilderMetaFromJob(job, deploySha) {
+  const trace = job?.result_json?.trace || {};
+  const builderOutput = trace.builder_output || {};
+  return {
+    committed: job?.status === 'committed' || builderOutput.committed === true,
+    commit_sha: builderOutput.raw?.commit_sha || job?.result_json?.commit_sha || null,
+    railway_sha: deploySha || null,
+    model_used: builderOutput.model_used || null,
+    execution_only: true,
+    advisory_only: false,
+  };
+}
+
+export async function sendCommunicationViaC2(pool, payload = {}, options = {}) {
+  const text = normalizeText(payload.transcript || payload.text);
+  if (!text) {
+    return { ok: false, error: 'transcript is required' };
+  }
+
+  const mode = normalizeText(payload.mode) || 'c2_command';
+  const domain = normalizeText(payload.domain) || 'lifeos-core';
+  const threadId = normalizeText(payload.thread_id) || randomUUID();
+  const threadTitle = normalizeText(payload.thread_title) || deriveThreadTitle(text);
+  const transport = normalizeText(payload.transport) || 'text';
+  const selectedVoice = normalizeText(payload.selected_voice) || null;
+  const playbackRate = Number(payload.playback_rate || 1) || 1;
+  const explicitSend = payload.explicit_send !== false;
+  const deploySha = payload.deploy_sha || null;
+
+  const userMessage = await insertCommunication(pool, {
+    thread_id: threadId,
+    thread_title: threadTitle,
+    speaker: 'adam',
+    council_member: 'C2',
+    mode,
+    domain,
+    transcript: text,
+    response_text: null,
+    message_type: 'user_message',
+    transport,
+    status: 'received',
+    selected_voice: selectedVoice,
+    playback_rate: playbackRate,
+    explicit_send: explicitSend,
+    evidence_json: {
+      evidence_status: 'VERIFIED',
+      proof_source: 'command_center_operator_input',
+      advisory_only: false,
+      committed: false,
+      do_not_use_for_builderos_memory_proof: true,
+      commands_or_endpoints_used: ['POST /api/v1/lifeos/command-center/communications/send'],
+    },
+  });
+
+  const instruction = buildCommunicationPrompt(mode, text);
+  const job = await createCommandControlJob(pool, {
+    instruction,
+    requested_by: 'adam_remote_c2_communication',
+    metadata_json: {
+      domain,
+      source: 'command_center_communication',
+      communication_thread_id: threadId,
+      communication_message_id: userMessage.id,
+      communication_mode: mode,
+      target_file: payload.target_file || null,
+    },
+  });
+
+  let execution = null;
+  let refreshedJob = job;
+  if (job.status === 'queued' && payload.auto_execute !== false) {
+    execution = await executeCommandControlJob(pool, job.id, {
+      baseUrl: options.baseUrl,
+      commandKey: options.commandKey,
+    });
+    refreshedJob = await getCommandControlJob(pool, job.id);
+  }
+
+  const responseText = summarizeExecution(refreshedJob?.result_json?.trace || {}, refreshedJob || job);
+  const endpointsUsed = [
+    'POST /api/v1/lifeos/command-center/communications/send',
+    'POST /api/v1/lifeos/builderos/command-control/jobs',
+  ];
+  if (payload.auto_execute !== false) {
+    endpointsUsed.push('POST /api/v1/lifeos/builderos/command-control/jobs/:id/execute');
+    endpointsUsed.push('GET /api/v1/lifeos/builderos/command-control/jobs/:id');
+  }
+
+  const builderMeta = buildBuilderMetaFromJob(refreshedJob || job, deploySha);
+  const evidence = buildCommunicationEvidence({
+    responseText,
+    endpointsUsed,
+    builderMeta,
+    deploySha,
+  });
+
+  const systemMessage = await insertCommunication(pool, {
+    thread_id: threadId,
+    thread_title: threadTitle,
+    speaker: 'system',
+    council_member: 'C2',
+    mode,
+    domain,
+    transcript: text,
+    response_text: responseText,
+    message_type: 'system_response',
+    transport: 'text',
+    status: refreshedJob?.status || job.status || 'recorded',
+    selected_voice: selectedVoice,
+    playback_rate: playbackRate,
+    explicit_send: true,
+    parent_message_id: userMessage.id,
+    command_control_job_id: refreshedJob?.id || job.id,
+    builder_job_id: refreshedJob?.id || job.id,
+    commit_sha: evidence.commit_sha,
+    railway_sha: evidence.railway_sha,
+    evidence_json: evidence,
+  });
+
+  return {
+    ok: true,
+    thread_id: threadId,
+    user_message: userMessage,
+    system_message: systemMessage,
+    job: refreshedJob || job,
+    execution,
+    evidence,
+  };
 }

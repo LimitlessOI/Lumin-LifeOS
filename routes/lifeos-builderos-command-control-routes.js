@@ -4,6 +4,7 @@ import express from 'express';
 import {
   createCommandControlJob,
   getCommandControlJob,
+  listCommandControlJobs,
   cancelCommandControlJob,
   setCommandControlHalt,
   getCommandControlHaltState,
@@ -18,6 +19,18 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
     try {
       const job = await createCommandControlJob(pool, req.body || {});
       res.status(201).json({ ok: true, job });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.get('/jobs', async (req, res, next) => {
+    try {
+      const jobs = await listCommandControlJobs(pool, {
+        limit: req.query.limit,
+        status: req.query.status,
+      });
+      res.json({ ok: true, jobs });
     } catch (error) {
       next(error);
     }
