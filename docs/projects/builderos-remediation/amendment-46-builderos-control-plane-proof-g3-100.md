@@ -1,3 +1,6 @@
-# Amendment 46: BuilderOS Control Plane Proof Gap G3-100 Remediation
+### Proof-Closing Blueprint Note: G3-100 BuilderOS Control Plane Wiring
 
-This document outlines the remediation plan for Proof Gap G3-100, focusing on wiring the BuilderOS control plane routes within `routes/lifeos-council-builder-routes.js` as specified in AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md.
+This note addresses the wiring of `routes/lifeos-council-builder-routes.js` to support the BuilderOS control plane build lifecycle events as specified in AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md.
+
+**1. Exact Missing Implementation or Proof Gap:**
+The `routes
