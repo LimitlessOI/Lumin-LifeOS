@@ -1,54 +1,33 @@
-// src/data/models/Word.ts
-export interface Word {
-  id: string;
-  value: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+## AMENDMENT 16: WORD KEEPER - Proof G34-100: Prisma Schema Definition
 
-// src/data/schemas/wordSchema.ts
-import { z } from 'zod';
+This document serves as a proof-closing blueprint note for the initial build slice of Amendment 16, focusing on the foundational data model definition.
 
-export const wordSchema = z.object({
-  id: z.string().uuid(),
-  value: z.string().min(1, "Word value cannot be empty"),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
+---
 
-export type WordSchema = z.infer<typeof wordSchema>;
+**1. Exact Missing Implementation or Proof Gap:**
 
-// src/data/repositories/IWordRepository.ts
-import { Word } from '../models/Word';
+The `Word` entity's Prisma schema definition is currently absent from the `prisma/schema.prisma` file. This is the prerequisite for all subsequent data-layer and service-layer implementations.
 
-export interface IWordRepository {
-  save(word: Word): Promise<Word>;
-  findById(id: string): Promise<Word | null>;
-}
+**2. Smallest Safe Build Slice to Close It:**
 
-// src/data/repositories/WordRepository.ts
-import { Word } from '../models/Word';
-import { IWordRepository } from './IWordRepository';
-import { wordSchema } from '../schemas/wordSchema';
+Define the `Word` entity within the existing `prisma/schema.prisma` file, incorporating the specified fields and constraints from the blueprint.
 
-// For the smallest safe build slice, we'll use an in-memory store.
-// In a production environment, this would be replaced with a database client.
-const inMemoryWordStore = new Map<string, Word>();
+**3. Exact Safe-Scope Files to Touch First:**
 
-export class WordRepository implements IWordRepository {
-  async save(word: Word): Promise<Word> {
-    // Validate the word against the schema before persistence
-    wordSchema.parse(word);
+*   `prisma/schema.prisma`
 
-    // Simulate asynchronous database save operation
-    const savedWord = { ...word }; // Create a copy to ensure immutability of stored object
-    inMemoryWordStore.set(savedWord.id, savedWord);
-    return savedWord;
-  }
+**4. Verifier/Runtime Checks:**
 
-  async findById(id: string): Promise<Word | null> {
-    // Simulate asynchronous database fetch operation
-    const word = inMemoryWordStore.get(id);
-    return word ? { ...word } : null; // Return a copy or null if not found
-  }
-}
+*   Execute `npx prisma validate` to confirm the new schema syntax is correct and free of errors.
+*   Execute `npx prisma db push --preview-feature` (or `npx prisma migrate dev` if migrations are preferred) to apply the schema changes to the development database.
+*   Inspect the database directly (e.g., using a database client) to verify the `Word` table has been created with the `id`, `userId`, `text`, `language`, `createdAt`, `updatedAt` columns, and the `@@unique([userId, text, language])` constraint is active.
+*   Execute `npx prisma generate` to update the Prisma client.
+*   Verify that the `Word` model is now accessible and correctly typed within the generated Prisma client (e.g., `import { PrismaClient, Word } from '@prisma/client';`).
+
+**5. Stop Conditions if Runtime Truth Disagrees:**
+
+*   `npx prisma validate` reports any errors or warnings related to the `Word` model definition.
+*   `npx prisma db push` (or `migrate dev`) fails to apply the schema changes, indicating a database connection issue, permission problem, or a conflict with existing data/schema.
+*   The `Word` table or its specified columns/constraints are not found in the database after a successful `db push`/`migrate dev`.
+*   `npx prisma generate` fails, preventing the update of the Prisma client.
+*   The `Word` model is not found or is incorrectly typed in the generated Prisma client after `npx prisma generate`.
