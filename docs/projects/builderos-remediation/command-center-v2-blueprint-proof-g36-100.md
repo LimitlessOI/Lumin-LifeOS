@@ -1,5 +1,10 @@
-# Command Center V2 Blueprint Proof: G36-100 - Core Infrastructure Initialization
+# Blueprint Proof: Command Center V2 - Persistence Layer (g36-100)
 
-## Blueprint Note: Proof Closing for G36-100
+This document outlines the next smallest blueprint-backed build slice for the Command Center V2 platform, focusing on establishing the foundational persistence for commands.
 
-This note closes the proof for Phase 1 (G36-100) of the Command Center V2 Blueprint, focusing on establishing the basic service structure, implementing skeleton `CommandCenterService` and `CommandRouter`, and
+---
+
+## Proof-Closing Blueprint Note
+
+**1. Exact Missing Implementation or Proof Gap:**
+The fundamental capability to persist a new `ICommand` object within the `CommandCenterDB` is currently unproven. This is the initial 'Create' operation for commands in the
