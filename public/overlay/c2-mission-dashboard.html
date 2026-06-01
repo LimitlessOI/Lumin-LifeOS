@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C2 Mission Dashboard</title>
+  <style>
+    :root {
+      --bg: #0a0b0e;
+      --panel: #12141a;
+      --border: #1e2230;
+      --text: #d4d8e8;
+      --muted: #5a6080;
+      --accent: #4f8ef7;
+      --green: #3ddc84;
+      --yellow: #f7c948;
+      --red: #f7564f;
+      --orange: #f7934f;
+      --purple: #9b6ef7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 13px;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    #status-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    #halt-badge {
+      display: none;
+      background: var(--red);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .grid-wide {
+      grid-column: span 2;
+    }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+      .grid-wide { grid-column: span 1; }
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .panel-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .mission-text {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .kv {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .kv:last-child { border-bottom: none; }
+    .kv-key { color: var(--muted); }
+    .kv-val { color: var(--text); font-weight: 500; }
+    .pill {
+      display: inline-block;
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .pill-green  { background: rgba(61,220,132,.15); color: var(--green); }
+    .pill-yellow { background: rgba(247,201,72,.15); color: var(--yellow); }
+    .pill-red    { background: rgba(247,86,79,.15);  color: var(--red); }
+    .pill-orange { background: rgba(247,147,79,.15); color: var(--orange); }
+    .pill-blue   { background: rgba(79,142,247,.15); color: var(--accent); }
+    .pill-muted  { background: rgba(90,96,128,.15);  color: var(--muted); }
+    .pill-purple { background: rgba(155,110,247,.15);color: var(--purple); }
+    .job-list { list-style: none; }
+    .job-item {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .job-item:last-child { border-bottom: none; }
+    .job-instr {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .job-meta {
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .job-meta span { white-space: nowrap; }
+    .empty { color: var(--muted); font-size: 12px; padding: 6px 0; }
+    .ratio-bar-wrap {
+      height: 8px;
+      background: rgba(90,96,128,.2);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .ratio-bar-fill {
+      height: 100%;
+      background: var(--green);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .adam-item {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .adam-item:last-child { border-bottom: none; }
+    .adam-title { color: var(--text); margin-bottom: 2px; }
+    .adam-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; }
+    #error-banner {
+      display: none;
+      background: rgba(247,86,79,.1);
+      border: 1px solid var(--red);
+      color: var(--red);
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      font-size: 12px;
+    }
+    .refresh-indicator {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+      display: inline-block;
+      transition: background 0.2s;
+    }
+    .refresh-indicator.live { background: var(--green); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⬛ C2 Mission Dashboard</h1>
+    <div id="status-bar">
+      <span id="halt-badge">⛔ HALT ACTIVE</span>
+      <span class="refresh-indicator" id="refresh-dot"></span>
+      <span id="last-updated">—</span>
+    </div>
+  </header>
+
+  <div id="error-banner"></div>
+
+  <div class="grid">
+    <!-- Current Mission -->
+    <div class="panel grid-wide" id="panel-mission">
+      <div class="panel-label">Current Mission</div>
+      <div class="mission-text" id="current-mission">Loading…</div>
+    </div>
+
+    <!-- Runner Status -->
+    <div class="panel" id="panel-runner">
+      <div class="panel-label">Runner Status</div>
+      <div id="runner-content"><div class="empty">Loading…</div></div>
+    </div>
+
+    <!-- Active Task -->
+    <div class="panel" id="panel-active-task">
+      <div class="panel-label">Active Task</div>
+      <div id="active-task-content"><div class="empty">Loading…</div></div>
+    </div>
+
+    <!-- Active C2 Jobs -->
+    <div class="panel" id="panel-active-jobs">
+      <div class="panel-label">Active C2 Jobs</div>
+      <ul class="job-list" id="active-jobs-list"></ul>
+    </div>
+
+    <!-- Next Queued -->
+    <div class="panel" id="panel-next-queued">
+      <div class="panel-label">Next Queued Task</div>
+      <div id="next-queued-content"><div class="empty">Loading…</div></div>
+    </div>
+
+    <!-- Blueprint / Support Ratio -->
+    <div class="panel" id="panel-ratio">
+      <div class="panel-label">Blueprint / Support Ratio</div>
+      <div id="ratio-content"><div class="empty">Loading…</div></div>
+    </div>
+
+    <!-- Recent Completed -->
+    <div class="panel" id="panel-completed">
+      <div class="panel-label">Recent Completed</div>
+      <ul class="job-list" id="completed-list"></ul>
+    </div>
+
+    <!-- Failed / Blocked -->
+    <div class="panel" id="panel-failed">
+      <div class="panel-label">Failed / Blocked</div>
+      <ul class="job-list" id="failed-list"></ul>
+    </div>
+
+    <!-- Adam Needed -->
+    <div class="panel grid-wide" id="panel-adam">
+      <div class="panel-label">Adam Needed</div>
+      <div id="adam-content"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <script>
+    const API = '/api/v1/lifeos/command-center/mission-dashboard';
+    const KEY_PARAM = 'key';
+
+    function getKey() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(KEY_PARAM) || localStorage.getItem('cc_key') || '';
+    }
+
+    function fmtTime(iso) {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    function fmtAgo(iso) {
+      if (!iso) return '—';
+      const sec = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+      if (sec < 60) return `${sec}s ago`;
+      if (sec < 3600) return `${Math.floor(sec / 60)}m ago`;
+      return `${Math.floor(sec / 3600)}h ago`;
+    }
+
+    function statusPill(status) {
+      const map = {
+        running: 'pill-blue',
+        queued: 'pill-yellow',
+        committed: 'pill-green',
+        failed: 'pill-red',
+        blocked: 'pill-orange',
+        halted: 'pill-red',
+        cancelled: 'pill-muted',
+        unknown: 'pill-muted',
+        unavailable: 'pill-muted',
+      };
+      return `<span class="pill ${map[status] || 'pill-muted'}">${status}</span>`;
+    }
+
+    function priorityPill(p) {
+      const map = { urgent: 'pill-red', normal: 'pill-yellow', low: 'pill-muted' };
+      return `<span class="pill ${map[p] || 'pill-muted'}">${p}</span>`;
+    }
+
+    function renderRunner(runner) {
+      if (!runner) return '<div class="empty">No data</div>';
+      const rows = [];
+      rows.push(`<div class="kv"><span class="kv-key">Status</span><span class="kv-val">${statusPill(runner.status)}</span></div>`);
+      if (runner.note) {
+        rows.push(`<div class="kv"><span class="kv-key">Note</span><span class="kv-val" style="color:var(--muted)">${runner.note}</span></div>`);
+      }
+      if (runner.current_gen !== null && runner.current_gen !== undefined) {
+        rows.push(`<div class="kv"><span class="kv-key">Generation</span><span class="kv-val">${runner.current_gen}</span></div>`);
+      }
+      if (runner.tasks_completed !== null && runner.tasks_completed !== undefined) {
+        const total = runner.tasks_total ? `/ ${runner.tasks_total}` : '';
+        rows.push(`<div class="kv"><span class="kv-key">Tasks</span><span class="kv-val">${runner.tasks_completed} ${total}</span></div>`);
+      }
+      if (runner.stop_reason) {
+        rows.push(`<div class="kv"><span class="kv-key">Stop Reason</span><span class="kv-val" style="color:var(--yellow)">${runner.stop_reason}</span></div>`);
+      }
+      return rows.join('');
+    }
+
+    function renderActiveTask(active_task, runner) {
+      if (!active_task && (!runner || runner.status === 'unavailable')) {
+        return '<div class="empty">Runner state unavailable (local file)</div>';
+      }
+      if (!active_task) return '<div class="empty">No active task</div>';
+      const rows = [];
+      rows.push(`<div class="kv"><span class="kv-key">Task ID</span><span class="kv-val" style="font-size:11px">${active_task.task_id}</span></div>`);
+      if (active_task.gen !== null && active_task.gen !== undefined) {
+        rows.push(`<div class="kv"><span class="kv-key">Gen</span><span class="kv-val">${active_task.gen}</span></div>`);
+      }
+      return rows.join('');
+    }
+
+    function renderJobList(jobs, emptyMsg, showStatus) {
+      if (!jobs || jobs.length === 0) return `<li class="empty">${emptyMsg}</li>`;
+      return jobs.map(j => {
+        const meta = [];
+        if (showStatus && j.status) meta.push(statusPill(j.status));
+        if (j.blocker) meta.push(`<span style="color:var(--red)">⛔ ${j.blocker}</span>`);
+        if (j.lane) meta.push(`<span>lane: ${j.lane}</span>`);
+        const tsKey = j.started_at ? j.started_at : j.completed_at || j.failed_at;
+        if (tsKey) meta.push(`<span>${fmtAgo(tsKey)}</span>`);
+        if (j.target_file) meta.push(`<span style="color:var(--accent)">${j.target_file.split('/').slice(-1)[0]}</span>`);
+        return `<li class="job-item">
+          <div class="job-instr">${escHtml(j.instruction || '—')}</div>
+          <div class="job-meta">${meta.join('')}</div>
+        </li>`;
+      }).join('');
+    }
+
+    function renderRatio(r) {
+      if (!r || r.blueprint === null) return '<div class="empty">Runner state unavailable (local file)</div>';
+      const pct = r.pct !== null ? r.pct : 0;
+      const color = pct >= 90 ? 'var(--green)' : pct >= 70 ? 'var(--yellow)' : 'var(--red)';
+      return `
+        <div class="kv"><span class="kv-key">Blueprint tasks</span><span class="kv-val" style="color:var(--green)">${r.blueprint}</span></div>
+        <div class="kv"><span class="kv-key">Support tasks</span><span class="kv-val" style="color:var(--muted)">${r.support}</span></div>
+        <div class="kv"><span class="kv-key">Ratio</span><span class="kv-val" style="color:${color};font-weight:700">${pct}%</span></div>
+        <div class="ratio-bar-wrap"><div class="ratio-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+      `;
+    }
+
+    function renderNextQueued(nq) {
+      if (!nq) return '<div class="empty">No queued tasks</div>';
+      return `
+        <div class="job-instr">${escHtml(nq.instruction || '—')}</div>
+        <div class="job-meta"><span>${fmtAgo(nq.queued_at)}</span><span style="font-size:10px;color:var(--muted)">${nq.id}</span></div>
+      `;
+    }
+
+    function renderAdamNeeded(an) {
+      if (!an) return '<div class="empty">No data</div>';
+      if (an.count === 0) return '<div class="empty" style="color:var(--green)">✓ Nothing needed from Adam</div>';
+      const header = `<div style="color:var(--yellow);font-size:14px;font-weight:700;margin-bottom:8px">⚠ ${an.count} item${an.count === 1 ? '' : 's'} awaiting Adam</div>`;
+      const items = (an.items || []).map(it => `
+        <div class="adam-item">
+          <div class="adam-title">${escHtml(it.title || '—')}</div>
+          <div class="adam-meta">${priorityPill(it.priority)}<span>${it.type}</span><span>${fmtAgo(it.created_at)}</span></div>
+        </div>
+      `).join('');
+      return header + items;
+    }
+
+    function escHtml(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    async function fetchDashboard() {
+      const key = getKey();
+      const dot = document.getElementById('refresh-dot');
+      try {
+        const resp = await fetch(API, { headers: key ? { 'x-command-key': key } : {} });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+        dot.classList.add('live');
+        document.getElementById('error-banner').style.display = 'none';
+        render(data);
+        setTimeout(() => dot.classList.remove('live'), 400);
+      } catch (err) {
+        dot.classList.remove('live');
+        const banner = document.getElementById('error-banner');
+        banner.style.display = 'block';
+        banner.textContent = `Fetch error: ${err.message}`;
+      }
+    }
+
+    function render(data) {
+      document.getElementById('last-updated').textContent = fmtTime(data.generated_at);
+
+      // Halt badge
+      const haltBadge = document.getElementById('halt-badge');
+      if (data.halt && data.halt.active) {
+        haltBadge.style.display = 'inline-block';
+        haltBadge.title = data.halt.reason || '';
+      } else {
+        haltBadge.style.display = 'none';
+      }
+
+      document.getElementById('current-mission').textContent = data.current_mission || 'No active mission';
+      document.getElementById('runner-content').innerHTML = renderRunner(data.runner);
+      document.getElementById('active-task-content').innerHTML = renderActiveTask(data.active_task, data.runner);
+
+      document.getElementById('active-jobs-list').innerHTML =
+        renderJobList(data.active_jobs, 'No active jobs', false);
+
+      document.getElementById('completed-list').innerHTML =
+        renderJobList(data.recent_completed, 'None yet', false);
+
+      document.getElementById('failed-list').innerHTML =
+        renderJobList(data.failed_blocked, 'None', true);
+
+      document.getElementById('ratio-content').innerHTML = renderRatio(data.blueprint_ratio);
+      document.getElementById('next-queued-content').innerHTML = renderNextQueued(data.next_queued);
+      document.getElementById('adam-content').innerHTML = renderAdamNeeded(data.adam_needed);
+    }
+
+    // Initial load + 10s poll
+    fetchDashboard();
+    setInterval(fetchDashboard, 10_000);
+
+    // If no key in URL, prompt once and store
+    (function() {
+      const k = getKey();
+      if (!k) {
+        const entered = prompt('Enter your Command Center key:');
+        if (entered) {
+          localStorage.setItem('cc_key', entered);
+          fetchDashboard();
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -70,6 +70,10 @@ import {
   listCommunications,
   sendCommunicationViaC2,
 } from '../services/command-center-communication-service.js';
+import {
+  listCommandControlJobs,
+  getCommandControlHaltState,
+} from '../services/builderos-command-control-service.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -1214,6 +1218,119 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
       }
 
       res.status(201).json(result);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/mission-dashboard
+   * C2 Mission Dashboard — real-time system status for Adam.
+   * Sources: builderos_command_control_jobs, pending_adam, governed-autonomy-backlog-state.json
+   */
+  router.get('/api/v1/lifeos/command-center/mission-dashboard', requireKey, async (req, res, next) => {
+    const STATE_PATH = path.join(ROOT, 'data', 'governed-autonomy-backlog-state.json');
+    try {
+      const [jobs, haltState, adamNeededResult] = await Promise.all([
+        listCommandControlJobs(pool, { limit: 50 }),
+        getCommandControlHaltState(pool),
+        pool.query(
+          `SELECT id, title, type, priority, created_at
+             FROM pending_adam
+            WHERE is_resolved = false
+            ORDER BY CASE priority WHEN 'urgent' THEN 0 WHEN 'normal' THEN 1 ELSE 2 END, created_at DESC
+            LIMIT 10`
+        ),
+      ]);
+
+      const activeJobs = jobs.filter(j => j.status === 'running');
+      const queuedJobs = jobs.filter(j => j.status === 'queued');
+      const recentCompleted = jobs.filter(j => j.status === 'committed').slice(0, 10);
+      const failedBlocked = jobs.filter(j => ['failed', 'blocked', 'halted'].includes(j.status)).slice(0, 10);
+
+      let runnerState = null;
+      try {
+        runnerState = JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'));
+      } catch {
+        // local runner state file — unavailable on Railway
+      }
+
+      const blueprintCount = runnerState?.blueprint_tasks_generated ?? null;
+      const supportCount = runnerState?.support_tasks_generated ?? 0;
+      const totalCount = blueprintCount !== null ? (blueprintCount + supportCount) : null;
+      const ratio = totalCount > 0 ? blueprintCount / totalCount : null;
+
+      const activeJob = activeJobs[0] || null;
+      const currentMission =
+        activeJob?.metadata_json?.mission ||
+        runnerState?.current_mission ||
+        'No active mission';
+
+      const adamItems = adamNeededResult.rows;
+
+      return res.json({
+        ok: true,
+        generated_at: new Date().toISOString(),
+        halt: haltState,
+        current_mission: currentMission,
+        runner: runnerState
+          ? {
+              status: runnerState.status || 'unknown',
+              current_gen: runnerState.current_gen ?? null,
+              tasks_completed: runnerState.tasks_completed ?? null,
+              tasks_total: runnerState.tasks_total ?? null,
+              stop_reason: runnerState.stop_reason || null,
+              current_task_id: runnerState.current_task_id || null,
+            }
+          : { status: 'unavailable', note: 'runner state file not present on this host' },
+        active_task: runnerState?.current_task_id
+          ? { task_id: runnerState.current_task_id, gen: runnerState.current_gen }
+          : null,
+        active_jobs: activeJobs.map(j => ({
+          id: j.id,
+          instruction: String(j.instruction || '').slice(0, 120),
+          lane: j.metadata_json?.lane || null,
+          target_file: j.metadata_json?.target_file || null,
+          started_at: j.updated_at,
+        })),
+        recent_completed: recentCompleted.map(j => ({
+          id: j.id,
+          instruction: String(j.instruction || '').slice(0, 100),
+          target_file: j.metadata_json?.target_file || null,
+          completed_at: j.updated_at,
+        })),
+        failed_blocked: failedBlocked.map(j => ({
+          id: j.id,
+          instruction: String(j.instruction || '').slice(0, 100),
+          status: j.status,
+          blocker: j.blocker,
+          failed_at: j.updated_at,
+        })),
+        blueprint_ratio: {
+          blueprint: blueprintCount,
+          support: supportCount,
+          total: totalCount,
+          ratio: ratio !== null ? Math.round(ratio * 1000) / 1000 : null,
+          pct: ratio !== null ? Math.round(ratio * 100) : null,
+        },
+        next_queued: queuedJobs[0]
+          ? {
+              id: queuedJobs[0].id,
+              instruction: String(queuedJobs[0].instruction || '').slice(0, 120),
+              queued_at: queuedJobs[0].created_at,
+            }
+          : null,
+        adam_needed: {
+          count: adamItems.length,
+          items: adamItems.slice(0, 5).map(r => ({
+            id: r.id,
+            title: String(r.title || '').slice(0, 100),
+            type: r.type,
+            priority: r.priority,
+            created_at: r.created_at,
+          })),
+        },
+      });
     } catch (err) {
       next(err);
     }

@@ -59,6 +59,13 @@ export function registerPublicRoutes(app, {
     return res.status(404).send("LifeOS Command Center v2 not found.");
   });
 
+  // C2 Mission Dashboard — real-time system status (AMENDMENT_12)
+  app.get("/mission-dashboard", (req, res) => {
+    const filePath = path.join(__dirname, "public", "overlay", "c2-mission-dashboard.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("C2 Mission Dashboard not found.");
+  });
+
   // LifeOS Communication OS — conversation-first primary interface (AMENDMENT_21)
   app.get("/lifeos-communication", (req, res) => {
     const filePath = path.join(__dirname, "public", "overlay", "lifeos-communication.html");

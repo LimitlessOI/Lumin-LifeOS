@@ -2,6 +2,27 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [MISSION] 2026-05-31 — C2 Mission Dashboard v1
+
+### Mission result: COMPLETE — endpoint + UI built, node --check PASS, pending Railway deploy
+
+**Agent:** Claude Sonnet 4.6 / Claude Code VSCode Extension / main branch / Conductor role
+
+**Task:** Build `GET /api/v1/lifeos/command-center/mission-dashboard` and `public/overlay/c2-mission-dashboard.html` so Adam can see what the system is doing without reading logs.
+
+**Files changed:**
+- `routes/lifeos-command-center-routes.js` — added import `listCommandControlJobs`, `getCommandControlHaltState` from `builderos-command-control-service.js`; added `GET /api/v1/lifeos/command-center/mission-dashboard` route (requireKey) returning 9 sections
+- `public/overlay/c2-mission-dashboard.html` (NEW) — standalone dark dashboard, 10s auto-poll, key from URL param or localStorage, 9 sections rendered
+- `routes/public-routes.js` — added `GET /mission-dashboard` serving the HTML with no-cache headers
+- `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — updated API surface, owned files, build plan, change receipt
+
+**Data sources (real, no mock):** `builderos_command_control_jobs` (50 most recent), `data/governed-autonomy-backlog-state.json` (try/catch — local runner only, unavailable on Railway), `pending_adam WHERE is_resolved=false`
+
+**Verification:** `node --check` PASS on both JS files. No migrations. No AI calls.
+
+**Next:** Push and Railway deploy → hit `GET /api/v1/lifeos/command-center/mission-dashboard` with key → confirm all 9 sections return real data.
+
+---
 ## [MISSION] 2026-05-31 — Blueprint-First Overnight Runner Repair
 
 ### Mission result: COMPLETE — queue source repaired from verifier-first fallback to amendment/blueprint-first execution
