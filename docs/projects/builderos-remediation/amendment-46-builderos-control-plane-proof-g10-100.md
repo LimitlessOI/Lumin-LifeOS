@@ -1,7 +1,7 @@
-# Amendment 46: BuilderOS Control Plane Proof - G10-100
+# Amendment 46: BuilderOS Control Plane Proof Gap G10-100 Remediation
 
-This document serves as a proof-closing blueprint note for the BuilderOS Control Plane, specifically addressing the integration of build lifecycle events within `routes/lifeos-council-builder-routes.js`.
+## Proof-Closing Blueprint Note
 
-## 1. Exact Missing Implementation or Proof Gap
+This document outlines the plan to close the identified proof gap related to the BuilderOS control plane, specifically addressing the wiring of build lifecycle endpoints within `routes/lifeos-council-builder-routes.js`.
 
-The current `routes/lifeos
+### 1. Exact Missing Implementation
