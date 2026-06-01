@@ -1,5 +1,9 @@
-# Amendment 01 AI Council: Proof-of-Concept G27-100 - AI-driven Remediation
+# AMENDMENT_01_AI_COUNCIL Proof: G27-100 - AI Recommendation Logging
 
-## Status Update: Initial Proof-of-Concept for G27-100
+**Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
 
-This document serves as a proof-closing note for the initial phase of the G27-100 objective, "AI-driven Remediation Proof-of-
+---
+
+### Proof-Closing Blueprint Note
+
+This note addresses the proof point G27-100, focusing on the auditable logging of AI-driven
