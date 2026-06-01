@@ -1,7 +1,9 @@
-# Amendment 41 (MarketingOS) - Open Decisions & Initial Build Plan (G1)
+# Amendment 41 (MarketingOS) - Open Decisions & Next Steps (G1)
 
-This memo outlines the current blocking founder decisions for Amendment 41 (MarketingOS) and proposes a minimal, decision-agnostic build slice to enable initial engineering progress.
+This memo outlines the blocking founder decisions for Amendment 41 (MarketingOS) and proposes the smallest buildable next slice that does not violate the blueprint.
 
 ## 1. Blocking Ambiguity / Founder Decision List
 
-The following founder decisions currently block direct code start for customer-facing
+The following decisions are required from the founder to proceed with core implementation:
+
+1.
