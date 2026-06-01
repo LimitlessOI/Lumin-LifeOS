@@ -1,9 +1,9 @@
-# Blueprint Proof: G21-100 - Define GraphQL Schema for SystemHealthMetric
+# Blueprint Proof: Command Center V2 - G21-100 - Initial Telemetry API Endpoint
 
-This proof addresses the initial build slice for Phase 1: Core Data Ingestion & Display (MVP) as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.
+This document outlines the next smallest build slice for the Command Center V2, focusing on establishing the foundational telemetry data flow as per Phase 1 of the blueprint.
 
 ---
 
 ### 1. Exact Missing Implementation or Proof Gap
 
-The foundational GraphQL schema definition for the `SystemHealthMetric` type is missing. This type is essential for establishing the API contract for system health data ingestion
+The core gap is the absence of a functional `command
