@@ -1,49 +1,37 @@
-# Amendment 46: BuilderOS Control Plane Proof - G4-100 Remediation
+Amendment 46: BuilderOS Control Plane Proof Gap G4-100 Remediation
+This document outlines the proof-closing blueprint note for addressing the identified gap in the BuilderOS Control Plane, specifically regarding the wiring of build start and complete events within `routes/lifeos-council-builder-routes.js`.
 
-## Proof-Closing Blueprint Note
+1.  **Exact Missing Implementation or Proof Gap**
+    The core missing implementation is the addition of new POST routes within `routes/lifeos-council-builder-routes.js` to handle build lifecycle events. Specifically:
+    *   A route to capture build start events, invoking an internal `recordBuildStart` function with `task_id`, `blueprint_id`, and `model_used`.
+    *   A route to capture build complete events, invoking an internal `recordBuildComplete` function with a `token` and `OIL receipt IDs`.
+    *   The build complete route must also incorporate a health check, returning a `409 Conflict` status if `canMarkBuildDone` fails when the system's health is reported as RED.
 
-This document addresses the OIL verifier rejection and outlines the necessary steps to close the implementation gap for Amendment 46, focusing on the BuilderOS control plane. The previous verifier rejection was identified as a tooling configuration issue (attempting to execute a markdown file as JavaScript), not a defect in the proposed blueprint or its content.
+2.  **Smallest Safe Build Slice to Close It**
+    The smallest safe build slice involves extending `routes/lifeos-council-builder-routes.js` to define the new POST endpoints and their respective handler logic. This includes importing and calling the necessary internal service functions (`recordBuildStart`, `recordBuildComplete`, `canMarkBuildDone`) and implementing the conditional 409 response. No changes to existing LifeOS user features or TSOS customer-facing surfaces are required.
 
-### 1. Exact Missing Implementation or Proof Gap
+3.  **Exact Safe-Scope Files to Touch First**
+    *   `routes/lifeos-council-builder-routes.js`: To add the new `/build/start` and `/build/complete` POST routes and their associated middleware/handlers.
+    *   `services/builder-control-plane-service.js` (or similar internal service file): To ensure `recordBuildStart`, `recordBuildComplete`, and `canMarkBuildDone` functions are correctly implemented and exposed for use by the routes.
+    *   `utils/health-check.js` (or similar utility): To provide the underlying health status check that `canMarkBuildDone` would leverage.
 
-The core gap is the absence of the specified route implementations within `routes/lifeos-council-builder-routes.js` to manage the BuilderOS build lifecycle events (`/build` start and complete) and enforce health-based completion constraints. Specifically:
--   `POST /build/start` endpoint to trigger `recordBuildStart`.
--   `POST /build/complete` endpoint to trigger `recordBuildComplete` and enforce `canMarkBuildDone` health checks.
+4.  **Verifier/Runtime Checks**
+    *   **Unit Tests:**
+        *   Verify that a POST request to `/build/start` correctly invokes `recordBuildStart` with the expected `task_id`, `blueprint_id`, and `model_used`.
+        *   Verify that a POST request to `/build/complete` correctly invokes `recordBuildComplete` with the expected `token` and `OIL receipt IDs`.
+        *   Verify that a POST request to `/build/complete` returns a `409` status code when `canMarkBuildDone` returns `false` and the system health is RED.
+        *   Verify that a POST request to `/build/complete` returns a `200` (or appropriate success code) when `canMarkBuildDone` returns `true` or health is not RED.
+    *   **Integration Tests:**
+        *   Execute end-to-end scenarios involving build start and complete events, monitoring logs and database entries to confirm event recording.
+        *   Simulate RED health conditions and verify the `409` response for build completion attempts.
+    *   **Manual Verification (Staging):**
+        *   Deploy the changes to a staging environment.
+        *   Manually trigger build start and complete events via API calls.
+        *   Observe system behavior, logs, and data persistence for correctness.
 
-### 2. Smallest Safe Build Slice to Close It
-
-The smallest safe build slice involves:
-1.  Adding two new `POST` routes to `routes/lifeos-council-builder-routes.js`.
-2.  Implementing the handlers for these routes to:
-    *   Call an internal `recordBuildStart` function with `task_id`, `blueprint_id`, and `model_used` on `/build/start`.
-    *   Call an internal `recordBuildComplete` function with `token` and `OIL receipt IDs` on `/build/complete`.
-    *   Before calling `recordBuildComplete`, invoke an internal `canMarkBuildDone` function. If `canMarkBuildDone` returns `false` (indicating health RED or other blocking condition), return a `409 Conflict` status.
-
-### 3. Exact Safe-Scope Files to Touch First
-
--   `routes/lifeos-council-builder-routes.js`: This file will be modified to add the new route definitions and their corresponding handler logic.
--   `services/builder-control-plane.js` (or similar existing service module): This module is the likely candidate for housing `recordBuildStart`, `recordBuildComplete`, and `canMarkBuildDone` functions. If these functions do not exist, they will be added here. If they exist, their interfaces will be confirmed and used.
-
-### 4. Verifier/Runtime Checks
-
-To ensure correct implementation and prevent regressions:
-
-*   **Unit/Integration Tests:**
-    *   Verify `POST /build/start` successfully calls `recordBuildStart` with correct parameters and returns a 200/202 status.
-    *   Verify `POST /build/complete` successfully calls `recordBuildComplete` with correct parameters and returns a 200/202 status when `canMarkBuildDone` permits.
-    *   Verify `POST /build/complete` returns a 409 status when `canMarkBuildDone` fails (e.g., health is RED), and `recordBuildComplete` is *not* invoked.
-    *   Verify input validation for all required parameters (`task_id`, `blueprint_id`, `model_used`, `token`, `receipt_ids`).
-*   **End-to-End (E2E) Tests:**
-    *   Simulate a complete BuilderOS build flow, including calling `/build/start` and `/build/complete`, and verify the expected state transitions and data persistence.
-    *   Test scenarios where health is degraded, ensuring `/build/complete` correctly rejects the request with a 409.
-*   **OIL Verifier Re-run:** After deployment, re-run the OIL verifier to confirm no new syntax or structural issues are introduced by the code changes. The verifier's tooling configuration must be corrected to avoid attempting to execute markdown files.
-
-### 5. Stop Conditions if Runtime Truth Disagrees
-
-The build pass should be halted and re-evaluated if any of the following conditions are observed during testing or runtime:
-*   `recordBuildStart` or `recordBuildComplete` are not invoked as expected by their respective routes.
-*   The `/build/complete` endpoint incorrectly allows completion (returns 200/202) when `canMarkBuildDone` indicates a failure condition (e.g., health RED).
-*   The `/build/complete` endpoint incorrectly rejects completion (returns 409) when `canMarkBuildDone` indicates success.
-*   Any new regressions are introduced into existing BuilderOS or LifeOS functionalities.
-*   The OIL verifier reports new code-level errors (syntax, type, etc.) after its tooling configuration is corrected.
-*   Performance degradation is observed in the BuilderOS control plane due to the new routes or their underlying logic.
+5.  **Stop Conditions if Runtime Truth Disagrees**
+    *   If `recordBuildStart` or `recordBuildComplete` are not called, or are called with incorrect parameters, during build lifecycle events.
+    *   If the `/build/complete` endpoint does not return a `409` status when `canMarkBuildDone` fails and health is RED.
+    *   If the `/build/complete` endpoint returns a `409` status when `canMarkBuildDone` succeeds or health is not RED.
+    *   If existing BuilderOS control plane functionality or any LifeOS user features are negatively impacted or exhibit regressions.
+    *   If unexpected errors or performance degradation are observed in the `lifeos-council-builder-routes.js` module or related services.
