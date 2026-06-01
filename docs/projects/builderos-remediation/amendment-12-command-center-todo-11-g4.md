@@ -1,7 +1,5 @@
-# BuilderOS Remediation: Amendment 12 Command Center - TODO-11-G4
+# BuilderOS Remediation: Amendment 12 Command Center - TODO-11-G4 Enhancement Memo
 
-This memo addresses the unchecked blueprint task related to the `/api/v1/admin/ai/status` endpoint, ensuring it accurately reflects the current AI enabled state.
+## Target: `/api/v1/admin/ai/status` - Show Current AI Enabled State
 
-## 1. Blocking Ambiguity or Founder Decision List
-
-*   **Definition of "AI Enabled State"**: Is
+This memo outlines the next buildable slice for implementing the `/api/v1/admin/ai/status` endpoint as per `AMENDMENT_12_COMMAND_CENTER.
