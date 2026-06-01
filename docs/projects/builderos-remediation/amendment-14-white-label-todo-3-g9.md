@@ -1,13 +1,7 @@
-import { promises as fs } from 'node:fs';
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+# BuilderOS Remediation: Amendment 14 White Label - Partner Onboarding Endpoint
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+This memo addresses the open task regarding the missing endpoint for creating a new partner configuration, identified as a blocking ambiguity in the AMENDMENT_14_WHITE_LABEL blueprint. The goal is to define the smallest buildable slice to establish the foundational API for partner onboarding.
 
-const targetFilePath = 'docs/projects/builderos-remediation/amendment-14-white-label-todo-3-g9.md';
+---
 
-const markdownContent = `
-# BuilderOS Remediation: Amendment 14 White Label - Partner Config Endpoint (Todo 3-G9)
-
-This memo addresses the blocking task: "Partner onboarding flow not specified: no endpoint for creating a new partner config." It provides a builder-ready enhancement for the \`AMENDMENT_1
+### 1. Blocking Ambiguity
