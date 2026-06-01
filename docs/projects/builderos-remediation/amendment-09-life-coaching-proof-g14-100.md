@@ -1,33 +1,26 @@
-# Amendment 09: Life Coaching - Proof G14-100: Coaching Session Data Model & Basic API
+### Proof-Closing Blueprint Note: Amendment 09 - Life Coaching (Proof G14-100)
 
-This document outlines the proof-closing blueprint note for establishing the foundational data model and a minimal API surface for `CoachingSession` entities within the LifeOS platform, as part of Amendment 09.
-
----
-
-### Blueprint Note: Proof-Closing for Coaching Session Foundation
+This note addresses the proof gap G14-100 related to Amendment 09, focusing on ensuring the foundational data integrity for life coaching interactions.
 
 1.  **Exact missing implementation or proof gap:**
-    The core data model for a `CoachingSession` entity is not yet defined or persisted, nor is there a basic API surface to interact with it. This gap prevents the tracking and management of individual coaching interactions.
+    The current system lacks a verifiable mechanism to confirm and persist the completion status of a scheduled life coaching session for a user. Specifically, there is no explicit data point or event log that reliably marks a session as "completed" and links it to a user and a specific coaching plan, which is crucial for accurate progress tracking, reporting, and potential billing.
 
 2.  **Smallest safe build slice to close it:**
-    Define the `CoachingSession` database schema (e.g., `id`, `coachId`, `clientId`, `startTime`, `endTime`, `status`, `notes`) and implement a basic set of API endpoints (`POST /api/coaching/sessions` for creation, `GET /api/coaching/sessions/:id` for retrieval) to enable foundational data persistence and access. This slice focuses on establishing the entity's persistence and a minimal interaction layer.
+    Implement a `markSessionCompleted` service function within the coaching domain that updates the status of a `UserCoachingSession` record to `COMPLETED` and emits a corresponding `SESSION_COMPLETED` event. This function will be designed for internal system calls (e.g., from a coach portal backend or an automated session management service) and will include basic authorization checks.
 
 3.  **Exact safe-scope files to touch first:**
-    *   `src/db/schema/coachingSession.js`: Define the Mongoose/Sequelize schema for `CoachingSession`.
-    *   `src/db/migrations/YYYYMMDD_create_coaching_sessions_table.js`: Database migration script to create the `coaching_sessions` table.
-    *   `src/api/controllers/coachingController.js`: Implement `createCoachingSession` and `getCoachingSessionById` logic.
-    *   `src/api/routes/coachingRoutes.js`: Define `POST /api/coaching/sessions` and `GET /api/coaching/sessions/:id` routes, linking to the controller.
-    *   `src/api/index.js`: Register `coachingRoutes`.
+    *   `src/services/coachingService.js`: Add the `markSessionCompleted` asynchronous function.
+    *   `src/models/UserCoachingSession.js`: Ensure the `status` field in the `UserCoachingSession` schema/model supports a `COMPLETED` enum value.
+    *   `src/events/coachingEvents.js`: Define a new `SESSION_COMPLETED` event constant and its payload structure.
+    *   `src/utils/eventEmitter.js`: Utilize the existing platform event emitter to dispatch the `SESSION_COMPLETED` event.
 
 4.  **Verifier/runtime checks:**
-    *   **Database Migration Check:** Execute `npm run db:migrate` (or equivalent) and verify that the `coaching_sessions` table is successfully created in the database with the expected columns.
-    *   **API Creation Check:** Send a `POST` request to `/api/coaching/sessions` with a valid `CoachingSession` payload (e.g., `{ coachId: 'uuid1', clientId: 'uuid2', startTime: 'ISOString', endTime: 'ISOString', status: 'scheduled' }`). Expect a `201 Created` response with the newly created session object, including its `id`.
-    *   **API Retrieval Check:** Using the `id` from the creation check, send a `GET` request to `/api/coaching/sessions/{id}`. Expect a `200 OK` response with the full `CoachingSession` object matching the created data.
-    *   **Database Persistence Check:** Directly query the database for the created session using its `id` and confirm that all fields match the data sent via the API.
+    *   **Unit Test (`coachingService.test.js`):** Verify that `markSessionCompleted` successfully updates a `UserCoachingSession` record's status to `COMPLETED` in the mock database and that a `SESSION_COMPLETED` event is emitted with the correct payload.
+    *   **Integration Test (`coachingFlow.test.js`):** Simulate an authorized call to `markSessionCompleted` via a mock API endpoint. Assert that the database reflects the `COMPLETED` status for the session and that the `SESSION_COMPLETED` event is observable by a mock listener.
+    *   **Runtime Check:** After a simulated session completion, query the `UserCoachingSession` collection/table directly for the affected session ID. The `status` field must be `COMPLETED`. Monitor system logs for the `SESSION_COMPLETED` event.
 
 5.  **Stop conditions if runtime truth disagrees:**
-    *   The database migration fails to apply or creates a table with an incorrect schema.
-    *   The `POST /api/coaching/sessions` endpoint returns any status code other than `201 Created` for valid input, or the response body does not contain the expected session data.
-    *   The `GET /api/coaching/sessions/{id}` endpoint returns any status code other than `200 OK` for a valid `id`, or the retrieved data does not accurately reflect the created session.
-    *   Data persisted in the database for a `CoachingSession` does not match the data provided during creation.
-    *   Any critical error logs appear during the execution of these checks.
+    *   If `markSessionCompleted` fails to update the `UserCoachingSession` record's status to `COMPLETED` in the database.
+    *   If no `SESSION_COMPLETED` event is emitted or logged upon successful status update.
+    *   If the updated status is not immediately and consistently reflected in subsequent database reads.
+    *   If unauthorized attempts to call `markSessionCompleted` are not properly rejected with an appropriate error.
