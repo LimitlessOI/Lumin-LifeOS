@@ -1,9 +1,7 @@
-import { Router } from 'express';
-import * as builderService from '../services/builderService.js'; // Assuming this service exists and exports the required functions
+# Amendment 46: BuilderOS Control Plane Proof - G5-100
 
-const router = Router();
+## Proof-Closing Blueprint Note
 
-/**
- * POST /build/start
- * Records the start of a build process.
- * Expected body: { task_id: string, blueprint_id: string, model_
+This document outlines the implementation plan and verification steps for wiring the BuilderOS control plane routes as specified in Amendment 46, specifically addressing the build start and complete signals within `routes/lifeos-council-builder-routes.js`.
+
+### 1. Exact Missing
