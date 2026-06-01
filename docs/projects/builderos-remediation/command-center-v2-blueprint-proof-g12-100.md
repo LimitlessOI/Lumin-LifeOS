@@ -1,9 +1,21 @@
-The specification is contradictory: the target file path `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g12-100.md` implies markdown content, but the OIL verifier rejected the previous attempt by trying to execute the `.md` file as a Node module, and the instruction demands "code first". To repair the verifier rejection, the output must be valid TypeScript, while also fulfilling the "blueprint note" requirement. I will output valid TypeScript code first, followed by the blueprint note content exported as a string.
+### Blueprint Proof: G12-100 - Core Data Model & Registry (Initial Slice)
 
-```typescript
-// This file is intended to be a TypeScript module, despite its .md extension,
-// to satisfy the BuilderOS verifier's expectation of executable code.
-// The blueprint note content is exported as a string.
+This proof addresses the first concrete build slice for Phase 1 (G12-100) of the Command Center V2 blueprint, focusing on establishing the foundational `CommandDefinition` schema.
 
-// Smallest safe build slice: Core CommandDefinition types
-export type CommandParameterType = 'string' |
+**1. Exact Missing Implementation or Proof Gap:**
+The blueprint specifies "Define `CommandDefinition` schema." This is the initial data model definition required before any registry or persistence implementation can begin. The gap is the concrete TypeScript type definition for `CommandDefinition`.
+
+**2. Smallest Safe Build Slice to Close It:**
+Define the `CommandDefinition` TypeScript interface/type. This involves creating a new type definition file and declaring the `CommandDefinition` interface with its core properties as outlined in the blueprint's conceptual description.
+
+**3. Exact Safe-Scope Files to Touch First:**
+- `src/command-center/v2/command.types.ts` (new file)
+
+**4. Verifier/Runtime Checks:**
+- **Static Check:** Successful TypeScript compilation of `src/command-center/v2/command.types.ts` and any files that import it. This ensures the type definition is syntactically valid and adheres to TypeScript rules.
+- **Conceptual Check:** Review the defined `CommandDefinition` interface against the blueprint's description to ensure all essential fields (e.g., `name`, `description`, `parameters`, `executionLogicRef`) are present and correctly typed.
+
+**5. Stop Conditions if Runtime Truth Disagrees:**
+- If TypeScript compilation fails due to errors within the `CommandDefinition` type definition.
+- If the defined `CommandDefinition` interface is found to be missing critical fields or contains incorrect types that would prevent subsequent implementation steps (e.g., `CommandRegistry` or `CommandExecutor`) from functioning as intended by the blueprint.
+- If the chosen file path `src/command-center/v2/command.types.ts` conflicts with existing file patterns or naming conventions not visible in the current context (requires re-evaluation of file placement).
