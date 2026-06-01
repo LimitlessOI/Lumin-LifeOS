@@ -1,8 +1,3 @@
-BuilderOS Remediation: Amendment 12 Command Center - TODO 18 G6 (C&C Stability)
+# BuilderOS Remediation: Amendment 12 Command Center - TODO 18 G6 - C&C Stability for Site Builder UI
 
-This memo addresses the blocking dependency for the Site Builder UI: "waiting on C&C stability." The goal is to define and implement the minimal set of actions required to establish verifiable Command & Control (C&C) stability, thereby unblocking subsequent Site Builder UI development.
-
-### 1. Blocking Ambiguity or Founder Decision List
-
-*   **Definition of "C&C Stability":** What specific metrics and thresholds define "stable" for the Command & Control services relevant to the Site Builder UI?
-    *   *Decision Required:* Define critical C&C API endpoints (e.g., authentication, project data, asset management) and their acceptable latency (e.g., <100ms P
+This memo addresses the blocking task: "Site Builder UI not built — waiting on C&C stability." The objective is to define and achieve a minimal viable stability state for the Command & Control (C&C) platform to unblock Site Builder UI development.
