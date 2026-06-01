@@ -1,7 +1,7 @@
-# BuilderOS Remediation: Amendment 14 White Label - Partner API Key Schema Definition (G9)
+# BuilderOS Remediation: Amendment 14 White Label - Partner API Key Schema (G9)
 
-This memo addresses the "Partner apiKey generation not designed — no schema for partner keys vs platform keys" blocking task from the AMENDMENT_14_WHITE_LABEL blueprint. The goal is to establish the foundational data model for partner API keys.
+This memo addresses the blocking ambiguity regarding partner API key generation, specifically the lack of a defined schema to differentiate partner keys from platform keys. This enhancement focuses on establishing the foundational data model and a minimal generation mechanism.
 
----
+## 1. Blocking Ambiguity or Founder Decision List
 
-### 1. Blocking Ambiguity
+*
