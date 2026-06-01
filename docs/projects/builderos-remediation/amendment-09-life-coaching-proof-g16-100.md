@@ -1,26 +1,39 @@
-# Amendment 09: Life Coaching Integration - Proof G16-100: CoachProfile Core Model & API
+# Amendment 09: Life Coaching - Proof G16-100
 
-This document outlines the first granular build slice for integrating life coaching features, focusing on the foundational `CoachProfile` data model and its initial API endpoints.
+**Status:** Blueprint Missing - Cannot Derive Build Slice
+
+This proof-closing blueprint note requires the content of `docs/projects/AMENDMENT_09_LIFE_COACHING.md` to derive the next smallest build slice. The blueprint file was not provided in the `REPO FILE CONTENTS`.
 
 ---
 
-## Proof-Closing Blueprint Note
+## 1. Exact Missing Implementation or Proof Gap
 
-**1. Exact missing implementation or proof gap:**
-The core data model definition and persistence layer for `CoachProfile`, along with a minimal set of API endpoints to create and retrieve coach profiles. This establishes the fundamental entity required for all subsequent coaching features.
+Cannot determine without the source blueprint `docs/projects/AMENDMENT_09_LIFE_COACHING.md`. The blueprint is essential for identifying specific gaps related to Life Coaching features, such as user onboarding flows, coaching session scheduling, data integration points, or specific UI components.
 
-**2. Smallest safe build slice to close it:**
-Implement the `CoachProfile` schema definition and a basic `/api/coaches` endpoint. This slice includes:
-*   Defining the `CoachProfile` data structure (e.g., name, bio, specialties, availability).
-*   Creating a service layer function to handle `CoachProfile` CRUD operations (initially create and fetch).
-*   Adding Express.js route handlers for `POST /api/coaches` (create a new coach profile) and `GET /api/coaches` (retrieve all coach profiles or a specific one by ID).
+## 2. Smallest Safe Build Slice to Close It
 
-**3. Exact safe-scope files to touch first:**
-*   `src/models/CoachProfile.js`: Define the Mongoose/Sequelize schema for `CoachProfile`.
-*   `src/services/coachService.js`: Implement functions for `createCoachProfile` and `getCoachProfiles`.
-*   `src/api/v1/coachRoutes.js`: Define the Express router for `/api/coaches` endpoints.
-*   `src/api/v1/index.js`: Integrate `coachRoutes` into the main API router. (Assuming `src/api/v1/index.js` is the standard aggregation point for API routes; if not, `src/app.js` or `src/server.js` would be the alternative).
+Cannot determine without the source blueprint `docs/projects/AMENDMENT_09_LIFE_COACHING.md`. A build slice would typically target a single, verifiable unit of work, e.g., "Implement basic API endpoint for coach availability lookup" or "Add 'Start Coaching Session' button to user dashboard."
 
-**4. Verifier/runtime checks:**
-*   **API Test (Create):** Send a `POST` request to `/api/v1/coaches` with a valid `CoachProfile` payload (e.g., `{ "name": "Jane Doe", "bio": "Experienced coach...", "specialties": ["career", "wellness"] }`). Expect a `201 Created` status code and the newly created coach profile object in the response, including a generated ID.
-*   **API Test (Retrieve All):** Send
+## 3. Exact Safe-Scope Files to Touch First
+
+Cannot determine without the source blueprint `docs/projects/AMENDMENT_09_LIFE_COACHING.md`. These files would be specific to the identified build slice, potentially including:
+*   `src/api/coaching/routes.js`
+*   `src/services/coachingService.js`
+*   `src/db/schemas/coachingSession.js`
+*   `src/ui/components/CoachCard.jsx`
+
+## 4. Verifier/Runtime Checks
+
+Cannot determine without the source blueprint `docs/projects/AMENDMENT_09_LIFE_COACHING.md`. Checks would be specific to the build slice, e.g.:
+*   API endpoint `/api/v1/coaching/availability` returns 200 OK with valid JSON.
+*   Database query for `CoachingSession` by `userId` returns expected data.
+*   UI component renders without errors and displays correct data.
+
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+Cannot determine without the source blueprint `docs/projects/AMENDMENT_09_LIFE_COACHING.md`. Stop conditions would be tied to the specific verifier checks, e.g.:
+*   If `/api/v1/coaching/availability` returns 5xx, stop.
+*   If `CoachingSession` data is inconsistent with user profile, stop.
+*   If UI component throws a rendering error or displays stale data, stop.
+
+Source blueprint `docs/projects/AMENDMENT_09_LIFE_COACHING.md` not provided in REPO FILE CONTENTS, preventing derivation of build slice details.
