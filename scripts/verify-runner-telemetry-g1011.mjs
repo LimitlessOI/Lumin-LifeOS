@@ -3,80 +3,69 @@
  */
 
 /**
- * A simple helper to wrap an async promise in a try-catch block,
- * returning an array [error, result].
- * @param {Promise<any>} promise The promise to execute.
- * @returns {Promise<[Error | null, any | null]>} An array containing an error or the result.
+ * Helper function to fetch JSON data from a given URL with error handling.
+ * @param {string} baseUrl - The base URL for the API endpoint.
+ * @param {string} path - The specific API path.
+ * @param {string} commandKey - The command key for the 'x-command-key' header.
+ * @returns {Promise<{data: object|null, error: Error|null}>} An object containing either data or an error.
  */
-const tryCatch = async (promise) => {
+async function fetchJson(baseUrl, path, commandKey) {
   try {
-    const result = await promise;
-    return [null, result];
+    const url = `${baseUrl}${path}`;
+    const response = await fetch(url, {
+      headers: {
+        'x-command-key': commandKey,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
+    }
+
+    return { data: await response.json(), error: null };
   } catch (error) {
-    return [error, null];
+    return { data: null, error: error instanceof Error ? error : new Error(String(error)) };
   }
-};
+}
 
 /**
- * Fetches JSON data from a specified URL with an x-command-key header.
- * @param {string} baseUrl The base URL for the API.
- * @param {string} path The API endpoint path.
- * @param {string} commandKey The command key for authentication.
- * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If baseUrl, path, or commandKey are missing, or if the HTTP response is not ok.
- */
-const fetchJson = async (baseUrl, path, commandKey) => {
-  if (!baseUrl || !path || !commandKey) {
-    throw new Error('Missing baseUrl, path, or commandKey for fetchJson.');
-  }
-  const url = `${baseUrl}${path}`;
-  const response = await fetch(url, {
-    headers: {
-      'x-command-key': commandKey,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    const errorBody = await response.text();
-    throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorBody}`);
-  }
-
-  return response.json();
-};
-
-/**
- * Verifies runner telemetry by fetching health and efficiency data.
+ * Verifies runner telemetry for Generation 1011 by fetching control plane health
+ * and autonomous telemetry efficiency.
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the LifeOS API.
- * @param {string} params.commandKey - The command key for API authentication.
- * @returns {Promise<object>} A structured JSON object with verification results.
+ * @param {string} params.baseUrl - The base URL for the API endpoints.
+ * @param {string} params.commandKey - The command key for authentication.
+ * @returns {Promise<object>} A promise that resolves to a structured audit JSON object.
  */
 export async function runRunnerTelemetryG1011Verification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
     return {
       ok: false,
-      error: 'Missing baseUrl or commandKey parameter.',
-      runner_assessment: 'configuration_error',
-      checked_at: new Date().toISOString(),
+      generation: 1011,
+      error: 'Missing baseUrl or commandKey',
+      runner_assessment: 'initialization_failed',
+      checked_at: new Date().toISOString()
     };
   }
 
-  const [error, [cpData, effData]] = await tryCatch(
-    Promise.all([
-      fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
-      fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey),
-    ])
-  );
+  const [cpResponse, effResponse] = await Promise.all([
+    fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
+    fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey)
+  ]);
 
-  if (error) {
+  if (cpResponse.error || effResponse.error) {
     return {
       ok: false,
-      error: error.message,
+      generation: 1011,
+      error: cpResponse.error?.message || effResponse.error?.message || 'Unknown fetch error',
       runner_assessment: 'telemetry_fetch_failed',
-      checked_at: new Date().toISOString(),
+      checked_at: new Date().toISOString()
     };
   }
+
+  const cpData = cpResponse.data;
+  const effData = effResponse.data;
 
   return {
     ok: true,
@@ -89,6 +78,6 @@ export async function runRunnerTelemetryG1011Verification({ baseUrl, commandKey 
     without_proof: cpData.build?.without_proof || 0,
     efficiency_summary: effData.efficiency?.summary || null,
     runner_assessment: 'continuous_autonomous_operation_verified',
-    checked_at: new Date().toISOString(),
+    checked_at: new Date().toISOString()
   };
 }
