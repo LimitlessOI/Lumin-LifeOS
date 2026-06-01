@@ -1,9 +1,9 @@
-# Amendment 01 AI Council Proof G37-100: Remediation Closure Note
+# BuilderOS Remediation: Amendment 01 AI Council Proof G37-100
 
-This document serves as a proof-closing blueprint note for the remediation of AI Council policy G37-100, ensuring its effective runtime enforcement and auditability within the LifeOS platform.
+## Proof-Closing Blueprint Note
 
----
+This note addresses the initial foundational build slice for Amendment 01, specifically focusing on establishing the persistence layer for AI Council audit events.
 
 ### 1. Exact Missing Implementation or Proof Gap
 
-The current gap is the lack of a
+The core gap is the absence of a defined data model and a basic persistence
