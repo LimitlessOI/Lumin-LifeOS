@@ -1,3 +1,3 @@
-## Blueprint Enhancement Memo: Amendment 12 Command Center - Goal Tracking Remediation (TODO-17-G6)
+# BuilderOS Remediation: AMENDMENT_12_COMMAND_CENTER - Goal Tracking UI (TODO-17-G6)
 
-This memo addresses the deferred "Goal tracking UI is partial" task, aiming to define the smallest buildable next slice without violating the constraint that C&C must be stable enough for feature work before completing the UI. The focus is on establishing foundational backend components
+This memo addresses the "Goal tracking UI is partial — deferred until C&C is stable enough for feature work" task from `AMENDMENT_12_COMMAND_CENTER.md`. The objective is to define the smallest buildable next slice to advance this
