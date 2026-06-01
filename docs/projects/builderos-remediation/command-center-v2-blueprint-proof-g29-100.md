@@ -1,3 +1,3 @@
-# Command Center V2 Blueprint Proof: G29-100 - Core Registry & Router Definition
+# Blueprint Proof: Command Center V2 - G29-100 - Core Data Ingestion (TSOS to LifeOS Event Bus)
 
-This document outlines the next smallest build slice for the Command Center V2, focusing on establishing the foundational `CommandRegistry` and `CommandRouter` components as defined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`. This proof aims to define the core interfaces and initial
+This document serves as a proof-closing note for the initial build slice of Command Center V2, focusing on establishing core data ingestion from `tsos-data-stream` into the `lifeos-event-bus`. This aligns with Phase
