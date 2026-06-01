@@ -20,10 +20,10 @@ The smallest buildable slice focuses on establishing the scheduling mechanism an
 2.  Create a placeholder email template: A basic EJS (or existing templating engine) template for the weekly progress email, using the minimal data schema.
 3.  Implement a scheduled job: A `node-cron` or similar job that runs weekly.
 4.  Job Logic (placeholder):
-    -   On execution, the job will iterate through a hardcoded list of `userId`s (or a single placeholder `userId`).
-    -   For each `userId`, it will generate mock `WeeklyProgressEmailData`.
-    -   It will then call an internal function (e.g., `emailService.renderWeeklyProgressEmail`) to render the template with the mock data.
-    -   Crucially, it will *log* the rendered email content instead of sending it.
+-   On execution, the job will iterate through a hardcoded list of `userId`s (or a single placeholder `userId`).
+-   For each `userId`, it will generate mock `WeeklyProgressEmailData`.
+-   It will then call an internal function (e.g., `emailService.renderWeeklyProgressEmail`) to render the template with the mock data.
+-   Crucially, it will log the rendered email content instead of sending it.
 4. Exact Safe-Scope Files BuilderOS Should Touch First
 -   `src/types/email.d.ts`: Add `WeeklyProgressEmailData` interface.
 -   `src/services/email/templates/weekly-progress.ejs`: New email template file.
@@ -32,7 +32,7 @@ The smallest buildable slice focuses on establishing the scheduling mechanism an
 -   `src/config/jobs.js`: Add configuration entry for `weeklyProgressEmailJob`.
 5. Required Verifier/Runtime Checks
 -   Job Execution Log: Verify that `weeklyProgressEmailJob` executes successfully on its scheduled cadence (e.g., once a week).
--   Rendered Email Content Log: Confirm that the job logs the *rendered* email content (using mock data and the EJS template) to the console or a designated log file.
+-   Rendered Email Content Log: Confirm that the job logs the rendered email content (using mock data and the EJS template) to the console or a designated log file.
 -   Data Integrity (Mock): Check that the logged email content correctly incorporates the placeholder `WeeklyProgressEmailData` fields.
 -   No External Dispatch: Verify that no actual emails are sent to an external email service during this phase.
 -   Type Safety: Ensure `WeeklyProgressEmailData` interface is correctly defined and used in `emailService.js` and `weeklyProgressEmailJob.js`.
