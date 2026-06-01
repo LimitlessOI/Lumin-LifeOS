@@ -1,5 +1,7 @@
-# BuilderOS Remediation: AMENDMENT_01_AI_COUNCIL - Groq Fallback to Gemini (TODO-7-G5)
+# BuilderOS Remediation: Amendment 01 AI Council - TODO 7 G5
 
-This memo outlines the next buildable slice for implementing the automatic fallback from Groq to Gemini when Groq resources are exhausted, as per `AMENDMENT_01_AI_COUNCIL.md`.
+## Blueprint Enhancement Memo: Groq to Gemini Automatic Fallback
 
-## 1. Blocking
+This memo outlines the next buildable slice for implementing automatic fallback from Groq to Gemini when Groq resources are exhausted, as per the `AMENDMENT_01_AI_COUNCIL.md` blueprint.
+
+### 1. Blocking Amb
