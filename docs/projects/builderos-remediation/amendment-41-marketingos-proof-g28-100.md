@@ -1,10 +1,3 @@
-# Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G28-100
+# AMENDMENT 41: MarketingOS Proof - G28-100: SSOT Foundation for Consent
 
-**Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`
-**Signal:** This document — SSOT foundation.
-
----
-
-### 1. Exact Missing Implementation or Proof Gap
-
-The specific proof gap for G28-100 is
+This document serves as a proof-closing blueprint note for Amendment 41, specifically addressing the "SSOT foundation" signal for MarketingOS integration. The core focus is to prove that LifeOS `UserConsent` is the Single Source of Truth (SSOT) for marketing
