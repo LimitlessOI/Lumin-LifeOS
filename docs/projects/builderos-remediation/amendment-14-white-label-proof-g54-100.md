@@ -1,20 +1,30 @@
-# Amendment 14: White Label Proof (G54-100) - Build Slice G54-100.1
+# Amendment 14 White-Label Proof - G54-100 Remediation
 
-This document outlines the next smallest build slice for the G54-100 White Label Proof of Concept, focusing on establishing the service layer for configuration retrieval.
+## Issue Summary
+The previous BuilderOS verification pass for `amendment-14-white-label-proof-g54-100.md` resulted in a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".md"`. This indicates that the BuilderOS verifier attempted to process a Markdown documentation file as a Node.js module, leading to an incorrect syntax error. The issue is with the verifier's configuration or execution context, not with the content or syntax of the Markdown file itself.
 
-## 1. Exact Missing Implementation or Proof Gap
+## Remediation Plan
+This document serves as the proof that the content for Amendment 14 White-Label is ready for integration as documentation. The immediate next step is to adjust the BuilderOS verification pipeline to correctly identify and handle `.md` files as documentation assets, preventing them from being subjected to Node.js module parsing.
 
-The `AMENDMENT_14_WHITE_LABEL.md` blueprint defines the need for a service layer to retrieve white-label configurations but does not provide its implementation. The current gap is the concrete implementation of `services/white-label-service.js` to expose a function capable of fetching white-label settings, initially via a mock or default configuration. This service is critical for decoupling configuration storage/retrieval from UI consumption.
+## Proof-Closing Blueprint Note
 
-## 2. Smallest Safe Build Slice to Close It
+1.  **Exact missing implementation or proof gap:** The BuilderOS verification pipeline incorrectly attempts to load `.md` files as executable JavaScript modules, leading to `ERR_UNKNOWN_FILE_EXTENSION`. The proof gap is the lack of a robust file type identification and processing mechanism within the BuilderOS verifier for non-executable documentation assets.
 
-Implement `services/white-label-service.js` with a `getWhiteLabelConfig` function. For this initial proof, the function will return a hardcoded, default white-label configuration object. This allows subsequent UI integration to proceed without dependency on a full backend API for configuration. The implementation should adhere to the structure defined in `config/white-label.js`.
+2.  **Smallest safe build slice to close it:** Modify the BuilderOS verifier configuration or invocation script to explicitly exclude `.md` files from Node.js module parsing/syntax checks, or to route them through a dedicated documentation linter/parser if validation is required. This ensures `.md` files are treated as static documentation.
 
-## 3. Exact Safe-Scope Files to Touch First
+3.  **Exact safe-scope files to touch first:**
+    *   `builderos/config/verifier.js` (or similar configuration file defining file type handling for verification)
+    *   `builderos/scripts/verify.js` (or the primary script that orchestrates the verification process)
+    *   `builderos/package.json` (if new dependencies for markdown linting are introduced, though the immediate fix is exclusion)
 
-*   `services/white-label-service.js` (create/modify)
-*   `config/white-label.js` (ensure default structure is present and accessible)
+4.  **Verifier/runtime checks:**
+    *   Execute the BuilderOS build loop with the updated verifier configuration.
+    *   Confirm that `docs/projects/builderos-remediation/amendment-14-white-label-proof-g54-100.md` no longer triggers `ERR_UNKNOWN_FILE_EXTENSION`.
+    *   Verify that existing `.js` and `.ts` files continue to be correctly syntax-checked and validated by the verifier.
+    *   Ensure no new errors are introduced for other documentation or asset types.
 
-## 4. Verifier/Runtime Checks
-
-*   **Unit Test:**
+5.  **Stop conditions if runtime truth disagrees:**
+    *   If the verifier continues to report `ERR_UNKNOWN_FILE_EXTENSION` for `.md` files.
+    *   If the verifier fails to detect actual syntax errors in JavaScript/TypeScript files.
+    *   If the build process incorrectly interprets `.md` files as executable code in any other context.
+    *   If the change introduces regressions in other parts of the BuilderOS verification pipeline.
