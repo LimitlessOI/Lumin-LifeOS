@@ -1,7 +1,5 @@
-# BuilderOS Remediation: Amendment 01 AI Council - TODO-11-G7 - HAB Limit Enforcement Blueprint Enhancement
+# BuilderOS Remediation: Amendment 01 AI Council - HAB Limit Management (TODO-11-G7)
 
-This memo enhances the `AMENDMENT_01_AI_COUNCIL.md` blueprint to address the "HAB limit blocks at 100 calls/day per key" constraint, focusing on the smallest buildable next slice for implementation.
+## Blueprint Enhancement Memo
 
----
-
-##
+This memo addresses the blocking issue identified in `docs/projects/AMENDMENT_01_AI_COUNCIL.md` regarding the HAB API call limit of 100 calls/day per key. The current blueprint is
