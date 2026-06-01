@@ -1,49 +1,32 @@
-# AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G29-100 Marketing Proof Data Sync
+# Amendment 41 MarketingOS Proof G29-100 Remediation Blueprint Note
 
-This document serves as the proof-closing blueprint note for the implementation of the G29-100 Marketing Proof Data synchronization, as defined by `AMENDMENT_41_MARKETINGOS.md`. It outlines the necessary steps to close the implementation gap and verify its correctness.
+This document serves as the Single Source of Truth (SSOT) foundation for addressing the OIL verifier rejection related to blueprint processing.
 
 ## 1. Exact Missing Implementation or Proof Gap
 
-The core gap is the absence of an active, production-ready service responsible for extracting, transforming, and securely transmitting the "G29-100 Marketing Proof Data" from LifeOS to MarketingOS. This includes:
-*   Identification and retrieval of relevant G29-100 proof data points within LifeOS.
-*   Transformation of this data into the schema expected by MarketingOS for G29-100 proofs.
-*   Secure API integration (e.g., REST, GraphQL, message queue) to push this data to the designated MarketingOS endpoint.
-*   Error handling, retry mechanisms, and logging for the synchronization process.
+The BuilderOS verifier environment currently attempts to execute `.md` files as JavaScript modules, leading to a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]` during the verification loop. This indicates a fundamental gap in the verifier's file type handling, where documentation and blueprint files are not correctly distinguished from executable code. The proof gap is the absence of explicit configuration or logic within the verifier to identify, parse, and validate `.md` blueprints as non-executable artifacts.
 
 ## 2. Smallest Safe Build Slice to Close It
 
-The smallest safe build slice involves creating a dedicated, isolated service module for the G29-100 proof data synchronization. This module will encapsulate all logic related to this specific data flow, minimizing impact on existing LifeOS features or other MarketingOS integrations.
-
-The slice includes:
-*   A new `G29ProofSyncService` responsible for the end-to-end sync.
-*   A new data accessor/query for G29-100 specific data.
-*   Configuration for the MarketingOS G29-100 endpoint and authentication.
-*   An integration point (e.g., a scheduled cron job or an event listener) to trigger the sync.
+The smallest safe build slice involves modifying the BuilderOS verifier's internal file processing logic to correctly identify and handle `.md` files. This change must ensure that `.md` files are *read* as text-based documentation rather than being passed to the Node.js module loader for execution. This slice specifically targets the verifier's input pipeline and file type discernment mechanism.
 
 ## 3. Exact Safe-Scope Files to Touch First
 
-*   `src/services/marketingos/G29ProofSyncService.js`: New service file containing the core sync logic.
-*   `src/data/queries/getG29ProofData.js`: New data query function to retrieve G29-100 specific data.
-*   `src/config/marketingos.js`: Extend existing config or add new entries for `MARKETINGOS_G29_PROOF_ENDPOINT` and related credentials.
-*   `src/jobs/syncG29ProofData.js`: New cron job definition to schedule the sync (if applicable).
-*   `src/types/marketingos/G29ProofData.js`: New type definition for the data payload sent to MarketingOS.
+*   `builderos/verifier/src/fileTypeResolver.js`: Introduce or modify logic to explicitly map `.md` extensions to a 'documentation' or 'blueprint' type, preventing execution attempts.
+*   `builderos/verifier/src/verificationEngine.js`: Update the file processing flow to use the `fileTypeResolver` and route `.md` files to a dedicated parser/reader function instead of the module execution path.
+*   `builderos/verifier/config/verifierConfig.json`: Potentially add a configuration entry to define known documentation file extensions and their handling.
 
 ## 4. Verifier/Runtime Checks
 
-Upon deployment, the following checks will be performed:
-*   **Log Monitoring:** Verify `G29ProofSyncService` logs indicate successful data extraction, transformation, and transmission without errors.
-*   **MarketingOS Data Validation:** Directly inspect the MarketingOS platform to confirm receipt of G29-100 proof data.
-    *   Check for correct data format and schema adherence.
-    *   Verify data integrity (e.g., correct values, no truncation).
-    *   Confirm expected volume and frequency of data updates.
-*   **LifeOS Performance Metrics:** Monitor LifeOS CPU, memory, and database load during sync operations to ensure no adverse performance impact.
-*   **Error Reporting:** Trigger known edge cases (e.g., missing data, API rate limits) to verify error handling and retry mechanisms function as designed.
+1.  **File Type Resolution Test:** Submit a `.md` file (e.g., `amendment-41-marketingos-proof-g29-100.md`) to the BuilderOS verifier.
+    *   **Expected Outcome:** The verifier processes the file without `TypeError [ERR_UNKNOWN_FILE_EXTENSION]`. The internal logs should indicate the file was identified as a 'blueprint' or 'documentation' type.
+2.  **Execution Isolation Test:** Ensure that existing `.js` or `.ts` files continue to be executed correctly by the verifier without any new errors or changes in behavior.
+3.  **Blueprint Content Readability Test:** (If a blueprint content parser is implemented) Verify that the verifier can successfully read the content of the `.md` file and extract basic metadata (e.g., title, sections) without errors.
 
 ## 5. Stop Conditions if Runtime Truth Disagrees
 
-The implementation will be halted or rolled back if any of the following conditions are met:
-*   **Data Inaccuracy/Loss:** G29-100 proof data arriving in MarketingOS is consistently incorrect, incomplete, or missing.
-*   **API Failures:** Persistent API errors (e.g., 4xx, 5xx status codes) when communicating with MarketingOS, indicating a fundamental integration issue.
-*   **LifeOS Instability:** The `G29ProofSyncService` or its dependencies cause measurable performance degradation, resource exhaustion, or service interruptions within LifeOS.
-*   **MarketingOS Rejection:** MarketingOS consistently rejects the data payload due to schema mismatches or validation failures, indicating a misunderstanding of the target API.
-*   **Security Vulnerabilities:** Any identified security flaw in the data transmission or storage related to G29-100 proof data.
+*   If the `TypeError [ERR_UNKNOWN_FILE_EXTENSION]` persists for `.md` files.
+*   If the verifier attempts to execute `.md` files after the changes.
+*   If the changes introduce new `ERR_UNKNOWN_FILE_EXTENSION` or similar errors for other valid code file types (e.g., `.js`, `.ts`).
+*   If the verifier's overall performance or stability is negatively impacted.
+*   If the verifier fails to correctly identify `.md` files as non-executable documentation.
