@@ -1,7 +1,6 @@
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-
 // Import AI Council service (assumed to exist and export generateCompletion)
 // This dependency is from Task 5, AI council VERIFIED.
 import * as aiCouncil from './ai-council.js';
@@ -21,7 +20,6 @@ const HOOK_DETECTION_KEYWORDS = [
 /**
  * Generates an AI-powered coaching response based on the user's input and the ongoing conversation history.
  * This function interacts with the AI Council to simulate a marketing coaching session.
- *
  * @param {string} userId - The unique identifier for the user engaging in the coaching conversation.
  * @param {string} userMessage - The current message or query from the user.
  * @param {Array<{role: 'user' | 'assistant', content: string}>} [conversationHistory=[]] - An array of previous messages in the conversation,
@@ -47,7 +45,6 @@ export async function getCoachingResponse(userId, userMessage, conversationHisto
 
     if (completion && typeof completion.content === 'string' && completion.content.trim().length > 0) {
       aiResponseContent = completion.content.trim();
-
       // Check if the AI's response contains any of the predefined hook detection keywords.
       const lowerCaseResponse = aiResponseContent.toLowerCase();
       hookDetected = HOOK_DETECTION_KEYWORDS.some(keyword => lowerCaseResponse.includes(keyword));
@@ -66,7 +63,6 @@ export async function getCoachingResponse(userId, userMessage, conversationHisto
 /**
  * Initializes a new coaching conversation with a standard greeting from the AI coach.
  * This function provides a starting point for users to begin their marketing coaching journey.
- *
  * @param {string} userId - The unique identifier for the user.
  * @returns {Promise<{response: string, hookDetected: boolean}>} An initial coaching response, typically without a hook.
  */
