@@ -1,46 +1,35 @@
-AMENDMENT 41: MarketingOS Proof - G6-100 (LDES Core Service Initial Build)
+# Proof-Closing Blueprint Note: Amendment 41 MarketingOS - SSOT Foundation (G6-100)
 
-Proof-Closing Blueprint Note
+This document serves as a proof-closing blueprint note for `AMENDMENT_41_MARKETINGOS.md`, specifically addressing the "SSOT foundation" signal.
 
-This document serves as a proof-closing blueprint note for the initial implementation of the LifeOS Data Export Service (LDES) core service, as outlined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`. This note details the final steps required to close the proof for the G6-100 build, establishing it as the Single Source of Truth (SSOT) foundation for subsequent MarketingOS integrations.
+---
 
 ### 1. Exact Missing Implementation or Proof Gap
 
-The primary gap is the comprehensive end-to-end validation of the LDES core service's data export integrity and its readiness to serve MarketingOS data requests. Specifically, proving:
--   **Data Consistency:** Verification that exported data aligns precisely with source data schemas and content.
--   **Service Availability & Resilience:** Confirmation of LDES uptime, error handling, and recovery mechanisms under expected load.
--   **Integration Point Validation:** Successful data delivery to a designated MarketingOS staging endpoint.
+The current MarketingOS platform lacks an automated, runtime enforcement mechanism to guarantee that campaign definitions and audience segmentation structures strictly conform to the foundational schemas outlined in `AMENDMENT_41_MARKETINGOS.md`. There is no explicit, programmatic validation step during campaign creation or update operations that asserts adherence to the SSOT-defined data contracts, leaving a potential for drift between the documented SSOT and the operational system state.
 
 ### 2. Smallest Safe Build Slice to Close It
 
-The smallest safe build slice involves:
--   **LDES Core Service Deployment:** Deploying the G6-100 LDES core service to a dedicated `builder-staging` environment.
--   **Test Data Generation:** Generating a controlled, representative dataset for export.
--   **End-to-End Test Execution:** Running a suite of integration tests that trigger LDES exports and validate the output at the MarketingOS staging sink.
--   **Monitoring Setup:** Activating production-grade monitoring for LDES service health and export metrics.
+Implement a new schema validation utility within the MarketingOS core service. This utility will be responsible for loading the canonical JSON schema (derived from `AMENDMENT_41_MARKETINGOS.md`'s foundational definitions) and validating incoming campaign payload data against it. The validation will be integrated into the existing campaign creation and update API routes, rejecting non-conformant payloads with a standardized error response.
 
 ### 3. Exact Safe-Scope Files to Touch First
 
-To facilitate this proof, the following files are within safe scope and will be touched first:
--   `services/ldes/src/config/ldes.builder.staging.ts`: Update LDES configuration for `builder-staging` environment.
--   `services/ldes/tests/e2e/marketingos.spec.ts`: Implement or extend end-to-end tests for MarketingOS data flow.
--   `ops/k8s/builder-staging/ldes-deployment.yaml`: Verify and apply the Kubernetes deployment manifest for LDES in `builder-staging`.
--   `services/ldes/src/api/v1/marketingos-export.ts`: Minor adjustments for logging/tracing if required for proof visibility.
+*   `services/marketingos/src/utils/campaignSchemaValidator.js` (New file: Contains the schema loading and validation logic.)
+*   `services/marketingos/src/api/campaigns/routes.js` (Modification: Integrate `campaignSchemaValidator` middleware for POST/PUT routes.)
+*   `services/marketingos/src/api/campaigns/campaignService.js` (Modification: Potentially call validator directly if middleware is not suitable, or ensure service layer handles validation errors.)
+*   `services/marketingos/tests/unit/campaignSchemaValidator.test.js` (New file: Unit tests for the validator utility.)
+*   `services/marketingos/tests/integration/campaigns.test.js` (Modification: Add integration tests for API validation failures.)
 
 ### 4. Verifier/Runtime Checks
 
-The following checks will be performed:
--   **LDES Service Health Check:** `GET /health` endpoint returns 200 OK.
--   **Data Export Job Status:** Monitor LDES internal job queues for successful completion of export tasks.
--   **MarketingOS Staging Sink Validation:** Automated comparison of exported data in the MarketingOS staging environment against expected test data.
--   **Error Log Analysis:** Zero critical errors in LDES service logs during test execution.
--   **Performance Metrics:** Export latency and throughput within defined SLOs.
+*   **Unit Tests:** Execute `campaignSchemaValidator.test.js` to confirm the utility correctly identifies both valid and invalid campaign payloads against the defined schema.
+*   **API Integration Tests:** Deploy a test MarketingOS instance. Submit campaign creation/update requests via the `/api/marketingos/campaigns` endpoint with payloads that *intentionally violate* the SSOT schema. Verify that the API consistently rejects these requests with a `400 Bad Request` status and a clear validation error message.
+*   **Positive Flow Test:** Submit a campaign creation/update request with a *valid* payload. Verify that the request is processed successfully and the campaign is persisted.
+*   **Schema Source Check:** Verify that the schema used by `campaignSchemaValidator.js` is directly traceable to the definitions in `AMENDMENT_41_MARKETINGOS.md` (e.g., by parsing a specific section or referencing a generated schema file).
 
 ### 5. Stop Conditions if Runtime Truth Disagrees
 
-The proof will be halted and marked as failed if any of the following conditions are met:
--   **Data Corruption/Mismatch:** More than 0.1% data discrepancy between source and exported data.
--   **Service Unavailability:** LDES service in `builder-staging` is unreachable for more than 5 consecutive minutes during testing.
--   **Critical Error Rate:** Sustained error rate exceeding 1% for export operations.
--   **Performance Degradation:** Export latency exceeding 2x the defined SLO for more than 10% of test runs.
--   **Integration Failure:** MarketingOS staging sink fails to receive or process exported data correctly.
+*   If the MarketingOS API allows the creation or update of campaigns with data structures that clearly violate the foundational schema defined in `AMENDMENT_41_MARKETINGOS.md`, the proof fails.
+*   If the `campaignSchemaValidator` utility fails to correctly identify schema violations in its unit tests, indicating a flaw in the validation logic itself, the proof fails.
+*   If the integration of the validator introduces unacceptable performance degradation (e.g., >50ms latency increase per validated request) that cannot be mitigated, the current approach requires re-evaluation, and the proof fails for the proposed solution.
+*   If the foundational schema from `AMENDMENT_41_MARKETINGOS.md` cannot be programmatically extracted or translated into a usable validation format (e.g., JSON Schema), indicating an issue with the SSOT's machine-readability, the proof fails at a higher level.
