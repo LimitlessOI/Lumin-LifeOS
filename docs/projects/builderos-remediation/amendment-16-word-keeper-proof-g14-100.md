@@ -1,5 +1,9 @@
-### AMENDMENT 16: WORD KEEPER - Proof Gap G14-100 Remediation
+# Amendment 16: Word Keeper - Proof Gap G14-100
 
-This document addresses the next smallest blueprint-backed build slice for AMENDMENT 16: WORD KEEPER, focusing on establishing the core in-memory functionality as a proof of concept for the service's data handling.
+## Blueprint Note: Next Smallest Build Slice
 
-1.  **Exact missing implementation or proof gap:**
+This note addresses the next smallest blueprint-backed build slice for Amendment 16, focusing on establishing the foundational data model and persistence layer.
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The blueprint defines the `Word` entity structure and specifies the need
