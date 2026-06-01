@@ -1,3 +1,4 @@
+The verifier's attempt to execute a `.md` file as a Node.js module contradicts the task's requirement to write a markdown document.
 BuilderOS Remediation: AMENDMENT_01_AI_COUNCIL - Phase 2: Custom BPE Tokenizer (G4)
 Blueprint Enhancement Memo for `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
 Relevant Section Summary: Phase 2: Custom BPE tokenizer on LifeOS codebase (FUTURE — needs budget) `[safe]`
@@ -17,15 +18,15 @@ This memo outlines the next buildable slice for the Custom BPE Tokenizer project
 Phase 2.1: Tokenizer Requirements Definition & Tooling Research
 This slice focuses on defining the technical foundation and exploring implementation options without incurring significant development costs or modifying production code.
 -   Task 2.1.1: Technical Specification Draft:
-    -   Define precise input/output formats for the BPE tokenizer (e.g., string input, array of token IDs output).
-    -   Outline performance targets (e.g., tokenization speed per character, memory footprint).
-    -   Identify potential integration points within LifeOS where tokenization will occur.
+-   Define precise input/output formats for the BPE tokenizer (e.g., string input, array of token IDs output).
+-   Outline performance targets (e.g., tokenization speed per character, memory footprint).
+-   Identify potential integration points within LifeOS where tokenization will occur.
 -   Task 2.1.2: BPE Library Research:
-    -   Investigate existing Node-compatible BPE tokenizer libraries. Evaluate their features, performance, licensing, and ease of integration.
-    -   Assess feasibility of using WebAssembly or native Node addons for performance-critical components if a pure JS solution is insufficient.
+-   Investigate existing Node-compatible BPE tokenizer libraries. Evaluate their features, performance, licensing, and ease of integration.
+-   Assess feasibility of using WebAssembly or native Node addons for performance-critical components if a pure JS solution is insufficient.
 -   Task 2.1.3: Training Data Identification:
-    -   Identify and document potential anonymized text data sources within LifeOS suitable for training the BPE model.
-    -   Outline data preprocessing steps required for tokenizer training.
+-   Identify and document potential anonymized text data sources within LifeOS suitable for training the BPE model.
+-   Outline data preprocessing steps required for tokenizer training.
 4. Exact Safe-Scope Files BuilderOS Should Touch First
 During Phase 2.1, BuilderOS should primarily interact with documentation and specification files. No source code modifications are expected.
 -   `docs/projects/builderos-remediation/amendment-01-ai-council-todo-4-g4.md` (this file)
@@ -34,13 +35,13 @@ During Phase 2.1, BuilderOS should primarily interact with documentation and spe
 -   `docs/data/bpe-training-data-sources.md` (new file for training data identification)
 5. Required Verifier/Runtime Checks
 -   Verifier Checks (for Phase 2.1 outputs):
-    -   Documentation Format: Ensure all new `.md` files adhere to established Markdown linting rules and project documentation standards.
-    -   Content Completeness: Verify that `docs/specs/bpe-tokenizer-v1.md` includes all required sections (input/output, performance, integration points).
-    -   Scope Adherence: Confirm no modifications to `src/` or `lib/` directories.
+-   Documentation Format: Ensure all new `.md` files adhere to established Markdown linting rules and project documentation standards.
+-   Content Completeness: Verify that `docs/specs/bpe-tokenizer-v1.md` includes all required sections (input/output, performance, integration points).
+-   Scope Adherence: Confirm no modifications to `src/` or `lib/` directories.
 -   Runtime Checks (for future implementation phases, but critical for planning):
-    -   Tokenization Accuracy: Evaluate the BPE tokenizer's ability to segment text into meaningful tokens, minimizing out-of-vocabulary (OOV) tokens.
-    -   Performance Benchmarks: Measure tokenization speed and memory usage against defined targets.
-    -   Integration Tests: Verify seamless operation when integrated with mock LifeOS components.
+-   Tokenization Accuracy: Evaluate the BPE tokenizer's ability to segment text into meaningful tokens, minimizing out-of-vocabulary (OOV) tokens.
+-   Performance Benchmarks: Measure tokenization speed and memory usage against defined targets.
+-   Integration Tests: Verify seamless operation when integrated with mock LifeOS components.
 6. Stop Conditions
 -   Completion and approval of `docs/specs/bpe-tokenizer-v1.md`.
 -   Completion and approval of `docs/research/bpe-library-evaluation.md`.
