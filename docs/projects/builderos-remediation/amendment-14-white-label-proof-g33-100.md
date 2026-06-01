@@ -1,34 +1,78 @@
-Amendment 14 White-Label Proof: G33-100 - Default Configuration Endpoint
+// src/builder-config/default-white-label.js
+const defaultWhiteLabelConfig = {
+  appName: "BuilderOS Default",
+  logoUrl: "https://cdn.builderos.com/default-logo.svg",
+  primaryColor: "#007bff",
+  secondaryColor: "#6c757d",
+  fontFamily: "Arial, sans-serif",
+  // Additional default properties can be added here as the white-label schema evolves
+};
 
-This document outlines the proof-closing blueprint note for the initial build slice related to white-label configuration accessibility, specifically focusing on a default configuration. This slice establishes the foundational data structure and a minimal apiEP to serve a placeholder white-label configuration, demonstrating the system's readiness to handle white-label branding and customization requests.
+export default defaultWhiteLabelConfig;
 
----
+// src/builder-api/controllers/white-label-controller.js
+import defaultWhiteLabelConfig from '../builder-config/default-white-label.js';
 
-### Proof-Closing Blueprint Note: G33-100 Default White-Label Configuration Endpoint
+export const getDefaultWhiteLabelConfig = (req, res) => {
+  try {
+    // Serve the static default white-label configuration
+    res.status(200).json(defaultWhiteLabelConfig);
+  } catch (error) {
+    console.error('Error serving default white-label config:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
-This note details the next smallest build slice to address the initial white-label configuration requirement, ensuring BuilderOS can serve a default white-label profile without impacting LifeOS or TSOS.
+// src/builder-api/routes/white-label.js
+import { Router } from 'express';
+import { getDefaultWhiteLabelConfig } from '../controllers/white-label-controller.js';
 
-1.  **Exact missing implementation or proof gap:**
-    The current system lacks a defined data structure for white-label configurations and a dedicated BuilderOS API endpoint to retrieve a default white-label profile. The proof gap is the absence of a functional, accessible endpoint returning a structured default configuration.
+const router = Router();
 
-2.  **Smallest safe build slice to close it:**
-    Implement a static default white-label configuration object and expose it via a new, read-only BuilderOS API endpoint. This endpoint will serve a predefined JSON structure representing the default white-label settings (e.g., `appName`, `logoUrl`, `primaryColor`).
+// Define the GET route for retrieving the default white-label configuration
+router.get('/default', getDefaultWhiteLabelConfig);
 
-3.  **Exact safe-scope files to touch first:**
-    *   `src/builder-config/default-white-label.js`: Define the default white-label configuration object.
-    *   `src/builder-api/routes/white-label.js`: Define the new API route `/builder/config/white-label/default`.
-    *   `src/builder-api/controllers/white-label-controller.js`: Implement the controller logic to serve the default configuration from `default-white-label.js`.
-    *   `src/builder-api/index.js` (or equivalent main API entry point): Register the new `white-label.js` route.
+// Handle unsupported methods for this specific endpoint to return 405 Method Not Allowed
+router.all('/default', (req, res) => {
+  res.status(405).json({ message: 'Method Not Allowed' });
+});
 
-4.  **Verifier/runtime checks:**
-    *   **API Endpoint Accessibility:** `GET /builder/config/white-label/default` returns HTTP 200 OK.
-    *   **Data Integrity:** The response body is a valid JSON object containing expected default white-label properties (e.g., `appName`, `logoUrl`, `primaryColor`).
-    *   **Isolation:** No changes observed in LifeOS user features or TSOS customer-facing surfaces.
-    *   **Error Handling:** Invalid requests (e.g., POST, PUT) to this endpoint return appropriate HTTP 405 Method Not Allowed.
+export default router;
 
-5.  **Stop conditions if runtime truth disagrees:**
-    *   The endpoint `/builder/config/white-label/default` is unreachable or returns a 404.
-    *   The endpoint returns an HTTP status code other than 200 OK for a valid GET request.
-    *   The returned JSON structure is malformed or missing critical default white-label properties.
-    *   Any observed side effects or errors impacting LifeOS or TSOS functionality.
-    *   Performance degradation or increased latency in BuilderOS or related services.
+// src/builder-api/index.js
+import express from 'express';
+import whiteLabelRoutes from './routes/white-label.js';
+// Assume other existing imports for routes and middleware here
+
+const app = express();
+const PORT = process.env.BUILDER_API_PORT || 3001; // Example default port for BuilderOS API
+
+// Standard middleware setup
+app.use(express.json()); // For parsing application/json
+app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+
+// Register existing BuilderOS API routes here
+// Example: app.use('/builder/users', userRoutes);
+
+// Register the new white-label configuration routes
+// The blueprint specifies the full path as /builder/config/white-label/default
+// So the base path for the whiteLabelRoutes router should be /builder/config/white-label
+app.use('/builder/config/white-label', whiteLabelRoutes);
+
+// Basic health check endpoint for BuilderOS API
+app.get('/builder/health', (req, res) => {
+  res.status(200).json({ status: 'BuilderOS API is running', uptime: process.uptime() });
+});
+
+// Global error handling middleware (example)
+app.use((err, req, res, next) => {
+  console.error('Global API Error:', err.stack);
+  res.status(500).json({ message: 'Internal Server Error', error: err.message });
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`BuilderOS API listening on port ${PORT}`);
+});
+
+export default app; // Export the app for testing or modular use
