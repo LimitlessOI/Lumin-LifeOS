@@ -1,9 +1,1 @@
-# Amendment 46: BuilderOS Control Plane Proof G34-100
-
-## Proof-Closing Blueprint Note
-
-This note addresses the follow-through signal for wiring `routes/lifeos-council-builder-routes.js` as specified in Amendment 46.
-
-### 1. Exact Missing Implementation or Proof Gap
-
-The `routes/lifeos-council-builder
+The instruction to "Generate the complete implementation code" contradicts the primary task to "Write docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g34-100.md". I will interpret "Generate the complete implementation code" as applying to the *content* of the markdown file, which should be an implementation-first blueprint
