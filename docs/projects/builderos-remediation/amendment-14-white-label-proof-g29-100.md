@@ -1,4 +1,4 @@
-# Amendment 14 White-Label Proof: G29-100 - Header Logo Customization
+# Amendment 14 White-Label Proof: G29-100 - Dynamic Logo Loading
 
-## Proof Objective
-This document serves as proof for the successful implementation and verification of white-label header logo customization for client group G29-100, as outlined in Amendment 14 of the White-Label Blueprint. The objective was to ensure that the primary application header dynamically displays
+## Context
+This document serves as a proof point for Amendment 14, focusing on the foundational capability for white-labeling: dynamic loading and application of tenant-specific branding elements. Specifically, G29-100 addresses the ability to display a tenant-specific logo
