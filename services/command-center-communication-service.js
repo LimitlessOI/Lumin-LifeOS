@@ -323,7 +323,7 @@ export async function getThreadWithJobStatus(pool, threadId) {
             j.blocker       AS job_blocker,
             j.updated_at    AS job_updated_at
        FROM command_center_communications c
-       LEFT JOIN command_control_jobs j ON j.id = c.command_control_job_id
+       LEFT JOIN builderos_command_control_jobs j ON j.id = c.command_control_job_id
       WHERE c.thread_id = $1::uuid
       ORDER BY c.created_at ASC`,
     [threadId],
