@@ -1,7 +1,9 @@
-# Amendment 16 Word Keeper Proof: G28-100 - Initial Data Model & Migration
+# Amendment 16: Word Keeper - Proof G28-100
 
-This document outlines the next smallest build slice for the Amendment 16 Word Keeper blueprint, focusing on establishing the foundational data model and persistence layer.
+## Blueprint Note: Next Smallest Build Slice
 
-## 1. Exact Missing Implementation or Proof Gap
+This note addresses the next smallest, blueprint-backed build slice for Amendment 16, focusing on establishing the foundational data persistence for the Word Keeper feature.
 
-The core data model for the `Word` entity and its corresponding database table
+### 1. Exact Missing Implementation or Proof Gap
+
+The core gap is the absence of the
