@@ -1,5 +1,5 @@
-# BuilderOS Remediation: Amendment 12 Command Center - Pending Adam Panel (TODO-15-G5)
+# BuilderOS Remediation: Amendment 12 Command Center - Pending Adam Panel (Task G5)
 
-## 1. Blocking Ambiguity or Founder Decision List
+## Blueprint Enhancement Memo
 
-*   **Adam Item Definition:** Precise definition of an "Adam item" within the LifeOS/BuilderOS context (e.g., specific task type, system alert, user-assigned item, or a specific data
+This memo addresses the "Pending Adam panel shows count badge and items sorted by priority" task from `AMENDMENT_12_COMMAND_CENTER.md`. The current blueprint is not directly buildable due to open tasks and ambiguities regarding implementation specifics. This document
