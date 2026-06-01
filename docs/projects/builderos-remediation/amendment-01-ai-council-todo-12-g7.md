@@ -1,5 +1,9 @@
-# BuilderOS Remediation: Amendment 01 AI Council - Ollama Prompt Size Investigation (G7)
+### Blueprint Enhancement Memo: Ollama System Prompt Remediation (AI Council TODO-12-G7)
 
-## 1. Blocking Ambiguity or Founder Decision List
+**Problem Statement:** Ollama system prompts average 7,327 tokens/call, indicating excessive size that requires investigation and remediation to optimize cost and performance.
 
-*   **Target System Prompt Token Limit:** What is the desired maximum token count for system prompts? (e.g., 1024, 2048, 4096, or a dynamic
+---
+
+#### 1. Blocking Ambiguity or Founder Decision List
+
+*   **Target Token Limit:** What is the
