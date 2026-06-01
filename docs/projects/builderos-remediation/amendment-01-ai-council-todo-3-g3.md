@@ -1,9 +1,7 @@
-### BuilderOS Blueprint Enhancement Memo: Persist Provider Cooldowns to DB
+# BuilderOS Remediation: Amendment 01 AI Council - Persist Provider Cooldowns
 
-This memo addresses the task "Persist provider cooldowns to DB (survive restarts)" from `AMENDMENT_01_AI_COUNCIL.md`, providing a builder-ready enhancement plan.
+This memo outlines the next buildable slice for persisting provider cooldowns to the database, ensuring they survive application restarts.
 
----
+## 1. Blocking Ambiguity or Founder Decision List
 
-**1. Blocking Ambiguity or Founder Decision List:**
-
-*   **Current Cooldown State Representation:**
+*   **Provider Identifier:** Confirm the exact type and source of `providerId`. Is it a string, an enum, or
