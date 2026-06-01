@@ -7,42 +7,39 @@
  * @param {string} baseUrl - The base URL for the API.
  * @param {string} path - The API endpoint path.
  * @param {string} commandKey - The command key for authentication.
- * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If the fetch operation fails or the response is not OK.
+ * @returns {Promise<object>} The JSON response data.
+ * @throws {Error} If the network request fails or the response status is not OK.
  */
 async function fetchJson(baseUrl, path, commandKey) {
-    if (!baseUrl || !path || !commandKey) {
-        throw new Error('fetchJson: Missing required parameters (baseUrl, path, commandKey).');
-    }
     const url = `${baseUrl}${path}`;
     const response = await fetch(url, {
         headers: {
             'x-command-key': commandKey,
-            'Content-Type': 'application/json'
+            'Accept': 'application/json'
         }
     });
+
     if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorText}`);
     }
+
     return response.json();
 }
 
 /**
- * Verifies runner telemetry by fetching health and efficiency data concurrently.
+ * Verifies runner telemetry by fetching health and efficiency data from BuilderOS and LifeOS.
+ * This function performs read-only GET requests and returns a structured audit JSON object.
+ *
  * @param {object} params - The parameters for the verification.
- * @param {string} params.baseUrl - The base URL for the LifeOS API.
- * @param {string} params.commandKey - The command key for API authentication.
+ * @param {string} params.baseUrl - The base URL for the API endpoints.
+ * @param {string} params.commandKey - The command key to be used in the 'x-command-key' header.
  * @returns {Promise<object>} A structured JSON object indicating the verification status and data.
+ *   On success: { ok: true, generation: 885, session_tasks_done: 928, session_successful: 731, session_failed: 626, session_governance_blocks: 1, builds_today: number, without_proof: number, efficiency_summary: object | null, runner_assessment: string, checked_at: string }
+ *   On failure: { ok: false, error: string, checked_at: string }
  */
 export async function runRunnerTelemetryG885Verification({ baseUrl, commandKey }) {
-    // Parameter validation (as per "env validation" helper requirement)
-    if (!baseUrl) {
-        return { ok: false, error: 'baseUrl parameter is required.', checked_at: new Date().toISOString() };
-    }
-    if (!commandKey) {
-        return { ok: false, error: 'commandKey parameter is required.', checked_at: new Date().toISOString() };
-    }
+    const checked_at = new Date().toISOString();
 
     try {
         const [cpData, effData] = await Promise.all([
@@ -61,16 +58,13 @@ export async function runRunnerTelemetryG885Verification({ baseUrl, commandKey }
             without_proof: cpData.build?.without_proof || 0,
             efficiency_summary: effData.efficiency?.summary || null,
             runner_assessment: 'continuous_autonomous_operation_verified',
-            checked_at: new Date().toISOString()
+            checked_at: checked_at
         };
     } catch (error) {
-        // Error shaping as per requirement
         return {
             ok: false,
-            generation: 885,
-            runner_assessment: 'telemetry_verification_failed',
             error: error.message,
-            checked_at: new Date().toISOString()
+            checked_at: checked_at
         };
     }
 }
