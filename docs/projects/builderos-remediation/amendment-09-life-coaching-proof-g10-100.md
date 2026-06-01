@@ -1,30 +1,19 @@
-Amendment 09: Life Coaching - Proof G10-100
-This document outlines the first build slice for the Life Coaching feature, focusing on establishing the foundational data model and the initial session creation mechanism.
+# Amendment 09 Life Coaching Proof: G10-100 Remediation
+
+This document outlines the next smallest build slice to close the proof gap for G10-100: Proof of Concept: Basic Coaching Session Flow, as defined in `docs/projects/AMENDMENT_09_LIFE_COACHING.md`.
+
 ---
-Proof-Closing Blueprint Note
-1.  **Exact Missing Implementation or Proof Gap:**
-    The core gap is the absence of the `CoachingSession` data model definition and its associated persistence layer. This includes:
-    *   `CoachingSession` schema definition (e.g., `id`, `coachId`, `clientId`, `startTime`, `endTime`, `status`, `notes`).
-    *   Basic data access object (DAO) or repository for `CoachingSession` to handle creation and retrieval.
 
-2.  **Smallest Safe Build Slice to Close It:**
-    Define the `CoachingSession` data model schema and implement a minimal `CoachingSessionRepository` with `create` and `findById` methods. This establishes the core data structure and its persistence interface without exposing it to user-facing APIs yet.
+**Proof-Closing Blueprint Note: G10-100 Initial Session Request**
 
-3.  **Exact Safe-Scope Files to Touch First:**
-    *   `src/models/CoachingSession.js` (for the ORM model definition, e.g., Mongoose schema, Sequelize model, or plain JS object with validation).
-    *   `src/repositories/CoachingSessionRepository.js` (for data access logic, encapsulating database interactions for `CoachingSession`).
+1.  **Exact missing implementation or proof gap:**
+    The initial capability for a client user to formally request a coaching session, resulting in a persisted session record with a `requested` status. This addresses the first bullet point of G10-100's scope: "User (Client) can initiate a coaching session request."
 
-4.  **Verifier/Runtime Checks:**
-    *   **Unit Test:** Write a test suite for `CoachingSessionRepository` that:
-        *   Successfully creates a new `CoachingSession` record in the database.
-        *   Successfully retrieves an existing `CoachingSession` record by its ID.
-        *   Verifies that the created and retrieved session data adheres to the defined `CoachingSession` schema (e.g., required fields, data types).
-    *   **Schema Validation:** If using a separate schema validation library, ensure the `CoachingSession` schema definition itself passes internal validation checks.
-    *   **Database Connection:** Verify that the application can establish and maintain a connection to the underlying database system required for `CoachingSession` persistence.
+2.  **Smallest safe build slice to close it:**
+    Implement the API endpoint and associated service logic to allow an authenticated client to create a new coaching session request. This involves defining the `CoachingSession` data model, a service function to handle creation and persistence, and a controller/route to expose this functionality via a POST request.
 
-5.  **Stop Conditions if Runtime Truth Disagrees:**
-    *   `CoachingSession` model definition causes schema validation errors or database migration failures.
-    *   Database connection fails or becomes unstable when attempting `CoachingSession` operations.
-    *   `CoachingSessionRepository.create` fails to persist a session, returns an error, or persists malformed data.
-    *   `CoachingSessionRepository.findById` fails to retrieve a previously created session, returns an error, or retrieves incorrect/incomplete data.
-    *   Any unexpected runtime errors or exceptions during the definition, instantiation, or interaction with `CoachingSession` model or repository.
+3.  **Exact safe-scope files to touch first:**
+    *   `src/models/CoachingSession.js`: Define the Mongoose schema/model for `CoachingSession` including fields like `clientId`, `coachId`, `status` (defaulting to `requested`), `requestedAt`, `notes`.
+    *   `src/services/coachingSessionService.js`: Implement `createCoachingSession(clientId, coachId, notes)` to validate input and persist the new session.
+    *   `src/controllers/coachingSessionController.js`: Implement `requestCoachingSession(req, res)` to parse request body, call the service, and send appropriate HTTP responses.
+    *   `src/routes/coachingSessionRoutes.js`: Define a new
