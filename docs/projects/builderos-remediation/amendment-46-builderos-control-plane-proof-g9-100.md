@@ -1,9 +1,9 @@
-Amendment 46 BuilderOS Control Plane Proof - G9-100: Build Lifecycle Wiring
-Proof-Closing Blueprint Note
+# Amendment 46: BuilderOS Control Plane Proof - G9-100
 
-This note addresses the integration of BuilderOS build lifecycle tracking into the LifeOS Council Builder routes, specifically for build start and completion events.
+## Proof-Closing Blueprint Note
 
-1.  **Exact Missing Implementation or Proof Gap**
-    The `POST /build` endpoint within `routes/lifeos-council-builder-routes.js` requires implementation to:
-    *   **Build Start:** Identify a "build start" request (e.g., by a specific `action` field or payload structure). Upon identification, invoke the internal `recordBuildStart({ task_id, blueprint_id, model_used })` function, extracting parameters from the request body.
-    *   **Build Complete:** Identify a "build
+This note addresses the implementation gap for wiring the BuilderOS control plane build lifecycle endpoints within `routes/lifeos-council-builder-routes.js`.
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The core gap is the absence of `POST /build/start
