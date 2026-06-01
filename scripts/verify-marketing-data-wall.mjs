@@ -1,8 +1,7 @@
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- *
- * This module performs an audit to verify the "data wall" between MarketingOS and LifeOS.
- * It checks marketing services for any direct imports or dependencies on LifeOS components.
+ * @module verify-marketing-data-wall
+ * @description This module performs an audit to verify the "data wall" between MarketingOS and LifeOS.
  * The audit is considered successful if no LifeOS imports are found in marketing services.
  */
 
@@ -18,10 +17,10 @@ class AuditError extends Error {
 }
 
 /**
- * Validates required environment variables.
- * @param {string[]} varNames - An array of environment variable names to validate.
- * @returns {object} An object containing the validated environment variables.
- * @throws {AuditError} If any required environment variable is missing.
+ * Validates required envVars.
+ * @param {string[]} varNames - An array of envVar names to validate.
+ * @returns {object} An object containing the validated envVars.
+ * @throws {AuditError} If any required envVar is missing.
  */
 function validateEnv(varNames) {
   const envVars = {};
@@ -34,16 +33,16 @@ function validateEnv(varNames) {
     }
   }
   if (missingVars.length > 0) {
-    throw new AuditError(`Missing required environment variables: ${missingVars.join(', ')}`);
+    throw new AuditError(`Missing required envVars: ${missingVars.join(', ')}`);
   }
   return envVars;
 }
 
 /**
- * Fetches JSON data from a specified URL with an authentication key.
+ * Fetches JSON data from a specified URL with an auth key.
  * @param {string} baseUrl - The base URL for the API.
- * @param {string} path - The API endpoint path.
- * @param {string} commandKey - The x-command-key for authentication.
+ * @param {string} path - The apiEP path.
+ * @param {string} commandKey - The x-command-key for auth.
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {AuditError} If the fetch operation fails or returns a non-OK status.
  */
@@ -57,7 +56,6 @@ async function fetchJson(baseUrl, path, commandKey) {
         'x-command-key': commandKey,
       },
     });
-
     if (!response.ok) {
       const errorText = await response.text();
       throw new AuditError(`API call failed with status ${response.status} for ${url}`, {
@@ -65,19 +63,20 @@ async function fetchJson(baseUrl, path, commandKey) {
         body: errorText,
       });
     }
-
     return await response.json();
   } catch (error) {
     if (error instanceof AuditError) {
       throw error; // Re-throw our custom error
     }
-    throw new AuditError(`Network or parsing error fetching from ${url}: ${error.message}`, { originalError: error });
+    throw new AuditError(`Network or parsing error fetching from ${url}: ${error.message}`, {
+      originalError: error
+    });
   }
 }
 
 /**
  * Runs the MarketingOS data wall audit.
- * Checks marketing services for any direct LifeOS imports.
+ * It checks marketing services for any direct imports or dependencies on LifeOS components.
  * @returns {Promise<object>} A structured JSON object with audit results.
  */
 export async function runAudit() {
