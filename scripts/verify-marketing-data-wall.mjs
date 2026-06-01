@@ -19,8 +19,8 @@ class AuditError extends Error {
 /**
  * Validates required envVars.
  * @param {string[]} varNames - An array of envVar names to validate.
- * @returns {object} An object containing the validated envVars.
  * @throws {AuditError} If any required envVar is missing.
+ * @returns {object} An object containing the validated envVars.
  */
 function validateEnv(varNames) {
   const envVars = {};
@@ -56,6 +56,7 @@ async function fetchJson(baseUrl, path, commandKey) {
         'x-command-key': commandKey,
       },
     });
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new AuditError(`API call failed with status ${response.status} for ${url}`, {
