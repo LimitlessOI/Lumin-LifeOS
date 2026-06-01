@@ -2,6 +2,35 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [MISSION] 2026-06-01 — Overnight SocialMediaOS / MarketingOS Build Run
+
+### Mission result: IN PROGRESS — runner alive (PID 5428), gen 2 started, Railway redeploy triggered, 0 commits yet (all blocked by stale deploy)
+
+**Agent:** Claude Sonnet 4.6 / Claude Code VSCode Extension / main branch / Conductor role
+
+**Task:** Run overnight on SocialMediaOS/MarketingOS. Fix C2 starvation (priority reorder). Build missing MarketingOS Phase 1 files.
+
+**Root cause fixed:** `PRIORITY_RULES` in `scripts/governed-overnight-backlog-run.mjs` had C2 at rank 1 and MarketingOS at rank 2 — every 10-task generation filled with C2 tasks first. Fixed: socialmediaos→rank 1, c2_command_control→rank 2. Committed `5fde694263`.
+
+**Runner state at report time:**
+- PID: 5428 (alive) | Log: `data/overnight-backlog-stdout.log` | State: `data/governed-autonomy-backlog-state.json`
+- Gen 1: 11/11 tasks done, 0 successes — all blocked by `HTTP_502` (Railway stale deploy)
+- Gen 2: started 06:56 UTC, first 3 tasks are MarketingOS code files (DB migration, `marketing-transcriber.js`, `marketing-coach.js`)
+- Railway redeploy triggered via `POST /api/v1/railway/deploy` at ~07:00 UTC
+
+**Files changed this session:**
+- `scripts/governed-overnight-backlog-run.mjs` — PRIORITY_RULES reorder (socialmediaos rank 1, c2 rank 2), founder directive comment
+- `public/overlay/c2-mission-dashboard.html` (NEW) — C2 dashboard UI (see C2 mission entry below)
+- `routes/lifeos-command-center-routes.js` — mission-dashboard API endpoint
+- `routes/public-routes.js` — `/mission-dashboard` HTML route
+
+**Blocker:** Railway deploy stale (`72af0f0329c1` vs git `5fde694263`). All execute calls 502 until Railway redeploys. Redeploy triggered.
+
+**Next task (exact):** Gen 2 task 1 — `db/migrations/[date]_marketing_schema.sql` (MarketingOS Build Order Task 5, Zone 1, new file, will succeed when Railway is up).
+
+**Pending Adam decisions (block Phase 1 quality, not runner):** (1) Amendment 23 sibling vs absorbed, (2) $49/session vs $199/month, (3) first vertical, (4) Buffer vs Publer, (5) Google Form vs Typeform.
+
+---
 ## [MISSION] 2026-05-31 — C2 Mission Dashboard v1
 
 ### Mission result: COMPLETE — endpoint + UI built, node --check PASS, pending Railway deploy
