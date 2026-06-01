@@ -1,5 +1,7 @@
-# Amendment 16: Word Keeper - Proof G31-100
+# AMENDMENT_16_WORD_KEEPER: Proof-Closing Blueprint Note (G31-100)
 
-## Blueprint Note: Word Keeper Service - Initial Implementation (Create & Get)
+This note addresses the next smallest build slice for the AMENDMENT_16_WORD_KEEPER blueprint, focusing on establishing the foundational data model and persistence layer.
 
-This note closes the proof gap for the initial implementation of the `WordKeeperService`, focusing on the `createWordKeeper` and `getWordKeeperById` methods, including essential input validation and interaction with the `WordKeeperRepository`. This
+## 1. Exact Missing Implementation or Proof Gap
+
+The primary gap is the
