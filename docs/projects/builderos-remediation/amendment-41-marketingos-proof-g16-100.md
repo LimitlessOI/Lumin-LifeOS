@@ -1,18 +1,42 @@
-# AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: g16-100
+# Amendment 41: MarketingOS Proof - G16-100 (User Goal Completion Event)
 
-This document addresses the proof gap for `g16-100` as outlined in `AMENDMENT_41_MARKETINGOS.md`, serving as the SSOT foundation for its implementation.
+## Proof-Closing Blueprint Note
 
-## 1. Exact Missing Implementation or Proof Gap
+This document serves as the SSOT foundation for closing the proof gap related to the `User.GoalCompletion` event for MarketingOS, as defined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`.
 
-The `AMENDMENT_41_MARKETINGOS.md` blueprint specifies the need for a `marketing.campaign.conversion.g16_100` event to be emitted upon a specific user conversion action. The current system lacks the concrete implementation to detect this specific conversion trigger and subsequently emit the structured event to the MarketingOS event bus. Specifically, the mechanism to identify the `g16-100` conversion point within the user journey (e.g., completion of a specific form, reaching a designated success page, or a specific API call completion) and integrate with the existing event emission service is absent.
+### 1. Exact Missing Implementation or Proof Gap
 
-## 2. Smallest Safe Build Slice to Close It
+The core LifeOS platform currently lacks the explicit event emission for `User.GoalCompletion` when a user successfully completes a defined goal. While the goal completion logic exists, the integration point to publish this critical signal to the internal `EventBus` for MarketingOS consumption is absent. Specifically, the `goalService` does not trigger an event with the necessary payload upon a goal's status transition to 'completed'.
 
-Implement a new dedicated service function or module that monitors for the `g16-100` conversion condition. This function will be responsible for:
-1.  Detecting the `g16-100` conversion trigger (e.g., a specific API call completion, a database state change, or a user interaction event).
-2.  Constructing the `marketing.campaign.conversion.g16_100` event payload according to the MarketingOS event schema.
-3.  Publishing this event to the designated MarketingOS event bus (e.g., via an existing `EventService.publish` method).
+### 2. Smallest Safe Build Slice to Close It
 
-This slice should be minimal, focusing solely on the `g16-100` event emission, without altering existing core business logic unrelated to this specific conversion.
+The smallest safe build slice involves modifying the existing `GoalService` to emit a `User.GoalCompletion` event. This includes:
+*   Identifying the precise point within the `completeGoal` method (or equivalent) where a goal's status is confirmed as completed.
+*   Constructing the event payload according to the schema outlined in `AMENDMENT_41_MARKETINGOS.md` (e.g., `userId`, `goalId`, `completionTimestamp`, `goalMetadata`).
+*   Invoking the `EventBus.publish` method with the event type `User.GoalCompletion` and the constructed payload.
 
-##
+### 3. Exact Safe-Scope Files to Touch First
+
+*   `src/services/goalService.js`: This file contains the core logic for managing and completing user goals. The event emission will be added here.
+*   `src/events/eventDefinitions.js`: (If applicable) To ensure the `User.GoalCompletion` event type and its expected payload schema are formally defined and centralized.
+*   `src/integrations/eventBus.js`: (If applicable) To ensure the `EventBus` interface is correctly imported and utilized.
+
+### 4. Verifier/Runtime Checks
+
+*   **Unit Test (`goalService.test.js`):** Mock the `EventBus` dependency. Call `goalService.completeGoal(userId, goalId)`. Assert that `EventBus.publish` was called exactly once with `eventType: 'User.GoalCompletion'` and a payload matching the specified schema (e.g., containing `userId`, `goalId`, `completionTimestamp`).
+*   **Integration Test (Staging Environment):**
+    1.  Create a test user.
+    2.  Assign a trackable goal to the test user.
+    3.  Perform actions that lead to the completion of the goal.
+    4.  Monitor the internal event logging system (e.g., Kafka topic, SQS queue, or dedicated event dashboard) for the `User.GoalCompletion` event.
+    5.  Verify the event's presence, its payload accuracy, and its timestamp.
+    6.  (If MarketingOS integration is live in staging) Verify that MarketingOS receives and processes this event correctly, reflecting the goal completion for the test user.
+*   **Observability:** Monitor `EventBus` metrics for `User.GoalCompletion` event counts and processing latency in production after deployment.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+*   If the `User.GoalCompletion` event is not emitted by `goalService.completeGoal()` during unit or integration tests.
+*   If the emitted event's payload schema or data values do not precisely match the requirements specified in `AMENDMENT_41_MARKETINGOS.md`.
+*   If the event is emitted but causes downstream errors or unexpected behavior in the `EventBus` or MarketingOS integration.
+*   If the event is emitted but MarketingOS does not receive or correctly interpret it within the defined SLA.
+*   If the event emission introduces significant performance degradation to the `goalService`.
