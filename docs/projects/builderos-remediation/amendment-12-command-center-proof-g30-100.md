@@ -1,0 +1,3 @@
+# Amendment 12 Command Center Proof: G30-100 - Initial Operational Alert Data Model and Mock Endpoint
+
+This proof-closing blueprint note outlines the next smallest build slice for establishing the foundational data model and a mock API endpoint for Operational Alerts within the Amendment 12 Command Center. This slice focuses on defining the alert structure and making it retrievable, without UI integration yet.
