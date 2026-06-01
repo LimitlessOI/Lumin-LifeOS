@@ -1,45 +1,31 @@
-# Amendment 19 Project Governance Proof: G55-100 - Project State Reporting Validation
+### Amendment 19 Project Governance Proof - G55-100
 
-This document outlines the next smallest build slice to provide proof of compliance for Amendment 19 Project Governance, specifically focusing on automated validation of project state reporting.
+This note closes the proof for the initial integration slice of Amendment 19 Project Governance within BuilderOS.
 
----
+**1. Exact missing implementation or proof gap:**
+The core governance rules for project creation and lifecycle, as defined in Amendment 19, are specified but lack an active enforcement mechanism within the BuilderOS project provisioning workflow. Specifically, the `ProjectService` does not yet validate new project requests against the Amendment 19 governance policies.
 
-### 1. The exact missing implementation or proof gap
+**2. Smallest safe build slice to close it:**
+Implement a policy enforcement hook within the existing `ProjectService.createProject` method. This hook will call a new internal `ProjectGovernancePolicy.validateProjectCreation` function, which will apply the Amendment 19 rules. This slice focuses solely on *validation* during creation, not modification or deletion, and does not introduce new UI elements or external API endpoints.
 
-The current gap is the lack of an automated, verifiable mechanism to prove that project state reports, particularly the `project_status` field and its update frequency, adhere to the requirements stipulated in Amendment 19. While the amendment defines the governance rules, there is no active, internal BuilderOS component that programmatically checks and reports on this compliance.
+**3. Exact safe-scope files to touch first:**
+*   `services/ProjectService.js`: Add the validation hook.
+*   `lib/project-governance/ProjectGovernancePolicy.js`: Create this new file to encapsulate Amendment 19 rules.
+*   `lib/project-governance/index.js`: Export the new policy module.
+*   `tests/unit/services/ProjectService.test.js`: Add tests for the new validation logic.
+*   `tests/unit/lib/project-governance/ProjectGovernancePolicy.test.js`: Add tests for the policy rules.
 
-### 2. The smallest safe build slice to close it
+**4. Verifier/runtime checks:**
+*   **Unit Tests:** All new and modified unit tests pass.
+*   **Integration Tests:** Existing `ProjectService` integration tests continue to pass.
+*   **Manual Check (BuilderOS Dev Env):**
+    *   Attempt to create a project that *violates* an Amendment 19 rule (e.g., naming convention, required metadata). Expect creation to fail with a clear governance error message.
+    *   Attempt to create a project that *conforms* to Amendment 19 rules. Expect creation to succeed.
+*   **Logs:** Monitor BuilderOS logs for any unexpected errors or warnings related to project creation.
 
-Implement a new internal BuilderOS utility function, `validateProjectStateCompliance`, that takes a project's current state object as input. This function will:
-1.  Verify that the `project_status` field exists and conforms to a predefined schema (e.g., enum of allowed states, specific string format).
-2.  Check the `last_updated_at` timestamp of the project state against the required update frequency defined in governance rules.
-3.  Return a boolean indicating compliance and a detailed report of any non-compliance findings.
-
-This slice focuses solely on the validation logic, not on its integration into a larger reporting or enforcement system.
-
-### 3. Exact safe-scope files to touch first
-
-*   `src/builder-os/utils/project-governance-validator.js` (new file): Contains the `validateProjectStateCompliance` function.
-*   `src/builder-os/config/governance-rules.js` (new file or extend existing): Defines the expected `project_status` schema and update frequency requirements.
-*   `tests/builder-os/utils/project-governance-validator.test.js` (new file): Unit tests for the `validateProjectStateCompliance` function.
-
-### 4. Verifier/runtime checks
-
-*   **Unit Tests:**
-    *   `npm test tests/builder-os/utils/project-governance-validator.test.js`
-    *   Test cases must cover:
-        *   Valid project state (correct `project_status`, recent update).
-        *   Invalid `project_status` format/value.
-        *   Outdated `last_updated_at` timestamp.
-        *   Missing `project_status` field.
-        *   Edge cases for update frequency (e.g., exactly on the boundary).
-*   **Internal BuilderOS Console Check (Manual):**
-    *   After deployment, manually invoke the `validateProjectStateCompliance` function with known compliant and non-compliant project data via a BuilderOS internal console or script.
-    *   Verify that the function's output correctly identifies compliance status and provides accurate reasons for non-compliance.
-
-### 5. Stop conditions if runtime truth disagrees
-
-*   If `validateProjectStateCompliance` incorrectly flags a demonstrably compliant project as non-compliant.
-*   If `validateProjectStateCompliance` fails to flag a demonstrably non-compliant project as non-compliant.
-*   If the function introduces any measurable performance degradation to BuilderOS internal processes when run against a representative dataset.
-*   If the validation logic cannot be clearly mapped back to specific clauses in `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`.
+**5. Stop conditions if runtime truth disagrees:**
+*   If existing `ProjectService` functionality (e.g., project creation for valid requests) is broken.
+*   If the governance validation logic allows non-compliant projects to be created.
+*   If the governance validation logic incorrectly rejects compliant projects.
+*   If performance degradation is observed during project creation.
+*   If new, unhandled exceptions are thrown during project creation.
