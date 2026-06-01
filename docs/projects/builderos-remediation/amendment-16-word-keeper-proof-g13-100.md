@@ -1,10 +1,15 @@
-Amendment 16: Word Keeper - Proof Gap G13-100
-This document outlines the next smallest build slice for the Word Keeper feature, focusing on establishing the foundational data model, persistence layer, and core business logic as described in `docs/projects/AMENDMENT_16_WORD_KEEPER.md`.
----
-Proof-Closing Blueprint Note
+# AMENDMENT_16_WORD_KEEPER - Proof G13-100: Initial Word Set Definition and Loading
 
-1.  **Exact missing implementation or proof gap:**
-    The foundational data model and persistence layer for canonical words within BuilderOS. Specifically, the `Word` entity definition, its storage mechanism, and basic CRUD operations. This gap prevents consistent management of critical identifiers used across build processes.
+This proof-closing note addresses the foundational step of defining and loading the initial set of words for the Word Keeper service, as outlined in AMENDMENT_16_WORD_KEEPER.md. This slice establishes the core data source for the words without introducing complex persistence or dynamic management at this stage.
 
-2.  **Smallest safe build slice to close it:**
-    Implement the `Word` data model, a dedicated repository for basic CRUD operations
+## 1. Exact Missing Implementation or Proof Gap
+
+The primary gap is the absence of a concrete mechanism to define and load the initial, static set of words that the Word Keeper service will manage. Before any "keeping" or validation logic can be implemented, the system needs to know *which* words are relevant. This gap prevents any further development of word validation or lookup features.
+
+## 2. Smallest Safe Build Slice to Close It
+
+Implement a static JSON configuration file to hold the initial list of approved words and a corresponding utility module to load this configuration into an in-memory data structure (e.g., a `Set` for efficient lookups) at application startup. This approach minimizes dependencies and provides a clear, auditable source for the initial word set.
+
+## 3. Exact Safe-Scope Files to Touch First
+
+*   `config/wordKeeperWords.json
