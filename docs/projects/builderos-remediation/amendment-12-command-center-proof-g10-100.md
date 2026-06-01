@@ -1,37 +1,59 @@
-# Amendment 12: Command Center - Proof G10-100: Core Command Dispatch
+# Amendment 12 Command Center Proof - G10-100 Remediation
 
-This document outlines the first proof-of-concept build slice for Amendment 12, focusing on establishing the foundational mechanism for command registration and synchronous dispatch within the BuilderOS Command Center.
+## Blueprint Note: OIL Verifier Misconfiguration for Documentation Files
 
----
+This note addresses the OIL verifier rejection related to `TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".md"`. The verifier is attempting to parse documentation markdown files as Node.js ESM modules, which is an incorrect operational mode for `.md` files. The issue is not with the markdown file's content or syntax, but with the verifier's scope or invocation.
 
-### Proof-Closing Blueprint Note
+### 1. Exact Missing Implementation or Proof Gap
 
-**1. Exact missing implementation or proof gap:**
-The core mechanism for defining, registering, and synchronously dispatching BuilderOS commands is missing. This includes the initial structure for a `CommandRegistry` to store command metadata and a basic `CommandDispatcher` capable of retrieving a handler from the registry and executing it.
+The current BuilderOS verifier pipeline, specifically the OIL verifier, is configured or invoked in a manner that includes non-executable documentation files (e.g., `.md` files) in its JavaScript module syntax check scope. This leads to `ERR_UNKNOWN_FILE_EXTENSION` when Node.js attempts to load a `.md` file as a module. The proof gap is the lack of a clear separation between documentation assets and executable code assets within the verifier's input set.
 
-**2. Smallest safe build slice to close it:**
-Implement a minimal `CommandRegistry` to manage command definitions (mapping command names to their respective handler functions or modules) and a `CommandDispatcher` that can synchronously retrieve a handler from the registry and invoke it. This slice will demonstrate the ability to define a simple command and execute it through the dispatch mechanism.
+### 2. Smallest Safe Build Slice to Close It
 
-**3. Exact safe-scope files to touch first:**
--   `src/builderos/command-center/CommandRegistry.js`: New file. Implements a singleton or static class to register and retrieve command handlers.
--   `src/builderos/command-center/CommandDispatcher.js`: New file. Implements a class with a `dispatch` method that uses `CommandRegistry` to find and execute handlers.
--   `src/builderos/command-center/commands/TestCommand.js`: New file. A simple, initial command definition (e.g., an object with a `name` and an `execute` method) for proof-of-concept.
--   `src/builderos/command-center/index.js`: New file. Exports the `CommandRegistry` and `CommandDispatcher` instances, and potentially registers initial commands.
+The smallest safe build slice involves adjusting the BuilderOS verifier configuration or invocation script to explicitly exclude `.md` files (and potentially other non-code documentation formats) from the set of files passed to the Node.js module syntax checker. This ensures the verifier operates only on intended code artifacts.
 
-**4. Verifier/runtime checks:**
--   **Test Case 1: Successful Command Dispatch**
-    -   Register `TestCommand` with `CommandRegistry`.
-    -   Call `CommandDispatcher.dispatch('TestCommand', { payload: 'test' })`.
-    -   Verify that `TestCommand.execute` is invoked with the correct payload and returns an expected success value or logs a specific message.
--   **Test Case 2: Unregistered Command Handling**
-    -   Call `CommandDispatcher.dispatch('NonExistentCommand')`.
-    -   Verify that `CommandDispatcher` throws a specific error (e.g., `CommandNotFoundError`) indicating the command is not registered.
--   **Test Case 3: Registry Integrity**
-    -   Verify that `CommandRegistry.getCommand('TestCommand')` returns the correct `TestCommand` definition.
+### 3. Exact Safe-Scope Files to Touch First
 
-**5. Stop conditions if runtime truth disagrees:**
--   If `CommandRegistry` fails to correctly store or retrieve command definitions.
--   If `CommandDispatcher` fails to locate a registered command's handler via the `CommandRegistry`.
--   If `CommandDispatcher` executes an incorrect handler for a given command name.
--   If `CommandDispatcher` does not throw an expected error when attempting to dispatch an unregistered command.
--   If the executed command handler does not produce the expected side effect or return value as defined in its `execute` method.
+The specific files to touch will depend on the BuilderOS's internal verifier orchestration. Based on common patterns, the following files or configuration areas are the most likely candidates:
+
+*   `builderos/config/oil-verifier.json` (or similar configuration file defining verifier scope)
+*   `builderos/scripts/run-oil-verifier.js` (or similar script orchestrating the verifier execution)
+*   `package.json` (if the verifier is invoked via a `scripts` entry with a glob pattern)
+
+**Proposed Action:**
+Modify the relevant configuration or script to add an exclusion pattern for `**/*.md` files (and potentially `**/*.txt`, `**/*.yaml`, etc., as needed) from the verifier's input glob or file list.
+
+Example (conceptual, assuming a glob pattern in a config):
+```json
+// builderos/config/oil-verifier.json (conceptual)
+{
+  "include": ["src/**/*.js", "src/**/*.ts"],
+  "exclude": ["docs/**/*.md", "docs/**/*.txt"] // Add this exclusion
+}
+```
+
+Example (conceptual, assuming a script argument):
+```javascript
+// builderos/scripts/run-oil-verifier.js (conceptual)
+const verifierArgs = [
+  '--files', 'src/**/*.js', 'src/**/*.ts',
+  '--exclude-files', 'docs/**/*.md' // Add this exclusion
+];
+// ... execute verifier with verifierArgs
+```
+
+### 4. Verifier/Runtime Checks
+
+1.  **Local Test:** Run the BuilderOS build loop locally after applying the configuration change.
+2.  **OIL Verifier Pass:** Confirm that the OIL verifier now completes successfully without the `ERR_UNKNOWN_FILE_EXTENSION` error for `.md` files.
+3.  **Code Verification Integrity:** Ensure that actual JavaScript/TypeScript files within the `src/` directories are still correctly verified for syntax and other defined checks.
+4.  **No Regression:** Verify that no new build failures or unexpected behavior are introduced in other parts of the BuilderOS pipeline.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+*   If the `ERR_UNKNOWN_FILE_EXTENSION` error persists for `.md` files, indicating the exclusion pattern was not correctly applied or the wrong configuration file was modified.
+*   If the verifier fails to process valid JavaScript/TypeScript files, suggesting the exclusion pattern was too broad or incorrectly implemented.
+*   If the BuilderOS loop enters an unstable state or introduces new, unrelated failures, indicating a broader impact from the configuration change.
+*   If the verifier reports new, unexpected syntax errors in previously valid code, suggesting a change in the verifier's operational mode beyond just file exclusion.
+
+In any of these cases, revert the change and investigate the verifier's invocation mechanism more deeply within the BuilderOS architecture.
