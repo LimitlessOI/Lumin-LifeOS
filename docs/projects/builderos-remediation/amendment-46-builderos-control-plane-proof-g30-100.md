@@ -1,7 +1,6 @@
-# Amendment 46: BuilderOS Control Plane Proof - G30-100
+# Amendment 46: BuilderOS Control Plane Proof (G30-100) - Proof Closing Note
 
-## Proof-Closing Blueprint Note: BuilderOS Build Lifecycle Wiring
+## 1. Exact Missing Implementation or Proof Gap
 
-This note addresses the signal to wire the BuilderOS build lifecycle endpoints within `routes/lifeos-council-builder-routes.js`, ensuring proper internal state management and health-based control.
-
-### 1. Exact Missing Implementation or Proof
+The primary gap is the implementation of the `/build` start and complete endpoints within `routes/lifeos-council-builder-routes.js` to integrate with the BuilderOS control plane. This includes:
+-
