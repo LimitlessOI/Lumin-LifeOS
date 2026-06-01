@@ -1,7 +1,9 @@
-# Amendment 12: Command Center - Proof G8-100 Follow-Through
+# Proof-Closing Blueprint Note: AMENDMENT_12_COMMAND_CENTER - G8-100
 
-This document outlines the next smallest blueprint-backed build slice following the completion or current proof of G8-100, focusing on the "Enhanced Action Controls" within Phase 3 (G7-G9) of the Command Center rollout.
+This note closes the initial proof slice for the core `CommandCenter` and `Command` pattern, focusing on establishing the foundational structure and demonstrating basic command registration and execution.
 
 ---
 
-## Blueprint Note: Next Smallest Build Slice
+### 1. Exact missing implementation or proof gap
+
+The blueprint defines the
