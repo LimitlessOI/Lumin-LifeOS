@@ -4,6 +4,4 @@
 
 This memo outlines the next buildable slice for implementing the `/api/health` endpoint as specified in AMENDMENT_12_COMMAND_CENTER.md, ensuring it returns 200 with no authentication for uptime monitors.
 
----
-
-###
+### 1
