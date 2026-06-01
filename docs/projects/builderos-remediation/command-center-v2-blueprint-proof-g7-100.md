@@ -1,28 +1,32 @@
-**Blueprint Note: Command Center V2 - Proof G7-100**
+# Command Center V2 Blueprint Proof - G7-100 Remediation Note
 
-This proof closes the initial conceptual gap for Command Center V2 by establishing a foundational data model and a read-only API endpoint for its core configuration. This enables subsequent UI development to consume a stable, versioned configuration.
+## Blueprint Note: OIL Verifier Rejection Remediation
 
-1.  **Exact missing implementation or proof gap:**
-    The current blueprint lacks a concrete, versioned data model and a corresponding read-only API endpoint for the Command Center V2's core configuration. This prevents any downstream UI or service from reliably consuming its initial state or settings.
+This note addresses the OIL verifier rejection for `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g7-100.md`, specifically the `ERR_UNKNOWN_FILE_EXTENSION` error. The rejection indicates a misinterpretation by the verifier, which attempted to execute a markdown documentation file as a Node.js module.
 
-2.  **Smallest safe build slice to close it:**
-    Implement a new, versioned read-only API endpoint (`/api/v2/command-center/config`) that serves a static or mock JSON object representing the Command Center V2's initial configuration. This includes defining a minimal JSON schema for the configuration object.
+### 1. Exact Missing Implementation or Proof Gap
 
-3.  **Exact safe-scope files to touch first:**
-    *   `src/api/v2/command-center/config.js` (New endpoint handler)
-    *   `src/models/v2/command-center/config.js` (Minimal data model/interface definition)
-    *   `src/routes/api.js` (Add new route for `/api/v2/command-center/config`)
-    *   `src/schemas/v2/command-center/config.json` (JSON schema for configuration object)
-    *   `docs/api/v2/command-center/config.md` (API documentation stub)
+The core gap is within the BuilderOS OIL verifier's file type identification and processing logic. The verifier is currently attempting to apply JavaScript module syntax checks to non-executable documentation files (e.g., `.md` files). This leads to false negatives for valid documentation artifacts. The proof gap is that the verifier's scope of execution analysis is over-broad, encompassing file types not intended for runtime execution.
 
-4.  **Verifier/runtime checks:**
-    *   **API Call:** `GET /api/v2/command-center/config`
-    *   **Expected Status:** `HTTP 200 OK`
-    *   **Expected Body:** A JSON object conforming to `src/schemas/v2/command-center/config.json`. Example: `{"version": "1.0.0", "status": "operational", "features": ["dashboard", "alerts"]}`
-    *   **Schema Validation:** The returned JSON body must pass validation against `src/schemas/v2/command-center/config.json`.
+### 2. Smallest Safe Build Slice to Close It
 
-5.  **Stop conditions if runtime truth disagrees:**
-    *   The endpoint `GET /api/v2/command-center/config` returns any HTTP status code other than `200 OK`.
-    *   The returned JSON body is malformed or does not conform to the `src/schemas/v2/command-center/config.json` schema.
-    *   The endpoint is unreachable or returns a `404 Not Found`.
-    *   The response time exceeds 500ms for a local request.
+The smallest safe build slice is to refine the BuilderOS OIL verifier's configuration or internal logic to correctly differentiate between executable code files and documentation files. Specifically, the verifier must be updated to:
+*   Identify `.md` files as documentation.
+*   Skip Node.js module syntax validation for `.md` files.
+*   Apply appropriate documentation-specific checks (e.g., markdown linting, if configured) or simply pass them through without execution attempts.
+
+### 3. Exact Safe-Scope Files to Touch First
+
+Given the nature of the error, the primary files to investigate and modify are those governing the BuilderOS OIL verifier's file processing pipeline.
+*   `builderos/verifier/config.js` (or `.json`): To update file type mappings or exclusion rules.
+*   `builderos/verifier/index.js`: To adjust the core logic for how different file extensions are handled during the verification pass.
+*   `builderos/verifier/plugins/node-syntax-check.js`: To ensure this plugin is only invoked for relevant file types (e.g., `.js`, `.mjs`, `.cjs`, `.ts`).
+
+### 4. Verifier/Runtime Checks
+
+*   **Verifier Check (Post-Fix):** Rerun the OIL verifier against `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g7-100.md`. The expected outcome is a successful verification pass without the `ERR_UNKNOWN_FILE_EXTENSION` error.
+*   **Runtime Check (Systemic):** Verify that other existing `.md` files within the `docs/` directory and other non-code files (e.g., `.txt`, `.yaml`) are also correctly processed by the OIL verifier without execution attempts or similar file type errors.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+If, after implementing the build slice, the OIL verifier continues to report `ERR_UNKNOWN_FILE_EXTENSION` for `.md` files, or if new file type misinterpretation errors emerge for other documentation formats, the stop condition is met. This would indicate that the underlying mechanism for file type identification or module loading within the verifier is still fundamentally misconfigured or that the fix was incomplete. Further debugging of the verifier's internal module resolution and file parsing pipeline would be required.
