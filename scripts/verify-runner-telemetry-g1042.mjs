@@ -2,44 +2,57 @@
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
-const tryCatch = async (promise) => {
-  try {
-    const result = await promise;
-    return [null, result];
-  } catch (error) {
-    return [error, null];
-  }
-};
-
-const fetchJson = async (baseUrl, path, key) => {
+/**
+ * Fetches JSON data from a given URL path with a command key header.
+ * @param {string} baseUrl - The base URL for the API.
+ * @param {string} path - The API endpoint path.
+ * @param {string} commandKey - The x-command-key header value.
+ * @returns {Promise<object>} The JSON response data.
+ * @throws {Error} If the fetch operation fails or the response is not OK.
+ */
+async function fetchJson(baseUrl, path, commandKey) {
   const url = `${baseUrl}${path}`;
   const response = await fetch(url, {
     headers: {
-      'x-command-key': key,
-      'Accept': 'application/json'
+      'x-command-key': commandKey,
+      'Content-Type': 'application/json'
     }
   });
+
   if (!response.ok) {
     const errorBody = await response.text();
-    throw new Error(`HTTP error! Status: ${response.status} for ${url}, Body: ${errorBody}`);
+    throw new Error(`HTTP error! Status: ${response.status}, URL: ${url}, Body: ${errorBody}`);
   }
+
   return response.json();
-};
+}
 
+/**
+ * Verifies runner telemetry by fetching control plane health and autonomous telemetry efficiency.
+ * @param {object} params - The parameters for the verification.
+ * @param {string} params.baseUrl - The base URL for the API.
+ * @param {string} params.commandKey - The x-command-key header value.
+ * @returns {Promise<object>} A structured audit JSON object.
+ */
 export async function runRunnerTelemetryG1042Verification({ baseUrl, commandKey }) {
-  const [cpResult, effResult] = await Promise.all([
-    tryCatch(fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey)),
-    tryCatch(fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey))
-  ]);
+  let cpData = {};
+  let effData = {};
+  let errorDetails = null;
 
-  const [cpError, cpData] = cpResult;
-  const [effError, effData] = effResult;
-
-  if (cpError || effError) {
+  try {
+    const [controlPlaneHealth, autonomousTelemetryEfficiency] = await Promise.all([
+      fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
+      fetchJson(baseUrl, '/api/v1/lifeos/autonomous-telemetry/efficiency', commandKey)
+    ]);
+    cpData = controlPlaneHealth;
+    effData = autonomousTelemetryEfficiency;
+  } catch (e) {
+    errorDetails = e.message;
     return {
       ok: false,
       generation: 1042,
-      error: cpError?.message || effError?.message || 'Unknown fetch error',
+      runner_assessment: 'telemetry_fetch_failed',
+      error: errorDetails,
       checked_at: new Date().toISOString()
     };
   }
