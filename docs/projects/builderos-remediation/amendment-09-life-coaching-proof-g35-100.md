@@ -1,3 +1,9 @@
-# Amendment 09: Life Coaching - G35-100 End-to-End Session Lifecycle Proof
+# Blueprint Note: AMENDMENT_09_LIFE_COACHING - Proof G35-100
 
-This document serves as the proof-closing blueprint note for Amendment 09, specifically addressing the `G35-100: End-to-End Session Lifecycle Proof` objective. It confirms the successful integration and functionality of the core life coaching session lifecycle,
+This note closes proof G35-100 for Amendment 09, focusing on the foundational capability to create a `CoachingSession` record.
+
+---
+
+**1. Exact missing implementation or proof gap:**
+
+The foundational capability to persist a new `
