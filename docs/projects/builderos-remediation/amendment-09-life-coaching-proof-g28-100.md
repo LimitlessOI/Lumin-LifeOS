@@ -1,31 +1,39 @@
-# Amendment 09 Life Coaching - Proof G28-100: Initial Coaching Session Data Model & Mock Read
+# Amendment 09: Life Coaching - Proof G28-100: Initial CoachingSession Data Model
 
-This proof point establishes the foundational data model for a `CoachingSession` and a minimal mock read operation to retrieve a session by its ID. This validates the ability to define core coaching data types and integrate a basic data access pattern within the LifeOS platform.
+This proof-closing blueprint note addresses the foundational data model for `CoachingSession` within the LifeOS platform, as derived from `AMENDMENT_09_LIFE_COACHING.md`. This is the smallest safe build slice to establish the core persistence layer for life coaching interactions.
 
-## 1. Exact missing implementation or proof gap
+---
 
-The current platform lacks a defined data model for `CoachingSession` entities and a basic mechanism to retrieve them, even in a mocked capacity. This gap prevents any further development of coaching-specific features that rely on session data.
+### 1. Exact Missing Implementation or Proof Gap
 
-## 2. Smallest safe build slice to close it
+The initial data model definition, schema, and basic persistence layer for a `CoachingSession` entity are missing. This includes the database table creation and a minimal set of CRUD operations to manage coaching session records.
 
-Define the `CoachingSession` interface/type and implement a mock repository function that returns a hardcoded `CoachingSession` by ID. This slice focuses purely on data type definition and a placeholder read function, avoiding actual database integration or complex business logic initially.
+### 2. Smallest Safe Build Slice to Close It
 
-## 3. Exact safe-scope files to touch first
+Define the `CoachingSession` data model schema, implement a database migration to create the corresponding table, and establish a basic repository and service layer for `CoachingSession` creation and retrieval. This slice focuses solely on data persistence and access, without exposing any API endpoints or UI components.
 
-*   `src/modules/coaching/coaching.types.ts`: Define the `CoachingSession` interface.
-*   `src/modules/coaching/coaching.repository.ts`: Implement a mock `getCoachingSessionById(id: string): Promise<CoachingSession | null>` that returns a hardcoded session if `id === 'mock-session-123'` and `null` otherwise.
+### 3. Exact Safe-Scope Files to Touch First
 
-## 4. Verifier/runtime checks
+*   `src/data/models/CoachingSession.js`: Define the Mongoose/Sequelize schema for `CoachingSession`.
+    *   **Schema fields (example):** `userId` (UUID, ref to User), `coachId` (UUID, ref to User), `scheduledAt` (Date), `durationMinutes` (Number), `status` (String: 'scheduled', 'completed', 'cancelled'), `notes` (String), `createdAt` (Date), `updatedAt` (Date).
+*   `src/data/migrations/YYYYMMDDHHMMSS-create-coaching-session.js`: Database migration script to create the `coaching_sessions` table with appropriate indices.
+*   `src/data/repositories/CoachingSessionRepository.js`: Implement basic CRUD methods (`create`, `findById`, `findByUserId`, `updateStatus`).
+*   `src/data/services/CoachingSessionService.js`: Provide a thin service layer wrapping the repository for business logic separation (e.g., `createSession`, `getSessionById`).
+*   `src/data/index.js`: Register the new `CoachingSession` model and repository for global access within the data layer.
 
-*   **Unit Test**: Write a unit test for `src/modules/coaching/coaching.repository.ts` to assert that:
-    *   `getCoachingSessionById('mock-session-123')` returns the expected mock `CoachingSession` object.
-    *   `getCoachingSessionById('non-existent-id')` returns `null`.
-*   **Type Check**: Ensure `tsc` passes without errors across the codebase, validating the `CoachingSession` type definition and its usage in the repository.
+### 4. Verifier/Runtime Checks
 
-## 5. Stop conditions if runtime truth disagrees
+1.  **Migration Success:** Execute database migrations; verify `coaching_sessions` table is created successfully in the database.
+2.  **Model Instantiation:** Programmatically instantiate a `CoachingSession` model instance and verify its structure.
+3.  **Create Operation:** Call `CoachingSessionService.createSession()` with valid data; verify a new record appears in the `coaching_sessions` table.
+4.  **Retrieve Operation:** Call `CoachingSessionService.getSessionById()` using the ID of the created session; verify the correct data is returned.
+5.  **Data Integrity:** Attempt to create a session with invalid data (e.g., missing required fields); verify appropriate validation errors are thrown.
+6.  **No Regression:** Run existing data layer unit/integration tests to ensure no existing LifeOS data models or services are negatively impacted.
 
-*   If `tsc` fails due to type mismatches related to `CoachingSession` or its usage in `coaching.repository.ts`.
-*   If the unit tests for `coaching.repository.ts` fail, indicating incorrect data retrieval or mock behavior.
-*   If the defined `CoachingSession` structure does not align with the high-level requirements outlined in `AMENDMENT_09_LIFE_COACHING.md` (e.g., missing critical fields like `coachId`, `clientId`, `startTime`, `duration`, `status`).
+### 5. Stop Conditions if Runtime Truth Disagrees
 
----METAD
+*   The database migration fails to execute or rolls back unexpectedly.
+*   `CoachingSession` records cannot be successfully created or retrieved from the database.
+*   Data validation rules defined in the model do not function as expected.
+*   Existing LifeOS data models or services exhibit unexpected errors, data corruption, or performance degradation after the migration or service integration.
+*   The `coaching_sessions` table schema does not match the blueprint specification.
