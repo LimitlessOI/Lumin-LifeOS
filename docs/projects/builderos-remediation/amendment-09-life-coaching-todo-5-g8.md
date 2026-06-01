@@ -1,46 +1,47 @@
-BuilderOS Remediation: Amendment 09 Life Coaching - Weekly Progress Email
+# BuilderOS Remediation: Amendment 09 Life Coaching - Weekly Progress Email (G8)
 
-This memo addresses the unspecified weekly progress email schema and scheduling for Amendment 09 Life Coaching. The goal is to define a buildable next slice to resolve these ambiguities.
+This memo addresses the missing specification for "Weekly progress email schema and scheduling" from `docs/projects/AMENDMENT_09_LIFE_COACHING.md`. The goal is to produce a builder-ready enhancement memo for the smallest buildable next slice.
 
 ---
 
-1.  **Blocking Ambiguity or Founder Decision List**
-    *   **Email Recipient:** Is the weekly progress email intended for the LifeOS user, their assigned coach, or both? If both, are the contents identical or tailored?
-    *   **Email Content Details:** What specific data points should be included in the "progress summary"? (e.g., completed goals, pending tasks, upcoming coaching sessions, streak data, custom notes). Should it be configurable by the user/coach?
-    *   **Scheduling Specificity:** "Weekly" is set, but what exact day of the week and time of day should the email be sent? Is this configurable per user/coach?
-    *   **Opt-in/Opt-out:** Is this email mandatory for users with a coach, or is there an explicit opt-in/opt-out mechanism?
+## 1. Blocking Ambiguity or Founder Decision List
 
-2.  **Already-Settled Constraints**
-    *   **Frequency:** Weekly.
-    *   **Scope:** BuilderOS-only execution; no direct modification of existing LifeOS user features or TSOS customer-facing surfaces.
-    *   **Mechanism:** Email-based notification.
-    *   **Purpose:** Summarize progress related to Life Coaching.
+*   **Email Content Schema:** Define the exact data points required for the weekly progress email. This includes user-specific progress metrics, goal summaries, and any coach-specific input.
+    *   *Example questions:* Should it include a summary of completed tasks, upcoming tasks, or a free-form progress note? Is there a specific call to action?
+*   **Email Recipient(s):** Confirm if the email is sent only to the user, or also to their assigned life coach.
+*   **Scheduling Logic:** Specify the exact day and time for email dispatch (e.g., Sunday 5 PM local time, configurable per user/coach, or a fixed global time).
+*   **Opt-in/Opt-out Mechanism:** Determine if users or coaches have the ability to opt-in/out of these emails, and if so, how this preference is stored and managed.
+*   **Data Source for Progress:** Identify the specific LifeOS modules or database tables from which weekly progress data will be aggregated.
 
-3.  **Smallest Buildable Next Slice**
-    *   **Target:** Implement a basic weekly progress email sent *only to the LifeOS user*.
-    *   **Content:** A minimal summary including:
-        *   Subject: "Your Weekly LifeOS Progress Update"
-        *   Body: A simple text-based summary of the number of completed tasks/goals in the past week, and a link back to the LifeOS dashboard. No complex data aggregation initially.
-    *   **Scheduling:** A fixed weekly schedule (e.g., Monday 9 AM UTC) for all users, without individual configuration.
-    *   **Data Source:** Leverage existing task/goal completion records from the past 7 days.
+## 2. Already-Settled Constraints
 
-4.  **Exact Safe-Scope Files BuilderOS Should Touch First**
-    *   `services/email/templates/weeklyProgressEmail.hbs`: New Handlebars template for the email body.
-    *   `services/email/senders/weeklyProgressEmailSender.js`: New module to encapsulate email sending logic for this specific email type.
-    *   `jobs/weeklyProgressEmailJob.js`: New cron job definition to trigger the email generation and sending.
-    *   `config/jobs.js`: Add configuration entry for `weeklyProgressEmailJob`.
-    *   `schemas/email/weeklyProgressEmailDataSchema.js`: New Joi/Zod schema for the data payload passed to the email template.
+*   **Platform:** LifeOS, Node/ESM environment.
+*   **Code Quality:** Adhere to existing clean, production-quality Node/ESM patterns.
+*   **Scope:** Backend/internal service implementation only. No direct modification of LifeOS user features or TSOS customer-facing surfaces.
+*   **Existing Services:** Leverage existing email sending infrastructure (e.g., `src/services/emailService.js`) and job scheduling mechanisms (e.g., `src/jobs/`).
+*   **Purpose:** Deliver a weekly progress summary related to life coaching.
 
-5.  **Required Verifier/Runtime Checks**
-    *   **Schema Validation:** Ensure the data payload for the email template conforms to `weeklyProgressEmailDataSchema`.
-    *   **Email Delivery:** Verify that a test email is successfully sent to a designated test user's inbox.
-    *   **Job Execution:** Confirm the `weeklyProgressEmailJob` executes at the scheduled time.
-    *   **Content Integrity:** Basic check that the email subject and body contain expected placeholder text (e.g., "Weekly Progress Update", "completed X tasks").
-    *   **Error Handling:** Verify that email sending failures are logged appropriately.
+## 3. Smallest Buildable Next Slice
 
-6.  **Stop Conditions**
-    *   A new Handlebars email template (`weeklyProgressEmail.hbs`) exists and can render with sample data.
-    *   A dedicated email sender service (`weeklyProgressEmailSender.js`) is implemented, capable of sending the templated email.
-    *   A cron job (`weeklyProgressEmailJob.js`) is defined and configured to run weekly, triggering the sender service.
-    *   The job successfully sends a basic progress email to the LifeOS user (containing a count of completed tasks/goals and a dashboard link) in a test environment.
-    *   No new user-facing UI elements or configuration options are introduced.
+The smallest buildable slice focuses on establishing the scheduling mechanism and a placeholder email generation flow without actual external email dispatch.
+
+1.  **Define a minimal `WeeklyProgressEmailData` interface/type:** This will include placeholder fields like `userId`, `weekStartDate`, `weekEndDate`, `summaryText`.
+2.  **Create a placeholder email template:** A basic EJS (or existing templating engine) template for the weekly progress email, using the minimal data schema.
+3.  **Implement a scheduled job:** A `node-cron` or similar job that runs weekly.
+4.  **Job Logic (placeholder):**
+    *   On execution, the job will iterate through a hardcoded list of `userId`s (or a single placeholder `userId`).
+    *   For each `userId`, it will generate mock `WeeklyProgressEmailData`.
+    *   It will then call an internal function (e.g., `emailService.renderWeeklyProgressEmail`) to render the template with the mock data.
+    *   Crucially, it will *log* the rendered email content instead of sending it.
+
+## 4. Exact Safe-Scope Files BuilderOS Should Touch First
+
+*   `src/types/email.d.ts`: Add `WeeklyProgressEmailData` interface.
+*   `src/services/email/templates/weekly-progress.ejs`: New email template file.
+*   `src/services/email/emailService.js`: Add `renderWeeklyProgressEmail(data: WeeklyProgressEmailData)` function.
+*   `src/jobs/weeklyProgressEmailJob.js`: New file for the scheduled job.
+*   `src/config/jobs.js`: Add configuration entry for `weeklyProgressEmailJob`.
+
+## 5. Required Verifier/Runtime Checks
+
+*   **Job Execution Log:**
