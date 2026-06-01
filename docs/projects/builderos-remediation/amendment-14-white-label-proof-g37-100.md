@@ -1,15 +1,13 @@
-# Amendment 14 White Label Proof: G37-100 - Branding Removal Verification
+# Amendment 14: White-Label Proof - G37-100
 
-## Blueprint Note for C2 Build Pass
+## Document Purpose
+This document serves as a proof of concept and verification guide for Amendment 14, which introduces white-label capabilities within BuilderOS. This specific proof (G37-100) focuses on the foundational configuration and rendering of white-label assets.
 
-This note addresses a critical proof gap in Amendment 14 White Label implementation: the verifiable removal of default LifeOS branding for white-labeled tenants. This is a foundational aspect of white-labeling and requires explicit verification.
+## Amendment Context
+Amendment 14 enables BuilderOS to support custom branding and theming for client-specific deployments without modifying core LifeOS user features or TSOS customer-facing surfaces. This ensures BuilderOS-only governed loop execution.
 
-### 1. Exact Missing Implementation or Proof Gap
+## Proof Gap Addressed
+This proof addresses the initial setup and verification that white-label configuration parameters are correctly applied and recognized by the BuilderOS rendering engine.
 
-The current gap is the *proof* that the "Powered by LifeOS" branding is successfully suppressed or replaced with client-specific branding for tenants configured for white-labeling. While the implementation might exist, the explicit verification and documentation of this state are missing. This proof point ensures the core promise of white-labeling is met.
-
-### 2. Smallest Safe Build Slice to Close It
-
-The smallest safe build slice involves:
-*   **Verification of existing branding suppression logic:** Confirming that the application's UI components (specifically footers or global branding areas) correctly interpret and apply white-label branding settings.
-*   **Runtime validation:** Executing a test case for a
+## Implementation Details (Conceptual)
+The white-
