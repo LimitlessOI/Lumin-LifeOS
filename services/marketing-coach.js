@@ -1,6 +1,3 @@
-/**
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- */
 // Import AI Council service (assumed to exist and export generateCompletion)
 // This dependency is from Task 5, AI council VERIFIED.
 import * as aiCouncil from './ai-council.js';
