@@ -1,26 +1,31 @@
-# Blueprint Proof: Command Center V2 - Core Command Execution (G32-100)
+# Command Center V2 Blueprint Proof - G32-100
 
-This document serves as a proof-closing note for the initial build slice of the Command Center V2, focusing on establishing the foundational command execution flow.
+## Blueprint Note: Initial CommandRegistry Implementation
 
----
+This note closes the proof gap for the foundational `CommandRegistry` component, enabling the subsequent implementation of the `CommandRouter`.
 
-### Blueprint Note: Core Command Execution Proof
+### 1. Exact Missing Implementation or Proof Gap
 
-**1. Exact Missing Implementation or Proof Gap:**
-The core command execution pipeline, from API request reception to command dispatch and execution, is not yet implemented. Specifically, the `POST /api/v2/command-center/execute` endpoint and its ability to successfully dispatch and execute a registered command (e.g., `SystemHealthCheckCommand`) is the current gap.
+The core `CommandRegistry` component, responsible for storing and retrieving command handlers, is not yet implemented. Its existence and correct functionality are a prerequisite for the `CommandRouter` to dispatch commands effectively.
 
-**2. Smallest Safe Build Slice to Close It:**
-Implement the foundational components required for an end-to-end command execution flow:
--   Define the `ICommand` interface.
--   Define the `CommandRegistryService` to manage command mappings.
--   Implement a minimal `SystemHealthCheckCommand` as the first executable command.
--   Implement the `CommandCenterV2Service` to orchestrate command execution via the registry.
--   Implement the `CommandCenterV2Controller` to expose the `POST /api/v2/command-center/execute` endpoint.
--   Define necessary request/response schemas (`CommandExecutionRequest`, `CommandExecutionResponse`).
--   Integrate these components into the application module.
+### 2. Smallest Safe Build Slice to Close It
 
-**3. Exact Safe-Scope Files to Touch First:**
--   `src/modules/command-center-v2/interfaces/ICommand.ts`
--   `src/modules/command-center-v2/schemas/CommandCenterV2Schema.ts`
--   `src/modules/command-center-v2/commands/SystemHealthCheckCommand.ts`
--   `src/modules/command-center-v2/
+Implement the `CommandRegistry` module as defined in the blueprint. This includes:
+-   Creating the `CommandRegistry` class/object.
+-   Implementing a `registerCommand(commandId: string, handler: CommandHandler)` method to add handlers to an internal map.
+-   Implementing a `getCommandHandler(commandId: string)` method to retrieve a handler by its ID.
+
+### 3. Exact Safe-Scope Files to Touch First
+
+-   `src/command-center/CommandRegistry.js`
+
+### 4. Verifier/Runtime Checks
+
+To verify the correct implementation of `CommandRegistry`:
+
+1.  **Instantiation:** Ensure `CommandRegistry` can be instantiated without errors.
+2.  **Registration:**
+    ```javascript
+    import { CommandRegistry } from './src/command-center/CommandRegistry.js'; // Assuming default export or named export
+    const registry = new CommandRegistry();
+    const dummyHandler = async (command) => `Handled ${command
