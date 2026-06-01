@@ -1,30 +1,42 @@
-Amendment 41 MarketingOS Proof: G8-100 SSOT Foundation
+# Proof-Closing Blueprint Note: MarketingOS SSOT Foundation (G8-100)
 
-This document serves as a proof-closing blueprint note for Amendment 41 within the MarketingOS context, specifically addressing the foundational status of `docs/projects/AMENDMENT_41_MARKETINGOS.md` as the Single Source of Truth (SSOT).
+This document addresses a critical proof gap in establishing MarketingOS as the Single Source of Truth (SSOT) for `MarketingSegment` data, as outlined in `AMENDMENT_41_MARKETINGOS.md`.
 
-1. Exact Missing Implementation or Proof Gap
-The proof gap is the formal establishment and explicit referencing of `docs/projects/AMENDMENT_41_MARKETINGOS.md` as the definitive Single Source of Truth (SSOT) for all aspects pertaining to Amendment 41 within the MarketingOS domain. This includes ensuring all dependent BuilderOS processes and documentation consistently point to this single source, and that a verification mechanism is in place to confirm this adherence.
+## 1. Exact Missing Implementation or Proof Gap
 
-2. Smallest Safe Build Slice to Close It
-The smallest safe build slice involves:
-    a. Updating BuilderOS configuration or metadata to formally declare `docs/projects/AMENDMENT_41_MARKETINGOS.md` as the SSOT for Amendment 41.
-    b. Implementing a lightweight BuilderOS verification script that checks for the existence and correct referencing of this SSOT across relevant BuilderOS artifacts.
-    c. Ensuring any new or modified BuilderOS components related to Amendment 41 are configured to retrieve their foundational data exclusively from the specified SSOT.
+The `AMENDMENT_41_MARKETINGOS.md` blueprint establishes the *intent* for MarketingOS to be the SSOT for `MarketingSegment` data. The missing implementation and proof gap is the concrete, verifiable mechanism for ensuring that `MarketingSegment` updates originating in MarketingOS are consistently and reliably propagated to all designated downstream systems, thereby proving its SSOT status in practice. Specifically, the absence of an event-driven propagation and verification loop for `MarketingSegment` changes.
 
-3. Exact Safe-Scope Files to Touch First
-    - `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g8-100.md` (this document, completing its content)
-    - `docs/projects/AMENDMENT_41_MARKETINGOS.md` (ensure its content is stable and complete as the SSOT)
-    - `builderos/config/amendment-41-ssot.json` (new or existing configuration file to declare SSOT path)
-    - `builderos/verification/ssot-integrity-check.js` (new or existing script to perform checks)
+## 2. Smallest Safe Build Slice to Close It
 
-4. Verifier/Runtime Checks
-    - **File Existence Check:** Verify that `docs/projects/AMENDMENT_41_MARKETINGOS.md` exists and is readable by BuilderOS processes.
-    - **SSOT Reference Check:** Scan `builderos/config/` and `builderos/pipelines/` for explicit references to `AMENDMENT_41_MARKETINGOS.md` and confirm they point to the correct SSOT path.
-    - **Content Integrity Check:** Perform a basic schema validation or keyword search within `AMENDMENT_41_MARKETINGOS.md` to ensure critical sections (e.g., `[Scope]`, `[Key Objectives]`) are present and non-empty.
-    - **BuilderOS Loop Integration Check:** Confirm that the `ssot-integrity-check.js` script is integrated into the relevant BuilderOS governed loop execution for Amendment 41.
+Implement a foundational event-driven propagation mechanism for `MarketingSegment` updates. This slice will focus on:
+a.  Emitting a `MarketingSegmentUpdatedEvent` from MarketingOS whenever a `MarketingSegment` is created, updated, or deleted.
+b.  Establishing a minimal, observable listener in a representative downstream system (e.g., a simulated `DownstreamCRMService`) that consumes this event and logs the received data, demonstrating successful propagation.
+This slice prioritizes proving the *propagation channel* and *data consistency* for a single, critical entity.
 
-5. Stop Conditions if Runtime Truth Disagrees
-    - If `docs/projects/AMENDMENT_41_MARKETINGOS.md` is not found or is inaccessible.
-    - If any BuilderOS configuration or pipeline related to Amendment 41 references a different or non-existent source for foundational information.
-    - If the content of `AMENDMENT_41_MARKETINGOS.md` fails basic integrity checks (e.g., missing required sections, malformed structure).
-    - If the `ssot-integrity-check.js` script itself fails to execute or reports an unexpected error, indicating a problem with the verification mechanism.
+## 3. Exact Safe-Scope Files to Touch First
+
+*   `services/marketingos/src/segment/segment.service.ts`: Modify `create`, `update`, and `delete` methods to emit `MarketingSegmentUpdatedEvent` after successful database operations.
+*   `services/marketingos/src/segment/segment.events.ts`: Define the `MarketingSegmentUpdatedEvent` interface, including `segmentId`, `payload` (full segment data), and `eventType` (e.g., 'created', 'updated', 'deleted').
+*   `services/marketingos/src/segment/segment.module.ts`: Ensure event emitter/broker is configured and available to the service.
+*   `services/downstream-crm/src/segment-sync/segment-sync.service.ts` (new file): Implement an event listener for `MarketingSegmentUpdatedEvent` that logs the received segment data and updates an internal cache/state.
+*   `services/downstream-crm/src/segment-sync/segment-sync.controller.ts` (new file): Expose a simple `/status` endpoint to report the timestamp of the last received `MarketingSegment` update and its ID.
+*   `services/downstream-crm/src/app.module.ts`: Register the `SegmentSyncService` and its event listener.
+
+## 4. Verifier/Runtime Checks
+
+*   **Unit Test (`segment.service.ts`):** Verify that `MarketingSegmentUpdatedEvent` is emitted with correct data and event type upon `create`, `update`, and `delete` operations.
+*   **Integration Test (E2E):**
+    1.  Create a new `MarketingSegment` via MarketingOS API.
+    2.  Verify `DownstreamCRMService` logs the `MarketingSegmentCreatedEvent` within 5 seconds.
+    3.  Verify `DownstreamCRMService` `/status` endpoint reflects the new segment's ID and a recent timestamp.
+    4.  Update the created `MarketingSegment` via MarketingOS API.
+    5.  Verify `DownstreamCRMService` logs the `MarketingSegmentUpdatedEvent` with the updated data within 5 seconds.
+    6.  Verify `DownstreamCRMService` `/status` endpoint reflects the updated segment's ID and a recent timestamp.
+*   **Observability:** Monitor event broker queues for `MarketingSegmentUpdatedEvent` volume and latency.
+
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+*   `MarketingSegmentUpdatedEvent` is not emitted by MarketingOS on any `MarketingSegment` modification.
+*   `DownstreamCRMService` does not receive the event within 5 seconds of emission.
+*   The data received by `DownstreamCRMService` for a `MarketingSegment` update does not precisely match the data committed in MarketingOS.
+*   `DownstreamCRMService` `/status` endpoint
