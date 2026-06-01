@@ -464,6 +464,23 @@ export async function sendCommunicationViaC2(pool, payload = {}, options = {}) {
         });
       } catch (err) {
         console.error('[C2-comm] async execute failed for job', job.id, err?.message);
+        // Recover: mark job failed + update comm row so neither stays zombied.
+        try {
+          await pool.query(
+            `UPDATE builderos_command_control_jobs SET status='failed', blocker=$2, updated_at=NOW() WHERE id=$1 AND status='running'`,
+            [job.id, `SETIMMEDIATE_ERROR: ${err?.message || 'unknown'}`],
+          );
+          await updateCommunicationAfterExecution(pool, systemMessage.id, {
+            response_text: `C2 execution interrupted: ${err?.message || 'unknown'}`,
+            status: 'failed',
+            evidence_json: evidence,
+            commit_sha: null,
+            railway_sha: null,
+            builder_job_id: job.id,
+          });
+        } catch (recoveryErr) {
+          console.error('[C2-comm] recovery update failed for job', job.id, recoveryErr?.message);
+        }
       }
     });
   }

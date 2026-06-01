@@ -51,14 +51,22 @@ async function dispatchBuilderPlan(plan, { baseUrl, commandKey, task_id, bluepri
     ...(plan.max_output_tokens ? { max_output_tokens: plan.max_output_tokens } : {}),
   };
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-command-key': commandKey,
-    },
-    body: JSON.stringify(body),
-  });
+  const controller = new AbortController();
+  const abortTimer = setTimeout(() => controller.abort(), 90_000);
+  let response;
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-command-key': commandKey,
+      },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(abortTimer);
+  }
 
   let json = null;
   try {
@@ -168,6 +176,9 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   if (!claimed) {
     return { ok: false, error: 'claim_failed', stage: 'preflight' };
   }
+
+  // Guard: if anything throws after claiming running, mark job failed so it never zombies.
+  try {
 
   const trace = {
     job_id: jobId,
@@ -403,6 +414,22 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
       repair_loop_result: trace.repair_loop_result,
     },
   });
-  trace.repair_loop_result.result = 'verifier_failed_after_retry';
-  return { ok: false, error: 'verifier_failed', stage: 'oil_verifier', trace };
+    trace.repair_loop_result.result = 'verifier_failed_after_retry';
+    return { ok: false, error: 'verifier_failed', stage: 'oil_verifier', trace };
+  } catch (unexpectedErr) {
+    // Ensure job never stays zombied in 'running' on unexpected throws (e.g. redeploy mid-fetch).
+    try {
+      const currentJob = await getCommandControlJob(pool, jobId);
+      if (currentJob?.status === 'running') {
+        await updateCommandControlJobExecution(pool, jobId, {
+          status: 'failed',
+          blocker: `UNEXPECTED_ERROR: ${unexpectedErr?.message || 'unknown'}`,
+          result_json: { unexpected_error: unexpectedErr?.message, stack: unexpectedErr?.stack?.slice(0, 500) },
+        });
+      }
+    } catch {
+      // best-effort — DB may be unavailable during redeploy
+    }
+    return { ok: false, error: 'unexpected_error', stage: 'execution', detail: unexpectedErr?.message };
+  }
 }

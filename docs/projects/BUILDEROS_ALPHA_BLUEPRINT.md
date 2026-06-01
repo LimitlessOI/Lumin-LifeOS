@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-05-31 (OC-014 fix: /execute fallback + SUPERVISED uppercase + OIL race condition; overnight backlog runner added)
+**Last Updated:** 2026-06-01
 
 ---
 
@@ -454,6 +454,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-06-01 | `services/builderos-governed-loop-executor.js` — (1) AbortController 90s timeout on `dispatchBuilderPlan` fetch; (2) top-level try/catch in `executeCommandControlJob` after `claimed` — sets job to `failed` on unexpected throw so job never zombies in `running`. | Railway redeploys kill in-flight fetch in setImmediate callbacks with no DB cleanup. Jobs stuck `running` for hours. Timeout ensures fetch aborts after 90s; guard ensures terminal state is always written. `node --check` PASS. GAP-FILL: executor is the thing being fixed. |
 | 2026-05-24 | `services/builderos-governed-loop-executor.js` — pass `task_id`/`blueprint_id` to `/builder/build`; optional control-plane health preflight hook. | Governed loop respects kernel build identity + health. GAP-FILL platform. | TSOS Platform Kernel Phase 0 |
 | 2026-05-29 | `services/builderos-tsos-routing.js` (G3.3 hypothetical rules) + `services/builderos-tsos-evidence.js` (global avg token + cheaper verifier success) + `routes/tsos-efficiency-routes.js` (hypothetical_only filter + shadow labels) + TSOS docs §9.4 | TSOS-G3.3 — shadow hypothetical routing deltas only. `computeTsosHypotheticalRouting()` logs what TSOS would change; actual dispatch unchanged (`decision_changed=false`). Rules: repair escalation, prefix risk, token downgrade. GAP-FILL: builder preflight dotenv missing locally. | Future ACTIVE proof requires hypothetical deltas before apply (G3.4). |
 | 2026-05-29 | `db/migrations/20260529_builderos_tsos_routing_g3_2_comparator.sql` (NEW) + `services/builderos-tsos-routing.js` (computeBaselineRouting + comparator_snapshot_json) + `services/builderos-tsos-evidence.js` (expanded prefix/global evidence fields) + `routes/lifeos-council-builder-routes.js` (pass routingPolicy + operatorOverride) + `docs/projects/TSOS_PROVEN_ADVANCEMENT_PLAN.md` §9 + `TSOS_HOOK_BOUNDARY.md` §8 | TSOS-G3.2 — baseline comparator refinement SHADOW only. Extended comparator output (allowed models, policy source, operator_override); expanded evidence snapshot (global + prefix aggregates). decision_changed remains false; no routing/ACTIVE/alpha changes. GAP-FILL: builder preflight dotenv missing locally. | Observability for future routing delta proof before G3.3 hypothetical adjustments. |
