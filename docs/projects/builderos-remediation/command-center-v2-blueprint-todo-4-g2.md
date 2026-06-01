@@ -1,0 +1,1 @@
+The blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided in the REPO FILE CONTENTS, making it impossible to ground the output in its specific details for sections F and H.
