@@ -72,6 +72,14 @@ For **architecture review, drift audits, kernel/ledger planning, or ChatGPT cros
 
 Architect Mode does **not** authorize product hand-authoring; implementation sessions use **Conductor Mode** below (builder-first, §2.11).
 
+## Continuous Autonomous Operations (overnight / C2 runner)
+
+When running or supervising **autonomous overnight work**, **C2 backlog runners**, or **BuilderOS continuous loops**, read **`prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md`** first.
+
+**Enforced in code:** `scripts/governed-overnight-backlog-run.mjs` — founder-value metrics (`founder_value_deliveries`), blocker-class redirect (no 502 retry loops), infrastructure pivot to support/local verify.
+
+**Success = verified founder value** (OIL + token + committed capability), **not** commit count or tasks attempted.
+
 ## Conductor Roles
 
 - **SSOT (brain/blueprint):** Source of truth and build order.

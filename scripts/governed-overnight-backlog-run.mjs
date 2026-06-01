@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 /**
- * Overnight BuilderOS backlog runner — blueprint-first, C2-governed, never stops.
+ * Overnight BuilderOS backlog runner — blueprint-first, C2-governed, never idle.
+ *
+ * Operating law: prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md
+ * — maximize verified founder value, not commits or queue consumption.
  *
  * Canonical workflow:
  * SSOT / Amendment / Blueprint
@@ -11,7 +14,7 @@
  *   -> verify
  *   -> receipts
  *   -> update continuity
- *   -> next blueprint task
+ *   -> next highest-value mission (redirect when blocked)
  *
  * Gap/contradiction verifier scripts are fallback support work only. They are
  * not the primary queue while blueprint work exists.
@@ -50,7 +53,53 @@ const HARD_BLOCKERS = new Set([
   'CAPACITY_EXHAUSTED',
 ]);
 const MAX_CONSECUTIVE_502 = 15;
+const INFRA_REDIRECT_AT_502 = 8;
 let consecutive502s = 0;
+
+const NO_RETRY_BLOCKERS = new Set([
+  'HTTP_502',
+  'SERVICE_OUTAGE',
+  'LIFEOS_PRODUCT_DRIFT',
+  'ZONE3_PATCH_REQUIRED',
+]);
+
+function blockerCategory(code) {
+  const c = String(code || '');
+  if (c.startsWith('HTTP_5') || c === 'SERVICE_OUTAGE' || c === 'fetch failed') return 'infrastructure';
+  if (c === 'ZONE3_PATCH_REQUIRED' || c === 'LIFEOS_PRODUCT_DRIFT') return 'governance';
+  if (c === 'syntax' || c.includes('validation')) return 'test_failure';
+  if (c.includes('Council')) return 'council';
+  if (c.includes('Commit failed')) return 'deployment';
+  return 'other';
+}
+
+function taskBaseId(taskId) {
+  return String(taskId || '').replace(/_retry\d*$/, '').replace(/_retry$/, '');
+}
+
+async function runLocalVerificationBurst(state) {
+  const checks = [
+    { name: 'platform:coverage', cmd: 'npm run platform:coverage' },
+    { name: 'ai:bypasses', cmd: 'npm run ai:bypasses' },
+  ];
+  state.local_verifications = state.local_verifications || [];
+  for (const check of checks) {
+    try {
+      const out = execSync(check.cmd, { cwd: ROOT, encoding: 'utf8', timeout: 120000, stdio: ['ignore', 'pipe', 'pipe'] });
+      await appendLog('local_verification_ok', {
+        check: check.name,
+        output_preview: String(out).slice(0, 400),
+      });
+      state.local_verifications.push({ check: check.name, ok: true, at: new Date().toISOString() });
+    } catch (error) {
+      await appendLog('local_verification_fail', {
+        check: check.name,
+        error: (error.stderr?.toString?.() || error.message || 'failed').slice(0, 200),
+      });
+      state.local_verifications.push({ check: check.name, ok: false, at: new Date().toISOString() });
+    }
+  }
+}
 
 const SAFE_TARGET_PREFIXES = Object.freeze([
   'routes/',
@@ -765,7 +814,8 @@ async function runTask(task, state) {
         ref: task.ref || null,
         zone: task.zone,
         expected_blocker: task.expected_blocker || null,
-        mission: 'BLUEPRINT_FIRST_CONTINUOUS_AUTONOMOUS_OVERNIGHT',
+        mission: 'TSOS_CONTINUOUS_AUTONOMOUS_OPS',
+        operations_directive: 'prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md',
         session: new Date().toISOString().slice(0, 10),
         blueprint_path: task.blueprint_path || null,
         blueprint_section: task.blueprint_section || null,
@@ -838,7 +888,10 @@ async function runTask(task, state) {
       blueprint_path: task.blueprint_path || null,
     });
     state.autonomous_decisions++;
-    if (oilVerified && tokenVerified) state.successful_repairs++;
+    if (oilVerified && tokenVerified) {
+      state.successful_repairs++;
+      state.founder_value_deliveries++;
+    }
     return { ok: true, committed: true, job_id: jobId, oil_verified: oilVerified };
   }
 
@@ -870,6 +923,15 @@ async function runTask(task, state) {
   });
   if (!isZone3) state.failed_repairs++;
   if (isZone3) state.governance_prevented_drift++;
+
+  const baseId = taskBaseId(task.id);
+  const category = blockerCategory(blockerInfo.code);
+  state.blocked_attempts[baseId] = {
+    blocker: blockerInfo.code,
+    category,
+    at: new Date().toISOString(),
+    target_file: task.target_file,
+  };
 
   return {
     ok: false,
@@ -930,9 +992,13 @@ async function main() {
     successes: [],
     failures: [],
     lessons: [],
+    founder_value_deliveries: 0,
+    blocked_attempts: {},
+    local_verifications: [],
+    infrastructure_degraded: false,
     current_task: null,
     stop_reason: null,
-    stop_law: 'ONLY: operator_stop | capacity_exhausted | service_outage | safety_boundary | repo_corruption. Time limits are checkpoints only.',
+    stop_law: 'ONLY: operator_stop | capacity_exhausted | safety_boundary | repo_corruption. Time limits are checkpoints only. HTTP_502 → redirect (not idle). See prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md',
   };
 
   await appendLog('orchestrator_start', {
@@ -941,6 +1007,8 @@ async function main() {
     base_url: BASE_URL.slice(0, 50),
     key_len: KEY.length,
     workflow: 'BLUEPRINT_FIRST',
+    operations_directive: 'prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md',
+    success_metrics: 'founder_value_deliveries (oil+token+committed), not commit_count',
     queue_priority: ['SocialMediaOS/MarketingOS', 'C2/Command Control (when needed for MarketingOS)', 'LifeOS/LimitlessOS (only if needed by MarketingOS)', 'TC', 'TSOS platform improvements'],
     fallback_queue: ['OPEN_CONTRADICTIONS.md', 'PLATFORM_GAP_REGISTER.md', 'self_improvement'],
   });
@@ -958,12 +1026,14 @@ async function main() {
         wall_min: wallMin,
         tasks_done: state.tasks_done,
         generation_count: state.generation_count,
+        founder_value_deliveries: state.founder_value_deliveries,
         autonomous_decisions: state.autonomous_decisions,
         successful_repairs: state.successful_repairs,
         failed_repairs: state.failed_repairs,
         governance_prevented_drift: state.governance_prevented_drift,
         blueprint_tasks_generated: state.blueprint_tasks_generated,
         support_tasks_generated: state.support_tasks_generated,
+        infrastructure_degraded: state.infrastructure_degraded,
         queue_depth: workQueue.length,
         action: 'CONTINUING — checkpoint is NOT a stop condition',
       });
@@ -971,10 +1041,34 @@ async function main() {
       nextCheckpoint = Date.now() + CHECKPOINT_MS;
     }
 
+    if (consecutive502s >= INFRA_REDIRECT_AT_502 && consecutive502s < MAX_CONSECUTIVE_502) {
+      if (!state.infrastructure_degraded) {
+        state.infrastructure_degraded = true;
+        await appendLog('infrastructure_degraded', {
+          consecutive_502s: consecutive502s,
+          action: 'local_verification_burst',
+        });
+        await runLocalVerificationBurst(state);
+      }
+    }
+
     if (consecutive502s >= MAX_CONSECUTIVE_502) {
+      state.infrastructure_degraded = true;
+      const supportBatch = await generateSupportTaskBatch(state.generation_count + 1, attemptedKeys, state);
+      if (supportBatch.length > 0) {
+        workQueue.unshift(...supportBatch.sort((a, b) => a.priority - b.priority));
+        await appendLog('infrastructure_redirect', {
+          consecutive_502s: consecutive502s,
+          support_tasks_queued: supportBatch.length,
+          message: 'Railway degraded — pivot to gap/contradiction support lane + local verify; not stopping.',
+        });
+        consecutive502s = 0;
+        await writeState(state);
+        continue;
+      }
       await appendLog('orchestrator_hard_stop', {
         blocker: 'SERVICE_OUTAGE',
-        reason: `${consecutive502s} consecutive HTTP 502 responses — Railway unreachable`,
+        reason: `${consecutive502s} consecutive HTTP 502 responses — no redirect tasks available`,
       });
       state.status = 'hard_stop';
       state.stop_reason = 'SERVICE_OUTAGE';
@@ -1062,22 +1156,40 @@ async function main() {
     }
 
     if (!result.ok && !result.dry_run && !result.zone3) {
-      const retryTask = {
-        ...task,
-        id: `${task.id}_retry`,
-        instruction: `${task.instruction} Keep the implementation minimal and aligned to the blueprint. Focus only on the named target and required return shape.`,
-      };
-      await appendLog('task_retry', { task_id: task.id, retry_id: retryTask.id });
-      const retryResult = await runTask(retryTask, state);
-      if (!state.first_job_id && retryResult.job_id) {
-        state.first_job_id = retryResult.job_id;
-      }
-      if (retryResult.hard) {
-        await appendLog('orchestrator_hard_stop', { blocker: retryResult.blocker, task_id: retryTask.id });
-        state.status = 'hard_stop';
-        state.stop_reason = retryResult.blocker;
-        hardStop = true;
-        break;
+      const baseId = taskBaseId(task.id);
+      const failCode = result.blocker || result.error || 'UNKNOWN_FAILURE';
+      const category = blockerCategory(failCode);
+      const prior = state.blocked_attempts[baseId];
+      const shouldSkipRetry = NO_RETRY_BLOCKERS.has(failCode)
+        || failCode.startsWith('HTTP_5')
+        || (prior && prior.blocker === failCode)
+        || (prior && prior.category === category && category !== 'other');
+
+      if (shouldSkipRetry) {
+        await appendLog('task_redirect_skip_retry', {
+          task_id: task.id,
+          blocker: failCode,
+          category,
+          reason: 'TSOS_CONTINUOUS_AUTONOMOUS_OPS — no repeated retry on same blocker class',
+        });
+      } else {
+        const retryTask = {
+          ...task,
+          id: `${task.id}_retry`,
+          instruction: `${task.instruction} Keep the implementation minimal and aligned to the blueprint. Focus only on the named target and required return shape.`,
+        };
+        await appendLog('task_retry', { task_id: task.id, retry_id: retryTask.id, blocker: failCode, category });
+        const retryResult = await runTask(retryTask, state);
+        if (!state.first_job_id && retryResult.job_id) {
+          state.first_job_id = retryResult.job_id;
+        }
+        if (retryResult.hard) {
+          await appendLog('orchestrator_hard_stop', { blocker: retryResult.blocker, task_id: retryTask.id });
+          state.status = 'hard_stop';
+          state.stop_reason = retryResult.blocker;
+          hardStop = true;
+          break;
+        }
       }
     }
 
@@ -1091,10 +1203,12 @@ async function main() {
     stop_reason: state.stop_reason,
     tasks_done: state.tasks_done,
     generation_count: state.generation_count,
+    founder_value_deliveries: state.founder_value_deliveries,
     autonomous_decisions: state.autonomous_decisions,
     successful_repairs: state.successful_repairs,
     failed_repairs: state.failed_repairs,
     governance_prevented_drift: state.governance_prevented_drift,
+    infrastructure_degraded: state.infrastructure_degraded,
     wall_min: ((Date.now() - new Date(state.started_at).getTime()) / 60000).toFixed(1),
     valid_stop: true,
   });

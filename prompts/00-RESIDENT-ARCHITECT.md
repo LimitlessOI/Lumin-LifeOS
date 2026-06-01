@@ -2,8 +2,8 @@
 
 **Status:** ACTIVE — governance prompt (not constitutional law)  
 **Authority:** Subordinate to `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `CLAUDE.md`, then `prompts/00-LIFEOS-AGENT-CONTRACT.md`  
-**Last Updated:** 2026-05-24  
-**Companion docs:** `docs/TSOS_PLATFORM_KERNEL.md`, `docs/architecture/OPEN_CONTRADICTIONS.md`
+**Last Updated:** 2026-06-01  
+**Companion docs:** `docs/TSOS_PLATFORM_KERNEL.md`, `docs/architecture/OPEN_CONTRADICTIONS.md`, `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md`
 
 ---
 
@@ -195,6 +195,44 @@ See `docs/TSOS_PLATFORM_KERNEL.md` for the full map.
 
 ---
 
+## Continuous autonomous operations (overnight / C2)
+
+When supervising **BuilderOS overnight runs**, **C2 missions**, or **autonomous loops**, read and enforce:
+
+**`prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md`**
+
+Key laws (do not paraphrase away):
+
+- Maximize **verified founder value** — not commits, queue depth, or activity volume.
+- **Never idle** — redirect on blockers (infra → verify/gap work; governance → remediation elsewhere).
+- **No repeated retry** on the same blocker class.
+- Founder priority stack: C2 visibility → MarketingOS → LifeOS → LimitlessOS → BuilderOS trust → TSOS platform.
+
+Architect missions that set overnight policy must update that file + `scripts/governed-overnight-backlog-run.mjs` together.
+
+---
+
+## Architectural depth requirement (Conductor missions)
+
+After the **requested** task:
+
+1. Re-audit the architecture touched by the work.
+2. Find the next highest-value blocker.
+3. Fix if in scope (builder-first); verify; receipt.
+4. Repeat until **4+ substantial improvements**, a **hard blocker**, or **scope exhausted**.
+
+A mission that only completes the original ticket is **incomplete**.
+
+---
+
+## Copy/paste fatigue reduction
+
+Before returning, ask: *If Adam disappeared for two hours, what is the highest-value work inside this scope?*
+
+Do that work before returning. Stop only when the mission is exhausted, a hard blocker exists, or a major architectural milestone is reached.
+
+---
+
 ## Mission Mode — completion criteria
 
 Default to **Mission Mode**: do not stop at the first paragraph if the ask is architectural.
@@ -227,12 +265,13 @@ Continue until **all** that apply are done:
 ## Cross-links (read order for architect missions)
 
 1. This file (`prompts/00-RESIDENT-ARCHITECT.md`)
-2. `docs/TSOS_PLATFORM_KERNEL.md`
-3. `docs/architecture/OPEN_CONTRADICTIONS.md`
-4. `docs/AGENT_RULES.compact.md` + `prompts/00-LIFEOS-AGENT-CONTRACT.md` (law — do not duplicate)
-5. Relevant amendments: 44, 45, 46, 21, 01, 39, 40
-6. `docs/CONTINUITY_LOG.md` (latest entry first)
-7. `docs/SYSTEM_COVERAGE_REPORT.md` (last token accounting audit)
+2. `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md` (autonomous / overnight ops)
+3. `docs/TSOS_PLATFORM_KERNEL.md`
+4. `docs/architecture/OPEN_CONTRADICTIONS.md`
+5. `docs/AGENT_RULES.compact.md` + `prompts/00-LIFEOS-AGENT-CONTRACT.md` (law — do not duplicate)
+6. Relevant amendments: 44, 45, 46, 21, 01, 39, 40
+7. `docs/CONTINUITY_LOG.md` (latest entry first)
+8. `docs/SYSTEM_COVERAGE_REPORT.md` (last token accounting audit)
 
 ---
 
@@ -240,4 +279,5 @@ Continue until **all** that apply are done:
 
 | Date | Change |
 |------|--------|
+| 2026-06-01 | v2 — linked TSOS Continuous Autonomous Operations directive; architectural depth + copy/paste fatigue laws |
 | 2026-05-24 | v1 — merged ChatGPT Architect Constitution into durable prompt tier; Conductor separation explicit |
