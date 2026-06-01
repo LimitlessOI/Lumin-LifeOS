@@ -19,13 +19,39 @@
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
-import 'dotenv/config';
 import fs from 'node:fs/promises';
+import fsSync from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
 const ROOT = process.cwd();
+function loadLocalEnvFile() {
+  const envPath = path.join(ROOT, '.env');
+  if (!fsSync.existsSync(envPath)) return;
+  try {
+    const text = fsSync.readFileSync(envPath, 'utf8');
+    for (const line of text.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+      if (!match || process.env[match[1]] !== undefined) continue;
+      let value = match[2].trim();
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+      process.env[match[1]] = value;
+    }
+  } catch {
+    // Local .env loading is best-effort; missing env still fails closed in main().
+  }
+}
+
+loadLocalEnvFile();
+
 const PROJECTS_DIR = path.join(ROOT, 'docs', 'projects');
 const LOG_PATH = path.join(ROOT, 'data', 'governed-autonomy-overnight-log.jsonl');
 const STATE_PATH = path.join(ROOT, 'data', 'governed-autonomy-backlog-state.json');
