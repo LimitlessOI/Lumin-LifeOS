@@ -1,3 +1,9 @@
-# Amendment 12 Command Center Proof G19-100: Core Command Entity Persistence
+# Amendment 12 Command Center Proof: G19-100 - System Health Status Endpoint
 
-This document serves as a proof-closing blueprint note for the initial persistence layer of the Command Center's core `Command` entity, as outlined in `AMENDMENT_12_COMMAND_CENTER.md`. This proof focuses on establishing the foundational data model and basic CRUD operations for `Command` objects
+## Blueprint Note: Proof Closure
+
+This note closes proof G19-100 by defining the smallest, safest build slice to establish a foundational backend capability for the Command Center.
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The initial backend API endpoint for retrieving a high
