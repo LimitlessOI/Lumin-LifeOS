@@ -65,6 +65,7 @@ import { buildSupervisedAutonomyReadiness } from '../services/supervised-autonom
 import { buildBuilderOSSystemAlphaReadiness } from '../services/builderos-system-alpha-readiness.js';
 import {
   buildCommunicationEvidence,
+  getThreadWithJobStatus,
   insertCommunication,
   listCommunications,
   sendCommunicationViaC2,
@@ -1100,6 +1101,20 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
         messageType: req.query.message_type,
       });
       res.json({ ok: true, count: rows.length, communications: rows });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/communications/thread/:thread_id
+   * Thread view with enriched job status joined from command_control_jobs.
+   * Designed as the poll endpoint for async C2 execution status updates.
+   */
+  router.get('/api/v1/lifeos/command-center/communications/thread/:thread_id', requireKey, async (req, res, next) => {
+    try {
+      const rows = await getThreadWithJobStatus(pool, req.params.thread_id);
+      res.json({ ok: true, thread_id: req.params.thread_id, count: rows.length, messages: rows });
     } catch (err) {
       next(err);
     }

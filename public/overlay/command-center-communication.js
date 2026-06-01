@@ -79,6 +79,7 @@
   let availableVoices = [];
   let longPressTimer = null;
   let initialized = false;
+  let activeJobPoller = null;
 
   function getKey() {
     return global.KEY
@@ -418,6 +419,68 @@
     }
   }
 
+  const JOB_TERMINAL = new Set(['committed', 'failed', 'blocked', 'done', 'halted', 'cancelled']);
+
+  function stopJobPolling() {
+    if (activeJobPoller) {
+      clearInterval(activeJobPoller);
+      activeJobPoller = null;
+    }
+    const indicator = document.getElementById('cc-job-poll-indicator');
+    if (indicator) indicator.textContent = '';
+  }
+
+  function startJobPolling(threadId, systemMessageId) {
+    stopJobPolling();
+    let polls = 0;
+    const MAX_POLLS = 40;
+
+    activeJobPoller = setInterval(async () => {
+      polls += 1;
+      if (polls > MAX_POLLS) {
+        stopJobPolling();
+        const indicator = document.getElementById('cc-job-poll-indicator');
+        if (indicator) indicator.textContent = 'Poll timeout — check job manually';
+        return;
+      }
+
+      const resp = await ccFetch(`/api/v1/lifeos/command-center/communications/thread/${threadId}`);
+      if (!resp.ok) return;
+
+      const sysMsg = (resp.data?.messages || []).find((m) => m.id === systemMessageId);
+      if (!sysMsg) return;
+
+      const liveStatus = sysMsg.job_status || sysMsg.status || 'queued';
+      const liveBlocker = sysMsg.job_blocker || '';
+      const liveText = sysMsg.response_text || '';
+
+      const pill = document.getElementById('cc-job-status-pill');
+      if (pill) {
+        const cls = liveStatus === 'committed' ? 'pill-success'
+          : (liveStatus === 'failed' || liveStatus === 'blocked' || liveStatus === 'halted') ? 'pill-error'
+          : liveStatus === 'running' ? 'pill-warning'
+          : 'pill-muted';
+        pill.className = `pill ${cls}`;
+        pill.style.fontSize = '9px';
+        pill.textContent = liveBlocker ? `${liveStatus} · ${liveBlocker}` : liveStatus;
+      }
+
+      const textEl = document.getElementById('cc-response-text');
+      if (textEl && liveText && liveText !== textEl.getAttribute('data-text')) {
+        textEl.setAttribute('data-text', liveText);
+        textEl.innerHTML = escapeHtml(liveText).replace(/\n/g, '<br>');
+      }
+
+      const indicator = document.getElementById('cc-job-poll-indicator');
+      if (JOB_TERMINAL.has(liveStatus)) {
+        if (indicator) indicator.textContent = '';
+        stopJobPolling();
+      } else if (indicator) {
+        indicator.textContent = `updating… (${polls})`;
+      }
+    }, 3000);
+  }
+
   async function askCouncil() {
     const messageEl = document.getElementById('council-msg');
     const responseEl = document.getElementById('council-response');
@@ -425,6 +488,7 @@
     const text = messageEl?.value?.trim() || '';
     if (!text || !responseEl || isThinking) return;
 
+    stopJobPolling();
     setThinking(true);
     responseEl.style.display = 'block';
     responseEl.innerHTML = '<div class="cc-loading">Sending through C2…</div>';
@@ -460,17 +524,24 @@
     const transcript = document.getElementById('cc-voice-transcript');
     if (transcript) transcript.value = '';
 
+    const initialStatus = data.job?.status || 'queued';
+    const initialText = String(data.system_message?.response_text || '');
     responseEl.innerHTML = `
       <div class="cc-response-head">
         <strong style="color:var(--accent)">C2</strong>
         <span class="pill pill-accent" style="font-size:9px">${escapeHtml(COMM_MODES[getMode()]?.label || getMode())}</span>
-        ${data.job?.status ? `<span class="pill pill-muted" style="font-size:9px">${escapeHtml(data.job.status)}</span>` : ''}
+        <span class="pill pill-muted" id="cc-job-status-pill" style="font-size:9px">${escapeHtml(initialStatus)}</span>
+        <span id="cc-job-poll-indicator" style="font-size:9px;color:var(--text-muted,#888);margin-left:4px">${data.async_execute ? 'updating…' : ''}</span>
       </div>
-      <div class="cc-response-body" id="cc-response-text">${escapeHtml(String(data.system_message?.response_text || '')).replace(/\n/g, '<br>')}</div>
+      <div class="cc-response-body" id="cc-response-text" data-text="${escapeHtml(initialText)}">${escapeHtml(initialText).replace(/\n/g, '<br>')}</div>
       ${renderEvidence(data.evidence)}
       <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
         <button type="button" class="btn btn-ghost btn-sm" id="cc-speak-response">Speak response</button>
       </div>`;
+
+    if (data.async_execute && data.thread_id && data.system_message?.id) {
+      startJobPolling(data.thread_id, data.system_message.id);
+    }
 
     document.getElementById('cc-speak-response')?.addEventListener('click', () => {
       speakResponse(data.system_message?.response_text || '');
@@ -578,6 +649,7 @@
     loadBuildHistory,
     loadDomains,
     speakResponse,
+    stopJobPolling,
     COMM_MODES,
   };
 })(window);

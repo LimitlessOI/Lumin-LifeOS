@@ -312,6 +312,25 @@ async function updateCommunicationAfterExecution(pool, id, updates) {
   );
 }
 
+export async function getThreadWithJobStatus(pool, threadId) {
+  const result = await pool.query(
+    `SELECT c.id, c.thread_id, c.thread_title, c.speaker, c.council_member,
+            c.mode, c.domain, c.transcript, c.response_text, c.evidence_json,
+            c.builder_job_id, c.commit_sha, c.railway_sha, c.message_type,
+            c.transport, c.status, c.selected_voice, c.playback_rate, c.explicit_send,
+            c.parent_message_id, c.command_control_job_id, c.created_at,
+            j.status        AS job_status,
+            j.blocker       AS job_blocker,
+            j.updated_at    AS job_updated_at
+       FROM command_center_communications c
+       LEFT JOIN command_control_jobs j ON j.id = c.command_control_job_id
+      WHERE c.thread_id = $1::uuid
+      ORDER BY c.created_at ASC`,
+    [threadId],
+  );
+  return result.rows;
+}
+
 function buildBuilderMetaFromJob(job, deploySha) {
   const trace = job?.result_json?.trace || {};
   const builderOutput = trace.builder_output || {};
