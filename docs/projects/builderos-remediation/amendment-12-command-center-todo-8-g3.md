@@ -1,6 +1,3 @@
-### AMENDMENT 12 COMMAND CENTER: Chat Response Remediation (G3)
+### BuilderOS Blueprint Enhancement Memo: Amendment 12 Command Center - Chat Remediation (G3)
 
-This memo outlines a builder-ready enhancement for the `AMENDMENT_12_COMMAND_CENTER` blueprint, focusing on the robust handling of chat service responses.
-
-1.  **Blocking Ambiguity or Founder Decision List:**
-    *   **Definition of "valid key":** The blueprint states
+This memo addresses the `AMENDMENT_12_COMMAND_CENTER.md` blueprint, specifically the task related to the "Chat returns `{ ok: true, response: "..." }` with valid key" section. The goal is to provide a builder-ready enhancement for this
