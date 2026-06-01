@@ -297,6 +297,21 @@ export async function listCommunications(pool, {
   return result.rows;
 }
 
+async function updateCommunicationAfterExecution(pool, id, updates) {
+  await pool.query(
+    `UPDATE command_center_communications
+        SET response_text = $2,
+            status        = $3,
+            evidence_json = $4,
+            commit_sha    = $5,
+            railway_sha   = $6,
+            builder_job_id = $7
+      WHERE id = $1`,
+    [id, updates.response_text, updates.status, updates.evidence_json,
+      updates.commit_sha, updates.railway_sha, updates.builder_job_id],
+  );
+}
+
 function buildBuilderMetaFromJob(job, deploySha) {
   const trace = job?.result_json?.trace || {};
   const builderOutput = trace.builder_output || {};
@@ -365,33 +380,20 @@ export async function sendCommunicationViaC2(pool, payload = {}, options = {}) {
     },
   });
 
-  let execution = null;
-  let refreshedJob = job;
-  if (job.status === 'queued' && payload.auto_execute !== false) {
-    execution = await executeCommandControlJob(pool, job.id, {
-      baseUrl: options.baseUrl,
-      commandKey: options.commandKey,
-    });
-    refreshedJob = await getCommandControlJob(pool, job.id);
-  }
-
-  const responseText = summarizeExecution(refreshedJob?.result_json?.trace || {}, refreshedJob || job);
+  // Build system_message immediately — execution runs async so HTTP response never blocks on council.
   const endpointsUsed = [
     'POST /api/v1/lifeos/command-center/communications/send',
     'POST /api/v1/lifeos/builderos/command-control/jobs',
   ];
-  if (payload.auto_execute !== false) {
+  const willExecute = job.status === 'queued' && payload.auto_execute !== false;
+  if (willExecute) {
     endpointsUsed.push('POST /api/v1/lifeos/builderos/command-control/jobs/:id/execute');
     endpointsUsed.push('GET /api/v1/lifeos/builderos/command-control/jobs/:id');
   }
 
-  const builderMeta = buildBuilderMetaFromJob(refreshedJob || job, deploySha);
-  const evidence = buildCommunicationEvidence({
-    responseText,
-    endpointsUsed,
-    builderMeta,
-    deploySha,
-  });
+  const responseText = summarizeExecution({}, job);
+  const builderMeta = buildBuilderMetaFromJob(job, deploySha);
+  const evidence = buildCommunicationEvidence({ responseText, endpointsUsed, builderMeta, deploySha });
 
   const systemMessage = await insertCommunication(pool, {
     thread_id: threadId,
@@ -404,25 +406,61 @@ export async function sendCommunicationViaC2(pool, payload = {}, options = {}) {
     response_text: responseText,
     message_type: 'system_response',
     transport: 'text',
-    status: refreshedJob?.status || job.status || 'recorded',
+    status: job.status || 'queued',
     selected_voice: selectedVoice,
     playback_rate: playbackRate,
     explicit_send: true,
     parent_message_id: userMessage.id,
-    command_control_job_id: refreshedJob?.id || job.id,
-    builder_job_id: refreshedJob?.id || job.id,
+    command_control_job_id: job.id,
+    builder_job_id: job.id,
     commit_sha: evidence.commit_sha,
     railway_sha: evidence.railway_sha,
     evidence_json: evidence,
   });
+
+  // Fire execution in background — never blocks the HTTP response.
+  if (willExecute) {
+    setImmediate(async () => {
+      try {
+        await executeCommandControlJob(pool, job.id, {
+          baseUrl: options.baseUrl,
+          commandKey: options.commandKey,
+        });
+        const refreshedJob = await getCommandControlJob(pool, job.id);
+        const updatedText = summarizeExecution(refreshedJob?.result_json?.trace || {}, refreshedJob);
+        const updatedMeta = buildBuilderMetaFromJob(refreshedJob, deploySha);
+        const updatedEvidence = buildCommunicationEvidence({
+          responseText: updatedText,
+          endpointsUsed,
+          builderMeta: updatedMeta,
+          deploySha,
+        });
+        await updateCommunicationAfterExecution(pool, systemMessage.id, {
+          response_text: updatedText,
+          status: refreshedJob.status || 'recorded',
+          evidence_json: updatedEvidence,
+          commit_sha: updatedEvidence.commit_sha,
+          railway_sha: updatedEvidence.railway_sha,
+          builder_job_id: refreshedJob.id,
+        });
+      } catch (err) {
+        console.error('[C2-comm] async execute failed for job', job.id, err?.message);
+      }
+    });
+  }
 
   return {
     ok: true,
     thread_id: threadId,
     user_message: userMessage,
     system_message: systemMessage,
-    job: refreshedJob || job,
-    execution,
+    job,
+    execution: null,
     evidence,
+    async_execute: willExecute,
+    poll: {
+      communications: `/api/v1/lifeos/command-center/communications?thread_id=${threadId}`,
+      job_status: `/api/v1/lifeos/builderos/command-control/jobs/${job.id}`,
+    },
   };
 }
