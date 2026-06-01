@@ -1,42 +1,44 @@
-The instruction to 'Generate the complete implementation code' is contradictory to the target file being a markdown document, which is not executable code.
-BuilderOS Blueprint Enhancement Memo: Amendment 12 Command Center - Mobile Responsiveness (Slice G2)
-This memo outlines the next buildable slice for implementing mobile responsiveness within the Command Center, focusing on foundational layout and navigation adaptation.
+# Amendment 12 Command Center: Mobile-Responsive Layout (Todo 5, G2) - Blueprint Enhancement Memo
 
-1.  Blocking Ambiguity or Founder Decision List:
-    -   Target Breakpoints: Confirm specific pixel widths for mobile, tablet, and desktop breakpoints if not already defined in a global stylesheet. This decision impacts the exact media query definitions. (Assumption: Standard breakpoints like 768px for tablet/mobile cutoff will be used if not specified, aligning with common responsive design practices).
-    -   Navigation Strategy: Clarify the desired mobile navigation pattern (e.g., hamburger menu, bottom navigation bar, simplified inline links) for the primary navigation. This choice dictates the UI/UX for mobile users and the complexity of the component adaptation. (Assumption: A standard hamburger menu or similar collapsible pattern for primary navigation on mobile, requiring a toggle mechanism).
-    -   Component Prioritization: Identify any specific critical Command Center components (beyond main layout/nav) that require immediate responsive treatment in subsequent slices. This helps in planning future work and avoiding scope creep in this slice.
+This memo outlines the next buildable slice for implementing a mobile-responsive layout for the Command Center, based on the `AMENDMENT_12_COMMAND_CENTER.md` blueprint.
 
-2.  Already-Settled Constraints:
-    -   The task is `[safe]` and should not introduce regressions or break existing desktop layouts.
-    -   Modifications are strictly for BuilderOS internal tools; no impact on LifeOS user features or TSOS customer-facing surfaces.
-    -   Adhere to existing Node/ESM patterns and extend current styling approaches (e.g., CSS Modules, SCSS).
-    -   Do not rebuild existing components; adapt their styling.
+---
 
-3.  The Smallest Buildable Next Slice:
-    Implement foundational mobile responsiveness for the Command Center's main layout container and primary navigation. This slice will ensure the overall page structure reflows appropriately and the primary navigation is functional and accessible on screens with a width of 768px or less. This includes:
-    -   **Main Layout Adaptation**: Applying CSS media queries to `CommandCenterLayout.module.css` to adjust properties like `max-width`, `padding`, and `margin` for screen widths <= 768px. This ensures the main content wrapper centers and scales correctly on smaller viewports, preventing horizontal scroll.
-    -   **Primary Navigation Refactoring**: Implementing a collapsible navigation pattern (e.g., a hamburger menu) within `PrimaryNav.jsx` and styling it via `PrimaryNav.module.css`. This involves:
-        -   Hiding the full navigation links on mobile.
-        -   Displaying a toggle icon (e.g., hamburger icon).
-        -   Adding JavaScript logic to `PrimaryNav.jsx` to manage the open/closed state of the mobile navigation overlay/drawer.
-        -   Styling the mobile navigation overlay/drawer to be full-width and vertically scrollable if needed.
-    -   **Readability and Tappability**: Ensuring font sizes, line heights, and interactive element (buttons, links) tap targets are appropriately sized for mobile use within the adapted layout and navigation. This primarily involves CSS adjustments within the relevant module files.
+**1. Blocking Ambiguity or Founder Decision List:**
 
-4.  Exact Safe-Scope Files BuilderOS Should Touch First:
-    -   `src/components/CommandCenterLayout/CommandCenterLayout.module.css` (or equivalent main layout CSS file)
-    -   `src/components/PrimaryNav/PrimaryNav.module.css` (or equivalent primary navigation CSS file)
-    -   `src/styles/global.css` (or equivalent global stylesheet, if breakpoints or responsive utilities are defined here)
-    -   `src/components/PrimaryNav/PrimaryNav.jsx` (or equivalent primary navigation component, for conditional rendering of mobile menu toggle)
+*   **Primary Breakpoints:** Define specific pixel widths for mobile, tablet, and desktop transitions (e.g., `max-width: 767px` for mobile, `min-width: 768px` and `max-width: 1023px` for tablet).
+*   **Core Mobile Layout Strategy:** Determine if the primary Command Center layout should collapse to a single column, use a specific grid adaptation, or hide certain non-critical elements on mobile.
+*   **Component-Specific Adaptations:** Identify any Command Center sub-components (e.g., navigation, data tables, action panels) that require unique mobile styling beyond general layout adjustments.
 
-5.  Required Verifier/Runtime Checks:
-    -   Browser Responsive Mode: Verify layout and navigation functionality across common mobile device widths (e.g., 320px, 375px, 414px, 768px) using browser developer tools.
-    -   Content Reflow: Ensure main content areas reflow vertically without horizontal scrolling or overlapping elements on mobile.
-    -   Navigation Usability: Confirm primary navigation is accessible and functional on mobile (e.g., menu toggle works, links are clickable).
-    -   Desktop Regression: Verify no visual or functional regressions are introduced on desktop screen sizes.
+**2. Already-Settled Constraints:**
 
-6.  Stop Conditions:
-    -   The main Command Center layout container correctly adapts to screen widths <= 768px, preventing horizontal scroll.
-    -   The primary navigation component is fully functional and visually appropriate for screen widths <= 768px.
-    -   All verifier/runtime checks pass without issues.
-    -   No new technical debt or performance regressions are introduced.
+*   The scope is limited to front-end UI/UX styling; no backend or data model changes.
+*   Existing desktop layout and functionality must remain unaffected.
+*   The implementation must be `[safe]` and avoid introducing regressions.
+*   Focus on core readability and usability on smaller screens.
+
+**3. Smallest Buildable Next Slice:**
+
+Implement a foundational mobile-responsive structure for the main Command Center container. This involves:
+*   Introducing a single media query targeting common mobile screen widths.
+*   Applying basic layout adjustments within this media query, such as changing the `flex-direction` of the main content area to `column` or adjusting `padding`/`margin` for better spacing.
+*   Ensuring primary text content remains legible and appropriately sized on mobile.
+
+**4. Exact Safe-Scope Files BuilderOS Should Touch First:**
+
+*   `src/ui/styles/command-center.css` (or equivalent primary CSS file for the Command Center)
+*   `src/ui/components/command-center/CommandCenterLayout.jsx` (or equivalent main layout component, for adding responsive classes if needed)
+
+**5. Required Verifier/Runtime Checks:**
+
+*   **Browser DevTools:** Verify layout behavior using responsive design mode across common mobile device presets (e.g., iPhone SE, Pixel 5).
+*   **Manual Device Testing:** Test on at least one physical iOS and one Android device to confirm touch targets and overall feel.
+*   **No Horizontal Scroll:** Ensure no horizontal scrollbars appear on any mobile viewport.
+*   **Content Readability:** Confirm all text and interactive elements are clearly visible and usable.
+
+**6. Stop Conditions:**
+
+*   The main Command Center layout successfully adapts to a single-column or clearly defined mobile-first structure when viewed on screens `max-width: 767px`.
+*   No regressions are observed on desktop (`min-width: 1024px`).
+*   All primary interactive elements within the Command Center remain functional and accessible on mobile.
+*   The initial set of founder decisions regarding breakpoints and core mobile strategy are implemented.
