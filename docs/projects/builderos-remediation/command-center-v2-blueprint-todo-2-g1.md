@@ -1,3 +1,9 @@
-The target file `docs/projects/builderos-remediation/command-center-v2-blueprint-todo-2-g1.md` has an `.md` extension, implying a markdown document. However, the OIL verifier rejected the previous attempt with `TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".md"`, indicating it attempted to execute the file as a JavaScript module. The instruction "Output ONLY the code first" further suggests the output should be code. To reconcile these conflicting signals and address the verifier's error, this output assumes the verifier expects a JavaScript module that exports the markdown content as a string, despite the `.md` file extension. This is an unusual pattern but directly addresses the verifier's explicit error.
-```javascript
-export const memoContent
+# BuilderOS Remediation: Command Center V2 Blueprint - Todo 2 (G1)
+
+This memo addresses the "Add 3 new endpoints to builder routes" task from the `COMMAND_CENTER_V2_BLUEPRINT.md`.
+
+---
+
+### 1. Blocking Ambiguity or Founder Decision List
+
+*   **Endpoint Definitions:** The blueprint specifies "Add 3 new endpoints to
