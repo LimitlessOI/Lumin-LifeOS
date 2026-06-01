@@ -1,30 +1,12 @@
-// This file contains the proof-closing blueprint note for Amendment 12 Command Center.
-// It is structured as a JS module to comply with the BuilderOS verifier's expectation
-// for this path, despite the .md extension in the task description.
+### Proof-Closing Blueprint Note: AMENDMENT_12_COMMAND_CENTER - Core Infrastructure G37-100
 
-export const blueprintNote = {
-  missingImplementationOrProofGap: "The fundamental definition of a 'Command' within the Command Center architecture. Without a clear interface for commands, the system cannot process or dispatch them consistently.",
-  smallestSafeBuildSlice: "Define the `ICommand` TypeScript interface.",
-  safeScopeFilesToTouchFirst: [
-    "src/core/command/ICommand.ts",
-    "src/core/command/index.ts",
-    "docs/projects/builderos-remediation/amendment-12-command-center-proof-g37-100.md", // This file, for documentation/proof
-  ],
-  verifierRuntimeChecks: [
-    "Type Check: Ensure `ICommand` compiles without errors.",
-    "Linter Check: Ensure `ICommand.ts` adheres to project linting rules.",
-    "Unit Test (future): A dummy command implementation conforming to `ICommand` can be created and type-checked against the interface.",
-  ],
-  stopConditionsIfRuntimeTruthDisagrees: [
-    "If `ICommand` causes unexpected type conflicts with existing core interfaces.",
-    "If the definition of `ICommand` proves insufficient for basic command processing (e.g., missing a `type` or `payload` field that is immediately required).",
-    "If the build system rejects the `.ts` file or its location.",
-  ],
-  nextC2BuildPassImplementation: `
-// src/core/command/ICommand.ts
-export interface ICommand {
-  readonly type: string;
-  readonly payload?: any; // Consider a more specific type if known, e.g., Record<string, unknown>
-}
-`,
-};
+This note closes the proof for the initial core infrastructure slice of the `CommandCenter` as outlined in `AMENDMENT_12_COMMAND_CENTER.md`. This slice focuses on establishing the foundational interfaces and classes required for command definition and registration, proving the viability of the core component structure before proceeding to execution logic.
+
+**1. Exact Missing Implementation or Proof Gap:**
+The blueprint defines the conceptual `Command` interface, `CommandRegistry`, and `CommandCenter` classes. The current gap is the concrete implementation of these core structures, specifically demonstrating that a `Command` can be defined and successfully registered within a `CommandCenter` instance. This proves the foundational architecture for command management.
+
+**2. Smallest Safe Build Slice to Close It:**
+Implement the basic `Command` interface (as a class or type definition), the `CommandRegistry` class, and the `CommandCenter` class. The `CommandCenter` will instantiate and utilize the `CommandRegistry` to manage commands. This slice will not include command execution logic, advanced validation, or logging integration, focusing solely on the structural integrity of command definition and registration.
+
+**3. Exact Safe-Scope Files to Touch First:**
+-
