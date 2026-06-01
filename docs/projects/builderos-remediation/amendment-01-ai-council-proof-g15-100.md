@@ -1,28 +1,19 @@
-# Amendment 01: AI Council Proof - G15-100
-
-## Document Purpose
-
-This document serves as proof of concept and initial verification for Amendment 01 concerning the AI Council within the BuilderOS governance framework. It confirms the successful integration of the amendment's documentation and its readiness for formal review and subsequent implementation phases.
-
-## Amendment 01 Summary
-
-Amendment 01 establishes the foundational principles and operational guidelines for the BuilderOS AI Council. Key aspects include:
-*   **Council Mandate**: Define the scope of AI governance, ethical guidelines, and decision-making authority.
-*   **Membership Structure**: Outline roles, responsibilities, and selection criteria for council members.
-*   **Review Process**: Detail the procedures for AI model approval, audit, and lifecycle management within BuilderOS.
-
-## Proof of Integration (G15-100)
-
-This proof slice (G15-100) specifically verifies the successful creation and placement of the amendment's core documentation within the BuilderOS repository structure.
-
-**Verification Steps:**
-1.  **File Creation**: Confirmation of `docs/projects/builderos-remediation/amendment-01-ai-council-proof-g15-100.md` existence.
-2.  **Content Integrity**: Basic structural validation of the markdown content.
-3.  **Repository Pathing**: Verification that the file resides in the correct, approved documentation path for BuilderOS remediation efforts.
-
-**Outcome:**
-The document has been successfully created and integrated into the specified path. This marks the initial step in formalizing Amendment 01's presence within the BuilderOS documentation ecosystem.
-
-## Next Steps
-
-The next phase involves the formal review of the amendment's content by the designated stakeholders and the subsequent implementation of any required code changes or system configurations outlined by the amendment.
+AI Council Amendment 01: Proof Gap G15-100 - Initial Configuration Definition
+This document outlines the next smallest build slice for `AMENDMENT_01_AI_COUNCIL.md`, focusing on establishing the foundational configuration for the AI Council.
+1.  Exact missing implementation or proof gap:
+    The exact missing implementation is the definition of the initial, static AI Council configuration data structure, including placeholder members and their roles, and a robust mechanism to load this configuration within the LifeOS platform. This establishes the council's existence and initial composition for subsequent feature development.
+2.  Smallest safe build slice to close it:
+    Implement a new static JSON configuration file (`aiCouncil.json`) to define the AI Council's initial structure (e.g., `members` array, `roles` definitions). Concurrently, create a utility module (`aiCouncilConfig.js`) responsible for loading and providing access to this configuration, ensuring it adheres to a predefined schema.
+3.  Exact safe-scope files to touch first:
+-   `src/config/aiCouncil.json` (new file)
+-   `src/lib/aiCouncilConfig.js` (new file)
+-   `src/lib/aiCouncilConfig.test.js` (new file)
+4.  Verifier/runtime checks:
+-   Execute `npm test src/lib/aiCouncilConfig.test.js`. All tests must pass, confirming the `aiCouncilConfig.js` utility correctly loads `aiCouncil.json` and provides the expected data structure.
+-   Manually inspect `src/config/aiCouncil.json` to ensure it contains valid JSON and includes the expected top-level keys (e.g., `members`, `roles`) with placeholder data.
+-   In a development environment, import and log the configuration from `src/lib/aiCouncilConfig.js` to verify its content matches `aiCouncil.json`.
+5.  Stop conditions if runtime truth disagrees:
+-   Unit tests in `src/lib/aiCouncilConfig.test.js` fail or report unexpected behavior (e.g., incorrect data types, missing properties).
+-   Loading `src/config/aiCouncil.json` via `aiCouncilConfig.js` throws a parsing error or returns an empty/malformed object.
+-   The loaded configuration object does not contain the expected `members` array or `roles` definitions, indicating a schema mismatch or incomplete configuration.
+-   Any attempt to access properties of the loaded configuration results in `undefined` where data is expected.
