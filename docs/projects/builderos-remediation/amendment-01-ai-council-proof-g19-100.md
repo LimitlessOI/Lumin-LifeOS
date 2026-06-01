@@ -1,9 +1,28 @@
-The specification is incomplete as the content of `docs/projects/AMENDMENT_01_AI_COUNCIL.md` was not provided.
-```markdown
-# AMENDMENT_01_AI_COUNCIL Proof-Closing Note: G19-100 - Initial Policy Schema Definition
+Blueprint file `docs/projects/AMENDMENT_01_AI_COUNCIL.md` content was not provided, preventing derivation.
+# Amendment 01 AI Council Proof - G19-100
 
-This proof-closing note addresses the initial implementation gap identified in the AMENDMENT_01_AI_COUNCIL blueprint, focusing on establishing the foundational data structure for AI Council policies within BuilderOS.
+**Status:** Blocked - Blueprint Content Missing
 
-## 1. Exact Missing Implementation or Proof Gap
+This proof document requires derivation from the blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md`. The content of this blueprint file was not provided in the `REPO FILE CONTENTS` for this execution.
 
-The AMENDMENT_01_AI_COUNCIL blueprint defines the conceptual framework and governance for the AI Council.
+---
+
+### Proof-Closing Blueprint Note
+
+1.  **Exact missing implementation or proof gap:**
+    The blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` content is required to identify the specific implementation or proof gap. Without it, no derivation is possible.
+
+2.  **Smallest safe build slice to close it:**
+    Cannot be determined without the blueprint content.
+
+3.  **Exact safe-scope files to touch first:**
+    Cannot be determined without the blueprint content.
+
+4.  **Verifier/runtime checks:**
+    Cannot be determined without the blueprint content.
+
+5.  **Stop conditions if runtime truth disagrees:**
+    Cannot be determined without the blueprint content.
+
+**Next Steps:**
+Provide the content of `docs/projects/AMENDMENT_01_AI_COUNCIL.md` in the `REPO FILE CONTENTS` for the next BuilderOS execution.
