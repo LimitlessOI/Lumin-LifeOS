@@ -1,4 +1,9 @@
-The source blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` was not provided in the REPO FILE CONTENTS, making the specification incomplete for deriving content.
 # Amendment 01: AI Council - Proof G30-100
 
-This document serves as a proof-of-concept and initial remediation step for the `AMENDMENT_01_AI
+## Blueprint Reference
+This document serves as a proof artifact for the "Amendment 01: AI Council" blueprint, as defined in `docs/projects/AMENDMENT_01_AI_COUNCIL.md`.
+
+## Current Proof Status (G30-100)
+Proof G30-100 signifies the successful completion of the initial architectural design and high-level API specification for the AI Council component within the LifeOS platform. This includes:
+- Definition of the AI Council's core responsibilities and scope.
+- Identification of key
