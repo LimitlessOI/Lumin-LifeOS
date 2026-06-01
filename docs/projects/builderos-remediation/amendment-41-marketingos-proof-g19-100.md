@@ -1,23 +1,38 @@
-Amendment 41: MarketingOS Proof G19-100 - Proof-Closing Blueprint Note
-This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified for MarketingOS campaign G19-100 within the BuilderOS platform.
-1. Exact Missing Implementation or Proof Gap
-The final activation and verification step for MarketingOS campaign G19-100 within BuilderOS is currently pending. Specifically, the `marketingCampaignStatus` for `G19-100` in the BuilderOS internal configuration needs to be updated from `pending_proof` to `verified_active`, and a corresponding internal event must be emitted to signal readiness for downstream MarketingOS consumption. This ensures BuilderOS correctly reflects the campaign's operational status and triggers necessary internal data synchronization.
-2. Smallest Safe Build Slice to Close It
-The smallest safe build slice involves a single configuration update and an internal event emission. This change is isolated to BuilderOS internal services and does not impact LifeOS user features or TSOS customer-facing surfaces.
-3. Exact Safe-Scope Files to Touch First
--   `services/builder-config-service/src/config/marketingCampaigns.js` (Update `G19-100` status)
--   `services/builder-event-emitter/src/events/marketingCampaignEvents.js` (Add `campaignVerified` event type if not present)
--   `services/builder-event-emitter/src/publishers/internalPublisher.js` (Emit `campaignVerified` event)
--   `services/builder-api/src/routes/internal/marketingProofRoutes.js` (Add or update endpoint to trigger this status change, if manual trigger is required)
-4. Verifier/Runtime Checks
-1.  Database/Config Check: Verify that the `marketingCampaignStatus` for `G19-100` in the BuilderOS internal configuration store (e.g., `builder_config.marketing_campaigns` table or equivalent) is `verified_active`.
--   `SELECT status FROM builder_config.marketing_campaigns WHERE campaign_id = 'G19-100';`
-2.  Log Check: Confirm that a `campaignVerified` event for `G19-100` was successfully emitted by `builder-event-emitter` in the BuilderOS internal event logs.
--   Search BuilderOS internal logs for `event_type: "campaignVerified"` and `campaign_id: "G19-100"`.
-3.  Internal API Check (if applicable): If an internal apiEP is used to trigger this, verify its successful execution and response.
--   `GET /builder-api/internal/marketing/campaign/G19-100/status` should return `{"status": "verified_active"}`.
-5. Stop Conditions if Runtime Truth Disagrees
--   Status Mismatch: If the `marketingCampaignStatus` for `G19-100` remains `pending_proof` or reverts to an unverified state after the build slice is applied.
--   Event Not Emitted: If no `campaignVerified` event for `G19-100` is observed in the BuilderOS internal event logs within 5 minutes of the build slice deployment.
--   Service Instability: Any observed increase in error rates or latency in `builder-config-service`, `builder-event-emitter`, or `builder-api` after deployment.
--   Rollback: In any of these disagreement scenarios, the build slice must be immediately rolled back, and further investigation initiated to diagnose the root cause before re-attempting the proof closure.
+### AMENDMENT_41_MARKETINGOS - Proof G19-100: SSOT Foundation for Campaign Data
+
+This blueprint note addresses the "SSOT foundation" signal for `AMENDMENT_41_MARKETINGOS`, specifically focusing on ensuring `Campaign` data adheres to a Single Source of Truth (SSOT).
+
+**1. Exact Missing Implementation or Proof Gap:**
+The current implementation lacks explicit runtime verification that `Campaign` entity data, as consumed and processed by MarketingOS features, consistently originates from and aligns with the designated SSOT (e.g., `MarketingDataService.getCampaignById`). This gap can lead to data inconsistencies if `Campaign` data is inadvertently sourced from or modified by non-SSOT pathways.
+
+**2. Smallest Safe Build Slice to Close It:**
+Implement a lightweight, configurable SSOT validation layer within the `CampaignService` data access methods. This layer will:
+    a. Intercept `Campaign` data retrieval and update operations.
+    b. Compare the retrieved/updated data against the designated SSOT for key fields (e.g., `id`, `name`, `status`, `startDate`, `endDate`).
+    c. Log discrepancies and, optionally, enforce strict adherence by throwing an error or reverting to SSOT data based on configuration.
+    d. Introduce a `CampaignSSOTValidator` utility.
+
+**3. Exact Safe-Scope Files to Touch First:**
+*   `services/marketing/CampaignService.js`: Modify `getCampaignById`, `updateCampaign`, and `createCampaign` methods to incorporate SSOT validation.
+*   `utils/marketing/CampaignSSOTValidator.js`: New file to encapsulate SSOT validation logic.
+*   `config/marketing.js`: Add configuration for SSOT enforcement level (e.g., `LOG_ONLY`, `ENFORCE_STRICT`).
+*   `tests/unit/services/marketing/CampaignService.test.js`: Add unit tests for SSOT validation scenarios.
+*   `tests/unit/utils/marketing/CampaignSSOTValidator.test.js`: Add unit tests for the new validator utility.
+
+**4. Verifier/Runtime Checks:**
+*   **Unit Tests:**
+    *   `CampaignService.test.js`: Verify that `getCampaignById` logs a warning when data from its internal cache (if any) differs from the SSOT.
+    *   `CampaignService.test.js`: Verify that `updateCampaign` attempts to write to the SSOT and, if configured, rejects updates that conflict with SSOT data.
+    *   `CampaignSSOTValidator.test.js`: Test various scenarios of matching and mismatching campaign data against a mock SSOT source.
+*   **Integration Tests (Staging):**
+    *   Deploy a test MarketingOS feature that retrieves and displays `Campaign` data. Introduce a simulated data discrepancy in a non-SSOT source and verify that the SSOT validation logs the discrepancy or prevents the inconsistent data from being used.
+    *   Execute a test `Campaign` update via MarketingOS and verify that the update propagates correctly to the SSOT and that subsequent retrievals reflect the SSOT data.
+*   **Runtime Monitoring:**
+    *   Monitor logs for `SSOT_DISCREPANCY` warnings or errors originating from `CampaignService`.
+    *   Track latency impact of SSOT validation on critical `Campaign` data operations.
+
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   **Critical Data Mismatch:** If `Campaign` data retrieved by MarketingOS consistently (e.g., >5% of requests over 1 hour) shows discrepancies with the designated SSOT, indicating a fundamental data integrity issue.
+*   **SSOT Unreachability/Failure:** If the designated `MarketingDataService` (SSOT for campaigns) becomes consistently unreachable or returns malformed data, preventing SSOT validation or data operations.
+*   **Performance Degradation:** If the SSOT validation layer introduces a measurable and unacceptable performance overhead (e.g., >100ms average latency increase on `getCampaignById` in production).
+*   **Validation Bypass:** If logs indicate that `Campaign` data is being created or updated through pathways that bypass the `CampaignService`'s SSOT validation.
