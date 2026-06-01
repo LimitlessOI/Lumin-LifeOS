@@ -1,28 +1,26 @@
-The verifier's rejection indicates it attempted to execute the `.md` file as a JS module, which contradicts the task of writing a markdown documentation file.
+# Amendment 01: AI Council - Proof G11-100: Foundational Configuration Establishment
+
+This document outlines the proof-closing blueprint note for establishing the foundational configuration mechanism for the AI Council within BuilderOS, addressing proof point G11-100 as derived from `AMENDMENT_01_AI_COUNCIL.md`.
+
 ---
-Amendment 01: AI Council - Proof G11-100
-Blueprint Note: Proof-Closing Build Slice
-This document serves as a proof-closing note for the `g11-100` build slice, derived from the `AMENDMENT_01_AI_COUNCIL.md` blueprint. This slice focuses on establishing the foundational data structure for AI Council entities.
----
-Proof-Closing Blueprint Note: Next Smallest Build Slice
-1. Exact Missing Implementation or Proof Gap:
-The `g11-100` slice successfully established the foundational data structures for AI Council entities. The immediate and critical gap is the implementation of the core service layer responsible for managing these entities. This includes defining the API for initial data persistence (creation) and retrieval (reading) of AI Council-related records, ensuring the established data structures can be interacted with programmatically.
-2. Smallest Safe Build Slice to Close It:
-Implement the `AICouncilService` with minimal, essential methods: `createAICouncilRecord` and `getAICouncilRecordById`. This slice will focus on a single primary AI Council entity type (e.g., `AICouncilDecision` or `AICouncilMember` as defined by the foundational data structure) to provide the smallest functional interface for data interaction.
-3. Exact Safe-Scope Files to Touch First:
--   `src/builderos/services/AICouncilService.js` (New file: Core service logic for AI Council entities)
--   `src/builderos/data/AICouncilRepository.js` (New or extend existing: Data access layer for persistence)
--   `src/builderos/models/AICouncilEntity.js` (Existing: Ensure model definition is complete and accessible)
--   `test/builderos/services/AICouncilService.test.js` (New file: Unit tests for the new service methods)
-4. Verifier/Runtime Checks:
--   Unit Tests: `AICouncilService.test.js` must pass, verifying `createAICouncilRecord` correctly persists data and `getAICouncilRecordById` retrieves it accurately.
--   Integration Tests: Verify `AICouncilService` correctly interacts with `AICouncilRepository` and the underlying data store.
--   BuilderOS Internal API Endpoint (if applicable): If an internal endpoint is exposed, verify it can successfully call the new service methods and return expected data.
--   Schema Validation: Confirm that data persisted via the service adheres to the defined `AICouncilEntity` schema.
-5. Stop Conditions if Runtime Truth Disagrees:
--   Test Failures: Any failure in the unit or integration tests for `AICouncilService` or `AICouncilRepository`.
--   Data Inconsistency: Detection of corrupted, malformed, or inconsistent data in the BuilderOS db after service operations.
--   Performance Degradation: `createAICouncilRecord` or `getAICouncilRecordById` operations exceeding predefined latency thresholds.
--   Security Vulnerabilities: Identification of any new security risks or data access violations related to the new service.
--   Functional Discrepancy: Inability to reliably create or retrieve AI Council entity data as per specification.
----
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The current BuilderOS platform lacks a defined, loadable, and validated configuration schema for the AI Council. The proof gap is the absence of a robust mechanism to define and integrate the AI Council's operational parameters (e.g., member roles, decision thresholds, logging preferences) into the BuilderOS runtime environment. This build slice aims to establish the initial configuration structure and loading utility, proving that BuilderOS can recognize and utilize AI Council-specific settings.
+
+### 2. Smallest Safe Build Slice to Close It
+
+Implement a dedicated JSON schema for the AI Council's core configuration and a corresponding utility to load and validate this configuration during BuilderOS initialization. This slice focuses solely on the *presence* and *validity* of the configuration, not its active use or enforcement.
+
+### 3. Exact Safe-Scope Files to Touch First
+
+*   `builder-os/config/schemas/aiCouncilConfig.schema.json` (New file): Defines the JSON schema for the AI Council configuration.
+*   `builder-os/lib/config/aiCouncilConfigLoader.js` (New file): A utility module responsible for loading and validating `aiCouncilConfig.json` against its schema.
+*   `builder-os/core/init.js` (Extend existing): Integrate a call to `aiCouncilConfigLoader.js` during BuilderOS startup to load the configuration into the global `BuilderOS.config` object.
+*   `builder-os/config/aiCouncilConfig.json` (New file, example/default config): A default or example configuration file for the AI Council, adhering to the new schema.
+
+### 4. Verifier/Runtime Checks
+
+*   **Unit Test (`aiCouncilConfigLoader.js`):**
+    *   Verify that `aiCouncilConfigLoader.js` successfully loads a valid `aiCouncilConfig.json` and returns the parsed object.
+    *   Verify that
