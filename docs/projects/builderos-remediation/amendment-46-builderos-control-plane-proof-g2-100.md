@@ -11,3 +11,5 @@ import {
   canMarkBuildDone,
   getSystemHealth, // Assuming this function exists to check system health
 } from '../services/builderControlPlaneService.js'; // Inferred path
+
+const router = Router();
