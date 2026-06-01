@@ -1,7 +1,7 @@
-# BuilderOS Remediation: Amendment 14 White Label - Response Transformation Middleware (G9)
+# Amendment 14 White-Label Todo 2 (G9): Response Transformation Middleware
 
-This memo addresses the open task regarding the "Response transformation mw (stripping model names, costs)" for white-label contexts. The current blueprint is not directly buildable due to critical ambiguities regarding scope and implementation details.
+This memo outlines the next buildable slice for implementing the response transformation middleware to strip model names and costs for white-label clients, as per `AMENDMENT_14_WHITE_LABEL.md`.
 
 ## 1. Blocking Ambiguity or Founder Decision List
 
-The following decisions are
+*   **Specific fields to
