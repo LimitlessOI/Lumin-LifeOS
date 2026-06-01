@@ -1,9 +1,10 @@
-# Amendment 14 White-Label Proof: G15 - DNS CNAME Verification (g15-100)
+# Amendment 14 White-Label Proof: G15-100 - Dynamic Favicon Integration
 
-This document serves as a proof-closing blueprint note for the initial infrastructure setup phase of Amendment 14, focusing on the G15 white-labeling project.
+This document outlines the next smallest build slice to address a specific proof gap within Amendment 14, focusing on dynamic favicon integration for white-labeled instances.
 
 ---
 
-## Blueprint Note: Next Smallest Build Slice
+### Blueprint Note for C2 Build Pass
 
-**1. Exact Missing Implementation
+1.  **Exact missing implementation or proof gap:**
+    The
