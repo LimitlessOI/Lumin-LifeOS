@@ -3,7 +3,7 @@
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  
 **Priority:** High  
 **Owner:** Adam  
-**Last Updated:** 2026-05-24  
+**Last Updated:** 2026-06-01
 **Stability:** Stable (Phase 1 + builder sync complete; Phases 2–4 in backlog)
 
 ---
@@ -16,6 +16,21 @@ Replace the file-as-fact model with an **evidence engine**: every stored fact ca
 > Not "what do we know?" but "what has earned the right to influence action, at what weight, in this context?"
 
 This is not a second brain that contradicts the SSOT. It is the SSOT becoming self-aware about how confident it should be in itself.
+
+### Constitutional alignment update
+
+Memory does not exist to make the system feel informed.
+It exists to calibrate what has earned the right to influence action.
+
+Historian-level memory must record:
+- decision
+- reason
+- prediction
+- outcome
+- lesson
+
+Without prediction, there is memory.
+With prediction and outcome comparison, there is calibration and learning.
 
 ---
 
@@ -103,6 +118,19 @@ Categorized lessons. Fields: domain, impact_class (small|medium|large|unknown), 
 ### `agent_performance`
 Track record by task type — including operator "adam". Fields: agent_id, task_type, prediction, outcome (correct|incorrect|partial|overridden), confidence_at_time, notes.
 
+### Founder Intent Model support
+
+The memory system must support Founder Intent Model evaluation by recording, when available:
+- founder instinct
+- founder intent model prediction
+- council recommendation
+- consensus outcome
+- measured outcome
+- calibration notes on where founder instinct or model judgment was stronger or weaker
+
+This does not make any one source automatically correct.
+It makes them comparable through outcomes.
+
 ### `agent_protocol_violations`
 Corner-cutting / misalignment memory. Fields: agent_id, task_type, violation_type, severity, details, evidence_text, detected_by, source_route, related_fact_id, related_debate_id, auto_action.
 
@@ -181,6 +209,14 @@ Every load-bearing debate must produce a **future_back** artifact:
 - what signals we should instrument now so the breakdown is visible early
 
 This turns long-horizon regret into present-tense monitoring.
+
+## Mission linkage requirement
+
+Where runtime surfaces support it, debates, lessons, agent-performance events, and protocol violations should attach to `mission_id` or an equivalent mission reference.
+
+Current truth:
+- some memory records already preserve decision and outcome-adjacent context
+- a full first-class mission object is still a constitutional target, not yet universal runtime reality
 
 ---
 
@@ -271,6 +307,7 @@ Phase 1 fully built + extended. Phase 2 adoption (S2) now seeded:
 
 | Date | File | What | Why |
 |---|---|---|---|
+| 2026-06-01 | Governance-only constitutional alignment | Added historian prediction→outcome wording, Founder Intent Model support fields, and mission-linkage requirement language that is explicit about current runtime limits. | Align evidence memory with trust-calibrated governance without claiming full mission-object enforcement exists already. |
 | 2026-05-24 | `services/self-repair-memory.js` | Phase 2+3 hardening: `writeRepairMemoryFromExecution` now writes to `self_repair_memory_events` table first (DB-first), reports `{db_written, jsonl_written, fallback_used}`; back-fills `fact_id` FK. Added `readRepairMemoryFromDedicatedTable(pool, limit)` — queries `self_repair_memory_events` with all named columns, `source='db'`. `readLatestRepairMemory` priority: JSONL → DB (self_repair_memory_events) → epistemic_facts. | Durable per-field schema for self-repair memory — prior state stored lessons as JSON blob in epistemic_facts.context_required with no queryable fields |
 | 2026-05-24 | `services/self-repair-memory.js` | Added `classifyRepairLesson` on write (classification, signals, verification_path); `enrichLessonsWithClassification` on read via `self-repair-lesson-classifier.js` — lessons remain derived from executor only, no invented prevention text | Adam slice: self-repair memory → prevention; classification attached to JSONL + epistemic_facts context |
 | 2026-04-26 | `db/migrations/20260426_memory_intelligence.sql` | Created — 7 tables, 2 views, full Phase 1 schema | Memory Intelligence Phase 1 foundation |

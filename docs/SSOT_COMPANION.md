@@ -102,6 +102,12 @@ Non-negotiables:
 - A run is not complete until receipts and the owning SSOT are updated.
 - If the work touches production behavior, the evaluation loop must be reproducible from saved inputs and receipts.
 
+Constitutional additions:
+- the proposal must name the mission served
+- the score must note which truths are observation, hypothesis, pattern, proven practice, or law
+- the receipt must record whether confidence matched outcome
+- any proposal that seeks policy or governance promotion must include promotion and failure criteria
+
 ## 0.5B SSOT read-before-write — HARD RULE
 - **No append/edit to any SSOT-class document without reading that entire file in the same session first** (top-to-bottom; chunked reads through EOF are fine). SSOT-class paths are listed in repo root `CLAUDE.md` under **`## SSOT READ-BEFORE-WRITE`** — they include `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `docs/NORTH_STAR_*.md`, `docs/projects/AMENDMENT_*.md`, authoritative `docs/projects/INDEX.md` / template / readiness edits, and **policy-bearing** changes to `docs/CONTINUITY_LOG*.md` / `docs/CONTINUITY_INDEX.md`.
 - **Why:** A single unseen paragraph can change mission, priorities, or legal posture; the next cold agent treats it as law.
@@ -297,6 +303,122 @@ Exposed secrets; destructive DB; money/legal/medical/high-stakes external; auton
 - Auto-builder is manual-first: queueing/build runs happen on direct operator request; background scheduler remains off unless explicitly enabled.
 - Savings/reporting must be based on authoritative ledger rows only; duplicate/non-authoritative write paths must not drive operator dashboards.
 
+## 0.7 Constitutional Refactor Operating Rules (NEW)
+
+This Companion now operationalizes the trust-first constitutional refactor:
+- the system optimizes for **justified trust**, not raw confidence
+- missions are the parent object; files, jobs, routes, commits, and receipts are artifacts
+- historical concepts are preserved, but current canonical truth must be explicit
+
+### Canonical terminology
+- **BPB** = Blueprint Builder (canonical)
+- **PBB** = historical terminology retained only where legacy file names or receipts still use it
+- **Founder Intent Model** = constitutional term
+- **Adam Simulator** = internal implementation term
+
+### Concept status markers
+Use these terms when refactoring governance docs:
+- `active`
+- `superseded`
+- `merged`
+- `deprecated`
+- `historical`
+
+No constitutional refactor may delete prior reasoning if that reasoning still matters for proof, drift review, or historical lessons.
+
+### Current supersession map
+- `autonomous building` as the primary system aim → `merged` into trust-calibrated mission execution
+- `PBB` as the canonical blueprint term → `superseded` by `BPB`; retained only as historical terminology or legacy file naming
+- `artifact-first thinking` (files/jobs/commits as the parent object) → `superseded` by mission-first governance
+- `confidence sounding like truth` → `deprecated`; evidence and outcomes govern authority
+- `mission object everywhere in runtime` → `active constitutional target`, not yet universal enforcement reality
+
+## 0.8 Truth Ladder Promotion Rules (NEW)
+
+Every governance claim, operating rule, ranking, policy, or lesson must be classified on the constitutional truth ladder:
+- `L0 Observation`
+- `L1 Hypothesis`
+- `L2 Pattern`
+- `L3 Proven Practice`
+- `L4 Law`
+- `L5 Foundational Law`
+
+### Promotion requirements
+- `Observation -> Hypothesis`: explicit explanation of what the observation may mean
+- `Hypothesis -> Pattern`: repeated evidence across more than one event or mission
+- `Pattern -> Proven Practice`: measurable improvement to outcomes with acceptable cost/latency
+- `Proven Practice -> Law`: explicit enforcement value, challenge history, and failure conditions documented
+- `Law -> Foundational Law`: rare; identity-defining; repeatedly survives challenge across long horizons
+
+### No silent promotion
+Nothing may silently move up the ladder.
+Every promotion must produce:
+- evidence receipt
+- challenge criteria
+- review cadence
+- named owner
+
+### Burden of proof
+The stronger the claimed authority, the stronger the required proof.
+The more irreversible the action, the stronger the required proof.
+The more expansive the delegation, the stronger the required proof.
+
+## 0.9 Mission-First Attachment Rule (NEW)
+
+Every meaningful action must attach to a mission record.
+
+Minimum mission linkage for any load-bearing artifact:
+- `mission_id`
+- current mission state
+- governing blueprint or amendment
+- authority class / zone
+- actor(s) involved
+- predicted outcome when applicable
+- verification result when applicable
+- lesson linkage on closure
+
+Receipts, jobs, control-plane rows, debates, OIL findings, memory facts, and change summaries are incomplete if they cannot be tied back to a mission.
+
+## 0.10 Law Challenge Cadence + Latency Balance (NEW)
+
+Every law must declare a review cadence:
+- new laws: frequent review
+- proven laws: periodic review
+- foundational laws: slower review, never “never”
+
+Every governed decision must also respect latency reality.
+
+### Latency balancing rule
+Do not spend mission-killing time to over-govern low-risk reversible choices.
+Governance routing must balance:
+- risk
+- reversibility
+- mission criticality
+- cost
+- latency
+- founder bottleneck pressure
+
+If the full governance path would create avoidable decision latency, the system must either:
+- use an already-approved shorter route, or
+- halt and name the latency blocker honestly
+
+## 0.11 Drift and Assumption-Killing Rule (NEW)
+
+Humans drift.
+Models drift.
+Governance drifts.
+Assumptions drift.
+
+The system must detect, measure, and correct drift rather than pretending it can eliminate drift.
+
+Operational assumption-killing checklist:
+1. What do we know from evidence?
+2. What are we inferring?
+3. What is merely historical habit?
+4. What mission is this serving?
+5. What would falsify this claim?
+6. What changed since this was last proven?
+
 ---
 
 # SECTION 1: WHAT THIS SYSTEM IS
@@ -481,6 +603,7 @@ System must refuse to proceed if:
 5. Vote (choice + confidence 0–1 + rationale)  
 6. Action only after audits  
 7. Log decision + rollback plan + future-back artifact
+8. Record predicted outcome so Historian can compare expectation vs result later
 
 ## 5.3 Decision Thresholds
 - Normal: majority vote + avg confidence ≥ 0.6  
@@ -566,6 +689,7 @@ Every 5th turn or 10 minutes: audit against Zero-Degree, Evidence Rule, Honesty 
 - Facts are append-only in meaning: promotions/demotions create history rows; no silent trust edits.
 - Debate records, lessons learned, agent performance, protocol violations, and task authority are first-class memory objects.
 - A model that repeatedly cuts corners can be set to `watch` or `blocked` for a task type; static routing preferences do not override runtime authority.
+- Founder calibration is part of memory: founder instinct, Founder Intent Model prediction, AIC recommendation, consensus outcome, and real outcome must be comparable over time.
 
 ---
 

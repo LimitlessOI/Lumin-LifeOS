@@ -1,7 +1,7 @@
 # AMENDMENT 02 — Memory Capsule System
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-28 — memory authority cleanup: capsule memory isolated from Amendment 39 evidence memory and legacy CRUD memory.
+**Last Updated:** 2026-06-01 — constitutional refactor alignment: capsule-memory scope clarified against mission-linked retrieval direction; historian prediction/outcome duties remain with Amendment 39. Prior: 2026-05-28 — memory authority cleanup: capsule memory isolated from Amendment 39 evidence memory and legacy CRUD memory.
 
 ---
 
@@ -21,6 +21,11 @@ It is not the umbrella SSOT for all memory anymore.
 - Evidence memory: `AMENDMENT_39_MEMORY_INTELLIGENCE`
 - Self-repair memory: `services/self-repair-memory.js`
 - Legacy CRUD/session memory: `routes/memory-routes.js` + `core/memory-system.js`
+
+### Historical vs canonical scope
+
+Older umbrella-memory language is preserved as historical context, but the canonical scope of this amendment is now capsule memory only.
+Historian-style prediction/outcome calibration lives primarily in Amendment 39, not here.
 
 ---
 
@@ -93,6 +98,17 @@ The following older memory surfaces are preserved for historical reference only 
 - **KNOW:** legacy CRUD memory still exists and is preserved under legacy naming
 - **DON'T KNOW:** whether legacy CRUD memory still serves an active product need or only migration/history
 
+### Mission-linked retrieval direction
+
+Capsule retrieval should increasingly attach to mission context where available:
+- why this capsule was retrieved
+- which mission or lane it served
+- whether it influenced an action
+- whether later outcomes confirmed or weakened that influence
+
+That direction is canonical.
+Full runtime mission-state attachment is not yet universal.
+
 ---
 
 ## CLEANUP NOTE
@@ -149,6 +165,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-06-01 | Constitutional refactor alignment only. Preserved capsule-memory scope as canonical; explicitly marked historian-style prediction/outcome calibration as Amendment 39 authority; added mission-linked retrieval direction without claiming full runtime mission-state enforcement exists yet. | Keep memory authority split honest while aligning to mission-first governance. | ✅ |
 | 2026-05-21 | Memory Capsule Alpha OIL Governance Pass: 17 services/route files written (BT-001–BT-021) + 11 blockers repaired. Files: memory-signal-intake, memory-candidate, memory-capsule, memory-provenance, memory-trust-bridge, memory-oil-bridge, memory-retrieval, memory-links, memory-contradiction, memory-zombie, memory-explanation, memory-relationship, memory-legacy-bridge, memory-receipts, memory-working, memory-health, memory-institutional, routes/memory-capsule-routes. 2 DB migrations (20260521_memory_capsule_core + receipts). | Alpha build + governance pass for MC-F01–F21 per BUILD_QUEUE.json. GAP-FILL: council output had logic inversions, stray fences, truncated files. | `node --check` PASS all 17 files |
 | 2026-05-28 | **Memory namespace audit Phase 2:** `routes/memory-routes.js` — added `LEGACY_META` constant (`memory_authority: 'LEGACY_COMPAT'`, `canonical_replacement: '/api/v1/memory/evidence or /api/v1/memory/capsules'`, `do_not_use_for_builderos_proof: true`) spread into all 5 legacy route responses. Routes mounted at `/api/memories/*` and `/api/v1/memory/legacy/*` now self-report their authority classification to callers. | Close ambiguity: callers must not use legacy CRUD memory routes for BuilderOS proof. No routes deleted. | ✅ `node --check routes/memory-routes.js` |
 | 2026-05-28 | Memory authority cleanup: Amendment 02 narrowed to capsule-memory scope only; canonical capsule routes moved to `/api/v1/memory/capsules/*`; legacy CRUD/session-memory narrative archived from canonical sections. | Remove overlap with Amendment 39 evidence memory and legacy CRUD memory while preserving historical receipts. | ✅ |

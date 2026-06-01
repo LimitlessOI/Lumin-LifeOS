@@ -1,7 +1,7 @@
 # AMENDMENT 46 — BuilderOS Control Plane (Measure Everything)
 **Status:** IN_BUILD — Phase 1 infrastructure on disk
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-31 — kernel OIL JSONB path fix + files_changed type fix
+**Last Updated:** 2026-06-01 — constitutional refactor alignment: mission-first control-plane requirements, governance-routing display, trust-escalation tracking. Prior: 2026-05-31 — kernel OIL JSONB path fix + files_changed type fix
 
 > **Core law:** If it is not in the ledger, it did not happen.
 > **Priority:** Higher than MarketingOS, SalesOS, CCL production integration.
@@ -15,6 +15,16 @@
 BuilderOS cannot improve what it does not measure. Adam has repeatedly requested token tracking, build time, failures, cost, and benchmarks. Pieces exist but are scattered and unenforced. This amendment defines one control plane that makes every AI agent accountable.
 
 **Do not build product features under this amendment** — measurement and enforcement only.
+
+### 1.1 Mission-first control-plane requirement
+
+Jobs, ledger rows, logs, and route probes are not the parent object.
+Missions are.
+
+This control plane must evolve from job-centric truth to mission-centric truth:
+- every meaningful build action should attach to a mission
+- every mission should expose current state, authority class, and governing blueprint
+- every measured outcome should roll back into trust, calibration, and lessons
 
 ---
 
@@ -127,6 +137,20 @@ Fields per user spec: task_id, blueprint_id, timing, files, lines, commands, tes
 | GET | `/api/v1/builderos/control-plane/tasks-without-proof` | Audit gap list |
 | GET | `/api/v1/tokens/unified/health` | Token sub-layer health (Am 44) |
 
+### 7.1 Mission-state display requirements
+
+The control plane should ultimately expose, at minimum:
+- `mission_id`
+- current mission state
+- governing blueprint path
+- authority zone / routing class
+- predicted outcome
+- measured outcome
+- challenge history
+- trust escalation status
+
+Current runtime does not yet provide this full mission object. Until code support exists, docs must not imply that it does.
+
 ---
 
 ## 8. Verification
@@ -151,6 +175,18 @@ If measurement health is **RED** → DONE blocked unless explicit exception.
 Implemented in: `controlPlane.canMarkBuildDone()` + `POST /builds/complete` returns 409 when blocked.
 
 ⚠️ INCOMPLETE: `lifeos-council-builder-routes.js` `/build` does not yet call control plane automatically.
+
+### 9.1 Governance routing display
+
+The control plane should distinguish:
+- Autonomous
+- Supervised
+- Founder Required
+- Pre-Authorized
+- Mission-Critical
+
+These are display and routing requirements for future enforcement mapping.
+Current code/runtime truth still primarily exposes job and receipt state, not full mission routing state.
 
 ---
 
@@ -188,6 +224,21 @@ Wire `routes/lifeos-council-builder-routes.js`:
 - On `/build` complete → `recordBuildComplete` with token + OIL receipt IDs
 - Return 409 if `canMarkBuildDone` fails when health RED
 
+## 13. Trust Escalation Tracking
+
+The control plane must eventually support trust escalation based on evidence, not vibes.
+
+For any expandable autonomy path, track:
+- governing mission
+- actor or model class
+- historical accuracy
+- challenge survival
+- failure rate
+- decision latency saved
+- whether delegation was pre-authorized, supervised, or founder-required
+
+Until this is implemented, trust escalation remains a constitutional requirement without full runtime enforcement.
+
 ---
 
 ## Agent Handoff Notes
@@ -200,6 +251,7 @@ Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy m
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-06-01 | Constitutional refactor alignment only. Added mission-first control-plane requirements, minimum mission-state display targets, governance-routing display requirements, and trust-escalation tracking while explicitly noting these are not yet fully implemented runtime surfaces. | Keep control-plane authority honest: mission-centric governance is canonical direction, not current fake-green runtime. |
 | 2026-05-24 | Amendment 46 + `build_task_ledger` + control plane service/routes + verify script | Measure everything before more product build |
 | 2026-05-24 | `services/tsos-platform-kernel.js` + `/api/v1/kernel/*` + `wrapBuild` DONE gate wiring | TSOS Platform Kernel Phase 0 orchestrates control plane + token accounting |
 | 2026-05-31 | GAP-FILL: `verifyOilReceipt` query now also checks `payload->'details'->>'task_id'` (canonical OIL payload nests task_id under `details`, not top-level). `files_changed` fixed from integer `1` to `[target_file]` array (column is TEXT[]). Both fixes in `services/tsos-platform-kernel.js`. Root cause: OIL receipts were being written correctly but never found by verifier. |

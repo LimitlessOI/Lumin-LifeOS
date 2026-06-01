@@ -9,7 +9,7 @@
   "phase": "alpha",
   "next_task": "Deploy phase7-railway-probe to Railway and run live mode of scripts/memory-pressure-test.mjs against Neon to confirm static 20/20 PASS holds in runtime.",
   "stability_class": "alpha-pass-static",
-  "current_focus": "Memory Capsule Alpha remains the canonical governed product-memory layer. Route ownership is now isolated under /api/v1/memory/capsules to avoid overlap with Amendment 39 evidence memory.",
+  "current_focus": "Memory Capsule Alpha remains the canonical governed product-memory layer. Constitutional alignment now makes mission-linked retrieval direction explicit while keeping historian prediction/outcome authority in Amendment 39.",
   "owned_files": [
     "routes/memory-capsule-routes.js",
     "services/memory-signal-intake.js",
@@ -123,5 +123,5 @@
     "Zombie capsules blocked from action_authority_lane"
   ],
   "anti_drift_notes": "Memory Capsule Alpha ends at TRUSTED_FOR_CONTEXT — CANONICAL is Beta. SQL-first, no vector/graph. Every retrieval creates a retrieval_event row. All trust mutations require receipts.",
-  "last_updated": "2026-05-28"
+  "last_updated": "2026-06-01"
 }

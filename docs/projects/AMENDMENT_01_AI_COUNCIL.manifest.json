@@ -9,7 +9,7 @@
   "phase": "optimization",
   "next_task": "Run T5-T15 LifeOS feature builds via builder council (now using claude_via_openrouter)",
   "stability_class": "active",
-  "current_focus": "Builder code tasks route to claude_via_openrouter (anthropic/claude-sonnet-4-5 via OpenRouter). Add ANTHROPIC_API_KEY to Railway to use direct claude_sonnet instead.",
+  "current_focus": "AIC is now explicitly mission-attached deliberation and challenge. Outcome accountability and predicted-outcome recording are canonical, while routing/runtime enforcement remains separate.",
   "owned_files": [
     "services/council-service.js",
     "services/token-optimizer.js",
@@ -149,6 +149,6 @@
   ],
   "last_verified_at": "2026-04-24",
   "verification_passed": null,
-  "last_updated": "2026-05-14",
-  "ssot_receipt_tail": "extractJavaScriptFromOutput */ regex bug fixed (line 304); 5 quarantine entries cleared. TC + site-builder queues unblocked."
+  "last_updated": "2026-06-01",
+  "ssot_receipt_tail": "2026-06-01: constitutional refactor alignment clarified AIC role, mission attachment, and outcome accountability without changing runtime routing claims."
 }

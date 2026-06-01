@@ -8,9 +8,9 @@
   "owner": "adam",
   "phase": "phase_2_adoption",
   "stability_class": "stable",
-  "last_updated": "2026-05-24",
-  "current_focus": "Self-repair lesson classification on write/read; prevention candidate rules from receipt-backed executor lessons only",
-  "ssot_receipt_tail": "2026-05-24: self-repair-memory.js classification + prevention registry slice (AM12)",
+  "last_updated": "2026-06-01",
+  "current_focus": "Historian prediction→outcome linkage, Founder Intent Model comparison inputs, and mission-linkage language are now explicit while runtime mission-object enforcement remains partial.",
+  "ssot_receipt_tail": "2026-06-01: constitutional refactor alignment added historian prediction/outcome and founder calibration language without overstating runtime enforcement.",
   "owned_files": [
     "db/migrations/20260426_memory_intelligence.sql",
     "db/migrations/20260426_memory_intelligence_hardening.sql",

@@ -27,12 +27,41 @@ BuilderOS exists to safely:
 
 without Adam handling routine operational work.
 
+BuilderOS exists to increase justified trust in mission execution, not to maximize code churn, task count, or apparent activity.
+
 BuilderOS is not LifeOS.
 BuilderOS is not TSOS.
 
 LifeOS is a product built by BuilderOS.  
 TSOS is an external AI efficiency/routing product.  
 BuilderOS is the internal governed machine.
+
+### 0.1 Canonical workflow
+
+The canonical BuilderOS workflow is:
+
+SSOT / Amendment / Blueprint
+→ BPB expansion
+→ ranked build task
+→ C2 job
+→ BuilderOS build
+→ verify
+→ receipts
+→ update blueprint / continuity
+→ next blueprint task
+
+Historical references to **PBB** remain preserved in change receipts and legacy file names such as `services/builderos-pbb-plan.js`, but the canonical concept is now **BPB**.
+
+### 0.2 Mission-first operating rule
+
+BuilderOS must think primarily in missions, not files, commits, or queue counts.
+
+Every governed build slice should answer:
+- what mission is this serving?
+- which blueprint authority approved it?
+- what outcome is predicted?
+- what outcome was measured?
+- what lesson changed future trust?
 
 ---
 
@@ -195,6 +224,20 @@ Canonical BuilderOS Alpha components:
 11. Command Center
 12. Useful-work-guard
 
+### 7.1 Mission governance requirements
+
+BuilderOS execution is subordinate to approved BPB output.
+BuilderOS may fill bounded implementation gaps, but it may not make material product or architecture decisions outside approved blueprint authority.
+
+Verifier scope must include:
+- syntax / runtime truth
+- mission compliance
+- blueprint compliance
+- governance compliance
+
+Founder-value deliveries outrank raw task count.
+Useful work is measured by mission outcome contribution, not by number of commits, scripts, or queue items generated.
+
 ---
 
 ## 8. Alpha Scoring
@@ -263,6 +306,47 @@ BuilderOS Alpha must measure:
 - `autonomous_continuation_rate`
 
 Decision latency and execution latency must remain separate metrics.
+
+### 9.1 Additional mission metrics
+
+BuilderOS Alpha must also track:
+- `founder_value_deliveries`
+- `mission_completion_rate`
+- `prediction_accuracy_delta`
+- `decision_latency_ms`
+- `build_latency_ms`
+- `outcome_measured_rate`
+- `lesson_capture_rate`
+
+### 9.2 Model benchmarking requirement
+
+BuilderOS must benchmark models by role, not by generic intelligence.
+
+Required role surfaces:
+- AIC debate
+- BPB blueprinting
+- OIL adversarial review
+- BuilderOS execution
+- Verifier
+- summarizer
+- historian
+- founder intent modeling
+
+Required comparison metrics:
+- cost
+- success rate
+- retry rate
+- drift rate
+- hallucination rate
+- useful outcome contribution
+- founder-value delivery
+- latency
+- calibration accuracy
+
+### 9.3 Historical terminology note
+
+Existing receipts that mention **PBB** remain valid historical proof.
+Current BuilderOS authority language must use **BPB**.
 
 ---
 

@@ -11,7 +11,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-05-11 — **`services/lifeos-gate-change-council-run.js`** **`@ssot`** corrected **LifeOS → Amendment 01** (gate-change debate is council SSOT; fixes **`npm run ssot:validate`** when only council service changes). Prior: 2026-04-28 — **Railway-aware builder routing hardening:** `services/council-model-availability.js` now marks Ollama unavailable on Railway unless a real non-local endpoint is explicitly configured; this prevents council/builder memory routing from selecting local-only Ollama models in production. Prior: 2026-04-27 — **`services/council-model-availability.js`** committed (was untracked, crashing Railway boot). Prior: 2026-04-26 — **future-back consensus artifact** required for gate-change debate; runtime authority from Memory Intelligence may override static model routing. Prior: 2026-04-25 — **`council.builder.code_execute`** → **`groq_llama`** (builder **`execution_only: true`** + `mode: code`, no `model` override). Prior: 2026-04-24 — **`services/savings-ledger.js` `getSavingsReport`:** exposes full monetization columns from rebuilt `tsos_savings_report` view. Prior: **`maxOutputTokens`** in **`council-service.js`**. Prior: explicit **`council.builder.code` / `plan` / `review`**. Prior: **`@ssot`** council-service. Prior: **`POST /gate-change/run-preset`:** server-side debate. |
+| **Last Updated** | 2026-06-01 — constitutional refactor alignment: AIC clarified as mission-attached deliberation layer with outcome accountability, not automatic truth. Prior: 2026-05-11 — **`services/lifeos-gate-change-council-run.js`** **`@ssot`** corrected **LifeOS → Amendment 01** (gate-change debate is council SSOT; fixes **`npm run ssot:validate`** when only council service changes). Prior: 2026-04-28 — **Railway-aware builder routing hardening:** `services/council-model-availability.js` now marks Ollama unavailable on Railway unless a real non-local endpoint is explicitly configured; this prevents council/builder memory routing from selecting local-only Ollama models in production. Prior: 2026-04-27 — **`services/council-model-availability.js`** committed (was untracked, crashing Railway boot). Prior: 2026-04-26 — **future-back consensus artifact** required for gate-change debate; runtime authority from Memory Intelligence may override static model routing. Prior: 2026-04-25 — **`council.builder.code_execute`** → **`groq_llama`** (builder **`execution_only: true`** + `mode: code`, no `model` override). Prior: 2026-04-24 — **`services/savings-ledger.js` `getSavingsReport`:** exposes full monetization columns from rebuilt `tsos_savings_report` view. Prior: **`maxOutputTokens`** in **`council-service.js`**. Prior: explicit **`council.builder.code` / `plan` / `review`**. Prior: **`@ssot`** council-service. Prior: **`POST /gate-change/run-preset`:** server-side debate. |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json` |
 
@@ -19,6 +19,13 @@
 
 ## Mission
 Route every AI task to the cheapest capable model. Zero unnecessary spend. Free providers first, paid providers never unless explicitly authorized.
+
+### Canonical role clarification
+
+AIC is the deliberation, challenge, research, external-lessons, and consensus layer.
+AIC does not replace founder authority.
+AIC does not automatically create truth.
+AIC recommendations must attach to missions and be measured against outcomes over time.
 
 ### North Star §2.12 — Technical decisions and debate (constitutional)
 
@@ -127,6 +134,8 @@ Every non-trivial council answer that is meant to drive code or workflow change 
 - `cheaper_or_faster_option`
 - `confidence`
 - `verification_plan`
+- `mission_id` or named mission target
+- `predicted_outcome`
 
 That proposal is scored independently from execution quality. The council is responsible for the planning half of the loop, not for declaring its own code successful.
 
@@ -142,6 +151,17 @@ The council may recommend, but a separate verifier/reviewer must decide whether 
 
 ### Runtime routing authority (cross-link: Amendment 39)
 Static task routing is a **preference**, not permission. Runtime task authority from the memory system may mark a model `watch` or `blocked` for a task type based on protocol violations, intent drift, skipped verification, or poor historical accuracy. When that happens, runtime authority overrides the static map.
+
+### Outcome accountability
+
+Council quality is not measured only by elegance of reasoning.
+It is measured by:
+- outcome contribution
+- calibration accuracy
+- drift rate
+- security catch rate
+- founder-value delivery
+- whether consensus improved the result versus founder instinct or simulator prediction
 
 ### Gate-change & efficiency proposals (North Star §2.6 ¶8 — operational)
 
@@ -435,6 +455,7 @@ When this is done:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-06-01 | Constitutional refactor alignment only. Clarified AIC as mission-attached deliberation/challenge/research/consensus layer; added `mission_id` + `predicted_outcome` to the council evaluation contract; added explicit outcome accountability language. No runtime routing claims changed. | Preserve history while making trust-first governance explicit and assumption-resistant. | ✅ | pending | Review against future mission-state runtime implementation |
 | 2026-05-24 | **`services/council-service.js`** — added `tokenAccounting` injection, `recordMetered()` helper (7 call sites), budget gate via `tokenAccounting.checkBudgetGate()`. Replaced direct `savingsLedger.record` on council paths. **`services/savings-ledger.js`** — INSERT extended with CCL/product_lane/blueprint_id/oil_result columns. | Amendment 44 Token Accounting OS — enforce metered ledger or unmetered exception on all council AI calls. | ✅ | n/a | `node scripts/verify-token-accounting-enforcement.mjs` VERIFIED |
 | 2026-05-14 | **`routes/lifeos-council-builder-routes.js` line 304** — removed `\*\/` from `extractJavaScriptFromOutput()` valid-code-start regex. `*/` is never a valid JS file start; including it caused the extractor to begin extracted output at a closing comment marker when `/**` was dropped by the model, producing files that started with `*/` and failed `node --check` with "Unexpected token '*'". **This was the root cause of 4+ quarantine entries** across both queues (tc-document-qa-validator ×11, site-builder-prospect-ranker ×2, site-builder-revenue-service ×4). Fix: `if (/^(\/\/|\/\*|\{|\(|\[)/.test(t))` (dropped `\*\/`). All 5 `*/`-pattern quarantine entries cleared and re-queued. | Systematic builder output corruption affecting TC and site-builder lanes — every JS task hitting a JSDoc comment in model output was producing a file starting with `*/`. | ✅ | n/a | `node --check routes/lifeos-council-builder-routes.js` PASS; 49/49 tests pass |
 | 2026-05-14 | **`docs/projects/TC_SERVICE_BUILDER_QUEUE.json`** — `tc-document-qa-validator` max_output_tokens 6000→16000; `tc-agent-portal-polish` max_output_tokens 9000→32000. Quarantine cleared for both (portal: truncated before `<body>` — 9000 tokens insufficient for full HTML regen; validator: `*/` bug, but 6000 also too tight for complex spec). | Token caps were suppressing valid large outputs — HTML truncation and JS truncation share the same root cause: conservative limits set before real output sizes were measured. | ✅ | n/a | Queue JSON valid |

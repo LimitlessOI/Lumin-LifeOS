@@ -9,7 +9,7 @@
   "phase": "stabilization",
   "next_task": "Keep command-center runtime proof surfaces aligned with BuilderOS canonical scoring, then continue structural consolidation and mobile/role-based improvements from a governed alpha surface",
   "stability_class": "needs-review",
-  "current_focus": "C2 communication layer v1 — typed/threaded history, explicit-send voice/text controls, recent governed C2 jobs, and real /communications/send job bridge. Deploy proof pending.",
+  "current_focus": "Mission-cockpit alignment: Command Center must center mission state, governing blueprint, authority, challenge history, and outcomes where runtime truth exists. C2 communication layer v1 remains the live implementation focus.",
   "owned_files": [
     "middleware/apply-middleware.js",
     "routes/command-center-routes.js",
@@ -194,6 +194,6 @@
     }
   ],
   "last_verified_at": "2026-05-31",
-  "last_updated": "2026-05-31",
+  "last_updated": "2026-06-01",
   "verification_passed": null
 }

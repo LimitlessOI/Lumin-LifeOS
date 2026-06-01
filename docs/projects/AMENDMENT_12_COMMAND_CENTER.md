@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-05-31 |
+| **Last Updated** | 2026-06-01 |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -22,6 +22,22 @@ Give Adam one browser tab to see everything, control everything, and act on anyt
 
 ## North Star Anchor
 Autonomy Amplifier — every feature in the system is only useful if Adam can see and control it. The C&C is the bridge between system capability and human direction.
+
+## Canonical Direction Update
+
+Command Center is no longer just an admin dashboard.
+It is the mission cockpit for a governed mission execution system.
+
+The cockpit must center:
+- mission state
+- governing blueprint
+- authority level / zone
+- challenge history
+- predicted outcome
+- measured outcome
+- lessons attached
+
+Historical dashboard-first framing remains preserved, but the canonical direction is now mission-first.
 
 ---
 
@@ -115,6 +131,17 @@ are owned by AMENDMENT_18 and read by this project's dashboard panels.
 - **Free Cloud Providers panel** — free tier usage status
 - **Builder Control Panel** ← NEW — running/paused state badge; Run Now / Dry Run / Pause / Resume buttons; 4 stat cards (Safe & Ready, In Progress, Needs Review, Blocked); last run results; queue detail table; Adam Decision Accuracy section
 - **BuilderOS System Alpha panel** ← NEW — read-only BuilderOS Alpha % / blockers / active-proven-live counts sourced only from `/api/v1/lifeos/command-center/system-alpha-readiness`
+
+### Mission-centric cockpit requirements
+- C2 views must show typed record of every user message and every system response
+- Communication history must be searchable by thread and mission when available
+- Mission dashboard views should prefer mission state over raw job noise
+- Authority display should use the existing zone system and routing classes together without contradiction
+- Challenge history and outcome history should be visible where the runtime has real data
+
+Current runtime note:
+- communications history is real where the backing table and routes exist
+- full mission-state attachment and predicted-vs-measured outcome display are not yet fully implemented across the cockpit
 
 ### External Dependencies
 | Dependency | Env Var | Required? |
@@ -220,6 +247,7 @@ node --check public/overlay/command-center.js
 - [ ] Click on project card opens drawer with full details
 - [ ] Pending Adam panel shows count badge and items sorted by priority
 - [ ] Resolving a pending item removes it from the list
+- [ ] Mission-centric views do not imply mission-state enforcement that runtime does not yet support
 
 ---
 
@@ -257,6 +285,7 @@ node --check public/overlay/command-center.js
 - [x] ~~LIFEOS_OPEN_ACCESS was set for testing — removed from Railway~~ ✅
 - [ ] **Goal tracking UI is partial** — deferred until C&C is stable enough for feature work
 - [ ] **Site Builder UI not built** — waiting on C&C stability
+- [ ] **Mission object not yet first-class in C2 runtime** — dashboard surfaces jobs and aggregates, but not the full constitutional mission state machine yet
 
 ---
 
@@ -264,6 +293,7 @@ node --check public/overlay/command-center.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-06-01 | Constitutional refactor alignment only. Reframed Command Center as mission cockpit; added mission-centric cockpit requirements, explicit note that communications history is real while full mission-state/predicted-vs-measured outcome display is not yet universal runtime truth, and recorded the missing first-class mission object as decision debt. | Preserve dashboard history while making current mission-first governance explicit and honest about runtime gaps. | ✅ | pending | Await runtime mission-object implementation before claiming full cockpit compliance |
 | 2026-05-31 | **C2 Mission Dashboard v1:** `routes/lifeos-command-center-routes.js` — added import for `listCommandControlJobs`, `getCommandControlHaltState` from `builderos-command-control-service.js`; added `GET /api/v1/lifeos/command-center/mission-dashboard` (requireKey) — reads 50 most-recent C2 jobs, categorizes into active/queued/completed/failed, reads `data/governed-autonomy-backlog-state.json` (try/catch — unavailable on Railway), queries `pending_adam WHERE is_resolved=false`, runs all in `Promise.all`; returns 9 sections: current_mission, halt, runner (status/gen/tasks/stop_reason), active_task, active_jobs, recent_completed, failed_blocked, blueprint_ratio (pct/count), next_queued, adam_needed. `public/overlay/c2-mission-dashboard.html` (NEW) — standalone dark-themed dashboard (monospace, CSS vars, grid layout), polls endpoint every 10s, key from URL `?key=` or localStorage prompt, 9 panels rendered, halt badge, status dot, pill pills for status/priority, blueprint ratio bar. `routes/public-routes.js` — added `GET /mission-dashboard` serving `c2-mission-dashboard.html` with no-cache headers. `node --check` PASS all JS files. No new migrations. No AI calls. GAP-FILL: Zone 3 route file (>150 lines). INTENT DRIFT: none. | Adam mission directive: "Build the C2 Mission Dashboard so Adam can instantly see what the system is doing without reading logs." Real sources only, no mock data. | AM12 | `node --check` PASS | pending deploy |
 | 2026-06-01 | **Conversation memory integration — thread context window:** `services/command-center-communication-service.js` — added `getRecentThreadContext(pool, threadId, beforeMessageId)` (fetches last 10 rows from same thread, returns chronologically); added `buildThreadContextBlock(messages)` (formats as `=== PRIOR CONVERSATION (N messages) ===` preamble, capped at 5 pairs × 300 chars × 3000 total); modified `sendCommunicationViaC2` to detect `isExistingThread` (payload `thread_id` provided) and inject context preamble into instruction for all non-`c2_command` modes; `c2_command` skipped (builder needs clean single-shot instructions); `contextMessageCount` exposed in response as `thread_context_count`. `public/overlay/command-center-communication.js` — added `↩ N prior` indicator in response header when `data.thread_context_count > 0`. No new tables. No migration. `node --check` PASS both files. GAP-FILL: Zone 3 files (service ~545 lines, overlay ~670 lines). INTENT DRIFT: none. | Council had zero context about prior turns in a thread — every message was a cold one-shot prompt. Multi-turn conversations (quick_ask, brainstorm, meeting, step_build, audit) are now context-aware: the council sees the last 5 message pairs from the same thread before answering. | AM12 | `node --check` PASS | pending deploy |
 | 2026-06-01 | **C2 zombie-job fix — abort timeout + error recovery in setImmediate:** `services/command-center-communication-service.js` — catch block in `setImmediate` now recovers on error: `UPDATE builderos_command_control_jobs SET status='failed' WHERE id=$1 AND status='running'` then calls `updateCommunicationAfterExecution` with `status:failed` + error message so comm row never stays `queued` indefinitely. `services/builderos-governed-loop-executor.js` — (1) `dispatchBuilderPlan` now wraps `fetch()` in `AbortController` with 90s timeout (prevents unbounded hang when Railway self-call has no response); (2) `executeCommandControlJob` body after `claimed` is wrapped in top-level try/catch: on unexpected throw, reads job from DB and if still `running` updates to `failed` with `UNEXPECTED_ERROR` blocker. Root cause: Railway redeploys send SIGTERM mid-execution, aborting in-flight `fetch()` calls; the old `catch` block only logged, never updated DB, leaving jobs zombied in `running`. `node --check` PASS both files. GAP-FILL: Zone 3 files (462 / ~420 lines); executor is the tool being fixed (can't use it to fix itself). INTENT DRIFT: none. | Proof that `comm_status` transitions from `queued` → terminal after background execution was blocked: both test jobs (5b386c2c, 21738cde) zombied in `running` for >14min because Railway redeploys kill setImmediate callbacks — the only state update path. Fix ensures terminal state is always written even on unexpected abort. | AM12 + BUILDEROS_ALPHA | `node --check` PASS | pending next deploy |
