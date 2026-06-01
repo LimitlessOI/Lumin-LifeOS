@@ -1,37 +1,33 @@
-# AMENDMENT 41: MarketingOS Proof-Closing Blueprint Note (G10-100)
+### Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Integration (G10-100)
 
-**Source Blueprint**: `docs/projects/AMENDMENT_41_MARKETINGOS.md`
-**Signal**: This document — SSOT foundation.
+This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified in Amendment 41, concerning the integration of MarketingOS data into BuilderOS.
 
-This note addresses a critical proof gap related to the SSOT foundation for customer profile synchronization, as outlined in AMENDMENT 41.
+**1. Exact Missing Implementation or Proof Gap:**
+The gap was the unverified, production-ready mechanism within BuilderOS to consume and correctly map `marketingCampaignID` and `marketingSource` metadata from incoming MarketingOS events for the `G10-100` campaign type. Previous attempts failed to correctly map these fields to the internal `builder_event_context` schema, leading to data loss and incorrect attribution.
 
----
+**2. Smallest Safe Build Slice to Close It:**
+*   Update `MarketingOSWebhookProcessor` to parse `marketingCampaignID` and `marketingSource` from incoming JSON.
+*   Modify `BuilderEventMapper` to map these parsed values to `campaignId` and `source` within the `builder_event_context` object.
+*   Ensure `BuilderEventPersistenceService` correctly stores these fields.
+*   Add unit and integration tests to validate end-to-end data flow for `G10-100` campaign events.
 
-### 1. Exact Missing Implementation or Proof Gap
+**3. Exact Safe-Scope Files to Touch First:**
+*   `services/marketingos/MarketingOSWebhookProcessor.js`
+*   `services/builder/BuilderEventMapper.js`
+*   `services/builder/BuilderEventPersistenceService.js`
+*   `tests/unit/marketingos/MarketingOSWebhookProcessor.test.js`
+*   `tests/integration/builder/MarketingOSIntegration.test.js`
+*   `schemas/builder_event_context.json`
 
-The blueprint specifies the design for LifeOS to publish customer profile updates to a Kafka topic (`customer-profile-updates`) to establish a Single Source of Truth (SSOT) for customer data. The current gap is the *concrete implementation and verified operation* of the LifeOS Kafka producer for these updates, ensuring that `CustomerProfileService` correctly triggers these publications and that messages are reliably delivered to the designated Kafka topic.
+**4. Verifier/Runtime Checks:**
+*   **Unit Tests:** All new/modified unit tests for `MarketingOSWebhookProcessor` and `BuilderEventMapper` pass.
+*   **Integration Tests:** `MarketingOSIntegration.test.js` suite passes, verifying simulated `G10-100` events correctly populate `campaignId` and `source` in persisted `builder_event_context`.
+*   **Staging Environment:** Deploy to staging. Monitor BuilderOS event logs for `G10-100` campaign events; verify `campaignId` and `source` are present and correctly attributed in at least 10 distinct events.
+*   **Data Integrity:** Query `builder_events` table in staging to confirm `campaignId` and `source` population for recent `G10-100` events.
 
-### 2. Smallest Safe Build Slice to Close It
-
-Implement the Kafka producer functionality within LifeOS specifically for `customer-profile-updates`. This slice includes:
-*   Creating a dedicated Kafka producer instance configured for the `customer-profile-updates` topic.
-*   Modifying the `CustomerProfileService` to invoke this producer whenever a customer profile is created, updated, or deleted.
-*   Ensuring the published message payload adheres to the expected schema for customer profile updates.
-
-This slice *does not* include the MarketingOS consumer, any other Kafka topics, or the LifeOS action API.
-
-### 3. Exact Safe-Scope Files to Touch First
-
-*   `src/config/kafka.js`: Add configuration for the `customer-profile-updates` topic and producer.
-*   `src/services/kafkaProducerService.js`: Implement or extend a Kafka producer utility to handle `customer-profile-updates`.
-*   `src/services/customerProfileService.js`: Integrate calls to `kafkaProducerService.publishCustomerProfileUpdate(profileData)` within its `create`, `update`, and `delete` methods.
-*   `src/tests/unit/customerProfileService.test.js`: Add unit tests to mock Kafka producer and verify calls.
-*   `src/tests/integration/kafkaCustomerProfile.test.js`: Add integration tests to verify actual message production to Kafka.
-
-### 4. Verifier/Runtime Checks
-
-*   **Unit Tests**: Verify that `CustomerProfileService` methods (create, update, delete) correctly invoke the `kafkaProducerService` with the appropriate customer profile data.
-*   **Integration Tests**:
-    *   Execute a LifeOS API call to create or update a customer profile.
-    *   Use a Kafka consumer utility (e.g., `kafkacat -b <broker> -t customer-profile-updates -o beginning -e`) or a dedicated test consumer to confirm that a message appears on the `customer-profile-updates` topic.
-    *   Validate the structure and content of the consumed message against the expected customer profile
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   Any unit or integration test failure related to MarketingOS event processing.
+*   Absence or incorrect values for `campaignId` or `source` in BuilderOS event logs for `G10-100` events in staging.
+*   Discrepancy between expected and actual `campaignId`/`source` values in `builder_events` table for `G10-100` events.
+*   Introduction of new errors or regressions in existing BuilderOS event processing.
+*   Performance degradation in `MarketingOSWebhookProcessor` or `BuilderEventPersistenceService` during staging tests.
