@@ -1,9 +1,7 @@
-# Amendment 46: BuilderOS Control Plane Proof - G13-100
+# Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane (G13-100)
 
-## Proof-Closing Blueprint Note
+This document addresses the follow-through signal for Amendment 46, focusing on the BuilderOS control plane integration within `routes/lifeos-council-builder-routes.js`.
 
-This note addresses the implementation gap for wiring the BuilderOS control plane build lifecycle events within `routes/lifeos-council-builder-routes.js`, as specified in Amendment 46.
+## 1. Exact Missing Implementation or Proof Gap
 
-### 1. Exact Missing Implementation or Proof Gap
-
-The
+The `routes/lifeos-
