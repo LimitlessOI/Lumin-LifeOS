@@ -211,6 +211,32 @@ function extractBuildOrderRows(markdown) {
   return rows;
 }
 
+function extractUncheckedChecklistItems(markdown) {
+  const items = [];
+  for (const line of markdown.split('\n')) {
+    const match = line.match(/^\s*[-*]\s+\[\s\]\s+(.+)$/);
+    if (!match) continue;
+    items.push(clampSummary(match[1], 220));
+  }
+  return items;
+}
+
+function extractNextStepSignals(markdown) {
+  const signals = [];
+  for (const line of markdown.split('\n')) {
+    const normalized = normalizeText(line);
+    if (!normalized) continue;
+    if (/^[-*]\s+\*\*→ NEXT:/.test(normalized) || /^[-*]\s+\*\*Current blocker:/.test(normalized)) {
+      signals.push(clampSummary(normalized.replace(/^[-*]\s+/, ''), 240));
+      continue;
+    }
+    if (/^Remaining operational next step:/i.test(normalized) || /^Exact next step:/i.test(normalized)) {
+      signals.push(clampSummary(normalized, 240));
+    }
+  }
+  return signals;
+}
+
 function detectLane(fileName, content) {
   const haystack = `${fileName}\n${content.slice(0, 5000)}`;
   for (const rule of PRIORITY_RULES) {
@@ -255,10 +281,11 @@ function buildPatchPlanTask(blueprint, sourceTask, generation, reason) {
   };
 }
 
-function buildEnhancementTask(blueprint, generation, reason, sectionSummary) {
-  const targetFile = `docs/projects/builderos-remediation/${slugify(path.basename(blueprint.path, '.md'))}-enhancement-g${generation}.md`;
+function buildEnhancementTask(blueprint, generation, reason, sectionSummary, suffix = 'enhancement') {
+  const safeSuffix = slugify(suffix) || 'enhancement';
+  const targetFile = `docs/projects/builderos-remediation/${slugify(path.basename(blueprint.path, '.md'))}-${safeSuffix}-g${generation}.md`;
   return {
-    id: `${slugify(path.basename(blueprint.path, '.md'))}-enhancement-g${generation}`,
+    id: `${slugify(path.basename(blueprint.path, '.md'))}-${safeSuffix}-g${generation}`,
     priority: blueprint.rank * 100 + 80,
     category: 'blueprint_enhancement',
     lane: blueprint.lane,
@@ -282,6 +309,34 @@ function buildEnhancementTask(blueprint, generation, reason, sectionSummary) {
       '6. stop conditions.',
       'Keep it implementation-oriented, not marketing. 60-120 lines.',
     ].filter(Boolean).join(' '),
+  };
+}
+
+function buildBlueprintProofTask(blueprint, generation, signal, index = 0) {
+  const targetFile = `docs/projects/builderos-remediation/${slugify(path.basename(blueprint.path, '.md'))}-proof-g${generation}-${index + 1}.md`;
+  return {
+    id: `${slugify(path.basename(blueprint.path, '.md'))}-proof-g${generation}-${index + 1}`,
+    priority: blueprint.rank * 100 + 70 + index,
+    category: 'blueprint_proof',
+    lane: blueprint.lane,
+    ref: blueprint.path,
+    zone: 'Z1',
+    target_file: targetFile,
+    blueprint_path: blueprint.path,
+    blueprint_title: blueprint.title,
+    blueprint_section: 'proof_next_step',
+    instruction: [
+      `Write ${targetFile}.`,
+      `Source blueprint: ${blueprint.path}.`,
+      `Signal requiring follow-through: ${signal}.`,
+      'Produce a proof-closing blueprint note with:',
+      '1. the exact missing implementation or proof gap,',
+      '2. the smallest safe build slice to close it,',
+      '3. exact safe-scope files to touch first,',
+      '4. verifier/runtime checks,',
+      '5. stop conditions if runtime truth disagrees.',
+      'Keep it implementation-first and ready for the next C2 build pass.',
+    ].join(' '),
   };
 }
 
@@ -331,19 +386,11 @@ function buildBlueprintBuildTask(blueprint, label, sectionText, targetFile, prio
 
 async function readProjectBlueprints() {
   const entries = await fs.readdir(PROJECTS_DIR);
-  const candidates = [
-    'BUILDEROS_ALPHA_BLUEPRINT.md',
-    'AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md',
-    'AMENDMENT_12_COMMAND_CENTER.md',
-    'AMENDMENT_41_MARKETINGOS.md',
-    'AMENDMENT_21_LIFEOS_CORE.md',
-    'AMENDMENT_09_LIFE_COACHING.md',
-    'AMENDMENT_17_TC_SERVICE.md',
-    'AMENDMENT_10_API_COST_SAVINGS.md',
-    'AMENDMENT_44_TOKEN_ACCOUNTING_OS.md',
-    'AMENDMENT_45_CCL_MEANING_PRESERVATION_PROTOCOL.md',
-    'TSOS_PROVEN_ADVANCEMENT_PLAN.md',
-  ].filter((name) => entries.includes(name));
+  const candidates = entries
+    .filter((name) => name.endsWith('.md'))
+    .filter((name) => name !== 'INDEX.md')
+    .filter((name) => !name.endsWith('.manifest.json'))
+    .sort((a, b) => a.localeCompare(b));
 
   const blueprints = [];
   for (const fileName of candidates) {
@@ -361,6 +408,8 @@ async function readProjectBlueprints() {
       firstExactTask: extractFirstExactCodingTask(text),
       openDecisionSection: extractOpenDecisionSection(text),
       buildOrderRows: extractBuildOrderRows(text),
+      uncheckedChecklistItems: extractUncheckedChecklistItems(text),
+      nextStepSignals: extractNextStepSignals(text),
     });
   }
 
@@ -383,7 +432,7 @@ function pickBuildableRows(blueprint, attemptedKeys) {
       row.file,
       row.order,
     ));
-    if (tasks.length >= 2) break;
+    if (tasks.length >= 3) break;
   }
   return tasks;
 }
@@ -393,7 +442,8 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
   const tasks = [];
 
   for (const blueprint of blueprints) {
-    if (tasks.length >= 6) break;
+    if (tasks.length >= 10) break;
+    let addedForBlueprint = 0;
 
     if (blueprint.openDecisionSection && blueprint.lane === 'socialmediaos') {
       const key = buildBlueprintQueueKey(blueprint.path, 'open-decisions');
@@ -403,8 +453,10 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
           generation,
           'founder decisions still block direct code start',
           clampSummary(blueprint.openDecisionSection, 900),
+          'open-decisions',
         ));
         attemptedKeys.add(key);
+        addedForBlueprint += 1;
         continue;
       }
     }
@@ -422,6 +474,7 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
             targetFile,
           ));
           attemptedKeys.add(key);
+          addedForBlueprint += 1;
           continue;
         }
       } else {
@@ -432,8 +485,10 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
             generation,
             'first exact coding task section exists but no safe target file could be inferred',
             clampSummary(blueprint.firstExactTask, 900),
+            'exact-enhancement',
           ));
           attemptedKeys.add(key);
+          addedForBlueprint += 1;
           continue;
         }
       }
@@ -444,20 +499,56 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
       for (const task of rowTasks) {
         tasks.push(task);
         attemptedKeys.add(buildBlueprintQueueKey(blueprint.path, `row:${task.blueprint_source_target || task.target_file}`));
-        if (tasks.length >= 6) break;
+        addedForBlueprint += 1;
+        if (tasks.length >= 10) break;
+        if (addedForBlueprint >= 3) break;
       }
-      continue;
+      if (tasks.length >= 10 || addedForBlueprint >= 3) continue;
     }
 
-    const fallbackKey = buildBlueprintQueueKey(blueprint.path, 'fallback-enhancement');
-    if (!attemptedKeys.has(fallbackKey)) {
+    for (let i = 0; i < blueprint.uncheckedChecklistItems.length; i += 1) {
+      const item = blueprint.uncheckedChecklistItems[i];
+      const key = buildBlueprintQueueKey(blueprint.path, `todo:${item}`);
+      if (attemptedKeys.has(key)) continue;
       tasks.push(buildEnhancementTask(
         blueprint,
         generation,
-        'no directly buildable safe-scope task was found in the current blueprint sections',
-        blueprint.firstExactTask || (blueprint.buildOrderRows[0]?.purpose ?? ''),
+        'unchecked blueprint task remains open',
+        item,
+        `todo-${i + 1}`,
       ));
-      attemptedKeys.add(fallbackKey);
+      attemptedKeys.add(key);
+      addedForBlueprint += 1;
+      if (tasks.length >= 10) break;
+      if (addedForBlueprint >= 3) break;
+    }
+    if (tasks.length >= 10 || addedForBlueprint >= 3) continue;
+
+    for (let i = 0; i < blueprint.nextStepSignals.length; i += 1) {
+      const signal = blueprint.nextStepSignals[i];
+      const key = buildBlueprintQueueKey(blueprint.path, `next:${signal}`);
+      if (attemptedKeys.has(key)) continue;
+      tasks.push(buildBlueprintProofTask(blueprint, generation, signal, i));
+      attemptedKeys.add(key);
+      addedForBlueprint += 1;
+      if (tasks.length >= 10) break;
+      if (addedForBlueprint >= 3) break;
+    }
+    if (tasks.length >= 10 || addedForBlueprint >= 3) continue;
+
+    if (
+      blueprint.firstExactTask ||
+      blueprint.buildOrderRows.length ||
+      blueprint.uncheckedChecklistItems.length ||
+      blueprint.nextStepSignals.length
+    ) {
+      tasks.push(buildBlueprintProofTask(
+        blueprint,
+        generation,
+        blueprint.firstExactTask || blueprint.buildOrderRows[0]?.purpose || 'derive the next smallest blueprint-backed build slice',
+        99,
+      ));
+      addedForBlueprint += 1;
     }
   }
 
