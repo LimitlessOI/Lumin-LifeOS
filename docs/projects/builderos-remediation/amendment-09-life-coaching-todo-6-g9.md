@@ -1,7 +1,5 @@
-# BuilderOS Remediation: AMENDMENT_09_LIFE_COACHING - Income Diagnostic (TODO-6-G9)
+# BuilderOS Remediation: Amendment 09 Life Coaching - Income Diagnostic (Todo 6-G9)
 
-This memo addresses the blocking issues for the "Income Diagnostic" feature within AMENDMENT_09_LIFE_COACHING, specifically the lack of DB schema and endpoint definitions.
+This memo addresses the missing DB schema and endpoint definition for the Income Diagnostic feature as outlined in `docs/projects/AMENDMENT_09_LIFE_COACHING.md`. The goal is to produce the smallest buildable next slice to unblock further development.
 
----
-
-## 1. Blocking Ambiguity / Founder Decision List
+##
