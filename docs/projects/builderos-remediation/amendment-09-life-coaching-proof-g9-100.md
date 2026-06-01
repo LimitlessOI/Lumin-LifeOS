@@ -1,30 +1,199 @@
-Amendment 09: Life Coaching - Proof G9-100: Initial Session Scheduling Mechanism
-This document outlines the proof-closing blueprint note for the initial implementation slice of the Life Coaching feature, specifically addressing the core mechanism for scheduling and managing individual coaching sessions.
----
-1. Exact Missing Implementation or Proof Gap
-The primary gap identified in the AMENDMENT_09_LIFE_COACHING blueprint is the concrete implementation of the data model and API surface required to schedule a life coaching session. While the concept of coaching sessions is defined, the technical means to persist and expose these sessions for creation and basic management is absent. This proof focuses on establishing the foundational data structure and a minimal apiEP for session creation.
-2. Smallest Safe Build Slice to Close It
-The smallest safe build slice involves:
--   Defining the data schema for a `LifeCoachingSession`.
--   Implementing a service layer function to create a new `LifeCoachingSession` record.
--   Exposing a RESTful apiEP (`POST /api/v1/life-coaching/sessions`) to allow authenticated users to schedule a new session.
--   This slice explicitly avoids complex scheduling logic (e.g., availability checks, recurring sessions), notification systems, or UI integration, focusing solely on the core data persistence and API entry point.
-3. Exact Safe-Scope Files to Touch First
--   `src/data/schemas/LifeCoachingSession.js`: Define the schema for a life coaching session (e.g., `sessionId`, `coachId`, `clientId`, `scheduledTime`, `durationMinutes`, `status`).
--   `src/services/lifeCoachingService.js`: Implement `createSession(sessionData)` to handle business logic for session creation and interact with the data layer.
--   `src/api/v1/lifeCoachingRoutes.js`: Define the `POST /api/v1/life-coaching/sessions` route, which will call `lifeCoachingService.createSession`.
--   `src/api/v1/index.js`: Register `lifeCoachingRoutes` with the main API router.
-4. Verifier/Runtime Checks
--   API Integration Test:
--   Request: `POST /api/v1/life-coaching/sessions` with a valid payload (e.g., `{ coachId: 'uuid-coach-1', clientId: 'uuid-client-1', scheduledTime: '2024-07-20T10:00:00Z', durationMinutes: 60 }`).
--   Expected Response: `HTTP 201 Created` with the newly created `LifeCoachingSession` object, including its generated `sessionId`.
--   Database Verification:
--   After a successful API call, directly query the db for the `LifeCoachingSession` table.
--   Expected Outcome: A new record exists matching the submitted data and the `sessionId` returned by the API.
--   Service Layer Unit Test:
--   Run unit tests for `lifeCoachingService.createSession` to ensure it correctly validates input and interacts with the data access layer (e.g., mock db calls).
-5. Stop Conditions if Runtime Truth Disagrees
--   If the `POST /api/v1/life-coaching/sessions` endpoint returns any HTTP status code other than `201 Created` for a valid request payload.
--   If the db does not contain a new `LifeCoachingSession` record matching the submitted data after a successful API call.
--   If the `lifeCoachingService.createSession` unit tests fail, indicating a logic or data access issue.
--   If existing, unrelated apiEPs or data models exhibit unexpected behavior or regressions after
+// src/data/schemas/LifeCoachingSession.js
+import mongoose from 'mongoose';
+
+const LifeCoachingSessionSchema = new mongoose.Schema({
+  // Mongoose automatically adds an _id field which can serve as sessionId
+  // If a distinct sessionId is required, it can be added here and indexed.
+  // For this slice, we'll use _id as the primary identifier.
+  coachId: {
+    type: String, // Assuming UUID string
+    required: true,
+    index: true,
+  },
+  clientId: {
+    type: String, // Assuming UUID string
+    required: true,
+    index: true,
+  },
+  scheduledTime: {
+    type: Date,
+    required: true,
+  },
+  durationMinutes: {
+    type: Number,
+    required: true,
+    min: 1, // Sessions must have a positive duration
+  },
+  status: {
+    type: String,
+    enum: ['scheduled', 'completed', 'cancelled', 'rescheduled'],
+    default: 'scheduled',
+    required: true,
+  },
+}, {
+  timestamps: true, // Adds createdAt and updatedAt fields
+});
+
+// Optionally, if a specific 'sessionId' field is strictly required by the blueprint
+// and should be distinct from _id, we could add a pre-save hook or a virtual.
+// For now, we'll assume _id serves this purpose as is common in MongoDB.
+// If the blueprint implies a user-facing 'sessionId' distinct from the internal _id,
+// this would be the place to add it, e.g., `sessionId: { type: String, unique: true, required: true }`
+// and generate it in the service layer.
+
+const LifeCoachingSession = mongoose.model('LifeCoachingSession', LifeCoachingSessionSchema);
+
+export default LifeCoachingSession;
+
+// src/services/lifeCoachingService.js
+import LifeCoachingSession from '../data/schemas/LifeCoachingSession.js';
+
+/**
+ * Creates a new life coaching session record.
+ * @param {object} sessionData - The data for the new session.
+ * @param {string} sessionData.coachId - The ID of the coach.
+ * @param {string} sessionData.clientId - The ID of the client.
+ * @param {string} sessionData.scheduledTime - ISO 8601 string for the scheduled time.
+ * @param {number} sessionData.durationMinutes - Duration of the session in minutes.
+ * @returns {Promise<object>} The newly created session object.
+ * @throws {Error} If session creation fails or data is invalid.
+ */
+export const createSession = async (sessionData) => {
+  const { coachId, clientId, scheduledTime, durationMinutes } = sessionData;
+
+  if (!coachId || !clientId || !scheduledTime || !durationMinutes) {
+    throw new Error('Missing required session data fields.');
+  }
+
+  if (typeof durationMinutes !== 'number' || durationMinutes <= 0) {
+    throw new Error('Duration must be a positive number.');
+  }
+
+  try {
+    const newSession = new LifeCoachingSession({
+      coachId,
+      clientId,
+      scheduledTime: new Date(scheduledTime),
+      durationMinutes,
+      status: 'scheduled', // Default status as per blueprint
+    });
+
+    await newSession.save();
+    return newSession;
+  } catch (error) {
+    console.error('Error creating life coaching session:', error);
+    throw new Error(`Failed to create session: ${error.message}`);
+  }
+};
+
+// src/api/v1/lifeCoachingRoutes.js
+import { Router } from 'express';
+import { createSession } from '../services/lifeCoachingService.js';
+// Assuming an authentication middleware exists and is imported
+// import { authMiddleware } from '../../middleware/authMiddleware.js'; // Placeholder
+
+const router = Router();
+
+/**
+ * @swagger
+ * /api/v1/life-coaching/sessions:
+ *   post:
+ *     summary: Schedule a new life coaching session
+ *     tags: [Life Coaching]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - coachId
+ *               - clientId
+ *               - scheduledTime
+ *               - durationMinutes
+ *             properties:
+ *               coachId:
+ *                 type: string
+ *                 format: uuid
+ *                 description: The ID of the coach.
+ *               clientId:
+ *                 type: string
+ *                 format: uuid
+ *                 description: The ID of the client.
+ *               scheduledTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: ISO 8601 formatted date and time for the session.
+ *               durationMinutes:
+ *                 type: number
+ *                 description: Duration of the session in minutes.
+ *                 minimum: 1
+ *     responses:
+ *       201:
+ *         description: Session successfully scheduled.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The unique ID of the session.
+ *                 coachId:
+ *                   type: string
+ *                 clientId:
+ *                   type: string
+ *                 scheduledTime:
+ *                   type: string
+ *                   format: date-time
+ *                 durationMinutes:
+ *                   type: number
+ *                 status:
+ *                   type: string
+ *                   enum: [scheduled, completed, cancelled, rescheduled]
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: Invalid request payload.
+ *       500:
+ *         description: Internal server error.
+ */
+router.post('/sessions', /* authMiddleware, */ async (req, res) => {
+  try {
+    const sessionData = req.body;
+    const newSession = await createSession(sessionData);
+    res.status(201).json(newSession);
+  } catch (error) {
+    if (error.message.includes('Missing required') || error.message.includes('Duration must be')) {
+      return res.status(400).json({ message: error.message });
+    }
+    console.error('API Error scheduling life coaching session:', error);
+    res.status(500).json({ message: 'Failed to schedule session due to an internal server error.' });
+  }
+});
+
+export default router;
+
+// src/api/v1/index.js
+import { Router } from 'express';
+import lifeCoachingRoutes from './lifeCoachingRoutes.js';
+// Assuming other routes are imported here as well, e.g.,
+// import userRoutes from './userRoutes.js';
+// import healthRoutes from './healthRoutes.js';
+
+const router = Router();
+
+// Register other routes here
+// router.use('/users', userRoutes);
+// router.use('/health', healthRoutes);
+
+// Register the new life coaching routes
+router.use('/life-coaching', lifeCoachingRoutes);
+
+export default router;
