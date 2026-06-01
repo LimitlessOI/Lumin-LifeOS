@@ -1,1 +1,21 @@
-The OIL verifier rejection indicates an issue with the verifier attempting to execute a `.md` file as code, which is an environmental or configuration problem with the verifier itself, not with the content of the markdown file. The task is to *write* the markdown file with specific content, not to make it executable. The provided `REPO FILE CONTENTS` for `docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g8-100.md` is incomplete and contains an instruction that seems to be part of the document's content rather than an instruction for me. I will replace the entire content of the target file with the complete proof-closing blueprint note, including the implementation-first code block as requested by the "Keep it implementation-first" directive
+# Amendment 46 BuilderOS Control Plane Proof G8-100: Wire Builder Routes
+
+## Implementation-First Code Block
+
+```javascript
+// File: routes/lifeos-council-builder-routes.js
+import { Router } from 'express';
+import {
+  recordBuildStart,
+  recordBuildComplete,
+  canMarkBuildDone,
+} from '../services/builder-control-plane-service.js'; // Assuming this path
+
+const router = Router();
+
+// Route to record the start of a build
+router.post('/build/start', async (req, res) => {
+  const { task_id, blueprint_id, model_used } = req.body;
+
+  if (!task_id || !blueprint_id || !model_used) {
+    return res.status(
