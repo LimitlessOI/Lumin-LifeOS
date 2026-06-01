@@ -1,9 +1,3 @@
-# Amendment 16 Word Keeper: 24h Transcript Auto-Purge (G11 - Dry Run)
+# Amendment 16 Word Keeper - ToDo 2 (G11): 24h Transcript Auto-Purge Confirmation
 
-This memo outlines the next buildable slice for the "24h transcript auto-purge cron" task, focusing on a dry-run implementation to identify purge candidates without data modification.
-
----
-
-### 1. Blocking Ambiguity or Founder Decision List
-
-*   **Transcript
+This memo addresses the outstanding task of confirming the implementation of the 24h transcript auto-purge cron job, as outlined in `docs/projects/AMENDMENT_16_WORD_KEEPER.md`. The current blueprint is blocked by the lack of
