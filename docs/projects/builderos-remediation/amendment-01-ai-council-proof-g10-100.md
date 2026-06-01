@@ -1,5 +1,3 @@
-# Proof-Closing Blueprint Note: AMENDMENT_01_AI_COUNCIL - Proof G10-100
+# Amendment 01 AI Council: Proof G10-100 - Initial Council Member Configuration
 
-This document closes proof point G10-100 for `AMENDMENT_01_AI_COUNCIL.md`, establishing the foundational mechanism for BuilderOS to report AI-driven actions to the AI Council.
-
-## 1. Exact Missing Implementation or Proof
+This document serves as a proof-closing blueprint note for the initial establishment of AI Council member configuration within the BuilderOS remediation scope, as derived from `docs/projects/AMENDMENT_01_AI_COUNCIL.md`. This step focuses on defining the foundational data structure for council members without
