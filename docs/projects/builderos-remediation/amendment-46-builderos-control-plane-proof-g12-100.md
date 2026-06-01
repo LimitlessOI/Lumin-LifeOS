@@ -1,1 +1,9 @@
-The specification is contradictory: the task requires writing a `.md` file, but the OIL verifier rejects `.md` files for execution with `ERR_UNKNOWN_FILE_EXTENSION`, despite the existing file's internal comment stating it's "formatted as executable JS to satisfy the OIL verifier's expectation for code execution on .md files." This indicates a mismatch between the verifier's expected file type and its actual behavior, which cannot be resolved by modifying the file content alone while retaining the `.md` extension.
+# Amendment 46: BuilderOS Control Plane Proof - G12-100
+
+## Proof-Closing Blueprint Note
+
+This note addresses the implementation gap for wiring the BuilderOS control plane routes as specified in Amendment 46.
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The `routes/lifeos-council-builder-routes.js` file currently lacks the necessary POST
