@@ -1,11 +1,6 @@
-# Amendment 16: Word Keeper - Proof G23-100
+### AMENDMENT_16_WORD_KEEPER - Proof-Closing Blueprint Note (g23-100)
 
-This document outlines the next smallest blueprint-backed build slice for the Word Keeper feature, focusing on establishing the core data model and basic persistence layer.
+This note closes the `g23-100` build slice for the Word Keeper project, focusing on establishing the foundational data validation schemas.
 
----
-
-## Proof-Closing Blueprint Note
-
-### 1. Exact Missing Implementation or Proof Gap
-
-The current state lacks the foundational `Word` data schema definition and
+**1. Exact Missing Implementation or Proof Gap:**
+The blueprint specifies comprehensive Joi schemas for validating
