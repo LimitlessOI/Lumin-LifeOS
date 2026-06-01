@@ -1,9 +1,9 @@
-# Blueprint Note: AMENDMENT_01_AI_COUNCIL - Proof G34-100
+# BuilderOS Remediation: Amendment 01 AI Council - Proof G34-100
 
-This note closes proof point G34-100 for AMENDMENT_01_AI_COUNCIL, focusing on establishing the foundational data structures required for AI Council member management.
+This document outlines the next smallest build slice for the `AMENDMENT_01_AI_COUNCIL` blueprint, focusing on establishing the foundational data model and initial access patterns for the AI Council entity within the LifeOS platform.
 
 ---
 
-### 1. Exact Missing Implementation or Proof Gap
+## Proof-Closing Blueprint Note
 
-The core data model for `AICouncilMember` is not yet defined. This foundational type is a prerequisite for any subsequent implementation related to council member registration
+###
