@@ -1,41 +1,37 @@
 # Amendment 46: BuilderOS Control Plane Proof - G3-100 Remediation
 
-## Proof-Closing Blueprint Note
+This document outlines the remediation plan for the OIL verifier rejection related to Amendment 46, focusing on the BuilderOS control plane. The verifier's rejection was due to an attempt to execute this `.md` file as a JavaScript module, indicating a misconfiguration in the verification environment rather than an issue with the markdown content itself. The core task remains to implement the specified build lifecycle hooks within `routes/lifeos-council-builder-routes.js`.
 
-This document addresses the OIL verifier rejection for `amendment-46-builderos-control-plane-proof-g3-100.md` and outlines the next steps for implementing the BuilderOS control plane wiring.
+## 1. Exact Missing Implementation or Proof Gap
 
-### 1. Exact Missing Implementation or Proof Gap
+The primary gap is the implementation of the build lifecycle event recording and health-based completion gate within `routes/lifeos-council-builder-routes.js`. Specifically:
+-   A `POST` endpoint for `/build/start` to call `recordBuildStart({ task_id, blueprint_id, model_used })`.
+-   A `POST` endpoint for `/build/complete` to call `recordBuildComplete` with a token and OIL receipt IDs.
+-   The `/build/complete` endpoint must return a `409 Conflict` if `canMarkBuildDone()` returns `false` (indicating a RED health status).
 
-The immediate proof gap identified by the OIL verifier rejection is a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]` when attempting to process this `.md` file. This indicates the verifier environment is attempting to load the markdown file as a JavaScript module, which is incorrect for a documentation artifact. The verifier's expectation for documentation file types needs to be aligned with its purpose.
+The verifier's `ERR_UNKNOWN_FILE_EXTENSION` for this `.md` file is a false positive regarding the *content* of this file, but it correctly signals that the *proof* (the actual code implementation) is not yet integrated and verifiable.
 
-The underlying implementation gap, as per the task signal, is the missing wiring in `routes/lifeos-council-builder-routes.js` for the `/build` endpoints.
+## 2. Smallest Safe Build Slice to Close It
 
-### 2. Smallest Safe Build Slice to Close It
+The smallest safe build slice involves:
+1.  Adding the necessary `POST` route handlers to `routes/lifeos-council-builder-routes.js`.
+2.  Implementing or importing the `recordBuildStart`, `recordBuildComplete`, and `canMarkBuildDone` functions. Assuming these are internal BuilderOS services, they should be imported or defined within the scope of the routes or a related service layer.
 
-**For Verifier Rejection:**
-The smallest slice to close the verifier rejection is to ensure the verifier correctly identifies and processes `.md` files as documentation, not as executable code. This may involve a verifier configuration adjustment or clarification of expected file types. Assuming the verifier expects a valid *document* and not a JS module, this markdown file itself serves as the proof.
+## 3. Exact Safe-Scope Files to Touch First
 
-**For BuilderOS Control Plane Wiring:**
-Implement the `POST /build` endpoints within `routes/lifeos-council-builder-routes.js` to:
-1.  Call `recordBuildStart({ task_id, blueprint_id, model_used })` on build initiation.
-2.  Call `recordBuildComplete` with `token` and `OIL receipt IDs` on build completion.
-3.  Implement a check using `canMarkBuildDone` and return a `409 Conflict` if it fails when health is RED.
+-   `routes/lifeos-council-builder-routes.js`: This file will contain the new route definitions and their handlers.
+-   Potentially a new or existing service file (e.g., `services/build-lifecycle-service.js` or `utils/builder-health.js`) if `recordBuildStart`, `recordBuildComplete`, and `canMarkBuildDone` are not already defined globally or in an accessible utility. For this pass, we will assume they are either imported or stubbed for immediate integration.
 
-### 3. Exact Safe-Scope Files to Touch First
+## 4. Verifier/Runtime Checks
 
-*   `docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g3-100.md` (this file, to be created/updated)
-*   `routes/lifeos-council-builder-routes.js` (for endpoint wiring)
-*   `services/build-record-service.js` (assuming `recordBuildStart`, `recordBuildComplete`, and `canMarkBuildDone` are or will be defined here, or a similar dedicated service file for build operations).
+-   **Functional Test 1 (Build Start):** Send `POST /build/start` with `task_id`, `blueprint_id`, `model_used`. Expect `200 OK` and verification that `recordBuildStart` was called with correct parameters.
+-   **Functional Test 2 (Build Complete - Success):** Ensure `canMarkBuildDone()` returns `true`. Send `POST /build/complete` with `token` and `oil_receipt_ids`. Expect `200 OK` and verification that `recordBuildComplete` was called with correct parameters.
+-   **Functional Test 3 (Build Complete - Conflict):** Configure system such that `canMarkBuildDone()` returns `false` (e.g., simulate RED health). Send `POST /build/complete`. Expect `409 Conflict`.
+-   **System Check:** Verify that this `amendment-46-builderos-control-plane-proof-g3-100.md` file is treated as a documentation asset and not subjected to JavaScript module parsing by the verifier.
 
-### 4. Verifier/Runtime Checks
+## 5. Stop Conditions if Runtime Truth Disagrees
 
-*   **Verifier Check (Documentation):** The OIL verifier should successfully process this `.md` file without `ERR_UNKNOWN_FILE_EXTENSION`. This confirms the verifier's understanding of documentation file types.
-*   **Runtime Check (API Endpoints):**
-    *   `POST /build` (start): Verify that `recordBuildStart` is invoked with the correct payload (`task_id`, `blueprint_id`, `model_used`).
-    *   `POST /build` (complete): Verify that `recordBuildComplete` is invoked with the correct `token` and `OIL receipt IDs`.
-    *   `POST /build` (complete, health RED): Verify that if `canMarkBuildDone` returns `false` when health is RED, the endpoint responds with a `409 Conflict` status.
-
-### 5. Stop Conditions if Runtime Truth Disagrees
-
-*   **Verifier Rejection Persists:** If the OIL verifier continues to reject this `.md` file with a syntax error or `ERR_UNKNOWN_FILE_EXTENSION`, halt and investigate the verifier's configuration and expected input types for documentation. This indicates a fundamental mismatch in the build system's understanding of documentation artifacts.
-*   **API Endpoint Mismatch:** If the `POST /build` endpoints do not correctly invoke the build record services or fail to return the `409` status under the specified conditions, halt and debug the `routes/lifeos-council-builder-routes.js` implementation and its dependencies.
+-   If `recordBuildStart` or `recordBuildComplete` functions are not found or throw unexpected errors during integration.
+-   If `canMarkBuildDone` cannot be reliably controlled for testing RED/GREEN health states.
+-   If the `/build/complete` endpoint does not consistently return `409` when `canMarkBuildDone` is `false`, or `200` when it's `true`.
+-   If the verifier continues to attempt to execute `.md` files as JavaScript, indicating a fundamental misconfiguration in the verification environment that needs addressing outside of code changes.
