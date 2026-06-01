@@ -1,9 +1,9 @@
-# Command Center V2 Blueprint Proof: G23-100 - API Gateway Metrics Endpoint Stub
+# Command Center V2 Blueprint Proof: G23-100 - Asynchronous Task Lifecycle
 
-This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, focusing on establishing a minimal API Gateway endpoint.
+This document serves as a proof-closing blueprint note for the next smallest build slice following the initial P0 implementation of Command Center V2 (C2). It addresses the gap in functional asynchronous task handling and UI observability.
 
 ---
 
-### 1. Exact Missing Implementation or Proof Gap
+### Blueprint Note: Next Smallest Build Slice
 
-The Command Center V2 blueprint specifies an API Gateway with several endpoints
+**1
