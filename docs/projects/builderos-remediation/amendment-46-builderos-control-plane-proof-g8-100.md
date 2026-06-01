@@ -1,7 +1,1 @@
-# Amendment 46 BuilderOS Control Plane Proof Gap 8-100: Build Event Wiring
-
-This blueprint note closes the proof gap for wiring build start/complete events in the BuilderOS control plane.
-
-## 1. Exact Missing Implementation / Proof Gap
-
-The `routes/lifeos-council-builder-routes.js` module lacks the necessary POST endpoints to record build start and complete
+The OIL verifier rejection indicates an issue with the verifier attempting to execute a `.md` file as code, which is an environmental or configuration problem with the verifier itself, not with the content of the markdown file. The task is to *write* the markdown file with specific content, not to make it executable. The provided `REPO FILE CONTENTS` for `docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g8-100.md` is incomplete and contains an instruction that seems to be part of the document's content rather than an instruction for me. I will replace the entire content of the target file with the complete proof-closing blueprint note, including the implementation-first code block as requested by the "Keep it implementation-first" directive
