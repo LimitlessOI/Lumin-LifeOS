@@ -1,6 +1,9 @@
-### Amendment 46: BuilderOS Control Plane - Proof Gap G29-100 Closure
+# Amendment 46: BuilderOS Control Plane Proof - G29-100
 
-This note addresses the implementation gap for wiring the BuilderOS control plane routes as specified in Amendment 46.
+## Proof-Closing Blueprint Note
 
-**1. Exact Missing Implementation / Proof Gap:**
-The `routes/lifeos-council-builder-routes.js` module lacks the necessary POST endpoints to manage the BuilderOS
+This note addresses the implementation gap for wiring the BuilderOS control plane routes within `routes/lifeos-council-builder-routes.js` as specified in Amendment 46.
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The primary gap is
