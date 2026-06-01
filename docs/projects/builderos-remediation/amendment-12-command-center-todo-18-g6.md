@@ -1,5 +1,3 @@
-### Blueprint Enhancement Memo: Site Builder UI Unblock - Minimal C&C Contract & UI Scaffolding
+# BuilderOS Remediation: Amendment 12 Command Center - TODO 18 G6 (C&C Stability)
 
-This memo addresses the blocking task: "Site Builder UI not built — waiting on C&C stability." The objective is to define a buildable next slice that allows progress on the Site Builder UI while mitigating the dependency on full C&C stability.
-
-#### 1
+This memo addresses the blocking dependency for the Site Builder UI: "waiting on C&C stability." The goal is to define and implement the minimal set of actions required to establish verifiable Command & Control (C&C) stability, thereby unblocking subsequent Site Builder UI development
