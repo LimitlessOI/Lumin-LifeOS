@@ -1,7 +1,5 @@
-# Amendment 09: Life Coaching - Proof G33-100
+# Amendment 09: Life Coaching Integration - Proof G33-100
 
-This proof-closing blueprint note addresses the initial asynchronous processing of user messages to generate and store AI responses within the Life Coaching feature.
+## Blueprint Note: Core Service & Data Models Proof
 
-## 1. Exact Missing Implementation or Proof Gap
-
-The core gap is the asynchronous mechanism for processing a user's `LifeCoachMessage` to generate a corresponding AI response and persist
+This document outlines the next smallest build slice required to achieve the proof goal for Phase 1 (G33-100) of Amendment 09: Life Coaching Integration. The goal for G33-100 is to "Verify
