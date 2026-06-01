@@ -1,3 +1,9 @@
-The specification is contradictory. The task asks to "Write docs/projects/builderos-remediation/amendment-09-life-coaching-proof-g15-100.md" (a markdown file), but the `REPO FILE CONTENTS` for this markdown file contains an embedded instruction "INSTRUCTION: Generate the complete implementation code. Output ONLY the code first — no explanation before the code block." This, combined with the global instruction "Output ONLY the code first" and the OIL verifier rejection (which attempted to execute the `.md` file as code), indicates a conflict between the specified `target_file` (a markdown document) and the expected output format (executable code).
+# Amendment 09: Life Coaching - Proof G15-100
 
-To resolve this, I will interpret the embedded instruction as the primary directive for this step: generate the implementation code for the described build slice. The `target_file` in the metadata will refer to the blueprint
+## Objective
+This document serves as proof for the completion of build slice G15-100, focusing on the foundational data model and repository interface for `LifeCoachSession` entities within the LifeOS platform.
+
+## Scope of G15-100
+G15-100 encompassed:
+1.  Definition of the `ILifeCoachSession` interface/schema, including core properties like `id`, `userId`, `coachId`, `status`, `scheduledTime`, `durationMinutes`, `notes`.
+2
