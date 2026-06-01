@@ -1,51 +1,39 @@
-# Amendment 41: MarketingOS Proof G28-100 Closing Blueprint Note
+# AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (G28-100)
 
-This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41 regarding MarketingOS integration for project G28-100.
+**Signal:** This document — SSOT foundation.
 
 ## 1. Exact Missing Implementation or Proof Gap
 
-The current gap is the lack of an automated, auditable verification step confirming that BuilderOS-initiated configurations for `Project.G28-100` are correctly reflected and active within MarketingOS as `Campaign.G28-100`. Specifically, the proof needs to validate the synchronization of key attributes (e.g., status, target audience, budget parameters) from BuilderOS's internal state to the corresponding MarketingOS campaign entity.
+The proof gap for G28-100 is the unverified, end-to-end data pipeline for `CampaignEngagement` metrics from the `ExternalAdPlatform` into the `MarketingOS.CampaignMetrics` data store. Specifically, there is no confirmed mechanism to ensure that `CampaignEngagement` data, once ingested, accurately reflects the source data and is consistently available and correctly structured within `MarketingOS` for downstream consumption, establishing it as the Single Source of Truth (SSOT).
 
 ## 2. Smallest Safe Build Slice to Close It
 
-Implement a dedicated BuilderOS internal verification script (`marketingos-g28-100-proof.js`) that performs the following:
-1.  Retrieves the canonical configuration for `Project.G28-100` from BuilderOS's internal data store.
-2.  Queries the MarketingOS API for the current state of `Campaign.G28-100`.
-3.  Compares critical, pre-defined attributes between the BuilderOS canonical configuration and the MarketingOS live state.
-4.  Reports a clear pass/fail status based on the comparison.
-
-This script will operate strictly within BuilderOS's internal verification framework and will not modify any production data in either BuilderOS or MarketingOS.
+The smallest safe build slice involves implementing a dedicated, idempotent data ingestion and transformation service. This service will be responsible for:
+1.  Polling or receiving `CampaignEngagement` data from the `ExternalAdPlatform` API.
+2.  Validating and transforming the raw data into the `MarketingOS.CampaignMetrics` schema.
+3.  Persisting the transformed data into the `MarketingOS.CampaignMetrics` table.
+This slice focuses purely on the secure and accurate ingestion and storage of this specific metric, without touching existing reporting or UI components.
 
 ## 3. Exact Safe-Scope Files to Touch First
 
-*   `builder-os/src/verification/marketingos-g28-100-proof.js` (New file: Node.js script for verification logic)
-*   `builder-os/tests/verification/marketingos-g28-100-proof.test.js` (New file: Unit/integration tests for the verification script)
-*   `builder-os/config/verification-targets.json` (Update: Add an entry to enable/configure the G28-100 proof target)
-*   `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g28-100.md` (This document: Blueprint for the proof)
+*   `services/marketingos/ingestor/campaignEngagementIngestor.js` (New file: Core logic for fetching, transforming, and persisting `CampaignEngagement` data.)
+*   `services/marketingos/ingestor/schemas/campaignEngagementSchema.js` (New file: Joi/Zod schema for validating and transforming `ExternalAdPlatform` data to `MarketingOS.CampaignMetrics` format.)
+*   `services/marketingos/data/campaignMetricsRepository.js` (Existing file: Add a new method, e.g., `saveCampaignEngagement(data)`, to handle persistence of the transformed data.)
+*   `config/marketingos/externalAdPlatform.js` (Existing file: Verify or add necessary API endpoints, authentication tokens, and rate limit configurations for `ExternalAdPlatform`.)
+*   `tests/services/marketingos/ingestor/campaignEngagementIngestor.test.js` (New file: Unit and integration tests for the ingestor service.)
 
 ## 4. Verifier/Runtime Checks
 
-To execute the proof and verify its closure:
-
-1.  **Manual Execution:**
-    ```bash
-    node builder-os/src/verification/marketingos-g28-100-proof.js
-    ```
-2.  **Expected Output (Success):**
-    ```
-    [BUILDEROS_VERIFIER] MarketingOS G28-100 Proof: PASSED. All attributes synchronized.
-    ```
-3.  **Expected Output (Failure):**
-    ```
-    [BUILDEROS_VERIFIER] MarketingOS G28-100 Proof: FAILED. Mismatch detected for attribute: [attribute_name]. Expected: [expected_value], Actual: [actual_value].
-    ```
-4.  **CI/CD Integration:** The BuilderOS CI pipeline will include a step to run this script. A successful run (exit code 0) will be required for `Project.G28-100` related deployments.
-
-## 5. Stop Conditions if Runtime Truth Disagrees
-
-The proof is considered *not closed* and requires immediate investigation if any of the following occur:
-
-*   The `marketingos-g28-100-proof.js` script exits with a non-zero status code.
-*   The script's output contains "FAILED" or "ERROR" messages indicating attribute mismatches or API communication issues with MarketingOS.
-*   Manual inspection of MarketingOS `Campaign.G28-100` via its UI or API reveals discrepancies with the BuilderOS `Project.G28-100` configuration, even if the script reports "PASSED" (indicating a potential flaw in the proof script itself).
-*   The verification script fails to execute due to missing dependencies, incorrect environment variables, or API authentication failures.
+*   **Unit Tests (`campaignEngagementIngestor.test.js`):**
+    *   Mock `ExternalAdPlatform` API responses to verify correct data parsing and transformation according to `campaignEngagementSchema.js`.
+    *   Verify that `campaignMetricsRepository.js`'s `saveCampaignEngagement` method is called with the correctly transformed data.
+    *   Test edge cases: missing fields, invalid data types, empty responses from `ExternalAdPlatform`.
+*   **Integration Tests (`campaignEngagementIngestor.test.js`):**
+    *   Run the ingestor against a controlled `ExternalAdPlatform` mock server or a staging `ExternalAdPlatform` instance.
+    *   Verify that the `MarketingOS.CampaignMetrics` table contains the expected `CampaignEngagement` records with correct values and timestamps after an ingestion run.
+    *   Confirm idempotency: running the ingestor multiple times with the same source data does not create duplicate records or incorrect updates.
+*   **Runtime Monitoring:**
+    *   Log successful ingestion counts, processing durations, and any data transformation errors.
+    *   Implement alerts for ingestion failures, data validation errors, or significant deviations in expected data volume.
+    *   Set up a dashboard to visualize `CampaignEngagement` data flow, showing source vs. ingested counts and key metric values.
+*   **Data Reconciliation:**
