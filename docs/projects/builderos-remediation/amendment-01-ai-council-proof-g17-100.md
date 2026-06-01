@@ -1,10 +1,3 @@
-# Amendment 01: AI Council - Proof G17-100
+ASSUMPTIONS: The blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` outlines the establishment of an AI Council and its initial charter. `proof-g17-100` refers to a foundational step in establishing its documentation infrastructure.
 
-**Proof ID:** G17-100
-**Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
-**Date:** 2024-07-30
-**Status:** Verified
-
-## Objective
-
-This document serves as proof for
+# Amendment 01 AI Council: Proof G17-100 - Initial Documentation Repository
