@@ -1,7 +1,7 @@
-# BuilderOS Remediation: Amendment 14 White Label - Partner Onboarding Endpoint
+# Amendment 14 White Label: Partner Onboarding - Create Partner Config Endpoint (G9)
 
-This memo addresses the open task regarding the missing endpoint for creating a new partner configuration, identified as a blocking ambiguity in the AMENDMENT_14_WHITE_LABEL blueprint. The goal is to define the smallest buildable slice to establish the foundational API for partner onboarding.
+This memo addresses the missing API endpoint for creating a new partner configuration, a blocking task for the "Partner onboarding flow" as identified in the blueprint `docs/projects/AMENDMENT_14_WHITE_LABEL.md`.
 
 ---
 
-### 1. Blocking Ambiguity
+## 1. Blocking Ambiguity / Founder
