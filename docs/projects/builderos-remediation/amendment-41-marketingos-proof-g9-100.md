@@ -1,3 +1,5 @@
+The specification is contradictory: it asks to write a `.md` file but then asks to "Generate the complete implementation code." The provided `.md` content is a blueprint, not executable code.
+---
 Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G9-100
 Signal: This document — SSOT foundation.
 This blueprint note addresses and closes proof point G9-100, focusing on the foundational synchronization of core customer profile data from LifeOS to MarketingOS to establish a Single Source of Truth (SSOT) for customer profiles.
