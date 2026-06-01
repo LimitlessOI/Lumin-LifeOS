@@ -74,16 +74,20 @@ const BLOCKED_TARGET_PREFIXES = Object.freeze([
   'docs/SSOT_COMPANION.md',
 ]);
 
+// Founder directive 2026-05-31: SocialMediaOS/MarketingOS is priority 1.
+// C2/Command Control is priority 2 (support when needed to run MarketingOS).
+// LifeOS only if directly needed by MarketingOS.
+// No generic verifier churn unless all blueprint/product work is blocked.
 const PRIORITY_RULES = Object.freeze([
   {
-    lane: 'c2_command_control',
+    lane: 'socialmediaos',
     rank: 1,
-    patterns: [/AMENDMENT_46_BUILDEROS_CONTROL_PLANE/i, /AMENDMENT_12_COMMAND_CENTER/i, /BUILDEROS_ALPHA_BLUEPRINT/i],
+    patterns: [/AMENDMENT_41_MARKETINGOS/i, /SOCIALMEDIAOS/i, /MARKETINGOS/i],
   },
   {
-    lane: 'socialmediaos',
+    lane: 'c2_command_control',
     rank: 2,
-    patterns: [/AMENDMENT_41_MARKETINGOS/i, /SOCIALMEDIAOS/i, /MARKETINGOS/i],
+    patterns: [/AMENDMENT_46_BUILDEROS_CONTROL_PLANE/i, /AMENDMENT_12_COMMAND_CENTER/i, /BUILDEROS_ALPHA_BLUEPRINT/i],
   },
   {
     lane: 'lifeos_limitlessos',
@@ -937,7 +941,7 @@ async function main() {
     base_url: BASE_URL.slice(0, 50),
     key_len: KEY.length,
     workflow: 'BLUEPRINT_FIRST',
-    queue_priority: ['C2/Command Control', 'SocialMediaOS', 'LifeOS/LimitlessOS', 'TC', 'TSOS platform improvements'],
+    queue_priority: ['SocialMediaOS/MarketingOS', 'C2/Command Control (when needed for MarketingOS)', 'LifeOS/LimitlessOS (only if needed by MarketingOS)', 'TC', 'TSOS platform improvements'],
     fallback_queue: ['OPEN_CONTRADICTIONS.md', 'PLATFORM_GAP_REGISTER.md', 'self_improvement'],
   });
   await writeState(state);
