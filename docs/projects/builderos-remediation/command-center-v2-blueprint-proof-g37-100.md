@@ -1,10 +1,7 @@
-# Command Center V2 Blueprint Proof: G37-100
+### Blueprint Note: Command Center V2 - Proof G37-100
 
-This document serves as a proof-closing note for the Command Center V2 Blueprint, deriving the next smallest blueprint-backed build slice.
+**Target Blueprint Slice:** Phase 1, Slice 1.2: User Authentication & Authorization Service (AuthN/AuthZ)
 
----
+This note closes the proof for the initial implementation slice of the AuthN/AuthZ service, focusing on establishing basic authentication and token validation capabilities.
 
-### Blueprint Note: Core Command Entity Type Definition
-
-1.  **Exact missing implementation or proof gap:**
-    The foundational TypeScript interfaces/types for the core `Command` entity
+1.
