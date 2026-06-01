@@ -1,34 +1,31 @@
-BuilderOS Remediation: Amendment 01 AI Council - Task 10-G6 Enhancement Memo
-This memo outlines a builder-ready enhancement for `todo-10-g6` under the `AMENDMENT_01_AI_COUNCIL` blueprint. It addresses the `LIFEOS_DIRECTED_MODE=true` constraint, which prevents autonomous scheduler firing, and the "unchecked blueprint task remains open" status. The goal is to define the smallest buildable slice for BuilderOS to proceed.
----
-1. Blocking Ambiguity / Founder Decision List
--   Specific Objective of `todo-10-g6`: The blueprint states `LIFEOS_DIRECTED_MODE=true` and "no autonomous scheduler fires." What is the precise action or outcome expected from `todo-10-g6` within this directed context? Is it a review, a data aggregation, a specific configuration update, or an approval gate?
--   Trigger Mechanism for `todo-10-g6`: How will BuilderOS receive the explicit instruction to execute `todo-10-g6` when `LIFEOS_DIRECTED_MODE` is active? (e.g., internal API call, specific configuration flag, manual CLI command, message queue event).
--   Input/Output for `todo-10-g6`: What data does `todo-10-g6` require as input, and what is its expected output or state change?
-2. Already-Settled Constraints
--   `LIFEOS_DIRECTED_MODE=true` is the active operational mode.
--   No autonomous scheduler within LifeOS will fire for this context; BuilderOS must explicitly manage execution.
--   BuilderOS is solely responsible for governing the execution loop for `todo-10-g6`.
--   No modifications to LifeOS user features or TSOS customer-facing surfaces are permitted.
--   The task `todo-10-g6` is part of the `AMENDMENT_01_AI_COUNCIL` blueprint.
-3. Smallest Buildable Next Slice
-The immediate next slice focuses on defining the `todo-10-g6` task and establishing its directed execution interface within BuilderOS.
--   Task Definition Stub: Create a placeholder module for `todo-10-g6` that logs its invocation and returns a pending status.
--   Directed Trigger Integration: Implement a minimal internal BuilderOS mechanism (e.g., a dedicated internal apiEP or a configuration watcher) that can explicitly invoke the `todo-10-g6` task stub. This mechanism must respect `LIFEOS_DIRECTED_MODE`.
--   Mode Enforcement: Ensure BuilderOS actively checks `LIFEOS_DIRECTED_MODE` and prevents any autonomous scheduling attempts related to `todo-10-g6`.
-4. Exact Safe-Scope Files BuilderOS Should Touch First
--   `builder-os/src/config/directedModeTasks.js`: Register `todo-10-g6` as a directed-mode-only task.
--   `builder-os/src/tasks/aiCouncil/todo10G6.js`: Create the task stub for `todo-10-g6`.
--   `builder-os/src/api/internal/directedTaskTrigger.js`: (If using API) Add an endpoint to trigger directed tasks.
--   `builder-os/src/core/scheduler.js`: Add a check to prevent `todo-10-g6` from being scheduled autonomously when `LIFEOS_DIRECTED_MODE=true`.
--   `docs/projects/builderos-remediation/amendment-01-ai-council-todo-10-g6.md`: This document itself.
-5. Required Verifier/Runtime Checks
--   Mode Detection: Verify BuilderOS correctly identifies `LIFEOS_DIRECTED_MODE=true`.
--   Directed Invocation: Confirm the `todo-10-g6` task stub can be successfully invoked via the established directed trigger mechanism.
-   Autonomous Prevention: Verify that `todo-10-g6` is not* scheduled or executed by any autonomous scheduler when `LIFEOS_DIRECTED_MODE=true`.
--   Logging: Ensure invocation and status changes for `todo-10-g6` are logged appropriately.
-6. Stop Conditions
--   The specific objective and expected outcome of `todo-10-g6` are clearly defined and documented.
--   A functional, minimal BuilderOS internal mechanism exists to explicitly trigger and execute the `todo-10-g6` task stub.
--   The `todo-10-g6` task stub is in place, ready for its core logic implementation.
--   All verifier checks for this slice pass.
+# BuilderOS Remediation: Amendment 01 AI Council - TODO-10-G6 Blueprint Enhancement Memo
+
+This memo addresses the open task `TODO-10-G6` within `AMENDMENT_01_AI_COUNCIL.md`, focusing on the implications of `LIFEOS_DIRECTED_MODE=true` and the suppression of the autonomous scheduler. The goal is to provide a builder-ready enhancement for the next iteration.
+
+## 1. Blocking Ambiguity / Founder Decision List
+
+*   **A1: Directed Execution Trigger Mechanism:** The blueprint states `LIFEOS_DIRECTED_MODE=true` prevents the autonomous scheduler. What is the *explicit, directed* mechanism for triggering BuilderOS loop iterations in this mode? Is it an API endpoint, a message queue listener, or a manual CLI command? This needs to be defined to enable any BuilderOS activity in directed mode.
+*   **A2: Granularity of Directed Control:** Does `TODO-10-G6` require defining the *entire* directed execution flow, or just the initial trigger point and the guarantee of autonomous scheduler suppression? Assuming the latter for this slice.
+*   **A3: Logging Specification:** What level of detail is required for logging when the autonomous scheduler is suppressed? Should it be a warning, info, or debug log? What specific data points should be included (e.g., timestamp, mode, attempted scheduler ID)?
+
+## 2. Already-Settled Constraints
+
+*   `LIFEOS_DIRECTED_MODE=true` explicitly disables the BuilderOS autonomous loop scheduler. No autonomous scheduling logic will execute in this mode.
+*   BuilderOS loop execution must be entirely governed by external direction when `LIFEOS_DIRECTED_MODE=true`.
+*   No modifications to LifeOS user features or TSOS customer-facing surfaces are permitted.
+*   Implementation must adhere strictly to approved BuilderOS safe scope.
+
+## 3. Smallest Buildable Next Slice
+
+The smallest buildable slice for `TODO-10-G6` is to robustly enforce the suppression of the autonomous scheduler when `LIFEOS_DIRECTED_MODE=true` and to establish a minimal, explicit entry point for directed execution.
+
+**Slice Components:**
+1.  **Scheduler Guard:** Implement a conditional check at the earliest possible entry point of the autonomous scheduler. If `LIFEOS_DIRECTED_MODE` is true, prevent the scheduler from initializing or executing its loop.
+2.  **Suppression Logging:** Log an informational message when the autonomous scheduler is suppressed due to `LIFEOS_DIRECTED_MODE=true`.
+3.  **Directed Trigger Placeholder:** Define a minimal, internal API endpoint or function (`/builder-os/trigger-directed-loop` or `triggerDirectedLoop()`) that, when invoked, initiates a single iteration of the BuilderOS core loop *only* if `LIFEOS_DIRECTED_MODE` is true. This placeholder will serve as the initial directed execution mechanism.
+
+## 4. Exact Safe-Scope Files BuilderOS Should Touch First
+
+*   `src/builder-os/config.js`: To read `LIFEOS_DIRECTED_MODE` (likely from `process.env`).
+*   `src/builder-os/scheduler/autonomousScheduler.js`: The primary file containing the autonomous loop logic. Add the guard here.
+*   `src
