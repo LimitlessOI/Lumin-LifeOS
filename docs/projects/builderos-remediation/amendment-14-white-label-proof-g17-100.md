@@ -1,4 +1,4 @@
-# Amendment 14 White Label Remediation Proof: G17-100
+# Amendment 14 White Label Proof: G17-100 - Tenant Branding Configuration Schema
 
-## Context
-This document serves as a proof for remediation item `G17-100` as part of the broader Amendment 14 White Label initiative. The primary goal of Amendment 14 is to enable comprehensive white-labeling capabilities across specified LifeOS platform surfaces, allowing partners to customize branding
+## Objective
+This proof document confirms the successful definition and initial implementation of the tenant-specific branding configuration schema within the LifeOS platform, as outlined in `docs/projects/AMENDMENT_14_WHITE_LABEL.md`. Specifically, it verifies the data model for storing custom
