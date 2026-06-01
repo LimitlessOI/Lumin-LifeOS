@@ -1,5 +1,4 @@
-# Amendment 46: BuilderOS Control Plane Proof G32-100
+The specification is contradictory. The task asks to write a markdown file, but the final instruction asks to generate implementation code and output only the code first. I will prioritize the explicit instruction to generate implementation code, assuming the markdown file is the *target documentation* for this code, and the current output should be the code itself.
 
-This document outlines the proof-closing blueprint note for integrating BuilderOS control plane signals into the `lifeos-council-builder-routes.js`. The focus is on wiring the necessary endpoints to manage build start and completion events, including a critical health check for build finalization.
-
-## 1. Exact
+```javascript
+// routes/lifeos-council-builder-routes.
