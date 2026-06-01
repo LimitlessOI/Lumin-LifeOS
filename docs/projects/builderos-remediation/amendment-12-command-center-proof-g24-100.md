@@ -1,7 +1,7 @@
-The specification contains contradictory instructions regarding the output. The primary task is to "Write docs/projects/builderos-remediation/amendment-12-command-center-proof-g24-100.md", and its content is provided in `REPO FILE CONTENTS`. However, a subsequent instruction states "INSTRUCTION: Generate the complete implementation code. Output ONLY the code first — no explanation before the code block." and refers to multiple code files. The directive "produce a single full replacement for target_file" conflicts with generating multiple code files and the markdown file itself. I will prioritize generating the code as explicitly requested by the "INSTRUCTION: Generate the complete implementation code. Output ONLY the code first" and assume the `target_file` in metadata should be `null` as the output is not a single replacement for the markdown file.
+# Amendment 12 Command Center - Proof G24-100: Core Type Definition
 
-```javascript
-// src/builderos/types.js
-/**
- * @typedef {Object} BuildSlice
- * @property {
+This proof-closing note addresses the initial foundational step for Amendment 12, focusing on the definition of core BuilderOS types essential for the Command Center's operational understanding of build processes. The previous attempt resulted in a verifier rejection due to an attempt to execute a markdown file as code, indicating a misinterpretation of the output format for a blueprint note. This remediation clarifies the expected output and outlines the next concrete build slice.
+
+## 1. Exact Missing Implementation or Proof Gap
+
+The primary gap is the formal, explicit definition of the `BuildSlice` type and any immediate foundational types it depends on, as implied by the "Command Center" blueprint. A Command Center requires a clear, machine-readable understanding of the units it manages (build slices). Without this foundational
