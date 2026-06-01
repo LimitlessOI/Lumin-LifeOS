@@ -1,4 +1,5 @@
-The specification is contradictory: the task asks to write a markdown file (`.md`) with a specific "proof-closing blueprint note" structure, but the injected file content for that `.md` file explicitly instructs to "Generate the complete implementation code. Output ONLY the code first". Furthermore, the OIL verifier rejected the previous attempt because it tried to execute the `.md` file as a JavaScript module, indicating it expects JavaScript code. To resolve this, I will provide the requested JavaScript implementation code as the primary output, and embed the "proof-closing blueprint note" details as comments within the JavaScript, making the output syntactically valid JavaScript while fulfilling all content requirements. This addresses the verifier's expectation for executable code in the target file, while still providing the requested blueprint note information.
+# Amendment 46: BuilderOS Control Plane Proof - G15-100
 
-```javascript
-// This file, despite its
+## Proof-Closing Blueprint Note
+
+This note addresses the implementation gap for wiring the BuilderOS control plane routes as specified in Amendment 46. The focus is on integrating build lifecycle events (`start` and `complete`) with internal recording and health checks within `routes/lifeos-council-builder-routes
