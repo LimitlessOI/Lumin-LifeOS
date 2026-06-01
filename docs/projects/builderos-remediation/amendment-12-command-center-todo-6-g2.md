@@ -1,24 +1,47 @@
-Blueprint Enhancement Memo: AMENDMENT_12_COMMAND_CENTER - Role-based Access (G2)
-This memo addresses the "Role-based access (admin vs client vs agent views)" task, providing a builder-ready slice for initial implementation.
-1. Blocking Ambiguity or Founder Decision List
--   Role-to-Route Mapping: Precise definition of which routes/apiEPs require specific roles (admin, client, agent) for access. The blueprint only lists roles, not their specific access rights.
--   Unauthorized Access Handling: Desired behavior when a user attempts to access a restricted resource without the required role (e.g., HTTP 403 Forbidden, redirect to login, specific error message).
--   Role Source of Truth: Confirmation of where the user's role information is reliably stored and accessed (e.g., `req.user.role` after auth, db lookup).
-2. Already-Settled Constraints
--   The system must support distinct roles: `admin`, `client`, and `agent`.
--   Access control must differentiate views/endpoints based on these roles.
--   Implementation must extend existing auth patterns, not rebuild them.
--   The solution should be reusable across multiple routes.
-3. The Smallest Buildable Next Slice
-Implement a generic `authorizeRoles` mw that accepts an array of allowed roles. This mw will check the authenticated user's role (assumed to be available at `req.user.role`) against the allowed roles. If the user's role is not in the allowed list, access will be denied. This mw will then be applied to one existing, non-critical apiEP to demonstrate its functionality.
-4. Exact Safe-Scope Files BuilderOS Should Touch First
--   `src/mw/authorizeRoles.js` (New file for the role-based access control mw)
--   `src/routes/api/v1/status.js` (Modify an existing, non-critical API route to apply the new mw)
-5. Required Verifier/Runtime Checks
--   Admin Access: Verify that a user with `role: 'admin'` can successfully access the `/api/v1/status` endpoint after the mw is applied.
--   Client/Agent Denial: Verify that users with `role: 'client'` or `role: 'agent'` are denied access to `/api/v1/status` and receive an appropriate HTTP 403 Forbidden response.
--   Unauthenticated Denial: Verify that unauthenticated users are denied access (this should be handled by existing auth mw, but confirm it's not bypassed).
--   Error Handling: Confirm that the system logs unauthorized access attempts appropriately.
-6. Stop Conditions
--   The `src/mw/authorizeRoles.js` file is created and contains a functional mw.
--   The `authorizeRoles` mw is successfully integrated into `src/routes/api/v1/status.js`.
+# BuilderOS Remediation: Amendment 12 Command Center - Role-Based Access (G2)
+
+This memo addresses the high-risk task: "Role-based access (admin vs client vs agent views)". The blueprint is not directly buildable due to ambiguity regarding the scope and implementation details of these roles.
+
+## 1. Blocking Ambiguity or Founder Decision List
+
+*   **Role Granularity & Scope**: What specific features, data, or UI elements are restricted per role (admin, client, agent)? Is this purely UI-driven, API-driven, or both?
+*   **Default Role Assignment**: How are users initially assigned a role? Is there a default, or is it explicitly set during creation/onboarding?
+*   **Role Management**: Who can assign/change roles? Is there an admin interface for this, or is it programmatic?
+*   **Authentication vs. Authorization**: Is this task solely focused on authorization (what a user *can do* once authenticated) or does it involve authentication flows as well? Assume authorization for now.
+
+## 2. Already-Settled Constraints
+
+*   **Required Roles**: The system must support at least three distinct roles: `admin`, `client`, `agent`.
+*   **Existence of Task**: Role-based access control is a confirmed requirement for the Command Center.
+*   **No LifeOS User Feature Modification**: Changes must not impact existing LifeOS user features or TSOS customer-facing surfaces.
+
+## 3. Smallest Buildable Next Slice
+
+The most fundamental next slice is to establish the data model foundation for roles. This involves:
+1.  Defining the set of valid roles as an enumerable constant.
+2.  Adding a `role` field to the existing `User` model (or equivalent user entity).
+3.  Ensuring basic validation for the `role` field to only accept predefined values.
+This slice focuses purely on data persistence and validation, deferring UI and API enforcement.
+
+## 4. Exact Safe-Scope Files BuilderOS Should Touch First
+
+*   `src/config/roles.js`: Define `ROLES = ['admin', 'client', 'agent']` (or similar enum).
+*   `src/models/user.js`: Add `role: { type: String, enum: ROLES, default: 'client', required: true }` to the user schema/model definition.
+*   `src/db/migrations/add_user_role_field.js`: Create a migration script to add the `role` column to the `users` table with a default value (e.g., 'client') and appropriate constraints.
+*   `src/types/user.d.ts`: Update TypeScript definition for `User` to include the `role` property.
+
+## 5. Required Verifier/Runtime Checks
+
+*   **Database Schema Check**: Verify that the `users` table now contains a `role` column of type `VARCHAR` (or equivalent) with a `NOT NULL` constraint and a default value.
+*   **Model Validation Test**: Attempt to create/update a user with an invalid `role` value; ensure it fails with a validation error.
+*   **Model Persistence Test**: Create a user with each valid role (`admin`, `client`, `agent`); verify the role is correctly stored and retrieved.
+*   **Default Role Test**: Create a user without specifying a role; verify the default role (e.g., 'client') is assigned.
+
+## 6. Stop Conditions
+
+This slice is complete when:
+*   The `ROLES` constant is defined and accessible.
+*   The `User` model schema includes a `role` field with enum validation against `ROLES`.
+*   A database migration has been successfully applied, adding the `role` column to the `users` table.
+*   All verifier/runtime checks listed above pass successfully.
+*   The system can successfully store and retrieve users with valid roles.
