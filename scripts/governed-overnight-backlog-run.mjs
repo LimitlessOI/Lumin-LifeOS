@@ -19,12 +19,39 @@
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
-import 'dotenv/config';
 import fs from 'node:fs/promises';
+import fsSync from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
 
 const ROOT = process.cwd();
+function loadLocalEnvFile() {
+  const envPath = path.join(ROOT, '.env');
+  if (!fsSync.existsSync(envPath)) return;
+  try {
+    const text = fsSync.readFileSync(envPath, 'utf8');
+    for (const line of text.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+      if (!match || process.env[match[1]] !== undefined) continue;
+      let value = match[2].trim();
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+      process.env[match[1]] = value;
+    }
+  } catch {
+    // Local .env loading is best-effort; missing env still fails closed in main().
+  }
+}
+
+loadLocalEnvFile();
+
 const PROJECTS_DIR = path.join(ROOT, 'docs', 'projects');
 const LOG_PATH = path.join(ROOT, 'data', 'governed-autonomy-overnight-log.jsonl');
 const STATE_PATH = path.join(ROOT, 'data', 'governed-autonomy-backlog-state.json');
@@ -40,6 +67,7 @@ const CHECKPOINT_EVERY_MIN = Math.max(
 );
 const BASE_URL = (process.env.PUBLIC_BASE_URL || '').replace(/\/+$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY || '';
+const API_TIMEOUT_MS = Math.max(1000, Number(process.env.GOVERNED_BACKLOG_API_TIMEOUT_MS || 120000) || 120000);
 
 const HARD_BLOCKERS = new Set([
   'GLOBAL_HALT',
@@ -441,8 +469,8 @@ function pickBuildableRows(blueprint, attemptedKeys) {
   return tasks;
 }
 
-async function generateBlueprintTaskBatch(generation, attemptedKeys) {
-  const blueprints = await readProjectBlueprints();
+export async function generateBlueprintTaskBatch(generation, attemptedKeys, options = {}) {
+  const blueprints = options.blueprints || await readProjectBlueprints();
   const tasks = [];
 
   for (const blueprint of blueprints) {
@@ -546,13 +574,18 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
       blueprint.uncheckedChecklistItems.length ||
       blueprint.nextStepSignals.length
     ) {
-      tasks.push(buildBlueprintProofTask(
-        blueprint,
-        generation,
-        blueprint.firstExactTask || blueprint.buildOrderRows[0]?.purpose || 'derive the next smallest blueprint-backed build slice',
-        99,
-      ));
-      addedForBlueprint += 1;
+      const fallbackSignal = blueprint.firstExactTask || blueprint.buildOrderRows[0]?.purpose || 'derive the next smallest blueprint-backed build slice';
+      const key = buildBlueprintQueueKey(blueprint.path, `proof-fallback:${fallbackSignal}`);
+      if (!attemptedKeys.has(key)) {
+        tasks.push(buildBlueprintProofTask(
+          blueprint,
+          generation,
+          fallbackSignal,
+          99,
+        ));
+        attemptedKeys.add(key);
+        addedForBlueprint += 1;
+      }
     }
   }
 
@@ -610,9 +643,9 @@ async function readOpenGaps() {
   }
 }
 
-async function generateSupportTaskBatch(generation, attemptedKeys, state) {
+export async function generateSupportTaskBatch(generation, attemptedKeys, state, options = {}) {
   const tasks = [];
-  const openOCs = await readOpenContradictions();
+  const openOCs = options.openOCs || await readOpenContradictions();
   for (const oc of openOCs) {
     const tf = `scripts/verify-${oc.id.toLowerCase()}-status.mjs`;
     const key = `support::${tf}`;
@@ -631,7 +664,7 @@ async function generateSupportTaskBatch(generation, attemptedKeys, state) {
     if (tasks.length >= 3) break;
   }
 
-  const openGaps = await readOpenGaps();
+  const openGaps = options.openGaps || await readOpenGaps();
   for (const gap of openGaps) {
     if (tasks.length >= 5) break;
     const tf = `scripts/verify-${gap.id.toLowerCase()}-gap.mjs`;
@@ -651,11 +684,11 @@ async function generateSupportTaskBatch(generation, attemptedKeys, state) {
   }
 
   if (tasks.length === 0) {
-    const tf = `scripts/verify-runner-telemetry-g${generation}.mjs`;
-    const key = `support::${tf}`;
+    const tf = 'scripts/verify-runner-telemetry.mjs';
+    const key = 'support::runner-telemetry';
     if (!attemptedKeys.has(key)) {
       tasks.push({
-        id: `runner-self-improvement-g${generation}`,
+        id: 'runner-self-improvement',
         priority: 999,
         category: 'support_self_improvement',
         lane: 'support',
@@ -691,11 +724,19 @@ async function writeState(state) {
 }
 
 async function callApi(method, apiPath, body) {
-  const res = await fetch(`${BASE_URL}${apiPath}`, {
-    method,
-    headers: { 'x-command-key': KEY, 'content-type': 'application/json' },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+  let res;
+  try {
+    res = await fetch(`${BASE_URL}${apiPath}`, {
+      method,
+      headers: { 'x-command-key': KEY, 'content-type': 'application/json' },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
   let json = {};
   try {
     json = await res.json();
@@ -1102,8 +1143,10 @@ async function main() {
   try { await fs.unlink(LOCK_PATH); } catch {}
 }
 
-main().catch(async (error) => {
-  await appendLog('orchestrator_crash', { error: error.message, stack: error.stack?.slice(0, 500) });
-  try { await fs.unlink(LOCK_PATH); } catch {}
-  process.exit(1);
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch(async (error) => {
+    await appendLog('orchestrator_crash', { error: error.message, stack: error.stack?.slice(0, 500) });
+    try { await fs.unlink(LOCK_PATH); } catch {}
+    process.exit(1);
+  });
+}

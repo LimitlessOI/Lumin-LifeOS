@@ -2,6 +2,25 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] 2026-06-01 — Critical governed runner fallback churn fix
+
+### Mission result: COMPLETE — unbounded generation-scoped proof/telemetry fallback loop fixed and tested
+
+**Agent:** GPT-5.5 / Cursor Automation / `cursor/critical-bug-investigation-bee2` / deep bug-finding automation
+
+**Bug found:** `scripts/governed-overnight-backlog-run.mjs` regenerated fallback proof tasks with generation-scoped ids/targets (`proof-g6`, `proof-g7`, `proof-g8`, …) after stable blueprint work was already attempted. Local log evidence in `data/governed-autonomy-overnight-log.jsonl` showed repeated proof tasks for the same blueprints every generation. Support self-improvement fallback had the same generation-scoped pattern (`verify-runner-telemetry-gN.mjs`). `callApi()` also had no timeout, so a hung synchronous execute request could hold the runner lock indefinitely.
+
+**Files changed:**
+- `scripts/governed-overnight-backlog-run.mjs` — stable dedupe key for fallback blueprint proof tasks; stable self-improvement id/target; 120s default HTTP abort; direct-run guard; built-in `.env` loader replacing top-level `dotenv/config` so tests can import the generators without installed dependencies.
+- `tests/governed-overnight-backlog-run.test.js` — regression tests proving fallback proof and support self-improvement tasks are emitted once across generations.
+- `package.json` — includes the new test in `npm test`.
+- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — change/verification receipts.
+
+**Verification:** `node --check` on changed JS PASS; `node --test tests/governed-overnight-backlog-run.test.js` PASS (2/2); `npm test` PASS (51 pass, 0 fail, 4 skipped).
+
+**Next agent:** If production runner is active, redeploy/pull this branch before restarting it; then inspect `data/governed-autonomy-overnight-log.jsonl` for absence of repeated `*-proof-gN-100` fallback tasks after stable work is exhausted.
+
+---
 ## [MISSION] 2026-06-01 — Overnight SocialMediaOS / MarketingOS Build Run
 
 ### Mission result: IN PROGRESS — runner alive (PID 5428), gen 2 started, Railway redeploy triggered, 0 commits yet (all blocked by stale deploy)
