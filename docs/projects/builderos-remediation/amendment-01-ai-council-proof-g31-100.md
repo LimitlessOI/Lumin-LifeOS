@@ -1,7 +1,7 @@
-### Blueprint Note: AMENDMENT_01_AI_COUNCIL - Proof G31-100
+# BuilderOS Remediation: Amendment 01 AI Council - Proof G31-100
 
-This note closes the initial proof-of-concept for establishing the foundational `AICouncil` class and its integration into the `LifeOS` core, as per `AMENDMENT_01_AI_COUNCIL.md`.
+This document outlines the next smallest build slice to address a specific proof gap related to the AI Council's mandate for auditable AI-driven decisions, as defined in `docs/projects/AMENDMENT_01_AI_COUNCIL.md`.
 
 ---
 
-1.  **
+### 1. Exact missing
