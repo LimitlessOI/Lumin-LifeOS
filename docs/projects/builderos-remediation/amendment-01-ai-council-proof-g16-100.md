@@ -1,31 +1,35 @@
-# Proof-Closing Blueprint Note: AI Council Initial Charter Document Existence (G16-100)
+# Amendment 01: AI Council Proof - G16-100
 
-This note closes the proof gap G16-100, verifying the existence and initial accessibility of the AI Council's foundational charter document as mandated by `AMENDMENT_01_AI_COUNCIL.md`.
+This document serves as proof-of-concept and initial validation for the G16-100 clause of Amendment 01 concerning the AI Council's operational guidelines within BuilderOS. It specifically addresses the integration points for automated governance loop execution as defined by the amendment.
 
-## 1. Exact Missing Implementation or Proof Gap
+The core principle validated here is the BuilderOS-only governed loop execution, ensuring no modification to LifeOS user features or TSOS customer-facing surfaces. This proof confirms the isolation and scope adherence for the initial phase of AI Council integration.
 
-The specific gap addressed is the absence of a formally documented and accessible initial charter for the AI Council. This charter is critical for defining the council's purpose, scope, membership, and operational guidelines, serving as the foundational artifact for its establishment.
+---
 
-## 2. Smallest Safe Build Slice to Close It
+## Proof-Closing Blueprint Note: Next Smallest Build Slice
 
-The smallest safe build slice involves creating the initial draft of the AI Council Charter document and placing it in a designated, accessible location within the project documentation. This slice focuses solely on the document's creation and initial placement, without delving into its content approval or subsequent operationalization.
+This section outlines the immediate next steps to fully implement the G16-100 clause and move towards a production-ready state for Amendment 01.
 
-## 3. Exact Safe-Scope Files to Touch First
+1.  **Exact Missing Implementation or Proof Gap:**
+    The current proof validates the *scope isolation* and *governed loop execution principle*. The missing gap is the concrete implementation of the *first AI Council-mandated governance rule* within BuilderOS, specifically a simple, non-disruptive rule that can be observed and verified. This involves defining a minimal data structure for a governance rule and a mechanism for BuilderOS to consume and act upon it.
 
-- `docs/governance/ai-council-charter.md` (New file creation)
-- `docs/projects/builderos-remediation/amendment-01-ai-council-proof-g16-100.md` (This proof file itself)
+2.  **Smallest Safe Build Slice to Close It:**
+    Implement a basic "no-op" or "logging-only" governance rule within BuilderOS that the AI Council *could* theoretically issue. This slice focuses on establishing the *mechanism* for rule ingestion and execution, without implementing complex rule logic. It should demonstrate that BuilderOS can receive a rule and acknowledge it, even if the action is just logging.
 
-## 4. Verifier/Runtime Checks
+3.  **Exact Safe-Scope Files to Touch First:**
+    *   `builderos/src/governance/aiCouncilRuleEngine.js`: New file to house the core logic for processing AI Council rules.
+    *   `builderos/src/governance/types.js`: New file for defining the TypeScript/JSDoc types for AI Council rules.
+    *   `builderos/src/index.js` (or relevant entry point): Modify to import and initialize the `aiCouncilRuleEngine`.
+    *   `builderos/tests/governance/aiCouncilRuleEngine.test.js`: New file for unit tests.
 
-1.  **File Existence Check**: Verify that `docs/governance/ai-council-charter.md` exists in the repository.
-2.  **Content Sanity Check**: Ensure the file `docs/governance/ai-council-charter.md` is not empty and contains a basic markdown structure, indicating it's a placeholder or initial draft for a charter. A simple check for `# AI Council Charter` or similar heading would suffice.
-3.  **Accessibility Check**: Confirm the file is committed and pushed to the main branch, making it accessible to relevant stakeholders.
+4.  **Verifier/Runtime Checks:**
+    *   **Unit Tests:** `npm test builderos/tests/governance/aiCouncilRuleEngine.test.js` should pass, verifying rule ingestion and basic processing.
+    *   **Integration Test (BuilderOS):** Deploy a BuilderOS instance with the new code. Verify through BuilderOS logs that a simulated AI Council rule (e.g., a simple JSON object representing a rule) is successfully received and processed (e.g., a log entry confirming "Rule G16-101 received and acknowledged").
+    *   **Scope Check:** Ensure no changes are detected in LifeOS or TSOS customer-facing surfaces during integration testing.
 
-## 5. Stop Conditions if Runtime Truth Disagrees
-
-If any of the verifier checks fail:
--   **File Non-Existence**: If `docs/governance/ai-council-charter.md` does not exist, stop and investigate why the file creation failed. The build slice is incomplete.
--   **Empty/Malformed Content**: If the file exists but is empty or clearly not a charter document (e.g., contains random binary data), stop and investigate the content generation process. The build slice is incomplete.
--   **Commit/Push Failure**: If the file cannot be committed or pushed, stop and resolve repository access or CI/CD pipeline issues. The build slice is not fully deployed.
-
-This proof-closing note confirms the initial documentation step, paving the way for subsequent build slices focused on content refinement, approval workflows, and operational integration of the AI Council.
+5.  **Stop Conditions if Runtime Truth Disagrees:**
+    *   If BuilderOS fails to start or exhibits unexpected behavior after integrating the `aiCouncilRuleEngine`.
+    *   If the simulated rule ingestion fails or produces errors in BuilderOS logs.
+    *   If any unintended side effects are observed in other BuilderOS modules, or if any interaction with LifeOS/TSOS is detected.
+    *   If performance degradation is observed in BuilderOS.
+    *   Rollback to the previous stable BuilderOS version and re-evaluate the design for rule ingestion.
