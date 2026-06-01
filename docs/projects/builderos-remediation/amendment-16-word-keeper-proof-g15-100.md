@@ -1,5 +1,3 @@
-# Amendment 16 Word Keeper Proof - G15-100: Initial Word Persistence Model
+# Amendment 16 Word Keeper Proof - G15-100: Initial Persistence and Add Operation
 
-This document outlines the next smallest build slice for Amendment 16, focusing on establishing the foundational data model and initial persistence mechanism for the Word Keeper feature. This addresses the `g15-100` gap identified in the main blueprint.
-
-## 1. Exact missing implementation or proof
+This document serves as a proof-closing blueprint note for the `g15-100` build slice, focusing on establishing the initial persistence layer for the Word Keeper feature and implementing the `addWord` functionality as per `docs/projects/AMENDMENT_16_
