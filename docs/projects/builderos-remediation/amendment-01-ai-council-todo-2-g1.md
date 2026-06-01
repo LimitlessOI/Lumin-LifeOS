@@ -1,5 +1,8 @@
-# BuilderOS Remediation: Amendment 01 AI Council - Investigate Ollama System Prompts
+# BuilderOS Remediation: Amendment 01 AI Council - Ollama Token Investigation (G1)
+
+## Blueprint Task
+Investigate Ollama 7,327 avg tokens/call — likely bloated system prompts (est: 2h) `[safe]`
 
 ## 1. Blocking Ambiguity or Founder Decision List
 
-*   **Definition of "Bloated":** Establish a quantitative threshold or heuristic for what constitutes a "bloated" system prompt. Is it an absolute token count (e.g., >500 tokens), a percentage of total
+*   **Token Definition:** Clar
