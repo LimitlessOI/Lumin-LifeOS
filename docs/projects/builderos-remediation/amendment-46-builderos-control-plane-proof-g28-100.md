@@ -6,4 +6,4 @@ This note addresses the implementation gap for wiring the BuilderOS control plan
 
 ### 1. Exact Missing Implementation or Proof Gap
 
-The primary gap is the absence of dedicated POST endpoints within `routes/lifeos-council-builder-
+The primary gap is the absence of dedicated API endpoints within `routes/lifeos-council-builder-
