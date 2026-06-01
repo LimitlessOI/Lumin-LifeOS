@@ -1,30 +1,29 @@
-# Amendment 16: Word Keeper - Proof G98-100: Initial KeptWord Data Model and Persistence
+# Amendment 16 Word Keeper Proof: g98-100
 
-This document outlines the next smallest build slice for Amendment 16, focusing on the foundational data model and persistence layer for "Kept Words."
+This document outlines the proof-closing blueprint note for the `g98-100` segment under Amendment 16's Word Keeper mechanism, addressing the identified implementation and proof gaps.
 
 ---
 
-### Blueprint Note: Proof-Closing Build Slice
+### 1. Exact Missing Implementation or Proof Gap
 
-**1. Exact missing implementation or proof gap:**
-The core data model for `KeptWord` entities is not yet defined or persisted. Specifically, the database schema for storing a `KeptWord` (including `word_text`, `user_id`, `context_id`, `created_at`, `updated_at`) and the initial database migration to create the corresponding `kept_words` table are missing. This gap prevents any further development of features that rely on storing and retrieving kept words.
+The "Word Keeper" mechanism for Amendment 16 requires a robust integrity check for the content segment identified as `g98-100`. The current BuilderOS pipeline lacks an explicit, automated verification step to confirm that the `g98-100` segment, once processed and stored, precisely matches its intended, immutable state as defined by Amendment 16. This gap can lead to silent corruption or unintended modifications of critical content during build or deployment, violating the "Word Keeper" guarantee for this specific range.
 
-**2. Smallest safe build slice to close it:**
-Implement the `KeptWord` data model definition (e.g., using a Mongoose schema or Sequelize model, depending on existing patterns) and create the initial database migration script to establish the `kept_words` table. This slice focuses solely on schema definition and table creation, without introducing any API endpoints, business logic, or service layer interactions.
+### 2. Smallest Safe Build Slice to Close It
 
-**3. Exact safe-scope files to touch first:**
-*   `src/models/KeptWord.js` (Define the Mongoose/Sequelize model for `KeptWord`)
-*   `src/db/migrations/YYYYMMDDHHMMSS_create_kept_words_table.js` (Create the database migration script for the `kept_words` table)
-*   `src/db/index.js` (If necessary, register the new `KeptWord` model with the database connection)
+Implement a dedicated BuilderOS pre-commit hook or a post-processing build step that specifically hashes the `g98-100` content segment and compares it against a known, immutable reference hash. This check must be integrated into the existing BuilderOS content processing pipeline for Amendment 16, ensuring that any deviation prevents further build progression.
 
-**4. Verifier/runtime checks:**
-*   Execute database migrations: `npm run db:migrate` (or equivalent command for the project's ORM/migration tool).
-*   Connect to the development database using a database client (e.g., `psql`, MongoDB Compass) and verify that the `kept_words` collection/table exists.
-*   Confirm the `kept_words` collection/table contains the expected fields: `_id` (or `id`), `word_text` (string), `user_id` (string/ObjectId), `context_id` (string/ObjectId, nullable), `createdAt` (Date), `updatedAt` (Date).
-*   Attempt to insert a dummy `KeptWord` record directly into the database via a database client and verify successful insertion and retrieval of the record with correct data types.
+### 3. Exact Safe-Scope Files to Touch First
 
-**5. Stop conditions if runtime truth disagrees:**
-*   The database migration fails to execute successfully, reporting errors.
-*   The `kept_words` collection/table does not exist in the database after the migration completes.
-*   The `kept_words` collection/table exists but is missing any of the specified fields (`word_text`, `user_id`, `context_id`, `createdAt`, `updatedAt`) or has incorrect data types for these fields.
-*   Direct database insertion of a dummy `KeptWord` record fails or results in data corruption/unexpected schema validation errors.
+*   `builderos/amendment-16/word-keeper-config.json`: To define the `g98-100` segment boundaries (e.g., file path, line numbers, or content identifier) and its immutable SHA256 reference hash.
+*   `builderos/pipelines/amendment-16-processor.js`: To inject the hashing and comparison logic as a mandatory step within the content processing flow for Amendment 16.
+*   `builderos/tests/amendment-16/word-keeper.test.js`: To add unit and integration tests specifically for the new `g98-100` verification step, including tests for both success and failure scenarios.
+
+### 4. Verifier/Runtime Checks
+
+*   **Build-time Verification:** The BuilderOS pipeline must execute the hash comparison. If the computed hash of the `g98-100` segment does not match the reference hash defined in `word-keeper-config.json`, the build process must fail immediately.
+*   **Post-deployment Runtime Check:** A lightweight, read-only API endpoint or a scheduled BuilderOS job should periodically re-verify the `g98-100` segment's integrity in the deployed environment against the same reference hash. This provides continuous assurance.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+*   **Immediate Build Failure:** If the build-time hash verification fails for `g98-100`, the build process must halt, preventing deployment of potentially corrupted content. The error message should clearly indicate the `g98-100` segment and the hash mismatch.
+*   **Alerting and Rollback:** If post-deployment runtime verification fails for `g98-100`, an immediate high-priority alert must be triggered to the BuilderOS team. An automated rollback to the last known good version of the affected content (or the entire Amendment 16 deployment) should be initiated. Manual investigation is then required to determine the root cause of the discrepancy and update the reference hash if the change was intentional and approved.
