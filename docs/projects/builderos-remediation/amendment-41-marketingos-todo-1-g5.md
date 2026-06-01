@@ -1,5 +1,9 @@
 # BuilderOS Remediation: Amendment 41 MarketingOS - ToDo 1 (G5)
 
-This memo addresses the unbuildable state of `docs/projects/AMENDMENT_41_MARKETINGOS.md` due to outstanding founder decisions. It proposes a minimal, buildable slice to enable foundational progress without violating the blueprint's intent.
+## Blueprint Enhancement Memo
 
-## 1
+This memo outlines the smallest buildable slice for Amendment 41 (MarketingOS) given outstanding founder decisions, focusing on preparing foundational elements for the "Phase 0 intake form" concept.
+
+### 1. Blocking Ambiguity / Founder Decision List
+
+The following critical decisions
