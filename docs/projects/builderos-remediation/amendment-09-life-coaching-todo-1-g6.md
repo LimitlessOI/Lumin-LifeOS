@@ -1,6 +1,9 @@
-### BuilderOS Remediation: Amendment 09 Life Coaching - TODO 1 G6
+# BuilderOS Remediation: Amendment 09 Life Coaching - Todo 1 (G6)
 
-This memo outlines the first buildable slice for extracting Life Coaching API logic from `server.js`, focusing on a single, minimal endpoint to establish the pattern for future extractions.
+This memo outlines the next buildable slice for extracting Life Coaching feature code from `server.js`, addressing the 900 lines of inline endpoint logic.
 
-1.  **Blocking Ambiguity or Founder Decision List:**
-    *   Confirmation of the exact initial endpoint to
+---
+
+### 1. Blocking Ambiguity or Founder Decision List
+
+*   **Module Structure for Life Coaching Features**: Confirm the preferred
