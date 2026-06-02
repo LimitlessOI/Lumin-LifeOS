@@ -1,5 +1,7 @@
-# Amendment 46 BuilderOS Control Plane Proof - G55-100
+### Proof-Closing Blueprint Note: BuilderOS Control Plane Wiring (G55-100)
 
-## 1. Exact Missing Implementation / Proof Gap
+This note addresses the implementation gap for wiring the BuilderOS control plane routes as specified in Amendment 46.
 
-The core gap is the absence of dedicated BuilderOS control plane endpoints within `routes/lifeos-council-builder-routes.js` to manage the lifecycle of a build process. Specifically, the `POST /build/start` and `
+#### 1. Exact Missing Implementation or Proof Gap
+
+The core gap is the absence of dedicated API endpoints within `routes/lifeos-council-builder-routes.js` to
