@@ -1,7 +1,1 @@
-# Amendment 46 BuilderOS Control Plane Proof - G764-100
-
-## Proof-Closing Blueprint Note
-
-This document outlines the necessary implementation to close the proof gap for Amendment 46, specifically addressing the wiring of BuilderOS control plane routes within `routes/lifeos-council-builder-routes.js`.
-
-### 1. Exact Missing Implementation or Proof Gap
+The specification is contradictory regarding the expected output format. The task is to write a `.md` file, but the general instruction for output format (and the instruction found in the existing `.md` file content) states "Output ONLY the code first — no explanation before the code block. Then append a line containing exactly
