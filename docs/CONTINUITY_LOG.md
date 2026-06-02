@@ -64,9 +64,23 @@ Every update must report: runner PID · active/idle/productive status · current
 
 **Rule: Do not stop the mission unless it is completed, superseded, abandoned by approved authority, or proven impossible.**
 
+### Founder Value Rule
+
+Every completed task must identify:
+
+- **User value created** — what does Adam or Sherry get from this that they didn't have before?
+- **Revenue value created** — does this move a sellable product closer to selling?
+- **Reliability value created** — does the system become more trustworthy or resilient?
+- **Technical debt increased or reduced** — net direction, not neutral
+- **Why this task over alternatives** — what was not built, and why was this the right choice?
+
+If none of those can be demonstrated, the task is low priority and should not be chosen over tasks that can. This is not a reporting formality — it is the filter that separates operating system work from impressive-but-low-value infrastructure.
+
 ### Tomorrow's First Question
 
-> "Show me evidence that the deployed system works end-to-end, and show me the root cause analysis for the HTTP_502 builder failure."
+> "What is running right now — and show me the evidence."
+
+Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and proof. If the system answers with plans and intentions instead of evidence, it is still in architecture mode. The test is whether the machine keeps moving when Adam is asleep.
 
 ---
 ## [SSOT] 2026-06-02 — Mission Runtime Phase 2 Complete (AMENDMENT_47)
