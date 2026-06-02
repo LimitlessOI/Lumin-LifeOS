@@ -1,38 +1,31 @@
-# Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Proof G567-100
+# Amendment 41 MarketingOS Proof-Closing Blueprint Note (G567-100)
 
-**Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`
-**Signal:** This document — SSOT foundation.
+**SSOT Foundation:** This document serves as the Single Source of Truth for closing the proof gap for Amendment 41 MarketingOS within BuilderOS.
 
-This note outlines the necessary steps to close the proof gap for `G567-100`, specifically related to the successful completion of a user's "onboarding survey step 3" and its associated metadata transmission to MarketingOS.
+## 1. Exact Missing Implementation or Proof Gap
 
----
+The core integration points for MarketingOS within BuilderOS are implemented, including data ingestion and API endpoints. The critical proof gap is the absence of a comprehensive, automated integration test suite that validates the end-to-end data flow and consistency of MarketingOS campaign objects within BuilderOS. This includes verifying correct ingestion, processing, display in the BuilderOS campaign management interface, and accurate reflection of BuilderOS-initiated actions (e.g., status updates) back to MarketingOS via established communication channels. Manual verification has been performed, but an automated, repeatable proof is required for C2 build pass.
 
-### 1. Exact Missing Implementation or Proof Gap
+## 2. Smallest Safe Build Slice to Close It
 
-The specific mechanism to capture and transmit `g567-100` proof data from LifeOS to MarketingOS is not yet implemented. This proof specifically relates to the successful completion of a user's "onboarding survey step 3" and its associated metadata (e.g., `surveyId`, `userId`, `completionTimestamp`, `selectedOptions`). The `AMENDMENT_41_MARKETINGOS.md` blueprint specifies that this proof is critical for triggering downstream MarketingOS automation related to user segmentation and personalized follow-up campaigns.
+Implement a new integration test suite within the `packages/builder-os-integrations` module. This suite will utilize a mock MarketingOS service to simulate various campaign lifecycle events (creation, updates, deletion) and assert the corresponding state changes, data integrity, and UI reflections within BuilderOS. It will also verify that BuilderOS-initiated actions correctly trigger outbound calls to the mock MarketingOS endpoint, ensuring bidirectional communication is functional and robust. This slice focuses exclusively on testing and validation, introducing no new production features or modifications to existing core logic, only exercising the already implemented integration points.
 
-### 2. Smallest Safe Build Slice to Close It
+## 3. Exact Safe-Scope Files to Touch First
 
-1.  **Introduce `MarketingOSProofService.sendProofG567_100(userId, surveyData)`:** A new method within an existing or new `MarketingOSProofService` to encapsulate the logic for constructing the `g567-100` specific payload and invoking the `MarketingOSIntegrationClient`.
-2.  **Integrate into `OnboardingService`:** Add a call to `MarketingOSProofService.sendProofG567_100` within the `OnboardingService` flow, specifically after the successful persistence and validation of "onboarding survey step 3" data. This call should be non-blocking (e.g., asynchronous or fire-and-forget) to avoid impacting core onboarding UX.
-3.  **Ensure `MarketingOSIntegrationClient` readiness:** Verify the existing `MarketingOSIntegrationClient` has a generic `sendProof(proofType, payload)` method capable of handling the `g567-100` payload structure as defined in `AMENDMENT_41_MARKETINGOS.md`.
+*   `packages/builder-os-integrations/src/marketing-os/tests/integration.test.js` (new file for the test suite)
+*   `packages/builder-os-integrations/src/marketing-os/mock-marketing-os-service.js` (new file for a lightweight mock service, if needed for complex scenarios)
+*   `packages/builder-os-integrations/package.json` (update `devDependencies` for testing utilities like `nock` or `supertest` if not already present)
 
-### 3. Exact Safe-Scope Files to Touch First
+## 4. Verifier/Runtime Checks
 
-*   `src/services/MarketingOSProofService.js` (Create if not exists, or extend `src/services/MarketingOSService.js`)
-*   `src/services/OnboardingService.js` (Modify `completeSurveyStep3` or similar method)
-*   `src/clients/MarketingOSIntegrationClient.js` (Verify/extend `sendProof` method signature and implementation)
-*   `src/models/UserSurveyData.js` (Ensure relevant data fields are accessible for proof payload construction)
-*   `src/tests/services/MarketingOSProofService.test.js` (New unit test file)
-*   `src/tests/services/OnboardingService.test.js` (Extend existing integration tests)
+*   **Automated Test Pass:** All tests within `packages/builder-os-integrations/src/marketing-os/tests/integration.test.js` must execute successfully with zero failures.
+*   **Data Consistency Assertion:** The tests must include assertions that verify the consistency of MarketingOS-sourced data within BuilderOS's internal state and, where applicable, its representation in the BuilderOS UI (via component testing or E2E checks if within scope).
+*   **Log Verification:** During test execution, monitor BuilderOS integration service logs for any unexpected errors, warnings, or unhandled exceptions related to MarketingOS API interactions or webhook processing.
+*   **Performance Baseline:** Ensure the execution of the new test suite does not introduce significant performance regressions (e.g., excessive CPU/memory usage, prolonged test run times) to the BuilderOS integration services.
 
-### 4. Verifier/Runtime Checks
+## 5. Stop Conditions if Runtime Truth Disagrees
 
-*   **Unit Tests:** `MarketingOSProofService.test.js` to verify correct `g567-100` payload construction and `MarketingOSIntegrationClient` invocation with expected arguments.
-*   **Integration Tests:** `OnboardingService.test.js` to verify that `MarketingOSProofService.sendProofG567_100` is called with the correct `userId` and `surveyData` upon successful completion of "onboarding survey step 3".
-*   **E2E Tests (Staging):** Simulate a user completing "onboarding survey step 3" in a staging environment. Verify that a corresponding `g567-100` proof is logged by the `MarketingOSIntegrationClient` and, if possible, received by a mock MarketingOS endpoint or observed in MarketingOS integration logs.
-*   **Runtime Monitoring:** Observe `MarketingOSIntegrationClient` logs for successful `g567-100` proof transmissions (HTTP 2xx responses) and monitor for any errors or latency spikes.
-
-### 5. Stop Conditions if Runtime Truth Disagrees
-
-*   If MarketingOS does not receive the `g567-100` proof within 5 seconds of a user completing "onboarding survey step 3" in a staging
+*   **Test Failures:** Any failure in the `integration.test.js` suite immediately stops the build pass, indicating a critical functional or data integrity issue.
+*   **Critical Log Errors:** The presence of unhandled exceptions, repeated API call failures (to mock or actual MarketingOS), or other critical errors in the BuilderOS integration service logs during test execution stops the build pass.
+*   **Unacceptable Performance Impact:** If the new test suite causes a measurable and unacceptable degradation in the performance of BuilderOS integration services (e.g., test run time exceeding a predefined threshold, resource exhaustion), the build pass stops.
+*   **Unexplained Data Discrepancies:** If post-test manual inspection or subsequent automated checks reveal data inconsistencies not caught by the new test suite, indicating a gap in test coverage or a deeper underlying issue, the build pass stops.
