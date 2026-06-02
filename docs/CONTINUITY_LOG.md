@@ -2,6 +2,19 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SSOT] 2026-06-02 — Critical Bug Fix: Mission Transition Lost-Update Race
+
+**Agent:** GPT-5.5 / Cursor Cloud automation / branch `cursor/critical-bug-investigation-c2ff` / deep bug-finding audit role
+
+**What:** Found and fixed a high-severity Mission Runtime correctness bug in `services/mission-ledger.js`. `transitionMissionState()` previously read `missions.state` with `pool.query()` before opening its transaction, then updated unconditionally inside a later transaction. Concrete trigger: two simultaneous `POST /api/v1/lifeos/missions/:id/transition` calls from `Approved` to different valid next states (`Building` and `BPB Blueprinting`) could both validate against stale `Approved`, both return success, and insert two `mission_state_transitions` rows from `Approved` while final `missions.state` depended on last writer.
+
+**Fix:** `transitionMissionState()` now opens the transaction first and reads the mission row with `SELECT * FROM missions WHERE id = $1 FOR UPDATE`, forcing concurrent transition callers to serialize and validate against the latest committed state. Added `tests/mission-ledger-transition.test.js` to model the concurrent divergent transition path and assert only the first transition writes a ledger row; the second rejects as `INVALID_TRANSITION` from the updated state.
+
+**Validation:** Before the fix, a one-off reproduction showed both concurrent calls fulfilled and produced two ledger rows from `Approved` (`corrupted: true`). After the fix: `node --check services/mission-ledger.js` ✅, `node --check tests/mission-ledger-transition.test.js` ✅, `node --test tests/mission-ledger-transition.test.js` ✅ (1/1 pass). Branch pushed: `931fc6193`. **Not production-verified:** this branch is not deployed.
+
+**Next:** Review/merge the branch if accepted, then deploy before claiming production protection. Existing known next mission items remain: C2-first priority stack, `today_commitments` timezone check, and pause/terminate governance gap.
+
+---
 ## [FOUNDER DIRECTIVE] 2026-06-02 — End-of-Session Handoff for All Agents (CUR / C2 / Gemini / any)
 
 > **YOU ARE REQUIRED TO IDENTIFY YOURSELF AND YOUR ROLE BEFORE STARTING WORK.**
