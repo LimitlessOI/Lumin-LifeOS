@@ -1,5 +1,7 @@
 # Amendment 46: BuilderOS Control Plane Proof - G53-100
 
-## 1. Exact Missing Implementation or Proof Gap
+## Proof-Closing Blueprint Note: Builder Control Plane Route Wiring
 
-The `routes/lifeos-council-builder-routes.js` file is missing the necessary POST endpoints to manage BuilderOS build lifecycle events. Specifically, the routes for `/build/start` and `/build/complete` are not
+This note addresses the implementation gap identified in Amendment 46 regarding the BuilderOS Control Plane, specifically the wiring of build lifecycle endpoints within `routes/lifeos-council-builder-routes.js`.
+
+###
