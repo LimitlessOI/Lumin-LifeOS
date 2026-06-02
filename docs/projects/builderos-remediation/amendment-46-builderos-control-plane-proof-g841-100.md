@@ -1,7 +1,16 @@
-# Amendment 46: BuilderOS Control Plane Proof - G841-100
+// File: routes/lifeos-council-builder-routes.js (Proposed additions)
 
-## Proof-Closing Blueprint Note: Wiring `routes/lifeos-council-builder-routes.js`
+import express from 'express';
+// Assuming these services/utilities exist or will be created as part of the build slice
+import {
+  recordBuildStart,
+  recordBuildComplete,
+  canMarkBuildDone,
+} from '../services/builderControlPlaneService.js';
+import { getLogger } from '../utils/logger.js'; // Standard logger utility
 
-This note details the necessary implementation to wire the BuilderOS control plane routes as specified, ensuring build start/completion tracking and health-gated completion.
-
-### 1. Exact Missing
+// Assuming 'router' is already initialized and exported in this file,
+// or this snippet is intended to be merged into an existing router definition.
+// For this proof, we'll show the full router setup for clarity.
+const router = express.Router();
+const logger = getLogger('BuilderOS-ControlPlane
