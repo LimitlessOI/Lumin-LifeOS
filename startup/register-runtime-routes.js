@@ -49,6 +49,7 @@ import { createLifeOSAmbientRoutes } from "../routes/lifeos-ambient-routes.js";
 import { createLifeOSHabitsRoutes } from "../routes/lifeos-habits-routes.js";
 import { createLifeOSBriefingRoutes } from "../routes/lifeos-briefing-routes.js";
 import { createLifeOSCommitmentRoutes } from "../routes/lifeos-commitment-routes.js";
+import { createMissionRoutes } from "../routes/mission-routes.js";
 import { createLifeOSAmbientIntelligenceRoutes } from "../routes/lifeos-ambient-intelligence-routes.js";
 import { createLifeOSCycleRoutes } from "../routes/lifeos-cycle-routes.js";
 import { createLifeOSAuthRoutes } from "../routes/lifeos-auth-routes.js";
@@ -286,6 +287,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/lifeos/commitments", createLifeOSCommitmentRoutes({ pool, requireKey, logger }));
   logger.info("✅ [LIFEOS-COMMITMENTS] Routes mounted at /api/v1/lifeos/commitments");
+  // Mission Runtime — BPB-0001 §§3.1-3.3, 3.5, 8 (AMENDMENT_47)
+  app.use("/api/v1/lifeos", createMissionRoutes({ pool, requireKey, logger }));
+  logger.info("✅ [MISSIONS] Routes mounted at /api/v1/lifeos/missions/* + /api/v1/lifeos/household/board");
 
   app.use("/api/v1/lifeos/ambient-intel", createLifeOSAmbientIntelligenceRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-AMBIENT-INTEL] Routes mounted at /api/v1/lifeos/ambient-intel");

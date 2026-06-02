@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Household Mission Board</title>
+  <style>
+    /* BPB-0001 §Section 6 — prescribed UI, builder-discretion layout */
+    :root {
+      --bg: #0a0b0e;
+      --panel: #12141a;
+      --border: #1e2230;
+      --text: #d4d8e8;
+      --muted: #5a6080;
+      --accent: #4f8ef7;
+      --green: #3ddc84;
+      --yellow: #f7c948;
+      --red: #f7564f;
+      --orange: #f7934f;
+      --purple: #9b6ef7;
+      --blue: #4f8ef7;
+      --gray: #5a6080;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 13px;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    header h1 { font-size: 16px; color: var(--text); }
+    #status-line { font-size: 11px; color: var(--muted); margin-left: auto; }
+    .state-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .pill-gray   { background: #2a2d38; color: var(--gray); }
+    .pill-yellow { background: #2d2a10; color: var(--yellow); }
+    .pill-blue   { background: #101c38; color: var(--blue); }
+    .pill-orange { background: #2d1c0a; color: var(--orange); }
+    .pill-purple { background: #1e1030; color: var(--purple); }
+    .pill-green  { background: #0d2a1a; color: var(--green); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 16px;
+    }
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .section h2 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+    .section.overdue { border-color: var(--red); }
+    .section.overdue h2 { color: var(--red); }
+    .commitment-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .commitment-row:last-child { border-bottom: none; }
+    .commitment-text { flex: 1; line-height: 1.4; }
+    .commitment-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .badge-owner {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+    .badge-adam   { background: #101c38; color: var(--blue); }
+    .badge-sherry { background: #2d1c0a; color: var(--orange); }
+    .empty { color: var(--muted); font-size: 12px; font-style: italic; padding: 8px 0; }
+    button.approve-btn {
+      background: #0d2a1a;
+      color: var(--green);
+      border: 1px solid var(--green);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    button.approve-btn:hover { background: #153d28; }
+    /* Add commitment form */
+    #add-section { grid-column: 1 / -1; }
+    #add-form { display: flex; flex-direction: column; gap: 10px; }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .form-row label { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--muted); }
+    .form-row input, .form-row select, .form-row textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 12px;
+    }
+    .form-row textarea { resize: vertical; min-height: 60px; flex: 1; }
+    button.submit-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+    button.submit-btn:hover { opacity: 0.85; }
+    #form-feedback { font-size: 12px; color: var(--green); min-height: 18px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Household Mission Board</h1>
+  <span id="mission-badge"></span>
+  <span id="status-line">loading…</span>
+</header>
+
+<div class="grid" id="board-grid">
+  <div class="section"><p class="empty">Loading board…</p></div>
+</div>
+
+<script>
+/* BPB-0001 §Section 6 — Household Board UI. Authority: AMENDMENT_47_MISSION_RUNTIME.md */
+const BASE = '';
+let API_KEY = new URLSearchParams(location.search).get('key') || localStorage.getItem('hh_key') || '';
+
+if (!API_KEY) {
+  API_KEY = prompt('Enter API key (x-command-key):') || '';
+  if (API_KEY) localStorage.setItem('hh_key', API_KEY);
+}
+
+const MISSION_ID = new URLSearchParams(location.search).get('mission_id') || 'MISSION-0001';
+
+function statePill(state) {
+  const map = {
+    'Proposed': 'gray', 'Clarified': 'gray',
+    'Council Review': 'yellow', 'OIL Review': 'yellow',
+    'Approved': 'blue', 'Build Approved': 'blue',
+    'BPB Blueprinting': 'orange', 'Building': 'orange',
+    'Verification': 'purple',
+    'Deployed': 'green', 'Outcome Measured': 'green', 'Lessons Captured': 'green',
+  };
+  const cls = map[state] || 'gray';
+  return `<span class="state-pill pill-${cls}">${state}</span>`;
+}
+
+function ownerBadge(owner) {
+  const cls = owner === 'adam' ? 'badge-adam' : owner === 'sherry' ? 'badge-sherry' : '';
+  return `<span class="badge-owner ${cls}">${owner}</span>`;
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function renderRow(c, showApprove = false) {
+  const due = c.due_date ? `due ${fmtDate(c.due_date)}` : '';
+  const urg = c.urgency ? `U${c.urgency}` : '';
+  const imp = c.importance ? `I${c.importance}` : '';
+  const meta = [due, urg, imp].filter(Boolean).join(' · ');
+  return `
+    <div class="commitment-row" data-id="${c.id}">
+      <div class="commitment-text">
+        <div>${ownerBadge(c.owner)} ${escHtml(c.text || '')}</div>
+        ${meta ? `<div class="commitment-meta">${meta}</div>` : ''}
+      </div>
+      ${showApprove ? `<button class="approve-btn" onclick="approve('${c.id}')">Approve</button>` : ''}
+    </div>`;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderList(items, showApprove = false) {
+  if (!items || items.length === 0) return '<p class="empty">— none —</p>';
+  return items.map(c => renderRow(c, showApprove)).join('');
+}
+
+async function approve(id) {
+  const now = new Date().toISOString();
+  try {
+    await fetch(`${BASE}/api/v1/lifeos/commitments/mission/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'x-command-key': API_KEY },
+      body: JSON.stringify({ approved_by: 'adam', approved_at: now }),
+    });
+    await loadBoard();
+  } catch (e) {
+    alert('Approve failed: ' + e.message);
+  }
+}
+
+async function loadBoard() {
+  const statusEl = document.getElementById('status-line');
+  try {
+    const res = await fetch(`${BASE}/api/v1/lifeos/household/board?mission_id=${encodeURIComponent(MISSION_ID)}`, {
+      headers: { 'x-command-key': API_KEY },
+    });
+    if (!res.ok) { statusEl.textContent = `Error ${res.status}`; return; }
+    const d = await res.json();
+    if (!d.ok) { statusEl.textContent = d.error || 'unknown error'; return; }
+
+    document.getElementById('mission-badge').innerHTML =
+      `<strong>${escHtml(d.mission.slug)}</strong> — ${escHtml(d.mission.title)} ${statePill(d.mission.state)}`;
+
+    const gen = new Date(d.generated_at).toLocaleTimeString();
+    statusEl.textContent = `refreshed ${gen} · next in 30s`;
+
+    document.getElementById('board-grid').innerHTML = `
+      <div class="section">
+        <h2>Today's Commitments</h2>
+        ${renderList(d.today_commitments)}
+      </div>
+      <div class="section overdue">
+        <h2>Overdue</h2>
+        ${renderList(d.overdue_commitments)}
+      </div>
+      <div class="section">
+        <h2>Adam's Tasks</h2>
+        ${renderList(d.adam_tasks)}
+      </div>
+      <div class="section">
+        <h2>Sherry's Tasks</h2>
+        ${renderList(d.sherry_tasks)}
+      </div>
+      <div class="section">
+        <h2>Waiting Approval</h2>
+        ${renderList(d.waiting_approval, true)}
+      </div>
+      <div class="section">
+        <h2>Income Priorities</h2>
+        ${renderList(d.income_priorities)}
+      </div>
+      <div class="section" id="add-section">
+        <h2>Add Commitment</h2>
+        <form id="add-form" onsubmit="submitCommitment(event)">
+          <div class="form-row">
+            <label>Owner
+              <select name="owner">
+                <option value="adam">Adam</option>
+                <option value="sherry">Sherry</option>
+              </select>
+            </label>
+            <label>Due date
+              <input type="date" name="due_date">
+            </label>
+            <label>Urgency (1-5)
+              <input type="number" name="urgency" min="1" max="5" style="width:60px">
+            </label>
+            <label>Importance (1-5)
+              <input type="number" name="importance" min="1" max="5" style="width:60px">
+            </label>
+          </div>
+          <div class="form-row">
+            <textarea name="text" placeholder="What will you do…" required></textarea>
+          </div>
+          <div class="form-row">
+            <button type="submit" class="submit-btn">Add Commitment</button>
+            <span id="form-feedback"></span>
+          </div>
+        </form>
+      </div>`;
+  } catch (e) {
+    statusEl.textContent = 'fetch error: ' + e.message;
+  }
+}
+
+async function submitCommitment(e) {
+  e.preventDefault();
+  const fb = document.getElementById('form-feedback');
+  fb.textContent = 'Saving…';
+  const fd = new FormData(e.target);
+  const body = {
+    owner: fd.get('owner'),
+    text: fd.get('text'),
+    mission_id: MISSION_ID,
+  };
+  if (fd.get('due_date')) body.due_date = fd.get('due_date');
+  if (fd.get('urgency')) body.urgency = Number(fd.get('urgency'));
+  if (fd.get('importance')) body.importance = Number(fd.get('importance'));
+
+  try {
+    const res = await fetch(`${BASE}/api/v1/lifeos/commitments/mission`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-command-key': API_KEY },
+      body: JSON.stringify(body),
+    });
+    const d = await res.json();
+    if (d.ok) {
+      fb.textContent = 'Added!';
+      e.target.reset();
+      setTimeout(() => { fb.textContent = ''; }, 3000);
+      await loadBoard();
+    } else {
+      fb.textContent = d.error || 'error';
+    }
+  } catch (err) {
+    fb.textContent = err.message;
+  }
+}
+
+loadBoard();
+setInterval(loadBoard, 30000);
+</script>
+</body>
+</html>

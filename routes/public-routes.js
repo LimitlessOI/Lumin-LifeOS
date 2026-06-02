@@ -75,6 +75,13 @@ export function registerPublicRoutes(app, {
 
   app.get("/communicate", (_req, res) => res.redirect(301, "/lifeos-communication"));
 
+  // Household Mission Board — BPB-0001 §Section 7 (AMENDMENT_47)
+  app.get("/lifeos-household", (req, res) => {
+    const filePath = path.join(__dirname, "public", "overlay", "lifeos-household.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("Household mission board not found.");
+  });
+
   app.get("/tc", (req, res) => {
     const filePath = path.join(__dirname, "public", "tc", "agent-portal.html");
     if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);

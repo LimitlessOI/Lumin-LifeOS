@@ -203,6 +203,7 @@ Required runtime truths:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-06-02 | **`startup/register-runtime-routes.js`** — surgical add: import `createMissionRoutes` from `routes/mission-routes.js`; mount `app.use("/api/v1/lifeos", createMissionRoutes({ pool, requireKey, logger }))` after the commitment routes block. `node --check` PASS. | Mission Runtime Phase 2 wiring — mount 8 mission/participant/board routes per BPB-0001 §Section 8. `register-runtime-routes.js` @ssot = AM19. | AM19 (wiring), AMENDMENT_47 (feature) | pending | ✅ `node --check` PASS |
 | 2026-05-24 | **`startup/register-runtime-routes.js`:** OCL import fix; mount `/api/v1/kernel`, token accounting, control plane; pass `platformKernel` to builder. **`services/builder-council-review.js`:** kernel bypass warning header. | TSOS Platform Kernel Phase 0 wiring + OC-002 fix. | AM19 | `node --check` PASS |
 | 2026-05-24 | **`startup/register-runtime-routes.js`:** mount `createLifeOSCommunicationRoutes({ pool, requireKey, callCouncilMember })` at `/api/v1/lifeos/communication/*`. | LifeOS Communication OS Phase 2 — conversation-first API surface (AMENDMENT_21). | AM19 wiring | pending | `node --check` PASS |
 | 2026-05-29 | **`routes/project-governance-routes.js`**: moved `GET /projects/readiness/queue` before `/projects/:id`; guard `id=readiness` with helpful 404. | Prevent `/projects/readiness` hitting slug lookup ("Project not found"). | AM19 routes | pending | `node --check` PASS |
