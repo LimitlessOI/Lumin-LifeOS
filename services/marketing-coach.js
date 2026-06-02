@@ -1,3 +1,8 @@
+/**
+ * @file services/marketing-coach.js
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @description Implements the AI marketing coach service, providing conversational guidance and identifying actionable next steps.
+ */
 // Import AI Council service (assumed to exist and export generateCompletion)
 // This dependency is from Task 5, AI council VERIFIED.
 import * as aiCouncil from './ai-council.js';
@@ -31,7 +36,6 @@ export async function getCoachingResponse(userId, userMessage, conversationHisto
     ...conversationHistory,
     { role: 'user', content: userMessage },
   ];
-
   let aiResponseContent = "I'm sorry, I couldn't generate a coaching response at this moment. Please try again.";
   let hookDetected = false;
 
@@ -39,7 +43,6 @@ export async function getCoachingResponse(userId, userMessage, conversationHisto
     // Call the AI council service to get a completion.
     // Assumes aiCouncil.generateCompletion returns an object with a 'content' string property.
     const completion = await aiCouncil.generateCompletion(messages);
-
     if (completion && typeof completion.content === 'string' && completion.content.trim().length > 0) {
       aiResponseContent = completion.content.trim();
       // Check if the AI's response contains any of the predefined hook detection keywords.
@@ -67,7 +70,6 @@ export async function initializeCoachingConversation(userId) {
   // For an initial greeting, we provide a predefined message.
   // This message is designed to invite interaction but not necessarily contain an immediate "hook".
   const initialGreeting = "Hello! I'm your dedicated marketing coach. How can I assist you with your marketing strategy or any specific challenges you're facing today?";
-
   // An initial greeting typically doesn't contain a "hook" for immediate action.
   return {
     response: initialGreeting,
