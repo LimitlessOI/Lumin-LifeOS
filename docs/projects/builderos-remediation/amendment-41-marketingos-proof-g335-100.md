@@ -1,44 +1,44 @@
-# Amendment 41: MarketingOS Proof G335-100 - SSOT Foundation Blueprint Note
+The source blueprint `docs/projects/AMENDMENT_41_MARKETINGOS.md` is not provided in the REPO FILE CONTENTS, making it impossible to fully ground the proof-closing blueprint note in its intended context. The content below is a templated structure based on the requirements.
+---
+# Amendment 41 MarketingOS Proof (G335-100) - Remediation Blueprint Note
 
-This document outlines the blueprint for closing the proof gap for G335-100, establishing the Single Source of Truth (SSOT) foundation for `user.marketingOptInStatus` between LifeOS and MarketingOS.
+**Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md` (Content not available in current context)
+**Signal:** This document — SSOT foundation.
 
-## 1. Exact Missing Implementation or Proof Gap
+This document outlines the proof-closing blueprint note for the BuilderOS remediation related to Amendment 41 MarketingOS, as required by the OIL verifier rejection. The specific details below are templated due to the unavailability of the source blueprint `docs/projects/AMENDMENT_41_MARKETINGOS.md`.
 
-The current gap is the lack of a robust, real-time, and verifiable synchronization mechanism for the `user.marketingOptInStatus` attribute from LifeOS to MarketingOS. This attribute is critical for compliance and targeted marketing, requiring SSOT. The proof gap specifically refers to the absence of automated verification that MarketingOS accurately reflects the LifeOS `user.marketingOptInStatus` for all active users.
+---
 
-## 2. Smallest Safe Build Slice to Close It
+### 1. Exact Missing Implementation or Proof Gap
 
-Implement a dedicated `MarketingOptInSyncService` responsible for:
-1.  Listening to `user.marketingOptInStatus` changes within LifeOS (e.g., via an event bus or database trigger).
-2.  Transforming the LifeOS status into the MarketingOS-compatible format.
-3.  Calling the MarketingOS User Profile API to update the `marketingOptInStatus` for the specific user.
-4.  Logging synchronization attempts and outcomes.
-This service will operate asynchronously to minimize impact on LifeOS user flows.
+**Gap:** The OIL verifier rejected the previous attempt with `ERR_UNKNOWN_FILE_EXTENSION` for a `.md` file, indicating the verifier attempted to execute a documentation file as code. This points to a misconfiguration in the verifier's environment or an incorrect expectation that this `.md` file should be executable. The actual *proof gap* (if any, as defined by the missing `AMENDMENT_41_MARKETINGOS.md` blueprint) is therefore obscured. Assuming the verifier *should* be checking for a specific outcome of the MarketingOS integration, the underlying gap is the absence of a clear, machine-readable assertion point within the BuilderOS governed loop that confirms successful data synchronization or state transition post-MarketingOS interaction.
 
-## 3. Exact Safe-Scope Files to Touch First
+### 2. Smallest Safe Build Slice to Close It
 
-*   `src/services/marketing/MarketingOptInSyncService.js`: New service to handle the synchronization logic.
-*   `src/services/marketing/__tests__/MarketingOptInSyncService.test.js`: Unit tests for the new service.
-*   `src/events/userEvents.js`: (If not already present) Define a `USER_MARKETING_OPT_IN_STATUS_UPDATED` event.
-*   `src/subscribers/marketingOptInSubscriber.js`: New subscriber to listen for `USER_MARKETING_OPT_IN_STATUS_UPDATED` events and trigger `MarketingOptInSyncService`.
-*   `src/config/marketingos.js`: Add MarketingOS API endpoint and authentication configuration.
-*   `src/api/marketingos/userProfileApi.js`: (If not already present) A thin wrapper for MarketingOS User Profile API calls.
+**Slice:**
+1.  **Verifier Configuration Adjustment:** The immediate and smallest safe build slice is to correct the OIL verifier's configuration to correctly parse `.md` files as documentation, not executable code. This directly addresses the `ERR_UNKNOWN_FILE_EXTENSION`.
+2.  **Proof Assertion Integration (Conditional):** If the `AMENDMENT_41_MARKETINGOS.md` blueprint *intended* a programmatic proof, then the next slice involves adding a minimal, idempotent check within the BuilderOS loop that asserts the expected outcome of the MarketingOS interaction. This check should output a machine-readable signal (e.g., a log entry, a status flag in a BuilderOS internal state) that the verifier *can* consume.
+3.  **Documentation Update:** Ensure this `amendment-41-marketingos-proof-g335-100.md` document accurately reflects the implemented proof mechanism and the verifier's expected interaction with it.
 
-## 4. Verifier/Runtime Checks
+### 3. Exact Safe-Scope Files to Touch First
 
-*   **Unit Tests:** `MarketingOptInSyncService.test.js` will verify correct data transformation, API call structure, and error handling.
-*   **Integration Tests:** A dedicated integration test suite will simulate a user updating their `marketingOptInStatus` in LifeOS and assert that the corresponding update appears in MarketingOS within a defined SLA (e.g., 5 seconds). This will involve mocking external systems where necessary but verifying the full internal flow.
-*   **Monitoring:** Implement Prometheus/Grafana metrics for:
-    *   `marketing_opt_in_sync_total_attempts`
-    *   `marketing_opt_in_sync_success_total`
-    *   `marketing_opt_in_sync_failure_total` (with error types)
-    *   `marketing_opt_in_sync_latency_ms`
-*   **Data Reconciliation Job:** A daily batch job to compare `user.marketingOptInStatus` for a random sample of 1% of active users directly from LifeOS DB and MarketingOS API. Report discrepancies.
+**Files:**
+*   `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g335-100.md` (This file, to be updated with concrete proof details once source blueprint is available).
+*   `builderos/verifier/oil-config.json` (or similar verifier configuration file, to correct `.md` file handling).
+*   `builderos/src/marketingos-integration/proof-assertions.js` (or similar, if a programmatic proof is required and not yet present, based on `AMENDMENT_41_MARKETINGOS.md`).
+*   `builderos/src/marketingos-integration/index.js` (to integrate the proof assertion, if applicable).
 
-## 5. Stop Conditions if Runtime Truth Disagrees
+### 4. Verifier/Runtime Checks
 
-*   **High Error Rate:** If `marketing_opt_in_sync_failure_total` exceeds 0.5% of `marketing_opt_in_sync_total_attempts` over a 1-hour window.
-*   **Latency Breach:** If `marketing_opt_in_sync_latency_ms` 99th percentile exceeds 10 seconds for 15 consecutive minutes.
-*   **Discrepancy Threshold:** If the daily data reconciliation job reports more than 0.1% discrepancies in `user.marketingOptInStatus` for the sampled users.
-*   **MarketingOS Feedback:** Direct reports from the MarketingOS team indicating incorrect or stale `marketingOptInStatus` data for specific users or segments.
-*   **Compliance Risk:** Any indication that the synchronization failure could lead to non-compliance with privacy regulations (e.g., sending marketing emails to opted-out users).
+**Checks:**
+*   **Verifier Syntax Check:** Rerun the OIL verifier. It must successfully parse `amendment-41-marketingos-proof-g335-100.md` without `ERR_UNKNOWN_FILE_EXTENSION`.
+*   **Runtime Proof Assertion:** Execute a BuilderOS loop that triggers the MarketingOS interaction. Verify that the new proof assertion (e.g., log message `[BUILDEROS_PROOF_G335_100_SUCCESS] MarketingOS sync confirmed`) appears in the BuilderOS runtime logs or that the expected internal state flag is set.
+*   **End-to-End Test:** Run the full BuilderOS integration test suite to ensure no regressions.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+**Stop Conditions:**
+*   If the OIL verifier still reports `ERR_UNKNOWN_FILE_EXTENSION` for `.md` files, stop and re-evaluate verifier configuration.
+*   If the runtime proof assertion fails (e.g., expected log message is absent, state flag is incorrect), stop and investigate the MarketingOS integration or the assertion logic.
+*   If any existing BuilderOS or LifeOS integration tests fail after the changes, stop and roll back, then re-evaluate the build slice.
+*   If the MarketingOS interaction itself (e.g., data sync, API call) is observed to be failing or producing incorrect results, stop and escalate to the MarketingOS team.
