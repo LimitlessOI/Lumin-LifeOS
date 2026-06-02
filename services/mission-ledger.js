@@ -12,9 +12,8 @@
 
 /**
  * Valid state transitions for MISSION-0001 state machine (22 transitions, 12 states).
- * Backward transitions (Building→Approved, Verification→Building, Outcome Measured→Approved)
- * are included per §Section 2 but authority level is undefined pending AIC DISCUSSION-6.
- * // [GOVERNANCE-GAP] backward transition authority: AIC DISCUSSION-6 pending resolution.
+ * AIC DISCUSSION-6 resolved 2026-06-02: backward transitions require Founder authority
+ * (transitioned_by === 'adam') + mandatory non-empty note. No AI may initiate unilaterally.
  * @type {Readonly<Record<string, string[]>>}
  */
 export const MISSION_STATE_TRANSITIONS = Object.freeze({
@@ -25,15 +24,20 @@ export const MISSION_STATE_TRANSITIONS = Object.freeze({
   'BPB Blueprinting':  ['OIL Review', 'Approved'],
   'OIL Review':        ['Build Approved', 'BPB Blueprinting'],
   'Build Approved':    ['Building'],
-  // [GOVERNANCE-GAP] Building→Approved is a backward transition; authority undefined pending AIC DISCUSSION-6
   'Building':          ['Verification', 'Approved'],
-  // [GOVERNANCE-GAP] Verification→Building is a backward transition; authority undefined pending AIC DISCUSSION-6
-  'Verification':      ['Deployed', 'Building'],
+  'Verification':      ['Deployed', 'Build Approved'],
   'Deployed':          ['Outcome Measured'],
-  // [GOVERNANCE-GAP] Outcome Measured→Approved is a backward transition; authority undefined pending AIC DISCUSSION-6
   'Outcome Measured':  ['Lessons Captured', 'Approved'],
   'Lessons Captured':  ['Proposed'],
 });
+
+// AIC DISCUSSION-6 (2026-06-02): Founder-only backward transitions. Requires
+// transitioned_by === 'adam' and non-empty note in transitionMissionState().
+export const BACKWARD_TRANSITIONS = Object.freeze(new Set([
+  'Building→Approved',
+  'Verification→Build Approved',
+  'Outcome Measured→Approved',
+]));
 
 export async function createMission(pool, {
   slug, title, purpose, authority_class, owner, blueprint_ref, metadata_json, participants,
@@ -129,6 +133,24 @@ export async function transitionMissionState(pool, id, { to_state, transitioned_
       to: to_state,
       valid_next,
     });
+  }
+  // AIC DISCUSSION-6: backward transitions are Founder-only with mandatory note.
+  const pairKey = `${from_state}→${to_state}`;
+  if (BACKWARD_TRANSITIONS.has(pairKey)) {
+    if (transitioned_by !== 'adam') {
+      throw Object.assign(new Error('backward_transition_requires_founder'), {
+        code: 'BACKWARD_TRANSITION_AUTHORITY_REQUIRED',
+        pair: pairKey,
+        required: 'transitioned_by must be "adam" for backward transitions',
+      });
+    }
+    if (!note || String(note).trim().length < 10) {
+      throw Object.assign(new Error('backward_transition_requires_note'), {
+        code: 'BACKWARD_TRANSITION_NOTE_REQUIRED',
+        pair: pairKey,
+        required: 'note (min 10 chars) is mandatory for backward transitions',
+      });
+    }
   }
   const client = await pool.connect();
   try {
