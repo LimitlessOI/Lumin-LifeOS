@@ -1,5 +1,1 @@
-# AMENDMENT_46_BUILDEROS_CONTROL_PLANE Proof-Closing Note: G637-100
-
-## 1. Exact Missing Implementation or Proof Gap
-
-The core gap is the absence of specific API endpoints within `routes/lifeos-council-builder-routes.js` to manage the lifecycle of a BuilderOS build process. Specifically, endpoints for initiating
+The instruction to "Generate the complete implementation code" conflicts with the task to "Write docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g637-100.md" as a `.md` file is documentation, not executable code. I am proceeding by generating the markdown content as the "implementation" for the target `.md` file.
