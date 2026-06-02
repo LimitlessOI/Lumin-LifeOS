@@ -1,31 +1,29 @@
-# Proof-Closing Blueprint Note: AMENDMENT 41 MARKETINGOS - Proof G159-100
+### Proof-Closing Blueprint Note: Amendment 41 - MarketingOS (Proof G159-100)
 
-This document serves as a proof-closing blueprint note for AMENDMENT 41 MARKETINGOS, establishing the SSOT foundation for its implementation.
+This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified during the BuilderOS change verification for Amendment 41, related to MarketingOS.
 
-## 1. Exact Missing Implementation or Proof Gap
+**1. Exact Missing Implementation or Proof Gap:**
+The primary gap identified was the lack of a verifiable, runtime-provable link between the MarketingOS campaign definition (as per Amendment 41) and its actual deployment status within the BuilderOS-governed loop. Specifically, the verifier could not confirm that a MarketingOS campaign, once approved and marked for deployment, was correctly reflected in the BuilderOS state without manual intervention or an unverified external signal. The previous rejection (`ERR_UNKNOWN_FILE_EXTENSION` on `.md` file) indicates a tooling misconfiguration rather than a content error, but the underlying *functional* proof gap remains: how to programmatically *prove* the state transition and deployment.
 
-The primary gap is the lack of a fully implemented and verified secure API endpoint within LifeOS that provides real-time or near real-time user segment data to MarketingOS. Specifically, the proof gap is the absence of a production-ready `/api/v1/marketingos/segments` endpoint (or similar) that:
-*   Authenticates MarketingOS requests.
-*   Retrieves user segment definitions from LifeOS's `SegmentService`.
-*   Applies dynamic filtering based on MarketingOS-specific criteria (if applicable).
-*   Returns a paginated list of user IDs or aggregated segment data.
-*   Has undergone end-to-end integration testing with MarketingOS.
+**2. Smallest Safe Build Slice to Close It:**
+Introduce a new BuilderOS internal state flag and a corresponding read-only API endpoint within the BuilderOS domain. This flag, `marketingOsCampaignDeploymentStatus`, will be updated by an existing BuilderOS internal worker upon successful orchestration of a MarketingOS campaign deployment. The API endpoint will expose this status for specific campaign IDs. This avoids modifying LifeOS user features or TSOS customer-facing surfaces.
 
-## 2. Smallest Safe Build Slice to Close It
+**3. Exact Safe-Scope Files to Touch First:**
+*   `src/builder-os/services/campaignDeploymentWorker.js`: Modify existing worker to update `marketingOsCampaignDeploymentStatus` in BuilderOS internal state upon successful deployment.
+*   `src/builder-os/api/routes/statusRoutes.js`: Add a new GET endpoint `/builder-os/status/marketing-campaign/:campaignId` to expose the `marketingOsCampaignDeploymentStatus`.
+*   `src/builder-os/models/BuilderOsState.js`: Add `marketingOsCampaignDeploymentStatus` field to the internal state model.
+*   `docs/builder-os/api-spec.md`: Update API documentation for the new endpoint.
 
-The smallest safe build slice involves:
-1.  **API Endpoint Definition:** Define a new, read-only API endpoint `/api/v1/marketingos/segments` in LifeOS.
-2.  **Service Layer Integration:** Integrate this endpoint with the existing `SegmentService` to fetch segment data.
-3.  **Authentication/Authorization:** Implement a secure authentication mechanism (e.g., API key, OAuth token validation) for MarketingOS requests.
-4.  **Basic Data Serialization:** Return segment data in a standardized, MarketingOS-consumable format (e.g., JSON array of segment objects, each with `id`, `name`, `user_count`).
-5.  **Unit and Integration Tests:** Add tests for the new endpoint and service integration.
+**4. Verifier/Runtime Checks:**
+*   **Unit Test:** Verify `campaignDeploymentWorker.js` correctly updates the internal state.
+*   **Integration Test:** Simulate a MarketingOS campaign deployment and verify the new `/builder-os/status/marketing-campaign/:campaignId` endpoint returns the expected `deployed` status.
+*   **Runtime Check (OIL Verifier):**
+    1.  Trigger a test MarketingOS campaign deployment via the BuilderOS orchestration flow.
+    2.  Poll `/builder-os/status/marketing-campaign/:campaignId` for the specific test campaign ID.
+    3.  Assert that the status transitions from `pending` to `deployed` within a defined timeout.
 
-This slice focuses solely on exposing existing segment data, without introducing new segment definition capabilities or complex data transformations within this endpoint.
-
-## 3. Exact Safe-Scope Files to Touch First
-
-*   `src/api/routes/marketingos.js`: New file for MarketingOS-specific API routes.
-*   `src/api/controllers/marketingosController.js`: New file for controller logic handling MarketingOS requests.
-*   `src/services/SegmentService.js`: Potentially add a new method or modify an existing one to expose segment data in a MarketingOS-friendly format, or ensure existing methods are suitable.
-*   `src/middleware/auth/marketingosAuth.js`: New file for MarketingOS-specific authentication middleware.
-*
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   If the `/builder-os/status/marketing-campaign/:campaignId` endpoint consistently returns `pending` or an error after a successful orchestration signal and timeout, stop the build.
+*   If the status endpoint returns an unexpected state (e.g., `failed` without a corresponding failure in orchestration logs), stop the build.
+*   If the API endpoint is unreachable or returns a 5xx error, stop the build.
+*   If the `campaignDeploymentWorker` logs indicate failures to update the internal state, stop the build.
