@@ -1,7 +1,7 @@
-# Amendment 46 BuilderOS Control Plane Proof - G115-100
+### Blueprint Note: Amendment 46 BuilderOS Control Plane Proof (G115-100)
 
-This document outlines the proof-closing blueprint note for integrating BuilderOS control plane signals into `routes/lifeos-council-builder-routes.js`, specifically addressing the build start, build complete, and health-based completion gate.
+This note addresses the implementation gap identified in Amendment 46 concerning the BuilderOS control plane, specifically the wiring of build lifecycle events within `routes/lifeos-council-builder-routes.js`.
 
-## 1. Exact Missing Implementation or Proof Gap
+### 1. Exact Missing Implementation or Proof Gap
 
-The
+The primary
