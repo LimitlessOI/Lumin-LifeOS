@@ -1,29 +1,32 @@
-Amendment 41: MarketingOS Proof - G129-100
-Proof-Closing Blueprint Note
-This document serves as the SSOT foundation for closing the identified proof gap related to Amendment 41, MarketingOS integration.
-1. Exact Missing Implementation or Proof Gap
-The current implementation of Amendment 41, which integrates MarketingOS event tracking into LifeOS, lacks comprehensive end-to-end verification. Specifically, there is no dedicated integration test suite that validates the complete lifecycle of a user engagement event: from its generation within LifeOS, through its transformation and dispatch, to its successful (mocked) ingestion by the MarketingOS platform. The proof gap is the absence of automated assertions confirming that event payloads strictly adhere to the schema defined in `AMENDMENT_41_MARKETINGOS.md` and that the dispatch mechanism reliably communicates with MarketingOS.
-2. Smallest Safe Build Slice to Close It
-The smallest safe build slice involves creating a new, isolated integration test suite. This suite will:
--   Simulate specific user actions within a controlled LifeOS environment (e.g., page view, button click).
--   Trigger the corresponding MarketingOS event generation and dispatch logic.
--   Utilize a mocking library (e.g., `nock` or `jest-fetch-mock`) to intercept and inspect HTTP requests destined for the MarketingOS API.
--   Assert that the intercepted request body (the event payload) matches the expected schema and data points as specified in `AMENDMENT_41_MARKETINGOS.md`.
--   Assert that the dispatch function correctly handles the (mocked) successful response from MarketingOS.
-This slice focuses purely on verification and does not introduce new features or modify existing user-facing functionality.
-3. Exact Safe-Scope Files to Touch First
--   `tests/integration/marketingos-event-tracking.test.js` (New file: Contains the integration test suite)
--   `src/services/marketingos/event-dispatcher.js` (Potential minor refactor: Ensure the dispatch function is mockable or its dependencies are easily injectable for testing purposes, without altering core logic.)
--   `src/config/marketingos.js` (Reference only: To ensure event schemas and apiEPs are correctly referenced in tests.)
--   `package.json` (If new test-specific dependencies are required, e.g., `nock`, ensure it's added as a `devDependency`.)
-4. Verifier/Runtime Checks
--   Test Suite Execution: Execute `npm test -- tests/integration/marketingos-event-tracking.test.js`. All tests within this suite must pass without errors.
--   Payload Schema Validation: During test execution, verify that every simulated event payload sent to the mocked MarketingOS endpoint strictly conforms to the JSON schema and data requirements outlined in `AMENDMENT_41_MARKETINGOS.md`.
--   Successful Dispatch Acknowledgment: Confirm that the mocked MarketingOS apiEP receives the event and returns a success status (e.g., HTTP 200 OK, 202 Accepted), and that the `event-dispatcher` correctly processes this acknowledgment.
--   No Regression: Run the full `npm test` suite to ensure no existing tests have regressed due to any minor refactoring for testability.
--   Resource Utilization: Monitor CPU/memory usage during test execution to ensure the new tests do not introduce significant performance overhead.
-5. Stop Conditions if Runtime Truth Disagrees
--   Schema Mismatch: If any generated event payload fails to match the schema or data requirements specified in `AMENDMENT_41_MARKETINGOS.md`, stop immediately. This indicates a fundamental issue in event construction or transformation.
--   Dispatch Failure: If the `event-dispatcher` fails to successfully send an event to the mocked MarketingOS endpoint (e.g., due to network errors, incorrect API calls, or unexpected responses), stop. This points to a problem in the communication layer.
--   Existing Test Failures: If running the new integration test suite or the full test suite causes any previously passing tests to fail, stop immediately. This signifies an unintended side effect or scope bleed that must be investigated.
--   Unacceptable Performance Impact: If the new tests introduce a noticeable and sustained degradation in overall test suite execution time (e.g., >10% increase without clear justification), stop
+### AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G129-100
+
+**Signal:** This document — SSOT foundation.
+
+**1. Exact Missing Implementation or Proof Gap:**
+The core gap is the lack of a concrete, verifiable implementation and proof that MarketingOS data (e.g., customer segments, campaign performance metrics) is consistently synchronized with and served from the designated Single Source of Truth (SSOT) within LifeOS. Specifically, the proof that the `MarketingDataSyncService` correctly propagates updates and that the `MarketingOS_SSOT_API` endpoint reliably reflects this synchronized data is missing. The current blueprint outlines the *what* but not the *how* for this foundational SSOT mechanism.
+
+**2. Smallest Safe Build Slice to Close It:**
+Implement a minimal `MarketingDataSyncService` stub that performs a one-way synchronization of a single, representative data entity (e.g., `CustomerSegment` ID and name) from LifeOS core to a MarketingOS-facing data store (e.g., a dedicated `marketing_ssot_data` table or in-memory cache). Concurrently, expose a read-only `MarketingOS_SSOT_API` endpoint that serves this synchronized `CustomerSegment` data. The focus is on proving the *path*, *data consistency*, and *accessibility* for a single, critical data type.
+
+**3. Exact Safe-Scope Files to Touch First:**
+*   `services/marketing/MarketingDataSyncService.js`: New file for the synchronization logic.
+*   `routes/marketing/ssot.js`: New file for the SSOT API endpoint definition.
+*   `controllers/marketing/ssotController.js`: New file for the SSOT API endpoint handler.
+*   `models/CustomerSegment.js`: Existing model (read-only access for sync source).
+*   `models/MarketingSSOTSegment.js`: New model for the MarketingOS-facing synchronized data store.
+*   `config/marketing.js`: Existing config (add sync interval, SSOT endpoint base path, data source configuration).
+*   `tests/unit/MarketingDataSyncService.test.js`: New file for unit tests of the sync service.
+*   `tests/integration/MarketingOS_SSOT_API.test.js`: New file for integration tests of the SSOT API.
+
+**4. Verifier/Runtime Checks:**
+*   **Unit Test:** `MarketingDataSyncService.test.js` verifies that `syncCustomerSegments` function correctly fetches data from `CustomerSegment` model and attempts to persist it to a mock `MarketingSSOTSegment` store.
+*   **Integration Test:** `MarketingOS_SSOT_API.test.js` verifies that after a simulated sync, a GET request to `/api/marketing/ssot/customer-segments/{id}` returns the expected, synchronized `CustomerSegment` data.
+*   **Runtime Log Check:** Monitor `MarketingDataSyncService` logs for successful sync operations and any errors (e.g., `INFO: CustomerSegment {id} synced successfully`).
+*   **API Health Check:** Periodically query `/api/marketing/ssot/health` (if implemented as part of the slice) to ensure the SSOT API is responsive and reports its last sync time.
+*   **Database Inspection:** Directly query the `marketing_ssot_data` table (or equivalent) to confirm data presence and accuracy after a sync cycle.
+
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   If `MarketingDataSyncService` consistently reports synchronization failures (e.g., data mismatch, connection errors, schema violations) for the test `CustomerSegment` entity.
+*   If `MarketingOS_SSOT_API` consistently returns stale, incorrect, or incomplete data for the test `CustomerSegment` entity after a confirmed sync operation.
+*   If the SSOT API endpoint is unreachable or returns non-200 status codes during integration tests or manual verification.
+*   If the observed data in MarketingOS (via its own UI/API, if accessible) does not match the data served by `MarketingOS_SSOT_API` for the test entity, indicating a downstream integration failure or a fundamental SSOT breach.
