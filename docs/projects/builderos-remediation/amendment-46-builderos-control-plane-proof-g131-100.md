@@ -1,1 +1,5 @@
-The specification is contradictory. The task asks to write a `.md` file, but the existing content of that `.md` file (which I am to replace) contains an instruction to "Generate the complete implementation code. Output ONLY the code first". This implies the `.md` file itself is expected to contain executable code. I will proceed by embedding the required code within the markdown file, as per the existing file's instruction.
+# Amendment 46: BuilderOS Control Plane Proof - G131-100
+
+## Proof-Closing Blueprint Note: Builder Control Plane Route Wiring
+
+This document outlines the missing implementation and the plan to close the proof gap for wiring the BuilderOS control plane routes in `routes/lifeos-council-builder-routes.js`, as specified by Amendment 46.
