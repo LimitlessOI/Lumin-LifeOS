@@ -1,9 +1,5 @@
-# Amendment 12 Command Center Proof: G29-100 - Task Log Integration
+# Amendment 12 Command Center Proof G29-100: Initial Configuration Model Definition
 
-## Blueprint Note: G29-100
+This note closes the proof gap for `g29-100` by defining the foundational data model for the Command Center's configuration. This is the smallest safe build slice to establish the core structure before implementing persistence or API interactions.
 
-This note addresses the next smallest build slice for the BuilderOS Command Center, focusing on integrating task-specific log viewing.
-
-### 1. Exact Missing Implementation or Proof Gap
-
-The current Command Center blueprint outlines "Task Management
+## 1. Exact Missing Implementation or Proof Gap
