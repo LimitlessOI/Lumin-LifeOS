@@ -98,6 +98,30 @@ Invalid transitions must return `400 { ok: false, error: "invalid_transition", f
 
 ---
 
+## Agent Handoff Notes
+
+**Current state as of 2026-06-02:** PHASE 2 COMPLETE. All 7 owned files written, committed, and pushed to origin/main (final SHA: `db83939403`). 10/10 BPB-0001 §Section 9 verifier checks PASS.
+
+**What works:**
+- `services/mission-ledger.js` — 11 exports, 12-state machine, all CRUD ops
+- `routes/mission-routes.js` — 8 routes mounted at `/api/v1/lifeos/missions/*` + `/api/v1/lifeos/household/board`
+- `routes/lifeos-commitment-routes.js` — extended with POST/GET/PUT `/mission` routes per §13.3
+- `public/overlay/lifeos-household.html` — 8-section board, 30s poll, approve button, add form
+- DB migrations: `20260604_mission_runtime_v1.sql` + `20260604_mission_runtime_commitments_patch.sql`
+
+**What is NOT done (non-blocking for Phase 2, pending governance):**
+- **AIC DISCUSSION-6**: Backward transition authority for `Building→Approved`, `Verification→Building`, `Outcome Measured→Approved` undefined. [GOVERNANCE-GAP] comments in mission-ledger.js as placeholder. Trigger via `POST /api/v1/lifeos/gate-change/run-council` on Railway.
+- **Railway redeploy**: Committed code is on origin/main but Railway needs to redeploy to serve new routes and overlay. Trigger via `POST /api/v1/railway/deploy` or `npm run system:railway:redeploy`.
+- **Builder /build HTTP_502**: POST /build returned 502 on every call in the last session (GET /ready and GET /domains work — infrastructure issue with council execution layer). Run `npm run builder:preflight` at next session start; if still 502, file as infrastructure gap.
+
+**Next priority for next agent:**
+1. Trigger Railway redeploy (`POST /api/v1/railway/deploy`)
+2. Smoke-test `/lifeos-household` overlay against live Railway deployment
+3. Run AIC DISCUSSION-6 via council endpoint for backward transition authority
+4. Once builder /build recovers — run it against pending backlog items in AMENDMENT_21
+
+---
+
 ## Change Receipts
 
 | Date | What Changed | Why | Files | Verified |

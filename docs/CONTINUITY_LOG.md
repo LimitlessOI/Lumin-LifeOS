@@ -2,6 +2,41 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SSOT] 2026-06-02 — Mission Runtime Phase 2 Complete (AMENDMENT_47)
+
+### Mission result: COMPLETE — all 7 owned files written, 10/10 verifier PASS, pushed to origin/main
+
+**Agent:** Claude Sonnet 4.6 / Claude Code VSCode Extension / main branch / Conductor role
+
+**What:** Completed Mission Runtime Phase 2 — all prescribed files from BPB-0001-MISSION-RUNTIME-V1.md and AMENDMENT_47. Builder POST /build returned HTTP_502 on every call in this session (Railway council execution layer down, GET /ready returned 200). All product files written as GAP-FILL with evidence.
+
+**Files changed (in commit order):**
+- `services/mission-ledger.js` — NEW. 267 lines, ESM. 11 exports: createMission, listMissions, getMission, updateMission, transitionMissionState (validates MISSION_STATE_TRANSITIONS, throws INVALID_TRANSITION), addParticipant, removeParticipant, createCommitment, listCommitments, updateCommitment, getHouseholdBoard. MISSION_STATE_TRANSITIONS: 12 states, 22 transitions. 3 backward transitions marked [GOVERNANCE-GAP] pending AIC DISCUSSION-6.
+- `routes/mission-routes.js` — NEW. 146 lines, ESM. 8 routes at /missions/* + /household/board. §13.3 enforced: no commitment CRUD.
+- `routes/lifeos-commitment-routes.js` — MODIFIED. Added import from mission-ledger + 3 routes: POST/GET/PUT /mission per BPB-0001 §§3.4, 13.3.
+- `public/overlay/lifeos-household.html` — NEW. 8-section household board. 30s poll, ?key= auth, state pills, approve button, add commitment form.
+- `startup/register-runtime-routes.js` — MODIFIED. createMissionRoutes import + mount at /api/v1/lifeos.
+- `routes/public-routes.js` — MODIFIED. /lifeos-household route added per §Section 7.
+- `docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` — MODIFIED. Status = PHASE 2 COMPLETE. Agent Handoff Notes added.
+
+**Commits (all on main, pushed to origin/main):**
+- `d937bc46` — mission-ledger.js + AMENDMENT_47
+- `93f5e489` — mission-routes.js + AMENDMENT_47
+- `3943ea46` — commitment-routes.js extension + AMENDMENT_21
+- `9106fed1` — Phase 2 complete (HTML, wiring, 3 amendments)
+- Final origin/main push SHA: `db839394`
+
+**Open governance items (non-blocking):**
+- AIC DISCUSSION-6: backward transition authority undefined for 3 transitions
+- Railway builder POST /build returning 502 across entire session
+
+**Next exact steps:**
+1. Trigger Railway redeploy (`POST /api/v1/railway/deploy`) to serve new routes + overlay
+2. Smoke-test `/lifeos-household` on live Railway deployment
+3. AIC DISCUSSION-6 via `POST /api/v1/lifeos/gate-change/run-council`
+4. Investigate builder /build 502 (council execution layer)
+
+---
 ## [SSOT] 2026-06-02 — Mission Advancement Doctrine: Fix HTTP_502 Churn Loop in Continuous Runner
 
 ### Mission result: COMPLETE — runner patched, verified in production, PID 93168 running
