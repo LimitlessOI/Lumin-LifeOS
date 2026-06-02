@@ -1,10 +1,9 @@
-# Amendment 12: Command Center - Proof G15-100
+# AMENDMENT 12: COMMAND CENTER - Proof G15-100
 
-This document addresses a proof gap identified in the initial build phase of Amendment 12, focusing on the foundational `CommandCenter` class definition.
+This document outlines the proof-closing blueprint note for the G15-100 build slice, focusing on establishing the core Command Dispatcher service capable of receiving and acknowledging a `noop` command.
 
 ---
 
-## Proof-Closing Blueprint Note
+### Proof-Closing Blueprint Note: G15-100
 
-**1. Exact Missing Implementation or Proof Gap:**
-The core `CommandCenter` class definition, specifically its constructor and
+1.  **Exact Missing
