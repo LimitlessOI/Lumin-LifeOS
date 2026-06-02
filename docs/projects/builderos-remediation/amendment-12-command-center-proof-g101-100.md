@@ -1,4 +1,12 @@
-The specification is contradictory. The task asks to "Write docs/projects/builderos-remediation/amendment-12-command-center-proof-g101-100.md" and produce a "proof-closing blueprint note" (a markdown document). However, the OIL verifier rejected the previous attempt with `ERR_UNKNOWN_FILE_EXTENSION` because it tried to execute the `.md` file as JavaScript. Producing a markdown document will not resolve this verifier error if the verifier's behavior remains unchanged. Assuming the file *must* remain `.md` and the content *must* be a blueprint note, the verifier's execution context is misconfigured. I will produce the requested markdown blueprint note content.
+# Proof-Closing Blueprint Note: AMENDMENT_12_COMMAND_CENTER - G101-100
 
----
-Amendment 12: Command Center Proof - G1
+This document outlines the proof-closing details for the initial implementation slice `G101-100` of the `CommandCenter` as defined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.
+
+## 1. Exact Missing Implementation or Proof Gap
+
+The complete initial implementation of the `CommandCenter` core components: `CommandRouter`, `CommandRegistry`, `CommandExecutor`, `EventStream`, and `TelemetryService`, along with their integration, as specified in the `G101-100` scope of the blueprint. This includes basic functionality for command registration, routing, execution, event emission, and metric collection.
+
+## 2. Smallest Safe Build Slice to Close It
+
+Implement the foundational `CommandCenter` components and their basic integration:
+*   **`CommandRegistry`**: A class to manage the registration and retrieval of command definitions and their corresponding handlers
