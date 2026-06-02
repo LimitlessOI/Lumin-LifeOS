@@ -6,6 +6,7 @@
 import { Router } from 'express';
 import { createCommitmentTrackerService } from '../services/lifeos-commitment-tracker.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+import { createCommitment, listCommitments, updateCommitment } from '../services/mission-ledger.js';
 
 export function createLifeOSCommitmentRoutes({ pool, requireKey, logger }) {
   const router = Router();
@@ -65,6 +66,45 @@ export function createLifeOSCommitmentRoutes({ pool, requireKey, logger }) {
       res.json({ ok: true, commitments });
     } catch (err) {
       log.error?.('[COMMITMENTS] GET /overdue:', err.message);
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /mission — create mission-linked commitment (BPB-0001 §3.4, §13.3)
+  router.post('/mission', requireKey, async (req, res) => {
+    try {
+      const commitment = await createCommitment(pool, req.body || {});
+      res.status(201).json({ ok: true, commitment });
+    } catch (err) {
+      log.error?.('[COMMITMENTS] POST /mission:', err.message);
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /mission — list commitments with mission_id / owner / status filters (BPB-0001 §3.4, §13.3)
+  router.get('/mission', requireKey, async (req, res) => {
+    try {
+      const commitments = await listCommitments(pool, {
+        owner: req.query.owner,
+        status: req.query.status,
+        mission_id: req.query.mission_id,
+        limit: req.query.limit,
+      });
+      res.json({ ok: true, commitments });
+    } catch (err) {
+      log.error?.('[COMMITMENTS] GET /mission:', err.message);
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PUT /mission/:id — update commitment fields (BPB-0001 §3.4, §13.3)
+  router.put('/mission/:id', requireKey, async (req, res) => {
+    try {
+      const commitment = await updateCommitment(pool, req.params.id, req.body || {});
+      if (!commitment) return res.status(404).json({ ok: false, error: 'not found' });
+      res.json({ ok: true, commitment });
+    } catch (err) {
+      log.error?.('[COMMITMENTS] PUT /mission/:id:', err.message);
       res.status(500).json({ ok: false, error: err.message });
     }
   });
