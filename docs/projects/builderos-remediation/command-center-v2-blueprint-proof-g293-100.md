@@ -1,22 +1,34 @@
-# G293-100 Proof: Database Schema & Initial Migration
+Content of `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` is missing, preventing accurate derivation of the build slice.
+# Command Center V2 Blueprint Proof (G293-100)
 
-This document serves as the proof-closing blueprint note for `G293-100: Database Schema & Initial Migration`, derived from `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.
+This document outlines the next smallest build slice for Command Center V2, derived from the primary blueprint.
 
----
+## 1. Exact Missing Implementation or Proof Gap
 
-### Blueprint Note: G293-100 Proof Closure
+**Gap:** The foundational API endpoints for managing a core `Command` resource are not yet implemented. Specifically, the ability to list existing commands (`GET /commands`) and create new commands (`POST /commands`) is missing. This forms the absolute minimum viable interaction surface for a Command Center.
 
-**1. Exact missing implementation or proof gap:**
-The core database schema for `commands`, `executions`, and `users` is not yet defined, and the initial migration script to apply this schema is not implemented.
+## 2. Smallest Safe Build Slice to Close It
 
-**2. Smallest safe build slice to close it:**
-Define the initial database schema for the `commands`, `executions`, and `users` tables within the `@lifeos/command-center-db` package. Create and implement the first migration script (`001_initial_schema.ts`) to apply this schema. This slice focuses solely on schema definition and its initial application via migration.
+**Slice:** Implement the basic API endpoints for `GET /api/v2/commands` and `POST /api/v2/commands`. This slice focuses solely on establishing the HTTP interface and minimal internal routing/controller logic, without complex business rules or extensive data validation beyond basic type checks.
 
-**3. Exact safe-scope files to touch first:**
-*   `packages/command-center-db/src/schema/index.ts` (or similar for schema definition)
-*   `packages/command-center-db/migrations/001_initial_schema.ts`
-*   `packages/command-center-db/package.json` (to ensure `migrate:up` script is configured)
-*   `packages/command-center-db/README.md` (to document migration setup/commands)
+## 3. Exact Safe-Scope Files to Touch First
 
-**4. Verifier/runtime checks:**
-*   Execute `npm run migrate:up` within the `packages/command-center-
+- `src/api/command-center/v2/routes.js`: Define the `/api/v2/commands` routes for GET and POST.
+- `src/api/command-center/v2/controllers.js`: Implement the handler functions for `listCommands` and `createCommand`. These will initially return mock data or perform minimal in-memory operations.
+- `src/api/command-center/v2/index.js`: Export the routes for integration into the main application router.
+- `src/app.js` (or main router file): Integrate the new `command-center/v2` routes.
+
+## 4. Verifier/Runtime Checks
+
+- **Endpoint Reachability:**
+    - `curl -X GET http://localhost:PORT/api/v2/commands` should return `200 OK` with an empty array or mock list.
+    - `curl -X POST -H "Content-Type: application/json" -d '{"name": "Test Command"}' http://localhost:PORT/api/v2/commands` should return `201 Created` with a basic success message or the created command object.
+- **Schema Validation (Basic):** Attempt `POST` with invalid JSON or missing required fields; expect `400 Bad Request`.
+- **BuilderOS Deployment:** Verify that the BuilderOS pipeline successfully deploys this slice without errors and that the new endpoints are available in the target environment.
+
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+- **HTTP Status Mismatch:** If `GET /api/v2/commands` does not return `200 OK` or `POST /api/v2/commands` does not return `201 Created`, stop. This indicates routing, controller, or server startup issues.
+- **Endpoint Unreachable:** If `curl` commands result in connection refused or `404 Not Found`, stop. This points to incorrect route registration or server configuration.
+- **BuilderOS Deployment Failure:** If BuilderOS reports any deployment errors specific to the files touched in this slice, stop. Investigate build process, dependency resolution, or environment configuration.
+- **Unexpected Side Effects:** If any existing LifeOS user features or TSOS customer-facing surfaces exhibit regressions or unexpected behavior after deployment, immediately stop and revert.
