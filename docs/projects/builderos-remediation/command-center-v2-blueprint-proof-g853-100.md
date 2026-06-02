@@ -1,18 +1,30 @@
-# Command Center V2 Blueprint Proof - G853-100
+// src/types/command.d.ts
+interface Command {
+  id: string;
+  name: string;
+  description: string;
+}
 
-This document outlines the first build slice for the Command Center V2, derived from the COMMAND_CENTER_V2_BLUEPRINT.md.
+// src/api/v2/commands/route.ts
+import { Router } from 'express';
+import { Command } from '../types/command';
 
----
+const router = Router();
 
-**Blueprint Note: Initial Command Entity & List API**
+router.get('/api/v2/commands', (req, res) => {
+  const commands: Command[] = [
+    { id: 'cmd-1', name: 'Command 1', description: 'This is command 1' },
+    { id: 'cmd-2', name: 'Command 2', description: 'This is command 2' },
+  ];
+  res.json(commands);
+});
 
-1.  **Exact Missing Implementation or Proof Gap:**
-    The foundational data model for a `Command` entity and a minimal read-only API endpoint to retrieve a collection of these commands are not yet implemented. This gap prevents any subsequent UI or complex backend logic from being built upon a stable core.
+export default router;
 
-2.  **Smallest Safe Build Slice to Close It:**
-    Implement the `Command` TypeScript interface and a `/api/v2/commands` endpoint. This endpoint will initially return a static or mock array of `Command` objects, establishing the core data structure and a basic, verifiable API interaction point without introducing persistence or complex business logic.
+// src/api/v2/commands/data.ts
+import { Command } from '../types/command';
 
-3.  **Exact Safe-Scope Files to Touch First:**
-    *   `src/types/command.d.ts` (Define the `Command` TypeScript interface)
-    *   `src/api/v2/commands/route.ts` (Implement the GET handler for `/api/v2/commands`)
-    *   `src/api/v2/commands/data.ts` (Provide mock `Command` data for the
+export const commands: Command[] = [
+  { id: 'cmd-1', name: 'Command 1', description: 'This is command 1' },
+  { id: 'cmd-2', name: 'Command 2', description: 'This is command 2' },
+];
