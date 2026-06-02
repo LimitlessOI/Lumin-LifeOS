@@ -1,7 +1,7 @@
-# Amendment 46: BuilderOS Control Plane Proof - G21-100
+### Proof-Closing Blueprint Note: BuilderOS Control Plane Wiring (G21-100)
 
-## Proof-Closing Blueprint Note
+This note details the implementation plan to wire the BuilderOS control plane routes as specified in Amendment 46, focusing on build start and completion events, and integrating health-based build completion gating.
 
-This note addresses the follow-through signal for Amendment 46, specifically the wiring of `routes/lifeos-council-builder-routes.js` to manage build start and completion events within the BuilderOS control plane.
+#### 1. Exact Missing Implementation or Proof Gap
 
-### 1. Exact Missing Implementation or
+The primary gap is the absence of dedicated
