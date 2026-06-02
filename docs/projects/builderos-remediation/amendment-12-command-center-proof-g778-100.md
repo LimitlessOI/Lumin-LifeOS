@@ -1,38 +1,36 @@
-# Amendment 12 Command Center Proof - G778-100: Build Status Aggregation Endpoint
-
-This document closes the proof for the initial build slice of Amendment 12, focusing on establishing the foundational data aggregation for the BuilderOS Command Center.
-
-## Blueprint Note: Proof-Closing
-
-### 1. Exact Missing Implementation or Proof Gap
-
-The current BuilderOS Command Center blueprint lacks a dedicated, internal API endpoint for real-time aggregation and exposure of granular build pipeline status across all active projects. This gap prevents centralized monitoring and command issuance based on a unified, up-to-date view of build health.
-
-### 2. Smallest Safe Build Slice to Close It
-
-Establish a new BuilderOS internal API endpoint (`/api/v1/build-status`) that aggregates and returns the current status of all active build pipelines. This slice focuses solely on data exposure, not UI rendering or command issuance.
-
-### 3. Exact Safe-Scope Files to Touch First
-
-*   `src/builder-os/api/v1/build-status.js`: New file for the API endpoint handler logic. This will orchestrate data fetching from existing build services (e.g., `BuildService.getPipelineStatus()`).
-*   `src/builder-os/services/build-data-aggregator.js`: New file for a service responsible for fetching, normalizing, and aggregating build status data from various internal BuilderOS sources.
-*   `src/builder-os/router.js`: Update to register the new `/api/v1/build-status` route.
-
-### 4. Verifier/Runtime Checks
-
-*   **Unit Tests:**
-    *   `src/builder-os/services/build-data-aggregator.test.js`: Verify correct aggregation logic, error handling, and data normalization.
-    *   `src/builder-os/api/v1/build-status.test.js`: Verify endpoint handler correctly calls the service and formats responses.
-*   **Integration Tests:**
-    *   `test/integration/builder-os-api.test.js`: Send a `GET` request to `/api/v1/build-status` and assert the response structure, status code (200 OK), and presence of expected build data.
-*   **Manual Verification (Internal):**
-    *   `curl -X GET http://localhost:PORT/api/v1/build-status` (replace PORT with BuilderOS internal API port).
-    *   Verify JSON response contains an array of build statuses, each with `projectId`, `pipelineId`, `status` (e.g., `running`, `success`, `failed`), and `lastUpdated` fields.
-
-### 5. Stop Conditions if Runtime Truth Disagrees
-
-*   **API Endpoint Failure:** The `/api/v1/build-status` endpoint returns a 4xx or 5xx HTTP status code.
-*   **Data Inconsistency:** The aggregated build status data does not accurately reflect the actual state of active build pipelines as reported by underlying BuilderOS build services.
-*   **Malformed Response:** The JSON response from the endpoint does not conform to the expected schema (e.g., missing critical fields, incorrect data types).
-*   **Performance Degradation:** The endpoint response time exceeds 500ms under typical load, indicating an aggregation bottleneck.
-*   **Security Violation:** The endpoint exposes sensitive information not intended for this scope or allows unauthorized access.
+Amendment 12 Command Center Proof: G778-100 - Command Reception Endpoint Proof
+This proof-closing blueprint note addresses the initial implementation slice for the Amendment 12 Command Center, focusing on establishing the foundational command reception mechanism.
+---
+1. Exact Missing Implementation or Proof Gap:
+The core gap is the absence of a dedicated, authenticated apiEP within BuilderOS to receive and acknowledge commands for the Command Center. This endpoint is crucial for external systems (e.g., BuilderOS orchestrators) to issue instructions.
+2. Smallest Safe Build Slice to Close It:
+Implement a minimal `POST /builderos/command` apiEP. This endpoint will:
+-   Accept a JSON payload representing a command.
+-   Perform basic schema validation on the incoming command.
+-   Generate a unique `commandId`.
+-   Return a `200 OK` response with an acknowledgment payload including the `commandId` and a `status: "received"`.
+   Crucially, this slice does not* implement command execution, queuing, or complex state management beyond immediate acknowledgment. It proves the communication channel.
+3. Exact Safe-Scope Files to Touch First:
+-   `src/api/builderos/command.js`: New file for the command reception handler and route definition.
+-   `src/api/builderos/index.js`: Update to register the new `/command` route.
+-   `src/api/index.js`: Verify `builderos` router is correctly mounted.
+-   `src/types/builderos.d.ts`: Define the TS interface for the incoming command payload and the acknowledgment response.
+-   `src/schemas/builderos/command.js`: New file for Joi/Zod schema definition for command validation.
+4. Verifier/Runtime Checks:
+-   API Reachability & Acknowledgment:
+        curl -X POST -H "Content-Type: application/json" \
+         -d '{"commandType": "NOOP", "targetId": "self", "payload": {}}' \
+         http://localhost:3000/builderos/command
+        Expected Result: `HTTP 200 OK` with a JSON body like `{"status": "received", "commandId": "uuid-v4-string"}`.
+-   Schema Validation (Invalid Payload):
+        curl -X POST -H "Content-Type: application/json" \
+         -d '{"invalidField": "value"}' \
+         http://localhost:3000/builderos/command
+        Expected Result: `HTTP 400 Bad Request` with a validation error message.
+-   Unit Tests: Ensure `src/api/builderos/command.js` has unit tests covering valid and invalid command payloads, and correct response generation.
+5. Stop Conditions if Runtime Truth Disagrees:
+-   If the `POST /builderos/command` endpoint returns `4xx` or `5xx` for valid, well-formed requests.
+-   If the endpoint is unreachable or returns `404 Not Found`.
+-   If the response payload for a valid request does not contain `status: "received"` and a `commandId`.
+-   If invalid payloads are accepted without returning a `400 Bad Request`.
+-   If the new files cannot be integrated into the existing API routing structure without breaking existing BuilderOS routes.
