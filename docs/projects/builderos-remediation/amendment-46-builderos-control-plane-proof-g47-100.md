@@ -1,53 +1,67 @@
-# Amendment 46 BuilderOS Control Plane Proof - G47-100 Remediation
+# Amendment 46: BuilderOS Control Plane Proof - G47-100
 
-This document outlines the remediation plan for the BuilderOS control plane, addressing the implementation gap identified by the OIL verifier rejection (which was a verifier configuration issue, not a code syntax error in the `.md` file itself). The primary focus is to implement the required route wiring for build lifecycle management within `routes/lifeos-council-builder-routes.js`.
+This document serves as a proof-closing note for the implementation of the BuilderOS control plane wiring as specified in `AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md`. It addresses the signal requiring follow-through for `routes/lifeos-council-builder-routes.js`.
 
 ## 1. Exact Missing Implementation or Proof Gap
 
-The core missing implementation is the integration of build lifecycle events (`recordBuildStart`, `recordBuildComplete`) and build completion authorization (`canMarkBuildDone`) into the BuilderOS control plane routes. Specifically, the `routes/lifeos-council-builder-routes.js` file lacks the necessary `POST` endpoints for `/build/start` and `/build/complete` as specified.
-
-The OIL verifier rejection (`ERR_UNKNOWN_FILE_EXTENSION` for `.md`) indicates a misconfiguration in the verifier's environment, where it attempted to execute this documentation file as a Node.js module. This is not a code defect in the `.md` file content itself, but an external system issue. The proof gap is the absence of the specified route handlers.
+The primary gap is the absence of the `/build` start and complete POST endpoints within `routes/lifeos-council-builder-routes.js`. This includes the necessary integration with internal build management services for recording build states and performing health checks before marking a build as complete. Specifically:
+-   Missing `POST /build/start` endpoint to initiate build recording.
+-   Missing `POST /build/complete` endpoint to finalize build recording.
+-   Missing integration with a `canMarkBuildDone` health check, specifically returning a 409 status when this check fails due to a RED health state.
+-   The underlying service functions (`recordBuildStart`, `recordBuildComplete`, `canMarkBuildDone`) are assumed to exist or need to be created/extended in a dedicated builder control plane service layer.
 
 ## 2. Smallest Safe Build Slice to Close It
 
 The smallest safe build slice involves:
-1.  Adding two new `POST` endpoints to `routes/lifeos-council-builder-routes.js`: `/build/start` and `/build/complete`.
-2.  Implementing the logic within these endpoints to call the internal `recordBuildStart` and `recordBuildComplete` functions, respectively.
-3.  Integrating the `canMarkBuildDone` check for the `/build/complete` endpoint, returning a 409 status if the check fails under "health RED" conditions.
-4.  Ensuring proper import of the internal control plane functions.
+1.  Adding two new POST routes to `routes/lifeos-council-builder-routes.js`.
+2.  Implementing the request handlers for these routes, including input validation.
+3.  Integrating with a `builderControlPlaneService` (or similar) to call `recordBuildStart`, `recordBuildComplete`, and `canMarkBuildDone`.
+4.  Handling the 409 conflict response specifically when `canMarkBuildDone` indicates a failure due to health RED.
 
-## 3. Exact Safe-Scope Files to Touch First
+**Proposed `builderControlPlaneService` Interface (conceptual):**
 
--   `routes/lifeos-council-builder-routes.js`: This file will be modified to add the new routes and their handlers.
--   `../services/builder-control-plane.js` (assumed path): This file (or an equivalent internal service module) is expected to export `recordBuildStart`, `recordBuildComplete`, and `canMarkBuildDone`. If these functions do not exist, they would need to be stubbed or implemented here, adhering to existing patterns. For this build slice, we assume they are available for import.
+```javascript
+// services/builder-control-plane-service.js (conceptual)
+export const builderControlPlaneService = {
+  /**
+   * Records the start of a build process.
+   * @param {object} params
+   * @param {string} params.task_id - The ID of the task initiating the build.
+   * @param {string} params.blueprint_id - The ID of the blueprint being built.
+   * @param {string} params.model_used - The model used for the build.
+   * @returns {Promise<object>} Build record details.
+   */
+  async recordBuildStart({ task_id, blueprint_id, model_used }) {
+    // Implementation to persist build start details
+    console.log(`Recording build start for task ${task_id}, blueprint ${blueprint_id}`);
+    return { buildId: 'new-build-id-123', status: 'STARTED' };
+  },
 
-## 4. Verifier/Runtime Checks
+  /**
+   * Records the completion of a build process.
+   * @param {object} params
+   * @param {string} params.build_token - A token identifying the build.
+   * @param {string[]} params.oil_receipt_ids - Array of OIL receipt IDs.
+   * @returns {Promise<object>} Updated build record details.
+   */
+  async recordBuildComplete({ build_token, oil_receipt_ids }) {
+    // Implementation to update build completion details
+    console.log(`Recording build complete for token ${build_token}`);
+    return { buildId: 'existing-build-id-123', status: 'COMPLETED' };
+  },
 
-### Verifier Checks:
--   **Verifier Configuration:** Confirm the OIL verifier is configured to correctly parse `.md` files as documentation and not attempt to execute them as Node.js modules. This is an external system check.
--   **Syntax Check:** Ensure the modified `routes/lifeos-council-builder-routes.js` adheres to existing Node/ESM patterns and passes static analysis.
-
-### Runtime Checks:
--   **`/build/start` Endpoint:**
-    -   Send `POST` request to `/build/start` with `task_id`, `blueprint_id`, `model_used`.
-    -   Verify a 200 OK response.
-    -   Verify `recordBuildStart` is invoked with the correct parameters (e.g., via logging or mock verification in tests).
--   **`/build/complete` Endpoint (Success Path):**
-    -   Send `POST` request to `/build/complete` with `token` and `OIL receipt IDs`.
-    -   Ensure `canMarkBuildDone` returns `true` (or is not in a "health RED" state).
-    -   Verify a 200 OK response.
-    -   Verify `recordBuildComplete` is invoked with the correct parameters.
--   **`/build/complete` Endpoint (Failure Path - Health RED):**
-    -   Configure the environment or mock `canMarkBuildDone` to return `false` when "health RED".
-    -   Send `POST` request to `/build/complete`.
-    -   Verify a 409 Conflict response.
-    -   Verify `recordBuildComplete` is *not* invoked.
--   **Isolation:** Confirm no unintended side effects on LifeOS user features or TSOS customer-facing surfaces.
-
-## 5. Stop Conditions if Runtime Truth Disagrees
-
--   If `recordBuildStart`, `recordBuildComplete`, or `canMarkBuildDone` cannot be imported or are undefined at runtime.
--   If the `/build/start` endpoint fails to record the build start event or returns an unexpected status.
--   If the `/build/complete` endpoint fails to record the build completion event or returns an unexpected status (e.g., 500 instead of 200 on success).
--   If the 409 Conflict response for `/build/complete` (when `canMarkBuildDone` fails due to "health RED") is not consistently observed or is triggered under incorrect conditions.
--   If any modifications impact LifeOS user features or TSOS customer-facing surfaces, indicating a scope breach.
+  /**
+   * Checks if a build can be marked as done, considering system health.
+   * @returns {Promise<boolean>} True if allowed, false if health is RED or other conditions prevent completion.
+   */
+  async canMarkBuildDone() {
+    // Implementation to check system health (e.g., BuilderOS health, resource availability)
+    // For this proof, assume a simple check.
+    const isHealthRed = Math.random() < 0.1; // Simulate occasional RED health
+    if (isHealthRed) {
+      console.warn("System health is RED, cannot mark build done.");
+      return false;
+    }
+    return true;
+  }
+};
