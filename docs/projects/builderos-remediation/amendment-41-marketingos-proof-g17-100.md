@@ -1,42 +1,31 @@
-# AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (G17-100)
+# Blueprint Note: Amendment 41 MarketingOS Proof (G17-100)
 
-**Signal:** This document — SSOT foundation.
-
----
+This document establishes the Single Source of Truth (SSOT) foundation for closing proof gap G17-100 related to Amendment 41 for MarketingOS within the BuilderOS remediation context.
 
 ## 1. Exact Missing Implementation or Proof Gap
 
-The current LifeOS platform lacks a real-time, event-driven mechanism to reliably synchronize user email opt-in status changes from the `UserPreferences` service to the MarketingOS `ContactManagement` service. Specifically, `proof-g17-100` targets the absence of a dedicated event and handler to propagate `user.emailOptInStatus` updates, ensuring MarketingOS maintains a Single Source of Truth for user communication preferences.
+BuilderOS lacks a verifiable mechanism to confirm successful propagation and activation of MarketingOS configuration changes for Amendment 41, specifically for gap G17-100. This gap is the absence of a direct, auditable signal from MarketingOS back to BuilderOS confirming the state transition for the specified configuration slice.
 
 ## 2. Smallest Safe Build Slice to Close It
 
-Implement an event-driven synchronization pipeline:
-1.  **Event Definition:** Define a new `UserEmailOptInStatusUpdated` event.
-2.  **Event Emission:** Modify the `UserPreferencesService` to emit this event whenever a user's `emailOptInStatus` is updated.
-3.  **Integration Service:** Create a new `MarketingOSIntegrationService` responsible for subscribing to `UserEmailOptInStatusUpdated` events.
-4.  **Event Handler:** Within the `MarketingOSIntegrationService`, implement a handler that consumes the event, transforms the payload to match MarketingOS API requirements, and invokes the MarketingOS `updateContactPreference` API endpoint.
-5.  **API Client:** Develop a dedicated `MarketingOSClient` module for robust API interaction, including authentication and error handling.
+Introduce a new BuilderOS-internal verification step. This step will poll or receive a webhook from MarketingOS (via an existing, approved internal API endpoint) to confirm the state of the G17-100 configuration slice. Integrate this step into the BuilderOS post-deployment verification phase, *before* marking the BuilderOS loop as complete for Amendment 41.
 
 ## 3. Exact Safe-Scope Files to Touch First
 
-*   `services/user-preferences/src/events/UserEmailOptInStatusUpdated.js` (New file: Event definition)
-*   `services/user-preferences/src/UserPreferencesService.js` (Modification: Add event emission logic)
-*   `services/marketingos-integration/src/index.js` (New file: Service entry point, event subscription)
-*   `services/marketingos-integration/src/handlers/UserEmailOptInStatusHandler.js` (New file: Event handler logic)
-*   `services/marketingos-integration/src/api/MarketingOSClient.js` (New file: MarketingOS API client)
-*   `services/marketingos-integration/src/config.js` (New file: Configuration for MarketingOS API)
-*   `services/marketingos-integration/package.json` (New file: Service metadata and dependencies)
+*   `services/builderos/src/verification/marketingos-g17-100-proof.js` (new)
+*   `services/builderos/src/verification/index.js` (add import/registration)
+*   `services/builderos/src/loop/amendment-41-processor.js` (integrate verification step)
+*   `services/builderos/test/verification/marketingos-g17-100-proof.test.js` (new)
 
 ## 4. Verifier/Runtime Checks
 
-*   **Unit Tests:**
-    *   `UserPreferencesService` test: Verify `UserEmailOptInStatusUpdated` event is emitted with correct payload upon `emailOptInStatus` change.
-    *   `UserEmailOptInStatusHandler` test: Verify event processing logic, data transformation, and `MarketingOSClient` invocation with expected arguments.
-    *   `MarketingOSClient` test: Verify successful API call to a mock MarketingOS endpoint with correct headers and body.
-*   **Integration Tests (Staging/Pre-prod):**
-    *   Simulate a user updating their email opt-in status via LifeOS UI/API.
-    *   Verify that the `MarketingOSIntegrationService` processes the event and successfully calls the MarketingOS API (using a test/mock MarketingOS instance).
-    *   Confirm the `emailOptInStatus` is correctly reflected in the MarketingOS test environment for the specific user.
-*   **Observability:**
-    *   Monitor `UserEmailOptInStatusUpdated` event emission rates and success/failure.
-    *   Monitor `MarketingOS
+*   **Unit Tests:** `npm test services/builderos/test/verification/marketingos-g17-100-proof.test.js` passes for success/failure scenarios.
+*   **Integration Test:** New BuilderOS integration test case verifies full Amendment 41 deployment, ensuring G17-100 proof step correctly transitions BuilderOS loop state based on MarketingOS feedback.
+*   **Runtime Log Check:** Monitor BuilderOS logs for `[BUILDEROS][AMENDMENT_41][G17-100_PROOF]` messages indicating verification status.
+*   **MarketingOS Internal API Call:** Verify BuilderOS makes expected internal API call (e.g., `/marketingos/api/v1/amendment-41/g17-100/status`) and processes its response.
+
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+*   If BuilderOS consistently fails to receive valid confirmation from MarketingOS for G17-100 within a defined timeout (e.g., 5 minutes), the BuilderOS loop for Amendment 41 must halt, revert to `PENDING_VERIFICATION_G17_100`, and trigger an alert.
+*   If the MarketingOS internal API endpoint is unreachable or returns unexpected errors (e.g., 5xx) for >3 consecutive attempts, the BuilderOS loop must halt, revert, and trigger an alert.
+*   If MarketingOS response indicates an incorrect state for G17-100 (e.g., `status: 'INACTIVE'` when `status: 'ACTIVE'` expected), the BuilderOS loop must halt, revert, and trigger an alert.
