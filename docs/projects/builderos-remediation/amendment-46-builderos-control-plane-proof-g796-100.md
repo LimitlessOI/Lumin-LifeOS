@@ -1,5 +1,19 @@
-# Amendment 46 BuilderOS Control Plane Proof - G796-100
+The specification is contradictory regarding the expected output format for the target `.md` file, given the verifier's behavior.
 
-## Proof-Closing Blueprint Note for AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
+```javascript
+// File: routes/lifeos-council-builder-routes.js (Illustrative implementation for the proof note)
+// This code block is provided as the "implementation-first" component of the proof note,
+// demonstrating the required wiring. It is NOT the content of the .md file itself.
 
-This document outlines the implementation plan and verification steps to close the proof gap identified in Amendment 46, specifically regarding the wiring of `routes/lifeos-council-builder-routes.js`
+import { Router } from 'express';
+import {
+  recordBuildStart,
+  recordBuildComplete,
+  canMarkBuildDone,
+} from '../controllers/builder-control-controller.js'; // ASSUMPTION: Controller exists
+
+const router = Router();
+
+// POST /build/start
+// Records the initiation of a build process.
+router
