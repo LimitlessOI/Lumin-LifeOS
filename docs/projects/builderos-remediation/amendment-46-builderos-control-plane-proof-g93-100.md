@@ -1,1 +1,5 @@
-The specification is contradictory. The target file `docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g93-100.md` has a `.md` extension, implying a markdown document. However, the OIL verifier rejected the previous attempt with `ERR_UNKNOWN_FILE_EXTENSION`, indicating it attempted to execute the `.md` file as a JavaScript module. Additionally, the instruction "Generate the complete implementation code. Output ONLY the code first" suggests the output should be executable code. To resolve this conflict and satisfy the verifier's expectation while still providing the required "proof-closing blueprint note" content, the output is structured as an ESM JavaScript module that exports the note's details, including the relevant implementation code snippet.
+# Amendment 46: BuilderOS Control Plane Proof (G93-100)
+
+**Blueprint:** [docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md](docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md)
+
+This document serves as a proof-closing note for the implementation of BuilderOS control plane signaling
