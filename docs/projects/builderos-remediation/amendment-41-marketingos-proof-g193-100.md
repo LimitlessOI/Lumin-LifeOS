@@ -1,44 +1,34 @@
-# Proof-Closing Blueprint Note: MarketingOS Segment G193-100 Ingestion Proof
+# Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G193-100 Remediation
 
-**Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`
-**Signal:** This document — SSOT foundation.
+This document serves as the SSOT foundation for closing the proof gap identified during the OIL verifier rejection for Amendment 41, specifically concerning MarketingOS proof `g193-100`.
 
----
+## 1. Exact Missing Implementation or Proof Gap
 
-### 1. Exact Missing Implementation or Proof Gap
+The final data synchronization handshake between BuilderOS's `MarketingDataIngestor` and the MarketingOS `CampaignProofService` is not fully established for `g193-100` campaigns. Specifically, the `proof_g193_100_status` field is not reliably updated in the BuilderOS `CampaignArtifacts` store after successful MarketingOS processing, leading to intermittent proof generation failures or stale status reporting. The BuilderOS internal message bus listener for `marketingos.campaign.g193_100.proof_status_update` is either missing or incorrectly configured to persist the status.
 
-The current MarketingOS platform lacks a direct, auditable, and programmatic proof point confirming the successful ingestion and readiness for activation of specific user segments originating from LifeOS. Specifically, for segment `g193-100` as defined in `AMENDMENT_41_MARKETINGOS.md`, there is no dedicated internal API endpoint or verifiable metric that BuilderOS can query to confirm its processing status and availability for marketing campaigns. This gap prevents automated verification of the SSOT foundation for this critical segment.
+## 2. Smallest Safe Build Slice to Close It
 
-### 2. Smallest Safe Build Slice to Close It
+Implement the missing or correct the existing event listener within BuilderOS's `MarketingDataIngestor` to subscribe to the `marketingos.campaign.g193_100.proof_status_update` topic on the internal message bus. This listener must correctly parse the incoming status payload and invoke the appropriate update method on the `CampaignArtifactsStore` to persist the `proof_g193_100_status` for the relevant campaign ID.
 
-Implement a new, read-only, internal API endpoint within MarketingOS. This endpoint will expose the processing status (`isReady` boolean) and the `lastProcessedTimestamp` for a given segment ID. The implementation will involve:
-    a.  A new internal route handler.
-    b.  A new service layer function to query the segment's status from the MarketingOS data store.
-    c.  No modifications to existing MarketingOS user features or TSOS customer-facing surfaces.
+## 3. Exact Safe-Scope Files to Touch First
 
-### 3. Exact Safe-Scope Files to Touch First
+*   `src/builder-os/services/MarketingDataIngestor.js` (Add/correct message bus subscription and handler logic)
+*   `src/builder-os/data/CampaignArtifactsStore.js` (Verify or add a method for atomic `proof_g193_100_status` updates)
+*   `src/builder-os/config/messageBusTopics.js` (Confirm `marketingos.campaign.g193_100.proof_status_update` topic definition)
+*   `src/builder-os/services/MarketingDataIngestor.test.js` (Add unit tests for the new listener)
 
-*   `marketingos/src/api/internal/segmentProofRoutes.js` (New file: Defines the `GET /internal/segment-proof/:segmentId` route.)
-*   `marketingos/src/services/segmentProofService.js` (New file: Contains logic to retrieve segment status from the MarketingOS database/cache.)
-*   `marketingos/src/app.js` (Modification: Register the new `segmentProofRoutes` module.)
-*   `marketingos/src/models/SegmentStatus.js` (New or modification: If a dedicated status model is needed, or extend an existing segment model to include status fields.)
+## 4. Verifier/Runtime Checks
 
-### 4. Verifier/Runtime Checks
+*   **Unit Test:** Add a new unit test case to `src/builder-os/services/MarketingDataIngestor.test.js`. This test should mock the internal message bus, simulate a `marketingos.campaign.g193_100.proof_status_update` message, and assert that `CampaignArtifactsStore.updateProofStatus` (or equivalent) is called with the correct campaign ID and `proof_g193_100_status` (e.g., 'COMPLETED', 'VERIFIED').
+*   **Integration Test (BuilderOS Staging):**
+    1.  Trigger a simulated `g193-100` campaign proof generation flow via the BuilderOS internal API in a staging environment.
+    2.  Monitor the BuilderOS `CampaignArtifacts` store for the specific campaign ID.
+    3.  Verify that the `proof_g193_100_status` field transitions from `IN_PROGRESS` to `COMPLETED` or `VERIFIED` within the expected timeframe (e.g., 2 minutes) after MarketingOS reports completion.
+*   **Log Monitoring:** Monitor BuilderOS logs for `MarketingDataIngestor` for successful status update messages (e.g., `INFO: g193-100 proof status updated to COMPLETED`) and the absence of `ERROR: marketingos_g193_100_status_sync_failure` or `WARN: unknown_marketingos_status_payload` messages.
 
-1.  **API Endpoint Availability:**
-    *   **Check:** `GET /internal/segment-proof/g193-100`
-    *   **Expected:** HTTP 200 OK, with a JSON payload.
-2.  **Initial State Verification:**
-    *   **Check:** After MarketingOS deployment, before any `g193-100` segment data is pushed from LifeOS.
-    *   **Expected:** `GET /internal/segment-proof/g193-100` returns `{ "segmentId": "g193-100", "isReady": false, "lastProcessedTimestamp": null }` (or appropriate initial state).
-3.  **Successful Ingestion Verification:**
-    *   **Action:** Trigger a push of segment `g193-100` data from LifeOS to MarketingOS.
-    *   **Check:** Repeatedly query `GET /internal/segment-proof/g193-100` until `isReady` becomes `true`.
-    *   **Expected:** Within `T` minutes (e.g., 5 minutes) of LifeOS confirming the push, the response should be `{ "segmentId": "g193-100", "isReady": true, "lastProcessedTimestamp": "YYYY-MM-DDTHH:MM:SSZ" }`, where `lastProcessedTimestamp` reflects the recent ingestion.
-4.  **Data Integrity Check:**
-    *   **Check:** Verify the `segmentId` in the response matches the requested `g193-100`.
-    *   **Expected:** `response.segmentId === "g193-100"`.
+## 5. Stop Conditions if Runtime Truth Disagrees
 
-### 5. Stop Conditions if Runtime Truth Disagrees
-
-*   **Endpoint Failure:** If `GET /internal/segment-proof/g193-100` consistently returns HTTP
+*   **Unit Test Failure:** If the new unit tests in `MarketingDataIngestor.test.js` fail, indicating a fundamental issue with message handling or data persistence logic.
+*   **Stale Status:** If, during integration testing, the `proof_g193_100_status` for `g193-100` campaigns consistently remains in an `IN_PROGRESS` or `FAILED` state in `CampaignArtifacts` after MarketingOS has reported successful completion.
+*   **Error Log Spike:** A significant increase in `ERROR: marketingos_g193_100_status_sync_failure` or `WARN: unknown_marketingos_status_payload` entries in BuilderOS logs after deployment to staging.
+*   **Performance Degradation:** Any measurable degradation in BuilderOS message bus processing latency or `CampaignArtifactsStore` write operations directly attributable to this change.
