@@ -1,24 +1,27 @@
-# Amendment 16 Word Keeper Proof - G101-100
+### Amendment 16 Word Keeper Proof - G101-100
 
-## Blueprint Note: Next Smallest Build Slice
+This document outlines the proof-closing blueprint note for the Word Keeper remediation, specifically addressing the G101-100 rejection.
 
-This document outlines the initial, smallest build slice required to begin implementation of Amendment 16, focusing on establishing the foundational data model and a minimal service interface for word management.
+**1. Exact Missing Implementation or Proof Gap:**
+The current BuilderOS configuration validation for `project.json` and `build.yaml` does not consistently enforce the "Word Keeper" rules defined in Amendment 16. Specifically, the system lacks a dedicated, auditable check to ensure that specific reserved keywords (e.g., `_builder_reserved_`, `_system_internal_`) are either correctly used or explicitly disallowed in user-defined fields, leading to potential conflicts or misinterpretations during build orchestration. The G101-100 rejection indicates a failure to correctly parse or validate a configuration due to an unexpected keyword usage that should have been caught by Word Keeper rules.
 
-### 1. Exact Missing Implementation or Proof Gap
+**2. Smallest Safe Build Slice to Close It:**
+Implement a new validation module within the BuilderOS configuration parsing pipeline that specifically applies Amendment 16 Word Keeper rules. This module will perform a lexical analysis of relevant configuration fields (e.g., `name`, `tags`, `metadata` in `project.json`; `steps.name`, `env` keys in `build.yaml`) against a predefined list of reserved and disallowed words. The build slice focuses solely on adding this validation step without altering existing parsing logic or introducing new configuration syntax.
 
-The current gap is the absence of a defined data model for `Word` entities and the corresponding foundational service layer to interact with these entities. Specifically, there is no schema definition for a `Word` and no basic API or service function to persist or retrieve a `Word` record within the LifeOS platform's existing data access patterns.
+**3. Exact Safe-Scope Files to Touch First:**
+*   `builderos/src/config/validation/wordKeeperValidator.js`: New module to house the validation logic and word lists.
+*   `builderos/src/config/parser.js`: Integrate `wordKeeperValidator` into the existing configuration parsing and validation chain. This will likely involve adding a new step to an array of validators or a new function call within a `validateConfig` method.
+*   `builderos/src/config/wordKeeperRules.json`: (New file) A JSON file defining the reserved/disallowed words and their associated rules, allowing for easy updates without code changes.
+*   `builderos/test/config/validation/wordKeeperValidator.test.js`: New test file for the validator.
 
-### 2. Smallest Safe Build Slice to Close It
+**4. Verifier/Runtime Checks:**
+*   **Unit Tests:** `npm test builderos/test/config/validation/wordKeeperValidator.test.js` should pass, covering valid and invalid configurations against Word Keeper rules.
+*   **Integration Tests:** Existing BuilderOS integration tests that parse `project.json` and `build.yaml` should continue to pass. New integration tests should be added to specifically verify that configurations violating Word Keeper rules are rejected with appropriate error messages (e.g., `BUILDER_ERROR_WORD_KEEPER_VIOLATION`).
+*   **Local Build Loop:** Run a local BuilderOS build loop with a test project containing a configuration that *should* be rejected by Word Keeper rules. Verify the build fails with the expected error.
+*   **Local Build Loop (Success):** Run a local BuilderOS build loop with a test project containing a valid configuration. Verify the build succeeds.
 
-The smallest safe build slice involves:
-*   Defining the `Word` schema using the platform's established ORM/data modeling conventions.
-*   Creating a basic `WordService` with a `createWord` and `getWordById` method.
-*   Ensuring the schema and service integrate seamlessly with existing data access patterns (e.g., `src/data/db.js` or `src/models/index.js`).
-
-This slice focuses purely on atomic data persistence and retrieval for a single word, without introducing complex business logic, external integrations, or user-facing features.
-
-### 3. Exact Safe-Scope Files to Touch First
-
-Based on established LifeOS platform patterns for data models and services:
-
-*   `src/models/Word.
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   If existing BuilderOS integration tests fail after introducing the validator, indicating unintended side effects on valid configurations.
+*   If the new validator fails to reject configurations that explicitly violate Word Keeper rules, suggesting the validation logic is flawed or not correctly integrated.
+*   If the performance impact of the new validation step significantly degrades build times (e.g., >5% increase in configuration parsing phase for typical projects).
+*   If the error messages generated by the validator are unclear or do not accurately pinpoint the Word Keeper violation, leading to poor developer experience.
