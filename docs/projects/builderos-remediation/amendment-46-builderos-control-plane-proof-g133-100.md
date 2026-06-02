@@ -1,7 +1,7 @@
 # Amendment 46: BuilderOS Control Plane Proof - G133-100
 
-## Proof-Closing Blueprint Note: Wire `routes/lifeos-council-builder-routes.js`
+## Proof-Closing Blueprint Note
 
-This document outlines the implementation plan and verification steps to wire the BuilderOS control plane routes as specified in Amendment 46.
+This document addresses the signal requiring follow-through for Amendment 46, focusing on wiring `routes/lifeos-council-builder-routes.js` to integrate build start and completion events with health checks.
 
-### 1. Exact Missing Implementation or Proof
+### 1. Exact Missing Implementation or Proof Gap
