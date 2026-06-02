@@ -1,27 +1,39 @@
-# Amendment 41 MarketingOS Proof-Closing Blueprint Note: G123-100
-
-**Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`
-**Signal:** This document — SSOT foundation.
+Amendment 41 MarketingOS Proof-Closing Blueprint Note: G123-100
+Source Blueprint: `docs/projects/AMENDMENT_41_MARKETINGOS.md`
+Signal: This document — SSOT foundation.
 
 This blueprint note outlines the necessary steps to close the proof gap for Amendment 41, specifically focusing on establishing and verifying the Single Source of Truth (SSOT) foundation for MarketingOS data.
 
 ---
 
-### 1. Exact Missing Implementation or Proof Gap
+1.  Exact Missing Implementation or Proof Gap
+    The current gap is the verified, auditable reconciliation of key MarketingOS customer engagement and campaign performance metrics against the designated LifeOS SSOT data store. While data ingestion may be in place, the proof of its integrity, consistency, and adherence to SSOT principles across a representative data set is pending. This includes ensuring that data transformations maintain fidelity and that the SSOT accurately reflects MarketingOS's operational state for critical entities (e.g., customer segments, campaign IDs, interaction events).
 
-The current gap is the *verified, auditable reconciliation* of key MarketingOS customer engagement and campaign performance metrics against the designated LifeOS SSOT data store. While data ingestion may be in place, the proof of its integrity, consistency, and adherence to SSOT principles across a representative data set is pending. This includes ensuring that data transformations maintain fidelity and that the SSOT accurately reflects MarketingOS's operational state for critical entities (e.g., customer segments, campaign IDs, interaction events).
+2.  Smallest Safe Build Slice to Close It
+    Implement a lightweight, read-only data reconciliation service/script. This service will:
+    -   Connect to the MarketingOS data source (read-only access).
+    -   Connect to the LifeOS SSOT data store (read-only access).
+    -   Fetch a predefined, small sample set of critical entities and their associated metrics (e.g., 100 recent customer interaction records, 5 recent campaign performance summaries).
+    -   Perform a direct comparison of these data points, focusing on key identifiers and their corresponding metric values.
+    -   Generate a reconciliation report indicating matches, mismatches, and discrepancies.
+    This slice avoids any write operations or modifications to production data, focusing solely on verification.
 
-### 2. Smallest Safe Build Slice to Close It
+3.  Exact Safe-Scope Files to Touch First
+    -   `services/marketingos-ssot-verifier/src/index.js` (New service entry point for reconciliation logic)
+    -   `services/marketingos-ssot-verifier/package.json` (New service dependencies and metadata)
+    -   `services/marketingos-ssot-verifier/README.md` (New service documentation)
+    -   `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g123-100.md` (This document, for tracking and proof)
 
-Implement a lightweight, read-only data reconciliation service/script. This service will:
-*   Connect to the MarketingOS data source (read-only access).
-*   Connect to the LifeOS SSOT data store (read-only access).
-*   Fetch a predefined, small sample set of critical entities and their associated metrics (e.g., 100 recent customer interaction records, 5 recent campaign performance summaries).
-*   Perform a direct comparison of these data points, focusing on key identifiers and their corresponding metric values.
-*   Generate a reconciliation report indicating matches, mismatches, and discrepancies.
+4.  Verifier/Runtime Checks
+    -   Successful execution of the `marketingos-ssot-verifier` script without errors.
+    -   Reconciliation report generated, showing a high percentage (e.g., >99%) of matches for the sampled data points.
+    -   Discrepancies, if any, are logged with sufficient detail to identify the root cause (e.g., specific record IDs, differing values).
+    -   No modifications to MarketingOS or LifeOS production data.
+    -   The verifier script should exit with a success code (0) if reconciliation passes within acceptable thresholds, or a non-zero code otherwise.
 
-This slice avoids any write operations or modifications to production data, focusing solely on verification.
-
-### 3. Exact Safe-Scope Files to Touch First
-
-*   `services/marketingos-ssot-verifier/src/index.js` (New
+5.  Stop Conditions if Runtime Truth Disagrees
+    -   If the reconciliation report consistently shows significant discrepancies (e.g., >1% mismatch rate) across multiple runs for critical data points.
+    -   If the verifier script encounters unrecoverable errors connecting to either data source.
+    -   If the verifier script itself introduces performance degradation or resource contention on either system.
+    -   If the sampled data set is found to be unrepresentative or insufficient to establish SSOT proof.
+    -   Stop condition: Halt further C2 build passes for Amendment 41 and escalate to data governance and architecture teams for root cause analysis and re-evaluation of the SSOT strategy.
