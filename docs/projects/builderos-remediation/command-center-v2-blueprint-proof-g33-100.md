@@ -1,10 +1,9 @@
-# Blueprint Proof: Command Center V2 - Initial Status Endpoint (g33-100)
+# Command Center V2 Blueprint Proof: G33-100 - Core Command Model Definition
 
-This proof addresses the next smallest build slice derived from the `COMMAND_CENTER_V2_BLUEPRINT.md`, focusing on establishing the foundational "Initial API endpoint for C2 status check". This step validates the basic routing and controller setup for the C2 API.
+This document outlines the next smallest build slice for Command Center V2, focusing on establishing the foundational data model for a `Command` entity. This serves as a critical prerequisite for subsequent API and UI development.
 
 ---
 
-### Blueprint Note for C2 Build Pass
+### 1. Exact missing implementation or proof gap
 
-**1. Exact missing implementation or proof gap:**
-The `COMMAND_CENTER_V2_BLUEPRINT.md` specifies an "Initial API endpoint for C2 status check". This foundational endpoint, crucial for verifying the basic operational status of the Command Center V2 API, is not yet implemented. The gap is the functional definition and handler for a `/status` GET
+The core data model for a
