@@ -1,46 +1,30 @@
-# Proof-Closing Blueprint Note: Amendment 41 - MarketingOS G563-100 Conversion Event
+### Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Integration (G563-100)
 
-This document serves as a proof-closing blueprint note for the `G563-100` conversion event tracking as defined by `AMENDMENT_41_MARKETINGOS.md`. The objective is to establish a verifiable, end-to-end data flow from user interaction within LifeOS to successful ingestion and reporting within MarketingOS.
+This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41, ensuring BuilderOS-only governed loop execution for MarketingOS integration.
 
----
+**1. Exact Missing Implementation or Proof Gap:**
+The current implementation of Amendment 41 for MarketingOS lacks explicit, verifiable BuilderOS governance loop integration and runtime validation. Specifically, the proof gap is the absence of a mechanism to confirm that MarketingOS changes, as defined by Amendment 41, are exclusively initiated, managed, and verified through the BuilderOS governance pipeline, without direct modification of LifeOS user features or TSOS customer-facing surfaces. The verifier rejection indicated a tooling/environment issue, but the underlying functional proof gap remains: demonstrating BuilderOS's exclusive control over the specified MarketingOS changes.
 
-### 1. Exact missing implementation or proof gap
+**2. Smallest Safe Build Slice to Close It:**
+Implement a BuilderOS internal verification hook that asserts the origin and scope of MarketingOS-related changes introduced by Amendment 41. This slice focuses on adding a new BuilderOS internal check, not modifying MarketingOS itself.
 
-The exact missing implementation and proof gap is the absence of a fully verified, end-to-end data pipeline for the `G563-100` conversion event. This includes:
-*   Client-side detection and emission of the `G563-100` event.
-*   Server-side (LifeOS) reception, validation, and processing of the `G563-100` event.
-*   Secure and reliable transmission of the processed `G563-100` event data to the MarketingOS platform via its designated API.
-*   Confirmation of successful ingestion and availability of the `G563-100` event within MarketingOS reporting interfaces.
+**3. Exact Safe-Scope Files to Touch First:**
+*   `builderos/src/governance/marketingos-amendment-41-verifier.js` (new file)
+*   `builderos/src/governance/index.js` (add import and registration for the new verifier)
+*   `builderos/tests/unit/governance/marketingos-amendment-41-verifier.test.js` (new file)
 
-### 2. Smallest safe build slice to close it
+**4. Verifier/Runtime Checks:**
+*   **BuilderOS Internal Verifier Check:**
+    *   The new verifier (`marketingos-amendment-41-verifier.js`) will inspect incoming change manifests related to MarketingOS (as tagged by Amendment 41 metadata).
+    *   It will assert that these manifests originate from an approved BuilderOS pipeline source.
+    *   It will assert that the scope of changes in the manifest is confined to BuilderOS-governed MarketingOS internal configurations/integrations, explicitly rejecting any manifest attempting to modify `lifeos/` or `tsos/` directories or known customer-facing API endpoints.
+*   **Runtime Monitoring (BuilderOS Logs):**
+    *   Monitor BuilderOS governance loop logs for successful execution of the `marketingos-amendment-41-verifier`.
+    *   Look for log entries indicating "Amendment 41 MarketingOS change manifest approved by BuilderOS governance" or similar.
+    *   Actively monitor for any "Amendment 41 MarketingOS change manifest rejected: unauthorized source" or "Amendment 41 MarketingOS change manifest rejected: scope violation" entries.
 
-The smallest safe build slice involves:
-1.  **Client-side Event Emission:** Instrument the specific user interaction point in the LifeOS UI to emit a `G563-100` event to a new or existing LifeOS backend endpoint. This event should carry minimal, necessary context (e.g., `userId`, `timestamp`, `eventContext`).
-2.  **Server-side Event Handler:** Create or extend a LifeOS backend API endpoint (`/api/marketing/events/g563-100`) to receive, validate, and log the incoming `G563-100` event.
-3.  **MarketingOS Integration Service Call:** Within the server-side handler, invoke an existing or new MarketingOS integration service method to format and transmit the `G563-100` event data to the MarketingOS API.
-4.  **Logging and Error Handling:** Implement robust logging for each stage (client emission, server receipt, MarketingOS API call status) and appropriate error handling to prevent data loss and aid debugging.
-
-### 3. Exact safe-scope files to touch first
-
-*   `src/client/features/g563/G563ConversionComponent.js` (or the specific React/Vue component responsible for the G563-100 interaction)
-*   `src/server/api/marketing/marketingEventsController.js` (extend existing or create new controller for `/api/marketing/events`)
-*   `src/server/services/marketing/marketingIntegrationService.js` (extend existing or create new method for `sendG563_100EventToMarketingOS`)
-*   `src/server/routes/api.js` (add new route definition for `/api/marketing/events/g563-100`)
-*   `src/common/constants/marketingEvents.js` (define `G563_100_EVENT_TYPE` constant)
-*   `src/server/utils/logger.js` (ensure appropriate logging levels are used)
-
-### 4. Verifier/runtime checks
-
-1.  **Client-side Network Trace:** Use browser developer tools to confirm a `POST` request to `/api/marketing/events/g563-100` is initiated upon the target user action, with the expected payload.
-2.  **LifeOS Server Logs:** Monitor LifeOS backend logs for:
-    *   Confirmation of `G563-100` event receipt.
-    *   Successful validation of the event payload.
-    *   Successful invocation of the `marketingIntegrationService` method.
-    *   Confirmation of a successful (HTTP 2xx) response from the MarketingOS API.
-3.  **MarketingOS Platform UI/Logs:** Access the MarketingOS platform's event viewer, analytics dashboard, or internal logs to verify the `G563-100` event appears with the correct `userId`, `timestamp`, and any other transmitted context.
-
-### 5. Stop conditions if runtime truth disagrees
-
-The build pass must stop and be flagged for review if any of the following conditions are met:
-*   The client-side `POST` request for `G563-100` is not observed in network traces after the user action.
-*   The LifeOS backend logs do not show receipt of the `G563-
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   **Immediate Stop:** If the `marketingos-amendment-41-verifier` fails to execute or consistently reports false positives/negatives during initial integration testing within the BuilderOS staging environment.
+*   **Immediate Stop:** If any change manifest tagged with Amendment 41 metadata is observed to bypass the BuilderOS governance loop and directly impact MarketingOS, LifeOS, or TSOS in a production or staging environment.
+*   **Immediate Stop:** If the verifier logs show successful approval of a manifest that, upon manual inspection, clearly violates the "no modification of LifeOS user features or TSOS customer-facing surfaces" constraint.
+*   **Rollback Condition:** If the deployment of the new verifier itself introduces instability or performance degradation within the BuilderOS governance pipeline.
