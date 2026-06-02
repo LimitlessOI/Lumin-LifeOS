@@ -1,12 +1,9 @@
-// routes/lifeos-council-builder-routes.js
-import { Router } from 'express';
-import {
-  recordBuildStart,
-  recordBuildComplete,
-  canMarkBuildDone,
-} from '../services/builderService.js'; // Assuming builderService.js exists and exports these functions
+# Amendment 46 BuilderOS Control Plane Proof - G83-100
 
-const router = Router();
+## Proof-Closing Blueprint Note: Builder Control Plane Route Wiring
 
-/**
- * @route POST
+This note addresses the implementation gap for wiring the BuilderOS control plane routes within `routes/lifeos-council-builder-routes.js` as specified in Amendment 46.
+
+### 1. Exact Missing Implementation / Proof Gap
+
+The
