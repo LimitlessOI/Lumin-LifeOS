@@ -1,9 +1,23 @@
-# Amendment 12 Command Center Proof: G635-100 - Core Registration Slice
+// src/command-center/command.js
+export class Command {
+  constructor(id, handler) {
+    if (!id || typeof id !== 'string') {
+      throw new Error('Command ID must be a non-empty string.');
+    }
+    if (typeof handler !== 'function') {
+      throw new Error('Command handler must be a function.');
+    }
+    this.id = id;
+    this.handler = handler;
+  }
 
-This document outlines the proof-closing blueprint note for the initial build slice of the Amendment 12 Command Center, focusing on core command registration.
+  execute(...args) {
+    return this.handler(...args);
+  }
+}
 
----
+// src/command-center/command-registry.js
+import { Command } from './command.js'; // Assuming command.js is in the same directory
 
-### 1. Exact Missing Implementation or Proof Gap
-
-The fundamental ability to define a command and successfully register it within the `CommandCenter` instance, leveraging the `CommandRegistry` component as specified in the blueprint
+export class CommandRegistry {
+  constructor()
