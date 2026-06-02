@@ -1,12 +1,11 @@
-import express from 'express';
-import {
-  recordBuildStart,
-  recordBuildComplete,
-  canMarkBuildDone,
-} from '../services/builderService.js'; // Assuming builderService.js exists and exports these functions
+# Amendment 46 BuilderOS Control Plane Proof - G835-100 Remediation
 
-const router = express.Router();
+This document addresses the OIL verifier rejection related to `amendment-46-builderos-control-plane-proof-g835-100.md` and outlines the necessary steps to implement the BuilderOS control plane wiring. The previous attempt incorrectly placed JavaScript route definitions within a Markdown file, leading to an `ERR_UNKNOWN_FILE_EXTENSION` during verification.
 
-/**
- * @route POST /build/start
- * @description Records the start of a
+The core issue is a misapplication of file types. The required route logic belongs in `routes/lifeos-council-builder-routes.js`, while this document serves as the proof-closing blueprint note.
+
+---
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The `routes/lifeos-council-
