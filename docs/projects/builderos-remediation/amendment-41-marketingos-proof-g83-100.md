@@ -1,5 +1,7 @@
-# AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (G83-100)
+# Proof-Closing Blueprint Note: Amendment 41 - MarketingOS SSOT Foundation (G83-100)
+
+This document addresses the foundational SSOT requirement for MarketingOS by detailing the missing implementation and the smallest safe build slice to close the identified gap.
 
 ## 1. Exact Missing Implementation or Proof Gap
 
-The `AMENDMENT_41_MARKETINGOS` blueprint describes a "Batch Sync (Daily)" mechanism where "LifeOS will generate a daily export of changed or new customer profiles." The specific proof gap
+The `CustomerProfileService` currently lacks a mechanism to emit real-time
