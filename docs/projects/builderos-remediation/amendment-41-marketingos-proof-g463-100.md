@@ -1,31 +1,42 @@
-The `AMENDMENT_41_MARKETINGOS.md` blueprint is not provided, so the following content assumes a common pattern for MarketingOS integration proofs, specifically verifying an event emission.
+# Amendment 41: MarketingOS Proof - G463-100 - BuilderOS Remediation
 
-```markdown
-# Proof-Closing Blueprint Note: MarketingOS Proof G463-100
+This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41, specifically for goal G463-100, concerning the secure and isolated exposure of BuilderOS-derived marketing performance data to MarketingOS.
 
-This document serves as a proof-closing blueprint note for "MarketingOS Proof G463-100", ensuring the foundational requirements outlined in `AMENDMENT_41_MARKETINGOS.md` are met for a specific event.
+## Proof-Closing Blueprint Note
 
----
+### 1. Exact Missing Implementation or Proof Gap
 
-### 1. Exact missing implementation or proof gap
+The current BuilderOS platform lacks a verified, dedicated internal API endpoint to expose the aggregated "BuilderOS Campaign Engagement Score" (BCES) to the MarketingOS system. While raw data exists within BuilderOS, the specific aggregation logic and a secure, BuilderOS-only endpoint for MarketingOS consumption are not yet implemented and verified. This gap prevents MarketingOS from accurately assessing the performance of campaigns managed exclusively within BuilderOS without direct access to LifeOS user data, adhering to the BuilderOS-only governed loop execution.
 
-The `UserAccountCreated` event, as specified in `AMENDMENT_41_MARKETINGOS.md` section 3.1.2, requires explicit verification of its payload structure and successful transmission to the MarketingOS event ingestion endpoint `/api/v1/marketing/events`. Specifically, the `user_id` (UUID) and `created_at` (ISO 8601 string) fields within the event payload must be confirmed for presence, correct format, and accurate data mapping from the LifeOS user record. The current gap is the lack of a dedicated, automated verification step for this specific event's end-to-end integrity.
+### 2. Smallest Safe Build Slice to Close It
 
-### 2. Smallest safe build slice to close it
+Implement a new internal BuilderOS service and API route that:
+a. Aggregates campaign interaction data from BuilderOS-managed campaigns.
+b. Calculates the "BuilderOS Campaign Engagement Score" based on predefined BuilderOS-specific metrics (e.g., clicks, impressions, unique views within the BuilderOS context).
+c. Exposes this aggregated score via a new, authenticated, internal BuilderOS API endpoint.
+This slice ensures no modification to LifeOS user features or TSOS customer-facing surfaces, operating strictly within the BuilderOS domain.
 
-The smallest safe build slice involves:
-a. Adding a new unit test case to `userService.test.js` to assert the `UserAccountCreated` event's payload structure and emission.
-b. If the unit test reveals discrepancies, making minimal adjustments to the `UserAccountCreated` event construction within `userService.js` to align with `AMENDMENT_41_MARKETINGOS.md` specifications.
-c. Ensuring the `eventBus` correctly routes this event to the MarketingOS integration layer.
+### 3. Exact Safe-Scope Files to Touch First
 
-### 3. Exact safe-scope files to touch first
+*   `services/builder-marketing-data.js`: New service file for BCES aggregation logic.
+*   `routes/internal/marketing-metrics.js`: New internal API route definition for `/builderos/metrics/campaign-engagement`.
+*   `controllers/internal/marketing-metrics-controller.js`: New controller to handle requests for the BCES endpoint, utilizing `builder-marketing-data.js`.
+*   `tests/unit/services/builder-marketing-data.test.js`: Unit tests for the new service.
+*   `tests/integration/routes/internal/marketing-metrics.test.js`: Integration tests for the new API endpoint.
 
-*   `src/services/userService.js` (Potential minor adjustment to event payload construction)
-*   `src/tests/unit/userService.test.js` (Add new test case for `UserAccountCreated` event emission)
-*   `src/events/userEvents.js` (Verify event constant definition, if applicable)
-*   `src/integrations/marketingOS/eventEmitter.js` (Verify routing and serialization, if applicable)
+### 4. Verifier/Runtime Checks
 
-### 4. Verifier/runtime checks
+1.  **Unit Test Verification:** All tests in `tests/unit/services/builder-marketing-data.test.js` pass, covering various aggregation scenarios and edge cases for BCES calculation.
+2.  **Integration Test Verification:** All tests in `tests/integration/routes/internal/marketing-metrics.test.js` pass, confirming the API endpoint is accessible, returns the correct data structure, and applies appropriate authentication/authorization for internal BuilderOS access.
+3.  **Manual API Call (Staging/Dev):**
+    *   Execute an authenticated GET request to `/builderos/metrics/campaign-engagement`.
+    *   Expected response: JSON object containing `campaignEngagementScore` (number) and `timestamp` (ISO string).
+    *   Example: `{"campaignEngagementScore": 78.5, "timestamp": "2023-10-27T10:00:00Z"}`
+4.  **Data Consistency Check:** Verify that the `campaignEngagementScore` returned by the API aligns with manual calculations based on a sample set of BuilderOS campaign interaction data.
 
-*   **Unit Test:** A new unit test in `src/tests/unit/userService.test.js` will mock the `eventBus.emit` method and assert that when `userService.createUser` is called, the `UserAccountCreated` event is emitted with a payload containing `user_id` (valid UUID) and `created_at` (valid ISO 8601 string) fields, matching the created user's data.
-*   **Integration Test (Staging):** After deployment to a staging environment, trigger a new user account creation. Monitor the MarketingOS event ingestion logs (or a dedicated monitoring dashboard) for the presence of the `UserAccountCreated
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+*   If unit or integration tests fail, indicating incorrect logic or API behavior.
+*   If the API endpoint is inaccessible, returns an incorrect status code (e.g., 4xx, 5xx), or an unexpected data format.
+*   If the `campaignEngagementScore` value returned by the API significantly deviates from expected values based on source BuilderOS data, suggesting an aggregation error or data source issue.
+*   If any attempt to access or modify LifeOS user features or TSOS customer-facing surfaces is detected during implementation or testing, immediately halt and re-evaluate scope.
