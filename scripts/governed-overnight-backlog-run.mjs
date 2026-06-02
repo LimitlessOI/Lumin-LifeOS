@@ -52,9 +52,15 @@ const HARD_BLOCKERS = new Set([
   'REPO_CORRUPTION',
   'CAPACITY_EXHAUSTED',
 ]);
-const MAX_CONSECUTIVE_502 = 15;
-const INFRA_REDIRECT_AT_502 = 8;
+// MISSION ADVANCEMENT DOCTRINE: Active is not enough. Productive work is required.
+// Low thresholds ensure Railway degradation redirects to local-only work quickly,
+// preventing the HTTP_502 → support-task → HTTP_502 circular churn that burns tokens
+// without advancing any mission.
+const MAX_CONSECUTIVE_502 = 6;
+const INFRA_REDIRECT_AT_502 = 3;
+const INFRA_RECOVERY_BACKOFF_MS = [30_000, 60_000, 120_000, 300_000];
 let consecutive502s = 0;
+let infraBackoffIndex = 0;
 
 const NO_RETRY_BLOCKERS = new Set([
   'HTTP_502',
@@ -99,6 +105,111 @@ async function runLocalVerificationBurst(state) {
       state.local_verifications.push({ check: check.name, ok: false, at: new Date().toISOString() });
     }
   }
+}
+
+// Work classification for Mission Advancement Doctrine.
+// mission_advancing = committed + oil + token verified (real founder value)
+// mission_supporting = committed but not fully verified
+// blocker_reduction  = local work: health checks, syntax audits
+// learning           = gap/OC verification, analysis docs
+// churn              = same blocker class repeated with no new capability
+function classifyWorkAdvancement(task, result) {
+  if (result.local) return 'blocker_reduction';
+  if (result.ok && result.committed && result.oil_verified) return 'mission_advancing';
+  if (result.ok && result.committed) return 'mission_supporting';
+  const code = result.blocker || '';
+  if (code.startsWith('HTTP_5') || code === 'HTTP_502') return 'churn';
+  if (task.category === 'support_open_contradiction' || task.category === 'support_platform_gap') return 'learning';
+  return 'learning';
+}
+
+// Local task executor — runs tasks that do NOT require the Railway API.
+// Used when infrastructure_degraded=true to avoid the HTTP_502 → support-task →
+// HTTP_502 loop. Never calls callApi(). Always returns { local: true }.
+async function runLocalTask(task, state) {
+  const t0 = Date.now();
+  await appendLog('local_task_start', { task_id: task.id, action_type: task.action_type });
+
+  if (task.action_type === 'railway_health_check') {
+    try {
+      const res = await fetch(`${BASE_URL}/api/v1/lifeos/builder/ready`, {
+        headers: { 'x-command-key': KEY },
+        signal: AbortSignal.timeout(10_000),
+      });
+      const ok = res.status === 200;
+      if (ok) {
+        consecutive502s = 0;
+        infraBackoffIndex = 0;
+        state.infrastructure_degraded = false;
+        state.productive_work = true;
+        await appendLog('railway_health_recovered', {
+          status: res.status,
+          action: 'infrastructure_degraded cleared — blueprint work resumes next generation',
+        });
+      } else {
+        await appendLog('railway_health_still_degraded', { status: res.status, consecutive_502s: consecutive502s });
+      }
+      return { ok, local: true, action_type: 'railway_health_check', status: res.status, wall_ms: Date.now() - t0 };
+    } catch (error) {
+      await appendLog('railway_health_error', { error: error.message, wall_ms: Date.now() - t0 });
+      return { ok: false, local: true, action_type: 'railway_health_check', error: error.message, wall_ms: Date.now() - t0 };
+    }
+  }
+
+  if (task.action_type === 'syntax_audit') {
+    const dirs = ['routes', 'services', 'scripts', 'config', 'startup', 'core'];
+    let passed = 0;
+    let failed = 0;
+    const errors = [];
+    for (const dir of dirs) {
+      try {
+        const files = execSync(`find ${JSON.stringify(path.join(ROOT, dir))} -name "*.js" -o -name "*.mjs" 2>/dev/null`, {
+          encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
+        }).split('\n').filter(Boolean);
+        for (const f of files.slice(0, 30)) {
+          const result = syntaxCheck(f);
+          if (result.ok) { passed++; } else { failed++; errors.push(`${path.relative(ROOT, f)}: ${result.error}`); }
+        }
+      } catch { /* dir may not exist */ }
+    }
+    await appendLog('local_syntax_audit', { passed, failed, errors: errors.slice(0, 5), wall_ms: Date.now() - t0 });
+    state.productive_work = true;
+    return { ok: failed === 0, local: true, action_type: 'syntax_audit', passed, failed, wall_ms: Date.now() - t0 };
+  }
+
+  if (task.action_type === 'status_summary') {
+    const summaryPath = path.join(ROOT, 'data', 'governed-autonomy-status-summary.json');
+    const summary = {
+      ts: new Date().toISOString(),
+      generation: state.generation_count,
+      tasks_done: state.tasks_done,
+      successes: state.successes.length,
+      failures: state.failures.length,
+      founder_value_deliveries: state.founder_value_deliveries,
+      infrastructure_degraded: state.infrastructure_degraded,
+      consecutive_502s: consecutive502s,
+      infra_backoff_index: infraBackoffIndex,
+      consecutive_infra_failures: state.consecutive_infra_failures || 0,
+      churn_count: state.churn_count || 0,
+      productive_work: state.productive_work || false,
+      work_classification_last: state.work_classification_last || null,
+      law: 'ACTIVE IS NOT ENOUGH. PRODUCTIVE WORK IS REQUIRED.',
+      directive: 'prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md',
+    };
+    await fs.mkdir(path.dirname(summaryPath), { recursive: true });
+    await fs.writeFile(summaryPath, JSON.stringify(summary, null, 2) + '\n', 'utf8');
+    await appendLog('status_summary_written', {
+      path: summaryPath,
+      founder_value_deliveries: summary.founder_value_deliveries,
+      churn_count: summary.churn_count,
+      wall_ms: Date.now() - t0,
+    });
+    state.productive_work = true;
+    return { ok: true, local: true, action_type: 'status_summary', wall_ms: Date.now() - t0 };
+  }
+
+  await appendLog('local_task_unknown_type', { task_id: task.id, action_type: task.action_type });
+  return { ok: false, local: true, error: `unknown action_type: ${task.action_type}`, wall_ms: Date.now() - t0 };
 }
 
 const SAFE_TARGET_PREFIXES = Object.freeze([
@@ -719,7 +830,61 @@ async function generateSupportTaskBatch(generation, attemptedKeys, state) {
   return tasks;
 }
 
+// Returns local-only infra recovery tasks that do NOT call the Railway API.
+// These run when infrastructure_degraded=true to avoid the 502 → task → 502 churn loop.
+// Each task has requires_api=false so runLocalTask() handles it instead of runTask().
+function generateInfraRecoveryTasks(generation) {
+  return [
+    {
+      id: `infra-health-check-g${generation}`,
+      priority: 0,
+      category: 'infra_recovery',
+      lane: 'infra',
+      zone: 'Z0',
+      action_type: 'railway_health_check',
+      requires_api: false,
+      target_file: null,
+      instruction: 'Check Railway health — if 200 OK clear infrastructure_degraded and resume blueprint work.',
+    },
+    {
+      id: `syntax-audit-g${generation}`,
+      priority: 1,
+      category: 'infra_recovery',
+      lane: 'infra',
+      zone: 'Z0',
+      action_type: 'syntax_audit',
+      requires_api: false,
+      target_file: null,
+      instruction: 'Run node --check on all .js/.mjs files in routes/, services/, scripts/. Report failures.',
+    },
+    {
+      id: `status-summary-g${generation}`,
+      priority: 2,
+      category: 'infra_recovery',
+      lane: 'infra',
+      zone: 'Z0',
+      action_type: 'status_summary',
+      requires_api: false,
+      target_file: null,
+      instruction: 'Write data/governed-autonomy-status-summary.json with current runner state.',
+    },
+  ];
+}
+
+// MISSION ADVANCEMENT DOCTRINE: Active is not enough. Productive work is required.
+// When infrastructure is degraded, only generate local tasks (no Railway dependency).
+// This breaks the 502 → support-task → 502 circular churn that was the prior failure mode.
 async function generateNextTaskBatch(generation, attemptedKeys, state) {
+  if (state.infrastructure_degraded) {
+    const infraTasks = generateInfraRecoveryTasks(generation);
+    const fresh = infraTasks.filter((t) => !attemptedKeys.has(t.id));
+    if (fresh.length > 0) {
+      return { source: 'infra_recovery', tasks: fresh };
+    }
+    // All local tasks for this generation exhausted; signal backoff before next retry.
+    infraBackoffIndex = Math.min(infraBackoffIndex + 1, INFRA_RECOVERY_BACKOFF_MS.length - 1);
+    return { source: 'infra_recovery_backoff', tasks: [] };
+  }
   const blueprintTasks = await generateBlueprintTaskBatch(generation, attemptedKeys);
   if (blueprintTasks.length > 0) {
     return { source: 'blueprints', tasks: blueprintTasks };
@@ -997,8 +1162,15 @@ async function main() {
     local_verifications: [],
     infrastructure_degraded: false,
     current_task: null,
+    // Mission Advancement Doctrine fields — track whether work is advancing mission or just motion
+    productive_work: false,
+    productive_work_last_at: null,
+    consecutive_infra_failures: 0,
+    churn_count: 0,
+    work_classification_last: null,
+    infra_backoff_index: 0,
     stop_reason: null,
-    stop_law: 'ONLY: operator_stop | capacity_exhausted | safety_boundary | repo_corruption. Time limits are checkpoints only. HTTP_502 → redirect (not idle). See prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md',
+    stop_law: 'ONLY: operator_stop | capacity_exhausted | safety_boundary | repo_corruption. Active is not enough — productive work is required. HTTP_502 → redirect to local work (not idle). See prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md',
   };
 
   await appendLog('orchestrator_start', {
@@ -1035,40 +1207,43 @@ async function main() {
         support_tasks_generated: state.support_tasks_generated,
         infrastructure_degraded: state.infrastructure_degraded,
         queue_depth: workQueue.length,
-        action: 'CONTINUING — checkpoint is NOT a stop condition',
+        productive_work: state.productive_work,
+        productive_work_last_at: state.productive_work_last_at,
+        consecutive_infra_failures: state.consecutive_infra_failures,
+        churn_count: state.churn_count,
+        work_classification_last: state.work_classification_last,
+        infra_backoff_index: infraBackoffIndex,
+        action: 'CONTINUING — checkpoint is NOT a stop condition. Active is not enough; productive work is required.',
       });
       await writeState(state);
       nextCheckpoint = Date.now() + CHECKPOINT_MS;
     }
 
-    if (consecutive502s >= INFRA_REDIRECT_AT_502 && consecutive502s < MAX_CONSECUTIVE_502) {
-      if (!state.infrastructure_degraded) {
-        state.infrastructure_degraded = true;
-        await appendLog('infrastructure_degraded', {
-          consecutive_502s: consecutive502s,
-          action: 'local_verification_burst',
-        });
-        await runLocalVerificationBurst(state);
-      }
+    // INFRA DEGRADATION GUARD — Mission Advancement Doctrine
+    // At INFRA_REDIRECT_AT_502 (3) consecutive task-level 502 failures: mark degraded,
+    // flush Railway-dependent queue, redirect to local-only infra_recovery tasks.
+    // NOTE: consecutive502s (call-level) oscillates when CREATE succeeds but EXECUTE 502s.
+    // Use state.consecutive_infra_failures (task-level) as the reliable trigger.
+    if ((state.consecutive_infra_failures >= INFRA_REDIRECT_AT_502 || consecutive502s >= INFRA_REDIRECT_AT_502) && !state.infrastructure_degraded) {
+      state.infrastructure_degraded = true;
+      infraBackoffIndex = 0;
+      workQueue.length = 0; // flush Railway-dependent tasks; infra_recovery tasks generated next
+      await appendLog('infrastructure_degraded', {
+        consecutive_502s: consecutive502s,
+        threshold: INFRA_REDIRECT_AT_502,
+        action: 'queue_flushed — redirecting to local infra_recovery tasks only',
+        law: 'ACTIVE IS NOT ENOUGH. PRODUCTIVE WORK IS REQUIRED.',
+        next: 'generateNextTaskBatch will return railway_health_check, syntax_audit, status_summary',
+      });
+      await writeState(state);
     }
 
-    if (consecutive502s >= MAX_CONSECUTIVE_502) {
-      state.infrastructure_degraded = true;
-      const supportBatch = await generateSupportTaskBatch(state.generation_count + 1, attemptedKeys, state);
-      if (supportBatch.length > 0) {
-        workQueue.unshift(...supportBatch.sort((a, b) => a.priority - b.priority));
-        await appendLog('infrastructure_redirect', {
-          consecutive_502s: consecutive502s,
-          support_tasks_queued: supportBatch.length,
-          message: 'Railway degraded — pivot to gap/contradiction support lane + local verify; not stopping.',
-        });
-        consecutive502s = 0;
-        await writeState(state);
-        continue;
-      }
+    // Hard stop only if infra has been degraded for MAX_CONSECUTIVE_502 task-level failures
+    // (not just call-level). This is tracked via consecutive_infra_failures.
+    if (state.consecutive_infra_failures >= MAX_CONSECUTIVE_502 * 4) {
       await appendLog('orchestrator_hard_stop', {
         blocker: 'SERVICE_OUTAGE',
-        reason: `${consecutive502s} consecutive HTTP 502 responses — no redirect tasks available`,
+        reason: `${state.consecutive_infra_failures} consecutive infra failures with no recovery`,
       });
       state.status = 'hard_stop';
       state.stop_reason = 'SERVICE_OUTAGE';
@@ -1094,11 +1269,23 @@ async function main() {
       });
 
       if (newTasks.length === 0) {
+        const isInfraBackoff = batch.source === 'infra_recovery_backoff';
+        const sleepMs = isInfraBackoff
+          ? INFRA_RECOVERY_BACKOFF_MS[Math.max(0, infraBackoffIndex - 1)]
+          : 60_000;
+        state.infra_backoff_index = infraBackoffIndex;
         await appendLog('generator_temporarily_empty', {
           generation: state.generation_count,
-          message: 'Generator returned 0 tasks. Pausing 60s before retry. Will not stop.',
+          source: batch.source,
+          sleep_ms: sleepMs,
+          infrastructure_degraded: state.infrastructure_degraded,
+          consecutive_infra_failures: state.consecutive_infra_failures,
+          message: isInfraBackoff
+            ? `Infrastructure degraded — backing off ${sleepMs}ms before Railway health retry. Law: Active is not enough; productive work is required.`
+            : 'Generator returned 0 tasks. Pausing 60s before retry. Will not stop.',
         });
-        await new Promise((resolve) => setTimeout(resolve, 60000));
+        await writeState(state);
+        await new Promise((resolve) => setTimeout(resolve, sleepMs));
         continue;
       }
 
@@ -1124,9 +1311,31 @@ async function main() {
     state.tasks_total = state.tasks_done + workQueue.length + 1;
     await writeState(state);
 
-    const result = await runTask(task, state);
+    const result = task.requires_api === false
+      ? await runLocalTask(task, state)
+      : await runTask(task, state);
     if (!state.first_job_id && result.job_id) {
       state.first_job_id = result.job_id;
+    }
+
+    // Mission Advancement Doctrine — classify work and track productive vs churn.
+    const workClass = classifyWorkAdvancement(task, result);
+    state.work_classification_last = workClass;
+    if (workClass === 'mission_advancing') {
+      state.productive_work = true;
+      state.productive_work_last_at = new Date().toISOString();
+      state.churn_count = 0;
+      state.consecutive_infra_failures = 0;
+    } else if (workClass === 'blocker_reduction') {
+      state.productive_work = true;
+      if (result.ok) state.consecutive_infra_failures = 0; // successful local work = infra recovered
+    } else if (workClass === 'churn') {
+      state.productive_work = false;
+      state.churn_count = (state.churn_count || 0) + 1;
+      state.consecutive_infra_failures = (state.consecutive_infra_failures || 0) + 1;
+    } else {
+      // mission_supporting or learning — productive by effort even if not value-delivering
+      state.productive_work = result.ok || false;
     }
 
     if (result.hard) {

@@ -2,6 +2,34 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SSOT] 2026-06-02 — Mission Advancement Doctrine: Fix HTTP_502 Churn Loop in Continuous Runner
+
+### Mission result: COMPLETE — runner patched, verified in production, PID 93168 running
+
+**Agent:** Claude Sonnet 4.6 / Claude Code VSCode Extension / main branch / Conductor role
+
+**What:** Fixed the 1,488-failure HTTP_502 churn loop in `scripts/governed-overnight-backlog-run.mjs`. Root cause was governance doctrine gap: no Mission Advancement Doctrine, no local redirect path, and the per-call 502 counter oscillated because CREATE calls succeeded but EXECUTE calls 502'd (preventing the threshold from being reached). Prior support-task redirect also called Railway → also 502'd → counter reset → loop resumed.
+
+**Files changed:**
+- `scripts/governed-overnight-backlog-run.mjs` — 11 targeted changes: lower thresholds (3/6 from 8/15), `classifyWorkAdvancement()`, `runLocalTask()` (3 local-only action types), `generateInfraRecoveryTasks()`, `generateNextTaskBatch()` gated on `infrastructure_degraded`, task-level 502 counter (`consecutive_infra_failures`), local task dispatch via `requires_api`, progressive backoff sleep, work classification update after each task, `consecutive_infra_failures` reset on recovery, new state fields
+- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — change receipt added
+
+**Verified in production:**
+- `infrastructure_degraded` guard fired after 3 task-level 502 failures (not 1,488)
+- `local_task_start` → `railway_health_recovered` confirmed: health check ran locally, Railway responded 200, `infrastructure_degraded` cleared, `consecutive_infra_failures` reset
+- Rapid-cycling bug found and fixed during live verification: `consecutive_infra_failures` wasn't reset on `blocker_reduction` success; fixed inline
+- Runner restarted 3x during patch (each with syntax check before restart); final PID 93168 alive
+
+**Key law added to runner:** `ACTIVE IS NOT ENOUGH. PRODUCTIVE WORK IS REQUIRED.`
+
+**State fields added:** `productive_work`, `productive_work_last_at`, `consecutive_infra_failures`, `churn_count`, `work_classification_last`, `infra_backoff_index`
+
+**Next exact build steps:**
+1. Monitor PID 93168 — verify it stays in blueprint work mode (not cycling) across 5+ generations
+2. If Railway is down consistently: runner will cycle health_check → backoff (30s→60s→120s→300s) without burning tokens on blueprint tasks
+3. When infrastructure stabilizes: resume Mission Runtime Phase 2 prerequisites (AIC DISCUSSION-6, patch migration, mission-ledger.js)
+
+---
 ## [SSOT] 2026-06-01 — Governance + BPB Correction Before Mission Runtime Phase 2
 
 ### Mission result: COMPLETE — doctrine corrections applied, Phase 2 BLOCKED on known governance gaps
