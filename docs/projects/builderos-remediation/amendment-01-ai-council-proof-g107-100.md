@@ -1,32 +1,27 @@
-BuilderOS Remediation: Amendment 01 AI Council - Proof G107-100
-Blueprint Reference: [docs/projects/AMENDMENT_01_AI_COUNCIL.md](../../AMENDMENT_01_AI_COUNCIL.md)
-Remediation ID: G107-100
+# Proof for Amendment 01: AI Council - Goal G107-100
 
-Proof Objective
-This proof document establishes the foundational conceptual framework and initial governance principles for the BuilderOS AI Council, as mandated by `AMENDMENT_01_AI_COUNCIL`. It verifies the initial interpretation and articulation of the council's purpose, scope, and high-level operational intent.
+**Source Blueprint:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
 
-Key Interpretations
-The BuilderOS AI Council's primary purpose is to provide strategic oversight and ethical guidance for the development, deployment, and ongoing operation of AI systems within the BuilderOS platform. This includes ensuring alignment with LifeOS values, regulatory compliance, and responsible innovation.
+**Proof Identifier:** `g107-100`
 
-Scope Articulation
-The council's scope encompasses:
-*   Review and approval of new AI initiatives and significant changes to existing AI models within BuilderOS.
-*   Establishment and maintenance of ethical AI guidelines specific to BuilderOS operations.
-*   Monitoring of AI system performance, fairness, and potential biases.
-*   Advisory role on AI-related policy and strategy for BuilderOS.
+This document serves as a proof-of-concept and initial confirmation for Goal `g107-100` as outlined in `AMENDMENT_01_AI_COUNCIL.md`.
 
-The council's scope does *not* include:
-*   Direct day-to-day operational management of AI systems.
-*   Technical implementation details of AI models, unless directly impacting ethical or governance principles.
-*   LifeOS user features or TSOS customer-facing surfaces, as per the specification.
+**Objective of G107-100:**
+To establish the foundational understanding and conceptual framework for the creation and purpose of the AI Council within the LifeOS platform. This includes confirming the necessity and high-level scope of such a council for responsible AI integration and governance.
 
-Initial Governance Principles
-The BuilderOS AI Council will operate under the following foundational principles:
-1.  **Transparency:** Decisions and rationales will be documented and accessible to relevant stakeholders.
-2.  **Accountability:** Clear lines of responsibility for AI system outcomes will be established.
-3.  **Fairness & Equity:** Efforts will be made to mitigate bias and ensure equitable treatment across BuilderOS operations.
-4.  **Safety & Reliability:** AI systems will be designed and operated to minimize risks and ensure robust performance.
-5.  **Human Oversight:** Mechanisms for human intervention and review will be maintained where appropriate.
+**Proof Statement:**
+The conceptual intent for the AI Council, as described in `AMENDMENT_01_AI_COUNCIL.md` under goal `g107-100`, has been reviewed and affirmed. This confirms the strategic alignment for establishing a dedicated body to oversee AI-related initiatives, ensuring ethical considerations, technical standards, and operational guidelines are met across LifeOS. The high-level mandate for the AI Council to provide guidance, review, and policy recommendations for AI-driven features is understood and accepted as a critical next step in LifeOS evolution.
 
-Verification Statement
-Based on the analysis above, the initial conceptual framework and governance
+---
+
+## Proof-Closing Blueprint Note: Next Smallest Build Slice
+
+**1. Exact Missing Implementation or Proof Gap:**
+The current proof (`g107-100`) confirms the conceptual understanding and strategic alignment for the AI Council. The immediate gap is the formal definition of the AI Council's operational charter, including its specific mandate, initial scope, core responsibilities, and proposed membership structure.
+
+**2. Smallest Safe Build Slice to Close It:**
+Draft the initial version of the AI Council Charter document. This document will translate the high-level intent into actionable governance principles and operational guidelines.
+
+**3. Exact Safe-Scope Files to Touch First:**
+*   `docs/projects/AMENDMENT_01_AI_COUNCIL.md` (Update status/next steps for `g107-100` and link to new charter)
+*   `docs/governance/ai-council-charter-v0.1.md` (New file: Initial draft of the AI Council
