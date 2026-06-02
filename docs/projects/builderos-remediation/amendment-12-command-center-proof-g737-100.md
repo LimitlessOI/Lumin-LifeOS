@@ -1,18 +1,37 @@
-# Amendment 12: Command Center Proof - G737-100 Initial Status Display
+# Amendment 12 Command Center Proof: G737-100 Remediation
 
-This document serves as a proof-closing blueprint note for the initial implementation slice of the G737-100 module within the BuilderOS Command Center, as outlined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`. This proof focuses on establishing a minimal, read-only data path and display for a critical G737-100 status parameter within the BuilderOS context.
+## Context
 
----
+This document addresses the OIL verifier rejection encountered during the BuilderOS change for Amendment 12, specifically concerning the processing of documentation files. The verifier attempted to load `amendment-12-command-center-proof-g737-100.md` as an ECMAScript module, resulting in a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]`. This indicates a mismatch in how the BuilderOS verification pipeline handles non-executable documentation files.
 
-### Blueprint Note for Next C2 Build Pass
+## Proof-Closing Blueprint Note
 
-**1. Exact missing implementation or proof gap:**
-The BuilderOS Command Center currently lacks a proven, end-to-end data ingestion and display path for any specific G737-100 operational parameter. The immediate gap is the ability to retrieve and visually present the `aircraft_power_status` for a designated G737-100 instance within the BuilderOS UI. This foundational capability is essential before integrating real-time data or command functionalities.
+### 1. Exact Missing Implementation or Proof Gap
 
-**2. Smallest safe build slice to close it:**
-Implement a new, read-only BuilderOS internal API endpoint that returns a hardcoded or mocked `aircraft_power_status` for the G737-100. Concurrently, develop a minimal BuilderOS UI component to consume this API endpoint and display the `aircraft_power_status` in a dedicated proof-of-concept page. This slice establishes the basic architectural flow from backend data provision to frontend display without external dependencies or complex state management.
+The BuilderOS verification pipeline, when processing files, attempts to load `.md` files as executable ECMAScript modules, leading to a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]`. The proof gap is that the verifier's file type detection and dispatch mechanism does not correctly identify `.md` files as non-executable documentation, preventing their proper handling (e.g., ignoring them for module loading, or routing them to a documentation linter). The current build pass failed because the verifier's execution context is not configured to gracefully bypass or correctly process non-executable documentation files.
 
-**3. Exact safe-scope files to touch first:**
-*   `src/api/builder-os/g737-100-status.js`: Create a new Node.js/ESM module defining a GET endpoint (e.g., `/api/builder-os/g737-100/status`) that returns a JSON object containing `aircraft_id: "G737-100"` and `aircraft_power_status: "ON"`.
-*   `src/ui/builder-os/components/G737PowerStatusDisplay.js`: Create a new React/Vue component that fetches data from the new API endpoint and renders the `aircraft_power_status`.
-*   `src/ui/builder-os/pages/CommandCenterProofPage.js`: Create a new BuilderOS internal page (e.g., `/builder-os/proof/g737-100`) to host the `
+### 2. Smallest Safe Build Slice to Close It
+
+The smallest safe build slice is to modify the BuilderOS verifier's file processing logic to explicitly exclude `.md` files from module loading attempts. This involves updating the verifier's internal configuration or file-type dispatch mechanism to recognize `.md` files as documentation and prevent them from being passed to Node.js's module loader.
+
+### 3. Exact Safe-Scope Files to Touch First
+
+*   `builderos/verifier/src/fileProcessor.js` (or similar file responsible for iterating and dispatching file types)
+*   `builderos/verifier/src/config.js` (if file type exclusions are managed via configuration)
+*   `builderos/verifier/index.js` (if the main entry point directly controls file parsing logic)
+
+The primary focus should be on the component that determines how a file is processed based on its extension.
+
+### 4. Verifier/Runtime Checks
+
+*   Execute the BuilderOS verifier against a test project containing `.md` files, including the current `amendment-12-command-center-proof-g737-100.md`.
+*   Confirm that the `TypeError [ERR_UNKNOWN_FILE_EXTENSION]` for `.md` files no longer occurs.
+*   Verify that other expected file types (e.g., `.js`, `.ts`, `.json`) are still correctly processed and verified without regressions.
+*   Ensure the BuilderOS pipeline successfully completes its verification pass after the change.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+*   If the verifier continues to attempt loading `.md` files as executable modules.
+*   If the proposed changes introduce new errors or regressions in the processing of other file types.
+*   If the verifier's behavior indicates a deeper architectural issue requiring a more comprehensive redesign of its file processing strategy (e.g., if the verifier is fundamentally designed to execute *all* files in a directory).
+*   If the fix prevents the verifier from performing its intended checks on actual code files.
