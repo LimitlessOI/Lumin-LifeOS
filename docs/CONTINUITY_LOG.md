@@ -83,6 +83,38 @@ If none of those can be demonstrated, the task is low priority and should not be
 Not: "What got built?" Not: "What is planned?" Logs, routes, live state, and proof. If the system answers with plans and intentions instead of evidence, it is still in architecture mode. The test is whether the machine keeps moving when Adam is asleep.
 
 ---
+## [SSOT] 2026-06-02 — Mission-0001 Production Verified + Board Seeded
+
+**Agent:** Claude Sonnet 4.6 / Claude Code VSCode Extension / main branch / Conductor role
+
+**What:** Production smoke-test of Mission-0001 routes + builder repair + commitment seeding.
+
+**Builder fixes (now working):**
+- `council-service.js`: Gemini 413 → `PROMPT_TOO_LARGE` (non-retryable) — ends retry chains that caused Railway 60s → HTTP 502
+- `services/builderos-build-pipeline.js`: `detectFailureType` used `finding.id` (always undefined) → fixed to `finding.pattern`
+- `routes/lifeos-council-builder-routes.js`: JS gate 15 → 3 lines; PROMPT_TOO_LARGE handler returns 413 not 500
+- `scripts/verify-builder-output.mjs`: Signal 2 threshold 15 → 5 lines
+- `scripts/builderos-groq-antipattern-scan.mjs`: PATTERN 7 threshold 30 → 5 lines
+- `docs/projects/INDEX.md`: Priority order updated C2 → SocialMediaOS → LifeOS → Cursor (audit-only)
+- **POST /build verified working**: `services/check-required-env.js` built, `committed: true`, SHA `83819f7059`
+
+**Mission-0001 production state:**
+- `/lifeos-household` → HTTP 200 ✅
+- `/api/v1/lifeos/missions` → HTTP 200, MISSION-0001 found ✅
+- `/api/v1/lifeos/household/board` → HTTP 200, 8 sections ✅ (was HTTP 500 `column "due_date" does not exist`)
+- 8 commitments seeded (IDs 26–33): Doctor 06-03, Client 06-07, Taxes 06-10, Mortgage 06-15 (Adam); School 06-05, Budget 06-08, Nutrition 06-12 (Sherry); VA Hire 06-20 awaiting Sherry approval
+
+**Schema fixes (3 rounds):**
+- `db/migrations/20260605_mission_runtime_commitments_missing_columns.sql`: 5 ADD COLUMN IF NOT EXISTS (`owner`, `text`, `due_date`, `reminder_at`, `risk_if_missed`)
+- `services/mission-ledger.js` `createCommitment` cols: added `user_id` (BIGINT NOT NULL)
+- `services/mission-ledger.js` `createCommitment` cols: added `title` (TEXT NOT NULL)
+
+**Next priorities:**
+1. AIC DISCUSSION-6 (`POST /api/v1/lifeos/gate-change/run-council`) for backward transition authority
+2. C2 backlog work — priority per founder directive
+3. `today_commitments` timezone check — Railway UTC vs local date comparison
+
+---
 ## [SSOT] 2026-06-02 — Mission Runtime Phase 2 Complete (AMENDMENT_47)
 
 ### Mission result: COMPLETE — all 7 owned files written, 10/10 verifier PASS, pushed to origin/main
