@@ -1,33 +1,52 @@
-Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G35-100
+# AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G35-100
+
 This document serves as the SSOT foundation for closing proof gap G35-100 related to AMENDMENT_41_MARKETINGOS.
 
-1. Exact Missing Implementation or Proof Gap
-The AMENDMENT_41_MARKETINGOS blueprint defines the requirement for `MarketingEvent` objects to track and expose a `conversionRate` metric. The current implementation lacks the full lifecycle support for this metric: specifically, the calculation, persistence, and exposure of `MarketingEvent.conversionRate` via the MarketingOS API are not fully verified or implemented.
+## 1. Exact Missing Implementation or Proof Gap
 
-Proof Gap G35-100: Verification that the `conversionRate` metric for `MarketingEvent` objects, as defined in AMENDMENT_41_MARKETINGOS, is correctly calculated, persisted, and exposed via the MarketingOS API.
+The specific proof gap is the lack of verified ingestion and initial processing of the `marketingos.user.signup.completed` event within the LifeOS platform. This gap requires demonstrating that LifeOS can successfully receive, parse, and acknowledge this specific event type from MarketingOS, extracting key identifiers such as `userId` and `timestamp`.
 
-2. Smallest Safe Build Slice to Close It
-The smallest safe build slice involves extending existing `MarketingEvent` data structures and logic to incorporate the `conversionRate` metric. This includes:
-1.  Schema Extension: Add `conversionRate` field to the `MarketingEvent` data model/schema.
-2.  Calculation & Persistence Logic: Implement or extend the service layer logic responsible for creating/updating `MarketingEvent` instances to calculate `conversionRate` based on relevant event data (e.g., `impressions`, `clicks`, `conversions`) and persist it.
-3.  API Exposure: Ensure the `conversionRate` field is included in the response payload of relevant MarketingOS apiEPs that retrieve `MarketingEvent` data (e.g., `GET /api/v1/marketing-events/:id`, `GET /api/v1/marketing-events`).
+## 2. Smallest Safe Build Slice to Close It
 
-3. Exact Safe-Scope Files to Touch First
-The following files are within safe scope and should be touched first to implement the build slice:
--   `src/modules/marketing/marketingEvent.model.js`: To add the `conversionRate` field definition to the `MarketingEvent` schema.
--   `src/modules/marketing/marketingEvent.service.js`: To implement the `conversionRate` calculation logic during event creation or update, and ensure its persistence.
--   `src/modules/marketing/marketingEvent.controller.js`: To ensure the `conversionRate` field is included in the API response transformation for `MarketingEvent` retrieval endpoints.
--   `tests/integration/marketingEvent.integration.test.js`: To add new integration tests verifying the presence and correctness of `conversionRate` in API responses.
+The smallest safe build slice involves:
+*   Creating a dedicated event handler for `marketingos.user.signup.completed` events.
+*   This handler will perform minimal processing:
+    *   Validate the incoming event structure against a predefined schema.
+    *   Extract `userId` and `timestamp` from the event payload.
+    *   Log the successful reception and extraction of these key data points.
+    *   Return an acknowledgment to the event bus/source.
+*   No downstream business logic or database writes beyond logging are included in this slice to maintain minimal scope.
 
-4. Verifier/Runtime Checks
-To verify the implementation and close the proof gap:
--   API Call Verification:
--   Execute `GET /api/v1/marketing-events/:id` for a known `MarketingEvent` that should have a calculated `conversionRate`.
--   Assert that the response body contains a `conversionRate` field with a numeric value.
+## 3. Exact Safe-Scope Files to Touch First
 
-5. Stop Conditions if Runtime Truth Disagrees
-If any of the following conditions are met during runtime verification, the build pass must stop, and the proof gap remains open:
--   The `GET /api/v1/marketing-events/:id` endpoint returns an error or unexpected status code.
--   The response body for a `MarketingEvent` does not contain the `conversionRate` field.
--   The `conversionRate` field is present but its value is not a valid number (e.g., `null`, `undefined`, non-numeric string).
--   The calculated `conversionRate` value, when compared against known input data (`impressions`, `clicks`, `conversions`) and expected calculation logic, is demonstrably incorrect.
+*   `src/events/marketingos/handlers/signupCompletedHandler.js` (New file)
+    *   Purpose: Contains the core logic for handling `marketingos.user.signup.completed` events.
+*   `src/events/marketingos/index.js` (Existing/New, if `marketingos` event source not yet registered)
+    *   Purpose: Registers `signupCompletedHandler` with the appropriate event listener/dispatcher for `marketingos.user.signup.completed`.
+*   `src/config/eventSources.js` (Existing)
+    *   Purpose: Ensure `marketingos` is correctly configured as an active event source, if not already.
+*   `tests/unit/events/marketingos/signupCompletedHandler.test.js` (New file)
+    *   Purpose: Unit tests for the `signupCompletedHandler` to verify payload parsing and logging behavior.
+*   `tests/integration/events/marketingos/signupCompletedIntegration.test.js` (New file)
+    *   Purpose: Integration test to simulate an event dispatch and verify end-to-end reception and handler execution.
+
+## 4. Verifier/Runtime Checks
+
+*   **Unit Tests:**
+    *   `signupCompletedHandler.test.js`: Verify that the handler correctly parses valid `marketingos.user.signup.completed` payloads, extracts `userId` and `timestamp`, and logs the expected output. Test edge cases like missing optional fields.
+    *   `signupCompletedHandler.test.js`: Verify that the handler gracefully handles malformed or invalid payloads, logging errors without crashing.
+*   **Integration Tests:**
+    *   `signupCompletedIntegration.test.js`: Simulate sending a `marketingos.user.signup.completed` event to the LifeOS event bus. Assert that the `signupCompletedHandler` is invoked and its expected log output appears in a mocked logger.
+*   **Staging Environment Runtime Observation:**
+    *   Deploy the build slice to a staging environment.
+    *   Trigger a synthetic `marketingos.user.signup.completed` event (e.g., via a test script or MarketingOS test harness).
+    *   Monitor LifeOS application logs for the specific log messages generated by `signupCompletedHandler`, confirming successful event reception and data extraction.
+    *   Verify that no errors or unhandled exceptions are reported in the logs related to this event.
+
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+*   **Event Not Received:** If the `marketingos.user.signup.completed` event is not observed in LifeOS logs after being sent, indicating a failure in event bus integration or listener registration.
+*   **Payload Malformation:** If the event is received, but the `signupCompletedHandler` reports errors due to an unexpected or malformed payload structure, indicating a mismatch between expected and actual event schema.
+*   **Data Extraction Failure:** If the `userId` or `timestamp` cannot be correctly extracted and logged by the handler, suggesting issues with parsing logic or payload pathing.
+*   **Unhandled Exceptions:** If the `signupCompletedHandler` or related event processing infrastructure throws unhandled exceptions, indicating instability or critical logic flaws.
+*   **Performance Degradation:** If the introduction of this handler causes measurable performance degradation in the event processing pipeline (unlikely for this minimal slice, but always a stop condition).
