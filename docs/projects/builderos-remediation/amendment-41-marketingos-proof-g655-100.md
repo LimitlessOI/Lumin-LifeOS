@@ -1,34 +1,32 @@
-# Amendment 41 MarketingOS Proof: G655-100 - SSOT Foundation Verification
+# Amendment 41: MarketingOS Proof - G655-100 Remediation Blueprint
 
-This document serves as a proof-closing blueprint note for Amendment 41, focusing on the foundational Single Source of Truth (SSOT) verification for MarketingOS, specifically for proof point `g655-100`.
+This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified by the OIL verifier rejection for `amendment-41-marketingos-proof-g655-100.md`.
 
----
+## 1. Exact Missing Implementation or Proof Gap
 
-### 1. Exact Missing Implementation or Proof Gap
+The OIL verifier is incorrectly attempting to execute documentation files (`.md`) as Node.js modules, leading to a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]`. This indicates a misconfiguration in the verifier's file type handling or the build process's instruction set for documentation assets. Markdown files are static documentation and should not be processed as executable code.
 
-The current gap is the absence of a verifiable, read-only API endpoint that explicitly exposes the foundational SSOT data structure and initial values as defined by Amendment 41 for MarketingOS, specifically for the `g655-100` proof point. This endpoint is crucial for confirming that the core data model and its initial state align with the amendment's canonical specification.
+## 2. Smallest Safe Build Slice to Close It
 
-### 2. Smallest Safe Build Slice to Close It
+The remediation involves adjusting the BuilderOS build system's OIL verifier configuration to explicitly exclude `.md` files from code execution checks, or to define a specific, non-executable verification pipeline for documentation assets (e.g., Markdown linting, existence checks). The core change is to prevent Node.js from attempting to load `.md` files as ESM modules.
 
-Implement a new, read-only GET API endpoint under the MarketingOS API surface. This endpoint will retrieve and present the `g655-100` foundational SSOT data directly from the MarketingOS data store, ensuring it adheres to the schema and content specified in `docs/projects/AMENDMENT_41_MARKETINGOS.md`. The implementation will focus solely on data retrieval and exposure, without introducing any modification capabilities.
+## 3. Exact Safe-Scope Files to Touch First
 
-### 3. Exact Safe-Scope Files to Touch First
+1.  `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g655-100.md`: This document itself, providing the blueprint.
+2.  `[BUILD_SYSTEM_ROOT]/oil-verifier-config.json` (or similar): Update the verifier's configuration to define file type handling rules.
+3.  `[BUILD_SYSTEM_ROOT]/scripts/verify-build.js` (or similar build script): Modify the script responsible for invoking the OIL verifier to ensure `.md` files are passed through a documentation-specific check or explicitly ignored by the code execution check.
+4.  `package.json`: Review `scripts` section for verifier invocation parameters.
 
-*   `src/api/marketingos/v1/proofs/g655-100.js` (New: Endpoint handler for GET /api/marketingos/v1/proofs/g655-100)
-*   `src/api/marketingos/v1/routes.js` (Modify: Register the new `/proofs/g655-100` route)
-*   `src/services/marketingos/proofService.js` (New: Service layer for retrieving `g655-100` SSOT data)
-*   `src/models/marketingos/MarketingProofG655.js` (New: If a specific model is required for `g655-100`'s structure, otherwise leverage existing models)
-*   `src/tests/api/marketingos/v1/proofs/g655-100.test.js` (New: Unit and integration tests for the new endpoint)
+*(Note: Specific file paths for build system configuration are placeholders as they are not provided in the current context. The actual paths must be identified within the BuilderOS build system.)*
 
-### 4. Verifier/Runtime Checks
+## 4. Verifier/Runtime Checks
 
-*   **API Endpoint Accessibility:** Execute a `GET /api/marketingos/v1/proofs/g655-100` request. Expected HTTP status: `200 OK`.
-*   **Schema Conformance:** Validate the JSON response payload against the precise SSOT schema defined for `g655-100` in `docs/projects/AMENDMENT_41_MARKETINGOS.md`. All fields, types, and required properties must match.
-*   **Data Integrity & Foundational Values:** Verify that the returned data values for `g655-100` accurately reflect the foundational state and content specified by Amendment 41. This includes checking specific identifiers, timestamps, or configuration flags.
-*   **Security & Scope:** Confirm that the endpoint only exposes the intended SSOT foundational data for `g655-100` and does not inadvertently leak sensitive or out-of-scope information.
+*   **OIL Verifier Check:** Rerun the full BuilderOS build loop. The OIL verifier must complete without `ERR_UNKNOWN_FILE_EXTENSION` errors for `.md` files. Specifically, the check for `amendment-41-marketingos-proof-g655-100.md` should pass without attempting execution.
+*   **Documentation System Check:** Verify that `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g655-100.md` is correctly integrated into the documentation platform (e.g., rendered, discoverable, linked).
+*   **Build Log Review:** Confirm that no other non-executable file types are being subjected to Node.js execution checks.
 
-### 5. Stop Conditions If Runtime Truth Disagrees
+## 5. Stop Conditions if Runtime Truth Disagrees
 
-*   If the `GET /api/marketingos/v1/proofs/g655-100` endpoint returns any HTTP status code other than `200 OK` (e.g., `4xx`, `5xx`).
-*   If the JSON response payload's structure (fields, types, nesting) deviates from the SSOT schema specified in `docs/projects/AMENDMENT_41_MARKETINGOS.md` for `g655-100`.
-*   If the actual data values returned for `g655-100
+*   If the `ERR_UNKNOWN_FILE_EXTENSION` persists for `.md` files, the verifier configuration change was insufficient or incorrectly applied. Re-evaluate the verifier's invocation parameters and internal logic.
+*   If the verifier passes but the documentation file is not correctly processed or displayed by the documentation system, the scope of the fix needs to expand to the documentation build and rendering pipeline.
+*   If new `ERR_UNKNOWN_FILE_EXTENSION` errors emerge for other non-executable file types (e.g., `.txt`, `.json` intended as data, not modules), the underlying issue with the verifier's file type identification is broader than initially assessed.
