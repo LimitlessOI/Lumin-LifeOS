@@ -1,5 +1,3 @@
-# BuilderOS Remediation: Amendment 01 AI Council - Proof G121-100
+# Amendment 01: AI Council - Proof G121-100: Initial Council Data Structure
 
-## Blueprint Note: Defining AICouncilRecommendation Schema
-
-This proof-closing blueprint note addresses the initial foundational step for integrating the AI Council's operational output within the BuilderOS remediation framework. The core gap identified is the absence of a standardized data model for the AI Council's recommendations, which are
+This document serves as a proof-closing blueprint note for the initial establishment of the AI Council's foundational data structure within the LifeOS platform, as outlined in `docs/projects/AMENDMENT_01_AI_COUNCIL.md`. This proof addresses the `
