@@ -1,0 +1,1 @@
+The blueprint `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` was not provided, so assumptions about its content regarding `G113-100` were made.
