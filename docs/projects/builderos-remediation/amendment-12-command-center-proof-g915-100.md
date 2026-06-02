@@ -1,0 +1,2 @@
+ASSUMPTIONS: The blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` outlines a multi-phase feature integration, starting with database schema definition for `command_center_configs` and `command_center_events` tables, followed by service, API, and UI layers. LifeOS uses a standard Node.js database migration system.
+# Amendment
