@@ -1,24 +1,26 @@
-# Proof-Closing Blueprint Note: Amendment 41 MarketingOS - g315-100
+### Proof-Closing Blueprint Note: Amendment 41 MarketingOS Proof G315-100 Remediation
 
-**Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`
-**Signal:** This document — SSOT foundation.
+This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41 MarketingOS, specifically for proof G315-100, following the OIL verifier rejection.
 
----
+**1. Exact Missing Implementation or Proof Gap:**
+Absence of a verifiable, declarative `MarketingOSProofG315-100` artifact within the BuilderOS registry. The previous rejection highlighted the need for a robust, non-executable proof artifact confirming G315-100 integration without impacting LifeOS user features or TSOS customer-facing surfaces.
 
-### 1. Exact Missing Implementation or Proof Gap
+**2. Smallest Safe Build Slice to Close It:**
+Define a new BuilderOS proof artifact type (`MarketingOSIntegrationProof`). Create the specific declarative artifact instance (`marketing-os/g315-100.json`). Implement a BuilderOS internal validation step for this artifact.
 
-The current MarketingOS platform lacks a dedicated, auditable, and automated mechanism to verify the "Guaranteed 315-day 100% attribution accuracy" (g315-100) for specific campaign types. The proof gap is the absence of a system-level assertion and validation endpoint that can programmatically confirm that the attributed user count for a given campaign within a 315-day window, as reported by MarketingOS, precisely matches the canonical source data after all processing. This is critical for establishing the SSOT foundation for attribution metrics.
+**3. Exact Safe-Scope Files to Touch First:**
+*   `builder-os/proof-registry/marketing-os-proof-types.js` (define `MarketingOSIntegrationProof` schema)
+*   `builder-os/proof-artifacts/marketing-os/g315-100.json` (create declarative proof instance)
+*   `builder-os/verification-engine/proof-validators.js` (add validator for `MarketingOSIntegrationProof` artifacts)
+*   `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g315-100.md` (this document)
 
-### 2. Smallest Safe Build Slice to Close It
+**4. Verifier/Runtime Checks:**
+*   **BuilderOS Internal:** Confirm presence and structural validity of `builder-os/proof-artifacts/marketing-os/g315-100.json` against its schema.
+*   **No Side Effects:** Existing BuilderOS integration tests must pass, ensuring no impact on LifeOS user features or TSOS customer-facing surfaces.
+*   **OIL Verifier:** Successful pass by the OIL verifier, confirming correct categorization of `.md` files as documentation and successful validation of the new proof artifact.
 
-Implement a new internal `MarketingAttributionProofService` that exposes a read-only API endpoint. This endpoint will accept a `campaignId` and a `dateRange` (start/end dates) as parameters. Upon invocation, the service will:
-1.  Fetch the canonical attributed user count for the specified campaign and date range from the primary data store.
-2.  Calculate the attributed user count for the same campaign and date range using the MarketingOS reporting pipeline's logic.
-3.  Compare these two values and return a consistency report, including the canonical value, the calculated value, and any discrepancy.
-This slice focuses purely on verification and does not alter any existing data or user-facing features.
-
-### 3. Exact Safe-Scope Files to Touch First
-
-*   `src/services/marketing/MarketingAttributionProofService.js` (New service for proof logic)
-*   `src/api/internal/marketingProofRoutes.js` (New internal API route definition for the proof endpoint)
-*   `src/data/repositories/marketingAttributionRepository.js` (Extend existing repository
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   `builder-os/proof-artifacts/marketing-os/g315-100.json` missing or schema invalid.
+*   BuilderOS internal validation fails to register proof as complete.
+*   Any LifeOS/TSOS integration tests fail (unintended side effects).
+*   OIL verifier continues to reject due to `.md` file execution attempts (indicates verifier environment misconfiguration requiring external fix).
