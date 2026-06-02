@@ -1,28 +1,46 @@
-# Blueprint Proof: Command Center V2 - G269-100
+// src/api/routes/telemetry.js
+import express from 'express';
+import { TelemetryData } from '../models/TelemetryData';
+import { telemetryService } from '../services/telemetryService';
 
-**Source Blueprint:** `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`
-**Derived Build Slice:** Phase 1, Slice 1.1: Basic Telemetry Ingestion
+const router = express.Router();
 
----
+router.post('/api/v1/telemetry', async (req, res) => {
+  try {
+    const telemetryData = new TelemetryData(req.body);
+    await telemetryService.processTelemetry(telemetryData);
+    res.status(201).send('Telemetry data received');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error processing telemetry data');
+  }
+});
 
-### 1. Exact Missing Implementation or Proof Gap
+export default router;
+```
 
-The foundational gap is the absence of a defined API endpoint and data model for ingesting basic telemetry data into the Command Center V2 system. This includes the necessary routing, data validation, and initial persistence logic.
+```javascript
+// src/api/models/TelemetryData.js
+class TelemetryData {
+  constructor(data) {
+    this.id = data.id;
+    this.deviceId = data.deviceId;
+    this.timestamp = data.timestamp;
+    this.data = data.data;
+  }
+}
 
-### 2. Smallest Safe Build Slice to Close It
+export default TelemetryData;
+```
 
-Implement the `/api/v1/telemetry` POST endpoint for receiving telemetry data. This slice focuses solely on:
--   Defining the API route.
--   Creating a basic data model/schema for telemetry.
--   Implementing a service layer function to handle data ingestion (e.g., validation and logging/mock persistence).
--   Ensuring the endpoint is reachable and accepts valid data.
+```javascript
+// src/api/services/telemetryService.js
+import { TelemetryData } from '../models/TelemetryData';
 
-### 3. Exact Safe-Scope Files to Touch First
+async function processTelemetry(telemetryData) {
+  // Initial mock persistence logic
+  console.log(`Received telemetry data: ${JSON.stringify(telemetryData)}`);
+  // Replace with actual persistence logic
+}
 
--   `src/api/routes/telemetry.js`: Define the POST route for `/api/v1/telemetry`.
--   `src/api/models/TelemetryData.js`: Define the schema/interface for incoming telemetry data.
--   `src/api/services/telemetryService.js`: Implement the core logic for processing and (initially) storing telemetry data.
-
-### 4. Verifier/Runtime Checks
-
--   **API Endpoint Reachability:** Send a POST request to `/api/v1/telemetry` with a valid payload and
+export { processTelemetry };
