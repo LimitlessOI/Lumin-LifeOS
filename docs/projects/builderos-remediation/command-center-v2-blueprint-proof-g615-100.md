@@ -1,26 +1,38 @@
-# Command Center V2 Blueprint Proof: G615-100 - Command Definition & Registration
-
-This document outlines the first build slice for Command Center V2, focusing on proving the foundational command definition and registration mechanism as per `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.
-
+The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided in the REPO FILE CONTENTS, so the specific details of the missing implementation or proof gap are inferred based on the task context.
 ---
+# BuilderOS Remediation: Command Center V2 Blueprint Proof (G615-100)
 
-### Blueprint Note: Command Definition & Registration Proof
+This document serves as a proof-closing note for the initial build slice of Command Center V2, addressing the signal to derive the next smallest blueprint-backed build slice.
 
-**1. Exact Missing Implementation or Proof Gap:**
-The blueprint defines the `ICommand` interface and the `CommandRegistry` concept. The immediate gap is the concrete implementation of a basic command (e.g., `HelpCommand`) adhering to `ICommand`, and the initial implementation of `CommandRegistry` to successfully register and retrieve such a command. This proves the core extensibility point for new commands.
+## 1. Exact Missing Implementation or Proof Gap
 
-**2. Smallest Safe Build Slice to Close It:**
-Implement the `ICommand` interface and a concrete `HelpCommand` class. Implement a minimal `CommandRegistry` class capable of registering and retrieving `ICommand` instances by name. This slice establishes the fundamental structure for defining and managing commands without involving parsing, execution, or output formatting yet.
+The `COMMAND_CENTER_V2_BLUEPRINT.md` (not provided, inferred) implies a need for enhanced internal BuilderOS control and visibility. The immediate gap identified is the lack of a dedicated, versioned internal API endpoint for BuilderOS to report and update the status of individual build tasks, which is crucial for the Command Center's operational loop. This gap prevents real-time task state synchronization and robust error handling within BuilderOS's internal orchestration.
 
-**3. Exact Safe-Scope Files to Touch First:**
-*   `src/core/command-center/interfaces/ICommand.ts`
-*   `src/core/command-center/commands/HelpCommand.ts`
-*   `src/core/command-center/services/CommandRegistry.ts`
-*   `src/core/command-center/index.ts` (for exports)
+## 2. Smallest Safe Build Slice to Close It
 
-**4. Verifier/Runtime Checks:**
-*   Instantiate `CommandRegistry`.
-*   Instantiate `HelpCommand`.
-*   Register `HelpCommand` with the `CommandRegistry` using a known command name (e.g., 'help').
-*   Call `CommandRegistry.getCommand('help')`.
-*   Assert that the returned object
+Implement a minimal, internal-only BuilderOS v2 API endpoint: `POST /builder-os/v2/tasks/:taskId/status`. This endpoint will accept a `taskId` and a `newStatus` (e.g., `QUEUED`, `RUNNING`, `COMPLETED`, `FAILED`) to update the internal state of a BuilderOS task. This slice focuses solely on the API surface and its immediate persistence, without touching external integrations or complex business logic.
+
+## 3. Exact Safe-Scope Files to Touch First
+
+*   `src/builder-os/api/v2/task-status-handler.js` (NEW): Contains the handler logic for the `POST /builder-os/v2/tasks/:taskId/status` endpoint.
+*   `src/builder-os/api/v2/routes.js` (UPDATE): Registers the new `task-status-handler` with the BuilderOS internal API router.
+*   `src/builder-os/data/task-repository.js` (UPDATE): Adds a new method, `updateTaskStatus(taskId, newStatus)`, to persist the status change in the internal BuilderOS data store.
+*   `tests/builder-os/api/v2/task-status-handler.test.js` (NEW): Unit tests for the `task-status-handler`.
+*   `tests/builder-os/data/task-repository.test.js` (UPDATE): Adds tests for the `updateTaskStatus` method.
+
+## 4. Verifier/Runtime Checks
+
+*   **Unit Tests:** All new and modified unit tests (e.g., `task-status-handler.test.js`, `task-repository.test.js`) pass with 100% coverage for the new code paths.
+*   **Integration Test:**
+    *   Start BuilderOS in a test environment.
+    *   Send a `POST` request to `http://localhost:<BUILDEROS_INTERNAL_PORT>/builder-os/v2/tasks/test-task-123/status` with a payload `{ "newStatus": "RUNNING" }`.
+    *   Verify the API returns a `200 OK` status.
+    *   Query the internal BuilderOS task state (e.g., via a debug endpoint or direct database inspection in test) to confirm `test-task-123`'s status is now `RUNNING`.
+*   **Logging:** Monitor BuilderOS internal logs for successful processing of the status update request and absence of errors related to the new endpoint.
+
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+*   **API Response:** The `POST /builder-os/v2/tasks/:taskId/status` endpoint returns any non-2xx HTTP status code (e.g., 400, 500).
+*   **Data Inconsistency:** The internal BuilderOS task state does not accurately reflect the `newStatus` sent via the API after a successful API response.
+*   **Regression:** Any existing BuilderOS internal API endpoints or core task processing logic exhibits new failures or unexpected behavior (e.g., existing build tasks fail to start or complete).
+*   **Performance Degradation:** Significant increase in latency for existing BuilderOS operations or excessive resource consumption (CPU, memory) after deploying this slice.
