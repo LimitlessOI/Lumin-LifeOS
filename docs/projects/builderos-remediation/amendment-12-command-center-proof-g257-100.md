@@ -1,14 +1,3 @@
-# Amendment 12 Command Center - Proof G257-100
+The specification is contradictory. The task asks to "Write docs/projects/builderos-remediation/amendment-12-command-center-proof-g257-100.md" and provides existing content for this `.md` file. However, the `OIL VERIFIER REJECTION` indicates that the BuilderOS system is attempting to execute this `.md` file as a Node.js module, leading to a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]`. Simultaneously, the existing `.md` content contains an instruction: "INSTRUCTION: Generate the complete implementation code. Output ONLY the code first — no explanation before the code block." This instruction, if interpreted literally for the output, would mean replacing the markdown file with code, which contradicts the target file path.
 
-## Proof-Closing Blueprint Note
-
-This note addresses the initial implementation phase for the Amendment 12 Command Center, focusing on establishing foundational read capabilities as per the blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.
-
-### 1. Exact Missing Implementation or Proof Gap
-
-The core `CommandCenterService` and its associated API endpoint for retrieving the current status of Amendment 12 features are not yet implemented. Specifically, the ability to fetch the `amendment12_enabled` feature flag state and the `amendment12_config` configuration object, and expose them via `GET /api/v1/command-center/status`, is the immediate gap.
-
-### 2. Smallest Safe Build Slice to Close It
-
-Implement the `GET /api/v1/command-center/status` API endpoint. This slice will:
-*
+Given the `ERR_UNKNOWN_FILE_EXTENSION`
