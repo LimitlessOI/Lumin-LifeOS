@@ -1,43 +1,24 @@
-# Amendment 41: MarketingOS Proof - G121-100 (SSOT Foundation)
+### Proof-Closing Blueprint Note: MarketingOS Proof-G121-100 Remediation
 
-## Proof-Closing Blueprint Note
+This document serves as the SSOT foundation for closing the identified proof gap related to MarketingOS Proof-G121-100, as per `AMENDMENT_41_MARKETINGOS.md`.
 
-This document outlines the necessary steps to close the implementation and proof gap identified in Amendment 41, specifically concerning the establishment of a Single Source of Truth (SSOT) foundation for MarketingOS data consumption from LifeOS.
+**1. Exact Missing Implementation or Proof Gap:**
+The core gap is the lack of a verifiable, runtime-attested link between BuilderOS-governed loop execution and the successful generation/delivery of MarketingOS proof-G121-100 artifacts. Specifically, the system needs to demonstrate that the BuilderOS loop *completed* the necessary steps to produce G121-100, and that this completion is recorded and auditable within the BuilderOS domain, without impacting LifeOS user features or TSOS customer-facing surfaces. The current state lacks a clear, atomic "proof-of-delivery" signal from the BuilderOS loop to a designated audit log or status endpoint for G121-100.
 
-### 1. Exact Missing Implementation or Proof Gap
+**2. Smallest Safe Build Slice to Close It:**
+Introduce a new BuilderOS internal status update mechanism. This mechanism will be triggered upon the successful completion of the G121-100 artifact generation within the BuilderOS loop. It will record a timestamped, immutable entry indicating the successful proof generation. This is an internal BuilderOS-only operation.
 
-The core gap is the absence of a dedicated, versioned, and validated API endpoint within LifeOS that serves as the SSOT for `UserEngagementMetrics` required by MarketingOS. While Amendment 41 outlines the *need* for this data, the concrete implementation of the LifeOS-side data exposure and its SSOT guarantees are not yet in place. This includes the data serialization format, access control, and initial data validation at the source.
+**3. Exact Safe-Scope Files to Touch First:**
+*   `builderos/src/services/marketingProofService.js`: Add a new function, e.g., `recordG121ProofCompletion(proofId, timestamp)`. This function will interact with an internal BuilderOS persistence layer.
+*   `builderos/src/workflows/g121ProofWorkflow.js`: Integrate a call to `marketingProofService.recordG121ProofCompletion('G121-100', Date.now())` at the final successful step of the G121-100 generation process.
+*   `builderos/src/data/proofAuditLog.js`: (Assumption: an existing internal BuilderOS data access layer for audit logs exists or needs a minor extension). Define the schema/interface for recording proof completion events. This would likely involve appending to an existing internal log or a new, dedicated table/collection for BuilderOS internal proofs.
 
-### 2. Smallest Safe Build Slice to Close It
+**4. Verifier/Runtime Checks:**
+*   **Unit Tests:** Verify that `recordG121ProofCompletion` correctly persists the proof completion event with the correct `proofId` and timestamp.
+*   **Integration Tests:** Simulate the `g121ProofWorkflow` execution and assert that a corresponding entry appears in the internal BuilderOS proof audit log upon successful workflow completion.
+*   **Runtime Observation (BuilderOS Internal):** After a BuilderOS loop execution for G121-100, query the internal BuilderOS proof audit log to confirm the presence of a `G121-100` completion record. This check must be performed *within the BuilderOS domain* and not expose data to LifeOS or TSOS.
 
-The smallest safe build slice involves:
-*   **LifeOS API Endpoint:** Create a new read-only, authenticated API endpoint within LifeOS under the `/marketingos/v1/` path. This endpoint will expose `UserEngagementMetrics` for a specified time range or user segment.
-*   **Data Service Layer:** Implement a new service in LifeOS responsible for aggregating and formatting `UserEngagementMetrics` from existing LifeOS data stores into the agreed-upon SSOT schema.
-*   **Schema Definition:** Define and publish the canonical JSON schema for `UserEngagementMetrics` that this endpoint will adhere to.
-*   **Basic Access Control:** Implement token-based authentication for MarketingOS to access this endpoint.
-
-This slice focuses solely on the LifeOS side of the SSOT contract, providing the foundational data source without requiring immediate changes to MarketingOS consumption logic beyond initial integration testing.
-
-### 3. Exact Safe-Scope Files to Touch First
-
-*   `src/api/marketingos/v1/userEngagementMetrics.js`: New file for the API endpoint handler.
-*   `src/routes/marketingos.js`: Add a new route definition pointing to the new handler.
-*   `src/services/marketingos/userEngagementService.js`: New file for the data aggregation and formatting logic.
-*   `src/schemas/marketingos/userEngagementMetrics.json`: New file defining the JSON schema for the data.
-*   `src/middleware/auth/marketingosAuth.js`: Potentially extend or create a new middleware for MarketingOS-specific authentication if not already present.
-
-### 4. Verifier/Runtime Checks
-
-*   **Endpoint Accessibility:** `GET /marketingos/v1/user-engagement-metrics?startDate=...&endDate=...` returns HTTP 200 OK with valid authentication.
-*   **Schema Conformance:** The JSON response body strictly adheres to `src/schemas/marketingos/userEngagementMetrics.json`.
-*   **Data Integrity:** Returned `userId` values are valid LifeOS user IDs. `timestamp` values are valid ISO 8601 strings. Metric values (e.g., `sessionCount`, `activeTimeMinutes`) are non-negative integers/floats.
-*   **Performance:** Endpoint response time is consistently below 200ms for typical query loads.
-*   **Error Handling:** Invalid parameters (e.g., missing `startDate`) result in appropriate HTTP 400 responses. Unauthorized access results in HTTP 401.
-
-### 5. Stop Conditions if Runtime Truth Disagrees
-
-*   **Schema Mismatch:** The endpoint consistently returns data that does not conform to `src/schemas/marketingos/userEngagementMetrics.json` after initial deployment.
-*   **Data Inaccuracy:** Discrepancies are found between the data returned by the endpoint and the underlying LifeOS data sources, indicating a failure in the `userEngagementService.js` aggregation logic.
-*   **Authentication Failure:** MarketingOS is unable to consistently authenticate and retrieve data, indicating an issue with the access control implementation.
-*   **Performance Degradation:** The new endpoint introduces significant latency or resource contention on LifeOS, impacting other critical services.
-*   **Security Vulnerability:** Any identified security flaw in the new endpoint or authentication mechanism.
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   If `recordG121ProofCompletion` fails to persist the data, the workflow should halt and signal an internal BuilderOS error, preventing false positives.
+*   If the integration test fails to show a record in the audit log after workflow completion, the build pass must be rejected.
+*   If, during internal BuilderOS runtime observation, the audit log consistently lacks completion records for successful G121-100 runs, the remediation is considered incomplete, and the BuilderOS loop for G121-100 generation should be paused until the logging mechanism is verified.
