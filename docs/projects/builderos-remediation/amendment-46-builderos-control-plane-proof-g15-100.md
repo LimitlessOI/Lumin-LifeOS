@@ -2,4 +2,8 @@
 
 ## Proof-Closing Blueprint Note
 
-This note addresses the implementation gap for wiring the BuilderOS control plane routes as specified in Amendment 46. The focus is on integrating build lifecycle events (`start` and `complete`) with internal recording and health checks within `routes/lifeos-council-builder-routes
+This document outlines the necessary implementation to close the proof gap for BuilderOS control plane signaling, specifically for build start and completion events, and integrates health-based build completion gating.
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The primary gap is the
