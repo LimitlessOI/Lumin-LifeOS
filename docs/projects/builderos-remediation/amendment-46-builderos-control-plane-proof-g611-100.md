@@ -1,46 +1,52 @@
-# Amendment 46: BuilderOS Control Plane Proof - G611-100
+# Amendment 46 BuilderOS Control Plane Proof - G611-100 Remediation Note
 
-This document serves as a proof-closing blueprint note for the BuilderOS control plane, specifically addressing the wiring of build lifecycle events within `routes/lifeos-council-builder-routes.js`.
+**Context:** The previous verification failed due to a verifier configuration issue (ERR_UNKNOWN_FILE_EXTENSION for .md files), not a semantic error in the proposed amendment. This note addresses the underlying implementation gap identified for the BuilderOS control plane.
 
 ## 1. Exact Missing Implementation or Proof Gap
 
-The core gap is the absence of API endpoints in `routes/lifeos-council-builder-routes.js` to manage the BuilderOS build lifecycle. Specifically:
-*   A `POST /build/start` endpoint to record the initiation of a build, requiring `task_id`, `blueprint_id`, and `model_used`. This endpoint must internally call `builderControlPlaneService.recordBuildStart`.
-*   A `POST /build/complete` endpoint to record the completion of a build, requiring a `token` and `oil_receipt_ids`. This endpoint must internally call `builderControlPlaneService.recordBuildComplete`.
-*   The `POST /build/complete` endpoint must include a health check using `builderControlPlaneService.canMarkBuildDone`. If this check fails (e.g., due to a RED health status), the endpoint must return a `409 Conflict` status.
+The primary gap is the incomplete wiring of the `/build` and `/build/complete` endpoints within `routes/lifeos-council-builder-routes.js` to correctly integrate with the BuilderOS control plane functions for build lifecycle management and health checks. Specifically:
+-   Missing `POST /build` endpoint to initiate a build, calling `recordBuildStart`.
+-   Missing `POST /build/complete` endpoint to finalize a build, calling `recordBuildComplete`.
+-   Missing conditional check for `canMarkBuildDone` and 409 response on health RED for build completion.
 
 ## 2. Smallest Safe Build Slice to Close It
 
-The smallest safe build slice involves:
-1.  Adding two new `POST` route definitions to `routes/lifeos-council-builder-routes.js`.
-2.  Implementing request handlers for these routes that parse incoming JSON bodies.
-3.  Integrating calls to existing `builderControlPlaneService` functions (`recordBuildStart`, `recordBuildComplete`, `canMarkBuildDone`).
-4.  Adding conditional logic for the `409 Conflict` response based on `canMarkBuildDone`'s outcome.
+Implement the two specified POST routes in `routes/lifeos-council-builder-routes.js`.
+-   **`/build` (start):** Accept `task_id`, `blueprint_id`, `model_used` in the request body. Call `builderService.recordBuildStart` with these parameters.
+-   **`/build/complete` (complete):** Accept `token` and `oil_receipt_ids` in the request body. First, call `builderService.canMarkBuildDone()`. If it returns false (indicating health RED), respond with a 409 Conflict. Otherwise, call `builderService.recordBuildComplete` with the provided parameters.
 
 ## 3. Exact Safe-Scope Files to Touch First
 
-*   `routes/lifeos-council-builder-routes.js`
+-   `routes/lifeos-council-builder-routes.js` (primary modification)
+-   (Assumption: `builderService` exists and contains `recordBuildStart`, `recordBuildComplete`, `canMarkBuildDone`. If not, these service methods would need to be created/extended in `services/builderService.js` or similar.)
 
 ## 4. Verifier/Runtime Checks
 
-To verify the implementation:
-
-*   **Build Start Endpoint:**
-    *   Send a `POST` request to `/build/start` with a JSON body: `{"task_id": "test-task-123", "blueprint_id": "bp-456", "model_used": "g611"}`.
-    *   Expected outcome: HTTP `200 OK` response.
-    *   Internal check: Verify that `builderControlPlaneService.recordBuildStart` was invoked with the correct parameters.
-*   **Build Complete Endpoint (Success Path):**
-    *   Ensure `builderControlPlaneService.canMarkBuildDone()` would return `true` (simulated or actual healthy state).
-    *   Send a `POST` request to `/build/complete` with a JSON body: `{"token": "build-token-xyz", "oil_receipt_ids": ["oil-1", "oil-2"]}`.
-    *   Expected outcome: HTTP `200 OK` response.
-    *   Internal check: Verify that `builderControlPlaneService.recordBuildComplete` was invoked with the correct parameters.
-*   **Build Complete Endpoint (Failure Path - Health RED):**
-    *   Ensure `builderControlPlaneService.canMarkBuildDone()` would return `false` (simulated or actual RED health state).
-    *   Send a `POST` request to `/build/complete` with a JSON body: `{"token": "build-token-xyz", "oil_receipt_ids": ["oil-1", "oil-2"]}`.
-    *   Expected outcome: HTTP `409 Conflict` response.
-    *   Internal check: Verify that `builderControlPlaneService.recordBuildComplete` was *not* invoked.
+1.  **Build Start Success:**
+    -   `POST /build` with `{ "task_id": "t1", "blueprint_id": "b1", "model_used": "m1" }`
+    -   Expected: HTTP 200/202 OK.
+    -   Runtime check: Verify `builderService.recordBuildStart` was called with the correct payload.
+2.  **Build Complete Success:**
+    -   Ensure `builderService.canMarkBuildDone()` returns true (e.g., by simulating a healthy state).
+    -   `POST /build/complete` with `{ "token": "abc", "oil_receipt_ids": ["r1", "r2"] }`
+    -   Expected: HTTP 200/202 OK.
+    -   Runtime check: Verify `builderService.recordBuildComplete` was called with the correct payload.
+3.  **Build Complete Health Check Failure:**
+    -   Ensure `builderService.canMarkBuildDone()` returns false (e.g., by simulating a RED health state).
+    -   `POST /build/complete` with `{ "token": "abc", "oil_receipt_ids": ["r1", "r2"] }`
+    -   Expected: HTTP 409 Conflict.
+    -   Runtime check: Verify `builderService.recordBuildComplete` was *not* called.
+4.  **Isolation Check:**
+    -   Verify no changes or regressions in existing LifeOS user features or TSOS customer-facing surfaces.
 
 ## 5. Stop Conditions if Runtime Truth Disagrees
 
-*   If `POST /build/start` does not return `200 OK` or fails to call `recordBuildStart`.
-*   If `POST /build/complete` does not return `200 OK` when `can
+-   If `builderService.recordBuildStart` is not invoked on `/build` POST.
+-   If `builderService.recordBuildComplete` is not invoked on `/build/complete` POST when health is GREEN.
+-   If a 409 Conflict is not returned on `/build/complete` POST when `builderService.canMarkBuildDone()` returns false.
+-   If any existing BuilderOS control plane functionality is disrupted.
+-   If any LifeOS user features or TSOS customer-facing surfaces exhibit unexpected behavior or errors.
+
+ASSUMPTIONS:
+- A `builderService` module exists (e.g., `services/builderService.js`) that exports `recordBuildStart`, `recordBuildComplete`, and `canMarkBuildDone` functions.
+- The `routes/lifeos-council-builder-routes.js` file uses an Express-like router setup.
