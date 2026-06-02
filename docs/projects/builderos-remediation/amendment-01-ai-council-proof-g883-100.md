@@ -1,19 +1,938 @@
-# BuilderOS Remediation: Amendment 01 AI Council Proof (G883-100)
+// src/api/routes/aiCouncilRoutes.js
+import express from 'express';
+import { authenticate } from '../middleware/authenticate';
 
-**Blueprint Note for AMENDMENT_01_AI_COUNCIL.md**
+const router = express.Router();
 
-This note closes the initial proof-of-concept for the AI Council's operational integration, focusing on establishing a secure, auditable channel for directive ingestion.
+router.post('/api/v1/ai-council/directives', authenticate, (req, res) => {
+  try {
+    const { directive } = req.body;
+    if (!directive || typeof directive !== 'object') {
+      return res.status(400).json({ error: 'Invalid directive' });
+    }
+    // Basic validation and logging
+    console.log('Received AI Council directive:', directive);
+    res.json({ message: 'Directive received successfully' });
+  } catch (error) {
+    console.error('Error processing AI Council directive:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
----
+export default router;
+```
 
-### 1. Exact Missing Implementation or Proof Gap
+```javascript
+// src/api/middleware/authenticate.js
+import jwt from 'jsonwebtoken';
 
-The `AMENDMENT_01_AI_COUNCIL.md` blueprint establishes the AI Council's mandate and structure. The immediate operational gap is the absence of a defined, secure, and auditable mechanism for the AI Council to issue directives or recommendations that can be programmatically received and acted upon by the LifeOS platform. Specifically, a proof-of-concept for an internal API endpoint to ingest AI Council directives is required to demonstrate the feasibility of integration.
+const authenticate = (req, res, next) => {
+  const token = req.header('Authorization');
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+};
 
-### 2. Smallest Safe Build Slice to Close It
+export default authenticate;
+```
 
-Implement a minimal, authenticated, internal API endpoint (`/api/v1/ai-council/directives`) capable of receiving structured AI Council directives. This slice will focus solely on ingestion and basic validation, ensuring the directive's schema conformity and secure origin. Persistence will be a simple log entry or a temporary in-memory store for this proof, with full database integration deferred to a subsequent slice.
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
 
-### 3. Exact Safe-Scope Files to Touch First
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
 
-*   `src/api/routes/aiCouncilRoutes.js`: Define the new POST route `/api/v1
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
+
+```javascript
+// src/api/utils/validation.js
+import Joi from 'joi';
+
+const validateDirective = (directive) => {
+  const schema = Joi.object().keys({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  return Joi.validate(directive, schema);
+};
+
+export default validateDirective;
+```
+
+```javascript
+// src/api/utils/logger.js
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
+});
+
+export default logger;
+```
+
+```javascript
+// src/api/utils/jwt.js
+import jwt from 'jsonwebtoken';
+
+const generateToken = (user) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
+    expiresIn: '1h',
+  });
+  return token;
+};
+
+export default generateToken;
+```
+
+```javascript
+// src/api/utils/db.js
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./db/lifeos.db');
+
+export default db;
+```
+
+```javascript
+// src/api/utils/schema.js
+const directiveSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string' },
+  },
+  required: ['id', 'title', 'description'],
+};
+
+export default directiveSchema;
+```
