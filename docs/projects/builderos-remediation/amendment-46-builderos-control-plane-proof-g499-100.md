@@ -1,5 +1,19 @@
-# Blueprint Note: Amendment 46 BuilderOS Control Plane Proof - G499-100
+// File: routes/lifeos-council-builder-routes.js (proposed additions/modifications)
 
-**Source Blueprint:** `docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md`
+import express from 'express';
+import {
+  recordBuildStart,
+  recordBuildComplete,
+  canMarkBuildDone,
+  getBuilderHealthStatus // Assuming this function exists to check builder health
+} from '../services/builder-control-plane-service.js'; // Assuming a service layer for these functions
 
-This document closes the proof gap identified in Amendment 46 regarding the BuilderOS control plane, specifically addressing the wiring of build start/complete events and
+const router = express.Router();
+
+/**
+ * POST /build
+ * Records the start of a new build process.
+ * Requires task_id, blueprint_id, and model_used in the request body.
+ */
+router.post('/build', async (req, res) => {
+  const { task_id, blueprint_id
