@@ -1,5 +1,18 @@
-# Amendment 46 BuilderOS Control Plane Proof - G647-100
+The specification is contradictory: the task asks to write a `.md` file, but the verifier rejection and the instruction "Generate the complete implementation code" imply the content should be executable JavaScript, which is incompatible with the `.md` file extension for Node.js module loading.
 
-## Proof-Closing Blueprint Note: Builder Control Plane Wiring
+```javascript
+// File: routes/lifeos-council-builder-routes.js (Proposed additions/modifications)
 
-This document addresses the signal requiring follow-through for Amendment 46, specifically the wiring of `routes/lifeos-council-builder-routes.js` to manage build start and completion events, including health-based conditional completion.
+import { Router } from 'express';
+import {
+  recordBuildStart,
+  recordBuildComplete,
+  canMarkBuildDone,
+  getSystemHealth // Assuming this exists to check system health
+} from '../services/builderControlPlaneService.js'; // Assuming service path
+
+const builderRouter = Router();
+
+/**
+ * @route POST /build/start
+ * @description Records the start of a
