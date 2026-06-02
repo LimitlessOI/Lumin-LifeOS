@@ -1,9 +1,7 @@
-# Amendment 12: Command Center - Proof G139-100: Core Service Definition
+# Amendment 12: Command Center - Proof G139-100: Core Service & API Scaffolding (Status Endpoint)
 
-This document serves as a proof-closing blueprint note for the initial build slice of Amendment 12, focusing on establishing the foundational `CommandCenterService`.
+This proof-closing blueprint note addresses the initial scaffolding for the Command Center, focusing on defining the core service interface and implementing a basic API endpoint to verify service operational status. This aligns with Phase 1 of the Amendment 12 blueprint.
 
 ---
 
-### 1. Exact missing implementation or proof gap
-
-The core `CommandCenterService` and its fundamental interface are not yet defined or implemented. This gap prevents any
+### 1. Exact Missing Implementation or Proof Gap
