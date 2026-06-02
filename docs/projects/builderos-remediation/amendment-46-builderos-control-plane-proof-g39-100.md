@@ -1,7 +1,8 @@
-# Amendment 46: BuilderOS Control Plane Proof G39-100
-
-## Proof-Closing Blueprint Note: Wiring `routes/lifeos-council-builder-routes.js`
-
-### 1. Exact Missing Implementation or Proof Gap
-
-The `routes/lifeos-council-builder-routes.js` file requires new POST endpoints to handle build start and completion events
+// File: routes/lifeos-council-builder-routes.js
+import { Router } from 'express';
+import {
+  recordBuildStart,
+  recordBuildComplete,
+  canMarkBuildDone,
+} from '../services/builder-control-plane-service.js';
+import { getSystemHealth } from '../services/health-service.
