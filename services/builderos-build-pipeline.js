@@ -21,9 +21,10 @@ const CORRECTION_CLAUSES = {
 };
 
 function detectFailureType(antipatternFindings, stubSignals) {
-  if (antipatternFindings.some((finding) => finding.id.includes('MARKDOWN_FENCE'))) return 'SYNTAX';
-  if (antipatternFindings.some((finding) => finding.id.includes('WRONG_IMPORT'))) return 'MISSING_IMPORT';
-  if (antipatternFindings.some((finding) => finding.id.includes('RK_NOT') || finding.id.includes('MODULE_LEVEL'))) return 'ANTIPATTERN';
+  // Scanner emits { pattern: '...' } — not { id: '...' }. Using .pattern avoids TypeError on undefined.
+  if (antipatternFindings.some((f) => String(f.pattern || '').includes('MARKDOWN_FENCE'))) return 'SYNTAX';
+  if (antipatternFindings.some((f) => String(f.pattern || '').includes('WRONG_IMPORT'))) return 'MISSING_IMPORT';
+  if (antipatternFindings.some((f) => String(f.pattern || '').includes('RK_NOT') || String(f.pattern || '').includes('MODULE_LEVEL'))) return 'ANTIPATTERN';
   if (stubSignals.length > 0) return 'STUB';
   return 'SYNTAX';
 }
