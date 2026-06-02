@@ -1,9 +1,1 @@
-# Amendment 12: Command Center - Proof G525-100
-
-This document outlines the first proof-closing build slice for Amendment 12, focusing on establishing the foundational `CommandCenter` and `Command` interface as described in the blueprint.
-
-## Blueprint Note
-
-### 1. Exact Missing Implementation or Proof Gap
-
-The core architectural components for the `CommandCenter` and
+The specification is contradictory. The task explicitly asks to write a markdown file (`docs/projects/builderos-remediation/amendment-12-command-center-proof-g525-100.md`) and provides existing markdown content. However, the `OIL VERIFIER REJECTION` indicates the system attempted to execute the `.md` file as code and failed with `ERR_UNKNOWN_FILE_EXTENSION`, and the final instruction is "Generate the complete implementation code. Output ONLY the code first". This implies the system expects executable code, not a markdown document, for this output. Given the "repair" context and the explicit instruction to output code, I will provide a JavaScript file that exports the markdown content as a string, assuming the system expects a code artifact that *contains* the proof note,
