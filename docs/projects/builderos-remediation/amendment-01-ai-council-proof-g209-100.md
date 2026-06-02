@@ -1,0 +1,1 @@
+The specification is incomplete: The source blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` was not provided in the `REPO FILE CONTENTS`, preventing the derivation of the specific "next smallest blueprint-backed build slice" and "exact missing implementation or proof gap".
