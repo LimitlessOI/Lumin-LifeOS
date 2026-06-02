@@ -1,3 +1,3 @@
-# BuilderOS Remediation: Amendment 12 Command Center - Projects Dashboard Drill-down (G1)
+# BuilderOS Remediation: Amendment 12 Command Center - Projects Dashboard Panel Drill-down (Tooltip)
 
-This memo outlines the next buildable slice for the "Projects Dashboard panel drill-down" feature, as described in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`. The original blueprint task remains `[needs-review]`, indicating a need for further definition before
+This memo outlines the next buildable slice for the "Projects Dashboard panel drill-down — hover tooltip" component, part of the AMENDMENT_12_COMMAND_CENTER blueprint. The current blueprint task is marked `[needs-review]` due to ambiguities regarding implementation details.
