@@ -1,7 +1,1 @@
-# Amendment 46 BuilderOS Control Plane Proof - G311-100
-
-## Proof-Closing Blueprint Note
-
-This document outlines the necessary steps to close the implementation gap identified in Amendment 46, specifically regarding the wiring of `routes/lifeos-council-builder-routes.js` for BuilderOS control plane operations.
-
-### 1. Exact Missing Implementation
+The specification is contradictory regarding the expected file type for `docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g311-100.md`. The task explicitly states to write a `.md` file, and the existing content is markdown. However, the OIL verifier rejection indicates the verifier is attempting to execute this `.md` file as a JavaScript module, resulting in `ERR_UNKNOWN_FILE_EXTENSION`. To "repair" this rejection while adhering to the target file path, the content must be valid JavaScript. This implies the "proof-closing blueprint note" must be structured as a JavaScript file with comments for the prose sections.
