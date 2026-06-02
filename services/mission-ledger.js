@@ -121,40 +121,40 @@ export async function updateMission(pool, id, fields) {
 }
 
 export async function transitionMissionState(pool, id, { to_state, transitioned_by, note }) {
-  const { rows: mRows } = await pool.query('SELECT * FROM missions WHERE id = $1', [id]);
-  if (mRows.length === 0) throw Object.assign(new Error('mission not found'), { code: 'NOT_FOUND' });
-  const mission = mRows[0];
-  const from_state = mission.state;
-  const valid_next = MISSION_STATE_TRANSITIONS[from_state] ?? [];
-  if (!valid_next.includes(to_state)) {
-    throw Object.assign(new Error('invalid_transition'), {
-      code: 'INVALID_TRANSITION',
-      from: from_state,
-      to: to_state,
-      valid_next,
-    });
-  }
-  // AIC DISCUSSION-6: backward transitions are Founder-only with mandatory note.
-  const pairKey = `${from_state}→${to_state}`;
-  if (BACKWARD_TRANSITIONS.has(pairKey)) {
-    if (transitioned_by !== 'adam') {
-      throw Object.assign(new Error('backward_transition_requires_founder'), {
-        code: 'BACKWARD_TRANSITION_AUTHORITY_REQUIRED',
-        pair: pairKey,
-        required: 'transitioned_by must be "adam" for backward transitions',
-      });
-    }
-    if (!note || String(note).trim().length < 10) {
-      throw Object.assign(new Error('backward_transition_requires_note'), {
-        code: 'BACKWARD_TRANSITION_NOTE_REQUIRED',
-        pair: pairKey,
-        required: 'note (min 10 chars) is mandatory for backward transitions',
-      });
-    }
-  }
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
+    const { rows: mRows } = await client.query('SELECT * FROM missions WHERE id = $1 FOR UPDATE', [id]);
+    if (mRows.length === 0) throw Object.assign(new Error('mission not found'), { code: 'NOT_FOUND' });
+    const mission = mRows[0];
+    const from_state = mission.state;
+    const valid_next = MISSION_STATE_TRANSITIONS[from_state] ?? [];
+    if (!valid_next.includes(to_state)) {
+      throw Object.assign(new Error('invalid_transition'), {
+        code: 'INVALID_TRANSITION',
+        from: from_state,
+        to: to_state,
+        valid_next,
+      });
+    }
+    // AIC DISCUSSION-6: backward transitions are Founder-only with mandatory note.
+    const pairKey = `${from_state}→${to_state}`;
+    if (BACKWARD_TRANSITIONS.has(pairKey)) {
+      if (transitioned_by !== 'adam') {
+        throw Object.assign(new Error('backward_transition_requires_founder'), {
+          code: 'BACKWARD_TRANSITION_AUTHORITY_REQUIRED',
+          pair: pairKey,
+          required: 'transitioned_by must be "adam" for backward transitions',
+        });
+      }
+      if (!note || String(note).trim().length < 10) {
+        throw Object.assign(new Error('backward_transition_requires_note'), {
+          code: 'BACKWARD_TRANSITION_NOTE_REQUIRED',
+          pair: pairKey,
+          required: 'note (min 10 chars) is mandatory for backward transitions',
+        });
+      }
+    }
     const { rows: updated } = await client.query(
       `UPDATE missions SET state = $1, updated_at = NOW() WHERE id = $2 RETURNING *`,
       [to_state, id],
