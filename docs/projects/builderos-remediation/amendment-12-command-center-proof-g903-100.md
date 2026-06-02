@@ -1,23 +1,42 @@
-# Amendment 12: Command Center - Proof G903-100
+The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, preventing grounding the output in its specific content. Assumptions have been made regarding the nature of "Amendment 12 Command Center" within BuilderOS.
+---
+# Amendment 12 Command Center Proof - G903-100 Remediation
 
-## Proof-Closing Blueprint Note
+This document addresses the proof gap identified for Amendment 12 Command Center, aiming to provide the smallest safe build slice for remediation.
 
-This note addresses the initial foundational step for the Amendment 12 Command Center, focusing on establishing the core service component.
+## 1. Exact Missing Implementation or Proof Gap
 
-### 1. Exact Missing Implementation or Proof Gap
+The core gap is the lack of a verified, end-to-end command execution flow from the BuilderOS Command Center for a specific, new command type (e.g., `builder:deploy-slice`). The blueprint outlines the intent, but the implementation and proof of its operational integrity are incomplete. Specifically, the command registration, validation, and initial execution trigger within the BuilderOS core are not fully integrated and tested against the defined schema.
 
-The primary gap is the absence of the `CommandCenterService` definition. This service is intended to be the central orchestrator for BuilderOS operations, and its initial structure needs to be established to allow for subsequent integration and feature development. The current state lacks a concrete, instantiable service class.
+## 2. Smallest Safe Build Slice to Close It
 
-### 2. Smallest Safe Build Slice to Close It
+Implement the minimal command registration and a no-op execution handler for a single, new BuilderOS command: `builder:verify-slice-readiness`. This slice focuses solely on proving that a new command can be registered, validated against its schema, and successfully invoked within the BuilderOS command processing pipeline, without performing any actual deployment or complex logic. It will return a simple success/failure based on input validation.
 
-The smallest safe build slice involves defining the `CommandCenterService` class with a basic constructor and a placeholder initialization method. This establishes the service's presence and a minimal interface for future expansion without introducing complex logic or dependencies.
+## 3. Exact Safe-Scope Files to Touch First
 
-### 3. Exact Safe-Scope Files to Touch First
+-   `src/builder-os/commands/verifySliceReadiness.js`: New file for the command handler.
+-   `src/builder-os/commandRegistry.js`: Add registration entry for `builder:verify-slice-readiness`.
+-   `src/builder-os/schemas/commandSchemas.js`: Define Joi/Zod schema for `builder:verify-slice-readiness` command arguments.
+-   `tests/builder-os/commands/verifySliceReadiness.test.js`: Unit tests for the new command handler and its registration.
 
--   `src/builderos/services/CommandCenterService.js`: Create this file to define the `CommandCenterService` class.
--   `src/builderos/tests/CommandCenterService.test.js`: Create a basic test file to import and instantiate the service, verifying its existence and basic functionality.
+## 4. Verifier/Runtime Checks
 
-### 4. Verifier/Runtime Checks
+-   **Unit Tests**: `npm test src/builder-os/commands/verifySliceReadiness.test.js` should pass, covering:
+    -   Command registration success.
+    -   Input validation (success for valid, failure for invalid).
+    -   Handler execution (returning expected no-op success).
+-   **Integration Test (Manual/CLI)**:
+    -   Run BuilderOS locally.
+    -   Execute `builder-cli execute builder:verify-slice-readiness --sliceId="test-slice-123" --projectId="proj-abc"`
+    -   Expected output: `{"status": "success", "message": "Slice readiness verified (no-op)"}`
+    -   Execute with invalid args: `builder-cli execute builder:verify-slice-readiness --invalidArg="foo"`
+    -   Expected output: `{"status": "error", "message": "Validation failed: 'invalidArg' is not allowed"}`
+-   **Schema Validation Check**: Ensure the command schema is correctly loaded and applied by the command processor.
 
-To verify this build slice:
-1.  Ensure `src/builderos/
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+-   If `builder:verify-slice-readiness` command cannot be registered or invoked via `builder-cli`.
+-   If input validation fails for valid inputs or passes for invalid inputs.
+-   If the command handler throws unexpected errors during execution.
+-   If the command processing pipeline does not correctly route the command to the new handler.
+-   **Action**: Re-evaluate `src/builder-os/commandRegistry.js` and `src/builder-os/commandProcessor.js` for core routing issues. Review `src/builder-os/schemas/commandSchemas.js` for schema definition errors.
