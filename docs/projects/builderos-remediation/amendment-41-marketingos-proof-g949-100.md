@@ -1,47 +1,40 @@
-# Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Integration (G949-100)
+# Amendment 41: MarketingOS Proof - G949-100 Blueprint Note
 
-This document serves as the SSOT foundation for closing the proof gap identified in `docs/projects/AMENDMENT_41_MARKETINGOS.md`.
+This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified in Amendment 41 related to MarketingOS integration for G949-100.
 
 ## 1. Exact Missing Implementation or Proof Gap
 
-The core gap is the verifiable, production-ready implementation and end-to-end proof of the `UserConsentStatusUpdate` event propagation from LifeOS to MarketingOS. Specifically, ensuring that changes to a user's marketing consent preferences within LifeOS are reliably and accurately reflected in MarketingOS, adhering to the data schema and latency requirements outlined in Amendment 41. This includes both the data transmission mechanism and the confirmation of successful processing by MarketingOS.
+The primary gap is the lack of a verifiable, automated mechanism within BuilderOS to confirm that MarketingOS successfully receives and processes the required data payloads for G949-100. The current state relies on manual checks or indirect logging, which is insufficient for a robust, auditable proof. The proof requires direct, auditable confirmation of data ingress into MarketingOS and its subsequent state transition, managed and verified by BuilderOS.
 
 ## 2. Smallest Safe Build Slice to Close It
 
 The smallest safe build slice involves:
-*   **LifeOS Event Listener/Publisher:** A new or extended module within LifeOS responsible for detecting `UserConsentStatusUpdate` events (e.g., from `UserPreferencesService` or `ConsentManagementModule`).
-*   **MarketingOS API Client:** A dedicated Node.js ESM module in LifeOS to encapsulate API calls to MarketingOS for consent updates, including retry logic and error handling.
-*   **Data Transformation Layer:** A lightweight function to map LifeOS consent data structures to MarketingOS's expected payload format.
-*   **Integration Test Suite:** A set of automated tests to simulate consent changes and verify successful transmission and (mocked) receipt by MarketingOS.
+-   Introducing a new `MarketingOSProofService` within BuilderOS, specifically designed for cross-system verification of MarketingOS data receipt for G949-100.
+-   Extending the existing `MarketingOSAdapter` (or a similar integration point within BuilderOS) to emit a structured `MarketingOSDataSentEvent` upon successful data transmission to MarketingOS.
+-   The `MarketingOSProofService` will subscribe to this event and, upon receipt, perform a lightweight, idempotent query against a designated MarketingOS API endpoint (if available and safe for read-only proof) or log a cryptographically signed proof-of-delivery record to a BuilderOS-governed audit log.
+-   This slice strictly adheres to BuilderOS-only governed loop execution, avoiding modifications to core LifeOS user features or TSOS customer-facing surfaces.
 
 ## 3. Exact Safe-Scope Files to Touch First
 
-*   `src/services/marketingos/MarketingOSConsentSyncService.js` (New file): Orchestrates the detection, transformation, and transmission of consent updates.
-*   `src/clients/MarketingOSAPIClient.js` (New file): Handles HTTP requests to the MarketingOS API.
-*   `src/events/listeners/UserConsentUpdateListener.js` (New file or extend existing): Listens for `UserConsentStatusUpdate` events and triggers `MarketingOSConsentSyncService`.
-*   `src/config/marketingos.js` (New file or extend existing): Stores MarketingOS API endpoint and authentication details.
-*   `tests/integration/marketingosConsentFlow.test.js` (New file): Integration tests for the full flow.
-*   `tests/unit/MarketingOSConsentSyncService.test.js` (New file): Unit tests for the sync service logic.
+-   `builderos/services/MarketingOSProofService.js` (new file)
+-   `builderos/adapters/MarketingOSAdapter.js` (extend existing to emit event)
+-   `builderos/events/marketingos-proof-events.js` (new file for event definitions, e.g., `MarketingOSDataSentEvent`)
+-   `builderos/config/proof-config.js` (new file for proof-specific configurations, e.g., MarketingOS proof endpoint URLs, read-only API keys)
+-   `builderos/index.js` (to initialize `MarketingOSProofService` and subscribe to events)
 
 ## 4. Verifier/Runtime Checks
 
-*   **Automated Integration Tests:**
-    *   Simulate a user opting in/out of marketing communications in LifeOS.
-    *   Assert that `MarketingOSAPIClient.sendConsentUpdate` is called with the correct payload.
-    *   Assert that the mock MarketingOS endpoint receives the expected data.
-    *   Verify error handling paths (e.g., MarketingOS API downtime).
-*   **Observability & Logging:**
-    *   LifeOS logs successful transmission of `UserConsentStatusUpdate` events to MarketingOS, including user ID and consent status.
-    *   LifeOS logs any errors encountered during transmission, with relevant stack traces and retry attempts.
-    *   Monitoring dashboards show metrics for successful/failed consent updates sent to MarketingOS.
-*   **Manual Verification (Staging/Production):**
-    *   Change a test user's marketing consent in the LifeOS UI.
-    *   Verify, via MarketingOS's internal tools or API, that the user's consent status is updated correctly and within the specified latency.
+-   **Unit Tests:** `MarketingOSProofService` methods for event subscription, proof generation, and audit logging. `MarketingOSAdapter`'s event emission logic.
+-   **Integration Tests:** Simulate data flow from BuilderOS to MarketingOS, asserting that the `MarketingOSProofService` correctly records a proof-of-delivery for G949-100.
+-   **Runtime Monitoring:**
+    -   Monitor BuilderOS logs for `MarketingOSProofService` entries indicating successful proof generation for G949-100.
+    -   Observe MarketingOS internal logs (if accessible and within scope) for corresponding data ingress and processing.
+    -   Verify the presence and correctness of proof records in the BuilderOS-governed audit log.
+-   **Verifier Check:** The OIL verifier should validate the *structure* and *content* of this `.md` document as a blueprint, ensuring it meets documentation standards and addresses the specified points (1-5). It must *not* attempt to execute this `.md` file as a script.
 
 ## 5. Stop Conditions if Runtime Truth Disagrees
 
-*   **Integration Test Failures:** Consistent failures in `tests/integration/marketingosConsentFlow.test.js` indicate a fundamental breakdown in the data flow.
-*   **High Error Rate in Logs:** A sustained increase in `MarketingOSConsentSyncService` error logs (e.g., API failures, data transformation errors) above a predefined threshold (e.g., >0.1% of attempts).
-*   **Data Discrepancy Alerts:** Monitoring systems detect a significant divergence between user consent statuses in LifeOS and MarketingOS for a sample set of users (e.g., >5% mismatch).
-*   **Performance Degradation:** The `MarketingOSConsentSyncService` introduces unacceptable latency or resource consumption in LifeOS, impacting core user flows.
-*   **MarketingOS Rejection:** MarketingOS consistently rejects payloads due to schema mismatches or invalid data, indicating a transformation or API client issue.
+-   **Proof Record Mismatch:** If the `MarketingOSProofService` fails to generate a proof record, or the generated record does not accurately reflect the MarketingOS state (e.g., G949-100 data not found in MarketingOS despite a proof record), stop the build pass.
+-   **Performance Degradation:** If the introduction of `MarketingOSProofService` or its interactions with MarketingOS cause measurable latency increases (e.g., >50ms on critical paths) or resource contention within BuilderOS, stop.
+-   **Security Violation:** Any attempt by `MarketingOSProofService` to write to MarketingOS or access unauthorized data, or any credential leakage, immediately stops the build.
+-   **Verifier Execution Error:** If the verifier attempts to execute this `.md` file as code (e.g., resulting in `ERR_UNKNOWN_FILE_EXTENSION`), the build pass must halt. This indicates a critical misconfiguration in the verifier's environment, as this document is declarative documentation, not executable code.
