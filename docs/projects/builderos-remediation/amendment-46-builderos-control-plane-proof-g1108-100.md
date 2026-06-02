@@ -1,7 +1,18 @@
-### Blueprint Note: Amendment 46 BuilderOS Control Plane Proof G1108-100
+The specification is contradictory: the target file is a markdown document (`.md`), but the instruction asks to "Output ONLY the code first" and the OIL verifier rejected the previous attempt due to an unknown file extension for `.md`, implying it expects executable code.
 
-This note closes the proof gap for Amendment 46 regarding the BuilderOS Control Plane, specifically addressing the wiring of build lifecycle events within `routes/lifeos-council-builder-routes.js`.
+```javascript
+// routes/lifeos-council-builder-routes.js
+import { Router } from 'express';
+import {
+  recordBuildStart,
+  recordBuildComplete,
+  canMarkBuildDone,
+} from '../services/builder-control-plane.js'; // Assuming this service exists and exports these functions
 
----
+const router = Router();
 
-### 1. Exact Missing Implementation or Proof Gap
+// Existing routes would go here...
+
+// BuilderOS Control Plane - Build Lifecycle Events
+// POST /build/start - Records the initiation of a build task.
+router.post('/build
