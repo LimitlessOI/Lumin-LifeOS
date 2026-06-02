@@ -1,5 +1,8 @@
-# Proof: AMENDMENT_01_AI_COUNCIL - g1105-100 - AI Council Core Model Definition
+# Amendment 01: AI Council - Proof Gate G1105-100
 
-**Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
+This document serves as the initial proof artifact for `AMENDMENT_01_AI_COUNCIL.md`.
 
-**Proof Scope:** This proof confirms the conceptual model and foundational data structure for the AI Council and its members, as outlined in the `AMENDMENT
+**Blueprint Reference:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
+
+**Purpose:**
+This proof gate (G1105-100) confirms the successful conceptualization and initial architectural review of Amendment 01, pertaining to the establishment or modification of the AI Council
