@@ -2,6 +2,73 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FOUNDER DIRECTIVE] 2026-06-02 — End-of-Session Handoff for All Agents (CUR / C2 / Gemini / any)
+
+> **YOU ARE REQUIRED TO IDENTIFY YOURSELF AND YOUR ROLE BEFORE STARTING WORK.**
+
+### Priority Order
+
+1. **C2 (Command & Control)** becomes the primary operating layer.
+2. **SocialMediaOS** becomes a sellable and immediately usable product.
+3. **LifeOS and LimitlessOS** continue development.
+4. **Cursor (CUR)** should eventually become audit-only, not the primary builder.
+
+### Foundational Rules
+
+- No hallucinations.
+- No claiming work is complete without evidence. If evidence is missing, label status UNVERIFIED.
+- Maintain audit trails.
+- Identify drift from mission and report it.
+- Challenge bad assumptions — including founder assumptions.
+- Preserve founder intent while preventing mission drift.
+- AI must govern drift in both itself and the founder.
+
+### Verified Current State (2026-06-02)
+
+Mission Runtime Phase 2 (AMENDMENT_47) COMPLETE. Delivered: `services/mission-ledger.js`, `routes/mission-routes.js`, `public/overlay/lifeos-household.html`. Modified: `routes/lifeos-commitment-routes.js`, `startup/register-runtime-routes.js`, `routes/public-routes.js`. All BPB-0001 §Section 9 verifier checks PASS. CONTINUITY_LOG updated. AMENDMENT_47 handoff notes written. Railway redeploy triggered.
+
+### Known Blocker — Builder HTTP_502
+
+POST /build returns HTTP_502. Builder health endpoints function. Direct file writes succeeded. Infrastructure-side builder execution path appears broken. **This is the primary blocker.**
+
+### Execution Priorities
+
+**Priority 1 — Verify production deployment.**
+Test `/lifeos-household`, `GET /api/v1/lifeos/household/board`, `GET /api/v1/lifeos/missions`. Collect evidence.
+
+**Priority 2 — Investigate builder failure.**
+Determine where POST /build fails: infrastructure, runtime, auth, routing, queueing, or execution-layer. Produce root-cause analysis.
+
+**Priority 3 — Run AIC DISCUSSION-6.**
+Mission state rollback authority. Backward transition rules. Human override rules. Audit requirements.
+
+**Priority 4 — Move MISSION-0001 from "built" to "usable."**
+Seed Adam + Sherry mission data. Create realistic commitments. Verify dashboard usefulness, prioritization logic, approval workflow.
+
+### Required Deliverable
+
+Return: (1) Evidence collected. (2) Verified status. (3) Unverified assumptions. (4) Root cause findings. (5) Recommended next mission. (6) Risk assessment. (7) Estimated effort. (8) Drift observations. (9) Improvements discovered.
+
+**Do not stop at reporting problems.** Provide: diagnosis, proposed fix, verification plan, estimated confidence.
+
+### CRITICAL — DO NOT STOP AT AUDIT
+
+The system must be running and advancing. After verifying deploy and diagnosing /build HTTP_502:
+
+- Keep runner active. Keep highest-value approved work moving.
+- If one lane is blocked, record blocker and move to next executable task.
+- Prioritize: Mission-0001, C2 reliability, builder repair, income-adjacent work.
+- Do not sit idle waiting for Adam.
+
+Every update must report: runner PID · active/idle/productive status · current mission · current task · founder_value_deliveries · blockers · next executable task.
+
+**Rule: Do not stop the mission unless it is completed, superseded, abandoned by approved authority, or proven impossible.**
+
+### Tomorrow's First Question
+
+> "Show me evidence that the deployed system works end-to-end, and show me the root cause analysis for the HTTP_502 builder failure."
+
+---
 ## [SSOT] 2026-06-02 — Mission Runtime Phase 2 Complete (AMENDMENT_47)
 
 ### Mission result: COMPLETE — all 7 owned files written, 10/10 verifier PASS, pushed to origin/main
