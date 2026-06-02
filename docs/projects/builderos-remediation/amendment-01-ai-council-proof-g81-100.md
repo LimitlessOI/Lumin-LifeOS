@@ -1,20 +1,62 @@
-Blueprint Note: Amendment 01 AI Council - Proof G81-100 Remediation
-This note outlines the next smallest build slice to address the foundational requirements for AI Council policy record management, specifically targeting proof point `g81-100`.
-1. Exact Missing Implementation or Proof Gap:
-The current state lacks a defined, type-safe, and validated data structure for AI Council policy records, which is a prerequisite for `g81-100` (e.g., "Verify AI Council policy record creation and retrieval"). The immediate gap is the absence of a canonical schema and type definition for these records within the LifeOS platform.
-2. Smallest Safe Build Slice to Close It:
-Define the core TS interface and a corresponding Zod schema for `AICouncilPolicyRecord`. This slice focuses solely on establishing the data contract and validation mechanism without implementing persistence or complex business logic.
-3. Exact Safe-Scope Files to Touch First:
--   `src/lib/ai-council/types.ts` (new file): Defines the `AICouncilPolicyRecord` interface.
--   `src/lib/ai-council/schemas.ts` (new file): Implements the `AICouncilPolicyRecordSchema` using Zod.
--   `src/lib/ai-council/index.ts` (new file): Exports the new types and schemas.
--   `src/lib/ai-council/ai-council.test.ts` (new file): Basic unit test for schema validation and type checking.
-4. Verifier/Runtime Checks:
--   Type Check: Ensure `tsc` passes without errors when consuming `AICouncilPolicyRecord` in `ai-council.test.ts`.
--   Schema Validation: In `ai-council.test.ts`, create a valid `AICouncilPolicyRecord` object and assert that `AICouncilPolicyRecordSchema.parse(record)` succeeds.
--   Invalid Schema Rejection: In `ai-council.test.ts`, create an invalid `AICouncilPolicyRecord` object (e.g., missing required fields, incorrect types) and assert that `AICouncilPolicyRecordSchema.safeParse(invalidRecord).success` is `false`.
-5. Stop Conditions if Runtime Truth Disagrees:
--   `tsc` reports type errors when `AICouncilPolicyRecord` is used as expected.
--   `AICouncilPolicyRecordSchema.parse()` throws an error for a correctly structured record.
--   `AICouncilPolicyRecordSchema.safeParse().success` is `true` for an intentionally malformed record.
--   The defined schema does not accurately reflect the requirements for `g81-100` as detailed in the `AMENDMENT_01_AI_COUNCIL.md` blueprint (requires re-evaluation of blueprint details).
+# Blueprint Note: Amendment 01 AI Council - Proof G81-100
+
+**Proof-Closing Blueprint Note for Amendment 01: AI Council Establishment**
+
+This note addresses the initial proof-of-concept for integrating the AI Council's oversight into BuilderOS workflows, specifically focusing on the internal signaling mechanism.
+
+---
+
+### 1. Exact Missing Implementation or Proof Gap
+
+The `AMENDMENT_01_AI_COUNCIL.md` blueprint establishes the AI Council's mandate for reviewing AI-driven artifacts but lacks a concrete, internal BuilderOS mechanism to signal that an artifact is ready for such review. The immediate gap is the absence of a BuilderOS internal function to acknowledge and log a "request for AI Council review" for a specific build artifact. This proof focuses on the *initiation* of the review process from BuilderOS's perspective, not the actual AI Council interaction.
+
+### 2. Smallest Safe Build Slice to Close It
+
+Implement a new, internal BuilderOS utility module that provides a function to log a placeholder "AI Council review requested" event. This function will be called by an existing BuilderOS build completion handler when a build for an AI-designated project finishes. This slice proves BuilderOS's capability to identify and internally flag artifacts requiring AI Council attention without external dependencies or complex integration at this stage.
+
+### 3. Exact Safe-Scope Files to Touch First
+
+*   **New File:** `src/builder-os/internal/aiCouncilReviewNotifier.js`
+    *   Purpose: Contains the minimal function to log the review request.
+    *   Content:
+        ```javascript
+        // src/builder-os/internal/aiCouncilReviewNotifier.js
+        import { logger } from '../../utils/logger.js'; // Assuming a standard logger utility
+
+        /**
+         * Logs an internal notification that an artifact requires AI Council review.
+         * This is a placeholder for the initial proof-of-concept.
+         * @param {string} projectId - The ID of the project.
+         * @param {string} artifactId - The ID of the artifact requiring review.
+         * @param {string} buildId - The ID of the build that produced the artifact.
+         */
+        export function notifyAiCouncilReviewNeeded(projectId, artifactId, buildId) {
+          logger.info(`[AI_COUNCIL_PROOF] AI Council review requested for Project: ${projectId}, Artifact: ${artifactId}, Build: ${buildId}`);
+          // Future: This would evolve to trigger an actual submission process.
+        }
+        ```
+
+*   **Existing File (Modification):** `src/builder-os/services/buildCompletionService.js` (or similar, e.g., `buildProcessor.js`)
+    *   Purpose: Integrate the call to the new notifier.
+    *   Modification: Add an import and a conditional call within the existing build completion logic.
+    *   Example Snippet (to be inserted/modified within an existing `handleBuildCompletion` or similar function):
+        ```javascript
+        // src/builder-os/services/buildCompletionService.js (conceptual modification)
+        import { notifyAiCouncilReviewNeeded } from '../internal/aiCouncilReviewNotifier.js';
+        // ... other imports and existing code ...
+
+        async function handleBuildCompletion(buildResult) {
+          // ... existing build completion logic ...
+
+          if (buildResult.status === 'SUCCESS' && buildResult.isAiDriven) { // Assuming 'isAiDriven' flag exists or can be derived
+            notifyAiCouncilReviewNeeded(buildResult.projectId, buildResult.artifactId, buildResult.buildId);
+          }
+
+          // ... rest of existing logic ...
+        }
+        ```
+    *   **Assumption:** A `buildResult.isAiDriven` flag or similar metadata exists or can be easily inferred from project configuration to identify AI-driven builds. If not, this would be the next micro-slice. For this proof, we assume its existence.
+
+### 4. Verifier/Runtime Checks
+
+1.
