@@ -1,9 +1,5 @@
-# Amendment 46: BuilderOS Control Plane Proof - G153-100
+### Proof-Closing Blueprint Note: G153-100 - BuilderOS Control Plane Wiring
 
-## Proof-Closing Blueprint Note: Wiring `routes/lifeos-council-builder-routes.js`
-
-This note addresses the implementation gap for wiring the BuilderOS control plane routes as specified in Amendment 46.
-
-### 1. Exact Missing Implementation or Proof Gap
-
-The
+**1. Exact Missing Implementation or Proof Gap:**
+The `routes/lifeos-council-builder-routes.js` module requires new route definitions and associated handler logic to support the BuilderOS build lifecycle. Specifically, the following are missing:
+-   A `POST /build/start
