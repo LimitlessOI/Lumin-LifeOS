@@ -1,34 +1,36 @@
-### MarketingOS Proof G155-100: SSOT Foundation for Customer Segments
+# Amendment 41: MarketingOS Proof (G155-100) - Proof-Closing Blueprint Note
 
-This blueprint note addresses the proof gap for MarketingOS's adherence to the Single Source of Truth (SSOT) principle for customer segment data, as foundational to AMENDMENT_41_MARKETINGOS.
+This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified for Amendment 41, concerning MarketingOS integration.
 
-1.  **Exact missing implementation or proof gap:**
-    MarketingOS lacks a robust, verifiable mechanism to guarantee its internal customer segment data is a real-time, SSOT-compliant reflection of the `CustomerProfileService`'s segment definitions. Specifically, there is no explicit, event-driven synchronization or a scheduled reconciliation process with verifiable data integrity checks. This creates a potential for stale or inconsistent segment targeting.
+## 1. Exact Missing Implementation or Proof Gap
 
-2.  **Smallest safe build slice to close it:**
-    Implement an event-driven synchronization service within MarketingOS that subscribes to `CustomerProfileService`'s segment update events (e.g., via webhooks or a message queue). This service will be responsible for receiving segment changes (create, update, delete) and applying them to MarketingOS's internal customer segment store. This slice focuses solely on inbound segment data consistency.
+The current BuilderOS verification loop lacks an explicit, executable proof step confirming the successful integration and artifact generation as specified in `AMENDMENT_41_MARKETINGOS.md`. Specifically, there is no automated check that validates the output or state change BuilderOS is responsible for producing for MarketingOS, ensuring compliance with the amendment's requirements. The previous verifier rejection was due to an incorrect attempt to execute the `.md` blueprint itself, highlighting the absence of a dedicated, executable proof artifact.
 
-3.  **Exact safe-scope files to touch first:**
-    *   `services/marketingos/src/customerSegmentSyncService.js` (New: Core logic for processing segment events and updating local store)
-    *   `services/marketingos/src/api/webhooks/customerProfileWebhookController.js` (New/Extend: Endpoint to receive `CustomerProfileService` segment update webhooks)
-    *   `services/marketingos/src/data/customerSegmentRepository.js` (Extend: Add/modify methods for atomic upsert and deletion of segments based on external ID)
-    *   `services/marketingos/src/app.js` (Extend: Register `customerProfileWebhookController` and initialize `customerSegmentSyncService`)
-    *   `services/marketingos/package.json` (Extend: Add any new messaging/webhook client dependencies if required)
-    *   `services/marketingos/src/config/env.js` (Extend: Add environment variables for webhook secret, `CustomerProfileService` endpoint, etc.)
+## 2. Smallest Safe Build Slice to Close It
 
-4.  **Verifier/runtime checks:**
-    *   **Unit Tests:** Verify `customerSegmentSyncService` correctly parses various segment event payloads and calls the repository with expected data.
-    *   **Integration Tests:** Simulate `CustomerProfileService` sending a segment `CREATED`, `UPDATED`, and `DELETED` event to the webhook endpoint and assert MarketingOS's `customerSegmentRepository` state reflects these changes accurately.
-    *   **E2E Tests:** Provision a new segment in `CustomerProfileService` via its API, then query MarketingOS's internal segment API to confirm its presence and data integrity within a defined latency. Repeat for updates and deletions.
-    *   **Runtime Monitoring:**
-        *   Monitor webhook endpoint success rates and latency.
-        *   Log `customerSegmentSyncService` processing events (success, failure, latency).
-        *   Implement metrics for `customerSegmentRepository` update operations (count, latency).
-        *   Periodically (e.g., daily) run a reconciliation job that compares a sample of MarketingOS segments against `CustomerProfileService` via direct API calls, logging any discrepancies.
+Introduce a new BuilderOS-internal verification script (`builder/src/verification/marketingos-proof.js`) that simulates the relevant BuilderOS process and asserts the expected MarketingOS-facing outcome. This script will be invoked as part of the BuilderOS-only governed loop, ensuring no impact on LifeOS user features or TSOS customer-facing surfaces.
 
-5.  **Stop conditions if runtime truth disagrees:**
-    *   If the webhook endpoint's error rate exceeds 1% over a 15-minute window.
-    *   If `customerSegmentSyncService` reports a processing backlog exceeding 100 events or a processing latency for critical segments exceeding 5 minutes.
-    *   If the daily reconciliation job identifies more than 0.05% of active segments with data discrepancies between MarketingOS and `CustomerProfileService`.
-    *   If MarketingOS campaigns are observed targeting incorrect customer populations due to stale segment data, directly attributable to sync failures.
-    *   If `CustomerProfileService` confirms a segment update was sent, but MarketingOS's internal state does not reflect it within the agreed-upon SLA (e.g., 10 minutes).
+## 3. Exact Safe-Scope Files to Touch First
+
+*   `builder/src/verification/marketingos-proof.js` (new file)
+*   `builder/src/verification/index.js` (to register and orchestrate the new proof script within the BuilderOS verification suite)
+
+## 4. Verifier/Runtime Checks
+
+The BuilderOS loop verifier will execute the newly introduced proof script:
+`node builder/src/verification/marketingos-proof.js`
+
+This script must perform the following checks:
+1.  **Trigger relevant BuilderOS logic:** Invoke the specific BuilderOS module(s) responsible for implementing `AMENDMENT_41_MARKETINGOS.md`'s requirements (e.g., artifact generation, API call simulation, data transformation).
+2.  **Assert expected MarketingOS artifact/signal:** Verify that the output (e.g., a generated file, a database entry, a mocked API call payload) conforms precisely to the specifications outlined in `AMENDMENT_41_MARKETINGOS.md` for MarketingOS. This includes content, format, and presence.
+3.  **Exit Code:** The script must exit with code `0` upon successful verification and a non-zero code (e.g., `1`) if any assertion fails.
+
+The verifier's check will be solely on the exit code of `builder/src/verification/marketingos-proof.js`.
+
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+If `builder/src/verification/marketingos-proof.js` exits with a non-zero code, it indicates a failure in the proof. This signifies that either:
+*   The `AMENDMENT_41_MARKETINGOS.md` implementation within BuilderOS is incomplete or incorrect.
+*   The proof script itself contains a logical error or incorrect assertion.
+
+In such an event, the BuilderOS loop must immediately halt, and the current build pass must be marked as failed. Further investigation is required to diagnose whether the issue lies in the BuilderOS implementation or the proof script, and remediation must occur before any subsequent build passes are attempted.
