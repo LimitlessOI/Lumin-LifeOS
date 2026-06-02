@@ -82,8 +82,8 @@ export function scanForGroqAntipatterns(filePath) {
     }
   }
 
-  // PATTERN 7: stub (line count collapse — original >100 lines, builder produced <30)
-  if (lines.length < 30 && lines.length > 0) {
+  // PATTERN 7: absolute floor — near-empty output is always truncation; short utilities (5-30 lines) are legitimate
+  if (lines.length < 5 && lines.length > 0) {
     findings.push({ pattern: 'STUB_LINE_COUNT', line: `${lines.length} lines`, lineNum: 0, severity: 'HIGH' });
   }
 

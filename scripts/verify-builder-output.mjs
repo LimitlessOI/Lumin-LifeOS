@@ -37,8 +37,8 @@ export function detectBuilderStub(filePath, originalLines = null) {
     signals.push(`line_count_collapse: was_${originalLines}_now_${lineCount}`);
   }
 
-  // Signal 2: unconditionally too short to be a real module
-  if (lineCount < 15) {
+  // Signal 2: absolute floor — catches true truncation (near-empty output); legitimate short utilities pass through to other signals
+  if (lineCount < 5) {
     signals.push(`too_short_${lineCount}_lines`);
   }
 
