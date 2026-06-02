@@ -1,27 +1,39 @@
-# Blueprint Proof: Command Center V2 - Core Command API & Persistence (g383-100)
+# BuilderOS Remediation: Command Center V2 Blueprint Proof (G383-100)
 
-This document serves as a proof-closing blueprint note for the `g383-100` build slice, focusing on establishing the foundational API and persistence for the `Command` entity within the `@lifeos/command-center-v2-api` service.
+**Source Blueprint:** `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`
+
+This document serves as a proof-closing note for the initial build slice of Command Center V2, addressing the foundational requirement for internal BuilderOS command execution.
 
 ---
 
-## Proof-Closing Blueprint Note
+### Blueprint Note: Next Smallest Build Slice
 
-**1. Exact missing implementation or proof gap:**
-The current gap is the full-stack implementation and proof of concept for creating and retrieving a `Command` entity through the `@lifeos/command-center-v2-api`, ensuring data persistence. This validates the core `Command` data model, its repository interactions, and the exposure of these operations via the API layer (gRPC/REST).
+**1. Exact Missing Implementation or Proof Gap:**
+The core gap is the absence of a defined, executable internal command within the BuilderOS Command Center V2 framework. Specifically, a foundational command to manage BuilderOS internal blueprint state, enabling the system to acknowledge and process blueprint updates.
 
-**2. Smallest safe build slice to close it:**
-Implement the `createCommand` and `getCommandById` methods within the `CommandRepository` and expose these operations via dedicated gRPC/REST endpoints in the `CommandService`. This slice focuses on a single entity's fundamental CRUD (Create, Read) operations to prove the end-to-end flow from API request to database persistence and retrieval.
+**2. Smallest Safe Build Slice to Close It:**
+Implement a new internal BuilderOS command, `builderos:blueprint:sync-state`, and provide a minimal stub handler. This command will be exclusively for BuilderOS internal use, ensuring no impact on LifeOS user features or TSOS customer-facing surfaces. Its purpose is to signal to the BuilderOS core that a blueprint state synchronization is required, without yet implementing the full synchronization logic.
 
-**3. Exact safe-scope files to touch first:**
--   `@lifeos/command-center-v2-api/src/data/models/command.ts`: Ensure the `Command` interface/schema is complete and correctly defined for persistence.
--   `@lifeos/command-center-v2-api/src/data/repositories/commandRepository.ts`: Implement `create` and `findById` methods, including any necessary ORM/database interactions.
--   `@lifeos/command-center-v2-api/src/api/v2/command.ts`: Add gRPC/REST endpoint handlers for `CreateCommand` and `GetCommand` operations, utilizing the `CommandRepository`.
--   `@lifeos/command-center-v2-api/src/api/v2/interfaces.ts`: Define request and response DTOs/interfaces for `CreateCommand` and `GetCommand` operations.
--   `@lifeos/command-center-v2-api/src/proto/command_center_v2.proto`: Add gRPC service definitions for `CreateCommand` and `GetCommand` messages and RPC methods.
+**3. Exact Safe-Scope Files to Touch First:**
+*   `src/builderos/commands/blueprint/syncBlueprintState.command.ts`: Define the `BlueprintSyncStateCommand` class, its payload interface, and a basic `execute` method that logs its invocation.
+*   `src/builderos/commands/index.ts`: Register `BlueprintSyncStateCommand` within the BuilderOS command registry.
+*   `src/builderos/commandCenter/commandCenter.service.ts`: (Review only) Ensure the existing command dispatch mechanism can correctly identify and invoke the new command. No modification expected if existing patterns are followed.
 
-**4. Verifier/runtime checks:**
--   Successfully start the `@lifeos/command-center-v2-api` service without errors.
--   Using a gRPC client (e.g., `grpc-cli` or a programmatic client), invoke the `CreateCommand` RPC with a valid `Command` payload.
--   Verify that the `CreateCommand` response indicates success and returns the unique identifier (ID) of the newly created command.
--   Immediately after creation, invoke the `GetCommand` RPC using the ID obtained from the `CreateCommand` response.
--
+**4. Verifier/Runtime Checks:**
+*   **Unit Test (`src/builderos/commands/blueprint/syncBlueprintState.command.test.ts`):**
+    *   Verify that `BlueprintSyncStateCommand` can be instantiated with a valid payload.
+    *   Verify that the `execute` method is called when the command is dispatched via the internal BuilderOS command bus.
+    *   Assert that the `execute` method performs its stubbed action (e.g., logs a specific message).
+*   **Integration Test (`src/builderos/commandCenter/commandCenter.integration.test.ts`):**
+    *   Simulate an internal BuilderOS event (e.g., a blueprint file change detection) that would trigger the `builderos:blueprint:sync-state` command.
+    *   Observe that the command is correctly received and its handler invoked within the BuilderOS command center context.
+*   **Runtime Check (BuilderOS Internal Logs):**
+    *   Deploy the slice to a BuilderOS staging environment.
+    *   Manually trigger a simulated blueprint update event.
+    *   Verify that BuilderOS internal logs show the `builderos:blueprint:sync-state` command being dispatched and its handler executing successfully, logging its stubbed message.
+
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   If the `BlueprintSyncStateCommand` cannot be registered or dispatched successfully through the BuilderOS command bus.
+*   If the command's `execute` method is not invoked, or throws unexpected errors, when dispatched.
+*   If any runtime observation indicates the command attempts to interact with or modify LifeOS user features or TSOS customer-facing surfaces, violating the core specification.
+*   If the command registration causes conflicts with existing BuilderOS commands (e.g., duplicate command ID).
