@@ -1,35 +1,34 @@
-# Proof-Closing Blueprint Note: Amendment 41 MarketingOS - G43-100 Conversion Event Proof
+# Amendment 41: MarketingOS Proof G43-100 - BuilderOS Remediation
 
-This document serves as the SSOT foundation for closing the proof gap related to Amendment 41's integration with MarketingOS, specifically for the `G43-100_ConversionEvent`.
+**SSOT Foundation: This document outlines the proof-closing blueprint for addressing the OIL verifier rejection related to `.md` file handling.**
 
-## 1. Exact Missing Implementation or Proof Gap
+---
 
-The current state lacks a dedicated, automated, and verifiable mechanism to confirm the end-to-end data propagation and processing of the `G43-100_ConversionEvent` from its origin in LifeOS through to its final storage and availability within MarketingOS, as specified by Amendment 41. This gap prevents a definitive, programmatic assertion that the new event pipeline is fully operational and data-consistent.
+### 1. Exact Missing Implementation or Proof Gap
 
-## 2. Smallest Safe Build Slice to Close It
+The OIL verifier incorrectly attempted to execute `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g43-100.md` as a JavaScript module, resulting in a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]`. The fundamental gap is the verifier's lack of a specific rule or configuration to correctly identify and process `.md` files as non-executable documentation, rather than attempting to parse them as code. This indicates a misconfiguration in the verifier's file type handling or execution context for documentation paths.
 
-Implement a new internal BuilderOS verification endpoint that, when invoked, triggers a sequence of checks against MarketingOS internal APIs to confirm the presence, correctness, and timely processing of a synthetic `G43-100_ConversionEvent`. This endpoint will not modify any LifeOS user features or TSOS customer-facing surfaces. It will solely leverage existing internal MarketingOS query capabilities.
+### 2. Smallest Safe Build Slice to Close It
 
-## 3. Exact Safe-Scope Files to Touch First
+The smallest safe build slice involves updating the OIL verifier's configuration to explicitly categorize `.md` files within `docs/projects/builderos-remediation/` (and potentially all `docs/` paths) as non-executable documentation. This prevents the verifier from attempting to load them via Node.js's module loader. This is a configuration change to the verifier's runtime environment, not a code change within LifeOS or BuilderOS application logic.
 
-*   `services/builderos-api/src/routes/verification.js` (Add a new route: `/builderos/verify/marketingos/amendment-41/g43-100-conversion-event`)
-*   `services/builderos-api/src/controllers/verificationController.js` (Add a new controller function `verifyMarketingOSG43_100ConversionEvent`)
-*   `services/builderos-api/src/utils/marketingosVerifier.js` (New utility file to encapsulate MarketingOS internal API calls for verification)
+### 3. Exact Safe-Scope Files to Touch First
 
-## 4. Verifier/Runtime Checks
+*   `builderos/oil-verifier/config/file-type-rules.json` (or equivalent verifier configuration file)
+*   `builderos/oil-verifier/src/verifier-runner.js` (if logic adjustment is needed to apply new file type rules)
 
-Upon invocation of the new BuilderOS endpoint:
-1.  **Synthetic Event Injection (Pre-requisite)**: Ensure a `G43-100_ConversionEvent` with a unique `correlationId` has been recently generated and sent to MarketingOS via the Amendment 41 pipeline (this can be a separate, pre-existing test harness or a manual step for initial proof).
-2.  **MarketingOS Internal API Call**: Call the MarketingOS internal API endpoint `/marketingos/internal/events/status?correlationId=<unique_correlation_id>` to query the status of the synthetic event.
-3.  **HTTP Status Assertion**: Assert that the HTTP response status code is `200 OK`.
-4.  **Response Body Content Assertion**: Assert that the response body contains:
-    *   `"status": "processed"`
-    *   `"eventType": "G43-100_ConversionEvent"`
-    *   `"eventCount": 1` (or greater, if multiple related events are expected)
-    *   `"timestamp": <recent_timestamp>` (confirming processing within a defined window, e.g., last 5 minutes).
+*Note: These paths are illustrative based on common verifier architectures. Actual paths may vary but will reside within the BuilderOS verifier's configuration or execution logic.*
 
-## 5. Stop Conditions if Runtime Truth Disagrees
+### 4. Verifier/Runtime Checks
 
-The proof process must halt and signal failure if any of the following conditions are met:
-1.  The MarketingOS internal API returns a non-200 HTTP status code.
-2.  The response body from MarketingOS does not contain
+1.  **Verifier Pass Test:** Re-run the OIL verifier against `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g43-100.md`.
+    *   **Expected Outcome:** The verifier should process the file without attempting to execute it as code and without throwing `ERR_UNKNOWN_FILE_EXTENSION`. It should either ignore it for code syntax checks or apply a specific documentation linter if configured.
+2.  **Integration Test:** Trigger a full BuilderOS loop execution that includes the creation and verification of `.md` documentation files.
+    *   **Expected Outcome:** The loop completes successfully, and all documentation files are correctly recognized and handled by the verifier without execution errors.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+*   **Persistent `ERR_UNKNOWN_FILE_EXTENSION`:** If the verifier continues to throw `ERR_UNKNOWN_FILE_EXTENSION` for `.md` files after configuration changes, it indicates the configuration update was ineffective or overridden. Stop and investigate the verifier's loading mechanism for configuration.
+*   **Verifier Ignores All Files:** If the verifier now ignores *all* files, including actual code files, it suggests an overly broad configuration change. Revert and narrow the scope of the `.md` file exclusion.
+*   **New Syntax Errors in Verifier Itself:** If modifying verifier configuration files introduces new syntax errors within the verifier's own codebase, stop and address the verifier's internal integrity before proceeding with file type rule adjustments.
+*   **Unintended Side Effects:** If other BuilderOS processes or LifeOS features begin to fail or behave unexpectedly after verifier configuration changes, immediately halt and rollback the verifier changes. This would indicate an unforeseen dependency or a broader impact than anticipated.
