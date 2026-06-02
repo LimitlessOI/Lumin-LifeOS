@@ -2,6 +2,53 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SSOT] 2026-06-01 — Governance + BPB Correction Before Mission Runtime Phase 2
+
+### Mission result: COMPLETE — doctrine corrections applied, Phase 2 BLOCKED on known governance gaps
+
+**Agent:** Claude Sonnet 4.6 / Claude Code VSCode Extension / main branch / Conductor role
+
+**What:** Governance + BPB documentation correction before Mission Runtime Phase 2 proceeds. No service, route, or UI code written.
+
+**Files changed:**
+- `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md` — v2: 24/7 framing (not overnight mode), Identity/Terminology table, Builder Gap Escalation Protocol (10-step Builder→BPB→AIC→Adam ladder), updated binding table
+- `docs/projects/BPB-0001-MISSION-RUNTIME-V1.md` — §§13–16 added: Existing Asset Inventory + reuse plan (commitments table/route collision + resolution), Blocked Work Handling (escalation ladder), Mission Continuity Doctrine classification (open gap, not law), Builder Failure Lesson (gemini_flash truncation incident)
+- `docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` — status updated to Phase 2 BLOCKED; Known Gaps expanded with commitments conflict + governance gaps
+- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — change receipt for builder failure lesson + doctrine updates
+
+**Critical findings from BPB asset inventory:**
+1. `commitments` table already exists (SERIAL PK, different schema) — BPB migration will silently no-op; patch migration required
+2. `/api/v1/lifeos/commitments` already mounted via `lifeos-commitment-routes.js` — route collision; commitment CRUD must extend existing file
+3. `c2-mission-dashboard.html` exists — household board must complement, not duplicate
+
+**Governance gaps documented:**
+- Mission Continuity Doctrine = Level 1 Hypothesis, not law — pending AIC/Founder
+- Backward transition authority (Building→Approved etc.) = AIC DISCUSSION-6 pending
+- No pause/terminate state = Founder DISCUSSION-1 + AIC DISCUSSION-2 pending
+
+**Next exact build step:** Before Phase 2 service build —
+1. Run AIC DISCUSSION-6 (backward transition authority) — who can trigger `Building → Approved`, `Verification → Build Approved`, `Outcome Measured → Approved`
+2. Write `db/migrations/20260604_mission_runtime_commitments_patch.sql` (ALTER TABLE commitments ADD COLUMN IF NOT EXISTS for each BPB-0001 prescribed column)
+3. Then build `services/mission-ledger.js` per BPB-0001 §Section 4
+
+---
+## [SSOT] 2026-06-01 — TSOS Continuous Autonomous Operations Directive
+
+### Mission result: COMPLETE — operating law canonized + runner binding
+
+**What:** Founder directive for continuous autonomous ops (founder value > commits/activity; never idle; dynamic redirection; priority stack; forbidden success metrics).
+
+**Files:**
+- `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md` (NEW — canonical text)
+- `scripts/governed-overnight-backlog-run.mjs` — `founder_value_deliveries`, no-retry on 502/same blocker, infra redirect + local verify burst
+- `prompts/00-RESIDENT-ARCHITECT.md` — architectural depth + copy/paste fatigue + cross-link
+- `docs/QUICK_LAUNCH.md` — autonomous ops section
+- `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — change receipt
+
+**Next:** Mission dashboard should surface `founder_value_deliveries` vs `failed_repairs` ratio; council redirect hook when same blocker repeats across jobs.
+
+---
+
 ## [MISSION] 2026-06-01 — Overnight SocialMediaOS / MarketingOS Build Run
 
 ### Mission result: IN PROGRESS — runner alive (PID 5428), gen 2 started, Railway redeploy triggered, 0 commits yet (all blocked by stale deploy)

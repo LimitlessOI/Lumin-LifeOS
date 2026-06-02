@@ -561,8 +561,185 @@ All files with `@ssot docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` must point 
 
 ---
 
+## Section 13: Existing Asset Inventory and Reuse Plan **[REQUIRED — Builder must inspect before creating]**
+
+Per Lumin operating doctrine, BPB must inspect existing system assets before defining new tables, services, routes, or overlays. Mission Runtime must become the parent layer over existing systems — not a parallel app beside them.
+
+### 13.1 Existing Asset Inventory
+
+| Existing Asset | Location | Classification | Action Required |
+|---|---|---|---|
+| `routes/lifeos-commitment-routes.js` | `routes/` | **CONFLICT — path collision** | Mounted at `/api/v1/lifeos/commitments`. BPB-0001 prescribes new routes at same path. Cannot run both in parallel. Builder must extend this file to add mission_id support OR replace it with the new service-backed routes. Decision: **extend** — migrate `lifeos-commitment-routes.js` to use `mission-ledger.js` where possible. |
+| `commitments` table (existing) | `db/migrations/20260428_commitments_reminder_compat.sql` | **CONFLICT — schema mismatch** | Existing `commitments` table uses SERIAL PK, `to_person`, `committed_to`, `deadline` columns — different shape from BPB-0001 schema. `CREATE TABLE IF NOT EXISTS commitments` in the migration will silently no-op (table already exists). The BPB-0001 mission-runtime columns (`mission_id`, `urgency`, `importance`, `energy_cost`, `money_impact`, `relationship_impact`, `opportunity_cost_note`, `better_owner`, `approval_required`, `approved_by`, `approved_at`) do **not** exist yet. **Builder must use `ALTER TABLE commitments ADD COLUMN IF NOT EXISTS` for each missing column rather than CREATE TABLE.** |
+| `lifeos_commitments` table | `db/migrations/20260430_lifeos_commitments.sql` | **IGNORE — separate table** | Uses integer `user_id` FK. Not the same as the `commitments` table. Phase 1 does not need to unify these. |
+| `public/overlay/c2-mission-dashboard.html` | `public/overlay/` | **REUSE / EXTEND** | Existing C2 mission dashboard already shows jobs and system state. `lifeos-household.html` should complement, not duplicate this. Consider linking to it from the household board. Do not build a competing command view. |
+| `routes/project-governance-routes.js` + `pending_adam` table | `routes/` | **REUSE** | `pending_adam` table and routes already exist for blocked-on-founder escalation. Mission blocked-work escalation should use this infrastructure rather than creating a new table. |
+| `startup/register-runtime-routes.js` | `startup/` | **EXTEND (surgical)** | Already exists. Add `registerMissionRoutes` call per §Section 8. |
+| `routes/public-routes.js` | `routes/` | **EXTEND (surgical)** | Already exists. Add `/lifeos-household` per §Section 7. |
+| `routes/lifeos-command-center-routes.js` | `routes/` | **EXTEND** | C2 command center surface. Mission Runtime state should surface through here for Conductor visibility. |
+| `db/migrations/20260604_mission_runtime_v1.sql` | `db/migrations/` | **DONE — PARTIALLY CORRECT** | Migration exists and was verified (103 lines, 18/18 prescription checks PASS). However: `CREATE TABLE IF NOT EXISTS commitments` will silently no-op because the table already exists. **The migration must be amended or a new patch migration must add the missing columns.** See §13.2. |
+
+### 13.2 Commitments Table Conflict — Required Resolution **[PRESCRIBED]**
+
+The existing `commitments` table predates Mission Runtime. The BPB-0001 migration cannot create it. Instead, the Builder must apply a patch migration to add the mission-runtime columns:
+
+```sql
+-- Required patch (apply after 20260604_mission_runtime_v1.sql confirms table exists)
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS mission_id          UUID        REFERENCES missions(id) ON DELETE SET NULL;
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS time_estimate_hours NUMERIC(5,2);
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS urgency             SMALLINT    CHECK (urgency BETWEEN 1 AND 5);
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS importance          SMALLINT    CHECK (importance BETWEEN 1 AND 5);
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS energy_cost         SMALLINT    CHECK (energy_cost BETWEEN 1 AND 5);
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS money_impact        SMALLINT    CHECK (money_impact BETWEEN 1 AND 5);
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS relationship_impact SMALLINT    CHECK (relationship_impact BETWEEN 1 AND 5);
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS opportunity_cost_note TEXT;
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS better_owner        TEXT;
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS approval_required   BOOLEAN     NOT NULL DEFAULT FALSE;
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS approved_by         TEXT;
+ALTER TABLE commitments ADD COLUMN IF NOT EXISTS approved_at         TIMESTAMPTZ;
+```
+
+This patch migration should be a separate file: `db/migrations/20260604_mission_runtime_commitments_patch.sql`.
+
+The service layer (`mission-ledger.js`) must tolerate existing rows that predate these columns (all new columns nullable except `approval_required` which defaults to FALSE).
+
+### 13.3 Commitment Routes Conflict — Required Resolution **[PRESCRIBED]**
+
+`routes/lifeos-commitment-routes.js` is already mounted at `/api/v1/lifeos/commitments`. The new `routes/mission-routes.js` must NOT also try to mount at that path.
+
+**Resolution for Phase 2:**
+- `routes/mission-routes.js` mounts missions at `/api/v1/lifeos/missions` (no conflict).
+- Commitment routes (`POST /api/v1/lifeos/commitments`, `GET /api/v1/lifeos/commitments`, `PUT /api/v1/lifeos/commitments/:id`) must be added to the **existing** `routes/lifeos-commitment-routes.js`, not to `mission-routes.js`.
+- The existing `createLifeOSCommitmentRoutes` function must be extended to call `mission-ledger.js` functions.
+- The household board route (`GET /api/v1/lifeos/household/board`) stays in `mission-routes.js`.
+
+---
+
+## Section 14: Blocked Work Handling **[PRESCRIBED]**
+
+### 14.1 When Builder encounters a gap, ambiguity, or missing spec
+
+1. Builder records the exact gap in the work item log or receipt.
+2. Builder marks the work item `blocked` or `waiting-on-BPB`.
+3. Builder does **not** sit idle.
+4. Builder immediately continues the next highest-value executable work from: this BPB → this mission → another approved mission.
+5. BPB resolves the gap from existing approved context (mission intent, SSOT, existing assets).
+6. If BPB cannot resolve without a new governance, value, or priority decision: BPB escalates to AIC.
+7. AIC resolves unless Founder authority is required.
+8. Adam escalation is exceptional — it means BPB/AIC failed to specify enough during blueprinting.
+9. Once resolved, BPB updates this blueprint and Builder resumes the blocked work.
+
+### 14.2 Escalation chain for this BPB
+
+| Blocker type | Resolved by |
+|---|---|
+| Implementation detail not in spec | BPB updates this document |
+| Existing asset conflict (see §13) | BPB updates §13 with resolution; Builder applies |
+| Route or table collision | BPB (see §13.2, §13.3 — already resolved) |
+| Ambiguous transition authority (who may trigger which state change) | AIC discussion — DISCUSSION-6 from governance review |
+| Mission termination, pause, or priority doctrine | Founder + AIC — DISCUSSION-1 through DISCUSSION-5 from governance review |
+| Exposed secrets, destructive DB, money, legal | Adam — ADAM_REQUIRED stop |
+
+### 14.3 Build order with known blockers
+
+The following Phase 2 items have known blockers that must be resolved before building:
+
+| Work item | Status | Blocker | Resolved by |
+|---|---|---|---|
+| `db/migrations/20260604_mission_runtime_commitments_patch.sql` | **NEW — required** | commitments table pre-exists (§13.2) | BPB — patch spec now in §13.2 |
+| Commitment routes in `mission-routes.js` | **BLOCKED** | Route collision at `/api/v1/lifeos/commitments` (§13.3) | BPB — resolution in §13.3: extend lifeos-commitment-routes.js instead |
+| `transitionMissionState()` authority levels | **BLOCKED** | Backward transition authority not defined (§15) | AIC — DISCUSSION-6 |
+| Mission pause/termination states | **BLOCKED** | No pause/termination doctrine (§15) | Founder + AIC — DISCUSSION-1/2 |
+
+Builder must not wait idly on the blocked items — build the unblocked items first (`missions` CRUD, state machine validation, household board), then resume blocked items once resolved.
+
+---
+
+## Section 15: Mission Continuity Doctrine — Open Governance Gap **[NOT IMPLEMENTED — PENDING AIC/FOUNDER]**
+
+### 15.1 Classification
+
+**Doctrine under review:** "The system should never stop the mission unless the mission itself is completed, superseded, abandoned by approved authority, or proven impossible."
+
+**Truth level (§2.0B):** Currently at Level 1 — Hypothesis. It emerged during BPB-0001 implementation planning. It has NOT been:
+- formally debated by AIC
+- approved by Founder as operating law
+- added to NSSOT as §2.0D extension
+
+**This doctrine is NOT yet law. It is not encoded in this BPB. It is documented here as an open governance gap.**
+
+### 15.2 Current state
+
+- NSSOT §2.0D defines 12 mission states. No termination state, no pause state, no blocked state, no authority assignment for who may trigger which transitions.
+- `Lessons Captured` is the only sanctioned terminal state (success path only).
+- No formal doctrine defines when a mission ends, pauses, or is declared impossible.
+- The 22 valid transitions in §Section 2 include backward transitions (`Building → Approved`, `Outcome Measured → Approved`) whose authority was not reviewed by AIC.
+
+### 15.3 Governance gaps requiring resolution before Phase 2
+
+| Gap | Pending | Blocking |
+|---|---|---|
+| Who may trigger backward transitions? | AIC — DISCUSSION-6 | `transitionMissionState()` authority check |
+| Can a mission be paused? What state does it enter? | AIC — DISCUSSION-2 | Service + UI |
+| Can a mission be terminated/abandoned? | Founder — DISCUSSION-1 | State machine, UI, Historian |
+| What does "impossible" mean formally? | AIC + Founder — DISCUSSION-3 | Termination path |
+| Escalation thresholds for stalled missions? | AIC — DISCUSSION-5 | Monitoring/alerting |
+| Mission priority between competing missions? | AIC + Founder — DISCUSSION-4 | Priority routing |
+
+### 15.4 BPB-0001 decision
+
+**BPB-0001 Phase 1 (migration) proceeds as-is.** The migration does not encode governance logic.
+
+**BPB-0001 Phase 2 (service + routes) must include this governance caveat:**
+The `transitionMissionState()` function must enforce the 22 prescribed transitions as written. It must also include a `[GOVERNANCE-GAP]` comment noting that authority levels for backward transitions are pending AIC resolution. The function must not unilaterally block transitions pending governance resolution — it enforces the prescribed transition table, nothing more.
+
+**BPB-0001 Phase 3 (UI) must include this caveat:**
+The household board must NOT render a "Terminate Mission" or "Pause Mission" button or option. These governance actions are not authorized in Phase 1.
+
+---
+
+## Section 16: Builder Failure Lesson — BPB Determinism Evidence **[REQUIRED READING BEFORE PHASE 2]**
+
+### 16.1 Incident
+
+| Field | Value |
+|---|---|
+| Date | 2026-06-01 |
+| Builder task ID | `build-1780364802760-de9cbe67` |
+| Model used | gemini_flash |
+| Target file | `db/migrations/20260604_mission_runtime_v1.sql` |
+| Builder claimed | `{ ok: true, committed: true }` |
+| Actual result | 6 lines committed / 341 bytes — all 4 CREATE TABLE statements missing, all ALTERs missing, seed INSERT missing |
+| Detection method | Post-commit `wc -l` verification against BPB-0001 §Section 1 prescription — 18 checks performed |
+| Resolution | GAP-FILL: complete 103-line migration written from BPB-0001 §Section 1 exactly; 18/18 prescription checks PASS |
+| Commit | `09688e589c` (origin `c5d4b0202a`) |
+
+### 16.2 Lessons
+
+**Lesson 1 — Builder success claims require proof, not trust.**  
+`committed: true` in builder response does not mean the file contains what was prescribed. BPB prescription checks are required after every builder commit. Trust the spec, not the builder's claim.
+
+**Lesson 2 — A blocked or failed task must not cause idle behavior.**  
+Builder failure was caught. The Conductor did not stop. The correct response was: record the failure, apply GAP-FILL, verify the prescription, continue the mission.
+
+**Lesson 3 — BPB determinism law (§2.0E) is the catch.**  
+The prescription check is what caught the truncation. Without the BPB prescription checks defined in §Section 9, this failure would have been silently accepted. BPB determinism law exists precisely for this: the prescription outlives the builder.
+
+**Lesson 4 — Pattern: gemini_flash truncation on large files.**  
+This is not the first occurrence. Historical receipts in `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` show gemini_flash truncating large file commits at least twice. For files > 50 lines, always verify line count after builder commit.
+
+### 16.3 Enforcement additions (required in Phase 2+)
+
+After every `POST /api/v1/lifeos/builder/build` response with `committed: true` for files in this BPB:
+1. Run the relevant verifier checks from §Section 9 immediately.
+2. If any check fails: record as `committed: true, verified: false`, apply GAP-FILL, re-verify.
+3. Never mark a Phase 2 deliverable complete until the §Section 9 checks pass.
+
+---
+
 ## Change Receipts
 
 | Date | What | Why | Verified |
 |---|---|---|---|
+| 2026-06-01 | Governance + BPB correction. Added §§13–16: Existing Asset Inventory (commitments table/route conflict identified + resolution prescribed); Blocked Work Handling (escalation ladder); Mission Continuity Doctrine classification (open gap, not yet law); Builder Failure Lesson (gemini_flash truncation, prescription-check enforcement). Updated §15 to explicitly hold backward transition authority pending AIC DISCUSSION-6. | Adam governance/BPB correction directive. Six governance doctrine gaps from prior review session required explicit BPB classification before Phase 2 build. | ✅ prescription checks §9 still PASS for migration |
 | 2026-06-01 | Created BPB-0001. Phases 1–4 fully specified. DB schema, state machine, routes, board, verifier checks, stop conditions all prescribed. | Adam mission directive: "Create BPB-0001 for Mission Runtime v1 + Shared Adam/Sherry Mission Board." §2.0E determinism requirement. | ✅ |

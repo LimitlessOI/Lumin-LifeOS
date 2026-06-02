@@ -4,7 +4,7 @@
 |---|---|
 | **Amendment Number** | 47 |
 | **Domain** | Mission Runtime |
-| **Status** | Phase 1 — Migration DONE, Service + Routes pending |
+| **Status** | Phase 1 — Migration DONE. Phase 2 BLOCKED pending BPB §15 governance resolution (AIC DISCUSSION-6 for transition authority; DISCUSSION-1/2 for pause/terminate) and §13 commitments conflict resolution. |
 | **Last Updated** | 2026-06-01 |
 | **BPB** | `docs/projects/BPB-0001-MISSION-RUNTIME-V1.md` |
 | **Mission** | MISSION-0001 — Adam + Sherry Household Reliability and Income Engine |
@@ -86,9 +86,13 @@ Invalid transitions must return `400 { ok: false, error: "invalid_transition", f
 
 ## ⚠️ Known Gaps
 
-- `historian_lessons` table does not exist yet — migration skips the FK backfill safely
+- `historian_lessons` table does not exist yet — migration skips the FK backfill safely (conditional DO $$ block)
 - No Sherry auth/login — API key only for Phase 1 (by design)
 - `capacity_warnings` array in board response is always `[]` for Phase 1 (by design)
+- **CRITICAL: `commitments` table already exists** with different schema (SERIAL PK, no mission_id/urgency/importance etc.) — BPB-0001 migration `CREATE TABLE IF NOT EXISTS commitments` will silently no-op. A patch migration is required before Phase 2 service can use the prescribed schema. See BPB-0001 §13.2.
+- **CRITICAL: `/api/v1/lifeos/commitments` route collision** — `routes/lifeos-commitment-routes.js` already mounted at this path. `mission-routes.js` must NOT also mount here. Commitment CRUD must extend existing file. See BPB-0001 §13.3.
+- **GOVERNANCE GAP: backward transition authority** — `Building → Approved`, `Verification → Build Approved`, `Outcome Measured → Approved` transitions exist in the state machine but authority levels are undefined. Pending AIC DISCUSSION-6. Phase 2 service implements them without authority check until resolved.
+- **GOVERNANCE GAP: no pause/terminate state** — Missions cannot be formally paused or terminated. Pending Founder DISCUSSION-1 + AIC DISCUSSION-2. Phase 1 household board must NOT render pause/terminate controls.
 
 ---
 
@@ -96,4 +100,5 @@ Invalid transitions must return `400 { ok: false, error: "invalid_transition", f
 
 | Date | What Changed | Why | Files | Verified |
 |---|---|---|---|---|
+| 2026-06-01 | Governance + BPB correction: status updated to Phase 2 BLOCKED; Known Gaps expanded with commitments table/route collision findings and governance doctrine gaps (transition authority, pause/terminate). BPB-0001 §§13–16 added covering same findings. TSOS Continuous Autonomous Ops directive updated with 24/7 framing, terminology table, and Builder Gap Escalation Protocol. | Adam governance/BPB correction directive. Six governance doctrine gaps from prior review session required explicit BPB and amendment documentation before Phase 2 proceeds. | `docs/projects/AMENDMENT_47_MISSION_RUNTIME.md`, `docs/projects/BPB-0001-MISSION-RUNTIME-V1.md`, `prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md` | ✅ no code changes |
 | 2026-06-01 | Created AMENDMENT_47 + DB migration `20260604_mission_runtime_v1.sql`. 4 tables, 2 backfill ALTERs, MISSION-0001 seed. Builder (gemini_flash) committed truncated file (6 lines / 341 bytes) — GAP-FILL: complete rewrite, 103 lines, 18/18 prescription checks PASS. | BPB-0001 Phase 1, migration-first per founder directive. Trust the build order, not the builder's claim of done. | `db/migrations/20260604_mission_runtime_v1.sql`, `docs/projects/AMENDMENT_47_MISSION_RUNTIME.md` | ✅ prescription check PASS |
