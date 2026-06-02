@@ -1,7 +1,6 @@
-# AMENDMENT_46_BUILDEROS_CONTROL_PLANE Proof - G99-100: Builder Control Plane Wiring
+**Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane (G99-100)**
 
-This document closes the proof gap for Amendment 46, specifically addressing the wiring of BuilderOS control plane routes within `routes/lifeos-council-builder-routes.js`.
+This document closes the proof gap identified in `AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md` regarding the wiring of build lifecycle events within the BuilderOS control plane.
 
-## 1. Exact Missing Implementation or Proof Gap
-
-The core gap
+**1. Exact Missing Implementation or Proof Gap:**
+The `routes/lifeos
