@@ -1,30 +1,44 @@
-Proof-Closing Blueprint Note: Amendment 41 MarketingOS Integration - Proof G15-100
-Source Blueprint: `docs/projects/AMENDMENT_41_MARKETINGOS.md`
-Signal: This document — SSOT foundation.
+# Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G15-100
+
+**Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`
+**Signal:** This document — SSOT foundation.
+
+This blueprint note addresses the specific proof gap G15-100 related to the AMENDMENT_41_MARKETINGOS initiative, focusing on the reliable dispatch of a critical marketing event payload from LifeOS to MarketingOS.
+
 ---
-1.  **Exact Missing Implementation or Proof Gap**
-    The initial proof of concept for the `UserSegmentSync` service to MarketingOS lacks robust error handling, idempotency for segment updates, and comprehensive logging for auditability. Specifically, the current implementation does not guarantee eventual consistency in the face of transient network failures or MarketingOS API rate limits, leading to potential data drift for user segments. The current implementation also does not fully leverage BuilderOS's internal event bus for segment change notifications, relying instead on periodic polling which introduces latency and potential race conditions.
 
-2.  **Smallest Safe Build Slice to Close It**
-    Implement a retry mechanism with exponential backoff for MarketingOS API calls within `apiClient.js`. Introduce a persistent, ordered queue (`segmentUpdateQueue`) for segment updates to ensure idempotency and reliable processing, triggered by BuilderOS internal `UserSegmentChanged` events. Enhance `UserSegmentSyncService` to consume from this queue and process updates, adding comprehensive logging to capture all sync attempts, successes, and failures with relevant payload identifiers and correlation IDs.
+### 1. Exact Missing Implementation or Proof Gap
 
-3.  **Exact Safe-Scope Files to Touch First**
-    *   `services/builder-os/src/marketingos/UserSegmentSyncService.js`
-    *   `services/builder-os/src/marketingos/apiClient.js`
-    *   `services/builder-os/src/queues/segmentUpdateQueue.js`
-    *   `services/builder-os/src/events/UserSegmentChangedEvent.js` (if not existing, define event structure)
-    *   `services/builder-os/src/listeners/UserSegmentChangeListener.js` (to push events to queue)
-    *   `tests/services/builder-os/src/marketingos/UserSegmentSyncService.test.js`
-    *   `tests/services/builder-os/src/queues/segmentUpdateQueue.test.js`
+The exact missing implementation is the dedicated function and integration logic responsible for constructing, serializing, and dispatching the `MarketingEvent_G15_100_Payload` to the designated MarketingOS API endpoint. This includes ensuring the payload adheres to the MarketingOS API contract, handling authentication, and managing network communication. The proof gap is the absence of verifiable runtime execution demonstrating successful, idempotent, and error-resilient delivery of this specific event.
 
-4.  **Verifier/Runtime Checks**
-    *   **Unit Tests:** Verify retry logic in `apiClient.js`, queue processing in `segmentUpdateQueue.js`, and error handling within `UserSegmentSyncService.test.js`.
-    *   **Integration Tests:** Simulate MarketingOS API failures (e.g., 5xx errors, rate limits) and verify that segments are eventually synchronized correctly. Verify that `UserSegmentChanged` events correctly trigger queueing and processing.
-    *   **Monitoring:** Observe `UserSegmentSyncService` logs for `sync_success`, `sync_failure`, `retry_attempt` events. Monitor `segmentUpdateQueue` depth and processing rates.
-    *   **Data Consistency Check:** Periodically compare a sample of BuilderOS user segments with their representation in MarketingOS to detect drift, ensuring consistency within a defined SLA (e.g., 5 minutes).
+### 2. Smallest Safe Build Slice to Close It
 
-5.  **Stop Conditions if Runtime Truth Disagrees**
-    *   Persistent `sync_failure` rates exceeding 5% for more than 30 minutes, indicating a systemic issue not covered by retries.
-    *   `segmentUpdateQueue` backlog growing continuously without processing, suggesting a consumer failure or resource exhaustion.
-    *   Discrepancies in data consistency checks (e.g., >1% segment mismatch) that cannot be attributed to expected propagation delays.
-    *   Introduction of new `ERR_UNKNOWN_FILE_EXTENSION` or similar Node.js runtime errors during deployment or execution of the BuilderOS service, indicating a build or environment misconfiguration.
+The smallest safe build slice involves:
+*   Creating a new utility function or extending an existing `MarketingOSAdapter` within the `src/services/marketing-integrations/` directory.
+*   This function will accept the raw LifeOS data, transform it into the `MarketingEvent_G15_100_Payload` structure, and initiate an authenticated HTTP POST request to the MarketingOS event ingestion endpoint.
+*   Integration of this dispatcher into the relevant LifeOS service/controller that triggers the event (e.g., a user lifecycle event, a specific data update).
+
+### 3. Exact Safe-Scope Files to Touch First
+
+*   `src/services/marketing-integrations/marketingOsEventDispatcher.js` (New file, or extend `src/services/marketing-integrations/marketingOsAdapter.js` if it exists)
+*   `src/services/marketing-integrations/index.js` (To export the new dispatcher/adapter function)
+*   `src/config/marketingOs.js` (If MarketingOS API endpoint or auth details are not already configured; add `MARKETINGOS_G15_100_EVENT_ENDPOINT` and `MARKETINGOS_API_KEY` if needed)
+*   `src/services/userService.js` (Example: If the event is triggered by a user action, integrate the dispatcher call here)
+*   `src/utils/logger.js` (Ensure appropriate logging for dispatch attempts and outcomes)
+
+### 4. Verifier/Runtime Checks
+
+1.  **LifeOS Internal Logs:** Verify `src/utils/logger.js` output confirms the `MarketingEvent_G15_100_Payload` was constructed correctly and the HTTP request was initiated with the expected target URL and headers.
+2.  **HTTP Response Code:** Monitor the HTTP response from the MarketingOS API. A successful dispatch is indicated by an HTTP 200-204 status code.
+3.  **MarketingOS Event Stream/Logs:** Directly observe the MarketingOS platform's event ingestion logs or a dedicated monitoring dashboard to confirm the `MarketingEvent_G15_100_Payload` was received, parsed, and acknowledged.
+4.  **MarketingOS Data Integrity:** If possible, verify the content of the ingested event within MarketingOS to ensure data fidelity (e.g., correct user ID, timestamp, event properties).
+5.  **Idempotency Check:** Trigger the event multiple times with the same source data to ensure MarketingOS handles duplicate events gracefully without creating erroneous records or side effects.
+
+### 5. Stop Conditions if Runtime Truth Disagrees
+
+*   **HTTP 4xx/5xx Response:** Any non-2xx HTTP status code from the MarketingOS API indicates a failure in dispatch or processing.
+*   **Missing Event in MarketingOS:** The event does not appear in MarketingOS logs or event streams within a reasonable timeframe (e.g., 5 minutes).
+*   **Malformed Payload:** MarketingOS reports errors indicating the `MarketingEvent_G15_100_Payload` is malformed, missing required fields, or fails schema validation.
+*   **Authentication Failure:** Repeated 401/403 errors from MarketingOS, indicating incorrect API key or token.
+*   **Performance Degradation:** The event dispatch mechanism introduces noticeable latency or resource contention within LifeOS (e.g., increased CPU, memory, or database load).
+*   **Non-Idempotent Behavior:** MarketingOS creates duplicate records or exhibits unexpected behavior when the same event is dispatched multiple times.
