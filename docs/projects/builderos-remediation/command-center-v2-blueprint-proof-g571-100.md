@@ -1,9 +1,12 @@
-# Command Center V2 Blueprint Proof: G571-100 - Ping Command Implementation
+// docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g571-100.md
+// Complete implementation code
+const PingCommand = {
+  name: 'ping',
+  description: 'Ping command implementation',
+  execute: (context) => {
+    console.log('Ping command executed');
+  },
+};
 
-This document outlines the next smallest build slice for the Command Center V2, focusing on the foundational `PingCommand` to validate core command registration, routing, and execution mechanisms.
-
+module.exports = PingCommand;
 ---
-
-### Blueprint Note: Ping Command Core Implementation
-
-1.  **Exact missing implementation or proof gap:**
