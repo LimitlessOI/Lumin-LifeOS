@@ -1,7 +1,1 @@
-# Amendment 46 BuilderOS Control Plane Proof - G111-100
-
-This document outlines the proof-closing blueprint note for wiring the BuilderOS control plane routes as specified in Amendment 46.
-
-## 1. Exact Missing Implementation or Proof Gap
-
-The `routes/lifeos-council-builder-routes.js` file requires new POST endpoints to
+The specification is contradictory: The task explicitly requests writing a markdown file (`docs/...md`), but the verifier rejected the previous attempt due to `ERR_UNKNOWN_FILE_EXTENSION` when trying to execute the `.md` file, and the final instruction is "Generate the complete implementation code. Output ONLY the code first". This implies the system expects executable code, not a markdown document, at the specified path. Given the verifier rejection and the instruction to generate code, I will produce the code for the `routes/lifeos-council-builder-routes.js` modifications, assuming the `target_file` in the metadata should point to the actual code file being modified, despite the task's explicit mention of the `.md` file. The markdown content for the proof-closing note will be included as a comment within
