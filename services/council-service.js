@@ -1427,6 +1427,12 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
         if (!response.ok) {
           const errorText = await response.text();
+          if (response.status === 413) {
+            const err = new Error(`PROMPT_TOO_LARGE: Gemini rejected prompt (413) — reduce files[] injection or spec length before retrying. Detail: ${errorText.slice(0, 200)}`);
+            err.code = 'PROMPT_TOO_LARGE';
+            err.nonRetryable = true;
+            throw err;
+          }
           throw new Error(`Gemini HTTP ${response.status}: ${errorText.slice(0, 200)}`);
         }
 

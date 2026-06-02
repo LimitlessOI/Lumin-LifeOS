@@ -90,13 +90,13 @@ They do NOT override the North Star — they add project-specific rules that ope
 ## NORTH STAR PRIORITY ORDER
 Per the SSOT North Star: **ONE killer feature → ONE paying segment → ONE economic model → then expand.**
 
-**Current Priority:**
-1. **ClientCare Billing Recovery** (Amendment 18) — immediate claims-rescue / revenue-recovery lane while TC is paused
-2. **TC Service** (Amendment 17) — hold state; resume after billing rescue priority clears
-3. **API Cost Savings** (Amendment 10) — verified savings product / case-study-to-product path
-4. **BoldTrail + Real Estate Workflow Systems** (Amendment 11) — adjacent expansion once active revenue lanes are stable
+**Current Priority (Founder directive 2026-06-02):**
+1. **C2 (Command & Control)** — becomes the primary operating layer; BuilderOS health + reliability first
+2. **SocialMediaOS / MarketingOS** (Amendment 41) — near-term revenue vehicle; Phase 0 manual revenue today, Phase 1 code immediately after
+3. **LifeOS and LimitlessOS** (Amendment 21+) — continue development; household reliability + Mission Runtime
+4. **Cursor / IDE agents** — audit-only eventually; system should build product, not the Conductor
 
-Everything else is supporting infrastructure, future-phase work, or must prove a tighter link to current revenue.
+All prior priority lanes (ClientCare, TC, API Cost Savings, BoldTrail) remain in the amendment registry but are subordinate to the above order. Resume them only after C2 + SocialMediaOS are operating.
 
 ---
 

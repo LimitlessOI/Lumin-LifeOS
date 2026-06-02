@@ -459,10 +459,10 @@ function validateGeneratedOutputForTarget(targetFile, output) {
       return 'generated HTML is missing required document structure (<html> wrapper OR <!DOCTYPE html> + <head> + <body>)';
     }
   }
-  // JS minimum line count — catches token-limit truncation before the syntax gate
+  // JS absolute floor — catches 1-line truncated stubs; legitimate short files (helpers, re-exports) pass through to node --check
   if (target.endsWith('.js') || target.endsWith('.mjs') || target.endsWith('.cjs')) {
     const lineCount = text.split('\n').length;
-    if (lineCount < 15) {
+    if (lineCount < 3) {
       return `generated JS is too short (${lineCount} lines); likely token-limit truncation — refusing to commit; retry with a smaller spec or explicit target_file`;
     }
   }
@@ -1126,6 +1126,26 @@ export function createLifeOSCouncilBuilderRoutes({
       });
     } catch (err) {
       log.error({ err: err.message, domain, mode }, '[BUILDER] Task dispatch failed');
+      if (err.code === 'PROMPT_TOO_LARGE') {
+        await recordBuilderGap({
+          domain,
+          task,
+          modelUsed: memberKey || 'system',
+          status: 'failed',
+          stage: 'dispatch',
+          reason: err.message,
+          targetFile: bodyTargetFile || null,
+          routingKey,
+          mode,
+          executionOnly,
+        });
+        return res.status(413).json({
+          ok: false,
+          error: 'prompt_too_large',
+          detail: err.message,
+          hint: 'Remove files[] injection or shorten spec. This error is non-retryable with the same payload.',
+        });
+      }
       const gapRecommendation = await recordBuilderGap({
         domain,
         task,
