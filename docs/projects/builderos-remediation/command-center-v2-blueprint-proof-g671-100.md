@@ -1,30 +1,32 @@
-# BuilderOS Remediation: Command Center V2 Blueprint Proof (G671-100)
+# Command Center V2 Blueprint Proof: G671-100 Remediation
 
-This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, derived from `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`. It outlines the next smallest, safest build increment to establish foundational capabilities.
+This document outlines the next smallest build slice to address the previous OIL verifier rejection and advance the Command Center V2 (CCv2) implementation. The prior rejection was due to the verifier attempting to execute a `.md` file as a Node.js module, indicating a verifier configuration issue rather than a flaw in the blueprint content itself. This remediation focuses on delivering the first functional, minimal component of CCv2 within BuilderOS.
 
----
+## 1. Exact Missing Implementation or Proof Gap
 
-**1. Exact Missing Implementation or Proof Gap:**
-The foundational data model for a `Command` entity and a basic read-only API endpoint to retrieve a list of these commands are not yet implemented or proven. This gap prevents further development of command execution or status display features within the BuilderOS context.
+The core gap is the absence of a foundational, BuilderOS-native command that CCv2 can reliably invoke and receive a response from. This initial command serves as the "hello world" for CCv2's interaction with BuilderOS, proving the basic command registration, execution, and response mechanism.
 
-**2. Smallest Safe Build Slice to Close It:**
-Implement a minimal `Command` data schema (e.g., `id`, `type`, `status`, `timestamp`) and a `/api/builder-commands` GET endpoint that returns a hardcoded or mock list of these commands. This proves the API route, basic data serialization, and response structure without requiring immediate database integration.
+## 2. Smallest Safe Build Slice to Close It
 
-**3. Exact Safe-Scope Files to Touch First:**
-*   `src/api/builder-commands/routes.js`: Define the GET `/api/builder-commands` route.
-*   `src/api/builder-commands/controller.js`: Implement the handler for the GET route, returning mock data conforming to the `Command` schema.
-*   `src/api/builder-commands/schema.js`: Define the basic `Command` data structure (e.g., using Joi or a simple object literal for validation/typing).
-*   `src/api/index.js`: Register the new `builder-commands` routes within the main API router.
+Implement a minimal `builder-os ping` command. This command will perform a no-op or return a simple success message, establishing the end-to-end flow for command definition, registration, and execution within BuilderOS. This slice avoids any complex business logic or external dependencies, focusing solely on the command infrastructure.
 
-**4. Verifier/Runtime Checks:**
-*   **API Call:** Send a GET request to `http://localhost:[PORT]/api/builder-commands`.
-*   **Status Code:** Verify the HTTP status code is `200 OK`.
-*   **Response Type:** Verify the `Content-Type` header is `application/json`.
-*   **Response Structure:** Verify the response body is a JSON array.
-*   **Data Integrity:** Verify each object in the array contains `id` (string), `type` (string), `status` (string, e.g., 'pending', 'executing', 'completed', 'failed'), and `timestamp` (ISO 8601 string) fields with appropriate values.
+## 3. Exact Safe-Scope Files to Touch First
 
-**5. Stop Conditions if Runtime Truth Disagrees:**
-*   **404 Not Found:** If the endpoint returns a `404`, the route registration in `src/api/index.js` or `src/api/builder-commands/routes.js` is incorrect or the server is not running.
-*   **500 Internal Server Error:** If the endpoint returns a `500`, there is an error in the controller logic within `src/api/builder-commands/controller.js` (e.g., syntax error, unhandled exception).
-*   **Incorrect Response Format:** If the response is not a JSON array, or the objects within the array lack the required `id`, `type`, `status`, or `timestamp` fields, the data serialization or mock data structure in `src/api/builder-commands/controller.js` or `src/api/builder-commands/schema.js` is incorrect.
-*   **Service Startup Failure:** If the Node.js service fails to start after changes, there is a syntax error or a dependency issue introduced in the new files.
+The following files are within the approved BuilderOS safe scope and should be touched first:
+
+*   `src/builder-os/commands/ping-command.js`: Define the `PingCommand` class, extending a base command class (e.g., `BaseCommand`). This file will specify the command's name (`ping`) and a minimal `execute` method.
+*   `src/builder-os/command-registry.js`: Add an entry to the existing command registry to map the `ping` command string to the `PingCommand` class. This ensures BuilderOS can discover and instantiate the command.
+
+## 4. Verifier/Runtime Checks
+
+*   **BuilderOS Startup:** Verify that BuilderOS starts successfully without any new errors or warnings after the changes.
+*   **Command Registration:** Execute `builder-os help` or a similar command listing mechanism to confirm `ping` appears in the list of available commands.
+*   **Command Execution:** Run `builder-os execute ping`. The command should complete successfully and output a predefined success message (e.g., "BuilderOS Ping successful.").
+*   **Verifier Behavior:** Confirm that the OIL verifier no longer attempts to execute `.md` files as Node.js modules. (This is an external check, but critical for the overall remediation loop).
+
+## 5. Stop Conditions if Runtime Truth Disagrees
+
+*   **Startup Failure:** If BuilderOS fails to start or throws unhandled exceptions related to command registration or `ping-command.js`.
+*   **Command Not Found:** If `builder-os execute ping` results in an "unknown command" error.
+*   **Execution Error:** If `builder-os execute ping` throws an exception during its execution or does not produce the expected success output.
+*   **Verifier Regression:** If the OIL verifier again flags `.md` files as syntax errors, indicating the underlying verifier configuration issue has not been resolved. In this case, the focus must shift back to the verifier configuration before proceeding with further code changes.
