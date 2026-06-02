@@ -1,38 +1,25 @@
-# Amendment 41: MarketingOS Proof G81-100 - SSOT Foundation Blueprint Note
+### Proof-Closing Blueprint Note: MarketingOS Proof G81-100
 
-**Signal:** This document — SSOT foundation.
+**1. Exact Missing Implementation or Proof Gap:**
+The current BuilderOS platform lacks a direct, verifiable data ingestion mechanism to consume and validate MarketingOS proof point `G81-100`. This gap prevents automated verification of MarketingOS campaign effectiveness as defined in `AMENDMENT_41_MARKETINGOS.md`. Specifically, the secure and auditable pipeline to ingest `G81-100` (e.g., "Campaign Conversion Rate for Segment X") from MarketingOS into a BuilderOS-internal verifiable data store is not yet implemented.
 
----
+**2. Smallest Safe Build Slice to Close It:**
+Implement a minimal, read-only data ingestion service within BuilderOS. This service will be responsible for either polling a designated MarketingOS API endpoint or receiving webhooks from MarketingOS to acquire `G81-100` data. The acquired data will be stored in a temporary, BuilderOS-internal, immutable data store designed for proof verification. This slice focuses exclusively on secure data acquisition, validation, and storage for proof purposes, without impacting LifeOS user features or TSOS customer-facing surfaces.
 
-### 1. Exact Missing Implementation or Proof Gap
+**3. Exact Safe-Scope Files to Touch First:**
+*   `builder-os/src/services/marketingosProofIngestor.js`: New ESM module for orchestrating `G81-100` data fetching/reception and initial processing.
+*   `builder-os/src/data/marketingosProofStore.js`: New ESM module for persisting `G81-100` data in a verifiable, append-only manner (e.g., using a simple file-based ledger or in-memory store for initial proof).
+*   `builder-os/src/config/marketingos.js`: New configuration file for MarketingOS API endpoints, authentication tokens, or webhook secrets.
+*   `builder-os/src/utils/marketingosProofValidator.js`: New utility for basic schema and data integrity validation of `G81-100` payloads.
+*   `builder-os/package.json`: Update dependencies if new libraries are required for HTTP requests (e.g., `node-fetch`) or data validation.
 
-The current gap is the lack of a formally verified, auditable, and real-time data synchronization and consistency proof for critical user attributes (specifically `user.marketingOptInStatus` and `user.segmentTags` relevant to G81-100 segmentation/reporting) from LifeOS (the Single Source of Truth) to MarketingOS. While a basic integration might exist, the "proof" aspect requires a dedicated mechanism to continuously assert and report on data consistency, ensuring MarketingOS accurately reflects LifeOS's state for these attributes.
+**4. Verifier/Runtime Checks:**
+*   **Data Ingestion Success:** Verify that `G81-100` data points are consistently received and successfully stored in `builder-os/src/data/marketingosProofStore.js` at expected intervals (for polling) or upon webhook trigger.
+*   **Data Integrity:** Implement runtime checks to ensure ingested `G81-100` data conforms to the expected schema and data types defined in `AMENDMENT_41_MARKETINGOS.md` via `marketingosProofValidator.js`.
+*   **Source Authentication:** Confirm that all ingested data originates from an authenticated and authorized MarketingOS source (e.g., valid API key, webhook signature).
+*   **Log Verification:** Monitor BuilderOS logs for successful ingestion events, data validation passes, and any parsing or storage errors.
+*   **Endpoint Reachability (if polling):** Ensure the BuilderOS service can successfully connect to the MarketingOS API endpoint.
 
-### 2. Smallest Safe Build Slice to Close It
-
-Implement a new BuilderOS-managed `marketing-sync` service responsible for:
-a.  Consuming relevant user attribute changes from LifeOS (e.g., via an existing `UserEventStream` or `UserProfileService` delta endpoint).
-b.  Idempotently updating corresponding user profiles in MarketingOS via its API.
-c.  Exposing a lightweight internal verification endpoint (`/verify-g81-100`) that, given a `userId`, queries both LifeOS and MarketingOS for the G81-100 relevant attributes and reports on their consistency.
-d.  A scheduled BuilderOS job that periodically invokes this verification endpoint for a random sample of users and logs the consistency status.
-
-This slice focuses on establishing the sync mechanism and, critically, the *proof* mechanism without altering existing LifeOS or MarketingOS core functionalities.
-
-### 3. Exact Safe-Scope Files to Touch First
-
-*   `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g81-100.md` (This document)
-*   `services/marketing-sync/src/index.js` (New service entry point)
-*   `services/marketing-sync/src/marketingos-adapter.js` (New module for MarketingOS API interactions)
-*   `services/marketing-sync/src/lifeos-event-consumer.js` (New module for consuming LifeOS events/data)
-*   `services/marketing-sync/src/verification-api.js` (New module for the internal verification endpoint)
-*   `services/marketing-sync/src/config.js` (New module for service-specific configuration, e.g., MarketingOS API keys, LifeOS endpoint URLs)
-*   `config/builder-services.json` (Add new `marketing-sync` service definition)
-*   `config/builder-jobs.json` (Add new scheduled job for G81-100 verification)
-
-### 4. Verifier/Runtime Checks
-
-*   **Unit Tests:** Ensure `marketingos-adapter.js` correctly formats requests and handles responses, and `lifeos-event-consumer.js` correctly parses LifeOS events.
-*   **Integration Tests:** Simulate LifeOS attribute changes and verify that `marketing-sync` service processes them and attempts to update MarketingOS (using mock MarketingOS API).
-*   **Automated Daily Consistency Check:** The scheduled BuilderOS job runs daily, sampling 100-500 active users. For each user, it calls the `marketing-sync`'s `/verify-g81-100` endpoint. The job asserts that >95% of sampled users show consistent data.
-*   **Observability:** Monitor `marketing-sync` service logs for processing errors, latency, and throughput. Dashboard metrics for `g81_100_consistency_rate` and `marketingos_api_call_success_rate`.
-*   **Manual Spot Check:** Periodically select a few users, verify their `marketingOpt
+**5. Stop Conditions if Runtime Truth Disagrees:**
+*   If `G81-100` data cannot be consistently ingested and stored without critical errors for 3 consecutive attempts or over a 1-hour period.
+*   If the ingested `G81-100` data consistently fails schema or integrity validation against the `AMENDMENT_41_MARKETINGOS.md` specification (e.g., >10% error rate over
