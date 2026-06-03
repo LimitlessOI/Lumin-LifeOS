@@ -293,11 +293,15 @@ export function generatePbbPlanFromOilAudit(job, oilAudit, options = {}) {
   const commitMessage = `[system-build] BuilderOS governed loop job ${job.id}${commitSuffix}`;
 
   const jsTarget = isJsTarget(targetFile || '');
+  const htmlTarget = /\.html?$/i.test(String(targetFile || ''));
   const zoneInfo = targetFile && existsSync(resolve(targetFile)) ? classifyBuildTarget(targetFile) : null;
   const lineCount = zoneInfo?.lineCount || 0;
+  // HTML overlays need an explicit token budget — undefined lets Gemini Flash default to minimal output.
   const maxOutputTokens = jsTarget
     ? Math.min(16384, Math.max(8192, Math.ceil(lineCount * 80) + 4096))
-    : undefined;
+    : htmlTarget
+      ? 16384
+      : undefined;
 
   return {
     ok: true,

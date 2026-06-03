@@ -131,6 +131,16 @@ export function scanForGroqAntipatterns(filePath) {
     }
   }
 
+  // PATTERN 12: asyncFn hallucination — Gemini Flash writes `asyncFn` instead of `async function`.
+  // This is not valid JS and fails node --check. Catch it here for a useful error message.
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i].trim();
+    if (l.startsWith('//') || l.startsWith('*')) continue;
+    if (/\basyncFn\b/.test(l)) {
+      findings.push({ pattern: 'ASYNC_FN_HALLUCINATION', line: l.slice(0, 100), lineNum: i + 1, severity: 'HIGH' });
+    }
+  }
+
   const highCount = findings.filter(f => f.severity === 'HIGH').length;
   return { ok: highCount === 0, filePath, lineCount: lines.length, findings };
 }
