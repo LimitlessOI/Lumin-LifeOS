@@ -19,8 +19,8 @@ class AuditError extends Error {
 /**
  * Validates required envVars.
  * @param {string[]} varNames - An array of envVar names to validate.
- * @throws {AuditError} If any required envVar is missing.
  * @returns {object} An object containing the validated envVars.
+ * @throws {AuditError} If any required envVar is missing.
  */
 function validateEnv(varNames) {
   const envVars = {};
