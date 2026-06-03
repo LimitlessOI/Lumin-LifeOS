@@ -9,8 +9,8 @@
  * @param {string} baseUrl - The base URL for the API.
  * @param {string} path - The apiEP path.
  * @param {string} commandKey - The value for the 'x-command-key' header.
- * @throws {Error} If the network request fails or the HTTP response is not ok.
  * @returns {Promise<object>} The parsed JSON response.
+ * @throws {Error} If the network request fails or the HTTP response is not ok.
  */
 async function fetchJson(baseUrl, path, commandKey) {
     const url = `${baseUrl}${path}`;
@@ -39,6 +39,7 @@ function createErrorResponse(e) {
 /**
  * Verifies the status of the Kernel and BuilderOS Control Plane for OC-007.
  * Fetches health data from both services concurrently and returns a structured audit report.
+ * Handle fetch errors with tryCatch and return { ok: false, error: e.message } on failure.
  *
  * @param {{baseUrl: string, commandKey: string}} params - Parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the API calls.
