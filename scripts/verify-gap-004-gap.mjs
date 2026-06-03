@@ -1,7 +1,6 @@
 /*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
-
 /**
  * Fetches JSON data from a given URL with a command key header.
  * Handles network errors and non-2xx HTTP responses.
@@ -42,12 +41,10 @@ export async function runGAP004GapVerification({ baseUrl, commandKey }) {
   try {
     const kernelHealthUrl = `${baseUrl}/api/v1/kernel/health`;
     const controlPlaneHealthUrl = `${baseUrl}/api/v1/builderos/control-plane/health`;
-
     const [kernelData, controlPlaneData] = await Promise.all([
       fetchJson(kernelHealthUrl, commandKey),
       fetchJson(controlPlaneHealthUrl, commandKey),
     ]);
-
     return {
       ok: true,
       gap_id: 'GAP-004',
