@@ -12,6 +12,8 @@ export const SAFE_WRITE_PATHS = Object.freeze([
   'public/overlay/',
   'scripts/',
   'docs/projects/builderos-remediation/',
+  'factory-v1/',
+  'docs/architecture/factory-v1-blueprint-pack/',
 ]);
 
 // Paths that are always blocked regardless of mode.
