@@ -1069,13 +1069,6 @@ async function generateNextTaskBatch(generation, attemptedKeys, state) {
       };
     }
   }
-  if (PRODUCT_ONLY_FACTORY) {
-    const recycled = recycleRetryableProductKeys(attemptedKeys, state);
-    if (recycled > 0) {
-      await appendLog('product_keys_recycled', { generation, recycled, reason: 'HTTP_502 retry on blueprint product targets' });
-    }
-  }
-
   const blueprintTasks = await generateBlueprintTaskBatch(generation, attemptedKeys, state);
   if (blueprintTasks.length > 0) {
     const valued = applyValueEngineToBatch(blueprintTasks, state);
@@ -1539,8 +1532,25 @@ async function main() {
 
     if (workQueue.length === 0) {
       state.generation_count++;
+      if (PRODUCT_ONLY_FACTORY && state.generation_count % 5 === 0) {
+        const recycled = recycleRetryableProductKeys(attemptedKeys, state);
+        if (recycled > 0) {
+          for (const id of [...completedIds]) {
+            const entry = state.blocked_attempts?.[taskBaseId(id)];
+            if (entry?.blocker?.includes('502') || String(entry?.blocker || '').startsWith('HTTP_5')) {
+              completedIds.delete(id);
+            }
+          }
+          await appendLog('product_keys_recycled', {
+            generation: state.generation_count,
+            recycled,
+            reason: 'HTTP_502 retry on blueprint product targets',
+          });
+        }
+      }
       const batch = await generateNextTaskBatch(state.generation_count, attemptedKeys, state);
-      const newTasks = batch.tasks || [];
+      let newTasks = batch.tasks || [];
+      newTasks = newTasks.filter((t) => !completedIds.has(t.id));
 
       await appendLog('queue_rebuild', {
         generation: state.generation_count,
