@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
 const tryCatch = async (promise) => {
   try {
     const data = await promise;
@@ -6,8 +9,7 @@ const tryCatch = async (promise) => {
     return { success: false, error };
   }
 };
-
-/**
+/*
  * Fetches JSON data from a specified URL with a command key header.
  * @param {string} baseUrl The base URL of the API.
  * @param {string} path The apiEP path.
@@ -29,8 +31,7 @@ const fetchJson = async (baseUrl, path, commandKey) => {
   }
   return response.json();
 };
-
-/**
+/*
  * Verifies the GAP-010 condition by checking the health of kernel and control plane APIs.
  * @param {{baseUrl: string, commandKey: string}} params
  * @returns {Promise<{ok: boolean, error?: string, gap_id?: string, gap_description?: string, gap_priority?: string, gap_status?: string, resolution_required?: boolean, kernel_status?: string, token_accounting?: string, checked_at?: string}>}
@@ -39,24 +40,19 @@ export async function runGAP010GapVerification({ baseUrl, commandKey }) {
   if (!baseUrl || !commandKey) {
     return { ok: false, error: 'baseUrl and commandKey are required.' };
   }
-
   const kernelHealthPromise = fetchJson(baseUrl, '/api/v1/kernel/health', commandKey);
   const controlPlaneHealthPromise = fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey);
-
   const [kernelResult, controlPlaneResult] = await Promise.all([
     tryCatch(kernelHealthPromise),
     tryCatch(controlPlaneHealthPromise)
   ]);
-
   if (!kernelResult.success) {
     return { ok: false, error: kernelResult.error.message };
   }
   if (!controlPlaneResult.success) {
     return { ok: false, error: controlPlaneResult.error.message };
   }
-
   const kernelData = kernelResult.data;
-
   return {
     ok: true,
     gap_id: 'GAP-010',
