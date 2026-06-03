@@ -18,8 +18,10 @@ const MAX_SENTENCE_LENGTH = 200; // Maximum character length for an extracted sn
  */
 function splitIntoSentences(text) {
   // Regex to split by periods, question marks, or exclamation points,
-  // optionally followed by closing quotes/parentheses and then whitespace.
-  return text.split(/(?<=[.?!])\s+(?=["')\]]\s)/)
+  // followed by one or more whitespace characters. This is a more robust
+  // approach for general sentence splitting in transcripts, ensuring
+  // a higher likelihood of extracting distinct sentences.
+  return text.split(/(?<=[.?!])\s+/)
              .map(s => s.trim())
              .filter(s => s.length > 0);
 }
