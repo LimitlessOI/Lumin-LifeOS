@@ -1,0 +1,8 @@
+{
+  "mission_id": "FACTORY-0001",
+  "blueprint_id": "FACTORY-0001-v1",
+  "step_id": "EXAMPLE-001",
+  "type": "write_file_exact",
+  "target_file": "factory-v1/tmp/proof-output.txt",
+  "content": "proof mission output\n"
+}
