@@ -1,3 +1,10 @@
+/**
+ * @file services/marketing-content-engine.js
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @description Provides core functionalities for extracting and potentially generating marketing content snippets from raw transcripts.
+ * This engine is a foundational component of the MarketingOS and SocialMediaOS platforms,
+ * designed to identify and refine content suitable for various marketing channels.
+ */
 // Constants for filtering extracted content
 const MIN_SENTENCE_LENGTH = 30; // Minimum character length for an extracted snippet
 const MAX_SENTENCE_LENGTH = 200; // Maximum character length for an extracted snippet
