@@ -1,11 +1,11 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * This script verifies the status of GAP-021 by checking the health endpoints
  * of the Kernel and BuilderOS Control Plane.
  * GAP-021: Am 44 vs Am 46 supremacy text unresolved in amendments (kernel orchestrates — doc only)
  */
 
-/**
+/*
  * A simple utility to wrap an asyncFn call in a tryCatch block.
  * @param {Function} promiseFn The asyncFn to execute.
  * @returns {Promise<{data: any, error: Error | null}>} An object containing either data or an error.
@@ -19,7 +19,7 @@ async function tryCatch(promiseFn) {
   }
 }
 
-/**
+/*
  * Fetches JSON data from a specified path relative to a base URL.
  * @param {string} baseUrl The base URL for the API.
  * @param {string} path The apiEP path.
@@ -42,7 +42,7 @@ async function fetchJson(baseUrl, path, commandKey) {
   return response.json();
 }
 
-/**
+/*
  * Runs the verification for GAP-021 by checking Kernel and BuilderOS Control Plane health.
  * @param {object} params - The parameters for the verification.
  * @param {string} params.baseUrl - The base URL for the API calls (e.g., 'http://localhost:3000').
