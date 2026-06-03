@@ -38,11 +38,13 @@ export async function runGAP022GapVerification({ baseUrl, commandKey }) {
   if (!commandKey) {
     return { ok: false, error: 'commandKey is required.' };
   }
+
   try {
     const [kernelData, controlPlaneData] = await Promise.all([
       fetchJson(baseUrl, '/api/v1/kernel/health', commandKey),
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
     ]);
+
     return {
       ok: true,
       gap_id: 'GAP-022',
