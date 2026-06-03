@@ -1,10 +1,10 @@
-/**
+/*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * - This script verifies GAP-014, checking for the absence of a platform coverage score
  * in the control plane API, which currently only provides RED/YELLOW health status.
  * It fetches health data from both the kernel and control plane APIs.
  */
-/**
+/*
  * Helper function to fetch JSON data from a given URL with a command key header.
  * Throws an error if the fetch operation fails or the response is not OK.
  * @param {string} baseUrl - The base URL for the API.
@@ -25,8 +25,7 @@ async function fetchJson(baseUrl, path, commandKey) {
   }
   return response.json();
 }
-
-/**
+/*
  * Executes GAP-014 verification by fetching health status from Kernel and Control Plane APIs.
  * It checks for the presence of a platform coverage score, which is expected to be absent.
  * @param {object} params - The parameters for the verification.
@@ -41,13 +40,11 @@ export async function runGAP014GapVerification({ baseUrl, commandKey }) {
   if (!commandKey) {
     return { ok: false, error: 'commandKey is required.' };
   }
-
   try {
     const [kernelData, controlPlaneData] = await Promise.all([
       fetchJson(baseUrl, '/api/v1/kernel/health', commandKey),
       fetchJson(baseUrl, '/api/v1/builderos/control-plane/health', commandKey),
     ]);
-
     // controlPlaneData is fetched to confirm its health status, but its content
     // is not directly used in the success return object beyond confirming the fetch was successful.
     // The GAP description implies its content is lacking, not that it's absent.
