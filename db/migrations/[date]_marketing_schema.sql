@@ -1,8 +1,10 @@
--- Migration for AMENDMENT 41 — MarketingOS / SocialMediaOS Phase 1 db tables
--- This migration creates 5 tables: marketing_campaigns, marketing_audiences, social_accounts, social_posts, and marketing_sessions.
-
--- Ensure UUID extension is available
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- db/migrations/[date]_marketing_schema.sql
 
 -- Table: marketing_campaigns
-CREATE
+CREATE TABLE marketing_campaigns (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    start_date TIMESTAMP WITH TIME ZONE,
+    end_date TIMESTAMP WITH TIME ZONE,
+    status TEXT DEFAULT 'draft'
