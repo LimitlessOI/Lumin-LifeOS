@@ -1,3 +1,10 @@
+/**
+ * @file services/marketing-transcriber.js
+ * @overview This module provides functionality to transcribe audio content from a given URL.
+ *           It acts as a wrapper, fetching audio from a URL, saving it temporarily,
+ *           and then delegating the actual transcription to the `word-keeper-transcriber` service.
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
 import path from 'node:path';
 import { promises as fs } from 'node:fs';
 import { finished } from 'node:stream/promises';
@@ -7,6 +14,7 @@ import { randomUUID } from 'node:crypto';
 // The content of word-keeper-transcriber.js is not provided, but its existence and API are assumed based on its "VERIFIED" status.
 // This import will resolve in the target execution environment where the dependency is available.
 import { transcribeAudioFile } from './word-keeper-transcriber.js';
+
 /**
  * Transcribes audio content from a given URL using the underlying word-keeper-transcriber service.
  * This function orchestrates fetching the audio from the provided URL, saving it to a temporary file,
