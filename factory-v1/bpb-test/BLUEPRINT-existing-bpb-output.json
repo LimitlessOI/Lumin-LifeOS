@@ -1,0 +1,13 @@
+{
+  "mission_id": "FACTORY-0001-v1",
+  "blueprint_id": "FACTORY-0001-v1",
+  "steps": [
+    {
+      "mission_id": "FACTORY-0001-v1",
+      "blueprint_id": "FACTORY-0001-v1",
+      "step_id": "S001",
+      "status": "PENDING",
+      "type": "SCHEMA",
+      "phase_id": "P1",
+      "title": "factory-v1/contracts/BLOCKED_RETURN_SCHEMA.json — blocked return contract",
+      "target_file": "factory-
