@@ -26,6 +26,15 @@ import 'dotenv/config';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
+import {
+  filterAndRankTasks,
+  scoreTask,
+  shouldSkipKnownBadTask,
+} from '../services/founder-value-engine.js';
+import {
+  analyzeFactoryHealth,
+  writeFactoryHealthReport,
+} from '../services/builder-operations-director.js';
 
 const ROOT = process.cwd();
 const PROJECTS_DIR = path.join(ROOT, 'docs', 'projects');
@@ -68,6 +77,40 @@ const NO_RETRY_BLOCKERS = new Set([
   'LIFEOS_PRODUCT_DRIFT',
   'ZONE3_PATCH_REQUIRED',
 ]);
+
+// Builder Reliability Initiative — product-only factory by default.
+// Set BUILDER_ALLOW_PROOF_DOCS=1 to re-enable proof-doc / enhancement memo churn.
+const FOUNDER_VALUE_CHURN_PAUSE = 10;
+const PRODUCT_ONLY_FACTORY = process.env.BUILDER_ALLOW_PROOF_DOCS !== '1';
+const CHURN_BLOCKER_FAMILIES = new Set(['infrastructure', 'governance', 'test_failure']);
+const PROOF_DOC_TARGET_RE = /builderos-remediation\/.*-proof-g\d+/;
+
+function shouldPauseBlueprintGeneration(state) {
+  return (state.consecutive_no_founder_value || 0) >= FOUNDER_VALUE_CHURN_PAUSE;
+}
+
+function isLowValueProofDocTask(task) {
+  const target = String(task?.target_file || '');
+  return task?.category === 'blueprint_proof' || PROOF_DOC_TARGET_RE.test(target);
+}
+
+function applyValueEngineToBatch(tasks, state) {
+  const allowProofDocs = (state.consecutive_no_founder_value || 0) < 3;
+  const ranked = filterAndRankTasks(tasks, {
+    minNoticeability: 3,
+    allowProofDocs,
+  });
+  if (ranked.length === 0 && tasks.length > 0) {
+    const fallback = filterAndRankTasks(tasks, { minNoticeability: 1, allowProofDocs: false });
+    return fallback.length > 0 ? fallback : tasks.map((task) => ({ task, score: scoreTask(task) }));
+  }
+  return ranked;
+}
+
+function isKnownChurnBlocker(code) {
+  const cat = blockerCategory(code);
+  return CHURN_BLOCKER_FAMILIES.has(cat) || NO_RETRY_BLOCKERS.has(code);
+}
 
 function blockerCategory(code) {
   const c = String(code || '');
@@ -179,6 +222,10 @@ async function runLocalTask(task, state) {
 
   if (task.action_type === 'status_summary') {
     const summaryPath = path.join(ROOT, 'data', 'governed-autonomy-status-summary.json');
+    const factoryReport = await analyzeFactoryHealth({ root: ROOT, sinceHours: 24 });
+    const factoryPath = path.join(ROOT, 'data', 'builder-factory-health.json');
+    await writeFactoryHealthReport({ ...factoryReport, runner_generation: state.generation_count }, factoryPath);
+
     const summary = {
       ts: new Date().toISOString(),
       generation: state.generation_count,
@@ -193,7 +240,11 @@ async function runLocalTask(task, state) {
       churn_count: state.churn_count || 0,
       productive_work: state.productive_work || false,
       work_classification_last: state.work_classification_last || null,
+      factory_score: factoryReport.factory_score ?? null,
+      factory_product_only: PRODUCT_ONLY_FACTORY,
+      factory_24h: factoryReport.layers ?? null,
       law: 'ACTIVE IS NOT ENOUGH. PRODUCTIVE WORK IS REQUIRED.',
+      initiative: 'Builder Reliability Initiative',
       directive: 'prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md',
     };
     await fs.mkdir(path.dirname(summaryPath), { recursive: true });
@@ -581,7 +632,7 @@ async function readProjectBlueprints() {
   return blueprints;
 }
 
-function pickBuildableRows(blueprint, attemptedKeys) {
+function pickBuildableRows(blueprint, attemptedKeys, generation) {
   const tasks = [];
   for (const row of blueprint.buildOrderRows) {
     if (!row.file) continue;
@@ -589,6 +640,28 @@ function pickBuildableRows(blueprint, attemptedKeys) {
     if (attemptedKeys.has(key)) continue;
     if (!row.file.includes('/')) continue;
     if (!/^(routes|services|scripts|public\/overlay|db\/migrations|config|prompts|docs\/projects\/builderos-remediation)\//.test(row.file)) continue;
+    const classification = classifyLocalTarget(row.file);
+    if (classification.zone === 3) {
+      const patchKey = buildBlueprintQueueKey(blueprint.path, `zone3-patch:${row.file}`);
+      if (!attemptedKeys.has(patchKey)) {
+        const stubTask = buildBlueprintBuildTask(
+          blueprint,
+          `Build Order Task ${row.order}`,
+          `${row.purpose}. Dependency: ${row.dependency}.`,
+          row.file,
+          row.order,
+        );
+        tasks.push(buildPatchPlanTask(
+          blueprint,
+          stubTask,
+          generation,
+          `Zone 3 target ${row.file} — queue patch plan only, not full-file builder job`,
+        ));
+        attemptedKeys.add(patchKey);
+        attemptedKeys.add(key);
+      }
+      continue;
+    }
     tasks.push(buildBlueprintBuildTask(
       blueprint,
       `Build Order Task ${row.order}`,
@@ -601,15 +674,52 @@ function pickBuildableRows(blueprint, attemptedKeys) {
   return tasks;
 }
 
-async function generateBlueprintTaskBatch(generation, attemptedKeys) {
+async function generateBlueprintTaskBatch(generation, attemptedKeys, state = {}) {
   const blueprints = await readProjectBlueprints();
   const tasks = [];
+  const skipProofDocs = PRODUCT_ONLY_FACTORY || shouldPauseBlueprintGeneration(state);
+  const skipMemos = PRODUCT_ONLY_FACTORY && process.env.BUILDER_ALLOW_ENHANCEMENT_DOCS !== '1';
 
+  // Pass 1 — product builds only (Builder Reliability Initiative / Layer 2)
+  for (const blueprint of blueprints) {
+    if (tasks.length >= 10) break;
+
+    if (blueprint.firstExactTask) {
+      const targetMatch = blueprint.firstExactTask.match(/`((?:routes|services|scripts|public\/overlay|db\/migrations|config|prompts|docs\/projects\/builderos-remediation)\/[^`]+)`/);
+      const targetFile = targetMatch?.[1];
+      if (targetFile) {
+        const key = buildBlueprintQueueKey(blueprint.path, `exact:${targetFile}`);
+        if (!attemptedKeys.has(key)) {
+          tasks.push(buildBlueprintBuildTask(
+            blueprint,
+            'First Exact Coding Task',
+            blueprint.firstExactTask,
+            targetFile,
+          ));
+          attemptedKeys.add(key);
+          continue;
+        }
+      }
+    }
+
+    const rowTasks = pickBuildableRows(blueprint, attemptedKeys, generation);
+    for (const task of rowTasks) {
+      tasks.push(task);
+      attemptedKeys.add(buildBlueprintQueueKey(blueprint.path, `row:${task.blueprint_source_target || task.target_file}`));
+      if (tasks.length >= 10) break;
+    }
+  }
+
+  if (tasks.length > 0 || PRODUCT_ONLY_FACTORY) {
+    return tasks.sort((a, b) => a.priority - b.priority);
+  }
+
+  // Legacy memo/proof path — only when BUILDER_ALLOW_PROOF_DOCS=1
   for (const blueprint of blueprints) {
     if (tasks.length >= 10) break;
     let addedForBlueprint = 0;
 
-    if (blueprint.openDecisionSection && blueprint.lane === 'socialmediaos') {
+    if (!skipMemos && blueprint.openDecisionSection && blueprint.lane === 'socialmediaos') {
       const key = buildBlueprintQueueKey(blueprint.path, 'open-decisions');
       if (!attemptedKeys.has(key)) {
         tasks.push(buildEnhancementTask(
@@ -658,7 +768,7 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
       }
     }
 
-    const rowTasks = pickBuildableRows(blueprint, attemptedKeys);
+    const rowTasks = pickBuildableRows(blueprint, attemptedKeys, generation);
     if (rowTasks.length > 0) {
       for (const task of rowTasks) {
         tasks.push(task);
@@ -670,21 +780,23 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
       if (tasks.length >= 10 || addedForBlueprint >= 3) continue;
     }
 
-    for (let i = 0; i < blueprint.uncheckedChecklistItems.length; i += 1) {
-      const item = blueprint.uncheckedChecklistItems[i];
-      const key = buildBlueprintQueueKey(blueprint.path, `todo:${item}`);
-      if (attemptedKeys.has(key)) continue;
-      tasks.push(buildEnhancementTask(
-        blueprint,
-        generation,
-        'unchecked blueprint task remains open',
-        item,
-        `todo-${i + 1}`,
-      ));
-      attemptedKeys.add(key);
-      addedForBlueprint += 1;
-      if (tasks.length >= 10) break;
-      if (addedForBlueprint >= 3) break;
+    if (!skipMemos) {
+      for (let i = 0; i < blueprint.uncheckedChecklistItems.length; i += 1) {
+        const item = blueprint.uncheckedChecklistItems[i];
+        const key = buildBlueprintQueueKey(blueprint.path, `todo:${item}`);
+        if (attemptedKeys.has(key)) continue;
+        tasks.push(buildEnhancementTask(
+          blueprint,
+          generation,
+          'unchecked blueprint task remains open',
+          item,
+          `todo-${i + 1}`,
+        ));
+        attemptedKeys.add(key);
+        addedForBlueprint += 1;
+        if (tasks.length >= 10) break;
+        if (addedForBlueprint >= 3) break;
+      }
     }
     if (tasks.length >= 10 || addedForBlueprint >= 3) continue;
 
@@ -692,6 +804,7 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
       const signal = blueprint.nextStepSignals[i];
       const key = buildBlueprintQueueKey(blueprint.path, `next:${signal}`);
       if (attemptedKeys.has(key)) continue;
+      if (skipProofDocs) continue;
       tasks.push(buildBlueprintProofTask(blueprint, generation, signal, i));
       attemptedKeys.add(key);
       addedForBlueprint += 1;
@@ -701,10 +814,11 @@ async function generateBlueprintTaskBatch(generation, attemptedKeys) {
     if (tasks.length >= 10 || addedForBlueprint >= 3) continue;
 
     if (
-      blueprint.firstExactTask ||
+      !skipProofDocs &&
+      (blueprint.firstExactTask ||
       blueprint.buildOrderRows.length ||
       blueprint.uncheckedChecklistItems.length ||
-      blueprint.nextStepSignals.length
+      blueprint.nextStepSignals.length)
     ) {
       tasks.push(buildBlueprintProofTask(
         blueprint,
@@ -879,18 +993,42 @@ async function generateNextTaskBatch(generation, attemptedKeys, state) {
     const infraTasks = generateInfraRecoveryTasks(generation);
     const fresh = infraTasks.filter((t) => !attemptedKeys.has(t.id));
     if (fresh.length > 0) {
-      return { source: 'infra_recovery', tasks: fresh };
+      return { source: 'infra_recovery', tasks: fresh, choice_reason: 'infrastructure_degraded — local recovery only' };
     }
-    // All local tasks for this generation exhausted; signal backoff before next retry.
     infraBackoffIndex = Math.min(infraBackoffIndex + 1, INFRA_RECOVERY_BACKOFF_MS.length - 1);
-    return { source: 'infra_recovery_backoff', tasks: [] };
+    return { source: 'infra_recovery_backoff', tasks: [], choice_reason: 'infra backoff — no local tasks left' };
   }
-  const blueprintTasks = await generateBlueprintTaskBatch(generation, attemptedKeys);
+  if (shouldPauseBlueprintGeneration(state)) {
+    const diagnoseTasks = generateInfraRecoveryTasks(generation).map((t) => ({
+      ...t,
+      id: `${t.id}-churn-diagnose`,
+      category: 'churn_diagnosis',
+      instruction: `${t.instruction} Churn diagnosis: ${state.consecutive_no_founder_value} consecutive tasks without founder_value_deliveries. Pause proof-doc generation.`,
+    }));
+    const fresh = diagnoseTasks.filter((t) => !attemptedKeys.has(t.id));
+    if (fresh.length > 0) {
+      return {
+        source: 'churn_diagnosis',
+        tasks: fresh,
+        choice_reason: `${state.consecutive_no_founder_value} tasks without founder value — diagnose before more blueprint churn`,
+      };
+    }
+  }
+  const blueprintTasks = await generateBlueprintTaskBatch(generation, attemptedKeys, state);
   if (blueprintTasks.length > 0) {
-    return { source: 'blueprints', tasks: blueprintTasks };
+    const valued = applyValueEngineToBatch(blueprintTasks, state);
+    const tasks = valued.map(({ task, score }) => ({
+      ...task,
+      value_score: score,
+    }));
+    return {
+      source: 'blueprints',
+      tasks,
+      choice_reason: `value-ranked blueprint queue (active_mission=${state.active_mission || 'unset'}, top_notice=${tasks[0]?.value_score?.adamNoticeability ?? '?'})`,
+    };
   }
   const supportTasks = await generateSupportTaskBatch(generation, attemptedKeys, state);
-  return { source: 'support', tasks: supportTasks };
+  return { source: 'support', tasks: supportTasks, choice_reason: 'blueprint queue exhausted — fallback support only' };
 }
 
 async function appendLog(event, payload = {}) {
@@ -902,6 +1040,25 @@ async function appendLog(event, payload = {}) {
 
 async function writeState(state) {
   await fs.writeFile(STATE_PATH, JSON.stringify(state, null, 2) + '\n', 'utf8');
+}
+
+async function appendBuilderFailureLesson(task, blockerCode, state) {
+  const lessonPath = path.join(ROOT, 'data', 'builder-failure-lessons.jsonl');
+  const entry = {
+    ts: new Date().toISOString(),
+    task_id: task.id,
+    target_file: task.target_file || null,
+    blueprint_path: task.blueprint_path || null,
+    blocker: blockerCode,
+    blocker_family: blockerCategory(blockerCode),
+    founder_value_deliveries: state.founder_value_deliveries,
+    consecutive_no_founder_value: state.consecutive_no_founder_value,
+    lesson: isKnownChurnBlocker(blockerCode)
+      ? `Known churn blocker ${blockerCode} — route to blocker repair, not another proof doc`
+      : `Builder failure on ${task.target_file || task.id}: ${blockerCode}`,
+  };
+  await fs.mkdir(path.dirname(lessonPath), { recursive: true });
+  await fs.appendFile(lessonPath, `${JSON.stringify(entry)}\n`, 'utf8');
 }
 
 async function callApi(method, apiPath, body) {
@@ -979,7 +1136,8 @@ async function runTask(task, state) {
         ref: task.ref || null,
         zone: task.zone,
         expected_blocker: task.expected_blocker || null,
-        mission: 'TSOS_CONTINUOUS_AUTONOMOUS_OPS',
+        mission: task.mission_id || state.active_mission || 'TSOS_CONTINUOUS_AUTONOMOUS_OPS',
+        mission_id: task.mission_id || state.active_mission_id || null,
         operations_directive: 'prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md',
         session: new Date().toISOString().slice(0, 10),
         blueprint_path: task.blueprint_path || null,
@@ -1056,8 +1214,11 @@ async function runTask(task, state) {
     if (oilVerified && tokenVerified) {
       state.successful_repairs++;
       state.founder_value_deliveries++;
+      state.consecutive_no_founder_value = 0;
+    } else {
+      state.consecutive_no_founder_value = (state.consecutive_no_founder_value || 0) + 1;
     }
-    return { ok: true, committed: true, job_id: jobId, oil_verified: oilVerified };
+    return { ok: true, committed: true, job_id: jobId, oil_verified: oilVerified, token_verified: tokenVerified };
   }
 
   const blockerInfo = classifyBlocker(job, execResult);
@@ -1088,6 +1249,8 @@ async function runTask(task, state) {
   });
   if (!isZone3) state.failed_repairs++;
   if (isZone3) state.governance_prevented_drift++;
+  state.consecutive_no_founder_value = (state.consecutive_no_founder_value || 0) + 1;
+  await appendBuilderFailureLesson(task, blockerInfo.code, state).catch(() => {});
 
   const baseId = taskBaseId(task.id);
   const category = blockerCategory(blockerInfo.code);
@@ -1158,6 +1321,10 @@ async function main() {
     failures: [],
     lessons: [],
     founder_value_deliveries: 0,
+    consecutive_no_founder_value: 0,
+    active_mission: 'MarketingOS / Am 41',
+    active_mission_id: null,
+    task_choice_reason: null,
     blocked_attempts: {},
     local_verifications: [],
     infrastructure_degraded: false,
@@ -1259,6 +1426,11 @@ async function main() {
       await appendLog('queue_rebuild', {
         generation: state.generation_count,
         mode: batch.source,
+        choice_reason: batch.choice_reason || null,
+        active_mission: state.active_mission,
+        founder_value_deliveries: state.founder_value_deliveries,
+        consecutive_no_founder_value: state.consecutive_no_founder_value,
+        productive_work: state.productive_work,
         new_tasks: newTasks.length,
         task_ids: newTasks.map((task) => task.id),
         target_files: newTasks.map((task) => task.target_file),
@@ -1289,7 +1461,15 @@ async function main() {
         continue;
       }
 
-      workQueue.push(...newTasks.sort((a, b) => a.priority - b.priority));
+      state.task_choice_reason = batch.choice_reason || null;
+      const sorted = newTasks.sort((a, b) => {
+        const sa = a.value_score || scoreTask(a);
+        const sb = b.value_score || scoreTask(b);
+        const dc = (sb.composite ?? 0) - (sa.composite ?? 0);
+        if (dc !== 0) return dc;
+        return (a.priority || 999) - (b.priority || 999);
+      });
+      workQueue.push(...sorted);
       if (batch.source === 'blueprints') {
         state.blueprint_tasks_generated += newTasks.length;
         if (!state.first_blueprint_selected) {
@@ -1308,8 +1488,35 @@ async function main() {
     completedIds.add(task.id);
 
     state.current_task = task.id;
+    if (task.blueprint_path?.includes('AMENDMENT_41')) {
+      state.active_mission = 'MarketingOS / Am 41';
+    }
     state.tasks_total = state.tasks_done + workQueue.length + 1;
     await writeState(state);
+
+    const knownBad = shouldSkipKnownBadTask(task, state.blocked_attempts);
+    if (knownBad.skip) {
+      await appendLog('task_skip_known_bad', {
+        task_id: task.id,
+        reason: knownBad.reason,
+        value_score: task.value_score || scoreTask(task),
+      });
+      state.tasks_done++;
+      await writeState(state);
+      continue;
+    }
+
+    const taskScore = task.value_score || scoreTask(task);
+    if (task.requires_api !== false && isLowValueProofDocTask(task)) {
+      await appendLog('task_skip_low_value_proof_doc', {
+        task_id: task.id,
+        target_file: task.target_file,
+        value_score: taskScore,
+      });
+      state.tasks_done++;
+      await writeState(state);
+      continue;
+    }
 
     const result = task.requires_api === false
       ? await runLocalTask(task, state)

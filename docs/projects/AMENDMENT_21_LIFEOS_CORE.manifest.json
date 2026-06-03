@@ -847,6 +847,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-05-29",
-  "ssot_receipt_tail": "Memory namespace audit Phase 2: /api/v1/memory/search in api-v1-core.js annotated LEGACY_COMPAT (recallConversationMemory). BuilderOS execution-control hardening: routing policy + routing_task_class + guard audit + scanner families."
+  "last_updated": "2026-06-03",
+  "ssot_receipt_tail": "Builder Reliability Initiative: model escalation gate on lifeos-council-builder-routes.js (413 fast-fail + evaluateModelEscalationGate)."
 }

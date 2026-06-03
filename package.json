@@ -38,6 +38,7 @@
     "gen:rules": "node scripts/generate-agent-rules.mjs",
     "hooks:install": "node scripts/install-git-hooks.mjs",
     "builder:preflight": "node scripts/council-builder-preflight.mjs",
+    "builder:factory-health": "node scripts/builder-factory-health.mjs --write",
     "builder:diagnose-prod": "node scripts/diagnose-builder-prod.mjs",
     "tsos:doctor": "node scripts/tsos-doctor.mjs",
     "tsos:tokens": "node scripts/tsos-token-efficiency.mjs",

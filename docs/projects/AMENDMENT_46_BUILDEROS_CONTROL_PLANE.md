@@ -1,7 +1,7 @@
 # AMENDMENT 46 — BuilderOS Control Plane (Measure Everything)
 **Status:** IN_BUILD — Phase 1 infrastructure on disk
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-01 — constitutional refactor alignment: mission-first control-plane requirements, governance-routing display, trust-escalation tracking. Prior: 2026-05-31 — kernel OIL JSONB path fix + files_changed type fix
+**Last Updated:** 2026-06-03 — **Decision ledger service** (`services/decision-ledger.js` + `20260606_decision_ledger.sql`) for model escalation receipts. Prior **2026-06-01** — constitutional refactor alignment.
 
 > **Core law:** If it is not in the ledger, it did not happen.
 > **Priority:** Higher than MarketingOS, SalesOS, CCL production integration.
@@ -251,6 +251,7 @@ Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy m
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-06-03 | **`services/decision-ledger.js` (NEW)** + **`db/migrations/20260606_decision_ledger.sql`** — `founder_decision_ledger` table; `createDecision()` used by model escalation gate receipts. | Builder Reliability Initiative Layer 1 — escalation audit trail. | ✅ migration applies on deploy |
 | 2026-06-01 | Constitutional refactor alignment only. Added mission-first control-plane requirements, minimum mission-state display targets, governance-routing display requirements, and trust-escalation tracking while explicitly noting these are not yet fully implemented runtime surfaces. | Keep control-plane authority honest: mission-centric governance is canonical direction, not current fake-green runtime. |
 | 2026-05-24 | Amendment 46 + `build_task_ledger` + control plane service/routes + verify script | Measure everything before more product build |
 | 2026-05-24 | `services/tsos-platform-kernel.js` + `/api/v1/kernel/*` + `wrapBuild` DONE gate wiring | TSOS Platform Kernel Phase 0 orchestrates control plane + token accounting |

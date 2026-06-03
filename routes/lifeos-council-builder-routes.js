@@ -42,6 +42,11 @@ import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-se
 import { pool as dbPool } from '../core/database.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
+import {
+  evaluateModelEscalationGate,
+  writeModelEscalationReceipt,
+  isCheaperModel,
+} from '../services/builderos-model-escalation-gate.js';
 import { logShadowRoutingDecision } from '../services/builderos-tsos-routing.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -833,6 +838,40 @@ export function createLifeOSCouncilBuilderRoutes({
       mode === 'code' && executionOnly && !model
         ? 'council.builder.code_execute'
         : `council.builder.${mode}`;
+
+    // Model Escalation Gate — prompts/00-MODEL-ESCALATION-GATE.md
+    const bodyEsc = req.body || {};
+    const escalationRequested = Boolean(
+      bodyEsc.escalate_to_model ||
+      (model && !isCheaperModel(model) && (bodyEsc.cheaper_attempt_count >= 1 || bodyEsc.escalate_from_model)),
+    );
+    if (escalationRequested && pool?.query) {
+      const escalationVerdict = evaluateModelEscalationGate({
+        task_id: bodyEsc.task_id || task || routingKey,
+        mission_id: bodyEsc.mission_id || bodyEsc.metadata_json?.mission_id || null,
+        cheaper_model_used: bodyEsc.escalate_from_model || bodyEsc.cheaper_model_used || 'gemini_flash',
+        stronger_model_requested: bodyEsc.escalate_to_model || model || null,
+        failure_reason: bodyEsc.escalation_failure_reason || bodyEsc.failure_reason || bodyEsc.blocker || 'reasoning_failure',
+        value_categories: bodyEsc.value_categories || (bodyEsc.value_category ? [bodyEsc.value_category] : []),
+        cheaper_attempt_count: Number(bodyEsc.cheaper_attempt_count) || (bodyEsc.escalate_from_model ? 1 : 0),
+        http_status: bodyEsc.http_status || null,
+        expected_outcome: bodyEsc.expected_outcome || null,
+      });
+      await writeModelEscalationReceipt(pool, escalationVerdict, {
+        expected_outcome: bodyEsc.expected_outcome,
+        actor: 'builder_dispatch',
+      });
+      if (!escalationVerdict.allowed) {
+        return res.status(409).json({
+          ok: false,
+          error: 'model_escalation_denied',
+          blocked_reason: escalationVerdict.blocked_reason,
+          checks: escalationVerdict.checks,
+          law: 'prompts/00-MODEL-ESCALATION-GATE.md',
+        });
+      }
+    }
+
     const requestedModel = model || getModelForTask(routingKey) || 'gemini_flash';
     const rawCandidateModels = model ? [model] : getCandidateModelsForTask(routingKey);
     const routingPolicy = applyBuilderRoutingPolicy({
