@@ -8,6 +8,7 @@ import {
   cancelCommandControlJob,
   setCommandControlHalt,
   getCommandControlHaltState,
+  updateCommandControlJobExecution,
 } from '../services/builderos-command-control-service.js';
 import { executeCommandControlJob } from '../services/builderos-governed-loop-executor.js';
 
@@ -58,13 +59,39 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
 
   router.post('/jobs/:id/execute', async (req, res, next) => {
     try {
-      const result = await executeCommandControlJob(pool, req.params.id, {
-        baseUrl: req.body?.base_url,
-        commandKey: req.headers['x-command-key'],
+      const jobId = req.params.id;
+      const existing = await getCommandControlJob(pool, jobId);
+      if (!existing) return res.status(404).json({ ok: false, error: 'job_not_found' });
+      if (existing.status !== 'queued') {
+        return res.status(409).json({ ok: false, error: 'job_not_executable', job_status: existing.status });
+      }
+
+      // Return immediately — Railway/proxy 502s when execute holds connection through full /build.
+      res.status(202).json({
+        ok: true,
+        accepted: true,
+        job_id: jobId,
+        poll_url: `/api/v1/lifeos/builderos/command-control/jobs/${jobId}`,
       });
-      const job = await getCommandControlJob(pool, req.params.id);
-      const status = result.ok ? 200 : result.error === 'job_not_executable' ? 409 : 422;
-      res.status(status).json({ ok: result.ok, result, job });
+
+      setImmediate(async () => {
+        try {
+          await executeCommandControlJob(pool, jobId, {
+            baseUrl: req.body?.base_url,
+            commandKey: req.headers['x-command-key'],
+          });
+        } catch (error) {
+          console.error('[command-control] async execute failed for job', jobId, error?.message);
+          try {
+            await updateCommandControlJobExecution(pool, jobId, {
+              status: 'failed',
+              blocker: error?.message || 'EXECUTE_ASYNC_CRASH',
+            });
+          } catch {
+            // best-effort
+          }
+        }
+      });
     } catch (error) {
       next(error);
     }

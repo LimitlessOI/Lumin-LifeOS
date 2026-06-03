@@ -84,6 +84,61 @@ const FOUNDER_VALUE_CHURN_PAUSE = 10;
 const PRODUCT_ONLY_FACTORY = process.env.BUILDER_ALLOW_PROOF_DOCS !== '1';
 const CHURN_BLOCKER_FAMILIES = new Set(['infrastructure', 'governance', 'test_failure']);
 const PROOF_DOC_TARGET_RE = /builderos-remediation\/.*-proof-g\d+/;
+const SUPPORT_TASK_CATEGORY_RE = /^support_|^blueprint_enhancement$|^blueprint_proof$/;
+const JOB_EXECUTE_POLL_MS = Number(process.env.BUILDER_JOB_POLL_MS || 2500);
+const JOB_EXECUTE_POLL_MAX_MS = Number(process.env.BUILDER_JOB_POLL_MAX_MS || 120_000);
+
+function hasExplicitProductBlockerReceipt(state = {}) {
+  return Object.values(state.blocked_attempts || {}).some((entry) => {
+    const cat = String(entry?.category || '');
+    const blocker = String(entry?.blocker || '');
+    return cat === 'blueprint_build'
+      || cat === 'blueprint_patch_plan'
+      || blocker === 'ZONE3_PATCH_REQUIRED'
+      || blocker.startsWith('HTTP_5');
+  });
+}
+
+function recycleRetryableProductKeys(attemptedKeys, state) {
+  if (!PRODUCT_ONLY_FACTORY) return 0;
+  let removed = 0;
+  for (const entry of Object.values(state.blocked_attempts || {})) {
+    const target = entry?.target_file;
+    const blocker = String(entry?.blocker || '');
+    if (!target || (!blocker.includes('502') && !blocker.startsWith('HTTP_5'))) continue;
+    for (const key of [...attemptedKeys]) {
+      if (key.includes(target)) {
+        attemptedKeys.delete(key);
+        removed++;
+      }
+    }
+  }
+  return removed;
+}
+
+async function estimateRemainingProductTasks(attemptedKeys) {
+  const blueprints = await readProjectBlueprints();
+  let remaining = 0;
+  for (const blueprint of blueprints) {
+    if (blueprint.firstExactTask) {
+      const targetMatch = blueprint.firstExactTask.match(
+        /`((?:routes|services|scripts|public\/overlay|db\/migrations|config|prompts|docs\/projects\/builderos-remediation)\/[^`]+)`/,
+      );
+      const targetFile = targetMatch?.[1];
+      if (targetFile) {
+        const key = buildBlueprintQueueKey(blueprint.path, `exact:${targetFile}`);
+        if (!attemptedKeys.has(key)) remaining++;
+      }
+    }
+    for (const row of blueprint.buildOrderRows) {
+      if (!row.file) continue;
+      if (!/^(routes|services|scripts|public\/overlay|db\/migrations|config|prompts|docs\/projects\/builderos-remediation)\//.test(row.file)) continue;
+      const key = buildBlueprintQueueKey(blueprint.path, `row:${row.file}`);
+      if (!attemptedKeys.has(key)) remaining++;
+    }
+  }
+  return remaining;
+}
 
 function shouldPauseBlueprintGeneration(state) {
   return (state.consecutive_no_founder_value || 0) >= FOUNDER_VALUE_CHURN_PAUSE;
@@ -1014,6 +1069,13 @@ async function generateNextTaskBatch(generation, attemptedKeys, state) {
       };
     }
   }
+  if (PRODUCT_ONLY_FACTORY) {
+    const recycled = recycleRetryableProductKeys(attemptedKeys, state);
+    if (recycled > 0) {
+      await appendLog('product_keys_recycled', { generation, recycled, reason: 'HTTP_502 retry on blueprint product targets' });
+    }
+  }
+
   const blueprintTasks = await generateBlueprintTaskBatch(generation, attemptedKeys, state);
   if (blueprintTasks.length > 0) {
     const valued = applyValueEngineToBatch(blueprintTasks, state);
@@ -1027,6 +1089,33 @@ async function generateNextTaskBatch(generation, attemptedKeys, state) {
       choice_reason: `value-ranked blueprint queue (active_mission=${state.active_mission || 'unset'}, top_notice=${tasks[0]?.value_score?.adamNoticeability ?? '?'})`,
     };
   }
+
+  if (PRODUCT_ONLY_FACTORY) {
+    const remainingProduct = await estimateRemainingProductTasks(attemptedKeys);
+    if (remainingProduct > 0) {
+      return {
+        source: 'product_only_backoff',
+        tasks: [],
+        choice_reason: `product-only: ${remainingProduct} product task(s) remain — suppress support/verify; backoff`,
+      };
+    }
+    if (hasExplicitProductBlockerReceipt(state)) {
+      const infraTasks = generateInfraRecoveryTasks(generation).filter((t) => !attemptedKeys.has(t.id));
+      if (infraTasks.length > 0) {
+        return {
+          source: 'product_blocker_recovery',
+          tasks: infraTasks,
+          choice_reason: 'product-only: explicit product blocker receipt — local infra recovery only (no support/verify)',
+        };
+      }
+    }
+    return {
+      source: 'product_only_idle',
+      tasks: [],
+      choice_reason: 'product-only: no product tasks remain — support/verify suppressed',
+    };
+  }
+
   const supportTasks = await generateSupportTaskBatch(generation, attemptedKeys, state);
   return { source: 'support', tasks: supportTasks, choice_reason: 'blueprint queue exhausted — fallback support only' };
 }
@@ -1079,6 +1168,32 @@ async function callApi(method, apiPath, body) {
     consecutive502s = 0;
   }
   return { status: res.status, body: json };
+}
+
+async function pollCommandControlJob(jobId, meta) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < JOB_EXECUTE_POLL_MAX_MS) {
+    const poll = await callApi('GET', `/api/v1/lifeos/builderos/command-control/jobs/${jobId}`);
+    const job = poll.body?.job;
+    if (!job) {
+      return { status: poll.status, body: poll.body };
+    }
+    if (['committed', 'failed', 'blocked', 'halted', 'cancelled'].includes(job.status)) {
+      const trace = job.result_json?.trace || job.result_json || {};
+      return {
+        status: job.status === 'committed' ? 200 : 422,
+        body: { job, result: { trace } },
+      };
+    }
+    await appendLog('task_execute_poll', {
+      ...meta,
+      job_id: jobId,
+      job_status: job.status,
+      poll_ms: Date.now() - t0,
+    });
+    await new Promise((resolve) => setTimeout(resolve, JOB_EXECUTE_POLL_MS));
+  }
+  return { status: 502, body: { error: 'job_poll_timeout', job_id: jobId } };
 }
 
 function syntaxCheck(filePath) {
@@ -1165,6 +1280,10 @@ async function runTask(task, state) {
   let execResult;
   try {
     execResult = await callApi('POST', `/api/v1/lifeos/builderos/command-control/jobs/${jobId}/execute`, {});
+    if (execResult.status === 202 && execResult.body?.accepted) {
+      await appendLog('task_execute_async_accepted', { ...meta, job_id: jobId });
+      execResult = await pollCommandControlJob(jobId, meta);
+    }
   } catch (error) {
     await appendLog('task_execute_error', { ...meta, job_id: jobId, error: error.message, wall_ms: Date.now() - t0 });
     return { ok: false, error: error.message, stage: 'execute', job_id: jobId };
@@ -1486,6 +1605,17 @@ async function main() {
     const task = workQueue.shift();
     if (completedIds.has(task.id)) continue;
     completedIds.add(task.id);
+
+    if (PRODUCT_ONLY_FACTORY && SUPPORT_TASK_CATEGORY_RE.test(task.category || '')) {
+      await appendLog('task_skip_support_product_only', {
+        task_id: task.id,
+        category: task.category,
+        target_file: task.target_file,
+      });
+      state.tasks_done++;
+      await writeState(state);
+      continue;
+    }
 
     state.current_task = task.id;
     if (task.blueprint_path?.includes('AMENDMENT_41')) {

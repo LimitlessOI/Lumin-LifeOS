@@ -34,8 +34,22 @@ function resolveCommandKey(explicit) {
   return explicit || process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY || '';
 }
 
+/** Same-process Railway deploy: loopback avoids edge proxy timeout on nested /build fetch. */
+function resolveBuilderDispatchBaseUrl(baseUrl) {
+  const normalized = String(baseUrl || '').replace(/\/$/, '');
+  const publicBase = String(
+    process.env.PUBLIC_BASE_URL || process.env.RAILWAY_PUBLIC_DOMAIN || '',
+  ).replace(/\/$/, '');
+  const port = process.env.PORT || '3000';
+  if (publicBase && normalized === publicBase) {
+    return `http://127.0.0.1:${port}`;
+  }
+  return normalized || `http://127.0.0.1:${port}`;
+}
+
 async function dispatchBuilderPlan(plan, { baseUrl, commandKey, task_id, blueprint_id }) {
-  const url = `${baseUrl}/api/v1/lifeos/builder/build`;
+  const dispatchBase = resolveBuilderDispatchBaseUrl(baseUrl);
+  const url = `${dispatchBase}/api/v1/lifeos/builder/build`;
   const body = {
     domain: plan.domain,
     mode: plan.mode || 'code',
