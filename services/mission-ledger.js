@@ -191,9 +191,54 @@ export async function removeParticipant(pool, mission_id, participant) {
   return { deleted: true };
 }
 
+const UUID_RE = /^[0-9a-f-]{36}$/i;
+
+async function resolveMissionId(pool, missionIdOrSlug) {
+  if (!missionIdOrSlug || UUID_RE.test(String(missionIdOrSlug))) return missionIdOrSlug;
+  const { rows } = await pool.query('SELECT id FROM missions WHERE slug = $1 LIMIT 1', [missionIdOrSlug]);
+  if (rows.length === 0) {
+    throw Object.assign(new Error('mission not found'), {
+      code: 'MISSION_NOT_FOUND',
+      mission_id: missionIdOrSlug,
+    });
+  }
+  return rows[0].id;
+}
+
+async function resolveOwnerUserId(pool, owner) {
+  const { rows } = await pool.query(
+    'SELECT id FROM lifeos_users WHERE LOWER(user_handle) = LOWER($1) LIMIT 1',
+    [owner],
+  );
+  if (rows.length === 0) {
+    throw Object.assign(new Error('user not found'), {
+      code: 'USER_NOT_FOUND',
+      owner,
+    });
+  }
+  return rows[0].id;
+}
+
 export async function createCommitment(pool, fields) {
+  const normalized = { ...(fields || {}) };
+  if (Object.prototype.hasOwnProperty.call(normalized, 'mission_id')) {
+    normalized.mission_id = await resolveMissionId(pool, normalized.mission_id);
+  }
+  if (!Object.prototype.hasOwnProperty.call(normalized, 'title') && normalized.text) {
+    normalized.title = normalized.text;
+  }
+  if (!Object.prototype.hasOwnProperty.call(normalized, 'text') && normalized.title) {
+    normalized.text = normalized.title;
+  }
+  if (!Object.prototype.hasOwnProperty.call(normalized, 'user_id') && normalized.owner) {
+    normalized.user_id = await resolveOwnerUserId(pool, normalized.owner);
+  }
+  if (!Object.prototype.hasOwnProperty.call(normalized, 'status')) {
+    normalized.status = 'open';
+  }
+
   const cols = [
-    'user_id', 'title', 'mission_id', 'owner', 'text', 'due_date', 'reminder_at', 'risk_if_missed',
+    'user_id', 'title', 'mission_id', 'owner', 'text', 'due_date', 'reminder_at', 'risk_if_missed', 'status',
     'time_estimate_hours', 'urgency', 'importance', 'energy_cost', 'money_impact',
     'relationship_impact', 'opportunity_cost_note', 'better_owner', 'approval_required',
   ];
@@ -201,9 +246,9 @@ export async function createCommitment(pool, fields) {
   const placeholders = [];
   const params = [];
   for (const col of cols) {
-    if (Object.prototype.hasOwnProperty.call(fields, col)) {
+    if (Object.prototype.hasOwnProperty.call(normalized, col)) {
       names.push(col);
-      params.push(fields[col]);
+      params.push(normalized[col]);
       placeholders.push(`$${params.length}`);
     }
   }
