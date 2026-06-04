@@ -6,6 +6,25 @@
 
 ---
 
+## [FIX] Update 2026-06-04 — Mission household Add Commitment normalization
+
+### What happened
+- Critical bug sweep found a concrete Mission Runtime breakage: `public/overlay/lifeos-household.html` posts `{ owner, text, mission_id: "MISSION-0001" }` to `POST /api/v1/lifeos/commitments/mission`, but `services/mission-ledger.js#createCommitment()` inserted fields directly into the legacy `commitments` table, which requires `user_id` and `title` and stores `mission_id` as UUID. Fresh UI submissions could fail with NOT NULL or UUID parse errors even though seeded board data displayed correctly.
+- Builder path was honored first: `npm run builder:preflight` passed, but two `/api/v1/lifeos/builder/task` attempts produced the same unsafe cached partial rewrite (undeclared `uuid`/`pg-sql2`, wrong `lifeos_users.user_id`, incomplete service file). GAP-FILL local fix applied.
+- `createCommitment()` now resolves mission slug to UUID, owner handle to `lifeos_users.id`, backfills `title`/`text`, and defaults `status='open'`.
+
+### Verification
+- `node --test tests/mission-ledger.test.js`: 3/3 pass
+- `node --check services/mission-ledger.js`
+- `node --check tests/mission-ledger.test.js`
+- `npm test`: 49 pass, 0 fail, 4 skipped
+- `node scripts/ssot-check.js --all`: exit 0; reports pre-existing missing-tag inventory
+
+### Next step
+- After this branch deploys, smoke `POST /api/v1/lifeos/commitments/mission` against the live Railway app with `{ owner:"adam", text:"...", mission_id:"MISSION-0001" }`, then confirm `GET /api/v1/lifeos/household/board` shows the new row.
+
+---
+
 ## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 4
 
 ### What happened

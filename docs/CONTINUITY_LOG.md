@@ -2,6 +2,15 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] 2026-06-04 — Mission household Add Commitment critical bug fixed
+
+**Agent:** GPT-5.5 / Cursor Cloud / `cursor/critical-bug-investigation-6e26` / critical bug-finding automation.
+
+**What:** Fixed Mission Runtime household board Add Commitment path. The overlay posted BPB-style `{ owner, text, mission_id: "MISSION-0001" }`, but `services/mission-ledger.js#createCommitment()` inserted directly into the legacy `commitments` table requiring `user_id`, `title`, and UUID `mission_id`. The service now normalizes owner→`lifeos_users.id`, text↔title, slug→mission UUID, and `status='open'`; regression test added.
+
+**Evidence:** Builder preflight passed; builder task output was rejected as unsafe partial code (undeclared deps/wrong columns/truncated). Verification: `node --test tests/mission-ledger.test.js` 3/3 pass, `node --check` service+test, `npm test` 49 pass / 0 fail / 4 skipped, `node scripts/ssot-check.js --all` exit 0 with pre-existing missing-tag inventory. See `docs/CONTINUITY_LOG_LIFEOS.md` and `docs/projects/AMENDMENT_47_MISSION_RUNTIME.md`.
+
+---
 ## [FOUNDER DIRECTIVE] 2026-06-02 — End-of-Session Handoff for All Agents (CUR / C2 / Gemini / any)
 
 > **YOU ARE REQUIRED TO IDENTIFY YOURSELF AND YOUR ROLE BEFORE STARTING WORK.**
