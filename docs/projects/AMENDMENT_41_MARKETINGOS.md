@@ -7,7 +7,7 @@
 | **Lifecycle** | `planning` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `draft` |
-| **Last Updated** | 2026-05-30 |
+| **Last Updated** | 2026-06-07 |
 | **Owner** | adam |
 | **Parent System** | LimitlessOS |
 | **First Module** | SocialMediaOS |
@@ -1200,7 +1200,7 @@ Create Stripe payment link for $997 "Build My Thing — 30-Day Content System" (
 ## Pre-Build Readiness
 
 **Status:** NOT_READY (Phase 0 starts today; Phase 1 code starts after decisions)
-**Last Updated:** 2026-05-30
+**Last Updated:** 2026-06-07
 
 ### Gate 1 — Implementation Detail
 - [x] Complete A-to-Z feature inventory
@@ -1299,6 +1299,7 @@ config/council-members.js           — shared AI config
 
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
+| 2026-06-07 | **Critical migration repair:** `db/migrations/[date]_marketing_schema.sql` replaced invalid prose/truncated SQL with executable PostgreSQL for all five Phase 1 tables (`marketing_consent_records`, `marketing_sessions`, `marketing_content_extractions`, `marketing_content_pieces`, `marketing_channel_profiles`) plus required indexes/check constraints. Current state: migration file is valid SQL and aligned to §6; Phase 1 product still remains `NOT_READY` until R2/env and open founder decisions are resolved. Next: run migration/verification harness and continue with Task 6 only after Task 5 is proven in the target DB. System path: builder `/build` first committed an incomplete/wrong schema; builder `/execute` then committed exact corrected SQL to branch `cursor/critical-bug-investigation-7ba5`. | Daily critical-bug automation found a concrete deploy/runtime break: startup migration runner executes every `db/migrations/*.sql`, and this file began with English prose plus a truncated `CREATE TABLE`, causing the MarketingOS schema migration to fail silently/non-blockingly and leaving Phase 1 tables absent. | ✅ | ⬜ | `builder:preflight` OK; `/build` committed `5fee3fe` but semantic audit failed; `/execute` committed corrected SQL (`667daf650`); local validation pending |
 | 2026-06-01 | Overnight runner priority fix — PRIORITY_RULES reorder: socialmediaos→rank 1 (was rank 2), c2_command_control→rank 2 (was rank 1). Commit `5fde694263`. Gen 2 queue confirmed: first 3 tasks = MarketingOS DB migration + marketing-transcriber.js + marketing-coach.js. Railway redeploy triggered to fix HTTP_502 blocking. 0 commits from runner yet (Railway stale deploy). | C2 was starving MarketingOS — every gen filled with C2 tasks first due to rank 1. | ✅ | ⬜ | pending |
 | 2026-05-30 | Created AMENDMENT_41_MARKETINGOS.md — full A-to-Z blueprint, Phase 0-10, MVP technical spec, consent contract, BuilderOS execution contract, revenue plan, build order checklist | SSOT foundation for MarketingOS / SocialMediaOS before any code is written | ✅ | ✅ | pending |
 | 2026-05-30 | Closed 6 BuilderOS decision gaps: storage→R2, autosave rule (Rule 12), user identity rule (Rule 13), English-only rule (Rule 14), export→download-first, team accounts→Phase 2. Updated §5 Phase 1, §6 export/error handling/acceptance tests, §9 execution contract (+3 rules), §11 build order task 15, §12 resolved/open split, §13 final summary | Decision gaps audit required before coding begins | ✅ | ✅ | pending |
