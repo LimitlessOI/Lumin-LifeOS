@@ -2,6 +2,24 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] Update 2026-06-08 — Critical bug audit: MarketingOS schema/session + runner portability
+
+### Files changed
+- `db/migrations/[date]_marketing_schema.sql` — GAP-FILL after builder commit `1ae7bb97` truncated the migration to 9 lines; replaced with complete idempotent Phase 1 MarketingOS SQL for the five AM41 tables.
+- `public/overlay/marketing-session.html` — GAP-FILL after builder returned `committed:false` for truncated HTML; removed auto-consent timer and user-controlled `innerHTML`, added explicit consent checkbox/confirm flow and text-node message rendering.
+- `scripts/governed-overnight-backlog-run.mjs` — removed `/bin/zsh` dependency from target existence/line-count and syntax checks; uses Node filesystem APIs and `execFileSync(process.execPath, ['--check', file])`.
+- `tests/marketing-critical-regressions.test.js`, `package.json` — added focused tests for schema completeness, session overlay consent/XSS, and runner portability.
+- `docs/projects/AMENDMENT_41_MARKETINGOS.md`, `docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md` — receipts updated with builder attempt evidence and validation results.
+
+### State after this session
+- Verified: `node --test tests/marketing-critical-regressions.test.js` 3/3 PASS; `npm test` 52 pass / 0 fail / 4 skipped; `node --check scripts/governed-overnight-backlog-run.mjs` PASS; `npm run check:overlay` PASS.
+- Manual UI evidence: browser walkthrough recorded; pending consent stayed disabled after wait, explicit confirm enabled controls, XSS payload rendered as text with no alert.
+- Not changed: latent unmounted MarketingOS service import issues found during audit were not patched because they do not have a current runtime trigger.
+
+### Next agent: start here
+- If continuing MarketingOS hardening, inspect unmounted `services/marketing-transcriber.js` and `services/marketing-coach.js` before mounting routes; both have latent import/API issues but are not live today.
+
+---
 ## [FOUNDER DIRECTIVE] 2026-06-02 — End-of-Session Handoff for All Agents (CUR / C2 / Gemini / any)
 
 > **YOU ARE REQUIRED TO IDENTIFY YOURSELF AND YOUR ROLE BEFORE STARTING WORK.**

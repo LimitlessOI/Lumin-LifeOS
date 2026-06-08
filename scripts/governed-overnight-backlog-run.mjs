@@ -24,8 +24,9 @@
 
 import 'dotenv/config';
 import fs from 'node:fs/promises';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execFileSync, execSync } from 'node:child_process';
 import {
   filterAndRankTasks,
   scoreTask,
@@ -401,8 +402,9 @@ function isBuilderSafeTarget(targetFile) {
 function targetLineCount(targetFile) {
   try {
     const resolved = path.resolve(ROOT, targetFile);
-    const content = execSync(`wc -l < ${JSON.stringify(resolved)}`, { stdio: 'pipe', shell: '/bin/zsh' }).toString().trim();
-    return Number(content) || 0;
+    const content = readFileSync(resolved, 'utf8');
+    if (content.length === 0) return 0;
+    return content.endsWith('\n') ? content.split('\n').length - 1 : content.split('\n').length;
   } catch {
     return 0;
   }
@@ -412,13 +414,7 @@ function classifyLocalTarget(targetFile) {
   if (!targetFile) return { zone: 0, safe: false, exists: false, lineCount: 0 };
   const normalized = normalizeText(targetFile).replace(/^\//, '');
   const resolved = path.resolve(ROOT, normalized);
-  let exists = false;
-  try {
-    execSync(`test -f ${JSON.stringify(resolved)}`, { stdio: 'pipe', shell: '/bin/zsh' });
-    exists = true;
-  } catch {
-    exists = false;
-  }
+  const exists = existsSync(resolved);
   const lineCount = exists ? targetLineCount(normalized) : 0;
   if (!isBuilderSafeTarget(normalized)) {
     return { zone: 4, safe: false, exists, lineCount, reason: 'outside builder safe scope' };
@@ -1191,7 +1187,7 @@ async function pollCommandControlJob(jobId, meta) {
 
 function syntaxCheck(filePath) {
   try {
-    execSync(`node --check ${JSON.stringify(filePath)}`, { stdio: 'pipe', shell: '/bin/zsh' });
+    execFileSync(process.execPath, ['--check', filePath], { stdio: 'pipe' });
     return { ok: true };
   } catch (error) {
     return { ok: false, error: error.stderr?.toString?.()?.slice(0, 200) || 'syntax_error' };
