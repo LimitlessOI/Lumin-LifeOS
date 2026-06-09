@@ -1,3 +1,7 @@
+/**
+ * Exported Lumin factory execute-step dispatcher.
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -8,19 +12,42 @@ import { buildBlockedReturn } from './blocked-return.js';
 const BUILDER_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(BUILDER_DIR, '../../..');
 export const FACTORY_ROOT = path.resolve(BUILDER_DIR, '../..');
+const AUTHORIZED_SANDBOX_ROOTS = ['factory-staging', 'builderos-reboot', 'lumin-factory'].map((root) =>
+  path.resolve(REPO_ROOT, root)
+);
 
 function sha256Buffer(buf) {
   return crypto.createHash('sha256').update(buf).digest('hex');
 }
 
 export function resolveRepoPath(relativePath) {
-  return path.join(REPO_ROOT, relativePath.replace(/\\/g, '/'));
+  return path.resolve(REPO_ROOT, String(relativePath || '').replace(/\\/g, '/'));
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
-  const normalized = relativePath.replace(/\\/g, '/');
-  const boundary = sandboxBoundary.replace(/\\/g, '/').replace(/\/\*\*$/, '');
-  return normalized === boundary || normalized.startsWith(`${boundary}/`);
+  const sandboxRoot = resolveSandboxRoot(sandboxBoundary);
+  if (!sandboxRoot || !isAuthorizedSandboxRoot(sandboxRoot)) return false;
+  return isPathInside(resolveRepoPath(relativePath), sandboxRoot);
+}
+
+function isPathInside(childPath, parentPath) {
+  const relative = path.relative(parentPath, childPath);
+  return relative === '' || (Boolean(relative) && !relative.startsWith('..') && !path.isAbsolute(relative));
+}
+
+function isAuthorizedSandboxRoot(sandboxRoot) {
+  return AUTHORIZED_SANDBOX_ROOTS.some((root) => isPathInside(sandboxRoot, root));
+}
+
+function resolveSandboxRoot(sandboxBoundary) {
+  if (!sandboxBoundary) return null;
+  const normalized = String(sandboxBoundary).replace(/\\/g, '/').replace(/\/\*\*$/, '');
+  return resolveRepoPath(normalized);
+}
+
+function isAuthorizedFactoryPath(relativePath) {
+  const resolved = resolveRepoPath(relativePath);
+  return AUTHORIZED_SANDBOX_ROOTS.some((root) => isPathInside(resolved, root));
 }
 
 function resolveStepContent(step) {
@@ -29,6 +56,9 @@ function resolveStepContent(step) {
     return { mode: 'greenfield', content: Buffer.from(String(inputs.exact_content), 'utf8') };
   }
   if (inputs.content_source_path) {
+    if (!isAuthorizedFactoryPath(inputs.content_source_path)) {
+      return { error: 'source_outside_authorized_roots', path: inputs.content_source_path };
+    }
     const source = resolveRepoPath(inputs.content_source_path);
     if (!fs.existsSync(source)) return { error: 'missing_source', path: inputs.content_source_path };
     return { mode: 'copy', content: fs.readFileSync(source) };
@@ -91,12 +121,21 @@ export function runWriteFileExact({ mission_id, blueprint_id, step }) {
       evidence: {},
     });
   }
+  if (resolved.error === 'source_outside_authorized_roots') {
+    return buildBlockedReturn({
+      mission_id,
+      blueprint_id,
+      step_id: step.step_id,
+      gap_type: 'authority_violation',
+      summary: `Source ${resolved.path} outside authorized factory roots`,
+      attempted_action: 'runWriteFileExact',
+      missing_information: [],
+      evidence: { content_source_path: resolved.path },
+    });
+  }
 
   const target = resolveRepoPath(step.target_file);
-  fs.mkdirSync(path.dirname(target), { recursive: true });
-  fs.writeFileSync(target, resolved.content);
   const gotSha = sha256Buffer(resolved.content);
-
   const contract = step.exact_output_contract || {};
   if (contract.type === 'byte_exact_copy' && contract.sha256 && gotSha !== contract.sha256) {
     return {
@@ -105,12 +144,15 @@ export function runWriteFileExact({ mission_id, blueprint_id, step }) {
       blueprint_id,
       step_id: step.step_id,
       target_file: step.target_file,
-      summary: 'byte_exact_copy sha256 mismatch after write',
+      summary: 'byte_exact_copy sha256 mismatch before write',
       expected_sha256: contract.sha256,
       got_sha256: gotSha,
       input_mode: resolved.mode,
     };
   }
+
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(target, resolved.content);
 
   return {
     status: 'DONE',

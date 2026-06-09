@@ -1,3 +1,7 @@
+/**
+ * Exported Lumin factory HTTP route registration.
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
 import { factoryExecuteStepRoute } from '../factory-core/routes/factory-execute-step-routes.js';
 import { factoryExecuteMissionRoute } from '../factory-core/routes/factory-execute-mission-routes.js';
 import { dispatchExecuteStep } from '../factory-core/builder/run-step.js';
@@ -7,7 +11,37 @@ import { getCouncilAdapterStatus, assertCouncilQuarantine } from '../factory-cor
 import { summarizeHistory } from '../factory-core/historian/mission-history.js';
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { REPO_ROOT } from '../factory-core/builder/run-step.js';
+
+function getPresentedFactoryKey(req) {
+  const authorization = req.get('authorization') || '';
+  if (authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.slice('bearer '.length).trim();
+  }
+  return req.get('x-command-key') || req.get('x-factory-key') || '';
+}
+
+function secureEqual(a, b) {
+  const left = Buffer.from(String(a));
+  const right = Buffer.from(String(b));
+  return left.length === right.length && crypto.timingSafeEqual(left, right);
+}
+
+function requireFactoryWriteAuth(req, res, next) {
+  const requiredKey = process.env.FACTORY_COMMAND_KEY || process.env.COMMAND_CENTER_KEY || '';
+  if (!requiredKey) {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(503).json({ ok: false, error: 'FACTORY_COMMAND_KEY required for mutation routes' });
+    }
+    return next();
+  }
+
+  if (!secureEqual(getPresentedFactoryKey(req), requiredKey)) {
+    return res.status(401).json({ ok: false, error: 'unauthorized_factory_mutation' });
+  }
+  return next();
+}
 
 export function registerFactoryRoutes(app) {
   app.get('/health', (_req, res) => {
@@ -55,12 +89,12 @@ export function registerFactoryRoutes(app) {
     }
   });
 
-  app.post(factoryExecuteMissionRoute.path, (req, res) => {
+  app.post(factoryExecuteMissionRoute.path, requireFactoryWriteAuth, (req, res) => {
     const { httpStatus, body } = dispatchExecuteMission(req.body || {});
     res.status(httpStatus).json(body);
   });
 
-  app.post(factoryExecuteStepRoute.path, (req, res) => {
+  app.post(factoryExecuteStepRoute.path, requireFactoryWriteAuth, (req, res) => {
     const { httpStatus, body } = dispatchExecuteStep(req.body || {});
     const step = req.body?.step;
     const mission_id = req.body?.mission_id;
