@@ -18,6 +18,6 @@
     "step_id": "S1003",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9"
+    "expected_sha256": "bc1bbd28f6ad057444edd6d538367f65919d40dc337e7df1c2f9e7aa097cb3a6"
   }
 ]

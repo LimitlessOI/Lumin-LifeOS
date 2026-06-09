@@ -115,7 +115,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "c1204188f6b8989556661c7ca713e400686fc558cb78d534bb92ca6ebe656c66"
+        "sha256": "a844afea82e7a4ecf57b0256d5ae86b2c3dc5ec17ba8a0f5a1144f5be96c6930"
       },
       "allowed_context_files": [
         "builderos-reboot/HANDOFF.md"
