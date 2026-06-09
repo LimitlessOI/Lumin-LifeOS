@@ -130,7 +130,7 @@
     "step_id": "S319",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/record-step-metrics.js",
-    "expected_sha256": "0e1677957c98559751d8fadeddad1e58bded29368ad90e6eb292c03170e4525f"
+    "expected_sha256": "47802022a9809e95afebd09dff0bb9d153f930d1983149b519dd4c58d7872d1e"
   },
   {
     "test_id": "AT-S320-1",
@@ -172,7 +172,7 @@
     "step_id": "S325",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_MODULE_CHARTER.md",
-    "expected_sha256": "5c8b814c589cdb191029505a3144ff7a229726ac4402c90a57d606e84d6f1847"
+    "expected_sha256": "c42682389a4b2b3a0ceedf99647e8a46cebbfc560e535f3a1ff40dcf5b4b3008"
   },
   {
     "test_id": "AT-S326-1",

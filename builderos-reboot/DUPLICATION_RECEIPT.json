@@ -1,26 +1,26 @@
 {
   "test_id": "BLUEPRINT-DUPLICATION-REMATERIALIZE",
-  "run_at": "2026-06-09T06:58:40.724Z",
+  "run_at": "2026-06-09T07:44:22.566Z",
   "pass": true,
   "steps_rerun": [
     {
-      "mission": "FACTORY-REBOOT-0013",
-      "stepId": "S1301"
+      "mission": "FACTORY-REBOOT-0029",
+      "stepId": "S2904"
     },
     {
       "mission": "FACTORY-REBOOT-0006",
       "stepId": "S601"
     },
     {
-      "mission": "FACTORY-REBOOT-0015",
-      "stepId": "S1503"
+      "mission": "FACTORY-REBOOT-0029",
+      "stepId": "S2905"
     }
   ],
   "probes": [
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
-      "before": "0c5dbcf9960d64bbc31a6bbbf4a5c9991ae368eabb93fbb69e27f53c9700a3ef",
-      "after": "0c5dbcf9960d64bbc31a6bbbf4a5c9991ae368eabb93fbb69e27f53c9700a3ef",
+      "before": "d32b5d5b62535085dc0cd385a06f17b4732c3e22b8474ae379d4abe545a62126",
+      "after": "d32b5d5b62535085dc0cd385a06f17b4732c3e22b8474ae379d4abe545a62126",
       "match": true
     },
     {
@@ -31,8 +31,8 @@
     },
     {
       "path": "factory-staging/startup/register-routes.js",
-      "before": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51",
-      "after": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51",
+      "before": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9",
+      "after": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9",
       "match": true
     }
   ]

@@ -1,6 +1,6 @@
 {
   "queue_id": "BUILDEROS-REBOOT-QUEUE-0001",
-  "updated_at": "2026-06-09",
+  "updated_at": "2026-05-24",
   "missions": [
     { "mission_id": "FACTORY-REBOOT-0001", "status": "complete", "priority": 1, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001" },
     { "mission_id": "FACTORY-REBOOT-0002", "status": "complete", "priority": 2, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002" },
@@ -32,6 +32,7 @@
     { "mission_id": "FACTORY-REBOOT-0027", "status": "complete", "priority": 28, "purpose": "Phase 12 product salvage", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0027" },
     { "mission_id": "FACTORY-REBOOT-0028", "status": "complete", "priority": 29, "purpose": "Certification v2 with Phase 11-12", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0028" },
     { "mission_id": "FACTORY-PROOF-LOOP-0001", "status": "complete", "priority": 30, "purpose": "Phase 11 proof mission pack", "path": "builderos-reboot/MISSIONS/FACTORY-PROOF-LOOP-0001" },
-    { "mission_id": "PRODUCT-MARKETINGOS-SALVAGE-0001", "status": "complete", "priority": 31, "purpose": "First product salvage stub", "path": "builderos-reboot/MISSIONS/PRODUCT-MARKETINGOS-SALVAGE-0001" }
+    { "mission_id": "PRODUCT-MARKETINGOS-SALVAGE-0001", "status": "complete", "priority": 31, "purpose": "First product salvage stub", "path": "builderos-reboot/MISSIONS/PRODUCT-MARKETINGOS-SALVAGE-0001" },
+    { "mission_id": "FACTORY-REBOOT-0029", "status": "complete", "priority": 32, "purpose": "TSOS efficiency lane + guardrails on execute-step hot path", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029" }
   ]
 }

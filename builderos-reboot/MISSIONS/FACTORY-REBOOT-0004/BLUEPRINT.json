@@ -1005,7 +1005,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "0e1677957c98559751d8fadeddad1e58bded29368ad90e6eb292c03170e4525f"
+        "sha256": "47802022a9809e95afebd09dff0bb9d153f930d1983149b519dd4c58d7872d1e"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/record-step-metrics.js"
@@ -1104,7 +1104,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "5c8b814c589cdb191029505a3144ff7a229726ac4402c90a57d606e84d6f1847"
+        "sha256": "c42682389a4b2b3a0ceedf99647e8a46cebbfc560e535f3a1ff40dcf5b4b3008"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_MODULE_CHARTER.md"
@@ -1269,7 +1269,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+        "sha256": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js"

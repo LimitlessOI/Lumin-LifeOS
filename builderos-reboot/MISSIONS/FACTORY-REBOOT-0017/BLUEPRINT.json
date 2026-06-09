@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "4edb9181965c1c47ef1dbbb8d4cd2d55d61ee7ded0c56c80d7b3bc263e134adb"
+        "sha256": "07f9d6147e0f0a087d73062f7cc63e374e74151329198533704be7d4958e9cfc"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0017/CONTENT/factory-duplication-test.mjs"

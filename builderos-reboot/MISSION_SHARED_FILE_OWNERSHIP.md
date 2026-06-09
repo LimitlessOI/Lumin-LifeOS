@@ -6,11 +6,12 @@ When the same `target_file` appears in multiple mission blueprints, **only the l
 
 | Target file | Canonical step | Mission |
 |-------------|----------------|---------|
-| `factory-staging/factory-core/builder/run-step.js` | S1301 | FACTORY-REBOOT-0013 |
+| `factory-staging/factory-core/builder/run-step.js` | S2904 | FACTORY-REBOOT-0029 |
 | `factory-staging/factory-core/builder/run-mission.js` | S601 | FACTORY-REBOOT-0006 |
-| `factory-staging/startup/register-routes.js` | S1503 | FACTORY-REBOOT-0015 |
+| `factory-staging/startup/register-routes.js` | S2905 | FACTORY-REBOOT-0029 |
 | `builderos-reboot/scripts/readiness-report.mjs` | S2301 | FACTORY-REBOOT-0023 |
 | `builderos-reboot/scripts/emit-project-certification.mjs` | S2801 | FACTORY-REBOOT-0028 |
+| `builderos-reboot/scripts/factory-ci.mjs` | S2001 | FACTORY-REBOOT-0020 |
 
 ## Duplication test rule
 

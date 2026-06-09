@@ -30,9 +30,9 @@ for (const p of probes) {
 
 // Canonical owners of shared runtime files (latest mission wins — avoid stale intermediate routes).
 const steps = [
-  ['FACTORY-REBOOT-0013', 'S1301'],
+  ['FACTORY-REBOOT-0029', 'S2904'],
   ['FACTORY-REBOOT-0006', 'S601'],
-  ['FACTORY-REBOOT-0015', 'S1503'],
+  ['FACTORY-REBOOT-0029', 'S2905'],
 ];
 for (const [mission, stepId] of steps) {
   const r = spawnSync(process.execPath, ['builderos-reboot/scripts/execute-mission-step.mjs', mission, stepId], {

@@ -20,6 +20,7 @@ const steps = [
   ['full_loop_proof', ['builderos-reboot/scripts/run-full-loop-proof.mjs']],
   ['product_salvage', ['builderos-reboot/scripts/generate-product-salvage.mjs']],
   ['certification', ['builderos-reboot/scripts/emit-project-certification.mjs']],
+  ['tsos_integration', ['builderos-reboot/scripts/factory-tsos-integration.mjs']],
 ];
 
 const results = {};

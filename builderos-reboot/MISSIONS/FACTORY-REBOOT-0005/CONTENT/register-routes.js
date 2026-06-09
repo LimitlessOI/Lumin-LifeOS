@@ -5,6 +5,7 @@ import { dispatchExecuteMission } from '../factory-core/builder/run-mission.js';
 import { runVerification, appendStepReceipt } from '../factory-core/sentry/run-verification.js';
 import { getCouncilAdapterStatus, assertCouncilQuarantine } from '../factory-core/canon/services/council-adapter.js';
 import { summarizeHistory } from '../factory-core/historian/mission-history.js';
+import { summarizeTsosMetrics } from '../factory-core/tsos/tsos-summary.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT } from '../factory-core/builder/run-step.js';
@@ -18,12 +19,14 @@ export function registerFactoryRoutes(app) {
       execute_mission: 'live',
       greenfield: 'live',
       council: 'quarantine',
+      tsos: 'live',
       routes: [
         factoryExecuteStepRoute.path,
         factoryExecuteMissionRoute.path,
         '/factory/council/status',
         '/factory/readiness',
         '/factory/mission-history',
+        '/factory/tsos/summary',
         '/health',
       ],
     });
@@ -31,6 +34,14 @@ export function registerFactoryRoutes(app) {
 
   app.get('/factory/mission-history', (_req, res) => {
     res.json({ ok: true, history: summarizeHistory() });
+  });
+
+  app.get('/factory/tsos/summary', (_req, res) => {
+    res.json({
+      ok: true,
+      tsos: summarizeTsosMetrics(),
+      guardrails: 'measurement_only_no_mission_authority',
+    });
   });
 
   app.get('/factory/readiness', (_req, res) => {

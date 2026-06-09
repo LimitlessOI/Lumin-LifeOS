@@ -1,6 +1,6 @@
 # Current BP Gaps v1
 
-**Last updated:** 2026-06-09 (post SENTRY audit)
+**Last updated:** 2026-05-24 (post TSOS integration mission 0029)
 
 ## Question
 
@@ -23,6 +23,7 @@ Do we have the full A-to-Z machine-ready BP such that a low-tier coder can build
 | Blueprint duplication | Done — `DUPLICATION_RECEIPT.json` |
 | Phase 11 full loop orchestration | Done — `FULL_LOOP_PROOF_RECEIPT.json` |
 | Phase 12 product salvage stub | Done — `PRODUCT_SALVAGE_CANDIDATES.json` |
+| TSOS on execute-step hot path | Done — `FACTORY-REBOOT-0029` + `factory:tsos` |
 
 ## Remaining gaps (honest)
 
@@ -36,7 +37,7 @@ When multiple missions write the same target (e.g. `register-routes.js`), **only
 
 ### 3. SENTRY runtime depth
 
-`run-step.js` now calls `verifyStepContract` + `verifyStepResult`. Payload modules (`verifyStepResult`, historian, TSOS, C2) are still **stubs** — they record shape but do not enforce anti-pattern checks or live council calls.
+`run-step.js` now calls `verifyStepContract` + `verifyStepResult` and **TSOS append after SENTRY pass**. TSOS guardrails are live (`tsos-guardrails.js`). Historian and C2 module payloads remain **partial**. Anti-pattern depth and live council calls are still **not** wired.
 
 ### 4. Product missions
 
@@ -54,7 +55,7 @@ Most missions 0011–0028 were **materialized by a high-tier Conductor** (GAP-FI
 
 ### Ready now
 
-- `npm run factory:ci` — 13 checks
+- `npm run factory:ci` — 14 checks (includes `factory:tsos`)
 - Low-tier coder can execute **individual frozen steps** with zero decisions
 - Bootstrap verify/copy missions 0001–0004 are deterministic
 - Greenfield missions work with `exact_content`

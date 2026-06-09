@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "8b3130d36f4013cfd8c1d5b5e6be685bee16ae8327cf27c6f90f104b3b836c5d"
+        "sha256": "2c2a5c0b69ed0b975966df0c64c0748ef2c93b86e7f1486f758a78148ef928fd"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0020/CONTENT/factory-ci.mjs"

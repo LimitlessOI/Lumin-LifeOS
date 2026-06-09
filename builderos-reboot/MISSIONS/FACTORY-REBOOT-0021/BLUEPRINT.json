@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "34aec977c8fa18899f51b8f8b9dfc3c040ebac881131b1bf098641de279a2d0f"
+        "sha256": "195bdb990aa74c378cac43b660086bf470f2843fb302bdf082b960368db63e2f"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/run-sentry-checks.mjs"

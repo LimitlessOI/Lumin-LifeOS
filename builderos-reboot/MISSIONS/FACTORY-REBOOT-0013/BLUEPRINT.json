@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "0c5dbcf9960d64bbc31a6bbbf4a5c9991ae368eabb93fbb69e27f53c9700a3ef"
+        "sha256": "d32b5d5b62535085dc0cd385a06f17b4732c3e22b8474ae379d4abe545a62126"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/run-step.js"

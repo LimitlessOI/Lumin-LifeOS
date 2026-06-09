@@ -6,6 +6,7 @@ import { getSandboxBoundary } from './sandbox.js';
 import { buildBlockedReturn } from './blocked-return.js';
 import { verifyStepContract } from '../sentry/verify-step-contract.js';
 import { verifyStepResult } from '../sentry/verify-step-result.js';
+import { appendStepMetrics } from '../tsos/record-step-metrics.js';
 
 const BUILDER_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(BUILDER_DIR, '../../..');
@@ -148,6 +149,7 @@ export function dispatchExecuteStep(body) {
     };
   }
 
+  const t0 = Date.now();
   const builderResult = runWriteFileExact({ mission_id, blueprint_id, step });
   const status = builderResult.status;
 
@@ -173,6 +175,33 @@ export function dispatchExecuteStep(body) {
     };
   }
 
+  const tsosResult = appendStepMetrics({
+    mission_id,
+    blueprint_id,
+    step_id: step.step_id,
+    target_file: builderResult.target_file,
+    token_cost: Number(body?.token_cost) || 0,
+    latency_ms: Date.now() - t0,
+    retries: Number(body?.retries) || 0,
+    waste: Boolean(body?.waste),
+    bytes_written: builderResult.bytes,
+    input_mode: builderResult.input_mode,
+    model_tier: body?.model_tier || 'unspecified',
+  });
+
+  if (!tsosResult.ok) {
+    return {
+      httpStatus: 422,
+      body: {
+        ok: false,
+        status: 'TSOS_GUARDRAIL_VIOLATION',
+        builder: builderResult,
+        sentry: { contract: sentryContract, verify: sentryVerify },
+        tsos: tsosResult,
+      },
+    };
+  }
+
   return {
     httpStatus: 200,
     body: {
@@ -185,6 +214,7 @@ export function dispatchExecuteStep(body) {
         verify: sentryVerify,
         verifyAgainst: ['acceptance_tests', 'exact_output_contract', 'anti_pattern_check'],
       },
+      tsos: tsosResult,
     },
   };
 }

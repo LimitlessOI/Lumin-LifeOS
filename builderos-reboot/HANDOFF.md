@@ -6,7 +6,7 @@
 npm run factory:ci
 ```
 
-**13/13 checks pass** after SENTRY self-audit (2026-06-09).
+**14/14 checks pass** after mission FACTORY-REBOOT-0029 (TSOS + guardrails, 2026-05-24).
 
 ## SENTRY verdict
 
@@ -18,7 +18,8 @@ Full audit: `builderos-reboot/SENTRY_AUDIT_REPORT.md`
 
 | Scope | Done? |
 |-------|-------|
-| Factory reboot missions 0001–0028 | **Yes** |
+| Factory reboot missions 0001–0029 | **Yes** |
+| TSOS on execute-step hot path (guardrailed) | **Yes** — see `TSOS_FACTORY_INTEGRATION.md` |
 | Build spec segments 0–10 (runtime payloads) | **Yes** |
 | Build spec Phase 11 (full governed loop) | **Yes** — real SENTRY contract verify wired |
 | Build spec Phase 12 (product salvage) | **Stub** — 46 candidates + shell pack |
@@ -30,6 +31,7 @@ Full audit: `builderos-reboot/SENTRY_AUDIT_REPORT.md`
 
 ## Key docs
 
+- `TSOS_FACTORY_INTEGRATION.md` — TSOS lane + guardrails
 - `SENTRY_AUDIT_REPORT.md` — findings + fixes
 - `CURRENT_BP_GAPS_V1.md` — remaining gaps
 - `MISSION_SHARED_FILE_OWNERSHIP.md` — shared file rules
@@ -40,5 +42,6 @@ Full audit: `builderos-reboot/SENTRY_AUDIT_REPORT.md`
 ```bash
 npm run factory:full-loop
 npm run factory:sentry
+npm run factory:tsos
 npm run factory:certify
 ```

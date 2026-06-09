@@ -1,6 +1,6 @@
 {
   "proof_id": "FULL-LOOP-PROOF-0001",
-  "run_at": "2026-06-09T06:58:43.121Z",
+  "run_at": "2026-06-09T07:44:25.016Z",
   "mission_id": "FACTORY-PROOF-LOOP-0001",
   "pass": true,
   "phases": {
@@ -60,11 +60,15 @@
       }
     },
     "tsos": {
-      "step_id": "FL001",
-      "token_cost": 0,
-      "latency_ms": 7,
-      "retries": 0,
-      "waste": false
+      "ok": true,
+      "status": "RECORDED",
+      "metrics": {
+        "step_id": "FL001",
+        "token_cost": 0,
+        "latency_ms": 9,
+        "retries": 0,
+        "waste": false
+      }
     },
     "c2": {
       "status": "REVIEW_REQUIRED",
