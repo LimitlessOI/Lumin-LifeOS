@@ -51,6 +51,7 @@
     "factory:sentry": "node builderos-reboot/scripts/run-sentry-checks.mjs",
     "factory:certify": "node builderos-reboot/scripts/emit-project-certification.mjs",
     "factory:tsos": "node builderos-reboot/scripts/factory-tsos-integration.mjs",
+    "factory:tools": "node builderos-reboot/scripts/factory-tools-integration.mjs",
     "factory:duplication": "node builderos-reboot/scripts/factory-duplication-test.mjs",
     "factory:greenfield:3x": "node builderos-reboot/scripts/run-greenfield-determinism-3x.mjs",
     "factory:queue:dry-run": "node builderos-reboot/scripts/autopilot-run-queue.mjs",

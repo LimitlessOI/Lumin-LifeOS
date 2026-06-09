@@ -34,7 +34,8 @@ const cert = {
     BOOTSTRAP_AND_STAGING_READY:
       (readiness?.verdict?.includes('STAGING_READY') ?? false) &&
       loadJson('builderos-reboot/DUPLICATION_RECEIPT.json')?.pass === true,
-    SAME_TIER_CODER_DETERMINISM: loadJson('builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json')?.pass === true,
+    MECHANICAL_DETERMINISM_PROXY: loadJson('builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json')?.pass === true,
+    SAME_TIER_CODER_DETERMINISM: false,
     LUMIN_FACTORY_GITHUB: false,
     LIFEOS_PRODUCT_COMPLETE: false,
   },
@@ -42,11 +43,23 @@ const cert = {
   missions_total: queue?.missions?.length ?? 0,
   product_salvage_candidates: salvage?.candidate_count ?? 0,
   next_human_actions: [
-    'Push lumin-factory/ to GitHub',
-    'Run 3-session same-tier coder determinism before claiming FULLY_MACHINE_READY',
-    'Expand PRODUCT-MARKETINGOS-SALVAGE-0001 via BPB',
+    'Pick one revenue lane; allow AI spend only on milestones that move it to customer-visible outcome this week',
+    'Keep LIFEOS_DIRECTED_MODE=true until autonomous loops have income-linked useful-work contracts',
+    'Expand PRODUCT-MARKETINGOS-SALVAGE-0001 via BPB only if that lane is the income pick',
   ],
+  certification_notes: {
+    mechanical_determinism_proxy:
+      'MECHANICAL_DETERMINISM_PROXY=true means greenfield 3-run executor proxy only (GREENFIELD_DETERMINISM_RECEIPT.json). SAME_TIER_CODER_DETERMINISM is false — no human cold-coder proof.',
+    cold_coder_3_session:
+      'NOT required for this hand-built blueprint pack. Applies only when the factory system generates a BP end-to-end; then run DETERMINISM_CODER_PROMPT.md before claiming FULLY_MACHINE_READY.',
+    lumin_factory_github:
+      'Optional org step — copy factory-staging to its own repo when you want a clean standalone factory repo; not a blocker for using the factory inside Lumin-LifeOS.',
+  },
 };
 
 fs.writeFileSync(path.join(REPO_ROOT, 'builderos-reboot/PROJECT_CERTIFICATION.json'), `${JSON.stringify(cert, null, 2)}\n`);
 console.log(JSON.stringify(cert, null, 2));
+
+if (!cert.levels.STAGING_READY || !cert.levels.BOOTSTRAP_AND_STAGING_READY) {
+  process.exit(1);
+}

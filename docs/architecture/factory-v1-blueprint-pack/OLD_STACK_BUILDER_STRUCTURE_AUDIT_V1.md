@@ -385,3 +385,21 @@ So the right move is exactly what you are doing:
 
 This repo is not “failed.”
 It is overgrown, multi-generational, and badly needs the exact classification-and-rebuild pass you are doing now.
+
+---
+
+## Addendum — factory-staging vs old stack (2026-05-24)
+
+**Manifest:** [FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md) · **Goldmine:** [GOLDMINE_PASS_V2.md](./GOLDMINE_PASS_V2.md) addendum
+
+| Old stack concern (this audit) | Factory-staging answer |
+|--------------------------------|------------------------|
+| Builder route sprawl | Single hot path: `factory-staging/factory-core/builder/run-step.js` |
+| Council in every cron | Factory scheduled tasks not yet wired; useful-work-guard stays in main repo |
+| SSOT drift vs code | Mission sha256 pins + `npm run factory:ci` |
+| Overlay / command-center churn | C2 read-only surfaces: `GET /factory/c2/status`, `/c2/brief` |
+| Precommit vs runtime gates | SENTRY stack on execute-step success path (0030) |
+| Production builder | Still `routes/lifeos-council-builder-routes.js` — **not merged** |
+
+**Rebuild rule:** Use this audit to mine the main repo; use `FACTORY_REBUILD_MANIFEST_V1.md` to know what already landed in `factory-staging/`.
+

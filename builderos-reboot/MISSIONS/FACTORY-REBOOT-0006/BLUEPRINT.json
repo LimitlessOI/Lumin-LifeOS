@@ -81,7 +81,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9"
+        "sha256": "e46c0eedaaec8441fde5dcf239f59a7d15f4e2c1b76679b91b3d22cd4a2ee687"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/register-routes.js"

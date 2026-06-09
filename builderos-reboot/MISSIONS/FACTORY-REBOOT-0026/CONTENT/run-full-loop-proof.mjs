@@ -63,7 +63,9 @@ const tsos = recordStepMetrics({
   retries: 0,
   waste: false,
 });
-const c2 = systemAlphaReadiness({ proofFresh: builderOk });
+const c2 = systemAlphaReadiness({ proofFresh: builderOk, automatedProof: true });
+
+const c2Ok = c2.status === 'STRUCTURAL_PASS' || c2.status === 'PASS';
 
 const loopPass =
   productDev.status === 'PASS' &&
@@ -71,13 +73,15 @@ const loopPass =
   builderOk &&
   sentryContract.pass === true &&
   sentryContract.tests_run > 0 &&
-  fs.existsSync(markerPath);
+  fs.existsSync(markerPath) &&
+  c2Ok;
 
 const receipt = {
   proof_id: 'FULL-LOOP-PROOF-0001',
   run_at: new Date().toISOString(),
   mission_id: missionId,
   pass: loopPass,
+  c2_pass: c2Ok,
   phases: {
     product_development: { status: productDev.status, scope: productDev.scope },
     founder_packet: { mission_id: founderPacket.mission_id, frozen: true },

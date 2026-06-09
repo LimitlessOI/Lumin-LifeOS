@@ -1,0 +1,401 @@
+# Factory Rebuild Manifest v1
+
+**Purpose:** Rebuild the entire governed factory from scratch — anywhere, anytime — using only this blueprint pack, mission packs, and verification commands. No oral history required.
+
+**Certification level:** `BOOTSTRAP_AND_STAGING_READY` — not `FULLY_MACHINE_READY`
+
+**Last verified:** 2026-05-24 — `npm run factory:ci` **16/16 PASS**
+
+---
+
+## 1. Read order (cold start)
+
+```text
+1. BLUEPRINT_PACK_INDEX_V1.md          ← table of contents
+2. CANONICAL_FACTORY_FOUNDATION_V1.md
+3. CODER_ZERO_DECISION_BUILD_SPEC_V1.md
+4. This file (FACTORY_REBUILD_MANIFEST_V1.md)
+5. builderos-reboot/HANDOFF.md
+6. builderos-reboot/MISSION_QUEUE.json
+```
+
+Then materialize missions in queue order (or run `factory:ci` on an already-built clone).
+
+---
+
+## 2. Three-layer architecture
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ DOCTRINE  docs/architecture/factory-v1-blueprint-pack/      │
+│           What the system must be (law + phase spec)          │
+└───────────────────────────┬─────────────────────────────────┘
+                            │ BPB emits
+┌───────────────────────────▼─────────────────────────────────┐
+│ MACHINE   builderos-reboot/MISSIONS/FACTORY-REBOOT-*        │
+│           Step-atomic BLUEPRINT.json + sha256 pins           │
+└───────────────────────────┬─────────────────────────────────┘
+                            │ materialize / execute-step
+┌───────────────────────────▼─────────────────────────────────┐
+│ RUNTIME   factory-staging/                                    │
+│           Live execute-step, gates, SENTRY, TSOS, Historian   │
+└───────────────────────────┬─────────────────────────────────┘
+                            │ cutover (optional)
+┌───────────────────────────▼─────────────────────────────────┐
+│ CUTOVER   lumin-factory/  → separate git repo                 │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ PRODUCTION SPINE (main repo — parallel, not replaced)        │
+│ routes/lifeos-council-builder-routes.js                     │
+│ services/deployment-service.js, railway-managed-env-*       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 3. Execute-step hot path (runtime truth)
+
+```text
+POST /factory/execute-step
+  → BPB intake gate (PD + Founder Packet + Adam Filter + blueprint freeze)
+  → Builder (write_file_exact only, sandbox enforced)
+  → SENTRY (contract + anti-pattern + lookback + proof freshness)
+  → TSOS (metrics append, guardrails fail-closed)
+  → Historian (append-only step record)
+  → C2 surfaces read state via GET routes (never assigns work)
+```
+
+**Body flags:**
+
+| Flag | Effect |
+|------|--------|
+| `skip_intake_gate: true` | Integration tests only |
+| `strict_upstream_gates: true` | Full PD + Founder Packet required |
+
+---
+
+## 4. Phase → runtime file map
+
+Paths relative to `factory-staging/` unless noted.
+
+### Phase 0 — Canon lock
+
+| Spec output | Runtime path | Mission |
+|-------------|--------------|---------|
+| Mission state machine | `factory-core/canon/MISSION_STATE_MACHINE.json` | 0030 |
+| Maturity classification | `factory-core/canon/MATURITY_CLASSIFICATION.json` | 0030 |
+| Proof source registry | `factory-core/canon/PROOF_SOURCE_REGISTRY.json` | 0030 |
+| Council quarantine | `factory-core/canon/services/council-adapter.js` | 0003/0004 |
+
+Doctrine docs (not duplicated in runtime): `CANONICAL_FACTORY_FOUNDATION_V1.md`, `DEPARTMENT_CHARTERS_V1.md`
+
+### Phase 1 — Product Development
+
+| Spec output | Runtime path | Mission |
+|-------------|--------------|---------|
+| PD gate validator | `factory-core/product-development/validate-gate.js` | 0030 |
+| `PRODUCT_DEVELOPMENT_RESULT.json` | per-mission in `builderos-reboot/MISSIONS/*/PRODUCT_DEVELOPMENT_RESULT.json` | all |
+
+### Phase 2 — Founder Packet
+
+| Spec output | Runtime path | Mission |
+|-------------|--------------|---------|
+| Completeness validator | `factory-core/founder-packet/validate-completeness.js` | 0030 |
+| `FOUNDER_PACKET.json` | per-mission in `builderos-reboot/MISSIONS/*/FOUNDER_PACKET.json` | all |
+
+### Phase 3 — BPB intake
+
+| Spec output | Runtime path | Mission |
+|-------------|--------------|---------|
+| Intake gate | `factory-core/bpb/intake-gate.js` | 0030 |
+| Adam Filter | `factory-core/founder-intent/adam-filter.js` | 0030 |
+| Blueprint freeze | `factory-core/sentry/blueprint-freeze-check.js` | 0003 + 0030 depth |
+| Mission packs | `builderos-reboot/MISSIONS/*/BLUEPRINT.json` | 0001–0030 |
+
+### Phase 4 — Builder / Coder runtime
+
+| Spec output | Runtime path | Canonical step |
+|-------------|--------------|----------------|
+| `run-step.js` (dispatch) | `factory-core/builder/run-step.js` | 0029/0030 |
+| `run-mission.js` | `factory-core/builder/run-mission.js` | 0006 S601 |
+| `sandbox.js` | `factory-core/builder/sandbox.js` | 0003 |
+| `blocked-return.js` | `factory-core/builder/blocked-return.js` | 0003 |
+| `write-file-exact` handler | `factory-core/builder/action-handlers/write-file-exact.js` | 0003 |
+| Execute-step route | `factory-core/routes/factory-execute-step-routes.js` | 0005 |
+| Execute-mission route | `factory-core/routes/factory-execute-mission-routes.js` | 0006 |
+| Route registration | `startup/register-routes.js` | 0029/0030 |
+| Staging server | `server.js`, `package.json` | 0004 |
+
+### Phase 5 — SENTRY
+
+| Spec output | Runtime path | Notes |
+|-------------|--------------|-------|
+| Contract verify | `factory-core/sentry/verify-step-contract.js` | Acceptance test runner |
+| Result verify (full stack) | `factory-core/sentry/verify-step-result.js` | 0030 depth |
+| Anti-pattern | `factory-core/sentry/anti-pattern-check.js` | Blocks on hot path |
+| Blueprint freeze | `factory-core/sentry/blueprint-freeze-check.js` | |
+| Future lookback | `factory-core/sentry/future-lookback.js` | Advisory + blocking |
+| Unintended consequence | `factory-core/sentry/unintended-consequence-check.js` | |
+| Proof freshness | `factory-core/sentry/proof-freshness.js` | Adapted from `oil-proof-freshness` |
+| SENTRY review JSONL | `data/sentry-reviews.jsonl` | Append-only |
+| Run verification (legacy HTTP) | `factory-core/sentry/run-verification.js` | |
+
+### Phase 6 — Historian
+
+| Spec output | Runtime path | Notes |
+|-------------|--------------|-------|
+| Append record (hot path) | `factory-core/historian/append-record.js` | 0030 |
+| Mission history summary | `factory-core/historian/mission-history.js` | |
+| record-decision/prediction/outcome/lesson/consensus | `factory-core/historian/record-*.js` | Loop proof |
+| Ledger JSONL | `data/historian-records.jsonl` | |
+| Trust levels doc | `factory-core/historian/memory-trust-levels.md` | |
+| Authority map | `factory-core/historian/MEMORY_AUTHORITY_MAP.md` | |
+
+### Phase 7 — TSOS
+
+| Spec output | Runtime path | Notes |
+|-------------|--------------|-------|
+| Guardrails | `factory-core/tsos/tsos-guardrails.js` | 0029 |
+| Record + append | `factory-core/tsos/record-step-metrics.js` | Hot path |
+| Summary | `factory-core/tsos/tsos-summary.js` | |
+| Efficiency evaluator | `factory-core/tsos/evaluate-efficiency.js` | Proposals only |
+| prompt/cache/routing evaluators | `factory-core/tsos/prompt-optimization.js`, etc. | Stub proposals |
+| Hook boundary | `factory-core/tsos/TSOS_HOOK_BOUNDARY.md` | |
+| Metrics JSONL | `data/tsos-step-metrics.jsonl` | gitignored |
+
+### Phase 8 — C2 inside LifeOS
+
+| Spec output | Runtime path | Notes |
+|-------------|--------------|-------|
+| Module charter | `lifeos/c2/C2_MODULE_CHARTER.md` | |
+| State model | `lifeos/c2/C2_STATE_MODEL.json` | |
+| Escalation rules | `lifeos/c2/C2_ESCALATION_RULES.json` | |
+| Communication prefs | `lifeos/c2/C2_COMMUNICATION_PREFERENCES.json` | |
+| C2 surface (factory) | `factory-core/lifeos/c2-surface.js` | 0030 — not full LifeOS UI |
+
+### Phase 9 — Readiness / proof
+
+| Spec output | Runtime path | Notes |
+|-------------|--------------|-------|
+| system-alpha-readiness | `factory-core/readiness/system-alpha-readiness.js` | |
+| proof-freshness | `factory-core/readiness/proof-freshness.js` | |
+| structural-proof-freshness | `factory-core/readiness/structural-proof-freshness.js` | |
+| legacy-quarantine | `factory-core/readiness/legacy-quarantine.js` | |
+| runtime-proof-snapshot | `factory-core/readiness/runtime-proof-snapshot.js` | |
+| Remote truth reconciler | `factory-core/readiness/remote-truth-reconciler.js` | 0030 |
+| Readiness report | `builderos-reboot/READINESS_REPORT.json` | Generated |
+
+### Phase 10 — Full proof mission
+
+| Artifact | Path | Mission |
+|----------|------|---------|
+| Proof loop mission | `builderos-reboot/MISSIONS/FACTORY-PROOF-LOOP-0001/` | |
+| Receipt | `builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json` | 0026 |
+| Greenfield mission | `builderos-reboot/MISSIONS/FACTORY-GREENFIELD-0001/` | |
+
+### Phase 11 — Product salvage
+
+| Artifact | Path | Mission |
+|----------|------|---------|
+| Salvage candidates (repo) | `builderos-reboot/PRODUCT_SALVAGE_CANDIDATES.json` | 0027 |
+| Salvage candidates (pack) | `blueprint-pack/SALVAGE_CANDIDATES.json` | audit |
+| First product stub | `builderos-reboot/MISSIONS/PRODUCT-MARKETINGOS-SALVAGE-0001/` | stub only |
+
+### Phase 12 — Missions 0029 / 0030 (integration slices)
+
+| Mission | Purpose |
+|---------|---------|
+| FACTORY-REBOOT-0029 | TSOS hot path + guardrails |
+| FACTORY-REBOOT-0030 | Upstream gates + SENTRY depth + Historian + surfaces |
+
+---
+
+## 5. HTTP surface (factory-staging)
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | `/health` | Service + route list |
+| POST | `/factory/execute-step` | Hot path |
+| POST | `/factory/execute-mission` | Multi-step |
+| GET | `/factory/gates/intake?mission_id=` | BPB intake probe |
+| GET | `/factory/council/status` | Council quarantine |
+| GET | `/factory/readiness` | Readiness + remote truth |
+| GET | `/factory/mission-history` | History + Historian |
+| GET | `/factory/historian/summary` | Historian ledger |
+| GET | `/factory/tsos/summary` | TSOS aggregates |
+| GET | `/factory/c2/status` | C2 module artifacts |
+| GET | `/factory/c2/brief?mission_id=` | C2 mission brief |
+| GET | `/factory/truth/reconcile` | GitHub + receipts |
+| GET | `/factory/canon/status` | Runtime canon files |
+
+---
+
+## 6. Mission queue summary
+
+| Range | Purpose |
+|-------|---------|
+| 0001–0004 | Bootstrap, segments, materialize staging |
+| 0005–0010 | Execute-step/mission live, integration |
+| 0011–0028 | CI, determinism, duplication, proof, certification |
+| 0029 | TSOS integration |
+| 0030 | Full factory tools (gates, SENTRY depth, Historian) |
+| FACTORY-GREENFIELD-0001 | Greenfield proof |
+| FACTORY-PROOF-LOOP-0001 | Governed loop proof |
+
+Full list: `builderos-reboot/MISSION_QUEUE.json`
+
+---
+
+## 7. Verification matrix
+
+| Command | Proves |
+|---------|--------|
+| `npm run factory:ci` | 15-check umbrella (acceptance + integration + receipts) |
+| `npm run factory:tools` | Gates, SENTRY JSONL, Historian, C2, truth |
+| `npm run factory:tsos` | TSOS guardrails + append |
+| `npm run factory:sentry` | Mechanical SENTRY checklist |
+| `npm run factory:readiness` | Readiness report emission |
+| `npm run factory:full-loop` | Phase 10 proof |
+| `npm run factory:duplication` | Blueprint duplicability |
+| `node builderos-reboot/scripts/run-all-mission-acceptance.mjs` | All sha256 pins |
+
+---
+
+## 8. Data / receipt paths (append-only)
+
+| File | Owner |
+|------|-------|
+| `factory-staging/data/tsos-step-metrics.jsonl` | TSOS |
+| `factory-staging/data/historian-records.jsonl` | Historian |
+| `factory-staging/data/sentry-reviews.jsonl` | SENTRY |
+| `factory-staging/data/step-receipts.jsonl` | Legacy HTTP layer |
+| `builderos-reboot/DETERMINISM_RECEIPT.json` | Proof |
+| `builderos-reboot/DUPLICATION_RECEIPT.json` | Proof |
+| `builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json` | Proof |
+| `builderos-reboot/PROJECT_CERTIFICATION.json` | Certification |
+
+---
+
+## 9. Shared file ownership (rematerialize rules)
+
+| Target | Canonical owner |
+|--------|-----------------|
+| `factory-staging/factory-core/builder/run-step.js` | 0029 / 0030 |
+| `factory-staging/startup/register-routes.js` | 0029 / 0030 |
+| `factory-staging/factory-core/builder/run-mission.js` | 0006 S601 |
+
+Full table: `builderos-reboot/MISSION_SHARED_FILE_OWNERSHIP.md`
+
+---
+
+## 10. Production spine (main repo — rebuild separately)
+
+These tools exist in the **main LifeOS repo** and are required for production `/build`, GitHub commit, and Railway control. They are **not** copied into `factory-staging/` by design (see GOLDMINE_PASS_V2).
+
+| Tool | Path | Capability |
+|------|------|------------|
+| Builder HTTP | `routes/lifeos-council-builder-routes.js` | POST `/api/v1/lifeos/builder/build` |
+| Deployment | `services/deployment-service.js` | `commitToGitHub`, Railway redeploy |
+| Railway env | `routes/railway-managed-env-routes.js` | bulk env, sync, bootstrap |
+| Inline Railway | `server.js` routes | GET/POST `/api/v1/railway/env`, `/deploy` |
+| Preflight | `scripts/council-builder-preflight.mjs` | |
+| Useful-work guard | `services/useful-work-guard.js` | Scheduled AI gate |
+| Precommit governance | `services/builderos-precommit-governance.js` | |
+| Routing / escalation | `services/builderos-routing-policy.js`, `builderos-model-escalation-gate.js` | |
+| Proof freshness (source) | `services/oil-proof-freshness.js` | ADAPT → factory SENTRY |
+
+**ADAPT backlog:** Wire control-plane DONE gate + useful-work-guard into factory loop (not done in 0030).
+
+---
+
+## 11. Rebuild procedure (from empty repo)
+
+### A. Clone + install
+
+```bash
+git clone <repo> && cd Lumin-LifeOS && npm install
+```
+
+### B. Verify existing materialization
+
+```bash
+npm run factory:ci
+```
+
+If **15/15 PASS** — runtime matches mission pins; skip to §11.D.
+
+### C. Rematerialize from missions (if starting from doctrine only)
+
+1. Emit or copy mission packs `builderos-reboot/MISSIONS/FACTORY-REBOOT-0001` … `0030`
+2. For each mission, run materialize scripts per mission README (or `execute-mission` where live)
+3. After **any** shared file change, refresh hashes on owning mission only
+4. Run `npm run factory:ci` until green
+
+### D. Cutover (optional separate repo)
+
+```bash
+# Push lumin-factory/ to its own GitHub repo
+# Re-run CI on clean clone of that repo
+```
+
+### E. Production deploy
+
+```bash
+npm run builder:preflight
+npm run system:railway:redeploy   # requires COMMAND_CENTER_KEY + PUBLIC_BASE_URL
+```
+
+---
+
+## 12. Honest gaps (do not skip when rebuilding)
+
+| Gap | Impact | Priority for this hand-built BP |
+|-----|--------|----------------------------------|
+| Cold coder 3-session determinism | Required only when **system generates** a BP; **not** for this pack | **Deferred** — Adam decision 2026-05-24 |
+| Token caps on Railway (`MAX_DAILY_SPEND`, `COST_SHUTDOWN_THRESHOLD`) | Emergency brake only — does not stop unproductive churn | **Optional** — not the strategy |
+| Useful-work + directed mode on all scheduled AI | Stops garbage loops (free or paid) | **Income filter is the operator rule** |
+| Factory TSOS JSONL → `token_usage_log` bridge | One dashboard for factory + production AI spend | **When factory calls paid AI** — production ledger already live |
+| `lumin-factory/` not on GitHub | Optional standalone repo | **Optional** — factory works in main repo |
+| Production builder not merged with factory-staging | Two build paths coexist | **Future** — production self-execution still works |
+| 46 product missions | Salvage stub only | **When ready for first product** |
+| Live council on SENTRY hot path | Structural checks only on factory path | **Future enhancement** |
+| BPB compiler service | Mission format IS blueprint | **N/A for rebuild** |
+
+---
+
+## 13. Certification claims allowed
+
+| Claim | Allowed? |
+|-------|----------|
+| `BOOTSTRAP_AND_STAGING_READY` | **Yes** — when `factory:ci` green (**ceiling for this hand-built BP**) |
+| `BLUEPRINT_DUPLICABLE` | **Yes** — `DUPLICATION_RECEIPT.json` |
+| `FULLY_MACHINE_READY` | **No** — and **not required** for this pack; applies when system-generated BP + cold-coder proof |
+| `LIFEOS_PRODUCT_COMPLETE` | **No** |
+
+---
+
+## 15. Operator plain language (Adam)
+
+**Cold coder test:** You built this BP with agents, not by handing a spec to a dumb model cold. The 3-session test proves a *machine-emitted* BP works without human judgment. Skip it for this pack; use it later when the factory emits the next BP.
+
+**Token money:** Caps stop bleeding; they do not make work productive. Useful-work guard + directed mode stop scheduled garbage loops. **Income-linked milestones** are the filter for every AI dollar — spend freely on work that moves a chosen revenue lane to a customer-visible outcome.
+
+**Two builders:** Old production builder on Railway + new `factory-staging/` in repo. Both work; they are not one program yet.
+
+**lumin-factory/ folder:** Optional copy for its own GitHub repo. Not required to use the factory here.
+
+**46 products:** A shopping list, not build instructions yet.
+
+---
+
+## 14. Change log
+
+| Date | Change |
+|------|--------|
+| 2026-05-24 | Initial manifest: missions 0001–0030, full runtime map, 0030 tools |
+| 2026-05-24 | TSOS 0029 documented on hot path |
+| 2026-05-24 | Blueprint pack addenda synced (tool inventory, readiness, A-to-Z, goldmine, founder packet audit) |
+| 2026-05-24 | Cold-coder 3-session deferred for hand-built BP; token spend section in CURRENT_BP_GAPS |
+
+**Next agent:** When adding mission 0031+, append a row to §4, §6, §14 and update `BLUEPRINT_PACK_INDEX_V1.md`.

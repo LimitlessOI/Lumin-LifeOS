@@ -1,6 +1,6 @@
 {
   "certification_id": "FACTORY-REBOOT-CERT-002",
-  "generated_at": "2026-06-09T07:44:25.154Z",
+  "generated_at": "2026-06-09T19:06:42.390Z",
   "build_spec_phases": {
     "segments_0_10_runtime": true,
     "phase_11_full_loop_proof": true,
@@ -10,20 +10,26 @@
     "STAGING_READY": true,
     "BLUEPRINT_DUPLICABLE": true,
     "GREENFIELD_DETERMINISTIC_MECHANICAL": true,
-    "SENTRY_MECHANICAL": true,
+    "SENTRY_MECHANICAL": false,
     "FULL_LOOP_GOVERNED": true,
     "FULLY_MACHINE_READY": false,
     "BOOTSTRAP_AND_STAGING_READY": true,
-    "SAME_TIER_CODER_DETERMINISM": true,
+    "MECHANICAL_DETERMINISM_PROXY": true,
+    "SAME_TIER_CODER_DETERMINISM": false,
     "LUMIN_FACTORY_GITHUB": false,
     "LIFEOS_PRODUCT_COMPLETE": false
   },
-  "missions_complete": 31,
-  "missions_total": 31,
+  "missions_complete": 33,
+  "missions_total": 33,
   "product_salvage_candidates": 46,
   "next_human_actions": [
-    "Push lumin-factory/ to GitHub",
-    "Run 3-session same-tier coder determinism before claiming FULLY_MACHINE_READY",
-    "Expand PRODUCT-MARKETINGOS-SALVAGE-0001 via BPB"
-  ]
+    "Pick one revenue lane; allow AI spend only on milestones that move it to customer-visible outcome this week",
+    "Keep LIFEOS_DIRECTED_MODE=true until autonomous loops have income-linked useful-work contracts",
+    "Expand PRODUCT-MARKETINGOS-SALVAGE-0001 via BPB only if that lane is the income pick"
+  ],
+  "certification_notes": {
+    "mechanical_determinism_proxy": "MECHANICAL_DETERMINISM_PROXY=true means greenfield 3-run executor proxy only (GREENFIELD_DETERMINISM_RECEIPT.json). SAME_TIER_CODER_DETERMINISM is false — no human cold-coder proof.",
+    "cold_coder_3_session": "NOT required for this hand-built blueprint pack. Applies only when the factory system generates a BP end-to-end; then run DETERMINISM_CODER_PROMPT.md before claiming FULLY_MACHINE_READY.",
+    "lumin_factory_github": "Optional org step — copy factory-staging to its own repo when you want a clean standalone factory repo; not a blocker for using the factory inside Lumin-LifeOS."
+  }
 }

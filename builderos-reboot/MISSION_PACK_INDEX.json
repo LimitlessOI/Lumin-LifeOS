@@ -1,162 +1,238 @@
 {
-  "generated_at": "2026-06-09T06:44:35.686Z",
-  "mission_count": 26,
+  "generated_at": "2026-06-09T19:06:42.333Z",
+  "source_of_truth": "builderos-reboot/MISSION_QUEUE.json",
+  "mission_count": 33,
+  "missions_complete": 33,
   "missions": [
-    {
-      "mission_id": "FACTORY-GREENFIELD-0001",
-      "blueprint_id": "FACTORY-GREENFIELD-0001-v1",
-      "scope": "first_greenfield_exact_content_step",
-      "steps": 1
-    },
     {
       "mission_id": "FACTORY-REBOOT-0001",
       "blueprint_id": "FACTORY-REBOOT-0001-v2",
       "scope": "bootstrap_repo_and_first_bpb_pack",
-      "steps": 13
+      "steps": 13,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0002",
       "blueprint_id": "FACTORY-REBOOT-0002-v2",
       "scope": "segments_2_through_4_runtime_artifact_payloads",
-      "steps": 16
+      "steps": 16,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0003",
       "blueprint_id": "FACTORY-REBOOT-0003-v1",
       "scope": "segments_5_through_10_runtime_artifact_payloads",
-      "steps": 33
+      "steps": 33,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0004",
       "blueprint_id": "FACTORY-REBOOT-0004-v1",
       "scope": "proof_mission_materialize_factory_staging",
-      "steps": 40
+      "steps": 40,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0005",
       "blueprint_id": "FACTORY-REBOOT-0005-v1",
       "scope": "live_execute_step_dispatch",
-      "steps": 4
+      "steps": 4,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0006",
       "blueprint_id": "FACTORY-REBOOT-0006-v1",
       "scope": "execute_mission_over_http",
-      "steps": 3
+      "steps": 3,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0007",
       "blueprint_id": "FACTORY-REBOOT-0007-v1",
       "scope": "council_adapter_quarantine",
-      "steps": 3
+      "steps": 3,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0008",
       "blueprint_id": "FACTORY-REBOOT-0008-v1",
       "scope": "sentry_acceptance_hardening",
-      "steps": 2
+      "steps": 2,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0009",
       "blueprint_id": "FACTORY-REBOOT-0009-v1",
       "scope": "autopilot_queue_runner",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0010",
       "blueprint_id": "FACTORY-REBOOT-0010-v1",
       "scope": "cutover_readiness_export",
-      "steps": 3
+      "steps": 3,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0011",
       "blueprint_id": "FACTORY-REBOOT-0011-v1",
       "scope": "lumin_factory_cutover_bundle",
-      "steps": 3
+      "steps": 3,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0012",
       "blueprint_id": "FACTORY-REBOOT-0012-v1",
       "scope": "determinism_mechanical_receipt",
-      "steps": 2
+      "steps": 2,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0013",
       "blueprint_id": "FACTORY-REBOOT-0013-v1",
       "scope": "greenfield_exact_content",
-      "steps": 3
+      "steps": 3,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0014",
       "blueprint_id": "FACTORY-REBOOT-0014-v1",
       "scope": "factory_http_client",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0015",
       "blueprint_id": "FACTORY-REBOOT-0015-v1",
       "scope": "mission_history_and_readiness_v2",
-      "steps": 3
+      "steps": 3,
+      "status": "complete"
+    },
+    {
+      "mission_id": "FACTORY-GREENFIELD-0001",
+      "blueprint_id": "FACTORY-GREENFIELD-0001-v1",
+      "scope": "first_greenfield_exact_content_step",
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0016",
       "blueprint_id": "FACTORY-REBOOT-0016-v1",
       "scope": "greenfield_3x_determinism",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0017",
       "blueprint_id": "FACTORY-REBOOT-0017-v1",
       "scope": "blueprint_duplication_test",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0018",
       "blueprint_id": "FACTORY-REBOOT-0018-v1",
       "scope": "queue_dry_run_autopilot",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0019",
       "blueprint_id": "FACTORY-REBOOT-0019-v1",
       "scope": "lumin_factory_repo_init",
-      "steps": 3
+      "steps": 3,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0020",
       "blueprint_id": "FACTORY-REBOOT-0020-v1",
       "scope": "factory_ci_umbrella",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0021",
       "blueprint_id": "FACTORY-REBOOT-0021-v1",
       "scope": "sentry_mechanical_checks",
-      "steps": 2
+      "steps": 2,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0022",
       "blueprint_id": "FACTORY-REBOOT-0022-v1",
       "scope": "mission_pack_index",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0023",
       "blueprint_id": "FACTORY-REBOOT-0023-v1",
       "scope": "readiness_report_v3",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0024",
       "blueprint_id": "FACTORY-REBOOT-0024-v1",
       "scope": "project_certification",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
     },
     {
       "mission_id": "FACTORY-REBOOT-0025",
       "blueprint_id": "FACTORY-REBOOT-0025-v1",
       "scope": "operator_complete_guide",
-      "steps": 1
+      "steps": 1,
+      "status": "complete"
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0026",
+      "blueprint_id": "FACTORY-REBOOT-0026-v1",
+      "scope": "phase_11_full_loop_proof",
+      "steps": 2,
+      "status": "complete"
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0027",
+      "blueprint_id": "FACTORY-REBOOT-0027-v1",
+      "scope": "phase_12_product_salvage",
+      "steps": 2,
+      "status": "complete"
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0028",
+      "blueprint_id": "FACTORY-REBOOT-0028-v1",
+      "scope": "certification_v2_phase_11_12",
+      "steps": 1,
+      "status": "complete"
+    },
+    {
+      "mission_id": "FACTORY-PROOF-LOOP-0001",
+      "blueprint_id": "FACTORY-PROOF-LOOP-0001-v1",
+      "scope": "phase_11_full_governed_loop_proof",
+      "steps": 1,
+      "status": "complete"
+    },
+    {
+      "mission_id": "PRODUCT-MARKETINGOS-SALVAGE-0001",
+      "blueprint_id": "PRODUCT-MARKETINGOS-SALVAGE-0001-v1",
+      "scope": "phase_12_first_product_salvage_stub",
+      "steps": 1,
+      "status": "complete"
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0029",
+      "blueprint_id": "FACTORY-REBOOT-0029-v1",
+      "scope": "tsos_hot_path_with_guardrails",
+      "steps": 7,
+      "status": "complete"
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0030",
+      "steps": 0,
+      "status": "complete",
+      "error": "no_blueprint"
     }
   ]
 }

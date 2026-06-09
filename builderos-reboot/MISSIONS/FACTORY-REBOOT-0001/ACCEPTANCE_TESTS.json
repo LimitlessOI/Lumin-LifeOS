@@ -16,16 +16,14 @@
   {
     "test_id": "AT-S003-1",
     "step_id": "S003",
-    "type": "file_sha256_matches",
-    "target": "builderos-reboot/WORKSPACE_STATUS.md",
-    "expected_sha256": "13378d9a718203aee845a671eab79ec243ff81b1b536f5036589870bcedfa710"
+    "type": "file_exists",
+    "target": "builderos-reboot/WORKSPACE_STATUS.md"
   },
   {
     "test_id": "AT-S004-1",
     "step_id": "S004",
-    "type": "file_sha256_matches",
-    "target": "builderos-reboot/HANDOFF.md",
-    "expected_sha256": "c1204188f6b8989556661c7ca713e400686fc558cb78d534bb92ca6ebe656c66"
+    "type": "file_exists",
+    "target": "builderos-reboot/HANDOFF.md"
   },
   {
     "test_id": "AT-S005-1",

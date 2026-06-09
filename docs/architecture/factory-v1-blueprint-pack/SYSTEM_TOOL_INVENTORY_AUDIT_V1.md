@@ -477,3 +477,59 @@ The repo already has:
 - domain-specific browser agents
 
 But the new factory still needs one governed abstraction for when and how those tools are used.
+
+---
+
+## Addendum — factory-staging runtime status (2026-05-24)
+
+**Authority:** [FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md)  
+**Verify:** `npm run factory:ci` (15/15) · `npm run factory:tools`
+
+This addendum updates tool status for the **new factory runtime** (`factory-staging/`). It does not change the original audit body above (historical snapshot).
+
+### Moved to PRESENT in factory-staging
+
+| ID | Tool | Runtime path |
+|----|------|--------------|
+| 2.1 | Product Development gate | `factory-core/product-development/validate-gate.js` |
+| 2.2 | Founder Packet validator | `factory-core/founder-packet/validate-completeness.js` |
+| 3.x | BPB intake gate | `factory-core/bpb/intake-gate.js` |
+| 3.x | Adam Filter | `factory-core/founder-intent/adam-filter.js` |
+| 4.2 | Execute-only proof runtime | `factory-core/builder/run-step.js` (live hot path) |
+| 5.3 | SENTRY blueprint freeze | `factory-core/sentry/blueprint-freeze-check.js` |
+| 5.4 | SENTRY future-lookback | `factory-core/sentry/future-lookback.js` |
+| 5.5 | Unintended-consequence check | `factory-core/sentry/unintended-consequence-check.js` |
+| 6.3 | Historian step ledger | `factory-core/historian/append-record.js` |
+| 7.2 | TSOS hook boundary (wired) | hot path in `run-step.js` |
+| 7.3–7.5 | TSOS evaluators | `evaluate-efficiency.js` + stub evaluators |
+| 8.2 | C2 surface (factory) | `factory-core/lifeos/c2-surface.js` + `lifeos/c2/*` |
+| 9.4 | Remote truth reconciler | `factory-core/readiness/remote-truth-reconciler.js` |
+| 11.x | Structural proof freshness | used via `sentry/proof-freshness.js` on hot path |
+
+### Still PARTIAL
+
+| Tool | Gap |
+|------|-----|
+| 1.2 Founder intent simulation | Adam Filter only; no full simulator |
+| 3.1 BPB planner (production) | `builderos-pbb-plan.js` not factory canonical |
+| 3.2 Machine blueprint schema | Mission `BLUEPRINT.json` is de facto schema |
+| 3.3 Same-tier determinism harness | Mechanical yes; human 3-session no |
+| 6.4 Consensus correctness tracker | Not exposed as Historian API |
+| 8.3 Critical escalation ladder | JSON rules exist; not LifeOS UI |
+| 11.3 Legacy quarantine registry | Payload file; not live registry DB |
+| Production builder merge | `lifeos-council-builder-routes.js` separate |
+
+### Still MISSING (factory canonical)
+
+| Tool | Notes |
+|------|-------|
+| Full BPB compiler service | Missions + scripts replace for now |
+| Governed web operator abstraction | Browser tools exist in main repo only |
+| Platform TSOS ledger bridge | Factory JSONL → `token_usage_log` |
+| Live council on SENTRY hot path | Structural checks only |
+
+### Missions that materialized tools
+
+- **0029** — TSOS guardrails + hot path
+- **0030** — upstream gates, SENTRY depth, Historian, C2/truth surfaces
+

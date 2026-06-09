@@ -82,7 +82,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "13378d9a718203aee845a671eab79ec243ff81b1b536f5036589870bcedfa710"
+        "sha256": "859a63553d8d2f0d62c7abfb42550036173489fef26ab3b09e26db79ad5b78a0"
       },
       "allowed_context_files": [
         "builderos-reboot/WORKSPACE_STATUS.md"
@@ -115,7 +115,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "c1204188f6b8989556661c7ca713e400686fc558cb78d534bb92ca6ebe656c66"
+        "sha256": "435238c71eb78fe0c4dc535ce3b688a1e7a9f9b3be936cfb0a1ec86e6d54482c"
       },
       "allowed_context_files": [
         "builderos-reboot/HANDOFF.md"

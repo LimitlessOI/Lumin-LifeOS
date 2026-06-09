@@ -8,6 +8,7 @@ function sha256File(absPath) {
 }
 
 export function loadAcceptanceTestsForMission(missionId) {
+  if (!missionId || missionId === 'unknown') return [];
   const p = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS', missionId, 'ACCEPTANCE_TESTS.json');
   if (!fs.existsSync(p)) return [];
   return JSON.parse(fs.readFileSync(p, 'utf8'));

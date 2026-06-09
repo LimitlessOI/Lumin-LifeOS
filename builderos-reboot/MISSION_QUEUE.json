@@ -33,6 +33,7 @@
     { "mission_id": "FACTORY-REBOOT-0028", "status": "complete", "priority": 29, "purpose": "Certification v2 with Phase 11-12", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0028" },
     { "mission_id": "FACTORY-PROOF-LOOP-0001", "status": "complete", "priority": 30, "purpose": "Phase 11 proof mission pack", "path": "builderos-reboot/MISSIONS/FACTORY-PROOF-LOOP-0001" },
     { "mission_id": "PRODUCT-MARKETINGOS-SALVAGE-0001", "status": "complete", "priority": 31, "purpose": "First product salvage stub", "path": "builderos-reboot/MISSIONS/PRODUCT-MARKETINGOS-SALVAGE-0001" },
-    { "mission_id": "FACTORY-REBOOT-0029", "status": "complete", "priority": 32, "purpose": "TSOS efficiency lane + guardrails on execute-step hot path", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029" }
+    { "mission_id": "FACTORY-REBOOT-0029", "status": "complete", "priority": 32, "purpose": "TSOS efficiency lane + guardrails on execute-step hot path", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029" },
+    { "mission_id": "FACTORY-REBOOT-0030", "status": "complete", "priority": 33, "purpose": "Upstream gates, SENTRY depth, Historian, C2/truth surfaces", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0030" }
   ]
 }

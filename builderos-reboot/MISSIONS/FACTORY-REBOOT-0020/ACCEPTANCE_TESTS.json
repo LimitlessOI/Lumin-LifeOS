@@ -4,6 +4,6 @@
     "step_id": "S2001",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/factory-ci.mjs",
-    "expected_sha256": "2c2a5c0b69ed0b975966df0c64c0748ef2c93b86e7f1486f758a78148ef928fd"
+    "expected_sha256": "18c41f8fe05a87542cb68bb0df04a0b51252ce81e2ef1d24c3aac57d5e2e0411"
   }
 ]

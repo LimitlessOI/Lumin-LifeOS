@@ -1,6 +1,6 @@
 {
   "test_id": "BLUEPRINT-DUPLICATION-REMATERIALIZE",
-  "run_at": "2026-06-09T07:44:22.566Z",
+  "run_at": "2026-06-09T19:06:39.900Z",
   "pass": true,
   "steps_rerun": [
     {
@@ -19,8 +19,8 @@
   "probes": [
     {
       "path": "factory-staging/factory-core/builder/run-step.js",
-      "before": "d32b5d5b62535085dc0cd385a06f17b4732c3e22b8474ae379d4abe545a62126",
-      "after": "d32b5d5b62535085dc0cd385a06f17b4732c3e22b8474ae379d4abe545a62126",
+      "before": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae",
+      "after": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae",
       "match": true
     },
     {
@@ -31,8 +31,8 @@
     },
     {
       "path": "factory-staging/startup/register-routes.js",
-      "before": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9",
-      "after": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9",
+      "before": "681affea88801db0aa084ab0ba21f0022aaf5e336fe32abf09e9fb38e239a40e",
+      "after": "681affea88801db0aa084ab0ba21f0022aaf5e336fe32abf09e9fb38e239a40e",
       "match": true
     }
   ]

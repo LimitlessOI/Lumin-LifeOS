@@ -1237,3 +1237,30 @@ This build succeeds when the coding subsystem no longer requires the coding mode
 - or return a blocker because the step improperly required judgment
 
 That is the standard.
+
+---
+
+## Appendix A — Runtime materialization map (2026-05-24)
+
+**Do not hand this spec directly to Coder.** Use mission packs in `builderos-reboot/MISSIONS/` or regenerate from BPB.
+
+**Full rebuild documentation:** [FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md)
+
+| Segment / Phase | Spec § | Runtime (factory-staging) | Mission range |
+|-----------------|--------|---------------------------|---------------|
+| 0 Canon | Phase 0 | `factory-core/canon/*.json` | 0030 |
+| 1 Product Development | Phase 1 | `product-development/validate-gate.js` | 0030 |
+| 2 Founder Packet | Phase 2 | `founder-packet/validate-completeness.js` | 0030 |
+| 3 Founder Intent | Phase 3 | `founder-intent/adam-filter.js` | 0030 |
+| 4 BPB intake | Phase 3 | `bpb/intake-gate.js` | 0030 |
+| 5 Coder runtime | Phase 4–5 | `builder/run-step.js`, routes | 0003–0006, 0029–0030 |
+| 6 SENTRY | Phase 6 | `sentry/*` (full stack on hot path) | 0003, 0030 |
+| 7 Historian | Phase 7 | `historian/append-record.js` + record-* | 0003, 0030 |
+| 8 TSOS | Phase 8 | `tsos/*` + guardrails | 0003, 0029, 0030 |
+| 9 C2 | Phase 9 | `lifeos/c2/*`, `c2-surface.js` | 0003, 0030 |
+| 10 Readiness | Phase 10 | `readiness/*`, receipts in `builderos-reboot/` | 0020–0028 |
+| 11 Full proof | Segment 11 | `FACTORY-PROOF-LOOP-0001`, receipts | 0026 |
+| 12 Product salvage | Phase 12 | `PRODUCT_SALVAGE_CANDIDATES.json` | 0027 stub |
+
+**Verify:** `npm run factory:ci` · **Index:** [BLUEPRINT_PACK_INDEX_V1.md](./BLUEPRINT_PACK_INDEX_V1.md)
+

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-09T07:44:24.947Z",
+  "generated_at": "2026-06-09T19:06:42.135Z",
   "version": 3,
   "verdict": "STAGING_READY_EXTENDED",
   "checks": {
@@ -13,8 +13,8 @@
     "queue_dry_run": true,
     "cutover_verify": true
   },
-  "queue_complete": 31,
-  "queue_total": 31,
+  "queue_complete": 33,
+  "queue_total": 33,
   "active_mission": null,
   "lumin_factory_path": "lumin-factory/"
 }

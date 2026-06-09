@@ -663,3 +663,31 @@ The factory is successful when:
 - TSOS reduces waste without reducing trust
 - C2 truthfully surfaces system state inside LifeOS
 - one full mission runs end-to-end without making Adam solve the same bottleneck twice
+
+---
+
+## Addendum — runtime materialization (2026-05-24)
+
+**Master rebuild map:** [FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md)  
+**Index:** [BLUEPRINT_PACK_INDEX_V1.md](./BLUEPRINT_PACK_INDEX_V1.md)
+
+This addendum maps each **Build Phase** in this document to what exists in `factory-staging/` after missions **0001–0030**.
+
+| Phase (this doc) | Runtime path | Mission(s) | Status |
+|------------------|--------------|------------|--------|
+| Phase 0 — Canon | `factory-core/canon/*.json` | 0030 | **Live** |
+| Phase 1 — Product Development | `product-development/validate-gate.js` | 0030 | **Live** |
+| Phase 2 — Founder Packet | `founder-packet/validate-completeness.js` | 0030 | **Live** |
+| Phase 3 — Founder Intent + BPB intake | `founder-intent/adam-filter.js`, `bpb/intake-gate.js` | 0030 | **Live** |
+| Phase 4–5 — Builder / Coder | `builder/run-step.js`, routes | 0003–0006, 0029–0030 | **Live hot path** |
+| Phase 6 — SENTRY | `sentry/*` (full stack on success path) | 0003, 0030 | **Live** |
+| Phase 7 — Historian | `historian/append-record.js` | 0003, 0030 | **Live** |
+| Phase 8 — TSOS | `tsos/*`, guardrails in `run-step.js` | 0003, 0029, 0030 | **Live** |
+| Phase 9 — C2 | `lifeos/c2/*`, `c2-surface.js` | 0003, 0030 | **Live** |
+| Phase 10 — Readiness / proof | `readiness/*`, `FACTORY-PROOF-LOOP-0001` | 0020–0028, 0026 | **Live** |
+| Phase 11 — Product blueprinting | `PRODUCT_SALVAGE_CANDIDATES.json` | 0027 stub | **Stub only** |
+
+**Verify:** `npm run factory:ci` (15/15)
+
+**Maintenance:** Any new phase output or acceptance criterion added to this blueprint must also update `FACTORY_REBUILD_MANIFEST_V1.md` §4 and the relevant audit addendum.
+

@@ -5,8 +5,12 @@ import { fileURLToPath } from 'node:url';
 import { getSandboxBoundary } from './sandbox.js';
 import { buildBlockedReturn } from './blocked-return.js';
 import { verifyStepContract } from '../sentry/verify-step-contract.js';
-import { verifyStepResult } from '../sentry/verify-step-result.js';
+import { verifyStepResult, buildSentryReview } from '../sentry/verify-step-result.js';
+import { appendSentryReview } from '../sentry/proof-freshness.js';
 import { appendStepMetrics } from '../tsos/record-step-metrics.js';
+import { evaluateEfficiency } from '../tsos/evaluate-efficiency.js';
+import { appendStepExecutionRecord } from '../historian/append-record.js';
+import { runBpbIntakeGate } from '../bpb/intake-gate.js';
 
 const BUILDER_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(BUILDER_DIR, '../../..');
@@ -39,9 +43,6 @@ function resolveStepContent(step) {
   return { error: 'missing_input' };
 }
 
-/**
- * Execute one frozen write_file_exact step (copy OR greenfield exact_content).
- */
 export function runWriteFileExact({ mission_id, blueprint_id, step }) {
   if (step.action_type !== 'write_file_exact') {
     return buildBlockedReturn({
@@ -132,6 +133,7 @@ export function dispatchExecuteStep(body) {
   const mission_id = body?.mission_id || 'unknown';
   const blueprint_id = body?.blueprint_id || 'unknown';
   const step = body?.step;
+  const skipIntake = body?.skip_intake_gate === true;
 
   if (!step?.step_id || !step?.sandbox_boundary) {
     return {
@@ -149,6 +151,21 @@ export function dispatchExecuteStep(body) {
     };
   }
 
+  if (!skipIntake) {
+    const intake = runBpbIntakeGate(mission_id, { strict_pd: body?.strict_upstream_gates === true });
+    if (!intake.ok) {
+      return {
+        httpStatus: 422,
+        body: {
+          ok: false,
+          status: 'AIC_GATE_FAILURE',
+          intake,
+          summary: 'BPB intake gate failed — strategic or blueprint prerequisites missing',
+        },
+      };
+    }
+  }
+
   const t0 = Date.now();
   const builderResult = runWriteFileExact({ mission_id, blueprint_id, step });
   const status = builderResult.status;
@@ -161,19 +178,35 @@ export function dispatchExecuteStep(body) {
   }
 
   const sentryContract = verifyStepContract({ mission_id, step, builderResult });
-  const sentryVerify = verifyStepResult(step, builderResult);
+  const sentryVerify = verifyStepResult(step, builderResult, { mission_id, contract: sentryContract });
+  const sentryReview = buildSentryReview({
+    mission_id,
+    step,
+    builderResult,
+    contract: sentryContract,
+    verify: sentryVerify,
+  });
 
-  if (!sentryContract.pass) {
+  if (!sentryContract.pass || !sentryVerify.pass) {
+    appendSentryReview(sentryReview);
     return {
       httpStatus: 409,
       body: {
         ok: false,
         status: 'SENTRY_FAILED',
         builder: builderResult,
-        sentry: { contract: sentryContract, verify: sentryVerify },
+        sentry: {
+          implementation_status: 'FAIL',
+          step_id: step.step_id,
+          contract: sentryContract,
+          verify: sentryVerify,
+          review: sentryReview,
+        },
       },
     };
   }
+
+  appendSentryReview(sentryReview);
 
   const tsosResult = appendStepMetrics({
     mission_id,
@@ -196,11 +229,22 @@ export function dispatchExecuteStep(body) {
         ok: false,
         status: 'TSOS_GUARDRAIL_VIOLATION',
         builder: builderResult,
-        sentry: { contract: sentryContract, verify: sentryVerify },
+        sentry: { contract: sentryContract, verify: sentryVerify, review: sentryReview },
         tsos: tsosResult,
       },
     };
   }
+
+  const tsosEval = evaluateEfficiency({ stepMetrics: tsosResult.metrics });
+
+  appendStepExecutionRecord({
+    mission_id,
+    blueprint_id,
+    step_id: step.step_id,
+    builderResult,
+    sentryReview,
+    tsosResult,
+  });
 
   return {
     httpStatus: 200,
@@ -212,9 +256,11 @@ export function dispatchExecuteStep(body) {
         step_id: step.step_id,
         contract: sentryContract,
         verify: sentryVerify,
-        verifyAgainst: ['acceptance_tests', 'exact_output_contract', 'anti_pattern_check'],
+        review: sentryReview,
+        verifyAgainst: ['acceptance_tests', 'exact_output_contract', 'anti_pattern_check', 'future_lookback', 'proof_freshness'],
       },
-      tsos: tsosResult,
+      tsos: { ...tsosResult, evaluation: tsosEval },
+      historian: { recorded: true, mission_state: 'Verification' },
     },
   };
 }

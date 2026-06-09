@@ -419,3 +419,24 @@ You are starting from:
 
 This is no longer a blind rewrite.
 It is a governed extraction and rebuild.
+
+---
+
+## Addendum — ADAPT status in factory-staging (2026-05-24)
+
+**Manifest:** [FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md) §10
+
+| Verdict | Item | Factory-staging status |
+|---------|------|------------------------|
+| **ADAPT → DONE** | `oil-proof-freshness.js` logic | `factory-core/sentry/proof-freshness.js` on hot path (0030) |
+| **ADAPT → DONE** | Precommit / structural anti-patterns | `sentry/anti-pattern-check.js`, `unintended-consequence-check.js` |
+| **ADAPT → PARTIAL** | `useful-work-guard.js` | Main repo only; not factory scheduled tasks |
+| **ADAPT → PARTIAL** | `builderos-precommit-governance.js` | Main repo precommit; factory uses SENTRY stack |
+| **ADAPT → PARTIAL** | `builderos-routing-policy.js` / escalation | Main repo; factory uses mission pins |
+| **ADAPT → NOT STARTED** | `lifeos-council-builder-routes.js` merge | Production builder separate from `factory-staging/` |
+| **ADAPT → NOT STARTED** | Control-plane DONE gate | Documented backlog in manifest §10 |
+| **KEEP** | `deployment-service.js`, Railway routes | Production spine — rebuild per manifest §10 |
+| **REJECT for factory** | Drift-prone inline builder in old overlays | Use mission packs + `run-step.js` instead |
+
+**Rule:** When an ADAPT item lands in `factory-staging/`, update this table and [SYSTEM_TOOL_INVENTORY_AUDIT_V1.md](./SYSTEM_TOOL_INVENTORY_AUDIT_V1.md) addendum in the same change.
+

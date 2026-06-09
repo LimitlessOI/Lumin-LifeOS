@@ -387,3 +387,33 @@ To become the real build authority, it must absorb:
 - explicit salvage import/adapt/replace map
 
 That is the gap between “strong doctrine” and “lowest-tier Builder can execute safely.”
+
+---
+
+## Addendum — doctrine items now in factory runtime (2026-05-24)
+
+**Manifest:** [FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md)
+
+| Doctrine gap (§ above) | Runtime materialization | Mission |
+|------------------------|-------------------------|---------|
+| Mission-state machine | `factory-core/canon/MISSION_STATE_MACHINE.json` | 0030 |
+| Maturity classification | `factory-core/canon/MATURITY_CLASSIFICATION.json` | 0030 |
+| Proof-source registry | `factory-core/canon/PROOF_SOURCE_REGISTRY.json` | 0030 |
+| Fail-closed readiness | `readiness/*`, `remote-truth-reconciler.js` | 0020–0028 |
+| Remote truth doctrine | `GET /factory/truth/reconcile` | 0030 |
+| Append-only receipt doctrine | Historian JSONL + mission receipts | 0003, 0030 |
+| Structural proof freshness | `sentry/proof-freshness.js` | 0030 |
+| Explicit salvage map | `PRODUCT_SALVAGE_CANDIDATES.json` | 0027 stub |
+
+### Still doctrine-only (not factory-canonical yet)
+
+| Item | Notes |
+|------|-------|
+| useful-work-guard | Main repo scheduled AI; not wired to factory cron |
+| precommit governance | Repo hook; factory uses SENTRY on hot path |
+| model routing / escalation | Production builder; not factory execute-step |
+| legacy quarantine registry | Payload file; not live DB registry |
+| full founder packet as machine input | `strict_upstream_gates: true` requires complete packet for **new** missions; reboot missions use legacy relaxed mode |
+
+**Verify:** `npm run factory:ci` · **Next:** merge production builder ADAPT items per GOLDMINE_PASS addendum
+

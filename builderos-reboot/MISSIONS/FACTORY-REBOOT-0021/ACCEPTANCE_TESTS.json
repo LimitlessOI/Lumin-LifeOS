@@ -11,6 +11,6 @@
     "step_id": "S2102",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/EVALUATION_PACKET.md",
-    "expected_sha256": "7e288bd5c7f587aa9a1a1db71242294ed5f3c66893157f7969b11631b15caefd"
+    "expected_sha256": "b95193635730f1862e7027459ec10b41b573cb6e394c97a814cf21bcbd84510a"
   }
 ]

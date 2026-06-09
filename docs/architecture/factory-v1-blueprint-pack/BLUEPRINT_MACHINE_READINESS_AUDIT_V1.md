@@ -226,3 +226,40 @@ This addendum records state **after** `builderos-reboot/MISSIONS/FACTORY-REBOOT-
 1. Proof-mission pack with greenfield steps (no `content_source_path`)
 2. Same-tier determinism run on that proof mission (three fresh sessions)
 3. Full governed loop receipt through Builder → SENTRY → Historian
+
+---
+
+## Addendum — missions 0004–0030 (2026-05-24)
+
+**Master map:** [FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md)
+
+| Scope | Verdict (2026-05-24) |
+|-------|----------------------|
+| Mission packs 0001–0030 | **Emitted** — sha256-pinned |
+| `factory-staging/` runtime | **Live** — execute-step hot path |
+| `npm run factory:ci` | **15/15 PASS** |
+| Coder zero-decision on **frozen steps** | **Yes** — per-step |
+| Coder zero-decision on **whole factory from spec alone** | **No** — still requires mission packs |
+| `CODER_ZERO_DECISION_BUILD_SPEC_V1.md` as direct coder input | **Still no** — BPB source only |
+| `FULLY_MACHINE_READY` | **Not required for this hand-built BP** — deferred until system generates BP |
+
+### Cold coder 3-session (deferred for this pack)
+
+Operator directive: this blueprint pack was built with agents, not emitted cold by the factory. The 3-session test is for **future system-generated BPs** only — not a rebuild blocker for this pack. Ceiling for this pack: **`BOOTSTRAP_AND_STAGING_READY`**.
+
+### What changed since 0003 addendum
+
+- Greenfield + proof loop missions materialized
+- Mechanical determinism + duplication receipts
+- TSOS (0029) + full factory tools (0030) on hot path
+- Upstream BPB intake gate before builder
+- SENTRY depth (anti-pattern, lookback, proof freshness) enforced on success path
+- Historian append on every successful step
+- Runtime canon JSON in `factory-core/canon/`
+
+### Rebuild-from-scratch entry point
+
+1. [BLUEPRINT_PACK_INDEX_V1.md](./BLUEPRINT_PACK_INDEX_V1.md)
+2. [FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md)
+3. `builderos-reboot/MISSION_QUEUE.json`
+

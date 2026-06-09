@@ -19,8 +19,10 @@ const steps = [
   ['readiness', ['builderos-reboot/scripts/readiness-report.mjs']],
   ['full_loop_proof', ['builderos-reboot/scripts/run-full-loop-proof.mjs']],
   ['product_salvage', ['builderos-reboot/scripts/generate-product-salvage.mjs']],
+  ['mission_pack_index', ['builderos-reboot/scripts/generate-mission-pack-index.mjs']],
   ['certification', ['builderos-reboot/scripts/emit-project-certification.mjs']],
   ['tsos_integration', ['builderos-reboot/scripts/factory-tsos-integration.mjs']],
+  ['tools_integration', ['builderos-reboot/scripts/factory-tools-integration.mjs']],
 ];
 
 const results = {};

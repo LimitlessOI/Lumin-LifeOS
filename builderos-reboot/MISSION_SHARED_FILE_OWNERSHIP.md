@@ -6,9 +6,8 @@ When the same `target_file` appears in multiple mission blueprints, **only the l
 
 | Target file | Canonical step | Mission |
 |-------------|----------------|---------|
-| `factory-staging/factory-core/builder/run-step.js` | S2904 | FACTORY-REBOOT-0029 |
-| `factory-staging/factory-core/builder/run-mission.js` | S601 | FACTORY-REBOOT-0006 |
-| `factory-staging/startup/register-routes.js` | S2905 | FACTORY-REBOOT-0029 |
+| `factory-staging/factory-core/builder/run-step.js` | S2904 (extended 0030) | FACTORY-REBOOT-0029 / **0030 tools** |
+| `factory-staging/startup/register-routes.js` | S2905 (extended 0030) | FACTORY-REBOOT-0029 / **0030 tools** |
 | `builderos-reboot/scripts/readiness-report.mjs` | S2301 | FACTORY-REBOOT-0023 |
 | `builderos-reboot/scripts/emit-project-certification.mjs` | S2801 | FACTORY-REBOOT-0028 |
 | `builderos-reboot/scripts/factory-ci.mjs` | S2001 | FACTORY-REBOOT-0020 |
@@ -28,3 +27,15 @@ When updating a shared file:
 ## Anti-pattern
 
 Running `execute-mission.mjs FACTORY-REBOOT-0005` after 0013 has updated `run-step.js` will copy **stale** 0005 CONTENT unless 0005 CONTENT was synced.
+
+## Living operator docs (no sha256 acceptance pin)
+
+These files are updated by many missions. **Do not** use `file_sha256_matches` in acceptance tests — use `file_exists` only.
+
+| File | Purpose |
+|------|---------|
+| `builderos-reboot/HANDOFF.md` | Operator one-liner + key doc links |
+| `builderos-reboot/WORKSPACE_STATUS.md` | Phase summary + CI expectation |
+
+Canonical content evolves with the latest mission; truth is verified by `npm run factory:ci`, not frozen hashes on these files.
+

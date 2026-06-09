@@ -18,6 +18,6 @@
     "step_id": "S1503",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9"
+    "expected_sha256": "681affea88801db0aa084ab0ba21f0022aaf5e336fe32abf09e9fb38e239a40e"
   }
 ]

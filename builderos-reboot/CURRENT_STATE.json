@@ -1,12 +1,28 @@
 {
-  "updated_at": "2026-06-09",
+  "updated_at": "2026-05-24",
+  "source_of_truth": "builderos-reboot/MISSION_QUEUE.json",
   "active_mission_id": null,
   "active_task_id": null,
+  "certification_ceiling": "BOOTSTRAP_AND_STAGING_READY",
   "sentry_verdict": "SENTRY_MECHANICAL_PASS",
+  "missions": {
+    "complete": 33,
+    "total": 33,
+    "through_reboot": "FACTORY-REBOOT-0030",
+    "also_complete": [
+      "FACTORY-GREENFIELD-0001",
+      "FACTORY-PROOF-LOOP-0001",
+      "PRODUCT-MARKETINGOS-SALVAGE-0001"
+    ]
+  },
+  "factory_ci": {
+    "command": "npm run factory:ci",
+    "expected": "16/16 PASS"
+  },
   "acceptance_last_run": {
     "result": "pass",
-    "missions": 25,
-    "note": "plus FACTORY-GREENFIELD-0001"
+    "missions": 33,
+    "note": "All queue missions complete; run factory:ci for fresh proof"
   },
   "determinism_receipt": {
     "path": "builderos-reboot/DETERMINISM_RECEIPT.json",
@@ -14,11 +30,17 @@
   },
   "greenfield_3x_receipt": {
     "path": "builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json",
-    "pass": true
+    "pass": true,
+    "label": "MECHANICAL_DETERMINISM_PROXY",
+    "same_tier_coder": false
   },
   "duplication_receipt": {
     "path": "builderos-reboot/DUPLICATION_RECEIPT.json",
     "pass": true
+  },
+  "full_loop_proof": {
+    "path": "builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json",
+    "note": "pass requires C2 structural pass — regenerate via run-full-loop-proof.mjs"
   },
   "greenfield": {
     "pack": "FACTORY-GREENFIELD-0001",
@@ -31,23 +53,25 @@
   "lumin_factory_repo": {
     "path": "lumin-factory/",
     "git_ready": true,
-    "github_pushed": false
+    "github_pushed": false,
+    "optional": true
   },
   "current_truth": [
-    "Missions 0001 through 0025 complete (+ GREENFIELD-0001).",
-    "Blueprint duplication test passes (delete + rematerialize canonical steps).",
-    "Greenfield 3x mechanical determinism passes.",
-    "lumin-factory/ git-ready standalone repo exists locally.",
-    "FULLY_MACHINE_READY remains false until human GitHub push + optional 3-session coder test."
+    "Missions FACTORY-REBOOT-0001 through 0030 complete (+ GREENFIELD, PROOF-LOOP, product salvage stub).",
+    "factory-staging runtime live: intake → builder → SENTRY → TSOS → Historian.",
+    "Blueprint pack + FACTORY_REBUILD_MANIFEST_V1.md is rebuild-from-scratch documentation.",
+    "MECHANICAL_DETERMINISM_PROXY only — SAME_TIER_CODER_DETERMINISM is false.",
+    "FULLY_MACHINE_READY remains false; cold-coder 3-session deferred for this hand-built BP.",
+    "Income is operator P1 — factory reboot is platform plumbing, not revenue."
   ],
-  "next_required_action": "Adam: create GitHub Lumin-Factory repo and push lumin-factory/. Reviewers: npm run factory:ci && EVALUATION_PACKET.md",
+  "next_required_action": "Pick one revenue lane; use factory/BPB for first income-linked product mission when ready.",
   "session_receipts": [
     {
-      "timestamp": "2026-06-09",
-      "mission_id": "FACTORY-REBOOT-0016",
-      "through": "FACTORY-REBOOT-0025",
+      "timestamp": "2026-05-24",
+      "mission_id": "FACTORY-REBOOT-0030",
+      "through": "FACTORY-REBOOT-0030",
       "status": "completed",
-      "acceptance": "Phases 0016-0025 emitted and materialized; CI pipeline; duplication + greenfield 3x proofs."
+      "acceptance": "Truth-layer sync audit fixes; certification label correction; full-loop C2 gate."
     }
   ]
 }

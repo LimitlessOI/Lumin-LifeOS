@@ -114,7 +114,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "d32b5d5b62535085dc0cd385a06f17b4732c3e22b8474ae379d4abe545a62126"
+        "sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js"
@@ -147,7 +147,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9"
+        "sha256": "681affea88801db0aa084ab0ba21f0022aaf5e336fe32abf09e9fb38e239a40e"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/register-routes.js"

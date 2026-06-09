@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-06-09T07:44:22.633Z",
+  "run_at": "2026-06-09T19:06:39.965Z",
   "pass": true,
   "results": [
     {
@@ -187,6 +187,16 @@
       "httpStatus": 200,
       "ok": true,
       "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0029",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 7
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0030",
+      "status": "no_blueprint"
     }
   ]
 }

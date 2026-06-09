@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-09T06:58:34.920Z",
-  "verdict": "SENTRY_MECHANICAL_PASS",
-  "qualitative_verdict": "BOOTSTRAP_AND_STAGING_READY",
+  "generated_at": "2026-06-09T18:56:12.302Z",
+  "verdict": "SENTRY_MECHANICAL_FAIL",
+  "qualitative_verdict": "NOT_READY",
   "checks": [
     {
       "id": "SM-001",
-      "name": "Mission packs through 0028 exist",
+      "name": "Mission packs through 0029 exist",
       "pass": true
     },
     {
       "id": "SM-002",
       "name": "Acceptance tests pass",
-      "pass": true
+      "pass": false
     },
     {
       "id": "SM-003",
@@ -51,7 +51,7 @@
     {
       "id": "SM-010",
       "name": "Factory CI umbrella",
-      "pass": true
+      "pass": false
     },
     {
       "id": "SM-011",
@@ -66,6 +66,11 @@
     {
       "id": "SM-013",
       "name": "Full loop proof receipt",
+      "pass": true
+    },
+    {
+      "id": "SM-014",
+      "name": "TSOS hot path integration",
       "pass": true
     }
   ],
