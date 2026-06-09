@@ -1,0 +1,73 @@
+{
+  "generated_at": "2026-06-09T06:58:34.920Z",
+  "verdict": "SENTRY_MECHANICAL_PASS",
+  "qualitative_verdict": "BOOTSTRAP_AND_STAGING_READY",
+  "checks": [
+    {
+      "id": "SM-001",
+      "name": "Mission packs through 0028 exist",
+      "pass": true
+    },
+    {
+      "id": "SM-002",
+      "name": "Acceptance tests pass",
+      "pass": true
+    },
+    {
+      "id": "SM-003",
+      "name": "Execute-step live",
+      "pass": true
+    },
+    {
+      "id": "SM-004",
+      "name": "Council quarantine (no live calls)",
+      "pass": true
+    },
+    {
+      "id": "SM-005",
+      "name": "Determinism mechanical receipt",
+      "pass": true
+    },
+    {
+      "id": "SM-006",
+      "name": "Greenfield 3x receipt",
+      "pass": true
+    },
+    {
+      "id": "SM-007",
+      "name": "Duplication receipt",
+      "pass": true
+    },
+    {
+      "id": "SM-008",
+      "name": "Cutover bundle verify",
+      "pass": true
+    },
+    {
+      "id": "SM-009",
+      "name": "Lumin-Factory repo init path",
+      "pass": true
+    },
+    {
+      "id": "SM-010",
+      "name": "Factory CI umbrella",
+      "pass": true
+    },
+    {
+      "id": "SM-011",
+      "name": "No FULLY_MACHINE_READY overclaim",
+      "pass": true
+    },
+    {
+      "id": "SM-012",
+      "name": "SENTRY audit report exists",
+      "pass": true
+    },
+    {
+      "id": "SM-013",
+      "name": "Full loop proof receipt",
+      "pass": true
+    }
+  ],
+  "human_review_required": "See SENTRY_AUDIT_REPORT.md for qualitative findings"
+}

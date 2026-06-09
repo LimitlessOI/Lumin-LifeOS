@@ -1,0 +1,168 @@
+[
+  {
+    "test_id": "AT-S201-1",
+    "step_id": "S201",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_TEMPLATE_V2.md",
+    "expected_sha256": "d0c7d89b0354da0f7ee9a69e91d519054eca34ad89280dd43607f94dc3a9c7a4"
+  },
+  {
+    "test_id": "AT-S202-1",
+    "step_id": "S202",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET.schema.json",
+    "expected_sha256": "380078c1f0ca7d22cf217627b96f45a2add7b4f39fa12c855ad8bb645448181f"
+  },
+  {
+    "test_id": "AT-S202-2",
+    "step_id": "S202",
+    "type": "json_parseable",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET.schema.json"
+  },
+  {
+    "test_id": "AT-S203-1",
+    "step_id": "S203",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_COMPLETENESS_CHECKLIST_V2.md",
+    "expected_sha256": "80025502e5d2ab1170b1007df041f764d8c52bf492efad6252dc2cfe8a6927d3"
+  },
+  {
+    "test_id": "AT-S204-1",
+    "step_id": "S204",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_FREEZE_RULES.md",
+    "expected_sha256": "e49e312be4d8560b2b5eb144382da30c89f730a529c0fbf5115cc2c6a054a1dd"
+  },
+  {
+    "test_id": "AT-S205-1",
+    "step_id": "S205",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/CHANGE_CONTROL_RULES.md",
+    "expected_sha256": "1e426c82a2f1262936d5c5543c9516deba2ea64434fec6d7b4dffb258cef640f"
+  },
+  {
+    "test_id": "AT-S206-1",
+    "step_id": "S206",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_MODEL.md",
+    "expected_sha256": "e1397825e4a0612525b525a2ea7e8f1d2d652cf7d17b6c7a171f7dc8df1a15f5"
+  },
+  {
+    "test_id": "AT-S207-1",
+    "step_id": "S207",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_INPUT.schema.json",
+    "expected_sha256": "bf6a02ed70fb6450ec61bf7210c57c26762a64d90a5df8c1a14ad67957162d38"
+  },
+  {
+    "test_id": "AT-S207-2",
+    "step_id": "S207",
+    "type": "json_parseable",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_INPUT.schema.json"
+  },
+  {
+    "test_id": "AT-S208-1",
+    "step_id": "S208",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_OUTPUT.schema.json",
+    "expected_sha256": "b092245f8458cba7d6ea4438c6901b58d92d23711fda852c20e8882e5dd4d7f4"
+  },
+  {
+    "test_id": "AT-S208-2",
+    "step_id": "S208",
+    "type": "json_parseable",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_OUTPUT.schema.json"
+  },
+  {
+    "test_id": "AT-S209-1",
+    "step_id": "S209",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE_GATE.md",
+    "expected_sha256": "393de17b12cd9fc0d35779956e9fe73cdb0d56ed8108e3b2c422f9c9a4767030"
+  },
+  {
+    "test_id": "AT-S210-1",
+    "step_id": "S210",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE.schema.json",
+    "expected_sha256": "32ad152e7b1c9d320bf7981f961de3a97086b08a3e0202cce6772e92870bb2e8"
+  },
+  {
+    "test_id": "AT-S210-2",
+    "step_id": "S210",
+    "type": "json_parseable",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE.schema.json"
+  },
+  {
+    "test_id": "AT-S211-1",
+    "step_id": "S211",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLUEPRINT_SCHEMA.json",
+    "expected_sha256": "db8765ede57d97853674781b4dcdbacd49a3ba2bf0bb7fcbc30ef68bf44fa159"
+  },
+  {
+    "test_id": "AT-S211-2",
+    "step_id": "S211",
+    "type": "json_parseable",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLUEPRINT_SCHEMA.json"
+  },
+  {
+    "test_id": "AT-S212-1",
+    "step_id": "S212",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/ACCEPTANCE_TESTS_SCHEMA.json",
+    "expected_sha256": "b29815ea4547561633d52661810767ab3bb9fdd32754cee63938816438a38a6a"
+  },
+  {
+    "test_id": "AT-S212-2",
+    "step_id": "S212",
+    "type": "json_parseable",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/ACCEPTANCE_TESTS_SCHEMA.json"
+  },
+  {
+    "test_id": "AT-S213-1",
+    "step_id": "S213",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/AUTHORITY_CHECK_SCHEMA.json",
+    "expected_sha256": "53e23aae867749aac9afc03a6ca704fbcf4bffde8c5032b537a31862f10b1e8c"
+  },
+  {
+    "test_id": "AT-S213-2",
+    "step_id": "S213",
+    "type": "json_parseable",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/AUTHORITY_CHECK_SCHEMA.json"
+  },
+  {
+    "test_id": "AT-S214-1",
+    "step_id": "S214",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/SALVAGE_MAP_SCHEMA.json",
+    "expected_sha256": "c4ca5f1ad41e1891a7f93b8942464eafc84016cf32d762e41d1b137c7be0c3f6"
+  },
+  {
+    "test_id": "AT-S214-2",
+    "step_id": "S214",
+    "type": "json_parseable",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/SALVAGE_MAP_SCHEMA.json"
+  },
+  {
+    "test_id": "AT-S215-1",
+    "step_id": "S215",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLOCKED_RETURN_SCHEMA.json",
+    "expected_sha256": "dee40307c539a0c7fbf8894519cc10c22804661ab07677419e8d32373ac1578e"
+  },
+  {
+    "test_id": "AT-S215-2",
+    "step_id": "S215",
+    "type": "json_parseable",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLOCKED_RETURN_SCHEMA.json"
+  },
+  {
+    "test_id": "AT-S216-1",
+    "step_id": "S216",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/DETERMINISM_TEST_PROTOCOL.md",
+    "expected_sha256": "49626a811a421066ebb42394e911a460c0f3edcceca0191ac127ab3acfc1a813"
+  }
+]

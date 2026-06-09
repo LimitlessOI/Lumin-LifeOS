@@ -1,0 +1,6 @@
+{
+  "mission_id": "FACTORY-REBOOT-0018",
+  "scope": [
+    "queue_dry_run_autopilot"
+  ]
+}

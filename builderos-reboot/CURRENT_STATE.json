@@ -1,0 +1,53 @@
+{
+  "updated_at": "2026-06-09",
+  "active_mission_id": null,
+  "active_task_id": null,
+  "sentry_verdict": "SENTRY_MECHANICAL_PASS",
+  "acceptance_last_run": {
+    "result": "pass",
+    "missions": 25,
+    "note": "plus FACTORY-GREENFIELD-0001"
+  },
+  "determinism_receipt": {
+    "path": "builderos-reboot/DETERMINISM_RECEIPT.json",
+    "pass": true
+  },
+  "greenfield_3x_receipt": {
+    "path": "builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json",
+    "pass": true
+  },
+  "duplication_receipt": {
+    "path": "builderos-reboot/DUPLICATION_RECEIPT.json",
+    "pass": true
+  },
+  "greenfield": {
+    "pack": "FACTORY-GREENFIELD-0001",
+    "integration": "pass"
+  },
+  "cutover_bundle": {
+    "path": "lumin-factory-bundle/",
+    "file_count": 387
+  },
+  "lumin_factory_repo": {
+    "path": "lumin-factory/",
+    "git_ready": true,
+    "github_pushed": false
+  },
+  "current_truth": [
+    "Missions 0001 through 0025 complete (+ GREENFIELD-0001).",
+    "Blueprint duplication test passes (delete + rematerialize canonical steps).",
+    "Greenfield 3x mechanical determinism passes.",
+    "lumin-factory/ git-ready standalone repo exists locally.",
+    "FULLY_MACHINE_READY remains false until human GitHub push + optional 3-session coder test."
+  ],
+  "next_required_action": "Adam: create GitHub Lumin-Factory repo and push lumin-factory/. Reviewers: npm run factory:ci && EVALUATION_PACKET.md",
+  "session_receipts": [
+    {
+      "timestamp": "2026-06-09",
+      "mission_id": "FACTORY-REBOOT-0016",
+      "through": "FACTORY-REBOOT-0025",
+      "status": "completed",
+      "acceptance": "Phases 0016-0025 emitted and materialized; CI pipeline; duplication + greenfield 3x proofs."
+    }
+  ]
+}

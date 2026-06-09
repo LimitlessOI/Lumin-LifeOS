@@ -1,0 +1,30 @@
+[
+  {
+    "test_id": "AT-S501-1",
+    "step_id": "S501",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/builder/run-step.js",
+    "expected_sha256": "e7205f3c1a40b5f6862ff231f10862f22395650cc7ffe701a8a4ce8b8b669c7c"
+  },
+  {
+    "test_id": "AT-S502-1",
+    "step_id": "S502",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/sentry/run-verification.js",
+    "expected_sha256": "70fada8b3ad89e21d1e66eb4799071698dd2478db770a87d2725583320b0dd10"
+  },
+  {
+    "test_id": "AT-S503-1",
+    "step_id": "S503",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/startup/register-routes.js",
+    "expected_sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+  },
+  {
+    "test_id": "AT-S504-1",
+    "step_id": "S504",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/test-fixtures/proof-source.txt",
+    "expected_sha256": "556490768576b5ebf35e64178b9440e57ac5258ac9fb0fbd17062ca85539a943"
+  }
+]

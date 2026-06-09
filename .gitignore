@@ -1,4 +1,10 @@
 node_modules
+factory-staging/node_modules
+factory-staging/data/
+factory-staging/test-fixtures/proof-output.txt
+lumin-factory-bundle/
+lumin-factory/node_modules/
+lumin-factory/factory-staging/node_modules/
 .DS_Store
 .env
 .env.local

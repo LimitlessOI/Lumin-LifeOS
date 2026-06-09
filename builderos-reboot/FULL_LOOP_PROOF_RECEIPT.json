@@ -1,0 +1,77 @@
+{
+  "proof_id": "FULL-LOOP-PROOF-0001",
+  "run_at": "2026-06-09T06:58:43.121Z",
+  "mission_id": "FACTORY-PROOF-LOOP-0001",
+  "pass": true,
+  "phases": {
+    "product_development": {
+      "status": "PASS",
+      "scope": [
+        "phase_11_full_loop"
+      ]
+    },
+    "founder_packet": {
+      "mission_id": "FACTORY-PROOF-LOOP-0001",
+      "frozen": true
+    },
+    "founder_intent": {
+      "model": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_MODEL.md",
+      "exists": true
+    },
+    "bpb_blueprint": {
+      "blueprint_id": "FACTORY-PROOF-LOOP-0001-v1",
+      "steps": 1
+    },
+    "coder_execution": {
+      "httpStatus": 200,
+      "builder_status": "DONE",
+      "input_mode": "greenfield"
+    },
+    "sentry": {
+      "contract": {
+        "pass": true,
+        "tests_run": 1,
+        "failures": []
+      },
+      "verify": {
+        "implementation_status": "REVIEW_REQUIRED",
+        "stepId": "FL001",
+        "resultStatus": "DONE",
+        "verifyAgainst": [
+          "acceptance_tests",
+          "exact_output_contract",
+          "anti_pattern_check"
+        ]
+      }
+    },
+    "historian": {
+      "prediction": {
+        "type": "prediction",
+        "prediction": "Greenfield step writes LOOP_MARKER with exact sha256",
+        "confidence": 1,
+        "domain": "factory-proof-loop"
+      },
+      "outcome": {
+        "type": "outcome"
+      },
+      "lesson": {
+        "type": "lesson",
+        "lesson": "Full loop executed without coder judgment"
+      }
+    },
+    "tsos": {
+      "step_id": "FL001",
+      "token_cost": 0,
+      "latency_ms": 7,
+      "retries": 0,
+      "waste": false
+    },
+    "c2": {
+      "status": "REVIEW_REQUIRED",
+      "failClosed": true,
+      "requiresGovernedProof": true
+    }
+  },
+  "founder_touches_strategy": 1,
+  "coder_decisions": 0
+}

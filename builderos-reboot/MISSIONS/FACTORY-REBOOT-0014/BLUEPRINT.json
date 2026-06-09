@@ -1,0 +1,41 @@
+{
+  "mission_id": "FACTORY-REBOOT-0014",
+  "blueprint_id": "FACTORY-REBOOT-0014-v1",
+  "scope": "factory_http_client",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S1401",
+      "phase_id": "P24",
+      "title": "Write factory HTTP client",
+      "target_file": "builderos-reboot/scripts/factory-http-client.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0014/CONTENT/factory-http-client.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "a888a61d1bde3120fecbae399913cc2aa35c653b5586d6bb4850b99295a4e7a9"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0014/CONTENT/factory-http-client.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1401-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

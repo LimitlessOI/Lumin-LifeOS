@@ -1,0 +1,485 @@
+{
+  "mission_id": "FACTORY-REBOOT-0004",
+  "checks": [
+    {
+      "step_id": "S401",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S402",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S403",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S404",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S405",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S406",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S407",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S408",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S409",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S410",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S411",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S412",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S413",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S414",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S415",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S416",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S417",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S418",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S419",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S420",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S421",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S422",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S423",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S424",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S425",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S426",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S427",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S428",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S429",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S430",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S431",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S432",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S433",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S434",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S435",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S436",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S437",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S438",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S439",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S440",
+      "allowed_roles": [
+        "Coder",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2",
+        "TSOS"
+      ],
+      "requires_founder_input": false
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "test_id": "AT-S801-1",
+    "step_id": "S801",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/sentry/verify-step-contract.js",
+    "expected_sha256": "b31e5ba834725961e890fa3019e002f161081f482c4a6ca7618c7211338d1e43"
+  },
+  {
+    "test_id": "AT-S802-1",
+    "step_id": "S802",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/sentry/run-verification.js",
+    "expected_sha256": "70fada8b3ad89e21d1e66eb4799071698dd2478db770a87d2725583320b0dd10"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "mission_id": "FACTORY-REBOOT-0002",
+  "resolved_questions": [
+    "Segments 2 through 4 need concrete artifact payloads.",
+    "Payloads will be stored in mission-local ARTIFACTS paths.",
+    "BPB will point machine steps at those exact payloads."
+  ],
+  "unresolved_questions": [
+    "later runtime implementation packs for segments 5 through 10"
+  ],
+  "founder_decisions": [
+    "convert designed upstream segments into checked-in runtime payloads now"
+  ],
+  "rejected_alternatives": [
+    "leave segments 2 through 4 as planning-only docs"
+  ],
+  "accepted_assumptions": [
+    "mission-local artifact payloads are acceptable for deterministic handoff"
+  ],
+  "phase_boundary": "segments_2_through_4_only",
+  "founder_attention_budget": {
+    "target": "low"
+  },
+  "risk_register": [
+    "full rebuild still needs later mission packs",
+    "schemas may need tightening after SENTRY review"
+  ],
+  "salvage_guidance": "Use prior canonical docs as reference only; emit new exact payloads here."
+}

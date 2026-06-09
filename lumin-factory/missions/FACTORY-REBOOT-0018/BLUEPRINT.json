@@ -1,0 +1,41 @@
+{
+  "mission_id": "FACTORY-REBOOT-0018",
+  "blueprint_id": "FACTORY-REBOOT-0018-v1",
+  "scope": "queue_dry_run_autopilot",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S1801",
+      "phase_id": "P28",
+      "title": "Queue dry-run script",
+      "target_file": "builderos-reboot/scripts/autopilot-run-queue.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0018/CONTENT/autopilot-run-queue.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "8189c0122cc42762c8ebb6afcc164006110a8438be4ffacf12eb8e1b85213e76"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0018/CONTENT/autopilot-run-queue.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1801-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

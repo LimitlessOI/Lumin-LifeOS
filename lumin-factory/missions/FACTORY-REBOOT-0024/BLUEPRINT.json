@@ -1,0 +1,41 @@
+{
+  "mission_id": "FACTORY-REBOOT-0024",
+  "blueprint_id": "FACTORY-REBOOT-0024-v1",
+  "scope": "project_certification",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S2401",
+      "phase_id": "P34",
+      "title": "Project certification emitter",
+      "target_file": "builderos-reboot/scripts/emit-project-certification.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0024/CONTENT/emit-project-certification.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "d859cbd80f2937faa2c42da421e77a3f020423722e64641596fa7cb0abdfab89"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0024/CONTENT/emit-project-certification.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2401-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

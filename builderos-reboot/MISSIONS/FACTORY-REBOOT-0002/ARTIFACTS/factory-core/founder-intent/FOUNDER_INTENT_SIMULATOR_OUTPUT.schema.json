@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "required": [
+    "predicted_founder_preference",
+    "predicted_pushback",
+    "confidence",
+    "alternate_preference_candidates",
+    "reasoning_summary",
+    "escalation_required",
+    "predicted_decision",
+    "predicted_objections",
+    "likely_preferred_alternative",
+    "would_request_more_evidence",
+    "exceeds_pre_authorized_founder_bounds"
+  ],
+  "properties": {
+    "predicted_founder_preference": { "type": "string" },
+    "predicted_pushback": { "type": "array" },
+    "confidence": { "type": "number" },
+    "alternate_preference_candidates": { "type": "array" },
+    "reasoning_summary": { "type": "string" },
+    "escalation_required": { "type": "boolean" },
+    "predicted_decision": { "type": "string" },
+    "predicted_objections": { "type": "array" },
+    "likely_preferred_alternative": { "type": ["string", "null"] },
+    "would_request_more_evidence": { "type": "boolean" },
+    "exceeds_pre_authorized_founder_bounds": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}

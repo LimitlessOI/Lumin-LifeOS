@@ -1,0 +1,141 @@
+{
+  "audit_date": "2026-06-03",
+  "auditor": "Claude Code (SENTRY pass)",
+  "scope": "factory_only",
+  "note": "This file covers only what the factory itself needs to run. Product salvage (LifeOS routes, overlays, feature services) belongs in a separate PRODUCT_SALVAGE_CANDIDATES.json written when BPB blueprints the first product mission.",
+
+  "factory_salvage": [
+    {
+      "file": "startup/database.js",
+      "what": "Neon connection pool + migration auto-runner. Reads db/migrations/*.sql alphabetically, tracks applied in schema_migrations table, applies new ones at boot.",
+      "why_factory_needs_it": "Nothing runs without DB. Migration runner means new factory migrations apply automatically on deploy.",
+      "reuse_value": 10,
+      "proof": "confirmed_live",
+      "adaptation_cost": "none",
+      "salvage_type": "import_as_is"
+    },
+    {
+      "file": "services/council-service.js",
+      "what": "Multi-model AI call engine. 2052 lines. Calls Gemini Flash, Claude via OpenRouter, Groq Llama, DeepSeek. Handles failover, retry, 413 PROMPT_TOO_LARGE fast-fail, token logging.",
+      "why_factory_needs_it": "AIC runs on this. BPB sessions run on this. 12+ months of model-calling lessons are encoded in it. The hardest thing to rebuild.",
+      "reuse_value": 10,
+      "proof": "confirmed_live",
+      "adaptation_cost": "none",
+      "salvage_type": "import_as_is"
+    },
+    {
+      "file": "services/deployment-service.js",
+      "what": "commitToGitHub(), triggerDeployment(). 379 lines.",
+      "why_factory_needs_it": "How Builder commits output from Railway to GitHub. Without this, Builder output never persists.",
+      "reuse_value": 10,
+      "proof": "confirmed_live",
+      "adaptation_cost": "none",
+      "salvage_type": "import_as_is"
+    },
+    {
+      "file": "services/railway-managed-env-service.js + routes/railway-managed-env-routes.js",
+      "what": "GET/SET Railway env vars via API. 636 + 588 lines.",
+      "why_factory_needs_it": "How the factory manages its own configuration without touching the Railway UI. 107 vars already set.",
+      "reuse_value": 9,
+      "proof": "confirmed_live",
+      "adaptation_cost": "none",
+      "salvage_type": "import_as_is"
+    },
+    {
+      "file": "scripts/builderos-groq-antipattern-scan.mjs",
+      "what": "12 confirmed failure patterns from production: asyncFn hallucination, wrong import paths, CommonJS bleed in ESM, markdown fences in JS, partial-edit corruption, import-merge bug, and more. 152 lines.",
+      "why_factory_needs_it": "This is OIL's executable knowledge. Each pattern is a real failure that happened. Import into factory-v1/oil/.",
+      "reuse_value": 10,
+      "proof": "confirmed_live",
+      "adaptation_cost": "none",
+      "salvage_type": "import_as_is"
+    },
+    {
+      "file": "scripts/verify-builder-output.mjs",
+      "what": "Stub detection: line-count collapse, stub content markers, comment ellipsis, empty export bodies. 163 lines.",
+      "why_factory_needs_it": "SENTRY uses this to catch truncated or empty builder output before it gets committed.",
+      "reuse_value": 9,
+      "proof": "confirmed_live",
+      "adaptation_cost": "none",
+      "salvage_type": "import_as_is"
+    },
+    {
+      "file": "services/builderos-patch-mode-policy.js",
+      "what": "Zone 1/2/3 classification by file size and path. 144 lines.",
+      "why_factory_needs_it": "BPB needs to know if a target file is safe for full-file generation or requires patch mode. This is the classification logic.",
+      "reuse_value": 7,
+      "proof": "confirmed_live",
+      "adaptation_cost": "none",
+      "salvage_type": "import_as_is"
+    },
+    {
+      "file": "routes/lifeos-council-builder-routes.js",
+      "what": "POST /builder/build, /builder/execute, /builder/ready, /builder/domains, /builder/history. 2103 lines.",
+      "why_factory_needs_it": "The HTTP surface that Builder calls to generate and commit output. The validation gates (validateGeneratedOutputForTarget), Zone enforcement, and commitToGitHub path are all real and working.",
+      "reuse_value": 8,
+      "proof": "confirmed_live",
+      "adaptation_cost": "medium",
+      "salvage_type": "adapt_and_import",
+      "adaptation_note": "Extract the HTTP+validation+commit path. Remove the embedded runner/queue decision logic. The runner (governed-overnight-backlog-run.mjs) is what gets removed, not this file."
+    },
+    {
+      "file": "scripts/council-builder-preflight.mjs",
+      "what": "Preflight: verifies builder reachable, key matches, GitHub token live, domains endpoint returns 200. 378 lines.",
+      "why_factory_needs_it": "Factory should always run preflight before Builder executes. This is the check.",
+      "reuse_value": 8,
+      "proof": "confirmed_live",
+      "adaptation_cost": "low",
+      "salvage_type": "adapt_and_import",
+      "adaptation_note": "Update endpoint paths for factory-v1. Keep the check logic."
+    },
+    {
+      "file": "services/logger.js",
+      "what": "Pino logger. 50 lines.",
+      "why_factory_needs_it": "Structured logging. Used by everything.",
+      "reuse_value": 8,
+      "proof": "confirmed_live",
+      "adaptation_cost": "none",
+      "salvage_type": "import_as_is"
+    }
+  ],
+
+  "do_not_salvage": [
+    {
+      "file": "scripts/governed-overnight-backlog-run.mjs",
+      "why": "1779 lines. This is the autonomous runner that invents work, generates support tasks, recycles completedIds, and creates patch plans. It is the authority drift problem in code form. Do not bring it forward."
+    },
+    {
+      "file": "services/builderos-governed-loop-executor.js",
+      "why": "449 lines. The executor the runner calls. Coupled to autonomous queue decisions."
+    },
+    {
+      "file": "All 46 AMENDMENT_*.md files as active authority",
+      "why": "Reference only. They contain useful history. They are not the new constitution. Archive."
+    },
+    {
+      "file": ".git/hooks/commit-msg and pre-commit",
+      "why": "Enforce the old amendment system. Replace with simpler hooks for the factory."
+    }
+  ],
+
+  "neon_database": {
+    "note": "Do not create a new database. All 130+ dated migrations are already applied to the live Neon instance. The factory inherits the existing Neon DB via DATABASE_URL.",
+    "live_data_today": {
+      "lifeos_users": "1 user (Adam, id=1)",
+      "missions": "1 mission (MISSION-0001, Approved)",
+      "commitments": "8 commitments (Adam + Sherry)",
+      "build_task_ledger": "active builder history"
+    },
+    "migration_policy": "All db/migrations/2026*.sql are applied. Archive the 14 non-2026 migrations (001_*, 20231105_*, create_*, [date]_*). Do not re-run them."
+  },
+
+  "railway": {
+    "note": "Keep Railway. Keep the existing service. 107 env vars are set. Do not rebuild the deployment platform.",
+    "action": "Wire the new factory repo to the same Railway service, or create a parallel service in the same Railway project. Either way, reuse the existing env vars and Neon connection."
+  },
+
+  "product_salvage_deferred": {
+    "note": "LifeOS routes, feature services, HTML overlays, Lumin AI prompts — all of this is product, not factory. It belongs in PRODUCT_SALVAGE_CANDIDATES.json, written by BPB when the factory is proven and the first product mission blueprint is being written.",
+    "what_exists": "60 HTML overlays, 50+ LifeOS feature services, 30+ feature route files, Lumin AI persona. All built. Most not yet wired to confirmed live routes. The factory will blueprint and verify them one by one."
+  }
+}

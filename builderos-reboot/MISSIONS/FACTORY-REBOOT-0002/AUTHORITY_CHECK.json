@@ -1,0 +1,21 @@
+{
+  "mission_id": "FACTORY-REBOOT-0002",
+  "checks": [
+    { "step_id": "S201", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2", "TSOS"], "requires_founder_input": false },
+    { "step_id": "S202", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2", "TSOS"], "requires_founder_input": false },
+    { "step_id": "S203", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2", "TSOS"], "requires_founder_input": false },
+    { "step_id": "S204", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2", "TSOS"], "requires_founder_input": false },
+    { "step_id": "S205", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2", "TSOS"], "requires_founder_input": false },
+    { "step_id": "S206", "allowed_roles": ["BPB", "Coder", "AIC"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S207", "allowed_roles": ["BPB", "Coder", "AIC"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S208", "allowed_roles": ["BPB", "Coder", "AIC"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S209", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S210", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S211", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S212", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S213", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S214", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S215", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2"], "requires_founder_input": false },
+    { "step_id": "S216", "allowed_roles": ["BPB", "Coder", "SENTRY"], "forbidden_roles": ["C2"], "requires_founder_input": false }
+  ]
+}

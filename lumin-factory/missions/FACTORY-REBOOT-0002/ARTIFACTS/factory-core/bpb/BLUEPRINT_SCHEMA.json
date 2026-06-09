@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "required": [
+    "mission_id",
+    "blueprint_id",
+    "steps"
+  ],
+  "properties": {
+    "mission_id": { "type": "string" },
+    "blueprint_id": { "type": "string" },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "step_id",
+          "phase_id",
+          "target_file",
+          "action_type",
+          "dependencies",
+          "content_or_patch_contract",
+          "non_goals",
+          "acceptance_test_ids",
+          "sandbox_boundary",
+          "authority_owner",
+          "on_block"
+        ],
+        "properties": {
+          "step_id": { "type": "string" },
+          "phase_id": { "type": "string" },
+          "target_file": { "type": "string" },
+          "action_type": { "type": "string" },
+          "dependencies": { "type": "array" },
+          "content_or_patch_contract": { "type": "object" },
+          "non_goals": { "type": "array" },
+          "acceptance_test_ids": { "type": "array" },
+          "sandbox_boundary": { "type": "string" },
+          "authority_owner": { "type": "string" },
+          "on_block": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

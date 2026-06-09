@@ -1,0 +1,107 @@
+{
+  "mission_id": "FACTORY-REBOOT-0015",
+  "blueprint_id": "FACTORY-REBOOT-0015-v1",
+  "scope": "mission_history_and_readiness_v2",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S1501",
+      "phase_id": "P25",
+      "title": "Write mission history module",
+      "target_file": "factory-staging/factory-core/historian/mission-history.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/mission-history.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "3827dc68bab159c5b5c454472e616c0b51492314bff449d5c484a888748db1f9"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/mission-history.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1501-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S1502",
+      "phase_id": "P25",
+      "title": "Upgrade readiness report",
+      "target_file": "builderos-reboot/scripts/readiness-report.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/readiness-report.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "e4e79223443595261859a38d0cceb1f85ec18683d30bf549191bc230e9bd4382"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/readiness-report.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S1501"
+      ],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1502-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S1503",
+      "phase_id": "P25",
+      "title": "Wire mission-history route",
+      "target_file": "factory-staging/startup/register-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/register-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015/CONTENT/register-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S1502"
+      ],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1503-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

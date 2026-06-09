@@ -1,0 +1,9 @@
+[
+  {
+    "test_id": "AT-S901-1",
+    "step_id": "S901",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/autopilot-runner.mjs",
+    "expected_sha256": "abab5f3166c554f422bbb02dc30aff4add79381c4cca34ba24da87d54bca89cf"
+  }
+]

@@ -1,0 +1,107 @@
+{
+  "mission_id": "FACTORY-REBOOT-0019",
+  "blueprint_id": "FACTORY-REBOOT-0019-v1",
+  "scope": "lumin_factory_repo_init",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S1901",
+      "phase_id": "P29",
+      "title": "Init lumin-factory repo script",
+      "target_file": "builderos-reboot/scripts/init-lumin-factory-repo.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/init-lumin-factory-repo.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "94c0b4c94ee140b80ee45d93f8003c73b7be8edaf6aaa0281033efd71b52a369"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/init-lumin-factory-repo.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1901-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S1902",
+      "phase_id": "P29",
+      "title": "Root package.json template",
+      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/lumin-factory-root-package.json",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/lumin-factory-root-package.json"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "81efa770be7ed74b1834bfe5383e5e10a94ddf02b9ec5bc8ab4d5056f5ba91d1"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/lumin-factory-root-package.json"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S1901"
+      ],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1902-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S1903",
+      "phase_id": "P29",
+      "title": "Root README template",
+      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/lumin-factory-root-README.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/lumin-factory-root-README.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "dbb9aa1c56d58b3b6955b84af4a3968b52bd465248bbf3dc9a51dc861efa0a47"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019/CONTENT/lumin-factory-root-README.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S1902"
+      ],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1903-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

@@ -1,0 +1,1328 @@
+{
+  "mission_id": "FACTORY-REBOOT-0004",
+  "blueprint_id": "FACTORY-REBOOT-0004-v1",
+  "scope": "proof_mission_materialize_factory_staging",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S401",
+      "phase_id": "P11",
+      "title": "Write factory-staging README",
+      "target_file": "factory-staging/README.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-README.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "7642922dbb314843e0a8e07e17bf6ec373a8f81439aecfab9fa97294122a68fd"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-README.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S401-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S402",
+      "phase_id": "P11",
+      "title": "Write factory-staging package.json",
+      "target_file": "factory-staging/package.json",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-package.json"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "c3fcbe317bfe71d65fe73a3368cae0a257fd4731936a8b692bc68799a8f1d259"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-package.json"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S401"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S402-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S403",
+      "phase_id": "P12",
+      "title": "Materialize write-file-exact.js",
+      "target_file": "factory-staging/factory-core/builder/action-handlers/write-file-exact.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "fb8519fa2224893c7570b09c490291b299f8bbb46e2513bf2e9bb007e55884be"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S402"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S403-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S404",
+      "phase_id": "P12",
+      "title": "Materialize blocked-return.js",
+      "target_file": "factory-staging/factory-core/builder/blocked-return.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/blocked-return.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "62bf879f0b0f4f4445af115354f2d475f6771509a6b01cb8db9fae07f1dd194b"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/blocked-return.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S403"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S404-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S405",
+      "phase_id": "P12",
+      "title": "Materialize execute-step.js",
+      "target_file": "factory-staging/factory-core/builder/execute-step.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "2d48def91caef745fcfecf3646b7c4f7db497894bf1b4b158735a8570dc16eb4"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S404"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S405-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S406",
+      "phase_id": "P12",
+      "title": "Materialize sandbox.js",
+      "target_file": "factory-staging/factory-core/builder/sandbox.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/sandbox.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "86a2e9ec26bf3a3c0262a943bcae9f76a65b31d415cc41c4e25fca7cdc3f214a"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/sandbox.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S405"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S406-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S407",
+      "phase_id": "P12",
+      "title": "Materialize MEMORY_AUTHORITY_MAP.md",
+      "target_file": "factory-staging/factory-core/historian/MEMORY_AUTHORITY_MAP.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/MEMORY_AUTHORITY_MAP.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "fe7bed72f380eb0cdd99f1e5534181b3ba4a291c67828d10219ef3c5b5ec20f2"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/MEMORY_AUTHORITY_MAP.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S406"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S407-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S408",
+      "phase_id": "P12",
+      "title": "Materialize memory-trust-levels.md",
+      "target_file": "factory-staging/factory-core/historian/memory-trust-levels.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/memory-trust-levels.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "7dd0d31f070850632a07d77bb161cdbb4d4768c050301502aa855b5e6aea520b"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/memory-trust-levels.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S407"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S408-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S409",
+      "phase_id": "P12",
+      "title": "Materialize record-consensus-session.js",
+      "target_file": "factory-staging/factory-core/historian/record-consensus-session.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "6782421205bac5cb1e4a4257b6fe7f65c983f751743bbe549253a289500c417e"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S408"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S409-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S410",
+      "phase_id": "P12",
+      "title": "Materialize record-decision.js",
+      "target_file": "factory-staging/factory-core/historian/record-decision.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-decision.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "370d7cff1ffb916883a6a755ae18f8fb25289dd41e29f2967e031f6e7065151f"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-decision.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S409"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S410-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S411",
+      "phase_id": "P12",
+      "title": "Materialize record-lesson.js",
+      "target_file": "factory-staging/factory-core/historian/record-lesson.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-lesson.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "cbfd19f87c2f926d64118bbe39b8513148f46bd96cc661feef9b7fdcfcc98d54"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-lesson.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S410"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S411-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S412",
+      "phase_id": "P12",
+      "title": "Materialize record-outcome.js",
+      "target_file": "factory-staging/factory-core/historian/record-outcome.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-outcome.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "6556af565916c1bd50ac844ac5fe0e939f0588f3899a5df74d6b1696318ae8e3"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-outcome.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S411"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S412-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S413",
+      "phase_id": "P12",
+      "title": "Materialize record-prediction.js",
+      "target_file": "factory-staging/factory-core/historian/record-prediction.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-prediction.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "ec801bbb1d57c0e121851adb2c1128d932d9476d5d4fec87907d159217239af7"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-prediction.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S412"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S413-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S414",
+      "phase_id": "P12",
+      "title": "Materialize legacy-quarantine.js",
+      "target_file": "factory-staging/factory-core/readiness/legacy-quarantine.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/legacy-quarantine.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "6e1aacaab0cdad852b0090d85de539a015cdbd89d2cb7fbe7d52c831ec42a632"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/legacy-quarantine.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S413"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S414-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S415",
+      "phase_id": "P12",
+      "title": "Materialize proof-freshness.js",
+      "target_file": "factory-staging/factory-core/readiness/proof-freshness.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/proof-freshness.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "6c0c4acb6876cf04187f2b8fef3072d8aeaee6f5a70e583ad4b92ecd78e149a1"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/proof-freshness.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S414"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S415-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S416",
+      "phase_id": "P12",
+      "title": "Materialize runtime-proof-snapshot.js",
+      "target_file": "factory-staging/factory-core/readiness/runtime-proof-snapshot.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/runtime-proof-snapshot.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "d448a782d703885ddac740e2f8317b22504420de581fb8f083e8b42a6f5ae8f2"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/runtime-proof-snapshot.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S415"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S416-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S417",
+      "phase_id": "P12",
+      "title": "Materialize structural-proof-freshness.js",
+      "target_file": "factory-staging/factory-core/readiness/structural-proof-freshness.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/structural-proof-freshness.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "d08b4b4059962c83e20b0c78d0be556017635ef66dade458f1a2f10a5ab1c004"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/structural-proof-freshness.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S416"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S417-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S418",
+      "phase_id": "P12",
+      "title": "Materialize system-alpha-readiness.js",
+      "target_file": "factory-staging/factory-core/readiness/system-alpha-readiness.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/system-alpha-readiness.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "64debf6ed0240e39d6cc186d9c9f0fdf0d77521521e35ca1f628d988c840c742"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/system-alpha-readiness.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S417"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S418-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S419",
+      "phase_id": "P12",
+      "title": "Materialize factory-execute-step-routes.js",
+      "target_file": "factory-staging/factory-core/routes/factory-execute-step-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/routes/factory-execute-step-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "c4ade26771b4449b61e15373869b308eb8d94222a0cc40e67501155c47bfaf3d"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/routes/factory-execute-step-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S418"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S419-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S420",
+      "phase_id": "P12",
+      "title": "Materialize anti-pattern-check.js",
+      "target_file": "factory-staging/factory-core/sentry/anti-pattern-check.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "c2deb37901f8fa70f66edcf20b31c21bce366525eea251bcfb1073378de6b567"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S419"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S420-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S421",
+      "phase_id": "P12",
+      "title": "Materialize blueprint-freeze-check.js",
+      "target_file": "factory-staging/factory-core/sentry/blueprint-freeze-check.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/blueprint-freeze-check.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "bf217f628392cd2ccf5f555a28ab0fba8ef45d375b6b55b0f1e02ef90c5c93e2"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/blueprint-freeze-check.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S420"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S421-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S422",
+      "phase_id": "P12",
+      "title": "Materialize future-lookback.js",
+      "target_file": "factory-staging/factory-core/sentry/future-lookback.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/future-lookback.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "c48156e4ee8836c5038d19fc71b6e242822e7b70dcc7fd19aaf9b27287d60d2f"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/future-lookback.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S421"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S422-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S423",
+      "phase_id": "P12",
+      "title": "Materialize proof-freshness.js",
+      "target_file": "factory-staging/factory-core/sentry/proof-freshness.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "be644eb5e556161a29c785fa3e1e984ed71a8325451720a3ec31b9c7f13653ec"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S422"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S423-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S424",
+      "phase_id": "P12",
+      "title": "Materialize unintended-consequence-check.js",
+      "target_file": "factory-staging/factory-core/sentry/unintended-consequence-check.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "25e056e0322dc7dfd869c2f86977082203e4f93ce113f72da0f43878872addac"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S423"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S424-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S425",
+      "phase_id": "P12",
+      "title": "Materialize verify-step-result.js",
+      "target_file": "factory-staging/factory-core/sentry/verify-step-result.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/verify-step-result.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "faf87db94f599beac122386bf765eaefcda9ce8b5fe5fba5f80a7f62a49e1415"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/verify-step-result.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S424"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S425-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S426",
+      "phase_id": "P12",
+      "title": "Materialize CACHING_GOVERNANCE.md",
+      "target_file": "factory-staging/factory-core/tsos/CACHING_GOVERNANCE.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/CACHING_GOVERNANCE.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "9fda5bd85fe72cbb7bb1977082506eb77a5784cd93f75804199c646140ff36c4"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/CACHING_GOVERNANCE.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S425"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S426-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S427",
+      "phase_id": "P12",
+      "title": "Materialize TSOS_HOOK_BOUNDARY.md",
+      "target_file": "factory-staging/factory-core/tsos/TSOS_HOOK_BOUNDARY.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/TSOS_HOOK_BOUNDARY.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "15aa8e211eb4d8ff6adb450d52aae2629d00dc3882020ba7363274448e331181"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/TSOS_HOOK_BOUNDARY.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S426"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S427-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S428",
+      "phase_id": "P12",
+      "title": "Materialize cache-value-evaluator.js",
+      "target_file": "factory-staging/factory-core/tsos/cache-value-evaluator.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "5e3602357b70b0c29019f1d6ed7bd24bf7f6eda5cf180959e5bd5c200fec37f9"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S427"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S428-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S429",
+      "phase_id": "P12",
+      "title": "Materialize model-routing-evaluator.js",
+      "target_file": "factory-staging/factory-core/tsos/model-routing-evaluator.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/model-routing-evaluator.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "edf6a1cd9d0cf25b6ce4d8e90b7ef140784ac624decd911855e4585527f2127d"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/model-routing-evaluator.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S428"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S429-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S430",
+      "phase_id": "P12",
+      "title": "Materialize prompt-optimization.js",
+      "target_file": "factory-staging/factory-core/tsos/prompt-optimization.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/prompt-optimization.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "c23846cd46a72c30ea0b9cebd7e7bd845b8bc22eebfa7d23250a25d62f0c120d"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/prompt-optimization.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S429"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S430-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S431",
+      "phase_id": "P12",
+      "title": "Materialize record-step-metrics.js",
+      "target_file": "factory-staging/factory-core/tsos/record-step-metrics.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/record-step-metrics.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "0e1677957c98559751d8fadeddad1e58bded29368ad90e6eb292c03170e4525f"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/record-step-metrics.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S430"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S431-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S432",
+      "phase_id": "P12",
+      "title": "Materialize C2_COMMUNICATION_PREFERENCES.json",
+      "target_file": "factory-staging/lifeos/c2/C2_COMMUNICATION_PREFERENCES.json",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_COMMUNICATION_PREFERENCES.json"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "44584440647428247d4f86ddff395740bc4046ffe71282fd996393a9f8ffa479"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_COMMUNICATION_PREFERENCES.json"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S431"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S432-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S433",
+      "phase_id": "P12",
+      "title": "Materialize C2_ESCALATION_RULES.json",
+      "target_file": "factory-staging/lifeos/c2/C2_ESCALATION_RULES.json",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_ESCALATION_RULES.json"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "2f6a21fd2803e5075411ffb49ada63ef4c6d69a636c0e72a21828763d90ac29b"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_ESCALATION_RULES.json"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S432"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S433-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S434",
+      "phase_id": "P12",
+      "title": "Materialize C2_MODULE_CHARTER.md",
+      "target_file": "factory-staging/lifeos/c2/C2_MODULE_CHARTER.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_MODULE_CHARTER.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "5c8b814c589cdb191029505a3144ff7a229726ac4402c90a57d606e84d6f1847"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_MODULE_CHARTER.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S433"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S434-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S435",
+      "phase_id": "P12",
+      "title": "Materialize C2_STATE_MODEL.json",
+      "target_file": "factory-staging/lifeos/c2/C2_STATE_MODEL.json",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_STATE_MODEL.json"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "db2dffcd7f72d41dc36830fc3aa6c925937d3b207252fb58a073d28583fe7498"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_STATE_MODEL.json"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S434"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S435-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S436",
+      "phase_id": "P13",
+      "title": "Import council-service from parts car (SM-004)",
+      "target_file": "factory-staging/factory-core/canon/services/council-service.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "services/council-service.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "ebd9e492c964e5c66cfe5f78bdeb4f1be0e364f9a549075eecd585c4c0be099e"
+      },
+      "allowed_context_files": [
+        "services/council-service.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S435"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S436-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S437",
+      "phase_id": "P13",
+      "title": "Write council import receipt",
+      "target_file": "factory-staging/factory-core/canon/services/COUNCIL_IMPORT_RECEIPT.json",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/council-import-receipt.json"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "ec3799f71ed8c65b2113afb03d5eb159bd687e3b7b131ac6d65c7471d4c0fafb"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/council-import-receipt.json"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S436"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S437-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S438",
+      "phase_id": "P14",
+      "title": "Write factory-staging server composition root",
+      "target_file": "factory-staging/server.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-server.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "231763f8874bb6b1e5f49cfb867f6af9ac410a30cd41bae218e2acbc1be9c768"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-server.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S437"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S438-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S439",
+      "phase_id": "P14",
+      "title": "Write factory-staging route registration",
+      "target_file": "factory-staging/startup/register-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S438"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S439-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S440",
+      "phase_id": "P14",
+      "title": "Write factory-staging self-check script",
+      "target_file": "factory-staging/scripts/factory-self-check.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-self-check.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "88105927761047fc8d972da32d0ab4a11ed12c559579b6264a9623e24aa054ac"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-self-check.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S439"
+      ],
+      "non_goals": [
+        "Do not modify bytes during copy."
+      ],
+      "acceptance_test_ids": [
+        "AT-S440-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "salvage_id": "R2-SM-001",
+    "source_path": "docs/architecture/factory-v1-blueprint-pack/FOUNDER_PACKET_TEMPLATE_V1.md",
+    "classification": "REFERENCE_ONLY",
+    "target_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_TEMPLATE_V2.md",
+    "reason_kept_or_rejected": "Earlier draft informed the emitted payload.",
+    "known_risks": ["Earlier draft may contain superseded wording."],
+    "required_refactors": [],
+    "acceptance_proof_required": "Target file exists and is treated as the exact payload."
+  },
+  {
+    "salvage_id": "R2-SM-002",
+    "source_path": "docs/architecture/factory-v1-blueprint-pack/CODER_ZERO_DECISION_BUILD_SPEC_V1.md",
+    "classification": "REFERENCE_ONLY",
+    "target_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+    "reason_kept_or_rejected": "Canonical source for required artifact list and field sets.",
+    "known_risks": ["Design source is above coder level."],
+    "required_refactors": [],
+    "acceptance_proof_required": "Emitted payload files exist and match mission intent."
+  }
+]

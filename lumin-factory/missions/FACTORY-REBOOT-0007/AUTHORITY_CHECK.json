@@ -1,0 +1,38 @@
+{
+  "mission_id": "FACTORY-REBOOT-0007",
+  "checks": [
+    {
+      "step_id": "S701",
+      "allowed_roles": [
+        "Builder",
+        "Coder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S702",
+      "allowed_roles": [
+        "Builder",
+        "Coder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S703",
+      "allowed_roles": [
+        "Builder",
+        "Coder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    }
+  ]
+}

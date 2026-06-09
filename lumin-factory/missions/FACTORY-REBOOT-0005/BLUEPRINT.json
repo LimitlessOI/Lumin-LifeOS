@@ -1,0 +1,140 @@
+{
+  "mission_id": "FACTORY-REBOOT-0005",
+  "blueprint_id": "FACTORY-REBOOT-0005-v1",
+  "scope": "live_execute_step_dispatch",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S501",
+      "phase_id": "P15",
+      "title": "Write Builder run-step dispatch",
+      "target_file": "factory-staging/factory-core/builder/run-step.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-step.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "e7205f3c1a40b5f6862ff231f10862f22395650cc7ffe701a8a4ce8b8b669c7c"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-step.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "Do not widen execute-step authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S501-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S502",
+      "phase_id": "P15",
+      "title": "Write SENTRY run-verification + historian receipt",
+      "target_file": "factory-staging/factory-core/sentry/run-verification.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-verification.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "70fada8b3ad89e21d1e66eb4799071698dd2478db770a87d2725583320b0dd10"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-verification.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S501"
+      ],
+      "non_goals": [
+        "Do not widen execute-step authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S502-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S503",
+      "phase_id": "P15",
+      "title": "Wire live execute-step routes",
+      "target_file": "factory-staging/startup/register-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/register-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/register-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S502"
+      ],
+      "non_goals": [
+        "Do not widen execute-step authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S503-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S504",
+      "phase_id": "P15",
+      "title": "Write integration proof source fixture",
+      "target_file": "factory-staging/test-fixtures/proof-source.txt",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/proof-source.txt"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "556490768576b5ebf35e64178b9440e57ac5258ac9fb0fbd17062ca85539a943"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/proof-source.txt"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S503"
+      ],
+      "non_goals": [
+        "Do not widen execute-step authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S504-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

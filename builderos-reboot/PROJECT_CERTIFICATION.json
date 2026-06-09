@@ -1,0 +1,29 @@
+{
+  "certification_id": "FACTORY-REBOOT-CERT-002",
+  "generated_at": "2026-06-09T06:58:43.245Z",
+  "build_spec_phases": {
+    "segments_0_10_runtime": true,
+    "phase_11_full_loop_proof": true,
+    "phase_12_product_salvage": true
+  },
+  "levels": {
+    "STAGING_READY": true,
+    "BLUEPRINT_DUPLICABLE": true,
+    "GREENFIELD_DETERMINISTIC_MECHANICAL": true,
+    "SENTRY_MECHANICAL": true,
+    "FULL_LOOP_GOVERNED": true,
+    "FULLY_MACHINE_READY": false,
+    "BOOTSTRAP_AND_STAGING_READY": true,
+    "SAME_TIER_CODER_DETERMINISM": true,
+    "LUMIN_FACTORY_GITHUB": false,
+    "LIFEOS_PRODUCT_COMPLETE": false
+  },
+  "missions_complete": 31,
+  "missions_total": 31,
+  "product_salvage_candidates": 46,
+  "next_human_actions": [
+    "Push lumin-factory/ to GitHub",
+    "Run 3-session same-tier coder determinism before claiming FULLY_MACHINE_READY",
+    "Expand PRODUCT-MARKETINGOS-SALVAGE-0001 via BPB"
+  ]
+}

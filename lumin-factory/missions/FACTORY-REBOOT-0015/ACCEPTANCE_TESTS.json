@@ -1,0 +1,23 @@
+[
+  {
+    "test_id": "AT-S1501-1",
+    "step_id": "S1501",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/historian/mission-history.js",
+    "expected_sha256": "3827dc68bab159c5b5c454472e616c0b51492314bff449d5c484a888748db1f9"
+  },
+  {
+    "test_id": "AT-S1502-1",
+    "step_id": "S1502",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/readiness-report.mjs",
+    "expected_sha256": "e4e79223443595261859a38d0cceb1f85ec18683d30bf549191bc230e9bd4382"
+  },
+  {
+    "test_id": "AT-S1503-1",
+    "step_id": "S1503",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/startup/register-routes.js",
+    "expected_sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "test_id": "AT-S1301-1",
+    "step_id": "S1301",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/builder/run-step.js",
+    "expected_sha256": "e7205f3c1a40b5f6862ff231f10862f22395650cc7ffe701a8a4ce8b8b669c7c"
+  },
+  {
+    "test_id": "AT-S1302-1",
+    "step_id": "S1302",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/generate-greenfield-0001.mjs",
+    "expected_sha256": "b642c4b84bae872fa11fc00ef5570a4e5b573c27013c7f7f190ca90aee04e3f1"
+  },
+  {
+    "test_id": "AT-S1303-1",
+    "step_id": "S1303",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/greenfield-integration.mjs",
+    "expected_sha256": "9c88bb7341a03c467c3ddfaa997cde232ed6c1725d0d7779886e50c8abc07de5"
+  }
+]

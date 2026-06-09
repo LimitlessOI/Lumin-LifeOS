@@ -1,0 +1,17 @@
+{
+  "mission_id": "FACTORY-REBOOT-0005",
+  "priority": "high",
+  "scope": [
+    "live POST /factory/execute-step",
+    "SENTRY pass/fail on DONE",
+    "historian step receipts"
+  ],
+  "non_goals": [
+    "no multi-step orchestration",
+    "no council live calls"
+  ],
+  "success_criteria": [
+    "integration test passes",
+    "acceptance tests pass"
+  ]
+}

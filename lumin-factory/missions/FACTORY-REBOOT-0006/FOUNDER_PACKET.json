@@ -1,0 +1,9 @@
+{
+  "mission_id": "FACTORY-REBOOT-0006",
+  "scope": [
+    "execute_mission_over_http"
+  ],
+  "success_criteria": [
+    "acceptance tests pass"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "mission_id": "FACTORY-REBOOT-0010",
+  "scope": [
+    "cutover_readiness_export"
+  ],
+  "success_criteria": [
+    "acceptance tests pass"
+  ]
+}

@@ -1,0 +1,9 @@
+[
+  {
+    "test_id": "AT-S2001-1",
+    "step_id": "S2001",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/factory-ci.mjs",
+    "expected_sha256": "1ee143282b78cdc81dd414d163f258b2c0a86ac1b85dc50f520055cf2871ea78"
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "test_id": "AT-S2101-1",
+    "step_id": "S2101",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/run-sentry-checks.mjs",
+    "expected_sha256": "34aec977c8fa18899f51b8f8b9dfc3c040ebac881131b1bf098641de279a2d0f"
+  },
+  {
+    "test_id": "AT-S2102-1",
+    "step_id": "S2102",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/EVALUATION_PACKET.md",
+    "expected_sha256": "7e288bd5c7f587aa9a1a1db71242294ed5f3c66893157f7969b11631b15caefd"
+  }
+]

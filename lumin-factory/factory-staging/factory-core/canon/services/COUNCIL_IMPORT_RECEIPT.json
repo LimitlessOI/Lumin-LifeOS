@@ -1,0 +1,14 @@
+{
+  "import_id": "SM-004",
+  "source_path": "services/council-service.js",
+  "target_path": "factory-staging/factory-core/canon/services/council-service.js",
+  "classification": "DEFERRED_IMPORT",
+  "mission_id": "FACTORY-REBOOT-0004",
+  "import_mode": "byte_identical_copy",
+  "integration_status": "materialized_only",
+  "live_wiring": false,
+  "notes": [
+    "Council service is preserved byte-for-byte from the parts car.",
+    "Adapter boundary and live factory wiring are future missions."
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "mission_id": "FACTORY-REBOOT-0002",
+  "priority": "high",
+  "scope": [
+    "create exact payload files for segments 2 through 4",
+    "create BPB pack for those payloads"
+  ],
+  "non_goals": [
+    "do not claim the whole rebuild is coder-ready",
+    "do not implement segments 5 through 10 in this mission"
+  ],
+  "target_users": [
+    "BPB",
+    "SENTRY",
+    "cold-start coding models"
+  ],
+  "success_criteria": [
+    "all segment 2 through 4 artifact payload files exist",
+    "all mission JSON contracts parse",
+    "payload files are exact and machine-usable"
+  ],
+  "failure_criteria": [
+    "artifact payloads remain implied instead of checked in",
+    "required schemas are still only named rather than emitted"
+  ],
+  "tradeoffs": [
+    "upstream artifact concreteness first; downstream runtime packs later"
+  ],
+  "authority": {
+    "aic": "mission judgment",
+    "bpb": "artifact payload emission",
+    "coder": "future exact file writing only"
+  },
+  "escalation": {
+    "rule": "if any payload still requires interpretation, treat as BPB failure"
+  },
+  "resources": {
+    "design_source": "docs/architecture/factory-v1-blueprint-pack/CODER_ZERO_DECISION_BUILD_SPEC_V1.md"
+  },
+  "founder_attention_budget": {
+    "level": "low"
+  },
+  "existing_assets": [
+    "current blueprint pack docs",
+    "reboot workspace",
+    "parts-car manifest"
+  ],
+  "forbidden_carry_forward": [
+    "implicit schemas",
+    "prose-only artifact definitions"
+  ],
+  "evidence_inputs": [
+    "segment definitions in zero-decision build spec"
+  ],
+  "risk_register": [
+    "later missions still needed",
+    "some fields may tighten after determinism testing"
+  ],
+  "founder_decision_log": [
+    "emit exact files for segments 2 through 4 now"
+  ],
+  "dependency_map": [
+    "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**"
+  ],
+  "phase_boundaries": "segments_2_through_4",
+  "freeze_criteria": [
+    "all artifact payload files exist",
+    "blueprint pack references them exactly"
+  ],
+  "change_control": {
+    "rule": "future missions may tighten fields but not revert to planning-only artifacts"
+  },
+  "product_development_result_ref": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/PRODUCT_DEVELOPMENT_RESULT.json"
+}

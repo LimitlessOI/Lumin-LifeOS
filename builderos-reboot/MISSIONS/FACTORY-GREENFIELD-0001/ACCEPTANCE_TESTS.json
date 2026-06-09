@@ -1,0 +1,9 @@
+[
+  {
+    "test_id": "AT-GF001-1",
+    "step_id": "GF001",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/greenfield/PROOF_MARKER.txt",
+    "expected_sha256": "e3b3ea1137334646697dc1677f015473f55c7ab7ae774629b2af4f9b3d1626c8"
+  }
+]

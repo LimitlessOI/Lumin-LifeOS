@@ -1,0 +1,17 @@
+{
+  "module": "C2",
+  "density_levels": [
+    "minimal",
+    "standard",
+    "expanded"
+  ],
+  "controls": [
+    "expand_detail",
+    "collapse_detail",
+    "pin_priority_surface"
+  ],
+  "adaptive_rules": [
+    "surface_contextual_priority",
+    "accept_founder_feedback"
+  ]
+}

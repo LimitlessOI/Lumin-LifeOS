@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-06-09T06:58:43.054Z",
+  "version": 3,
+  "verdict": "STAGING_READY_EXTENDED",
+  "checks": {
+    "acceptance": true,
+    "integration_step": true,
+    "integration_mission": true,
+    "integration_greenfield": true,
+    "determinism_mechanical": true,
+    "greenfield_3x": true,
+    "duplication_rematerialize": true,
+    "queue_dry_run": true,
+    "cutover_verify": true
+  },
+  "queue_complete": 31,
+  "queue_total": 31,
+  "active_mission": null,
+  "lumin_factory_path": "lumin-factory/"
+}

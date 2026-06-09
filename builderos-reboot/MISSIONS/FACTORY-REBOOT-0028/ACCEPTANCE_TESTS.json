@@ -1,0 +1,9 @@
+[
+  {
+    "test_id": "AT-S2801-1",
+    "step_id": "S2801",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/emit-project-certification.mjs",
+    "expected_sha256": "c99ca28403187fb4f4fbda69245f36f398b3f0cb761fced4aead38f61256127f"
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "test_id": "AT-S2301-1",
+    "step_id": "S2301",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/readiness-report.mjs",
+    "expected_sha256": "e4e79223443595261859a38d0cceb1f85ec18683d30bf549191bc230e9bd4382"
+  }
+]

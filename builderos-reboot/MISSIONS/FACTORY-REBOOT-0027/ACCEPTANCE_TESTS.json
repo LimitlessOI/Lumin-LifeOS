@@ -1,0 +1,16 @@
+[
+  {
+    "test_id": "AT-S2701-1",
+    "step_id": "S2701",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/generate-product-salvage.mjs",
+    "expected_sha256": "b91350fe757c12fa0b9f3649723f465b965a2b08dc70f21345b5511ef67c1ce2"
+  },
+  {
+    "test_id": "AT-S2702-1",
+    "step_id": "S2702",
+    "type": "file_sha256_matches",
+    "target": "builderos-reboot/scripts/generate-marketingos-salvage-0001.mjs",
+    "expected_sha256": "64967f9cd3db2502b47e57661157bb5bb7577ddef461fc89cf57689beea0e5be"
+  }
+]

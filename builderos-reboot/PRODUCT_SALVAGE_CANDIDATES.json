@@ -1,0 +1,376 @@
+{
+  "generated_at": "2026-06-09T06:58:43.185Z",
+  "spec": "Phase 12 — Product mission salvage",
+  "candidate_count": 46,
+  "first_product_mission": "PRODUCT-MARKETINGOS-SALVAGE-0001",
+  "candidates": [
+    {
+      "amendment_file": "docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md",
+      "title": "AMENDMENT 44 — Token Accounting OS (Universal AI Token Ledger)",
+      "has_backlog": true,
+      "salvage_priority": "high",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.md",
+      "title": "AMENDMENT 40 — OIL Security Divisions + Security Alpha Scope",
+      "has_backlog": true,
+      "salvage_priority": "high",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
+      "title": "AMENDMENT 37 — Universal Overlay Platform",
+      "has_backlog": true,
+      "salvage_priority": "high",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+      "title": "AMENDMENT 36 — Zero-Drift Handoff & Cold-Start Protocol",
+      "has_backlog": true,
+      "salvage_priority": "high",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+      "title": "AMENDMENT 21 — LifeOS Core",
+      "has_backlog": true,
+      "salvage_priority": "high",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "title": "AMENDMENT 01 — AI Council System",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+      "title": "AMENDMENT 02 — Memory Capsule System",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md",
+      "title": "AMENDMENT 03 — Financial & Revenue System",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
+      "title": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "title": "AMENDMENT 05 — Site Builder & Prospect Pipeline",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_06_GAME_PUBLISHER.md",
+      "title": "AMENDMENT 06 — Game Publisher",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_07_VIDEO_PIPELINE.md",
+      "title": "AMENDMENT 07 — Video Pipeline",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_08_OUTREACH_CRM.md",
+      "title": "AMENDMENT 08 — Outreach Automation & CRM",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_09_LIFE_COACHING.md",
+      "title": "AMENDMENT 09 — Life Coaching / Personal OS + Digital Twin",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
+      "title": "AMENDMENT 10 — API Cost Savings Service (TokenOS) — *TokenSaverOS (TSOS) B2B lane*",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
+      "title": "AMENDMENT 11 — BoldTrail Real Estate CRM Integration",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
+      "title": "AMENDMENT 12 — Command & Control Center",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
+      "title": "AMENDMENT 13 — Knowledge Base & Web Intelligence",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_14_WHITE_LABEL.md",
+      "title": "AMENDMENT 14 — White-Label Platform",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md",
+      "title": "AMENDMENT 15 — Business Tools Suite",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_16_WORD_KEEPER.md",
+      "title": "AMENDMENT 16 — Word Keeper & Integrity Engine",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "title": "AMENDMENT 17 — Transaction Coordinator (TC) Service",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+      "title": "AMENDMENT 18 — ClientCare Billing Recovery",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
+      "title": "AMENDMENT 19 — Project Governance",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
+      "title": "AMENDMENT 20 — Capability Map",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+      "title": "AMENDMENT 22 — Story Studio",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+      "title": "AMENDMENT 23 — Creator Media OS",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+      "title": "AMENDMENT 24 — Faith Studio",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md",
+      "title": "AMENDMENT 25 — Conflict Arbitrator",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md",
+      "title": "AMENDMENT 26 — Personal Finance OS",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md",
+      "title": "AMENDMENT 27 — Productized Sprint Offers",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md",
+      "title": "AMENDMENT 28 — Wellness Studio",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md",
+      "title": "AMENDMENT 29 — AI Receptionist (Zoom Phone Overlay)",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md",
+      "title": "AMENDMENT 30 — Enterprise AI Governance",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_31_TEACHER_OS.md",
+      "title": "AMENDMENT_31: Teacher OS",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_32_MUSIC_TALENT_STUDIO.md",
+      "title": "AMENDMENT_32: Music Talent Studio",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md",
+      "title": "AMENDMENT_33: The Kingsman Protocol",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_34_KIDS_OS.md",
+      "title": "AMENDMENT_34: Kids OS",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.md",
+      "title": "AMENDMENT_35: Lumin University",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+      "title": "AMENDMENT 38 — Idea Vault (Captured Conversation Backlog)",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md",
+      "title": "AMENDMENT 39 — Memory Intelligence System",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+      "title": "AMENDMENT 41 — MarketingOS / SocialMediaOS",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md",
+      "title": "AMENDMENT 46 — BuilderOS Control Plane (Measure Everything)",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_47_MISSION_RUNTIME.md",
+      "title": "AMENDMENT_47 — Mission Runtime",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
+      "title": "Pre-Build Readiness Checklist",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_TEMPLATE.md",
+      "title": "AMENDMENT_XX — [Project Name]",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "status": "BLOCKED_RETURN_TO_BPB",
+  "required_fields": [
+    "status",
+    "mission_id",
+    "blueprint_id",
+    "step_id",
+    "gap_type",
+    "summary",
+    "attempted_action",
+    "missing_information",
+    "evidence"
+  ],
+  "allowed_gap_type_values": [
+    "ambiguous_spec",
+    "missing_requirement",
+    "conflicting_instruction",
+    "hidden_dependency",
+    "out_of_scope_request",
+    "authority_violation",
+    "step_not_deterministic",
+    "step_too_large",
+    "external_failure"
+  ]
+}

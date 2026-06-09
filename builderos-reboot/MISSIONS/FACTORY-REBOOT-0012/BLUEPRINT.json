@@ -1,0 +1,74 @@
+{
+  "mission_id": "FACTORY-REBOOT-0012",
+  "blueprint_id": "FACTORY-REBOOT-0012-v1",
+  "scope": "determinism_mechanical_receipt",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S1201",
+      "phase_id": "P22",
+      "title": "Write determinism mechanical script",
+      "target_file": "builderos-reboot/scripts/run-determinism-mechanical.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/CONTENT/run-determinism-mechanical.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "8be0a5e87951f56349d4e466ffdabb260ca05c49182a03aad77bdbb7d3f5df9b"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/CONTENT/run-determinism-mechanical.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1201-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S1202",
+      "phase_id": "P22",
+      "title": "Write determinism coder prompt",
+      "target_file": "builderos-reboot/DETERMINISM_CODER_PROMPT.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/CONTENT/DETERMINISM_CODER_PROMPT.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "beb8cd0a12c3d9a4181c8b47160b727e36b105d6293dfc52ca2b48cbd4e4c33e"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012/CONTENT/DETERMINISM_CODER_PROMPT.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S1201"
+      ],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S1202-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

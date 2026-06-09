@@ -1,0 +1,23 @@
+[
+  {
+    "test_id": "AT-S701-1",
+    "step_id": "S701",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/canon/services/council-adapter.js",
+    "expected_sha256": "dead63ba037fe38074418b4ab91abc177d3aef8c0255033b70834f8e84fe4999"
+  },
+  {
+    "test_id": "AT-S702-1",
+    "step_id": "S702",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/canon/services/COUNCIL_ADAPTER_BOUNDARY.md",
+    "expected_sha256": "98b2e6b71e11e1b7aed8916a1948af9a9951454512f5c5d7c4ab98d8f20f81f3"
+  },
+  {
+    "test_id": "AT-S703-1",
+    "step_id": "S703",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/startup/register-routes.js",
+    "expected_sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+  }
+]

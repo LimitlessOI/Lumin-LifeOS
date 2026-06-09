@@ -1,0 +1,32 @@
+{
+  "queue_id": "BUILDEROS-REBOOT-QUEUE-0001",
+  "updated_at": "2026-06-09",
+  "missions": [
+    { "mission_id": "FACTORY-REBOOT-0001", "status": "complete", "priority": 1, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001" },
+    { "mission_id": "FACTORY-REBOOT-0002", "status": "complete", "priority": 2, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002" },
+    { "mission_id": "FACTORY-REBOOT-0003", "status": "complete", "priority": 3, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003" },
+    { "mission_id": "FACTORY-REBOOT-0004", "status": "complete", "priority": 4, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004" },
+    { "mission_id": "FACTORY-REBOOT-0005", "status": "complete", "priority": 5, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005" },
+    { "mission_id": "FACTORY-REBOOT-0006", "status": "complete", "priority": 6, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006" },
+    { "mission_id": "FACTORY-REBOOT-0007", "status": "complete", "priority": 7, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007" },
+    { "mission_id": "FACTORY-REBOOT-0008", "status": "complete", "priority": 8, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0008" },
+    { "mission_id": "FACTORY-REBOOT-0009", "status": "complete", "priority": 9, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0009" },
+    { "mission_id": "FACTORY-REBOOT-0010", "status": "complete", "priority": 10, "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0010" },
+    { "mission_id": "FACTORY-REBOOT-0011", "status": "complete", "priority": 11, "purpose": "Lumin-Factory cutover bundle", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011" },
+    { "mission_id": "FACTORY-REBOOT-0012", "status": "complete", "priority": 12, "purpose": "Mechanical determinism receipt", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0012" },
+    { "mission_id": "FACTORY-REBOOT-0013", "status": "complete", "priority": 13, "purpose": "Greenfield exact_content support", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013" },
+    { "mission_id": "FACTORY-REBOOT-0014", "status": "complete", "priority": 14, "purpose": "HTTP client for factory API", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0014" },
+    { "mission_id": "FACTORY-REBOOT-0015", "status": "complete", "priority": 15, "purpose": "Mission history + readiness v2", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0015" },
+    { "mission_id": "FACTORY-GREENFIELD-0001", "status": "complete", "priority": 16, "purpose": "First greenfield proof mission", "path": "builderos-reboot/MISSIONS/FACTORY-GREENFIELD-0001" },
+    { "mission_id": "FACTORY-REBOOT-0016", "status": "complete", "priority": 17, "purpose": "Greenfield 3x mechanical determinism", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0016" },
+    { "mission_id": "FACTORY-REBOOT-0017", "status": "complete", "priority": 18, "purpose": "Blueprint duplication rematerialize test", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0017" },
+    { "mission_id": "FACTORY-REBOOT-0018", "status": "complete", "priority": 19, "purpose": "Queue dry-run autopilot", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0018" },
+    { "mission_id": "FACTORY-REBOOT-0019", "status": "complete", "priority": 20, "purpose": "Lumin-Factory git-ready repo init", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0019" },
+    { "mission_id": "FACTORY-REBOOT-0020", "status": "complete", "priority": 21, "purpose": "Factory CI umbrella", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0020" },
+    { "mission_id": "FACTORY-REBOOT-0021", "status": "complete", "priority": 22, "purpose": "SENTRY mechanical checks + evaluation packet", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021" },
+    { "mission_id": "FACTORY-REBOOT-0022", "status": "complete", "priority": 23, "purpose": "Mission pack index", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0022" },
+    { "mission_id": "FACTORY-REBOOT-0023", "status": "complete", "priority": 24, "purpose": "Readiness report v3", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0023" },
+    { "mission_id": "FACTORY-REBOOT-0024", "status": "complete", "priority": 25, "purpose": "Project certification emitter", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0024" },
+    { "mission_id": "FACTORY-REBOOT-0025", "status": "complete", "priority": 26, "purpose": "Operator complete guide", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0025" }
+  ]
+}

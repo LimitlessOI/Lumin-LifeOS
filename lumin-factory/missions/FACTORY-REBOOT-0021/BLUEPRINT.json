@@ -1,0 +1,74 @@
+{
+  "mission_id": "FACTORY-REBOOT-0021",
+  "blueprint_id": "FACTORY-REBOOT-0021-v1",
+  "scope": "sentry_mechanical_checks",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S2101",
+      "phase_id": "P31",
+      "title": "SENTRY mechanical checks",
+      "target_file": "builderos-reboot/scripts/run-sentry-checks.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/run-sentry-checks.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "380e57c287891f54470ec527939a88bc65b855387bf95aa4f42e17e6832e2455"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/run-sentry-checks.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2101-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S2102",
+      "phase_id": "P31",
+      "title": "Evaluation packet for reviewers",
+      "target_file": "builderos-reboot/EVALUATION_PACKET.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/EVALUATION_PACKET.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "8381de0fceb0a5dd0d465f272da42f41f8116fdb6f258b59d2708f9da4e66a14"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/EVALUATION_PACKET.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S2101"
+      ],
+      "non_goals": [
+        "Do not widen authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2102-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "builderos-reboot/**",
+      "authority_owner": "Builder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

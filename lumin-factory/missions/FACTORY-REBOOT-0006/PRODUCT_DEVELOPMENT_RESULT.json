@@ -1,0 +1,5 @@
+{
+  "status": "PASS",
+  "mission_id": "FACTORY-REBOOT-0006",
+  "phase_boundary": "execute_mission_over_http"
+}

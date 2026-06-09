@@ -1,0 +1,10 @@
+{
+  "mission_id": "FACTORY-0001",
+  "blueprint_id": "FACTORY-0001-v1",
+  "policy": "no_salvage_for_proof_mission",
+  "entries": [],
+  "notes": [
+    "This first proof mission intentionally avoids reusing old builder logic.",
+    "The goal is to prove the minimal governed execution path in isolation."
+  ]
+}

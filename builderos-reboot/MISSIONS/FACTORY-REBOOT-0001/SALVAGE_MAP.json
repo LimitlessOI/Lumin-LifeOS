@@ -1,0 +1,43 @@
+[
+  {
+    "salvage_id": "SM-001",
+    "source_path": "docs/architecture/factory-v1-blueprint-pack/CANONICAL_FACTORY_FOUNDATION_V1.md",
+    "classification": "REFERENCE_ONLY",
+    "target_path": "builderos-reboot/INDEX.md",
+    "reason_kept_or_rejected": "Canonical doctrine source for workspace orientation.",
+    "known_risks": ["Not direct coder input."],
+    "required_refactors": [],
+    "acceptance_proof_required": "Workspace links it explicitly."
+  },
+  {
+    "salvage_id": "SM-002",
+    "source_path": "docs/architecture/factory-v1-blueprint-pack/CODER_ZERO_DECISION_BUILD_SPEC_V1.md",
+    "classification": "REFERENCE_ONLY",
+    "target_path": "builderos-reboot/INDEX.md",
+    "reason_kept_or_rejected": "Primary BPB design source for the reboot.",
+    "known_risks": ["Still one layer above coder execution."],
+    "required_refactors": [],
+    "acceptance_proof_required": "Workspace points to it explicitly."
+  },
+  {
+    "salvage_id": "SM-003",
+    "source_path": "docs/architecture/factory-v1-blueprint-pack/GOLDMINE_PASS_V2.md",
+    "classification": "REFERENCE_ONLY",
+    "target_path": "builderos-reboot/PARTS_CAR_MANIFEST.json",
+    "reason_kept_or_rejected": "Audit source for parts-car decisions.",
+    "known_risks": [],
+    "required_refactors": [],
+    "acceptance_proof_required": "Manifest decisions match the audit."
+  },
+  {
+    "salvage_id": "SM-004",
+    "source_path": "services/council-service.js",
+    "classification": "DEFERRED_IMPORT",
+    "target_path": "factory-core/canon/services/council-service.js",
+    "deferred_mission_id": "FACTORY-REBOOT-0004",
+    "reason_kept_or_rejected": "Real consensus engine worth preserving; import blocked until dedicated import mission exists.",
+    "known_risks": ["Needs mission-scoped integration later.", "Not in scope for bootstrap missions 0001-0003."],
+    "required_refactors": ["Extract adapter boundary before live factory wiring."],
+    "acceptance_proof_required": "FACTORY-REBOOT-0004 must verify byte-identical copy or explicit adapter contract before IMPORT_AS_IS."
+  }
+]

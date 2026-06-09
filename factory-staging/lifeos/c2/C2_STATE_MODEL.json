@@ -1,0 +1,14 @@
+{
+  "module": "C2",
+  "states": [
+    "idle",
+    "informing",
+    "awaiting_founder_action",
+    "critical_escalation"
+  ],
+  "rules": [
+    "lives_inside_lifeos",
+    "does_not_assign_builder_work",
+    "surfaces_state_truthfully"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "mission_id": "FACTORY-REBOOT-0003",
+  "priority": "high",
+  "scope": [
+    "create exact payload files for phases 4 through 9 runtime surfaces",
+    "create a BPB pack for those payloads"
+  ],
+  "non_goals": [
+    "do not claim the whole rebuild is fully machine-ready yet",
+    "do not wire these payloads into live runtime in this mission",
+    "do not prove the full loop in this mission"
+  ],
+  "target_users": [
+    "BPB",
+    "SENTRY",
+    "cold-start coding models"
+  ],
+  "success_criteria": [
+    "all later-phase payload files exist",
+    "all mission JSON contracts parse",
+    "payload files are exact and machine-usable"
+  ],
+  "failure_criteria": [
+    "later runtime surfaces remain implied instead of emitted",
+    "coder would still need to invent the remaining runtime artifact set"
+  ],
+  "tradeoffs": [
+    "artifact completeness now; live wiring and proof execution later"
+  ],
+  "authority": {
+    "aic": "mission judgment",
+    "bpb": "artifact payload emission",
+    "coder": "future exact file writing only",
+    "sentry": "future freeze and verification review"
+  },
+  "escalation": {
+    "rule": "if any later-phase payload still requires interpretation, treat as BPB failure"
+  },
+  "resources": {
+    "design_source": "docs/architecture/factory-v1-blueprint-pack/FACTORY_A_TO_Z_BUILD_BLUEPRINT_V1.md"
+  },
+  "founder_attention_budget": {
+    "level": "low"
+  },
+  "existing_assets": [
+    "reboot workspace",
+    "parts-car manifest",
+    "segment 2 through 4 artifact pack",
+    "old-system goldmine and tool audits"
+  ],
+  "forbidden_carry_forward": [
+    "planning-only runtime outputs",
+    "implicit tool surfaces",
+    "old OIL naming in new canonical payloads"
+  ],
+  "evidence_inputs": [
+    "phase definitions in the A-to-Z build blueprint",
+    "department charters",
+    "system tool inventory audit",
+    "old-stack builder structure audit",
+    "goldmine pass"
+  ],
+  "risk_register": [
+    "later determinism and proof-mission work still needed",
+    "salvage imports may need additional adaptation contracts"
+  ],
+  "founder_decision_log": [
+    "emit exact files for phases 4 through 9 now"
+  ],
+  "dependency_map": [
+    "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/**",
+    "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/**"
+  ],
+  "phase_boundaries": "segments_5_through_10",
+  "freeze_criteria": [
+    "all payload files exist",
+    "blueprint pack references them exactly"
+  ],
+  "change_control": {
+    "rule": "future missions may tighten fields and wire runtime, but may not revert to planning-only artifacts"
+  },
+  "product_development_result_ref": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/PRODUCT_DEVELOPMENT_RESULT.json"
+}

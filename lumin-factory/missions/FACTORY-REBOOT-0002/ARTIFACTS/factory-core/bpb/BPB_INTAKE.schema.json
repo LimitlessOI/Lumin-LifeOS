@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "required": [
+    "mission_id",
+    "founder_packet_ref",
+    "product_development_result_ref",
+    "intake_status"
+  ],
+  "properties": {
+    "mission_id": { "type": "string" },
+    "founder_packet_ref": { "type": "string" },
+    "product_development_result_ref": { "type": "string" },
+    "intake_status": { "type": "string", "enum": ["PASS", "FAIL"] }
+  },
+  "additionalProperties": false
+}
