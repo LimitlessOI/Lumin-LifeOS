@@ -1,0 +1,150 @@
+{
+  "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+  "status": "COMPLETE",
+  "completed_at": "2026-06-09",
+  "completed_by": "AIC/BPB Product Development",
+  "authoritative_report": "LIFEOS_SALVAGE_ASSESSMENT.md",
+  "required_before_blueprint": true,
+  "items": [
+    {
+      "path": "services/lifeos-event-stream.js",
+      "bucket": "ADAPT_AND_IMPORT",
+      "reason": "Primary v1 text ingest; add evidence schema; gate calendar auto-apply",
+      "risk_if_wrong": "Duplicate ingest path bypassing evidence links",
+      "evidence_required": "End-to-end ingest receipt with source span ids"
+    },
+    {
+      "path": "services/commitment-tracker.js",
+      "bucket": "IMPORT_AS_IS",
+      "reason": "Canonical v1 store: commitments table; extract, log, keep, overdue",
+      "risk_if_wrong": "Wrong service wired in blueprint",
+      "evidence_required": "Event stream apply + Mirror keep use this service"
+    },
+    {
+      "path": "routes/lifeos-core-routes.js",
+      "bucket": "ADAPT_AND_IMPORT",
+      "reason": "Canonical commitment API + event-stream; add Evidence First fields",
+      "risk_if_wrong": "Unmounted or wrong auth on production",
+      "evidence_required": "POST capture + extract smoke on production"
+    },
+    {
+      "path": "services/lifeos-commitment-tracker.js",
+      "bucket": "REFERENCE_ONLY",
+      "reason": "Split-brain duplicate; GET /api/v1/lifeos/commitments hits lifeos_commitments while event stream writes commitments table",
+      "risk_if_wrong": "Today list shows different rows than Mirror keep/event stream apply",
+      "evidence_required": "Blueprint consolidates all reads/writes on commitment-tracker.js"
+    },
+    {
+      "path": "routes/lifeos-commitment-routes.js",
+      "bucket": "ADAPT_AND_IMPORT",
+      "reason": "REST layer for tracker",
+      "risk_if_wrong": "Duplicate API surface",
+      "evidence_required": "Single write path in blueprint"
+    },
+    {
+      "path": "db/migrations/20260328_lifeos_core.sql",
+      "bucket": "ADAPT_AND_IMPORT",
+      "reason": "Rich commitments schema; alternative canonical if Mirror is daily UI",
+      "risk_if_wrong": "Wrong table chosen; migration debt",
+      "evidence_required": "Founder daily-surface decision"
+    },
+    {
+      "path": "services/commitment-detector.js",
+      "bucket": "REFERENCE_ONLY",
+      "reason": "Word Keeper audio path; borrow prompts only for v1 text",
+      "risk_if_wrong": "False commitment detection or unguarded council calls",
+      "evidence_required": "Do not wire audio in v1"
+    },
+    {
+      "path": "public/overlay/lifeos-mirror.html",
+      "bucket": "ADAPT_AND_IMPORT",
+      "reason": "Existing commitments UI; extend for approve + evidence",
+      "risk_if_wrong": "Stale vs tracker API",
+      "evidence_required": "UI shows approved rows with source quote"
+    },
+    {
+      "path": "public/overlay/lifeos-today.html",
+      "bucket": "ADAPT_AND_IMPORT",
+      "reason": "Today/overdue home candidate",
+      "risk_if_wrong": "MIT vs commitment confusion",
+      "evidence_required": "Overdue filter matches tracker"
+    },
+    {
+      "path": "public/overlay/lifeos-command-center.html",
+      "bucket": "REFERENCE_ONLY",
+      "reason": "Builder/repair focus; not v1 commitment buckets",
+      "risk_if_wrong": "C2 drift into builder authority",
+      "evidence_required": "C2 panel deferred or deep-link only in v1"
+    },
+    {
+      "path": "services/command-center-communication-service.js",
+      "bucket": "REFERENCE_ONLY",
+      "reason": "Density policy; not v1 bucket implementation",
+      "risk_if_wrong": "C2 drift into autonomous send",
+      "evidence_required": "C2 displays only; no silent send"
+    },
+    {
+      "path": "routes/lifeos-command-center-routes.js",
+      "bucket": "REFERENCE_ONLY",
+      "reason": "Legacy CC APIs; not primary commitment surface",
+      "risk_if_wrong": "Legacy vs canonical C2 surface confusion",
+      "evidence_required": "BUILDEROS_CLASSIFICATION_LOCK alignment"
+    },
+    {
+      "path": "services/lifeos-calendar.js",
+      "bucket": "ADAPT_AND_IMPORT",
+      "reason": "Calendar staging; disable auto-write for v1",
+      "risk_if_wrong": "Silent calendar writes without approval",
+      "evidence_required": "Staged suggestion only in v1"
+    },
+    {
+      "path": "services/google-calendar-service.js",
+      "bucket": "REFERENCE_ONLY",
+      "reason": "Phase 2 Google sync",
+      "risk_if_wrong": "OAuth scope creep in v1",
+      "evidence_required": "Not in 7-day MVP blueprint"
+    },
+    {
+      "path": "db/migrations/20260331_lifeos_family.sql",
+      "bucket": "ADAPT_AND_IMPORT",
+      "reason": "household_links + shared_commitments for Sherry path",
+      "risk_if_wrong": "Privacy leak without consent UI",
+      "evidence_required": "Default-private + explicit share flag"
+    },
+    {
+      "path": "public/overlay/lifeos-household.html",
+      "bucket": "REFERENCE_ONLY",
+      "reason": "Household UI stub; 30-day scope",
+      "risk_if_wrong": "Premature share UX",
+      "evidence_required": "After 7-day MVP proof"
+    },
+    {
+      "path": "docs/C2_CANONICAL_DEFINITION.md",
+      "bucket": "IMPORT_AS_IS",
+      "reason": "C2 authority: bridge not brain",
+      "risk_if_wrong": "Blueprint builds brain in C2",
+      "evidence_required": "Blueprint cites this doc"
+    },
+    {
+      "path": "docs/LIFEOS_PROGRAM_MAP_SSOT.md",
+      "bucket": "IMPORT_AS_IS",
+      "reason": "Nav IA when feature ships",
+      "risk_if_wrong": "Orphan UI surface",
+      "evidence_required": "Program map slot in 30-day backlog"
+    },
+    {
+      "path": "factory-staging/factory-core/canon/services/council-adapter.js",
+      "bucket": "ARCHIVE_ONLY",
+      "reason": "Factory runtime; not product v1 extraction",
+      "risk_if_wrong": "Wrong runtime for live extraction",
+      "evidence_required": "Production council only"
+    },
+    {
+      "path": "coaching / therapist routes (scattered)",
+      "bucket": "REJECT",
+      "reason": "Out of founder v1 scope",
+      "risk_if_wrong": "Scope explosion",
+      "evidence_required": "Explicit REJECT in blueprint"
+    }
+  ]
+}

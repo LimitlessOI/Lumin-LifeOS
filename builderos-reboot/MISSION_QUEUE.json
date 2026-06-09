@@ -36,6 +36,6 @@
     { "mission_id": "FACTORY-REBOOT-0029", "status": "complete", "priority": 32, "purpose": "TSOS efficiency lane + guardrails on execute-step hot path", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029" },
     { "mission_id": "FACTORY-REBOOT-0030", "status": "complete", "priority": 33, "purpose": "Upstream gates, SENTRY depth, Historian, C2/truth surfaces", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0030" },
     { "mission_id": "FACTORY-REBOOT-0031", "status": "queued", "priority": 34, "purpose": "Role-based council routing (department → provider)", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0031", "blocks": "provider_key_sprint_until_receipted" },
-    { "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001", "status": "queued", "priority": 35, "purpose": "First revenue product — commitments + C2 bridge", "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001", "note": "Separate from factory 0031; BPB after founder packet" }
+    { "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001", "status": "bpb_ready", "priority": 35, "purpose": "First LifeOS product proof — commitments + C2 + evidence", "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001", "note": "Phase 0 PASS 2026-06-09; BPB blueprints 7-day MVP only; canonical table commitments" }
   ]
 }

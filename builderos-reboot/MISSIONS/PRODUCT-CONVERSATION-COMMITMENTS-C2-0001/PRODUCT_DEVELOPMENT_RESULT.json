@@ -1,28 +1,44 @@
 {
   "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
   "status": "PASS",
-  "resolved_questions": [
-    "First revenue product mission? Conversation Commitments + C2",
-    "Separate from factory routing mission? Yes",
-    "Auto-send default? No — fail-closed"
-  ],
-  "unresolved_questions": [
-    "Exact v1 overlay surface (Today vs Lumin thread vs C2 comms only)",
-    "Postmark vs alternate SMTP for phase 2 send"
+  "handoff_date": "2026-06-09",
+  "founder_intent_locked_at": "2026-06-09",
+  "phase0_completed_at": "2026-06-09",
+  "phase0_agent": "AIC/BPB Product Development",
+  "bpb_readiness": "PASS",
+  "headline_finding": "60-70% of 7-day MVP already exists — do not build from scratch",
+  "artifacts": [
+    "FOUNDER_PACKET_REFINEMENT_REPORT.md",
+    "LIFEOS_SALVAGE_ASSESSMENT.md",
+    "PERSONAL_UTILITY_ANALYSIS.md",
+    "BPB_READINESS_DECISION.md",
+    "FOUNDER_INTENT_LOCK.md",
+    "SALVAGE_REVIEW.json"
   ],
   "founder_decisions": [
-    "Lead product mission after factory routing spec is queued",
-    "Integrity mirror positioning — not generic coworker",
-    "C2 displays truth; does not assign builder work"
+    "C2 is long-term destination surface; v1 reuses Mirror/Today with C2 embed path",
+    "Canonical table: commitments via commitment-tracker.js (evidence-based)",
+    "Private by default for all users; explicit share only",
+    "Evidence First Law mandatory on every extraction",
+    "BPB blueprints 7-day MVP slice only — not 30-day feature set"
   ],
-  "rejected_alternatives": [
-    "MarketingOS salvage as first revenue mission",
-    "Autonomous send in v1"
+  "resolved_questions": [
+    "Daily surface? C2 destination; Mirror/Today for v1 delivery",
+    "Canonical table? commitments (core) — salvage evidence",
+    "Sherry default? Private until explicit share (all users)",
+    "Blueprint scope? 7-day proof loop only",
+    "Build from scratch? No — salvage + wire + consolidate routes"
   ],
-  "phase_boundary": "Phase 1: detect, offer, MIT fallback, draft, confirm-send API — no live SMTP in v1",
-  "founder_attention_budget": "Review overlay UX and confirm-send once BPB emits steps",
-  "risk_register": [
-    { "risk": "Commitment classifier false positives", "mitigation": "Confidence threshold + snooze" },
-    { "risk": "C2 drift into blueprint authority", "mitigation": "docs/C2_CANONICAL_DEFINITION.md" }
-  ]
+  "unresolved_questions": [
+    "Production smoke receipt for event-stream path (soft gate before builder execute)"
+  ],
+  "blueprint_scope_7_day": "Conversation → Extract → Approval → Commitment → Today/Overdue",
+  "deferred_to_future_packet": [
+    "Waiting On bucket",
+    "Unconfirmed bucket beyond staging",
+    "Calendar staging",
+    "Sherry sharing",
+    "Coaching, Programs Map, therapist mode"
+  ],
+  "next_step": "BPB → BLUEPRINT.json (7-day MVP only) → production builder"
 }

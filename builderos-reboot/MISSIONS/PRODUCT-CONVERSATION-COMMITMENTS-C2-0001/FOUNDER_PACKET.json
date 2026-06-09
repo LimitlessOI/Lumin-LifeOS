@@ -1,62 +1,78 @@
 {
   "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+  "version": "3",
+  "handoff_date": "2026-06-09",
+  "founder_intent_locked": "2026-06-09",
   "mission_type": "product_revenue",
   "product_name": "LifeOS Conversation Commitments + C2",
-  "status": "founder_packet_locked",
-  "core_purpose": "Help users keep outbound promises without stealing agency — integrity mirror, not autonomous coworker",
-  "mission": "Detect commitments in conversation, offer delegated follow-through, surface status in C2, fail-closed on send",
-  "non_goals": [
-    "Autonomous send without explicit user consent (initial phases)",
-    "Replacing C2 as bridge — C2 displays and routes; does not decide strategy",
-    "Full mobile device filesystem access from server",
-    "Competing with factory reboot missions"
-  ],
-  "users": [
-    { "id": "adam", "role": "founder_operator", "need": "Keep word on follow-ups without busywork" },
-    { "id": "sherry", "role": "household_user", "need": "Shared accountability and gentle prompts" },
-    { "id": "future_customer", "role": "paid_lifeos_user", "need": "Trustworthy commitment tracking + optional assist" }
-  ],
-  "success_criteria": [
-    "Commitment detected from conversation with confidence score",
-    "User offered help — never forced",
-    "Send path requires explicit confirm or graduated tier with cancel window",
-    "C2 thread shows commitment status and job linkage",
-    "Audit row for every outbound send attempt"
-  ],
-  "failure_modes": [
-    "Silent auto-send",
-    "False-positive commitment spam",
-    "C2 claimed as brain or blueprint authority",
-    "Council draft triggers send without confirm route"
-  ],
-  "phase_boundary_v1": {
+  "status": "bpb_ready",
+  "bpb_readiness": "PASS",
+  "proof_question": "Can LifeOS reliably turn real conversations into useful action?",
+  "phase0_finding": "60-70 percent of 7-day MVP already exists in production spine",
+  "core_purpose": "Capture approved conversations, extract commitments, stage tasks and calendar suggestions, surface in C2 with evidence links — consent-driven, not surveillance",
+  "founder_intent_lock": "FOUNDER_INTENT_LOCK.md",
+  "evidence_first_law": true,
+  "privacy_default": "private_unless_explicitly_shared",
+  "c2_surface_strategy": {
+    "long_term_destination": "C2 command center",
+    "v1_implementation": "reuse Mirror and/or Today; embed path to C2; no standalone dashboard"
+  },
+  "canonical_data_model": {
+    "table": "commitments",
+    "service": "services/commitment-tracker.js",
+    "routes": "routes/lifeos-core-routes.js",
+    "retire_v1_writes": "lifeos_commitments / services/lifeos-commitment-tracker.js",
+    "selection_method": "evidence_based_salvage_not_founder_philosophy"
+  },
+  "blueprint_scope": {
+    "mode": "7_day_mvp_only",
     "in_scope": [
-      "Detection + offer card in Lumin/C2",
-      "MIT/commitment row when user declines automation",
-      "Draft generation via council (no unguarded send tool)",
-      "Explicit confirm-send route",
-      "C2 status surfacing"
+      "conversation_paste_or_approved_capture",
+      "extract_with_evidence_first",
+      "user_approval_gate",
+      "write_to_commitments_table",
+      "today_overdue_surface"
     ],
-    "out_of_scope_v1": [
-      "Live Postmark send (phase 2)",
-      "Mobile runner declutter (Amendment 36 dependency)",
-      "Graduated autonomy tier act_with_cancel_window (phase B)"
+    "explicitly_out_of_blueprint": [
+      "waiting_on_bucket",
+      "unconfirmed_bucket_beyond_staging",
+      "calendar_staging",
+      "sherry_household_sharing",
+      "coaching_programs_map_therapist",
+      "standalone_commitment_dashboard",
+      "full_command_center_rebuild"
     ]
   },
-  "existing_code_to_extend": [
-    "services/commitment-detector.js",
-    "services/commitment-tracker.js",
-    "services/command-center-communication-service.js",
-    "services/builderos-command-control-service.js",
-    "factory-staging/lifeos/c2/* (surfaces only)",
-    "public/overlay/lifeos-command-center.html"
+  "seven_day_mvp_acceptance": [
+    "Adam pastes real conversation",
+    "At least three extractions with evidence bundle",
+    "Adam approves subset",
+    "Approved rows in Today/Overdue",
+    "Why does LifeOS think this exists is answerable",
+    "No calendar write, no Sherry share, no autonomous send"
   ],
+  "non_goals": [
+    "Build all of LifeOS",
+    "Full therapy, mediation, or relationship analysis",
+    "Always-listening surveillance AI",
+    "Autonomous send without explicit approval in v1",
+    "C2 as brain, blueprint authority, or strategy setter",
+    "Silent reuse of legacy code without salvage review",
+    "Blueprint 30-day features in same pass"
+  ],
+  "salvage_review_required": true,
+  "salvage_status": "COMPLETE",
   "governance": {
-    "c2_role": "Bridge and cockpit — intake and status only",
-    "strategy_source": "This founder packet — not C2 chat",
-    "builder_path": "BPB → production builder after Product Development PASS"
+    "founder_packet_md": "FOUNDER_PACKET.md",
+    "strategy_source": "FOUNDER_PACKET.md + FOUNDER_INTENT_LOCK.md",
+    "builder_path": "BPB 7-day BLUEPRINT.json → production builder",
+    "factory_mission_separate": "FACTORY-REBOOT-0031"
   },
-  "priority_note": "P1 product spine per AMENDMENT_21; does not override factory 0031 queue order unless Adam explicitly reorders",
-  "founder_approval_required": true,
-  "canonical_user_story_ref": "AMENDMENT_21_LIFEOS_CORE.md — Commitment → execution desk (steps 1–7)"
+  "canonical_refs": [
+    "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+    "docs/C2_CANONICAL_DEFINITION.md",
+    "prompts/00-PROVIDER-STRATEGY-LOCK.md",
+    "FOUNDER_INTENT_LOCK.md",
+    "LIFEOS_SALVAGE_ASSESSMENT.md"
+  ]
 }
