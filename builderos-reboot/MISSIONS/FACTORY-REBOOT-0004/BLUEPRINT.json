@@ -1236,7 +1236,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "231763f8874bb6b1e5f49cfb867f6af9ac410a30cd41bae218e2acbc1be9c768"
+        "sha256": "a7f7e08c6cef1d6d809448375ef1b7f3b03a0d3c1d070a67d2edc97aa691df4d"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-server.js"
@@ -1269,7 +1269,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9"
+        "sha256": "bc1bbd28f6ad057444edd6d538367f65919d40dc337e7df1c2f9e7aa097cb3a6"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js"

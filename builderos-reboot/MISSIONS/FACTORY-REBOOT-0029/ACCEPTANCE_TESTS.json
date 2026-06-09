@@ -25,14 +25,14 @@
     "step_id": "S2904",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/builder/run-step.js",
-    "expected_sha256": "d32b5d5b62535085dc0cd385a06f17b4732c3e22b8474ae379d4abe545a62126"
+    "expected_sha256": "32b07da766f129e03dcb0aa92ce0d52b55f7929e992bc4779f58ee440ba51e97"
   },
   {
     "test_id": "AT-S2905-1",
     "step_id": "S2905",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "d3b9d2e9922d614e5087bd5ac6bb012e5d9ac3be991273e48ef8fbc18ed27cd9"
+    "expected_sha256": "bc1bbd28f6ad057444edd6d538367f65919d40dc337e7df1c2f9e7aa097cb3a6"
   },
   {
     "test_id": "AT-S2906-1",

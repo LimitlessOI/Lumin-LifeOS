@@ -1,8 +1,15 @@
+/**
+ * Shared BuilderOS mission materialization helpers.
+ * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
-export const REPO_ROOT = path.join(import.meta.dirname, '../..');
+export const REPO_ROOT = path.resolve(import.meta.dirname, '../..');
+const AUTHORIZED_SANDBOX_ROOTS = ['factory-staging', 'builderos-reboot', 'lumin-factory'].map((root) =>
+  path.resolve(REPO_ROOT, root)
+);
 
 export function sha256File(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
@@ -30,7 +37,7 @@ export function loadAcceptanceTests(missionId) {
 }
 
 export function resolveRepoPath(relativePath) {
-  return path.join(REPO_ROOT, relativePath);
+  return path.resolve(REPO_ROOT, String(relativePath || '').replace(/\\/g, '/'));
 }
 
 export function ensureParentDir(filePath) {
@@ -62,18 +69,55 @@ export function sortStepsByDependencies(steps) {
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
-  const normalized = relativePath.replace(/\\/g, '/');
-  const boundary = sandboxBoundary.replace(/\\/g, '/').replace(/\/\*\*$/, '');
-  return normalized === boundary || normalized.startsWith(`${boundary}/`);
+  const sandboxRoot = resolveSandboxRoot(sandboxBoundary);
+  if (!sandboxRoot || !isAuthorizedSandboxRoot(sandboxRoot)) return false;
+  return isPathInside(resolveRepoPath(relativePath), sandboxRoot);
+}
+
+function isPathInside(childPath, parentPath) {
+  const relative = path.relative(parentPath, childPath);
+  return relative === '' || (Boolean(relative) && !relative.startsWith('..') && !path.isAbsolute(relative));
+}
+
+function isAuthorizedSandboxRoot(sandboxRoot) {
+  return AUTHORIZED_SANDBOX_ROOTS.some((root) => isPathInside(sandboxRoot, root));
+}
+
+function resolveSandboxRoot(sandboxBoundary) {
+  if (!sandboxBoundary) return null;
+  const normalized = String(sandboxBoundary).replace(/\\/g, '/').replace(/\/\*\*$/, '');
+  return resolveRepoPath(normalized);
+}
+
+function isAuthorizedFactoryPath(relativePath) {
+  const resolved = resolveRepoPath(relativePath);
+  return AUTHORIZED_SANDBOX_ROOTS.some((root) => isPathInside(resolved, root));
 }
 
 export function writeFileExactStep(step) {
   let content;
   const sourceRel = step.exact_inputs?.content_source_path;
 
+  if (!pathMatchesSandbox(step.target_file, step.sandbox_boundary)) {
+    return {
+      ok: false,
+      status: 'BLOCKED_RETURN_TO_BPB',
+      gap_type: 'authority_violation',
+      summary: `Target ${step.target_file} outside sandbox ${step.sandbox_boundary}`,
+    };
+  }
+
   if (step.exact_inputs?.exact_content != null) {
     content = Buffer.from(String(step.exact_inputs.exact_content), 'utf8');
   } else if (sourceRel) {
+    if (!isAuthorizedFactoryPath(sourceRel)) {
+      return {
+        ok: false,
+        status: 'BLOCKED_RETURN_TO_BPB',
+        gap_type: 'authority_violation',
+        summary: `Source ${sourceRel} outside authorized factory roots`,
+      };
+    }
     const source = resolveRepoPath(sourceRel);
     if (!fs.existsSync(source)) {
       return {
@@ -94,22 +138,12 @@ export function writeFileExactStep(step) {
   }
 
   const target = resolveRepoPath(step.target_file);
-
-  if (!pathMatchesSandbox(step.target_file, step.sandbox_boundary)) {
-    return {
-      ok: false,
-      status: 'BLOCKED_RETURN_TO_BPB',
-      gap_type: 'authority_violation',
-      summary: `Target ${step.target_file} outside sandbox ${step.sandbox_boundary}`,
-    };
-  }
+  const got = sha256Buffer(content);
 
   ensureParentDir(target);
-  fs.writeFileSync(target, content);
 
   const contract = step.exact_output_contract || {};
   if (contract.type === 'byte_exact_copy' && contract.sha256) {
-    const got = sha256Buffer(content);
     if (got !== contract.sha256) {
       return {
         ok: false,
@@ -121,12 +155,14 @@ export function writeFileExactStep(step) {
     }
   }
 
+  fs.writeFileSync(target, content);
+
   return {
     ok: true,
     status: 'DONE',
     step_id: step.step_id,
     target_file: step.target_file,
     bytes: content.length,
-    sha256: sha256Buffer(content),
+    sha256: got,
   };
 }
