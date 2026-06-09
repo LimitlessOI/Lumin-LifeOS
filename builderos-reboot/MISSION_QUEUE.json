@@ -34,6 +34,8 @@
     { "mission_id": "FACTORY-PROOF-LOOP-0001", "status": "complete", "priority": 30, "purpose": "Phase 11 proof mission pack", "path": "builderos-reboot/MISSIONS/FACTORY-PROOF-LOOP-0001" },
     { "mission_id": "PRODUCT-MARKETINGOS-SALVAGE-0001", "status": "complete", "priority": 31, "purpose": "First product salvage stub", "path": "builderos-reboot/MISSIONS/PRODUCT-MARKETINGOS-SALVAGE-0001" },
     { "mission_id": "FACTORY-REBOOT-0029", "status": "complete", "priority": 32, "purpose": "TSOS efficiency lane + guardrails on execute-step hot path", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029" },
-    { "mission_id": "FACTORY-REBOOT-0030", "status": "complete", "priority": 33, "purpose": "Upstream gates, SENTRY depth, Historian, C2/truth surfaces", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0030" }
+    { "mission_id": "FACTORY-REBOOT-0030", "status": "complete", "priority": 33, "purpose": "Upstream gates, SENTRY depth, Historian, C2/truth surfaces", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0030" },
+    { "mission_id": "FACTORY-REBOOT-0031", "status": "queued", "priority": 34, "purpose": "Role-based council routing (department → provider)", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0031", "blocks": "provider_key_sprint_until_receipted" },
+    { "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001", "status": "queued", "priority": 35, "purpose": "First revenue product — commitments + C2 bridge", "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001", "note": "Separate from factory 0031; BPB after founder packet" }
   ]
 }

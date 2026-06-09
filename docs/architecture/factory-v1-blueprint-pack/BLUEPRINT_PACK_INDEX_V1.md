@@ -8,8 +8,9 @@
 
 ## If you lost everything — start here
 
-1. **[FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md)** — master map: doctrine → mission packs → runtime → verify → cutover
-2. Run on a clean clone: `npm run factory:ci` (expect **15/15 PASS**)
+1. **`prompts/00-SYSTEM-AUTHORITY-LAYERS.md`** — which layer is canonical (factory vs legacy spine)
+2. **[FACTORY_REBUILD_MANIFEST_V1.md](./FACTORY_REBUILD_MANIFEST_V1.md)** — master map: doctrine → mission packs → runtime → verify → cutover
+3. Run on a clean clone: `npm run factory:ci` (expect **16/16 PASS**)
 
 ---
 
@@ -17,6 +18,8 @@
 
 | Document | Role | Rebuild? |
 |----------|------|----------|
+| [AGENTS.md](./AGENTS.md) | **Doctrine only** — agent boundary prompt for this pack | Read when editing pack |
+| [COUNCIL_ROUTING_AUDIT_V1.md](../COUNCIL_ROUTING_AUDIT_V1.md) | **Today's routing truth** (production spine) | Read before provider keys |
 | [CANONICAL_FACTORY_FOUNDATION_V1.md](./CANONICAL_FACTORY_FOUNDATION_V1.md) | Constitutional vocabulary | Read first |
 | [DEPARTMENT_CHARTERS_V1.md](./DEPARTMENT_CHARTERS_V1.md) | Actor boundaries | Read |
 | [FULL_FOUNDER_PACKET_V1.md](./FULL_FOUNDER_PACKET_V1.md) | Founder packet doctrine | Read |

@@ -1,0 +1,62 @@
+{
+  "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+  "mission_type": "product_revenue",
+  "product_name": "LifeOS Conversation Commitments + C2",
+  "status": "founder_packet_locked",
+  "core_purpose": "Help users keep outbound promises without stealing agency — integrity mirror, not autonomous coworker",
+  "mission": "Detect commitments in conversation, offer delegated follow-through, surface status in C2, fail-closed on send",
+  "non_goals": [
+    "Autonomous send without explicit user consent (initial phases)",
+    "Replacing C2 as bridge — C2 displays and routes; does not decide strategy",
+    "Full mobile device filesystem access from server",
+    "Competing with factory reboot missions"
+  ],
+  "users": [
+    { "id": "adam", "role": "founder_operator", "need": "Keep word on follow-ups without busywork" },
+    { "id": "sherry", "role": "household_user", "need": "Shared accountability and gentle prompts" },
+    { "id": "future_customer", "role": "paid_lifeos_user", "need": "Trustworthy commitment tracking + optional assist" }
+  ],
+  "success_criteria": [
+    "Commitment detected from conversation with confidence score",
+    "User offered help — never forced",
+    "Send path requires explicit confirm or graduated tier with cancel window",
+    "C2 thread shows commitment status and job linkage",
+    "Audit row for every outbound send attempt"
+  ],
+  "failure_modes": [
+    "Silent auto-send",
+    "False-positive commitment spam",
+    "C2 claimed as brain or blueprint authority",
+    "Council draft triggers send without confirm route"
+  ],
+  "phase_boundary_v1": {
+    "in_scope": [
+      "Detection + offer card in Lumin/C2",
+      "MIT/commitment row when user declines automation",
+      "Draft generation via council (no unguarded send tool)",
+      "Explicit confirm-send route",
+      "C2 status surfacing"
+    ],
+    "out_of_scope_v1": [
+      "Live Postmark send (phase 2)",
+      "Mobile runner declutter (Amendment 36 dependency)",
+      "Graduated autonomy tier act_with_cancel_window (phase B)"
+    ]
+  },
+  "existing_code_to_extend": [
+    "services/commitment-detector.js",
+    "services/commitment-tracker.js",
+    "services/command-center-communication-service.js",
+    "services/builderos-command-control-service.js",
+    "factory-staging/lifeos/c2/* (surfaces only)",
+    "public/overlay/lifeos-command-center.html"
+  ],
+  "governance": {
+    "c2_role": "Bridge and cockpit — intake and status only",
+    "strategy_source": "This founder packet — not C2 chat",
+    "builder_path": "BPB → production builder after Product Development PASS"
+  },
+  "priority_note": "P1 product spine per AMENDMENT_21; does not override factory 0031 queue order unless Adam explicitly reorders",
+  "founder_approval_required": true,
+  "canonical_user_story_ref": "AMENDMENT_21_LIFEOS_CORE.md — Commitment → execution desk (steps 1–7)"
+}

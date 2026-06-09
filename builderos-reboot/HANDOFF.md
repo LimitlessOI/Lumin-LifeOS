@@ -32,8 +32,29 @@ Full audit: `builderos-reboot/SENTRY_AUDIT_REPORT.md`
 | Push to GitHub | **Optional** — `lumin-factory/` standalone repo only |
 | Full LifeOS product | **No** |
 
+| Role-based council routing | **Queued** — mission 0031; routing audit + provider lock done |
+| First product mission (Commitments + C2) | **Queued** — founder packet ready |
+| Provider key sprint | **Blocked** until 0031 receipts |
+
+## Next priorities (operator)
+
+1. **`prompts/00-PROVIDER-STRATEGY-LOCK.md`** — Decision A locked (tiers + departments)
+2. **`docs/architecture/COUNCIL_ROUTING_AUDIT_V1.md`** — today's routing truth
+3. **`FACTORY-REBOOT-0031`** — implement department-first routing (spec in mission folder)
+4. **`PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`** — BPB product mission (separate lane)
+5. **Do not** gather new API keys until step 3 receipts PASS
+
+**Parallel track (founder):** Refine `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001` founder packet while 0031 runs — product proves LifeOS value; factory proves routing. 0031 accelerates 0035 when council drafts/reviews need department pools; v1 detection/MIT path can start without it.
+
 ## Key docs
 
+- `prompts/00-PROVIDER-STRATEGY-LOCK.md` — **locked provider strategy (Decision A)**
+- `docs/architecture/COUNCIL_ROUTING_AUDIT_V1.md` — **routing problem receipt**
+- `builderos-reboot/MISSIONS/FACTORY-REBOOT-0031/` — role-based routing mission
+- `builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/` — first product mission
+- `prompts/00-SYSTEM-AUTHORITY-LAYERS.md` — **repo truth layers** (factory vs legacy spine)
+- Path `AGENTS.md` at `builderos-reboot/`, `factory-staging/`, `routes/`, `services/`, blueprint pack
+- `.cursor/rules/system-authority-layers.mdc` — always-on Cursor boundary rules
 - `FACTORY_TOOLS_COMPLETION.md` — mission 0030 tool matrix
 - `TSOS_FACTORY_INTEGRATION.md` — TSOS lane + guardrails
 - `SENTRY_AUDIT_REPORT.md` — findings + fixes

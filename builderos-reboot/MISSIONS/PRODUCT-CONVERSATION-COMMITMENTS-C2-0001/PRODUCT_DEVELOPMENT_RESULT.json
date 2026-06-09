@@ -1,0 +1,28 @@
+{
+  "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+  "status": "PASS",
+  "resolved_questions": [
+    "First revenue product mission? Conversation Commitments + C2",
+    "Separate from factory routing mission? Yes",
+    "Auto-send default? No — fail-closed"
+  ],
+  "unresolved_questions": [
+    "Exact v1 overlay surface (Today vs Lumin thread vs C2 comms only)",
+    "Postmark vs alternate SMTP for phase 2 send"
+  ],
+  "founder_decisions": [
+    "Lead product mission after factory routing spec is queued",
+    "Integrity mirror positioning — not generic coworker",
+    "C2 displays truth; does not assign builder work"
+  ],
+  "rejected_alternatives": [
+    "MarketingOS salvage as first revenue mission",
+    "Autonomous send in v1"
+  ],
+  "phase_boundary": "Phase 1: detect, offer, MIT fallback, draft, confirm-send API — no live SMTP in v1",
+  "founder_attention_budget": "Review overlay UX and confirm-send once BPB emits steps",
+  "risk_register": [
+    { "risk": "Commitment classifier false positives", "mitigation": "Confidence threshold + snooze" },
+    { "risk": "C2 drift into blueprint authority", "mitigation": "docs/C2_CANONICAL_DEFINITION.md" }
+  ]
+}

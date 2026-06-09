@@ -64,6 +64,7 @@ This replaces full NSSOT + Companion for routine work. Full NSSOT required ONLY 
 - First-time project onboarding
 
 Then read:
+- `prompts/00-SYSTEM-AUTHORITY-LAYERS.md` — **which repo layer is canonical** (factory vs production spine)
 - `docs/QUICK_LAUNCH.md` — lane routing + execution protocol
 - `docs/CONTINUITY_LOG.md` — Latest session summary and handoff state
 

@@ -10,6 +10,7 @@ When Cursor hits a usage limit and a new agent starts cold, it reads the relevan
 
 **Session start (as an AI agent):**
 0. **Read `prompts/00-LIFEOS-AGENT-CONTRACT.md` first** — **North Star Article II §2.6** (platform-wide: no lies, no misleading — to operators, users, or system state); then LifeOS specifics + read full `AMENDMENT_21` before editing it.
+0a. **`prompts/00-SYSTEM-AUTHORITY-LAYERS.md`** — which repo layer is canonical (factory runtime vs legacy production spine); then path `AGENTS.md` for the tree you edit.
 0b. **`prompts/00-SSOT-READ-SEQUENCE.md`** — fixed read order (Channel A conductor vs Channel B system) to reduce hallucination/drift.
 0c. **`prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md`** — when to use think-tier vs execute-tier models (maps to `config/task-model-routing.js`).
 1. Identify which domain you're working on
@@ -27,6 +28,8 @@ When Cursor hits a usage limit and a new agent starts cold, it reads the relevan
 | File | Domain | SSOT |
 |---|---|---|
 | `00-LIFEOS-AGENT-CONTRACT.md` | **Read first** — Platform epistemic oath (North Star §2.6) + LifeOS channel | AMENDMENT_21 + North Star |
+| `00-SYSTEM-AUTHORITY-LAYERS.md` | **Read early** — Factory vs production spine; path to `AGENTS.md` boundaries | Blueprint pack + HANDOFF |
+| `00-PROVIDER-STRATEGY-LOCK.md` | **Locked** — Decision A provider tiers + department ownership (no monthly re-debate) | COUNCIL_ROUTING_AUDIT + mission 0031 |
 | `00-SSOT-READ-SEQUENCE.md` | **Read early** — SSOT read order (agents vs system); anti-drift rules | Dual-channel + amendments |
 | `00-MODEL-TIERS-THINK-VS-EXECUTE.md` | **Read early** — Think vs execute model policy; builder `execution_only` | AMENDMENT_01 |
 | `lifeos-lumin.md` | Lumin AI conversational interface | AMENDMENT_21 |
