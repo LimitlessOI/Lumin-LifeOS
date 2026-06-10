@@ -80,12 +80,12 @@ One official meaning for every core BuilderOS / Lumin term so language drift doe
 
 ## Agent Handoff Notes
 
-**Current state:** **SNT pass-3 fixes committed — pending Railway deploy + `npm run lifeos:deliberation:snt-live` PROVEN.** Mission `FACTORY-DELIBERATION-V27-0001` targets **alpha** after SNT sign-off. Local: behavior **31/31**, acceptance **24/24**.
+**Current state:** **SNT mechanical PASS; live BLOCKED on deploy drift.** GitHub `57ef960c16`; Railway still `23fc14fe02`. `SNT_VERIFY_RESULT.json` verdict: `SNT_MECHANICAL_PASS_LIVE_BLOCKED`. **Deliberation phase alpha NOT signed.**
 
 **Next priority:**
-1. Deploy + **`npm run lifeos:deliberation:snt-live`** → `SNT_LIVE_PASS`
-2. Mission status → `complete` / deliberation **PROVEN** on Neon+Railway
-3. REP catalog registry UI; Founder Debrief push to FM/Lumin (deferred)
+1. Railway `build-from-latest` until SHA matches `57ef960c16`
+2. `npm run lifeos:deliberation:snt-live` → 9/9
+3. Mission → `complete` / PROVEN; then deliberation slice counts toward BuilderOS alpha receipt
 
 **Legacy code:** Many files still say TSOS dept or six depts — read v2.7 vocabulary; rename on touch with receipt.
 

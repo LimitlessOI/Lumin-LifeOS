@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-06-10T19:10:00.000Z",
+  "role": "SNT",
+  "mission_id": "FACTORY-DELIBERATION-V27-0001",
+  "phase": "deliberation_governance_v27",
+  "verdict": "SNT_MECHANICAL_PASS_LIVE_BLOCKED",
+  "alpha_eligible": false,
+  "alpha_blocker": "Railway deploy drift — live runtime still 23fc14fe02; GitHub HEAD 57ef960c16",
+  "loops_completed": {
+    "sentry_pass_1_codex": "L1-L12 fixed (23fc14fe02)",
+    "sentry_pass_2_claude_live": "DOCTRINE_FAIL — pass-3 findings",
+    "sentry_pass_3_codex": "DOCTRINE_FAIL confirmed on Railway before fix",
+    "snt_repair": "57ef960c16 — sticky load_bearing, ROSTER_MISSING, validators, advisory lock",
+    "snt_mechanical_verify": "PASS",
+    "snt_live_verify": "FAIL (1/9) — deploy not updated"
+  },
+  "mechanical_evidence": {
+    "behavior_tests": "31/31 PASS — npm run lifeos:deliberation:behavior",
+    "acceptance_tests": "24/24 PASS — factory:deliberation-v27:acceptance",
+    "sentry_aspect_loop": "14/14 SENTRY_ASPECT_PASS (WIRED maturity)",
+    "commit_sha": "57ef960c16",
+    "deploy_sha_live": "23fc14fe02098ff46363a8c7e31ed641a57ba665"
+  },
+  "live_failures": [
+    "SNT-N1 negative CFO accepted (201)",
+    "SNT-N2 invalid horizon accepted (201)",
+    "SNT-N3 negative votes accepted (201)",
+    "SNT-N11 negative scorecard accepted (201)",
+    "SNT-ROSTER gate pass without roster (200)",
+    "SNT-LB-STICKY load-bearing downgrade (200 on pass 2/3)",
+    "SNT-N6B expand null wipe (200)",
+    "SNT-LB-META metadata load_bearing not persisted"
+  ],
+  "repair_direction_for_deploy": [
+    "POST /api/v1/railway/managed-env/build-from-latest until deploy_commit_sha starts with 57ef960",
+    "npm run lifeos:deliberation:snt-live — must exit 0 (9/9)",
+    "npm run lifeos:deliberation:a-to-z-smoke with Railway env",
+    "node scripts/deliberation-sentry-probe-cleanup.mjs --confirm --verify-railway"
+  ],
+  "grade": {
+    "code_integrity": "A- (31 behavior + pass-3 doctrine fixes on disk)",
+    "live_doctrine": "F (stale deploy — not a code regression claim)",
+    "honesty": "PASS — no false alpha claim"
+  },
+  "next_agent": "Deploy 57ef960c16 → re-run npm run lifeos:deliberation:snt-live → set mission complete + deliberation PROVEN → then deliberation slice eligible for BuilderOS alpha receipt"
+}

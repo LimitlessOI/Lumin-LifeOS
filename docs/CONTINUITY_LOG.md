@@ -2,17 +2,36 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SESSION SEAL] 2026-05-24 — SNT verify loop (deliberation v2.7 phase)
+
+**Agent role:** SNT — verify + propose solutions + sign-off (not false alpha).
+
+**Mechanical loop PASS:** behavior **31/31**; acceptance **24/24**; SENTRY aspect **14/14** `SENTRY_SESSION_PASS`.
+
+**Pass-3 repairs shipped:** `57ef960c16` — sticky `load_bearing`, `ROSTER_MISSING`, advisory lock, CFO/consensus/scorecard validators, expand null guard, `npm run lifeos:deliberation:snt-live`.
+
+**Live loop BLOCKED:** Railway `deploy_commit_sha` still `23fc14fe02` after multiple `build-from-latest` triggers. `npm run lifeos:deliberation:snt-live` → **1/9 PASS** (deploy drift, not uncommitted code).
+
+**SNT verdict:** `SNT_MECHANICAL_PASS_LIVE_BLOCKED` — see `builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/SNT_VERIFY_RESULT.json`.
+
+**BuilderOS alpha for this phase:** **NOT signed** until live SNT 9/9. Platform-wide alpha (94%+) unchanged.
+
+**Next:** Railway deploy `57ef960c16` → `lifeos:deliberation:snt-live` exit 0 → mission `complete` + PROVEN.
+
+---
 ## [SESSION SEAL] 2026-05-24 — Claude live SENTRY L1–L12 fixes
 
 **Agent role:** Cursor Conductor — GAP-FILL implementation of Claude adversarial live probe report (Neon-confirmed).
 
 **Fixed (L1–L12):** substantive `case_text` + CFO role validation; immutable gate PASS + corrupt PASS revocation; ghost debrief 404; evidence vault allowlist; REP catalog enforcement; roster size caps; PG 23505→409; deliberation rate limit 60/min; boot REP sync warn+retry; `scripts/deliberation-sentry-probe-cleanup.mjs`.
 
-**Verified:** `npm run lifeos:deliberation:behavior` **22/22 PASS**; `npm run builder:preflight` OK.
+**Verified:** `npm run lifeos:deliberation:behavior` **22/22 PASS**; `npm run builder:preflight` OK. Commit **23fc14fe02** pushed; Railway live; Neon cleanup **38 rows**.
 
-**Next:** commit+push; Railway `build-from-latest`; Neon probe cleanup; Codex pass 3 with dedupe list.
+**Next:** Codex pass 3 adversarial re-probe (dedupe L1–L12).
 
-**INTENT DRIFT:** none — implemented Claude report fixes as requested.
+**Deploy proof:** `deploy_commit_sha=23fc14fe02`; live L1/L4/L6/L7 verified.
+
+**INTENT DRIFT:** none — delivered exactly what was asked.
 
 ---
 ## [SESSION SEAL] 2026-06-10 — Codex adversarial SENTRY probe fixes
