@@ -8,6 +8,17 @@ npm run factory:ci
 
 **16/16 checks pass** after truth-layer audit fixes (2026-05-24).
 
+**2026-06-10 security hotfix in progress:** `factory-staging/factory-core/builder/run-step.js`
+and canonical mission source `builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js`
+now canonicalize execute-step source/target paths with `path.resolve` + containment checks
+before writes. Trigger found by cron audit: a target like
+`factory-staging/test-fixtures/sandbox/../../../path-traversal-proof.txt` passed the old
+string-prefix sandbox check and wrote outside the declared sandbox.
+`builderos-reboot/scripts/factory-execute-step-integration.mjs` now asserts the valid write
+still succeeds, traversal is blocked, and byte-exact SHA mismatch does not write a target.
+`FACTORY-REBOOT-0029` hash pin `S2904` was refreshed for the canonical content update.
+Next proof to run: `npm run factory:ci`.
+
 ## SENTRY verdict
 
 **`BOOTSTRAP_AND_STAGING_READY`** — not `FULLY_MACHINE_READY`.

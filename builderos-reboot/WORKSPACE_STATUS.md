@@ -1,13 +1,15 @@
 # Workspace Status
 
-**Date:** 2026-05-24  
+**Date:** 2026-06-10
 **Source of truth:** `builderos-reboot/MISSION_QUEUE.json` (33 missions complete)
 
 ## Phase
 
 **Factory reboot complete: FACTORY-REBOOT-0001 → 0030** plus `FACTORY-GREENFIELD-0001`, `FACTORY-PROOF-LOOP-0001`, `PRODUCT-MARKETINGOS-SALVAGE-0001`.
 
-**Verdict:** `BOOTSTRAP_AND_STAGING_READY` — `npm run factory:ci` **16/16 PASS**
+**Verdict:** `BOOTSTRAP_AND_STAGING_READY` — `npm run factory:ci` **16/16 PASS** before
+the 2026-06-10 execute-step sandbox hotfix; rerun `npm run factory:ci` after the hotfix
+commit.
 
 ## Adam's status check
 
@@ -46,6 +48,21 @@ Also complete: `FACTORY-PROOF-LOOP-0001`, `FACTORY-GREENFIELD-0001`, `PRODUCT-MA
 | `SAME_TIER_CODER_DETERMINISM` | **No** — not human cold-coder proof |
 | `FULLY_MACHINE_READY` | **No** — reserved for system-generated BPs |
 | Income / LifeOS product | **No** — factory platform only; Phase 12 salvage is stub |
+
+## 2026-06-10 sandbox hotfix receipt
+
+- **Bug found:** `factory-staging/factory-core/builder/run-step.js` used a string-prefix
+  sandbox check before `path.join` normalized `../` segments, so an execute-step target could
+  look inside `factory-staging/test-fixtures/sandbox/**` while resolving to `/workspace/*.txt`.
+- **Impact:** a malformed or hostile step could write outside its declared sandbox; the cron
+  audit reproduced this with a disposable proof file and removed it immediately.
+- **Fix state:** runtime plus canonical mission source `FACTORY-REBOOT-0029/CONTENT/run-step.js`
+  now resolve repo-relative paths with `path.resolve`, reject paths outside the repo, check
+  target containment with `path.relative`, reject source paths that escape the repo, and verify
+  byte-exact SHA before writing.
+- **Regression:** `builderos-reboot/scripts/factory-execute-step-integration.mjs` includes
+  traversal and SHA-mismatch no-write assertions. `FACTORY-REBOOT-0029` hash pin `S2904`
+  was refreshed. Next proof: `npm run factory:ci`.
 
 ## Optional (not blockers)
 
