@@ -9,6 +9,7 @@ import {
   validateCfoReceipt,
   validateConsensusSession,
   validateEvidenceVaultEntry,
+  validateScorecardEntry,
   PROTOCOL_VERSION,
   GRADES,
   clampQueryLimit,
@@ -27,6 +28,37 @@ function gradeOrNull(g) {
   if (!g) return null;
   const u = String(g).toUpperCase().charAt(0);
   return GRADES.includes(u) ? u : null;
+}
+
+function parseMetadataJson(raw) {
+  if (!raw) return {};
+  if (typeof raw === 'object' && !Array.isArray(raw)) return raw;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
+/** load_bearing is sticky — once asserted for a session it cannot be downgraded via later requests. */
+function resolveEffectiveLoadBearing(payload, existingGateRow) {
+  const existingMeta = parseMetadataJson(existingGateRow?.metadata_json);
+  const payloadMeta = parseMetadataJson(payload?.metadata_json);
+  return (
+    payload?.load_bearing === true ||
+    payloadMeta.load_bearing === true ||
+    existingMeta.load_bearing === true
+  );
+}
+
+function buildStickyGateMetadata(payload, existingGateRow, effectiveLoadBearing) {
+  const existingMeta = parseMetadataJson(existingGateRow?.metadata_json);
+  const payloadMeta = parseMetadataJson(payload?.metadata_json);
+  return {
+    ...existingMeta,
+    ...payloadMeta,
+    load_bearing: effectiveLoadBearing,
+  };
 }
 
 export function createDeliberationGovernanceService(pool, logger = console) {
@@ -75,14 +107,18 @@ export function createDeliberationGovernanceService(pool, logger = console) {
   }
 
   async function expandRoster(session_id, { audit_expanded_roster, expand_reason }) {
+    if (!Array.isArray(audit_expanded_roster) || audit_expanded_roster.length < 1) {
+      return { ok: false, errors: ['audit_expanded_roster required (non-empty array)'] };
+    }
     const { rows } = await pool.query(
       `UPDATE cncl_rosters
        SET audit_expanded_roster = $2, expand_reason = $3
        WHERE session_id = $1
        RETURNING *`,
-      [session_id, JSON.stringify(audit_expanded_roster), expand_reason]
+      [session_id, JSON.stringify(audit_expanded_roster), expand_reason ?? null]
     );
-    return rows[0] || null;
+    if (!rows[0]) return { ok: false, errors: ['session_id not found'] };
+    return { ok: true, roster: rows[0] };
   }
 
   async function recordHistCase(payload) {
@@ -189,7 +225,8 @@ export function createDeliberationGovernanceService(pool, logger = console) {
   }
 
   async function recordScorecardEntry(payload) {
-    if (!payload?.decision_type) return { ok: false, errors: ['decision_type required'] };
+    const v = validateScorecardEntry(payload);
+    if (!v.ok) return { ok: false, errors: v.errors };
 
     let roster_id = payload.roster_id || null;
     if (!roster_id && payload.session_id) {
@@ -243,7 +280,7 @@ export function createDeliberationGovernanceService(pool, logger = console) {
   }
 
   async function getGateStatus(session_id, opts = {}) {
-    const [gate, hist, cfo, consensus, latestConsensus] = await Promise.all([
+    const [gate, hist, cfo, consensus, latestConsensus, roster] = await Promise.all([
       pool.query(`SELECT * FROM deliberation_gate_records WHERE session_id = $1`, [session_id]),
       pool.query(
         `SELECT COUNT(*)::int AS n FROM hist_dept_cases WHERE session_id = $1`,
@@ -261,6 +298,7 @@ export function createDeliberationGovernanceService(pool, logger = console) {
         `SELECT * FROM consensus_sessions WHERE session_id = $1 ORDER BY created_at DESC LIMIT 1`,
         [session_id]
       ),
+      pool.query(`SELECT id FROM cncl_rosters WHERE session_id = $1 LIMIT 1`, [session_id]),
     ]);
 
     const violations = [];
@@ -268,11 +306,12 @@ export function createDeliberationGovernanceService(pool, logger = console) {
     const cfoCount = cfo.rows[0]?.n || 0;
     const consensusCount = consensus.rows[0]?.n || 0;
 
+    if (!roster.rows[0]) violations.push('ROSTER_MISSING');
     if (histCount < 1) violations.push('HIST_CASE_MISSING');
     if (cfoCount < 1) violations.push('CFO_RECEIPT_MISSING');
 
-    const load_bearing =
-      opts.load_bearing === true || gate.rows[0]?.metadata_json?.load_bearing === true;
+    const gateMeta = parseMetadataJson(gate.rows[0]?.metadata_json);
+    const load_bearing = opts.load_bearing === true || gateMeta.load_bearing === true;
     if (load_bearing) {
       if (consensusCount < 1) {
         violations.push('CONSENSUS_SESSION_MISSING');
@@ -308,119 +347,131 @@ export function createDeliberationGovernanceService(pool, logger = console) {
     const session_id = payload.session_id;
     if (!session_id) return { ok: false, errors: ['session_id required'] };
 
-    const load_bearing =
-      payload.load_bearing === true || payload.metadata_json?.load_bearing === true;
+    await pool.query('BEGIN');
+    try {
+      await pool.query(`SELECT pg_advisory_xact_lock(hashtext($1::text))`, [session_id]);
 
-    const existingGate = await pool.query(
-      `SELECT * FROM deliberation_gate_records WHERE session_id = $1 LIMIT 1`,
-      [session_id]
-    );
-    const existing = existingGate.rows[0];
+      const existingGate = await pool.query(
+        `SELECT * FROM deliberation_gate_records WHERE session_id = $1 LIMIT 1`,
+        [session_id]
+      );
+      const existing = existingGate.rows[0];
+      const effectiveLoadBearing = resolveEffectiveLoadBearing(payload, existing);
+      const gateMetadata = buildStickyGateMetadata(payload, existing, effectiveLoadBearing);
 
-    if (existing?.gate_status === 'PASS') {
-      const verify = await getGateStatus(session_id, {
-        load_bearing:
-          load_bearing || existing.metadata_json?.load_bearing === true,
-      });
-      if (!verify.pass) {
-        await pool.query(
-          `UPDATE deliberation_gate_records
-           SET gate_status = 'FAIL',
-               violations = $2,
-               metadata_json = COALESCE(metadata_json, '{}'::jsonb) || $3::jsonb
-           WHERE session_id = $1`,
-          [
-            session_id,
-            JSON.stringify([...verify.violations, 'CORRUPTED_PASS_REVOKED']),
-            JSON.stringify({ corrupted_pass_revoked_at: new Date().toISOString() }),
-          ]
-        );
+      if (existing?.gate_status === 'PASS') {
+        const verify = await getGateStatus(session_id, { load_bearing: effectiveLoadBearing });
+        if (!verify.pass) {
+          await pool.query(
+            `UPDATE deliberation_gate_records
+             SET gate_status = 'FAIL',
+                 violations = $2,
+                 metadata_json = COALESCE(metadata_json, '{}'::jsonb) || $3::jsonb
+             WHERE session_id = $1`,
+            [
+              session_id,
+              JSON.stringify([...verify.violations, 'CORRUPTED_PASS_REVOKED']),
+              JSON.stringify({
+                ...gateMetadata,
+                corrupted_pass_revoked_at: new Date().toISOString(),
+              }),
+            ]
+          );
+          await pool.query('COMMIT');
+          return {
+            ok: false,
+            status: 'DELIBERATION_GATE_CORRUPT',
+            violations: verify.violations,
+          };
+        }
+        await pool.query('COMMIT');
         return {
-          ok: false,
-          status: 'DELIBERATION_GATE_CORRUPT',
-          violations: verify.violations,
+          ok: true,
+          status: 'DELIBERATION_GATE_PASS',
+          gate: existing,
+          idempotent: true,
         };
       }
-      return {
-        ok: true,
-        status: 'DELIBERATION_GATE_PASS',
-        gate: existing,
-        idempotent: true,
-      };
-    }
 
-    const status = await getGateStatus(session_id, { load_bearing });
-    if (!status.pass) {
-      await pool.query(
-        `INSERT INTO deliberation_gate_records (session_id, mission_id, objective_id, gate_status, violations, metadata_json)
-         VALUES ($1,$2,$3,'FAIL',$4,$5)
-         ON CONFLICT (session_id) DO UPDATE SET
-           gate_status = 'FAIL',
-           violations = EXCLUDED.violations,
-           metadata_json = EXCLUDED.metadata_json`,
+      const status = await getGateStatus(session_id, { load_bearing: effectiveLoadBearing });
+      if (!status.pass) {
+        await pool.query(
+          `INSERT INTO deliberation_gate_records (session_id, mission_id, objective_id, gate_status, violations, metadata_json)
+           VALUES ($1,$2,$3,'FAIL',$4,$5)
+           ON CONFLICT (session_id) DO UPDATE SET
+             gate_status = 'FAIL',
+             violations = EXCLUDED.violations,
+             metadata_json = COALESCE(deliberation_gate_records.metadata_json, '{}'::jsonb) || EXCLUDED.metadata_json`,
+          [
+            session_id,
+            payload.mission_id || null,
+            payload.objective_id || null,
+            JSON.stringify(status.violations),
+            JSON.stringify(gateMetadata),
+          ]
+        );
+        await pool.query('COMMIT');
+        return { ok: false, status: 'DELIBERATION_GATE_FAIL', violations: status.violations };
+      }
+
+      const histRow = await pool.query(
+        `SELECT id FROM hist_dept_cases WHERE session_id = $1 ORDER BY created_at DESC LIMIT 1`,
+        [session_id]
+      );
+      const consensusRow = await pool.query(
+        `SELECT id FROM consensus_sessions WHERE session_id = $1 ORDER BY created_at DESC LIMIT 1`,
+        [session_id]
+      );
+      const roster = await getRosterBySession(session_id);
+
+      const { rows } = await pool.query(
+        `INSERT INTO deliberation_gate_records (
+          session_id, mission_id, objective_id, roster_id,
+          hist_case_id, consensus_session_id, cfo_receipt_count,
+          gate_status, violations, passed_at, metadata_json
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,'PASS','[]'::jsonb,NOW(),$8)
+        ON CONFLICT (session_id) DO UPDATE SET
+          gate_status = EXCLUDED.gate_status,
+          violations = EXCLUDED.violations,
+          hist_case_id = EXCLUDED.hist_case_id,
+          consensus_session_id = EXCLUDED.consensus_session_id,
+          cfo_receipt_count = EXCLUDED.cfo_receipt_count,
+          passed_at = COALESCE(deliberation_gate_records.passed_at, EXCLUDED.passed_at),
+          metadata_json = COALESCE(deliberation_gate_records.metadata_json, '{}'::jsonb) || EXCLUDED.metadata_json
+        WHERE deliberation_gate_records.gate_status IS DISTINCT FROM 'PASS'
+        RETURNING *`,
         [
           session_id,
           payload.mission_id || null,
           payload.objective_id || null,
-          JSON.stringify(status.violations),
-          JSON.stringify(payload.metadata_json || {}),
+          roster?.id || null,
+          histRow.rows[0]?.id || null,
+          consensusRow.rows[0]?.id || null,
+          status.cfo_receipt_count,
+          JSON.stringify(gateMetadata),
         ]
       );
-      return { ok: false, status: 'DELIBERATION_GATE_FAIL', violations: status.violations };
+
+      if (!rows.length) {
+        const again = await pool.query(
+          `SELECT * FROM deliberation_gate_records WHERE session_id = $1 LIMIT 1`,
+          [session_id]
+        );
+        await pool.query('COMMIT');
+        return {
+          ok: true,
+          status: 'DELIBERATION_GATE_PASS',
+          gate: again.rows[0],
+          idempotent: true,
+        };
+      }
+
+      await pool.query('COMMIT');
+      return { ok: true, status: 'DELIBERATION_GATE_PASS', gate: rows[0] };
+    } catch (err) {
+      await pool.query('ROLLBACK');
+      throw err;
     }
-
-    const histRow = await pool.query(
-      `SELECT id FROM hist_dept_cases WHERE session_id = $1 ORDER BY created_at DESC LIMIT 1`,
-      [session_id]
-    );
-    const consensusRow = await pool.query(
-      `SELECT id FROM consensus_sessions WHERE session_id = $1 ORDER BY created_at DESC LIMIT 1`,
-      [session_id]
-    );
-    const roster = await getRosterBySession(session_id);
-
-    const { rows } = await pool.query(
-      `INSERT INTO deliberation_gate_records (
-        session_id, mission_id, objective_id, roster_id,
-        hist_case_id, consensus_session_id, cfo_receipt_count,
-        gate_status, violations, passed_at, metadata_json
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,'PASS','[]'::jsonb,NOW(),$8)
-      ON CONFLICT (session_id) DO UPDATE SET
-        gate_status = EXCLUDED.gate_status,
-        violations = EXCLUDED.violations,
-        hist_case_id = EXCLUDED.hist_case_id,
-        consensus_session_id = EXCLUDED.consensus_session_id,
-        cfo_receipt_count = EXCLUDED.cfo_receipt_count,
-        passed_at = COALESCE(deliberation_gate_records.passed_at, EXCLUDED.passed_at),
-        metadata_json = EXCLUDED.metadata_json
-      WHERE deliberation_gate_records.gate_status IS DISTINCT FROM 'PASS'
-      RETURNING *`,
-      [
-        session_id,
-        payload.mission_id || null,
-        payload.objective_id || null,
-        roster?.id || null,
-        histRow.rows[0]?.id || null,
-        consensusRow.rows[0]?.id || null,
-        status.cfo_receipt_count,
-        JSON.stringify(payload.metadata_json || {}),
-      ]
-    );
-
-    if (!rows.length) {
-      const again = await pool.query(
-        `SELECT * FROM deliberation_gate_records WHERE session_id = $1 LIMIT 1`,
-        [session_id]
-      );
-      return {
-        ok: true,
-        status: 'DELIBERATION_GATE_PASS',
-        gate: again.rows[0],
-        idempotent: true,
-      };
-    }
-
-    return { ok: true, status: 'DELIBERATION_GATE_PASS', gate: rows[0] };
   }
 
   async function listScorecard({ decision_type, limit = 50 } = {}) {

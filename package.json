@@ -98,6 +98,7 @@
     "lifeos:deliberation:verify": "node scripts/verify-deliberation-governance.mjs",
     "lifeos:deliberation:behavior": "node scripts/deliberation-governance-behavior.mjs",
     "lifeos:deliberation:a-to-z-smoke": "node scripts/deliberation-a-to-z-smoke.mjs",
+    "lifeos:deliberation:snt-live": "node --import dotenv/config scripts/deliberation-snt-live-verify.mjs",
     "factory:deliberation-v27:sentry": "node builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/CONTENT/run-deliberation-sentry.mjs",
     "factory:deliberation-v27:sentry-loop": "node builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/CONTENT/run-all-aspects-sentry.mjs",
     "factory:deliberation-v27:acceptance": "node builderos-reboot/scripts/run-mission-acceptance.mjs FACTORY-DELIBERATION-V27-0001",

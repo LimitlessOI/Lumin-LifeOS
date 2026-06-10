@@ -5,7 +5,7 @@
 | **Lifecycle** | `constitutional-adjunct` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `safe` |
-| **Last Updated** | 2026-05-24 (**Claude live SENTRY L1–L12 fixes — immutable gate, validators, rate limit**) |
+| **Last Updated** | 2026-05-24 (**SNT pass-3 doctrine fixes + live verify loop — alpha gate pending deploy proof**) |
 | **Verification Command** | `rg -l "C2\\|AIC\\|PSSOT\\|Lens" docs/ --glob '*.md' \| head -20` (deprecation audit) |
 | **Canonical body** | **`docs/BUILDEROS_VOCABULARY.md`** |
 | **Governance body** | **`docs/architecture/DELIBERATION_ARCHITECTURE.md`** |
@@ -74,19 +74,19 @@ One official meaning for every core BuilderOS / Lumin term so language drift doe
 | 2026-06-10 | **Codex SENTRY behavioral fixes** — `validateConsensusSession()` (non-empty synthesis/participants/votes/horizons); load-bearing gate validates consensus **substance** not row count; `finalizePipeline` no debrief on gate fail; factory `validateDeliberationGate({ load_bearing })`; `scripts/deliberation-governance-behavior.mjs` + AT-BEH-1..4 (22 acceptance tests) | Fail-closed law was breakable with `{}` consensus and debrief-on-fail |
 | 2026-06-10 | **Codex adversarial probe fixes** — BPB+CDR session law (require focus + distinct ids); `clampQueryLimit`; whitespace `case_text`; `skip_intake_gate` env-gated; factory consensus validation; `force_reseed`; `run-mission` missing import + blueprint sort try/catch; behavior suite **17 assertions**, acceptance **24/24** | Adversarial SENTRY found exploitable paths tests did not cover |
 | 2026-05-24 | **Claude live SENTRY L1–L12 (GAP-FILL)** — `validateHistCase` min 20 chars + trim; `validateCfoReceipt` role min 3; `validateEvidenceVaultEntry` allowlist + path traversal block; `VALID_REP_CATALOG` enforced; roster size caps (20 reps / 10 models / 7 authorities); `passDeliberationGate` immutable PASS + corrupt PASS revocation + `passed_at` COALESCE; ghost debrief guard (404 on empty session); `respondDeliberationError` PG 23505→409; deliberation rate limit 60/min; boot REP sync warn + 2s retry; `scripts/deliberation-sentry-probe-cleanup.mjs`; behavior suite **22/22 PASS** | Live Neon probe found whitespace hist PASS, corrupt load-bearing PASS, ghost debriefs, XSS evidence, constraint leak, no throttle |
+| 2026-05-24 | **SNT pass-3 doctrine (GAP-FILL)** — sticky `load_bearing` metadata (non-downgradable); `ROSTER_MISSING` gate check; `pg_advisory_xact_lock` on gate pass; `validateScorecardEntry`; CFO/consensus horizon+vote numeric validation; expand null guard; `scripts/deliberation-snt-live-verify.mjs` + `npm run lifeos:deliberation:snt-live`; behavior **31/31**, acceptance **24/24** | Codex pass-3 `DOCTRINE_FAIL` on live Railway: load-bearing downgrade, no-roster PASS, N1/N2/N3/N6b/N11 |
 
 ---
 
 ## Agent Handoff Notes
 
-**Current state:** **v2.7 SENTRY fixes committed — pending Railway deploy proof.** Mission `FACTORY-DELIBERATION-V27-0001`: **`deployed_pending_sentry_proven`** until live re-probe + cleanup; behavior **22/22 PASS** locally.
+**Current state:** **SNT pass-3 fixes committed — pending Railway deploy + `npm run lifeos:deliberation:snt-live` PROVEN.** Mission `FACTORY-DELIBERATION-V27-0001` targets **alpha** after SNT sign-off. Local: behavior **31/31**, acceptance **24/24**.
 
 **Next priority:**
-1. **Deploy Railway** — `npm run system:railway:redeploy` (build-from-latest) until `deploy_commit_sha` matches HEAD
-2. **Neon cleanup** — `node --import dotenv/config scripts/deliberation-sentry-probe-cleanup.mjs --confirm`
-3. **Live smoke** — `npm run lifeos:deliberation:a-to-z-smoke`; Codex pass 3 with dedupe list (L1–L12 already fixed)
-4. REP catalog registry UI; Founder Debrief push to FM/Lumin
+1. Deploy + **`npm run lifeos:deliberation:snt-live`** → `SNT_LIVE_PASS`
+2. Mission status → `complete` / deliberation **PROVEN** on Neon+Railway
+3. REP catalog registry UI; Founder Debrief push to FM/Lumin (deferred)
 
 **Legacy code:** Many files still say TSOS dept or six depts — read v2.7 vocabulary; rename on touch with receipt.
 
-**⚠️ INCOMPLETE:** Live SENTRY re-probe after deploy; REP catalog UI; Founder Debrief auto-delivery.
+**⚠️ INCOMPLETE:** SNT live verify on Railway after pass-3 deploy; REP catalog UI; Founder Debrief auto-delivery.

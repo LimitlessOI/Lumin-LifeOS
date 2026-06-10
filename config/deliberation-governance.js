@@ -173,12 +173,30 @@ export function validateHistCase(payload) {
 /**
  * @param {unknown} payload
  */
+function nonNegativeNumberError(value, label, { integer = false } = {}) {
+  if (value == null) return null;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 0) {
+    return `${label} must be a non-negative ${integer ? 'integer' : 'number'}`;
+  }
+  if (integer && !Number.isInteger(n)) {
+    return `${label} must be a non-negative integer`;
+  }
+  return null;
+}
+
 export function validateCfoReceipt(payload) {
   const errors = [];
   if (!payload?.session_id) errors.push('session_id required');
   const role = payload?.role || payload?.dept;
   if (typeof role !== 'string' || role.trim().length < 3) {
     errors.push('role or dept required (min 3 non-whitespace chars)');
+  }
+  for (const msg of [
+    nonNegativeNumberError(payload?.tokens, 'tokens', { integer: true }),
+    nonNegativeNumberError(payload?.cost_usd, 'cost_usd'),
+  ]) {
+    if (msg) errors.push(msg);
   }
   return { ok: errors.length === 0, errors };
 }
@@ -228,12 +246,46 @@ export function validateConsensusSession(payload) {
   const horizons = payload.future_back_horizons || payload.futureBackHorizons || {};
   if (!horizons || typeof horizons !== 'object' || Object.keys(horizons).length < 1) {
     errors.push('future_back_horizons required');
+  } else {
+    const invalidHorizons = Object.keys(horizons).filter((k) => !FUTURE_BACK_HORIZONS.includes(k));
+    if (invalidHorizons.length) {
+      errors.push(
+        `future_back_horizons keys must be from: ${FUTURE_BACK_HORIZONS.join(', ')}`
+      );
+    }
   }
 
   const voteCounts = payload.vote_counts ?? payload.voteCounts;
   if (!voteCounts || typeof voteCounts !== 'object' || Object.keys(voteCounts).length < 1) {
     errors.push('vote_counts required');
+  } else {
+    for (const [key, value] of Object.entries(voteCounts)) {
+      if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
+        errors.push(`vote_counts.${key} must be a non-negative integer`);
+      }
+    }
   }
 
+  return { ok: errors.length === 0, errors };
+}
+
+/**
+ * @param {unknown} payload
+ */
+export function validateScorecardEntry(payload) {
+  const errors = [];
+  if (!payload?.decision_type) errors.push('decision_type required');
+  for (const msg of [
+    nonNegativeNumberError(payload?.model_count, 'model_count', { integer: true }),
+    nonNegativeNumberError(payload?.cost_usd, 'cost_usd'),
+    nonNegativeNumberError(payload?.token_count, 'token_count', { integer: true }),
+    nonNegativeNumberError(payload?.latency_ms, 'latency_ms'),
+  ]) {
+    if (msg) errors.push(msg);
+  }
+  if (payload?.outcome_grade != null && payload.outcome_grade !== '') {
+    const g = String(payload.outcome_grade).toUpperCase().charAt(0);
+    if (!GRADES.includes(g)) errors.push(`outcome_grade must be one of: ${GRADES.join(', ')}`);
+  }
   return { ok: errors.length === 0, errors };
 }

@@ -12,6 +12,7 @@ import {
   validateHistCase,
   validateCfoReceipt,
   validateEvidenceVaultEntry,
+  validateScorecardEntry,
   clampQueryLimit,
 } from '../config/deliberation-governance.js';
 import { validateDeliberationGate } from '../factory-staging/factory-core/deliberation/validate-deliberation-gate.js';
@@ -40,6 +41,16 @@ function createMockPool() {
 
   const pool = {
     query: async (sql, params = []) => {
+      if (sql === 'BEGIN' || sql === 'COMMIT' || sql === 'ROLLBACK') {
+        return { rows: [] };
+      }
+      if (sql.includes('pg_advisory_xact_lock')) {
+        return { rows: [{ locked: true }] };
+      }
+      if (sql.includes('SELECT id FROM cncl_rosters WHERE')) {
+        const row = store.rosters.find((r) => r.session_id === params[0]);
+        return { rows: row ? [{ id: row.id }] : [] };
+      }
       if (sql.includes('FROM cncl_rosters WHERE')) {
         return { rows: store.rosters.filter((r) => r.session_id === params[0]).slice(0, 1) };
       }
@@ -87,14 +98,46 @@ function createMockPool() {
         return { rows: [{ id: 1 }] };
       }
       if (sql.includes('INSERT INTO deliberation_gate_records')) {
+        const session_id = params[0];
         const meta = JSON.parse(params[params.length - 1] || '{}');
+        const isPass = sql.includes("'PASS'");
+        const existingIdx = store.gates.findIndex((g) => g.session_id === session_id);
+        if (sql.includes('ON CONFLICT') && existingIdx >= 0) {
+          const existing = store.gates[existingIdx];
+          if (isPass && existing.gate_status === 'PASS') {
+            return { rows: [] };
+          }
+          const mergedMeta = { ...(existing.metadata_json || {}), ...meta };
+          store.gates[existingIdx] = {
+            ...existing,
+            gate_status: isPass ? 'PASS' : 'FAIL',
+            metadata_json: mergedMeta,
+            violations: isPass ? [] : JSON.parse(params[3] || '[]'),
+          };
+          return { rows: [store.gates[existingIdx]] };
+        }
         const row = {
-          session_id: params[0],
-          gate_status: sql.includes("'PASS'") ? 'PASS' : 'FAIL',
+          session_id,
+          gate_status: isPass ? 'PASS' : 'FAIL',
           metadata_json: meta,
+          violations: isPass ? [] : JSON.parse(params[3] || '[]'),
         };
         store.gates.push(row);
         return { rows: [row] };
+      }
+      if (sql.includes('UPDATE deliberation_gate_records')) {
+        const session_id = params[0];
+        const idx = store.gates.findIndex((g) => g.session_id === session_id);
+        if (idx >= 0) {
+          store.gates[idx].gate_status = 'FAIL';
+          if (params[2]) {
+            store.gates[idx].metadata_json = {
+              ...(store.gates[idx].metadata_json || {}),
+              ...JSON.parse(params[2]),
+            };
+          }
+        }
+        return { rows: [] };
       }
       if (sql.includes('SELECT id FROM hist_dept_cases')) {
         return { rows: store.hist.length ? [{ id: 1 }] : [] };
@@ -236,6 +279,71 @@ assert('whitespace-only hist case_text rejected', !validateHistCase({ session_id
 assert('short hist case_text rejected', !validateHistCase({ session_id: 'x', case_text: 'too short' }).ok);
 
 assert('trivial cfo role rejected', !validateCfoReceipt({ session_id: 'x', role: 'x' }).ok);
+assert('negative cfo cost rejected', !validateCfoReceipt({ session_id: 'x', role: 'CFO', cost_usd: -1 }).ok);
+assert('negative cfo tokens rejected', !validateCfoReceipt({ session_id: 'x', role: 'CFO', tokens: -1 }).ok);
+
+assert(
+  'invalid future_back horizon rejected',
+  !validateConsensusSession({
+    session_id: 'x',
+    final_synthesis: 'synthesis text here',
+    participants: [{ id: 'a' }, { id: 'b' }],
+    original_positions: [{ stance: 'ship' }],
+    future_back_horizons: { '100y': 'bad' },
+    vote_counts: { ship: 2 },
+  }).ok
+);
+
+assert(
+  'negative vote_counts rejected',
+  !validateConsensusSession({
+    session_id: 'x',
+    final_synthesis: 'synthesis text here',
+    participants: [{ id: 'a' }, { id: 'b' }],
+    original_positions: [{ stance: 'ship' }],
+    future_back_horizons: { '1y': 'scale' },
+    vote_counts: { ship: -1 },
+  }).ok
+);
+
+assert(
+  'negative scorecard metrics rejected',
+  !validateScorecardEntry({
+    decision_type: 'test',
+    cost_usd: -5,
+    token_count: -1,
+    latency_ms: -1,
+  }).ok
+);
+
+{
+  const pool = createMockPool();
+  const svc = createDeliberationGovernanceService(pool);
+  await svc.seedPipelineMinimum({
+    session_id: 'sticky-lb',
+    case_text: SUBSTANTIVE_CASE,
+    problem: 'p',
+  });
+  const fail1 = await svc.passDeliberationGate({ session_id: 'sticky-lb', load_bearing: true });
+  assert('load-bearing fail without consensus', !fail1.ok);
+  const fail2 = await svc.passDeliberationGate({ session_id: 'sticky-lb' });
+  assert('sticky load-bearing blocks downgrade pass', !fail2.ok);
+  const gateMeta = pool.store.gates.find((g) => g.session_id === 'sticky-lb')?.metadata_json;
+  assert('load_bearing persisted in gate metadata', gateMeta?.load_bearing === true);
+}
+
+{
+  const pool = createMockPool();
+  const svc = createDeliberationGovernanceService(pool);
+  await svc.recordHistCase({ session_id: 'no-roster-gate', case_text: SUBSTANTIVE_CASE });
+  await svc.recordCfoReceipt({ session_id: 'no-roster-gate', role: 'CFO', cost_usd: 0 });
+  const gate = await svc.passDeliberationGate({ session_id: 'no-roster-gate' });
+  assert(
+    'gate pass without roster fails',
+    !gate.ok && (gate.violations || []).includes('ROSTER_MISSING')
+  );
+}
+
 assert('xss evidence source_type rejected', !validateEvidenceVaultEntry({ source_type: '<script>' }).ok);
 assert('path traversal storage_path rejected', !validateEvidenceVaultEntry({ source_type: 'manual', storage_path: '../../etc/passwd' }).ok);
 

@@ -21,6 +21,7 @@
     "scripts/deliberation-a-to-z-smoke.mjs",
     "scripts/deliberation-sentry-probe-cleanup.mjs",
     "scripts/deliberation-governance-behavior.mjs",
+    "scripts/deliberation-snt-live-verify.mjs",
     "scripts/verify-deliberation-governance.mjs",
     "factory-staging/factory-core/deliberation/seed-mission-deliberation.js",
     "factory-staging/factory-core/deliberation/validate-deliberation-gate.js"
@@ -31,5 +32,5 @@
     { "type": "node_check", "check": "services/deliberation-governance-service.js" },
     { "type": "node_check", "check": "scripts/deliberation-governance-behavior.mjs" }
   ],
-  "ssot_receipt_tail": "Claude live SENTRY L1–L12 fixes: immutable gate PASS, validators, rate limit, probe cleanup script; behavior 22/22."
+  "ssot_receipt_tail": "SNT pass-3 doctrine: sticky load_bearing, ROSTER_MISSING, validators, snt-live verify; behavior 31/31."
 }

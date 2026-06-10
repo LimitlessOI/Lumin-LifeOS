@@ -70,9 +70,12 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
 
   router.post('/roster/:sessionId/expand', requireKey, async (req, res) => {
     try {
-      const roster = await svc.expandRoster(req.params.sessionId, req.body);
-      if (!roster) return res.status(404).json({ ok: false, error: 'not found' });
-      res.json({ ok: true, roster });
+      const result = await svc.expandRoster(req.params.sessionId, req.body);
+      if (!result.ok) {
+        const code = result.errors?.includes('session_id not found') ? 404 : 400;
+        return res.status(code).json(result);
+      }
+      res.json({ ok: true, roster: result.roster });
     } catch (e) {
       return respondDeliberationError(res, log, 'roster expand', e);
     }
@@ -142,7 +145,9 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
 
   router.get('/gate/:sessionId', requireKey, async (req, res) => {
     try {
-      const status = await svc.getGateStatus(req.params.sessionId);
+      const status = await svc.getGateStatus(req.params.sessionId, {
+        load_bearing: req.query.load_bearing === 'true',
+      });
       res.json({ ok: true, ...status });
     } catch (e) {
       return respondDeliberationError(res, log, 'gate get', e);
