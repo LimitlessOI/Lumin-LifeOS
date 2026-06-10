@@ -93,7 +93,9 @@ if (base && key) {
   ok('API pipeline/finalize', fin.status === 200 && fin.body.ok);
 
   const debrief = await api(`/api/v1/lifeos/deliberation/debrief/${encodeURIComponent(apiSession)}`);
-  ok('API debrief generated', debrief.body.ok && debrief.body.layer1_synopsis?.includes('Founder Debrief'));
+  const synopsis =
+    debrief.body.layer1_synopsis || debrief.body.debrief?.layer1_synopsis || '';
+  ok('API debrief generated', debrief.body.ok && synopsis.includes('Founder Debrief'));
 
   const repSync = await api('/api/v1/lifeos/deliberation/reps/sync', { method: 'POST' });
   ok('API reps/sync', repSync.body.ok);
