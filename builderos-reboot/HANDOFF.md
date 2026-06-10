@@ -8,7 +8,7 @@ npm run factory:ci
 
 **16/16 checks pass** after truth-layer audit fixes (2026-05-24).
 
-**2026-06-10 security hotfix in progress:** `factory-staging/factory-core/builder/run-step.js`
+**2026-06-10 security hotfix verified:** `factory-staging/factory-core/builder/run-step.js`
 and canonical mission source `builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js`
 now canonicalize execute-step source/target paths with `path.resolve` + containment checks
 before writes. Trigger found by cron audit: a target like
@@ -19,7 +19,9 @@ still succeeds, traversal is blocked, and byte-exact SHA mismatch does not write
 `FACTORY-REBOOT-0029` hash pin `S2904` was refreshed for the canonical content update, and
 the `run-step.js` acceptance pins in missions 0005, 0013, and 0029 were updated to the new
 secure runtime SHA.
-Next proof to run: `npm run factory:ci`.
+Verification: targeted traversal repro now returns `422/BLOCKED_RETURN_TO_BPB` without creating
+the outside-sandbox file; `npm run factory:acceptance` PASS; `npm run factory:bundle` then
+`npm run factory:ci` PASS (16/16); `cd factory-staging && npm run check` PASS.
 
 ## SENTRY verdict
 

@@ -8,8 +8,9 @@ Date: `2026-06-10`
 
 **2026-06-10 security hotfix:** standalone execute-step runtime now canonicalizes repo-relative
 paths before sandbox checks, rejects source paths outside the repo, and verifies byte-exact SHA
-before writing. Regression proof added to `scripts/factory-execute-step-integration.mjs`;
-rerun `npm run factory:ci` from `lumin-factory/`.
+before writing. Regression proof added to `scripts/factory-execute-step-integration.mjs`.
+Verified by direct standalone-runtime traversal repro (`422/BLOCKED_RETURN_TO_BPB`, no outside
+file created) and `cd lumin-factory/factory-staging && npm run check` PASS.
 
 ## Adam's status check
 

@@ -7,9 +7,8 @@
 
 **Factory reboot complete: FACTORY-REBOOT-0001 → 0030** plus `FACTORY-GREENFIELD-0001`, `FACTORY-PROOF-LOOP-0001`, `PRODUCT-MARKETINGOS-SALVAGE-0001`.
 
-**Verdict:** `BOOTSTRAP_AND_STAGING_READY` — `npm run factory:ci` **16/16 PASS** before
-the 2026-06-10 execute-step sandbox hotfix; rerun `npm run factory:ci` after the hotfix
-commit.
+**Verdict:** `BOOTSTRAP_AND_STAGING_READY` — `npm run factory:bundle` then
+`npm run factory:ci` **16/16 PASS** after the 2026-06-10 execute-step sandbox hotfix.
 
 ## Adam's status check
 
@@ -63,7 +62,10 @@ Also complete: `FACTORY-PROOF-LOOP-0001`, `FACTORY-GREENFIELD-0001`, `PRODUCT-MA
 - **Regression:** `builderos-reboot/scripts/factory-execute-step-integration.mjs` includes
   traversal and SHA-mismatch no-write assertions. `FACTORY-REBOOT-0029` hash pin `S2904`
   was refreshed, and shared `run-step.js` acceptance pins in missions 0005, 0013, and 0029
-  now expect the secure runtime SHA. Next proof: `npm run factory:ci`.
+  now expect the secure runtime SHA.
+- **Verified:** direct traversal repro returns `422/BLOCKED_RETURN_TO_BPB` and creates no
+  outside-sandbox file; `npm run factory:acceptance` PASS; generated-bundle cutover verify PASS;
+  `npm run factory:ci` PASS; `cd factory-staging && npm run check` PASS.
 
 ## Optional (not blockers)
 
