@@ -1,0 +1,66 @@
+{
+  "generated_at": "2026-06-10T19:12:13.622Z",
+  "role": "SNT",
+  "mission_id": "FACTORY-DELIBERATION-V27-0001",
+  "base_url": "https://robust-magic-production.up.railway.app",
+  "verdict": "SNT_LIVE_PASS",
+  "checks": [
+    {
+      "id": "SNT-DEPLOY",
+      "name": "Builder ready + deploy SHA present",
+      "pass": true,
+      "detail": "d907745eaafc049173cd4329c6b5aedebeaa20fa"
+    },
+    {
+      "id": "SNT-N1",
+      "name": "Negative CFO rejected (400)",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "id": "SNT-N2",
+      "name": "Invalid horizon rejected (400)",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "id": "SNT-N3",
+      "name": "Negative vote_counts rejected (400)",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "id": "SNT-N11",
+      "name": "Negative scorecard rejected (400)",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "id": "SNT-ROSTER",
+      "name": "Gate pass without roster fails (422 + ROSTER_MISSING)",
+      "pass": true,
+      "detail": "HTTP 422 violations=[\"ROSTER_MISSING\"]"
+    },
+    {
+      "id": "SNT-LB-STICKY",
+      "name": "Sticky load_bearing blocks downgrade pass",
+      "pass": true,
+      "detail": "statuses 422/422/422"
+    },
+    {
+      "id": "SNT-N6B",
+      "name": "Expand without audit_expanded_roster rejected (400)",
+      "pass": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "id": "SNT-LB-META",
+      "name": "Load-bearing PASS persists metadata_json.load_bearing",
+      "pass": true,
+      "detail": "HTTP 200 meta={\"load_bearing\":true}"
+    }
+  ],
+  "failed": 0,
+  "passed": 9,
+  "total": 9
+}

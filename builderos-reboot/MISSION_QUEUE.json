@@ -36,7 +36,7 @@
     { "mission_id": "FACTORY-REBOOT-0029", "status": "complete", "priority": 32, "purpose": "TSOS efficiency lane + guardrails on execute-step hot path", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0029" },
     { "mission_id": "FACTORY-REBOOT-0030", "status": "complete", "priority": 33, "purpose": "Upstream gates, SENTRY depth, Historian, C2/truth surfaces", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0030" },
     { "mission_id": "FACTORY-REBOOT-0031", "status": "queued", "priority": 34, "purpose": "Role-based council routing (department → provider)", "path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0031", "blocks": "provider_key_sprint_until_receipted" },
-    { "mission_id": "FACTORY-DELIBERATION-V27-0001", "status": "snt_mechanical_pass_live_blocked", "priority": 34.5, "purpose": "Deliberation governance v2.7 A→Z (FP→BP→code→SENTRY→SNT)", "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001", "note": "57ef960c16 pushed; SNT mechanical PASS; live blocked on Railway deploy drift — run lifeos:deliberation:snt-live after build-from-latest" },
+    { "mission_id": "FACTORY-DELIBERATION-V27-0001", "status": "complete", "priority": 34.5, "purpose": "Deliberation governance v2.7 A→Z (FP→BP→code→SENTRY→SNT)", "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001", "note": "SNT_LIVE_PASS 9/9 on Railway d907745eaa; deliberation PROVEN" },
     { "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001", "status": "pssot_complete", "priority": 35, "purpose": "First LifeOS product proof — commitments + C2 + evidence", "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001", "note": "PSSOT.md complete; BPB converts to BLUEPRINT.json (7-day MVP); execute blocked on billing" }
   ]
 }
