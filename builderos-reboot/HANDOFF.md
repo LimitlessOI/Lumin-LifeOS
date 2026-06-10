@@ -16,7 +16,9 @@ before writes. Trigger found by cron audit: a target like
 string-prefix sandbox check and wrote outside the declared sandbox.
 `builderos-reboot/scripts/factory-execute-step-integration.mjs` now asserts the valid write
 still succeeds, traversal is blocked, and byte-exact SHA mismatch does not write a target.
-`FACTORY-REBOOT-0029` hash pin `S2904` was refreshed for the canonical content update.
+`FACTORY-REBOOT-0029` hash pin `S2904` was refreshed for the canonical content update, and
+the `run-step.js` acceptance pins in missions 0005, 0013, and 0029 were updated to the new
+secure runtime SHA.
 Next proof to run: `npm run factory:ci`.
 
 ## SENTRY verdict

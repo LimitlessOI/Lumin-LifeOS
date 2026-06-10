@@ -62,7 +62,8 @@ Also complete: `FACTORY-PROOF-LOOP-0001`, `FACTORY-GREENFIELD-0001`, `PRODUCT-MA
   byte-exact SHA before writing.
 - **Regression:** `builderos-reboot/scripts/factory-execute-step-integration.mjs` includes
   traversal and SHA-mismatch no-write assertions. `FACTORY-REBOOT-0029` hash pin `S2904`
-  was refreshed. Next proof: `npm run factory:ci`.
+  was refreshed, and shared `run-step.js` acceptance pins in missions 0005, 0013, and 0029
+  now expect the secure runtime SHA. Next proof: `npm run factory:ci`.
 
 ## Optional (not blockers)
 

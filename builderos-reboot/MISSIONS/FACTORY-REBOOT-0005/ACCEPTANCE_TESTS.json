@@ -4,7 +4,7 @@
     "step_id": "S501",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/builder/run-step.js",
-    "expected_sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
+    "expected_sha256": "06bd626faad393d7e3248ba242170c78a19085aa58c002ce3c2bbd412c8f467c"
   },
   {
     "test_id": "AT-S502-1",
