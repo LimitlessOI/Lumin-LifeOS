@@ -49,6 +49,67 @@ if (written !== sourceBytes.toString('utf8')) {
   process.exit(1);
 }
 
+const escapedTargetRel = 'factory-staging/test-fixtures/sandbox/../../../path-traversal-proof.txt';
+const escapedTargetPath = resolveRepoPath(escapedTargetRel);
+if (fs.existsSync(escapedTargetPath)) fs.unlinkSync(escapedTargetPath);
+
+const traversal = dispatchExecuteStep({
+  mission_id: 'FACTORY-REBOOT-0005',
+  blueprint_id: 'integration-proof',
+  skip_intake_gate: true,
+  step: {
+    step_id: 'INTEGRATION-TRAVERSAL-001',
+    action_type: 'write_file_exact',
+    target_file: escapedTargetRel,
+    sandbox_boundary: 'factory-staging/test-fixtures/sandbox/**',
+    exact_inputs: { exact_content: 'TRAVERSAL_PROOF' },
+  },
+});
+
+if (traversal.httpStatus !== 422 || traversal.body?.status !== 'BLOCKED_RETURN_TO_BPB') {
+  console.error('FAIL traversal target was not blocked', traversal);
+  if (fs.existsSync(escapedTargetPath)) fs.unlinkSync(escapedTargetPath);
+  process.exit(1);
+}
+
+if (fs.existsSync(escapedTargetPath)) {
+  console.error('FAIL traversal target wrote outside sandbox');
+  fs.unlinkSync(escapedTargetPath);
+  process.exit(1);
+}
+
+const mismatchRel = 'factory-staging/test-fixtures/sha-mismatch-proof.txt';
+const mismatchPath = resolveRepoPath(mismatchRel);
+if (fs.existsSync(mismatchPath)) fs.unlinkSync(mismatchPath);
+
+const mismatch = dispatchExecuteStep({
+  mission_id: 'FACTORY-REBOOT-0005',
+  blueprint_id: 'integration-proof',
+  skip_intake_gate: true,
+  step: {
+    step_id: 'INTEGRATION-SHA-MISMATCH-001',
+    action_type: 'write_file_exact',
+    target_file: mismatchRel,
+    sandbox_boundary: 'factory-staging/test-fixtures/**',
+    exact_inputs: { exact_content: 'BAD_SHA_PROOF' },
+    exact_output_contract: { type: 'byte_exact_copy', sha256: '0'.repeat(64) },
+  },
+});
+
+if (mismatch.httpStatus !== 409 || mismatch.body?.status !== 'FAILED_VERIFICATION') {
+  console.error('FAIL sha mismatch did not fail verification', mismatch);
+  if (fs.existsSync(mismatchPath)) fs.unlinkSync(mismatchPath);
+  process.exit(1);
+}
+
+if (fs.existsSync(mismatchPath)) {
+  console.error('FAIL sha mismatch wrote target before verification');
+  fs.unlinkSync(mismatchPath);
+  process.exit(1);
+}
+
 console.log('PASS execute-step integration');
 console.log(`  wrote ${targetRel}`);
 console.log(`  sha256=${body.builder.sha256.slice(0, 16)}…`);
+console.log('  blocked traversal target outside sandbox');
+console.log('  blocked byte-exact sha mismatch before write');

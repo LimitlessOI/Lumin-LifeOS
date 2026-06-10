@@ -1,13 +1,14 @@
 # Workspace Status
 
-**Date:** 2026-05-24  
+**Date:** 2026-06-10
 **Source of truth:** `builderos-reboot/MISSION_QUEUE.json` (33 missions complete)
 
 ## Phase
 
 **Factory reboot complete: FACTORY-REBOOT-0001 → 0030** plus `FACTORY-GREENFIELD-0001`, `FACTORY-PROOF-LOOP-0001`, `PRODUCT-MARKETINGOS-SALVAGE-0001`.
 
-**Verdict:** `BOOTSTRAP_AND_STAGING_READY` — `npm run factory:ci` **16/16 PASS**
+**Verdict:** `BOOTSTRAP_AND_STAGING_READY` — `npm run factory:bundle` then
+`npm run factory:ci` **16/16 PASS** after the 2026-06-10 execute-step sandbox hotfix.
 
 ## Adam's status check
 
@@ -46,6 +47,25 @@ Also complete: `FACTORY-PROOF-LOOP-0001`, `FACTORY-GREENFIELD-0001`, `PRODUCT-MA
 | `SAME_TIER_CODER_DETERMINISM` | **No** — not human cold-coder proof |
 | `FULLY_MACHINE_READY` | **No** — reserved for system-generated BPs |
 | Income / LifeOS product | **No** — factory platform only; Phase 12 salvage is stub |
+
+## 2026-06-10 sandbox hotfix receipt
+
+- **Bug found:** `factory-staging/factory-core/builder/run-step.js` used a string-prefix
+  sandbox check before `path.join` normalized `../` segments, so an execute-step target could
+  look inside `factory-staging/test-fixtures/sandbox/**` while resolving to `/workspace/*.txt`.
+- **Impact:** a malformed or hostile step could write outside its declared sandbox; the cron
+  audit reproduced this with a disposable proof file and removed it immediately.
+- **Fix state:** runtime plus canonical mission source `FACTORY-REBOOT-0029/CONTENT/run-step.js`
+  now resolve repo-relative paths with `path.resolve`, reject paths outside the repo, check
+  target containment with `path.relative`, reject source paths that escape the repo, and verify
+  byte-exact SHA before writing.
+- **Regression:** `builderos-reboot/scripts/factory-execute-step-integration.mjs` includes
+  traversal and SHA-mismatch no-write assertions. `FACTORY-REBOOT-0029` hash pin `S2904`
+  was refreshed, and shared `run-step.js` acceptance pins in missions 0005, 0013, and 0029
+  now expect the secure runtime SHA.
+- **Verified:** direct traversal repro returns `422/BLOCKED_RETURN_TO_BPB` and creates no
+  outside-sandbox file; `npm run factory:acceptance` PASS; generated-bundle cutover verify PASS;
+  `npm run factory:ci` PASS; `cd factory-staging && npm run check` PASS.
 
 ## Optional (not blockers)
 

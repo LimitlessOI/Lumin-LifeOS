@@ -20,14 +20,44 @@ function sha256Buffer(buf) {
   return crypto.createHash('sha256').update(buf).digest('hex');
 }
 
+function isPathInside(childPath, parentPath) {
+  const relative = path.relative(parentPath, childPath);
+  return relative === '' || (!!relative && !relative.startsWith('..') && !path.isAbsolute(relative));
+}
+
 export function resolveRepoPath(relativePath) {
-  return path.join(REPO_ROOT, relativePath.replace(/\\/g, '/'));
+  const normalized = String(relativePath || '').replace(/\\/g, '/');
+  if (!normalized || path.isAbsolute(normalized)) {
+    const err = new Error(`Path must be repo-relative: ${relativePath}`);
+    err.code = 'PATH_OUTSIDE_REPO';
+    throw err;
+  }
+
+  const resolved = path.resolve(REPO_ROOT, normalized);
+  if (!isPathInside(resolved, REPO_ROOT)) {
+    const err = new Error(`Path escapes repo root: ${relativePath}`);
+    err.code = 'PATH_OUTSIDE_REPO';
+    throw err;
+  }
+  return resolved;
+}
+
+function resolveSandboxBoundary(sandboxBoundary) {
+  const boundary = String(sandboxBoundary || '')
+    .replace(/\\/g, '/')
+    .replace(/\/\*\*$/, '')
+    .replace(/\/$/, '');
+  return resolveRepoPath(boundary || '.');
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
-  const normalized = relativePath.replace(/\\/g, '/');
-  const boundary = sandboxBoundary.replace(/\\/g, '/').replace(/\/\*\*$/, '');
-  return normalized === boundary || normalized.startsWith(`${boundary}/`);
+  try {
+    const target = resolveRepoPath(relativePath);
+    const boundary = resolveSandboxBoundary(sandboxBoundary);
+    return isPathInside(target, boundary);
+  } catch {
+    return false;
+  }
 }
 
 function resolveStepContent(step) {
@@ -36,7 +66,12 @@ function resolveStepContent(step) {
     return { mode: 'greenfield', content: Buffer.from(String(inputs.exact_content), 'utf8') };
   }
   if (inputs.content_source_path) {
-    const source = resolveRepoPath(inputs.content_source_path);
+    let source;
+    try {
+      source = resolveRepoPath(inputs.content_source_path);
+    } catch (err) {
+      return { error: 'invalid_source_path', path: inputs.content_source_path, message: err.message };
+    }
     if (!fs.existsSync(source)) return { error: 'missing_source', path: inputs.content_source_path };
     return { mode: 'copy', content: fs.readFileSync(source) };
   }
@@ -95,10 +130,19 @@ export function runWriteFileExact({ mission_id, blueprint_id, step }) {
       evidence: {},
     });
   }
+  if (resolved.error === 'invalid_source_path') {
+    return buildBlockedReturn({
+      mission_id,
+      blueprint_id,
+      step_id: step.step_id,
+      gap_type: 'authority_violation',
+      summary: `Source ${resolved.path} outside repo boundary`,
+      attempted_action: 'runWriteFileExact',
+      missing_information: [],
+      evidence: { path: resolved.path, error: resolved.message },
+    });
+  }
 
-  const target = resolveRepoPath(step.target_file);
-  fs.mkdirSync(path.dirname(target), { recursive: true });
-  fs.writeFileSync(target, resolved.content);
   const gotSha = sha256Buffer(resolved.content);
 
   const contract = step.exact_output_contract || {};
@@ -109,12 +153,16 @@ export function runWriteFileExact({ mission_id, blueprint_id, step }) {
       blueprint_id,
       step_id: step.step_id,
       target_file: step.target_file,
-      summary: 'byte_exact_copy sha256 mismatch after write',
+      summary: 'byte_exact_copy sha256 mismatch before write',
       expected_sha256: contract.sha256,
       got_sha256: gotSha,
       input_mode: resolved.mode,
     };
   }
+
+  const target = resolveRepoPath(step.target_file);
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(target, resolved.content);
 
   return {
     status: 'DONE',

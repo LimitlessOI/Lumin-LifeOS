@@ -12,6 +12,16 @@ Full regression (for tomorrow's review):
 npm run factory:ci
 ```
 
+**2026-06-10 security hotfix verified:** standalone
+`factory-staging/factory-core/builder/run-step.js` now canonicalizes execute-step source/target
+paths with `path.resolve` + containment checks before writes. Trigger found in the main repo
+factory audit: a `../` target could pass the old string-prefix sandbox check and write outside
+the declared sandbox. `scripts/factory-execute-step-integration.mjs` now asserts the valid write
+still succeeds, traversal is blocked, and byte-exact SHA mismatch does not write a target.
+Verification: direct import of this standalone runtime returns `422/BLOCKED_RETURN_TO_BPB`
+for traversal with no outside file created; `cd lumin-factory/factory-staging && npm run check`
+PASS.
+
 ## What's done (factory reboot track)
 
 | Range | What |
