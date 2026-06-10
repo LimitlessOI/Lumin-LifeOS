@@ -1,0 +1,597 @@
+{
+  "generated_at": "2026-06-10T16:46:29.606Z",
+  "session_id": "SESSION-DELIBERATION-V27-2026-06-09",
+  "mission_id": "FACTORY-DELIBERATION-V27-0001",
+  "verdict": "SENTRY_SESSION_PASS",
+  "aspects": [
+    {
+      "aspect_id": "A01-vocabulary-docs",
+      "title": "Vocabulary v2.7 + governance docs sealed",
+      "blueprint_steps": [],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "results": [
+          {
+            "test_id": "AT-A01-1",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A01-2",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A01-3",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A01-4",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A01-5",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:27.406Z"
+    },
+    {
+      "aspect_id": "A02-db-core",
+      "title": "Neon core deliberation tables migration",
+      "blueprint_steps": [
+        "D01"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "results": [
+          {
+            "test_id": "AT-A02-1",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A02-2",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A02-3",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:27.473Z"
+    },
+    {
+      "aspect_id": "A03-db-debrief-rep",
+      "title": "Founder debrief + REP catalog migration",
+      "blueprint_steps": [
+        "D02"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "results": [
+          {
+            "test_id": "AT-A03-1",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A03-2",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A03-3",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:27.536Z"
+    },
+    {
+      "aspect_id": "A04-config-rep",
+      "title": "Deliberation config + REP catalog JSON",
+      "blueprint_steps": [
+        "D03"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "results": [
+          {
+            "test_id": "AT-A04-1",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A04-2",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A04-3",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A04-4",
+            "type": "shell_command",
+            "pass": true,
+            "detail": "exit 0"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:27.657Z"
+    },
+    {
+      "aspect_id": "A05-service-governance",
+      "title": "Deliberation governance service",
+      "blueprint_steps": [
+        "D04"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "results": [
+          {
+            "test_id": "AT-A05-1",
+            "type": "node_syntax_check",
+            "pass": true,
+            "detail": "syntax ok"
+          },
+          {
+            "test_id": "AT-A05-2",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A05-3",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A05-4",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:27.771Z"
+    },
+    {
+      "aspect_id": "A06-service-debrief",
+      "title": "Founder Debrief generator service",
+      "blueprint_steps": [
+        "D05"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "results": [
+          {
+            "test_id": "AT-A06-1",
+            "type": "node_syntax_check",
+            "pass": true,
+            "detail": "syntax ok"
+          },
+          {
+            "test_id": "AT-A06-2",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A06-3",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:27.884Z"
+    },
+    {
+      "aspect_id": "A07-api-production",
+      "title": "Production deliberation API + runtime mount",
+      "blueprint_steps": [
+        "D06"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "results": [
+          {
+            "test_id": "AT-A07-1",
+            "type": "node_syntax_check",
+            "pass": true,
+            "detail": "syntax ok"
+          },
+          {
+            "test_id": "AT-A07-2",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A07-3",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A07-4",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A07-5",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:27.998Z"
+    },
+    {
+      "aspect_id": "A08-factory-gate",
+      "title": "Factory deliberation seed + BPB intake gate + HTTP routes",
+      "blueprint_steps": [
+        "D07"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "results": [
+          {
+            "test_id": "AT-A08-1",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A08-2",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A08-3",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A08-4",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A08-5",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A08-6",
+            "type": "shell_command",
+            "pass": true,
+            "detail": "exit 0"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:28.133Z"
+    },
+    {
+      "aspect_id": "A09-builder-hook",
+      "title": "Council /build deliberation seed + finalize",
+      "blueprint_steps": [
+        "D08"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "results": [
+          {
+            "test_id": "AT-A09-1",
+            "type": "node_syntax_check",
+            "pass": true,
+            "detail": "syntax ok"
+          },
+          {
+            "test_id": "AT-A09-2",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A09-3",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A09-4",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:28.247Z"
+    },
+    {
+      "aspect_id": "A10-gate-change",
+      "title": "Gate-change Position E/K + deliberation auto-persist",
+      "blueprint_steps": [
+        "D09"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "results": [
+          {
+            "test_id": "AT-A10-1",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A10-2",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A10-3",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A10-4",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A10-5",
+            "type": "node_syntax_check",
+            "pass": true,
+            "detail": "syntax ok"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:28.359Z"
+    },
+    {
+      "aspect_id": "A11-historian-factory",
+      "title": "Factory historian consensus persist (no stub)",
+      "blueprint_steps": [],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "results": [
+          {
+            "test_id": "AT-A11-1",
+            "type": "node_syntax_check",
+            "pass": true,
+            "detail": "syntax ok"
+          },
+          {
+            "test_id": "AT-A11-2",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A11-3",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:28.473Z"
+    },
+    {
+      "aspect_id": "A12-boot-rep",
+      "title": "REP catalog boot sync",
+      "blueprint_steps": [
+        "D12"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 2,
+        "failed": 0,
+        "total": 2,
+        "results": [
+          {
+            "test_id": "AT-A12-1",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          },
+          {
+            "test_id": "AT-A12-2",
+            "type": "file_contains_string",
+            "pass": true,
+            "detail": "contains expected string"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:28.537Z"
+    },
+    {
+      "aspect_id": "A13-verify-smoke",
+      "title": "Verify script + A→Z smoke orchestrator",
+      "blueprint_steps": [
+        "D10",
+        "D11"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "results": [
+          {
+            "test_id": "AT-A13-1",
+            "type": "shell_command",
+            "pass": true,
+            "detail": "exit 0"
+          },
+          {
+            "test_id": "AT-A13-2",
+            "type": "shell_command",
+            "pass": true,
+            "detail": "exit 0"
+          },
+          {
+            "test_id": "AT-A13-3",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A13-4",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:28.909Z"
+    },
+    {
+      "aspect_id": "A14-mission-pack",
+      "title": "Mission pack contracts (FP/BP/acceptance/SENTRY self)",
+      "blueprint_steps": [
+        "D01",
+        "D02",
+        "D03",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "D10",
+        "D11",
+        "D12"
+      ],
+      "verdict": "SENTRY_ASPECT_PASS",
+      "maturity": "WIRED",
+      "acceptance": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "results": [
+          {
+            "test_id": "AT-A14-1",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A14-2",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          },
+          {
+            "test_id": "AT-A14-3",
+            "type": "shell_command",
+            "pass": true,
+            "detail": "exit 0"
+          },
+          {
+            "test_id": "AT-A14-4",
+            "type": "shell_command",
+            "pass": true,
+            "detail": "exit 0"
+          },
+          {
+            "test_id": "AT-A14-5",
+            "type": "file_exists",
+            "pass": true,
+            "detail": "exists"
+          }
+        ]
+      },
+      "generated_at": "2026-06-10T16:46:29.605Z"
+    }
+  ],
+  "neon_proof": null,
+  "counts": {
+    "proven": 0,
+    "wired": 14,
+    "fail": 0,
+    "total": 14
+  }
+}

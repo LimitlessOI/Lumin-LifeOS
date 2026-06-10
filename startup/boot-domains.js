@@ -9,6 +9,7 @@
  * This is the ONLY place async IIFE startup blocks should live.
  * Do NOT put domain boot logic in server.js — add it here instead.
  *
+ * @authority Legacy production spine — see services/AGENTS.md. Not canonical factory runtime.
  * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  */
 
@@ -309,9 +310,28 @@ async function bootSelfRepairDeployCheck(deps) {
   logger?.info('[BOOT] Governed proof parity scheduled at +45s, +120s, +240s after boot');
 }
 
+// ── Deliberation REP catalog sync (idempotent — no AI) ─────────────────────────
+async function bootDeliberationRepCatalog(deps) {
+  const { pool, logger } = deps;
+  if (!pool?.query) return;
+  try {
+    const { createDeliberationGovernanceService } = await import('../services/deliberation-governance-service.js');
+    const delib = createDeliberationGovernanceService(pool, logger);
+    const result = await delib.syncRepCatalogFromConfig();
+    if (result.ok) {
+      logger?.info({ upserted: result.upserted }, '[BOOT] REP catalog synced from config/rep-catalog.json');
+    } else {
+      logger?.warn({ reason: result.error }, '[BOOT] REP catalog sync skipped');
+    }
+  } catch (err) {
+    logger?.warn({ err: err.message }, '[BOOT] REP catalog sync failed (non-fatal)');
+  }
+}
+
 export async function bootAllDomains(deps) {
   const { pool, logger } = deps;
   await autoSeedEpistemicFacts(pool, logger);
+  await bootDeliberationRepCatalog(deps);
   await Promise.allSettled([
     bootGLVARMonitor(deps),
     bootEmailTriage(deps),

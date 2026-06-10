@@ -1,0 +1,45 @@
+{
+  "aspect_id": "A01-vocabulary-docs",
+  "title": "Vocabulary v2.7 + governance docs sealed",
+  "blueprint_steps": [],
+  "verdict": "SENTRY_ASPECT_PASS",
+  "maturity": "WIRED",
+  "acceptance": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "results": [
+      {
+        "test_id": "AT-A01-1",
+        "type": "file_exists",
+        "pass": true,
+        "detail": "exists"
+      },
+      {
+        "test_id": "AT-A01-2",
+        "type": "file_exists",
+        "pass": true,
+        "detail": "exists"
+      },
+      {
+        "test_id": "AT-A01-3",
+        "type": "file_exists",
+        "pass": true,
+        "detail": "exists"
+      },
+      {
+        "test_id": "AT-A01-4",
+        "type": "file_contains_string",
+        "pass": true,
+        "detail": "contains expected string"
+      },
+      {
+        "test_id": "AT-A01-5",
+        "type": "file_contains_string",
+        "pass": true,
+        "detail": "contains expected string"
+      }
+    ]
+  },
+  "generated_at": "2026-06-10T16:46:27.406Z"
+}

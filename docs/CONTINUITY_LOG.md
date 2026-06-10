@@ -2,6 +2,99 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SESSION SEAL] 2026-06-10 — Codex adversarial SENTRY probe fixes
+
+**Fixed:** B1 BPB+CDR unfocused-model bypass; B2 `clampQueryLimit` (LIMIT -1); B3 `skip_intake_gate` requires `FACTORY_ALLOW_SKIP_INTAKE_GATE=true`; B5 whitespace hist case; B6 `force_reseed`; B7 blueprint sort try/catch; factory `recordConsensusSession` validation; **missing `ensureMissionDeliberation` import** in `run-mission.js`.
+
+**Verified:** `npm run lifeos:deliberation:behavior` **17/17**; acceptance **24/24 PASS**.
+
+**Note:** Codex load_bearing first-call simulation was stale — `getGateStatus` already honors `opts.load_bearing` from `passDeliberationGate`.
+
+---
+## [SESSION SEAL] 2026-06-10 — Codex SENTRY behavioral fail-closed fixes
+
+**Agent role:** Cursor Conductor — implement Codex findings on breakable fail-closed law.
+
+**Fixed:** `validateConsensusSession()`; empty `{}` consensus rejected; load-bearing gate checks consensus substance; `finalizePipeline` returns `debrief: null` on gate fail; factory gate honors `load_bearing`; `npm run lifeos:deliberation:behavior` (11 assertions); acceptance **22/22 PASS**.
+
+**Design note:** Builder **seed** enforces Hist+CFO only; load-bearing consensus enforced at **finalize** (consensus does not exist pre-codegen).
+
+**Still blocked:** Git commit; Railway deploy; Neon proof.
+
+---
+## [SESSION SEAL] 2026-06-10 — SENTRY audit alignment (Claude Code verdict)
+
+**Agent role:** Cursor Conductor — fix P0/P1 from Claude Code qualitative SENTRY (mechanical WIRED ≠ mission shipped).
+
+**Fixed:**
+- `routes/lifeos-council-builder-routes.js` — deliberation seed **fail-closed** on exception (422, not silent bypass)
+- `services/builder-deliberation-hook.js` — missing pool returns **fail** (not `ok:true skipped`); finalize same
+- `services/deliberation-governance-service.js` — `getGateStatus` accepts `{ load_bearing }` from caller + gate row metadata; `passDeliberationGate` passes it through
+- `builderos-reboot/MISSION_QUEUE.json` — `FACTORY-DELIBERATION-V27-0001` → **`wired_uncommitted`**
+- `builderos-reboot/HANDOFF.md` — v2.7 status block at top
+
+**Still blocked (Adam action):** Git commit; Railway deploy; Neon 9-table proof; `SENTRY_MISSION_FAIL` until then.
+
+**Verified:** `npm run factory:deliberation-v27:acceptance` **18/18 PASS**; `node --check` on 3 deliberation files OK.
+
+---
+## [SESSION SEAL] 2026-06-09 — Deliberation v2.7 A→Z implementation complete
+
+**Agent role:** Cursor Conductor — GAP-FILL completion pass (Adam: "complete from A to Z").
+
+**Shipped this pass:**
+- Migration `20260609b_founder_debrief_rep_catalog.sql` — `founder_debriefs`, `rep_catalog_entries`
+- API: `GET /session/:id`, `GET /debrief/:id`, `POST /pipeline/seed`, `POST /pipeline/finalize`, `POST /reps/sync`, `GET /reps`
+- `services/founder-debrief-service.js` — Layer 1 synopsis + Layer 2 pack generator
+- `services/builder-deliberation-hook.js` — council `/build` seeds deliberation pre-codegen, finalizes + debrief post-commit
+- `scripts/deliberation-a-to-z-smoke.mjs` — factory local + optional Railway API leg (`npm run lifeos:deliberation:a-to-z-smoke`)
+- Boot: REP catalog sync from `config/rep-catalog.json` on startup
+
+**Verified locally:** A→Z smoke **0 failures** (factory pipeline + BPB intake gate). DB/API legs skipped without `DATABASE_URL` / Railway keys in shell.
+
+**Not done:** Git commit (Adam did not request). Production Railway smoke after deploy. REP catalog UI. Debrief push to FM/Lumin overlay.
+
+**Factory loop (this pass):** `FACTORY-DELIBERATION-V27-0001` — FP → retroactive BP → **14 aspect SENTRY loop** (`SENTRY_SESSION_PASS`, 54 tests, all **WIRED**).
+
+**PROVEN upgrade:** `DELIBERATION_SENTRY_PROVEN=1 npm run factory:deliberation-v27:sentry-loop` after Railway deploy + keys.
+
+**Prior seal (same day):** Founder Governance v2.7 vocabulary + architecture consensus — see block below.
+
+---
+## [SESSION SEAL] 2026-06-09 — Founder Governance v2.7 (vocabulary + architecture consensus)
+
+**Agent role:** Cursor advisor / Conductor supervisor — documentation seal (no code build this slice).
+
+**What happened:** Full-day founder session: memory/truth archaeology (morning) + vocabulary freeze + deliberation/governance architecture (afternoon/evening). Adam declared **full consensus** — seal v2.7.
+
+**Ratified (documented):**
+- **Seven departments:** ChC, Hist, SNT, **CFO**, BPB, SDO, **CDR** — separation of powers; no dept verdicts alone
+- **TSOS** → subsystem + doctrine **under CFO** (not dept seat in v2.7)
+- **REP** capsules replace **Lens**; authority capsules vs REP capsules (separate stacks)
+- **CDR** = Coder Department; **Coder** = model tier (zero-decision executor)
+- **BPB ↔ CDR session law:** two AIs when translate + execute same window
+- **Hist:** nail-level ledger + **mandatory case** (parallel to SNT must propose solutions)
+- **Lean Cncl default;** expand roster on audit failure; everything scored A–F
+- **Consensus:** brainstorm → 1/2/4/5y future-back → competitive scan → synthesis E/K
+- **Founder Debrief** template — synopsis first, plain English
+- **Sealed for build** — not forever; change on SNT drift or failed results
+
+**Files sealed:**
+- `docs/BUILDEROS_VOCABULARY.md` v2.7
+- `docs/architecture/DELIBERATION_ARCHITECTURE.md` (rewrite)
+- `docs/architecture/FOUNDER_VOCABULARY_CONSENSUS_REPORT.md` v2.7
+- `docs/architecture/FOUNDER_DEBRIEF_TEMPLATE.md` (new)
+- `docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md` (receipts + handoff)
+
+**Morning archaeology (unchanged, cross-linked):** `MEMORY_ARCHITECTURE_ARCHAEOLOGY.md`, `TRUTH_SYSTEM_ARCHITECTURE.md`, `PERSONAL_MEMORY_ARCHITECTURE.md`, `docs/archive/EVIDENCE_VAULT/`
+
+**Next build slice:** `CnclRoster` JSON + composition scorecard schema → Position E/K in council prompts → factory deliberation gate receipts.
+
+**Implementation shipped (same session continuation):** Migration `20260609_deliberation_governance_v27.sql`, `/api/v1/lifeos/deliberation/*`, gate-change synthesis round 3, factory BPB deliberation gate, `scripts/verify-deliberation-governance.mjs`.
+
+**Not done:** Git commit (Adam did not request). Code/migrations for roster/scorecard. Global TSOS→CFO rename in `services/`.
+
+---
 ## [FOUNDER DIRECTIVE] 2026-06-02 — End-of-Session Handoff for All Agents (CUR / C2 / Gemini / any)
 
 > **YOU ARE REQUIRED TO IDENTIFY YOURSELF AND YOUR ROLE BEFORE STARTING WORK.**

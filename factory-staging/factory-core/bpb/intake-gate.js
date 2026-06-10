@@ -5,6 +5,7 @@ import { validateProductDevelopmentGate } from '../product-development/validate-
 import { validateFounderPacketCompleteness } from '../founder-packet/validate-completeness.js';
 import { runAdamFilter } from '../founder-intent/adam-filter.js';
 import { blueprintFreezeCheck } from '../sentry/blueprint-freeze-check.js';
+import { validateDeliberationGate } from '../deliberation/validate-deliberation-gate.js';
 
 function loadMissionJson(missionId, filename) {
   const p = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS', missionId, filename);
@@ -23,7 +24,7 @@ const STEP_REQUIRED = [
 /**
  * BPB intake gate — rejects if upstream strategy or blueprint shape is incomplete.
  */
-export function runBpbIntakeGate(mission_id, { strict_pd = false, skip_if_missing = false } = {}) {
+export function runBpbIntakeGate(mission_id, { strict_pd = false, skip_if_missing = false, session_id = null } = {}) {
   if (!mission_id || mission_id === 'unknown') {
     return { ok: false, status: 'AIC_GATE_FAILURE', violations: ['mission_id required'] };
   }
@@ -53,11 +54,19 @@ export function runBpbIntakeGate(mission_id, { strict_pd = false, skip_if_missin
   if (!adam.ok) violations.push(...(adam.flags || []).map((v) => `adam:${v}`));
   if (!freeze.pass) violations.push(...(freeze.blocking || []).map((v) => `bpb:${v}`));
 
+  const delibSession = session_id || `mission:${mission_id}`;
+  const deliberation = validateDeliberationGate(delibSession, {
+    skip_if_missing: skip_if_missing && !strict_pd,
+  });
+  if (!deliberation.ok && deliberation.status !== 'SKIP') {
+    violations.push(...(deliberation.violations || []).map((v) => `delib:${v}`));
+  }
+
   return {
     ok: violations.length === 0,
     status: violations.length === 0 ? 'BPB_INTAKE_PASS' : 'AIC_GATE_FAILURE',
     mission_id,
-    checks: { product_development: pd, founder_packet: fp, adam_filter: adam, blueprint_freeze: freeze },
+    checks: { product_development: pd, founder_packet: fp, adam_filter: adam, blueprint_freeze: freeze, deliberation_gate: deliberation },
     violations,
   };
 }

@@ -1,0 +1,32 @@
+[
+  {
+    "test_id": "AT-A10-1",
+    "step_id": "D09",
+    "type": "file_contains_string",
+    "target": "services/lifeos-gate-change-council-run.js",
+    "expected": "consensus_v4_opposite_synthesis_v27"
+  },
+  {
+    "test_id": "AT-A10-2",
+    "type": "file_contains_string",
+    "target": "routes/lifeos-gate-change-routes.js",
+    "expected": "persistDeliberationGovernance"
+  },
+  {
+    "test_id": "AT-A10-3",
+    "type": "file_contains_string",
+    "target": "routes/lifeos-gate-change-routes.js",
+    "expected": "deliberation_session_id"
+  },
+  {
+    "test_id": "AT-A10-4",
+    "type": "file_contains_string",
+    "target": "prompts/lifeos-gate-change-proposal.md",
+    "expected": "Position E"
+  },
+  {
+    "test_id": "AT-A10-5",
+    "type": "node_syntax_check",
+    "target": "services/lifeos-gate-change-council-run.js"
+  }
+]

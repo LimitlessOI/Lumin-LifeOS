@@ -847,6 +847,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-03",
-  "ssot_receipt_tail": "Builder Reliability Initiative: model escalation gate on lifeos-council-builder-routes.js (413 fast-fail + evaluateModelEscalationGate)."
+  "last_updated": "2026-06-10",
+  "ssot_receipt_tail": "Deliberation v2.7 builder hook on /build — seed before codegen, finalize after commit (AM48)."
 }

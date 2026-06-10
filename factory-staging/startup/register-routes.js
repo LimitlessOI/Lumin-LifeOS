@@ -1,3 +1,7 @@
+/**
+ * Factory staging route registration — canonical factory runtime.
+ * @authority Canonical factory runtime — see factory-staging/AGENTS.md
+ */
 import { factoryExecuteStepRoute } from '../factory-core/routes/factory-execute-step-routes.js';
 import { factoryExecuteMissionRoute } from '../factory-core/routes/factory-execute-mission-routes.js';
 import { dispatchExecuteStep } from '../factory-core/builder/run-step.js';
@@ -7,6 +11,11 @@ import { summarizeHistory } from '../factory-core/historian/mission-history.js';
 import { summarizeHistorian } from '../factory-core/historian/append-record.js';
 import { summarizeTsosMetrics } from '../factory-core/tsos/tsos-summary.js';
 import { runBpbIntakeGate } from '../factory-core/bpb/intake-gate.js';
+import {
+  ensureMissionDeliberation,
+  runFactoryDeliberationPipeline,
+} from '../factory-core/deliberation/seed-mission-deliberation.js';
+import { validateDeliberationGate } from '../factory-core/deliberation/validate-deliberation-gate.js';
 import { reconcileRemoteTruth } from '../factory-core/readiness/remote-truth-reconciler.js';
 import { getC2SurfaceStatus, formatC2MissionBrief } from '../factory-core/lifeos/c2-surface.js';
 import fs from 'node:fs';
@@ -36,6 +45,8 @@ export function registerFactoryRoutes(app) {
         '/factory/tsos/summary',
         '/factory/historian/summary',
         '/factory/gates/intake',
+        '/factory/deliberation/seed',
+        '/factory/deliberation/gate',
         '/factory/c2/status',
         '/factory/truth/reconcile',
         '/factory/canon/status',
@@ -65,8 +76,32 @@ export function registerFactoryRoutes(app) {
     if (!mission_id) {
       return res.status(400).json({ ok: false, error: 'mission_id query required' });
     }
-    const intake = runBpbIntakeGate(String(mission_id), { strict_pd: req.query.strict === 'true' });
+    if (req.query.auto_seed !== 'false') {
+      ensureMissionDeliberation(String(mission_id));
+    }
+    const intake = runBpbIntakeGate(String(mission_id), {
+      strict_pd: req.query.strict === 'true',
+      session_id: req.query.session_id || `mission:${mission_id}`,
+    });
     res.status(intake.ok ? 200 : 422).json({ ok: intake.ok, intake });
+  });
+
+  app.post('/factory/deliberation/seed', (req, res) => {
+    const mission_id = req.body?.mission_id;
+    if (!mission_id) {
+      return res.status(400).json({ ok: false, error: 'mission_id required' });
+    }
+    const result = runFactoryDeliberationPipeline(String(mission_id), req.body?.context || {});
+    res.status(result.ok ? 200 : 422).json({ ok: result.ok, ...result });
+  });
+
+  app.get('/factory/deliberation/gate', (req, res) => {
+    const session_id = req.query.session_id || (req.query.mission_id ? `mission:${req.query.mission_id}` : null);
+    if (!session_id) {
+      return res.status(400).json({ ok: false, error: 'session_id or mission_id required' });
+    }
+    const gate = validateDeliberationGate(String(session_id));
+    res.status(gate.ok ? 200 : 422).json({ ok: gate.ok, gate });
   });
 
   app.get('/factory/c2/status', (_req, res) => {

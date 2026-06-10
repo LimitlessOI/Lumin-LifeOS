@@ -351,6 +351,22 @@ Tuning only; defaults are wired in **`routes/lifeos-council-builder-routes.js`**
 
 ---
 
+## Railway environments (operator policy)
+
+**Project:** `robust-magic` on Railway.
+
+| Environment | Operator status | System use |
+|-------------|-----------------|------------|
+| **production** | **Canonical** — only environment Adam maintains | All proofs, builder preflight, `PUBLIC_BASE_URL`, live LifeOS |
+| **Lumin sandbox** | **Abandoned for operator attention** (2026-06-09) — Adam does not use it; created on prior AI advice | **Do not** ask Adam to sync vars or keep it updated. If staging is needed later, the **system** opens a mission — not manual twin-vault hygiene |
+| **PR preview envs** (e.g. `Lumin-LifeOS-pr-*`) | Stale unless actively used for PR deploys | Ignore for runtime truth |
+
+**`DATABASE_URL_SANDBOX` in production vault:** still used by **code** when `NODE_ENV !== 'production'` (local dev / non-prod deploy). That is **not** the same as maintaining the Railway **Lumin sandbox** environment.
+
+**Agents:** Never instruct Adam to duplicate production variables into Lumin sandbox. Production vault is source of truth.
+
+---
+
 ## 🧾 Deploy inventory — Lumin (Railway production, variable **names** only)
 
 **Service:** `robust-magic` · **Environment:** production · **Vault:** Railway → Lumin → Variables.  

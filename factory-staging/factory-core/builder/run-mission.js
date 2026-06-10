@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { dispatchExecuteStep, REPO_ROOT } from './run-step.js';
+import { ensureMissionDeliberation } from '../deliberation/seed-mission-deliberation.js';
 
 function sortStepsByDependencies(steps) {
   const byId = new Map(steps.map((s) => [s.step_id, s]));
@@ -48,7 +49,26 @@ export function dispatchExecuteMission(body) {
     return { httpStatus: 404, body: blueprint };
   }
 
-  const steps = sortStepsByDependencies(blueprint.steps || []);
+  if (body?.auto_seed_deliberation !== false) {
+    ensureMissionDeliberation(mission_id, body?.deliberation_context || {});
+  }
+
+  let steps;
+  try {
+    steps = sortStepsByDependencies(blueprint.steps || []);
+  } catch (err) {
+    return {
+      httpStatus: 422,
+      body: {
+        ok: false,
+        status: 'BLOCKED_RETURN_TO_BPB',
+        gap_type: 'invalid_blueprint',
+        summary: err.message,
+        mission_id,
+      },
+    };
+  }
+
   const results = [];
 
   for (const step of steps) {

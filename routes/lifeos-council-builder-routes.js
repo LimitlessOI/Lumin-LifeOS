@@ -25,6 +25,7 @@
  *   execution_only: boolean (default: false) — when true with mode=code and no explicit `model`, routes to
  *     `council.builder.code_execute` (fast literal codegen). Use only after a frozen spec (see prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md).
  *
+ * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime (factory-staging/).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
@@ -48,6 +49,10 @@ import {
   isCheaperModel,
 } from '../services/builderos-model-escalation-gate.js';
 import { logShadowRoutingDecision } from '../services/builderos-tsos-routing.js';
+import {
+  seedBuilderDeliberation,
+  finalizeBuilderDeliberation,
+} from '../services/builder-deliberation-hook.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -1485,6 +1490,29 @@ export function createLifeOSCouncilBuilderRoutes({
       }
     }
 
+    let deliberationSessionId = null;
+    try {
+      const delibSeed = await seedBuilderDeliberation(pool, taskBody, log);
+      if (!delibSeed.ok && !delibSeed.skipped) {
+        return res.status(422).json({
+          ok: false,
+          error: 'deliberation_gate_fail',
+          violations: delibSeed.violations || delibSeed.errors,
+          deliberation_session_id: delibSeed.session_id,
+          committed: false,
+        });
+      }
+      deliberationSessionId = delibSeed.session_id || null;
+    } catch (delibErr) {
+      log.error({ err: delibErr.message }, '[BUILDER] deliberation seed failed — fail-closed');
+      return res.status(422).json({
+        ok: false,
+        error: 'deliberation_seed_failed',
+        detail: delibErr.message,
+        committed: false,
+      });
+    }
+
     if (typeof commitToGitHub !== 'function') {
       const gapRecommendation = await recordBuilderGap({
         domain: taskBody.domain || null,
@@ -1919,6 +1947,25 @@ export function createLifeOSCouncilBuilderRoutes({
         }
       }
 
+      let deliberationFinalize = null;
+      if (deliberationSessionId) {
+        try {
+          deliberationFinalize = await finalizeBuilderDeliberation(
+            pool,
+            {
+              ...taskBody,
+              session_id: deliberationSessionId,
+              target_file: resolvedTarget,
+              model_used,
+              commit_sha: goldenSha,
+            },
+            log
+          );
+        } catch (finErr) {
+          log.warn({ err: finErr.message, deliberationSessionId }, '[BUILDER] deliberation finalize failed (non-fatal)');
+        }
+      }
+
       res.json({
         ok: true,
         output: generatedOutput,
@@ -1929,6 +1976,10 @@ export function createLifeOSCouncilBuilderRoutes({
         model_used,
         domain_context_loaded,
         domain,
+        ...(deliberationSessionId ? { deliberation_session_id: deliberationSessionId } : {}),
+        ...(deliberationFinalize?.debrief
+          ? { founder_debrief_synopsis: deliberationFinalize.debrief.layer1_synopsis }
+          : {}),
         ...(routeWired ? { route_wired: routeWired } : {}),
       });
     } catch (err) {

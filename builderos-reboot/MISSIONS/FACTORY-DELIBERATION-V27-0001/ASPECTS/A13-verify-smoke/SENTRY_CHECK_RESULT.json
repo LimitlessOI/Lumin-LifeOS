@@ -1,0 +1,42 @@
+{
+  "aspect_id": "A13-verify-smoke",
+  "title": "Verify script + A→Z smoke orchestrator",
+  "blueprint_steps": [
+    "D10",
+    "D11"
+  ],
+  "verdict": "SENTRY_ASPECT_PASS",
+  "maturity": "WIRED",
+  "acceptance": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "results": [
+      {
+        "test_id": "AT-A13-1",
+        "type": "shell_command",
+        "pass": true,
+        "detail": "exit 0"
+      },
+      {
+        "test_id": "AT-A13-2",
+        "type": "shell_command",
+        "pass": true,
+        "detail": "exit 0"
+      },
+      {
+        "test_id": "AT-A13-3",
+        "type": "file_exists",
+        "pass": true,
+        "detail": "exists"
+      },
+      {
+        "test_id": "AT-A13-4",
+        "type": "file_exists",
+        "pass": true,
+        "detail": "exists"
+      }
+    ]
+  },
+  "generated_at": "2026-06-10T16:46:28.909Z"
+}

@@ -4,7 +4,7 @@
  * Used by routes/lifeos-gate-change-routes.js — runs on the **server** where
  * callCouncilMember and provider keys already exist (e.g. Railway).
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
  */
 
 import { parseCouncilVerdict } from './lifeos-gate-change-proposals.js';
@@ -140,18 +140,66 @@ export async function runGateChangeCouncilDebate({ callCouncilMember, rubricText
     consensus = summarizeConsensus(oppositeRound);
   }
 
+  let synthesisRound = [];
+  let position_e_or_k_found = false;
+  let final_synthesis = null;
+
+  if (!consensus.unanimous || consensus.final_verdict === 'DEFER') {
+    const synthesisPrompt = [
+      systemPrompt,
+      '',
+      'ROUND 3 (SYNTHESIS — Position E/K):',
+      'After pro/con and opposite-argument rounds, search for a synthesis or reframe',
+      'that is NOT simply A or B — name Position E or K if one exists.',
+      'Cover multi-horizon future-back (1y, 2y, 4y, 5y) and competitive/external scan briefly.',
+      'End with SYNTHESIS: <one paragraph> then your VERDICT line.',
+      '',
+      userPrompt,
+      '',
+      '--- PRIOR ROUNDS SUMMARY ---',
+      ...round1.map((r) => `${r.member} R1: ${r.verdict}`),
+      ...oppositeRound.map((r) => `${r.member} R2: ${r.verdict}`),
+    ].join('\n');
+
+    const synthesizer = memberKeys[0];
+    try {
+      const syn = await runSingleCouncilPrompt(synthesizer, synthesisPrompt);
+      synthesisRound.push(syn);
+      const raw = syn.raw || '';
+      const synMatch = raw.match(/SYNTHESIS:\s*([\s\S]+?)(?=VERDICT:|$)/i);
+      if (synMatch) {
+        final_synthesis = synMatch[1].trim();
+        position_e_or_k_found = /position\s+[ek]/i.test(raw) || Boolean(final_synthesis);
+      }
+      if (syn.verdict && syn.verdict !== 'UNKNOWN') {
+        consensus = summarizeConsensus([...oppositeRound.length ? oppositeRound : round1, syn]);
+      }
+    } catch (err) {
+      synthesisRound.push({
+        member: synthesizer,
+        raw: `ERROR: ${err.message}`,
+        verdict: 'UNKNOWN',
+      });
+    }
+  }
+
   const rounds = {
-    protocol: 'consensus_v3_opposite_argument_future_back',
+    protocol: 'consensus_v4_opposite_synthesis_v27',
     required_sections: [
       'steel_man_risk',
       'equivalence',
       'blind_spots',
-      'future_back',
+      'future_back_1y_2y_4y_5y',
+      'competitive_scan',
+      'synthesis_e_or_k',
       'recommendation',
     ],
     models: memberKeys,
     round1,
     round2_opposite: oppositeRound,
+    round3_synthesis: synthesisRound,
+    position_e_or_k_found,
+    final_synthesis,
     final: consensus,
   };
 
@@ -160,9 +208,22 @@ export async function runGateChangeCouncilDebate({ callCouncilMember, rubricText
     ...round1.map((r) => `\n=== ${r.member} (${r.verdict}) ===\n${r.raw}`),
     oppositeRound.length ? '\n\nROUND 2 (OPPOSITE ARGUMENT)' : '',
     ...oppositeRound.map((r) => `\n=== ${r.member} (${r.verdict}) ===\n${r.raw}`),
+    synthesisRound.length ? '\n\nROUND 3 (SYNTHESIS E/K)' : '',
+    ...synthesisRound.map((r) => `\n=== ${r.member} (${r.verdict}) ===\n${r.raw}`),
+    final_synthesis ? `\n\nFINAL SYNTHESIS: ${final_synthesis}` : '',
     `\n\nCONSENSUS SUMMARY: ${consensus.summary}`,
     `VERDICT: ${consensus.final_verdict}`,
   ].join('\n');
 
-  return { round1, oppositeRound, consensus, rounds, councilOutput, memberKeys };
+  return {
+    round1,
+    oppositeRound,
+    synthesisRound,
+    position_e_or_k_found,
+    final_synthesis,
+    consensus,
+    rounds,
+    councilOutput,
+    memberKeys,
+  };
 }

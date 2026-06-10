@@ -31,6 +31,7 @@ import { GATE_CHANGE_PRESETS } from '../config/gate-change-presets.js';
 import { getModelForTask } from '../config/task-model-routing.js';
 import { verifyToken } from '../services/lifeos-auth.js';
 import { createMemoryIntelligenceService } from '../services/memory-intelligence-service.js';
+import { createDeliberationGovernanceService } from '../services/deliberation-governance-service.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPT_PATH = join(__dirname, '..', 'prompts', 'lifeos-gate-change-proposal.md');
@@ -77,6 +78,7 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
   const log = logger || console;
   const router = express.Router();
   const memorySvc = pool?.query ? createMemoryIntelligenceService(pool, log) : null;
+  const deliberationSvc = pool?.query ? createDeliberationGovernanceService(pool, log) : null;
 
   if (!pool?.query) {
     router.use((req, res) => {
@@ -189,6 +191,75 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
     });
   }
 
+  async function persistDeliberationGovernance(row, debateRun, reqBody = {}) {
+    if (!deliberationSvc) return null;
+    const session_id =
+      reqBody.session_id ||
+      `gate-change-${row.id}-${Date.now()}`;
+    const { round1, oppositeRound, synthesisRound, consensus, rounds, memberKeys } = debateRun;
+
+    await deliberationSvc.createRoster({
+      session_id,
+      decision_type: 'gate_change',
+      authorities: ['ChC', 'SNT', 'CFO'],
+      reps: [{ name: 'Founder' }],
+      models: memberKeys.map((id, i) => ({
+        id,
+        focus: i === 0 ? 'ChC' : 'SNT',
+      })),
+      partial: memberKeys.length < 3,
+      metadata_json: { gate_change_proposal_id: row.id },
+    });
+
+    await deliberationSvc.recordHistCase({
+      session_id,
+      problem: row.title,
+      case_text: consensus.summary || 'Gate-change council debate completed',
+      ideas: (synthesisRound || []).map((s) => s.raw?.slice(0, 500)),
+      opportunity: debateRun.final_synthesis || null,
+      evidence_links: [{ type: 'gate_change_proposal', id: row.id }],
+      uncertainty: 'THINK',
+    });
+
+    await deliberationSvc.recordCfoReceipt({
+      session_id,
+      dept: 'CFO',
+      role: 'gate_change_debate',
+      model: memberKeys.join(','),
+      tokens: null,
+      cost_usd: null,
+      founder_priority_mode: Boolean(reqBody.founder_priority_mode),
+      metadata_json: { models: memberKeys },
+    });
+
+    await deliberationSvc.recordConsensusSession({
+      session_id,
+      original_positions: (round1 || []).map((e) => ({
+        agent: e.member,
+        position: e.verdict,
+        raw_excerpt: (e.raw || '').slice(0, 2000),
+      })),
+      final_synthesis: debateRun.final_synthesis || consensus.summary,
+      position_e_or_k_found: Boolean(debateRun.position_e_or_k_found),
+      participants: memberKeys,
+      vote_counts: consensus.vote_counts,
+      predicted_outcome: `Gate-change verdict: ${consensus.final_verdict}`,
+      metadata_json: { rounds },
+    });
+
+    await deliberationSvc.recordScorecardEntry({
+      session_id,
+      decision_type: 'gate_change',
+      authorities: ['ChC', 'SNT', 'CFO'],
+      reps: [{ name: 'Founder' }],
+      model_count: memberKeys.length,
+      partial: memberKeys.length < 3,
+      notes: consensus.summary,
+    });
+
+    return session_id;
+  }
+
   // POST /run-preset — create + run full debate on **server** (one request; uses Railway env keys)
   router.post('/run-preset', requireKey, async (req, res) => {
     try {
@@ -223,6 +294,12 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
       } catch (memoryErr) {
         log.warn({ err: memoryErr.message, proposalId: updated.id }, '[GATE-CHANGE] debate persisted to proposal but not memory');
       }
+      let deliberation_session_id = null;
+      try {
+        deliberation_session_id = await persistDeliberationGovernance(updated, debateRun, req.body || {});
+      } catch (delibErr) {
+        log.warn({ err: delibErr.message, proposalId: updated.id }, '[GATE-CHANGE] deliberation governance persist failed');
+      }
       res.json({
         ok: true,
         proposal: updated,
@@ -230,6 +307,9 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
         consensus_reached: consensus.reached,
         vote_counts: consensus.vote_counts,
         models_used: memberKeys,
+        position_e_or_k_found: debateRun.position_e_or_k_found,
+        final_synthesis: debateRun.final_synthesis,
+        deliberation_session_id,
         source: 'server_run_preset',
       });
     } catch (err) {
@@ -314,6 +394,12 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
       } catch (memoryErr) {
         log.warn({ err: memoryErr.message, proposalId: updated.id }, '[GATE-CHANGE] debate persisted to proposal but not memory');
       }
+      let deliberation_session_id = null;
+      try {
+        deliberation_session_id = await persistDeliberationGovernance(updated, debateRun, req.body || {});
+      } catch (delibErr) {
+        log.warn({ err: delibErr.message, proposalId: updated.id }, '[GATE-CHANGE] deliberation governance persist failed');
+      }
 
       res.json({
         ok: true,
@@ -322,6 +408,9 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
         consensus_reached: consensus.reached,
         vote_counts: consensus.vote_counts,
         models_used: memberKeys,
+        position_e_or_k_found: debateRun.position_e_or_k_found,
+        final_synthesis: debateRun.final_synthesis,
+        deliberation_session_id,
         source: 'server_run_council',
       });
     } catch (err) {

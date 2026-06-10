@@ -35,6 +35,7 @@ const missions = [
   'FACTORY-REBOOT-0027',
   'FACTORY-REBOOT-0028',
   'FACTORY-REBOOT-0029',
+  'FACTORY-DELIBERATION-V27-0001',
 ];
 let failed = 0;
 

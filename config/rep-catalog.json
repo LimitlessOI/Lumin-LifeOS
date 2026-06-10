@@ -1,0 +1,17 @@
+{
+  "catalog_version": "v2.7",
+  "reps": [
+    { "name": "LifeOS", "description": "Human impact, privacy, relationships, growth" },
+    { "name": "LimitlessOS", "description": "Business impact, revenue, ops, delegation" },
+    { "name": "Marketing", "description": "GTM, brand, audience" },
+    { "name": "Relationship", "description": "Dyadic / family / marriage context" },
+    { "name": "Health", "description": "Health, energy, behavioral patterns" },
+    { "name": "Founder", "description": "Adam intent, sovereignty, FM priorities" },
+    { "name": "Customer", "description": "End-user experience" },
+    { "name": "Revenue", "description": "Money, ROI, sustainability" },
+    { "name": "Scalability", "description": "Growth, load, architecture scale" },
+    { "name": "Privacy", "description": "Data sovereignty, consent" },
+    { "name": "Education", "description": "Learning, clarity, coachability" }
+  ],
+  "add_rep_rule": "One-line receipt in AMENDMENT_48 Change Receipts when adding a REP"
+}

@@ -35,6 +35,8 @@ const checks = [
   { id: 'SM-012', name: 'SENTRY audit report exists', pass: exists('builderos-reboot/SENTRY_AUDIT_REPORT.md') },
   { id: 'SM-013', name: 'Full loop proof receipt', pass: loadJson('builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json')?.pass === true },
   { id: 'SM-014', name: 'TSOS hot path integration', pass: runOk(['builderos-reboot/scripts/factory-tsos-integration.mjs']) },
+  { id: 'SM-015', name: 'Deliberation v27 mission SENTRY pass', pass: loadJson('builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/SENTRY_CHECK_RESULT.json')?.verdict === 'SENTRY_MISSION_PASS' },
+  { id: 'SM-016', name: 'Deliberation v27 aspect SENTRY loop pass', pass: loadJson('builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/SESSION_SENTRY_LOOP_RESULT.json')?.verdict === 'SENTRY_SESSION_PASS' },
 ];
 
 const pass = checks.every((c) => c.pass);

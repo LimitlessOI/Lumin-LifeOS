@@ -1,0 +1,15 @@
+[
+  {
+    "test_id": "AT-A12-1",
+    "step_id": "D12",
+    "type": "file_contains_string",
+    "target": "startup/boot-domains.js",
+    "expected": "bootDeliberationRepCatalog"
+  },
+  {
+    "test_id": "AT-A12-2",
+    "type": "file_contains_string",
+    "target": "services/deliberation-governance-service.js",
+    "expected": "syncRepCatalogFromConfig"
+  }
+]

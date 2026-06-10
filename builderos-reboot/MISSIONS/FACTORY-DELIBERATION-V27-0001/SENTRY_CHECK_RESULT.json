@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-06-10T09:41:06.742Z",
+  "mission_id": "FACTORY-DELIBERATION-V27-0001",
+  "verdict": "SENTRY_MISSION_PASS",
+  "maturity": "WIRED",
+  "fully_machine_ready": false,
+  "checks": [
+    {
+      "id": "SD-FOUNDER_PACKET.json",
+      "name": "FOUNDER_PACKET.json exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "SD-BLUEPRINT.json",
+      "name": "BLUEPRINT.json exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "SD-ACCEPTANCE_TESTS.json",
+      "name": "ACCEPTANCE_TESTS.json exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "SD-PRODUCT_DEVELOPMENT_RESULT.json",
+      "name": "PRODUCT_DEVELOPMENT_RESULT.json exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "SD-BP-STEPS",
+      "name": "Blueprint has 12 steps",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "SD-ACCEPTANCE",
+      "name": "Mission acceptance tests pass",
+      "pass": true,
+      "detail": "fy-deliberation-governance.mjs\nPASS AT-D11-1 file_exists scripts/deliberation-a-to-z-smoke.mjs\nPASS AT-D11-2 shell_command npm run lifeos:deliberation:a-to-z-smoke\nPASS AT-D12-1 file_contains_string startup/boot-domains.js\nPASS AT-COV-1 acceptance_tests_cover_blueprint builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/ACCEPTANCE_TESTS.json\n\nFACTORY-DELIBERATION-V27-0001: 18 passed, 0 failed\n"
+    },
+    {
+      "id": "SD-SMOKE",
+      "name": "A→Z smoke pass",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "SD-DB-ENV",
+      "name": "DATABASE_URL set for Neon verify",
+      "pass": false,
+      "detail": "SKIP — not PROVEN on Neon"
+    },
+    {
+      "id": "SD-API-ENV",
+      "name": "Railway API leg env present",
+      "pass": false,
+      "detail": "SKIP — API leg not PROVEN"
+    },
+    {
+      "id": "SD-VOCAB",
+      "name": "No Lens/C2-dept in new deliberation core",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "blockers": []
+}

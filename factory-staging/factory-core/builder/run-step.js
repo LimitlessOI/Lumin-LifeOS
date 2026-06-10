@@ -1,3 +1,7 @@
+/**
+ * Factory execute-step dispatch — canonical factory runtime hot path.
+ * @authority Canonical factory runtime — see factory-staging/AGENTS.md
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -11,6 +15,7 @@ import { appendStepMetrics } from '../tsos/record-step-metrics.js';
 import { evaluateEfficiency } from '../tsos/evaluate-efficiency.js';
 import { appendStepExecutionRecord } from '../historian/append-record.js';
 import { runBpbIntakeGate } from '../bpb/intake-gate.js';
+import { ensureMissionDeliberation } from '../deliberation/seed-mission-deliberation.js';
 
 const BUILDER_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(BUILDER_DIR, '../../..');
@@ -133,7 +138,23 @@ export function dispatchExecuteStep(body) {
   const mission_id = body?.mission_id || 'unknown';
   const blueprint_id = body?.blueprint_id || 'unknown';
   const step = body?.step;
-  const skipIntake = body?.skip_intake_gate === true;
+  const requestedSkipIntake = body?.skip_intake_gate === true;
+  const skipIntakeAllowed =
+    requestedSkipIntake && process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE === 'true';
+
+  if (requestedSkipIntake && !skipIntakeAllowed) {
+    return {
+      httpStatus: 422,
+      body: {
+        ok: false,
+        status: 'AIC_GATE_FAILURE',
+        violations: ['skip_intake_gate denied — fail-closed unless FACTORY_ALLOW_SKIP_INTAKE_GATE=true'],
+        summary: 'BPB intake gate bypass rejected',
+      },
+    };
+  }
+
+  const skipIntake = skipIntakeAllowed;
 
   if (!step?.step_id || !step?.sandbox_boundary) {
     return {
@@ -152,7 +173,13 @@ export function dispatchExecuteStep(body) {
   }
 
   if (!skipIntake) {
-    const intake = runBpbIntakeGate(mission_id, { strict_pd: body?.strict_upstream_gates === true });
+    if (body?.auto_seed_deliberation !== false && mission_id !== 'unknown') {
+      ensureMissionDeliberation(mission_id, body?.deliberation_context || {});
+    }
+    const intake = runBpbIntakeGate(mission_id, {
+      strict_pd: body?.strict_upstream_gates === true,
+      session_id: body?.session_id || `mission:${mission_id}`,
+    });
     if (!intake.ok) {
       return {
         httpStatus: 422,

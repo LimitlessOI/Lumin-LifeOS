@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 
 const ROOT = process.cwd();
 const missionId = process.argv[2];
@@ -26,7 +27,7 @@ let passed = 0;
 let failed = 0;
 
 for (const test of tests) {
-  const target = path.join(ROOT, test.target);
+  const target = test.target ? path.join(ROOT, test.target) : null;
   let ok = false;
   let detail = '';
 
@@ -77,6 +78,27 @@ for (const test of tests) {
         detail = ok ? 'all blueprint steps covered' : `missing coverage for ${missing.join(',')}`;
         break;
       }
+      case 'shell_command': {
+        const result = spawnSync(test.command, {
+          shell: true,
+          cwd: ROOT,
+          encoding: 'utf8',
+        });
+        ok = result.status === 0;
+        detail = ok ? 'exit 0' : `exit ${result.status}: ${(result.stderr || result.stdout || '').slice(0, 200)}`;
+        break;
+      }
+      case 'node_syntax_check': {
+        ok = fs.existsSync(target);
+        if (ok) {
+          const result = spawnSync(process.execPath, ['--check', target], { cwd: ROOT, encoding: 'utf8' });
+          ok = result.status === 0;
+          detail = ok ? 'syntax ok' : result.stderr?.slice(0, 200) || 'syntax fail';
+        } else {
+          detail = 'missing';
+        }
+        break;
+      }
       default:
         detail = `unknown test type ${test.type}`;
         ok = false;
@@ -88,10 +110,10 @@ for (const test of tests) {
 
   if (ok) {
     passed++;
-    console.log(`PASS ${test.test_id} ${test.type} ${test.target}`);
+    console.log(`PASS ${test.test_id} ${test.type} ${test.target || test.command || ''}`);
   } else {
     failed++;
-    console.log(`FAIL ${test.test_id} ${test.type} ${test.target} — ${detail}`);
+    console.log(`FAIL ${test.test_id} ${test.type} ${test.target || test.command || ''} — ${detail}`);
   }
 }
 

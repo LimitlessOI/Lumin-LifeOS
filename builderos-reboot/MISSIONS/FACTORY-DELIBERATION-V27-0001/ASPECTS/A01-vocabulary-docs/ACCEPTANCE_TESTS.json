@@ -1,0 +1,29 @@
+[
+  {
+    "test_id": "AT-A01-1",
+    "type": "file_exists",
+    "target": "docs/BUILDEROS_VOCABULARY.md"
+  },
+  {
+    "test_id": "AT-A01-2",
+    "type": "file_exists",
+    "target": "docs/architecture/DELIBERATION_ARCHITECTURE.md"
+  },
+  {
+    "test_id": "AT-A01-3",
+    "type": "file_exists",
+    "target": "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md"
+  },
+  {
+    "test_id": "AT-A01-4",
+    "type": "file_contains_string",
+    "target": "docs/BUILDEROS_VOCABULARY.md",
+    "expected": "CDR"
+  },
+  {
+    "test_id": "AT-A01-5",
+    "type": "file_contains_string",
+    "target": "docs/architecture/DELIBERATION_ARCHITECTURE.md",
+    "expected": "REP"
+  }
+]

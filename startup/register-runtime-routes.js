@@ -1,4 +1,5 @@
 /**
+ * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime.
  * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  * Runtime route composition for the main Express app.
  * This keeps server.js as a composition root instead of a second implementation file.
@@ -67,6 +68,7 @@ import { createCanonicalSystemRoutes } from "../routes/canonical-system-routes.j
 import { createTsosEfficiencyRoutes } from "../routes/tsos-efficiency-routes.js";
 import { createLifeOSBuilderOSCommandControlRoutes } from "../routes/lifeos-builderos-command-control-routes.js";
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
+import { createDeliberationGovernanceRoutes } from "../routes/deliberation-governance-routes.js";
 import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
 import { createTokenOSRoutes } from "../routes/tokenos-routes.js";
@@ -314,6 +316,12 @@ export async function registerRuntimeRoutes(app, deps) {
     createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMember, logger })
   );
   logger.info("✅ [LIFEOS-GATE-CHANGE] Routes mounted at /api/v1/lifeos/gate-change");
+
+  app.use(
+    "/api/v1/lifeos/deliberation",
+    createDeliberationGovernanceRoutes({ pool, requireKey, logger })
+  );
+  logger.info("✅ [LIFEOS-DELIBERATION] Routes mounted at /api/v1/lifeos/deliberation");
 
   app.use(
     "/api/v1/lifeos/intel",
