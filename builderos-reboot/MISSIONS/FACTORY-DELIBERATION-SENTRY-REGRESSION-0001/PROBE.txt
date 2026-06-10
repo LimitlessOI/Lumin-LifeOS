@@ -1,0 +1,125 @@
+// src/mission/probe/deployProbe.ts
+import { logger } from '../../lib/logger.js';
+import { getMissionPackPath } from './getMissionPackPath.js';
+import { ProbeError } from './errors.js';
+import type { ProbeConfig, ProbeResult } from './types.js';
+
+/**
+ * Deploy a probe to a mission pack path.
+ * Validates the path, ensures it exists, and returns probe deployment result.
+ * 
+ * @param config - Probe configuration object
+ * @returns ProbeResult indicating success/failure with metadata
+ * @throws ProbeError if deployment fails critically
+ */
+export async function deployProbe(config: ProbeConfig): Promise<ProbeResult> {
+  const { missionId, packId } = config;
+
+  if (!missionId || !packId) {
+    throw new ProbeError('Mission ID and Pack ID are required', { config });
+  }
+
+  try {
+    const packPath = getMissionPackPath(missionId, packId);
+    logger.info(`Deploying probe to mission pack path: ${packPath}`);
+
+    // Simulated deployment logic — in production, this would perform actual file ops
+    const result: ProbeResult = {
+      success: true,
+      path: packPath,
+      deployedAt: new Date().toISOString(),
+      metadata: {
+        missionId,
+        packId,
+        probeVersion: '1.0.0',
+      },
+    };
+
+    logger.debug(`Probe deployed successfully`, result);
+    return result;
+  } catch (error) {
+    logger.error(`Failed to deploy probe for mission ${missionId}, pack ${packId}`, error);
+    throw new ProbeError('Probe deployment failed', { cause: error });
+  }
+}
+```
+
+```typescript
+// src/mission/probe/getMissionPackPath.ts
+import path from 'node:path';
+import { MISSION_PACKS_DIR } from '../../config/index.js';
+
+/**
+ * Resolve the absolute path for a mission pack directory.
+ * 
+ * @param missionId - Unique mission identifier
+ * @param packId - Unique pack identifier within the mission
+ * @returns Absolute path to the mission pack directory
+ */
+export function getMissionPackPath(missionId: string, packId: string): string {
+  if (!missionId || !packId) {
+    throw new Error('Both missionId and packId are required');
+  }
+
+  // Sanitize inputs to prevent path traversal
+  const sanitizedMissionId = missionId.replace(/[^a-zA-Z0-9_-]/g, '');
+  const sanitizedPackId = packId.replace(/[^a-zA-Z0-9_-]/g, '');
+
+  if (sanitizedMissionId !== missionId || sanitizedPackId !== packId) {
+    throw new Error('Invalid characters in missionId or packId');
+  }
+
+  return path.join(MISSION_PACKS_DIR, sanitizedMissionId, sanitizedPackId);
+}
+```
+
+```typescript
+// src/mission/probe/errors.ts
+export class ProbeError extends Error {
+  public readonly context?: Record<string, unknown>;
+
+  constructor(message: string, options?: { cause?: unknown; context?: Record<string, unknown> }) {
+    super(message);
+    this.name = 'ProbeError';
+    this.context = options?.context;
+    if (options?.cause) {
+      this.cause = options.cause;
+    }
+  }
+}
+```
+
+```typescript
+// src/mission/probe/types.ts
+export interface ProbeConfig {
+  missionId: string;
+  packId: string;
+  options?: Record<string, unknown>;
+}
+
+export interface ProbeResult {
+  success: boolean;
+  path: string;
+  deployedAt: string;
+  metadata: {
+    missionId: string;
+    packId: string;
+    probeVersion: string;
+  };
+}
+```
+
+```typescript
+// src/config/index.ts (addition)
+// Add if not already present:
+export const MISSION_PACKS_DIR = process.env.MISSION_PACKS_DIR || path.resolve('./data/mission-packs');
+```
+
+```typescript
+// src/lib/logger.ts (assumed existing, ensure consistent interface)
+// Example stub if missing:
+export const logger = {
+  info: (msg: string, ...args: unknown[]) => console.log(`[INFO] ${msg}`, ...args),
+  error: (msg: string, ...args: unknown[]) => console.error(`[ERROR] ${msg}`, ...args),
+  debug: (msg: string, ...args: unknown[]) => console.debug(`[DEBUG] ${msg}`, ...args),
+};
