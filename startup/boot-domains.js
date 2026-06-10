@@ -314,14 +314,27 @@ async function bootSelfRepairDeployCheck(deps) {
 async function bootDeliberationRepCatalog(deps) {
   const { pool, logger } = deps;
   if (!pool?.query) return;
-  try {
+
+  async function syncOnce(label) {
     const { createDeliberationGovernanceService } = await import('../services/deliberation-governance-service.js');
     const delib = createDeliberationGovernanceService(pool, logger);
     const result = await delib.syncRepCatalogFromConfig();
     if (result.ok) {
-      logger?.info({ upserted: result.upserted }, '[BOOT] REP catalog synced from config/rep-catalog.json');
+      logger?.info({ upserted: result.upserted, label }, '[BOOT] REP catalog synced from config/rep-catalog.json');
     } else {
-      logger?.warn({ reason: result.error }, '[BOOT] REP catalog sync skipped');
+      logger?.warn({ reason: result.error, label }, '[BOOT] REP catalog sync FAILED — GET /deliberation/reps may be empty');
+    }
+    return result;
+  }
+
+  try {
+    const first = await syncOnce('boot');
+    if (!first.ok) {
+      setTimeout(() => {
+        syncOnce('boot-retry').catch((err) => {
+          logger?.warn({ err: err.message }, '[BOOT] REP catalog retry failed');
+        });
+      }, 2000);
     }
   } catch (err) {
     logger?.warn({ err: err.message }, '[BOOT] REP catalog sync failed (non-fatal)');

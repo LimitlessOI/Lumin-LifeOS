@@ -2,6 +2,19 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SESSION SEAL] 2026-05-24 — Claude live SENTRY L1–L12 fixes
+
+**Agent role:** Cursor Conductor — GAP-FILL implementation of Claude adversarial live probe report (Neon-confirmed).
+
+**Fixed (L1–L12):** substantive `case_text` + CFO role validation; immutable gate PASS + corrupt PASS revocation; ghost debrief 404; evidence vault allowlist; REP catalog enforcement; roster size caps; PG 23505→409; deliberation rate limit 60/min; boot REP sync warn+retry; `scripts/deliberation-sentry-probe-cleanup.mjs`.
+
+**Verified:** `npm run lifeos:deliberation:behavior` **22/22 PASS**; `npm run builder:preflight` OK.
+
+**Next:** commit+push; Railway `build-from-latest`; Neon probe cleanup; Codex pass 3 with dedupe list.
+
+**INTENT DRIFT:** none — implemented Claude report fixes as requested.
+
+---
 ## [SESSION SEAL] 2026-06-10 — Codex adversarial SENTRY probe fixes
 
 **Fixed:** B1 BPB+CDR unfocused-model bypass; B2 `clampQueryLimit` (LIMIT -1); B3 `skip_intake_gate` requires `FACTORY_ALLOW_SKIP_INTAKE_GATE=true`; B5 whitespace hist case; B6 `force_reseed`; B7 blueprint sort try/catch; factory `recordConsensusSession` validation; **missing `ensureMissionDeliberation` import** in `run-mission.js`.

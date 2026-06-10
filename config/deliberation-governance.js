@@ -35,6 +35,19 @@ export const PROTOCOL_VERSION = 'v2.7';
 
 export const FUTURE_BACK_HORIZONS = Object.freeze(['1y', '2y', '4y', '5y']);
 
+export const VALID_EVIDENCE_SOURCE_TYPES = Object.freeze([
+  'session_doc',
+  'blueprint',
+  'commit',
+  'external_scan',
+  'council_output',
+  'manual',
+]);
+
+export const MIN_HIST_CASE_TEXT_CHARS = 20;
+export const MAX_REPS_PER_ROSTER = 20;
+export const MAX_MODELS_PER_ROSTER = 10;
+
 /** Safe LIMIT for list queries — rejects negative/zero/NaN. */
 export function clampQueryLimit(limit, { min = 1, max = 200, fallback = 50 } = {}) {
   const raw = Number(limit);
@@ -65,6 +78,16 @@ export function validateCnclRoster(roster) {
   if (!Array.isArray(reps)) errors.push('reps must be array');
   if (!Array.isArray(models)) errors.push('models must be array');
 
+  if (authorities.length > VALID_AUTHORITIES.length) {
+    errors.push(`authorities cannot exceed ${VALID_AUTHORITIES.length} (seven departments)`);
+  }
+  if (reps.length > MAX_REPS_PER_ROSTER) {
+    errors.push(`reps array must not exceed ${MAX_REPS_PER_ROSTER} entries`);
+  }
+  if (models.length > MAX_MODELS_PER_ROSTER) {
+    errors.push(`models array must not exceed ${MAX_MODELS_PER_ROSTER} entries`);
+  }
+
   for (const a of authorities) {
     if (!VALID_AUTHORITIES.includes(a)) {
       errors.push(`unknown authority: ${a}`);
@@ -73,7 +96,13 @@ export function validateCnclRoster(roster) {
 
   for (const r of reps) {
     const name = typeof r === 'string' ? r : r?.name;
-    if (!name) errors.push('rep entry requires name');
+    if (!name) {
+      errors.push('rep entry requires name');
+      continue;
+    }
+    if (!VALID_REP_CATALOG.includes(name)) {
+      errors.push(`unknown REP: ${name}`);
+    }
   }
 
   for (const m of models) {
@@ -134,7 +163,9 @@ export function validateHistCase(payload) {
   const errors = [];
   if (!payload?.session_id) errors.push('session_id required');
   if (typeof payload?.case_text !== 'string' || !payload.case_text.trim()) {
-    errors.push('case_text required');
+    errors.push('case_text required and must be non-blank');
+  } else if (payload.case_text.trim().length < MIN_HIST_CASE_TEXT_CHARS) {
+    errors.push(`case_text must contain substantive content (min ${MIN_HIST_CASE_TEXT_CHARS} chars)`);
   }
   return { ok: errors.length === 0, errors };
 }
@@ -145,6 +176,25 @@ export function validateHistCase(payload) {
 export function validateCfoReceipt(payload) {
   const errors = [];
   if (!payload?.session_id) errors.push('session_id required');
+  const role = payload?.role || payload?.dept;
+  if (typeof role !== 'string' || role.trim().length < 3) {
+    errors.push('role or dept required (min 3 non-whitespace chars)');
+  }
+  return { ok: errors.length === 0, errors };
+}
+
+/**
+ * @param {unknown} payload
+ */
+export function validateEvidenceVaultEntry(payload) {
+  const errors = [];
+  if (!payload?.source_type) errors.push('source_type required');
+  else if (!VALID_EVIDENCE_SOURCE_TYPES.includes(String(payload.source_type))) {
+    errors.push(`source_type must be one of: ${VALID_EVIDENCE_SOURCE_TYPES.join(', ')}`);
+  }
+  if (payload?.storage_path && /\.\./.test(String(payload.storage_path))) {
+    errors.push('storage_path must not contain path traversal sequences');
+  }
   return { ok: errors.length === 0, errors };
 }
 

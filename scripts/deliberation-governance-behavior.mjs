@@ -10,6 +10,8 @@ import {
   validateConsensusSession,
   validateCnclRoster,
   validateHistCase,
+  validateCfoReceipt,
+  validateEvidenceVaultEntry,
   clampQueryLimit,
 } from '../config/deliberation-governance.js';
 import { validateDeliberationGate } from '../factory-staging/factory-core/deliberation/validate-deliberation-gate.js';
@@ -142,6 +144,9 @@ const validConsensus = {
   vote_counts: { ship: 2 },
 };
 
+const SUBSTANTIVE_CASE =
+  'Substantive historian case text for behavioral gate testing (min twenty chars).';
+
 console.log('=== Deliberation governance behavior (fail-closed) ===\n');
 
 assert('empty consensus payload rejected', !validateConsensusSession({ session_id: 'x' }).ok);
@@ -150,7 +155,7 @@ assert('valid consensus payload accepted', validateConsensusSession({ session_id
 {
   const pool = createMockPool();
   const svc = createDeliberationGovernanceService(pool);
-  await svc.seedPipelineMinimum({ session_id: 'lb-1', case_text: 'case', problem: 'p' });
+  await svc.seedPipelineMinimum({ session_id: 'lb-1', case_text: SUBSTANTIVE_CASE, problem: 'p' });
   const gate = await svc.passDeliberationGate({
     session_id: 'lb-1',
     load_bearing: true,
@@ -165,7 +170,7 @@ assert('valid consensus payload accepted', validateConsensusSession({ session_id
 {
   const pool = createMockPool();
   const svc = createDeliberationGovernanceService(pool);
-  await svc.seedPipelineMinimum({ session_id: 'lb-2', case_text: 'case', problem: 'p' });
+  await svc.seedPipelineMinimum({ session_id: 'lb-2', case_text: SUBSTANTIVE_CASE, problem: 'p' });
   const fin = await svc.finalizePipeline({ session_id: 'lb-2', load_bearing: true, consensus: {} });
   assert('finalize rejects empty consensus object', !fin.ok);
   assert('empty consensus does not pass load-bearing gate', fin.status !== 'DELIBERATION_GATE_PASS');
@@ -174,7 +179,7 @@ assert('valid consensus payload accepted', validateConsensusSession({ session_id
 {
   const pool = createMockPool();
   const svc = createDeliberationGovernanceService(pool);
-  await svc.seedPipelineMinimum({ session_id: 'lb-3', case_text: 'case', problem: 'p' });
+  await svc.seedPipelineMinimum({ session_id: 'lb-3', case_text: SUBSTANTIVE_CASE, problem: 'p' });
   const before = pool.store.debriefs.length;
   const fin = await svc.finalizePipeline({ session_id: 'lb-3', load_bearing: true });
   assert('load-bearing finalize without consensus returns ok:false', !fin.ok);
@@ -185,7 +190,7 @@ assert('valid consensus payload accepted', validateConsensusSession({ session_id
 {
   const pool = createMockPool();
   const svc = createDeliberationGovernanceService(pool);
-  await svc.seedPipelineMinimum({ session_id: 'lb-4', case_text: 'case', problem: 'p' });
+  await svc.seedPipelineMinimum({ session_id: 'lb-4', case_text: SUBSTANTIVE_CASE, problem: 'p' });
   const fin = await svc.finalizePipeline({
     session_id: 'lb-4',
     load_bearing: true,
@@ -228,6 +233,19 @@ assert('clampQueryLimit(-1) never negative', clampQueryLimit(-1) >= 1);
 assert('clampQueryLimit(0) falls back to safe default', clampQueryLimit(0) >= 1);
 
 assert('whitespace-only hist case_text rejected', !validateHistCase({ session_id: 'x', case_text: '   ' }).ok);
+assert('short hist case_text rejected', !validateHistCase({ session_id: 'x', case_text: 'too short' }).ok);
+
+assert('trivial cfo role rejected', !validateCfoReceipt({ session_id: 'x', role: 'x' }).ok);
+assert('xss evidence source_type rejected', !validateEvidenceVaultEntry({ source_type: '<script>' }).ok);
+assert('path traversal storage_path rejected', !validateEvidenceVaultEntry({ source_type: 'manual', storage_path: '../../etc/passwd' }).ok);
+
+const unknownRep = validateCnclRoster({
+  session_id: 'rep-test',
+  authorities: ['BPB'],
+  reps: [{ name: 'NOT_IN_CATALOG_XYZ' }],
+  models: [{ id: 'm1', focus: 'BPB' }],
+});
+assert('unknown REP rejected', !unknownRep.ok);
 
 {
   const prev = process.env.FACTORY_ALLOW_SKIP_INTAKE_GATE;

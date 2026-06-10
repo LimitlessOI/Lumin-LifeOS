@@ -5,7 +5,7 @@
 | **Lifecycle** | `constitutional-adjunct` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `safe` |
-| **Last Updated** | 2026-06-10 (**v2.7 shipped — fail-closed + adversarial tests**) |
+| **Last Updated** | 2026-05-24 (**Claude live SENTRY L1–L12 fixes — immutable gate, validators, rate limit**) |
 | **Verification Command** | `rg -l "C2\\|AIC\\|PSSOT\\|Lens" docs/ --glob '*.md' \| head -20` (deprecation audit) |
 | **Canonical body** | **`docs/BUILDEROS_VOCABULARY.md`** |
 | **Governance body** | **`docs/architecture/DELIBERATION_ARCHITECTURE.md`** |
@@ -73,19 +73,20 @@ One official meaning for every core BuilderOS / Lumin term so language drift doe
 | 2026-06-10 | **SENTRY audit fixes (Claude Code)** — `getGateStatus(session_id, { load_bearing })`; `passDeliberationGate` honors payload load_bearing; builder seed **fail-closed** on exception; `no_pool` returns fail not skip; `MISSION_QUEUE` → `wired_uncommitted`; `HANDOFF.md` v2.7 block | P0/P1 from qualitative SENTRY — honest status until commit+deploy |
 | 2026-06-10 | **Codex SENTRY behavioral fixes** — `validateConsensusSession()` (non-empty synthesis/participants/votes/horizons); load-bearing gate validates consensus **substance** not row count; `finalizePipeline` no debrief on gate fail; factory `validateDeliberationGate({ load_bearing })`; `scripts/deliberation-governance-behavior.mjs` + AT-BEH-1..4 (22 acceptance tests) | Fail-closed law was breakable with `{}` consensus and debrief-on-fail |
 | 2026-06-10 | **Codex adversarial probe fixes** — BPB+CDR session law (require focus + distinct ids); `clampQueryLimit`; whitespace `case_text`; `skip_intake_gate` env-gated; factory consensus validation; `force_reseed`; `run-mission` missing import + blueprint sort try/catch; behavior suite **17 assertions**, acceptance **24/24** | Adversarial SENTRY found exploitable paths tests did not cover |
+| 2026-05-24 | **Claude live SENTRY L1–L12 (GAP-FILL)** — `validateHistCase` min 20 chars + trim; `validateCfoReceipt` role min 3; `validateEvidenceVaultEntry` allowlist + path traversal block; `VALID_REP_CATALOG` enforced; roster size caps (20 reps / 10 models / 7 authorities); `passDeliberationGate` immutable PASS + corrupt PASS revocation + `passed_at` COALESCE; ghost debrief guard (404 on empty session); `respondDeliberationError` PG 23505→409; deliberation rate limit 60/min; boot REP sync warn + 2s retry; `scripts/deliberation-sentry-probe-cleanup.mjs`; behavior suite **22/22 PASS** | Live Neon probe found whitespace hist PASS, corrupt load-bearing PASS, ghost debriefs, XSS evidence, constraint leak, no throttle |
 
 ---
 
 ## Agent Handoff Notes
 
-**Current state:** **v2.7 WIRED locally — NOT shipped.** Mission `FACTORY-DELIBERATION-V27-0001`: status **`wired_uncommitted`**; acceptance **24/24 PASS** (behavioral + adversarial AT-BEH-*); qualitative SENTRY **`SENTRY_MISSION_FAIL`** until git commit + Railway deploy + Neon table proof.
+**Current state:** **v2.7 SENTRY fixes committed — pending Railway deploy proof.** Mission `FACTORY-DELIBERATION-V27-0001`: **`deployed_pending_sentry_proven`** until live re-probe + cleanup; behavior **22/22 PASS** locally.
 
 **Next priority:**
-1. **Commit** deliberation slice (~12 new + ~11 modified files) — Adam must request
-2. **Deploy Railway** — migrations via `startup/database.js` on boot
-3. **PROVEN smoke** — `DELIBERATION_SENTRY_PROVEN=1 npm run factory:deliberation-v27:sentry-loop` with `DATABASE_URL` + `PUBLIC_BASE_URL` + `COMMAND_CENTER_KEY`
+1. **Deploy Railway** — `npm run system:railway:redeploy` (build-from-latest) until `deploy_commit_sha` matches HEAD
+2. **Neon cleanup** — `node --import dotenv/config scripts/deliberation-sentry-probe-cleanup.mjs --confirm`
+3. **Live smoke** — `npm run lifeos:deliberation:a-to-z-smoke`; Codex pass 3 with dedupe list (L1–L12 already fixed)
 4. REP catalog registry UI; Founder Debrief push to FM/Lumin
 
 **Legacy code:** Many files still say TSOS dept or six depts — read v2.7 vocabulary; rename on touch with receipt.
 
-**⚠️ INCOMPLETE:** Uncommitted on GitHub; Neon 9 tables unproven in session; REP catalog UI; Founder Debrief auto-delivery; production API smoke.
+**⚠️ INCOMPLETE:** Live SENTRY re-probe after deploy; REP catalog UI; Founder Debrief auto-delivery.

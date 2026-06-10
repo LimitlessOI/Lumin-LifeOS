@@ -10,6 +10,14 @@ import { Router } from 'express';
 import { createDeliberationGovernanceService } from '../services/deliberation-governance-service.js';
 import { VALID_AUTHORITIES, VALID_REP_CATALOG } from '../config/deliberation-governance.js';
 
+function respondDeliberationError(res, log, context, err) {
+  if (err?.code === '23505') {
+    return res.status(409).json({ ok: false, error: 'session_id already exists' });
+  }
+  log.error(`[DELIBERATION] ${context}`, err);
+  return res.status(500).json({ ok: false, error: 'Internal error' });
+}
+
 export function createDeliberationGovernanceRoutes({ pool, requireKey, logger }) {
   const router = Router();
   const log = logger || console;
@@ -46,8 +54,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       if (!result.ok) return res.status(400).json(result);
       res.status(201).json(result);
     } catch (e) {
-      log.error('[DELIBERATION] roster', e);
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'roster', e);
     }
   });
 
@@ -57,7 +64,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       if (!roster) return res.status(404).json({ ok: false, error: 'not found' });
       res.json({ ok: true, roster });
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'roster get', e);
     }
   });
 
@@ -67,7 +74,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       if (!roster) return res.status(404).json({ ok: false, error: 'not found' });
       res.json({ ok: true, roster });
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'roster expand', e);
     }
   });
 
@@ -77,7 +84,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       if (!result.ok) return res.status(400).json(result);
       res.status(201).json(result);
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'hist-case', e);
     }
   });
 
@@ -87,7 +94,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       if (!result.ok) return res.status(400).json(result);
       res.status(201).json(result);
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'cfo-receipt', e);
     }
   });
 
@@ -97,7 +104,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       if (!result.ok) return res.status(400).json(result);
       res.status(201).json(result);
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'consensus', e);
     }
   });
 
@@ -107,7 +114,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       if (!result.ok) return res.status(400).json(result);
       res.status(201).json(result);
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'scorecard post', e);
     }
   });
 
@@ -119,7 +126,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       });
       res.json({ ok: true, entries: rows });
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'scorecard get', e);
     }
   });
 
@@ -129,7 +136,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       if (!result.ok) return res.status(400).json(result);
       res.status(201).json(result);
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'evidence-vault', e);
     }
   });
 
@@ -138,7 +145,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       const status = await svc.getGateStatus(req.params.sessionId);
       res.json({ ok: true, ...status });
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'gate get', e);
     }
   });
 
@@ -148,7 +155,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       const code = result.ok ? 200 : 422;
       res.status(code).json(result);
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'gate pass', e);
     }
   });
 
@@ -157,7 +164,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       const bundle = await svc.getSessionBundle(req.params.sessionId);
       res.json({ ok: true, bundle });
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'session', e);
     }
   });
 
@@ -168,9 +175,12 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
         return res.json({ ok: true, debrief: stored, source: 'stored' });
       }
       const result = await svc.generateFounderDebrief(req.params.sessionId, { persist: true });
+      if (!result.ok) {
+        return res.status(404).json(result);
+      }
       res.json({ ok: true, ...result, source: 'generated' });
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'debrief', e);
     }
   });
 
@@ -180,7 +190,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       if (!result.ok) return res.status(400).json(result);
       res.status(201).json(result);
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'pipeline seed', e);
     }
   });
 
@@ -190,7 +200,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       const code = result.ok ? 200 : 422;
       res.status(code).json(result);
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'pipeline finalize', e);
     }
   });
 
@@ -199,7 +209,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       const result = await svc.syncRepCatalogFromConfig();
       res.json(result);
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'reps sync', e);
     }
   });
 
@@ -208,7 +218,7 @@ export function createDeliberationGovernanceRoutes({ pool, requireKey, logger })
       const reps = await svc.listRepCatalog();
       res.json({ ok: true, reps });
     } catch (e) {
-      res.status(500).json({ ok: false, error: e.message });
+      return respondDeliberationError(res, log, 'reps', e);
     }
   });
 

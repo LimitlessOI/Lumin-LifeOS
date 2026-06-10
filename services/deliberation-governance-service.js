@@ -8,6 +8,7 @@ import {
   validateHistCase,
   validateCfoReceipt,
   validateConsensusSession,
+  validateEvidenceVaultEntry,
   PROTOCOL_VERSION,
   GRADES,
   clampQueryLimit,
@@ -225,7 +226,8 @@ export function createDeliberationGovernanceService(pool, logger = console) {
   }
 
   async function recordEvidenceVaultEntry(payload) {
-    if (!payload?.source_type) return { ok: false, errors: ['source_type required'] };
+    const v = validateEvidenceVaultEntry(payload);
+    if (!v.ok) return { ok: false, errors: v.errors };
     const { rows } = await pool.query(
       `INSERT INTO evidence_vault_entries (source_type, source_ref, content_hash, storage_path, metadata_json)
        VALUES ($1,$2,$3,$4,$5) RETURNING *`,
@@ -308,6 +310,45 @@ export function createDeliberationGovernanceService(pool, logger = console) {
 
     const load_bearing =
       payload.load_bearing === true || payload.metadata_json?.load_bearing === true;
+
+    const existingGate = await pool.query(
+      `SELECT * FROM deliberation_gate_records WHERE session_id = $1 LIMIT 1`,
+      [session_id]
+    );
+    const existing = existingGate.rows[0];
+
+    if (existing?.gate_status === 'PASS') {
+      const verify = await getGateStatus(session_id, {
+        load_bearing:
+          load_bearing || existing.metadata_json?.load_bearing === true,
+      });
+      if (!verify.pass) {
+        await pool.query(
+          `UPDATE deliberation_gate_records
+           SET gate_status = 'FAIL',
+               violations = $2,
+               metadata_json = COALESCE(metadata_json, '{}'::jsonb) || $3::jsonb
+           WHERE session_id = $1`,
+          [
+            session_id,
+            JSON.stringify([...verify.violations, 'CORRUPTED_PASS_REVOKED']),
+            JSON.stringify({ corrupted_pass_revoked_at: new Date().toISOString() }),
+          ]
+        );
+        return {
+          ok: false,
+          status: 'DELIBERATION_GATE_CORRUPT',
+          violations: verify.violations,
+        };
+      }
+      return {
+        ok: true,
+        status: 'DELIBERATION_GATE_PASS',
+        gate: existing,
+        idempotent: true,
+      };
+    }
+
     const status = await getGateStatus(session_id, { load_bearing });
     if (!status.pass) {
       await pool.query(
@@ -345,13 +386,14 @@ export function createDeliberationGovernanceService(pool, logger = console) {
         gate_status, violations, passed_at, metadata_json
       ) VALUES ($1,$2,$3,$4,$5,$6,$7,'PASS','[]'::jsonb,NOW(),$8)
       ON CONFLICT (session_id) DO UPDATE SET
-        gate_status = 'PASS',
-        violations = '[]'::jsonb,
+        gate_status = EXCLUDED.gate_status,
+        violations = EXCLUDED.violations,
         hist_case_id = EXCLUDED.hist_case_id,
         consensus_session_id = EXCLUDED.consensus_session_id,
         cfo_receipt_count = EXCLUDED.cfo_receipt_count,
-        passed_at = NOW(),
+        passed_at = COALESCE(deliberation_gate_records.passed_at, EXCLUDED.passed_at),
         metadata_json = EXCLUDED.metadata_json
+      WHERE deliberation_gate_records.gate_status IS DISTINCT FROM 'PASS'
       RETURNING *`,
       [
         session_id,
@@ -364,6 +406,19 @@ export function createDeliberationGovernanceService(pool, logger = console) {
         JSON.stringify(payload.metadata_json || {}),
       ]
     );
+
+    if (!rows.length) {
+      const again = await pool.query(
+        `SELECT * FROM deliberation_gate_records WHERE session_id = $1 LIMIT 1`,
+        [session_id]
+      );
+      return {
+        ok: true,
+        status: 'DELIBERATION_GATE_PASS',
+        gate: again.rows[0],
+        idempotent: true,
+      };
+    }
 
     return { ok: true, status: 'DELIBERATION_GATE_PASS', gate: rows[0] };
   }
@@ -418,6 +473,17 @@ export function createDeliberationGovernanceService(pool, logger = console) {
 
   async function generateFounderDebrief(session_id, { persist = true } = {}) {
     const bundle = await getSessionBundle(session_id);
+    const hasData =
+      Boolean(bundle.roster) ||
+      bundle.hist_cases.length > 0 ||
+      bundle.cfo_receipts.length > 0 ||
+      bundle.consensus_sessions.length > 0 ||
+      Boolean(bundle.gate);
+
+    if (!hasData) {
+      return { ok: false, error: 'session_has_no_deliberation_data', session_id };
+    }
+
     const formatted = formatFounderDebrief(bundle);
     if (!persist) return { ok: true, ...formatted };
 

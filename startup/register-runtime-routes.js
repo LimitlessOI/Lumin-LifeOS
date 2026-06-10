@@ -69,6 +69,7 @@ import { createTsosEfficiencyRoutes } from "../routes/tsos-efficiency-routes.js"
 import { createLifeOSBuilderOSCommandControlRoutes } from "../routes/lifeos-builderos-command-control-routes.js";
 import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
 import { createDeliberationGovernanceRoutes } from "../routes/deliberation-governance-routes.js";
+import rateLimit from "express-rate-limit";
 import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
 import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
 import { createTokenOSRoutes } from "../routes/tokenos-routes.js";
@@ -317,8 +318,17 @@ export async function registerRuntimeRoutes(app, deps) {
   );
   logger.info("✅ [LIFEOS-GATE-CHANGE] Routes mounted at /api/v1/lifeos/gate-change");
 
+  const deliberationLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 60,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { ok: false, error: 'Too many deliberation requests' },
+  });
+
   app.use(
     "/api/v1/lifeos/deliberation",
+    deliberationLimiter,
     createDeliberationGovernanceRoutes({ pool, requireKey, logger })
   );
   logger.info("✅ [LIFEOS-DELIBERATION] Routes mounted at /api/v1/lifeos/deliberation");

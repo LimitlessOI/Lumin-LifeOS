@@ -4,7 +4,7 @@
   "amendment_path": "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md",
   "status": "active",
   "lifecycle": "constitutional-adjunct",
-  "last_updated": "2026-06-10",
+  "last_updated": "2026-05-24",
   "owned_files": [
     "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md",
     "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.manifest.json",
@@ -19,6 +19,7 @@
     "services/builder-deliberation-hook.js",
     "services/founder-debrief-service.js",
     "scripts/deliberation-a-to-z-smoke.mjs",
+    "scripts/deliberation-sentry-probe-cleanup.mjs",
     "scripts/deliberation-governance-behavior.mjs",
     "scripts/verify-deliberation-governance.mjs",
     "factory-staging/factory-core/deliberation/seed-mission-deliberation.js",
@@ -30,5 +31,5 @@
     { "type": "node_check", "check": "services/deliberation-governance-service.js" },
     { "type": "node_check", "check": "scripts/deliberation-governance-behavior.mjs" }
   ],
-  "ssot_receipt_tail": "Deliberation v2.7 shipped with fail-closed gates, behavioral adversarial tests, FACTORY-DELIBERATION-V27-0001 mission pack."
+  "ssot_receipt_tail": "Claude live SENTRY L1–L12 fixes: immutable gate PASS, validators, rate limit, probe cleanup script; behavior 22/22."
 }
