@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "resolved_at": "2026-05-24",
+  "scope": ["deliberation_v27_sentry_regression_harness"],
+  "strategic_ambiguity_remaining": false,
+  "decisions": [
+    {
+      "id": "PD-R1",
+      "topic": "mission_type",
+      "resolution": "Harness-only mission — tests enforcement, not new product features"
+    },
+    {
+      "id": "PD-R2",
+      "topic": "bp_first",
+      "resolution": "BPB produces BLUEPRINT.json only in phase 1; CDR implements after SENTRY BP audit"
+    },
+    {
+      "id": "PD-R3",
+      "topic": "probe_source",
+      "resolution": "Probe IDs locked to REGRESSION_PROBE_CATALOG.json — no renames without founder receipt"
+    },
+    {
+      "id": "PD-R4",
+      "topic": "existing_scripts",
+      "resolution": "Consolidate behavior.mjs + snt-live-verify.mjs into one harness; keep old scripts as thin wrappers during transition"
+    },
+    {
+      "id": "PD-R5",
+      "topic": "repair_mission",
+      "resolution": "Separate mission FACTORY-DELIBERATION-SENTRY-REPAIR-0001 only after harness trusted and fails on intentional negative control"
+    }
+  ],
+  "non_goals_locked": [
+    "Change deliberation gate business rules",
+    "New UI",
+    "Founder decisions during build",
+    "Production mutation without cleanup confirm flag"
+  ]
+}

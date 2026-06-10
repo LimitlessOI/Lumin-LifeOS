@@ -665,6 +665,8 @@ export function createLifeOSCouncilBuilderRoutes({
       sql: 'Strengthen SQL generation/validation so migrations contain real executable SQL before commit.',
       html: 'Require full-document HTML output with the required root tags before commit.',
       commit: 'Repair the GitHub commit path on the remote system: token, branch permissions, or commit transport.',
+      safe_scope:
+        'Add the path prefix to config/builder-safe-scope.js SAFE_WRITE_PATHS, or retry with an alternate target_file under an allowed prefix (scripts/, routes/, etc.).',
     };
     return {
       stage,
@@ -797,6 +799,45 @@ export function createLifeOSCouncilBuilderRoutes({
       executionOnly,
     });
     return gapRecommendation;
+  }
+
+  async function respondSafeScopeBlocked(res, { resolvedTarget, taskBody, attempted_action = 'POST /api/v1/lifeos/builder/build' }) {
+    const gapRecommendation = await recordBuilderGap({
+      domain: taskBody.domain || null,
+      task: taskBody.task,
+      status: 'blocked',
+      stage: 'safe_scope',
+      reason: `Target file is outside the Builder safe-scope policy: ${resolvedTarget}`,
+      targetFile: resolvedTarget,
+      routingKey: 'council.builder.code',
+      mode: taskBody.mode || 'code',
+      executionOnly: taskBody.execution_only === true,
+    });
+    const blockedReturn = {
+      status: 'BLOCKED_RETURN_TO_BPB',
+      mission_id: taskBody.mission_id || null,
+      blueprint_id: taskBody.blueprint_id || null,
+      step_id: taskBody.step_id || 'BUILD_SCOPE',
+      gap_type: 'out_of_scope_request',
+      summary: `Builder cannot commit to ${resolvedTarget} — path outside supervised safe-scope`,
+      attempted_action,
+      missing_information: [
+        'safe_scope_path_in_config/builder-safe-scope.js',
+        'or alternate target_file under SAFE_WRITE_PATHS',
+      ],
+      evidence: {
+        target_file: resolvedTarget,
+        gap_recommendation: gapRecommendation,
+      },
+    };
+    return res.status(422).json({
+      ok: false,
+      error: 'Target file is outside the Builder safe-scope policy',
+      target_file: resolvedTarget,
+      committed: false,
+      gap_recommendation: gapRecommendation,
+      blocked_return: blockedReturn,
+    });
   }
 
   // ── POST /task ───────────────────────────────────────────────────────────────
@@ -1532,6 +1573,11 @@ export function createLifeOSCouncilBuilderRoutes({
       });
     }
 
+    // Fail-fast safe-scope — do not burn council tokens when target is known and blocked.
+    if (target_file && !isSafeTarget(target_file)) {
+      return respondSafeScopeBlocked(res, { resolvedTarget: target_file, taskBody });
+    }
+
     // Step 1: Generate via council (reuse dispatchTask logic inline)
     let generatedOutput, placement, model_used, domain_context_loaded, domain, routing_key;
     try {
@@ -1849,12 +1895,7 @@ export function createLifeOSCouncilBuilderRoutes({
     }
 
     if (!isSafeTarget(resolvedTarget)) {
-      return res.status(403).json({
-        ok: false,
-        error: 'Target file is outside the Builder safe-scope policy',
-        target_file: resolvedTarget,
-        committed: false,
-      });
+      return respondSafeScopeBlocked(res, { resolvedTarget, taskBody });
     }
 
     const msg = commit_message || `[system-build] ${resolvedTarget}`;

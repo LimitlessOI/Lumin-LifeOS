@@ -1,0 +1,190 @@
+{
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "priority": "critical",
+  "founder_touches": 0,
+  "mission_class": "factory_platform_harness",
+  "parent_mission": "FACTORY-DELIBERATION-V27-0001",
+  "scope": [
+    "Create machine-run SENTRY regression harness for deliberation governance v2.7",
+    "Consolidate pass-3 live failure probes into one deterministic test pack",
+    "Prove B_NO_ROSTER_GATE, B_LB_METADATA, N5, N1, N2, N3, N6b, N11, CLEANUP_DB_FINGERPRINT",
+    "Emit REGRESSION_RUN_RESULT.json receipt on every run",
+    "Wire npm run lifeos:deliberation:regression for local + optional Railway layer",
+    "BP-only phase 1 — no production logic changes until harness trusted"
+  ],
+  "non_goals": [
+    "New deliberation product features",
+    "Changing gate validators or service logic in this mission",
+    "Founder decisions during BPB or CDR phases",
+    "Deleting legacy behavior/snt-live scripts before harness parity proven",
+    "Neon DELETE without --confirm on cleanup script"
+  ],
+  "target_users": [
+    "SNT (verify sign-off)",
+    "SENTRY (BP audit before code)",
+    "BPB (blueprint from this FP)",
+    "CDR (low-tier implementer executes frozen BP steps only)",
+    "Hist (ledger of probe definitions — REGRESSION_PROBE_CATALOG.json)",
+    "ChC (orchestration — observe BPB → SENTRY → CDR sequence)"
+  ],
+  "success_criteria": [
+    "FOUNDER_PACKET + PRODUCT_DEVELOPMENT_RESULT pass BPB intake gate",
+    "BLUEPRINT.json lists exact files, exact probe IDs, exact commands, exact expected pass/fail",
+    "Low-tier coder can implement without product judgment",
+    "Same-tier coder output materially identical across two runs (deterministic harness)",
+    "Harness fails if a validator is stubbed (negative control documented in BP step)",
+    "Harness passes on current main after fixes from deliberation v2.7 mission",
+    "No production mutation except optional cleanup with --confirm + fingerprint pass"
+  ],
+  "failure_criteria": [
+    "BP omits any probe ID from REGRESSION_PROBE_CATALOG.json",
+    "BP allows silent skip when Railway env missing (must fail-closed with receipt)",
+    "Tests pass while ROSTER_MISSING or sticky load_bearing regressions reintroduced",
+    "SENTRY certifies harness mission before BP audit",
+    "BuilderOS makes product decisions instead of translating probe catalog to steps"
+  ],
+  "tradeoffs": [
+    "Consolidate vs keep separate behavior + snt-live scripts — consolidate with thin wrapper deprecation",
+    "Mock-only vs live-first — both layers required; local mock always runs; live optional with env"
+  ],
+  "authority": {
+    "chc": "sequence enforcement",
+    "bpb": "BLUEPRINT.json only in phase 1",
+    "sentry": "audit BP before any CDR step",
+    "cdr": "implement harness files only — no validator edits",
+    "snt": "sign off on REGRESSION_RUN_RESULT.json",
+    "hist": "owns probe catalog + legacy script references",
+    "adam": "approve cleanup --confirm only"
+  },
+  "escalation": {
+    "rule": "Harness probe fail → CDR fixes harness only; validator bug → separate REPAIR mission after harness trusted"
+  },
+  "resources": {
+    "probe_catalog": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_PROBE_CATALOG.json",
+    "parent_fp": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/FOUNDER_PACKET.json",
+    "existing_behavior": "scripts/deliberation-governance-behavior.mjs",
+    "existing_live": "scripts/deliberation-snt-live-verify.mjs",
+    "existing_cleanup": "scripts/deliberation-sentry-probe-cleanup.mjs",
+    "validators": "config/deliberation-governance.js",
+    "service": "services/deliberation-governance-service.js",
+    "routes": "routes/deliberation-governance-routes.js",
+    "vocabulary": "docs/BUILDEROS_VOCABULARY.md",
+    "amendment": "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md"
+  },
+  "founder_attention_budget": {
+    "level": "zero_during_build",
+    "note": "Adam authorized harness-only test of BuilderOS 2026-05-24; observe via OBSERVE.md commands"
+  },
+  "existing_assets": [
+    "scripts/deliberation-governance-behavior.mjs (31 assertions)",
+    "scripts/deliberation-snt-live-verify.mjs (9 live checks)",
+    "scripts/deliberation-sentry-probe-cleanup.mjs (--verify-railway fingerprint)",
+    "npm run lifeos:deliberation:behavior",
+    "npm run lifeos:deliberation:snt-live",
+    "factory-staging/factory-core/deliberation/validate-deliberation-gate.js"
+  ],
+  "forbidden_carry_forward": [
+    "Silent probe skip",
+    "Prose-only acceptance without command + expected exit code",
+    "Editing validators in harness mission",
+    "Claiming BuilderOS alpha from harness alone"
+  ],
+  "evidence_inputs": [
+    "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/SNT_LIVE_VERIFY.json",
+    "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/SENTRY_AUDIT_REPORT.md",
+    "docs/architecture/DELIBERATION_ARCHITECTURE.md"
+  ],
+  "risk_register": [
+    {
+      "id": "R1",
+      "risk": "BP drifts from probe catalog IDs",
+      "mitigation": "ACCEPTANCE_TESTS.json must reference catalog probe id per test row"
+    },
+    {
+      "id": "R2",
+      "risk": "Local shell DATABASE_URL ≠ Railway Neon",
+      "mitigation": "CLEANUP_DB_FINGERPRINT probe mandatory before any --confirm cleanup"
+    },
+    {
+      "id": "R3",
+      "risk": "BuilderOS over-scopes into product fixes",
+      "mitigation": "non_goals + forbidden_carry_forward + on_block BLOCKED_RETURN_TO_BPB"
+    }
+  ],
+  "founder_decision_log": [
+    "2026-05-24: First BuilderOS spin test = SENTRY regression harness only (not feature build)",
+    "2026-05-24: Sequence locked — FP → BPB BP → SENTRY audit BP → CDR implement → run harness → then repair mission if needed",
+    "2026-05-24: Probe IDs B_NO_ROSTER_GATE, B_LB_METADATA, N5, N1, N2, N3, N6b, N11 + cleanup fingerprint are authoritative"
+  ],
+  "dependency_map": [
+    "FACTORY-DELIBERATION-V27-0001 complete (SNT_LIVE_PASS)",
+    "config/deliberation-governance.js",
+    "services/deliberation-governance-service.js",
+    "routes/deliberation-governance-routes.js"
+  ],
+  "phase_boundaries": "harness_only_no_validator_edits",
+  "freeze_criteria": [
+    "REGRESSION_PROBE_CATALOG.json frozen at mission start",
+    "BLUEPRINT.json SENTRY audit PASS before step S1 execute"
+  ],
+  "change_control": {
+    "rule": "Probe ID or expect shape change requires new founder_decision_log row"
+  },
+  "blueprint_contract_for_bpb": {
+    "allowed_action_types": ["write_file_exact", "node_syntax_check", "run_command"],
+    "required_steps_min": 6,
+    "steps_outline": [
+      {
+        "step_id": "H01",
+        "title": "Author unified regression harness script",
+        "target_file": "scripts/deliberation-sentry-regression-harness.mjs",
+        "authority_owner": "CDR",
+        "must_implement_probe_ids": ["B_NO_ROSTER_GATE", "B_LB_METADATA", "N5", "N1", "N2", "N3", "N6b", "N11", "CLEANUP_DB_FINGERPRINT"]
+      },
+      {
+        "step_id": "H02",
+        "title": "Regression receipt JSON schema",
+        "target_file": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_RUN_RECEIPT.schema.json",
+        "authority_owner": "CDR"
+      },
+      {
+        "step_id": "H03",
+        "title": "Package.json script + mission ACCEPTANCE_TESTS.json",
+        "target_file": "package.json",
+        "authority_owner": "CDR",
+        "note": "Also create ACCEPTANCE_TESTS.json in mission folder"
+      },
+      {
+        "step_id": "H04",
+        "title": "Thin wrappers deprecating duplicate scripts (optional exit-0 delegate)",
+        "target_file": "scripts/deliberation-governance-behavior.mjs",
+        "authority_owner": "CDR",
+        "action_type": "write_file_exact",
+        "constraint": "May delegate to harness --layer=local only; preserve exit codes"
+      },
+      {
+        "step_id": "H05",
+        "title": "Document operator runbook in mission README",
+        "target_file": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/README.md",
+        "authority_owner": "BPB"
+      },
+      {
+        "step_id": "H06",
+        "title": "Verify harness local layer exit 0",
+        "action_type": "run_command",
+        "command": "npm run lifeos:deliberation:regression -- --layer=local",
+        "expected_exit_code": 0,
+        "authority_owner": "SNT"
+      }
+    ],
+    "exact_commands_bpb_must_list_in_bp": [
+      "npm run lifeos:deliberation:regression",
+      "npm run lifeos:deliberation:regression -- --layer=local",
+      "npm run lifeos:deliberation:regression -- --layer=live",
+      "node --import dotenv/config scripts/deliberation-sentry-probe-cleanup.mjs --verify-railway",
+      "node builderos-reboot/scripts/run-mission-acceptance.mjs FACTORY-DELIBERATION-SENTRY-REGRESSION-0001"
+    ],
+    "determinism_requirement": "Two consecutive local runs must produce identical pass/fail probe list (timestamps/session_ids may differ)"
+  },
+  "product_development_result_ref": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/PRODUCT_DEVELOPMENT_RESULT.json"
+}

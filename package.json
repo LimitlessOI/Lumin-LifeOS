@@ -102,6 +102,7 @@
     "factory:deliberation-v27:sentry": "node builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/CONTENT/run-deliberation-sentry.mjs",
     "factory:deliberation-v27:sentry-loop": "node builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/CONTENT/run-all-aspects-sentry.mjs",
     "factory:deliberation-v27:acceptance": "node builderos-reboot/scripts/run-mission-acceptance.mjs FACTORY-DELIBERATION-V27-0001",
+    "lifeos:snt:builder-safe-scope": "node scripts/snt-verify-builder-safe-scope.mjs",
     "lifeos:builder:build-chat": "node scripts/lifeos-builder-build-chat.mjs",
     "lifeos:builder:supervise": "node scripts/lifeos-builder-supervisor.mjs",
     "lifeos:builder:probe": "node scripts/lifeos-builder-supervisor.mjs --probe-only",

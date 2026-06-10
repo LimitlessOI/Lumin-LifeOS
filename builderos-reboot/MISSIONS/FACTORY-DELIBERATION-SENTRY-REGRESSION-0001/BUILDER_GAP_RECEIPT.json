@@ -1,0 +1,18 @@
+{
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "attempted_at": "2026-06-10T21:44:29Z",
+  "endpoint": "POST /api/v1/lifeos/builder/build",
+  "target_file": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/BLUEPRINT.json",
+  "result": "resolved",
+  "resolved_at": "2026-06-10",
+  "resolution": "SNT_PLATFORM_FIX_RECEIPT.json — builderos-reboot/MISSIONS/ added to safe-scope; fail-fast + BLOCKED_RETURN_TO_BPB on /build",
+  "error": "Target file is outside the Builder safe-scope policy",
+  "task_id": "build-1781127869311-c5bd6a24",
+  "implication": "BPB phase 1 for mission packs cannot use Railway /build until builderos-reboot/MISSIONS/ is in SAFE_WRITE_PATHS or factory-local BPB compile path is used",
+  "workaround_options": [
+    "GAP-FILL: add builderos-reboot/MISSIONS/ to config/builder-safe-scope.js SAFE_WRITE_PATHS (load-bearing — council gate)",
+    "Factory-local: Conductor compiles BLUEPRINT.json from FP using BPB prompt + manual review (document as GAP-FILL in mission receipt)",
+    "Indirect: builder writes scripts/compile-sentry-regression-blueprint.mjs then run locally to emit BLUEPRINT.json"
+  ],
+  "next_action": "Use factory-local BPB or safe-scope GAP before claiming BuilderOS BP automation on mission packs"
+}
