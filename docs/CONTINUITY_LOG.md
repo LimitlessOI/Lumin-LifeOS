@@ -2,6 +2,11 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [FIX] Update 2026-06-07 — Critical bug automation: MarketingOS migration repaired
+
+Deep bug-finding automation inspected recent BuilderOS/MarketingOS commits and found one concrete high-impact regression: `db/migrations/[date]_marketing_schema.sql` was tracked as `*.sql` but contained English prose plus truncated SQL, so the startup migration runner would select it and fail the MarketingOS Phase 1 schema migration, leaving all five MarketingOS tables absent. Required builder path was used: `builder:preflight` passed; `/builder/build` committed an incomplete/wrong schema (`5fee3fe`, audited and rejected); `/builder/execute` committed exact corrected SQL (`667daf650`) to `cursor/critical-bug-investigation-7ba5`; AM41 receipts were updated (`f985875b9`, `357ea343b`). Validation: rollback-only PostgreSQL transaction executed the migration and found all five tables; a `runMigrations()` harness selected `[date]_marketing_schema.sql`; `npm test` passed (49 pass, 0 fail, 4 skipped). `verify-project --project marketingos` still fails for known `NOT_READY` gates (R2 env vars, live DB tables not applied, routes missing), so do not claim MarketingOS Phase 1 is complete.
+
+---
 ## [FOUNDER DIRECTIVE] 2026-06-02 — End-of-Session Handoff for All Agents (CUR / C2 / Gemini / any)
 
 > **YOU ARE REQUIRED TO IDENTIFY YOURSELF AND YOUR ROLE BEFORE STARTING WORK.**
