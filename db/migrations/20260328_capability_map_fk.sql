@@ -7,12 +7,23 @@ BEGIN
   ) AND EXISTS (
     SELECT 1 FROM information_schema.tables
     WHERE table_schema = 'public' AND table_name = 'capability_map'
-  ) AND NOT EXISTS (
-    SELECT 1 FROM information_schema.table_constraints
-    WHERE constraint_name = 'capability_map_segment_id_fkey'
   ) THEN
-    ALTER TABLE capability_map
-      ADD CONSTRAINT capability_map_segment_id_fkey
-      FOREIGN KEY (segment_id) REFERENCES project_segments(id) ON DELETE SET NULL;
+    -- Align column type if legacy UUID column exists
+    IF EXISTS (
+      SELECT 1 FROM information_schema.columns
+      WHERE table_name = 'capability_map' AND column_name = 'segment_id' AND udt_name = 'uuid'
+    ) THEN
+      ALTER TABLE capability_map DROP COLUMN IF EXISTS segment_id;
+      ALTER TABLE capability_map ADD COLUMN IF NOT EXISTS segment_id INT;
+    END IF;
+
+    IF NOT EXISTS (
+      SELECT 1 FROM information_schema.table_constraints
+      WHERE constraint_name = 'capability_map_segment_id_fkey'
+    ) THEN
+      ALTER TABLE capability_map
+        ADD CONSTRAINT capability_map_segment_id_fkey
+        FOREIGN KEY (segment_id) REFERENCES project_segments(id) ON DELETE SET NULL;
+    END IF;
   END IF;
 END $$;

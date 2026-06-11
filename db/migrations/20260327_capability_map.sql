@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS capability_map (
   rationale     TEXT,
   suggested_segment JSONB,                     -- ready-to-insert segment spec if mapping_type=new_segment
   status        TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'rejected', 'inserted')),
-  segment_id    UUID, -- FK to project_segments added after 20260327_project_governance.sql
+  segment_id    INT, -- FK to project_segments added after governance tables exist
   reviewed_by   TEXT DEFAULT 'pending',
   analyzed_at   TIMESTAMPTZ DEFAULT NOW(),
   acted_at      TIMESTAMPTZ
