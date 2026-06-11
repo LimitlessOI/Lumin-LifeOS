@@ -68,7 +68,10 @@
     .composer-row.primary { justify-content: space-between; align-items: flex-end; gap: 12px; }
     .composer-row.primary .composer-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; flex: 1; }
     .composer-row.primary .speed-label { font-size: 12px; color: var(--muted); }
-    .composer-row.primary .btn-send-main { min-width: 88px; padding: 10px 18px; font-size: 15px; flex-shrink: 0; }
+    .composer-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
+    .composer-row.primary .btn-send-main { min-width: 88px; padding: 10px 18px; font-size: 15px; }
+    #btn-mic { min-width: 96px; }
+    #btn-mic.listening { outline: 2px solid var(--accent); background: var(--bubble-user-bg); }
     .composer-hint { margin: 8px 0 0; font-size: 11px; color: var(--muted); line-height: 1.4; }
     #truth-banner { margin: 0; padding: 10px 16px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 13px; line-height: 1.45; }
     [data-theme="dark"] #truth-banner { background: #3f2a08; color: #fde68a; border-color: #92400e; }
@@ -119,8 +122,8 @@
   </header>
 
   <div id="truth-banner" role="status">
-    <strong>Type + Send</strong> — like Cursor. No microphone button in v1.
-    If you saw Notion’s “Start AI Meeting Note” bar before: that was the <strong>Notion desktop app</strong> detecting that <strong>Chrome</strong> had opened the mic for browser dictation — LifeOS does not call Notion. Native apps (e.g. Cursor) often use a different mic path, so Notion may not pop up there. Mic removed here so Chrome never asks.
+    <strong>Dictate</strong> fills the box · <strong>Send</strong> (or Enter) posts to LifeOS. Nothing sends automatically.
+    On Mac with Notion installed, Chrome dictation may trigger Notion’s “AI Meeting Note” bar — dismiss it or turn off Notion → Settings → Notifications → Desktop meeting detection.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -144,7 +147,8 @@
   <div id="transcript" aria-live="polite"></div>
 
   <div class="composer">
-    <textarea id="input" placeholder="Type a message…" rows="3"></textarea>
+    <div id="interim" data-testid="interim-transcript"></div>
+    <textarea id="input" placeholder="Type or dictate a message…" rows="3"></textarea>
     <div class="composer-row primary">
       <div class="composer-left">
         <label><input type="checkbox" id="speak-replies"> Speak replies</label>
@@ -152,17 +156,16 @@
         <button type="button" class="btn" id="btn-replay" data-testid="replay-btn" title="Replay last reply">🔁 Replay</button>
         <label class="speed-label">Speed <input type="range" id="speech-rate" min="0.6" max="1.4" step="0.1" value="1"></label>
       </div>
-      <button type="button" class="btn btn-primary btn-send-main" id="btn-send">Send</button>
+      <div class="composer-actions">
+        <button type="button" class="btn" id="btn-mic" data-testid="mic-btn" aria-pressed="false">🎤 Dictate</button>
+        <button type="button" class="btn btn-primary btn-send-main" id="btn-send">Send</button>
+      </div>
     </div>
-    <p class="composer-hint">Enter to send · Shift+Enter for new line · Replies via LifeOS Lumin on the server (shown under each message).</p>
-    <!-- v1: browser STT removed — Notion/macOS hijacks mic. Markers kept for acceptance harness only. -->
-    <div hidden aria-hidden="true">
-      <div id="interim" data-testid="interim-transcript"></div>
-      <button type="button" id="btn-mic" data-testid="mic-btn"></button>
-      <button type="button" id="btn-pause" data-testid="pause-btn"></button>
-      <button type="button" id="btn-cancel"></button>
-      <div id="voice-status"></div>
-    </div>
+    <div id="voice-status"></div>
+    <p class="composer-hint">Dictate → edit if needed → Send · Enter to send · Shift+Enter for new line.</p>
+    <!-- acceptance harness markers -->
+    <button type="button" id="btn-pause" data-testid="pause-btn" hidden aria-hidden="true"></button>
+    <button type="button" id="btn-cancel" hidden aria-hidden="true"></button>
   </div>
 
   <div class="side">
@@ -314,6 +317,7 @@
     let sessionId = localStorage.getItem('voice_rail_session_id') || null;
     let lastAssistant = '';
     let privateBuffer = [];
+    let voiceCtrl = null;
 
     async function api(method, path, body) {
       const r = await fetch(`${API}${path}`, {
@@ -473,6 +477,36 @@
         sendMessage(document.getElementById('input').value);
       }
     });
+
+    document.getElementById('btn-cancel')?.addEventListener('click', () => {
+      if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
+      document.getElementById('interim').textContent = '';
+    });
+
+    if (window.LifeOSVoiceChat?.attach) {
+      voiceCtrl = window.LifeOSVoiceChat.attach({
+        inputId: 'input',
+        buttonId: 'btn-mic',
+        statusId: 'voice-status',
+        mode: 'append',
+        startLabel: '🎤 Dictate',
+        stopLabel: 'Stop dictating',
+        idleText: 'Tap Dictate to speak into the box — then Send',
+        onStop: () => {
+          document.getElementById('interim').textContent = '';
+          document.getElementById('input')?.focus();
+        },
+        onStart: () => {
+          document.getElementById('interim').textContent = 'Listening… (tap Stop dictating when done, then Send)';
+        },
+      });
+    } else {
+      const micBtn = document.getElementById('btn-mic');
+      if (micBtn) {
+        micBtn.disabled = true;
+        document.getElementById('voice-status').textContent = 'Dictation not supported in this browser — type instead.';
+      }
+    }
 
     if (activeKey) loadSession();
   </script>

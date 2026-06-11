@@ -97,6 +97,8 @@
       mode: 'append',
       lang: 'en-US',
       idleText: 'Voice ready',
+      startLabel: 'Start voice',
+      stopLabel: 'Stop voice',
       storageKey: '',
       speakRepliesDefault: false,
       /** If set, leading wake phrases (case-insensitive) are stripped from the textarea when a listen session ends. */
@@ -148,8 +150,9 @@
     }
 
     function updateButton() {
-      button.textContent = state.listening ? 'Stop voice' : 'Start voice';
+      button.textContent = state.listening ? settings.stopLabel : settings.startLabel;
       button.classList.toggle('listening', state.listening);
+      button.setAttribute('aria-pressed', state.listening ? 'true' : 'false');
     }
 
     function updateStatus(value) {
