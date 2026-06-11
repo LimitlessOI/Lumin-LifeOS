@@ -62,7 +62,15 @@ function buildReply(intent, text) {
   }
 }
 
-export function createVoiceRailV1({ pool, commitmentTracker, callAI, logger }) {
+function resolveCouncilMemberLabel() {
+  return (
+    process.env.LIFEOS_CHAT_COUNCIL_MEMBER ||
+    process.env.LUMIN_COUNCIL_MEMBER ||
+    'anthropic'
+  );
+}
+
+export function createVoiceRailV1({ pool, commitmentTracker, callAI, lumin, logger }) {
   async function resolveUserId(userRef) {
     const { rows } = await pool.query(
       `SELECT id FROM lifeos_users WHERE user_handle = $1 OR display_name ILIKE $1 LIMIT 1`,
@@ -183,15 +191,58 @@ export function createVoiceRailV1({ pool, commitmentTracker, callAI, logger }) {
     }
 
     let reply = buildReply(intent, content);
-    if (callAI && !simulateOnly) {
+    let replySource = { path: 'template', council_member: null, note: 'Intent acknowledgment only — no council call.' };
+
+    if (!simulateOnly && lumin?.chat) {
+      try {
+        const { rows: existingThreads } = await pool.query(
+          `SELECT id FROM lumin_threads
+            WHERE user_id = $1 AND title = 'Voice Rail' AND archived = FALSE
+            ORDER BY last_message_at DESC NULLS LAST LIMIT 1`,
+          [userId],
+        );
+        let threadId = existingThreads[0]?.id;
+        if (!threadId && lumin.createThread) {
+          const thread = await lumin.createThread(userId, { mode: 'general', title: 'Voice Rail' });
+          threadId = thread?.id;
+        }
+        if (threadId) {
+          const luminResult = await lumin.chat(threadId, userId, content);
+          const luminText = luminResult?.reply?.content || luminResult?.reply?.text;
+          if (luminText && String(luminText).trim()) {
+            reply = String(luminText).trim().slice(0, 4000);
+            if (intent === 'command' || mode === 'command') {
+              reply += '\n\n(Commands are staged for your review — nothing auto-runs in v1.)';
+            }
+            replySource = {
+              path: 'lifeos/lumin',
+              council_member: resolveCouncilMemberLabel(),
+              note: 'LifeOS Lumin stack (context snapshot + council adapter). Commands still staged only.',
+            };
+          }
+        }
+      } catch (e) {
+        logger?.warn?.({ err: e.message }, 'voice-rail Lumin reply fallback');
+        replySource = { path: 'template', council_member: null, note: `Lumin unavailable (${e.message}); template fallback.` };
+      }
+    } else if (!simulateOnly && callAI) {
+      replySource = {
+        path: 'legacy_callAI',
+        council_member: resolveCouncilMemberLabel(),
+        note: 'Lumin service missing; degraded council prompt path.',
+      };
       try {
         const ai = await callAI(
-          'You are Lumin on Voice Rail v1. Reply in 1-3 short sentences. Never claim you executed BuilderOS.',
+          'You are Lumin on LifeOS Voice Rail. Use only verified LifeOS context. ' +
+            'Never invent internal system names or claim you executed commands. ' +
+            `Disclose backend: LifeOS council member ${resolveCouncilMemberLabel()}.`,
           content,
         );
         if (ai && String(ai).trim()) reply = String(ai).trim().slice(0, 2000);
       } catch (e) {
         logger?.warn?.({ err: e.message }, 'voice-rail AI reply fallback');
+        replySource.path = 'template';
+        replySource.note = `Council call failed (${e.message}); template fallback.`;
       }
     }
 
@@ -213,6 +264,7 @@ export function createVoiceRailV1({ pool, commitmentTracker, callAI, logger }) {
       intent,
       user_message: { role: 'user', content, intent },
       assistant_message: assistantRows[0],
+      reply_source: replySource,
       staged_command: stagedCommand,
       commitment_extract: commitmentExtract,
     };

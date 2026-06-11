@@ -6,14 +6,23 @@
 import express from 'express';
 import { createVoiceRailV1 } from '../services/voice-rail-v1.js';
 import { createCommitmentTracker } from '../services/commitment-tracker.js';
+import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 
 export function createLifeOSVoiceRailRoutes({ pool, requireKey, callAI, logger }) {
   const router = express.Router();
   const commitmentTracker = pool ? createCommitmentTracker(pool, callAI) : null;
-  const voiceRail = createVoiceRailV1({ pool, commitmentTracker, callAI, logger });
+  const lumin = pool && callAI ? createLifeOSLumin({ pool, callAI, logger }) : null;
+  const voiceRail = createVoiceRailV1({ pool, commitmentTracker, callAI, lumin, logger });
 
   router.get('/health', requireKey, (_req, res) => {
-    res.json({ ok: true, service: 'voice-rail-v1', modes: voiceRail.MODES, intents: voiceRail.INTENTS });
+    res.json({
+      ok: true,
+      service: 'voice-rail-v1',
+      modes: voiceRail.MODES,
+      intents: voiceRail.INTENTS,
+      reply_engine: lumin ? 'lifeos/lumin+council' : 'template_only',
+      council_member: lumin ? (process.env.LIFEOS_CHAT_COUNCIL_MEMBER || process.env.LUMIN_COUNCIL_MEMBER || 'anthropic') : null,
+    });
   });
 
   router.post('/session', requireKey, async (req, res, next) => {

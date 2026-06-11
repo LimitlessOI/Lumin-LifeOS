@@ -2,6 +2,34 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+
+## [SESSION] 2026-06-11 — Voice Rail: Notion mic hijack + reply honesty
+
+**Problem:** Adam clicked Voice → Notion macOS “Start AI Meeting Note” bar appeared (not LifeOS). Prior deploy also used generic council prompt cosplaying Lumin/DeepSeek with hallucinated “Lemon System” architecture.
+
+**Shipped (local — needs commit + deploy):**
+- **`lifeos-voice-rail-v1.html`** — mic/STT removed; type + Send only; Notion explained in banner
+- **`voice-rail-v1.js` + routes** — replies via LifeOS Lumin stack + `reply_source` disclosure
+
+**Next:** Commit, push, redeploy Railway; Adam hard-refresh `/voice-rail`. Optional: disable Notion AI Meeting Notes in Notion settings or quit Notion when using LifeOS.
+
+---
+## [SESSION] 2026-06-11 — BP priority queue + LEGACY banners (Adam directive)
+
+**Problem:** Agents cited `MISSION_QUEUE.json` and autopilot plumbing as "what to build next" — drift from Adam's model: **BPs in priority order ARE the queue.**
+
+**Shipped:**
+- **`builderos-reboot/BP_PRIORITY.json`** — canonical ordered product BP list (Voice Rail #1, Commitments technical PASS #2)
+- **`_authority` LEGACY banners** at top of: `MISSION_QUEUE.json`, `MISSION_PACK_INDEX.json`, `CURRENT_STATE.json`, `CURRENT_SLICE.json`, `OVERNIGHT_*`, autopilot receipts, `data/governed-autonomy-backlog-state.json`
+- **LEGACY file headers** on autopilot/overnight scripts + `services/factory-autopilot-scheduler.js`
+- **`.cursor/rules/bp-priority-canonical.mdc`** (always apply) + **`legacy-autopilot-plumbing.mdc`**
+- **`builderos-reboot/AGENTS.md`** rewritten — CANONICAL vs LEGACY table
+- **`HIST_LEGACY_SYSTEM_REGISTRY.md` §2E** — autopilot plumbing registry
+- **`prompts/00-HIST-LEGACY-BOUNDARY.md`** + **`00-SYSTEM-AUTHORITY-LAYERS.md`** — BP_PRIORITY routing
+
+**Next:** Execute BP rank #1 (Voice Rail v1): commit founder packet → BPB → `BLUEPRINT.json` → build → `npm run lifeos:voice-rail:v1-acceptance` PASS.
+
+---
 ## [SESSION SEAL] 2026-05-24 — AUTONOMOUS-RECOVERY-0001 (P0 before cutover)
 
 **Adam directive:** Phase 2 GitHub/Railway cutover **deferred**. P0 = BuilderOS must not stop on `hard_stop` — must recover autonomously until complete or honest UNSOLVED + founder alert.

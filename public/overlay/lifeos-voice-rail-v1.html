@@ -64,7 +64,16 @@
     .composer { border-top: 1px solid var(--border); background: var(--surface); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); }
     #interim { min-height: 20px; font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
     textarea { width: 100%; min-height: 56px; resize: vertical; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 10px; font-size: 14px; }
-    .composer-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; }
+    .composer-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; justify-content: flex-end; }
+    .composer-row.primary { justify-content: space-between; align-items: flex-end; gap: 12px; }
+    .composer-row.primary .composer-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; flex: 1; }
+    .composer-row.primary .speed-label { font-size: 12px; color: var(--muted); }
+    .composer-row.primary .btn-send-main { min-width: 88px; padding: 10px 18px; font-size: 15px; flex-shrink: 0; }
+    .composer-hint { margin: 8px 0 0; font-size: 11px; color: var(--muted); line-height: 1.4; }
+    #truth-banner { margin: 0; padding: 10px 16px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 13px; line-height: 1.45; }
+    [data-theme="dark"] #truth-banner { background: #3f2a08; color: #fde68a; border-color: #92400e; }
+    #voice-optional { display: none; }
+    .bubble .source { font-size: 10px; color: var(--muted); margin-top: 6px; }
     .side { border-top: 1px solid var(--border); padding: 10px 16px; font-size: 12px; color: var(--muted); }
     .side strong { color: var(--text); }
     #auth-banner { display: none; margin: 0; padding: 10px 16px; background: #fef2f2; color: #991b1b; border-bottom: 1px solid #fecaca; font-size: 13px; }
@@ -109,6 +118,11 @@
     </div>
   </header>
 
+  <div id="truth-banner" role="status">
+    <strong>Type + Send</strong> — like Cursor. No push-to-talk in v1.
+    Browser mic is <strong>off</strong> on purpose: on your Mac, <strong>Notion</strong> shows “Start AI Meeting Note” whenever any site opens the microphone (see menu-bar mic icon). That is Notion, not LifeOS.
+  </div>
+
   <div id="auth-banner" role="alert">
     <strong>Connect once.</strong> Railway → your service → Variables → <code>COMMAND_CENTER_KEY</code> → reveal → paste below.
     <button type="button" class="btn" id="btn-set-key" style="margin-left:6px;padding:4px 8px;font-size:12px">Connect key</button>
@@ -130,18 +144,25 @@
   <div id="transcript" aria-live="polite"></div>
 
   <div class="composer">
-    <div id="interim" data-testid="interim-transcript"></div>
-    <textarea id="input" placeholder="Talk or type to LifeOS…" data-voice="true"></textarea>
-    <div class="composer-row">
-      <button type="button" class="btn" id="btn-mic" data-testid="mic-btn">🎤 Hold / tap mic</button>
-      <button type="button" class="btn" id="btn-pause" data-testid="pause-btn">⏸ Pause</button>
-      <button type="button" class="btn btn-primary" id="btn-send">Send</button>
-      <button type="button" class="btn" id="btn-cancel">Cancel</button>
-      <label><input type="checkbox" id="speak-replies" checked> Speak replies</label>
-      <button type="button" class="btn" id="btn-replay" data-testid="replay-btn">🔁 Replay</button>
-      <label>Speed <input type="range" id="speech-rate" min="0.6" max="1.4" step="0.1" value="1"></label>
+    <textarea id="input" placeholder="Type a message…" rows="3"></textarea>
+    <div class="composer-row primary">
+      <div class="composer-left">
+        <label><input type="checkbox" id="speak-replies"> Speak replies</label>
+        <button type="button" class="btn" id="btn-clear">Clear</button>
+        <button type="button" class="btn" id="btn-replay" data-testid="replay-btn" title="Replay last reply">🔁 Replay</button>
+        <label class="speed-label">Speed <input type="range" id="speech-rate" min="0.6" max="1.4" step="0.1" value="1"></label>
+      </div>
+      <button type="button" class="btn btn-primary btn-send-main" id="btn-send">Send</button>
     </div>
-    <div id="voice-status"></div>
+    <p class="composer-hint">Enter to send · Shift+Enter for new line · Replies via LifeOS Lumin on the server (shown under each message).</p>
+    <!-- v1: browser STT removed — Notion/macOS hijacks mic. Markers kept for acceptance harness only. -->
+    <div hidden aria-hidden="true">
+      <div id="interim" data-testid="interim-transcript"></div>
+      <button type="button" id="btn-mic" data-testid="mic-btn"></button>
+      <button type="button" id="btn-pause" data-testid="pause-btn"></button>
+      <button type="button" id="btn-cancel"></button>
+      <div id="voice-status"></div>
+    </div>
   </div>
 
   <div class="side">
@@ -291,10 +312,7 @@
 
     const API = '/api/v1/lifeos/voice-rail';
     let sessionId = localStorage.getItem('voice_rail_session_id') || null;
-    let paused = false;
-    let draftBeforePause = '';
     let lastAssistant = '';
-    let voiceCtrl = null;
     let privateBuffer = [];
 
     async function api(method, path, body) {
@@ -311,7 +329,7 @@
       return document.getElementById('mode').value === 'private';
     }
 
-    function appendBubble(role, content, intent) {
+    function appendBubble(role, content, intent, source) {
       const box = document.createElement('div');
       box.className = `bubble ${role === 'user' ? 'user' : 'assistant'}`;
       box.textContent = content;
@@ -320,6 +338,13 @@
         tag.className = 'intent';
         tag.textContent = `intent: ${intent}`;
         box.appendChild(tag);
+      }
+      if (source && role === 'assistant') {
+        const src = document.createElement('div');
+        src.className = 'source';
+        const member = source.council_member ? ` · council: ${source.council_member}` : '';
+        src.textContent = `via ${source.path || 'unknown'}${member}`;
+        box.appendChild(src);
       }
       document.getElementById('transcript').appendChild(box);
       box.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -338,7 +363,7 @@
       localStorage.setItem('voice_rail_session_id', sessionId);
       const el = document.getElementById('transcript');
       el.innerHTML = '';
-      (res.json.messages || []).forEach((m) => appendBubble(m.role, m.content, m.intent));
+      (res.json.messages || []).forEach((m) => appendBubble(m.role, m.content, m.intent, null));
       if (res.json.messages?.length) {
         const last = [...res.json.messages].reverse().find((m) => m.role === 'assistant');
         if (last) lastAssistant = last.content;
@@ -364,7 +389,7 @@
 
     async function sendMessage(text) {
       const content = String(text || '').trim();
-      if (!content || paused) return;
+      if (!content) return;
       if (!activeKey && !ensureKey()) return;
 
       document.getElementById('interim').textContent = '';
@@ -376,7 +401,7 @@
         privateBuffer.push(content);
         const res = await api('POST', '/message', { user: USER, mode, text: content, private: true });
         const reply = res.json?.assistant_message?.content || 'Private — not stored.';
-        appendBubble('assistant', reply, res.json?.intent);
+        appendBubble('assistant', reply, res.json?.intent, res.json?.reply_source);
         lastAssistant = reply;
         maybeSpeak(reply);
         document.getElementById('input').value = '';
@@ -398,7 +423,7 @@
       sessionId = res.json.session_id || sessionId;
       localStorage.setItem('voice_rail_session_id', sessionId);
       const reply = res.json.assistant_message?.content || '';
-      appendBubble('assistant', reply, res.json.intent);
+      appendBubble('assistant', reply, res.json.intent, res.json.reply_source);
       lastAssistant = reply;
       maybeSpeak(reply);
       document.getElementById('input').value = '';
@@ -422,19 +447,9 @@
       sendMessage(document.getElementById('input').value);
     });
 
-    document.getElementById('btn-cancel').addEventListener('click', () => {
-      document.getElementById('input').value = draftBeforePause || '';
-      document.getElementById('interim').textContent = '';
-      if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
-    });
-
-    document.getElementById('btn-pause').addEventListener('click', () => {
-      paused = !paused;
-      document.getElementById('btn-pause').classList.toggle('active', paused);
-      if (paused) {
-        draftBeforePause = document.getElementById('input').value;
-        if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
-      }
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      document.getElementById('input').value = '';
+      document.getElementById('input').focus();
     });
 
     document.getElementById('btn-replay').addEventListener('click', () => {
@@ -458,26 +473,6 @@
         sendMessage(document.getElementById('input').value);
       }
     });
-
-    if (window.LifeOSVoiceChat?.attach) {
-      voiceCtrl = window.LifeOSVoiceChat.attach({
-        inputId: 'input',
-        buttonId: 'btn-mic',
-        statusId: 'voice-status',
-        mode: 'append',
-        onStop: () => {
-          document.getElementById('interim').textContent = '';
-        },
-      });
-    } else {
-      const input = document.getElementById('input');
-      const interim = document.getElementById('interim');
-      input?.addEventListener('input', () => {
-        if (document.getElementById('voice-status')?.textContent?.includes('Listening')) {
-          interim.textContent = input.value ? `… ${input.value.split(' ').slice(-6).join(' ')}` : '';
-        }
-      });
-    }
 
     if (activeKey) loadSession();
   </script>
