@@ -12,8 +12,8 @@
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-  <script src="/overlay/lifeos-bootstrap.js?v=20260524-3"></script>
-  <script src="/shared/lifeos-voice-chat.js?v=20260524-3"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260524-4"></script>
+  <script src="/shared/lifeos-voice-chat.js?v=20260524-4"></script>
   <title>LifeOS Voice Rail</title>
   <style>
     :root,
@@ -209,6 +209,36 @@
       flex-direction: column;
       min-height: 72px;
     }
+    .input-field-wrap {
+      position: relative;
+      flex: 1;
+      min-height: 72px;
+      display: flex;
+      flex-direction: column;
+    }
+    .input-field-wrap textarea {
+      padding-right: 36px;
+    }
+    .btn-clear-infield {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      z-index: 2;
+      min-width: 1.75rem;
+      min-height: 1.75rem;
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
+    }
+    .btn-clear-infield:hover { color: var(--text); border-color: var(--accent); }
+    .btn-clear-infield svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
     #interim { min-height: 16px; font-size: 11px; color: var(--muted); font-style: italic; margin-bottom: 4px; }
     textarea {
       flex: 1;
@@ -282,7 +312,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.3.1</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.3.2</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -303,7 +333,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.3</strong> — dept + AI engine are toggle buttons below (like ChC/Hist). Speaker icon = ElevenLabs voice.
+    Build <strong>v2.3.2</strong> — say <strong>send</strong> to post voice (not “over”). Clear ✕ inside the text box dumps draft.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -336,7 +366,12 @@
       <div class="composer-body">
         <div class="composer-input-wrap">
           <div id="interim" data-testid="interim-transcript"></div>
-          <textarea id="input" placeholder="Type or tap mic — say “send” when done…" rows="3"></textarea>
+          <div class="input-field-wrap">
+            <textarea id="input" placeholder="Type or tap mic — say “send” when done…" rows="3"></textarea>
+            <button type="button" class="btn-clear-infield" id="btn-clear" title="Clear text box" aria-label="Clear text box">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
         </div>
         <div class="composer-toolbar">
           <div class="toggle-groups">
@@ -358,7 +393,7 @@
             </div>
           </div>
           <div class="composer-actions">
-            <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” or “over” to post">
+            <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” to post">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
             </button>
             <button type="button" class="btn btn-primary btn-send-compact" id="btn-send">Send</button>
@@ -382,9 +417,6 @@
         <label class="speed-label" id="voice-pick-wrap" hidden>Voice
           <select id="tts-voice" aria-label="Read-aloud voice"></select>
         </label>
-        <button type="button" class="btn icon-btn compact" id="btn-clear" title="Clear text box" aria-label="Clear">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
         <button type="button" class="btn icon-btn compact" id="btn-replay" data-testid="replay-btn" title="Replay last reply" aria-label="Replay last reply">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
         </button>
@@ -1251,6 +1283,8 @@
 
     document.getElementById('btn-clear').addEventListener('click', () => {
       document.getElementById('input').value = '';
+      document.getElementById('interim').textContent = '';
+      if (voiceCtrl?.clearBuffer) voiceCtrl.clearBuffer();
       document.getElementById('input').focus();
     });
 
@@ -1297,6 +1331,7 @@
         iconOnly: true,
         silentStatus: false,
         voiceSendEnabled: true,
+        voiceSendPhrases: ['send it', 'send message', 'send that', 'send now', 'send'],
         keepListeningOnVoiceSend: true,
         persistentListen: true,
         pauseMicDuringTts: true,

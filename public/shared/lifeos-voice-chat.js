@@ -123,7 +123,7 @@
     if (!t) return { send: false, message: '' };
     const list = phrases && phrases.length
       ? phrases
-      : ['send it', 'send message', 'send that', 'send now', 'send', 'over'];
+      : ['send it', 'send message', 'send that', 'send now', 'send'];
     for (let i = 0; i < list.length; i += 1) {
       const raw = String(list[i] || '').trim();
       if (!raw) continue;
@@ -168,7 +168,7 @@
       wakePrefixes: [],
       /** When true, saying "send" / "over" at end of utterance triggers onVoiceSend (walkie-talkie style). */
       voiceSendEnabled: false,
-      voiceSendPhrases: ['send it', 'send message', 'send that', 'send now', 'send', 'over'],
+      voiceSendPhrases: ['send it', 'send message', 'send that', 'send now', 'send'],
       onVoiceSend: null,
       /** Keep mic running after voice-send; clear textarea for next utterance. */
       keepListeningOnVoiceSend: false,
@@ -272,7 +272,7 @@
         try {
           settings.onVoiceSend(msg);
         } catch (_) {}
-        updateStatus('Listening… (say “send” or “over” to post again)');
+        updateStatus('Listening… (say “send” to post again)');
         return true;
       }
       stopListening();
@@ -327,7 +327,7 @@
         state.listening = true;
         updateButton();
         focusInputHighlight();
-        updateStatus(settings.silentStatus ? '' : 'Listening… say “send” or “over” to post.');
+        updateStatus(settings.silentStatus ? '' : 'Listening… say “send” to post.');
         if (typeof settings.onStart === 'function') {
           try { settings.onStart({ inputValue: String(input?.value || '') }); } catch (_) {}
         }
@@ -362,9 +362,7 @@
           const next = stripLeadingWakePrefixes(input.value, settings.wakePrefixes);
           if (next !== input.value) input.value = next;
         }
-        if (!settings.keepListeningOnVoiceSend) {
-          maybeVoiceSend(true);
-        }
+        maybeVoiceSend(true);
         if (state.ttsDuck) {
           updateButton();
           updateStatus('Speaking…');

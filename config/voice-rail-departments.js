@@ -98,14 +98,13 @@ export function listVoiceRailDepartmentsPublic() {
 }
 
 export function resolveModelForRouting(cfg, dept, resolvedKey) {
-  const deptModel = process.env[dept.modelEnv]?.trim();
-  if (deptModel) return deptModel;
-
   const provider = cfg?.provider || 'unknown';
   const cfgModel = cfg?.model?.trim() || null;
 
   if (provider === 'anthropic' || resolvedKey === 'claude_sonnet' || String(resolvedKey).includes('claude')) {
+    const deptModel = process.env[dept.modelEnv]?.trim();
     return (
+      deptModel ||
       process.env.VOICE_RAIL_MODEL?.trim() ||
       process.env.LIFEOS_CHAIR_MODEL?.trim() ||
       cfgModel ||
