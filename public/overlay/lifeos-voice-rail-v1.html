@@ -61,13 +61,13 @@
     header { flex-shrink: 0; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     header h1 { margin: 0; font-size: 1rem; flex: 1; min-width: 120px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .dept-badge { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 6px; background: var(--accent); color: var(--accent-fg); }
-    .dept-toggles, .mode-toggles {
+    .dept-toggles, .provider-toggles, .mode-toggles {
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
       align-items: center;
     }
-    .dept-toggle {
+    .dept-toggle, .provider-toggle {
       font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.02em;
@@ -97,11 +97,7 @@
       border: 1px solid var(--border); border-radius: 8px;
       background: var(--input-bg); color: var(--text);
     }
-    #provider-pick {
-      font-size: 12px; padding: 6px 8px; max-width: 150px;
-      border: 1px solid var(--border); border-radius: 8px;
-      background: var(--input-bg); color: var(--text);
-    }
+    .provider-toggle { max-width: 4.5rem; overflow: hidden; text-overflow: ellipsis; }
     .history-loader { text-align: center; padding: 6px; font-size: 11px; color: var(--muted); flex-shrink: 0; }
     .msg-ts { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
     .build-stamp { font-size: 10px; font-weight: 600; color: var(--ok); margin-left: 6px; letter-spacing: 0.04em; }
@@ -286,9 +282,8 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.2</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.3</span></h1>
     <div class="controls">
-      <select id="provider-pick" title="Which AI engine replies (not Anthropic-only)" aria-label="AI engine"></select>
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
         <button type="button" class="btn" id="btn-history-search" style="font-size:12px;padding:6px 10px">Search</button>
@@ -308,7 +303,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.2</strong> — one timeline (scroll up for history). Pick dept + AI engine. Turn on the speaker icon for <strong>ElevenLabs</strong> voice. Old lines from June acceptance tests are history, not today’s council.
+    Build <strong>v2.3</strong> — dept + AI engine are toggle buttons below (like ChC/Hist). Speaker icon = ElevenLabs voice.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -345,6 +340,7 @@
         </div>
         <div class="composer-toolbar">
           <div class="toggle-groups">
+            <div class="provider-toggles" role="group" aria-label="AI engine" id="provider-toggles"></div>
             <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
             <div class="mode-toggles" role="group" aria-label="Session mode">
               <button type="button" class="btn icon-btn compact mode-toggle active" data-mode="conversation" aria-pressed="true" title="Conversation" aria-label="Conversation">
@@ -707,7 +703,7 @@
     function onDepartmentSelected(deptId) {
       applyDepartmentUI(deptId);
       localStorage.setItem('voice_rail_department', deptId);
-      syncProviderSelectForDept();
+      syncProviderForDept();
     }
 
     function providerStorageKey(deptId) {
@@ -721,37 +717,60 @@
       return providerCatalog[0]?.member_key || '';
     }
 
-    function syncProviderSelectForDept() {
-      const sel = document.getElementById('provider-pick');
-      if (!sel || !providerCatalog.length) return;
-      const key = selectedProviderKey();
-      if (key && providerCatalog.some((p) => p.member_key === key)) sel.value = key;
+    const PROVIDER_SHORT = {
+      anthropic: 'Claude',
+      openai: 'GPT',
+      gemini: 'Gemini',
+      groq: 'Groq',
+      deepseek: 'DS',
+      cerebras: 'Cer',
+    };
+
+    function providerButtonLabel(p) {
+      return PROVIDER_SHORT[p.id] || String(p.label || p.id).split(/\s+/)[0].slice(0, 6);
     }
 
-    function renderProviderSelect() {
-      const sel = document.getElementById('provider-pick');
-      if (!sel || !providerCatalog.length) return;
-      sel.innerHTML = providerCatalog
+    function applyProviderUI(memberKey) {
+      const key = memberKey || selectedProviderKey();
+      document.querySelectorAll('.provider-toggle').forEach((btn) => {
+        const on = btn.dataset.memberKey === key;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+
+    function onProviderSelected(memberKey) {
+      const dept = document.getElementById('department').value || 'ChC';
+      localStorage.setItem(providerStorageKey(dept), memberKey);
+      applyProviderUI(memberKey);
+    }
+
+    function syncProviderForDept() {
+      applyProviderUI(selectedProviderKey());
+    }
+
+    function renderProviderToggles() {
+      const host = document.getElementById('provider-toggles');
+      if (!host || !providerCatalog.length) return;
+      host.innerHTML = providerCatalog
         .map(
           (p) =>
-            `<option value="${escapeHtml(p.member_key)}">${escapeHtml(p.label)}${p.model ? ' · ' + escapeHtml(p.model) : ''}</option>`,
+            `<button type="button" class="btn icon-btn compact provider-toggle dept-toggle" data-member-key="${escapeHtml(p.member_key)}" aria-pressed="false" title="${escapeHtml(p.label)}${p.model ? ' · ' + escapeHtml(p.model) : ''}" aria-label="${escapeHtml(p.label)}">${escapeHtml(providerButtonLabel(p))}</button>`,
         )
         .join('');
-      syncProviderSelectForDept();
+      host.querySelectorAll('.provider-toggle').forEach((btn) => {
+        btn.addEventListener('click', () => onProviderSelected(btn.dataset.memberKey));
+      });
+      syncProviderForDept();
     }
 
     async function loadProviders() {
       const res = await api('GET', '/providers');
       if (res.status === 200 && res.json.ok && res.json.providers?.length) {
         providerCatalog = res.json.providers;
-        renderProviderSelect();
+        renderProviderToggles();
       }
     }
-
-    document.getElementById('provider-pick')?.addEventListener('change', (e) => {
-      const dept = document.getElementById('department').value || 'ChC';
-      localStorage.setItem(providerStorageKey(dept), e.target.value);
-    });
 
     function renderDepartmentToggles(list) {
       departmentCatalog = list || [];
