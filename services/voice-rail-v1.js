@@ -4,6 +4,13 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * @ssot builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md
  */
+import {
+  buildDepartmentSystemPrompt,
+  listVoiceRailDepartmentsPublic,
+  normalizeVoiceRailDepartment,
+  resolveDepartmentRouting,
+} from '../config/voice-rail-departments.js';
+
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
   'command',
@@ -49,39 +56,13 @@ function normalizeIntent(intent) {
   return INTENTS.has(i) ? i : 'general_conversation';
 }
 
-function resolveChairCouncilMember() {
-  return (
-    process.env.VOICE_RAIL_CHAIR_MEMBER ||
-    process.env.LIFEOS_CHAIR_COUNCIL_MEMBER ||
-    process.env.LIFEOS_CHAT_COUNCIL_MEMBER ||
-    process.env.LUMIN_COUNCIL_MEMBER ||
-    'anthropic'
+function sessionAlreadyExplainedIdentity(priorMessages, deptId) {
+  const dept = normalizeVoiceRailDepartment(deptId);
+  return (priorMessages || []).some(
+    (m) =>
+      m.role === 'assistant'
+      && (m.department === dept || /\b(council chair|ChC|department|voice rail)\b/i.test(m.content)),
   );
-}
-
-function resolveChairModelId(routing) {
-  return (
-    process.env.VOICE_RAIL_MODEL ||
-    process.env.LIFEOS_CHAIR_MODEL ||
-    routing?.modelId ||
-    process.env.ANTHROPIC_MODEL ||
-    'claude-sonnet-4-6'
-  );
-}
-
-function resolveCouncilRouting(councilMembers, councilAliasMap) {
-  const memberKey = resolveChairCouncilMember();
-  const resolvedKey = councilAliasMap?.[memberKey] || memberKey;
-  const cfg = councilMembers?.[resolvedKey] || {};
-  return {
-    memberKey,
-    resolvedKey,
-    displayName: cfg.name || resolvedKey,
-    modelId: resolveChairModelId({ modelId: cfg.model }),
-    provider: cfg.provider || 'unknown',
-    councilRole: 'Council Chair (ChC)',
-    persona: 'ChC',
-  };
 }
 
 function normalizeForCompare(text) {
@@ -101,14 +82,6 @@ function isNearDuplicateReply(a, b) {
 function isIdentityOrRoleQuestion(text) {
   return /\b(who are you|what(?:'s| is) your role|identify yourself|role within|who am i|who i am|position within|within (?:the )?system|within lumen|within lifeos)\b/i.test(
     String(text || ''),
-  );
-}
-
-function sessionAlreadyExplainedIdentity(priorMessages) {
-  return (priorMessages || []).some(
-    (m) =>
-      m.role === 'assistant'
-      && /\b(council chair|ChC|voice rail|i'?m the chair|founder communication)\b/i.test(m.content),
   );
 }
 
@@ -144,37 +117,6 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName) {
   return out || `${name}, I don't have a clear answer on that. Try once more in one sentence?`;
 }
 
-function buildChairSystemPrompt(routing, mode, contextData, operator) {
-  const operatorName = operator?.display_name || 'Adam';
-  const operatorHandle = operator?.user_handle || 'adam';
-  const ctxBlock =
-    contextData && Object.keys(contextData).length
-      ? `\nVerified LifeOS context (use only this — do not invent beyond it):\n${JSON.stringify(contextData, null, 2)}\n`
-      : '\nNo LifeOS context payload loaded for this turn — do not pretend you know private data.\n';
-
-  return `You are the Council Chair (ChC) on LifeOS Voice Rail — ${operatorName}'s direct line to LifeOS on Railway.
-
-YOU ARE NOT a generic chatbot, advisor template, or "Voice Rail Lumin." You are ChC: founder communication, orchestration, routine judgment, and honest answers. You are a first-class seat in LifeOS governance (see BuilderOS vocabulary ChC).
-
-WHO YOU SPEAK WITH:
-- ${operatorName} (${operatorHandle}) — LifeOS founder and operator. You know who they are. Never re-introduce them unless they ask.
-
-YOUR ROLE (when asked — state clearly, never deny it):
-- Council Chair (ChC): ${operatorName}'s executive comms interface into LifeOS.
-- You orchestrate, synthesize, stage commands (never auto-run BuilderOS), and escalate load-bearing decisions to full Council (Cncl) when needed.
-- You are NOT CDR/the coder in this chat — but you ARE the Chair with a real role in the system.
-- Product name is LifeOS (never "Lumen").
-
-MODEL (disclose if asked): ${routing.displayName} · ${routing.provider} · ${routing.modelId}
-
-HOW TO WRITE:
-- Direct, capable, plain English. One short paragraph; max 3 sentences unless ${operatorName} asks for depth.
-- Answer the latest message only — no thread recap, no "You asked about…", no "ANSWER:", no "Same as above."
-- If identity was already covered this session: one sentence, then ask what they want next.
-- Session mode: ${mode}.
-${ctxBlock}`;
-}
-
 function councilUnavailableError(routing, reason) {
   const err = new Error('council_unavailable');
   err.status = 503;
@@ -184,6 +126,7 @@ function councilUnavailableError(routing, reason) {
     council_member: routing?.memberKey,
     model_id: routing?.modelId,
     provider: routing?.provider,
+    department: routing?.department,
     policy: 'no_canned_or_template_operator_replies',
   };
   return err;
@@ -202,6 +145,7 @@ async function generateCouncilReply({
   listMessagesFn,
   content,
   mode,
+  department,
   routing,
   operator,
   logger,
@@ -209,6 +153,8 @@ async function generateCouncilReply({
   if (!callCouncilMember) {
     throw councilUnavailableError(routing, 'callCouncilMember not configured');
   }
+
+  const deptId = normalizeVoiceRailDepartment(department || routing?.department);
 
   let contextData = {};
   if (lumin?.buildContextSnapshot) {
@@ -223,22 +169,28 @@ async function generateCouncilReply({
   const prior = (history || []).slice(0, -1).slice(-10);
   const operatorName = operator?.display_name || 'Adam';
   const threadText = prior
-    .map((m) => `${m.role === 'user' ? operatorName : 'ChC'}: ${m.content}`)
+    .map((m) => {
+      const label =
+        m.role === 'user'
+          ? operatorName
+          : normalizeVoiceRailDepartment(m.department || deptId);
+      return `${label}: ${m.content}`;
+    })
     .join('\n\n');
 
   let repeatHint = '';
-  if (isIdentityOrRoleQuestion(content) && sessionAlreadyExplainedIdentity(prior)) {
+  if (isIdentityOrRoleQuestion(content) && sessionAlreadyExplainedIdentity(prior, deptId)) {
     repeatHint =
       '\n\nOne sentence only — identity already established. Do NOT restate who the founder is.\n';
   }
 
-  const system = buildChairSystemPrompt(routing, mode, contextData, operator);
+  const system = buildDepartmentSystemPrompt(deptId, routing, mode, contextData, operator);
   const userTurn = threadText
     ? `--- Prior messages ---\n${threadText}\n\n--- Current ---\n${operatorName}: ${content}${repeatHint}`
     : `${operatorName}: ${content}${repeatHint}`;
 
   const councilRaw = await callCouncilMember(routing.memberKey, userTurn, {
-    taskType: 'voice_rail_chair',
+    taskType: 'voice_rail_department',
     systemPromptOverride: system,
     skipKnowledge: true,
     useCache: false,
@@ -248,13 +200,15 @@ async function generateCouncilReply({
   const councilText = sanitizeVoiceRailReply(
     formatCouncilReply(councilRaw),
     prior,
-    operator?.display_name || 'Adam',
+    operatorName,
   );
   if (!councilText) {
     throw councilUnavailableError(routing, 'council returned empty response');
   }
   return councilText;
 }
+
+export { listVoiceRailDepartmentsPublic, normalizeVoiceRailDepartment };
 
 export function createVoiceRailV1({
   pool,
@@ -304,7 +258,7 @@ export function createVoiceRailV1({
     );
     if (!sessions[0]) return null;
     const { rows } = await pool.query(
-      `SELECT id, role, content, intent, is_interim, created_at
+      `SELECT id, role, content, intent, department, is_interim, created_at
          FROM voice_rail_messages
         WHERE session_id = $1 AND is_interim = FALSE
         ORDER BY created_at ASC`,
@@ -338,11 +292,13 @@ export function createVoiceRailV1({
     sessionId,
     mode = 'conversation',
     tag = null,
+    department = 'ChC',
     text,
     private: isPrivate = false,
     simulateOnly = false,
   }) {
     const content = String(text || '').trim();
+    const deptId = normalizeVoiceRailDepartment(department);
     if (!content) {
       const err = new Error('empty_message');
       err.status = 400;
@@ -396,7 +352,7 @@ export function createVoiceRailV1({
       }
     }
 
-    const routing = resolveCouncilRouting(councilMembers, councilAliasMap);
+    const routing = resolveDepartmentRouting(deptId, councilMembers, councilAliasMap);
     const operator = await resolveOperatorProfile(userId);
 
     if (simulateOnly) {
@@ -408,6 +364,7 @@ export function createVoiceRailV1({
         session_id: session.id,
         mode: session.mode,
         tag: session.tag,
+        department: deptId,
         intent,
         user_message: { role: 'user', content, intent },
         assistant_message: null,
@@ -428,18 +385,21 @@ export function createVoiceRailV1({
         listMessagesFn: listMessages,
         content,
         mode,
+        department: deptId,
         routing,
         operator,
         logger,
       });
       replySource = {
-        path: 'lifeos/chair',
-        persona: 'ChC',
+        path: 'lifeos/department',
+        persona: deptId,
+        department: deptId,
+        department_title: routing.departmentTitle,
         council_member: routing.memberKey,
         model_id: routing.modelId,
         provider: routing.provider,
         display_name: routing.displayName,
-        note: 'Council Chair (ChC) — direct founder comms; not template fallback.',
+        note: `Direct ${deptId} department voice — council-backed; not template fallback.`,
       };
     } catch (e) {
       logger?.warn?.({ err: e.message, detail: e.detail }, 'voice-rail council reply failed');
@@ -447,10 +407,10 @@ export function createVoiceRailV1({
     }
 
     const { rows: assistantRows } = await pool.query(
-      `INSERT INTO voice_rail_messages (session_id, role, content, intent, is_interim)
-       VALUES ($1, 'assistant', $2, $3, FALSE)
-       RETURNING id, role, content, intent, created_at`,
-      [session.id, reply, intent],
+      `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+       VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+       RETURNING id, role, content, intent, department, created_at`,
+      [session.id, reply, intent, deptId],
     );
 
     await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
@@ -461,6 +421,7 @@ export function createVoiceRailV1({
       session_id: session.id,
       mode: session.mode,
       tag: session.tag,
+      department: deptId,
       intent,
       user_message: { role: 'user', content, intent },
       assistant_message: assistantRows[0],
@@ -519,5 +480,6 @@ export function createVoiceRailV1({
     listStagedCommands,
     stageCommand,
     findPrivateLeak,
+    listDepartments: listVoiceRailDepartmentsPublic,
   };
 }

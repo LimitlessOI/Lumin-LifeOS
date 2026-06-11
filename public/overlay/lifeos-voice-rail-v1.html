@@ -49,7 +49,24 @@
     body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; display: flex; flex-direction: column; transition: background 0.2s, color 0.2s; }
     header { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     header h1 { margin: 0; font-size: 1rem; flex: 1; min-width: 120px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .chc-badge { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 6px; background: var(--accent); color: var(--accent-fg); }
+    .dept-badge { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 6px; background: var(--accent); color: var(--accent-fg); }
+    .dept-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .dept-toggle {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      min-width: 2.5rem;
+      min-height: 2.5rem;
+      padding: 6px 8px;
+    }
+    .bubble .dept-label { font-size: 10px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
     .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     select, button, input[type="range"] { font: inherit; }
     select { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 13px; }
@@ -147,7 +164,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="chc-badge" title="Council Chair — your direct line">ChC</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span></h1>
     <div class="controls">
       <button type="button" class="btn icon-btn" id="btn-theme" aria-label="Toggle light/dark mode" title="Light / dark mode">☀️</button>
     </div>
@@ -159,6 +176,7 @@
       <option value="emergency">Emergency priority</option>
     </select>
     <input type="hidden" id="mode" value="conversation">
+    <input type="hidden" id="department" value="ChC">
   </header>
 
   <div id="truth-banner" role="status">
@@ -167,7 +185,8 @@
   </div>
 
   <div id="auth-banner" role="alert">
-    <strong>Connect once.</strong> Railway → your service → Variables → <code>COMMAND_CENTER_KEY</code> → reveal → paste below.
+    <strong>Connect once.</strong> After you verify, the key stays in <strong>this browser</strong> — refresh won’t ask again.
+    Railway → Variables → <code>COMMAND_CENTER_KEY</code> → reveal → paste below.
     <button type="button" class="btn" id="btn-set-key" style="margin-left:6px;padding:4px 8px;font-size:12px">Connect key</button>
   </div>
 
@@ -196,6 +215,7 @@
         </button>
         <button type="button" class="btn btn-primary btn-send-main" id="btn-send">Send</button>
       </div>
+      <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
       <div class="mode-toggles" role="group" aria-label="Session mode">
         <button type="button" class="btn icon-btn mode-toggle active" data-mode="conversation" aria-pressed="true" title="Conversation" aria-label="Conversation">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -247,7 +267,7 @@
   </div>
 
   <script>
-    const ctx = window.getLifeOSContext?.({ promptForKey: false, defaultUser: 'adam' }) || {};
+    const ctx = window.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false, defaultUser: 'adam' }) || {};
 
     function readStoredKey() {
       const san = window.LifeOSBootstrap?.normalizeKey || ((s) => String(s || '').trim());
@@ -290,6 +310,17 @@
       document.getElementById('key-modal')?.classList.remove('open');
     }
 
+    function persistKeyLocal(raw) {
+      if (ctx.setKey) return ctx.setKey(raw);
+      const norm = window.LifeOSBootstrap?.normalizeCommandKey;
+      const k = norm ? norm(raw) : String(raw || '').trim();
+      if (!k) return '';
+      localStorage.setItem('commandKey', k);
+      localStorage.setItem('command_key', k);
+      localStorage.setItem('lifeos_key', k);
+      return k;
+    }
+
     async function verifyAndSaveKey(raw) {
       const status = document.getElementById('key-status');
       const san = window.LifeOSBootstrap?.normalizeKey || ((s) => String(s || '').trim());
@@ -310,7 +341,7 @@
           : `Server returned ${r.status}. Try again.`;
         return false;
       }
-      const saved = ctx.setKey ? ctx.setKey(entered) : entered;
+      const saved = persistKeyLocal(entered);
       activeKey = saved || entered;
       status.className = 'ok';
       status.textContent = `Connected (${activeKey.length} chars saved in this browser).`;
@@ -322,6 +353,7 @@
       history.replaceState({}, '', location.pathname + (qs ? `?${qs}` : ''));
       document.getElementById('transcript').innerHTML = '';
       await loadSession();
+      await loadDepartments();
       return true;
     }
 
@@ -353,6 +385,15 @@
       return true;
     }
 
+    function bootstrapAuth() {
+      activeKey = getKey();
+      if (activeKey) {
+        showAuthBanner(false);
+        return;
+      }
+      showAuthBanner(true);
+    }
+
     document.getElementById('btn-set-key')?.addEventListener('click', openKeyModal);
     document.getElementById('key-cancel')?.addEventListener('click', closeKeyModal);
     document.getElementById('key-save')?.addEventListener('click', () => {
@@ -362,9 +403,7 @@
       if (e.key === 'Enter') verifyAndSaveKey(e.target.value);
     });
 
-    if (!ensureKey()) {
-      /* modal open — loadSession after connect */
-    }
+    bootstrapAuth();
 
     function applyTheme(theme) {
       const t = theme === 'dark' ? 'dark' : 'light';
@@ -403,11 +442,73 @@
       return { status: r.status, json };
     }
 
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
     function isPrivate() {
       return document.getElementById('mode').value === 'private';
     }
 
     const MODE_VALUES = ['conversation', 'command', 'brainstorm', 'private'];
+    let departmentCatalog = [];
+
+    function departmentMeta(id) {
+      return departmentCatalog.find((d) => d.id === id) || null;
+    }
+
+    function applyDepartmentUI(deptId) {
+      const id = deptId || 'ChC';
+      document.getElementById('department').value = id;
+      const meta = departmentMeta(id);
+      const badge = document.getElementById('dept-badge');
+      if (badge) {
+        badge.textContent = id;
+        badge.title = meta ? `${meta.title} — direct line` : `${id} — direct line`;
+      }
+      document.querySelectorAll('.dept-toggle').forEach((btn) => {
+        const on = btn.dataset.department === id;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+
+    function onDepartmentSelected(deptId) {
+      applyDepartmentUI(deptId);
+      localStorage.setItem('voice_rail_department', deptId);
+    }
+
+    function renderDepartmentToggles(list) {
+      departmentCatalog = list || [];
+      const host = document.getElementById('dept-toggles');
+      if (!host || !departmentCatalog.length) return;
+      host.innerHTML = departmentCatalog
+        .map((d) => `<button type="button" class="btn icon-btn dept-toggle" data-department="${escapeHtml(d.id)}" aria-pressed="false" title="${escapeHtml(d.title)} — ${escapeHtml(d.summary)}" aria-label="${escapeHtml(d.title)}">${escapeHtml(d.id)}</button>`)
+        .join('');
+      host.querySelectorAll('.dept-toggle').forEach((btn) => {
+        btn.addEventListener('click', () => onDepartmentSelected(btn.dataset.department));
+      });
+      const saved = localStorage.getItem('voice_rail_department') || 'ChC';
+      const valid = departmentCatalog.some((d) => d.id === saved) ? saved : 'ChC';
+      applyDepartmentUI(valid);
+    }
+
+    async function loadDepartments() {
+      const res = await api('GET', '/departments');
+      if (res.status === 200 && res.json.ok && res.json.departments?.length) {
+        renderDepartmentToggles(res.json.departments);
+        return;
+      }
+      renderDepartmentToggles([
+        { id: 'ChC', title: 'Council Chair', summary: 'Founder communication' },
+        { id: 'Hist', title: 'Historian', summary: 'Ledger and evidence' },
+        { id: 'SNT', title: 'Sentinel', summary: 'Adversarial review' },
+        { id: 'CFO', title: 'CFO', summary: 'ROI and spend' },
+        { id: 'BPB', title: 'Blueprint', summary: 'SSOT translation' },
+        { id: 'SDO', title: 'Design', summary: 'Visual / UX' },
+        { id: 'CDR', title: 'Code execution', summary: 'Build and run' },
+      ]);
+    }
 
     function applyModeUI(mode) {
       const next = MODE_VALUES.includes(mode) ? mode : 'conversation';
@@ -441,10 +542,17 @@
       btn.title = on ? 'Read replies aloud (on)' : 'Read replies aloud (off)';
     }
 
-    function appendBubble(role, content, intent, source) {
+    function appendBubble(role, content, intent, source, department) {
       const box = document.createElement('div');
       box.className = `bubble ${role === 'user' ? 'user' : 'assistant'}`;
-      box.textContent = content;
+      if (role === 'assistant' && department && department !== 'ChC') {
+        const deptLabel = document.createElement('div');
+        deptLabel.className = 'dept-label';
+        deptLabel.textContent = departmentMeta(department)?.title || department;
+        box.appendChild(deptLabel);
+      }
+      const textNode = document.createTextNode(content);
+      box.appendChild(textNode);
       if (intent === 'error') {
         const tag = document.createElement('div');
         tag.className = 'intent';
@@ -467,7 +575,13 @@
       if (isPrivate()) return;
       const mode = document.getElementById('mode').value;
       const tag = document.getElementById('tag').value || null;
-      const res = await api('POST', '/session', { user: USER, mode, tag, session_id: sessionId });
+      const res = await api('POST', '/session', {
+        user: USER,
+        mode,
+        tag,
+        session_id: sessionId,
+        department: document.getElementById('department').value || 'ChC',
+      });
       if (res.status !== 200 || !res.json.ok) {
         if (res.status === 401) showAuthBanner(true);
         return;
@@ -476,7 +590,7 @@
       localStorage.setItem('voice_rail_session_id', sessionId);
       const el = document.getElementById('transcript');
       el.innerHTML = '';
-      (res.json.messages || []).forEach((m) => appendBubble(m.role, m.content, m.intent, null));
+      (res.json.messages || []).forEach((m) => appendBubble(m.role, m.content, m.intent, null, m.department));
       if (res.json.messages?.length) {
         const last = [...res.json.messages].reverse().find((m) => m.role === 'assistant');
         if (last) lastAssistant = last.content;
@@ -494,10 +608,6 @@
       list.innerHTML = res.json.staged_commands.slice(0, 5).map((c) =>
         `<div class="staged">${escapeHtml(c.utterance)} <em>(${c.status}, not executed)</em></div>`,
       ).join('');
-    }
-
-    function escapeHtml(s) {
-      return String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
 
     function setComposerBusy(busy) {
@@ -524,6 +634,7 @@
 
       const mode = document.getElementById('mode').value;
       const tag = document.getElementById('tag').value || null;
+      const department = document.getElementById('department').value || 'ChC';
 
       try {
         if (isPrivate()) {
@@ -531,7 +642,7 @@
           privateBuffer.push(content);
           const res = await api('POST', '/message', { user: USER, mode, text: content, private: true });
           const reply = res.json?.assistant_message?.content || 'Private — not stored.';
-          appendBubble('assistant', reply, res.json?.intent, res.json?.reply_source);
+          appendBubble('assistant', reply, res.json?.intent, res.json?.reply_source, null);
           lastAssistant = reply;
           maybeSpeak(reply);
           return;
@@ -543,6 +654,7 @@
           session_id: sessionId,
           mode,
           tag,
+          department,
           text: content,
         });
         if (res.status !== 200 || !res.json.ok) {
@@ -552,7 +664,8 @@
         sessionId = res.json.session_id || sessionId;
         localStorage.setItem('voice_rail_session_id', sessionId);
         const reply = res.json.assistant_message?.content || '';
-        appendBubble('assistant', reply, res.json.intent, res.json.reply_source);
+        const replyDept = res.json.department || res.json.reply_source?.persona || department;
+        appendBubble('assistant', reply, res.json.intent, res.json.reply_source, replyDept);
         lastAssistant = reply;
         maybeSpeak(reply);
         await refreshStaged();
@@ -681,7 +794,12 @@
       if (micBtn) micBtn.disabled = true;
     }
 
-    if (activeKey) loadSession();
+    if (activeKey) {
+      loadDepartments();
+      loadSession();
+    } else {
+      loadDepartments();
+    }
   </script>
 </body>
 </html>

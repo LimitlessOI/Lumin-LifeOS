@@ -51,13 +51,18 @@ export function createLifeOSVoiceRailRoutes({
       service: 'voice-rail-v1',
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,
-      reply_engine: callCouncilMember ? 'lifeos/chair+ChC' : 'template_only',
-      persona: 'ChC',
+      reply_engine: callCouncilMember ? 'lifeos/department' : 'template_only',
+      default_department: 'ChC',
+      departments: voiceRail.listDepartments(),
       council_member: chairMemberKey,
       model_id: chairModel,
       provider: councilCfg.provider || null,
       display_name: councilCfg.name || null,
     });
+  });
+
+  router.get('/departments', requireKey, (_req, res) => {
+    res.json({ ok: true, departments: voiceRail.listDepartments() });
   });
 
   router.post('/session', requireKey, async (req, res, next) => {
@@ -107,6 +112,7 @@ export function createLifeOSVoiceRailRoutes({
         sessionId: req.body.session_id || null,
         mode: req.body.mode || 'conversation',
         tag: req.body.tag || null,
+        department: req.body.department || 'ChC',
         text: req.body.text,
         private: Boolean(req.body.private),
         simulateOnly: Boolean(req.body.simulate_only),
