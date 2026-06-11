@@ -248,7 +248,7 @@
       "telemetry_enforcement": true,
       "mission_outcome": "PASS",
       "scorecard_ref": "SNT_MISSION_SCORECARD.json",
-      "note": "Recovered autonomously by autopilot owner (AUTONOMOUS-RECOVERY-0002) at 2026-06-11T08:35:49.915Z",
+      "note": "Recovered autonomously by autopilot owner (AUTONOMOUS-RECOVERY-0002) at 2026-06-11T10:21:19.588Z",
       "sequence": [
         "FP",
         "BPB_BLUEPRINT",
@@ -265,15 +265,19 @@
       "path": "builderos-reboot/MISSIONS/AUTONOMOUS-RECOVERY-0001",
       "blocks": "hard_stop_without_recovery",
       "parent_mission": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
-      "note": "Recovery owner wired (0002) — FACTORY-DELIBERATION-SENTRY-REGRESSION-0001 at 2026-06-11T08:35:49.915Z"
+      "note": "Recovery owner wired (0002) — FACTORY-DELIBERATION-SENTRY-REGRESSION-0001 at 2026-06-11T10:21:19.588Z"
     },
     {
       "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
-      "status": "pssot_complete",
-      "priority": 35,
-      "purpose": "First LifeOS product proof — commitments + C2 + evidence",
+      "status": "in_progress",
+      "priority": 1,
+      "purpose": "LifeOS Objective 1 — Conversation Commitments v1 (primary product mission)",
       "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
-      "note": "PSSOT.md complete; BPB converts to BLUEPRINT.json (7-day MVP); execute blocked on billing"
+      "founder_packet": "FOUNDER_PACKET.md",
+      "acceptance_command": "npm run lifeos:conversation-commitments:v1-acceptance",
+      "founder_success_test": "Adam voluntarily uses this feature again within 48 hours of first successful use",
+      "execution_mode": "end_to_end_until_pass_or_unsolved",
+      "note": "No sub-slice stops. SLICE-001 slice-proof is invalid Conductor bypass — do not use as PASS."
     }
   ]
 }

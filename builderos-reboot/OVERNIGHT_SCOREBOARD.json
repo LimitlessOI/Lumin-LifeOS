@@ -1,0 +1,44 @@
+{
+  "schema": "overnight_scoreboard_v1",
+  "updated_at": "2026-06-11T15:30:00.000Z",
+  "current_objective": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+  "objective_name": "LifeOS Objective 1 — Conversation Commitments v1",
+  "status": "NOT_COMPLETE",
+  "status_reason": "Founder packet locked; system not executing end-to-end. No BLUEPRINT.json. Acceptance command missing. Invalid SLICE-001 Conductor bypass claimed partial win.",
+  "prior_objective": {
+    "id": "AUTONOMOUS-RECOVERY-0002",
+    "verdict": "OBJECTIVE_COMPLETE",
+    "receipt": "builderos-reboot/MISSIONS/AUTONOMOUS-RECOVERY-0001/OBJECTIVE_VERDICT.json"
+  },
+  "git_main_sha": "237b480124b9bfc430ac3f6ae0f9cc339817f9cf",
+  "railway_running_sha": "237b480124b9bfc430ac3f6ae0f9cc339817f9cf",
+  "sha_parity": true,
+  "acceptance_command": "npm run lifeos:conversation-commitments:v1-acceptance",
+  "acceptance_command_exists": false,
+  "founder_success_test": "Adam voluntarily uses this feature again within 48 hours of first successful use",
+  "remaining_blocker": "BLUEPRINT.json missing — autopilot exits code 2 at mission pack check",
+  "next_autonomous_action": "Consume FOUNDER_PACKET.md → author BLUEPRINT + acceptance script → execute until PASS or UNSOLVED",
+  "do_not_count": [
+    "npm run lifeos:commitments:slice-proof",
+    "SLICE_001 API CRUD only"
+  ],
+  "scope_allowed_overnight": [
+    "conversation ingestion",
+    "commitment extraction",
+    "storage",
+    "listing",
+    "done/deferred/broken",
+    "acceptance command",
+    "PASS receipt"
+  ],
+  "scope_forbidden_overnight": [
+    "calendar",
+    "audio",
+    "family sharing",
+    "C2 rebuild",
+    "relationship analysis",
+    "coaching",
+    "wearables",
+    "adjacent LifeOS features"
+  ]
+}
