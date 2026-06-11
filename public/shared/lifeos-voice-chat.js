@@ -22,7 +22,8 @@
     if (!/^en(-|$)/i.test(lang) && !/English/i.test(name)) return -1000;
     let score = 0;
     if (/Enhanced|Premium|Neural|Natural|Wavenet|Super-AI/i.test(name)) score += 90;
-    if (/Samantha|Ava|Allison|Karen|Daniel|Serena|Moira|Tessa|Victoria|Tom/i.test(name)) score += 70;
+    if (/Samantha|Ava|Allison|Daniel|Serena|Moira|Tessa|Victoria|Tom/i.test(name)) score += 70;
+    if (/Karen/i.test(name)) score += 20;
     if (/Google (US )?English|Microsoft (Aria|Jenny|Guy|Zira|Steffan)/i.test(name)) score += 50;
     if (/Alex( Enhanced)?/i.test(name)) score += 40;
     if (/Compact|espeak|Flo|Fred|Cellos|Bahh|Bells|Boing|Bubbles|Junior|Kathy|Princess|Organ|Good News|Bad News|Zarvox|Whisper|Trinoids|Albert/i.test(name)) {
@@ -169,6 +170,12 @@
       voiceSendEnabled: false,
       voiceSendPhrases: ['send it', 'send message', 'send that', 'send now', 'send', 'over'],
       onVoiceSend: null,
+      /** Keep mic running after voice-send; clear textarea for next utterance. */
+      keepListeningOnVoiceSend: false,
+      /** Walkie-talkie: auto-restart STT when browser ends session; mic stays until user taps off. */
+      persistentListen: false,
+      /** Prime getUserMedia before SpeechRecognition (cuts cold-start delay). */
+      warmMicOnStart: true,
       focusInputOnMic: true,
       iconOnly: false,
       silentStatus: false,
@@ -190,13 +197,37 @@
     const state = {
       recognition: null,
       listening: false,
+      userWantsListen: false,
       buffer: '',
       destroyed: false,
+      warming: false,
       buttonListener: null,
       speakListener: null,
       storageKey: settings.storageKey,
       speakingEnabled: settings.speakRepliesDefault,
     };
+
+    async function warmAudioInput() {
+      if (!settings.warmMicOnStart || !global.navigator?.mediaDevices?.getUserMedia) return true;
+      if (state.warming) return true;
+      state.warming = true;
+      updateStatus('Starting microphone…');
+      try {
+        const stream = await global.navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach((t) => { try { t.stop(); } catch (_) {} });
+        return true;
+      } catch (err) {
+        updateStatus('Mic permission needed — allow microphone in browser settings.');
+        return false;
+      } finally {
+        state.warming = false;
+      }
+    }
+
+    function clearInputBuffer() {
+      state.buffer = '';
+      if (input) input.value = '';
+    }
 
     function loadSpeakPreference() {
       if (!speakToggle) return;
@@ -224,18 +255,27 @@
       } else {
         button.textContent = state.listening ? settings.stopLabel : settings.startLabel;
       }
-      button.classList.toggle('listening', state.listening);
-      button.setAttribute('aria-pressed', state.listening ? 'true' : 'false');
+      button.classList.toggle('listening', state.listening || state.userWantsListen);
+      button.setAttribute('aria-pressed', (state.listening || state.userWantsListen) ? 'true' : 'false');
     }
 
     function maybeVoiceSend(fromFinal) {
       if (!settings.voiceSendEnabled || typeof settings.onVoiceSend !== 'function') return false;
       const parsed = stripVoiceSendCommand(input.value, settings.voiceSendPhrases);
       if (!parsed.send || !String(parsed.message || '').trim()) return false;
+      const msg = parsed.message;
+      if (settings.keepListeningOnVoiceSend) {
+        clearInputBuffer();
+        try {
+          settings.onVoiceSend(msg);
+        } catch (_) {}
+        updateStatus('Listening… (say “send” or “over” to post again)');
+        return true;
+      }
       stopListening();
-      input.value = parsed.message;
+      input.value = msg;
       try {
-        settings.onVoiceSend(parsed.message);
+        settings.onVoiceSend(msg);
       } catch (_) {}
       return true;
     }
@@ -262,7 +302,8 @@
       setText(status, value);
     }
 
-    function stopListening() {
+    function stopListening(userInitiated) {
+      if (userInitiated) state.userWantsListen = false;
       if (state.recognition) {
         try {
           state.recognition.onend = null;
@@ -273,39 +314,26 @@
         state.recognition = null;
       }
       state.listening = false;
-      clearInputHighlight();
+      if (!state.userWantsListen) clearInputHighlight();
       updateButton();
-      updateStatus(settings.idleText);
+      updateStatus(state.userWantsListen ? 'Restarting mic…' : settings.idleText);
     }
 
-    function startListening() {
-      if (!SpeechRecognitionCtor) {
-        button.disabled = true;
-        updateStatus('Voice input is not supported in this browser');
-        return;
-      }
-      if (state.listening) {
-        stopListening();
-        return;
-      }
-
-      const recognition = new SpeechRecognitionCtor();
-      const baseText = settings.mode === 'replace' ? '' : String(input.value || '').trim();
-      state.buffer = baseText ? baseText + ' ' : '';
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = settings.lang;
+    function bindRecognitionHandlers(recognition) {
       recognition.onstart = function onStart() {
         state.listening = true;
         updateButton();
         focusInputHighlight();
-        updateStatus(settings.silentStatus ? '' : 'Listening... Say “send” or “over” when done.');
+        updateStatus(settings.silentStatus ? '' : 'Listening… say “send” or “over” to post.');
         if (typeof settings.onStart === 'function') {
           try { settings.onStart({ inputValue: String(input?.value || '') }); } catch (_) {}
         }
       };
       recognition.onerror = function onError(event) {
-        const message = event && event.error ? 'Voice error: ' + event.error : 'Voice input failed';
+        const code = event && event.error ? event.error : 'unknown';
+        if (code === 'no-speech' && state.userWantsListen) return;
+        if (code === 'aborted') return;
+        const message = 'Voice error: ' + code;
         state.listening = false;
         state.recognition = null;
         updateButton();
@@ -322,7 +350,7 @@
         if (finalChunk) state.buffer += finalChunk;
         input.value = (state.buffer + interimChunk).trim();
         if (finalChunk && maybeVoiceSend(true)) return;
-        updateStatus(interimChunk ? 'Listening... ' + interimChunk.trim() : 'Listening...');
+        updateStatus(interimChunk ? interimChunk.trim() : 'Listening…');
       };
       recognition.onend = function onEnd() {
         state.recognition = null;
@@ -331,21 +359,70 @@
           const next = stripLeadingWakePrefixes(input.value, settings.wakePrefixes);
           if (next !== input.value) input.value = next;
         }
-        if (!maybeVoiceSend(true)) {
-          clearInputHighlight();
+        if (!settings.keepListeningOnVoiceSend) {
+          maybeVoiceSend(true);
         }
+        if (state.userWantsListen && settings.persistentListen) {
+          updateButton();
+          updateStatus('Restarting mic…');
+          global.setTimeout(() => {
+            if (state.userWantsListen && !state.destroyed) startListeningInternal();
+          }, 120);
+          return;
+        }
+        if (!state.userWantsListen) clearInputHighlight();
         updateButton();
         updateStatus(settings.idleText);
         if (typeof settings.onStop === 'function') {
           try { settings.onStop({ inputValue: String(input?.value || '') }); } catch (_) {}
         }
       };
+    }
+
+    function startListeningInternal() {
+      if (!SpeechRecognitionCtor || state.destroyed) return;
+      const recognition = new SpeechRecognitionCtor();
+      const baseText = settings.mode === 'replace' ? '' : String(input.value || '').trim();
+      if (!state.buffer && baseText) state.buffer = baseText + ' ';
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = settings.lang;
+      bindRecognitionHandlers(recognition);
       state.recognition = recognition;
-      recognition.start();
+      try {
+        recognition.start();
+      } catch (err) {
+        state.recognition = null;
+        updateStatus('Mic busy — tap mic again in a second.');
+      }
+    }
+
+    async function startListening() {
+      if (!SpeechRecognitionCtor) {
+        button.disabled = true;
+        updateStatus('Voice input is not supported in this browser');
+        return;
+      }
+      if (state.listening || state.recognition) return;
+
+      if (state.userWantsListen && !settings.persistentListen) {
+        stopListening(true);
+        return;
+      }
+
+      state.userWantsListen = true;
+      updateButton();
+      const warmed = await warmAudioInput();
+      if (!warmed) {
+        state.userWantsListen = false;
+        updateButton();
+        return;
+      }
+      startListeningInternal();
     }
 
     state.buttonListener = function onButtonClick() {
-      if (state.listening) stopListening();
+      if (state.userWantsListen) stopListening(true);
       else startListening();
     };
     button.addEventListener('click', state.buttonListener);
@@ -375,7 +452,16 @@
         startListening();
       },
       stopMic() {
-        stopListening();
+        stopListening(true);
+      },
+      clearBuffer() {
+        clearInputBuffer();
+      },
+      isPersistentListen() {
+        return Boolean(state.userWantsListen);
+      },
+      warmMic() {
+        return warmAudioInput();
       },
       stop() {
         stopListening();

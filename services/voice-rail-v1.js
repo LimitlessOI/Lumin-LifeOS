@@ -4,12 +4,15 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * @ssot builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md
  */
+import fs from 'fs/promises';
+import path from 'path';
 import {
   buildDepartmentSystemPrompt,
   listVoiceRailDepartmentsPublic,
   normalizeVoiceRailDepartment,
   resolveDepartmentRouting,
 } from '../config/voice-rail-departments.js';
+import memorySystem from '../core/memory-system.js';
 
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -85,7 +88,13 @@ function isIdentityOrRoleQuestion(text) {
   );
 }
 
-export function sanitizeVoiceRailReply(text, priorAssistants, operatorName) {
+function isSystemOrMemoryQuestion(text) {
+  return /\b(system|health|project|mission|builder|deploy|memory|remember|worked on|what did we|continuity|voice rail|council|railway)\b/i.test(
+    String(text || ''),
+  );
+}
+
+export function sanitizeVoiceRailReply(text, priorAssistants, operatorName, userQuestion) {
   const name = operatorName || 'Adam';
   let raw = String(text || '').trim();
   raw = raw.replace(/^ANSWER:\s*/gim, '');
@@ -100,13 +109,17 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName) {
     if (/conversational gateway/i.test(line)) return false;
     if (/^I'?m (a )?Voice Rail/i.test(line)) return false;
     if (/^I'?m Lumin on Voice Rail/i.test(line)) return false;
+    if (/don'?t retain memory|each session starts fresh|no record of prior|I have no memory across/i.test(line)) {
+      return false;
+    }
     return true;
   });
   let out = kept.join(' ').replace(/\s+/g, ' ').trim();
   out = out.replace(/\bLumen\b/g, 'LifeOS');
-  if (out.length > 520) {
+  const maxLen = isSystemOrMemoryQuestion(userQuestion) ? 1400 : 720;
+  if (out.length > maxLen) {
     const sentences = out.match(/[^.!?]+[.!?]+/g) || [out];
-    out = sentences.slice(0, 3).join(' ').trim();
+    out = sentences.slice(0, isSystemOrMemoryQuestion(userQuestion) ? 6 : 3).join(' ').trim();
   }
   const priors = (priorAssistants || []).filter((m) => m.role === 'assistant').map((m) => m.content);
   for (const prev of priors.slice(-2)) {
@@ -114,7 +127,121 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName) {
       return `${name}, I already said that — what do you want to tackle next?`;
     }
   }
-  return out || `${name}, I don't have a clear answer on that. Try once more in one sentence?`;
+  return out || `${name}, council returned nothing usable — try again; if it repeats, check Railway logs for council_unavailable.`;
+}
+
+async function readMissionQueueHead() {
+  try {
+    const raw = await fs.readFile(path.join(process.cwd(), 'builderos-reboot', 'BP_PRIORITY.json'), 'utf8');
+    const q = JSON.parse(raw);
+    const list = q.items || q.priorities || q.queue || [];
+    return (Array.isArray(list) ? list : []).slice(0, 6).map((m) => ({
+      id: m.id || m.mission_id || m.slug,
+      title: m.title || m.name || m.objective,
+      status: m.status || m.state,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+async function readContinuityTail() {
+  try {
+    const text = await fs.readFile(path.join(process.cwd(), 'docs', 'CONTINUITY_LOG.md'), 'utf8');
+    return text.slice(-2000);
+  } catch {
+    return null;
+  }
+}
+
+/** Operator-facing context: DB + memories + cross-session voice rail + missions (not stateless chat). */
+export async function buildVoiceRailOperatorContext({ pool, userId, lumin, logger }) {
+  const ctx = { loaded_at: new Date().toISOString() };
+  const tasks = [];
+
+  if (lumin?.buildContextSnapshot) {
+    tasks.push(
+      lumin.buildContextSnapshot(userId, { mode: 'planning' }).then((s) => {
+        ctx.lifeos_snapshot = s;
+      }).catch((e) => {
+        logger?.warn?.({ err: e.message }, 'voice-rail lifeos snapshot failed');
+      }),
+    );
+  }
+
+  tasks.push(
+    pool.query(
+      `SELECT m.role, LEFT(m.content, 500) AS content, m.department, m.created_at
+         FROM voice_rail_messages m
+         JOIN voice_rail_sessions s ON s.id = m.session_id
+        WHERE s.user_id = $1 AND m.is_interim = FALSE
+        ORDER BY m.created_at DESC
+        LIMIT 30`,
+      [userId],
+    ).then((r) => {
+      ctx.voice_rail_history = (r.rows || []).reverse();
+    }).catch((e) => {
+      logger?.warn?.({ err: e.message }, 'voice-rail history load failed');
+      ctx.voice_rail_history = [];
+    }),
+
+    pool.query(
+      `SELECT utterance, status, created_at
+         FROM voice_rail_staged_commands
+        WHERE user_id = $1
+        ORDER BY created_at DESC
+        LIMIT 10`,
+      [userId],
+    ).then((r) => {
+      ctx.staged_commands = r.rows || [];
+    }).catch(() => {
+      ctx.staged_commands = [];
+    }),
+
+    memorySystem.retrieveMemories('facts', { minConfidence: 0.7, limit: 20 }).then((rows) => {
+      ctx.verified_memories = (rows || []).map((m) => ({
+        content: m.content,
+        confidence: m.confidence,
+        type: m.type,
+      }));
+    }).catch(() => {
+      ctx.verified_memories = [];
+    }),
+
+    memorySystem.retrieveMemories('goals', { minConfidence: 0.7, limit: 10 }).then((rows) => {
+      ctx.goals = (rows || []).map((m) => m.content);
+    }).catch(() => {
+      ctx.goals = [];
+    }),
+
+    readMissionQueueHead().then((m) => {
+      ctx.mission_queue_head = m;
+    }),
+
+    readContinuityTail().then((t) => {
+      ctx.continuity_log_tail = t;
+    }),
+  );
+
+  tasks.push(
+    pool.query(
+      `SELECT title, status, due_at, updated_at
+         FROM commitments
+        WHERE user_id = $1
+        ORDER BY updated_at DESC NULLS LAST
+        LIMIT 12`,
+      [userId],
+    ).then((r) => {
+      ctx.recent_commitments = r.rows || [];
+    }).catch(() => {
+      ctx.recent_commitments = [];
+    }),
+  );
+
+  await Promise.allSettled(tasks);
+  ctx.deploy_commit_sha =
+    process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GIT_COMMIT_SHA || process.env.DEPLOY_COMMIT_SHA || null;
+  return ctx;
 }
 
 function councilUnavailableError(routing, reason) {
@@ -138,6 +265,7 @@ function formatCouncilReply(raw) {
 }
 
 async function generateCouncilReply({
+  pool,
   callCouncilMember,
   lumin,
   userId,
@@ -157,12 +285,10 @@ async function generateCouncilReply({
   const deptId = normalizeVoiceRailDepartment(department || routing?.department);
 
   let contextData = {};
-  if (lumin?.buildContextSnapshot) {
-    try {
-      contextData = await lumin.buildContextSnapshot(userId, { mode: 'general' });
-    } catch (ctxErr) {
-      logger?.warn?.({ err: ctxErr.message }, 'voice-rail context snapshot skipped');
-    }
+  try {
+    contextData = await buildVoiceRailOperatorContext({ pool, userId, lumin, logger });
+  } catch (ctxErr) {
+    logger?.warn?.({ err: ctxErr.message }, 'voice-rail operator context failed');
   }
 
   const history = await listMessagesFn(sessionId, userId);
@@ -189,21 +315,32 @@ async function generateCouncilReply({
     ? `--- Prior messages ---\n${threadText}\n\n--- Current ---\n${operatorName}: ${content}${repeatHint}`
     : `${operatorName}: ${content}${repeatHint}`;
 
-  const councilRaw = await callCouncilMember(routing.memberKey, userTurn, {
-    taskType: 'voice_rail_department',
-    systemPromptOverride: system,
-    skipKnowledge: true,
-    useCache: false,
-    maxOutputTokens: 600,
-    model: routing.modelId,
-  });
+  let councilRaw;
+  try {
+    councilRaw = await callCouncilMember(routing.memberKey, userTurn, {
+      taskType: 'voice_rail_department',
+      systemPromptOverride: system,
+      skipKnowledge: true,
+      useCache: false,
+      critical: true,
+      founderComms: true,
+      maxOutputTokens: 1200,
+      model: routing.modelId,
+    });
+  } catch (apiErr) {
+    const msg = apiErr?.message || String(apiErr);
+    logger?.warn?.({ err: msg, member: routing.memberKey }, 'voice-rail council API failed');
+    throw councilUnavailableError(routing, msg);
+  }
+
   const councilText = sanitizeVoiceRailReply(
     formatCouncilReply(councilRaw),
     prior,
     operatorName,
+    content,
   );
-  if (!councilText) {
-    throw councilUnavailableError(routing, 'council returned empty response');
+  if (!councilText || /^Adam, council returned nothing/i.test(councilText)) {
+    throw councilUnavailableError(routing, 'council returned empty or unusable response after sanitize');
   }
   return councilText;
 }
@@ -378,6 +515,7 @@ export function createVoiceRailV1({
     let replySource;
     try {
       reply = await generateCouncilReply({
+        pool,
         callCouncilMember,
         lumin,
         userId,

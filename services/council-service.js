@@ -838,6 +838,7 @@ export function createCouncilService({
       console.log(`🔁 [ALIAS] ${requestedMember} → ${resolvedMember}`);
     }
     member = resolvedMember;
+    const founderComms = options.founderComms === true || options.taskType === 'voice_rail_department';
     // config is declared later, after selectOptimalModel may rewrite member
     if (!COUNCIL_MEMBERS[member]) {
       throw new Error(`Unknown member: ${member}`);
@@ -851,9 +852,8 @@ export function createCouncilService({
       (COUNCIL_MEMBERS[member]?.costPer1M > 0 || COUNCIL_MEMBERS[member]?.tier === "tier1");
 
     // ── Free-tier cascade (Groq → Gemini → Cerebras → OpenRouter → Mistral → Ollama) ──
-    // If a paid member was requested and spending is disabled/over limit,
-    // cascade through every free provider until one is available.
-    if (MAX_DAILY_SPEND === 0 && isPaid) {
+    // Founder Voice Rail comms always use configured paid council member (no silent downgrade).
+    if (!founderComms && MAX_DAILY_SPEND === 0 && isPaid) {
       const nextProvider = await freeTierGovernor.getNextAvailable();
       if (!nextProvider) {
         throw new Error(
@@ -870,7 +870,7 @@ export function createCouncilService({
       throw new Error(`💰 [COST SHUTDOWN] Blocked ${member} — no free providers available right now.`);
     }
 
-    if (spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
+    if (!founderComms && spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
       const nextProvider = await freeTierGovernor.getNextAvailable();
       if (!nextProvider) {
         throw new Error(
@@ -1273,6 +1273,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       if (taskType === 'health' || taskType === 'status') return 150;
       if (taskType === 'summary') return 300;
       if (taskType === 'extraction' || taskType === 'json') return 400;
+      if (taskType === 'voice_rail_department') return 1200;
       if (taskType === 'analysis' || taskType === 'review') return 600;
       if (taskType === 'planning') return 700;
       if (taskType === 'codegen' || taskType === 'code') return 1500;

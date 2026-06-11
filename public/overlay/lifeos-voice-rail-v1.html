@@ -273,6 +273,7 @@
   <header>
     <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span></h1>
     <div class="controls">
+      <button type="button" class="btn" id="btn-new-chat" title="New conversation — fresh session" style="font-size:12px;padding:6px 10px">New chat</button>
       <button type="button" class="btn icon-btn" id="btn-theme" aria-label="Toggle light/dark mode" title="Light / dark mode">☀️</button>
     </div>
     <select id="tag" class="sr-only" aria-hidden="true" tabindex="-1">
@@ -461,6 +462,7 @@
       }
       const saved = persistKeyLocal(entered);
       activeKey = saved || entered;
+      if (window.LifeOSVoiceChat?.attach && voiceCtrl?.warmMic) voiceCtrl.warmMic();
       status.className = 'ok';
       status.textContent = `Connected (${activeKey.length} chars saved in this browser).`;
       showAuthBanner(false);
@@ -489,7 +491,11 @@
         showAuthBanner(true);
         return `Auth failed (401). Tap Connect key — if verify succeeds but chat fails, hard refresh once. Key length stored: ${getKey().length || 0} chars.`;
       }
-      return res.json?.error || String(res.status);
+      if (res.status === 503 && res.json?.error === 'council_unavailable') {
+        const d = res.json.detail || {};
+        return `Council API failed (not a bot). ${d.reason || 'council_unavailable'} · ${d.model_id || '?'} · ${d.provider || '?'}. Check Railway ANTHROPIC_API_KEY and logs.`;
+      }
+      return res.json?.error || res.json?.detail?.reason || String(res.status);
     }
 
     function ensureKey() {
@@ -616,6 +622,13 @@
     document.getElementById('btn-theme').addEventListener('click', () => {
       const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
       applyTheme(next);
+    });
+
+    document.getElementById('btn-new-chat')?.addEventListener('click', () => {
+      sessionId = null;
+      localStorage.removeItem('voice_rail_session_id');
+      document.getElementById('transcript').innerHTML = '';
+      if (activeKey) loadSession();
     });
 
     const API = '/api/v1/lifeos/voice-rail';
@@ -751,6 +764,11 @@
         tag.className = 'intent';
         tag.textContent = `error`;
         box.appendChild(tag);
+      } else if (source && source.path === 'lifeos/department') {
+        const tag = document.createElement('div');
+        tag.className = 'source';
+        tag.textContent = `Council live · ${source.display_name || '?'} · ${source.model_id || '?'}`;
+        box.appendChild(tag);
       }
       document.getElementById('transcript').appendChild(box);
       box.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -811,7 +829,7 @@
         sendBtn.disabled = busy;
         sendBtn.setAttribute('aria-busy', busy ? 'true' : 'false');
       }
-      if (micBtn && busy) micBtn.disabled = true;
+      if (micBtn && busy && !voiceCtrl?.isPersistentListen?.()) micBtn.disabled = true;
       else if (micBtn && window.LifeOSVoiceChat?.isRecognitionSupported?.()) micBtn.disabled = false;
     }
 
@@ -820,9 +838,15 @@
       if (!content || sendInFlight) return;
       if (!activeKey && !ensureKey()) return;
 
-      if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
+      if (voiceCtrl?.isPersistentListen?.()) {
+        if (voiceCtrl?.clearBuffer) voiceCtrl.clearBuffer();
+      } else if (voiceCtrl?.stopMic) {
+        voiceCtrl.stopMic();
+        document.getElementById('input').value = '';
+      } else {
+        document.getElementById('input').value = '';
+      }
       document.getElementById('interim').textContent = '';
-      document.getElementById('input').value = '';
       setComposerBusy(true);
 
       const mode = document.getElementById('mode').value;
@@ -851,7 +875,7 @@
           text: content,
         });
         if (res.status !== 200 || !res.json.ok) {
-          appendBubble('assistant', authErrorMessage(res), 'error');
+          appendBubble('assistant', authErrorMessage({ status: res.status, json: res.json }), 'error');
           return;
         }
         sessionId = res.json.session_id || sessionId;
@@ -969,6 +993,9 @@
         iconOnly: true,
         silentStatus: false,
         voiceSendEnabled: true,
+        keepListeningOnVoiceSend: true,
+        persistentListen: true,
+        warmMicOnStart: true,
         focusInputOnMic: true,
         mode: 'append',
         startLabel: 'Microphone',
