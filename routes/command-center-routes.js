@@ -27,6 +27,8 @@
  *   GET  /api/v1/user/simulation/accuracy  — simulation accuracy
  *   GET  /internal/cron/autopilot          — cron trigger surface
  *   GET  /internal/cron/factory-recovery   — factory autopilot recovery owner (0002)
+ *   POST /internal/cron/factory-recovery-proof/inject — production failure inject (0002 proof)
+ *   GET  /internal/cron/factory-recovery-proof/status — production recovery proof status
  *   POST /internal/autopilot/build-now     — manual build trigger
  *   POST /api/overlay/:sid/state           — overlay state write
  *   GET  /api/overlay/status               — overlay status read
@@ -427,6 +429,29 @@ app.get("/internal/cron/factory-recovery", requireKey, async (req, res) => {
       result,
       scheduler: getFactoryAutopilotSchedulerState(),
     });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Production recovery proof — inject failure on server disk (0002)
+app.post("/internal/cron/factory-recovery-proof/inject", requireKey, async (req, res) => {
+  try {
+    const { injectProductionFailure } = await import('../services/factory-recovery-proof-service.js');
+    const objectiveId = req.body?.objective_id || req.query.objective_id || 'FACTORY-DELIBERATION-SENTRY-REGRESSION-0001';
+    const result = injectProductionFailure(objectiveId);
+    res.status(result.ok ? 200 : 400).json(result);
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/internal/cron/factory-recovery-proof/status", requireKey, async (req, res) => {
+  try {
+    const { getProductionProofStatus } = await import('../services/factory-recovery-proof-service.js');
+    const objectiveId = req.query.objective_id || 'FACTORY-DELIBERATION-SENTRY-REGRESSION-0001';
+    const status = await getProductionProofStatus(objectiveId);
+    res.json({ ok: true, ...status });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }

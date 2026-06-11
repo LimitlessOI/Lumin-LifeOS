@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-06-01 |
+| **Last Updated** | 2026-06-11 |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -293,6 +293,7 @@ node --check public/overlay/command-center.js
 
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 | 2026-06-11 | **`routes/command-center-routes.js`:** `GET /internal/cron/factory-recovery` — invokes `services/factory-autopilot-scheduler.js` `runFactoryAutopilotOnce()` (AUTONOMOUS-RECOVERY-0002); returns exit code + receipt path for Railway cron. GAP-FILL: factory recovery owner wiring. | Adam: production autonomy requires scheduled invoker, not manual observe. | AM12 cron surface | pending | `GET /internal/cron/factory-recovery` after deploy |
+| 2026-06-11 | **`services/factory-recovery-proof-service.js`** (NEW) — `injectProductionFailure`, `getProductionProofStatus`. **`routes/command-center-routes.js`:** `POST /internal/cron/factory-recovery-proof/inject`, `GET .../status`. **`run-production-recovery-proof.mjs`** + `npm run factory:production:recovery-proof` — HTTP-only orchestrator; recovery via production cron only. GAP-FILL: production hard_stop proof path. | Founder: prove mission_failed recovery on Railway without manual npm. | AM12 proof endpoints | pending | `npm run factory:production:recovery-proof` after deploy |
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|

@@ -65,6 +65,7 @@
     "factory:autopilot": "node builderos-reboot/scripts/autopilot-runner.mjs",
     "factory:autopilot:execute": "node builderos-reboot/scripts/autopilot-runner.mjs --execute",
     "factory:autopilot:proof": "node builderos-reboot/scripts/run-autopilot-recovery-proof.mjs",
+    "factory:production:recovery-proof": "node builderos-reboot/scripts/run-production-recovery-proof.mjs",
     "factory:overnight:bp": "node builderos-reboot/scripts/run-overnight-bp-autonomy.mjs",
     "factory:export": "node builderos-reboot/scripts/export-factory-staging.mjs",
     "factory:readiness": "node builderos-reboot/scripts/readiness-report.mjs",
