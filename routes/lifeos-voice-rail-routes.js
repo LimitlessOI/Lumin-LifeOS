@@ -4,10 +4,17 @@
  * @ssot builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md
  */
 import express from 'express';
+import multer from 'multer';
 import { createVoiceRailV1 } from '../services/voice-rail-v1.js';
 import { synthesizeVoiceRailSpeech, voiceRailTtsStatus } from '../services/voice-rail-tts.js';
+import { transcribeVoiceRailAudio, voiceRailSttStatus } from '../services/voice-rail-stt.js';
 import { createCommitmentTracker } from '../services/commitment-tracker.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
+
+const sttUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 export function createLifeOSVoiceRailRoutes({
   pool,
@@ -50,7 +57,7 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.1',
+      build: 'voice-rail-v2.6',
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,
       reply_engine: callCouncilMember ? 'lifeos/department' : 'template_only',
@@ -58,6 +65,7 @@ export function createLifeOSVoiceRailRoutes({
       departments: voiceRail.listDepartments(),
       providers: voiceRail.listProviders(),
       tts: voiceRailTtsStatus(),
+      stt: voiceRailSttStatus(),
       council_member: chairMemberKey,
       model_id: chairModel,
       provider: councilCfg.provider || null,
@@ -75,6 +83,36 @@ export function createLifeOSVoiceRailRoutes({
 
   router.get('/tts/status', requireKey, (_req, res) => {
     res.json({ ok: true, ...voiceRailTtsStatus() });
+  });
+
+  router.get('/stt/status', requireKey, (_req, res) => {
+    res.json({ ok: true, ...voiceRailSttStatus() });
+  });
+
+  router.post('/stt', requireKey, sttUpload.single('audio'), async (req, res, next) => {
+    try {
+      if (!req.file?.buffer) {
+        return res.status(400).json({ ok: false, error: 'audio_required' });
+      }
+      const context = String(req.body?.context || '').trim();
+      const result = await transcribeVoiceRailAudio(
+        req.file.buffer,
+        req.file.mimetype || 'audio/webm',
+        { context, filename: req.file.originalname || 'voice-rail.webm' },
+      );
+      if (!result.ok) {
+        return res.status(503).json({ ok: false, error: result.error, detail: result.detail });
+      }
+      return res.json({
+        ok: true,
+        text: result.text,
+        engine: 'openai-whisper',
+        raw_text: result.raw_text || undefined,
+        skipped: result.skipped || undefined,
+      });
+    } catch (err) {
+      next(err);
+    }
   });
 
   router.post('/tts', requireKey, async (req, res, next) => {

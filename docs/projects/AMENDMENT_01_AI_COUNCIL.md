@@ -456,6 +456,7 @@ When this is done:
 
 ## Change Receipts
 
+| 2026-05-24 | **`services/council-service.js`:** Voice Rail **`founderComms`** bypasses rules-engine **member override** (words like “route”/“build” in long founder messages had rerouted GPT → Claude while keeping `gpt-4o` → Anthropic 404). Override path uses `applyModelOverride()`. | Adam screenshot: GPT selected, Council API Anthropic 404 model gpt-4o | AM01 | pending deploy |
 | 2026-05-24 | **`services/council-service.js`:** `founderComms` skips `selectOptimalModel`; `applyModelOverride()` drops cross-provider model strings; no 429 free-tier cascade on founder comms. | Voice Rail Claude UI → DeepSeek API with claude model | AM01 | pending deploy |
 | 2026-05-24 | **`config/council-members.js`:** Added **`openai_gpt`** (direct OpenAI, `gpt-4o` default). **`COUNCIL_ALIAS_MAP`** — `openai`/`chatgpt` now resolve to **`openai_gpt`**, not **`groq_llama`** (prior alias was a free-tier hack that mislabeled OpenAI in Voice Rail). Explicit `groq` alias → `groq_llama`. | Adam: “OpenAI-class (Groq)” mislabel is a trust problem | AM01 | pending deploy |
 | 2026-05-24 | **`services/council-service.js`:** `founderComms` / `voice_rail_department` — skip free-tier cost cascade; token cap 1200 for operator Voice Rail. | Adam: council_unavailable / silent downgrade off paid API | AM01 | pending deploy |

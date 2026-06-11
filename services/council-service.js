@@ -1004,13 +1004,26 @@ export function createCouncilService({
     kingsmanAudit({ pool, member, taskType, prompt }).catch(() => {});
 
     // ── Rules engine pre-flight — deterministic no-AI answers + lightweight routing ──
-    const ruleDecision = rulesEngine.evaluate({
-      prompt,
-      requestedMember,
-      member,
-      taskType,
-      options,
-    });
+    // Voice Rail / founder comms: never reroute member or force model mismatch (operator picked engine).
+    const ruleDecision = founderComms
+      ? {
+          matched: false,
+          action: 'continue',
+          receipt: {
+            engine: 'rules-engine-v1',
+            ruleId: 'skip.founder_comms',
+            category: 'routing',
+            confidence: 0,
+            reason: 'founder comms bypass',
+          },
+        }
+      : rulesEngine.evaluate({
+          prompt,
+          requestedMember,
+          member,
+          taskType,
+          options,
+        });
 
     if (ruleDecision.action === "respond" && ruleDecision.responseText) {
       const text = ruleDecision.responseText;
@@ -1065,9 +1078,7 @@ export function createCouncilService({
         options = { ...options, ...ruleDecision.optionsPatch };
       }
       config = COUNCIL_MEMBERS[member];
-      if (options.model) {
-        config = { ...config, model: options.model };
-      }
+      config = applyModelOverride(config, member, options);
       console.log(`🧠 [RULES] ${ruleDecision.receipt?.ruleId || "override"} → ${member}/${taskType}`);
     }
 

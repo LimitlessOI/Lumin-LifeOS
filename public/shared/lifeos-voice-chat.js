@@ -158,6 +158,16 @@
     return t;
   }
 
+  function joinTextParts(before, middle, after) {
+    const left = String(before || '').trimEnd();
+    const core = String(middle || '').trim();
+    const right = String(after || '').trimStart();
+    if (!core) return (left + (left && right ? ' ' : '') + right).trim();
+    if (!left) return (core + (right ? ' ' + right : '')).trim();
+    if (!right) return (left + ' ' + core).trim();
+    return (left + ' ' + core + ' ' + right).trim();
+  }
+
   function attach(options) {
     const settings = Object.assign({
       mode: 'append',
@@ -167,25 +177,23 @@
       stopLabel: 'Stop voice',
       storageKey: '',
       speakRepliesDefault: false,
-      /** If set, leading wake phrases (case-insensitive) are stripped from the textarea when a listen session ends. */
       wakePrefixes: [],
-      /** When true, saying "send" / "over" at end of utterance triggers onVoiceSend (walkie-talkie style). */
       voiceSendEnabled: false,
       voiceSendPhrases: ['send it', 'send message', 'send that', 'send now', 'send'],
       onVoiceSend: null,
-      /** Keep mic running after voice-send; clear textarea for next utterance. */
       keepListeningOnVoiceSend: false,
-      /** Walkie-talkie: auto-restart STT when browser ends session; mic stays until user taps off. */
       persistentListen: false,
-      /** Pause STT while TTS plays so the speaker is not transcribed. */
       pauseMicDuringTts: false,
-      /** Prime getUserMedia before SpeechRecognition (cuts cold-start delay). */
       warmMicOnStart: true,
       focusInputOnMic: true,
       iconOnly: false,
       silentStatus: false,
       onStart: null,
       onStop: null,
+      serverSttEnabled: false,
+      serverSttTranscribe: null,
+      serverSttChunkMs: 1800,
+      serverSttMinBytes: 600,
     }, options || {});
 
     const input = document.getElementById(settings.inputId);
@@ -203,24 +211,52 @@
       recognition: null,
       listening: false,
       userWantsListen: false,
-      buffer: '',
+      committed: '',
+      appendAt: 0,
+      replaceEnd: null,
+      programmaticUpdate: false,
+      micWarmed: false,
+      warmStream: null,
       destroyed: false,
       warming: false,
       ttsDuck: false,
       buttonListener: null,
       speakListener: null,
+      inputListener: null,
+      selectionListener: null,
+      pointerDownListener: null,
+      hadHighlight: false,
+      dictationEpoch: 0,
+      lastRenderedValue: null,
+      restartTimer: null,
+      beforeInputListener: null,
+      mediaRecorder: null,
+      sttInFlight: 0,
       storageKey: settings.storageKey,
       speakingEnabled: settings.speakRepliesDefault,
     };
 
+    function releaseWarmStream() {
+      if (!state.warmStream) return;
+      try {
+        state.warmStream.getTracks().forEach((t) => { try { t.stop(); } catch (_) {} });
+      } catch (_) {}
+      state.warmStream = null;
+      state.micWarmed = false;
+    }
+
     async function warmAudioInput() {
       if (!settings.warmMicOnStart || !global.navigator?.mediaDevices?.getUserMedia) return true;
+      if (state.micWarmed && state.warmStream) return true;
       if (state.warming) return true;
       state.warming = true;
       updateStatus('Starting microphone…');
       try {
-        const stream = await global.navigator.mediaDevices.getUserMedia({ audio: true });
-        stream.getTracks().forEach((t) => { try { t.stop(); } catch (_) {} });
+        const stream = await global.navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: true, noiseSuppression: true },
+        });
+        state.warmStream = stream;
+        state.micWarmed = true;
         return true;
       } catch (err) {
         updateStatus('Mic permission needed — allow microphone in browser settings.');
@@ -230,9 +266,236 @@
       }
     }
 
+    function cancelMicRestart() {
+      if (state.restartTimer) {
+        global.clearTimeout(state.restartTimer);
+        state.restartTimer = null;
+      }
+    }
+
+    function scheduleMicRestart(delayMs) {
+      cancelMicRestart();
+      const wait = typeof delayMs === 'number' ? delayMs : 50;
+      state.restartTimer = global.setTimeout(() => {
+        state.restartTimer = null;
+        if (state.userWantsListen && !state.destroyed && !state.ttsDuck && !state.recognition && !state.mediaRecorder) {
+          restartListeningInternal();
+        }
+      }, wait);
+    }
+
+    function useServerStt() {
+      return Boolean(
+        settings.serverSttEnabled &&
+        typeof settings.serverSttTranscribe === 'function' &&
+        global.MediaRecorder &&
+        global.navigator?.mediaDevices?.getUserMedia,
+      );
+    }
+
+    function stopMediaRecorder() {
+      const rec = state.mediaRecorder;
+      if (!rec) return;
+      state.mediaRecorder = null;
+      try {
+        if (rec.state !== 'inactive') rec.stop();
+      } catch (_) {}
+    }
+
+    function abortActiveRecognition() {
+      const rec = state.recognition;
+      if (!rec) return;
+      state.recognition = null;
+      state.listening = false;
+      rec.onresult = null;
+      rec.onend = null;
+      rec.onerror = null;
+      rec.onstart = null;
+      try {
+        rec.abort();
+      } catch (_) {
+        try {
+          rec.stop();
+        } catch (_) {}
+      }
+    }
+
+    function abortActiveCapture() {
+      stopMediaRecorder();
+      abortActiveRecognition();
+    }
+
+    function markUserEditedText() {
+      state.dictationEpoch += 1;
+      if (!input) return;
+      state.committed = String(input.value || '');
+      state.lastRenderedValue = state.committed;
+      try {
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        if (typeof start === 'number' && typeof end === 'number' && start !== end) {
+          state.appendAt = start;
+          state.replaceEnd = end;
+        } else {
+          state.appendAt = typeof start === 'number' ? start : state.committed.length;
+          state.replaceEnd = null;
+        }
+      } catch (_) {
+        state.appendAt = state.committed.length;
+        state.replaceEnd = null;
+      }
+      if (state.userWantsListen && !state.ttsDuck) {
+        abortActiveCapture();
+        scheduleMicRestart(60);
+      }
+    }
+
+    function syncCommittedFromInput(moveCursorToEnd) {
+      if (!input || state.programmaticUpdate) return;
+      state.committed = String(input.value || '');
+      state.lastRenderedValue = state.committed;
+      if (moveCursorToEnd) {
+        state.appendAt = state.committed.length;
+        state.replaceEnd = null;
+        try {
+          input.setSelectionRange(state.appendAt, state.appendAt);
+        } catch (_) {}
+        return;
+      }
+      try {
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        if (typeof start === 'number' && typeof end === 'number') {
+          if (start !== end) {
+            state.appendAt = start;
+            state.replaceEnd = end;
+          } else {
+            state.appendAt = start;
+            state.replaceEnd = null;
+          }
+        }
+      } catch (_) {}
+    }
+
+    function onInputSelectionChange(ev) {
+      if (state.programmaticUpdate || !input) return;
+      try {
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        state.committed = String(input.value || '');
+        if (start !== end) {
+          state.appendAt = start;
+          state.replaceEnd = end;
+          return;
+        }
+        if (state.hadHighlight || ev?.type === 'select') {
+          state.appendAt = state.committed.length;
+          state.replaceEnd = null;
+          input.setSelectionRange(state.appendAt, state.appendAt);
+          state.hadHighlight = false;
+        } else {
+          state.appendAt = start;
+          state.replaceEnd = null;
+        }
+      } catch (_) {}
+    }
+
+    function onPointerDown() {
+      if (!input) return;
+      try {
+        state.hadHighlight = input.selectionStart !== input.selectionEnd;
+      } catch (_) {
+        state.hadHighlight = false;
+      }
+    }
+
+    function onManualInput() {
+      if (state.programmaticUpdate) return;
+      markUserEditedText();
+    }
+
+    function getDictationRange() {
+      if (!input) return { start: 0, end: 0 };
+      try {
+        if (document.activeElement === input) {
+          const start = input.selectionStart;
+          const end = input.selectionEnd;
+          if (typeof start === 'number' && typeof end === 'number' && start !== end) {
+            return { start, end };
+          }
+        }
+      } catch (_) {}
+      const start = Math.min(Math.max(state.appendAt, 0), state.committed.length);
+      const end = state.replaceEnd != null
+        ? Math.min(Math.max(state.replaceEnd, start), state.committed.length)
+        : start;
+      return { start, end };
+    }
+
+    function setInputValue(nextValue, cursorAt) {
+      if (!input) return;
+      state.programmaticUpdate = true;
+      input.value = nextValue;
+      const pos = typeof cursorAt === 'number' ? cursorAt : nextValue.length;
+      try {
+        input.setSelectionRange(pos, pos);
+      } catch (_) {}
+      state.programmaticUpdate = false;
+      state.lastRenderedValue = nextValue;
+    }
+
+    function applyDictation(finalChunk, interimChunk) {
+      const liveValue = String(input?.value || '');
+      if (state.lastRenderedValue != null && liveValue !== state.lastRenderedValue) {
+        state.committed = liveValue;
+        state.lastRenderedValue = liveValue;
+        try {
+          const start = input.selectionStart;
+          const end = input.selectionEnd;
+          if (typeof start === 'number' && typeof end === 'number' && start !== end) {
+            state.appendAt = start;
+            state.replaceEnd = end;
+          } else {
+            state.appendAt = typeof start === 'number' ? start : state.committed.length;
+            state.replaceEnd = null;
+          }
+        } catch (_) {
+          state.appendAt = state.committed.length;
+          state.replaceEnd = null;
+        }
+      }
+      const finalText = String(finalChunk || '').trim();
+      const interimText = String(interimChunk || '').trim();
+      const range = getDictationRange();
+      const before = state.committed.slice(0, range.start);
+      const after = state.committed.slice(range.end);
+
+      if (finalText) {
+        state.committed = joinTextParts(before, finalText, after);
+        state.appendAt = joinTextParts(before, finalText, '').length;
+        state.replaceEnd = null;
+      }
+
+      let display = state.committed;
+      let cursorAt = state.appendAt;
+      if (interimText) {
+        const pre = state.committed.slice(0, state.appendAt);
+        const post = state.committed.slice(state.appendAt);
+        display = joinTextParts(pre, interimText, post);
+        cursorAt = joinTextParts(pre, interimText, '').length;
+      }
+      setInputValue(display, cursorAt);
+    }
+
     function clearInputBuffer() {
-      state.buffer = '';
-      if (input) input.value = '';
+      state.committed = '';
+      state.appendAt = 0;
+      state.replaceEnd = null;
+      state.lastRenderedValue = '';
+      state.dictationEpoch += 1;
+      cancelMicRestart();
+      abortActiveCapture();
+      if (input) setInputValue('', 0);
     }
 
     function loadSpeakPreference() {
@@ -279,7 +542,7 @@
         return true;
       }
       stopListening();
-      input.value = msg;
+      setInputValue(msg, msg.length);
       try {
         settings.onVoiceSend(msg);
       } catch (_) {}
@@ -290,10 +553,7 @@
       if (!settings.focusInputOnMic || !input) return;
       input.focus();
       input.classList.add('mic-active');
-      try {
-        const len = input.value.length;
-        input.setSelectionRange(len, len);
-      } catch (_) {}
+      syncCommittedFromInput(false);
     }
 
     function clearInputHighlight() {
@@ -309,24 +569,22 @@
     }
 
     function stopListening(userInitiated) {
-      if (userInitiated) state.userWantsListen = false;
-      if (state.recognition) {
-        try {
-          state.recognition.onend = null;
-          state.recognition.stop();
-        } catch (_) {
-          // Ignore stop failures.
-        }
-        state.recognition = null;
+      if (userInitiated) {
+        state.userWantsListen = false;
+        releaseWarmStream();
       }
+      cancelMicRestart();
+      abortActiveCapture();
       state.listening = false;
+      syncCommittedFromInput(true);
       if (!state.userWantsListen) clearInputHighlight();
       updateButton();
       updateStatus(state.userWantsListen ? 'Restarting mic…' : settings.idleText);
     }
 
-    function bindRecognitionHandlers(recognition) {
+    function bindRecognitionHandlers(recognition, sessionEpoch) {
       recognition.onstart = function onStart() {
+        if (sessionEpoch !== state.dictationEpoch || recognition !== state.recognition) return;
         state.listening = true;
         updateButton();
         focusInputHighlight();
@@ -336,6 +594,7 @@
         }
       };
       recognition.onerror = function onError(event) {
+        if (sessionEpoch !== state.dictationEpoch || recognition !== state.recognition) return;
         const code = event && event.error ? event.error : 'unknown';
         if (code === 'no-speech' && state.userWantsListen) return;
         if (code === 'aborted') return;
@@ -346,6 +605,7 @@
         updateStatus(message);
       };
       recognition.onresult = function onResult(event) {
+        if (sessionEpoch !== state.dictationEpoch || recognition !== state.recognition) return;
         let finalChunk = '';
         let interimChunk = '';
         for (let index = event.resultIndex; index < event.results.length; index += 1) {
@@ -353,18 +613,23 @@
           if (event.results[index].isFinal) finalChunk += transcript + ' ';
           else interimChunk += transcript;
         }
-        if (finalChunk) state.buffer += finalChunk;
-        input.value = (state.buffer + interimChunk).trim();
+        applyDictation(finalChunk, interimChunk);
         if (finalChunk && maybeVoiceSend(true)) return;
         updateStatus(interimChunk ? interimChunk.trim() : 'Listening…');
       };
       recognition.onend = function onEnd() {
+        if (sessionEpoch !== state.dictationEpoch) return;
+        if (recognition !== state.recognition) return;
         state.recognition = null;
         state.listening = false;
         if (input && settings.wakePrefixes && settings.wakePrefixes.length) {
-          const next = stripLeadingWakePrefixes(input.value, settings.wakePrefixes);
-          if (next !== input.value) input.value = next;
+          const next = stripLeadingWakePrefixes(state.committed, settings.wakePrefixes);
+          if (next !== state.committed) {
+            state.committed = next;
+            setInputValue(state.committed, state.committed.length);
+          }
         }
+        syncCommittedFromInput(false);
         maybeVoiceSend(true);
         if (state.ttsDuck) {
           updateButton();
@@ -374,9 +639,9 @@
         if (state.userWantsListen && settings.persistentListen) {
           updateButton();
           updateStatus('Restarting mic…');
-          global.setTimeout(() => {
-            if (state.userWantsListen && !state.destroyed) startListeningInternal();
-          }, 120);
+          if (!state.restartTimer) {
+            scheduleMicRestart(40);
+          }
           return;
         }
         if (!state.userWantsListen) clearInputHighlight();
@@ -388,15 +653,178 @@
       };
     }
 
+    function appendServerTranscript(text) {
+      const chunk = String(text || '').trim();
+      if (!chunk) return;
+      const lowerChunk = chunk.toLowerCase();
+      const tail = state.committed.slice(-Math.max(chunk.length + 24, 48)).toLowerCase();
+      if (tail.endsWith(lowerChunk)) return;
+      applyDictation(chunk + ' ', '');
+    }
+
+    function syncListenStateFromInput() {
+      if (settings.mode === 'replace') {
+        state.committed = '';
+        state.appendAt = 0;
+        state.replaceEnd = null;
+      } else {
+        state.committed = String(input.value || '');
+        try {
+          const start = input.selectionStart;
+          const end = input.selectionEnd;
+          if (typeof start === 'number' && typeof end === 'number' && start !== end) {
+            state.appendAt = start;
+            state.replaceEnd = end;
+          } else {
+            state.appendAt = typeof start === 'number' ? start : state.committed.length;
+            state.replaceEnd = null;
+          }
+        } catch (_) {
+          state.appendAt = state.committed.length;
+          state.replaceEnd = null;
+        }
+      }
+      state.lastRenderedValue = state.committed;
+    }
+
+    async function transcribeServerChunk(blob, sessionEpoch) {
+      if (sessionEpoch !== state.dictationEpoch) return;
+      state.sttInFlight += 1;
+      try {
+        const text = await settings.serverSttTranscribe(blob, {
+          committed: state.committed,
+          appendAt: state.appendAt,
+        });
+        if (sessionEpoch !== state.dictationEpoch || !state.userWantsListen || state.ttsDuck) return;
+        if (text && String(text).trim()) {
+          appendServerTranscript(text);
+          maybeVoiceSend(true);
+          updateStatus('Listening (Whisper)…');
+        }
+      } catch (_) {
+        if (sessionEpoch === state.dictationEpoch) {
+          updateStatus('Whisper chunk failed — still listening…');
+        }
+      } finally {
+        state.sttInFlight -= 1;
+      }
+    }
+
+    async function startServerListeningInternal() {
+      if (state.destroyed || state.mediaRecorder) return;
+      if (!state.warmStream) {
+        const warmed = await warmAudioInput();
+        if (!warmed) return;
+      }
+      syncListenStateFromInput();
+      const sessionEpoch = state.dictationEpoch;
+      const mimeType = global.MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : (global.MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '');
+      let recorder;
+      try {
+        recorder = mimeType
+          ? new global.MediaRecorder(state.warmStream, { mimeType })
+          : new global.MediaRecorder(state.warmStream);
+      } catch (_) {
+        updateStatus('Could not start server mic — try again.');
+        return;
+      }
+
+      recorder.ondataavailable = function onSttChunk(ev) {
+        if (sessionEpoch !== state.dictationEpoch || !state.userWantsListen || state.ttsDuck) return;
+        if (!ev.data || ev.data.size < (settings.serverSttMinBytes || 600)) return;
+        transcribeServerChunk(ev.data, sessionEpoch);
+      };
+
+      recorder.onstart = function onSttStart() {
+        if (sessionEpoch !== state.dictationEpoch) return;
+        state.listening = true;
+        updateButton();
+        focusInputHighlight();
+        updateStatus('Listening (Whisper)… say “send” to post.');
+        if (typeof settings.onStart === 'function') {
+          try { settings.onStart({ inputValue: String(input?.value || ''), engine: 'whisper' }); } catch (_) {}
+        }
+      };
+
+      recorder.onstop = function onSttStop() {
+        if (sessionEpoch !== state.dictationEpoch) return;
+        if (state.mediaRecorder === recorder) state.mediaRecorder = null;
+        state.listening = false;
+        syncCommittedFromInput(false);
+        maybeVoiceSend(true);
+        if (state.ttsDuck) {
+          updateButton();
+          updateStatus('Speaking…');
+          return;
+        }
+        if (state.userWantsListen && settings.persistentListen) {
+          updateButton();
+          updateStatus('Restarting mic…');
+          if (!state.restartTimer) scheduleMicRestart(80);
+          return;
+        }
+        if (!state.userWantsListen) clearInputHighlight();
+        updateButton();
+        updateStatus(settings.idleText);
+        if (typeof settings.onStop === 'function') {
+          try { settings.onStop({ inputValue: String(input?.value || ''), engine: 'whisper' }); } catch (_) {}
+        }
+      };
+
+      recorder.onerror = function onSttError() {
+        state.listening = false;
+        if (state.mediaRecorder === recorder) state.mediaRecorder = null;
+        updateButton();
+        updateStatus('Mic error — tap mic again.');
+      };
+
+      state.mediaRecorder = recorder;
+      try {
+        recorder.start(settings.serverSttChunkMs || 1800);
+      } catch (_) {
+        state.mediaRecorder = null;
+        updateStatus('Mic busy — tap mic again in a second.');
+      }
+    }
+
+    function restartListeningInternal() {
+      if (useServerStt()) startServerListeningInternal();
+      else startListeningInternal();
+    }
+
     function startListeningInternal() {
       if (!SpeechRecognitionCtor || state.destroyed) return;
+      if (state.recognition) return;
+      const sessionEpoch = state.dictationEpoch;
       const recognition = new SpeechRecognitionCtor();
-      const baseText = settings.mode === 'replace' ? '' : String(input.value || '').trim();
-      if (!state.buffer && baseText) state.buffer = baseText + ' ';
+      if (settings.mode === 'replace') {
+        state.committed = '';
+        state.appendAt = 0;
+        state.replaceEnd = null;
+      } else {
+        state.committed = String(input.value || '');
+        try {
+          const start = input.selectionStart;
+          const end = input.selectionEnd;
+          if (typeof start === 'number' && typeof end === 'number' && start !== end) {
+            state.appendAt = start;
+            state.replaceEnd = end;
+          } else {
+            state.appendAt = typeof start === 'number' ? start : state.committed.length;
+            state.replaceEnd = null;
+          }
+        } catch (_) {
+          state.appendAt = state.committed.length;
+          state.replaceEnd = null;
+        }
+      }
+      state.lastRenderedValue = state.committed;
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.lang = settings.lang;
-      bindRecognitionHandlers(recognition);
+      bindRecognitionHandlers(recognition, sessionEpoch);
       state.recognition = recognition;
       try {
         recognition.start();
@@ -407,12 +835,14 @@
     }
 
     async function startListening() {
-      if (!SpeechRecognitionCtor) {
+      const canServer = useServerStt();
+      const canBrowser = Boolean(SpeechRecognitionCtor);
+      if (!canServer && !canBrowser) {
         button.disabled = true;
         updateStatus('Voice input is not supported in this browser');
         return;
       }
-      if (state.listening || state.recognition) return;
+      if (state.listening || state.recognition || state.mediaRecorder) return;
 
       if (state.userWantsListen && !settings.persistentListen) {
         stopListening(true);
@@ -421,13 +851,17 @@
 
       state.userWantsListen = true;
       updateButton();
-      const warmed = await warmAudioInput();
-      if (!warmed) {
-        state.userWantsListen = false;
-        updateButton();
-        return;
+      if (!state.micWarmed) {
+        const warmed = await warmAudioInput();
+        if (!warmed) {
+          state.userWantsListen = false;
+          updateButton();
+          return;
+        }
+      } else {
+        updateStatus(canServer ? 'Listening (Whisper)…' : 'Listening…');
       }
-      startListeningInternal();
+      restartListeningInternal();
     }
 
     state.buttonListener = function onButtonClick() {
@@ -435,6 +869,29 @@
       else startListening();
     };
     button.addEventListener('click', state.buttonListener);
+
+    state.inputListener = function onInputEvent() {
+      onManualInput();
+    };
+    state.selectionListener = function onSelectionEvent(ev) {
+      onInputSelectionChange(ev);
+    };
+    state.pointerDownListener = function onPointerDownEvent() {
+      onPointerDown();
+    };
+    state.beforeInputListener = function onBeforeInputEvent(ev) {
+      if (state.programmaticUpdate) return;
+      const inputType = String(ev?.inputType || '');
+      if (/^delete/.test(inputType) || inputType === 'insertFromPaste' || inputType === 'insertFromDrop') {
+        abortActiveCapture();
+      }
+    };
+    input.addEventListener('input', state.inputListener);
+    input.addEventListener('beforeinput', state.beforeInputListener);
+    input.addEventListener('keyup', state.selectionListener);
+    input.addEventListener('mouseup', state.selectionListener);
+    input.addEventListener('select', state.selectionListener);
+    input.addEventListener('mousedown', state.pointerDownListener);
 
     if (speakToggle) {
       loadSpeakPreference();
@@ -444,12 +901,15 @@
       speakToggle.addEventListener('change', state.speakListener);
     }
 
-    if (!SpeechRecognitionCtor) {
+    if (!SpeechRecognitionCtor && !useServerStt()) {
       button.disabled = true;
       updateStatus('Voice input is not supported in this browser');
     } else {
       updateStatus(settings.idleText);
       updateButton();
+      if (settings.warmMicOnStart) {
+        global.setTimeout(() => { warmAudioInput().catch(() => {}); }, 300);
+      }
     }
 
     const controller = {
@@ -472,14 +932,9 @@
       pauseForTts() {
         if (!settings.pauseMicDuringTts || !state.userWantsListen) return;
         state.ttsDuck = true;
-        if (state.recognition) {
-          try {
-            state.recognition.stop();
-          } catch (_) {
-            // Ignore stop failures during duck.
-          }
-        }
-        state.listening = false;
+      cancelMicRestart();
+      abortActiveCapture();
+      syncCommittedFromInput(false);
         updateButton();
         updateStatus('Speaking…');
       },
@@ -487,11 +942,7 @@
         if (!settings.pauseMicDuringTts) return;
         state.ttsDuck = false;
         if (!state.userWantsListen || state.destroyed) return;
-        global.setTimeout(() => {
-          if (state.userWantsListen && !state.destroyed && !state.ttsDuck) {
-            startListeningInternal();
-          }
-        }, 250);
+        scheduleMicRestart(80);
       },
       warmMic() {
         return warmAudioInput();
@@ -503,8 +954,15 @@
       destroy() {
         if (state.destroyed) return;
         state.destroyed = true;
-        stopListening();
+        stopListening(true);
+        releaseWarmStream();
         button.removeEventListener('click', state.buttonListener);
+        input.removeEventListener('input', state.inputListener);
+        input.removeEventListener('beforeinput', state.beforeInputListener);
+        input.removeEventListener('keyup', state.selectionListener);
+        input.removeEventListener('mouseup', state.selectionListener);
+        input.removeEventListener('select', state.selectionListener);
+        input.removeEventListener('mousedown', state.pointerDownListener);
         if (speakToggle && state.speakListener) {
           speakToggle.removeEventListener('change', state.speakListener);
         }
@@ -524,6 +982,9 @@
     listSpeakableVoices: listSpeakableVoices,
     isRecognitionSupported: function isRecognitionSupported() {
       return Boolean(SpeechRecognitionCtor);
+    },
+    isServerSttSupported: function isServerSttSupported() {
+      return Boolean(global.MediaRecorder && global.navigator?.mediaDevices?.getUserMedia);
     },
   };
 })(window);

@@ -12,8 +12,8 @@
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-  <script src="/overlay/lifeos-bootstrap.js?v=20260524-5"></script>
-  <script src="/shared/lifeos-voice-chat.js?v=20260524-5"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260524-8"></script>
+  <script src="/shared/lifeos-voice-chat.js?v=20260524-8"></script>
   <title>LifeOS Voice Rail</title>
   <style>
     :root,
@@ -312,7 +312,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.4</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.6</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -333,7 +333,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.4</strong> — Multi = pick several engines at once. Stop ■ = silence read-aloud only (mic stays on). Speed + volume sliders.
+    Build <strong>v2.6</strong> — OpenAI Whisper mic (faster start, better accuracy). Says <strong>BPB</strong>, <strong>Hist</strong>, <strong>CFO</strong>, <strong>CDR</strong> as department codes.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -524,6 +524,8 @@
       document.getElementById('transcript').innerHTML = '';
       await loadProviders();
       await probeServerTts();
+      await probeServerStt();
+      attachVoiceMic();
       await loadSession();
       await loadDepartments();
       return true;
@@ -1122,6 +1124,79 @@
 
     let activeServerAudio = null;
     let serverTtsAvailable = false;
+    let serverSttAvailable = false;
+
+    function voiceReadyLabel() {
+      if (serverSttAvailable && serverTtsAvailable) return 'Voice ready (Whisper + server TTS)';
+      if (serverSttAvailable) return 'Voice ready (Whisper STT)';
+      if (serverTtsAvailable) return 'Voice ready (server TTS)';
+      return '';
+    }
+
+    async function transcribeVoiceRailBlob(blob, ctx) {
+      if (!serverSttAvailable || !getKey()) return '';
+      const form = new FormData();
+      form.append('audio', blob, 'chunk.webm');
+      form.append('context', String(ctx?.committed || '').slice(-240));
+      const r = await fetch(`${API}/stt`, {
+        method: 'POST',
+        headers: { 'x-command-key': getKey() },
+        body: form,
+      });
+      const json = await r.json().catch(() => ({}));
+      if (r.status !== 200 || !json.ok) return '';
+      return String(json.text || '').trim();
+    }
+
+    function attachVoiceMic() {
+      if (!window.LifeOSVoiceChat?.attach) {
+        const micBtn = document.getElementById('btn-mic');
+        if (micBtn) micBtn.disabled = true;
+        return;
+      }
+      voiceCtrl = window.LifeOSVoiceChat.attach({
+        inputId: 'input',
+        buttonId: 'btn-mic',
+        statusId: 'voice-status',
+        speakToggleId: 'speak-replies',
+        storageKey: 'voice_rail_v1',
+        speakRepliesDefault: localStorage.getItem('voice_rail_speak') !== '0',
+        iconOnly: true,
+        silentStatus: false,
+        voiceSendEnabled: true,
+        voiceSendPhrases: ['send it', 'send message', 'send that', 'send now', 'send'],
+        keepListeningOnVoiceSend: true,
+        persistentListen: true,
+        pauseMicDuringTts: true,
+        warmMicOnStart: true,
+        focusInputOnMic: true,
+        mode: 'append',
+        startLabel: 'Microphone',
+        stopLabel: 'Stop microphone',
+        idleText: '',
+        serverSttEnabled: serverSttAvailable,
+        serverSttTranscribe: transcribeVoiceRailBlob,
+        serverSttChunkMs: 1800,
+        onVoiceSend: (message) => {
+          document.getElementById('interim').textContent = '';
+          if (String(message || '').trim()) sendMessage(message);
+        },
+        onStop: () => {
+          document.getElementById('interim').textContent = '';
+          document.getElementById('input')?.classList.remove('mic-active');
+        },
+        onStart: () => {
+          document.getElementById('interim').textContent = '';
+          const input = document.getElementById('input');
+          input?.focus();
+          input?.classList.add('mic-active');
+        },
+      });
+      syncSpeakToggleUI();
+      const ready = voiceReadyLabel();
+      const vs = document.getElementById('voice-status');
+      if (vs && ready) vs.textContent = ready;
+    }
 
     function finishSpeakPlayback() {
       if (ttsUserStopped) {
@@ -1242,7 +1317,20 @@
       const wrap = document.getElementById('voice-pick-wrap');
       if (wrap) wrap.hidden = serverTtsAvailable;
       const vs = document.getElementById('voice-status');
-      if (vs && serverTtsAvailable) vs.textContent = 'Voice ready (server TTS)';
+      if (vs) {
+        const ready = voiceReadyLabel();
+        if (ready) vs.textContent = ready;
+      }
+    }
+
+    async function probeServerStt() {
+      const res = await api('GET', '/stt/status');
+      serverSttAvailable = res.status === 200 && res.json.ok && res.json.available;
+      const vs = document.getElementById('voice-status');
+      if (vs) {
+        const ready = voiceReadyLabel();
+        if (ready) vs.textContent = ready;
+      }
     }
 
     async function refreshStaged() {
@@ -1266,7 +1354,7 @@
         sendBtn.setAttribute('aria-busy', busy ? 'true' : 'false');
       }
       if (micBtn && busy && !voiceCtrl?.isPersistentListen?.()) micBtn.disabled = true;
-      else if (micBtn && window.LifeOSVoiceChat?.isRecognitionSupported?.()) micBtn.disabled = false;
+      else if (micBtn && (window.LifeOSVoiceChat?.isRecognitionSupported?.() || window.LifeOSVoiceChat?.isServerSttSupported?.() || serverSttAvailable)) micBtn.disabled = false;
     }
 
     async function sendMessage(text) {
@@ -1435,61 +1523,26 @@
       }
     });
 
-    if (window.LifeOSVoiceChat?.attach) {
-      voiceCtrl = window.LifeOSVoiceChat.attach({
-        inputId: 'input',
-        buttonId: 'btn-mic',
-        statusId: 'voice-status',
-        speakToggleId: 'speak-replies',
-        storageKey: 'voice_rail_v1',
-        speakRepliesDefault: localStorage.getItem('voice_rail_speak') !== '0',
-        iconOnly: true,
-        silentStatus: false,
-        voiceSendEnabled: true,
-        voiceSendPhrases: ['send it', 'send message', 'send that', 'send now', 'send'],
-        keepListeningOnVoiceSend: true,
-        persistentListen: true,
-        pauseMicDuringTts: true,
-        warmMicOnStart: true,
-        focusInputOnMic: true,
-        mode: 'append',
-        startLabel: 'Microphone',
-        stopLabel: 'Stop microphone',
-        idleText: '',
-        onVoiceSend: (message) => {
-          document.getElementById('interim').textContent = '';
-          if (String(message || '').trim()) sendMessage(message);
-        },
-        onStop: () => {
-          document.getElementById('interim').textContent = '';
-          document.getElementById('input')?.classList.remove('mic-active');
-        },
-        onStart: () => {
-          document.getElementById('interim').textContent = '';
-          const input = document.getElementById('input');
-          input?.focus();
-          input?.classList.add('mic-active');
-        },
-      });
+    document.getElementById('speak-replies')?.addEventListener('change', () => {
+      const on = document.getElementById('speak-replies')?.checked;
+      localStorage.setItem('voice_rail_speak', on ? '1' : '0');
       syncSpeakToggleUI();
-      document.getElementById('speak-replies')?.addEventListener('change', () => {
-        const on = document.getElementById('speak-replies')?.checked;
-        localStorage.setItem('voice_rail_speak', on ? '1' : '0');
-        syncSpeakToggleUI();
-      });
-    } else {
-      const micBtn = document.getElementById('btn-mic');
-      if (micBtn) micBtn.disabled = true;
-    }
+    });
 
-    if (activeKey) {
-      loadDepartments();
-      loadProviders();
-      probeServerTts();
-      loadSession();
-    } else {
-      loadDepartments();
-    }
+    (async function bootVoiceRail() {
+      if (activeKey) {
+        await Promise.all([probeServerTts(), probeServerStt()]);
+      }
+      attachVoiceMic();
+      if (activeKey) {
+        loadDepartments();
+        loadProviders();
+        loadSession();
+        setTimeout(() => { voiceCtrl?.warmMic?.(); }, 500);
+      } else {
+        loadDepartments();
+      }
+    })();
   </script>
 </body>
 </html>

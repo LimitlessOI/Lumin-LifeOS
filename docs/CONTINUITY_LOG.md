@@ -3,6 +3,17 @@
 
 ---
 
+## [SESSION] 2026-05-24 — Voice Rail v2.5 dictation UX
+
+**Problem:** Adam reported long mic startup delay, poor browser STT, and deleted/highlighted wrong words coming back when dictating corrections.
+
+**Shipped (local — needs commit + deploy):**
+- **`public/shared/lifeos-voice-chat.js`** — `committed`/`appendAt`/`replaceEnd` model; highlight → speak replaces selection; deselect after highlight → cursor at end; manual typing restarts recognition to flush stale transcripts; mic pre-warm + 40ms restart
+- **`public/overlay/lifeos-voice-rail-v1.html`** — build stamp **v2.5**, cache-bust `?v=20260524-6`, `warmMic()` on load
+
+**Next:** Commit + push + Railway deploy; Adam hard-refresh `/voice-rail?v=2.5`. Phase 2 server Whisper STT for quality/latency beyond browser ceiling.
+
+---
 ## [SESSION] 2026-06-11 — Voice Rail: Notion mic hijack + reply honesty
 
 **Problem:** Adam clicked Voice → Notion macOS “Start AI Meeting Note” bar appeared (not LifeOS). Prior deploy also used generic council prompt cosplaying Lumin/DeepSeek with hallucinated “Lemon System” architecture.
