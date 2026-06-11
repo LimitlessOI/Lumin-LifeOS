@@ -26,6 +26,7 @@
  *   GET  /api/v1/ai/effectiveness          — effectiveness stats
  *   GET  /api/v1/user/simulation/accuracy  — simulation accuracy
  *   GET  /internal/cron/autopilot          — cron trigger surface
+ *   GET  /internal/cron/factory-recovery   — factory autopilot recovery owner (0002)
  *   POST /internal/autopilot/build-now     — manual build trigger
  *   POST /api/overlay/:sid/state           — overlay state write
  *   GET  /api/overlay/status               — overlay status read
@@ -401,6 +402,30 @@ app.get("/api/v1/user/simulation/accuracy", requireKey, async (req, res) => {
       accuracyPercent,
       accuracy: accuracyPercent / 100,
       note: "User simulation accuracy tracking"
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Internal factory recovery owner cron (AUTONOMOUS-RECOVERY-0002)
+app.get("/internal/cron/factory-recovery", requireKey, async (req, res) => {
+  try {
+    const { runFactoryAutopilotOnce, getFactoryAutopilotSchedulerState } = await import('../services/factory-autopilot-scheduler.js');
+    const force = req.query.force === '1';
+    const scheduler = getFactoryAutopilotSchedulerState();
+
+    if (scheduler.running && !force) {
+      return res.status(409).json({ ok: false, error: 'factory autopilot already running', scheduler });
+    }
+
+    const result = await runFactoryAutopilotOnce({ logger: console });
+    res.json({
+      ok: result.ok !== false,
+      owner: 'AUTONOMOUS-RECOVERY-0002',
+      timestamp: new Date().toISOString(),
+      result,
+      scheduler: getFactoryAutopilotSchedulerState(),
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });

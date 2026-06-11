@@ -1,6 +1,6 @@
 {
   "schema": "tier1_check_result_v1",
-  "generated_at": "2026-06-11T08:15:00.987Z",
+  "generated_at": "2026-06-11T08:35:47.647Z",
   "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
   "verdict": "TIER1_FAIL",
   "verdict_framing": "Exit criteria not yet satisfied — Tier 1 receipt incomplete",
@@ -11,6 +11,7 @@
       "blueprint_version",
       "model_used",
       "tests_added",
+      "tests_passed",
       "tests_failed",
       "acceptance_status",
       "cost_estimate_usd",
@@ -22,7 +23,6 @@
       "actor",
       "commit_sha",
       "files_changed",
-      "tests_passed",
       "deployment_sha",
       "sentry_verdict"
     ],
@@ -58,6 +58,7 @@
     "blueprint_version",
     "model_used",
     "tests_added",
+    "tests_passed",
     "tests_failed",
     "acceptance_status",
     "cost_estimate_usd",

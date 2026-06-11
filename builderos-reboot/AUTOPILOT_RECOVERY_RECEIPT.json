@@ -1,0 +1,17 @@
+{
+  "schema": "autopilot_recovery_receipt_v1",
+  "run_at": "2026-06-11T08:35:47.634Z",
+  "owner": "AUTONOMOUS-RECOVERY-0002",
+  "action": "recovery_owner",
+  "target": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "detect_reason": "queue_status:mission_failed",
+  "recovery_resolution": "OBJECTIVE_COMPLETE",
+  "objective_score": "PASS",
+  "observe_pass": true,
+  "queue_update": {
+    "updated": true,
+    "mission_status": "complete",
+    "mission_outcome": "PASS"
+  },
+  "founder_alert_only_on_unsolved": false
+}

@@ -1,6 +1,6 @@
 {
   "schema": "failure_pattern_packet_v1",
-  "generated_at": "2026-06-11T08:15:00.988Z",
+  "generated_at": "2026-06-11T08:35:47.649Z",
   "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
   "escalation_level": "hard_stop",
   "attempts_tried": [
@@ -77,6 +77,7 @@
     "blueprint_version",
     "model_used",
     "tests_added",
+    "tests_passed",
     "tests_failed",
     "acceptance_status",
     "cost_estimate_usd",
@@ -95,6 +96,7 @@
     "blueprint_version",
     "model_used",
     "tests_added",
+    "tests_passed",
     "tests_failed",
     "acceptance_status",
     "cost_estimate_usd",

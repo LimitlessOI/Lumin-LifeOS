@@ -1,0 +1,48 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-06-11T08:38:00.000Z",
+  "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "verdict": "OBJECTIVE_NOT_COMPLETE",
+  "scoreboard": "Mission contract only — not governance, not tokens",
+  "question": "Objective assigned → system completes → no Adam rescue",
+  "answer": "LOCAL autopilot owner PROVEN; Railway production loop NOT PROVEN",
+  "evidence": {
+    "autopilot_recovery_proof_v2": {
+      "command": "npm run factory:autopilot:proof",
+      "method": "Simulated mission_failed + deleted harness; invoked ONLY factory:autopilot (no manual observe)",
+      "pass": true,
+      "autopilot_exit": 0,
+      "hard_stop_detected": true,
+      "recovery_resolution": "OBJECTIVE_COMPLETE",
+      "acceptance": "14/14 PASS",
+      "duration_ms": "~8000",
+      "receipt": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/AUTOPILOT_RECOVERY_PROOF.json",
+      "caveat": "Local filesystem — not Railway cron without commit+deploy"
+    },
+    "recovery_owner_wiring": {
+      "autopilot_runner": "builderos-reboot/scripts/mission-recovery-owner.mjs wired as first step",
+      "boot_scheduler": "services/factory-autopilot-scheduler.js — FACTORY_RECOVERY_OWNER_ENABLED=1",
+      "cron_endpoint": "GET /internal/cron/factory-recovery (requires deploy of uncommitted changes)"
+    },
+    "railway_deploy": {
+      "local_head": "e85d1df09413",
+      "origin_main": "e85d1df094",
+      "live_deploy_commit_sha": "f53f1f65e9d0b388cbf88b476be130b5558fa25f",
+      "build_from_latest_triggered": true,
+      "polls_24x_15s": "SHA unchanged — DEPLOY_DRIFT persists",
+      "blocker": "Railway serving stale image; 0002 wiring not on live until commit+push+successful build"
+    }
+  },
+  "blockers": [
+    "DEPLOY_DRIFT: live Railway f53f1f65e9 != git main e85d1df094 (build-from-latest did not advance SHA in 6min poll)",
+    "UNCOMMITTED: AUTONOMOUS-RECOVERY-0002 wiring not pushed to GitHub",
+    "RAILWAY_SCHEDULER: FACTORY_RECOVERY_OWNER_ENABLED=1 not set on live deploy"
+  ],
+  "next_proof_required": [
+    "Commit+push 0002 wiring",
+    "Railway deploy_commit_sha matches main (diagnose why build-from-latest stuck on f53f1f65)",
+    "Set FACTORY_RECOVERY_OWNER_ENABLED=1 on Railway",
+    "Simulate failure on Railway; cron or boot scheduler completes without IDE"
+  ],
+  "honest_partial": "System now owns recovery locally: hard_stop → autopilot → OBJECTIVE_COMPLETE without human running observe. Production proof still blocked on deploy."
+}

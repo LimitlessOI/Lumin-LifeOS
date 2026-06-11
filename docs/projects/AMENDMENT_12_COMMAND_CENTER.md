@@ -292,6 +292,7 @@ node --check public/overlay/command-center.js
 ## Change Receipts
 
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
+| 2026-06-11 | **`routes/command-center-routes.js`:** `GET /internal/cron/factory-recovery` — invokes `services/factory-autopilot-scheduler.js` `runFactoryAutopilotOnce()` (AUTONOMOUS-RECOVERY-0002); returns exit code + receipt path for Railway cron. GAP-FILL: factory recovery owner wiring. | Adam: production autonomy requires scheduled invoker, not manual observe. | AM12 cron surface | pending | `GET /internal/cron/factory-recovery` after deploy |
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|

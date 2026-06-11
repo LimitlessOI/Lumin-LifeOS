@@ -357,6 +357,17 @@ async function bootDeliberationRepCatalog(deps) {
   }
 }
 
+// ── Factory autopilot recovery owner (AUTONOMOUS-RECOVERY-0002) ───────────────
+async function bootFactoryAutopilotRecoveryOwner(deps) {
+  const { logger } = deps;
+  try {
+    const { startFactoryAutopilotScheduler } = await import('../services/factory-autopilot-scheduler.js');
+    startFactoryAutopilotScheduler({ logger });
+  } catch (err) {
+    logger?.warn?.({ err: err.message }, '[BOOT] Factory autopilot recovery owner failed to start (non-fatal)');
+  }
+}
+
 export async function bootAllDomains(deps) {
   const { pool, logger } = deps;
   await autoSeedEpistemicFacts(pool, logger);
@@ -370,5 +381,6 @@ export async function bootAllDomains(deps) {
     bootTwinAutoIngest(deps),
     bootOILDailySummary(deps),
     bootSelfRepairDeployCheck(deps),
+    bootFactoryAutopilotRecoveryOwner(deps),
   ]);
 }

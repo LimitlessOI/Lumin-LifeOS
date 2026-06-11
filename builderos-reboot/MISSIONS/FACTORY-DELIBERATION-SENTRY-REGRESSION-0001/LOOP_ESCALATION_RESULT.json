@@ -1,6 +1,6 @@
 {
   "schema": "loop_escalation_result_v2",
-  "generated_at": "2026-06-11T08:15:00.988Z",
+  "generated_at": "2026-06-11T08:35:47.649Z",
   "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
   "attempt_count": 5,
   "failure_class": "fake_green_attempt",
@@ -62,7 +62,7 @@
   },
   "founder_alert": {
     "schema": "founder_alert_v1",
-    "generated_at": "2026-06-11T08:15:00.989Z",
+    "generated_at": "2026-06-11T08:35:47.650Z",
     "severity": "P0",
     "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
     "reason": "AUTONOMOUS_RECOVERY_PATH_INCOMPLETE",

@@ -1,6 +1,6 @@
 # AMENDMENT 19 — Project Governance
 
-**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-06-11 — AUTONOMOUS-RECOVERY-0002 factory autopilot owner boot + cron
 
 | Field | Value |
 |---|---|
@@ -202,6 +202,7 @@ Required runtime truths:
 ## Change Receipts
 
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
+| 2026-06-11 | **`services/factory-autopilot-scheduler.js`** (NEW) — `runFactoryAutopilotOnce`, `startFactoryAutopilotScheduler` (opt-in `FACTORY_RECOVERY_OWNER_ENABLED=1`, default interval 5m). **`startup/boot-domains.js`** — `bootFactoryAutopilotRecoveryOwner` in `bootAllDomains`. **`builderos-reboot/scripts/mission-recovery-owner.mjs`** + **`autopilot-runner.mjs`** — AUTONOMOUS-RECOVERY-0002 owner. **`run-autopilot-recovery-proof.mjs`** + `npm run factory:autopilot:proof`. Local proof PASS. | Wire hard_stop/mission_failed → autopilot recovery without human observe invoke. | AM19 boot + factory scripts | pending | Railway deploy + cron after push |
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
