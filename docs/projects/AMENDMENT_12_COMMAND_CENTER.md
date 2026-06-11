@@ -1,3 +1,6 @@
+> **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
+> This amendment contains full history, receipts, and all UI change receipts.
+
 # AMENDMENT 12 — Command & Control Center
 
 > **Y-STATEMENT:** In the context of a multi-feature AI platform that is growing rapidly,
@@ -292,6 +295,7 @@ node --check public/overlay/command-center.js
 ## Change Receipts
 
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
+| 2026-06-11 | **`routes/public-routes.js`:** `GET /voice-rail` → 301 redirect to `/overlay/lifeos-voice-rail-v1.html` (preserves query string for `?key=`). Voice Rail v1 canonical link alias. | Adam: finish + easy URL for phone/desktop communication layer. | AM12 wiring, AM21 Voice Rail | pending | after deploy |
 | 2026-06-11 | **`routes/command-center-routes.js`:** `GET /internal/cron/factory-recovery` — invokes `services/factory-autopilot-scheduler.js` `runFactoryAutopilotOnce()` (AUTONOMOUS-RECOVERY-0002); returns exit code + receipt path for Railway cron. GAP-FILL: factory recovery owner wiring. | Adam: production autonomy requires scheduled invoker, not manual observe. | AM12 cron surface | pending | `GET /internal/cron/factory-recovery` after deploy |
 | 2026-06-11 | **`services/factory-recovery-proof-service.js`** (NEW) — `injectProductionFailure`, `getProductionProofStatus`. **`routes/command-center-routes.js`:** `POST /internal/cron/factory-recovery-proof/inject`, `GET .../status`. **`run-production-recovery-proof.mjs`** + `npm run factory:production:recovery-proof` — HTTP-only orchestrator; recovery via production cron only. GAP-FILL: production hard_stop proof path. | Founder: prove mission_failed recovery on Railway without manual npm. | AM12 proof endpoints | pending | `npm run factory:production:recovery-proof` after deploy |
 

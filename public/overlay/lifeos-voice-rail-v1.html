@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0a0a12">
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <script src="/shared/lifeos-voice-chat.js"></script>
+  <title>LifeOS Voice Rail</title>
+  <style>
+    :root {
+      --bg: #0a0a12; --surface: #12121c; --border: #2a2a3a;
+      --text: #ececf4; --muted: #8888a0; --accent: #6b7cff; --ok: #34d399;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; display: flex; flex-direction: column; }
+    header { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    header h1 { margin: 0; font-size: 1rem; flex: 1; min-width: 120px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    select, button, input[type="range"] { font: inherit; }
+    select { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 13px; }
+    .btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .btn.active { outline: 2px solid var(--accent); }
+    #transcript { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .bubble { max-width: 92%; padding: 10px 12px; border-radius: 12px; font-size: 14px; line-height: 1.45; white-space: pre-wrap; }
+    .bubble.user { align-self: flex-end; background: #1e2640; border: 1px solid #3a4a80; }
+    .bubble.assistant { align-self: flex-start; background: var(--surface); border: 1px solid var(--border); }
+    .bubble .intent { font-size: 10px; color: var(--muted); margin-top: 6px; }
+    .composer { border-top: 1px solid var(--border); background: var(--surface); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); }
+    #interim { min-height: 20px; font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
+    textarea { width: 100%; min-height: 56px; resize: vertical; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 10px; font-size: 14px; }
+    .composer-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; }
+    .side { border-top: 1px solid var(--border); padding: 10px 16px; font-size: 12px; color: var(--muted); }
+    .side strong { color: var(--text); }
+    #staged-list { margin-top: 6px; }
+    .staged { background: var(--bg); border: 1px dashed var(--border); border-radius: 6px; padding: 6px 8px; margin-top: 4px; font-size: 11px; }
+    #voice-status { font-size: 11px; color: var(--muted); }
+    @media (max-width: 480px) { header h1 { font-size: 0.95rem; } .btn { padding: 10px 12px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LifeOS Voice Rail</h1>
+    <div class="controls">
+      <label for="mode" class="sr-only">Mode</label>
+      <select id="mode" aria-label="Mode">
+        <option value="conversation">Conversation</option>
+        <option value="command">Command</option>
+        <option value="brainstorm">Brainstorm</option>
+        <option value="private">Private / Off-Record</option>
+      </select>
+      <select id="tag" aria-label="Tag">
+        <option value="">No tag</option>
+        <option value="meeting">Meeting tag</option>
+        <option value="driving">Driving tag</option>
+        <option value="couple">Couple context</option>
+        <option value="emergency">Emergency priority</option>
+      </select>
+    </div>
+  </header>
+
+  <div id="transcript" aria-live="polite"></div>
+
+  <div class="composer">
+    <div id="interim" data-testid="interim-transcript"></div>
+    <textarea id="input" placeholder="Talk or type to LifeOS…" data-voice="true"></textarea>
+    <div class="composer-row">
+      <button type="button" class="btn" id="btn-mic" data-testid="mic-btn">🎤 Hold / tap mic</button>
+      <button type="button" class="btn" id="btn-pause" data-testid="pause-btn">⏸ Pause</button>
+      <button type="button" class="btn btn-primary" id="btn-send">Send</button>
+      <button type="button" class="btn" id="btn-cancel">Cancel</button>
+      <label><input type="checkbox" id="speak-replies" checked> Speak replies</label>
+      <button type="button" class="btn" id="btn-replay" data-testid="replay-btn">🔁 Replay</button>
+      <label>Speed <input type="range" id="speech-rate" min="0.6" max="1.4" step="0.1" value="1"></label>
+    </div>
+    <div id="voice-status"></div>
+  </div>
+
+  <div class="side">
+    <strong>Staged commands</strong> (visible only — v1 never auto-runs BuilderOS)
+    <div id="staged-list"></div>
+  </div>
+
+  <script>
+    const ctx = window.getLifeOSContext?.({ promptForKey: !localStorage.getItem('commandKey') }) || {};
+    const USER = ctx.USER || 'adam';
+
+    function headers() {
+      return ctx.headers ? ctx.headers({ 'content-type': 'application/json' }) : { 'content-type': 'application/json' };
+    }
+
+    const API = '/api/v1/lifeos/voice-rail';
+    let sessionId = localStorage.getItem('voice_rail_session_id') || null;
+    let paused = false;
+    let draftBeforePause = '';
+    let lastAssistant = '';
+    let voiceCtrl = null;
+    let privateBuffer = [];
+
+    async function api(method, path, body) {
+      const r = await fetch(`${API}${path}`, {
+        method,
+        headers: headers(),
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const json = await r.json().catch(() => ({}));
+      return { status: r.status, json };
+    }
+
+    function isPrivate() {
+      return document.getElementById('mode').value === 'private';
+    }
+
+    function appendBubble(role, content, intent) {
+      const box = document.createElement('div');
+      box.className = `bubble ${role === 'user' ? 'user' : 'assistant'}`;
+      box.textContent = content;
+      if (intent) {
+        const tag = document.createElement('div');
+        tag.className = 'intent';
+        tag.textContent = `intent: ${intent}`;
+        box.appendChild(tag);
+      }
+      document.getElementById('transcript').appendChild(box);
+      box.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    async function loadSession() {
+      if (isPrivate()) return;
+      const mode = document.getElementById('mode').value;
+      const tag = document.getElementById('tag').value || null;
+      const res = await api('POST', '/session', { user: USER, mode, tag, session_id: sessionId });
+      if (res.status !== 200 || !res.json.ok) return;
+      sessionId = res.json.session.id;
+      localStorage.setItem('voice_rail_session_id', sessionId);
+      const el = document.getElementById('transcript');
+      el.innerHTML = '';
+      (res.json.messages || []).forEach((m) => appendBubble(m.role, m.content, m.intent));
+      if (res.json.messages?.length) {
+        const last = [...res.json.messages].reverse().find((m) => m.role === 'assistant');
+        if (last) lastAssistant = last.content;
+      }
+      await refreshStaged();
+    }
+
+    async function refreshStaged() {
+      const res = await api('GET', `/staged-commands?user=${encodeURIComponent(USER)}`);
+      const list = document.getElementById('staged-list');
+      if (res.status !== 200 || !res.json.staged_commands?.length) {
+        list.innerHTML = '<div class="staged">None staged</div>';
+        return;
+      }
+      list.innerHTML = res.json.staged_commands.slice(0, 5).map((c) =>
+        `<div class="staged">${escapeHtml(c.utterance)} <em>(${c.status}, not executed)</em></div>`,
+      ).join('');
+    }
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function sendMessage(text) {
+      const content = String(text || '').trim();
+      if (!content || paused) return;
+
+      document.getElementById('interim').textContent = '';
+      const mode = document.getElementById('mode').value;
+      const tag = document.getElementById('tag').value || null;
+
+      if (isPrivate()) {
+        appendBubble('user', content, 'private');
+        privateBuffer.push(content);
+        const res = await api('POST', '/message', { user: USER, mode, text: content, private: true });
+        const reply = res.json?.assistant_message?.content || 'Private — not stored.';
+        appendBubble('assistant', reply, res.json?.intent);
+        lastAssistant = reply;
+        maybeSpeak(reply);
+        document.getElementById('input').value = '';
+        return;
+      }
+
+      appendBubble('user', content, null);
+      const res = await api('POST', '/message', {
+        user: USER,
+        session_id: sessionId,
+        mode,
+        tag,
+        text: content,
+      });
+      if (res.status !== 200 || !res.json.ok) {
+        appendBubble('assistant', `Error: ${res.json.error || res.status}`, 'error');
+        return;
+      }
+      sessionId = res.json.session_id || sessionId;
+      localStorage.setItem('voice_rail_session_id', sessionId);
+      const reply = res.json.assistant_message?.content || '';
+      appendBubble('assistant', reply, res.json.intent);
+      lastAssistant = reply;
+      maybeSpeak(reply);
+      document.getElementById('input').value = '';
+      await refreshStaged();
+    }
+
+    function maybeSpeak(text) {
+      if (!document.getElementById('speak-replies').checked) return;
+      const rate = parseFloat(document.getElementById('speech-rate').value || '1');
+      if (window.LifeOSVoiceChat?.speakText) {
+        window.LifeOSVoiceChat.speakText(text);
+      } else if (window.speechSynthesis) {
+        const u = new SpeechSynthesisUtterance(String(text).slice(0, 2000));
+        u.rate = rate;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    document.getElementById('btn-send').addEventListener('click', () => {
+      sendMessage(document.getElementById('input').value);
+    });
+
+    document.getElementById('btn-cancel').addEventListener('click', () => {
+      document.getElementById('input').value = draftBeforePause || '';
+      document.getElementById('interim').textContent = '';
+      if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
+    });
+
+    document.getElementById('btn-pause').addEventListener('click', () => {
+      paused = !paused;
+      document.getElementById('btn-pause').classList.toggle('active', paused);
+      if (paused) {
+        draftBeforePause = document.getElementById('input').value;
+        if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
+      }
+    });
+
+    document.getElementById('btn-replay').addEventListener('click', () => {
+      if (lastAssistant) maybeSpeak(lastAssistant);
+    });
+
+    document.getElementById('mode').addEventListener('change', () => {
+      if (isPrivate()) {
+        sessionId = null;
+        localStorage.removeItem('voice_rail_session_id');
+        document.getElementById('transcript').innerHTML = '';
+        privateBuffer = [];
+      } else {
+        loadSession();
+      }
+    });
+
+    document.getElementById('input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage(document.getElementById('input').value);
+      }
+    });
+
+    if (window.LifeOSVoiceChat?.attach) {
+      voiceCtrl = window.LifeOSVoiceChat.attach({
+        inputId: 'input',
+        buttonId: 'btn-mic',
+        statusId: 'voice-status',
+        mode: 'append',
+        onStop: () => {
+          document.getElementById('interim').textContent = '';
+        },
+      });
+    } else {
+      const input = document.getElementById('input');
+      const interim = document.getElementById('interim');
+      input?.addEventListener('input', () => {
+        if (document.getElementById('voice-status')?.textContent?.includes('Listening')) {
+          interim.textContent = input.value ? `… ${input.value.split(' ').slice(-6).join(' ')}` : '';
+        }
+      });
+    }
+
+    loadSession();
+  </script>
+</body>
+</html>

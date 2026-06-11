@@ -1,0 +1,58 @@
+{
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "blueprint_id": "VOICE-RAIL-V1-2026-06-11",
+  "scope": "voice_rail_v1_communication_layer",
+  "authority": "FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:voice-rail:v1-acceptance",
+  "allowed_action_types": ["builder_build", "shell_command"],
+  "steps": [
+    {
+      "step_id": "VRV1-S01",
+      "phase_id": "P0",
+      "title": "Voice Rail v1 schema migration",
+      "target_file": "db/migrations/20260611_voice_rail_v1.sql",
+      "action_type": "builder_build",
+      "dependencies": []
+    },
+    {
+      "step_id": "VRV1-S02",
+      "phase_id": "P1",
+      "title": "Voice Rail service — modes, intents, private, staging",
+      "target_file": "services/voice-rail-v1.js",
+      "action_type": "builder_build",
+      "dependencies": ["VRV1-S01"]
+    },
+    {
+      "step_id": "VRV1-S03",
+      "phase_id": "P2",
+      "title": "Voice Rail API routes",
+      "target_file": "routes/lifeos-voice-rail-routes.js",
+      "action_type": "builder_build",
+      "dependencies": ["VRV1-S02"]
+    },
+    {
+      "step_id": "VRV1-S04",
+      "phase_id": "P3",
+      "title": "Canonical overlay page",
+      "target_file": "public/overlay/lifeos-voice-rail-v1.html",
+      "action_type": "builder_build",
+      "dependencies": ["VRV1-S03"]
+    },
+    {
+      "step_id": "VRV1-S05",
+      "phase_id": "P4",
+      "title": "Acceptance command + receipt",
+      "target_file": "scripts/run-voice-rail-v1-acceptance.mjs",
+      "action_type": "builder_build",
+      "dependencies": ["VRV1-S04"]
+    },
+    {
+      "step_id": "VRV1-S06",
+      "phase_id": "P5",
+      "title": "Run acceptance until PASS",
+      "action_type": "shell_command",
+      "command": "npm run lifeos:voice-rail:v1-acceptance",
+      "dependencies": ["VRV1-S05"]
+    }
+  ]
+}

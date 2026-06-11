@@ -1,0 +1,37 @@
+{
+  "_authority": {
+    "domain": "Machine",
+    "status": "CANONICAL",
+    "not_hist_domain": true,
+    "role": "Ordered blueprint priority list — active product work queue (NOT Historian domain)",
+    "replaces_for_orchestration": "Hist-owned MISSION_QUEUE.json and overnight artifacts",
+    "mandatory_read": "builderos-reboot/AGENTS.md"
+  },
+  "queue_id": "BP-PRIORITY-0001",
+  "updated_at": "2026-06-11",
+  "operator_lock": "Adam 2026-06-11 — BPs in priority order ARE the queue. No separate mission queue for product work.",
+  "items": [
+    {
+      "rank": 1,
+      "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md",
+      "acceptance_spec": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/ACCEPTANCE_SPEC.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/BLUEPRINT.json",
+      "blueprint_status": "in_progress",
+      "acceptance_command": "npm run lifeos:voice-rail:v1-acceptance",
+      "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
+      "verdict": "NOT_COMPLETE"
+    },
+    {
+      "rank": 2,
+      "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/BLUEPRINT.json",
+      "blueprint_status": "complete",
+      "acceptance_command": "npm run lifeos:conversation-commitments:v1-acceptance",
+      "receipt_path": "products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json",
+      "verdict": "TECHNICAL_PASS",
+      "note": "Founder 48h voluntary reuse bar is human-only; do not re-run unless regression"
+    }
+  ]
+}

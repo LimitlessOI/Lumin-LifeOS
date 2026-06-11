@@ -75,6 +75,12 @@ export function registerPublicRoutes(app, {
 
   app.get("/communicate", (_req, res) => res.redirect(301, "/lifeos-communication"));
 
+  // Voice Rail v1 — canonical communication layer (PRODUCT-VOICE-RAIL-V1-0001)
+  app.get("/voice-rail", (req, res) => {
+    const q = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    return res.redirect(301, `/overlay/lifeos-voice-rail-v1.html${q}`);
+  });
+
   // Household Mission Board — BPB-0001 §Section 7 (AMENDMENT_47)
   app.get("/lifeos-household", (req, res) => {
     const filePath = path.join(__dirname, "public", "overlay", "lifeos-household.html");
