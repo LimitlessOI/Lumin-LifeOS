@@ -1,10 +1,12 @@
 -- Migration: decision_review_queue
 -- Description: Create table for tracking scheduled decision reviews (30-day, 90-day, 1-year)
+-- Safe on clean DB: this migration runs before the later May repair migration,
+-- so it must not reference legacy/nonexistent users or decision_logs tables.
 
 CREATE TABLE IF NOT EXISTS decision_review_queue (
     id BIGSERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    decision_log_id INTEGER REFERENCES decision_logs(id) ON DELETE SET NULL,
+    user_id BIGINT NOT NULL REFERENCES lifeos_users(id) ON DELETE CASCADE,
+    decision_log_id INTEGER,
     review_due_at TIMESTAMPTZ NOT NULL,
     review_type TEXT NOT NULL CHECK (review_type IN ('30_day', '90_day', '1_year')),
     status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'done', 'skipped')),

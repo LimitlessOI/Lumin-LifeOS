@@ -1,9 +1,11 @@
 -- Migration: Assessment Battery
 -- Creates table for storing user assessment results (attachment style, love language, etc.)
+-- Safe on clean DB: this migration runs before the later May repair migration,
+-- so it must reference the canonical LifeOS users table directly.
 
 CREATE TABLE IF NOT EXISTS assessment_results (
     id BIGSERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id BIGINT NOT NULL REFERENCES lifeos_users(id) ON DELETE CASCADE,
     assessment_type TEXT NOT NULL CHECK (assessment_type IN ('attachment_style', 'love_language', 'conflict_style', 'communication_style', 'personality_snapshot')),
     result_key TEXT NOT NULL,
     result_label TEXT NOT NULL,
