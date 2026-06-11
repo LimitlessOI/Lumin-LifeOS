@@ -823,6 +823,30 @@ export function createCouncilService({
     return { member: candidates[0][0], reason: "default tier0 model" };
   }
 
+  function modelMatchesProvider(modelId, provider) {
+    const m = String(modelId || '').toLowerCase();
+    const p = String(provider || '').toLowerCase();
+    if (!m || !p) return true;
+    if (p === 'anthropic') return m.includes('claude');
+    if (p === 'deepseek') return m.includes('deepseek');
+    if (p === 'openai') return m.includes('gpt') || /^o[0-9]/.test(m);
+    if (p === 'gemini') return m.includes('gemini');
+    if (p === 'groq') return m.includes('llama') || m.includes('mixtral') || m.includes('groq');
+    if (p === 'cerebras') return m.includes('llama') || m.includes('cerebras');
+    return true;
+  }
+
+  function applyModelOverride(config, member, options) {
+    if (!options?.model) return config;
+    if (modelMatchesProvider(options.model, config.provider)) {
+      return { ...config, model: options.model };
+    }
+    console.warn(
+      `⚠️ [COUNCIL] Dropping model override ${options.model} — incompatible with ${config.provider} (${member})`,
+    );
+    return config;
+  }
+
   // Called by the 429 handler so selectOptimalModel stops picking exhausted providers
   function _markProviderExhausted(providerKey) {
     _exhaustedProviders.add(providerKey);
@@ -925,7 +949,7 @@ export function createCouncilService({
     // SOT context is now injected into the system prompt via buildSystemContext().
     // Removed: duplicate SOT injection into user prompt that caused double-billing.
 
-    if (!options.useOpenSourceCouncil) {
+    if (!options.useOpenSourceCouncil && !founderComms) {
       const optimalModel = selectOptimalModel(prompt, options.complexity);
       if (optimalModel && options.allowModelDowngrade !== false) {
         const optimalConfig = COUNCIL_MEMBERS[optimalModel.member];
@@ -961,9 +985,7 @@ export function createCouncilService({
     // Recompute config after selectOptimalModel may have rewritten member
     let config = COUNCIL_MEMBERS[member];
     if (!config) throw new Error(`Unknown member after routing: ${member}`);
-    if (options.model) {
-      config = { ...config, model: options.model };
-    }
+    config = applyModelOverride(config, member, options);
 
     // ── Auto-detect taskType from prompt content if not provided ─────────────
     // Enables Layers 2-4 for far more calls without callers needing to set options.
@@ -1721,7 +1743,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       const is429 = error.message?.includes('429') ||
                     error.message?.toLowerCase().includes('rate limit') ||
                     error.message?.toLowerCase().includes('quota');
-      if (is429) {
+      if (is429 && !founderComms) {
         await freeTierGovernor.on429(member);
         const exhaustedProvider = freeTierGovernor.resolveProvider(member);
         _markProviderExhausted(exhaustedProvider); // keep selectOptimalModel from re-picking it

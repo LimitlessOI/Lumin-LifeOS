@@ -338,6 +338,7 @@ async function generateCouncilReply({
       useCache: false,
       critical: true,
       founderComms: true,
+      allowModelDowngrade: false,
       maxOutputTokens: 1200,
       model: routing.modelId,
     });
