@@ -2,7 +2,7 @@
 
 BEGIN;
 
-CREATE TABLE self_repair_memory_events (
+CREATE TABLE IF NOT EXISTS self_repair_memory_events (
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     trigger TEXT,
@@ -26,8 +26,8 @@ CREATE TABLE self_repair_memory_events (
     fact_id INTEGER REFERENCES epistemic_facts(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_self_repair_memory_events_created_at ON self_repair_memory_events USING btree (created_at DESC);
-CREATE INDEX idx_self_repair_memory_events_result ON self_repair_memory_events USING btree (result);
+CREATE INDEX IF NOT EXISTS idx_self_repair_memory_events_created_at ON self_repair_memory_events USING btree (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_self_repair_memory_events_result ON self_repair_memory_events USING btree (result);
 
 COMMENT ON TABLE self_repair_memory_events IS 'self_repair_memory_events table for tracking self-repair events';
 

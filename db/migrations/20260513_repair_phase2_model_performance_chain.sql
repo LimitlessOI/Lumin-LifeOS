@@ -66,7 +66,12 @@ CREATE INDEX IF NOT EXISTS idx_model_verdict_log_lens_model ON model_verdict_log
 CREATE INDEX IF NOT EXISTS idx_model_verdict_log_logged_at  ON model_verdict_log(logged_at DESC);
 
 -- Final model_performance_summary view — dissent_tracking version (most current)
-CREATE OR REPLACE VIEW model_performance_summary AS
+-- DROP dependents first: CREATE OR REPLACE cannot rename/reorder columns on existing views.
+DROP VIEW IF EXISTS model_lens_dissent_leader;
+DROP VIEW IF EXISTS model_lens_winner;
+DROP VIEW IF EXISTS model_performance_summary;
+
+CREATE VIEW model_performance_summary AS
 SELECT
   mvl.lens,
   mvl.model,
