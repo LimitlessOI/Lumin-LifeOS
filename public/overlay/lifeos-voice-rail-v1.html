@@ -347,7 +347,8 @@
         const src = document.createElement('div');
         src.className = 'source';
         const member = source.council_member ? ` · council: ${source.council_member}` : '';
-        src.textContent = `via ${source.path || 'unknown'}${member}`;
+        const model = source.model_id ? ` · model: ${source.model_id}` : '';
+        src.textContent = `via ${source.path || 'unknown'}${member}${model}`;
         box.appendChild(src);
       }
       document.getElementById('transcript').appendChild(box);

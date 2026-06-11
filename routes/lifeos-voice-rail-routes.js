@@ -8,11 +8,33 @@ import { createVoiceRailV1 } from '../services/voice-rail-v1.js';
 import { createCommitmentTracker } from '../services/commitment-tracker.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 
-export function createLifeOSVoiceRailRoutes({ pool, requireKey, callAI, logger }) {
+export function createLifeOSVoiceRailRoutes({
+  pool,
+  requireKey,
+  callAI,
+  callCouncilMember,
+  councilMembers,
+  councilAliasMap,
+  logger,
+}) {
   const router = express.Router();
   const commitmentTracker = pool ? createCommitmentTracker(pool, callAI) : null;
   const lumin = pool && callAI ? createLifeOSLumin({ pool, callAI, logger }) : null;
-  const voiceRail = createVoiceRailV1({ pool, commitmentTracker, callAI, lumin, logger });
+  const voiceRail = createVoiceRailV1({
+    pool,
+    commitmentTracker,
+    callAI,
+    callCouncilMember,
+    councilMembers,
+    councilAliasMap,
+    lumin,
+    logger,
+  });
+
+  const memberKey =
+    process.env.LIFEOS_CHAT_COUNCIL_MEMBER || process.env.LUMIN_COUNCIL_MEMBER || 'anthropic';
+  const resolvedKey = councilAliasMap?.[memberKey] || memberKey;
+  const councilCfg = councilMembers?.[resolvedKey] || {};
 
   router.get('/health', requireKey, (_req, res) => {
     res.json({
@@ -20,8 +42,11 @@ export function createLifeOSVoiceRailRoutes({ pool, requireKey, callAI, logger }
       service: 'voice-rail-v1',
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,
-      reply_engine: lumin ? 'lifeos/lumin+council' : 'template_only',
-      council_member: lumin ? (process.env.LIFEOS_CHAT_COUNCIL_MEMBER || process.env.LUMIN_COUNCIL_MEMBER || 'anthropic') : null,
+      reply_engine: callCouncilMember ? 'lifeos/council+voice_rail_prompt' : 'template_only',
+      council_member: memberKey,
+      model_id: councilCfg.model || null,
+      provider: councilCfg.provider || null,
+      display_name: councilCfg.name || null,
     });
   });
 

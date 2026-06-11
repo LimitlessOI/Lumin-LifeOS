@@ -107,6 +107,8 @@ export async function registerRuntimeRoutes(app, deps) {
     sendAlertCall,
     makePhoneCall,
     commitToGitHub,
+    COUNCIL_MEMBERS,
+    COUNCIL_ALIAS_MAP,
   } = deps;
 
   const councilChatAI = callCouncilMember
@@ -286,6 +288,9 @@ export async function registerRuntimeRoutes(app, deps) {
       pool,
       requireKey,
       callAI: councilChatAI,
+      callCouncilMember,
+      councilMembers: COUNCIL_MEMBERS,
+      councilAliasMap: COUNCIL_ALIAS_MAP,
       logger,
     })
   );
