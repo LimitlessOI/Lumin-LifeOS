@@ -47,18 +47,40 @@ async function internalRailwayRedeploy() {
 
 /**
  * Trigger a fresh build from the latest GitHub commit (not just a restart of the current image).
- * Uses deploymentCreate which pulls the latest source and rebuilds.
+ * Pass latestCommit:true so Railway pulls HEAD — bare serviceInstanceDeploy was redeploying stale SHAs.
  */
-async function internalRailwayBuildFromLatest() {
+async function internalRailwayBuildFromLatest({ commitSha = null } = {}) {
   const serviceId = process.env.RAILWAY_SERVICE_ID;
   const environmentId = process.env.RAILWAY_ENVIRONMENT_ID;
   if (!serviceId) throw new Error('RAILWAY_SERVICE_ID not set in environment');
   if (!environmentId) throw new Error('RAILWAY_ENVIRONMENT_ID not set in environment');
+  const sha = commitSha ? String(commitSha).trim() : null;
   return railwayGql(
-    `mutation BuildFromLatest($serviceId: String!, $environmentId: String!) {
-      serviceInstanceDeploy(serviceId: $serviceId, environmentId: $environmentId)
+    `mutation BuildFromLatest($serviceId: String!, $environmentId: String!, $commitSha: String, $latestCommit: Boolean) {
+      serviceInstanceDeploy(
+        serviceId: $serviceId
+        environmentId: $environmentId
+        commitSha: $commitSha
+        latestCommit: $latestCommit
+      )
     }`,
-    { serviceId, environmentId }
+    {
+      serviceId,
+      environmentId,
+      commitSha: sha,
+      latestCommit: sha ? null : true,
+    },
+  );
+}
+
+async function internalRailwayRedeployDeployment(deploymentId) {
+  const id = String(deploymentId || '').trim();
+  if (!id) throw new Error('deployment_id_required');
+  return railwayGql(
+    `mutation RedeployDeployment($id: String!) {
+      deploymentRedeploy(id: $id)
+    }`,
+    { id },
   );
 }
 
@@ -430,11 +452,38 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       if (!safeSecretMatch(commandKey, envCommandKey)) {
         return res.status(401).json({ ok: false, error: 'Unauthorized' });
       }
-      const data = await internalRailwayBuildFromLatest();
+      const commitSha = req.body?.commit_sha || req.body?.commitSha || null;
+      const data = await internalRailwayBuildFromLatest({ commitSha });
       console.log('[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=BUILD_FROM_LATEST | triggered fresh Railway build | NEXT=PROBE /ready in ~120s');
-      res.json({ ok: true, message: 'Fresh Railway build from latest commit triggered', data });
+      res.json({
+        ok: true,
+        message: commitSha
+          ? `Railway build triggered for commit ${commitSha}`
+          : 'Fresh Railway build from latest GitHub commit triggered',
+        commit_sha: commitSha || 'latest',
+        data,
+      });
     } catch (error) {
       console.error('[RAILWAY-BUILD-FROM-LATEST] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /deployments/:id/redeploy
+   * Promote an existing successful Railway deployment (e.g. after stale rollback).
+   */
+  router.post('/deployments/:id/redeploy', async (req, res) => {
+    try {
+      const commandKey = getOperatorKeyFromRequest(req);
+      const envCommandKey = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY;
+      if (!safeSecretMatch(commandKey, envCommandKey)) {
+        return res.status(401).json({ ok: false, error: 'Unauthorized' });
+      }
+      const data = await internalRailwayRedeployDeployment(req.params.id);
+      res.json({ ok: true, message: 'Deployment redeploy triggered', deployment_id: req.params.id, data });
+    } catch (error) {
+      console.error('[RAILWAY-DEPLOYMENT-REDEPLOY] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });

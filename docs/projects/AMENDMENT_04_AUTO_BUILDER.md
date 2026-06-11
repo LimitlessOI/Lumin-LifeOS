@@ -159,6 +159,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-05-24 | **`routes/railway-managed-env-routes.js`:** `serviceInstanceDeploy` now uses `latestCommit:true` or explicit `commitSha`; `POST .../deployments/:id/redeploy` promotes a prior build. Fixes stale rollback when GH Actions token dead. | Adam stuck on v2.3.1; build-from-latest redeployed old SHA | AM04 | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
