@@ -81,7 +81,11 @@ export function createLifeOSVoiceRailRoutes({
     try {
       const text = String(req.body.text || '').trim();
       if (!text) return res.status(400).json({ ok: false, error: 'text_required' });
-      const result = await synthesizeVoiceRailSpeech(text, { logger });
+      const result = await synthesizeVoiceRailSpeech(text, {
+        department: req.body.department || null,
+        voiceKey: req.body.voice_key || null,
+        logger,
+      });
       if (!result.ok) {
         return res.status(503).json({ ok: false, error: result.error, detail: result.detail });
       }

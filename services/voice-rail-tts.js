@@ -2,6 +2,12 @@
  * Voice Rail — server-side TTS (ElevenLabs primary, OpenAI tts-1-hd fallback).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+import {
+  listDepartmentVoiceMap,
+  listVoiceRailVoices,
+  resolveDepartmentVoiceId,
+  resolveElevenLabsVoiceId,
+} from '../config/voice-rail-voices.js';
 
 const MAX_CHARS = 2000;
 
@@ -26,18 +32,21 @@ export function voiceRailTtsStatus() {
       elevenlabs: eleven,
       openai: openai,
     },
-    voice_id: process.env.ELEVENLABS_VOICE_ID || null,
+    voice_id: resolveElevenLabsVoiceId('founder'),
+    voices: listVoiceRailVoices(),
+    department_voices: listDepartmentVoiceMap(),
     openai_voice: process.env.VOICE_RAIL_OPENAI_TTS_VOICE || 'nova',
     openai_model: process.env.VOICE_RAIL_OPENAI_TTS_MODEL || 'tts-1-hd',
   };
 }
 
-async function synthesizeElevenLabs(text) {
+async function synthesizeElevenLabs(text, { voiceId } = {}) {
   const apiKey = process.env.ELEVENLABS_API_KEY?.trim();
   if (!apiKey) return null;
-  const voiceId = process.env.ELEVENLABS_VOICE_ID?.trim() || '21m00Tcm4TlvDq8ikWAM';
+  const resolvedVoiceId =
+    voiceId?.trim() || process.env.ELEVENLABS_VOICE_ID?.trim() || '21m00Tcm4TlvDq8ikWAM';
   const modelId = process.env.VOICE_RAIL_ELEVENLABS_MODEL || 'eleven_turbo_v2_5';
-  const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+  const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${resolvedVoiceId}`, {
     method: 'POST',
     headers: {
       'xi-api-key': apiKey,
@@ -60,7 +69,7 @@ async function synthesizeElevenLabs(text) {
     throw new Error(`elevenlabs_http_${res.status}: ${errText.slice(0, 200)}`);
   }
   const buffer = Buffer.from(await res.arrayBuffer());
-  return { buffer, contentType: 'audio/mpeg', engine: 'elevenlabs', voice_id: voiceId };
+  return { buffer, contentType: 'audio/mpeg', engine: 'elevenlabs', voice_id: resolvedVoiceId };
 }
 
 async function synthesizeOpenAi(text) {
@@ -89,7 +98,7 @@ async function synthesizeOpenAi(text) {
   return { buffer, contentType: 'audio/mpeg', engine: 'openai', voice };
 }
 
-export async function synthesizeVoiceRailSpeech(text, { logger } = {}) {
+export async function synthesizeVoiceRailSpeech(text, { department = null, voiceKey = null, logger } = {}) {
   const cleaned = cleanForSpeech(text);
   if (!cleaned) {
     return { ok: false, error: 'empty_text' };
@@ -100,21 +109,35 @@ export async function synthesizeVoiceRailSpeech(text, { logger } = {}) {
     return { ok: false, error: 'no_tts_provider', detail: 'Set ELEVENLABS_API_KEY or OPENAI_API_KEY on Railway.' };
   }
 
+  const deptVoice = department ? resolveDepartmentVoiceId(department) : null;
+  const elevenVoiceId = voiceKey
+    ? resolveElevenLabsVoiceId(voiceKey)
+    : deptVoice?.voice_id || resolveElevenLabsVoiceId('founder');
+
   const order =
     status.primary === 'elevenlabs'
-      ? [synthesizeElevenLabs, synthesizeOpenAi]
-      : [synthesizeOpenAi, synthesizeElevenLabs];
+      ? [
+          () => synthesizeElevenLabs(cleaned, { voiceId: elevenVoiceId }),
+          () => synthesizeOpenAi(cleaned),
+        ]
+      : [() => synthesizeOpenAi(cleaned), () => synthesizeElevenLabs(cleaned, { voiceId: elevenVoiceId })];
 
   let lastErr = null;
   for (const fn of order) {
     try {
-      const out = await fn(cleaned);
+      const out = await fn();
       if (out?.buffer?.length) {
-        return { ok: true, ...out, char_count: cleaned.length };
+        return {
+          ok: true,
+          ...out,
+          char_count: cleaned.length,
+          department: deptVoice?.department || null,
+          voice_label: deptVoice?.label || null,
+        };
       }
     } catch (err) {
       lastErr = err;
-      logger?.warn?.({ err: err.message, fn: fn.name }, 'voice-rail tts engine failed');
+      logger?.warn?.({ err: err.message }, 'voice-rail tts engine failed');
     }
   }
 

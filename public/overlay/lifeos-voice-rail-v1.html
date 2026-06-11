@@ -286,7 +286,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.1</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.2</span></h1>
     <div class="controls">
       <select id="provider-pick" title="Which AI engine replies (not Anthropic-only)" aria-label="AI engine"></select>
       <div class="header-search">
@@ -1003,10 +1003,11 @@
     }
 
     async function fetchServerTts(text) {
+      const department = document.getElementById('department').value || 'ChC';
       const r = await fetch(`${API}/tts`, {
         method: 'POST',
         headers: headers(),
-        body: JSON.stringify({ text: String(text || '').slice(0, 2000) }),
+        body: JSON.stringify({ text: String(text || '').slice(0, 2000), department }),
       });
       if (!r.ok) {
         const err = await r.json().catch(() => ({}));
