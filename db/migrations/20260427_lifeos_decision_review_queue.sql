@@ -1,7 +1,7 @@
 -- Migration: decision_review_queue
 -- Description: Create table for tracking scheduled decision reviews (30-day, 90-day, 1-year)
 
-CREATE TABLE decision_review_queue (
+CREATE TABLE IF NOT EXISTS decision_review_queue (
     id BIGSERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     decision_log_id INTEGER REFERENCES decision_logs(id) ON DELETE SET NULL,
