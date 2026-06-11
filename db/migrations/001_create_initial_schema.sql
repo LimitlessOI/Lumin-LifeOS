@@ -1,4 +1,4 @@
-CREATE TABLE energy_assets (
+CREATE TABLE IF NOT EXISTS energy_assets (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     type VARCHAR(50),
@@ -9,7 +9,7 @@ CREATE TABLE energy_assets (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE mesh_network (
+CREATE TABLE IF NOT EXISTS mesh_network (
     id SERIAL PRIMARY KEY,
     asset_id INT REFERENCES energy_assets(id),
     peer_id INT,
@@ -19,7 +19,7 @@ CREATE TABLE mesh_network (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE energy_transactions (
+CREATE TABLE IF NOT EXISTS energy_transactions (
     id SERIAL PRIMARY KEY,
     from_asset_id INT REFERENCES energy_assets(id),
     to_asset_id INT REFERENCES energy_assets(id),
@@ -28,7 +28,7 @@ CREATE TABLE energy_transactions (
     status VARCHAR(50) DEFAULT 'pending'
 );
 
-CREATE TABLE digital_twins (
+CREATE TABLE IF NOT EXISTS digital_twins (
     id SERIAL PRIMARY KEY,
     asset_id INT REFERENCES energy_assets(id),
     model_data JSONB,
@@ -37,7 +37,7 @@ CREATE TABLE digital_twins (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE federated_learning_models (
+CREATE TABLE IF NOT EXISTS federated_learning_models (
     id SERIAL PRIMARY KEY,
     model_name VARCHAR(255) NOT NULL,
     version INT DEFAULT 1,
@@ -45,4 +45,3 @@ CREATE TABLE federated_learning_models (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
---
