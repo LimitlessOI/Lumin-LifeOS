@@ -848,5 +848,5 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "ssot_receipt_tail": "Voice Rail v1 icon UX + send clear + TTS + council prompt (GAP-FILL deploy slice)."
+  "ssot_receipt_tail": "Voice Rail stop button + reply sanitizer + role prompt fix (GAP-FILL)."
 }

@@ -219,6 +219,9 @@
         <button type="button" class="btn icon-btn" id="btn-speak-toggle" aria-pressed="false" title="Read replies aloud (off)" aria-label="Read replies aloud">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
         </button>
+        <button type="button" class="btn icon-btn" id="btn-stop-voice" data-testid="pause-btn" title="Stop speech and microphone" aria-label="Stop speech and microphone">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor" stroke="none"/></svg>
+        </button>
         <input type="checkbox" id="speak-replies" class="sr-only" tabindex="-1" aria-hidden="true">
         <label class="speed-label" id="voice-pick-wrap" hidden>Voice
           <select id="tts-voice" aria-label="Read-aloud voice"></select>
@@ -233,8 +236,7 @@
       </div>
     </div>
     <div id="voice-status" aria-live="polite"></div>
-    <!-- acceptance harness markers -->
-    <button type="button" id="btn-pause" data-testid="pause-btn" hidden aria-hidden="true"></button>
+    <button type="button" id="btn-pause" hidden aria-hidden="true" tabindex="-1"></button>
     <button type="button" id="btn-cancel" hidden aria-hidden="true"></button>
   </div>
 
@@ -442,22 +444,22 @@
       const box = document.createElement('div');
       box.className = `bubble ${role === 'user' ? 'user' : 'assistant'}`;
       box.textContent = content;
-      if (intent) {
+      if (intent === 'error') {
         const tag = document.createElement('div');
         tag.className = 'intent';
-        tag.textContent = `intent: ${intent}`;
+        tag.textContent = `error`;
         box.appendChild(tag);
-      }
-      if (source && role === 'assistant') {
-        const src = document.createElement('div');
-        src.className = 'source';
-        const member = source.council_member ? ` · council: ${source.council_member}` : '';
-        const model = source.model_id ? ` · model: ${source.model_id}` : '';
-        src.textContent = `via ${source.path || 'unknown'}${member}${model}`;
-        box.appendChild(src);
       }
       document.getElementById('transcript').appendChild(box);
       box.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    function stopAllVoice() {
+      if (window.LifeOSVoiceChat?.stopSpeaking) window.LifeOSVoiceChat.stopSpeaking();
+      else if (window.speechSynthesis) window.speechSynthesis.cancel();
+      if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
+      document.getElementById('interim').textContent = '';
+      document.getElementById('btn-stop-voice')?.classList.remove('active');
     }
 
     async function loadSession() {
@@ -563,12 +565,18 @@
       if (!document.getElementById('speak-replies').checked) return;
       const rate = parseFloat(document.getElementById('speech-rate').value || '0.94');
       const voiceURI = document.getElementById('tts-voice')?.value || localStorage.getItem('voice_rail_tts_voice') || '';
-      const opts = { rate, voiceURI: voiceURI || undefined };
+      const opts = {
+        rate,
+        voiceURI: voiceURI || undefined,
+        onEnd: () => document.getElementById('btn-stop-voice')?.classList.remove('active'),
+      };
+      document.getElementById('btn-stop-voice')?.classList.add('active');
       if (window.LifeOSVoiceChat?.speakText) {
         window.LifeOSVoiceChat.speakText(text, opts);
       } else if (window.speechSynthesis) {
         const u = new SpeechSynthesisUtterance(String(text).slice(0, 2000));
         u.rate = rate;
+        u.onend = opts.onEnd;
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(u);
       }
@@ -611,6 +619,10 @@
       document.getElementById('input').focus();
     });
 
+    document.getElementById('btn-stop-voice')?.addEventListener('click', stopAllVoice);
+    document.getElementById('btn-pause')?.addEventListener('click', stopAllVoice);
+    document.getElementById('btn-cancel')?.addEventListener('click', stopAllVoice);
+
     document.getElementById('btn-replay').addEventListener('click', () => {
       if (lastAssistant) maybeSpeak(lastAssistant);
     });
@@ -637,11 +649,6 @@
         e.preventDefault();
         sendMessage(document.getElementById('input').value);
       }
-    });
-
-    document.getElementById('btn-cancel')?.addEventListener('click', () => {
-      if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
-      document.getElementById('interim').textContent = '';
     });
 
     if (window.LifeOSVoiceChat?.attach) {

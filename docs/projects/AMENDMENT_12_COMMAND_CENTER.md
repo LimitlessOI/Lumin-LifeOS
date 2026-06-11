@@ -295,6 +295,7 @@ node --check public/overlay/command-center.js
 ## Change Receipts
 
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
+| 2026-05-24 | **`public/shared/lifeos-voice-chat.js`:** `stopSpeaking()` + `isSpeaking()` for Voice Rail stop control. | Adam: stop awful read-aloud | AM12 | pending deploy |
 | 2026-05-24 | **`public/shared/lifeos-voice-chat.js`:** `iconOnly` + `silentStatus` for icon mic buttons without overwriting SVG. | Voice Rail mic icon UX | AM12 | pending deploy |
 | 2026-05-24 | **`public/shared/lifeos-voice-chat.js`:** TTS scoring (`scoreVoice`/`chooseVoice`); `listSpeakableVoices()`; `speakText({ rate, pitch, voiceURI })`; metadata strip for spoken council footers. | Adam: Voice Rail robotic TTS | AM12 shared voice | pending deploy |
 | 2026-06-11 | **`public/shared/lifeos-voice-chat.js`:** optional `startLabel` / `stopLabel` on `attach()` for surface-specific mic button text (Voice Rail uses “Dictate” / “Stop dictating”). | Adam: restore visible voice-to-text without generic “Start voice” UX. | AM12 shared voice module | pending | after deploy |

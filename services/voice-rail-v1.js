@@ -71,6 +71,65 @@ function resolveCouncilRouting(councilMembers, councilAliasMap) {
   };
 }
 
+function normalizeForCompare(text) {
+  return String(text || '').toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function isNearDuplicateReply(a, b) {
+  if (!a || !b) return false;
+  const na = normalizeForCompare(a);
+  const nb = normalizeForCompare(b);
+  if (na === nb) return true;
+  const chunk = Math.min(120, na.length, nb.length);
+  if (chunk < 40) return false;
+  return na.slice(0, chunk) === nb.slice(0, chunk);
+}
+
+function isIdentityOrRoleQuestion(text) {
+  return /\b(who are you|what(?:'s| is) your role|identify yourself|role within|who am i|who i am|position within|within (?:the )?system|within lumen|within lifeos)\b/i.test(
+    String(text || ''),
+  );
+}
+
+function sessionAlreadyExplainedIdentity(priorMessages) {
+  return (priorMessages || []).some(
+    (m) =>
+      m.role === 'assistant'
+      && /\b(voice rail|i'?m lumin|lifeos founder|operator comms|not the builder)\b/i.test(m.content),
+  );
+}
+
+export function sanitizeVoiceRailReply(text, priorAssistants, operatorName) {
+  const name = operatorName || 'Adam';
+  let raw = String(text || '').trim();
+  raw = raw.replace(/^ANSWER:\s*/gim, '');
+  const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
+  const kept = lines.filter((line) => {
+    if (/^ANSWER:/i.test(line)) return false;
+    if (/^Same as above/i.test(line)) return false;
+    if (/^You asked about/i.test(line)) return false;
+    if (/^You'?re verified as/i.test(line)) return false;
+    if (/^I'm here to (help|provide|assist)/i.test(line)) return false;
+    if (/don't have a role within/i.test(line)) return false;
+    if (/conversational gateway and honest advisor/i.test(line)) return false;
+    if (/^I'?m a Voice Rail Lumin/i.test(line)) return false;
+    return true;
+  });
+  let out = kept.join(' ').replace(/\s+/g, ' ').trim();
+  out = out.replace(/\bLumen\b/g, 'LifeOS');
+  if (out.length > 520) {
+    const sentences = out.match(/[^.!?]+[.!?]+/g) || [out];
+    out = sentences.slice(0, 3).join(' ').trim();
+  }
+  const priors = (priorAssistants || []).filter((m) => m.role === 'assistant').map((m) => m.content);
+  for (const prev of priors.slice(-2)) {
+    if (isNearDuplicateReply(out, prev)) {
+      return `${name}, I already said that — what do you want to tackle next?`;
+    }
+  }
+  return out || `${name}, I don't have a clear answer on that. Try once more in one sentence?`;
+}
+
 function buildVoiceRailSystemPrompt(routing, mode, contextData, operator) {
   const operatorName = operator?.display_name || 'Adam';
   const operatorHandle = operator?.user_handle || 'adam';
@@ -79,30 +138,27 @@ function buildVoiceRailSystemPrompt(routing, mode, contextData, operator) {
       ? `\nVerified LifeOS context (use only this — do not invent beyond it):\n${JSON.stringify(contextData, null, 2)}\n`
       : '\nNo LifeOS context payload loaded for this turn — do not pretend you know private data.\n';
 
-  return `You are Lumin on LifeOS Voice Rail v1 — ${operatorName}'s phone/browser comms line to the LifeOS stack on Railway.
+  return `You are Lumin on Voice Rail — ${operatorName}'s comms line into LifeOS on Railway. You are part of LifeOS, not a separate chatbot app.
 
-WHO YOU ARE SPEAKING WITH (verified):
-- Operator: ${operatorName} (handle: ${operatorHandle}) — LifeOS founder and decision-maker. Address them by name when natural.
-- You are NOT speaking to a generic user. Never ask "who am I speaking with?" when the operator is ${operatorName}.
+WHO YOU ARE TALKING TO:
+- ${operatorName} (${operatorHandle}) — LifeOS founder and operator. Use their name naturally; never re-introduce them unless they ask.
 
-YOUR ROLE ON THIS SURFACE (not the council codegen role):
-- Voice Rail Lumin: conversational gateway, honest answers, intent routing, command staging.
-- Commands you detect are STAGED only — you never auto-run BuilderOS or deploy.
-- The council config label "${routing.councilRole}" applies to code-generation tasks elsewhere — it is NOT your job title when chatting with ${operatorName} here. Do NOT introduce yourself as "Primary Code Author & Builder" or tell ${operatorName} you are their coder in this chat. Building happens in BuilderOS; this surface is for communication.
+YOUR ROLE IN LIFEOS (say this plainly when asked — do NOT deny having a role):
+- Voice Rail Lumin: ${operatorName}'s operator-facing comms surface inside LifeOS.
+- You route conversation, stage commands (never auto-run), and answer from verified context.
+- You are NOT the Builder/coder in this chat — that work is BuilderOS elsewhere. But you ARE a real LifeOS component with a real job.
+- Never say you "don't have a role within LifeOS" or "don't have a role within Lumen." The product name is LifeOS (not Lumen).
 
-VERIFIED BACKEND FACTS (state plainly when asked about model or stack):
-- Surface: Voice Rail v1 (/voice-rail). Messages persist in LifeOS DB.
-- Council route: member key "${routing.memberKey}" → ${routing.displayName}
-- Provider: ${routing.provider} | Model ID: ${routing.modelId}
-- You are NOT Cursor, NOT a standalone chatbot, NOT DeepSeek unless the model ID above says deepseek.
+STACK FACTS (only when relevant):
+- Surface: Voice Rail v1 (/voice-rail), messages persist in LifeOS DB.
+- Model route: ${routing.displayName} (${routing.provider}, ${routing.modelId}).
+- Not Cursor. Not a generic advisor bot.
 
-Response style (mandatory):
-- Plain conversational prose — 2–6 sentences unless they ask for depth.
-- Answer their ACTUAL question first. Never ignore a direct question.
-- FORBIDDEN formats: numbered verification checklists, "User's question:", "Verify context:", "ANSWER:" labels, step-by-step audit templates, repeating an identical identity monologue you already gave earlier in the session.
-- If you already answered identity this session, say "Same as above — …" in one short line instead of re-reading the full script.
-- Never invent internal architecture unless it appears in the context block below.
-- If you lack evidence, say "I don't know" — do not roleplay omniscience.
+HOW TO WRITE (mandatory):
+- One short paragraph. Max 3 sentences unless ${operatorName} asks for depth.
+- Answer the latest message only. Do NOT recap the whole thread.
+- FORBIDDEN: "Same as above", "You asked about…", "ANSWER:", numbered lists, repeating who ${operatorName} is, boilerplate "conversational gateway", restating identity across turns.
+- If identity/role was already covered this session: one new sentence max — then ask what they want next.
 - Session mode: ${mode}.
 ${ctxBlock}`;
 }
@@ -157,17 +213,27 @@ async function generateCouncilReply({
     .map((m) => `${m.role === 'user' ? 'User' : 'Lumin'}: ${m.content}`)
     .join('\n\n');
 
+  let repeatHint = '';
+  if (isIdentityOrRoleQuestion(content) && sessionAlreadyExplainedIdentity(prior)) {
+    repeatHint =
+      `\n\nTURN CONSTRAINT: Identity/role was already explained above. One sentence only. Do NOT restate who the user is. Ask what they want next.\n`;
+  }
+
   const system = buildVoiceRailSystemPrompt(routing, mode, contextData, operator);
   const turn = threadText
-    ? `--- Prior messages this session ---\n${threadText}\n\n--- Current turn ---\nUser: ${content}\n\nLumin:`
-    : `User: ${content}\n\nLumin:`;
+    ? `--- Prior messages this session ---\n${threadText}\n\n--- Current turn ---\nUser: ${content}\n\nLumin:${repeatHint}`
+    : `User: ${content}\n\nLumin:${repeatHint}`;
   const prompt = `${system}\n\n---\n\n${turn}`;
 
   const councilRaw = await callCouncilMember(routing.memberKey, prompt, {
     taskType: 'analysis',
-    maxOutputTokens: 1200,
+    maxOutputTokens: 450,
   });
-  const councilText = formatCouncilReply(councilRaw);
+  const councilText = sanitizeVoiceRailReply(
+    formatCouncilReply(councilRaw),
+    prior,
+    operator?.display_name || 'Adam',
+  );
   if (!councilText) {
     throw councilUnavailableError(routing, 'council returned empty response');
   }

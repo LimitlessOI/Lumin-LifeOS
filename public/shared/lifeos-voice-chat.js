@@ -105,6 +105,14 @@
     synth.speak(utterance);
   }
 
+  function stopSpeaking() {
+    if (synth) synth.cancel();
+  }
+
+  function isSpeaking() {
+    return Boolean(synth && synth.speaking);
+  }
+
   function setText(node, value) {
     if (node) node.textContent = value;
   }
@@ -334,6 +342,8 @@
   global.LifeOSVoiceChat = {
     attach: attach,
     speakText: speakText,
+    stopSpeaking: stopSpeaking,
+    isSpeaking: isSpeaking,
     listSpeakableVoices: listSpeakableVoices,
     isRecognitionSupported: function isRecognitionSupported() {
       return Boolean(SpeechRecognitionCtor);
