@@ -4,27 +4,47 @@
  */
 /** Default picks shown in UI; memberKey must exist in council config on Railway. */
 export const VOICE_RAIL_PROVIDER_PICKS = Object.freeze([
-  { id: 'anthropic', memberKey: 'claude_sonnet', label: 'Anthropic', provider: 'anthropic' },
-  { id: 'gemini', memberKey: 'gemini_flash', label: 'Gemini', provider: 'gemini' },
-  { id: 'openai_path', memberKey: 'groq_llama', label: 'OpenAI-class (Groq)', provider: 'groq' },
+  { id: 'anthropic', memberKey: 'claude_sonnet', label: 'Anthropic Claude', provider: 'anthropic' },
+  { id: 'openai', memberKey: 'openai_gpt', label: 'OpenAI GPT', provider: 'openai' },
+  { id: 'gemini', memberKey: 'gemini_flash', label: 'Google Gemini', provider: 'gemini' },
+  { id: 'groq', memberKey: 'groq_llama', label: 'Groq Llama (free fast)', provider: 'groq' },
   { id: 'deepseek', memberKey: 'deepseek', label: 'DeepSeek', provider: 'deepseek' },
   { id: 'cerebras', memberKey: 'cerebras_llama', label: 'Cerebras', provider: 'cerebras' },
 ]);
 
 export const FOUNDER_CONTINUOUS_SESSION_TAG = 'founder_rail_continuous';
 
+const PROVIDER_ENV_KEYS = Object.freeze({
+  anthropic: 'ANTHROPIC_API_KEY',
+  openai: 'OPENAI_API_KEY',
+  gemini: 'GEMINI_API_KEY',
+  groq: 'GROQ_API_KEY',
+  deepseek: 'DEEPSEEK_API_KEY',
+  cerebras: 'CEREBRAS_API_KEY',
+});
+
+export function providerEnvConfigured(provider) {
+  const envName = PROVIDER_ENV_KEYS[provider];
+  if (!envName) return true;
+  return Boolean(process.env[envName]?.trim());
+}
+
 export function listVoiceRailProviderPicks(councilMembers) {
   return VOICE_RAIL_PROVIDER_PICKS.filter((p) => councilMembers?.[p.memberKey]).map((p) => {
     const cfg = councilMembers[p.memberKey] || {};
+    const provider = cfg.provider || p.provider;
+    const configured = providerEnvConfigured(provider);
     return {
       id: p.id,
       member_key: p.memberKey,
       label: p.label,
-      provider: cfg.provider || p.provider,
+      provider,
       model: cfg.model || null,
       display_name: cfg.name || p.label,
+      configured,
+      available: configured,
     };
-  });
+  }).filter((p) => p.available);
 }
 
 export function normalizeProviderMemberKey(raw, councilMembers, councilAliasMap) {

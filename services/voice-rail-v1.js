@@ -34,8 +34,13 @@ const PRIVATE_MODE_NOTICE =
   'Off-record: not saved. No council reply in Private mode — switch to Conversation to talk to LifeOS.';
 
 export function classifyIntent(text, mode = 'conversation') {
-  const t = String(text || '').trim().toLowerCase();
+  const raw = String(text || '').trim();
+  const t = raw.toLowerCase();
   if (!t) return 'general_conversation';
+
+  if (/!{2,}/.test(raw) || /\b[A-Z]{4,}\b/.test(raw)) {
+    return 'emotional';
+  }
 
   if (/\b(policy|routing|wrong system|should not|governance|ssot|drift)\b/.test(t)) {
     return 'governance_correction';

@@ -1,8 +1,9 @@
 export const COUNCIL_ALIAS_MAP = {
   claude: "claude_sonnet",    // direct Anthropic only — OpenRouter retired (Adam 2026-05-24)
   anthropic: "claude_sonnet",
-  chatgpt: "groq_llama",
-  openai: "groq_llama",
+  chatgpt: "openai_gpt",
+  openai: "openai_gpt",
+  groq: "groq_llama",
   gemini: "gemini_flash",
   grok: "groq_llama",
   deepseek: "deepseek",
@@ -26,6 +27,21 @@ export function createCouncilMembers({ OLLAMA_ENDPOINT, DEEPSEEK_BRIDGE_ENABLED 
       isFree: false,
       isLocal: false,
       priority: "highest",
+    },
+
+    openai_gpt: {
+      name: "OpenAI GPT",
+      model: process.env.OPENAI_MODEL || process.env.OPENAI_CHAT_MODEL || "gpt-4o",
+      provider: "openai",
+      role: "OpenAI Direct",
+      focus: "general conversation, reasoning, Voice Rail when operator picks OpenAI",
+      maxTokens: 8192,
+      tier: "tier1",
+      costPer1M: 2.5,
+      specialties: ["conversation", "reasoning", "general", "analysis"],
+      isFree: false,
+      isLocal: false,
+      priority: "high",
     },
 
     ollama_deepseek: {

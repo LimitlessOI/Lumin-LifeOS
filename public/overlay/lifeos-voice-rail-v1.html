@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#f5f5f8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <script>
     (function () {
       var t = localStorage.getItem('voice_rail_theme') || 'light';
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-  <script src="/overlay/lifeos-bootstrap.js"></script>
-  <script src="/shared/lifeos-voice-chat.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260524-3"></script>
+  <script src="/shared/lifeos-voice-chat.js?v=20260524-3"></script>
   <title>LifeOS Voice Rail</title>
   <style>
     :root,
@@ -103,6 +104,7 @@
     }
     .history-loader { text-align: center; padding: 6px; font-size: 11px; color: var(--muted); flex-shrink: 0; }
     .msg-ts { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+    .build-stamp { font-size: 10px; font-weight: 600; color: var(--ok); margin-left: 6px; letter-spacing: 0.04em; }
     select, button, input[type="range"] { font: inherit; }
     select { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 13px; }
     .btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
@@ -284,7 +286,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.1</span></h1>
     <div class="controls">
       <select id="provider-pick" title="Which AI engine replies (not Anthropic-only)" aria-label="AI engine"></select>
       <div class="header-search">
@@ -306,7 +308,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    One continuous timeline — scroll up for day one. Pick department + AI engine. Mic stays on; say <strong>“send”</strong> / <strong>“over”</strong> to post.
+    One continuous timeline — scroll up for day one. Pick department + AI engine. Replies use <strong>ElevenLabs/OpenAI voice</strong> when enabled (not browser Karen). Hard refresh if you don’t see <strong>v2.1</strong> in the header.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -491,6 +493,7 @@
       history.replaceState({}, '', location.pathname + (qs ? `?${qs}` : ''));
       document.getElementById('transcript').innerHTML = '';
       await loadProviders();
+      await probeServerTts();
       await loadSession();
       await loadDepartments();
       return true;
@@ -967,11 +970,133 @@
     });
 
     function stopAllVoice() {
+      if (activeServerAudio) {
+        try {
+          activeServerAudio.pause();
+          activeServerAudio.src = '';
+        } catch (_) {}
+        activeServerAudio = null;
+      }
       if (window.LifeOSVoiceChat?.stopSpeaking) window.LifeOSVoiceChat.stopSpeaking();
       else if (window.speechSynthesis) window.speechSynthesis.cancel();
       if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
       document.getElementById('interim').textContent = '';
       document.getElementById('btn-stop-voice')?.classList.remove('active');
+      const vs = document.getElementById('voice-status');
+      if (vs?.dataset?.ttsBusy) {
+        vs.textContent = '';
+        delete vs.dataset.ttsBusy;
+      }
+    }
+
+    let activeServerAudio = null;
+    let serverTtsAvailable = false;
+
+    function finishSpeakPlayback() {
+      voiceCtrl?.resumeAfterTts?.();
+      document.getElementById('btn-stop-voice')?.classList.remove('active');
+      const vs = document.getElementById('voice-status');
+      if (vs?.dataset?.ttsBusy) {
+        vs.textContent = serverTtsAvailable ? 'Voice ready (server TTS)' : '';
+        delete vs.dataset.ttsBusy;
+      }
+    }
+
+    async function fetchServerTts(text) {
+      const r = await fetch(`${API}/tts`, {
+        method: 'POST',
+        headers: headers(),
+        body: JSON.stringify({ text: String(text || '').slice(0, 2000) }),
+      });
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        return { ok: false, error: err.error || String(r.status) };
+      }
+      return {
+        ok: true,
+        blob: await r.blob(),
+        engine: r.headers.get('X-Voice-Rail-TTS-Engine') || 'server',
+      };
+    }
+
+    function playServerAudioBlob(blob, engine) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        activeServerAudio = audio;
+        audio.onended = () => {
+          URL.revokeObjectURL(url);
+          activeServerAudio = null;
+          resolve(engine);
+        };
+        audio.onerror = () => {
+          URL.revokeObjectURL(url);
+          activeServerAudio = null;
+          reject(new Error('audio_playback_failed'));
+        };
+        audio.play().catch(reject);
+      });
+    }
+
+    async function maybeSpeak(text) {
+      if (!document.getElementById('speak-replies').checked) return;
+      voiceCtrl?.pauseForTts?.();
+      document.getElementById('btn-stop-voice')?.classList.add('active');
+      const statusEl = document.getElementById('voice-status');
+      if (statusEl) {
+        statusEl.dataset.ttsBusy = '1';
+        statusEl.textContent = 'Generating voice…';
+      }
+
+      if (activeServerAudio) {
+        try {
+          activeServerAudio.pause();
+        } catch (_) {}
+        activeServerAudio = null;
+      }
+
+      if (serverTtsAvailable && activeKey) {
+        try {
+          const tts = await fetchServerTts(text);
+          if (tts.ok) {
+            if (statusEl) statusEl.textContent = `Speaking (${tts.engine})…`;
+            await playServerAudioBlob(tts.blob, tts.engine);
+            finishSpeakPlayback();
+            return;
+          }
+        } catch (_) {
+          // Fall through to browser TTS.
+        }
+      }
+
+      const rate = parseFloat(document.getElementById('speech-rate').value || '0.94');
+      const voiceURI = document.getElementById('tts-voice')?.value || localStorage.getItem('voice_rail_tts_voice') || '';
+      const opts = {
+        rate,
+        voiceURI: voiceURI || undefined,
+        onEnd: finishSpeakPlayback,
+      };
+      if (statusEl) statusEl.textContent = 'Speaking (browser fallback)…';
+      if (window.LifeOSVoiceChat?.speakText) {
+        window.LifeOSVoiceChat.speakText(text, opts);
+      } else if (window.speechSynthesis) {
+        const u = new SpeechSynthesisUtterance(String(text).slice(0, 2000));
+        u.rate = rate;
+        u.onend = opts.onEnd;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(u);
+      } else {
+        finishSpeakPlayback();
+      }
+    }
+
+    async function probeServerTts() {
+      const res = await api('GET', '/tts/status');
+      serverTtsAvailable = res.status === 200 && res.json.ok && res.json.available;
+      const wrap = document.getElementById('voice-pick-wrap');
+      if (wrap) wrap.hidden = serverTtsAvailable;
+      const vs = document.getElementById('voice-status');
+      if (vs && serverTtsAvailable) vs.textContent = 'Voice ready (server TTS)';
     }
 
     async function refreshStaged() {
@@ -1059,31 +1184,6 @@
       }
     }
 
-    function maybeSpeak(text) {
-      if (!document.getElementById('speak-replies').checked) return;
-      const rate = parseFloat(document.getElementById('speech-rate').value || '0.94');
-      const voiceURI = document.getElementById('tts-voice')?.value || localStorage.getItem('voice_rail_tts_voice') || '';
-      const opts = {
-        rate,
-        voiceURI: voiceURI || undefined,
-        onEnd: () => {
-          voiceCtrl?.resumeAfterTts?.();
-          document.getElementById('btn-stop-voice')?.classList.remove('active');
-        },
-      };
-      voiceCtrl?.pauseForTts?.();
-      document.getElementById('btn-stop-voice')?.classList.add('active');
-      if (window.LifeOSVoiceChat?.speakText) {
-        window.LifeOSVoiceChat.speakText(text, opts);
-      } else if (window.speechSynthesis) {
-        const u = new SpeechSynthesisUtterance(String(text).slice(0, 2000));
-        u.rate = rate;
-        u.onend = opts.onEnd;
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(u);
-      }
-    }
-
     function populateTtsVoices() {
       const select = document.getElementById('tts-voice');
       const wrap = document.getElementById('voice-pick-wrap');
@@ -1160,7 +1260,7 @@
         statusId: 'voice-status',
         speakToggleId: 'speak-replies',
         storageKey: 'voice_rail_v1',
-        speakRepliesDefault: false,
+        speakRepliesDefault: localStorage.getItem('voice_rail_speak') !== '0',
         iconOnly: true,
         silentStatus: false,
         voiceSendEnabled: true,
@@ -1189,7 +1289,11 @@
         },
       });
       syncSpeakToggleUI();
-      document.getElementById('speak-replies')?.addEventListener('change', syncSpeakToggleUI);
+      document.getElementById('speak-replies')?.addEventListener('change', () => {
+        const on = document.getElementById('speak-replies')?.checked;
+        localStorage.setItem('voice_rail_speak', on ? '1' : '0');
+        syncSpeakToggleUI();
+      });
     } else {
       const micBtn = document.getElementById('btn-mic');
       if (micBtn) micBtn.disabled = true;
@@ -1198,6 +1302,7 @@
     if (activeKey) {
       loadDepartments();
       loadProviders();
+      probeServerTts();
       loadSession();
     } else {
       loadDepartments();

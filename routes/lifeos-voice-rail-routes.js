@@ -5,6 +5,7 @@
  */
 import express from 'express';
 import { createVoiceRailV1 } from '../services/voice-rail-v1.js';
+import { synthesizeVoiceRailSpeech, voiceRailTtsStatus } from '../services/voice-rail-tts.js';
 import { createCommitmentTracker } from '../services/commitment-tracker.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 
@@ -49,11 +50,14 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
+      build: 'voice-rail-v2.1',
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,
       reply_engine: callCouncilMember ? 'lifeos/department' : 'template_only',
       default_department: 'ChC',
       departments: voiceRail.listDepartments(),
+      providers: voiceRail.listProviders(),
+      tts: voiceRailTtsStatus(),
       council_member: chairMemberKey,
       model_id: chairModel,
       provider: councilCfg.provider || null,
@@ -66,7 +70,27 @@ export function createLifeOSVoiceRailRoutes({
   });
 
   router.get('/providers', requireKey, (_req, res) => {
-    res.json({ ok: true, providers: voiceRail.listProviders() });
+    res.json({ ok: true, providers: voiceRail.listProviders(), tts: voiceRailTtsStatus() });
+  });
+
+  router.get('/tts/status', requireKey, (_req, res) => {
+    res.json({ ok: true, ...voiceRailTtsStatus() });
+  });
+
+  router.post('/tts', requireKey, async (req, res, next) => {
+    try {
+      const text = String(req.body.text || '').trim();
+      if (!text) return res.status(400).json({ ok: false, error: 'text_required' });
+      const result = await synthesizeVoiceRailSpeech(text, { logger });
+      if (!result.ok) {
+        return res.status(503).json({ ok: false, error: result.error, detail: result.detail });
+      }
+      res.set('Content-Type', result.contentType || 'audio/mpeg');
+      res.set('X-Voice-Rail-TTS-Engine', result.engine || 'unknown');
+      return res.send(result.buffer);
+    } catch (err) {
+      next(err);
+    }
   });
 
   router.get('/history', requireKey, async (req, res, next) => {
