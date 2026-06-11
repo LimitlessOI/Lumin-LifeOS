@@ -17,10 +17,21 @@
       "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md",
       "acceptance_spec": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/ACCEPTANCE_SPEC.md",
       "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/BLUEPRINT.json",
-      "blueprint_status": "in_progress",
+      "blueprint_status": "complete",
       "acceptance_command": "npm run lifeos:voice-rail:v1-acceptance",
       "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
-      "verdict": "NOT_COMPLETE"
+      "verdict": "TECHNICAL_PASS",
+      "note": "Production acceptance PASS. Founder 48h usability bar is human-only.",
+      "receipt_verdict": "PASS",
+      "technical_pass_at": "2026-06-11T19:44:25.907Z",
+      "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
+      "production_base": "https://robust-magic-production.up.railway.app",
+      "canonical_url": "/overlay/lifeos-voice-rail-v1.html",
+      "public_alias": "/voice-rail",
+      "build_method": "GAP-FILL",
+      "intent_drift": "asked builder-first; Conductor hand-built after Unauthorized — Adam finish directive 2026-06-11",
+      "founder_usability_pass": false,
+      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/OBJECTIVE_VERDICT.json"
     },
     {
       "rank": 2,
@@ -31,7 +42,15 @@
       "acceptance_command": "npm run lifeos:conversation-commitments:v1-acceptance",
       "receipt_path": "products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json",
       "verdict": "TECHNICAL_PASS",
-      "note": "Founder 48h voluntary reuse bar is human-only; do not re-run unless regression"
+      "note": "Founder 48h voluntary reuse bar is human-only; do not re-run unless regression",
+      "receipt_verdict": "PASS",
+      "technical_pass_at": "2026-06-11T18:52:22.171Z",
+      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d",
+      "production_base": "",
+      "canonical_url": "/overlay/lifeos-commitments-v1.html",
+      "build_method": "system-build",
+      "founder_usability_pass": false,
+      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/OBJECTIVE_VERDICT.json"
     }
   ]
 }

@@ -4,7 +4,10 @@
   "scope": "voice_rail_v1_communication_layer",
   "authority": "FOUNDER_PACKET.md",
   "acceptance_command": "npm run lifeos:voice-rail:v1-acceptance",
-  "allowed_action_types": ["builder_build", "shell_command"],
+  "allowed_action_types": [
+    "builder_build",
+    "shell_command"
+  ],
   "steps": [
     {
       "step_id": "VRV1-S01",
@@ -12,7 +15,10 @@
       "title": "Voice Rail v1 schema migration",
       "target_file": "db/migrations/20260611_voice_rail_v1.sql",
       "action_type": "builder_build",
-      "dependencies": []
+      "dependencies": [],
+      "status": "complete",
+      "completed_at": "2026-06-11T19:44:25.907Z",
+      "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638"
     },
     {
       "step_id": "VRV1-S02",
@@ -20,7 +26,12 @@
       "title": "Voice Rail service — modes, intents, private, staging",
       "target_file": "services/voice-rail-v1.js",
       "action_type": "builder_build",
-      "dependencies": ["VRV1-S01"]
+      "dependencies": [
+        "VRV1-S01"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T19:44:25.907Z",
+      "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638"
     },
     {
       "step_id": "VRV1-S03",
@@ -28,7 +39,12 @@
       "title": "Voice Rail API routes",
       "target_file": "routes/lifeos-voice-rail-routes.js",
       "action_type": "builder_build",
-      "dependencies": ["VRV1-S02"]
+      "dependencies": [
+        "VRV1-S02"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T19:44:25.907Z",
+      "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638"
     },
     {
       "step_id": "VRV1-S04",
@@ -36,7 +52,12 @@
       "title": "Canonical overlay page",
       "target_file": "public/overlay/lifeos-voice-rail-v1.html",
       "action_type": "builder_build",
-      "dependencies": ["VRV1-S03"]
+      "dependencies": [
+        "VRV1-S03"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T19:44:25.907Z",
+      "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638"
     },
     {
       "step_id": "VRV1-S05",
@@ -44,7 +65,12 @@
       "title": "Acceptance command + receipt",
       "target_file": "scripts/run-voice-rail-v1-acceptance.mjs",
       "action_type": "builder_build",
-      "dependencies": ["VRV1-S04"]
+      "dependencies": [
+        "VRV1-S04"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T19:44:25.907Z",
+      "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638"
     },
     {
       "step_id": "VRV1-S06",
@@ -52,7 +78,19 @@
       "title": "Run acceptance until PASS",
       "action_type": "shell_command",
       "command": "npm run lifeos:voice-rail:v1-acceptance",
-      "dependencies": ["VRV1-S05"]
+      "dependencies": [
+        "VRV1-S05"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T19:44:25.907Z",
+      "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
+      "receipt_verdict": "PASS"
     }
-  ]
+  ],
+  "blueprint_status": "complete",
+  "completed_at": "2026-06-11T19:44:25.907Z",
+  "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
+  "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "GAP-FILL"
 }

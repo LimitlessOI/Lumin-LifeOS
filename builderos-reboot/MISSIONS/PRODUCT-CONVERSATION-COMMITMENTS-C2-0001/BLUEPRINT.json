@@ -4,7 +4,10 @@
   "scope": "conversation_commitments_v1_end_to_end",
   "authority": "FOUNDER_PACKET.md",
   "acceptance_command": "npm run lifeos:conversation-commitments:v1-acceptance",
-  "allowed_action_types": ["builder_build", "shell_command"],
+  "allowed_action_types": [
+    "builder_build",
+    "shell_command"
+  ],
   "steps": [
     {
       "step_id": "CCV1-S01",
@@ -13,7 +16,15 @@
       "target_file": "services/commitment-tracker.js",
       "action_type": "builder_build",
       "dependencies": [],
-      "non_goals": ["split-brain lifeos_commitments", "calendar", "audio", "C2 rebuild"]
+      "non_goals": [
+        "split-brain lifeos_commitments",
+        "calendar",
+        "audio",
+        "C2 rebuild"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T18:52:22.171Z",
+      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d"
     },
     {
       "step_id": "CCV1-S02",
@@ -21,7 +32,12 @@
       "title": "Conversation ingest + batch save API routes",
       "target_file": "routes/lifeos-core-routes.js",
       "action_type": "builder_build",
-      "dependencies": ["CCV1-S01"]
+      "dependencies": [
+        "CCV1-S01"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T18:52:22.171Z",
+      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d"
     },
     {
       "step_id": "CCV1-S03",
@@ -29,7 +45,12 @@
       "title": "Paste extract list UI overlay",
       "target_file": "public/overlay/lifeos-commitments-v1.html",
       "action_type": "builder_build",
-      "dependencies": ["CCV1-S02"]
+      "dependencies": [
+        "CCV1-S02"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T18:52:22.171Z",
+      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d"
     },
     {
       "step_id": "CCV1-S04",
@@ -37,7 +58,12 @@
       "title": "Acceptance command + PASS receipt writer",
       "target_file": "scripts/run-conversation-commitments-v1-acceptance.mjs",
       "action_type": "builder_build",
-      "dependencies": ["CCV1-S03"]
+      "dependencies": [
+        "CCV1-S03"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T18:52:22.171Z",
+      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d"
     },
     {
       "step_id": "CCV1-S05",
@@ -45,7 +71,19 @@
       "title": "Run acceptance until PASS",
       "action_type": "shell_command",
       "command": "npm run lifeos:conversation-commitments:v1-acceptance",
-      "dependencies": ["CCV1-S04"]
+      "dependencies": [
+        "CCV1-S04"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-11T18:52:22.171Z",
+      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d",
+      "receipt_verdict": "PASS"
     }
-  ]
+  ],
+  "blueprint_status": "complete",
+  "completed_at": "2026-06-11T18:52:22.171Z",
+  "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d",
+  "receipt_path": "products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

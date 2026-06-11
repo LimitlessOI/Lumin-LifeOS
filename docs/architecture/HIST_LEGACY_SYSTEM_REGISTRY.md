@@ -97,6 +97,23 @@ Full bucket list: `docs/REPO_BUCKET_INDEX.md` + human verdicts `docs/REPO_TRIAGE
 
 Remove keys from Railway when convenient; code routing cleanup may be local until deploy.
 
+### 2E — Autopilot / mission-queue plumbing (**Hist domain — Historian owns**)
+
+Adam locked **2026-06-11:** **Blueprints in priority order ARE the queue.** Legacy files belong to **History** — **Historian (Hist) department** owns them: read, salvage, cite — **do not extend** without Hist mandatory case (`§4`).
+
+| Hist ID | Artifact | Was | Use instead now | Hist instructions |
+|---------|----------|-----|-----------------|-------------------|
+| **HIST-AUTO-001** | `builderos-reboot/MISSION_QUEUE.json` | Factory reboot mission order + old autopilot driver | **`builderos-reboot/BP_PRIORITY.json`** for product work | **HIST_OWNED** — `_authority.domain: Hist` |
+| **HIST-AUTO-002** | `builderos-reboot/MISSION_PACK_INDEX.json` | Generated index from MISSION_QUEUE | **`BP_PRIORITY.json`** | **HIST_OWNED** — historical index only |
+| **HIST-AUTO-003** | `CURRENT_SLICE.json`, `OVERNIGHT_SCOREBOARD.json`, overnight receipts | Overnight experiment pointers | **`BP_PRIORITY.json`** rank #1 | **HIST_OWNED** — evidence only |
+| **HIST-AUTO-004** | `scripts/autopilot*.mjs`, `run-overnight*.mjs`, `mission-recovery-owner.mjs` | Factory autopilot runners | BPB → `BLUEPRINT.json` → execute → acceptance | **HIST_OWNED** — factory recovery scope only |
+| **HIST-AUTO-005** | `services/factory-autopilot-scheduler.js` | Cron invoker for factory recovery | Same as HIST-AUTO-004 | **HIST_OWNED** |
+| **HIST-AUTO-006** | `scripts/governed-overnight-*.mjs`, `data/governed-autonomy-backlog-state.json` | Overnight backlog churn | **`BP_PRIORITY.json`** | **HIST_OWNED** — sidecar meta required |
+
+**Registry:** `builderos-reboot/HIST_DOMAIN_REGISTRY.json`  
+**Canonical product queue (NOT Hist):** `builderos-reboot/BP_PRIORITY.json`  
+**Enforcement:** `npm run lifeos:bp-priority:verify` (pre-commit HARD)
+
 ---
 
 ## 3. Decision tree (agents)
@@ -150,3 +167,6 @@ HIST_CASE:
 |------|--------|
 | 2026-05-24 | Initial registry — Adam: legacy repos/trees → Hist |
 | 2026-05-24 | Mandatory entry prompt `prompts/00-HIST-LEGACY-BOUNDARY.md` (QUICK_LAUNCH #2, compact rules header, cold-start) — no README.hist pattern |
+| 2026-06-11 | **§2E Autopilot plumbing registry** — Adam: BPs in `BP_PRIORITY.json` ARE the queue; `MISSION_QUEUE.json` and overnight/autopilot files marked LEGACY at file top + `.cursor/rules/` |
+| 2026-06-11 | **Hist domain lock** — legacy artifacts `_authority.domain: Hist`, `owner_department: Historian`, `status: HIST_OWNED`; `HIST_DOMAIN_REGISTRY.json`; verifier enforces Hist ownership (22 checks PASS) |
+| 2026-06-11 | **`services/bp-priority-sync.js`** — machine law: acceptance PASS syncs `BP_PRIORITY.json`, mission `BLUEPRINT.json`, `FOUNDER_PACKET.json`; `verify-bp-priority-guardrails.mjs` checks receipt alignment (23 checks) |

@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { syncMissionFromTechnicalReceipt } from '../services/bp-priority-sync.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MISSION = 'PRODUCT-VOICE-RAIL-V1-0001';
@@ -47,35 +48,73 @@ async function api(method, urlPath, body) {
   return { status: r.status, json };
 }
 
-function finish(code) {
-  const pass = report.tests_failed.length === 0;
+function finish() {
+  let pass = report.tests_failed.length === 0;
   let gitSha = '';
   try { gitSha = execSync('git rev-parse HEAD', { cwd: ROOT }).toString().trim(); } catch { /* */ }
-  report.verdict = pass ? 'PASS' : 'FAIL';
   report.completed_at = new Date().toISOString();
   report.git_sha = gitSha;
   fs.mkdirSync(RECEIPT_DIR, { recursive: true });
-  fs.writeFileSync(RECEIPT, `${JSON.stringify(report, null, 2)}\n`);
+
   const verdictPath = path.join(ROOT, 'builderos-reboot/MISSIONS', MISSION, 'OBJECTIVE_VERDICT.json');
-  fs.writeFileSync(verdictPath, `${JSON.stringify({
-    schema: 'objective_verdict_v1',
-    generated_at: report.completed_at,
-    objective_id: MISSION,
-    objective_name: 'LifeOS Voice Rail v1',
-    verdict: pass ? 'TECHNICAL_PASS' : 'NOT_COMPLETE',
-    acceptance_command: 'npm run lifeos:voice-rail:v1-acceptance',
-    receipt: 'products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json',
-    tests_passed: report.tests_passed,
-    tests_failed: report.tests_failed,
-    founder_usability_pass: report.founder_usability_pass,
-  }, null, 2)}\n`);
+  const writeArtifacts = () => {
+    report.verdict = pass ? 'PASS' : 'FAIL';
+    fs.writeFileSync(RECEIPT, `${JSON.stringify(report, null, 2)}\n`);
+    fs.writeFileSync(verdictPath, `${JSON.stringify({
+      schema: 'objective_verdict_v1',
+      generated_at: report.completed_at,
+      objective_id: MISSION,
+      objective_name: 'LifeOS Voice Rail v1',
+      verdict: pass ? 'TECHNICAL_PASS' : 'NOT_COMPLETE',
+      acceptance_command: 'npm run lifeos:voice-rail:v1-acceptance',
+      receipt: 'products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json',
+      production_base: base,
+      canonical_url: CANONICAL_PATH,
+      public_alias: '/voice-rail',
+      git_sha: gitSha,
+      tests_passed: report.tests_passed,
+      tests_failed: report.tests_failed,
+      founder_usability_pass: report.founder_usability_pass,
+    }, null, 2)}\n`);
+  };
+
+  writeArtifacts();
+
+  if (pass) {
+    try {
+      const sync = syncMissionFromTechnicalReceipt({
+        missionId: MISSION,
+        receipt: report,
+        root: ROOT,
+        buildRecord: {
+          git_sha: gitSha,
+          production_base: base,
+          canonical_url: CANONICAL_PATH,
+          public_alias: '/voice-rail',
+          build_method: 'GAP-FILL',
+          intent_drift:
+            'asked builder-first; Conductor hand-built after Unauthorized — Adam finish directive 2026-06-11',
+          note: 'Production acceptance PASS. Founder 48h usability bar is human-only.',
+        },
+      });
+      report.bp_sync = sync;
+      step('VR1-T19_bp_sync', sync.updated.includes('builderos-reboot/BP_PRIORITY.json'), sync);
+      pass = report.tests_failed.length === 0;
+      writeArtifacts();
+    } catch (err) {
+      step('VR1-T19_bp_sync', false, err.message);
+      pass = false;
+      writeArtifacts();
+    }
+  }
+
   console.log(JSON.stringify(report, null, 2));
-  process.exit(code);
+  process.exit(pass ? 0 : 1);
 }
 
 if (!base || !key) {
   step('VR1-ENV', false, { base: Boolean(base), key: Boolean(key) });
-  finish(1);
+  finish();
 }
 
 step('VR1-T01_blueprint', fs.existsSync(BLUEPRINT), BLUEPRINT);
@@ -169,4 +208,4 @@ step('VR1-T18', health.status === 200 && health.json?.service === 'voice-rail-v1
 const technicalPass = report.tests_failed.length === 0;
 step('VR1-T18_receipt', technicalPass, 'all automated tests');
 
-finish(technicalPass ? 0 : 1);
+finish();

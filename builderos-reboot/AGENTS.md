@@ -1,34 +1,60 @@
 # Machine layer / mission-pack authority
 
-You are in **`builderos-reboot/`** — the governed rebuild workspace, not the old LifeOS runtime.
+You are in **`builderos-reboot/`** — governed mission packs and factory proofs.
 
-## What this layer is
+---
 
-- Step-atomic mission packs (`MISSIONS/FACTORY-REBOOT-*`)
-- `BLUEPRINT.json` + sha256 pins + `ACCEPTANCE_TESTS.json`
-- Generated receipts (`FULL_LOOP_PROOF_RECEIPT.json`, `PROJECT_CERTIFICATION.json`, etc.)
-- Mission queue order (`MISSION_QUEUE.json`) — **index only**, not a runtime work queue
+## Two domains (do not confuse)
 
-## Authority
+| Domain | What | Owner |
+|--------|------|-------|
+| **Active product work** | `BP_PRIORITY.json` → mission `BLUEPRINT.json` → acceptance | BPB / Machine (NOT Hist) |
+| **History / legacy** | `MISSION_QUEUE.json`, overnight artifacts, autopilot scripts | **Hist (Historian)** |
 
-- **This is machine-layer authority** for the factory reboot program.
-- Runtime code materializes into **`factory-staging/`** when steps execute.
-- **This is not** live Railway LifeOS product code.
+**Adam locked:** Legacy files belong to **History**. **Historian domain owns them.** Read/salvage only — see `prompts/00-HIST-LEGACY-BOUNDARY.md`.
 
-## Before you edit
+---
 
-1. Read `HANDOFF.md` and `WORKSPACE_STATUS.md`
-2. Read `prompts/00-SYSTEM-AUTHORITY-LAYERS.md`
-3. Respect `MISSION_SHARED_FILE_OWNERSHIP.md` for shared files
+## CANONICAL — product work queue
 
-## Before you end a session
+**Blueprints in priority order ARE the queue.**
 
-Update `HANDOFF.md` and `WORKSPACE_STATUS.md` when material state changes.
+| Artifact | Role |
+|----------|------|
+| **`BP_PRIORITY.json`** | ONLY ordered list of product BPs to execute (rank 1 = active) |
+| `MISSIONS/<id>/FOUNDER_PACKET.md` | WHAT + PASS bar |
+| `MISSIONS/<id>/BLUEPRINT.json` | HOW |
+| Named acceptance npm script | PROOF |
 
-## Verify
+---
+
+## HIST DOMAIN — Historian owns (not product orchestration)
+
+Registry: **`HIST_DOMAIN_REGISTRY.json`**
+
+| Artifact | Hist ID |
+|----------|---------|
+| `MISSION_QUEUE.json` | HIST-AUTO-001 |
+| `MISSION_PACK_INDEX.json` | HIST-AUTO-002 |
+| Overnight / slice / receipt JSON | HIST-AUTO-003 |
+| Autopilot scripts | HIST-AUTO-004 |
+| `factory-autopilot-scheduler.js` | HIST-AUTO-005 |
+| Governed overnight runners + backlog state | HIST-AUTO-006 |
+
+Every Hist-owned file has `_authority.domain: Hist`, `owner_department: Historian`, `status: HIST_OWNED`.
+
+**To touch Hist artifacts:** Hist mandatory case (`HIST_LEGACY_SYSTEM_REGISTRY.md` §4) — default HALT.
+
+---
+
+## Verify (HARD)
 
 ```bash
-npm run factory:ci
+npm run lifeos:bp-priority:verify
 ```
 
-See also: `README.md`, `INDEX.md`
+Enforced: pre-commit step 10 + `builder:preflight`. Checks Hist banners, BP_PRIORITY shape, MISSION_QUEUE ban in spine, **BP item ↔ receipt ↔ OBJECTIVE_VERDICT alignment** for TECHNICAL_PASS rows.
+
+**Law:** Acceptance scripts **must** call `syncMissionFromTechnicalReceipt()` on technical PASS so `BP_PRIORITY.json`, mission `BLUEPRINT.json`, and `FOUNDER_PACKET.json` stay aligned with receipts.
+
+See: `HIST_DOMAIN_REGISTRY.json`, `docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md` §2E

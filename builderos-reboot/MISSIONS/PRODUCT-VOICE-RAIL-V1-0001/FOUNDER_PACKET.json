@@ -11,12 +11,38 @@
   "founder_success_test": "Adam voluntarily uses Voice Rail again within 48 hours instead of Cursor for normal system communication",
   "acceptance_command": "npm run lifeos:voice-rail:v1-acceptance",
   "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
-  "modes_v1": ["conversation", "command", "brainstorm", "private_off_record"],
-  "intents_v1": ["command", "brainstorm", "commitment", "governance_correction", "emotional_venting", "general_conversation"],
+  "modes_v1": [
+    "conversation",
+    "command",
+    "brainstorm",
+    "private_off_record"
+  ],
+  "intents_v1": [
+    "command",
+    "brainstorm",
+    "commitment",
+    "governance_correction",
+    "emotional_venting",
+    "general_conversation"
+  ],
   "builderos_handoff": "stage_only_no_auto_execute",
   "private_mode": "session_only_no_durable_persistence",
   "phone_v1": "responsive_pwa_same_url",
-  "pass_requires": ["technical_pass", "founder_usability_pass"],
+  "pass_requires": [
+    "technical_pass",
+    "founder_usability_pass"
+  ],
   "cursor_role": "audit_support_not_primary_mouth",
-  "additional_founder_rule": "System infers classifies routes; Adam never remembers surface subsystem or project"
+  "additional_founder_rule": "System infers classifies routes; Adam never remembers surface subsystem or project",
+  "technical_pass": {
+    "at": "2026-06-11T19:44:25.907Z",
+    "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
+    "receipt_verdict": "PASS",
+    "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
+    "production_base": "https://robust-magic-production.up.railway.app",
+    "canonical_url": "/overlay/lifeos-voice-rail-v1.html",
+    "public_alias": "/voice-rail",
+    "founder_usability_pass": false,
+    "build_method": "GAP-FILL"
+  }
 }
