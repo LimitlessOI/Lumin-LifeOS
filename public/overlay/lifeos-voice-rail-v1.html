@@ -110,7 +110,7 @@
   </header>
 
   <div id="auth-banner" role="alert">
-    <strong>Connect your key.</strong> Railway → Variables → <code>COMMAND_CENTER_KEY</code> → copy the <strong>value</strong> (click reveal), not the variable name.
+    <strong>Connect once.</strong> Railway → your service → Variables → <code>COMMAND_CENTER_KEY</code> → reveal → paste below.
     <button type="button" class="btn" id="btn-set-key" style="margin-left:6px;padding:4px 8px;font-size:12px">Connect key</button>
   </div>
 
@@ -151,21 +151,32 @@
 
   <script>
     const ctx = window.getLifeOSContext?.({ promptForKey: false, defaultUser: 'adam' }) || {};
-    let activeKey = ctx.KEY || '';
+
+    function readStoredKey() {
+      const san = window.LifeOSBootstrap?.normalizeKey || ((s) => String(s || '').trim());
+      const norm = window.LifeOSBootstrap?.normalizeCommandKey;
+      const raw = san(localStorage.getItem('commandKey') || localStorage.getItem('lifeos_key') || '');
+      return norm ? norm(raw) : raw;
+    }
+
+    let activeKey = ctx.KEY || readStoredKey();
     const USER = ctx.USER || 'adam';
 
-    // Strip placeholder keys from URL so bookmarks don't poison auth
+    // Bad ?key=YOUR_KEY in URL must NOT erase a good key already saved via Connect key.
     (function scrubUrlPlaceholder() {
       const params = new URLSearchParams(location.search);
       const urlKey = params.get('key') || params.get('commandKey') || '';
-      if (window.LifeOSBootstrap?.isPlaceholderKey?.(urlKey)) {
-        params.delete('key');
-        params.delete('commandKey');
-        params.delete('command_key');
-        const q = params.toString();
-        history.replaceState({}, '', location.pathname + (q ? `?${q}` : ''));
-        window.LifeOSBootstrap?.clearStoredKeys?.();
+      if (!window.LifeOSBootstrap?.isPlaceholderKey?.(urlKey)) return;
+      params.delete('key');
+      params.delete('commandKey');
+      params.delete('command_key');
+      const q = params.toString();
+      history.replaceState({}, '', location.pathname + (q ? `?${q}` : ''));
+      if (window.LifeOSBootstrap?.isPlaceholderKey?.(localStorage.getItem('commandKey'))) {
+        window.LifeOSBootstrap.clearStoredKeys();
         activeKey = '';
+      } else {
+        activeKey = readStoredKey();
       }
     })();
 
@@ -184,7 +195,8 @@
 
     async function verifyAndSaveKey(raw) {
       const status = document.getElementById('key-status');
-      const entered = String(raw || '').trim();
+      const san = window.LifeOSBootstrap?.normalizeKey || ((s) => String(s || '').trim());
+      const entered = san(raw);
       if (window.LifeOSBootstrap?.isPlaceholderKey?.(entered)) {
         status.className = 'bad';
         status.textContent = 'That looks like a placeholder or variable name — paste the secret value from Railway.';
@@ -192,28 +204,49 @@
       }
       status.className = '';
       status.textContent = 'Checking…';
-      const r = await fetch('/api/v1/lifeos/voice-rail/health', {
-        headers: { 'content-type': 'application/json', 'x-command-key': entered },
-      });
+      const hdrs = { 'content-type': 'application/json', 'x-command-key': entered };
+      const r = await fetch('/api/v1/lifeos/voice-rail/health', { headers: hdrs });
       if (r.status !== 200) {
         status.className = 'bad';
         status.textContent = r.status === 401
-          ? 'Key rejected (401). Copy the VALUE of COMMAND_CENTER_KEY in Railway — not LIFEOS_KEY, not the variable name.'
+          ? `Key rejected (401). Length pasted: ${entered.length} chars. Use COMMAND_CENTER_KEY value from the same Railway service as this app.`
           : `Server returned ${r.status}. Try again.`;
         return false;
       }
-      if (ctx.setKey) ctx.setKey(entered);
-      activeKey = entered;
+      const saved = ctx.setKey ? ctx.setKey(entered) : entered;
+      activeKey = saved || entered;
       status.className = 'ok';
-      status.textContent = 'Connected. Key saved in this browser.';
+      status.textContent = `Connected (${activeKey.length} chars saved in this browser).`;
       showAuthBanner(false);
       closeKeyModal();
-      history.replaceState({}, '', location.pathname + location.search.replace(/([?&])(key|commandKey|command_key)=[^&]*/g, '').replace(/\?&/, '?').replace(/\?$/, ''));
+      const cleanParams = new URLSearchParams(location.search);
+      ['key', 'commandKey', 'command_key'].forEach((k) => cleanParams.delete(k));
+      const qs = cleanParams.toString();
+      history.replaceState({}, '', location.pathname + (qs ? `?${qs}` : ''));
+      document.getElementById('transcript').innerHTML = '';
       await loadSession();
       return true;
     }
 
+    function getKey() {
+      return activeKey || readStoredKey() || ctx.KEY || '';
+    }
+
+    function headers() {
+      const k = getKey();
+      return { 'content-type': 'application/json', ...(k ? { 'x-command-key': k } : {}) };
+    }
+
+    function authErrorMessage(res) {
+      if (res.status === 401) {
+        showAuthBanner(true);
+        return `Auth failed (401). Tap Connect key — if verify succeeds but chat fails, hard refresh once. Key length stored: ${getKey().length || 0} chars.`;
+      }
+      return res.json?.error || String(res.status);
+    }
+
     function ensureKey() {
+      activeKey = getKey();
       if (!activeKey) {
         showAuthBanner(true);
         openKeyModal();
@@ -255,20 +288,6 @@
       const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
       applyTheme(next);
     });
-
-    function headers() {
-      const k = activeKey || ctx.KEY || '';
-      return { 'content-type': 'application/json', ...(k ? { 'x-command-key': k } : {}) };
-    }
-
-    function authErrorMessage(res) {
-      if (res.status === 401) {
-        showAuthBanner(true);
-        openKeyModal();
-        return 'Key not accepted — tap Connect key and paste the COMMAND_CENTER_KEY value from Railway (the secret, not YOUR_KEY).';
-      }
-      return res.json?.error || String(res.status);
-    }
 
     const API = '/api/v1/lifeos/voice-rail';
     let sessionId = localStorage.getItem('voice_rail_session_id') || null;

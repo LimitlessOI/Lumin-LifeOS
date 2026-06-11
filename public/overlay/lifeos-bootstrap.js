@@ -68,7 +68,12 @@
   }
 
   // ── Legacy API key (internal tools / command center) ─────────────────────────
-  function normalizeKey(raw)  { return String(raw || '').trim(); }
+  function normalizeKey(raw) {
+    return String(raw || '')
+      .replace(/\uFEFF/g, '')
+      .replace(/[\r\n\u200B-\u200D\u2060]+/g, '')
+      .trim();
+  }
   function normalizeUser(raw, fallback = 'adam') { return String(raw || '').trim() || fallback; }
 
   /** Doc placeholders and common copy mistakes — never treat as a real key. */
@@ -252,7 +257,7 @@
     };
   }
 
-  window.LifeOSBootstrap = { getLifeOSContext, storeTokens, clearTokens, attemptRefresh, isPlaceholderKey, normalizeCommandKey, clearStoredKeys };
+  window.LifeOSBootstrap = { getLifeOSContext, storeTokens, clearTokens, attemptRefresh, isPlaceholderKey, normalizeCommandKey, clearStoredKeys, normalizeKey };
 
   // ── Shell keyboard bridge (iframe → parent lifeos-app) ───────────────────────
   // Cmd/Ctrl+L does not bubble from a child document to the parent. When an overlay
