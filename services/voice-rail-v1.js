@@ -71,28 +71,39 @@ function resolveCouncilRouting(councilMembers, councilAliasMap) {
   };
 }
 
-function buildVoiceRailSystemPrompt(routing, mode, contextData) {
+function buildVoiceRailSystemPrompt(routing, mode, contextData, operator) {
+  const operatorName = operator?.display_name || 'Adam';
+  const operatorHandle = operator?.user_handle || 'adam';
   const ctxBlock =
     contextData && Object.keys(contextData).length
       ? `\nVerified LifeOS context (use only this — do not invent beyond it):\n${JSON.stringify(contextData, null, 2)}\n`
-      : '\nNo LifeOS context payload loaded for this turn — do not pretend you know Adam\'s private data.\n';
+      : '\nNo LifeOS context payload loaded for this turn — do not pretend you know private data.\n';
 
-  return `You are Lumin on LifeOS Voice Rail v1 — Adam's browser/phone comms surface to the LifeOS stack on Railway.
+  return `You are Lumin on LifeOS Voice Rail v1 — ${operatorName}'s phone/browser comms line to the LifeOS stack on Railway.
 
-VERIFIED BACKEND FACTS (state plainly when asked about identity, model, or role):
-- Surface: Voice Rail v1 (/voice-rail). Messages persist in LifeOS DB. Commands are STAGED only — you never auto-run BuilderOS or deploy.
+WHO YOU ARE SPEAKING WITH (verified):
+- Operator: ${operatorName} (handle: ${operatorHandle}) — LifeOS founder and decision-maker. Address them by name when natural.
+- You are NOT speaking to a generic user. Never ask "who am I speaking with?" when the operator is ${operatorName}.
+
+YOUR ROLE ON THIS SURFACE (not the council codegen role):
+- Voice Rail Lumin: conversational gateway, honest answers, intent routing, command staging.
+- Commands you detect are STAGED only — you never auto-run BuilderOS or deploy.
+- The council config label "${routing.councilRole}" applies to code-generation tasks elsewhere — it is NOT your job title when chatting with ${operatorName} here. Do NOT introduce yourself as "Primary Code Author & Builder" or tell ${operatorName} you are their coder in this chat. Building happens in BuilderOS; this surface is for communication.
+
+VERIFIED BACKEND FACTS (state plainly when asked about model or stack):
+- Surface: Voice Rail v1 (/voice-rail). Messages persist in LifeOS DB.
 - Council route: member key "${routing.memberKey}" → ${routing.displayName}
-- Provider: ${routing.provider} | Model ID: ${routing.modelId} | Council role label: ${routing.councilRole}
+- Provider: ${routing.provider} | Model ID: ${routing.modelId}
 - You are NOT Cursor, NOT a standalone chatbot, NOT DeepSeek unless the model ID above says deepseek.
-- Your role on THIS surface: conversational gateway + intent routing + honest answers. Not the full multi-model council debate UI.
 
-Behavior (North Star §2.6 — no lies; operator policy — NO CANNED COMMS):
-- Every reply MUST be generated for THIS user message. Forbidden: stock greetings, advisor boilerplate, repeated openers, intent-switch scripts, or template paragraphs reused across turns.
-- Answer the user's ACTUAL question first. Never ignore a direct question to give a generic greeting.
-- Never invent internal architecture (Lemon System, pods, KERNEL, SSOT names) unless it appears in the context block below.
+Response style (mandatory):
+- Plain conversational prose — 2–6 sentences unless they ask for depth.
+- Answer their ACTUAL question first. Never ignore a direct question.
+- FORBIDDEN formats: numbered verification checklists, "User's question:", "Verify context:", "ANSWER:" labels, step-by-step audit templates, repeating an identical identity monologue you already gave earlier in the session.
+- If you already answered identity this session, say "Same as above — …" in one short line instead of re-reading the full script.
+- Never invent internal architecture unless it appears in the context block below.
 - If you lack evidence, say "I don't know" — do not roleplay omniscience.
-- Typical length: 2–6 sentences unless the user asks for depth. Complete your sentences.
-- Session mode right now: ${mode}.
+- Session mode: ${mode}.
 ${ctxBlock}`;
 }
 
@@ -124,6 +135,7 @@ async function generateCouncilReply({
   content,
   mode,
   routing,
+  operator,
   logger,
 }) {
   if (!callCouncilMember) {
@@ -145,7 +157,7 @@ async function generateCouncilReply({
     .map((m) => `${m.role === 'user' ? 'User' : 'Lumin'}: ${m.content}`)
     .join('\n\n');
 
-  const system = buildVoiceRailSystemPrompt(routing, mode, contextData);
+  const system = buildVoiceRailSystemPrompt(routing, mode, contextData, operator);
   const turn = threadText
     ? `--- Prior messages this session ---\n${threadText}\n\n--- Current turn ---\nUser: ${content}\n\nLumin:`
     : `User: ${content}\n\nLumin:`;
@@ -177,6 +189,14 @@ export function createVoiceRailV1({
       [String(userRef || 'adam').toLowerCase()],
     );
     return rows[0]?.id || null;
+  }
+
+  async function resolveOperatorProfile(userId) {
+    const { rows } = await pool.query(
+      `SELECT id, user_handle, display_name, tier FROM lifeos_users WHERE id = $1 LIMIT 1`,
+      [userId],
+    );
+    return rows[0] || { user_handle: 'adam', display_name: 'Adam' };
   }
 
   async function getOrCreateSession({ userId, mode = 'conversation', tag = null, sessionId = null }) {
@@ -295,6 +315,7 @@ export function createVoiceRailV1({
     }
 
     const routing = resolveCouncilRouting(councilMembers, councilAliasMap);
+    const operator = await resolveOperatorProfile(userId);
 
     if (simulateOnly) {
       await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
@@ -326,6 +347,7 @@ export function createVoiceRailV1({
         content,
         mode,
         routing,
+        operator,
         logger,
       });
       replySource = {
@@ -406,6 +428,7 @@ export function createVoiceRailV1({
     INTENTS: [...INTENTS],
     classifyIntent,
     resolveUserId,
+    resolveOperatorProfile,
     getOrCreateSession,
     listMessages,
     submitMessage,

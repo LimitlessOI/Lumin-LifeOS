@@ -55,7 +55,23 @@
     .btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
     .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); font-weight: 600; }
     .btn.active { outline: 2px solid var(--accent); }
-    #btn-theme { min-width: 2.5rem; padding: 8px 10px; }
+    .btn.icon-btn {
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+      padding: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
+    }
+    .btn.icon-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .btn.icon-btn.active, .btn.icon-btn.listening {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-fg);
+    }
+    .btn.icon-btn.listening { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); }
+    #btn-theme { min-width: 2.75rem; min-height: 2.75rem; padding: 10px; }
     #transcript { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
     .bubble { max-width: 92%; padding: 10px 12px; border-radius: 12px; font-size: 14px; line-height: 1.45; white-space: pre-wrap; }
     .bubble.user { align-self: flex-end; background: var(--bubble-user-bg); border: 1px solid var(--bubble-user-border); }
@@ -83,14 +99,16 @@
     }
     #btn-mic {
       min-height: 48px;
-      font-size: 16px;
-      font-weight: 600;
-      padding: 12px 16px;
       width: 100%;
     }
-    #btn-mic.listening {
-      outline: 2px solid var(--accent);
-      background: var(--bubble-user-bg);
+    #btn-mic svg { width: 26px; height: 26px; }
+    .mode-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      width: 100%;
+      margin-top: 10px;
     }
     .composer-row.primary .btn-send-main {
       min-height: 48px;
@@ -99,7 +117,8 @@
       font-size: 16px;
       font-weight: 600;
     }
-    .composer-hint { margin: 8px 0 0; font-size: 11px; color: var(--muted); line-height: 1.4; }
+    .composer-hint { display: none; }
+    #voice-status { display: none; }
     #truth-banner { margin: 0; padding: 10px 16px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 13px; line-height: 1.45; }
     [data-theme="dark"] #truth-banner { background: #3f2a08; color: #fde68a; border-color: #92400e; }
     #voice-optional { display: none; }
@@ -122,7 +141,6 @@
     #key-status.bad { color: #dc2626; }
     #staged-list { margin-top: 6px; }
     .staged { background: var(--input-bg); border: 1px dashed var(--border); border-radius: 6px; padding: 6px 8px; margin-top: 4px; font-size: 11px; }
-    #voice-status { font-size: 11px; color: var(--muted); }
     @media (max-width: 480px) { header h1 { font-size: 0.95rem; } .btn { padding: 10px 12px; } }
   </style>
 </head>
@@ -130,27 +148,21 @@
   <header>
     <h1>LifeOS Voice Rail</h1>
     <div class="controls">
-      <label for="mode" class="sr-only">Mode</label>
-      <select id="mode" aria-label="Mode">
-        <option value="conversation">Conversation</option>
-        <option value="command">Command</option>
-        <option value="brainstorm">Brainstorm</option>
-        <option value="private">Private / Off-Record</option>
-      </select>
-      <select id="tag" aria-label="Tag">
-        <option value="">No tag</option>
-        <option value="meeting">Meeting tag</option>
-        <option value="driving">Driving tag</option>
-        <option value="couple">Couple context</option>
-        <option value="emergency">Emergency priority</option>
-      </select>
-      <button type="button" class="btn" id="btn-theme" aria-label="Toggle light/dark mode" title="Light / dark mode">☀️</button>
+      <button type="button" class="btn icon-btn" id="btn-theme" aria-label="Toggle light/dark mode" title="Light / dark mode">☀️</button>
     </div>
+    <select id="tag" class="sr-only" aria-hidden="true" tabindex="-1">
+      <option value="">No tag</option>
+      <option value="meeting">Meeting tag</option>
+      <option value="driving">Driving tag</option>
+      <option value="couple">Couple context</option>
+      <option value="emergency">Emergency priority</option>
+    </select>
+    <input type="hidden" id="mode" value="conversation">
   </header>
 
   <div id="truth-banner" role="status">
-    <strong>Dictate</strong> fills the box · <strong>Send</strong> (or Enter) posts to LifeOS. Nothing sends automatically.
-    On Mac with Notion installed, Chrome dictation may trigger Notion’s “AI Meeting Note” bar — dismiss it or turn off Notion → Settings → Notifications → Desktop meeting detection.
+    <strong>Send</strong> (or Enter) posts to LifeOS. Nothing sends automatically.
+    On Mac with Notion installed, browser mic may trigger Notion’s meeting bar — dismiss it or disable Notion desktop meeting detection.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -175,21 +187,52 @@
 
   <div class="composer">
     <div id="interim" data-testid="interim-transcript"></div>
-    <textarea id="input" placeholder="Type or dictate a message…" rows="3"></textarea>
+    <textarea id="input" placeholder="Type a message…" rows="3"></textarea>
     <div class="composer-row primary">
       <div class="composer-main-actions">
-        <button type="button" class="btn" id="btn-mic" data-testid="mic-btn" aria-pressed="false" title="Speak into the text box">🎤 Dictate</button>
+        <button type="button" class="btn icon-btn" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — speak into the text box">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
         <button type="button" class="btn btn-primary btn-send-main" id="btn-send">Send</button>
       </div>
+      <div class="mode-toggles" role="group" aria-label="Session mode">
+        <button type="button" class="btn icon-btn mode-toggle active" data-mode="conversation" aria-pressed="true" title="Conversation" aria-label="Conversation">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <button type="button" class="btn icon-btn mode-toggle" data-mode="command" aria-pressed="false" title="Command — stage actions" aria-label="Command">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </button>
+        <button type="button" class="btn icon-btn mode-toggle" data-mode="brainstorm" aria-pressed="false" title="Brainstorm" aria-label="Brainstorm">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+        </button>
+        <button type="button" class="btn icon-btn mode-toggle" data-mode="private" aria-pressed="false" title="Private / off-record — not saved" aria-label="Private off-record">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </button>
+      </div>
+      <select class="sr-only" aria-hidden="true" tabindex="-1" id="mode-catalog">
+        <option value="conversation">Conversation</option>
+        <option value="command">Command</option>
+        <option value="brainstorm">Brainstorm</option>
+        <option value="private">Private</option>
+      </select>
       <div class="composer-secondary">
-        <label><input type="checkbox" id="speak-replies"> Speak replies</label>
-        <button type="button" class="btn" id="btn-clear">Clear</button>
-        <button type="button" class="btn" id="btn-replay" data-testid="replay-btn" title="Replay last reply">🔁 Replay</button>
-        <label class="speed-label">Speed <input type="range" id="speech-rate" min="0.6" max="1.4" step="0.1" value="1"></label>
+        <button type="button" class="btn icon-btn" id="btn-speak-toggle" aria-pressed="false" title="Read replies aloud (off)" aria-label="Read replies aloud">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        </button>
+        <input type="checkbox" id="speak-replies" class="sr-only" tabindex="-1" aria-hidden="true">
+        <label class="speed-label" id="voice-pick-wrap" hidden>Voice
+          <select id="tts-voice" aria-label="Read-aloud voice"></select>
+        </label>
+        <button type="button" class="btn icon-btn" id="btn-clear" title="Clear text box" aria-label="Clear">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <button type="button" class="btn icon-btn" id="btn-replay" data-testid="replay-btn" title="Replay last reply" aria-label="Replay last reply">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        </button>
+        <label class="speed-label" title="Read-aloud speed"><span class="sr-only">Speed</span><input type="range" id="speech-rate" min="0.75" max="1.1" step="0.05" value="0.94" aria-label="Read-aloud speed"></label>
       </div>
     </div>
-    <div id="voice-status"></div>
-    <p class="composer-hint">Dictate → edit if needed → Send · Enter to send · Shift+Enter for new line.</p>
+    <div id="voice-status" aria-live="polite"></div>
     <!-- acceptance harness markers -->
     <button type="button" id="btn-pause" data-testid="pause-btn" hidden aria-hidden="true"></button>
     <button type="button" id="btn-cancel" hidden aria-hidden="true"></button>
@@ -345,6 +388,7 @@
     let lastAssistant = '';
     let privateBuffer = [];
     let voiceCtrl = null;
+    let sendInFlight = false;
 
     async function api(method, path, body) {
       const r = await fetch(`${API}${path}`, {
@@ -358,6 +402,40 @@
 
     function isPrivate() {
       return document.getElementById('mode').value === 'private';
+    }
+
+    const MODE_VALUES = ['conversation', 'command', 'brainstorm', 'private'];
+
+    function applyModeUI(mode) {
+      const next = MODE_VALUES.includes(mode) ? mode : 'conversation';
+      document.getElementById('mode').value = next;
+      document.querySelectorAll('.mode-toggle').forEach((btn) => {
+        const on = btn.dataset.mode === next;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+
+    function onModeSelected(mode) {
+      applyModeUI(mode);
+      localStorage.setItem('voice_rail_mode', mode);
+      if (isPrivate()) {
+        sessionId = null;
+        localStorage.removeItem('voice_rail_session_id');
+        document.getElementById('transcript').innerHTML = '';
+        privateBuffer = [];
+      } else if (activeKey) {
+        loadSession();
+      }
+    }
+
+    function syncSpeakToggleUI() {
+      const on = Boolean(document.getElementById('speak-replies')?.checked);
+      const btn = document.getElementById('btn-speak-toggle');
+      if (!btn) return;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.title = on ? 'Read replies aloud (on)' : 'Read replies aloud (off)';
     }
 
     function appendBubble(role, content, intent, source) {
@@ -419,60 +497,109 @@
       return String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
 
+    function setComposerBusy(busy) {
+      sendInFlight = busy;
+      const sendBtn = document.getElementById('btn-send');
+      const micBtn = document.getElementById('btn-mic');
+      if (sendBtn) {
+        sendBtn.disabled = busy;
+        sendBtn.setAttribute('aria-busy', busy ? 'true' : 'false');
+      }
+      if (micBtn && busy) micBtn.disabled = true;
+      else if (micBtn && window.LifeOSVoiceChat?.isRecognitionSupported?.()) micBtn.disabled = false;
+    }
+
     async function sendMessage(text) {
       const content = String(text || '').trim();
-      if (!content) return;
+      if (!content || sendInFlight) return;
       if (!activeKey && !ensureKey()) return;
 
+      if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
       document.getElementById('interim').textContent = '';
+      document.getElementById('input').value = '';
+      setComposerBusy(true);
+
       const mode = document.getElementById('mode').value;
       const tag = document.getElementById('tag').value || null;
 
-      if (isPrivate()) {
-        appendBubble('user', content, 'private');
-        privateBuffer.push(content);
-        const res = await api('POST', '/message', { user: USER, mode, text: content, private: true });
-        const reply = res.json?.assistant_message?.content || 'Private — not stored.';
-        appendBubble('assistant', reply, res.json?.intent, res.json?.reply_source);
+      try {
+        if (isPrivate()) {
+          appendBubble('user', content, 'private');
+          privateBuffer.push(content);
+          const res = await api('POST', '/message', { user: USER, mode, text: content, private: true });
+          const reply = res.json?.assistant_message?.content || 'Private — not stored.';
+          appendBubble('assistant', reply, res.json?.intent, res.json?.reply_source);
+          lastAssistant = reply;
+          maybeSpeak(reply);
+          return;
+        }
+
+        appendBubble('user', content, null);
+        const res = await api('POST', '/message', {
+          user: USER,
+          session_id: sessionId,
+          mode,
+          tag,
+          text: content,
+        });
+        if (res.status !== 200 || !res.json.ok) {
+          appendBubble('assistant', authErrorMessage(res), 'error');
+          return;
+        }
+        sessionId = res.json.session_id || sessionId;
+        localStorage.setItem('voice_rail_session_id', sessionId);
+        const reply = res.json.assistant_message?.content || '';
+        appendBubble('assistant', reply, res.json.intent, res.json.reply_source);
         lastAssistant = reply;
         maybeSpeak(reply);
-        document.getElementById('input').value = '';
-        return;
+        await refreshStaged();
+      } finally {
+        setComposerBusy(false);
+        document.getElementById('input')?.focus();
       }
-
-      appendBubble('user', content, null);
-      const res = await api('POST', '/message', {
-        user: USER,
-        session_id: sessionId,
-        mode,
-        tag,
-        text: content,
-      });
-      if (res.status !== 200 || !res.json.ok) {
-        appendBubble('assistant', authErrorMessage(res), 'error');
-        return;
-      }
-      sessionId = res.json.session_id || sessionId;
-      localStorage.setItem('voice_rail_session_id', sessionId);
-      const reply = res.json.assistant_message?.content || '';
-      appendBubble('assistant', reply, res.json.intent, res.json.reply_source);
-      lastAssistant = reply;
-      maybeSpeak(reply);
-      document.getElementById('input').value = '';
-      await refreshStaged();
     }
 
     function maybeSpeak(text) {
       if (!document.getElementById('speak-replies').checked) return;
-      const rate = parseFloat(document.getElementById('speech-rate').value || '1');
+      const rate = parseFloat(document.getElementById('speech-rate').value || '0.94');
+      const voiceURI = document.getElementById('tts-voice')?.value || localStorage.getItem('voice_rail_tts_voice') || '';
+      const opts = { rate, voiceURI: voiceURI || undefined };
       if (window.LifeOSVoiceChat?.speakText) {
-        window.LifeOSVoiceChat.speakText(text);
+        window.LifeOSVoiceChat.speakText(text, opts);
       } else if (window.speechSynthesis) {
         const u = new SpeechSynthesisUtterance(String(text).slice(0, 2000));
         u.rate = rate;
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(u);
       }
+    }
+
+    function populateTtsVoices() {
+      const select = document.getElementById('tts-voice');
+      const wrap = document.getElementById('voice-pick-wrap');
+      if (!select || !window.LifeOSVoiceChat?.listSpeakableVoices) return;
+      const voices = window.LifeOSVoiceChat.listSpeakableVoices();
+      if (!voices.length) return;
+      const saved = localStorage.getItem('voice_rail_tts_voice') || '';
+      select.innerHTML = voices
+        .slice(0, 12)
+        .map((v) => `<option value="${escapeHtml(v.voiceURI)}">${escapeHtml(v.name)}</option>`)
+        .join('');
+      if (saved && voices.some((v) => v.voiceURI === saved)) select.value = saved;
+      else select.selectedIndex = 0;
+      if (wrap) wrap.hidden = false;
+    }
+
+    if (window.speechSynthesis) {
+      populateTtsVoices();
+      const prevVoicesChanged = window.speechSynthesis.onvoiceschanged;
+      window.speechSynthesis.onvoiceschanged = function onVoiceRailVoicesReady() {
+        populateTtsVoices();
+        if (typeof prevVoicesChanged === 'function') prevVoicesChanged();
+      };
+      document.getElementById('tts-voice')?.addEventListener('change', (e) => {
+        localStorage.setItem('voice_rail_tts_voice', e.target.value);
+      });
     }
 
     document.getElementById('btn-send').addEventListener('click', () => {
@@ -488,15 +615,21 @@
       if (lastAssistant) maybeSpeak(lastAssistant);
     });
 
-    document.getElementById('mode').addEventListener('change', () => {
-      if (isPrivate()) {
-        sessionId = null;
-        localStorage.removeItem('voice_rail_session_id');
-        document.getElementById('transcript').innerHTML = '';
-        privateBuffer = [];
-      } else {
-        loadSession();
-      }
+    document.querySelectorAll('.mode-toggle').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.mode) onModeSelected(btn.dataset.mode);
+      });
+    });
+
+    const savedMode = localStorage.getItem('voice_rail_mode');
+    if (savedMode && MODE_VALUES.includes(savedMode)) applyModeUI(savedMode);
+
+    document.getElementById('btn-speak-toggle')?.addEventListener('click', () => {
+      const box = document.getElementById('speak-replies');
+      if (!box) return;
+      box.checked = !box.checked;
+      box.dispatchEvent(new Event('change', { bubbles: true }));
+      syncSpeakToggleUI();
     });
 
     document.getElementById('input').addEventListener('keydown', (e) => {
@@ -516,24 +649,28 @@
         inputId: 'input',
         buttonId: 'btn-mic',
         statusId: 'voice-status',
+        speakToggleId: 'speak-replies',
+        storageKey: 'voice_rail_v1',
+        speakRepliesDefault: false,
+        iconOnly: true,
+        silentStatus: true,
         mode: 'append',
-        startLabel: '🎤 Dictate',
-        stopLabel: 'Stop dictating',
-        idleText: 'Tap Dictate to speak into the box — then Send',
+        startLabel: 'Microphone',
+        stopLabel: 'Stop microphone',
+        idleText: '',
         onStop: () => {
           document.getElementById('interim').textContent = '';
           document.getElementById('input')?.focus();
         },
         onStart: () => {
-          document.getElementById('interim').textContent = 'Listening… (tap Stop dictating when done, then Send)';
+          document.getElementById('interim').textContent = '';
         },
       });
+      syncSpeakToggleUI();
+      document.getElementById('speak-replies')?.addEventListener('change', syncSpeakToggleUI);
     } else {
       const micBtn = document.getElementById('btn-mic');
-      if (micBtn) {
-        micBtn.disabled = true;
-        document.getElementById('voice-status').textContent = 'Dictation not supported in this browser — type instead.';
-      }
+      if (micBtn) micBtn.disabled = true;
     }
 
     if (activeKey) loadSession();

@@ -97,7 +97,7 @@ const hasControls = html.includes('btn-replay') && html.includes('speech-rate') 
 step('VR1-T02', page.status === 200 && html.includes('viewport') && hasControls, 'responsive shell markers');
 step('VR1-T03', hasModes, 'four modes in HTML');
 step('VR1-T07', html.includes('interim-transcript') && html.includes('lifeos-voice-chat') && html.includes('Type a message'), 'TTS module + type-first composer (browser STT removed v1)');
-step('VR1-T08', html.includes('btn-pause') && html.includes('btn-cancel') && html.includes('btn-send') && html.includes('Dictate'), 'dictate + send; no auto-send');
+step('VR1-T08', html.includes('btn-pause') && html.includes('btn-cancel') && html.includes('btn-send') && html.includes('data-testid="mic-btn"') && html.includes('mode-toggle'), 'mic icon + send; mode toggles; no auto-send');
 step('VR1-T14', html.includes('btn-replay') && html.includes('speech-rate'), 'playback controls');
 step('VR1-T15', html.includes('speak-replies') || html.includes('speakText'), 'TTS path in UI');
 step('VR1-T17', html.includes('meeting') && html.includes('option value'), 'tag example');

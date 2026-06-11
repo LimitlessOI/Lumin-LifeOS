@@ -15,24 +15,33 @@
       .trim();
   }
 
-  function chooseVoice() {
-    if (!synth || typeof synth.getVoices !== 'function') return null;
-    const voices = synth.getVoices();
-    const preferred = [
-      /Google US English/i,
-      /Microsoft Aria/i,
-      /Samantha/i,
-      /Alex/i,
-      /Neural/i,
-      /Natural/i,
-      /en-US/i,
-      /en-/i,
-    ];
-    for (const matcher of preferred) {
-      const voice = voices.find((candidate) => matcher.test(candidate.name) || matcher.test(candidate.lang));
-      if (voice) return voice;
+  function scoreVoice(voice) {
+    if (!voice) return -1000;
+    const name = String(voice.name || '');
+    const lang = String(voice.lang || '');
+    if (!/^en(-|$)/i.test(lang) && !/English/i.test(name)) return -1000;
+    let score = 0;
+    if (/Enhanced|Premium|Neural|Natural|Wavenet|Super-AI/i.test(name)) score += 90;
+    if (/Samantha|Ava|Allison|Karen|Daniel|Serena|Moira|Tessa|Victoria|Tom/i.test(name)) score += 70;
+    if (/Google (US )?English|Microsoft (Aria|Jenny|Guy|Zira|Steffan)/i.test(name)) score += 50;
+    if (/Alex( Enhanced)?/i.test(name)) score += 40;
+    if (/Compact|espeak|Flo|Fred|Cellos|Bahh|Bells|Boing|Bubbles|Junior|Kathy|Princess|Organ|Good News|Bad News|Zarvox|Whisper|Trinoids|Albert/i.test(name)) {
+      score -= 300;
     }
-    return voices[0] || null;
+    if (voice.localService) score += 15;
+    if (voice.default) score += 8;
+    return score;
+  }
+
+  function chooseVoice(preferredUri) {
+    if (!synth || typeof synth.getVoices !== 'function') return null;
+    const voices = synth.getVoices().filter((v) => scoreVoice(v) > 0);
+    if (preferredUri) {
+      const picked = voices.find((v) => v.voiceURI === preferredUri);
+      if (picked) return picked;
+    }
+    voices.sort((a, b) => scoreVoice(b) - scoreVoice(a));
+    return voices[0] || synth.getVoices().find((v) => /^en/i.test(v.lang)) || synth.getVoices()[0] || null;
   }
 
   let cachedVoice = chooseVoice();
@@ -42,9 +51,24 @@
     };
   }
 
+  function listSpeakableVoices() {
+    if (!synth || typeof synth.getVoices !== 'function') return [];
+    return synth
+      .getVoices()
+      .filter((v) => scoreVoice(v) > 0)
+      .sort((a, b) => scoreVoice(b) - scoreVoice(a))
+      .map((v) => ({ name: v.name, lang: v.lang, voiceURI: v.voiceURI, localService: v.localService }));
+  }
+
   function speakText(text, options) {
     const opts = typeof options === 'function' ? { onEnd: options } : options || {};
-    const cleaned = normalizeText(text);
+    let cleaned = normalizeText(text);
+    cleaned = cleaned
+      .replace(/\bintent:\s*\S+/gi, '')
+      .replace(/\bvia lifeos\/\S+.*$/gim, '')
+      .replace(/\bcouncil:\s*\S+/gi, '')
+      .replace(/\bmodel:\s*\S+/gi, '')
+      .trim();
     if (!cleaned || !synth) {
       if (typeof opts.onEnd === 'function') {
         try {
@@ -55,10 +79,19 @@
       }
       return;
     }
+    const voice = chooseVoice(opts.voiceURI) || cachedVoice;
+    if (voice) cachedVoice = voice;
+
+    const rateRaw = typeof opts.rate === 'number' ? opts.rate : 0.94;
+    const rate = Math.min(Math.max(rateRaw, 0.75), 1.15);
+    const pitchRaw = typeof opts.pitch === 'number' ? opts.pitch : 1.02;
+    const pitch = Math.min(Math.max(pitchRaw, 0.9), 1.1);
+
     const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 2000));
-    if (cachedVoice) utterance.voice = cachedVoice;
-    utterance.rate = 0.97;
-    utterance.pitch = 1;
+    if (voice) utterance.voice = voice;
+    utterance.rate = rate;
+    utterance.pitch = pitch;
+    utterance.lang = voice?.lang || 'en-US';
     if (typeof opts.onEnd === 'function') {
       utterance.onend = function onUtteranceEnd() {
         try {
@@ -103,6 +136,8 @@
       speakRepliesDefault: false,
       /** If set, leading wake phrases (case-insensitive) are stripped from the textarea when a listen session ends. */
       wakePrefixes: [],
+      iconOnly: false,
+      silentStatus: false,
       onStart: null,
       onStop: null,
     }, options || {});
@@ -150,12 +185,20 @@
     }
 
     function updateButton() {
-      button.textContent = state.listening ? settings.stopLabel : settings.startLabel;
+      if (settings.iconOnly) {
+        button.setAttribute('aria-label', state.listening ? settings.stopLabel : settings.startLabel);
+      } else {
+        button.textContent = state.listening ? settings.stopLabel : settings.startLabel;
+      }
       button.classList.toggle('listening', state.listening);
       button.setAttribute('aria-pressed', state.listening ? 'true' : 'false');
     }
 
     function updateStatus(value) {
+      if (settings.silentStatus && !state.listening && !(value && String(value).startsWith('Voice error'))) {
+        setText(status, '');
+        return;
+      }
       setText(status, value);
     }
 
@@ -194,7 +237,7 @@
       recognition.onstart = function onStart() {
         state.listening = true;
         updateButton();
-        updateStatus('Listening...');
+        updateStatus(settings.silentStatus ? '' : 'Listening...');
         if (typeof settings.onStart === 'function') {
           try { settings.onStart({ inputValue: String(input?.value || '') }); } catch (_) {}
         }
@@ -291,6 +334,7 @@
   global.LifeOSVoiceChat = {
     attach: attach,
     speakText: speakText,
+    listSpeakableVoices: listSpeakableVoices,
     isRecognitionSupported: function isRecognitionSupported() {
       return Boolean(SpeechRecognitionCtor);
     },
