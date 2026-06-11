@@ -161,12 +161,50 @@ export function createCommitmentTracker(pool, callAI) {
 
   // ── AI extraction ─────────────────────────────────────────────────────────
   // Run over a conversation message and extract implied commitments.
-  // Returns array of {title, committedTo, dueAt, weight} objects.
+  // Returns array of {title, committedTo, dueAt, weight, source_quote, confidence, extraction_method}
+
+  function extractCommitmentsHeuristic(messageText) {
+    const results = [];
+    const lines = messageText.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+    const re = /\b(I(?:'ll| will)|Yes, I(?:'ll| will))\s+(.+)/i;
+    for (const line of lines) {
+      const m = line.match(re);
+      if (!m) continue;
+      const action = (m[2] || m[1] || '').replace(/[.!?]+$/, '').trim();
+      if (!action || action.length < 4) continue;
+      results.push({
+        title: action.slice(0, 100),
+        committed_to: 'self',
+        due_at: null,
+        weight: 2,
+        source_quote: line.slice(0, 500),
+        confidence: 0.65,
+        extraction_method: 'heuristic',
+      });
+    }
+    return results;
+  }
+
+  function normalizeExtracted(items, messageText, method) {
+    return (items || []).map((e) => ({
+      title: e.title?.trim(),
+      committed_to: e.committed_to || e.committedTo || 'self',
+      due_at: e.due_at || e.dueAt || null,
+      weight: e.weight || 1,
+      source_quote: e.source_quote || e.sourceQuote || e.title || messageText.slice(0, 200),
+      confidence: e.confidence ?? (method === 'ai' ? 0.85 : 0.65),
+      extraction_method: e.extraction_method || method,
+    })).filter((e) => e.title);
+  }
 
   async function extractCommitments(messageText, userId) {
-    if (!callAI || !messageText?.trim()) return [];
+    if (!messageText?.trim()) return [];
 
-    const prompt = `You are analyzing a message to extract any commitments, promises, or things the person said they would do.
+    let method = 'heuristic';
+    let extracted = [];
+
+    if (callAI) {
+      const prompt = `You are analyzing a message to extract any commitments, promises, or things the person said they would do.
 
 Message:
 "${messageText}"
@@ -176,23 +214,45 @@ Extract ONLY explicit or strong implied commitments (not vague intentions). For 
 - committed_to: who this is committed to (use 'self' if just personal)
 - due_at: ISO datetime if a specific time was mentioned, otherwise null
 - weight: 1 (small/casual), 2 (medium), 3 (important), 5 (critical)
+- source_quote: verbatim quote from the message supporting this commitment
+- confidence: number 0-1
 
 Return a JSON array. If no commitments, return [].
-Example: [{"title":"Call the contractor about the roof","committed_to":"self","due_at":null,"weight":2}]
 
 Return ONLY the JSON array, no explanation.`;
 
-    try {
-      const raw = await callAI(prompt);
-      const text = typeof raw === 'string' ? raw : raw?.content || raw?.text || '';
-      const match = text.match(/\[[\s\S]*\]/);
-      if (!match) return [];
-      const extracted = JSON.parse(match[0]);
-      if (!Array.isArray(extracted)) return [];
-      return extracted.filter(e => e?.title?.trim());
-    } catch {
-      return [];
+      try {
+        const raw = await callAI(prompt);
+        const text = typeof raw === 'string' ? raw : raw?.content || raw?.text || '';
+        const match = text.match(/\[[\s\S]*\]/);
+        if (match) {
+          const parsed = JSON.parse(match[0]);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            extracted = parsed;
+            method = 'ai';
+          }
+        }
+      } catch {
+        extracted = [];
+      }
     }
+
+    if (extracted.length === 0) {
+      extracted = extractCommitmentsHeuristic(messageText);
+      method = 'heuristic';
+    }
+
+    return normalizeExtracted(extracted, messageText, method);
+  }
+
+  function buildEvidenceBundle(messageText, item) {
+    return JSON.stringify({
+      source_text: messageText,
+      source_quote: item.source_quote || item.title,
+      source_timestamp: new Date().toISOString(),
+      confidence: item.confidence ?? 0.7,
+      extraction_method: item.extraction_method || 'unknown',
+    });
   }
 
   // Auto-ingest: extract + log commitments from a conversation message
@@ -200,6 +260,7 @@ Return ONLY the JSON array, no explanation.`;
     const extracted = await extractCommitments(messageText, userId);
     const logged = [];
     for (const c of extracted) {
+      const evidenceRef = sourceRef || buildEvidenceBundle(messageText, c);
       const commitment = await logCommitment({
         userId,
         title: c.title,
@@ -207,7 +268,26 @@ Return ONLY the JSON array, no explanation.`;
         dueAt: c.due_at || null,
         weight: c.weight || 1,
         source: 'conversation',
-        sourceRef,
+        sourceRef: evidenceRef,
+        isPublic: false,
+      });
+      logged.push(commitment);
+    }
+    return logged;
+  }
+
+  async function logExtractedBatch({ userId, messageText, items }) {
+    const logged = [];
+    for (const c of items || []) {
+      const commitment = await logCommitment({
+        userId,
+        title: c.title,
+        committedTo: c.committed_to || 'self',
+        dueAt: c.due_at || null,
+        weight: c.weight || 1,
+        source: 'conversation',
+        sourceRef: buildEvidenceBundle(messageText, c),
+        isPublic: false,
       });
       logged.push(commitment);
     }
@@ -245,6 +325,7 @@ Return ONLY the JSON array, no explanation.`;
     getRecentHistory,
     extractCommitments,
     ingestFromMessage,
+    logExtractedBatch,
     getIntegrityInputs,
   };
 }

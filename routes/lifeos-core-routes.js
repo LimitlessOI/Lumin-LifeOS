@@ -355,18 +355,37 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
   // AI extraction from freeform text
   router.post('/commitments/extract', requireKey, async (req, res) => {
     try {
-      const { user = 'adam', text, source_ref, auto_log = false } = req.body;
+      const { user = 'adam', text, source_ref, auto_log = false, save = false } = req.body;
       if (!text?.trim()) return res.status(400).json({ ok: false, error: 'text is required' });
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      if (auto_log) {
-        const logged = await commitments.ingestFromMessage({ userId, messageText: text, sourceRef: source_ref });
-        res.json({ ok: true, logged, count: logged.length });
-      } else {
-        const extracted = await commitments.extractCommitments(text, userId);
-        res.json({ ok: true, extracted, count: extracted.length });
+      const extracted = await commitments.extractCommitments(text, userId);
+
+      if (auto_log || save) {
+        const logged = await commitments.logExtractedBatch({ userId, messageText: text, items: extracted });
+        return res.json({ ok: true, extracted, logged, count: logged.length });
       }
+
+      res.json({ ok: true, extracted, count: extracted.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/commitments/from-conversation', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', text, save = true } = req.body;
+      if (!text?.trim()) return res.status(400).json({ ok: false, error: 'text is required' });
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+
+      const extracted = await commitments.extractCommitments(text, userId);
+      if (!save) {
+        return res.json({ ok: true, extracted, count: extracted.length });
+      }
+      const logged = await commitments.logExtractedBatch({ userId, messageText: text, items: extracted });
+      res.json({ ok: true, extracted, logged, count: logged.length });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

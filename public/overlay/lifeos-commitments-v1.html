@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Conversation Commitments — LifeOS</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; margin: 0; min-height: 100vh; }
+    .root { max-width: 720px; margin: 0 auto; padding: 24px 16px 80px; }
+    h1 { font-size: 1.4rem; margin-bottom: 8px; }
+    .sub { color: #888; font-size: 0.9rem; margin-bottom: 20px; }
+    textarea { width: 100%; min-height: 140px; background: #111118; border: 1px solid #1e1e2e; color: #e8e8f0; border-radius: 8px; padding: 12px; font-size: 0.95rem; resize: vertical; }
+    .row { display: flex; gap: 8px; margin: 12px 0 20px; flex-wrap: wrap; }
+    button { background: #5b6af5; color: #fff; border: none; border-radius: 8px; padding: 10px 16px; cursor: pointer; font-size: 0.9rem; }
+    button.secondary { background: #1e1e2e; color: #ccc; }
+    button.danger { background: #7f1d1d; }
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+    .quote { color: #aaa; font-size: 0.85rem; margin-top: 8px; font-style: italic; }
+    .meta { color: #666; font-size: 0.8rem; margin-top: 4px; }
+    .status { margin-left: 8px; font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: #1e1e2e; }
+    .err { color: #f87171; margin: 8px 0; }
+    .ok { color: #34d399; margin: 8px 0; }
+    section { margin-top: 28px; }
+    section h2 { font-size: 1rem; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <div class="root">
+    <h1>Conversation Commitments</h1>
+    <p class="sub">Paste a conversation → extract → save → track. Private by default.</p>
+
+    <textarea id="conversation" placeholder="Paste conversation text here…"></textarea>
+    <div class="row">
+      <button id="btnExtract">Extract commitments</button>
+      <button id="btnSave" class="secondary" disabled>Save extracted</button>
+    </div>
+    <div id="msg"></div>
+    <div id="preview"></div>
+
+    <section>
+      <h2>Open commitments</h2>
+      <div id="openList"></div>
+    </section>
+  </div>
+  <script>
+    const USER = 'adam';
+    let lastExtracted = [];
+
+    function headers() {
+      const h = { 'content-type': 'application/json' };
+      const key = window.LIFEOS_KEY || window.COMMAND_CENTER_KEY;
+      if (key) h['x-command-key'] = key;
+      return h;
+    }
+
+    async function api(method, path, body) {
+      const r = await fetch(path, { method, headers: headers(), body: body ? JSON.stringify(body) : undefined });
+      const j = await r.json().catch(() => ({}));
+      return { status: r.status, json: j };
+    }
+
+    function showMsg(text, ok) {
+      const el = document.getElementById('msg');
+      el.className = ok ? 'ok' : 'err';
+      el.textContent = text;
+    }
+
+    function renderPreview(items) {
+      const box = document.getElementById('preview');
+      if (!items.length) { box.innerHTML = '<p class="sub">No commitments found in text.</p>'; return; }
+      box.innerHTML = items.map((c, i) => `
+        <div class="card">
+          <strong>${escapeHtml(c.title)}</strong>
+          <div class="meta">To: ${escapeHtml(c.committed_to || 'self')} · confidence ${(c.confidence ?? 0).toFixed(2)} · ${escapeHtml(c.extraction_method || 'unknown')}</div>
+          <div class="quote">"${escapeHtml(c.source_quote || c.title)}"</div>
+        </div>`).join('');
+    }
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    async function loadOpen() {
+      const { status, json } = await api('GET', `/api/v1/lifeos/commitments?user=${USER}&limit=50`);
+      const list = document.getElementById('openList');
+      if (status !== 200) { list.innerHTML = '<p class="err">Could not load list</p>'; return; }
+      const rows = json.commitments || [];
+      if (!rows.length) { list.innerHTML = '<p class="sub">No open commitments.</p>'; return; }
+      list.innerHTML = rows.map(c => {
+        let evidence = '';
+        try { evidence = JSON.parse(c.source_ref || '{}').source_quote || ''; } catch { evidence = c.source_ref || ''; }
+        return `<div class="card" data-id="${c.id}">
+          <strong>${escapeHtml(c.title)}</strong>
+          <span class="status">${escapeHtml(c.status)}</span>
+          ${evidence ? `<div class="quote">Why: "${escapeHtml(evidence)}"</div>` : ''}
+          <div class="row">
+            <button data-act="keep" data-id="${c.id}">Done</button>
+            <button class="secondary" data-act="snooze" data-id="${c.id}">Defer</button>
+            <button class="danger" data-act="break" data-id="${c.id}">Broken</button>
+          </div>
+        </div>`;
+      }).join('');
+      list.querySelectorAll('button[data-act]').forEach(btn => {
+        btn.addEventListener('click', () => act(btn.dataset.act, btn.dataset.id));
+      });
+    }
+
+    async function act(kind, id) {
+      const path = kind === 'keep' ? `/api/v1/lifeos/commitments/${id}/keep`
+        : kind === 'break' ? `/api/v1/lifeos/commitments/${id}/break`
+        : `/api/v1/lifeos/commitments/${id}/snooze`;
+      const body = kind === 'break' ? { reason: 'user marked broken' } : undefined;
+      const { status } = await api('POST', path, body);
+      if (status === 200) { showMsg('Updated.', true); loadOpen(); }
+      else showMsg('Update failed.', false);
+    }
+
+    document.getElementById('btnExtract').addEventListener('click', async () => {
+      const text = document.getElementById('conversation').value.trim();
+      if (!text) { showMsg('Paste conversation text first.', false); return; }
+      const { status, json } = await api('POST', '/api/v1/lifeos/commitments/extract', { user: USER, text });
+      if (status !== 200) { showMsg(json.error || 'Extract failed', false); return; }
+      lastExtracted = json.extracted || [];
+      renderPreview(lastExtracted);
+      document.getElementById('btnSave').disabled = lastExtracted.length === 0;
+      showMsg(`Found ${lastExtracted.length} commitment(s). Review then Save.`, true);
+    });
+
+    document.getElementById('btnSave').addEventListener('click', async () => {
+      const text = document.getElementById('conversation').value.trim();
+      const { status, json } = await api('POST', '/api/v1/lifeos/commitments/from-conversation', { user: USER, text, save: true });
+      if (status !== 200) { showMsg(json.error || 'Save failed', false); return; }
+      showMsg(`Saved ${json.count || 0} commitment(s).`, true);
+      lastExtracted = [];
+      document.getElementById('btnSave').disabled = true;
+      loadOpen();
+    });
+
+    loadOpen();
+  </script>
+</body>
+</html>

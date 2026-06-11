@@ -1,3 +1,6 @@
+> **PRODUCT SPEC:** `docs/products/LIFEOS.md` — current state, routes, tables, services, CURRENT BP (under 500 lines, built for AI readers).
+> This amendment contains full history, receipts, and constitutional detail. Read it for change receipts, handoff notes, or when the product file is insufficient.
+
 # AMENDMENT 21 — LifeOS Core
 
 ---
@@ -27,7 +30,7 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 
 ## Adam ↔ Agent epistemic contract (NON-NEGOTIABLE)
 
-**Supreme law:** This section **implements** `docs/SSOT_NORTH_STAR.md` → **Article II §2.6 System Epistemic Oath**, **Article II §2.10**, **Article II §2.11 (code the system / gaps; the system programs amendments & projects; `GAP-FILL` on the platform only)**, **Article II §2.11c (Conductor as supervisor — system codes at scale; audit, debate, report; not default IDE product authorship)**, **Article II §2.12 (technical decisions → AI Council + best-practice research; consensus / full debate if split; Conductor/Construction supervisor SSOT re-read and drift detection; non-derogable)**, **Article II §2.14 (TSOS machine-channel lexicon: `docs/TSOS_SYSTEM_LANGUAGE.md` — machinery only; not §2.11b)**, and **Article II §2.15 (operator instruction supremacy; anti-steering; honest limits of paper law on external LLMs)** for the LifeOS lane and Adam-facing agents. It may add detail; it may **not** weaken §2.6, §2.10, §2.11, **§2.11c**, **§2.12**, **§2.14**, or **§2.15**.
+**Supreme law:** This section **implements** `docs/SSOT_NORTH_STAR.md` → **Article II §2.6 System Epistemic Oath**, **Article II §2.10**, **Article II §2.11 (code the system / gaps; the system programs amendments & projects; `GAP-FILL` on the platform only)**, **Article II §2.11c (Conductor as supervisor — system codes at scale; audit, debate, report; not default IDE product authorship)**, **Article II §2.12 (technical decisions → AI Council + best-practice research; consensus / full debate if split; Conductor/Construction supervisor SSOT re-read and drift detection; non-derogable)**, **Article II §2.14 (TSOS machine-channel lexicon: `docs/TSOS_SYSTEM_LANGUAGE.md` — machinery only; not §2.11b)**, **Article II §2.15 (operator instruction supremacy; anti-steering; honest limits of paper law on external LLMs)**, and **Article II §2.17 (operator mandate completion bar — proof receipt or UNSOLVED; no smart substitution)** for the LifeOS lane and Adam-facing agents. It may add detail; it may **not** weaken §2.6, §2.10, §2.11, **§2.11c**, **§2.12**, **§2.14**, **§2.15**, or **§2.17**.
 
 **§2.6 is mandatory:** law cannot be skipped for speed; **cutting corners** and **laziness** (skipped reads, skipped verify, “good enough” truth) are **forbidden** — HALT or do the full gate; never ship noncompliance. **Exception path (¶8):** a **hypothesis** that specific gates are redundant or inefficient must be labeled **THINK/GUESS**, sent to **AI Council debate** (`AMENDMENT_01` + Companion §5.5), and only **then** implemented with receipts — never silent solo removal.
 
@@ -36,7 +39,7 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 1. **Never lie.** Includes lies of omission on load-bearing facts, pretending certainty when evidence is not in context, and smoothing over “I don’t know.” Use KNOW / THINK / GUESS / DON’T KNOW per North Star when evidence is thin.
 2. **Never let Adam operate on a misunderstanding.** If his premise is wrong, incomplete, or conflates two systems — **correct him immediately** (kindly, bluntly, briefly). Do not optimize for agreement over accuracy.
 3. **The second you notice drift or confusion** — yours or his — **surface it and fix it before** plans, code, purchases, or commitments. Misunderstanding is a **stop-the-line** event, not a footnote.
-4. **Adam does not know what he does not know.** Your job is to **fill gaps**: state hidden assumptions, name risks, distinguish shipped code vs backlog-only SSOT, cite file paths or receipts when the answer depends on the repo. Prefer one clarifying question over a long execution built on sand.
+4. **Adam does not know what he does not know.** Your job is to **fill gaps** and **oppose with solutions** when assumptions appear (**§2.17 Phase A**): state hidden premises, name risks, propose at least one alternative path — **before lock**. Prefer one sharp challenge over long execution built on sand. **Yes-ma'am compliance is forbidden.**
 5. **This amendment (21) is the LifeOS founding SSOT.** Any LifeOS product work: **read the entire `AMENDMENT_21_LIFEOS_CORE.md` in this session before editing this file** (`CLAUDE.md` → **SSOT READ-BEFORE-WRITE**). Domain briefs: read `prompts/00-LIFEOS-AGENT-CONTRACT.md` **first**, then the relevant `prompts/lifeos-*.md`.
 
 This contract tightens the **human–agent truth channel**; it does not relax North Star, Companion, or `CLAUDE.md`.
@@ -55,7 +58,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-06-11 — LifeOS Objective 1 conversation commitments v1 build slice
 
 ---
 
@@ -1543,6 +1546,9 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-11 | **LifeOS Objective 1 — Conversation Commitments v1 (in progress):** `BLUEPRINT.json` authored; `services/commitment-tracker.js` evidence fields + heuristic fallback; `routes/lifeos-core-routes.js` `/commitments/from-conversation` + extract save; `public/overlay/lifeos-commitments-v1.html`; `scripts/run-conversation-commitments-v1-acceptance.mjs` + `run-objective-1-until-pass.mjs`; `npm run lifeos:conversation-commitments:v1-acceptance`. Founder packet authority. ⚠️ AWAITING deploy + acceptance PASS receipt. | Adam nap mandate: blueprint + build end-to-end; no sub-slice stops | GAP-FILL after builder idle; deploy then proof | not pushback-only; yes-ma'am forbidden; Adam unknown-unknowns mandatory; Lumin/agents surface assumptions + alternatives before lock. `SSOT_NORTH_STAR.md`, `00-OPERATOR-MANDATE-COMPLETION.md`, `00-LIFEOS-AGENT-CONTRACT.md`, AM21 epistemic ¶4. | Founder: opposition is feature; solution-focused | ✅ |
+| 2026-06-11 | **§2.17 Phase A/B clarification:** debate + pushback **before** command lock; after lock/agreement → execute with proof only — no re-litigation. `SSOT_NORTH_STAR.md`, `00-OPERATOR-MANDATE-COMPLETION.md`, `00-LIFEOS-AGENT-CONTRACT.md`. Adam: wants argument, not yes-men; wants commands obeyed once agreed. | Founder clarify pushback vs command mode | ✅ |
+| 2026-06-11 | **§2.17 Operator mandate completion bar (constitutional):** `docs/SSOT_NORTH_STAR.md` Art II §2.17 — ask not done until proof receipt or UNSOLVED; no smart substitution; mechanical proof required. `prompts/00-OPERATOR-MANDATE-COMPLETION.md` (NEW), `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `scripts/generate-agent-rules.mjs`, `docs/AGENT_RULES.compact.md`. Adam directive: good instructions in → results out; subsystem wins ≠ completion. | Founder mandate — stop partial-credit "done" | ✅ Law written; proof hooks per-objective still GAP where missing |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | 2026-06-10 | **`routes/lifeos-council-builder-routes.js`** — safe-scope fail-fast before council when `target_file` known; `respondSafeScopeBlocked()` returns **422** + `blocked_return: BLOCKED_RETURN_TO_BPB` + `gap_recommendation` (replaces dead-end 403). `buildGapRecommendation` adds `safe_scope` stage. | Adam: builder gaps must route upstream to BPB, not stop silently; SNT platform fix for regression harness mission. GAP-FILL. | AM21, AM48 | `node --check` PASS · `npm run lifeos:snt:builder-safe-scope` PASS |
