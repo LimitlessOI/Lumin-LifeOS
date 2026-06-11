@@ -89,7 +89,20 @@
       font-weight: 600;
     }
     .bubble .dept-label { font-size: 10px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
-    .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; flex: 1; justify-content: flex-end; }
+    .header-search { display: flex; gap: 6px; align-items: center; flex: 1; min-width: 160px; max-width: 360px; }
+    .header-search input {
+      flex: 1; min-width: 0; padding: 6px 10px; font-size: 12px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--input-bg); color: var(--text);
+    }
+    #provider-pick {
+      font-size: 12px; padding: 6px 8px; max-width: 150px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--input-bg); color: var(--text);
+    }
+    .history-loader { text-align: center; padding: 6px; font-size: 11px; color: var(--muted); flex-shrink: 0; }
+    .msg-ts { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
     select, button, input[type="range"] { font: inherit; }
     select { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 13px; }
     .btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
@@ -273,7 +286,12 @@
   <header>
     <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span></h1>
     <div class="controls">
-      <button type="button" class="btn" id="btn-new-chat" title="New conversation — fresh session" style="font-size:12px;padding:6px 10px">New chat</button>
+      <select id="provider-pick" title="Which AI engine replies (not Anthropic-only)" aria-label="AI engine"></select>
+      <div class="header-search">
+        <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
+        <button type="button" class="btn" id="btn-history-search" style="font-size:12px;padding:6px 10px">Search</button>
+        <button type="button" class="btn" id="btn-timeline-back" style="display:none;font-size:12px;padding:6px 10px">Timeline</button>
+      </div>
       <button type="button" class="btn icon-btn" id="btn-theme" aria-label="Toggle light/dark mode" title="Light / dark mode">☀️</button>
     </div>
     <select id="tag" class="sr-only" aria-hidden="true" tabindex="-1">
@@ -288,7 +306,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Enter or mic + say <strong>“send”</strong> / <strong>“over”</strong> to post. Drag the bar above your message box to resize the conversation.
+    One continuous timeline — scroll up for day one. Pick department + AI engine. Mic stays on; say <strong>“send”</strong> / <strong>“over”</strong> to post.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -472,6 +490,7 @@
       const qs = cleanParams.toString();
       history.replaceState({}, '', location.pathname + (qs ? `?${qs}` : ''));
       document.getElementById('transcript').innerHTML = '';
+      await loadProviders();
       await loadSession();
       await loadDepartments();
       return true;
@@ -624,11 +643,9 @@
       applyTheme(next);
     });
 
-    document.getElementById('btn-new-chat')?.addEventListener('click', () => {
-      sessionId = null;
-      localStorage.removeItem('voice_rail_session_id');
-      document.getElementById('transcript').innerHTML = '';
-      if (activeKey) loadSession();
+    document.getElementById('btn-theme').addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      applyTheme(next);
     });
 
     const API = '/api/v1/lifeos/voice-rail';
@@ -637,6 +654,11 @@
     let privateBuffer = [];
     let voiceCtrl = null;
     let sendInFlight = false;
+    let providerCatalog = [];
+    let oldestLoadedAt = null;
+    let timelineHasMore = true;
+    let loadingOlder = false;
+    let inSearchView = false;
 
     async function api(method, path, body) {
       const r = await fetch(`${API}${path}`, {
@@ -682,7 +704,51 @@
     function onDepartmentSelected(deptId) {
       applyDepartmentUI(deptId);
       localStorage.setItem('voice_rail_department', deptId);
+      syncProviderSelectForDept();
     }
+
+    function providerStorageKey(deptId) {
+      return `voice_rail_provider_${deptId || document.getElementById('department').value || 'ChC'}`;
+    }
+
+    function selectedProviderKey() {
+      const dept = document.getElementById('department').value || 'ChC';
+      const saved = localStorage.getItem(providerStorageKey(dept));
+      if (saved) return saved;
+      return providerCatalog[0]?.member_key || '';
+    }
+
+    function syncProviderSelectForDept() {
+      const sel = document.getElementById('provider-pick');
+      if (!sel || !providerCatalog.length) return;
+      const key = selectedProviderKey();
+      if (key && providerCatalog.some((p) => p.member_key === key)) sel.value = key;
+    }
+
+    function renderProviderSelect() {
+      const sel = document.getElementById('provider-pick');
+      if (!sel || !providerCatalog.length) return;
+      sel.innerHTML = providerCatalog
+        .map(
+          (p) =>
+            `<option value="${escapeHtml(p.member_key)}">${escapeHtml(p.label)}${p.model ? ' · ' + escapeHtml(p.model) : ''}</option>`,
+        )
+        .join('');
+      syncProviderSelectForDept();
+    }
+
+    async function loadProviders() {
+      const res = await api('GET', '/providers');
+      if (res.status === 200 && res.json.ok && res.json.providers?.length) {
+        providerCatalog = res.json.providers;
+        renderProviderSelect();
+      }
+    }
+
+    document.getElementById('provider-pick')?.addEventListener('change', (e) => {
+      const dept = document.getElementById('department').value || 'ChC';
+      localStorage.setItem(providerStorageKey(dept), e.target.value);
+    });
 
     function renderDepartmentToggles(list) {
       departmentCatalog = list || [];
@@ -748,9 +814,15 @@
       btn.title = on ? 'Read replies aloud (on)' : 'Read replies aloud (off)';
     }
 
-    function appendBubble(role, content, intent, source, department) {
+    function buildBubble(role, content, intent, source, department, createdAt) {
       const box = document.createElement('div');
       box.className = `bubble ${role === 'user' ? 'user' : 'assistant'}`;
+      if (createdAt) {
+        const ts = document.createElement('div');
+        ts.className = 'msg-ts';
+        ts.textContent = new Date(createdAt).toLocaleString();
+        box.appendChild(ts);
+      }
       if (role === 'assistant' && department && department !== 'ChC') {
         const deptLabel = document.createElement('div');
         deptLabel.className = 'dept-label';
@@ -762,7 +834,7 @@
       if (intent === 'error') {
         const tag = document.createElement('div');
         tag.className = 'intent';
-        tag.textContent = `error`;
+        tag.textContent = 'error';
         box.appendChild(tag);
       } else if (source && source.path === 'lifeos/department') {
         const tag = document.createElement('div');
@@ -770,9 +842,129 @@
         tag.textContent = `Council live · ${source.display_name || '?'} · ${source.model_id || '?'}`;
         box.appendChild(tag);
       }
+      return box;
+    }
+
+    function appendBubble(role, content, intent, source, department, createdAt) {
+      const box = buildBubble(role, content, intent, source, department, createdAt);
       document.getElementById('transcript').appendChild(box);
       box.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
+
+    function prependMessages(messages) {
+      const el = document.getElementById('transcript');
+      const loader = el.querySelector('.history-loader');
+      const prevHeight = el.scrollHeight;
+      const frag = document.createDocumentFragment();
+      (messages || []).forEach((m) => {
+        frag.appendChild(
+          buildBubble(m.role, m.content, m.intent, null, m.department, m.created_at),
+        );
+      });
+      if (loader) el.insertBefore(frag, loader.nextSibling);
+      else el.insertBefore(frag, el.firstChild);
+      el.scrollTop += el.scrollHeight - prevHeight;
+    }
+
+    function renderTimelineLoader(text) {
+      let loader = document.getElementById('history-loader');
+      const el = document.getElementById('transcript');
+      if (!loader) {
+        loader = document.createElement('div');
+        loader.id = 'history-loader';
+        loader.className = 'history-loader';
+        el.prepend(loader);
+      }
+      loader.textContent = text || 'Scroll up for older messages';
+    }
+
+    async function loadTimeline(reset = true) {
+      if (isPrivate() || inSearchView) return;
+      if (loadingOlder) return;
+      loadingOlder = true;
+      try {
+        const qs = new URLSearchParams({ user: USER, limit: '40' });
+        if (!reset && oldestLoadedAt) qs.set('before', oldestLoadedAt);
+        const res = await api('GET', `/history?${qs.toString()}`);
+        if (res.status !== 200 || !res.json.ok) {
+          if (res.status === 401) showAuthBanner(true);
+          return;
+        }
+        sessionId = res.json.session_id || sessionId;
+        if (sessionId) localStorage.setItem('voice_rail_session_id', sessionId);
+        const messages = res.json.messages || [];
+        timelineHasMore = Boolean(res.json.has_more);
+        if (reset) {
+          const el = document.getElementById('transcript');
+          el.innerHTML = '';
+          renderTimelineLoader(timelineHasMore ? 'Scroll up for older messages' : 'Start of your timeline');
+          messages.forEach((m) => {
+            el.appendChild(buildBubble(m.role, m.content, m.intent, null, m.department, m.created_at));
+          });
+          el.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        } else if (messages.length) {
+          prependMessages(messages);
+        }
+        if (messages.length) oldestLoadedAt = messages[0].created_at;
+        if (!timelineHasMore) renderTimelineLoader('Start of your timeline');
+        if (messages.length) {
+          const last = [...messages].reverse().find((m) => m.role === 'assistant');
+          if (last) lastAssistant = last.content;
+        }
+        await refreshStaged();
+      } finally {
+        loadingOlder = false;
+      }
+    }
+
+    async function loadSession() {
+      inSearchView = false;
+      document.getElementById('btn-timeline-back').style.display = 'none';
+      oldestLoadedAt = null;
+      timelineHasMore = true;
+      await loadTimeline(true);
+    }
+
+    async function loadOlderTimeline() {
+      if (!timelineHasMore || loadingOlder || inSearchView) return;
+      await loadTimeline(false);
+    }
+
+    async function searchHistory() {
+      const q = String(document.getElementById('history-search')?.value || '').trim();
+      if (q.length < 2) return;
+      if (!activeKey && !ensureKey()) return;
+      const res = await api('GET', `/history/search?user=${encodeURIComponent(USER)}&q=${encodeURIComponent(q)}`);
+      if (res.status !== 200 || !res.json.ok) return;
+      inSearchView = true;
+      document.getElementById('btn-timeline-back').style.display = '';
+      const el = document.getElementById('transcript');
+      el.innerHTML = '';
+      const head = document.createElement('div');
+      head.className = 'history-loader';
+      head.textContent = `${res.json.count || 0} match(es) for “${q}” — Timeline returns to continuous scroll`;
+      el.appendChild(head);
+      (res.json.messages || []).forEach((m) => {
+        el.appendChild(buildBubble(m.role, m.content, m.intent, null, m.department, m.created_at));
+      });
+    }
+
+    document.getElementById('btn-history-search')?.addEventListener('click', searchHistory);
+    document.getElementById('history-search')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        searchHistory();
+      }
+    });
+    document.getElementById('btn-timeline-back')?.addEventListener('click', () => {
+      document.getElementById('history-search').value = '';
+      loadSession();
+    });
+
+    document.getElementById('transcript')?.addEventListener('scroll', (e) => {
+      const el = e.target;
+      if (el.scrollTop < 48) loadOlderTimeline();
+    });
 
     function stopAllVoice() {
       if (window.LifeOSVoiceChat?.stopSpeaking) window.LifeOSVoiceChat.stopSpeaking();
@@ -780,33 +972,6 @@
       if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
       document.getElementById('interim').textContent = '';
       document.getElementById('btn-stop-voice')?.classList.remove('active');
-    }
-
-    async function loadSession() {
-      if (isPrivate()) return;
-      const mode = document.getElementById('mode').value;
-      const tag = document.getElementById('tag').value || null;
-      const res = await api('POST', '/session', {
-        user: USER,
-        mode,
-        tag,
-        session_id: sessionId,
-        department: document.getElementById('department').value || 'ChC',
-      });
-      if (res.status !== 200 || !res.json.ok) {
-        if (res.status === 401) showAuthBanner(true);
-        return;
-      }
-      sessionId = res.json.session.id;
-      localStorage.setItem('voice_rail_session_id', sessionId);
-      const el = document.getElementById('transcript');
-      el.innerHTML = '';
-      (res.json.messages || []).forEach((m) => appendBubble(m.role, m.content, m.intent, null, m.department));
-      if (res.json.messages?.length) {
-        const last = [...res.json.messages].reverse().find((m) => m.role === 'assistant');
-        if (last) lastAssistant = last.content;
-      }
-      await refreshStaged();
     }
 
     async function refreshStaged() {
@@ -866,12 +1031,14 @@
         }
 
         appendBubble('user', content, null);
+        const councilMember = selectedProviderKey() || null;
         const res = await api('POST', '/message', {
           user: USER,
           session_id: sessionId,
           mode,
           tag,
           department,
+          council_member: councilMember,
           text: content,
         });
         if (res.status !== 200 || !res.json.ok) {
@@ -899,8 +1066,12 @@
       const opts = {
         rate,
         voiceURI: voiceURI || undefined,
-        onEnd: () => document.getElementById('btn-stop-voice')?.classList.remove('active'),
+        onEnd: () => {
+          voiceCtrl?.resumeAfterTts?.();
+          document.getElementById('btn-stop-voice')?.classList.remove('active');
+        },
       };
+      voiceCtrl?.pauseForTts?.();
       document.getElementById('btn-stop-voice')?.classList.add('active');
       if (window.LifeOSVoiceChat?.speakText) {
         window.LifeOSVoiceChat.speakText(text, opts);
@@ -995,6 +1166,7 @@
         voiceSendEnabled: true,
         keepListeningOnVoiceSend: true,
         persistentListen: true,
+        pauseMicDuringTts: true,
         warmMicOnStart: true,
         focusInputOnMic: true,
         mode: 'append',
@@ -1025,6 +1197,7 @@
 
     if (activeKey) {
       loadDepartments();
+      loadProviders();
       loadSession();
     } else {
       loadDepartments();

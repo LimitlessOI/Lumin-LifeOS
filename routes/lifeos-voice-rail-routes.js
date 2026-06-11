@@ -65,18 +65,67 @@ export function createLifeOSVoiceRailRoutes({
     res.json({ ok: true, departments: voiceRail.listDepartments() });
   });
 
+  router.get('/providers', requireKey, (_req, res) => {
+    res.json({ ok: true, providers: voiceRail.listProviders() });
+  });
+
+  router.get('/history', requireKey, async (req, res, next) => {
+    try {
+      const userId = await voiceRail.resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const timeline = await voiceRail.loadFounderTimeline(userId, {
+        before: req.query.before || null,
+        limit: req.query.limit || 40,
+      });
+      res.json({ ok: true, ...timeline });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/history/search', requireKey, async (req, res, next) => {
+    try {
+      const userId = await voiceRail.resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const q = String(req.query.q || '').trim();
+      if (q.length < 2) {
+        return res.status(400).json({ ok: false, error: 'query_too_short', min_length: 2 });
+      }
+      const messages = await voiceRail.searchFounderHistory(userId, q, {
+        limit: req.query.limit || 40,
+      });
+      res.json({ ok: true, query: q, messages, count: messages.length });
+    } catch (err) {
+      next(err);
+    }
+  });
+
   router.post('/session', requireKey, async (req, res, next) => {
     try {
       const userId = await voiceRail.resolveUserId(req.body.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const continuous = req.body.continuous !== false;
+      if (continuous) {
+        const timeline = await voiceRail.loadFounderTimeline(userId, {
+          limit: req.body.limit || 40,
+        });
+        return res.json({
+          ok: true,
+          session: { id: timeline.session_id, mode: timeline.mode, tag: timeline.tag },
+          messages: timeline.messages || [],
+          has_more: timeline.has_more,
+          continuous: true,
+        });
+      }
       const session = await voiceRail.getOrCreateSession({
         userId,
         mode: req.body.mode || 'conversation',
         tag: req.body.tag || null,
         sessionId: req.body.session_id || null,
+        continuous: false,
       });
       const messages = await voiceRail.listMessages(session.id, userId);
-      res.json({ ok: true, session, messages: messages || [] });
+      res.json({ ok: true, session, messages: messages || [], continuous: false });
     } catch (err) {
       next(err);
     }
@@ -113,9 +162,11 @@ export function createLifeOSVoiceRailRoutes({
         mode: req.body.mode || 'conversation',
         tag: req.body.tag || null,
         department: req.body.department || 'ChC',
+        councilMember: req.body.council_member || null,
         text: req.body.text,
         private: Boolean(req.body.private),
         simulateOnly: Boolean(req.body.simulate_only),
+        continuous: req.body.continuous !== false,
       });
       res.json({ ok: true, ...result });
     } catch (err) {

@@ -12,6 +12,11 @@ import {
   normalizeVoiceRailDepartment,
   resolveDepartmentRouting,
 } from '../config/voice-rail-departments.js';
+import {
+  FOUNDER_CONTINUOUS_SESSION_TAG,
+  listVoiceRailProviderPicks,
+  normalizeProviderMemberKey,
+} from '../config/voice-rail-providers.js';
 import memorySystem from '../core/memory-system.js';
 
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
@@ -35,7 +40,7 @@ export function classifyIntent(text, mode = 'conversation') {
   if (/\b(policy|routing|wrong system|should not|governance|ssot|drift)\b/.test(t)) {
     return 'governance_correction';
   }
-  if (/\b(frustrated|angry|stressed|overwhelmed|vent|upset|furious)\b/.test(t)) {
+  if (/\b(frustrated|angry|stressed|overwhelmed|vent|upset|furious|pissed|annoyed|irritated|livid|sad|depressed|anxious|excited|thrilled|happy|worried|scared|tired|exhausted)\b/.test(t)) {
     return 'emotional';
   }
   if (/\b(i will|i'll|i promise|commit to|by friday|by tomorrow|follow through)\b/.test(t)) {
@@ -311,13 +316,17 @@ async function generateCouncilReply({
   }
 
   const system = buildDepartmentSystemPrompt(deptId, routing, mode, contextData, operator);
+  const emotionHint =
+    classifyIntent(content, mode) === 'emotional'
+      ? '\n\nOperator tone reads emotional — acknowledge mood briefly, stay grounded, no platitudes.\n'
+      : '';
   const userTurn = threadText
-    ? `--- Prior messages ---\n${threadText}\n\n--- Current ---\n${operatorName}: ${content}${repeatHint}`
-    : `${operatorName}: ${content}${repeatHint}`;
+    ? `--- Prior messages ---\n${threadText}\n\n--- Current ---\n${operatorName}: ${content}${repeatHint}${emotionHint}`
+    : `${operatorName}: ${content}${repeatHint}${emotionHint}`;
 
   let councilRaw;
   try {
-    councilRaw = await callCouncilMember(routing.memberKey, userTurn, {
+    councilRaw = await callCouncilMember(routing.resolvedKey || routing.memberKey, userTurn, {
       taskType: 'voice_rail_department',
       systemPromptOverride: system,
       skipKnowledge: true,
@@ -372,8 +381,15 @@ export function createVoiceRailV1({
     return rows[0] || { user_handle: 'adam', display_name: 'Adam' };
   }
 
-  async function getOrCreateSession({ userId, mode = 'conversation', tag = null, sessionId = null }) {
+  async function getOrCreateSession({
+    userId,
+    mode = 'conversation',
+    tag = null,
+    sessionId = null,
+    continuous = false,
+  }) {
     const m = MODES.has(mode) ? mode : 'conversation';
+    const founderTag = continuous ? FOUNDER_CONTINUOUS_SESSION_TAG : tag;
     if (sessionId) {
       const { rows } = await pool.query(
         `SELECT * FROM voice_rail_sessions WHERE id = $1 AND user_id = $2`,
@@ -381,11 +397,66 @@ export function createVoiceRailV1({
       );
       if (rows[0]) return rows[0];
     }
+    if (continuous) {
+      const { rows } = await pool.query(
+        `SELECT * FROM voice_rail_sessions
+          WHERE user_id = $1 AND tag = $2
+          ORDER BY updated_at DESC
+          LIMIT 1`,
+        [userId, FOUNDER_CONTINUOUS_SESSION_TAG],
+      );
+      if (rows[0]) return rows[0];
+    }
     const { rows } = await pool.query(
       `INSERT INTO voice_rail_sessions (user_id, mode, tag) VALUES ($1, $2, $3) RETURNING *`,
-      [userId, m, tag || null],
+      [userId, m, founderTag || null],
     );
     return rows[0];
+  }
+
+  async function listFounderHistoryPage(userId, { before = null, limit = 40 } = {}) {
+    const lim = Math.min(Math.max(parseInt(limit, 10) || 40, 1), 100);
+    const params = [userId, lim];
+    let cursorSql = '';
+    if (before) {
+      params.push(before);
+      cursorSql = `AND m.created_at < $3`;
+    }
+    const { rows } = await pool.query(
+      `SELECT m.id, m.role, m.content, m.intent, m.department, m.created_at, s.id AS session_id
+         FROM voice_rail_messages m
+         JOIN voice_rail_sessions s ON s.id = m.session_id
+        WHERE s.user_id = $1 AND m.is_interim = FALSE ${cursorSql}
+        ORDER BY m.created_at DESC
+        LIMIT $2`,
+      before ? [userId, lim, before] : [userId, lim],
+    );
+    return rows.reverse();
+  }
+
+  async function searchFounderHistory(userId, query, { limit = 40 } = {}) {
+    const q = String(query || '').trim();
+    if (q.length < 2) return [];
+    const lim = Math.min(Math.max(parseInt(limit, 10) || 40, 1), 80);
+    const { rows } = await pool.query(
+      `SELECT m.id, m.role, m.content, m.intent, m.department, m.created_at, s.id AS session_id
+         FROM voice_rail_messages m
+         JOIN voice_rail_sessions s ON s.id = m.session_id
+        WHERE s.user_id = $1 AND m.is_interim = FALSE AND m.content ILIKE $2
+        ORDER BY m.created_at DESC
+        LIMIT $3`,
+      [userId, `%${q.replace(/[%_\\]/g, '\\$&')}%`, lim],
+    );
+    return rows.reverse();
+  }
+
+  function resolveRouting(deptId, councilMemberOverride) {
+    const overrideKey = normalizeProviderMemberKey(
+      councilMemberOverride,
+      councilMembers,
+      councilAliasMap,
+    );
+    return resolveDepartmentRouting(deptId, councilMembers, councilAliasMap, overrideKey);
   }
 
   async function listMessages(sessionId, userId) {
@@ -430,9 +501,11 @@ export function createVoiceRailV1({
     mode = 'conversation',
     tag = null,
     department = 'ChC',
+    councilMember = null,
     text,
     private: isPrivate = false,
     simulateOnly = false,
+    continuous = true,
   }) {
     const content = String(text || '').trim();
     const deptId = normalizeVoiceRailDepartment(department);
@@ -461,7 +534,13 @@ export function createVoiceRailV1({
       };
     }
 
-    const session = await getOrCreateSession({ userId, mode, tag, sessionId });
+    const session = await getOrCreateSession({
+      userId,
+      mode,
+      tag,
+      sessionId,
+      continuous: continuous !== false,
+    });
     await pool.query(
       `INSERT INTO voice_rail_messages (session_id, role, content, intent, is_interim)
        VALUES ($1, 'user', $2, $3, FALSE)`,
@@ -489,7 +568,7 @@ export function createVoiceRailV1({
       }
     }
 
-    const routing = resolveDepartmentRouting(deptId, councilMembers, councilAliasMap);
+    const routing = resolveRouting(deptId, councilMember);
     const operator = await resolveOperatorProfile(userId);
 
     if (simulateOnly) {
@@ -573,6 +652,23 @@ export function createVoiceRailV1({
     return { intent: normalizeIntent(classifyIntent(text, mode)) };
   }
 
+  async function loadFounderTimeline(userId, { before = null, limit = 40 } = {}) {
+    const session = await getOrCreateSession({ userId, continuous: true });
+    const messages = await listFounderHistoryPage(userId, { before, limit });
+    const lim = Math.min(Math.max(parseInt(limit, 10) || 40, 1), 100);
+    return {
+      session_id: session.id,
+      tag: session.tag,
+      mode: session.mode,
+      messages,
+      has_more: messages.length >= lim,
+    };
+  }
+
+  function listProviders() {
+    return listVoiceRailProviderPicks(councilMembers);
+  }
+
   async function findPrivateLeak(userId, needle) {
     const checks = {};
     const { rows: msgs } = await pool.query(
@@ -613,6 +709,10 @@ export function createVoiceRailV1({
     resolveOperatorProfile,
     getOrCreateSession,
     listMessages,
+    listFounderHistoryPage,
+    searchFounderHistory,
+    loadFounderTimeline,
+    listProviders,
     submitMessage,
     classifyOnly,
     listStagedCommands,

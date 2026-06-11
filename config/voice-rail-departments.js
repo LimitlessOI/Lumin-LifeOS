@@ -97,9 +97,11 @@ export function listVoiceRailDepartmentsPublic() {
   });
 }
 
-export function resolveDepartmentRouting(deptId, councilMembers, councilAliasMap) {
+export function resolveDepartmentRouting(deptId, councilMembers, councilAliasMap, councilMemberOverride = null) {
   const dept = getVoiceRailDepartment(deptId);
+  const override = councilMemberOverride ? String(councilMemberOverride).trim() : '';
   const memberKey =
+    override ||
     (process.env[dept.memberEnv] && String(process.env[dept.memberEnv]).trim()) ||
     process.env.VOICE_RAIL_CHAIR_MEMBER ||
     process.env.LIFEOS_CHAIR_COUNCIL_MEMBER ||

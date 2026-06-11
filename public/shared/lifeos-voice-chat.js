@@ -174,6 +174,8 @@
       keepListeningOnVoiceSend: false,
       /** Walkie-talkie: auto-restart STT when browser ends session; mic stays until user taps off. */
       persistentListen: false,
+      /** Pause STT while TTS plays so the speaker is not transcribed. */
+      pauseMicDuringTts: false,
       /** Prime getUserMedia before SpeechRecognition (cuts cold-start delay). */
       warmMicOnStart: true,
       focusInputOnMic: true,
@@ -201,6 +203,7 @@
       buffer: '',
       destroyed: false,
       warming: false,
+      ttsDuck: false,
       buttonListener: null,
       speakListener: null,
       storageKey: settings.storageKey,
@@ -362,6 +365,11 @@
         if (!settings.keepListeningOnVoiceSend) {
           maybeVoiceSend(true);
         }
+        if (state.ttsDuck) {
+          updateButton();
+          updateStatus('Speaking…');
+          return;
+        }
         if (state.userWantsListen && settings.persistentListen) {
           updateButton();
           updateStatus('Restarting mic…');
@@ -459,6 +467,30 @@
       },
       isPersistentListen() {
         return Boolean(state.userWantsListen);
+      },
+      pauseForTts() {
+        if (!settings.pauseMicDuringTts || !state.userWantsListen) return;
+        state.ttsDuck = true;
+        if (state.recognition) {
+          try {
+            state.recognition.stop();
+          } catch (_) {
+            // Ignore stop failures during duck.
+          }
+        }
+        state.listening = false;
+        updateButton();
+        updateStatus('Speaking…');
+      },
+      resumeAfterTts() {
+        if (!settings.pauseMicDuringTts) return;
+        state.ttsDuck = false;
+        if (!state.userWantsListen || state.destroyed) return;
+        global.setTimeout(() => {
+          if (state.userWantsListen && !state.destroyed && !state.ttsDuck) {
+            startListeningInternal();
+          }
+        }, 250);
       },
       warmMic() {
         return warmAudioInput();
