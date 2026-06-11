@@ -73,6 +73,8 @@ Full audit: `builderos-reboot/SENTRY_AUDIT_REPORT.md`
 - `builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/PSSOT.md` — **first product mission PSSOT**
 - `builderos-reboot/PSSOT_VOCABULARY.md` — PSSOT vs amendment vs blueprint
 - `prompts/00-SYSTEM-AUTHORITY-LAYERS.md` — **repo truth layers** (factory vs legacy spine)
+- `prompts/00-HIST-LEGACY-BOUNDARY.md` — **mandatory STOP read** (legacy = Hist; not a README)
+- `docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md` — **Hist-owned legacy repos/trees** (Adam 2026-05-24); full map
 - Path `AGENTS.md` at `builderos-reboot/`, `factory-staging/`, `routes/`, `services/`, blueprint pack
 - `.cursor/rules/system-authority-layers.mdc` — always-on Cursor boundary rules
 - `FACTORY_TOOLS_COMPLETION.md` — mission 0030 tool matrix

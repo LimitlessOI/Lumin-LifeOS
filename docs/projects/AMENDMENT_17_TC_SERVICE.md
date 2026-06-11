@@ -940,7 +940,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 **Status:** BUILD_READY (TC coordination core — gates 1-5 complete)
 **Adaptability Score:** 82/100
 **Council Persona:** edison (iterate fast, test every assumption, protect the core deadline logic)
-**Last Updated:** 2026-05-11
+**Last Updated:** 2026-05-24 — batch push receipt
 
 ### Gate 1 — Implementation Detail
 - [x] Email triage, GLVAR monitor, deadline cron all have specific segment descriptions
@@ -993,3 +993,8 @@ While SkySlope sends a reminder that a deadline is in 3 days, we read the email 
 | 2026-05-10 | `services/tc-document-validator.js` — rebuilt from truncated 5-line builder commit. File was missing everything after `const DATE_RE = ...` (regex ended mid-line with `\`). Rebuilt with: correct `DATE_RE`, `IMAGE_EXTENSIONS`, `STREET_SUFFIX_RE`, `PRICE_RE` constants, and `createTCDocumentValidator({ logger })` factory exporting `validateFile({ filePath, fileName, docType, expectedAddress })`. Returns `{ ok, blocks_upload, docType, isImage, hasDates, hasPrices, hasStreetAddress, warnings, errors }`. Matches API surface used in `routes/tc-routes.js` and `services/tc-doc-intake.js`. | NSSOT audit: compliance officer detected syntax error; file dynamically imported by 5+ TC routes — Railway would crash on any code path hitting document validation. | ✅ | `node --check services/tc-document-validator.js` |
 | 2026-05-10 | `services/tc-webhook-validator.js` — rebuilt from truncated 11-line builder commit. File ended at `import { createTCAsanaSyncService } from '../services/tc-asana-sync-service` (no closing quote or body). Rebuilt as a pure webhook signature validator: `createTCWebhookValidator({ postmarkSecret, twilioAuthToken, logger })` → `{ validatePostmark, validateTwilio }`. Postmark uses HMAC-SHA256; Twilio uses HMAC-SHA1 per their documented signature schemes. File is not currently imported anywhere in startup — it is available for future webhook route wiring. | NSSOT audit: compliance officer detected syntax error; original builder attempt imported services it never used and left no function body. | ✅ | `node --check services/tc-webhook-validator.js` |
 | 2026-05-14 | `services/tc-stripe-service.js` — GAP-FILL repair: removed self-import (`import { getStripeClient } from './tc-stripe-service.js'`), removed unused `logger` import from `'../logger'`, replaced `getStripeClient()` with local `new Stripe(process.env.STRIPE_SECRET_KEY)`, hoisted `dbPool` before use in `cancelSubscription`, replaced `subscriptions.del()` with `subscriptions.cancel()` (Stripe v13 API), added `ON CONFLICT` guards to two INSERT queries. `tc-stripe-billing-service` quarantine cleared (fail_count=2 → cleared, builder had generated SQL-in-JS syntax error x2). | Quarantine was last STABILITY-1 blocker after migration repair. Builder attempted twice and produced `/tmp/.js:3 WHERE id = $4 SyntaxError` — GAP-FILL applied per protocol. | ✅ | `node --check services/tc-stripe-service.js` PASS; 49/49 tests pass |
+
+
+## Change Receipts
+
+| 2026-05-24 | Batch push | services/tc-webhook-validator.js | founder push |

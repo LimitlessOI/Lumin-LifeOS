@@ -5,7 +5,6 @@
  */
 
 import express from 'express';
-import { pool } from '../core/database.js';
 import {
   listAutonomousTelemetry,
   getSessionTelemetrySummary,
@@ -14,7 +13,7 @@ import { computeEfficiencyIntelligence } from '../services/autonomous-efficiency
 import { runGovernedTelemetrySession } from '../services/autonomous-telemetry-session.js';
 import { computeAllBuilderOSMetrics } from '../services/builderos-metrics-reporter.js';
 
-export function createAutonomousTelemetryRoutes({ requireKey }) {
+export function createAutonomousTelemetryRoutes({ requireKey, pool }) {
   const router = express.Router();
 
   router.get('/api/v1/lifeos/autonomous-telemetry/events', requireKey, async (req, res, next) => {

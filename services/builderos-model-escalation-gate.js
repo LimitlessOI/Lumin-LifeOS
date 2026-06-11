@@ -66,8 +66,6 @@ const CHEAP_MODELS = new Set([
   'gemini_flash',
   'deepseek',
   'cerebras_llama',
-  'openrouter_free',
-  'together_free',
   'mistral_free',
 ]);
 

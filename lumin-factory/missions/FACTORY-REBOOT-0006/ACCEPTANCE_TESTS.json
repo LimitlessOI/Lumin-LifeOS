@@ -4,7 +4,7 @@
     "step_id": "S601",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/builder/run-mission.js",
-    "expected_sha256": "e7def25548ad1fdda227b02ad533dadce7c3035b972b1e8f32f368d495b30b7f"
+    "expected_sha256": "bebd008734814e42a3788656a4efbc55605fb20a76d5257db925a1dba41ff257"
   },
   {
     "test_id": "AT-S602-1",
@@ -18,6 +18,6 @@
     "step_id": "S603",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+    "expected_sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
   }
 ]

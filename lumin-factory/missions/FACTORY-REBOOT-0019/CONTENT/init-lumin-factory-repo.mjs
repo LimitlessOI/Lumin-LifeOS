@@ -28,4 +28,14 @@ const manifest = {
   push_required: 'Adam creates GitHub repo and pushes — not automated without credentials',
 };
 fs.writeFileSync(path.join(TARGET, 'REPO_INIT_MANIFEST.json'), `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(`Initialized ${TARGET} (git-ready, not pushed)`);
+
+if (!fs.existsSync(path.join(TARGET, '.git'))) {
+  const gitInit = spawnSync('git', ['init'], { cwd: TARGET, encoding: 'utf8' });
+  if (gitInit.status !== 0) {
+    console.warn('git init failed (non-fatal):', gitInit.stderr || gitInit.stdout);
+  } else {
+    console.log(`git init OK in ${TARGET}`);
+  }
+}
+
+console.log(`Initialized ${TARGET} (git-ready — create GitHub repo Lumin-Factory and push)`);

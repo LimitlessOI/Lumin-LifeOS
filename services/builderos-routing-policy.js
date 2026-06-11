@@ -18,7 +18,6 @@ const HIGH_RISK_PREFIXES = [
 
 const CHEAP_MODELS = ['groq_llama', 'gemini_flash', 'deepseek', 'cerebras_llama'];
 const STRONGER_MODELS = [
-  'claude_via_openrouter',
   'claude_sonnet',
   'gpt-5.1-codex',
   'gpt-5.2-codex',
@@ -115,7 +114,7 @@ export function getBuilderRoutingPolicy(input) {
     },
     bounded_patching: {
       allowedModels: ['gemini_flash', 'deepseek', ...STRONGER_MODELS],
-      blockedModels: ['groq_llama', 'openrouter_free', 'together_free', 'mistral_free'],
+      blockedModels: ['groq_llama', 'mistral_free'],
       escalationTriggers: ['import_merge_bug', 'stub_output', 'commonjs_bleed', 'verifier_failure'],
       retryCeiling: 1,
       verifierRequired: true,
@@ -160,7 +159,7 @@ export function getBuilderRoutingPolicy(input) {
     },
     high_risk_repo_edit: {
       allowedModels: ['gemini_flash', 'deepseek', ...STRONGER_MODELS],
-      blockedModels: ['groq_llama', 'openrouter_free', 'together_free', 'mistral_free', 'cerebras_llama'],
+      blockedModels: ['groq_llama', 'mistral_free', 'cerebras_llama'],
       escalationTriggers: ['zone3_target', 'auth_or_runtime_boundary', 'migration_or_governance_change', 'failure_family_repeat'],
       retryCeiling: 1,
       verifierRequired: true,

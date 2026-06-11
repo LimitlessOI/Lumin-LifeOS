@@ -1,8 +1,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import {
+  detectFactoryLayout,
+  isLegacyWriteTarget,
+  missionDir as layoutMissionDir,
+  repoRootFromScriptMeta,
+} from './factory-repo-layout.mjs';
 
-export const REPO_ROOT = path.join(import.meta.dirname, '../..');
+export const REPO_ROOT = repoRootFromScriptMeta(import.meta.url);
+export const FACTORY_LAYOUT = detectFactoryLayout(REPO_ROOT);
 
 export function sha256File(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
@@ -13,20 +20,28 @@ export function sha256Buffer(buf) {
 }
 
 export function loadJson(relativePath) {
-  const full = path.join(REPO_ROOT, relativePath);
+  let rel = relativePath;
+  if (rel.startsWith('builderos-reboot/MISSIONS/')) {
+    rel = rel.replace('builderos-reboot/MISSIONS/', `${FACTORY_LAYOUT.missionsRel}/`);
+  } else if (rel.startsWith('builderos-reboot/')) {
+    rel = FACTORY_LAYOUT.machineRel
+      ? rel.replace('builderos-reboot/', `${FACTORY_LAYOUT.machineRel}/`)
+      : rel.replace('builderos-reboot/', '');
+  }
+  const full = path.join(REPO_ROOT, rel);
   return JSON.parse(fs.readFileSync(full, 'utf8'));
 }
 
 export function missionDir(missionId) {
-  return path.join(REPO_ROOT, 'builderos-reboot', 'MISSIONS', missionId);
+  return layoutMissionDir(FACTORY_LAYOUT, missionId);
 }
 
 export function loadBlueprint(missionId) {
-  return loadJson(`builderos-reboot/MISSIONS/${missionId}/BLUEPRINT.json`);
+  return loadJson(`${FACTORY_LAYOUT.missionsRel}/${missionId}/BLUEPRINT.json`);
 }
 
 export function loadAcceptanceTests(missionId) {
-  return loadJson(`builderos-reboot/MISSIONS/${missionId}/ACCEPTANCE_TESTS.json`);
+  return loadJson(`${FACTORY_LAYOUT.missionsRel}/${missionId}/ACCEPTANCE_TESTS.json`);
 }
 
 export function resolveRepoPath(relativePath) {
@@ -101,6 +116,15 @@ export function writeFileExactStep(step) {
       status: 'BLOCKED_RETURN_TO_BPB',
       gap_type: 'authority_violation',
       summary: `Target ${step.target_file} outside sandbox ${step.sandbox_boundary}`,
+    };
+  }
+
+  if (isLegacyWriteTarget(step.target_file, FACTORY_LAYOUT)) {
+    return {
+      ok: false,
+      status: 'BLOCKED_RETURN_TO_BPB',
+      gap_type: 'legacy_quarantine',
+      summary: `Target ${step.target_file} is legacy LifeOS spine — run from Lumin-Factory repo or fix blueprint sandbox`,
     };
   }
 

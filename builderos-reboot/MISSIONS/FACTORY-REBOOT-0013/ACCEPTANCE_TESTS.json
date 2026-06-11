@@ -18,6 +18,6 @@
     "step_id": "S1303",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/greenfield-integration.mjs",
-    "expected_sha256": "9c88bb7341a03c467c3ddfaa997cde232ed6c1725d0d7779886e50c8abc07de5"
+    "expected_sha256": "1be17a61c3c47e666d1489bf4b094a75ee5935cfd5ce4c11c4a4223f8cf99664"
   }
 ]

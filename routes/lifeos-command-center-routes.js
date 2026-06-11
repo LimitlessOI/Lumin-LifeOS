@@ -5,6 +5,7 @@
  * No write operations except the mode POST which returns NOT_WIRED (Stage 2),
  * and the phase14 certify/run-proofs endpoints which write OIL audit receipts.
  *
+ * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime.
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 
@@ -13,7 +14,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import express from 'express';
-import { pool } from '../core/database.js';
 import { DEFAULT_BUILDER_MODE, BUILDER_MODE, BUILDER_MODE_RULES } from '../config/builder-release-modes.js';
 import {
   readLatestDailySummary,
@@ -78,8 +78,16 @@ import {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-export function createCommandCenterAggregateRoutes({ requireKey }) {
+export function createCommandCenterAggregateRoutes({ requireKey, pool }) {
   const router = express.Router();
+
+  function getForwardedOperatorKey(req) {
+    return req.headers['x-command-key']
+      || req.headers['x-command-center-key']
+      || req.headers['x-lifeos-key']
+      || req.headers['x-api-key']
+      || null;
+  }
 
   /**
    * GET /api/v1/lifeos/command-center/phase14
@@ -87,19 +95,35 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
    */
   router.get('/api/v1/lifeos/command-center/phase14', requireKey, async (req, res, next) => {
     try {
+      const ledger = await buildPhaseLedger(pool);
+      const reconciled = phase14StatusFromLedger(ledger);
       const row = await readLatestPhase14Cert(pool);
       if (!row) {
-        return res.json({ found: false, status: 'UNKNOWN', alpha_ready: null });
+        return res.json({
+          found: false,
+          status: 'UNCERTIFIED',
+          alpha_ready: reconciled.alphaReady,
+          proof_source: 'phase_ledger',
+          ledger_reconciled: {
+            alpha_ready: reconciled.alphaReady,
+            matches_cert: null,
+            blockers: reconciled.hardBlockers,
+          },
+        });
       }
       const fj = row.findings_json || {};
-      const alphaReady = Boolean(fj.alpha_ready);
+      const certAlphaReady = Boolean(fj.alpha_ready);
       const store = proofStoreFingerprint(process.env.DATABASE_URL);
-      const ledger = req.query.reconcile === '1' ? await buildPhaseLedger(pool) : null;
-      const reconciled = ledger ? phase14StatusFromLedger(ledger) : null;
+      const effectiveAlphaReady = reconciled.alphaReady;
+      const certMatchesLedger = certAlphaReady === effectiveAlphaReady;
+      const status = certMatchesLedger
+        ? (effectiveAlphaReady ? 'ALPHA_READY' : 'NOT_ALPHA_READY')
+        : 'CERT_DRIFT';
       return res.json({
         found: true,
-        alpha_ready: alphaReady,
-        status: alphaReady ? 'ALPHA_READY' : 'NOT_ALPHA_READY',
+        alpha_ready: effectiveAlphaReady,
+        cert_alpha_ready: certAlphaReady,
+        status,
         verified: fj.verified_phases?.length ?? 0,
         conditional: fj.conditional_phases?.length ?? 0,
         blockers: fj.blockers?.length ?? 0,
@@ -109,14 +133,12 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
         conditional_phases: fj.conditional_phases ?? [],
         blockers_detail: fj.blockers ?? [],
         proof_store_id: store.proof_store_id,
-        proof_source: 'builder_audit_receipts',
-        ledger_reconciled: reconciled
-          ? {
-              alpha_ready: reconciled.alphaReady,
-              matches_cert: reconciled.alphaReady === alphaReady,
-              blockers: reconciled.hardBlockers,
-            }
-          : undefined,
+        proof_source: 'builder_audit_receipts+phase_ledger',
+        ledger_reconciled: {
+          alpha_ready: reconciled.alphaReady,
+          matches_cert: certMatchesLedger,
+          blockers: reconciled.hardBlockers,
+        },
       });
     } catch (err) {
       next(err);
@@ -135,7 +157,7 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
       const { alphaReady, hardBlockers } = phase14StatusFromLedger(ledger);
       res.json({
         ...store,
-        proof_source: 'builder_audit_receipts',
+        proof_source: 'builder_audit_receipts+phase_ledger',
         canonical_repair: 'POST /api/v1/lifeos/command-center/phase14/run-proofs',
         read_path: 'GET /api/v1/lifeos/command-center/phase14',
         latest_cert: cert
@@ -1071,9 +1093,12 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
       ]);
 
       const lastProof = geminiProof[0] || null;
+      const securityStatus = latestSummary
+        ? (lastProof ? 'RECEIPTS_ACTIVE' : 'RECEIPTS_ONLY')
+        : 'NOT_WIRED';
 
       res.json({
-        status: latestSummary ? 'LIVE' : 'NOT_WIRED',
+        status: securityStatus,
         receipt_spine_only: true,
         live_data_only: true,
         latest_summary: latestSummary,
@@ -1210,7 +1235,7 @@ export function createCommandCenterAggregateRoutes({ requireKey }) {
         deploy_sha: process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || null,
       }, {
         baseUrl: `${req.protocol}://${req.get('host')}`,
-        commandKey: req.headers['x-command-key'],
+        commandKey: getForwardedOperatorKey(req),
       });
 
       if (!result.ok) {

@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "REGRESSION_RUN_RESULT",
+  "type": "object",
+  "required": [
+    "schema",
+    "mission_id",
+    "layer",
+    "pass",
+    "probes",
+    "generated_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "regression_run_result_v1"
+    },
+    "mission_id": {
+      "type": "string"
+    },
+    "layer": {
+      "type": "string"
+    },
+    "pass": {
+      "type": "boolean"
+    },
+    "probes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "probe_id",
+          "pass"
+        ],
+        "properties": {
+          "probe_id": {
+            "type": "string"
+          },
+          "pass": {
+            "type": "boolean"
+          },
+          "layer": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "phase": "SENTRY_BP_AUDIT",
+  "conductor_mode": "observe_only",
+  "system_dispatch": "npm run factory:recovery -- FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "stop_rule": "Any halt before BP phase complete = failure",
+  "exit_criteria": {
+    "required_artifact": "SENTRY_CHECK_RESULT.json",
+    "forbidden_as_proof": ["markdown report alone", "council narrative", "gemini summary", "truncated stub commits"],
+    "runner": "CONTENT/run-sentry-bp-audit.mjs",
+    "runner_must": "exit 0 only when checks[] all pass; write JSON receipt; node --check passes"
+  },
+  "deployed_at": "2026-06-10T22:15:00Z",
+  "active_prompts": [
+    {
+      "id": "P-SENTRY-MECH-001",
+      "role": "SENTRY",
+      "priority": 1,
+      "template_ref": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/CONTENT/run-deliberation-sentry.mjs",
+      "deliverable_script": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/CONTENT/run-sentry-bp-audit.mjs",
+      "deliverable_receipt": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/SENTRY_CHECK_RESULT.json",
+      "verdict_values": ["BP_AUDIT_PASS", "BP_AUDIT_FAIL"],
+      "blocks": "CDR_IMPLEMENT",
+      "system_dispatch": "npm run factory:recovery — mechanical template, not builder same-spec"
+    },
+    {
+      "id": "P-BPB-RETURN-001",
+      "role": "BPB",
+      "priority": 2,
+      "condition": "SENTRY_CHECK_RESULT.json verdict BP_AUDIT_FAIL",
+      "prompt_file": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_PROBE_CATALOG.json",
+      "deliverable": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/BLUEPRINT.json",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ],
+  "observe_commands": [
+    "npm run factory:deliberation-sentry-regression:observe",
+    "node builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/CONTENT/run-sentry-bp-audit.mjs"
+  ]
+}

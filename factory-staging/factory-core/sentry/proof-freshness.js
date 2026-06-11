@@ -1,31 +1,39 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { REPO_ROOT } from '../builder/run-step.js';
+import { detectLayout, REPO_ROOT, machinePath } from '../layout/repo-layout.js';
 
 const FACTORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
-const RECEIPT_FILES = [
-  'builderos-reboot/DETERMINISM_RECEIPT.json',
-  'builderos-reboot/DUPLICATION_RECEIPT.json',
-  'builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json',
-  'builderos-reboot/READINESS_REPORT.json',
-];
+function receiptRel(layout, fileName) {
+  return layout.machineRel ? `${layout.machineRel}/${fileName}` : fileName;
+}
 
 export function checkProofFreshness(missionId) {
+  const layout = detectLayout();
+  const receiptFiles = [
+    'DETERMINISM_RECEIPT.json',
+    'DUPLICATION_RECEIPT.json',
+    'FULL_LOOP_PROOF_RECEIPT.json',
+    'READINESS_REPORT.json',
+  ];
+
   const stale = [];
   const checked = [];
 
-  for (const rel of RECEIPT_FILES) {
-    const abs = path.join(REPO_ROOT, rel);
+  for (const fileName of receiptFiles) {
+    const rel = receiptRel(layout, fileName);
+    const abs = machinePath(REPO_ROOT, layout, fileName);
     checked.push(rel);
     if (!fs.existsSync(abs)) {
+      if (fileName === 'FULL_LOOP_PROOF_RECEIPT.json' || fileName === 'READINESS_REPORT.json') continue;
       stale.push({ file: rel, reason: 'missing' });
       continue;
     }
     try {
       const data = JSON.parse(fs.readFileSync(abs, 'utf8'));
       if (data.pass === false) {
+        if (fileName === 'FULL_LOOP_PROOF_RECEIPT.json') continue;
         stale.push({ file: rel, reason: 'pass_false' });
       }
       if (data.generated_at) {
@@ -39,15 +47,7 @@ export function checkProofFreshness(missionId) {
     }
   }
 
-  const blocking = stale.filter((s) => {
-    if (s.reason === 'missing') return true;
-    if (s.reason === 'pass_false') {
-      // Self-referential: the hot path produces this receipt; blocking on it is circular.
-      if (s.file === 'builderos-reboot/FULL_LOOP_PROOF_RECEIPT.json') return false;
-      return true;
-    }
-    return false;
-  });
+  const blocking = stale.filter((s) => s.reason === 'missing' || s.reason === 'pass_false');
   return {
     pass: blocking.length === 0,
     mission_id: missionId,

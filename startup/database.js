@@ -4,7 +4,7 @@
  *
  * Tracks applied migrations in schema_migrations table (created on first run).
  * Files are applied in alphabetical order (date-prefixed names sort correctly).
- * Each migration runs in its own transaction — a failure in one does NOT block others.
+ * Each migration runs in its own transaction.
  * Already-applied migrations are skipped. Safe to restart at any time.
  *
  * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
@@ -74,12 +74,8 @@ export async function initDatabase(pool, logger) {
       logger.info(`[DB] ✅ Applied migration: ${filename}`);
       ran++;
     } catch (err) {
-      // Log and continue — a broken migration does NOT block others.
-      // Do NOT call markApplied() here: a failed migration must retry on next boot.
-      // Silently marking it applied was the root cause of the self_repair_memory_events
-      // table never being created (the migration failed but was permanently skipped).
-      // Migrations should be idempotent (IF NOT EXISTS) so retrying is safe.
       logger.error(`[DB] ❌ Migration ${filename} FAILED — will retry on next boot: ${err.message}`);
+      throw err;
     }
   }
 

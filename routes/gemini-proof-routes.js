@@ -2,7 +2,6 @@
 /** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 
 import express from 'express';
-import { pool } from '../core/database.js';
 import {
   writeSecurityReceipt,
   readReceiptsByType,
@@ -10,7 +9,7 @@ import {
   createRuntimeProofReceipt,
 } from '../services/oil-security-receipts.js';
 
-export function createGeminiProofRoutes({ callCouncilMember, requireKey }) {
+export function createGeminiProofRoutes({ callCouncilMember, requireKey, pool }) {
   const router = express.Router();
 
   router.post('/api/v1/gemini/proof', requireKey, async (req, res) => {

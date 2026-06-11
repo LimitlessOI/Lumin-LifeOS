@@ -1,0 +1,96 @@
+{
+  "mission_id": "FACTORY-0001",
+  "blueprint_id": "FACTORY-0001-v1",
+  "roles": {
+    "Founder": {
+      "may": [
+        "define_mission",
+        "define_success_criteria",
+        "approve_scope"
+      ],
+      "may_not": [
+        "execute_builder_step"
+      ]
+    },
+    "AIC": {
+      "may": [
+        "challenge_founder_packet",
+        "approve_bpb_input"
+      ],
+      "may_not": [
+        "write_runtime_files",
+        "execute_builder_step"
+      ]
+    },
+    "BPB": {
+      "may": [
+        "author_blueprint",
+        "author_acceptance_tests",
+        "author_blocked_return_contract",
+        "author_salvage_map"
+      ],
+      "may_not": [
+        "execute_builder_step"
+      ]
+    },
+    "Builder": {
+      "may": [
+        "execute_exact_step",
+        "return_done",
+        "return_blocked",
+        "return_failed_verification"
+      ],
+      "may_not": [
+        "select_task",
+        "prioritize_task",
+        "create_support_task",
+        "create_fallback_task",
+        "create_patch_plan",
+        "modify_blueprint",
+        "modify_authority_rules",
+        "modify_canonical_memory"
+      ]
+    },
+    "SENTRY": {
+      "may": [
+        "verify_step_output",
+        "reject_failed_output",
+        "suspend_trust_on_failed_check"
+      ],
+      "may_not": [
+        "author_blueprint",
+        "execute_builder_step"
+      ]
+    },
+    "Historian": {
+      "may": [
+        "record_step_receipt"
+      ],
+      "may_not": [
+        "change_builder_output"
+      ]
+    },
+    "TSOS": {
+      "may": [
+        "record_step_metrics"
+      ],
+      "may_not": [
+        "change_builder_output",
+        "change_blueprint"
+      ]
+    }
+  },
+  "builder_api_forbidden_capabilities": [
+    "task_selection",
+    "priority_selection",
+    "support_task_creation",
+    "fallback_generation",
+    "patch_plan_creation",
+    "multi_step_orchestration"
+  ],
+  "enforcement_requirements": {
+    "sandbox_root": "factory-v1",
+    "proof_execution_acceptance_source": "blueprint_owned_registry_only",
+    "exact_write_validation_required": true
+  }
+}

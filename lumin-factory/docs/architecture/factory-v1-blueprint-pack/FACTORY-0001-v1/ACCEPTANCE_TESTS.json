@@ -1,0 +1,178 @@
+{
+  "mission_id": "FACTORY-0001",
+  "blueprint_id": "FACTORY-0001-v1",
+  "tests": [
+    {
+      "test_id": "AT-S001-1",
+      "step_id": "S001",
+      "type": "json_parseable",
+      "target": "factory-v1/contracts/BLOCKED_RETURN_SCHEMA.json"
+    },
+    {
+      "test_id": "AT-S001-2",
+      "step_id": "S001",
+      "type": "file_contains_string",
+      "target": "factory-v1/contracts/BLOCKED_RETURN_SCHEMA.json",
+      "expected": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "test_id": "AT-S002-1",
+      "step_id": "S002",
+      "type": "node_check",
+      "target": "factory-v1/sentry/verify-step-result.js"
+    },
+    {
+      "test_id": "AT-S002-2",
+      "step_id": "S002",
+      "type": "file_contains_export",
+      "target": "factory-v1/sentry/verify-step-result.js",
+      "expected": "verifyStepResult"
+    },
+    {
+      "test_id": "AT-S002-3",
+      "step_id": "S002",
+      "type": "file_contains_string",
+      "target": "factory-v1/sentry/verify-step-result.js",
+      "expected": "FAILED_VERIFICATION"
+    },
+    {
+      "test_id": "AT-S002-4",
+      "step_id": "S002",
+      "type": "file_contains_string",
+      "target": "factory-v1/sentry/verify-step-result.js",
+      "expected": "file_exact_match"
+    },
+    {
+      "test_id": "AT-S003-1",
+      "step_id": "S003",
+      "type": "node_check",
+      "target": "factory-v1/historian/record-step-outcome.js"
+    },
+    {
+      "test_id": "AT-S003-2",
+      "step_id": "S003",
+      "type": "file_contains_export",
+      "target": "factory-v1/historian/record-step-outcome.js",
+      "expected": "recordStepOutcome"
+    },
+    {
+      "test_id": "AT-S004-1",
+      "step_id": "S004",
+      "type": "node_check",
+      "target": "factory-v1/tsos/record-step-metrics.js"
+    },
+    {
+      "test_id": "AT-S004-2",
+      "step_id": "S004",
+      "type": "file_contains_export",
+      "target": "factory-v1/tsos/record-step-metrics.js",
+      "expected": "recordStepMetrics"
+    },
+    {
+      "test_id": "AT-S005-1",
+      "step_id": "S005",
+      "type": "node_check",
+      "target": "factory-v1/builder/execute-step.js"
+    },
+    {
+      "test_id": "AT-S005-2",
+      "step_id": "S005",
+      "type": "file_contains_export",
+      "target": "factory-v1/builder/execute-step.js",
+      "expected": "executeStep"
+    },
+    {
+      "test_id": "AT-S005-3",
+      "step_id": "S005",
+      "type": "file_contains_string",
+      "target": "factory-v1/builder/execute-step.js",
+      "expected": "MISSION_VIOLATION"
+    },
+    {
+      "test_id": "AT-S005-4",
+      "step_id": "S005",
+      "type": "file_contains_string",
+      "target": "factory-v1/builder/execute-step.js",
+      "expected": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "test_id": "AT-S005-5",
+      "step_id": "S005",
+      "type": "file_contains_string",
+      "target": "factory-v1/builder/execute-step.js",
+      "expected": "factory-v1"
+    },
+    {
+      "test_id": "AT-S006-1",
+      "step_id": "S006",
+      "type": "node_check",
+      "target": "factory-v1/runtime/run-frozen-step.js"
+    },
+    {
+      "test_id": "AT-S006-2",
+      "step_id": "S006",
+      "type": "file_contains_export",
+      "target": "factory-v1/runtime/run-frozen-step.js",
+      "expected": "runFrozenStep"
+    },
+    {
+      "test_id": "AT-S007-1",
+      "step_id": "S007",
+      "type": "node_check",
+      "target": "factory-v1/routes/factory-execute-step-routes.js"
+    },
+    {
+      "test_id": "AT-S007-2",
+      "step_id": "S007",
+      "type": "file_contains_export",
+      "target": "factory-v1/routes/factory-execute-step-routes.js",
+      "expected": "createFactoryExecuteStepRoutes"
+    },
+    {
+      "test_id": "AT-S007-3",
+      "step_id": "S007",
+      "type": "file_contains_string",
+      "target": "factory-v1/routes/factory-execute-step-routes.js",
+      "expected": "/execute-step"
+    },
+    {
+      "test_id": "AT-S007-4",
+      "step_id": "S007",
+      "type": "file_contains_string",
+      "target": "factory-v1/routes/factory-execute-step-routes.js",
+      "expected": "acceptance-tests-registry.json"
+    },
+    {
+      "test_id": "AT-S008-1",
+      "step_id": "S008",
+      "type": "json_parseable",
+      "target": "factory-v1/examples/sample-frozen-step.json"
+    },
+    {
+      "test_id": "AT-S008-2",
+      "step_id": "S008",
+      "type": "json_parseable",
+      "target": "factory-v1/examples/sample-frozen-step.json"
+    },
+    {
+      "test_id": "AT-S008-3",
+      "step_id": "S008",
+      "type": "file_contains_string",
+      "target": "factory-v1/examples/sample-frozen-step.json",
+      "expected": "\"type\": \"write_file_exact\""
+    },
+    {
+      "test_id": "AT-S009-1",
+      "step_id": "S009",
+      "type": "json_parseable",
+      "target": "factory-v1/contracts/acceptance-tests-registry.json"
+    },
+    {
+      "test_id": "AT-S009-2",
+      "step_id": "S009",
+      "type": "file_contains_string",
+      "target": "factory-v1/contracts/acceptance-tests-registry.json",
+      "expected": "file_exact_match"
+    }
+  ]
+}

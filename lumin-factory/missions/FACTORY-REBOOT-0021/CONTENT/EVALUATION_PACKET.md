@@ -26,7 +26,7 @@ cat builderos-reboot/PROJECT_CERTIFICATION.json
 |-------|--------|
 | STAGING_READY | Verify via readiness report |
 | Blueprint duplicability | DUPLICATION_RECEIPT.json |
-| FULLY_MACHINE_READY | **NO** — human 3-session coder test optional |
+| FULLY_MACHINE_READY | **NO** — see SENTRY_AUDIT_REPORT.md |
 | Lumin-Factory on GitHub | **NO** — local `lumin-factory/` only |
 | Full LifeOS product | **NO** — factory platform only |
 

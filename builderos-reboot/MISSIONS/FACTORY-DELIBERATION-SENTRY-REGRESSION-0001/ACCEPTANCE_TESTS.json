@@ -45,6 +45,48 @@
       "description": "Full local regression layer passes",
       "command": "npm run lifeos:deliberation:regression -- --layer=local",
       "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-B_LB_METADATA",
+      "probe_id": "B_LB_METADATA",
+      "description": "Catalog probe B_LB_METADATA covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=B_LB_METADATA",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N5",
+      "probe_id": "N5",
+      "description": "Catalog probe N5 covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N5",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N2",
+      "probe_id": "N2",
+      "description": "Catalog probe N2 covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N2",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N3",
+      "probe_id": "N3",
+      "description": "Catalog probe N3 covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N3",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N6b",
+      "probe_id": "N6b",
+      "description": "Catalog probe N6b covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N6b",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N11",
+      "probe_id": "N11",
+      "description": "Catalog probe N11 covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N11",
+      "expected_exit_code": 0
     }
   ]
 }

@@ -1,0 +1,239 @@
+{
+  "mission_id": "FACTORY-REBOOT-0029",
+  "blueprint_id": "FACTORY-REBOOT-0029-v1",
+  "scope": "tsos_hot_path_with_guardrails",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "steps": [
+    {
+      "step_id": "S2901",
+      "phase_id": "P39",
+      "title": "TSOS guardrails module",
+      "target_file": "factory-staging/factory-core/tsos/tsos-guardrails.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-REBOOT-0029/CONTENT/tsos-guardrails.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "ed381c429ca05a0a08c3363435b2008f132bf50551c003554b08f9e035676fcb"
+      },
+      "allowed_context_files": [
+        "missions/FACTORY-REBOOT-0029/CONTENT/tsos-guardrails.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "TSOS must not gain mission authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2901-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "TSOS",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S2902",
+      "phase_id": "P39",
+      "title": "TSOS record-step-metrics with append",
+      "target_file": "factory-staging/factory-core/tsos/record-step-metrics.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-REBOOT-0029/CONTENT/record-step-metrics.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "47802022a9809e95afebd09dff0bb9d153f930d1983149b519dd4c58d7872d1e"
+      },
+      "allowed_context_files": [
+        "missions/FACTORY-REBOOT-0029/CONTENT/record-step-metrics.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S2901"
+      ],
+      "non_goals": [
+        "TSOS must not gain mission authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2902-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "TSOS",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S2903",
+      "phase_id": "P39",
+      "title": "TSOS summary reader",
+      "target_file": "factory-staging/factory-core/tsos/tsos-summary.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-REBOOT-0029/CONTENT/tsos-summary.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "82ef3313fd81e2f8ca486086c506f4bd6140007e08d65931f15150c1e9c48556"
+      },
+      "allowed_context_files": [
+        "missions/FACTORY-REBOOT-0029/CONTENT/tsos-summary.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S2902"
+      ],
+      "non_goals": [
+        "TSOS must not gain mission authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2903-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "TSOS",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S2904",
+      "phase_id": "P39",
+      "title": "Wire TSOS into run-step dispatch",
+      "target_file": "factory-staging/factory-core/builder/run-step.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-REBOOT-0029/CONTENT/run-step.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
+      },
+      "allowed_context_files": [
+        "missions/FACTORY-REBOOT-0029/CONTENT/run-step.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S2903"
+      ],
+      "non_goals": [
+        "TSOS must not gain mission authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2904-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "TSOS",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S2905",
+      "phase_id": "P39",
+      "title": "Wire TSOS summary route",
+      "target_file": "factory-staging/startup/register-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-REBOOT-0029/CONTENT/register-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
+      },
+      "allowed_context_files": [
+        "missions/FACTORY-REBOOT-0029/CONTENT/register-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S2904"
+      ],
+      "non_goals": [
+        "TSOS must not gain mission authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2905-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "factory-staging/**",
+      "authority_owner": "TSOS",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S2906",
+      "phase_id": "P39",
+      "title": "TSOS integration test script",
+      "target_file": "scripts/factory-tsos-integration.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-REBOOT-0029/CONTENT/factory-tsos-integration.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "296d032ccc4edb0b50f6dc46d70ac3570ef70f9a76b2b752e2f5bd6112d6d120"
+      },
+      "allowed_context_files": [
+        "missions/FACTORY-REBOOT-0029/CONTENT/factory-tsos-integration.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S2905"
+      ],
+      "non_goals": [
+        "TSOS must not gain mission authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2906-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "**",
+      "authority_owner": "TSOS",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "S2907",
+      "phase_id": "P39",
+      "title": "TSOS integration doc",
+      "target_file": "TSOS_FACTORY_INTEGRATION.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-REBOOT-0029/CONTENT/TSOS_FACTORY_INTEGRATION.md"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "b67725a12a7bd7962a0ee4bc6ff65824788ab4848802fae7acb61373cb20e7fa"
+      },
+      "allowed_context_files": [
+        "missions/FACTORY-REBOOT-0029/CONTENT/TSOS_FACTORY_INTEGRATION.md"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "S2906"
+      ],
+      "non_goals": [
+        "TSOS must not gain mission authority."
+      ],
+      "acceptance_test_ids": [
+        "AT-S2907-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "sandbox_boundary": "**",
+      "authority_owner": "TSOS",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

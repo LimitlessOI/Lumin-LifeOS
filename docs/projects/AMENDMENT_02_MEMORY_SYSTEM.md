@@ -1,7 +1,7 @@
 # AMENDMENT 02 — Memory Capsule System
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-01 — constitutional refactor alignment: capsule-memory scope clarified against mission-linked retrieval direction; historian prediction/outcome duties remain with Amendment 39. Prior: 2026-05-28 — memory authority cleanup: capsule memory isolated from Amendment 39 evidence memory and legacy CRUD memory.
+**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ---
 
@@ -162,6 +162,8 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 ---
 
 ## Change Receipts
+
+| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|

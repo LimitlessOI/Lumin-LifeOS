@@ -1,0 +1,18 @@
+{
+  "schema": "founder_alert_v1",
+  "generated_at": "2026-06-11T08:15:00.989Z",
+  "severity": "P0",
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "reason": "AUTONOMOUS_RECOVERY_PATH_INCOMPLETE",
+  "summary": "Strategy forbidden but recovery protocol not fully autonomous — founder attention required. System must not silent-stop.",
+  "escalation_level": "hard_stop",
+  "recovery_protocol_active": true,
+  "council_auto_queued": false,
+  "required_actions": [
+    "Review FAILURE_PATTERN_PACKET.json",
+    "Unblock recovery: Council OR mechanical v27 runner OR factory-local path",
+    "Complete BP audit artifact or produce UNSOLVED receipt with evidence"
+  ],
+  "scorecard_ref": "SNT_MISSION_SCORECARD.json",
+  "mission_outcome": "FAIL"
+}

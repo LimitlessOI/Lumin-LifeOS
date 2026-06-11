@@ -1,0 +1,139 @@
+{
+  "generated_at": "2026-06-11T08:14:24.560Z",
+  "classification": {
+    "platform_totals": "KNOW: Railway 720h aggregate — mostly historical idle/autonomous churn, NOT founder-value proof",
+    "spend_buckets": "GUESS: proportional split from 200-event sample only",
+    "mission_attribution": "GUESS: keyword match on same sample"
+  },
+  "free_tier_policy": "Free-tier models first priority daily for appropriate tasks; paid when task class requires",
+  "platform_window": {
+    "since_hours": 720,
+    "source": "https://robust-magic-production.up.railway.app",
+    "metrics": {
+      "avg_useful_work_score": 0.736,
+      "total_token_estimate_sum": 8686864,
+      "useful_work_per_1k_tokens_estimate": 1.338,
+      "average_repair_cost_ms": 5733.776,
+      "average_successful_build_latency_ms": null,
+      "retry_waste_pct": 0.012,
+      "failed_build_pct": 3.758,
+      "hallucination_frequency": 0,
+      "pb_violation_attempts_prevented": 0,
+      "context_growth_rate": null,
+      "build_success_pct": 96.242,
+      "repair_success_pct": 96.686,
+      "avg_cycle_duration_ms": 5864.361,
+      "proof_recovery_time_ms": 84.138,
+      "drift_frequency": 0.114,
+      "overnight_throughput": 23.614,
+      "autonomous_continuation_rate": 1
+    },
+    "efficiency_summary": {
+      "task_type": "builder.build",
+      "count": 13572,
+      "avg_wall_ms": null,
+      "tokens_est": "8686864",
+      "avg_useful": "0.70748600058944886531",
+      "successes": 13062
+    },
+    "by_model": [
+      {
+        "model_used": "gemini_flash",
+        "count": 14650,
+        "tokens_est": "8592873",
+        "avg_wall_ms": null,
+        "avg_useful": "0.70886688505062537225"
+      },
+      {
+        "model_used": "groq_llama",
+        "count": 128,
+        "tokens_est": "83041",
+        "avg_wall_ms": null,
+        "avg_useful": "0.58984375000000000000"
+      },
+      {
+        "model_used": "deepseek",
+        "count": 9,
+        "tokens_est": "9751",
+        "avg_wall_ms": null,
+        "avg_useful": "0.44444444444444444444"
+      },
+      {
+        "model_used": "system",
+        "count": 3,
+        "tokens_est": "1199",
+        "avg_wall_ms": null,
+        "avg_useful": "0.33333333333333333333"
+      }
+    ],
+    "data_quality": "KNOW: Railway API"
+  },
+  "spend_buckets": {
+    "idle_churn_tokens": 15133,
+    "mission_attributed_useful_tokens": 38672,
+    "paid_railway_tokens": 0,
+    "unclassified_railway_tokens": 0,
+    "unknown_external_tokens": {
+      "cursor_conductor": "NOT IN TELEMETRY",
+      "claude_openai_direct": "NOT IN TELEMETRY",
+      "human_supervision_hours": "NOT IN TELEMETRY",
+      "opportunity_cost": "NOT IN TELEMETRY"
+    },
+    "note": "Sample-based split from last 200 events; platform total is NOT split without full DB query",
+    "platform_total_token_est_720h": 8686864,
+    "warning": "Do NOT treat platform_total as learning ROI — use useful + mission buckets"
+  },
+  "mission_attribution_sample": {
+    "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001": {
+      "events_in_sample": 11,
+      "token_estimate_sum": 8864,
+      "useful_token_estimate_sum": 5864,
+      "cost_estimate": {
+        "usd": 0.0012,
+        "method": "GUESS: paid deepseek @ $1.4e-7/token on char/4 estimates"
+      },
+      "note": "Sample = last 200 events; undercounts full mission history",
+      "successes": 9,
+      "failures": 2
+    },
+    "FACTORY-DELIBERATION-V27-0001": {
+      "events_in_sample": 0,
+      "token_estimate_sum": 0,
+      "useful_token_estimate_sum": 0,
+      "cost_estimate": {
+        "usd": 0,
+        "method": "zero_tokens"
+      },
+      "note": "Sample = last 200 events; undercounts full mission history",
+      "successes": 0,
+      "failures": 0
+    },
+    "PLATFORM_BUILDEROS_ALPHA": {
+      "events_in_sample": 7,
+      "token_estimate_sum": 2615,
+      "useful_token_estimate_sum": 2604,
+      "cost_estimate": {
+        "usd": 0.0004,
+        "method": "GUESS: paid deepseek @ $1.4e-7/token on char/4 estimates"
+      },
+      "note": "Sample = last 200 events; undercounts full mission history",
+      "successes": 6,
+      "failures": 1
+    }
+  },
+  "nine_questions_Q8_unknowns": [
+    "Cursor / Conductor usage",
+    "Claude / OpenAI outside BuilderOS",
+    "Human supervision time",
+    "Opportunity cost",
+    "Full idle vs useful split (needs DB query, not 200-event cap)"
+  ],
+  "founder_summary": {
+    "platform_builder_token_est_720h": 8686864,
+    "platform_builder_events_720h": 13572,
+    "sample_idle_churn_tokens": 15133,
+    "sample_useful_tokens": 38672,
+    "sample_paid_railway_tokens": 0,
+    "primary_model": "gemini_flash"
+  }
+}

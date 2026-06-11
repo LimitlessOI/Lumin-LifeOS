@@ -84,6 +84,19 @@ The model must stop and update handoff if:
 - never skip receipts
 - never skip handoff updates
 - never mark complete without acceptance evidence
+- **never advance a mission phase without Tier 1 telemetry** (`npm run factory:tier1:verify`)
+
+## Tier 1 enforcement loop
+
+For missions with `telemetry_enforcement: true` or status in the debug/BP audit set:
+
+1. Run `npm run factory:tier1:report` — writes `TIER1_CHECK_RESULT.json` per mission
+2. If `TIER1_FAIL` → **stay in loop** (BPB / SENTRY mechanical / debug) until `MISSION_TELEMETRY_RECEIPT.json` is complete
+3. If Tier 1 passes but SENTRY receipt missing → **SENTRY mechanical loop**
+4. If honest `BP_AUDIT_FAIL` with evidence → **route to BPB** (this is progress, not defeat)
+5. Only when Tier 1 + trustworthy SENTRY verdict → phase may advance
+
+See `builderos-reboot/SNT_TELEMETRY_DOCTRINE.md` and `ALPHA_MISSION_TELEMETRY_CONTRACT.json`.
 
 ## Session receipt format
 

@@ -1,0 +1,68 @@
+{
+  "plan_id": "CUTOVER-EXECUTION-PLAN-0001",
+  "mandate": "Adam directive — factory is NOT LifeOS; fresh repo + fresh Railway; legacy repo frozen",
+  "prerequisite_fixes_this_session": [
+    "factory-repo-layout.mjs — standalone vs monorepo detection",
+    "mission-lib + factory-ci + run-mission-acceptance wired to layout",
+    "legacy-write-quarantine on execute-step and execute-mission in monorepo",
+    "build-lumin-factory-bundle normalizes MISSION_QUEUE paths + copies doctrine",
+    "init-lumin-factory-repo runs git init"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "owner": "system",
+      "action": "Rebuild cutover bundle",
+      "command": "npm run factory:init",
+      "done_when": "lumin-factory/.git exists; missions/FACTORY-REBOOT-0001/BLUEPRINT.json exists"
+    },
+    {
+      "step": 2,
+      "owner": "system",
+      "action": "Verify standalone CI",
+      "command": "cd lumin-factory && npm run factory:ci",
+      "done_when": "factory:ci reports layout=standalone and passes (or lists only known migration failures)"
+    },
+    {
+      "step": 3,
+      "owner": "Adam",
+      "action": "Create empty GitHub repo",
+      "command": "gh repo create Lumin-Factory --private --description \"BuilderOS / Lumin Factory standalone runtime\"",
+      "done_when": "Remote URL exists"
+    },
+    {
+      "step": 4,
+      "owner": "Adam",
+      "action": "Push clean factory tree only",
+      "command": "cd lumin-factory && git add -A && git commit -m \"Initial Lumin-Factory cutover from LifeOS parts-car\" && git remote add origin <url> && git push -u origin main",
+      "done_when": "GitHub shows only factory-staging/, missions/, scripts/, docs/ — NO server.js LifeOS banner"
+    },
+    {
+      "step": 5,
+      "owner": "Adam",
+      "action": "New Railway service from Lumin-Factory repo",
+      "command": "Railway: New Project → Deploy from Lumin-Factory → root directory factory-staging or start script npm start",
+      "env": ["DATABASE_URL if historian needs DB", "ANTHROPIC_API_KEY", "OPENAI_API_KEY", "COMMAND_CENTER_KEY", "GITHUB_TOKEN"],
+      "done_when": "GET /health or factory-staging server responds 200"
+    },
+    {
+      "step": 6,
+      "owner": "Adam",
+      "action": "Freeze LifeOS factory authority",
+      "command": "Mark LifeOS Railway as LEGACY product-only; remove or disable factory:* npm scripts after migration receipt; archive builderos-reboot/ in LifeOS repo",
+      "done_when": "No factory mission executes against LifeOS REPO_ROOT"
+    },
+    {
+      "step": 7,
+      "owner": "system",
+      "action": "FACTORY-CUTOVER-0001 mission — rewrite acceptance test paths builderos-reboot/ → missions/ in all mission packs inside Lumin-Factory",
+      "done_when": "factory:ci ALL PASS on clean clone of Lumin-Factory only"
+    }
+  ],
+  "hard_rules_after_cutover": [
+    "Factory blueprints sandbox ONLY factory-staging/** and missions/**",
+    "Product regression tests LifeOS via HTTP contract — never write scripts/deliberation-* in LifeOS repo from factory",
+    "LUMIN_FACTORY_GITHUB=true required for any BOOTSTRAP_AND_STAGING_READY claim",
+    "Commingling = objective FAIL until CUTOVER_RECEIPT.json exists"
+  ]
+}

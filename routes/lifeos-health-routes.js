@@ -51,13 +51,19 @@ export function createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, 
    * Separate from requireKey to allow iOS Shortcuts to call without headers.
    */
   function requireWebhookToken(req, res, next) {
-    const token = req.query.token;
-    const expected = process.env.COMMAND_CENTER_KEY;
-    if (!expected) {
-      logger.warn('lifeos-health-routes: COMMAND_CENTER_KEY not set');
+    const token = String(req.query.token || '').trim();
+    const configuredValues = [
+      process.env.COMMAND_CENTER_KEY,
+      process.env.LIFEOS_KEY,
+      process.env.API_KEY,
+    ]
+      .map((value) => String(value || '').trim())
+      .filter(Boolean);
+    if (configuredValues.length === 0) {
+      logger.warn('lifeos-health-routes: no operator key configured for webhook auth');
       return res.status(500).json({ error: 'Server not configured' });
     }
-    if (token !== expected) {
+    if (!token || !configuredValues.includes(token)) {
       return res.status(401).json({ error: 'Invalid token' });
     }
     next();

@@ -1,0 +1,9 @@
+{
+  "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "strategies_attempted": [
+    "council_multi_hat",
+    "factory_local_runner"
+  ],
+  "cycles": 1,
+  "updated_at": "2026-06-11T07:53:03.280Z"
+}

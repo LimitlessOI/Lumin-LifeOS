@@ -1,5 +1,7 @@
 # C2 — Canonical Definition (anti-drift)
 
+> **⚠️ DEPRECATED (2026-06-09):** **C2** is retired. Use **Founder Mode (FM)** and **Council Chair (ChC)** per `docs/BUILDEROS_VOCABULARY.md` §0. This file is retained for archaeology only — do not cite in new work.
+
 **Authority:** Founder-aligned with `CODER_ZERO_DECISION_BUILD_SPEC_V1.md`, `FULL_FOUNDER_PACKET_V1.md`, `AMENDMENT_12_COMMAND_CENTER.md`.  
 **Last updated:** 2026-06-09 (founder confirmation session)
 

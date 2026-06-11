@@ -109,9 +109,16 @@ export function registerPublicRoutes(app, {
   app.get("/boldtrail", (req, res) => {
     console.log("🏠 [ROUTE] /boldtrail accessed");
     // Only accept header-based auth (no query params)
-    const key = req.headers["x-command-key"];
+    const key = String(req.headers["x-command-key"] || "").trim();
+    const configuredKeys = [
+      COMMAND_CENTER_KEY,
+      process.env.LIFEOS_KEY,
+      process.env.API_KEY,
+    ]
+      .map((value) => String(value || "").trim())
+      .filter(Boolean);
 
-    if (key && key === COMMAND_CENTER_KEY) {
+    if (key && configuredKeys.includes(key)) {
       const filePath = path.join(__dirname, "public", "overlay", "boldtrail.html");
       if (fs.existsSync(filePath)) {
         return sendPublicFileNoCache(res, filePath);

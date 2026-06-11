@@ -55,7 +55,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-03 — **Builder Reliability Initiative:** model escalation gate on builder dispatch + 413 fast-fail (prior receipt). Prior **2026-06-02** — Builder 413 fast-fail + JS validation gate fix + INDEX priority order.
+**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ---
 
@@ -1542,6 +1542,8 @@ Read first for Phase 1 build:
 ---
 
 ## Change Receipts
+
+| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | 2026-06-10 | **`routes/lifeos-council-builder-routes.js`** — safe-scope fail-fast before council when `target_file` known; `respondSafeScopeBlocked()` returns **422** + `blocked_return: BLOCKED_RETURN_TO_BPB` + `gap_recommendation` (replaces dead-end 403). `buildGapRecommendation` adds `safe_scope` stage. | Adam: builder gaps must route upstream to BPB, not stop silently; SNT platform fix for regression harness mission. GAP-FILL. | AM21, AM48 | `node --check` PASS · `npm run lifeos:snt:builder-safe-scope` PASS |
 | 2026-06-09 | **Deliberation v2.7 on `/build`** — `routes/lifeos-council-builder-routes.js` imports `services/builder-deliberation-hook.js`: seeds roster+Hist+CFO before council codegen; finalizes gate + Founder Debrief after successful commit; returns `deliberation_session_id` + `founder_debrief_synopsis`. Fail-closed only when `load_bearing:true` and gate violations. Opt-out: `skip_deliberation` / `skip_deliberation_finalize`. GAP-FILL: wiring layer (AM48 owns deliberation domain). | Adam A→Z deliberation build; BPB/CDR session law before builder execution. | AM21, AM48 | `node --check` PASS · factory smoke PASS |

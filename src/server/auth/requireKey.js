@@ -24,19 +24,33 @@ export function createRequireKey(options = {}) {
     "LIFEOS_KEY",
     "COMMAND_CENTER_KEY",
   ];
+  const nodeEnv = String(options.nodeEnv || process.env.NODE_ENV || "").toLowerCase();
+  const productionLike = ["production", "prod"].includes(nodeEnv);
 
   return function requireKeyMiddleware(req, res, next) {
     try {
       // Open access mode — set LIFEOS_OPEN_ACCESS=true in Railway to bypass auth for testing.
       // Remove this env var when done testing.
-      if (process.env.LIFEOS_OPEN_ACCESS === 'true') return next();
+      if (process.env.LIFEOS_OPEN_ACCESS === 'true') {
+        if (!productionLike) return next();
+        return res.status(503).json({
+          ok: false,
+          error: "OPEN_ACCESS_DISABLED_IN_PRODUCTION",
+        });
+      }
 
       const configuredValues = envVars
         .map((name) => normalizeKey(process.env[name]))
         .filter(Boolean);
 
-      // If no key is configured, do not block requests (avoids breaking deploys).
-      if (configuredValues.length === 0) return next();
+      // Allow unkeyed access only outside production-like runtimes.
+      if (configuredValues.length === 0) {
+        if (!productionLike) return next();
+        return res.status(503).json({
+          ok: false,
+          error: "AUTH_KEY_NOT_CONFIGURED",
+        });
+      }
 
       const providedHeader = headerAliases
         .map((name) =>

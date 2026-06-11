@@ -14,6 +14,7 @@
  *
  * Use createDeploymentService(deps) to get bound functions.
  *
+ * @authority Legacy production spine — see services/AGENTS.md. Not canonical factory runtime.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
@@ -82,14 +83,28 @@ export function createDeploymentService(deps) {
 
     const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
     const [owner, repo] = GITHUB_REPO.split('/');
+    const rawPath = String(filePath || '').replace(/\\/g, '/').trim();
+    const rawParts = rawPath.replace(/^\/+/, '').split('/').filter(Boolean);
+    const normalizedPath = path.posix.normalize(rawPath).replace(/^\/+/, '');
+    const pathParts = normalizedPath.split('/').filter(Boolean);
+
+    if (
+      !normalizedPath ||
+      rawParts.length === 0 ||
+      rawParts.some((part) => part === '.' || part === '..') ||
+      pathParts.length === 0 ||
+      pathParts.some((part) => part === '.' || part === '..')
+    ) {
+      throw new Error(`commitToGitHub BLOCKED: invalid repo-relative path "${filePath}"`);
+    }
 
     // ── Forbidden path guard ───────────────────────────────────────────────────
     // Prevents the builder from accumulating dead code in orphaned directories
     // (src/, frontend/, backend/, etc.) that have zero server imports.
-    const topDir = filePath.split('/')[0];
+    const topDir = pathParts[0];
     if (COMMIT_FORBIDDEN_TOP_DIRS.has(topDir)) {
       throw new Error(
-        `commitToGitHub BLOCKED: "${filePath}" targets forbidden directory "${topDir}/". ` +
+        `commitToGitHub BLOCKED: "${normalizedPath}" targets forbidden directory "${topDir}/". ` +
         `Valid roots: routes/ services/ db/ startup/ config/ scripts/ public/ docs/ prompts/ core/ middleware/. ` +
         `Re-scope target_file to a valid server path.`
       );
@@ -103,7 +118,7 @@ export function createDeploymentService(deps) {
     // Root cause of the 2026-05-13 triple-strip: stash-only scripts, then each
     // rebase + Railway rebuild lost them. Guard fires at the API level so even
     // Railway autonomous builds cannot silently strip them.
-    if (filePath === 'package.json') {
+    if (normalizedPath === 'package.json') {
       const REQUIRED_PACKAGE_SCRIPTS = [
         'repo:sync-check',
         'lifeos:verify:ui-map',
@@ -141,7 +156,7 @@ export function createDeploymentService(deps) {
     // Railway and causes a boot crash. Root cause of the 2026-05-09 crash loop:
     // site-builder-routes.js was committed at 336 lines (truncated), causing
     // SyntaxError: Unexpected end of input on every Railway boot.
-    if (filePath.endsWith('.js')) {
+    if (normalizedPath.endsWith('.js')) {
       const tmpDir = await fsPromises.mkdtemp(path.join(tmpdir(), 'deploy-check-'));
       const tmpFile = path.join(tmpDir, 'check.js');
       try {
@@ -152,7 +167,7 @@ export function createDeploymentService(deps) {
         await fsPromises.unlink(tmpFile).catch(() => {});
         await fsPromises.rmdir(tmpDir).catch(() => {});
         throw new Error(
-          `commitToGitHub BLOCKED: JS syntax check failed for "${filePath}" — not pushing broken code to GitHub.\n` +
+          `commitToGitHub BLOCKED: JS syntax check failed for "${normalizedPath}" — not pushing broken code to GitHub.\n` +
           `Detail: ${detail}\n` +
           `Likely cause: builder hit token limit mid-generation. Retry with a smaller spec or explicit target_file.`
         );
@@ -163,7 +178,7 @@ export function createDeploymentService(deps) {
 
     // Get current SHA so we can update (not create duplicate)
     const getRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${targetBranch}`,
+      `https://api.github.com/repos/${owner}/${repo}/contents/${normalizedPath}?ref=${targetBranch}`,
       {
         headers: {
           Authorization: `token ${token}`,
@@ -186,7 +201,7 @@ export function createDeploymentService(deps) {
     };
 
     const commitRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
+      `https://api.github.com/repos/${owner}/${repo}/contents/${normalizedPath}`,
       {
         method: 'PUT',
         headers: {
@@ -208,7 +223,7 @@ export function createDeploymentService(deps) {
 
     const commitData = await commitRes.json().catch(() => ({}));
     const commitSha = commitData?.commit?.sha || null;
-    console.log(`✅ [DEPLOY] Committed ${filePath} → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
+    console.log(`✅ [DEPLOY] Committed ${normalizedPath} → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
     return { ok: true, sha: commitSha };
   }
 

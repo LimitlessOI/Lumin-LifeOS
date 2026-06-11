@@ -13,14 +13,14 @@
       "target_file": "factory-staging/README.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-README.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-README.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "7642922dbb314843e0a8e07e17bf6ec373a8f81439aecfab9fa97294122a68fd"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-README.md"
+        "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-README.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -44,14 +44,14 @@
       "target_file": "factory-staging/package.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-package.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-package.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "c3fcbe317bfe71d65fe73a3368cae0a257fd4731936a8b692bc68799a8f1d259"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-package.json"
+        "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-package.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -77,14 +77,14 @@
       "target_file": "factory-staging/factory-core/builder/action-handlers/write-file-exact.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "fb8519fa2224893c7570b09c490291b299f8bbb46e2513bf2e9bb007e55884be"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -110,14 +110,14 @@
       "target_file": "factory-staging/factory-core/builder/blocked-return.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/blocked-return.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/blocked-return.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "62bf879f0b0f4f4445af115354f2d475f6771509a6b01cb8db9fae07f1dd194b"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/blocked-return.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/blocked-return.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -143,14 +143,14 @@
       "target_file": "factory-staging/factory-core/builder/execute-step.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "2d48def91caef745fcfecf3646b7c4f7db497894bf1b4b158735a8570dc16eb4"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -176,14 +176,14 @@
       "target_file": "factory-staging/factory-core/builder/sandbox.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/sandbox.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/sandbox.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "86a2e9ec26bf3a3c0262a943bcae9f76a65b31d415cc41c4e25fca7cdc3f214a"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/sandbox.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/sandbox.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -209,14 +209,14 @@
       "target_file": "factory-staging/factory-core/historian/MEMORY_AUTHORITY_MAP.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/MEMORY_AUTHORITY_MAP.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/MEMORY_AUTHORITY_MAP.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "fe7bed72f380eb0cdd99f1e5534181b3ba4a291c67828d10219ef3c5b5ec20f2"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/MEMORY_AUTHORITY_MAP.md"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/MEMORY_AUTHORITY_MAP.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -242,14 +242,14 @@
       "target_file": "factory-staging/factory-core/historian/memory-trust-levels.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/memory-trust-levels.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/memory-trust-levels.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "7dd0d31f070850632a07d77bb161cdbb4d4768c050301502aa855b5e6aea520b"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/memory-trust-levels.md"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/memory-trust-levels.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -275,14 +275,14 @@
       "target_file": "factory-staging/factory-core/historian/record-consensus-session.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "6782421205bac5cb1e4a4257b6fe7f65c983f751743bbe549253a289500c417e"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -308,14 +308,14 @@
       "target_file": "factory-staging/factory-core/historian/record-decision.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-decision.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-decision.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "370d7cff1ffb916883a6a755ae18f8fb25289dd41e29f2967e031f6e7065151f"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-decision.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-decision.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -341,14 +341,14 @@
       "target_file": "factory-staging/factory-core/historian/record-lesson.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-lesson.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-lesson.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "cbfd19f87c2f926d64118bbe39b8513148f46bd96cc661feef9b7fdcfcc98d54"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-lesson.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-lesson.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -374,14 +374,14 @@
       "target_file": "factory-staging/factory-core/historian/record-outcome.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-outcome.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-outcome.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "6556af565916c1bd50ac844ac5fe0e939f0588f3899a5df74d6b1696318ae8e3"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-outcome.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-outcome.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -407,14 +407,14 @@
       "target_file": "factory-staging/factory-core/historian/record-prediction.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-prediction.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-prediction.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "ec801bbb1d57c0e121851adb2c1128d932d9476d5d4fec87907d159217239af7"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-prediction.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-prediction.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -440,14 +440,14 @@
       "target_file": "factory-staging/factory-core/readiness/legacy-quarantine.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/legacy-quarantine.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/legacy-quarantine.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "6e1aacaab0cdad852b0090d85de539a015cdbd89d2cb7fbe7d52c831ec42a632"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/legacy-quarantine.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/legacy-quarantine.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -473,14 +473,14 @@
       "target_file": "factory-staging/factory-core/readiness/proof-freshness.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/proof-freshness.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/proof-freshness.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "6c0c4acb6876cf04187f2b8fef3072d8aeaee6f5a70e583ad4b92ecd78e149a1"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/proof-freshness.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/proof-freshness.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -506,14 +506,14 @@
       "target_file": "factory-staging/factory-core/readiness/runtime-proof-snapshot.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/runtime-proof-snapshot.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/runtime-proof-snapshot.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "d448a782d703885ddac740e2f8317b22504420de581fb8f083e8b42a6f5ae8f2"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/runtime-proof-snapshot.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/runtime-proof-snapshot.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -539,14 +539,14 @@
       "target_file": "factory-staging/factory-core/readiness/structural-proof-freshness.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/structural-proof-freshness.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/structural-proof-freshness.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "d08b4b4059962c83e20b0c78d0be556017635ef66dade458f1a2f10a5ab1c004"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/structural-proof-freshness.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/structural-proof-freshness.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -572,14 +572,14 @@
       "target_file": "factory-staging/factory-core/readiness/system-alpha-readiness.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/system-alpha-readiness.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/system-alpha-readiness.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "64debf6ed0240e39d6cc186d9c9f0fdf0d77521521e35ca1f628d988c840c742"
+        "sha256": "2abb02d4808b9a3aab2a2d34686e30f242d283239e516fa897354847bc83af82"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/system-alpha-readiness.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/readiness/system-alpha-readiness.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -605,14 +605,14 @@
       "target_file": "factory-staging/factory-core/routes/factory-execute-step-routes.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/routes/factory-execute-step-routes.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/routes/factory-execute-step-routes.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "c4ade26771b4449b61e15373869b308eb8d94222a0cc40e67501155c47bfaf3d"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/routes/factory-execute-step-routes.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/routes/factory-execute-step-routes.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -638,14 +638,14 @@
       "target_file": "factory-staging/factory-core/sentry/anti-pattern-check.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "c2deb37901f8fa70f66edcf20b31c21bce366525eea251bcfb1073378de6b567"
+        "sha256": "51c5afd3678d5376b2977b8ca4123050c6683ce59f4ecd8441196b4448cb955f"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -671,14 +671,14 @@
       "target_file": "factory-staging/factory-core/sentry/blueprint-freeze-check.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/blueprint-freeze-check.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/blueprint-freeze-check.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "bf217f628392cd2ccf5f555a28ab0fba8ef45d375b6b55b0f1e02ef90c5c93e2"
+        "sha256": "9435d887c10db895b13bb8fd64ae6ee453e5235f84ee6b2071f0a23950483472"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/blueprint-freeze-check.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/blueprint-freeze-check.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -704,14 +704,14 @@
       "target_file": "factory-staging/factory-core/sentry/future-lookback.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/future-lookback.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/future-lookback.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "c48156e4ee8836c5038d19fc71b6e242822e7b70dcc7fd19aaf9b27287d60d2f"
+        "sha256": "f77751c321339fe9e572c3aecba6a4f39cfe764bbdc534ca952aca9b56ecc9c7"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/future-lookback.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/future-lookback.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -737,14 +737,14 @@
       "target_file": "factory-staging/factory-core/sentry/proof-freshness.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "be644eb5e556161a29c785fa3e1e984ed71a8325451720a3ec31b9c7f13653ec"
+        "sha256": "7606fc348fa3cac8d47138563f102a08529503e0555d9d38bc9f63ec55fd5c00"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -770,14 +770,14 @@
       "target_file": "factory-staging/factory-core/sentry/unintended-consequence-check.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "25e056e0322dc7dfd869c2f86977082203e4f93ce113f72da0f43878872addac"
+        "sha256": "e9508a023fd56ab868ce012508571b2fda7066cd8d8c0e98d1fd891d2df1097d"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -803,14 +803,14 @@
       "target_file": "factory-staging/factory-core/sentry/verify-step-result.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/verify-step-result.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/verify-step-result.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "faf87db94f599beac122386bf765eaefcda9ce8b5fe5fba5f80a7f62a49e1415"
+        "sha256": "b0db6704d65fab88aa8adc1ddb055c9561ac32ad0c25ba1b1e7b9bad36796d9a"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/verify-step-result.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/verify-step-result.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -836,14 +836,14 @@
       "target_file": "factory-staging/factory-core/tsos/CACHING_GOVERNANCE.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/CACHING_GOVERNANCE.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/CACHING_GOVERNANCE.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "9fda5bd85fe72cbb7bb1977082506eb77a5784cd93f75804199c646140ff36c4"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/CACHING_GOVERNANCE.md"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/CACHING_GOVERNANCE.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -869,14 +869,14 @@
       "target_file": "factory-staging/factory-core/tsos/TSOS_HOOK_BOUNDARY.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/TSOS_HOOK_BOUNDARY.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/TSOS_HOOK_BOUNDARY.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "15aa8e211eb4d8ff6adb450d52aae2629d00dc3882020ba7363274448e331181"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/TSOS_HOOK_BOUNDARY.md"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/TSOS_HOOK_BOUNDARY.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -902,14 +902,14 @@
       "target_file": "factory-staging/factory-core/tsos/cache-value-evaluator.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "5e3602357b70b0c29019f1d6ed7bd24bf7f6eda5cf180959e5bd5c200fec37f9"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -935,14 +935,14 @@
       "target_file": "factory-staging/factory-core/tsos/model-routing-evaluator.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/model-routing-evaluator.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/model-routing-evaluator.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "edf6a1cd9d0cf25b6ce4d8e90b7ef140784ac624decd911855e4585527f2127d"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/model-routing-evaluator.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/model-routing-evaluator.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -968,14 +968,14 @@
       "target_file": "factory-staging/factory-core/tsos/prompt-optimization.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/prompt-optimization.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/prompt-optimization.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "c23846cd46a72c30ea0b9cebd7e7bd845b8bc22eebfa7d23250a25d62f0c120d"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/prompt-optimization.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/prompt-optimization.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -1001,14 +1001,14 @@
       "target_file": "factory-staging/factory-core/tsos/record-step-metrics.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/record-step-metrics.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/record-step-metrics.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "0e1677957c98559751d8fadeddad1e58bded29368ad90e6eb292c03170e4525f"
+        "sha256": "47802022a9809e95afebd09dff0bb9d153f930d1983149b519dd4c58d7872d1e"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/record-step-metrics.js"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/record-step-metrics.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -1034,14 +1034,14 @@
       "target_file": "factory-staging/lifeos/c2/C2_COMMUNICATION_PREFERENCES.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_COMMUNICATION_PREFERENCES.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_COMMUNICATION_PREFERENCES.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "44584440647428247d4f86ddff395740bc4046ffe71282fd996393a9f8ffa479"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_COMMUNICATION_PREFERENCES.json"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_COMMUNICATION_PREFERENCES.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -1067,14 +1067,14 @@
       "target_file": "factory-staging/lifeos/c2/C2_ESCALATION_RULES.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_ESCALATION_RULES.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_ESCALATION_RULES.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "2f6a21fd2803e5075411ffb49ada63ef4c6d69a636c0e72a21828763d90ac29b"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_ESCALATION_RULES.json"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_ESCALATION_RULES.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -1100,14 +1100,14 @@
       "target_file": "factory-staging/lifeos/c2/C2_MODULE_CHARTER.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_MODULE_CHARTER.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_MODULE_CHARTER.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "5c8b814c589cdb191029505a3144ff7a229726ac4402c90a57d606e84d6f1847"
+        "sha256": "c42682389a4b2b3a0ceedf99647e8a46cebbfc560e535f3a1ff40dcf5b4b3008"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_MODULE_CHARTER.md"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_MODULE_CHARTER.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -1133,14 +1133,14 @@
       "target_file": "factory-staging/lifeos/c2/C2_STATE_MODEL.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_STATE_MODEL.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_STATE_MODEL.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "db2dffcd7f72d41dc36830fc3aa6c925937d3b207252fb58a073d28583fe7498"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_STATE_MODEL.json"
+        "missions/FACTORY-REBOOT-0003/ARTIFACTS/lifeos/c2/C2_STATE_MODEL.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -1199,14 +1199,14 @@
       "target_file": "factory-staging/factory-core/canon/services/COUNCIL_IMPORT_RECEIPT.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/council-import-receipt.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0004/CONTENT/council-import-receipt.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "ec3799f71ed8c65b2113afb03d5eb159bd687e3b7b131ac6d65c7471d4c0fafb"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/council-import-receipt.json"
+        "missions/FACTORY-REBOOT-0004/CONTENT/council-import-receipt.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -1232,14 +1232,14 @@
       "target_file": "factory-staging/server.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-server.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-server.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "231763f8874bb6b1e5f49cfb867f6af9ac410a30cd41bae218e2acbc1be9c768"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-server.js"
+        "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-server.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -1265,14 +1265,14 @@
       "target_file": "factory-staging/startup/register-routes.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+        "sha256": "e46c0eedaaec8441fde5dcf239f59a7d15f4e2c1b76679b91b3d22cd4a2ee687"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js"
+        "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-register-routes.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -1298,14 +1298,14 @@
       "target_file": "factory-staging/scripts/factory-self-check.mjs",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-self-check.mjs"
+        "content_source_path": "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-self-check.mjs"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "88105927761047fc8d972da32d0ab4a11ed12c559579b6264a9623e24aa054ac"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0004/CONTENT/factory-staging-self-check.mjs"
+        "missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-self-check.mjs"
       ],
       "forbidden_context_files": [
         "**"

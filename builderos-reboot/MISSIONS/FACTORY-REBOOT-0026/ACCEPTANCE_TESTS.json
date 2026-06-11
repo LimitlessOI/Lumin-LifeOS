@@ -11,6 +11,6 @@
     "step_id": "S2602",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/run-full-loop-proof.mjs",
-    "expected_sha256": "2fbb98eae8c00e3706642adb22e4eb0c153e860d2a949414347d861141158314"
+    "expected_sha256": "1121236d7641ceb3c6948d87ef03d3efc076128d85c61045d7df187e790c4ab8"
   }
 ]

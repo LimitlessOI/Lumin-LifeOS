@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "mission_id": "FACTORY-DELIBERATION-V27-0001",
+  "resolved_at": "2026-06-09",
+  "scope": [
+    "deliberation_governance_v27_a_to_z"
+  ],
+  "strategic_ambiguity_remaining": false,
+  "decisions": [
+    {
+      "id": "PD-D1",
+      "topic": "department_roster",
+      "resolution": "Seven permanent seats: ChC, Hist, SNT, CFO, BPB, SDO, CDR"
+    },
+    {
+      "id": "PD-D2",
+      "topic": "rep_vs_lens",
+      "resolution": "REP capsules replace deprecated Lens; separate from authority capsules"
+    },
+    {
+      "id": "PD-D3",
+      "topic": "execution_path",
+      "resolution": "Reverse-BP acceptable when destination matches; formalize BP + SENTRY after code"
+    },
+    {
+      "id": "PD-D4",
+      "topic": "maturity_claim",
+      "resolution": "WIRED on legacy spine; PROVEN only after Railway smoke with DATABASE_URL"
+    }
+  ],
+  "non_goals_locked": [
+    "REP catalog UI",
+    "Debrief overlay delivery",
+    "FULLY_MACHINE_READY factory claim"
+  ]
+}

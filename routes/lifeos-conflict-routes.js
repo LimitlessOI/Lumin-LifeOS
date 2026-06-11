@@ -47,6 +47,15 @@ import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 export function createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = express.Router();
 
+  function setPrivateNoStore(res) {
+    res.set({
+      'Cache-Control': 'private, no-store, max-age=0',
+      Pragma: 'no-cache',
+      Expires: '0',
+      'Surrogate-Control': 'no-store',
+    });
+  }
+
   // ── callAI adapter (system + prompt) ─────────────────────────────────────
 
   const callAI = callCouncilMember
@@ -183,6 +192,7 @@ export function createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember
   // GET /recordings/:code — get recording (no auth — code is the secret)
   router.get('/recordings/:code', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const recording = await intel.getRecording(req.params.code);
       if (!recording) return res.status(404).json({ ok: false, error: 'Recording not found' });
       res.json({ ok: true, recording });
@@ -195,6 +205,7 @@ export function createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember
   // POST /recordings/:code/turn — add a turn (no auth)
   router.post('/recordings/:code/turn', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const { speaker, content, tone_flags } = req.body;
       if (!content) return res.status(400).json({ ok: false, error: 'content is required' });
 
@@ -214,6 +225,7 @@ export function createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember
   // POST /recordings/:code/complete — mark recording captured (no auth)
   router.post('/recordings/:code/complete', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const recording = await intel.captureComplete({ sessionCode: req.params.code });
       res.json({ ok: true, recording });
     } catch (err) {

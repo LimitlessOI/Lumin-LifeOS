@@ -38,6 +38,15 @@ import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 export function createLifeOSMediationRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = express.Router();
 
+  function setPrivateNoStore(res) {
+    res.set({
+      'Cache-Control': 'private, no-store, max-age=0',
+      Pragma: 'no-cache',
+      Expires: '0',
+      'Surrogate-Control': 'no-store',
+    });
+  }
+
   // Normalise callCouncilMember → callAI string helper (matches other LifeOS routes)
   const callAI = callCouncilMember
     ? async (p) => {
@@ -106,6 +115,7 @@ export function createLifeOSMediationRoutes({ pool, requireKey, callCouncilMembe
 
   router.get('/sessions/:code', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const session = await engine.getSession(req.params.code);
       if (!session) return res.status(404).json({ ok: false, error: 'Session not found' });
       res.json({ ok: true, session });
@@ -120,6 +130,7 @@ export function createLifeOSMediationRoutes({ pool, requireKey, callCouncilMembe
 
   router.post('/sessions/:code/consent', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const { party } = req.body;
       if (!party) return res.status(400).json({ ok: false, error: 'party is required' });
 
@@ -136,6 +147,7 @@ export function createLifeOSMediationRoutes({ pool, requireKey, callCouncilMembe
 
   router.post('/sessions/:code/accept', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const { respondent_label, respondent_user_id } = req.body;
 
       const session = await engine.acceptInvitation({
@@ -155,6 +167,7 @@ export function createLifeOSMediationRoutes({ pool, requireKey, callCouncilMembe
 
   router.post('/sessions/:code/ready', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const { party } = req.body;
       if (!party) return res.status(400).json({ ok: false, error: 'party is required' });
 
@@ -171,6 +184,7 @@ export function createLifeOSMediationRoutes({ pool, requireKey, callCouncilMembe
 
   router.post('/sessions/:code/statement', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const { party, content } = req.body;
       if (!party)   return res.status(400).json({ ok: false, error: 'party is required' });
       if (!content) return res.status(400).json({ ok: false, error: 'content is required' });
@@ -192,6 +206,7 @@ export function createLifeOSMediationRoutes({ pool, requireKey, callCouncilMembe
 
   router.post('/sessions/:code/propose', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const result = await engine.proposeResolution({ sessionCode: req.params.code });
       res.json({ ok: true, ...result });
     } catch (err) {
@@ -205,6 +220,7 @@ export function createLifeOSMediationRoutes({ pool, requireKey, callCouncilMembe
 
   router.post('/sessions/:code/accept-proposal', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const { party, agreement_id } = req.body;
       if (!party)        return res.status(400).json({ ok: false, error: 'party is required' });
       if (!agreement_id) return res.status(400).json({ ok: false, error: 'agreement_id is required' });
@@ -226,6 +242,7 @@ export function createLifeOSMediationRoutes({ pool, requireKey, callCouncilMembe
 
   router.post('/sessions/:code/close', async (req, res) => {
     try {
+      setPrivateNoStore(res);
       const { reason } = req.body;
       const session = await engine.closeSession({ sessionCode: req.params.code, reason });
       res.json({ ok: true, session });

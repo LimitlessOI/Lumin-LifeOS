@@ -40,7 +40,6 @@ import { filterAvailableCouncilMembers } from '../services/council-model-availab
 import { BUILDER_MODE, BUILDER_MODE_RULES, DEFAULT_BUILDER_MODE } from '../config/builder-release-modes.js';
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
-import { pool as dbPool } from '../core/database.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
 import {
@@ -1917,7 +1916,7 @@ export function createLifeOSCouncilBuilderRoutes({
             task_id: taskBody.task_id || null,
             build_task_id: taskBody.task_id || null,
           },
-          dbPool
+          pool
         ).catch(() => {});
       }
       const mirrorBuild = await mirrorCommittedContentToRepoRoot(resolvedTarget, generatedOutput);

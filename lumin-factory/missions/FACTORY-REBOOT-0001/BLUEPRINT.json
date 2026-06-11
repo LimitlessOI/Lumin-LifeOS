@@ -10,17 +10,17 @@
       "step_id": "S001",
       "phase_id": "P0",
       "title": "Write reboot workspace README",
-      "target_file": "builderos-reboot/README.md",
+      "target_file": "README.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/README.md"
+        "content_source_path": "README.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "6f40c0c06ab186dac86a3d7de2efb21b4fdff0187c8d289f320f4eb76867e337"
       },
       "allowed_context_files": [
-        "builderos-reboot/README.md"
+        "README.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -34,7 +34,7 @@
         "AT-S001-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -42,17 +42,17 @@
       "step_id": "S002",
       "phase_id": "P0",
       "title": "Write reboot workspace index",
-      "target_file": "builderos-reboot/INDEX.md",
+      "target_file": "INDEX.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/INDEX.md"
+        "content_source_path": "INDEX.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "8c86cc98748ff3fced4ca766b1002e9e75c4aba1bf4857f309af6080ff495091"
       },
       "allowed_context_files": [
-        "builderos-reboot/INDEX.md"
+        "INDEX.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -67,7 +67,7 @@
         "AT-S002-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -75,17 +75,17 @@
       "step_id": "S003",
       "phase_id": "P0",
       "title": "Write workspace status",
-      "target_file": "builderos-reboot/WORKSPACE_STATUS.md",
+      "target_file": "WORKSPACE_STATUS.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/WORKSPACE_STATUS.md"
+        "content_source_path": "WORKSPACE_STATUS.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "ff7a13fa65565d912993f6918848f16f627254a371f34265be6dec0268e5245b"
+        "sha256": "859a63553d8d2f0d62c7abfb42550036173489fef26ab3b09e26db79ad5b78a0"
       },
       "allowed_context_files": [
-        "builderos-reboot/WORKSPACE_STATUS.md"
+        "WORKSPACE_STATUS.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -100,7 +100,7 @@
         "AT-S003-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -108,17 +108,17 @@
       "step_id": "S004",
       "phase_id": "P0",
       "title": "Write handoff file",
-      "target_file": "builderos-reboot/HANDOFF.md",
+      "target_file": "HANDOFF.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/HANDOFF.md"
+        "content_source_path": "HANDOFF.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "cd17ef6a1a44fc022ffd2fc7b62b7e57703f8c7234bbefd452dd0d9cc0f4b4b2"
+        "sha256": "435238c71eb78fe0c4dc535ce3b688a1e7a9f9b3be936cfb0a1ec86e6d54482c"
       },
       "allowed_context_files": [
-        "builderos-reboot/HANDOFF.md"
+        "HANDOFF.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -133,7 +133,7 @@
         "AT-S004-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -141,17 +141,17 @@
       "step_id": "S005",
       "phase_id": "P1",
       "title": "Write parts-car manifest",
-      "target_file": "builderos-reboot/PARTS_CAR_MANIFEST.json",
+      "target_file": "PARTS_CAR_MANIFEST.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/PARTS_CAR_MANIFEST.json"
+        "content_source_path": "PARTS_CAR_MANIFEST.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "c4698b41524bec9e6206c3fc78035a90c8a6c95907adefb7c2fa4cd84a8210c1"
       },
       "allowed_context_files": [
-        "builderos-reboot/PARTS_CAR_MANIFEST.json"
+        "PARTS_CAR_MANIFEST.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -166,7 +166,7 @@
         "AT-S005-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -174,17 +174,17 @@
       "step_id": "S006",
       "phase_id": "P2",
       "title": "Write mission README",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/README.md",
+      "target_file": "missions/FACTORY-REBOOT-0001/README.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/README.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0001/README.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "943aeb962b5f725e4cb9e60e0eea00f7d9cb4a0b9b602696287dc5f648415088"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/README.md"
+        "missions/FACTORY-REBOOT-0001/README.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -199,7 +199,7 @@
         "AT-S006-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -207,17 +207,17 @@
       "step_id": "S007",
       "phase_id": "P2",
       "title": "Write product development result",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/PRODUCT_DEVELOPMENT_RESULT.json",
+      "target_file": "missions/FACTORY-REBOOT-0001/PRODUCT_DEVELOPMENT_RESULT.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/PRODUCT_DEVELOPMENT_RESULT.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0001/PRODUCT_DEVELOPMENT_RESULT.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "3ff3db290d90450cee173d817627f1974ee62f1aeeffd134f055cd62e3613b77"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/PRODUCT_DEVELOPMENT_RESULT.json"
+        "missions/FACTORY-REBOOT-0001/PRODUCT_DEVELOPMENT_RESULT.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -232,7 +232,7 @@
         "AT-S007-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "AIC",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -240,17 +240,17 @@
       "step_id": "S008",
       "phase_id": "P2",
       "title": "Write founder packet",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/FOUNDER_PACKET.json",
+      "target_file": "missions/FACTORY-REBOOT-0001/FOUNDER_PACKET.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/FOUNDER_PACKET.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0001/FOUNDER_PACKET.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "48194787dd9836c9ed88b6497c896291712411a399f6805ba705f3cf69cc171f"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/FOUNDER_PACKET.json"
+        "missions/FACTORY-REBOOT-0001/FOUNDER_PACKET.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -265,7 +265,7 @@
         "AT-S008-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "AIC",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -273,10 +273,10 @@
       "step_id": "S009",
       "phase_id": "P3",
       "title": "Write bootstrap mission blueprint",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/BLUEPRINT.json",
+      "target_file": "missions/FACTORY-REBOOT-0001/BLUEPRINT.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/BLUEPRINT.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0001/BLUEPRINT.json"
       },
       "exact_output_contract": {
         "type": "structural_json_contract",
@@ -305,7 +305,7 @@
         "required_scope": "bootstrap_repo_and_first_bpb_pack"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/BLUEPRINT.json"
+        "missions/FACTORY-REBOOT-0001/BLUEPRINT.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -321,7 +321,7 @@
         "AT-S009-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -329,18 +329,18 @@
       "step_id": "S010",
       "phase_id": "P3",
       "title": "Write acceptance tests contract",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/ACCEPTANCE_TESTS.json",
+      "target_file": "missions/FACTORY-REBOOT-0001/ACCEPTANCE_TESTS.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/ACCEPTANCE_TESTS.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0001/ACCEPTANCE_TESTS.json"
       },
       "exact_output_contract": {
         "type": "derived_acceptance_tests",
-        "source": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/BLUEPRINT.json",
+        "source": "missions/FACTORY-REBOOT-0001/BLUEPRINT.json",
         "note": "Derived from blueprint; no self-referential sha256 pin."
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/ACCEPTANCE_TESTS.json"
+        "missions/FACTORY-REBOOT-0001/ACCEPTANCE_TESTS.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -355,7 +355,7 @@
         "AT-S010-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -363,17 +363,17 @@
       "step_id": "S011",
       "phase_id": "P3",
       "title": "Write authority check contract",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/AUTHORITY_CHECK.json",
+      "target_file": "missions/FACTORY-REBOOT-0001/AUTHORITY_CHECK.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/AUTHORITY_CHECK.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0001/AUTHORITY_CHECK.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "f4f38c2bc6bccaa6b00061b39bf8f82ceb9e24b0243a4b89f4ed383fa84efa89"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/AUTHORITY_CHECK.json"
+        "missions/FACTORY-REBOOT-0001/AUTHORITY_CHECK.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -388,7 +388,7 @@
         "AT-S011-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -396,17 +396,17 @@
       "step_id": "S012",
       "phase_id": "P3",
       "title": "Write salvage map contract",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/SALVAGE_MAP.json",
+      "target_file": "missions/FACTORY-REBOOT-0001/SALVAGE_MAP.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/SALVAGE_MAP.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0001/SALVAGE_MAP.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "e901b849916e3f327da2dcc2c7bd250899d20577cac1dae5a965e5867b5bc101"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/SALVAGE_MAP.json"
+        "missions/FACTORY-REBOOT-0001/SALVAGE_MAP.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -421,7 +421,7 @@
         "AT-S012-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -429,17 +429,17 @@
       "step_id": "S013",
       "phase_id": "P3",
       "title": "Write blocked return schema",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/BLOCKED_RETURN_SCHEMA.json",
+      "target_file": "missions/FACTORY-REBOOT-0001/BLOCKED_RETURN_SCHEMA.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/BLOCKED_RETURN_SCHEMA.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0001/BLOCKED_RETURN_SCHEMA.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "f3ff9a9c302a55b67aee5ed56dae72a099b251d51779addcbb86ee4a44e68892"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0001/BLOCKED_RETURN_SCHEMA.json"
+        "missions/FACTORY-REBOOT-0001/BLOCKED_RETURN_SCHEMA.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -454,7 +454,7 @@
         "AT-S013-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     }

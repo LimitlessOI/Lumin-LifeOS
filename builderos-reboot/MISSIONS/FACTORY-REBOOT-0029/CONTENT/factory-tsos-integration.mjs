@@ -3,25 +3,25 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { fileURLToPath } from 'node:url';
+import { repoRootFromScriptMeta, detectFactoryLayout } from './factory-repo-layout.mjs';
 
-const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const REPO_ROOT = repoRootFromScriptMeta(import.meta.url);
+const layout = detectFactoryLayout(REPO_ROOT);
 process.chdir(REPO_ROOT);
 
 const metricsPath = path.join(REPO_ROOT, 'factory-staging/data/tsos-step-metrics.jsonl');
 const beforeSize = fs.existsSync(metricsPath) ? fs.statSync(metricsPath).size : 0;
 
 const { dispatchExecuteStep, resolveRepoPath } = await import(
-  '../../factory-staging/factory-core/builder/run-step.js'
+  path.join(REPO_ROOT, 'factory-staging/factory-core/builder/run-step.js')
 );
 const { recordStepMetrics } = await import(
-  '../../factory-staging/factory-core/tsos/record-step-metrics.js'
+  path.join(REPO_ROOT, 'factory-staging/factory-core/tsos/record-step-metrics.js')
 );
 const { summarizeTsosMetrics } = await import(
-  '../../factory-staging/factory-core/tsos/tsos-summary.js'
+  path.join(REPO_ROOT, 'factory-staging/factory-core/tsos/tsos-summary.js')
 );
 
-// Guardrail: forbidden authority field
 const blocked = recordStepMetrics({
   step_id: 'GUARDRAIL-TEST',
   verdict: 'STAGING_READY',
@@ -32,7 +32,7 @@ if (blocked.ok !== false || blocked.status !== 'TSOS_GUARDRAIL_VIOLATION') {
   process.exit(1);
 }
 
-const sourceRel = 'builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/proof-source.txt';
+const sourceRel = `${layout.missionsRel}/FACTORY-REBOOT-0005/CONTENT/proof-source.txt`;
 const targetRel = 'factory-staging/test-fixtures/tsos-proof-output.txt';
 const sourceBytes = fs.readFileSync(resolveRepoPath(sourceRel));
 const expectedSha = crypto.createHash('sha256').update(sourceBytes).digest('hex');
@@ -54,6 +54,7 @@ const { httpStatus, body } = dispatchExecuteStep({
   step,
   token_cost: 0,
   model_tier: 'integration-test',
+  skip_intake_gate: true,
 });
 
 if (httpStatus !== 200 || !body.tsos?.ok) {
@@ -73,5 +74,5 @@ if (summary.total_records < 1) {
   process.exit(1);
 }
 
-console.log('PASS factory TSOS integration');
+console.log(`PASS factory TSOS integration (layout=${layout.mode})`);
 console.log(`  tsos records=${summary.total_records} latency_ms=${body.tsos.metrics.latency_ms}`);

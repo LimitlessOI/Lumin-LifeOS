@@ -5,7 +5,7 @@
  * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  *
  * Priority chain (all free, in order):
- *   1. Groq … 6. Together — see PROVIDER_PRIORITY
+ *   1. Groq … 5. Mistral — see PROVIDER_PRIORITY
  *   7. Ollama — only when `ollamaMode !== 'off'`; last in chain (local / slow)
  *
  * Rules:
@@ -40,26 +40,12 @@ const PROVIDER_LIMITS = {
     councilMembers: ['cerebras', 'cerebras_llama'],
     label: 'Cerebras',
   },
-  openrouter: {
-    dailyRequests: 195,     // actual: ~200 — buffer: 5 (3%)
-    rpm: 10,
-    dailyTokens: null,
-    councilMembers: ['openrouter', 'openrouter_free'],
-    label: 'OpenRouter (free)',
-  },
   mistral: {
     dailyRequests: 485,     // actual: ~500 — buffer: 15 (3%)
     rpm: 9,
     dailyTokens: null,
     councilMembers: ['mistral', 'mistral_free'],
     label: 'Mistral (free)',
-  },
-  together: {
-    dailyRequests: 970,     // actual: ~1,000 — buffer: 30 (3%)
-    rpm: 15,
-    dailyTokens: null,
-    councilMembers: ['together', 'together_free'],
-    label: 'Together (free/shared)',
   },
   github_models: {
     dailyRequests: 4850,     // actual: ~5,000 — buffer: 150 (3%) — GitHub Pro/free quota
@@ -85,7 +71,7 @@ const PROVIDER_LIMITS = {
 };
 
 // Ordered priority — first available wins
-export const PROVIDER_PRIORITY = ['groq', 'gemini', 'cerebras', 'openrouter', 'mistral', 'together', 'github_models', 'fireworks', 'ollama'];
+export const PROVIDER_PRIORITY = ['groq', 'gemini', 'cerebras', 'mistral', 'github_models', 'fireworks', 'ollama'];
 
 // Build reverse map: councilMember → providerKey
 const MEMBER_TO_PROVIDER = {};

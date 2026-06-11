@@ -25,9 +25,36 @@ fs.mkdirSync(BUNDLE, { recursive: true });
 
 copyTree(path.join(REPO_ROOT, 'factory-staging'), path.join(BUNDLE, 'factory-staging'));
 copyTree(path.join(REPO_ROOT, 'builderos-reboot/MISSIONS'), path.join(BUNDLE, 'missions'));
-copyTree(path.join(REPO_ROOT, 'builderos-reboot/scripts'), path.join(BUNDLE, 'scripts'), (p) => p.includes('factory') || p.includes('autopilot') || p.includes('export') || p.includes('readiness') || p.includes('determinism') || p.includes('mission') || p.includes('compare-run'));
+copyTree(path.join(REPO_ROOT, 'builderos-reboot/scripts'), path.join(BUNDLE, 'scripts'), (p) =>
+  p.includes('factory') ||
+  p.includes('autopilot') ||
+  p.includes('export') ||
+  p.includes('readiness') ||
+  p.includes('determinism') ||
+  p.includes('mission') ||
+  p.includes('compare-run') ||
+  p.includes('repo-layout'),
+);
 
-for (const doc of ['INDEX.md', 'HANDOFF.md', 'IMPLEMENTATION_GUIDE.md', 'WORKSPACE_STATUS.md', 'MISSION_QUEUE.json', 'CUTOVER_MANIFEST.json', 'READINESS_REPORT.json', 'LUMIN_FACTORY_CUTOVER.md']) {
+function normalizeStandalonePaths(bundleRoot) {
+  const queuePath = path.join(bundleRoot, 'MISSION_QUEUE.json');
+  if (fs.existsSync(queuePath)) {
+    const queue = JSON.parse(fs.readFileSync(queuePath, 'utf8'));
+    for (const entry of queue.missions || []) {
+      if (typeof entry.path === 'string') {
+        entry.path = entry.path.replace(/^builderos-reboot\/MISSIONS\//, 'missions/');
+      }
+    }
+    fs.writeFileSync(queuePath, `${JSON.stringify(queue, null, 2)}\n`);
+  }
+}
+
+const doctrineSrc = path.join(REPO_ROOT, 'docs/architecture/factory-v1-blueprint-pack');
+if (fs.existsSync(doctrineSrc)) {
+  copyTree(doctrineSrc, path.join(BUNDLE, 'docs/architecture/factory-v1-blueprint-pack'));
+}
+
+for (const doc of ['INDEX.md', 'HANDOFF.md', 'IMPLEMENTATION_GUIDE.md', 'WORKSPACE_STATUS.md', 'MISSION_QUEUE.json', 'CUTOVER_MANIFEST.json', 'READINESS_REPORT.json', 'COMMINGLING_FAILURE_AUDIT.json', 'LUMIN_FACTORY_CUTOVER.md']) {
   const src = path.join(REPO_ROOT, 'builderos-reboot', doc);
   if (fs.existsSync(src)) {
     const destName = doc === 'LUMIN_FACTORY_CUTOVER.md' ? 'README.md' : doc;
@@ -43,6 +70,8 @@ const manifest = {
   entrypoint: 'factory-staging/server.js',
 };
 fs.writeFileSync(path.join(BUNDLE, 'BUNDLE_MANIFEST.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+
+normalizeStandalonePaths(BUNDLE);
 
 let files = 0;
 function count(dir) {

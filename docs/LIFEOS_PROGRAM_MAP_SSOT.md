@@ -106,3 +106,4 @@ Queue JSON: **`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json`**.
 | Shell gap audit | `docs/projects/DASHBOARD_SHELL_GAP_AUDIT.md` |
 | Density notes | `docs/projects/DASHBOARD_DENSITY_INTEGRATION_NOTES.md` |
 | AI rail contract | `docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md` |
+| Conversation evidence / coaching / Programs Map capture | `docs/LIFEOS_CONVERSATION_EVIDENCE_SSOT.md` |

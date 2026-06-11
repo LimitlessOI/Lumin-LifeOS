@@ -22,6 +22,7 @@
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { randomBytes } from 'crypto';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -57,14 +58,14 @@ if (!BASE_URL) {
 const args = process.argv.slice(2);
 const keyIdx = args.indexOf('--key');
 const providedKey = keyIdx >= 0 ? args[keyIdx + 1] : null;
+const nextKey = providedKey || `CCK-${randomBytes(24).toString('base64url')}`;
 
 // ── Rotate ────────────────────────────────────────────────────────────────────
 
 console.log(`\n🔑 TSOS Key Rotation`);
 console.log(`   Base URL:  ${BASE_URL}`);
-console.log(`   New key:   ${providedKey ? '(provided, hidden)' : '(auto-generate)'}\n`);
+console.log(`   New key:   ${providedKey ? '(provided, hidden)' : '(local secure generate)'}\n`);
 
-let newKey;
 try {
   const res = await fetch(`${BASE_URL}/api/v1/railway/managed-env/rotate-command-key`, {
     method: 'POST',
@@ -72,7 +73,7 @@ try {
       'Content-Type': 'application/json',
       'x-railway-token': RAILWAY_TOKEN,
     },
-    body: JSON.stringify(providedKey ? { new_key: providedKey } : {}),
+    body: JSON.stringify({ new_key: nextKey }),
   });
 
   const json = await res.json();
@@ -81,7 +82,6 @@ try {
     process.exit(1);
   }
 
-  newKey = json.new_key;
   console.log(`✅ Railway vault updated`);
   console.log('   New CCK: (hidden)\n');
 } catch (err) {
@@ -95,9 +95,9 @@ try {
   let envContent = existsSync(ENV_FILE) ? readFileSync(ENV_FILE, 'utf8') : '';
 
   if (envContent.includes('COMMAND_CENTER_KEY=')) {
-    envContent = envContent.replace(/^COMMAND_CENTER_KEY=.*/m, `COMMAND_CENTER_KEY=${newKey}`);
+    envContent = envContent.replace(/^COMMAND_CENTER_KEY=.*/m, `COMMAND_CENTER_KEY=${nextKey}`);
   } else {
-    envContent = envContent.trimEnd() + `\nCOMMAND_CENTER_KEY=${newKey}\n`;
+    envContent = envContent.trimEnd() + `\nCOMMAND_CENTER_KEY=${nextKey}\n`;
   }
 
   writeFileSync(ENV_FILE, envContent, 'utf8');

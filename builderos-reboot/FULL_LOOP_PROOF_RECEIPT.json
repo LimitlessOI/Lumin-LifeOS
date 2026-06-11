@@ -1,6 +1,6 @@
 {
   "proof_id": "FULL-LOOP-PROOF-0001",
-  "run_at": "2026-06-09T19:06:42.201Z",
+  "run_at": "2026-06-11T07:53:05.641Z",
   "mission_id": "FACTORY-PROOF-LOOP-0001",
   "pass": true,
   "c2_pass": true,
@@ -124,7 +124,7 @@
       "metrics": {
         "step_id": "FL001",
         "token_cost": 0,
-        "latency_ms": 12,
+        "latency_ms": 14,
         "retries": 0,
         "waste": false
       }

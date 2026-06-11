@@ -27,3 +27,11 @@ console.log(r.status, r.violations);
 ```
 
 See `OBSERVE.md` for full operator watch list.
+
+## Exact commands (BLUEPRINT)
+
+- `npm run lifeos:deliberation:regression`
+- `npm run lifeos:deliberation:regression -- --layer=local`
+- `npm run lifeos:deliberation:regression -- --layer=live`
+- `node --import dotenv/config scripts/deliberation-sentry-probe-cleanup.mjs --verify-railway`
+- `node builderos-reboot/scripts/run-mission-acceptance.mjs FACTORY-DELIBERATION-SENTRY-REGRESSION-0001`

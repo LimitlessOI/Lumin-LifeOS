@@ -227,6 +227,8 @@ const DEFAULT_MODEL =
   'gemini_flash';
 const LEGACY_TASK_MODELS = new Set([
   'claude_via_openrouter',
+  'openrouter_free',
+  'together_free',
 ]);
 
 /** Per-task `"branch"` in JSON wins over `BUILDER_QUEUE_COMMIT_BRANCH` / `BUILDER_COMMIT_BRANCH` (omit all for default repo branch, usually main). */

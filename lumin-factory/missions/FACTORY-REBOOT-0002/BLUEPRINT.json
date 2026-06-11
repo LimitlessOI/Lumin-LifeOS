@@ -10,17 +10,17 @@
       "step_id": "S201",
       "phase_id": "P2",
       "title": "Write Founder Packet template payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_TEMPLATE_V2.md",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_TEMPLATE_V2.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_TEMPLATE_V2.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_TEMPLATE_V2.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "d0c7d89b0354da0f7ee9a69e91d519054eca34ad89280dd43607f94dc3a9c7a4"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_TEMPLATE_V2.md"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_TEMPLATE_V2.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -33,7 +33,7 @@
         "AT-S201-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -41,17 +41,17 @@
       "step_id": "S202",
       "phase_id": "P2",
       "title": "Write Founder Packet schema payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET.schema.json",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET.schema.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET.schema.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET.schema.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "380078c1f0ca7d22cf217627b96f45a2add7b4f39fa12c855ad8bb645448181f"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET.schema.json"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET.schema.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -66,7 +66,7 @@
         "AT-S202-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -74,17 +74,17 @@
       "step_id": "S203",
       "phase_id": "P2",
       "title": "Write Founder Packet completeness checklist payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_COMPLETENESS_CHECKLIST_V2.md",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_COMPLETENESS_CHECKLIST_V2.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_COMPLETENESS_CHECKLIST_V2.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_COMPLETENESS_CHECKLIST_V2.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "80025502e5d2ab1170b1007df041f764d8c52bf492efad6252dc2cfe8a6927d3"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_COMPLETENESS_CHECKLIST_V2.md"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_COMPLETENESS_CHECKLIST_V2.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -99,7 +99,7 @@
         "AT-S203-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -107,17 +107,17 @@
       "step_id": "S204",
       "phase_id": "P2",
       "title": "Write Founder Packet freeze rules payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_FREEZE_RULES.md",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_FREEZE_RULES.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_FREEZE_RULES.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_FREEZE_RULES.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "e49e312be4d8560b2b5eb144382da30c89f730a529c0fbf5115cc2c6a054a1dd"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_FREEZE_RULES.md"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/FOUNDER_PACKET_FREEZE_RULES.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -132,7 +132,7 @@
         "AT-S204-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -140,17 +140,17 @@
       "step_id": "S205",
       "phase_id": "P2",
       "title": "Write Founder Packet change control payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/CHANGE_CONTROL_RULES.md",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/CHANGE_CONTROL_RULES.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/CHANGE_CONTROL_RULES.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/CHANGE_CONTROL_RULES.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "1e426c82a2f1262936d5c5543c9516deba2ea64434fec6d7b4dffb258cef640f"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/CHANGE_CONTROL_RULES.md"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-packet/CHANGE_CONTROL_RULES.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -165,7 +165,7 @@
         "AT-S205-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -173,17 +173,17 @@
       "step_id": "S206",
       "phase_id": "P3",
       "title": "Write Founder Intent model payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_MODEL.md",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_MODEL.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_MODEL.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_MODEL.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "e1397825e4a0612525b525a2ea7e8f1d2d652cf7d17b6c7a171f7dc8df1a15f5"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_MODEL.md"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_MODEL.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -198,7 +198,7 @@
         "AT-S206-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -206,17 +206,17 @@
       "step_id": "S207",
       "phase_id": "P3",
       "title": "Write Founder Intent simulator input schema payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_INPUT.schema.json",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_INPUT.schema.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_INPUT.schema.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_INPUT.schema.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "bf6a02ed70fb6450ec61bf7210c57c26762a64d90a5df8c1a14ad67957162d38"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_INPUT.schema.json"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_INPUT.schema.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -231,7 +231,7 @@
         "AT-S207-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -239,17 +239,17 @@
       "step_id": "S208",
       "phase_id": "P3",
       "title": "Write Founder Intent simulator output schema payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_OUTPUT.schema.json",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_OUTPUT.schema.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_OUTPUT.schema.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_OUTPUT.schema.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "b092245f8458cba7d6ea4438c6901b58d92d23711fda852c20e8882e5dd4d7f4"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_OUTPUT.schema.json"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/founder-intent/FOUNDER_INTENT_SIMULATOR_OUTPUT.schema.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -264,7 +264,7 @@
         "AT-S208-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -272,17 +272,17 @@
       "step_id": "S209",
       "phase_id": "P4",
       "title": "Write BPB intake gate payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE_GATE.md",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE_GATE.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE_GATE.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE_GATE.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "393de17b12cd9fc0d35779956e9fe73cdb0d56ed8108e3b2c422f9c9a4767030"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE_GATE.md"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE_GATE.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -297,7 +297,7 @@
         "AT-S209-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -305,17 +305,17 @@
       "step_id": "S210",
       "phase_id": "P4",
       "title": "Write BPB intake schema payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE.schema.json",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE.schema.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE.schema.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE.schema.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "32ad152e7b1c9d320bf7981f961de3a97086b08a3e0202cce6772e92870bb2e8"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE.schema.json"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BPB_INTAKE.schema.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -330,7 +330,7 @@
         "AT-S210-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -338,17 +338,17 @@
       "step_id": "S211",
       "phase_id": "P4",
       "title": "Write blueprint schema payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLUEPRINT_SCHEMA.json",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLUEPRINT_SCHEMA.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLUEPRINT_SCHEMA.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLUEPRINT_SCHEMA.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "db8765ede57d97853674781b4dcdbacd49a3ba2bf0bb7fcbc30ef68bf44fa159"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLUEPRINT_SCHEMA.json"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLUEPRINT_SCHEMA.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -363,7 +363,7 @@
         "AT-S211-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -371,17 +371,17 @@
       "step_id": "S212",
       "phase_id": "P4",
       "title": "Write acceptance tests schema payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/ACCEPTANCE_TESTS_SCHEMA.json",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/ACCEPTANCE_TESTS_SCHEMA.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/ACCEPTANCE_TESTS_SCHEMA.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/ACCEPTANCE_TESTS_SCHEMA.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "b29815ea4547561633d52661810767ab3bb9fdd32754cee63938816438a38a6a"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/ACCEPTANCE_TESTS_SCHEMA.json"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/ACCEPTANCE_TESTS_SCHEMA.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -396,7 +396,7 @@
         "AT-S212-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -404,17 +404,17 @@
       "step_id": "S213",
       "phase_id": "P4",
       "title": "Write authority check schema payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/AUTHORITY_CHECK_SCHEMA.json",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/AUTHORITY_CHECK_SCHEMA.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/AUTHORITY_CHECK_SCHEMA.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/AUTHORITY_CHECK_SCHEMA.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "53e23aae867749aac9afc03a6ca704fbcf4bffde8c5032b537a31862f10b1e8c"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/AUTHORITY_CHECK_SCHEMA.json"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/AUTHORITY_CHECK_SCHEMA.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -429,7 +429,7 @@
         "AT-S213-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -437,17 +437,17 @@
       "step_id": "S214",
       "phase_id": "P4",
       "title": "Write salvage map schema payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/SALVAGE_MAP_SCHEMA.json",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/SALVAGE_MAP_SCHEMA.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/SALVAGE_MAP_SCHEMA.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/SALVAGE_MAP_SCHEMA.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "c4ca5f1ad41e1891a7f93b8942464eafc84016cf32d762e41d1b137c7be0c3f6"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/SALVAGE_MAP_SCHEMA.json"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/SALVAGE_MAP_SCHEMA.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -462,7 +462,7 @@
         "AT-S214-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -470,17 +470,17 @@
       "step_id": "S215",
       "phase_id": "P4",
       "title": "Write blocked return schema payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLOCKED_RETURN_SCHEMA.json",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLOCKED_RETURN_SCHEMA.json",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLOCKED_RETURN_SCHEMA.json"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLOCKED_RETURN_SCHEMA.json"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "dee40307c539a0c7fbf8894519cc10c22804661ab07677419e8d32373ac1578e"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLOCKED_RETURN_SCHEMA.json"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/BLOCKED_RETURN_SCHEMA.json"
       ],
       "forbidden_context_files": [
         "**"
@@ -495,7 +495,7 @@
         "AT-S215-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -503,17 +503,17 @@
       "step_id": "S216",
       "phase_id": "P4",
       "title": "Write determinism protocol payload",
-      "target_file": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/DETERMINISM_TEST_PROTOCOL.md",
+      "target_file": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/DETERMINISM_TEST_PROTOCOL.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/DETERMINISM_TEST_PROTOCOL.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/DETERMINISM_TEST_PROTOCOL.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "49626a811a421066ebb42394e911a460c0f3edcceca0191ac127ab3acfc1a813"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/DETERMINISM_TEST_PROTOCOL.md"
+        "missions/FACTORY-REBOOT-0002/ARTIFACTS/factory-core/bpb/DETERMINISM_TEST_PROTOCOL.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -528,7 +528,7 @@
         "AT-S216-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0002/ARTIFACTS/**",
+      "sandbox_boundary": "missions/FACTORY-REBOOT-0002/ARTIFACTS/**",
       "authority_owner": "BPB",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     }

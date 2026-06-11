@@ -1,6 +1,6 @@
 {
   "certification_id": "FACTORY-REBOOT-CERT-002",
-  "generated_at": "2026-06-09T19:06:42.390Z",
+  "generated_at": "2026-06-11T07:53:05.849Z",
   "build_spec_phases": {
     "segments_0_10_runtime": true,
     "phase_11_full_loop_proof": true,
@@ -19,9 +19,9 @@
     "LUMIN_FACTORY_GITHUB": false,
     "LIFEOS_PRODUCT_COMPLETE": false
   },
-  "missions_complete": 33,
-  "missions_total": 33,
-  "product_salvage_candidates": 46,
+  "missions_complete": 34,
+  "missions_total": 38,
+  "product_salvage_candidates": 47,
   "next_human_actions": [
     "Pick one revenue lane; allow AI spend only on milestones that move it to customer-visible outcome this week",
     "Keep LIFEOS_DIRECTED_MODE=true until autonomous loops have income-linked useful-work contracts",

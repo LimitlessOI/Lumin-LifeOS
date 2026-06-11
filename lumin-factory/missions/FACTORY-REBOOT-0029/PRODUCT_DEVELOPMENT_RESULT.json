@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "mission_id": "FACTORY-REBOOT-0029",
+  "scope": [
+    "tsos_integration"
+  ]
+}

@@ -36,25 +36,11 @@ const chatModes = [
     help: 'Free Cerebras route. Requires CEREBRAS_API_KEY.',
   },
   {
-    id: 'openrouter_free',
-    label: 'OpenRouter Free',
-    endpoint: '/api/v1/chat',
-    member: 'openrouter_free',
-    help: 'Free OpenRouter route. Requires OPENROUTER_API_KEY.',
-  },
-  {
     id: 'mistral_free',
     label: 'Mistral Free',
     endpoint: '/api/v1/chat',
     member: 'mistral_free',
     help: 'Free Mistral route. Requires MISTRAL_API_KEY.',
-  },
-  {
-    id: 'together_free',
-    label: 'Together Free',
-    endpoint: '/api/v1/chat',
-    member: 'together_free',
-    help: 'Free/shared Together route. Requires TOGETHER_API_KEY.',
   },
   {
     id: 'brainstorm',
@@ -96,7 +82,7 @@ const chatModes = [
     help: 'Give a self-programming instruction; the council will analyze & act.',
   },
 ];
-const FREE_CLOUD_MEMBERS = ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openrouter_free', 'mistral_free', 'together_free'];
+const FREE_CLOUD_MEMBERS = ['groq_llama', 'gemini_flash', 'cerebras_llama', 'mistral_free'];
 const councilMembers = ['claude', 'chatgpt', 'gemini', 'deepseek', 'grok', ...FREE_CLOUD_MEMBERS];
 const memberLabels = {
   claude: 'Claude',
@@ -107,9 +93,7 @@ const memberLabels = {
   groq_llama: 'Groq Free',
   gemini_flash: 'Gemini Flash',
   cerebras_llama: 'Cerebras',
-  openrouter_free: 'OpenRouter Free',
   mistral_free: 'Mistral Free',
-  together_free: 'Together Free',
 };
 const specialMemberNames = {
   council: 'Council Decision',

@@ -1,0 +1,36 @@
+{
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "scorecard_type": "mission_contract",
+  "signed_by": "SNT",
+  "signed_at": "2026-06-11",
+  "mission_outcome": "FAIL",
+  "mission_outcome_note": "Requested output not delivered. Human rescue required. Not a governance success substitute.",
+  "success_criterion": "Complete assigned work without Adam rescuing the loop",
+  "scoreboard": {
+    "governance_capability": "PASS",
+    "truthfulness_capability": "PASS",
+    "delivery_capability": "FAIL",
+    "autonomous_recovery_capability": "FAIL",
+    "mission_outcome": "FAIL"
+  },
+  "contract_checklist": {
+    "build_artifact": false,
+    "complete_bp_audit": false,
+    "generate_required_receipt": false,
+    "recover_autonomously": false,
+    "deliver_final_output": false,
+    "human_rescue_required": true
+  },
+  "real_defect": {
+    "id": "AUTONOMOUS_RECOVERY_PATH_INCOMPLETE",
+    "severity": "P0",
+    "summary": "System detects deadlock but cannot reliably resolve it. Hard stop without recovery protocol is catastrophic."
+  },
+  "feedback_not_score": [
+    "Governance blocked fake-green",
+    "Tier 1 enforcement live",
+    "Loop escalation detected pattern",
+    "Failure packet generated"
+  ],
+  "next_mission": "AUTONOMOUS-RECOVERY-0001"
+}

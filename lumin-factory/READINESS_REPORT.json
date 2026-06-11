@@ -1,8 +1,10 @@
 {
-  "generated_at": "2026-06-09T06:45:59.160Z",
+  "generated_at": "2026-06-11T07:30:36.257Z",
   "version": 3,
+  "layout": "standalone",
   "verdict": "STAGING_READY_EXTENDED",
   "checks": {
+    "layout": "standalone",
     "acceptance": true,
     "integration_step": true,
     "integration_mission": true,
@@ -13,8 +15,8 @@
     "queue_dry_run": true,
     "cutover_verify": true
   },
-  "queue_complete": 26,
-  "queue_total": 26,
+  "queue_complete": 34,
+  "queue_total": 38,
   "active_mission": null,
-  "lumin_factory_path": "lumin-factory/"
+  "lumin_factory_path": null
 }

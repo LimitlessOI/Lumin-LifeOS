@@ -2,7 +2,9 @@
 
 **Purpose:** One definition of repo truth layers so cold agents do not extend the wrong system.
 
-**Read order:** This file → path `AGENTS.md` for the tree you are touching → domain prompt in `prompts/` if applicable.
+**Read order:** **`prompts/00-HIST-LEGACY-BOUNDARY.md` first** (STOP — legacy vs active). Then this file → path `AGENTS.md` for the tree you are touching → domain prompt in `prompts/` if applicable.
+
+**Legacy / Hist (2026-05-24):** All legacy repos, deploy surfaces, and experiment buckets are **Hist-owned**. The prompt above is mandatory; this registry is the full map. **Do not extend legacy** as the default path.
 
 ---
 
@@ -69,6 +71,7 @@ Tags are reminders, not proof. Maturity still requires receipts and `npm run fac
 
 ## Related docs
 
+- `docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md` — **Hist-owned legacy repos/trees + where to go instead**
 - `docs/architecture/factory-v1-blueprint-pack/FACTORY_REBUILD_MANIFEST_V1.md` — rebuild map
 - `prompts/00-PROVIDER-STRATEGY-LOCK.md` — locked provider tiers (Decision A)
 - `docs/architecture/COUNCIL_ROUTING_AUDIT_V1.md` — today's routing truth

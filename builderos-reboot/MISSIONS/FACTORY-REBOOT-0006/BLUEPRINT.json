@@ -17,7 +17,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e7def25548ad1fdda227b02ad533dadce7c3035b972b1e8f32f368d495b30b7f"
+        "sha256": "bebd008734814e42a3788656a4efbc55605fb20a76d5257db925a1dba41ff257"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js"

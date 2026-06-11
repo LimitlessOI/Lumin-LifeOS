@@ -1,0 +1,21 @@
+{
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "fixed_at": "2026-06-10",
+  "owner": "SNT",
+  "gap_id": "BUILDER_SAFE_SCOPE_MISSION_PACK",
+  "resolution": "Platform GAP-FILL — safe-scope + upstream routing",
+  "files_changed": [
+    "config/builder-safe-scope.js",
+    "routes/lifeos-council-builder-routes.js",
+    "scripts/snt-verify-builder-safe-scope.mjs"
+  ],
+  "changes": [
+    "Added builderos-reboot/MISSIONS/ to SAFE_WRITE_PATHS",
+    "Fail-fast isSafeTarget before council when target_file known",
+    "Safe-scope block returns 422 BLOCKED_RETURN_TO_BPB + gap_recommendation (not dead-end 403)",
+    "SNT mechanical verify: npm run lifeos:snt:builder-safe-scope"
+  ],
+  "verify_command": "node scripts/snt-verify-builder-safe-scope.mjs",
+  "verify_result": "SNT_SAFE_SCOPE_PASS",
+  "next_step": "POST /build for BLUEPRINT.json after Railway deploy picks up commit"
+}

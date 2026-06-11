@@ -3,7 +3,7 @@
     "test_id": "AT-S1801-1",
     "step_id": "S1801",
     "type": "file_sha256_matches",
-    "target": "builderos-reboot/scripts/autopilot-run-queue.mjs",
+    "target": "scripts/autopilot-run-queue.mjs",
     "expected_sha256": "8189c0122cc42762c8ebb6afcc164006110a8438be4ffacf12eb8e1b85213e76"
   }
 ]

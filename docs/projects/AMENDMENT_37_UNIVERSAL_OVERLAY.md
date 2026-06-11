@@ -295,6 +295,8 @@ User on insurance portal
 
 ## Change Receipts
 
+| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
+
 | Date | What Changed | Why | Verified | Status |
 |---|---|---|---|---|
 | 2026-04-20 | Founding document created; full architecture spec, feature spec, struggle detection design, form fill data flow, approved backlog | Adam: build web-first overlay above everything, real-time updates, proactive help, do-it-for-me form fill, fluid UI, universal platform | ✅ | complete |

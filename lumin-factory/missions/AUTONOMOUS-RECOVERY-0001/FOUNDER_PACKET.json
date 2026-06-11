@@ -1,0 +1,39 @@
+{
+  "mission_id": "AUTONOMOUS-RECOVERY-0001",
+  "priority": "P0",
+  "founder_touches": "alert_only_on_UNSOLVED",
+  "mission_class": "factory_platform_capability",
+  "parent_mission": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "trigger": "AUTONOMOUS_RECOVERY_PATH_INCOMPLETE exposed by regression mission FAIL",
+  "scope": [
+    "When loop escalation reaches hard_stop, forbid current strategy only — never terminal halt",
+    "Autonomously route: Council → BPB repair → alternative strategy → Builder retry → SENTRY verify → Deliver",
+    "Emit RECOVERY_PROTOCOL_RESULT.json each cycle",
+    "If all approved strategies exhausted: UNSOLVED receipt + FOUNDER_ALERT.json (P0)",
+    "Prove on regression mission: produce SENTRY_CHECK_RESULT.json or honest UNSOLVED with evidence"
+  ],
+  "success_criteria": [
+    "hard_stop starts recovery protocol automatically",
+    "Council invoked via existing gate-change API (not new review path)",
+    "At least one alternative strategy attempted without same-spec /build",
+    "Mission completes OR UNSOLVED receipt with founder alert",
+    "System never silent-stops without BP completion attempt + alert"
+  ],
+  "failure_criteria": [
+    "hard_stop ends loop with no recovery steps",
+    "Recovery protocol not logged",
+    "Founder not alerted when recovery unwired or exhausted"
+  ],
+  "approved_recovery_strategies": [
+    "council_multi_hat",
+    "bpb_spec_repair",
+    "mechanical_template_v27",
+    "factory_local_runner",
+    "paid_model_tier_with_cfo_flag"
+  ],
+  "non_goals": [
+    "Gold Mining scheduler",
+    "New council infrastructure",
+    "Declaring governance wins as mission PASS"
+  ]
+}

@@ -13,14 +13,14 @@
       "target_file": "factory-staging/factory-core/builder/run-mission.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0006/CONTENT/run-mission.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e7def25548ad1fdda227b02ad533dadce7c3035b972b1e8f32f368d495b30b7f"
+        "sha256": "bebd008734814e42a3788656a4efbc55605fb20a76d5257db925a1dba41ff257"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/run-mission.js"
+        "missions/FACTORY-REBOOT-0006/CONTENT/run-mission.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -44,14 +44,14 @@
       "target_file": "factory-staging/factory-core/routes/factory-execute-mission-routes.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/factory-execute-mission-routes.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0006/CONTENT/factory-execute-mission-routes.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "7ae5ecd107432e9c3d510719cae59887c07413912edaf2a47f9a00f541e94203"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/factory-execute-mission-routes.js"
+        "missions/FACTORY-REBOOT-0006/CONTENT/factory-execute-mission-routes.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -77,14 +77,14 @@
       "target_file": "factory-staging/startup/register-routes.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/register-routes.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0006/CONTENT/register-routes.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+        "sha256": "e46c0eedaaec8441fde5dcf239f59a7d15f4e2c1b76679b91b3d22cd4a2ee687"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0006/CONTENT/register-routes.js"
+        "missions/FACTORY-REBOOT-0006/CONTENT/register-routes.js"
       ],
       "forbidden_context_files": [
         "**"

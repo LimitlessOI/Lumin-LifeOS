@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
+import { detectFactoryLayout, missionDir as layoutMissionDir } from './factory-repo-layout.mjs';
 
 const ROOT = process.cwd();
 const missionId = process.argv[2];
@@ -12,8 +13,14 @@ if (!missionId) {
   process.exit(1);
 }
 
-const missionDir = path.join(ROOT, 'builderos-reboot', 'MISSIONS', missionId);
-const tests = JSON.parse(fs.readFileSync(path.join(missionDir, 'ACCEPTANCE_TESTS.json'), 'utf8'));
+const layout = detectFactoryLayout(ROOT);
+const missionDir = layoutMissionDir(layout, missionId);
+const testsRaw = JSON.parse(fs.readFileSync(path.join(missionDir, 'ACCEPTANCE_TESTS.json'), 'utf8'));
+const tests = Array.isArray(testsRaw) ? testsRaw : testsRaw.tests || [];
+
+function testId(test) {
+  return test.test_id || test.id || 'unknown';
+}
 
 function sha256File(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
@@ -27,12 +34,22 @@ let passed = 0;
 let failed = 0;
 
 for (const test of tests) {
+  const tid = testId(test);
   const target = test.target ? path.join(ROOT, test.target) : null;
   let ok = false;
   let detail = '';
+  const type =
+    test.type ||
+    (test.command
+      ? 'shell_command'
+      : test.probe_id && test.target
+        ? 'probe_catalog_coverage'
+        : test.target && /readme/i.test(test.description || '')
+          ? 'readme_lists_regression_commands'
+          : null);
 
   try {
-    switch (test.type) {
+    switch (type) {
       case 'file_exists':
         ok = fs.existsSync(target);
         detail = ok ? 'exists' : 'missing';
@@ -84,8 +101,27 @@ for (const test of tests) {
           cwd: ROOT,
           encoding: 'utf8',
         });
-        ok = result.status === 0;
-        detail = ok ? 'exit 0' : `exit ${result.status}: ${(result.stderr || result.stdout || '').slice(0, 200)}`;
+        const expected = test.expected_exit_code ?? 0;
+        ok = result.status === expected;
+        detail = ok ? `exit ${expected}` : `exit ${result.status}: ${(result.stderr || result.stdout || '').slice(0, 200)}`;
+        break;
+      }
+      case 'readme_lists_regression_commands': {
+        ok =
+          fs.existsSync(target) &&
+          fs.readFileSync(target, 'utf8').includes('lifeos:deliberation:regression');
+        detail = ok ? 'README lists regression script' : 'README missing lifeos:deliberation:regression';
+        break;
+      }
+      case 'probe_catalog_coverage': {
+        const acceptance = JSON.parse(fs.readFileSync(target, 'utf8'));
+        const list = Array.isArray(acceptance) ? acceptance : acceptance.tests || [];
+        const catalogPath = path.join(missionDir, 'REGRESSION_PROBE_CATALOG.json');
+        const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+        const covered = new Set(list.filter((t) => t.probe_id).map((t) => t.probe_id));
+        const missing = (catalog.probes || []).map((p) => p.id).filter((id) => !covered.has(id));
+        ok = missing.length === 0;
+        detail = ok ? 'all catalog probes covered' : `missing probe rows: ${missing.join(',')}`;
         break;
       }
       case 'node_syntax_check': {
@@ -100,7 +136,7 @@ for (const test of tests) {
         break;
       }
       default:
-        detail = `unknown test type ${test.type}`;
+        detail = `unknown test type ${type || test.type || 'undefined'}`;
         ok = false;
     }
   } catch (err) {
@@ -110,10 +146,10 @@ for (const test of tests) {
 
   if (ok) {
     passed++;
-    console.log(`PASS ${test.test_id} ${test.type} ${test.target || test.command || ''}`);
+    console.log(`PASS ${tid} ${type || test.type || 'implicit'} ${test.target || test.command || ''}`);
   } else {
     failed++;
-    console.log(`FAIL ${test.test_id} ${test.type} ${test.target || test.command || ''} — ${detail}`);
+    console.log(`FAIL ${tid} ${type || test.type || 'implicit'} ${test.target || test.command || ''} — ${detail}`);
   }
 }
 

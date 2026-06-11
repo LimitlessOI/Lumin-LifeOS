@@ -54,6 +54,7 @@ console.log(`   Base URL: ${BASE_URL}\n`);
 let liveKey;
 try {
   const res = await fetch(`${BASE_URL}/api/v1/railway/managed-env/sync-command-key`, {
+    method: 'POST',
     headers: { 'x-railway-token': RAILWAY_TOKEN },
   });
 

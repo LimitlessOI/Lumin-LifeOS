@@ -10,17 +10,17 @@
       "step_id": "S901",
       "phase_id": "P19",
       "title": "Write autopilot runner script",
-      "target_file": "builderos-reboot/scripts/autopilot-runner.mjs",
+      "target_file": "scripts/autopilot-runner.mjs",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0009/CONTENT/autopilot-runner.mjs"
+        "content_source_path": "missions/FACTORY-REBOOT-0009/CONTENT/autopilot-runner.mjs"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "abab5f3166c554f422bbb02dc30aff4add79381c4cca34ba24da87d54bca89cf"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0009/CONTENT/autopilot-runner.mjs"
+        "missions/FACTORY-REBOOT-0009/CONTENT/autopilot-runner.mjs"
       ],
       "forbidden_context_files": [
         "**"
@@ -33,7 +33,7 @@
         "AT-S901-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     }

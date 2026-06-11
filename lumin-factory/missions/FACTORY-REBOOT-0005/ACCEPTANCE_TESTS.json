@@ -4,7 +4,7 @@
     "step_id": "S501",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/builder/run-step.js",
-    "expected_sha256": "e7205f3c1a40b5f6862ff231f10862f22395650cc7ffe701a8a4ce8b8b669c7c"
+    "expected_sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
   },
   {
     "test_id": "AT-S502-1",
@@ -18,7 +18,7 @@
     "step_id": "S503",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+    "expected_sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
   },
   {
     "test_id": "AT-S504-1",

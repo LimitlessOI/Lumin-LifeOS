@@ -10,17 +10,17 @@
       "step_id": "S2101",
       "phase_id": "P31",
       "title": "SENTRY mechanical checks",
-      "target_file": "builderos-reboot/scripts/run-sentry-checks.mjs",
+      "target_file": "scripts/run-sentry-checks.mjs",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/run-sentry-checks.mjs"
+        "content_source_path": "missions/FACTORY-REBOOT-0021/CONTENT/run-sentry-checks.mjs"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "380e57c287891f54470ec527939a88bc65b855387bf95aa4f42e17e6832e2455"
+        "sha256": "195bdb990aa74c378cac43b660086bf470f2843fb302bdf082b960368db63e2f"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/run-sentry-checks.mjs"
+        "missions/FACTORY-REBOOT-0021/CONTENT/run-sentry-checks.mjs"
       ],
       "forbidden_context_files": [
         "**"
@@ -33,7 +33,7 @@
         "AT-S2101-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -41,17 +41,17 @@
       "step_id": "S2102",
       "phase_id": "P31",
       "title": "Evaluation packet for reviewers",
-      "target_file": "builderos-reboot/EVALUATION_PACKET.md",
+      "target_file": "EVALUATION_PACKET.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/EVALUATION_PACKET.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0021/CONTENT/EVALUATION_PACKET.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "8381de0fceb0a5dd0d465f272da42f41f8116fdb6f258b59d2708f9da4e66a14"
+        "sha256": "7e288bd5c7f587aa9a1a1db71242294ed5f3c66893157f7969b11631b15caefd"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0021/CONTENT/EVALUATION_PACKET.md"
+        "missions/FACTORY-REBOOT-0021/CONTENT/EVALUATION_PACKET.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -66,7 +66,7 @@
         "AT-S2102-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     }

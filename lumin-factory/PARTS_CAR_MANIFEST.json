@@ -1,0 +1,133 @@
+{
+  "manifest_id": "PARTS-CAR-0001",
+  "updated_at": "2026-06-08",
+  "purpose": "Canonical keep/adapt/reject manifest for the old system.",
+  "import_as_is": [
+    {
+      "source_path": "startup/database.js",
+      "reason": "Clean DB boot spine."
+    },
+    {
+      "source_path": "services/council-service.js",
+      "reason": "Real multi-model consensus engine."
+    },
+    {
+      "source_path": "services/deployment-service.js",
+      "reason": "Real deploy bridge."
+    },
+    {
+      "source_path": "services/railway-managed-env-service.js",
+      "reason": "Real env write/sync/verify capability."
+    },
+    {
+      "source_path": "routes/railway-managed-env-routes.js",
+      "reason": "Existing route surface for managed env operations."
+    },
+    {
+      "source_path": "services/logger.js",
+      "reason": "General utility, low governance risk."
+    },
+    {
+      "source_path": "scripts/builderos-groq-antipattern-scan.mjs",
+      "reason": "Useful anti-pattern scan."
+    },
+    {
+      "source_path": "scripts/verify-builder-output.mjs",
+      "reason": "Useful output verification tool."
+    },
+    {
+      "source_path": "services/builderos-patch-mode-policy.js",
+      "reason": "Useful patch classification logic."
+    }
+  ],
+  "adapt_and_import": [
+    {
+      "source_path": "routes/lifeos-council-builder-routes.js",
+      "reason": "Strong builder surface, but old authority model."
+    },
+    {
+      "source_path": "scripts/council-builder-preflight.mjs",
+      "reason": "Strong preflight, should survive under new governance."
+    },
+    {
+      "source_path": "services/useful-work-guard.js",
+      "reason": "Strong anti-waste guard."
+    },
+    {
+      "source_path": "services/builderos-precommit-governance.js",
+      "reason": "Strong precommit gate, old-era naming and integration."
+    },
+    {
+      "source_path": "services/builderos-routing-policy.js",
+      "reason": "Real routing discipline worth preserving."
+    },
+    {
+      "source_path": "services/builderos-model-escalation-gate.js",
+      "reason": "Real escalation guard worth preserving."
+    },
+    {
+      "source_path": "services/builderos-control-plane-service.js",
+      "reason": "Useful control-plane logic, mixed-era ownership."
+    },
+    {
+      "source_path": "services/builderos-system-alpha-readiness.js",
+      "reason": "Strong proof/maturity logic."
+    },
+    {
+      "source_path": "services/oil-proof-freshness.js",
+      "reason": "Strong proof freshness logic; rename under SENTRY."
+    },
+    {
+      "source_path": "services/self-repair-executor.js",
+      "reason": "Real bounded repair logic, needs re-homing."
+    },
+    {
+      "source_path": "services/self-repair-deploy-scheduler.js",
+      "reason": "Useful deploy-drift prevention hook."
+    },
+    {
+      "source_path": "services/memory-intelligence-service.js",
+      "reason": "Real memory substrate, needs Historian narrowing."
+    },
+    {
+      "source_path": "routes/memory-status-routes.js",
+      "reason": "Useful runtime memory proof surface."
+    },
+    {
+      "source_path": "services/response-cache.js",
+      "reason": "Real cache substrate, needs governance."
+    },
+    {
+      "source_path": "services/builderos-command-control-service.js",
+      "reason": "Useful command/control job logic."
+    },
+    {
+      "source_path": "routes/lifeos-builderos-command-control-routes.js",
+      "reason": "Route surface for command/control jobs."
+    },
+    {
+      "source_path": "routes/lifeos-command-center-routes.js",
+      "reason": "Aggregated truth/observability surface."
+    }
+  ],
+  "archive_only": [
+    {
+      "source_path": "docs/projects/AMENDMENT_*.md",
+      "reason": "Historical authority trail, not runtime execution authority."
+    }
+  ],
+  "reject": [
+    {
+      "source_path": "scripts/governed-overnight-backlog-run.mjs",
+      "reason": "Autonomous churn engine."
+    },
+    {
+      "source_path": "services/builderos-governed-loop-executor.js",
+      "reason": "Old direct runtime control model."
+    },
+    {
+      "source_path": "routes/auto-builder-routes.js",
+      "reason": "Wrong authority model for the reboot."
+    }
+  ]
+}

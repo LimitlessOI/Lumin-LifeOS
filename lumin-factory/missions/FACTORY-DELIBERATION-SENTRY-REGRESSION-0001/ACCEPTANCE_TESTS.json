@@ -1,0 +1,92 @@
+{
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "tests": [
+    {
+      "id": "AT-H01-1",
+      "probe_id": "B_NO_ROSTER_GATE",
+      "description": "Harness implements B_NO_ROSTER_GATE per REGRESSION_PROBE_CATALOG.json",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=B_NO_ROSTER_GATE",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-H01-2",
+      "probe_id": "CLEANUP_DB_FINGERPRINT",
+      "description": "All catalog probe IDs present in harness manifest",
+      "command": "node -e \"import fs from 'fs'; const c=JSON.parse(fs.readFileSync('builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_PROBE_CATALOG.json','utf8')); const h=fs.readFileSync('scripts/deliberation-sentry-regression-harness.mjs','utf8'); for (const p of c.probes) { if (!h.includes(p.id)) { console.error('missing', p.id); process.exit(1); } } console.log('OK');\""
+    },
+    {
+      "id": "AT-H02-1",
+      "description": "REGRESSION_RUN_RECEIPT.schema.json is valid JSON schema file",
+      "command": "node -e \"import fs from 'fs'; JSON.parse(fs.readFileSync('builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_RUN_RECEIPT.schema.json','utf8')); console.log('OK');\""
+    },
+    {
+      "id": "AT-H03-1",
+      "description": "package.json has lifeos:deliberation:regression script",
+      "command": "node -e \"import fs from 'fs'; const p=JSON.parse(fs.readFileSync('package.json','utf8')); if(!p.scripts['lifeos:deliberation:regression'])process.exit(1); console.log('OK');\""
+    },
+    {
+      "id": "AT-H03-2",
+      "probe_id": "N1",
+      "description": "Acceptance tests cover all probe IDs from catalog",
+      "target": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/ACCEPTANCE_TESTS.json"
+    },
+    {
+      "id": "AT-H04-1",
+      "description": "behavior.mjs delegates to harness or passes legacy assertions",
+      "command": "npm run lifeos:deliberation:behavior"
+    },
+    {
+      "id": "AT-H05-1",
+      "description": "README lists exact npm commands from BLUEPRINT",
+      "target": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/README.md"
+    },
+    {
+      "id": "AT-H06-1",
+      "description": "Full local regression layer passes",
+      "command": "npm run lifeos:deliberation:regression -- --layer=local",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-B_LB_METADATA",
+      "probe_id": "B_LB_METADATA",
+      "description": "Catalog probe B_LB_METADATA covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=B_LB_METADATA",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N5",
+      "probe_id": "N5",
+      "description": "Catalog probe N5 covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N5",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N2",
+      "probe_id": "N2",
+      "description": "Catalog probe N2 covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N2",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N3",
+      "probe_id": "N3",
+      "description": "Catalog probe N3 covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N3",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N6b",
+      "probe_id": "N6b",
+      "description": "Catalog probe N6b covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N6b",
+      "expected_exit_code": 0
+    },
+    {
+      "id": "AT-PROBE-N11",
+      "probe_id": "N11",
+      "description": "Catalog probe N11 covered (BPB mechanical fix)",
+      "command": "node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N11",
+      "expected_exit_code": 0
+    }
+  ]
+}

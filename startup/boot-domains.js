@@ -17,6 +17,26 @@ import { execSync } from 'child_process';
 import { createUsefulWorkGuard, requireTableRows } from '../services/useful-work-guard.js';
 import { generateDailyOILSummary } from '../services/oil-daily-summary.js';
 
+function scheduleAsyncInterval(task, intervalMs, logger, label) {
+  return setInterval(() => {
+    Promise.resolve()
+      .then(task)
+      .catch((err) => {
+        logger?.warn?.({ err: err.message, intervalMs, label }, '[BOOT] Scheduled interval task failed');
+      });
+  }, intervalMs);
+}
+
+function scheduleAsyncTimeout(task, delayMs, logger, label) {
+  return setTimeout(() => {
+    Promise.resolve()
+      .then(task)
+      .catch((err) => {
+        logger?.warn?.({ err: err.message, delayMs, label }, '[BOOT] Scheduled timeout task failed');
+      });
+  }, delayMs);
+}
+
 // ── GLVAR Monitor (dues + violations) ────────────────────────────────────────
 async function bootGLVARMonitor(deps) {
   const { pool, logger, notificationService, accountManager } = deps;
@@ -179,7 +199,7 @@ async function bootLaneIntel(deps) {
       await redteamGuard();
     };
     await tick();
-    setInterval(tick, tickMs);
+    scheduleAsyncInterval(tick, tickMs, logger, 'lane-intel');
     logger?.info?.(`[BOOT] Lane intel schedulers active (every ${tickMs}ms)`);
   } catch (err) {
     logger?.warn?.(`[BOOT] Lane intel schedulers failed to start: ${err.message}`);
@@ -218,7 +238,7 @@ async function bootTwinAutoIngest(deps) {
 
   // Run once at boot, then every 30 minutes
   await guardedIngest();
-  setInterval(guardedIngest, 30 * 60 * 1000);
+  scheduleAsyncInterval(guardedIngest, 30 * 60 * 1000, logger, 'twin-auto-ingest');
 }
 
 // ── Memory: auto-seed epistemic_facts on first boot ───────────────────────────
@@ -251,10 +271,10 @@ async function bootOILDailySummary(deps) {
     },
     logger,
   });
-  setTimeout(() => {
-    run();
-    setInterval(run, INTERVAL_MS);
-  }, 60 * 1000);
+  scheduleAsyncTimeout(async () => {
+    await run();
+    scheduleAsyncInterval(run, INTERVAL_MS, logger, 'oil-daily-summary');
+  }, 60 * 1000, logger, 'oil-daily-summary-bootstrap');
   logger?.info('[BOOT] OIL daily summary scheduler registered (runs every 24h after 60s delay)');
 }
 
@@ -301,11 +321,9 @@ async function bootSelfRepairDeployCheck(deps) {
   });
 
   for (const delaySec of [45, 120, 240]) {
-    setTimeout(() => {
-      guarded().catch((err) => {
-        logger?.warn?.(`[BOOT] Self-repair deploy check failed (+${delaySec}s): ${err.message}`);
-      });
-    }, delaySec * 1000);
+    scheduleAsyncTimeout(async () => {
+      await guarded();
+    }, delaySec * 1000, logger, `self-repair-deploy-check+${delaySec}s`);
   }
   logger?.info('[BOOT] Governed proof parity scheduled at +45s, +120s, +240s after boot');
 }
@@ -330,11 +348,9 @@ async function bootDeliberationRepCatalog(deps) {
   try {
     const first = await syncOnce('boot');
     if (!first.ok) {
-      setTimeout(() => {
-        syncOnce('boot-retry').catch((err) => {
-          logger?.warn({ err: err.message }, '[BOOT] REP catalog retry failed');
-        });
-      }, 2000);
+      scheduleAsyncTimeout(async () => {
+        await syncOnce('boot-retry');
+      }, 2000, logger, 'rep-catalog-retry');
     }
   } catch (err) {
     logger?.warn({ err: err.message }, '[BOOT] REP catalog sync failed (non-fatal)');

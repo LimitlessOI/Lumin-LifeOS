@@ -30,6 +30,7 @@ import express from 'express';
 import { createOutreachEngine } from '../services/outreach-engine.js';
 import { createCommunicationGateway } from '../services/communication-gateway.js';
 import { createLifeOSCalendarService } from '../services/lifeos-calendar.js';
+import { createTCWebhookValidator } from '../services/tc-webhook-validator.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 import { safeDays }               from '../services/lifeos-request-helpers.js';
 
@@ -306,10 +307,29 @@ export function createLifeOSGatewayRoutes({ pool, sendSMS, callCouncilMember, lo
     callCouncilMember,
     logger,
   });
+  const twilioValidator = createTCWebhookValidator({
+    twilioAuthToken: process.env.TWILIO_AUTH_TOKEN || '',
+    logger,
+  });
+  const productionLike = ['production', 'staging'].includes(String(process.env.NODE_ENV || '').toLowerCase());
 
-  // ── TWILIO WEBHOOKS (no auth — Twilio signs with X-Twilio-Signature) ──────
+  function requireTrustedTwilio(req, res, next) {
+    const verdict = twilioValidator.validateTwilio(req);
+    if (verdict.skip) {
+      if (productionLike) {
+        return res.status(503).type('text/xml').send(`<?xml version="1.0" encoding="UTF-8"?><Response><Say>Webhook verification not configured.</Say></Response>`);
+      }
+      return next();
+    }
+    if (!verdict.ok) {
+      return res.status(401).type('text/xml').send(`<?xml version="1.0" encoding="UTF-8"?><Response><Say>Unauthorized webhook.</Say></Response>`);
+    }
+    return next();
+  }
 
-  router.post('/gateway/inbound/sms', async (req, res) => {
+  // ── TWILIO WEBHOOKS (public path, signature-validated) ─────────────────────
+
+  router.post('/gateway/inbound/sms', requireTrustedTwilio, async (req, res) => {
     try {
       const { From, Body, To } = req.body;
       await gateway.handleInboundSMS({ from: From, body: Body, to: To });
@@ -320,7 +340,7 @@ export function createLifeOSGatewayRoutes({ pool, sendSMS, callCouncilMember, lo
     }
   });
 
-  router.post('/gateway/inbound/call', async (req, res) => {
+  router.post('/gateway/inbound/call', requireTrustedTwilio, async (req, res) => {
     try {
       const { From, To } = req.body;
       const userId = await resolveUserByPhone(To);
@@ -335,7 +355,7 @@ export function createLifeOSGatewayRoutes({ pool, sendSMS, callCouncilMember, lo
     }
   });
 
-  router.post('/gateway/voicemail', async (req, res) => {
+  router.post('/gateway/voicemail', requireTrustedTwilio, async (req, res) => {
     try {
       const { RecordingUrl } = req.body;
       const { from, userId } = req.query;

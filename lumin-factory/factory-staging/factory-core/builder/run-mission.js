@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { dispatchExecuteStep, REPO_ROOT } from './run-step.js';
+import { detectLayout } from '../layout/repo-layout.js';
 
 function sortStepsByDependencies(steps) {
   const byId = new Map(steps.map((s) => [s.step_id, s]));
@@ -25,7 +26,8 @@ function sortStepsByDependencies(steps) {
 }
 
 export function loadBlueprintFromRepo(missionId) {
-  const blueprintPath = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS', missionId, 'BLUEPRINT.json');
+  const layout = detectLayout();
+  const blueprintPath = path.join(REPO_ROOT, layout.missionsRel, missionId, 'BLUEPRINT.json');
   if (!fs.existsSync(blueprintPath)) {
     return { error: 'missing_blueprint', mission_id: missionId, path: blueprintPath };
   }
@@ -66,6 +68,7 @@ export function dispatchExecuteMission(body) {
       mission_id,
       blueprint_id: blueprint.blueprint_id,
       step,
+      skip_intake_gate: body?.skip_intake_gate === true,
     });
 
     results.push({

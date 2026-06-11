@@ -11,7 +11,7 @@
     "step_id": "S002",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/INDEX.md",
-    "expected_sha256": "8c86cc98748ff3fced4ca766b1002e9e75c4aba1bf4857f309af6080ff495091"
+    "expected_sha256": "b5cfbb575ea053ed2989ae585eebc0eb7abe2cda577d842cfa1f1e59bc1e418a"
   },
   {
     "test_id": "AT-S003-1",

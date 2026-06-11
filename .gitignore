@@ -82,6 +82,7 @@ data/prediction-loop.jsonl
 # Lane-specific builder daemon logs/state (written by builder-daemon.mjs)
 data/builder-daemon-log.*.jsonl
 data/builder-daemon-state.*.json
+.claude/worktrees/
 data/builder-continuous-queue-log.*.jsonl
 # TSOS overseer runtime state
 data/tsos-overseer-log.jsonl
@@ -91,3 +92,4 @@ data/tsos-runtime-guardian-log.jsonl
 data/tsos-runtime-guardian-state.json
 data/tsos-compliance-officer-last-run.json
 data/builder-daemon-state.*.json
+.claude/worktrees/

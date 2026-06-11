@@ -42,7 +42,7 @@
       "updated_at": "2026-01-26T10:10:55.039Z"
     },
     {
-      "id": "mem_1780311051352_8rnkgle11",
+      "id": "mem_1781149250455_1at604cbi",
       "category": "facts",
       "content": {
         "title": "LifeOS / LimitlessOS Source of Truth (v1.0)",
@@ -54,11 +54,11 @@
       "confidence": 1,
       "source": {
         "conversation_id": null,
-        "timestamp": "2026-06-01T10:50:51.352Z",
+        "timestamp": "2026-06-11T03:40:50.455Z",
         "user_confirmed": true
       },
-      "created_at": "2026-06-01T10:50:51.352Z",
-      "updated_at": "2026-06-01T10:50:51.353Z"
+      "created_at": "2026-06-11T03:40:50.455Z",
+      "updated_at": "2026-06-11T03:40:50.456Z"
     }
   ],
   "conversation_history": []

@@ -1,7 +1,10 @@
 /**
+ * Railway env vault + sync (production spine).
+ * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import express from "express";
+import { randomBytes, timingSafeEqual } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { getRegistryHealth } from "../services/env-registry-map.js";
@@ -61,6 +64,32 @@ async function internalRailwayBuildFromLatest() {
 
 function getActor(req) {
   return req.get("x-actor") || req.body?.actor || req.query?.actor || "system";
+}
+
+function setSensitiveNoStoreHeaders(res) {
+  res.set({
+    "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
+    "Surrogate-Control": "no-store",
+  });
+}
+
+function safeSecretMatch(candidate, expected) {
+  const left = Buffer.from(String(candidate || "").trim());
+  const right = Buffer.from(String(expected || "").trim());
+  if (!left.length || !right.length || left.length !== right.length) return false;
+  return timingSafeEqual(left, right);
+}
+
+function getOperatorKeyFromRequest(req) {
+  return (
+    req.headers["x-command-key"] ||
+    req.headers["x-command-center-key"] ||
+    req.headers["x-lifeos-key"] ||
+    req.headers["x-api-key"] ||
+    ""
+  );
 }
 
 export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService }) {
@@ -231,17 +260,18 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
   });
 
   /**
-   * GET /sync-command-key
+   * POST /sync-command-key
    * Returns the COMMAND_CENTER_KEY value that Railway is actually running with.
    * Auth: x-railway-token must match RAILWAY_TOKEN in process.env.
    * Used by npm run system:sync-command-key to pull Railway's live key into .env.local
    * without touching Railway vault at all.
    */
-  router.get("/sync-command-key", (req, res) => {
-    const railwayToken = req.headers['x-railway-token'];
-    const envToken = process.env.RAILWAY_TOKEN;
+  router.post("/sync-command-key", (req, res) => {
+    setSensitiveNoStoreHeaders(res);
+    const railwayToken = String(req.headers['x-railway-token'] || '').trim();
+    const envToken = String(process.env.RAILWAY_TOKEN || '').trim();
 
-    if (!envToken || !railwayToken || railwayToken !== envToken) {
+    if (!safeSecretMatch(railwayToken, envToken)) {
       return res.status(401).json({
         ok: false,
         error: 'Unauthorized — x-railway-token must match RAILWAY_TOKEN in vault',
@@ -266,15 +296,16 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
    * This escape-hatch bypasses the command key so it can be reset even when
    * local .env.local and Railway vault are out of sync.
    *
-   * Body: { new_key?: string }  — omit to auto-generate a secure random key
-   * Returns: { ok, new_key, message }
+   * Body: { new_key: string }  — caller must generate locally; route no longer returns secrets
+   * Returns: { ok, message }
    */
   router.post("/rotate-command-key", async (req, res) => {
     try {
-      const railwayToken = req.headers['x-railway-token'];
-      const envToken = process.env.RAILWAY_TOKEN;
+      setSensitiveNoStoreHeaders(res);
+      const railwayToken = String(req.headers['x-railway-token'] || '').trim();
+      const envToken = String(process.env.RAILWAY_TOKEN || '').trim();
 
-      if (!envToken || !railwayToken || railwayToken !== envToken) {
+      if (!safeSecretMatch(railwayToken, envToken)) {
         return res.status(401).json({
           ok: false,
           error: 'Unauthorized — x-railway-token must match RAILWAY_TOKEN in vault',
@@ -292,9 +323,15 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
         });
       }
 
-      // Use provided key or generate a secure random one
-      const rawKey = req.body?.new_key && String(req.body.new_key).trim();
-      const newKey = rawKey || `CCK-${Date.now()}-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+      // Server-side generation was leaking the rotated key through an HTTP response.
+      // Require callers to generate locally and send the exact key to store.
+      const newKey = String(req.body?.new_key || '').trim();
+      if (!newKey) {
+        return res.status(400).json({
+          ok: false,
+          error: 'new_key is required; generate locally and send it to avoid secret return over HTTP',
+        });
+      }
 
       // Push to Railway vault via GraphQL
       const gqlRes = await fetch(RAILWAY_GQL, {
@@ -328,10 +365,9 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
 
       res.json({
         ok: true,
-        new_key: newKey,
-        message: 'COMMAND_CENTER_KEY updated in Railway vault. Update .env.local to match, then redeploy.',
+        message: 'COMMAND_CENTER_KEY updated in Railway vault using caller-provided key. Update local env to match, then redeploy.',
         next_steps: [
-          `Set COMMAND_CENTER_KEY=${newKey} in your .env.local`,
+          'Update COMMAND_CENTER_KEY in your local env to the caller-generated value',
           'Run: npm run system:railway:redeploy',
         ],
       });
@@ -352,16 +388,14 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
   router.post("/self-redeploy", async (req, res) => {
     try {
       const railwayToken = req.headers['x-railway-token'];
-      const commandKey   = req.headers['x-command-key'] || req.headers['x-command-center-key'] ||
-                           req.headers['x-lifeos-key']  || req.headers['x-api-key'] ||
-                           req.query?.api_key;
+      const commandKey = getOperatorKeyFromRequest(req);
 
       const envToken      = process.env.RAILWAY_TOKEN;
       const envCommandKey = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY ||
                             process.env.API_KEY;
 
-      const authedViaRailwayToken = Boolean(envToken && railwayToken && railwayToken === envToken);
-      const authedViaCommandKey   = Boolean(envCommandKey && commandKey && commandKey === envCommandKey);
+      const authedViaRailwayToken = safeSecretMatch(railwayToken, envToken);
+      const authedViaCommandKey = safeSecretMatch(commandKey, envCommandKey);
 
       if (!authedViaRailwayToken && !authedViaCommandKey) {
         return res.status(401).json({
@@ -391,10 +425,9 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
    */
   router.post('/build-from-latest', async (req, res) => {
     try {
-      const commandKey = req.headers['x-command-key'] || req.headers['x-command-center-key'] ||
-                         req.headers['x-lifeos-key'] || req.headers['x-api-key'];
+      const commandKey = getOperatorKeyFromRequest(req);
       const envCommandKey = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY;
-      if (!envCommandKey || commandKey !== envCommandKey) {
+      if (!safeSecretMatch(commandKey, envCommandKey)) {
         return res.status(401).json({ ok: false, error: 'Unauthorized' });
       }
       const data = await internalRailwayBuildFromLatest();

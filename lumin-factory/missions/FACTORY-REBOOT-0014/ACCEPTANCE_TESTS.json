@@ -3,7 +3,7 @@
     "test_id": "AT-S1401-1",
     "step_id": "S1401",
     "type": "file_sha256_matches",
-    "target": "builderos-reboot/scripts/factory-http-client.mjs",
+    "target": "scripts/factory-http-client.mjs",
     "expected_sha256": "a888a61d1bde3120fecbae399913cc2aa35c653b5586d6bb4850b99295a4e7a9"
   }
 ]

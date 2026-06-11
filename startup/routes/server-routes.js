@@ -27,8 +27,8 @@ export function registerServerRoutes(app, deps) {
     podManager,
   } = deps;
 
-  app.use("/api", memoryRoutes());
-  app.use("/api/v1/memory/legacy", memoryRoutes());
+  app.use("/api", memoryRoutes({ requireKey }));
+  app.use("/api/v1/memory/legacy", memoryRoutes({ requireKey }));
 
   app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     const sig = req.headers["stripe-signature"];
@@ -98,8 +98,18 @@ export function registerServerRoutes(app, deps) {
       health.build = { status: "error", message: e.message };
     }
 
+    const allOk =
+      health.ollama?.status === "ok" &&
+      health.database?.status === "ok" &&
+      !(health.build && health.build.status === "error");
+
     telemetry?.recordMetric?.("endpoint.healthz", allOk ? 1 : 0);
-    res.json(health);
+    res.status(allOk ? 200 : 503).json({
+      ok: allOk,
+      status: allOk ? "healthy" : "degraded",
+      canonical_health_path: "/api/v1/lifeos/system/health",
+      ...health,
+    });
   });
 
   app.post("/api/v1/stripe/sync-revenue", requireKey, async (req, res) => {
@@ -148,18 +158,30 @@ export function registerServerRoutes(app, deps) {
         return res.status(400).json({ error: "filePath and fullContent required" });
       }
 
-      const allowedFiles = [
-        ".js",
+      const normalizedPath = String(filePath).trim().replace(/^[/\\]+/, "");
+      const allowedExactFiles = [
         "public/overlay/command-center.js",
         "public/overlay/command-center.html",
         "package.json",
       ];
+      const resolvedPath = path.resolve(rootDir, normalizedPath);
+      const relativePath = path.relative(rootDir, resolvedPath);
+      const insideRepo =
+        relativePath &&
+        !relativePath.startsWith("..") &&
+        !path.isAbsolute(relativePath);
 
-      if (!allowedFiles.includes(filePath)) {
+      const allowedJsPath = normalizedPath.endsWith(".js");
+      const allowedExactPath = allowedExactFiles.includes(normalizedPath);
+      if (!insideRepo) {
+        return res.status(403).json({ error: "Path must stay inside repository root" });
+      }
+
+      if (!allowedJsPath && !allowedExactPath) {
         return res.status(403).json({ error: "File not allowed for replacement" });
       }
 
-      const fullPath = path.join(rootDir, filePath);
+      const fullPath = resolvedPath;
 
       if (backup && fs.existsSync(fullPath)) {
         const backupPath = `${fullPath}.backup.${Date.now()}`;
@@ -173,7 +195,7 @@ export function registerServerRoutes(app, deps) {
 
       res.json({
         ok: true,
-        message: `File ${filePath} completely replaced`,
+        message: `File ${normalizedPath} completely replaced`,
         backup: backup ? `Created backup with timestamp` : "No backup",
         size: fullContent.length,
       });

@@ -1,0 +1,82 @@
+{
+  "mission_id": "FACTORY-REBOOT-0029",
+  "checks": [
+    {
+      "step_id": "S2901",
+      "allowed_roles": [
+        "TSOS",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S2902",
+      "allowed_roles": [
+        "TSOS",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S2903",
+      "allowed_roles": [
+        "TSOS",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S2904",
+      "allowed_roles": [
+        "TSOS",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S2905",
+      "allowed_roles": [
+        "TSOS",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S2906",
+      "allowed_roles": [
+        "TSOS",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    },
+    {
+      "step_id": "S2907",
+      "allowed_roles": [
+        "TSOS",
+        "Builder"
+      ],
+      "forbidden_roles": [
+        "C2"
+      ],
+      "requires_founder_input": false
+    }
+  ]
+}

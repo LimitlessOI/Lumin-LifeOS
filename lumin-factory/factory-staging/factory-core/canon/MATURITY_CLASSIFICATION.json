@@ -1,0 +1,15 @@
+{
+  "version": "1",
+  "levels": [
+    "NOT_WIRED",
+    "WIRED",
+    "LIVE",
+    "PROVEN",
+    "ACTIVE",
+    "LEGACY",
+    "ARCHIVED",
+    "FORBIDDEN",
+    "UNKNOWN_DO_NOT_TOUCH"
+  ],
+  "rule": "docs_alone_earn_zero_runtime_maturity"
+}

@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /** Run acceptance tests for all emitted factory reboot missions. */
 import { spawnSync } from 'node:child_process';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { detectFactoryLayout, repoRootFromScriptMeta, scriptPath } from './factory-repo-layout.mjs';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = repoRootFromScriptMeta(import.meta.url);
+const layout = detectFactoryLayout(REPO_ROOT);
+
 const missions = [
   'FACTORY-REBOOT-0001',
   'FACTORY-REBOOT-0002',
@@ -35,15 +36,15 @@ const missions = [
   'FACTORY-REBOOT-0027',
   'FACTORY-REBOOT-0028',
   'FACTORY-REBOOT-0029',
-  'FACTORY-DELIBERATION-V27-0001',
+  // Deliberation v2.7 wires production spine (LifeOS Railway) — not factory runtime acceptance.
 ];
 let failed = 0;
 
 for (const mission of missions) {
   const result = spawnSync(
     process.execPath,
-    [path.join(__dirname, 'run-mission-acceptance.mjs'), mission],
-    { stdio: 'inherit', cwd: path.join(__dirname, '../..') },
+    [scriptPath(layout, 'run-mission-acceptance.mjs'), mission],
+    { stdio: 'inherit', cwd: REPO_ROOT },
   );
   if (result.status !== 0) failed++;
 }

@@ -66,7 +66,7 @@
     "step_id": "S409",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/historian/record-consensus-session.js",
-    "expected_sha256": "6782421205bac5cb1e4a4257b6fe7f65c983f751743bbe549253a289500c417e"
+    "expected_sha256": "397e6978971971acde9259cb76877f15e6ed2200e79b61951bbbd02c7e6d731a"
   },
   {
     "test_id": "AT-S410-1",
@@ -164,7 +164,7 @@
     "step_id": "S423",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/proof-freshness.js",
-    "expected_sha256": "4aef1c6e60adabe98b08f487d0f665d05866ac9f5f2bb84c5a1ba7b2ad67e77d"
+    "expected_sha256": "d37669e571e1a0742e181a5e87507275ca2d5147c665988d34c1089fa26f4755"
   },
   {
     "test_id": "AT-S424-1",
@@ -300,7 +300,7 @@
     "step_id": "S439",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "681affea88801db0aa084ab0ba21f0022aaf5e336fe32abf09e9fb38e239a40e"
+    "expected_sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
   },
   {
     "test_id": "AT-S440-1",

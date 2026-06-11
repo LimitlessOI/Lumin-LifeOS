@@ -1,118 +1,64 @@
 # Factory Implementation Guide
 
-This guide is the **fast path** from mission packs to a runnable staging tree. A cold agent should be able to follow it without re-reading the whole thread.
+**Updated:** 2026-06-09
 
-## Architecture (one screen)
+## One-command status
 
-```mermaid
-flowchart LR
-  BPB[BPB mission packs] --> EXEC[execute-mission.mjs]
-  EXEC --> STAGE[factory-staging/]
-  EXEC --> ACC[run-mission-acceptance.mjs]
-  STAGE --> SRV[server.js stub]
-  STAGE --> PAYLOADS[factory-core payloads]
-  PARTS[services/council-service.js] --> STAGE
+```bash
+npm run factory:ci      # full regression (13 checks)
+npm run factory:readiness
 ```
+
+## Architecture
 
 | Layer | Location | Role |
 |-------|----------|------|
-| Mission packs | `builderos-reboot/MISSIONS/FACTORY-REBOOT-000*` | Frozen blueprints + acceptance |
+| Mission packs | `builderos-reboot/MISSIONS/` | Frozen blueprints + acceptance |
 | Executor | `builderos-reboot/scripts/` | Mechanical step runner |
-| Staging runtime | `factory-staging/` | Materialized payloads + minimal server |
-| Parts car | `services/`, docs | Import sources only when blueprint says so |
+| Staging runtime | `factory-staging/` | Materialized payloads + server |
+| Standalone cutover | `lumin-factory/` | Git-ready export |
 
-## Commands (copy/paste)
+## Mission map (summary)
 
-From repo root:
+| Range | Scope |
+|-------|-------|
+| 0001–0004 | Bootstrap, segments, materialize staging |
+| 0005–0010 | Live dispatch, council quarantine, autopilot, export |
+| 0011–0025 | Cutover bundle, determinism, greenfield, CI, certification |
+| 0026–0028 | Phase 11 full loop, Phase 12 salvage, cert v2 |
+| GREENFIELD-0001 | First `exact_content` proof |
+| PROOF-LOOP-0001 | Phase 11 governed loop anchor |
 
-```bash
-# Verify all mission packs (128 tests across 0001–0004)
-npm run factory:acceptance
+## How to add a governed file
 
-# Regenerate 0004 blueprint from manifests (after CONTENT edits)
-npm run factory:generate-0004
-npm run factory:acceptance:sync
+1. Put bytes in `MISSIONS/.../CONTENT/` or pin `content_source_path`
+2. Add blueprint step with sha256 contract
+3. `node builderos-reboot/scripts/sync-acceptance-from-blueprint.mjs <MISSION>`
+4. `node builderos-reboot/scripts/execute-mission.mjs <MISSION>`
 
-# Materialize factory-staging from proof mission
-npm run factory:materialize
+**Do not hand-edit `factory-staging/`** for governed work.
 
-# Run one step only
-npm run factory:step -- FACTORY-REBOOT-0004 S436
+## Shared files
 
-# Staging smoke check
-cd factory-staging && npm install && npm run check && npm start
-# curl http://127.0.0.1:3099/health
-```
+See `MISSION_SHARED_FILE_OWNERSHIP.md` before rematerializing missions that touch `run-step.js`, `register-routes.js`, etc.
 
-## Mission map
+## Execute-step (live)
 
-| Mission | Scope | Mode |
-|---------|-------|------|
-| 0001 | Reboot workspace + bootstrap pack | verify/copy |
-| 0002 | Segments 2–4 schema payloads | verify/copy |
-| 0003 | Phases 5–10 runtime payloads (in ARTIFACTS/) | verify/copy |
-| 0004 | **Proof**: materialize `factory-staging/` + SM-004 council import | first materialization |
+`POST /factory/execute-step` runs `runWriteFileExact` then **SENTRY** `verifyStepContract` (acceptance + builder status). Returns 409 if SENTRY contract fails.
 
-## How to implement the next slice
+## Evidence checklist
 
-### 1. Add a new file to factory-staging
-
-**Do not hand-edit `factory-staging/` for governed work.** Add a step to a mission blueprint:
-
-1. Put exact bytes in `MISSIONS/FACTORY-REBOOT-000X/CONTENT/` (BPB-owned template), **or** pin an existing repo file as `content_source_path`.
-2. Add step to `BLUEPRINT.json` with `byte_exact_copy` + sha256.
-3. Run `sync-acceptance-from-blueprint.mjs` for that mission.
-4. Run `execute-mission-step.mjs` or full `execute-mission.mjs`.
-
-### 2. Wire live execute-step dispatch (0005+)
-
-Current state: `POST /factory/execute-step` returns `501 NOT_IMPLEMENTED` but validates blocked-return shape.
-
-Next mission should:
-
-- Implement dispatch in `factory-staging/startup/register-routes.js` using `factory-core/builder/*` and `factory-core/sentry/verify-step-result.js`
-- Add integration test calling one real step
-- Keep council adapter behind explicit import boundary
-
-### 3. Cut over to clean `Lumin-Factory` repo
-
-When proof receipts exist:
-
-1. Copy `factory-staging/` as repo root (minus `node_modules`)
-2. Copy `builderos-reboot/MISSIONS/` as `missions/` or submodule
-3. Run acceptance + determinism runbook on fresh clone
-
-## File conventions
-
-- **Blueprint step** → one file, one action, sha256 pin, sandbox boundary
-- **Acceptance** → generated from blueprint; run after every materialize
-- **CONTENT/** → BPB exact bytes for first-time targets (not self-referential acceptance hash)
-- **ARTIFACTS/** (0003) → canonical payload library copied into staging by 0004
-
-## Stop conditions (auto-pilot)
-
-HALT and update `HANDOFF.md` if:
-
-- acceptance fails and hash pin is wrong (refresh blueprint, don't guess)
-- step needs greenfield without `content_source_path` (executor blocks by design)
-- strategic ambiguity appears (return `BLOCKED_RETURN_TO_BPB`)
-
-## Evidence checklist before claiming "implemented"
-
-- [ ] `npm run factory:acceptance` → all pass
-- [ ] `npm run factory:materialize` → exit 0
-- [ ] `cd factory-staging && npm run check` → all pass
-- [ ] `GET /health` → `{ ok: true }` with server running
-- [ ] Council import sha256 matches parts car (`COUNCIL_IMPORT_RECEIPT.json`)
+- [ ] `npm run factory:ci` → ALL PASS
+- [ ] `npm run factory:duplication` → pass
+- [ ] `npm run factory:full-loop` → pass
+- [ ] `PROJECT_CERTIFICATION.json` → `FULLY_MACHINE_READY: false` until 3-session coder test
 
 ## Script reference
 
 | Script | Purpose |
 |--------|---------|
-| `mission-lib.mjs` | Shared sha256, dependency sort, write_file_exact |
-| `execute-mission-step.mjs` | One step |
 | `execute-mission.mjs` | Full mission + acceptance |
-| `sync-acceptance-from-blueprint.mjs` | Regenerate ACCEPTANCE_TESTS.json |
+| `execute-mission-step.mjs` | One step |
+| `factory-ci.mjs` | Umbrella regression |
 | `refresh-blueprint-hashes.mjs` | Re-pin sha256 from disk |
-| `generate-factory-reboot-0004.mjs` | Rebuild proof mission from manifests |
-| `run-all-mission-acceptance.mjs` | CI-friendly gate |
+| `run-full-loop-proof.mjs` | Phase 11 orchestration proof |

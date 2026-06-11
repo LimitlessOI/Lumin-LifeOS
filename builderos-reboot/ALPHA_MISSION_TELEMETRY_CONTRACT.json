@@ -1,0 +1,131 @@
+{
+  "schema": "builderos_alpha_mission_telemetry_contract_v1",
+  "signed_by": "SNT",
+  "locked_at": "2026-06-10",
+  "doctrine_ref": "builderos-reboot/SNT_TELEMETRY_DOCTRINE.md",
+  "epistemic_language_ref": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/SNT_EPISTEMIC_LANGUAGE.md",
+  "principle": "Measure everything that materially affects truth, quality, cost, speed, or safety. Track structural beams, not every nail.",
+  "tiers": {
+    "tier_1_mandatory": {
+      "never_skip": true,
+      "fields": [
+        "mission_id",
+        "blueprint_version",
+        "actor",
+        "model_used",
+        "commit_sha",
+        "files_changed",
+        "tests_added",
+        "tests_passed",
+        "tests_failed",
+        "deployment_sha",
+        "acceptance_status",
+        "sentry_verdict",
+        "cost_estimate_usd",
+        "token_estimate",
+        "time_spent_ms"
+      ],
+      "analogy": "Which beam was installed, by whom, and did inspection pass?"
+    },
+    "tier_2_production_features": {
+      "when": "Shipping actual product features (not factory spine / harness only)",
+      "rule": "Track outcomes, not every API call",
+      "example": {
+        "feature": "Conversation Commitments v1",
+        "metrics": [
+          "commitments_created",
+          "commitments_completed",
+          "commitments_missed",
+          "reminder_success_rate",
+          "storage_cost_usd",
+          "ai_extraction_accuracy"
+        ]
+      }
+    },
+    "tier_3_investigation_mode": {
+      "when": "SENTRY escalation, load-bearing downgrade, fake-green suspicion, unexplained drift",
+      "includes": [
+        "every_query",
+        "every_validator",
+        "every_state_transition",
+        "every_deployment_event"
+      ],
+      "constraints": [
+        "time_bounded",
+        "explicitly_activated",
+        "activation_receipt_required",
+        "deactivate_when_root_cause_found"
+      ],
+      "analogy": "Track every nail — temporarily only"
+    }
+  },
+  "measurement_doctrine": {
+    "always_measure": ["truth", "quality", "cost", "time", "safety"],
+    "sometimes_measure": [
+      "detailed_execution_traces",
+      "internal_ai_reasoning",
+      "every_state_transition"
+    ],
+    "never_measure_by_default": ["everything_forever"]
+  },
+  "nine_questions": [
+    {
+      "id": "Q1",
+      "question": "What was requested?",
+      "artifact_hints": ["FOUNDER_PACKET.json", "FOUNDER_PACKET.md"]
+    },
+    {
+      "id": "Q2",
+      "question": "What was built?",
+      "artifact_hints": ["commit_sha", "files_changed", "BLUEPRINT.json"]
+    },
+    {
+      "id": "Q3",
+      "question": "Who built it?",
+      "artifact_hints": ["actor", "model_used"]
+    },
+    {
+      "id": "Q4",
+      "question": "What did it cost?",
+      "artifact_hints": ["cost_estimate_usd", "token_estimate"]
+    },
+    {
+      "id": "Q5",
+      "question": "How long did it take?",
+      "artifact_hints": ["time_spent_ms", "generated_at"]
+    },
+    {
+      "id": "Q6",
+      "question": "What evidence proves it works?",
+      "artifact_hints": ["tests_passed", "tests_failed", "SENTRY_CHECK_RESULT.json", "REGRESSION_RUN_RESULT.json"]
+    },
+    {
+      "id": "Q7",
+      "question": "What evidence proves it is safe?",
+      "artifact_hints": ["sentry_verdict", "governance_blocks", "pre_commit_receipts"]
+    },
+    {
+      "id": "Q8",
+      "question": "What remains unknown?",
+      "artifact_hints": ["blockers", "evidence_gaps", "THINK_GUESS_labeled"]
+    },
+    {
+      "id": "Q9",
+      "question": "Should we do it again?",
+      "artifact_hints": ["determinism_receipt", "repeatability_verdict"]
+    }
+  ],
+  "mission_receipt_template": {
+    "description": "Emit at phase boundaries (BPB freeze, SENTRY audit, CDR complete, deploy verify)",
+    "filename": "MISSION_TELEMETRY_RECEIPT.json",
+    "required_tier_1_on_emit": true,
+    "nine_questions_required": true,
+    "honest_fail_acceptable": true
+  },
+  "alpha_priority_order": [
+    "tier_1_on_every_mission",
+    "tier_2_when_shipping_products",
+    "tier_3_on_escalation_only",
+    "full_mission_forensics_after_tier_1_habitual"
+  ]
+}

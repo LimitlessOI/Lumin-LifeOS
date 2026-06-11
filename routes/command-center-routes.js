@@ -41,6 +41,7 @@
  *   POST /api/v1/projects/backlog/:id/skip    — backlog skip (calls autonomyOrchestrator.skipProject)
  *   POST /api/v1/projects/backlog/:id/reactivate — backlog reactivate
  *
+ * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime.
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 import logger from '../services/logger.js';

@@ -16,7 +16,6 @@ const MODEL_TIER_ORDER = [
   'gemini_flash',
   'deepseek',
   'cerebras_llama',
-  'claude_via_openrouter',
   'claude_sonnet',
   'gpt-5.1-codex',
   'gpt-5.2-codex',

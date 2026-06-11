@@ -152,9 +152,7 @@ export class CouncilModule {
         process.env.GROQ_API_KEY ? "groq_llama" : null,
         (process.env.GEMINI_API_KEY || process.env.LIFEOS_GEMINI_KEY) ? "gemini_flash" : null,
         process.env.CEREBRAS_API_KEY ? "cerebras_llama" : null,
-        process.env.OPENROUTER_API_KEY ? "openrouter_free" : null,
         process.env.MISTRAL_API_KEY ? "mistral_free" : null,
-        process.env.TOGETHER_API_KEY ? "together_free" : null,
       ].filter(Boolean);
 
       const requestedMembers = String(req.query.members || "")

@@ -81,7 +81,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "9c88bb7341a03c467c3ddfaa997cde232ed6c1725d0d7779886e50c8abc07de5"
+        "sha256": "1be17a61c3c47e666d1489bf4b094a75ee5935cfd5ce4c11c4a4223f8cf99664"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/greenfield-integration.mjs"

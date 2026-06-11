@@ -3,17 +3,26 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import {
+  detectFactoryLayout,
+  machinePath,
+  repoRootFromScriptMeta,
+  scriptPath,
+} from './factory-repo-layout.mjs';
 
-const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const REPO_ROOT = repoRootFromScriptMeta(import.meta.url);
+const layout = detectFactoryLayout(REPO_ROOT);
 
-function run(args) {
-  const r = spawnSync(process.execPath, args, { cwd: REPO_ROOT, encoding: 'utf8' });
+function runScript(scriptName, extraArgs = []) {
+  const r = spawnSync(process.execPath, [scriptPath(layout, scriptName), ...extraArgs], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+  });
   return { ok: r.status === 0, status: r.status };
 }
 
-function receiptPass(rel) {
-  const p = path.join(REPO_ROOT, rel);
+function receiptPass(fileName) {
+  const p = machinePath(REPO_ROOT, layout, fileName);
   if (!fs.existsSync(p)) return false;
   try {
     return JSON.parse(fs.readFileSync(p, 'utf8')).pass === true;
@@ -22,20 +31,22 @@ function receiptPass(rel) {
   }
 }
 
-const acceptance = run(['builderos-reboot/scripts/run-all-mission-acceptance.mjs']);
-const integrationStep = run(['builderos-reboot/scripts/factory-execute-step-integration.mjs']);
-const integrationMission = run(['builderos-reboot/scripts/factory-execute-mission-integration.mjs']);
-const integrationGreenfield = run(['builderos-reboot/scripts/greenfield-integration.mjs']);
-const determinism = receiptPass('builderos-reboot/DETERMINISM_RECEIPT.json') || run(['builderos-reboot/scripts/run-determinism-mechanical.mjs']).ok;
-const greenfield3x = receiptPass('builderos-reboot/GREENFIELD_DETERMINISM_RECEIPT.json');
-const duplication = receiptPass('builderos-reboot/DUPLICATION_RECEIPT.json');
-const queueDry = receiptPass('builderos-reboot/QUEUE_DRY_RUN_RECEIPT.json');
-const cutover = run(['builderos-reboot/scripts/cutover-verify.mjs']);
+const acceptance = runScript('run-all-mission-acceptance.mjs');
+const integrationStep = runScript('factory-execute-step-integration.mjs');
+const integrationMission = runScript('factory-execute-mission-integration.mjs');
+const integrationGreenfield = runScript('greenfield-integration.mjs');
+const determinism =
+  receiptPass('DETERMINISM_RECEIPT.json') || runScript('run-determinism-mechanical.mjs').ok;
+const greenfield3x = receiptPass('GREENFIELD_DETERMINISM_RECEIPT.json');
+const duplication = receiptPass('DUPLICATION_RECEIPT.json');
+const queueDry = receiptPass('QUEUE_DRY_RUN_RECEIPT.json');
+const cutover = runScript('cutover-verify.mjs');
 
-const queue = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'builderos-reboot/MISSION_QUEUE.json'), 'utf8'));
-const state = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'builderos-reboot/CURRENT_STATE.json'), 'utf8'));
+const queue = JSON.parse(fs.readFileSync(machinePath(REPO_ROOT, layout, 'MISSION_QUEUE.json'), 'utf8'));
+const state = JSON.parse(fs.readFileSync(machinePath(REPO_ROOT, layout, 'CURRENT_STATE.json'), 'utf8'));
 
 const checks = {
+  layout: layout.mode,
   acceptance: acceptance.ok,
   integration_step: integrationStep.ok,
   integration_mission: integrationMission.ok,
@@ -47,12 +58,23 @@ const checks = {
   cutover_verify: cutover.ok,
 };
 
-const corePass = checks.acceptance && checks.integration_step && checks.integration_mission && checks.integration_greenfield && checks.determinism_mechanical;
-const extendedPass = corePass && checks.greenfield_3x && checks.duplication_rematerialize && checks.queue_dry_run && checks.cutover_verify;
+const corePass =
+  checks.acceptance &&
+  checks.integration_step &&
+  checks.integration_mission &&
+  checks.integration_greenfield &&
+  checks.determinism_mechanical;
+const extendedPass =
+  corePass &&
+  checks.greenfield_3x &&
+  checks.duplication_rematerialize &&
+  checks.queue_dry_run &&
+  checks.cutover_verify;
 
 const report = {
   generated_at: new Date().toISOString(),
   version: 3,
+  layout: layout.mode,
   verdict: extendedPass ? 'STAGING_READY_EXTENDED' : corePass ? 'STAGING_READY' : 'STAGING_NOT_READY',
   checks,
   queue_complete: queue.missions.filter((m) => m.status === 'complete').length,
@@ -61,6 +83,6 @@ const report = {
   lumin_factory_path: fs.existsSync(path.join(REPO_ROOT, 'lumin-factory')) ? 'lumin-factory/' : null,
 };
 
-fs.writeFileSync(path.join(REPO_ROOT, 'builderos-reboot/READINESS_REPORT.json'), `${JSON.stringify(report, null, 2)}\n`);
+fs.writeFileSync(machinePath(REPO_ROOT, layout, 'READINESS_REPORT.json'), `${JSON.stringify(report, null, 2)}\n`);
 console.log(JSON.stringify(report, null, 2));
 process.exit(corePass ? 0 : 1);

@@ -1,0 +1,11 @@
+{
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "phase": "SENTRY_BP_AUDIT",
+  "status": "READY",
+  "blueprint_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001-v1",
+  "bpb_intake": "BPB_INTAKE_PASS",
+  "blueprint_freeze": "FROZEN",
+  "platform_fix_commit": "2526fa1",
+  "railway_deploy_note": "Platform fix may lag 2-5m on Railway; local factory gates pass now",
+  "next_action": "Paste SENTRY_BP_REVIEW_PROMPT.md into Claude Code; block CDR until BP_AUDIT_PASS"
+}

@@ -3,21 +3,21 @@
     "test_id": "AT-S1101-1",
     "step_id": "S1101",
     "type": "file_sha256_matches",
-    "target": "builderos-reboot/scripts/build-lumin-factory-bundle.mjs",
-    "expected_sha256": "af74cdd02dc966a9e6eaa1729bbad323664c2ec602c4c6ca9fa7b695ad0b073b"
+    "target": "scripts/build-lumin-factory-bundle.mjs",
+    "expected_sha256": "e7740f0722574c1b55dc13c5ef6398f7faf71ce035fc45c22623100c4f4ba2e6"
   },
   {
     "test_id": "AT-S1102-1",
     "step_id": "S1102",
     "type": "file_sha256_matches",
-    "target": "builderos-reboot/LUMIN_FACTORY_CUTOVER.md",
-    "expected_sha256": "c085d5444dba36ebb0ab9b998c46266e3c484467490c8933575d3f0fd390c92e"
+    "target": "LUMIN_FACTORY_CUTOVER.md",
+    "expected_sha256": "dbb9aa1c56d58b3b6955b84af4a3968b52bd465248bbf3dc9a51dc861efa0a47"
   },
   {
     "test_id": "AT-S1103-1",
     "step_id": "S1103",
     "type": "file_sha256_matches",
-    "target": "builderos-reboot/scripts/cutover-verify.mjs",
-    "expected_sha256": "f676ff3535b953a2a97e08c026a94067f3b4e360e8198483342116c5ba3c3072"
+    "target": "scripts/cutover-verify.mjs",
+    "expected_sha256": "9b8ca484abbd2851a37f47ed757f0c63367bc6b9b75f801c7f6789d43dca9f01"
   }
 ]

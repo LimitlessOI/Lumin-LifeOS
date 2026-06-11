@@ -73,16 +73,14 @@ export const TASK_MODEL_MAP = {
   'lifeos.health.pattern_analysis':    'gemini_flash',
 
   // ── Council / Builder ────────────────────────────────────────────────────
-  // NOTE: claude_via_openrouter hitting HTTP 402 (OpenRouter credits exhausted) as of 2026-04-30.
-  // Temporarily routed to gemini_flash (free tier, SET on Railway) until OpenRouter is topped up.
-  // Restore to claude_via_openrouter once credits are added: https://openrouter.ai/credits
-  'council.builder.task':             'gemini_flash',    // was: claude_via_openrouter
-  'council.builder.code':             'gemini_flash',    // was: claude_via_openrouter
+  // OpenRouter retired (Adam 2026-05-24). Use gemini_flash until ANTHROPIC_API_KEY on Railway → claude_sonnet.
+  'council.builder.task':             'gemini_flash',
+  'council.builder.code':             'gemini_flash',
   'council.builder.code_execute':     'groq_llama',      // frozen spec → groq is fast enough
   'council.builder.plan':             'gemini_flash',    // planning is free-tier safe
-  'council.builder.review':           'gemini_flash',    // was: claude_via_openrouter
-  'council.builder.code_review':      'gemini_flash',    // was: claude_via_openrouter
-  'council.gate_change.debate':       'gemini_flash',    // was: claude_via_openrouter
+  'council.builder.review':           'gemini_flash',
+  'council.builder.code_review':      'gemini_flash',
+  'council.gate_change.debate':       'gemini_flash',
 
   // ── Site Builder ─────────────────────────────────────────────────────────
   // gemini_flash: free, 8192+ output tokens — necessary for full 15-section HTML

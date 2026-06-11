@@ -1,5 +1,6 @@
 /**
  * routes/autonomy-routes.js
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  *
  * Autonomy orchestrator API endpoints.
  * Mounted at: /api/v1/autonomy
@@ -15,16 +16,38 @@
 
 import express from 'express';
 import { scoreIdea } from '../services/risk-scorer.js';
+import { createTCWebhookValidator } from '../services/tc-webhook-validator.js';
 
 export function createAutonomyRoutes({ pool, requireKey, orchestrator }) {
   const router = express.Router();
+  const twilioValidator = createTCWebhookValidator({
+    twilioAuthToken: process.env.TWILIO_AUTH_TOKEN || '',
+    logger: console,
+  });
+  const productionLike = ['production', 'staging'].includes(String(process.env.NODE_ENV || '').toLowerCase());
+
+  function requireTrustedTwilio(req, res, next) {
+    const verdict = twilioValidator.validateTwilio(req);
+    if (verdict.skip) {
+      if (productionLike) {
+        return res.status(503).type('text/xml').send(`<?xml version="1.0" encoding="UTF-8"?>
+<Response><Message>Webhook verification not configured.</Message></Response>`);
+      }
+      return next();
+    }
+    if (!verdict.ok) {
+      return res.status(401).type('text/xml').send(`<?xml version="1.0" encoding="UTF-8"?>
+<Response><Message>Unauthorized webhook.</Message></Response>`);
+    }
+    return next();
+  }
 
   // ── POST /sms-webhook — Twilio incoming SMS handler ──────────────────────
   // Twilio posts here when Adam replies to an approval SMS.
   // Twilio sends: Body=YES-A3F7B2, From=+17025551234
   // No auth header (Twilio doesn't support arbitrary headers easily) —
-  // security is via Twilio signature validation OR the code itself being secret.
-  router.post('/sms-webhook', express.urlencoded({ extended: false }), async (req, res) => {
+  // security is enforced via Twilio signature validation.
+  router.post('/sms-webhook', express.urlencoded({ extended: false }), requireTrustedTwilio, async (req, res) => {
     try {
       const body = (req.body?.Body || '').trim().toUpperCase();
       const from = req.body?.From || '';

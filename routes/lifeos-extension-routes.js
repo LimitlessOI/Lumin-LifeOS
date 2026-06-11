@@ -20,6 +20,47 @@
 import express from 'express';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
+function parseAllowedOrigin(raw) {
+  try {
+    return new URL(raw).origin;
+  } catch {
+    return null;
+  }
+}
+
+function getAllowedWebOrigins() {
+  const configured = [
+    process.env.PUBLIC_BASE_URL,
+    process.env.PUBLIC_DOMAIN,
+    ...(process.env.LIFEOS_EXTENSION_ALLOWED_ORIGINS || '')
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean),
+  ];
+
+  const normalized = new Set();
+  for (const candidate of configured) {
+    const origin = parseAllowedOrigin(candidate);
+    if (origin) normalized.add(origin);
+  }
+
+  normalized.add('http://localhost:3000');
+  normalized.add('http://127.0.0.1:3000');
+  normalized.add('http://localhost:8787');
+  normalized.add('http://127.0.0.1:8787');
+  return normalized;
+}
+
+function isAllowedExtensionOrigin(origin) {
+  if (!origin) return false;
+  if (origin.startsWith('chrome-extension://') || origin.startsWith('moz-extension://')) {
+    return true;
+  }
+  const normalizedOrigin = parseAllowedOrigin(origin);
+  if (!normalizedOrigin) return false;
+  return getAllowedWebOrigins().has(normalizedOrigin);
+}
+
 export function createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router  = express.Router();
   const log     = logger || console;
@@ -31,14 +72,8 @@ export function createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMembe
   // directly from content.js if needed in future.
   router.use((req, res, next) => {
     const origin = req.headers.origin || '';
-    // Allow extension origins and our own origin
-    if (
-      origin.startsWith('chrome-extension://') ||
-      origin.startsWith('moz-extension://') ||
-      origin.includes('localhost') ||
-      origin.includes('railway.app') ||
-      origin.includes('lumin') // custom domain future-proofing
-    ) {
+    if (isAllowedExtensionOrigin(origin)) {
+      res.setHeader('Vary', 'Origin');
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-command-key, Authorization');

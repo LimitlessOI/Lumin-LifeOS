@@ -10,17 +10,17 @@
       "step_id": "S1101",
       "phase_id": "P21",
       "title": "Write bundle builder script",
-      "target_file": "builderos-reboot/scripts/build-lumin-factory-bundle.mjs",
+      "target_file": "scripts/build-lumin-factory-bundle.mjs",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/CONTENT/build-lumin-factory-bundle.mjs"
+        "content_source_path": "missions/FACTORY-REBOOT-0011/CONTENT/build-lumin-factory-bundle.mjs"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "af74cdd02dc966a9e6eaa1729bbad323664c2ec602c4c6ca9fa7b695ad0b073b"
+        "sha256": "4c9678b8cada016c8bc2791af682dd111598202b71f9ce426328b1244635dc6f"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/CONTENT/build-lumin-factory-bundle.mjs"
+        "missions/FACTORY-REBOOT-0011/CONTENT/build-lumin-factory-bundle.mjs"
       ],
       "forbidden_context_files": [
         "**"
@@ -33,7 +33,7 @@
         "AT-S1101-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -41,17 +41,17 @@
       "step_id": "S1102",
       "phase_id": "P21",
       "title": "Write cutover guide",
-      "target_file": "builderos-reboot/LUMIN_FACTORY_CUTOVER.md",
+      "target_file": "LUMIN_FACTORY_CUTOVER.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/CONTENT/lumin-factory-README.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0011/CONTENT/lumin-factory-README.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "c085d5444dba36ebb0ab9b998c46266e3c484467490c8933575d3f0fd390c92e"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/CONTENT/lumin-factory-README.md"
+        "missions/FACTORY-REBOOT-0011/CONTENT/lumin-factory-README.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -66,7 +66,7 @@
         "AT-S1102-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -74,17 +74,17 @@
       "step_id": "S1103",
       "phase_id": "P21",
       "title": "Write cutover verify script",
-      "target_file": "builderos-reboot/scripts/cutover-verify.mjs",
+      "target_file": "scripts/cutover-verify.mjs",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/CONTENT/cutover-verify.mjs"
+        "content_source_path": "missions/FACTORY-REBOOT-0011/CONTENT/cutover-verify.mjs"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "f676ff3535b953a2a97e08c026a94067f3b4e360e8198483342116c5ba3c3072"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0011/CONTENT/cutover-verify.mjs"
+        "missions/FACTORY-REBOOT-0011/CONTENT/cutover-verify.mjs"
       ],
       "forbidden_context_files": [
         "**"
@@ -99,7 +99,7 @@
         "AT-S1103-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     }

@@ -1,6 +1,6 @@
 import { appendHistorianRecord } from '../historian/append-record.js';
 import { appendDeliberationRecord } from '../deliberation/validate-deliberation-gate.js';
-import { validateConsensusSession } from '../../../config/deliberation-governance.js';
+import { validateConsensusSession } from '../canon/deliberation-governance.js';
 
 /**
  * Persist consensus session to Historian jsonl + deliberation gate ledger.

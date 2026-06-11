@@ -4,7 +4,7 @@
     "step_id": "S1901",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/init-lumin-factory-repo.mjs",
-    "expected_sha256": "94c0b4c94ee140b80ee45d93f8003c73b7be8edaf6aaa0281033efd71b52a369"
+    "expected_sha256": "6a32873aaf5f09bb8ff2283dec6886dd559d7f326249ff192df729800d51e873"
   },
   {
     "test_id": "AT-S1902-1",

@@ -1,0 +1,14 @@
+{
+  "mission_id": "PRODUCT-MARKETINGOS-SALVAGE-0001",
+  "checks": [
+    {
+      "step_id": "MS001",
+      "allowed_roles": [
+        "BPB",
+        "Coder"
+      ],
+      "forbidden_roles": [],
+      "requires_founder_input": true
+    }
+  ]
+}

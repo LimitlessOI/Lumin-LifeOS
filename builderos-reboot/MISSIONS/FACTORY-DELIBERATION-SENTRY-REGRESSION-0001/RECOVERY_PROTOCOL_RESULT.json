@@ -1,0 +1,21 @@
+{
+  "schema": "recovery_protocol_result_v2",
+  "generated_at": "2026-06-11T08:15:02.106Z",
+  "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "recovery_protocol_active": true,
+  "system_terminal_stop": false,
+  "resolution": "OBJECTIVE_COMPLETE",
+  "objective_score": "PASS",
+  "complete_via": "mission_acceptance",
+  "steps": [
+    {
+      "step": "precheck",
+      "note": "Objective already complete"
+    }
+  ],
+  "strategies_attempted": [
+    "council_multi_hat",
+    "factory_local_runner"
+  ],
+  "loop_escalation_level": "hard_stop"
+}

@@ -66,7 +66,7 @@
     "step_id": "S409",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/historian/record-consensus-session.js",
-    "expected_sha256": "6782421205bac5cb1e4a4257b6fe7f65c983f751743bbe549253a289500c417e"
+    "expected_sha256": "397e6978971971acde9259cb76877f15e6ed2200e79b61951bbbd02c7e6d731a"
   },
   {
     "test_id": "AT-S410-1",
@@ -129,7 +129,7 @@
     "step_id": "S418",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/readiness/system-alpha-readiness.js",
-    "expected_sha256": "64debf6ed0240e39d6cc186d9c9f0fdf0d77521521e35ca1f628d988c840c742"
+    "expected_sha256": "2abb02d4808b9a3aab2a2d34686e30f242d283239e516fa897354847bc83af82"
   },
   {
     "test_id": "AT-S419-1",
@@ -143,42 +143,42 @@
     "step_id": "S420",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/anti-pattern-check.js",
-    "expected_sha256": "c2deb37901f8fa70f66edcf20b31c21bce366525eea251bcfb1073378de6b567"
+    "expected_sha256": "51c5afd3678d5376b2977b8ca4123050c6683ce59f4ecd8441196b4448cb955f"
   },
   {
     "test_id": "AT-S421-1",
     "step_id": "S421",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/blueprint-freeze-check.js",
-    "expected_sha256": "bf217f628392cd2ccf5f555a28ab0fba8ef45d375b6b55b0f1e02ef90c5c93e2"
+    "expected_sha256": "9435d887c10db895b13bb8fd64ae6ee453e5235f84ee6b2071f0a23950483472"
   },
   {
     "test_id": "AT-S422-1",
     "step_id": "S422",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/future-lookback.js",
-    "expected_sha256": "c48156e4ee8836c5038d19fc71b6e242822e7b70dcc7fd19aaf9b27287d60d2f"
+    "expected_sha256": "f77751c321339fe9e572c3aecba6a4f39cfe764bbdc534ca952aca9b56ecc9c7"
   },
   {
     "test_id": "AT-S423-1",
     "step_id": "S423",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/proof-freshness.js",
-    "expected_sha256": "be644eb5e556161a29c785fa3e1e984ed71a8325451720a3ec31b9c7f13653ec"
+    "expected_sha256": "d37669e571e1a0742e181a5e87507275ca2d5147c665988d34c1089fa26f4755"
   },
   {
     "test_id": "AT-S424-1",
     "step_id": "S424",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/unintended-consequence-check.js",
-    "expected_sha256": "25e056e0322dc7dfd869c2f86977082203e4f93ce113f72da0f43878872addac"
+    "expected_sha256": "e9508a023fd56ab868ce012508571b2fda7066cd8d8c0e98d1fd891d2df1097d"
   },
   {
     "test_id": "AT-S425-1",
     "step_id": "S425",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/sentry/verify-step-result.js",
-    "expected_sha256": "faf87db94f599beac122386bf765eaefcda9ce8b5fe5fba5f80a7f62a49e1415"
+    "expected_sha256": "b0db6704d65fab88aa8adc1ddb055c9561ac32ad0c25ba1b1e7b9bad36796d9a"
   },
   {
     "test_id": "AT-S426-1",
@@ -220,7 +220,7 @@
     "step_id": "S431",
     "type": "file_sha256_matches",
     "target": "factory-staging/factory-core/tsos/record-step-metrics.js",
-    "expected_sha256": "0e1677957c98559751d8fadeddad1e58bded29368ad90e6eb292c03170e4525f"
+    "expected_sha256": "47802022a9809e95afebd09dff0bb9d153f930d1983149b519dd4c58d7872d1e"
   },
   {
     "test_id": "AT-S432-1",
@@ -253,7 +253,7 @@
     "step_id": "S434",
     "type": "file_sha256_matches",
     "target": "factory-staging/lifeos/c2/C2_MODULE_CHARTER.md",
-    "expected_sha256": "5c8b814c589cdb191029505a3144ff7a229726ac4402c90a57d606e84d6f1847"
+    "expected_sha256": "c42682389a4b2b3a0ceedf99647e8a46cebbfc560e535f3a1ff40dcf5b4b3008"
   },
   {
     "test_id": "AT-S435-1",
@@ -300,7 +300,7 @@
     "step_id": "S439",
     "type": "file_sha256_matches",
     "target": "factory-staging/startup/register-routes.js",
-    "expected_sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+    "expected_sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
   },
   {
     "test_id": "AT-S440-1",

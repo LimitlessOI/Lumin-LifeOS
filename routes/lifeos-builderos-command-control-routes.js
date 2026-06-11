@@ -16,6 +16,14 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
   const router = express.Router();
   router.use(requireKey);
 
+  function getForwardedOperatorKey(req) {
+    return req.headers['x-command-key']
+      || req.headers['x-command-center-key']
+      || req.headers['x-lifeos-key']
+      || req.headers['x-api-key']
+      || null;
+  }
+
   router.post('/jobs', async (req, res, next) => {
     try {
       const job = await createCommandControlJob(pool, req.body || {});
@@ -78,7 +86,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
         try {
           await executeCommandControlJob(pool, jobId, {
             baseUrl: req.body?.base_url,
-            commandKey: req.headers['x-command-key'],
+            commandKey: getForwardedOperatorKey(req),
           });
         } catch (error) {
           console.error('[command-control] async execute failed for job', jobId, error?.message);

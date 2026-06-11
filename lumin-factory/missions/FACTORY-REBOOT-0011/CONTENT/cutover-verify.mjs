@@ -1,18 +1,28 @@
 #!/usr/bin/env node
-/** Verify lumin-factory-bundle structure after build. */
+/** Verify cutover bundle / standalone repo structure. */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { repoRootFromScriptMeta, detectFactoryLayout } from './factory-repo-layout.mjs';
 
-const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const BUNDLE = path.join(REPO_ROOT, 'lumin-factory-bundle');
+const REPO_ROOT = repoRootFromScriptMeta(import.meta.url);
+const layout = detectFactoryLayout(REPO_ROOT);
 
-const required = [
-  'lumin-factory-bundle/README.md',
-  'lumin-factory-bundle/BUNDLE_MANIFEST.json',
-  'lumin-factory-bundle/factory-staging/server.js',
-  'lumin-factory-bundle/missions/FACTORY-REBOOT-0005/BLUEPRINT.json',
-];
+const required =
+  layout.mode === 'standalone'
+    ? [
+        'README.md',
+        'BUNDLE_MANIFEST.json',
+        'factory-staging/server.js',
+        'factory-staging/startup/register-routes.js',
+        'factory-staging/factory-core/builder/run-step.js',
+        'missions/FACTORY-REBOOT-0005/BLUEPRINT.json',
+      ]
+    : [
+        'lumin-factory-bundle/README.md',
+        'lumin-factory-bundle/BUNDLE_MANIFEST.json',
+        'lumin-factory-bundle/factory-staging/server.js',
+        'lumin-factory-bundle/missions/FACTORY-REBOOT-0005/BLUEPRINT.json',
+      ];
 
 let failed = 0;
 for (const rel of required) {
@@ -21,4 +31,5 @@ for (const rel of required) {
   if (!ok) failed++;
 }
 
+console.log(`cutover_verify layout=${layout.mode}`);
 process.exit(failed ? 1 : 0);

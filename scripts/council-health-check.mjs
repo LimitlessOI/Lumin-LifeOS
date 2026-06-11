@@ -22,7 +22,6 @@ const councilMembers = [
   'groq_llama',
   'gemini_flash',
   'cerebras_llama',
-  'openrouter_free',
 ];
 
 const trivialSpec = 'Write: export const ok = true;';

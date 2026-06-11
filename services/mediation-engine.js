@@ -17,6 +17,7 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
+import { randomBytes } from 'node:crypto';
 import { createResponseVariety } from './response-variety.js';
 
 // ── Word list for human-readable session codes ────────────────────────────────
@@ -44,8 +45,8 @@ export function createMediationEngine({ pool, callAI, logger }) {
   function generateSessionCode() {
     const adj  = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
     const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
-    const num  = Math.floor(10 + Math.random() * 90); // 10–99
-    return `${adj}-${noun}-${num}`;
+    const token = randomBytes(6).toString('hex'); // 48 bits of entropy
+    return `${adj}-${noun}-${token}`;
   }
 
   // ── createSession ──────────────────────────────────────────────────────────

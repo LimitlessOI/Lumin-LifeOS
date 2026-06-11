@@ -1,0 +1,108 @@
+{
+  "schema_version": "deliberation_sentry_regression_v1",
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "parent_mission": "FACTORY-DELIBERATION-V27-0001",
+  "purpose": "Machine-enforced regression for live SENTRY pass-3 defects — no silent re-pass.",
+  "layers": {
+    "local_mock": "Mock pool behavioral probes (no DATABASE_URL, no Railway)",
+    "local_neon_optional": "Optional Neon when DATABASE_URL set — cleanup fingerprint only",
+    "live_railway": "HTTP probes against PUBLIC_BASE_URL deliberation API"
+  },
+  "probes": [
+    {
+      "id": "B_NO_ROSTER_GATE",
+      "layer": ["local_mock", "live_railway"],
+      "description": "Gate pass without cncl_roster must fail with ROSTER_MISSING",
+      "setup": "Hist case + CFO receipt only; no roster POST",
+      "action": "passDeliberationGate OR POST /api/v1/lifeos/deliberation/gate/pass",
+      "expect": { "ok": false, "violations_includes": "ROSTER_MISSING", "http_status_live": 422 },
+      "existing_coverage": ["scripts/deliberation-governance-behavior.mjs", "scripts/deliberation-snt-live-verify.mjs SNT-ROSTER"]
+    },
+    {
+      "id": "B_LB_METADATA",
+      "layer": ["local_mock", "live_railway"],
+      "description": "load_bearing=true on gate pass persists metadata_json.load_bearing",
+      "setup": "Full roster + hist + cfo + consensus; load_bearing pass",
+      "action": "passDeliberationGate with load_bearing true after consensus",
+      "expect": { "ok": true, "metadata_json.load_bearing": true, "http_status_live": 200 },
+      "existing_coverage": ["behavior sticky-lb metadata assert", "SNT-LB-META"]
+    },
+    {
+      "id": "N5",
+      "layer": ["local_mock", "live_railway"],
+      "description": "Failed load-bearing gate cannot downgrade to non-load-bearing pass",
+      "setup": "Roster+hist+cfo; fail load_bearing pass (no consensus); retry pass without load_bearing",
+      "action": "passDeliberationGate load_bearing true then passDeliberationGate default",
+      "expect": { "ok": false, "all_attempts_fail": true, "metadata_sticky_load_bearing": true },
+      "existing_coverage": ["behavior sticky-lb", "SNT-LB-STICKY"]
+    },
+    {
+      "id": "N1",
+      "layer": ["local_mock", "live_railway"],
+      "description": "Negative CFO tokens or cost_usd rejected at validator",
+      "setup": "POST cfo-receipt with tokens:-1 or cost_usd:-1",
+      "action": "validateCfoReceipt OR POST /api/v1/lifeos/deliberation/cfo-receipt",
+      "expect": { "ok": false, "http_status_live": 400 },
+      "existing_coverage": ["behavior validateCfoReceipt", "SNT-N1"]
+    },
+    {
+      "id": "N2",
+      "layer": ["local_mock", "live_railway"],
+      "description": "Invalid future_back_horizons keys rejected (not in 1y|5y|10y|25y)",
+      "setup": "consensus payload with future_back_horizons.100y",
+      "action": "validateConsensusSession OR POST /api/v1/lifeos/deliberation/consensus",
+      "expect": { "ok": false, "http_status_live": 400 },
+      "existing_coverage": ["behavior", "SNT-N2"]
+    },
+    {
+      "id": "N3",
+      "layer": ["local_mock", "live_railway"],
+      "description": "Negative vote_counts values rejected",
+      "setup": "consensus with vote_counts.ship:-1",
+      "action": "validateConsensusSession OR POST consensus",
+      "expect": { "ok": false, "http_status_live": 400 },
+      "existing_coverage": ["behavior", "SNT-N3"]
+    },
+    {
+      "id": "N6b",
+      "layer": ["live_railway"],
+      "description": "Roster expand cannot wipe audit_expanded_roster when omitted/null",
+      "setup": "Initial roster + expand with audit_expanded_roster; second expand without field",
+      "action": "POST /api/v1/lifeos/deliberation/roster/:session_id/expand",
+      "expect": { "http_status": 400, "must_not_wipe_prior_expand": true },
+      "existing_coverage": ["SNT-N6B"],
+      "local_mock_note": "Optional service-level unit if route logic extracted"
+    },
+    {
+      "id": "N11",
+      "layer": ["local_mock", "live_railway"],
+      "description": "Negative scorecard cost_usd, token_count, latency_ms rejected",
+      "setup": "scorecard entry with negative metrics",
+      "action": "validateScorecardEntry OR POST /api/v1/lifeos/deliberation/scorecard",
+      "expect": { "ok": false, "http_status_live": 400 },
+      "existing_coverage": ["behavior", "SNT-N11"]
+    },
+    {
+      "id": "CLEANUP_DB_FINGERPRINT",
+      "layer": ["local_neon_optional"],
+      "description": "Cleanup script targets same Neon store Railway reads",
+      "setup": "DATABASE_URL + PUBLIC_BASE_URL + COMMAND_CENTER_KEY",
+      "action": "node scripts/deliberation-sentry-probe-cleanup.mjs --verify-railway (dry) then --confirm when operator approves",
+      "expect": { "fingerprint_pass": true, "no_delete_without_confirm": true },
+      "existing_coverage": ["scripts/deliberation-sentry-probe-cleanup.mjs verifySameStoreAsRailway"]
+    }
+  ],
+  "harness_deliverables_required_by_bp": [
+    "scripts/deliberation-sentry-regression-harness.mjs",
+    "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_RUN_RECEIPT.schema.json",
+    "package.json script lifeos:deliberation:regression",
+    "npm run lifeos:deliberation:regression exits 0 when all probes pass",
+    "npm run lifeos:deliberation:regression -- --layer=local|live|all",
+    "Unified JSON receipt written to builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_RUN_RESULT.json"
+  ],
+  "forbidden": [
+    "Modify production deliberation business logic in this mission (harness only)",
+    "Skip probes silently on missing env (fail-closed with SKIP receipt reason)",
+    "Claim PASS without writing REGRESSION_RUN_RESULT.json"
+  ]
+}

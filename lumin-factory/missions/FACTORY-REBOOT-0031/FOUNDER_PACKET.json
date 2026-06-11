@@ -1,0 +1,16 @@
+{
+  "mission_id": "FACTORY-REBOOT-0031",
+  "mission_type": "factory_platform",
+  "scope": [
+    "Department-first council routing in production spine",
+    "Align TASK_MODEL_MAP and builder dispatch with AIC/BPB/Coder/SENTRY",
+    "Receipt-grade model-map and routing audit refresh"
+  ],
+  "depends_on_docs": [
+    "prompts/00-PROVIDER-STRATEGY-LOCK.md",
+    "docs/architecture/COUNCIL_ROUTING_AUDIT_V1.md"
+  ],
+  "founder_touches_expected": 0,
+  "blocks_provider_wiring": true,
+  "note": "Do not prioritize new provider keys until this mission receipts PASS"
+}

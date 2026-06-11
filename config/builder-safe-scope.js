@@ -1,6 +1,16 @@
 // config/builder-safe-scope.js
 /** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 
+function normalizeTargetPath(targetFile) {
+  if (!targetFile || typeof targetFile !== 'string') return null;
+  const slashNormalized = targetFile.replace(/\\/g, '/').trim();
+  const withoutLeading = slashNormalized.replace(/^\/+/, '');
+  const parts = withoutLeading.split('/').filter(Boolean);
+  if (parts.length === 0) return null;
+  if (parts.some((part) => part === '.' || part === '..')) return null;
+  return parts.join('/');
+}
+
 // Paths the supervised Builder is allowed to write or overwrite.
 // Unlisted paths require manual mode or founder approval.
 export const SAFE_WRITE_PATHS = Object.freeze([
@@ -50,8 +60,8 @@ export const BLOCKED_TASK_TYPES = Object.freeze([
 ]);
 
 export function isSafeTarget(targetFile) {
-  if (!targetFile) return false;
-  const normalized = targetFile.replace(/^\//, '');
+  const normalized = normalizeTargetPath(targetFile);
+  if (!normalized) return false;
   for (const blocked of BLOCKED_WRITE_PATHS) {
     if (normalized === blocked || normalized.startsWith(blocked)) return false;
   }

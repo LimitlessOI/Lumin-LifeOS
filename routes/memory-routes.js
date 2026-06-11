@@ -17,8 +17,12 @@ const LEGACY_META = {
   do_not_use_for_builderos_proof: true,
 };
 
-function createLegacyMemoryRoutes() {
+function createLegacyMemoryRoutes(options = {}) {
+  const { requireKey } = options;
   const legacyRouter = Router();
+  if (requireKey) {
+    legacyRouter.use(requireKey);
+  }
 
 /**
  * GET /api/memories/:category

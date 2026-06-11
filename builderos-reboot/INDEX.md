@@ -26,6 +26,20 @@ It exists so a cold model can answer:
   - verify/copy vs greenfield rules
 - `AUTO_PILOT_PROTOCOL.md`
   - exact execution loop for limited-usage Cursor models
+- `SNT_TELEMETRY_DOCTRINE.md`
+  - Alpha telemetry tiers + nine-questions contract (measure beams, not nails)
+- `ALPHA_MISSION_TELEMETRY_CONTRACT.json`
+  - machine-readable Tier 1 fields + phase receipt template
+- `SNT_LOOP_ESCALATION_DOCTRINE.md`
+  - signature-weighted loop escalation (3/5/8 by failure class)
+- `LOOP_ESCALATION_CONTRACT.json`
+  - machine-readable escalation thresholds + failure packet fields
+- `SNT_CAPSULE_HAT_DOCTRINE.md`
+  - model vs department hat vs REP capsule vs workbench
+- `SNT_GOLD_MINING_DOCTRINE.md`
+  - Innovation Council: 25+ diverge, weekly slot + skip gate
+- `builderos-reboot/scripts/loop-escalation-lib.mjs`
+  - attempt/signature tracking; writes `LOOP_ESCALATION_RESULT.json` + `FAILURE_PATTERN_PACKET.json`
 - `DETERMINISM_TEST_RUNBOOK.md`
   - exact same-tier test for coder determinism
 - `MISSION_QUEUE.json`

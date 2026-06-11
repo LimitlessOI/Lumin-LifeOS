@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-02
+**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ---
 
@@ -561,6 +561,8 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 ---
 
 ## Change Receipts
+
+| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | Date | File | What | Why |
 |---|---|---|---|

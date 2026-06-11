@@ -102,6 +102,13 @@
     "factory:deliberation-v27:sentry": "node builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/CONTENT/run-deliberation-sentry.mjs",
     "factory:deliberation-v27:sentry-loop": "node builderos-reboot/MISSIONS/FACTORY-DELIBERATION-V27-0001/CONTENT/run-all-aspects-sentry.mjs",
     "factory:deliberation-v27:acceptance": "node builderos-reboot/scripts/run-mission-acceptance.mjs FACTORY-DELIBERATION-V27-0001",
+    "factory:recovery": "node builderos-reboot/scripts/run-recovery-protocol.mjs",
+    "factory:recovery:proof": "node builderos-reboot/scripts/run-autonomous-recovery-proof.mjs",
+    "factory:deliberation-sentry-regression:observe": "node builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/CONTENT/run-mission-observe.mjs",
+    "factory:tier1:verify": "node builderos-reboot/scripts/verify-tier1-telemetry.mjs --active --enforce",
+    "factory:tier1:report": "node builderos-reboot/scripts/verify-tier1-telemetry.mjs --active",
+    "factory:spend:snapshot": "node builderos-reboot/scripts/emit-mission-spend-snapshot.mjs",
+    "factory:loop:escalation": "node builderos-reboot/scripts/loop-escalation-check.mjs FACTORY-DELIBERATION-SENTRY-REGRESSION-0001 --enforce",
     "lifeos:snt:builder-safe-scope": "node scripts/snt-verify-builder-safe-scope.mjs",
     "lifeos:builder:build-chat": "node scripts/lifeos-builder-build-chat.mjs",
     "lifeos:builder:supervise": "node scripts/lifeos-builder-supervisor.mjs",
@@ -151,7 +158,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:introspect": "drizzle-kit introspect",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "lifeos:deliberation:regression": "node scripts/deliberation-sentry-regression-harness.mjs"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.1.86",

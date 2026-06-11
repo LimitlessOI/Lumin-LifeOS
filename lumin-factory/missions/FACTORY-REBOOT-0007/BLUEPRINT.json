@@ -13,14 +13,14 @@
       "target_file": "factory-staging/factory-core/canon/services/council-adapter.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/CONTENT/council-adapter.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0007/CONTENT/council-adapter.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "dead63ba037fe38074418b4ab91abc177d3aef8c0255033b70834f8e84fe4999"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/CONTENT/council-adapter.js"
+        "missions/FACTORY-REBOOT-0007/CONTENT/council-adapter.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -44,14 +44,14 @@
       "target_file": "factory-staging/factory-core/canon/services/COUNCIL_ADAPTER_BOUNDARY.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/CONTENT/COUNCIL_ADAPTER_BOUNDARY.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0007/CONTENT/COUNCIL_ADAPTER_BOUNDARY.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "98b2e6b71e11e1b7aed8916a1948af9a9951454512f5c5d7c4ab98d8f20f81f3"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/CONTENT/COUNCIL_ADAPTER_BOUNDARY.md"
+        "missions/FACTORY-REBOOT-0007/CONTENT/COUNCIL_ADAPTER_BOUNDARY.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -77,14 +77,14 @@
       "target_file": "factory-staging/startup/register-routes.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/CONTENT/register-routes.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0007/CONTENT/register-routes.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+        "sha256": "e46c0eedaaec8441fde5dcf239f59a7d15f4e2c1b76679b91b3d22cd4a2ee687"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/CONTENT/register-routes.js"
+        "missions/FACTORY-REBOOT-0007/CONTENT/register-routes.js"
       ],
       "forbidden_context_files": [
         "**"

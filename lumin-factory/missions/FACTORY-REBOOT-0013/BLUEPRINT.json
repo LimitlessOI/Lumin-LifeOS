@@ -13,14 +13,14 @@
       "target_file": "factory-staging/factory-core/builder/run-step.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/run-step.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0013/CONTENT/run-step.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e7205f3c1a40b5f6862ff231f10862f22395650cc7ffe701a8a4ce8b8b669c7c"
+        "sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/run-step.js"
+        "missions/FACTORY-REBOOT-0013/CONTENT/run-step.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -41,17 +41,17 @@
       "step_id": "S1302",
       "phase_id": "P23",
       "title": "Write greenfield pack generator",
-      "target_file": "builderos-reboot/scripts/generate-greenfield-0001.mjs",
+      "target_file": "scripts/generate-greenfield-0001.mjs",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/generate-greenfield-0001.mjs"
+        "content_source_path": "missions/FACTORY-REBOOT-0013/CONTENT/generate-greenfield-0001.mjs"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "b642c4b84bae872fa11fc00ef5570a4e5b573c27013c7f7f190ca90aee04e3f1"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/generate-greenfield-0001.mjs"
+        "missions/FACTORY-REBOOT-0013/CONTENT/generate-greenfield-0001.mjs"
       ],
       "forbidden_context_files": [
         "**"
@@ -66,7 +66,7 @@
         "AT-S1302-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     },
@@ -74,17 +74,17 @@
       "step_id": "S1303",
       "phase_id": "P23",
       "title": "Write greenfield integration test",
-      "target_file": "builderos-reboot/scripts/greenfield-integration.mjs",
+      "target_file": "scripts/greenfield-integration.mjs",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/greenfield-integration.mjs"
+        "content_source_path": "missions/FACTORY-REBOOT-0013/CONTENT/greenfield-integration.mjs"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "9c88bb7341a03c467c3ddfaa997cde232ed6c1725d0d7779886e50c8abc07de5"
+        "sha256": "1be17a61c3c47e666d1489bf4b094a75ee5935cfd5ce4c11c4a4223f8cf99664"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0013/CONTENT/greenfield-integration.mjs"
+        "missions/FACTORY-REBOOT-0013/CONTENT/greenfield-integration.mjs"
       ],
       "forbidden_context_files": [
         "**"
@@ -99,7 +99,7 @@
         "AT-S1303-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     }

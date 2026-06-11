@@ -1,0 +1,123 @@
+{
+  "audit_id": "COMMINGLING-FAILURE-AUDIT-0001",
+  "generated_at": "2026-05-24T00:00:00.000Z",
+  "verdict": "CUTOVER_NEVER_EXECUTED — factory ran as a folder inside legacy LifeOS; Adam's greenfield intent was reversed in certification text",
+  "operator_intent": {
+    "summary": "Rebuild from scratch; parts-car salvage only; shut down old repos; fresh Railway; no mingling with LifeOS product spine",
+    "days_invested": "4-5",
+    "status": "NOT_HONORED"
+  },
+  "governance_failures": [
+    {
+      "id": "GF-001",
+      "severity": "P0",
+      "what": "PROJECT_CERTIFICATION.json marks LUMIN_FACTORY_GITHUB false and calls standalone repo optional / not a blocker",
+      "where": "builderos-reboot/PROJECT_CERTIFICATION.json",
+      "effect": "Agents treated cutover as nice-to-have; continued all factory work in monorepo"
+    },
+    {
+      "id": "GF-002",
+      "severity": "P0",
+      "what": "FACTORY_REBUILD_MANIFEST §11.D labels cutover optional; §15 says factory works in main repo",
+      "where": "docs/architecture/factory-v1-blueprint-pack/FACTORY_REBUILD_MANIFEST_V1.md",
+      "effect": "Rebuild procedure starts with clone Lumin-LifeOS — opposite of fresh repo"
+    },
+    {
+      "id": "GF-003",
+      "severity": "P0",
+      "what": "lumin-factory/ bundle built but never git init, never pushed, never own Railway",
+      "evidence": "REPO_INIT_MANIFEST.json git_ready true; no lumin-factory/.git",
+      "effect": "Cutover artifact exists on disk only inside legacy repo"
+    },
+    {
+      "id": "GF-004",
+      "severity": "P0",
+      "what": "Cutover bundle scripts still hardcode builderos-reboot/ paths",
+      "where": "lumin-factory/scripts/factory-ci.mjs, mission-lib.mjs, run-mission-acceptance.mjs",
+      "effect": "Standalone repo cannot run factory:ci even if pushed — false green on FACTORY-REBOOT-0019"
+    },
+    {
+      "id": "GF-005",
+      "severity": "P0",
+      "what": "Factory REPO_ROOT resolves to entire LifeOS monorepo root",
+      "where": "factory-staging/factory-core/builder/run-step.js REPO_ROOT = ../../..",
+      "evidence": "FACTORY_REPO_ROOT /Users/.../Lumin-LifeOS when run from monorepo",
+      "effect": "Sandbox boundaries like scripts/** legally write legacy production files"
+    },
+    {
+      "id": "GF-006",
+      "severity": "P0",
+      "what": "Regression blueprint H01-H06 target root scripts/, package.json — legacy spine",
+      "where": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/BLUEPRINT.json",
+      "effect": "execute-mission corrupted deliberation-governance-behavior.mjs; proves commingled design"
+    },
+    {
+      "id": "GF-007",
+      "severity": "P1",
+      "what": "legacy-quarantine.js is stub only — no registry, no block",
+      "where": "factory-staging/factory-core/readiness/legacy-quarantine.js",
+      "effect": "No mechanical quarantine of legacy paths"
+    },
+    {
+      "id": "GF-008",
+      "severity": "P1",
+      "what": "Two parallel build paths: Railway production builder (LifeOS) vs factory-staging execute-step",
+      "where": "routes/lifeos-council-builder-routes.js vs factory-staging/",
+      "effect": "Recovery routed to wrong builder; idle churn on legacy keys"
+    },
+    {
+      "id": "GF-009",
+      "severity": "P1",
+      "what": "Root package.json hosts 30+ factory:* scripts alongside lifeos:* product scripts",
+      "where": "package.json",
+      "effect": "Single npm install / deploy couples factory CI to entire legacy tree"
+    }
+  ],
+  "what_belongs_in_lumin_factory_repo": {
+    "repo_name": "Lumin-Factory",
+    "authority": "ONLY factory runtime — BPB, Builder, SENTRY, Historian, TSOS, mission packs",
+    "include": [
+      "factory-staging/**",
+      "missions/** (all FACTORY-REBOOT-*, FACTORY-GREENFIELD-*, factory objectives — NOT product salvage unless explicitly cut over)",
+      "scripts/** (factory tooling only)",
+      "docs/architecture/factory-v1-blueprint-pack/** (doctrine)",
+      "workspace INDEX/HANDOFF/MISSION_QUEUE (renamed from builderos-reboot top-level docs)",
+      "factory-core/canon/services/council-service.js (parts-car import — one-time at boundary)"
+    ],
+    "exclude": [
+      "server.js LifeOS composition root",
+      "routes/* except factory-staging routes",
+      "services/* except canon imports inside factory-staging",
+      "public/overlay/**",
+      "db/migrations for LifeOS product",
+      "deliberation-governance product validators (test via API contract, not in-repo edits)"
+    ]
+  },
+  "what_is_legacy_lumin_lifeos": {
+    "repo_name": "Lumin-LifeOS",
+    "maturity": "LEGACY — sunset factory authority here after cutover receipt",
+    "keep_as_parts_car_until_archived": [
+      "services/council-service.js (source for canon copy)",
+      "services/deployment-service.js",
+      "services/railway-managed-env-service.js",
+      "routes/railway-managed-env-routes.js"
+    ],
+    "remove_after_cutover": [
+      "builderos-reboot/ (migrated to Lumin-Factory)",
+      "factory-staging/ duplicate in monorepo",
+      "lumin-factory/ nested copy",
+      "package.json factory:* scripts",
+      "Railway factory workloads on LifeOS service"
+    ]
+  },
+  "mechanical_fixes_required_before_push": [
+    "factory-repo-layout.mjs — detect standalone vs monorepo (DONE this session)",
+    "Wire mission-lib, run-mission-acceptance, factory-ci to layout (DONE this session)",
+    "build-lumin-factory-bundle.mjs — rewrite MISSION_QUEUE paths to missions/",
+    "init-lumin-factory-repo.mjs — git init + path-normalized queue",
+    "run-step isLegacyWriteTarget gate when monorepo_legacy mode",
+    "bpb-content-source-gate — block JSON catalog → .mjs copy",
+    "Emit-project-certification: LUMIN_FACTORY_GITHUB required for BOOTSTRAP_AND_STAGING_READY after cutover mandate"
+  ],
+  "next_mission": "FACTORY-CUTOVER-0001 — mechanical repo split; no product work in LifeOS until receipt"
+}

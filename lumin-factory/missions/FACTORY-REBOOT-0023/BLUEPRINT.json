@@ -10,17 +10,17 @@
       "step_id": "S2301",
       "phase_id": "P33",
       "title": "Readiness report v3",
-      "target_file": "builderos-reboot/scripts/readiness-report.mjs",
+      "target_file": "scripts/readiness-report.mjs",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0023/CONTENT/readiness-report.mjs"
+        "content_source_path": "missions/FACTORY-REBOOT-0023/CONTENT/readiness-report.mjs"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e4e79223443595261859a38d0cceb1f85ec18683d30bf549191bc230e9bd4382"
+        "sha256": "39945377af122a92858aebf7109f5b7c2252e199ae7c0742dacf0a1286cbdc0e"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0023/CONTENT/readiness-report.mjs"
+        "missions/FACTORY-REBOOT-0023/CONTENT/readiness-report.mjs"
       ],
       "forbidden_context_files": [
         "**"
@@ -33,7 +33,7 @@
         "AT-S2301-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     }

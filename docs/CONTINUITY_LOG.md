@@ -2,6 +2,54 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
+## [SESSION SEAL] 2026-05-24 — AUTONOMOUS-RECOVERY-0001 (P0 before cutover)
+
+**Adam directive:** Phase 2 GitHub/Railway cutover **deferred**. P0 = BuilderOS must not stop on `hard_stop` — must recover autonomously until complete or honest UNSOLVED + founder alert.
+
+**Shipped:**
+- `recovery-protocol-lib.mjs` v2 — full loop: failure packet → Council (HTTP or local dry) → BP audit → BPB repair → `factory_local_runner` → acceptance → builder retry → `UNSOLVED_RECEIPT.json` + `FOUNDER_ALERT.json`
+- `mechanical-regression-harness-install.mjs` + `scripts/deliberation-sentry-regression-harness.mjs` — mechanical H01 harness (all catalog probes local)
+- `run-autonomous-recovery-proof.mjs` + `npm run factory:recovery:proof`
+- `run-mission-acceptance.mjs` — command-based regression acceptance format
+
+**Proof (verified):**
+- `FACTORY-DELIBERATION-SENTRY-REGRESSION-0001` acceptance **14/14 PASS**
+- Simulated hard_stop (harness deleted) → recovery reinstalls harness → **OBJECTIVE_COMPLETE PASS**
+- `npm run factory:ci` → ALL PASS
+- `npm run factory:recovery:proof` → exit 0
+
+**Next:** Re-run regression from clean hard_stop state on Railway observe path; then Phase 2 cutover when Adam approves.
+
+---
+## [SESSION SEAL] 2026-05-24 — Phase 1 standalone BuilderOS runtime proof
+
+**Adam directive (locked):** Do not rewrite `server.js`; do not keep building factory inside LifeOS spine; next objective = clean runtime separation; two active systems (`lumin-lifeos` product spine + `lumin-builderos` factory); old files classify keep/extract/archive/reject — not delete. **Phase 1 only:** standalone BuilderOS boots + CI passes + one governed step; no dependency on root LifeOS `server.js`.
+
+**Proof (verified this session):**
+- **Monorepo** `npm run factory:ci` → **ALL PASS** (17/17), layout `monorepo_legacy`
+- **Standalone** `lumin-factory/` via `npm run factory:init` → **ALL PASS** (17/17), layout `standalone`
+- `factory-staging/server.js` boots standalone; `GET /health` → `layout: standalone`, execute-step live
+- `factory-execute-step-integration.mjs` PASS (governed `write_file_exact` step)
+- Hot path does **not** mount LifeOS root `server.js`
+
+**Fixes:** `build-lumin-factory-bundle.mjs` — cutover doc from mission 0019 CONTENT + doc copy loop restored; acceptance sha256 refresh in bundle; monorepo acceptance pins refreshed for GAP-FILL files (0004, 0011, 0019).
+
+**Not done (Phase 2+):** Push `lumin-factory/` to GitHub `Lumin-Factory`; new Railway service; freeze LifeOS factory authority in monorepo per `CUTOVER_EXECUTION_PLAN.json`. No git commit this session unless Adam asks.
+
+**Next:** Adam creates `Lumin-Factory` repo + push `lumin-factory/` → deploy `factory-staging/server.js` on Railway as separate service.
+
+---
+## [SESSION SEAL] 2026-05-24 — Hist legacy registry + provider stack
+
+**Adam directive:** Legacy repos/systems → **Hist** ownership; agents directed to correct active system.
+
+**Shipped:** `docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md` — monorepo layers, Railway deploy, spine vs factory, experiment buckets, retired OpenRouter/Together; Hist mandatory case template. **Entry prompt:** `prompts/00-HIST-LEGACY-BOUNDARY.md` (mandatory read #2 in QUICK_LAUNCH; top of compact rules + cold-start — not README files). Wired into authority layers, HANDOFF, CLAUDE.md, agent contract.
+
+**Provider test (same session):** Groq, Gemini, DeepSeek, Anthropic inference PASS; Cerebras/Mistral skipped (no billing). OpenRouter/Together retired in local config (undeployed).
+
+**Next:** Commit registry + routing cleanup → deploy → spin test (deliberation or builder).
+
+---
 ## [SESSION SEAL] 2026-05-24 — SNT verify loop (deliberation v2.7 phase)
 
 **Agent role:** SNT — verify + propose solutions + sign-off (not false alpha).

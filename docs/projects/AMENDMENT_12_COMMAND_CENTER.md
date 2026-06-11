@@ -291,6 +291,8 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
+
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
 | 2026-06-02 | **`routes/public-routes.js`** — surgical add: `GET /lifeos-household` route serving `public/overlay/lifeos-household.html` with no-cache headers (per BPB-0001 §Section 7). Added after the `/lifeos-communication` block and its `/communicate` redirect. `node --check` PASS. | Mission Runtime Phase 2 wiring — give household board a clean URL per BPB-0001 §Section 7. `public-routes.js` @ssot = AM12. | AM12 (wiring), AMENDMENT_47 (feature) | pending | ✅ `node --check` PASS |
@@ -375,7 +377,7 @@ node --check public/overlay/command-center.js
 
 **Status:** BUILD_READY
 **Adaptability Score:** 80/100
-**Last Updated:** 2026-05-24
+**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ### Gate 1 — Implementation Detail
 - [x] All panels documented with specific UI descriptions

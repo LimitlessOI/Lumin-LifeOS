@@ -1,5 +1,6 @@
 /**
  * routes/word-keeper-routes.js — Amendment 16 (Word Keeper & Integrity Engine)
+ * @ssot docs/projects/AMENDMENT_16_WORD_KEEPER.md
  *
  * All Word Keeper API endpoints. Requires COMMAND_CENTER_KEY header.
  *
@@ -29,12 +30,18 @@ export function createWordKeeperRoutes({ pool, councilService, twilioService }) 
   // meaning auth would silently PASS for any request. Now explicit: reject if
   // the env var is missing OR the key doesn't match.
   router.use((req, res, next) => {
-    const expectedKey = process.env.COMMAND_CENTER_KEY;
-    if (!expectedKey) {
-      return res.status(503).json({ error: 'Service not configured (COMMAND_CENTER_KEY missing)' });
+    const configuredKeys = [
+      process.env.COMMAND_CENTER_KEY,
+      process.env.LIFEOS_KEY,
+      process.env.API_KEY,
+    ]
+      .map((value) => String(value || '').trim())
+      .filter(Boolean);
+    if (configuredKeys.length === 0) {
+      return res.status(503).json({ error: 'Service not configured (operator key missing)' });
     }
-    const key = req.headers['x-api-key'] || req.headers['authorization']?.replace('Bearer ', '');
-    if (!key || key !== expectedKey) {
+    const key = String(req.headers['x-api-key'] || req.headers['authorization']?.replace('Bearer ', '') || '').trim();
+    if (!key || !configuredKeys.includes(key)) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     next();

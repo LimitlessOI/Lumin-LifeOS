@@ -1,0 +1,80 @@
+{
+  "generated_at": "2026-06-11T07:20:29.684Z",
+  "missions_checked": 2,
+  "passed": 0,
+  "failed": 2,
+  "enforce": true,
+  "results": [
+    {
+      "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+      "verdict": "TIER1_FAIL",
+      "phase_gate": {
+        "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+        "phase_status": "mission_failed",
+        "in_enforced_phase": false,
+        "tier1_pass": false,
+        "nine_questions_pass": false,
+        "can_advance_phase": false,
+        "loop_until_tier1": false,
+        "loop_target": null,
+        "honest_fail_routes_bpb": false,
+        "verdict_framing": "evidence_gap_tier1_receipt"
+      },
+      "missing": [
+        "blueprint_version",
+        "model_used",
+        "tests_added",
+        "tests_failed",
+        "acceptance_status",
+        "cost_estimate_usd",
+        "token_estimate",
+        "time_spent_ms",
+        "nine_q:Q2",
+        "nine_q:Q3",
+        "nine_q:Q4",
+        "nine_q:Q5",
+        "nine_q:Q6",
+        "nine_q:Q7",
+        "nine_q:Q8",
+        "nine_q:Q9"
+      ]
+    },
+    {
+      "mission_id": "AUTONOMOUS-RECOVERY-0001",
+      "verdict": "TIER1_FAIL",
+      "phase_gate": {
+        "mission_id": "AUTONOMOUS-RECOVERY-0001",
+        "phase_status": "ready",
+        "in_enforced_phase": true,
+        "tier1_pass": false,
+        "nine_questions_pass": false,
+        "can_advance_phase": false,
+        "loop_until_tier1": true,
+        "loop_target": "TIER1_RECEIPT_LOOP",
+        "honest_fail_routes_bpb": false,
+        "verdict_framing": "evidence_gap_tier1_receipt"
+      },
+      "missing": [
+        "blueprint_version",
+        "model_used",
+        "files_changed",
+        "tests_added",
+        "tests_passed",
+        "tests_failed",
+        "acceptance_status",
+        "sentry_verdict",
+        "cost_estimate_usd",
+        "token_estimate",
+        "time_spent_ms",
+        "nine_q:Q2",
+        "nine_q:Q3",
+        "nine_q:Q4",
+        "nine_q:Q5",
+        "nine_q:Q6",
+        "nine_q:Q7",
+        "nine_q:Q8",
+        "nine_q:Q9"
+      ]
+    }
+  ]
+}

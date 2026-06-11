@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-06-09T19:06:39.965Z",
+  "run_at": "2026-06-11T07:53:03.032Z",
   "pass": true,
   "results": [
     {
@@ -196,6 +196,30 @@
     },
     {
       "mission_id": "FACTORY-REBOOT-0030",
+      "status": "no_blueprint"
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0031",
+      "status": "no_blueprint"
+    },
+    {
+      "mission_id": "FACTORY-DELIBERATION-V27-0001",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 12
+    },
+    {
+      "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 6
+    },
+    {
+      "mission_id": "AUTONOMOUS-RECOVERY-0001",
+      "status": "no_blueprint"
+    },
+    {
+      "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
       "status": "no_blueprint"
     }
   ]

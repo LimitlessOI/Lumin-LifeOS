@@ -7,7 +7,6 @@
  */
 
 import express from 'express';
-import { pool } from '../core/database.js';
 import { runSelfRepairExecutor, EXECUTOR_MAX_ATTEMPTS } from '../services/self-repair-executor.js';
 import { runDeployDriftPreventionHook } from '../services/self-repair-deploy-scheduler.js';
 import { readLatestSelfRepairExecution, readLastPassExecutionLogEntry } from '../services/self-repair-execution-log.js';
@@ -21,7 +20,7 @@ import {
   buildPreventionHooksStatus,
 } from '../services/self-repair-prevention-hook-planner.js';
 
-export function createSelfRepairExecutorRoutes({ requireKey }) {
+export function createSelfRepairExecutorRoutes({ requireKey, pool }) {
   const router = express.Router();
 
   router.post('/api/v1/lifeos/command-center/self-repair/execute', requireKey, async (req, res, next) => {

@@ -13,14 +13,14 @@
       "target_file": "factory-staging/factory-core/builder/run-step.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-step.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0005/CONTENT/run-step.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "e7205f3c1a40b5f6862ff231f10862f22395650cc7ffe701a8a4ce8b8b669c7c"
+        "sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-step.js"
+        "missions/FACTORY-REBOOT-0005/CONTENT/run-step.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -44,14 +44,14 @@
       "target_file": "factory-staging/factory-core/sentry/run-verification.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-verification.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0005/CONTENT/run-verification.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "70fada8b3ad89e21d1e66eb4799071698dd2478db770a87d2725583320b0dd10"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/run-verification.js"
+        "missions/FACTORY-REBOOT-0005/CONTENT/run-verification.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -77,14 +77,14 @@
       "target_file": "factory-staging/startup/register-routes.js",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/register-routes.js"
+        "content_source_path": "missions/FACTORY-REBOOT-0005/CONTENT/register-routes.js"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "7566761f2949851772c7ad153133ac1ddbbaeda0e79395166f07f42113f48b51"
+        "sha256": "e46c0eedaaec8441fde5dcf239f59a7d15f4e2c1b76679b91b3d22cd4a2ee687"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/register-routes.js"
+        "missions/FACTORY-REBOOT-0005/CONTENT/register-routes.js"
       ],
       "forbidden_context_files": [
         "**"
@@ -110,14 +110,14 @@
       "target_file": "factory-staging/test-fixtures/proof-source.txt",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/proof-source.txt"
+        "content_source_path": "missions/FACTORY-REBOOT-0005/CONTENT/proof-source.txt"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "556490768576b5ebf35e64178b9440e57ac5258ac9fb0fbd17062ca85539a943"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/proof-source.txt"
+        "missions/FACTORY-REBOOT-0005/CONTENT/proof-source.txt"
       ],
       "forbidden_context_files": [
         "**"

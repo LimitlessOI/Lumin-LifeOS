@@ -1,7 +1,7 @@
 # AMENDMENT 03 — Financial & Revenue System
 **Status:** LIVE (partial)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-26
+**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ---
 
@@ -122,6 +122,8 @@ Every other financial tool tracks what you earned and spent after the fact; Life
 ---
 
 ## Change Receipts
+
+| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|

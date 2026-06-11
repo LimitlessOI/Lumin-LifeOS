@@ -1,0 +1,164 @@
+{
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "blueprint_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001-v1",
+  "scope": "deliberation_v27_sentry_regression_harness",
+  "compilation_note": "BPB compile from FOUNDER_PACKET.json + REGRESSION_PROBE_CATALOG.json (SNT platform fix session 2026-06-10). Harness-only — no validator edits.",
+  "allowed_action_types": [
+    "write_file_exact",
+    "node_syntax_check",
+    "run_command"
+  ],
+  "non_goals": [
+    "Edit config/deliberation-governance.js validators",
+    "Edit services/deliberation-governance-service.js gate logic",
+    "Skip probes silently when live env missing"
+  ],
+  "exact_commands": [
+    "npm run lifeos:deliberation:regression",
+    "npm run lifeos:deliberation:regression -- --layer=local",
+    "npm run lifeos:deliberation:regression -- --layer=live",
+    "node --import dotenv/config scripts/deliberation-sentry-probe-cleanup.mjs --verify-railway",
+    "node builderos-reboot/scripts/run-mission-acceptance.mjs FACTORY-DELIBERATION-SENTRY-REGRESSION-0001"
+  ],
+  "steps": [
+    {
+      "step_id": "H01",
+      "phase_id": "P-HARNESS",
+      "title": "Author unified regression harness script",
+      "target_file": "scripts/deliberation-sentry-regression-harness.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_PROBE_CATALOG.json",
+        "content_source_note": "CDR implements all probe IDs; consolidate behavior.mjs + snt-live-verify.mjs"
+      },
+      "exact_output_contract": {
+        "type": "file_exists_with_probe_ids",
+        "probe_ids": [
+          "B_NO_ROSTER_GATE",
+          "B_LB_METADATA",
+          "N5",
+          "N1",
+          "N2",
+          "N3",
+          "N6b",
+          "N11",
+          "CLEANUP_DB_FINGERPRINT"
+        ]
+      },
+      "acceptance_test_ids": [
+        "AT-H01-1",
+        "AT-H01-2"
+      ],
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "CDR",
+      "on_block": "BLOCKED_RETURN_TO_BPB",
+      "non_goals": [
+        "Do not edit deliberation validators"
+      ]
+    },
+    {
+      "step_id": "H02",
+      "phase_id": "P-HARNESS",
+      "title": "Regression receipt JSON schema",
+      "target_file": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_RUN_RECEIPT.schema.json",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_PROBE_CATALOG.json",
+        "content_source_note": "JSON schema for REGRESSION_RUN_RESULT.json — probe_id, pass, layer, detail fields"
+      },
+      "dependencies": [
+        "H01"
+      ],
+      "acceptance_test_ids": [
+        "AT-H02-1"
+      ],
+      "sandbox_boundary": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/**",
+      "authority_owner": "CDR",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "H03",
+      "phase_id": "P-HARNESS",
+      "title": "Package.json script + ACCEPTANCE_TESTS.json",
+      "target_file": "package.json",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/BLUEPRINT.json",
+        "content_source_note": "Add lifeos:deliberation:regression to package.json scripts; keep ACCEPTANCE_TESTS.json in mission folder"
+      },
+      "dependencies": [
+        "H01"
+      ],
+      "exact_output_contract": {
+        "type": "package_script_exists",
+        "script": "lifeos:deliberation:regression"
+      },
+      "acceptance_test_ids": [
+        "AT-H03-1",
+        "AT-H03-2"
+      ],
+      "sandbox_boundary": "package.json",
+      "authority_owner": "CDR",
+      "on_block": "BLOCKED_RETURN_TO_BPB",
+      "note": "Also write builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/ACCEPTANCE_TESTS.json"
+    },
+    {
+      "step_id": "H04",
+      "phase_id": "P-HARNESS",
+      "title": "Thin wrapper — behavior.mjs delegates to harness --layer=local",
+      "target_file": "scripts/deliberation-governance-behavior.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_PROBE_CATALOG.json",
+        "content_source_note": "Thin delegate to harness --layer=local; preserve exit codes"
+      },
+      "dependencies": [
+        "H01"
+      ],
+      "acceptance_test_ids": [
+        "AT-H04-1"
+      ],
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "CDR",
+      "on_block": "BLOCKED_RETURN_TO_BPB",
+      "constraint": "Preserve exit codes; delegate only"
+    },
+    {
+      "step_id": "H05",
+      "phase_id": "P-DOC",
+      "title": "Operator runbook in mission README",
+      "target_file": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/README.md",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "missions/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/FOUNDER_PACKET.md",
+        "content_source_note": "Update README with exact commands from FP; no new scope"
+      },
+      "acceptance_test_ids": [
+        "AT-H05-1"
+      ],
+      "sandbox_boundary": "missions/**",
+      "authority_owner": "BPB",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    },
+    {
+      "step_id": "H06",
+      "phase_id": "P-VERIFY",
+      "title": "SNT verify harness local layer exit 0",
+      "target_file": "scripts/deliberation-sentry-regression-harness.mjs",
+      "action_type": "run_command",
+      "command": "npm run lifeos:deliberation:regression -- --layer=local",
+      "expected_exit_code": 0,
+      "dependencies": [
+        "H01",
+        "H03",
+        "H04"
+      ],
+      "acceptance_test_ids": [
+        "AT-H06-1"
+      ],
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "SNT",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

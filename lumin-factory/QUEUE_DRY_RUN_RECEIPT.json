@@ -1,0 +1,226 @@
+{
+  "run_at": "2026-06-11T07:29:59.197Z",
+  "pass": true,
+  "results": [
+    {
+      "mission_id": "FACTORY-REBOOT-0001",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 13
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0002",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 16
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0003",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 33
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0004",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 40
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0005",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 4
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0006",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 3
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0007",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 3
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0008",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 2
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0009",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0010",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 3
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0011",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 3
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0012",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 2
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0013",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 3
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0014",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0015",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 3
+    },
+    {
+      "mission_id": "FACTORY-GREENFIELD-0001",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0016",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0017",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0018",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0019",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 3
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0020",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0021",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 2
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0022",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0023",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0024",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0025",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0026",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 2
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0027",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 2
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0028",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-PROOF-LOOP-0001",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "PRODUCT-MARKETINGOS-SALVAGE-0001",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 1
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0029",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 7
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0030",
+      "status": "no_blueprint"
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0031",
+      "status": "no_blueprint"
+    },
+    {
+      "mission_id": "FACTORY-DELIBERATION-V27-0001",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 12
+    },
+    {
+      "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 6
+    },
+    {
+      "mission_id": "AUTONOMOUS-RECOVERY-0001",
+      "status": "no_blueprint"
+    },
+    {
+      "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+      "status": "no_blueprint"
+    }
+  ]
+}

@@ -1,7 +1,6 @@
 // services/oil-daily-summary.js
 /** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 
-import { pool } from '../core/database.js';
 import {
   writeSecurityReceipt,
   SECURITY_RECEIPT_TYPES,
@@ -18,7 +17,10 @@ const TYPE_DEFAULTS = {
 };
 
 export async function generateDailyOILSummary(poolOverride) {
-  const db = poolOverride || pool;
+  const db = poolOverride;
+  if (!db) {
+    throw new Error('generateDailyOILSummary requires an explicit pool');
+  }
 
   const { rows: byTypeRows } = await db.query(`
     SELECT receipt_type, COUNT(*)::int AS count

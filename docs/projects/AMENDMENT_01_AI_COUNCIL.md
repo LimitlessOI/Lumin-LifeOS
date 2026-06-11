@@ -453,6 +453,8 @@ When this is done:
 
 ## Change Receipts
 
+| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
+
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
 | 2026-06-02 | **`services/council-service.js`** — Gemini 413 now throws `err.code='PROMPT_TOO_LARGE'` + `err.nonRetryable=true`. Before this fix, Gemini 413 (request payload too large) threw a generic Error, which propagated up through `callCouncilMember` into `dispatchTask`'s catch, recording a 500 response. Runners retrying on 500s would re-send the same oversized payload → same 413 → same 500 → repeat until Railway's proxy timeout → 502 to the runner. The tagged error lets `dispatchTask` short-circuit to a 413 response with a `hint` field so callers know not to retry with the same payload. | Root cause of persistent builder POST /build HTTP_502 pattern — runner's files[] injection of large amendment/SSOT documents exceeds Gemini's request size limit. | AM01, AM21 | n/a | ✅ `node --check services/council-service.js` PASS |
@@ -497,7 +499,7 @@ When this is done:
 **Status:** BUILD_READY (token optimization + free-tier routing — core is live)
 **Adaptability Score:** 95/100
 **Council Persona:** tesla (think 50 years ahead — what's the theoretical ideal AI routing system?)
-**Last Updated:** 2026-03-30
+**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ### Gate 1 — Implementation Detail
 - [x] Token optimizer, free-tier governor, savings ledger all have specific segment descriptions

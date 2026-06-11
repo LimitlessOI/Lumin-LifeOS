@@ -1,5 +1,6 @@
 /**
  * services/migration-runner.js
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  * Runs SQL migration files automatically at server startup.
  *
  * How it works:
@@ -31,76 +32,72 @@ CREATE INDEX IF NOT EXISTS idx_schema_migrations_filename ON schema_migrations (
 
 export async function runMigrations(pool) {
   const results = { ran: [], skipped: [], failed: [] };
+  // Bootstrap: ensure tracking table exists
+  await pool.query(BOOTSTRAP_SQL);
 
+  // Get already-run migrations
+  const { rows: done } = await pool.query(
+    `SELECT filename FROM schema_migrations ORDER BY filename`
+  );
+  const doneSet = new Set(done.map(r => r.filename));
+
+  // Scan migration files
+  let files;
   try {
-    // Bootstrap: ensure tracking table exists
-    await pool.query(BOOTSTRAP_SQL);
+    files = await fs.readdir(MIGRATIONS_DIR);
+  } catch {
+    console.log('[MIGRATIONS] No db/migrations/ directory found — skipping');
+    return results;
+  }
 
-    // Get already-run migrations
-    const { rows: done } = await pool.query(
-      `SELECT filename FROM schema_migrations ORDER BY filename`
-    );
-    const doneSet = new Set(done.map(r => r.filename));
+  const sqlFiles = files
+    .filter(f => f.endsWith('.sql'))
+    .sort(); // lexicographic = date order since files are prefixed YYYYMMDD_
 
-    // Scan migration files
-    let files;
+  if (sqlFiles.length === 0) {
+    console.log('[MIGRATIONS] No migration files found');
+    return results;
+  }
+
+  console.log(`\n📦 [MIGRATIONS] Found ${sqlFiles.length} migration file(s)`);
+
+  for (const filename of sqlFiles) {
+    if (doneSet.has(filename)) {
+      results.skipped.push(filename);
+      console.log(`   ⏭️  ${filename} (already run)`);
+      continue;
+    }
+
+    const filePath = path.join(MIGRATIONS_DIR, filename);
+    const sql = await fs.readFile(filePath, 'utf-8');
+
+    const start = Date.now();
     try {
-      files = await fs.readdir(MIGRATIONS_DIR);
-    } catch {
-      console.log('[MIGRATIONS] No db/migrations/ directory found — skipping');
-      return results;
+      await pool.query(sql);
+      const duration = Date.now() - start;
+
+      await pool.query(
+        `INSERT INTO schema_migrations (filename, duration_ms) VALUES ($1, $2)
+         ON CONFLICT (filename) DO NOTHING`,
+        [filename, duration]
+      );
+
+      results.ran.push(filename);
+      console.log(`   ✅ ${filename} (${duration}ms)`);
+    } catch (err) {
+      results.failed.push(filename);
+      console.error(`   ❌ ${filename} FAILED: ${err.message}`);
     }
+  }
 
-    const sqlFiles = files
-      .filter(f => f.endsWith('.sql'))
-      .sort(); // lexicographic = date order since files are prefixed YYYYMMDD_
+  const summary = [];
+  if (results.ran.length > 0) summary.push(`${results.ran.length} ran`);
+  if (results.skipped.length > 0) summary.push(`${results.skipped.length} skipped`);
+  if (results.failed.length > 0) summary.push(`${results.failed.length} FAILED`);
+  console.log(`✅ [MIGRATIONS] Done: ${summary.join(', ')}\n`);
 
-    if (sqlFiles.length === 0) {
-      console.log('[MIGRATIONS] No migration files found');
-      return results;
-    }
-
-    console.log(`\n📦 [MIGRATIONS] Found ${sqlFiles.length} migration file(s)`);
-
-    for (const filename of sqlFiles) {
-      if (doneSet.has(filename)) {
-        results.skipped.push(filename);
-        console.log(`   ⏭️  ${filename} (already run)`);
-        continue;
-      }
-
-      const filePath = path.join(MIGRATIONS_DIR, filename);
-      const sql = await fs.readFile(filePath, 'utf-8');
-
-      const start = Date.now();
-      try {
-        await pool.query(sql);
-        const duration = Date.now() - start;
-
-        await pool.query(
-          `INSERT INTO schema_migrations (filename, duration_ms) VALUES ($1, $2)
-           ON CONFLICT (filename) DO NOTHING`,
-          [filename, duration]
-        );
-
-        results.ran.push(filename);
-        console.log(`   ✅ ${filename} (${duration}ms)`);
-      } catch (err) {
-        results.failed.push(filename);
-        console.error(`   ❌ ${filename} FAILED: ${err.message}`);
-        // Don't rethrow — log the failure and continue with next migration
-        // A failed migration won't block server startup
-      }
-    }
-
-    const summary = [];
-    if (results.ran.length > 0) summary.push(`${results.ran.length} ran`);
-    if (results.skipped.length > 0) summary.push(`${results.skipped.length} skipped`);
-    if (results.failed.length > 0) summary.push(`${results.failed.length} FAILED`);
-    console.log(`✅ [MIGRATIONS] Done: ${summary.join(', ')}\n`);
-
-  } catch (err) {
-    console.error(`[MIGRATIONS] Runner failed: ${err.message}`);
+  if (results.failed.length > 0) {
+    throw new Error(`Migration failure(s): ${results.failed.join(', ')}`);
   }
 
   return results;

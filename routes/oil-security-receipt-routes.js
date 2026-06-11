@@ -2,7 +2,6 @@
 /** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 
 import express from 'express';
-import { pool } from '../core/database.js';
 import {
   writeSecurityReceipt,
   readRecentReceipts,
@@ -11,7 +10,7 @@ import {
   SECURITY_RECEIPT_TYPES,
 } from '../services/oil-security-receipts.js';
 
-export function createOILSecurityReceiptRoutes({ requireKey }) {
+export function createOILSecurityReceiptRoutes({ requireKey, pool }) {
   const router = express.Router();
 
   router.get('/api/v1/oil/receipts', requireKey, async (req, res, next) => {

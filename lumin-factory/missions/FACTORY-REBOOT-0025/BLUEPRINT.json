@@ -10,17 +10,17 @@
       "step_id": "S2501",
       "phase_id": "P35",
       "title": "Operator complete guide",
-      "target_file": "builderos-reboot/OPERATOR_COMPLETE.md",
+      "target_file": "OPERATOR_COMPLETE.md",
       "action_type": "write_file_exact",
       "exact_inputs": {
-        "content_source_path": "builderos-reboot/MISSIONS/FACTORY-REBOOT-0025/CONTENT/OPERATOR_COMPLETE.md"
+        "content_source_path": "missions/FACTORY-REBOOT-0025/CONTENT/OPERATOR_COMPLETE.md"
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
         "sha256": "a7b260bf425a5e37e76d7064a077b0bdd3f8e3e1e8f8c9ba5b12bd7a35f71e5a"
       },
       "allowed_context_files": [
-        "builderos-reboot/MISSIONS/FACTORY-REBOOT-0025/CONTENT/OPERATOR_COMPLETE.md"
+        "missions/FACTORY-REBOOT-0025/CONTENT/OPERATOR_COMPLETE.md"
       ],
       "forbidden_context_files": [
         "**"
@@ -33,7 +33,7 @@
         "AT-S2501-1"
       ],
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
-      "sandbox_boundary": "builderos-reboot/**",
+      "sandbox_boundary": "**",
       "authority_owner": "Builder",
       "on_block": "BLOCKED_RETURN_TO_BPB"
     }

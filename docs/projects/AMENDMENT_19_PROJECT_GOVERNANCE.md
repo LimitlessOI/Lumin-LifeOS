@@ -1,6 +1,6 @@
 # AMENDMENT 19 — Project Governance
 
-**Last Updated:** 2026-05-27 — mount BuilderOS Command & Control Phase 2 routes at `/api/v1/lifeos/builderos/command-control`.
+**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 | Field | Value |
 |---|---|
@@ -200,6 +200,8 @@ Required runtime truths:
 ---
 
 ## Change Receipts
+
+| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|

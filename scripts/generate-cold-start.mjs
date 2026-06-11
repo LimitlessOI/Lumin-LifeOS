@@ -65,14 +65,15 @@ async function main() {
 
 ## Read order (mandatory)
 
-1. \`docs/CONTINUITY_INDEX.md\` — pick your lane.
-2. \`prompts/00-LIFEOS-AGENT-CONTRACT.md\` — epistemic baseline (§2.6, §2.11, §2.15).
-3. \`prompts/00-SSOT-READ-SEQUENCE.md\` — ordered SSOT reads (anti-drift).
-4. \`prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md\` — think vs execute model policy.
-5. This file (you are reading it).
-6. The lane log for your task (\`CONTINUITY_LOG_LIFEOS.md\` / \`CONTINUITY_LOG_COUNCIL.md\` / main log).
-7. Owning manifest JSON (e.g. \`AMENDMENT_21_LIFEOS_CORE.manifest.json\`) for structured next steps.
-8. \`prompts/<domain>.md\` when using the builder.
+1. \`docs/AGENT_RULES.compact.md\` — enforcement packet.
+2. \`prompts/00-HIST-LEGACY-BOUNDARY.md\` — **STOP:** Hist vs active systems (do not skip).
+3. \`prompts/00-LIFEOS-AGENT-CONTRACT.md\` — epistemic baseline (§2.6, §2.11, §2.15).
+4. \`prompts/00-SSOT-READ-SEQUENCE.md\` — ordered SSOT reads (anti-drift).
+5. \`prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md\` — think vs execute model policy.
+6. This file (you are reading it).
+7. The lane log for your task (\`CONTINUITY_LOG_LIFEOS.md\` / \`CONTINUITY_LOG_COUNCIL.md\` / main log).
+8. Owning manifest JSON (e.g. \`AMENDMENT_21_LIFEOS_CORE.manifest.json\`) for structured next steps.
+9. \`prompts/<domain>.md\` when using the builder.
 
 ## Program priority — LifeOS (KNOW)
 

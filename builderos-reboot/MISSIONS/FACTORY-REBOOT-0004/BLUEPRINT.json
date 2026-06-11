@@ -741,7 +741,7 @@
       },
       "exact_output_contract": {
         "type": "byte_exact_copy",
-        "sha256": "4aef1c6e60adabe98b08f487d0f665d05866ac9f5f2bb84c5a1ba7b2ad67e77d"
+        "sha256": "7606fc348fa3cac8d47138563f102a08529503e0555d9d38bc9f63ec55fd5c00"
       },
       "allowed_context_files": [
         "builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/proof-freshness.js"

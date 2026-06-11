@@ -22,6 +22,8 @@ You are in **`routes/`** — the **legacy production spine** for live LifeOS on 
 
 Some files are **legacy within the spine** (e.g. `command-center-routes.js`); others are **current production surfaces** (e.g. `lifeos-command-center-routes.js`). Both remain **production spine**, not factory authority.
 
+**Full legacy map (Hist-owned):** `docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md` — experiment buckets, retired providers, deploy surfaces. Default: **do not extend** legacy paths.
+
 ## ADAPT path to factory
 
 When mining old routes for the factory, use Goldmine / salvage missions — do not silently duplicate authority in both places.

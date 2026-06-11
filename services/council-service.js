@@ -1,5 +1,6 @@
 /**
  * Council routing, token/LCL/savings, and model failover for platform AI calls.
+ * @authority Legacy production spine — see services/AGENTS.md. Not canonical factory runtime.
  * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 import dayjs from "dayjs";

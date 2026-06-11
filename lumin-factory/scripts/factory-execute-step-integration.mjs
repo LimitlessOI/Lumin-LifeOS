@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 /**
  * Integration test: dispatchExecuteStep writes proof file via live runtime.
- * Usage: node builderos-reboot/scripts/factory-execute-step-integration.mjs
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { detectFactoryLayout, repoRootFromScriptMeta } from './factory-repo-layout.mjs';
 
-const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const REPO_ROOT = repoRootFromScriptMeta(import.meta.url);
+const layout = detectFactoryLayout(REPO_ROOT);
 process.chdir(REPO_ROOT);
 
 const { dispatchExecuteStep, resolveRepoPath } = await import(
-  '../../factory-staging/factory-core/builder/run-step.js'
+  path.join(REPO_ROOT, 'factory-staging/factory-core/builder/run-step.js')
 );
 
-const sourceRel = 'builderos-reboot/MISSIONS/FACTORY-REBOOT-0005/CONTENT/proof-source.txt';
+const sourceRel = `${layout.missionsRel}/FACTORY-REBOOT-0005/CONTENT/proof-source.txt`;
 const targetRel = 'factory-staging/test-fixtures/proof-output.txt';
 const sourceBytes = fs.readFileSync(resolveRepoPath(sourceRel));
 const expectedSha = crypto.createHash('sha256').update(sourceBytes).digest('hex');
@@ -36,6 +37,7 @@ const { httpStatus, body } = dispatchExecuteStep({
   mission_id: 'FACTORY-REBOOT-0005',
   blueprint_id: 'integration-proof',
   step,
+  skip_intake_gate: true,
 });
 
 if (httpStatus !== 200 || body.builder?.status !== 'DONE') {
@@ -50,5 +52,6 @@ if (written !== sourceBytes.toString('utf8')) {
 }
 
 console.log('PASS execute-step integration');
+console.log(`  layout=${layout.mode}`);
 console.log(`  wrote ${targetRel}`);
 console.log(`  sha256=${body.builder.sha256.slice(0, 16)}…`);

@@ -1,51 +1,42 @@
 # AGENT RULES — COMPACT ENFORCEMENT
-> Generated: 2026-06-01T22:28:14.222Z | Regenerate: `npm run gen:rules`
-> Read this instead of full NSSOT for routine work. Full NSSOT only for constitutional edits/conflicts/onboarding.
+> Generated: 2026-06-11T08:16:52.749Z | Regenerate: `npm run gen:rules`
+> NSSOT only for constitutional edits. **Next:** `prompts/00-HIST-LEGACY-BOUNDARY.md` (do not skip).
+
+## HIST (mandatory first)
+Legacy=**Hist-owned**; read/salvage only. Law:`prompts/00-HIST-LEGACY-BOUNDARY.md`. Factory:`factory-staging/`+`builderos-reboot/MISSIONS/`. Live:`routes/`/`services/`.
 
 ## HIERARCHY
-NSSOT `docs/SSOT_NORTH_STAR.md` > Companion `docs/SSOT_COMPANION.md` > `CLAUDE.md` > Amendments > repo state
+NSSOT > Companion > `CLAUDE.md` > Amendments > repo
 
 ## SUPREME LAWS
-- §2.6: no lies/mislead; KNOW/THINK/GUESS/UNKNOWN; no silent failed checks.
-- Improve only; QUICK_LAUNCH stays current.
-- §2.11a: builder-first. §2.11b: Adam gets score+evidence, why A>B, residue. §2.11c: supervisor = maximize verified system output, not IDE authorship.
-- §2.14: TSOS machine-channel only. Remote truth: GitHub=source, Railway=runtime, Neon=data; local is mirror. §2.15: clear ask → do it or HALT; drift → log INTENT DRIFT.
+- §2.6: truth labels; no silent fail.
+- §2.11a builder-first; §2.11b score+evidence; §2.11c supervisor≠IDE typist.
+- §2.14 TSOS machine-channel. §2.15 clear ask→do or HALT.
 
 ## BUILDER-FIRST
 1. `npm run builder:preflight`
-2. `POST /api/v1/lifeos/builder/build` with domain/task/spec/target/`[system-build]`
-3. `committed:true` = receipt. `committed:false` = use `/execute`. Builder blocked = **GAP-FILL** on platform, same session.
+2. `POST /api/v1/lifeos/builder/build` domain/task/spec/target/`[system-build]`
+3. `committed:true`=receipt; else `/execute`. Blocked=**GAP-FILL** same session.
 
-Hook: staged `routes/`/`services/`/`public/overlay/`/`db/migrations/` need `[system-build]` or `GAP-FILL:`. No `--no-verify` w/o Adam. Exceptions: `startup/`, `middleware/`, composition `core/`, SSOT.
+Hook: staged routes/services/overlay/migrations need `[system-build]` or `GAP-FILL:`. Exceptions: startup,middleware,core wiring,SSOT.
 
-## COUNCIL / TECHNICAL FORKS
-Load-bearing arch/security/API → `gate-change/*` or `lifeos:gate-change-run`. No synthetic “council” in chat.
+## COUNCIL
+Load-bearing→`gate-change/*` or `lifeos:gate-change-run`. No fake council in chat.
 
 ## TOKENS+HISTORY
-`useful-work-guard` sched AI. Builder:preflight,probe,`/gaps` b4 burn. SSOT receipts **append-only** (no deletes; add fix row). Plat break→**GAP-FILL**+receipt.
+`useful-work-guard` sched AI. preflight,probe,`/gaps`. Receipts append-only. Plat break→GAP-FILL.
 
 ## MEMORY
-Earned weight? CLAIM→INVARIANT (≠law; `context_required`+`false_when`). Code/receipts=proof. Violations `/memory/agents/violations`; drift `/intent-drift`.
+CLAIM→INVARIANT. Violations `/memory/agents/violations`.
 
-## IDEA VAULT (A/B)
-`AMENDMENT_38`+`CONVERSATION_DUMP*`=map only; keep **source threads**+`raw/`. Tools:`operator-corpus:pipeline`,`idea-vault:catalog-keywords`.
+## SESSION
+START:`00-HIST-LEGACY-BOUNDARY`,preflight,QUICK_LAUNCH. BUILD:`/build`→`/gaps`→GAP-FILL if blocked. END:receipts+§2.11b if load-bearing.
 
-## SESSION PROTOCOL
-- START: `builder:preflight`; QUICK_LAUNCH; correct continuity lane; amendment handoff + last receipts.
-- BUILD: try `/build`; failure → `/gaps`; only GAP-FILL when platform path is provably blocked.
-- VERIFY: `node --check` touched JS; project verifier; receipts match runtime.
-- END: Change Receipts, Handoff, continuity, QUICK_LAUNCH; §2.11b if load-bearing.
-
-## SSOT RULES
-Read full SSOT-class files before editing; chunked reads OK. Atomic: file→receipt→next. No blind patches.
-SSOT-class: `SSOT_NORTH_STAR.md`, `SSOT_COMPANION.md`, `NORTH_STAR_*`, `AMENDMENT_*`, `CONTINUITY_*`, `CONTINUITY_INDEX.md`.
+## SSOT
+Read full file before edit SSOT-class docs. Atomic file→receipt.
 
 ## PROHIBITED
-Lying; hidden failures; “done” w/o receipts; product w/o real `/build`; `--no-verify` w/o Adam; blind SSOT edits; synthetic council; skip QUICK_LAUNCH; env gaslight; §2.15 drift; IDE default when system path owed.
+Lie; skip Hist prompt; extend legacy default; done w/o receipts; `--no-verify`; env gaslight; IDE when system owed.
 
-## CURRENT STATE
-Queue: `docs/QUICK_LAUNCH.md` → Current Priority Queue
-General log: `docs/CONTINUITY_LOG.md`
-LifeOS: `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
-TC: `docs/projects/AMENDMENT_17_TC_SERVICE.md`
-Memory: `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md`
+## STATE
+`QUICK_LAUNCH` queue · `CONTINUITY_LOG` · AM21/17/39 handoffs

@@ -1,0 +1,55 @@
+{
+  "schema": "loop_escalation_contract_v1",
+  "signed_by": "SNT",
+  "locked_at": "2026-06-10",
+  "doctrine_ref": "builderos-reboot/SNT_LOOP_ESCALATION_DOCTRINE.md",
+  "principle": "Count failure signatures and class, not raw attempts. Escalation must change strategy.",
+  "failure_classes": [
+    "fake_green_attempt",
+    "same_signature_repeat",
+    "governance_block",
+    "evidence_gap",
+    "authority_violation"
+  ],
+  "default_ladder_same_signature": {
+    "notice": 3,
+    "escalate": 5,
+    "hard_stop": 8
+  },
+  "class_overrides": {
+    "fake_green_attempt": { "notice": 1, "escalate": 2, "hard_stop": 3 },
+    "same_signature_repeat": { "notice": 2, "escalate": 3, "hard_stop": 5 },
+    "governance_block": { "notice": 3, "escalate": 5, "hard_stop": 8 },
+    "evidence_gap": { "notice": 3, "escalate": 5, "hard_stop": 8 },
+    "authority_violation": { "notice": 2, "escalate": 3, "hard_stop": 5 }
+  },
+  "governance_block_weight": 0.5,
+  "failure_pattern_packet_fields": [
+    "attempts_tried",
+    "failures",
+    "failure_signature",
+    "files_touched",
+    "tests_failing",
+    "missing_evidence",
+    "suspected_root_cause",
+    "decision_blocked",
+    "required_strategy_change"
+  ],
+  "hard_stop_means": "strategy_forbidden_then_recovery_protocol_start",
+  "terminal_stop_forbidden": true,
+  "recovery_mission_ref": "AUTONOMOUS-RECOVERY-0001",
+  "recovery_steps": [
+    "council_escalation",
+    "bpb_repair",
+    "alternative_strategy_retry",
+    "sentry_verify",
+    "deliver_or_UNSOLVED"
+  ],
+  "founder_alert_on_incomplete_recovery": true,
+  "escalation_api": "POST /api/v1/lifeos/gate-change/run-preset",
+  "default_escalation_hats": {
+    "ai_1": ["BPB", "Hist", "BuilderOS_REP"],
+    "ai_2": ["SNT", "CFO", "Founder_REP"],
+    "ai_3_optional": ["SDO", "LifeOS_REP"]
+  }
+}

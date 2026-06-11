@@ -1,0 +1,61 @@
+{
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "phase": "BP_AUDIT",
+  "mission_outcome": "FAIL",
+  "mission_contract": "Complete assigned work without human rescue — NOT SATISFIED",
+  "telemetry_doctrine_ref": "builderos-reboot/SNT_TELEMETRY_DOCTRINE.md",
+  "telemetry_contract_ref": "builderos-reboot/ALPHA_MISSION_TELEMETRY_CONTRACT.json",
+  "signed_by": "SNT",
+  "signed_at": "2026-06-10",
+  "locked_at": "2026-06-10",
+  "standing_principles": [
+    "FAIL is feedback, not defeat. The objective is truth, not green status.",
+    "A verified FAIL advances the mission further than an unverified PASS."
+  ],
+  "three_states_do_not_conflate": {
+    "builderos_alpha_foundation": "PASS",
+    "deliberation_v27_snt_live": "PASS / PROVEN (9/9)",
+    "this_bp_audit_mission": "Exit criteria not yet satisfied (evidence gap)"
+  },
+  "milestone": {
+    "not": "Produce PASS",
+    "yes": "Produce a trustworthy verdict (BP_AUDIT_PASS or BP_AUDIT_FAIL with SENTRY_CHECK_RESULT.json evidence)",
+    "note": "A mechanical BP_AUDIT_FAIL with evidence is progress — proves governance, gates, and BPB return routing"
+  },
+  "scores": {
+    "pipeline_autonomy": 8,
+    "governance": 9,
+    "self_healing": 6,
+    "evidence_discipline": 2,
+    "bp_completion": 0,
+    "overall_bp_phase": "FAIL"
+  },
+  "observation_signals": {
+    "loop_active": true,
+    "governance_active": true,
+    "self_healing_active": true,
+    "fake_green_prevention_active": true,
+    "mechanical_audit_receipt_present": false,
+    "bp_phase_complete": false,
+    "no_new_fake_green_on_main_since_governance_hardened": true
+  },
+  "blocker": "No authoritative mechanical verdict yet — SENTRY_CHECK_RESULT.json missing",
+  "blocker_not": "The verdict being FAIL (FAIL with evidence would be acceptable progress)",
+  "invalid_artifacts": [
+    "SENTRY_BP_AUDIT_REPORT.md (truncated prose PASS without evidence)",
+    "CONTENT/run-sentry-bp-audit.mjs (4-line stub on main)",
+    "PROBE.txt (observation pollution commit 69e76ab)"
+  ],
+  "governance_wins": [
+    "Attempt #5 blocked: invalid async, wrong mission-root paths, hallucinated probe IDs",
+    "Pre-commit blocked bad commits — no new fake-green artifacts",
+    "Unsupported completion claims no longer rewarded"
+  ],
+  "sign_off_requires": {
+    "artifact": "SENTRY_CHECK_RESULT.json",
+    "generated_by": "Runnable script (node --check + execute), not council prose",
+    "must_contain": ["verdict", "checks[]", "blockers[]", "generated_at"],
+    "honest_fail_acceptable": true
+  },
+  "next_system_action": "Mechanical runner → trustworthy verdict → auto-route to BPB if FAIL"
+}

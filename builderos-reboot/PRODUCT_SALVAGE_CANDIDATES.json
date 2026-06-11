@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-09T19:06:42.271Z",
+  "generated_at": "2026-06-11T07:53:05.720Z",
   "spec": "Phase 12 — Product mission salvage",
-  "candidate_count": 46,
+  "candidate_count": 47,
   "first_product_mission": "PRODUCT-MARKETINGOS-SALVAGE-0001",
   "candidates": [
     {
@@ -351,6 +351,14 @@
     {
       "amendment_file": "docs/projects/AMENDMENT_47_MISSION_RUNTIME.md",
       "title": "AMENDMENT_47 — Mission Runtime",
+      "has_backlog": false,
+      "salvage_priority": "medium",
+      "factory_ready": false,
+      "note": "Requires BPB mission pack before coder execution"
+    },
+    {
+      "amendment_file": "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md",
+      "title": "AMENDMENT 48 — BuilderOS Vocabulary (Language Law)",
       "has_backlog": false,
       "salvage_priority": "medium",
       "factory_ready": false,

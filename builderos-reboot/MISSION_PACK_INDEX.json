@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-09T19:06:42.333Z",
+  "generated_at": "2026-06-11T07:53:05.787Z",
   "source_of_truth": "builderos-reboot/MISSION_QUEUE.json",
-  "mission_count": 33,
-  "missions_complete": 33,
+  "mission_count": 39,
+  "missions_complete": 34,
   "missions": [
     {
       "mission_id": "FACTORY-REBOOT-0001",
@@ -232,6 +232,44 @@
       "mission_id": "FACTORY-REBOOT-0030",
       "steps": 0,
       "status": "complete",
+      "error": "no_blueprint"
+    },
+    {
+      "mission_id": "FACTORY-REBOOT-0031",
+      "steps": 0,
+      "status": "queued",
+      "error": "no_blueprint"
+    },
+    {
+      "mission_id": "FACTORY-DELIBERATION-V27-0001",
+      "blueprint_id": "FACTORY-DELIBERATION-V27-0001-v1",
+      "scope": "deliberation_governance_v27_a_to_z",
+      "steps": 12,
+      "status": "complete"
+    },
+    {
+      "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+      "blueprint_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001-v1",
+      "scope": "deliberation_v27_sentry_regression_harness",
+      "steps": 6,
+      "status": "mission_failed"
+    },
+    {
+      "mission_id": "AUTONOMOUS-RECOVERY-0001",
+      "steps": 0,
+      "status": "ready",
+      "error": "no_blueprint"
+    },
+    {
+      "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+      "steps": 0,
+      "status": "pssot_complete",
+      "error": "no_blueprint"
+    },
+    {
+      "mission_id": "SENTRY-ASPECT-A08",
+      "steps": 0,
+      "status": "unknown",
       "error": "no_blueprint"
     }
   ]

@@ -4,7 +4,7 @@
     "step_id": "S2101",
     "type": "file_sha256_matches",
     "target": "builderos-reboot/scripts/run-sentry-checks.mjs",
-    "expected_sha256": "195bdb990aa74c378cac43b660086bf470f2843fb302bdf082b960368db63e2f"
+    "expected_sha256": "cd169aa22ce320325ae7dbe8f2a47e47f915692c07b70d232ee6ef57a0466c40"
   },
   {
     "test_id": "AT-S2102-1",

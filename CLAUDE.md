@@ -58,12 +58,14 @@ The next agent reads stale docs, rebuilds what already exists, breaks what works
 
 **Token-efficient path (normal build sessions — ~800 tokens vs ~8000+):**
 Read `docs/AGENT_RULES.compact.md` — compressed enforcement packet.
+**Immediately after:** `prompts/00-HIST-LEGACY-BOUNDARY.md` — **STOP read** (legacy = Hist; where to build). Do not skip.
 This replaces full NSSOT + Companion for routine work. Full NSSOT required ONLY when:
 - Editing a constitutional document
 - Facing a constitutional conflict
 - First-time project onboarding
 
 Then read:
+- `prompts/00-HIST-LEGACY-BOUNDARY.md` — legacy vs active (mandatory if you skipped above)
 - `prompts/00-SYSTEM-AUTHORITY-LAYERS.md` — **which repo layer is canonical** (factory vs production spine)
 - `docs/QUICK_LAUNCH.md` — lane routing + execution protocol
 - `docs/CONTINUITY_LOG.md` — Latest session summary and handoff state

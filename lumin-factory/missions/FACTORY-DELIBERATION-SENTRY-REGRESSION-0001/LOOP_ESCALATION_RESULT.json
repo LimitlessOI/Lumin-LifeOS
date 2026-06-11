@@ -1,0 +1,82 @@
+{
+  "schema": "loop_escalation_result_v2",
+  "generated_at": "2026-06-11T01:08:52.690Z",
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "attempt_count": 5,
+  "failure_class": "fake_green_attempt",
+  "failure_signature": "b96c15d81bcac488",
+  "repeated_signature_weight": 3,
+  "last_strategy": "builder_build_same_spec",
+  "escalation_level": "hard_stop",
+  "escalation_thresholds": {
+    "notice": 1,
+    "escalate": 2,
+    "hard_stop": 3
+  },
+  "required_next_strategy": {
+    "strategy": "autonomous_recovery_protocol",
+    "reason": "Strategy forbidden — begin autonomous recovery protocol (NOT terminal stop). See AUTONOMOUS-RECOVERY-0001.",
+    "forbidden": [
+      "builder_build_same_spec",
+      "builder_prose_pass",
+      "builder_build_same_spec"
+    ],
+    "recovery_steps": [
+      "council_escalation",
+      "bpb_repair",
+      "alternative_strategy_retry",
+      "sentry_verify",
+      "deliver_or_UNSOLVED"
+    ],
+    "first_recovery_action": "mechanical_template_v27_runner"
+  },
+  "same_agent_loop_blocked": true,
+  "recovery_protocol_active": true,
+  "system_terminal_stop": false,
+  "mission_outcome": "FAIL",
+  "route_target": "RECOVERY_PROTOCOL_START",
+  "recovery_protocol": {
+    "active": true,
+    "mission_ref": "AUTONOMOUS-RECOVERY-0001",
+    "steps": [
+      "council_escalation",
+      "bpb_repair",
+      "alternative_strategy_retry",
+      "sentry_verify",
+      "deliver_or_UNSOLVED"
+    ],
+    "terminal_stop_forbidden": true
+  },
+  "signal_ingested_this_run": false,
+  "current_signal": {
+    "failure_class": "evidence_gap",
+    "failure_signature": "46c57892774ebff1",
+    "strategy": "builder_build_same_spec",
+    "detail": "Tier 1 receipt incomplete"
+  },
+  "verdict_framing": "Strategy forbidden — recovery protocol must start (NOT terminal stop)",
+  "failure_packet_written": "FAILURE_PATTERN_PACKET.json",
+  "council_queue": {
+    "queued": false,
+    "reason": "LOOP_ESCALATION_AUTO_COUNCIL not set or missing API env"
+  },
+  "founder_alert": {
+    "schema": "founder_alert_v1",
+    "generated_at": "2026-06-11T01:08:52.691Z",
+    "severity": "P0",
+    "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+    "reason": "AUTONOMOUS_RECOVERY_PATH_INCOMPLETE",
+    "summary": "Strategy forbidden but recovery protocol not fully autonomous — founder attention required. System must not silent-stop.",
+    "escalation_level": "hard_stop",
+    "recovery_protocol_active": true,
+    "council_auto_queued": false,
+    "required_actions": [
+      "Review FAILURE_PATTERN_PACKET.json",
+      "Unblock recovery: Council OR mechanical v27 runner OR factory-local path",
+      "Complete BP audit artifact or produce UNSOLVED receipt with evidence"
+    ],
+    "scorecard_ref": "SNT_MISSION_SCORECARD.json",
+    "mission_outcome": "FAIL"
+  },
+  "founder_alert_written": "FOUNDER_ALERT.json"
+}

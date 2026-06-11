@@ -1,0 +1,24 @@
+[
+  {
+    "test_id": "AT-A04-1",
+    "step_id": "D03",
+    "type": "file_exists",
+    "target": "config/deliberation-governance.js"
+  },
+  {
+    "test_id": "AT-A04-2",
+    "type": "file_exists",
+    "target": "config/rep-catalog.json"
+  },
+  {
+    "test_id": "AT-A04-3",
+    "type": "file_contains_string",
+    "target": "config/deliberation-governance.js",
+    "expected": "VALID_AUTHORITIES"
+  },
+  {
+    "test_id": "AT-A04-4",
+    "type": "shell_command",
+    "command": "node -e \"import('./config/deliberation-governance.js').then(m=>{if(!m.VALID_AUTHORITIES?.includes('CDR'))process.exit(1)})\""
+  }
+]

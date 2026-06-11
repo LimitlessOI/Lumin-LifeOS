@@ -2,16 +2,22 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { verifyStepResult } from './verify-step-result.js';
+import { verifyStepContract } from './verify-step-contract.js';
 
 const HISTORIAN_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
-export function runVerification(step, builderResult) {
+export function runVerification(step, builderResult, context = {}) {
   const report = verifyStepResult(step, builderResult);
-  if (builderResult.status === 'DONE') {
+  const contract = context.mission_id
+    ? verifyStepContract({ mission_id: context.mission_id, step, builderResult })
+    : { pass: builderResult.status === 'DONE', tests_run: 0, failures: [] };
+
+  if (builderResult.status === 'DONE' && contract.pass) {
     return {
       ...report,
       implementation_status: 'PASS',
-      checks_run: ['result_status', 'exact_output_contract'],
+      checks_run: ['result_status', 'exact_output_contract', 'acceptance_tests'],
+      acceptance: contract,
     };
   }
   if (builderResult.status === 'FAILED_VERIFICATION') {
@@ -19,12 +25,14 @@ export function runVerification(step, builderResult) {
       ...report,
       implementation_status: 'FAIL',
       reason: builderResult.summary,
+      acceptance: contract,
     };
   }
   return {
     ...report,
-    implementation_status: 'BLOCKED',
-    reason: builderResult.summary || builderResult.gap_type,
+    implementation_status: contract.pass ? 'PASS' : 'FAIL',
+    reason: contract.failures?.[0]?.reason || builderResult.summary,
+    acceptance: contract,
   };
 }
 

@@ -1,0 +1,51 @@
+[
+  {
+    "test_id": "AT-S2901-1",
+    "step_id": "S2901",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/tsos/tsos-guardrails.js",
+    "expected_sha256": "ed381c429ca05a0a08c3363435b2008f132bf50551c003554b08f9e035676fcb"
+  },
+  {
+    "test_id": "AT-S2902-1",
+    "step_id": "S2902",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/tsos/record-step-metrics.js",
+    "expected_sha256": "47802022a9809e95afebd09dff0bb9d153f930d1983149b519dd4c58d7872d1e"
+  },
+  {
+    "test_id": "AT-S2903-1",
+    "step_id": "S2903",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/tsos/tsos-summary.js",
+    "expected_sha256": "82ef3313fd81e2f8ca486086c506f4bd6140007e08d65931f15150c1e9c48556"
+  },
+  {
+    "test_id": "AT-S2904-1",
+    "step_id": "S2904",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/factory-core/builder/run-step.js",
+    "expected_sha256": "e752569bd1192335a697a18a5d72d8b1fe6bfd090df092ede866fa3fa94c26ae"
+  },
+  {
+    "test_id": "AT-S2905-1",
+    "step_id": "S2905",
+    "type": "file_sha256_matches",
+    "target": "factory-staging/startup/register-routes.js",
+    "expected_sha256": "b7e52412be73cfd64ff1fc7ffd17616854a1cf778c876f4a1f248faa9d68308b"
+  },
+  {
+    "test_id": "AT-S2906-1",
+    "step_id": "S2906",
+    "type": "file_sha256_matches",
+    "target": "scripts/factory-tsos-integration.mjs",
+    "expected_sha256": "c7a0fa223cf240bf90a1ad210fdb963caae29cf6af65b9f18c75dfb63a95557a"
+  },
+  {
+    "test_id": "AT-S2907-1",
+    "step_id": "S2907",
+    "type": "file_sha256_matches",
+    "target": "TSOS_FACTORY_INTEGRATION.md",
+    "expected_sha256": "88994e2ef5bf4d19c4625dd10541379e6ec293d96f9a435b0124019fa901cbe2"
+  }
+]

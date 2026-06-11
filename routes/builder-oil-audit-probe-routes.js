@@ -14,14 +14,26 @@ export function createBuilderOilAuditProbeRoutes({ requireKey, pool }) {
   const router = Router();
 
   function requireCommandCenterKeyOnly(req, res, next) {
-    const provided = req.get('x-command-center-key');
-    const expected = process.env.COMMAND_CENTER_KEY;
-    if (!expected || !provided || provided !== expected) {
+    const provided = String(
+      req.get('x-command-center-key')
+      || req.get('x-command-key')
+      || req.get('x-lifeos-key')
+      || req.get('x-api-key')
+      || ''
+    ).trim();
+    const configuredKeys = [
+      process.env.COMMAND_CENTER_KEY,
+      process.env.LIFEOS_KEY,
+      process.env.API_KEY,
+    ]
+      .map((value) => String(value || '').trim())
+      .filter(Boolean);
+    if (configuredKeys.length === 0 || !provided || !configuredKeys.includes(provided)) {
       return res.status(401).json({
         ok: false,
         phase: 7,
         status: 'FAIL',
-        error: 'Unauthorized: x-command-center-key required',
+        error: 'Unauthorized: operator key required',
       });
     }
     return next();

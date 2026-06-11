@@ -1,8 +1,10 @@
 {
-  "generated_at": "2026-06-09T19:06:42.135Z",
+  "generated_at": "2026-06-11T07:53:05.566Z",
   "version": 3,
+  "layout": "monorepo_legacy",
   "verdict": "STAGING_READY_EXTENDED",
   "checks": {
+    "layout": "monorepo_legacy",
     "acceptance": true,
     "integration_step": true,
     "integration_mission": true,
@@ -13,8 +15,8 @@
     "queue_dry_run": true,
     "cutover_verify": true
   },
-  "queue_complete": 33,
-  "queue_total": 33,
+  "queue_complete": 34,
+  "queue_total": 38,
   "active_mission": null,
   "lumin_factory_path": "lumin-factory/"
 }

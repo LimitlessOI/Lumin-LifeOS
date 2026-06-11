@@ -1,7 +1,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-09c — Codebase cleanup: purged 231 orphaned files (root junk JS, dead routes, frontend/159, backend/45, stale screenshots). Fixed `routes/tsos-task-ledger-routes.js` syntax error (builder-committed `exp` → `export function`). Prior: 2026-05-09b (GQL meta scalar fix).
+**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
 
 ---
 
@@ -158,6 +158,8 @@ One model may fill more than one role only when no safer alternative exists, and
 ---
 
 ## Change Receipts
+
+| 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|

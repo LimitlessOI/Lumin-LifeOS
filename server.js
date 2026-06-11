@@ -17,6 +17,8 @@
  * ⛔  COMPOSITION ROOT — DO NOT ADD FEATURE CODE HERE
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  *
+ * @authority Legacy production spine — see prompts/00-SYSTEM-AUTHORITY-LAYERS.md
+ *
  * This file wires the system together. It does NOT implement features.
  * If you are an AI agent, human developer, or automated system about to add
  * new functionality here — STOP and put it in the right place instead:
@@ -118,7 +120,6 @@ import { createOutreachCrmRoutes } from './routes/outreach-crm-routes.js';
 import { createBillingRoutes } from './routes/billing-routes.js';
 import { createKnowledgeRoutes } from './routes/knowledge-routes.js';
 import { createConversationRoutes } from './routes/conversation-routes.js';
-import { createCommandCenterRoutes } from './routes/command-center-routes.js';
 import { SelfModificationEngine } from './core/self-modification-engine.js';
 import IncomeDroneSystem from './core/income-drone-system.js';
 import FinancialDashboard from './core/financial-dashboard.js';
@@ -171,7 +172,7 @@ import { createLatestRunManager } from "./startup/latest-run.js";
 import { registerServerRoutes } from "./startup/routes/server-routes.js";
 import { registerRuntimeRoutes } from "./startup/register-runtime-routes.js";
 import { createAutonomyScheduler } from "./startup/schedulers.js";
-import { initDatabase, ensureTcoAgentTables } from "./startup/database.js";
+import { initDatabase } from "./startup/database.js";
 import { createUserPreferenceGuesser } from "./startup/user-preferences.js";
 import { createSandboxTester } from "./startup/sandbox.js";
 import { createSnapshotManager } from "./startup/snapshots.js";
@@ -395,10 +396,6 @@ initDb(pool);
 
 // Start DB pool health monitoring
 startDbHealthMonitor(pool);
-
-ensureTcoAgentTables(pool, logger, __dirname).catch((error) => {
-  logger.warn("⚠️ ensureTcoAgentTables failed:", { error: error.message });
-});
 
 // ==================== GLOBAL STATE ====================
 const apiV1DepsRef = { current: {} };
@@ -673,9 +670,7 @@ const {
   isFileProtected,
   triggerDeployment,
   commitToGitHub,
-  triggerRailwayRedeploy,
   setRailwayEnvVar,
-  setRailwayEnvVars,
   getRailwayEnvVars,
 } = createDeploymentService({
   pool,
@@ -1070,14 +1065,15 @@ autoBuilder.overrideBuildHelpers({
     }
 
     // Cloud fallback: pick first free-tier model with an API key
-    const fallbackOrder = ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openrouter_free', 'claude'];
+    const fallbackOrder = ['groq_llama', 'gemini_flash', 'cerebras_llama', 'mistral_free', 'deepseek', 'claude'];
     const councilMember = fallbackOrder.find((m) => {
       const cfg = COUNCIL_MEMBERS[m];
       if (!cfg) return false;
       if (cfg.provider === 'groq')       return !!process.env.GROQ_API_KEY;
       if (cfg.provider === 'gemini')     return !!process.env.GEMINI_API_KEY;
       if (cfg.provider === 'cerebras')   return !!process.env.CEREBRAS_API_KEY;
-      if (cfg.provider === 'openrouter') return !!process.env.OPENROUTER_API_KEY;
+      if (cfg.provider === 'mistral')    return !!process.env.MISTRAL_API_KEY;
+      if (cfg.provider === 'deepseek')   return !!process.env.DEEPSEEK_API_KEY;
       if (cfg.provider === 'anthropic')  return !!process.env.ANTHROPIC_API_KEY;
       return false;
     }) || 'groq_llama';
@@ -1237,57 +1233,31 @@ setInterval(() => {
 }, 12 * 60 * 60 * 1000); // every 12 hours
 
 // ==================== RAILWAY CONTROL ====================
-// GET  /api/v1/railway/env          — list all env vars on Railway
-// POST /api/v1/railway/env          — set one: { name, value }
-// POST /api/v1/railway/env/bulk     — set many: { vars: { KEY: 'value' } }
-// POST /api/v1/railway/deploy       — trigger immediate redeploy
-app.get('/api/v1/railway/env', requireKey, async (req, res) => {
-  try {
-    const vars = await getRailwayEnvVars();
-    // Mask values for security — just show key names + first 4 chars
-    const masked = Object.fromEntries(
-      Object.entries(vars).map(([k, v]) => [k, `${String(v).slice(0, 4)}****`])
-    );
-    res.json({ ok: true, vars: masked, count: Object.keys(masked).length });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
+// Legacy direct-mutation endpoints are intentionally disabled.
+// Governed Railway changes must flow through /api/v1/railway/managed-env/*.
+function legacyRailwayControlDisabled(res, governedPath) {
+  return res.status(410).json({
+    ok: false,
+    error: 'LEGACY_RAILWAY_CONTROL_DISABLED',
+    governed_path: governedPath,
+  });
+}
 
-app.post('/api/v1/railway/env', requireKey, async (req, res) => {
-  try {
-    const { name, value } = req.body;
-    if (!name || value === undefined) {
-      return res.status(400).json({ ok: false, error: 'name and value are required' });
-    }
-    await setRailwayEnvVar(name, value);
-    res.json({ ok: true, set: name });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
+app.get('/api/v1/railway/env', requireKey, async (req, res) =>
+  legacyRailwayControlDisabled(res, '/api/v1/railway/managed-env')
+);
 
-app.post('/api/v1/railway/env/bulk', requireKey, async (req, res) => {
-  try {
-    const { vars } = req.body;
-    if (!vars || typeof vars !== 'object') {
-      return res.status(400).json({ ok: false, error: 'vars must be an object { KEY: value }' });
-    }
-    const results = await setRailwayEnvVars(vars);
-    res.json({ ok: true, results });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
+app.post('/api/v1/railway/env', requireKey, async (req, res) =>
+  legacyRailwayControlDisabled(res, '/api/v1/railway/managed-env')
+);
 
-app.post('/api/v1/railway/deploy', requireKey, async (req, res) => {
-  try {
-    await triggerRailwayRedeploy();
-    res.json({ ok: true, message: 'Redeploy triggered on Railway' });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
+app.post('/api/v1/railway/env/bulk', requireKey, async (req, res) =>
+  legacyRailwayControlDisabled(res, '/api/v1/railway/managed-env/bulk')
+);
+
+app.post('/api/v1/railway/deploy', requireKey, async (req, res) =>
+  legacyRailwayControlDisabled(res, '/api/v1/railway/managed-env/build-from-latest')
+);
 
 // ==================== WEBSOCKET ====================
 // Handler extracted to services/websocket-handler.js
@@ -1307,6 +1277,13 @@ setupWebSocketHandler(wss, {
 // ==================== HEALTH CHECK ====================
 // Auth diagnostic — shows which key env vars are SET (not their values) and what header was received
 app.get('/auth-check', (req, res) => {
+  const nodeEnv = String(process.env.NODE_ENV || '').toLowerCase();
+  if (nodeEnv === 'production' || nodeEnv === 'prod') {
+    return res.status(410).json({
+      ok: false,
+      error: 'AUTH_CHECK_DISABLED_IN_PRODUCTION',
+    });
+  }
   const envVars = ['API_KEY', 'LIFEOS_KEY', 'COMMAND_CENTER_KEY'];
   const configured = envVars.filter(k => !!process.env[k]);
   const headerAliases = ['x-api-key', 'x-lifeos-key', 'x-command-key', 'x-command-center-key'];
@@ -1319,30 +1296,6 @@ app.get('/auth-check', (req, res) => {
     open_access: process.env.LIFEOS_OPEN_ACCESS === 'true',
     key_received: provided ? `${provided.slice(0,4)}...${provided.slice(-4)} (len:${provided.length})` : null,
     match,
-  });
-});
-
-app.get('/healthz', async (req, res) => {
-  const checks = {
-    server: 'ok',
-    db: 'unknown',
-    ai: process.env.ANTHROPIC_API_KEY ? 'configured' : 'missing_key',
-    email: process.env.POSTMARK_SERVER_TOKEN ? 'configured' : 'not_configured',
-  };
-
-  try {
-    await pool.query('SELECT 1');
-    checks.db = 'ok';
-  } catch (e) {
-    checks.db = 'error: ' + e.message;
-  }
-
-  const allOk = checks.db === 'ok' && checks.ai === 'configured';
-  res.status(allOk ? 200 : 503).json({
-    status: allOk ? 'healthy' : 'degraded',
-    checks,
-    uptime: Math.floor(process.uptime()),
-    timestamp: new Date().toISOString(),
   });
 });
 
@@ -1461,14 +1414,8 @@ async function start() {
 
     validateEnv(logger);
 
-    // ── Run DB migrations automatically ───────────────────────────────────
-    // Scans db/migrations/*.sql and runs any not yet applied. Safe on every restart.
-    try {
-      const { runMigrations } = await import('./services/migration-runner.js');
-      await runMigrations(pool);
-    } catch (err) {
-      logger.warn('[STARTUP] Migration runner failed (non-blocking)', { error: err.message });
-    }
+    await initDatabase(pool, logger);
+    logger.info("✅ Database initialized");
 
     await startListening();
 
@@ -1510,16 +1457,6 @@ async function start() {
       initialDelay: 60000,          // 1 min initial delay (was 15s)
       interval: 6 * 60 * 60 * 1000, // 6 hours (was 60s) — preserve token quota until TC proven
     });
-
-    // Critical: Database must initialize (but don't fail if tables already exist)
-    try {
-      await initDatabase();
-      logger.info("✅ Database initialized");
-    } catch (dbError) {
-      logger.error("❌ Database initialization error:", { error: dbError.message });
-      // Don't exit - try to continue (might be connection issue that resolves)
-      logger.warn("⚠️ Continuing startup despite DB error - will retry connections");
-    }
 
     // Load ROI (non-critical)
     try {
@@ -1943,25 +1880,12 @@ async function start() {
   } catch (error) {
     finalizeStartup("error", { error: error.message });
     logger.error("❌ Startup error:", { error: error.message, stack: error.stack });
-    // Try to start HTTP server anyway for health checks
     if (selectedPort !== null || server.listening) {
       logger.warn("⚠️ Startup error after server already started - continuing in degraded mode");
       return;
     }
-    try {
-      const degradedPort = await listenWithRetry(
-        server,
-        HOST,
-        basePort,
-        MAX_PORT_ATTEMPTS
-      );
-      await writeAutonomyPortFile(degradedPort);
-      logger.warn(`⚠️ Server started in degraded mode due to startup error`);
-      logger.info(`📊 Health check available at http://${HOST}:${degradedPort}/healthz`);
-    } catch (serverError) {
-      logger.error("❌ Failed to start HTTP server:", { error: serverError.message });
-      process.exit(1);
-    }
+    logger.error("❌ Startup failed before network bind - refusing degraded listen");
+    process.exit(1);
   }
 }
 

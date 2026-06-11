@@ -41,6 +41,7 @@ const { httpStatus, body } = dispatchExecuteStep({
   mission_id: missionId,
   blueprint_id: blueprint.blueprint_id,
   step,
+  skip_intake_gate: true,
 });
 
 const builderOk = httpStatus === 200 && body.builder?.status === 'DONE';

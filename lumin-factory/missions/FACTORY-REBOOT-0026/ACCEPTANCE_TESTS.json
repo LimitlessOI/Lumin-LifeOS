@@ -1,0 +1,16 @@
+[
+  {
+    "test_id": "AT-S2601-1",
+    "step_id": "S2601",
+    "type": "file_sha256_matches",
+    "target": "scripts/generate-proof-loop-0001.mjs",
+    "expected_sha256": "87d0dd558ece0a7267acb20f7e3427834c5733f4069125ad4562600e3ef01a2a"
+  },
+  {
+    "test_id": "AT-S2602-1",
+    "step_id": "S2602",
+    "type": "file_sha256_matches",
+    "target": "scripts/run-full-loop-proof.mjs",
+    "expected_sha256": "1121236d7641ceb3c6948d87ef03d3efc076128d85c61045d7df187e790c4ab8"
+  }
+]

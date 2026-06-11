@@ -1,0 +1,135 @@
+{
+  "schema": "recovery_protocol_result_v1",
+  "generated_at": "2026-06-11T01:27:29.394Z",
+  "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "recovery_protocol_active": true,
+  "system_terminal_stop": false,
+  "objective_score": "FAIL",
+  "bp_audit_pass": true,
+  "blueprint_executed": false,
+  "objective_framing": "BP audit PASS — CDR/blueprint execution incomplete (objective FAIL until harness shipped)",
+  "steps": [
+    {
+      "step": "install_mechanical_bp_audit",
+      "strategy": "mechanical_template_v27"
+    },
+    {
+      "step": "run_bp_audit",
+      "ok": true,
+      "verdict": "BP_AUDIT_FAIL",
+      "exit_code": 1
+    },
+    {
+      "step": "bpb_mechanical_probe_coverage",
+      "ok": true,
+      "added": "{\n  \"objective_id\": \"FACTORY-DELIBERATION-SENTRY-REGRESSION-0001\",\n  \"added\": [\n    \"B_LB_METADATA\",\n    \"N5\",\n    \"N2\",\n    \"N3\",\n    \"N6b\",\n    \"N11\"\n  ],\n  \"total\": 14\n}\n"
+    },
+    {
+      "step": "run_bp_audit_retry",
+      "verdict": "BP_AUDIT_PASS",
+      "exit_code": 0
+    },
+    {
+      "step": "execute_locked_blueprint",
+      "ok": false,
+      "skipped": true,
+      "reason": "CDR harness requires builder/codegen — execute-mission write_file_exact would corrupt sources",
+      "next_action": "POST /api/v1/lifeos/builder/build with strategy mechanical_template_v27 and H01 spec"
+    }
+  ],
+  "next_route": "CDR_BUILDER_REQUIRED",
+  "bp_audit": {
+    "ok": true,
+    "exit_code": 1,
+    "runner": "/Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/CONTENT/run-sentry-bp-audit.mjs",
+    "receipt": {
+      "generated_at": "2026-06-11T01:27:29.390Z",
+      "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+      "audit_type": "SENTRY_BP_AUDIT",
+      "verdict": "BP_AUDIT_PASS",
+      "checks": [
+        {
+          "id": "BP-FOUNDER_PACKET.json",
+          "name": "FOUNDER_PACKET.json exists",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "id": "BP-BLUEPRINT.json",
+          "name": "BLUEPRINT.json exists",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "id": "BP-ACCEPTANCE_TESTS.json",
+          "name": "ACCEPTANCE_TESTS.json exists",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "id": "BP-REGRESSION_PROBE_CATALOG.json",
+          "name": "REGRESSION_PROBE_CATALOG.json exists",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "id": "P0-FREEZE",
+          "name": "Blueprint freeze check",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "id": "P0-1",
+          "name": "Every catalog probe in acceptance tests",
+          "pass": true,
+          "detail": "all covered"
+        },
+        {
+          "id": "P0-2",
+          "name": "No validator edits in blueprint",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "id": "P0-3",
+          "name": "Blueprint steps have required fields",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "id": "P0-4",
+          "name": "Exact commands include regression npm script",
+          "pass": true,
+          "detail": "npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera"
+        },
+        {
+          "id": "P0-5",
+          "name": "Cleanup verify-railway referenced before confirm",
+          "pass": true,
+          "detail": "verify-railway in blueprint/commands"
+        },
+        {
+          "id": "P0-6",
+          "name": "No founder decision steps",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "id": "P1-SYNTAX",
+          "name": "Audit runner syntax valid",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "blockers": [],
+      "generated_by": "mechanical_template_v27_recovery"
+    },
+    "stdout": "  \"pass\": true,\n      \"detail\": \"ok\"\n    },\n    {\n      \"id\": \"P0-4\",\n      \"name\": \"Exact commands include regression npm script\",\n      \"pass\": true,\n      \"detail\": \"npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera\"\n    },\n    {\n      \"id\": \"P0-5\",\n      \"name\": \"Cleanup verify-railway referenced before confirm\",\n      \"pass\": true,\n      \"detail\": \"verify-railway in blueprint/commands\"\n    },\n    {\n      \"id\": \"P0-6\",\n      \"name\": \"No founder decision steps\",\n      \"pass\": true,\n      \"detail\": \"ok\"\n    },\n    {\n      \"id\": \"P1-SYNTAX\",\n      \"name\": \"Audit runner syntax valid\",\n      \"pass\": true,\n      \"detail\": \"\"\n    }\n  ],\n  \"blockers\": [\n    \"P0-1\"\n  ],\n  \"generated_by\": \"mechanical_template_v27_recovery\"\n}\n",
+    "stderr": ""
+  },
+  "council": {
+    "attempted": false,
+    "reason": "RECOVERY_AUTO_COUNCIL not set"
+  },
+  "loop_escalation_level": "hard_stop"
+}

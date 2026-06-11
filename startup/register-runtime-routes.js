@@ -82,7 +82,7 @@ import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createMemoryIntelligenceRoutes } from "../routes/memory-intelligence-routes.js";
-import memoryCapsuleRoutes from "../routes/memory-capsule-routes.js";
+import { createMemoryCapsuleRoutes } from "../routes/memory-capsule-routes.js";
 import { createMemorySelfRepairRoutes } from "../routes/memory-self-repair-routes.js";
 import createMemoryStatusRoutes from "../routes/memory-status-routes.js";
 
@@ -438,7 +438,7 @@ export async function registerRuntimeRoutes(app, deps) {
   createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
 
   // Memory Capsule Alpha — governed product memory (AMENDMENT_02)
-  app.use('/api/v1/memory/capsules', memoryCapsuleRoutes);
+  app.use('/api/v1/memory/capsules', createMemoryCapsuleRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-CAPSULE] Routes mounted at /api/v1/memory/capsules/{signal,retrieve,health,capsule/:id,correct}');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
@@ -454,17 +454,17 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [MEMORY-SELF-REPAIR] Routes mounted at /api/v1/memory/self-repair/{health,latest}');
 
   // OIL Security Alpha — Gemini live proof + security receipts (AMENDMENT_19)
-  app.use(createGeminiProofRoutes({ callCouncilMember, requireKey }));
+  app.use(createGeminiProofRoutes({ callCouncilMember, requireKey, pool }));
   logger.info('✅ [OIL-GEMINI-PROOF] Routes mounted at /api/v1/gemini/proof');
-  app.use(createOILSecurityReceiptRoutes({ requireKey }));
+  app.use(createOILSecurityReceiptRoutes({ requireKey, pool }));
   logger.info('✅ [OIL-RECEIPTS] Routes mounted at /api/v1/oil/receipts');
-  app.use(createCommandCenterAggregateRoutes({ requireKey }));
+  app.use(createCommandCenterAggregateRoutes({ requireKey, pool }));
   logger.info('✅ [CMD-CENTER-AGG] Routes mounted at /api/v1/lifeos/command-center/{phase14,mode,security}');
   app.use(createLifeOSCommunicationRoutes({ pool, requireKey, callCouncilMember }));
   logger.info('✅ [LIFEOS-COMM-OS] Routes mounted at /api/v1/lifeos/communication/*');
-  app.use(createSelfRepairExecutorRoutes({ requireKey }));
+  app.use(createSelfRepairExecutorRoutes({ requireKey, pool }));
   logger.info('✅ [SELF-REPAIR-EXECUTOR] Routes mounted at /api/v1/lifeos/command-center/self-repair/execute');
-  app.use(createAutonomousTelemetryRoutes({ requireKey }));
+  app.use(createAutonomousTelemetryRoutes({ requireKey, pool }));
   logger.info('✅ [AUTONOMOUS-TELEMETRY] Routes mounted at /api/v1/lifeos/autonomous-telemetry/*');
   app.use(createCanonicalAdminRoutes({ pool, requireKey }));
   logger.info('✅ [CANONICAL-ADMIN] Routes mounted at /api/v1/lifeos/admin/ai/{status,effectiveness} + /api/v1/lifeos/system/{snapshot,health}');

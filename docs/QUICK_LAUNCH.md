@@ -35,12 +35,14 @@ Then: read this file (`docs/QUICK_LAUNCH.md`) for lane routing and execution, an
 > Full NSSOT required ONLY when: editing constitutional docs, constitutional conflict, first-time onboarding.
 
 1. **`docs/AGENT_RULES.compact.md`** — compressed enforcement packet (replaces NSSOT + Companion for normal sessions)
-2. `prompts/00-LIFEOS-AGENT-CONTRACT.md`
-3. `docs/CONTINUITY_INDEX.md`
-4. `docs/AI_COLD_START.md`
-5. `docs/CONTINUITY_LOG.md` (latest update first)
-6. `docs/CONTINUITY_LOG_LIFEOS.md` (latest update first)
-7. `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`:
+2. **`prompts/00-HIST-LEGACY-BOUNDARY.md`** — **STOP read:** legacy = Hist (no extend); where to build instead
+3. **`prompts/00-SYSTEM-AUTHORITY-LAYERS.md`** — factory vs production spine (four layers)
+4. `prompts/00-LIFEOS-AGENT-CONTRACT.md`
+5. `docs/CONTINUITY_INDEX.md`
+6. `docs/AI_COLD_START.md`
+7. `docs/CONTINUITY_LOG.md` (latest update first)
+8. `docs/CONTINUITY_LOG_LIFEOS.md` (latest update first)
+9. `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`:
    - `## Agent Handoff Notes`
    - latest 3–5 rows in `## Change Receipts`
 
