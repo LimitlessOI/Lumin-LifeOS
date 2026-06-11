@@ -46,25 +46,47 @@
     }
     * { box-sizing: border-box; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; display: flex; flex-direction: column; transition: background 0.2s, color 0.2s; }
-    header { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: background 0.2s, color 0.2s;
+    }
+    header { flex-shrink: 0; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     header h1 { margin: 0; font-size: 1rem; flex: 1; min-width: 120px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .dept-badge { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 6px; background: var(--accent); color: var(--accent-fg); }
-    .dept-toggles {
+    .dept-toggles, .mode-toggles {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      justify-content: center;
-      width: 100%;
-      margin-top: 8px;
+      gap: 4px;
+      align-items: center;
     }
     .dept-toggle {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.02em;
-      min-width: 2.5rem;
-      min-height: 2.5rem;
-      padding: 6px 8px;
+      min-width: 2rem;
+      min-height: 2rem;
+      padding: 4px 6px;
+    }
+    .toggle-groups { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .btn.icon-btn.compact {
+      min-width: 2.25rem;
+      min-height: 2.25rem;
+      padding: 6px;
+    }
+    .btn.icon-btn.compact svg { width: 18px; height: 18px; }
+    .btn-send-compact {
+      min-width: 3.5rem;
+      min-height: 2.25rem;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
     }
     .bubble .dept-label { font-size: 10px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
     .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -74,74 +96,159 @@
     .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); font-weight: 600; }
     .btn.active { outline: 2px solid var(--accent); }
     .btn.icon-btn {
-      min-width: 2.75rem;
-      min-height: 2.75rem;
-      padding: 10px;
+      min-width: 2.25rem;
+      min-height: 2.25rem;
+      padding: 6px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       line-height: 0;
     }
-    .btn.icon-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .btn.icon-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
     .btn.icon-btn.active, .btn.icon-btn.listening {
       background: var(--accent);
       border-color: var(--accent);
       color: var(--accent-fg);
     }
     .btn.icon-btn.listening { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); }
-    #btn-theme { min-width: 2.75rem; min-height: 2.75rem; padding: 10px; }
-    #transcript { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-    .bubble { max-width: 92%; padding: 10px 12px; border-radius: 12px; font-size: 14px; line-height: 1.45; white-space: pre-wrap; }
+    #btn-theme { min-width: 2.25rem; min-height: 2.25rem; padding: 6px; }
+    .main-workspace {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .transcript-panel {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 120px;
+      max-height: 75vh;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .panel-label {
+      flex-shrink: 0;
+      padding: 4px 12px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      user-select: none;
+    }
+    #transcript {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .resize-handle {
+      flex-shrink: 0;
+      height: 8px;
+      cursor: ns-resize;
+      background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--border) 60%, transparent));
+      touch-action: none;
+    }
+    .resize-handle:hover, .resize-handle.dragging {
+      background: color-mix(in srgb, var(--accent) 35%, var(--border));
+    }
+    .resize-handle::after {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 3px;
+      margin: 2px auto 0;
+      border-radius: 2px;
+      background: var(--muted);
+      opacity: 0.5;
+    }
+    .bubble { max-width: 88%; padding: 8px 11px; border-radius: 10px; font-size: 14px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
     .bubble.user { align-self: flex-end; background: var(--bubble-user-bg); border: 1px solid var(--bubble-user-border); }
     .bubble.assistant { align-self: flex-start; background: var(--surface); border: 1px solid var(--border); }
     .bubble .intent { font-size: 10px; color: var(--muted); margin-top: 6px; }
-    .composer { border-top: 1px solid var(--border); background: var(--surface); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); }
-    #interim { min-height: 20px; font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
-    textarea { width: 100%; min-height: 56px; resize: vertical; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 10px; font-size: 14px; }
-    .composer-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; justify-content: flex-end; }
-    .composer-row.primary { display: block; margin-top: 10px; }
-    .composer-main-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .composer {
+      flex: 1;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+      overflow: hidden;
+    }
+    .composer-body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .composer-input-wrap {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 72px;
+    }
+    #interim { min-height: 16px; font-size: 11px; color: var(--muted); font-style: italic; margin-bottom: 4px; }
+    textarea {
+      flex: 1;
       width: 100%;
+      min-height: 72px;
+      max-height: 40vh;
+      resize: vertical;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    textarea.mic-active {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .composer-toolbar {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+      justify-content: flex-end;
+      max-width: min(100%, 280px);
+    }
+    .composer-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
     }
     .composer-secondary {
+      flex-shrink: 0;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 6px;
       align-items: center;
-      margin-top: 10px;
-      font-size: 12px;
+      margin-top: 6px;
+      font-size: 11px;
       color: var(--muted);
     }
-    #btn-mic {
-      min-height: 48px;
-      width: 100%;
-    }
-    #btn-mic svg { width: 26px; height: 26px; }
-    .mode-toggles {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      width: 100%;
-      margin-top: 10px;
-    }
-    .composer-row.primary .btn-send-main {
-      min-height: 48px;
-      width: 100%;
-      padding: 12px 18px;
-      font-size: 16px;
-      font-weight: 600;
-    }
     .composer-hint { display: none; }
-    #voice-status { display: none; }
-    #truth-banner { margin: 0; padding: 10px 16px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 13px; line-height: 1.45; }
+    #voice-status { font-size: 11px; color: var(--muted); min-height: 0; margin-top: 4px; }
+    #truth-banner { flex-shrink: 0; margin: 0; padding: 6px 12px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 11px; line-height: 1.35; }
     [data-theme="dark"] #truth-banner { background: #3f2a08; color: #fde68a; border-color: #92400e; }
     #voice-optional { display: none; }
     .bubble .source { font-size: 10px; color: var(--muted); margin-top: 6px; }
-    .side { border-top: 1px solid var(--border); padding: 10px 16px; font-size: 12px; color: var(--muted); }
+    .side { flex-shrink: 0; border-top: 1px solid var(--border); padding: 6px 12px; font-size: 11px; color: var(--muted); max-height: 72px; overflow-y: auto; }
     .side strong { color: var(--text); }
     #auth-banner { display: none; margin: 0; padding: 10px 16px; background: #fef2f2; color: #991b1b; border-bottom: 1px solid #fecaca; font-size: 13px; }
     [data-theme="dark"] #auth-banner { background: #3f1515; color: #fecaca; border-color: #7f1d1d; }
@@ -180,8 +287,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    <strong>Send</strong> (or Enter) posts to LifeOS. Nothing sends automatically.
-    On Mac with Notion installed, browser mic may trigger Notion’s meeting bar — dismiss it or disable Notion desktop meeting detection.
+    Enter or mic + say <strong>“send”</strong> / <strong>“over”</strong> to post. Drag the bar above your message box to resize the conversation.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -203,32 +309,44 @@
     </div>
   </div>
 
-  <div id="transcript" aria-live="polite"></div>
+  <div class="main-workspace">
+    <div class="transcript-panel" id="transcript-panel">
+      <div class="panel-label">Conversation</div>
+      <div id="transcript" aria-live="polite"></div>
+    </div>
+    <div class="resize-handle" id="resize-transcript" title="Drag to resize conversation" aria-label="Resize conversation panel"></div>
 
-  <div class="composer">
-    <div id="interim" data-testid="interim-transcript"></div>
-    <textarea id="input" placeholder="Type a message…" rows="3"></textarea>
-    <div class="composer-row primary">
-      <div class="composer-main-actions">
-        <button type="button" class="btn icon-btn" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — speak into the text box">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </button>
-        <button type="button" class="btn btn-primary btn-send-main" id="btn-send">Send</button>
-      </div>
-      <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
-      <div class="mode-toggles" role="group" aria-label="Session mode">
-        <button type="button" class="btn icon-btn mode-toggle active" data-mode="conversation" aria-pressed="true" title="Conversation" aria-label="Conversation">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </button>
-        <button type="button" class="btn icon-btn mode-toggle" data-mode="command" aria-pressed="false" title="Command — stage actions" aria-label="Command">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        </button>
-        <button type="button" class="btn icon-btn mode-toggle" data-mode="brainstorm" aria-pressed="false" title="Brainstorm" aria-label="Brainstorm">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
-        </button>
-        <button type="button" class="btn icon-btn mode-toggle" data-mode="private" aria-pressed="false" title="Private / off-record — not saved" aria-label="Private off-record">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </button>
+    <div class="composer">
+      <div class="composer-body">
+        <div class="composer-input-wrap">
+          <div id="interim" data-testid="interim-transcript"></div>
+          <textarea id="input" placeholder="Type or tap mic — say “send” when done…" rows="3"></textarea>
+        </div>
+        <div class="composer-toolbar">
+          <div class="toggle-groups">
+            <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
+            <div class="mode-toggles" role="group" aria-label="Session mode">
+              <button type="button" class="btn icon-btn compact mode-toggle active" data-mode="conversation" aria-pressed="true" title="Conversation" aria-label="Conversation">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </button>
+              <button type="button" class="btn icon-btn compact mode-toggle" data-mode="command" aria-pressed="false" title="Command — stage actions" aria-label="Command">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </button>
+              <button type="button" class="btn icon-btn compact mode-toggle" data-mode="brainstorm" aria-pressed="false" title="Brainstorm" aria-label="Brainstorm">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+              </button>
+              <button type="button" class="btn icon-btn compact mode-toggle" data-mode="private" aria-pressed="false" title="Private / off-record — not saved" aria-label="Private off-record">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="composer-actions">
+            <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” or “over” to post">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </button>
+            <button type="button" class="btn btn-primary btn-send-compact" id="btn-send">Send</button>
+          </div>
+        </div>
       </div>
       <select class="sr-only" aria-hidden="true" tabindex="-1" id="mode-catalog">
         <option value="conversation">Conversation</option>
@@ -237,28 +355,28 @@
         <option value="private">Private</option>
       </select>
       <div class="composer-secondary">
-        <button type="button" class="btn icon-btn" id="btn-speak-toggle" aria-pressed="false" title="Read replies aloud (off)" aria-label="Read replies aloud">
+        <button type="button" class="btn icon-btn compact" id="btn-speak-toggle" aria-pressed="false" title="Read replies aloud (off)" aria-label="Read replies aloud">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
         </button>
-        <button type="button" class="btn icon-btn" id="btn-stop-voice" data-testid="pause-btn" title="Stop speech and microphone" aria-label="Stop speech and microphone">
+        <button type="button" class="btn icon-btn compact" id="btn-stop-voice" data-testid="pause-btn" title="Stop speech and microphone" aria-label="Stop speech and microphone">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor" stroke="none"/></svg>
         </button>
         <input type="checkbox" id="speak-replies" class="sr-only" tabindex="-1" aria-hidden="true">
         <label class="speed-label" id="voice-pick-wrap" hidden>Voice
           <select id="tts-voice" aria-label="Read-aloud voice"></select>
         </label>
-        <button type="button" class="btn icon-btn" id="btn-clear" title="Clear text box" aria-label="Clear">
+        <button type="button" class="btn icon-btn compact" id="btn-clear" title="Clear text box" aria-label="Clear">
           <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-        <button type="button" class="btn icon-btn" id="btn-replay" data-testid="replay-btn" title="Replay last reply" aria-label="Replay last reply">
+        <button type="button" class="btn icon-btn compact" id="btn-replay" data-testid="replay-btn" title="Replay last reply" aria-label="Replay last reply">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
         </button>
         <label class="speed-label" title="Read-aloud speed"><span class="sr-only">Speed</span><input type="range" id="speech-rate" min="0.75" max="1.1" step="0.05" value="0.94" aria-label="Read-aloud speed"></label>
       </div>
+      <div id="voice-status" aria-live="polite"></div>
+      <button type="button" id="btn-pause" hidden aria-hidden="true" tabindex="-1"></button>
+      <button type="button" id="btn-cancel" hidden aria-hidden="true"></button>
     </div>
-    <div id="voice-status" aria-live="polite"></div>
-    <button type="button" id="btn-pause" hidden aria-hidden="true" tabindex="-1"></button>
-    <button type="button" id="btn-cancel" hidden aria-hidden="true"></button>
   </div>
 
   <div class="side">
@@ -405,6 +523,81 @@
 
     bootstrapAuth();
 
+    function initPanelResize(handleId, panelId, storageKey, defaultPx, minPx) {
+      const handle = document.getElementById(handleId);
+      const panel = document.getElementById(panelId);
+      if (!handle || !panel) return;
+      const saved = parseInt(localStorage.getItem(storageKey) || '', 10);
+      if (saved >= minPx) panel.style.height = saved + 'px';
+      else panel.style.height = defaultPx + 'px';
+
+      let dragging = false;
+      let startY = 0;
+      let startH = 0;
+      function onMove(ev) {
+        if (!dragging) return;
+        const delta = ev.clientY - startY;
+        const next = Math.max(minPx, Math.min(window.innerHeight * 0.75, startH + delta));
+        panel.style.height = next + 'px';
+      }
+      function onUp() {
+        if (!dragging) return;
+        dragging = false;
+        handle.classList.remove('dragging');
+        localStorage.setItem(storageKey, String(panel.offsetHeight));
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+      handle.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        dragging = true;
+        startY = e.clientY;
+        startH = panel.offsetHeight;
+        handle.classList.add('dragging');
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+      handle.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        if (!touch) return;
+        e.preventDefault();
+        dragging = true;
+        handle.classList.add('dragging');
+        const startY = touch.clientY;
+        const startH = panel.offsetHeight;
+        function onTouchMove(ev) {
+          const t = ev.touches[0];
+          if (!t) return;
+          const next = Math.max(minPx, Math.min(window.innerHeight * 0.75, startH + (t.clientY - startY)));
+          panel.style.height = next + 'px';
+        }
+        function onTouchEnd() {
+          dragging = false;
+          handle.classList.remove('dragging');
+          localStorage.setItem(storageKey, String(panel.offsetHeight));
+          document.removeEventListener('touchmove', onTouchMove);
+          document.removeEventListener('touchend', onTouchEnd);
+        }
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd);
+      }, { passive: false });
+    }
+
+    function initComposerSizes() {
+      const input = document.getElementById('input');
+      if (!input) return;
+      const savedH = parseInt(localStorage.getItem('voice_rail_input_height') || '', 10);
+      if (savedH >= 72) input.style.height = savedH + 'px';
+      input.addEventListener('mouseup', () => {
+        if (input.offsetHeight >= 72) {
+          localStorage.setItem('voice_rail_input_height', String(input.offsetHeight));
+        }
+      });
+    }
+
+    initPanelResize('resize-transcript', 'transcript-panel', 'voice_rail_transcript_height', Math.round(window.innerHeight * 0.42), 120);
+    initComposerSizes();
+
     function applyTheme(theme) {
       const t = theme === 'dark' ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', t);
@@ -483,7 +676,7 @@
       const host = document.getElementById('dept-toggles');
       if (!host || !departmentCatalog.length) return;
       host.innerHTML = departmentCatalog
-        .map((d) => `<button type="button" class="btn icon-btn dept-toggle" data-department="${escapeHtml(d.id)}" aria-pressed="false" title="${escapeHtml(d.title)} — ${escapeHtml(d.summary)}" aria-label="${escapeHtml(d.title)}">${escapeHtml(d.id)}</button>`)
+        .map((d) => `<button type="button" class="btn icon-btn compact dept-toggle" data-department="${escapeHtml(d.id)}" aria-pressed="false" title="${escapeHtml(d.title)} — ${escapeHtml(d.summary)}" aria-label="${escapeHtml(d.title)}">${escapeHtml(d.id)}</button>`)
         .join('');
       host.querySelectorAll('.dept-toggle').forEach((btn) => {
         btn.addEventListener('click', () => onDepartmentSelected(btn.dataset.department));
@@ -774,17 +967,26 @@
         storageKey: 'voice_rail_v1',
         speakRepliesDefault: false,
         iconOnly: true,
-        silentStatus: true,
+        silentStatus: false,
+        voiceSendEnabled: true,
+        focusInputOnMic: true,
         mode: 'append',
         startLabel: 'Microphone',
         stopLabel: 'Stop microphone',
         idleText: '',
+        onVoiceSend: (message) => {
+          document.getElementById('interim').textContent = '';
+          if (String(message || '').trim()) sendMessage(message);
+        },
         onStop: () => {
           document.getElementById('interim').textContent = '';
-          document.getElementById('input')?.focus();
+          document.getElementById('input')?.classList.remove('mic-active');
         },
         onStart: () => {
           document.getElementById('interim').textContent = '';
+          const input = document.getElementById('input');
+          input?.focus();
+          input?.classList.add('mic-active');
         },
       });
       syncSpeakToggleUI();

@@ -117,6 +117,27 @@
     if (node) node.textContent = value;
   }
 
+  function stripVoiceSendCommand(text, phrases) {
+    let t = String(text || '').trim();
+    if (!t) return { send: false, message: '' };
+    const list = phrases && phrases.length
+      ? phrases
+      : ['send it', 'send message', 'send that', 'send now', 'send', 'over'];
+    for (let i = 0; i < list.length; i += 1) {
+      const raw = String(list[i] || '').trim();
+      if (!raw) continue;
+      const re = new RegExp('(?:^|\\s)' + raw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.?\\s*$', 'i');
+      if (re.test(t)) {
+        const message = t.replace(re, '').trim();
+        if (message) return { send: true, message };
+        if (new RegExp('^' + raw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.?$', 'i').test(t)) {
+          return { send: true, message: '' };
+        }
+      }
+    }
+    return { send: false, message: t };
+  }
+
   function stripLeadingWakePrefixes(text, prefixes) {
     let t = String(text || '').trim();
     if (!t || !prefixes || !prefixes.length) return t;
@@ -144,6 +165,11 @@
       speakRepliesDefault: false,
       /** If set, leading wake phrases (case-insensitive) are stripped from the textarea when a listen session ends. */
       wakePrefixes: [],
+      /** When true, saying "send" / "over" at end of utterance triggers onVoiceSend (walkie-talkie style). */
+      voiceSendEnabled: false,
+      voiceSendPhrases: ['send it', 'send message', 'send that', 'send now', 'send', 'over'],
+      onVoiceSend: null,
+      focusInputOnMic: true,
       iconOnly: false,
       silentStatus: false,
       onStart: null,
@@ -202,6 +228,32 @@
       button.setAttribute('aria-pressed', state.listening ? 'true' : 'false');
     }
 
+    function maybeVoiceSend(fromFinal) {
+      if (!settings.voiceSendEnabled || typeof settings.onVoiceSend !== 'function') return false;
+      const parsed = stripVoiceSendCommand(input.value, settings.voiceSendPhrases);
+      if (!parsed.send || !String(parsed.message || '').trim()) return false;
+      stopListening();
+      input.value = parsed.message;
+      try {
+        settings.onVoiceSend(parsed.message);
+      } catch (_) {}
+      return true;
+    }
+
+    function focusInputHighlight() {
+      if (!settings.focusInputOnMic || !input) return;
+      input.focus();
+      input.classList.add('mic-active');
+      try {
+        const len = input.value.length;
+        input.setSelectionRange(len, len);
+      } catch (_) {}
+    }
+
+    function clearInputHighlight() {
+      input?.classList.remove('mic-active');
+    }
+
     function updateStatus(value) {
       if (settings.silentStatus && !state.listening && !(value && String(value).startsWith('Voice error'))) {
         setText(status, '');
@@ -221,6 +273,7 @@
         state.recognition = null;
       }
       state.listening = false;
+      clearInputHighlight();
       updateButton();
       updateStatus(settings.idleText);
     }
@@ -245,7 +298,8 @@
       recognition.onstart = function onStart() {
         state.listening = true;
         updateButton();
-        updateStatus(settings.silentStatus ? '' : 'Listening...');
+        focusInputHighlight();
+        updateStatus(settings.silentStatus ? '' : 'Listening... Say “send” or “over” when done.');
         if (typeof settings.onStart === 'function') {
           try { settings.onStart({ inputValue: String(input?.value || '') }); } catch (_) {}
         }
@@ -267,6 +321,7 @@
         }
         if (finalChunk) state.buffer += finalChunk;
         input.value = (state.buffer + interimChunk).trim();
+        if (finalChunk && maybeVoiceSend(true)) return;
         updateStatus(interimChunk ? 'Listening... ' + interimChunk.trim() : 'Listening...');
       };
       recognition.onend = function onEnd() {
@@ -275,6 +330,9 @@
         if (input && settings.wakePrefixes && settings.wakePrefixes.length) {
           const next = stripLeadingWakePrefixes(input.value, settings.wakePrefixes);
           if (next !== input.value) input.value = next;
+        }
+        if (!maybeVoiceSend(true)) {
+          clearInputHighlight();
         }
         updateButton();
         updateStatus(settings.idleText);
