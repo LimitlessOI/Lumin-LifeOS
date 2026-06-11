@@ -508,6 +508,7 @@ export function createVoiceRailV1({
     tag = null,
     department = 'ChC',
     councilMember = null,
+    councilMemberKeys = null,
     text,
     private: isPrivate = false,
     simulateOnly = false,
@@ -577,6 +578,14 @@ export function createVoiceRailV1({
     const routing = resolveRouting(deptId, councilMember);
     const operator = await resolveOperatorProfile(userId);
 
+    const panelMemberKeys = (() => {
+      const raw = Array.isArray(councilMemberKeys) ? councilMemberKeys : [];
+      const keys = raw
+        .map((k) => normalizeProviderMemberKey(k, councilMembers, councilAliasMap))
+        .filter(Boolean);
+      return [...new Set(keys)];
+    })();
+
     if (simulateOnly) {
       await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
       return {
@@ -591,6 +600,85 @@ export function createVoiceRailV1({
         user_message: { role: 'user', content, intent },
         assistant_message: null,
         reply_source: { path: 'none', note: 'simulate_only — user message persisted; no reply generated.' },
+        staged_command: stagedCommand,
+        commitment_extract: commitmentExtract,
+      };
+    }
+
+    if (panelMemberKeys.length > 1) {
+      const panelReplies = await Promise.all(
+        panelMemberKeys.map(async (memberKey) => {
+          const panelRouting = resolveRouting(deptId, memberKey);
+          try {
+            const panelReply = await generateCouncilReply({
+              pool,
+              callCouncilMember,
+              lumin,
+              userId,
+              sessionId: session.id,
+              listMessagesFn: listMessages,
+              content,
+              mode,
+              department: deptId,
+              routing: panelRouting,
+              operator,
+              logger,
+            });
+            const replySource = {
+              path: 'lifeos/department',
+              persona: deptId,
+              department: deptId,
+              department_title: panelRouting.departmentTitle,
+              council_member: panelRouting.memberKey,
+              model_id: panelRouting.modelId,
+              provider: panelRouting.provider,
+              display_name: panelRouting.displayName,
+              note: `Panel reply — ${panelRouting.displayName}; council-backed.`,
+            };
+            const { rows: assistantRows } = await pool.query(
+              `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+               VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+               RETURNING id, role, content, intent, department, created_at`,
+              [session.id, panelReply, intent, deptId],
+            );
+            return {
+              ok: true,
+              assistant_message: assistantRows[0],
+              reply_source: replySource,
+            };
+          } catch (e) {
+            logger?.warn?.({ err: e.message, member: memberKey }, 'voice-rail panel reply failed');
+            const detail = e.detail || councilUnavailableError(panelRouting, e.message).detail;
+            return {
+              ok: false,
+              error: detail?.reason || e.message,
+              reply_source: {
+                path: 'lifeos/department',
+                display_name: panelRouting.displayName,
+                model_id: panelRouting.modelId,
+                provider: panelRouting.provider,
+                council_member: panelRouting.memberKey,
+              },
+            };
+          }
+        }),
+      );
+
+      await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+
+      return {
+        private: false,
+        persisted: true,
+        panel: true,
+        session_id: session.id,
+        mode: session.mode,
+        tag: session.tag,
+        department: deptId,
+        intent,
+        user_message: { role: 'user', content, intent },
+        panel_replies: panelReplies,
+        assistant_message: panelReplies.find((r) => r.ok)?.assistant_message || null,
+        reply_source: panelReplies.find((r) => r.ok)?.reply_source || null,
         staged_command: stagedCommand,
         commitment_extract: commitmentExtract,
       };

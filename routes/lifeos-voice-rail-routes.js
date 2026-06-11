@@ -191,6 +191,7 @@ export function createLifeOSVoiceRailRoutes({
         tag: req.body.tag || null,
         department: req.body.department || 'ChC',
         councilMember: req.body.council_member || null,
+        councilMemberKeys: Array.isArray(req.body.council_members) ? req.body.council_members : null,
         text: req.body.text,
         private: Boolean(req.body.private),
         simulateOnly: Boolean(req.body.simulate_only),

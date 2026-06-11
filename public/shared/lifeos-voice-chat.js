@@ -87,11 +87,14 @@
     const rate = Math.min(Math.max(rateRaw, 0.75), 1.15);
     const pitchRaw = typeof opts.pitch === 'number' ? opts.pitch : 1.02;
     const pitch = Math.min(Math.max(pitchRaw, 0.9), 1.1);
+    const volumeRaw = typeof opts.volume === 'number' ? opts.volume : 1;
+    const volume = Math.min(Math.max(volumeRaw, 0), 1);
 
     const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 2000));
     if (voice) utterance.voice = voice;
     utterance.rate = rate;
     utterance.pitch = pitch;
+    utterance.volume = volume;
     utterance.lang = voice?.lang || 'en-US';
     if (typeof opts.onEnd === 'function') {
       utterance.onend = function onUtteranceEnd() {

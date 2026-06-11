@@ -907,9 +907,10 @@ Adam directive: Voice Rail must feel like **one continuous conversation** with *
 | **2** | **Server STT** — `POST /voice-rail/stt` via OpenAI Whisper or **faster-whisper** sidecar (replaces brittle browser `SpeechRecognition`) | ⚠️ **Not built** |
 | **3** | **Natural TTS** — OpenAI `tts-1-hd` or **Piper** OSS (`POST /voice-rail/tts`); retire default browser Karen voices | ⚠️ **Not built** |
 | **4** | **Speaker lock-in** — enroll Adam embedding (e.g. **resemblyzer** / **Picovoice Eagle**); reject son/wife/overtalk; gate transcript before `/message` | ⚠️ **Not built** |
-| **5** | **Multi-model thread** — UI select 2+ council members; orchestrator route runs panel with shared `buildVoiceRailOperatorContext()` | ⚠️ **Not built** |
+| **5** | **Multi-model thread** — UI select 2+ council members; orchestrator route runs panel with shared `buildVoiceRailOperatorContext()` | ✅ **Alpha v2.4** — **Multi** toggle + `council_members[]` panel on `POST /message` |
 | **6** | **Semantic topic search** — embeddings over all `voice_rail_messages`; “everything we said about X” with ranked snippets + jump-to-date | ⚠️ **Not built** (v1 has ILIKE keyword search only) |
 | **7** | **Audio prosody / mood** — speech emotion model (e.g. SpeechBrain) or fused LLM on audio features + transcript | ⚠️ **Not built** (v1 uses keyword `emotional` intent on text only) |
+| **8** | **Founder packet → BPB → builder alpha loop** — Voice Rail (any dept/engine) drafts/edits `FOUNDER_PACKET.md` + `.json` under `builderos-reboot/MISSIONS/<slug>/`; routes packet to **BPB** (Blueprint) for SSOT translation; **`POST /api/v1/lifeos/builder/build`** executes; **SDO** visual spec when UI in scope; **SNT** adversarial pass; **Hist** receipt; full gate-change when load-bearing — same governed path as Cursor Conductor, not staged-only v1 commands | ⚠️ **Approved — not built** (v1 command mode still stages only; does not auto-build) |
 
 **OSS reference stack (research — not wired):** STT = faster-whisper / whisper.cpp · TTS = Piper / Coqui · speaker = resemblyzer / Eagle · emotion = speechbrain emotion-recognition.
 
@@ -1565,7 +1566,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-05-24 | **Voice Rail v2.3.4 + deploy fix (GAP-FILL):** `serviceInstanceDeploy` now passes `latestCommit:true` / optional `commitSha`; `POST .../deployments/:id/redeploy` promotes a known-good build. Root cause of Adam still on v2.3.1: GitHub Actions `RAILWAY_TOKEN` invalid + stale `build-from-latest` rolled back commit `548a1f11`. | Adam: same DeepSeek error, banner v2.3 | GAP-FILL | pending deploy |
+| 2026-05-24 | **Voice Rail v2.4 (GAP-FILL):** **Multi** engine toggle — parallel panel replies (`council_members[]`). Stop ■ = **TTS only** (mic stays on; fixes voice-change weirdness). **Volume** slider + speed. Founder packet→BPB→builder loop spec → Phase **8** backlog. | Adam: multi-AI, stop read not mic, volume, governed build from voice | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail model routing fix (GAP-FILL):** `resolveModelForRouting()` — global `VOICE_RAIL_MODEL` / `ANTHROPIC_MODEL` no longer bleed into DeepSeek/Groq/Gemini/OpenAI when operator picks those engines. DeepSeek default → `deepseek-v4-flash`. UI error hints provider-specific keys. Build **v2.3.1**. | Adam: DeepSeek 400 — claude model passed to DeepSeek API | GAP-FILL | deployed |
 | 2026-05-24 | **Voice Rail v2.3 — AI engine toggle buttons (GAP-FILL):**** Removed header `<select>`; provider row above dept toggles (Claude, GPT, Gemini, Groq, …) same button style as ChC/Hist. Per-dept choice still in `localStorage`. Build stamp **v2.3**. | Adam: models should be buttons like department positions | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail banner copy (GAP-FILL):**** truth banner now says v2.2 + clarifies June acceptance-test lines are historical DB rows, not failed deploy. | Adam: closed tab / same UI confusion | GAP-FILL | pending deploy |

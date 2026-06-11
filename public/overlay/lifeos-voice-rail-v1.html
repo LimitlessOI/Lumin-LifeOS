@@ -12,8 +12,8 @@
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-  <script src="/overlay/lifeos-bootstrap.js?v=20260524-4"></script>
-  <script src="/shared/lifeos-voice-chat.js?v=20260524-4"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260524-5"></script>
+  <script src="/shared/lifeos-voice-chat.js?v=20260524-5"></script>
   <title>LifeOS Voice Rail</title>
   <style>
     :root,
@@ -312,7 +312,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.3.4</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.4</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -333,7 +333,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.3.4</strong> — engine you pick is the engine that runs (no silent swap). Say <strong>send</strong> to post voice. ✕ clears the box.
+    Build <strong>v2.4</strong> — Multi = pick several engines at once. Stop ■ = silence read-aloud only (mic stays on). Speed + volume sliders.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -376,6 +376,7 @@
         <div class="composer-toolbar">
           <div class="toggle-groups">
             <div class="provider-toggles" role="group" aria-label="AI engine" id="provider-toggles"></div>
+            <button type="button" class="btn icon-btn compact" id="btn-multi-engine" aria-pressed="false" title="Multi-engine — select more than one AI" aria-label="Multi-engine mode">Multi</button>
             <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
             <div class="mode-toggles" role="group" aria-label="Session mode">
               <button type="button" class="btn icon-btn compact mode-toggle active" data-mode="conversation" aria-pressed="true" title="Conversation" aria-label="Conversation">
@@ -410,7 +411,7 @@
         <button type="button" class="btn icon-btn compact" id="btn-speak-toggle" aria-pressed="false" title="Read replies aloud (off)" aria-label="Read replies aloud">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
         </button>
-        <button type="button" class="btn icon-btn compact" id="btn-stop-voice" data-testid="pause-btn" title="Stop speech and microphone" aria-label="Stop speech and microphone">
+        <button type="button" class="btn icon-btn compact" id="btn-stop-voice" data-testid="pause-btn" title="Stop reading aloud — microphone stays on" aria-label="Stop reading aloud">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor" stroke="none"/></svg>
         </button>
         <input type="checkbox" id="speak-replies" class="sr-only" tabindex="-1" aria-hidden="true">
@@ -421,6 +422,7 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
         </button>
         <label class="speed-label" title="Read-aloud speed"><span class="sr-only">Speed</span><input type="range" id="speech-rate" min="0.75" max="1.1" step="0.05" value="0.94" aria-label="Read-aloud speed"></label>
+        <label class="speed-label" title="Read-aloud volume"><span class="sr-only">Volume</span><input type="range" id="speech-volume" min="0" max="1" step="0.05" value="1" aria-label="Read-aloud volume"></label>
       </div>
       <div id="voice-status" aria-live="polite"></div>
       <button type="button" id="btn-pause" hidden aria-hidden="true" tabindex="-1"></button>
@@ -755,11 +757,42 @@
       return `voice_rail_provider_${deptId || document.getElementById('department').value || 'ChC'}`;
     }
 
+    function providersMultiStorageKey(deptId) {
+      return `voice_rail_providers_multi_${deptId || document.getElementById('department').value || 'ChC'}`;
+    }
+
+    function multiEngineMode() {
+      return localStorage.getItem('voice_rail_multi_engine') === '1';
+    }
+
+    function setMultiEngineMode(on) {
+      localStorage.setItem('voice_rail_multi_engine', on ? '1' : '0');
+      const btn = document.getElementById('btn-multi-engine');
+      if (btn) {
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+      syncProviderForDept();
+    }
+
     function selectedProviderKey() {
+      const keys = selectedProviderKeys();
+      return keys[0] || providerCatalog[0]?.member_key || '';
+    }
+
+    function selectedProviderKeys() {
       const dept = document.getElementById('department').value || 'ChC';
+      if (multiEngineMode()) {
+        try {
+          const raw = localStorage.getItem(providersMultiStorageKey(dept));
+          const parsed = raw ? JSON.parse(raw) : [];
+          if (Array.isArray(parsed) && parsed.length) return parsed;
+        } catch (_) {}
+      }
       const saved = localStorage.getItem(providerStorageKey(dept));
-      if (saved) return saved;
-      return providerCatalog[0]?.member_key || '';
+      if (saved) return [saved];
+      const fallback = providerCatalog[0]?.member_key;
+      return fallback ? [fallback] : [];
     }
 
     const PROVIDER_SHORT = {
@@ -775,10 +808,10 @@
       return PROVIDER_SHORT[p.id] || String(p.label || p.id).split(/\s+/)[0].slice(0, 6);
     }
 
-    function applyProviderUI(memberKey) {
-      const key = memberKey || selectedProviderKey();
+    function applyProviderUI(activeKeys) {
+      const keys = Array.isArray(activeKeys) ? activeKeys : [activeKeys || selectedProviderKey()];
       document.querySelectorAll('.provider-toggle').forEach((btn) => {
-        const on = btn.dataset.memberKey === key;
+        const on = keys.includes(btn.dataset.memberKey);
         btn.classList.toggle('active', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
@@ -786,12 +819,25 @@
 
     function onProviderSelected(memberKey) {
       const dept = document.getElementById('department').value || 'ChC';
+      if (multiEngineMode()) {
+        const set = new Set(selectedProviderKeys());
+        if (set.has(memberKey)) {
+          if (set.size > 1) set.delete(memberKey);
+        } else {
+          set.add(memberKey);
+        }
+        const next = [...set];
+        localStorage.setItem(providersMultiStorageKey(dept), JSON.stringify(next));
+        localStorage.setItem(providerStorageKey(dept), next[0]);
+        applyProviderUI(next);
+        return;
+      }
       localStorage.setItem(providerStorageKey(dept), memberKey);
-      applyProviderUI(memberKey);
+      applyProviderUI([memberKey]);
     }
 
     function syncProviderForDept() {
-      applyProviderUI(selectedProviderKey());
+      applyProviderUI(selectedProviderKeys());
     }
 
     function renderProviderToggles() {
@@ -1034,6 +1080,22 @@
     });
 
     function stopAllVoice() {
+      stopSpeakingOnly();
+      if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
+      document.getElementById('interim').textContent = '';
+    }
+
+    let ttsPlaybackGen = 0;
+    let ttsUserStopped = false;
+
+    function getSpeechVolume() {
+      const v = parseFloat(document.getElementById('speech-volume')?.value || '1');
+      return Math.min(Math.max(Number.isFinite(v) ? v : 1, 0), 1);
+    }
+
+    function stopSpeakingOnly() {
+      ttsPlaybackGen += 1;
+      ttsUserStopped = true;
       if (activeServerAudio) {
         try {
           activeServerAudio.pause();
@@ -1043,20 +1105,29 @@
       }
       if (window.LifeOSVoiceChat?.stopSpeaking) window.LifeOSVoiceChat.stopSpeaking();
       else if (window.speechSynthesis) window.speechSynthesis.cancel();
-      if (voiceCtrl?.stopMic) voiceCtrl.stopMic();
-      document.getElementById('interim').textContent = '';
       document.getElementById('btn-stop-voice')?.classList.remove('active');
       const vs = document.getElementById('voice-status');
       if (vs?.dataset?.ttsBusy) {
-        vs.textContent = '';
         delete vs.dataset.ttsBusy;
+        if (voiceCtrl?.isPersistentListen?.()) {
+          vs.textContent = 'Listening… say “send” to post.';
+        } else if (serverTtsAvailable) {
+          vs.textContent = 'Voice ready (server TTS)';
+        } else {
+          vs.textContent = '';
+        }
       }
+      if (voiceCtrl?.resumeAfterTts) voiceCtrl.resumeAfterTts();
     }
 
     let activeServerAudio = null;
     let serverTtsAvailable = false;
 
     function finishSpeakPlayback() {
+      if (ttsUserStopped) {
+        ttsUserStopped = false;
+        return;
+      }
       voiceCtrl?.resumeAfterTts?.();
       document.getElementById('btn-stop-voice')?.classList.remove('active');
       const vs = document.getElementById('voice-status');
@@ -1088,6 +1159,7 @@
       return new Promise((resolve, reject) => {
         const url = URL.createObjectURL(blob);
         const audio = new Audio(url);
+        audio.volume = getSpeechVolume();
         activeServerAudio = audio;
         audio.onended = () => {
           URL.revokeObjectURL(url);
@@ -1105,6 +1177,8 @@
 
     async function maybeSpeak(text) {
       if (!document.getElementById('speak-replies').checked) return;
+      ttsUserStopped = false;
+      const gen = ++ttsPlaybackGen;
       voiceCtrl?.pauseForTts?.();
       document.getElementById('btn-stop-voice')?.classList.add('active');
       const statusEl = document.getElementById('voice-status');
@@ -1124,8 +1198,10 @@
         try {
           const tts = await fetchServerTts(text);
           if (tts.ok) {
+            if (gen !== ttsPlaybackGen) return;
             if (statusEl) statusEl.textContent = `Speaking (${tts.engine})…`;
             await playServerAudioBlob(tts.blob, tts.engine);
+            if (gen !== ttsPlaybackGen) return;
             finishSpeakPlayback();
             return;
           }
@@ -1135,11 +1211,16 @@
       }
 
       const rate = parseFloat(document.getElementById('speech-rate').value || '0.94');
+      const volume = getSpeechVolume();
       const voiceURI = document.getElementById('tts-voice')?.value || localStorage.getItem('voice_rail_tts_voice') || '';
       const opts = {
         rate,
+        volume,
         voiceURI: voiceURI || undefined,
-        onEnd: finishSpeakPlayback,
+        onEnd: () => {
+          if (gen !== ttsPlaybackGen) return;
+          finishSpeakPlayback();
+        },
       };
       if (statusEl) statusEl.textContent = 'Speaking (browser fallback)…';
       if (window.LifeOSVoiceChat?.speakText) {
@@ -1221,22 +1302,43 @@
         }
 
         appendBubble('user', content, null);
-        const councilMember = selectedProviderKey() || null;
-        const res = await api('POST', '/message', {
+        const engines = selectedProviderKeys().filter(Boolean);
+        const body = {
           user: USER,
           session_id: sessionId,
           mode,
           tag,
           department,
-          council_member: councilMember,
           text: content,
-        });
+        };
+        if (engines.length > 1) body.council_members = engines;
+        else body.council_member = engines[0] || null;
+
+        const res = await api('POST', '/message', body);
         if (res.status !== 200 || !res.json.ok) {
           appendBubble('assistant', authErrorMessage({ status: res.status, json: res.json }), 'error');
           return;
         }
         sessionId = res.json.session_id || sessionId;
         localStorage.setItem('voice_rail_session_id', sessionId);
+
+        if (res.json.panel && Array.isArray(res.json.panel_replies)) {
+          let firstOk = null;
+          for (const pr of res.json.panel_replies) {
+            if (pr.ok !== false && pr.assistant_message) {
+              const replyDept = pr.reply_source?.persona || department;
+              appendBubble('assistant', pr.assistant_message.content, res.json.intent, pr.reply_source, replyDept);
+              if (!firstOk) firstOk = pr.assistant_message.content;
+            } else {
+              const msg = `Council API failed (not a bot). ${pr.error || 'council_unavailable'} · ${pr.reply_source?.display_name || '?'} · ${pr.reply_source?.model_id || '?'}`;
+              appendBubble('assistant', msg, 'error');
+            }
+          }
+          lastAssistant = firstOk || lastAssistant;
+          await refreshStaged();
+          return;
+        }
+
         const reply = res.json.assistant_message?.content || '';
         const replyDept = res.json.department || res.json.reply_source?.persona || department;
         appendBubble('assistant', reply, res.json.intent, res.json.reply_source, replyDept);
@@ -1288,9 +1390,22 @@
       document.getElementById('input').focus();
     });
 
-    document.getElementById('btn-stop-voice')?.addEventListener('click', stopAllVoice);
-    document.getElementById('btn-pause')?.addEventListener('click', stopAllVoice);
+    document.getElementById('btn-stop-voice')?.addEventListener('click', stopSpeakingOnly);
+    document.getElementById('btn-pause')?.addEventListener('click', stopSpeakingOnly);
     document.getElementById('btn-cancel')?.addEventListener('click', stopAllVoice);
+
+    document.getElementById('btn-multi-engine')?.addEventListener('click', () => {
+      setMultiEngineMode(!multiEngineMode());
+    });
+    setMultiEngineMode(localStorage.getItem('voice_rail_multi_engine') === '1');
+
+    const volEl = document.getElementById('speech-volume');
+    const savedVol = localStorage.getItem('voice_rail_tts_volume');
+    if (volEl && savedVol) volEl.value = savedVol;
+    volEl?.addEventListener('input', (e) => {
+      localStorage.setItem('voice_rail_tts_volume', e.target.value);
+      if (activeServerAudio) activeServerAudio.volume = getSpeechVolume();
+    });
 
     document.getElementById('btn-replay').addEventListener('click', () => {
       if (lastAssistant) maybeSpeak(lastAssistant);
