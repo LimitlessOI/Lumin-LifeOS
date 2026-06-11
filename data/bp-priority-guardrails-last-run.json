@@ -1,10 +1,10 @@
 {
   "schema": "bp_priority_guardrails_v1",
-  "checked_at": "2026-06-11T19:44:40.665Z",
+  "checked_at": "2026-06-11T19:46:50.417Z",
   "verdict": "PASS",
   "owner_department": "Historian",
   "registry": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
-  "pass_count": 23,
+  "pass_count": 25,
   "fail_count": 0,
   "passes": [
     {
@@ -25,6 +25,14 @@
     },
     {
       "id": "BP_RECEIPT_ALIGNMENT",
+      "detail": ""
+    },
+    {
+      "id": "BP_ACCEPTANCE_SYNC_WIRED",
+      "detail": ""
+    },
+    {
+      "id": "BP_PASS_RECEIPT_SYNC_PROOF",
       "detail": ""
     },
     {

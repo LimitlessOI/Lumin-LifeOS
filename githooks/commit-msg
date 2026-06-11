@@ -1,0 +1,75 @@
+#!/bin/sh
+# §2.11 BUILDER-FIRST + §2.15 INTENT DRIFT + BP receipt co-commit
+# Tracked: githooks/commit-msg → install via npm run hooks:install
+# @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+
+COMMIT_MSG_FILE="$1"
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# ── 1. §2.11 Builder-first gate ───────────────────────────────────────────────
+STAGED_PRODUCT=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null \
+  | grep -E '^(routes/|services/|public/overlay/|db/migrations/)' \
+  | grep -v 'lifeos-council-builder-routes\.js' || true)
+
+if [ -n "$STAGED_PRODUCT" ]; then
+  case "$COMMIT_MSG" in
+    *"[system-build]"*|*"GAP-FILL:"*)
+      ;;
+    *)
+      echo ""
+      echo "❌ §2.11 VIOLATION — COMMIT BLOCKED"
+      echo ""
+      echo "   Product files staged but commit message lacks [system-build] or GAP-FILL:"
+      echo "$STAGED_PRODUCT" | sed 's/^/     /'
+      echo ""
+      exit 1
+      ;;
+  esac
+fi
+
+# ── 2. §2.15 Intent Drift gate ────────────────────────────────────────────────
+case "$COMMIT_MSG" in
+  *"[system-build]"*|*"GAP-FILL:"*)
+    STAGED_AMENDMENTS=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null \
+      | grep -E '^docs/projects/AMENDMENT_.*\.md$' || true)
+    if [ -n "$STAGED_AMENDMENTS" ]; then
+      case "$COMMIT_MSG" in
+        *"INTENT DRIFT:"*) ;;
+        *)
+          echo ""
+          echo "❌ §2.15 / §2.11b DRIFT GATE — COMMIT BLOCKED"
+          echo "   Add INTENT DRIFT: none (or asked X, delivered Y) to commit message."
+          echo ""
+          exit 1
+          ;;
+      esac
+    fi
+    ;;
+esac
+
+# ── 3. BP law — staged PASS product receipts (backup to pre-commit --staged) ───
+STAGED_PASS_RECEIPT=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null \
+  | grep '^products/receipts/' | grep '\.json$' || true)
+
+if [ -n "$STAGED_PASS_RECEIPT" ]; then
+  for f in $STAGED_PASS_RECEIPT; do
+    if git show ":$f" 2>/dev/null | grep -q '"verdict"[[:space:]]*:[[:space:]]*"PASS"'; then
+      case "$COMMIT_MSG" in
+        *"BP law"*|*"bp_sync"*|*"BP_PRIORITY"*)
+          ;;
+        *)
+          echo ""
+          echo "❌ BP LAW — COMMIT BLOCKED"
+          echo ""
+          echo "   Staged PASS receipt: $f"
+          echo "   Commit message must acknowledge BP sync (e.g. mention BP_PRIORITY / bp_sync)."
+          echo "   Pre-commit also requires co-staged BP_PRIORITY + blueprint + founder JSON."
+          echo ""
+          exit 1
+          ;;
+      esac
+    fi
+  done
+fi
+
+exit 0

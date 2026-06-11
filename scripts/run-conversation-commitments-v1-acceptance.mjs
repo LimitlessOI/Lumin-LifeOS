@@ -7,9 +7,8 @@
 import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { syncMissionFromTechnicalReceipt } from '../services/bp-priority-sync.js';
+import { finishBpAcceptance } from './lib/bp-acceptance-finish.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MISSION = 'PRODUCT-CONVERSATION-COMMITMENTS-C2-0001';
@@ -17,6 +16,8 @@ const BLUEPRINT = path.join(ROOT, 'builderos-reboot/MISSIONS', MISSION, 'BLUEPRI
 const UI = path.join(ROOT, 'public/overlay/lifeos-commitments-v1.html');
 const RECEIPT_DIR = path.join(ROOT, 'products/receipts');
 const RECEIPT = path.join(RECEIPT_DIR, 'CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json');
+const RECEIPT_REL = 'products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json';
+const VERDICT = path.join(ROOT, 'builderos-reboot/MISSIONS', MISSION, 'OBJECTIVE_VERDICT.json');
 
 const base = (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
 const key = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || '';
@@ -53,59 +54,27 @@ async function api(method, urlPath, body) {
 }
 
 function finish() {
-  let pass = report.tests_failed.length === 0 && report.tests_passed.length > 0;
-  let gitSha = '';
-  let railwaySha = report.railway_sha || '';
-  try { gitSha = execSync('git rev-parse HEAD', { cwd: ROOT }).toString().trim(); } catch { /* */ }
-  report.completed_at = new Date().toISOString();
-  report.git_sha = gitSha;
-  report.railway_sha = railwaySha;
-  report.production_base = base;
-  fs.mkdirSync(RECEIPT_DIR, { recursive: true });
-  const verdictPath = path.join(ROOT, 'builderos-reboot/MISSIONS', MISSION, 'OBJECTIVE_VERDICT.json');
-  const writeArtifacts = () => {
-    report.verdict = pass ? 'PASS' : 'FAIL';
-    fs.writeFileSync(RECEIPT, `${JSON.stringify(report, null, 2)}\n`);
-    fs.writeFileSync(verdictPath, `${JSON.stringify({
-      schema: 'objective_verdict_v1',
-      generated_at: report.completed_at,
-      objective_id: MISSION,
-      objective_name: 'LifeOS Objective 1 — Conversation Commitments v1',
-      verdict: pass ? 'OBJECTIVE_COMPLETE' : 'NOT_COMPLETE',
-      acceptance_command: 'npm run lifeos:conversation-commitments:v1-acceptance',
-      receipt: 'products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json',
-      production_base: base,
+  const { pass } = finishBpAcceptance({
+    root: ROOT,
+    missionId: MISSION,
+    report,
+    receiptAbsPath: RECEIPT,
+    receiptRelPath: RECEIPT_REL,
+    verdictAbsPath: VERDICT,
+    objectiveName: 'LifeOS Objective 1 — Conversation Commitments v1',
+    objectiveVerdictOnPass: 'OBJECTIVE_COMPLETE',
+    base,
+    buildRecord: {
       canonical_url: '/overlay/lifeos-commitments-v1.html',
-      git_sha: gitSha,
-      tests_passed: report.tests_passed,
-      tests_failed: report.tests_failed,
-    }, null, 2)}\n`);
-  };
-  writeArtifacts();
-  if (pass) {
-    try {
-      const sync = syncMissionFromTechnicalReceipt({
-        missionId: MISSION,
-        receipt: report,
-        root: ROOT,
-        buildRecord: {
-          git_sha: gitSha,
-          production_base: base,
-          canonical_url: '/overlay/lifeos-commitments-v1.html',
-          build_method: 'system-build',
-          note: 'Founder 48h voluntary reuse bar is human-only; do not re-run unless regression',
-        },
-      });
-      report.bp_sync = sync;
-      step('bp_sync', sync.updated.includes('builderos-reboot/BP_PRIORITY.json'), sync);
-      pass = report.tests_failed.length === 0 && report.tests_passed.length > 0;
-      writeArtifacts();
-    } catch (err) {
-      step('bp_sync', false, err.message);
-      pass = false;
-      writeArtifacts();
-    }
-  }
+      build_method: 'system-build',
+      note: 'Founder 48h voluntary reuse bar is human-only; do not re-run unless regression',
+    },
+    verdictExtra: {
+      acceptance_command: 'npm run lifeos:conversation-commitments:v1-acceptance',
+      canonical_url: '/overlay/lifeos-commitments-v1.html',
+    },
+    passPredicate: (r) => r.tests_failed.length === 0 && r.tests_passed.length > 0,
+  });
   console.log(JSON.stringify(report, null, 2));
   process.exit(pass ? 0 : 1);
 }

@@ -53,8 +53,15 @@ Every Hist-owned file has `_authority.domain: Hist`, `owner_department: Historia
 npm run lifeos:bp-priority:verify
 ```
 
-Enforced: pre-commit step 10 + `builder:preflight`. Checks Hist banners, BP_PRIORITY shape, MISSION_QUEUE ban in spine, **BP item ↔ receipt ↔ OBJECTIVE_VERDICT alignment** for TECHNICAL_PASS rows.
+Enforced: pre-commit step 10 (HARD, **no bypass**) + `builder:preflight`. Checks Hist banners, BP_PRIORITY shape, MISSION_QUEUE ban in spine, **BP item ↔ receipt ↔ OBJECTIVE_VERDICT alignment**, **acceptance scripts wired to `finishBpAcceptance`**, **PASS receipts must contain `bp_sync` proof**, **staged PASS receipts must co-commit BP artifacts**.
 
-**Law:** Acceptance scripts **must** call `syncMissionFromTechnicalReceipt()` on technical PASS so `BP_PRIORITY.json`, mission `BLUEPRINT.json`, and `FOUNDER_PACKET.json` stay aligned with receipts.
+**Law (no oops path):**
+
+| Layer | Enforcement |
+|-------|-------------|
+| Acceptance | `scripts/lib/bp-acceptance-finish.mjs` — only choke point; sync fails → exit 1 |
+| Pre-commit | `verify-bp-priority-guardrails.mjs --staged` — always runs; no `BP_PRIORITY_GUARDRAILS=off` |
+| Commit-msg | PASS receipt commits must acknowledge BP sync in message |
+| Runtime verify | `npm run lifeos:bp-priority:verify` — 26+ checks |
 
 See: `HIST_DOMAIN_REGISTRY.json`, `docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md` §2E

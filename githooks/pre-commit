@@ -1,0 +1,157 @@
+#!/bin/sh
+# LifeOS pre-commit hook — v2.1
+# TRACKED: githooks/pre-commit → install via npm run hooks:install
+# @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md
+
+set -e
+ROOT="$(git rev-parse --show-toplevel)"
+echo "🔍 Pre-commit checks..."
+
+# ── 1. JS syntax check ────────────────────────────────────────────────────────
+STAGED_JS=$(git diff --cached --name-only --diff-filter=ACM | grep '\.js$' || true)
+if [ -n "$STAGED_JS" ]; then
+  for f in $STAGED_JS; do
+    node --check "$ROOT/$f" 2>&1 || { echo "❌ Syntax error in $f"; exit 1; }
+  done
+  echo "✅ Syntax check passed"
+fi
+
+# ── 2. SSOT amendment tag coupling (HARD) ─────────────────────────────────────
+if node "$ROOT/scripts/ssot-check.js" --staged-only 2>/dev/null; then
+  echo "✅ SSOT amendments current"
+else
+  echo ""
+  echo "❌ SSOT VIOLATION: Staged .js file(s) lack updated amendment."
+  echo "   Run: node scripts/ssot-check.js"
+  echo ""
+  exit 1
+fi
+
+# ── 3. SSOT read-before-write gate (HARD for interactive sessions) ─────────────
+# When editing an SSOT amendment, the agent must confirm they read the FULL file
+# in this session — not from memory. Token limits = HALT. Partial = blind patch.
+# Skip only in CI (RAILWAY_ENVIRONMENT or CI env vars) or when explicitly set.
+STAGED_AMENDMENTS=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^docs/projects/AMENDMENT.*\.md$' || true)
+if [ -n "$STAGED_AMENDMENTS" ] && [ -z "$CI" ] && [ -z "$RAILWAY_ENVIRONMENT" ]; then
+  if [ -z "$SSOT_READ_CONFIRMED" ]; then
+    echo ""
+    echo "❌ SSOT READ CONFIRMATION REQUIRED"
+    echo ""
+    echo "   Editing SSOT amendment(s):"
+    echo "$STAGED_AMENDMENTS" | sed 's/^/     /'
+    echo ""
+    echo "   RULE (CLAUDE.md §SSOT-READ-BEFORE-WRITE): Read the ENTIRE file"
+    echo "   sequentially before editing. Token limits hit = HALT — do not proceed."
+    echo "   Partial or memory reads are blind patches and §2.6 violations."
+    echo ""
+    echo "   After confirming full sequential read in this session:"
+    echo "   export SSOT_READ_CONFIRMED=1"
+    echo "   Then retry the commit."
+    echo ""
+    exit 1
+  fi
+fi
+
+# ── 4. SSOT coupling check (warn-only) ─────────────────────────────────────────
+node "$ROOT/scripts/check-coupling.mjs" --warn-only 2>/dev/null || true
+
+# ── 5. Circular dependency check ───────────────────────────────────────────────
+STAGED_ROUTES=$(git diff --cached --name-only --diff-filter=ACM | grep '^routes/' | grep '\.js$' || true)
+if [ -n "$STAGED_ROUTES" ] && command -v npx >/dev/null 2>&1; then
+  npx madge --circular "$ROOT/server.js" --extensions js >/dev/null 2>&1 \
+    && echo "✅ No circular deps" \
+    || echo "⚠️  Circular dependency detected — check madge before pushing"
+fi
+
+# ── 6. §2.11 builder-first early warning ────────────────────────────────────────
+STAGED_PRODUCT=$(git diff --cached --name-only --diff-filter=ACM \
+  | grep -E '^(routes/|services/|public/overlay/|db/migrations/)' \
+  | grep -v 'lifeos-council-builder-routes\.js' || true)
+if [ -n "$STAGED_PRODUCT" ]; then
+  echo ""
+  echo "⚠️  §2.11 BUILDER-FIRST: Product files staged:"
+  echo "$STAGED_PRODUCT" | sed 's/^/   /'
+  echo ""
+  echo "   Commit message MUST contain:"
+  echo "   [system-build]  — builder returned committed:true; add receipt row to amendment"
+  echo "   GAP-FILL: <what tried> + <exact error> + <why no other path>  (min 40 chars)"
+  echo "   Vague GAP-FILL claims are §2.6 violations. Hard-blocked at commit-msg stage."
+  echo ""
+fi
+
+# ── 7. Builder preflight ─────────────────────────────────────────────────────────
+# Auto-strict when COMMAND_CENTER_KEY is in shell — key is present = builder reachable
+# No excuse for warn-only mode when authentication is available.
+STAGED_PRODUCT_CHECK=$(git diff --cached --name-only --diff-filter=ACM \
+  | grep -E '^(routes/|services/|public/overlay/|db/migrations/)' \
+  | grep -v 'lifeos-council-builder-routes\.js' || true)
+PREF_MODE="${BUILDER_PREFLIGHT:-warn}"
+if [ -z "$BUILDER_PREFLIGHT" ] && [ -n "$COMMAND_CENTER_KEY" ]; then
+  PREF_MODE="strict"
+fi
+if [ -n "$STAGED_PRODUCT_CHECK" ] && [ "$PREF_MODE" != "off" ]; then
+  echo ""
+  if node "$ROOT/scripts/council-builder-preflight.mjs" 2>&1; then
+    echo "✅ builder:preflight passed (BUILDER_FIRST)"
+  else
+    echo ""
+    if [ "$PREF_MODE" = "strict" ]; then
+      echo "❌ builder:preflight FAILED (auto-strict: COMMAND_CENTER_KEY is set)."
+      echo "   Fix: verify PUBLIC_BASE_URL + server running, or unstage product files."
+      echo "   Emergency bypass: export BUILDER_PREFLIGHT=off (document reason in GAP-FILL)."
+      exit 1
+    else
+      echo "⚠️  builder:preflight FAILED — do NOT claim [system-build] for hand-written product."
+      echo "   Fix: npm run builder:preflight | Strict mode: export BUILDER_PREFLIGHT=strict"
+    fi
+  fi
+  echo ""
+fi
+
+# ── 8. Token budget law for compact rules ────────────────────────────────────────
+STAGED_COMPACT=$(git diff --cached --name-only --diff-filter=ACM | grep 'AGENT_RULES\.compact\.md' || true)
+if [ -n "$STAGED_COMPACT" ]; then
+  BASELINE_FILE="$ROOT/docs/.compact-rules-baseline"
+  if [ -f "$BASELINE_FILE" ]; then
+    BASELINE=$(cat "$BASELINE_FILE")
+    NEW_SIZE=$(wc -c < "$ROOT/docs/AGENT_RULES.compact.md")
+    if [ "$NEW_SIZE" -gt "$BASELINE" ]; then
+      echo ""
+      echo "❌ TOKEN BUDGET LAW: compact rules grew (${NEW_SIZE} bytes > baseline ${BASELINE})."
+      echo "   Run: npm run gen:rules — compress output before committing."
+      echo ""
+      exit 1
+    fi
+  fi
+fi
+
+# ── 9. Auto-regenerate compact rules when NSSOT source changes ────────────────────
+STAGED_SSOT=$(git diff --cached --name-only --diff-filter=ACM \
+  | grep -E '^docs/(SSOT_NORTH_STAR|SSOT_COMPANION|QUICK_LAUNCH)\.md$' || true)
+if [ -n "$STAGED_SSOT" ]; then
+  echo "🔄 SSOT source changed — regenerating docs/AGENT_RULES.compact.md..."
+  node "$ROOT/scripts/generate-agent-rules.mjs" 2>&1 && {
+    git add "$ROOT/docs/AGENT_RULES.compact.md"
+    echo "✅ docs/AGENT_RULES.compact.md regenerated and staged"
+  } || {
+    echo "⚠️  generate-agent-rules.mjs failed — AGENT_RULES.compact.md may be stale"
+  }
+fi
+
+# ── 10. BP priority guardrails (HARD — no bypass) ─────────────────────────────
+# Mechanical enforcement: LEGACY banners; MISSION_QUEUE ban; receipt↔BP alignment;
+# acceptance scripts wired to BP sync; staged PASS receipts co-commit BP artifacts.
+# Adam 2026-06-11 — BP is law; no "oops" path (BP_PRIORITY_GUARDRAILS=off removed).
+if node "$ROOT/scripts/verify-bp-priority-guardrails.mjs" --staged 2>&1; then
+  echo "✅ BP priority guardrails (lifeos:bp-priority:verify + staged co-commit)"
+else
+  echo ""
+  echo "❌ BP PRIORITY GUARDRAILS FAILED — commit blocked."
+  echo "   Canonical queue: builderos-reboot/BP_PRIORITY.json"
+  echo "   Run: npm run lifeos:bp-priority:verify"
+  echo "   PASS receipts must include bp_sync + co-commit BP/blueprint/founder/objective."
+  echo ""
+  exit 1
+fi
+
+echo "✅ Pre-commit checks complete"

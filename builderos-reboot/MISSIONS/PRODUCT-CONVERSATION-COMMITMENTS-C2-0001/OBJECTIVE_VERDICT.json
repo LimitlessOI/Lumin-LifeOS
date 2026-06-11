@@ -1,9 +1,9 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-06-11T15:32:16.383Z",
+  "generated_at": "2026-06-11T18:52:22.171Z",
   "objective_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
   "objective_name": "LifeOS Objective 1 — Conversation Commitments v1",
-  "verdict": "NOT_COMPLETE",
+  "verdict": "OBJECTIVE_COMPLETE",
   "acceptance_command": "npm run lifeos:conversation-commitments:v1-acceptance",
   "receipt": "products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json",
   "tests_passed": [
@@ -11,10 +11,11 @@
     "ui_exists",
     "ui_has_paste_extract",
     "snt_empty_text_400",
-    "list_contains_saved"
-  ],
-  "tests_failed": [
     "extract_with_evidence",
-    "save_from_conversation"
-  ]
+    "save_from_conversation",
+    "list_contains_saved",
+    "mark_done",
+    "mark_broken"
+  ],
+  "tests_failed": []
 }

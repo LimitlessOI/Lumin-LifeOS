@@ -13,7 +13,12 @@ import {
   loadBpPriority,
   findLegacyQueueProductViolations,
 } from '../services/bp-priority-queue.js';
-import { checkBpReceiptAlignment } from '../services/bp-priority-sync.js';
+import {
+  checkBpReceiptAlignment,
+  checkAcceptanceScriptsRequireBpSync,
+  checkPassReceiptsHaveBpSyncProof,
+  checkStagedProductReceiptCommit,
+} from '../services/bp-priority-sync.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REGISTRY_CANDIDATES = [
@@ -241,6 +246,7 @@ function writeReceipt(payload) {
 }
 
 function main() {
+  const stagedMode = process.argv.includes('--staged');
   const loaded = loadRegistry();
   const registry = loaded?.data;
   checkHistLawPresent();
@@ -253,6 +259,29 @@ function main() {
   }
   if (!failures.some((x) => x.id.startsWith('BP_RECEIPT') || x.id.startsWith('BP_OBJECTIVE'))) {
     pass('BP_RECEIPT_ALIGNMENT');
+  }
+
+  for (const f of checkAcceptanceScriptsRequireBpSync({ root: ROOT })) {
+    fail(f.id, f.detail);
+  }
+  if (!failures.some((x) => x.id.startsWith('BP_ACCEPTANCE'))) {
+    pass('BP_ACCEPTANCE_SYNC_WIRED');
+  }
+
+  for (const f of checkPassReceiptsHaveBpSyncProof({ root: ROOT })) {
+    fail(f.id, f.detail);
+  }
+  if (!failures.some((x) => x.id.startsWith('BP_RECEIPT_NO_SYNC') || x.id.startsWith('BP_FINGERPRINT'))) {
+    pass('BP_PASS_RECEIPT_SYNC_PROOF');
+  }
+
+  if (stagedMode) {
+    for (const f of checkStagedProductReceiptCommit({ root: ROOT })) {
+      fail(f.id, f.detail);
+    }
+    if (!failures.some((x) => x.id.startsWith('BP_STAGED'))) {
+      pass('BP_STAGED_CO_COMMIT');
+    }
   }
 
   const jsonFiles = registry?.hist_owned_json_files || registry?.legacy_json_files || [];

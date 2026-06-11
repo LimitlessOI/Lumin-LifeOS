@@ -170,3 +170,4 @@ HIST_CASE:
 | 2026-06-11 | **§2E Autopilot plumbing registry** — Adam: BPs in `BP_PRIORITY.json` ARE the queue; `MISSION_QUEUE.json` and overnight/autopilot files marked LEGACY at file top + `.cursor/rules/` |
 | 2026-06-11 | **Hist domain lock** — legacy artifacts `_authority.domain: Hist`, `owner_department: Historian`, `status: HIST_OWNED`; `HIST_DOMAIN_REGISTRY.json`; verifier enforces Hist ownership (22 checks PASS) |
 | 2026-06-11 | **`services/bp-priority-sync.js`** — machine law: acceptance PASS syncs `BP_PRIORITY.json`, mission `BLUEPRINT.json`, `FOUNDER_PACKET.json`; `verify-bp-priority-guardrails.mjs` checks receipt alignment (23 checks) |
+| 2026-06-11 | **BP law hardwired (no oops)** — `scripts/lib/bp-acceptance-finish.mjs` mandatory choke point; pre-commit `--staged` co-commit gate; `BP_PRIORITY_GUARDRAILS=off` removed; PASS receipts require `bp_sync`; fingerprint + acceptance-script wiring checks; tracked `githooks/commit-msg` |
