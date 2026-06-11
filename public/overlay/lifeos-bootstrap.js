@@ -71,11 +71,34 @@
   function normalizeKey(raw)  { return String(raw || '').trim(); }
   function normalizeUser(raw, fallback = 'adam') { return String(raw || '').trim() || fallback; }
 
+  /** Doc placeholders and common copy mistakes — never treat as a real key. */
+  function isPlaceholderKey(raw) {
+    const k = normalizeKey(raw);
+    if (!k || k.length < 8) return true;
+    if (/^YOUR_/i.test(k)) return true;
+    if (/^PASTE_/i.test(k)) return true;
+    if (k === 'COMMAND_CENTER_KEY' || k === 'COMMAND_KEY' || k === 'LIFEOS_KEY') return true;
+    return false;
+  }
+
+  function normalizeCommandKey(raw) {
+    const k = normalizeKey(raw);
+    return isPlaceholderKey(k) ? '' : k;
+  }
+
+  function clearStoredKeys() {
+    localStorage.removeItem('commandKey');
+    localStorage.removeItem('command_key');
+    localStorage.removeItem('lifeos_key');
+  }
+
   function persistKey(key) {
-    if (!key) return;
-    localStorage.setItem('commandKey',   key);
-    localStorage.setItem('command_key',  key);
-    localStorage.setItem('lifeos_key',   key);
+    const k = normalizeCommandKey(key);
+    if (!k) return '';
+    localStorage.setItem('commandKey',   k);
+    localStorage.setItem('command_key',  k);
+    localStorage.setItem('lifeos_key',   k);
+    return k;
   }
 
   function persistUser(user) {
@@ -114,7 +137,7 @@
     const params = new URLSearchParams(location.search);
 
     // Legacy command key (still used by internal admin routes)
-    let key = normalizeKey(
+    let key = normalizeCommandKey(
       params.get('commandKey')
       || params.get('command_key')
       || params.get('key')
@@ -122,7 +145,8 @@
       || localStorage.getItem('command_key')
       || localStorage.getItem('lifeos_key')
     );
-    if (!key && promptForKey) key = normalizeKey(window.prompt(keyPrompt) || '');
+    if (isPlaceholderKey(localStorage.getItem('commandKey'))) clearStoredKeys();
+    if (!key && promptForKey) key = normalizeCommandKey(window.prompt(keyPrompt) || '');
     if (key) persistKey(key);
 
     // User handle — from JWT payload first, then URL param, then localStorage
@@ -216,8 +240,7 @@
       requireAuth,
       logout,
       setKey(nextKey) {
-        key = normalizeKey(nextKey);
-        if (key) persistKey(key);
+        key = persistKey(nextKey);
         return key;
       },
       setUser(nextUser) {
@@ -229,7 +252,7 @@
     };
   }
 
-  window.LifeOSBootstrap = { getLifeOSContext, storeTokens, clearTokens, attemptRefresh };
+  window.LifeOSBootstrap = { getLifeOSContext, storeTokens, clearTokens, attemptRefresh, isPlaceholderKey, normalizeCommandKey, clearStoredKeys };
 
   // ── Shell keyboard bridge (iframe → parent lifeos-app) ───────────────────────
   // Cmd/Ctrl+L does not bubble from a child document to the parent. When an overlay

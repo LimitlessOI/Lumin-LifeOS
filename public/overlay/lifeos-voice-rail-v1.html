@@ -71,6 +71,16 @@
     [data-theme="dark"] #auth-banner { background: #3f1515; color: #fecaca; border-color: #7f1d1d; }
     #auth-banner.visible { display: block; }
     #auth-banner code { font-size: 12px; }
+    #key-modal { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.45); align-items: center; justify-content: center; padding: 16px; }
+    #key-modal.open { display: flex; }
+    #key-modal .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; max-width: 420px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,.2); }
+    #key-modal h2 { margin: 0 0 8px; font-size: 1.1rem; }
+    #key-modal p { margin: 0 0 12px; font-size: 13px; color: var(--muted); line-height: 1.45; }
+    #key-modal input { width: 100%; padding: 10px; font-size: 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); }
+    #key-modal .row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    #key-status { font-size: 12px; margin-top: 10px; min-height: 1.2em; }
+    #key-status.ok { color: var(--ok); }
+    #key-status.bad { color: #dc2626; }
     #staged-list { margin-top: 6px; }
     .staged { background: var(--input-bg); border: 1px dashed var(--border); border-radius: 6px; padding: 6px 8px; margin-top: 4px; font-size: 11px; }
     #voice-status { font-size: 11px; color: var(--muted); }
@@ -100,9 +110,21 @@
   </header>
 
   <div id="auth-banner" role="alert">
-    <strong>Not signed in.</strong> Paste your Railway <code>COMMAND_CENTER_KEY</code> into the URL:
-    <code>?key=…</code> (not the literal text YOUR_KEY). Or
-    <button type="button" class="btn" id="btn-set-key" style="margin-left:6px;padding:4px 8px;font-size:12px">Enter key</button>
+    <strong>Connect your key.</strong> Railway → Variables → <code>COMMAND_CENTER_KEY</code> → copy the <strong>value</strong> (click reveal), not the variable name.
+    <button type="button" class="btn" id="btn-set-key" style="margin-left:6px;padding:4px 8px;font-size:12px">Connect key</button>
+  </div>
+
+  <div id="key-modal" role="dialog" aria-labelledby="key-modal-title">
+    <div class="panel">
+      <h2 id="key-modal-title">Connect Voice Rail</h2>
+      <p>In Railway, open your service → <strong>Variables</strong> → <strong>COMMAND_CENTER_KEY</strong> → click the eye icon → copy the <strong>secret value</strong> (usually ~20+ characters). Do not copy the text <code>YOUR_KEY</code> from docs.</p>
+      <input type="password" id="key-input" autocomplete="off" placeholder="Paste COMMAND_CENTER_KEY value here" />
+      <div class="row">
+        <button type="button" class="btn btn-primary" id="key-save">Verify &amp; connect</button>
+        <button type="button" class="btn" id="key-cancel">Cancel</button>
+      </div>
+      <div id="key-status"></div>
+    </div>
   </div>
 
   <div id="transcript" aria-live="polite"></div>
@@ -129,31 +151,90 @@
 
   <script>
     const ctx = window.getLifeOSContext?.({ promptForKey: false, defaultUser: 'adam' }) || {};
+    let activeKey = ctx.KEY || '';
     const USER = ctx.USER || 'adam';
+
+    // Strip placeholder keys from URL so bookmarks don't poison auth
+    (function scrubUrlPlaceholder() {
+      const params = new URLSearchParams(location.search);
+      const urlKey = params.get('key') || params.get('commandKey') || '';
+      if (window.LifeOSBootstrap?.isPlaceholderKey?.(urlKey)) {
+        params.delete('key');
+        params.delete('commandKey');
+        params.delete('command_key');
+        const q = params.toString();
+        history.replaceState({}, '', location.pathname + (q ? `?${q}` : ''));
+        window.LifeOSBootstrap?.clearStoredKeys?.();
+        activeKey = '';
+      }
+    })();
 
     function showAuthBanner(show) {
       document.getElementById('auth-banner')?.classList.toggle('visible', show);
     }
 
+    function openKeyModal() {
+      document.getElementById('key-modal')?.classList.add('open');
+      document.getElementById('key-input')?.focus();
+    }
+
+    function closeKeyModal() {
+      document.getElementById('key-modal')?.classList.remove('open');
+    }
+
+    async function verifyAndSaveKey(raw) {
+      const status = document.getElementById('key-status');
+      const entered = String(raw || '').trim();
+      if (window.LifeOSBootstrap?.isPlaceholderKey?.(entered)) {
+        status.className = 'bad';
+        status.textContent = 'That looks like a placeholder or variable name — paste the secret value from Railway.';
+        return false;
+      }
+      status.className = '';
+      status.textContent = 'Checking…';
+      const r = await fetch('/api/v1/lifeos/voice-rail/health', {
+        headers: { 'content-type': 'application/json', 'x-command-key': entered },
+      });
+      if (r.status !== 200) {
+        status.className = 'bad';
+        status.textContent = r.status === 401
+          ? 'Key rejected (401). Copy the VALUE of COMMAND_CENTER_KEY in Railway — not LIFEOS_KEY, not the variable name.'
+          : `Server returned ${r.status}. Try again.`;
+        return false;
+      }
+      if (ctx.setKey) ctx.setKey(entered);
+      activeKey = entered;
+      status.className = 'ok';
+      status.textContent = 'Connected. Key saved in this browser.';
+      showAuthBanner(false);
+      closeKeyModal();
+      history.replaceState({}, '', location.pathname + location.search.replace(/([?&])(key|commandKey|command_key)=[^&]*/g, '').replace(/\?&/, '?').replace(/\?$/, ''));
+      await loadSession();
+      return true;
+    }
+
     function ensureKey() {
-      const k = ctx.KEY || localStorage.getItem('commandKey') || '';
-      if (!k || k === 'YOUR_KEY' || k.length < 8) {
+      if (!activeKey) {
         showAuthBanner(true);
+        openKeyModal();
         return false;
       }
       showAuthBanner(false);
       return true;
     }
 
-    document.getElementById('btn-set-key')?.addEventListener('click', () => {
-      const entered = window.prompt('Paste your COMMAND_CENTER_KEY:');
-      if (entered && ctx.setKey) {
-        ctx.setKey(entered.trim());
-        location.search = `?key=${encodeURIComponent(entered.trim())}`;
-      }
+    document.getElementById('btn-set-key')?.addEventListener('click', openKeyModal);
+    document.getElementById('key-cancel')?.addEventListener('click', closeKeyModal);
+    document.getElementById('key-save')?.addEventListener('click', () => {
+      verifyAndSaveKey(document.getElementById('key-input')?.value);
+    });
+    document.getElementById('key-input')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') verifyAndSaveKey(e.target.value);
     });
 
-    ensureKey();
+    if (!ensureKey()) {
+      /* modal open — loadSession after connect */
+    }
 
     function applyTheme(theme) {
       const t = theme === 'dark' ? 'dark' : 'light';
@@ -176,15 +257,15 @@
     });
 
     function headers() {
-      const base = ctx.headers ? ctx.headers({ 'content-type': 'application/json' }) : { 'content-type': 'application/json' };
-      if (ctx.KEY) base['x-command-key'] = ctx.KEY;
-      return base;
+      const k = activeKey || ctx.KEY || '';
+      return { 'content-type': 'application/json', ...(k ? { 'x-command-key': k } : {}) };
     }
 
     function authErrorMessage(res) {
       if (res.status === 401) {
         showAuthBanner(true);
-        return 'Not authorized — check your ?key= URL uses your real COMMAND_CENTER_KEY (not YOUR_KEY).';
+        openKeyModal();
+        return 'Key not accepted — tap Connect key and paste the COMMAND_CENTER_KEY value from Railway (the secret, not YOUR_KEY).';
       }
       return res.json?.error || String(res.status);
     }
@@ -265,6 +346,7 @@
     async function sendMessage(text) {
       const content = String(text || '').trim();
       if (!content || paused) return;
+      if (!activeKey && !ensureKey()) return;
 
       document.getElementById('interim').textContent = '';
       const mode = document.getElementById('mode').value;
@@ -378,7 +460,7 @@
       });
     }
 
-    loadSession();
+    if (activeKey) loadSession();
   </script>
 </body>
 </html>
