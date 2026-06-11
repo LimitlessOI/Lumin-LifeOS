@@ -3,10 +3,10 @@
 
 CREATE TABLE IF NOT EXISTS model_verdict_log (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  segment_id    UUID REFERENCES project_segments(id) ON DELETE CASCADE,
-  lens          TEXT NOT NULL,                 -- 'consequences', 'time_traveler', 'trend_scout', 'great_minds', 'codebase_coherence'
-  model         TEXT NOT NULL,                 -- e.g. 'gemini-2.5-pro', 'deepseek-r1-distill-llama-70b', 'claude-3-7-sonnet-20250219'
-  provider      TEXT NOT NULL,                 -- 'gemini', 'groq', 'anthropic', 'perplexity'
+  segment_id    INT,
+  lens          TEXT NOT NULL,
+  model         TEXT NOT NULL,
+  provider      TEXT NOT NULL,
   verdict       TEXT CHECK (verdict IN ('PROCEED', 'CAUTION', 'STOP', 'NEEDS_HUMAN')),
   latency_ms    INTEGER,
   tokens_used   INTEGER,
@@ -15,12 +15,10 @@ CREATE TABLE IF NOT EXISTS model_verdict_log (
   logged_at     TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Outcome correlation: filled in after build completes (references build_outcomes)
 ALTER TABLE model_verdict_log
-  ADD COLUMN IF NOT EXISTS outcome_id UUID REFERENCES build_outcomes(id) ON DELETE SET NULL,
-  ADD COLUMN IF NOT EXISTS verdict_was_correct BOOLEAN;  -- NULL until outcome known
+  ADD COLUMN IF NOT EXISTS outcome_id UUID,
+  ADD COLUMN IF NOT EXISTS verdict_was_correct BOOLEAN;
 
--- Summary view: accuracy + cost per model per lens
 CREATE OR REPLACE VIEW model_performance_summary AS
 SELECT
   mvl.lens,
@@ -40,7 +38,6 @@ SELECT
 FROM model_verdict_log mvl
 GROUP BY mvl.lens, mvl.model, mvl.provider;
 
--- Per-lens winner: highest accuracy among models with >= 3 scored verdicts
 CREATE OR REPLACE VIEW model_lens_winner AS
 SELECT DISTINCT ON (lens)
   lens,
