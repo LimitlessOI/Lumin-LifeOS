@@ -1,12 +1,9 @@
 -- Migration: 20260322_optimizer_cache
 -- Persistent storage for AI response cache and token optimizer daily stats.
--- Survives Railway deploys — no more starting from zero on every push.
+-- Idempotent for Neon: table may exist from older deploy with missing columns.
 
 BEGIN;
 
--- ── Daily token optimization summary ─────────────────────────────────────────
--- One row per day. Upserted on every saveStats() call.
--- Gives us trend data: are we getting better at compression over time?
 CREATE TABLE IF NOT EXISTS token_optimizer_daily (
   date                DATE        PRIMARY KEY,
   total_requests      INT         NOT NULL DEFAULT 0,
@@ -19,27 +16,33 @@ CREATE TABLE IF NOT EXISTS token_optimizer_daily (
   updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- ── AI response cache ─────────────────────────────────────────────────────────
--- Survives deploys. L2 cache: in-memory Map is L1, DB is L2.
--- On startup the in-memory cache warms itself from recent DB rows.
 CREATE TABLE IF NOT EXISTS ai_response_cache (
-  cache_key     TEXT        PRIMARY KEY,   -- member:promptHash
-  member        TEXT        NOT NULL,
-  prompt_hash   TEXT        NOT NULL,
-  prompt_snippet TEXT,                     -- first 120 chars for debugging
-  response_text TEXT        NOT NULL,
+  cache_key     TEXT        PRIMARY KEY,
+  member        TEXT        NOT NULL DEFAULT '',
+  prompt_hash   TEXT        NOT NULL DEFAULT '',
+  prompt_snippet TEXT,
+  response_text TEXT        NOT NULL DEFAULT '',
   task_type     TEXT,
   tokens_saved  INT         DEFAULT 0,
   hit_count     INT         NOT NULL DEFAULT 0,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   last_hit_at   TIMESTAMPTZ,
-  expires_at    TIMESTAMPTZ NOT NULL       -- TTL enforced at query time
+  expires_at    TIMESTAMPTZ NOT NULL DEFAULT (NOW() + INTERVAL '7 days')
 );
+
+-- Repair pre-existing ai_response_cache rows (table without expires_at)
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS member TEXT NOT NULL DEFAULT '';
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS prompt_hash TEXT NOT NULL DEFAULT '';
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS prompt_snippet TEXT;
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS response_text TEXT NOT NULL DEFAULT '';
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS task_type TEXT;
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS tokens_saved INT DEFAULT 0;
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS hit_count INT NOT NULL DEFAULT 0;
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS last_hit_at TIMESTAMPTZ;
+ALTER TABLE ai_response_cache ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ NOT NULL DEFAULT (NOW() + INTERVAL '7 days');
 
 CREATE INDEX IF NOT EXISTS idx_ai_cache_expires ON ai_response_cache (expires_at);
 CREATE INDEX IF NOT EXISTS idx_ai_cache_member  ON ai_response_cache (member);
-
--- Auto-delete expired entries (run via cron or on each cache check)
--- No separate cron needed — we filter by expires_at in queries.
 
 COMMIT;
