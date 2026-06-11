@@ -155,11 +155,11 @@
 
     function headers(extra = {}) {
       const h = { 'Content-Type': 'application/json', ...extra };
-      // Prefer JWT auth; fall back to legacy key for internal routes
-      if (token) {
+      // Always send command key when we have one (URL ?key= / localStorage).
+      // Stale JWT in storage must not shadow a valid founder key — that caused Voice Rail 401s.
+      if (key) h['x-command-key'] = key;
+      if (token && isTokenValid(token)) {
         h['Authorization'] = `Bearer ${token}`;
-      } else if (key) {
-        h['x-command-key'] = key;
       }
       return h;
     }

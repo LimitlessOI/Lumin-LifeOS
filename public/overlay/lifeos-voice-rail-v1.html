@@ -4,38 +4,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#0a0a12">
+  <meta name="theme-color" content="#f5f5f8">
+  <script>
+    (function () {
+      var t = localStorage.getItem('voice_rail_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
   <script src="/overlay/lifeos-bootstrap.js"></script>
   <script src="/shared/lifeos-voice-chat.js"></script>
   <title>LifeOS Voice Rail</title>
   <style>
-    :root {
-      --bg: #0a0a12; --surface: #12121c; --border: #2a2a3a;
-      --text: #ececf4; --muted: #8888a0; --accent: #6b7cff; --ok: #34d399;
+    :root,
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0a0a12;
+      --surface: #12121c;
+      --border: #2a2a3a;
+      --text: #ececf4;
+      --muted: #8888a0;
+      --accent: #6b7cff;
+      --accent-fg: #fff;
+      --ok: #34d399;
+      --bubble-user-bg: #1e2640;
+      --bubble-user-border: #3a4a80;
+      --input-bg: #0a0a12;
+    }
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #f4f4f8;
+      --surface: #ffffff;
+      --border: #d4d4e0;
+      --text: #14141f;
+      --muted: #5c5c72;
+      --accent: #4a5fd6;
+      --accent-fg: #fff;
+      --ok: #059669;
+      --bubble-user-bg: #e8ecff;
+      --bubble-user-border: #a8b4f0;
+      --input-bg: #fafafe;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; display: flex; flex-direction: column; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; display: flex; flex-direction: column; transition: background 0.2s, color 0.2s; }
     header { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     header h1 { margin: 0; font-size: 1rem; flex: 1; min-width: 120px; }
     .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     select, button, input[type="range"] { font: inherit; }
-    select { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 13px; }
+    select { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 13px; }
     .btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer; }
-    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); font-weight: 600; }
     .btn.active { outline: 2px solid var(--accent); }
+    #btn-theme { min-width: 2.5rem; padding: 8px 10px; }
     #transcript { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
     .bubble { max-width: 92%; padding: 10px 12px; border-radius: 12px; font-size: 14px; line-height: 1.45; white-space: pre-wrap; }
-    .bubble.user { align-self: flex-end; background: #1e2640; border: 1px solid #3a4a80; }
+    .bubble.user { align-self: flex-end; background: var(--bubble-user-bg); border: 1px solid var(--bubble-user-border); }
     .bubble.assistant { align-self: flex-start; background: var(--surface); border: 1px solid var(--border); }
     .bubble .intent { font-size: 10px; color: var(--muted); margin-top: 6px; }
     .composer { border-top: 1px solid var(--border); background: var(--surface); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); }
     #interim { min-height: 20px; font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
-    textarea { width: 100%; min-height: 56px; resize: vertical; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 10px; font-size: 14px; }
+    textarea { width: 100%; min-height: 56px; resize: vertical; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 10px; font-size: 14px; }
     .composer-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; }
     .side { border-top: 1px solid var(--border); padding: 10px 16px; font-size: 12px; color: var(--muted); }
     .side strong { color: var(--text); }
+    #auth-banner { display: none; margin: 0; padding: 10px 16px; background: #fef2f2; color: #991b1b; border-bottom: 1px solid #fecaca; font-size: 13px; }
+    [data-theme="dark"] #auth-banner { background: #3f1515; color: #fecaca; border-color: #7f1d1d; }
+    #auth-banner.visible { display: block; }
+    #auth-banner code { font-size: 12px; }
     #staged-list { margin-top: 6px; }
-    .staged { background: var(--bg); border: 1px dashed var(--border); border-radius: 6px; padding: 6px 8px; margin-top: 4px; font-size: 11px; }
+    .staged { background: var(--input-bg); border: 1px dashed var(--border); border-radius: 6px; padding: 6px 8px; margin-top: 4px; font-size: 11px; }
     #voice-status { font-size: 11px; color: var(--muted); }
     @media (max-width: 480px) { header h1 { font-size: 0.95rem; } .btn { padding: 10px 12px; } }
   </style>
@@ -58,8 +95,15 @@
         <option value="couple">Couple context</option>
         <option value="emergency">Emergency priority</option>
       </select>
+      <button type="button" class="btn" id="btn-theme" aria-label="Toggle light/dark mode" title="Light / dark mode">☀️</button>
     </div>
   </header>
+
+  <div id="auth-banner" role="alert">
+    <strong>Not signed in.</strong> Paste your Railway <code>COMMAND_CENTER_KEY</code> into the URL:
+    <code>?key=…</code> (not the literal text YOUR_KEY). Or
+    <button type="button" class="btn" id="btn-set-key" style="margin-left:6px;padding:4px 8px;font-size:12px">Enter key</button>
+  </div>
 
   <div id="transcript" aria-live="polite"></div>
 
@@ -84,11 +128,65 @@
   </div>
 
   <script>
-    const ctx = window.getLifeOSContext?.({ promptForKey: !localStorage.getItem('commandKey') }) || {};
+    const ctx = window.getLifeOSContext?.({ promptForKey: false, defaultUser: 'adam' }) || {};
     const USER = ctx.USER || 'adam';
 
+    function showAuthBanner(show) {
+      document.getElementById('auth-banner')?.classList.toggle('visible', show);
+    }
+
+    function ensureKey() {
+      const k = ctx.KEY || localStorage.getItem('commandKey') || '';
+      if (!k || k === 'YOUR_KEY' || k.length < 8) {
+        showAuthBanner(true);
+        return false;
+      }
+      showAuthBanner(false);
+      return true;
+    }
+
+    document.getElementById('btn-set-key')?.addEventListener('click', () => {
+      const entered = window.prompt('Paste your COMMAND_CENTER_KEY:');
+      if (entered && ctx.setKey) {
+        ctx.setKey(entered.trim());
+        location.search = `?key=${encodeURIComponent(entered.trim())}`;
+      }
+    });
+
+    ensureKey();
+
+    function applyTheme(theme) {
+      const t = theme === 'dark' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('voice_rail_theme', t);
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = t === 'light' ? '#f5f5f8' : '#0a0a12';
+      const btn = document.getElementById('btn-theme');
+      if (btn) {
+        btn.textContent = t === 'light' ? '🌙' : '☀️';
+        btn.title = t === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+        btn.setAttribute('aria-label', t === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+      }
+    }
+
+    applyTheme(localStorage.getItem('voice_rail_theme') || 'light');
+    document.getElementById('btn-theme').addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      applyTheme(next);
+    });
+
     function headers() {
-      return ctx.headers ? ctx.headers({ 'content-type': 'application/json' }) : { 'content-type': 'application/json' };
+      const base = ctx.headers ? ctx.headers({ 'content-type': 'application/json' }) : { 'content-type': 'application/json' };
+      if (ctx.KEY) base['x-command-key'] = ctx.KEY;
+      return base;
+    }
+
+    function authErrorMessage(res) {
+      if (res.status === 401) {
+        showAuthBanner(true);
+        return 'Not authorized — check your ?key= URL uses your real COMMAND_CENTER_KEY (not YOUR_KEY).';
+      }
+      return res.json?.error || String(res.status);
     }
 
     const API = '/api/v1/lifeos/voice-rail';
@@ -132,7 +230,10 @@
       const mode = document.getElementById('mode').value;
       const tag = document.getElementById('tag').value || null;
       const res = await api('POST', '/session', { user: USER, mode, tag, session_id: sessionId });
-      if (res.status !== 200 || !res.json.ok) return;
+      if (res.status !== 200 || !res.json.ok) {
+        if (res.status === 401) showAuthBanner(true);
+        return;
+      }
       sessionId = res.json.session.id;
       localStorage.setItem('voice_rail_session_id', sessionId);
       const el = document.getElementById('transcript');
@@ -190,7 +291,7 @@
         text: content,
       });
       if (res.status !== 200 || !res.json.ok) {
-        appendBubble('assistant', `Error: ${res.json.error || res.status}`, 'error');
+        appendBubble('assistant', authErrorMessage(res), 'error');
         return;
       }
       sessionId = res.json.session_id || sessionId;
