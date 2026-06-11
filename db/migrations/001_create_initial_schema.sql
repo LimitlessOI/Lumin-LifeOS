@@ -3,7 +3,7 @@ CREATE TABLE energy_assets (
     name VARCHAR(255) NOT NULL,
     type VARCHAR(50),
     capacity FLOAT,
-    location GEOGRAPHY(Point, 4326),
+    location TEXT,
     status VARCHAR(50) DEFAULT 'inactive',
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
