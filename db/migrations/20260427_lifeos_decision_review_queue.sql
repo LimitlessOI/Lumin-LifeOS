@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS decision_review_queue (
 );
 
 -- Indexes for efficient querying
-CREATE INDEX idx_decision_review_queue_user_due ON decision_review_queue(user_id, review_due_at);
-CREATE INDEX idx_decision_review_queue_user_status ON decision_review_queue(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_decision_review_queue_user_due ON decision_review_queue(user_id, review_due_at);
+CREATE INDEX IF NOT EXISTS idx_decision_review_queue_user_status ON decision_review_queue(user_id, status);
 
 -- Comment for documentation
 COMMENT ON TABLE decision_review_queue IS 'Scheduled reviews for decisions at 30-day, 90-day, and 1-year intervals';
