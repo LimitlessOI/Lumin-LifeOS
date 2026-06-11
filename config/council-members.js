@@ -74,7 +74,7 @@ export function createCouncilMembers({ OLLAMA_ENDPOINT, DEEPSEEK_BRIDGE_ENABLED 
     },
     deepseek: {
       name: "DeepSeek Cloud",
-      model: "deepseek-coder",
+      model: process.env.DEEPSEEK_MODEL || "deepseek-v4-flash",
       provider: "deepseek",
       role: "Primary Developer & Infrastructure (Cloud Fallback)",
       focus: "optimization, performance, safe testing, development",

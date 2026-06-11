@@ -282,7 +282,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.3</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.3.1</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -511,7 +511,20 @@
       }
       if (res.status === 503 && res.json?.error === 'council_unavailable') {
         const d = res.json.detail || {};
-        return `Council API failed (not a bot). ${d.reason || 'council_unavailable'} · ${d.model_id || '?'} · ${d.provider || '?'}. Check Railway ANTHROPIC_API_KEY and logs.`;
+        const prov = d.provider || '?';
+        const hint =
+          prov === 'anthropic'
+            ? 'Check Railway ANTHROPIC_API_KEY.'
+            : prov === 'deepseek'
+              ? 'Check DEEPSEEK_API_KEY and DEEPSEEK_MODEL (deepseek-v4-flash or deepseek-v4-pro).'
+              : prov === 'openai'
+                ? 'Check OPENAI_API_KEY.'
+                : prov === 'gemini'
+                  ? 'Check GEMINI_API_KEY.'
+                  : prov === 'groq'
+                    ? 'Check GROQ_API_KEY.'
+                    : 'Check the API key for the selected engine on Railway.';
+        return `Council API failed (not a bot). ${d.reason || 'council_unavailable'} · ${d.council_member || '?'} · ${d.model_id || '?'} · ${prov}. ${hint}`;
       }
       return res.json?.error || res.json?.detail?.reason || String(res.status);
     }

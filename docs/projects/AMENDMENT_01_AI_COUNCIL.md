@@ -456,6 +456,7 @@ When this is done:
 
 ## Change Receipts
 
+| 2026-05-24 | **`config/council-members.js` + `voice-rail-departments.js`:** DeepSeek default model `deepseek-v4-flash`; `resolveModelForRouting()` stops chair Anthropic model env from being sent to other providers. | Voice Rail DS button sent claude-sonnet-4-6 to DeepSeek API | AM01 | pending deploy |
 | 2026-05-24 | **`config/council-members.js`:** Added **`openai_gpt`** (direct OpenAI, `gpt-4o` default). **`COUNCIL_ALIAS_MAP`** — `openai`/`chatgpt` now resolve to **`openai_gpt`**, not **`groq_llama`** (prior alias was a free-tier hack that mislabeled OpenAI in Voice Rail). Explicit `groq` alias → `groq_llama`. | Adam: “OpenAI-class (Groq)” mislabel is a trust problem | AM01 | pending deploy |
 | 2026-05-24 | **`services/council-service.js`:** `founderComms` / `voice_rail_department` — skip free-tier cost cascade; token cap 1200 for operator Voice Rail. | Adam: council_unavailable / silent downgrade off paid API | AM01 | pending deploy |
 | 2026-05-24 | **`services/council-service.js`:** `options.systemPromptOverride` + `options.model` for Voice Rail ChC (no Primary Builder persona bleed). | Adam: Chair not builder bot on /voice-rail | AM01 | pending deploy |

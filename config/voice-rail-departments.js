@@ -97,6 +97,47 @@ export function listVoiceRailDepartmentsPublic() {
   });
 }
 
+export function resolveModelForRouting(cfg, dept, resolvedKey) {
+  const deptModel = process.env[dept.modelEnv]?.trim();
+  if (deptModel) return deptModel;
+
+  const provider = cfg?.provider || 'unknown';
+  const cfgModel = cfg?.model?.trim() || null;
+
+  if (provider === 'anthropic' || resolvedKey === 'claude_sonnet' || String(resolvedKey).includes('claude')) {
+    return (
+      process.env.VOICE_RAIL_MODEL?.trim() ||
+      process.env.LIFEOS_CHAIR_MODEL?.trim() ||
+      cfgModel ||
+      process.env.ANTHROPIC_MODEL?.trim() ||
+      'claude-sonnet-4-6'
+    );
+  }
+
+  if (provider === 'deepseek') {
+    return process.env.DEEPSEEK_MODEL?.trim() || cfgModel || 'deepseek-v4-flash';
+  }
+  if (provider === 'openai') {
+    return (
+      process.env.OPENAI_MODEL?.trim() ||
+      process.env.OPENAI_CHAT_MODEL?.trim() ||
+      cfgModel ||
+      'gpt-4o'
+    );
+  }
+  if (provider === 'groq') {
+    return process.env.GROQ_MODEL?.trim() || cfgModel || 'llama-3.1-8b-instant';
+  }
+  if (provider === 'gemini') {
+    return process.env.GEMINI_MODEL?.trim() || cfgModel || 'gemini-2.5-flash';
+  }
+  if (provider === 'cerebras') {
+    return process.env.CEREBRAS_MODEL?.trim() || cfgModel || 'llama3.1-8b';
+  }
+
+  return cfgModel || process.env.VOICE_RAIL_MODEL?.trim() || null;
+}
+
 export function resolveDepartmentRouting(deptId, councilMembers, councilAliasMap, councilMemberOverride = null) {
   const dept = getVoiceRailDepartment(deptId);
   const override = councilMemberOverride ? String(councilMemberOverride).trim() : '';
@@ -109,13 +150,7 @@ export function resolveDepartmentRouting(deptId, councilMembers, councilAliasMap
     'anthropic';
   const resolvedKey = councilAliasMap?.[memberKey] || memberKey;
   const cfg = councilMembers?.[resolvedKey] || {};
-  const modelId =
-    (process.env[dept.modelEnv] && String(process.env[dept.modelEnv]).trim()) ||
-    process.env.VOICE_RAIL_MODEL ||
-    process.env.LIFEOS_CHAIR_MODEL ||
-    cfg.model ||
-    process.env.ANTHROPIC_MODEL ||
-    'claude-sonnet-4-6';
+  const modelId = resolveModelForRouting(cfg, dept, resolvedKey);
   return {
     department: dept.id,
     departmentTitle: dept.title,

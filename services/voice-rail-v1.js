@@ -260,7 +260,7 @@ function councilUnavailableError(routing, reason) {
   err.code = 'COUNCIL_UNAVAILABLE';
   err.detail = {
     reason,
-    council_member: routing?.memberKey,
+    council_member: routing?.resolvedKey || routing?.memberKey,
     model_id: routing?.modelId,
     provider: routing?.provider,
     department: routing?.department,
