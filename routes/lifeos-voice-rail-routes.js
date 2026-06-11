@@ -104,6 +104,14 @@ export function createLifeOSVoiceRailRoutes({
       res.json({ ok: true, ...result });
     } catch (err) {
       if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
+      if (err.status === 503) {
+        return res.status(503).json({
+          ok: false,
+          error: err.message,
+          code: err.code,
+          detail: err.detail,
+        });
+      }
       next(err);
     }
   });

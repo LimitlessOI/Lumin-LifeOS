@@ -65,13 +65,40 @@
     #interim { min-height: 20px; font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
     textarea { width: 100%; min-height: 56px; resize: vertical; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 10px; font-size: 14px; }
     .composer-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; justify-content: flex-end; }
-    .composer-row.primary { justify-content: space-between; align-items: flex-end; gap: 12px; }
-    .composer-row.primary .composer-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; flex: 1; }
-    .composer-row.primary .speed-label { font-size: 12px; color: var(--muted); }
-    .composer-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
-    .composer-row.primary .btn-send-main { min-width: 88px; padding: 10px 18px; font-size: 15px; }
-    #btn-mic { min-width: 96px; }
-    #btn-mic.listening { outline: 2px solid var(--accent); background: var(--bubble-user-bg); }
+    .composer-row.primary { display: block; margin-top: 10px; }
+    .composer-main-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+    .composer-secondary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    #btn-mic {
+      min-height: 48px;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 12px 16px;
+      width: 100%;
+    }
+    #btn-mic.listening {
+      outline: 2px solid var(--accent);
+      background: var(--bubble-user-bg);
+    }
+    .composer-row.primary .btn-send-main {
+      min-height: 48px;
+      width: 100%;
+      padding: 12px 18px;
+      font-size: 16px;
+      font-weight: 600;
+    }
     .composer-hint { margin: 8px 0 0; font-size: 11px; color: var(--muted); line-height: 1.4; }
     #truth-banner { margin: 0; padding: 10px 16px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 13px; line-height: 1.45; }
     [data-theme="dark"] #truth-banner { background: #3f2a08; color: #fde68a; border-color: #92400e; }
@@ -150,15 +177,15 @@
     <div id="interim" data-testid="interim-transcript"></div>
     <textarea id="input" placeholder="Type or dictate a message…" rows="3"></textarea>
     <div class="composer-row primary">
-      <div class="composer-left">
+      <div class="composer-main-actions">
+        <button type="button" class="btn" id="btn-mic" data-testid="mic-btn" aria-pressed="false" title="Speak into the text box">🎤 Dictate</button>
+        <button type="button" class="btn btn-primary btn-send-main" id="btn-send">Send</button>
+      </div>
+      <div class="composer-secondary">
         <label><input type="checkbox" id="speak-replies"> Speak replies</label>
         <button type="button" class="btn" id="btn-clear">Clear</button>
         <button type="button" class="btn" id="btn-replay" data-testid="replay-btn" title="Replay last reply">🔁 Replay</button>
         <label class="speed-label">Speed <input type="range" id="speech-rate" min="0.6" max="1.4" step="0.1" value="1"></label>
-      </div>
-      <div class="composer-actions">
-        <button type="button" class="btn" id="btn-mic" data-testid="mic-btn" aria-pressed="false">🎤 Dictate</button>
-        <button type="button" class="btn btn-primary btn-send-main" id="btn-send">Send</button>
       </div>
     </div>
     <div id="voice-status"></div>

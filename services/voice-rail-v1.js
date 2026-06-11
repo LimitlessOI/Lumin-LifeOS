@@ -1,5 +1,6 @@
 /**
  * Voice Rail v1 — LifeOS communication layer (sessions, intents, staging).
+ * Operator policy: no canned/template operator-facing replies — council or fail-closed.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * @ssot builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md
  */
@@ -13,6 +14,9 @@ const INTENTS = new Set([
   'venting',
   'general_conversation',
 ]);
+
+const PRIVATE_MODE_NOTICE =
+  'Off-record: not saved. No council reply in Private mode — switch to Conversation to talk to LifeOS.';
 
 export function classifyIntent(text, mode = 'conversation') {
   const t = String(text || '').trim().toLowerCase();
@@ -45,23 +49,6 @@ function normalizeIntent(intent) {
   return INTENTS.has(i) ? i : 'general_conversation';
 }
 
-function buildReply(intent, text) {
-  switch (intent) {
-    case 'command':
-      return 'Understood. I staged that command for your review — nothing runs automatically in v1.';
-    case 'brainstorm':
-      return 'Got it — brainstorming mode. I will not execute anything from this thread unless you switch to Command and stage it.';
-    case 'commitment':
-      return 'I heard a commitment in that. I will extract and track it if you want follow-through.';
-    case 'governance_correction':
-      return 'Governance note received. I will route this as a system correction for visibility — not silent auto-fix.';
-    case 'emotional':
-      return 'I hear you. Take your time — I am here when you are ready to continue.';
-    default:
-      return `Thanks — I received: "${String(text || '').slice(0, 120)}". How can I help next?`;
-  }
-}
-
 function resolveCouncilMemberLabel() {
   return (
     process.env.LIFEOS_CHAT_COUNCIL_MEMBER ||
@@ -84,12 +71,6 @@ function resolveCouncilRouting(councilMembers, councilAliasMap) {
   };
 }
 
-function isIdentityQuestion(text) {
-  return /\b(who am i talking|who are you|what model|what modle|which model|deep\s*seek|deepseek|what role|what'?s your role|who is this|are you (real|ai|a bot)|not a bot|what backend)\b/i.test(
-    String(text || ''),
-  );
-}
-
 function buildVoiceRailSystemPrompt(routing, mode, contextData) {
   const ctxBlock =
     contextData && Object.keys(contextData).length
@@ -105,9 +86,9 @@ VERIFIED BACKEND FACTS (state plainly when asked about identity, model, or role)
 - You are NOT Cursor, NOT a standalone chatbot, NOT DeepSeek unless the model ID above says deepseek.
 - Your role on THIS surface: conversational gateway + intent routing + honest answers. Not the full multi-model council debate UI.
 
-Behavior (North Star §2.6 — no lies):
+Behavior (North Star §2.6 — no lies; operator policy — NO CANNED COMMS):
+- Every reply MUST be generated for THIS user message. Forbidden: stock greetings, advisor boilerplate, repeated openers, intent-switch scripts, or template paragraphs reused across turns.
 - Answer the user's ACTUAL question first. Never ignore a direct question to give a generic greeting.
-- Never repeat the same opening paragraph you already used earlier in this session.
 - Never invent internal architecture (Lemon System, pods, KERNEL, SSOT names) unless it appears in the context block below.
 - If you lack evidence, say "I don't know" — do not roleplay omniscience.
 - Typical length: 2–6 sentences unless the user asks for depth. Complete your sentences.
@@ -115,15 +96,75 @@ Behavior (North Star §2.6 — no lies):
 ${ctxBlock}`;
 }
 
+function councilUnavailableError(routing, reason) {
+  const err = new Error('council_unavailable');
+  err.status = 503;
+  err.code = 'COUNCIL_UNAVAILABLE';
+  err.detail = {
+    reason,
+    council_member: routing?.memberKey,
+    model_id: routing?.modelId,
+    provider: routing?.provider,
+    policy: 'no_canned_or_template_operator_replies',
+  };
+  return err;
+}
+
 function formatCouncilReply(raw) {
   const text = typeof raw === 'string' ? raw : (raw?.content || raw?.text || '');
   return String(text || '').trim().replace(/\n{3,}/g, '\n\n').slice(0, 8000);
 }
 
+async function generateCouncilReply({
+  callCouncilMember,
+  lumin,
+  userId,
+  sessionId,
+  listMessagesFn,
+  content,
+  mode,
+  routing,
+  logger,
+}) {
+  if (!callCouncilMember) {
+    throw councilUnavailableError(routing, 'callCouncilMember not configured');
+  }
+
+  let contextData = {};
+  if (lumin?.buildContextSnapshot) {
+    try {
+      contextData = await lumin.buildContextSnapshot(userId, { mode: 'general' });
+    } catch (ctxErr) {
+      logger?.warn?.({ err: ctxErr.message }, 'voice-rail context snapshot skipped');
+    }
+  }
+
+  const history = await listMessagesFn(sessionId, userId);
+  const prior = (history || []).slice(0, -1).slice(-10);
+  const threadText = prior
+    .map((m) => `${m.role === 'user' ? 'User' : 'Lumin'}: ${m.content}`)
+    .join('\n\n');
+
+  const system = buildVoiceRailSystemPrompt(routing, mode, contextData);
+  const turn = threadText
+    ? `--- Prior messages this session ---\n${threadText}\n\n--- Current turn ---\nUser: ${content}\n\nLumin:`
+    : `User: ${content}\n\nLumin:`;
+  const prompt = `${system}\n\n---\n\n${turn}`;
+
+  const councilRaw = await callCouncilMember(routing.memberKey, prompt, {
+    taskType: 'analysis',
+    maxOutputTokens: 1200,
+  });
+  const councilText = formatCouncilReply(councilRaw);
+  if (!councilText) {
+    throw councilUnavailableError(routing, 'council returned empty response');
+  }
+  return councilText;
+}
+
 export function createVoiceRailV1({
   pool,
   commitmentTracker,
-  callAI,
   callCouncilMember,
   councilMembers,
   councilAliasMap,
@@ -209,13 +250,17 @@ export function createVoiceRailV1({
     const intent = normalizeIntent(classifyIntent(content, mode));
 
     if (isPrivate || mode === 'private') {
-      const reply = buildReply(intent, content);
       return {
         private: true,
         persisted: false,
         intent,
         user_message: { role: 'user', content, intent },
-        assistant_message: { role: 'assistant', content: reply, intent },
+        assistant_message: {
+          role: 'system',
+          content: PRIVATE_MODE_NOTICE,
+          intent: 'private_notice',
+        },
+        reply_source: { path: 'none', note: 'Private mode — no council call; operational notice only.' },
         staged_command: null,
         commitment_extract: null,
       };
@@ -249,103 +294,51 @@ export function createVoiceRailV1({
       }
     }
 
-    let reply = buildReply(intent, content);
     const routing = resolveCouncilRouting(councilMembers, councilAliasMap);
-    let replySource = {
-      path: 'template',
-      council_member: routing.memberKey,
-      model_id: routing.modelId,
-      provider: routing.provider,
-      note: 'Intent acknowledgment only — council unavailable.',
-    };
 
-    if (!simulateOnly && callCouncilMember) {
-      try {
-        let contextData = {};
-        if (lumin?.buildContextSnapshot) {
-          try {
-            contextData = await lumin.buildContextSnapshot(userId, { mode: 'general' });
-          } catch (ctxErr) {
-            logger?.warn?.({ err: ctxErr.message }, 'voice-rail context snapshot skipped');
-          }
-        }
-
-        const history = await listMessages(session.id, userId);
-        const prior = (history || []).slice(0, -1).slice(-10);
-        const threadText = prior
-          .map((m) => `${m.role === 'user' ? 'User' : 'Lumin'}: ${m.content}`)
-          .join('\n\n');
-
-        const system = buildVoiceRailSystemPrompt(routing, mode, contextData);
-        const turn = threadText
-          ? `--- Prior messages this session ---\n${threadText}\n\n--- Current turn ---\nUser: ${content}\n\nLumin:`
-          : `User: ${content}\n\nLumin:`;
-        const prompt = `${system}\n\n---\n\n${turn}`;
-
-        const councilRaw = await callCouncilMember(routing.memberKey, prompt, {
-          taskType: 'analysis',
-          maxOutputTokens: 1200,
-        });
-        const councilText = formatCouncilReply(councilRaw);
-
-        if (councilText) {
-          reply = councilText;
-          if (isIdentityQuestion(content)) {
-            const facts =
-              `[Voice Rail · ${routing.displayName} · model ${routing.modelId}] ` +
-              `You are talking to Lumin on LifeOS (Railway). I route through council member "${routing.memberKey}" (${routing.provider}). ` +
-              `Role here: conversational layer — persist messages, stage commands, no auto-execution.\n\n`;
-            if (!reply.toLowerCase().includes(routing.modelId.toLowerCase())) {
-              reply = facts + reply;
-            }
-          }
-          if (intent === 'command' || mode === 'command') {
-            reply += '\n\n(Commands are staged for your review — nothing auto-runs in v1.)';
-          }
-          replySource = {
-            path: 'lifeos/council',
-            council_member: routing.memberKey,
-            model_id: routing.modelId,
-            provider: routing.provider,
-            display_name: routing.displayName,
-            note: 'Session-aware council call with Voice Rail system prompt + LifeOS context snapshot.',
-          };
-        }
-      } catch (e) {
-        logger?.warn?.({ err: e.message }, 'voice-rail council reply fallback');
-        replySource = {
-          path: 'template',
-          council_member: routing.memberKey,
-          model_id: routing.modelId,
-          provider: routing.provider,
-          note: `Council call failed (${e.message}); template fallback.`,
-        };
-        if (isIdentityQuestion(content)) {
-          reply =
-            `You are on LifeOS Voice Rail. Backend: council member "${routing.memberKey}" → ${routing.displayName}, ` +
-            `provider ${routing.provider}, model ${routing.modelId}. I am Lumin (conversational layer). ` +
-            'Commands stage only — nothing auto-runs. Council call failed this turn; this answer is factual, not AI-generated.';
-        }
-      }
-    } else if (!simulateOnly && callAI) {
-      replySource = {
-        path: 'legacy_callAI',
-        council_member: resolveCouncilMemberLabel(),
-        note: 'Lumin service missing; degraded council prompt path.',
+    if (simulateOnly) {
+      await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+      return {
+        private: false,
+        persisted: true,
+        simulate_only: true,
+        session_id: session.id,
+        mode: session.mode,
+        tag: session.tag,
+        intent,
+        user_message: { role: 'user', content, intent },
+        assistant_message: null,
+        reply_source: { path: 'none', note: 'simulate_only — user message persisted; no reply generated.' },
+        staged_command: stagedCommand,
+        commitment_extract: commitmentExtract,
       };
-      try {
-        const ai = await callAI(
-          'You are Lumin on LifeOS Voice Rail. Use only verified LifeOS context. ' +
-            'Never invent internal system names or claim you executed commands. ' +
-            `Disclose backend: LifeOS council member ${resolveCouncilMemberLabel()}.`,
-          content,
-        );
-        if (ai && String(ai).trim()) reply = String(ai).trim().slice(0, 2000);
-      } catch (e) {
-        logger?.warn?.({ err: e.message }, 'voice-rail AI reply fallback');
-        replySource.path = 'template';
-        replySource.note = `Council call failed (${e.message}); template fallback.`;
-      }
+    }
+
+    let reply;
+    let replySource;
+    try {
+      reply = await generateCouncilReply({
+        callCouncilMember,
+        lumin,
+        userId,
+        sessionId: session.id,
+        listMessagesFn: listMessages,
+        content,
+        mode,
+        routing,
+        logger,
+      });
+      replySource = {
+        path: 'lifeos/council',
+        council_member: routing.memberKey,
+        model_id: routing.modelId,
+        provider: routing.provider,
+        display_name: routing.displayName,
+        note: 'Session-aware council reply — no template fallback.',
+      };
+    } catch (e) {
+      logger?.warn?.({ err: e.message, detail: e.detail }, 'voice-rail council reply failed');
+      throw e.status ? e : councilUnavailableError(routing, e.message);
     }
 
     const { rows: assistantRows } = await pool.query(
