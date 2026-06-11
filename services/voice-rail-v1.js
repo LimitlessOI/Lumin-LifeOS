@@ -49,25 +49,38 @@ function normalizeIntent(intent) {
   return INTENTS.has(i) ? i : 'general_conversation';
 }
 
-function resolveCouncilMemberLabel() {
+function resolveChairCouncilMember() {
   return (
+    process.env.VOICE_RAIL_CHAIR_MEMBER ||
+    process.env.LIFEOS_CHAIR_COUNCIL_MEMBER ||
     process.env.LIFEOS_CHAT_COUNCIL_MEMBER ||
     process.env.LUMIN_COUNCIL_MEMBER ||
     'anthropic'
   );
 }
 
+function resolveChairModelId(routing) {
+  return (
+    process.env.VOICE_RAIL_MODEL ||
+    process.env.LIFEOS_CHAIR_MODEL ||
+    routing?.modelId ||
+    process.env.ANTHROPIC_MODEL ||
+    'claude-sonnet-4-6'
+  );
+}
+
 function resolveCouncilRouting(councilMembers, councilAliasMap) {
-  const memberKey = resolveCouncilMemberLabel();
+  const memberKey = resolveChairCouncilMember();
   const resolvedKey = councilAliasMap?.[memberKey] || memberKey;
   const cfg = councilMembers?.[resolvedKey] || {};
   return {
     memberKey,
     resolvedKey,
     displayName: cfg.name || resolvedKey,
-    modelId: cfg.model || 'unknown',
+    modelId: resolveChairModelId({ modelId: cfg.model }),
     provider: cfg.provider || 'unknown',
-    councilRole: cfg.role || 'LifeOS chat',
+    councilRole: 'Council Chair (ChC)',
+    persona: 'ChC',
   };
 }
 
@@ -95,7 +108,7 @@ function sessionAlreadyExplainedIdentity(priorMessages) {
   return (priorMessages || []).some(
     (m) =>
       m.role === 'assistant'
-      && /\b(voice rail|i'?m lumin|lifeos founder|operator comms|not the builder)\b/i.test(m.content),
+      && /\b(council chair|ChC|voice rail|i'?m the chair|founder communication)\b/i.test(m.content),
   );
 }
 
@@ -111,8 +124,9 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName) {
     if (/^You'?re verified as/i.test(line)) return false;
     if (/^I'm here to (help|provide|assist)/i.test(line)) return false;
     if (/don't have a role within/i.test(line)) return false;
-    if (/conversational gateway and honest advisor/i.test(line)) return false;
-    if (/^I'?m a Voice Rail Lumin/i.test(line)) return false;
+    if (/conversational gateway/i.test(line)) return false;
+    if (/^I'?m (a )?Voice Rail/i.test(line)) return false;
+    if (/^I'?m Lumin on Voice Rail/i.test(line)) return false;
     return true;
   });
   let out = kept.join(' ').replace(/\s+/g, ' ').trim();
@@ -130,7 +144,7 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName) {
   return out || `${name}, I don't have a clear answer on that. Try once more in one sentence?`;
 }
 
-function buildVoiceRailSystemPrompt(routing, mode, contextData, operator) {
+function buildChairSystemPrompt(routing, mode, contextData, operator) {
   const operatorName = operator?.display_name || 'Adam';
   const operatorHandle = operator?.user_handle || 'adam';
   const ctxBlock =
@@ -138,27 +152,25 @@ function buildVoiceRailSystemPrompt(routing, mode, contextData, operator) {
       ? `\nVerified LifeOS context (use only this — do not invent beyond it):\n${JSON.stringify(contextData, null, 2)}\n`
       : '\nNo LifeOS context payload loaded for this turn — do not pretend you know private data.\n';
 
-  return `You are Lumin on Voice Rail — ${operatorName}'s comms line into LifeOS on Railway. You are part of LifeOS, not a separate chatbot app.
+  return `You are the Council Chair (ChC) on LifeOS Voice Rail — ${operatorName}'s direct line to LifeOS on Railway.
 
-WHO YOU ARE TALKING TO:
-- ${operatorName} (${operatorHandle}) — LifeOS founder and operator. Use their name naturally; never re-introduce them unless they ask.
+YOU ARE NOT a generic chatbot, advisor template, or "Voice Rail Lumin." You are ChC: founder communication, orchestration, routine judgment, and honest answers. You are a first-class seat in LifeOS governance (see BuilderOS vocabulary ChC).
 
-YOUR ROLE IN LIFEOS (say this plainly when asked — do NOT deny having a role):
-- Voice Rail Lumin: ${operatorName}'s operator-facing comms surface inside LifeOS.
-- You route conversation, stage commands (never auto-run), and answer from verified context.
-- You are NOT the Builder/coder in this chat — that work is BuilderOS elsewhere. But you ARE a real LifeOS component with a real job.
-- Never say you "don't have a role within LifeOS" or "don't have a role within Lumen." The product name is LifeOS (not Lumen).
+WHO YOU SPEAK WITH:
+- ${operatorName} (${operatorHandle}) — LifeOS founder and operator. You know who they are. Never re-introduce them unless they ask.
 
-STACK FACTS (only when relevant):
-- Surface: Voice Rail v1 (/voice-rail), messages persist in LifeOS DB.
-- Model route: ${routing.displayName} (${routing.provider}, ${routing.modelId}).
-- Not Cursor. Not a generic advisor bot.
+YOUR ROLE (when asked — state clearly, never deny it):
+- Council Chair (ChC): ${operatorName}'s executive comms interface into LifeOS.
+- You orchestrate, synthesize, stage commands (never auto-run BuilderOS), and escalate load-bearing decisions to full Council (Cncl) when needed.
+- You are NOT CDR/the coder in this chat — but you ARE the Chair with a real role in the system.
+- Product name is LifeOS (never "Lumen").
 
-HOW TO WRITE (mandatory):
-- One short paragraph. Max 3 sentences unless ${operatorName} asks for depth.
-- Answer the latest message only. Do NOT recap the whole thread.
-- FORBIDDEN: "Same as above", "You asked about…", "ANSWER:", numbered lists, repeating who ${operatorName} is, boilerplate "conversational gateway", restating identity across turns.
-- If identity/role was already covered this session: one new sentence max — then ask what they want next.
+MODEL (disclose if asked): ${routing.displayName} · ${routing.provider} · ${routing.modelId}
+
+HOW TO WRITE:
+- Direct, capable, plain English. One short paragraph; max 3 sentences unless ${operatorName} asks for depth.
+- Answer the latest message only — no thread recap, no "You asked about…", no "ANSWER:", no "Same as above."
+- If identity was already covered this session: one sentence, then ask what they want next.
 - Session mode: ${mode}.
 ${ctxBlock}`;
 }
@@ -209,25 +221,29 @@ async function generateCouncilReply({
 
   const history = await listMessagesFn(sessionId, userId);
   const prior = (history || []).slice(0, -1).slice(-10);
+  const operatorName = operator?.display_name || 'Adam';
   const threadText = prior
-    .map((m) => `${m.role === 'user' ? 'User' : 'Lumin'}: ${m.content}`)
+    .map((m) => `${m.role === 'user' ? operatorName : 'ChC'}: ${m.content}`)
     .join('\n\n');
 
   let repeatHint = '';
   if (isIdentityOrRoleQuestion(content) && sessionAlreadyExplainedIdentity(prior)) {
     repeatHint =
-      `\n\nTURN CONSTRAINT: Identity/role was already explained above. One sentence only. Do NOT restate who the user is. Ask what they want next.\n`;
+      '\n\nOne sentence only — identity already established. Do NOT restate who the founder is.\n';
   }
 
-  const system = buildVoiceRailSystemPrompt(routing, mode, contextData, operator);
-  const turn = threadText
-    ? `--- Prior messages this session ---\n${threadText}\n\n--- Current turn ---\nUser: ${content}\n\nLumin:${repeatHint}`
-    : `User: ${content}\n\nLumin:${repeatHint}`;
-  const prompt = `${system}\n\n---\n\n${turn}`;
+  const system = buildChairSystemPrompt(routing, mode, contextData, operator);
+  const userTurn = threadText
+    ? `--- Prior messages ---\n${threadText}\n\n--- Current ---\n${operatorName}: ${content}${repeatHint}`
+    : `${operatorName}: ${content}${repeatHint}`;
 
-  const councilRaw = await callCouncilMember(routing.memberKey, prompt, {
-    taskType: 'analysis',
-    maxOutputTokens: 450,
+  const councilRaw = await callCouncilMember(routing.memberKey, userTurn, {
+    taskType: 'voice_rail_chair',
+    systemPromptOverride: system,
+    skipKnowledge: true,
+    useCache: false,
+    maxOutputTokens: 600,
+    model: routing.modelId,
   });
   const councilText = sanitizeVoiceRailReply(
     formatCouncilReply(councilRaw),
@@ -417,12 +433,13 @@ export function createVoiceRailV1({
         logger,
       });
       replySource = {
-        path: 'lifeos/council',
+        path: 'lifeos/chair',
+        persona: 'ChC',
         council_member: routing.memberKey,
         model_id: routing.modelId,
         provider: routing.provider,
         display_name: routing.displayName,
-        note: 'Session-aware council reply — no template fallback.',
+        note: 'Council Chair (ChC) — direct founder comms; not template fallback.',
       };
     } catch (e) {
       logger?.warn?.({ err: e.message, detail: e.detail }, 'voice-rail council reply failed');

@@ -1,3 +1,6 @@
+> **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).
+> This amendment contains full history, receipts, LCL architecture detail, and competitive analysis.
+
 # AMENDMENT 01 — AI Council System
 
 > **Y-STATEMENT:** In the context of a platform that makes many AI calls daily,
@@ -453,6 +456,7 @@ When this is done:
 
 ## Change Receipts
 
+| 2026-05-24 | **`services/council-service.js`:** `options.systemPromptOverride` + `options.model` for Voice Rail ChC (no Primary Builder persona bleed). | Adam: Chair not builder bot on /voice-rail | AM01 | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |

@@ -31,10 +31,19 @@ export function createLifeOSVoiceRailRoutes({
     logger,
   });
 
-  const memberKey =
-    process.env.LIFEOS_CHAT_COUNCIL_MEMBER || process.env.LUMIN_COUNCIL_MEMBER || 'anthropic';
-  const resolvedKey = councilAliasMap?.[memberKey] || memberKey;
+  const chairMemberKey =
+    process.env.VOICE_RAIL_CHAIR_MEMBER ||
+    process.env.LIFEOS_CHAIR_COUNCIL_MEMBER ||
+    process.env.LIFEOS_CHAT_COUNCIL_MEMBER ||
+    process.env.LUMIN_COUNCIL_MEMBER ||
+    'anthropic';
+  const resolvedKey = councilAliasMap?.[chairMemberKey] || chairMemberKey;
   const councilCfg = councilMembers?.[resolvedKey] || {};
+  const chairModel =
+    process.env.VOICE_RAIL_MODEL ||
+    process.env.LIFEOS_CHAIR_MODEL ||
+    councilCfg.model ||
+    null;
 
   router.get('/health', requireKey, (_req, res) => {
     res.json({
@@ -42,9 +51,10 @@ export function createLifeOSVoiceRailRoutes({
       service: 'voice-rail-v1',
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,
-      reply_engine: callCouncilMember ? 'lifeos/council+voice_rail_prompt' : 'template_only',
-      council_member: memberKey,
-      model_id: councilCfg.model || null,
+      reply_engine: callCouncilMember ? 'lifeos/chair+ChC' : 'template_only',
+      persona: 'ChC',
+      council_member: chairMemberKey,
+      model_id: chairModel,
       provider: councilCfg.provider || null,
       display_name: councilCfg.name || null,
     });

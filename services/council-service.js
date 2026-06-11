@@ -961,6 +961,9 @@ export function createCouncilService({
     // Recompute config after selectOptimalModel may have rewritten member
     let config = COUNCIL_MEMBERS[member];
     if (!config) throw new Error(`Unknown member after routing: ${member}`);
+    if (options.model) {
+      config = { ...config, model: options.model };
+    }
 
     // ── Auto-detect taskType from prompt content if not provided ─────────────
     // Enables Layers 2-4 for far more calls without callers needing to set options.
@@ -1040,6 +1043,9 @@ export function createCouncilService({
         options = { ...options, ...ruleDecision.optionsPatch };
       }
       config = COUNCIL_MEMBERS[member];
+      if (options.model) {
+        config = { ...config, model: options.model };
+      }
       console.log(`🧠 [RULES] ${ruleDecision.receipt?.ruleId || "override"} → ${member}/${taskType}`);
     }
 
@@ -1104,7 +1110,8 @@ export function createCouncilService({
     const enhancedPrompt = prompt;
 
     // ── Compact system prompt — knowledge context baked in for cacheability ───
-    const systemPromptBase = `You are ${config.name} (${config.role}) in LifeOS AI Council on Railway.
+    // Voice Rail / ChC and other callers may supply a full system persona (overrides builder label).
+    const systemPromptBase = options.systemPromptOverride || `You are ${config.name} (${config.role}) in LifeOS AI Council on Railway.
 Specialties: ${config.specialties.join(', ')}.${options.checkBlindSpots ? ' Check blind spots.' : ''}${options.guessUserPreference ? ' Use user preferences.' : ''}${options.webSearch ? '\nWEB SEARCH: Include links, code, actionable solutions.' : ''}
 Core framing: never moralize or judge. The only question is "does this work for the user, or does it not?" Frame everything in terms of outcomes and fit — never "right/wrong", never "should/shouldn't". The user is the authority on their own life.
 Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
