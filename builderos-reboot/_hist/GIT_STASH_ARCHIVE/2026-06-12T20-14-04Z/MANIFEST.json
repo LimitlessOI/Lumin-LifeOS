@@ -1,0 +1,1020 @@
+{
+  "schema": "git_stash_archive_v1",
+  "archived_at": "2026-06-12T20:14:06.041Z",
+  "stash_count": 64,
+  "verdict": "runtime_log_noise_only",
+  "action": "cleared_after_index",
+  "entries": [
+    {
+      "index": 0,
+      "label": "stash@{0}: On main: runtime data ephemeral",
+      "file_count": 4,
+      "code_file_count": 0,
+      "files": [
+        "data/builder-factory-health.json",
+        "data/governed-autonomy-backlog-state.json",
+        "data/governed-autonomy-overnight-log.jsonl",
+        "data/governed-autonomy-status-summary.json"
+      ],
+      "stat_summary": " data/governed-autonomy-status-summary.json |  6 +++--- |  4 files changed, 25 insertions(+), 10 deletions(-) | "
+    },
+    {
+      "index": 1,
+      "label": "stash@{1}: WIP on main: afa9484959 fix(builder): PATTERN 12 asyncFn + HTML max_output_tokens floor",
+      "file_count": 2,
+      "code_file_count": 1,
+      "files": [
+        "config/builder-safe-scope.js",
+        "data/governed-autonomy-overnight-log.jsonl"
+      ],
+      "stat_summary": " data/governed-autonomy-overnight-log.jsonl | 4 ++++ |  2 files changed, 6 insertions(+) | "
+    },
+    {
+      "index": 2,
+      "label": "stash@{2}: WIP on main: 9d31b08c07 fix(runner): stop product-key recycle spin on completedIds.",
+      "file_count": 1,
+      "code_file_count": 0,
+      "files": [
+        "data/governed-autonomy-overnight-log.jsonl"
+      ],
+      "stat_summary": " data/governed-autonomy-overnight-log.jsonl | 27495 +++++++++++++++++++++++++++ |  1 file changed, 27495 insertions(+) | "
+    },
+    {
+      "index": 3,
+      "label": "stash@{3}: On main: bri-session-unstaged",
+      "file_count": 19,
+      "code_file_count": 17,
+      "files": [
+        "data/governed-autonomy-overnight-log.jsonl",
+        "data/memories.json",
+        "db/migrations/[date]_marketing_schema.sql",
+        "docs/CONTINUITY_LOG.md",
+        "docs/QUICK_LAUNCH.md",
+        "docs/SSOT_COMPANION.md",
+        "docs/SSOT_NORTH_STAR.md",
+        "docs/architecture/BUILDEROS_COMMAND_CONTROL_PROTOCOL.md",
+        "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
+        "docs/projects/INDEX.md",
+        "docs/projects/LIFEOS_UX_ARCHITECTURE.md",
+        "prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md",
+        "prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md",
+        "routes/mission-routes.js",
+        "scripts/autonomy/last-port.txt",
+        "services/builder-council-review.js",
+        "services/builderos-command-control-service.js",
+        "services/mission-ledger.js",
+        "services/oil-security-receipts.js"
+      ],
+      "stat_summary": " docs/SSOT_COMPANION.md                             |    24 +- |  docs/SSOT_NORTH_STAR.md                            |    25 +- |  .../BUILDEROS_COMMAND_CONTROL_PROTOCOL.md  "
+    },
+    {
+      "index": 4,
+      "label": "stash@{4}: WIP on main: 53692456e2 feat(mission-ledger): AIC DISCUSSION-6 — backward transition authority enforced",
+      "file_count": 1,
+      "code_file_count": 0,
+      "files": [
+        "data/governed-autonomy-overnight-log.jsonl"
+      ],
+      "stat_summary": " data/governed-autonomy-overnight-log.jsonl | 2 ++ |  1 file changed, 2 insertions(+) | "
+    },
+    {
+      "index": 5,
+      "label": "stash@{5}: WIP on main: c5d4b0202a GAP-FILL: BPB-0001 Phase 1 — Mission Runtime v1 DB migration (complete)",
+      "file_count": 1,
+      "code_file_count": 0,
+      "files": [
+        "data/governed-autonomy-overnight-log.jsonl"
+      ],
+      "stat_summary": " data/governed-autonomy-overnight-log.jsonl | 2 ++ |  1 file changed, 2 insertions(+) | "
+    },
+    {
+      "index": 6,
+      "label": "stash@{6}: WIP on main: c5d4b0202a GAP-FILL: BPB-0001 Phase 1 — Mission Runtime v1 DB migration (complete)",
+      "file_count": 2,
+      "code_file_count": 1,
+      "files": [
+        "data/governed-autonomy-overnight-log.jsonl",
+        "scripts/autonomy/last-port.txt"
+      ],
+      "stat_summary": " scripts/autonomy/last-port.txt             |    2 +- |  2 files changed, 5999 insertions(+), 1 deletion(-) | "
+    },
+    {
+      "index": 7,
+      "label": "stash@{7}: On main: temp-runner-proof-noise",
+      "file_count": 1,
+      "code_file_count": 0,
+      "files": [
+        "data/governed-autonomy-overnight-log.jsonl"
+      ],
+      "stat_summary": " data/governed-autonomy-overnight-log.jsonl | 56 ++++++++++++++++++++++++++++++ |  1 file changed, 56 insertions(+) | "
+    },
+    {
+      "index": 8,
+      "label": "stash@{8}: On main: temp-post-runner-stop",
+      "file_count": 1,
+      "code_file_count": 0,
+      "files": [
+        "data/governed-autonomy-overnight-log.jsonl"
+      ],
+      "stat_summary": " data/governed-autonomy-overnight-log.jsonl | 5 +++++ |  1 file changed, 5 insertions(+) | "
+    },
+    {
+      "index": 9,
+      "label": "stash@{9}: On main: temp-pre-rebase-c2-communication",
+      "file_count": 6,
+      "code_file_count": 4,
+      "files": [
+        "data/governed-autonomy-overnight-log.jsonl",
+        "data/memories.json",
+        "docs/QUICK_LAUNCH.md",
+        "package.json",
+        "prompts/00-RESIDENT-ARCHITECT.md",
+        "scripts/autonomy/last-port.txt"
+      ],
+      "stat_summary": " scripts/autonomy/last-port.txt             |    2 +- |  6 files changed, 8410 insertions(+), 6 deletions(-) | "
+    },
+    {
+      "index": 10,
+      "label": "stash@{10}: On main: temp audit",
+      "file_count": 1,
+      "code_file_count": 1,
+      "files": [
+        "data/useful-work-guard-audit-results.json"
+      ],
+      "stat_summary": " data/useful-work-guard-audit-results.json | 2 +- |  1 file changed, 1 insertion(+), 1 deletion(-) | "
+    },
+    {
+      "index": 11,
+      "label": "stash@{11}: On main: codex-temp-ignored-pre-rebase-2026-05-28",
+      "file_count": 0,
+      "code_file_count": 0,
+      "files": [],
+      "stat_summary": ""
+    },
+    {
+      "index": 12,
+      "label": "stash@{12}: On main: builderos-remediation-br01-br03-wip",
+      "file_count": 7,
+      "code_file_count": 7,
+      "files": [
+        "docs/AGENT_RULES.compact.md",
+        "docs/CONTINUITY_LOG.md",
+        "docs/SSOT_COMPANION.md",
+        "docs/SSOT_NORTH_STAR.md",
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+        "services/builderos-build-pipeline.js",
+        "services/builderos-system-alpha-readiness.js"
+      ],
+      "stat_summary": " services/builderos-system-alpha-readiness.js | 20 ++++++++- |  7 files changed, 112 insertions(+), 26 deletions(-) | "
+    },
+    {
+      "index": 13,
+      "label": "stash@{13}: On main: pbb-skeleton",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+        "scripts/builderos-c2-commit-proof.mjs",
+        "services/builderos-governed-loop-executor.js",
+        "services/builderos-pbb-plan.js"
+      ],
+      "stat_summary": " services/builderos-pbb-plan.js               | 36 +++++----- |  4 files changed, 54 insertions(+), 84 deletions(-) | "
+    },
+    {
+      "index": 14,
+      "label": "stash@{14}: On main: codex-temp-unrelated-before-builderos-repair",
+      "file_count": 3,
+      "code_file_count": 3,
+      "files": [
+        "data/builderos-gap-report.json",
+        "data/useful-work-guard-audit-results.json",
+        "scripts/autonomy/last-port.txt"
+      ],
+      "stat_summary": " scripts/autonomy/last-port.txt            | 2 +- |  3 files changed, 3 insertions(+), 3 deletions(-) | "
+    },
+    {
+      "index": 15,
+      "label": "stash@{15}: On main: gap-fill telemetry fix",
+      "file_count": 1,
+      "code_file_count": 1,
+      "files": [
+        "services/autonomous-telemetry-session.js"
+      ],
+      "stat_summary": " services/autonomous-telemetry-session.js | 34 ++++++++++++++++++++++---------- |  1 file changed, 24 insertions(+), 10 deletions(-) | "
+    },
+    {
+      "index": 16,
+      "label": "stash@{16}: On main: temp-pre-push-self-repair-executor",
+      "file_count": 11,
+      "code_file_count": 10,
+      "files": [
+        "data/builder/receipts/ALPHA_READY_CERTIFICATION.md",
+        "data/memories.json",
+        "docs/AGENT_RULES.compact.md",
+        "docs/CONTINUITY_LOG.md",
+        "docs/SSOT_COMPANION.md",
+        "docs/SSOT_NORTH_STAR.md",
+        "public/overlay/lifeos-command-center.html",
+        "routes/lifeos-command-center-routes.js",
+        "scripts/autonomy/last-port.txt",
+        "scripts/council-builder-preflight.mjs",
+        "scripts/oil-proof-phase14-alpha-certification.mjs"
+      ],
+      "stat_summary": " docs/SSOT_NORTH_STAR.md                            |  12 + |  public/overlay/lifeos-command-center.html          | 828 ++++++++++++++++++--- |  routes/lifeos-command-center-routes.js             | 608"
+    },
+    {
+      "index": 17,
+      "label": "stash@{17}: On main: wip non-probe",
+      "file_count": 15,
+      "code_file_count": 14,
+      "files": [
+        "data/builder/receipts/ALPHA_READY_CERTIFICATION.md",
+        "data/builder/receipts/phase14-alpha-certification-receipt.json",
+        "data/builder/receipts/phase7-audit-before-done-receipt.json",
+        "data/memories.json",
+        "docs/SSOT_COMPANION.md",
+        "docs/SSOT_NORTH_STAR.md",
+        "docs/projects/PRODUCT_BLUEPRINT_FACTORY_PROTOCOL.md",
+        "docs/projects/PRODUCT_BLUEPRINT_FACTORY_RUNBOOK.md",
+        "docs/projects/PRODUCT_BLUEPRINT_FACTORY_VALIDATOR_CHECKLIST.md",
+        "docs/projects/_templates/BLUEPRINT.md",
+        "docs/projects/_templates/brainstorm-output.json",
+        "docs/projects/_templates/feature-map.json",
+        "routes/builder-supervisor-routes.js",
+        "scripts/autonomy/builder-supervisor.js",
+        "services/builder-truth-surface.js"
+      ],
+      "stat_summary": " docs/SSOT_NORTH_STAR.md                            | 232 +++++- |  .../projects/PRODUCT_BLUEPRINT_FACTORY_PROTOCOL.md | 476 ++++++++++- |  docs/projects/PRODUCT_BLUEPRINT_FACTORY_RUNBOOK.md | 132 +"
+    },
+    {
+      "index": 18,
+      "label": "stash@{18}: WIP on main: 454803d2 [mixed-scope recovery] SC1 compliance receipt severity persistence + prior unstaged hunks (operator-approved waiver)",
+      "file_count": 33,
+      "code_file_count": 32,
+      "files": [
+        ".github/workflows/ci-cd.yml",
+        ".github/workflows/ci.yml",
+        "data/memories.json",
+        "data/quarantine-cleared-tasks.json",
+        "data/quarantined-tasks.json",
+        "docs/AUTONOMY_SUPERVISION_RUNBOOK.md",
+        "docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md",
+        "docs/BUILDER_OPERATOR_ENV.md",
+        "docs/LIFEOS_PROGRAM_MAP_SSOT.md",
+        "docs/QUICK_LAUNCH.md",
+        "docs/SSOT_NORTH_STAR.md",
+        "docs/SYSTEM_CAPABILITIES.md",
+        "docs/TSOS_COMPLIANCE_OFFICER.md",
+        "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+        "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+        "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
+        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+        "docs/projects/INDEX.md"
+      ],
+      "stat_summary": " docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md         |   2 + |  docs/BUILDER_OPERATOR_ENV.md                      |  20 ++ |  do"
+    },
+    {
+      "index": 19,
+      "label": "stash@{19}: WIP on main: 2db5197b feat(tsos-audit): NSSOT audit Tier A — 12 items shipped + A-to-Z plans",
+      "file_count": 21,
+      "code_file_count": 20,
+      "files": [
+        "TaskProgressDisplay.js, FinancialOverview.js, styles.css, TaskManager.js, IncomeAnalytics.js",
+        "data/memories.json",
+        "docs/AGENT_RULES.compact.md",
+        "docs/CONTINUITY_LOG.md",
+        "docs/CROSS_AGENT_CHANNEL.md",
+        "docs/PROGRAM_DESIGN_ROADMAP_LIFEOS_TC_SITEBUILDER.md",
+        "docs/QUICK_LAUNCH.md",
+        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json",
+        "ecosystem.config.js",
+        "package.json",
+        "routes/lifeos-council-builder-routes.js",
+        "routes/lifeos-gate-change-routes.js",
+        "routes/railway-managed-env-routes.js",
+        "scripts/autonomy/last-port.txt",
+        "scripts/builder-live-status.mjs",
+        "scripts/lifeos-builder-continuous-queue.mjs",
+        "scripts/lifeos-builder-daemon.mjs",
+        "scripts/tsos-compliance.mjs"
+      ],
+      "stat_summary": " docs/QUICK_LAUNCH.md                               |  11 +- |  docs/projects/AMENDMENT_17_TC_SERVICE.md           |   3 +- |  do"
+    },
+    {
+      "index": 20,
+      "label": "stash@{20}: On main: wip-session-docs",
+      "file_count": 10,
+      "code_file_count": 10,
+      "files": [
+        "docs/AGENT_RULES.compact.md",
+        "docs/AI_COLD_START.md",
+        "docs/SSOT_NORTH_STAR.md",
+        "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+        "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
+        "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
+        "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md",
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "products/api-service/index.html",
+        "public/overlay/lifeos-app.html"
+      ],
+      "stat_summary": " docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md | 17 +++- |  docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md   |  3 +- |  prod"
+    },
+    {
+      "index": 21,
+      "label": "stash@{21}: On main: wip-local-before-supervisor-merge",
+      "file_count": 12,
+      "code_file_count": 12,
+      "files": [
+        "docs/CONTINUITY_LOG.md",
+        "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
+        "docs/conversation_dumps/README.md",
+        "docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json",
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+        "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json",
+        "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+        "docs/projects/INDEX.md",
+        "public/overlay/lifeos-dashboard.html",
+        "scripts/operator-corpus-pipeline.mjs",
+        "services/lifeos-lumin-build.js"
+      ],
+      "stat_summary": " .../projects/AMENDMENT_38_IDEA_VAULT.manifest.json |    7 +- |  docs/projects/AMENDMENT_38_IDEA_VAULT.md           |   18 +- |  doc"
+    },
+    {
+      "index": 22,
+      "label": "stash@{22}: WIP on main: e8b91bbe fix(builder): 3 platform fixes — cache isolation, METADATA strip, route auto-wiring",
+      "file_count": 21,
+      "code_file_count": 21,
+      "files": [
+        ".env",
+        "docs/.compact-rules-baseline",
+        "docs/AGENT_RULES.compact.md",
+        "docs/AI_COLD_START.md",
+        "docs/CONTINUITY_LOG.md",
+        "docs/CONTINUITY_LOG_LIFEOS.md",
+        "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
+        "docs/QUICK_LAUNCH.md",
+        "docs/SSOT_COMPANION.md",
+        "docs/SSOT_NORTH_STAR.md",
+        "docs/conversation_dumps/README.md",
+        "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+        "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json",
+        "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+        "docs/projects/INDEX.md",
+        "scripts/catalog-dump-keywords.mjs",
+        "scripts/generate-agent-rules.mjs",
+        "scripts/lifeos-verify.mjs",
+        "scripts/operator-corpus-pipeline.mjs",
+        "services/lifeos-lumin-build.js"
+      ],
+      "stat_summary": " docs/CONTINUITY_LOG_LIFEOS.md                      |  16 ++ |  docs/CONVERSATION_DUMP_IDEAS_INDEX.md              | 200 +++++++++++++- |  docs/QUICK_LAUNCH.md                             "
+    },
+    {
+      "index": 23,
+      "label": "stash@{23}: WIP on main: 61c19ef5 feat: async_send=true on forward-inspection-docs — avoids Railway 60s proxy timeout",
+      "file_count": 11,
+      "code_file_count": 11,
+      "files": [
+        "docs/CONTINUITY_LOG.md",
+        "docs/SSOT_COMPANION.md",
+        "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
+        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+        "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
+        "package.json",
+        "public/clientcare-billing/clientcare-billing.js",
+        "public/clientcare-billing/overlay.html",
+        "services/tc-imap-config.js"
+      ],
+      "stat_summary": " docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md   |  32 +- |  package.json                                       |   5 + |  public/clientc"
+    },
+    {
+      "index": 24,
+      "label": "stash@{24}: WIP on main: c46c04f6 fix(tc): TD upload across iframes/shadow DOM, retries, save dialogs, open-file paths",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        ".env",
+        "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
+        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "services/browser-agent.js"
+      ],
+      "stat_summary": " services/browser-agent.js                      | 11 ++-- |  4 files changed, 63 insertions(+), 24 deletions(-) | "
+    },
+    {
+      "index": 25,
+      "label": "stash@{25}: On main: wip2",
+      "file_count": 26,
+      "code_file_count": 26,
+      "files": [
+        "core/notification-service.js",
+        "docs/CONTINUITY_LOG.md",
+        "docs/SSOT_NORTH_STAR.md",
+        "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+        "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json",
+        "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json",
+        "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
+        "docs/projects/INDEX.md",
+        "public/manifest.json",
+        "routes/account-manager-routes.js",
+        "routes/builder-supervisor-routes.js",
+        "routes/tc-routes.js",
+        "scripts/verify-project.mjs",
+        "services/account-manager.js",
+        "services/ai-guard.js",
+        "services/autonomy-scheduler.js",
+        "services/email-reader.js",
+        "services/env-registry-map.js",
+        "services/tc-automation-service.js",
+        "services/tc-email-document-service.js"
+      ],
+      "stat_summary": " .../AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json  |   5 + |  docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md   |   8 +- |  docs/projects/INDEX.md                             |   7 +-"
+    },
+    {
+      "index": 26,
+      "label": "stash@{26}: WIP on chore/memory-index: 48f07dd4 fix: remove markdown corruption and stop tracking .env file",
+      "file_count": 40,
+      "code_file_count": 40,
+      "files": [
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/DeepSeek dump 001\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/Directives and ideas log.md\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/GPT dump 01\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/GPT dump 02\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/GPT dump 03\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/GPT dump 04\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/GPT dump 05\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/GPT dump 06\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/Gemini Dump 001\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/Gemini Dump 002\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/Gemini Dump 003\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/Gemini Dump 004\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/Grok dump 001\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/LifeOS_LimitlessOS dump 001\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/LifeOS_LimitlessOS dump 002\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/LifeOS_LimitlessOS dump 003\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/Miscellaneous\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/Mission & North Star\"",
+        "\"Lumin-Memory/\\342\\200\\242\\tLumin-Memory/00_INBOX/raw/README.md\"",
+        "\"Lumin-Memory/\\342\\200\\242 Lumin-Memory/00_INBOX/raw/DeepSeek dump 001\""
+      ],
+      "stat_summary": " .../00_INBOX/raw/GPT dump 05\"                      |  0 |  .../00_INBOX/raw/GPT dump 06\"                      |  0 |  .../00_INBOX/raw/Gemini Dump 001\"          "
+    },
+    {
+      "index": 27,
+      "label": "stash@{27}: On chore/memory-index: wip: before memory indexing",
+      "file_count": 7,
+      "code_file_count": 6,
+      "files": [
+        "data/memories.json",
+        "project-root/package.json",
+        "server.js",
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 38 +++++++++------------- |  7 files changed, 131 insertions(+), 81 deletions(-) | "
+    },
+    {
+      "index": 28,
+      "label": "stash@{28}: On (no branch): temp: src file changes",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 29,
+      "label": "stash@{29}: WIP on (no branch): fdcce4a9 Auto-deployment: Updated unknown.js",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 30,
+      "label": "stash@{30}: WIP on (no branch): fdcce4a9 Auto-deployment: Updated unknown.js",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 31,
+      "label": "stash@{31}: WIP on main: 1b83bd90 docs: comprehensive analysis of self-programming gaps",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 32,
+      "label": "stash@{32}: On main: temp: unrelated src changes",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js       | 36 +++++++++++++--------- |  4 files changed, 73 insertions(+), 99 deletions(-) | "
+    },
+    {
+      "index": 33,
+      "label": "stash@{33}: On main: WIP: stash unrelated local changes before tunnel fix",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 34,
+      "label": "stash@{34}: On main: SAFETY: before tunnel-only recovery",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 35,
+      "label": "stash@{35}: On main: Stash unrelated src/ changes",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "scripts/ollama_tunnel_start_and_print_url.sh",
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js                  |  36 ++++--- |  5 files changed, 224 insertions(+), 99 deletions(-) | "
+    },
+    {
+      "index": 36,
+      "label": "stash@{36}: On main: Stash remaining unrelated changes",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "scripts/ollama_tunnel_start_and_print_url.sh",
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js                  | 36 +++++++--------- |  5 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 37,
+      "label": "stash@{37}: On main: Stash all other changes, keeping only tunnel files",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 38,
+      "label": "stash@{38}: On main: Stash all other changes, keeping only tunnel files",
+      "file_count": 8,
+      "code_file_count": 8,
+      "files": [
+        "RAILWAY_OLLAMA_SETUP.md",
+        "core/tier0-council.js",
+        "packages/adapters/ollama.js",
+        "scripts/ollama_tunnel_start_and_print_url.sh",
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/controllers/AuthController.js            |  64 ++++++++---- |  src/controllers/UserController.js            |  29 +++-- |  src/services/UserService.js                  |  36 "
+    },
+    {
+      "index": 39,
+      "label": "stash@{39}: On main: wip: park local changes before ollama endpoint fix",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js       | 36 +++++++++++++--------- |  4 files changed, 73 insertions(+), 99 deletions(-) | "
+    },
+    {
+      "index": 40,
+      "label": "stash@{40}: On main: wip: park local changes before ollama endpoint autofix",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 41,
+      "label": "stash@{41}: On main: wip: park local changes before requireKey fix",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js       | 36 +++++++++++++--------- |  4 files changed, 73 insertions(+), 99 deletions(-) | "
+    },
+    {
+      "index": 42,
+      "label": "stash@{42}: On main: wip: park local changes (unrelated to deploy fix)",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "package.json",
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  5 files changed, 100 insertions(+), 74 deletions(-) | "
+    },
+    {
+      "index": 43,
+      "label": "stash@{43}: On main: wip before Dockerfile node bump",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js       | 36 +++++++++++++--------- |  4 files changed, 73 insertions(+), 99 deletions(-) | "
+    },
+    {
+      "index": 44,
+      "label": "stash@{44}: On main: wip before Dockerfile fix",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 45,
+      "label": "stash@{45}: On fix/ollama-healthz: Stash unrelated changes for PR #149",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js       | 36 +++++++++++++--------- |  4 files changed, 73 insertions(+), 99 deletions(-) | "
+    },
+    {
+      "index": 46,
+      "label": "stash@{46}: On fix/ollama-healthz: wip local changes before Dockerfile fix",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 47,
+      "label": "stash@{47}: On fix/ollama-healthz: wip local changes before Dockerfile fix",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js       | 36 +++++++++++++--------- |  4 files changed, 73 insertions(+), 99 deletions(-) | "
+    },
+    {
+      "index": 48,
+      "label": "stash@{48}: On fix/ollama-healthz: Stash unrelated changes before fixing healthz syntax",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 49,
+      "label": "stash@{49}: On fix/bad-codefences: wip before clean PR",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 50,
+      "label": "stash@{50}: On fix/bad-codefences: WIP local changes (keep out of PR)",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js       | 36 +++++++++++++--------- |  4 files changed, 73 insertions(+), 99 deletions(-) | "
+    },
+    {
+      "index": 51,
+      "label": "stash@{51}: WIP on fix/bad-codefences: 278b21af fix: do not apply spend limit to ollama models",
+      "file_count": 4,
+      "code_file_count": 4,
+      "files": [
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  4 files changed, 99 insertions(+), 73 deletions(-) | "
+    },
+    {
+      "index": 52,
+      "label": "stash@{52}: On fix/bad-codefences: WIP local changes (keep out of PR)",
+      "file_count": 63,
+      "code_file_count": 63,
+      "files": [
+        "core/model-router.js",
+        "src/App.js",
+        "src/app.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/controllers/auth.controller.js",
+        "src/controllers/authController.js",
+        "src/controllers/businessTasksController.js",
+        "src/controllers/codeReviewController.js",
+        "src/controllers/commerceController.js",
+        "src/controllers/customizationController.js",
+        "src/controllers/funnelController.js",
+        "src/controllers/identity-controller.js",
+        "src/controllers/interactionController.js",
+        "src/controllers/processController.js",
+        "src/controllers/recommendationController.js",
+        "src/controllers/scenarioController.js",
+        "src/controllers/supportController.js",
+        "src/controllers/taskController.js",
+        "src/controllers/userController.js"
+      ],
+      "stat_summary": " src/controllers/auth.controller.js                 |  4 +- |  src/controllers/authController.js                  |  4 +- |  src/controllers/businessTasksContr"
+    },
+    {
+      "index": 53,
+      "label": "stash@{53}: WIP on main: 764f0acc Merge branch 'modular-micro-v27'",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "railway.toml",
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  5 files changed, 99 insertions(+), 75 deletions(-) | "
+    },
+    {
+      "index": 54,
+      "label": "stash@{54}: On modular-micro-v27: WIP: uncommitted changes before merge",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        ".gitignore",
+        "node_modules/.package-lock.json",
+        "package-lock.json",
+        "package.json",
+        "src/components/AlwaysOnOverlay.tsx"
+      ],
+      "stat_summary": " src/components/AlwaysOnOverlay.tsx |   30 +- |  5 files changed, 6067 insertions(+), 510 deletions(-) | "
+    },
+    {
+      "index": 55,
+      "label": "stash@{55}: On main: Other changes",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "Railway.toml",
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  5 files changed, 101 insertions(+), 80 deletions(-) | "
+    },
+    {
+      "index": 56,
+      "label": "stash@{56}: WIP on main: b841e46b Fix XSS vulnerabilities, null pointer exceptions, and error handling in overlay files",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "railway.toml",
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js       | 36 +++++++++++++--------- |  5 files changed, 80 insertions(+), 101 deletions(-) | "
+    },
+    {
+      "index": 57,
+      "label": "stash@{57}: On main: wip before railway deploy",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "Railway.toml",
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  5 files changed, 101 insertions(+), 80 deletions(-) | "
+    },
+    {
+      "index": 58,
+      "label": "stash@{58}: On main: wip local edits before pushing main",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "railway.toml",
+        "src/app.js",
+        "src/controllers/authController.js",
+        "src/controllers/userController.js",
+        "src/services/userService.js"
+      ],
+      "stat_summary": " src/services/userService.js       | 36 +++++++++++++--------- |  5 files changed, 80 insertions(+), 101 deletions(-) | "
+    },
+    {
+      "index": 59,
+      "label": "stash@{59}: On main: wip cleanup before merging to main",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "Railway.toml",
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  5 files changed, 101 insertions(+), 80 deletions(-) | "
+    },
+    {
+      "index": 60,
+      "label": "stash@{60}: On main: wip before merge to main",
+      "file_count": 77,
+      "code_file_count": 77,
+      "files": [
+        "FIX_GIT_AND_RAILWAY.md",
+        "QUICK_FIX_SUMMARY.md",
+        "QUICK_START_FIXES.md",
+        "SEE_OSC_WORKING_NOW.md",
+        "audit/drift/drift_metrics.js",
+        "audit/drift/drift_sentinel.js",
+        "audit/fsar/fsar_runner.js",
+        "audit/fsar/fsar_schema.json",
+        "audit/fsar/prompts/fsar_proposal.md",
+        "audit/gating/execution_gate.js",
+        "audit/quality/gold_tasks.json",
+        "audit/quality/regression_runner.js",
+        "audit/quality/rubrics.json",
+        "audit/reports/drift_report_2025-12-15T06-59-40-653Z.json",
+        "audit/reports/drift_report_2025-12-15T06-59-40-653Z.md",
+        "audit/reports/quality_regression_2025-12-15T07-01-41-432Z.json",
+        "audit/reports/quality_regression_2025-12-15T07-01-41-432Z.md",
+        "audit/reports/quarterly_rip_replace_2025-12-15T07-03-31-261Z.json",
+        "audit/reports/quarterly_rip_replace_2025-12-15T07-03-31-261Z.md",
+        "core/open-source-council.js"
+      ],
+      "stat_summary": " audit/fsar/fsar_runner.js                          | 106 +++ |  audit/fsar/fsar_schema.json                        |  16 + |  audit"
+    },
+    {
+      "index": 61,
+      "label": "stash@{61}: On main: WIP before merging modular-micro-v27 into main",
+      "file_count": 77,
+      "code_file_count": 77,
+      "files": [
+        "FIX_GIT_AND_RAILWAY.md",
+        "QUICK_FIX_SUMMARY.md",
+        "QUICK_START_FIXES.md",
+        "Railway.toml",
+        "SEE_OSC_WORKING_NOW.md",
+        "audit/drift/drift_metrics.js",
+        "audit/drift/drift_sentinel.js",
+        "audit/fsar/fsar_runner.js",
+        "audit/fsar/fsar_schema.json",
+        "audit/fsar/prompts/fsar_proposal.md",
+        "audit/gating/execution_gate.js",
+        "audit/quality/gold_tasks.json",
+        "audit/quality/regression_runner.js",
+        "audit/quality/rubrics.json",
+        "audit/reports/drift_report_2025-12-15T06-59-40-653Z.json",
+        "audit/reports/drift_report_2025-12-15T06-59-40-653Z.md",
+        "audit/reports/quality_regression_2025-12-15T07-01-41-432Z.json",
+        "audit/reports/quality_regression_2025-12-15T07-01-41-432Z.md",
+        "audit/reports/quarterly_rip_replace_2025-12-15T07-03-31-261Z.json",
+        "audit/reports/quarterly_rip_replace_2025-12-15T07-03-31-261Z.md"
+      ],
+      "stat_summary": " audit/drift/drift_sentinel.js                      |  58 ++ |  audit/fsar/fsar_runner.js                          | 106 +++ |  audi"
+    },
+    {
+      "index": 62,
+      "label": "stash@{62}: On modular-micro-v27: WIP before merging modular-micro-v27 into main",
+      "file_count": 9,
+      "code_file_count": 9,
+      "files": [
+        ".gitignore",
+        "node_modules/.package-lock.json",
+        "package-lock.json",
+        "public/overlay/control.html",
+        "public/overlay/extract-conversations.html",
+        "public/overlay/index.html",
+        "public/overlay/overlay-window.js",
+        "public/overlay/portal.html",
+        "server.js"
+      ],
+      "stat_summary": " public/overlay/overlay-window.js          |   94 ++- |  public/overlay/portal.html                |  224 ++++-- |  server.js"
+    },
+    {
+      "index": 63,
+      "label": "stash@{63}: WIP on (no branch): d001374d Merge branch 'main' into modular-micro-v27",
+      "file_count": 5,
+      "code_file_count": 5,
+      "files": [
+        "Railway.toml",
+        "src/App.js",
+        "src/controllers/AuthController.js",
+        "src/controllers/UserController.js",
+        "src/services/UserService.js"
+      ],
+      "stat_summary": " src/services/UserService.js       | 36 +++++++++------------- |  5 files changed, 101 insertions(+), 80 deletions(-) | "
+    }
+  ]
+}

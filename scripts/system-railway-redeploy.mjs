@@ -191,12 +191,15 @@ async function main() {
       console.log('\n✅ Redeploy triggered via command-key path.\n');
       process.exit((await waitForLiveDeploy()) ? 0 : 1);
     }
-    if (status !== 401 && status !== 403) {
+    if (status === 410 && json?.error === 'LEGACY_RAILWAY_CONTROL_DISABLED') {
+      console.warn(`⚠️  Legacy /railway/deploy disabled (410) — using build-from-latest…`);
+    } else if (status !== 401 && status !== 403) {
       // Non-auth failure — surface it
       console.error(`HTTP ${status}:`, JSON.stringify(json));
       process.exit(1);
+    } else {
+      console.warn(`⚠️  Command-key auth failed (${status}) — trying railway-token fallback…`);
     }
-    console.warn(`⚠️  Command-key auth failed (${status}) — trying railway-token fallback…`);
   } else {
     console.warn('No command key in env — skipping command-key path.');
   }

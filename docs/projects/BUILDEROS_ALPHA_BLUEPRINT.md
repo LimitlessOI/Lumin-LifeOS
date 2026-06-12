@@ -562,6 +562,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-12 | `services/builderos-governed-loop-executor.js` | Governed loop `trace.builder_output.commit_sha` from `/build` and `/execute` fallback — Voice Rail exec receipts. | Adam next-10 system slice. |
 | 2026-06-12 | `services/builder-instruction-target.js` (NEW), `builderos-pbb-plan.js`, `builderos-governed-loop-executor.js`, `routes/lifeos-council-builder-routes.js` | Voice Rail patch path: extract `target_file` from instruction; patch spec + `files[]`; prose refusal detection; validation rejects prose before commit; blockers `builder_prose_refusal` / `builder_missing_target_file`. Tests PASS. | Adam: prod builder failed with `target_file: null` + Gemini prose on proof-script command. GAP-FILL. |
 
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |

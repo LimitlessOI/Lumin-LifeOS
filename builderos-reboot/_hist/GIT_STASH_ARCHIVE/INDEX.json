@@ -1,0 +1,14 @@
+{
+  "schema": "git_stash_archive_index_v1",
+  "owner": "Hist",
+  "updated_at": "2026-06-12",
+  "archives": [
+    {
+      "id": "2026-06-12T20-14-04Z",
+      "path": "builderos-reboot/_hist/GIT_STASH_ARCHIVE/2026-06-12T20-14-04Z",
+      "stash_count": 64,
+      "verdict": "runtime_log_noise_only",
+      "action": "git stash clear after index"
+    }
+  ]
+}

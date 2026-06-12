@@ -22,7 +22,13 @@ export { inferBuilderDomainForTargetFile } from './builder-instruction-target.js
 
 function extractCommitSha(trace) {
   const raw = trace?.builder_output?.raw || trace?.builder_output || {};
-  return raw.commit_sha || raw.commitSha || raw.sha || null;
+  return (
+    trace?.builder_output?.commit_sha
+    || raw.commit_sha
+    || raw.commitSha
+    || raw.sha
+    || null
+  );
 }
 
 function extractTargetFile(trace, job) {

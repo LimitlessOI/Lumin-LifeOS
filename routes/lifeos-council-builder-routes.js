@@ -43,6 +43,7 @@ import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-se
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
 import { looksLikeBuilderProseRefusal } from '../services/builder-instruction-target.js';
+import { checkBuildBlueprintGate } from '../services/builder-blueprint-gate.js';
 import {
   evaluateModelEscalationGate,
   writeModelEscalationReceipt,
@@ -1656,6 +1657,25 @@ export function createLifeOSCouncilBuilderRoutes({
         committed: false,
         note: 'target_file not in placement metadata and not provided — pass target_file to commit',
         gap_recommendation: gapRecommendation,
+      });
+    }
+
+    const blueprintGate = checkBuildBlueprintGate({
+      target_file: resolvedTarget,
+      blueprint_path: taskBody.blueprint_path,
+      blueprint_id: taskBody.blueprint_id,
+      mission_id: taskBody.mission_id,
+      platform_gap_fill: taskBody.platform_gap_fill === true,
+      platform_gap_fill_reason: taskBody.platform_gap_fill_reason,
+    });
+    if (!blueprintGate.ok) {
+      return res.status(422).json({
+        ok: false,
+        error: blueprintGate.error,
+        hint: blueprintGate.hint,
+        blueprint_path: blueprintGate.blueprint_path || null,
+        target_file: resolvedTarget,
+        committed: false,
       });
     }
 

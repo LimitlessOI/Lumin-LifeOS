@@ -159,6 +159,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-12 | **`services/builder-blueprint-gate.js`** + **`routes/lifeos-council-builder-routes.js`** — `/build` fail-closed blueprint gate for `routes/`, `services/`, `public/overlay/` (requires `blueprint_path` / `blueprint_id` / `mission_id` with step covering target). **`scripts/system-railway-redeploy.mjs`** — 410 legacy deploy falls through to `build-from-latest`. **`services/builderos-governed-loop-executor.js`** + **`voice-rail-command-executor.js`** — surface `commit_sha` in command exec receipts. **`tests/builder-blueprint-gate.test.js`**. Stash archive: 64 cleared → `builderos-reboot/_hist/GIT_STASH_ARCHIVE/`. | Adam: next 10 system items — enforce §2.18, clean stashes, fix deploy + Voice Rail receipts | ✅ 4/4 blueprint gate tests | pending prod proofs |
 | 2026-05-24 | **`routes/railway-managed-env-routes.js`:** `serviceInstanceDeploy` now uses `latestCommit:true` or explicit `commitSha`; `POST .../deployments/:id/redeploy` promotes a prior build. Fixes stale rollback when GH Actions token dead. | Adam stuck on v2.3.1; build-from-latest redeployed old SHA | AM04 | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 

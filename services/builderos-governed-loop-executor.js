@@ -95,6 +95,7 @@ async function dispatchBuilderPlan(plan, { baseUrl, commandKey, task_id, bluepri
     http_status: response.status,
     committed: json?.committed === true,
     target_file: json?.target_file || plan.target_file || null,
+    commit_sha: json?.commit_sha || json?.sha || null,
     output: json?.output || null,
     model_used: json?.model_used || null,
     error: json?.error || null,
@@ -153,7 +154,13 @@ async function tryExecuteFallback(builderResult, plan, { baseUrl, commandKey, jo
     json = { ok: false, error: 'non_json_execute_response' };
   }
   if (response.ok && json?.ok && json?.committed) {
-    return { ...builderResult, committed: true, target_file: json.target_file || effectiveTargetFile, execute_fallback_used: true };
+    return {
+      ...builderResult,
+      committed: true,
+      target_file: json.target_file || effectiveTargetFile,
+      commit_sha: json?.commit_sha || json?.sha || builderResult.commit_sha || null,
+      execute_fallback_used: true,
+    };
   }
   return { ...builderResult, execute_fallback_attempted: true, execute_fallback_error: json?.error || `http_${response.status}` };
 }
@@ -277,6 +284,7 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   trace.builder_output = {
     committed: builderResult.committed,
     target_file: builderResult.target_file,
+    commit_sha: builderResult.commit_sha || builderResult.raw?.commit_sha || null,
     model_used: builderResult.model_used,
     http_status: builderResult.http_status,
     error: builderResult.error,
@@ -376,6 +384,7 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   trace.builder_output = {
     committed: builderResult.committed,
     target_file: builderResult.target_file,
+    commit_sha: builderResult.commit_sha || builderResult.raw?.commit_sha || null,
     model_used: builderResult.model_used,
     http_status: builderResult.http_status,
     error: builderResult.error,
