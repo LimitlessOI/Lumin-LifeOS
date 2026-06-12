@@ -61,6 +61,23 @@
       .map((v) => ({ name: v.name, lang: v.lang, voiceURI: v.voiceURI, localService: v.localService }));
   }
 
+  function scoreAudioInput(device) {
+    const label = String(device?.label || '').toLowerCase();
+    let score = 0;
+    if (/macbook|built-in|builtin|internal|microphone/.test(label)) score += 80;
+    if (/usb|headset|airpods|pods|airpod|external/.test(label)) score += 55;
+    if (/continuity|iphone|ipad|camera/.test(label)) score -= 200;
+    return score;
+  }
+
+  async function listAudioInputDevices() {
+    if (!global.navigator?.mediaDevices?.enumerateDevices) return [];
+    const devices = await global.navigator.mediaDevices.enumerateDevices();
+    return devices
+      .filter((device) => device.kind === 'audioinput')
+      .sort((a, b) => scoreAudioInput(b) - scoreAudioInput(a));
+  }
+
   function speakText(text, options) {
     const opts = typeof options === 'function' ? { onEnd: options } : options || {};
     let cleaned = normalizeText(text);
@@ -195,6 +212,7 @@
       serverSttChunkMs: 1800,
       serverSttMinBytes: 400,
       serverSttFailureLimit: 2,
+      audioDeviceId: '',
     }, options || {});
 
     const input = document.getElementById(settings.inputId);
@@ -237,7 +255,34 @@
       serverSttForceBrowser: false,
       storageKey: settings.storageKey,
       speakingEnabled: settings.speakRepliesDefault,
+      selectedAudioDeviceId: String(settings.audioDeviceId || '').trim(),
     };
+
+    function formatMicError(err) {
+      const name = String(err?.name || '');
+      if (name === 'NotReadableError' || name === 'AbortError') {
+        return 'Mic busy or routed to another device. Pick a mic in Options or disconnect Continuity Camera.';
+      }
+      if (name === 'NotAllowedError' || name === 'SecurityError') {
+        return 'Mic permission needed — allow microphone in browser settings.';
+      }
+      if (name === 'OverconstrainedError' || name === 'NotFoundError') {
+        return 'Selected microphone is unavailable. Choose a different mic in Options.';
+      }
+      return 'Could not start microphone. Check browser mic access and selected device.';
+    }
+
+    function buildAudioConstraints(deviceId) {
+      const audio = {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+      };
+      if (deviceId) {
+        audio.deviceId = { exact: deviceId };
+      }
+      return { audio };
+    }
 
     function releaseWarmStream() {
       if (!state.warmStream) return;
@@ -248,21 +293,54 @@
       state.micWarmed = false;
     }
 
+    async function maybeAdoptPreferredDevice() {
+      if (!state.warmStream || state.selectedAudioDeviceId) return;
+      const currentTrack = state.warmStream.getAudioTracks?.()[0] || null;
+      const currentSettings = currentTrack?.getSettings?.() || {};
+      const currentDeviceId = String(currentSettings.deviceId || '').trim();
+      const devices = await listAudioInputDevices().catch(() => []);
+      if (!devices.length) return;
+      const preferred = devices[0];
+      const preferredId = String(preferred?.deviceId || '').trim();
+      if (!preferredId || preferredId === currentDeviceId) return;
+      if (scoreAudioInput(preferred) <= 0) return;
+      state.selectedAudioDeviceId = preferredId;
+      releaseWarmStream();
+      const stream = await global.navigator.mediaDevices.getUserMedia(buildAudioConstraints(preferredId));
+      state.warmStream = stream;
+      state.micWarmed = true;
+    }
+
     async function warmAudioInput() {
-      if (!settings.warmMicOnStart || !global.navigator?.mediaDevices?.getUserMedia) return true;
+      if (!global.navigator?.mediaDevices?.getUserMedia) return false;
       if (state.micWarmed && state.warmStream) return true;
       if (state.warming) return true;
       state.warming = true;
       updateStatus('Starting microphone…');
       try {
-        const stream = await global.navigator.mediaDevices.getUserMedia({
-          audio: { echoCancellation: true, noiseSuppression: true },
-        });
+        const stream = await global.navigator.mediaDevices.getUserMedia(
+          buildAudioConstraints(state.selectedAudioDeviceId),
+        );
         state.warmStream = stream;
         state.micWarmed = true;
+        await maybeAdoptPreferredDevice().catch(() => {});
         return true;
       } catch (err) {
-        updateStatus('Mic permission needed — allow microphone in browser settings.');
+        if (state.selectedAudioDeviceId) {
+          try {
+            state.selectedAudioDeviceId = '';
+            const fallbackStream = await global.navigator.mediaDevices.getUserMedia(buildAudioConstraints(''));
+            state.warmStream = fallbackStream;
+            state.micWarmed = true;
+            await maybeAdoptPreferredDevice().catch(() => {});
+            updateStatus('Selected mic unavailable — using system microphone.');
+            return true;
+          } catch (fallbackErr) {
+            updateStatus(formatMicError(fallbackErr));
+            return false;
+          }
+        }
+        updateStatus(formatMicError(err));
         return false;
       } finally {
         state.warming = false;
@@ -977,6 +1055,18 @@
       warmMic() {
         return warmAudioInput();
       },
+      async setAudioDevice(deviceId) {
+        state.selectedAudioDeviceId = String(deviceId || '').trim();
+        releaseWarmStream();
+        if (state.userWantsListen) {
+          stopListening(false);
+          const warmed = await warmAudioInput();
+          if (warmed && !state.ttsDuck) restartListeningInternal();
+        }
+      },
+      getAudioDeviceId() {
+        return state.selectedAudioDeviceId;
+      },
       stop() {
         stopListening();
         if (synth) synth.cancel();
@@ -1010,6 +1100,7 @@
     stopSpeaking: stopSpeaking,
     isSpeaking: isSpeaking,
     listSpeakableVoices: listSpeakableVoices,
+    listAudioInputDevices: listAudioInputDevices,
     isRecognitionSupported: function isRecognitionSupported() {
       return Boolean(SpeechRecognitionCtor);
     },

@@ -1,7 +1,13 @@
-> **PRODUCT SPEC:** `docs/products/LIFEOS.md` — current state, routes, tables, services, CURRENT BP (under 500 lines, built for AI readers).
-> This amendment contains full history, receipts, and constitutional detail. Read it for change receipts, handoff notes, or when the product file is insufficient.
+# LifeOS Core
+_(formerly AMENDMENT_21_LIFEOS_CORE.md)_
 
-# AMENDMENT 21 — LifeOS Core
+## CURRENT MISSION
+**Mission ID:** `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`
+**Acceptance:** `npm run lifeos:conversation-commitments:v1-acceptance`
+**Status:** NOT COMPLETE — acceptance command not yet system-authored
+**Gate:** PSSOT + archaeology ✅ → BPB → BLUEPRINT.json (billing is NOT a gate) → Execute → receipt
+**Success test:** Adam voluntarily uses the feature again within 48h of first successful use.
+**Archive:** Pre-split docs in mission `_hist/` — history only, not active authority.
 
 ---
 ## ⚠️ AGENT CONTINUITY NOTICE — READ BEFORE TOUCHING ANYTHING
@@ -1566,6 +1572,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-11 | **Voice Rail v2.14 — mic device control + no eager capture (GAP-FILL):** `public/shared/lifeos-voice-chat.js` — audio input enumeration/scoring, selected device persistence, clearer mic errors, no eager warm-up requirement for on-demand capture. `public/overlay/lifeos-voice-rail-v1.html` — UI **Mic** picker + refresh, auto mode warns about Continuity/iPhone routing, removed eager warm-up on boot/verify, build stamp **v2.14**. `routes/lifeos-voice-rail-routes.js` — `/health` build marker updated to **v2.14**. | Adam: browser mic routing is broken/weird; stop grabbing wrong device; make Voice Rail comms trustworthy before adding more features | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.13 — preference capture + cost ledger + tier escalation (GAP-FILL):** `services/voice-rail-founder-memory.js` — detect/persist founder comm prefs ("too fluffy", etc.) → memory capsule + `communication_profiles`; `filterCapsulesForDepartment()`; session `founder_routing_state` tier boost on "go deeper". `services/voice-rail-usage-receipt.js` — `fetchVoiceRailUsageReceipt()` from `token_usage_log`. `voice-rail-v1.js` — wire prefs before reply; shallow-reply auto-escalation retry; `usage_receipt` + `escalated` on `reply_source`. Migration `20260612_voice_rail_founder_routing_state.sql`. UI **v2.13** footer shows cost + escalated. | Adam: finish backlog — learn tone in-chat; visible cost; ramp models mid-thread | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.12 — founder auto routing + capsules + comm profile (GAP-FILL):** `config/voice-rail-founder-routing.js` — Auto/CFO cheap-first ladder, ramp on hard questions; memory **capsules** + `communication_profiles` in context; founder max output 8192; UI **Auto** default. | Adam: best-for-role at lowest cost; capsules; tone memory; no caps | GAP-FILL | deployed |
 | 2026-05-24 | **Voice Rail v2.11.1 hotfix:** `probeFounderContext` exported on `createVoiceRailV1` return — `GET /context-probe` was 500. | context-probe broken at ship | GAP-FILL | deployed |

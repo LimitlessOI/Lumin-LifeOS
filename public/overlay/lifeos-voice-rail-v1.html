@@ -371,6 +371,7 @@
     [data-theme="dark"] #truth-banner { background: #3f2a08; color: #fde68a; border-color: #92400e; }
     #voice-status { font-size: 11px; color: var(--muted); min-height: 1em; flex-shrink: 0; }
     .composer-hint { display: none; }
+    .mic-note { font-size: 10px; color: var(--muted); line-height: 1.35; }
     .bubble .source { font-size: 10px; color: var(--muted); margin-top: 6px; }
     .bubble .source.source-warn { color: #c96; }
     .bubble .context-warn { font-size: 10px; color: #c96; margin-top: 4px; line-height: 1.35; }
@@ -397,7 +398,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.13</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.14</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -418,7 +419,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.9.1</strong> — fixed bottom bar: <strong>+</strong> attach · message · mic · send. Options drawer; staged commands moved inside drawer on phone.
+    Build <strong>v2.14</strong> — microphone picker added; no eager mic warm-up; auto mode avoids Continuity/iPhone mics when possible; browser fallback still uses the system default mic.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -490,6 +491,10 @@
         <button type="button" class="btn icon-btn compact" id="btn-replay" data-testid="replay-btn" title="Replay last reply" aria-label="Replay last reply">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
         </button>
+        <label class="speed-label">Mic
+          <select id="mic-input" aria-label="Microphone input"></select>
+        </label>
+        <button type="button" class="btn" id="btn-refresh-mics" style="font-size:11px;padding:6px 10px">Refresh mics</button>
         <div class="slider-group">
           <label class="slider-field" for="speech-rate">
             <input type="range" id="speech-rate" min="0.75" max="1.5" step="0.05" value="1.05" aria-label="Read-aloud speed">
@@ -501,6 +506,7 @@
           </label>
         </div>
       </div>
+      <div class="mic-note" id="mic-route-note">Whisper mic honors the selected input. Browser fallback uses your system default mic.</div>
       <div class="side side-in-drawer">
         <strong>Staged commands</strong> (visible only — v1 never auto-runs BuilderOS)
         <div id="staged-list"></div>
@@ -548,6 +554,7 @@
 
     let activeKey = ctx.KEY || readStoredKey();
     const USER = ctx.USER || 'adam';
+    const MIC_AUTO = '__auto__';
 
     // Bad ?key=YOUR_KEY in URL must NOT erase a good key already saved via Connect key.
     (function scrubUrlPlaceholder() {
@@ -613,7 +620,6 @@
       }
       const saved = persistKeyLocal(entered);
       activeKey = saved || entered;
-      if (window.LifeOSVoiceChat?.attach && voiceCtrl?.warmMic) voiceCtrl.warmMic();
       status.className = 'ok';
       status.textContent = `Connected (${activeKey.length} chars saved in this browser).`;
       showAuthBanner(false);
@@ -627,6 +633,7 @@
       await probeServerTts();
       await probeServerStt();
       attachVoiceMic();
+      await populateMicInputs();
       await loadSession();
       await loadDepartments();
       return true;
@@ -1314,12 +1321,76 @@
       return String(json.text || '').trim();
     }
 
+    function preferredMicDeviceId(devices) {
+      const list = Array.isArray(devices) ? devices : [];
+      if (!list.length) return '';
+      const score = (label) => {
+        const text = String(label || '').toLowerCase();
+        let total = 0;
+        if (/macbook|built-in|builtin|internal|microphone/.test(text)) total += 80;
+        if (/usb|headset|airpods|pods|airpod|external/.test(text)) total += 55;
+        if (/continuity|iphone|ipad|camera/.test(text)) total -= 200;
+        return total;
+      };
+      const best = [...list].sort((a, b) => score(b?.label) - score(a?.label))[0];
+      return String(best?.deviceId || '').trim();
+    }
+
+    function micOptionLabel(device, index) {
+      const raw = String(device?.label || '').trim();
+      if (raw) return raw;
+      return `Microphone ${index + 1}`;
+    }
+
+    function updateMicRouteNote(devices, selectedValue) {
+      const note = document.getElementById('mic-route-note');
+      if (!note) return;
+      if (selectedValue && selectedValue !== MIC_AUTO) {
+        const match = (devices || []).find((device) => device.deviceId === selectedValue);
+        note.textContent = `Selected mic: ${micOptionLabel(match, 0)}. Whisper mic honors this choice. Browser fallback still uses the system default mic.`;
+        return;
+      }
+      note.textContent = 'Auto mic prefers built-in or headset mics and avoids Continuity/iPhone devices when labels are available. Browser fallback still uses your system default mic.';
+    }
+
+    async function populateMicInputs() {
+      const select = document.getElementById('mic-input');
+      if (!select) return;
+      let devices = [];
+      try {
+        devices = await (window.LifeOSVoiceChat?.listAudioInputDevices?.() || Promise.resolve([]));
+      } catch (_) {
+        devices = [];
+      }
+      const saved = localStorage.getItem('voice_rail_mic_input') || MIC_AUTO;
+      const live = voiceCtrl?.getAudioDeviceId?.() || '';
+      const autoPreferred = preferredMicDeviceId(devices);
+      select.innerHTML = [
+        `<option value="${MIC_AUTO}">Auto (recommended)</option>`,
+        ...devices.map((device, index) =>
+          `<option value="${escapeHtml(device.deviceId)}">${escapeHtml(micOptionLabel(device, index))}</option>`),
+      ].join('');
+      const nextValue =
+        saved !== MIC_AUTO && devices.some((device) => device.deviceId === saved)
+          ? saved
+          : (live || MIC_AUTO);
+      select.value = nextValue;
+      if (!select.value) {
+        select.value = MIC_AUTO;
+      }
+      if (select.value === MIC_AUTO && autoPreferred && voiceCtrl?.getAudioDeviceId?.() === autoPreferred) {
+        select.value = MIC_AUTO;
+      }
+      updateMicRouteNote(devices, select.value);
+    }
+
     function attachVoiceMic() {
       if (!window.LifeOSVoiceChat?.attach) {
         const micBtn = document.getElementById('btn-mic');
         if (micBtn) micBtn.disabled = true;
         return;
       }
+      const savedMic = localStorage.getItem('voice_rail_mic_input') || MIC_AUTO;
       voiceCtrl = window.LifeOSVoiceChat.attach({
         inputId: 'input',
         buttonId: 'btn-mic',
@@ -1334,7 +1405,7 @@
         keepListeningOnVoiceSend: true,
         persistentListen: true,
         pauseMicDuringTts: true,
-        warmMicOnStart: true,
+        warmMicOnStart: false,
         focusInputOnMic: true,
         mode: 'append',
         startLabel: 'Microphone',
@@ -1345,6 +1416,7 @@
         serverSttChunkMs: 1800,
         serverSttMinBytes: 400,
         serverSttFailureLimit: 2,
+        audioDeviceId: savedMic !== MIC_AUTO ? savedMic : '',
         onVoiceSend: (message) => {
           document.getElementById('interim').textContent = '';
           if (String(message || '').trim()) sendMessage(message);
@@ -1358,6 +1430,7 @@
           const input = document.getElementById('input');
           input?.focus();
           input?.classList.add('mic-active');
+          populateMicInputs();
         },
       });
       syncSpeakToggleUI();
@@ -1690,6 +1763,21 @@
       if (lastAssistant) maybeSpeak(lastAssistant);
     });
 
+    document.getElementById('btn-refresh-mics')?.addEventListener('click', async () => {
+      await populateMicInputs();
+    });
+
+    document.getElementById('mic-input')?.addEventListener('change', async (e) => {
+      const raw = String(e.target.value || MIC_AUTO);
+      localStorage.setItem('voice_rail_mic_input', raw);
+      await voiceCtrl?.setAudioDevice?.(raw === MIC_AUTO ? '' : raw);
+      await populateMicInputs();
+    });
+
+    navigator.mediaDevices?.addEventListener?.('devicechange', () => {
+      populateMicInputs();
+    });
+
     document.querySelectorAll('.mode-toggle').forEach((btn) => {
       btn.addEventListener('click', () => {
         if (btn.dataset.mode) onModeSelected(btn.dataset.mode);
@@ -1739,11 +1827,11 @@
         await Promise.all([probeServerTts(), probeServerStt()]);
       }
       attachVoiceMic();
+      await populateMicInputs();
       if (activeKey) {
         loadDepartments();
         loadProviders();
         loadSession();
-        setTimeout(() => { voiceCtrl?.warmMic?.(); }, 500);
       } else {
         loadDepartments();
       }
