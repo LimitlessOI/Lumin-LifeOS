@@ -58,7 +58,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-05-24 — Voice Rail v2.11 fail-closed founder comms
+**Last Updated:** 2026-05-24 — Voice Rail v2.12 founder auto routing + memory capsules in context
 
 ---
 
@@ -1566,6 +1566,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-05-24 | **Voice Rail v2.12 — founder auto routing + capsules + comm profile (GAP-FILL):** `config/voice-rail-founder-routing.js` — Auto/CFO cheap-first ladder, ramp on hard questions; memory **capsules** + `communication_profiles` in context; founder max output 8192; UI **Auto** default. | Adam: best-for-role at lowest cost; capsules; tone memory; no caps | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.11.1 hotfix:** `probeFounderContext` exported on `createVoiceRailV1` return — `GET /context-probe` was 500. | context-probe broken at ship | GAP-FILL | deployed |
 | 2026-05-24 | **Voice Rail v2.11 — fail-closed founder comms (GAP-FILL):** `isVoiceRailFailClosedEnabled()` default ON; block council call when context below minimum (`lifeos_context_not_connected` 503) — no raw-model fake-out. `GET /context-probe` for status without chatting. UI error shows counts. Build **v2.11**. | Adam: never fake connected; failure must be visible error | GAP-FILL | pending deploy |
 | 2026-05-24 | **Operator standing order:** push+deploy after every agreed slice unless Adam says hold — `.cursor/rules/operator-push-default.mdc`, `CLAUDE.md`, `generate-agent-rules.mjs`. | Adam: stop asking every time | ✅ |

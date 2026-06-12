@@ -397,7 +397,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.11</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.12</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -902,8 +902,8 @@
       const deptId = document.getElementById('department').value || 'ChC';
       const meta = departmentMeta(deptId);
       const engines = selectedProviderKeys();
-      const engineText = engines.length ? engines.map(providerLabelForKey).join(' + ') : '?';
-      el.textContent = `Talking to: ${meta?.title || deptId} (${deptId}) · ${engineText}`;
+      const engineText = engines.length ? engines.map(providerLabelForKey).join(' + ') : 'Auto';
+      el.textContent = `Talking to: ${meta?.title || deptId} (${deptId}) · ${engineText} — hat + engine (Auto = CFO picks cheapest fit)`;
     }
 
     function selectedProviderKey() {
@@ -920,11 +920,11 @@
       } catch (_) {}
       const saved = localStorage.getItem(providerStorageKey(dept));
       if (saved) return [saved];
-      const fallback = providerCatalog[0]?.member_key;
-      return fallback ? [fallback] : [];
+      return ['founder_auto'];
     }
 
     const PROVIDER_SHORT = {
+      auto: 'Auto',
       anthropic: 'Claude',
       openai: 'GPT',
       gemini: 'Gemini',
@@ -1099,8 +1099,10 @@
         const deptTitle =
           source.department_title || departmentMeta(persona)?.title || persona;
         const ch = source.context_health;
+        const rm = source.routing_meta;
         const ctxBit = ch?.level ? ` · ctx ${ch.level}` : '';
-        tag.textContent = `${deptTitle} (${persona}) · ${source.display_name || '?'} · ${source.model_id || '?'}${ctxBit}`;
+        const routeBit = rm?.tier_label ? ` · ${rm.tier_label}` : '';
+        tag.textContent = `${deptTitle} (${persona}) · ${source.display_name || '?'} · ${source.model_id || '?'}${routeBit}${ctxBit}`;
         if (ch && (ch.level === 'empty' || ch.level === 'thin')) tag.classList.add('source-warn');
         box.appendChild(tag);
         if (ch?.honesty_note && (ch.level === 'empty' || ch.level === 'thin')) {

@@ -4,6 +4,7 @@
  */
 /** Default picks shown in UI; memberKey must exist in council config on Railway. */
 export const VOICE_RAIL_PROVIDER_PICKS = Object.freeze([
+  { id: 'auto', memberKey: 'founder_auto', label: 'Auto (CFO picks)', provider: 'lifeos' },
   { id: 'anthropic', memberKey: 'claude_sonnet', label: 'Anthropic Claude', provider: 'anthropic' },
   { id: 'openai', memberKey: 'openai_gpt', label: 'OpenAI GPT', provider: 'openai' },
   { id: 'gemini', memberKey: 'gemini_flash', label: 'Google Gemini', provider: 'gemini' },
@@ -30,7 +31,19 @@ export function providerEnvConfigured(provider) {
 }
 
 export function listVoiceRailProviderPicks(councilMembers) {
-  return VOICE_RAIL_PROVIDER_PICKS.filter((p) => councilMembers?.[p.memberKey]).map((p) => {
+  return VOICE_RAIL_PROVIDER_PICKS.filter((p) => p.id === 'auto' || councilMembers?.[p.memberKey]).map((p) => {
+    if (p.id === 'auto') {
+      return {
+        id: p.id,
+        member_key: p.memberKey,
+        label: p.label,
+        provider: p.provider,
+        model: null,
+        display_name: 'LifeOS Auto (CFO)',
+        configured: true,
+        available: true,
+      };
+    }
     const cfg = councilMembers[p.memberKey] || {};
     const provider = cfg.provider || p.provider;
     const configured = providerEnvConfigured(provider);
@@ -53,6 +66,6 @@ export function normalizeProviderMemberKey(raw, councilMembers, councilAliasMap)
   const resolved = councilAliasMap?.[key] || key;
   if (councilMembers?.[resolved]) return resolved;
   const pick = VOICE_RAIL_PROVIDER_PICKS.find((p) => p.id === key || p.memberKey === key);
-  if (pick && councilMembers?.[pick.memberKey]) return pick.memberKey;
+  if (pick && (pick.id === 'auto' || councilMembers?.[pick.memberKey])) return pick.memberKey;
   return null;
 }

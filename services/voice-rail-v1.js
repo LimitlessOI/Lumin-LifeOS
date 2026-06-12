@@ -10,8 +10,8 @@ import {
   buildDepartmentSystemPrompt,
   listVoiceRailDepartmentsPublic,
   normalizeVoiceRailDepartment,
-  resolveDepartmentRouting,
 } from '../config/voice-rail-departments.js';
+import { resolveFounderVoiceRailRouting } from '../config/voice-rail-founder-routing.js';
 import {
   FOUNDER_CONTINUOUS_SESSION_TAG,
   listVoiceRailProviderPicks,
@@ -24,6 +24,7 @@ import {
   normalizeVoiceRailAttachments,
 } from './voice-rail-attachments.js';
 import { buildSystemContext } from './knowledge-context.js';
+import { retrieveCapsules } from './memory-retrieval.js';
 
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -194,6 +195,8 @@ export function summarizeVoiceRailContextHealth(contextData) {
     ),
     has_continuity_log: Boolean(String(ctx.continuity_log_tail || '').trim().length > 80),
     has_product_brief: Boolean(String(ctx.lifeos_product_brief || '').trim().length > 80),
+    memory_capsules: Array.isArray(ctx.memory_capsules) ? ctx.memory_capsules.length : 0,
+    has_communication_profile: Boolean(String(ctx.founder_communication_profile || '').trim().length > 40),
     sot_knowledge_chars: Number(ctx.sot_knowledge_chars) || 0,
     deploy_commit_sha: ctx.deploy_commit_sha || null,
   };
@@ -205,6 +208,8 @@ export function summarizeVoiceRailContextHealth(contextData) {
     counts.has_continuity_log,
     counts.mission_queue_head > 0,
     counts.has_product_brief,
+    counts.memory_capsules > 0,
+    counts.has_communication_profile,
     counts.sot_knowledge_chars > 200,
   ].filter(Boolean).length;
 
@@ -265,8 +270,8 @@ function contextNotConnectedError(routing, contextHealth) {
   return err;
 }
 
-/** Operator-facing context: DB + memories + cross-session voice rail + missions (not stateless chat). */
-export async function buildVoiceRailOperatorContext({ pool, userId, lumin, logger }) {
+/** Operator-facing context: DB + memories + capsules + comm profile + cross-session voice rail. */
+export async function buildVoiceRailOperatorContext({ pool, userId, lumin, communicationProfile, logger }) {
   const ctx = { loaded_at: new Date().toISOString() };
   const tasks = [];
 
@@ -282,7 +287,7 @@ export async function buildVoiceRailOperatorContext({ pool, userId, lumin, logge
 
   tasks.push(
     pool.query(
-      `SELECT m.role, LEFT(m.content, 500) AS content, m.department, m.created_at
+      `SELECT m.role, LEFT(m.content, 2000) AS content, m.department, m.created_at
          FROM voice_rail_messages m
          JOIN voice_rail_sessions s ON s.id = m.session_id
         WHERE s.user_id = $1 AND m.is_interim = FALSE
@@ -338,6 +343,40 @@ export async function buildVoiceRailOperatorContext({ pool, userId, lumin, logge
     }),
   );
 
+  if (communicationProfile?.getProfileForPrompt) {
+    tasks.push(
+      communicationProfile.getProfileForPrompt(userId).then((p) => {
+        ctx.founder_communication_profile = p || null;
+      }).catch((e) => {
+        logger?.warn?.({ err: e.message }, 'voice-rail communication profile failed');
+        ctx.founder_communication_profile = null;
+      }),
+    );
+  }
+
+  tasks.push(
+    retrieveCapsules(
+      'LifeOS founder voice rail operator context',
+      'context_lane',
+      'voice_rail_founder',
+      'founder_comms_wearing_dept_hat',
+      'context_only',
+      pool,
+    ).then((r) => {
+      ctx.memory_capsules = (r.results || []).slice(0, 15).map((c) => ({
+        capsule_id: c.capsule_id,
+        title: c.title,
+        truth_class: c.truth_class,
+        trust_level: c.trust_level,
+        task_scope: c.task_scope,
+      }));
+      ctx.memory_capsule_provenance = r.provenance?.length || 0;
+    }).catch((e) => {
+      logger?.warn?.({ err: e.message }, 'voice-rail memory capsule retrieve failed');
+      ctx.memory_capsules = [];
+    }),
+  );
+
   tasks.push(
     pool.query(
       `SELECT title, status, due_at, updated_at
@@ -383,6 +422,7 @@ async function generateCouncilReply({
   pool,
   callCouncilMember,
   lumin,
+  communicationProfile,
   userId,
   sessionId,
   listMessagesFn,
@@ -401,7 +441,7 @@ async function generateCouncilReply({
 
   let contextData = {};
   try {
-    contextData = await buildVoiceRailOperatorContext({ pool, userId, lumin, logger });
+    contextData = await buildVoiceRailOperatorContext({ pool, userId, lumin, communicationProfile, logger });
   } catch (ctxErr) {
     logger?.warn?.({ err: ctxErr.message }, 'voice-rail operator context failed');
   }
@@ -466,7 +506,7 @@ async function generateCouncilReply({
       critical: true,
       founderComms: true,
       allowModelDowngrade: false,
-      maxOutputTokens: 800,
+      maxOutputTokens: parseInt(process.env.VOICE_RAIL_FOUNDER_MAX_OUTPUT || '8192', 10),
       model: routing.modelId,
     });
   } catch (apiErr) {
@@ -496,6 +536,7 @@ export function createVoiceRailV1({
   councilMembers,
   councilAliasMap,
   lumin,
+  communicationProfile,
   logger,
 }) {
   async function resolveUserId(userRef) {
@@ -583,13 +624,21 @@ export function createVoiceRailV1({
     return rows.reverse();
   }
 
-  function resolveRouting(deptId, councilMemberOverride) {
+  function resolveRouting(deptId, councilMemberOverride, turn = {}) {
     const overrideKey = normalizeProviderMemberKey(
       councilMemberOverride,
       councilMembers,
       councilAliasMap,
     );
-    return resolveDepartmentRouting(deptId, councilMembers, councilAliasMap, overrideKey);
+    return resolveFounderVoiceRailRouting({
+      deptId,
+      councilMemberOverride: overrideKey,
+      councilMembers,
+      councilAliasMap,
+      content: turn.content || '',
+      mode: turn.mode || 'conversation',
+      intent: turn.intent || 'general_conversation',
+    });
   }
 
   async function listMessages(sessionId, userId) {
@@ -714,7 +763,11 @@ export function createVoiceRailV1({
       }
     }
 
-    const routing = resolveRouting(deptId, councilMember);
+    const routing = resolveRouting(deptId, councilMember, {
+      content: councilContent,
+      mode,
+      intent,
+    });
     const operator = await resolveOperatorProfile(userId);
 
     const panelMemberKeys = (() => {
@@ -747,12 +800,17 @@ export function createVoiceRailV1({
     if (panelMemberKeys.length > 1) {
       const panelReplies = await Promise.all(
         panelMemberKeys.map(async (memberKey) => {
-          const panelRouting = resolveRouting(deptId, memberKey);
+          const panelRouting = resolveRouting(deptId, memberKey, {
+            content: councilContent,
+            mode,
+            intent,
+          });
           try {
             const panelResult = await generateCouncilReply({
               pool,
               callCouncilMember,
               lumin,
+              communicationProfile,
               userId,
               sessionId: session.id,
               listMessagesFn: listMessages,
@@ -774,6 +832,7 @@ export function createVoiceRailV1({
               provider: panelRouting.provider,
               display_name: panelRouting.displayName,
               context_health: panelResult.contextHealth,
+              routing_meta: panelRouting.routing_meta || null,
               note: panelResult.contextHealth?.honesty_note || 'Panel reply via council API.',
             };
             const { rows: assistantRows } = await pool.query(
@@ -833,6 +892,7 @@ export function createVoiceRailV1({
         pool,
         callCouncilMember,
         lumin,
+        communicationProfile,
         userId,
         sessionId: session.id,
         listMessagesFn: listMessages,
@@ -854,6 +914,7 @@ export function createVoiceRailV1({
         provider: routing.provider,
         display_name: routing.displayName,
         context_health: councilResult.contextHealth,
+        routing_meta: routing.routing_meta || null,
         note: councilResult.contextHealth?.honesty_note || 'Council API reply.',
       };
     } catch (e) {
@@ -943,7 +1004,7 @@ export function createVoiceRailV1({
   async function probeFounderContext(userId) {
     let contextData = {};
     try {
-      contextData = await buildVoiceRailOperatorContext({ pool, userId, lumin, logger });
+      contextData = await buildVoiceRailOperatorContext({ pool, userId, lumin, communicationProfile, logger });
     } catch (e) {
       logger?.warn?.({ err: e.message }, 'voice-rail context probe failed');
     }

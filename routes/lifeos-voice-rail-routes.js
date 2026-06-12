@@ -14,6 +14,7 @@ import {
 } from '../services/voice-rail-attachments.js';
 import { createCommitmentTracker } from '../services/commitment-tracker.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
+import { createCommunicationProfile } from '../services/communication-profile.js';
 
 const sttUpload = multer({
   storage: multer.memoryStorage(),
@@ -32,6 +33,8 @@ export function createLifeOSVoiceRailRoutes({
   const router = express.Router();
   const commitmentTracker = pool ? createCommitmentTracker(pool, callAI) : null;
   const lumin = pool && callAI ? createLifeOSLumin({ pool, callAI, logger }) : null;
+  const communicationProfile =
+    pool && callAI ? createCommunicationProfile({ pool, callAI, logger }) : null;
   const voiceRail = createVoiceRailV1({
     pool,
     commitmentTracker,
@@ -40,6 +43,7 @@ export function createLifeOSVoiceRailRoutes({
     councilMembers,
     councilAliasMap,
     lumin,
+    communicationProfile,
     logger,
   });
 
@@ -61,7 +65,8 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.11',
+      build: 'voice-rail-v2.12',
+      founder_auto_routing: true,
       fail_closed_founder_comms: isVoiceRailFailClosedEnabled(),
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,

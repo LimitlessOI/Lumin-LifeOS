@@ -13,7 +13,7 @@ export const VOICE_RAIL_DEPARTMENTS = Object.freeze({
     summary: 'Founder communication, orchestration, routine judgment',
     roleLine:
       'Council Chair (ChC): executive comms, orchestrate sessions, stage commands (never auto-run), escalate load-bearing items to full Council (Cncl).',
-    defaultMember: 'anthropic',
+    defaultMember: 'founder_auto',
     memberEnv: 'VOICE_RAIL_DEPT_CHC_MEMBER',
     modelEnv: 'VOICE_RAIL_DEPT_CHC_MODEL',
   },
@@ -23,7 +23,7 @@ export const VOICE_RAIL_DEPARTMENTS = Object.freeze({
     summary: 'Ledger, lessons, evidence, meaning',
     roleLine:
       'Historian (Hist): nail-level ledger, lessons, triggers — evidence and meaning; you do not solo-verdict load-bearing outcomes.',
-    defaultMember: 'anthropic',
+    defaultMember: 'founder_auto',
     memberEnv: 'VOICE_RAIL_DEPT_HIST_MEMBER',
     modelEnv: 'VOICE_RAIL_DEPT_HIST_MODEL',
   },
@@ -33,7 +33,7 @@ export const VOICE_RAIL_DEPARTMENTS = Object.freeze({
     summary: 'Adversarial review, drift, proposed fixes',
     roleLine:
       'Sentinel (SNT): immune system — challenge drift, stress-test claims, propose concrete fixes; attack with solutions, not theater.',
-    defaultMember: 'anthropic',
+    defaultMember: 'founder_auto',
     memberEnv: 'VOICE_RAIL_DEPT_SNT_MEMBER',
     modelEnv: 'VOICE_RAIL_DEPT_SNT_MODEL',
   },
@@ -43,7 +43,7 @@ export const VOICE_RAIL_DEPARTMENTS = Object.freeze({
     summary: 'ROI, routing, spend stewardship',
     roleLine:
       'CFO: stewardship — speed, spend, ROI, model scorecards; plain terms on cost vs outcome (founder priority mode when declared).',
-    defaultMember: 'anthropic',
+    defaultMember: 'founder_auto',
     memberEnv: 'VOICE_RAIL_DEPT_CFO_MEMBER',
     modelEnv: 'VOICE_RAIL_DEPT_CFO_MODEL',
   },
@@ -53,7 +53,7 @@ export const VOICE_RAIL_DEPARTMENTS = Object.freeze({
     summary: 'SSOT → living blueprint translation',
     roleLine:
       'Blueprint (BPB): translate SSOT into living blueprint — translation only, no code, no solo load-bearing verdict.',
-    defaultMember: 'anthropic',
+    defaultMember: 'founder_auto',
     memberEnv: 'VOICE_RAIL_DEPT_BPB_MEMBER',
     modelEnv: 'VOICE_RAIL_DEPT_BPB_MODEL',
   },
@@ -63,7 +63,7 @@ export const VOICE_RAIL_DEPARTMENTS = Object.freeze({
     summary: 'Visual / UX specs when UI in scope',
     roleLine:
       'Design (SDO): visual and UX specs when UI is in scope — concrete, not product law.',
-    defaultMember: 'anthropic',
+    defaultMember: 'founder_auto',
     memberEnv: 'VOICE_RAIL_DEPT_SDO_MEMBER',
     modelEnv: 'VOICE_RAIL_DEPT_SDO_MODEL',
   },
@@ -73,7 +73,7 @@ export const VOICE_RAIL_DEPARTMENTS = Object.freeze({
     summary: 'Execution authority — receipts, blockers up',
     roleLine:
       'Code execution (CDR): execution authority — how to build/run, blockers upward; no design inference in this chat.',
-    defaultMember: 'anthropic',
+    defaultMember: 'founder_auto',
     memberEnv: 'VOICE_RAIL_DEPT_CDR_MEMBER',
     modelEnv: 'VOICE_RAIL_DEPT_CDR_MODEL',
   },
@@ -187,7 +187,8 @@ MODEL (disclose if asked): ${routing.displayName} · ${routing.provider} · ${ro
 
 HOW TO WRITE:
 - Direct, capable, plain English. Answer the latest message; use depth when ${operatorName} asks about system health, projects, memory, or what was built.
-- NEVER claim you lack memory across sessions, that each session starts fresh, or that you have no record of prior work — LifeOS context below IS your memory (DB, voice rail history, missions, continuity log, verified memories).
+- If founder_communication_profile is in context — obey it (tone, length, formality). If ${operatorName} says they dislike fluff, formality, or repetition — treat that as law and remember it applies forward.
+- NEVER claim you lack memory across sessions, that each session starts fresh, or that you have no record of prior work — LifeOS context below IS your memory (DB, voice rail history, memory capsules, missions, continuity log, verified memories).
 - When asked what the system worked on / project status / health: cite specifics from the context payload only. If a field is empty, say what is missing — never invent.
 - No thread recap filler, no "You asked about…", no "ANSWER:", no "Same as above."
 - Session mode: ${mode}.
