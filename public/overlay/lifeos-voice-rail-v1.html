@@ -411,7 +411,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.18</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.19</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -433,7 +433,7 @@
 
   <div id="truth-banner" role="status" class="connection-check">
     <span id="connection-status">Checking LifeOS connection…</span>
-    <span class="truth-build"> · build <strong>v2.18</strong></span>
+    <span class="truth-build"> · build <strong>v2.19</strong></span>
   </div>
 
   <div id="auth-banner" role="alert">
@@ -721,8 +721,11 @@
         const sha = exec.commit_sha ? ` · commit ${String(exec.commit_sha).slice(0, 12)}` : '';
         const file = exec.target_file ? ` · ${exec.target_file}` : '';
         const run = exec.timed_out ? ' · STILL RUNNING (tap Poll)' : '';
-        const err = exec.error && !exec.ok ? ` · ${exec.error}` : '';
-        return `EXEC RECEIPT · job_id ${exec.job_id}${sha}${file}${run}${err}`;
+        const root = exec.root_cause || (exec.error && !exec.ok ? exec.error : null);
+        const http = exec.builder_http_status ? ` · HTTP ${exec.builder_http_status}` : '';
+        const err = root ? ` · ${root}${http}` : '';
+        const okLabel = exec.ok ? '' : ' · builder_failed';
+        return `EXEC RECEIPT · job_id ${exec.job_id}${sha}${file}${okLabel}${run}${err}`;
       }
       if (exec?.skipped) return `BLOCKED: execution disabled (${exec.reason || 'VOICE_RAIL_EXECUTE_COMMANDS off'})`;
       if (exec?.error) return `BLOCKED: ${exec.error}`;
@@ -735,15 +738,29 @@
       });
       const json = await r.json().catch(() => ({}));
       const job = json.job || {};
-      const trace = job.execution_trace_json || job.execution_trace || {};
-      const raw = trace?.builder_output?.raw || trace?.builder_output || {};
+      const receipts = Array.isArray(job.receipts_json) ? job.receipts_json : [];
+      const dispatch = receipts.find((row) => row.stage === 'builder_dispatch') || {};
+      const resultBo = job.result_json?.builder_output || {};
+      const raw = job.result_json?.builder_raw || {};
       const sha = raw.commit_sha || raw.commitSha || raw.sha || null;
       const status = job.status || '?';
+      const http = dispatch.http_status ?? resultBo.http_status ?? raw.http_status;
+      const root =
+        job.blocker
+        || dispatch.error
+        || resultBo.error
+        || raw.error
+        || raw.detail?.reason
+        || null;
       receiptEl.classList.remove('ok', 'warn', 'fail');
-      if (status === 'completed' || status === 'succeeded') receiptEl.classList.add('ok');
+      if (status === 'committed' || status === 'deployed') receiptEl.classList.add('ok');
       else if (status === 'failed' || status === 'blocked') receiptEl.classList.add('fail');
       else receiptEl.classList.add('warn');
-      receiptEl.textContent = `EXEC RECEIPT · job_id ${jobId} · status ${status}${sha ? ` · commit ${String(sha).slice(0, 12)}` : ''}${job.blocker ? ` · ${job.blocker}` : ''}`;
+      receiptEl.textContent =
+        `EXEC RECEIPT · job_id ${jobId} · status ${status}`
+        + (sha ? ` · commit ${String(sha).slice(0, 12)}` : '')
+        + (root ? ` · ${root}` : '')
+        + (http != null ? ` · HTTP ${http}` : '');
     }
 
     function buildExecReceiptEl(exec, mode) {
@@ -751,9 +768,9 @@
       const el = document.createElement('div');
       el.className = 'exec-receipt';
       if (exec?.job_id) {
-        el.classList.add(exec.timed_out ? 'warn' : 'ok');
+        el.classList.add(exec.ok ? 'ok' : exec.timed_out ? 'warn' : 'fail');
         el.textContent = formatExecReceiptText(exec);
-        if (exec.timed_out || !exec.commit_sha) {
+        if (!exec.ok || exec.timed_out || !exec.commit_sha) {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.textContent = 'Poll';

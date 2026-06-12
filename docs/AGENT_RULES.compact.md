@@ -1,9 +1,9 @@
 # AGENT RULES — COMPACT ENFORCEMENT
-> Generated: 2026-06-12T00:53:03.408Z | Regenerate: `npm run gen:rules`
+> Generated: 2026-06-12T19:32:53.763Z | Regenerate: `npm run gen:rules`
 > NSSOT only for constitutional edits. **Next:** `prompts/00-HIST-LEGACY-BOUNDARY.md` (do not skip).
 
 ## HIST (mandatory first)
-Legacy=**Hist-owned**; read/salvage only. Law:`prompts/00-HIST-LEGACY-BOUNDARY.md`. Factory:`factory-staging/`+`builderos-reboot/MISSIONS/`. Live:`routes/`/`services/`.
+Legacy=Hist-owned; salvage-only. Law:`prompts/00-HIST-LEGACY-BOUNDARY.md`. Factory:`builderos-reboot/MISSIONS/`. Live:`routes/`/`services/`.
 
 ## HIERARCHY
 NSSOT > Companion > `CLAUDE.md` > Amendments > repo
@@ -11,7 +11,7 @@ NSSOT > Companion > `CLAUDE.md` > Amendments > repo
 ## SUPREME LAWS
 - §2.6: truth labels; no silent fail.
 - §2.11a builder-first; §2.11b score+evidence; §2.11c supervisor≠IDE typist.
-- §2.14 TSOS lexicon. §2.15 do|HALT. §2.17 proof|UNSOLVED.
+- §2.14 lexicon. §2.15 do|HALT. §2.17 proof|UNSOLVED. §2.18 correct-or-HALT; no close-enough.
 
 ## BUILDER-FIRST
 1. `npm run builder:preflight`
@@ -36,7 +36,7 @@ START:Hist,preflight,QL. BUILD:/build→GAP-FILL. END:receipts. PUSH unless hold
 Read full file before edit SSOT-class docs. Atomic file→receipt.
 
 ## PROHIBITED
-Lie; skip Hist prompt; extend legacy default; done w/o receipts; `--no-verify`; env gaslight; IDE when system owed.
+Lie; extend legacy; done w/o receipts; `--no-verify`; env gaslight; IDE when system owed.
 
 ## STATE
 `QUICK_LAUNCH` queue · `CONTINUITY_LOG` · AM21/17/39 handoffs

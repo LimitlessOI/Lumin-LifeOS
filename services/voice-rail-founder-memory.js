@@ -110,7 +110,7 @@ export async function persistFounderPreferenceSignal({
 
     await pool.query(
       `UPDATE communication_profiles
-          SET profile_summary = TRIM(BOTH FROM COALESCE(profile_summary, '') || $2),
+          SET profile_summary = RIGHT(TRIM(BOTH FROM COALESCE(profile_summary, '') || $2), 5000),
               updated_at = NOW()
         WHERE user_id = $1`,
       [userId, `\n[Voice Rail ${new Date().toISOString().slice(0, 10)}] ${hit.excerpt}`],

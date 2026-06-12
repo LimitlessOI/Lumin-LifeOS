@@ -1,6 +1,6 @@
 /**
  * Sync BP_PRIORITY + mission BLUEPRINT from acceptance receipts (machine law).
- * @ssot docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md
+ * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -420,5 +420,49 @@ export function checkStagedProductReceiptCommit({ root }) {
     }
   }
 
+  return failures;
+}
+
+const PRODUCT_RECEIPTS_DIR = 'products/receipts';
+
+/** §2.18 — any product PASS receipt must be BP-registered and carry bp_sync proof (repo-wide, not staged-only). */
+export function checkOrphanProductPassReceipts({ root }) {
+  const failures = [];
+  const receiptDir = path.join(root, PRODUCT_RECEIPTS_DIR);
+  if (!fs.existsSync(receiptDir)) return failures;
+
+  const bp = loadBpPriority({ root });
+  const registeredReceipts = new Set(
+    (bp.items || []).map((i) => i.receipt_path).filter(Boolean),
+  );
+
+  for (const name of fs.readdirSync(receiptDir)) {
+    if (!name.endsWith('.json')) continue;
+    const rel = `${PRODUCT_RECEIPTS_DIR}/${name}`;
+    const full = path.join(root, rel);
+    let receipt;
+    try {
+      receipt = JSON.parse(fs.readFileSync(full, 'utf8'));
+    } catch (e) {
+      failures.push({ id: 'BP_RECEIPT_PARSE', detail: `${rel}: ${e.message}` });
+      continue;
+    }
+    if (receipt.verdict !== 'PASS') continue;
+
+    if (!registeredReceipts.has(rel)) {
+      failures.push({
+        id: 'BP_ORPHAN_PASS_NOT_REGISTERED',
+        detail: `${rel}: verdict PASS but not listed in ${BP_PRIORITY_REL} — orphan PASS forbidden (§2.18)`,
+      });
+    }
+
+    const updated = receipt.bp_sync?.updated;
+    if (!Array.isArray(updated) || !updated.includes(BP_SYNC_REQUIRED_PATH)) {
+      failures.push({
+        id: 'BP_ORPHAN_PASS_NO_SYNC',
+        detail: `${rel}: verdict PASS requires bp_sync.updated → ${BP_SYNC_REQUIRED_PATH} (§2.18)`,
+      });
+    }
+  }
   return failures;
 }

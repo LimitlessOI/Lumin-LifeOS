@@ -20,6 +20,7 @@ import {
 import { runVerification } from '../scripts/builderos-builder-output-verifier.mjs';
 import { emitTSOSHookReading, buildTsosHookPayloadFromGovernedCommit } from './builderos-tsos-hook-service.js';
 import { scheduleProofParityAfterGovernedCommit } from './builderos-governed-proof-parity.js';
+import { looksLikeBuilderProseRefusal } from './builder-instruction-target.js';
 
 function resolveBaseUrl(explicit) {
   return (
@@ -128,6 +129,13 @@ async function tryExecuteFallback(builderResult, plan, { baseUrl, commandKey, jo
   if (!builderResult.ok || !builderResult.output || builderResult.committed) return builderResult;
   const effectiveTargetFile = builderResult.target_file || plan.target_file;
   if (!effectiveTargetFile) return builderResult;
+  if (looksLikeBuilderProseRefusal(builderResult.output, effectiveTargetFile)) {
+    return {
+      ...builderResult,
+      error: 'builder_prose_refusal',
+      execute_fallback_attempted: false,
+    };
+  }
   const url = `${baseUrl}/api/v1/lifeos/builder/execute`;
   const response = await fetch(url, {
     method: 'POST',
@@ -148,6 +156,24 @@ async function tryExecuteFallback(builderResult, plan, { baseUrl, commandKey, jo
     return { ...builderResult, committed: true, target_file: json.target_file || effectiveTargetFile, execute_fallback_used: true };
   }
   return { ...builderResult, execute_fallback_attempted: true, execute_fallback_error: json?.error || `http_${response.status}` };
+}
+
+function resolveBuilderDispatchBlocker(builderResult, plan) {
+  const raw = builderResult.raw || {};
+  const targetFile = plan.target_file || builderResult.target_file;
+  if (looksLikeBuilderProseRefusal(builderResult.output, targetFile)) {
+    return 'builder_prose_refusal';
+  }
+  if (!builderResult.committed && !targetFile) {
+    return 'builder_missing_target_file';
+  }
+  return (
+    builderResult.execute_fallback_error
+    || builderResult.error
+    || raw.error
+    || raw.note
+    || 'BUILDER_DISPATCH_FAILED'
+  );
 }
 
 export async function executeCommandControlJob(pool, jobId, options = {}) {
@@ -278,12 +304,13 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   }
 
   if (!builderResult.ok || !builderResult.committed) {
+    const blocker = resolveBuilderDispatchBlocker(builderResult, plan);
     await updateCommandControlJobExecution(pool, jobId, {
       status: 'failed',
-      blocker: builderResult.execute_fallback_error || builderResult.error || 'BUILDER_DISPATCH_FAILED',
+      blocker,
       result_json: { builder_output: trace.builder_output, builder_raw: builderResult.raw },
     });
-    return { ok: false, error: 'builder_failed', stage: 'builder_dispatch', trace };
+    return { ok: false, error: 'builder_failed', stage: 'builder_dispatch', trace, blocker };
   }
 
   let verifierResult = await verifyBuilderOutput(builderResult.target_file, builderResult.output);
@@ -377,13 +404,14 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   }
 
   if (!builderResult.ok || !builderResult.committed) {
+    const blocker = resolveBuilderDispatchBlocker(builderResult, plan) || 'BUILDER_RETRY_FAILED';
     await updateCommandControlJobExecution(pool, jobId, {
       status: 'failed',
-      blocker: builderResult.execute_fallback_error || builderResult.error || 'BUILDER_RETRY_FAILED',
+      blocker,
       result_json: { repair_loop_result: trace.repair_loop_result, builder_output: trace.builder_output },
     });
     trace.repair_loop_result.result = 'builder_retry_failed';
-    return { ok: false, error: 'builder_retry_failed', stage: 'builder_retry', trace };
+    return { ok: false, error: 'builder_retry_failed', stage: 'builder_retry', trace, blocker };
   }
 
   const retryVerifier = await verifyBuilderOutput(builderResult.target_file, builderResult.output);

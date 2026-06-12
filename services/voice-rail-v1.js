@@ -129,6 +129,27 @@ function isSystemOrMemoryQuestion(text) {
   );
 }
 
+function isStructuredVoiceRailReply(text) {
+  const raw = String(text || '');
+  return (
+    /\bcommand_execution_receipt\b/i.test(raw)
+    || /\bEXEC RECEIPT\b/i.test(raw)
+    || /\bVERDICT:\s*(PASS|FAIL)/i.test(raw)
+    || /\bTHEATER CHECK\b/i.test(raw)
+    || /^\s*\d+[.)]\s/m.test(raw)
+    || (/\bjob_id\b/i.test(raw) && /\b(builder_failed|commit_sha|root_cause)\b/i.test(raw))
+  );
+}
+
+function isStructuredUserQuestion(text) {
+  const q = String(text || '');
+  return (
+    isSystemOrMemoryQuestion(q)
+    || /\b(CONNECTED|THEATER CHECK|VERDICT|command_execution|job_id|builder_failed|root cause)\b/i.test(q)
+    || /\b\d+[.)]\s/.test(q)
+  );
+}
+
 export function sanitizeVoiceRailReply(text, priorAssistants, operatorName, userQuestion) {
   const name = operatorName || 'Adam';
   let raw = String(text || '').trim();
@@ -149,17 +170,24 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName, user
     }
     return true;
   });
-  let out = kept.join(' ').replace(/\s+/g, ' ').trim();
+  const structured = isStructuredVoiceRailReply(raw) || isStructuredUserQuestion(userQuestion);
+  let out = structured ? kept.join('\n').trim() : kept.join(' ').replace(/\s+/g, ' ').trim();
   out = out.replace(/\bLumen\b/g, 'LifeOS');
-  const maxLen = isSystemOrMemoryQuestion(userQuestion) ? 1400 : 720;
-  if (out.length > maxLen) {
-    const sentences = out.match(/[^.!?]+[.!?]+/g) || [out];
-    out = sentences.slice(0, isSystemOrMemoryQuestion(userQuestion) ? 6 : 3).join(' ').trim();
+  if (!structured) {
+    const maxLen = isSystemOrMemoryQuestion(userQuestion) ? 1400 : 720;
+    if (out.length > maxLen) {
+      const sentences = out.match(/[^.!?]+[.!?]+/g) || [out];
+      out = sentences.slice(0, isSystemOrMemoryQuestion(userQuestion) ? 6 : 3).join(' ').trim();
+    }
+  } else if (out.length > 6000) {
+    out = `${out.slice(0, 5800).trim()}\n\n[truncated — use EXEC RECEIPT / Poll for machine truth]`;
   }
   const priors = (priorAssistants || []).filter((m) => m.role === 'assistant').map((m) => m.content);
-  for (const prev of priors.slice(-2)) {
-    if (isNearDuplicateReply(out, prev)) {
-      return `${name}, I already said that — what do you want to tackle next?`;
+  if (!structured) {
+    for (const prev of priors.slice(-2)) {
+      if (isNearDuplicateReply(out, prev)) {
+        return `${name}, I already said that — what do you want to tackle next?`;
+      }
     }
   }
   return out || `${name}, council returned nothing usable — try again; if it repeats, check Railway logs for council_unavailable.`;
@@ -807,6 +835,8 @@ export function createVoiceRailV1({
     private: isPrivate = false,
     simulateOnly = false,
     continuous = true,
+    commandKey = null,
+    baseUrl = null,
   }) {
     const content = String(text || '').trim();
     const deptId = normalizeVoiceRailDepartment(department);
@@ -876,6 +906,8 @@ export function createVoiceRailV1({
             utterance: content,
             userId,
             logger,
+            commandKey,
+            baseUrl,
           });
           stagedCommand = {
             ...stagedCommand,

@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-06-12 — Voice Rail builder patch pipeline (target_file from instruction, prose gate, governed loop blockers)
 
 ---
 
@@ -561,6 +561,8 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 ---
 
 ## Change Receipts
+
+| 2026-06-12 | `services/builder-instruction-target.js` (NEW), `builderos-pbb-plan.js`, `builderos-governed-loop-executor.js`, `routes/lifeos-council-builder-routes.js` | Voice Rail patch path: extract `target_file` from instruction; patch spec + `files[]`; prose refusal detection; validation rejects prose before commit; blockers `builder_prose_refusal` / `builder_missing_target_file`. Tests PASS. | Adam: prod builder failed with `target_file: null` + Gemini prose on proof-script command. GAP-FILL. |
 
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 

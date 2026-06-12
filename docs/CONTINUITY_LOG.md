@@ -3,6 +3,18 @@
 
 ---
 
+## [CONSTITUTION] 2026-06-12 — Article II §2.18 Compound Drift Law
+
+Adam: one-degree navigation error compounds (Hawaii→NY → Florida); decisions on false premises stack. **Shipped:** **Article II §2.18** in `docs/SSOT_NORTH_STAR.md` (Foundational Law) — zero tolerated angular error; mandatory course correction before build-on-error; mechanical enforcement must be **impossible** not “hard.” Cross-refs: §2.4, TL;DR table, `docs/constitution/NORTH_STAR.md` digest, Companion **§0.11**, `npm run gen:rules` → compact rules. **Next:** wire enforcement gaps Adam named (CI `lifeos:bp-priority:verify`, runtime `/build` blueprint gate, orphan PASS impossible on merge).
+
+---
+
+## [BUILD] 2026-06-12 — §2.18 enforcement + builder patch pipeline (local, not deployed)
+
+**Enforcement (§2.18 ¶5):** `checkOrphanProductPassReceipts()` — any `products/receipts/*.json` with `verdict: PASS` must be BP-registered + `bp_sync`; CI via `system-maturity-check.mjs` → `lifeos:bp-priority:verify` (26 checks PASS). **Builder patch pipeline (Voice Rail command path):** `services/builder-instruction-target.js` (path extract, prose refusal detect); `builderos-pbb-plan.js` (target from instruction, patch mode + `files[]`); `builderos-governed-loop-executor.js` (blocker labels); `voice-rail-command-executor.js` (metadata target/domain); `lifeos-council-builder-routes.js` (reject prose at validation). Tests: 8/8 PASS. **Next:** commit + deploy → re-run Voice Rail proof command → expect `target_file` + `commit_sha`.
+
+---
+
 ## [SESSION] 2026-05-24 — Voice Rail v2.18 connection + receipt UI
 
 Adam: duplicate Council Chair replies; no visible job_id; connection unclear. **Shipped (GAP-FILL):** live CONNECTED banner from `/connection-proof`; command-mode **EXEC RECEIPT** / **BLOCKED** under every reply; voice double-send fix (`voiceSendFired`); client fail-closed before chat when not connected; build **v2.18**. **Next:** deploy Railway → hard refresh → Command mode test → `npm run lifeos:voice-rail:capability-proof`.

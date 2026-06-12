@@ -1,8 +1,10 @@
+> **DIGEST:** `docs/constitution/NORTH_STAR.md` + `docs/AGENT_RULES.compact.md` cover operational rules for routine sessions. Read this full document only for constitutional sessions or when a specific section is referenced.
+
 # LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT
 ## Zero-Context Operational Manual + Enforcement Contract
 **System (canonical machine name):** **BuilderOS** — same stack as `docs/SSOT_NORTH_STAR.md`: council, builder, memory, governance, proof chain, and runtime machinery. **TSOS** is the external efficiency/routing product; **LifeOS** is a product built by BuilderOS.
 
-**Version:** 2026-05-27 (**BuilderOS machine identity correction** — Companion now matches North Star: BuilderOS is the autonomous machine; TSOS is the external efficiency/routing product and retained machine-channel lexicon name). Prior: 2026-04-26 (**§5.2 / §5.5** — mandatory **future-back** consensus artifact; **§6.4 / §7.2** anti-corner-cutting + evidence-engine memory enforcement). Prior: 2026-04-25 (**§0.5D** — new **supervisor mandate** / North Star **§2.11c**; Conductor = audit + system `/build`, not default IDE product authorship). Prior: **§0.5I** operator instruction + **§2.15**; **§0.5H** TSOS machine-channel (**§2.14**); **§0.4** `SYSTEM_CAPABILITIES.md`. Prior: 2026-04-22 self-serve ops + `ENV_REGISTRY`; **§2.3**; prior **§0.5F** / **§0.5G**; **§0.5D**; **§2.12** + **§2.11**)  
+**Version:** 2026-06-12 (**§0.11** — aligned to North Star **Article II §2.18** compound drift law: zero tolerated angular error; course-correct or HALT). Prior: 2026-05-27 (**BuilderOS machine identity correction** — Companion now matches North Star: BuilderOS is the autonomous machine; TSOS is the external efficiency/routing product and retained machine-channel lexicon name). Prior: 2026-04-26 (**§5.2 / §5.5** — mandatory **future-back** consensus artifact; **§6.4 / §7.2** anti-corner-cutting + evidence-engine memory enforcement). Prior: 2026-04-25 (**§0.5D** — new **supervisor mandate** / North Star **§2.11c**; Conductor = audit + system `/build`, not default IDE product authorship). Prior: **§0.5I** operator instruction + **§2.15**; **§0.5H** TSOS machine-channel (**§2.14**); **§0.4** `SYSTEM_CAPABILITIES.md`. Prior: 2026-04-22 self-serve ops + `ENV_REGISTRY`; **§2.3**; prior **§0.5F** / **§0.5G**; **§0.5D**; **§2.12** + **§2.11**)  
 **Status:** CANONICAL COMPANION (SSOT-adjacent)  
 **Purpose:** Ensure any AI can operate with zero prior exposure without drift or hallucinations.
 
@@ -404,12 +406,14 @@ If the full governance path would create avoidable decision latency, the system 
 
 ## 0.11 Drift and Assumption-Killing Rule (NEW)
 
+**Supreme law:** North Star **Article II §2.18** — **zero tolerated angular error.** A one-degree false assumption or failed verification **compounds**: each downstream decision inherits the error. **Course-correct at the source or HALT** — never build atop uncorrected drift. “Close enough,” “hard to cheat,” and “can’t easily ship wrong” are **§2.6** violations.
+
 Humans drift.
 Models drift.
 Governance drifts.
 Assumptions drift.
 
-The system must detect, measure, and correct drift rather than pretending it can eliminate drift.
+The system must detect, measure, and **correct** drift at the **first detectable degree** — not manage it as acceptable noise.
 
 Operational assumption-killing checklist:
 1. What do we know from evidence?

@@ -51,6 +51,11 @@ function main() {
     process.exit(1);
   }
 
+  if (!runNpm('lifeos:bp-priority:verify')) {
+    console.error('\n[fail] lifeos:bp-priority:verify — orphan PASS / BP sync / Hist guardrails (§2.18)\n');
+    process.exit(1);
+  }
+
   const preflight = path.join(ROOT, 'scripts', 'council-builder-preflight.mjs');
   const canBuilderProbe =
     !inCi &&

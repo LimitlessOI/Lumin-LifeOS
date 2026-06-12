@@ -9,6 +9,10 @@ import { randomUUID } from 'crypto';
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { classifyBuildTarget } from './builderos-patch-mode-policy.js';
+import {
+  extractTargetFileFromInstruction,
+  inferBuilderDomainForTargetFile,
+} from './builder-instruction-target.js';
 
 const MIN_JS_LINES = 40;
 const MIN_JS_LINES_UPDATE = 15;
@@ -38,12 +42,25 @@ function extractExportNames(instruction) {
 
 function isUpdateInstruction(instruction, targetFile) {
   const lower = instruction.toLowerCase();
-  if (/\bupdate\b/.test(lower) || /\bpatch\b/.test(lower) || /\bmodify\b/.test(lower)) return true;
-  if (targetFile && existsSync(resolve(targetFile))) return true;
+  if (
+    /\b(update|patch|modify|edit)\b/.test(lower)
+    || /\badd\s+(?:a\s+)?(?:one-line\s+)?(?:comment|line)\b/.test(lower)
+    || /\bat line\s+\d+\b/.test(lower)
+    || /\bdo not change anything else\b/.test(lower)
+    || /\b(insert|append|remove|delete|fix|replace)\b/.test(lower)
+  ) {
+    return true;
+  }
+  if (targetFile && existsSync(resolve(targetFile))) {
+    // Greenfield "build/create" on an existing path is not a patch unless delta verbs appear above.
+    if (/\b(build|create|scaffold|implement)\b/.test(lower)) return false;
+    return false;
+  }
   return false;
 }
 
-function readExistingFileSnippet(targetFile, maxChars = 6000) {
+/** Match builder file-inject cap so patch specs include the full target when possible. */
+function readExistingFileSnippet(targetFile, maxChars = 120_000) {
   try {
     const content = readFileSync(resolve(targetFile), 'utf8');
     if (content.length <= maxChars) return content;
@@ -79,7 +96,8 @@ const AUDIT_INSTRUCTION_MARKERS = /\b(read[- ]only|audit|investigate|diagnostic|
 const CONTRADICTORY_IMPORT_MARKERS = /\b(pg\b|dotenv|process\.argv|read-only cli\b|export main\b|token_usage_log)/i;
 
 function isZone1AuditScriptJob(instruction, targetFile) {
-  if (!isZone1NewScriptTarget(targetFile)) return false;
+  const normalized = normalizeText(targetFile).replace(/\\/g, '/');
+  if (!/^scripts\/[^/]+\.mjs$/i.test(normalized)) return false;
   const text = normalizeText(instruction);
   return AUDIT_INSTRUCTION_MARKERS.test(text) || CONTRADICTORY_IMPORT_MARKERS.test(text);
 }
@@ -206,6 +224,8 @@ function buildUpdateJsSpec(instruction, targetFile, exportNames, existingContent
     `- Minimum ${MIN_JS_LINES_UPDATE} lines (match or exceed current ${lineCount} lines unless instruction removes code).`,
     '- Include file-level JSDoc with @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md.',
     '- Do NOT add process.argv CLI scaffolding.',
+    '- REPO FILE CONTENTS (if injected separately) is authoritative — emit the full updated file.',
+    '- Do NOT refuse or ask for file content — it is provided in EXISTING FILE and/or REPO FILE CONTENTS.',
     '',
     'REQUIRED EXPORTS / CHANGES:',
     exportLines,
@@ -227,15 +247,15 @@ function buildBaseSpec(instruction, targetFile) {
     (targetFile.includes('proof') || /builderos-.*-proof\.mjs$/i.test(targetFile));
 
   if (isJsTarget(targetFile)) {
+    if (isZone1AuditScriptJob(instruction, targetFile)) {
+      return buildZone1AuditJsSpec(instruction, targetFile, exportNames);
+    }
     if (isUpdateInstruction(instruction, targetFile)) {
       const zone = classifyBuildTarget(targetFile);
       const existingContent = readExistingFileSnippet(targetFile);
       return buildUpdateJsSpec(instruction, targetFile, exportNames, existingContent, zone.lineCount || 0);
     }
     if (isProofFile) return buildProofFileSpec(instruction, targetFile, exportNames);
-    if (isZone1AuditScriptJob(instruction, targetFile)) {
-      return buildZone1AuditJsSpec(instruction, targetFile, exportNames);
-    }
     return buildGenericJsSpec(instruction, targetFile, exportNames);
   }
 
@@ -258,8 +278,13 @@ export function generatePbbPlanFromOilAudit(job, oilAudit, options = {}) {
 
   const metadata = job?.metadata_json && typeof job.metadata_json === 'object' ? job.metadata_json : {};
   const instruction = normalizeText(job?.instruction);
-  const targetFile = normalizeText(metadata.target_file) || null;
-  const domain = normalizeText(metadata.domain) || 'builderos-platform';
+  const targetFile =
+    normalizeText(metadata.target_file)
+    || extractTargetFileFromInstruction(instruction)
+    || null;
+  const domain =
+    normalizeText(metadata.domain)
+    || (targetFile ? inferBuilderDomainForTargetFile(targetFile) : 'builderos-platform');
   const repairAttempt = Number(options.repairAttempt || 0);
   const verifierResult = options.verifierResult || null;
 

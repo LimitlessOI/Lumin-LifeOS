@@ -69,7 +69,7 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.18',
+      build: 'voice-rail-v2.19',
       founder_auto_routing: true,
       fail_closed_founder_comms: isVoiceRailFailClosedEnabled(),
       founder_command_execute: process.env.VOICE_RAIL_EXECUTE_COMMANDS !== '0',
@@ -283,6 +283,24 @@ export function createLifeOSVoiceRailRoutes({
     }
   });
 
+  function resolveRequestCommandKey(req) {
+    return (
+      req.headers['x-command-key']
+      || req.headers['x-command-center-key']
+      || req.headers['x-lifeos-key']
+      || req.headers['x-api-key']
+      || null
+    );
+  }
+
+  function resolveRequestBaseUrl(req) {
+    const envBase = String(process.env.PUBLIC_BASE_URL || process.env.RAILWAY_PUBLIC_DOMAIN || '').replace(/\/$/, '');
+    if (envBase) return envBase;
+    const proto = String(req.headers['x-forwarded-proto'] || req.protocol || 'https').split(',')[0].trim();
+    const host = String(req.headers['x-forwarded-host'] || req.get('host') || '').split(',')[0].trim();
+    return host ? `${proto}://${host}`.replace(/\/$/, '') : null;
+  }
+
   router.post('/message', requireKey, async (req, res, next) => {
     try {
       const userId = await voiceRail.resolveUserId(req.body.user || 'adam');
@@ -300,6 +318,8 @@ export function createLifeOSVoiceRailRoutes({
         private: Boolean(req.body.private),
         simulateOnly: Boolean(req.body.simulate_only),
         continuous: req.body.continuous !== false,
+        commandKey: resolveRequestCommandKey(req),
+        baseUrl: resolveRequestBaseUrl(req),
       });
       res.json({ ok: true, ...result });
     } catch (err) {

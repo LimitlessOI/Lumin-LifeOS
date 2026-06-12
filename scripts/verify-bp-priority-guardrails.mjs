@@ -18,6 +18,7 @@ import {
   checkAcceptanceScriptsRequireBpSync,
   checkPassReceiptsHaveBpSyncProof,
   checkStagedProductReceiptCommit,
+  checkOrphanProductPassReceipts,
 } from '../services/bp-priority-sync.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -273,6 +274,13 @@ function main() {
   }
   if (!failures.some((x) => x.id.startsWith('BP_RECEIPT_NO_SYNC') || x.id.startsWith('BP_FINGERPRINT'))) {
     pass('BP_PASS_RECEIPT_SYNC_PROOF');
+  }
+
+  for (const f of checkOrphanProductPassReceipts({ root: ROOT })) {
+    fail(f.id, f.detail);
+  }
+  if (!failures.some((x) => x.id.startsWith('BP_ORPHAN_PASS') || x.id.startsWith('BP_RECEIPT_PARSE'))) {
+    pass('BP_NO_ORPHAN_PASS_RECEIPTS');
   }
 
   if (stagedMode) {

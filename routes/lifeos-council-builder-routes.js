@@ -42,6 +42,7 @@ import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
+import { looksLikeBuilderProseRefusal } from '../services/builder-instruction-target.js';
 import {
   evaluateModelEscalationGate,
   writeModelEscalationReceipt,
@@ -470,6 +471,9 @@ function validateGeneratedOutputForTarget(targetFile, output) {
   }
   // JS absolute floor — catches 1-line truncated stubs; legitimate short files (helpers, re-exports) pass through to node --check
   if (target.endsWith('.js') || target.endsWith('.mjs') || target.endsWith('.cjs')) {
+    if (looksLikeBuilderProseRefusal(text, targetFile)) {
+      return 'generated output is prose refusal, not code — inject target_file + files[] or retry with full file in spec';
+    }
     const lineCount = text.split('\n').length;
     if (lineCount < 3) {
       return `generated JS is too short (${lineCount} lines); likely token-limit truncation — refusing to commit; retry with a smaller spec or explicit target_file`;
