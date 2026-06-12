@@ -12,8 +12,8 @@
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-  <script src="/overlay/lifeos-bootstrap.js?v=20260524-9"></script>
-  <script src="/shared/lifeos-voice-chat.js?v=20260524-9"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260524-10"></script>
+  <script src="/shared/lifeos-voice-chat.js?v=20260524-10"></script>
   <title>LifeOS Voice Rail</title>
   <style>
     :root,
@@ -219,7 +219,25 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--muted);
-      min-width: 2.75rem;
+      min-width: 2rem;
+    }
+    .control-row-label-dept {
+      margin-left: 2px;
+      min-width: 2.5rem;
+    }
+    .control-row-engines {
+      gap: 4px 6px;
+    }
+    .control-row-engines .provider-toggles,
+    .control-row-engines .dept-toggles {
+      flex: 0 1 auto;
+      min-width: 0;
+    }
+    #routing-line {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.35;
+      padding: 0 2px 2px;
     }
     .control-row-actions {
       align-items: center;
@@ -327,6 +345,11 @@
       min-width: 100px;
       max-width: 140px;
     }
+    .slider-field input[type="range"] {
+      width: 100%;
+      margin: 0;
+      order: 1;
+    }
     .slider-field span {
       font-size: 10px;
       font-weight: 600;
@@ -334,32 +357,8 @@
       text-transform: uppercase;
       color: var(--muted);
       text-align: center;
+      order: 2;
     }
-    .slider-field input[type="range"] {
-      width: 100%;
-      margin: 0;
-    }
-    #btn-multi-engine {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 4px 8px;
-      min-height: 2rem;
-    }
-    #btn-multi-engine.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--accent-fg);
-    }
-    #multi-hint {
-      font-size: 10px;
-      color: var(--accent);
-      flex: 1 1 100%;
-      display: none;
-      margin: 0;
-      padding: 0 0 2px calc(2.75rem + 6px);
-      line-height: 1.35;
-    }
-    #multi-hint.visible { display: block; }
     #truth-banner { flex-shrink: 0; margin: 0; padding: 6px 12px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 11px; line-height: 1.35; }
     [data-theme="dark"] #truth-banner { background: #3f2a08; color: #fde68a; border-color: #92400e; }
     #voice-status { font-size: 11px; color: var(--muted); min-height: 1em; flex-shrink: 0; }
@@ -388,7 +387,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.7</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.8</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -409,7 +408,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.7</strong> — controls stay visible when you resize the transcript. Speed &amp; Volume labeled. Tap <strong>Multi</strong> to pick several AIs. Mic falls back to browser if Whisper fails.
+    Build <strong>v2.8</strong> — one row for AI + Dept toggles. Tap multiple engines (no Multi button). Speed slider works on server voice. Footer shows department seat + engine.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -440,16 +439,13 @@
 
     <div class="composer">
       <div class="composer-controls">
-        <div class="control-row">
+        <div class="control-row control-row-engines">
           <span class="control-row-label">AI</span>
           <div class="provider-toggles" role="group" aria-label="AI engine" id="provider-toggles"></div>
-          <button type="button" class="btn icon-btn compact" id="btn-multi-engine" aria-pressed="false" title="Multi-engine — tap to select several AIs at once" aria-label="Multi-engine mode">Multi</button>
-        </div>
-        <p id="multi-hint" role="status">Multi on — tap each engine you want (2 or more). Send once to get parallel replies.</p>
-        <div class="control-row">
-          <span class="control-row-label">Dept</span>
+          <span class="control-row-label control-row-label-dept">Dept</span>
           <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
         </div>
+        <p id="routing-line" aria-live="polite">Talking to: Council Chair (ChC)</p>
         <div class="control-row control-row-actions">
           <span class="control-row-label">Mode</span>
           <div class="mode-toggles" role="group" aria-label="Session mode">
@@ -507,12 +503,12 @@
         </button>
         <div class="slider-group">
           <label class="slider-field" for="speech-rate">
+            <input type="range" id="speech-rate" min="0.75" max="1.5" step="0.05" value="1.05" aria-label="Read-aloud speed">
             <span>Speed</span>
-            <input type="range" id="speech-rate" min="0.75" max="1.1" step="0.05" value="0.94" aria-label="Read-aloud speed">
           </label>
           <label class="slider-field" for="speech-volume">
-            <span>Volume</span>
             <input type="range" id="speech-volume" min="0" max="1" step="0.05" value="1" aria-label="Read-aloud volume">
+            <span>Volume</span>
           </label>
         </div>
       </div>
@@ -843,6 +839,7 @@
         btn.classList.toggle('active', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
+      syncRoutingLine();
     }
 
     function onDepartmentSelected(deptId) {
@@ -859,19 +856,19 @@
       return `voice_rail_providers_multi_${deptId || document.getElementById('department').value || 'ChC'}`;
     }
 
-    function multiEngineMode() {
-      return localStorage.getItem('voice_rail_multi_engine') === '1';
+    function providerLabelForKey(memberKey) {
+      const p = providerCatalog.find((x) => x.member_key === memberKey);
+      return p ? providerButtonLabel(p) : memberKey;
     }
 
-    function setMultiEngineMode(on) {
-      localStorage.setItem('voice_rail_multi_engine', on ? '1' : '0');
-      const btn = document.getElementById('btn-multi-engine');
-      if (btn) {
-        btn.classList.toggle('active', on);
-        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-      }
-      document.getElementById('multi-hint')?.classList.toggle('visible', on);
-      syncProviderForDept();
+    function syncRoutingLine() {
+      const el = document.getElementById('routing-line');
+      if (!el) return;
+      const deptId = document.getElementById('department').value || 'ChC';
+      const meta = departmentMeta(deptId);
+      const engines = selectedProviderKeys();
+      const engineText = engines.length ? engines.map(providerLabelForKey).join(' + ') : '?';
+      el.textContent = `Talking to: ${meta?.title || deptId} (${deptId}) · ${engineText}`;
     }
 
     function selectedProviderKey() {
@@ -881,13 +878,11 @@
 
     function selectedProviderKeys() {
       const dept = document.getElementById('department').value || 'ChC';
-      if (multiEngineMode()) {
-        try {
-          const raw = localStorage.getItem(providersMultiStorageKey(dept));
-          const parsed = raw ? JSON.parse(raw) : [];
-          if (Array.isArray(parsed) && parsed.length) return parsed;
-        } catch (_) {}
-      }
+      try {
+        const raw = localStorage.getItem(providersMultiStorageKey(dept));
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (Array.isArray(parsed) && parsed.length) return parsed;
+      } catch (_) {}
       const saved = localStorage.getItem(providerStorageKey(dept));
       if (saved) return [saved];
       const fallback = providerCatalog[0]?.member_key;
@@ -918,25 +913,22 @@
 
     function onProviderSelected(memberKey) {
       const dept = document.getElementById('department').value || 'ChC';
-      if (multiEngineMode()) {
-        const set = new Set(selectedProviderKeys());
-        if (set.has(memberKey)) {
-          if (set.size > 1) set.delete(memberKey);
-        } else {
-          set.add(memberKey);
-        }
-        const next = [...set];
-        localStorage.setItem(providersMultiStorageKey(dept), JSON.stringify(next));
-        localStorage.setItem(providerStorageKey(dept), next[0]);
-        applyProviderUI(next);
-        return;
+      const set = new Set(selectedProviderKeys());
+      if (set.has(memberKey)) {
+        if (set.size > 1) set.delete(memberKey);
+      } else {
+        set.add(memberKey);
       }
-      localStorage.setItem(providerStorageKey(dept), memberKey);
-      applyProviderUI([memberKey]);
+      const next = [...set];
+      localStorage.setItem(providersMultiStorageKey(dept), JSON.stringify(next));
+      localStorage.setItem(providerStorageKey(dept), next[0]);
+      applyProviderUI(next);
+      syncRoutingLine();
     }
 
     function syncProviderForDept() {
       applyProviderUI(selectedProviderKeys());
+      syncRoutingLine();
     }
 
     function renderProviderToggles() {
@@ -945,7 +937,7 @@
       host.innerHTML = providerCatalog
         .map(
           (p) =>
-            `<button type="button" class="btn icon-btn compact provider-toggle dept-toggle" data-member-key="${escapeHtml(p.member_key)}" aria-pressed="false" title="${escapeHtml(p.label)}${p.model ? ' · ' + escapeHtml(p.model) : ''}" aria-label="${escapeHtml(p.label)}">${escapeHtml(providerButtonLabel(p))}</button>`,
+            `<button type="button" class="btn icon-btn compact provider-toggle dept-toggle" data-member-key="${escapeHtml(p.member_key)}" aria-pressed="false" title="${escapeHtml(p.label)}${p.model ? ' · ' + escapeHtml(p.model) : ''} — tap to select; tap more for panel" aria-label="${escapeHtml(p.label)}">${escapeHtml(providerButtonLabel(p))}</button>`,
         )
         .join('');
       host.querySelectorAll('.provider-toggle').forEach((btn) => {
@@ -1035,7 +1027,7 @@
         ts.textContent = new Date(createdAt).toLocaleString();
         box.appendChild(ts);
       }
-      if (role === 'assistant' && department && department !== 'ChC') {
+      if (role === 'assistant' && department) {
         const deptLabel = document.createElement('div');
         deptLabel.className = 'dept-label';
         deptLabel.textContent = departmentMeta(department)?.title || department;
@@ -1051,7 +1043,10 @@
       } else if (source && source.path === 'lifeos/department') {
         const tag = document.createElement('div');
         tag.className = 'source';
-        tag.textContent = `Council live · ${source.display_name || '?'} · ${source.model_id || '?'}`;
+        const persona = source.persona || source.department || department || 'ChC';
+        const deptTitle =
+          source.department_title || departmentMeta(persona)?.title || persona;
+        tag.textContent = `${deptTitle} (${persona}) · ${source.display_name || '?'} · ${source.model_id || '?'}`;
         box.appendChild(tag);
       }
       return box;
@@ -1186,6 +1181,11 @@
 
     let ttsPlaybackGen = 0;
     let ttsUserStopped = false;
+
+    function getSpeechRate() {
+      const raw = parseFloat(document.getElementById('speech-rate')?.value || '1.05');
+      return Number.isFinite(raw) ? Math.min(2, Math.max(0.5, raw)) : 1.05;
+    }
 
     function getSpeechVolume() {
       const v = parseFloat(document.getElementById('speech-volume')?.value || '1');
@@ -1337,6 +1337,7 @@
         const url = URL.createObjectURL(blob);
         const audio = new Audio(url);
         audio.volume = getSpeechVolume();
+        audio.playbackRate = getSpeechRate();
         activeServerAudio = audio;
         audio.onended = () => {
           URL.revokeObjectURL(url);
@@ -1387,7 +1388,7 @@
         }
       }
 
-      const rate = parseFloat(document.getElementById('speech-rate').value || '0.94');
+      const rate = getSpeechRate();
       const volume = getSpeechVolume();
       const voiceURI = document.getElementById('tts-voice')?.value || localStorage.getItem('voice_rail_tts_voice') || '';
       const opts = {
@@ -1584,10 +1585,13 @@
     document.getElementById('btn-pause')?.addEventListener('click', stopSpeakingOnly);
     document.getElementById('btn-cancel')?.addEventListener('click', stopAllVoice);
 
-    document.getElementById('btn-multi-engine')?.addEventListener('click', () => {
-      setMultiEngineMode(!multiEngineMode());
+    const rateEl = document.getElementById('speech-rate');
+    const savedRate = localStorage.getItem('voice_rail_tts_rate');
+    if (rateEl && savedRate) rateEl.value = savedRate;
+    rateEl?.addEventListener('input', (e) => {
+      localStorage.setItem('voice_rail_tts_rate', e.target.value);
+      if (activeServerAudio) activeServerAudio.playbackRate = getSpeechRate();
     });
-    setMultiEngineMode(localStorage.getItem('voice_rail_multi_engine') === '1');
 
     const volEl = document.getElementById('speech-volume');
     const savedVol = localStorage.getItem('voice_rail_tts_volume');

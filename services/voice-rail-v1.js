@@ -339,7 +339,7 @@ async function generateCouncilReply({
       critical: true,
       founderComms: true,
       allowModelDowngrade: false,
-      maxOutputTokens: 1200,
+      maxOutputTokens: 800,
       model: routing.modelId,
     });
   } catch (apiErr) {
