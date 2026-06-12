@@ -3,6 +3,17 @@
 
 ---
 
+## [SESSION] 2026-05-24 — Voice Rail v2.7 layout + mic fallback
+
+**Problem:** Adam reported resize bar clipping AI/dept controls; Speed/Volume need visible labels; mic not working; multi-engine selection unclear.
+
+**Shipped (local — needs commit + deploy):**
+- **`public/overlay/lifeos-voice-rail-v1.html`** — v2.7 composer rows (AI+Multi, Dept, Mode+Mic+Send); labeled sliders; transcript max-height cap; Multi hint; cache `?v=20260524-9`
+- **`public/shared/lifeos-voice-chat.js`** — Whisper 2-failure → browser STT fallback; STT errors in status line
+
+**Next:** Commit + push + deploy; Adam hard-refresh `/voice-rail?v=2.7`. Tap **Multi** then select 2+ engines. If mic still silent, check status line for Whisper error (OPENAI_API_KEY on Railway).
+
+---
 ## [SESSION] 2026-05-24 — Voice Rail v2.5 dictation UX
 
 **Problem:** Adam reported long mic startup delay, poor browser STT, and deleted/highlighted wrong words coming back when dictating corrections.

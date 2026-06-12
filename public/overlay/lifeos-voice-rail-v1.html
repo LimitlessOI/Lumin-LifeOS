@@ -12,8 +12,8 @@
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-  <script src="/overlay/lifeos-bootstrap.js?v=20260524-8"></script>
-  <script src="/shared/lifeos-voice-chat.js?v=20260524-8"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260524-9"></script>
+  <script src="/shared/lifeos-voice-chat.js?v=20260524-9"></script>
   <title>LifeOS Voice Rail</title>
   <style>
     :root,
@@ -134,8 +134,8 @@
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      min-height: 120px;
-      max-height: 75vh;
+      min-height: 100px;
+      max-height: min(55vh, calc(100dvh - 300px));
       overflow: hidden;
       border-bottom: 1px solid var(--border);
       background: var(--bg);
@@ -188,19 +188,55 @@
     .bubble .intent { font-size: 10px; color: var(--muted); margin-top: 6px; }
     .composer {
       flex: 1;
-      min-height: 140px;
+      min-height: 220px;
       display: flex;
       flex-direction: column;
+      gap: 8px;
       background: var(--surface);
       padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .composer-controls {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      width: 100%;
+    }
+    .control-row-label {
+      flex: 0 0 auto;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      min-width: 2.75rem;
+    }
+    .control-row-actions {
+      align-items: center;
+      justify-content: space-between;
+    }
+    .control-row-actions .mode-toggles { flex: 1; }
+    .control-row .provider-toggles,
+    .control-row .dept-toggles {
+      flex: 1;
+      min-width: 0;
     }
     .composer-body {
       flex: 1;
-      min-height: 0;
+      min-height: 88px;
       display: flex;
-      gap: 8px;
-      align-items: stretch;
+      flex-direction: column;
+      gap: 6px;
     }
     .composer-input-wrap {
       flex: 1;
@@ -260,34 +296,74 @@
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
     }
     .composer-toolbar {
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: flex-end;
-      justify-content: flex-end;
-      max-width: min(100%, 280px);
+      display: none;
     }
     .composer-actions {
       display: flex;
       gap: 6px;
       align-items: center;
+      margin-left: auto;
+      flex-shrink: 0;
     }
-    .composer-secondary {
+    .composer-audio {
       flex-shrink: 0;
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-      margin-top: 6px;
-      font-size: 11px;
-      color: var(--muted);
+      gap: 10px;
+      align-items: flex-end;
+      padding-top: 4px;
     }
-    .composer-hint { display: none; }
-    #voice-status { font-size: 11px; color: var(--muted); min-height: 0; margin-top: 4px; }
+    .slider-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+      margin-left: auto;
+    }
+    .slider-field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 100px;
+      max-width: 140px;
+    }
+    .slider-field span {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+    .slider-field input[type="range"] {
+      width: 100%;
+      margin: 0;
+    }
+    #btn-multi-engine {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 8px;
+      min-height: 2rem;
+    }
+    #btn-multi-engine.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-fg);
+    }
+    #multi-hint {
+      font-size: 10px;
+      color: var(--accent);
+      flex: 1 1 100%;
+      display: none;
+      margin: 0;
+      padding: 0 0 2px calc(2.75rem + 6px);
+      line-height: 1.35;
+    }
+    #multi-hint.visible { display: block; }
     #truth-banner { flex-shrink: 0; margin: 0; padding: 6px 12px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 11px; line-height: 1.35; }
     [data-theme="dark"] #truth-banner { background: #3f2a08; color: #fde68a; border-color: #92400e; }
-    #voice-optional { display: none; }
+    #voice-status { font-size: 11px; color: var(--muted); min-height: 1em; flex-shrink: 0; }
+    .composer-hint { display: none; }
     .bubble .source { font-size: 10px; color: var(--muted); margin-top: 6px; }
     .side { flex-shrink: 0; border-top: 1px solid var(--border); padding: 6px 12px; font-size: 11px; color: var(--muted); max-height: 72px; overflow-y: auto; }
     .side strong { color: var(--text); }
@@ -312,7 +388,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.6</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.7</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -333,7 +409,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.6</strong> — OpenAI Whisper mic (faster start, better accuracy). Says <strong>BPB</strong>, <strong>Hist</strong>, <strong>CFO</strong>, <strong>CDR</strong> as department codes.
+    Build <strong>v2.7</strong> — controls stay visible when you resize the transcript. Speed &amp; Volume labeled. Tap <strong>Multi</strong> to pick several AIs. Mic falls back to browser if Whisper fails.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -363,6 +439,41 @@
     <div class="resize-handle" id="resize-transcript" title="Drag to resize conversation" aria-label="Resize conversation panel"></div>
 
     <div class="composer">
+      <div class="composer-controls">
+        <div class="control-row">
+          <span class="control-row-label">AI</span>
+          <div class="provider-toggles" role="group" aria-label="AI engine" id="provider-toggles"></div>
+          <button type="button" class="btn icon-btn compact" id="btn-multi-engine" aria-pressed="false" title="Multi-engine — tap to select several AIs at once" aria-label="Multi-engine mode">Multi</button>
+        </div>
+        <p id="multi-hint" role="status">Multi on — tap each engine you want (2 or more). Send once to get parallel replies.</p>
+        <div class="control-row">
+          <span class="control-row-label">Dept</span>
+          <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
+        </div>
+        <div class="control-row control-row-actions">
+          <span class="control-row-label">Mode</span>
+          <div class="mode-toggles" role="group" aria-label="Session mode">
+            <button type="button" class="btn icon-btn compact mode-toggle active" data-mode="conversation" aria-pressed="true" title="Conversation" aria-label="Conversation">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button type="button" class="btn icon-btn compact mode-toggle" data-mode="command" aria-pressed="false" title="Command — stage actions" aria-label="Command">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </button>
+            <button type="button" class="btn icon-btn compact mode-toggle" data-mode="brainstorm" aria-pressed="false" title="Brainstorm" aria-label="Brainstorm">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+            </button>
+            <button type="button" class="btn icon-btn compact mode-toggle" data-mode="private" aria-pressed="false" title="Private / off-record — not saved" aria-label="Private off-record">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </button>
+          </div>
+          <div class="composer-actions">
+            <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” to post">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </button>
+            <button type="button" class="btn btn-primary btn-send-compact" id="btn-send">Send</button>
+          </div>
+        </div>
+      </div>
       <div class="composer-body">
         <div class="composer-input-wrap">
           <div id="interim" data-testid="interim-transcript"></div>
@@ -373,33 +484,6 @@
             </button>
           </div>
         </div>
-        <div class="composer-toolbar">
-          <div class="toggle-groups">
-            <div class="provider-toggles" role="group" aria-label="AI engine" id="provider-toggles"></div>
-            <button type="button" class="btn icon-btn compact" id="btn-multi-engine" aria-pressed="false" title="Multi-engine — select more than one AI" aria-label="Multi-engine mode">Multi</button>
-            <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
-            <div class="mode-toggles" role="group" aria-label="Session mode">
-              <button type="button" class="btn icon-btn compact mode-toggle active" data-mode="conversation" aria-pressed="true" title="Conversation" aria-label="Conversation">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              </button>
-              <button type="button" class="btn icon-btn compact mode-toggle" data-mode="command" aria-pressed="false" title="Command — stage actions" aria-label="Command">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-              </button>
-              <button type="button" class="btn icon-btn compact mode-toggle" data-mode="brainstorm" aria-pressed="false" title="Brainstorm" aria-label="Brainstorm">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
-              </button>
-              <button type="button" class="btn icon-btn compact mode-toggle" data-mode="private" aria-pressed="false" title="Private / off-record — not saved" aria-label="Private off-record">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="composer-actions">
-            <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” to post">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-            </button>
-            <button type="button" class="btn btn-primary btn-send-compact" id="btn-send">Send</button>
-          </div>
-        </div>
       </div>
       <select class="sr-only" aria-hidden="true" tabindex="-1" id="mode-catalog">
         <option value="conversation">Conversation</option>
@@ -407,7 +491,7 @@
         <option value="brainstorm">Brainstorm</option>
         <option value="private">Private</option>
       </select>
-      <div class="composer-secondary">
+      <div class="composer-audio">
         <button type="button" class="btn icon-btn compact" id="btn-speak-toggle" aria-pressed="false" title="Read replies aloud (off)" aria-label="Read replies aloud">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
         </button>
@@ -421,8 +505,16 @@
         <button type="button" class="btn icon-btn compact" id="btn-replay" data-testid="replay-btn" title="Replay last reply" aria-label="Replay last reply">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
         </button>
-        <label class="speed-label" title="Read-aloud speed"><span class="sr-only">Speed</span><input type="range" id="speech-rate" min="0.75" max="1.1" step="0.05" value="0.94" aria-label="Read-aloud speed"></label>
-        <label class="speed-label" title="Read-aloud volume"><span class="sr-only">Volume</span><input type="range" id="speech-volume" min="0" max="1" step="0.05" value="1" aria-label="Read-aloud volume"></label>
+        <div class="slider-group">
+          <label class="slider-field" for="speech-rate">
+            <span>Speed</span>
+            <input type="range" id="speech-rate" min="0.75" max="1.1" step="0.05" value="0.94" aria-label="Read-aloud speed">
+          </label>
+          <label class="slider-field" for="speech-volume">
+            <span>Volume</span>
+            <input type="range" id="speech-volume" min="0" max="1" step="0.05" value="1" aria-label="Read-aloud volume">
+          </label>
+        </div>
       </div>
       <div id="voice-status" aria-live="polite"></div>
       <button type="button" id="btn-pause" hidden aria-hidden="true" tabindex="-1"></button>
@@ -600,9 +692,13 @@
       const handle = document.getElementById(handleId);
       const panel = document.getElementById(panelId);
       if (!handle || !panel) return;
+      function maxPanelHeight() {
+        return Math.max(minPx + 40, Math.min(window.innerHeight * 0.55, window.innerHeight - 300));
+      }
       const saved = parseInt(localStorage.getItem(storageKey) || '', 10);
-      if (saved >= minPx) panel.style.height = saved + 'px';
-      else panel.style.height = defaultPx + 'px';
+      const cap = maxPanelHeight();
+      if (saved >= minPx) panel.style.height = Math.min(saved, cap) + 'px';
+      else panel.style.height = Math.min(defaultPx, cap) + 'px';
 
       let dragging = false;
       let startY = 0;
@@ -610,7 +706,7 @@
       function onMove(ev) {
         if (!dragging) return;
         const delta = ev.clientY - startY;
-        const next = Math.max(minPx, Math.min(window.innerHeight * 0.75, startH + delta));
+        const next = Math.max(minPx, Math.min(maxPanelHeight(), startH + delta));
         panel.style.height = next + 'px';
       }
       function onUp() {
@@ -641,7 +737,7 @@
         function onTouchMove(ev) {
           const t = ev.touches[0];
           if (!t) return;
-          const next = Math.max(minPx, Math.min(window.innerHeight * 0.75, startH + (t.clientY - startY)));
+          const next = Math.max(minPx, Math.min(maxPanelHeight(), startH + (t.clientY - startY)));
           panel.style.height = next + 'px';
         }
         function onTouchEnd() {
@@ -774,6 +870,7 @@
         btn.classList.toggle('active', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       }
+      document.getElementById('multi-hint')?.classList.toggle('visible', on);
       syncProviderForDept();
     }
 
@@ -1134,7 +1231,7 @@
     }
 
     async function transcribeVoiceRailBlob(blob, ctx) {
-      if (!serverSttAvailable || !getKey()) return '';
+      if (!getKey()) throw new Error('API key required for Whisper');
       const form = new FormData();
       form.append('audio', blob, 'chunk.webm');
       form.append('context', String(ctx?.committed || '').slice(-240));
@@ -1144,7 +1241,10 @@
         body: form,
       });
       const json = await r.json().catch(() => ({}));
-      if (r.status !== 200 || !json.ok) return '';
+      if (r.status !== 200 || !json.ok) {
+        const err = json.error || json.message || `Whisper HTTP ${r.status}`;
+        throw new Error(err);
+      }
       return String(json.text || '').trim();
     }
 
@@ -1174,9 +1274,11 @@
         startLabel: 'Microphone',
         stopLabel: 'Stop microphone',
         idleText: '',
-        serverSttEnabled: serverSttAvailable,
+        serverSttEnabled: serverSttAvailable && Boolean(getKey()),
         serverSttTranscribe: transcribeVoiceRailBlob,
         serverSttChunkMs: 1800,
+        serverSttMinBytes: 400,
+        serverSttFailureLimit: 2,
         onVoiceSend: (message) => {
           document.getElementById('interim').textContent = '';
           if (String(message || '').trim()) sendMessage(message);

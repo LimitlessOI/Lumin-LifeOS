@@ -193,7 +193,8 @@
       serverSttEnabled: false,
       serverSttTranscribe: null,
       serverSttChunkMs: 1800,
-      serverSttMinBytes: 600,
+      serverSttMinBytes: 400,
+      serverSttFailureLimit: 2,
     }, options || {});
 
     const input = document.getElementById(settings.inputId);
@@ -232,6 +233,8 @@
       beforeInputListener: null,
       mediaRecorder: null,
       sttInFlight: 0,
+      serverSttConsecutiveFailures: 0,
+      serverSttForceBrowser: false,
       storageKey: settings.storageKey,
       speakingEnabled: settings.speakRepliesDefault,
     };
@@ -286,11 +289,34 @@
 
     function useServerStt() {
       return Boolean(
+        !state.serverSttForceBrowser &&
         settings.serverSttEnabled &&
         typeof settings.serverSttTranscribe === 'function' &&
         global.MediaRecorder &&
         global.navigator?.mediaDevices?.getUserMedia,
       );
+    }
+
+    async function switchToBrowserStt(sessionEpoch, reason) {
+      if (state.serverSttForceBrowser || !SpeechRecognitionCtor) return false;
+      state.serverSttForceBrowser = true;
+      stopMediaRecorder();
+      const msg = reason || 'Whisper unavailable — using browser mic…';
+      updateStatus(msg);
+      if (state.userWantsListen && sessionEpoch === state.dictationEpoch && !state.ttsDuck) {
+        startListeningInternal();
+      }
+      return true;
+    }
+
+    function noteServerSttFailure(sessionEpoch, reason) {
+      state.serverSttConsecutiveFailures += 1;
+      const limit = settings.serverSttFailureLimit || 2;
+      if (state.serverSttConsecutiveFailures >= limit && SpeechRecognitionCtor) {
+        switchToBrowserStt(sessionEpoch, reason || 'Whisper unavailable — using browser mic…');
+      } else if (reason) {
+        updateStatus(reason);
+      }
     }
 
     function stopMediaRecorder() {
@@ -696,15 +722,19 @@
           appendAt: state.appendAt,
         });
         if (sessionEpoch !== state.dictationEpoch || !state.userWantsListen || state.ttsDuck) return;
-        if (text && String(text).trim()) {
-          appendServerTranscript(text);
+        const trimmed = String(text || '').trim();
+        if (trimmed) {
+          state.serverSttConsecutiveFailures = 0;
+          appendServerTranscript(trimmed);
           maybeVoiceSend(true);
           updateStatus('Listening (Whisper)…');
+          return;
         }
-      } catch (_) {
-        if (sessionEpoch === state.dictationEpoch) {
-          updateStatus('Whisper chunk failed — still listening…');
-        }
+        noteServerSttFailure(sessionEpoch, 'Whisper returned no text — still listening…');
+      } catch (err) {
+        if (sessionEpoch !== state.dictationEpoch) return;
+        const msg = err?.message ? String(err.message) : 'Whisper chunk failed';
+        noteServerSttFailure(sessionEpoch, `${msg} — retrying…`);
       } finally {
         state.sttInFlight -= 1;
       }
@@ -727,7 +757,7 @@
           ? new global.MediaRecorder(state.warmStream, { mimeType })
           : new global.MediaRecorder(state.warmStream);
       } catch (_) {
-        updateStatus('Could not start server mic — try again.');
+        noteServerSttFailure(sessionEpoch, 'Could not start Whisper mic — trying browser…');
         return;
       }
 
@@ -777,7 +807,7 @@
         state.listening = false;
         if (state.mediaRecorder === recorder) state.mediaRecorder = null;
         updateButton();
-        updateStatus('Mic error — tap mic again.');
+        noteServerSttFailure(sessionEpoch, 'Mic recorder error — switching…');
       };
 
       state.mediaRecorder = recorder;
@@ -785,7 +815,7 @@
         recorder.start(settings.serverSttChunkMs || 1800);
       } catch (_) {
         state.mediaRecorder = null;
-        updateStatus('Mic busy — tap mic again in a second.');
+        noteServerSttFailure(sessionEpoch, 'Mic busy — trying browser mic…');
       }
     }
 
