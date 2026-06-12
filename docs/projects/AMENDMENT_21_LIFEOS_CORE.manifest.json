@@ -175,6 +175,7 @@
     "db/migrations/20260423_lifeos_ambient_snapshots.sql",
     "services/lifeos-ambient-context.js",
     "routes/lifeos-ambient-routes.js",
+    "services/voice-rail-execution-truth.js",
     "services/voice-rail-founder-memory.js",
     "services/voice-rail-usage-receipt.js",
     "db/migrations/20260612_voice_rail_founder_routing_state.sql",
@@ -851,5 +852,5 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "ssot_receipt_tail": "Voice Rail v2.13 preference capture + cost receipts + tier escalation."
+  "ssot_receipt_tail": "Voice Rail v2.16 execution truth — lie detector + live-context fail-closed."
 }

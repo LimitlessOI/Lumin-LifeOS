@@ -34,6 +34,10 @@ import {
   detectEscalationAsk,
 } from './voice-rail-founder-memory.js';
 import { fetchVoiceRailUsageReceipt } from './voice-rail-usage-receipt.js';
+import {
+  VOICE_RAIL_EXECUTION_MANIFEST,
+  enforceExecutionTruth,
+} from './voice-rail-execution-truth.js';
 
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -182,7 +186,7 @@ async function readContinuityTail() {
 
 async function readLifeOSProductBrief() {
   try {
-    const text = await fs.readFile(path.join(process.cwd(), 'docs', 'products', 'LIFEOS.md'), 'utf8');
+    const text = await fs.readFile(path.join(process.cwd(), 'docs', 'projects', 'AMENDMENT_21_LIFEOS_CORE.md'), 'utf8');
     return text.slice(0, 4500);
   } catch {
     return null;
@@ -257,6 +261,12 @@ export function isVoiceRailContextSufficientForFounderReply(contextHealth) {
   const { level, counts } = contextHealth;
   if (level === 'empty' || level === 'thin') return false;
   if (!counts.sot_knowledge_chars || counts.sot_knowledge_chars < 200) return false;
+  const hasLive =
+    (counts.verified_memories || 0) > 0
+    || (counts.memory_capsules || 0) > 0
+    || counts.has_lifeos_snapshot
+    || (counts.voice_rail_history || 0) > 2;
+  if (!hasLive) return false;
   return true;
 }
 
@@ -551,18 +561,33 @@ async function generateCouncilReply({
       throw councilUnavailableError(activeRouting, msg);
     }
 
-    const councilText = sanitizeVoiceRailReply(
+    let councilText = sanitizeVoiceRailReply(
       formatCouncilReply(councilRaw),
       prior,
       operatorName,
       content,
     );
+    const truth = enforceExecutionTruth(councilText, content, operatorName);
+    if (truth.replaced) {
+      logger?.warn?.({ violations: truth.violations }, 'voice-rail execution lie blocked — replaced with truth');
+      councilText = truth.text;
+    }
     if (!councilText || /^Adam, council returned nothing/i.test(councilText)) {
       throw councilUnavailableError(activeRouting, 'council returned empty or unusable response after sanitize');
     }
 
     const usageReceipt = await fetchVoiceRailUsageReceipt(pool, { since: callStartedAt });
-    return { text: councilText, routing: activeRouting, usageReceipt, callStartedAt };
+    return {
+      text: councilText,
+      routing: activeRouting,
+      usageReceipt,
+      callStartedAt,
+      execution_truth: {
+        manifest: VOICE_RAIL_EXECUTION_MANIFEST,
+        lie_blocked: Boolean(truth.replaced),
+        violations: truth.violations || [],
+      },
+    };
   }
 
   let activeRouting = routing;
@@ -602,6 +627,7 @@ async function generateCouncilReply({
     usageReceipt: result.usageReceipt,
     escalated: Boolean(result.escalated),
     escalation_reason: result.escalation_reason || null,
+    execution_truth: result.execution_truth || null,
   };
 }
 
@@ -940,7 +966,11 @@ export function createVoiceRailV1({
               escalated: panelResult.escalated || false,
               escalation_reason: panelResult.escalation_reason || null,
               preference_saved: preferenceSaved?.ok ? preferenceSaved.preference_type : null,
-              note: panelResult.contextHealth?.honesty_note || 'Panel reply via council API.',
+              execution_truth: panelResult.execution_truth || null,
+              lie_blocked: Boolean(panelResult.execution_truth?.lie_blocked),
+              note: panelResult.execution_truth?.lie_blocked
+                ? 'Model claimed async work — reply replaced with execution truth.'
+                : panelResult.contextHealth?.honesty_note || 'Panel reply via council API.',
             };
             const { rows: assistantRows } = await pool.query(
               `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
@@ -1033,7 +1063,11 @@ export function createVoiceRailV1({
         escalated: councilResult.escalated || false,
         escalation_reason: councilResult.escalation_reason || null,
         preference_saved: preferenceSaved?.ok ? preferenceSaved.preference_type : null,
-        note: councilResult.contextHealth?.honesty_note || 'Council API reply.',
+        execution_truth: councilResult.execution_truth || null,
+        lie_blocked: Boolean(councilResult.execution_truth?.lie_blocked),
+        note: councilResult.execution_truth?.lie_blocked
+          ? 'Model claimed async work — reply replaced with execution truth.'
+          : councilResult.contextHealth?.honesty_note || 'Council API reply.',
       };
     } catch (e) {
       logger?.warn?.({ err: e.message, detail: e.detail }, 'voice-rail council reply failed');

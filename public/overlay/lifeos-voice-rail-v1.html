@@ -398,7 +398,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.15</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.16</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -419,7 +419,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.15</strong> — microphone picker plus STT failover hardening. If browser speech capture fails, Voice Rail now retries Whisper instead of dying on browser-only errors.
+    Build <strong>v2.16</strong> — <strong>SYNC CHAT ONLY.</strong> Replies run when you send a message. Nothing works overnight unless a job ID or commit SHA appears. Staged commands are not auto-executed. Lies about “working on it” get replaced with truth.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -824,11 +824,6 @@
       applyTheme(next);
     });
 
-    document.getElementById('btn-theme').addEventListener('click', () => {
-      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      applyTheme(next);
-    });
-
     const API = '/api/v1/lifeos/voice-rail';
     let sessionId = localStorage.getItem('voice_rail_session_id') || null;
     let lastAssistant = '';
@@ -1112,7 +1107,9 @@
         const routeBit = rm?.tier_label ? ` · ${rm.tier_label}` : '';
         const costBit = ur?.cost_display ? ` · ${ur.cost_display}` : '';
         const escBit = source.escalated ? ' · escalated' : '';
-        tag.textContent = `${deptTitle} (${persona}) · ${source.display_name || '?'} · ${source.model_id || '?'}${routeBit}${costBit}${ctxBit}${escBit}`;
+        const lieBit = source.lie_blocked ? ' · LIE BLOCKED' : '';
+        tag.textContent = `${deptTitle} (${persona}) · ${source.display_name || '?'} · ${source.model_id || '?'}${routeBit}${costBit}${ctxBit}${escBit}${lieBit}`;
+        if (source.lie_blocked) tag.classList.add('source-warn');
         if (ch && (ch.level === 'empty' || ch.level === 'thin')) tag.classList.add('source-warn');
         box.appendChild(tag);
         if (ch?.honesty_note && (ch.level === 'empty' || ch.level === 'thin')) {
@@ -1620,6 +1617,7 @@
 
       if (voiceCtrl?.isPersistentListen?.()) {
         if (voiceCtrl?.clearBuffer) voiceCtrl.clearBuffer();
+        document.getElementById('input').value = '';
       } else if (voiceCtrl?.stopMic) {
         voiceCtrl.stopMic();
         document.getElementById('input').value = '';

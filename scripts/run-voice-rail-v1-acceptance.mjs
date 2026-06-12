@@ -172,6 +172,11 @@ step('VR1-T16', leak.status === 200 && leak.json?.leaked === false, leak.json?.c
 
 const health = await api('GET', '/api/v1/lifeos/voice-rail/health');
 step('VR1-T18', health.status === 200 && health.json?.service === 'voice-rail-v1', health.json);
+step(
+  'VR1-T20_execution_truth',
+  health.status === 200 && health.json?.execution_truth?.background_work === false,
+  health.json?.execution_truth,
+);
 
 step('VR1-T18_receipt', report.tests_failed.length === 0, 'all automated tests');
 

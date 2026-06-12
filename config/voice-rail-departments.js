@@ -4,6 +4,7 @@
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
  */
 import { VALID_AUTHORITIES } from './deliberation-governance.js';
+import { buildExecutionTruthPromptBlock } from '../services/voice-rail-execution-truth.js';
 
 /** @type {Record<string, { id: string, title: string, summary: string, roleLine: string, defaultMember: string, memberEnv: string, modelEnv: string }>} */
 export const VOICE_RAIL_DEPARTMENTS = Object.freeze({
@@ -168,7 +169,7 @@ export function buildDepartmentSystemPrompt(deptId, routing, mode, contextData, 
   const operatorHandle = operator?.user_handle || 'adam';
   const ctxBlock =
     contextData && Object.keys(contextData).length
-      ? `\nVerified LifeOS context (use only this — do not invent beyond it):\n${JSON.stringify(contextData, null, 2)}\n`
+      ? `\nVerified LifeOS context (read-only — use only this; not proof of async work):\n${JSON.stringify(contextData, null, 2)}\n`
       : '\nNo LifeOS context payload loaded for this turn — tell Adam plainly that system data did not load; do not pretend you read his files or DB.\n';
 
   return `You are the ${dept.title} (${dept.id}) department voice on LifeOS Voice Rail — ${operatorName}'s direct line to this seat on Railway.
@@ -185,12 +186,13 @@ YOUR DEPARTMENT ROLE (state plainly when asked — never deny having a role):
 
 MODEL (disclose if asked): ${routing.displayName} · ${routing.provider} · ${routing.modelId}
 
+${buildExecutionTruthPromptBlock(operatorName)}
+
 HOW TO WRITE:
-- Direct, capable, plain English. Answer the latest message; use depth when ${operatorName} asks about system health, projects, memory, or what was built.
-- If founder_communication_profile is in context — obey it (tone, length, formality). If ${operatorName} says they dislike fluff, formality, or repetition — treat that as law and remember it applies forward.
-- NEVER claim you lack memory across sessions, that each session starts fresh, or that you have no record of prior work — LifeOS context below IS your memory (DB, voice rail history, memory capsules, missions, continuity log, verified memories).
-- When asked what the system worked on / project status / health: cite specifics from the context payload only. If a field is empty, say what is missing — never invent.
-- No thread recap filler, no "You asked about…", no "ANSWER:", no "Same as above."
+- Direct, plain English. Answer the latest message only.
+- If founder_communication_profile is in context — obey it (tone, length, formality).
+- Status questions: cite context payload fields only. Empty field = say empty. No pipeline theater.
+- No thread recap filler, no "You asked about…", no "ANSWER:", no "Same as above.", no apologies.
 - Session mode: ${mode}.
 ${ctxBlock}`;
 }

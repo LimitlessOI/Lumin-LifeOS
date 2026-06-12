@@ -3,6 +3,14 @@
 
 ---
 
+## [SESSION] 2026-06-12 — Voice Rail v2.16 execution truth (stop-the-line)
+
+Adam: ChC transcript proved overnight “work” was pure LLM theater. **Shipped:** `voice-rail-execution-truth.js` blocks/replaces lies about background work, fake BTB/Sentry routing, “will report when done”; prompt rewritten; fail-closed now requires live DB context not static markdown alone; UI v2.16 banner + LIE BLOCKED footer; VR1-T20 acceptance.
+
+**Next:** deploy v2.16; Adam retry “are you still working on it” — must get truth or NOT CONNECTED, never fake progress.
+
+---
+
 ## [SESSION] 2026-06-11 — Voice Rail system audit + 4 bugs fixed
 
 **Audit scope:** All Voice Rail files — `services/voice-rail-v1.js`, `services/voice-rail-founder-memory.js`, `services/voice-rail-tts.js`, `services/voice-rail-stt.js`, `config/voice-rail-departments.js`, `config/voice-rail-founder-routing.js`, `public/overlay/lifeos-voice-rail-v1.html`, `routes/lifeos-voice-rail-routes.js`.

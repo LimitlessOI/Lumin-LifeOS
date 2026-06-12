@@ -6,6 +6,7 @@
 import express from 'express';
 import multer from 'multer';
 import { createVoiceRailV1, isVoiceRailFailClosedEnabled } from '../services/voice-rail-v1.js';
+import { VOICE_RAIL_EXECUTION_MANIFEST } from '../services/voice-rail-execution-truth.js';
 import { synthesizeVoiceRailSpeech, voiceRailTtsStatus } from '../services/voice-rail-tts.js';
 import { transcribeVoiceRailAudio, voiceRailSttStatus } from '../services/voice-rail-stt.js';
 import {
@@ -65,9 +66,10 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.15',
+      build: 'voice-rail-v2.16',
       founder_auto_routing: true,
       fail_closed_founder_comms: isVoiceRailFailClosedEnabled(),
+      execution_truth: VOICE_RAIL_EXECUTION_MANIFEST,
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,
       reply_engine: callCouncilMember ? 'lifeos/department' : 'template_only',
