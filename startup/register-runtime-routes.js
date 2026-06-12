@@ -190,7 +190,7 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [MODEL-PERFORMANCE] Routes mounted at /api/v1/model-performance/{leaderboard,winners,lens/:lens,score-outcome}");
 
   // LifeOS Auth — must be mounted before core routes; no requireKey needed (it IS the auth)
-  app.use("/api/v1/lifeos/auth", createLifeOSAuthRoutes({ pool, logger }));
+  app.use("/api/v1/lifeos/auth", createLifeOSAuthRoutes({ pool, logger, requireKey }));
   logger.info("✅ [LIFEOS-AUTH] Routes mounted at /api/v1/lifeos/auth");
 
   // Core LifeOS routes are required for the product to function.

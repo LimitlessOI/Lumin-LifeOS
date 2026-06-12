@@ -123,5 +123,5 @@
     "Zombie capsules blocked from action_authority_lane"
   ],
   "anti_drift_notes": "Memory Capsule Alpha ends at TRUSTED_FOR_CONTEXT — CANONICAL is Beta. SQL-first, no vector/graph. Every retrieval creates a retrieval_event row. All trust mutations require receipts.",
-  "last_updated": "2026-06-01"
+  "last_updated": "2026-05-24"
 }

@@ -20,9 +20,16 @@ const LEGACY_META = {
 function createLegacyMemoryRoutes(options = {}) {
   const { requireKey } = options;
   const legacyRouter = Router();
-  if (requireKey) {
-    legacyRouter.use(requireKey);
-  }
+
+  // Only gate legacy /memories paths. A global requireKey here blocked all /api/* traffic
+  // (including POST /api/v1/lifeos/auth/login) because this router mounts at /api.
+  legacyRouter.use((req, res, next) => {
+    const p = req.path || '';
+    const isMemoryPath = p === '/memories' || p.startsWith('/memories/');
+    if (!isMemoryPath) return next('router');
+    if (requireKey) return requireKey(req, res, next);
+    return next();
+  });
 
 /**
  * GET /api/memories/:category

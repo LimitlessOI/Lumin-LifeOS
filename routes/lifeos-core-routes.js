@@ -166,7 +166,11 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
   router.get('/users/:handle', requireKey, async (req, res) => {
     try {
       const { rows } = await pool.query(
-        'SELECT * FROM lifeos_users WHERE LOWER(user_handle) = LOWER($1)',
+        `SELECT id, user_handle, display_name, timezone, tier, be_statement, do_statement,
+                have_vision, truth_style, flourishing_prefs, active, created_at, updated_at,
+                email, role, last_login_at, conflict_interrupt_enabled,
+                conflict_interrupt_sensitivity, legacy_check_in_cadence_days, legacy_last_check_in_at
+         FROM lifeos_users WHERE LOWER(user_handle) = LOWER($1)`,
         [req.params.handle]
       );
       if (!rows[0]) return res.status(404).json({ ok: false, error: 'User not found' });

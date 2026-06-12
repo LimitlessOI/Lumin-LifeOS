@@ -163,6 +163,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 
 ## Change Receipts
 
+| 2026-05-24 | **`routes/memory-routes.js`** — legacy memory router no longer applies `requireKey` to non-`/memories` paths under `/api` (unblocked LifeOS public login). | Auth regression: all `/api/v1/lifeos/auth/*` returned 401 without command key. | GAP-FILL | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 
 | Date | What Changed | Why | Verified |

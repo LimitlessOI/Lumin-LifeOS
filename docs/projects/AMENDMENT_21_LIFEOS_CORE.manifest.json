@@ -854,5 +854,5 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "ssot_receipt_tail": "Voice Rail v2.20 laptop mic Auto routing — block Continuity/iPhone before getUserMedia."
+  "ssot_receipt_tail": "Sherry JWT login fix + operator invite/provision; memory router no longer blocks /auth."
 }

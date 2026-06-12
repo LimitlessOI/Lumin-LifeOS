@@ -18,12 +18,17 @@
  *   POST /api/v1/lifeos/auth/invite         — generate new invite code; response `invite.signup_url` when `PUBLIC_BASE_URL` or proxy Host is known
  *   GET  /api/v1/lifeos/auth/invites        — list invites; each unused row includes `signup_url` (same origin rules)
  *
+ * Operator endpoints (requireKey — Adam's admin key, NOT member login):
+ *   POST /api/v1/lifeos/auth/operator/invite           — create invite for Sherry / new members
+ *   POST /api/v1/lifeos/auth/operator/provision-member — create member account + optional household link
+ *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
 import express from 'express';
 import { createLifeOSAuth } from '../services/lifeos-auth.js';
 import { requireLifeOSUser, requireLifeOSAdmin } from '../middleware/lifeos-auth-middleware.js';
+import { createHouseholdSync } from '../services/household-sync.js';
 
 /** Absolute web origin for invite links (Railway / prod). */
 function publicWebOrigin(req) {
@@ -43,10 +48,11 @@ function signupUrlForCode(req, code) {
   return origin ? `${origin}${path}` : path;
 }
 
-export function createLifeOSAuthRoutes({ pool, logger }) {
+export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
   const router = express.Router();
   const log    = logger || console;
   const auth   = createLifeOSAuth(pool);
+  const householdSvc = createHouseholdSync({ pool });
 
   // ── Register ────────────────────────────────────────────────────────────────
   router.post('/register', async (req, res) => {
@@ -181,6 +187,93 @@ export function createLifeOSAuthRoutes({ pool, logger }) {
       res.status(500).json({ ok: false, error: e.message });
     }
   });
+
+  async function resolveAdamId() {
+    const { rows } = await pool.query(
+      `SELECT id FROM lifeos_users WHERE LOWER(user_handle) = 'adam' LIMIT 1`
+    );
+    return rows[0]?.id || null;
+  }
+
+  // ── Operator: create invite (command key — for provisioning family members) ─
+  if (requireKey) {
+    router.post('/operator/invite', requireKey, async (req, res) => {
+      try {
+        const { role = 'member', tier = 'premium', email = null, days = 90, label = 'member' } = req.body || {};
+        const adamId = await resolveAdamId();
+        if (!adamId) return res.status(503).json({ ok: false, error: 'adam user row missing' });
+        const invite = await auth.createInvite({
+          role,
+          tier,
+          email,
+          days: Math.min(Math.max(parseInt(days, 10) || 90, 1), 365),
+          createdBy: adamId,
+        });
+        const signup_url = signupUrlForCode(req, invite.code);
+        log.info({ code: invite.code, tier }, '[LIFEOS-AUTH] operator invite created');
+        res.json({
+          ok: true,
+          invite: { ...invite, signup_url },
+          note: 'Member uses signup URL with their own email + password — not COMMAND_CENTER_KEY.',
+        });
+      } catch (e) {
+        res.status(e.status || 500).json({ ok: false, error: e.message });
+      }
+    });
+
+    router.post('/operator/provision-member', requireKey, async (req, res) => {
+      try {
+        const {
+          handle,
+          email,
+          password,
+          displayName,
+          display_name,
+          role = 'member',
+          tier = 'premium',
+          link_adam = true,
+        } = req.body || {};
+        if (!handle || !email || !password) {
+          return res.status(400).json({ ok: false, error: 'handle, email, and password required' });
+        }
+        const result = await auth.register({
+          email,
+          password,
+          handle,
+          displayName: display_name || displayName || handle,
+          inviteCode: (await auth.createInvite({
+            role,
+            tier,
+            email,
+            days: 1,
+            createdBy: await resolveAdamId(),
+          })).code,
+          userAgent: req.headers['user-agent'],
+          ip: req.ip,
+        });
+        let link = null;
+        if (link_adam) {
+          const adamId = await resolveAdamId();
+          if (adamId) {
+            link = await householdSvc.linkUsers({
+              userIdA: Math.min(Number(adamId), Number(result.user.id)),
+              userIdB: Math.max(Number(adamId), Number(result.user.id)),
+              relationship: 'partner',
+            });
+          }
+        }
+        res.json({
+          ok: true,
+          user: result.user,
+          household_link: link,
+          login_url: `${publicWebOrigin(req) || ''}/overlay/lifeos-login.html`,
+          note: 'Sherry signs in with email + password on the Login tab.',
+        });
+      } catch (e) {
+        res.status(e.status || 500).json({ ok: false, error: e.message });
+      }
+    });
+  }
 
   return router;
 }

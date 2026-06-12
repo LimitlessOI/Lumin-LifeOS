@@ -202,6 +202,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-05-24 | **`startup/register-runtime-routes.js`** — pass `requireKey` into `createLifeOSAuthRoutes` for operator invite/provision endpoints. | Sherry account provisioning via command key; member login stays JWT. | AM19 wiring | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 | 2026-06-11 | **`startup/register-runtime-routes.js` + `server.js`:** pass `callCouncilMember`, `COUNCIL_MEMBERS`, `COUNCIL_ALIAS_MAP` into `createLifeOSVoiceRailRoutes` for session-aware council replies with model disclosure. | Voice Rail was using generic lumin.chat boilerplate; Adam trust fix. | AM19 wiring, AM21 Voice Rail | pending | after deploy |
 | 2026-06-12 | **`startup/register-runtime-routes.js`:** mount `createActionInboxRoutes` at `/api/v1/lifeos/action-inbox` (PRODUCT-ACTION-INBOX-V1-0001). | Action Inbox v1 middle layer between Voice Rail and BuilderOS. | AM19 wiring, AM21 feature | pending | `npm run lifeos:action-inbox:v1-acceptance` |

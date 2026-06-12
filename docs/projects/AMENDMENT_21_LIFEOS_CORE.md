@@ -64,7 +64,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-05-24 — Voice Rail v2.20 laptop mic routing (Continuity block)
+**Last Updated:** 2026-05-24 — Sherry member login + operator provisioning
 
 ---
 
@@ -1572,6 +1572,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-05-24 | **Sherry member login + operator provisioning (GAP-FILL):** `routes/memory-routes.js` — stop global requireKey on all `/api/*` (was blocking `POST /lifeos/auth/login`). `routes/lifeos-auth-routes.js` — `POST /operator/invite`, `POST /operator/provision-member` (command key); members use email+password JWT. `scripts/lifeos-provision-member.mjs` CLI. `lifeos-core-routes.js` — stop leaking `password_hash` on GET user. | Adam: Sherry needs own login, not COMMAND_CENTER_KEY | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.20 — laptop mic routing fix (GAP-FILL):** `public/shared/lifeos-voice-chat.js` — Auto mode resolves MacBook built-in **before** `getUserMedia` (not OS default-then-switch); penalizes Continuity/iPhone/iPad/AirPlay labels; blocks negative-score devices; `getActiveMicLabel()` on controller; browser STT fallback warns it cannot honor device picker. `public/overlay/lifeos-voice-rail-v1.html` — mic dropdown uses shared sort; route note shows **Active:** mic label; build **v2.20**. `routes/lifeos-voice-rail-routes.js` — health build **voice-rail-v2.20**. | Adam: on laptop, mic button grabbed iPhone mic (Continuity) | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.18 — connection banner + exec receipt UI + duplicate fix (GAP-FILL):**** `lifeos-voice-rail-v1.html` — live `GET /connection-proof` banner (green CONNECTED / red NOT CONNECTED); **EXEC RECEIPT** / **BLOCKED** strip under command-mode replies with Poll button; fail-closed blocks send when not connected; command mode single-engine; fingerprint dedupe. `lifeos-voice-chat.js` — `voiceSendFired` latch fixes double POST on browser STT (onresult + onend). `voice-rail-v1.js` — panel response includes `command_execution`; `listStagedCommands` returns recent 10 with job receipts. Build **v2.18**. | Adam: show job_id in UI; fix duplicate; properly connected | GAP-FILL | pending deploy |
 | 2026-06-12 | **commit_sha in Voice Rail exec receipts:** `services/voice-rail-command-executor.js` reads `trace.builder_output.commit_sha`; `services/builderos-governed-loop-executor.js` propagates from `/build` + `/execute` responses. | Adam next-10: UI receipt showed null commit_sha when kernel committed | GAP-FILL | pending deploy |
