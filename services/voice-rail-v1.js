@@ -982,6 +982,7 @@ export function createVoiceRailV1({
     listStagedCommands,
     stageCommand,
     findPrivateLeak,
+    probeFounderContext,
     listDepartments: listVoiceRailDepartmentsPublic,
   };
 }
