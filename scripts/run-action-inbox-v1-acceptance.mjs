@@ -108,7 +108,7 @@ step(
 const taskCapture = await api('POST', '/api/v1/lifeos/action-inbox/capture', {
   user,
   source: 'api',
-  text: `Please build the invoice service for the system`,
+  text: `Send the quarterly report to the team by end of day`,
   mode: 'command',
 });
 const taskItem = taskCapture.json?.item;

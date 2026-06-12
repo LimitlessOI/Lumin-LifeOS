@@ -3,6 +3,22 @@
 
 ---
 
+## [SESSION] 2026-06-11 — Voice Rail system audit + 4 bugs fixed
+
+**Audit scope:** All Voice Rail files — `services/voice-rail-v1.js`, `services/voice-rail-founder-memory.js`, `services/voice-rail-tts.js`, `services/voice-rail-stt.js`, `config/voice-rail-departments.js`, `config/voice-rail-founder-routing.js`, `public/overlay/lifeos-voice-rail-v1.html`, `routes/lifeos-voice-rail-routes.js`.
+
+**Bugs found and fixed in-session:**
+1. `lifeos-voice-rail-v1.html` — duplicate `btn-theme` `addEventListener` made theme toggle a no-op (fires twice, reverts to original state). Removed second handler.
+2. `voice-rail-v1.js` — `readLifeOSProductBrief()` read `docs/products/LIFEOS.md` which was deleted in doc restructure → always returned `null` → `has_product_brief` always false → context health reduced by 1 signal. Fixed to `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`.
+3. `lifeos-voice-rail-v1.html` — `sendMessage()` persistent-listen branch called `clearBuffer()` but never cleared the textarea; typed messages stayed in the input after send. Added `value = ''`.
+4. `voice-rail-founder-memory.js` — `UPDATE communication_profiles` appended to `profile_summary` with no length cap; would grow unboundedly over sessions. Capped to `RIGHT(..., 5000)`.
+
+**All 4 fixes verified:** `node --check` PASS; single duplicate handler gone; path updated; textarea clear added; SQL capped.
+
+**Next:** Deploy to Railway (deploy required for all pending Voice Rail versions from v2.10–v2.15). Run `GET /api/v1/lifeos/voice-rail/context-probe` to confirm context health reads ≥ `partial` after deploy. Hard-refresh `/voice-rail?v=2.15`.
+
+---
+
 ## [SESSION] 2026-05-24 — Voice Rail v2.13 preference + cost + escalation
 
 **Shipped (local — GAP-FILL, pending deploy):** Voice Rail **v2.13** wires the remaining founder-comms backlog from v2.12: in-chat preference capture (`voice-rail-founder-memory.js`) → capsule + comm profile; per-message cost from `token_usage_log` (`voice-rail-usage-receipt.js`); session tier boost on "go deeper" + shallow-reply auto-escalation; dept-scoped capsule filter; UI footer shows cost + escalated flag. Migration `20260612_voice_rail_founder_routing_state.sql`.

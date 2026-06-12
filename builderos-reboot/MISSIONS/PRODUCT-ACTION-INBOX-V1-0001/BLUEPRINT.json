@@ -17,8 +17,9 @@
       "action_type": "builder_build",
       "dependencies": [],
       "status": "complete",
-      "completed_at": "2026-06-12T00:00:00.000Z",
-      "build_method": "GAP-FILL"
+      "completed_at": "2026-06-12T03:44:01.277Z",
+      "build_method": "GAP-FILL",
+      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
     },
     {
       "step_id": "AIV1-S02",
@@ -30,8 +31,9 @@
         "AIV1-S01"
       ],
       "status": "complete",
-      "completed_at": "2026-06-12T00:00:00.000Z",
-      "build_method": "GAP-FILL"
+      "completed_at": "2026-06-12T03:44:01.277Z",
+      "build_method": "GAP-FILL",
+      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
     },
     {
       "step_id": "AIV1-S03",
@@ -43,8 +45,9 @@
         "AIV1-S02"
       ],
       "status": "complete",
-      "completed_at": "2026-06-12T00:00:00.000Z",
-      "build_method": "GAP-FILL"
+      "completed_at": "2026-06-12T03:44:01.277Z",
+      "build_method": "GAP-FILL",
+      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
     },
     {
       "step_id": "AIV1-S04",
@@ -56,8 +59,9 @@
         "AIV1-S03"
       ],
       "status": "complete",
-      "completed_at": "2026-06-12T00:00:00.000Z",
-      "build_method": "GAP-FILL"
+      "completed_at": "2026-06-12T03:44:01.277Z",
+      "build_method": "GAP-FILL",
+      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
     },
     {
       "step_id": "AIV1-S05",
@@ -69,8 +73,9 @@
         "AIV1-S04"
       ],
       "status": "complete",
-      "completed_at": "2026-06-12T00:00:00.000Z",
-      "build_method": "GAP-FILL"
+      "completed_at": "2026-06-12T03:44:01.277Z",
+      "build_method": "GAP-FILL",
+      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
     },
     {
       "step_id": "AIV1-S06",
@@ -82,11 +87,17 @@
         "AIV1-S05"
       ],
       "status": "complete",
-      "completed_at": "2026-06-12T00:00:00.000Z",
-      "build_method": "GAP-FILL"
+      "completed_at": "2026-06-12T03:44:01.277Z",
+      "build_method": "GAP-FILL",
+      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089",
+      "receipt_verdict": "PASS"
     }
   ],
   "blueprint_status": "complete",
   "build_method": "GAP-FILL",
-  "build_note": "Builder-first attempted; Unauthorized on POST /api/v1/lifeos/builder/build — GAP-FILL per protocol"
+  "build_note": "Builder-first attempted; Unauthorized on POST /api/v1/lifeos/builder/build — GAP-FILL per protocol",
+  "completed_at": "2026-06-12T03:44:01.277Z",
+  "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089",
+  "receipt_path": "products/receipts/ACTION_INBOX_V1_ACCEPTANCE.json",
+  "receipt_verdict": "PASS"
 }
