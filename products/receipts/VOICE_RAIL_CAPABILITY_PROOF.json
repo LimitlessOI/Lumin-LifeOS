@@ -1,6 +1,6 @@
 {
   "schema": "voice_rail_capability_proof_v1",
-  "started_at": "2026-06-12T16:53:20.637Z",
+  "started_at": "2026-06-12T20:18:26.465Z",
   "production_base": "https://robust-magic-production.up.railway.app",
   "manifest": {
     "mode": "sync_chat_plus_command_execute",
@@ -20,26 +20,26 @@
     "LOCAL-L5_partial_context_fails_bar",
     "CAP-ENV",
     "CAP-T01_health_reachable",
+    "CAP-T02_deploy_at_least_v2_16",
     "CAP-T03_fail_closed_flag_on",
     "CAP-T04_ui_reachable",
+    "CAP-T05_ui_connection_banner",
+    "CAP-T05b_connection_proof_endpoint",
     "CAP-T06_context_probe_reachable",
     "CAP-T07_context_probe_returns_counts",
     "CAP-T08_live_context_connected",
     "CAP-T09_fail_closed_blocks_when_not_connected",
     "CAP-T10_lie_trap_blocked_or_honest",
     "CAP-T11_reply_includes_context_health",
+    "CAP-T12_reply_includes_execution_truth",
     "CAP-T13_pipeline_theater_blocked",
-    "CAP-T14_command_creates_staged_row",
     "CAP-T15_staged_visible_in_api",
     "CAP-T17_status_question_no_execution_lies",
     "CAP-T18_messages_persist_to_db",
     "CAP-T19_usage_receipt_on_reply"
   ],
   "tests_failed": [
-    "CAP-T02_deploy_at_least_v2_16",
-    "CAP-T05_ui_sync_chat_banner",
-    "CAP-T05b_connection_proof_endpoint",
-    "CAP-T12_reply_includes_execution_truth",
+    "CAP-T14_command_creates_staged_row",
     "CAP-T16_command_routes_to_builder_job"
   ],
   "capabilities_proven": [
@@ -57,45 +57,14 @@
   ],
   "blockers": [
     {
-      "test": "CAP-T02_deploy_at_least_v2_16",
-      "detail": {
-        "build": "voice-rail-v2.16",
-        "required": 17
-      }
-    },
-    {
-      "test": "CAP-T05_ui_sync_chat_banner",
-      "detail": {
-        "has_banner": false
-      }
-    },
-    {
-      "test": "CAP-T05b_connection_proof_endpoint",
-      "detail": {
-        "raw": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/v1/lifeos/voice-rail/connection-proof</pre>\n</body>\n</html>\n"
-      }
-    },
-    {
-      "test": "CAP-T12_reply_includes_execution_truth",
-      "detail": {
-        "manifest": {
-          "mode": "sync_chat_only",
-          "background_work": false,
-          "runs_while_operator_offline": false,
-          "staged_commands_auto_execute": false,
-          "writes_files_on_chat": false,
-          "builder_runs_on_chat": false,
-          "honest_staged_command_meaning": "A row in voice_rail_staged_commands (executed=false) — not BTB/Sentry/CBR until builder API runs."
-        },
-        "lie_blocked": false,
-        "violations": []
-      }
+      "test": "CAP-T14_command_creates_staged_row",
+      "detail": null
     },
     {
       "test": "CAP-T16_command_routes_to_builder_job",
       "detail": {
         "command_execution": {},
-        "excerpt": "Staged. `cap-proof-1781283201257` is in the staged commands queue — not executed. No receipt exists in this context. Nothing has been built. To actually execute: POST /api/v1/lifeos/builder/build with"
+        "excerpt": ""
       }
     }
   ],
@@ -133,17 +102,19 @@
   "detail_CAP-T01_health_reachable": {
     "ok": true,
     "service": "voice-rail-v1",
-    "build": "voice-rail-v2.16",
+    "build": "voice-rail-v2.19",
     "founder_auto_routing": true,
     "fail_closed_founder_comms": true,
+    "founder_command_execute": true,
     "execution_truth": {
-      "mode": "sync_chat_only",
+      "mode": "sync_chat_plus_command_execute",
       "background_work": false,
       "runs_while_operator_offline": false,
-      "staged_commands_auto_execute": false,
-      "writes_files_on_chat": false,
-      "builder_runs_on_chat": false,
-      "honest_staged_command_meaning": "A row in voice_rail_staged_commands (executed=false) — not BTB/Sentry/CBR until builder API runs."
+      "staged_commands_auto_execute": true,
+      "founder_commands_route": "builderos_command_control_job",
+      "writes_files_on_chat": true,
+      "builder_runs_on_chat": true,
+      "honest_staged_command_meaning": "Founder commands queue BuilderOS command-control → governed builder loop; receipt required."
     },
     "modes": [
       "conversation",
@@ -399,32 +370,69 @@
     "display_name": "Claude Sonnet 4.6 (Anthropic direct)"
   },
   "detail_CAP-T02_deploy_at_least_v2_16": {
-    "build": "voice-rail-v2.16",
-    "required": 17
+    "build": "voice-rail-v2.19",
+    "required": 18
   },
   "capability_execution_truth_manifest_exposed": {
-    "mode": "sync_chat_only",
+    "mode": "sync_chat_plus_command_execute",
     "background_work": false,
     "runs_while_operator_offline": false,
-    "staged_commands_auto_execute": false,
-    "writes_files_on_chat": false,
-    "builder_runs_on_chat": false,
-    "honest_staged_command_meaning": "A row in voice_rail_staged_commands (executed=false) — not BTB/Sentry/CBR until builder API runs."
+    "staged_commands_auto_execute": true,
+    "founder_commands_route": "builderos_command_control_job",
+    "writes_files_on_chat": true,
+    "builder_runs_on_chat": true,
+    "honest_staged_command_meaning": "Founder commands queue BuilderOS command-control → governed builder loop; receipt required."
   },
   "detail_CAP-T03_fail_closed_flag_on": true,
   "detail_CAP-T04_ui_reachable": 200,
-  "detail_CAP-T05_ui_sync_chat_banner": {
-    "has_banner": false
+  "detail_CAP-T05_ui_connection_banner": {
+    "has_connection_status": true,
+    "uiBuildTag": "v2.19"
   },
   "detail_CAP-T05b_connection_proof_endpoint": {
-    "raw": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/v1/lifeos/voice-rail/connection-proof</pre>\n</body>\n</html>\n"
+    "ok": true,
+    "connected": true,
+    "fail_closed": true,
+    "context_health": {
+      "level": "connected",
+      "connected": true,
+      "sufficient_for_founder_reply": true,
+      "counts": {
+        "voice_rail_history": 30,
+        "verified_memories": 3,
+        "goals": 0,
+        "staged_commands": 10,
+        "mission_queue_head": 3,
+        "recent_commitments": 12,
+        "has_lifeos_snapshot": true,
+        "has_continuity_log": false,
+        "has_product_brief": false,
+        "memory_capsules": 1,
+        "has_communication_profile": true,
+        "sot_knowledge_chars": 591,
+        "deploy_commit_sha": "d6906c440e9b7e9d347b4bc5cfb050330fbbdc45"
+      },
+      "loaded_at": "2026-06-12T20:18:26.821Z",
+      "honesty_note": "LifeOS context loaded (history, memories, continuity, missions, SOT)."
+    },
+    "execution_truth": {
+      "mode": "sync_chat_plus_command_execute",
+      "background_work": false,
+      "runs_while_operator_offline": false,
+      "staged_commands_auto_execute": true,
+      "founder_commands_route": "builderos_command_control_job",
+      "writes_files_on_chat": true,
+      "builder_runs_on_chat": true,
+      "honest_staged_command_meaning": "Founder commands queue BuilderOS command-control → governed builder loop; receipt required."
+    },
+    "acceptance_command": "npm run lifeos:voice-rail:capability-proof"
   },
   "detail_CAP-T06_context_probe_reachable": 200,
   "detail_CAP-T07_context_probe_returns_counts": {
     "voice_rail_history": 30,
     "verified_memories": 3,
     "goals": 0,
-    "staged_commands": 3,
+    "staged_commands": 10,
     "mission_queue_head": 3,
     "recent_commitments": 12,
     "has_lifeos_snapshot": true,
@@ -433,7 +441,7 @@
     "memory_capsules": 1,
     "has_communication_profile": true,
     "sot_knowledge_chars": 591,
-    "deploy_commit_sha": "98bb0278507b8422c2474e264b1ca99101cc1e1d"
+    "deploy_commit_sha": "46061762697f22b1e2b648e8cc7d6c43943b6e5c"
   },
   "detail_CAP-T08_live_context_connected": {
     "sufficient": true,
@@ -442,7 +450,7 @@
       "voice_rail_history": 30,
       "verified_memories": 3,
       "goals": 0,
-      "staged_commands": 3,
+      "staged_commands": 10,
       "mission_queue_head": 3,
       "recent_commitments": 12,
       "has_lifeos_snapshot": true,
@@ -451,14 +459,14 @@
       "memory_capsules": 1,
       "has_communication_profile": true,
       "sot_knowledge_chars": 591,
-      "deploy_commit_sha": "98bb0278507b8422c2474e264b1ca99101cc1e1d"
+      "deploy_commit_sha": "46061762697f22b1e2b648e8cc7d6c43943b6e5c"
     }
   },
   "capability_live_lifeos_context_loaded": {
     "voice_rail_history": 30,
     "verified_memories": 3,
     "goals": 0,
-    "staged_commands": 3,
+    "staged_commands": 10,
     "mission_queue_head": 3,
     "recent_commitments": 12,
     "has_lifeos_snapshot": true,
@@ -467,7 +475,7 @@
     "memory_capsules": 1,
     "has_communication_profile": true,
     "sot_knowledge_chars": 591,
-    "deploy_commit_sha": "98bb0278507b8422c2474e264b1ca99101cc1e1d"
+    "deploy_commit_sha": "46061762697f22b1e2b648e8cc7d6c43943b6e5c"
   },
   "detail_CAP-T09_fail_closed_blocks_when_not_connected": {
     "skipped": "context sufficient — use CAP-T08"
@@ -481,7 +489,7 @@
       "reason": "clean"
     },
     "lie_blocked": false,
-    "excerpt": "The blueprint alignment is not actively running as an automated process. I respond to your inputs in real-time and do not perform continuous background work. To proceed with the blueprint alignment, d"
+    "excerpt": "Adam, Voice Rail operates solely in a synchronous chat mode. No background work is conducted between your messages. The blueprint alignment task requires execution through the Command Center builder, "
   },
   "capability_lie_detector_on_live_reply": {
     "ok": true,
@@ -495,7 +503,7 @@
       "voice_rail_history": 30,
       "verified_memories": 3,
       "goals": 0,
-      "staged_commands": 3,
+      "staged_commands": 10,
       "mission_queue_head": 3,
       "recent_commitments": 12,
       "has_lifeos_snapshot": true,
@@ -504,9 +512,9 @@
       "memory_capsules": 1,
       "has_communication_profile": true,
       "sot_knowledge_chars": 591,
-      "deploy_commit_sha": "98bb0278507b8422c2474e264b1ca99101cc1e1d"
+      "deploy_commit_sha": "46061762697f22b1e2b648e8cc7d6c43943b6e5c"
     },
-    "loaded_at": "2026-06-12T16:53:21.441Z",
+    "loaded_at": "2026-06-12T20:18:27.458Z",
     "honesty_note": "LifeOS context loaded (history, memories, continuity, missions, SOT)."
   },
   "capability_council_reply_with_context_health": {
@@ -517,7 +525,7 @@
       "voice_rail_history": 30,
       "verified_memories": 3,
       "goals": 0,
-      "staged_commands": 3,
+      "staged_commands": 10,
       "mission_queue_head": 3,
       "recent_commitments": 12,
       "has_lifeos_snapshot": true,
@@ -526,47 +534,41 @@
       "memory_capsules": 1,
       "has_communication_profile": true,
       "sot_knowledge_chars": 591,
-      "deploy_commit_sha": "98bb0278507b8422c2474e264b1ca99101cc1e1d"
+      "deploy_commit_sha": "46061762697f22b1e2b648e8cc7d6c43943b6e5c"
     },
-    "loaded_at": "2026-06-12T16:53:21.441Z",
+    "loaded_at": "2026-06-12T20:18:27.458Z",
     "honesty_note": "LifeOS context loaded (history, memories, continuity, missions, SOT)."
   },
   "detail_CAP-T12_reply_includes_execution_truth": {
-    "manifest": {
-      "mode": "sync_chat_only",
-      "background_work": false,
-      "runs_while_operator_offline": false,
-      "staged_commands_auto_execute": false,
-      "writes_files_on_chat": false,
-      "builder_runs_on_chat": false,
-      "honest_staged_command_meaning": "A row in voice_rail_staged_commands (executed=false) — not BTB/Sentry/CBR until builder API runs."
+    "execution_truth": {
+      "manifest": {
+        "mode": "sync_chat_plus_command_execute",
+        "background_work": false,
+        "runs_while_operator_offline": false,
+        "staged_commands_auto_execute": true,
+        "founder_commands_route": "builderos_command_control_job",
+        "writes_files_on_chat": true,
+        "builder_runs_on_chat": true,
+        "honest_staged_command_meaning": "Founder commands queue BuilderOS command-control → governed builder loop; receipt required."
+      },
+      "lie_blocked": false,
+      "violations": []
     },
-    "lie_blocked": false,
-    "violations": []
+    "lie_blocked": false
   },
   "detail_CAP-T13_pipeline_theater_blocked": {
     "pipe_check": {
       "ok": true,
-      "reason": "lie_blocked_by_server"
+      "reason": "clean"
     },
-    "excerpt": "Adam — TRUTH (reply blocked — model claimed work that did not happen): Voice Rail is sync chat only. Nothing runs between your messages. No files were written, no builder ran, no account was provision"
-  },
-  "detail_CAP-T14_command_creates_staged_row": {
-    "id": "8aa86ec9-4514-4f6b-b827-7bf35bc24ac4",
-    "session_id": "914d495c-ace6-4c03-9e9a-8dc79517b299",
-    "user_id": "1",
-    "utterance": "Please build the capability proof slice cap-proof-1781283201257",
-    "intent": "command",
-    "status": "staged",
-    "executed": false,
-    "created_at": "2026-06-12 16:53:27.392433+00"
+    "excerpt": "Adam, I cannot route items to BTB and Sentry from Voice Rail. Voice Rail is a synchronous chat. No background execution is possible. State your next command."
   },
   "detail_CAP-T15_staged_visible_in_api": {
-    "tag": "cap-proof-1781283201257"
+    "tag": "cap-proof-1781295507221"
   },
   "detail_CAP-T16_command_routes_to_builder_job": {
     "command_execution": {},
-    "excerpt": "Staged. `cap-proof-1781283201257` is in the staged commands queue — not executed. No receipt exists in this context. Nothing has been built. To actually execute: POST /api/v1/lifeos/builder/build with"
+    "excerpt": ""
   },
   "capability_founder_commands_execute_via_command_control": {},
   "detail_CAP-T17_status_question_no_execution_lies": {
@@ -574,10 +576,10 @@
       "ok": true,
       "reason": "clean"
     },
-    "excerpt": "Adam, the system is not actively building anything right now. The following commands are staged and awaiting further instruction: * `Please build the capability proof slice cap-proof-1781283201257` * `Please build the capability proof slice cap-proof"
+    "excerpt": "Adam, the system is not building anything right now.\nFrom the `staged_commands` in the context payload:\n- `Please build: add a one-line comment \"# voice-rail proof cap-proof-1781295507221\" at line 2 of scripts/run-voice-rail-capability-proof.mjs. Do "
   },
   "detail_CAP-T18_messages_persist_to_db": {
-    "tag": "cap-proof-1781283201257"
+    "tag": "cap-proof-1781295507221"
   },
   "capability_conversation_persisted": {
     "session_id": "914d495c-ace6-4c03-9e9a-8dc79517b299"
@@ -585,12 +587,12 @@
   "detail_CAP-T19_usage_receipt_on_reply": {
     "provider": "openai",
     "model": "gpt-4o",
-    "input_tokens": 22551,
-    "output_tokens": 68,
-    "cost_usd": 0.057058,
-    "cost_display": "$0.0571",
+    "input_tokens": 23920,
+    "output_tokens": 59,
+    "cost_usd": 0.06039,
+    "cost_display": "$0.0604",
     "provider_was_free": false,
-    "logged_at": "2026-06-12 16:53:24.170441+00"
+    "logged_at": "2026-06-12 20:18:29.924321+00"
   },
   "capability_background_work_while_offline": {
     "reason": "by design — no job runs without a message or explicit CC job"
@@ -598,6 +600,6 @@
   "capability_write_blueprint_from_chat_without_builder": {
     "reason": "blueprint writes require builder commit receipt"
   },
-  "finished_at": "2026-06-12T16:53:38.728Z",
+  "finished_at": "2026-06-12T20:18:46.773Z",
   "pass": false
 }

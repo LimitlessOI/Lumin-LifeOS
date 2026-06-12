@@ -261,7 +261,11 @@ if (!liveConnected) {
   step(
     'CAP-T12_reply_includes_execution_truth',
     lieTrap.status === 200
-      && (lieSrc.execution_truth?.mode === 'sync_chat_only' || lieSrc.lie_blocked === true),
+      && (
+        lieSrc.lie_blocked === true
+        || lieSrc.execution_truth?.manifest?.background_work === false
+        || lieSrc.execution_truth?.mode === 'sync_chat_only'
+      ),
     { execution_truth: lieSrc.execution_truth, lie_blocked: lieSrc.lie_blocked },
   );
 
