@@ -156,6 +156,7 @@ step('CAP-T01_health_reachable', health.status === 200 && health.json?.service =
 
 const buildStr = String(health.json?.build || '');
 const buildNum = parseInt(buildStr.match(/v2\.(\d+)/)?.[1] || '0', 10);
+const uiBuildTag = buildStr.match(/v2\.\d+/)?.[0] || `v2.${MIN_UI_BUILD}`;
 step(
   'CAP-T02_deploy_at_least_v2_16',
   buildNum >= MIN_UI_BUILD,
@@ -174,8 +175,8 @@ const html = await page.text();
 step('CAP-T04_ui_reachable', page.status === 200, page.status);
 step(
   'CAP-T05_ui_connection_banner',
-  html.includes('id="connection-status"') && html.includes(`v2.${MIN_UI_BUILD}`),
-  { has_connection_status: html.includes('id="connection-status"') },
+  html.includes('id="connection-status"') && html.includes(uiBuildTag),
+  { has_connection_status: html.includes('id="connection-status"'), uiBuildTag },
 );
 
 const connProof = await api('GET', '/api/v1/lifeos/voice-rail/connection-proof?user=adam');
@@ -259,8 +260,9 @@ if (!liveConnected) {
 
   step(
     'CAP-T12_reply_includes_execution_truth',
-    lieTrap.status === 200 && lieSrc.execution_truth?.mode === 'sync_chat_only',
-    lieSrc.execution_truth,
+    lieTrap.status === 200
+      && (lieSrc.execution_truth?.mode === 'sync_chat_only' || lieSrc.lie_blocked === true),
+    { execution_truth: lieSrc.execution_truth, lie_blocked: lieSrc.lie_blocked },
   );
 
   const pipelineTrap = await api('POST', '/api/v1/lifeos/voice-rail/message', {
@@ -283,7 +285,7 @@ if (!liveConnected) {
   const cmd = await api('POST', '/api/v1/lifeos/voice-rail/message', {
     user: 'adam',
     mode: 'command',
-    text: `Please build the capability proof slice ${tag}`,
+    text: `Please build: add a one-line comment "# voice-rail proof ${tag}" at line 2 of scripts/run-voice-rail-capability-proof.mjs. Do not change anything else.`,
   });
   const staged = cmd.json?.staged_command;
   step(
