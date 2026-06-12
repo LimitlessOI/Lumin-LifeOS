@@ -6,7 +6,10 @@
 import express from 'express';
 import multer from 'multer';
 import { createVoiceRailV1, isVoiceRailFailClosedEnabled } from '../services/voice-rail-v1.js';
-import { VOICE_RAIL_EXECUTION_MANIFEST } from '../services/voice-rail-execution-truth.js';
+import {
+  buildVoiceRailExecutionManifest,
+  VOICE_RAIL_EXECUTION_MANIFEST,
+} from '../services/voice-rail-execution-truth.js';
 import { synthesizeVoiceRailSpeech, voiceRailTtsStatus } from '../services/voice-rail-tts.js';
 import { transcribeVoiceRailAudio, voiceRailSttStatus } from '../services/voice-rail-stt.js';
 import {
@@ -66,10 +69,11 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.16',
+      build: 'voice-rail-v2.17',
       founder_auto_routing: true,
       fail_closed_founder_comms: isVoiceRailFailClosedEnabled(),
-      execution_truth: VOICE_RAIL_EXECUTION_MANIFEST,
+      founder_command_execute: process.env.VOICE_RAIL_EXECUTE_COMMANDS !== '0',
+      execution_truth: buildVoiceRailExecutionManifest(),
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,
       reply_engine: callCouncilMember ? 'lifeos/department' : 'template_only',
@@ -101,9 +105,28 @@ export function createLifeOSVoiceRailRoutes({
       res.json({
         ok: probe.sufficient,
         ...probe,
+        execution_truth: buildVoiceRailExecutionManifest(),
         note: probe.sufficient
-          ? 'LifeOS context meets founder comms minimum — replies allowed.'
-          : 'LifeOS context below minimum — founder replies blocked until fixed.',
+          ? 'LifeOS context CONNECTED — founder replies allowed.'
+          : 'LifeOS context below CONNECTED bar — founder replies blocked until fixed.',
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/connection-proof', requireKey, async (req, res, next) => {
+    try {
+      const userId = await voiceRail.resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const probe = await voiceRail.probeFounderContext(userId);
+      res.json({
+        ok: probe.sufficient === true,
+        connected: probe.sufficient === true,
+        fail_closed: isVoiceRailFailClosedEnabled(),
+        context_health: probe.context_health,
+        execution_truth: buildVoiceRailExecutionManifest(),
+        acceptance_command: 'npm run lifeos:voice-rail:capability-proof',
       });
     } catch (err) {
       next(err);

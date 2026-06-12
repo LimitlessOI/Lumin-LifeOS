@@ -12,7 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   detectExecutionLie,
-  VOICE_RAIL_EXECUTION_MANIFEST,
+  buildVoiceRailExecutionManifest,
 } from '../services/voice-rail-execution-truth.js';
 import {
   isVoiceRailContextSufficientForFounderReply,
@@ -21,7 +21,7 @@ import {
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RECEIPT = path.join(ROOT, 'products/receipts/VOICE_RAIL_CAPABILITY_PROOF.json');
-const MIN_UI_BUILD = 16;
+const MIN_UI_BUILD = 17;
 const CANONICAL_PATH = '/overlay/lifeos-voice-rail-v1.html';
 
 const base = (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
@@ -31,7 +31,7 @@ const report = {
   schema: 'voice_rail_capability_proof_v1',
   started_at: new Date().toISOString(),
   production_base: base || null,
-  manifest: VOICE_RAIL_EXECUTION_MANIFEST,
+  manifest: buildVoiceRailExecutionManifest(),
   tests_passed: [],
   tests_failed: [],
   capabilities_proven: [],
@@ -123,14 +123,22 @@ step(
 
 const liveHealth = summarizeVoiceRailContextHealth({
   memory_capsules: [{ id: 1 }],
+  verified_memories: [{ c: 1 }],
+  voice_rail_history: [{}, {}, {}, {}],
+  lifeos_snapshot: { mits: 1 },
   sot_knowledge_chars: 500,
-  voice_rail_history: [{}, {}, {}],
 });
 liveHealth.sufficient_for_founder_reply = isVoiceRailContextSufficientForFounderReply(liveHealth);
 step(
   'LOCAL-L4_live_context_can_pass_bar',
-  liveHealth.sufficient_for_founder_reply === true,
+  liveHealth.level === 'connected' && liveHealth.sufficient_for_founder_reply === true,
   { level: liveHealth.level },
+);
+
+step(
+  'LOCAL-L5_partial_context_fails_bar',
+  fileOnlyHealth.sufficient_for_founder_reply === false && fileOnlyHealth.level !== 'connected',
+  { level: fileOnlyHealth.level },
 );
 
 if (!base || !key) {
@@ -166,8 +174,15 @@ const html = await page.text();
 step('CAP-T04_ui_reachable', page.status === 200, page.status);
 step(
   'CAP-T05_ui_sync_chat_banner',
-  html.includes('SYNC CHAT ONLY') && html.includes(`v2.${MIN_UI_BUILD}`),
-  { has_banner: html.includes('SYNC CHAT ONLY') },
+  html.includes('CONNECTED or blocked') && html.includes(`v2.${MIN_UI_BUILD}`),
+  { has_banner: html.includes('CONNECTED or blocked') },
+);
+
+const connProof = await api('GET', '/api/v1/lifeos/voice-rail/connection-proof?user=adam');
+step(
+  'CAP-T05b_connection_proof_endpoint',
+  connProof.status === 200 && connProof.json?.execution_truth != null,
+  connProof.json,
 );
 
 // ─── CONNECTION (live vs theater) ──────────────────────────────────────────
@@ -182,7 +197,10 @@ step(
   counts,
 );
 
-const liveConnected = probe.json?.sufficient === true && hasLiveContextCounts(counts);
+const liveConnected =
+  probe.json?.sufficient === true &&
+  ch.level === 'connected' &&
+  hasLiveContextCounts(counts);
 step('CAP-T08_live_context_connected', liveConnected, {
   sufficient: probe.json?.sufficient,
   level: ch.level,
@@ -281,15 +299,14 @@ if (!liveConnected) {
   const replyClaimsBuilt = /\b(built|committed|deployed|executed the command|CBR ran)\b/i.test(
     cmd.json?.assistant_message?.content || '',
   );
+  const exec = cmd.json?.command_execution || {};
+  const hasJobReceipt = Boolean(exec.job_id);
   step(
-    'CAP-T16_chat_does_not_claim_build_executed',
-    cmd.status === 200 && !replyClaimsBuilt,
-    { excerpt: (cmd.json?.assistant_message?.content || '').slice(0, 200) },
+    'CAP-T16_command_routes_to_builder_job',
+    cmd.status === 200 && hasJobReceipt && !replyClaimsBuilt,
+    { command_execution: exec, excerpt: (cmd.json?.assistant_message?.content || '').slice(0, 200) },
   );
-  capability('staged_command_not_auto_executed', staged?.executed === false && !replyClaimsBuilt, {
-    staged,
-    replyClaimsBuilt,
-  });
+  capability('founder_commands_execute_via_command_control', hasJobReceipt, exec);
 
   const statusAsk = await api('POST', '/api/v1/lifeos/voice-rail/message', {
     user: 'adam',
@@ -328,13 +345,10 @@ if (!liveConnected) {
 // ─── EXPLICIT NOT-PROVEN (honest scope) ────────────────────────────────────
 
 capability('background_work_while_offline', false, {
-  reason: 'by design — sync chat only until job queue ships',
+  reason: 'by design — no job runs without a message or explicit CC job',
 });
-capability('auto_execute_staged_commands', false, {
-  reason: 'staged rows only — builder API required',
-});
-capability('write_blueprint_from_chat_alone', false, {
-  reason: 'no file writer on /message',
+capability('write_blueprint_from_chat_without_builder', false, {
+  reason: 'blueprint writes require builder commit receipt',
 });
 
 finish();

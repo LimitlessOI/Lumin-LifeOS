@@ -2,20 +2,28 @@
  * Voice Rail — execution truth enforcement (no background-work theater).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+import { isVoiceRailCommandExecuteEnabled } from './voice-rail-command-executor.js';
 
 /** Machine-readable operational reality — every reply must align with this. */
-export const VOICE_RAIL_EXECUTION_MANIFEST = Object.freeze({
-  mode: 'sync_chat_only',
-  background_work: false,
-  runs_while_operator_offline: false,
-  staged_commands_auto_execute: false,
-  writes_files_on_chat: false,
-  builder_runs_on_chat: false,
-  honest_staged_command_meaning:
-    'A row in voice_rail_staged_commands (executed=false) — not BTB/Sentry/CBR until builder API runs.',
-});
+export function buildVoiceRailExecutionManifest() {
+  const executeCommands = isVoiceRailCommandExecuteEnabled();
+  return Object.freeze({
+    mode: executeCommands ? 'sync_chat_plus_command_execute' : 'sync_chat_only',
+    background_work: false,
+    runs_while_operator_offline: false,
+    staged_commands_auto_execute: executeCommands,
+    founder_commands_route: executeCommands ? 'builderos_command_control_job' : 'staged_only',
+    writes_files_on_chat: executeCommands,
+    builder_runs_on_chat: executeCommands,
+    honest_staged_command_meaning: executeCommands
+      ? 'Founder commands queue BuilderOS command-control → governed builder loop; receipt required.'
+      : 'A row in voice_rail_staged_commands (executed=false) — set VOICE_RAIL_EXECUTE_COMMANDS=1 to run.',
+  });
+}
 
-/** Model claims that imply async work, progress, or execution without a receipt. */
+// Static default for imports that need a constant shape
+export const VOICE_RAIL_EXECUTION_MANIFEST = buildVoiceRailExecutionManifest();
+
 const EXECUTION_LIE_PATTERNS = [
   { id: 'background_work', re: /\b(still actively working|actively working on|still working on|i am working on|i'm working on|we are working on|cross-?referenc(?:ing)?|retriev(?:ing)?|aligning the|auditing the|synthesiz)/i },
   { id: 'report_when_done', re: /\b(will report back|report back (to you )?(when|upon|immediately)|upon completion,? i will|as soon as (it|the task) is (done|complete|finished))/i },
@@ -43,16 +51,18 @@ export function detectExecutionLie(replyText) {
 }
 
 export function buildExecutionTruthPromptBlock(operatorName = 'Adam') {
-  const m = VOICE_RAIL_EXECUTION_MANIFEST;
+  const m = buildVoiceRailExecutionManifest();
+  const commandLine = m.staged_commands_auto_execute
+    ? `- Founder **command** mode: utterance is queued to BuilderOS command-control and the governed builder loop runs on Railway. You MUST cite command_execution_receipt in context (job_id, commit_sha, target_file, ok/fail) — never fake BTB/Sentry pipeline language.`
+    : `- Founder commands are **staged only** until VOICE_RAIL_EXECUTE_COMMANDS=1 — say staged row only, not routed.`;
   return `
 EXECUTION TRUTH (constitutional — violating this is a system failure):
 - You ONLY run when ${operatorName} sends a message on Voice Rail. NOTHING runs while they sleep. NO background jobs. NO "I am working on it" between messages.
-- You CANNOT write files, update blueprints, run builder, deploy, provision accounts, or execute staged commands from chat alone.
-- Staged commands = database rows (executed=false). They are NOT routed to BTB/Sentry/CBR until POST /api/v1/lifeos/builder/build (or equivalent) runs and returns a receipt.
+${commandLine}
 - NEVER claim progress, "still working", "will report when done", "in progress", "routed to team", pipeline phases, or % complete unless the context payload includes a concrete receipt (job_id, commit SHA, file path, build ok:true).
-- When asked to DO work: say what was staged (if anything) and what API/human step actually executes it — or say nothing was executed this turn.
+- When asked to DO work: cite command_execution_receipt if present; else say what was staged only — or FAIL.
 - When asked for status of prior work: if no receipt in context, answer FAIL — nothing was done — not "still in progress".
-- No apologies for failure. No SOT citations to soften failure. Results only: done (with receipt) or not done.
+- No apologies for failure. Results only: done (with receipt) or not done.
 - Read-only context below is memory for THIS chat — not proof that async work happened.`.trim();
 }
 
@@ -84,6 +94,6 @@ export function enforceExecutionTruth(replyText, userQuestion, operatorName) {
     text: buildExecutionTruthReplacement(operatorName, userQuestion, violations),
     violations,
     replaced: true,
-    manifest: VOICE_RAIL_EXECUTION_MANIFEST,
+    manifest: buildVoiceRailExecutionManifest(),
   };
 }

@@ -175,6 +175,8 @@
     "db/migrations/20260423_lifeos_ambient_snapshots.sql",
     "services/lifeos-ambient-context.js",
     "routes/lifeos-ambient-routes.js",
+    "services/voice-rail-command-executor.js",
+    "db/migrations/20260612_voice_rail_command_execution.sql",
     "services/voice-rail-execution-truth.js",
     "services/voice-rail-founder-memory.js",
     "services/voice-rail-usage-receipt.js",
@@ -852,5 +854,5 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "ssot_receipt_tail": "Voice Rail v2.16 execution truth — lie detector + live-context fail-closed."
+  "ssot_receipt_tail": "Voice Rail v2.17 command-control execute + CONNECTED-only fail-closed."
 }

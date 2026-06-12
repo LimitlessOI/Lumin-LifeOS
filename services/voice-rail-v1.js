@@ -37,7 +37,12 @@ import { fetchVoiceRailUsageReceipt } from './voice-rail-usage-receipt.js';
 import {
   VOICE_RAIL_EXECUTION_MANIFEST,
   enforceExecutionTruth,
+  buildVoiceRailExecutionManifest,
 } from './voice-rail-execution-truth.js';
+import {
+  executeVoiceRailFounderCommand,
+  isVoiceRailCommandExecuteEnabled,
+} from './voice-rail-command-executor.js';
 
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -255,11 +260,11 @@ export function isVoiceRailFailClosedEnabled() {
   return v !== '0' && v !== 'false' && v !== 'off';
 }
 
-/** Minimum bar before founder comms may call the model — no raw-API fake-out. */
+/** Minimum bar — partial/static-only context = FAIL (founder comms). */
 export function isVoiceRailContextSufficientForFounderReply(contextHealth) {
   if (!contextHealth?.counts) return false;
   const { level, counts } = contextHealth;
-  if (level === 'empty' || level === 'thin') return false;
+  if (level !== 'connected') return false;
   if (!counts.sot_knowledge_chars || counts.sot_knowledge_chars < 200) return false;
   const hasLive =
     (counts.verified_memories || 0) > 0
@@ -467,6 +472,7 @@ async function generateCouncilReply({
   councilAliasMap,
   tierBoost = 0,
   operator,
+  commandExecutionReceipt = null,
   logger,
 }) {
   if (!callCouncilMember) {
@@ -488,6 +494,10 @@ async function generateCouncilReply({
     });
   } catch (ctxErr) {
     logger?.warn?.({ err: ctxErr.message }, 'voice-rail operator context failed');
+  }
+
+  if (commandExecutionReceipt) {
+    contextData.command_execution_receipt = commandExecutionReceipt;
   }
 
   const history = await listMessagesFn(sessionId, userId);
@@ -583,7 +593,7 @@ async function generateCouncilReply({
       usageReceipt,
       callStartedAt,
       execution_truth: {
-        manifest: VOICE_RAIL_EXECUTION_MANIFEST,
+        manifest: buildVoiceRailExecutionManifest(),
         lie_blocked: Boolean(truth.replaced),
         violations: truth.violations || [],
       },
@@ -849,6 +859,7 @@ export function createVoiceRailV1({
     );
 
     let stagedCommand = null;
+    let commandExecution = null;
     if (intent === 'command' || mode === 'command') {
       stagedCommand = await stageCommand({
         userId,
@@ -856,6 +867,26 @@ export function createVoiceRailV1({
         utterance: content,
         intent: 'command',
       });
+      if (stagedCommand?.id && isVoiceRailCommandExecuteEnabled()) {
+        try {
+          commandExecution = await executeVoiceRailFounderCommand({
+            pool,
+            stagedCommandId: stagedCommand.id,
+            utterance: content,
+            userId,
+            logger,
+          });
+          stagedCommand = {
+            ...stagedCommand,
+            executed: commandExecution.ok === true,
+            command_control_job_id: commandExecution.job_id || null,
+            execution_receipt: commandExecution,
+          };
+        } catch (execErr) {
+          logger?.warn?.({ err: execErr.message }, 'voice-rail command execute failed');
+          commandExecution = { ok: false, error: execErr.message };
+        }
+      }
     }
 
     let commitmentExtract = null;
@@ -947,6 +978,7 @@ export function createVoiceRailV1({
               councilAliasMap,
               tierBoost,
               operator,
+              commandExecutionReceipt: commandExecution,
               logger,
             });
             const panelReply = panelResult.text;
@@ -968,6 +1000,7 @@ export function createVoiceRailV1({
               preference_saved: preferenceSaved?.ok ? preferenceSaved.preference_type : null,
               execution_truth: panelResult.execution_truth || null,
               lie_blocked: Boolean(panelResult.execution_truth?.lie_blocked),
+              command_execution: commandExecution,
               note: panelResult.execution_truth?.lie_blocked
                 ? 'Model claimed async work — reply replaced with execution truth.'
                 : panelResult.contextHealth?.honesty_note || 'Panel reply via council API.',
@@ -1044,6 +1077,7 @@ export function createVoiceRailV1({
         councilAliasMap,
         tierBoost,
         operator,
+        commandExecutionReceipt: commandExecution,
         logger,
       });
       reply = councilResult.text;
@@ -1065,6 +1099,7 @@ export function createVoiceRailV1({
         preference_saved: preferenceSaved?.ok ? preferenceSaved.preference_type : null,
         execution_truth: councilResult.execution_truth || null,
         lie_blocked: Boolean(councilResult.execution_truth?.lie_blocked),
+        command_execution: commandExecution,
         note: councilResult.execution_truth?.lie_blocked
           ? 'Model claimed async work — reply replaced with execution truth.'
           : councilResult.contextHealth?.honesty_note || 'Council API reply.',
@@ -1101,6 +1136,7 @@ export function createVoiceRailV1({
       reply_source: replySource,
       context_health: replySource.context_health || null,
       staged_command: stagedCommand,
+      command_execution: commandExecution,
       commitment_extract: commitmentExtract,
     };
   }
