@@ -224,10 +224,45 @@ export function summarizeVoiceRailContextHealth(contextData) {
   return {
     level,
     connected: level === 'connected' || level === 'partial',
+    sufficient_for_founder_reply: null, // filled by caller after SOT inject
     counts,
     loaded_at: ctx.loaded_at || null,
     honesty_note: honestyNoteByLevel[level],
   };
+}
+
+/** Default ON — set VOICE_RAIL_FAIL_CLOSED=0 only for local debugging. */
+export function isVoiceRailFailClosedEnabled() {
+  const v = String(process.env.VOICE_RAIL_FAIL_CLOSED ?? '1').trim().toLowerCase();
+  return v !== '0' && v !== 'false' && v !== 'off';
+}
+
+/** Minimum bar before founder comms may call the model — no raw-API fake-out. */
+export function isVoiceRailContextSufficientForFounderReply(contextHealth) {
+  if (!contextHealth?.counts) return false;
+  const { level, counts } = contextHealth;
+  if (level === 'empty' || level === 'thin') return false;
+  if (!counts.sot_knowledge_chars || counts.sot_knowledge_chars < 200) return false;
+  return true;
+}
+
+function contextNotConnectedError(routing, contextHealth) {
+  const err = new Error('lifeos_context_not_connected');
+  err.status = 503;
+  err.code = 'LIFEOS_CONTEXT_NOT_CONNECTED';
+  err.detail = {
+    reason:
+      'LifeOS context did not load to the minimum bar — reply blocked (fail-closed). Not a model reply; fix connection.',
+    context_health: contextHealth,
+    policy: 'fail_closed_founder_comms',
+    fail_closed: isVoiceRailFailClosedEnabled(),
+    council_member: routing?.resolvedKey || routing?.memberKey,
+    model_id: routing?.modelId,
+    provider: routing?.provider,
+    department: routing?.department,
+    counts: contextHealth?.counts || null,
+  };
+  return err;
 }
 
 /** Operator-facing context: DB + memories + cross-session voice rail + missions (not stateless chat). */
@@ -399,6 +434,16 @@ async function generateCouncilReply({
   }
 
   const contextHealth = summarizeVoiceRailContextHealth(contextData);
+  contextHealth.sufficient_for_founder_reply = isVoiceRailContextSufficientForFounderReply(contextHealth);
+
+  if (isVoiceRailFailClosedEnabled() && !contextHealth.sufficient_for_founder_reply) {
+    logger?.warn?.(
+      { level: contextHealth.level, counts: contextHealth.counts },
+      'voice-rail fail-closed — context not connected',
+    );
+    throw contextNotConnectedError(routing, contextHealth);
+  }
+
   const systemBase = buildDepartmentSystemPrompt(deptId, routing, mode, contextData, operator);
   const system = sotSection
     ? `${systemBase}\n\n[LifeOS SOT / knowledge — authoritative; cite when relevant]\n${sotSection}`
@@ -892,6 +937,31 @@ export function createVoiceRailV1({
     return {
       leaked: (checks.messages + checks.staged_commands + checks.commitments) > 0,
       checks,
+    };
+  }
+
+  async function probeFounderContext(userId) {
+    let contextData = {};
+    try {
+      contextData = await buildVoiceRailOperatorContext({ pool, userId, lumin, logger });
+    } catch (e) {
+      logger?.warn?.({ err: e.message }, 'voice-rail context probe failed');
+    }
+    try {
+      const sotSection = await buildSystemContext('LifeOS founder context probe', {
+        taskType: 'voice_rail_department',
+        maxIdeas: 2,
+      });
+      if (sotSection) contextData.sot_knowledge_chars = sotSection.length;
+    } catch (e) {
+      logger?.warn?.({ err: e.message }, 'voice-rail SOT probe failed');
+    }
+    const contextHealth = summarizeVoiceRailContextHealth(contextData);
+    contextHealth.sufficient_for_founder_reply = isVoiceRailContextSufficientForFounderReply(contextHealth);
+    return {
+      fail_closed: isVoiceRailFailClosedEnabled(),
+      sufficient: contextHealth.sufficient_for_founder_reply,
+      context_health: contextHealth,
     };
   }
 

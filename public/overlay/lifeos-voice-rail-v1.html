@@ -397,7 +397,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.10</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.11</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -641,10 +641,31 @@
       return { 'content-type': 'application/json', ...(k ? { 'x-command-key': k } : {}) };
     }
 
+    function formatContextCounts(counts) {
+      if (!counts) return '';
+      const bits = [
+        counts.sot_knowledge_chars ? `SOT ${counts.sot_knowledge_chars}ch` : 'SOT 0',
+        `history ${counts.voice_rail_history || 0}`,
+        `memories ${counts.verified_memories || 0}`,
+        counts.has_lifeos_snapshot ? 'snapshot yes' : 'snapshot no',
+        counts.has_continuity_log ? 'continuity yes' : 'continuity no',
+      ];
+      return bits.join(' · ');
+    }
+
     function authErrorMessage(res) {
       if (res.status === 401) {
         showAuthBanner(true);
         return `Auth failed (401). Tap Connect key — if verify succeeds but chat fails, hard refresh once. Key length stored: ${getKey().length || 0} chars.`;
+      }
+      if (res.status === 503 && res.json?.error === 'lifeos_context_not_connected') {
+        const d = res.json.detail || {};
+        const ch = d.context_health || {};
+        return (
+          `NOT CONNECTED — reply blocked (fail-closed). LifeOS context did not load. ` +
+          `Level: ${ch.level || '?'} · ${formatContextCounts(d.counts || ch.counts)}. ` +
+          `This is a system failure, not a chatbot reply. Fix DB/memory/SOT wiring on Railway.`
+        );
       }
       if (res.status === 503 && res.json?.error === 'council_unavailable') {
         const d = res.json.detail || {};

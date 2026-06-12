@@ -5,7 +5,7 @@
  */
 import express from 'express';
 import multer from 'multer';
-import { createVoiceRailV1 } from '../services/voice-rail-v1.js';
+import { createVoiceRailV1, isVoiceRailFailClosedEnabled } from '../services/voice-rail-v1.js';
 import { synthesizeVoiceRailSpeech, voiceRailTtsStatus } from '../services/voice-rail-tts.js';
 import { transcribeVoiceRailAudio, voiceRailSttStatus } from '../services/voice-rail-stt.js';
 import {
@@ -61,7 +61,8 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.9',
+      build: 'voice-rail-v2.11',
+      fail_closed_founder_comms: isVoiceRailFailClosedEnabled(),
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,
       reply_engine: callCouncilMember ? 'lifeos/department' : 'template_only',
@@ -83,6 +84,23 @@ export function createLifeOSVoiceRailRoutes({
 
   router.get('/providers', requireKey, (_req, res) => {
     res.json({ ok: true, providers: voiceRail.listProviders(), tts: voiceRailTtsStatus() });
+  });
+
+  router.get('/context-probe', requireKey, async (req, res, next) => {
+    try {
+      const userId = await voiceRail.resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const probe = await voiceRail.probeFounderContext(userId);
+      res.json({
+        ok: probe.sufficient,
+        ...probe,
+        note: probe.sufficient
+          ? 'LifeOS context meets founder comms minimum — replies allowed.'
+          : 'LifeOS context below minimum — founder replies blocked until fixed.',
+      });
+    } catch (err) {
+      next(err);
+    }
   });
 
   router.get('/tts/status', requireKey, (_req, res) => {

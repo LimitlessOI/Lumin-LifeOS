@@ -3,6 +3,14 @@
 
 ---
 
+## [SESSION] 2026-05-24 — Operator standing order: push by default
+
+Adam directive: **commit + push + deploy after every agreed change** unless he explicitly says hold. Recorded in `.cursor/rules/operator-push-default.mdc`, `CLAUDE.md` OPERATOR STANDING ORDERS, and `generate-agent-rules.mjs` SESSION line.
+
+**Follow-up (same session):** Voice Rail **v2.11 fail-closed** — if LifeOS context not connected, **503 error, no model reply**. `GET /api/v1/lifeos/voice-rail/context-probe` shows status without chatting.
+
+---
+
 ## [SESSION] 2026-05-24 — Voice Rail v2.10 context honesty (§2.6 stop-the-line)
 
 **Problem:** Adam reported Voice Rail replies felt like raw GPT/Claude with **no LifeOS connection** — UI/persona implied integrated system memory while backend used `skipKnowledge: true` and could load empty DB context silently.

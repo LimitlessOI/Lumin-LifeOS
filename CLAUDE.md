@@ -12,6 +12,12 @@ Claude, CUR, Codex, and C2 **fight disagreements out here first**. Adam is not t
 
 ---
 
+## OPERATOR STANDING ORDERS (Adam — do not forget)
+
+**Push by default:** After every change we talk about, **commit → push `main` → trigger Railway deploy** without being asked again. Adam will say explicitly if he wants a slice held local (`don't push`, `hold`, `local only`). See also `.cursor/rules/operator-push-default.mdc`.
+
+---
+
 ## READ ORDER (every session, in order)
 
 1. `docs/AGENT_INBOX.md` — open agent questions (resolve before asking Adam)

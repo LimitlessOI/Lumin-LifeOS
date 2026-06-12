@@ -1,5 +1,5 @@
 # AGENT RULES — COMPACT ENFORCEMENT
-> Generated: 2026-06-11T08:16:52.749Z | Regenerate: `npm run gen:rules`
+> Generated: 2026-06-12T00:53:03.408Z | Regenerate: `npm run gen:rules`
 > NSSOT only for constitutional edits. **Next:** `prompts/00-HIST-LEGACY-BOUNDARY.md` (do not skip).
 
 ## HIST (mandatory first)
@@ -11,17 +11,17 @@ NSSOT > Companion > `CLAUDE.md` > Amendments > repo
 ## SUPREME LAWS
 - §2.6: truth labels; no silent fail.
 - §2.11a builder-first; §2.11b score+evidence; §2.11c supervisor≠IDE typist.
-- §2.14 TSOS machine-channel. §2.15 clear ask→do or HALT.
+- §2.14 TSOS lexicon. §2.15 do|HALT. §2.17 proof|UNSOLVED.
 
 ## BUILDER-FIRST
 1. `npm run builder:preflight`
 2. `POST /api/v1/lifeos/builder/build` domain/task/spec/target/`[system-build]`
 3. `committed:true`=receipt; else `/execute`. Blocked=**GAP-FILL** same session.
 
-Hook: staged routes/services/overlay/migrations need `[system-build]` or `GAP-FILL:`. Exceptions: startup,middleware,core wiring,SSOT.
+Hook: staged product paths need `[system-build]`|GAP-FILL. Exc: startup,middleware,core,SSOT.
 
 ## COUNCIL
-Load-bearing→`gate-change/*` or `lifeos:gate-change-run`. No fake council in chat.
+Load-bearing→`gate-change/*` or `lifeos:gate-change-run`. No chat-council.
 
 ## TOKENS+HISTORY
 `useful-work-guard` sched AI. preflight,probe,`/gaps`. Receipts append-only. Plat break→GAP-FILL.
@@ -30,7 +30,7 @@ Load-bearing→`gate-change/*` or `lifeos:gate-change-run`. No fake council in c
 CLAIM→INVARIANT. Violations `/memory/agents/violations`.
 
 ## SESSION
-START:`00-HIST-LEGACY-BOUNDARY`,preflight,QUICK_LAUNCH. BUILD:`/build`→`/gaps`→GAP-FILL if blocked. END:receipts+§2.11b if load-bearing.
+START:Hist,preflight,QL. BUILD:/build→GAP-FILL. END:receipts. PUSH unless hold. HARD:`lifeos:bp-priority:verify`.
 
 ## SSOT
 Read full file before edit SSOT-class docs. Atomic file→receipt.
