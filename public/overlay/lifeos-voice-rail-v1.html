@@ -13,7 +13,7 @@
     })();
   </script>
   <script src="/overlay/lifeos-bootstrap.js?v=20260525-1"></script>
-  <script src="/shared/lifeos-voice-chat.js?v=20260525-1"></script>
+  <script src="/shared/lifeos-voice-chat.js?v=20260525-2"></script>
   <script src="/shared/lifeos-chat-composer.js?v=20260525-2"></script>
   <link rel="stylesheet" href="/shared/lifeos-chat-composer.css?v=20260525-2">
   <title>LifeOS Voice Rail</title>
@@ -368,7 +368,20 @@
       order: 2;
     }
     #truth-banner { flex-shrink: 0; margin: 0; padding: 6px 12px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 11px; line-height: 1.35; }
+    #truth-banner.connection-ok { background: #ecfdf5; color: #065f46; border-color: #6ee7b7; }
+    #truth-banner.connection-bad { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
     [data-theme="dark"] #truth-banner { background: #3f2a08; color: #fde68a; border-color: #92400e; }
+    [data-theme="dark"] #truth-banner.connection-ok { background: #052e1a; color: #6ee7b7; border-color: #065f46; }
+    [data-theme="dark"] #truth-banner.connection-bad { background: #3f1515; color: #fecaca; border-color: #7f1d1d; }
+    .truth-build { opacity: 0.85; }
+    .bubble .exec-receipt { font-size: 11px; margin-top: 8px; padding: 6px 8px; border-radius: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 1.45; word-break: break-all; }
+    .bubble .exec-receipt.ok { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; }
+    .bubble .exec-receipt.fail { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .bubble .exec-receipt.warn { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    [data-theme="dark"] .bubble .exec-receipt.ok { background: #052e1a; color: #6ee7b7; border-color: #065f46; }
+    [data-theme="dark"] .bubble .exec-receipt.fail { background: #3f1515; color: #fecaca; border-color: #7f1d1d; }
+    [data-theme="dark"] .bubble .exec-receipt.warn { background: #3f2a08; color: #fde68a; border-color: #92400e; }
+    .bubble .exec-receipt button { margin-left: 6px; font-size: 10px; padding: 2px 6px; cursor: pointer; border-radius: 4px; border: 1px solid currentColor; background: transparent; color: inherit; }
     #voice-status { font-size: 11px; color: var(--muted); min-height: 1em; flex-shrink: 0; }
     .composer-hint { display: none; }
     .mic-note { font-size: 10px; color: var(--muted); line-height: 1.35; }
@@ -398,7 +411,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.17</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.18</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -418,8 +431,9 @@
     <input type="hidden" id="department" value="ChC">
   </header>
 
-  <div id="truth-banner" role="status">
-    Build <strong>v2.17</strong> — <strong>CONNECTED or blocked.</strong> Partial/static-only context = 503. Founder commands run BuilderOS command-control (job_id + commit_sha on receipt). No overnight theater.
+  <div id="truth-banner" role="status" class="connection-check">
+    <span id="connection-status">Checking LifeOS connection…</span>
+    <span class="truth-build"> · build <strong>v2.18</strong></span>
   </div>
 
   <div id="auth-banner" role="alert">
@@ -508,7 +522,7 @@
       </div>
       <div class="mic-note" id="mic-route-note">Whisper mic honors the selected input. Browser fallback uses your system default mic.</div>
       <div class="side side-in-drawer">
-        <strong>Staged commands</strong> (visible only — v1 never auto-runs BuilderOS)
+        <strong>Recent commands</strong> — command mode runs BuilderOS; receipt shows under reply
         <div id="staged-list"></div>
       </div>
       </div>
@@ -635,6 +649,7 @@
       attachVoiceMic();
       await populateMicInputs();
       await loadSession();
+      await refreshConnectionProof();
       await loadDepartments();
       return true;
     }
@@ -658,6 +673,116 @@
         counts.has_continuity_log ? 'continuity yes' : 'continuity no',
       ];
       return bits.join(' · ');
+    }
+
+    let connectionState = { connected: null, checkedAt: null, level: null, counts: null };
+    let lastSendFingerprint = { text: '', at: 0 };
+
+    async function refreshConnectionProof() {
+      const banner = document.getElementById('truth-banner');
+      const statusEl = document.getElementById('connection-status');
+      if (!statusEl) return;
+      if (!getKey()) {
+        statusEl.textContent = 'NOT CONNECTED — paste COMMAND_CENTER_KEY to connect';
+        banner?.classList.remove('connection-ok', 'connection-check');
+        banner?.classList.add('connection-bad');
+        connectionState = { connected: false, checkedAt: Date.now(), level: 'no_key', counts: null };
+        return;
+      }
+      statusEl.textContent = 'Checking LifeOS connection…';
+      banner?.classList.remove('connection-ok', 'connection-bad');
+      banner?.classList.add('connection-check');
+      const res = await api('GET', `/connection-proof?user=${encodeURIComponent(USER)}`);
+      const ch = res.json?.context_health || {};
+      const counts = ch.counts || {};
+      const detail = formatContextCounts(counts);
+      if (res.json?.connected === true) {
+        statusEl.textContent = `CONNECTED — ${detail}`;
+        banner?.classList.remove('connection-check', 'connection-bad');
+        banner?.classList.add('connection-ok');
+        connectionState = { connected: true, checkedAt: Date.now(), level: ch.level, counts };
+      } else {
+        statusEl.textContent = `NOT CONNECTED (fail-closed) — ${ch.level || '?'} · ${detail || 'context below bar'}`;
+        banner?.classList.remove('connection-check', 'connection-ok');
+        banner?.classList.add('connection-bad');
+        connectionState = { connected: false, checkedAt: Date.now(), level: ch.level, counts };
+      }
+    }
+
+    function extractCommandExecution(json, panelReply) {
+      return json?.command_execution
+        || panelReply?.reply_source?.command_execution
+        || json?.reply_source?.command_execution
+        || null;
+    }
+
+    function formatExecReceiptText(exec) {
+      if (exec?.job_id) {
+        const sha = exec.commit_sha ? ` · commit ${String(exec.commit_sha).slice(0, 12)}` : '';
+        const file = exec.target_file ? ` · ${exec.target_file}` : '';
+        const run = exec.timed_out ? ' · STILL RUNNING (tap Poll)' : '';
+        const err = exec.error && !exec.ok ? ` · ${exec.error}` : '';
+        return `EXEC RECEIPT · job_id ${exec.job_id}${sha}${file}${run}${err}`;
+      }
+      if (exec?.skipped) return `BLOCKED: execution disabled (${exec.reason || 'VOICE_RAIL_EXECUTE_COMMANDS off'})`;
+      if (exec?.error) return `BLOCKED: ${exec.error}`;
+      return 'BLOCKED: no job_id — command did not reach BuilderOS';
+    }
+
+    async function pollCommandJob(jobId, receiptEl) {
+      const r = await fetch(`/api/v1/lifeos/builderos/command-control/jobs/${encodeURIComponent(jobId)}`, {
+        headers: headers(),
+      });
+      const json = await r.json().catch(() => ({}));
+      const job = json.job || {};
+      const trace = job.execution_trace_json || job.execution_trace || {};
+      const raw = trace?.builder_output?.raw || trace?.builder_output || {};
+      const sha = raw.commit_sha || raw.commitSha || raw.sha || null;
+      const status = job.status || '?';
+      receiptEl.classList.remove('ok', 'warn', 'fail');
+      if (status === 'completed' || status === 'succeeded') receiptEl.classList.add('ok');
+      else if (status === 'failed' || status === 'blocked') receiptEl.classList.add('fail');
+      else receiptEl.classList.add('warn');
+      receiptEl.textContent = `EXEC RECEIPT · job_id ${jobId} · status ${status}${sha ? ` · commit ${String(sha).slice(0, 12)}` : ''}${job.blocker ? ` · ${job.blocker}` : ''}`;
+    }
+
+    function buildExecReceiptEl(exec, mode) {
+      if (mode !== 'command') return null;
+      const el = document.createElement('div');
+      el.className = 'exec-receipt';
+      if (exec?.job_id) {
+        el.classList.add(exec.timed_out ? 'warn' : 'ok');
+        el.textContent = formatExecReceiptText(exec);
+        if (exec.timed_out || !exec.commit_sha) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = 'Poll';
+          btn.addEventListener('click', () => pollCommandJob(exec.job_id, el));
+          el.appendChild(btn);
+        }
+      } else if (exec?.skipped) {
+        el.classList.add('warn');
+        el.textContent = formatExecReceiptText(exec);
+      } else {
+        el.classList.add('fail');
+        el.textContent = formatExecReceiptText(exec || {});
+      }
+      return el;
+    }
+
+    function appendNotConnectedBubble(content, displayAttachments) {
+      appendBubble('user', content, null, null, null, null, displayAttachments);
+      appendBubble(
+        'assistant',
+        authErrorMessage({
+          status: 503,
+          json: {
+            error: 'lifeos_context_not_connected',
+            detail: { context_health: { level: connectionState.level, counts: connectionState.counts } },
+          },
+        }),
+        'error',
+      );
     }
 
     function authErrorMessage(res) {
@@ -1055,7 +1180,7 @@
       btn.title = on ? 'Read replies aloud (on)' : 'Read replies aloud (off)';
     }
 
-    function buildBubble(role, content, intent, source, department, createdAt, attachments) {
+    function buildBubble(role, content, intent, source, department, createdAt, attachments, extra) {
       const box = document.createElement('div');
       box.className = `bubble ${role === 'user' ? 'user' : 'assistant'}`;
       if (createdAt) {
@@ -1119,11 +1244,15 @@
           box.appendChild(warn);
         }
       }
+      if (role === 'assistant' && extra?.commandExecution) {
+        const receipt = buildExecReceiptEl(extra.commandExecution, extra.mode);
+        if (receipt) box.appendChild(receipt);
+      }
       return box;
     }
 
-    function appendBubble(role, content, intent, source, department, createdAt, attachments) {
-      const box = buildBubble(role, content, intent, source, department, createdAt, attachments);
+    function appendBubble(role, content, intent, source, department, createdAt, attachments, extra) {
+      const box = buildBubble(role, content, intent, source, department, createdAt, attachments, extra);
       document.getElementById('transcript').appendChild(box);
       box.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
@@ -1587,12 +1716,15 @@
       const res = await api('GET', `/staged-commands?user=${encodeURIComponent(USER)}`);
       const list = document.getElementById('staged-list');
       if (res.status !== 200 || !res.json.staged_commands?.length) {
-        list.innerHTML = '<div class="staged">None staged</div>';
+        list.innerHTML = '<div class="staged">None yet — switch to Command mode and send a build instruction</div>';
         return;
       }
-      list.innerHTML = res.json.staged_commands.slice(0, 5).map((c) =>
-        `<div class="staged">${escapeHtml(c.utterance)} <em>(${c.status}, not executed)</em></div>`,
-      ).join('');
+      list.innerHTML = res.json.staged_commands.slice(0, 5).map((c) => {
+        const job = c.command_control_job_id ? ` · job ${String(c.command_control_job_id).slice(0, 8)}…` : '';
+        const sha = c.execution_receipt?.commit_sha ? ` · commit ${String(c.execution_receipt.commit_sha).slice(0, 8)}` : '';
+        const state = c.executed ? 'executed' : (c.status || 'staged');
+        return `<div class="staged">${escapeHtml(c.utterance)} <em>(${state}${job}${sha})</em></div>`;
+      }).join('');
     }
 
     function setComposerBusy(busy) {
@@ -1615,6 +1747,12 @@
       if (!activeKey && !ensureKey()) return;
       closeOptionsDrawer();
 
+      const mode = document.getElementById('mode').value;
+      const fp = `${mode}:${content}`;
+      const now = Date.now();
+      if (fp === lastSendFingerprint.text && now - lastSendFingerprint.at < 2500) return;
+      lastSendFingerprint = { text: fp, at: now };
+
       if (voiceCtrl?.isPersistentListen?.()) {
         if (voiceCtrl?.clearBuffer) voiceCtrl.clearBuffer();
         document.getElementById('input').value = '';
@@ -1627,7 +1765,6 @@
       document.getElementById('interim').textContent = '';
       setComposerBusy(true);
 
-      const mode = document.getElementById('mode').value;
       const tag = document.getElementById('tag').value || null;
       const department = document.getElementById('department').value || 'ChC';
 
@@ -1643,8 +1780,17 @@
           return;
         }
 
+        if (connectionState.connected !== true) {
+          await refreshConnectionProof();
+        }
+        if (connectionState.connected !== true) {
+          appendNotConnectedBubble(content, displayAttachments);
+          return;
+        }
+
         appendBubble('user', content, null, null, null, null, displayAttachments);
-        const engines = selectedProviderKeys().filter(Boolean);
+        let engines = selectedProviderKeys().filter(Boolean);
+        if (mode === 'command' && engines.length > 1) engines = engines.slice(0, 1);
         const body = {
           user: USER,
           session_id: sessionId,
@@ -1667,10 +1813,21 @@
 
         if (res.json.panel && Array.isArray(res.json.panel_replies)) {
           let firstOk = null;
+          const panelExec = extractCommandExecution(res.json);
           for (const pr of res.json.panel_replies) {
             if (pr.ok !== false && pr.assistant_message) {
               const replyDept = pr.reply_source?.persona || department;
-              appendBubble('assistant', pr.assistant_message.content, res.json.intent, pr.reply_source, replyDept);
+              const exec = extractCommandExecution(res.json, pr) || panelExec;
+              appendBubble(
+                'assistant',
+                pr.assistant_message.content,
+                res.json.intent,
+                pr.reply_source,
+                replyDept,
+                null,
+                null,
+                { commandExecution: exec, mode },
+              );
               if (!firstOk) firstOk = pr.assistant_message.content;
             } else {
               const msg = `Council API failed (not a bot). ${pr.error || 'council_unavailable'} · ${pr.reply_source?.display_name || '?'} · ${pr.reply_source?.model_id || '?'}`;
@@ -1685,7 +1842,17 @@
 
         const reply = res.json.assistant_message?.content || '';
         const replyDept = res.json.department || res.json.reply_source?.persona || department;
-        appendBubble('assistant', reply, res.json.intent, res.json.reply_source, replyDept);
+        const exec = extractCommandExecution(res.json);
+        appendBubble(
+          'assistant',
+          reply,
+          res.json.intent,
+          res.json.reply_source,
+          replyDept,
+          null,
+          null,
+          { commandExecution: exec, mode },
+        );
         lastAssistant = reply;
         maybeSpeak(reply);
         await refreshStaged();
@@ -1841,6 +2008,7 @@
         loadDepartments();
         loadProviders();
         loadSession();
+        refreshConnectionProof();
       } else {
         loadDepartments();
       }

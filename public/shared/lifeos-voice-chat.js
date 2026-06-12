@@ -253,6 +253,7 @@
       sttInFlight: 0,
       serverSttConsecutiveFailures: 0,
       serverSttForceBrowser: false,
+      voiceSendFired: false,
       storageKey: settings.storageKey,
       speakingEnabled: settings.speakRepliesDefault,
       selectedAudioDeviceId: String(settings.audioDeviceId || '').trim(),
@@ -607,6 +608,7 @@
       state.appendAt = 0;
       state.replaceEnd = null;
       state.lastRenderedValue = '';
+      state.voiceSendFired = false;
       state.dictationEpoch += 1;
       cancelMicRestart();
       abortActiveCapture();
@@ -645,9 +647,11 @@
 
     function maybeVoiceSend(fromFinal) {
       if (!settings.voiceSendEnabled || typeof settings.onVoiceSend !== 'function') return false;
+      if (state.voiceSendFired) return true;
       const parsed = stripVoiceSendCommand(input.value, settings.voiceSendPhrases);
       if (!parsed.send || !String(parsed.message || '').trim()) return false;
       const msg = parsed.message;
+      state.voiceSendFired = true;
       if (settings.keepListeningOnVoiceSend) {
         clearInputBuffer();
         try {

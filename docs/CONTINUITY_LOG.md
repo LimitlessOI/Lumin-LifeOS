@@ -3,7 +3,11 @@
 
 ---
 
-## [SESSION] 2026-06-12 — Voice Rail v2.16 execution truth (stop-the-line)
+## [SESSION] 2026-05-24 — Voice Rail v2.18 connection + receipt UI
+
+Adam: duplicate Council Chair replies; no visible job_id; connection unclear. **Shipped (GAP-FILL):** live CONNECTED banner from `/connection-proof`; command-mode **EXEC RECEIPT** / **BLOCKED** under every reply; voice double-send fix (`voiceSendFired`); client fail-closed before chat when not connected; build **v2.18**. **Next:** deploy Railway → hard refresh → Command mode test → `npm run lifeos:voice-rail:capability-proof`.
+
+---
 
 Adam: ChC transcript proved overnight “work” was pure LLM theater. **Shipped:** `voice-rail-execution-truth.js` blocks/replaces lies about background work, fake BTB/Sentry routing, “will report when done”; prompt rewritten; fail-closed now requires live DB context not static markdown alone; UI v2.16 banner + LIE BLOCKED footer; VR1-T20 acceptance.
 

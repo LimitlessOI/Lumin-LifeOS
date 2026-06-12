@@ -21,7 +21,7 @@ import {
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RECEIPT = path.join(ROOT, 'products/receipts/VOICE_RAIL_CAPABILITY_PROOF.json');
-const MIN_UI_BUILD = 17;
+const MIN_UI_BUILD = 18;
 const CANONICAL_PATH = '/overlay/lifeos-voice-rail-v1.html';
 
 const base = (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
@@ -173,9 +173,9 @@ const page = await fetch(`${base}${CANONICAL_PATH}`, { headers: { 'x-command-key
 const html = await page.text();
 step('CAP-T04_ui_reachable', page.status === 200, page.status);
 step(
-  'CAP-T05_ui_sync_chat_banner',
-  html.includes('CONNECTED or blocked') && html.includes(`v2.${MIN_UI_BUILD}`),
-  { has_banner: html.includes('CONNECTED or blocked') },
+  'CAP-T05_ui_connection_banner',
+  html.includes('id="connection-status"') && html.includes(`v2.${MIN_UI_BUILD}`),
+  { has_connection_status: html.includes('id="connection-status"') },
 );
 
 const connProof = await api('GET', '/api/v1/lifeos/voice-rail/connection-proof?user=adam');

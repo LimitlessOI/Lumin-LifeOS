@@ -786,8 +786,9 @@ export function createVoiceRailV1({
   async function listStagedCommands(userId) {
     const { rows } = await pool.query(
       `SELECT * FROM voice_rail_staged_commands
-        WHERE user_id = $1 AND status = 'staged' AND executed = FALSE
-        ORDER BY created_at DESC LIMIT 50`,
+        WHERE user_id = $1
+        ORDER BY created_at DESC
+        LIMIT 10`,
       [userId],
     );
     return rows;
@@ -1051,6 +1052,7 @@ export function createVoiceRailV1({
         reply_source: panelReplies.find((r) => r.ok)?.reply_source || null,
         context_health: panelReplies.find((r) => r.ok)?.reply_source?.context_health || null,
         staged_command: stagedCommand,
+        command_execution: commandExecution,
         commitment_extract: commitmentExtract,
       };
     }
