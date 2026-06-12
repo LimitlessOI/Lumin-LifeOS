@@ -169,7 +169,7 @@ export function buildDepartmentSystemPrompt(deptId, routing, mode, contextData, 
   const ctxBlock =
     contextData && Object.keys(contextData).length
       ? `\nVerified LifeOS context (use only this — do not invent beyond it):\n${JSON.stringify(contextData, null, 2)}\n`
-      : '\nNo LifeOS context payload loaded for this turn — do not pretend you know private data.\n';
+      : '\nNo LifeOS context payload loaded for this turn — tell Adam plainly that system data did not load; do not pretend you read his files or DB.\n';
 
   return `You are the ${dept.title} (${dept.id}) department voice on LifeOS Voice Rail — ${operatorName}'s direct line to this seat on Railway.
 

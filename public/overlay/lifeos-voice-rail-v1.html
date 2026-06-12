@@ -372,6 +372,8 @@
     #voice-status { font-size: 11px; color: var(--muted); min-height: 1em; flex-shrink: 0; }
     .composer-hint { display: none; }
     .bubble .source { font-size: 10px; color: var(--muted); margin-top: 6px; }
+    .bubble .source.source-warn { color: #c96; }
+    .bubble .context-warn { font-size: 10px; color: #c96; margin-top: 4px; line-height: 1.35; }
     .side { flex-shrink: 0; border-top: 1px solid var(--border); padding: 6px 12px; font-size: 11px; color: var(--muted); max-height: 72px; overflow-y: auto; }
     .side strong { color: var(--text); }
     #auth-banner { display: none; margin: 0; padding: 10px 16px; background: #fef2f2; color: #991b1b; border-bottom: 1px solid #fecaca; font-size: 13px; }
@@ -395,7 +397,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.9.1</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.10</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -1075,8 +1077,17 @@
         const persona = source.persona || source.department || department || 'ChC';
         const deptTitle =
           source.department_title || departmentMeta(persona)?.title || persona;
-        tag.textContent = `${deptTitle} (${persona}) · ${source.display_name || '?'} · ${source.model_id || '?'}`;
+        const ch = source.context_health;
+        const ctxBit = ch?.level ? ` · ctx ${ch.level}` : '';
+        tag.textContent = `${deptTitle} (${persona}) · ${source.display_name || '?'} · ${source.model_id || '?'}${ctxBit}`;
+        if (ch && (ch.level === 'empty' || ch.level === 'thin')) tag.classList.add('source-warn');
         box.appendChild(tag);
+        if (ch?.honesty_note && (ch.level === 'empty' || ch.level === 'thin')) {
+          const warn = document.createElement('div');
+          warn.className = 'context-warn';
+          warn.textContent = ch.honesty_note;
+          box.appendChild(warn);
+        }
       }
       return box;
     }

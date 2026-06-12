@@ -23,6 +23,7 @@ import {
   describeVoiceRailImages,
   normalizeVoiceRailAttachments,
 } from './voice-rail-attachments.js';
+import { buildSystemContext } from './knowledge-context.js';
 
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -163,10 +164,70 @@ async function readMissionQueueHead() {
 async function readContinuityTail() {
   try {
     const text = await fs.readFile(path.join(process.cwd(), 'docs', 'CONTINUITY_LOG.md'), 'utf8');
-    return text.slice(-2000);
+    return text.slice(-4000);
   } catch {
     return null;
   }
+}
+
+async function readLifeOSProductBrief() {
+  try {
+    const text = await fs.readFile(path.join(process.cwd(), 'docs', 'products', 'LIFEOS.md'), 'utf8');
+    return text.slice(0, 4500);
+  } catch {
+    return null;
+  }
+}
+
+/** Founder-visible honesty receipt — what LifeOS data actually loaded for this turn. */
+export function summarizeVoiceRailContextHealth(contextData) {
+  const ctx = contextData || {};
+  const counts = {
+    voice_rail_history: Array.isArray(ctx.voice_rail_history) ? ctx.voice_rail_history.length : 0,
+    verified_memories: Array.isArray(ctx.verified_memories) ? ctx.verified_memories.length : 0,
+    goals: Array.isArray(ctx.goals) ? ctx.goals.length : 0,
+    staged_commands: Array.isArray(ctx.staged_commands) ? ctx.staged_commands.length : 0,
+    mission_queue_head: Array.isArray(ctx.mission_queue_head) ? ctx.mission_queue_head.length : 0,
+    recent_commitments: Array.isArray(ctx.recent_commitments) ? ctx.recent_commitments.length : 0,
+    has_lifeos_snapshot: Boolean(
+      ctx.lifeos_snapshot && typeof ctx.lifeos_snapshot === 'object' && Object.keys(ctx.lifeos_snapshot).length,
+    ),
+    has_continuity_log: Boolean(String(ctx.continuity_log_tail || '').trim().length > 80),
+    has_product_brief: Boolean(String(ctx.lifeos_product_brief || '').trim().length > 80),
+    sot_knowledge_chars: Number(ctx.sot_knowledge_chars) || 0,
+    deploy_commit_sha: ctx.deploy_commit_sha || null,
+  };
+
+  const signals = [
+    counts.voice_rail_history > 0,
+    counts.verified_memories > 0,
+    counts.has_lifeos_snapshot,
+    counts.has_continuity_log,
+    counts.mission_queue_head > 0,
+    counts.has_product_brief,
+    counts.sot_knowledge_chars > 200,
+  ].filter(Boolean).length;
+
+  let level = 'empty';
+  if (signals >= 4) level = 'connected';
+  else if (signals >= 2) level = 'partial';
+  else if (signals >= 1) level = 'thin';
+
+  const honestyNoteByLevel = {
+    empty:
+      'No LifeOS data loaded this turn — this is dept prompt + raw model only. Say so if asked about system state.',
+    thin: 'Thin LifeOS context — only partial DB/files loaded. Cite payload only; name what is missing.',
+    partial: 'Partial LifeOS context — use payload below; do not invent beyond it.',
+    connected: 'LifeOS context loaded (history, memories, continuity, missions, SOT).',
+  };
+
+  return {
+    level,
+    connected: level === 'connected' || level === 'partial',
+    counts,
+    loaded_at: ctx.loaded_at || null,
+    honesty_note: honestyNoteByLevel[level],
+  };
 }
 
 /** Operator-facing context: DB + memories + cross-session voice rail + missions (not stateless chat). */
@@ -235,6 +296,10 @@ export async function buildVoiceRailOperatorContext({ pool, userId, lumin, logge
 
     readContinuityTail().then((t) => {
       ctx.continuity_log_tail = t;
+    }),
+
+    readLifeOSProductBrief().then((t) => {
+      ctx.lifeos_product_brief = t;
     }),
   );
 
@@ -325,7 +390,19 @@ async function generateCouncilReply({
       '\n\nOne sentence only — identity already established. Do NOT restate who the founder is.\n';
   }
 
-  const system = buildDepartmentSystemPrompt(deptId, routing, mode, contextData, operator);
+  let sotSection = '';
+  try {
+    sotSection = await buildSystemContext(content, { taskType: 'voice_rail_department', maxIdeas: 3 });
+    if (sotSection) contextData.sot_knowledge_chars = sotSection.length;
+  } catch (sotErr) {
+    logger?.warn?.({ err: sotErr.message }, 'voice-rail SOT knowledge inject failed');
+  }
+
+  const contextHealth = summarizeVoiceRailContextHealth(contextData);
+  const systemBase = buildDepartmentSystemPrompt(deptId, routing, mode, contextData, operator);
+  const system = sotSection
+    ? `${systemBase}\n\n[LifeOS SOT / knowledge — authoritative; cite when relevant]\n${sotSection}`
+    : systemBase;
   const emotionHint =
     classifyIntent(content, mode) === 'emotional'
       ? '\n\nOperator tone reads emotional — acknowledge mood briefly, stay grounded, no platitudes.\n'
@@ -362,7 +439,7 @@ async function generateCouncilReply({
   if (!councilText || /^Adam, council returned nothing/i.test(councilText)) {
     throw councilUnavailableError(routing, 'council returned empty or unusable response after sanitize');
   }
-  return councilText;
+  return { text: councilText, contextHealth };
 }
 
 export { listVoiceRailDepartmentsPublic, normalizeVoiceRailDepartment };
@@ -627,7 +704,7 @@ export function createVoiceRailV1({
         panelMemberKeys.map(async (memberKey) => {
           const panelRouting = resolveRouting(deptId, memberKey);
           try {
-            const panelReply = await generateCouncilReply({
+            const panelResult = await generateCouncilReply({
               pool,
               callCouncilMember,
               lumin,
@@ -641,6 +718,7 @@ export function createVoiceRailV1({
               operator,
               logger,
             });
+            const panelReply = panelResult.text;
             const replySource = {
               path: 'lifeos/department',
               persona: deptId,
@@ -650,7 +728,8 @@ export function createVoiceRailV1({
               model_id: panelRouting.modelId,
               provider: panelRouting.provider,
               display_name: panelRouting.displayName,
-              note: `Panel reply — ${panelRouting.displayName}; council-backed.`,
+              context_health: panelResult.contextHealth,
+              note: panelResult.contextHealth?.honesty_note || 'Panel reply via council API.',
             };
             const { rows: assistantRows } = await pool.query(
               `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
@@ -696,6 +775,7 @@ export function createVoiceRailV1({
         panel_replies: panelReplies,
         assistant_message: panelReplies.find((r) => r.ok)?.assistant_message || null,
         reply_source: panelReplies.find((r) => r.ok)?.reply_source || null,
+        context_health: panelReplies.find((r) => r.ok)?.reply_source?.context_health || null,
         staged_command: stagedCommand,
         commitment_extract: commitmentExtract,
       };
@@ -704,7 +784,7 @@ export function createVoiceRailV1({
     let reply;
     let replySource;
     try {
-      reply = await generateCouncilReply({
+      const councilResult = await generateCouncilReply({
         pool,
         callCouncilMember,
         lumin,
@@ -718,6 +798,7 @@ export function createVoiceRailV1({
         operator,
         logger,
       });
+      reply = councilResult.text;
       replySource = {
         path: 'lifeos/department',
         persona: deptId,
@@ -727,7 +808,8 @@ export function createVoiceRailV1({
         model_id: routing.modelId,
         provider: routing.provider,
         display_name: routing.displayName,
-        note: `Direct ${deptId} department voice — council-backed; not template fallback.`,
+        context_health: councilResult.contextHealth,
+        note: councilResult.contextHealth?.honesty_note || 'Council API reply.',
       };
     } catch (e) {
       logger?.warn?.({ err: e.message, detail: e.detail }, 'voice-rail council reply failed');
@@ -754,6 +836,7 @@ export function createVoiceRailV1({
       user_message: { role: 'user', content, intent },
       assistant_message: assistantRows[0],
       reply_source: replySource,
+      context_health: replySource.context_health || null,
       staged_command: stagedCommand,
       commitment_extract: commitmentExtract,
     };

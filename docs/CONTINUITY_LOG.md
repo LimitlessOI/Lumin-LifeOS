@@ -3,6 +3,21 @@
 
 ---
 
+## [SESSION] 2026-05-24 — Voice Rail v2.10 context honesty (§2.6 stop-the-line)
+
+**Problem:** Adam reported Voice Rail replies felt like raw GPT/Claude with **no LifeOS connection** — UI/persona implied integrated system memory while backend used `skipKnowledge: true` and could load empty DB context silently.
+
+**Root cause (verified in code):** `generateCouncilReply()` built dept prompt from `buildVoiceRailOperatorContext()` but **did not** inject council `buildSystemContext()` (SOT/knowledge). Empty/failed context loads were invisible to operator; footers only showed model name.
+
+**Shipped (local — GAP-FILL, pending commit/deploy):**
+- **`services/voice-rail-v1.js`** — SOT inject via `buildSystemContext()`; `readLifeOSProductBrief()`; `summarizeVoiceRailContextHealth()`; `context_health` on API responses
+- **`public/overlay/lifeos-voice-rail-v1.html`** — build **v2.10**; reply footer `ctx empty|thin|partial|connected` + amber warning when thin/empty
+- **`config/voice-rail-departments.js`** — empty context must tell Adam plainly that system data did not load
+
+**Next:** Commit + deploy; Adam hard-refresh `/voice-rail?v=2.10`; send one message — footer must show ctx level. If still `empty`, diagnose Neon/ memory / lumin wiring (not UI theater). Ask Adam for exact reply text / “one word” that triggered stop-the-line if still wrong.
+
+---
+
 ## [SESSION] 2026-05-24 — Voice Rail v2.7 layout + mic fallback
 
 **Problem:** Adam reported resize bar clipping AI/dept controls; Speed/Volume need visible labels; mic not working; multi-engine selection unclear.
