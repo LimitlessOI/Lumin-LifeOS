@@ -1,0 +1,27 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-06-12T03:28:06.135Z",
+  "objective_id": "PRODUCT-ACTION-INBOX-V1-0001",
+  "objective_name": "LifeOS Action Inbox v1",
+  "verdict": "NOT_COMPLETE",
+  "receipt": "products/receipts/ACTION_INBOX_V1_ACCEPTANCE.json",
+  "production_base": "https://robust-magic-production.up.railway.app",
+  "git_sha": "56a93b43b190e634491489db1628edbc9c17950e",
+  "tests_passed": [
+    "AIV1-T01_blueprint"
+  ],
+  "tests_failed": [
+    "AIV1-T01",
+    "AIV1-T02",
+    "AIV1-T03",
+    "AIV1-T04",
+    "AIV1-T05",
+    "AIV1-T06",
+    "AIV1-T07",
+    "AIV1-T08",
+    "AIV1-T09",
+    "AIV1-T10"
+  ],
+  "founder_usability_pass": false,
+  "acceptance_command": "npm run lifeos:action-inbox:v1-acceptance"
+}

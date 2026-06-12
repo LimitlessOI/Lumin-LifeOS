@@ -51,6 +51,18 @@
       "build_method": "system-build",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/OBJECTIVE_VERDICT.json"
+    },
+    {
+      "rank": 3,
+      "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/BLUEPRINT.json",
+      "blueprint_status": "complete",
+      "acceptance_command": "npm run lifeos:action-inbox:v1-acceptance",
+      "receipt_path": "products/receipts/ACTION_INBOX_V1_ACCEPTANCE.json",
+      "verdict": "NOT_PASS",
+      "verdict_note": "Code complete + node --check PASS. Acceptance pending Railway deploy. Re-run npm run lifeos:action-inbox:v1-acceptance after deploy.",
+      "build_method": "GAP-FILL"
     }
   ]
 }

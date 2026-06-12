@@ -1,0 +1,72 @@
+{
+  "schema": "action_inbox_v1_acceptance_v1",
+  "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
+  "started_at": "2026-06-12T03:28:05.591Z",
+  "production_base": "https://robust-magic-production.up.railway.app",
+  "tests_passed": [
+    "AIV1-T01_blueprint"
+  ],
+  "tests_failed": [
+    "AIV1-T01",
+    "AIV1-T02",
+    "AIV1-T03",
+    "AIV1-T04",
+    "AIV1-T05",
+    "AIV1-T06",
+    "AIV1-T07",
+    "AIV1-T08",
+    "AIV1-T09",
+    "AIV1-T10"
+  ],
+  "founder_usability_pass": false,
+  "fail_AIV1-T01": {
+    "http": 404
+  },
+  "fail_AIV1-T02": {
+    "http": 404
+  },
+  "fail_AIV1-T03": {
+    "http": 404
+  },
+  "fail_AIV1-T04": {},
+  "fail_AIV1-T05": {
+    "http": 404
+  },
+  "fail_AIV1-T06": {
+    "private": false,
+    "count_before": 0,
+    "count_after": 0
+  },
+  "fail_AIV1-T07": "no task item to approve",
+  "fail_AIV1-T08": "no approved item to route",
+  "fail_AIV1-T09": {
+    "http": 404,
+    "count": 0,
+    "contains_commit": false
+  },
+  "fail_AIV1-T10": {
+    "http": 404,
+    "count": 0,
+    "has_routed": false
+  },
+  "completed_at": "2026-06-12T03:28:06.135Z",
+  "git_sha": "56a93b43b190e634491489db1628edbc9c17950e",
+  "verdict": "FAIL",
+  "verdict_note": "All 404s — routes not yet deployed to Railway. Deploy and re-run: npm run lifeos:action-inbox:v1-acceptance",
+  "build_method": "GAP-FILL",
+  "files_written": [
+    "db/migrations/20260612_action_inbox_v1.sql",
+    "services/action-inbox.js",
+    "routes/action-inbox-routes.js",
+    "startup/register-runtime-routes.js",
+    "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/BLUEPRINT.json",
+    "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/FOUNDER_PACKET.md",
+    "scripts/run-action-inbox-v1-acceptance.mjs"
+  ],
+  "node_check": {
+    "services/action-inbox.js": "PASS",
+    "routes/action-inbox-routes.js": "PASS",
+    "startup/register-runtime-routes.js": "PASS",
+    "scripts/run-action-inbox-v1-acceptance.mjs": "PASS"
+  }
+}

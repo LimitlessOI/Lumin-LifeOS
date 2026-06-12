@@ -47,6 +47,7 @@ import { createLifeOSWeeklyReviewRoutes } from "../routes/lifeos-weekly-review-r
 import { createLifeOSScorecardRoutes } from "../routes/lifeos-scorecard-routes.js";
 import { createLifeOSChatRoutes } from "../routes/lifeos-chat-routes.js";
 import { createLifeOSVoiceRailRoutes } from "../routes/lifeos-voice-rail-routes.js";
+import { createActionInboxRoutes } from "../routes/action-inbox-routes.js";
 import { createLifeOSAmbientRoutes } from "../routes/lifeos-ambient-routes.js";
 import { createLifeOSHabitsRoutes } from "../routes/lifeos-habits-routes.js";
 import { createLifeOSBriefingRoutes } from "../routes/lifeos-briefing-routes.js";
@@ -295,6 +296,9 @@ export async function registerRuntimeRoutes(app, deps) {
     })
   );
   logger.info("✅ [LIFEOS-VOICE-RAIL] Routes mounted at /api/v1/lifeos/voice-rail");
+
+  app.use("/api/v1/lifeos/action-inbox", createActionInboxRoutes({ pool, requireKey, logger }));
+  logger.info("✅ [ACTION-INBOX] Routes mounted at /api/v1/lifeos/action-inbox");
 
   app.use("/api/v1/lifeos/ambient", createLifeOSAmbientRoutes({ pool, requireKey, logger }));
   logger.info("✅ [LIFEOS-AMBIENT] Routes mounted at /api/v1/lifeos/ambient");

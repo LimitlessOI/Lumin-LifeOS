@@ -1,0 +1,92 @@
+{
+  "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
+  "blueprint_id": "ACTION-INBOX-V1-2026-06-12",
+  "scope": "action_inbox_v1_middle_layer",
+  "authority": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:action-inbox:v1-acceptance",
+  "allowed_action_types": [
+    "builder_build",
+    "shell_command"
+  ],
+  "steps": [
+    {
+      "step_id": "AIV1-S01",
+      "phase_id": "P0",
+      "title": "Action Inbox schema migration",
+      "target_file": "db/migrations/20260612_action_inbox_v1.sql",
+      "action_type": "builder_build",
+      "dependencies": [],
+      "status": "complete",
+      "completed_at": "2026-06-12T00:00:00.000Z",
+      "build_method": "GAP-FILL"
+    },
+    {
+      "step_id": "AIV1-S02",
+      "phase_id": "P1",
+      "title": "Action Inbox service — capture, classify, stage, route, receipts",
+      "target_file": "services/action-inbox.js",
+      "action_type": "builder_build",
+      "dependencies": [
+        "AIV1-S01"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-12T00:00:00.000Z",
+      "build_method": "GAP-FILL"
+    },
+    {
+      "step_id": "AIV1-S03",
+      "phase_id": "P2",
+      "title": "Action Inbox API routes",
+      "target_file": "routes/action-inbox-routes.js",
+      "action_type": "builder_build",
+      "dependencies": [
+        "AIV1-S02"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-12T00:00:00.000Z",
+      "build_method": "GAP-FILL"
+    },
+    {
+      "step_id": "AIV1-S04",
+      "phase_id": "P3",
+      "title": "Startup wiring in register-runtime-routes.js",
+      "target_file": "startup/register-runtime-routes.js",
+      "action_type": "builder_build",
+      "dependencies": [
+        "AIV1-S03"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-12T00:00:00.000Z",
+      "build_method": "GAP-FILL"
+    },
+    {
+      "step_id": "AIV1-S05",
+      "phase_id": "P4",
+      "title": "Acceptance test script",
+      "target_file": "scripts/run-action-inbox-v1-acceptance.mjs",
+      "action_type": "builder_build",
+      "dependencies": [
+        "AIV1-S04"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-12T00:00:00.000Z",
+      "build_method": "GAP-FILL"
+    },
+    {
+      "step_id": "AIV1-S06",
+      "phase_id": "P5",
+      "title": "Run acceptance until PASS",
+      "action_type": "shell_command",
+      "command": "npm run lifeos:action-inbox:v1-acceptance",
+      "dependencies": [
+        "AIV1-S05"
+      ],
+      "status": "complete",
+      "completed_at": "2026-06-12T00:00:00.000Z",
+      "build_method": "GAP-FILL"
+    }
+  ],
+  "blueprint_status": "complete",
+  "build_method": "GAP-FILL",
+  "build_note": "Builder-first attempted; Unauthorized on POST /api/v1/lifeos/builder/build — GAP-FILL per protocol"
+}
