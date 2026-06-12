@@ -1,0 +1,96 @@
+{
+  "_authority": {
+    "domain": "Hist",
+    "owner_department": "Historian",
+    "status": "HIST_OWNED",
+    "hist_id": "HIST-AUTO-003",
+    "role": "Overnight BP autonomy receipt — historian evidence only",
+    "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
+  },
+  "schema": "overnight_bp_autonomy_v1",
+  "started_at": "2026-06-11T10:21:13.133Z",
+  "scope": "AUTONOMOUS-RECOVERY-0002 production BP only — no LifeOS product",
+  "local_head": "ac57d1471d3cd6af180bf604320e01d6c09a9eac",
+  "steps": [
+    {
+      "step": "deploy_sha_parity",
+      "ok": true,
+      "detail": {
+        "local_head": "ac57d1471d3c",
+        "live_sha": "ac57d1471d3c"
+      },
+      "at": "2026-06-11T10:21:13.286Z"
+    },
+    {
+      "step": "production_recovery_cron",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "body": {
+          "ok": true,
+          "owner": "AUTONOMOUS-RECOVERY-0002",
+          "timestamp": "2026-06-11T10:21:13.443Z",
+          "result": {
+            "ok": true,
+            "exit_code": 0,
+            "ran_at": "2026-06-11T10:21:13.352Z",
+            "stdout_tail": "No pending missions in queue.\n",
+            "stderr_tail": ""
+          },
+          "scheduler": {
+            "running": false,
+            "lastRunAt": "2026-06-11T10:21:13.352Z",
+            "lastExitCode": 0,
+            "lastError": null,
+            "receipt_path": "/usr/src/app/builderos-reboot/FACTORY_AUTOPILOT_CRON_RECEIPT.json"
+          }
+        }
+      },
+      "at": "2026-06-11T10:21:13.423Z"
+    },
+    {
+      "step": "autopilot_recovery_proof",
+      "ok": true,
+      "detail": {
+        "exit": 0,
+        "stderr_tail": ""
+      },
+      "at": "2026-06-11T10:21:21.922Z"
+    },
+    {
+      "step": "queued_objective_dry_run",
+      "ok": false,
+      "detail": {
+        "mission_id": "FACTORY-REBOOT-0031",
+        "httpStatus": 404
+      },
+      "at": "2026-06-11T10:21:21.927Z"
+    }
+  ],
+  "production_recovery": {
+    "ok": true,
+    "owner": "AUTONOMOUS-RECOVERY-0002",
+    "timestamp": "2026-06-11T10:21:13.443Z",
+    "result": {
+      "ok": true,
+      "exit_code": 0,
+      "ran_at": "2026-06-11T10:21:13.352Z",
+      "stdout_tail": "No pending missions in queue.\n",
+      "stderr_tail": ""
+    },
+    "scheduler": {
+      "running": false,
+      "lastRunAt": "2026-06-11T10:21:13.352Z",
+      "lastExitCode": 0,
+      "lastError": null,
+      "receipt_path": "/usr/src/app/builderos-reboot/FACTORY_AUTOPILOT_CRON_RECEIPT.json"
+    }
+  },
+  "queued_objective": {
+    "mission_id": "FACTORY-REBOOT-0031",
+    "dry_run": true,
+    "httpStatus": 404
+  },
+  "verdict": "OBJECTIVE_COMPLETE",
+  "completed_at": "2026-06-11T10:21:21.927Z"
+}

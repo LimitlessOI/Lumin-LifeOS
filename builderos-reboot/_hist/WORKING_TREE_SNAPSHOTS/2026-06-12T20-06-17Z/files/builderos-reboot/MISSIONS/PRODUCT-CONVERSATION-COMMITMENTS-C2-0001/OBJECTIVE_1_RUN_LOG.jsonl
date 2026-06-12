@@ -1,0 +1,10 @@
+{"ts":"2026-06-11T15:33:00.535Z","event":"cycle_start","cycle":1,"max":20}
+{"ts":"2026-06-11T15:33:01.467Z","event":"acceptance_fail","cycle":1,"tail":"  },\n      \"at\": \"2026-06-11T15:33:01.318Z\"\n    },\n    {\n      \"step\": \"list_contains_saved\",\n      \"ok\": false,\n      \"detail\": {\n        \"http\": 200,\n        \"saved\": 0,\n        \"found\": false\n      },\n      \"at\": \"2026-06-11T15:33:01.417Z\"\n    }\n  ],\n  \"railway_sha\": \"\",\n  \"verdict\": \"FAIL\",\n  \"completed_at\": \"2026-06-11T15:33:01.461Z\",\n  \"git_sha\": \"c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d\"\n}\n"}
+{"ts":"2026-06-11T15:33:01.619Z","event":"deploy_trigger","local":"c69e2b7a3b1b","live":"237b480124b9"}
+{"ts":"2026-06-11T15:33:14.933Z","event":"builder_build","target":"services/commitment-tracker.js","status":422,"committed":false}
+{"ts":"2026-06-11T15:33:14.934Z","event":"builder_build_error","target":"services/commitment-tracker.js","error":"Pre-commit governance blocked — anti-pattern, stub, or verifier failure"}
+{"ts":"2026-06-11T15:33:26.952Z","event":"builder_build","target":"routes/lifeos-core-routes.js","status":422,"committed":false}
+{"ts":"2026-06-11T15:33:26.953Z","event":"builder_build_error","target":"routes/lifeos-core-routes.js","error":"Pre-commit governance blocked — anti-pattern, stub, or verifier failure"}
+{"ts":"2026-06-11T15:33:40.349Z","event":"builder_build","target":"public/overlay/lifeos-commitments-v1.html","status":200,"committed":true}
+{"ts":"2026-06-11T15:36:40.393Z","event":"cycle_start","cycle":2,"max":20}
+{"ts":"2026-06-11T15:36:44.255Z","event":"OBJECTIVE_COMPLETE","cycle":2}

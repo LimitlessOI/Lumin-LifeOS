@@ -1,0 +1,252 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-06-11T13:41:54.739Z",
+  "objective_id": "AUTONOMOUS-RECOVERY-0002",
+  "verdict": "OBJECTIVE_COMPLETE",
+  "production_path": "inject → GET /internal/cron/factory-recovery only",
+  "proof": "/Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/PRODUCTION_RECOVERY_PROOF.json",
+  "report": {
+    "schema": "production_recovery_proof_v1",
+    "started_at": "2026-06-11T13:41:44.891Z",
+    "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+    "invoke_recovery": "GET /internal/cron/factory-recovery ONLY (no local npm)",
+    "local_head": "237b480124b9bfc430ac3f6ae0f9cc339817f9cf",
+    "steps": [
+      {
+        "step": "deploy_sha_parity",
+        "ok": true,
+        "detail": {
+          "local": "237b480124b9",
+          "live": "237b480124b9"
+        },
+        "at": "2026-06-11T13:41:45.075Z"
+      },
+      {
+        "step": "production_inject_failure",
+        "ok": true,
+        "detail": {
+          "http": 200,
+          "body": {
+            "ok": true,
+            "objectiveId": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+            "injected_at": "2026-06-11T13:41:45.182Z",
+            "queue_status": "mission_failed",
+            "harness_removed": true
+          }
+        },
+        "at": "2026-06-11T13:41:45.120Z"
+      },
+      {
+        "step": "recovery_candidates_detected",
+        "ok": true,
+        "detail": {
+          "count": 1,
+          "body": {
+            "ok": true,
+            "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+            "deploy_sha": "237b480124b9bfc430ac3f6ae0f9cc339817f9cf",
+            "queue_entry": {
+              "status": "mission_failed",
+              "mission_outcome": "FAIL",
+              "recovery_required": true,
+              "note": "Production proof inject — simulated hard_stop at 2026-06-11T13:41:45.182Z"
+            },
+            "recovery_candidates": [
+              {
+                "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+                "reason": "queue_status:mission_failed",
+                "sync_only": false
+              }
+            ],
+            "objective_complete": {
+              "complete": false
+            },
+            "artifacts": {
+              "harness": false,
+              "REGRESSION_RUN_RESULT": false,
+              "RECOVERY_PROTOCOL_RESULT": false,
+              "UNSOLVED_RECEIPT": false,
+              "FOUNDER_ALERT": true
+            },
+            "receipts": {
+              "autopilot": {
+                "schema": "autopilot_recovery_receipt_v1",
+                "run_at": "2026-06-11T13:26:02.824Z",
+                "owner": "AUTONOMOUS-RECOVERY-0002",
+                "action": "recovery_owner",
+                "target": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+                "detect_reason": "queue_status:mission_failed",
+                "recovery_resolution": "OBJECTIVE_COMPLETE",
+                "objective_score": "PASS",
+                "observe_pass": true,
+                "queue_update": {
+                  "updated": true,
+                  "mission_status": "complete",
+                  "mission_outcome": "PASS"
+                },
+                "founder_alert_only_on_unsolved": false
+              },
+              "cron": {
+                "schema": "factory_autopilot_cron_receipt_v1",
+                "ok": true,
+                "exit_code": 0,
+                "ran_at": "2026-06-11T13:26:01.709Z",
+                "stdout_tail": "dit runner syntax valid\",\n              \"pass\": true,\n              \"detail\": \"\"\n            }\n          ],\n          \"blockers\": [],\n          \"generated_by\": \"mechanical_template_v27_recovery\"\n        },\n        \"stdout\": \" fields\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-4\\\",\\n      \\\"name\\\": \\\"Exact commands include regression npm script\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-5\\\",\\n      \\\"name\\\": \\\"Cleanup verify-railway referenced before confirm\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"verify-railway in blueprint/commands\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-6\\\",\\n      \\\"name\\\": \\\"No founder decision steps\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P1-SYNTAX\\\",\\n      \\\"name\\\": \\\"Audit runner syntax valid\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"\\\"\\n    }\\n  ],\\n  \\\"blockers\\\": [],\\n  \\\"generated_by\\\": \\\"mechanical_template_v27_recovery\\\"\\n}\\n\",\n        \"stderr\": \"\"\n      },\n      \"council\": {\n        \"attempted\": true,\n        \"route\": \"council_local_dry\",\n        \"http\": {\n          \"queued\": false,\n          \"reason\": \"LOOP_ESCALATION_AUTO_COUNCIL not set or missing API env\"\n        },\n        \"local_presets_ok\": true,\n        \"note\": \"Set RECOVERY_AUTO_COUNCIL=1 for live Council POST\"\n      },\n      \"loop_escalation_level\": \"hard_stop\"\n    },\n    \"observePass\": true,\n    \"objectiveScore\": \"PASS\",\n    \"artifacts\": {\n      \"SENTRY_CHECK_RESULT\": true,\n      \"BLUEPRINT\": true,\n      \"harness\": true,\n      \"PROBE_pollution\": true,\n      \"FAILURE_PATTERN_PACKET\": true,\n      \"LOOP_ESCALATION_RESULT\": true\n    }\n  },\n  \"queueUpdate\": {\n    \"updated\": true,\n    \"mission_status\": \"complete\",\n    \"mission_outcome\": \"PASS\"\n  },\n  \"receipt\": \"/usr/src/app/builderos-reboot/AUTOPILOT_RECOVERY_RECEIPT.json\"\n}\n",
+                "stderr_tail": ""
+              }
+            },
+            "pass": false,
+            "checked_at": "2026-06-11T13:41:46.192Z"
+          }
+        },
+        "at": "2026-06-11T13:41:46.132Z"
+      },
+      {
+        "step": "production_cron_recovery",
+        "ok": true,
+        "detail": {
+          "http": 200,
+          "result": {
+            "ok": true,
+            "exit_code": 0,
+            "ran_at": "2026-06-11T13:41:46.237Z",
+            "stdout_tail": "dit runner syntax valid\",\n              \"pass\": true,\n              \"detail\": \"\"\n            }\n          ],\n          \"blockers\": [],\n          \"generated_by\": \"mechanical_template_v27_recovery\"\n        },\n        \"stdout\": \" fields\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-4\\\",\\n      \\\"name\\\": \\\"Exact commands include regression npm script\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-5\\\",\\n      \\\"name\\\": \\\"Cleanup verify-railway referenced before confirm\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"verify-railway in blueprint/commands\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-6\\\",\\n      \\\"name\\\": \\\"No founder decision steps\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P1-SYNTAX\\\",\\n      \\\"name\\\": \\\"Audit runner syntax valid\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"\\\"\\n    }\\n  ],\\n  \\\"blockers\\\": [],\\n  \\\"generated_by\\\": \\\"mechanical_template_v27_recovery\\\"\\n}\\n\",\n        \"stderr\": \"\"\n      },\n      \"council\": {\n        \"attempted\": true,\n        \"route\": \"council_local_dry\",\n        \"http\": {\n          \"queued\": false,\n          \"reason\": \"LOOP_ESCALATION_AUTO_COUNCIL not set or missing API env\"\n        },\n        \"local_presets_ok\": true,\n        \"note\": \"Set RECOVERY_AUTO_COUNCIL=1 for live Council POST\"\n      },\n      \"loop_escalation_level\": \"hard_stop\"\n    },\n    \"observePass\": true,\n    \"objectiveScore\": \"PASS\",\n    \"artifacts\": {\n      \"SENTRY_CHECK_RESULT\": true,\n      \"BLUEPRINT\": true,\n      \"harness\": true,\n      \"PROBE_pollution\": true,\n      \"FAILURE_PATTERN_PACKET\": true,\n      \"LOOP_ESCALATION_RESULT\": true\n    }\n  },\n  \"queueUpdate\": {\n    \"updated\": true,\n    \"mission_status\": \"complete\",\n    \"mission_outcome\": \"PASS\"\n  },\n  \"receipt\": \"/usr/src/app/builderos-reboot/AUTOPILOT_RECOVERY_RECEIPT.json\"\n}\n",
+            "stderr_tail": ""
+          }
+        },
+        "at": "2026-06-11T13:41:49.088Z"
+      },
+      {
+        "step": "objective_complete_on_production",
+        "ok": true,
+        "detail": {
+          "ok": true,
+          "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+          "deploy_sha": "237b480124b9bfc430ac3f6ae0f9cc339817f9cf",
+          "queue_entry": {
+            "status": "complete",
+            "mission_outcome": "PASS",
+            "recovery_required": false,
+            "note": "Recovered autonomously by autopilot owner (AUTONOMOUS-RECOVERY-0002) at 2026-06-11T13:41:48.346Z"
+          },
+          "recovery_candidates": [],
+          "objective_complete": {
+            "complete": true,
+            "via": "mission_acceptance"
+          },
+          "artifacts": {
+            "harness": true,
+            "REGRESSION_RUN_RESULT": true,
+            "RECOVERY_PROTOCOL_RESULT": true,
+            "UNSOLVED_RECEIPT": false,
+            "FOUNDER_ALERT": true
+          },
+          "receipts": {
+            "autopilot": {
+              "schema": "autopilot_recovery_receipt_v1",
+              "run_at": "2026-06-11T13:41:47.246Z",
+              "owner": "AUTONOMOUS-RECOVERY-0002",
+              "action": "recovery_owner",
+              "target": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+              "detect_reason": "queue_status:mission_failed",
+              "recovery_resolution": "OBJECTIVE_COMPLETE",
+              "objective_score": "PASS",
+              "observe_pass": true,
+              "queue_update": {
+                "updated": true,
+                "mission_status": "complete",
+                "mission_outcome": "PASS"
+              },
+              "founder_alert_only_on_unsolved": false
+            },
+            "cron": {
+              "schema": "factory_autopilot_cron_receipt_v1",
+              "ok": true,
+              "exit_code": 0,
+              "ran_at": "2026-06-11T13:41:46.237Z",
+              "stdout_tail": "dit runner syntax valid\",\n              \"pass\": true,\n              \"detail\": \"\"\n            }\n          ],\n          \"blockers\": [],\n          \"generated_by\": \"mechanical_template_v27_recovery\"\n        },\n        \"stdout\": \" fields\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-4\\\",\\n      \\\"name\\\": \\\"Exact commands include regression npm script\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-5\\\",\\n      \\\"name\\\": \\\"Cleanup verify-railway referenced before confirm\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"verify-railway in blueprint/commands\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-6\\\",\\n      \\\"name\\\": \\\"No founder decision steps\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P1-SYNTAX\\\",\\n      \\\"name\\\": \\\"Audit runner syntax valid\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"\\\"\\n    }\\n  ],\\n  \\\"blockers\\\": [],\\n  \\\"generated_by\\\": \\\"mechanical_template_v27_recovery\\\"\\n}\\n\",\n        \"stderr\": \"\"\n      },\n      \"council\": {\n        \"attempted\": true,\n        \"route\": \"council_local_dry\",\n        \"http\": {\n          \"queued\": false,\n          \"reason\": \"LOOP_ESCALATION_AUTO_COUNCIL not set or missing API env\"\n        },\n        \"local_presets_ok\": true,\n        \"note\": \"Set RECOVERY_AUTO_COUNCIL=1 for live Council POST\"\n      },\n      \"loop_escalation_level\": \"hard_stop\"\n    },\n    \"observePass\": true,\n    \"objectiveScore\": \"PASS\",\n    \"artifacts\": {\n      \"SENTRY_CHECK_RESULT\": true,\n      \"BLUEPRINT\": true,\n      \"harness\": true,\n      \"PROBE_pollution\": true,\n      \"FAILURE_PATTERN_PACKET\": true,\n      \"LOOP_ESCALATION_RESULT\": true\n    }\n  },\n  \"queueUpdate\": {\n    \"updated\": true,\n    \"mission_status\": \"complete\",\n    \"mission_outcome\": \"PASS\"\n  },\n  \"receipt\": \"/usr/src/app/builderos-reboot/AUTOPILOT_RECOVERY_RECEIPT.json\"\n}\n",
+              "stderr_tail": ""
+            }
+          },
+          "pass": true,
+          "checked_at": "2026-06-11T13:41:54.797Z"
+        },
+        "at": "2026-06-11T13:41:54.736Z"
+      }
+    ],
+    "pass": true,
+    "production_cron": {
+      "ok": true,
+      "owner": "AUTONOMOUS-RECOVERY-0002",
+      "timestamp": "2026-06-11T13:41:48.871Z",
+      "result": {
+        "ok": true,
+        "exit_code": 0,
+        "ran_at": "2026-06-11T13:41:46.237Z",
+        "stdout_tail": "dit runner syntax valid\",\n              \"pass\": true,\n              \"detail\": \"\"\n            }\n          ],\n          \"blockers\": [],\n          \"generated_by\": \"mechanical_template_v27_recovery\"\n        },\n        \"stdout\": \" fields\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-4\\\",\\n      \\\"name\\\": \\\"Exact commands include regression npm script\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-5\\\",\\n      \\\"name\\\": \\\"Cleanup verify-railway referenced before confirm\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"verify-railway in blueprint/commands\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-6\\\",\\n      \\\"name\\\": \\\"No founder decision steps\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P1-SYNTAX\\\",\\n      \\\"name\\\": \\\"Audit runner syntax valid\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"\\\"\\n    }\\n  ],\\n  \\\"blockers\\\": [],\\n  \\\"generated_by\\\": \\\"mechanical_template_v27_recovery\\\"\\n}\\n\",\n        \"stderr\": \"\"\n      },\n      \"council\": {\n        \"attempted\": true,\n        \"route\": \"council_local_dry\",\n        \"http\": {\n          \"queued\": false,\n          \"reason\": \"LOOP_ESCALATION_AUTO_COUNCIL not set or missing API env\"\n        },\n        \"local_presets_ok\": true,\n        \"note\": \"Set RECOVERY_AUTO_COUNCIL=1 for live Council POST\"\n      },\n      \"loop_escalation_level\": \"hard_stop\"\n    },\n    \"observePass\": true,\n    \"objectiveScore\": \"PASS\",\n    \"artifacts\": {\n      \"SENTRY_CHECK_RESULT\": true,\n      \"BLUEPRINT\": true,\n      \"harness\": true,\n      \"PROBE_pollution\": true,\n      \"FAILURE_PATTERN_PACKET\": true,\n      \"LOOP_ESCALATION_RESULT\": true\n    }\n  },\n  \"queueUpdate\": {\n    \"updated\": true,\n    \"mission_status\": \"complete\",\n    \"mission_outcome\": \"PASS\"\n  },\n  \"receipt\": \"/usr/src/app/builderos-reboot/AUTOPILOT_RECOVERY_RECEIPT.json\"\n}\n",
+        "stderr_tail": ""
+      },
+      "scheduler": {
+        "running": false,
+        "lastRunAt": "2026-06-11T13:41:46.237Z",
+        "lastExitCode": 0,
+        "lastError": null,
+        "receipt_path": "/usr/src/app/builderos-reboot/FACTORY_AUTOPILOT_CRON_RECEIPT.json"
+      }
+    },
+    "final_status": {
+      "ok": true,
+      "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+      "deploy_sha": "237b480124b9bfc430ac3f6ae0f9cc339817f9cf",
+      "queue_entry": {
+        "status": "complete",
+        "mission_outcome": "PASS",
+        "recovery_required": false,
+        "note": "Recovered autonomously by autopilot owner (AUTONOMOUS-RECOVERY-0002) at 2026-06-11T13:41:48.346Z"
+      },
+      "recovery_candidates": [],
+      "objective_complete": {
+        "complete": true,
+        "via": "mission_acceptance"
+      },
+      "artifacts": {
+        "harness": true,
+        "REGRESSION_RUN_RESULT": true,
+        "RECOVERY_PROTOCOL_RESULT": true,
+        "UNSOLVED_RECEIPT": false,
+        "FOUNDER_ALERT": true
+      },
+      "receipts": {
+        "autopilot": {
+          "schema": "autopilot_recovery_receipt_v1",
+          "run_at": "2026-06-11T13:41:47.246Z",
+          "owner": "AUTONOMOUS-RECOVERY-0002",
+          "action": "recovery_owner",
+          "target": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+          "detect_reason": "queue_status:mission_failed",
+          "recovery_resolution": "OBJECTIVE_COMPLETE",
+          "objective_score": "PASS",
+          "observe_pass": true,
+          "queue_update": {
+            "updated": true,
+            "mission_status": "complete",
+            "mission_outcome": "PASS"
+          },
+          "founder_alert_only_on_unsolved": false
+        },
+        "cron": {
+          "schema": "factory_autopilot_cron_receipt_v1",
+          "ok": true,
+          "exit_code": 0,
+          "ran_at": "2026-06-11T13:41:46.237Z",
+          "stdout_tail": "dit runner syntax valid\",\n              \"pass\": true,\n              \"detail\": \"\"\n            }\n          ],\n          \"blockers\": [],\n          \"generated_by\": \"mechanical_template_v27_recovery\"\n        },\n        \"stdout\": \" fields\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-4\\\",\\n      \\\"name\\\": \\\"Exact commands include regression npm script\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-5\\\",\\n      \\\"name\\\": \\\"Cleanup verify-railway referenced before confirm\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"verify-railway in blueprint/commands\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P0-6\\\",\\n      \\\"name\\\": \\\"No founder decision steps\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"ok\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"P1-SYNTAX\\\",\\n      \\\"name\\\": \\\"Audit runner syntax valid\\\",\\n      \\\"pass\\\": true,\\n      \\\"detail\\\": \\\"\\\"\\n    }\\n  ],\\n  \\\"blockers\\\": [],\\n  \\\"generated_by\\\": \\\"mechanical_template_v27_recovery\\\"\\n}\\n\",\n        \"stderr\": \"\"\n      },\n      \"council\": {\n        \"attempted\": true,\n        \"route\": \"council_local_dry\",\n        \"http\": {\n          \"queued\": false,\n          \"reason\": \"LOOP_ESCALATION_AUTO_COUNCIL not set or missing API env\"\n        },\n        \"local_presets_ok\": true,\n        \"note\": \"Set RECOVERY_AUTO_COUNCIL=1 for live Council POST\"\n      },\n      \"loop_escalation_level\": \"hard_stop\"\n    },\n    \"observePass\": true,\n    \"objectiveScore\": \"PASS\",\n    \"artifacts\": {\n      \"SENTRY_CHECK_RESULT\": true,\n      \"BLUEPRINT\": true,\n      \"harness\": true,\n      \"PROBE_pollution\": true,\n      \"FAILURE_PATTERN_PACKET\": true,\n      \"LOOP_ESCALATION_RESULT\": true\n    }\n  },\n  \"queueUpdate\": {\n    \"updated\": true,\n    \"mission_status\": \"complete\",\n    \"mission_outcome\": \"PASS\"\n  },\n  \"receipt\": \"/usr/src/app/builderos-reboot/AUTOPILOT_RECOVERY_RECEIPT.json\"\n}\n",
+          "stderr_tail": ""
+        }
+      },
+      "pass": true,
+      "checked_at": "2026-06-11T13:41:54.797Z"
+    },
+    "verdict": "OBJECTIVE_COMPLETE",
+    "completed_at": "2026-06-11T13:41:54.736Z"
+  }
+}

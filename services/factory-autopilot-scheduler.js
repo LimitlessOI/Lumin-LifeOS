@@ -1,7 +1,12 @@
 /**
- * Factory autopilot recovery owner — scheduled invoker (smoke detector → fire extinguisher).
+ * HIST DOMAIN — Historian owns this artifact (read/salvage only).
+ * hist_id: HIST-AUTO-005
+ * Law: prompts/00-HIST-LEGACY-BOUNDARY.md
+ * Product queue: builderos-reboot/BP_PRIORITY.json
+ *
+ * Factory autopilot cron invoker — factory recovery scope only.
  * Spawns `factory:autopilot` when recovery candidates or failed missions exist.
- * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
+ * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
  */
 import fs from 'node:fs';
 import path from 'node:path';

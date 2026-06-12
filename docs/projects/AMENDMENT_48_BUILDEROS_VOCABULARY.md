@@ -48,7 +48,7 @@ One official meaning for every core BuilderOS / Lumin term so language drift doe
 
 | Date | Change | Why |
 |------|--------|-----|
-| 2026-06-10 | Mission pack `FACTORY-DELIBERATION-SENTRY-REGRESSION-0001` (FP+PD+probe catalog); `scripts/snt-verify-builder-safe-scope.mjs`; SNT platform fix receipt | First BuilderOS spin test — regression harness BP-only; safe-scope gap blocked BPB |
+| 2026-06-12 | **Working-tree snapshot archive** — `builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/` (99 files); `INDEX.json`; `HIST_LEGACY_SYSTEM_REGISTRY.md` §2E snapshot law; `.gitignore` governed-autonomy runtime sidecars | Adam: dirty tree from autopilot/overnight churn — park for Hist, restore clean `main` |
 | 2026-06-09 | Created Amendment 48 + `docs/BUILDEROS_VOCABULARY.md` | Founder: canonize vocabulary; stop jargon drift |
 | 2026-06-09 | **v2 SEAL** — C2/AIC/FM/ChC/Cncl/Objective; six depts; deliberation loop | Founder consensus |
 | 2026-06-09 | **v2.1–v2.4** — LSSOT; SDO; partial Cncl; ChC 6th dept | Founder clarifications |

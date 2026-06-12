@@ -114,6 +114,8 @@ Adam locked **2026-06-11:** **Blueprints in priority order ARE the queue.** Lega
 **Canonical product queue (NOT Hist):** `builderos-reboot/BP_PRIORITY.json`  
 **Enforcement:** `npm run lifeos:bp-priority:verify` (pre-commit HARD)
 
+**Working-tree snapshots (Hist review queue):** when uncommitted local churn must not block `main`, park copies under `builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/<stamp>/` (`MANIFEST.json` + `files/`). Index: `builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/INDEX.json`. Restore working tree to `HEAD` after archive — **do not** leave dirty trees on operator machines.
+
 ---
 
 ## 3. Decision tree (agents)
@@ -172,3 +174,4 @@ HIST_CASE:
 | 2026-06-11 | **`services/bp-priority-sync.js`** — machine law: acceptance PASS syncs `BP_PRIORITY.json`, mission `BLUEPRINT.json`, `FOUNDER_PACKET.json`; `verify-bp-priority-guardrails.mjs` checks receipt alignment (23 checks) |
 | 2026-06-11 | **BP law hardwired (no oops)** — `scripts/lib/bp-acceptance-finish.mjs` mandatory choke point; pre-commit `--staged` co-commit gate; `BP_PRIORITY_GUARDRAILS=off` removed; PASS receipts require `bp_sync`; fingerprint + acceptance-script wiring checks; tracked `githooks/commit-msg` |
 | 2026-06-12 | **§2.18 orphan PASS enforcement** — `checkOrphanProductPassReceipts()` in `services/bp-priority-sync.js` (repo-wide: any `products/receipts/*.json` with `verdict: PASS` must be in `BP_PRIORITY.json` + carry `bp_sync`); wired to `verify-bp-priority-guardrails.mjs` (26 checks); `system-maturity-check.mjs` CI runs `lifeos:bp-priority:verify`; test `tests/bp-priority-orphan-pass-guard.test.js` |
+| 2026-06-12 | **Working-tree snapshot archive** — 99 uncommitted files (autopilot/overnight churn, amendment title bulk edits, runtime `data/` sidecars) parked at `builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z/`; index `WORKING_TREE_SNAPSHOTS/INDEX.json`; operator tree restored to `f2555dfeee` |

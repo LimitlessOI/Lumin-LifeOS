@@ -1,0 +1,79 @@
+{
+  "schema": "slice_proof_v1",
+  "slice_id": "SLICE-001",
+  "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+  "started_at": "2026-06-11T14:16:07.940Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "steps": [
+    {
+      "step": "post_manual_a",
+      "ok": "34",
+      "detail": {
+        "http": 201,
+        "id": "34"
+      },
+      "at": "2026-06-11T14:16:08.167Z"
+    },
+    {
+      "step": "post_manual_b",
+      "ok": "35",
+      "detail": {
+        "http": 201,
+        "id": "35"
+      },
+      "at": "2026-06-11T14:16:08.263Z"
+    },
+    {
+      "step": "post_manual_c",
+      "ok": "36",
+      "detail": {
+        "http": 201,
+        "id": "36"
+      },
+      "at": "2026-06-11T14:16:08.358Z"
+    },
+    {
+      "step": "get_list_contains_created",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "found": {
+          "idA": true,
+          "idB": true,
+          "idC": true
+        }
+      },
+      "at": "2026-06-11T14:16:08.498Z"
+    },
+    {
+      "step": "mark_kept_done",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "status": "kept"
+      },
+      "at": "2026-06-11T14:16:08.573Z"
+    },
+    {
+      "step": "mark_broken",
+      "ok": true,
+      "detail": {
+        "http": 200,
+        "status": "broken"
+      },
+      "at": "2026-06-11T14:16:08.640Z"
+    },
+    {
+      "step": "mark_snooze_deferred_v1",
+      "ok": "2026-06-11 18:16:08.769+00",
+      "detail": {
+        "http": 200,
+        "snoozed_until": "2026-06-11 18:16:08.769+00"
+      },
+      "at": "2026-06-11T14:16:08.715Z"
+    }
+  ],
+  "pass": true,
+  "verdict": "OBJECTIVE_COMPLETE",
+  "completed_at": "2026-06-11T14:16:08.715Z"
+}

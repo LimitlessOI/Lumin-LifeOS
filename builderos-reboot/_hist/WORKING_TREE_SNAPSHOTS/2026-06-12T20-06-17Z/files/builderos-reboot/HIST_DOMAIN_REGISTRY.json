@@ -1,0 +1,63 @@
+{
+  "_authority": {
+    "domain": "Hist",
+    "owner_department": "Historian",
+    "status": "CANONICAL",
+    "role": "Hist department registry — historian-owned artifacts + enforcement map",
+    "verifier": "npm run lifeos:bp-priority:verify",
+    "law": "prompts/00-HIST-LEGACY-BOUNDARY.md"
+  },
+  "schema": "hist_domain_registry_v1",
+  "updated_at": "2026-06-11",
+  "operator_lock": "Adam — legacy files belong to History; Historian domain owns them. Read/salvage only.",
+  "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json",
+  "hist_owned_json_files": [
+    { "path": "builderos-reboot/MISSION_QUEUE.json", "hist_id": "HIST-AUTO-001" },
+    { "path": "builderos-reboot/MISSION_PACK_INDEX.json", "hist_id": "HIST-AUTO-002" },
+    { "path": "builderos-reboot/CURRENT_STATE.json", "hist_id": "HIST-AUTO-003" },
+    { "path": "builderos-reboot/CURRENT_SLICE.json", "hist_id": "HIST-AUTO-003" },
+    { "path": "builderos-reboot/OVERNIGHT_SCOREBOARD.json", "hist_id": "HIST-AUTO-003" },
+    { "path": "builderos-reboot/OVERNIGHT_BP_AUTONOMY_RECEIPT.json", "hist_id": "HIST-AUTO-003" },
+    { "path": "builderos-reboot/AUTOPILOT_RECOVERY_RECEIPT.json", "hist_id": "HIST-AUTO-003" },
+    { "path": "builderos-reboot/QUEUE_DRY_RUN_RECEIPT.json", "hist_id": "HIST-AUTO-003" }
+  ],
+  "hist_owned_json_sidecars": [
+    {
+      "runtime_file": "data/governed-autonomy-backlog-state.json",
+      "meta_file": "data/governed-autonomy-backlog-state.meta.json",
+      "hist_id": "HIST-AUTO-006"
+    }
+  ],
+  "hist_owned_script_files": [
+    { "path": "builderos-reboot/scripts/autopilot-runner.mjs", "hist_id": "HIST-AUTO-004" },
+    { "path": "builderos-reboot/scripts/autopilot-run-queue.mjs", "hist_id": "HIST-AUTO-004" },
+    { "path": "builderos-reboot/scripts/run-overnight-bp-autonomy.mjs", "hist_id": "HIST-AUTO-004" },
+    { "path": "builderos-reboot/scripts/mission-recovery-owner.mjs", "hist_id": "HIST-AUTO-004" },
+    { "path": "builderos-reboot/scripts/generate-mission-pack-index.mjs", "hist_id": "HIST-AUTO-002" },
+    { "path": "services/factory-autopilot-scheduler.js", "hist_id": "HIST-AUTO-005" },
+    { "path": "scripts/governed-overnight-backlog-run.mjs", "hist_id": "HIST-AUTO-006" },
+    { "path": "scripts/governed-overnight-autonomy.mjs", "hist_id": "HIST-AUTO-006" }
+  ],
+  "mission_queue_reference_allowlist_prefixes": [
+    "builderos-reboot/scripts/",
+    "builderos-reboot/MISSIONS/",
+    "services/factory-autopilot-scheduler.js",
+    "services/factory-recovery-proof-service.js",
+    "scripts/verify-bp-priority-guardrails.mjs",
+    "services/bp-priority-queue.js",
+    "lumin-factory/",
+    "docs/",
+    "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
+    "builderos-reboot/LEGACY_PLUMBING_REGISTRY.json",
+    "builderos-reboot/BP_PRIORITY.json",
+    "builderos-reboot/AGENTS.md"
+  ],
+  "forbidden_mission_queue_scan_roots": [
+    "routes/",
+    "services/",
+    "startup/",
+    "public/overlay/",
+    "scripts/"
+  ],
+  "product_mission_id_pattern": "^PRODUCT-"
+}

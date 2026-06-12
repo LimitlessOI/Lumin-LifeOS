@@ -1,0 +1,44 @@
+{
+  "schema": "product_slice_v1",
+  "slice_id": "SLICE-001",
+  "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+  "name": "Conversation Commitments v1 — API CRUD proof",
+  "status": "NOT_COMPLETE",
+  "verdict_rule": "npm run lifeos:commitments:slice-proof exits 0 → COMPLETE; else NOT COMPLETE",
+  "acceptance_command": "npm run lifeos:commitments:slice-proof",
+  "receipt_path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/SLICE_001_PROOF.json",
+  "scope_in": [
+    "Canonical API only: /api/v1/lifeos/commitments via lifeos-core-routes + commitment-tracker.js + commitments table",
+    "Manual POST → GET list → mark kept (done) → mark broken → snooze (deferred v1)",
+    "Mechanical HTTP proof against PUBLIC_BASE_URL (production path)"
+  ],
+  "scope_out": [
+    "UI / Mirror / Today overlay",
+    "lifeos_commitments split-brain table",
+    "AI extract with evidence bundle (SLICE-002)",
+    "Calendar, Sherry share, audio, therapy interpretation",
+    "BPB blueprint authoring busywork"
+  ],
+  "build_tasks_if_fail": [
+    {
+      "id": "T1",
+      "when": "POST /commitments 4xx/5xx",
+      "do": "Fix lifeos-core-routes + commitment-tracker logCommitment; ensure commitments migration applied on Neon"
+    },
+    {
+      "id": "T2",
+      "when": "GET list missing created row",
+      "do": "Fix getOpen filter / user resolver for adam"
+    },
+    {
+      "id": "T3",
+      "when": "keep/break/snooze fail",
+      "do": "Fix markKept/markBroken/snooze in commitment-tracker.js"
+    }
+  ],
+  "next_slice_after_pass": {
+    "slice_id": "SLICE-002",
+    "name": "Extract + evidence + approve gate",
+    "acceptance_command": "npm run lifeos:commitments:extract-proof"
+  }
+}

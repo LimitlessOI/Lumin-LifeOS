@@ -1,0 +1,50 @@
+{
+  "schema": "objective_verdict_v1",
+  "generated_at": "2026-06-11T10:22:00.000Z",
+  "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "verdict": "OBJECTIVE_COMPLETE",
+  "scoreboard": "Mission contract only — not governance, not tokens",
+  "question": "Objective assigned → system completes → no Adam rescue",
+  "answer": "LOCAL + PRODUCTION recovery owner PROVEN; queued dry-run dispatch 404 is non-blocking gap",
+  "evidence": {
+    "autopilot_recovery_proof_v2": {
+      "command": "npm run factory:autopilot:proof",
+      "method": "Simulated mission_failed + deleted harness; invoked ONLY factory:autopilot (no manual observe)",
+      "pass": true,
+      "autopilot_exit": 0,
+      "hard_stop_detected": true,
+      "recovery_resolution": "OBJECTIVE_COMPLETE",
+      "acceptance": "14/14 PASS",
+      "receipt": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/AUTOPILOT_RECOVERY_PROOF.json"
+    },
+    "production_deploy": {
+      "local_head": "ac57d1471d3cd6af180bf604320e01d6c09a9eac",
+      "live_deploy_commit_sha": "ac57d1471d3cd6af180bf604320e01d6c09a9eac",
+      "sha_parity": true,
+      "build_from_latest": "SUCCESS after migration GAP-FILL chain"
+    },
+    "production_recovery_cron": {
+      "endpoint": "GET /internal/cron/factory-recovery",
+      "http": 200,
+      "owner": "AUTONOMOUS-RECOVERY-0002",
+      "exit_code": 0,
+      "receipt": "builderos-reboot/OVERNIGHT_BP_AUTONOMY_RECEIPT.json"
+    },
+    "overnight_bp_gate": {
+      "command": "npm run factory:overnight:bp",
+      "verdict": "OBJECTIVE_COMPLETE",
+      "queued_objective_dry_run": {
+        "mission_id": "FACTORY-REBOOT-0031",
+        "ok": false,
+        "httpStatus": 404,
+        "note": "dispatch route missing locally — does not block recovery BP"
+      }
+    }
+  },
+  "blockers": [],
+  "next_proof_required": [
+    "Overnight unattended re-run of factory:overnight:bp on production cron cadence",
+    "Optional: wire FACTORY-REBOOT-0031 dry-run dispatch (404) before treating queue objective as proven"
+  ],
+  "honest_partial": "Core BP complete: deploy parity + production recovery cron + local autopilot proof. Tomorrow scope: Conversation Commitments v1 — not all LifeOS."
+}

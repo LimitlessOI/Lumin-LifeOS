@@ -91,5 +91,12 @@ data/tsos-overseer-summary.json
 data/tsos-runtime-guardian-log.jsonl
 data/tsos-runtime-guardian-state.json
 data/tsos-compliance-officer-last-run.json
+# Hist-owned governed overnight autonomy runtime (HIST-AUTO-006; local sidecars only)
+data/governed-autonomy-backlog-state.json
+data/governed-autonomy-overnight-log.jsonl
+data/governed-autonomy-status-summary.json
+data/governed-autonomy-overnight-state.json
+data/governed-autonomy-overnight.lock
+data/builder-factory-health.json
 data/builder-daemon-state.*.json
 .claude/worktrees/

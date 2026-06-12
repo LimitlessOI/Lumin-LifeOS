@@ -1,0 +1,66 @@
+{
+  "schema": "regression_run_result_v1",
+  "generated_at": "2026-06-11T10:21:21.916Z",
+  "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "layer": "local",
+  "pass": true,
+  "probes": [
+    {
+      "probe_id": "B_NO_ROSTER_GATE",
+      "pass": true,
+      "layer": "local_mock",
+      "detail": "ok",
+      "ms": 1
+    },
+    {
+      "probe_id": "B_LB_METADATA",
+      "pass": true,
+      "layer": "local_mock",
+      "detail": "ok",
+      "ms": 1
+    },
+    {
+      "probe_id": "N5",
+      "pass": true,
+      "layer": "local_mock",
+      "detail": "ok",
+      "ms": 0
+    },
+    {
+      "probe_id": "N1",
+      "pass": true,
+      "layer": "local_mock",
+      "detail": "ok",
+      "ms": 0
+    },
+    {
+      "probe_id": "N2",
+      "pass": true,
+      "layer": "local_mock",
+      "detail": "ok",
+      "ms": 0
+    },
+    {
+      "probe_id": "N3",
+      "pass": true,
+      "layer": "local_mock",
+      "detail": "ok",
+      "ms": 0
+    },
+    {
+      "probe_id": "N6b",
+      "pass": true,
+      "layer": "local_mock",
+      "detail": "ok",
+      "ms": 0
+    },
+    {
+      "probe_id": "N11",
+      "pass": true,
+      "layer": "local_mock",
+      "detail": "ok",
+      "ms": 0
+    }
+  ],
+  "generated_by": "mechanical_template_v27_recovery"
+}

@@ -1,0 +1,82 @@
+{
+  "generated_at": "2026-06-11T10:21:18.164Z",
+  "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "audit_type": "SENTRY_BP_AUDIT",
+  "verdict": "BP_AUDIT_PASS",
+  "checks": [
+    {
+      "id": "BP-FOUNDER_PACKET.json",
+      "name": "FOUNDER_PACKET.json exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "BP-BLUEPRINT.json",
+      "name": "BLUEPRINT.json exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "BP-ACCEPTANCE_TESTS.json",
+      "name": "ACCEPTANCE_TESTS.json exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "BP-REGRESSION_PROBE_CATALOG.json",
+      "name": "REGRESSION_PROBE_CATALOG.json exists",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "id": "P0-FREEZE",
+      "name": "Blueprint freeze check",
+      "pass": true,
+      "detail": "ok"
+    },
+    {
+      "id": "P0-1",
+      "name": "Every catalog probe in acceptance tests",
+      "pass": true,
+      "detail": "all covered"
+    },
+    {
+      "id": "P0-2",
+      "name": "No validator edits in blueprint",
+      "pass": true,
+      "detail": "ok"
+    },
+    {
+      "id": "P0-3",
+      "name": "Blueprint steps have required fields",
+      "pass": true,
+      "detail": "ok"
+    },
+    {
+      "id": "P0-4",
+      "name": "Exact commands include regression npm script",
+      "pass": true,
+      "detail": "npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera"
+    },
+    {
+      "id": "P0-5",
+      "name": "Cleanup verify-railway referenced before confirm",
+      "pass": true,
+      "detail": "verify-railway in blueprint/commands"
+    },
+    {
+      "id": "P0-6",
+      "name": "No founder decision steps",
+      "pass": true,
+      "detail": "ok"
+    },
+    {
+      "id": "P1-SYNTAX",
+      "name": "Audit runner syntax valid",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "blockers": [],
+  "generated_by": "mechanical_template_v27_recovery"
+}

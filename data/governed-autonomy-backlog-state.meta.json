@@ -1,0 +1,13 @@
+{
+  "_authority": {
+    "domain": "Hist",
+    "owner_department": "Historian",
+    "status": "HIST_OWNED",
+    "hist_id": "HIST-AUTO-006",
+    "role": "Overnight backlog runner state sidecar — historian domain",
+    "applies_to": "data/governed-autonomy-backlog-state.json",
+    "do_not_use_for": "LifeOS product work orchestration",
+    "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json",
+    "mandatory_read": "prompts/00-HIST-LEGACY-BOUNDARY.md"
+  }
+}

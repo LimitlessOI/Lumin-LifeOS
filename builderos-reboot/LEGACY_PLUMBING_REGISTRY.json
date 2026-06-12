@@ -1,0 +1,10 @@
+{
+  "_authority": {
+    "domain": "Hist",
+    "owner_department": "Historian",
+    "status": "HIST_OWNED",
+    "hist_id": "HIST-DOMAIN-REGISTRY",
+    "redirect": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
+    "note": "Renamed — use HIST_DOMAIN_REGISTRY.json. Historian domain owns all entries."
+  }
+}

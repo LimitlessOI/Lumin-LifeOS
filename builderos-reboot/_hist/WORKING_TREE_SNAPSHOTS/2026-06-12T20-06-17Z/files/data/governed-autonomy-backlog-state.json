@@ -1,0 +1,1092 @@
+{
+  "status": "running",
+  "started_at": "2026-06-03T06:59:21.951Z",
+  "checkpoint_every_min": 60,
+  "dry_run": false,
+  "tasks_total": 96030,
+  "tasks_done": 96028,
+  "generation_count": 32249,
+  "autonomous_decisions": 2,
+  "successful_repairs": 2,
+  "failed_repairs": 73,
+  "governance_prevented_drift": 1,
+  "blueprint_tasks_generated": 1447,
+  "support_tasks_generated": 94584,
+  "first_blueprint_selected": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md",
+  "first_job_id": "cffc37af-2f91-41a8-82a6-6a9cca2c4781",
+  "successes": [
+    {
+      "task_id": "amendment-41-marketingos-build-order-task-6-services-marketing-transcriber-js",
+      "job_id": "5e4bdc4a-c430-4037-9392-192a8810af7c",
+      "committed": true,
+      "oil_verified": true,
+      "token_verified": true,
+      "blueprint_path": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+    },
+    {
+      "task_id": "amendment-41-marketingos-build-order-task-8-services-marketing-content-engine-js",
+      "job_id": "d3a96e42-4b66-4030-8e92-f1d8a4565cec",
+      "committed": true,
+      "oil_verified": true,
+      "token_verified": true,
+      "blueprint_path": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+    }
+  ],
+  "failures": [
+    {
+      "task_id": "amendment-46-builderos-control-plane-first-exact-coding-task-routes-lifeos-council-builder-routes-js",
+      "job_id": "cffc37af-2f91-41a8-82a6-6a9cca2c4781",
+      "blocker": "ZONE3_PATCH_REQUIRED",
+      "zone3": true,
+      "expected": true,
+      "blueprint_path": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md"
+    },
+    {
+      "task_id": "amendment-41-marketingos-build-order-task-5-db-migrations-date-marketing-schema-sql",
+      "job_id": "010dca8d-4cd5-46bd-9dfe-b677521790ca",
+      "blocker": "HTTP_502",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+    },
+    {
+      "task_id": "amendment-41-marketingos-build-order-task-7-services-marketing-coach-js",
+      "job_id": "22abc7af-9e55-46bd-b838-4a87a279a520",
+      "blocker": "generated JS is too short (1 lines); likely token-limit truncation — refusing to commit; retry with a smaller spec or explicit target_file",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+    },
+    {
+      "task_id": "amendment-46-builderos-control-plane-first-exact-coding-task-routes-lifeos-council-builder-routes-js-patch-plan-g1",
+      "job_id": "80773bbd-512e-428c-b2ad-00f8ac7556bc",
+      "blocker": "HTTP_502",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md"
+    },
+    {
+      "task_id": "amendment-41-marketingos-build-order-task-11-scripts-verify-marketing-data-wall-mjs",
+      "job_id": "01c8c088-ec59-4034-b8f6-9b270fa83c58",
+      "blocker": "Pre-commit syntax check failed — commit blocked",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+    },
+    {
+      "task_id": "amendment-41-marketingos-build-order-task-9-routes-marketing-routes-js-patch-plan-g2",
+      "job_id": "134868c4-5e4a-453b-a0f2-d73df6658bad",
+      "blocker": "HTTP_502",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+    },
+    {
+      "task_id": "amendment-41-marketingos-build-order-task-10-scripts-verify-marketing-phase1-mjs-patch-plan-g2",
+      "job_id": "7397a1bb-e5a8-45f3-9715-3d7f2bad9889",
+      "blocker": "HTTP_502",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+    },
+    {
+      "task_id": "amendment-41-marketingos-build-order-task-12-public-overlay-marketing-session-html",
+      "job_id": "a623239e-b03a-43dc-bdf7-b752c047bd78",
+      "blocker": "HTTP_502",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+    },
+    {
+      "task_id": "infra-health-check-g877_retry",
+      "job_id": "b7a32a6a-5ba2-49f8-8e80-a9e661741d31",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g1493_retry",
+      "job_id": "7390287d-143a-42f2-8e86-03fafb39f15e",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g1518_retry",
+      "job_id": "51a8d853-35bf-421d-bb0e-e4296a87eda0",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3514_retry",
+      "job_id": "817a3b13-172a-4c1c-a929-5564201b085e",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3587_retry",
+      "job_id": "3bddfcc6-7a02-4ec9-b936-10f781a8fc9d",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3594_retry",
+      "job_id": "bbf9a6e5-5eeb-41f8-b4d7-3318d7f871f1",
+      "blocker": "UNKNOWN_FAILURE",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3680-churn-diagnose_retry",
+      "job_id": "bb1fc243-28d8-4bd0-9de9-7d9b154c37c9",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3685-churn-diagnose_retry",
+      "job_id": "6e2a68fa-97a1-47bb-bbe6-3621c9210879",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3724-churn-diagnose_retry",
+      "job_id": "0ca026bb-c4e8-4d63-9547-782c3e5a1564",
+      "blocker": "HTTP_502",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3725-churn-diagnose_retry",
+      "job_id": "46402570-0265-428a-bb5d-0f64dc6934d9",
+      "blocker": "UNKNOWN_FAILURE",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3752-churn-diagnose_retry",
+      "job_id": "d6d900e6-cb43-4bae-8764-5e0621afd4b0",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3830-churn-diagnose_retry",
+      "job_id": "76e46da1-9db4-4c6b-9093-ba495b91dc8b",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3844-churn-diagnose_retry",
+      "job_id": "20db69ec-796c-446e-b939-6e2a420cd6f1",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3874-churn-diagnose_retry",
+      "job_id": "fb6cfcc5-959a-4d06-b061-b4f0c3c6474b",
+      "blocker": "UNKNOWN_FAILURE",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3883-churn-diagnose_retry",
+      "job_id": "862cd5fa-ba98-4c28-8e59-e151c27b50bf",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3890-churn-diagnose_retry",
+      "job_id": "dfc82b15-f564-4cea-b195-72e231625ab3",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3896-churn-diagnose_retry",
+      "job_id": "7b413d85-bb73-4be7-a945-2943ad77ef9b",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3898-churn-diagnose_retry",
+      "job_id": "e2447db9-adb6-4c28-a83f-50f7eee25cac",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3913-churn-diagnose_retry",
+      "job_id": "d5e83445-6fbf-477d-a887-0916d0ca8382",
+      "blocker": "UNKNOWN_FAILURE",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3924-churn-diagnose_retry",
+      "job_id": "d3e242d6-6130-452c-9e7c-988c2be5ae17",
+      "blocker": "UNKNOWN_FAILURE",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3934-churn-diagnose_retry",
+      "job_id": "812146b3-d2fb-4129-98db-e6a5f87a6fc4",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3937-churn-diagnose_retry",
+      "job_id": "71c9897a-75c4-4c27-bc1d-5939094ff5f0",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3946-churn-diagnose_retry",
+      "job_id": "3871c39d-6d7a-4e24-9b7a-d49c7bd88b24",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g3950-churn-diagnose_retry",
+      "job_id": "dd58e676-7046-4ca6-bbdd-6b80eff026c7",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4238-churn-diagnose_retry",
+      "job_id": "2068a352-eafe-4ebd-959e-479fde33d39f",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4247-churn-diagnose_retry",
+      "job_id": "d41716f4-e518-4a5b-8133-eeca1e50326c",
+      "blocker": "UNKNOWN_FAILURE",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4320-churn-diagnose_retry",
+      "job_id": "f61e796b-e688-4573-9e69-7eb2a7a24ede",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4351-churn-diagnose_retry",
+      "job_id": "dd729f36-b52b-4dba-8aa5-75999c409192",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4388-churn-diagnose_retry",
+      "job_id": "07b4f191-e7db-4dff-9597-f2851fc91b5b",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4426-churn-diagnose_retry",
+      "job_id": "d7dbc780-365a-4eb6-bcaf-3ced93d0cd7d",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4453-churn-diagnose_retry",
+      "job_id": "e8011125-36c9-4889-8e5a-eb24a20dbc97",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4483-churn-diagnose_retry",
+      "job_id": "04e02612-bad5-4626-88cc-531c05e6ce73",
+      "blocker": "UNKNOWN_FAILURE",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4492-churn-diagnose_retry",
+      "job_id": "dfd044bf-f4df-4dbf-8a63-fca818629a8f",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4589-churn-diagnose_retry",
+      "job_id": "9e6c7787-6cfd-467c-915f-0160874f1713",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4629-churn-diagnose_retry",
+      "job_id": "2d672c65-678f-46c1-bedb-48c472e1d802",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g4687-churn-diagnose_retry",
+      "job_id": "5183a6eb-faac-422f-aec9-8370ee861dff",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g8412-churn-diagnose_retry",
+      "job_id": "78e0d53e-8eb6-418a-b5e1-238c7f9b5ba0",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g9709-churn-diagnose_retry",
+      "job_id": "91d09616-cbc2-490b-92c4-9d8e95db3e54",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g9832-churn-diagnose_retry",
+      "job_id": "3fa2dc01-df23-4202-a4e5-5f20f701fd37",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g10105-churn-diagnose_retry",
+      "job_id": "4dce24ed-4ec5-46e5-90ea-abb66e3564fd",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g10286-churn-diagnose_retry",
+      "job_id": "782a9473-2412-4d81-b198-bf38887b1e22",
+      "blocker": "HTTP_502",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g10332-churn-diagnose_retry",
+      "job_id": "bd628b38-2f46-4a1e-9801-81bd1458bf4c",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g10417-churn-diagnose_retry",
+      "job_id": "65cda162-f5d7-403b-bd51-8a10b473422d",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g10427-churn-diagnose_retry",
+      "job_id": "1d67a02c-a9e3-4f8d-953c-6a23eb490cc4",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g10594-churn-diagnose_retry",
+      "job_id": "4286e74d-ae54-42a7-ad00-17ed81013222",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g10626-churn-diagnose_retry",
+      "job_id": "f79ed6b4-efe8-4200-94db-0db8049eea18",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g11069-churn-diagnose_retry",
+      "job_id": "2bb5e32f-9022-4327-ae8b-fc34c5b2018c",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g11074-churn-diagnose_retry",
+      "job_id": "292d479a-1454-40c8-98c3-b8fa03560d31",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g11435-churn-diagnose_retry",
+      "job_id": "81e12ea4-c3fc-4740-8a35-681fd8bba6c6",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g11592-churn-diagnose_retry",
+      "job_id": "c709f5c6-1d67-4d6e-b895-be81ec6c428b",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g11867-churn-diagnose_retry",
+      "job_id": "9b130c67-1a63-4235-ba65-561a6e4c18d7",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g12479-churn-diagnose_retry",
+      "job_id": "a6a3f8e6-059b-45af-9a0e-2951b9556f78",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g12564-churn-diagnose_retry",
+      "job_id": "f10819b2-8a70-4428-8823-5e3710836c14",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g12576-churn-diagnose_retry",
+      "job_id": "06da6577-752c-4d33-b410-9d0f6a72ee43",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g12588-churn-diagnose_retry",
+      "job_id": "1c050ba6-87df-45af-a42d-0714958d67cb",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g12617-churn-diagnose_retry",
+      "job_id": "87690672-c3dc-48cc-bc58-15831b06df84",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "syntax-audit-g15214-churn-diagnose_retry",
+      "job_id": "c4205154-5b9c-494b-ab26-1b299843bd8b",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g16496-churn-diagnose_retry",
+      "job_id": "f593b723-d7bb-4fac-944b-f62e4a10f1c2",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g23493-churn-diagnose_retry",
+      "job_id": "26b64de6-2187-4816-8ce8-d488361e6d19",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g23513-churn-diagnose_retry",
+      "job_id": "38f7194f-e365-4101-9adf-8c5b1ae7df95",
+      "blocker": "UNKNOWN_FAILURE",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "infra-health-check-g23703-churn-diagnose_retry",
+      "job_id": "db67b3c7-fdd2-4ccd-9e90-f8215f08f773",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "syntax-audit-g27366-churn-diagnose_retry",
+      "job_id": "447ec16a-390b-4ca3-af29-8bac3438c4e5",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "syntax-audit-g27367-churn-diagnose_retry",
+      "job_id": "49a2bd7b-c8e1-43a5-b8a4-18ebf17c093d",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "syntax-audit-g27456-churn-diagnose_retry",
+      "job_id": "3dea4649-ee30-4567-9901-1c8946032811",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "syntax-audit-g27584-churn-diagnose_retry",
+      "job_id": "34728bb6-bfb1-4cee-96a9-56a64ee30bb4",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    },
+    {
+      "task_id": "syntax-audit-g28396-churn-diagnose_retry",
+      "job_id": "8b429dc2-3f73-417c-8de5-03f61e041ad6",
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "zone3": false,
+      "expected": false,
+      "blueprint_path": null
+    }
+  ],
+  "lessons": [],
+  "founder_value_deliveries": 2,
+  "consecutive_no_founder_value": 70,
+  "active_mission": "MarketingOS / Am 41",
+  "active_mission_id": null,
+  "task_choice_reason": "70 tasks without founder value — diagnose before more blueprint churn",
+  "blocked_attempts": {
+    "amendment-46-builderos-control-plane-first-exact-coding-task-routes-lifeos-council-builder-routes-js": {
+      "blocker": "ZONE3_PATCH_REQUIRED",
+      "category": "governance",
+      "at": "2026-06-03T06:59:24.916Z",
+      "target_file": "routes/lifeos-council-builder-routes.js"
+    },
+    "amendment-41-marketingos-build-order-task-5-db-migrations-date-marketing-schema-sql": {
+      "blocker": "HTTP_502",
+      "category": "infrastructure",
+      "at": "2026-06-03T07:01:28.120Z",
+      "target_file": "db/migrations/[date]_marketing_schema.sql"
+    },
+    "amendment-41-marketingos-build-order-task-7-services-marketing-coach-js": {
+      "blocker": "generated JS is too short (1 lines); likely token-limit truncation — refusing to commit; retry with a smaller spec or explicit target_file",
+      "category": "other",
+      "at": "2026-06-03T07:02:03.372Z",
+      "target_file": "services/marketing-coach.js"
+    },
+    "amendment-46-builderos-control-plane-first-exact-coding-task-routes-lifeos-council-builder-routes-js-patch-plan-g1": {
+      "blocker": "HTTP_502",
+      "category": "infrastructure",
+      "at": "2026-06-03T07:04:07.682Z",
+      "target_file": "docs/projects/builderos-remediation/amendment-46-builderos-control-plane-lifeos-council-builder-routes-js-patch-plan-g1.md"
+    },
+    "amendment-41-marketingos-build-order-task-11-scripts-verify-marketing-data-wall-mjs": {
+      "blocker": "Pre-commit syntax check failed — commit blocked",
+      "category": "other",
+      "at": "2026-06-03T07:04:55.667Z",
+      "target_file": "scripts/verify-marketing-data-wall.mjs"
+    },
+    "amendment-41-marketingos-build-order-task-9-routes-marketing-routes-js-patch-plan-g2": {
+      "blocker": "HTTP_502",
+      "category": "infrastructure",
+      "at": "2026-06-03T07:07:00.029Z",
+      "target_file": "docs/projects/builderos-remediation/amendment-41-marketingos-marketing-routes-js-patch-plan-g2.md"
+    },
+    "amendment-41-marketingos-build-order-task-10-scripts-verify-marketing-phase1-mjs-patch-plan-g2": {
+      "blocker": "HTTP_502",
+      "category": "infrastructure",
+      "at": "2026-06-03T07:09:05.638Z",
+      "target_file": "docs/projects/builderos-remediation/amendment-41-marketingos-verify-marketing-phase1-mjs-patch-plan-g2.md"
+    },
+    "amendment-41-marketingos-build-order-task-12-public-overlay-marketing-session-html": {
+      "blocker": "HTTP_502",
+      "category": "infrastructure",
+      "at": "2026-06-03T07:11:11.354Z",
+      "target_file": "public/overlay/marketing-session.html"
+    },
+    "infra-health-check-g877": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T10:02:50.596Z",
+      "target_file": null
+    },
+    "infra-health-check-g1493": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T11:43:00.304Z",
+      "target_file": null
+    },
+    "infra-health-check-g1518": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T11:47:38.368Z",
+      "target_file": null
+    },
+    "infra-health-check-g3514": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T18:13:26.021Z",
+      "target_file": null
+    },
+    "infra-health-check-g3587": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T18:25:41.113Z",
+      "target_file": null
+    },
+    "infra-health-check-g3594": {
+      "blocker": "UNKNOWN_FAILURE",
+      "category": "other",
+      "at": "2026-06-03T18:32:17.787Z",
+      "target_file": null
+    },
+    "infra-health-check-g3680-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T18:50:01.460Z",
+      "target_file": null
+    },
+    "infra-health-check-g3685-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T18:51:26.273Z",
+      "target_file": null
+    },
+    "infra-health-check-g3724-churn-diagnose": {
+      "blocker": "HTTP_502",
+      "category": "infrastructure",
+      "at": "2026-06-03T19:02:17.096Z",
+      "target_file": null
+    },
+    "infra-health-check-g3725-churn-diagnose": {
+      "blocker": "UNKNOWN_FAILURE",
+      "category": "other",
+      "at": "2026-06-03T19:07:39.824Z",
+      "target_file": null
+    },
+    "infra-health-check-g3752-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T19:13:35.600Z",
+      "target_file": null
+    },
+    "infra-health-check-g3830-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T19:29:52.052Z",
+      "target_file": null
+    },
+    "infra-health-check-g3844-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T19:33:05.860Z",
+      "target_file": null
+    },
+    "infra-health-check-g3874-churn-diagnose": {
+      "blocker": "UNKNOWN_FAILURE",
+      "category": "other",
+      "at": "2026-06-03T19:44:22.093Z",
+      "target_file": null
+    },
+    "infra-health-check-g3883-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T19:46:34.865Z",
+      "target_file": null
+    },
+    "infra-health-check-g3890-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T19:48:23.278Z",
+      "target_file": null
+    },
+    "infra-health-check-g3896-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T19:50:00.078Z",
+      "target_file": null
+    },
+    "infra-health-check-g3898-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T19:50:47.913Z",
+      "target_file": null
+    },
+    "infra-health-check-g3913-churn-diagnose": {
+      "blocker": "UNKNOWN_FAILURE",
+      "category": "other",
+      "at": "2026-06-03T19:59:18.101Z",
+      "target_file": null
+    },
+    "infra-health-check-g3924-churn-diagnose": {
+      "blocker": "UNKNOWN_FAILURE",
+      "category": "other",
+      "at": "2026-06-03T20:06:42.530Z",
+      "target_file": null
+    },
+    "infra-health-check-g3934-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T20:09:09.166Z",
+      "target_file": null
+    },
+    "infra-health-check-g3937-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T20:11:11.306Z",
+      "target_file": null
+    },
+    "infra-health-check-g3946-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T20:13:36.717Z",
+      "target_file": null
+    },
+    "infra-health-check-g3950-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T20:14:48.902Z",
+      "target_file": null
+    },
+    "infra-health-check-g4238-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T21:13:52.159Z",
+      "target_file": null
+    },
+    "infra-health-check-g4247-churn-diagnose": {
+      "blocker": "UNKNOWN_FAILURE",
+      "category": "other",
+      "at": "2026-06-03T21:20:52.489Z",
+      "target_file": null
+    },
+    "infra-health-check-g4320-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T21:36:10.695Z",
+      "target_file": null
+    },
+    "infra-health-check-g4351-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T21:42:51.254Z",
+      "target_file": null
+    },
+    "infra-health-check-g4388-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T21:50:48.765Z",
+      "target_file": null
+    },
+    "infra-health-check-g4426-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T21:59:01.910Z",
+      "target_file": null
+    },
+    "infra-health-check-g4453-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T22:04:56.957Z",
+      "target_file": null
+    },
+    "infra-health-check-g4483-churn-diagnose": {
+      "blocker": "UNKNOWN_FAILURE",
+      "category": "other",
+      "at": "2026-06-03T22:16:31.880Z",
+      "target_file": null
+    },
+    "infra-health-check-g4492-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T22:20:13.808Z",
+      "target_file": null
+    },
+    "infra-health-check-g4589-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T22:40:33.452Z",
+      "target_file": null
+    },
+    "infra-health-check-g4629-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T22:49:06.068Z",
+      "target_file": null
+    },
+    "infra-health-check-g4687-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-03T23:01:23.204Z",
+      "target_file": null
+    },
+    "infra-health-check-g8412-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-04T16:53:36.439Z",
+      "target_file": null
+    },
+    "infra-health-check-g9709-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-04T21:26:51.494Z",
+      "target_file": null
+    },
+    "infra-health-check-g9832-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-04T21:52:10.113Z",
+      "target_file": null
+    },
+    "infra-health-check-g10105-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-04T23:46:13.436Z",
+      "target_file": null
+    },
+    "infra-health-check-g10286-churn-diagnose": {
+      "blocker": "HTTP_502",
+      "category": "infrastructure",
+      "at": "2026-06-05T06:50:41.026Z",
+      "target_file": null
+    },
+    "infra-health-check-g10332-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-05T09:14:20.567Z",
+      "target_file": null
+    },
+    "infra-health-check-g10417-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-05T13:33:26.483Z",
+      "target_file": null
+    },
+    "infra-health-check-g10427-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-05T14:19:00.927Z",
+      "target_file": null
+    },
+    "infra-health-check-g10594-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-05T22:59:32.502Z",
+      "target_file": null
+    },
+    "infra-health-check-g10626-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-05T23:26:15.939Z",
+      "target_file": null
+    },
+    "infra-health-check-g11069-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-06T15:30:27.942Z",
+      "target_file": null
+    },
+    "infra-health-check-g11074-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-06T15:39:59.769Z",
+      "target_file": null
+    },
+    "infra-health-check-g11435-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-07T04:17:52.996Z",
+      "target_file": null
+    },
+    "infra-health-check-g11592-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-07T11:27:56.009Z",
+      "target_file": null
+    },
+    "infra-health-check-g11867-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-07T20:29:04.862Z",
+      "target_file": null
+    },
+    "infra-health-check-g12479-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-08T02:19:40.006Z",
+      "target_file": null
+    },
+    "infra-health-check-g12564-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-08T11:42:56.371Z",
+      "target_file": null
+    },
+    "infra-health-check-g12576-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-08T12:06:52.970Z",
+      "target_file": null
+    },
+    "infra-health-check-g12588-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-08T13:29:33.006Z",
+      "target_file": null
+    },
+    "infra-health-check-g12617-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-08T15:31:33.437Z",
+      "target_file": null
+    },
+    "syntax-audit-g15214-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-09T05:02:13.208Z",
+      "target_file": null
+    },
+    "infra-health-check-g16496-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-09T11:39:02.205Z",
+      "target_file": null
+    },
+    "infra-health-check-g23493-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-11T00:12:37.928Z",
+      "target_file": null
+    },
+    "infra-health-check-g23513-churn-diagnose": {
+      "blocker": "UNKNOWN_FAILURE",
+      "category": "other",
+      "at": "2026-06-11T00:49:11.696Z",
+      "target_file": null
+    },
+    "infra-health-check-g23703-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-11T01:45:03.466Z",
+      "target_file": null
+    },
+    "syntax-audit-g27366-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-11T21:19:07.928Z",
+      "target_file": null
+    },
+    "syntax-audit-g27367-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-11T21:19:38.445Z",
+      "target_file": null
+    },
+    "syntax-audit-g27456-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-11T21:44:58.617Z",
+      "target_file": null
+    },
+    "syntax-audit-g27584-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-11T22:21:14.866Z",
+      "target_file": null
+    },
+    "syntax-audit-g28396-churn-diagnose": {
+      "blocker": "BUILDER_DISPATCH_FAILED",
+      "category": "other",
+      "at": "2026-06-12T02:12:52.332Z",
+      "target_file": null
+    }
+  },
+  "local_verifications": [],
+  "infrastructure_degraded": false,
+  "current_task": "syntax-audit-g32249-churn-diagnose",
+  "productive_work": true,
+  "productive_work_last_at": "2026-06-03T07:04:31.881Z",
+  "consecutive_infra_failures": 0,
+  "churn_count": 3,
+  "work_classification_last": "blocker_reduction",
+  "infra_backoff_index": 0,
+  "stop_reason": null,
+  "stop_law": "ONLY: operator_stop | capacity_exhausted | safety_boundary | repo_corruption. Active is not enough — productive work is required. HTTP_502 → redirect to local work (not idle). See prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md"
+}

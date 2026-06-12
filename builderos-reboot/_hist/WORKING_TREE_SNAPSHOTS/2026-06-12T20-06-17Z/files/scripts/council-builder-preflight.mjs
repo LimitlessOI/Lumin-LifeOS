@@ -1,0 +1,400 @@
+/**
+ * Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build
+ * would fail (auth, GITHUB_TOKEN, DB, etc.). Run before any Conductor work on product paths.
+ * That proves e.g. COMMAND_CENTER_KEY / PUBLIC_BASE_URL exist in the service vault without asking Adam to re-screenshot.
+ *
+ * Exit: 0 = ready for /build (with caveats printed), 1 = not ready, 2 = local operator error (no key when required)
+ *
+ * Appends a JSON line to `data/builder-preflight-log.jsonl` (gitignored) on every exit — system-owned readiness note.
+ *
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ *
+ * If repo-root `.env` exists, it is loaded first (same pattern as `server.js` / other scripts) so
+ * `PUBLIC_BASE_URL`, `BUILDER_BASE_URL`, and `x-command-key` source vars work without manual `export`.
+ */
+
+import 'dotenv/config';
+// Also load .env.local so Railway URL + key are available without manual export.
+// .env.local values override .env (it holds Railway-matching vars).
+import dotenv from 'dotenv';
+dotenv.config({ path: new URL('../.env.local', import.meta.url).pathname, override: true });
+
+import { mkdir, appendFile } from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import {
+  detectRuntimeProofMismatch,
+  detectProofStoreMismatch,
+  fetchRailwayProofStore,
+  fetchLatestReceiptCommitSha,
+  readLocalGitShas,
+} from '../services/oil-self-repair-detector.js';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const PREFLIGHT_LOG = path.join(ROOT, 'data', 'builder-preflight-log.jsonl');
+
+const base = (
+  process.env.BUILDER_BASE_URL ||
+  process.env.PUBLIC_BASE_URL ||
+  process.env.LUMIN_SMOKE_BASE_URL ||
+  'http://127.0.0.1:3000'
+)
+  .replace(/\/$/, '');
+
+const key =
+  process.env.COMMAND_CENTER_KEY ||
+  process.env.COMMAND_KEY ||
+  process.env.LIFEOS_KEY ||
+  process.env.API_KEY ||
+  '';
+
+const headers = {
+  'content-type': 'application/json',
+  ...(key ? { 'x-command-key': key } : {}),
+};
+
+function printBlock(title, body) {
+  console.log(`\n${title}`);
+  console.log(body);
+}
+
+async function fetchJson(url) {
+  const r = await fetch(url, { headers });
+  const text = await r.text();
+  let json;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    json = { _parseError: true, text: text.slice(0, 400) };
+  }
+  return { r, json };
+}
+
+async function logPreflight({ exitCode, reason, topology }) {
+  const host = (() => {
+    try {
+      return new URL(base).host;
+    } catch {
+      return 'invalid_base';
+    }
+  })();
+  const line =
+    JSON.stringify({
+      ts: new Date().toISOString(),
+      exit_code: exitCode,
+      reason,
+      host,
+      key_in_shell: Boolean(key),
+      topology: topology || {
+        github: 'committed_source_truth',
+        railway: 'deployed_runtime_env_truth',
+        neon: 'live_data_truth',
+        local: 'workbench_mirror',
+      },
+    }) + '\n';
+  try {
+    await mkdir(path.dirname(PREFLIGHT_LOG), { recursive: true });
+    await appendFile(PREFLIGHT_LOG, line, 'utf8');
+  } catch (err) {
+    console.warn('[builder-preflight] machine log append failed:', err.message);
+  }
+}
+
+async function finish(exitCode, reason, topology) {
+  await logPreflight({ exitCode, reason, topology });
+  process.exit(exitCode);
+}
+
+// Emit a TSOS machine-channel line (§2.14 / docs/TSOS_SYSTEM_LANGUAGE.md).
+// §2.11b plain-language block follows for the human (Adam) read.
+function tsosMachine(epistemic, state, verb, fact, next) {
+  console.log(`[TSOS-MACHINE] ${epistemic}: STATE=${state} VERB=${verb} | ${fact} | NEXT=${next}`);
+}
+
+async function main() {
+  const topology = {
+    github: 'committed_source_truth',
+    railway: 'deployed_runtime_env_truth',
+    neon: 'live_data_truth',
+    local: 'workbench_mirror',
+  };
+
+  // Machine-channel header (§2.14) — first output line, receipt-parsable
+  tsosMachine('KNOW', 'PREFLIGHT_FAIL', 'PROBE', `base=${base} key_in_shell=${Boolean(key)}`, 'PROBE /ready then /domains');
+
+  printBlock(
+    '══ Council builder preflight ══',
+    `Base URL: ${base}\nKey in env: ${key ? 'yes (value hidden)' : 'no'}\n\n` +
+    `System topology:\n` +
+    `  • GitHub: committed source truth\n` +
+    `  • Railway: deployed runtime/env truth\n` +
+    `  • Neon: live data truth\n` +
+    `  • Local shell/repo: workbench mirror`,
+  );
+
+  const readyUrl = `${base}/api/v1/lifeos/builder/ready`;
+  let r;
+  let json;
+
+  try {
+    const out = await fetchJson(readyUrl);
+    r = out.r;
+    json = out.json;
+  } catch (e) {
+    if (e?.cause?.code === 'ECONNREFUSED' || e?.code === 'ECONNREFUSED') {
+      tsosMachine('KNOW', 'BLOCKED', 'PROBE', `ECONNREFUSED ${base}`, 'GAP_FILL platform or start server or set PUBLIC_BASE_URL');
+      printBlock(
+        '❌ CONNECTION REFUSED',
+        [
+          'Nothing is listening at ' + base,
+          '',
+          'Fix ONE of:',
+          '• Start the app locally: npm start',
+          '• Point to Railway: export PUBLIC_BASE_URL=https://<your-service>.up.railway.app',
+        ].join('\n'),
+      );
+      await finish(1, 'econnrefused_ready', topology);
+    }
+    throw e;
+  }
+
+  const readyMissing = r.status === 404;
+  if (readyMissing) {
+    console.warn('\n⚠️ GET /ready not found (404) — server build predates this route. Skipping server capability checks; use GET /domains + POST /build only after upgrade.');
+  } else if (r.status === 401) {
+    tsosMachine('KNOW', 'AUTH_FAIL', 'PROBE', 'x-command-key rejected on /ready', 'HALT_REQUEST operator supplies matching COMMAND_CENTER_KEY');
+    printBlock(
+      '❌ UNAUTHORIZED',
+      [
+        'The server requires a command key but this request was rejected.',
+        '',
+        '1. In Railway, see which of API_KEY, LIFEOS_KEY, COMMAND_CENTER_KEY is set.',
+        '2. In this shell, export the SAME value as: COMMAND_CENTER_KEY, LIFEOS_KEY, or API_KEY.',
+        '3. Requests use header x-command-key (see requireKey aliases).',
+        '',
+        'If the server has NO auth keys, requireKey is open — 401 means wrong URL or wrong key value.',
+      ].join('\n'),
+    );
+    await finish(2, 'unauthorized_ready', topology);
+  } else if (!r.ok) {
+    printBlock('❌ /ready request failed', `HTTP ${r.status} ${json._parseError ? json.text : JSON.stringify(json, null, 2)}`);
+    await finish(1, 'ready_http_error', topology);
+  }
+
+  if (!readyMissing && json?.builder) {
+    const b = json.builder;
+    const s = json.server;
+    printBlock(
+      'Builder readiness (server truth)',
+      JSON.stringify({ builder: b, server: s, codegen: json.codegen ?? null, next_steps: json.next_steps }, null, 2),
+    );
+    const pol = json?.codegen?.policy_revision;
+    if (pol) {
+      tsosMachine('KNOW', 'READY_OK', 'PROBE', `codegen.policy_revision=${pol}`, 'Compare to git BUILDER_CODEGEN_POLICY_REVISION — deploy parity');
+    }
+
+    if (!b.commitToGitHub) {
+      printBlock(
+        '❌ BLOCKER for POST /build',
+        'commitToGitHub is not available on the server. Wire deployment-service into createLifeOSCouncilBuilderRoutes.\n' +
+        'You cannot use [system-build] until the server can commit. Hand product edits require GAP-FILL: and a platform fix plan.',
+      );
+      await finish(1, 'no_commitToGitHub', topology);
+    }
+
+    if (b.github_token === false) {
+      printBlock(
+        '⚠️ RUNTIME github_token: false — diagnose before concluding absent from vault',
+        [
+          'Per ENV_DIAGNOSIS_PROTOCOL: "name in vault" and "runtime reports false" are DIFFERENT facts.',
+          '',
+          'Step 1 — is the name in the Railway vault?',
+          ' → If Railway env name-list below shows ✓ GITHUB_TOKEN: the name IS set. This is not a vault absence.',
+          ' → DO NOT tell Adam to re-add or re-set GITHUB_TOKEN if it shows ✓.',
+          '',
+          'Step 2 — if name IS in vault but runtime is false, diagnose:',
+          '  a) Deploy drift: the running instance predates the last variable update → trigger redeploy',
+          '  b) Env scope: the variable is set on a different Railway service than this one',
+          '  c) Wrong PUBLIC_BASE_URL: you are hitting a different deploy than the one with the token',
+          '  d) Verifier skip: the /ready route has a bug that reports false even when token is present',
+          '',
+          'Step 3 — only if name is ✗ ABSENT from vault AND all above are ruled out:',
+          '  → Then set GITHUB_TOKEN in Railway for this service (generate at github.com/settings/tokens)',
+          '',
+          'GAP-FILL wording when manually writing files: "GAP-FILL: /ready reports github_token:false;',
+          'vault presence: [✓ SET / ✗ ABSENT per name-list]; diagnose: [deploy drift / env scope / unknown]"',
+        ].join('\n'),
+      );
+      // Non-fatal: report the diagnosis path but do not exit(1) if vault may have the key.
+      // Let the build attempt proceed — it will fail with a clear GitHub error if truly absent.
+      console.warn('\n[preflight] Continuing — /build will surface the real error if GITHUB_TOKEN is truly missing.');
+    }
+
+    if (!b.callCouncilMember) {
+      printBlock('❌ BLOCKER', 'callCouncilMember not wired — startup must pass it into the builder factory.');
+      await finish(1, 'no_callCouncilMember', topology);
+    }
+  }
+
+  const domainsUrl = `${base}/api/v1/lifeos/builder/domains`;
+  let d;
+  try {
+    d = await fetchJson(domainsUrl);
+  } catch (e) {
+    if (e?.cause?.code === 'ECONNREFUSED' || e?.code === 'ECONNREFUSED') {
+      printBlock('❌ CONNECTION REFUSED (domains)', 'See base URL and server listen address above.');
+      await finish(1, 'econnrefused_domains', topology);
+    }
+    throw e;
+  }
+
+  if (d.r.status === 401) {
+    printBlock('❌ UNAUTHORIZED on /domains', 'Same as /ready: set COMMAND_CENTER_KEY (or matching key) in this shell.');
+    await finish(2, 'unauthorized_domains', topology);
+  }
+
+  if (!d.r.ok || !d.json?.ok) {
+    printBlock('❌ GET /domains failed', `HTTP ${d.r.status} ${JSON.stringify(d.json)}`);
+    await finish(1, 'domains_http_error', topology);
+  }
+
+  const n = d.json?.domains?.length ?? 0;
+
+  /**
+   * Builder-critical names: presence checked via deploy GET /api/v1/railway/env (masked values only).
+   * Railway vault is still authoritative; use Railway UI or redeploy.
+   */
+  const RAILWAY_PROBE_NAMES = [
+    'PUBLIC_BASE_URL',
+    'COMMAND_CENTER_KEY',
+    'LIFEOS_KEY',
+    'API_KEY',
+    'GITHUB_TOKEN',
+    'RAILWAY_TOKEN',
+    'DATABASE_URL',
+    'GITHUB_REPO',
+  ];
+
+  if (key) {
+    const envUrl = `${base}/api/v1/railway/env`;
+    try {
+      const envOut = await fetchJson(envUrl);
+      if (envOut.r.status === 404) {
+        printBlock(
+          'ℹ️ Railway env name-list (skipped)',
+          'GET /api/v1/railway/env returned 404 — this deploy may predate the route.',
+        );
+      } else if (!envOut.r.ok || !envOut.json?.ok) {
+        printBlock(
+          'ℹ️ Railway env name-list (skipped)',
+          `GET /api/v1/railway/env failed HTTP ${envOut.r.status} — ${JSON.stringify(envOut.json).slice(0, 300)}`,
+        );
+      } else {
+        const names = Object.keys(envOut.json.vars || {});
+        const set = new Set(names);
+        const authNamePresent = ['COMMAND_CENTER_KEY', 'LIFEOS_KEY', 'API_KEY'].some(k => set.has(k));
+        const lines = RAILWAY_PROBE_NAMES.map(nm => {
+          const ok = set.has(nm);
+          return `  ${ok ? '✓' : '✗'} ${nm}${nm === 'COMMAND_CENTER_KEY' && !ok && authNamePresent ? ' (alias: LIFEOS_KEY or API_KEY present)' : ''}`;
+        });
+        printBlock(
+          'Railway variable names (from deploy — values never shown)',
+          [
+            'Source: GET /api/v1/railway/env (server uses RAILWAY_TOKEN + project/service IDs).',
+            'This is name-level proof for agents: do not tell Adam a var is "missing from Railway" if it appears here.',
+            '',
+            ...lines,
+            '',
+            `Total keys reported: ${envOut.json.count ?? names.length}`,
+          ].join('\n'),
+        );
+      }
+    } catch (e) {
+      printBlock('ℹ️ Railway env name-list (skipped)', e?.message || String(e));
+    }
+  } else {
+    printBlock(
+      'ℹ️ Railway env name-list (skipped)',
+      'No command key in this shell — set COMMAND_CENTER_KEY (or LIFEOS_KEY / API_KEY) to probe GET /api/v1/railway/env on the deploy.\nRailway dashboard remains authoritative; this probe is optional receipts.',
+    );
+  }
+
+  tsosMachine('KNOW', 'PREFLIGHT_OK', 'PROBE', `builder domains+ready OK domains=${n}`, 'BUILD');
+
+  // Self-repair audit (non-blocking unless P0 + BUILDER_PREFLIGHT=strict)
+  if (key && !readyMissing) {
+    try {
+      const git = readLocalGitShas(ROOT);
+      const deploySha = json?.codegen?.deploy_commit_sha || null;
+      const [storeRemote, receipt] = await Promise.all([
+        fetchRailwayProofStore(base, key),
+        fetchLatestReceiptCommitSha(base, key),
+      ]);
+      const runtimeProof = detectRuntimeProofMismatch({
+        localHead: git.localHead,
+        githubMainSha: git.githubMainSha,
+        railwayDeploySha: deploySha,
+        receiptCommitSha: receipt.commitSha,
+      });
+      const proofStore = detectProofStoreMismatch(process.env.DATABASE_URL, storeRemote.store);
+      const warnLines = [];
+      if (!runtimeProof.verified) {
+        for (const m of runtimeProof.mismatches) {
+          warnLines.push(`  [${m.severity}] ${m.rule}: ${m.detail}`);
+        }
+      }
+      if (proofStore.local_proof_only) {
+        warnLines.push(`  [P1] LOCAL_PROOF_ONLY: ${proofStore.detail}`);
+      }
+      if (warnLines.length) {
+        printBlock(
+          '⚠️ Self-repair audit (non-blocking unless P0 + strict)',
+          warnLines.join('\n') + '\n\nRun: node scripts/oil-self-repair-audit.mjs',
+        );
+        if (runtimeProof.blocks_build && /^1|true|strict$/i.test(String(process.env.BUILDER_PREFLIGHT || ''))) {
+          await finish(1, 'self_repair_p0', topology);
+        }
+      }
+    } catch (e) {
+      printBlock('ℹ️ Self-repair audit (skipped)', e?.message || String(e));
+    }
+  }
+
+  printBlock(
+    '✅ OK',
+    `GET /domains: ${n} domain prompt file(s) visible.\n` +
+    'Next: POST /api/v1/lifeos/builder/build with a task + target_file (or placement metadata) for [system-build].',
+  );
+
+  // BP priority guardrails — mechanical enforcement (Adam 2026-06-11)
+  try {
+    const { spawnSync } = await import('node:child_process');
+    const guard = spawnSync(process.execPath, [path.join(ROOT, 'scripts/verify-bp-priority-guardrails.mjs')], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    });
+    if (guard.status !== 0) {
+      printBlock(
+        '❌ BP priority guardrails',
+        (guard.stdout || '') + (guard.stderr || '') + '\nRun: npm run lifeos:bp-priority:verify',
+      );
+      await finish(1, 'bp_priority_guardrails_fail', topology);
+    }
+    printBlock('✅ BP priority guardrails', 'lifeos:bp-priority:verify PASS');
+  } catch (e) {
+    printBlock('❌ BP priority guardrails (uncaught)', e?.message || String(e));
+    await finish(1, 'bp_priority_guardrails_error', topology);
+  }
+
+  await finish(0, 'ok', topology);
+}
+
+main().catch(async e => {
+  console.error(e);
+  await finish(1, `uncaught:${e?.message || e}`, {
+    github: 'committed_source_truth',
+    railway: 'deployed_runtime_env_truth',
+    neon: 'live_data_truth',
+    local: 'workbench_mirror',
+  });
+});

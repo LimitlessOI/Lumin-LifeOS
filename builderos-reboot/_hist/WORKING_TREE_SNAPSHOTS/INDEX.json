@@ -1,0 +1,14 @@
+{
+  "schema": "hist_working_tree_snapshot_index_v1",
+  "owner": "Hist",
+  "updated_at": "2026-06-12",
+  "snapshots": [
+    {
+      "id": "2026-06-12T20-06-17Z",
+      "path": "builderos-reboot/_hist/WORKING_TREE_SNAPSHOTS/2026-06-12T20-06-17Z",
+      "base_commit_sha": "f2555dfeee6a775063aea39db65f6facfd3868f9",
+      "file_count": 99,
+      "reason": "Uncommitted autopilot/overnight churn + amendment bulk edits parked for Hist review"
+    }
+  ]
+}

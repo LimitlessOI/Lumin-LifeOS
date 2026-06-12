@@ -1,0 +1,407 @@
+{
+  "schema": "hist_working_tree_snapshot_v1",
+  "archived_at": "2026-06-12T20:06:18.018Z",
+  "base_commit_sha": "f2555dfeee6a775063aea39db65f6facfd3868f9",
+  "reason": "Operator request: park uncommitted working-tree churn for Hist review; restore clean tree",
+  "operator": "Adam",
+  "file_count": 99,
+  "entries": [
+    {
+      "path": "CLAUDE.md",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/AUTOPILOT_RECOVERY_RECEIPT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/BP_PRIORITY.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/CURRENT_STATE.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/AUTOPILOT_RECOVERY_PROOF.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/FAILURE_PATTERN_PACKET.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/FOUNDER_ALERT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/LOOP_ESCALATION_RESULT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/OBJECTIVE_VERDICT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/OBSERVATION_LOG.jsonl",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/RECOVERY_PROTOCOL_RESULT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/RECOVERY_STATE.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_RUN_RESULT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/SENTRY_CHECK_RESULT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/TIER1_CHECK_RESULT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/BLUEPRINT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/OBJECTIVE_VERDICT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSION_PACK_INDEX.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/MISSION_QUEUE.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/OVERNIGHT_SCOREBOARD.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/QUEUE_DRY_RUN_RECEIPT.json",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/scripts/autopilot-run-queue.mjs",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/scripts/autopilot-runner.mjs",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/scripts/generate-mission-pack-index.mjs",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/scripts/mission-recovery-owner.mjs",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/scripts/run-overnight-bp-autonomy.mjs",
+      "status": " M"
+    },
+    {
+      "path": "data/bp-priority-guardrails-last-run.json",
+      "status": " M"
+    },
+    {
+      "path": "data/builder-failure-lessons.jsonl",
+      "status": " M"
+    },
+    {
+      "path": "docs/architecture/BUILDEROS_A_TO_Z_BLUEPRINT.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/products/LIFEOS.md",
+      "status": " D",
+      "note": "deleted_in_working_tree; archived copy from HEAD"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_06_GAME_PUBLISHER.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_07_VIDEO_PIPELINE.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_08_OUTREACH_CRM.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_09_LIFE_COACHING.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_14_WHITE_LABEL.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_16_WORD_KEEPER.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_31_TEACHER_OS.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_32_MUSIC_TALENT_STUDIO.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_34_KIDS_OS.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_47_MISSION_RUNTIME.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md",
+      "status": " M"
+    },
+    {
+      "path": "docs/projects/INDEX.md",
+      "status": " M"
+    },
+    {
+      "path": "products/receipts/ACTION_INBOX_V1_ACCEPTANCE.json",
+      "status": " M"
+    },
+    {
+      "path": "prompts/00-HIST-LEGACY-BOUNDARY.md",
+      "status": " M"
+    },
+    {
+      "path": "prompts/00-LIFEOS-AGENT-CONTRACT.md",
+      "status": " M"
+    },
+    {
+      "path": "prompts/00-SYSTEM-AUTHORITY-LAYERS.md",
+      "status": " M"
+    },
+    {
+      "path": "scripts/council-builder-preflight.mjs",
+      "status": " M"
+    },
+    {
+      "path": "scripts/governed-overnight-autonomy.mjs",
+      "status": " M"
+    },
+    {
+      "path": "scripts/governed-overnight-backlog-run.mjs",
+      "status": " M"
+    },
+    {
+      "path": "services/factory-autopilot-scheduler.js",
+      "status": " M"
+    },
+    {
+      "path": "builderos-reboot/CURRENT_SLICE.json",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/CUR_OVERNIGHT_MANDATE.md",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/LEGACY_PLUMBING_REGISTRY.json",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/AUTONOMOUS-RECOVERY-0001/OBJECTIVE_VERDICT.json",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/PRODUCTION_RECOVERY_PROOF.json",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/LIFEOS_OBJECTIVE_01_FOUNDER_HANDOFF.md",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/OBJECTIVE_1_RUN_LOG.jsonl",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/SLICE_001.json",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/SLICE_001_PROOF.json",
+      "status": "untracked"
+    },
+    {
+      "path": "builderos-reboot/OVERNIGHT_BP_AUTONOMY_RECEIPT.json",
+      "status": "untracked"
+    },
+    {
+      "path": "data/builder-factory-health.json",
+      "status": "untracked"
+    },
+    {
+      "path": "data/governed-autonomy-backlog-state.json",
+      "status": "untracked"
+    },
+    {
+      "path": "data/governed-autonomy-backlog-state.meta.json",
+      "status": "untracked"
+    },
+    {
+      "path": "data/governed-autonomy-overnight-log.jsonl",
+      "status": "untracked"
+    },
+    {
+      "path": "data/governed-autonomy-status-summary.json",
+      "status": "untracked"
+    },
+    {
+      "path": "prompts/00-OPERATOR-MANDATE-COMPLETION.md",
+      "status": "untracked"
+    },
+    {
+      "path": "scripts/run-commitments-v1-slice-proof.mjs",
+      "status": "untracked"
+    }
+  ]
+}

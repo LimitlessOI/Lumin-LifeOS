@@ -1,0 +1,43 @@
+{
+  "ts": "2026-06-12T20:06:11.735Z",
+  "generation": 32248,
+  "tasks_done": 96026,
+  "successes": 2,
+  "failures": 74,
+  "founder_value_deliveries": 2,
+  "infrastructure_degraded": false,
+  "consecutive_502s": 0,
+  "infra_backoff_index": 0,
+  "consecutive_infra_failures": 0,
+  "churn_count": 3,
+  "productive_work": true,
+  "work_classification_last": "blocker_reduction",
+  "factory_score": 7,
+  "factory_product_only": true,
+  "factory_24h": {
+    "layer1": {
+      "name": "factory_survival",
+      "http_502_failure_pct": 0,
+      "syntax_failure_pct": 0,
+      "combined_survival_blocker_pct": 0,
+      "healthy": true
+    },
+    "layer2": {
+      "name": "factory_utilization",
+      "proof_doc_start_pct": 0,
+      "product_build_start_pct": 0,
+      "enhancement_memo_starts": 0,
+      "healthy": false
+    },
+    "layer3": {
+      "name": "founder_value",
+      "founder_value_deliveries": 0,
+      "founder_value_per_1000_starts": 0,
+      "product_build_success_pct": 0,
+      "healthy": false
+    }
+  },
+  "law": "ACTIVE IS NOT ENOUGH. PRODUCTIVE WORK IS REQUIRED.",
+  "initiative": "Builder Reliability Initiative",
+  "directive": "prompts/00-TSOS-CONTINUOUS-AUTONOMOUS-OPERATIONS.md"
+}

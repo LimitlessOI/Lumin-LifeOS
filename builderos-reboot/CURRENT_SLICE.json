@@ -1,0 +1,26 @@
+{
+  "_authority": {
+    "domain": "Hist",
+    "owner_department": "Historian",
+    "status": "HIST_OWNED",
+    "hist_id": "HIST-AUTO-003",
+    "role": "Overnight slice pointer — historian archive only",
+    "do_not_use_for": "LifeOS product work orchestration",
+    "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json",
+    "mandatory_read": "prompts/00-HIST-LEGACY-BOUNDARY.md"
+  },
+  "schema": "current_slice_pointer_v1",
+  "updated_at": "2026-06-11T14:00:00.000Z",
+  "objective": "Prove the system completes a product task — not busywork",
+  "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+  "slice_id": "SLICE-001",
+  "slice_spec": "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/SLICE_001.json",
+  "acceptance_command": "npm run lifeos:commitments:slice-proof",
+  "pass_means": "exit 0 + SLICE_001_PROOF.json pass:true",
+  "fail_means": "exit 1 + receipt with failing step — fix code, re-run, no status report until pass",
+  "previous_objective_complete": {
+    "mission_id": "AUTONOMOUS-RECOVERY-0002",
+    "proof": "npm run factory:production:recovery-proof",
+    "verdict": "OBJECTIVE_COMPLETE"
+  }
+}

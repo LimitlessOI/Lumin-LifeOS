@@ -1,0 +1,59 @@
+{
+  "schema": "builder_factory_health_v1",
+  "generated_at": "2026-06-12T20:06:11.734Z",
+  "window": {
+    "event_count": 835,
+    "task_starts": 0
+  },
+  "throughput": {
+    "task_starts": 0,
+    "task_successes": 0,
+    "task_failures": 0,
+    "overall_success_pct": 0,
+    "retries": 0,
+    "skipped_retries": 0
+  },
+  "layers": {
+    "layer1": {
+      "name": "factory_survival",
+      "http_502_failure_pct": 0,
+      "syntax_failure_pct": 0,
+      "combined_survival_blocker_pct": 0,
+      "healthy": true
+    },
+    "layer2": {
+      "name": "factory_utilization",
+      "proof_doc_start_pct": 0,
+      "product_build_start_pct": 0,
+      "enhancement_memo_starts": 0,
+      "healthy": false
+    },
+    "layer3": {
+      "name": "founder_value",
+      "founder_value_deliveries": 0,
+      "founder_value_per_1000_starts": 0,
+      "product_build_success_pct": 0,
+      "healthy": false
+    }
+  },
+  "factory_score": 7,
+  "kpi_targets": {
+    "proof_doc_start_pct_max": 10,
+    "http_502_failure_pct_max": 5,
+    "syntax_failure_pct_max": 5,
+    "product_build_start_pct_min": 50,
+    "product_build_success_pct_min": 40,
+    "founder_value_per_1000_starts_min": 5
+  },
+  "top_failed_targets": [],
+  "top_blockers": [],
+  "recommendations": [
+    {
+      "priority": "P1",
+      "layer": 2,
+      "action": "Prioritize blueprint_build rows from P1 missions (MarketingOS Am 41)"
+    }
+  ],
+  "initiative": "Builder Reliability Initiative",
+  "runner_generation": 32248
+}

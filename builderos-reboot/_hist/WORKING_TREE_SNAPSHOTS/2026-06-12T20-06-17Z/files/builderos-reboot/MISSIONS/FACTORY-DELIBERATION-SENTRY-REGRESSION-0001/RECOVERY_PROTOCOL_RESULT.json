@@ -1,0 +1,231 @@
+{
+  "schema": "recovery_protocol_result_v2",
+  "generated_at": "2026-06-11T10:21:19.588Z",
+  "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "recovery_protocol_active": true,
+  "system_terminal_stop": false,
+  "resolution": "OBJECTIVE_COMPLETE",
+  "objective_score": "PASS",
+  "bp_audit_pass": true,
+  "blueprint_executed": true,
+  "objective_framing": "Recovery protocol completed objective — acceptance passed without founder rescue",
+  "steps": [
+    {
+      "step": "failure_packet",
+      "note": "FAILURE_PATTERN_PACKET.json from loop escalation"
+    },
+    {
+      "step": "council_escalation",
+      "strategy": "council_multi_hat",
+      "attempted": true,
+      "route": "council_local_dry",
+      "http": {
+        "queued": false,
+        "reason": "LOOP_ESCALATION_AUTO_COUNCIL not set or missing API env"
+      },
+      "local_presets_ok": true,
+      "note": "Set RECOVERY_AUTO_COUNCIL=1 for live Council POST"
+    },
+    {
+      "step": "install_mechanical_bp_audit",
+      "strategy": "mechanical_template_v27"
+    },
+    {
+      "step": "run_bp_audit",
+      "verdict": "BP_AUDIT_PASS",
+      "exit_code": 0
+    },
+    {
+      "step": "factory_local_runner",
+      "strategy": "factory_local_runner",
+      "ok": true,
+      "exit_code": 0,
+      "installed": {
+        "harnessDest": "/Users/adamhopkins/Projects/Lumin-LifeOS/scripts/deliberation-sentry-regression-harness.mjs",
+        "schemaPath": "/Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_RUN_RECEIPT.schema.json",
+        "commands_added": 5
+      },
+      "receipt": {
+        "schema": "regression_run_result_v1",
+        "generated_at": "2026-06-11T10:21:18.230Z",
+        "mission_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+        "layer": "local",
+        "pass": true,
+        "probes": [
+          {
+            "probe_id": "B_NO_ROSTER_GATE",
+            "pass": true,
+            "layer": "local_mock",
+            "detail": "ok",
+            "ms": 1
+          },
+          {
+            "probe_id": "B_LB_METADATA",
+            "pass": true,
+            "layer": "local_mock",
+            "detail": "ok",
+            "ms": 1
+          },
+          {
+            "probe_id": "N5",
+            "pass": true,
+            "layer": "local_mock",
+            "detail": "ok",
+            "ms": 1
+          },
+          {
+            "probe_id": "N1",
+            "pass": true,
+            "layer": "local_mock",
+            "detail": "ok",
+            "ms": 0
+          },
+          {
+            "probe_id": "N2",
+            "pass": true,
+            "layer": "local_mock",
+            "detail": "ok",
+            "ms": 0
+          },
+          {
+            "probe_id": "N3",
+            "pass": true,
+            "layer": "local_mock",
+            "detail": "ok",
+            "ms": 0
+          },
+          {
+            "probe_id": "N6b",
+            "pass": true,
+            "layer": "local_mock",
+            "detail": "ok",
+            "ms": 0
+          },
+          {
+            "probe_id": "N11",
+            "pass": true,
+            "layer": "local_mock",
+            "detail": "ok",
+            "ms": 0
+          }
+        ],
+        "generated_by": "mechanical_template_v27_recovery"
+      },
+      "stdout": "_mock\",\n      \"detail\": \"ok\",\n      \"ms\": 0\n    },\n    {\n      \"probe_id\": \"N2\",\n      \"pass\": true,\n      \"layer\": \"local_mock\",\n      \"detail\": \"ok\",\n      \"ms\": 0\n    },\n    {\n      \"probe_id\": \"N3\",\n      \"pass\": true,\n      \"layer\": \"local_mock\",\n      \"detail\": \"ok\",\n      \"ms\": 0\n    },\n    {\n      \"probe_id\": \"N6b\",\n      \"pass\": true,\n      \"layer\": \"local_mock\",\n      \"detail\": \"ok\",\n      \"ms\": 0\n    },\n    {\n      \"probe_id\": \"N11\",\n      \"pass\": true,\n      \"layer\": \"local_mock\",\n      \"detail\": \"ok\",\n      \"ms\": 0\n    }\n  ],\n  \"generated_by\": \"mechanical_template_v27_recovery\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "step": "sentry_verify",
+      "strategy": "mission_acceptance",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "eration:regression -- --layer=local\nPASS AT-PROBE-B_LB_METADATA shell_command node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=B_LB_METADATA\nPASS AT-PROBE-N5 shell_command node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N5\nPASS AT-PROBE-N2 shell_command node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N2\nPASS AT-PROBE-N3 shell_command node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N3\nPASS AT-PROBE-N6b shell_command node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N6b\nPASS AT-PROBE-N11 shell_command node scripts/deliberation-sentry-regression-harness.mjs --layer=local --probe=N11\n\nFACTORY-DELIBERATION-SENTRY-REGRESSION-0001: 14 passed, 0 failed\n",
+      "stderr": ""
+    }
+  ],
+  "strategies_attempted": [
+    "council_multi_hat",
+    "factory_local_runner"
+  ],
+  "next_route": "DELIVER",
+  "bp_audit": {
+    "ok": true,
+    "exit_code": 0,
+    "runner": "/Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/CONTENT/run-sentry-bp-audit.mjs",
+    "receipt": {
+      "generated_at": "2026-06-11T10:21:18.164Z",
+      "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+      "audit_type": "SENTRY_BP_AUDIT",
+      "verdict": "BP_AUDIT_PASS",
+      "checks": [
+        {
+          "id": "BP-FOUNDER_PACKET.json",
+          "name": "FOUNDER_PACKET.json exists",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "id": "BP-BLUEPRINT.json",
+          "name": "BLUEPRINT.json exists",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "id": "BP-ACCEPTANCE_TESTS.json",
+          "name": "ACCEPTANCE_TESTS.json exists",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "id": "BP-REGRESSION_PROBE_CATALOG.json",
+          "name": "REGRESSION_PROBE_CATALOG.json exists",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "id": "P0-FREEZE",
+          "name": "Blueprint freeze check",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "id": "P0-1",
+          "name": "Every catalog probe in acceptance tests",
+          "pass": true,
+          "detail": "all covered"
+        },
+        {
+          "id": "P0-2",
+          "name": "No validator edits in blueprint",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "id": "P0-3",
+          "name": "Blueprint steps have required fields",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "id": "P0-4",
+          "name": "Exact commands include regression npm script",
+          "pass": true,
+          "detail": "npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera"
+        },
+        {
+          "id": "P0-5",
+          "name": "Cleanup verify-railway referenced before confirm",
+          "pass": true,
+          "detail": "verify-railway in blueprint/commands"
+        },
+        {
+          "id": "P0-6",
+          "name": "No founder decision steps",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "id": "P1-SYNTAX",
+          "name": "Audit runner syntax valid",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "blockers": [],
+      "generated_by": "mechanical_template_v27_recovery"
+    },
+    "stdout": " fields\",\n      \"pass\": true,\n      \"detail\": \"ok\"\n    },\n    {\n      \"id\": \"P0-4\",\n      \"name\": \"Exact commands include regression npm script\",\n      \"pass\": true,\n      \"detail\": \"npm run lifeos:deliberation:regression; npm run lifeos:deliberation:regression -- --layer=local; npm run lifeos:delibera\"\n    },\n    {\n      \"id\": \"P0-5\",\n      \"name\": \"Cleanup verify-railway referenced before confirm\",\n      \"pass\": true,\n      \"detail\": \"verify-railway in blueprint/commands\"\n    },\n    {\n      \"id\": \"P0-6\",\n      \"name\": \"No founder decision steps\",\n      \"pass\": true,\n      \"detail\": \"ok\"\n    },\n    {\n      \"id\": \"P1-SYNTAX\",\n      \"name\": \"Audit runner syntax valid\",\n      \"pass\": true,\n      \"detail\": \"\"\n    }\n  ],\n  \"blockers\": [],\n  \"generated_by\": \"mechanical_template_v27_recovery\"\n}\n",
+    "stderr": ""
+  },
+  "council": {
+    "attempted": true,
+    "route": "council_local_dry",
+    "http": {
+      "queued": false,
+      "reason": "LOOP_ESCALATION_AUTO_COUNCIL not set or missing API env"
+    },
+    "local_presets_ok": true,
+    "note": "Set RECOVERY_AUTO_COUNCIL=1 for live Council POST"
+  },
+  "loop_escalation_level": "hard_stop"
+}

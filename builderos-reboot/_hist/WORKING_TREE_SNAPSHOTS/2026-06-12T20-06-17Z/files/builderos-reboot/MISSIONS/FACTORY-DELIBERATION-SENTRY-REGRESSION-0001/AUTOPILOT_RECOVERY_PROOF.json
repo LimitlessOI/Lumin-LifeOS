@@ -1,0 +1,32 @@
+{
+  "schema": "autopilot_recovery_proof_v2",
+  "generated_at": "2026-06-11T10:21:21.921Z",
+  "started_at": "2026-06-11T10:21:13.484Z",
+  "owner": "AUTONOMOUS-RECOVERY-0002",
+  "objective_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+  "invoke": "npm run factory:autopilot ONLY (no run-mission-observe manual)",
+  "autopilot_exit": 0,
+  "recovery_candidates_before": 1,
+  "mission_status_after": "complete",
+  "mission_outcome_after": "PASS",
+  "objective_complete": true,
+  "complete_via": "mission_acceptance",
+  "receipt": {
+    "schema": "autopilot_recovery_receipt_v1",
+    "run_at": "2026-06-11T10:21:16.971Z",
+    "owner": "AUTONOMOUS-RECOVERY-0002",
+    "action": "recovery_owner",
+    "target": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001",
+    "detect_reason": "queue_status:mission_failed",
+    "recovery_resolution": "OBJECTIVE_COMPLETE",
+    "objective_score": "PASS",
+    "observe_pass": true,
+    "queue_update": {
+      "updated": true,
+      "mission_status": "complete",
+      "mission_outcome": "PASS"
+    },
+    "founder_alert_only_on_unsolved": false
+  },
+  "pass": true
+}
