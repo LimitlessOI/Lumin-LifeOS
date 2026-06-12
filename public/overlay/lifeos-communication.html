@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>LifeOS — Communication</title>
+  <link rel="stylesheet" href="/shared/lifeos-chat-composer.css?v=20260525-1">
   <style>
     :root {
-      --bg: #0d1117; --surface: #161b22; --border: #30363d;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --input-bg: #0d1117;
       --text: #e6edf3; --text-muted: #8b949e; --accent: #58a6ff;
       --success: #3fb950; --warning: #d29922; --error: #f85149;
     }
@@ -16,7 +20,9 @@
     .topbar h1 { margin: 0; font-size: 16px; font-weight: 700; }
     .topbar a { color: var(--accent); font-size: 12px; text-decoration: none; }
     .layout { display: grid; grid-template-columns: 1fr 320px; gap: 0; min-height: calc(100vh - 48px); }
-    @media(max-width:900px){ .layout { grid-template-columns: 1fr; } .sidebar { order: -1; max-height: 240px; overflow-y: auto; } }
+    @media(max-width:900px){ .layout { grid-template-columns: 1fr; } .sidebar { order: -1; max-height: 180px; overflow-y: auto; } }
+    @media(max-width:720px){ .topbar a { font-size:11px; } .controls { display:none; } .controls.open { display:flex; } .btn-comm-options { display:block; width:100%; border:none; border-bottom:1px solid var(--border); background:var(--surface); color:var(--text-muted); font-size:11px; padding:8px 12px; text-align:left; cursor:pointer; } }
+    @media(min-width:721px){ .btn-comm-options { display:none; } }
     .main { display: flex; flex-direction: column; border-right: 1px solid var(--border); }
     .controls { padding: 12px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     select, textarea, input { background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 6px; font-family: inherit; }
@@ -62,13 +68,15 @@
   <header class="topbar">
     <h1 data-comm-help="comm-hub-priorities">LifeOS Communication</h1>
     <span style="font-size:11px;color:var(--text-muted)">Conversation first · Dashboard supports</span>
-    <a href="/lifeos-command-center">Open Dashboard →</a>
+    <a href="/voice-rail">Voice Rail →</a>
+    <a href="/lifeos-command-center">Dashboard →</a>
     <a href="/activate">Key / Activate</a>
   </header>
 
   <div class="layout">
     <section class="main">
-      <div class="controls">
+      <button type="button" class="btn-comm-options" id="btn-comm-options">Options — mode · domain</button>
+      <div class="controls" id="comm-controls">
         <label data-comm-help="cc-mode" style="font-size:11px;color:var(--text-muted)">Mode</label>
         <select id="comm-mode"></select>
         <select id="comm-domain"><option value="">Domain (optional)</option></select>
@@ -80,17 +88,22 @@
         <div class="empty">Talk to LifeOS — pick a mode and ask anything.</div>
       </div>
 
-      <div class="composer">
-        <textarea id="comm-input" placeholder="Message LifeOS…"></textarea>
-        <div class="voice-row" data-comm-help="cc-voice-record">
-          <button type="button" class="btn btn-warning" id="btn-record">Record</button>
-          <textarea id="voice-transcript" class="voice-transcript" placeholder="Live transcript" readonly rows="1"></textarea>
-          <span id="voice-status" style="font-size:10px;color:var(--text-muted)">Voice idle</span>
+      <div id="comm-attachment-strip" class="attachment-strip" hidden></div>
+      <input type="file" id="comm-file-input" hidden multiple accept="image/*,.pdf,.txt,.md,.csv" tabindex="-1" aria-hidden="true">
+      <div class="chat-input-bar">
+        <button type="button" class="btn-attach" id="comm-btn-attach" aria-label="Add photos or files">+</button>
+        <div class="chat-input-inner">
+          <textarea id="comm-input" placeholder="Message LifeOS…" rows="1"></textarea>
         </div>
-        <div class="composer-actions">
-          <button type="button" class="btn btn-primary" id="btn-send">Send</button>
-          <button type="button" class="btn" id="btn-speak" disabled>Speak last</button>
-        </div>
+        <button type="button" class="btn-send-round" id="btn-send">Send</button>
+      </div>
+      <div class="voice-row" data-comm-help="cc-voice-record" style="padding:0 12px 8px">
+        <button type="button" class="btn btn-warning" id="btn-record">Record</button>
+        <textarea id="voice-transcript" class="voice-transcript" placeholder="Live transcript" readonly rows="1"></textarea>
+        <span id="voice-status" style="font-size:10px;color:var(--text-muted)">Voice idle</span>
+      </div>
+      <div class="composer-actions" style="padding:0 12px 12px">
+        <button type="button" class="btn" id="btn-speak" disabled>Speak last</button>
       </div>
     </section>
 
@@ -119,6 +132,7 @@
   </div>
 
   <script src="/shared/lifeos-comm-help.js"></script>
+  <script src="/shared/lifeos-chat-composer.js?v=20260525-1"></script>
   <script src="/overlay/lifeos-communication-os.js"></script>
 </body>
 </html>

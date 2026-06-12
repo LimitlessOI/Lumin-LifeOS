@@ -8,6 +8,7 @@
   let lastResponseText = '';
   let voiceRecognition = null;
   let voiceListening = false;
+  let attachmentManager = null;
 
   function getKey() {
     return localStorage.getItem('cc_key')
@@ -58,13 +59,18 @@
     return html;
   }
 
-  function appendAdam(text) {
+  function appendAdam(text, attachments) {
     const thread = document.getElementById('thread');
     const empty = thread.querySelector('.empty');
     if (empty) empty.remove();
     const el = document.createElement('div');
     el.className = 'msg adam';
-    el.innerHTML = `<div class="msg-head"><span class="speaker">Adam</span></div><div class="msg-body">${esc(text)}</div>`;
+    const attList = Array.isArray(attachments) ? attachments : [];
+    const attHtml = attList
+      .filter((a) => a.preview_url)
+      .map((a) => `<img src="${esc(a.preview_url)}" alt="${esc(a.name || 'attachment')}" style="max-width:160px;max-height:120px;border-radius:8px;margin-bottom:6px">`)
+      .join('');
+    el.innerHTML = `<div class="msg-head"><span class="speaker">Adam</span></div>${attHtml ? `<div class="bubble-attachments">${attHtml}</div>` : ''}<div class="msg-body">${esc(text)}</div>`;
     thread.appendChild(el);
     thread.scrollTop = thread.scrollHeight;
   }
@@ -133,12 +139,28 @@
 
   async function sendMessage() {
     const input = document.getElementById('comm-input');
-    const text = input.value.trim();
-    if (!text) return;
+    let text = input.value.trim();
+    const attachments = attachmentManager?.getAttachments?.() || [];
+    const displayAttachments = attachmentManager?.getDisplayAttachments?.() || [];
+    if (!text && !attachments.length) return;
     const mode = document.getElementById('comm-mode').value;
     const domain = document.getElementById('comm-domain').value || null;
-    appendAdam(text);
+
+    if (attachments.length) {
+      const dr = await api('/api/v1/lifeos/voice-rail/describe-attachments', {
+        method: 'POST',
+        body: JSON.stringify({ attachments }),
+      });
+      if (dr.data?.blocks?.length) {
+        text = [dr.data.blocks.join('\n\n'), text].filter(Boolean).join('\n\n');
+      } else if (!text) {
+        text = '(attachment — vision unavailable; add a caption next time)';
+      }
+    }
+
+    appendAdam(text, displayAttachments);
     input.value = '';
+    attachmentManager?.clear?.();
 
     const deploySha = await fetchDeploySha();
     const endpoint = mode === 'meeting'
@@ -288,7 +310,21 @@
     loadDomains();
     loadHub();
     initVoice();
+    if (global.LifeOSChatComposer?.createAttachmentManager) {
+      attachmentManager = global.LifeOSChatComposer.createAttachmentManager({
+        stripId: 'comm-attachment-strip',
+        inputId: 'comm-file-input',
+        attachBtnId: 'comm-btn-attach',
+      });
+      const inputEl = document.getElementById('comm-input');
+      attachmentManager.setupPaste(inputEl);
+      attachmentManager.setupDropzone(document.querySelector('#comm-input')?.closest('.chat-input-inner'));
+    }
     if (global.LifeOSCommHelp) LifeOSCommHelp.initHelp(document);
+
+    document.getElementById('btn-comm-options')?.addEventListener('click', () => {
+      document.getElementById('comm-controls')?.classList.toggle('open');
+    });
 
     document.getElementById('btn-send').addEventListener('click', sendMessage);
     document.getElementById('btn-meeting').addEventListener('click', () => {

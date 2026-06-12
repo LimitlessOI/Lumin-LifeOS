@@ -18,6 +18,11 @@ import {
   normalizeProviderMemberKey,
 } from '../config/voice-rail-providers.js';
 import memorySystem from '../core/memory-system.js';
+import {
+  attachmentsForStorage,
+  describeVoiceRailImages,
+  normalizeVoiceRailAttachments,
+} from './voice-rail-attachments.js';
 
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -429,7 +434,7 @@ export function createVoiceRailV1({
       cursorSql = `AND m.created_at < $3`;
     }
     const { rows } = await pool.query(
-      `SELECT m.id, m.role, m.content, m.intent, m.department, m.created_at, s.id AS session_id
+      `SELECT m.id, m.role, m.content, m.intent, m.department, m.attachments, m.created_at, s.id AS session_id
          FROM voice_rail_messages m
          JOIN voice_rail_sessions s ON s.id = m.session_id
         WHERE s.user_id = $1 AND m.is_interim = FALSE ${cursorSql}
@@ -445,7 +450,7 @@ export function createVoiceRailV1({
     if (q.length < 2) return [];
     const lim = Math.min(Math.max(parseInt(limit, 10) || 40, 1), 80);
     const { rows } = await pool.query(
-      `SELECT m.id, m.role, m.content, m.intent, m.department, m.created_at, s.id AS session_id
+      `SELECT m.id, m.role, m.content, m.intent, m.department, m.attachments, m.created_at, s.id AS session_id
          FROM voice_rail_messages m
          JOIN voice_rail_sessions s ON s.id = m.session_id
         WHERE s.user_id = $1 AND m.is_interim = FALSE AND m.content ILIKE $2
@@ -472,7 +477,7 @@ export function createVoiceRailV1({
     );
     if (!sessions[0]) return null;
     const { rows } = await pool.query(
-      `SELECT id, role, content, intent, department, is_interim, created_at
+      `SELECT id, role, content, intent, department, attachments, is_interim, created_at
          FROM voice_rail_messages
         WHERE session_id = $1 AND is_interim = FALSE
         ORDER BY created_at ASC`,
@@ -510,19 +515,31 @@ export function createVoiceRailV1({
     councilMember = null,
     councilMemberKeys = null,
     text,
+    attachments: rawAttachments = null,
     private: isPrivate = false,
     simulateOnly = false,
     continuous = true,
   }) {
     const content = String(text || '').trim();
     const deptId = normalizeVoiceRailDepartment(department);
-    if (!content) {
+    const attachments = normalizeVoiceRailAttachments(rawAttachments);
+    if (!content && !attachments.length) {
       const err = new Error('empty_message');
       err.status = 400;
       throw err;
     }
 
-    const intent = normalizeIntent(classifyIntent(content, mode));
+    let councilContent = content;
+    let storedAttachments = [];
+    if (attachments.length) {
+      const vision = await describeVoiceRailImages(attachments, { logger });
+      if (vision.blocks?.length) {
+        councilContent = [vision.blocks.join('\n\n'), content].filter(Boolean).join('\n\n');
+      }
+      storedAttachments = attachmentsForStorage(attachments);
+    }
+
+    const intent = normalizeIntent(classifyIntent(councilContent || content, mode));
 
     if (isPrivate || mode === 'private') {
       return {
@@ -549,9 +566,9 @@ export function createVoiceRailV1({
       continuous: continuous !== false,
     });
     await pool.query(
-      `INSERT INTO voice_rail_messages (session_id, role, content, intent, is_interim)
-       VALUES ($1, 'user', $2, $3, FALSE)`,
-      [session.id, content, intent],
+      `INSERT INTO voice_rail_messages (session_id, role, content, intent, attachments, is_interim)
+       VALUES ($1, 'user', $2, $3, $4::jsonb, FALSE)`,
+      [session.id, content || '(attachment)', intent, JSON.stringify(storedAttachments)],
     );
 
     let stagedCommand = null;
@@ -617,7 +634,7 @@ export function createVoiceRailV1({
               userId,
               sessionId: session.id,
               listMessagesFn: listMessages,
-              content,
+              content: councilContent,
               mode,
               department: deptId,
               routing: panelRouting,
@@ -694,7 +711,7 @@ export function createVoiceRailV1({
         userId,
         sessionId: session.id,
         listMessagesFn: listMessages,
-        content,
+        content: councilContent,
         mode,
         department: deptId,
         routing,

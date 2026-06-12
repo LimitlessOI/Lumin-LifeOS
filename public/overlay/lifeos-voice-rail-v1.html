@@ -12,8 +12,10 @@
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-  <script src="/overlay/lifeos-bootstrap.js?v=20260524-10"></script>
-  <script src="/shared/lifeos-voice-chat.js?v=20260524-10"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260525-1"></script>
+  <script src="/shared/lifeos-voice-chat.js?v=20260525-1"></script>
+  <script src="/shared/lifeos-chat-composer.js?v=20260525-1"></script>
+  <link rel="stylesheet" href="/shared/lifeos-chat-composer.css?v=20260525-1">
   <title>LifeOS Voice Rail</title>
   <style>
     :root,
@@ -387,7 +389,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.8</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.9</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -408,7 +410,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.8</strong> — one row for AI + Dept toggles. Tap multiple engines (no Multi button). Speed slider works on server voice. Footer shows department seat + engine.
+    Build <strong>v2.9</strong> — ChatGPT-style mobile composer. Tap <strong>+</strong> for photos/screenshots/PDFs. Paste screenshots from clipboard. Options drawer on phone.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -438,6 +440,8 @@
     <div class="resize-handle" id="resize-transcript" title="Drag to resize conversation" aria-label="Resize conversation panel"></div>
 
     <div class="composer">
+      <button type="button" class="btn-options-toggle" id="btn-options-toggle" aria-expanded="false">Options — AI · Dept · Voice</button>
+      <div class="composer-options" id="composer-options">
       <div class="composer-controls">
         <div class="control-row control-row-engines">
           <span class="control-row-label">AI</span>
@@ -462,31 +466,8 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </button>
           </div>
-          <div class="composer-actions">
-            <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” to post">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-            </button>
-            <button type="button" class="btn btn-primary btn-send-compact" id="btn-send">Send</button>
-          </div>
         </div>
       </div>
-      <div class="composer-body">
-        <div class="composer-input-wrap">
-          <div id="interim" data-testid="interim-transcript"></div>
-          <div class="input-field-wrap">
-            <textarea id="input" placeholder="Type or tap mic — say “send” when done…" rows="3"></textarea>
-            <button type="button" class="btn-clear-infield" id="btn-clear" title="Clear text box" aria-label="Clear text box">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-      <select class="sr-only" aria-hidden="true" tabindex="-1" id="mode-catalog">
-        <option value="conversation">Conversation</option>
-        <option value="command">Command</option>
-        <option value="brainstorm">Brainstorm</option>
-        <option value="private">Private</option>
-      </select>
       <div class="composer-audio">
         <button type="button" class="btn icon-btn compact" id="btn-speak-toggle" aria-pressed="false" title="Read replies aloud (off)" aria-label="Read replies aloud">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
@@ -512,6 +493,28 @@
           </label>
         </div>
       </div>
+      </div>
+      <div id="attachment-strip" class="attachment-strip" hidden></div>
+      <input type="file" id="file-input" hidden multiple accept="image/*,.pdf,.txt,.md,.csv" aria-hidden="true" tabindex="-1">
+      <div class="chat-input-bar">
+        <button type="button" class="btn-attach" id="btn-attach" aria-label="Add photos or files">+</button>
+        <div class="chat-input-inner">
+          <div id="interim" data-testid="interim-transcript"></div>
+          <textarea id="input" placeholder="Message LifeOS…" rows="1"></textarea>
+        </div>
+        <div class="btn-mic-slot">
+          <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” to post">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+        </div>
+        <button type="button" class="btn-send-round" id="btn-send" aria-label="Send">Send</button>
+      </div>
+      <select class="sr-only" aria-hidden="true" tabindex="-1" id="mode-catalog">
+        <option value="conversation">Conversation</option>
+        <option value="command">Command</option>
+        <option value="brainstorm">Brainstorm</option>
+        <option value="private">Private</option>
+      </select>
       <div id="voice-status" aria-live="polite"></div>
       <button type="button" id="btn-pause" hidden aria-hidden="true" tabindex="-1"></button>
       <button type="button" id="btn-cancel" hidden aria-hidden="true"></button>
@@ -793,6 +796,7 @@
     let lastAssistant = '';
     let privateBuffer = [];
     let voiceCtrl = null;
+    let attachmentManager = null;
     let sendInFlight = false;
     let providerCatalog = [];
     let oldestLoadedAt = null;
@@ -1018,7 +1022,7 @@
       btn.title = on ? 'Read replies aloud (on)' : 'Read replies aloud (off)';
     }
 
-    function buildBubble(role, content, intent, source, department, createdAt) {
+    function buildBubble(role, content, intent, source, department, createdAt, attachments) {
       const box = document.createElement('div');
       box.className = `bubble ${role === 'user' ? 'user' : 'assistant'}`;
       if (createdAt) {
@@ -1033,8 +1037,25 @@
         deptLabel.textContent = departmentMeta(department)?.title || department;
         box.appendChild(deptLabel);
       }
-      const textNode = document.createTextNode(content);
-      box.appendChild(textNode);
+      const attList = Array.isArray(attachments) ? attachments : [];
+      if (attList.length) {
+        const wrap = document.createElement('div');
+        wrap.className = 'bubble-attachments';
+        attList.forEach((a) => {
+          if (a.preview_url) {
+            const img = document.createElement('img');
+            img.src = a.preview_url;
+            img.alt = a.name || 'attachment';
+            wrap.appendChild(img);
+          }
+        });
+        if (wrap.childNodes.length) box.appendChild(wrap);
+      }
+      const showText = String(content || '').trim() && content !== '(attachment)';
+      if (showText) {
+        const textNode = document.createTextNode(content);
+        box.appendChild(textNode);
+      }
       if (intent === 'error') {
         const tag = document.createElement('div');
         tag.className = 'intent';
@@ -1052,8 +1073,8 @@
       return box;
     }
 
-    function appendBubble(role, content, intent, source, department, createdAt) {
-      const box = buildBubble(role, content, intent, source, department, createdAt);
+    function appendBubble(role, content, intent, source, department, createdAt, attachments) {
+      const box = buildBubble(role, content, intent, source, department, createdAt, attachments);
       document.getElementById('transcript').appendChild(box);
       box.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
@@ -1065,7 +1086,7 @@
       const frag = document.createDocumentFragment();
       (messages || []).forEach((m) => {
         frag.appendChild(
-          buildBubble(m.role, m.content, m.intent, null, m.department, m.created_at),
+          buildBubble(m.role, m.content, m.intent, null, m.department, m.created_at, m.attachments),
         );
       });
       if (loader) el.insertBefore(frag, loader.nextSibling);
@@ -1462,7 +1483,9 @@
 
     async function sendMessage(text) {
       const content = String(text || '').trim();
-      if (!content || sendInFlight) return;
+      const attachments = attachmentManager?.getAttachments?.() || [];
+      const displayAttachments = attachmentManager?.getDisplayAttachments?.() || [];
+      if ((!content && !attachments.length) || sendInFlight) return;
       if (!activeKey && !ensureKey()) return;
 
       if (voiceCtrl?.isPersistentListen?.()) {
@@ -1492,7 +1515,7 @@
           return;
         }
 
-        appendBubble('user', content, null);
+        appendBubble('user', content, null, null, null, null, displayAttachments);
         const engines = selectedProviderKeys().filter(Boolean);
         const body = {
           user: USER,
@@ -1502,6 +1525,7 @@
           department,
           text: content,
         };
+        if (attachments.length) body.attachments = attachments;
         if (engines.length > 1) body.council_members = engines;
         else body.council_member = engines[0] || null;
 
@@ -1527,6 +1551,7 @@
           }
           lastAssistant = firstOk || lastAssistant;
           await refreshStaged();
+          attachmentManager?.clear?.();
           return;
         }
 
@@ -1536,6 +1561,7 @@
         lastAssistant = reply;
         maybeSpeak(reply);
         await refreshStaged();
+        attachmentManager?.clear?.();
       } finally {
         setComposerBusy(false);
         document.getElementById('input')?.focus();
@@ -1570,15 +1596,15 @@
       });
     }
 
-    document.getElementById('btn-send').addEventListener('click', () => {
-      sendMessage(document.getElementById('input').value);
+    document.getElementById('btn-options-toggle')?.addEventListener('click', () => {
+      const drawer = document.getElementById('composer-options');
+      const btn = document.getElementById('btn-options-toggle');
+      const open = drawer?.classList.toggle('open');
+      btn?.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
 
-    document.getElementById('btn-clear').addEventListener('click', () => {
-      document.getElementById('input').value = '';
-      document.getElementById('interim').textContent = '';
-      if (voiceCtrl?.clearBuffer) voiceCtrl.clearBuffer();
-      document.getElementById('input').focus();
+    document.getElementById('btn-send').addEventListener('click', () => {
+      sendMessage(document.getElementById('input').value);
     });
 
     document.getElementById('btn-stop-voice')?.addEventListener('click', stopSpeakingOnly);
@@ -1636,6 +1662,20 @@
     });
 
     (async function bootVoiceRail() {
+      if (window.LifeOSChatComposer?.createAttachmentManager) {
+        attachmentManager = window.LifeOSChatComposer.createAttachmentManager({
+          stripId: 'attachment-strip',
+          inputId: 'file-input',
+          attachBtnId: 'btn-attach',
+        });
+        const inputEl = document.getElementById('input');
+        attachmentManager.setupPaste(inputEl);
+        attachmentManager.setupDropzone(document.querySelector('.chat-input-inner'));
+        inputEl?.addEventListener('input', () => {
+          inputEl.style.height = 'auto';
+          inputEl.style.height = `${Math.min(inputEl.scrollHeight, window.innerHeight * 0.35)}px`;
+        });
+      }
       if (activeKey) {
         await Promise.all([probeServerTts(), probeServerStt()]);
       }

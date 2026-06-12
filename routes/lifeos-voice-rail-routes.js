@@ -8,6 +8,10 @@ import multer from 'multer';
 import { createVoiceRailV1 } from '../services/voice-rail-v1.js';
 import { synthesizeVoiceRailSpeech, voiceRailTtsStatus } from '../services/voice-rail-tts.js';
 import { transcribeVoiceRailAudio, voiceRailSttStatus } from '../services/voice-rail-stt.js';
+import {
+  describeVoiceRailImages,
+  normalizeVoiceRailAttachments,
+} from '../services/voice-rail-attachments.js';
 import { createCommitmentTracker } from '../services/commitment-tracker.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 
@@ -57,7 +61,7 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.6',
+      build: 'voice-rail-v2.9',
       modes: voiceRail.MODES,
       intents: voiceRail.INTENTS,
       reply_engine: callCouncilMember ? 'lifeos/department' : 'template_only',
@@ -218,6 +222,19 @@ export function createLifeOSVoiceRailRoutes({
     }
   });
 
+  router.post('/describe-attachments', requireKey, async (req, res, next) => {
+    try {
+      const attachments = normalizeVoiceRailAttachments(req.body.attachments);
+      if (!attachments.length) {
+        return res.status(400).json({ ok: false, error: 'attachments_required' });
+      }
+      const result = await describeVoiceRailImages(attachments, { logger });
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      next(err);
+    }
+  });
+
   router.post('/message', requireKey, async (req, res, next) => {
     try {
       const userId = await voiceRail.resolveUserId(req.body.user || 'adam');
@@ -231,6 +248,7 @@ export function createLifeOSVoiceRailRoutes({
         councilMember: req.body.council_member || null,
         councilMemberKeys: Array.isArray(req.body.council_members) ? req.body.council_members : null,
         text: req.body.text,
+        attachments: req.body.attachments,
         private: Boolean(req.body.private),
         simulateOnly: Boolean(req.body.simulate_only),
         continuous: req.body.continuous !== false,
