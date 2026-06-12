@@ -175,6 +175,9 @@
     "db/migrations/20260423_lifeos_ambient_snapshots.sql",
     "services/lifeos-ambient-context.js",
     "routes/lifeos-ambient-routes.js",
+    "services/voice-rail-founder-memory.js",
+    "services/voice-rail-usage-receipt.js",
+    "db/migrations/20260612_voice_rail_founder_routing_state.sql",
     "public/overlay/lifeos-ambient-sense.js"
   ],
   "assertions": [
@@ -848,5 +851,5 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "ssot_receipt_tail": "Voice Rail v2.12 Auto/CFO routing + capsules + comm profile."
+  "ssot_receipt_tail": "Voice Rail v2.13 preference capture + cost receipts + tier escalation."
 }

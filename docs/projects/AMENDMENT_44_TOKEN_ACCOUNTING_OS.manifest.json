@@ -16,7 +16,8 @@
     "scripts/verify-token-accounting-enforcement.mjs",
     "scripts/verify-operator-consumption-ledger.mjs",
     "scripts/operator-consumption-ledger.mjs",
-    "scripts/tokens-health.mjs"
+    "scripts/tokens-health.mjs",
+    "services/voice-rail-usage-receipt.js"
   ],
   "subordinate_systems": [
     "services/savings-ledger.js",

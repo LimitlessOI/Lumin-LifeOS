@@ -3,6 +3,14 @@
 
 ---
 
+## [SESSION] 2026-05-24 — Voice Rail v2.13 preference + cost + escalation
+
+**Shipped (local — GAP-FILL, pending deploy):** Voice Rail **v2.13** wires the remaining founder-comms backlog from v2.12: in-chat preference capture (`voice-rail-founder-memory.js`) → capsule + comm profile; per-message cost from `token_usage_log` (`voice-rail-usage-receipt.js`); session tier boost on "go deeper" + shallow-reply auto-escalation; dept-scoped capsule filter; UI footer shows cost + escalated flag. Migration `20260612_voice_rail_founder_routing_state.sql`.
+
+**Next:** Deploy; hard-refresh `/voice-rail?v=2.13`; say "stop being fluffy" then send — preference should persist; reply footer should show model + cost. Still not done: acceptance test for context-probe/fail-closed; post-message memory signal on all turns.
+
+---
+
 ## [SESSION] 2026-05-24 — Operator standing order: push by default
 
 Adam directive: **commit + push + deploy after every agreed change** unless he explicitly says hold. Recorded in `.cursor/rules/operator-push-default.mdc`, `CLAUDE.md` OPERATOR STANDING ORDERS, and `generate-agent-rules.mjs` SESSION line.

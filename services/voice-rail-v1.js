@@ -25,6 +25,15 @@ import {
 } from './voice-rail-attachments.js';
 import { buildSystemContext } from './knowledge-context.js';
 import { retrieveCapsules } from './memory-retrieval.js';
+import {
+  detectShallowCouncilReply,
+  filterCapsulesForDepartment,
+  getSessionRoutingState,
+  persistFounderPreferenceSignal,
+  saveSessionRoutingState,
+  detectEscalationAsk,
+} from './voice-rail-founder-memory.js';
+import { fetchVoiceRailUsageReceipt } from './voice-rail-usage-receipt.js';
 
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -271,7 +280,14 @@ function contextNotConnectedError(routing, contextHealth) {
 }
 
 /** Operator-facing context: DB + memories + capsules + comm profile + cross-session voice rail. */
-export async function buildVoiceRailOperatorContext({ pool, userId, lumin, communicationProfile, logger }) {
+export async function buildVoiceRailOperatorContext({
+  pool,
+  userId,
+  lumin,
+  communicationProfile,
+  departmentId = 'ChC',
+  logger,
+}) {
   const ctx = { loaded_at: new Date().toISOString() };
   const tasks = [];
 
@@ -393,6 +409,11 @@ export async function buildVoiceRailOperatorContext({ pool, userId, lumin, commu
   );
 
   await Promise.allSettled(tasks);
+  if (ctx.memory_capsules?.length) {
+    ctx.memory_capsules_all = ctx.memory_capsules.length;
+    ctx.memory_capsules = filterCapsulesForDepartment(ctx.memory_capsules, departmentId);
+  }
+  ctx.department_hat = normalizeVoiceRailDepartment(departmentId);
   ctx.deploy_commit_sha =
     process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GIT_COMMIT_SHA || process.env.DEPLOY_COMMIT_SHA || null;
   return ctx;
@@ -428,8 +449,13 @@ async function generateCouncilReply({
   listMessagesFn,
   content,
   mode,
+  intent,
   department,
   routing,
+  councilMemberOverride,
+  councilMembers,
+  councilAliasMap,
+  tierBoost = 0,
   operator,
   logger,
 }) {
@@ -438,10 +464,18 @@ async function generateCouncilReply({
   }
 
   const deptId = normalizeVoiceRailDepartment(department || routing?.department);
+  const intentNorm = intent || 'general_conversation';
 
   let contextData = {};
   try {
-    contextData = await buildVoiceRailOperatorContext({ pool, userId, lumin, communicationProfile, logger });
+    contextData = await buildVoiceRailOperatorContext({
+      pool,
+      userId,
+      lumin,
+      communicationProfile,
+      departmentId: deptId,
+      logger,
+    });
   } catch (ctxErr) {
     logger?.warn?.({ err: ctxErr.message }, 'voice-rail operator context failed');
   }
@@ -496,35 +530,79 @@ async function generateCouncilReply({
     ? `--- Prior messages ---\n${threadText}\n\n--- Current ---\n${operatorName}: ${content}${repeatHint}${emotionHint}`
     : `${operatorName}: ${content}${repeatHint}${emotionHint}`;
 
-  let councilRaw;
-  try {
-    councilRaw = await callCouncilMember(routing.resolvedKey || routing.memberKey, userTurn, {
-      taskType: 'voice_rail_department',
-      systemPromptOverride: system,
-      skipKnowledge: true,
-      useCache: false,
-      critical: true,
-      founderComms: true,
-      allowModelDowngrade: false,
-      maxOutputTokens: parseInt(process.env.VOICE_RAIL_FOUNDER_MAX_OUTPUT || '8192', 10),
-      model: routing.modelId,
-    });
-  } catch (apiErr) {
-    const msg = apiErr?.message || String(apiErr);
-    logger?.warn?.({ err: msg, member: routing.memberKey }, 'voice-rail council API failed');
-    throw councilUnavailableError(routing, msg);
+  async function callOnce(activeRouting) {
+    const callStartedAt = new Date();
+    let councilRaw;
+    try {
+      councilRaw = await callCouncilMember(activeRouting.resolvedKey || activeRouting.memberKey, userTurn, {
+        taskType: 'voice_rail_department',
+        systemPromptOverride: system,
+        skipKnowledge: true,
+        useCache: false,
+        critical: true,
+        founderComms: true,
+        allowModelDowngrade: false,
+        maxOutputTokens: parseInt(process.env.VOICE_RAIL_FOUNDER_MAX_OUTPUT || '8192', 10),
+        model: activeRouting.modelId,
+      });
+    } catch (apiErr) {
+      const msg = apiErr?.message || String(apiErr);
+      logger?.warn?.({ err: msg, member: activeRouting.memberKey }, 'voice-rail council API failed');
+      throw councilUnavailableError(activeRouting, msg);
+    }
+
+    const councilText = sanitizeVoiceRailReply(
+      formatCouncilReply(councilRaw),
+      prior,
+      operatorName,
+      content,
+    );
+    if (!councilText || /^Adam, council returned nothing/i.test(councilText)) {
+      throw councilUnavailableError(activeRouting, 'council returned empty or unusable response after sanitize');
+    }
+
+    const usageReceipt = await fetchVoiceRailUsageReceipt(pool, { since: callStartedAt });
+    return { text: councilText, routing: activeRouting, usageReceipt, callStartedAt };
   }
 
-  const councilText = sanitizeVoiceRailReply(
-    formatCouncilReply(councilRaw),
-    prior,
-    operatorName,
-    content,
-  );
-  if (!councilText || /^Adam, council returned nothing/i.test(councilText)) {
-    throw councilUnavailableError(routing, 'council returned empty or unusable response after sanitize');
+  let activeRouting = routing;
+  let result = await callOnce(activeRouting);
+
+  if (detectShallowCouncilReply(result.text, content) && councilMembers) {
+    const boostedTier = Math.min(Math.max(Number(tierBoost) || 0, 0) + 1, 3);
+    const escalatedRouting = resolveFounderVoiceRailRouting({
+      deptId,
+      councilMemberOverride: councilMemberOverride || routing.memberKey,
+      councilMembers,
+      councilAliasMap,
+      content,
+      mode,
+      intent: intentNorm,
+      tierBoost: boostedTier,
+      forceMinTier: 2,
+    });
+    const shouldRetry =
+      escalatedRouting.memberKey !== activeRouting.memberKey ||
+      (escalatedRouting.routing_meta?.tier ?? 0) > (activeRouting.routing_meta?.tier ?? 0);
+    if (shouldRetry) {
+      logger?.info?.(
+        { from: activeRouting.memberKey, to: escalatedRouting.memberKey },
+        'voice-rail shallow reply — escalating tier',
+      );
+      result = await callOnce(escalatedRouting);
+      result.escalated = true;
+      result.escalation_reason = 'shallow_reply_retry';
+    }
   }
-  return { text: councilText, contextHealth };
+
+  return {
+    text: result.text,
+    contextHealth,
+    routing: result.routing,
+    usageReceipt: result.usageReceipt,
+    escalated: Boolean(result.escalated),
+    escalation_reason: result.escalation_reason || null,
+  };
 }
 
 export { listVoiceRailDepartmentsPublic, normalizeVoiceRailDepartment };
@@ -638,6 +716,8 @@ export function createVoiceRailV1({
       content: turn.content || '',
       mode: turn.mode || 'conversation',
       intent: turn.intent || 'general_conversation',
+      tierBoost: turn.tierBoost || 0,
+      forceMinTier: turn.forceMinTier ?? null,
     });
   }
 
@@ -763,10 +843,26 @@ export function createVoiceRailV1({
       }
     }
 
+    const preferenceSaved = await persistFounderPreferenceSignal({
+      pool,
+      userId,
+      sessionId: session.id,
+      content: councilContent,
+      communicationProfile,
+      logger,
+    });
+
+    const sessionState = await getSessionRoutingState(pool, session.id);
+    let tierBoost = sessionState.tier_boost || 0;
+    if (detectEscalationAsk(councilContent)) {
+      tierBoost = Math.min(tierBoost + 1, 3);
+    }
+
     const routing = resolveRouting(deptId, councilMember, {
       content: councilContent,
       mode,
       intent,
+      tierBoost,
     });
     const operator = await resolveOperatorProfile(userId);
 
@@ -804,6 +900,7 @@ export function createVoiceRailV1({
             content: councilContent,
             mode,
             intent,
+            tierBoost,
           });
           try {
             const panelResult = await generateCouncilReply({
@@ -816,23 +913,33 @@ export function createVoiceRailV1({
               listMessagesFn: listMessages,
               content: councilContent,
               mode,
+              intent,
               department: deptId,
               routing: panelRouting,
+              councilMemberOverride: memberKey,
+              councilMembers,
+              councilAliasMap,
+              tierBoost,
               operator,
               logger,
             });
             const panelReply = panelResult.text;
+            const finalRouting = panelResult.routing || panelRouting;
             const replySource = {
               path: 'lifeos/department',
               persona: deptId,
               department: deptId,
-              department_title: panelRouting.departmentTitle,
-              council_member: panelRouting.memberKey,
-              model_id: panelRouting.modelId,
-              provider: panelRouting.provider,
-              display_name: panelRouting.displayName,
+              department_title: finalRouting.departmentTitle,
+              council_member: finalRouting.memberKey,
+              model_id: finalRouting.modelId,
+              provider: finalRouting.provider,
+              display_name: finalRouting.displayName,
               context_health: panelResult.contextHealth,
-              routing_meta: panelRouting.routing_meta || null,
+              routing_meta: finalRouting.routing_meta || null,
+              usage_receipt: panelResult.usageReceipt || null,
+              escalated: panelResult.escalated || false,
+              escalation_reason: panelResult.escalation_reason || null,
+              preference_saved: preferenceSaved?.ok ? preferenceSaved.preference_type : null,
               note: panelResult.contextHealth?.honesty_note || 'Panel reply via council API.',
             };
             const { rows: assistantRows } = await pool.query(
@@ -887,6 +994,7 @@ export function createVoiceRailV1({
 
     let reply;
     let replySource;
+    let finalRouting = routing;
     try {
       const councilResult = await generateCouncilReply({
         pool,
@@ -898,29 +1006,44 @@ export function createVoiceRailV1({
         listMessagesFn: listMessages,
         content: councilContent,
         mode,
+        intent,
         department: deptId,
         routing,
+        councilMemberOverride: councilMember,
+        councilMembers,
+        councilAliasMap,
+        tierBoost,
         operator,
         logger,
       });
       reply = councilResult.text;
+      finalRouting = councilResult.routing || routing;
       replySource = {
         path: 'lifeos/department',
         persona: deptId,
         department: deptId,
-        department_title: routing.departmentTitle,
-        council_member: routing.memberKey,
-        model_id: routing.modelId,
-        provider: routing.provider,
-        display_name: routing.displayName,
+        department_title: finalRouting.departmentTitle,
+        council_member: finalRouting.memberKey,
+        model_id: finalRouting.modelId,
+        provider: finalRouting.provider,
+        display_name: finalRouting.displayName,
         context_health: councilResult.contextHealth,
-        routing_meta: routing.routing_meta || null,
+        routing_meta: finalRouting.routing_meta || null,
+        usage_receipt: councilResult.usageReceipt || null,
+        escalated: councilResult.escalated || false,
+        escalation_reason: councilResult.escalation_reason || null,
+        preference_saved: preferenceSaved?.ok ? preferenceSaved.preference_type : null,
         note: councilResult.contextHealth?.honesty_note || 'Council API reply.',
       };
     } catch (e) {
       logger?.warn?.({ err: e.message, detail: e.detail }, 'voice-rail council reply failed');
       throw e.status ? e : councilUnavailableError(routing, e.message);
     }
+
+    await saveSessionRoutingState(pool, session.id, {
+      tier_boost: tierBoost,
+      last_tier: finalRouting.routing_meta?.tier ?? 0,
+    });
 
     const { rows: assistantRows } = await pool.query(
       `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
@@ -1004,7 +1127,14 @@ export function createVoiceRailV1({
   async function probeFounderContext(userId) {
     let contextData = {};
     try {
-      contextData = await buildVoiceRailOperatorContext({ pool, userId, lumin, communicationProfile, logger });
+      contextData = await buildVoiceRailOperatorContext({
+        pool,
+        userId,
+        lumin,
+        communicationProfile,
+        departmentId: 'ChC',
+        logger,
+      });
     } catch (e) {
       logger?.warn?.({ err: e.message }, 'voice-rail context probe failed');
     }

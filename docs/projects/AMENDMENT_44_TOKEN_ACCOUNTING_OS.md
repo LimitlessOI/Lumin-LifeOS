@@ -1,7 +1,7 @@
 # AMENDMENT 44 — Token Accounting OS (Universal AI Token Ledger)
 **Status:** IN_BUILD — schema + services + routes on disk; production row proof requires deploy + `npm run tokens:verify`
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-24
+**Last Updated:** 2026-05-24 — Voice Rail usage receipt helper
 
 > **Core law:** No AI call is production-valid unless it writes a **token receipt** OR an **explicit unmetered-exception receipt** (`ai_unmetered_exceptions`).
 
@@ -144,5 +144,6 @@ Infrastructure on disk. Council uses `recordMetered`. Deploy migrations then `np
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-05-24 | **`services/voice-rail-usage-receipt.js`** — `fetchVoiceRailUsageReceipt()` reads latest `token_usage_log` row for `voice_rail_department` after founder reply; wired to Voice Rail `reply_source.usage_receipt` + UI cost footer (v2.13) | Adam: visible per-message cost on Voice Rail replies |
 | 2026-05-24 | Amendment 44 + migrations + services + routes + scripts | Token Accounting OS mission |
 | 2026-05-24 | Phase 0 kernel integration: `services/tsos-platform-kernel.js` wraps council/build; repair migrations `20260602`/`20260603`; Neon unified view applied | TSOS Platform Kernel A-to-Z slice |

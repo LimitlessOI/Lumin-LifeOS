@@ -397,7 +397,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.12</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.13</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -1100,9 +1100,12 @@
           source.department_title || departmentMeta(persona)?.title || persona;
         const ch = source.context_health;
         const rm = source.routing_meta;
+        const ur = source.usage_receipt;
         const ctxBit = ch?.level ? ` · ctx ${ch.level}` : '';
         const routeBit = rm?.tier_label ? ` · ${rm.tier_label}` : '';
-        tag.textContent = `${deptTitle} (${persona}) · ${source.display_name || '?'} · ${source.model_id || '?'}${routeBit}${ctxBit}`;
+        const costBit = ur?.cost_display ? ` · ${ur.cost_display}` : '';
+        const escBit = source.escalated ? ' · escalated' : '';
+        tag.textContent = `${deptTitle} (${persona}) · ${source.display_name || '?'} · ${source.model_id || '?'}${routeBit}${costBit}${ctxBit}${escBit}`;
         if (ch && (ch.level === 'empty' || ch.level === 'thin')) tag.classList.add('source-warn');
         box.appendChild(tag);
         if (ch?.honesty_note && (ch.level === 'empty' || ch.level === 'thin')) {

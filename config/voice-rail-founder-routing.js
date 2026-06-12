@@ -33,7 +33,7 @@ export function isFounderAutoMemberKey(raw) {
   return !k || k === 'auto' || k === FOUNDER_AUTO_MEMBER || k === 'founder_auto';
 }
 
-export function scoreFounderTaskTier(content, mode, intent, deptId) {
+export function scoreFounderTaskTier(content, mode, intent, deptId, tierBoost = 0) {
   const text = String(content || '').toLowerCase();
   let tier = DEPT_TIER_BIAS[normalizeVoiceRailDepartment(deptId)] ?? 0;
 
@@ -49,6 +49,7 @@ export function scoreFounderTaskTier(content, mode, intent, deptId) {
   }
   if (text.length > 900) tier = Math.max(tier, 2);
 
+  tier += Math.min(Math.max(Number(tierBoost) || 0, 0), 3);
   return Math.min(tier, TIER_LADDER.length - 1);
 }
 
@@ -109,28 +110,33 @@ export function resolveFounderVoiceRailRouting({
   content,
   mode,
   intent,
+  tierBoost = 0,
+  forceMinTier = null,
 }) {
   const override = councilMemberOverride ? String(councilMemberOverride).trim() : '';
   let memberKey;
   let routingMeta;
 
+  let tier = scoreFounderTaskTier(content, mode, intent, deptId, tierBoost);
+  if (forceMinTier != null) tier = Math.max(tier, Number(forceMinTier));
+
   if (isFounderAutoMemberKey(override)) {
-    const tier = scoreFounderTaskTier(content, mode, intent, deptId);
     const pick = pickMemberForTier(tier, councilMembers);
     memberKey = pick.memberKey;
     routingMeta = {
       mode: 'auto',
       tier: pick.tier,
       tier_label: describeRoutingTier(pick.tier),
+      tier_boost: tierBoost,
       reason: `CFO auto — ${describeRoutingTier(pick.tier)} tier for ${intent || mode}`,
     };
   } else {
-    const tier = scoreFounderTaskTier(content, mode, intent, deptId);
     memberKey = resolveExplicitMember(override, tier, councilMembers, councilAliasMap);
     routingMeta = {
       mode: 'explicit',
       tier,
       tier_label: describeRoutingTier(tier),
+      tier_boost: tierBoost,
       provider_family: explicitProviderFamily(override, councilMembers, councilAliasMap),
       reason:
         tier >= 3
