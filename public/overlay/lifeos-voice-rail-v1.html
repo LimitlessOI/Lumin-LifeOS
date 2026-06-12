@@ -398,7 +398,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.14</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.15</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -419,7 +419,7 @@
   </header>
 
   <div id="truth-banner" role="status">
-    Build <strong>v2.14</strong> — microphone picker added; no eager mic warm-up; auto mode avoids Continuity/iPhone mics when possible; browser fallback still uses the system default mic.
+    Build <strong>v2.15</strong> — microphone picker plus STT failover hardening. If browser speech capture fails, Voice Rail now retries Whisper instead of dying on browser-only errors.
   </div>
 
   <div id="auth-banner" role="alert">
@@ -1303,6 +1303,15 @@
       return '';
     }
 
+    function syncVoiceSttMode() {
+      if (!voiceCtrl?.setServerSttOptions) return;
+      voiceCtrl.setServerSttOptions({
+        enabled: serverSttAvailable && Boolean(getKey()),
+        transcribe: transcribeVoiceRailBlob,
+        failureLimit: 2,
+      });
+    }
+
     async function transcribeVoiceRailBlob(blob, ctx) {
       if (!getKey()) throw new Error('API key required for Whisper');
       const form = new FormData();
@@ -1433,6 +1442,7 @@
           populateMicInputs();
         },
       });
+      syncVoiceSttMode();
       syncSpeakToggleUI();
       const ready = voiceReadyLabel();
       const vs = document.getElementById('voice-status');
@@ -1568,6 +1578,7 @@
     async function probeServerStt() {
       const res = await api('GET', '/stt/status');
       serverSttAvailable = res.status === 200 && res.json.ok && res.json.available;
+      syncVoiceSttMode();
       const vs = document.getElementById('voice-status');
       if (vs) {
         const ready = voiceReadyLabel();

@@ -387,6 +387,17 @@
       return true;
     }
 
+    async function switchToServerStt(sessionEpoch, reason) {
+      if (!useServerStt()) return false;
+      state.serverSttForceBrowser = false;
+      abortActiveRecognition();
+      if (reason) updateStatus(reason);
+      if (state.userWantsListen && sessionEpoch === state.dictationEpoch && !state.ttsDuck) {
+        await startServerListeningInternal();
+      }
+      return true;
+    }
+
     function noteServerSttFailure(sessionEpoch, reason) {
       state.serverSttConsecutiveFailures += 1;
       const limit = settings.serverSttFailureLimit || 2;
@@ -702,10 +713,25 @@
         const code = event && event.error ? event.error : 'unknown';
         if (code === 'no-speech' && state.userWantsListen) return;
         if (code === 'aborted') return;
-        const message = 'Voice error: ' + code;
         state.listening = false;
         state.recognition = null;
         updateButton();
+        if (code === 'audio-capture' || code === 'network' || code === 'service-not-allowed') {
+          switchToServerStt(sessionEpoch, 'Browser mic failed — trying Whisper…').then((switched) => {
+            if (!switched) {
+              const msg = code === 'audio-capture'
+                ? 'Browser mic capture failed. Pick a mic in Options or disconnect Continuity Camera.'
+                : 'Browser speech recognition failed. Check browser mic permissions or use Whisper.';
+              updateStatus(msg);
+            }
+          }).catch(() => {
+            updateStatus('Voice error: ' + code);
+          });
+          return;
+        }
+        const message = code === 'not-allowed' || code === 'permission-denied'
+          ? 'Browser mic permission denied. Allow microphone access in browser settings.'
+          : ('Voice error: ' + code);
         updateStatus(message);
       };
       recognition.onresult = function onResult(event) {
@@ -1066,6 +1092,21 @@
       },
       getAudioDeviceId() {
         return state.selectedAudioDeviceId;
+      },
+      setServerSttOptions(next) {
+        const opts = next && typeof next === 'object' ? next : {};
+        if (Object.prototype.hasOwnProperty.call(opts, 'enabled')) {
+          settings.serverSttEnabled = Boolean(opts.enabled);
+        }
+        if (typeof opts.transcribe === 'function') {
+          settings.serverSttTranscribe = opts.transcribe;
+        }
+        if (typeof opts.failureLimit === 'number' && opts.failureLimit > 0) {
+          settings.serverSttFailureLimit = opts.failureLimit;
+        }
+        if (!settings.serverSttEnabled) {
+          state.serverSttForceBrowser = false;
+        }
       },
       stop() {
         stopListening();
