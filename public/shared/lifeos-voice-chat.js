@@ -64,10 +64,48 @@
   function scoreAudioInput(device) {
     const label = String(device?.label || '').toLowerCase();
     let score = 0;
-    if (/macbook|built-in|builtin|internal|microphone/.test(label)) score += 80;
+    // Built-in laptop mic — strongest signal (avoid generic "Microphone" alone; Continuity often uses that).
+    if (/macbook|built-in|builtin|internal/.test(label)) score += 100;
+    else if (/microphone/.test(label)) score += 25;
     if (/usb|headset|airpods|pods|airpod|external/.test(label)) score += 55;
-    if (/continuity|iphone|ipad|camera/.test(label)) score -= 200;
+    // iPhone / iPad / Continuity must never win Auto on a laptop.
+    if (/continuity|iphone|ipad|airplay|handoff|\bphone\b/.test(label)) score -= 200;
     return score;
+  }
+
+  function isBlockedContinuityMic(device) {
+    return scoreAudioInput(device) < 0;
+  }
+
+  function pickPreferredAudioInputDevice(devices) {
+    const inputs = (devices || []).filter((device) => device.kind === 'audioinput');
+    const allowed = inputs.filter((device) => !isBlockedContinuityMic(device));
+    const pool = allowed.length ? allowed : inputs;
+    return [...pool].sort((a, b) => scoreAudioInput(b) - scoreAudioInput(a))[0] || null;
+  }
+
+  async function ensureAudioInputLabelsUnlocked() {
+    if (!global.navigator?.mediaDevices?.enumerateDevices) return;
+    const devices = await global.navigator.mediaDevices.enumerateDevices();
+    const hasLabels = devices.some((device) => device.kind === 'audioinput' && String(device.label || '').trim());
+    if (hasLabels || !global.navigator.mediaDevices.getUserMedia) return;
+    let tmp;
+    try {
+      tmp = await global.navigator.mediaDevices.getUserMedia({ audio: true });
+    } finally {
+      tmp?.getTracks?.().forEach((track) => {
+        try {
+          track.stop();
+        } catch (_) {}
+      });
+    }
+  }
+
+  async function resolveAutoAudioDeviceId() {
+    await ensureAudioInputLabelsUnlocked();
+    const devices = await listAudioInputDevices();
+    const pick = pickPreferredAudioInputDevice(devices);
+    return String(pick?.deviceId || '').trim();
   }
 
   async function listAudioInputDevices() {
@@ -257,6 +295,7 @@
       storageKey: settings.storageKey,
       speakingEnabled: settings.speakRepliesDefault,
       selectedAudioDeviceId: String(settings.audioDeviceId || '').trim(),
+      autoResolvedDeviceId: '',
     };
 
     function formatMicError(err) {
@@ -300,12 +339,15 @@
       const currentSettings = currentTrack?.getSettings?.() || {};
       const currentDeviceId = String(currentSettings.deviceId || '').trim();
       const devices = await listAudioInputDevices().catch(() => []);
-      if (!devices.length) return;
-      const preferred = devices[0];
+      const preferred = pickPreferredAudioInputDevice(devices);
       const preferredId = String(preferred?.deviceId || '').trim();
       if (!preferredId || preferredId === currentDeviceId) return;
-      if (scoreAudioInput(preferred) <= 0) return;
-      state.selectedAudioDeviceId = preferredId;
+      if (isBlockedContinuityMic({ label: currentTrack?.label || '' })) {
+        // Force away from Continuity even if IDs matched unexpectedly.
+      } else if (scoreAudioInput({ label: currentTrack?.label || '' }) >= scoreAudioInput(preferred)) {
+        return;
+      }
+      state.autoResolvedDeviceId = preferredId;
       releaseWarmStream();
       const stream = await global.navigator.mediaDevices.getUserMedia(buildAudioConstraints(preferredId));
       state.warmStream = stream;
@@ -319,22 +361,41 @@
       state.warming = true;
       updateStatus('Starting microphone…');
       try {
+        let deviceId = state.selectedAudioDeviceId;
+        if (!deviceId) {
+          deviceId = await resolveAutoAudioDeviceId();
+          state.autoResolvedDeviceId = deviceId;
+        }
         const stream = await global.navigator.mediaDevices.getUserMedia(
-          buildAudioConstraints(state.selectedAudioDeviceId),
+          buildAudioConstraints(deviceId),
         );
         state.warmStream = stream;
         state.micWarmed = true;
+        const activeTrack = stream.getAudioTracks?.()[0] || null;
+        if (activeTrack && isBlockedContinuityMic({ label: activeTrack.label || '' })) {
+          releaseWarmStream();
+          const fallbackId = await resolveAutoAudioDeviceId();
+          if (fallbackId && fallbackId !== deviceId) {
+            state.autoResolvedDeviceId = fallbackId;
+            state.warmStream = await global.navigator.mediaDevices.getUserMedia(buildAudioConstraints(fallbackId));
+            state.micWarmed = true;
+          }
+        }
         await maybeAdoptPreferredDevice().catch(() => {});
+        const label = state.warmStream?.getAudioTracks?.()[0]?.label || '';
+        if (label) updateStatus(`Mic: ${label}`);
         return true;
       } catch (err) {
         if (state.selectedAudioDeviceId) {
           try {
             state.selectedAudioDeviceId = '';
-            const fallbackStream = await global.navigator.mediaDevices.getUserMedia(buildAudioConstraints(''));
+            state.autoResolvedDeviceId = await resolveAutoAudioDeviceId();
+            const fallbackStream = await global.navigator.mediaDevices.getUserMedia(
+              buildAudioConstraints(state.autoResolvedDeviceId),
+            );
             state.warmStream = fallbackStream;
             state.micWarmed = true;
-            await maybeAdoptPreferredDevice().catch(() => {});
-            updateStatus('Selected mic unavailable — using system microphone.');
+            updateStatus('Selected mic unavailable — using laptop microphone.');
             return true;
           } catch (fallbackErr) {
             updateStatus(formatMicError(fallbackErr));
@@ -403,7 +464,10 @@
       state.serverSttConsecutiveFailures += 1;
       const limit = settings.serverSttFailureLimit || 2;
       if (state.serverSttConsecutiveFailures >= limit && SpeechRecognitionCtor) {
-        switchToBrowserStt(sessionEpoch, reason || 'Whisper unavailable — using browser mic…');
+        switchToBrowserStt(
+          sessionEpoch,
+          `${reason || 'Whisper unavailable'} — browser mic uses macOS default; pick MacBook mic in Options if wrong.`,
+        );
       } else if (reason) {
         updateStatus(reason);
       }
@@ -1095,7 +1159,11 @@
         }
       },
       getAudioDeviceId() {
-        return state.selectedAudioDeviceId;
+        return state.selectedAudioDeviceId || state.autoResolvedDeviceId;
+      },
+      getActiveMicLabel() {
+        const track = state.warmStream?.getAudioTracks?.()[0];
+        return String(track?.label || '').trim();
       },
       setServerSttOptions(next) {
         const opts = next && typeof next === 'object' ? next : {};

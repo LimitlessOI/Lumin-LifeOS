@@ -411,7 +411,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.19</span></h1>
+    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.20</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -433,7 +433,7 @@
 
   <div id="truth-banner" role="status" class="connection-check">
     <span id="connection-status">Checking LifeOS connection…</span>
-    <span class="truth-build"> · build <strong>v2.19</strong></span>
+    <span class="truth-build"> · build <strong>v2.20</strong></span>
   </div>
 
   <div id="auth-banner" role="alert">
@@ -1476,16 +1476,7 @@
     function preferredMicDeviceId(devices) {
       const list = Array.isArray(devices) ? devices : [];
       if (!list.length) return '';
-      const score = (label) => {
-        const text = String(label || '').toLowerCase();
-        let total = 0;
-        if (/macbook|built-in|builtin|internal|microphone/.test(text)) total += 80;
-        if (/usb|headset|airpods|pods|airpod|external/.test(text)) total += 55;
-        if (/continuity|iphone|ipad|camera/.test(text)) total -= 200;
-        return total;
-      };
-      const best = [...list].sort((a, b) => score(b?.label) - score(a?.label))[0];
-      return String(best?.deviceId || '').trim();
+      return String(list[0]?.deviceId || '').trim();
     }
 
     function micOptionLabel(device, index) {
@@ -1502,7 +1493,8 @@
         note.textContent = `Selected mic: ${micOptionLabel(match, 0)}. Whisper mic honors this choice. Browser fallback still uses the system default mic.`;
         return;
       }
-      note.textContent = 'Auto mic prefers built-in or headset mics and avoids Continuity/iPhone devices when labels are available. Browser fallback still uses your system default mic.';
+      note.textContent = 'Auto mic prefers MacBook built-in or headset and blocks iPhone/Continuity inputs. Active: '
+        + (voiceCtrl?.getActiveMicLabel?.() || 'tap mic to connect');
     }
 
     async function populateMicInputs() {

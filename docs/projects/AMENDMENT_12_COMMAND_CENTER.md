@@ -14,7 +14,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-05-24 |
+| **Last Updated** | 2026-05-24 — Voice Rail v2.20 mic routing |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -294,6 +294,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-05-24 | **`public/shared/lifeos-voice-chat.js` — laptop mic Auto routing:** `scoreAudioInput` / `pickPreferredAudioInputDevice` / `resolveAutoAudioDeviceId` prefer MacBook built-in; block Continuity/iPhone; resolve device id before opening stream; `getActiveMicLabel()`. Shared by Voice Rail + Command Center surfaces. | Adam: laptop browser used phone mic via Apple Continuity | AM12 | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 | 2026-05-24 | **`public/overlay/lifeos-voice-rail-v1.html` (v2.8) + `voice-rail-v1.js`:** AI+Dept one row; tap-to-multi (no Multi button); Speed slider applies `playbackRate` on server TTS; routing line + dept in reply footer; max tokens 800. | Adam: layout, multi-select, speed, who am I talking to, slowness | AM12 | pending deploy |
 | 2026-05-24 | **`public/overlay/lifeos-voice-rail-v1.html` (v2.7) + `lifeos-voice-chat.js`:** Composer reorganized — AI/Multi, Dept, Mode+Mic+Send rows (scrollable). Speed + Volume labels under sliders. Transcript resize capped. Multi hint. Whisper → browser fallback after 2 failures. Build **v2.7**. | Adam: resize clips controls; mic dead; multi-engine; slider labels | AM12 | pending deploy |

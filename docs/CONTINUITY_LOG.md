@@ -3,6 +3,12 @@
 
 ---
 
+## [SESSION] 2026-05-24 — Voice Rail v2.20 laptop mic fix
+
+Adam: on laptop browser, Voice Rail mic button used **iPhone** input (Apple Continuity), not MacBook built-in — not a Railway/server issue. **Shipped (GAP-FILL):** `lifeos-voice-chat.js` resolves preferred laptop mic before capture, blocks Continuity-labeled devices, shows active mic label; Voice Rail UI **v2.20**. **Next:** deploy → hard refresh → Options → Mic shows MacBook label; or pick built-in explicitly.
+
+---
+
 ## [CONSTITUTION] 2026-06-12 — Article II §2.18 Compound Drift Law
 
 Adam: one-degree navigation error compounds (Hawaii→NY → Florida); decisions on false premises stack. **Shipped:** **Article II §2.18** in `docs/SSOT_NORTH_STAR.md` (Foundational Law) — zero tolerated angular error; mandatory course correction before build-on-error; mechanical enforcement must be **impossible** not “hard.” Cross-refs: §2.4, TL;DR table, `docs/constitution/NORTH_STAR.md` digest, Companion **§0.11**, `npm run gen:rules` → compact rules. **Next:** wire enforcement gaps Adam named (CI `lifeos:bp-priority:verify`, runtime `/build` blueprint gate, orphan PASS impossible on merge).
