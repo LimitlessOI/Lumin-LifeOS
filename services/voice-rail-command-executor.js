@@ -12,6 +12,7 @@ import {
   detectSystemActionIntent,
   isRepoBuildCommand,
 } from './lifeos-founder-command-class.js';
+import { detectProviderProofIntent } from './founder-provider-tool-action.js';
 import { detectSystemAgentQuestion } from './lifeos-system-agent.js';
 
 const DEFAULT_SYNC_MS = 90_000;
@@ -71,6 +72,7 @@ export function shouldRouteFounderToSystem({ mode, intent, content, department }
   const text = String(content || '').trim();
   if (!text) return false;
 
+  if (detectProviderProofIntent(text)) return false;
   if (detectSystemActionIntent(text)) return false;
   if (detectSystemAgentQuestion(text)) return false;
 

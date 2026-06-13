@@ -465,7 +465,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="LifeOS operator">LifeOS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.36</span></h1>
+    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="LifeOS operator">LifeOS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.37</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -487,7 +487,7 @@
 
   <div id="truth-banner" role="status" class="connection-check">
     <span id="connection-status">Checking LifeOS connection…</span>
-    <span class="truth-build"> · build <strong>v2.36</strong> · provider proof in UI</span>
+    <span class="truth-build"> · build <strong>v2.37</strong> · provider proof in UI</span>
   </div>
 
   <section id="provider-proof-panel" class="provider-proof-panel" aria-label="Provider connection proof">
@@ -2159,6 +2159,7 @@
         const replyDept = res.json.department || res.json.reply_source?.persona || department;
         const exec = extractCommandExecution(res.json);
         const providerToolProof = res.json.provider_tool_proof || null;
+        const proofRecord = res.json.proof_record || providerToolProof?.proof_record || null;
         appendBubble(
           'assistant',
           reply,
@@ -2171,11 +2172,11 @@
             commandExecution: exec,
             mode,
             systemDirect: Boolean(res.json.system_direct),
-            providerToolProof: providerToolProof?.ok ? providerToolProof : (providerToolProof || null),
+            providerToolProof: providerToolProof?.ok ? { ...providerToolProof, proof_record: proofRecord } : providerToolProof,
           },
         );
-        if (providerToolProof?.ok) {
-          renderProviderProofDetail({
+        if (proofRecord?.ok || providerToolProof?.ok) {
+          renderProviderProofDetail(proofRecord?.ok ? proofRecord : {
             ok: true,
             verified: true,
             proof_event_id: providerToolProof.proof_event_id,
@@ -2188,7 +2189,7 @@
               provider_request_id: providerToolProof.provider_request_id,
               tool_name: providerToolProof.tool_name,
             },
-          }, { title: 'Created via chat + live provider API' });
+          }, { title: res.json.provider_proof_hard_route ? 'Provider proof (hard route)' : 'Provider proof' });
           refreshProofEventList();
         }
         lastAssistant = reply;

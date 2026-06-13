@@ -861,7 +861,7 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_receipt": "2026-05-24 provider-proof-ui-v2.36",
+  "last_receipt": "2026-05-24 provider-proof-hard-route-v2.37",
   "last_change_summary": "Founder verifies provider proof events inside LifeOS UI",
   "ssot_receipt_tail": "Provider connection proof panel; GET /system-proof-events list."
 }

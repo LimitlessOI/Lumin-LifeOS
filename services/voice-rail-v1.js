@@ -64,11 +64,9 @@ import {
   formatFounderDirectProviderReply,
 } from './founder-direct-provider.js';
 import {
-  executeProviderToolProofAction,
+  detectProviderProofIntent,
+  handleProviderProofAction,
   formatProviderToolProofReply,
-  isCreateProofEventCommand,
-  memberKeyToProofProvider,
-  parseProviderToolProofUtterance,
 } from './founder-provider-tool-action.js';
 import {
   detectSystemAgentQuestion,
@@ -980,66 +978,52 @@ export function createVoiceRailV1({
       [session.id, content || '(attachment)', intent, JSON.stringify(storedAttachments)],
     );
 
+    /** Provider proof — hard route before council, ChC, BuilderOS, staging (all modes). */
+    if (!simulateOnly && detectProviderProofIntent(content)) {
+      const proofResult = await handleProviderProofAction(pool, {
+        userId,
+        utterance: content,
+        sessionId: session.id,
+        baseUrl,
+        councilMember,
+        councilMemberKeys,
+      });
+      const replyText = proofResult.reply_text || formatProviderToolProofReply(proofResult);
+      const { rows: assistantRows } = await pool.query(
+        `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+         VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+         RETURNING id, role, content, intent, department, created_at`,
+        [session.id, replyText, 'provider_tool_action', 'SYS'],
+      );
+      await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+      return {
+        private: false,
+        persisted: true,
+        provider_tool_action: true,
+        provider_proof_hard_route: true,
+        session_id: session.id,
+        mode: session.mode,
+        tag: session.tag,
+        department: 'SYS',
+        intent: 'provider_tool_action',
+        user_message: { role: 'user', content, intent: 'provider_tool_action' },
+        assistant_message: assistantRows[0],
+        reply_source: {
+          path: 'lifeos/system/provider-proof',
+          persona: 'SYS',
+          department: 'SYS',
+          department_title: 'Provider Proof',
+          council_used: false,
+          provider_tool_proof: proofResult,
+        },
+        provider_tool_proof: proofResult,
+        proof_record: proofResult.proof_record || null,
+      };
+    }
+
     /** LifeOS — intent-first routing; mode=lifeos default, explicit modes are overrides only. */
     if (mode === 'lifeos' && !simulateOnly) {
       const intentRoute = resolveFounderIntentRoute(content, { explicitMode: mode });
-
-      const toolProofParsed = parseProviderToolProofUtterance(content);
-      const proofCommand = isCreateProofEventCommand(content);
-      if (toolProofParsed || proofCommand || intentRoute.lane === 'provider_tool_action') {
-        const provider = toolProofParsed?.provider
-          || intentRoute.inferred_provider
-          || (proofCommand ? memberKeyToProofProvider(councilMember) : null);
-        if (!provider) {
-          const replyText = 'Select OpenAI (GPT), Anthropic (Claude), or Google (Gemini) in AI options, then say: Create a LifeOS proof event.';
-          const { rows: assistantRows } = await pool.query(
-            `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
-             VALUES ($1, 'assistant', $2, $3, $4, FALSE)
-             RETURNING id, role, content, intent, department, created_at`,
-            [session.id, replyText, 'provider_tool_action', 'LifeOS'],
-          );
-          await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
-          return {
-            private: false,
-            persisted: true,
-            provider_tool_action: false,
-            error: 'provider_not_selected_in_ui',
-            session_id: session.id,
-            assistant_message: assistantRows[0],
-            intent_route: intentRoute,
-          };
-        }
-        const proofResult = await executeProviderToolProofAction(pool, {
-          provider,
-          userId,
-          utterance: content,
-          sessionId: session.id,
-          baseUrl,
-        });
-        const replyText = formatProviderToolProofReply(proofResult);
-        const { rows: assistantRows } = await pool.query(
-          `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
-           VALUES ($1, 'assistant', $2, $3, $4, FALSE)
-           RETURNING id, role, content, intent, department, created_at`,
-          [session.id, replyText, 'provider_tool_action', 'LifeOS'],
-        );
-        await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
-        return {
-          private: false,
-          persisted: true,
-          provider_tool_action: true,
-          session_id: session.id,
-          mode: 'lifeos',
-          tag: session.tag,
-          department: 'LifeOS',
-          intent: 'provider_tool_action',
-          user_message: { role: 'user', content, intent },
-          assistant_message: assistantRows[0],
-          reply_source: { council_used: false, provider_tool_proof: proofResult, intent_route: intentRoute },
-          provider_tool_proof: proofResult,
-          intent_route: intentRoute,
-        };
-      }
 
       const directParsed = parseFounderDirectProviderUtterance(content);
       if (directParsed || intentRoute.lane === 'direct_provider') {

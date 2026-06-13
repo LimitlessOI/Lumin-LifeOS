@@ -5,6 +5,7 @@
  */
 import {
   createSystemProofEvent,
+  getSystemProofEvent,
   proofToolDefinition,
   PROOF_TOOL_NAME,
   verificationCurlForProofEvent,
@@ -57,10 +58,66 @@ export function memberKeyToProofProvider(memberKey) {
   return MEMBER_KEY_TO_PROVIDER[key] || null;
 }
 
-/** Short founder command when provider comes from LifeOS UI picker. */
+/** Founder trigger phrases — hard-routed before council/command/builder. */
+export const PROVIDER_PROOF_TRIGGER_PATTERNS = [
+  'create provider proof event',
+  'create proof event',
+  'create a lifeos proof event',
+  'verify provider connection',
+  'verify gpt connection',
+  'verify claude connection',
+  'verify gemini connection',
+  'run provider proof',
+  'ask gpt to create a lifeos proof event',
+  'ask claude to create a lifeos proof event',
+  'ask gemini to create a lifeos proof event',
+  'provider proof',
+  'proof record inside lifeos',
+];
+
+/**
+ * Hard gate: any provider-proof utterance bypasses council, ChC, BuilderOS, staging.
+ */
+export function detectProviderProofIntent(utterance) {
+  const raw = String(utterance || '').trim();
+  const t = raw.toLowerCase();
+  if (!t) return false;
+
+  if (parseProviderToolProofUtterance(raw)) return true;
+  if (/^(create|make)\s+(a\s+)?lifeos\s+proof\s+event\.?$/i.test(raw)) return true;
+  if (/\b(run|execute)\s+provider\s+proof\b/.test(t)) return true;
+  if (/\bverify\s+(provider|gpt|claude|gemini|openai|anthropic|google)(\s+|\s+\w+\s+)connection\b/.test(t)) return true;
+  if (/\bcreat(e|ing)\s+(a\s+)?(provider\s+)?proof\s+event\b/.test(t)) return true;
+  if (/\bprovider\s+proof\b/.test(t) && /\b(creat|verify|run|record|show|inside lifeos)\b/.test(t)) return true;
+  if (/\bproof\s+record\b/.test(t) && /\b(creat|record|show|inside lifeos|resulting)\b/.test(t)) return true;
+  if (/\bverify\s+provider\s+connection\b/.test(t)) return true;
+
+  return false;
+}
+
+/** Extract openai | anthropic | google from utterance text. */
+export function extractProofProviderFromUtterance(utterance) {
+  const t = String(utterance || '').toLowerCase();
+  if (/\b(gpt|openai)\b/.test(t)) return 'openai';
+  if (/\b(claude|anthropic)\b/.test(t)) return 'anthropic';
+  if (/\b(gemini|google)\b/.test(t)) return 'google';
+  return null;
+}
+
+export function resolveProviderProofProvider(utterance, councilMember, councilMemberKeys) {
+  return (
+    extractProofProviderFromUtterance(utterance)
+    || memberKeyToProofProvider(councilMember)
+    || (Array.isArray(councilMemberKeys) && councilMemberKeys[0]
+      ? memberKeyToProofProvider(councilMemberKeys[0])
+      : null)
+  );
+}
+
+/** @deprecated use detectProviderProofIntent */
 export function isCreateProofEventCommand(utterance) {
-  const t = String(utterance || '').trim();
-  return /^(create|make)\s+(a\s+)?lifeos\s+proof\s+event\.?$/i.test(t);
+  return detectProviderProofIntent(utterance)
+    && /^(create|make)\s+(a\s+)?lifeos\s+proof\s+event\.?$/i.test(String(utterance || '').trim());
 }
 
 /**
@@ -447,7 +504,7 @@ export async function executeProviderToolProofAction(pool, {
 
 export function formatProviderToolProofReply(result) {
   const lines = [
-    'PROVIDER API → TOOL → LIFEOS SYSTEM ACTION PROOF',
+    'PROVIDER PROOF — direct system action (no council, no builder)',
     `ok: ${result.ok}`,
     `provider: ${result.provider_label || result.provider}`,
     `model: ${result.model}`,
@@ -462,6 +519,63 @@ export function formatProviderToolProofReply(result) {
   if (result.verification_curl) lines.push(`verification_curl: ${result.verification_curl}`);
   if (result.error) lines.push(`error: ${result.error}`);
   if (result.tool_input) lines.push(`tool_input: ${JSON.stringify(result.tool_input)}`);
+  if (result.proof_record?.ok) {
+    lines.push('');
+    lines.push('PROOF RECORD (LifeOS):');
+    lines.push(`  id: ${result.proof_record.proof_event_id}`);
+    lines.push(`  provider: ${result.proof_record.metadata?.provider || '—'}`);
+    lines.push(`  model: ${result.proof_record.metadata?.model || '—'}`);
+    lines.push(`  provider_request_id: ${result.proof_record.metadata?.provider_request_id || '—'}`);
+    lines.push(`  created_at: ${result.proof_record.created_at || '—'}`);
+    lines.push(`  verified: ${result.proof_record.verified === true}`);
+    lines.push(`  status: ${result.proof_record.status || '—'}`);
+  }
   lines.push(`council_used: ${result.council_used === true}`);
   return lines.join('\n');
+}
+
+/**
+ * Execute provider proof and read back the stored record for founder-visible display.
+ */
+export async function handleProviderProofAction(pool, {
+  userId,
+  utterance,
+  sessionId = null,
+  baseUrl = null,
+  councilMember = null,
+  councilMemberKeys = null,
+}) {
+  const provider = resolveProviderProofProvider(utterance, councilMember, councilMemberKeys);
+  if (!provider) {
+    return {
+      ok: false,
+      test: 'provider_tool_action_proof',
+      error: 'provider_not_specified',
+      council_used: false,
+      reply_text: formatProviderToolProofReply({
+        ok: false,
+        error: 'provider_not_specified — name GPT, Claude, or Gemini, or select in AI options',
+        council_used: false,
+      }),
+    };
+  }
+
+  const proofResult = await executeProviderToolProofAction(pool, {
+    provider,
+    userId,
+    utterance,
+    sessionId,
+    baseUrl,
+  });
+
+  if (proofResult.ok && proofResult.proof_event_id) {
+    const proof_record = await getSystemProofEvent(pool, proofResult.proof_event_id);
+    proofResult.proof_record = proof_record.ok ? proof_record : null;
+  }
+
+  return {
+    ...proofResult,
+    council_used: false,
+    reply_text: formatProviderToolProofReply({ ...proofResult, council_used: false }),
+  };
 }

@@ -4,7 +4,7 @@
  */
 import { parseFounderDirectProviderUtterance } from './founder-direct-provider.js';
 import {
-  isCreateProofEventCommand,
+  detectProviderProofIntent,
   parseProviderToolProofUtterance,
 } from './founder-provider-tool-action.js';
 import { detectSystemAgentQuestion } from './lifeos-system-agent.js';
@@ -45,6 +45,7 @@ export function declaresNoRepoEdits(text) {
 export function detectSystemActionIntent(text) {
   const t = String(text || '').toLowerCase();
   if (!t) return null;
+  if (detectProviderProofIntent(text)) return null;
   if (extractTargetFileFromInstruction(text)) return null;
 
   const writeIntent =
@@ -69,6 +70,7 @@ export function detectSystemActionIntent(text) {
 export function isRepoBuildCommand(text, { explicitMode = 'lifeos' } = {}) {
   const utterance = String(text || '').trim();
   if (!utterance) return false;
+  if (detectProviderProofIntent(utterance)) return false;
   if (detectSystemActionIntent(utterance)) return false;
   if (detectSystemAgentQuestion(utterance)) return false;
   if (isBuildNextBpStepUtterance(utterance)) return false;
@@ -98,8 +100,8 @@ export function classifyFounderCommandClass(utterance, { explicitMode = 'lifeos'
   const text = String(utterance || '').trim();
   if (!text) return { class: 'lifeos_operator', reason: 'empty' };
 
-  if (parseProviderToolProofUtterance(text) || isCreateProofEventCommand(text)) {
-    return { class: 'provider_tool_action', reason: 'ask_provider_tool_proof_pattern' };
+  if (parseProviderToolProofUtterance(text) || detectProviderProofIntent(text)) {
+    return { class: 'provider_tool_action', reason: 'provider_proof_hard_route' };
   }
 
   if (parseFounderDirectProviderUtterance(text)) {

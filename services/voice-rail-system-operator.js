@@ -13,6 +13,7 @@ import {
   extractTargetFileFromInstruction,
 } from './voice-rail-command-executor.js';
 import { isRepoBuildCommand } from './lifeos-founder-command-class.js';
+import { detectProviderProofIntent } from './founder-provider-tool-action.js';
 import { BP_PRIORITY_REL } from './bp-priority-queue.js';
 
 function normalizeText(value) {
@@ -25,6 +26,9 @@ function normalizeText(value) {
  */
 export function classifyFounderToolPass({ utterance, mode, intent, department }) {
   const content = normalizeText(utterance);
+  if (detectProviderProofIntent(content)) {
+    return { type: 'provider_proof' };
+  }
   const direct = classifySystemDirectAction(content);
   if (direct.type === 'help' || direct.type === 'status' || direct.type === 'jobs' || direct.type === 'system_action') {
     return direct;
@@ -62,6 +66,17 @@ export async function runFounderSystemToolPass({
   logger,
 }) {
   const action = classifyFounderToolPass({ utterance, mode, intent, department });
+
+  if (action.type === 'provider_proof') {
+    return {
+      action: 'provider_proof',
+      context_health: null,
+      command_execution: null,
+      staged_command: null,
+      api_trace: [{ action: 'provider_proof_deferred_to_hard_route' }],
+      tool_summary: 'Provider proof — handled by hard route (not builder/council).',
+    };
+  }
 
   if (action.type === 'context_only') {
     let contextHealth = null;
