@@ -1572,7 +1572,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-05-24 | **LifeOS System Agent v2.32.1 (GAP-FILL):** GitHub Contents API fallback when Railway `.dockerignore` omits `docs/*`; whitelist AMENDMENT_21 in `.dockerignore`. | Prod NOT_FOUND — AMENDMENT_21 absent on deployed filesystem | GAP-FILL | pending deploy |
+| 2026-05-24 | **Voice Rail operator prompt — remove queue wording (GAP-FILL):** `voice-rail-system-operator.js` line 133 — BP_PRIORITY described as priority ranking only, not a queue. | Adam: legacy queue language conflicts with founder law | GAP-FILL | pending deploy |
 | 2026-05-24 | **Founder Direct Provider Test v2.31 (GAP-FILL):** `services/founder-direct-provider.js` — live fetch to OpenAI / Anthropic / Google only (no council). `POST /api/v1/lifeos/voice-rail/founder-direct-provider` + LifeOS `/message` intercept for `Talk to GPT|Claude|Gemini:`. Build **v2.31**. | Adam FOUNDER DIRECT PROVIDER TEST — prove paid provider APIs with receipts | GAP-FILL | deployed |
 | 2026-05-24 | **Voice Rail v2.30 — BP_PRIORITY is the only queue (GAP-FILL):** Renamed `mission_queue_head` → `bp_priority`; reads only `BP_PRIORITY.json` + each `BLUEPRINT.json`. Removed all other queue naming. Build **v2.30**. | Adam: BP is the queue — rank list only, no other queues | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.27 — superseded by v2.28:** removed operator parallel builder path; reverted bp-priority-queue extensions. | Adam: stop making shit up against structure | GAP-FILL | superseded |

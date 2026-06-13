@@ -856,6 +856,6 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_change_summary": "LifeOS System Agent v2.32 — repo-aware search/read for founder questions",
-  "ssot_receipt_tail": "POST /system-agent; LifeOS intercept for blueprint/BP/repo questions."
+  "last_change_summary": "Voice Rail operator prompt — BP_PRIORITY is priority ranking, not a queue",
+  "ssot_receipt_tail": "voice-rail-system-operator.js line 133 wording only; no runtime change."
 }
