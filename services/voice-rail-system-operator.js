@@ -13,6 +13,15 @@ import {
   shouldRouteFounderToSystem,
   extractTargetFileFromInstruction,
 } from './voice-rail-command-executor.js';
+import {
+  isBpProgramUtterance,
+  wantsBpExecute,
+  loadBpPriorityQueue,
+  resolveNextLifeOSSlice,
+  executeLifeOSSliceBuild,
+  summarizeBuildAsCommandExecution,
+  formatSliceToolSummary,
+} from './lifeos-bp-next-slice.js';
 
 function normalizeText(value) {
   return String(value || '').trim();
@@ -20,10 +29,13 @@ function normalizeText(value) {
 
 /**
  * Decide what the system does before any conversational reply.
- * General chat → context only (no spurious builder jobs).
+ * BP/slice requests → read queue + optional /builder/build. General chat → context only.
  */
 export function classifyFounderToolPass({ utterance, mode, intent, department }) {
   const content = normalizeText(utterance);
+  if (isBpProgramUtterance(content)) {
+    return { type: wantsBpExecute(content) ? 'bp_execute' : 'bp_inspect' };
+  }
   const direct = classifySystemDirectAction(content);
   if (direct.type === 'help' || direct.type === 'status' || direct.type === 'jobs') {
     return direct;
@@ -54,8 +66,44 @@ export async function runFounderSystemToolPass({
 }) {
   const action = classifyFounderToolPass({ utterance, mode, intent, department });
 
+  if (action.type === 'bp_inspect' || action.type === 'bp_execute') {
+    const queue = await loadBpPriorityQueue();
+    const slice = await resolveNextLifeOSSlice();
+    let buildResult = null;
+    if (action.type === 'bp_execute' && slice?.target_file && slice.actionable !== false) {
+      buildResult = await executeLifeOSSliceBuild({ slice, baseUrl, commandKey, logger });
+    }
+    const tool_summary = formatSliceToolSummary({
+      slice,
+      buildResult,
+      mode: action.type,
+      queue,
+    });
+    return {
+      action: action.type,
+      bp_slice: slice,
+      bp_queue: queue,
+      context_health: null,
+      command_execution: summarizeBuildAsCommandExecution(buildResult),
+      staged_command: null,
+      api_trace: [
+        { action: action.type, slice: slice?.step_id || slice?.task_id },
+        ...(buildResult ? [{ action: 'builder_build', http: buildResult.http_status, committed: buildResult.committed }] : []),
+      ],
+      tool_summary,
+    };
+  }
+
   if (action.type === 'context_only') {
     let contextHealth = null;
+    let bpSummary = '';
+    try {
+      const queue = await loadBpPriorityQueue();
+      const slice = await resolveNextLifeOSSlice();
+      bpSummary = formatSliceToolSummary({ slice, buildResult: null, mode: 'bp_inspect', queue });
+    } catch (err) {
+      logger?.warn?.({ err: err.message }, 'lifeos operator bp preload failed');
+    }
     if (typeof connectionProbe === 'function') {
       try {
         const probe = await connectionProbe();
@@ -64,15 +112,19 @@ export async function runFounderSystemToolPass({
         logger?.warn?.({ err: err.message }, 'lifeos operator context probe failed');
       }
     }
+    const tool_summary = [
+      bpSummary || 'LifeOS BP queue: preload failed',
+      contextHealth
+        ? `LifeOS context: ${contextHealth.level || 'unknown'} (connected=${contextHealth.connected ?? contextHealth.sufficient_for_founder_reply ?? '?'})`
+        : '',
+    ].filter(Boolean).join('\n\n');
     return {
       action: 'context_only',
       context_health: contextHealth,
       command_execution: null,
       staged_command: null,
-      api_trace: [{ action: 'context_only' }],
-      tool_summary: contextHealth
-        ? `LifeOS context: ${contextHealth.level || 'unknown'} (connected=${contextHealth.connected ?? contextHealth.sufficient_for_founder_reply ?? '?'})`
-        : 'LifeOS context: probe unavailable',
+      api_trace: [{ action: 'context_only', bp_preloaded: Boolean(bpSummary) }],
+      tool_summary,
     };
   }
 
@@ -119,6 +171,16 @@ export function buildLifeOSOperatorSystemPrompt({
       target_file: receipt.target_file,
       commit_sha: receipt.commit_sha,
       stage: receipt.stage,
+      model_used: receipt.model_used,
+    })}`
+    : '';
+
+  const bpContext = contextData?.bp_next_slice
+    ? `\nBP_NEXT_SLICE (from repo): ${JSON.stringify({
+      source: contextData.bp_next_slice.source,
+      step_id: contextData.bp_next_slice.step_id,
+      target_file: contextData.bp_next_slice.target_file,
+      title: contextData.bp_next_slice.title,
     })}`
     : '';
 
@@ -126,10 +188,13 @@ export function buildLifeOSOperatorSystemPrompt({
     `You are LifeOS — ${name}'s live operator interface to their Railway-deployed system.`,
     'You speak naturally in conversation, like a trusted operator who runs the machine — NOT a separate "advisor" chatbot.',
     'You are NOT Council Chair, NOT BPB, NOT any department persona. Never say "I routed to…" or "the team will…".',
-    'When work was requested, SYSTEM_TOOL_RESULTS shows what the APIs actually did. Cite job_id / blockers when present.',
-    'When no tool ran, you may discuss, clarify, or ask for a file path — but never claim execution.',
-    'Keep flow human. Short paragraphs. No corporate filler. No fake pipelines.',
+    `${name} is the authority. When he asks to program, build, or run a BP slice, the system already read BP_PRIORITY.json and blueprints — cite SYSTEM_TOOL_RESULTS.`,
+    'You HAVE repo access via the server: builderos-reboot/BP_PRIORITY.json, mission BLUEPRINT.json files, and the builder API. NEVER claim you cannot browse the repo, pick the next slice, or need Adam to supply file paths when BP context is present.',
+    'NEVER refuse work with "I require you to provide a file path" unless COMMAND_EXECUTION_RECEIPT shows missing_target_file from a failed build.',
+    'When work was requested, SYSTEM_TOOL_RESULTS shows what the APIs actually did. Cite job_id / commit_sha / blockers when present.',
+    'Keep flow human. Short paragraphs. No corporate filler. No fake pipelines. No arguing with the founder.',
     executionTruthBlock || '',
+    bpContext,
     toolBlock,
     receiptBlock,
     contextData?.communication_profile_summary
@@ -152,6 +217,7 @@ export function buildLifeOSOperatorReplySource(routing, toolPass, usageReceipt) 
     council_used: true,
     operator_voice: true,
     tool_action: toolPass?.action || null,
+    bp_slice: toolPass?.bp_slice || null,
     command_execution: toolPass?.command_execution || null,
     usage_receipt: usageReceipt || null,
     routing_meta: routing?.routing_meta || null,

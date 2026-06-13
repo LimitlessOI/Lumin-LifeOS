@@ -8,6 +8,7 @@ import {
   extractTargetFileFromInstruction,
   inferBuilderDomainForTargetFile,
 } from './builder-instruction-target.js';
+import { isBpProgramUtterance } from './lifeos-bp-next-slice.js';
 
 const DEFAULT_SYNC_MS = 90_000;
 
@@ -81,6 +82,13 @@ export function shouldRouteFounderToSystem({ mode, intent, content, department }
     return true;
   }
   if (/\b(please build|please fix|please run|deploy this|execute this|run builder)\b/.test(t)) {
+    return true;
+  }
+  if (isBpProgramUtterance(t)) return true;
+  if (
+    /\b(bp|blueprint|slice|next slice|mission queue|program.*lifeos|prove.*agent)\b/.test(t)
+    && /\b(lifeos|build|program|run|next|queue)\b/.test(t)
+  ) {
     return true;
   }
   const dept = String(department || '').toUpperCase();

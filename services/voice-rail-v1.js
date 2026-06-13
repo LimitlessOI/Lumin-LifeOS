@@ -214,16 +214,30 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName, user
 
 async function readMissionQueueHead() {
   try {
-    const raw = await fs.readFile(path.join(process.cwd(), 'builderos-reboot', 'BP_PRIORITY.json'), 'utf8');
-    const q = JSON.parse(raw);
-    const list = q.items || q.priorities || q.queue || [];
-    return (Array.isArray(list) ? list : []).slice(0, 6).map((m) => ({
-      id: m.id || m.mission_id || m.slug,
-      title: m.title || m.name || m.objective,
-      status: m.status || m.state,
-    }));
+    const { loadBpPriorityQueue, resolveNextLifeOSSlice } = await import('./lifeos-bp-next-slice.js');
+    const queue = await loadBpPriorityQueue();
+    const next = await resolveNextLifeOSSlice();
+    return {
+      bp_priority: queue.items,
+      next_slice: next,
+    };
   } catch {
-    return [];
+    try {
+      const raw = await fs.readFile(path.join(process.cwd(), 'builderos-reboot', 'BP_PRIORITY.json'), 'utf8');
+      const q = JSON.parse(raw);
+      const list = q.items || q.priorities || q.queue || [];
+      return {
+        bp_priority: (Array.isArray(list) ? list : []).slice(0, 6).map((m) => ({
+          rank: m.rank,
+          mission_id: m.mission_id || m.id,
+          verdict: m.verdict || m.receipt_verdict,
+          blueprint_path: m.blueprint_path,
+        })),
+        next_slice: null,
+      };
+    } catch {
+      return { bp_priority: [], next_slice: null };
+    }
   }
 }
 
@@ -409,7 +423,8 @@ export async function buildVoiceRailOperatorContext({
     }),
 
     readMissionQueueHead().then((m) => {
-      ctx.mission_queue_head = m;
+      ctx.mission_queue_head = m?.bp_priority || m || [];
+      ctx.bp_next_slice = m?.next_slice || null;
     }),
 
     readContinuityTail().then((t) => {
