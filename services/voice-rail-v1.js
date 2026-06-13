@@ -57,6 +57,7 @@ import {
   buildLifeOSOperatorReplySource,
   formatLifeOSOperatorReply,
 } from './voice-rail-system-operator.js';
+import { loadBpPriority, BP_PRIORITY_REL } from './bp-priority-queue.js';
 
 const MODES = new Set(['lifeos', 'system', 'conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -213,13 +214,11 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName, user
   return out || `${name}, council returned nothing usable — try again; if it repeats, check Railway logs for council_unavailable.`;
 }
 
-async function readMissionQueueHead() {
+async function readBpPriorityStatus() {
   try {
-    const raw = await fs.readFile(path.join(process.cwd(), 'builderos-reboot', 'BP_PRIORITY.json'), 'utf8');
-    const q = JSON.parse(raw);
-    const list = q.items || [];
+    const q = loadBpPriority();
     const items = [];
-    for (const m of [...list].sort((a, b) => (a.rank || 0) - (b.rank || 0)).slice(0, 6)) {
+    for (const m of [...q.items].sort((a, b) => (a.rank || 0) - (b.rank || 0))) {
       const row = {
         rank: m.rank,
         mission_id: m.mission_id,
@@ -278,7 +277,7 @@ export function summarizeVoiceRailContextHealth(contextData) {
     verified_memories: Array.isArray(ctx.verified_memories) ? ctx.verified_memories.length : 0,
     goals: Array.isArray(ctx.goals) ? ctx.goals.length : 0,
     staged_commands: Array.isArray(ctx.staged_commands) ? ctx.staged_commands.length : 0,
-    mission_queue_head: Array.isArray(ctx.mission_queue_head) ? ctx.mission_queue_head.length : 0,
+    bp_priority: Array.isArray(ctx.bp_priority) ? ctx.bp_priority.length : 0,
     recent_commitments: Array.isArray(ctx.recent_commitments) ? ctx.recent_commitments.length : 0,
     has_lifeos_snapshot: Boolean(
       ctx.lifeos_snapshot && typeof ctx.lifeos_snapshot === 'object' && Object.keys(ctx.lifeos_snapshot).length,
@@ -296,7 +295,7 @@ export function summarizeVoiceRailContextHealth(contextData) {
     counts.verified_memories > 0,
     counts.has_lifeos_snapshot,
     counts.has_continuity_log,
-    counts.mission_queue_head > 0,
+    counts.bp_priority > 0,
     counts.has_product_brief,
     counts.memory_capsules > 0,
     counts.has_communication_profile,
@@ -433,8 +432,8 @@ export async function buildVoiceRailOperatorContext({
       ctx.goals = [];
     }),
 
-    readMissionQueueHead().then((m) => {
-      ctx.mission_queue_head = m;
+    readBpPriorityStatus().then((m) => {
+      ctx.bp_priority = m;
     }),
 
     readContinuityTail().then((t) => {
@@ -980,7 +979,7 @@ export function createVoiceRailV1({
 
       const replyText = formatLifeOSOperatorReply({
         toolPass,
-        missionQueueHead: contextData.mission_queue_head,
+        bpPriority: contextData.bp_priority,
       });
 
       const routing = resolveRouting('ChC', councilMember, {

@@ -12,6 +12,7 @@ import {
   shouldRouteFounderToSystem,
   extractTargetFileFromInstruction,
 } from './voice-rail-command-executor.js';
+import { BP_PRIORITY_REL } from './bp-priority-queue.js';
 
 function normalizeText(value) {
   return String(value || '').trim();
@@ -121,16 +122,16 @@ export function buildLifeOSOperatorSystemPrompt({
     })}`
     : '';
 
-  const bpBlock = Array.isArray(contextData?.mission_queue_head) && contextData.mission_queue_head.length
-    ? `\nBP_QUEUE (from BP_PRIORITY.json + BLUEPRINT.json in context):\n${JSON.stringify(contextData.mission_queue_head, null, 2)}`
+  const bpBlock = Array.isArray(contextData?.bp_priority) && contextData.bp_priority.length
+    ? `\nBP_PRIORITY (${BP_PRIORITY_REL} + each mission BLUEPRINT.json):\n${JSON.stringify(contextData.bp_priority, null, 2)}`
     : '';
 
   return [
     `You are LifeOS — ${name}'s live operator interface to their Railway-deployed system.`,
     'You speak naturally in conversation, like a trusted operator who runs the machine — NOT a separate "advisor" chatbot.',
     'You are NOT Council Chair, NOT BPB, NOT any department persona. Never say "I routed to…" or "the team will…".',
-    'Product queue law: builderos-reboot/BP_PRIORITY.json → mission BLUEPRINT.json → builder/command-control. Cite mission_queue_head when present.',
-    'NEVER claim you lack repo access, cannot read blueprints, or need Adam to name paths when BP_QUEUE is in context.',
+    `There is one product queue: ${BP_PRIORITY_REL} — rank order of which BP to work. Each item points at a mission BLUEPRINT.json. No other queue.`,
+    'NEVER claim you lack repo access, cannot read blueprints, or need Adam to name paths when BP_PRIORITY is in context.',
     'When work was requested, SYSTEM_TOOL_RESULTS shows what command-control/builder actually did. Cite job_id / blockers when present.',
     'Keep flow human. Short paragraphs. No corporate filler. No fake pipelines.',
     executionTruthBlock || '',
@@ -143,14 +144,14 @@ export function buildLifeOSOperatorSystemPrompt({
   ].filter(Boolean).join('\n');
 }
 
-/** Deterministic LifeOS reply — system receipts only, no council freestyle. */
-export function formatMissionQueueForReply(missionQueueHead) {
-  if (!Array.isArray(missionQueueHead) || !missionQueueHead.length) {
-    return 'Product queue: BP_PRIORITY.json not loaded this turn.';
+/** Deterministic LifeOS reply — BP_PRIORITY + BLUEPRINT.json + receipts only. */
+export function formatBpPriorityReply(bpPriority) {
+  if (!Array.isArray(bpPriority) || !bpPriority.length) {
+    return `${BP_PRIORITY_REL}: not loaded this turn.`;
   }
-  const lines = ['Product queue (builderos-reboot/BP_PRIORITY.json → mission BLUEPRINT.json):'];
+  const lines = [`${BP_PRIORITY_REL} (rank → mission → BLUEPRINT.json):`];
   let hasPending = false;
-  for (const row of missionQueueHead) {
+  for (const row of bpPriority) {
     const next = row.next_step;
     let note = 'all blueprint steps complete';
     if (next?.step_id) {
@@ -163,13 +164,13 @@ export function formatMissionQueueForReply(missionQueueHead) {
   }
   if (!hasPending) {
     lines.push('');
-    lines.push('No incomplete blueprint steps. Add a step to a mission BLUEPRINT.json or rank 4 to BP_PRIORITY.json.');
+    lines.push('No incomplete steps in any BLUEPRINT.json. Add a step to a blueprint or a new rank in BP_PRIORITY.json.');
   }
   return lines.join('\n');
 }
 
-export function formatLifeOSOperatorReply({ toolPass, missionQueueHead }) {
-  const parts = [formatMissionQueueForReply(missionQueueHead)];
+export function formatLifeOSOperatorReply({ toolPass, bpPriority }) {
+  const parts = [formatBpPriorityReply(bpPriority)];
   if (toolPass?.tool_summary) parts.push(toolPass.tool_summary);
   if (toolPass?.command_execution) {
     const ce = toolPass.command_execution;
