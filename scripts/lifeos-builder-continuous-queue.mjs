@@ -14,6 +14,10 @@
  *
  * **`--reset-cursor-only`** — resets lane cursor then **exits without `/build`** (prevents chaining reset + accidental full-queue run).
  *
+ * **Quarantine (2026-05-24):** This legacy shadow queue runner does **not** execute unless
+ * **`BUILDER_QUEUE_ENABLED=1`** is set explicitly. Product work uses **`builderos-reboot/BP_PRIORITY.json`**
+ * (priority ranking) → mission **`BLUEPRINT.json`** (work plan) — not this JSON task list.
+ *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
@@ -34,6 +38,27 @@ import { buildClosureRecord } from './lib/closure-contract.mjs';
 import { makePrediction, evaluatePrediction } from './lib/prediction-loop.mjs';
 
 const execFileAsync = promisify(execFile);
+
+/** Legacy shadow queue — opt-in only; default quarantined for migration/audit. */
+function isLegacyBuilderQueueEnabled() {
+  return String(process.env.BUILDER_QUEUE_ENABLED || '').trim() === '1';
+}
+
+function exitIfLegacyQueueQuarantined() {
+  if (isLegacyBuilderQueueEnabled()) return;
+  console.error(
+    [
+      '',
+      'LEGACY BUILDER QUEUE QUARANTINED',
+      'scripts/lifeos-builder-continuous-queue.mjs will not run tasks autonomously.',
+      'This runner is preserved for migration/audit only.',
+      'Opt in explicitly: BUILDER_QUEUE_ENABLED=1',
+      'Product work queue: builderos-reboot/BP_PRIORITY.json (rank) → mission BLUEPRINT.json (steps).',
+      '',
+    ].join('\n'),
+  );
+  process.exit(0);
+}
 
 const ROOT = process.cwd();
 const DEFAULT_TASKS_PATH = join(ROOT, 'docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json');
@@ -605,6 +630,8 @@ function selectQueueSlice(tasks, { startIdx, max, wrap, quarantinedIds }) {
 }
 
 async function main() {
+  exitIfLegacyQueueQuarantined();
+
   const dry = hasFlag('--dry-run');
   const max = parseInt(
     argValue('--max', process.env.BUILDER_QUEUE_MAX || process.env.OVERNIGHT_MAX || ''),
