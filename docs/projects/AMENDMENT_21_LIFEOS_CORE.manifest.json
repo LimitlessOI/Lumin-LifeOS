@@ -180,6 +180,7 @@
     "services/voice-rail-execution-truth.js",
     "services/voice-rail-founder-memory.js",
     "services/voice-rail-usage-receipt.js",
+    "services/founder-direct-provider.js",
     "db/migrations/20260612_voice_rail_founder_routing_state.sql",
     "public/overlay/lifeos-ambient-sense.js"
   ],
@@ -854,6 +855,6 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_change_summary": "Voice Rail v2.25 — AI picker in LifeOS mode (Auto/GPT/Groq), dept hidden",
-  "ssot_receipt_tail": "providerScopeId LifeOS; cheapest Auto default; v2.25 UI."
+  "last_change_summary": "Founder Direct Provider Test v2.31 — live OpenAI/Anthropic/Google fetch",
+  "ssot_receipt_tail": "POST /founder-direct-provider; Talk to GPT|Claude|Gemini in LifeOS mode."
 }

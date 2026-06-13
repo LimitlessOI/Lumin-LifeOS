@@ -64,7 +64,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-05-24 — Voice Rail v2.21 command mode direct system path
+**Last Updated:** 2026-05-24 — Founder Direct Provider Test v2.31
 
 ---
 
@@ -1572,6 +1572,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-05-24 | **Founder Direct Provider Test v2.31 (GAP-FILL):** `services/founder-direct-provider.js` — live fetch to OpenAI / Anthropic / Google only (no council). `POST /api/v1/lifeos/voice-rail/founder-direct-provider` + LifeOS `/message` intercept for `Talk to GPT|Claude|Gemini:`. Build **v2.31**. | Adam FOUNDER DIRECT PROVIDER TEST — prove paid provider APIs with receipts | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.30 — BP_PRIORITY is the only queue (GAP-FILL):** Renamed `mission_queue_head` → `bp_priority`; reads only `BP_PRIORITY.json` + each `BLUEPRINT.json`. Removed all other queue naming. Build **v2.30**. | Adam: BP is the queue — rank list only, no other queues | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.27 — superseded by v2.28:** removed operator parallel builder path; reverted bp-priority-queue extensions. | Adam: stop making shit up against structure | GAP-FILL | superseded |
 | 2026-05-24 | **Voice Rail v2.25 — LifeOS AI picker restored (GAP-FILL):** `lifeos-voice-rail-v1.html` — LifeOS/system modes show **AI** row (Auto/GPT/Groq/…) hide **Dept** only; `providerScopeId()` = `LifeOS` storage; single-engine pick in LifeOS; routing line shows voice model; footer shows model on operator replies. Default **Auto (cheapest first)**. Build **v2.25**. | Adam: pick GPT/Groq voice while system APIs run first | GAP-FILL | pending deploy |

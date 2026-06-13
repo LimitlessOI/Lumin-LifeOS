@@ -58,6 +58,11 @@ import {
   formatLifeOSOperatorReply,
 } from './voice-rail-system-operator.js';
 import { loadBpPriority, BP_PRIORITY_REL } from './bp-priority-queue.js';
+import {
+  parseFounderDirectProviderUtterance,
+  callFounderDirectProvider,
+  formatFounderDirectProviderReply,
+} from './founder-direct-provider.js';
 
 const MODES = new Set(['lifeos', 'system', 'conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -951,6 +956,33 @@ export function createVoiceRailV1({
 
     /** LifeOS — system runs first; reply is receipts only (no council freestyle). */
     if (mode === 'lifeos' && !simulateOnly) {
+      const directParsed = parseFounderDirectProviderUtterance(content);
+      if (directParsed) {
+        const providerResult = await callFounderDirectProvider(directParsed);
+        const replyText = formatFounderDirectProviderReply(providerResult);
+        const { rows: assistantRows } = await pool.query(
+          `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+           VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+           RETURNING id, role, content, intent, department, created_at`,
+          [session.id, replyText, 'founder_direct_provider', 'LifeOS'],
+        );
+        await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+        return {
+          private: false,
+          persisted: true,
+          founder_direct_provider: true,
+          session_id: session.id,
+          mode: 'lifeos',
+          tag: session.tag,
+          department: 'LifeOS',
+          intent: 'founder_direct_provider',
+          user_message: { role: 'user', content, intent },
+          assistant_message: assistantRows[0],
+          reply_source: { council_used: false, founder_direct_provider: providerResult },
+          provider_result: providerResult,
+        };
+      }
+
       const contextData = await buildVoiceRailOperatorContext({
         pool,
         userId,

@@ -19,6 +19,10 @@ import {
 import { createCommitmentTracker } from '../services/commitment-tracker.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 import { createCommunicationProfile } from '../services/communication-profile.js';
+import {
+  parseFounderDirectProviderUtterance,
+  callFounderDirectProvider,
+} from '../services/founder-direct-provider.js';
 
 const sttUpload = multer({
   storage: multer.memoryStorage(),
@@ -69,7 +73,8 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.30',
+      build: 'voice-rail-v2.31',
+      founder_direct_provider: true,
       founder_system_direct_default: true,
       founder_operator_mode: 'lifeos',
       founder_auto_routing: true,
@@ -258,6 +263,33 @@ export function createLifeOSVoiceRailRoutes({
       const messages = await voiceRail.listMessages(req.params.id, userId);
       if (messages === null) return res.status(404).json({ ok: false, error: 'session_not_found' });
       res.json({ ok: true, messages });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post('/founder-direct-provider', requireKey, async (req, res, next) => {
+    try {
+      const text = String(req.body.text || req.body.utterance || '').trim();
+      let parsed = parseFounderDirectProviderUtterance(text);
+      if (!parsed && req.body.provider && req.body.prompt) {
+        const p = String(req.body.provider).toLowerCase();
+        const map = { gpt: 'openai', openai: 'openai', claude: 'anthropic', anthropic: 'anthropic', gemini: 'google', google: 'google' };
+        const provider = map[p];
+        if (provider) {
+          parsed = { provider, prompt: String(req.body.prompt).trim() };
+        }
+      }
+      if (!parsed) {
+        return res.status(400).json({
+          ok: false,
+          error: 'invalid_utterance',
+          hint: 'Talk to GPT: … | Talk to Claude: … | Talk to Gemini: …',
+        });
+      }
+      const result = await callFounderDirectProvider(parsed);
+      const status = result.ok ? 200 : result.error?.startsWith('missing_api_key') ? 503 : 502;
+      return res.status(status).json(result);
     } catch (err) {
       next(err);
     }
