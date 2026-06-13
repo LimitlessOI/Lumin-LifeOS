@@ -1572,7 +1572,8 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-06-13 | **Intent-first routing v2.33 (GAP-FILL):** `services/voice-rail-intent-router.js` — infer lane from utterance; `execution_bp` vertical slice for "Build the next LifeOS BP step"; mode buttons collapsed in UI. Build **v2.33**. | Adam: MODE-FIRST → INTENT-FIRST; LifeOS routes itself | GAP-FILL | pending deploy |
+| 2026-06-13 | **execution_bp HTTP proof hotfix (GAP-FILL):** `voice-rail-intent-router.js` — shell_command proof via live `/founder-direct-provider` HTTP not execSync (502 fix). | Railway 502 on npm exec in request handler | GAP-FILL | pending deploy |
+| 2026-06-13 | **Intent-first routing v2.33 (GAP-FILL):** `services/voice-rail-intent-router.js` — infer lane from utterance; `execution_bp` vertical slice for "Build the next LifeOS BP step"; mode buttons collapsed in UI. Build **v2.33**. | Adam: MODE-FIRST → INTENT-FIRST; LifeOS routes itself | GAP-FILL | deployed |
 | 2026-05-24 | **Founder Direct Provider Test v2.31 (GAP-FILL):** `services/founder-direct-provider.js` — live fetch to OpenAI / Anthropic / Google only (no council). `POST /api/v1/lifeos/voice-rail/founder-direct-provider` + LifeOS `/message` intercept for `Talk to GPT|Claude|Gemini:`. Build **v2.31**. | Adam FOUNDER DIRECT PROVIDER TEST — prove paid provider APIs with receipts | GAP-FILL | deployed |
 | 2026-05-24 | **Voice Rail v2.30 — BP_PRIORITY is the only queue (GAP-FILL):** Renamed `mission_queue_head` → `bp_priority`; reads only `BP_PRIORITY.json` + each `BLUEPRINT.json`. Removed all other queue naming. Build **v2.30**. | Adam: BP is the queue — rank list only, no other queues | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.27 — superseded by v2.28:** removed operator parallel builder path; reverted bp-priority-queue extensions. | Adam: stop making shit up against structure | GAP-FILL | superseded |

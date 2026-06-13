@@ -858,5 +858,5 @@
   },
   "last_updated": "2026-05-24",
   "last_change_summary": "Intent-first routing v2.33 — execution_bp vertical slice",
-  "ssot_receipt_tail": "resolveFounderIntentRoute; mode row collapsed; Build next BP step auto-routes."
+  "ssot_receipt_tail": "execution_bp HTTP proof; resolveFounderIntentRoute v2.33."
 }

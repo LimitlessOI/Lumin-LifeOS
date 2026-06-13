@@ -20,6 +20,37 @@ const ALLOWLIST_SHELL_COMMANDS = new Set([
   'npm run lifeos:founder-direct-provider:proof',
 ]);
 
+async function runFounderDirectProviderProofHttp(baseUrl, commandKey) {
+  const base = String(baseUrl || '').replace(/\/$/, '');
+  const hdrs = { 'content-type': 'application/json', 'x-command-key': commandKey };
+  const cases = [
+    { id: 'FDP-T02', text: 'Talk to GPT: what model are you and what is 2+2?', provider: 'openai' },
+    { id: 'FDP-T03', text: 'Talk to Claude: what model are you and what is 2+2?', provider: 'anthropic' },
+    { id: 'FDP-T04', text: 'Talk to Gemini: what model are you and what is 2+2?', provider: 'google' },
+  ];
+  const health = await fetch(`${base}/api/v1/lifeos/voice-rail/health`, { headers: hdrs });
+  const healthJson = await health.json().catch(() => ({}));
+  const results = [];
+  for (const c of cases) {
+    const res = await fetch(`${base}/api/v1/lifeos/voice-rail/founder-direct-provider`, {
+      method: 'POST',
+      headers: hdrs,
+      body: JSON.stringify({ text: c.text }),
+    });
+    const body = await res.json().catch(() => ({}));
+    results.push({
+      test: c.id,
+      http_status: res.status,
+      ok: body.ok === true && body.provider === c.provider && Boolean(body.raw_response),
+      provider: body.provider,
+      model: body.model,
+      request_id: body.request_id,
+    });
+  }
+  const pass = health.ok && healthJson.founder_direct_provider === true && results.every((r) => r.ok);
+  return { pass, health: { build: healthJson.build, founder_direct_provider: healthJson.founder_direct_provider }, results };
+}
+
 function isBuildNextBpStepUtterance(text) {
   const t = String(text || '').toLowerCase();
   return (
@@ -147,6 +178,17 @@ export async function executeBuildNextBpStep({
         stepInfo,
       };
     }
+    if (step.command === 'npm run lifeos:founder-direct-provider:proof' && baseUrl && commandKey) {
+      const proof = await runFounderDirectProviderProofHttp(baseUrl, commandKey);
+      return {
+        ok: proof.pass,
+        path: 'shell_command',
+        command: step.command,
+        stepInfo,
+        proof_receipt_path: 'products/receipts/FOUNDER_DIRECT_PROVIDER_PROOF.json',
+        proof_http: proof,
+      };
+    }
     try {
       const stdout = execSync(step.command, {
         cwd: REPO_ROOT,
@@ -249,6 +291,13 @@ export function formatBuildNextBpStepReply(route, result) {
     lines.push(`command: ${result.command}`);
     lines.push(`ok: ${result.ok}`);
     if (result.proof_receipt_path) lines.push(`proof_receipt: ${result.proof_receipt_path}`);
+    if (result.proof_http?.results?.length) {
+      lines.push('');
+      lines.push('provider_proof:');
+      for (const r of result.proof_http.results) {
+        lines.push(`  ${r.test} ${r.provider} ok=${r.ok} model=${r.model || '—'} request_id=${r.request_id || '—'}`);
+      }
+    }
     if (result.proof_receipt?.verdict) lines.push(`proof_verdict: ${result.proof_receipt.verdict}`);
     if (result.error) lines.push(`error: ${result.error}`);
     if (result.stderr) {
