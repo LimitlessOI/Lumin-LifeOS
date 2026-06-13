@@ -406,12 +406,66 @@
     #key-status.bad { color: #dc2626; }
     #staged-list { margin-top: 6px; }
     .staged { background: var(--input-bg); border: 1px dashed var(--border); border-radius: 6px; padding: 6px 8px; margin-top: 4px; font-size: 11px; }
+    .provider-proof-panel {
+      flex-shrink: 0;
+      margin: 0;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 12px;
+    }
+    .provider-proof-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .provider-proof-head strong { font-size: 12px; }
+    .provider-proof-selected { color: var(--muted); flex: 1; min-width: 140px; }
+    .provider-proof-detail {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .provider-proof-detail.verified { border-color: var(--ok); }
+    .provider-proof-detail.failed { border-color: #dc2626; }
+    .provider-proof-list { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .provider-proof-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      cursor: pointer;
+    }
+    .provider-proof-row:hover { border-color: var(--accent); }
+    .provider-proof-row .id { font-weight: 700; color: var(--accent); }
+    .provider-proof-card {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--ok);
+      background: var(--input-bg);
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      line-height: 1.45;
+    }
+    .provider-proof-card.fail { border-color: #dc2626; }
     @media (max-width: 480px) { header h1 { font-size: 0.95rem; } .btn { padding: 10px 12px; } }
   </style>
 </head>
 <body>
   <header>
-    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="LifeOS operator">LifeOS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.35</span></h1>
+    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="LifeOS operator">LifeOS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.36</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -433,8 +487,19 @@
 
   <div id="truth-banner" role="status" class="connection-check">
     <span id="connection-status">Checking LifeOS connection…</span>
-    <span class="truth-build"> · build <strong>v2.35</strong> · BP_PRIORITY only · receipts only</span>
+    <span class="truth-build"> · build <strong>v2.36</strong> · provider proof in UI</span>
   </div>
+
+  <section id="provider-proof-panel" class="provider-proof-panel" aria-label="Provider connection proof">
+    <div class="provider-proof-head">
+      <strong>Provider connection proof</strong>
+      <span id="provider-proof-selected" class="provider-proof-selected">Select GPT, Claude, or Gemini in AI options</span>
+      <button type="button" class="btn btn-primary" id="btn-provider-proof-create">Create proof event</button>
+      <button type="button" class="btn" id="btn-provider-proof-refresh" title="Reload proof records from LifeOS">Refresh list</button>
+    </div>
+    <div id="provider-proof-detail" class="provider-proof-detail" hidden></div>
+    <div id="provider-proof-list" class="provider-proof-list" aria-live="polite"></div>
+  </section>
 
   <div id="auth-banner" role="alert">
     <strong>Connect once.</strong> After you verify, the key stays in <strong>this browser</strong> — refresh won’t ask again.
@@ -658,6 +723,8 @@
       await populateMicInputs();
       await loadSession();
       await refreshConnectionProof();
+      syncProviderProofSelectedLabel();
+      await refreshProofEventList();
       await loadDepartments();
       return true;
     }
@@ -976,6 +1043,164 @@
     });
 
     const API = '/api/v1/lifeos/voice-rail';
+    const LIFEOS_API = '/api/v1/lifeos';
+
+    const PROOF_MEMBER_TO_PROVIDER = {
+      openai_gpt: { id: 'openai', label: 'OpenAI' },
+      claude_sonnet: { id: 'anthropic', label: 'Anthropic' },
+      gemini_flash: { id: 'google', label: 'Google' },
+    };
+
+    async function lifeosApi(method, path, body) {
+      const r = await fetch(`${LIFEOS_API}${path}`, {
+        method,
+        headers: headers(),
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const json = await r.json().catch(() => ({}));
+      return { status: r.status, json };
+    }
+
+    function resolveProofProviderFromUi() {
+      const memberKey = selectedProviderKeys()[0] || '';
+      return PROOF_MEMBER_TO_PROVIDER[memberKey] || null;
+    }
+
+    function syncProviderProofSelectedLabel() {
+      const el = document.getElementById('provider-proof-selected');
+      if (!el) return;
+      const picked = resolveProofProviderFromUi();
+      el.textContent = picked
+        ? `Selected: ${picked.label} — creates a live proof record in LifeOS`
+        : 'Select GPT, Claude, or Gemini in AI options (not Auto)';
+    }
+
+    function renderProviderProofDetail(record, { title } = {}) {
+      const el = document.getElementById('provider-proof-detail');
+      if (!el) return;
+      if (!record || !record.ok) {
+        el.hidden = false;
+        el.className = 'provider-proof-detail failed';
+        el.textContent = record?.error || 'Proof record not found';
+        return;
+      }
+      el.hidden = false;
+      el.className = `provider-proof-detail${record.verified ? ' verified' : ''}`;
+      const meta = record.metadata || {};
+      el.innerHTML = [
+        title ? `<div><strong>${escapeHtml(title)}</strong></div>` : '',
+        `proof_event_id: ${escapeHtml(record.proof_event_id)}`,
+        `provider: ${escapeHtml(meta.provider || '—')}`,
+        `model: ${escapeHtml(meta.model || '—')}`,
+        `provider_request_id: ${escapeHtml(meta.provider_request_id || '—')}`,
+        `tool: ${escapeHtml(record.tool_name || meta.tool_name || '—')}`,
+        `created_at: ${escapeHtml(record.created_at || '—')}`,
+        `verified: ${record.verified === true}`,
+        `status: ${escapeHtml(record.status || '—')}`,
+      ].filter(Boolean).join('<br>');
+    }
+
+    function buildProviderProofCardEl(proof) {
+      const el = document.createElement('div');
+      el.className = `provider-proof-card${proof?.ok ? '' : ' fail'}`;
+      if (!proof?.ok) {
+        el.textContent = `PROVIDER PROOF FAILED · ${proof?.error || 'unknown'}`;
+        return el;
+      }
+      el.innerHTML = [
+        'PROVIDER PROOF · stored in LifeOS',
+        `id: ${escapeHtml(proof.proof_event_id)}`,
+        `provider: ${escapeHtml(proof.provider_label || proof.provider)}`,
+        `model: ${escapeHtml(proof.model)}`,
+        `request_id: ${escapeHtml(proof.provider_request_id || '—')}`,
+        `tool_called: ${proof.tool_called === true}`,
+      ].join('<br>');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn';
+      btn.style.cssText = 'margin-top:6px;font-size:10px;padding:4px 8px';
+      btn.textContent = 'Verify in LifeOS';
+      btn.addEventListener('click', () => verifyProofEventInUi(proof.proof_event_id));
+      el.appendChild(btn);
+      return el;
+    }
+
+    async function verifyProofEventInUi(proofEventId) {
+      if (!ensureKey()) return;
+      const res = await lifeosApi('GET', `/system-proof-event/${encodeURIComponent(proofEventId)}`);
+      renderProviderProofDetail(res.json, { title: 'Verified in LifeOS' });
+    }
+
+    async function refreshProofEventList() {
+      const host = document.getElementById('provider-proof-list');
+      if (!host || !ensureKey()) return;
+      host.textContent = 'Loading proof records…';
+      const res = await lifeosApi('GET', `/system-proof-events?user=${encodeURIComponent(USER)}&limit=15`);
+      if (res.status !== 200 || !res.json.ok) {
+        host.textContent = res.json?.error || 'Could not load proof records';
+        return;
+      }
+      const events = res.json.events || [];
+      if (!events.length) {
+        host.textContent = 'No proof records yet — create one above.';
+        return;
+      }
+      host.innerHTML = '';
+      events.forEach((ev) => {
+        const row = document.createElement('div');
+        row.className = 'provider-proof-row';
+        row.innerHTML = `<span class="id">#${escapeHtml(ev.proof_event_id)}</span>`
+          + `<span>${escapeHtml(ev.provider || '?')} · ${escapeHtml(ev.model || '?')}</span>`
+          + `<span>${escapeHtml(new Date(ev.created_at).toLocaleString())}</span>`
+          + `<span>${ev.verified ? '✓ verified' : 'unverified'}</span>`;
+        row.addEventListener('click', () => verifyProofEventInUi(ev.proof_event_id));
+        host.appendChild(row);
+      });
+    }
+
+    async function createProviderProofFromUi() {
+      if (!ensureKey()) return;
+      const picked = resolveProofProviderFromUi();
+      if (!picked) {
+        renderProviderProofDetail({ ok: false, error: 'Select GPT, Claude, or Gemini in AI options first.' });
+        return;
+      }
+      const btn = document.getElementById('btn-provider-proof-create');
+      if (btn) btn.disabled = true;
+      try {
+        const text = `Ask ${picked.label === 'OpenAI' ? 'GPT' : picked.label === 'Anthropic' ? 'Claude' : 'Gemini'} to create a LifeOS proof event.`;
+        const res = await lifeosApi('POST', '/provider-tool-proof', {
+          text,
+          provider: picked.id,
+          user: USER,
+        });
+        const proof = res.json;
+        if (proof?.ok) {
+          renderProviderProofDetail({
+            ok: true,
+            verified: true,
+            proof_event_id: proof.proof_event_id,
+            tool_name: proof.tool_name,
+            status: 'processed',
+            created_at: proof.created_at,
+            metadata: {
+              provider: proof.provider,
+              model: proof.model,
+              provider_request_id: proof.provider_request_id,
+              tool_name: proof.tool_name,
+            },
+          }, { title: 'Created via live provider API' });
+        } else {
+          renderProviderProofDetail({ ok: false, error: proof?.error || `HTTP ${res.status}` });
+        }
+        await refreshProofEventList();
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    document.getElementById('btn-provider-proof-create')?.addEventListener('click', createProviderProofFromUi);
+    document.getElementById('btn-provider-proof-refresh')?.addEventListener('click', refreshProofEventList);
     let sessionId = localStorage.getItem('voice_rail_session_id') || null;
     let lastAssistant = '';
     let privateBuffer = [];
@@ -1135,11 +1360,13 @@
       localStorage.setItem(providerStorageKey(scope), next[0]);
       applyProviderUI(next);
       syncRoutingLine();
+      syncProviderProofSelectedLabel();
     }
 
     function syncProviderForDept() {
       applyProviderUI(selectedProviderKeys());
       syncRoutingLine();
+      syncProviderProofSelectedLabel();
     }
 
     function renderProviderToggles() {
@@ -1340,6 +1567,9 @@
           extra.systemDirect,
         );
         if (receipt) box.appendChild(receipt);
+      }
+      if (role === 'assistant' && extra?.providerToolProof) {
+        box.appendChild(buildProviderProofCardEl(extra.providerToolProof));
       }
       return box;
     }
@@ -1928,6 +2158,7 @@
         const reply = res.json.assistant_message?.content || '';
         const replyDept = res.json.department || res.json.reply_source?.persona || department;
         const exec = extractCommandExecution(res.json);
+        const providerToolProof = res.json.provider_tool_proof || null;
         appendBubble(
           'assistant',
           reply,
@@ -1936,8 +2167,30 @@
           replyDept,
           null,
           null,
-          { commandExecution: exec, mode, systemDirect: Boolean(res.json.system_direct) },
+          {
+            commandExecution: exec,
+            mode,
+            systemDirect: Boolean(res.json.system_direct),
+            providerToolProof: providerToolProof?.ok ? providerToolProof : (providerToolProof || null),
+          },
         );
+        if (providerToolProof?.ok) {
+          renderProviderProofDetail({
+            ok: true,
+            verified: true,
+            proof_event_id: providerToolProof.proof_event_id,
+            tool_name: providerToolProof.tool_name,
+            status: 'processed',
+            created_at: providerToolProof.created_at,
+            metadata: {
+              provider: providerToolProof.provider,
+              model: providerToolProof.model,
+              provider_request_id: providerToolProof.provider_request_id,
+              tool_name: providerToolProof.tool_name,
+            },
+          }, { title: 'Created via chat + live provider API' });
+          refreshProofEventList();
+        }
         lastAssistant = reply;
         if (!res.json.system_direct && !res.json.founder_direct) maybeSpeak(reply);
         await refreshStaged();
@@ -2102,6 +2355,8 @@
         loadProviders();
         loadSession();
         refreshConnectionProof();
+        syncProviderProofSelectedLabel();
+        refreshProofEventList();
       } else {
         loadDepartments();
       }

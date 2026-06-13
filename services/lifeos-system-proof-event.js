@@ -114,6 +114,40 @@ export async function createSystemProofEvent(pool, {
   }
 }
 
+export async function listSystemProofEvents(pool, userId, { limit = 20 } = {}) {
+  if (!pool?.query) {
+    return { ok: false, error: 'database_pool_unavailable' };
+  }
+  if (!userId) {
+    return { ok: false, error: 'user_id_required' };
+  }
+  const lim = Math.min(Math.max(parseInt(String(limit), 10) || 20, 1), 50);
+  const { rows } = await pool.query(
+    `SELECT id, user_id, source, channel, status, detected_command, metadata, created_at
+     FROM lifeos_event_stream
+     WHERE user_id = $1 AND source = $2 AND channel = $3
+     ORDER BY created_at DESC
+     LIMIT $4`,
+    [userId, PROOF_SOURCE, PROOF_CHANNEL, lim],
+  );
+  return {
+    ok: true,
+    count: rows.length,
+    events: rows.map((row) => ({
+      proof_event_id: row.id,
+      record_id: String(row.id),
+      provider: row.metadata?.provider || null,
+      model: row.metadata?.model || null,
+      provider_request_id: row.metadata?.provider_request_id || null,
+      tool_name: row.detected_command,
+      status: row.status,
+      created_at: row.created_at,
+      timestamp: row.created_at,
+      verified: row.metadata?.schema === PROOF_SCHEMA,
+    })),
+  };
+}
+
 export async function getSystemProofEvent(pool, id) {
   if (!pool?.query) {
     return { ok: false, error: 'database_pool_unavailable' };

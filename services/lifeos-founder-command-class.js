@@ -3,7 +3,10 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 import { parseFounderDirectProviderUtterance } from './founder-direct-provider.js';
-import { parseProviderToolProofUtterance } from './founder-provider-tool-action.js';
+import {
+  isCreateProofEventCommand,
+  parseProviderToolProofUtterance,
+} from './founder-provider-tool-action.js';
 import { detectSystemAgentQuestion } from './lifeos-system-agent.js';
 import { extractTargetFileFromInstruction } from './voice-rail-command-executor.js';
 
@@ -95,7 +98,7 @@ export function classifyFounderCommandClass(utterance, { explicitMode = 'lifeos'
   const text = String(utterance || '').trim();
   if (!text) return { class: 'lifeos_operator', reason: 'empty' };
 
-  if (parseProviderToolProofUtterance(text)) {
+  if (parseProviderToolProofUtterance(text) || isCreateProofEventCommand(text)) {
     return { class: 'provider_tool_action', reason: 'ask_provider_tool_proof_pattern' };
   }
 

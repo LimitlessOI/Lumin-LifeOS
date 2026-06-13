@@ -64,7 +64,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-05-24 — Provider API → tool → system proof event (v2.35)
+**Last Updated:** 2026-05-24 — Provider proof visible in LifeOS UI (v2.36)
 
 ---
 
@@ -1572,7 +1572,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-05-24 | **Provider tool schema hotfix (GAP-FILL):** `founder-provider-tool-action.js` — Anthropic `input_schema` (not OpenAI `parameters`); Gemini strip `additionalProperties`, use `OBJECT`/`STRING` types. | Production PTA-T02/T03 failed: invalid tool payload from provider APIs | GAP-FILL | pending deploy |
+| 2026-05-24 | **Provider proof in LifeOS UI (GAP-FILL v2.36):** `GET /api/v1/lifeos/system-proof-events` list; `lifeos-voice-rail-v1.html` — Provider connection proof panel (create + verify + list in-browser); chat path accepts UI-selected provider + "Create a LifeOS proof event"; `memberKeyToProofProvider`. Build **v2.36**. | Adam: proof must be visible/verifiable in LifeOS UI — not Cursor/terminal | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.34 — founder command-class routing (GAP-FILL):** `services/lifeos-founder-command-class.js` — repo_build / bp_level / system_read / direct_provider / system_action / blocked. `services/lifeos-founder-system-action.js` — harmless receipts → `lifeos_event_stream` (Neon), no BuilderOS job. `voice-rail-intent-router.js` — lanes `system_action`, `execution_repo`, `blocked`. `voice-rail-v1.js` — wire lanes; no builder for no-repo actions. `voice-rail-command-executor.js` — `shouldRouteFounderToSystem` requires repo target or BP handoff. `voice-rail-system-direct.js` — system_action before status/execute default. Build **v2.34**. | Adam: no-repo system action was misrouted to command-control + missing_target_file | GAP-FILL | deployed |
 | 2026-06-13 | **execution_bp HTTP proof hotfix (GAP-FILL):**** `voice-rail-intent-router.js` — shell_command proof via live `/founder-direct-provider` HTTP not execSync (502 fix). | Railway 502 on npm exec in request handler | GAP-FILL | pending deploy |
 | 2026-06-13 | **Intent-first routing v2.33 (GAP-FILL):** `services/voice-rail-intent-router.js` — infer lane from utterance; `execution_bp` vertical slice for "Build the next LifeOS BP step"; mode buttons collapsed in UI. Build **v2.33**. | Adam: MODE-FIRST → INTENT-FIRST; LifeOS routes itself | GAP-FILL | deployed |

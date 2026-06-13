@@ -861,7 +861,7 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_receipt": "2026-05-24 voice-rail-v2.34-founder-command-class-routing"
-  "last_change_summary": "Intent-first routing v2.33 — execution_bp vertical slice",
-  "ssot_receipt_tail": "execution_bp HTTP proof; resolveFounderIntentRoute v2.33."
+  "last_receipt": "2026-05-24 provider-proof-ui-v2.36",
+  "last_change_summary": "Founder verifies provider proof events inside LifeOS UI",
+  "ssot_receipt_tail": "Provider connection proof panel; GET /system-proof-events list."
 }

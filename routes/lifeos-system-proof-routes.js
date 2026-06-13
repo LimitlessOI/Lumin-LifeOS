@@ -7,6 +7,7 @@ import { resolveLifeOSUserId } from '../services/lifeos-user-resolver.js';
 import {
   createSystemProofEvent,
   getSystemProofEvent,
+  listSystemProofEvents,
   verificationCurlForProofEvent,
 } from '../services/lifeos-system-proof-event.js';
 import {
@@ -43,6 +44,25 @@ export function createLifeOSSystemProofRoutes({ pool, requireKey }) {
         ...result,
         verification_curl: verificationCurlForProofEvent(result.proof_event_id, baseUrl),
       });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/system-proof-events', requireKey, async (req, res, next) => {
+    try {
+      const userRef = req.query.user || req.body?.user || 'adam';
+      const userId = await resolveLifeOSUserId(pool, userRef);
+      if (!userId) {
+        return res.status(404).json({ ok: false, error: 'user_not_found', user: userRef });
+      }
+      const limit = req.query.limit || 20;
+      const result = await listSystemProofEvents(pool, userId, { limit });
+      if (!result.ok) {
+        const status = result.error === 'database_pool_unavailable' ? 503 : 400;
+        return res.status(status).json(result);
+      }
+      return res.json(result);
     } catch (err) {
       next(err);
     }

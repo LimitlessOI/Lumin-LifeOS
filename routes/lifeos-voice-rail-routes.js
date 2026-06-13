@@ -82,7 +82,7 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.35',
+      build: 'voice-rail-v2.36',
       intent_first: true,
       founder_direct_provider: true,
       provider_tool_action_proof: true,

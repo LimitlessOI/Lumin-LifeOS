@@ -45,6 +45,24 @@ function modelFor(provider) {
   return process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 }
 
+const MEMBER_KEY_TO_PROVIDER = {
+  openai_gpt: 'openai',
+  claude_sonnet: 'anthropic',
+  gemini_flash: 'google',
+};
+
+/** UI-selected engine → proof provider id (openai | anthropic | google). */
+export function memberKeyToProofProvider(memberKey) {
+  const key = String(memberKey || '').trim();
+  return MEMBER_KEY_TO_PROVIDER[key] || null;
+}
+
+/** Short founder command when provider comes from LifeOS UI picker. */
+export function isCreateProofEventCommand(utterance) {
+  const t = String(utterance || '').trim();
+  return /^(create|make)\s+(a\s+)?lifeos\s+proof\s+event\.?$/i.test(t);
+}
+
 /**
  * Parse founder utterance: "Ask GPT to create a LifeOS proof event."
  */

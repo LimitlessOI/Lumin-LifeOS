@@ -66,6 +66,8 @@ import {
 import {
   executeProviderToolProofAction,
   formatProviderToolProofReply,
+  isCreateProofEventCommand,
+  memberKeyToProofProvider,
   parseProviderToolProofUtterance,
 } from './founder-provider-tool-action.js';
 import {
@@ -983,14 +985,27 @@ export function createVoiceRailV1({
       const intentRoute = resolveFounderIntentRoute(content, { explicitMode: mode });
 
       const toolProofParsed = parseProviderToolProofUtterance(content);
-      if (toolProofParsed || intentRoute.lane === 'provider_tool_action') {
-        const provider = toolProofParsed?.provider || intentRoute.inferred_provider;
+      const proofCommand = isCreateProofEventCommand(content);
+      if (toolProofParsed || proofCommand || intentRoute.lane === 'provider_tool_action') {
+        const provider = toolProofParsed?.provider
+          || intentRoute.inferred_provider
+          || (proofCommand ? memberKeyToProofProvider(councilMember) : null);
         if (!provider) {
+          const replyText = 'Select OpenAI (GPT), Anthropic (Claude), or Google (Gemini) in AI options, then say: Create a LifeOS proof event.';
+          const { rows: assistantRows } = await pool.query(
+            `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+             VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+             RETURNING id, role, content, intent, department, created_at`,
+            [session.id, replyText, 'provider_tool_action', 'LifeOS'],
+          );
+          await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
           return {
             private: false,
             persisted: true,
             provider_tool_action: false,
-            error: 'provider_not_inferred',
+            error: 'provider_not_selected_in_ui',
+            session_id: session.id,
+            assistant_message: assistantRows[0],
             intent_route: intentRoute,
           };
         }
