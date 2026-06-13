@@ -59,6 +59,40 @@ export function parseProviderToolProofUtterance(utterance) {
   return { provider, label: PROVIDER_LABELS[provider], utterance: raw };
 }
 
+function openAiTool() {
+  const def = proofToolDefinition();
+  return { type: 'function', function: def };
+}
+
+function anthropicTool() {
+  const def = proofToolDefinition();
+  return {
+    name: def.name,
+    description: def.description,
+    input_schema: {
+      type: 'object',
+      properties: def.parameters.properties,
+    },
+  };
+}
+
+function googleTool() {
+  const def = proofToolDefinition();
+  return {
+    name: def.name,
+    description: def.description,
+    parameters: {
+      type: 'OBJECT',
+      properties: {
+        note: {
+          type: 'STRING',
+          description: 'Optional short note stored on the proof record',
+        },
+      },
+    },
+  };
+}
+
 function baseFailure({ provider, model, timestamp, error, httpStatus = null }) {
   return {
     ok: false,
@@ -148,7 +182,6 @@ async function executeProofTool(pool, { userId, provider, model, providerRequest
 }
 
 async function callOpenAiWithTool({ apiKey, model, utterance }) {
-  const tool = proofToolDefinition();
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -168,7 +201,7 @@ async function callOpenAiWithTool({ apiKey, model, utterance }) {
           content: utterance || 'Create a LifeOS proof event by calling create_lifeos_system_proof_event with note "openai_api_proof".',
         },
       ],
-      tools: [{ type: 'function', function: tool }],
+      tools: [openAiTool()],
       tool_choice: { type: 'function', function: { name: PROOF_TOOL_NAME } },
       max_tokens: 256,
       temperature: 0,
@@ -201,7 +234,6 @@ async function callOpenAiWithTool({ apiKey, model, utterance }) {
 }
 
 async function callAnthropicWithTool({ apiKey, model, utterance }) {
-  const tool = proofToolDefinition();
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -220,7 +252,7 @@ async function callAnthropicWithTool({ apiKey, model, utterance }) {
           content: utterance || 'Create a LifeOS proof event by calling create_lifeos_system_proof_event with note "anthropic_api_proof".',
         },
       ],
-      tools: [tool],
+      tools: [anthropicTool()],
       tool_choice: { type: 'tool', name: PROOF_TOOL_NAME },
     }),
   });
@@ -245,7 +277,6 @@ async function callAnthropicWithTool({ apiKey, model, utterance }) {
 }
 
 async function callGoogleWithTool({ apiKey, model, utterance }) {
-  const tool = proofToolDefinition();
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
   const res = await fetch(url, {
     method: 'POST',
@@ -263,7 +294,7 @@ async function callGoogleWithTool({ apiKey, model, utterance }) {
           text: utterance || 'Create a LifeOS proof event by calling create_lifeos_system_proof_event with note "google_api_proof".',
         }],
       }],
-      tools: [{ functionDeclarations: [tool] }],
+      tools: [{ functionDeclarations: [googleTool()] }],
       toolConfig: {
         functionCallingConfig: {
           mode: 'ANY',
