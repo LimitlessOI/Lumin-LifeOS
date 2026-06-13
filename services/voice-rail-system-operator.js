@@ -143,19 +143,63 @@ export function buildLifeOSOperatorSystemPrompt({
   ].filter(Boolean).join('\n');
 }
 
-export function buildLifeOSOperatorReplySource(routing, toolPass, usageReceipt) {
+/** Deterministic LifeOS reply — system receipts only, no council freestyle. */
+export function formatMissionQueueForReply(missionQueueHead) {
+  if (!Array.isArray(missionQueueHead) || !missionQueueHead.length) {
+    return 'Product queue: BP_PRIORITY.json not loaded this turn.';
+  }
+  const lines = ['Product queue (builderos-reboot/BP_PRIORITY.json → mission BLUEPRINT.json):'];
+  let hasPending = false;
+  for (const row of missionQueueHead) {
+    const next = row.next_step;
+    let note = 'all blueprint steps complete';
+    if (next?.step_id) {
+      note = `next ${next.step_id} → ${next.target_file || next.command || '?'}`;
+      hasPending = true;
+    } else if (next?.error) {
+      note = 'blueprint unreadable';
+    }
+    lines.push(`  rank ${row.rank} ${row.mission_id} [${row.verdict || '?'}] — ${note}`);
+  }
+  if (!hasPending) {
+    lines.push('');
+    lines.push('No incomplete blueprint steps. Add a step to a mission BLUEPRINT.json or rank 4 to BP_PRIORITY.json.');
+  }
+  return lines.join('\n');
+}
+
+export function formatLifeOSOperatorReply({ toolPass, missionQueueHead }) {
+  const parts = [formatMissionQueueForReply(missionQueueHead)];
+  if (toolPass?.tool_summary) parts.push(toolPass.tool_summary);
+  if (toolPass?.command_execution) {
+    const ce = toolPass.command_execution;
+    parts.push([
+      'Execution receipt:',
+      `  ok: ${ce.ok}`,
+      `  job_id: ${ce.job_id || '—'}`,
+      `  target_file: ${ce.target_file || '—'}`,
+      `  commit_sha: ${ce.commit_sha || '—'}`,
+      ce.root_cause ? `  blocker: ${ce.root_cause}` : '',
+    ].filter(Boolean).join('\n'));
+  }
+  return parts.filter(Boolean).join('\n\n');
+}
+
+export function buildLifeOSOperatorReplySource(routing, toolPass, usageReceipt, { councilUsed = false } = {}) {
   return {
     path: 'lifeos/system/operator',
     persona: 'LifeOS',
     department: 'LifeOS',
     department_title: 'LifeOS',
     display_name: routing?.displayName || 'LifeOS',
-    model_id: routing?.modelId || null,
-    provider: routing?.provider || null,
-    note: 'Natural conversation backed by system API tool pass — not department theater.',
+    model_id: councilUsed ? (routing?.modelId || null) : null,
+    provider: councilUsed ? (routing?.provider || null) : 'system',
+    note: councilUsed
+      ? 'Council voice over system receipts'
+      : 'System receipts only — no council call (anti-theater)',
     system_operator: true,
-    council_used: true,
-    operator_voice: true,
+    council_used: councilUsed,
+    operator_voice: !councilUsed,
     tool_action: toolPass?.action || null,
     command_execution: toolPass?.command_execution || null,
     usage_receipt: usageReceipt || null,

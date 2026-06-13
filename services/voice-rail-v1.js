@@ -55,6 +55,7 @@ import {
   runFounderSystemToolPass,
   buildLifeOSOperatorSystemPrompt,
   buildLifeOSOperatorReplySource,
+  formatLifeOSOperatorReply,
 } from './voice-rail-system-operator.js';
 
 const MODES = new Set(['lifeos', 'system', 'conversation', 'command', 'brainstorm', 'private']);
@@ -949,9 +950,19 @@ export function createVoiceRailV1({
       [session.id, content || '(attachment)', intent, JSON.stringify(storedAttachments)],
     );
 
-    /** LifeOS operator — natural conversation; system APIs run first; voice speaks from receipts. */
+    /** LifeOS — system runs first; reply is receipts only (no council freestyle). */
     if (mode === 'lifeos' && !simulateOnly) {
-      const operator = await resolveOperatorProfile(userId);
+      const contextData = await buildVoiceRailOperatorContext({
+        pool,
+        userId,
+        lumin,
+        communicationProfile,
+        departmentId: 'LifeOS',
+        logger,
+      });
+      const contextHealth = summarizeVoiceRailContextHealth(contextData);
+      contextHealth.sufficient_for_founder_reply = isVoiceRailContextSufficientForFounderReply(contextHealth);
+
       const toolPass = await runFounderSystemToolPass({
         pool,
         userId,
@@ -966,49 +977,27 @@ export function createVoiceRailV1({
         sessionId: session.id,
         logger,
       });
+
+      const replyText = formatLifeOSOperatorReply({
+        toolPass,
+        missionQueueHead: contextData.mission_queue_head,
+      });
+
       const routing = resolveRouting('ChC', councilMember, {
         content: councilContent,
         mode,
         intent,
       });
-      const panelResult = await generateCouncilReply({
-        pool,
-        callCouncilMember,
-        lumin,
-        communicationProfile,
-        userId,
-        sessionId: session.id,
-        listMessagesFn: listMessages,
-        content: councilContent,
-        mode,
-        intent,
-        department: 'LifeOS',
-        routing,
-        councilMemberOverride: councilMember,
-        councilMembers,
-        councilAliasMap,
-        operator,
-        commandExecutionReceipt: toolPass.command_execution,
-        operatorMode: true,
-        toolPass,
-        logger,
-      });
       const replySource = {
-        ...buildLifeOSOperatorReplySource(
-          panelResult.routing,
-          toolPass,
-          panelResult.usageReceipt,
-        ),
-        context_health: panelResult.contextHealth,
-        execution_truth: panelResult.execution_truth,
-        escalated: panelResult.escalated || false,
+        ...buildLifeOSOperatorReplySource(routing, toolPass, null, { councilUsed: false }),
+        context_health: contextHealth,
         api_trace: toolPass.api_trace || null,
       };
       const { rows: assistantRows } = await pool.query(
         `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
          VALUES ($1, 'assistant', $2, $3, $4, FALSE)
          RETURNING id, role, content, intent, department, created_at`,
-        [session.id, panelResult.text, intent, 'LifeOS'],
+        [session.id, replyText, intent, 'LifeOS'],
       );
       await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
       return {
@@ -1023,7 +1012,7 @@ export function createVoiceRailV1({
         user_message: { role: 'user', content, intent },
         assistant_message: assistantRows[0],
         reply_source: replySource,
-        context_health: panelResult.contextHealth,
+        context_health: contextHealth,
         staged_command: toolPass.staged_command,
         command_execution: toolPass.command_execution,
         tool_action: toolPass.action,
