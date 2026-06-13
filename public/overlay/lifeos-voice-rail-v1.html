@@ -204,8 +204,6 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid var(--border);
     }
     .control-row {
       display: flex;
@@ -358,15 +356,7 @@
       margin: 0;
       order: 1;
     }
-    .slider-field span {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-align: center;
-      order: 2;
-    }
+    .slider-field span { display: none; }
     #truth-banner { flex-shrink: 0; margin: 0; padding: 6px 12px; background: #fffbeb; color: #78350f; border-bottom: 1px solid #fde68a; font-size: 11px; line-height: 1.35; }
     #truth-banner.connection-ok { background: #ecfdf5; color: #065f46; border-color: #6ee7b7; }
     #truth-banner.connection-bad { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
@@ -384,11 +374,11 @@
     .bubble .exec-receipt button { margin-left: 6px; font-size: 10px; padding: 2px 6px; cursor: pointer; border-radius: 4px; border: 1px solid currentColor; background: transparent; color: inherit; }
     #voice-status { font-size: 11px; color: var(--muted); min-height: 1em; flex-shrink: 0; }
     .composer-hint { display: none; }
-    .mic-note { font-size: 10px; color: var(--muted); line-height: 1.35; }
+    .mic-note { display: none; }
     .bubble .source { font-size: 10px; color: var(--muted); margin-top: 6px; }
     .bubble .source.source-warn { color: #c96; }
     .bubble .context-warn { font-size: 10px; color: #c96; margin-top: 4px; line-height: 1.35; }
-    .side { flex-shrink: 0; border-top: 1px solid var(--border); padding: 6px 12px; font-size: 11px; color: var(--muted); max-height: 72px; overflow-y: auto; }
+    .side { display: none; }
     .side strong { color: var(--text); }
     #auth-banner { display: none; margin: 0; padding: 10px 16px; background: #fef2f2; color: #991b1b; border-bottom: 1px solid #fecaca; font-size: 13px; }
     [data-theme="dark"] #auth-banner { background: #3f1515; color: #fecaca; border-color: #7f1d1d; }
@@ -406,49 +396,6 @@
     #key-status.bad { color: #dc2626; }
     #staged-list { margin-top: 6px; }
     .staged { background: var(--input-bg); border: 1px dashed var(--border); border-radius: 6px; padding: 6px 8px; margin-top: 4px; font-size: 11px; }
-    .provider-proof-panel {
-      flex-shrink: 0;
-      margin: 0;
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      font-size: 12px;
-    }
-    .provider-proof-head {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-    .provider-proof-head strong { font-size: 12px; }
-    .provider-proof-selected { color: var(--muted); flex: 1; min-width: 140px; }
-    .provider-proof-detail {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--input-bg);
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 11px;
-      line-height: 1.5;
-      word-break: break-word;
-    }
-    .provider-proof-detail.verified { border-color: var(--ok); }
-    .provider-proof-detail.failed { border-color: #dc2626; }
-    .provider-proof-list { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
-    .provider-proof-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--input-bg);
-      cursor: pointer;
-    }
-    .provider-proof-row:hover { border-color: var(--accent); }
-    .provider-proof-row .id { font-weight: 700; color: var(--accent); }
     .provider-proof-card {
       margin-top: 8px;
       padding: 8px 10px;
@@ -460,12 +407,29 @@
       line-height: 1.45;
     }
     .provider-proof-card.fail { border-color: #dc2626; }
+    .btn-options-toggle {
+      align-self: flex-start;
+      order: 2;
+    }
+    .composer-options {
+      order: 3;
+    }
+    .composer-dock {
+      order: 1;
+    }
+    .control-row-label-dept,
+    #dept-toggles {
+      display: none !important;
+    }
+    #routing-line {
+      padding-top: 2px;
+    }
     @media (max-width: 480px) { header h1 { font-size: 0.95rem; } .btn { padding: 10px 12px; } }
   </style>
 </head>
 <body>
   <header>
-    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="LifeOS operator">LifeOS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.38</span></h1>
+    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="LifeOS operator">LifeOS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.39</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -487,19 +451,8 @@
 
   <div id="truth-banner" role="status" class="connection-check">
     <span id="connection-status">Checking LifeOS connection…</span>
-    <span class="truth-build"> · build <strong>v2.38</strong> · direct-action bridge before chat routing</span>
+    <span class="truth-build"> · build <strong>v2.39</strong></span>
   </div>
-
-  <section id="provider-proof-panel" class="provider-proof-panel" aria-label="Provider connection proof">
-    <div class="provider-proof-head">
-      <strong>Provider connection proof</strong>
-      <span id="provider-proof-selected" class="provider-proof-selected">Select GPT, Claude, or Gemini in AI options</span>
-      <button type="button" class="btn btn-primary" id="btn-provider-proof-create">Create proof event</button>
-      <button type="button" class="btn" id="btn-provider-proof-refresh" title="Reload proof records from LifeOS">Refresh list</button>
-    </div>
-    <div id="provider-proof-detail" class="provider-proof-detail" hidden></div>
-    <div id="provider-proof-list" class="provider-proof-list" aria-live="polite"></div>
-  </section>
 
   <div id="auth-banner" role="alert">
     <strong>Connect once.</strong> After you verify, the key stays in <strong>this browser</strong> — refresh won’t ask again.
@@ -528,16 +481,32 @@
     <div class="resize-handle" id="resize-transcript" title="Drag to resize conversation" aria-label="Resize conversation panel"></div>
 
     <div class="composer">
-      <button type="button" class="btn-options-toggle" id="btn-options-toggle" aria-expanded="false">Options — AI · Dept · Voice</button>
+      <div class="composer-dock" id="composer-dock">
+      <div id="attachment-strip" class="attachment-strip" hidden></div>
+      <input type="file" id="file-input" hidden multiple accept="image/*,.pdf,.txt,.md,.csv" aria-hidden="true" tabindex="-1">
+      <div class="chat-input-bar">
+        <button type="button" class="btn-attach" id="btn-attach" aria-label="Add photos or files">+</button>
+        <div class="chat-input-inner">
+          <div id="interim" data-testid="interim-transcript"></div>
+          <textarea id="input" placeholder="Talk to LifeOS…" rows="1"></textarea>
+        </div>
+        <div class="btn-mic-slot">
+          <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” to post">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+        </div>
+        <button type="button" class="btn-send-round" id="btn-send" aria-label="Send">↑</button>
+      </div>
+      <div id="voice-status" class="voice-status-dock" aria-live="polite"></div>
+      </div>
+      <button type="button" class="btn-options-toggle" id="btn-options-toggle" aria-expanded="false">Options — AI · Voice</button>
       <div class="composer-options" id="composer-options">
       <div class="composer-controls">
         <div class="control-row control-row-engines">
           <span class="control-row-label">AI</span>
           <div class="provider-toggles" role="group" aria-label="AI engine" id="provider-toggles"></div>
-          <span class="control-row-label control-row-label-dept">Dept</span>
-          <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
         </div>
-        <p id="routing-line" aria-live="polite">LifeOS — state your intent; routing is automatic</p>
+        <p id="routing-line" aria-live="polite">Auto routes from lower-cost models upward only when needed.</p>
         <div class="control-row control-row-actions intent-first-collapsed">
           <span class="control-row-label">Mode</span>
           <div class="mode-toggles" role="group" aria-label="Session mode">
@@ -579,7 +548,7 @@
         <label class="speed-label">Mic
           <select id="mic-input" aria-label="Microphone input"></select>
         </label>
-        <button type="button" class="btn" id="btn-refresh-mics" style="font-size:11px;padding:6px 10px">Refresh mics</button>
+        <button type="button" class="btn" id="btn-refresh-mics" style="font-size:11px;padding:6px 10px">Refresh</button>
         <div class="slider-group">
           <label class="slider-field" for="speech-rate">
             <input type="range" id="speech-rate" min="0.75" max="1.5" step="0.05" value="1.05" aria-label="Read-aloud speed">
@@ -596,24 +565,6 @@
         <strong>Recent commands</strong> — command mode runs BuilderOS; receipt shows under reply
         <div id="staged-list"></div>
       </div>
-      </div>
-      <div class="composer-dock" id="composer-dock">
-      <div id="attachment-strip" class="attachment-strip" hidden></div>
-      <input type="file" id="file-input" hidden multiple accept="image/*,.pdf,.txt,.md,.csv" aria-hidden="true" tabindex="-1">
-      <div class="chat-input-bar">
-        <button type="button" class="btn-attach" id="btn-attach" aria-label="Add photos or files">+</button>
-        <div class="chat-input-inner">
-          <div id="interim" data-testid="interim-transcript"></div>
-          <textarea id="input" placeholder="Talk to LifeOS…" rows="1"></textarea>
-        </div>
-        <div class="btn-mic-slot">
-          <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” to post">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-          </button>
-        </div>
-        <button type="button" class="btn-send-round" id="btn-send" aria-label="Send">↑</button>
-      </div>
-      <div id="voice-status" class="voice-status-dock" aria-live="polite"></div>
       </div>
       <button type="button" id="btn-pause" hidden aria-hidden="true" tabindex="-1"></button>
       <button type="button" id="btn-cancel" hidden aria-hidden="true"></button>
@@ -1067,12 +1018,7 @@
     }
 
     function syncProviderProofSelectedLabel() {
-      const el = document.getElementById('provider-proof-selected');
-      if (!el) return;
-      const picked = resolveProofProviderFromUi();
-      el.textContent = picked
-        ? `Selected: ${picked.label} — creates a live proof record in LifeOS`
-        : 'Select GPT, Claude, or Gemini in AI options (not Auto)';
+      return resolveProofProviderFromUi();
     }
 
     function renderProviderProofDetail(record, { title } = {}) {
@@ -1297,27 +1243,12 @@
     function syncRoutingLine() {
       const el = document.getElementById('routing-line');
       if (!el) return;
-      const mode = document.getElementById('mode')?.value || 'system';
-      if (mode === 'system') {
-        el.textContent = 'Raw API mode — receipt text only (debug)';
-        return;
-      }
-      if (mode === 'lifeos') {
-        const engines = selectedProviderKeys();
-        const engineText = engines.length ? engines.map(providerLabelForKey).join(' + ') : 'Auto (cheapest first)';
-        el.textContent = `LifeOS · system APIs first · voice: ${engineText}`;
-        return;
-      }
-      const deptId = document.getElementById('department').value || 'ChC';
-      const meta = departmentMeta(deptId);
       const engines = selectedProviderKeys();
-      const engineText = engines.length ? engines.map(providerLabelForKey).join(' + ') : 'Auto';
-      el.textContent = `Talking to: ${meta?.title || deptId} (${deptId}) · ${engineText} — hat + engine (Auto = CFO picks cheapest fit)`;
-    }
-
-    function selectedProviderKey() {
-      const keys = selectedProviderKeys();
-      return keys[0] || providerCatalog[0]?.member_key || '';
+      const autoOnly = engines.length === 1 && engines[0] === 'founder_auto';
+      const engineText = autoOnly ? 'Auto' : engines.map(providerLabelForKey).join(' + ');
+      el.textContent = autoOnly
+        ? 'Auto starts with the lowest-cost model and steps up only when the request needs it.'
+        : `Selected AI: ${engineText}`;
     }
 
     function selectedProviderKeys() {
@@ -1347,7 +1278,7 @@
     }
 
     function applyProviderUI(activeKeys) {
-      const keys = Array.isArray(activeKeys) ? activeKeys : [activeKeys || selectedProviderKey()];
+      const keys = Array.isArray(activeKeys) && activeKeys.length ? activeKeys : selectedProviderKeys();
       document.querySelectorAll('.provider-toggle').forEach((btn) => {
         const on = keys.includes(btn.dataset.memberKey);
         btn.classList.toggle('active', on);
@@ -1357,19 +1288,18 @@
 
     function onProviderSelected(memberKey) {
       const scope = providerScopeId();
-      const mode = document.getElementById('mode')?.value || 'lifeos';
-      let next;
-      if (mode === 'lifeos' || mode === 'system' || mode === 'command') {
-        next = [memberKey];
+      const set = new Set(selectedProviderKeys());
+      if (memberKey === 'founder_auto') {
+        set.clear();
+        set.add('founder_auto');
+      } else if (set.has(memberKey)) {
+        set.delete(memberKey);
       } else {
-        const set = new Set(selectedProviderKeys());
-        if (set.has(memberKey)) {
-          if (set.size > 1) set.delete(memberKey);
-        } else {
-          set.add(memberKey);
-        }
-        next = [...set];
+        set.delete('founder_auto');
+        set.add(memberKey);
       }
+      if (!set.size) set.add('founder_auto');
+      const next = [...set];
       localStorage.setItem(providersMultiStorageKey(scope), JSON.stringify(next));
       localStorage.setItem(providerStorageKey(scope), next[0]);
       applyProviderUI(next);
@@ -1448,10 +1378,7 @@
     function updateOptionsButtonLabel(mode) {
       const btn = document.getElementById('btn-options-toggle');
       if (!btn) return;
-      btn.textContent =
-        mode === 'lifeos' || mode === 'system'
-          ? 'Options — AI · Voice'
-          : 'Options — AI · Dept · Voice';
+      btn.textContent = 'Options — AI · Voice';
     }
 
     function applyModeUI(mode) {
@@ -1462,15 +1389,13 @@
         btn.classList.toggle('active', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
-      const hideDept = next === 'lifeos' || next === 'system';
+      const hideDept = true;
       setDeptControlsVisible(!hideDept);
       updateOptionsButtonLabel(next);
       const badge = document.getElementById('dept-badge');
-      if (badge && hideDept) {
-        badge.textContent = next === 'lifeos' ? 'LifeOS' : 'API';
-        badge.title = next === 'lifeos' ? 'LifeOS operator' : 'Raw API debug';
-      } else if (badge && !hideDept) {
-        applyDepartmentUI(document.getElementById('department')?.value || 'ChC');
+      if (badge) {
+        badge.textContent = next === 'system' ? 'API' : 'LifeOS';
+        badge.title = next === 'system' ? 'Raw API debug' : 'LifeOS operator';
       }
       applyProviderUI(selectedProviderKeys());
       syncRoutingLine();
@@ -2096,8 +2021,7 @@
 
       const tag = document.getElementById('tag').value || null;
       const department = document.getElementById('department').value || 'ChC';
-      let engines = selectedProviderKeys().filter(Boolean);
-      if ((mode === 'command' || mode === 'lifeos') && engines.length > 1) engines = engines.slice(0, 1);
+      const engines = selectedProviderKeys().filter(Boolean);
 
       try {
         const directAction = await tryDirectAction(content, mode, engines);
