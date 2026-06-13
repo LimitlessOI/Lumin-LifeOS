@@ -17,7 +17,10 @@ export function isVoiceRailCommandExecuteEnabled() {
 }
 
 /** Parse repo-relative path from founder "please build … scripts/foo.mjs …" utterances. */
-export { extractTargetFileFromInstruction as extractTargetFileFromFounderUtterance } from './builder-instruction-target.js';
+export {
+  extractTargetFileFromInstruction,
+  extractTargetFileFromInstruction as extractTargetFileFromFounderUtterance,
+} from './builder-instruction-target.js';
 export { inferBuilderDomainForTargetFile } from './builder-instruction-target.js';
 
 function extractCommitSha(trace) {
