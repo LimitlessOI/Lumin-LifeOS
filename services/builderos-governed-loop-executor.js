@@ -21,6 +21,7 @@ import { runVerification } from '../scripts/builderos-builder-output-verifier.mj
 import { emitTSOSHookReading, buildTsosHookPayloadFromGovernedCommit } from './builderos-tsos-hook-service.js';
 import { scheduleProofParityAfterGovernedCommit } from './builderos-governed-proof-parity.js';
 import { looksLikeBuilderProseRefusal } from './builder-instruction-target.js';
+import { verifyGovernedOutcomeBeforePass } from './builder-outcome-verifier.js';
 
 function resolveBaseUrl(explicit) {
   return (
@@ -234,6 +235,7 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     builder_task_sent: null,
     builder_output: null,
     oil_audit_result: null,
+    outcome_verification: null,
     repair_loop_result: null,
   };
 
@@ -328,6 +330,35 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   });
 
   if (verifierResult.ok) {
+    const outcomeVerification = await verifyGovernedOutcomeBeforePass({
+      job,
+      trace,
+      verifierResult,
+    });
+    trace.outcome_verification = outcomeVerification;
+    await updateCommandControlJobExecution(pool, jobId, {
+      receipt: {
+        stage: 'outcome_verifier',
+        repair_attempt: 0,
+        ok: outcomeVerification.ok === true,
+        code: outcomeVerification.code || null,
+        reason: outcomeVerification.reason || null,
+      },
+    });
+    if (!outcomeVerification.ok) {
+      await updateCommandControlJobExecution(pool, jobId, {
+        status: 'failed',
+        blocker: 'FAIL_WRONG_OUTCOME',
+        result_json: {
+          oil_finding: oilFinding,
+          pbb_plan: plan,
+          builder_output: trace.builder_output,
+          oil_audit_result: verifierResult,
+          outcome_verification: outcomeVerification,
+        },
+      });
+      return { ok: false, error: 'wrong_outcome', stage: 'outcome_verifier', trace, blocker: 'FAIL_WRONG_OUTCOME' };
+    }
     await updateCommandControlJobExecution(pool, jobId, {
       status: 'committed',
       blocker: null,
@@ -336,6 +367,7 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
         pbb_plan: plan,
         builder_output: trace.builder_output,
         oil_audit_result: verifierResult,
+        outcome_verification: outcomeVerification,
       },
     });
     trace.repair_loop_result = { attempted: false, reason: 'verifier_pass_first_attempt' };
@@ -430,6 +462,37 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   });
 
   if (retryVerifier.ok) {
+    const retryOutcomeVerification = await verifyGovernedOutcomeBeforePass({
+      job,
+      trace,
+      verifierResult: retryVerifier,
+    });
+    trace.outcome_verification = retryOutcomeVerification;
+    await updateCommandControlJobExecution(pool, jobId, {
+      receipt: {
+        stage: 'outcome_verifier',
+        repair_attempt: 1,
+        ok: retryOutcomeVerification.ok === true,
+        code: retryOutcomeVerification.code || null,
+        reason: retryOutcomeVerification.reason || null,
+      },
+    });
+    if (!retryOutcomeVerification.ok) {
+      await updateCommandControlJobExecution(pool, jobId, {
+        status: 'failed',
+        blocker: 'FAIL_WRONG_OUTCOME',
+        result_json: {
+          oil_finding: oilFinding,
+          pbb_plan: plan,
+          builder_output: trace.builder_output,
+          oil_audit_result: retryVerifier,
+          repair_loop_result: trace.repair_loop_result,
+          outcome_verification: retryOutcomeVerification,
+        },
+      });
+      trace.repair_loop_result.result = 'wrong_outcome_after_retry';
+      return { ok: false, error: 'wrong_outcome', stage: 'outcome_verifier', trace, blocker: 'FAIL_WRONG_OUTCOME' };
+    }
     await updateCommandControlJobExecution(pool, jobId, {
       status: 'committed',
       blocker: null,
@@ -439,6 +502,7 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
         builder_output: trace.builder_output,
         oil_audit_result: retryVerifier,
         repair_loop_result: trace.repair_loop_result,
+        outcome_verification: retryOutcomeVerification,
       },
     });
     trace.repair_loop_result.result = 'verifier_pass_after_retry';

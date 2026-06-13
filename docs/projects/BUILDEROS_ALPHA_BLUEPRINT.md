@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-12 — Voice Rail builder patch pipeline (target_file from instruction, prose gate, governed loop blockers)
+**Last Updated:** 2026-06-13 — Wrong-outcome governance guard before command-control PASS
 
 ---
 
@@ -562,6 +562,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-13 | `services/builder-outcome-verifier.js` (NEW) + `services/builderos-governed-loop-executor.js` + `tests/builder-outcome-verifier.test.js` (NEW) | Repair lane guard against false-pass/wrong-outcome governance theater. Governed loop now runs `verifyGovernedOutcomeBeforePass()` after verifier success and before setting job `status='committed'`. Verification compares founder request + required outcome (metadata or quoted phrase) against actual committed diff/content from `git show` and requires acceptance verifier PASS. If requested outcome is missing, job is fail-closed with blocker `FAIL_WRONG_OUTCOME`, receipt stage `outcome_verifier`, and result payload containing mismatch evidence. Regression test reproduces known mismatch pattern (`"Multi-Lane Execution Governance"` request vs `§2.18` commit content) and asserts `FAIL_WRONG_OUTCOME`. | A commit existing and a receipt existing are insufficient proof of delivered intent; PASS must require requested outcome parity, not just syntax/runtime commit success. |
 | 2026-06-12 | `services/builderos-governed-loop-executor.js` | Governed loop `trace.builder_output.commit_sha` from `/build` and `/execute` fallback — Voice Rail exec receipts. | Adam next-10 system slice. |
 | 2026-06-12 | `services/builder-instruction-target.js` (NEW), `builderos-pbb-plan.js`, `builderos-governed-loop-executor.js`, `routes/lifeos-council-builder-routes.js` | Voice Rail patch path: extract `target_file` from instruction; patch spec + `files[]`; prose refusal detection; validation rejects prose before commit; blockers `builder_prose_refusal` / `builder_missing_target_file`. Tests PASS. | Adam: prod builder failed with `target_file: null` + Gemini prose on proof-script command. GAP-FILL. |
 
