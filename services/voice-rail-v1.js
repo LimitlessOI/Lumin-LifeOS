@@ -46,7 +46,12 @@ import {
   shouldRouteFounderToSystem,
 } from './voice-rail-command-executor.js';
 
-const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
+import {
+  handleSystemDirectMessage,
+  buildSystemDirectReplySource,
+} from './voice-rail-system-direct.js';
+
+const MODES = new Set(['system', 'conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
   'command',
   'brainstorm',
@@ -896,6 +901,51 @@ export function createVoiceRailV1({
        VALUES ($1, 'user', $2, $3, $4::jsonb, FALSE)`,
       [session.id, content || '(attachment)', intent, JSON.stringify(storedAttachments)],
     );
+
+    /** Founder System Direct — every message hits Railway APIs; zero council / zero personas. */
+    if (mode === 'system' && !simulateOnly) {
+      const direct = await handleSystemDirectMessage({
+        pool,
+        userId,
+        sessionId: session.id,
+        utterance: content,
+        baseUrl,
+        commandKey,
+        connectionProbe: () => probeFounderContext(userId),
+        stageCommand,
+        logger,
+      });
+      const replySource = {
+        ...buildSystemDirectReplySource(direct.command_execution),
+        api_trace: direct.api_trace || null,
+      };
+      const { rows: assistantRows } = await pool.query(
+        `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+         VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+         RETURNING id, role, content, intent, department, created_at`,
+        [session.id, direct.text, 'system_direct', 'SYS'],
+      );
+      await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+      return {
+        private: false,
+        persisted: true,
+        system_direct: true,
+        founder_direct: true,
+        session_id: session.id,
+        mode: 'system',
+        tag: session.tag,
+        department: 'SYS',
+        intent: 'system_direct',
+        user_message: { role: 'user', content, intent: 'system_direct' },
+        assistant_message: assistantRows[0],
+        reply_source: replySource,
+        context_health: null,
+        staged_command: direct.staged_command,
+        command_execution: direct.command_execution,
+        api_trace: direct.api_trace,
+        commitment_extract: null,
+      };
+    }
 
     let stagedCommand = null;
     let commandExecution = null;

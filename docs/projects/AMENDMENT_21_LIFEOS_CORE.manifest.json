@@ -854,6 +854,6 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_change_summary": "Voice Rail v2.22 — app auto-routes build/route utterances to BuilderOS command-control (no ChC theater)",
-  "ssot_receipt_tail": "v2.22 shouldRouteFounderToSystem; conversation send-to-BPB hits system path."
+  "last_change_summary": "Voice Rail v2.23 — System Direct default founder channel (API-only, no council personas)",
+  "ssot_receipt_tail": "voice-rail-system-direct.js; mode system; council_used false on founder default."
 }
