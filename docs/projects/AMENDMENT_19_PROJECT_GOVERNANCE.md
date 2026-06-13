@@ -1,7 +1,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-12 — Action Inbox v1 route wired at /api/v1/lifeos/action-inbox
+**Last Updated:** 2026-05-24 — mount LifeOS system-proof routes at /api/v1/lifeos
 
 | Field | Value |
 |---|---|

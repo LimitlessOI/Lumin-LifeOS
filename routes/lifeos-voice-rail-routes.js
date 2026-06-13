@@ -24,6 +24,11 @@ import {
   callFounderDirectProvider,
 } from '../services/founder-direct-provider.js';
 import {
+  executeProviderToolProofAction,
+  formatProviderToolProofReply,
+  parseProviderToolProofUtterance,
+} from '../services/founder-provider-tool-action.js';
+import {
   answerSystemAgentQuestion,
   formatSystemAgentReply,
 } from '../services/lifeos-system-agent.js';
@@ -77,9 +82,10 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.34',
+      build: 'voice-rail-v2.35',
       intent_first: true,
       founder_direct_provider: true,
+      provider_tool_action_proof: true,
       lifeos_system_agent: true,
       founder_system_action: true,
       founder_system_direct_default: true,
@@ -324,6 +330,43 @@ export function createLifeOSVoiceRailRoutes({
       const result = await callFounderDirectProvider(parsed);
       const status = result.ok ? 200 : result.error?.startsWith('missing_api_key') ? 503 : 502;
       return res.status(status).json(result);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post('/provider-tool-proof', requireKey, async (req, res, next) => {
+    try {
+      const text = String(req.body.text || req.body.utterance || '').trim();
+      let provider = req.body.provider ? String(req.body.provider).toLowerCase() : null;
+      const map = {
+        gpt: 'openai', openai: 'openai', claude: 'anthropic', anthropic: 'anthropic', gemini: 'google', google: 'google',
+      };
+      if (provider && map[provider]) provider = map[provider];
+      const parsed = parseProviderToolProofUtterance(text);
+      if (!provider && parsed) provider = parsed.provider;
+      if (!provider) {
+        return res.status(400).json({
+          ok: false,
+          error: 'invalid_utterance_or_provider',
+          hint: 'Ask GPT to create a LifeOS proof event. | provider: openai|anthropic|google',
+        });
+      }
+      const userId = await voiceRail.resolveUserId(req.body.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const baseUrl = resolveRequestBaseUrl(req);
+      const result = await executeProviderToolProofAction(pool, {
+        provider,
+        userId,
+        utterance: text || parsed?.utterance || null,
+        sessionId: req.body.session_id || null,
+        baseUrl,
+      });
+      const status = result.ok ? 200 : result.error?.startsWith('missing_api_key') ? 503 : 502;
+      return res.status(status).json({
+        ...result,
+        reply_text: formatProviderToolProofReply(result),
+      });
     } catch (err) {
       next(err);
     }

@@ -64,6 +64,11 @@ import {
   formatFounderDirectProviderReply,
 } from './founder-direct-provider.js';
 import {
+  executeProviderToolProofAction,
+  formatProviderToolProofReply,
+  parseProviderToolProofUtterance,
+} from './founder-provider-tool-action.js';
+import {
   detectSystemAgentQuestion,
   answerSystemAgentQuestion,
   formatSystemAgentReply,
@@ -976,6 +981,50 @@ export function createVoiceRailV1({
     /** LifeOS — intent-first routing; mode=lifeos default, explicit modes are overrides only. */
     if (mode === 'lifeos' && !simulateOnly) {
       const intentRoute = resolveFounderIntentRoute(content, { explicitMode: mode });
+
+      const toolProofParsed = parseProviderToolProofUtterance(content);
+      if (toolProofParsed || intentRoute.lane === 'provider_tool_action') {
+        const provider = toolProofParsed?.provider || intentRoute.inferred_provider;
+        if (!provider) {
+          return {
+            private: false,
+            persisted: true,
+            provider_tool_action: false,
+            error: 'provider_not_inferred',
+            intent_route: intentRoute,
+          };
+        }
+        const proofResult = await executeProviderToolProofAction(pool, {
+          provider,
+          userId,
+          utterance: content,
+          sessionId: session.id,
+          baseUrl,
+        });
+        const replyText = formatProviderToolProofReply(proofResult);
+        const { rows: assistantRows } = await pool.query(
+          `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+           VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+           RETURNING id, role, content, intent, department, created_at`,
+          [session.id, replyText, 'provider_tool_action', 'LifeOS'],
+        );
+        await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+        return {
+          private: false,
+          persisted: true,
+          provider_tool_action: true,
+          session_id: session.id,
+          mode: 'lifeos',
+          tag: session.tag,
+          department: 'LifeOS',
+          intent: 'provider_tool_action',
+          user_message: { role: 'user', content, intent },
+          assistant_message: assistantRows[0],
+          reply_source: { council_used: false, provider_tool_proof: proofResult, intent_route: intentRoute },
+          provider_tool_proof: proofResult,
+          intent_route: intentRoute,
+        };
+      }
 
       const directParsed = parseFounderDirectProviderUtterance(content);
       if (directParsed || intentRoute.lane === 'direct_provider') {

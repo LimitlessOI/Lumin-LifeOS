@@ -3,10 +3,11 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 import { parseFounderDirectProviderUtterance } from './founder-direct-provider.js';
+import { parseProviderToolProofUtterance } from './founder-provider-tool-action.js';
 import { detectSystemAgentQuestion } from './lifeos-system-agent.js';
 import { extractTargetFileFromInstruction } from './voice-rail-command-executor.js';
 
-/** @typedef {'repo_build'|'bp_level'|'system_read'|'direct_provider'|'system_action'|'brainstorm'|'lifeos_operator'|'unsupported'} FounderCommandClass */
+/** @typedef {'repo_build'|'bp_level'|'system_read'|'direct_provider'|'provider_tool_action'|'system_action'|'brainstorm'|'lifeos_operator'|'unsupported'} FounderCommandClass */
 
 export function isBuildNextBpStepUtterance(text) {
   const t = String(text || '').toLowerCase();
@@ -94,6 +95,10 @@ export function classifyFounderCommandClass(utterance, { explicitMode = 'lifeos'
   const text = String(utterance || '').trim();
   if (!text) return { class: 'lifeos_operator', reason: 'empty' };
 
+  if (parseProviderToolProofUtterance(text)) {
+    return { class: 'provider_tool_action', reason: 'ask_provider_tool_proof_pattern' };
+  }
+
   if (parseFounderDirectProviderUtterance(text)) {
     return { class: 'direct_provider', reason: 'talk_to_provider_pattern' };
   }
@@ -135,6 +140,8 @@ export function commandClassToIntentLane(commandClass) {
   switch (commandClass) {
     case 'direct_provider':
       return 'direct_provider';
+    case 'provider_tool_action':
+      return 'provider_tool_action';
     case 'system_read':
       return 'audit';
     case 'bp_level':

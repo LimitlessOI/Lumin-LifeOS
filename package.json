@@ -72,6 +72,7 @@
     "lifeos:voice-rail:v1-acceptance": "node scripts/run-voice-rail-v1-acceptance.mjs",
     "lifeos:voice-rail:capability-proof": "node scripts/run-voice-rail-capability-proof.mjs",
     "lifeos:founder-direct-provider:proof": "node scripts/run-founder-direct-provider-proof.mjs",
+    "lifeos:provider-tool-action:proof": "node scripts/run-provider-tool-action-proof.mjs",
     "lifeos:action-inbox:v1-acceptance": "node scripts/run-action-inbox-v1-acceptance.mjs",
     "lifeos:objective-1:until-pass": "node scripts/run-objective-1-until-pass.mjs",
     "factory:overnight:bp": "node builderos-reboot/scripts/run-overnight-bp-autonomy.mjs",

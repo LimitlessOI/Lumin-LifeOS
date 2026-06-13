@@ -7,6 +7,7 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { parseFounderDirectProviderUtterance } from './founder-direct-provider.js';
+import { parseProviderToolProofUtterance } from './founder-provider-tool-action.js';
 import {
   classifyFounderCommandClass,
   commandClassToIntentLane,
@@ -108,7 +109,9 @@ export function resolveFounderIntentRoute(utterance, { explicitMode = 'lifeos', 
     system_action: classified.system_action || null,
     inferred_provider: classified.class === 'direct_provider'
       ? parseFounderDirectProviderUtterance(text)?.provider
-      : undefined,
+      : classified.class === 'provider_tool_action'
+        ? parseProviderToolProofUtterance(text)?.provider
+        : undefined,
   };
 }
 
