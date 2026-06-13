@@ -83,6 +83,12 @@ export function shouldRouteFounderToSystem({ mode, intent, content, department }
   if (/\b(please build|please fix|please run|deploy this|execute this|run builder)\b/.test(t)) {
     return true;
   }
+  if (
+    /\b(build|run|execute|complete)\b.*\bnext\b.*\b(bp|blueprint|lifeos)\b/.test(t)
+    || /\bnext\b.*\b(lifeos\s+)?(bp|blueprint)\b.*\bstep\b/.test(t)
+  ) {
+    return true;
+  }
   const dept = String(department || '').toUpperCase();
   if (dept === 'CDR' && /\b(build|fix|patch|implement|execute|deploy)\b/.test(t)) {
     return true;

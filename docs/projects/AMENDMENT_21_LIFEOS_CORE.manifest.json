@@ -182,6 +182,7 @@
     "services/voice-rail-usage-receipt.js",
     "services/founder-direct-provider.js",
     "services/lifeos-system-agent.js",
+    "services/voice-rail-intent-router.js",
     "db/migrations/20260612_voice_rail_founder_routing_state.sql",
     "public/overlay/lifeos-ambient-sense.js"
   ],
@@ -856,6 +857,6 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_change_summary": "Voice Rail VRV1-S07 — founder direct provider regression proof step",
-  "ssot_receipt_tail": "BLUEPRINT pending VRV1-S07; npm run lifeos:founder-direct-provider:proof"
+  "last_change_summary": "Intent-first routing v2.33 — execution_bp vertical slice",
+  "ssot_receipt_tail": "resolveFounderIntentRoute; mode row collapsed; Build next BP step auto-routes."
 }

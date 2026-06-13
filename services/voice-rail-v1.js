@@ -68,6 +68,13 @@ import {
   answerSystemAgentQuestion,
   formatSystemAgentReply,
 } from './lifeos-system-agent.js';
+import {
+  resolveFounderIntentRoute,
+  executeBuildNextBpStep,
+  formatBuildNextBpStepReply,
+  answerAuditIntent,
+  formatAuditIntentReply,
+} from './voice-rail-intent-router.js';
 
 const MODES = new Set(['lifeos', 'system', 'conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
@@ -107,6 +114,8 @@ export function classifyIntent(text, mode = 'conversation') {
   if (
     mode === 'command'
     || /\b(please run|please build|please fix|deploy|execute|do this now|make the system)\b/.test(t)
+    || /\b(build|run|execute|complete)\b.*\bnext\b.*\b(bp|blueprint)\b/.test(t)
+    || /\bnext\b.*\b(lifeos\s+)?(bp|blueprint)\b.*\bstep\b/.test(t)
   ) {
     return 'command';
   }
@@ -959,10 +968,12 @@ export function createVoiceRailV1({
       [session.id, content || '(attachment)', intent, JSON.stringify(storedAttachments)],
     );
 
-    /** LifeOS — system runs first; reply is receipts only (no council freestyle). */
+    /** LifeOS — intent-first routing; mode=lifeos default, explicit modes are overrides only. */
     if (mode === 'lifeos' && !simulateOnly) {
+      const intentRoute = resolveFounderIntentRoute(content, { explicitMode: mode });
+
       const directParsed = parseFounderDirectProviderUtterance(content);
-      if (directParsed) {
+      if (directParsed || intentRoute.lane === 'direct_provider') {
         const providerResult = await callFounderDirectProvider(directParsed);
         const replyText = formatFounderDirectProviderReply(providerResult);
         const { rows: assistantRows } = await pool.query(
@@ -983,34 +994,78 @@ export function createVoiceRailV1({
           intent: 'founder_direct_provider',
           user_message: { role: 'user', content, intent },
           assistant_message: assistantRows[0],
-          reply_source: { council_used: false, founder_direct_provider: providerResult },
+          reply_source: { council_used: false, founder_direct_provider: providerResult, intent_route: intentRoute },
           provider_result: providerResult,
+          intent_route: intentRoute,
         };
       }
 
-      if (detectSystemAgentQuestion(content)) {
-        const agentResult = await answerSystemAgentQuestion(content, { baseUrl, commandKey });
-        const replyText = formatSystemAgentReply(agentResult);
+      if (intentRoute.lane === 'execution_bp') {
+        const execResult = await executeBuildNextBpStep({
+          pool,
+          userId,
+          sessionId: session.id,
+          stageCommand,
+          baseUrl,
+          commandKey,
+          logger,
+        });
+        const replyText = formatBuildNextBpStepReply(intentRoute, execResult);
         const { rows: assistantRows } = await pool.query(
           `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
            VALUES ($1, 'assistant', $2, $3, $4, FALSE)
            RETURNING id, role, content, intent, department, created_at`,
-          [session.id, replyText, 'lifeos_system_agent', 'LifeOS'],
+          [session.id, replyText, 'execution_bp', 'LifeOS'],
         );
         await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
         return {
           private: false,
           persisted: true,
-          lifeos_system_agent: true,
+          intent_first: true,
+          execution_bp: true,
           session_id: session.id,
           mode: 'lifeos',
           tag: session.tag,
           department: 'LifeOS',
-          intent: 'lifeos_system_agent',
+          intent: 'execution_bp',
           user_message: { role: 'user', content, intent },
           assistant_message: assistantRows[0],
-          reply_source: { council_used: false, lifeos_system_agent: agentResult },
-          system_agent_result: agentResult,
+          reply_source: {
+            council_used: false,
+            intent_route: intentRoute,
+            command_execution: execResult.commandExecution || null,
+          },
+          intent_route: intentRoute,
+          execution_result: execResult,
+        };
+      }
+
+      if (intentRoute.lane === 'audit') {
+        const auditResult = await answerAuditIntent(content, { baseUrl, commandKey });
+        const replyText = detectSystemAgentQuestion(content)
+          ? formatSystemAgentReply(auditResult)
+          : formatAuditIntentReply(intentRoute, auditResult);
+        const { rows: assistantRows } = await pool.query(
+          `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+           VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+           RETURNING id, role, content, intent, department, created_at`,
+          [session.id, replyText, 'audit', 'LifeOS'],
+        );
+        await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+        return {
+          private: false,
+          persisted: true,
+          intent_first: true,
+          session_id: session.id,
+          mode: 'lifeos',
+          tag: session.tag,
+          department: 'LifeOS',
+          intent: 'audit',
+          user_message: { role: 'user', content, intent },
+          assistant_message: assistantRows[0],
+          reply_source: { council_used: false, intent_route: intentRoute, audit_result: auditResult },
+          intent_route: intentRoute,
+          audit_result: auditResult,
         };
       }
 
