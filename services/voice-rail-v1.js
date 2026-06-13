@@ -214,11 +214,40 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName, user
 
 async function readMissionQueueHead() {
   try {
-    const { summarizeBpPriorityForOperator } = await import('./bp-priority-queue.js');
-    const summary = summarizeBpPriorityForOperator();
-    return { summary: summary.text, next_blueprint_step: summary.next };
+    const raw = await fs.readFile(path.join(process.cwd(), 'builderos-reboot', 'BP_PRIORITY.json'), 'utf8');
+    const q = JSON.parse(raw);
+    const list = q.items || [];
+    const items = [];
+    for (const m of [...list].sort((a, b) => (a.rank || 0) - (b.rank || 0)).slice(0, 6)) {
+      const row = {
+        rank: m.rank,
+        mission_id: m.mission_id,
+        verdict: m.verdict || m.receipt_verdict || null,
+        blueprint_path: m.blueprint_path || null,
+        next_step: null,
+      };
+      if (m.blueprint_path) {
+        try {
+          const bpRaw = await fs.readFile(path.join(process.cwd(), m.blueprint_path), 'utf8');
+          const bp = JSON.parse(bpRaw);
+          const pending = (bp.steps || []).find((s) => s.status !== 'complete');
+          if (pending) {
+            row.next_step = {
+              step_id: pending.step_id,
+              title: pending.title,
+              target_file: pending.target_file || null,
+              action_type: pending.action_type || null,
+            };
+          }
+        } catch {
+          row.next_step = { error: 'blueprint_unreadable' };
+        }
+      }
+      items.push(row);
+    }
+    return items;
   } catch {
-    return { summary: null, next_blueprint_step: null };
+    return [];
   }
 }
 
@@ -248,7 +277,7 @@ export function summarizeVoiceRailContextHealth(contextData) {
     verified_memories: Array.isArray(ctx.verified_memories) ? ctx.verified_memories.length : 0,
     goals: Array.isArray(ctx.goals) ? ctx.goals.length : 0,
     staged_commands: Array.isArray(ctx.staged_commands) ? ctx.staged_commands.length : 0,
-    mission_queue_head: String(ctx.mission_queue_head || '').length,
+    mission_queue_head: Array.isArray(ctx.mission_queue_head) ? ctx.mission_queue_head.length : 0,
     recent_commitments: Array.isArray(ctx.recent_commitments) ? ctx.recent_commitments.length : 0,
     has_lifeos_snapshot: Boolean(
       ctx.lifeos_snapshot && typeof ctx.lifeos_snapshot === 'object' && Object.keys(ctx.lifeos_snapshot).length,
@@ -404,8 +433,7 @@ export async function buildVoiceRailOperatorContext({
     }),
 
     readMissionQueueHead().then((m) => {
-      ctx.mission_queue_head = m?.summary || null;
-      ctx.next_blueprint_step = m?.next_blueprint_step || null;
+      ctx.mission_queue_head = m;
     }),
 
     readContinuityTail().then((t) => {

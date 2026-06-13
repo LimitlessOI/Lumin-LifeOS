@@ -69,7 +69,7 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.27',
+      build: 'voice-rail-v2.28',
       founder_system_direct_default: true,
       founder_operator_mode: 'lifeos',
       founder_auto_routing: true,
