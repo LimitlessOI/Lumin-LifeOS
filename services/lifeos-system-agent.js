@@ -52,7 +52,75 @@ export function readRepoFile(relPath, { root = REPO_ROOT, maxChars = 12000 } = {
     size_bytes: stat.size,
     mtime: stat.mtime.toISOString(),
     content: text.length > maxChars ? `${text.slice(0, maxChars)}\n…[truncated]` : text,
+    source: 'filesystem',
   };
+}
+
+async function readFromGitHub(relPath, { maxChars = 12000 } = {}) {
+  const token = process.env.GITHUB_TOKEN?.trim();
+  const repo = process.env.GITHUB_REPO?.trim();
+  if (!token || !repo) {
+    return {
+      ok: false,
+      error: 'github_fallback_unavailable',
+      path: relPath,
+      missing: !token ? 'GITHUB_TOKEN' : 'GITHUB_REPO',
+    };
+  }
+  const url = `https://api.github.com/repos/${repo}/contents/${relPath.split('/').map(encodeURIComponent).join('/')}`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  });
+  if (!res.ok) {
+    return { ok: false, error: `github_http_${res.status}`, path: relPath };
+  }
+  const data = await res.json();
+  if (data.type !== 'file' || !data.content) {
+    return { ok: false, error: 'not_a_file', path: relPath };
+  }
+  const text = Buffer.from(String(data.content).replace(/\n/g, ''), 'base64').toString('utf8');
+  return {
+    ok: true,
+    path: relPath,
+    source: 'github_api',
+    sha: data.sha,
+    github_url: data.html_url,
+    content: text.length > maxChars ? `${text.slice(0, maxChars)}\n…[truncated]` : text,
+  };
+}
+
+/** Local filesystem first; GitHub Contents API when deploy image omits docs (Railway .dockerignore). */
+export async function readRepoFileAsync(relPath, opts = {}) {
+  const local = readRepoFile(relPath, opts);
+  if (local.ok) return local;
+  return readFromGitHub(relPath, opts);
+}
+
+async function searchGitHubByTerms(terms, { maxResults = 10 } = {}) {
+  const token = process.env.GITHUB_TOKEN?.trim();
+  const repo = process.env.GITHUB_REPO?.trim();
+  if (!token || !repo) return [];
+  const q = encodeURIComponent(`${terms.join(' ')} repo:${repo}`);
+  const res = await fetch(`https://api.github.com/search/code?q=${q}&per_page=${maxResults}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return (data.items || []).map((item) => ({
+    path: item.path,
+    matched_terms: terms,
+    snippet: item.name || '',
+    source: 'github_code_search',
+    github_url: item.html_url,
+  }));
 }
 
 export async function searchRepoByTerms(terms, { root = REPO_ROOT, maxResults = 25, scanRoots = null } = {}) {
@@ -112,7 +180,12 @@ export async function searchRepoByTerms(terms, { root = REPO_ROOT, maxResults = 
   for (const start of roots) {
     if (fs.existsSync(start)) await walk(start);
   }
-  return hits.sort((a, b) => b.matched_terms.length - a.matched_terms.length);
+  let sorted = hits.sort((a, b) => b.matched_terms.length - a.matched_terms.length);
+  if (sorted.length < 3) {
+    const ghHits = await searchGitHubByTerms(needles.slice(0, 3), { maxResults: maxResults - sorted.length });
+    sorted = [...sorted, ...ghHits].slice(0, maxResults);
+  }
+  return sorted;
 }
 
 export function listBpPriorityRanking({ root = REPO_ROOT } = {}) {
@@ -232,18 +305,25 @@ export async function findOriginalLifeOSBlueprint({ root = REPO_ROOT } = {}) {
 
   const candidateResults = [];
   for (const c of knownCandidates) {
-    const full = path.join(root, c.path);
-    if (fs.existsSync(full)) {
-      const read = readRepoFile(c.path, { root, maxChars: 1500 });
+    const read = await readRepoFileAsync(c.path, { root, maxChars: 1500 });
+    if (read.ok) {
       candidateResults.push({
         path: c.path,
         why: c.why,
         exists: true,
+        read_source: read.source,
+        github_url: read.github_url || null,
         ...gitFileInfo(c.path, { root }),
-        evidence_snippet: read.ok ? read.content.slice(0, 400) : null,
+        evidence_snippet: read.content.slice(0, 400),
       });
     } else {
-      candidateResults.push({ path: c.path, why: c.why, exists: false });
+      candidateResults.push({
+        path: c.path,
+        why: c.why,
+        exists: false,
+        read_error: read.error,
+        github_missing: read.missing || null,
+      });
     }
   }
 
@@ -266,13 +346,34 @@ export async function findOriginalLifeOSBlueprint({ root = REPO_ROOT } = {}) {
     deletedLifeosMd = { note: 'No git history for docs/products/LIFEOS.md (or git unavailable).' };
   }
 
-  const primary = candidateResults.find((c) => c.path === 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md' && c.exists);
+  const primary = candidateResults.find(
+    (c) => c.path === 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md' && c.exists,
+  );
+  if (!primary) {
+    const ghToken = process.env.GITHUB_TOKEN?.trim();
+    const ghRepo = process.env.GITHUB_REPO?.trim();
+    if (!ghToken || !ghRepo) {
+      return {
+        status: 'BLOCKED',
+        question: 'where is the original LifeOS blueprint?',
+        blocker: 'lifeos_ssot_not_on_deployed_filesystem',
+        detail: `${'docs/projects/AMENDMENT_21_LIFEOS_CORE.md'} excluded from Railway image (.dockerignore docs/*). GitHub fallback needs GITHUB_TOKEN + GITHUB_REPO.`,
+        missing: [!ghToken && 'GITHUB_TOKEN', !ghRepo && 'GITHUB_REPO'].filter(Boolean),
+        methods_used: ['readRepoFileAsync', 'searchRepoByTerms'],
+        search_terms: searchTerms,
+        locations_searched: locationsSearched,
+        closest_candidates: candidateResults,
+        search_hits: searchHits.slice(0, 10),
+      };
+    }
+  }
   if (primary) {
     return {
       status: 'FOUND',
       question: 'where is the original LifeOS blueprint?',
-      methods_used: ['readRepoFile', 'searchRepoByTerms', 'git log', 'listBpPriorityRanking'],
+      methods_used: ['readRepoFile', 'readRepoFileAsync', 'searchRepoByTerms', 'searchGitHubByTerms', 'listBpPriorityRanking'],
       file_path: primary.path,
+      read_source: primary.read_source || 'filesystem',
       why: primary.why,
       evidence_snippet: primary.evidence_snippet,
       last_modified: primary.mtime,
@@ -501,6 +602,7 @@ export function formatSystemAgentReply(result) {
     lines.push('');
     lines.push('FOUND');
     lines.push(`file_path: ${result.file_path}`);
+    if (result.read_source) lines.push(`read_source: ${result.read_source}`);
     lines.push(`why: ${result.why || '—'}`);
     if (result.last_modified) lines.push(`last_modified: ${result.last_modified}`);
     if (result.last_commit_sha) lines.push(`last_commit_sha: ${result.last_commit_sha}`);

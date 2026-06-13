@@ -32,7 +32,9 @@ docs/*
 !docs/architecture/**
 !docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
 !docs/projects/AMENDMENT_12_COMMAND_CENTER.md
-!docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json
+!docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+!docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json
+!docs/CONTINUITY_LOG.md
 • Lumin-Memory/
 
 # Tests
