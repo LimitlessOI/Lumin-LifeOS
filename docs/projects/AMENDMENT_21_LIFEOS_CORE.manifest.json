@@ -854,6 +854,6 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_change_summary": "Voice Rail v2.24 — LifeOS operator: natural talk + system API tool pass first",
-  "ssot_receipt_tail": "lifeos mode default; voice-rail-system-operator.js; not department theater."
+  "last_change_summary": "Voice Rail v2.25 — AI picker in LifeOS mode (Auto/GPT/Groq), dept hidden",
+  "ssot_receipt_tail": "providerScopeId LifeOS; cheapest Auto default; v2.25 UI."
 }
