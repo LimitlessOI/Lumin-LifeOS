@@ -411,7 +411,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="Council Chair — conversation mode">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.21</span></h1>
+    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="Council Chair — conversation mode">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.22</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -433,7 +433,7 @@
 
   <div id="truth-banner" role="status" class="connection-check">
     <span id="connection-status">Checking LifeOS connection…</span>
-    <span class="truth-build"> · build <strong>v2.21</strong></span>
+    <span class="truth-build"> · build <strong>v2.22</strong> · build/fix/route requests go to BuilderOS directly (Command mode or “please build…”)</span>
   </div>
 
   <div id="auth-banner" role="alert">
@@ -763,8 +763,9 @@
         + (http != null ? ` · HTTP ${http}` : '');
     }
 
-    function buildExecReceiptEl(exec, mode) {
-      if (mode !== 'command') return null;
+    function buildExecReceiptEl(exec, mode, systemDirect) {
+      if (!exec?.job_id && !exec?.skipped && !exec?.error) return null;
+      if (mode !== 'command' && !systemDirect) return null;
       const el = document.createElement('div');
       el.className = 'exec-receipt';
       if (exec?.job_id) {
@@ -1267,7 +1268,11 @@
         }
       }
       if (role === 'assistant' && extra?.commandExecution) {
-        const receipt = buildExecReceiptEl(extra.commandExecution, extra.mode);
+        const receipt = buildExecReceiptEl(
+          extra.commandExecution,
+          extra.mode,
+          extra.systemDirect,
+        );
         if (receipt) box.appendChild(receipt);
       }
       return box;
@@ -1865,7 +1870,7 @@
           replyDept,
           null,
           null,
-          { commandExecution: exec, mode },
+          { commandExecution: exec, mode, systemDirect: Boolean(res.json.system_direct) },
         );
         lastAssistant = reply;
         if (!res.json.system_direct) maybeSpeak(reply);

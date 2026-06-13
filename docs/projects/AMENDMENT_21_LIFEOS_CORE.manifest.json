@@ -854,6 +854,6 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_change_summary": "Voice Rail v2.21 — command mode routes directly to BuilderOS command-control (no council chat wrapper)",
-  "ssot_receipt_tail": "Sherry JWT login fix + operator invite/provision; memory router no longer blocks /auth."
+  "last_change_summary": "Voice Rail v2.22 — app auto-routes build/route utterances to BuilderOS command-control (no ChC theater)",
+  "ssot_receipt_tail": "v2.22 shouldRouteFounderToSystem; conversation send-to-BPB hits system path."
 }

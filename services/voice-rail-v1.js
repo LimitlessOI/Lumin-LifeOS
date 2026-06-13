@@ -43,6 +43,7 @@ import {
   executeVoiceRailFounderCommand,
   formatCommandSystemReply,
   isVoiceRailCommandExecuteEnabled,
+  shouldRouteFounderToSystem,
 } from './voice-rail-command-executor.js';
 
 const MODES = new Set(['conversation', 'command', 'brainstorm', 'private']);
@@ -83,6 +84,12 @@ export function classifyIntent(text, mode = 'conversation') {
   if (
     mode === 'command'
     || /\b(please run|please build|please fix|deploy|execute|do this now|make the system)\b/.test(t)
+  ) {
+    return 'command';
+  }
+  if (
+    /\b(send (this )?to|route (this )?to|forward to|hand (this )?off to)\b/.test(t)
+    && /\b(bpb|blueprint|cdr|builderos|builder)\b/.test(t)
   ) {
     return 'command';
   }
@@ -892,7 +899,13 @@ export function createVoiceRailV1({
 
     let stagedCommand = null;
     let commandExecution = null;
-    if (intent === 'command' || mode === 'command') {
+    const routeToSystem = shouldRouteFounderToSystem({
+      mode,
+      intent,
+      content,
+      department: deptId,
+    });
+    if (routeToSystem) {
       stagedCommand = await stageCommand({
         userId,
         sessionId: session.id,
@@ -923,10 +936,8 @@ export function createVoiceRailV1({
       }
     }
 
-    const isFounderSystemCommand = intent === 'command' || mode === 'command';
-
-    /** Command mode → BuilderOS command-control directly; no council chat wrapper. */
-    if (isFounderSystemCommand && !simulateOnly) {
+    /** Work/build/route → BuilderOS command-control directly; no department chat wrapper. */
+    if (routeToSystem && !simulateOnly) {
       const systemReply = formatCommandSystemReply({
         commandExecution,
         stagedCommand,
@@ -948,7 +959,7 @@ export function createVoiceRailV1({
         `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
          VALUES ($1, 'assistant', $2, $3, $4, FALSE)
          RETURNING id, role, content, intent, department, created_at`,
-        [session.id, systemReply, intent, deptId],
+        [session.id, systemReply, intent, 'SYS'],
       );
       await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
       return {

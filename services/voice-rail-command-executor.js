@@ -56,6 +56,41 @@ const TARGET_FILE_HINT_PREFIXES =
   'scripts/, services/, routes/, public/, config/, db/migrations/, builderos-reboot/';
 
 /**
+ * Founder work utterances → BuilderOS command-control (same path as terminal/API).
+ * Conversation mode still uses council for Q&A; build/route/fix requests skip department chat.
+ */
+export function shouldRouteFounderToSystem({ mode, intent, content, department } = {}) {
+  if (mode === 'command') return true;
+  if (intent === 'command') return true;
+  const t = String(content || '').toLowerCase();
+  if (!t) return false;
+
+  if (
+    /\b(send (this )?to|route (this )?to|forward to|hand (this )?off to|escalate (this )?to)\b/.test(t)
+    && /\b(bpb|blueprint|cdr|builderos|builder|code execution|command.control)\b/.test(t)
+  ) {
+    return true;
+  }
+  if (
+    /\b(take a look at|fix the|update the|change the|patch the|implement|make the system)\b/.test(t)
+    && /\b(assistant|voice rail|lifeos|builder|overlay|command.control|app)\b/.test(t)
+  ) {
+    return true;
+  }
+  if (/\b(please build|please fix|please run|deploy this|execute this|run builder)\b/.test(t)) {
+    return true;
+  }
+  const dept = String(department || '').toUpperCase();
+  if (dept === 'CDR' && /\b(build|fix|patch|implement|execute|deploy)\b/.test(t)) {
+    return true;
+  }
+  if (dept === 'BPB' && /\b(blueprint|translate|turn this into|spec for)\b/.test(t)) {
+    return true;
+  }
+  return false;
+}
+
+/**
  * Deterministic founder-command reply — no council chat layer.
  * Shown in LifeOS app when command mode routes straight to command-control.
  */
