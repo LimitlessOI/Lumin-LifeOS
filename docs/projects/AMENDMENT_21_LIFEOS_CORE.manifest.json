@@ -860,8 +860,8 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-05-24",
-  "last_receipt": "2026-05-24 provider-proof-hard-route-v2.37",
-  "last_change_summary": "Founder verifies provider proof events inside LifeOS UI",
-  "ssot_receipt_tail": "Provider connection proof panel; GET /system-proof-events list."
+  "last_updated": "2026-06-13",
+  "last_receipt": "2026-06-13 provider-proof-detection-broadened",
+  "last_change_summary": "detectProviderProofIntent broadened: standalone 'provider proof' now always hard-routes before council",
+  "ssot_receipt_tail": "provider proof phrase alone routes before ChC; AND gate removed; 18/18 test cases pass."
 }

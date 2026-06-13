@@ -60,6 +60,7 @@ export function memberKeyToProofProvider(memberKey) {
 
 /** Founder trigger phrases — hard-routed before council/command/builder. */
 export const PROVIDER_PROOF_TRIGGER_PATTERNS = [
+  'provider proof',
   'create provider proof event',
   'create proof event',
   'create a lifeos proof event',
@@ -67,11 +68,17 @@ export const PROVIDER_PROOF_TRIGGER_PATTERNS = [
   'verify gpt connection',
   'verify claude connection',
   'verify gemini connection',
+  'test gpt connection',
+  'test claude connection',
+  'test gemini connection',
+  'check gpt connection',
+  'check claude connection',
+  'check gemini connection',
   'run provider proof',
+  'do a provider proof',
   'ask gpt to create a lifeos proof event',
   'ask claude to create a lifeos proof event',
   'ask gemini to create a lifeos proof event',
-  'provider proof',
   'proof record inside lifeos',
 ];
 
@@ -85,10 +92,10 @@ export function detectProviderProofIntent(utterance) {
 
   if (parseProviderToolProofUtterance(raw)) return true;
   if (/^(create|make)\s+(a\s+)?lifeos\s+proof\s+event\.?$/i.test(raw)) return true;
-  if (/\b(run|execute)\s+provider\s+proof\b/.test(t)) return true;
-  if (/\bverify\s+(provider|gpt|claude|gemini|openai|anthropic|google)(\s+|\s+\w+\s+)connection\b/.test(t)) return true;
+  if (/\b(run|execute|do|make|start)\s+(?:a\s+)?provider\s+proof\b/.test(t)) return true;
+  if (/\b(verify|test|check|probe)\s+(provider|gpt|claude|gemini|openai|anthropic|google)(\s+\w+)?\s+connection\b/.test(t)) return true;
   if (/\bcreat(e|ing)\s+(a\s+)?(provider\s+)?proof\s+event\b/.test(t)) return true;
-  if (/\bprovider\s+proof\b/.test(t) && /\b(creat|verify|run|record|show|inside lifeos)\b/.test(t)) return true;
+  if (/\bprovider\s+proof\b/.test(t)) return true;
   if (/\bproof\s+record\b/.test(t) && /\b(creat|record|show|inside lifeos|resulting)\b/.test(t)) return true;
   if (/\bverify\s+provider\s+connection\b/.test(t)) return true;
 
