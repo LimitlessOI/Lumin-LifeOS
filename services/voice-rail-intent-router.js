@@ -8,10 +8,19 @@ import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { parseFounderDirectProviderUtterance } from './founder-direct-provider.js';
 import {
+  classifyFounderCommandClass,
+  commandClassToIntentLane,
+  isBuildNextBpStepUtterance,
+} from './lifeos-founder-command-class.js';
+import {
   detectSystemAgentQuestion,
   findNextIncompleteBpStep,
   answerDeployVsCommit,
 } from './lifeos-system-agent.js';
+import {
+  executeFounderSystemAction,
+  formatFounderSystemActionReply,
+} from './lifeos-founder-system-action.js';
 import { executeVoiceRailFounderCommand } from './voice-rail-command-executor.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -19,6 +28,10 @@ const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..
 const ALLOWLIST_SHELL_COMMANDS = new Set([
   'npm run lifeos:founder-direct-provider:proof',
 ]);
+
+export {
+  isBuildNextBpStepUtterance,
+} from './lifeos-founder-command-class.js';
 
 async function runFounderDirectProviderProofHttp(baseUrl, commandKey) {
   const base = String(baseUrl || '').replace(/\/$/, '');
@@ -51,36 +64,6 @@ async function runFounderDirectProviderProofHttp(baseUrl, commandKey) {
   return { pass, health: { build: healthJson.build, founder_direct_provider: healthJson.founder_direct_provider }, results };
 }
 
-function isBuildNextBpStepUtterance(text) {
-  const t = String(text || '').toLowerCase();
-  return (
-    /\bnext\b.*\b(lifeos\s+)?(bp|blueprint)\b.*\bstep\b/.test(t)
-    || /\bbuild\b.*\bnext\b.*\b(lifeos\s+)?(bp|blueprint)\b/.test(t)
-    || /\b(build|run|execute|complete)\b.*\bnext\b.*\b(bp|blueprint)\b/.test(t)
-  );
-}
-
-function isAuditUtterance(text) {
-  const t = String(text || '').toLowerCase();
-  return (
-    /\b(show me proof|proof this was|was this deployed|deployed or only committed|only committed)\b/.test(t)
-    || /\b(deploy sha|deployment proof|prove.*deployed)\b/.test(t)
-  );
-}
-
-function isBrainstormUtterance(text) {
-  const t = String(text || '').toLowerCase();
-  return /\b(brainstorm|what if|ideas? for|could we explore|monetize|monetization)\b/.test(t);
-}
-
-function inferCommandLikeIntent(text, explicitMode) {
-  const t = String(text || '').toLowerCase();
-  if (explicitMode === 'command') return 'command';
-  if (isBuildNextBpStepUtterance(text)) return 'command';
-  if (/\b(please run|please build|please fix|deploy|execute|make the system)\b/.test(t)) return 'command';
-  return 'general_conversation';
-}
-
 /**
  * Resolve intent lane from utterance. explicitMode is a founder override, not required routing.
  */
@@ -98,52 +81,35 @@ export function resolveFounderIntentRoute(utterance, { explicitMode = 'lifeos', 
     return { lane: 'debug_api', confidence: 'high', explicit_mode: 'system', reason: 'explicit_debug' };
   }
 
-  if (parseFounderDirectProviderUtterance(text)) {
-    const p = parseFounderDirectProviderUtterance(text);
+  const classified = classifyFounderCommandClass(text, { explicitMode });
+  const lane = commandClassToIntentLane(classified.class);
+
+  if (lane === 'blocked') {
     return {
-      lane: 'direct_provider',
+      lane: 'blocked',
       confidence: 'high',
-      inferred_provider: p.provider,
       explicit_mode: explicitMode,
-      reason: 'talk_to_provider_pattern',
+      reason: classified.reason,
+      command_class: classified.class,
     };
   }
 
-  if (detectSystemAgentQuestion(text)) {
-    return { lane: 'audit', confidence: 'high', explicit_mode: explicitMode, reason: 'system_agent_question' };
-  }
+  const confidence =
+    classified.class === 'lifeos_operator' ? 'medium'
+      : classified.class === 'repo_build' ? 'high'
+        : 'high';
 
-  if (isAuditUtterance(text)) {
-    return { lane: 'audit', confidence: 'high', explicit_mode: explicitMode, reason: 'deploy_proof_question' };
-  }
-
-  if (isBuildNextBpStepUtterance(text)) {
-    return { lane: 'execution_bp', confidence: 'high', explicit_mode: explicitMode, reason: 'build_next_bp_step' };
-  }
-
-  const intent = inferCommandLikeIntent(text, explicitMode);
-  if (intent === 'command') {
-    return { lane: 'execution', confidence: 'medium', inferred_intent: intent, explicit_mode: explicitMode, reason: 'command_intent' };
-  }
-
-  if (isBrainstormUtterance(text) || explicitMode === 'brainstorm') {
-    return {
-      lane: 'brainstorm',
-      confidence: explicitMode === 'brainstorm' ? 'high' : 'medium',
-      explicit_mode: explicitMode,
-      reason: 'brainstorm_intent',
-    };
-  }
-
-  if (explicitMode === 'conversation') {
-    return { lane: 'conversation', confidence: 'medium', explicit_mode: 'conversation', reason: 'explicit_departments' };
-  }
-
-  if (explicitMode === 'command') {
-    return { lane: 'execution', confidence: 'high', explicit_mode: 'command', reason: 'explicit_command_mode' };
-  }
-
-  return { lane: 'lifeos_operator', confidence: 'medium', explicit_mode: explicitMode, reason: 'default_lifeos' };
+  return {
+    lane,
+    confidence,
+    explicit_mode: explicitMode,
+    reason: classified.reason,
+    command_class: classified.class,
+    system_action: classified.system_action || null,
+    inferred_provider: classified.class === 'direct_provider'
+      ? parseFounderDirectProviderUtterance(text)?.provider
+      : undefined,
+  };
 }
 
 export async function executeBuildNextBpStep({
@@ -256,12 +222,43 @@ export async function executeBuildNextBpStep({
   };
 }
 
+export async function executeRepoBuildCommand({
+  pool,
+  userId,
+  sessionId,
+  utterance,
+  stageCommand,
+  baseUrl,
+  commandKey,
+  logger,
+}) {
+  const stagedCommand = await stageCommand({
+    userId,
+    sessionId,
+    utterance,
+    intent: 'command',
+  });
+  const commandExecution = await executeVoiceRailFounderCommand({
+    pool,
+    stagedCommandId: stagedCommand.id,
+    utterance,
+    userId,
+    logger,
+    baseUrl,
+    commandKey,
+  });
+  return { stagedCommand, commandExecution };
+}
+
+export { executeFounderSystemAction, formatFounderSystemActionReply };
+
 export function formatIntentRouteHeader(route) {
   return [
     'INTENT-FIRST ROUTING',
     `lane: ${route.lane}`,
     `confidence: ${route.confidence}`,
     `reason: ${route.reason || '—'}`,
+    route.command_class ? `command_class: ${route.command_class}` : '',
     route.inferred_provider ? `inferred_provider: ${route.inferred_provider}` : '',
     route.explicit_mode ? `explicit_mode_override: ${route.explicit_mode}` : '',
   ].filter(Boolean).join('\n');
@@ -322,6 +319,33 @@ export function formatBuildNextBpStepReply(route, result) {
     lines.push(`blocker: ${result.blocker}`);
   }
 
+  return lines.join('\n');
+}
+
+export function formatBlockedIntentReply(route, result) {
+  const lines = [
+    formatIntentRouteHeader(route),
+    '',
+    'LIFEOS BLOCKED',
+    `status: ${result.status || 'BLOCKED'}`,
+    `blocker: ${result.blocker || route.reason}`,
+    `detail: ${result.detail || 'This command class is not supported on this path.'}`,
+    'builder_job_created: false',
+    'repo_edit_attempted: false',
+  ];
+  if (result.hint) lines.push(`hint: ${result.hint}`);
+  return lines.join('\n');
+}
+
+export function formatRepoBuildReply(route, { commandExecution, stagedCommand } = {}) {
+  const lines = [formatIntentRouteHeader(route), '', 'LIFEOS REPO BUILD'];
+  const ce = commandExecution || {};
+  lines.push(`ok: ${ce.ok === true}`);
+  lines.push(`job_id: ${ce.job_id || '—'}`);
+  lines.push(`target_file: ${ce.target_file || '—'}`);
+  lines.push(`commit_sha: ${ce.commit_sha || '—'}`);
+  if (ce.root_cause) lines.push(`blocker: ${ce.root_cause}`);
+  if (stagedCommand?.id) lines.push(`staged_command_id: ${stagedCommand.id}`);
   return lines.join('\n');
 }
 

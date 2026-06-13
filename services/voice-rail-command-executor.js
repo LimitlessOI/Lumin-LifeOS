@@ -8,6 +8,11 @@ import {
   extractTargetFileFromInstruction,
   inferBuilderDomainForTargetFile,
 } from './builder-instruction-target.js';
+import {
+  detectSystemActionIntent,
+  isRepoBuildCommand,
+} from './lifeos-founder-command-class.js';
+import { detectSystemAgentQuestion } from './lifeos-system-agent.js';
 
 const DEFAULT_SYNC_MS = 90_000;
 
@@ -63,10 +68,18 @@ const TARGET_FILE_HINT_PREFIXES =
  * Conversation mode still uses council for Q&A; build/route/fix requests skip department chat.
  */
 export function shouldRouteFounderToSystem({ mode, intent, content, department } = {}) {
-  if (mode === 'command') return true;
-  if (intent === 'command') return true;
-  const t = String(content || '').toLowerCase();
-  if (!t) return false;
+  const text = String(content || '').trim();
+  if (!text) return false;
+
+  if (detectSystemActionIntent(text)) return false;
+  if (detectSystemAgentQuestion(text)) return false;
+
+  const targetFile = extractTargetFileFromInstruction(text);
+  const t = text.toLowerCase();
+
+  if (mode === 'command' || intent === 'command') {
+    return isRepoBuildCommand(text, { explicitMode: mode === 'command' ? 'command' : 'lifeos' });
+  }
 
   if (
     /\b(send (this )?to|route (this )?to|forward to|hand (this )?off to|escalate (this )?to)\b/.test(t)
@@ -74,13 +87,10 @@ export function shouldRouteFounderToSystem({ mode, intent, content, department }
   ) {
     return true;
   }
-  if (
-    /\b(take a look at|fix the|update the|change the|patch the|implement|make the system)\b/.test(t)
-    && /\b(assistant|voice rail|lifeos|builder|overlay|command.control|app)\b/.test(t)
-  ) {
+  if (targetFile && /\b(take a look at|fix the|update the|change the|patch the|implement|make the system)\b/.test(t)) {
     return true;
   }
-  if (/\b(please build|please fix|please run|deploy this|execute this|run builder)\b/.test(t)) {
+  if (/\b(please build|please fix|please run|deploy this|execute this|run builder)\b/.test(t) && targetFile) {
     return true;
   }
   if (
@@ -90,7 +100,7 @@ export function shouldRouteFounderToSystem({ mode, intent, content, department }
     return true;
   }
   const dept = String(department || '').toUpperCase();
-  if (dept === 'CDR' && /\b(build|fix|patch|implement|execute|deploy)\b/.test(t)) {
+  if (dept === 'CDR' && targetFile && /\b(build|fix|patch|implement|execute|deploy)\b/.test(t)) {
     return true;
   }
   if (dept === 'BPB' && /\b(blueprint|translate|turn this into|spec for)\b/.test(t)) {

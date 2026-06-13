@@ -12,6 +12,7 @@ import {
   shouldRouteFounderToSystem,
   extractTargetFileFromInstruction,
 } from './voice-rail-command-executor.js';
+import { isRepoBuildCommand } from './lifeos-founder-command-class.js';
 import { BP_PRIORITY_REL } from './bp-priority-queue.js';
 
 function normalizeText(value) {
@@ -25,14 +26,22 @@ function normalizeText(value) {
 export function classifyFounderToolPass({ utterance, mode, intent, department }) {
   const content = normalizeText(utterance);
   const direct = classifySystemDirectAction(content);
-  if (direct.type === 'help' || direct.type === 'status' || direct.type === 'jobs') {
+  if (direct.type === 'help' || direct.type === 'status' || direct.type === 'jobs' || direct.type === 'system_action') {
+    return direct;
+  }
+  if (direct.type === 'unsupported') {
     return direct;
   }
   if (
-    mode === 'command'
-    || shouldRouteFounderToSystem({ mode, intent, content, department })
-    || extractTargetFileFromInstruction(content)
+    (mode === 'command' || intent === 'command')
+    && isRepoBuildCommand(content, { explicitMode: mode })
   ) {
+    return { type: 'execute' };
+  }
+  if (shouldRouteFounderToSystem({ mode, intent, content, department })) {
+    return { type: 'execute' };
+  }
+  if (extractTargetFileFromInstruction(content) && isRepoBuildCommand(content, { explicitMode: mode })) {
     return { type: 'execute' };
   }
   return { type: 'context_only' };

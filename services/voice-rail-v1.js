@@ -74,6 +74,11 @@ import {
   formatBuildNextBpStepReply,
   answerAuditIntent,
   formatAuditIntentReply,
+  executeFounderSystemAction,
+  formatFounderSystemActionReply,
+  executeRepoBuildCommand,
+  formatRepoBuildReply,
+  formatBlockedIntentReply,
 } from './voice-rail-intent-router.js';
 
 const MODES = new Set(['lifeos', 'system', 'conversation', 'command', 'brainstorm', 'private']);
@@ -1037,6 +1042,125 @@ export function createVoiceRailV1({
           },
           intent_route: intentRoute,
           execution_result: execResult,
+        };
+      }
+
+      if (intentRoute.lane === 'system_action') {
+        const actionResult = await executeFounderSystemAction({
+          pool,
+          userId,
+          sessionId: session.id,
+          utterance: content,
+          baseUrl,
+          commandKey,
+          connectionProbe: () => probeFounderContext(userId),
+        });
+        const replyText = formatFounderSystemActionReply(intentRoute, actionResult);
+        const { rows: assistantRows } = await pool.query(
+          `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+           VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+           RETURNING id, role, content, intent, department, created_at`,
+          [session.id, replyText, 'system_action', 'LifeOS'],
+        );
+        await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+        return {
+          private: false,
+          persisted: true,
+          intent_first: true,
+          system_action: true,
+          session_id: session.id,
+          mode: 'lifeos',
+          tag: session.tag,
+          department: 'LifeOS',
+          intent: 'system_action',
+          user_message: { role: 'user', content, intent },
+          assistant_message: assistantRows[0],
+          reply_source: {
+            council_used: false,
+            intent_route: intentRoute,
+            command_execution: null,
+            system_action: actionResult,
+          },
+          intent_route: intentRoute,
+          system_action_result: actionResult,
+        };
+      }
+
+      if (intentRoute.lane === 'execution_repo') {
+        const repoResult = await executeRepoBuildCommand({
+          pool,
+          userId,
+          sessionId: session.id,
+          utterance: content,
+          stageCommand,
+          baseUrl,
+          commandKey,
+          logger,
+        });
+        const replyText = formatRepoBuildReply(intentRoute, repoResult);
+        const { rows: assistantRows } = await pool.query(
+          `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+           VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+           RETURNING id, role, content, intent, department, created_at`,
+          [session.id, replyText, 'execution_repo', 'LifeOS'],
+        );
+        await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+        return {
+          private: false,
+          persisted: true,
+          intent_first: true,
+          execution_repo: true,
+          session_id: session.id,
+          mode: 'lifeos',
+          tag: session.tag,
+          department: 'LifeOS',
+          intent: 'execution_repo',
+          user_message: { role: 'user', content, intent },
+          assistant_message: assistantRows[0],
+          reply_source: {
+            council_used: false,
+            intent_route: intentRoute,
+            command_execution: repoResult.commandExecution || null,
+          },
+          intent_route: intentRoute,
+          command_execution: repoResult.commandExecution,
+        };
+      }
+
+      if (intentRoute.lane === 'blocked') {
+        const blockedResult = {
+          status: 'BLOCKED',
+          blocker: intentRoute.reason,
+          detail: 'Command mode requires a repo target_file path or a classified system action (no repo edits).',
+          hint: 'Include scripts/foo.mjs for repo builds, or ask for a harmless timestamped receipt with no repo edits.',
+        };
+        const replyText = formatBlockedIntentReply(intentRoute, blockedResult);
+        const { rows: assistantRows } = await pool.query(
+          `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+           VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+           RETURNING id, role, content, intent, department, created_at`,
+          [session.id, replyText, 'blocked', 'LifeOS'],
+        );
+        await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+        return {
+          private: false,
+          persisted: true,
+          intent_first: true,
+          blocked: true,
+          session_id: session.id,
+          mode: 'lifeos',
+          tag: session.tag,
+          department: 'LifeOS',
+          intent: 'blocked',
+          user_message: { role: 'user', content, intent },
+          assistant_message: assistantRows[0],
+          reply_source: {
+            council_used: false,
+            intent_route: intentRoute,
+            command_execution: null,
+          },
+          intent_route: intentRoute,
+          blocked_result: blockedResult,
         };
       }
 

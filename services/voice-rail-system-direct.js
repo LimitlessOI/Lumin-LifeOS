@@ -9,6 +9,10 @@ import {
   formatCommandSystemReply,
   isVoiceRailCommandExecuteEnabled,
 } from './voice-rail-command-executor.js';
+import {
+  detectSystemActionIntent,
+  isRepoBuildCommand,
+} from './lifeos-founder-command-class.js';
 
 const HELP_TEXT = [
   'LifeOS DIRECT — straight line to Railway APIs. No council. No department chat.',
@@ -32,6 +36,9 @@ export function classifySystemDirectAction(utterance) {
   if (/^\/?(help|commands|\?)$/.test(t) || /\b(what can (you|i) do|list apis|direct help)\b/.test(t)) {
     return { type: 'help' };
   }
+  if (detectSystemActionIntent(utterance)) {
+    return { type: 'system_action' };
+  }
   if (
     /\b(status|health|ready|connected|connection|am i connected|system check|probe)\b/.test(t)
     && !extractTargetFileFromInstruction(utterance)
@@ -41,7 +48,10 @@ export function classifySystemDirectAction(utterance) {
   if (/\b(recent jobs|last jobs|job list|command.control jobs|failed jobs)\b/.test(t)) {
     return { type: 'jobs' };
   }
-  return { type: 'execute' };
+  if (isRepoBuildCommand(utterance)) {
+    return { type: 'execute' };
+  }
+  return { type: 'unsupported' };
 }
 
 async function fetchJson(baseUrl, path, commandKey) {
@@ -189,6 +199,52 @@ export async function handleSystemDirectMessage({
     return {
       ok: true,
       text: formatJobsReply(jobs),
+      api_trace: apiTrace,
+      command_execution: null,
+      staged_command: null,
+    };
+  }
+
+  if (action.type === 'system_action') {
+    const { executeFounderSystemAction, formatFounderSystemActionReply } = await import('./lifeos-founder-system-action.js');
+    apiTrace.push({ api: 'lifeos_event_stream INSERT (founder system action)' });
+    const result = await executeFounderSystemAction({
+      pool,
+      userId,
+      utterance: content,
+      sessionId,
+      baseUrl,
+      commandKey,
+      connectionProbe,
+    });
+    const text = formatFounderSystemActionReply(
+      { lane: 'system_action', confidence: 'high', reason: 'system_action_no_repo' },
+      result,
+    );
+    return {
+      ok: result.ok === true,
+      text,
+      api_trace: apiTrace,
+      command_execution: null,
+      staged_command: null,
+      system_action: result,
+    };
+  }
+
+  if (action.type === 'unsupported') {
+    apiTrace.push({ action: 'unsupported_no_builder_route' });
+    const text = [
+      'LifeOS DIRECT — BLOCKED (no BuilderOS route)',
+      'api_path: lifeos/system/direct',
+      '',
+      'This utterance is not a repo build (no target_file), not a system read, and not a classified system action.',
+      'For repo edits include a path: scripts/foo.mjs, services/bar.js, routes/…',
+      'For connection proof without repo edits, ask to create a harmless timestamped receipt/event with no repo edits.',
+      'builder_job_created: false',
+    ].join('\n');
+    return {
+      ok: false,
+      text,
       api_trace: apiTrace,
       command_execution: null,
       staged_command: null,
