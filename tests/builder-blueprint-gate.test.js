@@ -34,3 +34,25 @@ test('blueprint gate rejects target not in blueprint steps', () => {
   assert.equal(r.ok, false);
   assert.equal(r.error, 'blueprint_gate_target_not_in_scope');
 });
+
+test('blueprint gate passes platform_gap_fill for product spine with reason', () => {
+  const reason =
+    'GAP-FILL platform repair (governed loop): Integrate BuilderOS DONE gate into /build. Target: routes/lifeos-council-builder-routes.js. No mission BLUEPRINT.json; NSSOT §2.11 platform wiring.';
+  const r = checkBuildBlueprintGate({
+    target_file: 'routes/lifeos-council-builder-routes.js',
+    platform_gap_fill: true,
+    platform_gap_fill_reason: reason,
+  });
+  assert.equal(r.ok, true);
+  assert.equal(r.platform_gap_fill, true);
+});
+
+test('blueprint gate still requires reason for platform_gap_fill', () => {
+  const r = checkBuildBlueprintGate({
+    target_file: 'routes/foo-routes.js',
+    platform_gap_fill: true,
+    platform_gap_fill_reason: 'too short',
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.error, 'blueprint_gate_platform_gap_fill_reason');
+});

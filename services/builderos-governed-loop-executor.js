@@ -49,9 +49,69 @@ function resolveBuilderDispatchBaseUrl(baseUrl) {
   return normalized || `http://127.0.0.1:${port}`;
 }
 
-async function dispatchBuilderPlan(plan, { baseUrl, commandKey, task_id, blueprint_id }) {
+const PLATFORM_INFRASTRUCTURE_TARGET_RES = [
+  /^routes\/lifeos-council-builder-routes\.js$/i,
+  /^routes\/builderos-/i,
+  /^services\/builderos-/i,
+  /^services\/tsos-platform-kernel\.js$/i,
+  /^builderos-reboot\//i,
+];
+
+const PLATFORM_REPAIR_INSTRUCTION_RES = [
+  /\b(gap-fill|gap fill|platform kernel|control plane|builderos done|done gate|command\.control|governed loop|oil boundary|builder pipeline|platform repair)\b/i,
+  /\b(integrate|wire|enforce)\b.*\b(\/build|build path|recordbuildstart|recordbuildcomplete|canmarkbuilddone)\b/i,
+  /\bintegrate builderos\b/i,
+];
+
+function normalizeRelPath(value) {
+  return String(value || '').replace(/\\/g, '/').replace(/^\.\//, '').trim();
+}
+
+export function isPlatformInfrastructureTarget(targetFile) {
+  const rel = normalizeRelPath(targetFile);
+  if (!rel) return false;
+  return PLATFORM_INFRASTRUCTURE_TARGET_RES.some((re) => re.test(rel));
+}
+
+export function hasPlatformRepairInstructionMarkers(text) {
+  const source = String(text || '').trim();
+  if (!source) return false;
+  return PLATFORM_REPAIR_INSTRUCTION_RES.some((re) => re.test(source));
+}
+
+export function isPlatformRepairPlan(plan, job) {
+  if (plan?.domain === 'builderos-platform') return true;
+  const targetFile = normalizeRelPath(plan?.target_file || job?.metadata_json?.target_file);
+  if (targetFile && isPlatformInfrastructureTarget(targetFile)) return true;
+  const instruction = [job?.instruction, plan?.task, plan?.spec].filter(Boolean).join('\n');
+  return hasPlatformRepairInstructionMarkers(instruction);
+}
+
+export function buildPlatformGapFillReason(plan, job) {
+  const instruction = String(job?.instruction || plan?.task || '').trim();
+  const target = normalizeRelPath(plan?.target_file || job?.metadata_json?.target_file) || 'platform spine';
+  const summary = instruction.length > 140 ? `${instruction.slice(0, 137)}...` : instruction;
+  return `GAP-FILL platform repair (governed loop): ${summary || 'BuilderOS platform wiring'}. Target: ${target}. No mission BLUEPRINT.json; NSSOT §2.11 platform wiring.`;
+}
+
+export function resolvePlatformGapFillForBuildDispatch(plan, job, { blueprint_id } = {}) {
+  if (blueprint_id || plan?.blueprint_id || job?.blueprint_id || job?.mission_id) {
+    return null;
+  }
+  if (!isPlatformRepairPlan(plan, job)) {
+    return null;
+  }
+  const platform_gap_fill_reason = buildPlatformGapFillReason(plan, job);
+  if (platform_gap_fill_reason.length < 40) {
+    return null;
+  }
+  return { platform_gap_fill: true, platform_gap_fill_reason };
+}
+
+async function dispatchBuilderPlan(plan, { baseUrl, commandKey, task_id, blueprint_id, job }) {
   const dispatchBase = resolveBuilderDispatchBaseUrl(baseUrl);
   const url = `${dispatchBase}/api/v1/lifeos/builder/build`;
+  const gapFill = resolvePlatformGapFillForBuildDispatch(plan, job, { blueprint_id });
   const body = {
     domain: plan.domain,
     mode: plan.mode || 'code',
@@ -65,6 +125,7 @@ async function dispatchBuilderPlan(plan, { baseUrl, commandKey, task_id, bluepri
     ...(Array.isArray(plan.files) && plan.files.length ? { files: plan.files } : {}),
     ...(plan.model ? { model: plan.model } : {}),
     ...(plan.max_output_tokens ? { max_output_tokens: plan.max_output_tokens } : {}),
+    ...(gapFill || {}),
   };
 
   const controller = new AbortController();
@@ -282,6 +343,7 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     commandKey,
     task_id: `cc-${jobId}`,
     blueprint_id: job.blueprint_id || plan.blueprint_id,
+    job,
   });
   trace.builder_output = {
     committed: builderResult.committed,
@@ -412,6 +474,7 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
     commandKey,
     task_id: `cc-${jobId}-retry`,
     blueprint_id: job.blueprint_id || plan.blueprint_id,
+    job,
   });
   trace.builder_output = {
     committed: builderResult.committed,
