@@ -85,12 +85,40 @@
       "completed_at": "2026-06-11T19:44:25.907Z",
       "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
       "receipt_verdict": "PASS"
+    },
+    {
+      "step_id": "VRV1-S07",
+      "phase_id": "P6",
+      "title": "Founder direct provider live regression proof (OpenAI, Anthropic, Google)",
+      "target_file": "scripts/run-founder-direct-provider-proof.mjs",
+      "proof_spec": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_DIRECT_PROVIDER_PROOF_SPEC.md",
+      "action_type": "shell_command",
+      "command": "npm run lifeos:founder-direct-provider:proof",
+      "receipt_path": "products/receipts/FOUNDER_DIRECT_PROVIDER_PROOF.json",
+      "dependencies": [
+        "VRV1-S06"
+      ],
+      "status": "pending",
+      "acceptance_tests": [
+        "FDP-T01",
+        "FDP-T02",
+        "FDP-T03",
+        "FDP-T04",
+        "FDP-T05",
+        "FDP-T06"
+      ],
+      "notes": "Live provider path only — council/simulation/wrapper responses fail proof. Requires production PUBLIC_BASE_URL + COMMAND_CENTER_KEY."
     }
   ],
-  "blueprint_status": "complete",
-  "completed_at": "2026-06-11T19:44:25.907Z",
-  "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
+  "blueprint_status": "in_progress",
   "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
+  "previous_completion": {
+    "completed_at": "2026-06-11T19:44:25.907Z",
+    "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
+    "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
+    "receipt_verdict": "PASS",
+    "scope": "VRV1-S01 through VRV1-S06"
+  },
   "build_method": "GAP-FILL"
 }
