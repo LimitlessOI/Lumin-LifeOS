@@ -52,6 +52,71 @@ function extractBuilderFailureDetail(trace, job) {
   };
 }
 
+const TARGET_FILE_HINT_PREFIXES =
+  'scripts/, services/, routes/, public/, config/, db/migrations/, builderos-reboot/';
+
+/**
+ * Deterministic founder-command reply — no council chat layer.
+ * Shown in LifeOS app when command mode routes straight to command-control.
+ */
+export function formatCommandSystemReply({ commandExecution, stagedCommand, utterance } = {}) {
+  const ce = commandExecution || {};
+  const stagedId = stagedCommand?.id || ce.staged_command_id || null;
+
+  if (!commandExecution && !isVoiceRailCommandExecuteEnabled()) {
+    return [
+      'LifeOS SYSTEM — command staged only (execution disabled on server).',
+      `Set VOICE_RAIL_EXECUTE_COMMANDS=1 on Railway to run builder from the app.`,
+      stagedId ? `staged_command_id: ${stagedId}` : '',
+    ].filter(Boolean).join('\n');
+  }
+
+  if (ce.skipped) {
+    return [
+      'LifeOS SYSTEM — command staged only (execution disabled).',
+      `Set VOICE_RAIL_EXECUTE_COMMANDS=1 on Railway to run builder jobs from the app.`,
+      stagedId ? `staged_command_id: ${stagedId}` : '',
+    ].filter(Boolean).join('\n');
+  }
+
+  if (ce.ok) {
+    return [
+      'LifeOS SYSTEM — BuilderOS command-control completed.',
+      `job_id: ${ce.job_id || '—'}`,
+      `target_file: ${ce.target_file || '—'}`,
+      `commit_sha: ${ce.commit_sha || '—'}`,
+      ce.poll_url ? `poll: ${ce.poll_url}` : '',
+    ].filter(Boolean).join('\n');
+  }
+
+  const lines = [
+    'LifeOS SYSTEM — routed to BuilderOS command-control (not department chat).',
+    `job_id: ${ce.job_id || '—'}`,
+    `status: ${ce.job_status || ce.stage || 'failed'}`,
+    `root_cause: ${ce.root_cause || ce.error || 'unknown'}`,
+  ];
+
+  const root = String(ce.root_cause || ce.error || '').toLowerCase();
+  if (root.includes('missing_target_file') || root.includes('insufficient_instruction')) {
+    lines.push('');
+    lines.push('Include a repo file path in your command, for example:');
+    lines.push('  "Add a one-line comment to scripts/my-audit.mjs — do not change anything else."');
+    lines.push(`Supported prefixes: ${TARGET_FILE_HINT_PREFIXES}`);
+  }
+  if (ce.timed_out) {
+    lines.push('');
+    lines.push(`Still running — poll ${ce.poll_url || 'command-control job API'} for commit_sha.`);
+  }
+  if (ce.builder_http_status) {
+    lines.push(`builder_http_status: ${ce.builder_http_status}`);
+  }
+  if (utterance && !extractTargetFileFromInstruction(String(utterance))) {
+    lines.push('');
+    lines.push('No target_file was detected in your message — the builder requires an explicit path.');
+  }
+  return lines.join('\n');
+}
+
 export function summarizeVoiceRailCommandExecution(job, execResult = {}) {
   const trace = execResult.trace || {};
   const failure = extractBuilderFailureDetail(trace, job);

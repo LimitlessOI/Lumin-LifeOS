@@ -16,7 +16,7 @@
   <script src="/shared/lifeos-voice-chat.js?v=20260525-2"></script>
   <script src="/shared/lifeos-chat-composer.js?v=20260525-2"></script>
   <link rel="stylesheet" href="/shared/lifeos-chat-composer.css?v=20260525-2">
-  <title>LifeOS Voice Rail</title>
+  <title>LifeOS</title>
   <style>
     :root,
     [data-theme="dark"] {
@@ -411,7 +411,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS Voice Rail <span class="dept-badge" id="dept-badge" title="Council Chair — your direct line">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.20</span></h1>
+    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="Council Chair — conversation mode">ChC</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.21</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -433,7 +433,7 @@
 
   <div id="truth-banner" role="status" class="connection-check">
     <span id="connection-status">Checking LifeOS connection…</span>
-    <span class="truth-build"> · build <strong>v2.20</strong></span>
+    <span class="truth-build"> · build <strong>v2.21</strong></span>
   </div>
 
   <div id="auth-banner" role="alert">
@@ -479,7 +479,7 @@
             <button type="button" class="btn icon-btn compact mode-toggle active" data-mode="conversation" aria-pressed="true" title="Conversation" aria-label="Conversation">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </button>
-            <button type="button" class="btn icon-btn compact mode-toggle" data-mode="command" aria-pressed="false" title="Command — stage actions" aria-label="Command">
+            <button type="button" class="btn icon-btn compact mode-toggle" data-mode="command" aria-pressed="false" title="Command — runs BuilderOS directly (no department chat)" aria-label="Command">
               <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             </button>
             <button type="button" class="btn icon-btn compact mode-toggle" data-mode="brainstorm" aria-pressed="false" title="Brainstorm" aria-label="Brainstorm">
@@ -1236,6 +1236,11 @@
         tag.className = 'intent';
         tag.textContent = 'error';
         box.appendChild(tag);
+      } else if (source && source.path === 'lifeos/system/command-control') {
+        const tag = document.createElement('div');
+        tag.className = 'source';
+        tag.textContent = 'LifeOS System · BuilderOS command-control · direct API';
+        box.appendChild(tag);
       } else if (source && source.path === 'lifeos/department') {
         const tag = document.createElement('div');
         tag.className = 'source';
@@ -1863,7 +1868,7 @@
           { commandExecution: exec, mode },
         );
         lastAssistant = reply;
-        maybeSpeak(reply);
+        if (!res.json.system_direct) maybeSpeak(reply);
         await refreshStaged();
         attachmentManager?.clear?.();
       } finally {

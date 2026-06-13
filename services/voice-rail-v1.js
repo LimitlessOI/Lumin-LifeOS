@@ -41,6 +41,7 @@ import {
 } from './voice-rail-execution-truth.js';
 import {
   executeVoiceRailFounderCommand,
+  formatCommandSystemReply,
   isVoiceRailCommandExecuteEnabled,
 } from './voice-rail-command-executor.js';
 
@@ -920,6 +921,53 @@ export function createVoiceRailV1({
           commandExecution = { ok: false, error: execErr.message };
         }
       }
+    }
+
+    const isFounderSystemCommand = intent === 'command' || mode === 'command';
+
+    /** Command mode → BuilderOS command-control directly; no council chat wrapper. */
+    if (isFounderSystemCommand && !simulateOnly) {
+      const systemReply = formatCommandSystemReply({
+        commandExecution,
+        stagedCommand,
+        utterance: content,
+      });
+      const replySource = {
+        path: 'lifeos/system/command-control',
+        persona: 'SYS',
+        department: deptId,
+        department_title: 'LifeOS System',
+        display_name: 'BuilderOS Command & Control',
+        model_id: 'command-control',
+        provider: 'lifeos',
+        note: 'Founder command executed via internal API — not department chat.',
+        command_execution: commandExecution,
+        system_direct: true,
+      };
+      const { rows: assistantRows } = await pool.query(
+        `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+         VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+         RETURNING id, role, content, intent, department, created_at`,
+        [session.id, systemReply, intent, deptId],
+      );
+      await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+      return {
+        private: false,
+        persisted: true,
+        system_direct: true,
+        session_id: session.id,
+        mode: session.mode,
+        tag: session.tag,
+        department: deptId,
+        intent,
+        user_message: { role: 'user', content, intent },
+        assistant_message: assistantRows[0],
+        reply_source: replySource,
+        context_health: null,
+        staged_command: stagedCommand,
+        command_execution: commandExecution,
+        commitment_extract: null,
+      };
     }
 
     let commitmentExtract = null;
