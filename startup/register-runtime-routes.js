@@ -25,6 +25,7 @@ import { createTCRoutes } from "../routes/tc-routes.js";
 import { createMLSRoutes } from "../routes/mls-routes.js";
 import { createLifeOSCoreRoutes } from "../routes/lifeos-core-routes.js";
 import { createLifeOSSystemProofRoutes } from "../routes/lifeos-system-proof-routes.js";
+import { createLifeOSDirectActionRoutes } from "../routes/lifeos-direct-action-routes.js";
 import { createLifeOSGatewayRoutes, createLifeOSEngineRoutes } from "../routes/lifeos-engine-routes.js";
 import { createLifeOSHealthRoutes } from "../routes/lifeos-health-routes.js";
 import { createLifeOSFamilyRoutes } from "../routes/lifeos-family-routes.js";
@@ -202,6 +203,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/lifeos", createLifeOSSystemProofRoutes({ pool, requireKey }));
   logger.info("✅ [LIFEOS-SYSTEM-PROOF] Routes mounted at /api/v1/lifeos/system-proof-event + /provider-tool-proof");
+
+  app.use("/api/v1/lifeos", createLifeOSDirectActionRoutes({ pool, requireKey }));
+  logger.info("✅ [LIFEOS-DIRECT-ACTION] Routes mounted at /api/v1/lifeos/direct-action");
 
   app.use("/api/v1/lifeos", createLifeOSGatewayRoutes({ pool, sendSMS, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-GATEWAY] Routes mounted at /api/v1/lifeos");

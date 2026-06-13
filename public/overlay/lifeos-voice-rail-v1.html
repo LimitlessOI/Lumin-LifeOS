@@ -465,7 +465,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="LifeOS operator">LifeOS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.37</span></h1>
+    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="LifeOS operator">LifeOS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.38</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -487,7 +487,7 @@
 
   <div id="truth-banner" role="status" class="connection-check">
     <span id="connection-status">Checking LifeOS connection…</span>
-    <span class="truth-build"> · build <strong>v2.37</strong> · provider proof in UI</span>
+    <span class="truth-build"> · build <strong>v2.38</strong> · direct-action bridge before chat routing</span>
   </div>
 
   <section id="provider-proof-panel" class="provider-proof-panel" aria-label="Provider connection proof">
@@ -1131,6 +1131,20 @@
       renderProviderProofDetail(res.json, { title: 'Verified in LifeOS' });
     }
 
+    async function tryDirectAction(text, mode, selectedProviderKeys) {
+      const providers = Array.isArray(selectedProviderKeys) ? selectedProviderKeys.filter(Boolean) : [];
+      const selectedProvider = providers[0] || null;
+      const res = await lifeosApi('POST', '/direct-action', {
+        user: USER,
+        text,
+        current_mode: mode,
+        session_id: sessionId,
+        selected_provider: selectedProvider,
+        selected_providers: providers,
+      });
+      return { status: res.status, json: res.json || {} };
+    }
+
     async function refreshProofEventList() {
       const host = document.getElementById('provider-proof-list');
       if (!host || !ensureKey()) return;
@@ -1530,7 +1544,7 @@
           const voice = source.model_id ? ` · ${source.display_name || source.model_id}` : '';
           tag.textContent = `LifeOS · system APIs first · voice${voice} · tool=${source.tool_action || '?'}`;
         } else if (source.path === 'lifeos/system/direct') {
-          tag.textContent = 'LifeOS Direct API · no council · no department persona';
+          tag.textContent = 'LifeOS Direct API · system action';
         } else {
           tag.textContent = 'LifeOS System · BuilderOS command-control · direct API';
         }
@@ -2082,8 +2096,49 @@
 
       const tag = document.getElementById('tag').value || null;
       const department = document.getElementById('department').value || 'ChC';
+      let engines = selectedProviderKeys().filter(Boolean);
+      if ((mode === 'command' || mode === 'lifeos') && engines.length > 1) engines = engines.slice(0, 1);
 
       try {
+        const directAction = await tryDirectAction(content, mode, engines);
+        if (directAction.json?.matched) {
+          appendBubble('user', content, null, null, null, null, displayAttachments);
+          const proofRecord = directAction.json.result_record || directAction.json.proof_record || null;
+          const providerToolProof = directAction.json.provider_tool_proof || null;
+          appendBubble(
+            'assistant',
+            directAction.json.visible_founder_message || directAction.json.error || 'DIRECT ACTION FAILED',
+            directAction.json.ok ? null : 'error',
+            directAction.json.source || { path: 'lifeos/system/direct' },
+            'SYS',
+            null,
+            null,
+            {
+              systemDirect: true,
+              providerToolProof: providerToolProof?.ok ? { ...providerToolProof, proof_record: proofRecord } : providerToolProof,
+            },
+          );
+          if (proofRecord?.ok || providerToolProof?.ok) {
+            renderProviderProofDetail(proofRecord?.ok ? proofRecord : {
+              ok: true,
+              verified: true,
+              proof_event_id: providerToolProof.proof_event_id,
+              tool_name: providerToolProof.tool_name,
+              status: 'processed',
+              created_at: providerToolProof.created_at,
+              metadata: {
+                provider: providerToolProof.provider,
+                model: providerToolProof.model,
+                provider_request_id: providerToolProof.provider_request_id,
+                tool_name: providerToolProof.tool_name,
+              },
+            }, { title: 'Direct action proof record' });
+            refreshProofEventList();
+          }
+          attachmentManager?.clear?.();
+          return;
+        }
+
         if (isPrivate()) {
           appendBubble('user', content, 'private');
           privateBuffer.push(content);
@@ -2104,8 +2159,6 @@
         }
 
         appendBubble('user', content, null, null, null, null, displayAttachments);
-        let engines = selectedProviderKeys().filter(Boolean);
-        if ((mode === 'command' || mode === 'lifeos') && engines.length > 1) engines = engines.slice(0, 1);
         const body = {
           user: USER,
           session_id: sessionId,

@@ -1,7 +1,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-05-24 — mount LifeOS system-proof routes at /api/v1/lifeos
+**Last Updated:** 2026-06-13 — mount LifeOS direct-action route at /api/v1/lifeos/direct-action
 
 | Field | Value |
 |---|---|
@@ -202,6 +202,8 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-05-24 | **`startup/register-runtime-routes.js`** — mount `createLifeOSSystemProofRoutes` at `/api/v1/lifeos` (`/system-proof-event`, `/provider-tool-proof`). | Provider API tool-action proof wiring (AM21 v2.35). | AM19 wiring | pending deploy |
+| 2026-06-13 | **`startup/register-runtime-routes.js`** — mount `createLifeOSDirectActionRoutes` at `/api/v1/lifeos/direct-action`. | LifeOS direct-action v1 must bypass Voice Rail chat routing and execute founder system actions on a dedicated endpoint. | AM19 wiring, AM21 feature | pending deploy | `npm run lifeos:direct-action:v1-acceptance` |
 | 2026-05-24 | **`startup/register-runtime-routes.js`** — pass `requireKey` into `createLifeOSAuthRoutes` for operator invite/provision endpoints. | Sherry account provisioning via command key; member login stays JWT. | AM19 wiring | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 | 2026-06-11 | **`startup/register-runtime-routes.js` + `server.js`:** pass `callCouncilMember`, `COUNCIL_MEMBERS`, `COUNCIL_ALIAS_MAP` into `createLifeOSVoiceRailRoutes` for session-aware council replies with model disclosure. | Voice Rail was using generic lumin.chat boilerplate; Adam trust fix. | AM19 wiring, AM21 Voice Rail | pending | after deploy |
