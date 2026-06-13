@@ -23,6 +23,10 @@ import {
   parseFounderDirectProviderUtterance,
   callFounderDirectProvider,
 } from '../services/founder-direct-provider.js';
+import {
+  answerSystemAgentQuestion,
+  formatSystemAgentReply,
+} from '../services/lifeos-system-agent.js';
 
 const sttUpload = multer({
   storage: multer.memoryStorage(),
@@ -73,8 +77,9 @@ export function createLifeOSVoiceRailRoutes({
     res.json({
       ok: true,
       service: 'voice-rail-v1',
-      build: 'voice-rail-v2.31',
+      build: 'voice-rail-v2.32',
       founder_direct_provider: true,
+      lifeos_system_agent: true,
       founder_system_direct_default: true,
       founder_operator_mode: 'lifeos',
       founder_auto_routing: true,
@@ -263,6 +268,33 @@ export function createLifeOSVoiceRailRoutes({
       const messages = await voiceRail.listMessages(req.params.id, userId);
       if (messages === null) return res.status(404).json({ ok: false, error: 'session_not_found' });
       res.json({ ok: true, messages });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post('/system-agent', requireKey, async (req, res, next) => {
+    try {
+      const text = String(req.body.text || req.body.utterance || req.body.question || '').trim();
+      if (!text) {
+        return res.status(400).json({ ok: false, error: 'question_required' });
+      }
+      const baseUrl = resolveRequestBaseUrl(req);
+      const commandKey = resolveRequestCommandKey(req);
+      const result = await answerSystemAgentQuestion(text, { baseUrl, commandKey });
+      if (!result) {
+        return res.status(400).json({
+          ok: false,
+          error: 'not_a_system_agent_question',
+          hint: 'Try: Where is the original LifeOS blueprint?',
+        });
+      }
+      const status = result.status === 'BLOCKED' ? 503 : 200;
+      return res.status(status).json({
+        ok: result.status !== 'BLOCKED',
+        reply_text: formatSystemAgentReply(result),
+        ...result,
+      });
     } catch (err) {
       next(err);
     }

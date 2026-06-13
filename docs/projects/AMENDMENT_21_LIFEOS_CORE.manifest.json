@@ -181,6 +181,7 @@
     "services/voice-rail-founder-memory.js",
     "services/voice-rail-usage-receipt.js",
     "services/founder-direct-provider.js",
+    "services/lifeos-system-agent.js",
     "db/migrations/20260612_voice_rail_founder_routing_state.sql",
     "public/overlay/lifeos-ambient-sense.js"
   ],
@@ -855,6 +856,6 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_change_summary": "Founder Direct Provider Test v2.31 — live OpenAI/Anthropic/Google fetch",
-  "ssot_receipt_tail": "POST /founder-direct-provider; Talk to GPT|Claude|Gemini in LifeOS mode."
+  "last_change_summary": "LifeOS System Agent v2.32 — repo-aware search/read for founder questions",
+  "ssot_receipt_tail": "POST /system-agent; LifeOS intercept for blueprint/BP/repo questions."
 }
