@@ -214,30 +214,11 @@ export function sanitizeVoiceRailReply(text, priorAssistants, operatorName, user
 
 async function readMissionQueueHead() {
   try {
-    const { loadBpPriorityQueue, resolveNextLifeOSSlice } = await import('./lifeos-bp-next-slice.js');
-    const queue = await loadBpPriorityQueue();
-    const next = await resolveNextLifeOSSlice();
-    return {
-      bp_priority: queue.items,
-      next_slice: next,
-    };
+    const { summarizeBpPriorityForOperator } = await import('./bp-priority-queue.js');
+    const summary = summarizeBpPriorityForOperator();
+    return { summary: summary.text, next_blueprint_step: summary.next };
   } catch {
-    try {
-      const raw = await fs.readFile(path.join(process.cwd(), 'builderos-reboot', 'BP_PRIORITY.json'), 'utf8');
-      const q = JSON.parse(raw);
-      const list = q.items || q.priorities || q.queue || [];
-      return {
-        bp_priority: (Array.isArray(list) ? list : []).slice(0, 6).map((m) => ({
-          rank: m.rank,
-          mission_id: m.mission_id || m.id,
-          verdict: m.verdict || m.receipt_verdict,
-          blueprint_path: m.blueprint_path,
-        })),
-        next_slice: null,
-      };
-    } catch {
-      return { bp_priority: [], next_slice: null };
-    }
+    return { summary: null, next_blueprint_step: null };
   }
 }
 
@@ -267,7 +248,7 @@ export function summarizeVoiceRailContextHealth(contextData) {
     verified_memories: Array.isArray(ctx.verified_memories) ? ctx.verified_memories.length : 0,
     goals: Array.isArray(ctx.goals) ? ctx.goals.length : 0,
     staged_commands: Array.isArray(ctx.staged_commands) ? ctx.staged_commands.length : 0,
-    mission_queue_head: Array.isArray(ctx.mission_queue_head) ? ctx.mission_queue_head.length : 0,
+    mission_queue_head: String(ctx.mission_queue_head || '').length,
     recent_commitments: Array.isArray(ctx.recent_commitments) ? ctx.recent_commitments.length : 0,
     has_lifeos_snapshot: Boolean(
       ctx.lifeos_snapshot && typeof ctx.lifeos_snapshot === 'object' && Object.keys(ctx.lifeos_snapshot).length,
@@ -423,8 +404,8 @@ export async function buildVoiceRailOperatorContext({
     }),
 
     readMissionQueueHead().then((m) => {
-      ctx.mission_queue_head = m?.bp_priority || m || [];
-      ctx.bp_next_slice = m?.next_slice || null;
+      ctx.mission_queue_head = m?.summary || null;
+      ctx.next_blueprint_step = m?.next_blueprint_step || null;
     }),
 
     readContinuityTail().then((t) => {
