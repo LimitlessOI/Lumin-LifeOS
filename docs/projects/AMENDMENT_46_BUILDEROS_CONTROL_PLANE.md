@@ -2,7 +2,7 @@
 _(formerly AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md)_
 **Status:** IN_BUILD — Phase 1 infrastructure on disk
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-12 — BP orphan PASS guard (`bp-priority-sync` + CI). Prior **2026-06-03** — decision ledger service.
+**Last Updated:** 2026-06-13 — DONE gate helper extracted for `/build` wiring. Prior **2026-06-12** — BP orphan PASS guard (`bp-priority-sync` + CI).
 
 > **Core law:** If it is not in the ledger, it did not happen.
 > **Priority:** Higher than MarketingOS, SalesOS, CCL production integration.
@@ -252,6 +252,7 @@ Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy m
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-06-13 | **`services/builderos-build-done-gate-helper.js` (NEW)** + **`tests/builderos-build-done-gate-helper.test.js`** — extracted DONE gate evaluation (rejects commit_sha-only success; requires control-plane evidence when available). **Not yet wired** into `routes/lifeos-council-builder-routes.js`. | Repair Lane GAP-FILL: unblock Phase 6 `/build` integration without Zone 3 route patch in same step. | ✅ 5 tests |
 | 2026-05-24 | **Revert** voice-specific helpers from `bp-priority-queue.js` (v2.27 extension removed in v2.28). Loader stays canonical per `builderos-reboot/AGENTS.md`. | Adam: do not pollute control-plane loader with voice theater | GAP-FILL v2.28 |
 | 2026-06-12 | **`services/bp-priority-sync.js`** — `checkOrphanProductPassReceipts()` (§2.18: no orphan PASS in `products/receipts/`); CI via `system-maturity-check.mjs`. **`services/bp-priority-queue.js`** — canonical BP_PRIORITY loader (tracked). | Adam: PASS without BP sync must be impossible; default push+deploy. | ✅ verify 26 checks |
 | 2026-06-03 | **`services/decision-ledger.js` (NEW)** + **`db/migrations/20260606_decision_ledger.sql`** — `founder_decision_ledger` table; `createDecision()` used by model escalation gate receipts. | Builder Reliability Initiative Layer 1 — escalation audit trail. | ✅ migration applies on deploy |
