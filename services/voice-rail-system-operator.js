@@ -1,0 +1,169 @@
+/**
+ * LifeOS System Operator — natural conversation backed by real API/tool execution.
+ * One channel: talk normally; system runs first; model speaks from receipts only.
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ */
+import {
+  classifySystemDirectAction,
+  handleSystemDirectMessage,
+  runSystemDirectStatusProbes,
+} from './voice-rail-system-direct.js';
+import { listCommandControlJobs } from './builderos-command-control-service.js';
+import {
+  shouldRouteFounderToSystem,
+  extractTargetFileFromInstruction,
+} from './voice-rail-command-executor.js';
+
+function normalizeText(value) {
+  return String(value || '').trim();
+}
+
+/**
+ * Decide what the system does before any conversational reply.
+ * General chat → context only (no spurious builder jobs).
+ */
+export function classifyFounderToolPass({ utterance, mode, intent, department }) {
+  const content = normalizeText(utterance);
+  const direct = classifySystemDirectAction(content);
+  if (direct.type === 'help' || direct.type === 'status' || direct.type === 'jobs') {
+    return direct;
+  }
+  if (
+    mode === 'command'
+    || shouldRouteFounderToSystem({ mode, intent, content, department })
+    || extractTargetFileFromInstruction(content)
+  ) {
+    return { type: 'execute' };
+  }
+  return { type: 'context_only' };
+}
+
+export async function runFounderSystemToolPass({
+  pool,
+  userId,
+  utterance,
+  mode,
+  intent,
+  department,
+  baseUrl,
+  commandKey,
+  connectionProbe,
+  stageCommand,
+  sessionId,
+  logger,
+}) {
+  const action = classifyFounderToolPass({ utterance, mode, intent, department });
+
+  if (action.type === 'context_only') {
+    let contextHealth = null;
+    if (typeof connectionProbe === 'function') {
+      try {
+        const probe = await connectionProbe();
+        contextHealth = probe?.context_health || null;
+      } catch (err) {
+        logger?.warn?.({ err: err.message }, 'lifeos operator context probe failed');
+      }
+    }
+    return {
+      action: 'context_only',
+      context_health: contextHealth,
+      command_execution: null,
+      staged_command: null,
+      api_trace: [{ action: 'context_only' }],
+      tool_summary: contextHealth
+        ? `LifeOS context: ${contextHealth.level || 'unknown'} (connected=${contextHealth.connected ?? contextHealth.sufficient_for_founder_reply ?? '?'})`
+        : 'LifeOS context: probe unavailable',
+    };
+  }
+
+  const direct = await handleSystemDirectMessage({
+    pool,
+    userId,
+    sessionId,
+    utterance,
+    baseUrl,
+    commandKey,
+    connectionProbe,
+    stageCommand,
+    logger,
+  });
+
+  return {
+    action: action.type,
+    command_execution: direct.command_execution,
+    staged_command: direct.staged_command,
+    api_trace: direct.api_trace,
+    probes: direct.probes,
+    tool_summary: direct.text,
+    raw_direct: direct,
+  };
+}
+
+export function buildLifeOSOperatorSystemPrompt({
+  operator,
+  contextData,
+  toolPass,
+  executionTruthBlock,
+}) {
+  const name = operator?.display_name || 'Adam';
+  const toolBlock = toolPass?.tool_summary
+    ? `\n\nSYSTEM_TOOL_RESULTS (ground truth — never contradict):\n${toolPass.tool_summary}`
+    : '\n\nSYSTEM_TOOL_RESULTS: (no tools ran this turn — conversation only; do not claim builds or jobs.)';
+
+  const receipt = toolPass?.command_execution;
+  const receiptBlock = receipt
+    ? `\nCOMMAND_EXECUTION_RECEIPT: ${JSON.stringify({
+      ok: receipt.ok,
+      job_id: receipt.job_id,
+      root_cause: receipt.root_cause,
+      target_file: receipt.target_file,
+      commit_sha: receipt.commit_sha,
+      stage: receipt.stage,
+    })}`
+    : '';
+
+  return [
+    `You are LifeOS — ${name}'s live operator interface to their Railway-deployed system.`,
+    'You speak naturally in conversation, like a trusted operator who runs the machine — NOT a separate "advisor" chatbot.',
+    'You are NOT Council Chair, NOT BPB, NOT any department persona. Never say "I routed to…" or "the team will…".',
+    'When work was requested, SYSTEM_TOOL_RESULTS shows what the APIs actually did. Cite job_id / blockers when present.',
+    'When no tool ran, you may discuss, clarify, or ask for a file path — but never claim execution.',
+    'Keep flow human. Short paragraphs. No corporate filler. No fake pipelines.',
+    executionTruthBlock || '',
+    toolBlock,
+    receiptBlock,
+    contextData?.communication_profile_summary
+      ? `\nOperator tone preferences:\n${String(contextData.communication_profile_summary).slice(0, 800)}`
+      : '',
+  ].filter(Boolean).join('\n');
+}
+
+export function buildLifeOSOperatorReplySource(routing, toolPass, usageReceipt) {
+  return {
+    path: 'lifeos/system/operator',
+    persona: 'LifeOS',
+    department: 'LifeOS',
+    department_title: 'LifeOS',
+    display_name: routing?.displayName || 'LifeOS',
+    model_id: routing?.modelId || null,
+    provider: routing?.provider || null,
+    note: 'Natural conversation backed by system API tool pass — not department theater.',
+    system_operator: true,
+    council_used: true,
+    operator_voice: true,
+    tool_action: toolPass?.action || null,
+    command_execution: toolPass?.command_execution || null,
+    usage_receipt: usageReceipt || null,
+    routing_meta: routing?.routing_meta || null,
+  };
+}
+
+export async function fetchRecentJobsSummary(pool, limit = 3) {
+  if (!pool) return '';
+  const jobs = await listCommandControlJobs(pool, { limit });
+  if (!jobs?.length) return 'Recent command-control jobs: none';
+  return `Recent command-control jobs:\n${jobs
+    .slice(0, limit)
+    .map((j) => `- ${j.id?.slice(0, 8)}… ${j.status}${j.blocker ? ` (${j.blocker})` : ''}`)
+    .join('\n')}`;
+}

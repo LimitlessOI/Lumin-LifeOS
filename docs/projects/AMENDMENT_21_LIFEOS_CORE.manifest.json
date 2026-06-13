@@ -854,6 +854,6 @@
     ]
   },
   "last_updated": "2026-05-24",
-  "last_change_summary": "Voice Rail v2.23 — System Direct default founder channel (API-only, no council personas)",
-  "ssot_receipt_tail": "voice-rail-system-direct.js; mode system; council_used false on founder default."
+  "last_change_summary": "Voice Rail v2.24 — LifeOS operator: natural talk + system API tool pass first",
+  "ssot_receipt_tail": "lifeos mode default; voice-rail-system-operator.js; not department theater."
 }

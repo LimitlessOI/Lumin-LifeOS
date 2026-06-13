@@ -35,6 +35,7 @@ import {
 } from './voice-rail-founder-memory.js';
 import { fetchVoiceRailUsageReceipt } from './voice-rail-usage-receipt.js';
 import {
+  buildExecutionTruthPromptBlock,
   VOICE_RAIL_EXECUTION_MANIFEST,
   enforceExecutionTruth,
   buildVoiceRailExecutionManifest,
@@ -50,8 +51,13 @@ import {
   handleSystemDirectMessage,
   buildSystemDirectReplySource,
 } from './voice-rail-system-direct.js';
+import {
+  runFounderSystemToolPass,
+  buildLifeOSOperatorSystemPrompt,
+  buildLifeOSOperatorReplySource,
+} from './voice-rail-system-operator.js';
 
-const MODES = new Set(['system', 'conversation', 'command', 'brainstorm', 'private']);
+const MODES = new Set(['lifeos', 'system', 'conversation', 'command', 'brainstorm', 'private']);
 const INTENTS = new Set([
   'command',
   'brainstorm',
@@ -514,13 +520,17 @@ async function generateCouncilReply({
   tierBoost = 0,
   operator,
   commandExecutionReceipt = null,
+  operatorMode = false,
+  toolPass = null,
   logger,
 }) {
   if (!callCouncilMember) {
     throw councilUnavailableError(routing, 'callCouncilMember not configured');
   }
 
-  const deptId = normalizeVoiceRailDepartment(department || routing?.department);
+  const deptId = operatorMode
+    ? 'LifeOS'
+    : normalizeVoiceRailDepartment(department || routing?.department);
   const intentNorm = intent || 'general_conversation';
 
   let contextData = {};
@@ -540,6 +550,10 @@ async function generateCouncilReply({
   if (commandExecutionReceipt) {
     contextData.command_execution_receipt = commandExecutionReceipt;
   }
+  if (toolPass) {
+    contextData.system_tool_results = toolPass.tool_summary;
+    contextData.system_tool_action = toolPass.action;
+  }
 
   const history = await listMessagesFn(sessionId, userId);
   const prior = (history || []).slice(0, -1).slice(-10);
@@ -549,7 +563,9 @@ async function generateCouncilReply({
       const label =
         m.role === 'user'
           ? operatorName
-          : normalizeVoiceRailDepartment(m.department || deptId);
+          : operatorMode
+            ? 'LifeOS'
+            : normalizeVoiceRailDepartment(m.department || deptId);
       return `${label}: ${m.content}`;
     })
     .join('\n\n');
@@ -579,7 +595,14 @@ async function generateCouncilReply({
     throw contextNotConnectedError(routing, contextHealth);
   }
 
-  const systemBase = buildDepartmentSystemPrompt(deptId, routing, mode, contextData, operator);
+  const systemBase = operatorMode
+    ? buildLifeOSOperatorSystemPrompt({
+        operator,
+        contextData,
+        toolPass,
+        executionTruthBlock: buildExecutionTruthPromptBlock(operatorName),
+      })
+    : buildDepartmentSystemPrompt(deptId, routing, mode, contextData, operator);
   const system = sotSection
     ? `${systemBase}\n\n[LifeOS SOT / knowledge — authoritative; cite when relevant]\n${sotSection}`
     : systemBase;
@@ -596,7 +619,7 @@ async function generateCouncilReply({
     let councilRaw;
     try {
       councilRaw = await callCouncilMember(activeRouting.resolvedKey || activeRouting.memberKey, userTurn, {
-        taskType: 'voice_rail_department',
+        taskType: operatorMode ? 'lifeos_operator' : 'voice_rail_department',
         systemPromptOverride: system,
         skipKnowledge: true,
         useCache: false,
@@ -902,7 +925,89 @@ export function createVoiceRailV1({
       [session.id, content || '(attachment)', intent, JSON.stringify(storedAttachments)],
     );
 
-    /** Founder System Direct — every message hits Railway APIs; zero council / zero personas. */
+    /** LifeOS operator — natural conversation; system APIs run first; voice speaks from receipts. */
+    if (mode === 'lifeos' && !simulateOnly) {
+      const operator = await resolveOperatorProfile(userId);
+      const toolPass = await runFounderSystemToolPass({
+        pool,
+        userId,
+        utterance: content,
+        mode,
+        intent,
+        department: deptId,
+        baseUrl,
+        commandKey,
+        connectionProbe: () => probeFounderContext(userId),
+        stageCommand,
+        sessionId: session.id,
+        logger,
+      });
+      const routing = resolveRouting('ChC', councilMember, {
+        content: councilContent,
+        mode,
+        intent,
+      });
+      const panelResult = await generateCouncilReply({
+        pool,
+        callCouncilMember,
+        lumin,
+        communicationProfile,
+        userId,
+        sessionId: session.id,
+        listMessagesFn: listMessages,
+        content: councilContent,
+        mode,
+        intent,
+        department: 'LifeOS',
+        routing,
+        councilMemberOverride: councilMember,
+        councilMembers,
+        councilAliasMap,
+        operator,
+        commandExecutionReceipt: toolPass.command_execution,
+        operatorMode: true,
+        toolPass,
+        logger,
+      });
+      const replySource = {
+        ...buildLifeOSOperatorReplySource(
+          panelResult.routing,
+          toolPass,
+          panelResult.usageReceipt,
+        ),
+        context_health: panelResult.contextHealth,
+        execution_truth: panelResult.execution_truth,
+        escalated: panelResult.escalated || false,
+        api_trace: toolPass.api_trace || null,
+      };
+      const { rows: assistantRows } = await pool.query(
+        `INSERT INTO voice_rail_messages (session_id, role, content, intent, department, is_interim)
+         VALUES ($1, 'assistant', $2, $3, $4, FALSE)
+         RETURNING id, role, content, intent, department, created_at`,
+        [session.id, panelResult.text, intent, 'LifeOS'],
+      );
+      await pool.query(`UPDATE voice_rail_sessions SET updated_at = NOW() WHERE id = $1`, [session.id]);
+      return {
+        private: false,
+        persisted: true,
+        system_operator: true,
+        session_id: session.id,
+        mode: 'lifeos',
+        tag: session.tag,
+        department: 'LifeOS',
+        intent,
+        user_message: { role: 'user', content, intent },
+        assistant_message: assistantRows[0],
+        reply_source: replySource,
+        context_health: panelResult.contextHealth,
+        staged_command: toolPass.staged_command,
+        command_execution: toolPass.command_execution,
+        tool_action: toolPass.action,
+        commitment_extract: null,
+      };
+    }
+
+    /** Raw API receipts only (advanced / debug) — no conversational voice. */
     if (mode === 'system' && !simulateOnly) {
       const direct = await handleSystemDirectMessage({
         pool,

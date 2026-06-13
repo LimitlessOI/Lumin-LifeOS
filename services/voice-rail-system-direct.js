@@ -20,8 +20,6 @@ const HELP_TEXT = [
   'Execute (BuilderOS command-control):',
   '  Include a repo path: scripts/foo.mjs, services/bar.js, routes/…',
   '  Example: Add one comment to scripts/my-audit.mjs — do not change anything else.',
-  '',
-  'Advisor (LLM chat) is NOT this mode — switch to Conversation only if you want a model opinion.',
 ].join('\n');
 
 function normalizeText(value) {

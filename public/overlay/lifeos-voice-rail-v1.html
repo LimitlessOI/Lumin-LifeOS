@@ -411,7 +411,7 @@
 </head>
 <body>
   <header>
-    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="System Direct — API line">SYS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.23</span></h1>
+    <h1>LifeOS <span class="dept-badge" id="dept-badge" title="LifeOS operator">LifeOS</span><span class="build-stamp" id="build-stamp" title="UI build marker — if missing after hard refresh, cache or deploy is stale">v2.24</span></h1>
     <div class="controls">
       <div class="header-search">
         <input type="search" id="history-search" placeholder="Search all history…" autocomplete="off" aria-label="Search conversation history" />
@@ -427,13 +427,13 @@
       <option value="couple">Couple context</option>
       <option value="emergency">Emergency priority</option>
     </select>
-    <input type="hidden" id="mode" value="system">
+    <input type="hidden" id="mode" value="lifeos">
     <input type="hidden" id="department" value="ChC">
   </header>
 
   <div id="truth-banner" role="status" class="connection-check">
     <span id="connection-status">Checking LifeOS connection…</span>
-    <span class="truth-build"> · build <strong>v2.23</strong> · <strong>System Direct</strong> = straight API line (default). Conversation = optional advisor chat only.</span>
+    <span class="truth-build"> · build <strong>v2.24</strong> · talk normally — system APIs run first, then LifeOS replies from receipts</span>
   </div>
 
   <div id="auth-banner" role="alert">
@@ -472,15 +472,18 @@
           <span class="control-row-label control-row-label-dept">Dept</span>
           <div class="dept-toggles" role="group" aria-label="Department direct line" id="dept-toggles"></div>
         </div>
-        <p id="routing-line" aria-live="polite">Direct line: Railway system APIs (no council)</p>
+        <p id="routing-line" aria-live="polite">LifeOS — talk normally; system APIs run first</p>
         <div class="control-row control-row-actions">
           <span class="control-row-label">Mode</span>
           <div class="mode-toggles" role="group" aria-label="Session mode">
-            <button type="button" class="btn icon-btn compact mode-toggle active" data-mode="system" aria-pressed="true" title="System Direct — straight API line, no council chat" aria-label="System Direct">
+            <button type="button" class="btn icon-btn compact mode-toggle active" data-mode="lifeos" aria-pressed="true" title="LifeOS — conversation backed by live system APIs" aria-label="LifeOS">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button type="button" class="btn icon-btn compact mode-toggle" data-mode="system" aria-pressed="false" title="Raw API receipts only (debug)" aria-label="Raw API">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
-            <button type="button" class="btn icon-btn compact mode-toggle" data-mode="conversation" aria-pressed="false" title="Advisor chat (LLM) — not the execution engine" aria-label="Conversation advisor">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <button type="button" class="btn icon-btn compact mode-toggle" data-mode="conversation" aria-pressed="false" title="Legacy department council (ChC, BPB, …)" aria-label="Departments">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </button>
             <button type="button" class="btn icon-btn compact mode-toggle" data-mode="command" aria-pressed="false" title="Command — runs BuilderOS directly (no department chat)" aria-label="Command">
               <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -536,7 +539,7 @@
         <button type="button" class="btn-attach" id="btn-attach" aria-label="Add photos or files">+</button>
         <div class="chat-input-inner">
           <div id="interim" data-testid="interim-transcript"></div>
-          <textarea id="input" placeholder="System Direct — status, jobs, or build with file path…" rows="1"></textarea>
+          <textarea id="input" placeholder="Talk to LifeOS…" rows="1"></textarea>
         </div>
         <div class="btn-mic-slot">
           <button type="button" class="btn icon-btn compact" id="btn-mic" data-testid="mic-btn" aria-pressed="false" aria-label="Microphone" title="Microphone — say “send” to post">
@@ -550,8 +553,9 @@
       <button type="button" id="btn-pause" hidden aria-hidden="true" tabindex="-1"></button>
       <button type="button" id="btn-cancel" hidden aria-hidden="true"></button>
       <select class="sr-only" aria-hidden="true" tabindex="-1" id="mode-catalog">
-        <option value="system">System Direct</option>
-        <option value="conversation">Conversation</option>
+        <option value="lifeos">LifeOS</option>
+        <option value="system">Raw API</option>
+        <option value="conversation">Departments</option>
         <option value="command">Command</option>
         <option value="brainstorm">Brainstorm</option>
         <option value="private">Private</option>
@@ -769,7 +773,7 @@
 
     function buildExecReceiptEl(exec, mode, systemDirect) {
       if (!exec?.job_id && !exec?.skipped && !exec?.error) return null;
-      if (mode !== 'command' && mode !== 'system' && !systemDirect) return null;
+      if (mode !== 'command' && mode !== 'system' && mode !== 'lifeos' && !systemDirect) return null;
       const el = document.createElement('div');
       el.className = 'exec-receipt';
       if (exec?.job_id) {
@@ -1002,7 +1006,7 @@
       return document.getElementById('mode').value === 'private';
     }
 
-    const MODE_VALUES = ['system', 'conversation', 'command', 'brainstorm', 'private'];
+    const MODE_VALUES = ['lifeos', 'system', 'conversation', 'command', 'brainstorm', 'private'];
     let departmentCatalog = [];
 
     function departmentMeta(id) {
@@ -1050,7 +1054,11 @@
       if (!el) return;
       const mode = document.getElementById('mode')?.value || 'system';
       if (mode === 'system') {
-        el.textContent = 'Direct line: Railway system APIs (no council, no department persona)';
+        el.textContent = 'Raw API mode — receipt text only (debug)';
+        return;
+      }
+      if (mode === 'lifeos') {
+        el.textContent = 'LifeOS — talk normally; system APIs run first, then reply';
         return;
       }
       const deptId = document.getElementById('department').value || 'ChC';
@@ -1176,21 +1184,21 @@
     }
 
     function applyModeUI(mode) {
-      const next = MODE_VALUES.includes(mode) ? mode : 'system';
+      const next = MODE_VALUES.includes(mode) ? mode : 'lifeos';
       document.getElementById('mode').value = next;
       document.querySelectorAll('.mode-toggle').forEach((btn) => {
         const on = btn.dataset.mode === next;
         btn.classList.toggle('active', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
-      const isSystem = next === 'system';
+      const isSystemLike = next === 'system' || next === 'lifeos';
       const toggleGroups = document.querySelector('.toggle-groups');
-      if (toggleGroups) toggleGroups.style.display = isSystem ? 'none' : '';
+      if (toggleGroups) toggleGroups.style.display = isSystemLike ? 'none' : '';
       const badge = document.getElementById('dept-badge');
-      if (badge && isSystem) {
-        badge.textContent = 'SYS';
-        badge.title = 'System Direct — straight API line';
-      } else if (badge && !isSystem) {
+      if (badge && isSystemLike) {
+        badge.textContent = next === 'lifeos' ? 'LifeOS' : 'API';
+        badge.title = next === 'lifeos' ? 'LifeOS operator' : 'Raw API debug';
+      } else if (badge && !isSystemLike) {
         applyDepartmentUI(document.getElementById('department')?.value || 'ChC');
       }
       syncRoutingLine();
@@ -1257,12 +1265,16 @@
         tag.className = 'intent';
         tag.textContent = 'error';
         box.appendChild(tag);
-      } else if (source && (source.path === 'lifeos/system/command-control' || source.path === 'lifeos/system/direct')) {
+      } else if (source && (source.path === 'lifeos/system/command-control' || source.path === 'lifeos/system/direct' || source.path === 'lifeos/system/operator')) {
         const tag = document.createElement('div');
         tag.className = 'source';
-        tag.textContent = source.path === 'lifeos/system/direct'
-          ? 'LifeOS Direct API · no council · no department persona'
-          : 'LifeOS System · BuilderOS command-control · direct API';
+        if (source.path === 'lifeos/system/operator') {
+          tag.textContent = `LifeOS · system-backed conversation · tool=${source.tool_action || '?'}`;
+        } else if (source.path === 'lifeos/system/direct') {
+          tag.textContent = 'LifeOS Direct API · no council · no department persona';
+        } else {
+          tag.textContent = 'LifeOS System · BuilderOS command-control · direct API';
+        }
         box.appendChild(tag);
       } else if (source && source.path === 'lifeos/department') {
         const tag = document.createElement('div');
@@ -1824,7 +1836,7 @@
         if (connectionState.connected !== true) {
           await refreshConnectionProof();
         }
-        if (connectionState.connected !== true && mode !== 'system') {
+        if (connectionState.connected !== true && mode !== 'system' && mode !== 'lifeos') {
           appendNotConnectedBubble(content, displayAttachments);
           return;
         }
@@ -2001,13 +2013,13 @@
       });
     });
 
-    if (!localStorage.getItem('voice_rail_direct_v223')) {
-      localStorage.setItem('voice_rail_mode', 'system');
-      localStorage.setItem('voice_rail_direct_v223', '1');
+    if (!localStorage.getItem('voice_rail_lifeos_v224')) {
+      localStorage.setItem('voice_rail_mode', 'lifeos');
+      localStorage.setItem('voice_rail_lifeos_v224', '1');
     }
     const savedMode = localStorage.getItem('voice_rail_mode');
     if (savedMode && MODE_VALUES.includes(savedMode)) applyModeUI(savedMode);
-    else applyModeUI('system');
+    else applyModeUI('lifeos');
 
     document.getElementById('btn-speak-toggle')?.addEventListener('click', () => {
       const box = document.getElementById('speak-replies');
