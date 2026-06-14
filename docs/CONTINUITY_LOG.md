@@ -3,6 +3,16 @@
 
 ---
 
+## [FIX] 2026-06-14 — Critical `/builder/build` completion authority bypass fixed
+
+**Bug found:** Recent kernel sequencing repair made every mounted `/api/v1/lifeos/builder/build` call return `ok:true, committed:true` with `completion_deferred_to_kernel:true` even though `services/tsos-platform-kernel.js` records build/DONE proof but never grants completion. Direct automations use `ok && committed` as success, so wrong-outcome or missing-evidence commits could be treated as completed work.
+
+**Fix:** `routes/lifeos-council-builder-routes.js` now defers only the route-level DONE gate for kernel-managed calls. Completion authority always runs before a committed success response and returns 409 when founder request/evidence/outcome proof is missing. Regression coverage in `tests/builderos-completion-authority.test.js` now asserts the kernel-managed path is fail-closed. Current-state docs corrected in `docs/BUILD_EXECUTION_BLOCKER_SEQUENCE_PLAN_V1.md` and `docs/CANONICAL_BUILD_EXECUTION_PATH_V1.md`; receipts added to AM21, AM46, and `BUILDEROS_ALPHA_BLUEPRINT.md`.
+
+**Validation:** `node --check routes/lifeos-council-builder-routes.js`; focused builder gate tests `11/11 PASS`; `npm test` PASS (`49` pass, `4` skipped due no local server); `npm run ssot:validate`; `node scripts/ssot-check.js --all`; `npm run builder:preflight` OK.
+
+---
+
 ## [SESSION] 2026-06-13 — System Capability Inventory + Constitution Phase 1
 
 **Inventory:** Created `docs/SYSTEM_CAPABILITY_INVENTORY.md` — canonical runtime capability map across 14 sections (BuilderOS, C2, LifeOS, Voice Rail, Memory/Historian, Proof/Sentry, TSOS, Deployment, TC, Marketing, Scheduled Jobs, Browser/Web, Legacy, Parts-Car). Classification: PRESENT / PARTIAL / MISSING / SHADOW. 10 capability gaps ranked G1–G10. Source: register-runtime-routes.js, services/, BUILDEROS_SYSTEM_INVENTORY.md, SYSTEM_TOOL_INVENTORY_AUDIT_V1.md.

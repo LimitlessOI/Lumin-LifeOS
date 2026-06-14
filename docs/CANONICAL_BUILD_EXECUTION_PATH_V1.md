@@ -70,8 +70,8 @@ Mission: Trace exact governed path from Founder Command to PASS
    - `recordBuildComplete(...)`
    - `canMarkBuildDone(...)`
 14. Completion/outcome path:
-   - Route-level completion authority currently defers when kernel-managed:
-     `evaluateBuildCompletionForBuildResponse(..., kernelManaged: true)` -> `completion_deferred_to_kernel`
+   - Route-level completion authority runs before committed success, including kernel-managed `/build` calls.
+   - Kernel-managed `/build` defers only DONE-gate proof ordering to the kernel (`done_gate_deferred_to_kernel`), not completion authority.
    - Governed loop still runs outcome gate before `job.status='committed'`:
      `verifyGovernedOutcomeBeforePass(...)`
 15. Terminal state today:
@@ -97,7 +97,7 @@ Mission: Trace exact governed path from Founder Command to PASS
 7. **DONE evidence gate (control plane/kernel)**
    - `canMarkBuildDone(...)` on `build_task_ledger`.
 8. **Completion authority gate**
-   - `grantBuildCompletion(...)` (feature-flagged), but currently deferred on kernel-managed path.
+   - `grantBuildCompletion(...)` (feature-flagged), route-enforced for committed `/builder/build` responses.
 9. **Governed outcome gate**
    - `verifyGovernedOutcomeBeforePass(...)` in governed loop.
 
@@ -162,7 +162,7 @@ The first practical blocker on the founder-governed path is the OIL boundary aud
 
 ### 5. What is the smallest repair?
 
-Smallest safe repair: keep canonical path unchanged, but remove remaining terminal split by making kernel-managed `/builder/build` call completion authority after kernel DONE evidence is recorded, so PASS/complete is granted by one authority in-order (without re-enabling non-canonical `/execute` or bypassing OIL/DONE/outcome gates).
+Smallest safe repair: keep canonical path unchanged, preserve kernel DONE proof sequencing, and keep completion authority route-enforced for every committed `/builder/build` response. The remaining consolidation work is to feed kernel measurement evidence into the completion grant as evidence, not to defer completion to the kernel or re-enable non-canonical `/execute` success.
 
 ---
 
@@ -173,3 +173,11 @@ Use only this execution authority chain for build commits:
 `Voice Rail (command mode) -> BuilderOS command-control -> governed loop -> /api/v1/lifeos/builder/build (kernel-wrapped) -> kernel DONE evidence -> completion authority -> governed outcome verify -> committed/PASS receipt`.
 
 Keep non-canonical commit-capable paths (`/builder/execute` fallback, legacy auto-builder/shadow queue) blocked or break-glass only.
+
+---
+
+## Change receipt
+
+| Date | File | What |
+|------|------|------|
+| 2026-06-14 | `docs/CANONICAL_BUILD_EXECUTION_PATH_V1.md` | Corrected current canonical path after completion-deferral rollback: kernel-managed `/build` now defers only DONE proof ordering while route-level completion authority remains enforced. |

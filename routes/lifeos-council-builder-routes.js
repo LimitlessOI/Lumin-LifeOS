@@ -310,28 +310,7 @@ export async function evaluateBuildCompletionForBuildResponse({
   buildResult,
   taskBody = {},
   readCommit = null,
-  kernelManaged = false,
 } = {}) {
-  if (kernelManaged) {
-    return {
-      ok: true,
-      completion: {
-        granted: false,
-        completion_required: true,
-        blocker: null,
-        reason: 'completion_deferred_to_kernel',
-        completion_receipt_id: null,
-        rollback_bypass: false,
-        warning: null,
-        outcome_verification: null,
-        technical_verification: { ok: true, source: 'builder_precommit' },
-      },
-      metadata: {
-        completion_deferred_to_kernel: true,
-      },
-    };
-  }
-
   const completion = await grantBuildCompletion({
     buildResult,
     founder_request: taskBody?.task || '',
@@ -2239,14 +2218,12 @@ export function createLifeOSCouncilBuilderRoutes({
           target_file: resolvedTarget,
         },
         taskBody,
-        kernelManaged: req?.__kernel_managed_build === true,
       });
       if (!completionOutcome.ok) {
         return res.status(409).json(completionOutcome.blockedResponse);
       }
 
       const doneGateDeferred = doneGateOutcome.metadata?.done_gate_deferred_to_kernel === true;
-      const completionDeferred = completionOutcome.metadata?.completion_deferred_to_kernel === true;
 
       res.json({
         ok: true,
@@ -2264,16 +2241,8 @@ export function createLifeOSCouncilBuilderRoutes({
           : {
               done_gate_passed: true,
             }),
-        ...(completionDeferred
-          ? {
-              completion_granted: false,
-              completion_receipt_id: null,
-              completion_deferred_to_kernel: true,
-            }
-          : {
-              completion_granted: completionOutcome.metadata?.completion_granted !== false,
-              completion_receipt_id: completionOutcome.completion?.completion_receipt_id || null,
-            }),
+        completion_granted: completionOutcome.metadata?.completion_granted !== false,
+        completion_receipt_id: completionOutcome.completion?.completion_receipt_id || null,
         ...(completionOutcome.metadata?.completion_authority_warning
           ? {
               completion_authority_warning: completionOutcome.metadata.completion_authority_warning,
