@@ -1,7 +1,7 @@
 # SYSTEM CAPABILITY TRUTH AUDIT V1
 
 **Status:** `AUTHORITATIVE AUDIT` (repo-truth; not runtime law)  
-**Produced:** 2026-06-13 — read-only audit; **no runtime code modified**  
+**Produced:** 2026-06-13 (v1.1 consumer fields) — read-only audit; **no runtime code modified**  
 **Source inventory:** `docs/SYSTEM_CAPABILITY_INVENTORY.md` (317 capabilities)  
 **Evidence spine:** `server.js` → `startup/register-runtime-routes.js` + `startup/routes/server-routes.js` + `core/two-tier-system-init.js` + `startup/boot-domains.js`  
 **Companion audits:** `docs/architecture/factory-v1-blueprint-pack/SYSTEM_TOOL_INVENTORY_AUDIT_V1.md`, `docs/REPO_DEEP_AUDIT.md`, `docs/REPO_TRIAGE_NOTES.md`
@@ -34,11 +34,25 @@ The inventory marked **299 / 317** capabilities as `PRESENT`. After mount-path, 
 1. Parsed every capability row from `docs/SYSTEM_CAPABILITY_INVENTORY.md`.
 2. Verified **Exists** via filesystem check on primary artifact path.
 3. Verified **Mounted** if route filename appears in spine files **or** service is consumed by a mounted route chain (grep corpus under `routes/`, `startup/`, `server.js`).
-4. Verified **Has consumer** via import/reference in production spine corpus.
-5. Verified **Has tests** via `tests/`, `scripts/*verify*`, `scripts/*proof*`, `scripts/*acceptance*`, or `package.json` script name match.
-6. Verified **Runtime proof** via receipt in `products/receipts/`, acceptance script, or live proof script reference only (not assumed from docs).
-7. Applied **manual overrides** for known spine facts (e.g. two-tier init mounts site-builder; sleep routes regression; DONE gate helper wired in council builder).
-8. **Confidence:** HIGH = ACTIVE + tests/proof; MEDIUM = ACTIVE/PARTIAL with consumer; LOW = disconnected/missing/legacy.
+4. Verified **Called** (import/reference in `routes/`, `services/`, `startup/`, `core/`, `server.js`, or invoked via `package.json` script).
+5. Verified **Tested** via `tests/`, `scripts/*verify*`, `scripts/*proof*`, `scripts/*acceptance*`, or matching npm script.
+6. Verified **Runtime proof** via `products/receipts/*.json`, acceptance script, or verify script only (not docs claims).
+7. Recorded **Current consumers** — up to 3 importer files from ripgrep (Appendix A `Consumers` column).
+8. Recorded **Missing consumers** — expected spine mount or proof path not found (e.g. `register-runtime-routes.js` for orphan routes).
+9. Applied **manual overrides** for known spine facts (two-tier init, sleep-route regression, DONE gate helper in council builder).
+10. **Confidence:** HIGH = ACTIVE + tested + proof; MEDIUM = ACTIVE/PARTIAL with called; LOW = disconnected/missing/legacy.
+
+**Field legend (Appendix A):**
+
+| Field | Meaning |
+|-------|---------|
+| Exists | Primary artifact on disk |
+| Mounted | Route filename in spine OR boot-scheduled service |
+| Called | Imported or script-invoked elsewhere in repo |
+| Tested | Dedicated test or verify/proof script |
+| Runtime proof | Receipt or live acceptance script reference |
+| Consumers | Current importers (truncated) |
+| Missing consumers | Expected wiring not present |
 
 **Three composition roots (production Railway app):**
 
@@ -110,6 +124,20 @@ Artifact exists; **not imported** into any spine path (verified 2026-06-13).
 | Site builder prospect ranker | `services/site-builder-prospect-ranker.js` | No import located |
 | Funnel analyzer | `services/funnel-analyzer.js` | No import located |
 | Tools status | `services/tools-status.js` | No import located |
+
+### 3.1 Consumer gap index (DISCONNECTED — missing consumers)
+
+| Capability | Current consumers | Missing consumers |
+|------------|-------------------|-------------------|
+| TSOS task ledger | — | `startup/register-runtime-routes.js`; Am 46 control-plane mount |
+| Marketing routes | — | `register-runtime-routes.js` or `two-tier-system-init.js` |
+| Sleep / conflict-interrupt / decision-review | services only (no route import) | `startup/register-runtime-routes.js` mount (documented regression) |
+| BoldTrail coaching | — | `boldtrail-routes.js` merge or spine `app.use` |
+| Structural proof | manual/audit scripts only | scheduled verify hook; control-plane summary |
+| Live enforcement pass | — | control-plane health integration |
+| Council bypass audit | verify scripts only | council-service metering path |
+| Site builder revenue / prospect ranker | — | `routes/site-builder-routes.js` factory |
+| Funnel analyzer / tools status | — | site-builder or C2 dashboard mount |
 
 ---
 
@@ -393,327 +421,325 @@ See §4. Family sizes:
 
 ## Appendix A — Full capability audit (317 rows)
 
-| Capability | Status | Exists | Mounted | Consumer | Tests | Runtime proof | Primary artifact | Confidence |
-|------------|--------|--------|---------|----------|-------|---------------|------------------|------------|
-| Builder supervisor / task runner | ACTIVE | Y | Y | Y | Y | Y | routes/builder-supervisor-routes.js | HIGH |
-| Builder preflight gate | PARTIAL | Y | Y | Y | Y | Y | scripts/council-builder-preflight.mjs | MEDIUM |
-| Builder council review | PARTIAL | Y | Y | Y | Y | Y | services/builder-council-review.js | MEDIUM |
-| Build audit before done | PARTIAL | Y | Y | Y | Y | Y | services/builder-audit-before-done.js | MEDIUM |
-| Build critic | PARTIAL | Y | Y | Y | N | N | services/build-critic.js | MEDIUM |
-| Outcome verifier | PARTIAL | Y | Y | Y | Y | Y | services/builder-outcome-verifier.js | MEDIUM |
-| Blueprint gate | PARTIAL | Y | Y | Y | Y | Y | services/builder-blueprint-gate.js | MEDIUM |
-| Instruction target resolver | PARTIAL | Y | Y | Y | Y | Y | services/builder-instruction-target.js | MEDIUM |
-| Build pipeline | PARTIAL | Y | Y | Y | N | N | services/builderos-build-pipeline.js | MEDIUM |
-| Governed loop executor | PARTIAL | Y | Y | Y | Y | Y | services/builderos-governed-loop-executor.js | MEDIUM |
-| Patch mode policy | PARTIAL | Y | Y | Y | N | N | services/builderos-patch-mode-policy.js | MEDIUM |
-| Routing policy | PARTIAL | Y | Y | Y | N | N | services/builderos-routing-policy.js | MEDIUM |
-| Structural proof | BUILT BUT DISCONNECTED | Y | N | N | N | N | services/builderos-structural-proof.js | LOW |
-| Metrics reporter | PARTIAL | Y | Y | Y | N | N | services/builderos-metrics-reporter.js | MEDIUM |
-| Control plane | ACTIVE | Y | Y | Y | Y | Y | routes/builderos-control-plane-routes.js | HIGH |
-| Command + control service | PARTIAL | Y | Y | Y | Y | Y | services/builderos-command-control-service.js | MEDIUM |
-| Alpha readiness guards | PARTIAL | Y | Y | Y | N | N | services/builderos-system-alpha-readiness.js | MEDIUM |
-| Oil job audit | PARTIAL | Y | Y | Y | N | N | services/builderos-oil-job-audit.js | MEDIUM |
-| Governed proof parity | PARTIAL | Y | Y | Y | Y | Y | services/builderos-governed-proof-parity.js | MEDIUM |
-| Live enforcement pass | BUILT BUT DISCONNECTED | Y | N | N | N | N | services/builderos-live-enforcement-pass.js | LOW |
-| TSOS evidence | PARTIAL | Y | Y | Y | N | N | services/builderos-tsos-evidence.js | MEDIUM |
-| TSOS hook service | PARTIAL | Y | Y | Y | N | N | services/builderos-tsos-hook-service.js | MEDIUM |
-| Pre-commit governance | PARTIAL | Y | Y | Y | N | N | services/builderos-precommit-governance.js | MEDIUM |
-| Phase14 ledger | PARTIAL | Y | Y | Y | Y | Y | services/builder-phase14-ledger.js | MEDIUM |
-| BP priority queue | PARTIAL | Y | Y | Y | Y | Y | services/bp-priority-queue.js | MEDIUM |
-| Oil probe (Phase 7) | ACTIVE | Y | Y | Y | Y | Y | routes/builder-oil-audit-probe-routes.js | HIGH |
-| Factory autopilot scheduler | PARTIAL | Y | Y | Y | N | N | services/factory-autopilot-scheduler.js | MEDIUM |
-| Factory recovery proof | PARTIAL | Y | Y | Y | N | N | services/factory-recovery-proof-service.js | MEDIUM |
-| Continuous queue (shadow queue) | REJECT | Y | Y | Y | Y | Y | scripts/lifeos-builder-continuous-queue.mjs | LOW |
-| Product development gate | MISSING | N | N | N | N | N | — | LOW |
-| Founder packet completeness checker | PARTIAL | N | N | N | N | Y | — | MEDIUM |
-| Determinism checker at Builder tier | PARTIAL | N | N | N | N | N | — | MEDIUM |
-| Command center aggregate | ACTIVE | Y | Y | Y | Y | Y | routes/lifeos-command-center-routes.js | HIGH |
-| Supervised autonomy readiness | PARTIAL | Y | Y | Y | N | N | services/supervised-autonomy-readiness.js | MEDIUM |
-| PB execution authority | PARTIAL | Y | Y | Y | N | N | services/pb-execution-authority.js | MEDIUM |
-| Proof freshness | PARTIAL | Y | Y | Y | Y | Y | services/oil-proof-freshness.js | MEDIUM |
-| Phase 14 cert | MISSING | N | N | N | N | N | — | LOW |
-| Canonical admin routes | ACTIVE | Y | Y | Y | N | N | routes/canonical-admin-routes.js | MEDIUM |
-| Canonical system routes | ACTIVE | Y | Y | Y | N | N | routes/canonical-system-routes.js | MEDIUM |
-| Canonical execution routes | ACTIVE | Y | Y | Y | N | N | routes/canonical-execution-routes.js | MEDIUM |
-| Canonical backlog | ACTIVE | Y | Y | Y | N | N | routes/canonical-backlog-routes.js | MEDIUM |
-| Autonomous telemetry | ACTIVE | Y | Y | Y | Y | Y | routes/autonomous-telemetry-routes.js | HIGH |
-| Capability map | ACTIVE | Y | Y | Y | N | Y | routes/capability-map-routes.js | MEDIUM |
-| Mission ledger | PARTIAL | Y | Y | Y | N | N | services/mission-ledger.js | MEDIUM |
-| Deliberation governance | ACTIVE | Y | Y | Y | Y | Y | routes/deliberation-governance-routes.js | HIGH |
-| Gate change council runner | ACTIVE | Y | Y | Y | Y | Y | routes/lifeos-gate-change-routes.js | HIGH |
-| Founder debrief | PARTIAL | Y | Y | Y | N | Y | services/founder-debrief-service.js | MEDIUM |
-| Founder value engine | PARTIAL | Y | Y | Y | Y | Y | services/founder-value-engine.js | MEDIUM |
-| Founder direct provider | PARTIAL | Y | Y | Y | Y | Y | services/founder-direct-provider.js | MEDIUM |
-| Lane intel | ACTIVE | Y | Y | Y | Y | Y | routes/lane-intel-routes.js | HIGH |
-| TSOS efficiency | ACTIVE | Y | Y | Y | N | N | routes/tsos-efficiency-routes.js | MEDIUM |
-| TSOS platform kernel | ACTIVE | Y | Y | Y | Y | Y | routes/tsos-platform-kernel-routes.js | HIGH |
-| Telemetry cycle guard | PARTIAL | Y | Y | Y | N | N | services/telemetry-cycle-guard.js | MEDIUM |
-| Constitutional lock | PARTIAL | Y | Y | Y | Y | Y | services/constitutional-lock.js | MEDIUM |
-| Kingsman gate | PARTIAL | Y | Y | Y | N | N | services/kingsman-gate.js | MEDIUM |
-| Sovereignty check | PARTIAL | Y | Y | Y | Y | Y | services/sovereignty-check.js | MEDIUM |
-| OIL security receipts | ACTIVE | Y | Y | Y | Y | Y | routes/oil-security-receipt-routes.js | HIGH |
-| Self-repair executor | ACTIVE | Y | Y | Y | Y | Y | routes/self-repair-executor-routes.js | HIGH |
-| Agent recruitment routes | ACTIVE | Y | Y | Y | Y | Y | routes/agent-recruitment-routes.js | HIGH |
-| Runtime mode controller | PARTIAL | Y | Y | Y | Y | Y | services/runtime-modes.js | MEDIUM |
-| Useful work guard | PARTIAL | Y | Y | Y | Y | Y | services/useful-work-guard.js | MEDIUM |
-| Metered AI call | PARTIAL | Y | Y | Y | Y | Y | services/metered-ai-call.js | MEDIUM |
-| Core engine + gateway | MISSING | N | Y | Y | Y | Y | lifeos-engine-routes.js | LOW |
-| Auth (user registration, login) | PARTIAL | Y | Y | Y | Y | Y | services/lifeos-auth.js | MEDIUM |
-| Daily briefing | PARTIAL | Y | Y | Y | N | N | services/lifeos-daily-briefing.js | MEDIUM |
-| Habits + streaks | PARTIAL | Y | Y | Y | Y | Y | services/lifeos-habits.js | MEDIUM |
-| Commitments | PARTIAL | Y | Y | Y | N | Y | services/lifeos-commitment-tracker.js | MEDIUM |
-| Emotional layer | PARTIAL | Y | Y | Y | Y | Y | services/emotional-pattern-engine.js | MEDIUM |
-| Health | PARTIAL | Y | Y | Y | Y | Y | services/health-pattern-engine.js | MEDIUM |
-| Family sync | PARTIAL | Y | Y | Y | Y | Y | services/household-sync.js | MEDIUM |
-| Purpose discovery | PARTIAL | Y | Y | Y | Y | Y | services/purpose-discovery.js | MEDIUM |
-| Decisions | PARTIAL | Y | Y | Y | Y | Y | services/decision-intelligence.js | MEDIUM |
-| Identity intelligence | MISSING | N | Y | Y | Y | Y | lifeos-identity-routes.js | LOW |
-| Vision / Future Self | PARTIAL | Y | Y | Y | N | N | services/future-self-simulator.js | MEDIUM |
-| Finance OS | PARTIAL | Y | Y | Y | Y | Y | services/lifeos-finance.js | MEDIUM |
-| Conflict coach | PARTIAL | Y | Y | Y | Y | Y | services/conflict-intelligence.js | MEDIUM |
-| Mediation engine | PARTIAL | Y | Y | Y | Y | Y | services/mediation-engine.js | MEDIUM |
-| Healing | MISSING | N | Y | Y | Y | Y | lifeos-healing-routes.js | LOW |
-| Legacy builder | PARTIAL | Y | Y | Y | Y | Y | services/lifeos-legacy-core.js | MEDIUM |
-| Ethics | MISSING | N | Y | Y | Y | Y | lifeos-ethics-routes.js | LOW |
-| Growth + mastery | PARTIAL | Y | Y | Y | Y | Y | services/mastery-tracker.js | MEDIUM |
-| Scorecard / scoreboard | PARTIAL | Y | Y | Y | N | N | services/lifeos-daily-scorecard.js | MEDIUM |
-| Victory vault | PARTIAL | Y | Y | Y | Y | Y | services/victory-vault.js | MEDIUM |
-| Weekly review | PARTIAL | Y | Y | Y | N | N | services/lifeos-weekly-review.js | MEDIUM |
-| Assessment battery | PARTIAL | Y | Y | Y | N | N | services/lifeos-assessment-battery.js | MEDIUM |
-| Children (Kids OS) | PARTIAL | Y | Y | Y | N | N | services/kids-os-core.js | MEDIUM |
-| Communication OS | PARTIAL | Y | Y | Y | Y | Y | services/lifeos-communication-os-service.js | MEDIUM |
-| Calendar integration | PARTIAL | Y | Y | Y | N | N | services/lifeos-calendar.js | MEDIUM |
-| Ambient intelligence | PARTIAL | Y | Y | Y | N | N | services/lifeos-ambient-intelligence.js | MEDIUM |
-| Cycle tracking | PARTIAL | Y | Y | Y | N | N | services/lifeos-cycle.js | MEDIUM |
-| Sleep | BUILT BUT DISCONNECTED | Y | Y | Y | N | N | services/lifeos-sleep-service.js | LOW |
-| Backtest | MISSING | N | Y | Y | N | N | lifeos-backtest-routes.js | LOW |
-| Extension points | MISSING | N | Y | Y | N | N | lifeos-extension-routes.js | LOW |
-| Council builder | MISSING | N | Y | Y | Y | Y | lifeos-council-builder-routes.js | LOW |
-| LifeOS direct action | PARTIAL | Y | Y | Y | Y | Y | services/lifeos-direct-action.js | MEDIUM |
-| System proof | PARTIAL | Y | Y | Y | N | Y | services/lifeos-system-proof-event.js | MEDIUM |
-| System agent | PARTIAL | Y | Y | Y | N | Y | services/lifeos-system-agent.js | MEDIUM |
-| LifeOS chat | MISSING | N | Y | Y | Y | Y | lifeos-chat-routes.js | LOW |
-| Lumin AI persona | PARTIAL | Y | Y | Y | Y | Y | services/lifeos-lumin.js | MEDIUM |
-| Wearable integration | PARTIAL | N | N | N | N | N | — | MEDIUM |
-| Conflict interrupt | BUILT BUT DISCONNECTED | Y | Y | Y | N | N | services/lifeos-conflict-interrupt.js | LOW |
-| Decision review | BUILT BUT DISCONNECTED | Y | Y | Y | N | N | services/lifeos-decision-review.js | LOW |
-| Workshop of mind | ACTIVE | Y | Y | Y | N | N | routes/lifeos-workshop-routes.js | MEDIUM |
-| Copilot | ACTIVE | Y | Y | Y | N | N | routes/lifeos-copilot-routes.js | MEDIUM |
-| Simulator | ACTIVE | Y | Y | Y | N | N | routes/lifeos-simulator-routes.js | MEDIUM |
-| Emergency detection | PARTIAL | Y | Y | Y | Y | Y | services/emergency-detection.js | MEDIUM |
-| Self-sabotage monitor | PARTIAL | Y | Y | Y | N | N | services/self-sabotage-monitor.js | MEDIUM |
-| User auth (multi-user) | PARTIAL | N | N | N | N | N | — | MEDIUM |
-| Voice Rail v1 core | PARTIAL | Y | Y | Y | Y | Y | services/voice-rail-v1.js | MEDIUM |
-| STT (speech-to-text) | PARTIAL | Y | Y | Y | N | N | services/voice-rail-stt.js | MEDIUM |
-| TTS (text-to-speech) | PARTIAL | Y | Y | Y | N | N | services/voice-rail-tts.js | MEDIUM |
-| Intent router | PARTIAL | Y | Y | Y | N | N | services/voice-rail-intent-router.js | MEDIUM |
-| Command executor | PARTIAL | Y | Y | Y | N | N | services/voice-rail-command-executor.js | MEDIUM |
-| System direct path | PARTIAL | Y | Y | Y | N | Y | services/voice-rail-system-direct.js | MEDIUM |
-| System operator path | PARTIAL | Y | Y | Y | N | Y | services/voice-rail-system-operator.js | MEDIUM |
-| Founder memory integration | PARTIAL | Y | Y | Y | N | Y | services/voice-rail-founder-memory.js | MEDIUM |
-| Execution truth receipts | PARTIAL | Y | Y | Y | Y | Y | services/voice-rail-execution-truth.js | MEDIUM |
-| Usage receipt | PARTIAL | Y | Y | Y | N | N | services/voice-rail-usage-receipt.js | MEDIUM |
-| Attachment handling | PARTIAL | Y | Y | Y | N | N | services/voice-rail-attachments.js | MEDIUM |
-| Provider proof hard-route | PARTIAL | Y | Y | Y | N | Y | services/founder-provider-tool-action.js | MEDIUM |
-| Action Inbox | ACTIVE | Y | Y | Y | Y | Y | routes/action-inbox-routes.js | HIGH |
-| Native mobile mic (iOS/Android) | MISSING | N | N | N | N | N | — | LOW |
-| Conversation history | ACTIVE | Y | Y | Y | N | Y | routes/conversation-history-routes.js | MEDIUM |
-| Memory intelligence | ACTIVE | Y | Y | Y | N | N | routes/memory-intelligence-routes.js | MEDIUM |
-| Memory capsule | ACTIVE | Y | Y | Y | Y | Y | routes/memory-capsule-routes.js | HIGH |
-| Working memory | PARTIAL | Y | Y | Y | N | N | services/memory-working.js | MEDIUM |
-| Institutional memory | PARTIAL | Y | Y | Y | Y | Y | services/memory-institutional.js | MEDIUM |
-| Memory relationship graph | PARTIAL | Y | Y | Y | Y | Y | services/memory-relationship.js | MEDIUM |
-| Memory links | PARTIAL | Y | Y | Y | Y | Y | services/memory-links.js | MEDIUM |
-| Memory provenance | PARTIAL | Y | Y | Y | Y | Y | services/memory-provenance.js | MEDIUM |
-| Memory trust bridge | PARTIAL | Y | Y | Y | Y | Y | services/memory-trust-bridge.js | MEDIUM |
-| Memory healing | PARTIAL | Y | Y | Y | Y | Y | services/memory-healing.js | MEDIUM |
-| Memory health | PARTIAL | Y | Y | Y | N | N | services/memory-health.js | MEDIUM |
-| Memory explanation | PARTIAL | Y | Y | Y | Y | Y | services/memory-explanation.js | MEDIUM |
-| Memory receipts | PARTIAL | Y | Y | Y | Y | Y | services/memory-receipts.js | MEDIUM |
-| Memory signal intake | PARTIAL | Y | Y | Y | Y | Y | services/memory-signal-intake.js | MEDIUM |
-| Memory contradiction | PARTIAL | Y | Y | Y | Y | Y | services/memory-contradiction.js | MEDIUM |
-| Memory zombie (stale detection) | PARTIAL | Y | Y | Y | Y | Y | services/memory-zombie.js | MEDIUM |
-| Memory OIL bridge | PARTIAL | Y | Y | Y | Y | Y | services/memory-oil-bridge.js | MEDIUM |
-| Memory legacy bridge | PARTIAL | Y | Y | Y | Y | Y | services/memory-legacy-bridge.js | MEDIUM |
-| Memory candidate | PARTIAL | Y | Y | Y | Y | Y | services/memory-candidate.js | MEDIUM |
-| Self-repair memory | PARTIAL | Y | Y | Y | N | N | services/self-repair-memory.js | MEDIUM |
-| Lumin memory fetcher | PARTIAL | Y | Y | Y | Y | Y | services/lumin-memory-fetcher.js | MEDIUM |
-| Delta context | PARTIAL | Y | Y | Y | N | N | services/delta-context.js | MEDIUM |
-| Memory status routes | ACTIVE | Y | Y | Y | N | N | routes/memory-status-routes.js | MEDIUM |
-| Memory self-repair routes | ACTIVE | Y | Y | Y | N | N | routes/memory-self-repair-routes.js | MEDIUM |
-| Historian canonical contract (NSSOT §2.0I) | PARTIAL | N | N | N | N | N | — | MEDIUM |
-| OIL security receipts | PARTIAL | Y | Y | Y | Y | Y | services/oil-security-receipts.js | MEDIUM |
-| OIL daily summary | PARTIAL | Y | Y | Y | N | N | services/oil-daily-summary.js | MEDIUM |
-| OIL proof freshness | PARTIAL | Y | Y | Y | Y | Y | services/oil-proof-freshness.js | MEDIUM |
-| OIL self-repair detector | PARTIAL | Y | Y | Y | Y | Y | services/oil-self-repair-detector.js | MEDIUM |
-| Self-repair executor | PARTIAL | Y | Y | Y | Y | Y | services/self-repair-executor.js | MEDIUM |
-| Self-repair deploy scheduler | PARTIAL | Y | Y | Y | N | N | services/self-repair-deploy-scheduler.js | MEDIUM |
-| Self-repair lesson classifier | PARTIAL | Y | Y | Y | N | N | services/self-repair-lesson-classifier.js | MEDIUM |
-| Self-repair execution log | PARTIAL | Y | Y | Y | N | N | services/self-repair-execution-log.js | MEDIUM |
-| Self-repair prevention hook log | PARTIAL | Y | Y | Y | N | N | services/self-repair-prevention-hook-log.js | MEDIUM |
-| Self-repair prevention hook planner | PARTIAL | Y | Y | Y | N | N | services/self-repair-prevention-hook-planner.js | MEDIUM |
-| Self-repair prevention registry | PARTIAL | Y | Y | Y | N | N | services/self-repair-prevention-registry.js | MEDIUM |
-| Emergency repair | PARTIAL | Y | Y | Y | N | N | services/emergency-repair.js | MEDIUM |
-| Gemini proof routes | ACTIVE | Y | Y | Y | N | N | routes/gemini-proof-routes.js | MEDIUM |
-| System proof event | PARTIAL | Y | Y | Y | N | Y | services/lifeos-system-proof-event.js | MEDIUM |
-| Integrity engine | PARTIAL | Y | Y | Y | N | N | services/integrity-engine.js | MEDIUM |
-| Integrity score | PARTIAL | Y | Y | Y | Y | Y | services/integrity-score.js | MEDIUM |
-| Council bypass audit | BUILT BUT DISCONNECTED | Y | N | N | N | N | services/council-bypass-audit.js | LOW |
-| Contradiction engine | PARTIAL | Y | Y | Y | Y | Y | services/contradiction-engine.js | MEDIUM |
-| Blind spot detector | MISSING | N | N | N | N | N | — | LOW |
-| AI guard | PARTIAL | Y | Y | Y | N | Y | services/ai-guard.js | MEDIUM |
-| Anomaly detection | MISSING | N | N | N | N | N | — | LOW |
-| Truth delivery | PARTIAL | Y | Y | Y | Y | Y | services/truth-delivery.js | MEDIUM |
-| Response variety | PARTIAL | Y | Y | Y | Y | Y | services/response-variety.js | MEDIUM |
-| Fraud detection | PARTIAL | N | N | N | N | N | — | MEDIUM |
-| Consent registry | PARTIAL | Y | Y | Y | Y | Y | services/consent-registry.js | MEDIUM |
-| Data sovereignty | PARTIAL | Y | Y | Y | Y | Y | services/data-sovereignty.js | MEDIUM |
-| API cost savings | ACTIVE | Y | Y | Y | Y | Y | routes/api-cost-savings-routes.js | HIGH |
-| TokenOS core | ACTIVE | Y | Y | Y | N | N | routes/tokenos-routes.js | MEDIUM |
-| Token accounting | ACTIVE | Y | Y | Y | Y | Y | routes/token-accounting-routes.js | HIGH |
-| Operator consumption ledger | ACTIVE | Y | Y | Y | Y | Y | routes/operator-consumption-ledger-routes.js | HIGH |
-| Token optimizer | PARTIAL | Y | Y | Y | N | N | services/token-optimizer.js | MEDIUM |
-| TSOS task ledger | BUILT BUT DISCONNECTED | Y | N | Y | Y | Y | routes/tsos-task-ledger-routes.js | LOW |
-| TCO agent routes | ACTIVE | Y | Y | Y | N | N | routes/tco-agent-routes.js | MEDIUM |
-| TCO routes | ACTIVE | Y | Y | Y | Y | Y | routes/tco-routes.js | HIGH |
-| TSOS platform kernel | ACTIVE | Y | Y | Y | Y | Y | routes/tsos-platform-kernel-routes.js | HIGH |
-| TSOS efficiency | ACTIVE | Y | Y | Y | N | N | routes/tsos-efficiency-routes.js | MEDIUM |
-| Model performance tracking | ACTIVE | Y | Y | Y | Y | Y | routes/model-performance-routes.js | HIGH |
-| Response cache | PARTIAL | Y | Y | Y | N | N | services/response-cache.js | MEDIUM |
-| Free tier governor | PARTIAL | Y | Y | Y | N | N | services/free-tier-governor.js | MEDIUM |
-| Savings ledger | PARTIAL | Y | Y | Y | N | N | services/savings-ledger.js | MEDIUM |
-| AI model selector | PARTIAL | Y | Y | Y | N | Y | services/ai-model-selector.js | MEDIUM |
-| Adaptive model routing | BUILT BUT DISCONNECTED | Y | N | N | N | N | services/adaptiveModel.js | LOW |
-| TokenOS quality check | PARTIAL | Y | Y | Y | N | N | services/tokenos-quality-check.js | MEDIUM |
-| Monetization map | PARTIAL | Y | Y | Y | N | N | services/monetization-map.js | MEDIUM |
-| Deployment service (git + Railway) | PARTIAL | Y | Y | Y | Y | Y | services/deployment-service.js | MEDIUM |
-| Railway managed env routes | ACTIVE | Y | Y | Y | Y | Y | routes/railway-managed-env-routes.js | HIGH |
-| Env validator (boot-time) | PARTIAL | Y | Y | Y | N | N | services/env-validator.js | MEDIUM |
-| Env registry map | PARTIAL | Y | Y | Y | N | N | services/env-registry-map.js | MEDIUM |
-| Migration runner | PARTIAL | Y | Y | Y | N | N | services/migration-runner.js | MEDIUM |
-| DB health monitor | PARTIAL | Y | Y | Y | N | N | services/db-health-monitor.js | MEDIUM |
-| Project governance routes | ACTIVE | Y | Y | Y | Y | Y | routes/project-governance-routes.js | HIGH |
-| SSOT check script | PARTIAL | Y | Y | Y | Y | Y | scripts/ssot-check.js | MEDIUM |
-| Pre-commit hooks | MISSING | N | N | N | N | N | — | LOW |
-| Coupling check | PARTIAL | Y | Y | Y | Y | Y | scripts/check-coupling.mjs | MEDIUM |
-| Snapshot service | PARTIAL | Y | Y | Y | Y | Y | services/snapshot-service.js | MEDIUM |
-| Sandbox service | PARTIAL | Y | Y | Y | Y | Y | services/sandbox-service.js | MEDIUM |
-| Account manager | ACTIVE | Y | Y | Y | N | N | routes/account-manager-routes.js | MEDIUM |
-| Stripe integration | ACTIVE | Y | Y | Y | Y | Y | routes/stripe-routes.js | HIGH |
-| Billing routes | ACTIVE | Y | Y | Y | Y | Y | routes/billing-routes.js | HIGH |
-| Auto-builder routes | ACTIVE | Y | Y | Y | Y | Y | routes/auto-builder-routes.js | HIGH |
-| TC core routes | ACTIVE | Y | Y | Y | Y | Y | routes/tc-routes.js | HIGH |
-| MLS routes | ACTIVE | Y | Y | Y | N | N | routes/mls-routes.js | MEDIUM |
-| TC assistant service | PARTIAL | Y | Y | Y | N | N | services/tc-assistant-service.js | MEDIUM |
-| TC workflow runner | PARTIAL | Y | Y | Y | N | N | services/tc-td-workflow-runner.js | MEDIUM |
-| TC status engine | PARTIAL | Y | Y | Y | N | N | services/tc-status-engine.js | MEDIUM |
-| TC email monitor + intake | PARTIAL | Y | Y | Y | N | N | services/tc-email-monitor.js | MEDIUM |
-| TC document validator | PARTIAL | Y | Y | Y | N | N | services/tc-document-validator.js | MEDIUM |
-| TC browser agent | PARTIAL | Y | Y | Y | N | N | services/tc-browser-agent.js | MEDIUM |
-| TC inspection service | PARTIAL | Y | Y | Y | N | N | services/tc-inspection-service.js | MEDIUM |
-| TC offer prep | PARTIAL | Y | Y | Y | N | N | services/tc-offer-prep-service.js | MEDIUM |
-| TC morning digest | BUILT BUT DISCONNECTED | Y | N | N | Y | Y | services/tc-morning-digest-service.js | LOW |
-| TC coordinator | PARTIAL | Y | Y | Y | N | N | services/tc-coordinator.js | MEDIUM |
-| TC Asana sync | PARTIAL | Y | Y | Y | N | N | services/tc-asana-sync-service.js | MEDIUM |
-| TC alert service | PARTIAL | Y | Y | Y | N | N | services/tc-alert-service.js | MEDIUM |
-| TC portal | PARTIAL | Y | Y | Y | N | N | services/tc-portal-service.js | MEDIUM |
-| TC Stripe | PARTIAL | Y | Y | Y | N | N | services/tc-stripe-service.js | MEDIUM |
-| TC pricing | PARTIAL | Y | Y | Y | N | N | services/tc-pricing.js | MEDIUM |
-| TC R4R attachment classify | PARTIAL | Y | Y | Y | Y | Y | services/tc-r4r-attachment-classify.js | MEDIUM |
-| TC report service | PARTIAL | Y | Y | Y | N | N | services/tc-report-service.js | MEDIUM |
-| TC review package | PARTIAL | Y | Y | Y | N | N | services/tc-review-package-service.js | MEDIUM |
-| TC SkySlope listing sync | PARTIAL | Y | Y | Y | N | N | services/tc-listing-skyslope-sync.js | MEDIUM |
-| TC mobile link | PARTIAL | Y | Y | Y | N | N | services/tc-mobile-link-service.js | MEDIUM |
-| TC TD party sync | PARTIAL | Y | Y | Y | N | N | services/tc-td-party-sync.js | MEDIUM |
-| TC form knowledge | PARTIAL | Y | Y | Y | N | N | services/tc-td-form-knowledge-service.js | MEDIUM |
-| BoldTrail real estate | PARTIAL | Y | Y | Y | Y | Y | routes/boldtrail-routes.js | MEDIUM |
-| MLS deal scanner | PARTIAL | Y | Y | Y | N | N | services/mls-deal-scanner.js | MEDIUM |
-| GLVAR monitor | PARTIAL | Y | Y | Y | N | N | services/glvar-monitor.js | MEDIUM |
-| ClientCare billing | ACTIVE | Y | Y | Y | Y | Y | routes/clientcare-billing-routes.js | HIGH |
-| ClientCare browser service | PARTIAL | Y | Y | Y | N | N | services/clientcare-browser-service.js | MEDIUM |
-| Life coaching / Twin | ACTIVE | Y | Y | Y | Y | Y | routes/life-coaching-routes.js | HIGH |
-| Word Keeper | ACTIVE | Y | Y | Y | N | N | routes/word-keeper-routes.js | MEDIUM |
-| Word Keeper transcriber | PARTIAL | Y | Y | Y | N | N | services/word-keeper-transcriber.js | MEDIUM |
-| Site builder core | ACTIVE | Y | Y | Y | Y | Y | routes/site-builder-routes.js | HIGH |
-| Site builder discovery | ACTIVE | Y | Y | Y | N | N | routes/site-builder-discovery-routes.js | MEDIUM |
-| Site builder launch readiness | ACTIVE | Y | N | N | N | N | routes/site-builder-launch-readiness-routes.js | MEDIUM |
-| Site builder pipeline report | ACTIVE | Y | Y | Y | Y | Y | routes/site-builder-pipeline-report-routes.js | HIGH |
-| Site builder revenue | BUILT BUT DISCONNECTED | Y | N | N | N | N | services/site-builder-revenue-service.js | LOW |
-| Site builder opportunity scorer | PARTIAL | Y | Y | Y | Y | Y | services/site-builder-opportunity-scorer.js | MEDIUM |
-| Site builder quality scorer | PARTIAL | Y | Y | Y | Y | Y | services/site-builder-quality-scorer.js | MEDIUM |
-| Site builder prospect ranker | BUILT BUT DISCONNECTED | Y | N | N | N | N | services/site-builder-prospect-ranker.js | LOW |
-| Site builder email templates | PARTIAL | Y | Y | Y | N | N | services/site-builder-email-templates.js | MEDIUM |
-| Prospect pipeline | PARTIAL | Y | Y | Y | Y | Y | services/prospect-pipeline.js | MEDIUM |
-| Preview expiry cron | PARTIAL | Y | Y | Y | Y | Y | services/preview-expiry-cron.js | MEDIUM |
-| Outreach CRM | ACTIVE | Y | Y | Y | Y | Y | routes/outreach-crm-routes.js | HIGH |
-| Email reader + triage | PARTIAL | Y | Y | Y | N | N | services/email-reader.js | MEDIUM |
-| Marketing routes | BUILT BUT DISCONNECTED | Y | N | N | Y | Y | routes/marketing-routes.js | LOW |
-| Marketing content engine | PARTIAL | Y | Y | Y | N | N | services/marketing-content-engine.js | MEDIUM |
-| Marketing coach | PARTIAL | Y | Y | Y | N | N | services/marketing-coach.js | MEDIUM |
-| Marketing transcriber | PARTIAL | Y | Y | Y | N | N | services/marketing-transcriber.js | MEDIUM |
-| Web intelligence | ACTIVE | Y | Y | Y | Y | Y | routes/web-intelligence-routes.js | HIGH |
-| Web search integration | PARTIAL | Y | Y | Y | N | N | services/web-search-integration.js | MEDIUM |
-| Website audit | ACTIVE | Y | Y | Y | Y | Y | routes/website-audit-routes.js | HIGH |
-| Financial routes | ACTIVE | Y | Y | Y | Y | Y | routes/financial-routes.js | HIGH |
-| Email provision (Postmark) | PARTIAL | N | N | N | N | N | — | MEDIUM |
-| Browser agent core | PARTIAL | Y | Y | Y | N | N | services/browser-agent.js | MEDIUM |
-| TC browser agent | PARTIAL | Y | Y | Y | N | N | services/tc-browser-agent.js | MEDIUM |
-| ClientCare browser service | PARTIAL | Y | Y | Y | N | N | services/clientcare-browser-service.js | MEDIUM |
-| Web search integration | PARTIAL | Y | Y | Y | N | N | services/web-search-integration.js | MEDIUM |
-| Web search service | PARTIAL | Y | Y | Y | N | N | services/web-search-service.js | MEDIUM |
-| Website audit routes | ACTIVE | Y | Y | Y | Y | Y | routes/website-audit-routes.js | HIGH |
-| Web intelligence | ACTIVE | Y | Y | Y | Y | Y | routes/web-intelligence-routes.js | HIGH |
-| Research aggregator | PARTIAL | Y | Y | Y | Y | Y | services/research-aggregator.js | MEDIUM |
-| Funnel analyzer | BUILT BUT DISCONNECTED | Y | N | N | N | N | services/funnel-analyzer.js | LOW |
-| Document processor | PARTIAL | N | N | N | N | N | — | MEDIUM |
-| PDF signature stamp | PARTIAL | Y | Y | Y | N | N | services/tc-pdf-signature-stamp.js | MEDIUM |
-| Old self-programming path | LEGACY | Y | Y | Y | Y | Y | services/self-programming.js | LOW |
-| Old self-improvement loop | LEGACY | Y | Y | Y | N | N | services/self-improvement-loop.js | LOW |
-| Orphan routes (CJS in ESM, not imported) | LEGACY | N | N | N | N | N | — | LOW |
-| Autonomous efficiency intelligence | LEGACY | Y | Y | Y | N | N | services/autonomous-efficiency-intelligence.js | LOW |
-| ChatGPT import | LEGACY | Y | Y | Y | Y | Y | services/chatgpt-import.js | LOW |
-| Logger (Pino) | PARTIAL | Y | Y | Y | Y | Y | services/logger.js | MEDIUM |
-| Adam logger | PARTIAL | Y | Y | Y | N | N | services/adam-logger.js | MEDIUM |
-| Telemetry | PARTIAL | Y | Y | Y | Y | Y | services/telemetry.js | MEDIUM |
-| DB connection pool | PARTIAL | Y | Y | Y | Y | Y | services/db.js | MEDIUM |
-| DB health monitor | PARTIAL | Y | Y | Y | N | N | services/db-health-monitor.js | MEDIUM |
-| Migration runner | PARTIAL | Y | Y | Y | N | N | services/migration-runner.js | MEDIUM |
-| Env validator | PARTIAL | Y | Y | Y | N | N | services/env-validator.js | MEDIUM |
-| Env registry map | PARTIAL | Y | Y | Y | N | N | services/env-registry-map.js | MEDIUM |
-| Response cache | PARTIAL | Y | Y | Y | N | N | services/response-cache.js | MEDIUM |
-| Queue (BullMQ) | PARTIAL | Y | Y | Y | Y | Y | services/queue.js | MEDIUM |
-| Execution queue | PARTIAL | Y | Y | Y | N | N | services/execution-queue.js | MEDIUM |
-| Request tracer middleware | PARTIAL | Y | Y | Y | N | N | middleware/request-tracer.js | MEDIUM |
-| Error boundary middleware | PARTIAL | Y | Y | Y | N | N | middleware/error-boundary.js | MEDIUM |
-| Websocket handler | PARTIAL | Y | Y | Y | N | N | services/websocket-handler.js | MEDIUM |
-| Twilio service | PARTIAL | Y | Y | Y | Y | Y | services/twilio-service.js | MEDIUM |
-| Twilio webhook registrar | PARTIAL | Y | Y | Y | N | N | services/twilio-webhook-registrar.js | MEDIUM |
-| Council service | PARTIAL | Y | Y | Y | Y | Y | services/council-service.js | MEDIUM |
-| Consensus service | PARTIAL | Y | Y | Y | Y | Y | services/consensus-service.js | MEDIUM |
-| Council prompt adapter | PARTIAL | Y | Y | Y | Y | Y | services/council-prompt-adapter.js | MEDIUM |
-| AI model service | MISSING | N | N | N | N | Y | — | LOW |
-| AI performance tracker | PARTIAL | Y | Y | Y | N | Y | services/ai-performance-tracker.js | MEDIUM |
-| Rules engine | PARTIAL | Y | Y | Y | N | N | services/rules-engine.js | MEDIUM |
-| Risk scorer | PARTIAL | Y | Y | Y | N | N | services/risk-scorer.js | MEDIUM |
-| Continuous improvement | PARTIAL | Y | Y | Y | N | N | services/continuous-improvement.js | MEDIUM |
-| Outcome tracker | PARTIAL | Y | Y | Y | N | N | services/outcome-tracker.js | MEDIUM |
-| Decision ledger | PARTIAL | Y | Y | Y | N | N | services/decision-ledger.js | MEDIUM |
-| Communication gateway | PARTIAL | Y | Y | Y | Y | Y | services/communication-gateway.js | MEDIUM |
-| Prompt IR | PARTIAL | Y | Y | Y | N | N | services/prompt-ir.js | MEDIUM |
-| Prompt translator | PARTIAL | Y | Y | Y | N | N | services/prompt-translator.js | MEDIUM |
-| Tools status | BUILT BUT DISCONNECTED | Y | N | N | N | N | services/tools-status.js | LOW |
-| UX evaluator | PARTIAL | Y | Y | Y | N | N | services/ux-evaluator.js | MEDIUM |
-| Design quality gate | PARTIAL | Y | Y | Y | N | N | services/design-quality-gate.js | MEDIUM |
-| Notification router (LifeOS) | PARTIAL | Y | Y | Y | Y | Y | services/lifeos-notification-router.js | MEDIUM |
-| Community growth | PARTIAL | Y | Y | Y | Y | Y | services/community-growth.js | MEDIUM |
-| Credential aliases | PARTIAL | Y | Y | Y | N | N | services/credential-aliases.js | MEDIUM |
-| Video pipeline | ACTIVE | Y | Y | Y | Y | Y | routes/video-routes.js | HIGH |
-| Game publisher | ACTIVE | Y | Y | Y | Y | Y | routes/game-routes.js | HIGH |
-| Knowledge context | ACTIVE | Y | Y | Y | Y | Y | routes/knowledge-routes.js | HIGH |
-| Idea queue | ACTIVE | Y | Y | Y | Y | Y | routes/idea-queue-routes.js | HIGH |
-| Teacher OS | ACTIVE | Y | Y | Y | N | N | routes/teacher-os-routes.js | MEDIUM |
-
----
+| Capability | Status | Exists | Mounted | Called | Tested | Runtime proof | Current consumers | Missing consumers |
+|------------|--------|--------|---------|--------|--------|---------------|-------------------|-------------------|
+| Builder supervisor / task runner | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| Builder preflight gate | PARTIAL | Y | Y | Y | Y | partial | package.json; scripts/system-maturity-check.mjs; scripts/lifeos-builder-build-chat.mjs | runtime proof receipt |
+| Builder council review | PARTIAL | Y | Y | Y | Y | partial | scripts/verify-oc-009-status.mjs; scripts/verify-council-bypass-audit.mjs; scripts/verify-gap-001-gap.mjs | runtime proof receipt |
+| Build audit before done | PARTIAL | Y | Y | Y | Y | partial | services/builder-oil-phase7-probe.js; routes/lifeos-command-center-routes.js; services/self-repair-executor.js | runtime proof receipt |
+| Build critic | PARTIAL | Y | Y | Y | N | N | core/auto-builder.js | runtime proof receipt |
+| Outcome verifier | PARTIAL | Y | Y | Y | Y | partial | tests/builder-outcome-verifier.test.js; services/builderos-governed-loop-executor.js | runtime proof receipt |
+| Blueprint gate | PARTIAL | Y | Y | Y | Y | partial | tests/builderos-governed-loop-platform-gap-fill.test.js; tests/builder-blueprint-gate.test.js; routes/lifeos-council-builder-routes.js | runtime proof receipt |
+| Instruction target resolver | PARTIAL | Y | Y | Y | Y | partial | tests/builderos-pbb-voice-rail-target.test.js; routes/lifeos-council-builder-routes.js; services/voice-rail-command-executor.js | runtime proof receipt |
+| Build pipeline | PARTIAL | Y | Y | Y | N | N | services/builderos-precommit-governance.js; services/builderos-structural-proof.js | runtime proof receipt |
+| Governed loop executor | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-builderos-command-control-routes.js; tests/builderos-governed-loop-platform-gap-fill.test.js; services/voice-rail-command-executor.js | runtime proof receipt |
+| Patch mode policy | PARTIAL | Y | Y | Y | N | N | services/builderos-oil-job-audit.js; services/builderos-build-pipeline.js; services/builderos-pbb-plan.js | runtime proof receipt |
+| Routing policy | PARTIAL | Y | Y | Y | N | N | routes/lifeos-council-builder-routes.js; services/builderos-tsos-routing.js | runtime proof receipt |
+| Structural proof | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | scripts/verify-builderos-control-plane.mjs; npm run builderos:control-plane:verify |
+| Metrics reporter | PARTIAL | Y | Y | Y | N | N | routes/autonomous-telemetry-routes.js; services/builderos-system-alpha-readiness.js | runtime proof receipt |
+| Control plane | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/verify-builderos-control-plane.mjs |  |
+| Command + control service | PARTIAL | Y | Y | Y | N | N | routes/lifeos-command-center-routes.js; routes/lifeos-builderos-command-control-routes.js; services/voice-rail-system-operator.js | runtime proof receipt |
+| Alpha readiness guards | PARTIAL | Y | Y | Y | N | N | routes/lifeos-command-center-routes.js; services/builderos-structural-proof.js | runtime proof receipt |
+| Oil job audit | PARTIAL | Y | Y | Y | N | N | services/builderos-governed-loop-executor.js | runtime proof receipt |
+| Governed proof parity | PARTIAL | Y | Y | Y | Y | partial | startup/boot-domains.js; tests/builderos-governed-proof-parity.test.js; services/builderos-governed-loop-executor.js | runtime proof receipt |
+| Live enforcement pass | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| TSOS evidence | PARTIAL | Y | Y | Y | N | N | routes/tsos-efficiency-routes.js; services/builderos-tsos-routing.js | runtime proof receipt |
+| TSOS hook service | PARTIAL | Y | Y | Y | N | N | services/builderos-tsos-evidence.js; services/builderos-governed-loop-executor.js | runtime proof receipt |
+| Pre-commit governance | PARTIAL | Y | Y | Y | N | N | routes/lifeos-council-builder-routes.js; services/builderos-structural-proof.js | runtime proof receipt |
+| Phase14 ledger | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-command-center-routes.js; scripts/oil-phase14-railway-canonical.mjs; scripts/oil-missed-issues-summary.mjs | runtime proof receipt |
+| BP priority queue | PARTIAL | Y | Y | Y | Y | partial | services/voice-rail-v1.js; services/voice-rail-system-operator.js; scripts/verify-bp-priority-guardrails.mjs | runtime proof receipt |
+| Oil probe (Phase 7) | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; services/builder-oil-phase7-probe.js; scripts/oil-invoke-phase7-railway-probe.mjs |  |
+| Factory autopilot scheduler | PARTIAL | Y | Y | Y | N | N | startup/boot-domains.js; routes/command-center-routes.js | runtime proof receipt |
+| Factory recovery proof | PARTIAL | Y | Y | Y | N | N | routes/command-center-routes.js | runtime proof receipt |
+| Continuous queue (shadow queue) | REJECT | Y | Y | Y | Y | partial | package.json; scripts/lifeos-builder-supervisor.mjs; scripts/builder-slice-throughput-meter.mjs |  |
+| Product development gate | MISSING | N | N | N | N | N | — | factory-staging BPB intake; production /build preflight |
+| Founder packet completeness checker | MISSING | N | N | N | N | N | — |  |
+| Determinism checker at Builder tier | MISSING | N | N | N | N | N | — |  |
+| Command center aggregate | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; routes/AGENTS.md; scripts/verify-cc-communication.mjs |  |
+| Supervised autonomy readiness | PARTIAL | Y | Y | Y | N | N | routes/lifeos-command-center-routes.js; services/self-repair-executor.js; services/builderos-system-alpha-readiness.js | runtime proof receipt |
+| PB execution authority | PARTIAL | Y | Y | Y | N | N | services/supervised-autonomy-readiness.js; services/oil-self-repair-detector.js | runtime proof receipt |
+| Proof freshness | PARTIAL | Y | Y | Y | Y | partial | tests/oil-proof-freshness.test.js; routes/lifeos-command-center-routes.js; services/supervised-autonomy-readiness.js | runtime proof receipt |
+| Phase 14 cert | MISSING | N | N | N | N | N | — |  |
+| Canonical admin routes | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Canonical system routes | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Canonical execution routes | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Canonical backlog | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Autonomous telemetry | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; services/builderos-structural-proof.js |  |
+| Capability map | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Mission ledger | PARTIAL | Y | Y | Y | N | N | routes/lifeos-commitment-routes.js; routes/mission-routes.js | runtime proof receipt |
+| Deliberation governance | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| Gate change council runner | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/lifeos-verify.mjs; services/lifeos-gate-change-council-run.js |  |
+| Founder debrief | PARTIAL | Y | Y | Y | N | N | services/deliberation-governance-service.js | runtime proof receipt |
+| Founder value engine | PARTIAL | Y | Y | Y | Y | partial | scripts/governed-overnight-backlog-run.mjs | runtime proof receipt |
+| Founder direct provider | PARTIAL | Y | Y | Y | Y | partial | package.json; routes/lifeos-voice-rail-routes.js; services/voice-rail-v1.js | runtime proof receipt |
+| Lane intel | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/lifeos-verify.mjs |  |
+| TSOS efficiency | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js; services/builderos-structural-proof.js |  |
+| TSOS platform kernel | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/verify-tsos-platform-kernel.mjs |  |
+| Telemetry cycle guard | PARTIAL | Y | Y | Y | N | N | services/autonomous-telemetry-session.js | runtime proof receipt |
+| Constitutional lock | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-ethics-routes.js; scripts/lifeos-verify.mjs; services/sovereignty-check.js | runtime proof receipt |
+| Kingsman gate | PARTIAL | Y | Y | Y | N | N | services/council-service.js | runtime proof receipt |
+| Sovereignty check | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-ethics-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| OIL security receipts | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| Self-repair executor | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/builderos-autonomy-guard-audit.mjs |  |
+| Agent recruitment routes | ACTIVE | Y | Y | Y | Y | partial | server.js; core/two-tier-system-init.js; scripts/extract-routes.py |  |
+| Runtime mode controller | PARTIAL | Y | Y | Y | Y | partial | scripts/autonomy/builder-supervisor.js | runtime proof receipt |
+| Useful work guard | PARTIAL | Y | Y | Y | Y | partial | startup/boot-domains.js; scripts/generate-agent-rules.mjs; scripts/seed-epistemic-facts.mjs | runtime proof receipt |
+| Metered AI call | PARTIAL | Y | Y | Y | Y | partial | scripts/verify-gap-006-gap.mjs; scripts/verify-token-accounting-enforcement.mjs; scripts/verify-ai-call-bypasses.mjs | runtime proof receipt |
+| Core engine + gateway | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/lifeos-verify.mjs |  |
+| Auth (user registration, login) | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-assessment-battery-routes.js; startup/register-runtime-routes.js; routes/lifeos-sleep-routes.js | runtime proof receipt |
+| Daily briefing | PARTIAL | Y | Y | Y | N | N | routes/lifeos-briefing-routes.js | runtime proof receipt |
+| Habits + streaks | PARTIAL | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; routes/lifeos-habits-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Commitments | PARTIAL | Y | Y | Y | N | N | routes/lifeos-commitment-routes.js | runtime proof receipt |
+| Emotional layer | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-emotional-routes.js; scripts/lifeos-verify.mjs; services/lifeos-scheduled-jobs.js | runtime proof receipt |
+| Health | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-health-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Family sync | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-family-routes.js; routes/lifeos-auth-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Purpose discovery | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-purpose-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Decisions | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-decisions-routes.js; scripts/lifeos-verify.mjs; services/lifeos-money-decision-bridge.js | runtime proof receipt |
+| Identity intelligence | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/lifeos-verify.mjs |  |
+| Vision / Future Self | PARTIAL | Y | Y | Y | N | N | routes/lifeos-simulator-routes.js | runtime proof receipt |
+| Finance OS | PARTIAL | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; routes/lifeos-finance-routes.js; tests/builderos-governed-loop-platform-gap-fill.test.js | runtime proof receipt |
+| Conflict coach | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-conflict-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Mediation engine | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-mediation-routes.js; scripts/lifeos-verify.mjs; services/response-variety.js | runtime proof receipt |
+| Healing | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/lifeos-verify.mjs |  |
+| Legacy builder | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-legacy-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Ethics | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/lifeos-verify.mjs |  |
+| Growth + mastery | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-growth-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Scorecard / scoreboard | PARTIAL | Y | Y | Y | N | N | routes/lifeos-scorecard-routes.js | runtime proof receipt |
+| Victory vault | PARTIAL | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; routes/lifeos-victory-vault-routes.js; routes/lifeos-council-builder-routes.js | runtime proof receipt |
+| Weekly review | PARTIAL | Y | Y | Y | N | N | startup/register-runtime-routes.js; routes/lifeos-weekly-review-routes.js; services/lifeos-scheduled-jobs.js | runtime proof receipt |
+| Assessment battery | PARTIAL | Y | Y | Y | N | N | startup/register-runtime-routes.js; routes/lifeos-assessment-battery-routes.js | runtime proof receipt |
+| Children (Kids OS) | PARTIAL | Y | Y | Y | N | N | routes/kids-os-routes.js | runtime proof receipt |
+| Communication OS | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-communication-routes.js; scripts/verify-lifeos-communication.mjs | runtime proof receipt |
+| Calendar integration | PARTIAL | Y | Y | Y | N | N | routes/lifeos-core-routes.js; services/lifeos-ambient-intelligence.js; routes/lifeos-ambient-routes.js | runtime proof receipt |
+| Ambient intelligence | PARTIAL | Y | Y | Y | N | N | startup/register-runtime-routes.js; routes/lifeos-ambient-intelligence-routes.js | runtime proof receipt |
+| Cycle tracking | PARTIAL | Y | Y | Y | N | N | startup/register-runtime-routes.js; routes/lifeos-cycle-routes.js | runtime proof receipt |
+| Sleep | BUILT BUT DISCONNECTED | Y | Y | Y | N | N | routes/lifeos-sleep-routes.js | startup/register-runtime-routes.js |
+| Backtest | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Extension points | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Council builder | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; tests/builderos-build-done-gate-route-wiring.test.js; tests/builderos-governed-loop-platform-gap-fill.test.js |  |
+| LifeOS direct action | PARTIAL | Y | Y | Y | Y | partial | package.json; startup/register-runtime-routes.js; routes/lifeos-direct-action-routes.js | runtime proof receipt |
+| System proof | PARTIAL | Y | Y | Y | N | N | routes/lifeos-system-proof-routes.js; services/founder-provider-tool-action.js; services/lifeos-direct-action.js | runtime proof receipt |
+| System agent | PARTIAL | Y | Y | Y | N | N | routes/lifeos-voice-rail-routes.js; services/voice-rail-v1.js; services/voice-rail-command-executor.js | runtime proof receipt |
+| LifeOS chat | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/builder-inner-supervisor.mjs; scripts/lifeos-verify.mjs |  |
+| Lumin AI persona | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-chat-routes.js; scripts/lifeos-builder-build-chat.mjs; routes/lifeos-voice-rail-routes.js | runtime proof receipt |
+| Wearable integration | MISSING | N | N | N | N | N | — |  |
+| Conflict interrupt | BUILT BUT DISCONNECTED | Y | Y | Y | N | N | routes/lifeos-conflict-interrupt-routes.js | startup/register-runtime-routes.js |
+| Decision review | BUILT BUT DISCONNECTED | Y | Y | Y | N | N | routes/lifeos-decision-review-routes.js | startup/register-runtime-routes.js |
+| Workshop of mind | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Copilot | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Simulator | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Emergency detection | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-health-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Self-sabotage monitor | PARTIAL | Y | Y | Y | N | N | routes/lifeos-emotional-routes.js | runtime proof receipt |
+| User auth (multi-user) | MISSING | N | N | N | N | N | — |  |
+| Voice Rail v1 core | PARTIAL | Y | Y | Y | Y | partial | package.json; tests/builder-blueprint-gate.test.js; routes/public-routes.js | runtime proof receipt |
+| STT (speech-to-text) | PARTIAL | Y | Y | Y | N | N | routes/lifeos-voice-rail-routes.js | runtime proof receipt |
+| TTS (text-to-speech) | PARTIAL | Y | Y | Y | N | N | routes/lifeos-voice-rail-routes.js | runtime proof receipt |
+| Intent router | PARTIAL | Y | Y | Y | N | N | services/voice-rail-v1.js; services/lifeos-founder-command-class.js | runtime proof receipt |
+| Command executor | PARTIAL | Y | Y | Y | N | N | services/voice-rail-v1.js; services/voice-rail-system-operator.js; services/voice-rail-intent-router.js | runtime proof receipt |
+| System direct path | PARTIAL | Y | Y | Y | N | N | services/voice-rail-v1.js; services/voice-rail-system-operator.js; services/lifeos-founder-system-action.js | runtime proof receipt |
+| System operator path | PARTIAL | Y | Y | Y | N | N | services/voice-rail-v1.js | runtime proof receipt |
+| Founder memory integration | PARTIAL | Y | Y | Y | N | N | services/voice-rail-v1.js | runtime proof receipt |
+| Execution truth receipts | PARTIAL | Y | Y | Y | Y | partial | services/voice-rail-v1.js; routes/lifeos-voice-rail-routes.js; scripts/run-voice-rail-capability-proof.mjs | runtime proof receipt |
+| Usage receipt | PARTIAL | Y | Y | Y | N | N | services/voice-rail-v1.js | runtime proof receipt |
+| Attachment handling | PARTIAL | Y | Y | Y | N | N | routes/lifeos-voice-rail-routes.js; services/voice-rail-v1.js | runtime proof receipt |
+| Provider proof hard-route | PARTIAL | Y | Y | Y | N | N | routes/lifeos-system-proof-routes.js; services/voice-rail-v1.js; routes/lifeos-voice-rail-routes.js | runtime proof receipt |
+| Action Inbox | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| Native mobile mic (iOS/Android) | MISSING | N | N | N | N | N | — |  |
+| Conversation history | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Memory intelligence | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Memory capsule | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| Working memory | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Institutional memory | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory relationship graph | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory links | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory provenance | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs; services/memory-retrieval.js | runtime proof receipt |
+| Memory trust bridge | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory healing | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-healing-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Memory health | PARTIAL | Y | Y | Y | N | N | routes/memory-capsule-routes.js | runtime proof receipt |
+| Memory explanation | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory receipts | PARTIAL | Y | Y | Y | Y | partial | routes/memory-capsule-routes.js; scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory signal intake | PARTIAL | Y | Y | Y | Y | partial | routes/memory-capsule-routes.js; scripts/memory-pressure-test.mjs; services/voice-rail-founder-memory.js | runtime proof receipt |
+| Memory contradiction | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory zombie (stale detection) | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory OIL bridge | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory legacy bridge | PARTIAL | Y | Y | Y | Y | partial | scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Memory candidate | PARTIAL | Y | Y | Y | Y | partial | routes/memory-capsule-routes.js; services/memory-working.js; scripts/memory-pressure-test.mjs | runtime proof receipt |
+| Self-repair memory | PARTIAL | Y | Y | Y | N | N | routes/self-repair-executor-routes.js; routes/memory-self-repair-routes.js; services/self-repair-prevention-registry.js | runtime proof receipt |
+| Lumin memory fetcher | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-core-routes.js; scripts/run-memory-import.mjs; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Delta context | PARTIAL | Y | Y | Y | N | N | services/council-service.js | runtime proof receipt |
+| Memory status routes | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Memory self-repair routes | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Historian canonical contract (NSSOT §2.0I) | MISSING | N | N | N | N | N | — |  |
+| OIL security receipts | PARTIAL | Y | Y | Y | Y | partial | routes/oil-security-receipt-routes.js; routes/gemini-proof-routes.js; routes/lifeos-command-center-routes.js | runtime proof receipt |
+| OIL daily summary | PARTIAL | Y | Y | Y | N | N | startup/boot-domains.js | runtime proof receipt |
+| OIL proof freshness | PARTIAL | Y | Y | Y | Y | partial | tests/oil-proof-freshness.test.js; routes/lifeos-command-center-routes.js; services/supervised-autonomy-readiness.js | runtime proof receipt |
+| OIL self-repair detector | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-command-center-routes.js; scripts/council-builder-preflight.mjs; scripts/oil-self-repair-audit.mjs | runtime proof receipt |
+| Self-repair executor | PARTIAL | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; routes/self-repair-executor-routes.js; scripts/builderos-autonomy-guard-audit.mjs | runtime proof receipt |
+| Self-repair deploy scheduler | PARTIAL | Y | Y | Y | N | N | startup/boot-domains.js; routes/self-repair-executor-routes.js; services/autonomous-telemetry-session.js | runtime proof receipt |
+| Self-repair lesson classifier | PARTIAL | Y | Y | Y | N | N | services/self-repair-prevention-registry.js; services/self-repair-memory.js | runtime proof receipt |
+| Self-repair execution log | PARTIAL | Y | Y | Y | N | N | routes/self-repair-executor-routes.js; services/self-repair-executor.js | runtime proof receipt |
+| Self-repair prevention hook log | PARTIAL | Y | Y | Y | N | N | services/self-repair-prevention-hook-planner.js; services/self-repair-deploy-scheduler.js | runtime proof receipt |
+| Self-repair prevention hook planner | PARTIAL | Y | Y | Y | N | N | routes/self-repair-executor-routes.js; services/builderos-system-alpha-readiness.js; services/autonomous-telemetry-session.js | runtime proof receipt |
+| Self-repair prevention registry | PARTIAL | Y | Y | Y | N | N | routes/self-repair-executor-routes.js; services/self-repair-prevention-hook-planner.js | runtime proof receipt |
+| Emergency repair | PARTIAL | Y | Y | Y | N | N | routes/lifeos-copilot-routes.js | runtime proof receipt |
+| Gemini proof routes | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| System proof event | PARTIAL | Y | Y | Y | N | N | routes/lifeos-system-proof-routes.js; services/founder-provider-tool-action.js; services/lifeos-direct-action.js | runtime proof receipt |
+| Integrity engine | PARTIAL | Y | Y | Y | N | N | startup/register-runtime-routes.js; routes/word-keeper-routes.js | runtime proof receipt |
+| Integrity score | PARTIAL | Y | Y | Y | Y | partial | scripts/lifeos-verify.mjs; routes/lifeos-core-routes.js | runtime proof receipt |
+| Council bypass audit | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Contradiction engine | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-identity-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Blind spot detector | MISSING | N | N | N | N | N | — |  |
+| AI guard | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Anomaly detection | MISSING | N | N | N | N | N | — |  |
+| Truth delivery | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-emotional-routes.js; routes/lifeos-core-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Response variety | PARTIAL | Y | Y | Y | Y | partial | services/mediation-engine.js; scripts/lifeos-verify.mjs; services/communication-profile.js | runtime proof receipt |
+| Fraud detection | MISSING | N | N | N | N | N | — |  |
+| Consent registry | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-ethics-routes.js; services/research-aggregator.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Data sovereignty | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-ethics-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| API cost savings | ACTIVE | Y | Y | Y | Y | partial | server.js; startup/register-runtime-routes.js; core/two-tier-system-init.js |  |
+| TokenOS core | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Token accounting | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/verify-token-accounting-unified.mjs |  |
+| Operator consumption ledger | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/verify-token-accounting-unified.mjs; scripts/verify-operator-consumption-ledger.mjs |  |
+| Token optimizer | PARTIAL | Y | Y | Y | N | N | services/council-service.js; services/prompt-translator.js | runtime proof receipt |
+| TSOS task ledger | BUILT BUT DISCONNECTED | Y | N | Y | Y | partial | scripts/verify-gap-020-gap.mjs; scripts/verify-oc-013-status.mjs | startup/register-runtime-routes.js; server.js |
+| TCO agent routes | ACTIVE | Y | Y | Y | N | N | server.js; core/two-tier-system-init.js |  |
+| TCO routes | ACTIVE | Y | Y | Y | Y | partial | server.js; core/two-tier-system-init.js; scripts/verify-ai-call-bypasses.mjs |  |
+| TSOS platform kernel | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/verify-tsos-platform-kernel.mjs |  |
+| TSOS efficiency | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js; services/builderos-structural-proof.js |  |
+| Model performance tracking | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| Response cache | PARTIAL | Y | Y | Y | N | N | server.js; startup/register-runtime-routes.js; routes/command-center-routes.js | runtime proof receipt |
+| Free tier governor | PARTIAL | Y | Y | Y | N | N | services/council-service.js; routes/twin-routes.js | runtime proof receipt |
+| Savings ledger | PARTIAL | Y | Y | Y | N | N | server.js; services/council-service.js; routes/twin-routes.js | runtime proof receipt |
+| AI model selector | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Adaptive model routing | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| TokenOS quality check | PARTIAL | Y | Y | Y | N | N | routes/tokenos-routes.js | runtime proof receipt |
+| Monetization map | PARTIAL | Y | Y | Y | N | N | routes/lifeos-legacy-routes.js; routes/lifeos-purpose-routes.js | runtime proof receipt |
+| Deployment service (git + Railway) | PARTIAL | Y | Y | Y | Y | partial | package.json; server.js; tests/deployment-service-package-guard.test.js | runtime proof receipt |
+| Railway managed env routes | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| Env validator (boot-time) | PARTIAL | Y | Y | Y | N | N | server.js; services/ConfigService.js | runtime proof receipt |
+| Env registry map | PARTIAL | Y | Y | Y | N | N | routes/site-builder-routes.js; routes/railway-managed-env-routes.js; routes/site-builder-launch-readiness-routes.js | runtime proof receipt |
+| Migration runner | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| DB health monitor | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Project governance routes | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/seed-projects.mjs |  |
+| SSOT check script | PARTIAL | Y | Y | Y | Y | partial | scripts/system-maturity-check.mjs; scripts/ssot-validate.mjs | runtime proof receipt |
+| Pre-commit hooks | MISSING | N | N | N | N | N | — |  |
+| Coupling check | PARTIAL | Y | Y | Y | Y | partial | scripts/seed-projects.mjs | runtime proof receipt |
+| Snapshot service | PARTIAL | Y | Y | Y | N | N | server.js; core/idea-to-implementation-pipeline.js | runtime proof receipt |
+| Sandbox service | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Account manager | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Stripe integration | ACTIVE | Y | Y | Y | Y | partial | server.js |  |
+| Billing routes | ACTIVE | Y | Y | Y | Y | partial | server.js; startup/register-runtime-routes.js; scripts/extract-routes.py |  |
+| Auto-builder routes | ACTIVE | Y | Y | Y | Y | partial | server.js; core/two-tier-system-init.js; scripts/extract-routes.py |  |
+| TC core routes | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| MLS routes | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| TC assistant service | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC workflow runner | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC status engine | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js; services/tc-portal-service.js; services/tc-intake-workspace-service.js | runtime proof receipt |
+| TC email monitor + intake | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js; services/tc-coordinator.js | runtime proof receipt |
+| TC document validator | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js; services/tc-inspection-forward-service.js; services/tc-doc-intake.js | runtime proof receipt |
+| TC browser agent | PARTIAL | Y | Y | Y | N | N | startup/boot-domains.js; routes/mls-routes.js; services/tc-listing-skyslope-sync.js | runtime proof receipt |
+| TC inspection service | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC offer prep | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC morning digest | PARTIAL | Y | Y | Y | Y | partial | package.json; tests/deployment-service-package-guard.test.js; tests/tc-morning-digest-service-module.test.js | runtime proof receipt |
+| TC coordinator | PARTIAL | Y | Y | Y | N | N | startup/register-runtime-routes.js; startup/boot-domains.js; routes/tc-routes.js | runtime proof receipt |
+| TC Asana sync | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC alert service | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC portal | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC Stripe | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| TC pricing | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js; services/tc-stripe-service.js | runtime proof receipt |
+| TC R4R attachment classify | PARTIAL | Y | Y | Y | Y | partial | tests/tc-r4r.test.js; routes/tc-routes.js | runtime proof receipt |
+| TC report service | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC review package | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| TC SkySlope listing sync | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC mobile link | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| TC TD party sync | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js; services/tc-td-workflow-runner.js | runtime proof receipt |
+| TC form knowledge | PARTIAL | Y | Y | Y | N | N | routes/tc-routes.js | runtime proof receipt |
+| BoldTrail real estate | PARTIAL | Y | Y | Y | Y | partial | server.js; core/two-tier-system-init.js; scripts/extract-routes.py | runtime proof receipt |
+| MLS deal scanner | PARTIAL | Y | Y | Y | N | N | routes/mls-routes.js | runtime proof receipt |
+| GLVAR monitor | PARTIAL | Y | Y | Y | N | N | startup/boot-domains.js; routes/tc-routes.js | runtime proof receipt |
+| ClientCare billing | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| ClientCare browser service | PARTIAL | Y | Y | Y | N | N | routes/clientcare-billing-routes.js | runtime proof receipt |
+| Life coaching / Twin | ACTIVE | Y | Y | Y | Y | partial | server.js; core/two-tier-system-init.js; scripts/extract-routes.py |  |
+| Word Keeper | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
+| Word Keeper transcriber | PARTIAL | Y | Y | Y | N | N | routes/word-keeper-routes.js; services/tc-interaction-service.js; services/marketing-transcriber.js | runtime proof receipt |
+| Site builder core | ACTIVE | Y | Y | Y | Y | partial | server.js; core/two-tier-system-init.js; services/lifeos-communication-os-service.js |  |
+| Site builder discovery | ACTIVE | Y | Y | Y | N | N | core/two-tier-system-init.js |  |
+| Site builder launch readiness | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Site builder pipeline report | ACTIVE | Y | Y | Y | Y | partial | core/two-tier-system-init.js |  |
+| Site builder revenue | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Site builder opportunity scorer | PARTIAL | Y | Y | Y | Y | partial | services/prospect-pipeline.js; scripts/site-builder-batch-rank.mjs; routes/site-builder-routes.js | runtime proof receipt |
+| Site builder quality scorer | PARTIAL | Y | Y | Y | Y | partial | tests/site-builder-quality-scorer.test.js; scripts/site-builder-quality-audit.mjs; services/site-builder.js | runtime proof receipt |
+| Site builder prospect ranker | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Site builder email templates | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Prospect pipeline | PARTIAL | Y | Y | Y | Y | partial | routes/site-builder-routes.js; scripts/site-builder-follow-up-cron.mjs; scripts/autonomy/builder-queue.json | runtime proof receipt |
+| Preview expiry cron | PARTIAL | Y | Y | Y | Y | partial | server.js; scripts/site-builder-preview-expiry-cron.mjs | runtime proof receipt |
+| Outreach CRM | ACTIVE | Y | Y | Y | Y | partial | server.js; scripts/extract-routes.py; core/two-tier-system-init.js |  |
+| Email reader + triage | PARTIAL | Y | Y | Y | N | N | core/signup-agent.js; services/tc-email-monitor.js | runtime proof receipt |
+| Marketing routes | BUILT BUT DISCONNECTED | Y | N | N | Y | partial | — | startup/register-runtime-routes.js; core/two-tier-system-init.js |
+| Marketing content engine | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Marketing coach | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Marketing transcriber | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Web intelligence | ACTIVE | Y | Y | Y | Y | partial | server.js; scripts/extract-routes.py; core/two-tier-system-init.js |  |
+| Web search integration | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Website audit | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/autonomy/proof-report.md |  |
+| Financial routes | ACTIVE | Y | Y | Y | Y | partial | server.js; core/two-tier-system-init.js; scripts/extract-routes.py |  |
+| Email provision (Postmark) | MISSING | N | N | N | N | N | — |  |
+| Browser agent core | PARTIAL | Y | Y | Y | N | N | startup/boot-domains.js; routes/mls-routes.js; core/signup-agent.js | runtime proof receipt |
+| TC browser agent | PARTIAL | Y | Y | Y | N | N | startup/boot-domains.js; routes/mls-routes.js; services/tc-listing-skyslope-sync.js | runtime proof receipt |
+| ClientCare browser service | PARTIAL | Y | Y | Y | N | N | routes/clientcare-billing-routes.js | runtime proof receipt |
+| Web search integration | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Web search service | PARTIAL | Y | Y | Y | N | N | routes/idea-queue-routes.js; core/auto-builder.js; services/lane-intel-service.js | runtime proof receipt |
+| Website audit routes | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; scripts/autonomy/proof-report.md |  |
+| Web intelligence | ACTIVE | Y | Y | Y | Y | partial | server.js; scripts/extract-routes.py; core/two-tier-system-init.js |  |
+| Research aggregator | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-ethics-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Funnel analyzer | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Document processor | MISSING | N | N | N | N | N | — |  |
+| PDF signature stamp | PARTIAL | Y | Y | Y | N | N | services/tc-inspection-forward-service.js | runtime proof receipt |
+| Old self-programming path | LEGACY | Y | Y | Y | Y | partial | server.js; core/log-monitor.js; core/two-tier-system-init.js |  |
+| Old self-improvement loop | LEGACY | Y | Y | Y | N | N | server.js |  |
+| Orphan routes (CJS in ESM, not imported) | LEGACY | N | N | N | N | N | — |  |
+| Autonomous efficiency intelligence | LEGACY | Y | Y | Y | N | N | routes/autonomous-telemetry-routes.js; services/autonomous-telemetry-session.js |  |
+| ChatGPT import | LEGACY | Y | Y | Y | Y | partial | routes/lifeos-core-routes.js; scripts/lifeos-verify.mjs |  |
+| Logger (Pino) | PARTIAL | Y | Y | Y | Y | partial | server.js; startup/environment.js; startup/roi.js | runtime proof receipt |
+| Adam logger | PARTIAL | Y | Y | Y | N | N | server.js; routes/twin-routes.js; services/twin-auto-ingest.js | runtime proof receipt |
+| Telemetry | PARTIAL | Y | Y | Y | Y | partial | package.json; server.js; startup/routes/server-routes.js | runtime proof receipt |
+| DB connection pool | PARTIAL | Y | Y | Y | Y | partial | package.json; server.js; startup/routes/server-routes.js | runtime proof receipt |
+| DB health monitor | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Migration runner | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| Env validator | PARTIAL | Y | Y | Y | N | N | server.js; services/ConfigService.js | runtime proof receipt |
+| Env registry map | PARTIAL | Y | Y | Y | N | N | routes/site-builder-routes.js; routes/site-builder-launch-readiness-routes.js; routes/railway-managed-env-routes.js | runtime proof receipt |
+| Response cache | PARTIAL | Y | Y | Y | N | N | server.js; startup/register-runtime-routes.js; services/council-service.js | runtime proof receipt |
+| Queue (BullMQ) | PARTIAL | Y | Y | Y | Y | partial | server.js; package.json; startup/routes/server-routes.js | runtime proof receipt |
+| Execution queue | PARTIAL | Y | Y | Y | N | N | server.js; core/two-tier-system-init.js; services/learning-engine/task_queue_connector.py | runtime proof receipt |
+| Request tracer middleware | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Error boundary middleware | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Websocket handler | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Twilio service | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Twilio webhook registrar | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Council service | PARTIAL | Y | Y | Y | Y | partial | server.js; services/lcl-monitor.js; services/prompt-translator.js | runtime proof receipt |
+| Consensus service | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Council prompt adapter | PARTIAL | Y | Y | Y | Y | partial | startup/register-runtime-routes.js; routes/lifeos-health-routes.js; routes/lifeos-communication-routes.js | runtime proof receipt |
+| AI model service | MISSING | N | N | N | N | N | — |  |
+| AI performance tracker | PARTIAL | Y | Y | Y | N | N | server.js | runtime proof receipt |
+| Rules engine | PARTIAL | Y | Y | Y | N | N | services/council-service.js | runtime proof receipt |
+| Risk scorer | PARTIAL | Y | Y | Y | N | N | routes/autonomy-routes.js; services/autonomy-orchestrator.js | runtime proof receipt |
+| Continuous improvement | PARTIAL | Y | Y | Y | N | N | server.js; routes/twin-routes.js | runtime proof receipt |
+| Outcome tracker | PARTIAL | Y | Y | Y | N | N | routes/twin-routes.js | runtime proof receipt |
+| Decision ledger | PARTIAL | Y | Y | Y | N | N | services/founder-value-engine.js; services/builderos-model-escalation-gate.js | runtime proof receipt |
+| Communication gateway | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-engine-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Prompt IR | PARTIAL | Y | Y | Y | N | N | services/council-service.js | runtime proof receipt |
+| Prompt translator | PARTIAL | Y | Y | Y | N | N | services/council-service.js | runtime proof receipt |
+| Tools status | BUILT BUT DISCONNECTED | Y | N | N | N | N | — | production spine mount |
+| UX evaluator | PARTIAL | Y | Y | Y | N | N | services/design-quality-gate.js | runtime proof receipt |
+| Design quality gate | PARTIAL | Y | Y | Y | N | N | routes/idea-queue-routes.js; core/auto-builder.js | runtime proof receipt |
+| Notification router (LifeOS) | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-core-routes.js; scripts/lifeos-verify.mjs; services/lifeos-scheduled-jobs.js | runtime proof receipt |
+| Community growth | PARTIAL | Y | Y | Y | Y | partial | routes/lifeos-legacy-routes.js; scripts/lifeos-verify.mjs | runtime proof receipt |
+| Credential aliases | PARTIAL | Y | Y | Y | N | N | services/tc-imap-config.js; services/tc-access-service.js; services/tc-browser-agent.js | runtime proof receipt |
+| Video pipeline | ACTIVE | Y | Y | Y | Y | partial | server.js; core/two-tier-system-init.js; scripts/extract-routes.py |  |
+| Game publisher | ACTIVE | Y | Y | Y | Y | partial | server.js; scripts/extract-routes.py; core/two-tier-system-init.js |  |
+| Knowledge context | ACTIVE | Y | Y | Y | Y | partial | server.js; core/two-tier-system-init.js; scripts/extract-routes.py |  |
+| Idea queue | ACTIVE | Y | Y | Y | Y | partial | startup/register-runtime-routes.js |  |
+| Teacher OS | ACTIVE | Y | Y | Y | N | N | startup/register-runtime-routes.js |  |
 
 ## Appendix B — Evidence index
 
