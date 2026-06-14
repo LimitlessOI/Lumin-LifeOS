@@ -3,6 +3,18 @@
 
 ---
 
+## [SESSION] 2026-06-13 — System Capability Inventory + Constitution Phase 1
+
+**Inventory:** Created `docs/SYSTEM_CAPABILITY_INVENTORY.md` — canonical runtime capability map across 14 sections (BuilderOS, C2, LifeOS, Voice Rail, Memory/Historian, Proof/Sentry, TSOS, Deployment, TC, Marketing, Scheduled Jobs, Browser/Web, Legacy, Parts-Car). Classification: PRESENT / PARTIAL / MISSING / SHADOW. 10 capability gaps ranked G1–G10. Source: register-runtime-routes.js, services/, BUILDEROS_SYSTEM_INVENTORY.md, SYSTEM_TOOL_INVENTORY_AUDIT_V1.md.
+
+**Constitution Phase 1 (observe-only):** Created 4 new files — `docs/constitution/CONSTITUTION_INVENTORY.md` (69 files across 8 tiers), `docs/constitution/CONSTITUTION_MAPPING.md` (35+ topics → authoritative file), `docs/constitution/CONSTITUTION_CONFLICTS.md` (7 conflicts C1–C7, 2 MEDIUM 5 LOW), `docs/architecture/DOC_REORG_RECEIPT.md`. No existing files modified. Phase 2 requires founder review of CONSTITUTION_CONFLICTS.md first.
+
+**Provider-proof fix (prior session):** `services/founder-provider-tool-action.js` broadened — AND gate removed, "provider proof" alone now hard-routes. Commit 28f4ae447e pushed to main.
+
+**Next:** Founder reviews CONSTITUTION_CONFLICTS.md for Phase 2 authorization. Shadow queue governance (G1) awaiting founder authorization. Postmark env vars (G3) unset — outreach blocked.
+
+---
+
 ## [SESSION] 2026-05-24 — Voice Rail v2.20 laptop mic fix
 
 Adam: on laptop browser, Voice Rail mic button used **iPhone** input (Apple Continuity), not MacBook built-in — not a Railway/server issue. **Shipped (GAP-FILL):** `lifeos-voice-chat.js` resolves preferred laptop mic before capture, blocks Continuity-labeled devices, shows active mic label; Voice Rail UI **v2.20**. **Next:** deploy → hard refresh → Options → Mic shows MacBook label; or pick built-in explicitly.
