@@ -47,6 +47,11 @@ import { checkBuildBlueprintGate } from '../services/builder-blueprint-gate.js';
 import { createBuilderOSControlPlaneService } from '../services/builderos-control-plane-service.js';
 import { evaluateBuildDoneGateAsync } from '../services/builderos-build-done-gate-helper.js';
 import {
+  grantBuildCompletion,
+  isCompletionAuthorityEnabled,
+  BUILDEROS_COMPLETION_AUTHORITY_FLAG,
+} from '../services/builderos-completion-authority.js';
+import {
   evaluateModelEscalationGate,
   writeModelEscalationReceipt,
   isCheaperModel,
@@ -280,6 +285,64 @@ export async function evaluateBuildDoneGateForBuildResponse({
   return {
     ok: true,
     doneGate,
+  };
+}
+
+export async function evaluateBuildCompletionForBuildResponse({
+  buildResult,
+  taskBody = {},
+  readCommit = null,
+} = {}) {
+  const completion = await grantBuildCompletion({
+    buildResult,
+    founder_request: taskBody?.task || '',
+    required_outcome: taskBody?.required_outcome || null,
+    technical: { ok: true, source: 'builder_precommit' },
+    featureEnabled: isCompletionAuthorityEnabled(),
+    ...(typeof readCommit === 'function' ? { readCommit } : {}),
+  });
+
+  if (completion.rollback_bypass) {
+    return {
+      ok: true,
+      completion,
+      metadata: {
+        completion_authority_warning: completion.warning,
+      },
+    };
+  }
+
+  if (completion.completion_required === false) {
+    return {
+      ok: true,
+      completion,
+      metadata: {
+        completion_skipped: true,
+      },
+    };
+  }
+
+  if (!completion.granted) {
+    return {
+      ok: false,
+      blockedResponse: {
+        ok: false,
+        blocker: completion.blocker || 'FAIL_WRONG_OUTCOME',
+        reason: completion.reason || 'completion_authority_denied',
+        committed: true,
+        completion_granted: false,
+        completion_receipt_id: null,
+      },
+    };
+  }
+
+  return {
+    ok: true,
+    completion,
+    metadata: {
+      completion_granted: true,
+      completion_receipt_id: completion.completion_receipt_id,
+    },
   };
 }
 
@@ -2127,6 +2190,20 @@ export function createLifeOSCouncilBuilderRoutes({
         return res.status(409).json(doneGateOutcome.blockedResponse);
       }
 
+      const completionOutcome = await evaluateBuildCompletionForBuildResponse({
+        buildResult: {
+          ok: true,
+          status: 'SUCCESS',
+          committed: true,
+          commit_sha: goldenSha,
+          target_file: resolvedTarget,
+        },
+        taskBody,
+      });
+      if (!completionOutcome.ok) {
+        return res.status(409).json(completionOutcome.blockedResponse);
+      }
+
       res.json({
         ok: true,
         output: generatedOutput,
@@ -2136,6 +2213,14 @@ export function createLifeOSCouncilBuilderRoutes({
         commit_sha: goldenSha,
         done_gate_required: true,
         done_gate_passed: true,
+        completion_granted: completionOutcome.metadata?.completion_granted !== false,
+        completion_receipt_id: completionOutcome.completion?.completion_receipt_id || null,
+        ...(completionOutcome.metadata?.completion_authority_warning
+          ? {
+              completion_authority_warning: completionOutcome.metadata.completion_authority_warning,
+              completion_authority_flag: BUILDEROS_COMPLETION_AUTHORITY_FLAG,
+            }
+          : {}),
         model_used,
         domain_context_loaded,
         domain,
