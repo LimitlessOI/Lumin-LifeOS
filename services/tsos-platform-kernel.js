@@ -319,6 +319,7 @@ export function createTSOSPlatformKernel({
       const body = req.body || {};
       const task_id = body.task_id || newTaskId('build');
       req.body = { ...body, task_id };
+      req.__kernel_managed_build = true;
 
       let statusCode = 200;
       let responseBody = null;
@@ -380,6 +381,8 @@ export function createTSOSPlatformKernel({
           kernel_receipts: err.receipts || null,
           ...(responseBody && typeof responseBody === 'object' ? { partial: responseBody } : {}),
         });
+      } finally {
+        delete req.__kernel_managed_build;
       }
     };
   }
