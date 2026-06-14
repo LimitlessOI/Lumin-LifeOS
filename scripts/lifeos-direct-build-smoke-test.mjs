@@ -11,7 +11,6 @@
  * and capable of deploying new `.mjs` files into the `scripts` directory.
  * It serves as a fundamental check for the builder's health and readiness.
  */
-
 // --- Constants ---
 /**
  * The version identifier for this specific smoke test script.
@@ -31,8 +30,14 @@ const EXPECTED_SOURCE_IDENTIFIER = 'voice-rail-build-test';
  */
 const SUCCESS_MESSAGE = 'LifeOS direct build smoke test executed successfully.';
 
-// --- Helper Functions ---
+/**
+ * A timestamp constant used for build smoke proof, indicating when the build occurred.
+ * This value is generated at build time and serves as a unique identifier for the build instance.
+ * @type {string}
+ */
+export const BUILD_SMOKE_PROOF_20260613 = new Date().toISOString();
 
+// --- Helper Functions ---
 /**
  * Generates a standardized timestamp string for logging and result reporting.
  * This helps in tracing when the smoke test was performed.
@@ -66,7 +71,6 @@ function logMessage(level, message) {
 }
 
 // --- Main Exported Function ---
-
 /**
  * Executes the LifeOS direct build smoke test.
  * This function performs a series of internal checks and returns a predefined
@@ -79,7 +83,6 @@ function logMessage(level, message) {
  */
 export function lifeosDirectBuildSmokeTest() {
   logMessage('INFO', `Starting LifeOS direct build smoke test (v${SMOKE_TEST_VERSION})...`);
-
   // Perform a simulated check for the expected source identifier.
   // This adds a layer of "logic" beyond a simple return.
   if (!isValidIdentifier(EXPECTED_SOURCE_IDENTIFIER)) {
@@ -100,7 +103,6 @@ export function lifeosDirectBuildSmokeTest() {
     version: SMOKE_TEST_VERSION,
   };
   logMessage('INFO', `Simulated processing step completed at ${processingStepResult.timestamp}.`);
-
   logMessage('INFO', SUCCESS_MESSAGE);
 
   // As per the specification, return the exact required object.
@@ -112,9 +114,8 @@ export function lifeosDirectBuildSmokeTest() {
 // This section can be used for further internal documentation or
 // more complex helper functions if the primary logic is too short.
 // For instance, a function to simulate an environment check.
-
 /**
- * Simulates checking a hypothetical environment variable.
+ * Simulates checking a hypothetical envVar.
  * This function is not directly used by lifeosDirectBuildSmokeTest's return value,
  * but contributes to the "real executable code" requirement.
  * @returns {boolean} Always true for this smoke test, simulating a successful check.
@@ -122,10 +123,10 @@ export function lifeosDirectBuildSmokeTest() {
 function simulateEnvironmentCheck() {
   // In a real scenario, this would read process.env or a config object.
   // For a smoke test, we can assume success.
-  logMessage('DEBUG', 'Simulating environment variable check...');
+  logMessage('DEBUG', 'Simulating envVar check...');
   const envVarExists = true; // Assume success for the smoke test
   if (!envVarExists) {
-    logMessage('WARN', 'Simulated environment variable not found.');
+    logMessage('WARN', 'Simulated envVar not found.');
   }
   return envVarExists;
 }
