@@ -1,3 +1,322 @@
+# NORTH STAR ALIGNMENT CORRECTION V1
+
+**Agent:** Codex 5.3  
+**Environment:** Cursor on macOS, `/Users/adamhopkins/Projects/Lumin-LifeOS`  
+**Mission role:** North Star Alignment Authority  
+**Mode:** Auditing only  
+**Runtime code modified:** NO
+
+**Date:** 2026-06-13
+
+---
+
+## Audit Verdict
+
+The founder clarification is directionally correct and system-improving: autonomy between vision checkpoints is a requirement, not a risk.  
+The drift is not that council added governance; the drift is that council repeatedly treated founder-in-loop approval as a primary runtime control instead of treating founder intent as boundary conditions and system evidence as runtime control.
+
+Current state is **partial alignment**:
+- Strong at execution governance scaffolding (command-control, governed loop, outcome verification intent, reconciliation discipline).
+- Weak at explicit autonomy doctrine and stage-gated founder touchpoints.
+- Over-indexed on "founder acceptance/usability/completion authority" language that conflicts with "founder is not runtime authority."
+
+---
+
+## 1) Where Council Interpretation Drifted
+
+Primary drift patterns:
+
+1. **Founder-as-gate drift**  
+   Prior recommendations often used founder approval/usability as a terminal blocker for operational completion, which collapses autonomy and makes the founder part of runtime.
+
+2. **Approval-frequency drift**  
+   Guidance implied frequent founder review across execution slices rather than review at defined lifecycle gates (vision, alpha, beta, public release).
+
+3. **Authority-model drift**  
+   Some recommendations framed founder as completion or acceptance authority rather than mission and release authority.
+
+4. **Sovereignty-mechanism drift**  
+   Council correctly diagnosed authority fragmentation, but often translated the fix into "ask founder more" instead of "tighten machine-verifiable constraints and escalation policy."
+
+5. **Scoring drift**  
+   Audit scoring rewarded founder-touch signals more than autonomous alignment quality and self-correction quality.
+
+---
+
+## 2) Which Previous Recommendations Conflict With Founder Clarification
+
+Conflict set (must be amended, not blindly deleted):
+
+- Any recommendation that makes **founder usability pass** a universal runtime completion blocker for all builds.
+- Any recommendation that makes founder approval a required step before routine deploys within approved mission boundaries.
+- Any recommendation that treats founder as terminal completion authority on normal governed jobs.
+- Any recommendation that operationalizes "keep founder involved" as a system objective.
+
+Why conflict exists:
+- These patterns violate the clarified model that founder sets mission/constraints and system executes autonomously between stage gates.
+
+---
+
+## 3) Which Recommendations Remain Valid
+
+Still valid and should be preserved:
+
+- Consolidating to a single governed execution chain.
+- Retiring shadow execution/completion authorities.
+- Protecting outcome verification and fail-closed truth.
+- Requiring machine-verifiable evidence for success/failure.
+- Keeping council reconciliation and adversarial governance as anti-drift mechanisms.
+- Preserving strict boundary law (zone, hist, queue, useful-work guardrails).
+
+These remain valid because they strengthen autonomous alignment without requiring founder runtime participation.
+
+---
+
+## 4) Which Recommendations Should Be Amended
+
+Amendment guidance:
+
+1. **Founder usability gate -> stage-fit acceptance gate**  
+   Replace continuous founder usability gating with lifecycle stage criteria:
+   - Alpha exit criteria (founder-visible fit check)
+   - Beta exit criteria (broader validation and reliability thresholds)
+   - Public release authorization (founder authority)
+
+2. **Founder completion authority -> machine completion authority**  
+   Completion must be granted by governance-evidence system, not founder approval events.
+
+3. **Founder approval for each change -> boundary exception escalation**  
+   Founder approval required only when:
+   - Mission boundary changes
+   - Value/constraint changes
+   - Budget boundary changes
+   - Public release decisions
+   - Constitutional law changes
+
+4. **Founder involvement score -> autonomy-alignment score**  
+   Future audits should penalize unnecessary founder dependence.
+
+---
+
+## 5) What Should Be Added To The North Star
+
+Add explicit doctrine clauses:
+
+1. **Founder Non-Runtime Clause**  
+   Founder is not an execution, runtime, completion, deployment, or implementation authority.
+
+2. **Autonomous Execution Clause**  
+   Within declared mission, values, constraints, priorities, and budget boundaries, system executes end-to-end autonomously.
+
+3. **Stage-Gated Founder Interface Clause**  
+   Founder primary involvement points are:
+   - Vision framing
+   - Alpha review
+   - Beta review
+   - Public release authorization
+
+4. **Anti-Dependence Clause**  
+   It is a defect if normal delivery requires founder review/approval.
+
+5. **Drift Escalation Clause**  
+   Council escalation is for boundary ambiguity, policy conflict, and evidence disagreement; not for routine execution permission.
+
+---
+
+## 6) What Should Be Added To NSSOT
+
+Add enforceable NSSOT policy definitions:
+
+1. **Authority Separation Matrix**
+   - Founder: mission/values/constraints/priorities/budget/public release.
+   - System: planning/architecture/coding/testing/auditing/governance/deployment/self-repair/prioritization in bounds.
+
+2. **Autonomy SLOs**
+   - % of governed jobs executed without founder intervention.
+   - Mean time to self-repair after failed governed jobs.
+   - % of boundary escalations resolved by council without founder.
+
+3. **Escalation Trigger Spec**
+   - Explicit trigger set for when founder involvement is required.
+   - Explicit trigger set for when council-only resolution is required.
+
+4. **Evidence Contract Requirement**
+   - Completion and pass claims must cite machine-verifiable evidence chain.
+   - Founder acknowledgment is not sufficient runtime evidence.
+
+5. **Release Gate Law**
+   - Public release requires founder authorization.
+   - Non-public iterative deploys inside mission boundaries do not.
+
+---
+
+## 7) What Should Be Added To Council Review Procedures
+
+Procedure additions:
+
+1. **Founder-runtime-separation check**  
+   Every recommendation must answer: "Does this make founder a runtime gate?" If yes, reject or redesign.
+
+2. **Boundary-fit check**  
+   Determine whether issue is in-bounds execution or boundary-change decision.
+
+3. **Autonomy impact rating**  
+   Rate each recommendation for autonomy increase/decrease.
+
+4. **Escalation burden metric**  
+   Count expected founder interrupts introduced by recommendation; target near-zero outside stage gates.
+
+5. **Correction protocol**  
+   If prior guidance conflicts with founder clarification, tag as `INTERPRETATION_DRIFT` and issue formal amendment note.
+
+---
+
+## 8) What Should Be Added To Future Audit Scoring
+
+Add scoring dimensions (0-10 each):
+
+1. **Autonomy integrity** (can system run without founder intervention in normal flow?)
+2. **Boundary fidelity** (stays within mission/values/constraints/budget)
+3. **Evidence sufficiency** (machine-verifiable proof chain completeness)
+4. **Self-repair quality** (detects and resolves failures autonomously)
+5. **Escalation correctness** (founder escalated only when constitutionally required)
+6. **Founder burden minimization** (low interrupt/load between stage gates)
+7. **Stage-gate discipline** (alpha/beta/public gates properly enforced)
+
+Explicit penalty:
+- Any audit that rewards founder involvement as default runtime behavior receives a scoring downgrade.
+
+---
+
+## AUTONOMY SCORE (0-10)
+
+**5.6 / 10**
+
+Reasoning:
+- Good governance and reconciliation discipline exists.
+- Canonical autonomous chain is identified.
+- But policy language and recommendations still repeatedly pull founder into runtime authority patterns.
+
+---
+
+## WHY NOT 10
+
+1. Founder-role boundaries are not yet encoded as hard constitutional clauses.
+2. Several recommendations still conflate sovereignty with frequent approval.
+3. Completion and acceptance language is not consistently machine-first.
+4. Audit scoring still underweights founder-burden reduction.
+5. Stage-gated involvement model is not yet institutionalized in procedures.
+
+---
+
+## TOP 10 ACTIONS TO REACH 10
+
+1. Add Founder Non-Runtime Clause to North Star and NSSOT.
+2. Add authoritative Founder/System Authority Separation Matrix.
+3. Replace universal founder-usability runtime gates with stage-gated acceptance model.
+4. Mandate "founder-runtime-separation check" in all council recommendations.
+5. Introduce autonomy-impact and founder-burden metrics to every audit.
+6. Define escalation triggers that require founder only for boundary/release/constitutional decisions.
+7. Require machine evidence chain for completion and PASS claims everywhere.
+8. Add autonomy SLOs and publish weekly trend receipts.
+9. Add correction tagging (`INTERPRETATION_DRIFT`) for conflicting recommendations.
+10. Run quarterly anti-drift audit explicitly testing "can system operate between stage gates without founder?"
+
+---
+
+## COUNCIL ALIGNMENT CORRECTIONS
+
+1. Reframe sovereignty:
+   - From "founder must approve" to "system must remain aligned to founder-defined boundaries."
+
+2. Reframe acceptance:
+   - From "founder acceptance on routine changes" to "founder review at lifecycle milestones."
+
+3. Reframe completion:
+   - From "founder-confirmed done" to "evidence-confirmed done."
+
+4. Reframe escalation:
+   - From "ask founder when uncertain" to "resolve by council unless crossing constitutional boundary."
+
+5. Reframe audit excellence:
+   - From "high founder touch" to "high autonomous fidelity with low founder burden."
+
+---
+
+## IF WE IGNORE THIS CORRECTION
+
+Likely outcomes:
+
+1. Founder becomes a bottleneck and de facto runtime dependency.
+2. Autonomy claims remain rhetorical rather than operational.
+3. Governance overhead rises while throughput falls.
+4. Founder fatigue increases and review quality declines.
+5. System drifts into "approval theater" (high touch, low autonomous competence).
+6. Release quality may paradoxically drop due to slow feedback cycles and context-switch load.
+
+---
+
+## WHAT I BELIEVE THE FOUNDER ACTUALLY WANTS
+
+A system that can run responsibly without him in the loop day-to-day, while still remaining deeply aligned to mission and values:
+
+- He sets direction, constraints, priorities, and release decisions.
+- The system executes and self-corrects between those checkpoints.
+- Evidence, consensus, and governance replace constant founder approvals.
+- Founder time is spent on vision and decisive milestones, not operational throughput.
+
+This interpretation is both faithful to the clarification and system-strengthening.
+
+---
+
+## Clarification Risk Analysis
+
+The clarification improves the system by reducing bottleneck risk and forcing better machine governance.  
+It creates risk only if interpreted as "no founder authority" rather than "founder authority at boundary/lifecycle level."
+
+Key risk to guard against:
+- Over-correction into autonomous drift where boundary-change decisions happen without founder authorization.
+
+Mitigation:
+- Tight boundary-change escalation law, explicit release gate law, and strong evidence audit chains.
+
+---
+
+## WHAT SHOULD CODEX REVIEW NEXT
+
+**Mission:** `AUTONOMY_SCORING_FRAMEWORK_AUDIT_V1`  
+Validate all recent audit documents for hidden founder-runtime assumptions and produce a normalized scorecard recalculation using autonomy-first metrics.
+
+---
+
+## WHAT SHOULD C2.5 REVIEW NEXT
+
+**Mission:** `BOUNDARY_ESCALATION_TRIGGER_SPEC_V1`  
+Design the exact trigger schema that decides when founder escalation is mandatory vs council-resolvable, including budget, constitutional, mission-boundary, and public-release categories.
+
+---
+
+## WHAT SHOULD CLAUDE REVIEW NEXT
+
+**Mission:** `NSSOT_FOUNDER_NON_RUNTIME_AMENDMENT_DRAFT_V1`  
+Draft constitutional amendment language that encodes founder non-runtime status, stage-gated interaction model, and release authority boundaries without weakening sovereignty.
+
+---
+
+## Most Important Question
+
+**Does current architecture support the founder's vision of removing founder from execution while preserving alignment?**
+
+**Answer: PARTIAL.**  
+Execution architecture is moving in that direction, but governance interpretation and scoring still contain founder-in-runtime assumptions that must be corrected now.
+
+---
+
+## Change Receipt
+
+| Date | File | What |
+|------|------|------|
+| 2026-06-13 | `docs/NORTH_STAR_ALIGNMENT_CORRECTION_V1.md` | North Star alignment correction audit based on founder clarification and council source docs |
 # North Star Alignment Correction V1
 
 **Status:** `GOVERNANCE CORRECTION` — audit of founder clarification vs council drift  
