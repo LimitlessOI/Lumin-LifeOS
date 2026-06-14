@@ -44,6 +44,8 @@ import { runPrecommitGovernance } from '../services/builderos-precommit-governan
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
 import { looksLikeBuilderProseRefusal } from '../services/builder-instruction-target.js';
 import { checkBuildBlueprintGate } from '../services/builder-blueprint-gate.js';
+import { createBuilderOSControlPlaneService } from '../services/builderos-control-plane-service.js';
+import { evaluateBuildDoneGateAsync } from '../services/builderos-build-done-gate-helper.js';
 import {
   evaluateModelEscalationGate,
   writeModelEscalationReceipt,
@@ -202,6 +204,83 @@ function builderTargetsJavaScript(files, targetFile) {
   if (paths.some(p => /\.(js|mjs|cjs)$/i.test(String(p)))) return true;
   if (/\.(js|mjs|cjs)$/i.test(String(targetFile || ''))) return true;
   return false;
+}
+
+function parseMissingEvidence({ doneGateReason, doneGateEvidence } = {}) {
+  if (Array.isArray(doneGateEvidence?.missing_evidence) && doneGateEvidence.missing_evidence.length) {
+    return doneGateEvidence.missing_evidence;
+  }
+  const reason = String(doneGateReason || doneGateEvidence?.reason || '');
+  const marker = 'missing_proof:';
+  const idx = reason.indexOf(marker);
+  if (idx === -1) return [];
+  const raw = reason.slice(idx + marker.length).trim();
+  if (!raw) return [];
+  return raw.split(',').map((part) => part.trim()).filter(Boolean);
+}
+
+export async function evaluateBuildDoneGateForBuildResponse({
+  buildResult,
+  taskId = null,
+  controlPlane = null,
+}) {
+  let doneGateEvidence = null;
+  try {
+    if (controlPlane?.canMarkBuildDone && taskId) {
+      doneGateEvidence = await controlPlane.canMarkBuildDone({ task_id: taskId, allow_exception: false });
+    }
+  } catch (error) {
+    return {
+      ok: false,
+      blockedResponse: {
+        ok: false,
+        blocker: 'BUILDEROS_DONE_BLOCKED',
+        reason: `done_gate_evaluation_error:${error.message}`,
+        receipt_path: taskId ? `build_task_ledger:${taskId}` : null,
+        done_gate_required: true,
+        done_gate_passed: false,
+      },
+    };
+  }
+
+  const doneGate = await evaluateBuildDoneGateAsync({
+    buildResult,
+    task_id: taskId,
+    doneGate: doneGateEvidence,
+    controlPlane,
+    allow_exception: false,
+  });
+
+  if (doneGate.done_gate_required === false) {
+    return {
+      ok: true,
+      doneGate,
+    };
+  }
+
+  if (!doneGate.ok) {
+    const missingEvidence = parseMissingEvidence({
+      doneGateReason: doneGate.reason,
+      doneGateEvidence,
+    });
+    return {
+      ok: false,
+      blockedResponse: {
+        ok: false,
+        blocker: 'BUILDEROS_DONE_BLOCKED',
+        reason: doneGate.reason || 'done_gate_required',
+        receipt_path: doneGate.receipt_path || null,
+        ...(missingEvidence.length ? { missing_evidence: missingEvidence } : {}),
+        done_gate_required: true,
+        done_gate_passed: false,
+      },
+    };
+  }
+
+  return {
+    ok: true,
+    doneGate,
+  };
 }
 
 function htmlFullFileCodegenHints() {
@@ -513,6 +592,9 @@ export function createLifeOSCouncilBuilderRoutes({
   const cacheGet = typeof getCachedResponse === 'function' ? getCachedResponse : null;
   const cacheSet = typeof cacheResponse === 'function' ? cacheResponse : null;
   const memorySvc = pool?.query ? createMemoryIntelligenceService(pool, log) : null;
+  const builderControlPlane = pool?.query
+    ? createBuilderOSControlPlaneService({ pool, logger: log })
+    : null;
 
   // Fire-and-forget: tag the commit SHA so we can roll back a bad autonomous night with
   // `git checkout refs/tags/autonomy/golden-<sha>` without bisecting hundreds of commits.
@@ -2030,6 +2112,21 @@ export function createLifeOSCouncilBuilderRoutes({
         }
       }
 
+      const doneGateOutcome = await evaluateBuildDoneGateForBuildResponse({
+        buildResult: {
+          ok: true,
+          status: 'SUCCESS',
+          committed: true,
+          commit_sha: goldenSha,
+          target_file: resolvedTarget,
+        },
+        taskId: taskBody.task_id || null,
+        controlPlane: builderControlPlane,
+      });
+      if (!doneGateOutcome.ok) {
+        return res.status(409).json(doneGateOutcome.blockedResponse);
+      }
+
       res.json({
         ok: true,
         output: generatedOutput,
@@ -2037,6 +2134,8 @@ export function createLifeOSCouncilBuilderRoutes({
         committed: true,
         commit_message: msg,
         commit_sha: goldenSha,
+        done_gate_required: true,
+        done_gate_passed: true,
         model_used,
         domain_context_loaded,
         domain,

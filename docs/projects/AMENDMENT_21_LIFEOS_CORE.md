@@ -64,7 +64,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-13 — Provider-proof detection broadened; "provider proof" alone now hard-routes before council
+**Last Updated:** 2026-06-13 — Builder `/build` DONE-gate enforced before success responses (commit_sha-only no longer passes)
 
 ---
 
@@ -1572,6 +1572,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-13 | **Builder `/build` DONE-gate enforcement wired (Amendment 46 integration):** `routes/lifeos-council-builder-routes.js` now imports `evaluateBuildDoneGateAsync` and runs `evaluateBuildDoneGateForBuildResponse(...)` before returning `ok:true, committed:true, commit_sha`. Failed gate now returns `409` with `blocker: BUILDEROS_DONE_BLOCKED`, `reason`, `receipt_path`, and `missing_evidence` when available; passed gate returns `done_gate_required:true`, `done_gate_passed:true`. Added test `tests/builderos-build-done-gate-route-wiring.test.js` for commit_sha-only block, pass case, missing evidence, and non-success path unchanged. | Founder asked to finish Amendment 46 live-path enforcement so `/build` cannot be marked DONE/PASS from commit evidence alone. | GAP-FILL | pending deploy |
 | 2026-05-24 | **Provider proof hard route v2.37 (GAP-FILL):** `detectProviderProofIntent` runs before council/ChC/BuilderOS in `voice-rail-v1.js` (all modes). Expanded trigger phrases. `handleProviderProofAction` reads proof record back. Blocks `system_action`/builder misroute. Build **v2.37**. | Founder provider proof hit Council Chair + builder staging | GAP-FILL | pending deploy |
 | 2026-05-24 | **Voice Rail v2.34 — founder command-class routing (GAP-FILL):** `services/lifeos-founder-command-class.js` — repo_build / bp_level / system_read / direct_provider / system_action / blocked. `services/lifeos-founder-system-action.js` — harmless receipts → `lifeos_event_stream` (Neon), no BuilderOS job. `voice-rail-intent-router.js` — lanes `system_action`, `execution_repo`, `blocked`. `voice-rail-v1.js` — wire lanes; no builder for no-repo actions. `voice-rail-command-executor.js` — `shouldRouteFounderToSystem` requires repo target or BP handoff. `voice-rail-system-direct.js` — system_action before status/execute default. Build **v2.34**. | Adam: no-repo system action was misrouted to command-control + missing_target_file | GAP-FILL | deployed |
 | 2026-06-13 | **execution_bp HTTP proof hotfix (GAP-FILL):**** `voice-rail-intent-router.js` — shell_command proof via live `/founder-direct-provider` HTTP not execSync (502 fix). | Railway 502 on npm exec in request handler | GAP-FILL | pending deploy |
