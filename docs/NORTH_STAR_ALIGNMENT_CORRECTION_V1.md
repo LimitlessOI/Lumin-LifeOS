@@ -657,10 +657,11 @@ Draft NSSOT amendment implementing §5–6 above:
 | Date | File | What |
 |------|------|------|
 | 2026-06-14 | `docs/NORTH_STAR_ALIGNMENT_CORRECTION_V1.md` | V1 governance drift correction — founder role boundary |
+| 2026-06-13 | `docs/NORTH_STAR_ALIGNMENT_CORRECTION_V1.md` | Claude synthesis section — risk audit of clarification, IF I AM WRONG, score reconciliation |
 
 ---
 
-## Return block
+## Return block (Composer/Cursor)
 
 ```
 Autonomy score: 4/10
@@ -672,3 +673,226 @@ C2.5: NORTH_STAR_ALIGNMENT_RECEIPT_V1
 Claude: NSSOT_FOUNDER_ROLE_BOUNDARY_AMENDMENT_V1
 Verdict: PASS (correction audit complete; implementation BLOCKER remains on machine completion)
 ```
+
+---
+
+---
+
+# Claude Synthesis — North Star Alignment Authority
+
+**Agent:** Claude Sonnet 4.6
+**Role:** North Star Alignment Authority (third agent in this audit)
+**Input read:** Full file above (Codex 5.3 section + Composer/Cursor section) + FOUNDER_PACKET_TEMPLATE_V1.md + FACTORY-0001 FOUNDER_PACKET.md
+
+**Purpose of this section:** Two prior agents already produced strong alignment corrections. This section does not repeat them. It adds: (1) score reconciliation, (2) rigorous risk audit of the clarification itself, (3) IF I AM WRONG — defenses of prior audits that may still be valid, (4) one critical gap neither agent addressed fully, (5) FOUNDER_PACKET.md canonical path correction.
+
+---
+
+## Score Reconciliation
+
+Codex 5.3 scored autonomy at **5.6/10**. Composer scored **4/10**.
+
+**Claude ruling: 4/10 is more accurate.** Codex scored higher primarily because it weighted "good governance and reconciliation discipline" heavily. But governance discipline in documents is not autonomy. Autonomy requires the system to operate reliably without founder involvement. Current blockers against that:
+
+- Machine cannot produce `completion_receipt_id` on typical targets (live proof blocked — Composer §WHY NOT 10 item 1)
+- Five shadow commit paths still mounted — autonomous builds can exit through ungoverned paths
+- Overnight runner historically fails to complete BP items (U-10)
+- No automated product quality testing — system cannot verify its own deliverables
+- Zone 3 blocks most proof targets before the governed loop reaches `/build`
+
+**A system that fails at execution cannot be credited with autonomy because its governance documents are excellent.**
+
+Codex's 5.6 reflects the quality of the consolidation plan and council process. Composer's 4.0 reflects the current operational capability. For an autonomy score, operational capability is the correct metric.
+
+---
+
+## AUTONOMY SCORE: 4 / 10
+
+Adopting Composer's score. Rationale:
+
+| What works | What doesn't |
+|---|---|
+| BP_PRIORITY queue with guardrail enforcement | Completion authority not wired end-to-end |
+| Voice Rail → CC → governed loop chain exists | Zone 3 blocks most real targets |
+| Railway auto-deploy on push | Shadow paths can commit without outcome verification |
+| Pre-commit constitutional hooks enforce daily | Overnight runner fails frequently |
+| OIL boundary audit active | No automated product quality testing |
+| Hist boundary enforced | LifeOS features 63/317 ACTIVE |
+
+---
+
+## WHY NOT 10
+
+Both prior agents listed gaps. Synthesized and ordered by autonomy impact:
+
+1. **Machine BUILD completion not working end-to-end** — `completion_receipt_id` deferred on kernel-managed path; DONE token linkage broken. Until this works, the system cannot self-certify delivery.
+2. **Shadow execution paths mounted** — ungoverned commits possible; autonomous quality cannot be trusted.
+3. **No automated product probes** — system cannot verify its own output without founder dogfooding.
+4. **Release stage model not encoded in NSSOT** — four touchpoints are cultural, not constitutional.
+5. **`required_outcome` optional** — outcome verifier has nothing to compare against on undeclared builds.
+6. **Overnight runner unreliable** — autonomous scheduler cannot complete work reliably.
+7. **Council interpretation not yet corrected** — prior sovereignty audit recommendations still in the governance corpus; future agents will re-implement founder gates.
+8. **Zone 3 blocks proof targets** — governed loop fails before commit on most real targets.
+9. **Healing mission not in NSSOT** — autonomous system has no constitutional direction on wellness feature priority.
+10. **Alpha/beta/release gate criteria undefined** — touchpoints exist as concept, not as machine-enforced handoffs.
+
+---
+
+## TOP 10 ACTIONS TO REACH 10
+
+Synthesized from both prior agents plus gaps they missed:
+
+| # | Action | Who | Why it matters |
+|---|---|---|---|
+| 1 | NSSOT amendment: founder not execution authority + review stage model | Claude draft, Adam authorize | Closes governance corpus drift at constitutional level |
+| 2 | Wire kernel → `grantBuildCompletion()` + DONE token linkage | Code | Machine BUILD completion unlocks everything downstream |
+| 3 | Retire shadow commit paths at code level | Code | Safe autonomy precondition |
+| 4 | Publish council correction notice superseding per-build founder gate recs | Docs | Stops future agents implementing revoked recommendations |
+| 5 | Make `required_outcome` mandatory in CC job creation | Schema | Outcome verifier needs something to verify against |
+| 6 | Define alpha/beta/release gate criteria + handoff format | Design | Four touchpoints become machine-enforceable |
+| 7 | Automated product quality probes (at least Mirror + commitment tracker) | Code | System verifies its own product output autonomously |
+| 8 | Add healing mission as NSSOT mission direction clause | Claude draft | Autonomous system knows wellness features are high priority |
+| 9 | Fix overnight runner reliability on zone 1/2 targets | Code | Autonomous scheduler must actually work |
+| 10 | Quarterly anti-drift audit: "can system operate between stages without founder?" | Process | Governance loop that detects autonomy regression |
+
+---
+
+## IF I AM WRONG
+
+Both prior agents agreed quickly with the founder clarification. This section defends the prior audits where they may still be right — not to reinstate founder gates, but to ensure the correction does not overshoot.
+
+### Defense 1: The problem the prior audits identified was REAL — only the prescription was wrong
+
+Prior audits said: "The system can issue completion_receipt_id without Adam ever seeing the product."
+
+This is true and it is a real problem. The prior audits prescribed the wrong fix (require Adam's approval). The right fix is autonomous quality verification — smoke tests, acceptance probes, outcome parity checks. The problem does not go away because the prescription changes. If this audit correction is implemented without also implementing autonomous quality gates, the system will produce more completion receipts with less quality assurance than before.
+
+**Risk:** The clarification correction removes `founder_usability_pass` as a gate but does not mandate an autonomous replacement gate. If both changes (remove founder gate AND add autonomous quality gate) are not made together, autonomy increases with quality assurance decreasing. This is strictly worse than the current state.
+
+### Defense 2: The healing mission constitutional protection recommendation was correct and orthogonal to the drift
+
+Prior audits said: "The healing mission has no constitutional protection and must be added to NSSOT."
+
+Both prior agents in this file agreed. This is the one prior recommendation that was correct for the right reason AND is not a founder-in-loop issue. The healing mission should be in NSSOT so the autonomous system pursues it without Adam present — not so Adam approves wellness features. The clarity in the founder's clarification about what the founder provides ("mission, vision, desired outcomes, values, constraints") is precisely why the healing mission must be in NSSOT — it is one of those declared values that the autonomous system must follow.
+
+**The prior audit was right about this. It should not be swept up in the drift correction.**
+
+### Defense 3: 90-day autonomous operation identifying risks was correct — identifying Adam's presence as the solution was wrong
+
+The prior audits listed: shadow queue re-enable, TSOS vocabulary drift, LifeOS wellness feature degradation, completion receipts without quality as 90-day drift risks.
+
+These risks are real. The prior audits prescribed Adam's return as the solution. Wrong prescription. But the risks require solutions:
+- Shadow queue re-enable → production refusal in code
+- TSOS vocabulary drift → NSSOT vocabulary amendment
+- Wellness feature degradation → automated product monitoring
+- Completion receipts without quality → autonomous quality gates
+
+The prior audits identified the correct problems. The correction document must not inadvertently discard the problems along with the wrong prescriptions.
+
+### Defense 4: Required_outcome being optional is a problem independent of founder involvement
+
+Prior audits flagged: "required_outcome is optional in CC jobs; the outcome verifier may receive null."
+
+This is an autonomous governance issue, not a founder-approval issue. If `required_outcome` is null, `verifyGovernedOutcomeBeforePass()` has nothing to verify against. The autonomous system cannot self-certify quality without a declared quality standard per build. Making `required_outcome` mandatory is not about founder approval — it is about the system knowing what it was supposed to build.
+
+Both prior agents in this file agreed. This remains a valid gap.
+
+### Where I might be wrong
+
+If `docs/SSOT_NORTH_STAR.md` already contains explicit founder non-runtime authority clauses, explicit four-touchpoint interaction model, and explicit healing mission protection, then the drift problem is less severe than all three audits concluded. The prior agents could not read the full NSSOT; their findings are based on NSSOT summaries in other audit documents.
+
+**Verification needed:** Read `docs/SSOT_NORTH_STAR.md` in full. If it already has these clauses, the score rises and the amendment work is smaller than described.
+
+---
+
+## FOUNDER_PACKET.md Canonical Path Gap
+
+Composer noted that `docs/FOUNDER_PACKET.md` was NOT FOUND at the path specified in the mission. The actual founder packet for the factory proof mission is at:
+
+`docs/architecture/factory-v1-blueprint-pack/FACTORY-0001-v1/FOUNDER_PACKET.md`
+
+The FOUNDER_PACKET_TEMPLATE is at:
+
+`docs/architecture/factory-v1-blueprint-pack/FOUNDER_PACKET_TEMPLATE_V1.md`
+
+This is a real governance gap: there is no single `docs/FOUNDER_PACKET.md` at the canonical docs root. The FOUNDER_PACKET_TEMPLATE §11 "Founder Attention Budget" contains the design principle that minimizes founder decision load per mission. This template-level principle needs to be:
+
+1. Elevated to NSSOT doctrine (not just a template suggestion)
+2. Placed at a canonical path (`docs/FOUNDER_PACKET.md`) that agents can reliably read
+
+**Composer's C2.5 recommendation** includes "Draft `docs/FOUNDER_PACKET.md` at canonical path." This is correct and should be Priority 1 in the C2.5 mission — before running live proof v3.
+
+---
+
+## Critical Gap Neither Prior Agent Addressed
+
+### Separation of powers after consolidation to single terminal writer
+
+The AUTHORITY_CONSOLIDATION_MASTER_AUDIT found: consolidation moves toward `grantBuildCompletion()` as sole terminal writer. This is correct for reducing fragmentation.
+
+But: if `grantBuildCompletion()` runs as a single service call without adversarial review (SNT), the consolidation trades 24 fragmented authorities for 1 unreviewed authority. Separation of powers still does not exist at the terminal decision point.
+
+Under the founder clarification, this gap is **more important**, not less. If the system operates autonomously, the governing body at the terminal decision point must be the council (multi-department) — not a single service function called sequentially. A single terminal writer is correct. A single terminal writer without adversarial council input at the terminal point is autonomous fragility.
+
+**Addition to NSSOT needed:** `grantBuildCompletion()` must require a council evidence bundle (OIL verdict, deliberation receipt if threshold met, outcome verify result) as input — not just technical gate fields. This makes it a council-informed terminal decision, not a solo decision by one service.
+
+---
+
+## COUNCIL ALIGNMENT CORRECTIONS (Claude Addition)
+
+These correct specific prior document language without re-litigation:
+
+| Document | Prior language | Corrected language |
+|---|---|---|
+| `FOUNDER_CONSTITUTIONAL_PROTECTION_AUDIT_V1.md` Action 2 | "Add condition in grantBuildCompletion() that blocks until Adam confirms usability" | "Add condition requiring autonomous quality proof (smoke test pass, acceptance probe result) before granting for product lanes" |
+| `FOUNDER_SOVEREIGNTY_PRIORITY_AUDIT_V1.md` Priority 3 | "Promote founder_usability_pass from schema field to execution gate" | "Implement autonomous quality gate — system verifies product lane deliveries independently; founder sees quality evidence at alpha" |
+| `FOUNDER_VISION_PRESERVATION_AUDIT_V1.md` C2.5 recommendation | "FOUNDER SOVEREIGNTY GATE DESIGN V1 — how Adam confirms usability" | "AUTONOMOUS QUALITY GATE DESIGN V1 — how the system verifies its own product quality autonomously" |
+| `FOUNDER_CONSTITUTIONAL_PROTECTION_AUDIT_V1.md` score | "3/10 because founder veto and per-build acceptance don't exist" | Veto and per-build acceptance correctly absent; rescore using autonomy + mission encoding metrics |
+| All sovereignty audits | "90-day disappearance = system fails" | "90-day autonomous operation = design target; current score 4/10; governance completion is the solution, not founder return" |
+
+---
+
+## WHAT SHOULD CODEX REVIEW NEXT
+
+**MISSION: AUTONOMOUS QUALITY GATE DESIGN V1** (replaces prior "LIFEOS PRODUCT ACTIVATION AUDIT V1" as primary)
+
+The critical autonomous replacement for `founder_usability_pass`. Before `grantBuildCompletion()` can be trusted on product lanes, the system must have automated quality verification.
+
+Scope:
+1. Design the automated acceptance probe framework for product lane completions
+2. Define what "product lane" means vs "infrastructure lane" in completion authority
+3. Produce a working acceptance probe for one LifeOS feature (Mirror or commitment tracker)
+4. Define the schema for autonomous quality evidence in completion receipts
+
+Deliverable: `docs/AUTONOMOUS_QUALITY_GATE_DESIGN_V1.md`
+
+---
+
+## WHAT SHOULD C2.5 REVIEW NEXT
+
+**MISSION: NORTH_STAR_ALIGNMENT_RECEIPT_V1** (Composer's recommendation — adopted)
+
+Plus the canonical path gap:
+1. Create `docs/FOUNDER_PACKET.md` at canonical docs root — slim template with WHAT + outcomes + constraints only; reference the full template at its existing path
+2. Publish correction notice superseding per-build founder gate recommendations from sovereignty audits
+3. Run live proof v3 targeting BUILD_PASS only — no founder involvement — to validate autonomy path
+
+Deliverable: `docs/FOUNDER_PACKET.md` (canonical slim version) + `products/receipts/LIVE_BUILD_READINESS_V3.json`
+
+---
+
+## WHAT SHOULD CLAUDE REVIEW NEXT
+
+**MISSION: NSSOT_AUTONOMOUS_OPERATION_AMENDMENT_V1** (synthesized from both prior agents' recommendations)
+
+Both Codex and Composer recommended a NSSOT amendment on founder role boundary. This is the same mission under different names. Claude should execute it with the following scope:
+
+1. Read `docs/SSOT_NORTH_STAR.md` in full — verify what is already there before drafting
+2. Identify existing clauses that already encode founder non-runtime status (may be more than audit corpus summaries suggested)
+3. Draft amendment covering: (a) founder non-runtime authority clause, (b) four-touchpoint review stage model, (c) healing mission as system direction, (d) autonomous quality standard for product lanes, (e) `founder_usability_pass` redefined as beta-stage signal only, (f) required_outcome mandatory doctrine, (g) `grantBuildCompletion()` requires council evidence bundle
+4. Mark every clause requiring SNT adversarial review
+5. Mark explicit founder authorization requirement before merge
+
+Deliverable: `docs/NSSOT_AUTONOMOUS_OPERATION_AMENDMENT_V1.md`
+
+**Do not merge NSSOT without founder authorization.**
