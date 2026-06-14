@@ -29,7 +29,7 @@
 | **Pre-commit path (OIL boundary)** | BLOCKED for common targets | CC jobs → `ZONE3_PATCH_REQUIRED` at `oil_boundary_audit` when `target_file` >150 lines |
 | **Governed loop → `/build`** | PARTIAL | Zone 1/2 targets can reach `/builder/build`; zone 3 never calls `/build` |
 | **Post-commit measurement** | BROKEN on non-kernel path | `BUILDEROS_DONE_BLOCKED: missing_proof:token_receipt,build_end_time,oil_receipt` when ledger incomplete |
-| **Completion authority** | PARTIAL (step 1 shipped) | `builderos-completion-authority.js` exists; runs **after** DONE gate in `/build` response path; skipped when DONE gate blocks |
+| **Completion authority** | PARTIAL (kernel path restored) | `builderos-completion-authority.js` exists; kernel-managed `/build` now defers only DONE gate and still runs completion authority before success. Non-kernel paths can still be blocked by DONE before completion. |
 | **Governed loop outcome verify** | READY (when job completes) | `verifyGovernedOutcomeBeforePass()` in `builderos-governed-loop-executor.js` — only reached if `/build` returns success |
 
 **Summary:** The system can talk to providers and commit files, but **cannot complete a governed build end-to-end** on typical proof targets because blockers fire in sequence — first at zone policy (pre-build), then at measurement DONE gate (post-commit).
@@ -161,7 +161,7 @@ precommit (technical) → commit → [measurement evidence async/sync] → grant
 
 DONE gate (`canMarkBuildDone`) feeds **measurement_complete** into completion authority input — it must **not** short-circuit completion authority.
 
-**Kernel path note:** When `kernelManaged`, completion is deferred to kernel (`completion_deferred_to_kernel`). Kernel should call `grantBuildCompletion()` after `recordBuildComplete` succeeds — not yet unified in one module call.
+**Kernel path note (2026-06-14 correction):** When `kernelManaged`, only DONE-gate evaluation is deferred to the kernel for ledger proof ordering. Completion is no longer deferred to the kernel; the route calls `grantBuildCompletion()` before returning any committed success response. The remaining consolidation gap is making kernel measurement evidence feed completion as evidence, not restoring a kernel-side completion bypass.
 
 ---
 
@@ -276,4 +276,5 @@ Production profile: all break-glass flags unset; zone 3 remains enforced.
 
 | Date | File | What |
 |------|------|------|
+| 2026-06-14 | `docs/BUILD_EXECUTION_BLOCKER_SEQUENCE_PLAN_V1.md` | Corrected kernel path note after completion authority deferral rollback: DONE gate only is kernel-deferred; completion authority remains route-enforced. |
 | 2026-06-14 | `docs/BUILD_EXECUTION_BLOCKER_SEQUENCE_PLAN_V1.md` | V1 blocker sequence from live truth check + code read |

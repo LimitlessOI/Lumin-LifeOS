@@ -77,18 +77,15 @@ test('non-success paths are unchanged (completion not required)', async () => {
   assert.equal(outcome.completion?.reason, 'build_not_claiming_success');
 });
 
-test('kernel-managed /build defers completion authority grant', async () => {
+test('kernel-managed /build still enforces completion authority', async () => {
   const outcome = await evaluateBuildCompletionForBuildResponse({
     buildResult: buildSuccess(),
-    taskBody: {
-      task: 'Add tiny smoke test proof constant.',
-      required_outcome: 'smoke test proof constant',
-    },
+    taskBody: {},
     kernelManaged: true,
   });
-  assert.equal(outcome.ok, true);
-  assert.equal(outcome.metadata?.completion_deferred_to_kernel, true);
-  assert.equal(outcome.completion?.granted, false);
-  assert.equal(outcome.completion?.reason, 'completion_deferred_to_kernel');
+  assert.equal(outcome.ok, false);
+  assert.equal(outcome.blockedResponse?.blocker, 'FAIL_MISSING_EVIDENCE');
+  assert.equal(outcome.blockedResponse?.completion_granted, false);
+  assert.equal(outcome.metadata?.completion_deferred_to_kernel, undefined);
 });
 
