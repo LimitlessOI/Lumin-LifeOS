@@ -1,0 +1,70 @@
+{
+  "schema": "builder_run_receipt_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "blueprint_id": "CAPTURE-PIPELINE-V2-2026-06-16",
+  "run_at": "2026-06-16T11:35:16.877Z",
+  "runner": "builderos-reboot/scripts/execute-mission.mjs",
+  "procedure": [
+    "builder_pre_build_simulate",
+    "decision_gap_map",
+    "pre_build_validation_packet",
+    "write_file_exact_steps",
+    "acceptance_tests",
+    "point_b_gate"
+  ],
+  "pre_build": {
+    "status": "BUILDER_PRE_BUILD_PASS",
+    "blocking_gaps": 0,
+    "receipt": "receipts/BUILDER_PRE_BUILD_SIMULATION.json"
+  },
+  "steps_executed": 5,
+  "step_results": [
+    {
+      "step_id": "LCP2-S01",
+      "status": "DONE",
+      "target_file": "services/lifeos-capture-pipeline.js",
+      "sha256": "c19653fdb2d78370f43c5cadd7bd63c8c20e9e6fc635effe3acf1e44d987eef1"
+    },
+    {
+      "step_id": "LCP2-S02",
+      "status": "DONE",
+      "target_file": "routes/capture-pipeline-routes.js",
+      "sha256": "679c4dff83491dc1a0dda0d0ae66fa4540c0edfb637f3f4b7ae3f7a712b8f55d"
+    },
+    {
+      "step_id": "LCP2-S03",
+      "status": "DONE",
+      "target_file": "routes/lifeos-voice-rail-routes.js",
+      "sha256": "9e2baf945a0199cf12e54944bb5045d93d144e55aaa38a7e93baf2c16a0c53d7"
+    },
+    {
+      "step_id": "LCP2-S04",
+      "status": "DONE",
+      "target_file": "startup/register-runtime-routes.js",
+      "sha256": "344313e2c1d0d59b3c9ff6827629721d14aaec885d8a231c9b4ef163f5fe17f2"
+    },
+    {
+      "step_id": "LCP2-S05",
+      "status": "DONE",
+      "target_file": "scripts/run-capture-pipeline-v2-acceptance.mjs",
+      "sha256": "bc6e67da2b7257e632854f9db02b9c67eca774037320df617c702c191978e500"
+    }
+  ],
+  "acceptance_exit_code": 1,
+  "point_b": {
+    "handoff_pass": true,
+    "machine_path_complete": false,
+    "alpha_reached": false,
+    "status": "BLOCKED_MACHINE_PATH",
+    "proof_lap_only": false,
+    "awaiting_founder_alpha": false,
+    "violations": [
+      "machine:roadmap FUTURE P4,P5",
+      "machine:Builder not TECHNICAL_PASS"
+    ]
+  },
+  "verdict": "FAIL",
+  "machine_path_complete": false,
+  "alpha_reached": false,
+  "awaiting_founder_alpha": false
+}

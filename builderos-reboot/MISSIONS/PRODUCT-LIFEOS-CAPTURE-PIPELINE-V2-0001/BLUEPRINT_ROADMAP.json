@@ -1,0 +1,49 @@
+{
+  "schema": "blueprint_roadmap_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "roadmap_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001-ROADMAP",
+  "status": "ARC_HANDOFF",
+  "updated_at": "2026-06-16",
+  "intent_source": "FOUNDER_PACKET.md + existing BLUEPRINT.json",
+  "boundary_note": "Product mission on BP_PRIORITY queue — not meta proof lap",
+  "full_map_note": "A→Z for this product scope; P4/P5 BUILDER_READY when blueprint complete",
+  "phases": [
+    {
+      "phase_id": "P1",
+      "name": "Phase P1",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged P1",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase P1 artifacts exist"
+    },
+    {
+      "phase_id": "P2",
+      "name": "Phase P2",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged P2",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase P2 artifacts exist"
+    },
+    {
+      "phase_id": "P3",
+      "name": "Phase P3",
+      "status": "BUILDER_READY",
+      "intent": "Blueprint steps tagged P3",
+      "builder_outcome": "Builder executes frozen byte contracts",
+      "alpha_signal": "Phase P3 artifacts exist"
+    },
+    {
+      "phase_id": "P4",
+      "name": "Builder Execution",
+      "status": "FUTURE",
+      "intent": "System Builder executes ARC-emitted write_file_exact steps"
+    },
+    {
+      "phase_id": "P5",
+      "name": "Alpha Acceptance",
+      "status": "FUTURE",
+      "intent": "Acceptance command + founder usability verdict"
+    }
+  ],
+  "primary_metric": "founder_usability_pass"
+}

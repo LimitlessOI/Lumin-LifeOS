@@ -1,0 +1,19 @@
+{
+  "schema": "known_risks_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "risks": [
+    {
+      "id": "R1",
+      "risk": "Auto-execution bypass",
+      "severity": "high",
+      "owner": "SNT"
+    },
+    {
+      "id": "R2",
+      "risk": "Private data persistence",
+      "severity": "high",
+      "owner": "SNT"
+    }
+  ],
+  "updated_at": "2026-06-16T11:35:15.746Z"
+}

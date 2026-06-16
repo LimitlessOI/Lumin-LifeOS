@@ -1,0 +1,191 @@
+{
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "blueprint_id": "CAPTURE-PIPELINE-V2-2026-06-16",
+  "blueprint_status": "ready_for_builder",
+  "scope": "lifeos_capture_pipeline_v2",
+  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
+  "authority": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:capture-pipeline:v2-acceptance",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "non_goals": [
+    "No shell_command steps in Builder — acceptance at blueprint root only"
+  ],
+  "intent_sources": [
+    "FOUNDER_PACKET.md",
+    "INTENT_BASELINE.json",
+    "ASSET_REUSE_DECISION.json",
+    "BLUEPRINT_ROADMAP.json",
+    "BLUEPRINT.json (legacy host)"
+  ],
+  "compile_mode": "product_host",
+  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/BLUEPRINT.json",
+  "steps": [
+    {
+      "step_id": "LCP2-S01",
+      "phase_id": "P1",
+      "title": "Capture pipeline service",
+      "target_file": "services/lifeos-capture-pipeline.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S01/lifeos-capture-pipeline.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "c19653fdb2d78370f43c5cadd7bd63c8c20e9e6fc635effe3acf1e44d987eef1"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S01/lifeos-capture-pipeline.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LCP2-S01-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "LCP2-S02",
+      "phase_id": "P1",
+      "title": "Capture pipeline routes",
+      "target_file": "routes/capture-pipeline-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S02/capture-pipeline-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "679c4dff83491dc1a0dda0d0ae66fa4540c0edfb637f3f4b7ae3f7a712b8f55d"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S02/capture-pipeline-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LCP2-S01"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LCP2-S02-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "LCP2-S03",
+      "phase_id": "P2",
+      "title": "Voice Rail hook — inbox_staging on message",
+      "target_file": "routes/lifeos-voice-rail-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S03/lifeos-voice-rail-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "9e2baf945a0199cf12e54944bb5045d93d144e55aaa38a7e93baf2c16a0c53d7"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S03/lifeos-voice-rail-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LCP2-S01"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LCP2-S03-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "LCP2-S04",
+      "phase_id": "P2",
+      "title": "Mount capture pipeline routes",
+      "target_file": "startup/register-runtime-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S04/register-runtime-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "344313e2c1d0d59b3c9ff6827629721d14aaec885d8a231c9b4ef163f5fe17f2"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S04/register-runtime-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LCP2-S02"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LCP2-S04-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "startup/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "LCP2-S05",
+      "phase_id": "P3",
+      "title": "Capture pipeline v2 acceptance script",
+      "target_file": "scripts/run-capture-pipeline-v2-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S05/run-capture-pipeline-v2-acceptance.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "bc6e67da2b7257e632854f9db02b9c67eca774037320df617c702c191978e500"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/CONTENT/LCP2-S05/run-capture-pipeline-v2-acceptance.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LCP2-S04"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LCP2-S05-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    }
+  ],
+  "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
+  "authored_by": "ARC"
+}

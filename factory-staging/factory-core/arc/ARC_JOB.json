@@ -1,0 +1,77 @@
+{
+  "schema": "arc_job_v1",
+  "role": "ARC",
+  "replaces": "BPB",
+  "summary": "Translator not inventor. Consumes PRE_ARC_INPUT_PACKET; emits factory-compatible BLUEPRINT.json + receipts.",
+  "must_not": [
+    "invent product scope",
+    "resolve unclear intent silently",
+    "ask founder mechanical questions after handoff",
+    "emit prose-only blueprint steps",
+    "self-grade simulation without mechanical runner",
+    "require founder_usability_pass before machine path completes"
+  ],
+  "must_do": [
+    "consume PRE_ARC_INPUT_PACKET manifest",
+    "require ASSET_REUSE_DECISION before compile",
+    "require BLUEPRINT_ROADMAP with BUILDER_READY phases",
+    "emit exact_inputs on every write_file_exact step",
+    "emit ACCEPTANCE_TESTS.json synced from blueprint",
+    "run mechanical builder simulation before write",
+    "return BLOCKED_RETURN_TO_IDC when intent gaps remain",
+    "write ARC_RUN_RECEIPT.json on every run",
+    "honest handoff gate — never claim intent complete when coverage gaps exist"
+  ],
+  "inputs": {
+    "required": [
+      "FOUNDER_PACKET.md or FOUNDER_PACKET.json",
+      "INTENT_BASELINE.json",
+      "INTENT_COVERAGE_MAP.json",
+      "PRE_ARC_INPUT_PACKET.json",
+      "ASSET_REUSE_DECISION.json",
+      "BLUEPRINT_ROADMAP.json"
+    ],
+    "optional": [
+      "ARC_SCOPE_ENVELOPE.md",
+      "SNT_INTENT_ATTACK_RECEIPT",
+      "CHAIR_FORECAST_SIMULATION_RECEIPT",
+      "CFO_RESOURCE_SIMULATION_RECEIPT",
+      "WISDOM_REVIEW_RECEIPT"
+    ]
+  },
+  "outputs": {
+    "primary": "BLUEPRINT.json",
+    "receipts": [
+      "ARC_RUN_RECEIPT.json",
+      "receipts/HANDOFF_GATE_REPORT.json",
+      "receipts/BUILDER_SIMULATION_REPORT.json",
+      "receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
+      "receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
+      "PRE_BUILD_VALIDATION_PACKET.json",
+      "ACCEPTANCE_TESTS.json"
+    ],
+    "blocked": "receipts/BLOCKED_RETURN_TO_IDC.json"
+  },
+  "pipeline_order": [
+    "validate_arc_intake",
+    "compile_blueprint",
+    "sync_acceptance_tests",
+    "simulate_blueprint_steps",
+    "write_post_arc_receipts",
+    "write_blueprint_if_clear",
+    "builder_execute",
+    "machine_path_gate"
+  ],
+  "compile_modes": {
+    "mechanical": "Registered mission compiler snapshots CONTENT/ + exact contracts",
+    "product_host": "Legacy PRODUCT blueprint re-emitted as write_file_exact",
+    "council": "POST /api/v1/builderos/arc/translate when no mechanical compiler"
+  },
+  "pass_fail": {
+    "HANDOFF_PASS": "Point B — FP + intent artifacts complete. Adam job done until Alpha.",
+    "MACHINE_PATH_PASS": "B→C — ARC blueprint + Builder TECHNICAL_PASS + acceptance. Ready for Adam Alpha evaluation.",
+    "ALPHA_PASS": "Point C — founder_usability_pass true after Adam evaluates outcome.",
+    "MECHANICAL_PASS": "ARC simulation clear + cold walk handoff_to_builder",
+    "FAIL": "handoff gaps, simulation gaps, builder failure, or proof_lap claiming product path"
+  }
+}

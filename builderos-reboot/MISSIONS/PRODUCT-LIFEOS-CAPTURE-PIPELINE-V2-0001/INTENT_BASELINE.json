@@ -1,0 +1,34 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-06-16",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "When Adam sends a non-private message through Voice Rail, the same text is classified and staged in Action Inbox with `source: voice_rail`. Private mode and simulate-only never write to inbox. Adam sees one pipeline: speak → staged → approve.\n\n---",
+  "user": "Adam (founder)",
+  "pain": "Voice Rail and Action Inbox work independently. Messages spoken in Voice Rail do not appear in the staging inbox unless Adam manually re-captures them. The middle layer is disconnected.\n\n---",
+  "value": "When Adam sends a non-private message through Voice Rail, the same text is classified and staged in Action Inbox with `source: voice_rail`. Private mode and simulate-only never write to inbox. Adam sees one pipeline: speak → staged → approve.\n\n---",
+  "success_metrics": [
+    "**`npm run lifeos:capture-pipeline:v2-acceptance` exits 0 — machine Alpha; three consecutive foundation-pipeline runs without manual intervention.**\n\n---"
+  ],
+  "failure_metrics": [
+    "TECHNICAL_PASS without founder_usability_pass",
+    "Auto-execution without Adam approval"
+  ],
+  "constraints": [
+    "BP_PRIORITY queue authority",
+    "BuilderOS system path only — no agent hand-build"
+  ],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Partial blueprint labeled Alpha; bypass of staging/approval gates",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "BP_PRIORITY rank 4",
+  "point_model": {
+    "A": "Vision — Adam provides FP in development stage",
+    "B": "Chair locks handoff — corridor protected; Adam done until Alpha",
+    "C": "Alpha — Adam evaluates outcome only"
+  }
+}

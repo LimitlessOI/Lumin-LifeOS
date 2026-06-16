@@ -1,0 +1,33 @@
+{
+  "schema": "arc_run_receipt_v1",
+  "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+  "run_at": "2026-06-16T11:35:30.652Z",
+  "runner": "factory-core/arc/translate-mission.js",
+  "arc_job": "factory-staging/factory-core/arc/ARC_JOB.json",
+  "entry_gate": "PASS",
+  "intake_status": "ARC_INTAKE_PASS",
+  "compile_mode": "product_host",
+  "compile_status": "ARC_COMPILE_PASS",
+  "translate": {
+    "status": "MECHANICAL_PASS",
+    "compiler": "factory-core/arc/compilers/product-blueprint-host.js"
+  },
+  "simulation_summary": {
+    "total_gaps": 0,
+    "blocking_gaps": 0,
+    "clear_to_build": true
+  },
+  "cold_builder_walk": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  },
+  "mechanical_handoff_pass": true,
+  "handoff_pass": true,
+  "corridor_entered": true,
+  "proof_lap_only": false,
+  "system_produced": true,
+  "blueprint_written": true,
+  "acceptance_sync": "PASS"
+}

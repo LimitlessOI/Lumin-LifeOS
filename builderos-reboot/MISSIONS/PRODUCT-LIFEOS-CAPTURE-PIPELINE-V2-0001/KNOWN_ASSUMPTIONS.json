@@ -1,0 +1,21 @@
+{
+  "schema": "known_assumptions_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "assumptions": [
+    {
+      "id": "A1",
+      "assumption": "Adam is primary user at Alpha",
+      "confidence": "KNOW"
+    },
+    {
+      "id": "A2",
+      "assumption": "Railway production spine is live",
+      "confidence": "THINK"
+    },
+    {
+      "id": "A3",
+      "assumption": "When Adam sends a non-private message through Voice Rail, the same text is classified and staged in Action Inbox with `source: voice_rail`. Private mode and simulate-only never write to inbox. Adam sees one pipeline: speak → staged → approve.\n\n---",
+      "confidence": "KNOW"
+    }
+  ]
+}

@@ -1,103 +1,211 @@
 {
   "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
   "blueprint_id": "ACTION-INBOX-V1-2026-06-12",
+  "blueprint_status": "complete",
   "scope": "action_inbox_v1_middle_layer",
+  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/FOUNDER_PACKET.md",
   "acceptance_command": "npm run lifeos:action-inbox:v1-acceptance",
   "allowed_action_types": [
-    "builder_build",
-    "shell_command"
+    "write_file_exact"
   ],
+  "non_goals": [
+    "No shell_command steps in Builder — acceptance at blueprint root only"
+  ],
+  "intent_sources": [
+    "FOUNDER_PACKET.md",
+    "INTENT_BASELINE.json",
+    "ASSET_REUSE_DECISION.json",
+    "BLUEPRINT_ROADMAP.json",
+    "BLUEPRINT.json (legacy host)"
+  ],
+  "compile_mode": "product_host",
+  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/BLUEPRINT.json",
   "steps": [
     {
       "step_id": "AIV1-S01",
       "phase_id": "P0",
       "title": "Action Inbox schema migration",
       "target_file": "db/migrations/20260612_action_inbox_v1.sql",
-      "action_type": "builder_build",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S01/20260612_action_inbox_v1.sql"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "29492a0c751dd0a6baccc286072a103dc76e508b59de3911bcd5977e3bbd52ad"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S01/20260612_action_inbox_v1.sql"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-AIV1-S01-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "db/migrations/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-12T03:44:01.277Z",
-      "build_method": "GAP-FILL",
-      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
+      "completed_at": "2026-06-16T11:19:55.949Z",
+      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
     },
     {
       "step_id": "AIV1-S02",
       "phase_id": "P1",
       "title": "Action Inbox service — capture, classify, stage, route, receipts",
       "target_file": "services/action-inbox.js",
-      "action_type": "builder_build",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S02/action-inbox.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "74241c048edf2b830234e5035f96f0888bf68b77d8d526bca1b1d92059e035c4"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S02/action-inbox.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [
         "AIV1-S01"
       ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-AIV1-S02-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-12T03:44:01.277Z",
-      "build_method": "GAP-FILL",
-      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
+      "completed_at": "2026-06-16T11:19:55.949Z",
+      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
     },
     {
       "step_id": "AIV1-S03",
       "phase_id": "P2",
       "title": "Action Inbox API routes",
       "target_file": "routes/action-inbox-routes.js",
-      "action_type": "builder_build",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S03/action-inbox-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "4d928385077c4b7bec455b2ee43d54db27b99e7132b8ee1d27f533d1072d1815"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S03/action-inbox-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [
         "AIV1-S02"
       ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-AIV1-S03-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-12T03:44:01.277Z",
-      "build_method": "GAP-FILL",
-      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
+      "completed_at": "2026-06-16T11:19:55.949Z",
+      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
     },
     {
       "step_id": "AIV1-S04",
       "phase_id": "P3",
       "title": "Startup wiring in register-runtime-routes.js",
       "target_file": "startup/register-runtime-routes.js",
-      "action_type": "builder_build",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S04/register-runtime-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "32398da8ef4b8effadb928b2676216dea4091776a0b1d289c0bbb89ac6f61c06"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S04/register-runtime-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [
         "AIV1-S03"
       ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-AIV1-S04-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "startup/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-12T03:44:01.277Z",
-      "build_method": "GAP-FILL",
-      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
+      "completed_at": "2026-06-16T11:19:55.949Z",
+      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
     },
     {
       "step_id": "AIV1-S05",
       "phase_id": "P4",
       "title": "Acceptance test script",
       "target_file": "scripts/run-action-inbox-v1-acceptance.mjs",
-      "action_type": "builder_build",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S05/run-action-inbox-v1-acceptance.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "7b4c3085df3d329ce5bf56ed50c8771c57da73c707a096400055e7bf6006e3e6"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/CONTENT/AIV1-S05/run-action-inbox-v1-acceptance.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
       "dependencies": [
         "AIV1-S04"
       ],
-      "status": "complete",
-      "completed_at": "2026-06-12T03:44:01.277Z",
-      "build_method": "GAP-FILL",
-      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089"
-    },
-    {
-      "step_id": "AIV1-S06",
-      "phase_id": "P5",
-      "title": "Run acceptance until PASS",
-      "action_type": "shell_command",
-      "command": "npm run lifeos:action-inbox:v1-acceptance",
-      "dependencies": [
-        "AIV1-S05"
+      "non_goals": [
+        "No agent improvisation — byte contract only"
       ],
+      "acceptance_test_ids": [
+        "AT-AIV1-S05-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-12T03:44:01.277Z",
-      "build_method": "GAP-FILL",
-      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089",
-      "receipt_verdict": "PASS"
+      "completed_at": "2026-06-16T11:19:55.949Z",
+      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f"
     }
   ],
-  "blueprint_status": "complete",
-  "build_method": "GAP-FILL",
-  "build_note": "Builder-first attempted; Unauthorized on POST /api/v1/lifeos/builder/build — GAP-FILL per protocol",
-  "completed_at": "2026-06-12T03:44:01.277Z",
-  "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089",
+  "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
+  "authored_by": "ARC",
+  "completed_at": "2026-06-16T11:19:55.949Z",
+  "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f",
   "receipt_path": "products/receipts/ACTION_INBOX_V1_ACCEPTANCE.json",
-  "receipt_verdict": "PASS"
+  "receipt_verdict": "PASS",
+  "build_method": "GAP-FILL"
 }

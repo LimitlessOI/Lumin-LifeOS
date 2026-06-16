@@ -1,0 +1,55 @@
+{
+  "schema": "snt_translation_attack_v2",
+  "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+  "seat": "SNT",
+  "review": "translation_attack",
+  "simulated_at": "2026-06-16T11:35:30.652Z",
+  "simulated_by": "factory-core/arc/foundation/snt-translation-attack.js",
+  "core_question": "If this claim is wrong, how would we know?",
+  "attacks_run": 5,
+  "attacks": [
+    {
+      "claim": "ARC preserved intent sources",
+      "pass": true,
+      "failure_scenario": "ARC invented scope",
+      "severity": "blocking",
+      "evidence_if_wrong": null,
+      "recommended_action": "none"
+    },
+    {
+      "claim": "Blueprint has acceptance command",
+      "pass": true,
+      "failure_scenario": "No measurable Alpha bar",
+      "severity": "blocking",
+      "evidence_if_wrong": null,
+      "recommended_action": "none"
+    },
+    {
+      "claim": "All steps are write_file_exact",
+      "pass": true,
+      "failure_scenario": "Builder forced to decide",
+      "severity": "blocking",
+      "evidence_if_wrong": null,
+      "recommended_action": "none"
+    },
+    {
+      "claim": "Auto-execution rule preserved",
+      "pass": true,
+      "failure_scenario": "Intent drift on staging rule",
+      "severity": "blocking",
+      "evidence_if_wrong": null,
+      "recommended_action": "none"
+    },
+    {
+      "claim": "Simulation clear to build",
+      "pass": true,
+      "failure_scenario": "Blocking decision gaps remain",
+      "severity": "blocking",
+      "evidence_if_wrong": null,
+      "recommended_action": "none"
+    }
+  ],
+  "blocking_count": 0,
+  "verdict": "builder_clearance_yes",
+  "pass": true
+}

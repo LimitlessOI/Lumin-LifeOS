@@ -1,0 +1,14 @@
+{
+  "schema": "builder_simulation_report_v1",
+  "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+  "blueprint_id": "COMMITMENT-ROUTE-V2-2026-06-16",
+  "simulated_by": "factory-core/arc/simulate-blueprint-steps.js",
+  "simulated_at": "2026-06-16T11:35:30.829Z",
+  "steps": [],
+  "all_gaps": [],
+  "summary": {
+    "total_gaps": 0,
+    "blocking_gaps": 0,
+    "clear_to_build": true
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "_authority": {
+    "domain": "Machine",
+    "role": "LifeOS versioned machine-path queue — slices for A→B testing",
+    "operator_note": "Adam 2026-06-16 — overnight autonomous build; machine Alpha = foundation pipeline + acceptance PASS"
+  },
+  "product": "LifeOS",
+  "updated_at": "2026-06-16",
+  "machine_alpha_definition": "npm run builderos:foundation:pipeline -- MISSION --force exits 0 + acceptance command exits 0",
+  "versions": [
+    {
+      "version": "1.1",
+      "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+      "name": "Voice Rail v1",
+      "layer": "comms",
+      "status": "TECHNICAL_PASS",
+      "acceptance_command": "npm run lifeos:voice-rail:v1-acceptance"
+    },
+    {
+      "version": "1.2",
+      "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+      "name": "Conversation Commitments v1",
+      "layer": "engine",
+      "status": "TECHNICAL_PASS",
+      "acceptance_command": "npm run lifeos:conversation-commitments:v1-acceptance"
+    },
+    {
+      "version": "1.3",
+      "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
+      "name": "Action Inbox v1",
+      "layer": "staging",
+      "status": "TECHNICAL_PASS",
+      "acceptance_command": "npm run lifeos:action-inbox:v1-acceptance"
+    },
+    {
+      "version": "2.0",
+      "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+      "name": "Capture Pipeline v2",
+      "layer": "integration",
+      "status": "IN_PROGRESS",
+      "depends_on": ["1.1", "1.3"],
+      "acceptance_command": "npm run lifeos:capture-pipeline:v2-acceptance"
+    },
+    {
+      "version": "2.1",
+      "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+      "name": "Commitment Route v2",
+      "layer": "integration",
+      "status": "IN_PROGRESS",
+      "depends_on": ["1.2", "2.0"],
+      "acceptance_command": "npm run lifeos:commitment-route:v2-acceptance"
+    },
+    {
+      "version": "3.0",
+      "mission_id": "PRODUCT-LIFEOS-DAILY-MIRROR-V3-0001",
+      "name": "Daily Mirror API v3",
+      "layer": "mirror",
+      "status": "PLANNED",
+      "depends_on": ["2.0"],
+      "acceptance_command": "npm run lifeos:daily-mirror:v3-acceptance"
+    },
+    {
+      "version": "3.1",
+      "mission_id": "PRODUCT-LIFEOS-INTEGRITY-JOY-V3-0001",
+      "name": "Integrity + Joy Loop v3",
+      "layer": "mirror",
+      "status": "PLANNED",
+      "depends_on": ["3.0"],
+      "acceptance_command": "npm run lifeos:integrity-joy:v3-acceptance"
+    },
+    {
+      "version": "4.0",
+      "mission_id": "PRODUCT-LIFEOS-HUB-OVERLAY-V4-0001",
+      "name": "LifeOS Hub Overlay v4",
+      "layer": "surface",
+      "status": "PLANNED",
+      "depends_on": ["1.1", "1.3", "3.0"],
+      "acceptance_command": "npm run lifeos:hub-overlay:v4-acceptance"
+    }
+  ]
+}

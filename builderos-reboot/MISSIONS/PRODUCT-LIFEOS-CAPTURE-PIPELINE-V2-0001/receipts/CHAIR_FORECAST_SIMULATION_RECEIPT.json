@@ -1,0 +1,79 @@
+{
+  "schema": "chair_forecast_simulation_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "seat": "CHAIR",
+  "simulated_at": "2026-06-16T11:35:15.745Z",
+  "simulated_by": "factory-core/arc/department-simulations.js",
+  "scenarios_run": 4,
+  "predictions": [
+    {
+      "horizon": "6_months",
+      "confidence": "THINK",
+      "note": "Near-term staging product — evidence from FP scope",
+      "prediction": "Intent remains valid at 6_months for PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+      "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+      "evidence_used": [
+        "FOUNDER_PACKET.md",
+        "BP_PRIORITY.json"
+      ],
+      "evidence_missing": [],
+      "expected_timeline": "6_months",
+      "expected_impact": "intent_fidelity",
+      "recommended_action": "proceed_if_intent_locked"
+    },
+    {
+      "horizon": "1_year",
+      "confidence": "THINK",
+      "note": "Middle layer between comms and execution remains load-bearing",
+      "prediction": "Intent remains valid at 1_year for PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+      "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+      "evidence_used": [
+        "FOUNDER_PACKET.md",
+        "BP_PRIORITY.json"
+      ],
+      "evidence_missing": [],
+      "expected_timeline": "1_year",
+      "expected_impact": "intent_fidelity",
+      "recommended_action": "proceed_if_intent_locked"
+    },
+    {
+      "horizon": "2_years",
+      "confidence": "GUESS",
+      "note": "Platform evolution — scenario only",
+      "prediction": "Intent remains valid at 2_years for PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+      "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+      "evidence_used": [
+        "FOUNDER_PACKET.md",
+        "BP_PRIORITY.json"
+      ],
+      "evidence_missing": [
+        "long_horizon_market_data"
+      ],
+      "expected_timeline": "2_years",
+      "expected_impact": "intent_fidelity",
+      "recommended_action": "proceed_if_intent_locked"
+    },
+    {
+      "horizon": "5_years",
+      "confidence": "GUESS",
+      "note": "Long-range — not blocking handoff",
+      "prediction": "Intent remains valid at 5_years for PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+      "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+      "evidence_used": [
+        "FOUNDER_PACKET.md",
+        "BP_PRIORITY.json"
+      ],
+      "evidence_missing": [
+        "long_horizon_market_data"
+      ],
+      "expected_timeline": "5_years",
+      "expected_impact": "intent_fidelity",
+      "recommended_action": "proceed_if_intent_locked"
+    }
+  ],
+  "priority_fit": "BP_PRIORITY rank 4",
+  "blocking_risks": [],
+  "verdict": "forecast_acceptable",
+  "pass": true,
+  "route_on_fail": "CHAIR"
+}

@@ -202,6 +202,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-06-16 | **`startup/register-runtime-routes.js`** — mount capture-pipeline at `/api/v1/lifeos/capture-pipeline` and commitment-route at `/api/v1/lifeos/commitment-route`. | LifeOS v2.0–v2.1 integration slices overnight build. | AM19 wiring, AM21 | pending deploy |
 | 2026-05-24 | **`startup/register-runtime-routes.js`** — mount `createLifeOSSystemProofRoutes` at `/api/v1/lifeos` (`/system-proof-event`, `/provider-tool-proof`). | Provider API tool-action proof wiring (AM21 v2.35). | AM19 wiring | pending deploy |
 | 2026-06-13 | **`startup/register-runtime-routes.js`** — mount `createLifeOSDirectActionRoutes` at `/api/v1/lifeos/direct-action`. | LifeOS direct-action v1 must bypass Voice Rail chat routing and execute founder system actions on a dedicated endpoint. | AM19 wiring, AM21 feature | pending deploy | `npm run lifeos:direct-action:v1-acceptance` |
 | 2026-05-24 | **`startup/register-runtime-routes.js`** — pass `requireKey` into `createLifeOSAuthRoutes` for operator invite/provision endpoints. | Sherry account provisioning via command key; member login stays JWT. | AM19 wiring | pending deploy |

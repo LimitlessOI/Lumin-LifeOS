@@ -1,7 +1,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-06-16 — Builder frozen-blueprint spine writes + full intake-loop execute PASS
 
 ---
 
@@ -159,6 +159,10 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-16 | **Foundation pipeline** — `factory-staging/factory-core/arc/foundation/*` (coverage-map, idc-exit-gate, pre-arc-enrichment, studio-simulation, snt-translation-attack, result-scoreboard), **`run-foundation.js`**, **`scripts/run-foundation-pipeline.mjs`**, **`run-system-path.mjs`** delegates here. Full development stage: dept sims → consensus → pre-arc packet → IDC exit → Chair handoff lock. Corridor: ARC translate + studio + SNT translation attack. Builder + RESULT_SCOREBOARD + RELEASE_PASS gate. | Adam: fix all — full founder-doc machine path before sleep | ✅ Action Inbox foundation pipeline exit 0 `MACHINE_PATH_PASS_AWAITING_ALPHA`; 6/6 point-b-gate tests | Alpha: `npm run builderos:alpha:confirm -- PRODUCT-ACTION-INBOX-V1-0001 --confirm` |
+| 2026-06-16 | **`point-b-gate.js` v2**, **`run-system-path.mjs`**, **`bootstrap-product-mission.js`**, **`run-alpha-confirm.mjs`**, **`execute-mission.mjs`**, **`translate-mission.js`**, **`ARC_JOB.json`** — Split gates: **B handoff** (FP complete, Adam done) → **B→C machine path** (ARC+Builder+TECHNICAL_PASS) → **C Alpha** (founder confirms only). Removed founder_usability as machine blocker. Honest intent coverage at bootstrap. Full system path runs bootstrap→ARC→Builder automatically. | Adam: after FP his job done till Alpha; lying about intent completeness = system fail | ✅ Action Inbox `MACHINE_PATH_PASS_AWAITING_ALPHA` exit 0 | Alpha: `npm run builderos:alpha:confirm -- MISSION --confirm` |
+| 2026-06-16 | **`builderos-reboot/scripts/blueprint-write-policy.mjs`**, **`mission-lib.mjs`**, **`execute-mission.mjs`**, **`factory-staging/factory-core/arc/builder-cold-walk.js`**, **`simulate-blueprint-steps.js`**, **`tests/builder-blueprint-spine-write.test.js`** — frozen blueprint steps (`write_file_exact` + sha256 + sandbox) may write monorepo spine (`services/`, `package.json`); cold walk + simulator aligned; execute uses `acceptance_command` from blueprint. Verified: `execute-mission.mjs BUILDEROS-INTAKE-LOOP-V1-0001` 14/14 DONE + intake acceptance PASS. | Adam: fix Builder — legacy quarantine blocked IL-S08+; get handoff working | ✅ 3/3 spine tests + 14-step execute | next: commit ARC stack + BP_PRIORITY register |
+| 2026-06-16 | **`services/adf-prediction-ledger.js`**, **`routes/adf-routes.js`**, **`scripts/adf-ledger.mjs`**, **`tests/adf-prediction-ledger.test.js`** — file-based predict → actual → score → lesson loop at `data/adf-predictions/` + `adf-lessons.json`; API `/api/v1/adf/*`; council `loadAdamProfile` injects scored lessons; refreshed `ADAM_SEED_PROFILE`. npm: `adf:status`, `adf:list`, `adf:lessons`, `adf:corpus`. Scored pred-001 (1.0) pred-002 (0.0) from Adam directive. | Adam: implement ADF, guess + accountable, every lesson adjusts | ✅ 3/3 unit tests | corpus ingest via `npm run adf:corpus` |
 | 2026-06-12 | **`services/builder-blueprint-gate.js`** + **`routes/lifeos-council-builder-routes.js`** — `/build` fail-closed blueprint gate for `routes/`, `services/`, `public/overlay/` (requires `blueprint_path` / `blueprint_id` / `mission_id` with step covering target). **`scripts/system-railway-redeploy.mjs`** — 410 legacy deploy falls through to `build-from-latest`. **`services/builderos-governed-loop-executor.js`** + **`voice-rail-command-executor.js`** — surface `commit_sha` in command exec receipts. **`tests/builder-blueprint-gate.test.js`**. Stash archive: 64 cleared → `builderos-reboot/_hist/GIT_STASH_ARCHIVE/`. | Adam: next 10 system items — enforce §2.18, clean stashes, fix deploy + Voice Rail receipts | ✅ 4/4 blueprint gate tests | pending prod proofs |
 | 2026-05-24 | **`routes/railway-managed-env-routes.js`:** `serviceInstanceDeploy` now uses `latestCommit:true` or explicit `commitSha`; `POST .../deployments/:id/redeploy` promotes a prior build. Fixes stale rollback when GH Actions token dead. | Adam stuck on v2.3.1; build-from-latest redeployed old SHA | AM04 | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
@@ -181,7 +185,7 @@ One model may fill more than one role only when no safer alternative exists, and
 **Status:** BUILD_READY (builder supervisor + council review — core loop complete)
 **Adaptability Score:** 88/100
 **Council Persona:** musk (first principles — what can we delete? is there a 10x simpler version?)
-**Last Updated:** 2026-04-01
+**Last Updated:** 2026-06-16
 
 ### Gate 1 — Implementation Detail
 - [x] Builder supervisor spawns Claude Code headlessly with --dangerously-skip-permissions

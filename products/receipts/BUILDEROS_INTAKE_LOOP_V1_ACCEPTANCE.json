@@ -1,0 +1,41 @@
+{
+  "schema": "builderos_intake_loop_v1_acceptance_v1",
+  "mission_id": "BUILDEROS-INTAKE-LOOP-V1-0001",
+  "at": "2026-06-16T09:39:33.123Z",
+  "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f",
+  "verdict": "PROOF_PASS",
+  "checks": [
+    {
+      "id": "IL-ACC-01_schemas",
+      "pass": true
+    },
+    {
+      "id": "IL-ACC-02_tier1_validate",
+      "pass": true
+    },
+    {
+      "id": "IL-ACC-03_pre_arc_assemble",
+      "pass": true
+    },
+    {
+      "id": "IL-ACC-04_pre_build_simulate",
+      "pass": true
+    },
+    {
+      "id": "IL-ACC-07_builder_simulation_receipts",
+      "pass": true
+    },
+    {
+      "id": "IL-ACC-05_blueprint_ready",
+      "pass": true
+    },
+    {
+      "id": "IL-ACC-06_founder_defect_service",
+      "pass": true
+    }
+  ],
+  "bp_sync": {
+    "updated": ["builderos-reboot/BP_PRIORITY.json"],
+    "at": "2026-06-16T11:40:00.000Z"
+  }
+}

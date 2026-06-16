@@ -1,0 +1,21 @@
+{
+  "schema": "known_assumptions_v1",
+  "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+  "assumptions": [
+    {
+      "id": "A1",
+      "assumption": "Adam is primary user at Alpha",
+      "confidence": "KNOW"
+    },
+    {
+      "id": "A2",
+      "assumption": "Railway production spine is live",
+      "confidence": "THINK"
+    },
+    {
+      "id": "A3",
+      "assumption": "When an approved Action Inbox item with classification `commitment` is routed via commitment-route, a `lifeos_commitments` row is created from the inbox text, the inbox item is marked done, and a receipt proves the link.\n\n---",
+      "confidence": "KNOW"
+    }
+  ]
+}

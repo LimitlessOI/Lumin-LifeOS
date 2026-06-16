@@ -1,0 +1,87 @@
+{
+  "schema": "builder_pre_build_simulation_v1",
+  "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+  "blueprint_id": "COMMITMENT-ROUTE-V2-2026-06-16",
+  "simulated_at": "2026-06-16T11:35:30.831Z",
+  "simulated_by": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
+  "procedure": [
+    "simulate_blueprint_steps",
+    "cold_builder_walk",
+    "sha256_content_contracts",
+    "blueprint_freeze_check",
+    "assemble_pre_build_packet"
+  ],
+  "decision_table": [
+    {
+      "step_id": "LCR2-S01",
+      "title": "Commitment route service",
+      "target_file": "services/lifeos-commitment-route.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S01/lifeos-commitment-route.js → services/lifeos-commitment-route.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "LCR2-S02",
+      "title": "Commitment route routes",
+      "target_file": "routes/commitment-route-routes.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S02/commitment-route-routes.js → routes/commitment-route-routes.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "LCR2-S03",
+      "title": "Mount commitment route routes",
+      "target_file": "startup/register-runtime-routes.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S03/register-runtime-routes.js → startup/register-runtime-routes.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "LCR2-S04",
+      "title": "Commitment route acceptance script",
+      "target_file": "scripts/run-commitment-route-v2-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S04/run-commitment-route-v2-acceptance.mjs → scripts/run-commitment-route-v2-acceptance.mjs",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    }
+  ],
+  "summary": {
+    "steps_total": 4,
+    "steps_blocked": 0,
+    "steps_clear": 4,
+    "blocking_gaps": 0,
+    "clear_to_build": true,
+    "freeze_pass": true
+  },
+  "simulation_summary": {
+    "total_gaps": 0,
+    "blocking_gaps": 0,
+    "clear_to_build": true
+  },
+  "cold_walk_summary": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  },
+  "freeze": {
+    "blueprint_status": "FROZEN",
+    "pass": true,
+    "blocking": [],
+    "checks": [
+      "deterministic_step_set",
+      "authority_lock",
+      "exact_output_contract_present",
+      "non_goals_present"
+    ],
+    "blueprintId": "COMMITMENT-ROUTE-V2-2026-06-16"
+  }
+}

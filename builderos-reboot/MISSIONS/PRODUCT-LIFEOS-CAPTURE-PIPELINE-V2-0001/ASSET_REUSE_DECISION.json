@@ -1,0 +1,45 @@
+{
+  "schema": "asset_reuse_decision_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "arc_decision_status": "CONFIRMED",
+  "surveyed_at": "2026-06-16",
+  "wisdom_lessons": [
+    "Reuse production spine files already built — ARC hosts byte contracts"
+  ],
+  "cfo_recommendation": "EXTEND existing repo assets; no greenfield parallel stack",
+  "assets_reviewed": [
+    "services/lifeos-capture-pipeline.js",
+    "routes/capture-pipeline-routes.js",
+    "routes/lifeos-voice-rail-routes.js",
+    "startup/register-runtime-routes.js",
+    "scripts/run-capture-pipeline-v2-acceptance.mjs"
+  ],
+  "decisions": [
+    {
+      "asset": "services/lifeos-capture-pipeline.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "routes/capture-pipeline-routes.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "routes/lifeos-voice-rail-routes.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "startup/register-runtime-routes.js",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    },
+    {
+      "asset": "scripts/run-capture-pipeline-v2-acceptance.mjs",
+      "decision": "REUSE",
+      "reason": "Existing implementation snapshotted into CONTENT for system Builder path"
+    }
+  ],
+  "arc_decision": "REUSE repo truth; mechanical ARC host compiler emits write_file_exact blueprint"
+}

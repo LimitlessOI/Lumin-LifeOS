@@ -1,0 +1,30 @@
+[
+  {
+    "test_id": "AT-LCR2-S01-1",
+    "step_id": "LCR2-S01",
+    "type": "file_sha256_matches",
+    "target": "services/lifeos-commitment-route.js",
+    "expected_sha256": "e32b34f8c6000c2ef859482c9eea1d267bf752c3a365df0f16949c6558817757"
+  },
+  {
+    "test_id": "AT-LCR2-S02-1",
+    "step_id": "LCR2-S02",
+    "type": "file_sha256_matches",
+    "target": "routes/commitment-route-routes.js",
+    "expected_sha256": "3104d5ff027928e7a6015a230840f151dc078589dc553d9b3f8a22231b5328c5"
+  },
+  {
+    "test_id": "AT-LCR2-S03-1",
+    "step_id": "LCR2-S03",
+    "type": "file_sha256_matches",
+    "target": "startup/register-runtime-routes.js",
+    "expected_sha256": "344313e2c1d0d59b3c9ff6827629721d14aaec885d8a231c9b4ef163f5fe17f2"
+  },
+  {
+    "test_id": "AT-LCR2-S04-1",
+    "step_id": "LCR2-S04",
+    "type": "file_sha256_matches",
+    "target": "scripts/run-commitment-route-v2-acceptance.mjs",
+    "expected_sha256": "5f3a43fe6839adedbf9e36ddb37a3584708f6d4a2794767e27ec1c76f4a8c2cf"
+  }
+]

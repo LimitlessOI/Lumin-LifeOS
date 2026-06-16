@@ -860,8 +860,8 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-13",
-  "last_receipt": "2026-06-13 provider-proof-detection-broadened",
-  "last_change_summary": "detectProviderProofIntent broadened: standalone 'provider proof' now always hard-routes before council",
-  "ssot_receipt_tail": "provider proof phrase alone routes before ChC; AND gate removed; 18/18 test cases pass."
+  "last_updated": "2026-06-16",
+  "last_receipt": "2026-06-16 lifeos-v2-capture-pipeline-commitment-route",
+  "last_change_summary": "LifeOS v2.0 capture pipeline + v2.1 commitment route integration slices",
+  "ssot_receipt_tail": "Voice Rail auto-stages to Action Inbox; approved inbox commitments route to lifeos_commitments."
 }

@@ -1,0 +1,158 @@
+{
+  "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+  "blueprint_id": "COMMITMENT-ROUTE-V2-2026-06-16",
+  "blueprint_status": "ready_for_builder",
+  "scope": "lifeos_commitment_route_v2",
+  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
+  "authority": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/FOUNDER_PACKET.md",
+  "acceptance_command": "npm run lifeos:commitment-route:v2-acceptance",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "non_goals": [
+    "No shell_command steps in Builder — acceptance at blueprint root only"
+  ],
+  "intent_sources": [
+    "FOUNDER_PACKET.md",
+    "INTENT_BASELINE.json",
+    "ASSET_REUSE_DECISION.json",
+    "BLUEPRINT_ROADMAP.json",
+    "BLUEPRINT.json (legacy host)"
+  ],
+  "compile_mode": "product_host",
+  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/BLUEPRINT.json",
+  "steps": [
+    {
+      "step_id": "LCR2-S01",
+      "phase_id": "P1",
+      "title": "Commitment route service",
+      "target_file": "services/lifeos-commitment-route.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S01/lifeos-commitment-route.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "e32b34f8c6000c2ef859482c9eea1d267bf752c3a365df0f16949c6558817757"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S01/lifeos-commitment-route.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LCR2-S01-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "services/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "LCR2-S02",
+      "phase_id": "P1",
+      "title": "Commitment route routes",
+      "target_file": "routes/commitment-route-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S02/commitment-route-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "3104d5ff027928e7a6015a230840f151dc078589dc553d9b3f8a22231b5328c5"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S02/commitment-route-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LCR2-S01"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LCR2-S02-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "routes/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "LCR2-S03",
+      "phase_id": "P2",
+      "title": "Mount commitment route routes",
+      "target_file": "startup/register-runtime-routes.js",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S03/register-runtime-routes.js"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "344313e2c1d0d59b3c9ff6827629721d14aaec885d8a231c9b4ef163f5fe17f2"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S03/register-runtime-routes.js"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LCR2-S02"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LCR2-S03-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "startup/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    },
+    {
+      "step_id": "LCR2-S04",
+      "phase_id": "P3",
+      "title": "Commitment route acceptance script",
+      "target_file": "scripts/run-commitment-route-v2-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S04/run-commitment-route-v2-acceptance.mjs"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "5f3a43fe6839adedbf9e36ddb37a3584708f6d4a2794767e27ec1c76f4a8c2cf"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/CONTENT/LCR2-S04/run-commitment-route-v2-acceptance.mjs"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LCR2-S03"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LCR2-S04-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "scripts/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC"
+    }
+  ],
+  "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
+  "authored_by": "ARC"
+}

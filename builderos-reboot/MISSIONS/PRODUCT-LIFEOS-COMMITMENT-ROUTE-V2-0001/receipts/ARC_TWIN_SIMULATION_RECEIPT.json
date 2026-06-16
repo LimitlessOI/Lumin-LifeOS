@@ -1,0 +1,15 @@
+{
+  "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+  "simulated_at": "2026-06-16T11:35:30.652Z",
+  "simulated_by": "factory-core/arc/translate-mission.js",
+  "compile_mode": "product_host",
+  "intent_sources_cited": [
+    "FOUNDER_PACKET.md",
+    "INTENT_BASELINE.json",
+    "ASSET_REUSE_DECISION.json",
+    "BLUEPRINT_ROADMAP.json",
+    "BLUEPRINT.json (legacy host)"
+  ],
+  "blocking_gaps": 0,
+  "verdict": "PASS"
+}

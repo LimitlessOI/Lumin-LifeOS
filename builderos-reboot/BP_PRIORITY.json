@@ -8,8 +8,9 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-06-12",
+  "updated_at": "2026-06-16",
   "operator_lock": "Adam 2026-06-11 — BPs in priority order ARE the queue. No separate mission queue for product work.",
+  "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "items": [
     {
       "rank": 1,
@@ -17,11 +18,12 @@
       "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md",
       "acceptance_spec": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/ACCEPTANCE_SPEC.md",
       "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/BLUEPRINT.json",
-      "blueprint_status": "complete",
+      "blueprint_status": "in_progress",
       "acceptance_command": "npm run lifeos:voice-rail:v1-acceptance",
+      "extension_proof_command": "npm run lifeos:founder-direct-provider:proof",
       "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
-      "verdict": "TECHNICAL_PASS",
-      "note": "Production acceptance PASS. Founder 48h usability bar is human-only.",
+      "verdict": "EXTENSION_PENDING",
+      "note": "VRV1-S01–S06 TECHNICAL_PASS retained (VOICE_RAIL_V1_ACCEPTANCE.json). Extension VRV1-S07: founder direct provider live regression proof pending.",
       "receipt_verdict": "PASS",
       "technical_pass_at": "2026-06-11T19:44:25.907Z",
       "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
@@ -64,12 +66,40 @@
       "verdict_note": "Code complete + node --check PASS. Acceptance pending Railway deploy. Re-run npm run lifeos:action-inbox:v1-acceptance after deploy.",
       "build_method": "GAP-FILL",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-12T03:44:01.277Z",
-      "git_sha": "a331e5434090a2a0ab59cd33c72540eaa694d089",
+      "technical_pass_at": "2026-06-16T11:19:55.949Z",
+      "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f",
       "production_base": "https://robust-magic-production.up.railway.app",
       "note": "Action Inbox v1 acceptance. BP build request boundary enforced.",
       "founder_usability_pass": false,
       "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001/OBJECTIVE_VERDICT.json"
+    },
+    {
+      "rank": 4,
+      "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/BLUEPRINT.json",
+      "blueprint_status": "complete",
+      "acceptance_command": "npm run lifeos:capture-pipeline:v2-acceptance",
+      "receipt_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
+      "verdict": "IN_PROGRESS",
+      "note": "LifeOS v2.0 — Voice Rail auto-stages to Action Inbox. Overnight machine build 2026-06-16.",
+      "build_method": "system-build",
+      "founder_usability_pass": false,
+      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/OBJECTIVE_VERDICT.json"
+    },
+    {
+      "rank": 5,
+      "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/BLUEPRINT.json",
+      "blueprint_status": "complete",
+      "acceptance_command": "npm run lifeos:commitment-route:v2-acceptance",
+      "receipt_path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
+      "verdict": "IN_PROGRESS",
+      "note": "LifeOS v2.1 — inbox commitment → commitment tracker",
+      "build_method": "system-build",
+      "founder_usability_pass": false,
+      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/OBJECTIVE_VERDICT.json"
     }
   ]
 }

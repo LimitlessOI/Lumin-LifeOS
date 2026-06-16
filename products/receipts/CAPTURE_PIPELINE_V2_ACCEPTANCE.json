@@ -1,0 +1,30 @@
+{
+  "schema": "capture_pipeline_v2_acceptance_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "started_at": "2026-06-16T11:35:16.151Z",
+  "production_base": "https://robust-magic-production.up.railway.app",
+  "tests_passed": [
+    "LCP2-T01_blueprint",
+    "LCP2-T03_private_skips",
+    "LCP2-T04_voice_source",
+    "LCP2-T02"
+  ],
+  "tests_failed": [
+    "LCP2-T01",
+    "LCP2-T02_simulate_skips",
+    "LCP2-T05_stage",
+    "LCP2-T07_stats"
+  ],
+  "founder_usability_pass": false,
+  "fail_LCP2-T01": {
+    "http": 404
+  },
+  "fail_LCP2-T02_simulate_skips": {},
+  "fail_LCP2-T05_stage": "",
+  "fail_LCP2-T07_stats": {
+    "raw": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/v1/lifeos/capture-pipeline/stats</pre>\n</body>\n</html>\n"
+  },
+  "completed_at": "2026-06-16T11:35:16.868Z",
+  "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f",
+  "verdict": "FAIL"
+}

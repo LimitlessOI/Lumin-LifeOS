@@ -1,0 +1,37 @@
+[
+  {
+    "test_id": "AT-LCP2-S01-1",
+    "step_id": "LCP2-S01",
+    "type": "file_sha256_matches",
+    "target": "services/lifeos-capture-pipeline.js",
+    "expected_sha256": "c19653fdb2d78370f43c5cadd7bd63c8c20e9e6fc635effe3acf1e44d987eef1"
+  },
+  {
+    "test_id": "AT-LCP2-S02-1",
+    "step_id": "LCP2-S02",
+    "type": "file_sha256_matches",
+    "target": "routes/capture-pipeline-routes.js",
+    "expected_sha256": "679c4dff83491dc1a0dda0d0ae66fa4540c0edfb637f3f4b7ae3f7a712b8f55d"
+  },
+  {
+    "test_id": "AT-LCP2-S03-1",
+    "step_id": "LCP2-S03",
+    "type": "file_sha256_matches",
+    "target": "routes/lifeos-voice-rail-routes.js",
+    "expected_sha256": "9e2baf945a0199cf12e54944bb5045d93d144e55aaa38a7e93baf2c16a0c53d7"
+  },
+  {
+    "test_id": "AT-LCP2-S04-1",
+    "step_id": "LCP2-S04",
+    "type": "file_sha256_matches",
+    "target": "startup/register-runtime-routes.js",
+    "expected_sha256": "344313e2c1d0d59b3c9ff6827629721d14aaec885d8a231c9b4ef163f5fe17f2"
+  },
+  {
+    "test_id": "AT-LCP2-S05-1",
+    "step_id": "LCP2-S05",
+    "type": "file_sha256_matches",
+    "target": "scripts/run-capture-pipeline-v2-acceptance.mjs",
+    "expected_sha256": "bc6e67da2b7257e632854f9db02b9c67eca774037320df617c702c191978e500"
+  }
+]

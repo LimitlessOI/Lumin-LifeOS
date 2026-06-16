@@ -1,0 +1,64 @@
+{
+  "schema": "builder_run_receipt_v1",
+  "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+  "blueprint_id": "COMMITMENT-ROUTE-V2-2026-06-16",
+  "run_at": "2026-06-16T11:35:31.436Z",
+  "runner": "builderos-reboot/scripts/execute-mission.mjs",
+  "procedure": [
+    "builder_pre_build_simulate",
+    "decision_gap_map",
+    "pre_build_validation_packet",
+    "write_file_exact_steps",
+    "acceptance_tests",
+    "point_b_gate"
+  ],
+  "pre_build": {
+    "status": "BUILDER_PRE_BUILD_PASS",
+    "blocking_gaps": 0,
+    "receipt": "receipts/BUILDER_PRE_BUILD_SIMULATION.json"
+  },
+  "steps_executed": 4,
+  "step_results": [
+    {
+      "step_id": "LCR2-S01",
+      "status": "DONE",
+      "target_file": "services/lifeos-commitment-route.js",
+      "sha256": "e32b34f8c6000c2ef859482c9eea1d267bf752c3a365df0f16949c6558817757"
+    },
+    {
+      "step_id": "LCR2-S02",
+      "status": "DONE",
+      "target_file": "routes/commitment-route-routes.js",
+      "sha256": "3104d5ff027928e7a6015a230840f151dc078589dc553d9b3f8a22231b5328c5"
+    },
+    {
+      "step_id": "LCR2-S03",
+      "status": "DONE",
+      "target_file": "startup/register-runtime-routes.js",
+      "sha256": "344313e2c1d0d59b3c9ff6827629721d14aaec885d8a231c9b4ef163f5fe17f2"
+    },
+    {
+      "step_id": "LCR2-S04",
+      "status": "DONE",
+      "target_file": "scripts/run-commitment-route-v2-acceptance.mjs",
+      "sha256": "5f3a43fe6839adedbf9e36ddb37a3584708f6d4a2794767e27ec1c76f4a8c2cf"
+    }
+  ],
+  "acceptance_exit_code": 1,
+  "point_b": {
+    "handoff_pass": true,
+    "machine_path_complete": false,
+    "alpha_reached": false,
+    "status": "BLOCKED_MACHINE_PATH",
+    "proof_lap_only": false,
+    "awaiting_founder_alpha": false,
+    "violations": [
+      "machine:blueprint missing phases P4",
+      "machine:Builder not TECHNICAL_PASS"
+    ]
+  },
+  "verdict": "FAIL",
+  "machine_path_complete": false,
+  "alpha_reached": false,
+  "awaiting_founder_alpha": false
+}

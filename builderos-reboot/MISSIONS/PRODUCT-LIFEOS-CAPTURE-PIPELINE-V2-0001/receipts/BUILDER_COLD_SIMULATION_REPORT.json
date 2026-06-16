@@ -1,0 +1,41 @@
+{
+  "schema": "builder_cold_simulation_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "blueprint_id": "CAPTURE-PIPELINE-V2-2026-06-16",
+  "simulated_by": "factory-core/arc/builder-cold-walk.js",
+  "simulated_at": "2026-06-16T11:35:15.924Z",
+  "builder_runtime": "builderos-reboot/scripts/execute-mission.mjs",
+  "steps": [
+    {
+      "step_id": "LCP2-S01",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LCP2-S02",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LCP2-S03",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LCP2-S04",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LCP2-S05",
+      "decision_gap": null,
+      "blocked": false
+    }
+  ],
+  "summary": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  }
+}

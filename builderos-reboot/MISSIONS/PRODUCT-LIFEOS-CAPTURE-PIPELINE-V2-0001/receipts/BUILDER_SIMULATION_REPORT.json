@@ -1,0 +1,14 @@
+{
+  "schema": "builder_simulation_report_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "blueprint_id": "CAPTURE-PIPELINE-V2-2026-06-16",
+  "simulated_by": "factory-core/arc/simulate-blueprint-steps.js",
+  "simulated_at": "2026-06-16T11:35:15.923Z",
+  "steps": [],
+  "all_gaps": [],
+  "summary": {
+    "total_gaps": 0,
+    "blocking_gaps": 0,
+    "clear_to_build": true
+  }
+}

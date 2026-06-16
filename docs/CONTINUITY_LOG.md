@@ -3,6 +3,34 @@
 
 ---
 
+## [SESSION] 2026-06-16 — LifeOS overnight versions v2.0 + v2.1
+
+Adam: go to bed — system builds LifeOS in versions overnight, machine Alpha = foundation + acceptance.
+
+**Shipped:** `LIFEOS_VERSION_QUEUE.json` + `docs/products/LIFEOS_VERSION_ROADMAP.md` + `scripts/lifeos-versions-overnight.mjs`. **v2.0 Capture Pipeline** (`PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001`) — Voice Rail → Action Inbox auto-stage. **v2.1 Commitment Route** (`PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001`) — approved inbox commitment → `lifeos_commitments`. Both on `BP_PRIORITY.json` ranks 4–5.
+
+**Verified local:** 3/3 capture-pipeline unit tests; foundation development+corridor PASS; builder executes all steps; production acceptance pending deploy.
+
+**Next overnight:** v3.0 Daily Mirror, v3.1 Integrity+Joy, v4.0 Hub Overlay — founder packets + blueprints.
+
+---
+
+## [SESSION] 2026-06-16 — Foundation pipeline (FOUNDER_PACKET_V2 machine path)
+
+Adam: "fix this all" before sleep — full founder-doc machine path must run without agent impersonation.
+
+**Shipped:** `factory-staging/factory-core/arc/foundation/*` — coverage map (Tier1+Tier2), IDC exit gate, pre-arc enrichment (consensus receipt, KNOWN_RISKS/ASSUMPTIONS/CONTRADICTIONS, DO_NOT_INVENT, PRE_ARC_INPUT_PACKET v2), studio simulation, SNT translation attack, RESULT_SCOREBOARD + RELEASE_PASS gate. **`run-foundation.js`** orchestrates development → corridor (ARC) → builder → scoreboard. **`scripts/run-foundation-pipeline.mjs`** + **`npm run builderos:foundation:pipeline`**. **`run-system-path.mjs`** delegates here. Import fixes in `run-foundation.js` + `translate-mission.js`.
+
+**Verified:** `PRODUCT-ACTION-INBOX-V1-0001` — foundation pipeline exit 0, status `MACHINE_PATH_PASS_AWAITING_ALPHA`, `awaiting_alpha: true`. All dept receipts + IDC_CONSENSUS + PRE_ARC packet + studio + SNT translation + scoreboard on disk. 6/6 `tests/point-b-gate.test.js` PASS.
+
+**Doctrine held:** After FP handoff Adam's job done until Alpha. TECHNICAL_PASS ≠ Alpha. RELEASE_PASS blocked until `founder_usability_pass`.
+
+**Still mechanical (not conversational AI):** IDC UI, full council AI seats, greenfield A→Z ARC from FP alone.
+
+**Next:** Adam Alpha confirm when ready: `npm run builderos:alpha:confirm -- PRODUCT-ACTION-INBOX-V1-0001 --confirm`
+
+---
+
 ## [SESSION] 2026-06-15 — FOUNDER_PACKET_V2 + Pre-ARC department simulations
 
 Adam pasted the full FOUNDER_PACKET_V2 ("BuilderOS / Lumin Company Foundation — Pre-ARC Consensus Review Packet") and said "use that as V2," then asked for (1) areas to improve and (2) manual role-play simulation of each not-yet-built department (IDC/ARC/SNT/Chair/CFO/Wisdom/Studio/Builder) per the packet's own Bootstrap Protocol, since those departments don't exist as running systems yet.
