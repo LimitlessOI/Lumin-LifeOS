@@ -3,6 +3,22 @@
 
 ---
 
+## [SESSION] 2026-06-15 — FOUNDER_PACKET_V2 + Pre-ARC department simulations
+
+Adam pasted the full FOUNDER_PACKET_V2 ("BuilderOS / Lumin Company Foundation — Pre-ARC Consensus Review Packet") and said "use that as V2," then asked for (1) areas to improve and (2) manual role-play simulation of each not-yet-built department (IDC/ARC/SNT/Chair/CFO/Wisdom/Studio/Builder) per the packet's own Bootstrap Protocol, since those departments don't exist as running systems yet.
+
+**Shipped:** `docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md` — full verbatim V2 text (replacing the old 74-line condensed stub) plus an appended "Claude Review — Areas to Improve" section, 10 critique items each with confidence label, severity, and proposed fix. `docs/constitution/PRE_ARC_FOUNDER_PACKET_V2/` — four manually-simulated Pre-ARC artifacts (`SNT_INTENT_ATTACK_RECEIPT.md`, `CHAIR_FORECAST_SIMULATION_RECEIPT.md`, `CFO_RESOURCE_SIMULATION_RECEIPT.md`, `WISDOM_REVIEW_RECEIPT.md`) plus a bundling index (`PRE_ARC_INPUT_PACKET_V1.md`). Commit `28b731b2f5`, pushed to main.
+
+**Finding:** All four departments, working independently, converged on the same 5 blocking gaps: (1) no reconciliation with Article III money/risk veto, (2) no constitutional-floor exemption for Healing/Education/Hardship from CFO ROI scoring — same blind spot independently found in Codex's parallel `ADAM_DECISION_FILTER_V1.md`, (3) PRIORITY_MAP has no subordination rule to canonical `BP_PRIORITY.json`, (4) INTENT_COVERAGE_MAP is self-graded with no independent SNT check — same circularity flaw as Codex's `PREDICTIVE_ACCURACY_REPORT_ADF_V1.md`, (5) "Predicted Adam never overrides Actual Adam" has no defined fallback when Adam is actually unreachable during an autonomous run.
+
+**Verdict:** Packet is safe for a **supervised** first lap (Chair + IDC + ARC Intake Loop v1) scoped to one existing `BP_PRIORITY.json` item; **not** safe for unattended/unsupervised operation or anything touching money, billing, hardship signals, or priority reordering until the 5 items are patched into the live document.
+
+**Note:** Other agents (Codex/Composer) have substantial untracked/in-progress work on the parallel ADF mission in this same window (`docs/ADAM_DECISION_FILTER_V1_CLAUDE_SYNTHESIS.md`, `_CLAUDE_RECOVERY.md`, `_MERGED.md`, `ADF_PREDICTION_LEDGER_V1.md`, `routes/adf-routes.js`, etc.) — left untouched/uncommitted by this session since it wasn't mine to commit; only the FOUNDER_PACKET_V2 files were staged and pushed.
+
+**Next:** Adam decides whether to patch the 5 blocking items into FOUNDER_PACKET_V2 before the first lap, or run supervised first lap now and patch in parallel. Separately, the ADF cross-agent synthesis (Motivation Model gap, circular validation, Contradiction #6) is still worth appending to `docs/ADAM_DECISION_FILTER_V1.md` if not already superseded by Codex/Composer's own in-flight files above — check their current state before re-attempting.
+
+---
+
 ## [SESSION] 2026-06-13 — System Capability Inventory + Constitution Phase 1
 
 **Inventory:** Created `docs/SYSTEM_CAPABILITY_INVENTORY.md` — canonical runtime capability map across 14 sections (BuilderOS, C2, LifeOS, Voice Rail, Memory/Historian, Proof/Sentry, TSOS, Deployment, TC, Marketing, Scheduled Jobs, Browser/Web, Legacy, Parts-Car). Classification: PRESENT / PARTIAL / MISSING / SHADOW. 10 capability gaps ranked G1–G10. Source: register-runtime-routes.js, services/, BUILDEROS_SYSTEM_INVENTORY.md, SYSTEM_TOOL_INVENTORY_AUDIT_V1.md.
