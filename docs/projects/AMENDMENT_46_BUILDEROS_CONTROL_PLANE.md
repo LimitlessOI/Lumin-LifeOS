@@ -2,7 +2,7 @@
 _(formerly AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md)_
 **Status:** IN_BUILD — Phase 1 infrastructure on disk
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-13 — kernel-managed `/builder/build` now defers route-level DONE/completion checks to kernel sequencing so `recordBuildComplete()` can write proof fields before authority checks. Prior **2026-06-13** — `/build` DONE-gate enforced in `routes/lifeos-council-builder-routes.js` before success response. Prior **2026-06-13** — DONE gate helper extracted for `/build` wiring.
+**Last Updated:** 2026-06-16 — factory execute-step sandbox checks now compare canonical repo-contained paths and factory CI includes traversal/source-escape regression coverage. Prior **2026-06-13** — kernel-managed `/builder/build` now defers route-level DONE/completion checks to kernel sequencing so `recordBuildComplete()` can write proof fields before authority checks. Prior **2026-06-13** — `/build` DONE-gate enforced in `routes/lifeos-council-builder-routes.js` before success response. Prior **2026-06-13** — DONE gate helper extracted for `/build` wiring.
 
 > **Core law:** If it is not in the ledger, it did not happen.
 > **Priority:** Higher than MarketingOS, SalesOS, CCL production integration.
@@ -244,7 +244,7 @@ Until this is implemented, trust escalation remains a constitutional requirement
 
 ## Agent Handoff Notes
 
-Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy migrations `20260531`, `20260532`, `20260601` then run verify scripts.
+Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy migrations `20260531`, `20260532`, `20260601` then run verify scripts. 2026-06-16: factory execute-step sandbox traversal was patched in `factory-staging/factory-core/builder/run-step.js`; keep `builderos-reboot/scripts/factory-sandbox-security.mjs` in factory CI when touching execute-step path validation.
 
 ---
 
@@ -252,6 +252,7 @@ Phase 1 control plane is on disk. Amendment 44 remains token sub-layer. Deploy m
 
 | Date | Change | Why |
 |------|--------|-----|
+| 2026-06-16 | **`factory-staging/factory-core/builder/run-step.js`** — sandbox matching now resolves target and boundary to canonical paths under `REPO_ROOT` before comparison; source copy paths outside `REPO_ROOT` return `authority_violation` instead of reading arbitrary filesystem paths. **`builderos-reboot/scripts/factory-sandbox-security.mjs` (NEW)** proves `factory-staging/../server.js` is blocked and `server.js` remains unchanged; **`builderos-reboot/scripts/factory-ci.mjs`** runs the regression as `sandbox_security`. | Critical bug-finding automation found execute-step validated raw strings before path resolution, allowing a concrete traversal target (`factory-staging/../server.js` with boundary `factory-staging/**`) to overwrite files outside the sandbox. |
 | 2026-06-13 | **`services/tsos-platform-kernel.js`** — `wrapBuild()` now sets request marker `req.__kernel_managed_build = true` for wrapped `/builder/build` calls and clears it in `finally`, allowing route-layer guards to distinguish kernel-managed sequencing. **`routes/lifeos-council-builder-routes.js`** — `evaluateBuildDoneGateForBuildResponse()` and `evaluateBuildCompletionForBuildResponse()` now support `kernelManaged` deferral mode; `/build` passes this marker and, when set, defers terminal DONE/completion checks to kernel authority (`done_gate_deferred_to_kernel`, `completion_deferred_to_kernel`) instead of early route blocking. **`tests/builderos-build-done-gate-route-wiring.test.js`** and **`tests/builderos-completion-authority.test.js`** add regression coverage for kernel-managed deferral and non-kernel missing-proof blocking. | Fix circular proof ordering found in live job `881754fc-5674-4e49-8f63-4cfe137be606`: route-level DONE gate ran before kernel/control-plane could write `build_end_time`/token/OIL proof, causing false early `missing_proof` blocks. |
 | 2026-06-13 | **`routes/lifeos-council-builder-routes.js`** — imports `evaluateBuildDoneGateAsync` and enforces DONE gate in `evaluateBuildDoneGateForBuildResponse(...)` before any `ok:true, committed:true, commit_sha` response. Returns `409` with `blocker: BUILDEROS_DONE_BLOCKED`, `reason`, `receipt_path`, and `missing_evidence` when present. Success now includes `done_gate_required: true`, `done_gate_passed: true`. **`tests/builderos-build-done-gate-route-wiring.test.js` (NEW)** covers: (A) commit_sha alone blocked, (B) done gate pass allows success, (C) missing evidence blocked, (D) non-success build path unchanged. | Phase 6 completion: make DONE/PASS impossible from commit SHA alone on production `/build` path. |
 | 2026-06-13 | **`services/builderos-build-done-gate-helper.js` (NEW)** + **`tests/builderos-build-done-gate-helper.test.js`** — extracted DONE gate evaluation (rejects commit_sha-only success; requires control-plane evidence when available). This helper was later wired into `/build` in the receipt above. | Repair Lane GAP-FILL: unblock Phase 6 `/build` integration without Zone 3 route patch in same step. | ✅ 5 tests |
