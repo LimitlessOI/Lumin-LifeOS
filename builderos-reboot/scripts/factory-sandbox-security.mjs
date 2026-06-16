@@ -14,6 +14,7 @@ process.chdir(REPO_ROOT);
 const { dispatchExecuteStep, pathMatchesSandbox, resolveRepoPath } = await import(
   path.join(REPO_ROOT, 'factory-staging/factory-core/builder/run-step.js')
 );
+const missionLib = await import(path.join(REPO_ROOT, 'builderos-reboot/scripts/mission-lib.mjs'));
 
 function assert(condition, message, details = {}) {
   if (condition) return;
@@ -25,6 +26,10 @@ const traversalTarget = 'factory-staging/../server.js';
 assert(
   pathMatchesSandbox(traversalTarget, 'factory-staging/**') === false,
   'path traversal target matched factory-staging sandbox',
+);
+assert(
+  missionLib.pathMatchesSandbox(traversalTarget, 'factory-staging/**') === false,
+  'mission materializer matched traversal target to factory-staging sandbox',
 );
 
 const serverPath = resolveRepoPath('server.js');
@@ -72,5 +77,35 @@ assert(
   sourceEscapeResult,
 );
 assert(!fs.existsSync(sourceEscapePath), 'source escape test wrote target file');
+
+const materializerTraversal = missionLib.writeFileExactStep({
+  step_id: 'SANDBOX-MATERIALIZER-TRAVERSAL-001',
+  action_type: 'write_file_exact',
+  target_file: traversalTarget,
+  sandbox_boundary: 'factory-staging/**',
+  exact_inputs: { exact_content: 'should-not-overwrite-server' },
+});
+
+assert(
+  materializerTraversal.ok === false && materializerTraversal.gap_type === 'authority_violation',
+  'mission materializer traversal was not blocked as an authority violation',
+  materializerTraversal,
+);
+assert(fs.readFileSync(serverPath, 'utf8') === beforeServer, 'server.js changed during materializer traversal test');
+
+const materializerSourceEscape = missionLib.writeFileExactStep({
+  step_id: 'SANDBOX-MATERIALIZER-SOURCE-ESCAPE-001',
+  action_type: 'write_file_exact',
+  target_file: sourceEscapeTarget,
+  sandbox_boundary: 'factory-staging/**',
+  exact_inputs: { content_source_path: '../package.json' },
+});
+
+assert(
+  materializerSourceEscape.ok === false && materializerSourceEscape.gap_type === 'authority_violation',
+  'mission materializer source escape was not blocked as an authority violation',
+  materializerSourceEscape,
+);
+assert(!fs.existsSync(sourceEscapePath), 'materializer source escape test wrote target file');
 
 console.log('PASS factory sandbox security');

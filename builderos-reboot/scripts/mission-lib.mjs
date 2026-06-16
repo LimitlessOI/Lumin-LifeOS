@@ -44,8 +44,25 @@ export function loadAcceptanceTests(missionId) {
   return loadJson(`${FACTORY_LAYOUT.missionsRel}/${missionId}/ACCEPTANCE_TESTS.json`);
 }
 
+function normalizeRepoRelative(relativePath) {
+  return String(relativePath || '').replace(/\\/g, '/');
+}
+
+function resolveRepoContainedPath(relativePath) {
+  const resolved = path.resolve(REPO_ROOT, normalizeRepoRelative(relativePath));
+  const rootPrefix = `${REPO_ROOT}${path.sep}`;
+  if (resolved !== REPO_ROOT && !resolved.startsWith(rootPrefix)) {
+    return null;
+  }
+  return resolved;
+}
+
 export function resolveRepoPath(relativePath) {
-  return path.join(REPO_ROOT, relativePath);
+  const resolved = resolveRepoContainedPath(relativePath);
+  if (!resolved) {
+    throw new Error(`Path escapes repo root: ${relativePath}`);
+  }
+  return resolved;
 }
 
 export function ensureParentDir(filePath) {
@@ -77,9 +94,11 @@ export function sortStepsByDependencies(steps) {
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
-  const normalized = relativePath.replace(/\\/g, '/');
-  const boundary = sandboxBoundary.replace(/\\/g, '/').replace(/\/\*\*$/, '');
-  return normalized === boundary || normalized.startsWith(`${boundary}/`);
+  const target = resolveRepoContainedPath(relativePath);
+  const boundaryText = normalizeRepoRelative(sandboxBoundary).replace(/\/\*\*$/, '');
+  const boundary = resolveRepoContainedPath(boundaryText);
+  if (!target || !boundary) return false;
+  return target === boundary || target.startsWith(`${boundary}${path.sep}`);
 }
 
 export function writeFileExactStep(step) {
@@ -89,7 +108,15 @@ export function writeFileExactStep(step) {
   if (step.exact_inputs?.exact_content != null) {
     content = Buffer.from(String(step.exact_inputs.exact_content), 'utf8');
   } else if (sourceRel) {
-    const source = resolveRepoPath(sourceRel);
+    const source = resolveRepoContainedPath(sourceRel);
+    if (!source) {
+      return {
+        ok: false,
+        status: 'BLOCKED_RETURN_TO_BPB',
+        gap_type: 'authority_violation',
+        summary: `Source ${sourceRel} outside repo root`,
+      };
+    }
     if (!fs.existsSync(source)) {
       return {
         ok: false,
@@ -108,8 +135,6 @@ export function writeFileExactStep(step) {
     };
   }
 
-  const target = resolveRepoPath(step.target_file);
-
   if (!pathMatchesSandbox(step.target_file, step.sandbox_boundary)) {
     return {
       ok: false,
@@ -118,6 +143,8 @@ export function writeFileExactStep(step) {
       summary: `Target ${step.target_file} outside sandbox ${step.sandbox_boundary}`,
     };
   }
+
+  const target = resolveRepoPath(step.target_file);
 
   if (isLegacyWriteTarget(step.target_file, FACTORY_LAYOUT)) {
     return {
