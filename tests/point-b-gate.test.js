@@ -2,13 +2,17 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { evaluatePointBGate, evaluateCorridorEntered } from '../factory-staging/factory-core/arc/point-b-gate.js';
+import { evaluatePointBGate, evaluateCorridorEntered, isStubSntReceipt } from '../factory-staging/factory-core/arc/point-b-gate.js';
 import { evaluatePreHandoffIntentGate } from '../factory-staging/factory-core/arc/pre-handoff-intent-gate.js';
 import {
   runDepartmentSimulations,
   validateDepartmentReceipts,
   isStubDepartmentReceipt,
 } from '../factory-staging/factory-core/arc/department-simulations.js';
+import {
+  writeModeAToBTransitionReceipt,
+  writePredictionReceipt,
+} from '../factory-staging/factory-core/arc/foundation/prediction-receipt.js';
 import { buildUpstreamRoute } from '../factory-staging/factory-core/arc/upstream-routing.js';
 
 const INTAKE = path.join(process.cwd(), 'builderos-reboot/MISSIONS/BUILDEROS-INTAKE-LOOP-V1-0001');
@@ -18,12 +22,18 @@ describe('department + upstream doctrine', () => {
   it('stub department receipts are detected', () => {
     assert.equal(isStubDepartmentReceipt({ attacks_run: 5, verdict: 'yes' }, 'SNT'), true);
     assert.equal(
-      isStubDepartmentReceipt({ attacks: [{ claim: 'x', pass: true }], simulated_by: 'x' }, 'SNT'),
+      isStubDepartmentReceipt({ attacks: [{ claim: 'x', pass: true }], simulated_by: 'x', simulation_tier: 'COUNCIL_SIM' }, 'SNT'),
       false,
+    );
+    assert.equal(
+      isStubDepartmentReceipt({ attacks: [{ claim: 'x', pass: true }], simulated_by: 'x', simulation_tier: 'BOOTSTRAP_MECHANICAL' }, 'SNT'),
+      true,
     );
   });
 
   it('department sims produce non-stub receipts for Action Inbox', () => {
+    writeModeAToBTransitionReceipt(INBOX);
+    writePredictionReceipt(INBOX);
     const result = runDepartmentSimulations(INBOX);
     assert.equal(result.all_pass, true);
     const v = validateDepartmentReceipts(INBOX);
@@ -49,6 +59,23 @@ describe('department + upstream doctrine', () => {
   it('corridor gate does not re-litigate intent sections', () => {
     const corridor = evaluateCorridorEntered(INBOX);
     assert.ok(!corridor.violations.some((v) => v.includes('intent_incomplete')));
+  });
+
+  it('stub SNT translation rejects null evidence on blocking passes', () => {
+    assert.equal(
+      isStubSntReceipt({
+        attacks: [{ severity: 'blocking', pass: true, evidence_if_wrong: null }],
+        verdict: 'builder_clearance_yes',
+      }),
+      true,
+    );
+    assert.equal(
+      isStubSntReceipt({
+        attacks: [{ severity: 'blocking', pass: true, evidence_if_wrong: 'npm run lifeos:x-acceptance' }],
+        verdict: 'builder_clearance_yes',
+      }),
+      false,
+    );
   });
 
   it('proof lap is not product machine path', () => {

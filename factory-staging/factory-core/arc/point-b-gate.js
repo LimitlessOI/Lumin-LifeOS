@@ -38,9 +38,26 @@ function loadJsonIfExists(absPath) {
 
 function isStubSntReceipt(data) {
   if (!data) return true;
-  const attacks = data.attacks_run ?? data.attacks ?? null;
+  const attacks = data.attacks ?? [];
   const verdict = String(data.verdict || '');
-  return attacks === 0 && verdict.includes('clearance_yes');
+  if ((data.attacks_run ?? attacks.length) === 0 && verdict.includes('clearance_yes')) return true;
+  const blockingPasses = attacks.filter((a) => a.severity === 'blocking' && a.pass);
+  if (blockingPasses.some((a) => !a.evidence_if_wrong)) return true;
+  return false;
+}
+
+function isEmptyBuilderSim(data, blueprint) {
+  const blueprintSteps = blueprint?.steps?.length || 0;
+  if (!blueprintSteps) return false;
+  return !(data?.steps?.length);
+}
+
+function loadAcceptanceVerdict(missionFolder, blueprint) {
+  const objective = loadJsonIfExists(path.join(missionFolder, 'OBJECTIVE_VERDICT.json'));
+  const rel = objective?.receipt || blueprint?.receipt_path || blueprint?.acceptance_receipt;
+  if (!rel) return null;
+  const abs = path.isAbsolute(rel) ? rel : path.join(process.cwd(), rel);
+  return loadJsonIfExists(abs);
 }
 
 function isProofLapMission(roadmap, missionId, baseline, objective) {
@@ -167,6 +184,16 @@ export function evaluateMachinePathGate(missionFolder, { blueprint } = {}) {
     const snt = loadJsonIfExists(path.join(missionFolder, 'receipts/SNT_TRANSLATION_ATTACK_REPORT.json'));
     if (isStubSntReceipt(snt)) violations.push('machine:SNT_TRANSLATION_ATTACK stub');
 
+    const builderSim = loadJsonIfExists(path.join(missionFolder, 'receipts/BUILDER_SIMULATION_REPORT.json'));
+    if (isEmptyBuilderSim(builderSim, blueprint)) {
+      violations.push('machine:BUILDER_SIMULATION_REPORT empty steps for non-empty blueprint');
+    }
+
+    const acceptanceReceipt = loadAcceptanceVerdict(missionFolder, blueprint);
+    if (acceptanceReceipt?.verdict === 'FAIL' || (acceptanceReceipt?.tests_failed?.length > 0)) {
+      violations.push('machine:acceptance FAIL — result truth wins over corridor pass');
+    }
+
     const preBuild = loadJsonIfExists(path.join(missionFolder, 'PRE_BUILD_VALIDATION_PACKET.json'));
     if (preBuild?.builder_clearance !== 'yes') violations.push('machine:builder_clearance not yes');
 
@@ -282,3 +309,5 @@ export function evaluatePointBGate(missionFolder, opts = {}) {
         : 'Development handoff incomplete — Chair resolves before corridor.',
   };
 }
+
+export { isStubSntReceipt, isEmptyBuilderSim };

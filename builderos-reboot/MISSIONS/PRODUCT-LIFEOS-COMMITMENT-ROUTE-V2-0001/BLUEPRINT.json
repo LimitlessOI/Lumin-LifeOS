@@ -1,7 +1,7 @@
 {
   "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
   "blueprint_id": "COMMITMENT-ROUTE-V2-2026-06-16",
-  "blueprint_status": "ready_for_builder",
+  "blueprint_status": "complete",
   "scope": "lifeos_commitment_route_v2",
   "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/FOUNDER_PACKET.md",
@@ -51,7 +51,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-17T04:43:39.050Z",
+      "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c"
     },
     {
       "step_id": "LCR2-S02",
@@ -84,7 +87,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "routes/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-17T04:43:39.050Z",
+      "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c"
     },
     {
       "step_id": "LCR2-S03",
@@ -117,7 +123,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "startup/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-17T04:43:39.050Z",
+      "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c"
     },
     {
       "step_id": "LCR2-S04",
@@ -150,9 +159,17 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "scripts/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-17T04:43:39.050Z",
+      "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c"
     }
   ],
   "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
-  "authored_by": "ARC"
+  "authored_by": "ARC",
+  "completed_at": "2026-06-17T04:43:39.050Z",
+  "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c",
+  "receipt_path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
 }

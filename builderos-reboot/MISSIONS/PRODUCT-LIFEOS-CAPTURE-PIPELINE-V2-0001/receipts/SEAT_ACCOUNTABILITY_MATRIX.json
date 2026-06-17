@@ -1,0 +1,72 @@
+{
+  "schema": "seat_accountability_matrix_v1",
+  "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+  "generated_at": "2026-06-17T04:43:38.146Z",
+  "resolution": "TECHNICAL_PASS",
+  "deploy_commit_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c",
+  "rows": [
+    {
+      "test_id": "LCP2-T01",
+      "owner_seat": "SYSTEM_DRIFT",
+      "classification": "SYSTEM_DRIFT",
+      "phase": "pre_recovery",
+      "evidence_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
+      "detail": "register-runtime-routes imported adf-routes.js + builderos-arc-routes.js never committed; Railway 3e7611d4e9 deploy FAILED boot",
+      "next_action_command": "npm run system:railway:redeploy"
+    },
+    {
+      "test_id": "LCP2-T02_simulate_skips",
+      "owner_seat": "DEPLOY",
+      "classification": "DEPLOY_LAG",
+      "phase": "pre_recovery",
+      "evidence_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
+      "detail": "Prod voice-rail lacked v2 inbox_staging hook while rolled back to 6a45d8f",
+      "next_action_command": "npm run lifeos:capture-pipeline:v2-acceptance"
+    },
+    {
+      "test_id": "LCP2-T05_stage",
+      "owner_seat": "DEPLOY",
+      "classification": "DEPLOY_LAG",
+      "phase": "pre_recovery",
+      "evidence_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
+      "detail": "404 on /api/v1/lifeos/capture-pipeline/stage — route not mounted on stale prod",
+      "next_action_command": "npm run lifeos:capture-pipeline:v2-acceptance"
+    },
+    {
+      "test_id": "LCP2-T07_stats",
+      "owner_seat": "DEPLOY",
+      "classification": "DEPLOY_LAG",
+      "phase": "pre_recovery",
+      "evidence_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
+      "detail": "404 on /api/v1/lifeos/capture-pipeline/stats",
+      "next_action_command": "npm run lifeos:capture-pipeline:v2-acceptance"
+    },
+    {
+      "test_id": "SNT_TRANSLATION_ATTACK",
+      "owner_seat": "SNT",
+      "classification": "GATE_DRIFT",
+      "phase": "pre_recovery",
+      "evidence_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
+      "detail": "Template pass with evidence_if_wrong null on blocking claims; no prod route probe",
+      "next_action_command": "npm run builderos:foundation:pipeline -- PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001"
+    },
+    {
+      "test_id": "BUILDER_SIMULATION_REPORT",
+      "owner_seat": "Builder-sim",
+      "classification": "GATE_DRIFT",
+      "phase": "pre_recovery",
+      "evidence_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/receipts/BUILDER_SIMULATION_REPORT.json",
+      "detail": "Empty steps[] marked clear_to_build",
+      "next_action_command": "node scripts/simulate-blueprint-steps.mjs PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001"
+    },
+    {
+      "test_id": "ALL_ACCEPTANCE",
+      "owner_seat": "Deploy",
+      "classification": "RESOLVED",
+      "phase": "post_recovery",
+      "evidence_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
+      "detail": "All tests PASS after GAP-FILL commits 8570554438, 15277e0ed4, 7a7c96d0f4 + deploy",
+      "next_action_command": "npm run lifeos:capture-pipeline:v2-acceptance"
+    }
+  ]
+}

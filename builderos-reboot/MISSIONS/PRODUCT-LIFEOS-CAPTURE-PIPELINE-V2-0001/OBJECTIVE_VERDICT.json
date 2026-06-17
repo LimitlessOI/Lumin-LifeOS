@@ -1,24 +1,26 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-06-16T11:35:16.868Z",
+  "generated_at": "2026-06-17T04:43:38.146Z",
   "objective_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
   "objective_name": "LifeOS Capture Pipeline v2",
-  "verdict": "NOT_COMPLETE",
+  "verdict": "TECHNICAL_PASS",
   "receipt": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
   "production_base": "https://robust-magic-production.up.railway.app",
-  "git_sha": "6a45d8fd28788ed22a6be0554d57212315228b9f",
+  "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c",
   "tests_passed": [
     "LCP2-T01_blueprint",
-    "LCP2-T03_private_skips",
-    "LCP2-T04_voice_source",
-    "LCP2-T02"
-  ],
-  "tests_failed": [
     "LCP2-T01",
     "LCP2-T02_simulate_skips",
+    "LCP2-T03_private_skips",
+    "LCP2-T04_voice_source",
     "LCP2-T05_stage",
-    "LCP2-T07_stats"
+    "LCP2-T06_item_exists",
+    "LCP2-T07_stats",
+    "LCP2-T02",
+    "bp_sync_mandatory",
+    "LCP2-T08_bp_sync"
   ],
+  "tests_failed": [],
   "founder_usability_pass": false,
   "acceptance_command": "npm run lifeos:capture-pipeline:v2-acceptance"
 }

@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-06-16",
+  "updated_at": "2026-06-17",
   "operator_lock": "Adam 2026-06-11 — BPs in priority order ARE the queue. No separate mission queue for product work.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "items": [
@@ -81,11 +81,15 @@
       "blueprint_status": "complete",
       "acceptance_command": "npm run lifeos:capture-pipeline:v2-acceptance",
       "receipt_path": "products/receipts/CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
-      "verdict": "IN_PROGRESS",
-      "note": "LifeOS v2.0 — Voice Rail auto-stages to Action Inbox. Overnight machine build 2026-06-16.",
+      "verdict": "TECHNICAL_PASS",
+      "note": "Voice Rail auto-stages to Action Inbox via capture pipeline v2.",
       "build_method": "system-build",
       "founder_usability_pass": false,
-      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/OBJECTIVE_VERDICT.json"
+      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001/OBJECTIVE_VERDICT.json",
+      "receipt_verdict": "PASS",
+      "technical_pass_at": "2026-06-17T04:43:38.146Z",
+      "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c",
+      "production_base": "https://robust-magic-production.up.railway.app"
     },
     {
       "rank": 5,
@@ -95,11 +99,15 @@
       "blueprint_status": "complete",
       "acceptance_command": "npm run lifeos:commitment-route:v2-acceptance",
       "receipt_path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
-      "verdict": "IN_PROGRESS",
+      "verdict": "TECHNICAL_PASS",
       "note": "LifeOS v2.1 — inbox commitment → commitment tracker",
       "build_method": "system-build",
       "founder_usability_pass": false,
-      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/OBJECTIVE_VERDICT.json"
+      "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/OBJECTIVE_VERDICT.json",
+      "receipt_verdict": "PASS",
+      "technical_pass_at": "2026-06-17T04:43:39.050Z",
+      "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c",
+      "production_base": "https://robust-magic-production.up.railway.app"
     }
   ]
 }

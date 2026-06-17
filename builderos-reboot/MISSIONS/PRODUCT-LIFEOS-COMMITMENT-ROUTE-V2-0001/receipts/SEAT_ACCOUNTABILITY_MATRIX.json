@@ -1,0 +1,45 @@
+{
+  "schema": "seat_accountability_matrix_v1",
+  "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+  "generated_at": "2026-06-17T04:43:39.050Z",
+  "resolution": "TECHNICAL_PASS",
+  "deploy_commit_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c",
+  "rows": [
+    {
+      "test_id": "LCR2-T01",
+      "owner_seat": "SYSTEM_DRIFT",
+      "classification": "SYSTEM_DRIFT",
+      "phase": "pre_recovery",
+      "evidence_path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
+      "detail": "Same boot crash chain as capture v2 — uncommitted route imports blocked deploy of 3e7611d4e9",
+      "next_action_command": "npm run system:railway:redeploy"
+    },
+    {
+      "test_id": "LCR2-T04_route",
+      "owner_seat": "DEPLOY",
+      "classification": "DEPLOY_LAG",
+      "phase": "pre_recovery",
+      "evidence_path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
+      "detail": "404 on /api/v1/lifeos/commitment-route/from-inbox — prod on 6a45d8f",
+      "next_action_command": "npm run lifeos:commitment-route:v2-acceptance"
+    },
+    {
+      "test_id": "FOUNDATION_PIPELINE_REPORT",
+      "owner_seat": "Foundation-report",
+      "classification": "GATE_DRIFT",
+      "phase": "pre_recovery",
+      "evidence_path": "builderos-reboot/MISSIONS/PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001/receipts/FOUNDATION_PIPELINE_REPORT.json",
+      "detail": "Mid-pipeline snapshot showed missing post-ARC receipts before builder stage completed",
+      "next_action_command": "npm run builderos:foundation:pipeline -- PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001"
+    },
+    {
+      "test_id": "ALL_ACCEPTANCE",
+      "owner_seat": "Deploy",
+      "classification": "RESOLVED",
+      "phase": "post_recovery",
+      "evidence_path": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
+      "detail": "LCR2-T01 through LCR2-T05 PASS on production 7a7c96d0f4",
+      "next_action_command": "npm run lifeos:commitment-route:v2-acceptance"
+    }
+  ]
+}
