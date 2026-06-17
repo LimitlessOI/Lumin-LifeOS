@@ -2,10 +2,10 @@
  * BuilderOS ARC translate — system mechanical compile + optional council fallback.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
-import { runArcTranslate } from '../../factory-staging/factory-core/arc/translate-mission.js';
-import { runArcEntryGate } from '../../factory-staging/factory-core/arc/entry-gate.js';
-import { simulateBlueprintSteps } from '../../factory-staging/factory-core/arc/simulate-blueprint-steps.js';
-import { compileBlueprint, listRegisteredCompilers } from '../../factory-staging/factory-core/arc/compile-blueprint.js';
+import { runArcTranslate } from '../factory-staging/factory-core/arc/translate-mission.js';
+import { runArcEntryGate } from '../factory-staging/factory-core/arc/entry-gate.js';
+import { simulateBlueprintSteps } from '../factory-staging/factory-core/arc/simulate-blueprint-steps.js';
+import { compileBlueprint, listRegisteredCompilers } from '../factory-staging/factory-core/arc/compile-blueprint.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
