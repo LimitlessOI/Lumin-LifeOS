@@ -6,6 +6,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { loadMissionJson } from '../mission-paths.js';
 import { validateDepartmentReceipts } from '../department-simulations.js';
+import { isHardGate, isProofLapMission } from '../gate-enforcement.js';
+import { hasPredictionReceipt, hasModeAToBReceipt } from './prediction-receipt.js';
 
 const BLOCKING = new Set(['MISSING', 'MENTIONED']);
 
@@ -45,6 +47,26 @@ export function evaluateIdcExitGate(missionFolder) {
   const asset = loadMissionJson(missionFolder, 'ASSET_REUSE_DECISION.json');
   checks.asset_reuse = { pass: Boolean(asset?.decisions?.length) };
   if (!asset?.decisions?.length) violations.push('idc:missing ASSET_REUSE_DECISION');
+
+  checks.prediction_receipt = { pass: hasPredictionReceipt(missionFolder) };
+  if (!checks.prediction_receipt.pass && isHardGate('IDC_EXIT')) {
+    violations.push('idc:missing PREDICTION_RECEIPT.json');
+  }
+
+  checks.mode_a_to_b = { pass: hasModeAToBReceipt(missionFolder) };
+  if (!checks.mode_a_to_b.pass && isHardGate('IDC_EXIT')) {
+    violations.push('idc:missing MODE_A_TO_B_TRANSITION_RECEIPT.json');
+  }
+
+  if (isHardGate('SIMULATION_FIDELITY') && !isProofLapMission(missionFolder)) {
+    const deptTier = dept.checks;
+    const bootstrapSeats = Object.entries(deptTier || {})
+      .filter(([, c]) => c.bootstrapBlocked || c.tier === 'BOOTSTRAP_MECHANICAL')
+      .map(([seat]) => seat);
+    if (bootstrapSeats.length) {
+      violations.push(`idc:SIMULATION_FIDELITY bootstrap tier on ${bootstrapSeats.join(',')}`);
+    }
+  }
 
   return {
     schema: 'idc_exit_gate_v1',

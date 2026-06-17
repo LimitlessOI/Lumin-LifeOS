@@ -1,0 +1,150 @@
+{
+  "schema": "gate_enforcement_matrix_v1",
+  "version": "2.0A",
+  "updated_at": "2026-06-17",
+  "enforcement_levels": {
+    "HARD": "Machine or human gate blocks queue advance, /build, or ARC handoff claim",
+    "SOFT": "Warning + receipt required; may proceed supervised only",
+    "MANUAL": "Bootstrap — same-session receipt, labeled KNOW/THINK/GUESS"
+  },
+  "primary_metric": "founder_interruptions_before_alpha",
+  "gates": [
+    {
+      "gate_id": "IDC_EXIT",
+      "blocker": "BLOCKED_CONTINUE_IDC",
+      "enforcement": "HARD",
+      "requires": [
+        "INTENT_BASELINE",
+        "INTENT_COVERAGE_MAP tier-1 SUFFICIENT+",
+        "SNT tier-1 re-grade",
+        "PRE_ARC_INPUT_PACKET",
+        "IDC_CONSENSUS_RECEIPT",
+        "PREDICTION_RECEIPT",
+        "MODE_A_TO_B_TRANSITION_RECEIPT"
+      ]
+    },
+    {
+      "gate_id": "SIMULATION_FIDELITY",
+      "blocker": "BLOCKED_BOOTSTRAP_MISLABELED",
+      "enforcement": "HARD",
+      "requires": [
+        "department receipts simulation_tier COUNCIL_SIM or proof_lap_only",
+        "not BOOTSTRAP_MECHANICAL on BP_PRIORITY product missions"
+      ]
+    },
+    {
+      "gate_id": "POST_ARC_BUNDLE",
+      "blocker": "BLOCKED_RETURN_TO_ARC",
+      "enforcement": "HARD",
+      "requires": [
+        "ARC_TWIN_SIMULATION_RECEIPT",
+        "BUILDER_SIMULATION_REPORT",
+        "SNT_TRANSLATION_ATTACK_REPORT",
+        "PRE_BUILD_VALIDATION_PACKET",
+        "builder_clearance yes"
+      ]
+    },
+    {
+      "gate_id": "STUDIO_BLOCKING",
+      "blocker": "BLOCKED_RETURN_TO_ARC",
+      "enforcement": "HARD",
+      "requires": ["STUDIO_EXPERIENCE_SIMULATION_RECEIPT pass when UX in scope"]
+    },
+    {
+      "gate_id": "NEVER_STOP_RUNNER",
+      "blocker": "RUNNER_HALT_DEFECT",
+      "enforcement": "HARD",
+      "requires": [
+        "BP_PRIORITY active rank retries until TECHNICAL_PASS or founder_stop",
+        "no silent exit on acceptance FAIL"
+      ],
+      "founder_stop_paths": [
+        "builderos-reboot/FOUNDER_STOP.json",
+        "data/founder_stop.json"
+      ]
+    },
+    {
+      "gate_id": "DOCTRINE_COMPLIANCE",
+      "blocker": "doctrine_violation",
+      "enforcement": "HARD",
+      "requires": [
+        "MISSION_PHASE_ARTIFACTS complete for phase",
+        "department role contract + measurements",
+        "blueprint no-discard — every step DONE",
+        "acceptance exit 0 before healthy claim",
+        "TWIN_DRIFT_REPORT scored post-build"
+      ]
+    },
+    {
+      "gate_id": "TOKEN_MISSION_LEDGER",
+      "blocker": "MEASUREMENT_GAP",
+      "enforcement": "SOFT",
+      "enforcement_target": "HARD",
+      "requires": ["data/builderos-mission-ledger.jsonl row per foundation/builder run"]
+    },
+    {
+      "gate_id": "ARC_ENTRY",
+      "blocker": "BLOCKED_RETURN_TO_IDC",
+      "enforcement_v1": "SOFT",
+      "requires": ["AMENDMENT_PACK_V2.0A acknowledged", "Tier-1 complete", "Pre-ARC sim receipts"]
+    },
+    {
+      "gate_id": "BUILDER_ENTRY",
+      "blocker": "BLOCKED_RETURN_TO_ARC_OR_IDC",
+      "enforcement": "HARD",
+      "requires": [
+        "BLUEPRINT_TWIN",
+        "ASSET_REUSE_DECISION",
+        "BUILDER_SIMULATION_REPORT zero blocking gaps",
+        "PRE_BUILD_VALIDATION_PACKET"
+      ]
+    },
+    {
+      "gate_id": "GOVERNED_BUILD",
+      "blocker": "blueprint-gate",
+      "enforcement_v1": "HARD",
+      "requires": ["blueprint_path or mission_id on /build for spine paths"]
+    },
+    {
+      "gate_id": "INTENT_AMBIGUITY",
+      "blocker": "BLOCKED_INTENT_AMBIGUITY",
+      "enforcement_v1": "HARD",
+      "note": "Only valid founder return before Alpha — not mechanics"
+    },
+    {
+      "gate_id": "ARTICLE_III_VETO",
+      "blocker": "founder_veto",
+      "enforcement_v1": "HARD",
+      "requires": ["Adam approval for >$100, irreversible, data destruction, public release without proof"]
+    },
+    {
+      "gate_id": "FOUNDER_HANDOFF_CORRIDOR",
+      "blocker": "FOUNDER_INTERRUPTION_DEFECT",
+      "enforcement_v1": "MANUAL",
+      "enforcement_target": "HARD",
+      "note": "Any founder question after Point B before Alpha must be receipted as defect unless REALITY_INVALIDATION"
+    },
+    {
+      "gate_id": "QUEUE_AUTHORITY",
+      "blocker": "queue_drift",
+      "enforcement_v1": "HARD",
+      "canonical_queue": "builderos-reboot/BP_PRIORITY.json"
+    },
+    {
+      "gate_id": "BUILD_PASS_CLAIM",
+      "blocker": "false_success",
+      "enforcement": "HARD",
+      "requires": ["TECHNICAL_PASS only when acceptance exit 0 + doctrine pass"]
+    },
+    {
+      "gate_id": "CONSTITUTIONAL_FLOOR",
+      "blocker": "mission_pillar_starvation",
+      "enforcement_v1": "HARD",
+      "domains": ["healing", "education", "hardship"]
+    }
+  ],
+  "reversible_mechanical_dispute": {
+    "definition": "Rollback <= 1 deploy, no schema migration, no constitutional touch, no user data loss",
+    "resolution": "lowest-risk reversible path + dissent recorded"
+  }
+}

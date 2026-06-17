@@ -21,6 +21,14 @@ import { writeResultScoreboard, evaluateReleasePassGate } from './foundation/res
 import { runArcTranslate } from './translate-mission.js';
 import { evaluatePointBGate } from './point-b-gate.js';
 import {
+  writeModeAToBTransitionReceipt,
+  writePredictionReceipt,
+} from './foundation/prediction-receipt.js';
+import { evaluateBuilderEntryGate } from './foundation/builder-entry-gate.js';
+import { evaluateMissionDoctrine } from './foundation/doctrine-enforcement.js';
+import { scoreRealityAgainstSimulations } from './foundation/reality-score.js';
+import { appendMissionLedger } from './foundation/mission-ledger.js';
+import {
   buildUpstreamRoute,
   writeChairFailureReceipt,
   writeUpstreamRouteReport,
@@ -72,6 +80,9 @@ export function runDevelopmentStage(missionIdOrPath, { force = false } = {}) {
   const baseline = loadMissionJson(folder, 'INTENT_BASELINE.json');
   const queueEntry = loadBpPriority(missionId);
   writeCoverageMap(folder, buildFullCoverageMap(missionId, founderText, baseline, queueEntry));
+
+  writeModeAToBTransitionReceipt(folder);
+  writePredictionReceipt(folder);
 
   const deptSims = runDepartmentSimulations(folder);
   writeConsensusReceipt(folder, deptSims);
@@ -128,6 +139,7 @@ export function runBuilderStage(missionIdOrPath) {
 export function runFoundationPipeline(missionIdOrPath, { force = false, dryRun = false } = {}) {
   const folder = resolveMissionFolder(missionIdOrPath);
   const missionId = path.basename(folder);
+  const started = Date.now();
   const report = {
     schema: 'foundation_pipeline_report_v1',
     mission_id: missionId,
@@ -149,8 +161,33 @@ export function runFoundationPipeline(missionIdOrPath, { force = false, dryRun =
   }
 
   if (!dryRun) {
+    const builderEntry = evaluateBuilderEntryGate(folder);
+    report.stages.builder_entry = builderEntry;
+    if (!builderEntry.pass) {
+      writeJson(path.join(folder, 'receipts/BUILDER_ENTRY_GATE_REPORT.json'), builderEntry);
+      report.stages.builder = { ok: false, blocked: true, violations: builderEntry.violations };
+      appendMissionLedger({
+        mission_id: missionId,
+        event: 'builder_entry_blocked',
+        runner: 'run-foundation.js',
+        latency_ms: Date.now() - started,
+        verdict: 'BLOCKED',
+        violations: builderEntry.violations,
+      });
+      writeJson(path.join(folder, 'receipts/FOUNDATION_PIPELINE_REPORT.json'), report);
+      return { ok: false, report };
+    }
+
     report.stages.builder = runBuilderStage(missionId);
     if (!report.stages.builder.ok) {
+      appendMissionLedger({
+        mission_id: missionId,
+        event: 'builder_execute_fail',
+        runner: 'execute-mission.mjs',
+        latency_ms: Date.now() - started,
+        verdict: 'FAIL',
+        note: 'See BUILDER_RUN_RECEIPT.json',
+      });
       writeJson(path.join(folder, 'receipts/FOUNDATION_PIPELINE_REPORT.json'), report);
       return { ok: false, report };
     }
@@ -158,11 +195,20 @@ export function runFoundationPipeline(missionIdOrPath, { force = false, dryRun =
 
   const bp = loadMissionJson(folder, 'BLUEPRINT.json');
   report.stages.final_gate = evaluatePointBGate(folder, { blueprint: bp });
+  scoreRealityAgainstSimulations(folder);
   report.stages.scoreboard = writeResultScoreboard(folder);
   report.stages.release_gate = evaluateReleasePassGate(folder);
+  report.stages.doctrine = evaluateMissionDoctrine(folder, { blueprint: bp });
 
-  report.ok = report.stages.final_gate.machine_path_complete;
+  report.ok = report.stages.final_gate.machine_path_complete && report.stages.doctrine.pass;
   report.awaiting_alpha = report.ok && !report.stages.final_gate.alpha_reached;
   writeJson(path.join(folder, 'receipts/FOUNDATION_PIPELINE_REPORT.json'), report);
+  appendMissionLedger({
+    mission_id: missionId,
+    event: 'foundation_pipeline_complete',
+    runner: 'run-foundation.js',
+    latency_ms: Date.now() - started,
+    verdict: report.ok ? 'PASS' : 'FAIL',
+  });
   return { ok: report.ok, report };
 }

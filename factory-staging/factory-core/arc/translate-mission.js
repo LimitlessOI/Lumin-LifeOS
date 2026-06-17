@@ -13,6 +13,8 @@ import { writeSystemFailureDefect, isIntentRelatedGap } from './system-failure-d
 import { buildUpstreamRoute, writeUpstreamRouteReport, classifyDrift } from './upstream-routing.js';
 import { runSntTranslationAttack } from './foundation/snt-translation-attack.js';
 import { runStudioSimulation } from './foundation/studio-simulation.js';
+import { evaluateStudioBlockingGate } from './foundation/builder-entry-gate.js';
+import { isHardGate } from './gate-enforcement.js';
 
 function writeJson(absPath, data) {
   fs.mkdirSync(path.dirname(absPath), { recursive: true });
@@ -44,19 +46,6 @@ function writePostArcReceipts(missionFolder, { intake, simulation, compile }) {
   fs.writeFileSync(
     path.join(receiptsDir, 'ARC_TWIN_SIMULATION_RECEIPT.json'),
     `${JSON.stringify(twin, null, 2)}\n`,
-  );
-
-  const snt = {
-    schema: 'snt_translation_attack_v1',
-    mission_id: missionId,
-    at: new Date().toISOString(),
-    attacks_run: Math.max(1, simulation.all_gaps?.length || simulation.steps?.length || 1),
-    verdict: simulation.summary.clear_to_build ? 'builder_clearance_yes' : 'builder_clearance_no',
-    blocking: simulation.all_gaps.filter((g) => g.blocked),
-  };
-  fs.writeFileSync(
-    path.join(receiptsDir, 'SNT_TRANSLATION_ATTACK_REPORT.json'),
-    `${JSON.stringify(snt, null, 2)}\n`,
   );
 }
 
@@ -147,7 +136,26 @@ export function runArcTranslate(missionId, { dryRun = false, writeBlueprint = tr
 
   writePostArcReceipts(missionFolder, { intake, simulation, compile });
   runSntTranslationAttack(missionFolder, { blueprint: compile.blueprint, simulation });
-  runStudioSimulation(missionFolder);
+  const studioReceipt = runStudioSimulation(missionFolder);
+  const studioGate = evaluateStudioBlockingGate(missionFolder);
+  if (!studioGate.pass && isHardGate('STUDIO_BLOCKING')) {
+    writeJson(path.join(missionFolder, 'receipts/STUDIO_BLOCKING_GATE_REPORT.json'), studioGate);
+    writeJson(path.join(missionFolder, 'ARC_RUN_RECEIPT.json'), {
+      ...receipt,
+      translate: { ...receipt.translate, status: 'BLOCKED_STUDIO' },
+      studio_gate: studioGate,
+    });
+    return {
+      ok: false,
+      status: 'BLOCKED_RETURN_TO_ARC',
+      intake,
+      compile,
+      simulation,
+      studio: studioReceipt,
+      studio_gate: studioGate,
+      receipt,
+    };
+  }
 
   if (!mechanicalPass) {
     writeJson(path.join(missionFolder, 'ARC_RUN_RECEIPT.json'), receipt);

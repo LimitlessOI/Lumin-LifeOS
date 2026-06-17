@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BUILDER_SIMULATION_REPORT",
+  "type": "object",
+  "required": ["schema", "mission_id", "steps", "summary"],
+  "properties": {
+    "schema": { "type": "string", "const": "builder_simulation_report_v1" },
+    "mission_id": { "type": "string", "minLength": 1 },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_id", "blocked"],
+        "properties": {
+          "step_id": { "type": "string" },
+          "decision_gap": { "type": ["string", "null"] },
+          "decision_type": { "type": "string" },
+          "forced_decision_reason": { "type": "string" },
+          "required_owner": { "type": "string" },
+          "severity": { "type": "string", "enum": ["low", "medium", "high", "blocking"] },
+          "blocked": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total_gaps", "blocking_gaps"],
+      "properties": {
+        "total_gaps": { "type": "integer", "minimum": 0 },
+        "blocking_gaps": { "type": "integer", "minimum": 0 },
+        "clear_to_build": { "type": "boolean" }
+      }
+    }
+  },
+  "additionalProperties": true
+}

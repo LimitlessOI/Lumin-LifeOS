@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PRE_BUILD_VALIDATION_PACKET",
+  "type": "object",
+  "required": ["schema", "mission_id", "builder_clearance"],
+  "properties": {
+    "schema": { "type": "string", "const": "pre_build_validation_packet_v1" },
+    "mission_id": { "type": "string", "minLength": 1 },
+    "builder_clearance": { "type": "string", "enum": ["yes", "no"] },
+    "builder_simulation_ref": { "type": "string" }
+  },
+  "additionalProperties": true
+}

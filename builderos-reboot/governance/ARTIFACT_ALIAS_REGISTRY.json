@@ -1,0 +1,121 @@
+{
+  "schema": "artifact_alias_registry_v1",
+  "version": "2.0A",
+  "updated_at": "2026-06-16",
+  "rule": "Canonical names only in new artifacts. Legacy aliases are lookup-only.",
+  "artifacts": [
+    {
+      "canonical": "INTENT_BASELINE",
+      "legacy_aliases": [],
+      "owner": "IDC / Chair",
+      "schema_v1": "builderos-reboot/governance/schemas/INTENT_BASELINE.schema.json"
+    },
+    {
+      "canonical": "INTENT_COVERAGE_MAP",
+      "legacy_aliases": [],
+      "owner": "IDC / Chair",
+      "schema_v1": "builderos-reboot/governance/schemas/INTENT_COVERAGE_MAP.schema.json"
+    },
+    {
+      "canonical": "SNT_INTENT_ATTACK_RECEIPT",
+      "legacy_aliases": ["SNT_INTENT_REVIEW"],
+      "owner": "SNT"
+    },
+    {
+      "canonical": "SNT_TRANSLATION_ATTACK_REPORT",
+      "legacy_aliases": ["SNT_ATTACK_REPORT"],
+      "owner": "SNT"
+    },
+    {
+      "canonical": "CHAIR_FORECAST_SIMULATION_RECEIPT",
+      "legacy_aliases": ["CHAIR_FORECAST_RECEIPT"],
+      "owner": "Chair"
+    },
+    {
+      "canonical": "CFO_RESOURCE_SIMULATION_RECEIPT",
+      "legacy_aliases": ["CFO_RESOURCE_RECEIPT", "PRIORITY_MAP"],
+      "owner": "CFO",
+      "note": "PRIORITY_MAP is analysis only — never execution queue. Queue is BP_PRIORITY.json"
+    },
+    {
+      "canonical": "PREDICTION_RECEIPT",
+      "legacy_aliases": [],
+      "owner": "CFO",
+      "schema_v1": "builderos-reboot/governance/schemas/PREDICTION_RECEIPT.schema.json"
+    },
+    {
+      "canonical": "BUILDER_ENTRY_GATE_REPORT",
+      "legacy_aliases": [],
+      "owner": "Chair",
+      "schema_v1": "builderos-reboot/governance/schemas/BUILDER_ENTRY_GATE.schema.json"
+    },
+    {
+      "canonical": "MODE_A_TO_B_TRANSITION_RECEIPT",
+      "legacy_aliases": [],
+      "owner": "Chair"
+    },
+    {
+      "canonical": "PRE_ARC_INPUT_PACKET",
+      "legacy_aliases": [],
+      "owner": "Chair",
+      "schema_v1": "builderos-reboot/governance/schemas/PRE_ARC_INPUT_PACKET.schema.json"
+    },
+    {
+      "canonical": "PRE_BUILD_VALIDATION_PACKET",
+      "legacy_aliases": [],
+      "owner": "Chair",
+      "schema_v1": "builderos-reboot/governance/schemas/PRE_BUILD_VALIDATION_PACKET.schema.json"
+    },
+    {
+      "canonical": "BLUEPRINT_TWIN",
+      "legacy_aliases": ["BLUEPRINT", "BPB output"],
+      "owner": "ARC",
+      "machine_path": "builderos-reboot/MISSIONS/{mission_id}/BLUEPRINT.json"
+    },
+    {
+      "canonical": "OBJECTIVE_VERDICT",
+      "legacy_aliases": [],
+      "owner": "ARC / Hist",
+      "machine_path": "builderos-reboot/MISSIONS/{mission_id}/OBJECTIVE_VERDICT.json"
+    },
+    {
+      "canonical": "ASSET_REUSE_DECISION",
+      "legacy_aliases": [],
+      "owner": "ARC + CFO + Wisdom"
+    },
+    {
+      "canonical": "BUILDER_SIMULATION_REPORT",
+      "legacy_aliases": ["SIMULATION_RECEIPT"],
+      "owner": "Builder / CDR"
+    },
+    {
+      "canonical": "FOUNDER_INTERRUPTION_DEFECT",
+      "legacy_aliases": [],
+      "owner": "Hist",
+      "introduced": "AMENDMENT_PACK_V2.0A A3"
+    },
+    {
+      "canonical": "REALITY_INVALIDATION",
+      "legacy_aliases": [],
+      "owner": "SNT + Chair"
+    },
+    {
+      "canonical": "STUDIO_SCOPE_WAIVER",
+      "legacy_aliases": [],
+      "owner": "Chair + ARC"
+    },
+    {
+      "canonical": "SHERRY_FILTER_PARK_RECEIPT",
+      "legacy_aliases": [],
+      "owner": "Wisdom + Studio"
+    }
+  ],
+  "naming_migration": {
+    "BPB": "ARC",
+    "SDO": "Studio",
+    "Vision Discovery": "IDC",
+    "Founder Packet": "vision seed / IDC input",
+    "Intent Baseline": "IDC output",
+    "Blueprint / Twin": "ARC output — machine twin = BLUEPRINT.json + OBJECTIVE_VERDICT.json + receipts"
+  }
+}

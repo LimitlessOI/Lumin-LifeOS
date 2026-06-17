@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "INTENT_BASELINE",
+  "type": "object",
+  "required": ["schema", "mission_id", "intent_id"],
+  "properties": {
+    "schema": { "type": "string", "const": "intent_baseline_v1" },
+    "mission_id": { "type": "string", "minLength": 1 },
+    "intent_id": { "type": "string", "minLength": 1 },
+    "status": { "type": "string" },
+    "outcome_statement": { "type": "string" }
+  },
+  "additionalProperties": true
+}

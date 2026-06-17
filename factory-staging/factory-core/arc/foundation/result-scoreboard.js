@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { loadMissionJson } from '../mission-paths.js';
 import { readFounderText } from './coverage-map.js';
+import { mergeScoreboardWithReality } from './reality-score.js';
 
 export function writeResultScoreboard(missionFolder) {
   const missionId = path.basename(missionFolder);
@@ -14,7 +15,7 @@ export function writeResultScoreboard(missionFolder) {
   const builderRun = loadMissionJson(missionFolder, 'BUILDER_RUN_RECEIPT.json');
   const founderText = readFounderText(missionFolder);
 
-  const board = {
+  const board = mergeScoreboardWithReality(missionFolder, {
     schema: 'result_scoreboard_v1',
     mission_id: missionId,
     at: new Date().toISOString(),
@@ -31,7 +32,7 @@ export function writeResultScoreboard(missionFolder) {
     changed: [],
     learned: [],
     no_narrative: true,
-  };
+  });
 
   const out = path.join(missionFolder, 'RESULT_SCOREBOARD.json');
   fs.writeFileSync(out, `${JSON.stringify(board, null, 2)}\n`);

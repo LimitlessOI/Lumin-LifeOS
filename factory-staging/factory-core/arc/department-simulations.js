@@ -7,6 +7,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT } from '../builder/run-step.js';
 import { loadMissionJson } from './mission-paths.js';
+import {
+  isHardGate,
+  isProofLapMission,
+  loadBpPriorityMission,
+} from './gate-enforcement.js';
+import {
+  attachMeasurementsToReceipt,
+  measurementEnvelope,
+} from './foundation/simulation-measurements.js';
 
 const DEPARTMENTS = ['SNT', 'CHAIR', 'CFO', 'WISDOM'];
 
@@ -38,6 +47,17 @@ function loadWisdomLessons() {
   } catch {
     return [];
   }
+}
+
+function resolveSimulationTier(missionFolder) {
+  const hasPred = fs.existsSync(path.join(missionFolder, 'PREDICTION_RECEIPT.json'));
+  const hasMode = fs.existsSync(path.join(missionFolder, 'MODE_A_TO_B_TRANSITION_RECEIPT.json'));
+  if (hasPred && hasMode) return 'COUNCIL_SIM';
+  return 'BOOTSTRAP_MECHANICAL';
+}
+
+function withSimulationTier(receipt, tier) {
+  return { ...receipt, simulation_tier: tier };
 }
 
 function writeJson(absPath, data) {
@@ -86,7 +106,7 @@ function runSntIntentAttack(missionFolder, founderText, baseline, coverage) {
   );
 
   const blocking = attacks.filter((a) => !a.pass && a.severity === 'blocking');
-  return {
+  const base = {
     schema: 'snt_intent_attack_v1',
     mission_id: missionId,
     seat: 'SNT',
@@ -99,6 +119,22 @@ function runSntIntentAttack(missionFolder, founderText, baseline, coverage) {
     pass: blocking.length === 0,
     route_on_fail: 'CHAIR',
   };
+  return attachMeasurementsToReceipt(base, 'SNT', [
+    measurementEnvelope({
+      seat: 'SNT',
+      metric_id: 'intent_measurable',
+      predicted: blocking.length === 0 ? 'clear' : 'blocked',
+      confidence: 'THINK',
+      how_we_know_if_wrong: 'IDC exit gate or acceptance FAIL on scope drift',
+    }),
+    measurementEnvelope({
+      seat: 'SNT',
+      metric_id: 'blocking_attack_count',
+      predicted: 0,
+      confidence: 'KNOW',
+      how_we_know_if_wrong: 'attacks with severity=blocking and pass=false',
+    }),
+  ]);
 }
 
 function runChairForecast(missionFolder, founderText, queueEntry) {
@@ -112,7 +148,7 @@ function runChairForecast(missionFolder, founderText, queueEntry) {
   const blocking = [];
   if (!founderText.trim()) blocking.push('no_founder_packet_for_forecast');
 
-  return {
+  return attachMeasurementsToReceipt({
     schema: 'chair_forecast_simulation_v1',
     mission_id: missionId,
     seat: 'CHAIR',
@@ -134,7 +170,15 @@ function runChairForecast(missionFolder, founderText, queueEntry) {
     verdict: blocking.length ? 'forecast_blocked' : 'forecast_acceptable',
     pass: blocking.length === 0,
     route_on_fail: 'CHAIR',
-  };
+  }, 'CHAIR', [
+    measurementEnvelope({
+      seat: 'CHAIR',
+      metric_id: 'handoff_forecast',
+      predicted: blocking.length === 0 ? 'proceed' : 'block',
+      confidence: 'THINK',
+      how_we_know_if_wrong: 'CHAIR_HANDOFF_RECEIPT missing or corridor gate FAIL',
+    }),
+  ]);
 }
 
 function runCfoResource(missionFolder, blueprint, queueEntry) {
@@ -144,7 +188,7 @@ function runCfoResource(missionFolder, blueprint, queueEntry) {
   const blocking = [];
   if (!queueEntry) blocking.push('not_on_BP_PRIORITY — CFO cannot confirm priority fit');
 
-  return {
+  return attachMeasurementsToReceipt({
     schema: 'cfo_resource_simulation_v1',
     mission_id: missionId,
     seat: 'CFO',
@@ -160,7 +204,15 @@ function runCfoResource(missionFolder, blueprint, queueEntry) {
     verdict: blocking.length ? 'priority_unconfirmed' : 'within_budget',
     pass: blocking.length === 0,
     route_on_fail: 'CHAIR',
-  };
+  }, 'CFO', [
+    measurementEnvelope({
+      seat: 'CFO',
+      metric_id: 'within_budget',
+      predicted: blocking.length === 0 ? 'yes' : 'no',
+      confidence: 'THINK',
+      how_we_know_if_wrong: 'Mission blocked on BP or overrun token ledger vs PREDICTION_RECEIPT',
+    }),
+  ]);
 }
 
 function runWisdomReview(missionFolder, founderText) {
@@ -175,7 +227,7 @@ function runWisdomReview(missionFolder, founderText) {
   }
   patterns.push('Partial blueprint labeled success = historical drift — fail closed');
 
-  return {
+  return attachMeasurementsToReceipt({
     schema: 'wisdom_review_v1',
     mission_id: missionId,
     seat: 'Wisdom',
@@ -187,7 +239,15 @@ function runWisdomReview(missionFolder, founderText) {
     verdict: 'proceed',
     pass: true,
     route_on_fail: 'CHAIR',
-  };
+  }, 'WISDOM', [
+    measurementEnvelope({
+      seat: 'WISDOM',
+      metric_id: 'drift_pattern_acknowledged',
+      predicted: true,
+      confidence: 'KNOW',
+      how_we_know_if_wrong: 'TWIN_DRIFT_REPORT drift_count > 0 post-acceptance',
+    }),
+  ]);
 }
 
 /**
@@ -201,11 +261,12 @@ export function runDepartmentSimulations(missionFolder) {
   const blueprint = loadMissionJson(missionFolder, 'BLUEPRINT.json');
   const queueEntry = loadBpPriority(missionId);
   const receiptsDir = path.join(missionFolder, 'receipts');
+  const simulationTier = resolveSimulationTier(missionFolder);
 
-  const snt = runSntIntentAttack(missionFolder, founderText, baseline, coverage);
-  const chair = runChairForecast(missionFolder, founderText, queueEntry);
-  const cfo = runCfoResource(missionFolder, blueprint, queueEntry);
-  const wisdom = runWisdomReview(missionFolder, founderText);
+  const snt = withSimulationTier(runSntIntentAttack(missionFolder, founderText, baseline, coverage), simulationTier);
+  const chair = withSimulationTier(runChairForecast(missionFolder, founderText, queueEntry), simulationTier);
+  const cfo = withSimulationTier(runCfoResource(missionFolder, blueprint, queueEntry), simulationTier);
+  const wisdom = withSimulationTier(runWisdomReview(missionFolder, founderText), simulationTier);
 
   writeJson(path.join(receiptsDir, 'SNT_INTENT_ATTACK_RECEIPT.json'), snt);
   writeJson(path.join(receiptsDir, 'CHAIR_FORECAST_SIMULATION_RECEIPT.json'), chair);
@@ -224,6 +285,7 @@ export function runDepartmentSimulations(missionFolder) {
     failed_seats: failed.map(([seat]) => seat),
     defect_owner_seat: failed.length ? 'Chair' : null,
     route_to: failed.length ? 'CHAIR' : 'ARC',
+    simulation_tier: simulationTier,
     lesson: failed.length
       ? 'Department simulation failed — Chair failed to produce clear handoff. ARC pushes upstream.'
       : 'All departments touched. Chair may lock handoff.',
@@ -231,6 +293,7 @@ export function runDepartmentSimulations(missionFolder) {
 }
 
 export function isStubDepartmentReceipt(data, seat) {
+  if (data?.simulation_tier === 'BOOTSTRAP_MECHANICAL') return true;
   if (!data?.simulated_by) return true;
   if (seat === 'SNT') return !Array.isArray(data.attacks) || data.attacks.length === 0;
   if (seat === 'CHAIR') return !Array.isArray(data.predictions) || data.predictions.length === 0;
@@ -266,10 +329,25 @@ export function validateDepartmentReceipts(missionFolder) {
       continue;
     }
     const stub = isStubDepartmentReceipt(data, spec.seat);
-    const pass = data.pass === true && !stub;
-    checks[spec.seat] = { pass, stub, verdict: data.verdict };
+    const tier = data.simulation_tier || 'BOOTSTRAP_MECHANICAL';
+    const onBp = Boolean(loadBpPriorityMission(path.basename(missionFolder)));
+    const proofLap = isProofLapMission(missionFolder);
+    const fidelityHard = isHardGate('SIMULATION_FIDELITY');
+    const bootstrapBlocked =
+      fidelityHard && tier === 'BOOTSTRAP_MECHANICAL' && onBp && !proofLap;
+
+    const pass = data.pass === true && !stub && !bootstrapBlocked;
+    checks[spec.seat] = { pass, stub, tier, bootstrapBlocked, verdict: data.verdict };
     if (stub) violations.push(`department:${spec.seat} stub receipt — system failure`);
+    if (bootstrapBlocked) {
+      violations.push(
+        `department:${spec.seat} BOOTSTRAP_MECHANICAL blocked — write PREDICTION_RECEIPT + MODE_A_TO_B before sims`,
+      );
+    }
     if (!pass) violations.push(`department:${spec.seat} simulation failed (${data.verdict})`);
+    if (onBp && !proofLap && tier === 'COUNCIL_SIM' && (!Array.isArray(data.measurements) || data.measurements.length === 0)) {
+      violations.push(`department:${spec.seat} missing measurements envelope`);
+    }
   }
 
   return {

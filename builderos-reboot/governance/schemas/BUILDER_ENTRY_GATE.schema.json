@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BUILDER_ENTRY_GATE_REPORT",
+  "type": "object",
+  "required": ["schema", "mission_id", "pass", "violations"],
+  "properties": {
+    "schema": { "const": "builder_entry_gate_v1" },
+    "mission_id": { "type": "string" },
+    "pass": { "type": "boolean" },
+    "status": { "type": "string" },
+    "violations": { "type": "array", "items": { "type": "string" } },
+    "enforcement": { "enum": ["HARD", "SOFT"] }
+  }
+}

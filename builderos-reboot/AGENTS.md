@@ -22,9 +22,16 @@ You are in **`builderos-reboot/`** — governed mission packs and factory proofs
 | Artifact | Role |
 |----------|------|
 | **`BP_PRIORITY.json`** | ONLY ordered list of product BPs to execute (rank 1 = active) |
-| `MISSIONS/<id>/FOUNDER_PACKET.md` | WHAT + PASS bar |
-| `MISSIONS/<id>/BLUEPRINT.json` | HOW |
+| `MISSIONS/<id>/FOUNDER_PACKET.md` | Verbal digital twin — intended reality (WHAT) |
+| `MISSIONS/<id>/BLUEPRINT.json` | Machine-buildable twin — ARC instructions (HOW) |
+| `MISSIONS/<id>/OBJECTIVE_VERDICT.json` | Result scoreboard |
 | Named acceptance npm script | PROOF |
+
+**Governance (read first):** `docs/constitution/AMENDMENT_PACK_V2.0A.md` — intent front-loaded; no founder re-questions after handoff except defects or new reality. Metric: founder interruptions before Alpha.
+
+**Registries:** `governance/ARTIFACT_ALIAS_REGISTRY.json`, `governance/GATE_ENFORCEMENT_MATRIX.json`, `governance/DEPARTMENT_ROLE_CONTRACT.json`, `governance/MISSION_PHASE_ARTIFACTS.json`
+
+**Enforcement (HARD — Adam 2026-06-17):** Gates in `GATE_ENFORCEMENT_MATRIX.json` with `"enforcement": "HARD"` fail-closed in foundation + execute paths. **Doctrine verify:** `npm run builderos:doctrine:verify -- MISSION_ID` — no artifact discards, department role + measurement envelopes, acceptance exit 0 before healthy claim, `TWIN_DRIFT_REPORT` scores simulation vs reality (Hist lane). **Never-stop runner:** `npm run builderos:bp-priority:never-stop` walks `BP_PRIORITY.json` until complete or defect. **Founder stop only:** create `builderos-reboot/FOUNDER_STOP.json` with `{ "stop": true }` to halt the runner. **Token ledger:** `data/builderos-mission-ledger.jsonl` (+ `factory-staging/data/tsos-step-metrics.jsonl`). **Prediction vs reality:** `docs/ADF_PREDICTION_LEDGER_V1.md` + mission `PREDICTION_RECEIPT.json` / `RESULT_SCOREBOARD.json`.
 
 ---
 

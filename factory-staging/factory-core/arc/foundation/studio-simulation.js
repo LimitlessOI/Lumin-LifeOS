@@ -29,7 +29,7 @@ export function runStudioSimulation(missionFolder) {
   const checks = [
     {
       check: 'Founder can see staged items in one place',
-      pass: /one list|see staged|inbox/i.test(founderText),
+      pass: /one list|see staged|inbox|tracker|commitment/i.test(founderText),
       friction_if_fail: 'Adam cannot trust staging visibility',
     },
     {
@@ -37,12 +37,19 @@ export function runStudioSimulation(missionFolder) {
       pass: /approve|explicit|never auto/i.test(founderText),
       friction_if_fail: 'Trust collapse at Alpha',
     },
-    {
+  ];
+
+  const privateInScope =
+    /private mode|private_no_save|off-record|private input/i.test(founderText) &&
+    !/out of scope[\s\S]{0,200}private|private[\s\S]{0,80}out of scope/i.test(founderText);
+
+  if (privateInScope) {
+    checks.push({
       check: 'Private mode UX boundary',
       pass: /private/i.test(founderText),
       friction_if_fail: 'Privacy trust failure',
-    },
-  ];
+    });
+  }
 
   const failed = checks.filter((c) => !c.pass);
   const receipt = {

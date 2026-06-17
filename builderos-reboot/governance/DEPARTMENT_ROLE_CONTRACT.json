@@ -1,0 +1,102 @@
+{
+  "schema": "department_role_contract_v1",
+  "version": "2.0A",
+  "updated_at": "2026-06-17",
+  "rule": "Every seat simulates its role — stub or missing measurement = system failure on BP_PRIORITY missions.",
+  "seats": {
+    "SNT": {
+      "title": "Sentinel",
+      "role": "Adversarial review — intent fidelity, drift, translation attack, reality invalidation",
+      "must_answer": [
+        "If this claim is wrong, how would we know?",
+        "What failure mode is unmeasured?",
+        "What would silent success look like?"
+      ],
+      "receipts": ["SNT_INTENT_ATTACK_RECEIPT", "SNT_TRANSLATION_ATTACK_REPORT"],
+      "required_fields": ["attacks", "evidence_if_wrong", "pass", "verdict"],
+      "measurement_fields": ["attacks[].evidence_if_wrong", "attacks[].failure_scenario"]
+    },
+    "CHAIR": {
+      "title": "Council Chair",
+      "role": "Strategic forecast, handoff lock, Mode A→B transition, upstream routing on failure",
+      "must_answer": [
+        "Does intent remain valid at 6mo/1yr?",
+        "Is handoff locked before corridor?",
+        "Who owns defects when departments fail?"
+      ],
+      "receipts": ["CHAIR_FORECAST_SIMULATION_RECEIPT", "CHAIR_HANDOFF_RECEIPT"],
+      "required_fields": ["predictions", "verdict", "pass"],
+      "measurement_fields": ["predictions[].expected_timeline", "predictions[].confidence"]
+    },
+    "CFO": {
+      "title": "CFO",
+      "role": "Resource burden, ROI note, priority fit — never demote constitutional floor on ROI alone",
+      "must_answer": [
+        "What is opportunity cost?",
+        "Is this within budget for rank?",
+        "Does deploy/acceptance cost exist?"
+      ],
+      "receipts": ["CFO_RESOURCE_SIMULATION_RECEIPT", "PREDICTION_RECEIPT"],
+      "required_fields": ["roi_note", "resource_burden", "verdict", "pass"],
+      "measurement_fields": ["PREDICTION_RECEIPT.pre_build.estimated_duration_minutes", "PREDICTION_RECEIPT.pre_build.estimated_deploy_required"]
+    },
+    "WISDOM": {
+      "title": "Wisdom / Hist lane",
+      "role": "Historical patterns, drift warnings, lesson surfacing — scores predictions post-hoc",
+      "must_answer": [
+        "What historical drift pattern applies?",
+        "What lesson from prior missions?",
+        "Who scores simulation vs reality?"
+      ],
+      "receipts": ["WISDOM_REVIEW_RECEIPT"],
+      "required_fields": ["patterns_from_history", "drift_warnings", "verdict", "pass"],
+      "measurement_fields": ["lessons_surfaced"]
+    },
+    "ARC": {
+      "title": "Architect / Blueprint",
+      "role": "Mechanical translate — blueprint twin, zero unauthorized decision gaps, asset reuse",
+      "must_answer": [
+        "Are all steps write_file_exact?",
+        "Does simulation have per-step content?",
+        "Is mechanical handoff honest?"
+      ],
+      "receipts": ["ARC_RUN_RECEIPT", "ARC_TWIN_SIMULATION_RECEIPT", "BLUEPRINT_TWIN"],
+      "required_fields": ["mechanical_handoff_pass", "simulation_summary"],
+      "measurement_fields": ["BUILDER_SIMULATION_REPORT.steps.length", "simulation_summary.blocking_gaps"]
+    },
+    "Builder": {
+      "title": "CDR / Builder",
+      "role": "Deterministic execute — no inventing, every blueprint step DONE, acceptance is result truth",
+      "must_answer": [
+        "Did every blueprint step execute?",
+        "Did acceptance exit 0?",
+        "Are sha256 contracts met?"
+      ],
+      "receipts": ["BUILDER_RUN_RECEIPT", "BUILDER_SIMULATION_REPORT", "PRE_BUILD_VALIDATION_PACKET"],
+      "required_fields": ["steps_executed", "step_results", "acceptance_exit_code", "verdict"],
+      "measurement_fields": ["acceptance_exit_code", "step_results[].sha256"]
+    },
+    "Studio": {
+      "title": "Design / UX",
+      "role": "Experience simulation when UI/product feel in scope — blocking when in_scope",
+      "must_answer": [
+        "Is UX in scope?",
+        "What friction points remain?"
+      ],
+      "receipts": ["STUDIO_EXPERIENCE_SIMULATION_RECEIPT"],
+      "required_fields": ["in_scope", "verdict"],
+      "measurement_fields": ["friction_points"]
+    },
+    "Hist": {
+      "title": "Historian",
+      "role": "Score predictions vs actual — simulation is oracle not authority",
+      "must_answer": [
+        "Did prediction match reality?",
+        "What variance lesson?"
+      ],
+      "receipts": ["RESULT_SCOREBOARD", "TWIN_DRIFT_REPORT", "PREDICTION_RECEIPT.post_build"],
+      "required_fields": ["simulation_vs_reality"],
+      "measurement_fields": ["simulation_vs_reality[].match"]
+    }
+  }
+}

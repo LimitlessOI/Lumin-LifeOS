@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PREDICTION_RECEIPT",
+  "type": "object",
+  "required": ["schema", "mission_id", "pre_build", "owner"],
+  "properties": {
+    "schema": { "const": "prediction_receipt_v1" },
+    "mission_id": { "type": "string" },
+    "owner": { "type": "string" },
+    "pre_build": { "type": "object" },
+    "post_build": { "type": "object" }
+  }
+}

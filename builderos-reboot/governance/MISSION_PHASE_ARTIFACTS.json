@@ -1,0 +1,71 @@
+{
+  "schema": "mission_phase_artifacts_v1",
+  "version": "2.0A",
+  "updated_at": "2026-06-17",
+  "rule": "Required artifacts cannot be discarded. PARKED only via explicit receipt with founder or Chair lock.",
+  "phases": {
+    "development": {
+      "gate": "IDC_EXIT",
+      "blocker": "BLOCKED_CONTINUE_IDC",
+      "required": [
+        { "id": "INTENT_BASELINE", "path": "INTENT_BASELINE.json" },
+        { "id": "INTENT_COVERAGE_MAP", "path": "INTENT_COVERAGE_MAP.json" },
+        { "id": "IDC_CONSENSUS_RECEIPT", "path": "IDC_CONSENSUS_RECEIPT.json" },
+        { "id": "KNOWN_RISKS", "path": "KNOWN_RISKS.json" },
+        { "id": "KNOWN_ASSUMPTIONS", "path": "KNOWN_ASSUMPTIONS.json" },
+        { "id": "PREDICTION_RECEIPT", "path": "PREDICTION_RECEIPT.json" },
+        { "id": "MODE_A_TO_B_TRANSITION_RECEIPT", "path": "MODE_A_TO_B_TRANSITION_RECEIPT.json" },
+        { "id": "PRE_ARC_INPUT_PACKET", "path": "PRE_ARC_INPUT_PACKET.json" },
+        { "id": "ASSET_REUSE_DECISION", "path": "ASSET_REUSE_DECISION.json" },
+        { "id": "CHAIR_HANDOFF_RECEIPT", "path": "CHAIR_HANDOFF_RECEIPT.json", "alt": "FOUNDER_HANDOFF_RECEIPT.json" },
+        { "id": "SNT_INTENT_ATTACK_RECEIPT", "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json" },
+        { "id": "CHAIR_FORECAST_SIMULATION_RECEIPT", "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json" },
+        { "id": "CFO_RESOURCE_SIMULATION_RECEIPT", "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json" },
+        { "id": "WISDOM_REVIEW_RECEIPT", "path": "receipts/WISDOM_REVIEW_RECEIPT.json" }
+      ]
+    },
+    "corridor": {
+      "gate": "ARC_ENTRY",
+      "blocker": "BLOCKED_RETURN_TO_IDC",
+      "required": [
+        { "id": "BLUEPRINT_TWIN", "path": "BLUEPRINT.json" },
+        { "id": "ARC_RUN_RECEIPT", "path": "ARC_RUN_RECEIPT.json" },
+        { "id": "ARC_TWIN_SIMULATION_RECEIPT", "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json" },
+        { "id": "BUILDER_SIMULATION_REPORT", "path": "receipts/BUILDER_SIMULATION_REPORT.json" },
+        { "id": "SNT_TRANSLATION_ATTACK_REPORT", "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json" },
+        { "id": "PRE_BUILD_VALIDATION_PACKET", "path": "PRE_BUILD_VALIDATION_PACKET.json" }
+      ]
+    },
+    "builder": {
+      "gate": "BUILDER_ENTRY",
+      "blocker": "BLOCKED_RETURN_TO_ARC_OR_IDC",
+      "required": [
+        { "id": "BUILDER_RUN_RECEIPT", "path": "BUILDER_RUN_RECEIPT.json" }
+      ]
+    },
+    "technical_pass": {
+      "gate": "BUILD_PASS_CLAIM",
+      "blocker": "false_success",
+      "required": [
+        { "id": "OBJECTIVE_VERDICT", "path": "OBJECTIVE_VERDICT.json" },
+        { "id": "RESULT_SCOREBOARD", "path": "RESULT_SCOREBOARD.json" }
+      ],
+      "invariants": [
+        "OBJECTIVE_VERDICT.verdict in TECHNICAL_PASS|PASS",
+        "acceptance receipt verdict PASS",
+        "BUILDER_RUN_RECEIPT.acceptance_exit_code === 0"
+      ]
+    },
+    "release_pass": {
+      "gate": "RELEASE_PASS",
+      "blocker": "BLOCKED_RELEASE",
+      "required": [
+        { "id": "RESULT_SCOREBOARD", "path": "RESULT_SCOREBOARD.json" },
+        { "id": "TWIN_DRIFT_REPORT", "path": "receipts/TWIN_DRIFT_REPORT.json" }
+      ],
+      "invariants": [
+        "OBJECTIVE_VERDICT.founder_usability_pass === true"
+      ]
+    }
+  }
+}
