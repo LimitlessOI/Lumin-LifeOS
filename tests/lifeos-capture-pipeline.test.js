@@ -73,6 +73,49 @@ describe('lifeos capture pipeline v2', () => {
     assert.equal(result.reason, 'private_mode');
   });
 
+  it('classifies no-save text before callers persist voice history', () => {
+    const pool = mockPool();
+    const pipeline = createLifeOSCapturePipeline({ pool, logger: null });
+    const classification = pipeline.classifyVoiceSubmit({
+      text: "off the record: don't save this",
+      mode: 'conversation',
+    });
+    assert.equal(classification, 'private_no_save');
+  });
+
+  it('does not persist private/no-save classified text to the inbox', async () => {
+    const pool = mockPool();
+    const pipeline = createLifeOSCapturePipeline({ pool, logger: null });
+    const result = await pipeline.stageFromVoiceSubmit({
+      userId: 'user-1',
+      text: "off the record: don't save this",
+      private: false,
+    });
+    assert.equal(result.staged, false);
+    assert.equal(result.reason, 'private_classification');
+    assert.equal(pool.items.length, 0);
+  });
+
+  it('returns capture_error when inbox persistence fails', async () => {
+    const pool = {
+      async query(sql) {
+        if (String(sql).includes('INSERT INTO action_inbox_items')) {
+          throw new Error('db_down');
+        }
+        return { rows: [] };
+      },
+    };
+    const pipeline = createLifeOSCapturePipeline({ pool, logger: null });
+    const result = await pipeline.stageFromVoiceSubmit({
+      userId: 'user-1',
+      text: 'Please remind me to call the client',
+      private: false,
+    });
+    assert.equal(result.staged, false);
+    assert.equal(result.reason, 'capture_error');
+    assert.equal(result.error, 'db_down');
+  });
+
   it('skips simulate_only', async () => {
     const pool = mockPool();
     const pipeline = createLifeOSCapturePipeline({ pool, logger: null });
