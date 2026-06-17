@@ -1,7 +1,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-16 — Builder frozen-blueprint spine writes + full intake-loop execute PASS
+**Last Updated:** 2026-06-17 — ADF prediction ledger ID hardening
 
 ---
 
@@ -159,6 +159,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-17 | **`services/adf-prediction-ledger.js`**, **`routes/adf-routes.js`**, **`tests/adf-prediction-ledger.test.js`** — prediction IDs now accept only filename-safe `[A-Za-z0-9_-]`, reject reuse with 409 semantics, create new receipt files with no-overwrite writes, and surface validation/conflict statuses through the API; tests cover path-escape rejection and duplicate-id non-overwrite. | Critical bug hunt: authenticated `/api/v1/adf/predictions` could path-escape `data/adf-predictions/` or silently overwrite a scored prediction when `prediction_id` was reused. | ✅ `node --test tests/adf-prediction-ledger.test.js`; `npm test`; `node scripts/ssot-check.js --all` | commit + push |
 | 2026-06-17 | **V2 production recovery + gate hardening** — GAP-FILL boot chain (adf/builderos-arc routes, blueprint-write-policy, import paths); both v2 acceptances PASS on `7a7c96d0f4`; `SEAT_ACCOUNTABILITY_MATRIX.json` per mission; SNT translation requires `evidence_if_wrong` + prod route probe; point-b-gate blocks empty builder sim + acceptance FAIL | Adam plan #1–#5 | ✅ capture + commitment v2 acceptance PASS | Alpha confirm pending |
 | 2026-06-17 | GAP-FILL: **`builderos-reboot/scripts/blueprint-write-policy.mjs`** — imported by `simulate-blueprint-steps.js` at ARC boot; Railway `15277e0ed4` FAILED missing module | Third boot crash in deploy chain | pending redeploy | commit + push |
 | 2026-06-17 | GAP-FILL: **`services/builderos-arc-service.js`** — factory-staging imports used `../../` (resolved to `/usr/src/factory-staging` in Docker) instead of `../`; Railway `8570554438` FAILED boot | Second boot crash after adf-routes commit | pending redeploy | fix imports + push |

@@ -6,6 +6,25 @@
 
 ---
 
+## [FIX] Update 2026-06-17 — Voice Rail privacy hardening + ADF/commitment corruption guards
+
+### What changed
+- **Voice Rail / Action Inbox bridge:** `routes/lifeos-voice-rail-routes.js` now asks `services/lifeos-capture-pipeline.js` to classify text before `submitMessage()` persists it. Utterances like "off the record" / "don't save" now take the private no-save path before `voice_rail_messages` writes. Capture-pipeline DB failures now return explicit 503 instead of top-level `ok:true` with buried metadata.
+- **Commitment Route:** `services/lifeos-commitment-route.js` now locks the inbox item with `FOR UPDATE` and commits approval, commitment insert, receipt insert, and final `done` status in one transaction. Partial failures roll back the commitment insert instead of leaving an orphan that can duplicate on retry.
+- **ADF prediction ledger:** `services/adf-prediction-ledger.js` now rejects unsafe `prediction_id` values, uses no-overwrite file creation for new prediction receipts, and rejects duplicate IDs. `routes/adf-routes.js` surfaces 400/409 statuses instead of masking them as 500.
+- **Tests:** Added `tests/adf-prediction-ledger.test.js` and `tests/lifeos-commitment-route.test.js`; expanded `tests/lifeos-capture-pipeline.test.js`.
+
+### Verification
+- `node --check` on changed JS/test files: PASS
+- `node --test tests/adf-prediction-ledger.test.js tests/lifeos-capture-pipeline.test.js tests/lifeos-commitment-route.test.js`: 10 pass
+- `node scripts/ssot-check.js --all`: exit 0 (pre-existing missing-tag warnings outside touched files)
+- `npm test`: 51 pass, 0 fail, 4 skipped (local smoke tests skipped because no local server)
+
+### Next
+Deploy this branch before relying on the new Voice Rail privacy/capture semantics, ADF ID safety, or atomic commitment routing in production.
+
+---
+
 ## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 4
 
 ### What happened

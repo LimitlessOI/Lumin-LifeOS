@@ -13,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = path.resolve(__dirname, '..');
 const PREDICTIONS_DIR = 'data/adf-predictions';
 const LESSONS_FILE = 'data/adf-predictions/adf-lessons.json';
+const PREDICTION_ID_RE = /^[A-Za-z0-9_-]{1,120}$/;
 
 const VERDICT_ALIASES = {
   APPROVE: 'APPROVE',
@@ -66,6 +67,28 @@ async function readJson(filePath, fallback = null) {
 async function writeJson(filePath, data) {
   await ensureDir(path.dirname(filePath));
   await fs.writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+}
+
+async function writeNewJson(filePath, data) {
+  await ensureDir(path.dirname(filePath));
+  await fs.writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`, { encoding: 'utf8', flag: 'wx' });
+}
+
+function httpError(message, status, detail = undefined) {
+  const err = new Error(message);
+  err.status = status;
+  if (detail !== undefined) err.detail = detail;
+  return err;
+}
+
+function normalizePredictionId(predictionId) {
+  const id = String(predictionId || '').trim();
+  if (!PREDICTION_ID_RE.test(id)) {
+    throw httpError('invalid_prediction_id', 400, {
+      rule: 'Use 1-120 characters: letters, numbers, underscore, hyphen.',
+    });
+  }
+  return id;
 }
 
 async function listReceiptFiles(rootDir = DEFAULT_ROOT) {
@@ -159,7 +182,10 @@ export function createAdfPredictionLedger({ rootDir = DEFAULT_ROOT } = {}) {
 
   async function filePrediction(input) {
     const now = new Date();
-    const predictionId = input.prediction_id || nextPredictionId(rootDir, now);
+    const predictionId = normalizePredictionId(input.prediction_id || nextPredictionId(rootDir, now));
+    if (await findReceiptById(predictionId, rootDir)) {
+      throw httpError('prediction_id_exists', 409, { prediction_id: predictionId });
+    }
     const receipt = {
       schema: 'adf_prediction_receipt_v1',
       prediction_id: predictionId,
@@ -213,7 +239,14 @@ export function createAdfPredictionLedger({ rootDir = DEFAULT_ROOT } = {}) {
 
     const dir = path.join(predictionsRoot(rootDir), monthDir(now));
     const filePath = path.join(dir, `${predictionId}.json`);
-    await saveReceipt(filePath, receipt);
+    try {
+      await writeNewJson(filePath, receipt);
+    } catch (err) {
+      if (err?.code === 'EEXIST') {
+        throw httpError('prediction_id_exists', 409, { prediction_id: predictionId });
+      }
+      throw err;
+    }
     return { filePath, receipt };
   }
 

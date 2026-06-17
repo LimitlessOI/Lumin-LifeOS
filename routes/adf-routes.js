@@ -37,7 +37,7 @@ export function createAdfRoutes({ requireKey }) {
       const result = await ledger.filePrediction(req.body || {});
       res.json({ ok: true, prediction: result.receipt, path: result.filePath });
     } catch (err) {
-      res.status(500).json({ ok: false, error: err.message });
+      res.status(err.status || 500).json({ ok: false, error: err.message, detail: err.detail });
     }
   });
 

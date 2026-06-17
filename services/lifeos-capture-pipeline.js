@@ -8,6 +8,10 @@ import { createActionInbox } from './action-inbox.js';
 export function createLifeOSCapturePipeline({ pool, logger }) {
   const inbox = createActionInbox({ pool, logger });
 
+  function classifyVoiceSubmit({ text, mode } = {}) {
+    return inbox.classifyItem(text, mode || 'conversation');
+  }
+
   async function stageFromVoiceSubmit({
     userId,
     text,
@@ -70,6 +74,7 @@ export function createLifeOSCapturePipeline({ pool, logger }) {
   }
 
   return {
+    classifyVoiceSubmit,
     stageFromVoiceSubmit,
     countVoiceRailStaged,
     inbox,
