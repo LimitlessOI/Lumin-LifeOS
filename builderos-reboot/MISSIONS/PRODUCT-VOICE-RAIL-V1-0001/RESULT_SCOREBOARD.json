@@ -1,0 +1,116 @@
+{
+  "schema": "result_scoreboard_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "at": "2026-06-18T03:34:33.872Z",
+  "intended": "Adam opens one URL on phone or desktop, reaches one control, speaks or types naturally, sees words appear live, pauses and continues without being cut off, sends or cancels, receives text and/or spoken reply, replays the reply, finds the conversation later (when not in Private mode), sees extracted commitments and staged commands, and never needs Cursor for normal system communication.\n\nThe system infers intent, classifies, and routes. Adam does not remember which subsystem, project, or surface ",
+  "built": "FAIL",
+  "happened": "NOT_COMPLETE",
+  "matched_intent": false,
+  "evidence": {
+    "acceptance_receipt": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
+    "builder_receipt": "BUILDER_RUN_RECEIPT.json",
+    "tests_passed": [
+      "VR1-T01_blueprint",
+      "VR1-T01_ui_file",
+      "VR1-T02",
+      "VR1-T03",
+      "VR1-T08",
+      "VR1-T14",
+      "VR1-T15",
+      "VR1-T17",
+      "VR1-T04",
+      "VR1-T05",
+      "VR1-T06",
+      "VR1-T09",
+      "VR1-T10",
+      "VR1-T11",
+      "VR1-T11b",
+      "VR1-T11c",
+      "VR1-T13",
+      "VR1-T13_visible",
+      "VR1-T16",
+      "VR1-T18",
+      "VR1-T20_execution_truth"
+    ]
+  },
+  "failed": [
+    "VR1-T01",
+    "VR1-T07",
+    "VR1-T12",
+    "VR1-T18_receipt"
+  ],
+  "changed": [],
+  "learned": [],
+  "no_narrative": true,
+  "simulation_vs_reality": [
+    {
+      "metric_id": "acceptance_pass",
+      "seat": "Builder",
+      "predicted": "PASS",
+      "actual": "FAIL",
+      "how_we_know_if_wrong": "BUILDER_RUN_RECEIPT.acceptance_exit_code and acceptance receipt verdict",
+      "match": false,
+      "variance": "predicted \"PASS\" got \"FAIL\"",
+      "scored_at": "2026-06-18T03:34:33.863Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "technical_pass",
+      "seat": "CFO",
+      "predicted": "LIKELY",
+      "actual": "NOT_COMPLETE",
+      "how_we_know_if_wrong": "OBJECTIVE_VERDICT.verdict after acceptance",
+      "match": false,
+      "variance": "predicted \"LIKELY\" got \"NOT_COMPLETE\"",
+      "scored_at": "2026-06-18T03:34:33.863Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "deploy_required",
+      "seat": "CFO",
+      "predicted": true,
+      "actual": true,
+      "how_we_know_if_wrong": "Production acceptance implies deploy occurred or was unnecessary",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-18T03:34:33.863Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "production_route_probe",
+      "seat": "SNT",
+      "predicted": "routes_missing",
+      "actual": "routes_missing",
+      "how_we_know_if_wrong": "Set PUBLIC_BASE_URL + COMMAND_CENTER_KEY to probe production routes",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-18T03:34:33.863Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "intent_measurable",
+      "seat": "SNT",
+      "predicted": "clear",
+      "actual": "FAIL",
+      "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
+      "match": false,
+      "variance": "predicted \"clear\" got \"FAIL\"",
+      "scored_at": "2026-06-18T03:34:33.863Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "blocking_attack_count",
+      "seat": "SNT",
+      "predicted": 0,
+      "actual": "FAIL",
+      "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
+      "match": false,
+      "variance": "predicted 0 got \"FAIL\"",
+      "scored_at": "2026-06-18T03:34:33.863Z",
+      "scored_by": "Hist"
+    }
+  ],
+  "twin_drift_pass": false,
+  "twin_drift_count": 4,
+  "scored_by": "Hist"
+}

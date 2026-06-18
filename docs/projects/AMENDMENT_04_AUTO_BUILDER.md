@@ -1,7 +1,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-16 — Builder frozen-blueprint spine writes + full intake-loop execute PASS
+**Last Updated:** 2026-06-17 — coverage-map.js levelFor type bug fixed; failure_metric now SUFFICIENT when baseline has failure_metrics array
 
 ---
 
@@ -159,6 +159,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-17 | **BUG FIX: `factory-staging/factory-core/arc/foundation/coverage-map.js`** — `levelFor()` checked `v === true` (strict) but `baseline?.failure_metrics?.length` returns a number (e.g. `2`), causing `failure_metric` to always resolve as `MISSING` even when INTENT_BASELINE.json had valid entries. Fixed: `v === true || (typeof v === 'string' && v.length > 10)` → `v && v !== 'PARTIAL' && v !== 'PARKED'`. Also fixed: **`scripts/bp-priority-never-stop.mjs`** import paths were `../../factory-staging/...` (resolved to parent of repo); fixed to `../factory-staging/...`. **`services/builderos-bp-priority-scheduler.js`** (NEW) — autonomous queue scheduler; boots on Railway when `BUILDEROS_AUTOPILOT=1`. **`startup/boot-domains.js`** — added `bootBuilderOSPriorityQueue`. | Voice Rail pipeline always failing at development stage with `failure_metric:MISSING` despite baseline having failure_metrics defined; root cause was wrong type check. | ✅ `buildFullCoverageMap` now returns `tier1_load_bearing_ready: true, blocking_gaps: []` for Voice Rail | `npm run builderos:bp-priority:once` |
 | 2026-06-17 | **Doctrine enforcement stack** — `DEPARTMENT_ROLE_CONTRACT.json`, `MISSION_PHASE_ARTIFACTS.json`, `doctrine-enforcement.js`, `simulation-measurements.js`, `reality-score.js`, `TWIN_DRIFT_REPORT`, department sim measurements, `DOCTRINE_COMPLIANCE` HARD gate, `verify-mission-doctrine.mjs` | Adam: no discards, departments enforced, sim→reality scored | ✅ 11/11 doctrine+point-b tests | `npm run builderos:doctrine:verify -- MISSION` |
 | 2026-06-17 | **V2 production recovery + gate hardening** — GAP-FILL boot chain (adf/builderos-arc routes, blueprint-write-policy, import paths); both v2 acceptances PASS on `7a7c96d0f4`; `SEAT_ACCOUNTABILITY_MATRIX.json` per mission; SNT translation requires `evidence_if_wrong` + prod route probe; point-b-gate blocks empty builder sim + acceptance FAIL | Adam plan #1–#5 | ✅ capture + commitment v2 acceptance PASS | Alpha confirm pending |
 | 2026-06-17 | GAP-FILL: **`builderos-reboot/scripts/blueprint-write-policy.mjs`** — imported by `simulate-blueprint-steps.js` at ARC boot; Railway `15277e0ed4` FAILED missing module | Third boot crash in deploy chain | pending redeploy | commit + push |

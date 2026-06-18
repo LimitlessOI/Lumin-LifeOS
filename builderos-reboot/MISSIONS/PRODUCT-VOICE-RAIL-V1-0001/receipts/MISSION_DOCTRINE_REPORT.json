@@ -1,0 +1,162 @@
+{
+  "schema": "mission_doctrine_report_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "evaluated_at": "2026-06-18T03:34:33.874Z",
+  "pass": false,
+  "enforcement": "HARD",
+  "violations": [
+    "doctrine:acceptance_exit_code !== 0 — mission cannot be healthy",
+    "doctrine:acceptance FAIL tests=VR1-T01,VR1-T07,VR1-T12,VR1-T18_receipt",
+    "doctrine:OBJECTIVE_VERDICT NOT_COMPLETE on BP mission"
+  ],
+  "checks": {
+    "phases": {
+      "corridor": {
+        "phase": "corridor",
+        "gate": "ARC_ENTRY",
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "BLUEPRINT_TWIN": {
+            "pass": true,
+            "path": "BLUEPRINT.json"
+          },
+          "ARC_RUN_RECEIPT": {
+            "pass": true,
+            "path": "ARC_RUN_RECEIPT.json"
+          },
+          "ARC_TWIN_SIMULATION_RECEIPT": {
+            "pass": true,
+            "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+          },
+          "BUILDER_SIMULATION_REPORT": {
+            "pass": true,
+            "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+          },
+          "SNT_TRANSLATION_ATTACK_REPORT": {
+            "pass": true,
+            "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+          },
+          "PRE_BUILD_VALIDATION_PACKET": {
+            "pass": true,
+            "path": "PRE_BUILD_VALIDATION_PACKET.json"
+          }
+        },
+        "discard_policy": "none — PARKED requires explicit receipt"
+      },
+      "builder": {
+        "phase": "builder",
+        "gate": "BUILDER_ENTRY",
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "BUILDER_RUN_RECEIPT": {
+            "pass": true,
+            "path": "BUILDER_RUN_RECEIPT.json"
+          }
+        },
+        "discard_policy": "none — PARKED requires explicit receipt"
+      },
+      "technical_pass": {
+        "phase": "technical_pass",
+        "gate": "BUILD_PASS_CLAIM",
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "OBJECTIVE_VERDICT": {
+            "pass": true,
+            "path": "OBJECTIVE_VERDICT.json"
+          },
+          "RESULT_SCOREBOARD": {
+            "pass": true,
+            "path": "RESULT_SCOREBOARD.json"
+          }
+        },
+        "discard_policy": "none — PARKED requires explicit receipt"
+      }
+    },
+    "blueprint_no_discard": {
+      "pass": true,
+      "violations": [],
+      "steps_required": 6,
+      "steps_done": 6
+    },
+    "result_truth": {
+      "pass": false,
+      "violations": [
+        "doctrine:acceptance_exit_code !== 0 — mission cannot be healthy",
+        "doctrine:acceptance FAIL tests=VR1-T01,VR1-T07,VR1-T12,VR1-T18_receipt",
+        "doctrine:OBJECTIVE_VERDICT NOT_COMPLETE on BP mission"
+      ],
+      "acceptance_verdict": "FAIL",
+      "exit_code": 1
+    },
+    "simulation_fidelity": {
+      "pass": true,
+      "violations": []
+    },
+    "department_roles": {
+      "pass": true,
+      "violations": [],
+      "checks": {
+        "SNT": {
+          "pass": true,
+          "violations": [],
+          "seat": "SNT"
+        },
+        "CHAIR": {
+          "pass": true,
+          "violations": [],
+          "seat": "CHAIR"
+        },
+        "CFO": {
+          "pass": true,
+          "violations": [],
+          "seat": "CFO"
+        },
+        "WISDOM": {
+          "pass": true,
+          "violations": [],
+          "seat": "WISDOM"
+        }
+      },
+      "departments": {
+        "pass": true,
+        "violations": [],
+        "checks": {
+          "SNT": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "intent_clearance_yes"
+          },
+          "CHAIR": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "forecast_acceptable"
+          },
+          "CFO": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "within_budget"
+          },
+          "WISDOM": {
+            "pass": true,
+            "stub": false,
+            "tier": "COUNCIL_SIM",
+            "bootstrapBlocked": false,
+            "verdict": "proceed"
+          }
+        },
+        "defect_owner_seat": null,
+        "route_to": "ARC"
+      }
+    }
+  },
+  "lesson": "Doctrine violation — fix before claiming healthy or advancing queue."
+}

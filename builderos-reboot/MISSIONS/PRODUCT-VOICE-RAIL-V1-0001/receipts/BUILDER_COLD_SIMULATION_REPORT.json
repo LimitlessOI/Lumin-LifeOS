@@ -1,0 +1,46 @@
+{
+  "schema": "builder_cold_simulation_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "blueprint_id": "VOICE-RAIL-V1-2026-06-11",
+  "simulated_by": "factory-core/arc/builder-cold-walk.js",
+  "simulated_at": "2026-06-18T03:34:05.923Z",
+  "builder_runtime": "builderos-reboot/scripts/execute-mission.mjs",
+  "steps": [
+    {
+      "step_id": "VRV1-S01",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "VRV1-S02",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "VRV1-S03",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "VRV1-S04",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "VRV1-S05",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "VRV1-S07",
+      "decision_gap": null,
+      "blocked": false
+    }
+  ],
+  "summary": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  }
+}

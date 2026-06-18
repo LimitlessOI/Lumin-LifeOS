@@ -1,0 +1,21 @@
+{
+  "schema": "known_assumptions_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "assumptions": [
+    {
+      "id": "A1",
+      "assumption": "Adam is primary user at Alpha",
+      "confidence": "KNOW"
+    },
+    {
+      "id": "A2",
+      "assumption": "Railway production spine is live",
+      "confidence": "THINK"
+    },
+    {
+      "id": "A3",
+      "assumption": "Adam opens one URL on phone or desktop, reaches one control, speaks or types naturally, sees words appear live, pauses and continues without being cut off, sends or cancels, receives text and/or spoken reply, replays the reply, finds the conversation later (when not in Private mode), sees extracted commitments and staged commands, and never needs Cursor for normal system communication.\n\nThe system infers intent, classifies, and routes. Adam does not remember which subsystem, project, or surface ",
+      "confidence": "KNOW"
+    }
+  ]
+}

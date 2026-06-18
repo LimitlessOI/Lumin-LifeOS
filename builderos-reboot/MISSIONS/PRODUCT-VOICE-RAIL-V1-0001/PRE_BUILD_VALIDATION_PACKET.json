@@ -1,0 +1,9 @@
+{
+  "schema": "pre_build_validation_packet_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "assembled_at": "2026-06-18T03:34:05.976Z",
+  "assembled_by": "assemble-pre-build-packet.mjs",
+  "builder_simulation_ref": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/receipts/BUILDER_SIMULATION_REPORT.json",
+  "blocking_gaps": 0,
+  "builder_clearance": "yes"
+}

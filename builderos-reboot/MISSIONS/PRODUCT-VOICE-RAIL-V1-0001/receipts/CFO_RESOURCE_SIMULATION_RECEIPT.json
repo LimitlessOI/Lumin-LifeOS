@@ -1,0 +1,38 @@
+{
+  "schema": "cfo_resource_simulation_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "seat": "CFO",
+  "simulated_at": "2026-06-18T03:34:05.701Z",
+  "simulated_by": "factory-core/arc/department-simulations.js",
+  "roi_note": "Greenfield — higher token/time cost",
+  "build_vs_buy": "BUILD",
+  "opportunity_cost": "VRV1-S01–S06 TECHNICAL_PASS retained (VOICE_RAIL_V1_ACCEPTANCE.json). Extension VRV1-S07: founder direct provider live regression proof pending.",
+  "priority_rank": 1,
+  "resource_burden": "low",
+  "constitutional_exemption_applied": false,
+  "fastest_responsible_path": "greenfield build",
+  "verdict": "within_budget",
+  "pass": true,
+  "route_on_fail": "CHAIR",
+  "role_contract": {
+    "seat": "CFO",
+    "contract_version": "2.0A",
+    "title": "CFO",
+    "role": "Resource burden, ROI note, priority fit — never demote constitutional floor on ROI alone"
+  },
+  "measurements": [
+    {
+      "metric_id": "within_budget",
+      "seat": "CFO",
+      "predicted": "yes",
+      "confidence": "THINK",
+      "how_we_know_if_wrong": "Mission blocked on BP or overrun token ledger vs PREDICTION_RECEIPT",
+      "evidence_path": null,
+      "predicted_at": "2026-06-18T03:34:05.701Z",
+      "actual": null,
+      "scored_at": null,
+      "match": null
+    }
+  ],
+  "simulation_tier": "COUNCIL_SIM"
+}

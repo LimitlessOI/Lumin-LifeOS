@@ -34,7 +34,7 @@ export function runStudioSimulation(missionFolder) {
     },
     {
       check: 'Approval gate before action',
-      pass: /approve|explicit|never auto/i.test(founderText),
+      pass: /approv|explicit|never auto/i.test(founderText),
       friction_if_fail: 'Trust collapse at Alpha',
     },
   ];

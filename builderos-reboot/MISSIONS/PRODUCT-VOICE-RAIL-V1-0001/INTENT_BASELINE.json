@@ -1,0 +1,34 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-06-18",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
+  "outcome_statement": "Adam opens one URL on phone or desktop, reaches one control, speaks or types naturally, sees words appear live, pauses and continues without being cut off, sends or cancels, receives text and/or spoken reply, replays the reply, finds the conversation later (when not in Private mode), sees extracted commitments and staged commands, and never needs Cursor for normal system communication.\n\nThe system infers intent, classifies, and routes. Adam does not remember which subsystem, project, or surface ",
+  "user": "Adam (founder)",
+  "pain": "Adam depends on Cursor as the primary mouth of the system. LifeOS does not yet offer one always-reachable place to speak or type to the ecosystem, see live transcript, pause without interruption, get responses, and have words classified and routed — on phone or desktop — without hunting across chat surfaces.\n\n---",
+  "value": "Adam opens one URL on phone or desktop, reaches one control, speaks or types naturally, sees words appear live, pauses and continues without being cut off, sends or cancels, receives text and/or spoken reply, replays the reply, finds the conversation later (when not in Private mode), sees extracted commitments and staged commands, and never needs Cursor for normal system communication.\n\nThe system",
+  "success_metrics": [
+    "**Adam voluntarily uses Voice Rail again within 48 hours instead of opening Cursor for normal system communication.**\n\n---"
+  ],
+  "failure_metrics": [
+    "TECHNICAL_PASS without founder_usability_pass",
+    "Auto-execution without Adam approval"
+  ],
+  "constraints": [
+    "BP_PRIORITY queue authority",
+    "BuilderOS system path only — no agent hand-build"
+  ],
+  "scope_boundary": "Per FOUNDER_PACKET.md",
+  "unacceptable_result": "Partial blueprint labeled Alpha; bypass of staging/approval gates",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "BP_PRIORITY rank 1",
+  "point_model": {
+    "A": "Vision — Adam provides FP in development stage",
+    "B": "Chair locks handoff — corridor protected; Adam done until Alpha",
+    "C": "Alpha — Adam evaluates outcome only"
+  }
+}

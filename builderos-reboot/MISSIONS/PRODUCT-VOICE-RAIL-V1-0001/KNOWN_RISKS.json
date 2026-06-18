@@ -1,0 +1,13 @@
+{
+  "schema": "known_risks_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "risks": [
+    {
+      "id": "R2",
+      "risk": "Private data persistence",
+      "severity": "high",
+      "owner": "SNT"
+    }
+  ],
+  "updated_at": "2026-06-18T03:34:05.702Z"
+}

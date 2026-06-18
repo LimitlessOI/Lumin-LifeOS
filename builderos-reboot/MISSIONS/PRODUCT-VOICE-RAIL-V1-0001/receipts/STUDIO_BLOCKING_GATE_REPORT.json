@@ -1,0 +1,12 @@
+{
+  "schema": "studio_blocking_gate_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "pass": false,
+  "in_scope": true,
+  "verdict": "STUDIO_CONCERNS",
+  "violations": [
+    "studio:STUDIO_CONCERNS",
+    "studio:friction:Trust collapse at Alpha"
+  ],
+  "enforcement": "HARD"
+}

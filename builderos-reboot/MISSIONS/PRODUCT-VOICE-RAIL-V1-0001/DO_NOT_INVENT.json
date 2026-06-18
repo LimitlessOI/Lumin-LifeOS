@@ -1,0 +1,9 @@
+{
+  "schema": "do_not_invent_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "rules": [
+    "ARC must not invent product scope beyond FOUNDER_PACKET",
+    "Builder must not choose mechanics — follow blueprint byte contracts",
+    "No auto-execution of BuilderOS from staged items"
+  ]
+}

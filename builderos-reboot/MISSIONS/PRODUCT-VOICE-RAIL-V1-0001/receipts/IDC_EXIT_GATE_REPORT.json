@@ -1,0 +1,79 @@
+{
+  "schema": "idc_exit_gate_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "pass": true,
+  "status": "IDC_EXIT_PASS",
+  "route_to": "ARC",
+  "defect_owner_seat": null,
+  "violations": [],
+  "checks": {
+    "intent_baseline": {
+      "pass": true,
+      "status": "HANDOFF_READY"
+    },
+    "coverage": {
+      "pass": true,
+      "gaps": []
+    },
+    "departments": {
+      "pass": true,
+      "violations": [],
+      "checks": {
+        "SNT": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "intent_clearance_yes"
+        },
+        "CHAIR": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "forecast_acceptable"
+        },
+        "CFO": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "within_budget"
+        },
+        "WISDOM": {
+          "pass": true,
+          "stub": false,
+          "tier": "COUNCIL_SIM",
+          "bootstrapBlocked": false,
+          "verdict": "proceed"
+        }
+      },
+      "defect_owner_seat": null,
+      "route_to": "ARC"
+    },
+    "IDC_CONSENSUS_RECEIPT.json": {
+      "pass": true
+    },
+    "KNOWN_RISKS.json": {
+      "pass": true
+    },
+    "KNOWN_ASSUMPTIONS.json": {
+      "pass": true
+    },
+    "CHAIR_HANDOFF_RECEIPT.json": {
+      "pass": true
+    },
+    "PRE_ARC_INPUT_PACKET.json": {
+      "pass": true
+    },
+    "asset_reuse": {
+      "pass": true
+    },
+    "prediction_receipt": {
+      "pass": true
+    },
+    "mode_a_to_b": {
+      "pass": true
+    }
+  }
+}

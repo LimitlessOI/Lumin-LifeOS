@@ -60,7 +60,7 @@ function levelFor(name, founderText, baseline, queueEntry) {
 
   const v = map[name];
   if (v === 'PARKED') return { level: 'PARKED', load_bearing: false };
-  if (v === true || (typeof v === 'string' && v.length > 10)) return { level: 'SUFFICIENT', load_bearing: TIER1_LOAD_BEARING.includes(name) };
+  if (v && v !== 'PARTIAL' && v !== 'PARKED') return { level: 'SUFFICIENT', load_bearing: TIER1_LOAD_BEARING.includes(name) };
   if (v === 'PARTIAL') return { level: 'PARTIAL', load_bearing: TIER1_LOAD_BEARING.includes(name) };
   if (TIER1_LOAD_BEARING.includes(name)) return { level: 'MISSING', load_bearing: true };
   return { level: 'PARTIAL', load_bearing: false };

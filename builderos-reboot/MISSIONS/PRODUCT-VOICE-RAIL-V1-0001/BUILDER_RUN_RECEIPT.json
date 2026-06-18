@@ -1,0 +1,84 @@
+{
+  "schema": "builder_run_receipt_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "blueprint_id": "VOICE-RAIL-V1-2026-06-11",
+  "run_at": "2026-06-18T03:34:33.857Z",
+  "runner": "builderos-reboot/scripts/execute-mission.mjs",
+  "procedure": [
+    "builder_pre_build_simulate",
+    "decision_gap_map",
+    "pre_build_validation_packet",
+    "write_file_exact_steps",
+    "acceptance_tests",
+    "point_b_gate"
+  ],
+  "pre_build": {
+    "status": "BUILDER_PRE_BUILD_PASS",
+    "blocking_gaps": 0,
+    "receipt": "receipts/BUILDER_PRE_BUILD_SIMULATION.json"
+  },
+  "steps_executed": 6,
+  "step_results": [
+    {
+      "step_id": "VRV1-S01",
+      "status": "DONE",
+      "target_file": "db/migrations/20260611_voice_rail_v1.sql",
+      "sha256": "d98add0893c8a7586ac69598958b3db84cf0fcfaefbefba12b6d24bb64ed77db"
+    },
+    {
+      "step_id": "VRV1-S02",
+      "status": "DONE",
+      "target_file": "services/voice-rail-v1.js",
+      "sha256": "92806b02630957df740e9a43f1f51238a57be4313280b1062219adef72f3f211"
+    },
+    {
+      "step_id": "VRV1-S03",
+      "status": "DONE",
+      "target_file": "routes/lifeos-voice-rail-routes.js",
+      "sha256": "9e2baf945a0199cf12e54944bb5045d93d144e55aaa38a7e93baf2c16a0c53d7"
+    },
+    {
+      "step_id": "VRV1-S04",
+      "status": "DONE",
+      "target_file": "public/overlay/lifeos-voice-rail-v1.html",
+      "sha256": "de3b575260411844d4068f2d20095caa13bb616bec0f39e819e47ec9ee159add"
+    },
+    {
+      "step_id": "VRV1-S05",
+      "status": "DONE",
+      "target_file": "scripts/run-voice-rail-v1-acceptance.mjs",
+      "sha256": "e634caea1985198a8d5726e3917b49b506f3b80adf93578ab12510525d3c7aab"
+    },
+    {
+      "step_id": "VRV1-S07",
+      "status": "DONE",
+      "target_file": "scripts/run-founder-direct-provider-proof.mjs",
+      "sha256": "5c1caa8bd35dad63d20128ef7427f0c05389cca8939d41da89d787d265e8a3d3"
+    }
+  ],
+  "acceptance_exit_code": 1,
+  "point_b": {
+    "handoff_pass": true,
+    "machine_path_complete": false,
+    "alpha_reached": false,
+    "status": "BLOCKED_MACHINE_PATH",
+    "proof_lap_only": false,
+    "awaiting_founder_alpha": false,
+    "violations": [
+      "machine:acceptance FAIL — result truth wins over corridor pass",
+      "machine:Builder not TECHNICAL_PASS"
+    ]
+  },
+  "verdict": "FAIL",
+  "machine_path_complete": false,
+  "alpha_reached": false,
+  "awaiting_founder_alpha": false,
+  "doctrine": {
+    "pass": false,
+    "violations": [
+      "doctrine:acceptance_exit_code !== 0 — mission cannot be healthy",
+      "doctrine:acceptance FAIL tests=VR1-T01,VR1-T07,VR1-T12,VR1-T18_receipt",
+      "doctrine:OBJECTIVE_VERDICT NOT_COMPLETE on BP mission"
+    ]
+  }
+}

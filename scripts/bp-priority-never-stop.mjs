@@ -7,11 +7,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { runFoundationPipeline } from '../../factory-staging/factory-core/arc/run-foundation.js';
-import { founderStopActive } from '../../factory-staging/factory-core/arc/gate-enforcement.js';
-import { appendMissionLedger } from '../../factory-staging/factory-core/arc/foundation/mission-ledger.js';
+import { runFoundationPipeline } from '../factory-staging/factory-core/arc/run-foundation.js';
+import { founderStopActive } from '../factory-staging/factory-core/arc/gate-enforcement.js';
+import { appendMissionLedger } from '../factory-staging/factory-core/arc/foundation/mission-ledger.js';
 
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
 const LOG_PATH = path.join(ROOT, 'data/bp-priority-never-stop-log.jsonl');
 

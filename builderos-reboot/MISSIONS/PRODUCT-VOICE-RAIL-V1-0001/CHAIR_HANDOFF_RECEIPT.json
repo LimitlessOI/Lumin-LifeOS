@@ -1,0 +1,16 @@
+{
+  "schema": "chair_handoff_receipt_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "handoff_at": "2026-06-18T03:34:05.704Z",
+  "from_stage": "development",
+  "to_stage": "protected_corridor",
+  "locked_by": "Chair",
+  "department_receipts": [
+    "receipts/SNT_INTENT_ATTACK_RECEIPT.json",
+    "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+    "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
+    "receipts/WISDOM_REVIEW_RECEIPT.json"
+  ],
+  "idc_exit_pass": true,
+  "note": "Full foundation development stage complete. Adam job done until Alpha."
+}

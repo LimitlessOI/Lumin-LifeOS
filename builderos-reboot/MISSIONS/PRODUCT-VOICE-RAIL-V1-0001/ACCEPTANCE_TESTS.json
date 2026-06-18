@@ -1,0 +1,44 @@
+[
+  {
+    "test_id": "AT-VRV1-S01-1",
+    "step_id": "VRV1-S01",
+    "type": "file_sha256_matches",
+    "target": "db/migrations/20260611_voice_rail_v1.sql",
+    "expected_sha256": "d98add0893c8a7586ac69598958b3db84cf0fcfaefbefba12b6d24bb64ed77db"
+  },
+  {
+    "test_id": "AT-VRV1-S02-1",
+    "step_id": "VRV1-S02",
+    "type": "file_sha256_matches",
+    "target": "services/voice-rail-v1.js",
+    "expected_sha256": "92806b02630957df740e9a43f1f51238a57be4313280b1062219adef72f3f211"
+  },
+  {
+    "test_id": "AT-VRV1-S03-1",
+    "step_id": "VRV1-S03",
+    "type": "file_sha256_matches",
+    "target": "routes/lifeos-voice-rail-routes.js",
+    "expected_sha256": "9e2baf945a0199cf12e54944bb5045d93d144e55aaa38a7e93baf2c16a0c53d7"
+  },
+  {
+    "test_id": "AT-VRV1-S04-1",
+    "step_id": "VRV1-S04",
+    "type": "file_sha256_matches",
+    "target": "public/overlay/lifeos-voice-rail-v1.html",
+    "expected_sha256": "de3b575260411844d4068f2d20095caa13bb616bec0f39e819e47ec9ee159add"
+  },
+  {
+    "test_id": "AT-VRV1-S05-1",
+    "step_id": "VRV1-S05",
+    "type": "file_sha256_matches",
+    "target": "scripts/run-voice-rail-v1-acceptance.mjs",
+    "expected_sha256": "e634caea1985198a8d5726e3917b49b506f3b80adf93578ab12510525d3c7aab"
+  },
+  {
+    "test_id": "AT-VRV1-S07-1",
+    "step_id": "VRV1-S07",
+    "type": "file_sha256_matches",
+    "target": "scripts/run-founder-direct-provider-proof.mjs",
+    "expected_sha256": "5c1caa8bd35dad63d20128ef7427f0c05389cca8939d41da89d787d265e8a3d3"
+  }
+]

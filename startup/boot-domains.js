@@ -16,6 +16,7 @@
 import { execSync } from 'child_process';
 import { createUsefulWorkGuard, requireTableRows } from '../services/useful-work-guard.js';
 import { generateDailyOILSummary } from '../services/oil-daily-summary.js';
+import { startBpPriorityScheduler } from '../services/builderos-bp-priority-scheduler.js';
 
 function scheduleAsyncInterval(task, intervalMs, logger, label) {
   return setInterval(() => {
@@ -368,6 +369,16 @@ async function bootFactoryAutopilotRecoveryOwner(deps) {
   }
 }
 
+// ── BuilderOS BP_PRIORITY autonomous queue (vision → reality) ────────────────
+async function bootBuilderOSPriorityQueue(deps) {
+  const { logger } = deps;
+  try {
+    startBpPriorityScheduler({ logger });
+  } catch (err) {
+    logger?.warn?.({ err: err.message }, '[BOOT] BuilderOS BP_PRIORITY scheduler failed to start (non-fatal)');
+  }
+}
+
 export async function bootAllDomains(deps) {
   const { pool, logger } = deps;
   await autoSeedEpistemicFacts(pool, logger);
@@ -382,5 +393,6 @@ export async function bootAllDomains(deps) {
     bootOILDailySummary(deps),
     bootSelfRepairDeployCheck(deps),
     bootFactoryAutopilotRecoveryOwner(deps),
+    bootBuilderOSPriorityQueue(deps),
   ]);
 }

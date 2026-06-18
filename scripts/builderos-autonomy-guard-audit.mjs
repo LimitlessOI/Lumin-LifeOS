@@ -64,9 +64,9 @@ const PATHS = [
   {
     path: 'services/builderos-governed-loop-executor.js',
     component: 'governed_loop_executor',
-    useful_objective: 'single-job BuilderOS execution through OIL → PBB → Builder → verifier',
+    useful_objective: 'single-job BuilderOS execution through Sentry → PBB → Builder → verifier',
     success_condition: 'job reaches committed only after verifier pass',
-    stop_condition: 'OIL boundary fail, builder failure, verifier fail, or halt state',
+    stop_condition: 'Sentry boundary fail, builder failure, verifier fail, or halt state',
     fake_progress_indicators: ['committed-like state before verifier pass', 'retry without bounded plan'],
     verifier_requirements: ['builder verifier pass', 'status committed only after audit chain'],
     rollback_requirements: ['mark job blocked/failed', 'no silent success'],

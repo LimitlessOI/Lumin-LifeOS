@@ -1,0 +1,107 @@
+{
+  "schema": "builder_pre_build_simulation_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "blueprint_id": "VOICE-RAIL-V1-2026-06-11",
+  "simulated_at": "2026-06-18T03:34:05.923Z",
+  "simulated_by": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
+  "procedure": [
+    "simulate_blueprint_steps",
+    "cold_builder_walk",
+    "sha256_content_contracts",
+    "blueprint_freeze_check",
+    "assemble_pre_build_packet"
+  ],
+  "decision_table": [
+    {
+      "step_id": "VRV1-S01",
+      "title": "Voice Rail v1 schema migration",
+      "target_file": "db/migrations/20260611_voice_rail_v1.sql",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S01/20260611_voice_rail_v1.sql → db/migrations/20260611_voice_rail_v1.sql",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "VRV1-S02",
+      "title": "Voice Rail service — modes, intents, private, staging",
+      "target_file": "services/voice-rail-v1.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S02/voice-rail-v1.js → services/voice-rail-v1.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "VRV1-S03",
+      "title": "Voice Rail API routes",
+      "target_file": "routes/lifeos-voice-rail-routes.js",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S03/lifeos-voice-rail-routes.js → routes/lifeos-voice-rail-routes.js",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "VRV1-S04",
+      "title": "Canonical overlay page",
+      "target_file": "public/overlay/lifeos-voice-rail-v1.html",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S04/lifeos-voice-rail-v1.html → public/overlay/lifeos-voice-rail-v1.html",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "VRV1-S05",
+      "title": "Acceptance command + receipt",
+      "target_file": "scripts/run-voice-rail-v1-acceptance.mjs",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S05/run-voice-rail-v1-acceptance.mjs → scripts/run-voice-rail-v1-acceptance.mjs",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    },
+    {
+      "step_id": "VRV1-S07",
+      "title": "Founder direct provider live regression proof (OpenAI, Anthropic, Google)",
+      "target_file": "scripts/run-founder-direct-provider-proof.mjs",
+      "action_type": "write_file_exact",
+      "builder_action": "copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S07/run-founder-direct-provider-proof.mjs → scripts/run-founder-direct-provider-proof.mjs",
+      "decision_gaps": [],
+      "blocked": false,
+      "clear_to_execute": true
+    }
+  ],
+  "summary": {
+    "steps_total": 6,
+    "steps_blocked": 0,
+    "steps_clear": 6,
+    "blocking_gaps": 0,
+    "clear_to_build": true,
+    "freeze_pass": true
+  },
+  "simulation_summary": {
+    "total_gaps": 0,
+    "blocking_gaps": 0,
+    "clear_to_build": true
+  },
+  "cold_walk_summary": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  },
+  "freeze": {
+    "blueprint_status": "FROZEN",
+    "pass": true,
+    "blocking": [],
+    "checks": [
+      "deterministic_step_set",
+      "authority_lock",
+      "exact_output_contract_present",
+      "non_goals_present"
+    ],
+    "blueprintId": "VOICE-RAIL-V1-2026-06-11"
+  }
+}

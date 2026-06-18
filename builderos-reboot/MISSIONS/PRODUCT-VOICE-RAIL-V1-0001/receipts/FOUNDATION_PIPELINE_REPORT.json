@@ -1,0 +1,919 @@
+{
+  "schema": "foundation_pipeline_report_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "at": "2026-06-18T03:33:18.003Z",
+  "doctrine": "FOUNDER_PACKET_V2 full machine path",
+  "stages": {
+    "development": {
+      "ok": true,
+      "stage": "development",
+      "deptSims": {
+        "schema": "department_simulations_v1",
+        "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+        "simulated_at": "2026-06-18T03:33:18.019Z",
+        "departments": {
+          "SNT": {
+            "schema": "snt_intent_attack_v1",
+            "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+            "seat": "SNT",
+            "simulated_at": "2026-06-18T03:33:18.016Z",
+            "simulated_by": "factory-core/arc/department-simulations.js",
+            "attacks_run": 4,
+            "attacks": [
+              {
+                "claim": "Desired outcome is stated",
+                "pass": true,
+                "failure_scenario": "Builder/ARC invents product scope",
+                "severity": "blocking",
+                "evidence_if_wrong": "Falsify by proving missing evidence for \"Desired outcome is stated\" in FOUNDER_PACKET.md or INTENT_BASELINE.json",
+                "recommended_action": "none"
+              },
+              {
+                "claim": "Success is measurable",
+                "pass": true,
+                "failure_scenario": "Alpha claimed without behavioral test",
+                "severity": "blocking",
+                "evidence_if_wrong": "Falsify by proving missing evidence for \"Success is measurable\" in FOUNDER_PACKET.md or INTENT_BASELINE.json",
+                "recommended_action": "none"
+              },
+              {
+                "claim": "Failure mode defined",
+                "pass": true,
+                "failure_scenario": "Silent failure at Alpha",
+                "severity": "blocking",
+                "evidence_if_wrong": "Falsify by proving missing evidence for \"Failure mode defined\" in FOUNDER_PACKET.md or INTENT_BASELINE.json",
+                "recommended_action": "none"
+              },
+              {
+                "claim": "Scope boundary present",
+                "pass": true,
+                "failure_scenario": "Scope creep during build",
+                "severity": "advisory",
+                "evidence_if_wrong": "Falsify by proving missing evidence for \"Scope boundary present\" in FOUNDER_PACKET.md or INTENT_BASELINE.json",
+                "recommended_action": "none"
+              }
+            ],
+            "blocking_count": 0,
+            "verdict": "intent_clearance_yes",
+            "pass": true,
+            "route_on_fail": "CHAIR",
+            "role_contract": {
+              "seat": "SNT",
+              "contract_version": "2.0A",
+              "title": "Sentinel",
+              "role": "Adversarial review — intent fidelity, drift, translation attack, reality invalidation"
+            },
+            "measurements": [
+              {
+                "metric_id": "intent_measurable",
+                "seat": "SNT",
+                "predicted": "clear",
+                "confidence": "THINK",
+                "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
+                "evidence_path": null,
+                "predicted_at": "2026-06-18T03:33:18.016Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              },
+              {
+                "metric_id": "blocking_attack_count",
+                "seat": "SNT",
+                "predicted": 0,
+                "confidence": "KNOW",
+                "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
+                "evidence_path": null,
+                "predicted_at": "2026-06-18T03:33:18.016Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              }
+            ],
+            "simulation_tier": "COUNCIL_SIM"
+          },
+          "CHAIR": {
+            "schema": "chair_forecast_simulation_v1",
+            "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+            "seat": "CHAIR",
+            "simulated_at": "2026-06-18T03:33:18.016Z",
+            "simulated_by": "factory-core/arc/department-simulations.js",
+            "scenarios_run": 4,
+            "predictions": [
+              {
+                "horizon": "6_months",
+                "confidence": "THINK",
+                "note": "Near-term staging product — evidence from FP scope",
+                "prediction": "Intent remains valid at 6_months for PRODUCT-VOICE-RAIL-V1-0001",
+                "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+                "evidence_used": [
+                  "FOUNDER_PACKET.md",
+                  "BP_PRIORITY.json"
+                ],
+                "evidence_missing": [],
+                "expected_timeline": "6_months",
+                "expected_impact": "intent_fidelity",
+                "recommended_action": "proceed_if_intent_locked"
+              },
+              {
+                "horizon": "1_year",
+                "confidence": "THINK",
+                "note": "Middle layer between comms and execution remains load-bearing",
+                "prediction": "Intent remains valid at 1_year for PRODUCT-VOICE-RAIL-V1-0001",
+                "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+                "evidence_used": [
+                  "FOUNDER_PACKET.md",
+                  "BP_PRIORITY.json"
+                ],
+                "evidence_missing": [],
+                "expected_timeline": "1_year",
+                "expected_impact": "intent_fidelity",
+                "recommended_action": "proceed_if_intent_locked"
+              },
+              {
+                "horizon": "2_years",
+                "confidence": "GUESS",
+                "note": "Platform evolution — scenario only",
+                "prediction": "Intent remains valid at 2_years for PRODUCT-VOICE-RAIL-V1-0001",
+                "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+                "evidence_used": [
+                  "FOUNDER_PACKET.md",
+                  "BP_PRIORITY.json"
+                ],
+                "evidence_missing": [
+                  "long_horizon_market_data"
+                ],
+                "expected_timeline": "2_years",
+                "expected_impact": "intent_fidelity",
+                "recommended_action": "proceed_if_intent_locked"
+              },
+              {
+                "horizon": "5_years",
+                "confidence": "GUESS",
+                "note": "Long-range — not blocking handoff",
+                "prediction": "Intent remains valid at 5_years for PRODUCT-VOICE-RAIL-V1-0001",
+                "rationale": "Derived from FOUNDER_PACKET outcome + BP_PRIORITY fit",
+                "evidence_used": [
+                  "FOUNDER_PACKET.md",
+                  "BP_PRIORITY.json"
+                ],
+                "evidence_missing": [
+                  "long_horizon_market_data"
+                ],
+                "expected_timeline": "5_years",
+                "expected_impact": "intent_fidelity",
+                "recommended_action": "proceed_if_intent_locked"
+              }
+            ],
+            "priority_fit": "BP_PRIORITY rank 1",
+            "blocking_risks": [],
+            "verdict": "forecast_acceptable",
+            "pass": true,
+            "route_on_fail": "CHAIR",
+            "role_contract": {
+              "seat": "CHAIR",
+              "contract_version": "2.0A",
+              "title": "Council Chair",
+              "role": "Strategic forecast, handoff lock, Mode A→B transition, upstream routing on failure"
+            },
+            "measurements": [
+              {
+                "metric_id": "handoff_forecast",
+                "seat": "CHAIR",
+                "predicted": "proceed",
+                "confidence": "THINK",
+                "how_we_know_if_wrong": "CHAIR_HANDOFF_RECEIPT missing or corridor gate FAIL",
+                "evidence_path": null,
+                "predicted_at": "2026-06-18T03:33:18.016Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              }
+            ],
+            "simulation_tier": "COUNCIL_SIM"
+          },
+          "CFO": {
+            "schema": "cfo_resource_simulation_v1",
+            "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+            "seat": "CFO",
+            "simulated_at": "2026-06-18T03:33:18.016Z",
+            "simulated_by": "factory-core/arc/department-simulations.js",
+            "roi_note": "Greenfield — higher token/time cost",
+            "build_vs_buy": "BUILD",
+            "opportunity_cost": "VRV1-S01–S06 TECHNICAL_PASS retained (VOICE_RAIL_V1_ACCEPTANCE.json). Extension VRV1-S07: founder direct provider live regression proof pending.",
+            "priority_rank": 1,
+            "resource_burden": "low",
+            "constitutional_exemption_applied": false,
+            "fastest_responsible_path": "greenfield build",
+            "verdict": "within_budget",
+            "pass": true,
+            "route_on_fail": "CHAIR",
+            "role_contract": {
+              "seat": "CFO",
+              "contract_version": "2.0A",
+              "title": "CFO",
+              "role": "Resource burden, ROI note, priority fit — never demote constitutional floor on ROI alone"
+            },
+            "measurements": [
+              {
+                "metric_id": "within_budget",
+                "seat": "CFO",
+                "predicted": "yes",
+                "confidence": "THINK",
+                "how_we_know_if_wrong": "Mission blocked on BP or overrun token ledger vs PREDICTION_RECEIPT",
+                "evidence_path": null,
+                "predicted_at": "2026-06-18T03:33:18.016Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              }
+            ],
+            "simulation_tier": "COUNCIL_SIM"
+          },
+          "WISDOM": {
+            "schema": "wisdom_review_v1",
+            "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+            "seat": "Wisdom",
+            "simulated_at": "2026-06-18T03:33:18.016Z",
+            "simulated_by": "factory-core/arc/department-simulations.js",
+            "lessons_surfaced": [],
+            "patterns_from_history": [
+              "Partial blueprint labeled success = historical drift — fail closed"
+            ],
+            "drift_warnings": [
+              "Agent hand-build bypassing system path = agent drift failure"
+            ],
+            "verdict": "proceed",
+            "pass": true,
+            "route_on_fail": "CHAIR",
+            "role_contract": {
+              "seat": "WISDOM",
+              "contract_version": "2.0A",
+              "title": "Wisdom / Hist lane",
+              "role": "Historical patterns, drift warnings, lesson surfacing — scores predictions post-hoc"
+            },
+            "measurements": [
+              {
+                "metric_id": "drift_pattern_acknowledged",
+                "seat": "WISDOM",
+                "predicted": true,
+                "confidence": "KNOW",
+                "how_we_know_if_wrong": "TWIN_DRIFT_REPORT drift_count > 0 post-acceptance",
+                "evidence_path": null,
+                "predicted_at": "2026-06-18T03:33:18.016Z",
+                "actual": null,
+                "scored_at": null,
+                "match": null
+              }
+            ],
+            "simulation_tier": "COUNCIL_SIM"
+          }
+        },
+        "all_pass": true,
+        "failed_seats": [],
+        "defect_owner_seat": null,
+        "route_to": "ARC",
+        "simulation_tier": "COUNCIL_SIM",
+        "lesson": "All departments touched. Chair may lock handoff."
+      },
+      "idcExit": {
+        "schema": "idc_exit_gate_v1",
+        "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+        "pass": true,
+        "status": "IDC_EXIT_PASS",
+        "route_to": "ARC",
+        "defect_owner_seat": null,
+        "violations": [],
+        "checks": {
+          "intent_baseline": {
+            "pass": true,
+            "status": "HANDOFF_READY"
+          },
+          "coverage": {
+            "pass": true,
+            "gaps": []
+          },
+          "departments": {
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "SNT": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "intent_clearance_yes"
+              },
+              "CHAIR": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "forecast_acceptable"
+              },
+              "CFO": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "within_budget"
+              },
+              "WISDOM": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "proceed"
+              }
+            },
+            "defect_owner_seat": null,
+            "route_to": "ARC"
+          },
+          "IDC_CONSENSUS_RECEIPT.json": {
+            "pass": true
+          },
+          "KNOWN_RISKS.json": {
+            "pass": true
+          },
+          "KNOWN_ASSUMPTIONS.json": {
+            "pass": true
+          },
+          "CHAIR_HANDOFF_RECEIPT.json": {
+            "pass": true
+          },
+          "PRE_ARC_INPUT_PACKET.json": {
+            "pass": true
+          },
+          "asset_reuse": {
+            "pass": true
+          },
+          "prediction_receipt": {
+            "pass": true
+          },
+          "mode_a_to_b": {
+            "pass": true
+          }
+        }
+      }
+    },
+    "corridor": {
+      "ok": true,
+      "translate": {
+        "ok": true,
+        "status": "ARC_TRANSLATE_PASS",
+        "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+        "intake": {
+          "ok": true,
+          "status": "ARC_INTAKE_PASS",
+          "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+          "mission_folder": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001",
+          "checks": {
+            "founder_packet": {
+              "pass": true,
+              "path": "FOUNDER_PACKET.md"
+            },
+            "intent_baseline": {
+              "pass": true,
+              "status": "HANDOFF_READY",
+              "corridor": true
+            },
+            "intent_coverage": {
+              "pass": true,
+              "note": "corridor — intent not re-litigated post-handoff"
+            },
+            "tier1_validator": {
+              "pass": true,
+              "note": "corridor — tier1 checked at development stage only"
+            },
+            "pre_arc_packet": {
+              "pass": true,
+              "manifest_count": 14
+            },
+            "blueprint_provenance": {
+              "has_blueprint": true,
+              "authored_by": "ARC",
+              "arc_run_receipt": true
+            },
+            "asset_reuse": {
+              "pass": true,
+              "arc_decision": "REUSE repo truth; mechanical ARC host compiler emits write_file_exact blueprint"
+            },
+            "roadmap": {
+              "pass": true,
+              "builder_ready_phases": [
+                "P0",
+                "P1",
+                "P2",
+                "P3",
+                "P4",
+                "P6"
+              ]
+            },
+            "snt_regrade": {
+              "pass": true,
+              "note": "corridor — no regrade at machine path"
+            },
+            "chair_handoff": {
+              "pass": true
+            }
+          },
+          "violations": [],
+          "route_to": "SYSTEM",
+          "idc_questions": []
+        },
+        "compile": {
+          "steps_count": 6,
+          "content_root": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT"
+        },
+        "simulation": {
+          "total_gaps": 0,
+          "blocking_gaps": 0,
+          "clear_to_build": true
+        },
+        "cold_walk": {
+          "decision_gaps": 0,
+          "total_gaps": 0,
+          "handoff_to_builder": true,
+          "architect_pass": true
+        },
+        "handoff": {
+          "schema": "corridor_entered_gate_v1",
+          "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+          "point": "B",
+          "pass": true,
+          "violations": [],
+          "checks": {
+            "founder_packet": {
+              "pass": true
+            },
+            "intent_baseline": {
+              "pass": true,
+              "status": "HANDOFF_READY"
+            },
+            "chair_handoff": {
+              "pass": true
+            },
+            "pre_arc_packet": {
+              "pass": true
+            },
+            "pre_arc_SNT_INTENT_ATTACK": {
+              "pass": true,
+              "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+            },
+            "pre_arc_CHAIR_FORECAST": {
+              "pass": true,
+              "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+            },
+            "pre_arc_CFO_RESOURCE": {
+              "pass": true,
+              "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+            },
+            "pre_arc_WISDOM_REVIEW": {
+              "pass": true,
+              "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+            },
+            "departments": {
+              "SNT": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "intent_clearance_yes"
+              },
+              "CHAIR": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "forecast_acceptable"
+              },
+              "CFO": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "within_budget"
+              },
+              "WISDOM": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "proceed"
+              }
+            }
+          },
+          "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+        },
+        "corridor": {
+          "schema": "corridor_entered_gate_v1",
+          "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+          "point": "B",
+          "pass": true,
+          "violations": [],
+          "checks": {
+            "founder_packet": {
+              "pass": true
+            },
+            "intent_baseline": {
+              "pass": true,
+              "status": "HANDOFF_READY"
+            },
+            "chair_handoff": {
+              "pass": true
+            },
+            "pre_arc_packet": {
+              "pass": true
+            },
+            "pre_arc_SNT_INTENT_ATTACK": {
+              "pass": true,
+              "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+            },
+            "pre_arc_CHAIR_FORECAST": {
+              "pass": true,
+              "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+            },
+            "pre_arc_CFO_RESOURCE": {
+              "pass": true,
+              "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+            },
+            "pre_arc_WISDOM_REVIEW": {
+              "pass": true,
+              "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+            },
+            "departments": {
+              "SNT": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "intent_clearance_yes"
+              },
+              "CHAIR": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "forecast_acceptable"
+              },
+              "CFO": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "within_budget"
+              },
+              "WISDOM": {
+                "pass": true,
+                "stub": false,
+                "tier": "COUNCIL_SIM",
+                "bootstrapBlocked": false,
+                "verdict": "proceed"
+              }
+            }
+          },
+          "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+        },
+        "point_b": {
+          "schema": "point_b_gate_v2",
+          "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+          "evaluated_at": "2026-06-18T03:33:18.036Z",
+          "proof_lap_only": false,
+          "handoff": {
+            "schema": "corridor_entered_gate_v1",
+            "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+            "point": "B",
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "founder_packet": {
+                "pass": true
+              },
+              "intent_baseline": {
+                "pass": true,
+                "status": "HANDOFF_READY"
+              },
+              "chair_handoff": {
+                "pass": true
+              },
+              "pre_arc_packet": {
+                "pass": true
+              },
+              "pre_arc_SNT_INTENT_ATTACK": {
+                "pass": true,
+                "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+              },
+              "pre_arc_CHAIR_FORECAST": {
+                "pass": true,
+                "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+              },
+              "pre_arc_CFO_RESOURCE": {
+                "pass": true,
+                "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+              },
+              "pre_arc_WISDOM_REVIEW": {
+                "pass": true,
+                "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+              },
+              "departments": {
+                "SNT": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "intent_clearance_yes"
+                },
+                "CHAIR": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "forecast_acceptable"
+                },
+                "CFO": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "within_budget"
+                },
+                "WISDOM": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "proceed"
+                }
+              }
+            },
+            "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+          },
+          "corridor": {
+            "schema": "corridor_entered_gate_v1",
+            "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+            "point": "B",
+            "pass": true,
+            "violations": [],
+            "checks": {
+              "founder_packet": {
+                "pass": true
+              },
+              "intent_baseline": {
+                "pass": true,
+                "status": "HANDOFF_READY"
+              },
+              "chair_handoff": {
+                "pass": true
+              },
+              "pre_arc_packet": {
+                "pass": true
+              },
+              "pre_arc_SNT_INTENT_ATTACK": {
+                "pass": true,
+                "path": "receipts/SNT_INTENT_ATTACK_RECEIPT.json"
+              },
+              "pre_arc_CHAIR_FORECAST": {
+                "pass": true,
+                "path": "receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json"
+              },
+              "pre_arc_CFO_RESOURCE": {
+                "pass": true,
+                "path": "receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json"
+              },
+              "pre_arc_WISDOM_REVIEW": {
+                "pass": true,
+                "path": "receipts/WISDOM_REVIEW_RECEIPT.json"
+              },
+              "departments": {
+                "SNT": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "intent_clearance_yes"
+                },
+                "CHAIR": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "forecast_acceptable"
+                },
+                "CFO": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "within_budget"
+                },
+                "WISDOM": {
+                  "pass": true,
+                  "stub": false,
+                  "tier": "COUNCIL_SIM",
+                  "bootstrapBlocked": false,
+                  "verdict": "proceed"
+                }
+              }
+            },
+            "lesson": "Protected corridor entered. Adam job done until Alpha. Intent not re-litigated."
+          },
+          "machine_path": {
+            "schema": "machine_path_gate_v1",
+            "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+            "point": "B_to_C",
+            "proof_lap_only": false,
+            "pass": false,
+            "violations": [
+              "machine:acceptance FAIL — result truth wins over corridor pass",
+              "machine:Builder not TECHNICAL_PASS"
+            ],
+            "checks": {
+              "corridor": {
+                "pass": true,
+                "violations": []
+              },
+              "post_arc_ARC_TWIN_SIM": {
+                "pass": true,
+                "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+              },
+              "post_arc_BUILDER_SIM": {
+                "pass": true,
+                "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+              },
+              "post_arc_SNT_TRANSLATION": {
+                "pass": true,
+                "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+              },
+              "post_arc_PRE_BUILD": {
+                "pass": true,
+                "path": "PRE_BUILD_VALIDATION_PACKET.json"
+              },
+              "arc_run": {
+                "pass": true,
+                "status": "MECHANICAL_PASS"
+              },
+              "builder_executed": {
+                "pass": false,
+                "value": "FAIL"
+              }
+            },
+            "awaiting_founder_at_alpha": true,
+            "lesson": "System failed B→C — ARC or Builder did not complete. If intent gap: system failure, not founder."
+          },
+          "alpha": {
+            "schema": "alpha_gate_v1",
+            "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+            "point": "C",
+            "machine_path_pass": false,
+            "pass": false,
+            "founder_usability_pass": false,
+            "violations": [
+              "machine:acceptance FAIL — result truth wins over corridor pass",
+              "machine:Builder not TECHNICAL_PASS",
+              "alpha:founder has not confirmed Alpha yet"
+            ],
+            "checks": {
+              "corridor": {
+                "pass": true,
+                "violations": []
+              },
+              "post_arc_ARC_TWIN_SIM": {
+                "pass": true,
+                "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+              },
+              "post_arc_BUILDER_SIM": {
+                "pass": true,
+                "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+              },
+              "post_arc_SNT_TRANSLATION": {
+                "pass": true,
+                "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+              },
+              "post_arc_PRE_BUILD": {
+                "pass": true,
+                "path": "PRE_BUILD_VALIDATION_PACKET.json"
+              },
+              "arc_run": {
+                "pass": true,
+                "status": "MECHANICAL_PASS"
+              },
+              "builder_executed": {
+                "pass": false,
+                "value": "FAIL"
+              },
+              "founder_usability": {
+                "pass": false,
+                "value": false
+              }
+            },
+            "lesson": "Cannot reach Alpha — machine path incomplete."
+          },
+          "point_b_reached": true,
+          "machine_path_complete": false,
+          "alpha_reached": false,
+          "pass": false,
+          "status": "BLOCKED_MACHINE_PATH",
+          "violations": [
+            "machine:acceptance FAIL — result truth wins over corridor pass",
+            "machine:Builder not TECHNICAL_PASS"
+          ],
+          "infrastructure_only": false,
+          "lesson": "Corridor entered. System must complete ARC → Builder → acceptance."
+        },
+        "acceptance": {
+          "ok": true,
+          "detail": "Wrote 6 acceptance tests to /Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/ACCEPTANCE_TESTS.json"
+        },
+        "receipt": {
+          "schema": "arc_run_receipt_v1",
+          "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+          "run_at": "2026-06-18T03:33:18.037Z",
+          "runner": "factory-core/arc/translate-mission.js",
+          "arc_job": "factory-staging/factory-core/arc/ARC_JOB.json",
+          "entry_gate": "PASS",
+          "intake_status": "ARC_INTAKE_PASS",
+          "compile_mode": "product_host",
+          "compile_status": "ARC_COMPILE_PASS",
+          "translate": {
+            "status": "MECHANICAL_PASS",
+            "compiler": "factory-core/arc/compilers/product-blueprint-host.js"
+          },
+          "simulation_summary": {
+            "total_gaps": 0,
+            "blocking_gaps": 0,
+            "clear_to_build": true
+          },
+          "cold_builder_walk": {
+            "decision_gaps": 0,
+            "total_gaps": 0,
+            "handoff_to_builder": true,
+            "architect_pass": true
+          },
+          "mechanical_handoff_pass": true,
+          "handoff_pass": true,
+          "corridor_entered": true,
+          "proof_lap_only": false,
+          "system_produced": true,
+          "blueprint_written": true,
+          "acceptance_sync": "PASS"
+        }
+      }
+    },
+    "builder_entry": {
+      "schema": "builder_entry_gate_v1",
+      "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+      "pass": true,
+      "status": "BUILDER_ENTRY_PASS",
+      "violations": [],
+      "checks": {
+        "post_arc": {
+          "schema": "post_arc_bundle_gate_v1",
+          "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+          "pass": true,
+          "violations": [],
+          "checks": {
+            "ARC_TWIN_SIM": {
+              "pass": true,
+              "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+            },
+            "BUILDER_SIM": {
+              "pass": true,
+              "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+            },
+            "SNT_TRANSLATION": {
+              "pass": true,
+              "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+            },
+            "PRE_BUILD": {
+              "pass": true,
+              "path": "PRE_BUILD_VALIDATION_PACKET.json"
+            },
+            "builder_clearance": {
+              "pass": true
+            },
+            "builder_sim_blocking": {
+              "pass": true,
+              "blocking_gaps": 0
+            }
+          },
+          "enforcement": "HARD"
+        },
+        "studio": {
+          "schema": "studio_blocking_gate_v1",
+          "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+          "pass": true,
+          "in_scope": true,
+          "verdict": "experience_acceptable",
+          "violations": [],
+          "enforcement": "HARD"
+        }
+      },
+      "enforcement": "HARD"
+    },
+    "builder": {
+      "ok": false,
+      "exit": 1,
+      "stdout": "\n=== Builder pre-build simulation (PRODUCT-VOICE-RAIL-V1-0001) ===\n\nVRV1-S01 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S01/20260611_voice_rail_v1.sql → db/migrations/20260611_voice_rail_v1.sql\nVRV1-S02 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S02/voice-rail-v1.js → services/voice-rail-v1.js\nVRV1-S03 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S03/lifeos-voice-rail-routes.js → routes/lifeos-voice-rail-routes.js\nVRV1-S04 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S04/lifeos-voice-rail-v1.html → public/overlay/lifeos-voice-rail-v1.html\nVRV1-S05 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S05/run-voice-rail-v1-acceptance.mjs → scripts/run-voice-rail-v1-acceptance.mjs\nVRV1-S07 [CLEAR] copy builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/CONTENT/VRV1-S07/run-founder-direct-provider-proof.mjs → scripts/run-founder-direct-provider-proof.mjs\n\nPre-build: BUILDER_PRE_BUILD_PASS — blocking_gaps=0, clear=6/6\n\nMission PRODUCT-VOICE-RAIL-V1-0001: 6 step(s) to execute\n\n--- VRV1-S01: Voice Rail v1 schema migration\n  DONE db/migrations/20260611_voice_rail_v1.sql (1494 bytes, sha256=d98add0893c8…)\n\n--- VRV1-S02: Voice Rail service — modes, intents, private, staging\n  DONE services/voice-rail-v1.js (63427 bytes, sha256=92806b026309…)\n\n--- VRV1-S03: Voice Rail API routes\n  DONE routes/lifeos-voice-rail-routes.js (18375 bytes, sha256=9e2baf945a01…)\n\n--- VRV1-S04: Canonical overlay page\n  DONE public/overlay/lifeos-voice-rail-v1.html (98670 bytes, sha256=de3b57526041…)\n\n--- VRV1-S05: Acceptance command + receipt\n  DONE scripts/run-voice-rail-v1-acceptance.mjs (8012 bytes, sha256=e634caea1985…)\n\n--- VRV1-S07: Founder direct provider live regression proof (OpenAI, Anthropic, Google)\n  DONE scripts/run-founder-direct-provider-proof.mjs (4789 bytes, sha256=5c1caa8bd35d…)\n\nRunning acceptance tests…\n\n> ai-counsel-os@1.0.0 lifeos:voice-rail:v1-acceptance\n> node scripts/run-voice-rail-v1-acceptance.mjs\n\n{\n  \"schema\": \"voice_rail_v1_acceptance_v1\",\n  \"mission_id\": \"PRODUCT-VOICE-RAIL-V1-0001\",\n  \"started_at\": \"2026-06-18T03:33:18.498Z\",\n  \"production_base\": \"https://robust-magic-production.up.railway.app\",\n  \"tests_passed\": [\n    \"VR1-T01_blueprint\",\n    \"VR1-T01_ui_file\",\n    \"VR1-T02\",\n    \"VR1-T03\",\n    \"VR1-T08\",\n    \"VR1-T14\",\n    \"VR1-T15\",\n    \"VR1-T17\",\n    \"VR1-T04\",\n    \"VR1-T05\",\n    \"VR1-T06\",\n    \"VR1-T09\",\n    \"VR1-T10\",\n    \"VR1-T11\",\n    \"VR1-T11b\",\n    \"VR1-T11c\",\n    \"VR1-T13\",\n    \"VR1-T13_visible\",\n    \"VR1-T16\",\n    \"VR1-T18\",\n    \"VR1-T20_execution_truth\"\n  ],\n  \"tests_failed\": [\n    \"VR1-T01\",\n    \"VR1-T07\",\n    \"VR1-T12\",\n    \"VR1-T18_receipt\"\n  ],\n  \"founder_usability_pass\": false,\n  \"fail_VR1-T01\": {\n    \"http\": 200\n  },\n  \"fail_VR1-T07\": \"TTS module + type-first composer (browser STT removed v1)\",\n  \"fail_VR1-T12\": {},\n  \"fail_VR1-T18_receipt\": \"all automated tests\",\n  \"completed_at\": \"2026-06-18T03:33:44.279Z\",\n  \"git_sha\": \"65989ad75fd6f8d7ab933d64adb490afd9248969\",\n  \"verdict\": \"FAIL\"\n}\n\nWrote builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/BUILDER_RUN_RECEIPT.json — verdict FAIL\nPoint B handoff: true | Machine path: false | Alpha: false\n",
+      "stderr": "DOCTRINE_VIOLATION — result truth or artifact policy failed:\n  - doctrine:acceptance_exit_code !== 0 — mission cannot be healthy\n  - doctrine:acceptance FAIL tests=VR1-T01,VR1-T07,VR1-T12,VR1-T18_receipt\n  - doctrine:OBJECTIVE_VERDICT NOT_COMPLETE on BP mission\n"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 /**
  * BuilderOS governed loop executor bridge — single queued job only.
- * OIL boundary audit → BP/PBB plan → Builder dispatch → OIL verifier → optional one retry.
+ * Sentry boundary audit → BP/PBB plan → Builder dispatch → Sentry verifier → optional one retry.
  *
  * C2 remains intake/status only; this module is explicit runtime glue.
  *
@@ -10,7 +10,7 @@
 import { writeFileSync, unlinkSync, existsSync, mkdtempSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-import { auditCommandControlJobBoundary } from './builderos-oil-job-audit.js';
+import { auditCommandControlJobBoundary } from './builderos-sentry-job-audit.js';
 import { generatePbbPlanFromOilAudit } from './builderos-pbb-plan.js';
 import {
   getCommandControlJob,

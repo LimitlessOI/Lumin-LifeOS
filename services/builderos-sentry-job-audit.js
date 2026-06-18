@@ -1,12 +1,15 @@
 /**
- * BuilderOS OIL boundary audit for queued C2 instructions.
+ * BuilderOS Sentry boundary audit for queued C2 instructions.
  * Deterministic supervisor checks — no council call on this step.
+ * Zone 3 files (>150 lines) are not blocked — they are routed to
+ * extract-helper patch mode so Builder creates a new Zone 1 helper
+ * instead of rewriting the large file.
  *
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 
 import { isSafeTarget } from '../config/builder-safe-scope.js';
-import { classifyBuildTarget } from './builderos-patch-mode-policy.js';
+import { classifyBuildTarget, generatePatchSpec } from './builderos-patch-mode-policy.js';
 
 const MIN_INSTRUCTION_LENGTH = 12;
 const DANGEROUS_PATTERNS = [
@@ -83,7 +86,12 @@ export function auditCommandControlJobBoundary(job, haltState = {}) {
         pushFinding(findings, 'ZONE4_BLOCKED', 'HIGH', zone.reason);
       }
       if (zone.zone === 3) {
-        pushFinding(findings, 'ZONE3_PATCH_REQUIRED', 'HIGH', zone.reason);
+        findings.push({
+          code: 'ZONE3_PATCH_SPEC_ATTACHED',
+          severity: 'MEDIUM',
+          message: zone.reason,
+          patch_spec: generatePatchSpec(zone.reason, targetFile, zone.lineCount),
+        });
       }
     }
   }
