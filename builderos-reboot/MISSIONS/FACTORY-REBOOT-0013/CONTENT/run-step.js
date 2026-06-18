@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -16,18 +19,37 @@ const BUILDER_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(BUILDER_DIR, '../../..');
 export const FACTORY_ROOT = path.resolve(BUILDER_DIR, '../..');
 
+function normalizeRepoRelative(relativePath) {
+  return String(relativePath || '').replace(/\\/g, '/');
+}
+
+function resolveRepoContainedPath(relativePath) {
+  const resolved = path.resolve(REPO_ROOT, normalizeRepoRelative(relativePath));
+  const rootPrefix = `${REPO_ROOT}${path.sep}`;
+  if (resolved !== REPO_ROOT && !resolved.startsWith(rootPrefix)) {
+    return null;
+  }
+  return resolved;
+}
+
 function sha256Buffer(buf) {
   return crypto.createHash('sha256').update(buf).digest('hex');
 }
 
 export function resolveRepoPath(relativePath) {
-  return path.join(REPO_ROOT, relativePath.replace(/\\/g, '/'));
+  const resolved = resolveRepoContainedPath(relativePath);
+  if (!resolved) {
+    throw new Error(`Path escapes repo root: ${relativePath}`);
+  }
+  return resolved;
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
-  const normalized = relativePath.replace(/\\/g, '/');
-  const boundary = sandboxBoundary.replace(/\\/g, '/').replace(/\/\*\*$/, '');
-  return normalized === boundary || normalized.startsWith(`${boundary}/`);
+  const target = resolveRepoContainedPath(relativePath);
+  const boundaryText = normalizeRepoRelative(sandboxBoundary).replace(/\/\*\*$/, '');
+  const boundary = resolveRepoContainedPath(boundaryText);
+  if (!target || !boundary) return false;
+  return target === boundary || target.startsWith(`${boundary}${path.sep}`);
 }
 
 function resolveStepContent(step) {
@@ -36,7 +58,8 @@ function resolveStepContent(step) {
     return { mode: 'greenfield', content: Buffer.from(String(inputs.exact_content), 'utf8') };
   }
   if (inputs.content_source_path) {
-    const source = resolveRepoPath(inputs.content_source_path);
+    const source = resolveRepoContainedPath(inputs.content_source_path);
+    if (!source) return { error: 'source_outside_repo', path: inputs.content_source_path };
     if (!fs.existsSync(source)) return { error: 'missing_source', path: inputs.content_source_path };
     return { mode: 'copy', content: fs.readFileSync(source) };
   }
@@ -93,6 +116,18 @@ export function runWriteFileExact({ mission_id, blueprint_id, step }) {
       attempted_action: 'runWriteFileExact',
       missing_information: [resolved.path],
       evidence: {},
+    });
+  }
+  if (resolved.error === 'source_outside_repo') {
+    return buildBlockedReturn({
+      mission_id,
+      blueprint_id,
+      step_id: step.step_id,
+      gap_type: 'authority_violation',
+      summary: `Source ${resolved.path} outside repo root`,
+      attempted_action: 'runWriteFileExact',
+      missing_information: [],
+      evidence: { content_source_path: resolved.path },
     });
   }
 

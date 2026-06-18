@@ -1,5 +1,8 @@
 #!/usr/bin/env node
-/** Single CI entry: run all factory verification scripts. */
+/**
+ * Single CI entry: run all factory verification scripts.
+ * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
+ */
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +15,7 @@ console.log(`factory:ci layout=${layout.mode} repo=${REPO_ROOT}`);
 const steps = [
   ['acceptance', ['run-all-mission-acceptance.mjs']],
   ['integration_step', ['factory-execute-step-integration.mjs']],
+  ['sandbox_security', ['factory-sandbox-security.mjs']],
   ['integration_mission', ['factory-execute-mission-integration.mjs']],
   ['greenfield', ['greenfield-integration.mjs']],
   ['determinism_mechanical', ['run-determinism-mechanical.mjs']],
