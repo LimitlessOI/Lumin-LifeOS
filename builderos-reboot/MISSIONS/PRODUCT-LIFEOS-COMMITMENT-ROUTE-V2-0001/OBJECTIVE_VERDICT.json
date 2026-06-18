@@ -1,12 +1,12 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-06-17T04:43:39.050Z",
+  "generated_at": "2026-06-18T02:51:37.404Z",
   "objective_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
   "objective_name": "LifeOS Commitment Route v2.1",
   "verdict": "TECHNICAL_PASS",
   "receipt": "products/receipts/COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
   "production_base": "https://robust-magic-production.up.railway.app",
-  "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c",
+  "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969",
   "tests_passed": [
     "LCR2-T01_blueprint",
     "LCR2-T01",

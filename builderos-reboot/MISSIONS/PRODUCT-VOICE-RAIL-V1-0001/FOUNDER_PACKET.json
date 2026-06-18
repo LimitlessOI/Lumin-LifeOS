@@ -35,10 +35,10 @@
   "cursor_role": "audit_support_not_primary_mouth",
   "additional_founder_rule": "System infers classifies routes; Adam never remembers surface subsystem or project",
   "technical_pass": {
-    "at": "2026-06-11T19:44:25.907Z",
+    "at": "2026-06-18T03:41:16.577Z",
     "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
     "receipt_verdict": "PASS",
-    "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
+    "git_sha": "1cba19b12d1e8d3a484ce5115de733f9457734e9",
     "production_base": "https://robust-magic-production.up.railway.app",
     "canonical_url": "/overlay/lifeos-voice-rail-v1.html",
     "public_alias": "/voice-rail",

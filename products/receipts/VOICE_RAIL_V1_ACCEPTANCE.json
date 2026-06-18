@@ -1,7 +1,7 @@
 {
   "schema": "voice_rail_v1_acceptance_v1",
   "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
-  "started_at": "2026-06-11T19:44:19.484Z",
+  "started_at": "2026-06-18T03:40:43.875Z",
   "production_base": "https://robust-magic-production.up.railway.app",
   "tests_passed": [
     "VR1-T01_blueprint",
@@ -27,13 +27,15 @@
     "VR1-T13_visible",
     "VR1-T16",
     "VR1-T18",
+    "VR1-T20_execution_truth",
     "VR1-T18_receipt",
+    "bp_sync_mandatory",
     "VR1-T19_bp_sync"
   ],
   "tests_failed": [],
   "founder_usability_pass": false,
-  "completed_at": "2026-06-11T19:44:25.907Z",
-  "git_sha": "c97f9195ac8d5167dd304575a0865df5204e9638",
+  "completed_at": "2026-06-18T03:41:16.577Z",
+  "git_sha": "1cba19b12d1e8d3a484ce5115de733f9457734e9",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [

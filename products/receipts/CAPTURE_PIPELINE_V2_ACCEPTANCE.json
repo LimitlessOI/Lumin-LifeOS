@@ -1,7 +1,7 @@
 {
   "schema": "capture_pipeline_v2_acceptance_v1",
   "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
-  "started_at": "2026-06-17T04:43:37.047Z",
+  "started_at": "2026-06-18T02:51:16.439Z",
   "production_base": "https://robust-magic-production.up.railway.app",
   "tests_passed": [
     "LCP2-T01_blueprint",
@@ -18,8 +18,8 @@
   ],
   "tests_failed": [],
   "founder_usability_pass": false,
-  "completed_at": "2026-06-17T04:43:38.146Z",
-  "git_sha": "7a7c96d0f40bf6f2b3b880ccb479adf821026b5c",
+  "completed_at": "2026-06-18T02:51:17.479Z",
+  "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [

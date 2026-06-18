@@ -1,7 +1,7 @@
 {
   "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
   "blueprint_id": "VOICE-RAIL-V1-2026-06-11",
-  "blueprint_status": "ready_for_builder",
+  "blueprint_status": "complete",
   "scope": "voice_rail_v1_communication_layer",
   "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
   "authority": "FOUNDER_PACKET.md",
@@ -51,7 +51,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "db/migrations/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-18T03:41:16.577Z",
+      "git_sha": "1cba19b12d1e8d3a484ce5115de733f9457734e9"
     },
     {
       "step_id": "VRV1-S02",
@@ -84,7 +87,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "services/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-18T03:41:16.577Z",
+      "git_sha": "1cba19b12d1e8d3a484ce5115de733f9457734e9"
     },
     {
       "step_id": "VRV1-S03",
@@ -117,7 +123,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "routes/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-18T03:41:16.577Z",
+      "git_sha": "1cba19b12d1e8d3a484ce5115de733f9457734e9"
     },
     {
       "step_id": "VRV1-S04",
@@ -150,7 +159,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "public/overlay/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-18T03:41:16.577Z",
+      "git_sha": "1cba19b12d1e8d3a484ce5115de733f9457734e9"
     },
     {
       "step_id": "VRV1-S05",
@@ -183,7 +195,10 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "scripts/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-18T03:41:16.577Z",
+      "git_sha": "1cba19b12d1e8d3a484ce5115de733f9457734e9"
     },
     {
       "step_id": "VRV1-S07",
@@ -216,9 +231,17 @@
       "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
       "sandbox_boundary": "scripts/**",
       "authority_owner": "ARC",
-      "on_block": "BLOCKED_RETURN_TO_ARC"
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-18T03:41:16.577Z",
+      "git_sha": "1cba19b12d1e8d3a484ce5115de733f9457734e9"
     }
   ],
   "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
-  "authored_by": "ARC"
+  "authored_by": "ARC",
+  "completed_at": "2026-06-18T03:41:16.577Z",
+  "git_sha": "1cba19b12d1e8d3a484ce5115de733f9457734e9",
+  "receipt_path": "products/receipts/VOICE_RAIL_V1_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "GAP-FILL"
 }
