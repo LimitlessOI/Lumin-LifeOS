@@ -26,7 +26,7 @@ export function createLifeOSCommitmentRoute({ pool, logger }) {
 
     let approved = item;
     if (item.status === 'staged') {
-      approved = await inbox.approveItem(itemId);
+      approved = await inbox.approveItem(itemId, userId);
     }
 
     const commitment = await commitments.addCommitment(userId, {
@@ -34,8 +34,8 @@ export function createLifeOSCommitmentRoute({ pool, logger }) {
       source: 'action_inbox',
     });
 
-    const routed = await inbox.routeItem(itemId, { department: 'commitments' });
-    await inbox.markDone(itemId);
+    const routed = await inbox.routeItem(itemId, { department: 'commitments', userId });
+    await inbox.markDone(itemId, userId);
 
     return {
       inbox_item_id: itemId,

@@ -83,6 +83,23 @@ export function createActionInbox({ pool, logger }) {
     return classifyExtended(rawText, mode);
   }
 
+  async function loadItem(itemId, userId = null) {
+    const params = [itemId];
+    const userClause = userId ? ' AND user_id = $2' : '';
+    if (userId) params.push(userId);
+    const { rows } = await pool.query(
+      `SELECT * FROM action_inbox_items WHERE id = $1${userClause} LIMIT 1`,
+      params,
+    );
+    const item = rows[0];
+    if (!item) {
+      const err = new Error('item_not_found');
+      err.status = 404;
+      throw err;
+    }
+    return item;
+  }
+
   async function captureItem({ userId, sessionId, source, rawText, metadata, mode }) {
     const raw = String(rawText || '').trim();
     if (!raw) {
@@ -122,17 +139,8 @@ export function createActionInbox({ pool, logger }) {
     return rows[0];
   }
 
-  async function stageItem(itemId) {
-    const { rows } = await pool.query(
-      `SELECT * FROM action_inbox_items WHERE id = $1 LIMIT 1`,
-      [itemId],
-    );
-    const item = rows[0];
-    if (!item) {
-      const err = new Error('item_not_found');
-      err.status = 404;
-      throw err;
-    }
+  async function stageItem(itemId, userId = null) {
+    const item = await loadItem(itemId, userId);
     if (item.status === 'staged') return item;
     if (!isForwardTransition(item.status, 'staged')) {
       const err = new Error('invalid_status_transition');
@@ -146,17 +154,8 @@ export function createActionInbox({ pool, logger }) {
     return updated[0];
   }
 
-  async function approveItem(itemId) {
-    const { rows } = await pool.query(
-      `SELECT * FROM action_inbox_items WHERE id = $1 LIMIT 1`,
-      [itemId],
-    );
-    const item = rows[0];
-    if (!item) {
-      const err = new Error('item_not_found');
-      err.status = 404;
-      throw err;
-    }
+  async function approveItem(itemId, userId = null) {
+    const item = await loadItem(itemId, userId);
     if (!isForwardTransition(item.status, 'approved')) {
       const err = new Error('invalid_status_transition');
       err.status = 400;
@@ -170,17 +169,8 @@ export function createActionInbox({ pool, logger }) {
     return updated[0];
   }
 
-  async function routeItem(itemId, { department } = {}) {
-    const { rows } = await pool.query(
-      `SELECT * FROM action_inbox_items WHERE id = $1 LIMIT 1`,
-      [itemId],
-    );
-    const item = rows[0];
-    if (!item) {
-      const err = new Error('item_not_found');
-      err.status = 404;
-      throw err;
-    }
+  async function routeItem(itemId, { department, userId = null } = {}) {
+    const item = await loadItem(itemId, userId);
 
     if (item.classification === 'bp_build_request') {
       const err = new Error('bp_build_request_cannot_be_routed');
@@ -213,17 +203,8 @@ export function createActionInbox({ pool, logger }) {
     return { item: updated[0], receipt: receipt[0] };
   }
 
-  async function markDone(itemId) {
-    const { rows } = await pool.query(
-      `SELECT * FROM action_inbox_items WHERE id = $1 LIMIT 1`,
-      [itemId],
-    );
-    const item = rows[0];
-    if (!item) {
-      const err = new Error('item_not_found');
-      err.status = 404;
-      throw err;
-    }
+  async function markDone(itemId, userId = null) {
+    const item = await loadItem(itemId, userId);
     if (!isForwardTransition(item.status, 'done')) {
       const err = new Error('invalid_status_transition');
       err.status = 400;
@@ -253,17 +234,8 @@ export function createActionInbox({ pool, logger }) {
     return updated[0];
   }
 
-  async function markFailed(itemId, { reason } = {}) {
-    const { rows } = await pool.query(
-      `SELECT * FROM action_inbox_items WHERE id = $1 LIMIT 1`,
-      [itemId],
-    );
-    const item = rows[0];
-    if (!item) {
-      const err = new Error('item_not_found');
-      err.status = 404;
-      throw err;
-    }
+  async function markFailed(itemId, { reason, userId = null } = {}) {
+    const item = await loadItem(itemId, userId);
     if (item.status === 'done' || item.status === 'failed') {
       const err = new Error('invalid_status_transition');
       err.status = 400;
@@ -300,16 +272,7 @@ export function createActionInbox({ pool, logger }) {
   }
 
   async function getItem(itemId, userId) {
-    const { rows } = await pool.query(
-      `SELECT * FROM action_inbox_items WHERE id = $1 AND user_id = $2 LIMIT 1`,
-      [itemId, userId],
-    );
-    if (!rows[0]) {
-      const err = new Error('item_not_found');
-      err.status = 404;
-      throw err;
-    }
-    return rows[0];
+    return loadItem(itemId, userId);
   }
 
   async function listReceipts(userId, { limit = 50 } = {}) {

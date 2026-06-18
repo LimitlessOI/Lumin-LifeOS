@@ -10,6 +10,20 @@ export function createActionInboxRoutes({ pool, requireKey, logger }) {
   const router = express.Router();
   const inbox = createActionInbox({ pool, logger });
 
+  async function resolveRequiredUserId(req, res) {
+    const user = req.body?.user || req.query?.user;
+    if (!user) {
+      res.status(400).json({ ok: false, error: 'user_required' });
+      return null;
+    }
+    const userId = await inbox.resolveUserId(user);
+    if (!userId) {
+      res.status(404).json({ ok: false, error: 'user_not_found' });
+      return null;
+    }
+    return userId;
+  }
+
   router.get('/health', requireKey, (_req, res) => {
     res.json({
       ok: true,
@@ -78,7 +92,9 @@ export function createActionInboxRoutes({ pool, requireKey, logger }) {
 
   router.post('/items/:id/approve', requireKey, async (req, res, next) => {
     try {
-      const item = await inbox.approveItem(req.params.id);
+      const userId = await resolveRequiredUserId(req, res);
+      if (!userId) return;
+      const item = await inbox.approveItem(req.params.id, userId);
       res.json({ ok: true, item });
     } catch (err) {
       if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
@@ -90,7 +106,9 @@ export function createActionInboxRoutes({ pool, requireKey, logger }) {
   router.post('/items/:id/route', requireKey, async (req, res, next) => {
     try {
       const { department } = req.body;
-      const result = await inbox.routeItem(req.params.id, { department });
+      const userId = await resolveRequiredUserId(req, res);
+      if (!userId) return;
+      const result = await inbox.routeItem(req.params.id, { department, userId });
       res.json({ ok: true, ...result });
     } catch (err) {
       if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
@@ -101,7 +119,9 @@ export function createActionInboxRoutes({ pool, requireKey, logger }) {
 
   router.post('/items/:id/done', requireKey, async (req, res, next) => {
     try {
-      const item = await inbox.markDone(req.params.id);
+      const userId = await resolveRequiredUserId(req, res);
+      if (!userId) return;
+      const item = await inbox.markDone(req.params.id, userId);
       res.json({ ok: true, item });
     } catch (err) {
       if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
@@ -113,7 +133,9 @@ export function createActionInboxRoutes({ pool, requireKey, logger }) {
   router.post('/items/:id/failed', requireKey, async (req, res, next) => {
     try {
       const { reason } = req.body;
-      const result = await inbox.markFailed(req.params.id, { reason });
+      const userId = await resolveRequiredUserId(req, res);
+      if (!userId) return;
+      const result = await inbox.markFailed(req.params.id, { reason, userId });
       res.json({ ok: true, ...result });
     } catch (err) {
       if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
