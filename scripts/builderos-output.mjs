@@ -1,15 +1,15 @@
 /**
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * This module provides read-only audit capabilities for the LifeOS platform.
- * It fetches data from specified internal API endpoints to assess system status
- * and identify potential issues without performing any mutations or direct database access.
+ * It fetches data from specified internal apiEPs to assess system status
+ * and identify potential issues without performing any mutations or direct db access.
  */
 
 /**
- * Validates that a required environment variable is set.
- * @param {string} varName The name of the environment variable to validate.
- * @returns {string} The value of the environment variable.
- * @throws {Error} If the environment variable is not set.
+ * Validates that a required envVar is set.
+ * @param {string} varName The name of the envVar to validate.
+ * @returns {string} The value of the envVar.
+ * @throws {Error} If the envVar is not set.
  */
 function validateEnv(varName) {
   const value = process.env[varName];
@@ -20,10 +20,10 @@ function validateEnv(varName) {
 }
 
 /**
- * Fetches JSON data from a specified URL with an authentication key.
+ * Fetches JSON data from a specified URL with an auth key.
  * @param {string} baseUrl The base URL for the API.
  * @param {string} path The API path relative to the base URL.
- * @param {string} key The command key for authentication (x-command-key header).
+ * @param {string} key The command key for auth (x-command-key header).
  * @returns {Promise<object>} The parsed JSON response.
  * @throws {Error} If the fetch operation fails or the response is not OK.
  */
@@ -36,12 +36,10 @@ async function fetchJson(baseUrl, path, key) {
         'Accept': 'application/json'
       }
     });
-
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`HTTP error! Status: ${response.status}, Path: ${path}, Response: ${errorText}`);
     }
-
     return await response.json();
   } catch (error) {
     throw new Error(`Failed to fetch from ${url}: ${error.message}`);
@@ -61,7 +59,7 @@ function shapeError(error) {
 }
 
 /**
- * Runs a read-only audit of the LifeOS system by querying specified API endpoints.
+ * Runs a read-only audit of the LifeOS system by querying specified apiEPs.
  * @param {string} publicBaseUrl The base URL for public API access.
  * @returns {Promise<object>} A structured JSON object containing the audit results.
  */
