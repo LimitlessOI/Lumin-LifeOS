@@ -131,6 +131,7 @@ const bpIsStaged = bpItem?.status === 'staged';
 
 if (bpItem?.id && bpIsBpClass && bpIsStaged) {
   const bpRouteAttempt = await api('POST', `/api/v1/lifeos/action-inbox/items/${bpItem.id}/route`, {
+    user,
     department: 'CDR',
   });
   step(
@@ -181,7 +182,7 @@ step(
 
 let approvedItem = null;
 if (taskItem?.id) {
-  const approveRes = await api('POST', `/api/v1/lifeos/action-inbox/items/${taskItem.id}/approve`);
+  const approveRes = await api('POST', `/api/v1/lifeos/action-inbox/items/${taskItem.id}/approve`, { user });
   approvedItem = approveRes.json?.item;
   step(
     'AIV1-T07',
@@ -196,6 +197,7 @@ let routedItem = null;
 let routeReceipt = null;
 if (approvedItem?.id) {
   const routeRes = await api('POST', `/api/v1/lifeos/action-inbox/items/${approvedItem.id}/route`, {
+    user,
     department: 'commitments',
   });
   routedItem = routeRes.json?.item;

@@ -93,7 +93,7 @@ step(
 
 const itemId = captured.json?.item?.id;
 if (itemId) {
-  const approved = await api('POST', `/api/v1/lifeos/action-inbox/items/${itemId}/approve`);
+  const approved = await api('POST', `/api/v1/lifeos/action-inbox/items/${itemId}/approve`, { user });
   step('LCR2-T03_approve', approved.status === 200 && approved.json?.item?.status === 'approved', approved.json?.item?.status);
 
   const routed = await api('POST', `/api/v1/lifeos/commitment-route/from-inbox/${itemId}`, { user });

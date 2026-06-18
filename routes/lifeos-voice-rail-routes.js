@@ -420,17 +420,21 @@ export function createLifeOSVoiceRailRoutes({
     try {
       const userId = await voiceRail.resolveUserId(req.body.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'user_not_found' });
+      const mode = req.body.mode || 'conversation';
+      const naturalPrivate =
+        capturePipeline?.inbox?.classifyItem?.(req.body.text, mode) === 'private_no_save';
+      const privateRequested = Boolean(req.body.private) || naturalPrivate;
       const result = await voiceRail.submitMessage({
         userId,
         sessionId: req.body.session_id || null,
-        mode: req.body.mode || 'conversation',
+        mode,
         tag: req.body.tag || null,
         department: req.body.department || 'ChC',
         councilMember: req.body.council_member || null,
         councilMemberKeys: Array.isArray(req.body.council_members) ? req.body.council_members : null,
         text: req.body.text,
         attachments: req.body.attachments,
-        private: Boolean(req.body.private),
+        private: privateRequested,
         simulateOnly: Boolean(req.body.simulate_only),
         continuous: req.body.continuous !== false,
         commandKey: resolveRequestCommandKey(req),
@@ -441,10 +445,10 @@ export function createLifeOSVoiceRailRoutes({
         inbox_staging = await capturePipeline.stageFromVoiceSubmit({
           userId,
           text: req.body.text,
-          mode: req.body.mode || 'conversation',
+          mode,
           sessionId: result.session_id || req.body.session_id || null,
           voiceIntent: result.intent || result.user_message?.intent,
-          private: Boolean(req.body.private),
+          private: privateRequested,
           simulateOnly: Boolean(req.body.simulate_only),
         });
       }
