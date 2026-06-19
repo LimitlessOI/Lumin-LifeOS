@@ -6,7 +6,7 @@
   "amendment": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
   "status": "active",
   "build_ready": true,
-  "last_updated": "2026-06-17",
-  "last_receipt": "2026-06-16 foundation-pipeline-lifeos-v2",
-  "last_change_summary": "Foundation pipeline + LifeOS version queue overnight build"
+  "last_updated": "2026-06-19",
+  "last_receipt": "2026-06-19 mission-lib-path-traversal-guard",
+  "last_change_summary": "Mission blueprint file writes reject absolute/traversal paths before sandbox checks"
 }
