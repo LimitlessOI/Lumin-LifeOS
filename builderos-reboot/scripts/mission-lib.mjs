@@ -44,8 +44,25 @@ export function loadAcceptanceTests(missionId) {
   return loadJson(`${FACTORY_LAYOUT.missionsRel}/${missionId}/ACCEPTANCE_TESTS.json`);
 }
 
+export function normalizeRepoRelativePath(relativePath) {
+  if (!relativePath || typeof relativePath !== 'string') return null;
+  const slashNormalized = relativePath.replace(/\\/g, '/').trim();
+  if (!slashNormalized || path.isAbsolute(slashNormalized) || /^[A-Za-z]:/.test(slashNormalized)) {
+    return null;
+  }
+  const parts = slashNormalized.split('/').filter(Boolean);
+  if (!parts.length || parts.some((part) => part === '.' || part === '..')) {
+    return null;
+  }
+  return parts.join('/');
+}
+
 export function resolveRepoPath(relativePath) {
-  return path.join(REPO_ROOT, relativePath);
+  const normalized = normalizeRepoRelativePath(relativePath);
+  if (!normalized) {
+    throw new Error(`Unsafe repo-relative path: ${relativePath}`);
+  }
+  return path.join(REPO_ROOT, normalized);
 }
 
 export function ensureParentDir(filePath) {
@@ -77,19 +94,57 @@ export function sortStepsByDependencies(steps) {
 }
 
 export function pathMatchesSandbox(relativePath, sandboxBoundary) {
-  const normalized = relativePath.replace(/\\/g, '/');
-  const boundary = sandboxBoundary.replace(/\\/g, '/').replace(/\/\*\*$/, '');
+  const normalized = normalizeRepoRelativePath(relativePath);
+  const boundary = normalizeRepoRelativePath(String(sandboxBoundary || '').replace(/\\/g, '/').replace(/\/\*\*$/, ''));
+  if (!normalized || !boundary) return false;
   return normalized === boundary || normalized.startsWith(`${boundary}/`);
 }
 
 export function writeFileExactStep(step) {
   let content;
   const sourceRel = step.exact_inputs?.content_source_path;
+  const targetRel = normalizeRepoRelativePath(step.target_file);
+
+  if (!targetRel) {
+    return {
+      ok: false,
+      status: 'BLOCKED_RETURN_TO_BPB',
+      gap_type: 'authority_violation',
+      summary: `Target ${step.target_file} is not a safe repo-relative path`,
+    };
+  }
+
+  if (!pathMatchesSandbox(targetRel, step.sandbox_boundary)) {
+    return {
+      ok: false,
+      status: 'BLOCKED_RETURN_TO_BPB',
+      gap_type: 'authority_violation',
+      summary: `Target ${step.target_file} outside sandbox ${step.sandbox_boundary}`,
+    };
+  }
+
+  if (isLegacyWriteTarget(targetRel, FACTORY_LAYOUT)) {
+    return {
+      ok: false,
+      status: 'BLOCKED_RETURN_TO_BPB',
+      gap_type: 'legacy_quarantine',
+      summary: `Target ${step.target_file} is legacy LifeOS spine — run from Lumin-Factory repo or fix blueprint sandbox`,
+    };
+  }
 
   if (step.exact_inputs?.exact_content != null) {
     content = Buffer.from(String(step.exact_inputs.exact_content), 'utf8');
   } else if (sourceRel) {
-    const source = resolveRepoPath(sourceRel);
+    const sourceSafeRel = normalizeRepoRelativePath(sourceRel);
+    if (!sourceSafeRel) {
+      return {
+        ok: false,
+        status: 'BLOCKED_RETURN_TO_BPB',
+        gap_type: 'authority_violation',
+        summary: `Source ${sourceRel} is not a safe repo-relative path`,
+      };
+    }
+    const source = resolveRepoPath(sourceSafeRel);
     if (!fs.existsSync(source)) {
       return {
         ok: false,
@@ -108,25 +163,7 @@ export function writeFileExactStep(step) {
     };
   }
 
-  const target = resolveRepoPath(step.target_file);
-
-  if (!pathMatchesSandbox(step.target_file, step.sandbox_boundary)) {
-    return {
-      ok: false,
-      status: 'BLOCKED_RETURN_TO_BPB',
-      gap_type: 'authority_violation',
-      summary: `Target ${step.target_file} outside sandbox ${step.sandbox_boundary}`,
-    };
-  }
-
-  if (isLegacyWriteTarget(step.target_file, FACTORY_LAYOUT)) {
-    return {
-      ok: false,
-      status: 'BLOCKED_RETURN_TO_BPB',
-      gap_type: 'legacy_quarantine',
-      summary: `Target ${step.target_file} is legacy LifeOS spine — run from Lumin-Factory repo or fix blueprint sandbox`,
-    };
-  }
+  const target = resolveRepoPath(targetRel);
 
   ensureParentDir(target);
   fs.writeFileSync(target, content);
@@ -149,7 +186,7 @@ export function writeFileExactStep(step) {
     ok: true,
     status: 'DONE',
     step_id: step.step_id,
-    target_file: step.target_file,
+    target_file: targetRel,
     bytes: content.length,
     sha256: sha256Buffer(content),
   };
