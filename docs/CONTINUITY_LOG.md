@@ -3,6 +3,14 @@
 
 ---
 
+## [FIX] 2026-06-19 — BuilderOS mission blueprint path traversal guard
+
+**High-severity bug fixed:** `builderos-reboot/scripts/mission-lib.mjs` checked `target_file` sandbox membership as a raw string before path normalization. A malformed blueprint step such as `builderos-reboot/MISSIONS/SAFE/../../../server.js` could pass the sandbox prefix check and then resolve outside the sandbox/repo boundary during write. The new guard rejects absolute paths and `.`/`..` segments before source reads, sandbox checks, legacy-spine checks, or target writes. Added `tests/mission-lib-path-safety.test.js`. Commit pushed on `cursor/critical-bug-investigation-899a`: `df547e343`.
+
+**Validation:** `node --test tests/mission-lib-path-safety.test.js`, `node --check builderos-reboot/scripts/mission-lib.mjs`, `npm run lifeos:bp-priority:verify`, and `npm run builder:preflight` passed. Adjacent `tests/doctrine-enforcement.test.js tests/point-b-gate.test.js tests/builder-blueprint-gate.test.js` had 16/17 pass; the one failure is a pre-existing missing fixture path for `BUILDEROS-INTAKE-LOOP-V1-0001/BLUEPRINT.json`, not the patched path-safety code.
+
+---
+
 ## [SESSION] 2026-06-16 — LifeOS overnight versions v2.0 + v2.1
 
 Adam: go to bed — system builds LifeOS in versions overnight, machine Alpha = foundation + acceptance.
