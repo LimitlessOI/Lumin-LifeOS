@@ -3,6 +3,12 @@
 
 ---
 
+## [SESSION] 2026-06-20 — Execution-truth hardening + revert poison routes
+
+Adam confirmed chat history survives hard refresh (comms proof UX OK on deploy `201fe9bd8d`). System COMMS PROOF build (`597324ed45`) replaced `routes/lifeos-builderos-command-control-routes.js` with browser drawer JS — Railway healthcheck failed; active deploy stayed on prior SHA. **Shipped:** revert routes file; `lifeos-execution-truth.js` adds ROUTE_STUB_REWRITE, SERVER_FILE_MASS_SHRINK, SCOPE_INCOMPLETE, COMMIT_NO_SHA gates; builder pre-commit uses same detector; `tests/lifeos-execution-truth.test.js`. **Next:** deploy revert + enforcement; system must FAIL (not PASS) on same class of mistake.
+
+---
+
 ## [SESSION] 2026-06-16 — LifeOS overnight versions v2.0 + v2.1
 
 Adam: go to bed — system builds LifeOS in versions overnight, machine Alpha = foundation + acceptance.

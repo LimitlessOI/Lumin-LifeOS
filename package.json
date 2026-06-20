@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server.js",
     "cli": "node apps/cli/index.js",
-    "test": "node --test tests/smoke.test.js tests/insurance-card-parse.test.js tests/site-builder-postmark-helper.test.js tests/tc-morning-digest-service-module.test.js tests/operator-runtime-status-freshness.test.js tests/deployment-service-package-guard.test.js tests/closure-contract.test.js tests/validate-task-dna.test.js tests/prediction-loop.test.js tests/founder-decoder.test.js tests/adf-prediction-ledger.test.js tests/builderos-arc-simulation.test.js",
+    "test": "node --test tests/smoke.test.js tests/lifeos-execution-truth.test.js tests/insurance-card-parse.test.js tests/site-builder-postmark-helper.test.js tests/tc-morning-digest-service-module.test.js tests/operator-runtime-status-freshness.test.js tests/deployment-service-package-guard.test.js tests/closure-contract.test.js tests/validate-task-dna.test.js tests/prediction-loop.test.js tests/founder-decoder.test.js tests/adf-prediction-ledger.test.js tests/builderos-arc-simulation.test.js",
     "dna:validate": "node scripts/validate-task-dna.mjs",
     "predictions:validate": "node scripts/validate-predictions.mjs",
     "founder:calm": "node scripts/founder-decoder.mjs --calm",

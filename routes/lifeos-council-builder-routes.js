@@ -46,6 +46,7 @@ import { looksLikeBuilderProseRefusal } from '../services/builder-instruction-ta
 import { checkBuildBlueprintGate } from '../services/builder-blueprint-gate.js';
 import { createBuilderOSControlPlaneService } from '../services/builderos-control-plane-service.js';
 import { evaluateBuildDoneGateAsync } from '../services/builderos-build-done-gate-helper.js';
+import { detectGeneratedLayerViolation } from '../services/lifeos-execution-truth.js';
 import {
   grantBuildCompletion,
   isCompletionAuthorityEnabled,
@@ -629,10 +630,13 @@ function extractHtmlFromOutput(text) {
   return trimmed;
 }
 
+
 function validateGeneratedOutputForTarget(targetFile, output) {
   const target = String(targetFile || '').toLowerCase();
   const text = String(output || '').trim();
   if (!text) return 'generated output is empty';
+  const layerViolation = detectGeneratedLayerViolation(targetFile, text);
+  if (layerViolation) return layerViolation.detail;
   if (target.endsWith('.html')) {
     if (text.length < 1000) return 'generated HTML is too short; refusing to commit likely truncated output';
     if (!/^[\s]*</.test(text)) return 'generated HTML must start with <!DOCTYPE or <html (no preamble or markdown)';

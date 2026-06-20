@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-20 — `enforceExecutionTruth` hard gate: no PASS without commit+file; large overlay rewrites FAIL closed; removed optimistic build success theater
+**Last Updated:** 2026-06-20 — execution-truth: ROUTE_STUB_REWRITE + SCOPE_INCOMPLETE + COMMIT_NO_SHA; revert poisoned command-control routes
 
 ---
 
@@ -562,6 +562,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-20 | **`services/lifeos-execution-truth.js`** + **`routes/lifeos-council-builder-routes.js`** + revert **`routes/lifeos-builderos-command-control-routes.js`** — ROUTE_STUB_REWRITE (browser code in routes/services), SERVER_FILE_MASS_SHRINK, SCOPE_INCOMPLETE (multi-file tasks), COMMIT_NO_SHA blocks build PASS; pre-commit `validateGeneratedOutputForTarget` calls same detector; **`tests/lifeos-execution-truth.test.js`**. Reverted system commit 597324ed45 that replaced Express routes with drawer JS (Railway healthcheck failed). | COMMS PROOF build claimed PASS while committing DOM code to routes — deploy failed, main poisoned. Lessons: layer violation + scope miss + missing SHA must FAIL with autopsy before founder sees PASS. | ✅ tests + node --check |
 | 2026-06-20 | **`services/lifeos-execution-truth.js`** — mandatory FAIL autopsy (what_happened, lessons, numbered fix_steps); OVERLAY_STUB_REWRITE detection; **`public/overlay/lifeos-app.html`** — dockable #lumin-drawer (Side/Top/Bottom/Pin/Min + localStorage). | User: failure had no autopsy and fix path was useless; dockable panel must ship via scoped GAP-FILL not builder whole-file rewrite. | ✅ deploy |
 | 2026-06-20 | **`services/lifeos-execution-truth.js`** (NEW) + **`routes/lifeos-builderos-command-control-routes.js`** — fail-closed execution truth: PASS requires `committed` + `target_file`; `ok` alone → FAIL; large overlay HTML rewrites (`lifeos-app.html`) → FAIL with lesson/fix (no false COMMITTED theater); removed `translateToPlainEnglish` success lies on build path; `formatExecutionTruthReply` single receipt formatter; founder auth tries Bearer → cookie before 401. | User rule zero: system showed PASS/COMMITTED with no visible result — that is lying. Root cause: `execJson.ok===true` mapped to PASS without commit proof; AI plain-English overwrote failures with optimism. | ✅ `node --check`; deploy |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — communication layer: structured execution receipts (PASS/FAIL, blocker, lesson, fix, gap_recommendation); build route forces `useCache:false` + target_file inference; failures skip AI plain-English rewrite; explicit “execute it” / `action=execute` routes to terminal bridge before conversation; Lumin converse prompt stops claiming code shipped. **`public/shared/lifeos-system-reply.js`** — shared client formatter for shell + dashboard. | Founder requires honest control-surface comms: when build fails, say why + lesson + fix; when he says execute, run execute — not vague truncated AI prose. | ✅ `node --check`; pending deploy + founder retest with dockable-chat build prompt |

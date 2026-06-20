@@ -11,6 +11,108 @@ const LARGE_OVERLAY_PATHS = [
   'public/overlay/lifeos-dashboard.html',
 ];
 
+const CRITICAL_SERVER_FILES = {
+  'routes/lifeos-builderos-command-control-routes.js': { minLines: 400, requireExpress: true },
+  'routes/lifeos-council-builder-routes.js': { minLines: 500, requireExpress: true },
+  'routes/lifeos-chat-routes.js': { minLines: 80, requireExpress: true },
+};
+
+const BROWSER_CODE_MARKERS = [
+  /\bdocument\.(getElementById|querySelector|createElement)\b/,
+  /\blocalStorage\.(getItem|setItem)\b/,
+  /\bwindow\.(luminBootThread|addEventListener)\b/,
+  /\bclassList\.(add|remove|toggle)\b/,
+];
+
+const SERVER_MODULE_MARKERS = [
+  /from\s+['"]express['"]/,
+  /\bexpress\.Router\b/,
+  /\bexport\s+function\s+create/i,
+  /\bimport\s+.+\s+from\s+['"]node:/,
+];
+
+/**
+ * Detect browser/UI code or destructive shrink committed to server route/service files.
+ * @returns {{ code: string, detail: string } | null}
+ */
+export function detectGeneratedLayerViolation(targetFile, output) {
+  const normalized = String(targetFile || '').replace(/^\//, '').trim();
+  const text = String(output || '');
+  if (!normalized || !text.trim()) return null;
+
+  const isServerPath = /^(routes|services|middleware|startup)\/[\w.-]+\.js$/i.test(normalized);
+  if (!isServerPath) return null;
+
+  const browserHits = BROWSER_CODE_MARKERS.filter((r) => r.test(text)).length;
+  const serverHits = SERVER_MODULE_MARKERS.filter((r) => r.test(text)).length;
+
+  if (/\bdocument\./.test(text) && serverHits === 0) {
+    return {
+      code: 'ROUTE_STUB_REWRITE',
+      detail: `Browser DOM code in ${normalized} — Node crashes on import (document is not defined). Railway healthcheck will fail.`,
+    };
+  }
+  if (browserHits >= 2 && serverHits === 0) {
+    return {
+      code: 'ROUTE_STUB_REWRITE',
+      detail: `Frontend UI code committed to ${normalized} — missing Express/server module exports.`,
+    };
+  }
+
+  const critical = CRITICAL_SERVER_FILES[normalized];
+  if (critical) {
+    const lines = text.split('\n').length;
+    if (lines < critical.minLines) {
+      return {
+        code: 'SERVER_FILE_MASS_SHRINK',
+        detail: `Output is ${lines} lines; ${normalized} requires ≥${critical.minLines} — destructive rewrite, not a scoped patch.`,
+      };
+    }
+    if (critical.requireExpress && !/\bexpress\b/.test(text)) {
+      return {
+        code: 'ROUTE_STUB_REWRITE',
+        detail: `${normalized} missing express — not a valid route module.`,
+      };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Extract explicit repo-relative paths named in a founder/build task.
+ * @returns {string[]}
+ */
+export function extractRequiredFilesFromTask(task) {
+  const t = String(task || '');
+  const paths = [];
+  const re = /(?:^|[\s'"`,:])(?:\.?\/)?((?:public\/overlay|routes|services|middleware|startup)\/[\w./-]+\.(?:html|js|md))/gi;
+  let m;
+  while ((m = re.exec(t)) !== null) {
+    paths.push(m[1].replace(/^\//, ''));
+  }
+  return [...new Set(paths)];
+}
+
+/**
+ * Task names multiple files but commit only touched one.
+ * @returns {{ code: string, detail: string, missing: string[] } | null}
+ */
+export function detectScopeIncomplete(task, targetFile, committed) {
+  if (!committed) return null;
+  const required = extractRequiredFilesFromTask(task);
+  const target = String(targetFile || '').replace(/^\//, '');
+  if (required.length < 2 || !target) return null;
+  if (!required.includes(target)) return null;
+  const missing = required.filter((f) => f !== target);
+  if (!missing.length) return null;
+  return {
+    code: 'SCOPE_INCOMPLETE',
+    detail: `Task required ${required.join(', ')} but only committed ${target}. Missing: ${missing.join(', ')}.`,
+    missing,
+  };
+}
+
 /**
  * @param {object} raw — builder / terminal bridge result fields
  * @param {object} [ctx]
@@ -25,6 +127,7 @@ export function enforceExecutionTruth(raw, ctx = {}) {
   const apiOk = raw.ok === true;
   const sha = raw.sha || raw.commit_sha || null;
   const upstreamBlocker = raw.first_blocker || raw.error || raw.execution_receipt?.blocker || null;
+  const generatedOutput = raw.generated_output || raw.output || raw.output_content || '';
 
   let pass_fail = 'FAIL';
   let command_truth = 'NO_COMMAND_RAN';
@@ -50,16 +153,36 @@ export function enforceExecutionTruth(raw, ctx = {}) {
     lesson = 'COMMITTED requires a file path in the receipt.';
     fix = 'Inspect builder /execute response; fix receipt wiring before retry.';
   } else if (committed && targetFile) {
-    const isLargeOverlay = LARGE_OVERLAY_PATHS.some((p) => targetFile.replace(/^\//, '') === p);
+    const normalizedTarget = targetFile.replace(/^\//, '');
+    const isLargeOverlay = LARGE_OVERLAY_PATHS.some((p) => normalizedTarget === p);
     const taskNamesOverlay = /\blifeos-app\.html\b/i.test(task) || LARGE_OVERLAY_PATHS.some((p) => task.includes(p));
-    const outputBytes = raw.task_meta?.output_bytes || raw.output_bytes || 0;
+    const outputBytes = raw.task_meta?.output_bytes || raw.output_bytes || (typeof generatedOutput === 'string' ? generatedOutput.length : 0);
     const stubRewrite = isLargeOverlay && outputBytes > 0 && outputBytes < 8000;
 
-    if ((isLargeOverlay && taskNamesOverlay) || stubRewrite) {
+    const layerViolation = detectGeneratedLayerViolation(normalizedTarget, generatedOutput);
+    const scopeMiss = detectScopeIncomplete(task, normalizedTarget, committed);
+
+    if (layerViolation) {
+      failure_code = layerViolation.code;
+      first_blocker = layerViolation.detail;
+      pass_fail = 'FAIL';
+      command_truth = 'BUILD_ATTEMPTED';
+      receipt_truth = 'COMMITTED_HARMFUL_STUB';
+      lesson = lesson || 'Never commit browser/DOM code to routes/ or services/ — server crashes and deploy healthcheck fails.';
+      fix = fix || `Restore ${normalizedTarget} from last good commit; patch the correct UI file under public/overlay/ instead.`;
+    } else if (scopeMiss) {
+      failure_code = scopeMiss.code;
+      first_blocker = scopeMiss.detail;
+      pass_fail = 'FAIL';
+      command_truth = 'COMMITTED';
+      receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
+      lesson = lesson || 'Multi-file tasks require every named file to be patched — one-file commit is not PASS.';
+      fix = fix || `Complete missing files: ${scopeMiss.missing.join(', ')} — or narrow task to single target_file.`;
+    } else if ((isLargeOverlay && taskNamesOverlay) || stubRewrite) {
       failure_code = stubRewrite ? 'OVERLAY_STUB_REWRITE' : 'OVERLAY_FULL_REWRITE_BLOCKED';
       first_blocker = first_blocker || (
         stubRewrite
-          ? `Builder committed a ${outputBytes}-byte stub to ${targetFile} — destroyed the ${LARGE_OVERLAY_PATHS.includes(targetFile.replace(/^\//, '')) ? '2700+' : 'full'}-line production shell.`
+          ? `Builder committed a ${outputBytes}-byte stub to ${targetFile} — destroyed the ${LARGE_OVERLAY_PATHS.includes(normalizedTarget) ? '2700+' : 'full'}-line production shell.`
           : `Large overlay ${targetFile} — whole-file rewrite not verified and not safe via builder.`
       );
       pass_fail = 'FAIL';
@@ -67,6 +190,14 @@ export function enforceExecutionTruth(raw, ctx = {}) {
       receipt_truth = stubRewrite ? 'COMMITTED_HARMFUL_STUB' : 'UNVERIFIED';
       lesson = lesson || 'The builder cannot replace entire overlay shells. It produced placeholder theater while claiming success.';
       fix = fix || 'Use GAP-FILL scoped patch on #lumin-drawer only — never regenerate lifeos-app.html wholesale.';
+    } else if (action === 'build' && !sha) {
+      failure_code = 'COMMIT_NO_SHA';
+      first_blocker = 'Commit claimed but no SHA returned — cannot verify git or deploy.';
+      pass_fail = 'FAIL';
+      command_truth = 'COMMITTED';
+      receipt_truth = 'COMMIT_CLAIMED_NO_SHA';
+      lesson = lesson || 'PASS on build requires commit SHA in the receipt — COMMIT_CLAIMED_NO_SHA is not proof.';
+      fix = fix || 'Fix builder /execute to return sha; retry only after SHA is present in response.';
     } else {
       pass_fail = 'PASS';
       command_truth = 'COMMITTED';
@@ -162,14 +293,33 @@ export function buildExecutionAutopsy({
     what_happened.push('The committed file was a short placeholder stub, not the production LifeOS shell.');
     what_happened.push('Prior UI showed PASS/COMMITTED anyway — that was false (fixed by execution-truth gate on 2026-06-20).');
   }
+  if (failure_code === 'ROUTE_STUB_REWRITE' || failure_code === 'SERVER_FILE_MASS_SHRINK') {
+    what_happened.push('Browser or truncated code was committed to a server routes/services file.');
+    what_happened.push('Node throws on import (e.g. document is not defined) — Railway deploy healthcheck fails; previous active deploy stays live.');
+  }
+  if (failure_code === 'SCOPE_INCOMPLETE') {
+    what_happened.push('Task named multiple files but builder only committed one — partial delivery is FAIL.');
+  }
+  if (failure_code === 'COMMIT_NO_SHA') {
+    what_happened.push('Git commit was claimed without returning a SHA — cannot verify what landed on main or deploy.');
+  }
 
   const lessons = [];
-  if (failure_code === 'OVERLAY_STUB_REWRITE' || failure_code === 'OVERLAY_FULL_REWRITE_BLOCKED') {
+  if (failure_code === 'ROUTE_STUB_REWRITE' || failure_code === 'SERVER_FILE_MASS_SHRINK') {
+    lessons.push('routes/*.js and services/*.js are Express/Node modules — never paste lifeos-app.html drawer JS into them.');
+    lessons.push('Deploy healthcheck failure means the bad commit never went live — but main may still be poisoned until revert.');
+    lessons.push('UI history/persistence patches belong in public/overlay/*.html using CTX.fetchWithAuth — not in route files.');
+  } else if (failure_code === 'SCOPE_INCOMPLETE') {
+    lessons.push('When a prompt lists N files, PASS requires all N to change — or narrow the prompt to one target_file.');
+    lessons.push('Committing the wrong layer (routes instead of overlay) does not satisfy UX requirements.');
+  } else if (failure_code === 'OVERLAY_STUB_REWRITE' || failure_code === 'OVERLAY_FULL_REWRITE_BLOCKED') {
     lessons.push('Whole-file rewrites of public/overlay/lifeos-app.html always fail or produce harmful stubs.');
     lessons.push('PASS requires proof you can verify — file path, commit, and scope — not builder ok alone.');
     lessons.push('Dock/UI features must extend #lumin-drawer in place; never replace the shell.');
   } else if (failure_code === 'OK_WITHOUT_COMMIT') {
     lessons.push('Builder codegen can succeed while commit is refused (validation, truncation, governance).');
+  } else if (failure_code === 'COMMIT_NO_SHA') {
+    lessons.push('Build PASS requires commit SHA — without it the founder cannot verify deploy or revert.');
   } else if (cacheHit) {
     lessons.push('Cached builder output is not fresh code for a new task.');
   } else {
@@ -184,6 +334,32 @@ export function buildExecutionAutopsy({
 
 function buildFixSteps({ failure_code, targetFile, task, action }) {
   const file = targetFile || (/\blifeos-app\.html\b/i.test(task) ? 'public/overlay/lifeos-app.html' : null);
+
+  if (failure_code === 'ROUTE_STUB_REWRITE' || failure_code === 'SERVER_FILE_MASS_SHRINK') {
+    return [
+      `Revert ${targetFile || 'routes/lifeos-builderos-command-control-routes.js'} on main to last good Express module (git revert or restore from prior SHA).`,
+      'If UI change needed: patch public/overlay/lifeos-app.html or lifeos-dashboard.html — extend luminBootThread / initChatHistory, never rewrite routes.',
+      'Redeploy and confirm Railway healthcheck PASS + deploy SHA matches revert commit.',
+      'Re-run comms proof: send message → hard refresh → history visible.',
+    ];
+  }
+
+  if (failure_code === 'SCOPE_INCOMPLETE') {
+    const missing = extractRequiredFilesFromTask(task).filter((f) => f !== String(targetFile || '').replace(/^\//, ''));
+    return [
+      `Complete patches for: ${missing.length ? missing.join(', ') : 'each file named in the task'}.`,
+      'One scoped commit per surface OR one commit touching all named files with SHA proof.',
+      'PASS only after hard refresh proves history in both dashboard and app drawer.',
+    ];
+  }
+
+  if (failure_code === 'COMMIT_NO_SHA') {
+    return [
+      'Inspect POST /api/v1/lifeos/builder/execute response — sha must flow from commitToGitHub.',
+      'Do not show PASS in founder chat until SHA is present.',
+      'After SHA confirmed: verify Railway deploy SHA matches before founder visual test.',
+    ];
+  }
 
   if (failure_code === 'OVERLAY_STUB_REWRITE' || failure_code === 'OVERLAY_FULL_REWRITE_BLOCKED'
     || (file && /lifeos-app\.html/i.test(file) && /\bdock|panel|lumin-drawer\b/i.test(task))) {
