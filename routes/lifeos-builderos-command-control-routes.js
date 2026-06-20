@@ -103,15 +103,27 @@ Rules:
         const ctx = await buildContextForPrompt();
         if (ctx && typeof ctx === 'object') {
           const parts = [];
-          if (ctx.user_profile?.name) parts.push(`Founder: ${ctx.user_profile.name}`);
+          // Load the doctrine/directive facts first (highest confidence)
           if (ctx.recent_facts?.length) {
-            const topFact = ctx.recent_facts[0];
-            const factText = topFact?.content?.content || topFact?.content;
-            if (factText && typeof factText === 'string') {
-              parts.push(`System context (from memory):\n${factText.slice(0, 2000)}`);
+            const doctrineFacts = ctx.recent_facts
+              .filter(f => f?.content?.type && ['lumin_doctrine', 'lumin_doctrine_wisdom', 'founder_directive'].includes(f.content.type))
+              .slice(0, 2);
+            const systemFacts = ctx.recent_facts
+              .filter(f => f?.content?.type === 'system_foundation')
+              .slice(0, 1);
+            const allFacts = [...doctrineFacts, ...systemFacts];
+            if (allFacts.length) {
+              const factTexts = allFacts.map(f => {
+                const text = f?.content?.content || (typeof f?.content === 'string' ? f.content : null);
+                return text ? String(text).slice(0, 800) : null;
+              }).filter(Boolean);
+              if (factTexts.length) parts.push(`What I know from memory:\n${factTexts.join('\n---\n')}`);
             }
           }
-          if (ctx.goals?.length) parts.push(`Active goals: ${ctx.goals.slice(0,3).map(g => g?.content?.title || g?.content).join('; ')}`);
+          if (ctx.goals?.length) {
+            const goalTitles = ctx.goals.slice(0,3).map(g => g?.content?.title || g?.content).filter(Boolean);
+            if (goalTitles.length) parts.push(`Active goals: ${goalTitles.join('; ')}`);
+          }
           memoryContext = parts.join('\n\n');
         }
       } catch { /* memory load failure is non-fatal */ }
@@ -135,10 +147,10 @@ a real artifact, recommendation, blocker, or receipt. Never pretend. If you cann
 context, say so and explain what is missing.
 
 HONESTY CONTRACT:
-- If no command ran → state NO_COMMAND_RAN
-- If a command ran → state COMMAND_RAN and provide receipt/artifact evidence
-- If uncertain → say "uncertain" explicitly
-- Predictions about Adam must be labeled "Prediction:" — never stated as Adam's confirmed decision
+- For pure conversation (no system action): just talk. Do NOT write "NO_COMMAND_RAN" in your response text. That is handled by the system metadata layer, not by you.
+- If you take a real system action: say clearly what you did and what the result was.
+- If uncertain: say "uncertain" explicitly.
+- Predictions about Adam: label as "Prediction:" — never state as Adam's confirmed decision.
 
 ADAM DIGITAL TWIN: You are building a model of Adam over time. You should predict what Adam would
 likely think, choose, reject, or approve — always labeled as "Prediction:" — and compare predictions

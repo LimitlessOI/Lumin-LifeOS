@@ -2548,7 +2548,7 @@ function _appendLuminMsg(role, content, createdAt, scroll) {
   const div = document.createElement('div');
   div.className = `lumin-msg ${role}`;
   const time = createdAt ? new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-  div.innerHTML = `<div>${_escHtml(content)}</div>${time ? `<div class="lumin-msg-time">${time}</div>` : ''}`;
+  div.innerHTML = `<div style="white-space:pre-wrap;word-break:break-word;">${_escHtml(content)}</div>${time ? `<div class="lumin-msg-time">${time}</div>` : ''}`;
   container.appendChild(div);
   if (scroll) container.scrollTop = container.scrollHeight;
 }
