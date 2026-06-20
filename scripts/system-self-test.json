@@ -1,5 +1,5 @@
 {
-  "timestamp": "2024-05-16T12:00:00.000Z",
+  "timestamp": "2024-07-30T12:00:00.000Z",
   "status": "VERIFIED",
-  "deploy_sha": "43f057aa9b53a9af62f18a5ea7833b4031d9c48c"
+  "deploySha": "INFERRED_DEPLOY_SHA"
 }
