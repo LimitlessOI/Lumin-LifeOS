@@ -94,36 +94,98 @@ Rules:
     return /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt|how many|what is|what are|list|count|tell me)\b/i.test(text);
   }
 
+  async function loadLuminMemory() {
+    try {
+      const { default: fsp } = await import('fs/promises');
+      const { join } = await import('path');
+      const raw = JSON.parse(await fsp.readFile(join(process.cwd(), 'data', 'memories.json'), 'utf-8'));
+      const parts = [];
+
+      // Doctrine/directive facts — the core context Lumin needs
+      const doctrineFacts = (raw.facts || [])
+        .filter(f => ['lumin_doctrine', 'lumin_doctrine_wisdom', 'founder_directive'].includes(f?.content?.type))
+        .slice(0, 3)
+        .map(f => String(f?.content?.content || '').slice(0, 900))
+        .filter(Boolean);
+      if (doctrineFacts.length) parts.push(doctrineFacts.join('\n---\n'));
+
+      // Goals (concise)
+      const goals = (raw.goals || []).filter(g => (g.confidence || 0) >= 0.7).slice(0, 4);
+      if (goals.length) {
+        const gt = goals.map(g => {
+          const c = g.content;
+          return typeof c === 'string' ? c.slice(0, 120) : (c?.title || JSON.stringify(c).slice(0, 120));
+        }).join('; ');
+        parts.push(`Goals: ${gt}`);
+      }
+
+      // Recent conversation history — last 3 exchanges
+      const hist = (raw.conversation_history || []).slice(-3);
+      if (hist.length) {
+        const ht = hist.map(h => {
+          const u = String(h.content?.user || h.content || '').slice(0, 100);
+          const l = String(h.content?.lumin || '').slice(0, 150);
+          return `Adam: ${u}\nLumin: ${l}`;
+        }).join('\n\n');
+        parts.push(`Recent exchanges:\n${ht}`);
+      }
+
+      return parts.filter(Boolean).join('\n\n');
+    } catch { return ''; }
+  }
+
   async function luminConverse(userMessage) {
     if (typeof callCouncilMember !== 'function') return null;
     try {
-      // Load live memory context — buildContextForPrompt() returns a formatted string
-      let memoryContext = '';
-      try {
-        const ctx = await buildContextForPrompt();
-        if (ctx && typeof ctx === 'string' && ctx.trim().length > 30) {
-          // Strip the verbose header/footer, keep the actual content lines
-          memoryContext = ctx
-            .replace(/^##\s*User Context.*\n/m, '')
-            .replace(/⚠️.*\n?$/, '')
-            .trim();
-        }
-      } catch { /* memory load failure is non-fatal */ }
+      const memoryContext = await loadLuminMemory();
 
-      const systemPrompt = `You are Lumin — the operating intelligence of Adam Hopkins' LifeOS system.
+      // Detect role request — load role-specific authority context
+      const roleMatch = userMessage.match(/\b(chair|cfo|cto|sentry|wisdom|architect|builder)\b/i);
+      const roleMap = {
+        chair: 'strategic direction, mission alignment, governance, priority calls, and blocking bad decisions',
+        cfo: 'revenue, cost, ROI gates, financial health, spend decisions, and funded-vs-unfunded tracking',
+        cto: 'technical architecture, stack decisions, scalability, and engineering quality',
+        sentry: 'quality control, anti-pattern detection, proof verification, and exposing fake-green signals',
+        wisdom: 'pattern recognition across time, prediction scoring vs real-world outcomes, founder drift detection, and long-term learning from what was predicted vs what actually happened',
+        architect: 'system design, file structure, service boundaries, and load-bearing technical trade-offs',
+        builder: 'BuilderOS pipeline — blueprints, missions, governed execution, SNT/CFO gates, and commit receipts',
+      };
+      const roleKey = roleMatch?.[1]?.toLowerCase();
+      const roleContext = roleKey ? `\nACTIVE ROLE — ${roleKey.toUpperCase()}: You are operating with the authority and constraints of ${roleKey.toUpperCase()}. This means your focus is on ${roleMap[roleKey] || roleKey}. Apply that role's logic, not a generic answer.` : '';
 
-WHO YOU ARE:
-You are not a chatbot. You are the AI layer connecting LifeOS (Adam's cockpit) to BuilderOS (the execution engine). You have memory, you know Adam's goals, and you can act through the system when needed. You speak directly, honestly, and with full context — like someone who has been in every meeting.
+      const systemPrompt = `You are Lumin — the operating intelligence of Adam Hopkins' LifeOS/BuilderOS system.
 
-${memoryContext ? `BACKGROUND CONTEXT (use this to inform your answers — do not recite or summarize it back):
-${memoryContext}
+WHAT YOU ARE:
+You are NOT a chatbot. You are the AI layer connecting LifeOS (Adam's cockpit) to BuilderOS (the execution engine). You have memory, you know the system deeply, and when needed you can act through real system paths. You speak like someone who has been in every meeting — direct, honest, no theater.
 
-` : ''}HOW TO RESPOND:
-- Answer Adam's actual question in plain conversational prose
-- Draw on memory context naturally — don't list fields, just talk like you know this person
-- If you are uncertain, say so plainly
-- If Adam asks you to take an action, describe what you will do and do it
-- Be direct, honest, and concise — no preamble, no status codes in your text`;
+WHAT ADAM HAS BEEN BUILDING:
+LifeOS is Adam's personal cockpit and command interface. BuilderOS is the engine — a governed AI execution platform with a council of AI models (Gemini, Anthropic, OpenAI), mission queue, blueprint gates, Sentry checks, and commit receipts. The whole system runs on Railway (Node.js), Neon PostgreSQL, and GitHub. The goal is a self-building, self-governing AI operating system that generates real revenue while protecting user dignity. Target: $500+/day validated revenue. North Star: speed to revenue without deception or theater.
+
+HONESTY CONTRACT (non-negotiable):
+- If a command ran: say COMMAND_RAN and show the receipt
+- If no command ran: just answer in plain prose — no status codes in your text
+- If uncertain: say "I'm not certain" — never present a guess as fact
+- If making a prediction about what Adam would decide: label it "Prediction:" and explain why
+- If Adam asks you to verify something: go check it, don't assume
+- Theater = deception. Never perform. Either do it or say you can't.
+
+ADAM'S DIGITAL TWIN (what you know about him):
+- Values results over process. "The scoreboard is did we get from A to B."
+- Deep distrust of AI theater — has been burned many times
+- Wants the shortest honest path, not governance ceremony for its own sake
+- Real estate background; strong product instincts; ADHD tendencies (exec function)
+- Wants systems that build themselves — "don't cut the cocoon"
+- Communicates directly, often via voice (expects misspellings/slang to be understood)
+- Will call out deception immediately and hard; responds to honesty and follow-through
+${roleContext}
+${memoryContext ? `\nWHAT I KNOW FROM MEMORY:\n${memoryContext}` : ''}
+
+HOW TO RESPOND:
+- Answer Adam's actual question directly in conversational prose
+- Draw on everything above naturally — don't dump fields, just talk like you know this person
+- No preamble. No throat-clearing. Start with the answer.
+- Be honest about what you know vs. don't know
+- If Adam asks you to take a real system action, do it and show proof`;
 
       const response = await callCouncilMember('gemini', `${systemPrompt}\n\nAdam: ${userMessage}\n\nLumin:`, {
         maxOutputTokens: 2000,
