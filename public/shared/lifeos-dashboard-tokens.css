@@ -6,6 +6,7 @@
 html[data-theme="dark"] {
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
+  --dash-surface-raised: #17171f;
   --dash-text: #e8e8f0;
   --dash-muted: #555566;
   --dash-accent: #5b6af5; /* Today / Primary accent */
@@ -17,6 +18,7 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
+  --dash-surface-raised: #f3f5fb;
   --dash-text: #1a1a22;
   --dash-muted: #888899;
   --dash-accent: #5b6af5; /* Today / Primary accent */

@@ -582,22 +582,37 @@ animation: bounce-dot 1.2s 0.4s infinite;
 display: flex;
 gap: 8px;
 }
-.chat-row input {
+.chat-row input,
+.chat-row textarea,
+#chat-input {
 flex: 1;
 background: var(--bg-surface2);
 border: 1px solid var(--border);
-border-radius: var(--radius-md);
+border-radius: var(--radius-lg);
 color: var(--text-primary);
+-webkit-text-fill-color: var(--text-primary);
+caret-color: var(--text-primary);
+font-family: inherit;
 font-size: 14px;
-padding: 10px 14px;
+line-height: 1.5;
+padding: 10px 12px;
 outline: none;
 transition: border-color 0.2s;
+resize: vertical;
+min-height: 48px;
+max-height: 200px;
 }
-.chat-row input:focus {
+.chat-row input:focus,
+.chat-row textarea:focus,
+#chat-input:focus {
 border-color: var(--c-today);
 }
-.chat-row input::placeholder {
+.chat-row input::placeholder,
+.chat-row textarea::placeholder,
+#chat-input::placeholder {
 color: var(--text-muted);
+-webkit-text-fill-color: var(--text-muted);
+opacity: 1;
 }
 .btn-mic {
 background: var(--bg-surface2);
@@ -807,7 +822,7 @@ gap: 16px;
 <div class="typing-dot"></div>
 </div>
 <div class="chat-row">
-<textarea id="chat-input" placeholder="Ask Lumin anything… or tap 🎙 to talk" rows="2" style="width:100%;resize:vertical;min-height:48px;max-height:200px;font-family:inherit;font-size:14px;padding:10px 12px;background:var(--bg-surface2);border:1px solid var(--border);border-radius:var(--radius-lg);color:var(--text-primary);outline:none;line-height:1.5;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+<textarea id="chat-input" class="chat-input" placeholder="Ask Lumin anything… or tap 🎙 to talk" rows="2" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
 <button class="btn-mic" id="btn-mic" title="Push to talk (or hold Space)">🎙</button>
 <button class="btn-send" id="send-btn">↑</button>
 </div>
