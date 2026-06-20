@@ -2,6 +2,8 @@
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  * Public HTML entry routes for operator-facing overlays and portals.
  */
+import { verifyToken } from '../services/lifeos-auth.js';
+
 export function registerPublicRoutes(app, {
   fs,
   path,
@@ -32,6 +34,36 @@ export function registerPublicRoutes(app, {
       "Surrogate-Control": "no-store",
     });
     return res.sendFile(filePath);
+  }
+
+  function readCookie(req, name) {
+    const raw = String(req.headers.cookie || '');
+    if (!raw) return '';
+    const pairs = raw.split(';');
+    for (const pair of pairs) {
+      const [k, ...rest] = pair.trim().split('=');
+      if (k === name) return decodeURIComponent(rest.join('=') || '');
+    }
+    return '';
+  }
+
+  function isFounderInterfaceAuthenticated(req) {
+    const authHeader = String(req.headers.authorization || '');
+    const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const token = bearer || String(req.headers['x-lifeos-token'] || '').trim() || readCookie(req, 'lifeos_access_token');
+    if (token) {
+      try {
+        verifyToken(token);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+    const key = String(req.headers['x-command-key'] || '').trim();
+    const fallbackAllowed = process.env.NODE_ENV !== 'production'
+      || String(process.env.FOUNDER_INTERFACE_ALLOW_KEY_FALLBACK || '').toLowerCase() === 'true';
+    const expected = String(COMMAND_CENTER_KEY || '').trim();
+    return Boolean(fallbackAllowed && key && expected && key === expected);
   }
 
   // ==================== COMMAND CENTER ROUTES (FIRST - Before all middleware) ====================
@@ -74,6 +106,19 @@ export function registerPublicRoutes(app, {
   });
 
   app.get("/communicate", (_req, res) => res.redirect(301, "/lifeos-communication"));
+
+  // LifeOS Founder Interface — terminal-bridge backed conversational founder console.
+  app.get("/lifeos-founder-interface", (req, res) => {
+    if (!isFounderInterfaceAuthenticated(req)) {
+      const next = encodeURIComponent('/lifeos-founder-interface');
+      return res.redirect(302, `/overlay/lifeos-login.html?next=${next}`);
+    }
+    const filePath = path.join(__dirname, "public", "overlay", "lifeos-founder-interface.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("LifeOS Founder Interface not found.");
+  });
+  // Legacy label alias -> renamed founder interface.
+  app.get("/c2-terminal-bridge", (_req, res) => res.redirect(301, "/lifeos-founder-interface"));
 
   // Voice Rail v1 — canonical communication layer (PRODUCT-VOICE-RAIL-V1-0001)
   app.get("/voice-rail", (req, res) => {

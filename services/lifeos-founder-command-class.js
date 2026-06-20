@@ -48,6 +48,19 @@ export function detectSystemActionIntent(text) {
   if (detectProviderProofIntent(text)) return null;
   if (extractTargetFileFromInstruction(text)) return null;
 
+  const founderIntakeIntent =
+    /\b(founder|voice|speech|notes?|idea|vision)\b/.test(t)
+    && /\b(intake|packet|chair|pre-arc|handoff|bootstrap|digital twin)\b/.test(t)
+    && /\b(route|send|start|create|run|trigger|kickoff|process)\b/.test(t);
+  if (founderIntakeIntent) {
+    return {
+      kind: 'founder_intake',
+      no_repo_edit: true,
+      write_intent: true,
+      connection_intent: false,
+    };
+  }
+
   const writeIntent =
     /\b(creat(e|ing)|writ(e|ing)|record(ing)?|log(ging)?|emit(ting)?|add(ing)?|insert(ing)?|store|save|generat(e|ing)|produc(e|ing))\b/.test(t)
     && /\b(receipt|event|record|proof|marker|heartbeat|ping|signal|audit trail)s?\b/.test(t);

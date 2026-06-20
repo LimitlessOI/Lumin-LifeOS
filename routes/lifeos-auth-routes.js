@@ -30,6 +30,9 @@ import { createLifeOSAuth } from '../services/lifeos-auth.js';
 import { requireLifeOSUser, requireLifeOSAdmin } from '../middleware/lifeos-auth-middleware.js';
 import { createHouseholdSync } from '../services/household-sync.js';
 
+const ACCESS_COOKIE_NAME = 'lifeos_access_token';
+const ACCESS_COOKIE_MAX_AGE_MS = 15 * 60 * 1000;
+
 /** Absolute web origin for invite links (Railway / prod). */
 function publicWebOrigin(req) {
   const env = (process.env.PUBLIC_BASE_URL || '').trim().replace(/\/$/, '');
@@ -39,6 +42,25 @@ function publicWebOrigin(req) {
   const proto = xfProto || req.protocol || 'https';
   if (!host) return '';
   return `${proto}://${host}`;
+}
+
+function setAccessCookie(res, accessToken) {
+  res.cookie(ACCESS_COOKIE_NAME, accessToken, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: ACCESS_COOKIE_MAX_AGE_MS,
+    path: '/',
+  });
+}
+
+function clearAccessCookie(res) {
+  res.clearCookie(ACCESS_COOKIE_NAME, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+  });
 }
 
 function signupUrlForCode(req, code) {
@@ -64,6 +86,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         ip: req.ip,
       });
       log.info({ handle: result.user.user_handle }, '[LIFEOS-AUTH] user registered');
+      setAccessCookie(res, result.accessToken);
       res.json({
         ok: true,
         user: result.user,
@@ -86,6 +109,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
         ip: req.ip,
       });
       log.info({ handle: result.user.user_handle }, '[LIFEOS-AUTH] login');
+      setAccessCookie(res, result.accessToken);
       res.json({
         ok: true,
         user: result.user,
@@ -103,6 +127,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
     try {
       const raw = req.body.refresh_token || req.headers['x-refresh-token'];
       const result = await auth.refresh(raw);
+      setAccessCookie(res, result.accessToken);
       res.json({ ok: true, access_token: result.accessToken, user: result.user });
     } catch (e) {
       res.status(e.status || 401).json({ ok: false, error: e.message });
@@ -114,6 +139,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
     try {
       const raw = req.body.refresh_token || req.headers['x-refresh-token'];
       await auth.logout(raw);
+      clearAccessCookie(res);
       res.json({ ok: true });
     } catch (e) {
       res.status(500).json({ ok: false, error: e.message });

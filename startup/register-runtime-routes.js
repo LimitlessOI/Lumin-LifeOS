@@ -49,10 +49,10 @@ import { createLifeOSBacktestRoutes } from "../routes/lifeos-backtest-routes.js"
 import { createLifeOSWeeklyReviewRoutes } from "../routes/lifeos-weekly-review-routes.js";
 import { createLifeOSScorecardRoutes } from "../routes/lifeos-scorecard-routes.js";
 import { createLifeOSChatRoutes } from "../routes/lifeos-chat-routes.js";
-import { createLifeOSVoiceRailRoutes } from "../routes/lifeos-voice-rail-routes.js";
 import { createActionInboxRoutes } from "../routes/action-inbox-routes.js";
 import { createCapturePipelineRoutes } from "../routes/capture-pipeline-routes.js";
 import { createCommitmentRouteRoutes } from "../routes/commitment-route-routes.js";
+import { createLifeRERoutes } from "../routes/lifere-os-routes.js";
 import { createLifeOSAmbientRoutes } from "../routes/lifeos-ambient-routes.js";
 import { createLifeOSHabitsRoutes } from "../routes/lifeos-habits-routes.js";
 import { createLifeOSBriefingRoutes } from "../routes/lifeos-briefing-routes.js";
@@ -114,8 +114,6 @@ export async function registerRuntimeRoutes(app, deps) {
     sendAlertCall,
     makePhoneCall,
     commitToGitHub,
-    COUNCIL_MEMBERS,
-    COUNCIL_ALIAS_MAP,
   } = deps;
 
   const councilChatAI = callCouncilMember
@@ -298,19 +296,7 @@ export async function registerRuntimeRoutes(app, deps) {
   );
   logger.info("✅ [LIFEOS-CHAT] Routes mounted at /api/v1/lifeos/chat");
 
-  app.use(
-    "/api/v1/lifeos/voice-rail",
-    createLifeOSVoiceRailRoutes({
-      pool,
-      requireKey,
-      callAI: councilChatAI,
-      callCouncilMember,
-      councilMembers: COUNCIL_MEMBERS,
-      councilAliasMap: COUNCIL_ALIAS_MAP,
-      logger,
-    })
-  );
-  logger.info("✅ [LIFEOS-VOICE-RAIL] Routes mounted at /api/v1/lifeos/voice-rail");
+  logger.warn("🧭 [HIST-ONLY] Voice Rail retired to history-only domain; /api/v1/lifeos/voice-rail is intentionally not mounted.");
 
   app.use("/api/v1/lifeos/action-inbox", createActionInboxRoutes({ pool, requireKey, logger }));
   logger.info("✅ [ACTION-INBOX] Routes mounted at /api/v1/lifeos/action-inbox");
@@ -320,6 +306,9 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/lifeos/commitment-route", createCommitmentRouteRoutes({ pool, requireKey, logger }));
   logger.info("✅ [COMMITMENT-ROUTE] Routes mounted at /api/v1/lifeos/commitment-route");
+
+  app.use("/api/v1/lifere", createLifeRERoutes({ requireKey }));
+  logger.info("✅ [LIFERE-OS] Routes mounted at /api/v1/lifere");
 
   app.use("/api/v1/lifeos/ambient", createLifeOSAmbientRoutes({ pool, requireKey, logger }));
   logger.info("✅ [LIFEOS-AMBIENT] Routes mounted at /api/v1/lifeos/ambient");
@@ -522,6 +511,11 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [SELF-REPAIR-EXECUTOR] Routes mounted at /api/v1/lifeos/command-center/self-repair/execute');
   app.use(createAutonomousTelemetryRoutes({ requireKey, pool }));
   logger.info('✅ [AUTONOMOUS-TELEMETRY] Routes mounted at /api/v1/lifeos/autonomous-telemetry/*');
+  app.use(
+    '/api/v1/lifeos/builderos/command-control',
+    createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey })
+  );
+  logger.info('✅ [BUILDEROS-C2] Routes mounted at /api/v1/lifeos/builderos/command-control/{jobs,halt}');
   app.use(createCanonicalAdminRoutes({ pool, requireKey }));
   logger.info('✅ [CANONICAL-ADMIN] Routes mounted at /api/v1/lifeos/admin/ai/{status,effectiveness} + /api/v1/lifeos/system/{snapshot,health}');
   app.use(createCanonicalExecutionRoutes({ pool, requireKey }));
@@ -532,11 +526,6 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [CANONICAL-SYSTEM] Routes mounted at /api/v1/lifeos/optimizer/stats + /api/v1/lifeos/system/fix-history + /api/v1/lifeos/user/simulation/accuracy');
   app.use(createTsosEfficiencyRoutes({ pool, requireKey }));
   logger.info('✅ [TSOS-EFFICIENCY] Routes mounted at /api/v1/lifeos/builderos/tsos-efficiency');
-  app.use(
-    '/api/v1/lifeos/builderos/command-control',
-    createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey })
-  );
-  logger.info('✅ [BUILDEROS-C2] Routes mounted at /api/v1/lifeos/builderos/command-control/{jobs,halt}');
   app.use(createMemoryStatusRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-STATUS] Routes mounted at /api/v1/lifeos/command-center/memory/status');
 

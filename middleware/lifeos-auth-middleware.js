@@ -17,15 +17,27 @@
 
 import { verifyToken } from '../services/lifeos-auth.js';
 
+function readCookie(req, name) {
+  const raw = String(req.headers.cookie || '');
+  if (!raw) return '';
+  const pairs = raw.split(';');
+  for (const pair of pairs) {
+    const [k, ...rest] = pair.trim().split('=');
+    if (k === name) return decodeURIComponent(rest.join('=') || '');
+  }
+  return '';
+}
+
 /**
  * Require a valid LifeOS JWT. Attaches req.lifeosUser on success.
  */
 export function requireLifeOSUser(req, res, next) {
   const authHeader = req.headers.authorization || '';
   const altHeader  = req.headers['x-lifeos-token'] || '';
+  const cookieTok  = readCookie(req, 'lifeos_access_token');
   const raw = authHeader.startsWith('Bearer ')
     ? authHeader.slice(7).trim()
-    : altHeader.trim();
+    : (altHeader.trim() || cookieTok);
 
   if (!raw) {
     return res.status(401).json({
@@ -54,7 +66,7 @@ export function requireLifeOSAdmin(req, res, next) {
   if (!req.lifeosUser) {
     return res.status(401).json({ ok: false, error: 'Not authenticated' });
   }
-  if (req.lifeosUser.role !== 'admin') {
+  if (!['admin', 'founder_admin'].includes(String(req.lifeosUser.role || '').toLowerCase())) {
     return res.status(403).json({ ok: false, error: 'Admin access required' });
   }
   next();
@@ -68,9 +80,10 @@ export function requireLifeOSAdmin(req, res, next) {
 export function optionalLifeOSUser(req, res, next) {
   const authHeader = req.headers.authorization || '';
   const altHeader  = req.headers['x-lifeos-token'] || '';
+  const cookieTok  = readCookie(req, 'lifeos_access_token');
   const raw = authHeader.startsWith('Bearer ')
     ? authHeader.slice(7).trim()
-    : altHeader.trim();
+    : (altHeader.trim() || cookieTok);
   if (raw) {
     try { req.lifeosUser = verifyToken(raw); } catch { /* ignore */ }
   }

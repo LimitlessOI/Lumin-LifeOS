@@ -1,7 +1,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-17 — added bootBuilderOSPriorityQueue to bootAllDomains; imports builderos-bp-priority-scheduler
+**Last Updated:** 2026-06-20 — Founder Interface/Builder command-control mount order + Voice Rail retirement mount guard
 
 | Field | Value |
 |---|---|
@@ -203,6 +203,7 @@ Required runtime truths:
 ## Change Receipts
 
 | 2026-06-17 | **`startup/boot-domains.js`** — added `import { startBpPriorityScheduler }` + `bootBuilderOSPriorityQueue(deps)` function + wired to `Promise.allSettled` in `bootAllDomains`. Requires `BUILDEROS_AUTOPILOT=1` env var to activate. | BuilderOS BP_PRIORITY queue needed to run autonomously on Railway without founder present; scheduler enabled via env flag to prevent unintended burns. | AM19 boot wiring | pending Railway env set + deploy |
+| 2026-06-20 | **`startup/register-runtime-routes.js`** — Founder Interface security wiring: ensured `createLifeOSBuilderOSCommandControlRoutes` mounts before generic key-only route groups so JWT role middleware runs first for founder-interface endpoints; disabled active Voice Rail route mount and logged retirement warning path so runtime stays history-only for Voice Rail. | Founder Interface execute/login flow was being intercepted by legacy `requireKey` middleware ordering, causing auth false-negatives and role gates to fail; Voice Rail must remain retired as a non-runtime authority path. | AM19 runtime composition | pending deploy |
 | 2026-06-16 | **`startup/register-runtime-routes.js`** — mount capture-pipeline at `/api/v1/lifeos/capture-pipeline` and commitment-route at `/api/v1/lifeos/commitment-route`. | LifeOS v2.0–v2.1 integration slices overnight build. | AM19 wiring, AM21 | pending deploy |
 | 2026-05-24 | **`startup/register-runtime-routes.js`** — mount `createLifeOSSystemProofRoutes` at `/api/v1/lifeos` (`/system-proof-event`, `/provider-tool-proof`). | Provider API tool-action proof wiring (AM21 v2.35). | AM19 wiring | pending deploy |
 | 2026-06-13 | **`startup/register-runtime-routes.js`** — mount `createLifeOSDirectActionRoutes` at `/api/v1/lifeos/direct-action`. | LifeOS direct-action v1 must bypass Voice Rail chat routing and execute founder system actions on a dedicated endpoint. | AM19 wiring, AM21 feature | pending deploy | `npm run lifeos:direct-action:v1-acceptance` |

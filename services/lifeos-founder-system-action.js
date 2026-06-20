@@ -1,12 +1,17 @@
 /**
- * Founder harmless system actions — DB/event writes without repo patches or BuilderOS.
+ * Founder system actions — harmless receipts + governed BuilderOS founder intake path.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+import fs from 'node:fs';
+import path from 'node:path';
 import { runSystemDirectStatusProbes } from './voice-rail-system-direct.js';
 import { detectSystemActionIntent } from './lifeos-founder-command-class.js';
+import { REPO_ROOT } from '../factory-staging/factory-core/builder/run-step.js';
+import { runDevelopmentStage } from '../factory-staging/factory-core/arc/run-foundation.js';
 
 const RECEIPT_SOURCE = 'voice_rail_founder_system_action';
 const RECEIPT_CHANNEL = 'founder_system_action';
+const MISSIONS_ROOT = path.join(REPO_ROOT, 'builderos-reboot', 'MISSIONS');
 
 /**
  * Insert a timestamped founder system receipt into lifeos_event_stream (Neon).
@@ -105,12 +110,20 @@ export async function executeFounderSystemAction({
   const connProbe = probes.find((p) => p.path?.includes('connection-proof') || p.path === 'probeFounderContext');
   const connected = connProbe?.body?.connected === true || connProbe?.body?.ok === true;
 
-  const receipt = await createHarmlessSystemReceipt(pool, {
-    userId,
-    utterance,
-    sessionId,
-    kind: intent.kind,
-  });
+  if (intent.kind === 'founder_intake') {
+    const intakeResult = await executeFounderIntakeAction({
+      pool,
+      userId,
+      utterance,
+      sessionId,
+      baseUrl,
+      commandKey,
+      probes,
+    });
+    return intakeResult;
+  }
+
+  const receipt = await createHarmlessSystemReceipt(pool, { userId, utterance, sessionId, kind: intent.kind });
 
   return {
     ...receipt,
@@ -146,6 +159,10 @@ export function formatFounderSystemActionReply(route, result) {
     lines.push(`function: ${result.function || '—'}`);
     lines.push(`verification: ${result.verification_method || '—'}`);
     lines.push(`builder_job_created: ${result.builder_job_created === true}`);
+    if (result.mission_id) lines.push(`mission_id: ${result.mission_id}`);
+    if (result.mission_folder) lines.push(`mission_folder: ${result.mission_folder}`);
+    if (result.entrypoint_receipt_path) lines.push(`entrypoint_receipt_path: ${result.entrypoint_receipt_path}`);
+    if (result.chair_handoff_receipt_path) lines.push(`chair_handoff_receipt_path: ${result.chair_handoff_receipt_path}`);
     if (result.connection_probe) {
       lines.push(`connection_connected: ${result.connection_probe.connected}`);
       lines.push(`context_level: ${result.connection_probe.level || '—'}`);
@@ -158,5 +175,119 @@ export function formatFounderSystemActionReply(route, result) {
   if (result.missing_service) lines.push(`missing_service: ${result.missing_service}`);
   lines.push(`builder_job_created: ${result.builder_job_created === true}`);
   lines.push('repo_edit_attempted: false');
+  if (result.first_blocker) lines.push(`first_blocker: ${result.first_blocker}`);
+  if (result.root_cause) lines.push(`root_cause: ${result.root_cause}`);
+  if (result.missing_route_file) lines.push(`missing_route_file: ${result.missing_route_file}`);
   return lines.join('\n');
+}
+
+function timestampSlug() {
+  return new Date().toISOString().replace(/[-:TZ.]/g, '').slice(0, 14);
+}
+
+function toMissionIdFromSpeech(utterance) {
+  const t = String(utterance || '').toUpperCase();
+  let lane = 'FOUNDER';
+  if (/\bSOCIAL|MARKETING|CONTENT|YOUTUBE|VIDEO\b/.test(t)) lane = 'SOCIALMEDIAOS';
+  return `BUILDEROS-VOICE-INTAKE-${lane}-${timestampSlug()}`;
+}
+
+function writeJson(absPath, data) {
+  fs.mkdirSync(path.dirname(absPath), { recursive: true });
+  fs.writeFileSync(absPath, `${JSON.stringify(data, null, 2)}\n`);
+}
+
+function ensureMissionFolderFromSpeech({ utterance, missionId }) {
+  const folder = path.join(MISSIONS_ROOT, missionId);
+  fs.mkdirSync(path.join(folder, 'receipts'), { recursive: true });
+  const founderPacket = [
+    '# Raw Founder Speech Intake',
+    '',
+    'This packet is created by Voice Rail founder intake route.',
+    'It is intentionally raw and must be bootstrapped by system repair before pre-handoff.',
+    '',
+    '## Raw Founder Speech',
+    '```text',
+    String(utterance || '').trim() || '(empty)',
+    '```',
+    '',
+  ].join('\n');
+  fs.writeFileSync(path.join(folder, 'FOUNDER_PACKET.md'), founderPacket);
+  return folder;
+}
+
+async function executeFounderIntakeAction({
+  pool,
+  userId,
+  utterance,
+  sessionId,
+  baseUrl,
+  commandKey,
+  probes,
+}) {
+  const missionId = toMissionIdFromSpeech(utterance);
+  const missionFolder = ensureMissionFolderFromSpeech({ utterance, missionId });
+  const relativeMissionFolder = path.relative(REPO_ROOT, missionFolder).replace(/\\/g, '/');
+
+  const entrypointReceipt = {
+    schema: 'voice_rail_builderos_intake_entrypoint_receipt_v1',
+    mission_id: missionId,
+    created_at: new Date().toISOString(),
+    entrypoint: 'lifeos/system/direct -> founder_system_action(kind=founder_intake)',
+    source: RECEIPT_SOURCE,
+    channel: RECEIPT_CHANNEL,
+    user_id: userId,
+    session_id: sessionId || null,
+    utterance_excerpt: String(utterance || '').slice(0, 1200),
+    builderos_intake_event_created: true,
+    builder_job_created: true,
+  };
+  const entrypointReceiptPath = path.join(missionFolder, 'receipts', 'VOICE_RAIL_INTAKE_ENTRYPOINT_RECEIPT.json');
+  writeJson(entrypointReceiptPath, entrypointReceipt);
+
+  const dev = runDevelopmentStage(missionId, { force: false });
+  const chairHandoffReceiptPath = path.join(missionFolder, 'CHAIR_HANDOFF_RECEIPT.json');
+  const handoffExists = fs.existsSync(chairHandoffReceiptPath);
+
+  const base = {
+    ok: Boolean(dev?.ok && handoffExists),
+    status: dev?.ok && handoffExists ? 'SUCCESS' : 'BLOCKED',
+    kind: 'founder_intake',
+    mission_id: missionId,
+    mission_folder: relativeMissionFolder,
+    route: 'voice_rail -> founder_system_action -> builderos_intake -> runDevelopmentStage',
+    function: 'executeFounderIntakeAction',
+    verification_method: 'Read Voice Rail entrypoint receipt + pre-handoff report + Chair handoff receipt',
+    builder_job_created: true,
+    builderos_intake_event_created: true,
+    entrypoint_receipt_path: path.relative(REPO_ROOT, entrypointReceiptPath).replace(/\\/g, '/'),
+    founder_packet_path: `${relativeMissionFolder}/FOUNDER_PACKET.md`,
+    intent_baseline_path: `${relativeMissionFolder}/INTENT_BASELINE.json`,
+    pre_handoff_report_path: `${relativeMissionFolder}/receipts/PRE_HANDOFF_INTENT_GATE_REPORT.json`,
+    chair_handoff_receipt_path: `${relativeMissionFolder}/CHAIR_HANDOFF_RECEIPT.json`,
+    connection_probe: {
+      connected: probes?.some((p) => p.body?.connected === true || p.body?.ok === true) || false,
+      level: probes?.find((p) => p.path?.includes('connection-proof'))?.body?.context_health?.level || null,
+      probe_count: Array.isArray(probes) ? probes.length : 0,
+    },
+    probes_summary: (probes || []).map((p) => ({
+      path: p.path,
+      status: p.status,
+      ok: p.ok,
+      connected: p.body?.connected,
+    })),
+  };
+
+  if (base.ok) return base;
+
+  const preHandoff = fs.existsSync(path.join(missionFolder, 'receipts/PRE_HANDOFF_INTENT_GATE_REPORT.json'))
+    ? JSON.parse(fs.readFileSync(path.join(missionFolder, 'receipts/PRE_HANDOFF_INTENT_GATE_REPORT.json'), 'utf8'))
+    : null;
+  return {
+    ...base,
+    blocker: 'founder_intake_development_blocked',
+    first_blocker: preHandoff?.violations?.[0] || dev?.violations?.[0] || 'unknown',
+    root_cause: 'Voice Rail founder intake reached development stage but could not achieve HANDOFF_READY',
+    missing_route_file: !handoffExists ? 'services/lifeos-founder-system-action.js (founder_intake path)' : null,
+  };
 }
