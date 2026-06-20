@@ -1060,7 +1060,9 @@ if (r.ok) {
 const reply = d.human_summary || d.stdout || d.response || d.reply || (d.pass_fail === 'PASS' ? 'Done.' : `System: ${d.reason || d.pass_fail || 'processed'}`);
 addMessage('assistant', reply);
 } else if (r.status === 401) {
-addMessage('ambient', 'Not authenticated. Please refresh and log in.');
+const loginUrl = (d && d.redirect) ? d.redirect : '/overlay/lifeos-login.html?next=/overlay/lifeos-app.html';
+window.location.href = loginUrl;
+return;
 } else {
 addMessage('ambient', `System responded: ${d.reason || d.error || 'check receipts'}`);
 }

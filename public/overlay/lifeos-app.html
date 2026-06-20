@@ -2513,8 +2513,8 @@ async function luminSend() {
     // Remove thinking bubble
     document.getElementById(thinkId)?.remove();
 
-    if ((res.status === 401 || res.status === 403) && data?.redirect) {
-      location.href = data.redirect;
+    if (res.status === 401 || res.status === 403) {
+      location.href = (data && data.redirect) ? data.redirect : '/overlay/lifeos-login.html?next=/overlay/lifeos-app.html';
       return;
     }
 
