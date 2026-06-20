@@ -1225,9 +1225,9 @@
     }
     .lumin-msg.assistant {
       align-self: flex-start;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
+      background: #1e2030;
+      border: 1px solid #3d4266;
+      color: #e8e8f0;
       border-bottom-left-radius: 4px;
     }
     .lumin-msg.thinking {
@@ -2588,14 +2588,11 @@ function formatDirectSystemReply(data) {
   const commandTruth = data.command_truth || (data.command_ran ? 'COMMAND_RAN' : 'NO_COMMAND_RAN');
   const summary = data.human_summary || data.reason || data.error || 'No summary returned.';
   const lines = [`${passFail} · ${commandTruth}`, summary];
-  if (Array.isArray(data.receipt_paths) && data.receipt_paths.length) {
-    lines.push(`Receipts: ${data.receipt_paths.join(', ')}`);
-  }
-  if (Array.isArray(data.artifact_paths) && data.artifact_paths.length) {
-    lines.push(`Artifacts: ${data.artifact_paths.join(', ')}`);
-  }
-  if (data.first_blocker) {
+  if (data.first_blocker && data.first_blocker !== 'COMMAND_FAILED') {
     lines.push(`Blocker: ${data.first_blocker}`);
+  }
+  if (data.mission_id) {
+    lines.push(`Mission: ${data.mission_id}`);
   }
   return lines.join('\n');
 }
