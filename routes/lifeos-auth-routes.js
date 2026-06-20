@@ -31,7 +31,7 @@ import { requireLifeOSUser, requireLifeOSAdmin } from '../middleware/lifeos-auth
 import { createHouseholdSync } from '../services/household-sync.js';
 
 const ACCESS_COOKIE_NAME = 'lifeos_access_token';
-const ACCESS_COOKIE_MAX_AGE_MS = 15 * 60 * 1000;
+const ACCESS_COOKIE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 /** Absolute web origin for invite links (Railway / prod). */
 function publicWebOrigin(req) {

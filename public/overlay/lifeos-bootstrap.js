@@ -32,10 +32,18 @@
     } catch { return null; }
   }
 
-  /** True if token exists and is not expired (with 60s buffer). */
+  /** True if token exists and is not expired (with 5 min refresh buffer). */
   function isTokenValid(token) {
     const p = decodeToken(token);
-    return p && p.exp && (p.exp - 60_000) > Date.now();
+    return p && p.exp && (p.exp - 5 * 60_000) > Date.now();
+  }
+
+  /** True if token exists but is expired or expiring soon. */
+  function tokenNeedsRefresh(token) {
+    if (!token) return !!getRefreshToken();
+    const p = decodeToken(token);
+    if (!p || !p.exp) return !!getRefreshToken();
+    return p.exp - 5 * 60_000 <= Date.now();
   }
 
   /**
@@ -49,6 +57,7 @@
       const r = await fetch('/api/v1/lifeos/auth/refresh', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify({ refresh_token: refresh }),
       });
       const data = await r.json();
@@ -195,18 +204,50 @@
 
     async function refreshIfNeeded() {
       if (token && isTokenValid(token)) return token;
+      if (!getRefreshToken()) return token && isTokenValid(token) ? token : '';
       const newToken = await attemptRefresh();
       if (newToken) { token = newToken; return token; }
       return '';
     }
 
-    function requireAuth(redirectUrl = '/overlay/lifeos-login.html') {
-      if (!token || !isTokenValid(token)) {
-        const next = encodeURIComponent(location.pathname + location.search);
-        location.href = `${redirectUrl}?next=${next}`;
-        return false;
+    async function requireAuth(redirectUrl = '/overlay/lifeos-login.html') {
+      await refreshIfNeeded();
+      if (token && isTokenValid(token)) return true;
+      const next = encodeURIComponent(location.pathname + location.search);
+      location.href = `${redirectUrl}?next=${next}`;
+      return false;
+    }
+
+    async function fetchWithAuth(url, options = {}) {
+      await refreshIfNeeded();
+      const opts = {
+        credentials: 'same-origin',
+        ...options,
+        headers: headers(options.headers || {}),
+      };
+      let res = await fetch(url, opts);
+      if (res.status === 401 && getRefreshToken()) {
+        const renewed = await attemptRefresh();
+        if (renewed) {
+          token = renewed;
+          opts.headers = headers(options.headers || {});
+          res = await fetch(url, opts);
+        }
       }
-      return true;
+      return res;
+    }
+
+    function startSessionKeepAlive() {
+      if (window.__lifeosSessionKeepAliveStarted) return;
+      window.__lifeosSessionKeepAliveStarted = true;
+      const tick = () => {
+        if (tokenNeedsRefresh(token) || !token) attemptRefresh().then((t) => { if (t) token = t; });
+      };
+      tick();
+      window.__lifeosSessionKeepAliveTimer = setInterval(tick, 10 * 60 * 1000);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') tick();
+      });
     }
 
     function logout() {
@@ -243,6 +284,8 @@
       headers,
       refreshIfNeeded,
       requireAuth,
+      fetchWithAuth,
+      startSessionKeepAlive,
       logout,
       setKey(nextKey) {
         key = persistKey(nextKey);
@@ -257,7 +300,19 @@
     };
   }
 
-  window.LifeOSBootstrap = { getLifeOSContext, storeTokens, clearTokens, attemptRefresh, isPlaceholderKey, normalizeCommandKey, clearStoredKeys, normalizeKey };
+  window.LifeOSBootstrap = {
+    getLifeOSContext,
+    storeTokens,
+    clearTokens,
+    attemptRefresh,
+    isPlaceholderKey,
+    normalizeCommandKey,
+    clearStoredKeys,
+    normalizeKey,
+    startSessionKeepAlive(ctx) {
+      if (ctx && typeof ctx.startSessionKeepAlive === 'function') ctx.startSessionKeepAlive();
+    },
+  };
 
   // ── Shell keyboard bridge (iframe → parent lifeos-app) ───────────────────────
   // Cmd/Ctrl+L does not bubble from a child document to the parent. When an overlay

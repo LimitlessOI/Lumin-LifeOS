@@ -8,6 +8,7 @@ import { REPO_ROOT } from '../factory-staging/factory-core/builder/run-step.js';
 import { verifyToken } from '../services/lifeos-auth.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 import { resolveLifeOSUserId } from '../services/lifeos-user-resolver.js';
+import { enforceExecutionTruth, formatExecutionTruthReply } from '../services/lifeos-execution-truth.js';
 import {
   createCommandControlJob,
   getCommandControlJob,
@@ -47,6 +48,12 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
     } catch {
       // non-blocking — conversation still returns even if DB write fails
     }
+  }
+
+  function persistFounderTurn(req, userMessage, replyText) {
+    const reply = String(replyText || '').trim();
+    if (!reply) return;
+    persistConversationToDb(req, userMessage, reply);
   }
 
   async function normalizeInputText(rawText) {
@@ -320,16 +327,14 @@ HOW TO RESPOND:
       const taskJson = await taskRes.json();
       if (!taskJson.ok || !taskJson.output) {
         const receipt = buildBuildFailureReceipt(task, taskJson, { error: taskJson.error || 'Builder task returned no output.' });
-        return {
+        return enforceExecutionTruth({
           ok: false,
           committed: false,
-          sha: null,
-          pass_fail: 'FAIL',
           first_blocker: receipt.blocker,
           execution_receipt: receipt,
           gap_recommendation: receipt.gap_recommendation,
-          taskMeta: taskJson,
-        };
+          execution_path: 'builder_task_execute',
+        }, { action: 'build', task });
       }
       const execRes = await fetch(`${base}/api/v1/lifeos/builder/execute`, {
         method: 'POST',
@@ -341,31 +346,29 @@ HOW TO RESPOND:
         }),
       });
       const execJson = await execRes.json();
-      const ok = execJson.ok === true;
-      const receipt = ok
+      const resolvedTarget = execJson.target_file || taskJson.target_file || taskJson.placement?.target_file || targetFile;
+      const receipt = execJson.ok === true && execJson.committed === true
         ? { pass_fail: 'PASS', blocker: null, lesson: null, fix: null, gap_recommendation: null }
         : buildBuildFailureReceipt(task, taskJson, execJson);
-      return {
-        ok,
+      return enforceExecutionTruth({
+        ok: execJson.ok === true,
         committed: execJson.committed === true,
-        sha: execJson.sha || null,
-        pass_fail: ok ? 'PASS' : 'FAIL',
+        target_file: resolvedTarget,
+        sha: execJson.sha || execJson.commit_sha || null,
         first_blocker: receipt.blocker,
         execution_receipt: receipt,
         gap_recommendation: execJson.gap_recommendation || receipt.gap_recommendation || null,
-        taskMeta: taskJson,
-      };
+        execution_path: 'builder_task_execute',
+      }, { action: 'build', task });
     } catch (err) {
       const receipt = buildBuildFailureReceipt(task, {}, { error: err.message });
-      return {
+      return enforceExecutionTruth({
         ok: false,
         committed: false,
-        sha: null,
-        pass_fail: 'FAIL',
         first_blocker: err.message,
         execution_receipt: receipt,
-        gap_recommendation: null,
-      };
+        execution_path: 'builder_task_execute',
+      }, { action: 'build', task });
     }
   }
 
@@ -402,21 +405,21 @@ HOW TO RESPOND:
   }
 
   function requireFounderInterfaceAuth(req, res, next) {
-    const token = getTokenFromRequest(req);
-    if (token) {
+    const authHeader = String(req.headers.authorization || '');
+    const alt = String(req.headers['x-lifeos-token'] || '').trim();
+    const cookieTok = readCookie(req, 'lifeos_access_token');
+    const candidates = [];
+    if (authHeader.startsWith('Bearer ')) candidates.push(authHeader.slice(7).trim());
+    if (alt) candidates.push(alt);
+    if (cookieTok) candidates.push(cookieTok);
+
+    for (const token of candidates) {
+      if (!token) continue;
       try {
         req.lifeosUser = verifyToken(token);
         req.auth_mode = 'account_jwt';
         return next();
-      } catch (error) {
-        return res.status(401).json({
-          ok: false,
-          pass_fail: 'FAIL',
-          command_truth: 'NO_COMMAND_RAN',
-          reason: 'AUTH_INVALID_TOKEN',
-          error: error.message,
-        });
-      }
+      } catch { /* try next */ }
     }
 
     const fallbackAllowed = keyFallbackAllowed();
@@ -895,6 +898,8 @@ HOW TO RESPOND:
           display: displayBundle,
         };
         const plainEnglish = await translateToPlainEnglish(cleanedInput, displayResult);
+        const displayReply = plainEnglish || displayResult.human_summary;
+        persistFounderTurn(req, cleanedInput, displayReply);
         return res.status(200).json({
           ok: true,
           interface: 'LifeOS Founder Interface',
@@ -928,40 +933,13 @@ HOW TO RESPOND:
           || process.env.API_KEY;
         if (operatorKey) {
           const builderResult = await routeToBuilder(cleanedInput, operatorKey);
-          const structuredSummary = formatExecutionSummary({
-            pass_fail: builderResult.pass_fail,
-            action: 'build',
-            command_truth: builderResult.committed ? 'COMMITTED' : 'BUILD_ATTEMPTED',
-            sha: builderResult.sha,
-            first_blocker: builderResult.first_blocker,
-            execution_receipt: builderResult.execution_receipt,
-            execution_path: 'builder_task_execute',
-            human_summary: builderResult.ok
-              ? 'Change committed. Hard refresh the app to see it live after deploy completes.'
-              : null,
-          });
-          let plainEnglish = null;
-          if (builderResult.ok) {
-            plainEnglish = await translateToPlainEnglish(cleanedInput, {
-              pass_fail: 'PASS',
-              first_blocker: null,
-              human_summary: 'Builder completed and committed the change.',
-            });
-          }
-          return res.status(builderResult.ok ? 200 : 200).json({
-            ok: builderResult.ok,
+          const buildReply = formatExecutionTruthReply(builderResult);
+          persistFounderTurn(req, cleanedInput, buildReply);
+          return res.status(200).json({
             interface: 'LifeOS Founder Interface',
             action: 'build',
-            command_truth: builderResult.committed ? 'COMMITTED' : 'BUILD_ATTEMPTED',
-            pass_fail: builderResult.pass_fail,
-            sha: builderResult.sha || null,
-            first_blocker: builderResult.first_blocker || null,
-            execution_path: 'builder_task_execute',
-            execution_receipt: builderResult.execution_receipt || null,
-            gap_recommendation: builderResult.gap_recommendation || null,
-            human_summary: structuredSummary || plainEnglish || `Could not complete: ${builderResult.first_blocker || 'builder error'}`,
-            auth_mode: req.auth_mode || 'unknown',
-            intake_normalized: intakeNormalized,
+            ...builderResult,
+            human_summary: builderResult.human_summary,
           });
         }
       }
@@ -987,6 +965,8 @@ HOW TO RESPOND:
         const plainEnglish = result.pass_fail === 'PASS'
           ? await translateToPlainEnglish(cleanedInput, result)
           : null;
+        const executeReply = structuredSummary || plainEnglish || result.human_summary;
+        persistFounderTurn(req, cleanedInput, executeReply);
         return res.status(200).json({
           interface: 'LifeOS Founder Interface',
           action: 'execute',
@@ -999,7 +979,7 @@ HOW TO RESPOND:
           execution_path: 'terminal_bridge',
           intake_normalized: intakeNormalized,
           ...result,
-          human_summary: structuredSummary || plainEnglish || result.human_summary,
+          human_summary: executeReply,
         });
       }
 
@@ -1007,7 +987,7 @@ HOW TO RESPOND:
       if (!explicitExecute && !isBuildRequest(cleanedInput)) {
       const luminReply = await luminConverse(cleanedInput, getForwardedOperatorKey(req) || process.env.COMMAND_CENTER_KEY);
       if (luminReply) {
-        persistConversationToDb(req, cleanedInput, luminReply);
+        persistFounderTurn(req, cleanedInput, luminReply);
         return res.status(200).json({
           ok: true,
           interface: 'LifeOS Founder Interface',
@@ -1063,6 +1043,8 @@ HOW TO RESPOND:
       const plainEnglish = result.pass_fail === 'PASS'
         ? await translateToPlainEnglish(cleanedInput, result)
         : null;
+      const terminalReply = structuredSummary || plainEnglish || result.human_summary;
+      persistFounderTurn(req, cleanedInput, terminalReply);
       return res.status(200).json({
         interface: 'LifeOS Founder Interface',
         action: 'execute',
@@ -1075,7 +1057,7 @@ HOW TO RESPOND:
         execution_path: 'terminal_bridge',
         intake_normalized: intakeNormalized,
         ...result,
-        human_summary: structuredSummary || plainEnglish || result.human_summary,
+        human_summary: terminalReply,
       });
     } catch (error) {
       next(error);

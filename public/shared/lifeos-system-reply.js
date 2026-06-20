@@ -3,6 +3,20 @@
 
   function formatLifeOSSystemReply(data) {
     if (!data || typeof data !== 'object') return 'No response from system.';
+
+    if (data.receipt_truth && data.pass_fail) {
+      return formatStructured(data);
+    }
+
+    const summary = String(data.human_summary || '').trim();
+    if (summary.startsWith('✅') || summary.startsWith('❌') || summary.startsWith('ℹ️')) {
+      return summary;
+    }
+
+    return formatStructured(data);
+  }
+
+  function formatStructured(data) {
     const lines = [];
     const passFail = data.pass_fail || (data.ok === true ? 'PASS' : data.ok === false ? 'FAIL' : null);
     const action = data.action || 'response';
@@ -10,7 +24,9 @@
 
     if (passFail) lines.push(`${icon} ${passFail} · ${action}`);
     if (data.command_truth) lines.push(`Command: ${data.command_truth}`);
+    if (data.receipt_truth) lines.push(`Receipt: ${data.receipt_truth}`);
     if (data.execution_path) lines.push(`Path: ${data.execution_path}`);
+    if (data.target_file) lines.push(`File: ${data.target_file}`);
     if (data.sha) lines.push(`Commit: ${String(data.sha).slice(0, 12)}`);
 
     const blocker = data.first_blocker || data.error || data.reason;

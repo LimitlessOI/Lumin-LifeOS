@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-bootstrap.js?v=20260620c"></script>
   <title>LifeOS — Sign in</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -384,6 +385,31 @@
     document.querySelector('[data-tab="register"]').classList.add('active');
     document.getElementById('register-section').classList.add('active');
   }
+
+  (async () => {
+    const refresh = localStorage.getItem('lifeos_refresh_token');
+    if (!refresh) return;
+    const token = localStorage.getItem('lifeos_access_token') || '';
+    let valid = false;
+    if (token) {
+      try {
+        const p = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+        valid = p && p.exp && (p.exp - 5 * 60_000) > Date.now();
+      } catch { /* refresh below */ }
+    }
+    if (valid) {
+      const next = new URLSearchParams(location.search).get('next') || '/overlay/lifeos-app.html';
+      location.replace(next);
+      return;
+    }
+    if (window.LifeOSBootstrap && typeof window.LifeOSBootstrap.attemptRefresh === 'function') {
+      const renewed = await window.LifeOSBootstrap.attemptRefresh();
+      if (renewed) {
+        const next = new URLSearchParams(location.search).get('next') || '/overlay/lifeos-app.html';
+        location.replace(next);
+      }
+    }
+  })();
 </script>
 <script>
 if ('serviceWorker' in navigator) {

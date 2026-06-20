@@ -16,7 +16,7 @@
 
 import crypto from 'node:crypto';
 
-const ACCESS_TTL_MS  = 15 * 60 * 1000;          // 15 minutes
+const ACCESS_TTL_MS  = 24 * 60 * 60 * 1000;       // 24 hours — refresh silently before re-login
 const REFRESH_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 const SCRYPT_N       = 16384;
 
@@ -222,6 +222,10 @@ export function createLifeOSAuth(pool) {
     if (!row.active) throw Object.assign(new Error('Account inactive'), { status: 403 });
 
     const accessToken = _issueAccessToken({ id: row.uid, handle: row.user_handle, role: row.role, tier: row.tier });
+    await pool.query(
+      `UPDATE lifeos_sessions SET expires_at = NOW() + INTERVAL '30 days' WHERE token_hash = $1`,
+      [hash]
+    );
     return { accessToken, user: { id: row.uid, user_handle: row.user_handle, display_name: row.display_name, email: row.email, role: row.role, tier: row.tier } };
   }
 

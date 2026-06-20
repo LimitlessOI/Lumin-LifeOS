@@ -15,15 +15,29 @@ import express from 'express';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 import { createLifeOSLuminBuild } from '../services/lifeos-lumin-build.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+import { createRequireLifeOSUserOrKey } from '../middleware/lifeos-auth-middleware.js';
 
 export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMember, logger }) {
   const router = express.Router();
   const lumin  = createLifeOSLumin({ pool, callAI, logger });
   const resolveUserId = makeLifeOSUserResolver(pool);
+  const requireChatAuth = createRequireLifeOSUserOrKey(requireKey);
   const luminBuild =
     pool && callCouncilMember
       ? createLifeOSLuminBuild({ pool, callCouncilMember, logger })
       : null;
+
+  async function resolveRequestUserId(req) {
+    const sub = req.lifeosUser?.sub;
+    if (sub && sub !== 'emergency-key' && /^\d+$/.test(String(sub))) {
+      return parseInt(sub, 10);
+    }
+    const handle = req.lifeosUser?.handle
+      || req.query?.user
+      || req.body?.user
+      || 'adam';
+    return resolveUserId(handle);
+  }
   const buildHealthDiagnosis = (code) => {
     if (!code) return null;
     if (code === '28P01') return 'database_auth_failed: runtime DATABASE_URL credentials rejected';
@@ -33,9 +47,9 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   };
 
   // ── GET /threads ─────────────────────────────────────────────────────────────
-  router.get('/threads', requireKey, async (req, res) => {
+  router.get('/threads', requireChatAuth, async (req, res) => {
     try {
-      const userId = await resolveUserId(req.query.user || 'adam');
+      const userId = await resolveRequestUserId(req);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
       const threads = await lumin.listThreads(userId, {
         includeArchived: req.query.archived === 'true',
@@ -48,9 +62,9 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   });
 
   // ── POST /threads — create a new thread ──────────────────────────────────────
-  router.post('/threads', requireKey, async (req, res) => {
+  router.post('/threads', requireChatAuth, async (req, res) => {
     try {
-      const userId = await resolveUserId(req.body.user || 'adam');
+      const userId = await resolveRequestUserId(req);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
       const thread = await lumin.createThread(userId, {
         mode: req.body.mode || 'general',
@@ -63,9 +77,9 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   });
 
   // ── GET /threads/default — get or create the general thread ─────────────────
-  router.get('/threads/default', requireKey, async (req, res) => {
+  router.get('/threads/default', requireChatAuth, async (req, res) => {
     try {
-      const userId = await resolveUserId(req.query.user || 'adam');
+      const userId = await resolveRequestUserId(req);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
       const thread = await lumin.getOrCreateDefaultThread(userId);
       res.json({ ok: true, thread });
@@ -75,9 +89,9 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   });
 
   // ── PATCH /threads/:id ───────────────────────────────────────────────────────
-  router.patch('/threads/:id', requireKey, async (req, res) => {
+  router.patch('/threads/:id', requireChatAuth, async (req, res) => {
     try {
-      const userId = await resolveUserId(req.body.user || 'adam');
+      const userId = await resolveRequestUserId(req);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
       const thread = await lumin.updateThread(parseInt(req.params.id, 10), userId, req.body);
       res.json({ ok: true, thread });
@@ -87,9 +101,9 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   });
 
   // ── GET /threads/:id/messages ────────────────────────────────────────────────
-  router.get('/threads/:id/messages', requireKey, async (req, res) => {
+  router.get('/threads/:id/messages', requireChatAuth, async (req, res) => {
     try {
-      const userId = await resolveUserId(req.query.user || 'adam');
+      const userId = await resolveRequestUserId(req);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
       const messages = await lumin.getMessages(parseInt(req.params.id, 10), {
         limit: parseInt(req.query.limit || '50', 10),
@@ -102,9 +116,9 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   });
 
   // ── POST /threads/:id/exchange — persist a turn without generating a reply ─
-  router.post('/threads/:id/exchange', requireKey, async (req, res) => {
+  router.post('/threads/:id/exchange', requireChatAuth, async (req, res) => {
     try {
-      const userId = await resolveUserId(req.body?.user || 'adam');
+      const userId = await resolveRequestUserId(req);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
       const userMessage = String(req.body?.user_message || req.body?.message || '').trim();
       const assistantMessage = String(req.body?.assistant_message || req.body?.reply || '').trim();
@@ -125,9 +139,9 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   });
 
   // ── POST /threads/:id/messages — send a message, get Lumin's reply ───────────
-  router.post('/threads/:id/messages', requireKey, async (req, res) => {
+  router.post('/threads/:id/messages', requireChatAuth, async (req, res) => {
     try {
-      const userId = await resolveUserId(req.body.user || 'adam');
+      const userId = await resolveRequestUserId(req);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
       const { message, content_type } = req.body;
       if (!message?.trim()) return res.status(400).json({ ok: false, error: 'message required' });
@@ -153,7 +167,7 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   //   data: {"token":"word "}      — one or more words
   //   data: {"done":true,"user_message":{...},"reply":{...}}   — final
   //   data: {"error":"..."}        — on failure
-  router.post('/threads/:id/messages/stream', requireKey, async (req, res) => {
+  router.post('/threads/:id/messages/stream', requireChatAuth, async (req, res) => {
     const userId = await resolveUserId(req.body?.user || 'adam').catch(() => null);
     if (!userId) { res.status(404).json({ ok: false, error: 'User not found' }); return; }
     const message = (req.body?.message || '').trim();

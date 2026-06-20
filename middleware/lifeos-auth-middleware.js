@@ -30,16 +30,18 @@ function readCookie(req, name) {
 
 /**
  * Require a valid LifeOS JWT. Attaches req.lifeosUser on success.
+ * Tries Bearer, x-lifeos-token, then httpOnly cookie — skips expired candidates.
  */
 export function requireLifeOSUser(req, res, next) {
   const authHeader = req.headers.authorization || '';
   const altHeader  = req.headers['x-lifeos-token'] || '';
   const cookieTok  = readCookie(req, 'lifeos_access_token');
-  const raw = authHeader.startsWith('Bearer ')
-    ? authHeader.slice(7).trim()
-    : (altHeader.trim() || cookieTok);
+  const candidates = [];
+  if (authHeader.startsWith('Bearer ')) candidates.push(authHeader.slice(7).trim());
+  if (altHeader.trim()) candidates.push(altHeader.trim());
+  if (cookieTok) candidates.push(cookieTok);
 
-  if (!raw) {
+  if (!candidates.length) {
     return res.status(401).json({
       ok: false,
       error: 'Login required',
@@ -47,16 +49,22 @@ export function requireLifeOSUser(req, res, next) {
     });
   }
 
-  try {
-    req.lifeosUser = verifyToken(raw);
-    next();
-  } catch (e) {
-    return res.status(401).json({
-      ok: false,
-      error: e.message,
-      redirect: '/overlay/lifeos-login.html',
-    });
+  let lastErr = null;
+  for (const raw of candidates) {
+    if (!raw) continue;
+    try {
+      req.lifeosUser = verifyToken(raw);
+      return next();
+    } catch (e) {
+      lastErr = e;
+    }
   }
+
+  return res.status(401).json({
+    ok: false,
+    error: lastErr?.message || 'Invalid token',
+    redirect: '/overlay/lifeos-login.html',
+  });
 }
 
 /**
@@ -78,14 +86,46 @@ export function requireLifeOSAdmin(req, res, next) {
  * authenticated and anonymous users with different data.
  */
 export function optionalLifeOSUser(req, res, next) {
+  const candidates = collectAccessTokenCandidates(req);
+  for (const raw of candidates) {
+    try {
+      req.lifeosUser = verifyToken(raw);
+      break;
+    } catch { /* try next candidate */ }
+  }
+  next();
+}
+
+function collectAccessTokenCandidates(req) {
   const authHeader = req.headers.authorization || '';
   const altHeader  = req.headers['x-lifeos-token'] || '';
   const cookieTok  = readCookie(req, 'lifeos_access_token');
-  const raw = authHeader.startsWith('Bearer ')
-    ? authHeader.slice(7).trim()
-    : (altHeader.trim() || cookieTok);
-  if (raw) {
-    try { req.lifeosUser = verifyToken(raw); } catch { /* ignore */ }
-  }
-  next();
+  const candidates = [];
+  if (authHeader.startsWith('Bearer ')) candidates.push(authHeader.slice(7).trim());
+  if (altHeader.trim()) candidates.push(altHeader.trim());
+  if (cookieTok) candidates.push(cookieTok);
+  return candidates;
+}
+
+/**
+ * JWT account login OR legacy command key — for routes founders hit from the app shell.
+ */
+export function createRequireLifeOSUserOrKey(requireKey) {
+  return function requireLifeOSUserOrKey(req, res, next) {
+    const candidates = collectAccessTokenCandidates(req);
+    for (const raw of candidates) {
+      try {
+        req.lifeosUser = verifyToken(raw);
+        req.auth_mode = 'account_jwt';
+        return next();
+      } catch { /* fall through to command key */ }
+    }
+    if (typeof requireKey === 'function') {
+      return requireKey(req, res, () => {
+        req.auth_mode = req.auth_mode || 'command_key';
+        next();
+      });
+    }
+    return res.status(401).json({ ok: false, error: 'Unauthorized' });
+  };
 }
