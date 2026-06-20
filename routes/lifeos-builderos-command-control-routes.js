@@ -97,56 +97,38 @@ Rules:
   async function luminConverse(userMessage) {
     if (typeof callCouncilMember !== 'function') return null;
     try {
-      // Load live memory context — facts, goals, profile, recent history
+      // Load live memory context — buildContextForPrompt() returns a formatted string
       let memoryContext = '';
       try {
         const ctx = await buildContextForPrompt();
-        if (ctx && typeof ctx === 'object') {
-          const parts = [];
-          // Load the doctrine/directive facts first (highest confidence)
-          if (ctx.recent_facts?.length) {
-            const doctrineFacts = ctx.recent_facts
-              .filter(f => f?.content?.type && ['lumin_doctrine', 'lumin_doctrine_wisdom', 'founder_directive'].includes(f.content.type))
-              .slice(0, 2);
-            const systemFacts = ctx.recent_facts
-              .filter(f => f?.content?.type === 'system_foundation')
-              .slice(0, 1);
-            const allFacts = [...doctrineFacts, ...systemFacts];
-            if (allFacts.length) {
-              const factTexts = allFacts.map(f => {
-                const text = f?.content?.content || (typeof f?.content === 'string' ? f.content : null);
-                return text ? String(text).slice(0, 800) : null;
-              }).filter(Boolean);
-              if (factTexts.length) parts.push(`What I know from memory:\n${factTexts.join('\n---\n')}`);
-            }
-          }
-          if (ctx.goals?.length) {
-            const goalTitles = ctx.goals.slice(0,3).map(g => g?.content?.title || g?.content).filter(Boolean);
-            if (goalTitles.length) parts.push(`Active goals: ${goalTitles.join('; ')}`);
-          }
-          memoryContext = parts.join('\n\n');
+        if (ctx && typeof ctx === 'string' && ctx.trim().length > 30) {
+          // Strip the verbose header/footer, keep the actual content lines
+          memoryContext = ctx
+            .replace(/^##\s*User Context.*\n/m, '')
+            .replace(/⚠️.*\n?$/, '')
+            .trim();
         }
       } catch { /* memory load failure is non-fatal */ }
 
       const systemPrompt = `You are Lumin — the operating intelligence of Adam Hopkins' LifeOS system.
 
 WHO YOU ARE:
-You are not a chatbot. You are the AI layer connecting LifeOS (Adam's cockpit) to BuilderOS (the execution engine). You have memory, you know Adam's goals, and you can act through the system when needed. You speak directly, honestly, and like someone who has been in every meeting.
+You are not a chatbot. You are the AI layer connecting LifeOS (Adam's cockpit) to BuilderOS (the execution engine). You have memory, you know Adam's goals, and you can act through the system when needed. You speak directly, honestly, and with full context — like someone who has been in every meeting.
 
-BACKGROUND CONTEXT — use this to inform your answers, do not repeat or summarize it:
-${memoryContext || 'Memory not loaded this session.'}
+${memoryContext ? `BACKGROUND CONTEXT (use this to inform your answers — do not recite or summarize it back):
+${memoryContext}
 
-HOW TO RESPOND:
+` : ''}HOW TO RESPOND:
 - Answer Adam's actual question in plain conversational prose
-- If you know something from memory, say it directly — do not list or bullet-dump memory fields
-- If you are uncertain about something, say "I'm not certain about that"
-- If Adam asks you to take a system action, say what you will do and do it
-- Never write status codes (NO_COMMAND_RAN etc) in your conversational text
-- Be concise. Be direct. Be honest.`;
+- Draw on memory context naturally — don't list fields, just talk like you know this person
+- If you are uncertain, say so plainly
+- If Adam asks you to take an action, describe what you will do and do it
+- Be direct, honest, and concise — no preamble, no status codes in your text`;
 
-      const response = await callCouncilMember('gemini', `${systemPrompt}\n\nAdam says: ${userMessage}\n\nLumin:`, {
-        maxTokens: 1200,
+      const response = await callCouncilMember('gemini', `${systemPrompt}\n\nAdam: ${userMessage}\n\nLumin:`, {
+        maxOutputTokens: 2000,
         taskType: 'chat',
+        useCache: false,
       });
       const text = typeof response === 'string'
         ? response
