@@ -206,6 +206,65 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
     return 'overview';
   }
 
+  function hasHandoffStructure(text = '') {
+    const t = String(text || '');
+    const requiredMarkers = [
+      /problem:/i,
+      /desired outcome:/i,
+      /scope boundary:/i,
+      /success metric:/i,
+      /failure metric:/i,
+      /constraints:/i,
+      /founder success test:/i,
+    ];
+    let found = 0;
+    for (const marker of requiredMarkers) {
+      if (marker.test(t)) found += 1;
+    }
+    return found >= 3;
+  }
+
+  function isLikelyExecuteIntent(text = '') {
+    return /\b(add|change|update|modify|edit|fix|remove|create|implement|wire|route|redirect|patch|refactor|build|ship)\b/i
+      .test(String(text || ''));
+  }
+
+  function normalizeFounderExecuteIntent(text = '') {
+    const clean = String(text || '').trim();
+    if (!clean) return '';
+    if (hasHandoffStructure(clean)) return clean;
+    if (!isLikelyExecuteIntent(clean)) return clean;
+    return [
+      'Problem:',
+      clean,
+      '',
+      'Desired Outcome:',
+      clean,
+      '',
+      'Scope Boundary:',
+      'Only the minimum files required to complete this exact request.',
+      '',
+      'Constraints:',
+      '- No theater, no simulation, no fake success',
+      '- Keep behavior fail-closed and reversible where possible',
+      '',
+      'Success Metric:',
+      'Requested change is visible/real in the live target surface or endpoint.',
+      '',
+      'Failure Metric:',
+      'No real change, or missing execution evidence/receipts.',
+      '',
+      'Unacceptable Result:',
+      'Claiming completion without runtime-verifiable evidence.',
+      '',
+      'Founder Success Test:',
+      'Founder can verify the requested change directly in the app/runtime.',
+      '',
+      'Acceptance Command:',
+      'Return command_truth, pass_fail, exit_code, commit_sha, changed_files, receipt_paths, first_blocker.',
+    ].join('\n');
+  }
+
   async function runTerminalBridgeIntake({ text, textFile, stage, missionId, force }) {
     const cmd = buildFounderIntakeCommand({
       text: text || null,
@@ -417,7 +476,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
 
   router.post('/founder-interface/message', requireFounderInterfaceAuth, async (req, res, next) => {
     try {
-      const text = typeof req.body?.text === 'string' ? req.body.text.trim() : '';
+      const originalText = typeof req.body?.text === 'string' ? req.body.text.trim() : '';
       const stage = String(req.body?.stage || 'development').toLowerCase();
       const missionId = req.body?.mission_id ? String(req.body.mission_id) : null;
       const force = req.body?.force === true;
@@ -426,7 +485,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
       const sourceMode = String(req.body?.source_mode || 'text').toLowerCase();
       const action = String(req.body?.action || 'auto').toLowerCase();
 
-      if (!text && !req.body?.text_file) {
+      if (!originalText && !req.body?.text_file) {
         return res.status(400).json({
           ok: false,
           pass_fail: 'FAIL',
@@ -436,9 +495,11 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
         });
       }
 
-      const inferredDisplayScope = summarizeDisplayRequest(text);
+      const inferredDisplayScope = summarizeDisplayRequest(originalText);
       const shouldDisplayOnly = action === 'display'
-        || (action === 'auto' && /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt)\b/i.test(text));
+        || (action === 'auto' && /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt)\b/i.test(originalText));
+      const normalizedText = shouldDisplayOnly ? originalText : normalizeFounderExecuteIntent(originalText);
+      const intakeNormalized = normalizedText !== originalText;
 
       if (!shouldDisplayOnly) {
         const role = String(req.lifeosUser?.role || '').toLowerCase();
@@ -489,6 +550,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
           display: displayBundle,
           auth_mode: req.auth_mode || 'unknown',
           user_role: req.lifeosUser?.role || null,
+          intake_normalized: false,
         });
       }
 
@@ -505,7 +567,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
       }
 
       const result = await runTerminalBridgeIntake({
-        text,
+        text: normalizedText,
         textFile: req.body?.text_file || null,
         stage,
         missionId,
@@ -520,6 +582,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
         model_routing: modelRouting,
         auth_mode: req.auth_mode || 'unknown',
         user_role: req.lifeosUser?.role || null,
+        intake_normalized: intakeNormalized,
         ...result,
       });
     } catch (error) {
