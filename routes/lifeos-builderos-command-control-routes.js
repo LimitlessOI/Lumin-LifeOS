@@ -1,6 +1,7 @@
 // @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
 
 import express from 'express';
+import { buildContextForPrompt, storeMemory } from '../core/memory-system.js';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { REPO_ROOT } from '../factory-staging/factory-core/builder/run-step.js';
@@ -93,32 +94,67 @@ Rules:
     return /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt|how many|what is|what are|list|count|tell me)\b/i.test(text);
   }
 
-  async function luminConverse(userMessage, commandKey) {
+  async function luminConverse(userMessage) {
     if (typeof callCouncilMember !== 'function') return null;
     try {
-      const systemPrompt = `You are Lumin — the AI core of Adam's LifeOS personal operating system. Adam is the founder and you are his trusted AI counsel.
+      // Load live memory context — facts, goals, profile, recent history
+      let memoryContext = '';
+      try {
+        const ctx = await buildContextForPrompt();
+        if (ctx && typeof ctx === 'object') {
+          const parts = [];
+          if (ctx.user_profile?.name) parts.push(`Founder: ${ctx.user_profile.name}`);
+          if (ctx.recent_facts?.length) {
+            const topFact = ctx.recent_facts[0];
+            const factText = topFact?.content?.content || topFact?.content;
+            if (factText && typeof factText === 'string') {
+              parts.push(`System context (from memory):\n${factText.slice(0, 2000)}`);
+            }
+          }
+          if (ctx.goals?.length) parts.push(`Active goals: ${ctx.goals.slice(0,3).map(g => g?.content?.title || g?.content).join('; ')}`);
+          memoryContext = parts.join('\n\n');
+        }
+      } catch { /* memory load failure is non-fatal */ }
+
+      const architectureSpec = `The correct architecture for this system (founder-specified 2026-06-20):
+Adam → Lumin (AI assistant inside LifeOS) → BuilderOS/system execution → receipts/results → Lumin explains back to Adam.
+Lumin is the conversational operator. BuilderOS is the execution engine. LifeOS Founder Interface is the cockpit.
+Lumin can wear any hat: Chair, CFO, Sentry, Builder — with full context of that role.`;
+
+      const systemPrompt = `You are Lumin — the AI core of Adam Hopkins' LifeOS personal operating system. Adam is the founder. You are his trusted AI counsel, operator, and thinking partner.
+
+${memoryContext ? `MEMORY CONTEXT:\n${memoryContext}\n\n` : ''}ARCHITECTURE:\n${architectureSpec}
 
 You can:
-- Have real conversations, brainstorm, and think through problems with Adam
-- Answer questions and provide information
-- Give advice and counsel on any topic — business, life, decisions, strategy
-- Tell Adam what his system is doing when he asks
-- Take action in his system when he explicitly asks you to build, fix, or change something
+- Have real conversations, brainstorm, explore ideas with Adam
+- Answer questions, give counsel, think through decisions together
+- Function as Chair, CFO, Sentry, or any council role — with full context of that seat
+- Tell Adam what his system is doing, check status, explain results
+- Execute system actions when Adam explicitly asks for something to be built or changed
 
-Right now you are in conversation mode. Be direct, honest, warm, and genuinely useful. Do not route everything to "the system" — just talk. If Adam wants something built or changed, he'll say so clearly and you'll handle it.
+RIGHT NOW you are in conversation. Be direct, honest, and genuinely useful. Do not deflect or over-route. If Adam asks a question, answer it. If he wants to brainstorm, brainstorm. If he wants counsel, give it.
 
-Adam's system is a personal operating system called LifeOS built on Node.js/Express deployed on Railway. It has AI council members, a builder pipeline, missions, and multiple life domains (health, family, finance, purpose, engine, etc).
-
-Keep responses concise unless Adam asks for depth. Never be sycophantic. Never lie about what you can or cannot do.`;
+Never be sycophantic. Never lie. If you don't know something, say so clearly.
+Keep responses concise unless Adam asks for depth.`;
 
       const response = await callCouncilMember('gemini', `${systemPrompt}\n\nAdam: ${userMessage}`, {
-        maxTokens: 600,
+        maxTokens: 800,
         taskType: 'chat',
       });
       const text = typeof response === 'string'
         ? response
         : response?.content || response?.text || null;
-      return text ? String(text).trim() : null;
+      if (!text) return null;
+      const reply = String(text).trim();
+
+      // Save this exchange to conversation memory (non-blocking)
+      storeMemory('conversation_history', {
+        user: userMessage,
+        lumin: reply,
+        timestamp: new Date().toISOString(),
+      }, { confidence: 0.8 }).catch(() => {});
+
+      return reply;
     } catch {
       return null;
     }

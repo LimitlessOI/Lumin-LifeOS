@@ -42,7 +42,7 @@
       "updated_at": "2026-01-26T10:10:55.039Z"
     },
     {
-      "id": "mem_1781149250455_1at604cbi",
+      "id": "mem_1781979155323_w3kn1ypo7",
       "category": "facts",
       "content": {
         "title": "LifeOS / LimitlessOS Source of Truth (v1.0)",
@@ -54,11 +54,30 @@
       "confidence": 1,
       "source": {
         "conversation_id": null,
-        "timestamp": "2026-06-11T03:40:50.455Z",
+        "timestamp": "2026-06-20T18:12:35.323Z",
         "user_confirmed": true
       },
-      "created_at": "2026-06-11T03:40:50.455Z",
-      "updated_at": "2026-06-11T03:40:50.456Z"
+      "created_at": "2026-06-20T18:12:35.323Z",
+      "updated_at": "2026-06-20T18:12:35.324Z"
+    },
+    {
+      "id": "mem_1781979248504_m8ktk3w73",
+      "category": "facts",
+      "content": {
+        "title": "Lumin Architecture Specification — Founder Directive 2026-06-20",
+        "content": "Adam's canonical specification for how Lumin must work:\n\nArchitecture:\nAdam → Lumin (AI assistant inside LifeOS Founder Interface) → BuilderOS execution layer → Receipts/artifacts/results → Lumin explains back to Adam in plain English.\n\nRules:\n- BuilderOS is the engine/foundation. It builds, gates, receipts, runs Chair/ARC/Builder.\n- LifeOS Founder Interface is the cockpit. Adam does not need a separate C2 product.\n- Lumin is the conversational AI operator between Adam and BuilderOS.\n- For Adam, LifeOS and command/control are the same experience.\n- When Adam speaks or types, Lumin understands intent, translates to proper BuilderOS/system action, runs real execution, and explains the result in plain English.\n- No terminal jargon. No fake Voice Rail theater. No disconnected chatbot.\n- If no real command ran: must say so (NO_COMMAND_RAN).\n- If a command ran: must show that it ran and show receipts.\n- Lumin must have memory and access to all files, all memory, and all abilities.\n- Lumin can wear any hat: Chair, CFO, Sentry, any department — with full role context and actual functionality.\n- Adam wants B: a real AI with access to the system. Not a helpdesk AI acting as go-between.",
+        "type": "founder_directive",
+        "last_updated": "2026-06-20"
+      },
+      "type": "ai_inferred",
+      "confidence": 1,
+      "source": {
+        "conversation_id": null,
+        "timestamp": "2026-06-20T18:14:08.504Z",
+        "user_confirmed": false
+      },
+      "created_at": "2026-06-20T18:14:08.505Z",
+      "updated_at": "2026-06-20T18:14:08.505Z"
     }
   ],
   "conversation_history": []
