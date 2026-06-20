@@ -98,14 +98,15 @@ export function registerPublicRoutes(app, {
     return res.status(404).send("C2 Mission Dashboard not found.");
   });
 
-  // LifeOS Communication OS — conversation-first primary interface (AMENDMENT_21)
-  app.get("/lifeos-communication", (req, res) => {
-    const filePath = path.join(__dirname, "public", "overlay", "lifeos-communication.html");
-    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
-    return res.status(404).send("LifeOS Communication hub not found.");
-  });
+  // LifeOS Communication surface is now consolidated into the canonical /lifeos shell.
+  app.get("/lifeos-communication", (_req, res) =>
+    res.redirect(301, "/lifeos?direct_system=1")
+  );
 
-  app.get("/communicate", (_req, res) => res.redirect(301, "/lifeos-communication"));
+  app.get("/communicate", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
+  app.get("/overlay/lifeos-communication.html", (_req, res) =>
+    res.redirect(301, "/lifeos?direct_system=1")
+  );
 
   // LifeOS Founder Interface — terminal-bridge backed conversational founder console.
   app.get("/lifeos-founder-interface", (req, res) => {

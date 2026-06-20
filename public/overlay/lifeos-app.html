@@ -1515,8 +1515,8 @@
       aria-label="Open Lumin — ask anything or use voice">
       <span class="lumin-quick-icon" aria-hidden="true">◎</span>
       <span class="lumin-quick-copy">
-        <span class="lumin-quick-title">Ask Lumin anything…</span>
-        <span class="lumin-quick-sub">Natural talk first — memory, modes, and gentle ideas. Voice or type. Full chat history via sidebar or “Full history” in the drawer.</span>
+        <span class="lumin-quick-title">Talk to your system directly…</span>
+        <span class="lumin-quick-sub">Voice or type. Messages route through the terminal bridge and return human-readable execution truth.</span>
       </span>
       <span class="lumin-quick-chev" aria-hidden="true">›</span>
     </button>
@@ -1781,7 +1781,7 @@
         class="lumin-input"
         id="lumin-input"
         placeholder="Message Lumin…"
-        rows="1"
+        rows="4"
         onkeydown="luminHandleKey(event)"
         oninput="luminAutoResize(this)"></textarea>
       <button class="lumin-input-mic" id="lumin-mic-btn" onclick="luminVoiceInput()" title="Voice input">🎙</button>
@@ -1879,6 +1879,7 @@ function applyShellLayoutFromQuery() {
 
   // URL shortcut — canonical: ?page=lifeos-dashboard.html&layout=auto
   const launchPage = new URLSearchParams(location.search).get('page');
+  const directSystemLaunch = new URLSearchParams(location.search).get('direct_system');
   if (launchPage && PAGE_META[launchPage]) {
     loadPage(launchPage);
     const nav = document.querySelector(`[data-page="${launchPage}"]`);
@@ -1893,6 +1894,9 @@ function applyShellLayoutFromQuery() {
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       nav.classList.add('active');
     }
+  }
+  if (directSystemLaunch === '1') {
+    setTimeout(() => openLuminDrawer(), 150);
   }
   initFeatureHelp();
 
@@ -2362,6 +2366,8 @@ function toast(msg) {
 ══════════════════════════════════════════════════════════════════ */
 
 const CHAT_BASE = '/api/v1/lifeos/chat';
+const DIRECT_SYSTEM_ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
+const USE_DIRECT_SYSTEM_CHAT = true;
 const luminState = {
   open: false,
   threadId: null,
@@ -2384,7 +2390,11 @@ function openLuminDrawer() {
   document.getElementById('lumin-fab').classList.add('drawer-open');
   document.getElementById('lumin-fab-badge').classList.remove('show');
   document.getElementById('lumin-quick-bar')?.classList.add('active');
-  if (!luminState.threadId) luminBootThread();
+  if (USE_DIRECT_SYSTEM_CHAT) {
+    document.getElementById('lumin-status-text').textContent = 'System Direct';
+  } else if (!luminState.threadId) {
+    luminBootThread();
+  }
   setTimeout(() => document.getElementById('lumin-input')?.focus(), 300);
 }
 
@@ -2459,7 +2469,7 @@ async function luminSend() {
   const input = document.getElementById('lumin-input');
   const msg   = (input.value || '').trim();
   if (!msg || luminState.sending) return;
-  if (!luminState.threadId) { await luminCreateThread(); }
+  if (!USE_DIRECT_SYSTEM_CHAT && !luminState.threadId) { await luminCreateThread(); }
 
   // Remove empty state
   document.getElementById('lumin-empty')?.remove();
@@ -2477,19 +2487,43 @@ async function luminSend() {
   document.getElementById('lumin-send-btn').disabled = true;
   document.getElementById('lumin-status-text').textContent = 'Thinking…';
 
-  const H = { 'x-command-key': KEY, 'Content-Type': 'application/json' };
+  const H = await directSystemHeaders();
   try {
-    const res  = await fetch(`${CHAT_BASE}/threads/${luminState.threadId}/messages`, {
+    const reqBody = USE_DIRECT_SYSTEM_CHAT
+      ? {
+          text: msg,
+          action: 'auto',
+          stage: 'development',
+          source_mode: 'text',
+          conversational_mode: true,
+          dictate_then_send: false,
+        }
+      : { user: USER || 'adam', message: msg };
+    const endpoint = USE_DIRECT_SYSTEM_CHAT
+      ? DIRECT_SYSTEM_ENDPOINT
+      : `${CHAT_BASE}/threads/${luminState.threadId}/messages`;
+    const res  = await fetch(endpoint, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: H,
-      body: JSON.stringify({ user: USER || 'adam', message: msg }),
+      body: JSON.stringify(reqBody),
     });
     const data = await res.json();
 
     // Remove thinking bubble
     document.getElementById(thinkId)?.remove();
 
-    if (data.ok && data.assistant_message) {
+    if ((res.status === 401 || res.status === 403) && data?.redirect) {
+      location.href = data.redirect;
+      return;
+    }
+
+    if (USE_DIRECT_SYSTEM_CHAT && data) {
+      _appendLuminMsg('assistant', formatDirectSystemReply(data), new Date().toISOString(), true);
+      if (!luminState.open) {
+        document.getElementById('lumin-fab-badge').classList.add('show');
+      }
+    } else if (data.ok && data.assistant_message) {
       _appendLuminMsg('assistant', data.assistant_message.content, data.assistant_message.created_at, true);
       // Badge on FAB if drawer is closed
       if (!luminState.open) {
@@ -2532,6 +2566,39 @@ function _escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
 
+async function directSystemHeaders() {
+  try {
+    if (CTX.refreshIfNeeded) await CTX.refreshIfNeeded();
+  } catch {
+    // best-effort
+  }
+  const headers = { 'Content-Type': 'application/json' };
+  const token = localStorage.getItem('lifeos_access_token') || '';
+  if (token) {
+    headers.authorization = `Bearer ${token}`;
+  } else if (KEY) {
+    headers['x-command-key'] = KEY;
+  }
+  return headers;
+}
+
+function formatDirectSystemReply(data) {
+  const passFail = data.pass_fail || data.status || 'FAIL';
+  const commandTruth = data.command_truth || (data.command_ran ? 'COMMAND_RAN' : 'NO_COMMAND_RAN');
+  const summary = data.human_summary || data.reason || data.error || 'No summary returned.';
+  const lines = [`${passFail} · ${commandTruth}`, summary];
+  if (Array.isArray(data.receipt_paths) && data.receipt_paths.length) {
+    lines.push(`Receipts: ${data.receipt_paths.join(', ')}`);
+  }
+  if (Array.isArray(data.artifact_paths) && data.artifact_paths.length) {
+    lines.push(`Artifacts: ${data.artifact_paths.join(', ')}`);
+  }
+  if (data.first_blocker) {
+    lines.push(`Blocker: ${data.first_blocker}`);
+  }
+  return lines.join('\n');
+}
+
 function luminHandleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); luminSend(); }
 }
@@ -2559,8 +2626,9 @@ window.addEventListener('message', (e) => {
 });
 
 function luminAutoResize(el) {
+  const minHeightPx = 72;
   el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  el.style.height = Math.max(minHeightPx, Math.min(el.scrollHeight, 120)) + 'px';
 }
 
 /* Voice input for Lumin drawer */
