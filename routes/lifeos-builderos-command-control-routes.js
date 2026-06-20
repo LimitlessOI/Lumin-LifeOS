@@ -21,6 +21,35 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
 
   const EXECUTE_ALLOWED_ROLES = new Set(['founder_admin', 'operator', 'admin']);
 
+  async function normalizeInputText(rawText) {
+    if (typeof callCouncilMember !== 'function') return rawText;
+    if (!rawText || rawText.trim().length < 3) return rawText;
+    try {
+      const response = await callCouncilMember(
+        'gemini',
+        `You are an input normalizer for a voice-first personal operating system called LifeOS.
+The founder speaks or types commands — often with misspellings, voice-to-text errors, autocorrect mistakes, dropped words, or garbled phrasing.
+
+Your job: figure out what they meant and rewrite it as a clean, clear English request.
+
+Rules:
+- Fix spelling, grammar, voice-to-text artifacts (e.g. "wanna" → "want to", "teh" → "the", "hwo" → "how")
+- Preserve the original intent exactly — do not add, invent, or change what was asked
+- If the input is already clean, return it unchanged
+- Output ONLY the cleaned text. No explanation, no prefix, no quotes.
+
+Input: ${rawText}`,
+        { maxTokens: 300, taskType: 'chat' }
+      );
+      const cleaned = typeof response === 'string'
+        ? response
+        : response?.content || response?.text || null;
+      return cleaned ? String(cleaned).trim() : rawText;
+    } catch {
+      return rawText;
+    }
+  }
+
   async function translateToPlainEnglish(originalText, result) {
     if (typeof callCouncilMember !== 'function') return null;
     try {
@@ -531,14 +560,18 @@ Rules:
         });
       }
 
-      const inferredDisplayScope = summarizeDisplayRequest(originalText);
-      const executeIntent = isLikelyExecuteIntent(originalText);
+      // Normalize input first: fix misspellings, voice-to-text errors, garbled phrasing
+      const cleanedInput = await normalizeInputText(originalText);
+      const inputWasCleaned = cleanedInput !== originalText;
+
+      const inferredDisplayScope = summarizeDisplayRequest(cleanedInput);
+      const executeIntent = isLikelyExecuteIntent(cleanedInput);
       const shouldDisplayOnly = action === 'display'
         || (action === 'auto'
           && !executeIntent
-          && /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt)\b/i.test(originalText));
-      const normalizedText = shouldDisplayOnly ? originalText : normalizeFounderExecuteIntent(originalText);
-      const intakeNormalized = normalizedText !== originalText;
+          && /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt)\b/i.test(cleanedInput));
+      const normalizedText = shouldDisplayOnly ? cleanedInput : normalizeFounderExecuteIntent(cleanedInput);
+      const intakeNormalized = inputWasCleaned || normalizedText !== cleanedInput;
 
       if (!shouldDisplayOnly) {
         const role = String(req.lifeosUser?.role || '').toLowerCase();
@@ -574,7 +607,7 @@ Rules:
           human_summary: `Rendered ${displayBundle.scope} display from live system data.`,
           display: displayBundle,
         };
-        const plainEnglish = await translateToPlainEnglish(originalText, displayResult);
+        const plainEnglish = await translateToPlainEnglish(cleanedInput, displayResult);
         return res.status(200).json({
           ok: true,
           interface: 'LifeOS Founder Interface',
@@ -619,7 +652,7 @@ Rules:
         missionId,
         force,
       });
-      const plainEnglish = await translateToPlainEnglish(originalText, result);
+      const plainEnglish = await translateToPlainEnglish(cleanedInput, result);
       return res.status(200).json({
         interface: 'LifeOS Founder Interface',
         action: 'execute',
