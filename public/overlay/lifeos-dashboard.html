@@ -994,12 +994,22 @@ console.error('Failed to add MIT:', await r.text());
 console.error('Error adding MIT:', e);
 }
 }
-// ── Calendar ──
+// ── Calendar (briefing service — /calendar/today route not mounted) ──
 async function loadCalendar() {
 try {
-const r = await API('/api/v1/lifeos/calendar/today');
+const r = await API('/api/v1/lifeos/briefing/today');
+if (!r.ok) throw new Error(`HTTP ${r.status}`);
 const d = await r.json();
-const events = d.events||[];
+const raw = d.briefing?.calendarEvents || d.calendarEvents || [];
+const events = raw.map(e => {
+const start = e.starts_at ? new Date(e.starts_at) : null;
+return {
+time: start && !Number.isNaN(start.getTime())
+  ? start.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+  : '—',
+title: e.title || 'Event',
+};
+});
 if (!events.length) {
 $('cal-list').innerHTML='<div class="empty"><span>🗓</span>No events today</div>';
 return;
@@ -1014,12 +1024,24 @@ console.error('Error loading calendar:', e);
 $('cal-list').innerHTML='<div class="empty"><span>⚠️</span>Failed to load calendar</div>';
 }
 }
-// ── Goals ──
+// ── Goals (finance goals — not /lifeos/goals) ──
 async function loadGoals() {
 try {
-const r = await API('/api/v1/lifeos/goals?limit=3');
+const r = await API('/api/v1/lifeos/finance/goals?limit=3');
+if (!r.ok) throw new Error(`HTTP ${r.status}`);
 const d = await r.json();
-const goals = d.goals||[];
+const goals = (d.goals||[]).slice(0, 3).map(g => {
+const target = Number(g.target_amount) || 0;
+const current = Number(g.current_amount) || 0;
+const pct = target > 0 ? Math.min(100, Math.round((current / target) * 100)) : 0;
+return {
+name: g.name || 'Goal',
+progress_pct: pct,
+current_value: current,
+target_value: target || '—',
+unit: g.unit || '$',
+};
+});
 if (!goals.length) {
 $('goals-list').innerHTML='<div class="empty"><span>🎯</span>No goals set</div>';
 return;
@@ -1055,9 +1077,16 @@ stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
 }
 async function loadScores() {
 try {
-const r = await API('/api/v1/lifeos/scores');
+const r = await API('/api/v1/lifeos/dashboard/scoreboard');
+if (!r.ok) throw new Error(`HTTP ${r.status}`);
 const d = await r.json();
-const scores = d.scores||[];
+const m = d.metrics || {};
+const scores = [
+{ name: 'Overall', value: d.overall?.score ?? 0, max_value: 100, color: '#6366f1', description: d.overall?.status || '' },
+{ name: 'Integrity', value: m.integrity?.score ?? 0, max_value: 100, color: '#8b5cf6', description: `Trend: ${m.integrity?.trend || '—'}` },
+{ name: 'Joy', value: m.joy?.score ?? 0, max_value: 100, color: '#f59e0b', description: `Trend: ${m.joy?.trend || '—'}` },
+{ name: 'Focus', value: m.focus?.score ?? 0, max_value: 100, color: '#10b981', description: m.focus?.trend_summary || '' },
+].filter(s => s.value != null && s.value > 0);
 if (!scores.length) {
 $('scores-grid').innerHTML='<div class="empty" style="grid-column:1/span 2"><span>📊</span>No scores yet</div>';
 return;

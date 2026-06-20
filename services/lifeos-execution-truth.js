@@ -188,10 +188,10 @@ function buildFixSteps({ failure_code, targetFile, task, action }) {
   if (failure_code === 'OVERLAY_STUB_REWRITE' || failure_code === 'OVERLAY_FULL_REWRITE_BLOCKED'
     || (file && /lifeos-app\.html/i.test(file) && /\bdock|panel|lumin-drawer\b/i.test(task))) {
     return [
-      'GAP-FILL (scoped): patch public/overlay/lifeos-app.html only — add dock CSS + header controls (Side/Top/Bottom/Pin/Minimize) on existing #lumin-drawer; persist to localStorage; do not rewrite the file.',
-      'Commit → push main → wait for Railway deploy (check /voice-rail/health deploy SHA).',
-      'Hard refresh LifeOS (Cmd+Shift+R) → open Lumin → test each dock control → refresh again to confirm persistence.',
-      'If still broken: paste the FAIL receipt (with autopsy) back into chat — do not re-run whole-file builder on lifeos-app.html.',
+      'System job (founder chat — NOT Cursor): scoped build on existing #lumin-drawer only — dock CSS classes, header controls Side/Top/Bottom/Pin/Min, localStorage keys; forbid whole-file rewrite of lifeos-app.html.',
+      'Prompt must name target_file and list exact DOM/CSS hooks to extend — one patch surface, not regenerate the shell.',
+      'After system commit: hard refresh → open Lumin drawer → verify controls persist across refresh.',
+      'If FAIL receipt returns: paste full autopsy here — do not rerun whole-file builder on lifeos-app.html.',
     ];
   }
 
