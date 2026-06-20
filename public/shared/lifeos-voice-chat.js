@@ -247,7 +247,7 @@
     if (!t) return { send: false, message: '' };
     const list = phrases && phrases.length
       ? phrases
-      : ['send it', 'send message', 'send that', 'send now', 'send'];
+      : ['send it', 'send message', 'send that', 'send now'];
     for (let i = 0; i < list.length; i += 1) {
       const raw = String(list[i] || '').trim();
       if (!raw) continue;
@@ -300,7 +300,9 @@
       speakRepliesDefault: false,
       wakePrefixes: [],
       voiceSendEnabled: false,
-      voiceSendPhrases: ['send it', 'send message', 'send that', 'send now', 'send'],
+      voiceSendPhrases: ['send it', 'send message', 'send that', 'send now'],
+      voiceSendRequireFinal: false,
+      manualSendOnly: false,
       onVoiceSend: null,
       keepListeningOnVoiceSend: false,
       persistentListen: false,
@@ -498,6 +500,7 @@
     }
 
     function fireAutoSend(reason) {
+      if (settings.manualSendOnly) return false;
       if (state.autoSendFired || typeof settings.onAutoSend !== 'function') return false;
       const msg = String(input?.value || '').trim();
       if (!msg) return false;
@@ -813,11 +816,20 @@
       button.setAttribute('aria-pressed', (state.listening || state.userWantsListen) ? 'true' : 'false');
     }
 
-    function maybeVoiceSend(fromFinal) {
+    function maybeVoiceSend(finalChunk) {
       if (!settings.voiceSendEnabled || typeof settings.onVoiceSend !== 'function') return false;
       if (state.voiceSendFired) return true;
+      const chunk = String(finalChunk || '').trim();
+      if (settings.voiceSendRequireFinal && !chunk) return false;
+
       const parsed = stripVoiceSendCommand(input.value, settings.voiceSendPhrases);
       if (!parsed.send || !String(parsed.message || '').trim()) return false;
+
+      if (settings.voiceSendRequireFinal) {
+        const chunkParsed = stripVoiceSendCommand(chunk, settings.voiceSendPhrases);
+        if (!chunkParsed.send) return false;
+      }
+
       const msg = parsed.message;
       state.voiceSendFired = true;
       if (settings.keepListeningOnVoiceSend) {
@@ -825,7 +837,7 @@
         try {
           settings.onVoiceSend(msg);
         } catch (_) {}
-        updateStatus('Listening… (say “send” to post again)');
+        updateStatus('Listening… (say “send it” to post again)');
         return true;
       }
       stopListening();
@@ -868,7 +880,7 @@
       if (!state.userWantsListen) clearInputHighlight();
       updateButton();
       updateStatus(state.userWantsListen ? 'Restarting mic…' : settings.idleText);
-      if (userInitiated && settings.sendOnMicStop && !state.autoSendFired) {
+      if (userInitiated && settings.sendOnMicStop && !settings.manualSendOnly && !state.autoSendFired) {
         const msg = String(input?.value || '').trim();
         if (msg && typeof settings.onAutoSend === 'function') {
           state.autoSendFired = true;
@@ -885,7 +897,7 @@
         state.listening = true;
         updateButton();
         focusInputHighlight();
-        updateStatus(settings.silentStatus ? '' : 'Listening… say “send” to post.');
+        updateStatus(settings.silentStatus ? '' : 'Listening… say “send it” to post.');
         if (typeof settings.onStart === 'function') {
           try { settings.onStart({ inputValue: String(input?.value || '') }); } catch (_) {}
         }
@@ -926,8 +938,8 @@
           else interimChunk += transcript;
         }
         applyDictation(finalChunk, interimChunk);
-        if (finalChunk && maybeVoiceSend(true)) return;
-        if (String(input?.value || '').trim()) scheduleSilenceAutoSend();
+        if (finalChunk.trim() && maybeVoiceSend(finalChunk)) return;
+        if (!settings.manualSendOnly && String(input?.value || '').trim()) scheduleSilenceAutoSend();
         updateStatus(interimChunk ? interimChunk.trim() : 'Listening…');
       };
       recognition.onend = function onEnd() {
@@ -943,7 +955,9 @@
           }
         }
         syncCommittedFromInput(false);
-        maybeVoiceSend(true);
+        if (!state.userWantsListen || !settings.persistentListen) {
+          maybeVoiceSend('');
+        }
         if (state.ttsDuck) {
           updateButton();
           updateStatus('Speaking…');
@@ -1013,7 +1027,7 @@
         if (trimmed) {
           state.serverSttConsecutiveFailures = 0;
           appendServerTranscript(trimmed);
-          maybeVoiceSend(true);
+          if (maybeVoiceSend(trimmed)) return;
           updateStatus('Listening (Whisper)…');
           return;
         }
@@ -1059,7 +1073,7 @@
         state.listening = true;
         updateButton();
         focusInputHighlight();
-        updateStatus('Listening (Whisper)… say “send” to post.');
+        updateStatus('Listening (Whisper)… say “send it” to post.');
         if (typeof settings.onStart === 'function') {
           try { settings.onStart({ inputValue: String(input?.value || ''), engine: 'whisper' }); } catch (_) {}
         }
@@ -1070,7 +1084,9 @@
         if (state.mediaRecorder === recorder) state.mediaRecorder = null;
         state.listening = false;
         syncCommittedFromInput(false);
-        maybeVoiceSend(true);
+        if (!state.userWantsListen || !settings.persistentListen) {
+          maybeVoiceSend('');
+        }
         if (state.ttsDuck) {
           updateButton();
           updateStatus('Speaking…');

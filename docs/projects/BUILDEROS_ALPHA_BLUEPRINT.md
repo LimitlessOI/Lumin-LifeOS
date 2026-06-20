@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-20 — Founder direct execute default stage switched to system pipeline (not development pre-handoff) to prevent instant SNT ambiguity fails
+**Last Updated:** 2026-06-20 — Founder-interface Lumin conversations persist to `lumin_messages` via `recordExchange` on default thread
 
 ---
 
@@ -562,6 +562,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — `luminConverse` exchanges now persist to default `lumin_threads`/`lumin_messages` via `recordExchange()` (JWT user or command-key → adam account); non-blocking DB write after successful conversation reply. | Founder dashboard chat must survive refresh/re-login; conversation memory belongs in DB not only `memories.json`. | ✅ `node --check`; pending deploy verification |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — added Founder Interface auth/role middleware path for `POST /founder-interface/message` and `POST /terminal-bridge/intake`; execute actions now require authenticated roles (`founder_admin`/`operator`) while preserving command-key fallback for dev/emergency. Added direct terminal intake route contract for governed founder text intake from UI. | BuilderOS command-control needed to be callable by authenticated founder accounts in production, not only by static command key, and must enforce execution authority by role before terminal bridge execution. | ✅ local auth/route tests; pending deploy verification |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — `AUTH_REQUIRED` response redirect target now points to canonical login handoff `next=/lifeos?direct_system=1` instead of legacy `/lifeos-founder-interface`. | Consolidated one-surface flow requires API fail-closed redirect hints to match canonical direct-system entrypoint and avoid sending users toward retired legacy path labels. | ✅ local route auth response check; pending deploy verification |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — added execute-intent normalization for `POST /founder-interface/message`: freeform founder execution asks are upgraded to a minimum handoff-ready schema (Problem/Desired Outcome/Scope/Constraints/Success+Failure metrics/Founder Success Test/Acceptance Command) when structure is missing but execute intent is detected. Response now includes `intake_normalized` for transparency. | Direct connection was real but repeatedly failing on `department:SNT` ambiguity for plain-language execute asks. This reduces false-negative governance blocks without bypassing fail-closed checks. | ✅ `node --check` PASS; pending live founder validation |

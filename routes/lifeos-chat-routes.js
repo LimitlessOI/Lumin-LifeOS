@@ -101,6 +101,29 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
     }
   });
 
+  // ── POST /threads/:id/exchange — persist a turn without generating a reply ─
+  router.post('/threads/:id/exchange', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(req.body?.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const userMessage = String(req.body?.user_message || req.body?.message || '').trim();
+      const assistantMessage = String(req.body?.assistant_message || req.body?.reply || '').trim();
+      if (!userMessage || !assistantMessage) {
+        return res.status(400).json({ ok: false, error: 'user_message and assistant_message required' });
+      }
+      const result = await lumin.recordExchange(
+        parseInt(req.params.id, 10),
+        userId,
+        userMessage,
+        assistantMessage
+      );
+      res.status(201).json({ ok: true, ...result });
+    } catch (err) {
+      const status = err.status || 500;
+      res.status(status).json({ ok: false, error: err.message });
+    }
+  });
+
   // ── POST /threads/:id/messages — send a message, get Lumin's reply ───────────
   router.post('/threads/:id/messages', requireKey, async (req, res) => {
     try {

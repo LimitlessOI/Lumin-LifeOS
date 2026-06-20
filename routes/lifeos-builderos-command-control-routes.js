@@ -6,6 +6,8 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { REPO_ROOT } from '../factory-staging/factory-core/builder/run-step.js';
 import { verifyToken } from '../services/lifeos-auth.js';
+import { createLifeOSLumin } from '../services/lifeos-lumin.js';
+import { resolveLifeOSUserId } from '../services/lifeos-user-resolver.js';
 import {
   createCommandControlJob,
   getCommandControlJob,
@@ -19,8 +21,33 @@ import { executeCommandControlJob } from '../services/builderos-governed-loop-ex
 
 export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
+  const luminPersist = pool
+    ? createLifeOSLumin({ pool, callAI: null, logger: { info: () => {}, error: () => {}, warn: () => {} } })
+    : null;
 
   const EXECUTE_ALLOWED_ROLES = new Set(['founder_admin', 'operator', 'admin']);
+
+  async function persistConversationToDb(req, userMessage, reply) {
+    if (!luminPersist) return;
+    try {
+      let userId = null;
+      const sub = req.lifeosUser?.sub;
+      if (sub && sub !== 'emergency-key' && /^\d+$/.test(String(sub))) {
+        userId = parseInt(sub, 10);
+      }
+      if (!userId) {
+        const handle = req.auth_mode === 'command_key_fallback'
+          ? 'adam'
+          : (req.lifeosUser?.handle || 'adam');
+        userId = await resolveLifeOSUserId(pool, handle);
+      }
+      if (!userId) return;
+      const thread = await luminPersist.getOrCreateDefaultThread(userId);
+      await luminPersist.recordExchange(thread.id, userId, userMessage, reply);
+    } catch {
+      // non-blocking — conversation still returns even if DB write fails
+    }
+  }
 
   async function normalizeInputText(rawText) {
     if (typeof callCouncilMember !== 'function') return rawText;
@@ -831,6 +858,7 @@ HOW TO RESPOND:
       // BuilderOS terminal bridge is last resort only for structured execution commands
       const luminReply = await luminConverse(cleanedInput, getForwardedOperatorKey(req) || process.env.COMMAND_CENTER_KEY);
       if (luminReply) {
+        persistConversationToDb(req, cleanedInput, luminReply);
         return res.status(200).json({
           ok: true,
           interface: 'LifeOS Founder Interface',

@@ -444,6 +444,10 @@
       transition: color var(--transition), background var(--transition);
     }
     .topbar-btn:hover { color: var(--text-primary); background: var(--bg-surface); }
+    .topbar-btn.sidebar-toggle-btn {
+      font-size: 18px;
+      margin-right: 2px;
+    }
 
     /* Content iframe */
     .content-frame {
@@ -919,16 +923,16 @@
        RESPONSIVE
     ═══════════════════════════════════════════════════════ */
 
-    /* 600–999px: icon-only sidebar */
+    /* 600–999px: default icon-only unless user expanded sidebar */
     @media (min-width: 600px) and (max-width: 999px) {
-      .sidebar { width: var(--sidebar-w-mini); }
-      .sidebar .logo-text,
-      .sidebar .user-info,
-      .sidebar .chevron,
-      .sidebar .nav-label,
-      .sidebar .nav-group-label { display: none; opacity: 0; }
-      .sidebar .nav-item { padding: 0; height: 44px; justify-content: center; }
-      .sidebar .collapse-btn { display: none; }
+      .sidebar.mini { width: var(--sidebar-w-mini); }
+      .sidebar.mini .logo-text,
+      .sidebar.mini .user-info,
+      .sidebar.mini .chevron,
+      .sidebar.mini .nav-label,
+      .sidebar.mini .nav-group-label { display: none; opacity: 0; }
+      .sidebar.mini .nav-item { padding: 0; height: 44px; justify-content: center; }
+      .sidebar:not(.mini) { width: var(--sidebar-w); }
     }
 
     /* Under 600px: full mobile layout */
@@ -1272,13 +1276,17 @@
     .lumin-input-wrap {
       flex: 1;
       background: var(--bg-surface);
-      border: 1px solid var(--border);
+      border: 1px solid color-mix(in srgb, var(--text-muted) 22%, transparent);
       border-radius: 14px;
       display: flex;
       align-items: flex-end;
-      transition: border-color var(--transition);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      transition: border-color var(--transition), box-shadow var(--transition);
     }
-    .lumin-input-wrap:focus-within { border-color: var(--border-focus); }
+    .lumin-input-wrap:focus-within {
+      border-color: color-mix(in srgb, var(--c-today) 50%, var(--border));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-today) 16%, transparent);
+    }
     .lumin-input {
       flex: 1;
       background: none;
@@ -1488,6 +1496,7 @@
 
     <!-- Desktop topbar -->
     <div class="topbar" id="topbar">
+      <button class="topbar-btn sidebar-toggle-btn" id="sidebar-toggle-topbar" onclick="toggleSidebar()" title="Toggle sidebar" aria-label="Toggle sidebar">☰</button>
       <span class="topbar-icon" id="topbar-icon">📊</span>
       <span class="topbar-title" id="topbar-title">Dashboard</span>
       <div class="topbar-actions">
@@ -1501,7 +1510,7 @@
 
     <!-- Mobile topbar -->
     <div class="mobile-topbar" id="mobile-topbar">
-      <button class="mobile-menu-btn" onclick="openMobileSidebar()">☰</button>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileSidebar()" title="Toggle menu" aria-label="Toggle menu">☰</button>
       <div class="mobile-logo">
         <div class="mobile-logo-icon">◎</div>
         <span class="mobile-section-name" id="mobile-section-name">Dashboard</span>
@@ -1876,7 +1885,16 @@ function applyShellLayoutFromQuery() {
   }
 
   // Sidebar collapse state
-  if (localStorage.getItem('sidebar_mini') === '1') toggleSidebar(true);
+  const savedSidebar = localStorage.getItem('sidebar_mini');
+  if (savedSidebar === '1') {
+    toggleSidebar(true);
+  } else if (savedSidebar === '0') {
+    toggleSidebar(false);
+  } else if (window.innerWidth >= 600 && window.innerWidth < 1000) {
+    toggleSidebar(true);
+  } else {
+    syncSidebarToggleButtons();
+  }
 
   // URL shortcut — canonical: ?page=lifeos-dashboard.html&layout=auto
   const launchPage = new URLSearchParams(location.search).get('page');
@@ -2130,25 +2148,51 @@ function escapeHtml(value) {
 }
 
 /* ── Sidebar collapse ────────────────────────────────────────── */
+function syncSidebarToggleButtons() {
+  const topBtn = document.getElementById('sidebar-toggle-topbar');
+  const collapseBtn = document.getElementById('collapse-btn');
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const expandedLabel = 'Collapse sidebar';
+  const collapsedLabel = 'Expand sidebar';
+  if (topBtn) {
+    topBtn.textContent = sidebarMini ? '☰' : '◧';
+    topBtn.title = sidebarMini ? collapsedLabel : expandedLabel;
+    topBtn.setAttribute('aria-label', sidebarMini ? collapsedLabel : expandedLabel);
+  }
+  if (collapseBtn) {
+    collapseBtn.textContent = sidebarMini ? '▶' : '◀';
+    collapseBtn.title = sidebarMini ? collapsedLabel : expandedLabel;
+  }
+  if (mobileBtn) {
+    mobileBtn.textContent = document.getElementById('sidebar')?.classList.contains('mobile-open') ? '✕' : '☰';
+  }
+}
+
 function toggleSidebar(force) {
   sidebarMini = force !== undefined ? force : !sidebarMini;
   const sb  = document.getElementById('sidebar');
-  const btn = document.getElementById('collapse-btn');
   sb.classList.toggle('mini', sidebarMini);
-  btn.textContent = sidebarMini ? '▶' : '◀';
   localStorage.setItem('sidebar_mini', sidebarMini ? '1' : '0');
+  syncSidebarToggleButtons();
 }
 
 /* ── Mobile sidebar ──────────────────────────────────────────── */
+function toggleMobileSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (sb.classList.contains('mobile-open')) closeMobileSidebar();
+  else openMobileSidebar();
+}
 function openMobileSidebar() {
   document.getElementById('sidebar').classList.add('mobile-open');
   document.getElementById('mobile-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  syncSidebarToggleButtons();
 }
 function closeMobileSidebar() {
   document.getElementById('sidebar').classList.remove('mobile-open');
   document.getElementById('mobile-overlay').classList.remove('open');
   document.body.style.overflow = '';
+  syncSidebarToggleButtons();
 }
 
 /* ── More bottom sheet ───────────────────────────────────────── */

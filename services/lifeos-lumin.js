@@ -237,6 +237,42 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     return { user_message: userMsg, reply: assistantMsg };
   }
 
+  async function recordExchange(threadId, userId, userMessage, assistantMessage) {
+    const thread = await getThread(threadId, userId);
+    if (!thread) throw Object.assign(new Error('Thread not found'), { status: 404 });
+    const userText = String(userMessage || '').trim();
+    const assistantText = String(assistantMessage || '').trim();
+    if (!userText || !assistantText) {
+      throw Object.assign(new Error('user_message and assistant_message required'), { status: 400 });
+    }
+
+    const { rows: [userMsg] } = await pool.query(
+      `INSERT INTO lumin_messages (thread_id, user_id, role, content, content_type)
+       VALUES ($1, $2, 'user', $3, 'text') RETURNING *`,
+      [threadId, userId, userText]
+    );
+
+    const { rows: [assistantMsg] } = await pool.query(
+      `INSERT INTO lumin_messages (thread_id, user_id, role, content)
+       VALUES ($1, $2, 'assistant', $3) RETURNING *`,
+      [threadId, userId, assistantText]
+    );
+
+    if (!thread.title) {
+      await pool.query(
+        `UPDATE lumin_threads SET title = $1 WHERE id = $2`,
+        [userText.slice(0, 60).trim(), threadId]
+      );
+    }
+
+    await pool.query(
+      `UPDATE lumin_threads SET last_message_at = NOW() WHERE id = $1`,
+      [threadId]
+    );
+
+    return { user_message: userMsg, reply: assistantMsg };
+  }
+
   // ── LifeOS context snapshot for Lumin ─────────────────────────────────────────
   async function buildContextSnapshot(userId, { mode: threadMode = 'general' } = {}) {
     const mode = (threadMode || 'general').toLowerCase();
@@ -431,6 +467,7 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     reactToMessage,
     searchMessages,
     chat,
+    recordExchange,
     getOrCreateDefaultThread,
     buildContextSnapshot,
   };
