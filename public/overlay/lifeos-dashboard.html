@@ -1269,7 +1269,7 @@ const reply = (window.LifeOSSystemReply && window.LifeOSSystemReply.format)
 addMessage(d.pass_fail === 'FAIL' || d.ok === false ? 'ambient' : 'assistant', reply);
 if (dashboardVoice && typeof dashboardVoice.speak === 'function') dashboardVoice.speak(reply);
 } else if (r.status === 401) {
-const loginUrl = (d && d.redirect) ? d.redirect : '/overlay/lifeos-login.html?next=/overlay/lifeos-app.html';
+const loginUrl = (d && d.redirect) ? d.redirect : `/overlay/lifeos-login.html?next=${encodeURIComponent(location.pathname + location.search)}`;
 if (!localStorage.getItem('lifeos_refresh_token')) window.location.href = loginUrl;
 else {
 await CTX.refreshIfNeeded();

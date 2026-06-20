@@ -103,6 +103,12 @@
     "services/lifeos-scoreboard.js",
     "scripts/lifeos-smoke.mjs",
     "public/overlay/lifeos-app.html",
+    "public/overlay/lifeos-dashboard.html",
+    "routes/lifeos-builderos-command-control-routes.js",
+    "routes/lifeos-chat-routes.js",
+    "services/lifeos-execution-truth.js",
+    "public/shared/lifeos-system-reply.js",
+    "tests/lifeos-execution-truth.test.js",
     "docs/LIFEOS_PROGRAM_MAP_SSOT.md",
     "docs/TSOS_TEN_UPLIFT_IDEAS.md",
     "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
@@ -861,7 +867,7 @@
     ]
   },
   "last_updated": "2026-06-20",
-  "last_receipt": "2026-06-16 lifeos-v2-capture-pipeline-commitment-route",
-  "last_change_summary": "LifeOS v2.0 capture pipeline + v2.1 commitment route integration slices",
+  "last_receipt": "2026-06-20 comms-enforcement-audit-gaps",
+  "last_change_summary": "Execution-truth audit: SHA on /execute, bridge truth gate, chat IDOR fix, manifest sync",
   "ssot_receipt_tail": "Voice Rail auto-stages to Action Inbox; approved inbox commitments route to lifeos_commitments."
 }

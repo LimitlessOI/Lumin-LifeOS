@@ -1579,8 +1579,9 @@ export function createLifeOSCouncilBuilderRoutes({
 
     const msg = commit_message || `[system-build] ${target_file}`;
     try {
-      await commitToGitHub(target_file, cleanedOutput, msg, branch || undefined);
-      log.info({ target_file, msg }, '[BUILDER] /execute committed file to GitHub');
+      const commitResult = await commitToGitHub(target_file, cleanedOutput, msg, branch || undefined);
+      const commitSha = commitResult?.sha || null;
+      log.info({ target_file, msg, sha: commitSha }, '[BUILDER] /execute committed file to GitHub');
       const mirrorExec = await mirrorCommittedContentToRepoRoot(target_file, cleanedOutput);
       if (!mirrorExec.ok) {
         log.warn({ target_file, reason: mirrorExec.reason }, '[BUILDER] Runtime repo mirror failed after /execute — chained files[] may be stale until redeploy');
@@ -1597,7 +1598,14 @@ export function createLifeOSCouncilBuilderRoutes({
         routingKey: 'council.builder.execute',
         mode: 'execute',
       });
-      res.json({ ok: true, committed: true, target_file, commit_message: msg });
+      res.json({
+        ok: true,
+        committed: true,
+        target_file,
+        commit_message: msg,
+        sha: commitSha,
+        commit_sha: commitSha,
+      });
     } catch (err) {
       log.error({ err: err.message, target_file }, '[BUILDER] /execute commit failed');
       const gapRecommendation = await recordBuilderGap({

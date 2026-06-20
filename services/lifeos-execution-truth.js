@@ -155,9 +155,16 @@ export function enforceExecutionTruth(raw, ctx = {}) {
   } else if (committed && targetFile) {
     const normalizedTarget = targetFile.replace(/^\//, '');
     const isLargeOverlay = LARGE_OVERLAY_PATHS.some((p) => normalizedTarget === p);
-    const taskNamesOverlay = /\blifeos-app\.html\b/i.test(task) || LARGE_OVERLAY_PATHS.some((p) => task.includes(p));
     const outputBytes = raw.task_meta?.output_bytes || raw.output_bytes || (typeof generatedOutput === 'string' ? generatedOutput.length : 0);
-    const stubRewrite = isLargeOverlay && outputBytes > 0 && outputBytes < 8000;
+    const outputLines = typeof generatedOutput === 'string' && generatedOutput.trim()
+      ? generatedOutput.split('\n').length
+      : 0;
+    const overlayMinLines = normalizedTarget.includes('lifeos-app.html') ? 2000
+      : normalizedTarget.includes('lifeos-dashboard.html') ? 400
+        : 0;
+    const stubRewrite = isLargeOverlay && outputBytes > 0 && (
+      outputBytes < 8000 || (overlayMinLines > 0 && outputLines > 0 && outputLines < overlayMinLines)
+    );
 
     const layerViolation = detectGeneratedLayerViolation(normalizedTarget, generatedOutput);
     const scopeMiss = detectScopeIncomplete(task, normalizedTarget, committed);
@@ -178,16 +185,16 @@ export function enforceExecutionTruth(raw, ctx = {}) {
       receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
       lesson = lesson || 'Multi-file tasks require every named file to be patched — one-file commit is not PASS.';
       fix = fix || `Complete missing files: ${scopeMiss.missing.join(', ')} — or narrow task to single target_file.`;
-    } else if ((isLargeOverlay && taskNamesOverlay) || stubRewrite) {
-      failure_code = stubRewrite ? 'OVERLAY_STUB_REWRITE' : 'OVERLAY_FULL_REWRITE_BLOCKED';
+    } else if (stubRewrite) {
+      failure_code = 'OVERLAY_STUB_REWRITE';
       first_blocker = first_blocker || (
-        stubRewrite
-          ? `Builder committed a ${outputBytes}-byte stub to ${targetFile} — destroyed the ${LARGE_OVERLAY_PATHS.includes(normalizedTarget) ? '2700+' : 'full'}-line production shell.`
-          : `Large overlay ${targetFile} — whole-file rewrite not verified and not safe via builder.`
+        outputLines && overlayMinLines
+          ? `Builder committed ${outputLines} lines to ${targetFile} — production shell requires ≥${overlayMinLines} lines.`
+          : `Builder committed a ${outputBytes}-byte stub to ${targetFile} — destroyed the production shell.`
       );
       pass_fail = 'FAIL';
       command_truth = 'BUILD_ATTEMPTED';
-      receipt_truth = stubRewrite ? 'COMMITTED_HARMFUL_STUB' : 'UNVERIFIED';
+      receipt_truth = 'COMMITTED_HARMFUL_STUB';
       lesson = lesson || 'The builder cannot replace entire overlay shells. It produced placeholder theater while claiming success.';
       fix = fix || 'Use GAP-FILL scoped patch on #lumin-drawer only — never regenerate lifeos-app.html wholesale.';
     } else if (action === 'build' && !sha) {
@@ -400,6 +407,9 @@ export function formatExecutionTruthReply(truth) {
   if (truth.execution_path) lines.push(`Path: ${truth.execution_path}`);
   if (truth.target_file) lines.push(`File: ${truth.target_file}`);
   if (truth.sha) lines.push(`Commit: ${String(truth.sha).slice(0, 12)}`);
+  if (truth.persist_warning === 'HISTORY_NOT_SAVED') {
+    lines.push('Warning: chat history was not saved — refresh may lose this turn.');
+  }
   if (truth.first_blocker) lines.push(`Blocker: ${truth.first_blocker}`);
 
   const autopsy = truth.autopsy;

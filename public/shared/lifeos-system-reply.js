@@ -32,10 +32,15 @@
     if (data.failure_code && passFail === 'FAIL') lines.push(`Code: ${data.failure_code}`);
     if (data.execution_path) lines.push(`Path: ${data.execution_path}`);
     if (data.target_file) lines.push(`File: ${data.target_file}`);
-    if (data.sha) lines.push(`Commit: ${String(data.sha).slice(0, 12)}`);
+    const sha = data.sha || data.commit_sha;
+    if (sha) lines.push(`Commit: ${String(sha).slice(0, 12)}`);
 
     const blocker = data.first_blocker || data.error || data.reason;
     if (blocker) lines.push(`Blocker: ${blocker}`);
+
+    if (data.persist_warning === 'HISTORY_NOT_SAVED') {
+      lines.push('Warning: chat history was not saved — refresh may lose this turn.');
+    }
 
     const autopsy = data.autopsy;
     if (autopsy && passFail === 'FAIL') {

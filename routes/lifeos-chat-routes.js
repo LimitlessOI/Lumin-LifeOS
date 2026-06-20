@@ -105,7 +105,10 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
     try {
       const userId = await resolveRequestUserId(req);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      const messages = await lumin.getMessages(parseInt(req.params.id, 10), {
+      const threadId = parseInt(req.params.id, 10);
+      const thread = await lumin.getThread(threadId, userId);
+      if (!thread) return res.status(404).json({ ok: false, error: 'Thread not found' });
+      const messages = await lumin.getMessages(threadId, {
         limit: parseInt(req.query.limit || '50', 10),
         before: req.query.before ? parseInt(req.query.before, 10) : null,
       });
@@ -168,8 +171,11 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   //   data: {"done":true,"user_message":{...},"reply":{...}}   — final
   //   data: {"error":"..."}        — on failure
   router.post('/threads/:id/messages/stream', requireChatAuth, async (req, res) => {
-    const userId = await resolveUserId(req.body?.user || 'adam').catch(() => null);
+    const userId = await resolveRequestUserId(req);
     if (!userId) { res.status(404).json({ ok: false, error: 'User not found' }); return; }
+    const threadId = parseInt(req.params.id, 10);
+    const thread = await lumin.getThread(threadId, userId);
+    if (!thread) { res.status(404).json({ ok: false, error: 'Thread not found' }); return; }
     const message = (req.body?.message || '').trim();
     if (!message) { res.status(400).json({ ok: false, error: 'message required' }); return; }
 
@@ -185,7 +191,7 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
 
     try {
       const result = await lumin.chat(
-        parseInt(req.params.id, 10),
+        threadId,
         userId,
         message,
         { contentType: req.body?.content_type || 'text' },

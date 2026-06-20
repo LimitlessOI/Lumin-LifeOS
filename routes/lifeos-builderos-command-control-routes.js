@@ -28,8 +28,10 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
 
   const EXECUTE_ALLOWED_ROLES = new Set(['founder_admin', 'operator', 'admin']);
 
-  async function persistConversationToDb(req, userMessage, reply) {
-    if (!luminPersist) return;
+  async function persistFounderTurn(req, userMessage, replyText) {
+    const reply = String(replyText || '').trim();
+    if (!reply) return null;
+    if (!luminPersist) return 'HISTORY_NOT_SAVED';
     try {
       let userId = null;
       const sub = req.lifeosUser?.sub;
@@ -42,18 +44,27 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
           : (req.lifeosUser?.handle || 'adam');
         userId = await resolveLifeOSUserId(pool, handle);
       }
-      if (!userId) return;
+      if (!userId) return 'HISTORY_NOT_SAVED';
       const thread = await luminPersist.getOrCreateDefaultThread(userId);
       await luminPersist.recordExchange(thread.id, userId, userMessage, reply);
+      return null;
     } catch {
-      // non-blocking — conversation still returns even if DB write fails
+      return 'HISTORY_NOT_SAVED';
     }
   }
 
-  function persistFounderTurn(req, userMessage, replyText) {
-    const reply = String(replyText || '').trim();
-    if (!reply) return;
-    persistConversationToDb(req, userMessage, reply);
+  function wrapBridgeResultAsTruth(result, task) {
+    const hasCommit = result.committed === true || Boolean(result.sha || result.commit_sha);
+    return enforceExecutionTruth({
+      ok: result.pass_fail === 'PASS' || result.ok === true,
+      committed: hasCommit,
+      target_file: result.target_file || result.changed_files?.[0] || null,
+      sha: result.sha || result.commit_sha || null,
+      first_blocker: result.first_blocker || result.error || result.reason || null,
+      execution_path: 'terminal_bridge',
+      task_meta: { output_bytes: 0 },
+      ...result,
+    }, { action: 'execute', task });
   }
 
   async function normalizeInputText(rawText) {
@@ -911,7 +922,7 @@ HOW TO RESPOND:
         };
         const plainEnglish = await translateToPlainEnglish(cleanedInput, displayResult);
         const displayReply = plainEnglish || displayResult.human_summary;
-        persistFounderTurn(req, cleanedInput, displayReply);
+        const persistWarning = await persistFounderTurn(req, cleanedInput, displayReply);
         return res.status(200).json({
           ok: true,
           interface: 'LifeOS Founder Interface',
@@ -934,6 +945,7 @@ HOW TO RESPOND:
           auth_mode: req.auth_mode || 'unknown',
           user_role: req.lifeosUser?.role || null,
           intake_normalized: false,
+          ...(persistWarning ? { persist_warning: persistWarning } : {}),
         });
       }
 
@@ -946,14 +958,31 @@ HOW TO RESPOND:
         if (operatorKey) {
           const builderResult = await routeToBuilder(cleanedInput, operatorKey);
           const buildReply = formatExecutionTruthReply(builderResult);
-          persistFounderTurn(req, cleanedInput, buildReply);
+          const persistWarning = await persistFounderTurn(req, cleanedInput, buildReply);
           return res.status(200).json({
             interface: 'LifeOS Founder Interface',
             action: 'build',
             ...builderResult,
-            human_summary: builderResult.human_summary,
+            human_summary: buildReply,
+            ...(persistWarning ? { persist_warning: persistWarning } : {}),
           });
         }
+        const missingKeyTruth = enforceExecutionTruth({
+          ok: false,
+          committed: false,
+          failure_code: 'BUILDER_KEY_MISSING',
+          first_blocker: 'Build request requires operator command key — cannot dispatch to builder.',
+          execution_path: 'builder_task_execute',
+        }, { action: 'build', task: cleanedInput });
+        const missingKeyReply = formatExecutionTruthReply(missingKeyTruth);
+        const persistWarning = await persistFounderTurn(req, cleanedInput, missingKeyReply);
+        return res.status(503).json({
+          interface: 'LifeOS Founder Interface',
+          action: 'build',
+          ...missingKeyTruth,
+          human_summary: missingKeyReply,
+          ...(persistWarning ? { persist_warning: persistWarning } : {}),
+        });
       }
 
       // Explicit execute ("execute it", action=execute) → terminal bridge, not conversation theater
@@ -965,20 +994,9 @@ HOW TO RESPOND:
           missionId,
           force,
         });
-        const structuredSummary = formatExecutionSummary({
-          pass_fail: result.pass_fail,
-          action: 'execute',
-          command_truth: result.command_truth || result.command_executed || 'EXECUTE_ATTEMPTED',
-          sha: result.sha || result.commit_sha || null,
-          first_blocker: result.first_blocker || result.error || null,
-          execution_path: 'terminal_bridge',
-          human_summary: result.human_summary || null,
-        });
-        const plainEnglish = result.pass_fail === 'PASS'
-          ? await translateToPlainEnglish(cleanedInput, result)
-          : null;
-        const executeReply = structuredSummary || plainEnglish || result.human_summary;
-        persistFounderTurn(req, cleanedInput, executeReply);
+        const truth = wrapBridgeResultAsTruth(result, cleanedInput);
+        const executeReply = formatExecutionTruthReply(truth);
+        const persistWarning = await persistFounderTurn(req, cleanedInput, executeReply);
         return res.status(200).json({
           interface: 'LifeOS Founder Interface',
           action: 'execute',
@@ -991,7 +1009,9 @@ HOW TO RESPOND:
           execution_path: 'terminal_bridge',
           intake_normalized: intakeNormalized,
           ...result,
+          ...truth,
           human_summary: executeReply,
+          ...(persistWarning ? { persist_warning: persistWarning } : {}),
         });
       }
 
@@ -999,16 +1019,17 @@ HOW TO RESPOND:
       if (!explicitExecute && !isBuildRequest(cleanedInput)) {
       const luminReply = await luminConverse(cleanedInput, getForwardedOperatorKey(req) || process.env.COMMAND_CENTER_KEY);
       if (luminReply) {
-        persistFounderTurn(req, cleanedInput, luminReply);
+        const persistWarning = await persistFounderTurn(req, cleanedInput, luminReply);
         return res.status(200).json({
           ok: true,
           interface: 'LifeOS Founder Interface',
           action: 'conversation',
           command_truth: 'NO_COMMAND_RAN',
-          pass_fail: 'PASS',
+          pass_fail: 'NO_COMMAND_RAN',
           human_summary: luminReply,
           auth_mode: req.auth_mode || 'unknown',
           intake_normalized: intakeNormalized,
+          ...(persistWarning ? { persist_warning: persistWarning } : {}),
         });
       }
       }
@@ -1043,20 +1064,9 @@ HOW TO RESPOND:
         missionId,
         force,
       });
-      const structuredSummary = formatExecutionSummary({
-        pass_fail: result.pass_fail,
-        action: 'execute',
-        command_truth: result.command_truth || result.command_executed || 'EXECUTE_ATTEMPTED',
-        sha: result.sha || result.commit_sha || null,
-        first_blocker: result.first_blocker || result.error || null,
-        execution_path: 'terminal_bridge',
-        human_summary: result.human_summary || null,
-      });
-      const plainEnglish = result.pass_fail === 'PASS'
-        ? await translateToPlainEnglish(cleanedInput, result)
-        : null;
-      const terminalReply = structuredSummary || plainEnglish || result.human_summary;
-      persistFounderTurn(req, cleanedInput, terminalReply);
+      const truth = wrapBridgeResultAsTruth(result, cleanedInput);
+      const terminalReply = formatExecutionTruthReply(truth);
+      const persistWarning = await persistFounderTurn(req, cleanedInput, terminalReply);
       return res.status(200).json({
         interface: 'LifeOS Founder Interface',
         action: 'execute',
@@ -1069,7 +1079,9 @@ HOW TO RESPOND:
         execution_path: 'terminal_bridge',
         intake_normalized: intakeNormalized,
         ...result,
+        ...truth,
         human_summary: terminalReply,
+        ...(persistWarning ? { persist_warning: persistWarning } : {}),
       });
     } catch (error) {
       next(error);

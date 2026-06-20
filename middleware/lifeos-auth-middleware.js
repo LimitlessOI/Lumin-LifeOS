@@ -122,7 +122,12 @@ export function createRequireLifeOSUserOrKey(requireKey) {
     }
     if (typeof requireKey === 'function') {
       return requireKey(req, res, () => {
-        req.auth_mode = req.auth_mode || 'command_key';
+        req.auth_mode = 'command_key_fallback';
+        req.lifeosUser = req.lifeosUser || {
+          sub: 'emergency-key',
+          handle: 'adam',
+          role: 'founder_admin',
+        };
         next();
       });
     }

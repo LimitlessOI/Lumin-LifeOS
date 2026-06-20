@@ -3,6 +3,12 @@
 
 ---
 
+## [SESSION] 2026-06-20 — Comms enforcement audit (full stack)
+
+Full audit of founder-interface / builder / chat / truth-gate stack. Fixed: builder `/execute` now returns commit SHA (unblocks build PASS); terminal-bridge paths run through `enforceExecutionTruth`; conversation no longer shows ✅ PASS; chat thread IDOR on message read + stream auth; command-key fallback sets consistent `lifeosUser`; `persist_warning` when DB write fails; overlay line-count stub detection; dashboard login returns to same page. Manifest synced with comms files. Deploy pending.
+
+---
+
 ## [SESSION] 2026-06-20 — Execution-truth hardening + revert poison routes
 
 Adam confirmed chat history survives hard refresh (comms proof UX OK on deploy `201fe9bd8d`). System COMMS PROOF build (`597324ed45`) replaced `routes/lifeos-builderos-command-control-routes.js` with browser drawer JS — Railway healthcheck failed; active deploy stayed on prior SHA. **Shipped:** revert routes file; `lifeos-execution-truth.js` adds ROUTE_STUB_REWRITE, SERVER_FILE_MASS_SHRINK, SCOPE_INCOMPLETE, COMMIT_NO_SHA gates; builder pre-commit uses same detector; `tests/lifeos-execution-truth.test.js`. **Next:** deploy revert + enforcement; system must FAIL (not PASS) on same class of mistake.
