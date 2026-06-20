@@ -496,8 +496,11 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
       }
 
       const inferredDisplayScope = summarizeDisplayRequest(originalText);
+      const executeIntent = isLikelyExecuteIntent(originalText);
       const shouldDisplayOnly = action === 'display'
-        || (action === 'auto' && /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt)\b/i.test(originalText));
+        || (action === 'auto'
+          && !executeIntent
+          && /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt)\b/i.test(originalText));
       const normalizedText = shouldDisplayOnly ? originalText : normalizeFounderExecuteIntent(originalText);
       const intakeNormalized = normalizedText !== originalText;
 
