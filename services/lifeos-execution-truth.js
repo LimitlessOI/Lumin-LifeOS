@@ -138,9 +138,23 @@ export function enforceExecutionTruth(raw, ctx = {}) {
   let failure_code = raw.failure_code || null;
 
   if (!apiOk && !committed) {
-    failure_code = failure_code || 'COMMAND_FAILED';
+    const builderRan = raw.execution_path === 'builder_task_execute'
+      || (raw.task_meta?.output_bytes > 0)
+      || Boolean(raw.exec_meta);
+    if (builderRan) {
+      command_truth = 'BUILD_ATTEMPTED';
+      receipt_truth = 'COMMIT_BLOCKED';
+    }
+    const blockerText = String(first_blocker || raw.exec_meta?.error || '');
+    if (/too short|validation|syntax|refusing to commit|stub|layer violation|pre-commit|governance/i.test(blockerText)) {
+      failure_code = failure_code || 'VALIDATION_REJECTED';
+    } else {
+      failure_code = failure_code || 'COMMAND_FAILED';
+    }
     first_blocker = first_blocker || 'Command did not complete successfully.';
-    lesson = lesson || 'The system returned failure or no commit — nothing shipped.';
+    lesson = lesson || (builderRan
+      ? 'Builder ran but commit was blocked — nothing shipped to git or deploy.'
+      : 'The system returned failure or no commit — nothing shipped.');
     fix = fix || 'Read the autopsy below and run Fix step 1.';
   } else if (apiOk && !committed) {
     failure_code = failure_code || 'OK_WITHOUT_COMMIT';
@@ -307,8 +321,8 @@ export function buildExecutionAutopsy({
   if (failure_code === 'SCOPE_INCOMPLETE') {
     what_happened.push('Task named multiple files but builder only committed one — partial delivery is FAIL.');
   }
-  if (failure_code === 'COMMIT_NO_SHA') {
-    what_happened.push('Git commit was claimed without returning a SHA — cannot verify what landed on main or deploy.');
+  if (failure_code === 'VALIDATION_REJECTED') {
+    what_happened.push('Pre-commit validation refused the builder output before git commit — live files were not corrupted.');
   }
 
   const lessons = [];

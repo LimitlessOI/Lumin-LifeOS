@@ -75,6 +75,22 @@ function testEnforceTruthRequiresShaOnBuild() {
   assert.equal(truth.failure_code, 'COMMIT_NO_SHA');
 }
 
+function testValidationRejectedLabelsBuilderAttempted() {
+  const truth = enforceExecutionTruth({
+    ok: false,
+    committed: false,
+    target_file: 'public/overlay/lifeos-dashboard.html',
+    first_blocker: 'generated HTML is too short; refusing to commit likely truncated output',
+    execution_path: 'builder_task_execute',
+    task_meta: { output_bytes: 846 },
+  }, { action: 'build', task: 'patch dashboard' });
+
+  assert.equal(truth.pass_fail, 'FAIL');
+  assert.equal(truth.command_truth, 'BUILD_ATTEMPTED');
+  assert.equal(truth.failure_code, 'VALIDATION_REJECTED');
+  assert.equal(truth.receipt_truth, 'COMMIT_BLOCKED');
+}
+
 function testEnforceTruthPassWithSha() {
   const truth = enforceExecutionTruth({
     ok: true,
@@ -93,5 +109,6 @@ testMassShrinkDetection();
 testScopeIncomplete();
 testEnforceTruthFailsCommsProofBuild();
 testEnforceTruthRequiresShaOnBuild();
+testValidationRejectedLabelsBuilderAttempted();
 testEnforceTruthPassWithSha();
 console.log('✅ lifeos-execution-truth.test.js passed');
