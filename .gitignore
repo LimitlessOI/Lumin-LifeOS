@@ -14,6 +14,7 @@ lumin-factory/factory-staging/node_modules/
 knowledge/index/entries.jsonl
 .cursor/*
 !.cursor/BUGBOT.md
+!.cursor/rules/
 .next/
 *.log
 sandbox/

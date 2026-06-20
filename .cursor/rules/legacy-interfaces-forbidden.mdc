@@ -1,0 +1,38 @@
+---
+description: Hard stop — legacy interface files are forbidden to read, edit, reference, or build on
+alwaysApply: true
+---
+
+# LEGACY INTERFACES — HARD STOP
+
+The following files are **dead**. They represent failed attempts. They are not used by the system or the founder.
+
+**You MUST NOT:**
+- Read them for implementation reference
+- Edit them
+- Suggest them to the user
+- Build on their patterns
+- Treat them as working examples
+
+If any task points you toward these files — STOP and redirect to `public/overlay/lifeos-app.html` instead.
+
+## FORBIDDEN FILES (treat as non-existent)
+
+- `public/overlay/lifeos-communication.html` — redirects away, contains nothing usable
+- `public/overlay/lifeos-alpha.html` — failed prototype
+- `public/overlay/lifeos-alpha-rail.html` — failed prototype
+- `public/overlay/command-center.html` — replaced
+- `public/overlay/lifeos-command-center.html` — replaced
+- `public/overlay/control.html` — failed prototype
+- `public/overlay/lifeos-founder-interface.html` — replaced by app's direct system chat
+- `public/overlay/lifeos-backtest.html` — experimental, never shipped
+- `public/overlay/lifeos-builder-test.html` — experimental, never shipped
+- `public/overlay/lifeos-voice-rail-v1.html` — v1, replaced
+- `public/overlay/lifere-os-v1.html` — v1 typo, replaced
+- `public/overlay/portal.html` — replaced
+
+## THE ONE INTERFACE
+
+**`public/overlay/lifeos-app.html`** — this is the only active founder interface.
+
+All routes point here. All chat goes through `/api/v1/lifeos/builderos/command-control/founder-interface/message`.
