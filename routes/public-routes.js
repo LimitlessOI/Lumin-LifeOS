@@ -60,10 +60,9 @@ export function registerPublicRoutes(app, {
       }
     }
     const key = String(req.headers['x-command-key'] || '').trim();
-    const fallbackAllowed = process.env.NODE_ENV !== 'production'
-      || String(process.env.FOUNDER_INTERFACE_ALLOW_KEY_FALLBACK || '').toLowerCase() === 'true';
+    // x-command-key (COMMAND_CENTER_KEY) is the master founder key — always sufficient
     const expected = String(COMMAND_CENTER_KEY || '').trim();
-    return Boolean(fallbackAllowed && key && expected && key === expected);
+    return Boolean(key && expected && key === expected);
   }
 
   // ==================== COMMAND CENTER ROUTES (FIRST - Before all middleware) ====================

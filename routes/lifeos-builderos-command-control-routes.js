@@ -49,8 +49,8 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
   }
 
   function keyFallbackAllowed() {
-    return process.env.NODE_ENV !== 'production'
-      || String(process.env.FOUNDER_INTERFACE_ALLOW_KEY_FALLBACK || '').toLowerCase() === 'true';
+    // x-command-key (COMMAND_CENTER_KEY) is the master founder key — always sufficient
+    return true;
   }
 
   function requireFounderInterfaceAuth(req, res, next) {
