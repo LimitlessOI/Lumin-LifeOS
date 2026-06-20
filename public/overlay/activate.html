@@ -162,6 +162,12 @@
       <p>Command Center Activation</p>
     </div>
 
+    <a href="/overlay/lifeos-login.html" class="btn" style="display:block;text-align:center;text-decoration:none;margin-bottom:16px;">
+      Log in with your account
+    </a>
+
+    <div style="text-align:center;color:#6b7280;font-size:13px;margin-bottom:16px;">— or use a key directly —</div>
+
     <form id="activationForm">
       <div class="form-group">
         <label for="commandKey">Command Center Key</label>
@@ -176,7 +182,7 @@
       </div>
 
       <button type="submit" class="btn" id="activateBtn">
-        Activate Command Center
+        Activate with Key
       </button>
 
       <div class="error" id="errorMsg"></div>
@@ -184,8 +190,7 @@
     </form>
 
     <div class="info">
-      <strong>Security Note:</strong> Your key is stored securely in your browser session. 
-      You'll need to re-enter it if you clear your browser data or use a different device.
+      <strong>Tip:</strong> Log in with your account above — no key entry needed, ever.
     </div>
   </div>
 
@@ -195,15 +200,16 @@
     const successMsg = document.getElementById('successMsg');
     const activateBtn = document.getElementById('activateBtn');
 
-    // Check if already activated
+    // If already activated, go directly to communication page
     const savedKey =
       localStorage.getItem('cc_key') ||
       sessionStorage.getItem('lifeos_cmd_key') ||
       localStorage.getItem('lifeos_cmd_key') ||
       localStorage.getItem('COMMAND_CENTER_KEY') ||
       localStorage.getItem('LIFEOS_KEY');
-    if (savedKey) {
-      window.location.href = '/lifeos-command-center';
+    const savedToken = localStorage.getItem('lifeos_access_token');
+    if (savedKey || savedToken) {
+      window.location.href = '/lifeos-communication';
       return;
     }
 
@@ -254,12 +260,11 @@
         localStorage.setItem('COMMAND_CENTER_KEY', key);
         localStorage.setItem('LIFEOS_KEY', key);
 
-        // Show success and redirect to command center
-        showSuccess('Activation successful! Redirecting to Command Center...');
-        
+        showSuccess('Activated! Redirecting...');
+        const next = new URLSearchParams(window.location.search).get('next') || '/lifeos-communication';
         setTimeout(() => {
-          window.location.href = '/lifeos-command-center';
-        }, 1000);
+          window.location.href = next;
+        }, 800);
 
       } catch (error) {
         console.error('Activation error:', error);
