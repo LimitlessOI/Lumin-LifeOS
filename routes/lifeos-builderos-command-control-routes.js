@@ -334,6 +334,11 @@ HOW TO RESPOND:
           execution_receipt: receipt,
           gap_recommendation: receipt.gap_recommendation,
           execution_path: 'builder_task_execute',
+          task_meta: {
+            cache_hit: taskJson.cache_hit === true,
+            output_bytes: 0,
+            error: taskJson.error || null,
+          },
         }, { action: 'build', task });
       }
       const execRes = await fetch(`${base}/api/v1/lifeos/builder/execute`, {
@@ -359,6 +364,12 @@ HOW TO RESPOND:
         execution_receipt: receipt,
         gap_recommendation: execJson.gap_recommendation || receipt.gap_recommendation || null,
         execution_path: 'builder_task_execute',
+        task_meta: {
+          cache_hit: taskJson.cache_hit === true,
+          output_bytes: typeof taskJson.output === 'string' ? taskJson.output.length : 0,
+          error: taskJson.error || null,
+        },
+        exec_meta: execJson,
       }, { action: 'build', task });
     } catch (err) {
       const receipt = buildBuildFailureReceipt(task, {}, { error: err.message });
