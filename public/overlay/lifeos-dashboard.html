@@ -880,6 +880,7 @@ gap: 16px;
 <div id="lifeos-ai-rail-root"></div>
 <!-- Voice module must be non-module (IIFE) -->
 <script src="/shared/lifeos-voice-chat.js?v=20260620b"></script>
+<script src="/shared/lifeos-system-reply.js?v=20260620"></script>
 <script src="../shared/lifeos-dashboard-ai-rail.js"></script>
 <script type="module">
 const HDR = () => {
@@ -1238,8 +1239,10 @@ body: JSON.stringify({ text, action: 'auto', stage: 'system', conversational_mod
 const d = await r.json();
 typingIndicator.classList.remove('show');
 if (r.ok) {
-const reply = d.human_summary || d.stdout || d.response || d.reply || (d.pass_fail === 'PASS' ? 'Done.' : `System: ${d.reason || d.pass_fail || 'processed'}`);
-addMessage('assistant', reply);
+const reply = (window.LifeOSSystemReply && window.LifeOSSystemReply.format)
+  ? window.LifeOSSystemReply.format(d)
+  : (d.human_summary || d.stdout || d.response || d.reply || (d.pass_fail === 'PASS' ? 'Done.' : `System: ${d.reason || d.pass_fail || 'processed'}`));
+addMessage(d.pass_fail === 'FAIL' || d.ok === false ? 'ambient' : 'assistant', reply);
 if (dashboardVoice && typeof dashboardVoice.speak === 'function') dashboardVoice.speak(reply);
 } else if (r.status === 401) {
 const loginUrl = (d && d.redirect) ? d.redirect : '/overlay/lifeos-login.html?next=/overlay/lifeos-app.html';

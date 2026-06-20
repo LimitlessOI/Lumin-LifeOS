@@ -1338,6 +1338,7 @@
   <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
   <script src="/overlay/lifeos-voice.js"></script>
   <script src="/overlay/lifeos-ambient-sense.js"></script>
+  <script src="/shared/lifeos-system-reply.js?v=20260620"></script>
 </head>
 <body>
 
@@ -2629,13 +2630,10 @@ async function directSystemHeaders() {
 }
 
 function formatDirectSystemReply(data) {
-  // human_summary is now the plain-English translation — show it directly
-  const summary = data.human_summary || data.reason || data.error || 'No response from system.';
-  // Append mission ID only if present, for traceability
-  if (data.mission_id) {
-    return `${summary}\n\n(Mission: ${data.mission_id})`;
+  if (window.LifeOSSystemReply && typeof window.LifeOSSystemReply.format === 'function') {
+    return window.LifeOSSystemReply.format(data);
   }
-  return summary;
+  return data.human_summary || data.reason || data.error || 'No response from system.';
 }
 
 function luminHandleKey(e) {

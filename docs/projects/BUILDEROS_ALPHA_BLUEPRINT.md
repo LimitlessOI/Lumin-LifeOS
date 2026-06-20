@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-20 — Founder-interface Lumin conversations persist to `lumin_messages` via `recordExchange` on default thread
+**Last Updated:** 2026-06-20 — Founder-interface build/execute replies now return structured PASS/FAIL with blocker, lesson, fix (no AI truncation on failures); explicit “execute it” routes to terminal bridge; builder uses useCache:false
 
 ---
 
@@ -562,6 +562,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — communication layer: structured execution receipts (PASS/FAIL, blocker, lesson, fix, gap_recommendation); build route forces `useCache:false` + target_file inference; failures skip AI plain-English rewrite; explicit “execute it” / `action=execute` routes to terminal bridge before conversation; Lumin converse prompt stops claiming code shipped. **`public/shared/lifeos-system-reply.js`** — shared client formatter for shell + dashboard. | Founder requires honest control-surface comms: when build fails, say why + lesson + fix; when he says execute, run execute — not vague truncated AI prose. | ✅ `node --check`; pending deploy + founder retest with dockable-chat build prompt | 
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — `luminConverse` exchanges now persist to default `lumin_threads`/`lumin_messages` via `recordExchange()` (JWT user or command-key → adam account); non-blocking DB write after successful conversation reply. | Founder dashboard chat must survive refresh/re-login; conversation memory belongs in DB not only `memories.json`. | ✅ `node --check`; pending deploy verification |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — added Founder Interface auth/role middleware path for `POST /founder-interface/message` and `POST /terminal-bridge/intake`; execute actions now require authenticated roles (`founder_admin`/`operator`) while preserving command-key fallback for dev/emergency. Added direct terminal intake route contract for governed founder text intake from UI. | BuilderOS command-control needed to be callable by authenticated founder accounts in production, not only by static command key, and must enforce execution authority by role before terminal bridge execution. | ✅ local auth/route tests; pending deploy verification |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — `AUTH_REQUIRED` response redirect target now points to canonical login handoff `next=/lifeos?direct_system=1` instead of legacy `/lifeos-founder-interface`. | Consolidated one-surface flow requires API fail-closed redirect hints to match canonical direct-system entrypoint and avoid sending users toward retired legacy path labels. | ✅ local route auth response check; pending deploy verification |

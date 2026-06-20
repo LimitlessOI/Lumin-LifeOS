@@ -107,10 +107,71 @@ Rules:
       const text = typeof response === 'string'
         ? response
         : response?.content || response?.text || response?.message || null;
-      return text ? String(text).trim().slice(0, 600) : null;
+      return text ? String(text).trim().slice(0, 1200) : null;
     } catch {
       return null;
     }
+  }
+
+  function isExplicitExecuteCommand(text = '') {
+    const t = String(text || '').trim();
+    if (!t) return false;
+    if (/^\s*(execute|run|go|ship)\s*[.!]?\s*$/i.test(t)) return true;
+    return /\b(execute it|do it now|run it now|ship it|go ahead|make it happen|just do it|execute that|run that|do that now|get it done|execute this)\b/i.test(t);
+  }
+
+  function inferTargetFileFromTask(task = '') {
+    const m = String(task).match(/(?:public\/overlay\/|public\/shared\/|routes\/|services\/)[\w./-]+\.(?:html|js|css|md|json)/i);
+    return m ? m[0] : null;
+  }
+
+  function buildBuildFailureReceipt(task, taskJson, execJson) {
+    const blocker = execJson?.error || taskJson?.error || 'Builder failed with no error detail';
+    let lesson = 'The build path ran but did not produce a committable change.';
+    let fix = 'Retry with a smaller scope: name the exact file and the one change you want.';
+
+    if (/too short|truncated/i.test(blocker)) {
+      lesson = 'Builder output was too short for the target file — commit was correctly refused to avoid corrupting live UI.';
+      fix = 'Scope to a minimal patch (one CSS block, one function, one label) instead of rewriting a large HTML file.';
+    } else if (taskJson?.cache_hit) {
+      lesson = 'Builder returned cached stale output instead of fresh code for this task.';
+      fix = 'System now disables cache on build route; retry the same request.';
+    } else if (/blueprint|gate|forbidden|SNT/i.test(blocker)) {
+      lesson = 'A governance gate blocked the change before commit.';
+      fix = 'Ask for status of the blocker, or narrow scope to a GAP-FILL patch with explicit target_file.';
+    } else if (!taskJson?.target_file && inferTargetFileFromTask(task)) {
+      lesson = 'Large overlay files need explicit patch scope — whole-file regeneration usually fails validation.';
+      fix = `Request a bounded change to ${inferTargetFileFromTask(task)} only (specific element or CSS class).`;
+    }
+
+    return {
+      pass_fail: 'FAIL',
+      blocker,
+      lesson,
+      fix,
+      gap_recommendation: execJson?.gap_recommendation || null,
+    };
+  }
+
+  function formatExecutionSummary({ pass_fail, action, command_truth, sha, first_blocker, execution_receipt, human_summary, execution_path }) {
+    const lines = [];
+    const icon = pass_fail === 'PASS' ? '✅' : pass_fail === 'FAIL' ? '❌' : 'ℹ️';
+    lines.push(`${icon} ${pass_fail || 'UNKNOWN'} · ${action || 'execute'}`);
+    if (command_truth) lines.push(`Command: ${command_truth}`);
+    if (execution_path) lines.push(`Path: ${execution_path}`);
+    if (sha) lines.push(`Commit: ${String(sha).slice(0, 12)}`);
+    const blocker = first_blocker || execution_receipt?.blocker;
+    if (blocker) lines.push(`Blocker: ${blocker}`);
+    if (execution_receipt?.lesson) lines.push(`Lesson: ${execution_receipt.lesson}`);
+    if (execution_receipt?.fix) lines.push(`Fix: ${execution_receipt.fix}`);
+    const gap = execution_receipt?.gap_recommendation;
+    if (gap?.next_platform_fix) lines.push(`Next: ${gap.next_platform_fix}`);
+    const note = String(human_summary || '').trim();
+    if (note) {
+      lines.push('');
+      lines.push(note);
+    }
+    return lines.join('\n');
   }
 
   function isBuildRequest(text) {
@@ -212,7 +273,8 @@ HOW TO RESPOND:
 - Draw on everything above naturally — don't dump fields, just talk like you know this person
 - No preamble. No throat-clearing. Start with the answer.
 - Be honest about what you know vs. don't know
-- If Adam asks you to take a real system action, do it and show proof`;
+- If Adam asks you to take a real system action, tell him to say it as a build/execute command — you cannot commit code yourself; the system will return PASS/FAIL with blocker, lesson, and fix
+- Never claim a UI change shipped unless the system returned COMMITTED with a commit SHA`;
 
       const response = await callCouncilMember('gemini', `${systemPrompt}\n\nAdam: ${userMessage}\n\nLumin:`, {
         maxOutputTokens: 2000,
@@ -243,36 +305,67 @@ HOW TO RESPOND:
       ? process.env.PUBLIC_BASE_URL.replace(/\/$/, '')
       : `http://localhost:${process.env.PORT || 3000}`;
     const headers = { 'Content-Type': 'application/json', 'x-command-key': commandKey };
+    const targetFile = inferTargetFileFromTask(task);
     try {
       const taskRes = await fetch(`${base}/api/v1/lifeos/builder/task`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ task, mode: 'code' }),
+        body: JSON.stringify({
+          task,
+          mode: 'code',
+          useCache: false,
+          target_file: targetFile,
+        }),
       });
       const taskJson = await taskRes.json();
       if (!taskJson.ok || !taskJson.output) {
-        return { ok: false, human_summary: null, error: taskJson.error || 'Builder task returned no output.' };
+        const receipt = buildBuildFailureReceipt(task, taskJson, { error: taskJson.error || 'Builder task returned no output.' });
+        return {
+          ok: false,
+          committed: false,
+          sha: null,
+          pass_fail: 'FAIL',
+          first_blocker: receipt.blocker,
+          execution_receipt: receipt,
+          gap_recommendation: receipt.gap_recommendation,
+          taskMeta: taskJson,
+        };
       }
       const execRes = await fetch(`${base}/api/v1/lifeos/builder/execute`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
           output: taskJson.output,
-          target_file: taskJson.target_file || taskJson.placement?.target_file || null,
+          target_file: taskJson.target_file || taskJson.placement?.target_file || targetFile,
           commit_message: `[system-build] ${task.slice(0, 80)}`,
         }),
       });
       const execJson = await execRes.json();
+      const ok = execJson.ok === true;
+      const receipt = ok
+        ? { pass_fail: 'PASS', blocker: null, lesson: null, fix: null, gap_recommendation: null }
+        : buildBuildFailureReceipt(task, taskJson, execJson);
       return {
-        ok: execJson.ok === true,
+        ok,
         committed: execJson.committed === true,
         sha: execJson.sha || null,
-        human_summary: null,
-        pass_fail: execJson.ok ? 'PASS' : 'FAIL',
-        first_blocker: execJson.error || null,
+        pass_fail: ok ? 'PASS' : 'FAIL',
+        first_blocker: receipt.blocker,
+        execution_receipt: receipt,
+        gap_recommendation: execJson.gap_recommendation || receipt.gap_recommendation || null,
+        taskMeta: taskJson,
       };
     } catch (err) {
-      return { ok: false, human_summary: null, error: err.message };
+      const receipt = buildBuildFailureReceipt(task, {}, { error: err.message });
+      return {
+        ok: false,
+        committed: false,
+        sha: null,
+        pass_fail: 'FAIL',
+        first_blocker: err.message,
+        execution_receipt: receipt,
+        gap_recommendation: null,
+      };
     }
   }
 
@@ -756,11 +849,14 @@ HOW TO RESPOND:
       const inputWasCleaned = cleanedInput !== originalText;
 
       const inferredDisplayScope = summarizeDisplayRequest(cleanedInput);
-      const executeIntent = isLikelyExecuteIntent(cleanedInput);
-      const shouldDisplayOnly = action === 'display'
+      const explicitExecute = action === 'execute' || isExplicitExecuteCommand(cleanedInput);
+      const executeIntent = isLikelyExecuteIntent(cleanedInput) || explicitExecute;
+      const shouldDisplayOnly = !explicitExecute && (
+        action === 'display'
         || (action === 'auto'
           && !executeIntent
-          && /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt)\b/i.test(cleanedInput));
+          && /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt)\b/i.test(cleanedInput))
+      );
       const normalizedText = shouldDisplayOnly ? cleanedInput : normalizeFounderExecuteIntent(cleanedInput);
       const intakeNormalized = inputWasCleaned || normalizedText !== cleanedInput;
 
@@ -825,37 +921,90 @@ HOW TO RESPOND:
       }
 
       // Route build/fix/change requests directly to the builder — same channel the system uses
-      if (isBuildRequest(cleanedInput)) {
+      if (!shouldDisplayOnly && isBuildRequest(cleanedInput)) {
         const operatorKey = getForwardedOperatorKey(req)
           || process.env.COMMAND_CENTER_KEY
           || process.env.LIFEOS_KEY
           || process.env.API_KEY;
         if (operatorKey) {
           const builderResult = await routeToBuilder(cleanedInput, operatorKey);
-          const plainEnglish = await translateToPlainEnglish(cleanedInput, {
-            pass_fail: builderResult.ok ? 'PASS' : 'FAIL',
-            first_blocker: builderResult.error || null,
+          const structuredSummary = formatExecutionSummary({
+            pass_fail: builderResult.pass_fail,
+            action: 'build',
+            command_truth: builderResult.committed ? 'COMMITTED' : 'BUILD_ATTEMPTED',
+            sha: builderResult.sha,
+            first_blocker: builderResult.first_blocker,
+            execution_receipt: builderResult.execution_receipt,
+            execution_path: 'builder_task_execute',
             human_summary: builderResult.ok
-              ? `Builder completed the task and committed the change.`
-              : `Builder could not complete the task: ${builderResult.error || 'unknown error'}`,
+              ? 'Change committed. Hard refresh the app to see it live after deploy completes.'
+              : null,
           });
-          return res.status(200).json({
+          let plainEnglish = null;
+          if (builderResult.ok) {
+            plainEnglish = await translateToPlainEnglish(cleanedInput, {
+              pass_fail: 'PASS',
+              first_blocker: null,
+              human_summary: 'Builder completed and committed the change.',
+            });
+          }
+          return res.status(builderResult.ok ? 200 : 200).json({
             ok: builderResult.ok,
             interface: 'LifeOS Founder Interface',
             action: 'build',
             command_truth: builderResult.committed ? 'COMMITTED' : 'BUILD_ATTEMPTED',
-            pass_fail: builderResult.ok ? 'PASS' : 'FAIL',
+            pass_fail: builderResult.pass_fail,
             sha: builderResult.sha || null,
-            first_blocker: builderResult.error || null,
-            human_summary: plainEnglish || (builderResult.ok ? 'Done — the change was made and deployed.' : `Could not complete: ${builderResult.error || 'builder error'}`),
+            first_blocker: builderResult.first_blocker || null,
+            execution_path: 'builder_task_execute',
+            execution_receipt: builderResult.execution_receipt || null,
+            gap_recommendation: builderResult.gap_recommendation || null,
+            human_summary: structuredSummary || plainEnglish || `Could not complete: ${builderResult.first_blocker || 'builder error'}`,
             auth_mode: req.auth_mode || 'unknown',
             intake_normalized: intakeNormalized,
           });
         }
       }
 
-      // Default: Lumin conversation — brainstorm, questions, counsel, information
-      // BuilderOS terminal bridge is last resort only for structured execution commands
+      // Explicit execute ("execute it", action=execute) → terminal bridge, not conversation theater
+      if (!shouldDisplayOnly && explicitExecute && !isBuildRequest(cleanedInput)) {
+        const result = await runTerminalBridgeIntake({
+          text: normalizedText || cleanedInput,
+          textFile: req.body?.text_file || null,
+          stage,
+          missionId,
+          force,
+        });
+        const structuredSummary = formatExecutionSummary({
+          pass_fail: result.pass_fail,
+          action: 'execute',
+          command_truth: result.command_truth || result.command_executed || 'EXECUTE_ATTEMPTED',
+          sha: result.sha || result.commit_sha || null,
+          first_blocker: result.first_blocker || result.error || null,
+          execution_path: 'terminal_bridge',
+          human_summary: result.human_summary || null,
+        });
+        const plainEnglish = result.pass_fail === 'PASS'
+          ? await translateToPlainEnglish(cleanedInput, result)
+          : null;
+        return res.status(200).json({
+          interface: 'LifeOS Founder Interface',
+          action: 'execute',
+          source_mode: sourceMode,
+          dictate_then_send: dictateThenSend,
+          conversational_mode: conversationalMode,
+          model_routing: modelRouting,
+          auth_mode: req.auth_mode || 'unknown',
+          user_role: req.lifeosUser?.role || null,
+          execution_path: 'terminal_bridge',
+          intake_normalized: intakeNormalized,
+          ...result,
+          human_summary: structuredSummary || plainEnglish || result.human_summary,
+        });
+      }
+
+      // Conversation — questions, counsel, brainstorm (not execute/build commands)
+      if (!explicitExecute && !isBuildRequest(cleanedInput)) {
       const luminReply = await luminConverse(cleanedInput, getForwardedOperatorKey(req) || process.env.COMMAND_CENTER_KEY);
       if (luminReply) {
         persistConversationToDb(req, cleanedInput, luminReply);
@@ -870,7 +1019,9 @@ HOW TO RESPOND:
           intake_normalized: intakeNormalized,
         });
       }
+      }
 
+      // Default execution path for structured build/change intents
       if (!['development', 'system'].includes(stage)) {
         return res.status(400).json({
           ok: false,
@@ -880,6 +1031,16 @@ HOW TO RESPOND:
           pass_fail: 'FAIL',
           reason: 'NO_COMMAND_RAN',
           error: 'stage must be development or system',
+          human_summary: formatExecutionSummary({
+            pass_fail: 'FAIL',
+            action: 'execute',
+            command_truth: 'NO_COMMAND_RAN',
+            first_blocker: 'stage must be development or system',
+            execution_receipt: {
+              lesson: 'Execute requests require stage=system or stage=development.',
+              fix: 'Resend with stage: system (default in dashboard chat).',
+            },
+          }),
         });
       }
 
@@ -890,7 +1051,18 @@ HOW TO RESPOND:
         missionId,
         force,
       });
-      const plainEnglish = await translateToPlainEnglish(cleanedInput, result);
+      const structuredSummary = formatExecutionSummary({
+        pass_fail: result.pass_fail,
+        action: 'execute',
+        command_truth: result.command_truth || result.command_executed || 'EXECUTE_ATTEMPTED',
+        sha: result.sha || result.commit_sha || null,
+        first_blocker: result.first_blocker || result.error || null,
+        execution_path: 'terminal_bridge',
+        human_summary: result.human_summary || null,
+      });
+      const plainEnglish = result.pass_fail === 'PASS'
+        ? await translateToPlainEnglish(cleanedInput, result)
+        : null;
       return res.status(200).json({
         interface: 'LifeOS Founder Interface',
         action: 'execute',
@@ -903,7 +1075,7 @@ HOW TO RESPOND:
         execution_path: 'terminal_bridge',
         intake_normalized: intakeNormalized,
         ...result,
-        human_summary: plainEnglish || result.human_summary,
+        human_summary: structuredSummary || plainEnglish || result.human_summary,
       });
     } catch (error) {
       next(error);
