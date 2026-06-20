@@ -42,7 +42,7 @@
       "updated_at": "2026-01-26T10:10:55.039Z"
     },
     {
-      "id": "mem_1781979456819_vvzpjowj1",
+      "id": "mem_1781979595178_11icq6ajn",
       "category": "facts",
       "content": {
         "title": "LifeOS / LimitlessOS Source of Truth (v1.0)",
@@ -54,11 +54,11 @@
       "confidence": 1,
       "source": {
         "conversation_id": null,
-        "timestamp": "2026-06-20T18:17:36.819Z",
+        "timestamp": "2026-06-20T18:19:55.178Z",
         "user_confirmed": true
       },
-      "created_at": "2026-06-20T18:17:36.819Z",
-      "updated_at": "2026-06-20T18:17:36.820Z"
+      "created_at": "2026-06-20T18:19:55.178Z",
+      "updated_at": "2026-06-20T18:19:55.179Z"
     },
     {
       "id": "mem_1781979248504_m8ktk3w73",
@@ -97,6 +97,25 @@
       },
       "created_at": "2026-06-20T18:18:54.170Z",
       "updated_at": "2026-06-20T18:18:54.170Z"
+    },
+    {
+      "id": "mem_1781979803471_vwzh9lpod",
+      "category": "facts",
+      "content": {
+        "title": "Wisdom Role + Conversation Preservation + Prediction Scoring — Founder Directive 2026-06-20",
+        "content": "Every conversation Lumin has with Adam must be fully preserved — not just logged. Preserved = full exchange, context at the time, predictions made, decisions confirmed, timestamp, topic tags.\n\nWisdom is a distinct role that studies accumulated data over time:\n- Tracks prediction accuracy (what Lumin predicted vs what actually happened)\n- Measures against REAL-WORLD outcomes — not verbal agreement but receipts, missions, revenue, product outcomes\n- Weights predictions over time (consistently wrong = lower confidence score)\n- Identifies drift when Adam's actual choices diverge from what the Twin predicted\n- Surfaces recurring patterns\n\nPrediction Scoring Model: every prediction must be labeled (Prediction: [content] | Confidence: high/medium/low), stored with a prediction ID, resolved when real outcome is known (correct/incorrect/partial), weighted over time.\n\nReality Measurement Rule: predictions measured against what actually happened — not what Adam said next. Verbal agreement does not resolve a prediction. Only observable evidence does.\n\nAlways-Present Context: Lumin must always carry mission-level goals, project-level intentions, detail-level context, and Adam's current state. Loaded upfront — not retrieved on demand. Lumin should feel like someone who was in the room for every prior conversation. Not like briefing a new assistant every time.",
+        "type": "lumin_doctrine_wisdom",
+        "last_updated": "2026-06-20"
+      },
+      "type": "ai_inferred",
+      "confidence": 1,
+      "source": {
+        "conversation_id": null,
+        "timestamp": "2026-06-20T18:23:23.471Z",
+        "user_confirmed": false
+      },
+      "created_at": "2026-06-20T18:23:23.472Z",
+      "updated_at": "2026-06-20T18:23:23.472Z"
     }
   ],
   "conversation_history": []
