@@ -305,26 +305,56 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
       };
     }
 
+    const normalizedTask = String(text || '').trim();
     const payload = {
-      task: String(text || '').trim(),
+      task: normalizedTask,
       target_file: String(targetFile || '').trim() || 'public/overlay/lifeos-app.html',
       platform_gap_fill: true,
       platform_gap_fill_reason: 'Founder direct feedback patch path for constrained UI/product tweaks requiring immediate governed execution without full mission packaging.',
     };
 
-    const resp = await fetch(`${baseUrl}/api/v1/lifeos/builder/build`, {
+    const runBuild = async (buildPayload) => fetch(`${baseUrl}/api/v1/lifeos/builder/build`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         'x-command-key': commandKey,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(buildPayload),
     });
+
+    let resp = await runBuild(payload);
     let body = null;
     try {
       body = await resp.json();
     } catch {
       body = null;
+    }
+
+    const truncationBlocked = String(body?.error || '').toLowerCase().includes('too short')
+      || String(body?.error || '').toLowerCase().includes('truncated');
+    if (!resp.ok || truncationBlocked) {
+      const retryPayload = {
+        ...payload,
+        task: [
+          '[PATCH MODE — DO NOT REWRITE FILE]',
+          `Target file: ${payload.target_file}`,
+          'Apply a minimal in-place patch only.',
+          'Preserve the full existing file content and structure.',
+          'Do not output a new skeleton HTML/JS document.',
+          'Requested change:',
+          normalizedTask,
+        ].join('\n'),
+      };
+      const retryResp = await runBuild(retryPayload);
+      try {
+        const retryBody = await retryResp.json();
+        if (retryBody) {
+          body = retryBody;
+          resp = retryResp;
+        }
+      } catch {
+        // keep first response
+      }
     }
 
     const committed = body?.ok === true && body?.committed === true;
