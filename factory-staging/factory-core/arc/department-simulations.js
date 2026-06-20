@@ -181,12 +181,14 @@ function runChairForecast(missionFolder, founderText, queueEntry) {
   ]);
 }
 
-function runCfoResource(missionFolder, blueprint, queueEntry) {
+function runCfoResource(missionFolder, blueprint, queueEntry, baseline) {
   const missionId = path.basename(missionFolder);
   const reuse = (blueprint?.steps || []).filter((s) => s.status === 'complete').length;
   const total = (blueprint?.steps || []).length;
   const blocking = [];
-  if (!queueEntry) blocking.push('not_on_BP_PRIORITY — CFO cannot confirm priority fit');
+  const directTerminalIntake = baseline?.direct_terminal_intake === true
+    && baseline?.priority_fit === 'Direct founder interface explicit operator request';
+  if (!queueEntry && !directTerminalIntake) blocking.push('not_on_BP_PRIORITY — CFO cannot confirm priority fit');
 
   return attachMeasurementsToReceipt({
     schema: 'cfo_resource_simulation_v1',
@@ -196,8 +198,9 @@ function runCfoResource(missionFolder, blueprint, queueEntry) {
     simulated_by: 'factory-core/arc/department-simulations.js',
     roi_note: reuse > 0 ? 'EXTEND existing spine — sunk cost leveraged' : 'Greenfield — higher token/time cost',
     build_vs_buy: reuse > 0 ? 'REUSE repo assets' : 'BUILD',
-    opportunity_cost: queueEntry?.note || 'Per BP_PRIORITY ordering',
+    opportunity_cost: queueEntry?.note || (directTerminalIntake ? 'Explicit authenticated Founder Interface command' : 'Per BP_PRIORITY ordering'),
     priority_rank: queueEntry?.rank ?? null,
+    priority_fit_source: queueEntry ? 'BP_PRIORITY' : (directTerminalIntake ? 'direct_terminal_intake' : 'missing'),
     resource_burden: total > 10 ? 'medium' : 'low',
     constitutional_exemption_applied: false,
     fastest_responsible_path: reuse > 0 ? 'EXTEND existing spine' : 'greenfield build',
@@ -265,7 +268,7 @@ export function runDepartmentSimulations(missionFolder) {
 
   const snt = withSimulationTier(runSntIntentAttack(missionFolder, founderText, baseline, coverage), simulationTier);
   const chair = withSimulationTier(runChairForecast(missionFolder, founderText, queueEntry), simulationTier);
-  const cfo = withSimulationTier(runCfoResource(missionFolder, blueprint, queueEntry), simulationTier);
+  const cfo = withSimulationTier(runCfoResource(missionFolder, blueprint, queueEntry, baseline), simulationTier);
   const wisdom = withSimulationTier(runWisdomReview(missionFolder, founderText), simulationTier);
 
   writeJson(path.join(receiptsDir, 'SNT_INTENT_ATTACK_RECEIPT.json'), snt);

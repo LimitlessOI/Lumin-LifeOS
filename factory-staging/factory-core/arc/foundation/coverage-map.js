@@ -41,7 +41,7 @@ function levelFor(name, founderText, baseline, queueEntry) {
     constraints: has(/locked|rule|non-negotiable|constraint/i) || baseline?.constraints?.length,
     unacceptable_result: has(/unacceptable|never auto|must not/i) || baseline?.unacceptable_result,
     ownership: has(/authority|owner/i) || baseline?.ownership,
-    priority_fit: Boolean(queueEntry?.rank),
+    priority_fit: Boolean(queueEntry?.rank) || baseline?.direct_terminal_intake === true,
     behavior_change: has(/approve|staging|trust|see staged/i),
     tradeoffs: has(/tradeoff|vs\.|instead/i),
     alternatives: has(/alternative|option/i),
