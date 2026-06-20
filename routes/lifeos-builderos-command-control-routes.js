@@ -85,6 +85,48 @@ Rules:
     }
   }
 
+  function isBuildRequest(text) {
+    return /\b(fix|change|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(text);
+  }
+
+  async function routeToBuilder(task, commandKey) {
+    const base = process.env.PUBLIC_BASE_URL
+      ? process.env.PUBLIC_BASE_URL.replace(/\/$/, '')
+      : `http://localhost:${process.env.PORT || 3000}`;
+    const headers = { 'Content-Type': 'application/json', 'x-command-key': commandKey };
+    try {
+      const taskRes = await fetch(`${base}/api/v1/lifeos/builder/task`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ task, mode: 'code' }),
+      });
+      const taskJson = await taskRes.json();
+      if (!taskJson.ok || !taskJson.output) {
+        return { ok: false, human_summary: null, error: taskJson.error || 'Builder task returned no output.' };
+      }
+      const execRes = await fetch(`${base}/api/v1/lifeos/builder/execute`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          output: taskJson.output,
+          target_file: taskJson.target_file || taskJson.placement?.target_file || null,
+          commit_message: `[system-build] ${task.slice(0, 80)}`,
+        }),
+      });
+      const execJson = await execRes.json();
+      return {
+        ok: execJson.ok === true,
+        committed: execJson.committed === true,
+        sha: execJson.sha || null,
+        human_summary: null,
+        pass_fail: execJson.ok ? 'PASS' : 'FAIL',
+        first_blocker: execJson.error || null,
+      };
+    } catch (err) {
+      return { ok: false, human_summary: null, error: err.message };
+    }
+  }
+
   function getForwardedOperatorKey(req) {
     return req.headers['x-command-key']
       || req.headers['x-command-center-key']
@@ -631,6 +673,36 @@ Rules:
           user_role: req.lifeosUser?.role || null,
           intake_normalized: false,
         });
+      }
+
+      // Route build/fix/change requests directly to the builder — same channel the system uses
+      if (isBuildRequest(cleanedInput)) {
+        const operatorKey = getForwardedOperatorKey(req)
+          || process.env.COMMAND_CENTER_KEY
+          || process.env.LIFEOS_KEY
+          || process.env.API_KEY;
+        if (operatorKey) {
+          const builderResult = await routeToBuilder(cleanedInput, operatorKey);
+          const plainEnglish = await translateToPlainEnglish(cleanedInput, {
+            pass_fail: builderResult.ok ? 'PASS' : 'FAIL',
+            first_blocker: builderResult.error || null,
+            human_summary: builderResult.ok
+              ? `Builder completed the task and committed the change.`
+              : `Builder could not complete the task: ${builderResult.error || 'unknown error'}`,
+          });
+          return res.status(200).json({
+            ok: builderResult.ok,
+            interface: 'LifeOS Founder Interface',
+            action: 'build',
+            command_truth: builderResult.committed ? 'COMMITTED' : 'BUILD_ATTEMPTED',
+            pass_fail: builderResult.ok ? 'PASS' : 'FAIL',
+            sha: builderResult.sha || null,
+            first_blocker: builderResult.error || null,
+            human_summary: plainEnglish || (builderResult.ok ? 'Done — the change was made and deployed.' : `Could not complete: ${builderResult.error || 'builder error'}`),
+            auth_mode: req.auth_mode || 'unknown',
+            intake_normalized: intakeNormalized,
+          });
+        }
       }
 
       if (!['development', 'system'].includes(stage)) {
