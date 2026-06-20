@@ -44,6 +44,7 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "IMAP_USER",
   "IMAP_PASS",
   "IMAP_PORT",
+  "FOUNDER_INTERFACE_ALLOW_KEY_FALLBACK",
 ]);
 
 const BLOCKED_KEYS = new Set([
