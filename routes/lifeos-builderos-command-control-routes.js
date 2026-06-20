@@ -91,7 +91,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
       command_truth: 'NO_COMMAND_RAN',
       reason: 'AUTH_REQUIRED',
       error: 'Login required for Founder Interface',
-      redirect: '/overlay/lifeos-login.html?next=%2Flifeos-founder-interface',
+      redirect: '/overlay/lifeos-login.html?next=%2Flifeos%3Fdirect_system%3D1',
     });
   }
 

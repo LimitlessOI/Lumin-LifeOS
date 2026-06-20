@@ -102,6 +102,10 @@ export function registerPublicRoutes(app, {
 
   // Voice Rail public surface is retired at entrypoint layer.
   app.get("/voice-rail", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
+  app.get("/overlay/lifeos-voice-rail-v1.html", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
+  app.get("/overlay/lifeos-command-center.html", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
+  app.get("/overlay/lifeos-founder-interface.html", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
+  app.get("/overlay/c2-mission-dashboard.html", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
 
   // Household Mission Board — BPB-0001 §Section 7 (AMENDMENT_47)
   app.get("/lifeos-household", (req, res) => {
@@ -209,7 +213,11 @@ export function registerPublicRoutes(app, {
   });
 
   app.get("/lifeos", (req, res) => {
-    if (String(req.query?.direct_system || '') === '1' && !isFounderInterfaceAuthenticated(req)) {
+    const directSystem = String(req.query?.direct_system || '').trim();
+    if (directSystem !== '1') {
+      return res.redirect(302, '/lifeos?direct_system=1');
+    }
+    if (!isFounderInterfaceAuthenticated(req)) {
       const next = encodeURIComponent('/lifeos?direct_system=1');
       return res.redirect(302, `/overlay/lifeos-login.html?next=${next}`);
     }
