@@ -3,6 +3,12 @@
 
 ---
 
+## [FIX] 2026-06-20 — Direct terminal founder intake gate repair
+
+Critical bug found in recent Founder Interface terminal-only execution changes: `scripts/run-founder-intake-direct.mjs` hid normalized structured requests inside a raw fenced block and never emitted required pre-ARC artifacts, so plain founder execute commands hit immediate `department:SNT`, `priority_unconfirmed`, `priority_fit:MISSING`, or missing asset-reuse blockers before execution. Fixed by rendering structured direct-intake payloads as real `FOUNDER_PACKET.md` sections, writing `INTENT_BASELINE.json` with `direct_terminal_intake: true`, writing minimal `ASSET_REUSE_DECISION.json`, and teaching coverage/CFO gates to accept only that explicit direct-intake marker outside `BP_PRIORITY`. Added `tests/run-founder-intake-direct.test.js` and wired it into `npm test`. Verified: targeted regression, full `npm test`, `builder:preflight`, and `ssot-check --all` pass (SSOT checker still reports pre-existing missing tags outside touched files).
+
+---
+
 ## [SESSION] 2026-06-16 — LifeOS overnight versions v2.0 + v2.1
 
 Adam: go to bed — system builds LifeOS in versions overnight, machine Alpha = foundation + acceptance.
