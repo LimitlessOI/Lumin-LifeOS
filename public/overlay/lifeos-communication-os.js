@@ -9,6 +9,7 @@
   let voiceRecognition = null;
   let voiceListening = false;
   let attachmentManager = null;
+  const SYSTEM_DIRECT_ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
 
   function getKey() {
     return localStorage.getItem('cc_key')
@@ -17,12 +18,21 @@
       || '';
   }
 
+  function getAccessToken() {
+    return localStorage.getItem('lifeos_access_token') || '';
+  }
+
   function headers() {
-    return { 'Content-Type': 'application/json', 'x-command-key': getKey() };
+    const h = { 'Content-Type': 'application/json' };
+    const token = getAccessToken();
+    const key = getKey();
+    if (token) h.authorization = `Bearer ${token}`;
+    else if (key) h['x-command-key'] = key;
+    return h;
   }
 
   async function api(url, opts = {}) {
-    const r = await fetch(url, { headers: headers(), ...opts });
+    const r = await fetch(url, { credentials: 'same-origin', headers: headers(), ...opts });
     const text = await r.text();
     let data = null;
     try { data = JSON.parse(text); } catch { data = { _raw: text }; }
@@ -113,12 +123,76 @@
     thread.scrollTop = thread.scrollHeight;
   }
 
+  function renderDisplayData(display) {
+    if (!display || typeof display !== 'object') return '';
+    const summary = display.queue_summary || null;
+    const jobs = Array.isArray(display.recent_jobs) ? display.recent_jobs.slice(0, 8) : [];
+    let html = '';
+    if (summary) {
+      html += `<div class="msg-body" style="margin-top:8px">
+Queue: queued=${summary.queued || 0}, running=${summary.running || 0}, blocked=${summary.blocked || 0}, failed=${summary.failed || 0}, done=${summary.done || 0}
+</div>`;
+    }
+    if (jobs.length) {
+      html += `<div class="msg-body" style="margin-top:8px"><strong>Recent jobs</strong></div>`;
+      html += jobs.map((job) => {
+        const line = `${job.status || 'unknown'} · ${String(job.instruction || '').slice(0, 90)}`;
+        return `<div class="hub-item">${esc(line)}</div>`;
+      }).join('');
+    }
+    return html;
+  }
+
+  function appendSystemResponse(payload) {
+    const thread = document.getElementById('thread');
+    const empty = thread.querySelector('.empty');
+    if (empty) empty.remove();
+
+    const passFail = payload.pass_fail || payload.status || 'FAIL';
+    const commandTruth = payload.command_truth || (payload.command_ran ? 'COMMAND_RAN' : 'NO_COMMAND_RAN');
+    const identity = {
+      primary_speaker: 'System',
+      evidence_status: passFail === 'PASS' ? 'VERIFIED' : (commandTruth === 'COMMAND_RAN' ? 'PARTIAL' : 'UNVERIFIED'),
+      confidence_pct: passFail === 'PASS' ? 100 : 70,
+      contributors: [commandTruth],
+    };
+
+    const summary = payload.human_summary
+      || payload.reason
+      || payload.error
+      || 'System responded with no summary.';
+    lastResponseText = summary;
+    document.getElementById('btn-speak').disabled = !summary;
+
+    const receiptPaths = Array.isArray(payload.receipt_paths) ? payload.receipt_paths : [];
+    const artifactPaths = Array.isArray(payload.artifact_paths) ? payload.artifact_paths : [];
+    const displayHtml = renderDisplayData(payload.display);
+
+    const el = document.createElement('div');
+    el.className = 'msg';
+    el.innerHTML = `
+      ${renderIdentity(identity, {})}
+      <div class="msg-body">${esc(summary)}</div>
+      <div class="msg-body" style="margin-top:8px">
+        ${esc(passFail)} · ${esc(commandTruth)}
+      </div>
+      ${payload.command_executed ? `<div class="msg-body" style="margin-top:8px;color:var(--text-muted)">${esc(payload.command_executed)}</div>` : ''}
+      ${displayHtml}
+      ${receiptPaths.length ? `<div class="msg-body" style="margin-top:8px"><strong>Receipts</strong>\n${esc(receiptPaths.join('\n'))}</div>` : ''}
+      ${artifactPaths.length ? `<div class="msg-body" style="margin-top:8px"><strong>Artifacts</strong>\n${esc(artifactPaths.join('\n'))}</div>` : ''}
+    `;
+    thread.appendChild(el);
+    if (global.LifeOSCommHelp) LifeOSCommHelp.initHelp(el);
+    thread.scrollTop = thread.scrollHeight;
+  }
+
   async function loadModes() {
     const sel = document.getElementById('comm-mode');
-    const r = await api('/api/v1/lifeos/communication/modes');
-    const modes = r.data?.modes || {};
-    sel.innerHTML = Object.entries(modes).map(([k, v]) =>
-      `<option value="${k}">${esc(v.label || k)}</option>`).join('');
+    sel.innerHTML = `
+      <option value="direct_system">Direct System (terminal bridge)</option>
+      <option value="display_only">Display only (reports/queues/receipts)</option>
+      <option value="meeting">Meeting</option>
+    `;
   }
 
   async function loadDomains() {
@@ -159,28 +233,39 @@
     }
 
     appendAdam(text, displayAttachments);
+    // Keep composer comfortable for multi-line use after each turn.
     input.value = '';
+    input.rows = Math.max(4, Number(input.rows || 1));
     attachmentManager?.clear?.();
 
     const deploySha = await fetchDeploySha();
-    const endpoint = mode === 'meeting'
-      ? '/api/v1/lifeos/communication/meeting'
-      : '/api/v1/lifeos/communication/ask';
-
-    const body = mode === 'meeting'
-      ? { transcript: text, domain, deploy_sha: deploySha }
-      : { transcript: text, mode, domain, deploy_sha: deploySha, primary_speaker: 'Lumin' };
-
-    const r = await api(endpoint, { method: 'POST', body: JSON.stringify(body) });
+    const action = mode === 'display_only' ? 'display' : 'auto';
+    const body = {
+      text,
+      stage: 'development',
+      source_mode: 'text',
+      conversational_mode: true,
+      dictate_then_send: false,
+      action,
+      display_scope: mode === 'meeting' ? 'overview' : undefined,
+      deploy_sha: deploySha,
+      domain: domain || undefined,
+    };
+    const r = await api(SYSTEM_DIRECT_ENDPOINT, { method: 'POST', body: JSON.stringify(body) });
+    if ((r.status === 401 || r.status === 403) && r.data?.redirect) {
+      window.location.href = r.data.redirect;
+      return;
+    }
     if (!r.ok) {
-      appendResponse({
-        response_text: `Error ${r.status}: ${JSON.stringify(r.data)}`,
-        identity: { primary_speaker: 'LifeOS', evidence_status: 'UNVERIFIED', confidence_pct: 0 },
-        evidence: { evidence_status: 'UNVERIFIED' },
+      appendSystemResponse({
+        pass_fail: 'FAIL',
+        command_truth: 'NO_COMMAND_RAN',
+        reason: `Error ${r.status}`,
+        error: JSON.stringify(r.data),
       });
       return;
     }
-    appendResponse(r.data);
+    appendSystemResponse(r.data || {});
     loadHub();
   }
 
@@ -302,9 +387,9 @@
   }
 
   function init() {
-    if (!getKey()) {
+    if (!getKey() && !getAccessToken()) {
       document.getElementById('thread').innerHTML =
-        '<div class="empty">No command key — <a href="/activate" style="color:var(--accent)">activate</a> first.</div>';
+        '<div class="empty">Login required — open <a href="/lifeos-founder-interface" style="color:var(--accent)">Founder Interface</a> or <a href="/overlay/lifeos-login.html?next=%2Flifeos-communication" style="color:var(--accent)">LifeOS Login</a>.</div>';
     }
     loadModes();
     loadDomains();
