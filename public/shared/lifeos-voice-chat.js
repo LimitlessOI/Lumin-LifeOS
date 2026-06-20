@@ -22,9 +22,10 @@
     if (!/^en(-|$)/i.test(lang) && !/English/i.test(name)) return -1000;
     let score = 0;
     if (/Enhanced|Premium|Neural|Natural|Wavenet|Super-AI/i.test(name)) score += 90;
-    if (/Samantha|Ava|Allison|Daniel|Serena|Moira|Tessa|Victoria|Tom/i.test(name)) score += 70;
-    if (/Karen/i.test(name)) score += 20;
-    if (/Google (US )?English|Microsoft (Aria|Jenny|Guy|Zira|Steffan)/i.test(name)) score += 50;
+    if (/Samantha|Ava|Allison|Serena|Moira|Tessa|Victoria|Jenny|Aria|Zira|Steffan|Nova/i.test(name)) score += 85;
+    if (/Karen/i.test(name)) score += 15;
+    if (/Google (US )?English|Microsoft (Aria|Jenny|Zira|Steffan)/i.test(name)) score += 55;
+    if (/Guy|Fred|Daniel|David|Mark|James|Tom(?!i)/i.test(name)) score -= 35;
     if (/Alex( Enhanced)?/i.test(name)) score += 40;
     if (/Compact|espeak|Flo|Fred|Cellos|Bahh|Bells|Boing|Bubbles|Junior|Kathy|Princess|Organ|Good News|Bad News|Zarvox|Whisper|Trinoids|Albert/i.test(name)) {
       score -= 300;
@@ -164,12 +165,77 @@
     synth.speak(utterance);
   }
 
+  let activeServerAudio = null;
+
+  function stopServerAudio() {
+    if (!activeServerAudio) return;
+    try {
+      activeServerAudio.pause();
+    } catch (_) {}
+    activeServerAudio = null;
+  }
+
+  function playServerAudioBlob(blob, options) {
+    const opts = options || {};
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.volume = typeof opts.volume === 'number' ? opts.volume : 1;
+      audio.playbackRate = typeof opts.rate === 'number' ? opts.rate : 1;
+      activeServerAudio = audio;
+      audio.onended = () => {
+        URL.revokeObjectURL(url);
+        if (activeServerAudio === audio) activeServerAudio = null;
+        resolve();
+      };
+      audio.onerror = () => {
+        URL.revokeObjectURL(url);
+        if (activeServerAudio === audio) activeServerAudio = null;
+        reject(new Error('audio_playback_failed'));
+      };
+      audio.play().catch(reject);
+    });
+  }
+
+  async function speakTextAsync(text, options) {
+    const opts = typeof options === 'function' ? { onEnd: options } : options || {};
+    let cleaned = normalizeText(text);
+    cleaned = cleaned
+      .replace(/\bintent:\s*\S+/gi, '')
+      .replace(/\bvia lifeos\/\S+.*$/gim, '')
+      .replace(/\bcouncil:\s*\S+/gi, '')
+      .replace(/\bmodel:\s*\S+/gi, '')
+      .trim();
+    if (!cleaned) {
+      if (typeof opts.onEnd === 'function') {
+        try { opts.onEnd(); } catch (_) {}
+      }
+      return;
+    }
+    if (opts.preferServerTts !== false && typeof opts.serverTtsFetch === 'function') {
+      try {
+        const result = await opts.serverTtsFetch(cleaned);
+        if (result?.ok && result.blob) {
+          stopServerAudio();
+          if (synth) synth.cancel();
+          await playServerAudioBlob(result.blob, opts);
+          if (typeof opts.onEnd === 'function') {
+            try { opts.onEnd(); } catch (_) {}
+          }
+          return;
+        }
+      } catch (_) {}
+    }
+    speakText(cleaned, opts);
+  }
+
   function stopSpeaking() {
+    stopServerAudio();
     if (synth) synth.cancel();
   }
 
   function isSpeaking() {
-    return Boolean(synth && synth.speaking);
+    return Boolean((synth && synth.speaking) || activeServerAudio);
   }
 
   function setText(node, value) {
@@ -245,6 +311,12 @@
       silentStatus: false,
       onStart: null,
       onStop: null,
+      onAutoSend: null,
+      silenceAutoSendMs: 0,
+      sendOnMicStop: false,
+      preferServerTts: true,
+      serverTtsFetch: null,
+      serverTtsDepartment: 'ChC',
       serverSttEnabled: false,
       serverSttTranscribe: null,
       serverSttChunkMs: 1800,
@@ -292,6 +364,8 @@
       serverSttConsecutiveFailures: 0,
       serverSttForceBrowser: false,
       voiceSendFired: false,
+      silenceTimer: null,
+      autoSendFired: false,
       storageKey: settings.storageKey,
       speakingEnabled: settings.speakRepliesDefault,
       selectedAudioDeviceId: String(settings.audioDeviceId || '').trim(),
@@ -414,6 +488,36 @@
         global.clearTimeout(state.restartTimer);
         state.restartTimer = null;
       }
+    }
+
+    function clearSilenceTimer() {
+      if (state.silenceTimer) {
+        global.clearTimeout(state.silenceTimer);
+        state.silenceTimer = null;
+      }
+    }
+
+    function fireAutoSend(reason) {
+      if (state.autoSendFired || typeof settings.onAutoSend !== 'function') return false;
+      const msg = String(input?.value || '').trim();
+      if (!msg) return false;
+      state.autoSendFired = true;
+      clearSilenceTimer();
+      stopListening(true);
+      try {
+        settings.onAutoSend(msg, { reason: reason || 'auto' });
+      } catch (_) {}
+      return true;
+    }
+
+    function scheduleSilenceAutoSend() {
+      const ms = Number(settings.silenceAutoSendMs || 0);
+      if (!ms || ms <= 0 || typeof settings.onAutoSend !== 'function') return;
+      clearSilenceTimer();
+      state.silenceTimer = global.setTimeout(() => {
+        state.silenceTimer = null;
+        fireAutoSend('silence');
+      }, ms);
     }
 
     function scheduleMicRestart(delayMs) {
@@ -757,12 +861,22 @@
         releaseWarmStream();
       }
       cancelMicRestart();
+      clearSilenceTimer();
       abortActiveCapture();
       state.listening = false;
       syncCommittedFromInput(true);
       if (!state.userWantsListen) clearInputHighlight();
       updateButton();
       updateStatus(state.userWantsListen ? 'Restarting mic…' : settings.idleText);
+      if (userInitiated && settings.sendOnMicStop && !state.autoSendFired) {
+        const msg = String(input?.value || '').trim();
+        if (msg && typeof settings.onAutoSend === 'function') {
+          state.autoSendFired = true;
+          try {
+            settings.onAutoSend(msg, { reason: 'mic_stop' });
+          } catch (_) {}
+        }
+      }
     }
 
     function bindRecognitionHandlers(recognition, sessionEpoch) {
@@ -813,6 +927,7 @@
         }
         applyDictation(finalChunk, interimChunk);
         if (finalChunk && maybeVoiceSend(true)) return;
+        if (String(input?.value || '').trim()) scheduleSilenceAutoSend();
         updateStatus(interimChunk ? interimChunk.trim() : 'Listening…');
       };
       recognition.onend = function onEnd() {
@@ -1052,6 +1167,7 @@
       }
 
       state.userWantsListen = true;
+      state.autoSendFired = false;
       updateButton();
       if (!state.micWarmed) {
         const warmed = await warmAudioInput();
@@ -1117,7 +1233,12 @@
     const controller = {
       speak(text) {
         if (!state.speakingEnabled) return;
-        speakText(text);
+        if (settings.pauseMicDuringTts) controller.pauseForTts();
+        speakTextAsync(text, {
+          preferServerTts: settings.preferServerTts,
+          serverTtsFetch: settings.serverTtsFetch,
+          onEnd: () => controller.resumeAfterTts(),
+        });
       },
       startMic() {
         startListening();
@@ -1210,6 +1331,7 @@
   global.LifeOSVoiceChat = {
     attach: attach,
     speakText: speakText,
+    speakTextAsync: speakTextAsync,
     stopSpeaking: stopSpeaking,
     isSpeaking: isSpeaking,
     listSpeakableVoices: listSpeakableVoices,

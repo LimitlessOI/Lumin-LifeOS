@@ -215,10 +215,10 @@ stroke-dashoffset: 0;
 }
 @keyframes mic-pulse {
 0%, 100% {
-box-shadow: 0 0 0 0 rgba(224,85,85,0.4);
+box-shadow: 0 0 0 0 rgba(91, 106, 245, 0.55);
 }
 50% {
-box-shadow: 0 0 0 8px rgba(224,85,85,0);
+box-shadow: 0 0 0 10px rgba(91, 106, 245, 0);
 }
 }
 .fade-up {
@@ -632,9 +632,14 @@ transition: border-color 0.2s, color 0.2s;
 border-color: var(--border-focus);
 }
 .btn-mic.listening {
-color: var(--c-conflict);
-border-color: var(--c-conflict);
-animation: mic-pulse 1s ease infinite;
+color: #5b6af5;
+border-color: #5b6af5;
+background: rgba(91, 106, 245, 0.14);
+animation: mic-pulse 1.2s ease-in-out infinite;
+}
+.chat-input.mic-active {
+border-color: #5b6af5 !important;
+box-shadow: 0 0 0 3px rgba(91, 106, 245, 0.28);
 }
 .btn-send {
 background: var(--c-today);
@@ -838,7 +843,7 @@ gap: 16px;
 </div>
 <div id="lifeos-ai-rail-root"></div>
 <!-- Voice module must be non-module (IIFE) -->
-<script src="/shared/lifeos-voice-chat.js"></script>
+<script src="/shared/lifeos-voice-chat.js?v=20260620"></script>
 <script src="../shared/lifeos-dashboard-ai-rail.js"></script>
 <script type="module">
 const HDR = () => {
@@ -1049,6 +1054,9 @@ const chatInput = $('chat-input');
 const chatMessages = $('chat-messages');
 const typingIndicator = $('typing');
 const sendBtn = $('send-btn');
+let dashboardVoice = null;
+let voiceSendBusy = false;
+let spaceMicHeld = false;
 let chatHistory = [{ role: 'assistant', content: "Hey Adam 👋 — what's on your mind today?" }];
 function addMessage(role, content) {
 const msgEl = document.createElement('div');
@@ -1060,7 +1068,8 @@ chatHistory.push({ role, content });
 }
 async function sendMessage() {
 const text = chatInput.value.trim();
-if (!text) return;
+if (!text || voiceSendBusy) return;
+voiceSendBusy = true;
 addMessage('user', text);
 chatInput.value = '';
 typingIndicator.classList.add('show');
@@ -1074,6 +1083,7 @@ typingIndicator.classList.remove('show');
 if (r.ok) {
 const reply = d.human_summary || d.stdout || d.response || d.reply || (d.pass_fail === 'PASS' ? 'Done.' : `System: ${d.reason || d.pass_fail || 'processed'}`);
 addMessage('assistant', reply);
+if (dashboardVoice && typeof dashboardVoice.speak === 'function') dashboardVoice.speak(reply);
 } else if (r.status === 401) {
 const loginUrl = (d && d.redirect) ? d.redirect : '/overlay/lifeos-login.html?next=/overlay/lifeos-app.html';
 window.location.href = loginUrl;
@@ -1085,14 +1095,76 @@ addMessage('ambient', `System responded: ${d.reason || d.error || 'check receipt
 typingIndicator.classList.remove('show');
 addMessage('ambient', 'Connection error. Check your network.');
 console.error('Chat network error:', e);
+} finally {
+voiceSendBusy = false;
 }
+}
+async function sendVoiceMessage(text) {
+const msg = String(text || '').trim();
+if (!msg || voiceSendBusy) return;
+chatInput.value = msg;
+await sendMessage();
+}
+function initDashboardVoice() {
+if (!window.LifeOSVoiceChat) return;
+if (dashboardVoice && typeof dashboardVoice.destroy === 'function') dashboardVoice.destroy();
+dashboardVoice = LifeOSVoiceChat.attach({
+inputId: 'chat-input',
+buttonId: 'btn-mic',
+statusId: 'voice-status',
+speakToggleId: 'speak-toggle',
+storageKey: 'lifeos_dashboard_lumin',
+iconOnly: true,
+idleText: 'Tap mic or hold Space to talk',
+silenceAutoSendMs: 1500,
+sendOnMicStop: true,
+preferServerTts: true,
+pauseMicDuringTts: true,
+speakRepliesDefault: false,
+onAutoSend: sendVoiceMessage,
+serverTtsFetch: async (spokenText) => {
+try {
+const r = await API('/api/v1/lifeos/voice-rail/tts', {
+method: 'POST',
+body: JSON.stringify({ text: spokenText, department: 'ChC' }),
+});
+if (!r.ok) return { ok: false };
+return { ok: true, blob: await r.blob(), engine: r.headers.get('X-Voice-Rail-TTS-Engine') || 'server' };
+} catch (_) {
+return { ok: false };
+}
+},
+});
+fetch('/api/v1/lifeos/voice-rail/tts/status', { headers: HDR() })
+.then(r => r.json())
+.then(d => {
+const vs = $('voice-status');
+if (vs && d?.available) vs.textContent = 'Voice ready (server TTS)';
+})
+.catch(() => {});
 }
 chatInput.addEventListener('keypress', e => {
 if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
 sendBtn.addEventListener('click', sendMessage);
+document.addEventListener('keydown', (e) => {
+if (e.code !== 'Space' || e.repeat) return;
+const tag = e.target?.tagName?.toLowerCase();
+if (tag === 'textarea' || tag === 'input' || e.target?.isContentEditable) return;
+e.preventDefault();
+if (!spaceMicHeld && dashboardVoice) {
+spaceMicHeld = true;
+dashboardVoice.startMic();
+}
+});
+document.addEventListener('keyup', (e) => {
+if (e.code !== 'Space' || !spaceMicHeld) return;
+spaceMicHeld = false;
+if (dashboardVoice) dashboardVoice.stopMic();
+});
 // ── Initial loads ──
 document.addEventListener('DOMContentLoaded', () => {
+initDashboardVoice();
 loadMITs();
 loadCalendar();
 loadGoals();

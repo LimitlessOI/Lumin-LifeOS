@@ -49,6 +49,7 @@ import { createLifeOSBacktestRoutes } from "../routes/lifeos-backtest-routes.js"
 import { createLifeOSWeeklyReviewRoutes } from "../routes/lifeos-weekly-review-routes.js";
 import { createLifeOSScorecardRoutes } from "../routes/lifeos-scorecard-routes.js";
 import { createLifeOSChatRoutes } from "../routes/lifeos-chat-routes.js";
+import { createLifeOSVoiceRailRoutes } from "../routes/lifeos-voice-rail-routes.js";
 import { createActionInboxRoutes } from "../routes/action-inbox-routes.js";
 import { createCapturePipelineRoutes } from "../routes/capture-pipeline-routes.js";
 import { createCommitmentRouteRoutes } from "../routes/commitment-route-routes.js";
@@ -296,7 +297,19 @@ export async function registerRuntimeRoutes(app, deps) {
   );
   logger.info("✅ [LIFEOS-CHAT] Routes mounted at /api/v1/lifeos/chat");
 
-  logger.warn("🧭 [HIST-ONLY] Voice Rail retired to history-only domain; /api/v1/lifeos/voice-rail is intentionally not mounted.");
+  app.use(
+    "/api/v1/lifeos/voice-rail",
+    createLifeOSVoiceRailRoutes({
+      pool,
+      requireKey,
+      callAI: councilChatAI,
+      callCouncilMember,
+      councilMembers: deps.COUNCIL_MEMBERS,
+      councilAliasMap: deps.COUNCIL_ALIAS_MAP,
+      logger,
+    })
+  );
+  logger.info("✅ [LIFEOS-VOICE-RAIL] Routes mounted at /api/v1/lifeos/voice-rail (TTS/STT for Lumin chat)");
 
   app.use("/api/v1/lifeos/action-inbox", createActionInboxRoutes({ pool, requireKey, logger }));
   logger.info("✅ [ACTION-INBOX] Routes mounted at /api/v1/lifeos/action-inbox");
