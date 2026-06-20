@@ -2574,8 +2574,11 @@ async function directSystemHeaders() {
   }
   const headers = { 'Content-Type': 'application/json' };
   const token = localStorage.getItem('lifeos_access_token') || '';
+  const key = localStorage.getItem('cc_key') || localStorage.getItem('lifeos_cmd_key') || localStorage.getItem('COMMAND_CENTER_KEY') || '';
   if (token) {
     headers.authorization = `Bearer ${token}`;
+  } else if (key) {
+    headers['x-command-key'] = key;
   }
   return headers;
 }

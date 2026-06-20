@@ -826,7 +826,14 @@ gap: 16px;
 <script src="/shared/lifeos-voice-chat.js"></script>
 <script src="../shared/lifeos-dashboard-ai-rail.js"></script>
 <script type="module">
-const HDR = () => ({ 'x-lifeos-key': localStorage.getItem('lifeos_api_key') || '', 'Content-Type': 'application/json' });
+const HDR = () => {
+  const h = { 'Content-Type': 'application/json' };
+  const token = localStorage.getItem('lifeos_access_token') || '';
+  const key = localStorage.getItem('cc_key') || localStorage.getItem('lifeos_cmd_key') || localStorage.getItem('COMMAND_CENTER_KEY') || localStorage.getItem('lifeos_api_key') || '';
+  if (token) h.authorization = `Bearer ${token}`;
+  else if (key) h['x-command-key'] = key;
+  return h;
+};
 const API = (p, o={}) => fetch(p, { headers: HDR(), ...o });
 const $ = id => document.getElementById(id);
 // ── Clock ──
@@ -1043,21 +1050,23 @@ addMessage('user', text);
 chatInput.value = '';
 typingIndicator.classList.add('show');
 try {
-const r = await API('/api/v1/lifeos/chat', {
+const r = await API('/api/v1/lifeos/builderos/command-control/founder-interface/message', {
 method: 'POST',
-body: JSON.stringify({ messages: chatHistory })
+body: JSON.stringify({ text, action: 'auto', stage: 'system', conversational_mode: true })
 });
 const d = await r.json();
 typingIndicator.classList.remove('show');
-if (r.ok && d.reply) {
-addMessage('assistant', d.reply);
+if (r.ok) {
+const reply = d.human_summary || d.stdout || d.response || d.reply || (d.pass_fail === 'PASS' ? 'Done.' : `System: ${d.reason || d.pass_fail || 'processed'}`);
+addMessage('assistant', reply);
+} else if (r.status === 401) {
+addMessage('ambient', 'Not authenticated. Please refresh and log in.');
 } else {
-addMessage('ambient', 'Lumin is unavailable right now. Please try again later.');
-console.error('Chat API error:', d.error || r.statusText);
+addMessage('ambient', `System responded: ${d.reason || d.error || 'check receipts'}`);
 }
 } catch (e) {
 typingIndicator.classList.remove('show');
-addMessage('ambient', 'Failed to connect to Lumin. Check your network.');
+addMessage('ambient', 'Connection error. Check your network.');
 console.error('Chat network error:', e);
 }
 }
