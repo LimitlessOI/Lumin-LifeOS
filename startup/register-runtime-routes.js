@@ -513,7 +513,7 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info('✅ [AUTONOMOUS-TELEMETRY] Routes mounted at /api/v1/lifeos/autonomous-telemetry/*');
   app.use(
     '/api/v1/lifeos/builderos/command-control',
-    createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey })
+    createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember })
   );
   logger.info('✅ [BUILDEROS-C2] Routes mounted at /api/v1/lifeos/builderos/command-control/{jobs,halt}');
   app.use(createCanonicalAdminRoutes({ pool, requireKey }));

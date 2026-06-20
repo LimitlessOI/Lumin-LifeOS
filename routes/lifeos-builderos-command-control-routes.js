@@ -16,10 +16,45 @@ import {
 } from '../services/builderos-command-control-service.js';
 import { executeCommandControlJob } from '../services/builderos-governed-loop-executor.js';
 
-export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) {
+export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
 
   const EXECUTE_ALLOWED_ROLES = new Set(['founder_admin', 'operator', 'admin']);
+
+  async function translateToPlainEnglish(originalText, result) {
+    if (typeof callCouncilMember !== 'function') return null;
+    try {
+      const systemContext = [
+        result.pass_fail === 'NO_COMMAND_RAN' ? `Status: No command was run. This was a read/display request.` : `Status: ${result.pass_fail}`,
+        result.first_blocker ? `Blocker hit: ${result.first_blocker}` : '',
+        result.human_summary ? `System summary: ${result.human_summary}` : '',
+        result.display ? `Live data was returned: jobs=${result.display.recent_jobs?.length ?? 0}, halted=${result.display.halt_state?.halted ?? false}` : '',
+      ].filter(Boolean).join('\n');
+
+      const translationPrompt = `You are the plain-English voice of LifeOS, a personal operating system for the founder Adam.
+The founder just sent this message to the system: "${originalText}"
+
+Here is what the system actually did:
+${systemContext}
+
+Write 1-3 sentences in plain, direct English explaining exactly what happened and what it means for Adam.
+Rules:
+- Never lie. If it failed, say it failed and why in simple terms.
+- If it succeeded, say what was done.
+- If it was a status/display request, summarize the key info.
+- Use plain English. No jargon. No "BuilderOS", "SNT", "receipt_paths". Say what it means in human terms.
+- If blocked by a review step: explain that the system requires a formal approval process for changes, and plain-English questions work fine but build commands go through a gate.
+- Be honest. Be brief.`;
+      const response = await callCouncilMember('gemini', translationPrompt, { maxTokens: 200, taskType: 'chat' });
+
+      const text = typeof response === 'string'
+        ? response
+        : response?.content || response?.text || response?.message || null;
+      return text ? String(text).trim().slice(0, 600) : null;
+    } catch {
+      return null;
+    }
+  }
 
   function getForwardedOperatorKey(req) {
     return req.headers['x-command-key']
@@ -533,6 +568,13 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
           scope: req.body?.display_scope || inferredDisplayScope,
           missionId,
         });
+        const displayResult = {
+          pass_fail: 'NO_COMMAND_RAN',
+          first_blocker: null,
+          human_summary: `Rendered ${displayBundle.scope} display from live system data.`,
+          display: displayBundle,
+        };
+        const plainEnglish = await translateToPlainEnglish(originalText, displayResult);
         return res.status(200).json({
           ok: true,
           interface: 'LifeOS Founder Interface',
@@ -550,7 +592,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
           receipt_paths: [],
           artifact_paths: [],
           first_blocker: null,
-          human_summary: `Rendered ${displayBundle.scope} display from live system data.`,
+          human_summary: plainEnglish || displayResult.human_summary,
           display: displayBundle,
           auth_mode: req.auth_mode || 'unknown',
           user_role: req.lifeosUser?.role || null,
@@ -577,6 +619,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
         missionId,
         force,
       });
+      const plainEnglish = await translateToPlainEnglish(originalText, result);
       return res.status(200).json({
         interface: 'LifeOS Founder Interface',
         action: 'execute',
@@ -589,6 +632,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
         execution_path: 'terminal_bridge',
         intake_normalized: intakeNormalized,
         ...result,
+        human_summary: plainEnglish || result.human_summary,
       });
     } catch (error) {
       next(error);

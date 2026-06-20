@@ -2585,17 +2585,13 @@ async function directSystemHeaders() {
 }
 
 function formatDirectSystemReply(data) {
-  const passFail = data.pass_fail || data.status || 'FAIL';
-  const commandTruth = data.command_truth || (data.command_ran ? 'COMMAND_RAN' : 'NO_COMMAND_RAN');
-  const summary = data.human_summary || data.reason || data.error || 'No summary returned.';
-  const lines = [`${passFail} · ${commandTruth}`, summary];
-  if (data.first_blocker && data.first_blocker !== 'COMMAND_FAILED') {
-    lines.push(`Blocker: ${data.first_blocker}`);
-  }
+  // human_summary is now the plain-English translation — show it directly
+  const summary = data.human_summary || data.reason || data.error || 'No response from system.';
+  // Append mission ID only if present, for traceability
   if (data.mission_id) {
-    lines.push(`Mission: ${data.mission_id}`);
+    return `${summary}\n\n(Mission: ${data.mission_id})`;
   }
-  return lines.join('\n');
+  return summary;
 }
 
 function luminHandleKey(e) {
