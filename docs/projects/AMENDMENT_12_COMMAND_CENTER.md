@@ -14,7 +14,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-06-20 — LifeOS communication route consolidation into canonical `/lifeos` shell with direct-system launch mode |
+| **Last Updated** | 2026-06-20 — legacy command-center/public communication surfaces deactivated in favor of canonical `/lifeos?direct_system=1` |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -295,6 +295,7 @@ node --check public/overlay/command-center.js
 ## Change Receipts
 
 | 2026-05-24 | **`public/shared/lifeos-voice-chat.js` — laptop mic Auto routing:** `scoreAudioInput` / `pickPreferredAudioInputDevice` / `resolveAutoAudioDeviceId` prefer MacBook built-in; block Continuity/iPhone; resolve device id before opening stream; `getActiveMicLabel()`. Shared by Voice Rail + Command Center surfaces. | Adam: laptop browser used phone mic via Apple Continuity | AM12 | pending deploy |
+| 2026-06-20 | **Legacy surface deactivation follow-through:** `routes/public-routes.js` now redirects `/command-center`, `/lifeos-command-center`, `/mission-dashboard`, `/lifeos-founder-interface`, `/c2-terminal-bridge`, and `/voice-rail` to canonical `/lifeos?direct_system=1`. | Audit showed one-surface claim was inflated while alternate command/voice entrypoints still remained live. This closes that mismatch at public-entry route layer. | AM12 + AM21 consolidation | pending deploy |
 | 2026-06-20 | **`routes/public-routes.js`** — consolidated duplicate communication entrypoints into one canonical LifeOS shell path: `/lifeos-communication`, `/communicate`, and `/overlay/lifeos-communication.html` now 301 redirect to `/lifeos?direct_system=1`. | Founder requirement: one LifeOS program, not multiple competing entrypoints; deprecate duplicate communication page behavior and launch canonical shell in direct-system mode. | AM12 + AM21 wiring | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 | 2026-05-24 | **`public/overlay/lifeos-voice-rail-v1.html` (v2.8) + `voice-rail-v1.js`:** AI+Dept one row; tap-to-multi (no Multi button); Speed slider applies `playbackRate` on server TTS; routing line + dept in reply footer; max tokens 800. | Adam: layout, multi-select, speed, who am I talking to, slowness | AM12 | pending deploy |

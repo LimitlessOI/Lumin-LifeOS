@@ -2576,8 +2576,6 @@ async function directSystemHeaders() {
   const token = localStorage.getItem('lifeos_access_token') || '';
   if (token) {
     headers.authorization = `Bearer ${token}`;
-  } else if (KEY) {
-    headers['x-command-key'] = KEY;
   }
   return headers;
 }

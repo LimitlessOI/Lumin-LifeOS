@@ -81,22 +81,10 @@ export function registerPublicRoutes(app, {
     }
   });
 
-  // Phase 26 — Legacy surface redirected to canonical cockpit (LEGACY_AUTHORITY_SURFACES_STILL_LIVE)
-  app.get("/command-center", (_req, res) => res.redirect(301, "/lifeos-command-center"));
-
-  // V2 executive cockpit — governed by AMENDMENT_12, backed by /api/v1/lifeos/command-center/*
-  app.get("/lifeos-command-center", (req, res) => {
-    const filePath = path.join(__dirname, "public", "overlay", "lifeos-command-center.html");
-    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
-    return res.status(404).send("LifeOS Command Center v2 not found.");
-  });
-
-  // C2 Mission Dashboard — real-time system status (AMENDMENT_12)
-  app.get("/mission-dashboard", (req, res) => {
-    const filePath = path.join(__dirname, "public", "overlay", "c2-mission-dashboard.html");
-    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
-    return res.status(404).send("C2 Mission Dashboard not found.");
-  });
+  // Legacy command surfaces are deactivated at entrypoint level.
+  app.get("/command-center", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
+  app.get("/lifeos-command-center", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
+  app.get("/mission-dashboard", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
 
   // LifeOS Communication surface is now consolidated into the canonical /lifeos shell.
   app.get("/lifeos-communication", (_req, res) =>
@@ -108,24 +96,12 @@ export function registerPublicRoutes(app, {
     res.redirect(301, "/lifeos?direct_system=1")
   );
 
-  // LifeOS Founder Interface — terminal-bridge backed conversational founder console.
-  app.get("/lifeos-founder-interface", (req, res) => {
-    if (!isFounderInterfaceAuthenticated(req)) {
-      const next = encodeURIComponent('/lifeos-founder-interface');
-      return res.redirect(302, `/overlay/lifeos-login.html?next=${next}`);
-    }
-    const filePath = path.join(__dirname, "public", "overlay", "lifeos-founder-interface.html");
-    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
-    return res.status(404).send("LifeOS Founder Interface not found.");
-  });
-  // Legacy label alias -> renamed founder interface.
-  app.get("/c2-terminal-bridge", (_req, res) => res.redirect(301, "/lifeos-founder-interface"));
+  // Founder Interface is consolidated into canonical /lifeos direct-system mode.
+  app.get("/lifeos-founder-interface", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
+  app.get("/c2-terminal-bridge", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
 
-  // Voice Rail v1 — canonical communication layer (PRODUCT-VOICE-RAIL-V1-0001)
-  app.get("/voice-rail", (req, res) => {
-    const q = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
-    return res.redirect(301, `/overlay/lifeos-voice-rail-v1.html${q}`);
-  });
+  // Voice Rail public surface is retired at entrypoint layer.
+  app.get("/voice-rail", (_req, res) => res.redirect(301, "/lifeos?direct_system=1"));
 
   // Household Mission Board — BPB-0001 §Section 7 (AMENDMENT_47)
   app.get("/lifeos-household", (req, res) => {
@@ -233,6 +209,10 @@ export function registerPublicRoutes(app, {
   });
 
   app.get("/lifeos", (req, res) => {
+    if (String(req.query?.direct_system || '') === '1' && !isFounderInterfaceAuthenticated(req)) {
+      const next = encodeURIComponent('/lifeos?direct_system=1');
+      return res.redirect(302, `/overlay/lifeos-login.html?next=${next}`);
+    }
     const filePath = resolveOverlayFile("lifeos-app.html", ["html"]);
     if (filePath) return sendPublicFileNoCache(res, filePath);
     return res.status(404).send("LifeOS shell not found.");
