@@ -265,132 +265,6 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
     ].join('\n');
   }
 
-  function extractTargetFileFromText(text = '') {
-    const t = String(text || '');
-    const m = t.match(/\b(public\/overlay\/[a-zA-Z0-9._-]+\.html|routes\/[a-zA-Z0-9._-]+\.js|services\/[a-zA-Z0-9._-]+\.js)\b/);
-    if (m?.[1]) return m[1];
-    return null;
-  }
-
-  function looksLikeFounderFeedbackPatchIntent(action, text = '') {
-    if (String(action || '').toLowerCase() === 'feedback_patch') return true;
-    const t = String(text || '').toLowerCase();
-    return /\b(feedback|ui|header|button|banner|label|copy|wording|layout|screen|page|app)\b/.test(t);
-  }
-
-  async function runFounderFeedbackPatch({ text, targetFile }) {
-    const baseUrl = String(process.env.PUBLIC_BASE_URL || `http://127.0.0.1:${process.env.PORT || '3000'}`).replace(/\/$/, '');
-    const commandKey = String(
-      process.env.COMMAND_CENTER_KEY
-      || process.env.LIFEOS_KEY
-      || process.env.API_KEY
-      || ''
-    ).trim();
-    if (!commandKey) {
-      return {
-        ok: false,
-        status: 'FAIL',
-        reason: 'DIRECT_FEEDBACK_KEY_MISSING',
-        command_ran: false,
-        command_truth: 'NO_COMMAND_RAN',
-        command_executed: null,
-        exit_code: 1,
-        pass_fail: 'FAIL',
-        first_blocker: 'DIRECT_FEEDBACK_KEY_MISSING',
-        receipt_paths: [],
-        artifact_paths: [],
-        receipt_truth: 'NO_RECEIPT',
-        human_summary: 'Direct feedback patch path missing command key in runtime env.',
-        raw_builder: null,
-      };
-    }
-
-    const normalizedTask = String(text || '').trim();
-    const payload = {
-      task: normalizedTask,
-      target_file: String(targetFile || '').trim() || 'public/overlay/lifeos-app.html',
-      platform_gap_fill: true,
-      platform_gap_fill_reason: 'Founder direct feedback patch path for constrained UI/product tweaks requiring immediate governed execution without full mission packaging.',
-    };
-
-    const runBuild = async (buildPayload) => fetch(`${baseUrl}/api/v1/lifeos/builder/build`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-command-key': commandKey,
-      },
-      body: JSON.stringify(buildPayload),
-    });
-
-    let resp = await runBuild(payload);
-    let body = null;
-    try {
-      body = await resp.json();
-    } catch {
-      body = null;
-    }
-
-    const truncationBlocked = String(body?.error || '').toLowerCase().includes('too short')
-      || String(body?.error || '').toLowerCase().includes('truncated');
-    if (!resp.ok || truncationBlocked) {
-      const retryPayload = {
-        ...payload,
-        task: [
-          '[PATCH MODE — DO NOT REWRITE FILE]',
-          `Target file: ${payload.target_file}`,
-          'Apply a minimal in-place patch only.',
-          'Preserve the full existing file content and structure.',
-          'Do not output a new skeleton HTML/JS document.',
-          'Requested change:',
-          normalizedTask,
-        ].join('\n'),
-      };
-      const retryResp = await runBuild(retryPayload);
-      try {
-        const retryBody = await retryResp.json();
-        if (retryBody) {
-          body = retryBody;
-          resp = retryResp;
-        }
-      } catch {
-        // keep first response
-      }
-    }
-
-    const committed = body?.ok === true && body?.committed === true;
-    const passFail = committed ? 'PASS' : 'FAIL';
-    const blocker = body?.error || body?.hint || null;
-    const commitSha = body?.commit_sha || body?.sha || null;
-    const changedFiles = Array.isArray(body?.changed_files)
-      ? body.changed_files
-      : (Array.isArray(body?.files_changed) ? body.files_changed : []);
-    const receiptPaths = [];
-    if (body?.kernel_receipts) receiptPaths.push('kernel_receipts:inline');
-
-    return {
-      ok: committed,
-      status: passFail,
-      reason: blocker,
-      command_ran: true,
-      command_truth: 'COMMAND_RAN',
-      command_executed: 'POST /api/v1/lifeos/builder/build (founder_feedback_patch)',
-      exit_code: committed ? 0 : 1,
-      pass_fail: passFail,
-      first_blocker: blocker,
-      mission_id: null,
-      mission_folder: null,
-      receipt_paths: receiptPaths,
-      artifact_paths: [],
-      receipt_truth: receiptPaths.length > 0 ? 'RECEIPT_PRESENT' : 'NO_RECEIPT',
-      human_summary: committed
-        ? 'Founder feedback patch executed and committed through direct builder path.'
-        : `Founder feedback patch blocked: ${blocker || 'BUILD_FAILED'}`,
-      parsed_output: null,
-      raw_builder: body,
-      commit_sha: commitSha,
-      changed_files: changedFiles,
-    };
-  }
 
   async function runTerminalBridgeIntake({ text, textFile, stage, missionId, force }) {
     const cmd = buildFounderIntakeCommand({
@@ -696,29 +570,6 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
         });
       }
 
-      const requestedTarget = typeof req.body?.target_file === 'string' ? req.body.target_file.trim() : '';
-      const inferredTarget = extractTargetFileFromText(originalText) || '';
-      const feedbackIntent = looksLikeFounderFeedbackPatchIntent(action, originalText);
-      if (stage === 'development' && feedbackIntent) {
-        const feedbackResult = await runFounderFeedbackPatch({
-          text: normalizedText,
-          targetFile: requestedTarget || inferredTarget || 'public/overlay/lifeos-app.html',
-        });
-        return res.status(200).json({
-          interface: 'LifeOS Founder Interface',
-          action: 'execute',
-          execution_path: 'founder_feedback_patch',
-          source_mode: sourceMode,
-          dictate_then_send: dictateThenSend,
-          conversational_mode: conversationalMode,
-          model_routing: modelRouting,
-          auth_mode: req.auth_mode || 'unknown',
-          user_role: req.lifeosUser?.role || null,
-          intake_normalized: intakeNormalized,
-          ...feedbackResult,
-        });
-      }
-
       const result = await runTerminalBridgeIntake({
         text: normalizedText,
         textFile: req.body?.text_file || null,
@@ -735,6 +586,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
         model_routing: modelRouting,
         auth_mode: req.auth_mode || 'unknown',
         user_role: req.lifeosUser?.role || null,
+        execution_path: 'terminal_bridge',
         intake_normalized: intakeNormalized,
         ...result,
       });
