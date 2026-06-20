@@ -37,10 +37,16 @@
 --c-decisions: var(--dash-accent-warning, #f59e0b);
 --c-mirror: var(--dash-accent-mirror, #7c3aed);
 --c-conflict: var(--dash-accent-conflict, #e05555);
+--vr-accent: #6b7cff;
+--vr-accent-fg: #fff;
 --radius-sm: var(--dash-radius-sm, 6px);
 --radius-md: var(--dash-radius-md, 10px);
 --radius-lg: var(--dash-radius-lg, 14px);
 --radius-xl: var(--dash-radius-xl, 20px);
+}
+html[data-theme="light"] {
+--vr-accent: #4a5fd6;
+--vr-accent-fg: #fff;
 }
 *, ::before, ::after {
 box-sizing: border-box;
@@ -213,12 +219,12 @@ to {
 stroke-dashoffset: 0;
 }
 }
-@keyframes mic-pulse {
+@keyframes vr-mic-glow {
 0%, 100% {
-box-shadow: 0 0 0 0 rgba(91, 106, 245, 0.55);
+box-shadow: 0 0 0 3px color-mix(in srgb, var(--vr-accent) 35%, transparent);
 }
 50% {
-box-shadow: 0 0 0 10px rgba(91, 106, 245, 0);
+box-shadow: 0 0 0 7px color-mix(in srgb, var(--vr-accent) 12%, transparent);
 }
 }
 .fade-up {
@@ -632,17 +638,18 @@ transition: border-color 0.2s, color 0.2s;
 border-color: var(--border-focus);
 }
 .btn-mic.listening {
-color: #5b6af5;
-border-color: #5b6af5;
-background: rgba(91, 106, 245, 0.14);
-animation: mic-pulse 1.2s ease-in-out infinite;
+background: var(--vr-accent);
+border-color: var(--vr-accent);
+color: var(--vr-accent-fg);
+animation: vr-mic-glow 1.4s ease-in-out infinite;
 }
 .chat-input.mic-active {
-border-color: #5b6af5 !important;
-box-shadow: 0 0 0 3px rgba(91, 106, 245, 0.28);
+border-color: var(--vr-accent) !important;
+outline: none;
+box-shadow: 0 0 0 3px color-mix(in srgb, var(--vr-accent) 30%, transparent);
 }
 .btn-send {
-background: var(--c-today);
+background: var(--vr-accent);
 color: #fff;
 border: none;
 border-radius: var(--radius-md);
