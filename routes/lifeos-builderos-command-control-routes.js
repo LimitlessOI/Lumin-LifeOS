@@ -437,7 +437,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
     try {
       const text = typeof req.body?.text === 'string' ? req.body.text.trim() : '';
       const textFile = typeof req.body?.text_file === 'string' ? req.body.text_file.trim() : '';
-      const stage = String(req.body?.stage || 'development').toLowerCase();
+      const stage = String(req.body?.stage || 'system').toLowerCase();
       const missionId = req.body?.mission_id ? String(req.body.mission_id) : null;
       const force = req.body?.force === true;
 
@@ -478,7 +478,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey }) 
   router.post('/founder-interface/message', requireFounderInterfaceAuth, async (req, res, next) => {
     try {
       const originalText = typeof req.body?.text === 'string' ? req.body.text.trim() : '';
-      const stage = String(req.body?.stage || 'development').toLowerCase();
+      const stage = String(req.body?.stage || 'system').toLowerCase();
       const missionId = req.body?.mission_id ? String(req.body.mission_id) : null;
       const force = req.body?.force === true;
       const dictateThenSend = req.body?.dictate_then_send === true;
