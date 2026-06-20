@@ -89,6 +89,41 @@ Rules:
     return /\b(fix|change|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(text);
   }
 
+  function isDisplayRequest(text) {
+    return /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt|how many|what is|what are|list|count|tell me)\b/i.test(text);
+  }
+
+  async function luminConverse(userMessage, commandKey) {
+    if (typeof callCouncilMember !== 'function') return null;
+    try {
+      const systemPrompt = `You are Lumin — the AI core of Adam's LifeOS personal operating system. Adam is the founder and you are his trusted AI counsel.
+
+You can:
+- Have real conversations, brainstorm, and think through problems with Adam
+- Answer questions and provide information
+- Give advice and counsel on any topic — business, life, decisions, strategy
+- Tell Adam what his system is doing when he asks
+- Take action in his system when he explicitly asks you to build, fix, or change something
+
+Right now you are in conversation mode. Be direct, honest, warm, and genuinely useful. Do not route everything to "the system" — just talk. If Adam wants something built or changed, he'll say so clearly and you'll handle it.
+
+Adam's system is a personal operating system called LifeOS built on Node.js/Express deployed on Railway. It has AI council members, a builder pipeline, missions, and multiple life domains (health, family, finance, purpose, engine, etc).
+
+Keep responses concise unless Adam asks for depth. Never be sycophantic. Never lie about what you can or cannot do.`;
+
+      const response = await callCouncilMember('gemini', `${systemPrompt}\n\nAdam: ${userMessage}`, {
+        maxTokens: 600,
+        taskType: 'chat',
+      });
+      const text = typeof response === 'string'
+        ? response
+        : response?.content || response?.text || null;
+      return text ? String(text).trim() : null;
+    } catch {
+      return null;
+    }
+  }
+
   async function routeToBuilder(task, commandKey) {
     const base = process.env.PUBLIC_BASE_URL
       ? process.env.PUBLIC_BASE_URL.replace(/\/$/, '')
@@ -703,6 +738,22 @@ Rules:
             intake_normalized: intakeNormalized,
           });
         }
+      }
+
+      // Default: Lumin conversation — brainstorm, questions, counsel, information
+      // BuilderOS terminal bridge is last resort only for structured execution commands
+      const luminReply = await luminConverse(cleanedInput, getForwardedOperatorKey(req) || process.env.COMMAND_CENTER_KEY);
+      if (luminReply) {
+        return res.status(200).json({
+          ok: true,
+          interface: 'LifeOS Founder Interface',
+          action: 'conversation',
+          command_truth: 'NO_COMMAND_RAN',
+          pass_fail: 'PASS',
+          human_summary: luminReply,
+          auth_mode: req.auth_mode || 'unknown',
+          intake_normalized: intakeNormalized,
+        });
       }
 
       if (!['development', 'system'].includes(stage)) {
