@@ -380,12 +380,23 @@ HOW TO RESPOND:
     });
   }
 
-  function wrapBridgeResultAsTruth(result, task) {
+  function getForwardedOperatorKey(req) {
     return req.headers['x-command-key']
       || req.headers['x-command-center-key']
       || req.headers['x-lifeos-key']
       || req.headers['x-api-key']
       || null;
+  }
+
+  function founderBuildResponsePayload(builderResult) {
+    if (!builderResult || typeof builderResult !== 'object') return builderResult;
+    const { generated_output, exec_meta, ...rest } = builderResult;
+    const safe = { ...rest };
+    if (exec_meta && typeof exec_meta === 'object') {
+      const { output, ...execRest } = exec_meta;
+      safe.exec_meta = execRest;
+    }
+    return safe;
   }
 
   function readCookie(req, name) {
@@ -975,7 +986,7 @@ HOW TO RESPOND:
             interface: 'LifeOS Founder Interface',
             action: 'build',
             build_task_resolved: buildTask !== cleanedInput,
-            ...builderResult,
+            ...founderBuildResponsePayload(builderResult),
             human_summary: buildReply,
             ...(persistWarning ? { persist_warning: persistWarning } : {}),
           });
