@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — migration.test.sql.
 ```sql
 -- Load pgTAP
 CREATE EXTENSION IF NOT EXISTS "pgtap";

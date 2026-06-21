@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Bounded self-repair executor route + deploy check + execution log read.
  * Bounded self-repair executor route + deploy check + execution log read.
  *
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md

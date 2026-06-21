@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-trust-bridge.js
+ */
 // services/memory-trust-bridge.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { LEVEL } from './memory-intelligence-service.js';

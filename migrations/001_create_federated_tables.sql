@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_federated_tables.sql.
 ```sql
 -- Create federated_workflows table
 CREATE TABLE federated_workflows (

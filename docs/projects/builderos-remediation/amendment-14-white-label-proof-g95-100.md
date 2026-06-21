@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G95 100. -->
+
 The source blueprint `docs/projects/AMENDMENT_14_WHITE_LABEL.md` was not provided in the `REPO FILE CONTENTS`, preventing derivation of the proof gap and build slice.
 Amendment 14 White Label Proof - G95-100
 Blueprint Source: `docs/projects/AMENDMENT_14_WHITE_LABEL.md`

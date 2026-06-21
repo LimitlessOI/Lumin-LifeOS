@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G114 100. -->
+
 BuilderOS Remediation: Command Center V2 Blueprint Proof (G114-100)
 This document serves as a proof-closing note for the initial build slice of the Command Center V2, derived from the `COMMAND_CENTER_V2_BLUEPRINT.md`. It outlines the first concrete step towards establishing the foundational API for the new Command Center interface.
 ---

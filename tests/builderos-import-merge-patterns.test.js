@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Regression tests for groq import-merge antipattern detection (PATTERN 9).
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * Regression tests for groq import-merge antipattern detection (PATTERN 9).
  */

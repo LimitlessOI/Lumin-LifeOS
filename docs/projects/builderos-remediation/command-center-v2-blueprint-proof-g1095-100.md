@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Core Data Model (g1095-100) -->
+
 # Blueprint Proof: Command Center V2 - Core Data Model (g1095-100)
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, focusing on establishing the core data model.

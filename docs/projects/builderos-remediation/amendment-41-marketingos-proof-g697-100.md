@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Integration - Proof G697-100: User Profile Sync Verification -->
+
 # Amendment 41: MarketingOS Integration - Proof G697-100: User Profile Sync Verification
 
 ## Proof-Closing Blueprint Note

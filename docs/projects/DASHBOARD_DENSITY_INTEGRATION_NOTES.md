@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD DENSITY INTEGRATION NOTES. -->
+
 **SPECIFICATION INCONSISTENCY**: `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` is referenced but not found in REPO FILE CONTENTS. This documentation will proceed without referencing its content.
 ---
 ### Dashboard Layout Utilities Integration

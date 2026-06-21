@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-pricing.js
  * tc-pricing.js
  * TC service pricing — three billing models:
  *

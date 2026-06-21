@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: A utility function to wrap an async promise in a try-catch block,
+ */
 async function fetchJson(baseUrl, path, commandKey) {
   const url = new URL(path, baseUrl).toString();
   const response = await fetch(url, {

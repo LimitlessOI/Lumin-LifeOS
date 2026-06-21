@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Example integration with LoRaWAN
+ */
 ```js
 const { Client } = require('pg');
 const lorawan = require('node-red-contrib-lorawan');

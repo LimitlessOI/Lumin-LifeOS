@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_smart_materials_tables.sql.
 ```sql
 CREATE TABLE smart_materials (
     id SERIAL PRIMARY KEY,

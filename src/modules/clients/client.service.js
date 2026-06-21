@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Additional functions for client metrics and Stripe integration can be added here
+ */
 ```javascript
 const { Client, ClientMetrics } = require('../../models');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);

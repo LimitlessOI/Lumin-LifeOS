@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_urban_tables.sql.
 ```sql
 CREATE TABLE urban_sensors (
     id SERIAL PRIMARY KEY,

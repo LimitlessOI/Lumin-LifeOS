@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof G1101-100 Remediation Note -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided in REPO FILE CONTENTS, so specific details for the gap and build slice are inferred based on common BuilderOS patterns and the task context.
 
 # Amendment 12 Command Center Proof G1101-100 Remediation Note

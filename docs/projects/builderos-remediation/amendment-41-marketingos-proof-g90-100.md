@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G90 100. -->
+
 ### Proof-Closing Blueprint Note: MarketingOS Proof-G90-100
 
 This document serves as the SSOT foundation for closing the proof gap for MarketingOS integration goal G90-100, as defined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`.

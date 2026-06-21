@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_apspan_tables.sql.
 ```sql
 CREATE TABLE apspan_agents (
     id SERIAL PRIMARY KEY,

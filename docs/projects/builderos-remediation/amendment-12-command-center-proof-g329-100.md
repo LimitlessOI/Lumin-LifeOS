@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G329-100 -->
+
 # Amendment 12 Command Center Proof - G329-100
 
 ## Proof-Closing Blueprint Note

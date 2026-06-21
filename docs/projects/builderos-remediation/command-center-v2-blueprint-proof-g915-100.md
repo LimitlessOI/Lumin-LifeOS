@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G915 100. -->
+
 ### Blueprint Note: Command Center V2 Blueprint Proof - G915-100 Remediation
 
 This note addresses the OIL verifier rejection encountered during the BuilderOS loop execution for `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g915-100.md`. The rejection, `TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".md"`, indicates a fundamental misconfiguration in how BuilderOS's verifier processes documentation files.

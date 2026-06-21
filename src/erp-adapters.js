@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/erp-adapters.js.
+ */
 ```javascript
 const axios = require('axios');
 

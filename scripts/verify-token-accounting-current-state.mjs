@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Read-only verification: current Token Accounting OS production state.
  * Read-only verification: current Token Accounting OS production state.
  * Does not fake data — queries DATABASE_URL when available.
  * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md

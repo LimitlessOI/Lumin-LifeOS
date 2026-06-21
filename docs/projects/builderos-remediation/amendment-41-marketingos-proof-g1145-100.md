@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1145 100. -->
+
 Amendment 41 MarketingOS Proof: G1145-100 - Campaign Status SSOT Foundation
 This document outlines the proof-closing blueprint note for establishing the `Campaign.status` field within MarketingOS as the Single Source of Truth (SSOT), as per Amendment 41.
 ---

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/code-review/router.js.
+ */
 ```javascript
 const express = require('express');
 const { check } = require('express-validator');

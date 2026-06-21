@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G63-100 - API V2 Status Endpoint -->
+
 # Command Center V2 Blueprint Proof: G63-100 - API V2 Status Endpoint
 
 This document serves as a proof-closing blueprint note for the initial establishment of the Command Center V2 API surface. It details the smallest, safest build slice to verify basic API V2 routing and service availability, derived from the overarching `COMMAND_CENTER_V2_BLUEPRINT.md`.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — workers/learningQueue.js.
+ */
 ```js
 const Queue = require('bull');
 const AdaptiveLearningEngine = require('../services/adaptiveModel');

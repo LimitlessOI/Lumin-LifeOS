@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PSSOT — pointer to canonical vocabulary -->
+
 # PSSOT — pointer to canonical vocabulary
 
 **Superseded as standalone glossary.** Full definitions:

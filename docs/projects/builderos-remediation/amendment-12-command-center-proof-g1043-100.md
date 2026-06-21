@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1043 100. -->
+
 Amendment 12: Command Center Integration - Proof G1043-100
 Blueprint Note: Telemetry Producer MVP - Service Status
 

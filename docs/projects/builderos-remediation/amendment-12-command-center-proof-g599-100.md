@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G599-100 -->
+
 # Amendment 12 Command Center Proof - G599-100
 
 ## Blueprint Note: Core Command Routing & Registration

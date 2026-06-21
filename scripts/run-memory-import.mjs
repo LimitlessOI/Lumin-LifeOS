@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Standalone runner for the Lumin Memory GitHub importer.
  * Standalone runner for the Lumin Memory GitHub importer.
  * Connects directly to the production DB and fetches all dump files.
  *

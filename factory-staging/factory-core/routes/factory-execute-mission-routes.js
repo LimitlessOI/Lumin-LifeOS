@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Factory staging — Factory Execute Mission Routes.
+ */
 export const factoryExecuteMissionRoute = {
   method: 'POST',
   path: '/factory/execute-mission',

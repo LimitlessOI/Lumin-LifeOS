@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof (G145-100) - Proof Closing Blueprint Note -->
+
 # Amendment 14 White-Label Proof (G145-100) - Proof Closing Blueprint Note
 
 This document outlines the next smallest build slice to progress the Amendment 14 White-Label Proof initiative, specifically focusing on the foundational utility for generating white-label proof data.

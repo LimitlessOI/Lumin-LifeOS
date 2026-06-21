@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: MarketingOS Proof G22-100 - Initial Customer Profile Sync -->
+
 # Proof-Closing Blueprint Note: MarketingOS Proof G22-100 - Initial Customer Profile Sync
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

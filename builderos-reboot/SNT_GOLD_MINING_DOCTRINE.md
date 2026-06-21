@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SNT Gold Mining Doctrine — Innovation Council -->
+
 # SNT Gold Mining Doctrine — Innovation Council
 
 **Signed by:** SNT + Founder consensus  

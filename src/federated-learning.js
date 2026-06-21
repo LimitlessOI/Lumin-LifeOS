@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/federated-learning.js.
+ */
 ```javascript
 const pysyft = require('pysyft-solidity');
 

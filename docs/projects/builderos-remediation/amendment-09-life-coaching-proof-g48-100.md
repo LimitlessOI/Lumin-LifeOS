@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Integration - Proof G48-100 -->
+
 # Amendment 09: Life Coaching Integration - Proof G48-100
 
 This document outlines the first build slice for integrating Life Coaching features, focusing on establishing the foundational data model.

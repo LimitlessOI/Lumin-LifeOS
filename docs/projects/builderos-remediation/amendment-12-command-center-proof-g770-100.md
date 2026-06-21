@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G770 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G770-100
 
 Blueprint Note: Core Dashboard & Read-Only Monitoring (G770-100) - Build Slice 1

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G701-100 - SSOT Foundation Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof G701-100 - SSOT Foundation Blueprint Note
 
 This document establishes the Single Source of Truth (SSOT) for closing the proof gap related to MarketingOS integration under Amendment 41, specifically for proof point G701-100. It outlines the exact missing implementation, the smallest safe build slice, target files, verification steps, and stop conditions.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G136 100. -->
+
 BuilderOS Remediation: Amendment 01 AI Council Proof G136-100
 This document serves as a proof-closing blueprint note for the `g136-100` proof point, derived from `docs/projects/AMENDMENT_01_AI_COUNCIL.md`. It outlines the next smallest build slice required to close the identified gap, ensuring adherence to AI Council oversight for BuilderOS remediation actions.
 ---

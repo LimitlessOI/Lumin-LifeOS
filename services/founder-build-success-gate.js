@@ -1,5 +1,5 @@
 /**
- * Founder build success gate — PASS requires atomic commit + outcome + live content + client proof spec.
+ * SYNOPSIS: Founder build success gate — PASS requires atomic commit + outcome + live content + client proof spec.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 import crypto from 'node:crypto';
@@ -34,6 +34,7 @@ export const FOUNDER_BUILD_TOOL_INVENTORY = {
     'services/lifeos-execution-truth.js',
     'services/founder-build-success-gate.js',
     'services/founder-build-outcome.js',
+    'services/founder-build-quorum-escalation.js — 3 solo → 2-AI → 3-AI → Chair',
   ],
   deploy: [
     'GET /api/v1/lifeos/builder/ready',

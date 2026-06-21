@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/clientController.js.
+ */
 const Client = require('../models/Client');
 const Joi = require('joi');
 

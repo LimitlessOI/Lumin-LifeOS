@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260328_capability_map_fk.sql.
 -- Add capability_map → project_segments FK after governance tables exist.
 DO $$
 BEGIN

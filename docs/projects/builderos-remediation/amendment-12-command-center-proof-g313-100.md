@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G313-100 -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, so the content below is inferred based on the task description and common BuilderOS patterns.
 ---
 # Amendment 12 Command Center Proof - G313-100

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G127-100 -->
+
 # Command Center V2 Blueprint Proof - G127-100
 
 ## Blueprint Note: CommandRegistry Foundation

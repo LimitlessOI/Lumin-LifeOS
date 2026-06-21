@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G505-100 Remediation -->
+
 # Command Center V2 Blueprint Proof: G505-100 Remediation
 
 This document addresses the OIL verifier rejection for the previous BuilderOS change related to Command Center V2, specifically focusing on deriving the next smallest blueprint-backed build slice to close a critical proof gap.

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Integration: TSOS append on execute-step + guardrail rejection. */
+/**
+ * SYNOPSIS: Integration: TSOS append on execute-step + guardrail rejection. Integration: TSOS append on execute-step + guardrail rejection. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

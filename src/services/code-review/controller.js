@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/code-review/controller.js.
+ */
 ```javascript
 const Project = require('./models/Project');
 const Analytics = require('./models/Analytics');

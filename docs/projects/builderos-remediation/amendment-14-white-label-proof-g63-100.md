@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G63-100 - Configuration Access Verification -->
+
 # Amendment 14 White-Label Proof: G63-100 - Configuration Access Verification
 
 ## 1. Purpose

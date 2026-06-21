@@ -1,5 +1,5 @@
 /**
- * BuilderOS pre-commit governance wrapper.
+ * SYNOPSIS: BuilderOS pre-commit governance wrapper.
  *
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * @ssot docs/projects/builderos-remediation/BLUEPRINT.md

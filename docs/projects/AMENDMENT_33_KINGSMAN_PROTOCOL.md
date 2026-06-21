@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_33: The Kingsman Protocol -->
+
 # AMENDMENT_33: The Kingsman Protocol
 
 **Status:** Constitutional — Active Mandate

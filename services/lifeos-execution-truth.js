@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Hard execution-truth gate — never emit PASS / COMMITTED without proof.
  * Hard execution-truth gate — never emit PASS / COMMITTED without proof.
  * Fail-closed: when evidence is missing, downgrade to FAIL with explicit blocker.
  * Every FAIL includes an autopsy: what happened, lessons, executable fix steps.
@@ -506,8 +507,22 @@ export function formatExecutionTruthReply(truth) {
     }
     if (repair.repaired && repair.success_attempt) {
       lines.push(`Recovered on attempt ${repair.success_attempt}.`);
-    } else if (repair.exhausted) {
-      lines.push('Repair budget exhausted — say "keep trying" to resume from chat history.');
+    } else     if (repair.exhausted) {
+      lines.push('Repair budget exhausted — quorum + Chair attempted if eligible.');
+    }
+    const quorum = repair.quorum_escalation;
+    if (quorum?.stages?.length) {
+      lines.push('');
+      lines.push('── Quorum escalation (CFO overseen) ──');
+      if (quorum.cfo?.roi_note) lines.push(`CFO: ${quorum.cfo.roi_note}`);
+      for (const s of quorum.stages) {
+        if (s.ok) {
+          lines.push(`• ${s.stage}: ${s.plan?.fix_approach} (confidence ${s.plan?.confidence ?? '?'})`);
+        } else {
+          lines.push(`• ${s.stage}: failed (${s.error || 'unknown'})`);
+        }
+      }
+      if (repair.recovered_via) lines.push(`Recovered via ${repair.recovered_via}.`);
     }
   }
 

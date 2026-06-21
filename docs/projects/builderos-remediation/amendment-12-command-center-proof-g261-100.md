@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G261 100. -->
+
 ### Proof-Closing Blueprint Note: AMENDMENT_12_COMMAND_CENTER - G261-100
 
 This note closes the initial proof-of-concept for the core `CommandCenter` framework, establishing the foundational components for command registration and execution.

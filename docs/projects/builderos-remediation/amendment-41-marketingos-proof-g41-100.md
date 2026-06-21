@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof G41-100: User Segment Endpoint Verification -->
+
 # AMENDMENT_41_MARKETINGOS Proof G41-100: User Segment Endpoint Verification
 
 This document serves as a proof-closing blueprint note for the `GET /api/v1/marketing/user-segments` endpoint, as outlined in `AMENDMENT_41_MARKETINGOS.md`. The objective is to confirm the correct implementation, data integrity, and security posture of this critical MarketingOS integration point.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Video Pipeline -->
+
 # Video Pipeline
 _(formerly AMENDMENT_07_VIDEO_PIPELINE.md)_
 **Status:** BUILDING

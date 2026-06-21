@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 15 — Business Tools Suite -->
+
 # AMENDMENT 15 — Business Tools Suite
 **Status:** LIVE (various stages)
 **Authority:** Subordinate to SSOT North Star Constitution

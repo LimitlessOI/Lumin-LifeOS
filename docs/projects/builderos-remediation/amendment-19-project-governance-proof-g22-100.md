@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance - Proof G22-100 -->
+
 The blueprint `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` was not provided in the REPO FILE CONTENTS, making it impossible to derive the next build slice or proof gap from its content.
 # Amendment 19 Project Governance - Proof G22-100
 

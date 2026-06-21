@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Database — initialises the global pg connection pool for Neon PostgreSQL and
  * Database — initialises the global pg connection pool for Neon PostgreSQL and
  * runs all CREATE TABLE / CREATE INDEX migrations needed by LifeOS on startup.
  *

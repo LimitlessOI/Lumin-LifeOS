@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Hipaa Middleware.
+ */
 ```javascript
 const crypto = require('crypto');
 

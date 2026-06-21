@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SYNOPSIS: Script — Pm2 Setup.
 set -euo pipefail
 mkdir -p logs
 npx pm2 start ecosystem.config.js --only lifeos

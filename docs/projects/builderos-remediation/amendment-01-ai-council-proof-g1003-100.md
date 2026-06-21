@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G1003-100 - Initial Decision Logging -->
+
 # Amendment 01: AI Council Proof - G1003-100 - Initial Decision Logging
 
 ## Objective

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Placeholder for quantum-resistant cryptography service
+ */
 ```javascript
 // Placeholder for quantum-resistant cryptography service
 module.exports = {

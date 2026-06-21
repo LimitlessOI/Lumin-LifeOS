@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - G84-100 Configuration Loading -->
+
 # Amendment 14: White-Label Proof - G84-100 Configuration Loading
 
 ## Proof-Closing Blueprint Note

@@ -1,0 +1,609 @@
+{
+  "schema": "builderos_tool_registry_v2",
+  "updated_at": "2026-06-21",
+  "purpose": "AI/human lookup — what exists, what is wired, what to integrate next. Search REPO_FILE_SYNOPSIS_INDEX.json for path→synopsis; this file for BuilderOS wiring truth.",
+  "ai_lookup_order": [
+    "builderos-reboot/governance/BUILDEROS_TOOL_REGISTRY.json",
+    "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
+    "In-file /** SYNOPSIS: */ header (129 factory + builderos files backfilled 2026-06-21)"
+  ],
+  "wiring_layers": {
+    "synopsis": "Four layers — do not conflate 'route exists' with 'founder chat uses it'",
+    "http_mounted": "Express route registered on Railway production server",
+    "founder_spine": "Called from POST …/founder-interface/message or its async build job",
+    "factory_cli": "Called from builderos-reboot/scripts/* or run-founder-intake-direct.mjs",
+    "c2_only": "Command-control jobs API only — not founder dashboard chat"
+  },
+  "wired_spine": {
+    "synopsis": "Live founder → BuilderOS paths (post 8a7c573707 + quorum escalation local)",
+    "paths": [
+      {
+        "entry": "POST /api/v1/lifeos/builderos/command-control/founder-interface/message",
+        "file": "routes/lifeos-builderos-command-control-routes.js",
+        "founder_spine": true,
+        "branches": [
+          "display → job queue read (NO_COMMAND_RAN)",
+          "build (async 202) → services/founder-build-self-repair.js → css patch OR /builder/task+execute OR quorum 2→3→Chair",
+          "mission → services/lifeos-mission-pipeline-executor.js → runFoundationPipelineForFounder",
+          "execute → spawn scripts/run-founder-intake-direct.mjs → runDevelopmentStage",
+          "feedback_patch → POST /api/v1/lifeos/builder/build (UI tweaks — skips terminal intake)",
+          "lumin_fallback → services/lifeos-lumin.js"
+        ]
+      },
+      {
+        "entry": "GET …/founder-interface/build-job/:jobId",
+        "file": "routes/lifeos-builderos-command-control-routes.js",
+        "founder_spine": true,
+        "note": "Poll async founder build + quorum escalation receipt"
+      },
+      {
+        "entry": "POST /api/v1/lifeos/builder/execute-batch",
+        "file": "routes/lifeos-council-builder-routes.js",
+        "founder_spine": true,
+        "note": "Atomic 4-file CSS commit via commitManyToGitHub"
+      },
+      {
+        "entry": "scripts/run-founder-intake-direct.mjs",
+        "file": "scripts/run-founder-intake-direct.mjs",
+        "factory_cli": true,
+        "calls": "factory-staging/factory-core/arc/run-foundation.js"
+      },
+      {
+        "entry": "builderos-reboot/scripts/execute-mission.mjs",
+        "file": "builderos-reboot/scripts/execute-mission.mjs",
+        "factory_cli": true,
+        "calls": "blueprint steps, doctrine-enforcement, council /build for write_file steps — NOT execute-step.js hot path"
+      },
+      {
+        "entry": "POST …/command-control/jobs/:id/execute",
+        "file": "services/builderos-governed-loop-executor.js",
+        "c2_only": true,
+        "note": "Sentry→PBB→Builder→verify — NOT founder chat UI"
+      }
+    ]
+  },
+  "http_mounted_not_founder_spine": {
+    "synopsis": "Routes exist on Railway but founder chat does not call them before/at build time",
+    "items": [
+      {
+        "path": "routes/action-inbox-routes.js",
+        "mount": "/api/v1/lifeos/action-inbox",
+        "gap": "Founder build bypasses inbox staging — bp_build_request never staged"
+      },
+      {
+        "path": "routes/builderos-control-plane-routes.js",
+        "mount": "/api/v1/builderos/control-plane",
+        "gap": "DONE gate + build ledger not in founder job poll UI"
+      },
+      {
+        "path": "routes/token-accounting-routes.js",
+        "mount": "/api/v1/token-accounting (verify mount in register-runtime-routes)",
+        "gap": "Founder sees no spend/budget on build"
+      },
+      {
+        "path": "routes/builderos-arc-routes.js",
+        "mount": "/api/v1/builderos/arc",
+        "gap": "No founder 'translate mission X' without terminal wording"
+      }
+    ]
+  },
+  "category_index": {
+    "factory_bpb": "Blueprint translation / intake gates before builder spends",
+    "factory_builder": "Single-step builder contract (sandbox, write_file_exact)",
+    "factory_sentry": "Per-step verification + anti-pattern + proof freshness",
+    "factory_tsos": "Token efficiency + model routing evaluation",
+    "factory_historian": "Lessons, predictions, consensus receipts",
+    "factory_deliberation": "v2.7 roster/consensus session bootstrap",
+    "builderos_governed_loop": "C2 job Sentry→PBB→Builder loop",
+    "builderos_control_plane": "Build ledger + DONE gate",
+    "founder_build": "Founder chat → commit → live proof path",
+    "token_economics": "Spend ledger + budget gates + zero-waste",
+    "prioritization": "BP queue ordering by founder-visible value",
+    "schedulers_legacy": "Competing autonomous queues — deprecate"
+  },
+  "top_10_integration_priorities": [
+    {
+      "rank": 1,
+      "path": "services/action-inbox.js",
+      "why": "AM21 law — stage bp_build_request before any /build; routes mounted but spine skips"
+    },
+    {
+      "rank": 2,
+      "path": "factory-staging/factory-core/bpb/intake-gate.js",
+      "why": "Block bad missions (adam-filter, packet completeness, blueprint freeze) before token burn"
+    },
+    {
+      "rank": 3,
+      "path": "factory-staging/factory-core/builder/execute-step.js",
+      "why": "Replace ad-hoc council /build in execute-mission.mjs with one exact step + sandbox"
+    },
+    {
+      "rank": 4,
+      "path": "factory-staging/factory-core/sentry/run-verification.js",
+      "why": "Per-step PASS proof on factory hot path (paired with execute-step)"
+    },
+    {
+      "rank": 5,
+      "path": "services/builderos-control-plane-service.js",
+      "why": "Founder async job poll should show DONE gate + proof artifacts"
+    },
+    {
+      "rank": 6,
+      "path": "services/token-accounting-service.js",
+      "why": "Quorum escalation burns tokens — founder needs visible budget"
+    },
+    {
+      "rank": 7,
+      "path": "services/useful-work-guard.js",
+      "why": "Cron/autopilot token burn (266 chat pings) — wrap all schedulers"
+    },
+    {
+      "rank": 8,
+      "path": "services/builderos-governed-loop-executor.js",
+      "why": "Unify C2 governed loop with founder async builds OR expose same proof surface"
+    },
+    {
+      "rank": 9,
+      "path": "services/founder-value-engine.js",
+      "why": "BP_PRIORITY ordering by revenue/UI impact vs proof-doc churn"
+    },
+    {
+      "rank": 10,
+      "path": "services/web-search-service.js",
+      "why": "Quorum/Chair has no live web — Brave/Perplexity exists but orphan on founder path"
+    }
+  ],
+  "orphan_tools": [
+    {
+      "path": "services/action-inbox.js",
+      "synopsis": "Capture/classify/stage messages; blocks auto-routing bp_build_request to builder.",
+      "category": "lifeos_middle_layer",
+      "http_mounted": true,
+      "founder_spine": false,
+      "priority": "P0",
+      "integrate_into": "founder-interface/message build branch — stage before /build per AM21"
+    },
+    {
+      "path": "factory-staging/factory-core/bpb/intake-gate.js",
+      "synopsis": "BPB intake: founder packet completeness, adam-filter, deliberation gate, blueprint freeze.",
+      "category": "factory_bpb",
+      "http_mounted": false,
+      "founder_spine": false,
+      "priority": "P0",
+      "integrate_into": "runDevelopmentStage + execute-mission.mjs pre-step"
+    },
+    {
+      "path": "factory-staging/factory-core/builder/execute-step.js",
+      "synopsis": "Canonical factory hot-path single-step builder (sandbox, exact step only).",
+      "category": "factory_builder",
+      "http_mounted": "partial — factory-staging server only, not production spine",
+      "founder_spine": false,
+      "priority": "P0",
+      "integrate_into": "execute-mission.mjs per blueprint step"
+    },
+    {
+      "path": "factory-staging/factory-core/builder/sandbox.js",
+      "synopsis": "Sandbox boundary enforcement for factory builder steps.",
+      "category": "factory_builder",
+      "founder_spine": false,
+      "priority": "P0",
+      "integrate_into": "execute-step.js (already internal — wire execute-step first)"
+    },
+    {
+      "path": "factory-staging/factory-core/builder/action-handlers/write-file-exact.js",
+      "synopsis": "Exact byte write handler — no whole-file LLM rewrite.",
+      "category": "factory_builder",
+      "founder_spine": false,
+      "priority": "P0",
+      "integrate_into": "execute-step.js action dispatch"
+    },
+    {
+      "path": "factory-staging/factory-core/sentry/run-verification.js",
+      "synopsis": "SENTRY per-step verification + historian receipt after builder step.",
+      "category": "factory_sentry",
+      "founder_spine": false,
+      "priority": "P0",
+      "integrate_into": "execute-mission.mjs loop after each step"
+    },
+    {
+      "path": "services/builderos-control-plane-service.js",
+      "synopsis": "Build task ledger + DONE gate — no PASS without proof artifacts.",
+      "category": "builderos_control_plane",
+      "http_mounted": true,
+      "founder_spine": false,
+      "priority": "P0",
+      "integrate_into": "founder build job poll + lifeos-dashboard proof panel"
+    },
+    {
+      "path": "services/token-accounting-service.js",
+      "synopsis": "Universal AI spend ledger + daily budget gates.",
+      "category": "token_economics",
+      "http_mounted": true,
+      "founder_spine": false,
+      "priority": "P0",
+      "integrate_into": "founder-build-self-repair + quorum escalation + lumin fallback"
+    },
+    {
+      "path": "services/useful-work-guard.js",
+      "synopsis": "Skip scheduled AI unless prerequisites + work-check prove real work.",
+      "category": "token_economics",
+      "founder_spine": false,
+      "priority": "P0",
+      "integrate_into": "builderos-bp-priority-scheduler, factory-autopilot, overnight runners"
+    },
+    {
+      "path": "services/web-search-service.js",
+      "synopsis": "Brave → Perplexity → AI fallback web search for research/UX patterns.",
+      "category": "research",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "founder-build-quorum-escalation on unknown blockers"
+    },
+    {
+      "path": "services/builder-outcome-verifier.js",
+      "synopsis": "Git-diff outcome verification for governed builder commits.",
+      "category": "founder_build",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "Unify with founder-build-outcome.js + governed-loop"
+    },
+    {
+      "path": "services/builderos-governed-loop-executor.js",
+      "synopsis": "Sentry→PBB plan→Builder→verifier loop for ONE queued C2 job.",
+      "category": "builderos_governed_loop",
+      "c2_only": true,
+      "priority": "P1",
+      "integrate_into": "Founder async build OR shared proof schema with founder-build-success-gate"
+    },
+    {
+      "path": "services/builderos-sentry-job-audit.js",
+      "synopsis": "OIL boundary audit before governed loop dispatch.",
+      "category": "builderos_governed_loop",
+      "c2_only": true,
+      "priority": "P1",
+      "integrate_into": "founder-build-self-repair pre-dispatch"
+    },
+    {
+      "path": "services/builderos-pbb-plan.js",
+      "synopsis": "Generate BP/PBB plan from OIL audit for governed execution.",
+      "category": "builderos_governed_loop",
+      "c2_only": true,
+      "priority": "P1",
+      "integrate_into": "founder build path for non-CSS tasks"
+    },
+    {
+      "path": "services/founder-value-engine.js",
+      "synopsis": "Rank work by founder-visible impact vs proof-doc churn.",
+      "category": "prioritization",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "bp-priority-never-stop.mjs job ordering"
+    },
+    {
+      "path": "routes/builderos-arc-routes.js",
+      "synopsis": "HTTP: ARC entry-gate, simulate, run-pipeline, translate, compile.",
+      "category": "routes",
+      "http_mounted": true,
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "founder 'translate mission X' + run-founder-intake system stage"
+    },
+    {
+      "path": "factory-staging/factory-core/founder-intent/adam-filter.js",
+      "synopsis": "Noise reduction on raw founder notes before packet bootstrap.",
+      "category": "factory_bpb",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "run-founder-intake-direct.mjs before ensureRawFounderPacket"
+    },
+    {
+      "path": "factory-staging/factory-core/arc/foundation/obstacle-lesson-loop.js",
+      "synopsis": "Obstacle → lesson → retry loop for foundation pipeline.",
+      "category": "factory_historian",
+      "factory_cli": true,
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "run-foundation.js FAIL paths + founder quorum lesson recorder"
+    },
+    {
+      "path": "factory-staging/factory-core/tsos/evaluate-efficiency.js",
+      "synopsis": "TSOS token/routing efficiency scoring post-build.",
+      "category": "factory_tsos",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "builderos-governed-loop-executor + founder build receipts"
+    },
+    {
+      "path": "factory-staging/factory-core/tsos/model-routing-evaluator.js",
+      "synopsis": "Score model choice vs outcome for meritocracy ledger.",
+      "category": "factory_tsos",
+      "founder_spine": false,
+      "priority": "P2",
+      "integrate_into": "founder-build-quorum-escalation stage receipts"
+    },
+    {
+      "path": "services/builderos-metrics-reporter.js",
+      "synopsis": "15 BuilderOS KPIs from telemetry for alpha readiness.",
+      "category": "metrics",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "founder display bundle + point-b-gate"
+    },
+    {
+      "path": "services/builderos-system-alpha-readiness.js",
+      "synopsis": "Structural alpha readiness snapshot for command surfaces.",
+      "category": "metrics",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "evaluatePointBTargetReached"
+    },
+    {
+      "path": "services/builderos-structural-proof.js",
+      "synopsis": "Structural proof freshness checks before PASS claims.",
+      "category": "metrics",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "execute-mission.mjs final gate"
+    },
+    {
+      "path": "services/builderos-completion-authority.js",
+      "synopsis": "Who may mark a build/mission complete — authority separation.",
+      "category": "builderos_control_plane",
+      "founder_spine": false,
+      "priority": "P2",
+      "integrate_into": "control-plane DONE gate"
+    },
+    {
+      "path": "services/builderos-build-done-gate-helper.js",
+      "synopsis": "Helper predicates for DONE gate (proof artifacts present).",
+      "category": "builderos_control_plane",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "founder-build-success-gate.js unify PASS bar"
+    },
+    {
+      "path": "services/builderos-model-escalation-gate.js",
+      "synopsis": "When to escalate model tier during builder retries.",
+      "category": "builderos_governed_loop",
+      "founder_spine": false,
+      "priority": "P2",
+      "integrate_into": "Merge with founder-build-quorum-escalation CFO gate"
+    },
+    {
+      "path": "services/builderos-routing-policy.js",
+      "synopsis": "Route builder tasks to correct execution path (patch vs full build).",
+      "category": "builderos_governed_loop",
+      "founder_spine": "partial — overlaps builder-instruction-target.js",
+      "priority": "P2",
+      "integrate_into": "Consolidate with builder-instruction-target.js"
+    },
+    {
+      "path": "services/builderos-tsos-routing.js",
+      "synopsis": "TSOS-aware council member routing for builder calls.",
+      "category": "factory_tsos",
+      "founder_spine": false,
+      "priority": "P2",
+      "integrate_into": "council /builder/task dispatch"
+    },
+    {
+      "path": "services/builderos-arc-service.js",
+      "synopsis": "ARC translate/simulate/compile service backing HTTP routes.",
+      "category": "factory_bpb",
+      "http_mounted": true,
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "lifeos-mission-pipeline-executor.js"
+    },
+    {
+      "path": "services/lifeos-capture-pipeline.js",
+      "synopsis": "Voice/text → Action Inbox auto-stage (Capture Pipeline v2).",
+      "category": "lifeos_middle_layer",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "Voice path + founder intake pre-processor"
+    },
+    {
+      "path": "services/lifeos-commitment-route.js",
+      "synopsis": "Approved inbox items → lifeos_commitments DB.",
+      "category": "lifeos_middle_layer",
+      "founder_spine": false,
+      "priority": "P2",
+      "integrate_into": "post-approve hook after Action Inbox"
+    },
+    {
+      "path": "services/mission-ledger.js",
+      "synopsis": "DB mission state machine (AM47) — runtime mission truth in Neon.",
+      "category": "mission_runtime",
+      "founder_spine": false,
+      "priority": "P1",
+      "integrate_into": "run-foundation.js stage transitions (file + DB sync)"
+    },
+    {
+      "path": "services/builder-council-review.js",
+      "synopsis": "5-lens pre-build council review (consequences, time-travel, trends, personas, coherence).",
+      "category": "builder_quality",
+      "founder_spine": false,
+      "priority": "P2",
+      "integrate_into": "execute-mission pre-step or governed-loop retry"
+    },
+    {
+      "path": "core/code-escalation.js",
+      "synopsis": "Multi-model code escalation when single agent fails.",
+      "category": "research",
+      "founder_spine": "partial — superseded by founder-build-quorum-escalation.js",
+      "priority": "P3",
+      "integrate_into": "Merge patterns or deprecate duplicate"
+    },
+    {
+      "path": "core/self-healing-code.js",
+      "synopsis": "Autonomous bug fix attempts from error patterns.",
+      "category": "research",
+      "founder_spine": false,
+      "priority": "P3",
+      "integrate_into": "Not founder spine — OIL/self-repair executor only"
+    },
+    {
+      "path": "scripts/lifeos-builder-daemon.mjs",
+      "synopsis": "Legacy continuous builder queue runner.",
+      "category": "schedulers_legacy",
+      "priority": "deprecate",
+      "integrate_into": "bp-priority-never-stop.mjs only"
+    },
+    {
+      "path": "builderos-reboot/scripts/autopilot-runner.mjs",
+      "synopsis": "Hist MISSION_QUEUE recovery autopilot (not BP_PRIORITY).",
+      "category": "schedulers_legacy",
+      "priority": "deprecate",
+      "integrate_into": "Archive — single queue BP_PRIORITY.json"
+    },
+    {
+      "path": "services/factory-autopilot-scheduler.js",
+      "synopsis": "Cron spawns factory:autopilot from Hist queue.",
+      "category": "schedulers_legacy",
+      "priority": "deprecate",
+      "integrate_into": "builderos-bp-priority-scheduler.js + useful-work-guard"
+    }
+  ],
+  "wired_tools": [
+    {
+      "path": "services/founder-build-self-repair.js",
+      "synopsis": "Solo 3× retry → quorum escalation hook → css patch or builder execute.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/founder-build-quorum-escalation.js",
+      "synopsis": "2-AI → 3-AI → Chair with CFO gate + lessons_learned.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/founder-build-success-gate.js",
+      "synopsis": "PASS requires atomic commit + live HTML + client proof spec.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/founder-css-patch.js",
+      "synopsis": "Mechanical 4-file assistant bubble CSS patch + batch commit.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/builder-instruction-target.js",
+      "synopsis": "Infer target_file + css-only routing for founder UI feedback.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/lifeos-execution-truth.js",
+      "synopsis": "Fail-closed PASS/FAIL + autopsy + quorum lines in founder replies.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/deployment-service.js",
+      "synopsis": "commitManyToGitHub atomic multi-file commits.",
+      "founder_spine": true
+    },
+    {
+      "path": "factory-staging/factory-core/arc/run-foundation.js",
+      "synopsis": "Foundation pipeline — department sims, gates, point-b (CLI/intake path).",
+      "factory_cli": true
+    }
+  ],
+  "factory_stack_on_cli_not_spine": {
+    "synopsis": "Proven in mission packs / run-foundation.js — not in execute-mission.mjs hot path or founder chat",
+    "modules": [
+      "factory-staging/factory-core/arc/foundation/pre-handoff-intent-gate.js",
+      "factory-staging/factory-core/arc/foundation/doctrine-enforcement.js",
+      "factory-staging/factory-core/arc/foundation/reality-score.js",
+      "factory-staging/factory-core/arc/point-b-gate.js",
+      "factory-staging/factory-core/arc/foundation/phase-repair.js",
+      "factory-staging/factory-core/arc/department-simulations.js",
+      "factory-staging/factory-core/deliberation/seed-mission-deliberation.js",
+      "factory-staging/factory-core/historian/record-lesson.js"
+    ]
+  },
+  "duplicate_queues_warning": {
+    "synopsis": "Two autonomous queues — only BP_PRIORITY is product-canonical.",
+    "canonical": "builderos-reboot/BP_PRIORITY.json + bp-priority-never-stop.mjs",
+    "legacy": "builderos-reboot/HIST MISSION_QUEUE + factory-autopilot + autopilot-runner.mjs"
+  },
+  "founder_execute_path_fork": {
+    "synopsis": "Three execute paths — not one terminal-backed spine",
+    "paths": [
+      {
+        "name": "terminal_intake",
+        "when": "Mission-style execute intent",
+        "terminal": true,
+        "entry": "run-founder-intake-direct.mjs"
+      },
+      {
+        "name": "feedback_patch",
+        "when": "UI/color/header tweaks",
+        "terminal": false,
+        "entry": "POST /api/v1/lifeos/builder/build"
+      },
+      {
+        "name": "lumin_fallback",
+        "when": "Conversational non-build",
+        "terminal": false,
+        "entry": "services/lifeos-lumin.js"
+      }
+    ],
+    "policy_gap": "100% terminal-backed execution requires routing feedback_patch through intake-gate + execute-step"
+  },
+  "integration_roadmap": [
+    {
+      "phase": 1,
+      "title": "Action Inbox before build",
+      "files": ["services/action-inbox.js", "routes/lifeos-builderos-command-control-routes.js"],
+      "outcome": "Every founder build stages bp_build_request; approve → build"
+    },
+    {
+      "phase": 2,
+      "title": "BPB intake on terminal path",
+      "files": ["factory-staging/factory-core/bpb/intake-gate.js", "scripts/run-founder-intake-direct.mjs"],
+      "outcome": "adam-filter + packet completeness before runDevelopmentStage"
+    },
+    {
+      "phase": 3,
+      "title": "Control plane + token accounting on builds",
+      "files": ["services/builderos-control-plane-service.js", "services/token-accounting-service.js"],
+      "outcome": "Founder job poll shows spend + DONE proof ledger"
+    },
+    {
+      "phase": 4,
+      "title": "Factory execute-step + SENTRY in execute-mission",
+      "files": ["factory-staging/factory-core/builder/execute-step.js", "factory-staging/factory-core/sentry/run-verification.js"],
+      "outcome": "Blueprint steps use hot path not ad-hoc /build"
+    },
+    {
+      "phase": 5,
+      "title": "Kill legacy queue + zero-waste schedulers",
+      "files": ["services/useful-work-guard.js", "services/factory-autopilot-scheduler.js"],
+      "outcome": "Single BP_PRIORITY queue; no Hist autopilot burn"
+    }
+  ],
+  "product_tools_not_builder_spine": [
+    {
+      "path": "services/video-pipeline.js",
+      "synopsis": "Replicate+FFmpeg text→video — MarketingOS Phase 3"
+    },
+    {
+      "path": "core/video-editing-council.js",
+      "synopsis": "8-tool local video council — MarketingOS clips"
+    },
+    {
+      "path": "services/lifere-os-v1.js",
+      "synopsis": "LifeRE product layer — not BuilderOS"
+    }
+  ],
+  "synopsis_header_standard": {
+    "law": "builderos-reboot/governance/FILE_SYNOPSIS_LAW.json",
+    "index": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
+    "entries": 12090,
+    "backfill_2026_06_21": "129 factory-core + builderos + founder service files",
+    "template": "/**\n * SYNOPSIS: <one line what it does>\n * WIRED: yes|no|partial — <where>\n * INTEGRATE: <target if orphan>\n * @ssot <amendment>\n */",
+    "commands": {
+      "lookup": "jq '.files[] | select(.path|test(\"intake-gate\"))' builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
+      "backfill": "npm run lifeos:file-synopsis:backfill",
+      "enforce": "npm run lifeos:file-synopsis:enforce"
+    }
+  }
+}

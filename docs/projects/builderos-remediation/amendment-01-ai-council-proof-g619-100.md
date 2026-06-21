@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT 01 AI COUNCIL - G619-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT 01 AI COUNCIL - G619-100
 
 ## Blueprint Reference

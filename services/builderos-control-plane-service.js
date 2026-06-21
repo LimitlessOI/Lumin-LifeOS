@@ -1,5 +1,7 @@
 /**
- * BuilderOS Control Plane — measurement aggregation + DONE gate + build ledger.
+ * SYNOPSIS: BuilderOS Control Plane — measurement aggregation + DONE gate + build ledger.
+ * WIRED: partial — HTTP /api/v1/builderos/control-plane; founder job poll does not read ledger
+ * INTEGRATE: founder-interface/build-job/:id poll UI + founder-build-success-gate PASS sync
  * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
  */
 

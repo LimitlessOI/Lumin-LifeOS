@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-backtest-routes.js
  * routes/lifeos-backtest-routes.js
  *
  * Education-only view over attention-momentum + strategy-benchmark logs.

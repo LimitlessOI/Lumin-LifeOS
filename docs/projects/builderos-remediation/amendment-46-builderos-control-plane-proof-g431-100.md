@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G431 100. -->
+
 Amendment 46 BuilderOS Control Plane Proof - G431-100
 
 Proof-Closing Blueprint Note: BuilderOS Build Event Wiring

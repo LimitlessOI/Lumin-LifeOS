@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/ai-optimizer.service.js.
+ */
 ```javascript
 const axios = require('axios');
 

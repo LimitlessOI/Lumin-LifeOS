@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS Commitment Route v2.1 — approved inbox commitment → commitment tracker.
  * LifeOS Commitment Route v2.1 — approved inbox commitment → commitment tracker.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Video Scripts for LifeOS Demo, TC Pitch, and Real-Estate OS -->
+
 # Video Scripts for LifeOS Demo, TC Pitch, and Real-Estate OS
 
 ## LifeOS Demo

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G841 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS Remediation (G841-100)
 Source Blueprint: `docs/projects/AMENDMENT_41_MARKETINGOS.md`
 Signal: This document — SSOT foundation.

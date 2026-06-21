@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G121-100 -->
+
 # Amendment 12: Command Center - Proof G121-100
 
 This document serves as a proof-closing blueprint note for the G121-100 build slice of Amendment 12, focusing on the initial `CommandCenterService` stub and core data model definitions.

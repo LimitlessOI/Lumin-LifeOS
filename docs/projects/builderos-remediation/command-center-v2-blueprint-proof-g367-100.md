@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G367-100 - CommandRegistry Core -->
+
 # Command Center V2 Blueprint Proof: G367-100 - CommandRegistry Core
 
 This document outlines the next smallest blueprint-backed build slice for the Command Center V2, focusing on the foundational `CommandRegistry`.

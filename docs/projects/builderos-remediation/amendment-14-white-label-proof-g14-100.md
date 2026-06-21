@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof - G14-100: Initial Configuration Schema Definition -->
+
 # Amendment 14 White Label Proof - G14-100: Initial Configuration Schema Definition
 
 This document serves as a proof-closing blueprint note for the first build slice of Amendment 14, focusing on establishing the foundational configuration schema for white-label capabilities.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G34 100. -->
+
 Command Center V2 Blueprint Proof: G34-100 - UMS Core CRUD Implementation
 This document serves as a proof-closing blueprint note, deriving the next smallest blueprint-backed build slice for the Command Center V2 re-platforming effort, specifically focusing on the User Management Service (UMS).
 ---

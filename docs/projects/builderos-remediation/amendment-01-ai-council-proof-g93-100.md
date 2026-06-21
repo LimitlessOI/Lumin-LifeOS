@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G93-100: Initial Communication Channel Establishment -->
+
 # Amendment 01: AI Council Proof - G93-100: Initial Communication Channel Establishment
 
 ## Objective

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Model Registry
  * Model Registry
  * Loads and manages model configurations from YAML
  */

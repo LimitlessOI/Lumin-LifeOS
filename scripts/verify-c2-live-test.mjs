@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports runC2LiveTest — scripts/verify-c2-live-test.mjs.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 export async function runC2LiveTest({ baseUrl, commandKey }) {

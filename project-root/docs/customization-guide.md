@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Jest Configurator Customization Guide -->
+
 ```markdown
 # Jest Configurator Customization Guide
 

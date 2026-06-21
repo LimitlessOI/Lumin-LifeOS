@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports billingRouter — src/routes/billing.js.
+ */
 import express from 'express';
 import Stripe from 'stripe';
 

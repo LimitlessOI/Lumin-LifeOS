@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/cron/health-monitor.js.
+ */
 const cron = require('node-cron');
 const smsAlerts = require('../services/sms-alerts');
 const db = require('../db');

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Determinism Test Protocol -->
+
 # Determinism Test Protocol
 
 Use the exact intended coder model tier.

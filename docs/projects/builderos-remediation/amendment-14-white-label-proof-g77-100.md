@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof - Remediation G77-100 -->
+
 # Amendment 14 White Label Proof - Remediation G77-100
 
 This document serves as a remediation note for the OIL verifier rejection of the `AMENDMENT_14_WHITE_LABEL` proof, specifically addressing the `TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".md"` error.

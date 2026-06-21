@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G16-100 -->
+
 # Amendment 01: AI Council Proof - G16-100
 
 This document serves as proof-of-concept and initial validation for the G16-100 clause of Amendment 01 concerning the AI Council's operational guidelines within BuilderOS. It specifically addresses the integration points for automated governance loop execution as defined by the amendment.

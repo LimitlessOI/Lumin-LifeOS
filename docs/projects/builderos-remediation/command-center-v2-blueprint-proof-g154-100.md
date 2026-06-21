@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G154-100 Remediation -->
+
 The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided, making it impossible to derive the exact content.
 # Command Center V2 Blueprint Proof - G154-100 Remediation
 

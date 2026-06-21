@@ -1,4 +1,5 @@
-/** PM2 configuration to keep `server.js` running with zero downtime. */
+/**
+ * SYNOPSIS: PM2 configuration to keep `server.js` running with zero downtime. PM2 configuration to keep `server.js` running with zero downtime. */
 export default {
   apps: [
     {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G743 100. -->
+
 // docs/projects/builderos-remediation/amendment-12-command-center-proof-g743-100.md
 Amendment 12 Command Center Proof: G743-100 - Command Lifecycle Integration
 Proof-Closing Blueprint Note

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: System proof event API — harmless DB records for provider tool-action proof.
  * System proof event API — harmless DB records for provider tool-action proof.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

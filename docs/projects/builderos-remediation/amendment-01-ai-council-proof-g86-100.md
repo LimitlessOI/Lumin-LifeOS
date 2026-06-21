@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT 01 AI COUNCIL - g86-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT 01 AI COUNCIL - g86-100
 
 This note closes the proof for the initial data model definitions, enabling the next build slice for the AI Council integration.

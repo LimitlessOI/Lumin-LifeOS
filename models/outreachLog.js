@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — models/outreachLog.js.
+ */
 const mongoose = require('mongoose');
 
 const outreachLogSchema = new mongoose.Schema({

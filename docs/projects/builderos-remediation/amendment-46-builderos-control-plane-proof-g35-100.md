@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G35 100. -->
+
 The OIL verifier rejection indicates an issue with the verifier attempting to execute a markdown file as a JavaScript module, which is external to the content of this markdown document.
 Amendment 46: BuilderOS Control Plane Proof - G35-100
 

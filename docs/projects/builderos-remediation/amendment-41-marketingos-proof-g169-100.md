@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G169 100. -->
+
 AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note (G169-100)
 Source Blueprint: `docs/projects/AMENDMENT_41_MARKETINGOS.md`
 Signal: This document — SSOT foundation.

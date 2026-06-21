@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G37-100 -->
+
 # Command Center V2 Blueprint Proof: G37-100
 
 This document serves as a proof-closing note for the Command Center V2 Blueprint, deriving the next smallest blueprint-backed build slice.

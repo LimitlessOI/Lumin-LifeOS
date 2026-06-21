@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 202310104_create_platform_integrations.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS platform_integrations (
     id SERIAL PRIMARY KEY,

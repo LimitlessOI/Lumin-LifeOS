@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — LIFEOS ALPHA CONSENSUS PACK. -->
+
 ### NEEDS ASSESSMENT
 
 Adam needs the following to effectively use the LifeOS prototype today:

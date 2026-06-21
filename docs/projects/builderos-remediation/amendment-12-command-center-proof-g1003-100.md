@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1003 100. -->
+
 The specification requires writing a `.md` file, but the OIL verifier rejects `.md` files when attempting to execute them as Node.js modules, indicating a fundamental mismatch in expected file type or processing. The content below fulfills the `.md` file and blueprint note requirements.
 
 Amendment 12: Command Center - Proof G1003-100 (Web UI Initial Status Display)

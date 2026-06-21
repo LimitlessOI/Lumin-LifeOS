@@ -1,5 +1,5 @@
 /**
- * BuilderOS structural consolidation + Alpha readiness.
+ * SYNOPSIS: BuilderOS structural consolidation + Alpha readiness.
  * Runtime truth governs LIVE / PROVEN / ACTIVE. Docs only shape expected topology.
  *
  * @ssot docs/architecture/BUILDEROS_STRUCTURAL_CONSOLIDATION_BLUEPRINT.md

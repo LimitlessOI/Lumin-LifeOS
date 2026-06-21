@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — database/migrations/20240101000000_create_courses_table.js.
+ */
 exports.up = function(knex) {
   return knex.schema.createTable('courses', function(table) {
     table.increments('id').primary();

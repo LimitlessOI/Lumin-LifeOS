@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center - Proof G1001-100 -->
+
 # Amendment 12 Command Center - Proof G1001-100
 
 ## Blueprint Note: Next Build Slice - Event Logging Infrastructure

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260524_builder_task_receipts_phase_cols.sql.
 -- Phase proof columns for builder_task_receipts
 -- Adds: prompt_hash, prompt_version, failure_family, builder_lane
 -- These columns were added locally via ad-hoc ALTER TABLE but were never committed

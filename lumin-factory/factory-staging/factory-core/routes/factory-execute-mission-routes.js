@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — lumin-factory/factory-staging/factory-core/routes/factory-execute-mission-routes.js.
+ */
 export const factoryExecuteMissionRoute = {
   method: 'POST',
   path: '/factory/execute-mission',

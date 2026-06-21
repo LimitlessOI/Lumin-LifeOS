@@ -1,5 +1,5 @@
 /**
- * TSOS hook evidence quality aggregates — read-only, for routing readiness (TSOS-G2).
+ * SYNOPSIS: TSOS hook evidence quality aggregates — read-only, for routing readiness (TSOS-G2).
  *
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

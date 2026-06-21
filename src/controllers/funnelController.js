@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/funnelController.js.
+ */
 ```javascript
 async function getFunnelData(req, res) {
   // Mock funnel data logic

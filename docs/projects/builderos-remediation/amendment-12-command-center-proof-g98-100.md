@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G98 100. -->
+
 // docs/projects/builderos-remediation/amendment-12-command-center-proof-g98-100.md
 ---
 title: Amendment 12 Command Center Proof: g98-100

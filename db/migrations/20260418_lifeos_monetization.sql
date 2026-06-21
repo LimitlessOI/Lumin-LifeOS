@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260418_lifeos_monetization.sql.
 -- Migration: 20260418_lifeos_monetization
 -- Bridges purpose_profiles.economic_paths → opt-in monetization + generated outreach.
 -- Purpose discovery already produces economic_paths (JSONB array of {title, description,

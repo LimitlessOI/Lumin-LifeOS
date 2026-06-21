@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G90-100 -->
+
 # Amendment 09: Life Coaching - Proof G90-100
 
 This document outlines the proof-closing blueprint note for the final stages (G90-100) of the Amendment 09: Life Coaching implementation, focusing on end-to-end validation and production readiness.

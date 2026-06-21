@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260529_command_center_communications.sql.
 -- Command Center communication history (NOT BuilderOS epistemic proof memory)
 -- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
 

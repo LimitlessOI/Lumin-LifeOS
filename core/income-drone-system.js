@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: IncomeDroneSystem — basic income drone management.
  * IncomeDroneSystem — basic income drone management.
  * Extracted from server.js. Enhanced version is in core/enhanced-income-drone.js.
  */

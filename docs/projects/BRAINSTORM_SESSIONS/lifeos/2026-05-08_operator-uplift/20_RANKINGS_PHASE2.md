@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Phase 2 — Rankings (total order, best → worst) -->
+
 # Phase 2 — Rankings (total order, best → worst)
 
 **Participant:** **Conductor / IDE session** (single rank — **not** multi-model quorum). For load-bearing reorder disputes, **`npm run lifeos:gate-change-run`** on Railway remains authoritative.

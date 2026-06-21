@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof (G38-100) - Proof Closing Blueprint Note -->
+
 # Amendment 46: BuilderOS Control Plane Proof (G38-100) - Proof Closing Blueprint Note
 
 This document outlines the missing implementation and the smallest safe build slice to wire the BuilderOS control plane routes as specified in Amendment 46.

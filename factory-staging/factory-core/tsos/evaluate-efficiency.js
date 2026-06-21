@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: TSOS efficiency evaluation — proposals only; never mission authority.
+ */
 import { promptOptimizationProposal } from './prompt-optimization.js';
 import { cacheValueEvaluation } from './cache-value-evaluator.js';
 import { modelRoutingEvaluation } from './model-routing-evaluator.js';

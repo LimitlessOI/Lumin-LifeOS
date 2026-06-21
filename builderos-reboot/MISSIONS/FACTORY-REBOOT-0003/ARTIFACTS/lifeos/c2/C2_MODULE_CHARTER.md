@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: C2 Module Charter -->
+
 # C2 Module Charter
 
 **Canonical anti-drift doc:** `docs/C2_CANONICAL_DEFINITION.md`

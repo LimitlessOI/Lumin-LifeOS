@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Integration - Proof G149-100 -->
+
 # Amendment 09: Life Coaching Integration - Proof G149-100
 
 This document serves as a proof-closing blueprint note for a build slice within the "Core API Development" phase of Amendment 09.

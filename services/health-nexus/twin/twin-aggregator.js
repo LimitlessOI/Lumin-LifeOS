@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Twin Aggregator.
+ */
 ```javascript
 function aggregateModelOutputs(wearableOutput, genomicOutput, labOutput) {
   return {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (g32-100) -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (g32-100)
 
 This note outlines the necessary steps to close the proof gap `g32-100`, ensuring that the `MarketingCampaign` data model defined in `AMENDMENT_41_MARKETINGOS.md` is enforced as the Single Source of Truth (SSOT) within the MarketingOS platform.

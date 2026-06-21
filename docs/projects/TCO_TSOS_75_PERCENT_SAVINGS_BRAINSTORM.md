@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TCO + TSOS — brainstorm toward ≥75% average token savings -->
+
 # TCO + TSOS — brainstorm toward ≥75% average token savings
 
 **Purpose:** Operator bar — **no less than ~75% measured average token savings** on the paths that feed **`npm run tsos:tokens`** / **`GET /api/v1/tsos/...`** telemetry — without lying on the ledger. This file is meant to be **handed to other AIs** for critique, ranking, and refinement.

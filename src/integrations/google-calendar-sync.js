@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Google Calendar API setup
+ */
 const { google } = require('googleapis');
 const calendar = google.calendar('v3');
 

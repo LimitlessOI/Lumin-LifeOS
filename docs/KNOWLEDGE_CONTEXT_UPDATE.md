@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Knowledge Context Update: TRUE_VISION.md as Primary Foundation -->
+
 # Knowledge Context Update: TRUE_VISION.md as Primary Foundation
 
 ## ✅ Changes Completed

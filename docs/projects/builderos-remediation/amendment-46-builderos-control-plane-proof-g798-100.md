@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G798-100 Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G798-100 Remediation
 
 ## Blueprint Note for C2 Build Pass

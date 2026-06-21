@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof G21-100 -->
+
 The specification to write a `.md` file is contradictory with the OIL verifier's rejection, which indicates it attempts to execute `.md` files as Node.js modules, leading to `ERR_UNKNOWN_FILE_EXTENSION`.
 
 ```markdown

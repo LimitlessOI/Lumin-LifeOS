@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G118-100 - Documentation Review and Linting -->
+
 # Amendment 19 Project Governance Proof: G118-100 - Documentation Review and Linting
 
 ## Governance Guideline G118-100

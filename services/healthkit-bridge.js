@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/healthkit-bridge.js
  * services/healthkit-bridge.js
  * Receives Apple Watch / HealthKit data via iOS Shortcuts webhook.
  * Normalizes and stores in wearable_data.

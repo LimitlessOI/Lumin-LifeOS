@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: extension/content.js — Lumin Universal Overlay
  * extension/content.js — Lumin Universal Overlay
  * Injected into every web page. Thin launcher (~4KB bundled).
  *

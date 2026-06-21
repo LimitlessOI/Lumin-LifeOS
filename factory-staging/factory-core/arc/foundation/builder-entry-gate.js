@@ -1,5 +1,5 @@
 /**
- * HARD builder entry gate — post-ARC bundle + Studio block.
+ * SYNOPSIS: HARD builder entry gate — post-ARC bundle + Studio block.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

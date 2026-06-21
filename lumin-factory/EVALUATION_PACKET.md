@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Evaluation Packet — Factory Reboot -->
+
 # Evaluation Packet — Factory Reboot
 
 **For:** External audit (Codex / Claude Code)  

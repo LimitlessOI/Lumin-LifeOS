@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-identity-routes.js
  * routes/lifeos-identity-routes.js
  *
  * LifeOS Identity Intelligence — API Routes

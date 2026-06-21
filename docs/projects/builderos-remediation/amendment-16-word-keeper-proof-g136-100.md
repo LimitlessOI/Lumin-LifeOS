@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G136-100 -->
+
 # Amendment 16 Word Keeper Proof - G136-100
 
 This document serves as a proof-closing blueprint note for the initial build slice of the Amendment 16 Word Keeper feature, focusing on establishing core data persistence and minimal API exposure.

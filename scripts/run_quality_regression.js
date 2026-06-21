@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: Script — Run Quality Regression.
+ */
 import { runQualityRegression } from '../audit/quality/regression_runner.js';
 
 async function main() {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G43-100 - BuilderOS Remediation -->
+
 # Amendment 41: MarketingOS Proof G43-100 - BuilderOS Remediation
 
 **SSOT Foundation: This document outlines the proof-closing blueprint for addressing the OIL verifier rejection related to `.md` file handling.**

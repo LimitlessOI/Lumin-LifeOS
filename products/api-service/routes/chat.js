@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — products/api-service/routes/chat.js.
+ */
 import express from 'express';
 const router = express.Router();
 

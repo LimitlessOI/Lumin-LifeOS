@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Operator runtime status — human-readable "heart monitor" (read-only).
  * Operator runtime status — human-readable "heart monitor" (read-only).
  * Reads `data/runtime-reality-snapshot.json` plus receipts listed in `docs/OPERATOR_DASHBOARD_JSON.md`.
  * Reuses in-memory `buildOperatorDashboard()` for queue/daemon/next-action (no JSON write).

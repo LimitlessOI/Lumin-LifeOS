@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G495 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 12 Command Center - Proof G495-100
 
 This note closes the current proof gap for Amendment 12 Command Center, focusing on establishing a verifiable, isolated entry point for BuilderOS-governed loop execution.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema.sql.
 ```sql
 CREATE TABLE vr_therapy_sessions (
     session_id SERIAL PRIMARY KEY,

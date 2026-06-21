@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Current BP Gaps v1 -->
+
 # Current BP Gaps v1
 
 **Last updated:** 2026-05-24 (audit truth-layer sync: queue through 0030; cert labels fixed)

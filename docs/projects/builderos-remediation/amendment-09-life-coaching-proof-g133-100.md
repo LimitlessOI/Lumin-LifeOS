@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G133-100: Core Data Model & Schema Definition -->
+
 # Amendment 09: Life Coaching - Proof G133-100: Core Data Model & Schema Definition
 
 This document outlines the initial build slice for the Life Coaching feature, focusing on the foundational data model and its validation schema. This step establishes the core data structure required for all subsequent components.

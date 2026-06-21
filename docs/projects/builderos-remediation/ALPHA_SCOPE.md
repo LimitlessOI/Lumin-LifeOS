@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BUILDEROS REMEDIATION ALPHA SCOPE -->
+
 # BUILDEROS REMEDIATION ALPHA SCOPE
 
 **Project key:** `builderos-remediation`

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Outreach Automation & CRM -->
+
 # Outreach Automation & CRM
 _(formerly AMENDMENT_08_OUTREACH_CRM.md)_
 **Status:** LIVE (partial)

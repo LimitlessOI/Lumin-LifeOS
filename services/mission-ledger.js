@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/mission-ledger.js
  * services/mission-ledger.js
  * Mission Runtime DB service layer — all DB logic, no Express.
  * Authority: docs/projects/BPB-0001-MISSION-RUNTIME-V1.md §Section 4.

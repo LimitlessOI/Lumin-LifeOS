@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G425 100. -->
+
 The specification is contradictory: The task explicitly asks to write a `.md` file with specific content (provided in `REPO FILE CONTENTS`), but also instructs to "Generate the complete implementation code" and "repair" a verifier rejection that occurs because the `.md` file is being treated as executable JavaScript. It is not possible to generate "implementation code" for a markdown document that is intended as a blueprint note, nor to make a markdown file valid JavaScript without fundamentally altering its purpose and content.
 
 Amendment 12: Command Center Integration - Proof G425-100

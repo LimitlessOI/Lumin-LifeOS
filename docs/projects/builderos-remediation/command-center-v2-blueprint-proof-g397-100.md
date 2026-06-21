@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G397-100: System Status Indicator -->
+
 # Command Center V2 Blueprint Proof - G397-100: System Status Indicator
 
 This document serves as a proof-closing note for the initial build slice of Command Center V2, specifically addressing the foundational capability to display system status.

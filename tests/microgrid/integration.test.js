@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/microgrid/integration.test.js.
+ */
 ```javascript
 const request = require('supertest');
 const app = require('../../app');  // Express app

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — StripeIntegration.
+ */
 const stripe = require('stripe')('your-stripe-secret-key');
 
 class StripeService {

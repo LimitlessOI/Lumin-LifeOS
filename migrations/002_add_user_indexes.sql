@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 002_add_user_indexes.sql.
 ```sql
 CREATE INDEX idx_users_username ON users(username);
 CREATE INDEX idx_users_email ON users(email);

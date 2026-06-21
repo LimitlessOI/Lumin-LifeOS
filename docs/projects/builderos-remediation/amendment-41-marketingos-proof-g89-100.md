@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof Gap G89-100 Remediation Blueprint -->
+
 # Amendment 41: MarketingOS Proof Gap G89-100 Remediation Blueprint
 
 **Signal:** This document — SSOT foundation.

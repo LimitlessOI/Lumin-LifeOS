@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G69-100 -->
+
 # Amendment 12 Command Center Proof: G69-100
 
 This document outlines the proof-closing blueprint note for the `g69-100` slice of Amendment 12, focusing on the BuilderOS Command Center.

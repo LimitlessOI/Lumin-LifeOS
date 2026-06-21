@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G621-100 -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G621-100
 
 ## Blueprint Note: BuilderOS Control Plane Route Wiring

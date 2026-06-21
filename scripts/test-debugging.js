@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Test script to verify debugging fixes
  * Test script to verify debugging fixes
  * Run this to test critical paths and verify fixes
  */

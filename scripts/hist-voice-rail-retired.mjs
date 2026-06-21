@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Voice Rail retirement guard — history only, not active system.
  * Voice Rail retirement guard — history only, not active system.
  */
 import { syncMissionFromTechnicalReceipt } from '../services/bp-priority-sync.js';

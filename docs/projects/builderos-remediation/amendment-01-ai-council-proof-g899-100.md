@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council: Proof G899-100 - Initial Operational Definition -->
+
 # Amendment 01 AI Council: Proof G899-100 - Initial Operational Definition
 
 **Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

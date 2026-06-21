@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260524_voice_rail_message_department.sql.
 -- Voice Rail — which department answered (ChC, Hist, SNT, …)
 ALTER TABLE voice_rail_messages
   ADD COLUMN IF NOT EXISTS department TEXT;

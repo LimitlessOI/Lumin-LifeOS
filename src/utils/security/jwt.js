@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/utils/security/jwt.js.
+ */
 ```javascript
 const jwt = require('jsonwebtoken');
 const { jwtSecret, jwtExpiration } = require('../../config/auth.config');

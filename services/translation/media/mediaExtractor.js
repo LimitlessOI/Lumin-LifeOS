@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — MediaExtractor.
+ */
 ```javascript
 const fs = require('fs');
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Provider-aware candidate filtering for council/builder routing.
  * Provider-aware candidate filtering for council/builder routing.
  *
  * Runtime task authority can only make sensible choices if the candidate set

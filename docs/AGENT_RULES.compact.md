@@ -1,5 +1,5 @@
 # AGENT RULES — COMPACT ENFORCEMENT
-> Generated: 2026-06-12T19:32:53.763Z | Regenerate: `npm run gen:rules`
+> Generated: 2026-06-21T22:30:28.683Z | Regenerate: `npm run gen:rules`
 > NSSOT only for constitutional edits. **Next:** `prompts/00-HIST-LEGACY-BOUNDARY.md` (do not skip).
 
 ## HIST (mandatory first)

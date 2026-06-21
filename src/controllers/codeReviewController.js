@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/codeReviewController.js.
+ */
 ```javascript
 const submissionService = require('../services/code-review/submissionService');
 const analysisEngine = require('../services/code-review/analysisEngine');

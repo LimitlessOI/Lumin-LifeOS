@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: LifeRE OS v1 acceptance — Point B proof for LifeRE Alpha.
  * LifeRE OS v1 acceptance — Point B proof for LifeRE Alpha.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

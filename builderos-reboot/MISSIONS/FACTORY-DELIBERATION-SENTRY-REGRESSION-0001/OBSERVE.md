@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Observe BPB → SENTRY → CDR (real time) -->
+
 # Observe BPB → SENTRY → CDR (real time)
 
 **Mission:** `FACTORY-DELIBERATION-SENTRY-REGRESSION-0001`

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports summarizeBuilderEvidence — services/builderos-live-enforcement-pass.js.
+ */
 export function summarizeBuilderEvidence({ build, proof, queue }) {
   const hasBuild = !!build;
   const hasProof = !!proof;

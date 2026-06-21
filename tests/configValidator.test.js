@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/configValidator.test.js.
+ */
 const validateEnv = require('../src/config/validator');
 
 describe('Environment Validation', () => {

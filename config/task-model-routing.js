@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: config/task-model-routing.js
  * config/task-model-routing.js
  *
  * Maps task type strings to council member keys.

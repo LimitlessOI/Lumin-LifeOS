@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/biohybrid/iot-gateway.js.
+ */
 ```javascript
 const mqtt = require('mqtt');
 const PanelSensorData = require('../../models/PanelSensorData');

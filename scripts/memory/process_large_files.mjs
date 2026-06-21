@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Process large files efficiently - for 200K+ line files
+ */
 // Process large files efficiently - for 200K+ line files
 import fs from 'fs';
 import path from 'path';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Productized Sprint Offers -->
+
 # Productized Sprint Offers
 _(formerly AMENDMENT_27_PRODUCTIZED_SPRINT.md)_
 

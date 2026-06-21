@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚨 Railway Auto-Deployment Not Triggering - Quick Fix Guide -->
+
 # 🚨 Railway Auto-Deployment Not Triggering - Quick Fix Guide
 
 ## **Why Railway Didn't Auto-Deploy After Push**

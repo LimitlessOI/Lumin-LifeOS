@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/tc-document-validator.js
  * services/tc-document-validator.js
  * Validates real-estate transaction documents before upload to Transaction Desk.
  * Checks file type, expected address match, price field presence, and date presence.

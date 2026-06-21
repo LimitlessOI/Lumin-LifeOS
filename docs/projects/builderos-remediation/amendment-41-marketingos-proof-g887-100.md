@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G887 100. -->
+
 The verifier expects the target .md file to be a Node.js module, which contradicts the file's intended markdown format.
 Amendment 41 MarketingOS Proof: G887-100
 Proof-Closing Blueprint Note

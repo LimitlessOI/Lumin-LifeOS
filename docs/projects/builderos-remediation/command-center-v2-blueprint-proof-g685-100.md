@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G685 100. -->
+
 Command Center V2 Blueprint Proof: g685-100 - Core Command Model & Service Proof
 
 This document serves as a proof-closing blueprint note for the initial foundational slice of the Command Center V2, focusing on establishing the core `Command` data model and a minimal in-memory service for its management. This slice proves the viability of the primary data structure and its basic lifecycle operations within a BuilderOS-governed context, strictly adhering to the principle of not modifying LifeOS user features or TSOS customer-facing surfaces.

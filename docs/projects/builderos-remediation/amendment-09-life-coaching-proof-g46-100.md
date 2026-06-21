@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G46 100. -->
+
 Amendment 09: Life Coaching - Proof G46-100
 Proof-Closing Blueprint Note
 This note addresses the initial foundational build slice for the `LifeCoach` entity as outlined in `docs/projects/AMENDMENT_09_LIFE_COACHING.md`.

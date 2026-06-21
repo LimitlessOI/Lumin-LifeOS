@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Define the canonical BuilderOS alpha components.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

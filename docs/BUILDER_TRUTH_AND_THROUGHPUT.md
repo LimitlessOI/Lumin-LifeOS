@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder truth channel + throughput (operator) -->
+
 # Builder truth channel + throughput (operator)
 
 **Purpose:** Measure slice time, ETA to MVP corridor, variance vs baseline, and tie supervision to **evidence**—not reassurance language.

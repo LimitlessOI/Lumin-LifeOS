@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G132-100 - Initial Data Model Definition -->
+
 # Amendment 19 Project Governance Proof: G132-100 - Initial Data Model Definition
 
 This document serves as a proof point for the ongoing remediation efforts related to Amendment 19 Project Governance. It outlines the first concrete build slice derived from the blueprint `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` to establish foundational elements for formalizing project artifact approval workflows.

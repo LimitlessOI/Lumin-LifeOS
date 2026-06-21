@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (G899-100) -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (G899-100)
 
 This document serves as a proof-closing blueprint note for the "SSOT foundation" signal identified in `AMENDMENT_41_MARKETINGOS.md`. The objective is to define the smallest safe build slice to prove the foundational consistency of MarketingOS-driven Single Source of Truth (SSOT) data within the LifeOS platform, specifically concerning user segment membership.

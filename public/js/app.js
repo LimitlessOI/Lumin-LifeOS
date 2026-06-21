@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/js/app.js.
+ */
 function makeCall() {
   const isSimulation = document.getElementById('simulationToggle').checked;
   fetch('/api/v1/outreach/call', {

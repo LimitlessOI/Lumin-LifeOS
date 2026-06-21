@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-workshop-routes.js
  * routes/lifeos-workshop-routes.js
  *
  * Workshop of the Mind API

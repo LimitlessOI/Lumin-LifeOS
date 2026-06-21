@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createLossTracker — startup/loss.js.
+ */
 export function createLossTracker({ pool, logger, createSystemSnapshot }) {
   return async function trackLoss(
     severity,

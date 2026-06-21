@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/cards-from-seed.yml.
 name: Build Cards From Seed
 
 on:

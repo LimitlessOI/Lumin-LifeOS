@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Named bodies for POST /api/v1/lifeos/gate-change/run-preset
  * Named bodies for POST /api/v1/lifeos/gate-change/run-preset
  * (shared with scripts/council-gate-change-run.mjs via same keys).
  *

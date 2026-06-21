@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: WearableInterfaceService.js
+ */
 ```javascript
 // WearableInterfaceService.js
 class WearableInterfaceService {

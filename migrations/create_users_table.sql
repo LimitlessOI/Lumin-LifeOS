@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — create_users_table.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,

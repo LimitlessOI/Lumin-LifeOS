@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof: G79-100 - Dynamic Branding Configuration -->
+
 # Amendment 14 White Label Proof: G79-100 - Dynamic Branding Configuration
 
 ## Purpose

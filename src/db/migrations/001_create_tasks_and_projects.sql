@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_tasks_and_projects.sql.
 ```sql
 CREATE TABLE projects (
     id SERIAL PRIMARY KEY,

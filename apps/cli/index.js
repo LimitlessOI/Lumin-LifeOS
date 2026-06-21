@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 /**
+ * SYNOPSIS: AI Counsel OS CLI
  * AI Counsel OS CLI
  * Command-line interface for managing the system
  */

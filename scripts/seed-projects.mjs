@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: scripts/seed-projects.mjs
  * scripts/seed-projects.mjs
  * Seeds the projects + project_segments tables from the SSOT amendment build plans.
  * Safe to run multiple times — uses INSERT ... ON CONFLICT DO UPDATE.

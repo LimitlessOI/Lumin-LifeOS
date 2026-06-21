@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — server/controllers/lessonController.js.
+ */
 ```javascript
 const { Lesson, LessonProgress } = require('../models');
 

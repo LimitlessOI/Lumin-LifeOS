@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Reboot Index -->
+
 # Reboot Index
 
 ## Canonical purpose

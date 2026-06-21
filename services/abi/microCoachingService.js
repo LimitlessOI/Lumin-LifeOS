@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — MicroCoachingService.
+ */
 const axios = require('axios');
 
 async function pushMicroCoachingMessage(userId, message) {

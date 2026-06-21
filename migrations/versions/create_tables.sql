@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — create_tables.sql.
 CREATE TABLE market_regime_models (
     id SERIAL PRIMARY KEY,
     model_name VARCHAR(255) NOT NULL,

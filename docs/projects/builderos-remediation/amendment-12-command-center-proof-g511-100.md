@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G511 100. -->
+
 AMENDMENT_12_COMMAND_CENTER Proof Note: G511-100 - Initial Data Flow for Active Operations
 This proof note addresses the foundational data retrieval mechanism for the Command Center, specifically focusing on establishing the API contract and initial data model for "Active Operations". This is a critical first step to enable any UI development for displaying operational status.
 1.  Exact Missing Implementation or Proof Gap:

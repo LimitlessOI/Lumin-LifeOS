@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-signal-intake.js
+ */
 // services/memory-signal-intake.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { Pool } from 'pg';

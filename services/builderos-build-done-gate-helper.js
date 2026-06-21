@@ -1,5 +1,5 @@
 /**
- * BuilderOS /build DONE gate helper — evaluates whether a build result may be marked DONE/PASS.
+ * SYNOPSIS: BuilderOS /build DONE gate helper — evaluates whether a build result may be marked DONE/PASS.
  * Extracted for Repair Lane wiring into routes/lifeos-council-builder-routes.js (later step).
  * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
  */

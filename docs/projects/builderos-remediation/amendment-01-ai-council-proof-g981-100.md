@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G981 100. -->
+
 BuilderOS Remediation: Amendment 01 AI Council Proof (G981-100)
 
 Proof-Closing Blueprint Note: Initial AI Council Configuration Definition

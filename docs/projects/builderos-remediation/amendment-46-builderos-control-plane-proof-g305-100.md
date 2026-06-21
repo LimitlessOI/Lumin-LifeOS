@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G305-100 Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G305-100 Remediation
 
 This document details the implementation plan and verification steps to address the BuilderOS control plane build lifecycle management within `routes/lifeos-council-builder-routes.js`, as required by the OIL verifier rejection.

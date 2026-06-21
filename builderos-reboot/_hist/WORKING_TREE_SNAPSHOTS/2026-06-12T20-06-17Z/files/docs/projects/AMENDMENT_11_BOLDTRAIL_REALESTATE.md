@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BoldTrail Real Estate CRM -->
+
 # BoldTrail Real Estate CRM
 _(formerly AMENDMENT_11_BOLDTRAIL_REALESTATE.md)_
 **Status:** LIVE (in use)

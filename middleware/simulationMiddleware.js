@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Simulation Middleware — intercepts outreach call/SMS routes and, when Twilio
  * Simulation Middleware — intercepts outreach call/SMS routes and, when Twilio
  * credentials are absent, logs a simulated outcome with a fake recording URL
  * instead of making real API calls.

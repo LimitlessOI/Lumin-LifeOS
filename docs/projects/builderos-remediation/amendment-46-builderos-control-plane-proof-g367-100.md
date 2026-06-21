@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G367 100. -->
+
 The specification is contradictory: the target file is a markdown document (`.md`), but the verifier rejected the previous attempt with a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]` indicating it attempted to execute the `.md` file as JavaScript. The existing content of the target `.md` file also explicitly instructs to "Output ONLY the code first". This implies the `.md` file's content should begin with executable JavaScript code, followed by the blueprint note in markdown.
 
 ```javascript

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof: G61-100 - Initial Member Data Structure -->
+
 # Amendment 01 AI Council Proof: G61-100 - Initial Member Data Structure
 
 This document serves as a proof-closing blueprint note for the `g61-100` build slice, focusing on the foundational data structure for AI Council members as outlined in `AMENDMENT_01_AI_COUNCIL.md`.

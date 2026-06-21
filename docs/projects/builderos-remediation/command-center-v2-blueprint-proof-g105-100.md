@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - G105-100 - Initial Data Model (Command Entity) -->
+
 # Blueprint Proof: Command Center V2 - G105-100 - Initial Data Model (Command Entity)
 
 This document serves as a proof-closing note for the initial build slice derived from the Command Center V2 Blueprint, focusing on the foundational data model for the `Command` entity.

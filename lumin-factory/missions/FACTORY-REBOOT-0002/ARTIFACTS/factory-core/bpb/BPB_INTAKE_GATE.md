@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BPB Intake Gate -->
+
 # BPB Intake Gate
 
 Reject intake if any of these are true:

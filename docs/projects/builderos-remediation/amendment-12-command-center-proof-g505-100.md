@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G505 100. -->
+
 Amendment 12 Command Center Proof - G505-100 Proof Closing Note
 This note addresses the initial build slice for the Proof-of-Work (PoW) generation component of the BuilderOS Command Center, specifically focusing on the foundational `Proof` data structure and the `ProofGenerator`.
 ---

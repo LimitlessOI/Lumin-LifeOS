@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/__tests__/funnelService.test.js.
+ */
 const funnelService = require('../funnelService');
 
 describe('Funnel Service', () => {

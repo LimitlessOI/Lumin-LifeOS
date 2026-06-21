@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Configuration — TranslationConfig.
+ */
 ```javascript
 module.exports = {
     defaultSourceLang: 'en',

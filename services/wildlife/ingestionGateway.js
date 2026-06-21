@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: MQTT Client
+ */
 const mqtt = require('mqtt');
 const WebSocket = require('ws');
 const redis = require('redis');

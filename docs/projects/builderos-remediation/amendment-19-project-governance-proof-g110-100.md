@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G110-100 -->
+
 # Amendment 19 Project Governance Proof: G110-100
 
 **Status**: Blueprint Missing - Placeholder

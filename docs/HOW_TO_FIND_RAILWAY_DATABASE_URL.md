@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔍 How to Find DATABASE_URL from Railway -->
+
 # 🔍 How to Find DATABASE_URL from Railway
 
 ## **Step-by-Step Guide:**

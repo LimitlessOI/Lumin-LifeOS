@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: code-escalation.js — extracted from server.js
  * code-escalation.js — extracted from server.js
  * Escalation strategy, robust sandbox testing, persistent council escalation,
  * code fix extraction and application helpers.

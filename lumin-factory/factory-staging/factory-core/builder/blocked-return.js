@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports buildBlockedReturn — lumin-factory/factory-staging/factory-core/builder/blocked-return.js.
+ */
 export function buildBlockedReturn(input) {
   return {
     status: 'BLOCKED_RETURN_TO_BPB',

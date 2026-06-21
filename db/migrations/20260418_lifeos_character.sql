@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260418_lifeos_character.sql.
 -- Migration: 20260418_lifeos_character
 -- LifeOS Children's App — Character Building Module
 -- Integrity, generosity, and courage taught through story and action.

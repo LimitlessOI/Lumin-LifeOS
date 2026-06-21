@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Fhir Adapter.
+ */
 ```javascript
 const axios = require('axios');
 

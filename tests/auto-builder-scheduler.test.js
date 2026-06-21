@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/auto-builder-scheduler.test.js.
+ */
 import { test } from 'node:test';
 import assert from 'node:assert';
 

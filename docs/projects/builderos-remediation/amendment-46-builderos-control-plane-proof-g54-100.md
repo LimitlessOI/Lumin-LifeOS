@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G54 100. -->
+
 ### Proof-Closing Blueprint Note: BuilderOS Control Plane - G54-100 Remediation
 
 **1. Exact Missing Implementation or Proof Gap:**

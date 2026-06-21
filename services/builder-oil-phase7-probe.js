@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/builder-oil-phase7-probe.js
  * services/builder-oil-phase7-probe.js
  *
  * OIL-only Phase 7 live Gemini audit-before-done probe (Railway runtime).

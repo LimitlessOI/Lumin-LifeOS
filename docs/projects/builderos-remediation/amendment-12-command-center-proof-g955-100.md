@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G955-100 -->
+
 # Amendment 12 Command Center Proof - G955-100
 
 ## Blueprint Note: Initial Task Listing API & Data Model

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - g123-100 Follow-Through -->
+
 # Blueprint Proof: Command Center V2 - g123-100 Follow-Through
 
 **Source Blueprint:** `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`

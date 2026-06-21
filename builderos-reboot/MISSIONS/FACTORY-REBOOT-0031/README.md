@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: FACTORY-REBOOT-0031 — Role-Based Council Routing -->
+
 # FACTORY-REBOOT-0031 — Role-Based Council Routing
 
 **Status:** QUEUED — spec ready; BLUEPRINT steps pending BPB materialization  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G487 100. -->
+
 The instruction to 'Generate the complete implementation code' is contradictory with the target file being a markdown document and the verifier's rejection being an `ERR_UNKNOWN_FILE_EXTENSION` for markdown files when treated as code. I am providing the markdown content as the 'implementation' for the target file.
 AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G487-100
 This document serves as the SSOT foundation for closing the proof gap identified in AMENDMENT_41_MARKETINGOS, specifically for MarketingOS integration G487-100.

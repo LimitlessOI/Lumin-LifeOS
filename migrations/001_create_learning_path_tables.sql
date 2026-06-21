@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_learning_path_tables.sql.
 ```sql
 -- Create table for user learning profiles
 CREATE TABLE learning_profiles (

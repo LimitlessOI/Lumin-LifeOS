@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G669-100 -->
+
 # Amendment 12: Command Center - Proof G669-100
 
 This document outlines the first proof-of-concept build slice for Amendment 12, focusing on establishing the foundational API for the BuilderOS Command Center Dashboard.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231101_create_market_reports.sql.
 ```sql
 CREATE TABLE market_reports (
     id SERIAL PRIMARY KEY,

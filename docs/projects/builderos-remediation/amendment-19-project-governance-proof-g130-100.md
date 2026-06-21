@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G130-100 - Initial Project Setup -->
+
 # Amendment 19 Project Governance Proof: G130-100 - Initial Project Setup
 
 This document serves as the initial proof point for the implementation of Amendment 19 Project Governance, specifically addressing the foundational setup for remediation efforts. This proof focuses on establishing the core project structure and communication channels as a prerequisite for deeper governance integration.

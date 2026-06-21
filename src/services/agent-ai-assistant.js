@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Agent AI Assistant Service
+ */
 // Agent AI Assistant Service
 
 class AgentAIAssistant {

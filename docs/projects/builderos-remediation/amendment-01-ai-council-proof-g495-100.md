@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof for Amendment 01: AI Council Establishment (G495-100) -->
+
 # Proof for Amendment 01: AI Council Establishment (G495-100)
 
 **Reference Blueprint:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

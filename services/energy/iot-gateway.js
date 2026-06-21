@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Iot Gateway.
+ */
 const mqtt = require('mqtt');
 const WebSocket = require('ws');
 const { addToQueue } = require('./message-queue');

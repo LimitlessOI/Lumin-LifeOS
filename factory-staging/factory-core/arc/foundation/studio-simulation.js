@@ -1,5 +1,5 @@
 /**
- * Studio experience simulation when UX/product feel in scope.
+ * SYNOPSIS: Studio experience simulation when UX/product feel in scope.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

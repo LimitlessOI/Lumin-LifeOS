@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/vrTherapy.test.js.
+ */
 ```javascript
 const vrSessionManager = require('../services/vrTherapy/vrSessionManager');
 const assert = require('assert');

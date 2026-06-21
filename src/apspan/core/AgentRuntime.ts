@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Class AgentRuntime — src/apspan/core/AgentRuntime.ts.
+ */
 import { LocalModel } from 'ollama';
 import { VectorDB } from 'llama.cpp';
 import pino from 'pino';

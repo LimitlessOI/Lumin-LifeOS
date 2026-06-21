@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — load-testing/artillery-config.yml.
 ```yaml
 config:
   target: 'http://localhost:3000'

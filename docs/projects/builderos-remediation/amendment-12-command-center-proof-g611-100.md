@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G611 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G611-100
 This document serves as a proof-closing blueprint note for the G611-100 build slice of AMENDMENT 12: COMMAND CENTER, as per BuilderOS instruction.
 ---

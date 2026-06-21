@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260418_truth_delivery_calibration.sql.
 -- Migration: 20260418_truth_delivery_calibration
 -- Extends truth_delivery_log with hour_of_day + emotional_state captured at delivery time,
 -- so the calibration tick can learn the hour and emotional window where each user is most

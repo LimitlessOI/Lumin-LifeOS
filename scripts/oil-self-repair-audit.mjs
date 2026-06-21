@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: OIL self-repair audit — runtime proof parity + proof-store + known OIL misses.
  * OIL self-repair audit — runtime proof parity + proof-store + known OIL misses.
  * No secrets printed. Exit 1 only on P0 runtime-proof blockers (optional --strict).
  *

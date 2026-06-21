@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G895 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS Proof (G895-100)
 This document addresses the identified proof gap `G895-100` related to Amendment 41's integration with MarketingOS, specifically focusing on ensuring robust and verifiable campaign status synchronization. This note serves as the SSOT foundation for closing this specific implementation and verification gap.
 

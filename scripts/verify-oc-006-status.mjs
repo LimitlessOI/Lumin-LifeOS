@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports runOC006StatusVerification — scripts/verify-oc-006-status.mjs.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

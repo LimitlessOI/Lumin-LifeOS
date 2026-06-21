@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G431 100. -->
+
 The verifier rejection indicates a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]` when attempting to process this `.md` file as a Node.js module. This is a contradiction: the task explicitly requests a markdown file, while the verifier's behavior implies an expectation of executable JavaScript. This output provides the requested markdown content for the blueprint note, assuming the verifier's processing context will be corrected to handle markdown documents appropriately.
 Command Center V2 Blueprint Proof: g431-100 - Core Schema Definition Remediation
 

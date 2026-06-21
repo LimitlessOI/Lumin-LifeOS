@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports acquireGovernorHeavyLease — startup/governor.js.
+ */
 import resourceGovernor from "../lib/resource-governor.js";
 
 function getGovernorFunction(name) {

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/reminder-cron.js — Amendment 16 (Word Keeper)
  * services/reminder-cron.js — Amendment 16 (Word Keeper)
  * @ssot docs/projects/AMENDMENT_16_WORD_KEEPER.md
  *

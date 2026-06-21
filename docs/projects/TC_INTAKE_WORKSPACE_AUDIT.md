@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — TC INTAKE WORKSPACE AUDIT. -->
+
 ### KNOW
 *   **Wired Components:**
     *   The `/api/v1/tc/intake/workspace` endpoint is implemented and authenticated via `*rk` (COMMAND_CENTER_KEY).

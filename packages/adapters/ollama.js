@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Ollama Adapter
  * Ollama Adapter
  * Handles communication with local Ollama models
  */

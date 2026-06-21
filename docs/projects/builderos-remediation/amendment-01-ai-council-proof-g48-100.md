@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof G48-100 -->
+
 # Amendment 01 AI Council Proof G48-100
 
 This document serves as a proof for Amendment 01 AI Council, as per blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md`.

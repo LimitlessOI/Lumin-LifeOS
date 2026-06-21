@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof: G118-100 - Core Configuration Verification -->
+
 # Amendment 14 White Label Proof: G118-100 - Core Configuration Verification
 
 ## Objective

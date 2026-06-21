@@ -1,5 +1,5 @@
 /**
- * Upstream failure routing — ARC pushes to Chair; Chair escalates to founder only on Chair failure.
+ * SYNOPSIS: Upstream failure routing — ARC pushes to Chair; Chair escalates to founder only on Chair failure.
  * Agent drift ≠ system drift.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

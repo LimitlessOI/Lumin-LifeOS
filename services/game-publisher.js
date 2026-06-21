@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Game Publisher — AI-generated Phaser.js games → deployed web URL
  * Game Publisher — AI-generated Phaser.js games → deployed web URL
  *
  * Flow:

@@ -1,3 +1,4 @@
+# SYNOPSIS: yaml — k8s/deployment.yaml.
 ```yaml
 apiVersion: apps/v1
 kind: Deployment

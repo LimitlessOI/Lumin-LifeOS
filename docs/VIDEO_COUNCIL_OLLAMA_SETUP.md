@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎬 Video Editing Council - Local Ollama Setup -->
+
 # 🎬 Video Editing Council - Local Ollama Setup
 
 ## Overview

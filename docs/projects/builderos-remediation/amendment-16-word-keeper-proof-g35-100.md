@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G35-100 -->
+
 # Amendment 16: Word Keeper - Proof G35-100
 
 This document outlines the next smallest build slice for the "Word Keeper" feature, focusing on establishing the foundational data persistence layer as described in `docs/projects/AMENDMENT_16_WORD_KEEPER.md`.

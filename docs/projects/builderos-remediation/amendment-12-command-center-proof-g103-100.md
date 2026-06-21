@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G103-100 - Initial Configuration Persistence -->
+
 # Amendment 12 Command Center Proof: G103-100 - Initial Configuration Persistence
 
 This document outlines the next smallest blueprint-backed build slice for the `AMENDMENT_12_COMMAND_CENTER` project, focusing on establishing the foundational configuration persistence.

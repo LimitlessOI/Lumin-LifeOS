@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G183-100: Core Command Definition -->
+
 The instruction to write a `.md` file contradicts the verifier's rejection which indicates an expectation for an executable code file.
 # Command Center V2 Blueprint Proof - G183-100: Core Command Definition
 

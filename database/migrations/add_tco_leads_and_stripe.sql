@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — add_tco_leads_and_stripe.sql.
 -- ╔══════════════════════════════════════════════════════════════════════════════════╗
 -- ║                TCO LEADS TABLE + STRIPE INTEGRATION                              ║
 -- ║          Lead capture from cost analyzer + Stripe payment tracking              ║

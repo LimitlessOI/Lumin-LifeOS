@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BPB Readiness Decision -->
+
 # BPB Readiness Decision
 
 **Mission:** PRODUCT-CONVERSATION-COMMITMENTS-C2-0001  

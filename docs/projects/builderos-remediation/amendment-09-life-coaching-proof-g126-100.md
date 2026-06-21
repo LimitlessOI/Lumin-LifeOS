@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G126 100. -->
+
 The source blueprint `docs/projects/AMENDMENT_09_LIFE_COACHING.md` was not provided, requiring assumptions about its content and the specific nature of proof `g126-100`.
 ---
 Amendment 09 Life Coaching - Proof G126-100 Remediation

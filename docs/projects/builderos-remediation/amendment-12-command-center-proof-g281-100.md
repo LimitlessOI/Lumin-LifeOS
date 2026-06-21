@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G281-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G281-100
 
 ## Blueprint Note: Initial CommandCenter Core Implementation

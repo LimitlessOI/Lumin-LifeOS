@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260322_optimizer_cache.sql.
 -- Migration: 20260322_optimizer_cache
 -- Persistent storage for AI response cache and token optimizer daily stats.
 -- Idempotent for Neon: table may exist from older deploy with missing columns.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 CREATE TABLE cognitive_profiles (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,

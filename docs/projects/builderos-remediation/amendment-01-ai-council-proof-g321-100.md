@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G321-100: Initial Charter and Membership Confirmation -->
+
 # Amendment 01: AI Council - Proof G321-100: Initial Charter and Membership Confirmation
 
 **Blueprint Reference**: `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

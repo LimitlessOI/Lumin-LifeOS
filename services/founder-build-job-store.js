@@ -1,5 +1,5 @@
 /**
- * In-process founder build job store — avoids Railway proxy 502 on long CSS verify loops.
+ * SYNOPSIS: In-process founder build job store — avoids Railway proxy 502 on long CSS verify loops.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 import crypto from 'node:crypto';

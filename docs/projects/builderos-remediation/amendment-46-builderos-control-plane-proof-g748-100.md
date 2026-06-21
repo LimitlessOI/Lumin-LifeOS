@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G748 100. -->
+
 The verifier rejected the .md file as an unknown executable, contradicting the task to write a .md document.
 Amendment 46 BuilderOS Control Plane Proof (G748-100)
 This document outlines the next C2 build pass for wiring the BuilderOS control plane routes as specified in Amendment 46.

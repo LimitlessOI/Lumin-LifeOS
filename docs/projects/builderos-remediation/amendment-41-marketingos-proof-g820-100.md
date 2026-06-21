@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G820-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G820-100
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap related to MarketingOS campaign `g820`'s Click-Through Rate (CTR) integration.

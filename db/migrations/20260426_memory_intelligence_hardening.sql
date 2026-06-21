@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260426_memory_intelligence_hardening.sql.
 -- @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
 -- Memory Intelligence hardening follow-up
 -- Fixes source-count semantics, adds future-lookback artifact storage,

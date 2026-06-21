@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260423_lifeos_ambient_snapshots.sql.
 -- LifeOS ambient context snapshots (device / environment hints, no raw audio)
 -- Opt-in client batches lightweight signals for Lumin context — no AI on insert.
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

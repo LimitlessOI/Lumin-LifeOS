@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G88-100 -->
+
 # Amendment 16 Word Keeper Proof - G88-100
 
 ## Proof-Closing Blueprint Note

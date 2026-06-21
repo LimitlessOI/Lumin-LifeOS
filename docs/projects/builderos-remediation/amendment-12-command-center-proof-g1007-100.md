@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: G1007 - Define Prisma schema for SystemHealthMetric -->
+
 # Proof-Closing Blueprint Note: G1007 - Define Prisma schema for SystemHealthMetric
 
 ## 1. Exact Missing Implementation or Proof Gap

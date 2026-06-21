@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G415-100 SSOT Foundation Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof G415-100 SSOT Foundation Blueprint Note
 
 This document outlines the remediation plan to establish and verify the Single Source of Truth (SSOT) foundation for MarketingOS proof G415-100.

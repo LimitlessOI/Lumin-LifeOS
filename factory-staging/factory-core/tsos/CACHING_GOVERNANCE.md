@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Caching Governance -->
+
 # Caching Governance
 
 Cache promotion requires:

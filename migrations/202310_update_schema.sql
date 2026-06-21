@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 202310_update_schema.sql.
 ```sql
 -- Migration for adding necessary columns to tables
 

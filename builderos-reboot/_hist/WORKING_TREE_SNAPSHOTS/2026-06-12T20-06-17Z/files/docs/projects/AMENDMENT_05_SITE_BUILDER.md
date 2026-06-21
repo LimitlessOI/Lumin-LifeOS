@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Site Builder & Prospect Pipeline -->
+
 # Site Builder & Prospect Pipeline
 _(formerly AMENDMENT_05_SITE_BUILDER.md)_
 **Status:** QUALITY-GATED LAUNCH READY — awaiting Railway env vars + live preview verification

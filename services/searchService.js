@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Search Service — provides a rate-limited, safety-filtered web search against
  * Search Service — provides a rate-limited, safety-filtered web search against
  * DuckDuckGo (or a configurable SEARCH_API_URL), blocking queries that match
  * sensitive patterns (passwords, keys, SQL destructive ops, etc.).

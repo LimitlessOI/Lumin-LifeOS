@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G179-100 - Initial CommandHistory Implementation -->
+
 # Command Center V2 Blueprint Proof: G179-100 - Initial CommandHistory Implementation
 
 This document outlines the next smallest build slice for Command Center V2, focusing on the initial implementation of the `CommandHistory` component. This follows the completion of basic routing and execution outlined in G179-1 through G179-6.

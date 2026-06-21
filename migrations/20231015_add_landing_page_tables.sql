@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231015_add_landing_page_tables.sql.
 ```sql
 CREATE TABLE landing_page_visitors (
     id SERIAL PRIMARY KEY,

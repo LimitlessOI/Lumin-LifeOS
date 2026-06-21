@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G25-100 - Project Lead Assignment Verification -->
+
 # Amendment 19 Project Governance Proof: G25-100 - Project Lead Assignment Verification
 
 This document serves as a proof-closing blueprint note for `G25-100`, addressing the verifiable tracking of `ProjectLead` assignments within BuilderOS projects as mandated by `AMENDMENT_19_PROJECT_GOVERNANCE.md`.

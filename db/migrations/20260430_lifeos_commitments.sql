@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260430_lifeos_commitments.sql.
 -- LifeOS commitments tracking
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 

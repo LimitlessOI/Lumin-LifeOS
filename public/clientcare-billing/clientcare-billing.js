@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: clientcare-billing.js
  * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
  * clientcare-billing.js
  * Operator overlay for ClientCare billing rescue.

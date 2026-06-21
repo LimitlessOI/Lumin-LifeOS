@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Database Schema.
 ```sql
 CREATE TABLE IF NOT EXISTS migration_projects (
     id SERIAL PRIMARY KEY,

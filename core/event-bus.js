@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createEventBus — core/event-bus.js.
+ */
 import { EventEmitter } from "events";
 
 export class EventBus extends EventEmitter {

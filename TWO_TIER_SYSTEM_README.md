@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Two-Tier Council System - Production Ready for Monday -->
+
 # Two-Tier Council System - Production Ready for Monday
 
 ## 🎯 Architecture Overview

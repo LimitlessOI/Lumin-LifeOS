@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/db/index.js.
+ */
 const { Client } = require('pg');
 const config = require('../config');
 

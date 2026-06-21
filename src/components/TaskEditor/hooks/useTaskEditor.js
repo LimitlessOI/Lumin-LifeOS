@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/components/TaskEditor/hooks/useTaskEditor.js.
+ */
 ```javascript
 import { useState, useEffect } from 'react';
 import taskApi from '../../../services/taskApi';

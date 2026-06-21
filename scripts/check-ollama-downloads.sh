@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Check Ollama Downloads.
 
 # ╔══════════════════════════════════════════════════════════════════════════════════╗
 # ║                    CHECK OLLAMA MODEL DOWNLOAD STATUS                            ║

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_clientcare_patient_ar_controls.sql.
 -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
 -- Provider-directed patient AR policy controls
 

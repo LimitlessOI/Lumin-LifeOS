@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: builder-daemon.js — Autonomous nightly build runner.
  * builder-daemon.js — Autonomous nightly build runner.
  *
  * Reads scripts/autonomy/builder-queue.json, runs each pending task through the

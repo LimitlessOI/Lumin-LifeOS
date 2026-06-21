@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Read-only HTTP probe: health vs council builder /domains.
  * Read-only HTTP probe: health vs council builder /domains.
  * No secrets. Use to prove deploy drift (404 on /domains while /healthz OK).
  *

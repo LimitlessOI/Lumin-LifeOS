@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LUMIN DOCTRINE — Canonical Specification -->
+
 # LUMIN DOCTRINE — Canonical Specification
 **Founder-specified: 2026-06-20. Non-negotiable. Read this before touching Lumin.**
 

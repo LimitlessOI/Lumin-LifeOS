@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║              PARALLEL FEATURE DEVELOPMENT SYSTEM                                ║
  * ║              Develop multiple features simultaneously without conflicts         ║

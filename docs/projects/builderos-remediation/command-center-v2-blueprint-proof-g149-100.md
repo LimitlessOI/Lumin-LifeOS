@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G149-100 Follow-Through -->
+
 # Command Center V2 Blueprint Proof: G149-100 Follow-Through
 
 **Blueprint Note: User Resource Listing (Read-Only)**

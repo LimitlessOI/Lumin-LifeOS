@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G114 100. -->
+
 Amendment 12 Command Center Proof: G114-100 - Initial Task API Slice
 Blueprint Note: Core Task API Endpoint Implementation
 This document outlines the next smallest build slice for the BuilderOS Command Center, focusing on establishing the foundational API for task management.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G349-100 -->
+
 # Amendment 12: Command Center - Proof G349-100
 
 ## Blueprint Note: Initial Service & API Definition Proof

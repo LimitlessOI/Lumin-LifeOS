@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 14 White Label - Todo 1 (G8) -->
+
 # BuilderOS Remediation: Amendment 14 White Label - Todo 1 (G8)
 
 ## Blueprint Enhancement Memo: Extract White Label Config Endpoints

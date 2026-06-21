@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G101 100. -->
+
 ### Amendment 16 Word Keeper Proof - G101-100
 
 This document outlines the proof-closing blueprint note for the Word Keeper remediation, specifically addressing the G101-100 rejection.

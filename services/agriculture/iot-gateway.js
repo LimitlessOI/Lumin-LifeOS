@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Iot Gateway.
+ */
 ```javascript
 const mqtt = require('mqtt');
 const { SensorData, DroneData } = require('../../models/agriculture');

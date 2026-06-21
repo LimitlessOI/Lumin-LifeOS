@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Configure Redis client
+ */
 ```javascript
 const Redis = require('ioredis');
 

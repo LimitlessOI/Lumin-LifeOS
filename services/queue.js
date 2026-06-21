@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Task Queue — BullMQ + Redis (with in-memory fallback for dev/no-Redis)
  * Task Queue — BullMQ + Redis (with in-memory fallback for dev/no-Redis)
  *
  * Replaces the custom in-memory execution queue.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — hipaa_audit_trail.sql.
 ```sql
 CREATE TABLE hipaa_audit_trail (
     id SERIAL PRIMARY KEY,

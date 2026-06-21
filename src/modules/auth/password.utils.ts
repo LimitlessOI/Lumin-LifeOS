@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports hashPassword — src/modules/auth/password.utils.ts.
+ */
 ```typescript
 import bcrypt from 'bcrypt';
 

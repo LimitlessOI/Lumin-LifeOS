@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SSOT dual channel — agents vs system -->
+
 # SSOT dual channel — agents vs system
 
 **Purpose:** Separate *who needs what* without maintaining two copies of the same law.  

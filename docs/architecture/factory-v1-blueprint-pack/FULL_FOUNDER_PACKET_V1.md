@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Full Founder Packet v1 -->
+
 # Full Founder Packet v1
 ## Lumin / BuilderOS Factory Foundation
 

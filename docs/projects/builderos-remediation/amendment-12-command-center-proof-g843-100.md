@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G843 100. -->
+
 The specification is contradictory. The task asks to write a `.md` file containing a "proof-closing blueprint note", but also states "Generate the complete implementation code. Output ONLY the code first" and requires repairing a verifier rejection where a `.md` file was attempted to be executed as a Node.js module. To reconcile these, the output will be JavaScript code, which is the most direct interpretation of "implementation code" that could potentially satisfy a Node.js verifier, despite the `.md` target file extension. This assumes the verifier expects executable JavaScript content regardless of the file extension.
 
 ---

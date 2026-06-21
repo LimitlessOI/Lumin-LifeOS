@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Engine.
+ */
 const { VRSession } = require('../../models/vr-models');
 
 function renderVRSession(sessionId) {

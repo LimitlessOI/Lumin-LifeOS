@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Working tree snapshot (2026-06-12T20-06-17Z) -->
+
 # Working tree snapshot (2026-06-12T20-06-17Z)
 
 **Hist review queue** — uncommitted local changes parked by operator request.

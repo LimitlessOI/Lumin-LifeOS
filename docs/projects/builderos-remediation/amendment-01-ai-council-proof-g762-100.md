@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 01 AI Council - Proof G762-100 -->
+
 # BuilderOS Remediation: Amendment 01 AI Council - Proof G762-100
 
 This document serves as a proof-closing blueprint note for the `AMENDMENT_01_AI_COUNCIL` blueprint, specifically addressing the initial foundational build slice for the AI Council's operational data.

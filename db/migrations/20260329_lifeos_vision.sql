@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260329_lifeos_vision.sql.
 BEGIN;
 
 -- ── vision_sessions ────────────────────────────────────────────────────────

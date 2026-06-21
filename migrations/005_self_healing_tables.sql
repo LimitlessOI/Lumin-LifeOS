@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 005_self_healing_tables.sql.
 -- ╔══════════════════════════════════════════════════════════════════════════════════╗
 -- ║              SELF-HEALING CODE TABLES                                           ║
 -- ║              Track automatic error fixes and learning patterns                  ║

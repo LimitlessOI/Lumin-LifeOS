@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Supervisor lens — consequences, future-back, prior art, industry learning, **and Adam (governing lens)** -->
+
 # Supervisor lens — consequences, future-back, prior art, industry learning, **and Adam (governing lens)**
 
 **Purpose:** Optional questions the **Conductor / supervisor** (human or agent) applies when a slice is **load-bearing**: architecture, new autonomy, money, data, trust, or anything hard to undo. **Not** a mandatory gate on every commit — **discretion** avoids token waste and ceremony fatigue.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports executeStep — factory-v1/builder/execute-step.js.
+ */
 import { appendFile, readFile, writeFile } from 'node:fs/promises';
 
 function blocked(step, summary, missingInformation, evidence) {

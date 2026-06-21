@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G677 100. -->
+
 ### Command Center V2 Blueprint Proof: G677-100 - Initial Command Status Model
 
 This proof addresses the foundational data model and internal API exposure for tracking command execution within Command Center V2, specifically for BuilderOS operational insights.

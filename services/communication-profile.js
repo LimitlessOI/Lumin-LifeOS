@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/communication-profile.js
  * services/communication-profile.js
  *
  * Communication Profile — personalized delivery intelligence.

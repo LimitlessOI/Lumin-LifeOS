@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createMemoryHandlers — startup/memory.js.
+ */
 export function createMemoryHandlers({ pool, logger }) {
   async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
     try {

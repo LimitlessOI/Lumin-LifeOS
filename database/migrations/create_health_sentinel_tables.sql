@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_health_sentinel_tables.sql.
 ```sql
 CREATE TABLE health_sentinel_users (
     user_id SERIAL PRIMARY KEY,

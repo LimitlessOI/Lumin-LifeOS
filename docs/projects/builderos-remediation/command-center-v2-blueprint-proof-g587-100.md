@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G587-100 Remediation -->
+
 The specification is incomplete as the source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided.
 # Command Center V2 Blueprint Proof: G587-100 Remediation
 

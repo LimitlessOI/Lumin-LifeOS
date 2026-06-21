@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G756 100. -->
+
 Amendment 12 Command Center Proof (G756-100): SystemStatusReportCommand Definition
 This proof-closing blueprint note addresses the next smallest build slice for Amendment 12, focusing on the foundational definition and a minimal handler for the `SystemStatusReportCommand`. This establishes the command's presence and basic invocation path within the Command Center without implementing its full reporting logic.
 ---

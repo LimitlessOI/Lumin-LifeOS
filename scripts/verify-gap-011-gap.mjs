@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: A utility function to wrap an async operation in a try-catch block.
  * A utility function to wrap an async operation in a try-catch block.
  * @param {Promise<any>} promise - The promise to execute.
  * @returns {Promise<[Error | null, any | null]>} A promise that resolves to an array

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — BiometricProcessor.
+ */
 ```javascript
 const pulseSensor = require('pulse-sensor-js');
 

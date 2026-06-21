@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G810 100. -->
+
 Blueprint Proof: Command Center V2 - Core Command Entity (G810-100)
 
 This document serves as a proof-closing note for the initial build slice of the Command Center V2, focusing on establishing the foundational `Command` entity and its basic API interactions.

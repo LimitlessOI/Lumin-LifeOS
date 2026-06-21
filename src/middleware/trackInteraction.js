@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/trackInteraction.js.
+ */
 ```javascript
 const interactionService = require('../services/interactionService');
 

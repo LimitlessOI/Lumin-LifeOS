@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G887 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 46 BuilderOS Control Plane - G887-100
 
 #### 1. Exact Missing Implementation or Proof Gap

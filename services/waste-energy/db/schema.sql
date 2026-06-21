@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 ```sql
 -- Create table for waste conversion sessions
 CREATE TABLE waste_conversion_sessions (

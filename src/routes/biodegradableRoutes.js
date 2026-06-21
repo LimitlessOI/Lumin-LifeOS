@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/biodegradableRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const { simulateMaterialProperties } = require('../materialEngine');

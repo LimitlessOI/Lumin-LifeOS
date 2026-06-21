@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G43 100. -->
+
 ### Proof-Closing Blueprint Note: Word Keeper - Create Word Endpoint (G43-100)
 
 This note addresses the next smallest blueprint-backed build slice for the Word Keeper feature, focusing on establishing the foundational API for creating a `Word` entity.

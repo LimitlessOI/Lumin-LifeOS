@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_financial_tables.sql.
 ```sql
 CREATE TABLE financial_profiles (
     id SERIAL PRIMARY KEY,

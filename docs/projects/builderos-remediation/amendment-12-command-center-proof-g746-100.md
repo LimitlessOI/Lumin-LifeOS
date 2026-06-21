@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G746 100. -->
+
 The provided REPO FILE CONTENTS for the target file was incomplete regarding point 5 (Stop conditions), requiring inference.
 Amendment 12 Command Center Proof - G746-100
 Proof-Closing Blueprint Note

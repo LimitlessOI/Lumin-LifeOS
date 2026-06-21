@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G981 100. -->
+
 Amendment 09 Life Coaching Remediation Proof: G981-100 - User Enrollment Flow
 
 1. Remediation Item

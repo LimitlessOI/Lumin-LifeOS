@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Setup.
 ```sql
 CREATE TABLE legal_research_sessions (
   id SERIAL PRIMARY KEY,

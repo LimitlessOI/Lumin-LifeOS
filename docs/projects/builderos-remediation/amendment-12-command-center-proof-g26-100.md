@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G26 100. -->
+
 The verifier rejection indicates a fundamental mismatch: the task requires writing a `.md` file, but the verifier attempts to execute it as a Node.js module, leading to `ERR_UNKNOWN_FILE_EXTENSION`. This suggests a misconfiguration in the verifier's environment or process for handling `.md` files, rather than an error in the content of the markdown itself (assuming valid markdown).
 
 Given the "AUTONOMY MODE: MAX" and the explicit instruction to "Write docs/projects/builderos-remediation/amendment-12-command-center-proof-g26-100.md", the repair focuses on producing the *correct content* for the markdown file as specified, assuming the verifier's environment will eventually correctly process markdown files containing code blocks. The "implementation-

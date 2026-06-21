@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G63 100. -->
+
 The task specifies writing to a `.md` file, but the OIL verifier attempts to execute this file as a Node.js module, leading to an `ERR_UNKNOWN_FILE_EXTENSION` for `.md` files. This makes it impossible to satisfy both the target file extension and the verifier's execution requirement.
 export const blueprintNote = {
   title: "Amendment 46 BuilderOS Control Plane Proof (G63-100)",

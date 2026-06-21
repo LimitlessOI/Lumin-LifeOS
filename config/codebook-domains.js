@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Optional LCL domain overlays — merged after global `CODE_SYMBOLS` in
  * Optional LCL domain overlays — merged after global `CODE_SYMBOLS` in
  * `services/prompt-translator.js` when `translate(..., { domain })` is set.
  * Keep each list **longest-match-first** (same rule as codebook-v1).

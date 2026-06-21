@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231101000000_create_system_config_and_webhook_events.sql.
 -- Create system_config table
 CREATE TABLE system_config (
   id SERIAL PRIMARY KEY,

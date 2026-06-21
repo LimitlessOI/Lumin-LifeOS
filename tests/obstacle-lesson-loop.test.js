@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Obstacle lesson loop tests.
  * Obstacle lesson loop tests.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

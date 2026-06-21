@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — createBusinessTasksTables.sql.
 ```sql
 -- Create table for business tasks
 CREATE TABLE IF NOT EXISTS business_tasks (

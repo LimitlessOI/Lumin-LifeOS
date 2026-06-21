@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G12 100. -->
+
 Amendment 09: Life Coaching Proof G12-100 - Core Data Model & Service
 Proof-Closing Blueprint Note
 

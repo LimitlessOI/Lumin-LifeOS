@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20250315_create_revenue_table.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS revenue (
     id SERIAL PRIMARY KEY,

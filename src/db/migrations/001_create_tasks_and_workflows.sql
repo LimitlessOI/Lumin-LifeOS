@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_tasks_and_workflows.sql.
 ```sql
 -- Create the tasks table
 CREATE TABLE tasks (

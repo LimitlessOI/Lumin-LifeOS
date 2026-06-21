@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Quick Start: Open Source Models -->
+
 # 🚀 Quick Start: Open Source Models
 
 ## 3-Step Setup

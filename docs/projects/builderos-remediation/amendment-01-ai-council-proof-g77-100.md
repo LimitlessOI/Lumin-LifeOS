@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G77-100 -->
+
 # Amendment 01: AI Council Proof - G77-100
 
 ## Document Purpose

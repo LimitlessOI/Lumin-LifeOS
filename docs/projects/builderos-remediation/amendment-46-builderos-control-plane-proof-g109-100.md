@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof (G109-100) -->
+
 # Amendment 46: BuilderOS Control Plane Proof (G109-100)
 
 This document outlines the proposed implementation and proof-closing blueprint note for wiring the BuilderOS control plane routes as per Amendment 46.

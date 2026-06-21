@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: CommandCenterV2 - Initial Component Shell (g130-100) -->
+
 # Blueprint Proof: CommandCenterV2 - Initial Component Shell (g130-100)
 
 This proof addresses the initial implementation of the `CommandCenterV2` component's basic structure and styling, as outlined in the `COMMAND_CENTER_V2_BLUEPRINT.md`.

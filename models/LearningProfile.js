@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — models/LearningProfile.js.
+ */
 ```js
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Assuming a configured Sequelize instance

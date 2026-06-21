@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G12 100. -->
+
 The specification is contradictory. The task explicitly asks to "Write docs/projects/builderos-remediation/amendment-16-word-keeper-proof-g12-100.md" (a markdown file), but also states "INSTRUCTION: Generate the complete implementation code. Output ONLY the code first". These instructions are mutually exclusive for a single output. Additionally, the OIL verifier rejected the previous attempt due to trying to execute a `.md` file as code, implying that outputting another `.md` file would not constitute a "repair".
 
 Given the "implementation-first" directive, the "Generate the complete implementation code" instruction, and the need to "repair" the verifier rejection (which implies producing something executable by Node.js, not a markdown file), I will prioritize generating the code for the next smallest build slice as described in the blueprint

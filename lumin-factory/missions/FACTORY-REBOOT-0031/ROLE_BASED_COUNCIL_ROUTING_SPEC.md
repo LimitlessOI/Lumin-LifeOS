@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Role-Based Council Routing — Build Spec (BPB input) -->
+
 # Role-Based Council Routing — Build Spec (BPB input)
 
 **Mission:** FACTORY-REBOOT-0031  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Phase 1 — Idea rain (operator-supplied) -->
+
 # Phase 1 — Idea rain (operator-supplied)
 
 **Session:** `2026-05-13_capsule-ssot-convergence`  

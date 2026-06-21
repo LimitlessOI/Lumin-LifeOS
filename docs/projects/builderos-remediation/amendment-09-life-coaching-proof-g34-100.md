@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching - Proof G34-100 Remediation -->
+
 # Amendment 09 Life Coaching - Proof G34-100 Remediation
 
 This document serves as proof for the successful remediation of issues identified during the BuilderOS verification process for Amendment 09 Life Coaching.

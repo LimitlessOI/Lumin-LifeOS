@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_ai_funnels_table.sql.
 ```sql
 CREATE TABLE ai_funnels (
     id SERIAL PRIMARY KEY,

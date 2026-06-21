@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof (G42-100) -->
+
 # Amendment 16 Word Keeper Proof (G42-100)
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_16_WORD_KEEPER.md`

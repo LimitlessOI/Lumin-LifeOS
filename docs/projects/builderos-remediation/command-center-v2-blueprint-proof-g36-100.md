@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Persistence Layer (g36-100) -->
+
 # Blueprint Proof: Command Center V2 - Persistence Layer (g36-100)
 
 This document outlines the next smallest blueprint-backed build slice for the Command Center V2 platform, focusing on establishing the foundational persistence for commands.

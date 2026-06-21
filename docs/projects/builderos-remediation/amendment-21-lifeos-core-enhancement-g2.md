@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 21 LifeOS Core Enhancement (G2) -->
+
 The instruction asks for a markdown file (`.md`), but the verifier rejected the previous attempt by trying to execute the `.md` file as code. This is a contradiction between the requested output type and the verifier's expectation.
 # BuilderOS Remediation: Amendment 21 LifeOS Core Enhancement (G2)
 

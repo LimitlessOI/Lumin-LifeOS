@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_city_zones_table.sql.
 CREATE TABLE city_zones (
     id SERIAL PRIMARY KEY,
     zone_name VARCHAR(255) NOT NULL,

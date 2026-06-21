@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Flags manifests with build_ready: true whose linked amendment lacks
  * Flags manifests with build_ready: true whose linked amendment lacks
  * Pre-Build Readiness / Gate markers (from AMENDMENT_READINESS_CHECKLIST.md).
  *

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Warns (or fails in strict mode) when routes/services changed without
  * Warns (or fails in strict mode) when routes/services changed without
  * continuity / cold-start docs updated in the same change set.
  *

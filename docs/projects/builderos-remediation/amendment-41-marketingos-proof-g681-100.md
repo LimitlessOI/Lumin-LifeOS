@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 41: MarketingOS SSOT Foundation Proof - G681-100 -->
+
 # AMENDMENT 41: MarketingOS SSOT Foundation Proof - G681-100
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G40-100 -->
+
 # Amendment 09: Life Coaching - Proof G40-100
 
 ## Proof-Closing Blueprint Note

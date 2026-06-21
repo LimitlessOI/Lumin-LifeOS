@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: scripts/lifeos-verify.mjs
  * scripts/lifeos-verify.mjs
  *
  * Quick diagnostic that verifies the LifeOS installation is healthy.

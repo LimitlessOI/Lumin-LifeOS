@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Trigger gate-change + multi-model AI Council on the **deployed** server.
  * Trigger gate-change + multi-model AI Council on the **deployed** server.
  *
  * **Preferred (preset):** one POST to `/api/v1/lifeos/gate-change/run-preset` — the

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Idle-period analysis for governed overnight autonomy — no useless cycles.
  * Idle-period analysis for governed overnight autonomy — no useless cycles.
  * Inspects telemetry gaps, NOT_WIRED, bottlenecks, deploy drift, wasted repairs.
  * Writes honest JSONL only; no fake metrics.

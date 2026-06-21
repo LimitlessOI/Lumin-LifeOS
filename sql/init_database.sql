@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — init_database.sql.
 ```sql
 CREATE TABLE resilience_profiles (
     id SERIAL PRIMARY KEY,

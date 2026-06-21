@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: lifeos-voice.js — Global voice-to-text utility for LifeOS overlays
  * lifeos-voice.js — Global voice-to-text utility for LifeOS overlays
  *
  * Usage:

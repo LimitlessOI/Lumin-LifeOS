@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Start continuous recording (with consent)
+ */
 // src/services/meaningful-moments.js
 // Meaningful moments recording and playback system
 

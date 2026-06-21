@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — models/agriculture.js.
+ */
 ```javascript
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize(process.env.DATABASE_URL);

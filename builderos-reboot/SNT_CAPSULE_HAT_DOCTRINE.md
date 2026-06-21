@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SNT Capsule-Hat Doctrine — BuilderOS Alpha -->
+
 # SNT Capsule-Hat Doctrine — BuilderOS Alpha
 
 **Signed by:** SNT + Conductor consensus  

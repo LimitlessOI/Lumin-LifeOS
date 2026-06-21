@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Dashboard Builder Brief -->
+
 # LifeOS Dashboard Builder Brief
 
 | Field | Value |

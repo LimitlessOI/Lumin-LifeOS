@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS (Proof G139-100) -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS (Proof G139-100)
 
 **SSOT Foundation:** This document serves as the Single Source of Truth for closing the verification gap identified for `AMENDMENT_41_MARKETINGOS`, specifically for proof `G139-100`.

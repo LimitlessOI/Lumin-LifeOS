@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G351-100 Remediation Blueprint -->
+
 # Amendment 41 MarketingOS Proof: G351-100 Remediation Blueprint
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: clientcare-ops-service.js
  * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
  * clientcare-ops-service.js
  * Actionable operations layer for ClientCare billing recovery.

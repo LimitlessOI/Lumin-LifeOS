@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof (G138-100) -->
+
 # Amendment 46 BuilderOS Control Plane Proof (G138-100)
 
 This document outlines the remediation plan and proof for closing the identified gap in Amendment 46, specifically concerning the BuilderOS control plane's interaction with build lifecycle events and health checks.

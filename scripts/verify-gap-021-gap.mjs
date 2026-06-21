@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports runGAP021GapVerification — scripts/verify-gap-021-gap.mjs.
+ */
 /*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * This script verifies the status of GAP-021 by checking the health endpoints

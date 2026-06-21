@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — index.js.
+ */
 const express = require('express');
 const { runMigrations } = require('./src/services/migrationService');
 const clientController = require('./src/controllers/clientController');

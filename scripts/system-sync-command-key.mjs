@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: system-sync-command-key.mjs
  * system-sync-command-key.mjs
  *
  * Pulls the COMMAND_CENTER_KEY that Railway is ACTUALLY running with and

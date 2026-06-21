@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G595-100 -->
+
 # Command Center V2 Blueprint Proof: G595-100
 
 ## Blueprint Note: Core Command Dispatch Foundation

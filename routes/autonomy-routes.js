@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/autonomy-routes.js
  * routes/autonomy-routes.js
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  *

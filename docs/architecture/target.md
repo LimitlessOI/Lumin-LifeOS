@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Target Architecture - AI Counsel OS -->
+
 # Target Architecture - AI Counsel OS
 
 **Version**: 1.0.0  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - G140-100: Backend Configuration Persistence -->
+
 # Amendment 14: White-Label Proof - G140-100: Backend Configuration Persistence
 
 ## Proof Objective

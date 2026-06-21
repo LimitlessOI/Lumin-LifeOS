@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: A→Z deliberation governance smoke — factory local + optional Railway API.
  * A→Z deliberation governance smoke — factory local + optional Railway API.
  * Usage: npm run lifeos:deliberation:a-to-z-smoke
  * Env: PUBLIC_BASE_URL + COMMAND_CENTER_KEY for API leg (optional)

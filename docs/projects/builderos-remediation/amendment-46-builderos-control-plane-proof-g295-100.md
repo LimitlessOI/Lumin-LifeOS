@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G295-100 -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G295-100
 
 ## Proof-Closing Blueprint Note

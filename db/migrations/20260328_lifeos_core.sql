@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260328_lifeos_core.sql.
 -- Migration: 20260328_lifeos_core
 -- LifeOS Phase 1 — The Mirror
 -- Commitments, Integrity Score, Joy Score, daily mirror log

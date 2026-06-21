@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Example Web3 setup for Ethereum
+ */
 ```javascript
 const Web3 = require('web3');
 const ipfsClient = require('ipfs-http-client');

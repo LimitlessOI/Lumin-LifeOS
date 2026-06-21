@@ -1,5 +1,5 @@
 /**
- * Score simulation predictions against reality — Hist lane, post-acceptance.
+ * SYNOPSIS: Score simulation predictions against reality — Hist lane, post-acceptance.
  * @ssot docs/ADF_PREDICTION_LEDGER_V1.md
  */
 import fs from 'node:fs';

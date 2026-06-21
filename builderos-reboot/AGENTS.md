@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Machine layer / mission-pack authority -->
+
 # Machine layer / mission-pack authority
 
 You are in **`builderos-reboot/`** — governed mission packs and factory proofs.

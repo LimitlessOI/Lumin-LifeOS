@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231025_add_project_tables.sql.
 ```sql
 -- Migration script to add project tables and columns
 CREATE TABLE projects (

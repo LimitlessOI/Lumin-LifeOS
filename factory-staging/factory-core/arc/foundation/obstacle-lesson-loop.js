@@ -1,5 +1,5 @@
 /**
- * Obstacle → lesson → system adjustment. Stopping is failure; obstacles are routed around.
+ * SYNOPSIS: Obstacle → lesson → system adjustment. Stopping is failure; obstacles are routed around.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

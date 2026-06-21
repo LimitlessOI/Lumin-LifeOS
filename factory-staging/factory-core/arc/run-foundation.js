@@ -1,5 +1,5 @@
 /**
- * Full foundation pipeline — founder document A→Alpha machine path.
+ * SYNOPSIS: Full foundation pipeline — founder document A→Alpha machine path.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-
+/**
+ * SYNOPSIS: Script — Verify Website Audit.
+ */
 import "dotenv/config";
 import { spawn } from "node:child_process";
 import { promises as fs } from "node:fs";

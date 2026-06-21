@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G1149-100 -->
+
 # Amendment 09: Life Coaching - Proof G1149-100
 
 This document outlines the next smallest build slice for the Life Coaching amendment, focusing on enabling users to request a coaching session.

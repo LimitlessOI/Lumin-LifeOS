@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260513_repair_phase3_users_monetization.sql.
 -- Repair Phase 3: users-chain FK fixes + monetization status column mismatch
 --
 -- Four migrations failed because they reference a "users" table that was renamed

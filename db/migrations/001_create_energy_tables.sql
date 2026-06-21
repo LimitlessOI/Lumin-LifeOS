@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_energy_tables.sql.
 CREATE TABLE energy_grid_nodes (
   id SERIAL PRIMARY KEY,
   node_id VARCHAR(255) UNIQUE NOT NULL,

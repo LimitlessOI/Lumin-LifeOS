@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 003 Create Review Metrics.
 ```sql
 CREATE TABLE review_metrics (
   id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AIC → BPB Handoff Spec — 7-Day MVP Blueprint -->
+
 # AIC → BPB Handoff Spec — 7-Day MVP Blueprint
 
 **Mission:** `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`  

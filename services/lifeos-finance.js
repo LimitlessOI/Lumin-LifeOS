@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS Personal Finance — budgets, categories, goals, IPS text (non-advisory mirror layer).
  * LifeOS Personal Finance — budgets, categories, goals, IPS text (non-advisory mirror layer).
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

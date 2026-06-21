@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Todo 1 G9. -->
+
 BuilderOS Remediation: Amendment 41 MarketingOS - TODO 1 (G9)
 Blueprint Enhancement Memo for `docs/projects/AMENDMENT_41_MARKETINGOS.md`
 

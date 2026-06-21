@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260421_lane_intel.sql.
 -- Amendment 36 — Horizon (competitive / landscape) + Red-team (supply-chain) intel lanes
 
 CREATE TABLE IF NOT EXISTS lane_intel_runs (

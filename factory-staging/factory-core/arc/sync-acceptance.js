@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports generateAcceptanceTestsFromBlueprint — factory-staging/factory-core/arc/sync-acceptance.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT } from '../builder/run-step.js';

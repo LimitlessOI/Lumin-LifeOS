@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: This engine is a foundational component of the MarketingOS and SocialMediaOS platforms,
  * @file services/marketing-content-engine.js
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * @description Provides core functionalities for extracting and potentially generating marketing content snippets from raw transcripts.

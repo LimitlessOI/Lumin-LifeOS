@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g74-100 - Core Service Foundation -->
+
 # Command Center V2 Blueprint Proof: g74-100 - Core Service Foundation
 
 This document outlines the first proof-of-concept build slice for Command Center V2, focusing on establishing the core service architecture as defined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.

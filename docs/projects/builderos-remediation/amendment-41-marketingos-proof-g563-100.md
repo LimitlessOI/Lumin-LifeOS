@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G563 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Integration (G563-100)
 
 This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41, ensuring BuilderOS-only governed loop execution for MarketingOS integration.

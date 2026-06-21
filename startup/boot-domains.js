@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: boot-domains.js
  * boot-domains.js
  * Bootstraps all domain-specific subsystems at startup.
  *

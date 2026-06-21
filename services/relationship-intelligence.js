@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/relationship-intelligence.js
  * services/relationship-intelligence.js
  *
  * Module B: Relationship Intelligence

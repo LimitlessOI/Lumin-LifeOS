@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 202310102_create_learning_sessions.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS learning_sessions (
     id SERIAL PRIMARY KEY,

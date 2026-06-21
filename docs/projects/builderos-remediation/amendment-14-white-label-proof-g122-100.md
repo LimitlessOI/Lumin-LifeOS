@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof G122-100: Proof-Closing Blueprint Note -->
+
 # Amendment 14 White-Label Proof G122-100: Proof-Closing Blueprint Note
 
 This document serves as a proof-closing note for `g122-100` and outlines the next smallest build slice for Amendment 14 White-Label implementation.

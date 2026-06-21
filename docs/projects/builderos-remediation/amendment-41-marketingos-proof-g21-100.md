@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - G21-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - G21-100
 
 This document serves as the SSOT foundation for closing the proof gap related to MarketingOS Amendment 41, specifically focusing on the G21-100 objective. It outlines the exact missing implementation, the smallest safe build slice to address it, the files to touch, verification steps, and stop conditions.

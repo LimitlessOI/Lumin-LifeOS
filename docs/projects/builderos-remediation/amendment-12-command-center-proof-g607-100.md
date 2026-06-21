@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G607 100. -->
+
 Proof-Closing Blueprint Note: G607-100 - Command Center Core Implementation
 
 This note closes the proof for the initial structural implementation of the BuilderOS Command Center, as outlined in `AMENDMENT_12_COMMAND_CENTER.md`.

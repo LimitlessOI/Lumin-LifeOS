@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Legacy production spine (routes) -->
+
 # Legacy production spine (routes)
 
 You are in **`routes/`** — the **legacy production spine** for live LifeOS on Railway.

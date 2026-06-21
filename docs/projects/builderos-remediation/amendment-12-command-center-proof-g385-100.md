@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G385-100 -->
+
 # Amendment 12: Command Center - Proof G385-100
 
 This document serves as a proof-closing blueprint note for the initial build slice related to Amendment 12, focusing on the foundational persistence layer for the Command Center.

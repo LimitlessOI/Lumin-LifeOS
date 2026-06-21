@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: BuilderOS /build DONE gate helper — Repair Lane platform GAP-FILL.
  * BuilderOS /build DONE gate helper — Repair Lane platform GAP-FILL.
  * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
  */

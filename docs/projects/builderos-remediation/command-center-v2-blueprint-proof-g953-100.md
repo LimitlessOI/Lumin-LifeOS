@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G953-100 - Core Persistence Slice -->
+
 # Command Center V2 Blueprint Proof: G953-100 - Core Persistence Slice
 
 This document serves as a proof-closing blueprint note for the Command Center V2, focusing on establishing the foundational data model and persistence layer.

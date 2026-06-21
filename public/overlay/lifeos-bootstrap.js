@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Shared overlay bootstrap — JWT/command key context, headers, and (when embedded)
  * Shared overlay bootstrap — JWT/command key context, headers, and (when embedded)
  * shell keyboard bridge so parent `lifeos-app.html` can open Lumin from iframe pages.
  *

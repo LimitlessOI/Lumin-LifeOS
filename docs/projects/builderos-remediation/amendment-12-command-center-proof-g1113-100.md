@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1113 100. -->
+
 The specification is contradictory: the target file is a markdown document (`.md`), but the verifier rejection indicates it's being treated as an executable JavaScript module, and the instruction "Output ONLY the code first" typically implies JavaScript. I will produce the markdown content as requested for the `.md` file, completing the blueprint note. The verifier error appears to be an external configuration issue rather than a problem with the content of the markdown file itself.
 
 Amendment 12 Command Center Proof - G1113-100

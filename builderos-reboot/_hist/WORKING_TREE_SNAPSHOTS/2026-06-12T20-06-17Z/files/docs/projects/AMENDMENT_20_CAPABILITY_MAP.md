@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Capability Map -->
+
 # Capability Map
 _(formerly AMENDMENT_20_CAPABILITY_MAP.md)_
 

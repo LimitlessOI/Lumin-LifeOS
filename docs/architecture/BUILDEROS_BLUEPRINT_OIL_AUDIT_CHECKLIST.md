@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BUILDEROS BLUEPRINT OIL AUDIT CHECKLIST -->
+
 # BUILDEROS BLUEPRINT OIL AUDIT CHECKLIST
 
 **Status:** `LIVE — run against each phase before commit`

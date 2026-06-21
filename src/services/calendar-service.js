@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Create a calendar event
+ */
 // src/services/calendar-service.js
 // Calendar management for appointments and training sessions
 

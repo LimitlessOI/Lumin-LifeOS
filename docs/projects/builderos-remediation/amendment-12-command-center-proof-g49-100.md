@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G49-100 -->
+
 # Amendment 12: Command Center - Proof G49-100
 
 This document outlines the proof-closing blueprint note for the initial implementation slice of Amendment 12, focusing on the core `CommandCenter` class definition and its basic integration into `LifeOS`.

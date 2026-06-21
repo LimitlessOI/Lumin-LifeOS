@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Classify self-repair memory lessons from observable lesson fields only.
  * Classify self-repair memory lessons from observable lesson fields only.
  * Unknown → UNKNOWN (never guessed).
  *

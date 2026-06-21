@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_add_task_triggers.sql.
 ```sql
 -- Function to update the updated_at field
 CREATE OR REPLACE FUNCTION update_updated_at_column()

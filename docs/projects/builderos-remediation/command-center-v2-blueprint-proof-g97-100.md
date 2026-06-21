@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G97 100. -->
+
 The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided, requiring inference for the `data-ingestion-service` context.
 Command Center V2 Blueprint Proof: G97-100 - Data Ingestion Service Foundation
 This document serves as a proof-closing blueprint note for the Command Center V2 project, focusing on the initial build slice for the `data-ingestion-service`.

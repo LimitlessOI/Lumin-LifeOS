@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS System Map and Build Order -->
+
 The source files specified in `RELEVANT FILE PATHS` were unreadable, leading to reliance on inferred structure from filenames and explicit mentions in the task description.
 ---
 # LifeOS System Map and Build Order

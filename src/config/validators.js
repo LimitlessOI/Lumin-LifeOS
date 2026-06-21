@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/config/validators.js.
+ */
 const Joi = require('joi');
 
 const envVarsSchema = Joi.object({

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: calendarSync.js
+ */
 // calendarSync.js
 const { google } = require('googleapis');
 

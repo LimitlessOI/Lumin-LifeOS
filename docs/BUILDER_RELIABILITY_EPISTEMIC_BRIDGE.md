@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder reliability ↔ truth evaluation (SSOT bridge) -->
+
 # Builder reliability ↔ truth evaluation (SSOT bridge)
 
 This document ties together:

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 01 AI Council - G393-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 01 AI Council - G393-100
 
 This note addresses the initial proof slice for Amendment 01, establishing the foundational presence of the AI Council within the BuilderOS remediation project.

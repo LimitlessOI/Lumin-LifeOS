@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — truffle-config.js.
+ */
 ```javascript
 module.exports = {
   networks: {

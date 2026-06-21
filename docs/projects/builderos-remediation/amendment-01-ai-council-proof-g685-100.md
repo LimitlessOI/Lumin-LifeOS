@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof: G685-100 - BuilderOS Remediation -->
+
 # Amendment 01 AI Council Proof: G685-100 - BuilderOS Remediation
 
 ## 1. Introduction

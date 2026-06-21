@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Memory Architecture Archaeology -->
+
 # Memory Architecture Archaeology
 
 > **Governance supersession (2026-06-09):** Deliberation/org vocabulary sealed in **`docs/BUILDEROS_VOCABULARY.md` v2.7** + **`docs/architecture/DELIBERATION_ARCHITECTURE.md`**. This archaeology doc remains valid for memory surfaces; dept count is now **seven** (CDR, CFO).

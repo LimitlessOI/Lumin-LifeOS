@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Readiness report v3 — includes duplication, greenfield 3x, queue dry-run receipts. */
+/**
+ * SYNOPSIS: Readiness report v3 — includes duplication, greenfield 3x, queue dry-run receipts. Readiness report v3 — includes duplication, greenfield 3x, queue dry-run receipts. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';

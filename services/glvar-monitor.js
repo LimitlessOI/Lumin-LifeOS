@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: glvar-monitor.js
  * glvar-monitor.js
  * Two monitoring tracks for GLVAR membership:
  *

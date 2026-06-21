@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - G261-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - G261-100
 
 This document addresses the proof gap `G261-100` related to `AMENDMENT_41_MARKETINGOS`.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — intervention_logs.sql.
 ```sql
 CREATE TABLE intervention_logs (
     id SERIAL PRIMARY KEY,

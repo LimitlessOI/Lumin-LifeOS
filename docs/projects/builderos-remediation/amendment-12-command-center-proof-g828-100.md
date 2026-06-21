@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G828-100 -->
+
 # Amendment 12: Command Center - Proof G828-100
 
 ## Blueprint Note for Next C2 Build Pass

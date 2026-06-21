@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G205 100. -->
+
 Amendment 12: Command Center - Proof G205-100 Closing Note
 This note outlines the final build slice required to achieve the proof goal for G205-100: "Successful invocation of a dummy command via API."
 ---

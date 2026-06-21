@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema.sql.
 ```sql
 CREATE TABLE code_review_insights (
     id SERIAL PRIMARY KEY,

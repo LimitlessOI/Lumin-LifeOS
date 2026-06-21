@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof: G57-100 -->
+
 # Amendment 16 Word Keeper Proof: G57-100
 
 This document outlines the next smallest build slice for Amendment 16, the "Word Keeper" feature, focusing on establishing the foundational data model and initial persistence mechanism.

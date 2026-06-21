@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Transcription Service — sends an audio file URL to OpenAI Whisper-1 for
  * Transcription Service — sends an audio file URL to OpenAI Whisper-1 for
  * speech-to-text transcription.
  *

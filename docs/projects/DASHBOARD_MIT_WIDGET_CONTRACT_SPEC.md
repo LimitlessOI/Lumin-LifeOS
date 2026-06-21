@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD MIT WIDGET CONTRACT SPEC. -->
+
 The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `docs/projects/DASHBOARD_TODAY_CATEGORY_SPEC.md` files are missing from the repository, which limits grounding in the full specification.
 <!DOCTYPE html>
 <html lang="en">

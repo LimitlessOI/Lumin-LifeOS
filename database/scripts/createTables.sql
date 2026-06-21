@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — createTables.sql.
 ```sql
 CREATE TABLE market_analyses (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G79-100 Closing Note -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G79-100 Closing Note
 
 This proof-closing note addresses the completion of the initial Command Center Dashboard UI shell and outlines the next smallest build slice to integrate live data, moving towards the Phase 1 MVP.

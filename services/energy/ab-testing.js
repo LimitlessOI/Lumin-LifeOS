@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Ab Testing.
+ */
 const { trackBehavior } = require('./gamification-service');
 
 function abTestFeature(userId, featureFlag) {

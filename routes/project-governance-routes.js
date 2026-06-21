@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/project-governance-routes.js
  * routes/project-governance-routes.js
  * Project governance API — projects, segments, estimation, pending-adam.
  *

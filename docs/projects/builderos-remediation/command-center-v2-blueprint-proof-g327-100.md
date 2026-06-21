@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G327 100. -->
+
 ### Command Center V2 Blueprint Proof: g327-100 - Implement Command Creation API
 
 This document details the next smallest build slice for Command Center V2, focusing on implementing the API endpoint and service logic for creating new `Command` entities. This builds upon the initial `Command` data model and list API, addressing the need for write operations.

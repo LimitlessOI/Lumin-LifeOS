@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof - G911-100 Blueprint Note -->
+
 # Amendment 41 MarketingOS Proof - G911-100 Blueprint Note
 
 This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41 regarding MarketingOS integration within BuilderOS.

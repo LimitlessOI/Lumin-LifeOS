@@ -1,3 +1,4 @@
+# SYNOPSIS: Shell script — Initialize Project.
 ```bash
 #!/bin/bash
 

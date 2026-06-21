@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_01_AI_COUNCIL Proof: G705-100 - Initial AI Council Member Data Model -->
+
 The source blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` was not provided, requiring inference for the proof document content.
 # AMENDMENT_01_AI_COUNCIL Proof: G705-100 - Initial AI Council Member Data Model
 

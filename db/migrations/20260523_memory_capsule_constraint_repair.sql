@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260523_memory_capsule_constraint_repair.sql.
 -- db/migrations/20260523_memory_capsule_constraint_repair.sql
 -- Repair: initial 20260521 migration ran before user_input was added to source_type.
 -- CREATE TABLE IF NOT EXISTS was a no-op on re-deploy, so constraint was never updated.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — create_automations_tables.sql.
 ```sql
 CREATE TABLE automations (
     id SERIAL PRIMARY KEY,

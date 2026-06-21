@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19: Project Governance - Proof G80-100: Remediation & Enforcement -->
+
 # Amendment 19: Project Governance - Proof G80-100: Remediation & Enforcement
 
 This document serves as the proof-closing blueprint note for the G80-100 build slice of Amendment 19, focusing on the initial implementation of remediation and enforcement mechanisms within BuilderOS.

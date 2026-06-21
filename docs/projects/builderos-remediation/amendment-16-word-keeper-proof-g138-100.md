@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G138-100 -->
+
 # Amendment 16: Word Keeper - Proof G138-100
 
 ## Blueprint Note: Initial WordKeeper Core Implementation

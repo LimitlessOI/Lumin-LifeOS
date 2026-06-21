@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Thin instrumentation helpers — map domain events → telemetry rows.
  * Thin instrumentation helpers — map domain events → telemetry rows.
  *
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md

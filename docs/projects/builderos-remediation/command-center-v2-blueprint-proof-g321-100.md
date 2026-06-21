@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G321 100. -->
+
 ### Proof-Closing Blueprint Note: Command Center V2 - Initial Route and Component Shell
 
 This note addresses the initial setup required to establish the Command Center V2 within the application's routing and component structure, providing a foundational element for subsequent feature development.

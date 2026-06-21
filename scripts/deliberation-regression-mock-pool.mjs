@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Shared mock pool for deliberation regression harness (local layer).
  * Shared mock pool for deliberation regression harness (local layer).
  * @ssot builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_PROBE_CATALOG.json
  */

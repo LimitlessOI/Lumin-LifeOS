@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — server/routes/lessonRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const lessonController = require('../controllers/lessonController');

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_47 — Mission Runtime -->
+
 # AMENDMENT_47 — Mission Runtime
 
 | Field | Value |

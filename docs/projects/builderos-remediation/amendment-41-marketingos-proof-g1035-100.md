@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1035 100. -->
+
 Proof-Closing Blueprint Note: MarketingOS Proof G1035-100
 This document serves as a blueprint note to close the proof gap for `g1035-100` as defined in `AMENDMENT_41_MARKETINGOS.md`.
 1.  Exact Missing Implementation or Proof Gap:

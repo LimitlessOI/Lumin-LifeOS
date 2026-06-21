@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/dream-funding.js
  * services/dream-funding.js
  *
  * Tracks dreams, funding progress, and the pay-forward chain.

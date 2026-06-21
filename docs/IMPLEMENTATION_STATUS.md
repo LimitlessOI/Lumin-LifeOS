@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Implementation Status - AI Counsel OS Reorganization -->
+
 # Implementation Status - AI Counsel OS Reorganization
 
 **Last Updated**: 2025-01-XX  

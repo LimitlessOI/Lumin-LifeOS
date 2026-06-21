@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Event Emission Verification (g423-100) -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Event Emission Verification (g423-100)
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

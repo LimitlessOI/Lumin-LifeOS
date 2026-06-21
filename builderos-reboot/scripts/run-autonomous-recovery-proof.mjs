@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: AUTONOMOUS-RECOVERY-0001 proof runner — regression objective must complete or UNSOLVED honestly.
  * AUTONOMOUS-RECOVERY-0001 proof runner — regression objective must complete or UNSOLVED honestly.
  * @ssot builderos-reboot/MISSIONS/AUTONOMOUS-RECOVERY-0001/FOUNDER_PACKET.json
  */

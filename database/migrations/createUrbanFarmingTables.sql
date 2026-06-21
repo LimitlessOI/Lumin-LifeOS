@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — createUrbanFarmingTables.sql.
 ```sql
 CREATE TABLE urban_farms (
     id SERIAL PRIMARY KEY,

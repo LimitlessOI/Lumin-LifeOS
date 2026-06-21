@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof Document: AI Council Amendment 01 - Goal G1047-100 -->
+
 # Proof Document: AI Council Amendment 01 - Goal G1047-100
 
 **Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

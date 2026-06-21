@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-engine-routes.js
  * routes/lifeos-engine-routes.js
  *
  * LifeOS Phase 2 — The Engine API

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G183-100 -->
+
 # AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G183-100
 
 **Signal:** This document — SSOT foundation.

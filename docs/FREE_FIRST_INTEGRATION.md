@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🆓 Free-First AI Integration (Ollama + Paid Fallback) -->
+
 # 🆓 Free-First AI Integration (Ollama + Paid Fallback)
 
 **Your Strategy:** Ollama (free local models) → Paid APIs (only when necessary)

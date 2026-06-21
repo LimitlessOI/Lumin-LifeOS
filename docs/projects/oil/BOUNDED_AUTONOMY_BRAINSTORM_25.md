@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Bounded Autonomy Brainstorm — 25 Ideas -->
+
 # Bounded Autonomy Brainstorm — 25 Ideas
 
 > **Phase 0** — Council/OIL brainstorm before bounded autonomous execution build  

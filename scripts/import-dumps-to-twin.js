@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: scripts/import-dumps-to-twin.js
  * scripts/import-dumps-to-twin.js
  *
  * One-time (and re-runnable) import of memory_dump_chunks into adam_decisions.

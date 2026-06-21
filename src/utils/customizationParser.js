@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/utils/customizationParser.js.
+ */
 ```javascript
 function parseCustomizationValue(value) {
     // Implement parsing logic if needed

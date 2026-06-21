@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Assuming services/word-keeper-transcriber.js exports this function.
+ */
 /*
 - @file services/marketing-transcriber.js
 - @overview This module provides functionality to transcribe audio content from a given URL.

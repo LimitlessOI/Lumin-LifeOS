@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G33-100 Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G33-100 Remediation
 
 This document outlines the remediation plan and proof-closing blueprint note for the BuilderOS control plane, addressing the OIL verifier rejection and ensuring the specified build lifecycle events are correctly wired.

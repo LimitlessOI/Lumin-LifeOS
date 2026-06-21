@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports clampMobileWidgetCount — scripts/builder-smoke/dashboard-layout-utils.mjs.
+ */
 export function clampMobileWidgetCount(count) {
   const num = Math.round(count);
   return Math.max(1, Math.min(6, num));

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Universal explainability catalog for LifeOS Communication OS + Command Center.
  * Universal explainability catalog for LifeOS Communication OS + Command Center.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G337-100 -->
+
 # Amendment 12 Command Center Proof - G337-100
 
 ## Blueprint Note: Next Smallest Build Slice

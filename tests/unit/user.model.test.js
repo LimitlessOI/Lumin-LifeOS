@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/unit/user.model.test.js.
+ */
 const { userValidationRules } = require('../../src/modules/users/user.model');
 const { validationResult } = require('express-validator');
 const { mockRequest, mockResponse } = require('jest-mock-req-res');

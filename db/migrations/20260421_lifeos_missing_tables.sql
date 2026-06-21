@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260421_lifeos_missing_tables.sql.
 -- 20260421_lifeos_missing_tables.sql
 -- Creates tables referenced in services but missing from migrations:
 --   user_preferences  — key/value store for per-user settings (phone, escalation policy, etc.)

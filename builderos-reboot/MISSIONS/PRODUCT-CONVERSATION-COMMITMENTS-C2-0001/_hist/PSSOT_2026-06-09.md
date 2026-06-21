@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PSSOT — Project Single Source of Truth -->
+
 # PSSOT — Project Single Source of Truth
 
 **Mission:** `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`  

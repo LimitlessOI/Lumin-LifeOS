@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G35-100 - Initial Documentation Structure -->
+
 # Amendment 19 Project Governance Proof: G35-100 - Initial Documentation Structure
 
 This document serves as proof for the initial build slice related to Amendment 19 Project Governance, specifically focusing on establishing the foundational structure for project-specific governance documentation.

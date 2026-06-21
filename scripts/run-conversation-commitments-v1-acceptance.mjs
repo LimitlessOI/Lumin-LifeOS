@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: LifeOS Objective 1 — Conversation Commitments v1 acceptance.
  * LifeOS Objective 1 — Conversation Commitments v1 acceptance.
  * PASS = blueprint exists + full vertical slice on production API + UI + receipt.
  * @ssot builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/FOUNDER_PACKET.md

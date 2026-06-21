@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 20231001_create_outreach_leads_table.js.
+ */
 const mongoose = require('mongoose');
 
 const outreachLeadSchema = new mongoose.Schema({

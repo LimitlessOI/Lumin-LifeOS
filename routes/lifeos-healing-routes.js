@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-healing-routes.js
  * routes/lifeos-healing-routes.js
  *
  * LifeOS Memory & Healing API

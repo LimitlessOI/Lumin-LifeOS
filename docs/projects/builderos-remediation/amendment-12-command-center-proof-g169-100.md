@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G169-100 - Initial Remediation Task Data Model & API Endpoint -->
+
 # Amendment 12 Command Center Proof: G169-100 - Initial Remediation Task Data Model & API Endpoint
 
 This document outlines the first granular build slice for the BuilderOS Command Center, focusing on establishing the foundational data model and a basic API endpoint for `RemediationTask` entities as part of Phase 1 (MVP) development.

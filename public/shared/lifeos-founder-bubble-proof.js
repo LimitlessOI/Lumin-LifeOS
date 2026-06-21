@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/shared/lifeos-founder-bubble-proof.js.
+ */
 (function (global) {
   'use strict';
 

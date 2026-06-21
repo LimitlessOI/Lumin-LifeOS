@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SESSION HANDOFF - LifeOS Project -->
+
 # SESSION HANDOFF - LifeOS Project
 
 > **Last Updated:** December 31, 2024  

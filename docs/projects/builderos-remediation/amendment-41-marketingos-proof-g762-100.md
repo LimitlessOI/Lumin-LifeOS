@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof - G762-100 -->
+
 # Amendment 41 MarketingOS Proof - G762-100
 
 ## Proof-Closing Blueprint Note

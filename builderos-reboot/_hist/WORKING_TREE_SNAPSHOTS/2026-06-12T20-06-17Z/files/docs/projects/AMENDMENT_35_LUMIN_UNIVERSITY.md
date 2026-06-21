@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Lumin University -->
+
 # Lumin University
 _(formerly AMENDMENT_35_LUMIN_UNIVERSITY.md)_
 

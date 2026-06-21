@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G121-100 - Project Ownership and Review Board Validation -->
+
 # Amendment 19 Project Governance Proof: G121-100 - Project Ownership and Review Board Validation
 
 ## Blueprint Reference

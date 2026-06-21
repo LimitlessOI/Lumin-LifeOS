@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: --- Constants for Audit Configuration ---
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 import { execSync } from 'child_process';

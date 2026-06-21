@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G639 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G639-100: Initial Build Status Data Feed
 
 This proof-closing blueprint note addresses the foundational requirement for the Command Center's Phase 1 (MVP) Dashboard: establishing a basic, read-only data feed for build status. This slice focuses on exposing the current status of a single, representative BuilderOS build.

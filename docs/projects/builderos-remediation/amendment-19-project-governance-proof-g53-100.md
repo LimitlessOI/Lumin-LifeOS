@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G53-100 - Verification of Project Lead Assignment Process -->
+
 # Amendment 19 Project Governance Proof: G53-100 - Verification of Project Lead Assignment Process
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

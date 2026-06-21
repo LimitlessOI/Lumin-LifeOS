@@ -1,8 +1,7 @@
 /**
- * Action Inbox v1 — capture, classify, stage, and route user messages.
- * Middle layer between Voice Rail communication and BuilderOS execution.
- * HARD RULE: bp_build_request items are STAGED ONLY; never auto-routed to CDR.
- * HARD RULE: private_no_save items are never written to DB.
+ * SYNOPSIS: Capture/classify/stage messages; blocks auto-routing bp_build_request to builder.
+ * WIRED: partial — HTTP /api/v1/lifeos/action-inbox mounted; founder build bypasses inbox
+ * INTEGRATE: founder-interface/message build branch — stage before /build per AM21
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 import { classifyIntent } from './voice-rail-v1.js';

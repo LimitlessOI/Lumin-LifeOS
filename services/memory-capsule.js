@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-capsule.js
+ */
 // services/memory-capsule.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 

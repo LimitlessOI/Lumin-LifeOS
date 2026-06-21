@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231010_create_energy_assets.sql.
 ```sql
 CREATE TABLE energy_assets (
     id SERIAL PRIMARY KEY,

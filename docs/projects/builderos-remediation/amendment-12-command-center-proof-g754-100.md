@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G754 100. -->
+
 Amendment 12 Command Center Proof: G754-100 - Initial API Endpoint Proof
 This document outlines the next smallest build slice for Amendment 12, focusing on proving the foundational apiEP for the Command Center.
 ---

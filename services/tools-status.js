@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Tools Status — probes the runtime environment for available CLI commands,
  * Tools Status — probes the runtime environment for available CLI commands,
  * Python modules, and Node.js packages needed by autonomous agents.
  *

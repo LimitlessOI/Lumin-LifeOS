@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Two-Tier Council System - Implementation Complete -->
+
 # 🚀 Two-Tier Council System - Implementation Complete
 
 ## ✅ What Was Built

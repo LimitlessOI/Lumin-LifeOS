@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: append_timestamp.js
+ */
 // append_timestamp.js
 const fs = require('fs');
 const path = require('path');

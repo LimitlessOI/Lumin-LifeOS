@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof - Gate 21-100: Base Configuration Retrieval and Validation -->
+
 # Amendment 14 White-Label Proof - Gate 21-100: Base Configuration Retrieval and Validation
 
 This blueprint note outlines the smallest safe build slice to establish foundational proof for Amendment 14 white-labeling: the reliable retrieval and validation of project-specific white-label configurations. This is a critical prerequisite for any subsequent rendering or application of white-label styles and assets

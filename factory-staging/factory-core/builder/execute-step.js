@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports executeStep — factory-staging/factory-core/builder/execute-step.js.
+ */
 export const BUILDER_ALLOWED_STATUSES = [
   'DONE',
   'BLOCKED_RETURN_TO_BPB',

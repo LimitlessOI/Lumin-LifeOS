@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/pre-deploy-check.yml.
 name: Pre-Deploy Validation
 
 on:

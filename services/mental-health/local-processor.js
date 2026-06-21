@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Local Processor.
+ */
 ```javascript
 class LocalProcessor {
   processCBT(sessionData) {

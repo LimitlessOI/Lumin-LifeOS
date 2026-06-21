@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: One-shot: run the main repo quality gates in order. Exit 1 on first failure.
  * One-shot: run the main repo quality gates in order. Exit 1 on first failure.
  *
  * Modes:

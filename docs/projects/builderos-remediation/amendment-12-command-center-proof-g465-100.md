@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G465 100. -->
+
 ### Proof-Closing Blueprint Note: AMENDMENT_12_COMMAND_CENTER - G465-100
 
 This note addresses the initial foundational implementation of the `CommandCenter` as outlined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

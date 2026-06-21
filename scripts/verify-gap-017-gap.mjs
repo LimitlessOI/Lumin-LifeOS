@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports runGAP017GapVerification — scripts/verify-gap-017-gap.mjs.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

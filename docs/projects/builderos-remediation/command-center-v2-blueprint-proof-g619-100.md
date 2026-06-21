@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Initial Dashboard Rendering (g619-100) -->
+
 // docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g619-100.md
 ---
 # Blueprint Proof: Command Center V2 - Initial Dashboard Rendering (g619-100)

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching Proof - G23-100 -->
+
 # Amendment 09 Life Coaching Proof - G23-100
 
 This document serves as a proof artifact for Amendment 09 related to Life Coaching, specifically for the G23-100 iteration within the BuilderOS remediation process.

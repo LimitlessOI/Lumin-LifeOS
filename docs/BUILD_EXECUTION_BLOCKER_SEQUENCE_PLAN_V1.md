@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Build Execution Blocker Sequence Plan V1 -->
+
 # Build Execution Blocker Sequence Plan V1
 
 **Status:** `AUTHORITATIVE PLAN` (doc-only — no runtime code in this slice)  

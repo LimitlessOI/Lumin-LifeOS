@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Apply Middleware — registers all Express middleware for the app: body parsers,
  * Apply Middleware — registers all Express middleware for the app: body parsers,
  * static file serving, and CORS with same-origin + allowlist enforcement.
  *

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G117-100 -->
+
 # Amendment 19 Project Governance Proof: G117-100
 
 This document serves as a proof-of-concept and blueprint note for the initial build slice addressing Amendment 19 Project Governance within the BuilderOS remediation efforts.

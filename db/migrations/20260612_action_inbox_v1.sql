@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260612_action_inbox_v1.sql.
 -- Action Inbox v1 schema
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 -- Mission: PRODUCT-ACTION-INBOX-V1-0001

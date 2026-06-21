@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G181-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G181-100
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the identified proof gap related to Amendment 41 for MarketingOS.

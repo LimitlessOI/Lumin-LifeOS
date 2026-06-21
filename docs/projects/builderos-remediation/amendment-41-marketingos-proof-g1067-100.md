@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G1067-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G1067-100
 
 This document serves as the SSOT foundation for closing the proof gap related to AMENDMENT_41_MARKETINGOS, specifically focusing on the verified transmission of `UserEngagementScore` (UES) updates from LifeOS to MarketingOS.

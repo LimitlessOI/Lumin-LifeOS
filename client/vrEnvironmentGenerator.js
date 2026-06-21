@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — client/vrEnvironmentGenerator.js.
+ */
 ```javascript
 import * as THREE from 'three';
 import { Canvas, useFrame } from 'react-three-fiber';

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/validateCustomization.js.
+ */
 ```javascript
 const Joi = require('joi');
 

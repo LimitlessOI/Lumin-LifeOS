@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Export manifest for Lumin-Factory repo cutover. */
+/**
+ * SYNOPSIS: Export manifest for Lumin-Factory repo cutover. Export manifest for Lumin-Factory repo cutover. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

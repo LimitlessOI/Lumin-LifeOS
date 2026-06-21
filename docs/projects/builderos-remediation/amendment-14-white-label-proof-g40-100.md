@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - Slice G40-100 -->
+
 # Amendment 14: White-Label Proof - Slice G40-100
 
 This document serves as a proof-of-completion and blueprint note for the initial build slice G40-100 of Amendment 14, focusing on the foundational white-label configuration definition and storage.

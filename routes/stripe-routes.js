@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: STRIPE ROUTES - Express router for Stripe automation
  * STRIPE ROUTES - Express router for Stripe automation
  */
 

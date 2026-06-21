@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G79 100. -->
+
 The specification to write a `.md` file contradicts the OIL verifier's rejection of `.md` files as unknown file extensions for Node.js execution.
 Amendment 41 MarketingOS Proof - G79-100
 Source Blueprint: `docs/projects/AMENDMENT_41_MARKETINGOS.md`

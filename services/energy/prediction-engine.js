@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Prediction Engine.
+ */
 const tf = require('@tensorflow/tfjs-node');
 const axios = require('axios');
 

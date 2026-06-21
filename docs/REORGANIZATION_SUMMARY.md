@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AI Counsel OS - Reorganization Summary -->
+
 # AI Counsel OS - Reorganization Summary
 
 **Date**: 2025-01-XX  

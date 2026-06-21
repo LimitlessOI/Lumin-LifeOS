@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Runtime route composition for the main Express app.
  * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime.
  * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  * Runtime route composition for the main Express app.

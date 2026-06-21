@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Customization Guide for Docker Images -->
+
 ```markdown
 # Customization Guide for Docker Images
 

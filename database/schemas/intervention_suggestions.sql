@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — intervention_suggestions.sql.
 ```sql
 CREATE TABLE intervention_suggestions (
     suggestion_id SERIAL PRIMARY KEY,

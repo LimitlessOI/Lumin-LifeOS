@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/canonical-execution-routes.js
  * routes/canonical-execution-routes.js
  * Phase 18 — Canonical execution queue + AI kill-switch routes (H-2 strategy).
  * Provides canonical equivalents for legacy command-center-routes.js execution surfaces.

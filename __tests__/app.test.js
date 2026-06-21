@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — __tests__/app.test.js.
+ */
 const request = require('supertest');
 const app = require('../src/index');
 

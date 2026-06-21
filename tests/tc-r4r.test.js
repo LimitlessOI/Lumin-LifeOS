@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/tc-r4r.test.js.
+ */
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { classifyR4RAttachment } from '../services/tc-r4r-attachment-classify.js';

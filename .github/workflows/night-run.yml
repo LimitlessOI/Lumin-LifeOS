@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/night-run.yml.
 name: Night Runner (15h Autopilot)
 
 on:

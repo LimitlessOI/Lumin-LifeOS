@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Improving Open Source AI Models -->
+
 # 🚀 Improving Open Source AI Models
 
 ## Can Open Source AI Be Improved?

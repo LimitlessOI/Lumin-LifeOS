@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Initial API & Type Definition (g947-100) -->
+
 # Blueprint Proof: Command Center V2 - Initial API & Type Definition (g947-100)
 
 This document outlines the first build slice for Command Center V2, focusing on establishing the core data type and a foundational API endpoint.

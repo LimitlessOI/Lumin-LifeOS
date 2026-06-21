@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Run autonomous recovery for an objective. Usage: run-recovery-protocol.mjs <OBJECTIVE_ID> */
+/**
+ * SYNOPSIS: Run autonomous recovery for an objective. Usage: run-recovery-protocol.mjs <OBJECTIVE_ID> Run autonomous recovery for an objective. Usage: run-recovery-protocol.mjs <OBJECTIVE_ID> */
 import { runRecoveryProtocol } from './recovery-protocol-lib.mjs';
 
 const objectiveId = process.argv[2] || 'FACTORY-DELIBERATION-SENTRY-REGRESSION-0001';

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_iot_tables.sql.
 ```sql
 -- Migration for creating necessary tables
 

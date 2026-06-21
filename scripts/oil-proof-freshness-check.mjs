@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: CLI proof freshness check — same rules as GET /command-center/proof-freshness.
  * CLI proof freshness check — same rules as GET /command-center/proof-freshness.
  *
  * @ssot docs/projects/oil/SELF_REPAIR_DETECTION_RULES.md

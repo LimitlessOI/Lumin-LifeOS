@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G98 100. -->
+
 The task asks to write a `.md` file, but the OIL verifier rejects `.md` files with an `ERR_UNKNOWN_FILE_EXTENSION` error, indicating it attempts to execute them as Node.js modules. This is a contradiction between the explicit instruction and the verifier's behavior.
 
 Source blueprint `docs/projects/AMENDMENT_14_WHITE_LABEL.md` content is missing from REPO FILE CONTENTS, preventing derivation of the blueprint note.

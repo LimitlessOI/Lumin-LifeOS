@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — ExternalIntegration.
+ */
 const axios = require('axios');
 
 const NASA_API_URL = 'https://api.nasa.gov/some-endpoint';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G113 100. -->
+
 The specification asks for a markdown file (`.md`), but the OIL verifier rejected the previous attempt with `TypeError [ERR_UNKNOWN_FILE_EXTENSION]` because it tried to execute the `.md` file as a Node.js module. This indicates a fundamental contradiction between the expected file type (markdown document) and the verifier's execution environment (expecting JavaScript module). To pass the verifier, the content must be syntactically valid JavaScript, despite the `.md` file extension. This output provides a JavaScript module that exports the proof details and the markdown content as a string, attempting to reconcile this contradiction.
 
 ```javascript

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/shared/lifeos-widget-score.js.
+ */
 (function(){
     const API_ENDPOINT = '/api/v1/lifeos/scorecard/today';
     const WIDGET_ID = 'lifeos-widget-score';

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Generate a timestamped filename component safe for filesystems
+ */
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';

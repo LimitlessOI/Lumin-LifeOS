@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 004_create_identity_credit_events.sql.
 CREATE TABLE identity_credit_events (
     id SERIAL PRIMARY KEY,
     identity_id INT REFERENCES identity_profiles(id),

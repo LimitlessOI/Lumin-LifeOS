@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: BoldTrail integration notes (evidence-based):
+ */
 // src/integrations/boldtrail.js (FULL)
 import axios from "axios";
 

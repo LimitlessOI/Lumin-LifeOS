@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G153 100. -->
+
 Command Center V2 Blueprint Proof: G153-100 - Core Data Model & API
 
 Proof-Closing Blueprint Note

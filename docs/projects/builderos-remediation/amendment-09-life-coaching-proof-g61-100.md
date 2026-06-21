@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof for g61-101 -->
+
 # Amendment 09: Life Coaching - Proof for g61-101
 
 ## Proof-Closing Blueprint Note

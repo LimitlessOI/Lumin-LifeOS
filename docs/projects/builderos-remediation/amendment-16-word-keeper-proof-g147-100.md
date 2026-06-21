@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G147-100 -->
+
 # Amendment 16: Word Keeper - Proof G147-100
 
 ## Blueprint Note: Next Smallest Build Slice - Word Entity and Repository Core

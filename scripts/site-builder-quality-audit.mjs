@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Quality audit for generated preview sites.
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * Quality audit for generated preview sites.
  *

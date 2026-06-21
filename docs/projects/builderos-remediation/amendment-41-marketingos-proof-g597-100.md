@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G597 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS Proof G597-100
 This document serves as a proof-closing blueprint note for the `g597-100` gap identified within Amendment 41, which establishes MarketingOS as the Single Source of Truth (SSOT) foundation for specific marketing campaign metadata.
 ---

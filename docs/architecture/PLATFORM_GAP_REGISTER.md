@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Platform Gap Register -->
+
 # Platform Gap Register
 
 | Field | Value |

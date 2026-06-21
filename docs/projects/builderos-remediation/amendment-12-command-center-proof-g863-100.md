@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G863 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G863-100: Core Service & DB Schema POC
 This document outlines the proof-closing blueprint note for the initial build slice of Amendment 12, focusing on establishing the foundational `CommandCenterService` and its corresponding db schema as a Proof-of-Concept (POC).
 ---

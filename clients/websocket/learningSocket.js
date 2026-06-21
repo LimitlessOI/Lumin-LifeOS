@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — clients/websocket/learningSocket.js.
+ */
 const io = require('socket.io')(3004);
 
 io.on('connection', (socket) => {

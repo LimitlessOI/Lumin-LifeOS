@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — farming-tables.sql.
 ```sql
 CREATE TABLE IoT_Sensors (
     sensor_id SERIAL PRIMARY KEY,

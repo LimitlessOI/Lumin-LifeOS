@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G30-100 -->
+
 # Amendment 16: Word Keeper - Proof G30-100
 
 ## Blueprint Note: Establishing WordMapping Data Model

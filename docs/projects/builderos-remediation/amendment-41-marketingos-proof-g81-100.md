@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof-Closing Blueprint Note (G81-100) -->
+
 The instruction to write a `.md` file conflicts with the OIL verifier's rejection, which indicates it attempts to execute `.md` files as Node.js modules. I am proceeding with generating the `.md` file as explicitly requested by the task.
 # Amendment 41 MarketingOS Proof-Closing Blueprint Note (G81-100)
 

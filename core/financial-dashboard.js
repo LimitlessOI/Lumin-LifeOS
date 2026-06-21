@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: FinancialDashboard — ledger transactions and daily financial summary.
  * FinancialDashboard — ledger transactions and daily financial summary.
  * Extracted from server.js.
  */

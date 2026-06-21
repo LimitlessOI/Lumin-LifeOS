@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ts — src/modules/users/user.model.ts.
+ */
 ```typescript
 export interface User {
   id: number;

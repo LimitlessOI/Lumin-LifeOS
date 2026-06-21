@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G271 100. -->
+
 ### Proof-Closing Blueprint Note: G271-100 - BuildSliceCommand Implementation
 
 This note closes the proof for the initial functional command implementation within the BuilderOS Command Center, following the core `CommandCenter` and `Command` interface setup.

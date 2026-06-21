@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports runFrozenStep — factory-v1/runtime/run-frozen-step.js.
+ */
 import { executeStep } from '../builder/execute-step.js';
 import { verifyStepResult } from '../sentry/verify-step-result.js';
 import { recordStepOutcome } from '../historian/record-step-outcome.js';

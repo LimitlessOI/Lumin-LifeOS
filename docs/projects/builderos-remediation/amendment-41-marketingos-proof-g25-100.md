@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS: Proof G25-100 Closing Blueprint Note -->
+
 # AMENDMENT_41_MARKETINGOS: Proof G25-100 Closing Blueprint Note
 
 This document serves as the SSOT foundation for closing the proof gap related to MarketingOS G25-100 for Amendment 41.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G219 100. -->
+
 The specification is contradictory: it asks to write a `.md` file, but the verifier rejects `.md` files as non-executable.
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS - G219-100
 Source Blueprint: `docs/projects/AMENDMENT_41_MARKETINGOS.md`

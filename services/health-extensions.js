@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/health-extensions.js
  * services/health-extensions.js
  *
  * Module A: Health Extensions — Ideas 16–17

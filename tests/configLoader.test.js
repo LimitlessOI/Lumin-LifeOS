@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/configLoader.test.js.
+ */
 const loadConfig = require('../src/config/loader');
 const validateEnv = require('../src/config/validator');
 

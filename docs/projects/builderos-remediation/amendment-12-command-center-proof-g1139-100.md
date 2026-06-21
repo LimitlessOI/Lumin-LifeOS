@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1139 100. -->
+
 Amendment 12: Command Center - Proof G1139-100
 This document outlines the next smallest build slice for Amendment 12, focusing on establishing the foundational `CommandCenter` and `Command` pattern.
 ---

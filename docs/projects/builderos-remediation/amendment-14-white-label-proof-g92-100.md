@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G92-100 Remediation Blueprint Note -->
+
 The specification is contradictory: the instruction to write a `.md` file conflicts with the OIL verifier's attempt to execute `.md` files as JavaScript modules, leading to an `ERR_UNKNOWN_FILE_EXTENSION`. This makes it impossible to satisfy both the instruction (create a `.md` file) and the implied requirement to pass the verifier (which fails on `.md` files).
 
 ```markdown

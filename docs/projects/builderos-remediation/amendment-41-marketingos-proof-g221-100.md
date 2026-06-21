@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof - G221-100 Remediation Blueprint Note -->
+
 # Amendment 41 MarketingOS Proof - G221-100 Remediation Blueprint Note
 
 **SSOT Foundation for BuilderOS Remediation**

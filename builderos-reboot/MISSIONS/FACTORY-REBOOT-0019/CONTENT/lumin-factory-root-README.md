@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Lumin Factory -->
+
 # Lumin Factory
 
 Standalone factory runtime cutover from Lumin-LifeOS.

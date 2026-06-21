@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Start recording a call or presentation
+ */
 // src/services/call-recorder.js
 // Handles recording sales calls and presentations
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS UX architecture — Lumin-first adaptive environment -->
+
 # LifeOS UX architecture — Lumin-first adaptive environment
 
 | Field | Value |

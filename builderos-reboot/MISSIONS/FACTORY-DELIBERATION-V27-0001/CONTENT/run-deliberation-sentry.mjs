@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: SENTRY review for FACTORY-DELIBERATION-V27-0001 — mechanical + qualitative emit.
  * SENTRY review for FACTORY-DELIBERATION-V27-0001 — mechanical + qualitative emit.
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
  */

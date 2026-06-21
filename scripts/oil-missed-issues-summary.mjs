@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Summarize tracked OIL missed-issue receipts with schema validation.
  * Summarize tracked OIL missed-issue receipts with schema validation.
  * Local: uses DATABASE_URL + optional PUBLIC_BASE_URL for live detect context.
  *

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Determinism Coder Prompt (copy into 3 fresh sessions) -->
+
 # Determinism Coder Prompt (copy into 3 fresh sessions)
 
 You are the **Coder tier** (same model each session).

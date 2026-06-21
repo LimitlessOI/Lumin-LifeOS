@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports runGAP015GapVerification — scripts/verify-gap-015-gap.mjs.
+ */
 /*
 - @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
 - - Verifies GAP-015: "No trust coverage map (OIL + build + token joint view)"

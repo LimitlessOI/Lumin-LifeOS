@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Product Development gate — BPB may not start unless strategic ambiguity is resolved.
  * Product Development gate — BPB may not start unless strategic ambiguity is resolved.
  */
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G933 100. -->
+
 // docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g933-100.md
 // This file serves as an executable proof-closing blueprint note for the OIL verifier.
 

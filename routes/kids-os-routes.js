@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/kids-os-routes.js
  * routes/kids-os-routes.js
  *
  * Kids OS API — enrollment, win logging, integrity scoring,

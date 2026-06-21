@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Simple text utilities to approximate drift signals locally.
+ */
 import { randomUUID } from 'crypto';
 
 /**

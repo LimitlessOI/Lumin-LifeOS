@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G559-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G559-100
 
 This document serves as a proof-closing blueprint note for the initial foundational slice of the AMENDMENT 12: COMMAND CENTER project. It addresses the establishment of the core data model and its persistence contract.

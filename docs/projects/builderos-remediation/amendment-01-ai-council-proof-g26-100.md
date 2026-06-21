@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G26 100. -->
+
 Proof-Closing Blueprint Note: Amendment 01 AI Council - Proof G26-100
 This note outlines the next smallest build slice to close proof point G26-100, focusing on ensuring immutable logging of AI Council decisions as per Amendment 01.
 ---

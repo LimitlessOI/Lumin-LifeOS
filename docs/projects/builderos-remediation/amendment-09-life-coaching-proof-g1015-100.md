@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: G1015-100 - Life Coaching Proof -->
+
 # Proof-Closing Blueprint Note: G1015-100 - Life Coaching Proof
 
 This note addresses the immediate BuilderOS OIL verifier rejection and outlines the next build slice for `AMENDMENT_09_LIFE_COACHING`.

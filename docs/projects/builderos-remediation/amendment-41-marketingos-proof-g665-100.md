@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G665 100. -->
+
 Amendment 41: MarketingOS Proof - G665-100
 Proof-Closing Blueprint Note
 Signal Requiring Follow-Through: This document — SSOT foundation.

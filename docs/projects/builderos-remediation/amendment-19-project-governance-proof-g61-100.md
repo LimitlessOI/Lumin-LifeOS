@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G61 100. -->
+
 Amendment 19 Project Governance Proof: G61-100
 Project: BuilderOS Remediation
 Blueprint: `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

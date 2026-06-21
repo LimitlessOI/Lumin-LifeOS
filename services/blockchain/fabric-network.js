@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Fabric Network.
+ */
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');

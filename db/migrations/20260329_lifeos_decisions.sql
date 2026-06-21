@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260329_lifeos_decisions.sql.
 -- ============================================================
 -- Migration: 20260329_lifeos_decisions.sql
 -- Decision Intelligence layer — Ideas 5-8

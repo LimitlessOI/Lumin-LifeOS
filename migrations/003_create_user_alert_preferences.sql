@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 003_create_user_alert_preferences.sql.
 ```sql
 CREATE TABLE user_alert_preferences (
     id SERIAL PRIMARY KEY,

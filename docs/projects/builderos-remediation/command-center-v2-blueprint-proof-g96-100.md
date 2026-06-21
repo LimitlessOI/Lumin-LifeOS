@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center v2 Blueprint Proof: g96-100 - Initial API Gateway Setup -->
+
 # Command Center v2 Blueprint Proof: g96-100 - Initial API Gateway Setup
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center v2, specifically addressing the foundational component `g96: Core API Gateway for internal services`.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/ux-evaluator.js
  * services/ux-evaluator.js
  * Evaluates generated UI against Nielsen's 10 usability heuristics,
  * user flow quality, and Adam's known preferences.

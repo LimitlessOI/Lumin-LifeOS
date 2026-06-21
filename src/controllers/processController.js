@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/processController.js.
+ */
 ```javascript
 const ProcessManager = require('../services/ProcessManager');
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Todo 1 G1. -->
+
 BuilderOS Remediation: Amendment 01 AI Council - TODO 1 (G1)
 Source Blueprint: `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
 Relevant Section Summary: Improve `general` task type savings from 4% → 15%+ (est: 3h) `[needs-review]`

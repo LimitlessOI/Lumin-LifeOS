@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G834 100. -->
+
 Proof-Closing Blueprint Note: Amendment 01 AI Council - Proof G834-100
 This document serves as the initial proof-closing blueprint note for the validation of Amendment 01's AI Council integration, specifically addressing proof `g834-100`.
 1. Exact missing implementation or proof gap:

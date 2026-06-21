@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Agent Twin Learning System
+ */
 // Agent Twin Learning System
 
 class AgentTwinLearning {

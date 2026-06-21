@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G923 100. -->
+
 The blueprint's initial description of 'telemetry ingestion endpoint' conflicts with the partial gap statement 'C2 to pull'.
 Amendment 12: Command Center Integration - Proof G923-100
 This document serves as a proof-closing blueprint note for the initial implementation slice of Amendment 12, focusing on establishing the telemetry ingestion endpoint.

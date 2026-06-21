@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G365 100. -->
+
 The instruction to "Generate the complete implementation code" contradicts the explicit task to "Write docs/projects/builderos-remediation/amendment-12-command-center-proof-g365-100.md" and the provided `.md` file content, which is a document describing implementation, not the implementation code itself. I am providing the content for the specified `.md` file.
 ---
 Amendment 12: Command Center - Proof G365-100

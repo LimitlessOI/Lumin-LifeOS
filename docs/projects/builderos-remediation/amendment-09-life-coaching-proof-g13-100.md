@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G13-100 Blueprint Note -->
+
 # Amendment 09: Life Coaching - Proof G13-100 Blueprint Note
 
 This note closes the proof gap G13-100, focusing on establishing the foundational data persistence for Life Coaching Sessions.

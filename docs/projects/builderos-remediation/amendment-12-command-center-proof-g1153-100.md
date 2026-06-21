@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1153 100. -->
+
 Amendment 12: Command Center - Proof G1153-100
 Blueprint Note: Next Smallest Build Slice
 This note outlines the next smallest, safest build slice to advance the implementation of Amendment 12, focusing on establishing the foundational `CommandCenter` class.

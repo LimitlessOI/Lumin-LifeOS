@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_tables.sql.
 ```sql
 CREATE TABLE arw_users (
     id SERIAL PRIMARY KEY,

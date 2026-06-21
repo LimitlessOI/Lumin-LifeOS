@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — api-gateway/routes.js.
+ */
 ```javascript
 const express = require('express');
 const productService = require('../services/product-service');

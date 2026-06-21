@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: build-task.js — CLI to submit a single build task to the self-programming pipeline.
  * build-task.js — CLI to submit a single build task to the self-programming pipeline.
  *
  * Usage:

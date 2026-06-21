@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof Gate G748-100 -->
+
 # Amendment 01: AI Council - Proof Gate G748-100
 
 ## Proof-Closing Blueprint Note

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G64 100. -->
+
 The specification is contradictory regarding whether the output should be the markdown file content or generated code, given the task to write a markdown file, the verifier's rejection of the markdown file as code, and an embedded instruction within the markdown file to generate code. The most direct repair for the verifier's rejection is to ensure the markdown file itself is a valid markdown document, completing its blueprint note purpose, and removing the embedded instruction that seems intended for a subsequent processing step.
 
 ```markdown

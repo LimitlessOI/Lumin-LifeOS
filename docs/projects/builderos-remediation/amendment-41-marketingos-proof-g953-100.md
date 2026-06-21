@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G953 100. -->
+
 ### AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G953-100
 
 This document serves as the SSOT foundation for closing the implementation gap identified in AMENDMENT_41_MARKETINGOS.

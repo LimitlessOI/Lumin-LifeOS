@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Two-Tier Council Routes
  * Two-Tier Council Routes
  * Extracted from server.js
  */

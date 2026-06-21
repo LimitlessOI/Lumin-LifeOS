@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 44 — Token Accounting OS (Universal AI Token Ledger) -->
+
 # AMENDMENT 44 — Token Accounting OS (Universal AI Token Ledger)
 **Status:** IN_BUILD — schema + services + routes on disk; production row proof requires deploy + `npm run tokens:verify`
 **Authority:** Subordinate to SSOT North Star Constitution

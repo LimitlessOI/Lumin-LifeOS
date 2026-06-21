@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SQL Migration Prompt -->
+
 ```
 # SQL Migration Prompt
 

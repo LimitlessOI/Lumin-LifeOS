@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G822-100 Remediation -->
+
 # Amendment 12 Command Center Proof: G822-100 Remediation
 
 This document outlines the remediation plan for the BuilderOS change related to Amendment 12, specifically addressing the verifier rejection encountered during the previous build pass. The rejection indicated an attempt to execute a `.md` file as an ESM module.

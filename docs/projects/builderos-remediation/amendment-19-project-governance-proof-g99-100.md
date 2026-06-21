@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_19_PROJECT_GOVERNANCE (G99-100) -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_19_PROJECT_GOVERNANCE (G99-100)
 
 **Blueprint Source:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

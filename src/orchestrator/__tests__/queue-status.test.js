@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: src/orchestrator/__tests__/queue-status.test.js
+ */
 // src/orchestrator/__tests__/queue-status.test.js
 
 const { getQueueStatus } = require('../queue-status');

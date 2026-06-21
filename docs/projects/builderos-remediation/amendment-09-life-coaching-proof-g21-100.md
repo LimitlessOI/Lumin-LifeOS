@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching: Proof-Closing Note G21-100 -->
+
 # Amendment 09 Life Coaching: Proof-Closing Note G21-100
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_09_LIFE_COACHING.md`

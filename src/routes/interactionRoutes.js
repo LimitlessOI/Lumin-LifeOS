@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/interactionRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const interactionController = require('../controllers/interactionController');

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports resolveRepoPath — lumin-factory/factory-staging/factory-core/builder/run-step.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

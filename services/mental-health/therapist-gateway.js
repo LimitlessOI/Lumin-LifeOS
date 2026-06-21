@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Therapist Gateway.
+ */
 ```javascript
 const auditLogger = require('hipaa-compliant-audit-logger');
 

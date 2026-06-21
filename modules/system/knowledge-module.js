@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Class KnowledgeModule — modules/system/knowledge-module.js.
+ */
 import { requireKey } from "../../src/server/auth/requireKey.js";
 import { getKnowledgeContext } from "../../services/knowledge-context.js";
 

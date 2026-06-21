@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — ConsensusManager.
+ */
 ```javascript
 const Web3 = require('web3');
 const snarkjs = require('snarkjs');

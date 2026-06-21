@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: DOC REORGANIZATION — PHASE 1 RECEIPT -->
+
 # DOC REORGANIZATION — PHASE 1 RECEIPT
 **Date:** 2026-06-13
 **Performed by:** Claude Code (read-only pass — no existing files modified)

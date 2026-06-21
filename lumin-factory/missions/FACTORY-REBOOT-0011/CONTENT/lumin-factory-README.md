@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Lumin Factory Bundle -->
+
 # Lumin Factory Bundle
 
 This folder is a **portable cutover bundle** built from `Lumin-LifeOS`.

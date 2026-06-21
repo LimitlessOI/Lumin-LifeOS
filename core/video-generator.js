@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Open Source Video Generation Service
  * Open Source Video Generation Service
  * Uses Stable Video Diffusion or other open source models
  */

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Todo 3 G1. -->
+
 BuilderOS Remediation: Command Center V2 Blueprint - Update cert script to write phase_ledger to findingsJson
 
 This memo outlines a builder-ready enhancement for integrating `phase_ledger` data into the `findingsJson` output of the certification script, as specified by the Command Center V2 Blueprint.

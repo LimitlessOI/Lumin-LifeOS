@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof (G437-100) - Proof-Closing Blueprint Note -->
+
 # Amendment 41 MarketingOS Proof (G437-100) - Proof-Closing Blueprint Note
 
 **SSOT Foundation for BuilderOS Remediation**

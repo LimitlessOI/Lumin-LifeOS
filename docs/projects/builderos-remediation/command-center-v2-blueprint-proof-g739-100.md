@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G739 100. -->
+
 Command Center V2 Blueprint Proof: G739-100 - Core Command Data Model & Persistence
 This proof-closing blueprint note addresses the initial foundational slice for Command Center V2, focusing on the core `Command` entity's data model and basic persistence.
 ---

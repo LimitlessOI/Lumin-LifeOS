@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: MASTER CAPSULE - Complete LifeOS Knowledge Base -->
+
 # MASTER CAPSULE - Complete LifeOS Knowledge Base
 
 ## Vision

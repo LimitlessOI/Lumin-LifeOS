@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof for G140 (Controller Integration) -->
+
 # Amendment 09: Life Coaching - Proof for G140 (Controller Integration)
 
 ## Blueprint Note: Proof-Closing for `impl-g140`

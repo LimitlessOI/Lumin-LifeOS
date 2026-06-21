@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚂 Railway Environment Variable Setup -->
+
 # 🚂 Railway Environment Variable Setup
 
 **Never guess again.** This guide provides exact copy/paste blocks for Railway environment variables.

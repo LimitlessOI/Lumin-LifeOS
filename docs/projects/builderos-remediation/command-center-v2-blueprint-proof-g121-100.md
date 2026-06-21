@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G121 100. -->
+
 Blueprint Proof Note: Command Center V2 - Slice 1.1 Data Ingestion Service (MVP) - Proof G121-100
 This document serves as a proof-closing note for the initial build slice of the Command Center V2 project, specifically targeting the Data Ingestion Service MVP.
 ---

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 18 — ClientCare Billing Recovery -->
+
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution

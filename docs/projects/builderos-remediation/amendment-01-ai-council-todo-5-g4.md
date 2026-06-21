@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 01 AI Council - TODO 5 (G4) - LoRA Fine-tuning Llama/Mistral on LCL Language -->
+
 # BuilderOS Remediation: Amendment 01 AI Council - TODO 5 (G4) - LoRA Fine-tuning Llama/Mistral on LCL Language
 
 ## Blueprint Enhancement Memo

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/multi-person-sync.js
  * services/multi-person-sync.js
  *
  * Multi-person household sync for LifeOS.

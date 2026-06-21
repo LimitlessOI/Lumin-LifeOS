@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: System path — delegates to full foundation pipeline.
  * System path — delegates to full foundation pipeline.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

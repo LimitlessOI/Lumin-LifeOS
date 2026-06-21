@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G28-100: Initial CoachingSession Data Model -->
+
 # Amendment 09: Life Coaching - Proof G28-100: Initial CoachingSession Data Model
 
 This proof-closing blueprint note addresses the foundational data model for `CoachingSession` within the LifeOS platform, as derived from `AMENDMENT_09_LIFE_COACHING.md`. This is the smallest safe build slice to establish the core persistence layer for life coaching interactions.

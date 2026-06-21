@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G945 100. -->
+
 Blueprint Proof: Command Center V2 - Core Routing Mechanism (G945-100)
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, focusing on establishing the core command routing mechanism as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.
 ---

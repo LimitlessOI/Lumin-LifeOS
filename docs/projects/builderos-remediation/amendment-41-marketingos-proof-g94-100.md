@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G94-100 (Welcome Series Trigger) -->
+
 # Amendment 41: MarketingOS Proof - G94-100 (Welcome Series Trigger)
 ## Proof-Closing Blueprint Note
 

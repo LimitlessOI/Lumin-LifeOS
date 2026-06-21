@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Completion Authority Consolidation Plan V1 -->
+
 # Completion Authority Consolidation Plan V1
 
 **Date:** 2026-06-13  

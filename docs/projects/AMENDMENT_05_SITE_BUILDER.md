@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 05 — Site Builder & Prospect Pipeline -->
+
 # AMENDMENT 05 — Site Builder & Prospect Pipeline
 **Status:** QUALITY-GATED LAUNCH READY — awaiting Railway env vars + live preview verification
 **Authority:** Subordinate to SSOT North Star Constitution

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/orchestrator/worker.js.
+ */
 const { Client } = require('pg');
 const { setInterval } = require('timers');
 const process = require('process');

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G26-100 Remediation -->
+
 # Command Center V2 Blueprint Proof: G26-100 Remediation
 
 This document outlines the remediation plan for the OIL verifier rejection encountered during the previous BuilderOS loop execution for `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g26-100.md`.

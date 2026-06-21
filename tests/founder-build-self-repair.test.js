@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/founder-build-self-repair.test.js.
+ */
 import assert from 'node:assert/strict';
 import {
   augmentTaskWithGapFillScope,

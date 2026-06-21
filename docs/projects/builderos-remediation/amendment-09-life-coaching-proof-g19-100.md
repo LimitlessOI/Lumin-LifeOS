@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G19 100. -->
+
 Amendment 09: Life Coaching Integration - Proof G19-100
 
 This proof-closing blueprint note addresses the initial foundational step for integrating Life Coaching features, specifically focusing on the core `LifeCoach` entity's persistence layer.

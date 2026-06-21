@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports validateArcIntake — factory-staging/factory-core/arc/validate-arc-intake.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

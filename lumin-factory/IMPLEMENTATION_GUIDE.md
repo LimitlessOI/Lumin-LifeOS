@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Factory Implementation Guide -->
+
 # Factory Implementation Guide
 
 **Updated:** 2026-06-09

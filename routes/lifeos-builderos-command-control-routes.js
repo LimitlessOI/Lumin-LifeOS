@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
 // @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
 
 import express from 'express';
@@ -403,6 +406,8 @@ HOW TO RESPOND:
       buildFailureReceipt: buildBuildFailureReceipt,
       enforceExecutionTruth,
       repoRoot: REPO_ROOT,
+      callCouncilMember,
+      pool,
     });
   }
 
@@ -1042,6 +1047,8 @@ HOW TO RESPOND:
               enforceExecutionTruth,
               repoRoot: REPO_ROOT,
               userId,
+              callCouncilMember,
+              pool,
             });
             const persistWarning = await persistFounderTurn(req, cleanedInput, `Build started — job ${jobId.slice(0, 8)}…`);
             return res.status(202).json({

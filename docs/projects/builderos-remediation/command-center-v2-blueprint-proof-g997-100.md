@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G997 100. -->
+
 Blueprint Proof: Command Center V2 - g997-100 Remediation
 This document closes the proof for the initial build slice derived from the Command Center V2 Blueprint, specifically addressing the foundational data model definition.
 ---

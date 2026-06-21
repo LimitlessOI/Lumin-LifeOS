@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G1017-100 -->
+
 # Amendment 01: AI Council Proof - G1017-100
 
 ## Purpose

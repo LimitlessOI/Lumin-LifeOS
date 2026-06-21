@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G57-100 - Project Metadata Compliance -->
+
 # Amendment 19 Project Governance Proof: G57-100 - Project Metadata Compliance
 
 This document serves as a proof-of-concept and initial build slice for validating compliance with Amendment 19, specifically focusing on project metadata governance (G57-100).

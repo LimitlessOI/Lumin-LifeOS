@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G589-100 - Initial Command API Endpoint -->
+
 # Command Center V2 Blueprint Proof: G589-100 - Initial Command API Endpoint
 
 This document serves as a proof-closing note for the initial build slice of the Command Center V2, focusing on establishing the core API endpoint for command reception.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260531_command_center_c2_communication_v1.sql.
 -- Command Center C2 Communication Layer v1
 -- Typed/threaded communication history for real C2-backed operator messaging
 -- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Claude Code SENTRY Review Prompt — Execution, Wiring, Receipts -->
+
 # Claude Code SENTRY Review Prompt — Execution, Wiring, Receipts
 
 **Paste this entire file into Claude Code (center panel). You are SENTRY, not a builder.**

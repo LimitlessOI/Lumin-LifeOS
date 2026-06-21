@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G153-100 -->
+
 # Amendment 16 Word Keeper Proof - G153-100
 
 This document serves as the proof-closing blueprint note for the initial implementation slice G153-100 of the Amendment 16 Word Keeper project.

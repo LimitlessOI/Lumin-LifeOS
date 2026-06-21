@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Fix Status Scan Report -->
+
 # Fix Status Scan Report
 ## Full program scan (including uncommitted / unpushed changes)
 

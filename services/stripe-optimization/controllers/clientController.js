@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — ClientController.
+ */
 ```javascript
 const pool = require('../config/database');
 

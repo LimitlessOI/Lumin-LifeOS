@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 💡 Enhanced Idea Generation System -->
+
 # 💡 Enhanced Idea Generation System
 
 ## Overview

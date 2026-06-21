@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (G947-100) -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (G947-100)
 
 This document serves as a proof-closing blueprint note for Amendment 41, focusing on establishing the Single Source of Truth (SSOT) foundation for `marketingCampaignId` within MarketingOS and its downstream consumers.

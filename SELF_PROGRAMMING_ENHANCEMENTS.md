@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Self-Programming Capability Enhancements -->
+
 # 🚀 Self-Programming Capability Enhancements
 
 ## Overview

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G820-100 -->
+
 # Amendment 12 Command Center Proof - G820-100
 
 This document serves as a proof-closing blueprint note for the `AMENDMENT_12_COMMAND_CENTER` project, specifically addressing the `g820-100` build slice and deriving the next smallest follow-on slice.

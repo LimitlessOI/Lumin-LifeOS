@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260426_memory_intelligence.sql.
 -- @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
 -- Memory Intelligence System — Phase 1 Foundation
 -- Evidence Ladder: CLAIM(0) → HYPOTHESIS(1) → TESTED(2) → RECEIPT(3) → VERIFIED(4) → FACT(5) → INVARIANT(6)

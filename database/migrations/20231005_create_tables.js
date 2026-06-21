@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — database/migrations/20231005_create_tables.js.
+ */
 ```javascript
 exports.up = async function(knex) {
   await knex.schema.createTable('users', table => {

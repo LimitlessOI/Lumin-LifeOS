@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof: G1015-100 - Build Route Wiring Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof: G1015-100 - Build Route Wiring Remediation
 
 ## Introduction

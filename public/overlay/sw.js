@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS Service Worker
  * LifeOS Service Worker
  * Provides offline shell + background sync for the PWA.
  *

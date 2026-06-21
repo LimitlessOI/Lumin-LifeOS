@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260325_tc_alerts.sql.
 -- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
 -- TC closed-loop alerting and escalation state.
 

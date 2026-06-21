@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G1081-100 - BuilderOS Loop Status Readout -->
+
 # Command Center V2 Blueprint Proof: G1081-100 - BuilderOS Loop Status Readout
 
 This document outlines the next smallest build slice for Command Center V2, focusing on providing a read-only view of the BuilderOS loop execution status, addressing the immediate need for operational visibility within BuilderOS.

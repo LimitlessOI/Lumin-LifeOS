@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G52-100 -->
+
 # Amendment 09: Life Coaching - Proof G52-100
 
 ## Blueprint Note: Initial LifeCoach Entity & Creation API

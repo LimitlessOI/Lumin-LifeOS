@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G79 100. -->
+
 BuilderOS Remediation Proof: Amendment 01 - AI Council (G79-100)
 This document serves as proof for the initial formalization slice of Amendment 01, establishing the AI Council within the LifeOS platform's governance structure. This proof specifically addresses the foundational documentation required for BuilderOS to track and manage subsequent AI Council-related initiatives.
 ---

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Class CommandCenter — docs/projects/builderos-remediation/amendment-12-command-center-proof-g118-100.md. -->
+
 Amendment 12: Command Center - Proof G118-100
 This document serves as a proof-closing blueprint note for Proof Goal G118-100, focusing on the initial core infrastructure of the BuilderOS Command Center.
 

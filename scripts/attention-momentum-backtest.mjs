@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Attention / flow backtest on real historical OHLCV.
  * Attention / flow backtest on real historical OHLCV.
  *
  * - P&L from price + fees + slippage only (no biased random wins).

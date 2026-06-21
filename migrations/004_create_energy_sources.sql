@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 004_create_energy_sources.sql.
 CREATE TABLE energy_sources (
     id SERIAL PRIMARY KEY,
     farm_id INT REFERENCES urban_farms(id),

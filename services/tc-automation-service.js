@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-automation-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-automation-service.js
  * Prepared-send automation for feedback requests, document requests, and report delivery.

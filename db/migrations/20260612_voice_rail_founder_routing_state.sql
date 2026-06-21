@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260612_voice_rail_founder_routing_state.sql.
 -- Voice Rail — founder session routing state (tier boost / escalation memory)
 BEGIN;
 

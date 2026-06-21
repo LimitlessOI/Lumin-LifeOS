@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_users_table.sql.
 ```sql
 CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

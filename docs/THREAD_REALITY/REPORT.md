@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Thread Reality Report - 2026-01-26 -->
+
 # Thread Reality Report - 2026-01-26
 
 - **Port health:** http://localhost:8080 continues to serve `200 OK` responses (see `outputs/20260126T223735Z/healthz.txt`).

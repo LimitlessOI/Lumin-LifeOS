@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G997 100. -->
+
 Proof-Closing Blueprint Note: AMENDMENT 12 COMMAND CENTER - Slice 1: Basic Status Dashboard Display (G997-100)
 This document serves as a proof-closing note for the initial build slice of Amendment 12, focusing on the foundational "Basic Status Dashboard Display" for the BuilderOS Command Center.
 ---

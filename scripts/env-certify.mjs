@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Probes the running deploy to certify env-backed paths work (not only "name exists").
  * Probes the running deploy to certify env-backed paths work (not only "name exists").
  * Appends one JSON line to data/env-certification-log.jsonl (gitignored) and prints a
  * markdown table row for pasting into docs/ENV_REGISTRY.md → Env certification log.

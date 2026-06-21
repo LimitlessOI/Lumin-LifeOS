@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Full SENTRY review artifact shape for receipts and C2 surfaces.
+ */
 import { verifyStepContract } from './verify-step-contract.js';
 import { antiPatternCheck } from './anti-pattern-check.js';
 import { futureLookbackReview } from './future-lookback.js';

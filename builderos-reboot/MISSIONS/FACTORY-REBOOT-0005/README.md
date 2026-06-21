@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: FACTORY-REBOOT-0005 -->
+
 # FACTORY-REBOOT-0005
 
 Live execute-step dispatch for factory-staging.

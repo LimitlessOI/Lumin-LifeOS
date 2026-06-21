@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_09_LIFE_COACHING: Proof-Closing Note G121-100 -->
+
 # AMENDMENT_09_LIFE_COACHING: Proof-Closing Note G121-100
 
 ## Blueprint Reference

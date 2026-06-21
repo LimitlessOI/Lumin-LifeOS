@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231020_create_ahpn_schema.sql.
 CREATE TABLE vehicles (
     id SERIAL PRIMARY KEY,
     vin VARCHAR(17) UNIQUE NOT NULL,

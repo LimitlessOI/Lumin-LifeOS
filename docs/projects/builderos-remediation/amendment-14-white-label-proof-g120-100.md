@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G120 100. -->
+
 Amendment 14: White-Label Proof - G120-100
 Overview
 This document serves as a proof point for the implementation of Amendment 14, focusing specifically on the white-label application for component/group G120-100. It details the current status and outlines the next smallest build slice required for full compliance.

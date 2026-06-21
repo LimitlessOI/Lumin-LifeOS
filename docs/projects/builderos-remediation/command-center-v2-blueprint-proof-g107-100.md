@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G107 100. -->
+
 **Proof-Closing Blueprint Note: Command Center V2 - Build Slice G107-100**
 
 This note outlines the next smallest build slice to advance Command Center V2 implementation, addressing a foundational gap.

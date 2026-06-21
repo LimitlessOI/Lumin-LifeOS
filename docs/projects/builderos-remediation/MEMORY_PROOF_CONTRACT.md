@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Memory Proof Contract -->
+
 # BuilderOS Memory Proof Contract
 
 **Closes:** BR-04 (Memory Authority Fragmentation) from `BLUEPRINT.md`  

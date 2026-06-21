@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G491 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS - User Consent Status Sync (g491-100)
 This document serves as a proof-closing blueprint note for the specific implementation and verification of user consent status synchronization between LifeOS and MarketingOS, as foundationalized by `AMENDMENT_41_MARKETINGOS.md`.
 ---

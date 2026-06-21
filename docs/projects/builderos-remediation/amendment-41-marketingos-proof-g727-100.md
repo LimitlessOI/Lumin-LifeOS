@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G727 100. -->
+
 Amendment 41 MarketingOS Proof - G727-100
 SSOT Foundation Signal: This document serves as the Single Source of Truth foundation for verifying the successful implementation and ongoing operational integrity of Amendment 41 within MarketingOS.
 ---

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Zero-Drift Handoff Protocol -->
+
 # Zero-Drift Handoff Protocol
 _(formerly AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md)_
 

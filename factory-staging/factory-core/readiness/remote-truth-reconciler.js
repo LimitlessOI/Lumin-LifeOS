@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Remote truth reconciler — GitHub (receipts), factory-staging, readiness in one surface.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 39 — Memory Intelligence System -->
+
 # AMENDMENT 39 — Memory Intelligence System
 
 **Status:** Active — Phase 1 Complete + Governance Hardening + Builder Integration  

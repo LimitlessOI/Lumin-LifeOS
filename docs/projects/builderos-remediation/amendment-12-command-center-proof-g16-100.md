@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof G16-100 -->
+
 # Amendment 12 Command Center Proof G16-100
 
 This note closes the proof for the initial definition of the `Command` interface and the foundational `CommandRegistry` within the BuilderOS Command Center. This enables the next build pass to begin implementing concrete command handlers.

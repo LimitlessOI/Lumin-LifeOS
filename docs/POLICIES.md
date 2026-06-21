@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Policies Overview -->
+
 # Policies Overview
 
 This repo keeps execution and escalation policies in `/policies`:

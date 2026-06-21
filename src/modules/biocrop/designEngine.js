@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/biocrop/designEngine.js.
+ */
 class DesignEngine {
   generateCRISPRDesign(variety) {
     // Implement CRISPR design algorithm

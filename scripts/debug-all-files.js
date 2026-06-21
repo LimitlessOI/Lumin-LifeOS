@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Comprehensive File Debugging Script
  * Comprehensive File Debugging Script
  * Scans all files for common bugs and issues
  */

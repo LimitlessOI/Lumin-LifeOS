@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: slack_notifier.js
+ */
 // slack_notifier.js
 const axios = require('axios');
 const SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK';

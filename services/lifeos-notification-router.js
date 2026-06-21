@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-notification-router.js
  * services/lifeos-notification-router.js
  *
  * Routes LifeOS notifications to the right channel for each user and supports

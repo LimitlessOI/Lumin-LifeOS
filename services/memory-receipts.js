@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-receipts.js
+ */
 // services/memory-receipts.js
 /**
  * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md

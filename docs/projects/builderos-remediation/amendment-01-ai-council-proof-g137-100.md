@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 01 AI Council - G137-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 01 AI Council - G137-100
 
 **Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

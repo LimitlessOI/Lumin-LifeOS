@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G816 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane Wiring (G816-100)
 
 **1. Exact Missing Implementation / Proof Gap:**

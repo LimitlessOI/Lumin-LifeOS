@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - G575-100 -->
+
 # Blueprint Proof: Command Center V2 - G575-100
 
 **Blueprint Note: Core Data Model and Persistence Layer**

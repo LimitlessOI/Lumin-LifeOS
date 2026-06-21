@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/communication-gateway.js
  * services/communication-gateway.js
  *
  * LifeOS communication gateway — the front door.

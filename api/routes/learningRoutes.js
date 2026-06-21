@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Learning Analytics Endpoint
+ */
 const express = require('express');
 const router = express.Router();
 

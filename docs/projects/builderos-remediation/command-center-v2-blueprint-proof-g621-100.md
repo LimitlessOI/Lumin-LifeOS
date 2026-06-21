@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G621 100. -->
+
 Command Center V2 Blueprint Proof: G621-100 - Core Registry & Executor Proof
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, focusing on the foundational `CommandRegistry` and `CommandExecutor` components. This slice aims to establish the core mechanism for command registration and execution within BuilderOS, without impacting LifeOS user features or TSOS customer-facing surfaces.

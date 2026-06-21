@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Test Smart Contract.
 set -e
 
 # Set environment variables

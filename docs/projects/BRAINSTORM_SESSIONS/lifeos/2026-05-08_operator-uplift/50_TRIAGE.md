@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Phase 5 — Triage -->
+
 # Phase 5 — Triage
 
 **BUILD_NOW** — verifier/GAP-FILL path exists or doc-only safe in one slice.

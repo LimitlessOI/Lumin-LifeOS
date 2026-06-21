@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AI Counsel OS - Detailed Build Plan -->
+
 # AI Counsel OS - Detailed Build Plan
 
 **Version**: 1.0  

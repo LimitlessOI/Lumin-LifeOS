@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/delta-context.js — TCO-A04
  * services/delta-context.js — TCO-A04
  *
  * Conversation state snapshot + delta-only sending.

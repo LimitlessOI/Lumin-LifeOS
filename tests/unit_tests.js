@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/unit_tests.js.
+ */
 ```javascript
 const { adaptContent } = require('../services/content-service/adaptation_logic');
 const { expect } = require('chai');

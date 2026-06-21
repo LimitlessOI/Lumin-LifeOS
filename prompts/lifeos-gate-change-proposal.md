@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: Gate-change & efficiency proposals (North Star §2.6 ¶8) -->
+
 # Domain: Gate-change & efficiency proposals (North Star §2.6 ¶8)
 
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)

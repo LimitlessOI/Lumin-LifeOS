@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: email-reader.js
  * email-reader.js
  * IMAP-based inbox reader for system email accounts.
  * Primary use: catch verification emails during autonomous signups.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Persistent failure-pattern memory for the autonomous builder queue.
  * Persistent failure-pattern memory for the autonomous builder queue.
  *
  * Tracks cumulative failure counts per task across daemon restarts and

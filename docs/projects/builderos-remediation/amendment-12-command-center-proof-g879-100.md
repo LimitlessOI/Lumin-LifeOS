@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G879 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 12 Command Center - G879-100
 
 This note closes the proof for the initial foundational build slice of the Amendment 12 Command Center.

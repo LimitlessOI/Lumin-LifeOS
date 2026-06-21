@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Core Dashboard Metrics (G359-100) -->
+
 # Blueprint Proof: Command Center V2 - Core Dashboard Metrics (G359-100)
 
 This document serves as a proof-closing blueprint note for the initial build slice of the Command Center V2, specifically addressing the "Core Dashboard & Basic Monitoring (MVP)" phase outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.

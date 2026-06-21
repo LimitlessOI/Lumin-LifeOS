@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Session charter — 2026-05-08_operator-uplift -->
+
 # Session charter — 2026-05-08_operator-uplift
 
 | Field | Value |

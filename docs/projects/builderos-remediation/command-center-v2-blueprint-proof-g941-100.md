@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G941-100 -->
+
 # Command Center V2 Blueprint Proof - G941-100
 
 This document serves as a proof-closing blueprint note for the Command Center V2 initiative, specifically addressing the initial build slice for establishing core command routing and execution.

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: scripts/ssot-staleness-check.mjs
  * scripts/ssot-staleness-check.mjs
  * SSOT Staleness Detector — CI gate that ensures code never drifts ahead
  * of its amendment documentation.

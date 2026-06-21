@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Provision a LifeOS member account (invite and/or user row + optional household link to Adam).
  * Provision a LifeOS member account (invite and/or user row + optional household link to Adam).
  * Uses DATABASE_URL — run from operator shell with Neon/Railway credentials.
  *

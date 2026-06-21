@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/canonical-admin-routes.js
  * routes/canonical-admin-routes.js
  * Phase 17 — Canonical system admin + status routes (H-2 strategy).
  * Provides canonical equivalents for legacy command-center-routes.js admin surfaces.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/models/Session.js.
+ */
 ```javascript
 const { Pool } = require('pg');
 const pool = new Pool();

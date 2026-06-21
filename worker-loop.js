@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: worker-loop.js
+ */
 // worker-loop.js
 const APP = 'http://example.com'; // Replace with your actual API endpoint
 const KEY = 'your_api_key'; // Replace with your actual API key

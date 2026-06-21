@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_clientcare_payer_rule_overrides.sql.
 -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
 -- Operator-defined payer rule overrides for commercial plans and payer-specific recovery behavior
 

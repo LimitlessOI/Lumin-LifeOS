@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G778-100 -->
+
 The content of the source blueprint `docs/projects/AMENDMENT_09_LIFE_COACHING.md` was not provided in the REPO FILE CONTENTS, requiring inference for the specific build slice details.
 # Amendment 09: Life Coaching - Proof G778-100
 

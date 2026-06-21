@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_user_feedback_table.sql.
 ```sql
 CREATE TABLE user_feedback (
     id SERIAL PRIMARY KEY,

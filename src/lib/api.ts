@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: API Client Wrapper - Typed fetch helpers with error handling
+ */
 // API Client Wrapper - Typed fetch helpers with error handling
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema_changes.sql.
 CREATE TABLE edge_devices (
     id SERIAL PRIMARY KEY,
     device_id VARCHAR(255) NOT NULL,

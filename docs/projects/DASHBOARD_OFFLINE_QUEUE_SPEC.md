@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Project Brief: LifeOS Dashboard Offline Queued Actions -->
+
 # Project Brief: LifeOS Dashboard Offline Queued Actions
 
 ## 1. Introduction

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/clients/middleware/client.auth.js.
+ */
 ```javascript
 const jwt = require('jsonwebtoken');
 

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — initial_setup.sql.
 ```sql
 CREATE TABLE chatbot_configs (
   id SERIAL PRIMARY KEY,

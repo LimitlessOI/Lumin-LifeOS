@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G353-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G353-100
 
 This proof-closing blueprint note addresses the initial foundational definitions for the `CommandCenterService`, specifically focusing on its core interface and associated data transfer objects (DTOs). This is a critical first step in establishing the `CommandCenterService` as outlined in the AMENDMENT_12_COMMAND_CENTER blueprint.

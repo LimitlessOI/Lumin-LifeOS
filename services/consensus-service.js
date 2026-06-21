@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: consensus-service.js — extracted from server.js
  * consensus-service.js — extracted from server.js
  * conductEnhancedConsensus and createProposal helpers.
  *

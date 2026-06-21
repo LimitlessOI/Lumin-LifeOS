@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔧 Auto-Fix System - Log Monitoring & Error Resolution -->
+
 # 🔧 Auto-Fix System - Log Monitoring & Error Resolution
 
 ## Overview

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Supervised builder runner for LifeOS dashboard work.
  * Supervised builder runner for LifeOS dashboard work.
  *
  * Purpose:

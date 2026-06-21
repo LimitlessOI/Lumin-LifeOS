@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: startup/database.js
  * startup/database.js
  * Auto-migration runner — runs every new .sql file in db/migrations/ on startup.
  *

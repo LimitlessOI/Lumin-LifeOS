@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Production recovery proof — inject mission_failed on server filesystem + read status.
  * Production recovery proof — inject mission_failed on server filesystem + read status.
  * Used only by /internal/cron/factory-recovery-proof/* (AUTONOMOUS-RECOVERY-0002).
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md

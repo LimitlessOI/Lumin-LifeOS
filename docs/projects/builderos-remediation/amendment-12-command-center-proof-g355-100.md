@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof (G355-100) -->
+
 Blueprint content for `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, leading to assumptions for proof details.
 # Amendment 12 Command Center Proof (G355-100)
 

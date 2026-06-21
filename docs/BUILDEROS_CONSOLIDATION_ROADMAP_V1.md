@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Consolidation Roadmap V1 -->
+
 # BuilderOS Consolidation Roadmap V1
 
 **Status:** `AUTHORITATIVE PLAN` (doc-only — no runtime code in this slice)  

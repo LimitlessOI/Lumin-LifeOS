@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Core Model & Persistence (g796-100) -->
+
 # Blueprint Proof: Command Center V2 - Core Model & Persistence (g796-100)
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, focusing on the foundational `Command` and `CommandResult` entities and their persistence.

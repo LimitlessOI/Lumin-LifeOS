@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/utils/logger.js.
+ */
 ```javascript
 const winston = require('winston');
 

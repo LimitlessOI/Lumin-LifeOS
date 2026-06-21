@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G32 100. -->
+
 Amendment 01: AI Council Proof - G32-100: Attestation of Remediation Approval
 Blueprint Note for C2 Build Pass
 

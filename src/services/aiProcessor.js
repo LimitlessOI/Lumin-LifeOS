@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/aiProcessor.js.
+ */
 ```javascript
 const aiProvider = require('openai');  // Example AI provider integration
 const pool = require('../config/database');

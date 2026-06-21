@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - Remediation and Next Slice (g67-100) -->
+
 # Amendment 14: White-Label Proof - Remediation and Next Slice (g67-100)
 
 ## Overview

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — queues/travelExecutionQueue.js.
+ */
 ```javascript
 const Queue = require('bull');
 const itineraryService = require('../services/travel/itineraryGenerator');

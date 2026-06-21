@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Non-stop Objective 1 runner — blueprint exists → build → acceptance until PASS or UNSOLVED.
  * Non-stop Objective 1 runner — blueprint exists → build → acceptance until PASS or UNSOLVED.
  * @ssot builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/FOUNDER_PACKET.md
  */

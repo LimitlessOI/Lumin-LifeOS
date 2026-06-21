@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_cityos_schema.sql.
 ```sql
 CREATE EXTENSION IF NOT EXISTS postgis;
 

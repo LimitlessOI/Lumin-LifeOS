@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/console.js.
+ */
 const express = require('express');
 const router = express.Router();
 const { handleConversation } = require('../services/conversation-router');

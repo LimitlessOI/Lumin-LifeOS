@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G707 100. -->
+
 Amendment 12: Command Center Integration - Proof G707-101 Closing Note
 
 This document serves as the proof-closing note for the `G707-101` build slice, which focuses on implementing the first functional command for the Command Center integration.

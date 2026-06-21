@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Deploy TCO to Railway - Step-by-Step Guide -->
+
 # Deploy TCO to Railway - Step-by-Step Guide
 
 **Status**: ✅ All code pushed to GitHub (commit cf6ea987)

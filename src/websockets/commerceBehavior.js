@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/websockets/commerceBehavior.js.
+ */
 ```javascript
 const socketIo = require('socket.io');
 

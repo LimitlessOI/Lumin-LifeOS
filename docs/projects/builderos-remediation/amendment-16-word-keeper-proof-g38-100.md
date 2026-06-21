@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof: G38-100 - Initial Data Model and Persistence Setup -->
+
 # Amendment 16 Word Keeper Proof: G38-100 - Initial Data Model and Persistence Setup
 
 This document outlines the first build slice for the `WordKeeper` service, focusing on establishing the foundational data model and its persistence layer integration.

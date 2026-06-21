@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G637-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G637-100
 
 This document serves as the SSOT foundation for closing the proof gap related to Amendment 41, specifically concerning the `UserSegment` data synchronization with MarketingOS.

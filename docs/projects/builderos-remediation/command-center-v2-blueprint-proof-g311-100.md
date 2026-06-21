@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G311 100. -->
+
 Command Center V2 Blueprint Proof: g311-100 Follow-Through
 
 Blueprint Note: Timeseries DB Integration for System Health Metrics

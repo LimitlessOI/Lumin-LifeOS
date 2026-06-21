@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Social Scheduler
+ */
 // Social Scheduler
 const FacebookManager = require('./integrations/facebook-manager');
 const YouTubeManager = require('./integrations/youtube-manager');

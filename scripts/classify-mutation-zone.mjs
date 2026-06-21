@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: scripts/classify-mutation-zone.mjs
  * scripts/classify-mutation-zone.mjs
  * Classify a file path into Zone 1-4 before any builder mutation.
  *

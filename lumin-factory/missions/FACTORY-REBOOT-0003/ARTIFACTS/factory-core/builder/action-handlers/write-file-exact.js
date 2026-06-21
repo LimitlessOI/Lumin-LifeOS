@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports writeFileExactContract — lumin-factory/missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/action-handlers/write-file-exact.js.
+ */
 export function writeFileExactContract(step) {
   return {
     actionType: 'write_file_exact',

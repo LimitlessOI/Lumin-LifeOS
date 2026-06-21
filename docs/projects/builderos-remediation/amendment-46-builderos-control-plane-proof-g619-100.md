@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G619 100. -->
+
 **Proof-Closing Blueprint Note: Amendment 46 BuilderOS Control Plane (G619-100)**
 
 This document outlines the necessary steps to complete the implementation of the BuilderOS control plane routes as specified in Amendment 46, addressing the current proof gap and preparing for the next C2 build pass.

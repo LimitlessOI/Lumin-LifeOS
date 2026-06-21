@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center Proof G181-100 Remediation -->
+
 # Amendment 12: Command Center Proof G181-100 Remediation
 
 This document serves as a proof-closing blueprint note for the initial core infrastructure build slice (G181-100) of the BuilderOS Command Center, as defined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

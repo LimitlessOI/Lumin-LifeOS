@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof - G39-100 Remediation -->
+
 The instruction to write a markdown file is contradictory with the verifier's attempt to execute it as a Node.js module.
 # Amendment 14 White-Label Proof - G39-100 Remediation
 

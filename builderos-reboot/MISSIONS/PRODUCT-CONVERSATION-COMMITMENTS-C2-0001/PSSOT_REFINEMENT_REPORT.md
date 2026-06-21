@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PSSOT Refinement Report (Phase 0) -->
+
 # PSSOT Refinement Report (Phase 0)
 
 **Mission:** PRODUCT-CONVERSATION-COMMITMENTS-C2-0001  

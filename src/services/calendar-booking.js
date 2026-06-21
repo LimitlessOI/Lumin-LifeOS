@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Mock data for agents
+ */
 const express = require('express');
 const nodemailer = require('nodemailer');
 const twilio = require('twilio');

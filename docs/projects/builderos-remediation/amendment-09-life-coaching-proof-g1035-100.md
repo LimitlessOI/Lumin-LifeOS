@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Remediation Proof G1035-100 -->
+
 # Amendment 09: Life Coaching - Remediation Proof G1035-100
 
 This document serves as a proof of remediation for the issues identified during the verification of Amendment 09, pertaining to the Life Coaching feature.

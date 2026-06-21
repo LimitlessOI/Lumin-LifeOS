@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/stripe-optimization/models/OptimizationInsight.js.
+ */
 ```javascript
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../../../../database');

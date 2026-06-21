@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — empathy_schema.sql.
 ```sql
 -- Drop tables if they already exist
 DROP TABLE IF EXISTS empathy_devices CASCADE;

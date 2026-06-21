@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Seed minimum deliberation records for a factory mission (jsonl + DELIBERATION_GATE.json).
  * Seed minimum deliberation records for a factory mission (jsonl + DELIBERATION_GATE.json).
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
  */

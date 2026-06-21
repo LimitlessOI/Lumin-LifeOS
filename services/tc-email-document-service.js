@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-email-document-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-email-document-service.js
  * Finds attachment emails in the TC mailbox, combines photo attachments into a

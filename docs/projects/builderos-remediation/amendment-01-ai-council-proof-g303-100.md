@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G303-100: Initial Operational Readiness Verification -->
+
 # Amendment 01: AI Council - Proof G303-100: Initial Operational Readiness Verification
 
 **Project:** BuilderOS Remediation

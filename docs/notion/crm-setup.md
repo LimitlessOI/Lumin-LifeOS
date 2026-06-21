@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CRM Setup Instructions -->
+
 # CRM Setup Instructions
 
 ## Notion Integration

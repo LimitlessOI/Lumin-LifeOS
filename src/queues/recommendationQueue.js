@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/queues/recommendationQueue.js.
+ */
 ```javascript
 const { Queue } = require('bullmq');
 const recommendationWorker = require('../workers/recommendationWorker');

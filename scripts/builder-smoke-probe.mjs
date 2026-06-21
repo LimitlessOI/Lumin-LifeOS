@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Constants for simulating asynchronous operations and statuses
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

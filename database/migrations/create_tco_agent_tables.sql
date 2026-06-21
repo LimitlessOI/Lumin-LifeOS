@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_tco_agent_tables.sql.
 -- ╔══════════════════════════════════════════════════════════════════════════════════╗
 -- ║                    TCO AI SALES AGENT TABLES (TCO-F01)                           ║
 -- ║         Autonomous agent for detecting and responding to cost complaints         ║

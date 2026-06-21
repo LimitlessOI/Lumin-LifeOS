@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1149 100. -->
+
 Blueprint Note: Amendment 46 - BuilderOS Control Plane Proof (G1149-100)
 
 1. Exact Missing Implementation or Proof Gap

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G68-100 -->
+
 # Amendment 09: Life Coaching - Proof G68-100
 
 ## Blueprint Note: Initial Coaching Program Data Model and Read Endpoint

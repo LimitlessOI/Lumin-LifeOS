@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Autonomy Supervision Runbook -->
+
 # Autonomy Supervision Runbook
 
 This runbook ensures builder assignments execute reliably with supervision and proof receipts.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_initial_schema.sql.
 CREATE TABLE IF NOT EXISTS energy_assets (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,

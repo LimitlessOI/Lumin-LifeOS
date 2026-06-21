@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G16 100. -->
+
 Amendment 16: Word Keeper - Proof G16-100
 This document outlines the next smallest build slice for the Word Keeper feature, focusing on establishing the foundational capability to create and persist a new `Word` entity.
 ---

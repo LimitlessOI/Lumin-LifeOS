@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — integrations/ecommerce-adapters.js.
+ */
 ```javascript
 const ShopifyAPI = require('shopify-api-node');
 const WooCommerceAPI = require('woocommerce-api');

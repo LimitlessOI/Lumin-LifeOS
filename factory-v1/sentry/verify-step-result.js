@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports verifyStepResult — factory-v1/sentry/verify-step-result.js.
+ */
 import { readFile } from 'node:fs/promises';
 import { execSync } from 'node:child_process';
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G705 100. -->
+
 The verifier expects a JavaScript module at `docs/projects/builderos-remediation/amendment-41-marketingos-proof-g705-100.md` despite the `.md` extension, contradicting the file's implied markdown format.
 ```javascript
 // docs/projects/builderos-remediation/amendment-41-marketingos-proof-g705-100.md

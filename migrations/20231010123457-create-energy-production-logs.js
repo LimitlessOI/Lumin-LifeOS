@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 20231010123457-create-energy-production-logs.js.
+ */
 ```javascript
 'use strict';
 

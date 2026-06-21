@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260323_tc_fees.sql.
 -- TC Fee Tracking + Agent Client Registry
 -- Three billing models: founding_member, monthly, per_transaction
 

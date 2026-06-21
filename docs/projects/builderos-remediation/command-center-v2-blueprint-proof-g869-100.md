@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G869-100 Remediation -->
+
 # Command Center V2 Blueprint Proof: G869-100 Remediation
 
 This document addresses the OIL verifier rejection for `g869-100` by providing the corrected blueprint note and remediation plan. The previous attempt failed due to the verifier attempting to parse the `.md` file as a JavaScript module, indicating a content mismatch with the expected document type.

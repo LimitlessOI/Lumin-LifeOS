@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G651 100. -->
+
 The verifier expects executable code for a .md file, which conflicts with the task to write a markdown document.
 Amendment 41 MarketingOS Proof G651-100: Marketing Opt-In Status Synchronization
 This document serves as a proof-closing blueprint note for a specific implementation gap identified within Amendment 41, which establishes MarketingOS as the SSOT foundation for marketing-related user attributes.

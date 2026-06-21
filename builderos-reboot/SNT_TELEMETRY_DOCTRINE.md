@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SNT Telemetry Doctrine — BuilderOS Alpha -->
+
 # SNT Telemetry Doctrine — BuilderOS Alpha
 
 **Signed by:** SNT  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G17-100 - Core Orchestration Loop -->
+
 # Amendment 12 Command Center Proof: G17-100 - Core Orchestration Loop
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Dashboard Card Density Specification -->
+
 The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `docs/projects/DASHBOARD_DENSITY_INTEGRATION_NOTES.md` files were not found, so the specification below infers details from `DASHBOARD_CUSTOMIZATION_STATE.md` and general UI/UX principles for density.
 
 ---

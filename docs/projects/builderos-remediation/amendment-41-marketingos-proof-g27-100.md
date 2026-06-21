@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G27 100. -->
+
 ### Proof-Closing Blueprint Note: MarketingOS Proof-G27-100 - Campaign Conversion Event Persistence
 
 **1. Exact Missing Implementation or Proof Gap:**

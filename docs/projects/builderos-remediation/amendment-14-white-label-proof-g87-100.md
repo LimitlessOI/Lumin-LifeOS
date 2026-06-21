@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G87 100. -->
+
 Amendment 14: White-Label Proofing - Build Slice G87-100 Proof Note
 
 Blueprint Reference

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_make_tables.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS make_scenario_logs (
   id SERIAL PRIMARY KEY,

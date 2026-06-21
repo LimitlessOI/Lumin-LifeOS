@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/aiEngine.js.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs');
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/scripts/seedAiModelData.js.
+ */
 ```javascript
 const AiModelFunnel = require('../models/AiModelFunnel');
 

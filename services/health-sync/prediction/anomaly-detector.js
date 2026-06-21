@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Anomaly Detector.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs-node');
 

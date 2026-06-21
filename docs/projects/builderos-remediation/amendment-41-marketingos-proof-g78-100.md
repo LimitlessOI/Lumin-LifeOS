@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Proof G78-100 -->
+
 ASSUMPTIONS:
 The source blueprint `docs/projects/AMENDMENT_41_MARKETINGOS.md` specifies the requirement for MarketingOS to consume and process user engagement events related to "campaign_g78_100" (e.g., `campaign_g78_100_viewed`, `campaign_g78_100_clicked`) emitted by LifeOS. The current state is that the event emission is defined, but the end-to-end verification of MarketingOS's successful reception and processing of these events is incomplete.
 

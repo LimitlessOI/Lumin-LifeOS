@@ -1,6 +1,6 @@
 /**
+ * SYNOPSIS: BuilderOS Zone 3 patch-mode policy — classify build targets, generate
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
- * BuilderOS Zone 3 patch-mode policy — classify build targets, generate
  * extract-helper specs for large files, validate output size safety.
  *
  * Pure-function module. No pool, no factory, no side effects.

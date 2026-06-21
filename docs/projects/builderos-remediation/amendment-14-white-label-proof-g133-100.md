@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Remediation Proof - G133-100 -->
+
 # Amendment 14 White Label Remediation Proof - G133-100
 
 **Document ID:** G133-100

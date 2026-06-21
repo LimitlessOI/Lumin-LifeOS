@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Deliberation & Governance Architecture -->
+
 # Deliberation & Governance Architecture
 
 **Status:** Ratified — **v2.7 seal** (2026-06-09 founder consensus)  

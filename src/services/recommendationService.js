@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/recommendationService.js.
+ */
 ```javascript
 const Recommendation = require('../models/Recommendation');
 const RecommendationAttachment = require('../models/RecommendationAttachment');

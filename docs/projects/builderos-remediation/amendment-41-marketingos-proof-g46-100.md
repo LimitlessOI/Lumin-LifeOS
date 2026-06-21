@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G46-100 - Proof Closing Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof G46-100 - Proof Closing Blueprint Note
 
 **Signal requiring follow-through: This document — SSOT foundation.**

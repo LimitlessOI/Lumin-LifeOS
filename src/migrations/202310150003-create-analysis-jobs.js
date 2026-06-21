@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/migrations/202310150003-create-analysis-jobs.js.
+ */
 ```javascript
 'use strict';
 

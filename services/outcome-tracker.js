@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/outcome-tracker.js
  * services/outcome-tracker.js
  * Tracks whether the things we built actually worked.
  * Connects features → real-world results (revenue, conversions, time saved, errors fixed).

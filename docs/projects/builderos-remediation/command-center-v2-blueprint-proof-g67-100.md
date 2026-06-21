@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G67 100. -->
+
 Command Center V2 Blueprint Proof: G67-100 - Core Command Definition Persistence
 This document serves as a proof-closing blueprint note for the initial data persistence layer of the Command Center V2, derived from the `COMMAND_CENTER_V2_BLUEPRINT.md`. It outlines the next smallest build slice to establish the foundational data model for `CommandDefinition` entities.
 ---

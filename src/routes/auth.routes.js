@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/auth.routes.js.
+ */
 ```javascript
 const express = require('express');
 const { body } = require('express-validator');

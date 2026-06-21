@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 01 AI Council - Proof G69-100 -->
+
 # BuilderOS Remediation: Amendment 01 AI Council - Proof G69-100
 
 This document serves as a proof-closing blueprint note for the BuilderOS remediation effort related to Amendment 01 AI Council, specifically addressing proof point G69-100.

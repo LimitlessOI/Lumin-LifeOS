@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Intervention Engine.
+ */
 ```javascript
 class InterventionEngine {
   constructor() {

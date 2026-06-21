@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Data Ingestion Pipeline (G756-100) -->
+
 # Blueprint Proof: Command Center V2 - Data Ingestion Pipeline (G756-100)
 
 This document serves as a proof-closing blueprint note for the initial build slice of the Command Center V2, specifically targeting the foundational data ingestion pipeline as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` Phase 1, Task 1.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G77 100. -->
+
 Amendment 12 Command Center Proof: G77-100 - Core Data Model & Persistence (Task Entity)
 This document outlines the proof-closing blueprint note for the initial data model and persistence layer for the BuilderOS Command Center, specifically focusing on the `Task` entity.
 ---

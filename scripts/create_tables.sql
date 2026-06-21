@@ -1,3 +1,4 @@
+-- SYNOPSIS: Script — Create Tables.
 ```sql
 CREATE TABLE learning_patterns (
     id SERIAL PRIMARY KEY,

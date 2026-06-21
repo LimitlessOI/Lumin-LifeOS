@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G361-100 Remediation -->
+
 # Command Center V2 Blueprint Proof - G361-100 Remediation
 
 This document addresses the OIL verifier rejection for `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g361-100.md` related to `TypeError [ERR_UNKNOWN_FILE_EXTENSION]` when processing `.md` files. The rejection indicates the verifier is attempting to execute documentation files as JavaScript modules.

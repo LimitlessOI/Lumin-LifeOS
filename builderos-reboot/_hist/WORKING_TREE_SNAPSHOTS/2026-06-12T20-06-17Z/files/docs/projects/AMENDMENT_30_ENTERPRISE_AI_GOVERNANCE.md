@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Enterprise AI Governance -->
+
 # Enterprise AI Governance
 _(formerly AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md)_
 

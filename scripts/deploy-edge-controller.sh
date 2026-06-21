@@ -1,3 +1,4 @@
+# SYNOPSIS: Script — Deploy Edge Controller.
 ```bash
 #!/bin/bash
 

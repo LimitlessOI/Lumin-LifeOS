@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Manages storage and retrieval of user assessment results including
  * @fileoverview Assessment Battery Service
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * 

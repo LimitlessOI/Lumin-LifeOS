@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G589-100 Remediation -->
+
 # Amendment 41: MarketingOS Proof - G589-100 Remediation
 
 This document serves as the SSOT foundation for closing the proof gap identified during the OIL verifier rejection for Amendment 41, related to MarketingOS integration.

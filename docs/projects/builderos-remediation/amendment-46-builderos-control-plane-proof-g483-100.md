@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G483 100. -->
+
 // Amendment 46: BuilderOS Control Plane Proof - G483-100
 // Blueprint Note: Wiring `routes/lifeos-council-builder-routes.js`
 // This document serves as the proof-closing blueprint note for Amendment 46,

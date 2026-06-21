@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G71-100 - Initial Tenant Identification & Configuration Loading -->
+
 # Amendment 14 White-Label Proof: G71-100 - Initial Tenant Identification & Configuration Loading
 
 This document serves as a proof-closing blueprint note for "Proof-G71-100" within Amendment 14, focusing on the foundational capability for white-labeling: initial tenant identification and the loading of a minimal, hardcoded configuration. This is the smallest safe build slice to establish the core mechanism without touching UI or complex data persistence.

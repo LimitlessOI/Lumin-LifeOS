@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (G42-100) -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (G42-100)
 
 This document addresses the proof gap identified in `AMENDMENT_41_MARKETINGOS.md` regarding the verifiable integrity and synchronization of `MarketingCampaignEvent` data with the LifeOS Single Source of Truth (SSOT).

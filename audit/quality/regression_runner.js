@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Stub for model output. Replace with real council/model call when wired.
+ */
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';

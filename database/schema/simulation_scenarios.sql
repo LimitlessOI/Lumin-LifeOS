@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — simulation_scenarios.sql.
 ```sql
 CREATE TABLE simulation_scenarios (
     id SERIAL PRIMARY KEY,

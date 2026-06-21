@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Auto-Builder -->
+
 # Auto-Builder
 _(formerly AMENDMENT_04_AUTO_BUILDER.md)_
 **Status:** LIVE (autonomous — builder supervisor operational)

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Lumin-LifeOS Bugbot Review Rules -->
+
 # Lumin-LifeOS Bugbot Review Rules
 
 Prioritize real defects over style.

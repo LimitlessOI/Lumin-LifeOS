@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/pages/outreach.js.
+ */
 import React, { useEffect, useState } from 'react';
 import LeadTable from '../components/LeadTable';
 import Filters from '../components/Filters';

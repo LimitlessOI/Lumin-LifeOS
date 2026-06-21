@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G2 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof Gap 2-100
 
 Proof-Closing Blueprint Note

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Factory staging — Server.
+ */
 import express from 'express';
 import { registerFactoryRoutes } from './startup/register-routes.js';
 

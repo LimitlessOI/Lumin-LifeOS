@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G136-100 - Database Schema Foundation -->
+
 # Command Center V2 Blueprint Proof: G136-100 - Database Schema Foundation
 
 ## Proof-Closing Blueprint Note

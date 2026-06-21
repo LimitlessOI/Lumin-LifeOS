@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G209-100 - SSOT Foundation Verification -->
+
 # Amendment 41 MarketingOS Proof: G209-100 - SSOT Foundation Verification
 
 This document serves as a proof-closing blueprint note for Amendment 41, specifically verifying the Single Source of Truth (SSOT) foundation for MarketingOS. The objective is to confirm the operational status and accessibility of the canonical `Campaign` entity as defined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`.

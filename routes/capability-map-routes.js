@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/capability-map-routes.js
  * routes/capability-map-routes.js
  *
  * Capability Map API — analyze, list, and act on inbound capability ideas.

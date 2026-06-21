@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS / LimitlessOS — Source of Truth (v1.0) -->
+
 # LifeOS / LimitlessOS — Source of Truth (v1.0)
 Last updated: 2026-01-03
 

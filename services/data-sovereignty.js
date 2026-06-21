@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/data-sovereignty.js
  * services/data-sovereignty.js
  *
  * Full erasure on demand. User data belongs to the user.

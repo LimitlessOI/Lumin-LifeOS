@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Mechanical Tier 1 telemetry gate — fail-closed for active missions.
  * Mechanical Tier 1 telemetry gate — fail-closed for active missions.
  * Exit 0 only when MISSION_TELEMETRY_RECEIPT.json satisfies Tier 1 + nine questions.
  *

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Creator Media OS -->
+
 # Creator Media OS
 _(formerly AMENDMENT_23_CREATOR_MEDIA_OS.md)_
 

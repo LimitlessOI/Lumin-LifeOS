@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_tables.sql.
 ```sql
 -- Create table for content projects
 CREATE TABLE content_projects (

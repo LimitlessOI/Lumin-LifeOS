@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G527-100 -->
+
 # Amendment 41: MarketingOS Proof - G527-100
 
 This document serves as the proof-closing blueprint note for Amendment 41, focusing on the MarketingOS integration as defined by `docs/projects/AMENDMENT_41_MARKETINGOS.md`, which is the Single Source of Truth (SSOT) foundation for this initiative.

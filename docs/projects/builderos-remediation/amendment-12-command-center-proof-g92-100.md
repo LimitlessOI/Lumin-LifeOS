@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G92-100 Closing Note -->
+
 # Amendment 12 Command Center Proof: G92-100 Closing Note
 
 This document serves as a proof-closing blueprint note for the `g92-100` build slice, and outlines the next smallest, blueprint-backed build slice for the Command Center.

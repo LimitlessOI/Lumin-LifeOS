@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — data-integration.js.
+ */
 ```javascript
 const axios = require('axios');
 

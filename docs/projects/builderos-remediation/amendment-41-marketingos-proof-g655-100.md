@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G655-100 Remediation Blueprint -->
+
 # Amendment 41: MarketingOS Proof - G655-100 Remediation Blueprint
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified by the OIL verifier rejection for `amendment-41-marketingos-proof-g655-100.md`.

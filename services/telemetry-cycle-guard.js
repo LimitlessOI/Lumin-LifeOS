@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Telemetry cycle context guard — Phase 02 of BuilderOS production autonomy roadmap.
  * Telemetry cycle context guard — Phase 02 of BuilderOS production autonomy roadmap.
  *
  * Pure helper functions for standardizing sessionId/cycleId propagation and

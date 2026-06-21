@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_task_tables.sql.
 ```sql
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Dashboard — 24/7 supervised builder queue -->
+
 # LifeOS Dashboard — 24/7 supervised builder queue
 
 Updated: 2026-05-05 — **Alpha reorder** for operator prototype path: **`LIFEOS_ALPHA_NEEDS_AND_QUEUE.md`**; JSON leads with **`lifeos-alpha-consensus-pack`** → **`lifeos-alpha-operator-one-pager`**, specs, then legacy foundation/rail **tail**. Cursor reset **without firing `/build`:** **`npm run lifeos:builder:queue:reset-cursor`** (same as **`--reset-cursor-only`**). Prefer this, then **`BUILDER_QUEUE_MAX=1`** (or small N) **`npm run lifeos:builder:queue`** — **do not combine bare `--reset-cursor`** with full drain unless intentional (see **`docs/projects/BUILDER_QUEUE_SLICE_POLICY.md`**).

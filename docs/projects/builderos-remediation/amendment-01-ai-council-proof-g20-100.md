@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G20-100 Compliance -->
+
 # Amendment 01: AI Council Proof - G20-100 Compliance
 
 ## Document Purpose

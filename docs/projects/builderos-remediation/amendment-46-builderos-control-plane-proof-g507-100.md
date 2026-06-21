@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G507 100. -->
+
 The specification is contradictory: The task explicitly requests writing to a `.md` file with "proof-closing blueprint note" content, implying a markdown document. However, the OIL verifier rejected the previous attempt with `ERR_UNKNOWN_FILE_EXTENSION` when attempting to execute the `.md` file as a Node.js module, indicating it expects executable code. Given the instruction to "Generate the complete implementation code" and the need to address the verifier's runtime expectation, the output will be formatted as JavaScript code containing the blueprint note as comments and a descriptive export. This will still likely result in `ERR_UNKNOWN_FILE_EXTENSION` from the verifier due to the `.md` extension, as the verifier's behavior is inconsistent with the target file type.
 
 ```javascript

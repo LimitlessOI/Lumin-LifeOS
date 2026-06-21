@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231024000002_create_model_updates_table.sql.
 ```sql
 CREATE TABLE model_updates (
     id SERIAL PRIMARY KEY,

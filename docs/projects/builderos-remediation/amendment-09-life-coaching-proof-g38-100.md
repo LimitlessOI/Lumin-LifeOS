@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G38-100 Remediation -->
+
 # Amendment 09: Life Coaching - Proof G38-100 Remediation
 
 **Document ID:** amendment-09-life-coaching-proof-g38-100.md

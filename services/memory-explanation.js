@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-explanation.js
+ */
 // services/memory-explanation.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 export function buildExplanation(capsuleId, influenceType, decisionContext) {

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 202310200002-create-energy-transactions.js.
+ */
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {

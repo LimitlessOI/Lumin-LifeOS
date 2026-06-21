@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G129 100. -->
+
 ### AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G129-100
 
 **Signal:** This document — SSOT foundation.

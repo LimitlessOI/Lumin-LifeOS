@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_projects_table.sql.
 ```sql
 CREATE TABLE Projects (
     id SERIAL PRIMARY KEY,

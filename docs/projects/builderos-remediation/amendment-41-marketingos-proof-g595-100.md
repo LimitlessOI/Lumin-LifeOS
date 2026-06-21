@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G595 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G595-100 Remediation
 This document outlines the plan to close the identified proof gap for `g595-100` as per `AMENDMENT_41_MARKETINGOS.md`, ensuring the SSOT foundation for MarketingOS data integrity.
 

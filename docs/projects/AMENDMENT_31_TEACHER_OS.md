@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_31: Teacher OS -->
+
 # AMENDMENT_31: Teacher OS
 
 **Status:** In Progress — Foundation Built

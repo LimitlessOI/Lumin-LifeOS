@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/code-review/validators/submission.js.
+ */
 ```javascript
 const { check, validationResult } = require('express-validator');
 

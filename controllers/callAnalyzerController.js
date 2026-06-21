@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — controllers/callAnalyzerController.js.
+ */
 const transcriptionService = require('../services/transcriptionService');
 const analysisService = require('../services/analysisService');
 const crmService = require('../utils/crmService');

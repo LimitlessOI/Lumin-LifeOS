@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/free-tier-governor.js
  * services/free-tier-governor.js
  * Governs usage of free-tier AI providers so we never go over limits.
  *

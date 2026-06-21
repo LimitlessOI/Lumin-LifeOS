@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — BiometricIngestion.
+ */
 const axios = require('axios');
 const UserBiometricProfile = require('../../models/userBiometricProfiles');
 

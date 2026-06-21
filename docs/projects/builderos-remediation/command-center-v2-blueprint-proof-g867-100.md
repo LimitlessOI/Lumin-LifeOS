@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g867-100 - Initial Metrics API Slice -->
+
 # Command Center V2 Blueprint Proof: g867-100 - Initial Metrics API Slice
 
 This document serves as a proof-closing blueprint note for the initial build slice of the Command Center V2, focusing on establishing the foundational API for core LifeOS metrics as outlined in Phase 1 of the `COMMAND_CENTER_V2_BLUEPRINT.md`.

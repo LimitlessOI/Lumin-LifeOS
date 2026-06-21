@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ai-model-selector.js — extracted from server.js
  * ai-model-selector.js — extracted from server.js
  * Smart model selection, Cloudflare-tunnel detection, Ollama streaming adapter,
  * and model fallback helpers.

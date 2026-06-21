@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G733 100. -->
+
 The specification is contradictory: the task explicitly requests writing a `.md` file, but the OIL verifier rejected the previous attempt at this path due to `ERR_UNKNOWN_FILE_EXTENSION` for `.md`, implying it expects an executable file.
 Amendment 46 BuilderOS Control Plane Proof - G733-100
 

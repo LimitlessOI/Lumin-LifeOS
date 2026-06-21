@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder Alpha-Ready Certification -->
+
 # Builder Alpha-Ready Certification
 **Phase:** 14
 **Status:** ALPHA_READY

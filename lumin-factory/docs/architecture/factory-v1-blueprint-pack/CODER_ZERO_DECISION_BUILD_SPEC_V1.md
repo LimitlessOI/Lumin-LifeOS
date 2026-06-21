@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Coder Zero-Decision Build Spec v1 -->
+
 # Coder Zero-Decision Build Spec v1
 
 > **Dept alignment (2026-06-09 v2.7):** Execution authority = **CDR** (Coder Department). **Coder** = model tier under CDR. **BPB** remains separate — session law requires two AIs when translate + execute same window. See `docs/architecture/DELIBERATION_ARCHITECTURE.md`.

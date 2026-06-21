@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Configuration — Constants.
+ */
 const ENVIRONMENTS = {
   DEVELOPMENT: 'development',
   PRODUCTION: 'production',

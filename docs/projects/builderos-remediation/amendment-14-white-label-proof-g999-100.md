@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof - G999-100 -->
+
 # Amendment 14 White-Label Proof - G999-100
 
 This document serves as a proof for the conceptual design and initial verification of white-label capabilities under Amendment 14, specifically focusing on the G999-100 aspect of project-level branding configuration within BuilderOS.

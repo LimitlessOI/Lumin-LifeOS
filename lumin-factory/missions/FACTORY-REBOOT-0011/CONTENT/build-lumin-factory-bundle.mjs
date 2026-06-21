@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Build lumin-factory-bundle/ for clean-repo cutover (portable export). */
+/**
+ * SYNOPSIS: Build lumin-factory-bundle/ for clean-repo cutover (portable export). Build lumin-factory-bundle/ for clean-repo cutover (portable export). */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

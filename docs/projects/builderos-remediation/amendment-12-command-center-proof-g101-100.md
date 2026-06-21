@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_12_COMMAND_CENTER - G101-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_12_COMMAND_CENTER - G101-100
 
 This document outlines the proof-closing details for the initial implementation slice `G101-100` of the `CommandCenter` as defined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

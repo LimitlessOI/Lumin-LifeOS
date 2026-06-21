@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: webhookHandler.js
+ */
 // webhookHandler.js
 const coachingTips = require('./coachingTips');
 const { saveCallSummary } = require('./database');

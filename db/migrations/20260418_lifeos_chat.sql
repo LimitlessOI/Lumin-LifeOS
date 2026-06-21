@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260418_lifeos_chat.sql.
 -- Migration: 20260418_lifeos_chat
 -- Lumin — LifeOS conversational AI interface
 --

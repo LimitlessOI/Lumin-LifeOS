@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G743 100. -->
+
 Amendment 14 White-Label Proof - G743-100
 
 This document serves as a proof-closing blueprint note for Amendment 14, focusing on the initial white-label implementation verification.

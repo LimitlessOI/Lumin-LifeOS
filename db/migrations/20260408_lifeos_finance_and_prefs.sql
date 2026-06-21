@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260408_lifeos_finance_and_prefs.sql.
 -- LifeOS: personal finance v1 + flourishing preference bag (Amendment 21 Phase 16 + backlog)
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 

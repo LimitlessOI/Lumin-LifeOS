@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Todo 8 G5. -->
+
 BuilderOS Remediation: Amendment 12 Command Center - TODO 8 G5
 Blueprint Enhancement Memo
 

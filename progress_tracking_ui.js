@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Progress Tracking UI Implementation
+ */
 // Progress Tracking UI Implementation
 class ProgressTrackingUI {
     constructor() {

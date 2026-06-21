@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: QUICK LAUNCH — Conductor Start -->
+
 # QUICK LAUNCH — Conductor Start
 
 **Platform:** **TokenSaverOS (TSOS)** — this repo. **#0 product priority** is **refine the builder** and prove the pipeline (North Star **Article II §2.11a**, Companion **§0.5F**). **Separately**, how the Conductor **evaluates work and reports to you** is **Article II §2.11b** + Companion **§0.5G** — that is *not* the TSOS name; it is the **session report** (grade, why A vs B, residue risk) so you are not code-reviewing at scale by intuition. **Do not conflate** “we build the builder first (§2.11a)” with “here is how I tell Adam what happened (§2.11b).”

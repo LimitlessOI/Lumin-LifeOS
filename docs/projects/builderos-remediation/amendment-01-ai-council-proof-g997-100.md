@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G997 100. -->
+
 Amendment 01: AI Council - Proof for Remediation G997-100
 
 Blueprint Reference: `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

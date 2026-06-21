@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-workflow-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-workflow-service.js
  * Derives workflow tasks from machine-readable TC listing/buyer workflow specs.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/config/logging.js.
+ */
 ```javascript
 const winston = require('winston');
 

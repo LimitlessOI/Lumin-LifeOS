@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_consultants_table.sql.
 ```sql
 CREATE TABLE consultants (
     id SERIAL PRIMARY KEY,

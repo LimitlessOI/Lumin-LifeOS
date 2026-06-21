@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G146-100 - Documentation Compliance Verification -->
+
 # Amendment 19 Project Governance Proof: G146-100 - Documentation Compliance Verification
 
 **Blueprint Source:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

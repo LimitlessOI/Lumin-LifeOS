@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: scripts/autonomy/builder-supervisor.js
  * scripts/autonomy/builder-supervisor.js
  *
  * Headless multi-agent builder orchestrator.

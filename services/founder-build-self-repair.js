@@ -1,5 +1,5 @@
 /**
- * Never-stop founder build loop — infer target_file, retry on repairable blockers.
+ * SYNOPSIS: Never-stop founder build loop — infer target_file, retry on repairable blockers.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 import {
@@ -25,8 +25,14 @@ import {
   getFounderBuildJob,
   setFounderBuildJobResult,
 } from './founder-build-job-store.js';
+import {
+  FOUNDER_SOLO_ATTEMPT_MAX,
+  runFounderBuildQuorumEscalation,
+  buildQuorumFailureEnvelope,
+  recordFounderEscalationLesson,
+} from './founder-build-quorum-escalation.js';
 
-export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = 5;
+export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = FOUNDER_SOLO_ATTEMPT_MAX;
 const POST_JSON_TIMEOUT_MS = Number(process.env.FOUNDER_POST_JSON_TIMEOUT_MS || '120000');
 
 function isRetriableBlocker(blocker = '', code = '') {
@@ -85,6 +91,128 @@ async function postJson(url, headers, body) {
   }
 }
 
+async function tryApplyQuorumPlan({
+  plan,
+  stage,
+  task,
+  commandKey,
+  baseUrl,
+  repoRoot,
+  buildFailureReceipt,
+  enforceExecutionTruth,
+  callCouncilMember,
+  pool,
+}) {
+  if (!plan?.augmented_task) return null;
+  const approach = String(plan.fix_approach || 'builder_execute');
+  const nextTask = String(plan.augmented_task).trim() || task;
+
+  if (approach === 'css_patch' || isCssOnlyUiFeedback(nextTask) || isCssOnlyUiFeedback(task)) {
+    return runCssPatchWithVerification({
+      task: nextTask,
+      commandKey,
+      baseUrl,
+      repoRoot,
+      maxAttempts: 1,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+      skipQuorum: true,
+      callCouncilMember,
+      pool,
+      quorumStage: stage,
+    });
+  }
+
+  return runFounderBuildWithSelfRepair({
+    task: nextTask,
+    commandKey,
+    baseUrl,
+    maxAttempts: 1,
+    buildFailureReceipt,
+    enforceExecutionTruth,
+    repoRoot,
+    skipQuorum: true,
+    callCouncilMember,
+    pool,
+    quorumStage: stage,
+  });
+}
+
+async function escalateAfterSoloExhaustion({
+  task,
+  attempts,
+  blocker,
+  verification,
+  targetFile,
+  commandKey,
+  baseUrl,
+  repoRoot,
+  buildFailureReceipt,
+  enforceExecutionTruth,
+  callCouncilMember,
+  pool,
+  baseFailure,
+  executionPath,
+}) {
+  let recovered = null;
+  let recoveredVia = null;
+
+  const receipt = await runFounderBuildQuorumEscalation({
+    task,
+    attempts,
+    blocker,
+    verification,
+    targetFile,
+    callCouncilMember,
+    pool,
+    onStagePlan: async (plan, stage) => {
+      const applied = await tryApplyQuorumPlan({
+        plan,
+        stage,
+        task,
+        commandKey,
+        baseUrl,
+        repoRoot,
+        buildFailureReceipt,
+        enforceExecutionTruth,
+        callCouncilMember,
+        pool,
+      });
+      if (applied?.pass_fail === 'PASS') {
+        recovered = applied;
+        recoveredVia = stage;
+        await recordFounderEscalationLesson(pool, {
+          task,
+          blocker,
+          stage,
+          outcome: 'PASS',
+          plan,
+        });
+        return { stop: true };
+      }
+      return { stop: false };
+    },
+  });
+
+  if (recovered) {
+    return {
+      ...recovered,
+      self_repair: {
+        ...(recovered.self_repair || {}),
+        solo_attempts: attempts,
+        quorum_escalation: receipt,
+        recovered_via: recoveredVia,
+      },
+    };
+  }
+
+  return buildQuorumFailureEnvelope(receipt, {
+    ...baseFailure,
+    execution_path: executionPath,
+    self_repair: { attempts, exhausted: true, quorum_escalation: receipt },
+  });
+}
+
 async function runCssPatchWithVerification({
   task,
   commandKey,
@@ -94,6 +222,10 @@ async function runCssPatchWithVerification({
   buildFailureReceipt,
   enforceExecutionTruth,
   cacheBust,
+  skipQuorum = false,
+  callCouncilMember = null,
+  pool = null,
+  quorumStage = null,
 }) {
   const baseCheck = assertFounderBuildBaseUrl(baseUrl);
   if (!baseCheck.ok) {
@@ -269,7 +401,28 @@ async function runCssPatchWithVerification({
     },
     exec_meta: execJson,
   }, { action: 'build', task });
-  return { ...failure, self_repair: { attempts, exhausted: true } };
+  const baseFailure = { ...failure, self_repair: { attempts, exhausted: true, quorum_stage: quorumStage || null } };
+
+  if (!skipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
+    return escalateAfterSoloExhaustion({
+      task,
+      attempts,
+      blocker: lastVerification?.blocker || receipt.blocker,
+      verification: lastVerification,
+      targetFile: committedFiles.join(', '),
+      commandKey,
+      baseUrl: verifiedBase,
+      repoRoot,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+      callCouncilMember,
+      pool,
+      baseFailure,
+      executionPath: 'founder_css_patch',
+    });
+  }
+
+  return baseFailure;
 }
 
 export async function runFounderBuildWithSelfRepair(options) {
@@ -281,6 +434,10 @@ export async function runFounderBuildWithSelfRepair(options) {
     buildFailureReceipt,
     enforceExecutionTruth,
     repoRoot = process.cwd(),
+    skipQuorum = false,
+    callCouncilMember = null,
+    pool = null,
+    quorumStage = null,
   } = options;
 
   const base = String(baseUrl || '').replace(/\/$/, '');
@@ -296,6 +453,10 @@ export async function runFounderBuildWithSelfRepair(options) {
       maxAttempts,
       buildFailureReceipt,
       enforceExecutionTruth,
+      skipQuorum,
+      callCouncilMember,
+      pool,
+      quorumStage,
     });
   }
 
@@ -335,6 +496,24 @@ export async function runFounderBuildWithSelfRepair(options) {
           currentTask = augmentTaskWithGapFillScope(currentTask, targetFile);
           attempts[attempts.length - 1].repair_applied = repair.repair;
           continue;
+        }
+        if (!skipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
+          return escalateAfterSoloExhaustion({
+            task: currentTask,
+            attempts,
+            blocker: failure.first_blocker,
+            verification: null,
+            targetFile,
+            commandKey,
+            baseUrl: base,
+            repoRoot,
+            buildFailureReceipt,
+            enforceExecutionTruth,
+            callCouncilMember,
+            pool,
+            baseFailure: { ...failure, self_repair: { attempts, exhausted: true } },
+            executionPath: 'builder_task_execute',
+          });
         }
         return { ...failure, self_repair: { attempts, exhausted: true } };
       }
@@ -390,6 +569,25 @@ export async function runFounderBuildWithSelfRepair(options) {
         continue;
       }
 
+      if (!skipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
+        return escalateAfterSoloExhaustion({
+          task: currentTask,
+          attempts,
+          blocker: result.first_blocker,
+          verification: null,
+          targetFile: resolvedTarget || targetFile,
+          commandKey,
+          baseUrl: base,
+          repoRoot,
+          buildFailureReceipt,
+          enforceExecutionTruth,
+          callCouncilMember,
+          pool,
+          baseFailure: { ...result, self_repair: { attempts, exhausted: true } },
+          executionPath: 'builder_task_execute',
+        });
+      }
+
       return { ...result, self_repair: { attempts, exhausted: true } };
     } catch (err) {
       const receipt = buildFailureReceipt(currentTask, taskJson, { error: err.message });
@@ -413,7 +611,26 @@ export async function runFounderBuildWithSelfRepair(options) {
     execution_receipt: receipt,
     execution_path: 'builder_task_execute',
   }, { action: 'build', task: currentTask });
-  return { ...failure, self_repair: { attempts, exhausted: true } };
+  const baseFailure = { ...failure, self_repair: { attempts, exhausted: true } };
+  if (!skipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
+    return escalateAfterSoloExhaustion({
+      task: currentTask,
+      attempts,
+      blocker: receipt.blocker,
+      verification: null,
+      targetFile,
+      commandKey,
+      baseUrl: base,
+      repoRoot,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+      callCouncilMember,
+      pool,
+      baseFailure,
+      executionPath: 'builder_task_execute',
+    });
+  }
+  return baseFailure;
 }
 
 export function startFounderBuildJob(options) {

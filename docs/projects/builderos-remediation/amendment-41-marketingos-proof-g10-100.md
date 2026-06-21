@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G10-100 User Profile Synchronization -->
+
 # AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G10-100 User Profile Synchronization
 
 This document addresses a critical proof gap identified in the `AMENDMENT_41_MARKETINGOS.md` blueprint, specifically concerning the foundational data synchronization required for MarketingOS to leverage LifeOS user profiles as the Single Source of Truth (SSOT).

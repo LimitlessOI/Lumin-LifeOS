@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane (G441-100) -->
+
 # Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane (G441-100)
 
 This note addresses the implementation gap for wiring BuilderOS control plane signals within `routes/lifeos-council-builder-routes.js` as specified in Amendment 46.

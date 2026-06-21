@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Dry-run entire mission queue to prove blueprints are parseable and ordered. */
+/**
+ * SYNOPSIS: Dry-run entire mission queue to prove blueprints are parseable and ordered. Dry-run entire mission queue to prove blueprints are parseable and ordered. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

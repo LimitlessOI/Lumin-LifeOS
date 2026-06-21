@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20240101_create_registrations_table.sql.
 ```sql
 CREATE TABLE registrations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

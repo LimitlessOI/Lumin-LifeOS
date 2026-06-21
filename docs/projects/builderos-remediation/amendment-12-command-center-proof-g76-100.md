@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G76 100. -->
+
 Proof-Closing Blueprint Note: G76-100 - Initial CommandCenter Core
 This note closes the initial proof-of-concept for the `CommandCenter` core, focusing on its fundamental ability to register and synchronously execute commands.
 

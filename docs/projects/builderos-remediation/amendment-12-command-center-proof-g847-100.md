@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G847-100 -->
+
 # Amendment 12: Command Center - Proof G847-100
 
 ## Blueprint Note: Proof-Closing Build Slice

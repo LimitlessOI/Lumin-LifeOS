@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/design-quality-gate.js
  * services/design-quality-gate.js
  * Post-build quality check run on every generated file before it's committed.
  *

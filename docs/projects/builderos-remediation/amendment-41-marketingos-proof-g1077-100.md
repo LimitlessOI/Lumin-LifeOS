@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1077 100. -->
+
 AMENDMENT 41 MARKETINGOS: Proof-Closing Blueprint Note (G1077-100)
 This document serves as the SSOT foundation for closing the identified proof gap related to Amendment 41 MarketingOS. It outlines the specific gap, the minimal build slice, affected files, verification steps, and stop conditions for the next C2 build pass.
 1. Exact Missing Implementation or Proof Gap

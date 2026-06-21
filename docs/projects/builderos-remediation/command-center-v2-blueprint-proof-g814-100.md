@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G814-100 - Initial BuilderOS Event Ingestion -->
+
 # Command Center V2 Blueprint Proof: G814-100 - Initial BuilderOS Event Ingestion
 
 This document serves as a proof-closing blueprint note for the first build slice derived from `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`. It focuses on establishing the foundational data ingestion for BuilderOS events.

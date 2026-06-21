@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/UserController.js.
+ */
 ```javascript
 const UserService = require('../services/UserService');
 

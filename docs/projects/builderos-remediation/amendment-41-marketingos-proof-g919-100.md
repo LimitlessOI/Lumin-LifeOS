@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 - MarketingOS User Segment Synchronization (G919-100) -->
+
 # Proof-Closing Blueprint Note: Amendment 41 - MarketingOS User Segment Synchronization (G919-100)
 
 This document serves as the SSOT foundation for closing the implementation and proof gap identified in `AMENDMENT_41_MARKETINGOS.md`, specifically regarding the synchronization of `UserSegment` data from LifeOS to MarketingOS.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Runtime State (Verified from Repo) -->
+
 # Runtime State (Verified from Repo)
 Last reviewed: 2026-02-02
 

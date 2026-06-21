@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof G551-100 Blueprint Note -->
+
 # Amendment 41 MarketingOS Proof G551-100 Blueprint Note
 
 **SSOT Foundation Document**

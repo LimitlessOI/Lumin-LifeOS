@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_capability_map.sql.
 -- Capability Map: stores analyzed competitor/industry ideas mapped to architecture
 -- @ssot docs/projects/AMENDMENT_20_CAPABILITY_MAP.md
 

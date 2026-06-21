@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: record-ci-evidence.mjs
  * record-ci-evidence.mjs
  *
  * Records the result of node --check (or any CI verification step) as

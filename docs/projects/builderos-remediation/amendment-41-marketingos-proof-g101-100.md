@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G101-100 -->
+
 # Amendment 41: MarketingOS Proof - G101-100
 
 ## 1. Exact Missing Implementation or Proof Gap

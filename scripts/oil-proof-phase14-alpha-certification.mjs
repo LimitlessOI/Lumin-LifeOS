@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: OIL proof — Phase 14: Alpha-Ready Builder Certification.
  * OIL proof — Phase 14: Alpha-Ready Builder Certification.
  *
  * Audits all Builder phases 1–14 against DB receipts and known statuses.

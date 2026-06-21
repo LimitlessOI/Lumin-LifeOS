@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260406_lifeos_conflict.sql.
 -- Migration: 20260406_lifeos_conflict.sql
 -- Conflict Intelligence + Communication Coaching layer
 -- Tables: conflict_consent, conflict_recordings, coaching_sessions, communication_patterns

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_automation_tables.sql.
 ```sql
 CREATE TABLE automation_tools (
     id SERIAL PRIMARY KEY,

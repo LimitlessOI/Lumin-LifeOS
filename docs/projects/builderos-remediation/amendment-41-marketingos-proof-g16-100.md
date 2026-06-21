@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G16 100. -->
+
 Amendment 41: MarketingOS Proof - G16-100 (User Goal Completion Event)
 Proof-Closing Blueprint Note
 This document serves as the SSOT foundation for closing the proof gap related to the `User.GoalCompletion` event for MarketingOS, as defined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`.

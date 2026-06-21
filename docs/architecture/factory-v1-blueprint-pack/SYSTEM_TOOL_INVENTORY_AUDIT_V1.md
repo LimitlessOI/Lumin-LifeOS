@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: System Tool Inventory Audit v1 -->
+
 # System Tool Inventory Audit v1
 
 ## Purpose

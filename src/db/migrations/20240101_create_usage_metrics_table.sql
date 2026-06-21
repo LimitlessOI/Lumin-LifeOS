@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20240101_create_usage_metrics_table.sql.
 ```sql
 CREATE TABLE usage_metrics (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

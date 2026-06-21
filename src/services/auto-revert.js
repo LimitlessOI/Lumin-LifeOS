@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/auto-revert.js.
+ */
 const { exec } = require('child_process');
 
 const detectFailure = () => {

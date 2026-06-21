@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: vapiWebhookHandler.js
+ */
 // vapiWebhookHandler.js
 const express = require('express');
 const router = express.Router();

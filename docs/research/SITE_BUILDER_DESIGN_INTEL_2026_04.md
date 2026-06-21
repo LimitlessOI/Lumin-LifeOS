@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Site Builder Design Intel — 2026-04 -->
+
 # Site Builder Design Intel — 2026-04
 
 Purpose: current design and delivery guidance injected into the Site Builder so preview sites feel modern, trustworthy, fast, and conversion-oriented instead of generic.

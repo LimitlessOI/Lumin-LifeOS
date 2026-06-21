@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G555 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 46 BuilderOS Control Plane - G555-100 Remediation
 
 This document outlines the remediation plan and proof for closing the implementation gap identified during the OIL verifier rejection for Amendment 46. The primary goal is to correctly wire the BuilderOS control plane endpoints in `routes/lifeos-council-builder-routes.js` to manage build lifecycle events and enforce health-based completion conditions.

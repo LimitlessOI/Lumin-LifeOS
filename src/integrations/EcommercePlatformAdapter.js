@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/integrations/EcommercePlatformAdapter.js.
+ */
 ```javascript
 class EcommercePlatformAdapter {
   constructor(platform) {

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260427_lifeos_conflict_interrupts.sql.
 -- Migration: Conflict Interrupts Table
 -- Created: 2026-04-27
 -- Purpose: Track conflict interruption events and their resolution status

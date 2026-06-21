@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G149 100. -->
+
 Amendment 14: White-Label Proof - G149-100
 
 Blueprint Reference

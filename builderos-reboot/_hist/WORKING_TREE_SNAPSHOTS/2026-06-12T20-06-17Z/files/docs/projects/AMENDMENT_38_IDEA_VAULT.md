@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Idea Vault -->
+
 # Idea Vault
 _(formerly AMENDMENT_38_IDEA_VAULT.md)_
 

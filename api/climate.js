@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — api/climate.js.
+ */
 ```javascript
 const express = require('express');
 const { runQuantumSimulation } = require('../quantum-climate-core');

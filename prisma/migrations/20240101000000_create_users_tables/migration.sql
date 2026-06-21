@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — migration.sql.
 ```sql
 -- Create Users Table
 CREATE TABLE "User" (

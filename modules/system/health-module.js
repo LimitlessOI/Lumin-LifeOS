@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Class HealthModule — modules/system/health-module.js.
+ */
 export class HealthModule {
   constructor({ systemHealthChecker = null } = {}) {
     this.systemHealthChecker = systemHealthChecker;

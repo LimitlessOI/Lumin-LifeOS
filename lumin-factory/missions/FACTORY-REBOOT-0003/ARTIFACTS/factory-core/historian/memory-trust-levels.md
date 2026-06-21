@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Memory Trust Levels -->
+
 # Memory Trust Levels
 
 - `observed`

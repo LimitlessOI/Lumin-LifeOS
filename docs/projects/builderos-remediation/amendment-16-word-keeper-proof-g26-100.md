@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof Gap G26-100 -->
+
 # Amendment 16: Word Keeper - Proof Gap G26-100
 
 ## Blueprint Note: Proof-Closing for WordKeeper Core

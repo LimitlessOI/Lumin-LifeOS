@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS G31-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS G31-100
 
 This document serves as a proof-closing blueprint note for the implementation of MarketingOS metric G31-100, as specified by `AMENDMENT_41_MARKETINGOS.md`.

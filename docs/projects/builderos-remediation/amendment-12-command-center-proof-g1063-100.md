@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G1063-100 -->
+
 # Amendment 12: Command Center - Proof G1063-100
 
 ## Blueprint Note: Closing G1063-100 - Core Service & Data Model

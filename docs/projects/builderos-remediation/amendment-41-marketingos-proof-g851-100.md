@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G851 100. -->
+
 AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note (G851-100)
 
 This document serves as the Single Source of Truth (SSOT) foundation for the proof-closing of `AMENDMENT_41_MARKETINGOS`. It outlines the exact steps required to verify the amendment's implementation and establish its operational integrity within the LifeOS platform.

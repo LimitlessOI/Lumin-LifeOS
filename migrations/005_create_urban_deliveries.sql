@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 005_create_urban_deliveries.sql.
 CREATE TABLE urban_deliveries (
     id SERIAL PRIMARY KEY,
     farm_id INT REFERENCES urban_farms(id),

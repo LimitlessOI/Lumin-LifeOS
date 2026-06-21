@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231015_add_predictive_maintenance_tables.sql.
 ```sql
 CREATE TABLE predictive_assets (
   id SERIAL PRIMARY KEY,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 003_create_logs_table.sql.
 ```sql
 CREATE TABLE logs (
     id SERIAL PRIMARY KEY,

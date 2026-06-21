@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_clientcare_sellable_v1_hardening.sql.
 -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
 -- Sellable-v1 hardening for payer rule depth and packaging exports/readiness
 

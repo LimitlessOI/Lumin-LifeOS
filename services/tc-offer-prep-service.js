@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-offer-prep-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-offer-prep-service.js
  * Structured offer-prep recommendations from client constraints, property facts, comps, and market/seller signals.

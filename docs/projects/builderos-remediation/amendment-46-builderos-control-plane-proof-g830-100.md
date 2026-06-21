@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G830-100 Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G830-100 Remediation
 
 This document outlines the remediation plan and proof for the BuilderOS control plane wiring, addressing the OIL verifier rejection. The previous attempt incorrectly submitted JavaScript code as a markdown proof document, leading to a file extension error. This proof details the required changes to `routes/lifeos-council-builder-routes.js` to correctly implement the build lifecycle hooks.

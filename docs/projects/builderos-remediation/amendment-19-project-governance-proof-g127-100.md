@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof (G127-100) -->
+
 ASSUMPTIONS:
 The content of `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` is assumed to define specific governance rules for BuilderOS projects, such as mandatory fields, allowed values, or process steps, which require automated enforcement. The proof document references these assumed rules.
 

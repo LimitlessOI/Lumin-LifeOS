@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — alignmentChecker.js.
+ */
 const fs = require('fs');
 
 const checkAlignment = (task) => {

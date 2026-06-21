@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CFO_RESOURCE_SIMULATION_RECEIPT — FOUNDER_PACKET_V2 -->
+
 # CFO_RESOURCE_SIMULATION_RECEIPT — FOUNDER_PACKET_V2
 
 **Role played by:** Claude (Sonnet 4.6), simulating CFO per V2's Bootstrap Protocol

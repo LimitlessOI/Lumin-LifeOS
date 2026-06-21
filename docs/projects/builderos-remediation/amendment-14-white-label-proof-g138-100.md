@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G138 100. -->
+
 Amendment 14 White-Label Proof: G138-100 - Application Name Configuration
 This proof note addresses the foundational white-label requirement for dynamically configuring the primary application name displayed across the platform. This is a critical first step to ensure branding flexibility without modifying core code.
 1. Exact Missing Implementation or Proof Gap

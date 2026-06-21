@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G48 100. -->
+
 Proof-Closing Blueprint Note: `g48-100` - Initial CommandCenter and Command Registration
 This note closes the proof for the foundational existence and basic registration capability of the `CommandCenter` and `Command` classes, as outlined in `AMENDMENT_12_COMMAND_CENTER.md`.
 

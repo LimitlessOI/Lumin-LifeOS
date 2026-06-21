@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: STRIPE AUTOMATION - Complete Stripe Management via API
  * STRIPE AUTOMATION - Complete Stripe Management via API
  * Creates products, prices, checkout sessions, handles webhooks
  * No manual Stripe dashboard work needed

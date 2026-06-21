@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231101_create_ar_tables.sql.
 CREATE TABLE ar_devices (
     id SERIAL PRIMARY KEY,
     device_id VARCHAR(255) NOT NULL,

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Deterministic 1–10 self-grade helpers for `npm run tsos:builder` (builder-operator-suite).
  * Deterministic 1–10 self-grade helpers for `npm run tsos:builder` (builder-operator-suite).
  * Not an LLM opinion — maps exit codes + JSON receipts (doctor / tokens / operational / daemon state).
  *

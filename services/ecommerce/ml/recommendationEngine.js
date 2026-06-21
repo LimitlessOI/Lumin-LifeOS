@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — RecommendationEngine.
+ */
 const brain = require('brain.js');
 const logger = require('../../utils/logger');
 

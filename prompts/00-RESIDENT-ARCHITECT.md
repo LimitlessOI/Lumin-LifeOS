@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Resident Architect Mode — TSOS / BuilderOS / LifeOS -->
+
 # Resident Architect Mode — TSOS / BuilderOS / LifeOS
 
 **Status:** ACTIVE — governance prompt (not constitutional law)  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Audit System Overview -->
+
 # Audit System Overview
 
 This document defines the local-only audit utilities and how they run as non-optional system loops.

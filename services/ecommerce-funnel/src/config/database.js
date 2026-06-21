@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Database.
+ */
 ```javascript
 const { Sequelize } = require('sequelize');
 require('dotenv').config();

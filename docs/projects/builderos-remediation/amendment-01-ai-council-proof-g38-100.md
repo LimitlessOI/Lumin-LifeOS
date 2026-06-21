@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G38-100 -->
+
 # Amendment 01: AI Council - Proof G38-100
 
 This document serves as a proof-closing blueprint note for build slice G38-100, addressing the initial data model definition for the AI Council as outlined in `docs/projects/AMENDMENT_01_AI_COUNCIL.md`.

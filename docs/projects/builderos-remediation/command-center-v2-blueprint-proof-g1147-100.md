@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Parsing and Validation Integration (G1147-100) -->
+
 # Blueprint Proof: Command Center V2 - Parsing and Validation Integration (G1147-100)
 
 This document serves as a proof-closing blueprint note for the initial implementation slice of `CommandParser` and `CommandValidator` within the `CommandCenterV2` framework, as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.

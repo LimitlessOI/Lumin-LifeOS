@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BUILDEROS BUILDER LIMITATION REGISTRY -->
+
 # BUILDEROS BUILDER LIMITATION REGISTRY
 
 **Status:** `LIVE — updated from confirmed failures`

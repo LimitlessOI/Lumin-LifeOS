@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: SENTRY future-lookback — structural questions (no council call on hot path).
  * SENTRY future-lookback — structural questions (no council call on hot path).
  */
 

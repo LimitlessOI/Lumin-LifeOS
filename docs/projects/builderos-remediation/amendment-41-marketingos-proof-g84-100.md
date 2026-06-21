@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof-G84-100: User Profile Update Event Emission -->
+
 # AMENDMENT_41_MARKETINGOS Proof-G84-100: User Profile Update Event Emission
 
 This document outlines the proof-closing blueprint note for the `MarketingOS_EngagementEvent_G84_100` event emission, as required by AMENDMENT_41_MARKETINGOS.md.

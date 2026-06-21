@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Dashboard — machine-readable UI map -->
+
 # LifeOS Dashboard — machine-readable UI map
 
 **Status:** Authoritative text map for builder injection when PNG boards cannot be embedded as UTF-8.  

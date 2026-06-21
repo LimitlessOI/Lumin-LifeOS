@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports recordDecision — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-decision.js.
+ */
 export function recordDecision(entry) {
   return {
     type: 'decision',

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G219-100 -->
+
 # Command Center V2 Blueprint Proof - G219-100
 
 ## Blueprint Note: Initial Command Infrastructure

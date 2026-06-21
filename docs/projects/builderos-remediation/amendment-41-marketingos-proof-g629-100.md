@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: MarketingOS Data Ingestion Audit Trail (G629-100) -->
+
 # Proof-Closing Blueprint Note: MarketingOS Data Ingestion Audit Trail (G629-100)
 
 This document serves as the SSOT foundation for closing the proof gap related to verifiable data ingestion within MarketingOS, specifically for campaign performance metrics from external sources.

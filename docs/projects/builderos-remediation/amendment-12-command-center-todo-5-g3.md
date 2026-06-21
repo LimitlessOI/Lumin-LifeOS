@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Todo 5 G3. -->
+
 BuilderOS Remediation: Amendment 12 Command Center - Mobile-Responsive Layout (G3)
 This memo outlines the next buildable slice for implementing mobile responsiveness in the Command Center, addressing the `[safe]` task from `AMENDMENT_12_COMMAND_CENTER.md`.
 

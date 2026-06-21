@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Quick Fix Summary -->
+
 # 🚀 Quick Fix Summary
 
 ## ✅ What I Fixed

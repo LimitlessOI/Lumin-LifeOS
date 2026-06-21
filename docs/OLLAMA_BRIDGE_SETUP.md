@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔗 Ollama Bridge Setup - Connect Your Laptop to AI Counsel OS -->
+
 # 🔗 Ollama Bridge Setup - Connect Your Laptop to AI Counsel OS
 
 ## Quick Start

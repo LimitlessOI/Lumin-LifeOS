@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Note: Amendment 41 MarketingOS Proof (G17-100) -->
+
 # Blueprint Note: Amendment 41 MarketingOS Proof (G17-100)
 
 This document establishes the Single Source of Truth (SSOT) foundation for closing proof gap G17-100 related to Amendment 41 for MarketingOS within the BuilderOS remediation context.

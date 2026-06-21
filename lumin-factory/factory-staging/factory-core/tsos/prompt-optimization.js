@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports promptOptimizationProposal — lumin-factory/factory-staging/factory-core/tsos/prompt-optimization.js.
+ */
 export function promptOptimizationProposal(entry) {
   return {
     proposal_type: 'prompt_optimization',

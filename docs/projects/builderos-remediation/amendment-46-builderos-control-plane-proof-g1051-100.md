@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G1051-100 Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G1051-100 Remediation
 
 This document outlines the remediation plan and proof for closing the implementation gap identified during the OIL verifier rejection for Amendment 46, specifically concerning the BuilderOS control plane wiring in `routes/lifeos-council-builder-routes.js`.

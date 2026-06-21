@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G371 100. -->
+
 Amendment 12 Command Center Proof - G371-100
 This document serves as a proof-closing blueprint note for the initial build slice of Amendment 12, focusing on establishing the foundational data model and a read-only apiEP for BuilderOS operation status.
 1. Exact Missing Implementation or Proof Gap

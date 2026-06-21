@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Preview Site Expiry Cron
  * Preview Site Expiry Cron
  * Deletes preview sites older than 30 days where status != 'converted'
  * Amendment 05 non-negotiable: "Preview sites expire after 30 days unless client converts"

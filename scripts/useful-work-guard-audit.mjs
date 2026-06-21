@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: BuilderOS Phase 01 — Useful-Work-Guard Coverage Audit
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * BuilderOS Phase 01 — Useful-Work-Guard Coverage Audit
  *

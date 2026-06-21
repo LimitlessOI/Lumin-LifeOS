@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-doc-intake.js
  * tc-doc-intake.js
  * Finds executed agreements in Adam's email inbox and routes documents
  * to SkySlope and/or TransactionDesk.

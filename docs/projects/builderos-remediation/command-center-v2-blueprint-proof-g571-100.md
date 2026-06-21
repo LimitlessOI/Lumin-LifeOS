@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G571 100. -->
+
 // docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g571-100.md
 // Complete implementation code
 const PingCommand = {

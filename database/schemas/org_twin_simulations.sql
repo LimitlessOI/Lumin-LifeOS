@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — org_twin_simulations.sql.
 ```sql
 CREATE TABLE org_twin_simulations (
     simulation_id SERIAL PRIMARY KEY,

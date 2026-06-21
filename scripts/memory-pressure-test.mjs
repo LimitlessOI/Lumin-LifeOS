@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Memory Capsule Alpha — Runtime Pressure Test
  * Memory Capsule Alpha — Runtime Pressure Test
  * Executes all 20 MC-BENCH signals from MEMORY_BENCHMARK_CORPUS.md
  * against the actual Neon/Postgres database.

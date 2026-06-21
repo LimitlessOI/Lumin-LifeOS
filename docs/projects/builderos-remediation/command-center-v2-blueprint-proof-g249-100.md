@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof (G249-100) Remediation -->
+
 The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided, preventing derivation of specific implementation details.
 
 # Command Center V2 Blueprint Proof (G249-100) Remediation

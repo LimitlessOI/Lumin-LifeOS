@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G92-G100 -->
+
 # Amendment 19 Project Governance Proof: G92-G100
 
 **Blueprint Source:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

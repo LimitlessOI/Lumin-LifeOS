@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Placeholder for ZK-SNARK proof generation service
+ */
 ```javascript
 // Placeholder for ZK-SNARK proof generation service
 module.exports = {

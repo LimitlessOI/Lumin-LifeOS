@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G806-100 - Core Execution Path -->
+
 # Command Center V2 Blueprint Proof: G806-100 - Core Execution Path
 
 This document serves as a proof-closing note for the initial build slice of the Command Center V2, focusing on establishing the fundamental command execution flow.

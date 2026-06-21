@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Factory Rebuild Manifest v1 -->
+
 # Factory Rebuild Manifest v1
 
 **Purpose:** Rebuild the entire governed factory from scratch — anywhere, anytime — using only this blueprint pack, mission packs, and verification commands. No oral history required.

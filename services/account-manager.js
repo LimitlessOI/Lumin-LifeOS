@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: account-manager.js
  * account-manager.js
  * Encrypted credential vault for all system-managed accounts.
  * Stores and retrieves account credentials from Neon with AES-256-GCM encryption.

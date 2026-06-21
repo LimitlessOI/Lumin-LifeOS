@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 💰 Savings Plan & Open-Source AI Systems Report -->
+
 # 💰 Savings Plan & Open-Source AI Systems Report
 
 ## ✅ MICRO PROTOCOL / LCTP v3 STATUS

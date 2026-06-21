@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 27 — Productized Sprint Offers -->
+
 # AMENDMENT 27 — Productized Sprint Offers
 
 | Field | Value |

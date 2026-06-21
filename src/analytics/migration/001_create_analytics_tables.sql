@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_analytics_tables.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS analytics_events (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G1108 100. -->
+
 Amendment 09: Life Coaching - Proof G1108-100
 
 Blueprint Reference

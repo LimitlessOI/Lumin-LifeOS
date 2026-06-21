@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Lumin / BuilderOS — Founder Governance & Vocabulary Consensus Report -->
+
 # Lumin / BuilderOS — Founder Governance & Vocabulary Consensus Report
 
 **Purpose:** Complete shareable record of 2026-06-09 founder architecture sessions — vocabulary freeze + governance seal.  

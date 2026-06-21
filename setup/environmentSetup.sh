@@ -1,3 +1,4 @@
+# SYNOPSIS: Shell script — EnvironmentSetup.
 ```bash
 #!/bin/bash
 

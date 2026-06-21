@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G639 100. -->
+
 The specification is contradictory: the task explicitly asks to write a `.md` file, but the verifier rejected the previous attempt due to an unknown file extension for `.md`, implying it expected an executable code file. I will proceed with writing the `.md` file as explicitly instructed, detailing the required code changes.
 ---
 Amendment 46: BuilderOS Control Plane Proof - G639-100

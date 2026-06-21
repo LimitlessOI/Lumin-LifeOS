@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20240101000000_create_clients_table.sql.
 CREATE TABLE clients (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,

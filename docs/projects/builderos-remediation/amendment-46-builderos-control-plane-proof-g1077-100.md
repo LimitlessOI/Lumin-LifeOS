@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G1077-100 -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G1077-100
 
 ## Proof-Closing Blueprint Note: Builder Control Plane Wiring

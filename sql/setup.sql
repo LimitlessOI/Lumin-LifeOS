@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup.sql.
 ```sql
 CREATE TABLE health_profiles (
     id SERIAL PRIMARY KEY,

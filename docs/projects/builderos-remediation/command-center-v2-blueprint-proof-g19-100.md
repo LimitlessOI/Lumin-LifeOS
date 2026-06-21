@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G19-100: Core Data Ingestion (Service Status) -->
+
 # Command Center V2 Blueprint Proof - G19-100: Core Data Ingestion (Service Status)
 
 ## Blueprint Note: Next Smallest Build Slice

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — integration/eduToolsIntegrator.js.
+ */
 const lti = require('lti-js');
 
 class EduToolsIntegrator {

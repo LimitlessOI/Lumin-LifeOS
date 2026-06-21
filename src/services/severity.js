@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/severity.js.
+ */
 class SeverityClassifier {
     static classify(score) {
         if (score >= 0.9) return 'high';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: REPO_TRIAGE_NOTES — human verdicts (gold / trash / keep) -->
+
 # REPO_TRIAGE_NOTES — human verdicts (gold / trash / keep)
 
 **Companion to:** `docs/REPO_CATALOG.md` (regenerate with `npm run repo:catalog`)

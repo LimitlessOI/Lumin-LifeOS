@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Todo 2 G11. -->
+
 Amendment 16 Word Keeper - ToDo 2 (G11): 24h Transcript Auto-Purge Confirmation
 This memo outlines the next steps for confirming the implementation of the 24h transcript auto-purge cron job, as required by `docs/projects/AMENDMENT_16_WORD_KEEPER.md`. The blueprint is currently blocked by the unconfirmed status of this cron job.
 ---

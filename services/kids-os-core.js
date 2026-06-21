@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/kids-os-core.js
  * services/kids-os-core.js
  *
  * Kids OS Core — enrollment, win logging, integrity scoring, session tracking,

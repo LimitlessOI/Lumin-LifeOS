@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎯 Complete Motivation & Coaching System -->
+
 # 🎯 Complete Motivation & Coaching System
 
 ## Overview

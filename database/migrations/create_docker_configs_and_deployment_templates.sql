@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_docker_configs_and_deployment_templates.sql.
 ```sql
 CREATE TABLE docker_configs (
     id SERIAL PRIMARY KEY,

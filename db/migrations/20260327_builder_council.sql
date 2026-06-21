@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_builder_council.sql.
 -- ============================================================
 -- Builder Council Review Tables
 -- Amendment: docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md

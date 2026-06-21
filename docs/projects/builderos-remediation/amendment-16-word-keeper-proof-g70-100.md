@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G70-100 Remediation Slice -->
+
 # Amendment 16 Word Keeper Proof - G70-100 Remediation Slice
 
 ## Blueprint Note: Eventing & Integration Foundation

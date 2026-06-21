@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Continuity Index -->
+
 # Continuity Index
 
 **Purpose:** Parallel workstreams no longer share one monolithic `CONTINUITY_LOG.md`. Each lane has its own log so the next agent reads only what matters for that lane.

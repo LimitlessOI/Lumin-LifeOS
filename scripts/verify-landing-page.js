@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Script — Verify Landing Page.
+ */
 import { exec } from 'node:child_process';
 import { access, readFile } from 'node:fs/promises';
 import { constants as fsConstants } from 'node:fs';

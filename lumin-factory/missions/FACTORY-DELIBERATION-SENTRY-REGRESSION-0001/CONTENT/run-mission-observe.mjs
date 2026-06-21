@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Conductor observation — objective FACTORY-DELIBERATION-SENTRY-REGRESSION-0001
  * Conductor observation — objective FACTORY-DELIBERATION-SENTRY-REGRESSION-0001
  * Triggers recovery protocol when strategy forbidden. Minimal interference.
  */

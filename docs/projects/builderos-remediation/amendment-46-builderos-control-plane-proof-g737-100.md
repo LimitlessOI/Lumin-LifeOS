@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof (G737-100) -->
+
 # Amendment 46 BuilderOS Control Plane Proof (G737-100)
 
 This document outlines the remediation plan and proof for the BuilderOS control plane, addressing the requirements from `AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md` and the specific wiring signals for `routes/lifeos-council-builder-routes.js`.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 CREATE TABLE customer_profiles (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100),

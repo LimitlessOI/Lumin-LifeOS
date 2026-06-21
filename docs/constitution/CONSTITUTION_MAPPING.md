@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CONSTITUTION MAPPING -->
+
 # CONSTITUTION MAPPING
 **Phase 1 — Non-destructive. Observation only.**
 **Produced:** 2026-06-13 by Claude Code (read-only pass)

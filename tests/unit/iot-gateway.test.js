@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/unit/iot-gateway.test.js.
+ */
 const { mqttClient } = require('../../services/energy/iot-gateway');
 
 test('MQTT client should connect to broker', (done) => {

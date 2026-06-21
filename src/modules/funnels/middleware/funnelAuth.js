@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/middleware/funnelAuth.js.
+ */
 function funnelAuth(req, res, next) {
     // Placeholder for authentication logic
     if (req.headers.authorization === 'Bearer valid-token') {

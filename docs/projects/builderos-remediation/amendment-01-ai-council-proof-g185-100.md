@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 01 AI Council - Proof G185-100 -->
+
 # BuilderOS Remediation: Amendment 01 AI Council - Proof G185-100
 
 This document serves as a proof-of-concept and initial build slice derivation for `AMENDMENT_01_AI_COUNCIL.md`.

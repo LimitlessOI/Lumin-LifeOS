@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SYSTEM CAPABILITY INVENTORY -->
+
 # SYSTEM CAPABILITY INVENTORY
 **Status:** `AUTHORITATIVE`
 **Produced:** 2026-06-13 by Claude Code (read pass — no runtime code modified)

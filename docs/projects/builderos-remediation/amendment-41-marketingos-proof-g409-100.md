@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G409-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G409-100
 
 This document serves as a proof-closing blueprint note for the remediation of Proof Gap G409-100, as identified in the context of Amendment 41 MarketingOS. This note outlines the exact gap, the smallest safe build slice to address it, the files to touch, verification steps, and stop conditions.

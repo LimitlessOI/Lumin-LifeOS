@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: browser-agent.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  *
  * browser-agent.js

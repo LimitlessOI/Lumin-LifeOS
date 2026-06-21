@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: REPO_DEEP_AUDIT — why things exist, what matters, what to fix or archive -->
+
 # REPO_DEEP_AUDIT — why things exist, what matters, what to fix or archive
 
 **Status:** Living document. **Not** constitutional SSOT law — operational truth-finding.  

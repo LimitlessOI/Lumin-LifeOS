@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — logistics_routes.sql.
 ```sql
 CREATE TABLE logistics_routes (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof Document: G1085-100 - AI Council Initial Definition -->
+
 # Proof Document: G1085-100 - AI Council Initial Definition
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

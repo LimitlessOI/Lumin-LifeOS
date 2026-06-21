@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Site Builder Lane Operator Runbook -->
+
 # Site Builder Lane Operator Runbook
 
 This runbook outlines the essential procedures for operating and monitoring the Site Builder lane, covering prerequisites, daily checks, live smoke testing, critical failure conditions, and the end-to-end first-customer path.

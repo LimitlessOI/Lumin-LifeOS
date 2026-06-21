@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G36-100 -->
+
 # Amendment 01: AI Council - Proof G36-100
 
 ## Proof-Closing Blueprint Note

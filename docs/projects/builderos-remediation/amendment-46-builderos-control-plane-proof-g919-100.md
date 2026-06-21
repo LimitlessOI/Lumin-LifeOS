@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G919 100. -->
+
 The task asks for a markdown document, but the verifier expects a JavaScript module at the target path, leading to a contradiction.
 ```javascript
 // docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g919-100.md

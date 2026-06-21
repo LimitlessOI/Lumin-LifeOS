@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G13 100. -->
+
 Amendment 41 MarketingOS Proof - G13-100: User Consent Synchronization
 This document serves as a proof-closing blueprint note for Amendment 41, establishing the SSOT foundation for user consent synchronization between LifeOS and MarketingOS.
 

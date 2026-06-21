@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: careerAI.js
+ */
 ```javascript
 // careerAI.js
 // This module simulates career trajectories.

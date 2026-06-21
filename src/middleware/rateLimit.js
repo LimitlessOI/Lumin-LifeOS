@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/rateLimit.js.
+ */
 const rateLimit = require('express-rate-limit');
 
 module.exports = rateLimit({

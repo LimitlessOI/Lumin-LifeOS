@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: seed-lessons-learned.mjs
  * seed-lessons-learned.mjs
  *
  * S2 — Memory Bootstrap. Seeds lessons_learned from real repair-loop receipts,

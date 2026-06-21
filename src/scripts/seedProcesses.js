@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/scripts/seedProcesses.js.
+ */
 ```javascript
 const sequelize = require('../config/database');
 const Process = require('../models/Process');

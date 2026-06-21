@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Resolver for overdue / open MIT rows (daily_mits table).
  * Resolver for overdue / open MIT rows (daily_mits table).
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Launch Checklist -->
+
 # Launch Checklist
 
 - [ ] Change MAX_DAILY_SPEND to 50 in Railway

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_generated_routes.sql.
 ```sql
 CREATE TABLE generated_routes (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G241 100. -->
+
 ### AMENDMENT_46_BUILDEROS_CONTROL_PLANE Proof-Closing Note: G241-100
 
 **1. Exact Missing Implementation or Proof Gap:**

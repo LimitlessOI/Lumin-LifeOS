@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231015_create_tables.sql.
 ```sql
 CREATE TABLE digital_twins (
   id SERIAL PRIMARY KEY,

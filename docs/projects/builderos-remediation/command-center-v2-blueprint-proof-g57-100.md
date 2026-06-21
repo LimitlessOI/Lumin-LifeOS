@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G57-100 Remediation Note -->
+
 The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided, making direct derivation of the build slice impossible.
 # Command Center V2 Blueprint Proof - G57-100 Remediation Note
 

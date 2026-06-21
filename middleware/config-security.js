@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Config Security Middleware — logs a warning via Winston whenever a request
  * Config Security Middleware — logs a warning via Winston whenever a request
  * path contains the substring '/sensitive', flagging potential sensitive-data access.
  *

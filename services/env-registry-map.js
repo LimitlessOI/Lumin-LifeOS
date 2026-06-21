@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: env-registry-map.js
  * env-registry-map.js
  * Machine-readable version of docs/ENV_REGISTRY.md
  * Single source of truth for every env var the system uses.

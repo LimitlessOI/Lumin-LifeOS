@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — docker-compose.voting.yml.
 ```yaml
 version: '2'
 

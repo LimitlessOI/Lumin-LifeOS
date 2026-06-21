@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G62 100. -->
+
 The target file path `docs/projects/builderos-remediation/amendment-14-white-label-proof-g62-100.md` implies a markdown document, but the OIL verifier rejection (`ERR_UNKNOWN_FILE_EXTENSION` when attempting to execute it) indicates it expects executable JavaScript.
 ```javascript
 // docs/projects/builderos-remediation/amendment-14-white-label-proof-g62-100.md

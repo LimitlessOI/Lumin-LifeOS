@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G800 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof (G800-100)
 Blueprint Note for C2 Build Pass
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G42 100. -->
+
 ### Proof-Closing Blueprint Note: G42-100 - Core Command Definition
 
 This note addresses the foundational element required for the `CommandCenter` to function: the definition of a `Command`. Without a clear `Command` interface and a base implementation, the `CommandCenter` cannot manage or execute operations.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 09 — Life Coaching / Personal OS + Digital Twin -->
+
 # AMENDMENT 09 — Life Coaching / Personal OS + Digital Twin
 **Status:** LIVE (local use) | Digital Twin: OPERATIONAL
 **Authority:** Subordinate to SSOT North Star Constitution

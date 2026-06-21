@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: System authority layers — read before choosing where to edit -->
+
 # System authority layers — read before choosing where to edit
 
 **Purpose:** One definition of repo truth layers so cold agents do not extend the wrong system.

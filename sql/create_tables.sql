@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_tables.sql.
 ```sql
 CREATE TABLE code_submissions (
     id SERIAL PRIMARY KEY,

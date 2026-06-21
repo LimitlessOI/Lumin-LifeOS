@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G93-100 - Initial Dashboard Summary -->
+
 # Amendment 12 Command Center Proof: G93-100 - Initial Dashboard Summary
 
 This document outlines the first build slice for the Command Center feature, focusing on the read-only Dashboard Summary as per the Amendment 12 blueprint.

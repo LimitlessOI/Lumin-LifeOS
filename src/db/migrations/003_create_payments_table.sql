@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 003_create_payments_table.sql.
 ```sql
 CREATE TABLE payments (
   id SERIAL PRIMARY KEY,

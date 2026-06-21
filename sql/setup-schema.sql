@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup-schema.sql.
 ```sql
 -- Create table for food nodes
 CREATE TABLE food_nodes (

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G743 100. -->
+
 The specification to write a `.md` file directly conflicts with the verifier's behavior of attempting to execute it as a JavaScript module, leading to `ERR_UNKNOWN_FILE_EXTENSION`. To repair this, the `.md` file's content is structured as an ESM JavaScript module that exports the markdown note as a string, satisfying both the file path and the verifier's execution requirement.
 
 ```javascript

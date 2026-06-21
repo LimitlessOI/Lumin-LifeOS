@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G95-100 -->
+
 # Amendment 19 Project Governance Proof: G95-100
 
 This document serves as a proof-closing blueprint note for governance clauses G95-100 of Amendment 19, focusing on the finalization and archival aspects of project governance.

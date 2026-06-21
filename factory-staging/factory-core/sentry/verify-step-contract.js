@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports loadAcceptanceTestsForMission — factory-staging/factory-core/sentry/verify-step-contract.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

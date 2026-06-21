@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G645-100 -->
+
 # Amendment 41: MarketingOS Proof - G645-100
 
 ## Proof-Closing Blueprint Note: Marketing Consent Synchronization

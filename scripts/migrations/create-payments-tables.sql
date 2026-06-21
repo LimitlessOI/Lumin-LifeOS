@@ -1,3 +1,4 @@
+-- SYNOPSIS: Script — Create Payments Tables.
 ```sql
 CREATE TABLE payments (
     id SERIAL PRIMARY KEY,

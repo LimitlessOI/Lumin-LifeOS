@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports recordOutcome — factory-staging/factory-core/historian/record-outcome.js.
+ */
 export function recordOutcome(entry) {
   return {
     type: 'outcome',

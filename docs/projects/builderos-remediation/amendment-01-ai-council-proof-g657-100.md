@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G657 100. -->
+
 The instruction to "Generate the complete implementation code. Output ONLY the code first" is contradictory when the target file is a `.md` document and the verifier error indicates it was treated as executable code. I will provide the complete Markdown content as the "code" and then the blueprint note.
 
 Proof: Amendment 01 AI Council - Initial Member Data Model (G657-100)

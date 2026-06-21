@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G97-100: Build Lifecycle Wiring -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G97-100: Build Lifecycle Wiring
 
 ## Proof-Closing Blueprint Note

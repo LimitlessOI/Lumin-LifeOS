@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-intake-workspace-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-intake-workspace-service.js
  * Agent-facing workspace for TC access readiness, inbox triage, and

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G903-100 Remediation -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, preventing grounding the output in its specific content. Assumptions have been made regarding the nature of "Amendment 12 Command Center" within BuilderOS.
 ---
 # Amendment 12 Command Center Proof - G903-100 Remediation

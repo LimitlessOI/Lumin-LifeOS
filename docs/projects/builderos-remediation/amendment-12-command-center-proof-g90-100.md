@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G90 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G90-100 Closure
 This document serves as a proof-closing blueprint note for the completion of G90 (Advanced Features - Automation & Scripting) and G100 (Advanced Features - Predictive Analytics Integration) as per the AMENDMENT_12_COMMAND_CENTER blueprint.
 ---

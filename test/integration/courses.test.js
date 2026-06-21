@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — test/integration/courses.test.js.
+ */
 const request = require('supertest');
 const express = require('express');
 const courseController = require('../../src/controllers/courseController');

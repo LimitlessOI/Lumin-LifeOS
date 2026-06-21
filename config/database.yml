@@ -1,3 +1,4 @@
+# SYNOPSIS: Configuration — Database.
 ```yaml
 default: &default
   adapter: postgresql

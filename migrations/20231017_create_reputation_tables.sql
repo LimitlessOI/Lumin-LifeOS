@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231017_create_reputation_tables.sql.
 ```sql
 CREATE TABLE reputation_profiles (
     id SERIAL PRIMARY KEY,

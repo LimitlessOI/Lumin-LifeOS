@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G393 100. -->
+
 Amendment 09: Life Coaching - Proof G393-100
 Blueprint Note: Initial LifeCoachingSession Model Definition
 This document serves as a proof-closing blueprint note for the initial build slice of Amendment 09, focusing on establishing the foundational data model for Life Coaching sessions.

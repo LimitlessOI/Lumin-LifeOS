@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof G1151-100: Marketing Event Stream Endpoint -->
+
 # Amendment 41 MarketingOS Proof G1151-100: Marketing Event Stream Endpoint
 
 This document serves as a proof-closing blueprint note for a critical implementation gap identified in Amendment 41, specifically concerning the foundational data stream for MarketingOS.

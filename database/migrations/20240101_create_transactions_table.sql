@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20240101_create_transactions_table.sql.
 ```sql
 CREATE TABLE transactions (
     id SERIAL PRIMARY KEY,

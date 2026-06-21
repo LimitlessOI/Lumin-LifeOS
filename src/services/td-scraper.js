@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: TD Scraper Service
+ */
 // TD Scraper Service
 
 export const scrapePageData = () => {

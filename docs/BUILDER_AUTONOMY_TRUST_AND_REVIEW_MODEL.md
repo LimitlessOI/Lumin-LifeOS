@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder autonomy — trust ramp and review model (operator vision vs today) -->
+
 # Builder autonomy — trust ramp and review model (operator vision vs today)
 
 **Purpose:** Align Adam’s intent (“~7 h highest-priority backlog, council extends when drained, **no promotion until reviewed**, trust earns autonomy”) with **what the codebase does today** and **what still needs platform work**.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 07 — Video Pipeline -->
+
 # AMENDMENT 07 — Video Pipeline
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution

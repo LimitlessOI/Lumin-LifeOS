@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/UserProfilingService.test.js.
+ */
 ```javascript
 const UserProfilingService = require('../src/services/commerce/UserProfilingService');
 const { pool } = require('../src/config/dbConfig');

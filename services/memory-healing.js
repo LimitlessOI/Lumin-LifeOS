@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/memory-healing.js
  * services/memory-healing.js
  *
  * LifeOS Memory & Healing — therapeutic AI assistance for grief, regression,

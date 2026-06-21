@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: MarketingOS Campaign Performance Integration (G24-100) -->
+
 # Proof-Closing Blueprint Note: MarketingOS Campaign Performance Integration (G24-100)
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap related to MarketingOS integration, specifically focusing on campaign performance data.

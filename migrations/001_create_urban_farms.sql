@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_urban_farms.sql.
 CREATE TABLE urban_farms (
     id SERIAL PRIMARY KEY,
     skyscraper_name VARCHAR(255) NOT NULL,

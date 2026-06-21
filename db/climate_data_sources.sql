@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — climate_data_sources.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS climate_data_sources (
     id SERIAL PRIMARY KEY,

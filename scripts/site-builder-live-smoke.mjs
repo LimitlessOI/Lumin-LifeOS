@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Live remote smoke for Site Builder.
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * Live remote smoke for Site Builder.
  *

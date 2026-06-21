@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: coachingTips.js
+ */
 // coachingTips.js
 module.exports.getTips = (analysis) => {
     const tips = [];

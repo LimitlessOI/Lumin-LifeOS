@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231024000001_create_ai_models_table.sql.
 ```sql
 CREATE TABLE ai_models (
     id SERIAL PRIMARY KEY,

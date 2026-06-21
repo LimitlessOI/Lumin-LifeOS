@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G90 100. -->
+
 The instruction to "Generate the complete implementation code" contradicts the target file type (`.md`) and the verifier's expectation to execute it as JavaScript. Assuming the primary intent is to complete the `.md` document with the requested blueprint note content, the problematic meta-instruction within the existing `.md` file will be replaced.
 
 ```markdown

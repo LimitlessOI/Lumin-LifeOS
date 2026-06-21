@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260526_self_repair_memory_recovery.sql.
 -- Third attempt to create self_repair_memory_events.
 -- Prior migrations (20260524_self_repair_memory_events.sql and
 -- 20260524_self_repair_memory_events_fix.sql) both failed on Railway and were

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 20231026 Add Asip Tables.
 ```sql
 CREATE TABLE supply_chain_assets (
     id SERIAL PRIMARY KEY,

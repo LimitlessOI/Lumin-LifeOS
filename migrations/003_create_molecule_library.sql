@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 003_create_molecule_library.sql.
 CREATE TABLE molecule_library (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,

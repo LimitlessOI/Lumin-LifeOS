@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Phase 4 — Rank meta list (**M01–M25**, best → worst) -->
+
 # Phase 4 — Rank meta list (**M01–M25**, best → worst)
 
 **Participant:** Conductor / IDE session (same caveat as Phase 2).

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G25 100. -->
+
 Amendment 01 AI Council - Proof G25-100
 Blueprint Note: Proof-Closing for G25-100
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Verify deliberation governance v2.7 — validation + optional DB smoke.
  * Verify deliberation governance v2.7 — validation + optional DB smoke.
  * Usage: node scripts/verify-deliberation-governance.mjs
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md

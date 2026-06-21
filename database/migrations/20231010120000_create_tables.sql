@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231010120000_create_tables.sql.
 CREATE TABLE organizations (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL

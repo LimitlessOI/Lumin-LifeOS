@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ts — tests/auth/auth.test.ts.
+ */
 ```typescript
 import request from 'supertest';
 import app from '../../src/app'; // Assume Express app is exported from this module

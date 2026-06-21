@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/clients/client.controller.js.
+ */
 ```javascript
 const ClientService = require('./client.service');
 const { validationResult } = require('express-validator');

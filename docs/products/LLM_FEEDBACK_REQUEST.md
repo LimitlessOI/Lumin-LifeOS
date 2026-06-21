@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LLM Feedback Request - AI Counsel OS Product Specification -->
+
 # LLM Feedback Request - AI Counsel OS Product Specification
 
 ## Context

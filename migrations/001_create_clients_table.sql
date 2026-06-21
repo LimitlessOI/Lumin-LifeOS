@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_clients_table.sql.
 ```sql
 CREATE TABLE clients (
   id SERIAL PRIMARY KEY,

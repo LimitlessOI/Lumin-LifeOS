@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/sms-alerts.js.
+ */
 const smsService = require('some-sms-library');
 
 async function sendAlert(recipient, message) {

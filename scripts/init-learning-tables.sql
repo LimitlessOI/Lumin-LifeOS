@@ -1,3 +1,4 @@
+-- SYNOPSIS: Script — Init Learning Tables.
 ```sql
 CREATE TABLE learning_profiles (
     id SERIAL PRIMARY KEY,

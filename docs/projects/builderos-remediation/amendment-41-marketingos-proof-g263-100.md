@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G263-100 - SSOT Foundation for User Engagement Scores -->
+
 # Amendment 41: MarketingOS Proof G263-100 - SSOT Foundation for User Engagement Scores
 
 ## 1. Exact Missing Implementation or Proof Gap

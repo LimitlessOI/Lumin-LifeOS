@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Configuration — Gdpr Compliance.
+ */
 ```javascript
 module.exports = {
     dataRetentionPeriod: 365, // days

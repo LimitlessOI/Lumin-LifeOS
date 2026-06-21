@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/businessTasksService.js.
+ */
 ```javascript
 const BusinessTasksRepository = require('../repositories/businessTasksRepository');
 

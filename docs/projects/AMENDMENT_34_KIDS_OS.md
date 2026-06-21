@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_34: Kids OS -->
+
 # AMENDMENT_34: Kids OS
 
 **Status:** In Progress — Foundation Build Complete

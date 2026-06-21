@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 ```sql
 CREATE TABLE health_twins (
     id SERIAL PRIMARY KEY,

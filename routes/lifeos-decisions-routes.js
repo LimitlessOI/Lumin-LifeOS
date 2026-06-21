@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-decisions-routes.js
  * routes/lifeos-decisions-routes.js
  *
  * Decision Intelligence API — Ideas 5-8

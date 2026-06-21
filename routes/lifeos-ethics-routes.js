@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-ethics-routes.js
  * routes/lifeos-ethics-routes.js
  *
  * LifeOS Phase 8 — Data Ethics + Sovereignty API

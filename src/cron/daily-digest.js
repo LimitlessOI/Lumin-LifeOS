@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: daily-digest.js
+ */
 // daily-digest.js
 const cron = require('node-cron');
 const { sendDigestSMS } = require('../services/digest-generator');

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 📁 File Upload, Knowledge Base & Cleanup System - Complete Summary -->
+
 # 📁 File Upload, Knowledge Base & Cleanup System - Complete Summary
 
 ## ✅ What Was Built

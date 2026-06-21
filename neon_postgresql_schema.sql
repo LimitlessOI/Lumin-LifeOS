@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — neon_postgresql_schema.sql.
 ```sql
 CREATE TABLE urban_metrics (
     id SERIAL PRIMARY KEY,

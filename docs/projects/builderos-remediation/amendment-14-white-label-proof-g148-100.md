@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G148-100 Verification -->
+
 # Amendment 14 White-Label Proof: G148-100 Verification
 
 **Blueprint Note: Proof-Closing Build Slice for G148-100 White-Label Configuration**

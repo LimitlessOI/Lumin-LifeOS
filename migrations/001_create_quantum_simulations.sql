@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_quantum_simulations.sql.
 CREATE TABLE quantum_simulations (
     id SERIAL PRIMARY KEY,
     job_id VARCHAR(255) NOT NULL,

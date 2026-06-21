@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G427 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G427-100
 Blueprint Note: Core Service & DB Foundation
 

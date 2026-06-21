@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/execution_gate.test.js.
+ */
 import assert from 'assert';
 import { evaluateExecutionGate } from '../audit/gating/execution_gate.js';
 

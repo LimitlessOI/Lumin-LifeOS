@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G63-100 Blueprint Note -->
+
 The source blueprint `docs/projects/AMENDMENT_41_MARKETINGOS.md` was not provided, requiring inference of its specific content regarding MarketingOS integration.
 ---
 # Amendment 41: MarketingOS Proof G63-100 Blueprint Note

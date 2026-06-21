@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: System Coverage Report — Token Accounting Reality Audit -->
+
 # System Coverage Report — Token Accounting Reality Audit
 
 **Date:** 2026-05-24  

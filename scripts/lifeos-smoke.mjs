@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: scripts/lifeos-smoke.mjs
  * scripts/lifeos-smoke.mjs
  * Lightweight LifeOS surface verifier:
  * - checks shell-linked pages exist

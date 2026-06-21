@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Memory Authority Map -->
+
 # Memory Authority Map
 
 Historian preserves:

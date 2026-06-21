@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: Script — Discovery Run.
+ */
 import "dotenv/config";
 import fs from "node:fs/promises";
 import path from "node:path";

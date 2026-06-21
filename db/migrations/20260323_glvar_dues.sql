@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260323_glvar_dues.sql.
 -- GLVAR Membership Dues Monitoring
 -- Stores scraped dues items and tracks reminder history
 

@@ -1,5 +1,5 @@
 /**
- * Founder Value Engine v0 — ranks work by founder-visible impact.
+ * SYNOPSIS: Founder Value Engine v0 — ranks work by founder-visible impact.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * @ssot docs/architecture/BUILDEROS_CONTINUOUS_AUDIT_TO_EXCELLENCE_PROTOCOL.md
  */

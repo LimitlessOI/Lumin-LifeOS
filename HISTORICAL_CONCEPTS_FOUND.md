@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔍 Historical Concepts Found in server.js Git History -->
+
 # 🔍 Historical Concepts Found in server.js Git History
 
 ## Analysis of Lost/Forgotten Features

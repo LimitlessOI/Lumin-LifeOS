@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — migration.sql.
 ```sql
 CREATE TABLE market_analyses (
     id SERIAL PRIMARY KEY,

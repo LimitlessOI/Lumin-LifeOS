@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: V2 ARC entry gate — pre-handoff (strict) vs corridor (post-handoff, no intent re-litigation).
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';

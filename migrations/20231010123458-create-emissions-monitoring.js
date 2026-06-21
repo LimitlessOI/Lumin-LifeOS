@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 20231010123458-create-emissions-monitoring.js.
+ */
 ```javascript
 'use strict';
 

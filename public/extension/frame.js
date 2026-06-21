@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: public/extension/frame.js — Lumin Universal Overlay
  * public/extension/frame.js — Lumin Universal Overlay
  *
  * Runs INSIDE the iframe injected by content.js.

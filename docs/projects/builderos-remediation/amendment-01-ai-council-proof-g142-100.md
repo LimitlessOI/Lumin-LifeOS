@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof Point G142-100: Initial AI Council Structure and Charter Definition -->
+
 # Proof Point G142-100: Initial AI Council Structure and Charter Definition
 
 This document serves as a proof point for the implementation of `AMENDMENT_01_AI_COUNCIL.md`, specifically addressing the foundational step of defining the AI Council's initial structure and charter.

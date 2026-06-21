@@ -1,5 +1,5 @@
 /**
- * Founder Intent / Adam Filter — pre-escalation check (measurement only; never assigns work).
+ * SYNOPSIS: Founder Intent / Adam Filter — pre-escalation check (measurement only; never assigns work).
  */
 
 export function runAdamFilter({ founder_packet: packet, product_development: pd, strict = false } = {}) {

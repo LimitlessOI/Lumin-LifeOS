@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Operator corpus — dual-lane checklist + optional keyword index.
  * Operator corpus — dual-lane checklist + optional keyword index.
  *
  * - Lane A (ideas): Amendment 38 — vault, INDEX, machine keyword map.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G381 100. -->
+
 The specification is contradictory: the task asks to write a `.md` file, but the verifier rejects `.md` files by attempting to execute them as JS, making a successful "repair" impossible solely through content modification.
 
 Command Center V2 Blueprint Proof: G381-100 - Initial Command Status Readout

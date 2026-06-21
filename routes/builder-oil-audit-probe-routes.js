@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/builder-oil-audit-probe-routes.js
  * routes/builder-oil-audit-probe-routes.js
  *
  * OIL-only audit probes — run inside Railway with runtime secrets.

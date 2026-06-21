@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/mediation-engine.js
  * services/mediation-engine.js
  *
  * LifeOS Mediation Engine — consent-first AI conflict facilitation.

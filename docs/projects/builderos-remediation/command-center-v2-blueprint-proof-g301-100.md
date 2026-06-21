@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G301-100 - Core Command Service Stub -->
+
 # Command Center V2 Blueprint Proof: G301-100 - Core Command Service Stub
 
 This document outlines the first proof-of-concept build slice for the Command Center V2 re-platforming, focusing on establishing the foundational `command-service`. This proof aims to validate the basic deployment and request-response cycle of the new service, without full business logic or data persistence.

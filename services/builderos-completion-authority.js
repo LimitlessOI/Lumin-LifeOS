@@ -1,5 +1,5 @@
 /**
- * BuilderOS completion authority — single terminal completion grant for /builder/build.
+ * SYNOPSIS: BuilderOS completion authority — single terminal completion grant for /builder/build.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

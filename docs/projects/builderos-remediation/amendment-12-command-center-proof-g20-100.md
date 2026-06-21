@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G20 100. -->
+
 ASSUMPTIONS:
 1.  The "Command Center" initiative, for which G20 was a proof slice, requires a foundational data model for `Command` entities to progress.
 2.  Standard BuilderOS internal file structure includes `src/builder-os/schemas`, `src/builder-os/models`, and `src/builder-os/tests` for defining data structures, their implementations, and associated unit tests, respectively.

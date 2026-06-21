@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-habits.js
  * services/lifeos-habits.js
  *
  * Identity-framed recurring habit tracker.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Integration - Proof G63-100 -->
+
 # Amendment 09: Life Coaching Integration - Proof G63-100
 
 ## Blueprint Note: Next Smallest Build Slice

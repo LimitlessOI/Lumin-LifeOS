@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Global Error Boundary
  * Global Error Boundary
  * Catches any unhandled Express errors and returns safe JSON responses.
  * Never exposes stack traces in production.

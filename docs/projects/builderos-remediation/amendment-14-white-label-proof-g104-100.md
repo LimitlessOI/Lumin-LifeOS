@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White Label Proof - G104-100 Remediation -->
+
 # Amendment 14: White Label Proof - G104-100 Remediation
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_14_WHITE_LABEL.md`

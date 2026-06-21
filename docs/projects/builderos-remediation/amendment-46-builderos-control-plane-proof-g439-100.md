@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G439-100 Remediation Note -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G439-100 Remediation Note
 
 **Source Blueprint:** `docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md`

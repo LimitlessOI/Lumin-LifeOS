@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231030_create_code_review_tables.sql.
 ```sql
 CREATE TABLE code_reviews (
     id SERIAL PRIMARY KEY,

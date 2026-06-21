@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Get or create agent progression record
+ */
 // src/services/coaching-progression.js
 // Manages agent progression from new agent to top performer
 

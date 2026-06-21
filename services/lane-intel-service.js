@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Horizon + Red-team intel lanes (Amendment 36 MVP).
  * Horizon + Red-team intel lanes (Amendment 36 MVP).
  *
  * Horizon: web search (Brave / Perplexity) + optional council synthesis; Zero-Waste cooldown.

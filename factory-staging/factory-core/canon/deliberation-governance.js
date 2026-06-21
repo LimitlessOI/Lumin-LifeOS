@@ -1,5 +1,5 @@
 /**
- * Deliberation governance v2.7 — constants and validation helpers.
+ * SYNOPSIS: Deliberation governance v2.7 — constants and validation helpers.
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
  */
 

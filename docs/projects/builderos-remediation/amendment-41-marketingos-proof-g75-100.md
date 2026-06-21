@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G75-100 (SSOT Foundation) -->
+
 # Amendment 41: MarketingOS Proof - G75-100 (SSOT Foundation)
 
 ## Proof-Closing Blueprint Note

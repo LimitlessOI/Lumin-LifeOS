@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: scripts/alpha-loop-stress-test.mjs
  * scripts/alpha-loop-stress-test.mjs
  * Phase 15 — BuilderOS alpha loop stress test.
  *

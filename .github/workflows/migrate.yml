@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/migrate.yml.
 ```yaml
 name: Migrate Database
 

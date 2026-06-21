@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Command Center V2 Blueprint - Phase 3 (E, G, I, J) -->
+
 # BuilderOS Remediation: Command Center V2 Blueprint - Phase 3 (E, G, I, J)
 
 **Reason for Remediation:** Unchecked blueprint task remains open, specifically regarding the precise data contract for core operational entities.

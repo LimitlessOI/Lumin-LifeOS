@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — TCO ANNEX. -->
+
 SSOT ANNEX — TOTALCOSTOPTIMIZER (TCO)
 Version: 2026-03-21
 Status: Canonical Annex (referenced by North Star; does not override Constitution)

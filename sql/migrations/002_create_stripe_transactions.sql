@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_stripe_transactions.sql.
 ```sql
 CREATE TABLE stripe_transactions (
   id SERIAL PRIMARY KEY,

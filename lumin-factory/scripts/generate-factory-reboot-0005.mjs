@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Generate FACTORY-REBOOT-0005 mission pack (live execute-step wiring). */
+/**
+ * SYNOPSIS: Generate FACTORY-REBOOT-0005 mission pack (live execute-step wiring). Generate FACTORY-REBOOT-0005 mission pack (live execute-step wiring). */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

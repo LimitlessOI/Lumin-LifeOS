@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G257 100. -->
+
 The specification is contradictory. The task asks to "Write docs/projects/builderos-remediation/amendment-12-command-center-proof-g257-100.md" and provides existing content for this `.md` file. However, the `OIL VERIFIER REJECTION` indicates that the BuilderOS system is attempting to execute this `.md` file as a Node.js module, leading to a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]`. Simultaneously, the existing `.md` content contains an instruction: "INSTRUCTION: Generate the complete implementation code. Output ONLY the code first — no explanation before the code block." This instruction, if interpreted literally for the output, would mean replacing the markdown file with code, which contradicts the target file path.
 
 Given the `ERR_UNKNOWN_FILE_EXTENSION`

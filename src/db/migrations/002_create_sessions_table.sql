@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 002_create_sessions_table.sql.
 ```sql
 CREATE TABLE user_sessions (
   id SERIAL PRIMARY KEY,

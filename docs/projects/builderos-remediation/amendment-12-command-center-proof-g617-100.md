@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G617 100. -->
+
 The specification contains contradictory instructions regarding the expected output format (markdown file content vs. implementation code) and the target file path.
 ```typescript
 // src/c2/interfaces/telemetry.ts

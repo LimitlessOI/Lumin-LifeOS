@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Coordinator.
+ */
 ```javascript
 const EventEmitter = require('events');
 

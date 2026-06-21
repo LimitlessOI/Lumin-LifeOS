@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/capsule-storage.js.
+ */
 const db = require('../db');
 
 const createCapsule = async (title, content, category) => {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G140-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G140-100
 
 ## Blueprint Note: Command Center API Endpoints (G140)

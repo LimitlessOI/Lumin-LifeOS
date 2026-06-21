@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G110-100 -->
+
 # Amendment 16 Word Keeper Proof - G110-100
 
 This document serves as a proof-closing blueprint note for the G110-100 build slice of Amendment 16: Word Keeper.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G1108-100 - Initial Route & Shell -->
+
 # Command Center V2 Blueprint Proof: G1108-100 - Initial Route & Shell
 
 This proof document outlines the first minimal build slice for Command Center V2, focusing on establishing the core routing and a placeholder UI shell. This validates the foundational integration points without implementing any specific features.

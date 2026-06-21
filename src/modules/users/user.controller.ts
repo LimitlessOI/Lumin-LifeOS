@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ts — src/modules/users/user.controller.ts.
+ */
 ```typescript
 import express from 'express';
 import { registerUser, loginUser } from './user.service';

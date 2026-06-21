@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G389 100. -->
+
 Amendment 12: Command Center - Proof G389-100 Follow-Through
 This document outlines the next smallest build slice for the Amendment 12 Command Center, following the completion of initial core module definition (assumed to be covered by G389-100).
 ---

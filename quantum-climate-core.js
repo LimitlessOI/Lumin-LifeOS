@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — quantum-climate-core.js.
+ */
 ```javascript
 const { QuantumCircuit } = require('qiskit');
 const { execute } = require('ibm-quantum');

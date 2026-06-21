@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Verifies LifeOS dashboard visual SSOT is present on disk and queue targets stay grounded.
  * Verifies LifeOS dashboard visual SSOT is present on disk and queue targets stay grounded.
  * No network. Used by CI / compliance-officer / pre-queue sanity.
  *

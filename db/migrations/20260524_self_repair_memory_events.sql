@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260524_self_repair_memory_events.sql.
 -- db/migrations/20260524_self_repair_memory_events.sql
 
 BEGIN;

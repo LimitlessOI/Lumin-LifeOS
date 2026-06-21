@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Stripe Integration (conservation/legacy) — creates Stripe charges using a
  * Stripe Integration (conservation/legacy) — creates Stripe charges using a
  * hardcoded test key placeholder. Used for conservation-domain charge flows.
  *

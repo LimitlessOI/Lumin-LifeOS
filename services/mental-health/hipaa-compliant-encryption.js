@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Hipaa Compliant Encryption.
+ */
 ```javascript
 const CryptoJS = require('crypto-js');
 

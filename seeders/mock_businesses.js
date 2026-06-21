@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — seeders/mock_businesses.js.
+ */
 const faker = require('faker');
 const OutreachLead = require('../models/outreachLead');
 

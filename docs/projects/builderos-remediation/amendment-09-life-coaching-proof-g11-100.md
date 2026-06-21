@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G11 100. -->
+
 The task specifies writing to a `.md` file, but the OIL verifier rejects `.md` files by attempting to execute them as JavaScript. The output reconciles this by providing valid JavaScript content for the `.md` file.
 ```javascript
 // docs/projects/builderos-remediation/amendment-09-life-coaching-proof-g11-100.md

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: seed-epistemic-facts.mjs
  * seed-epistemic-facts.mjs
  *
  * Seeds the epistemic_facts table from existing SSOT sources:

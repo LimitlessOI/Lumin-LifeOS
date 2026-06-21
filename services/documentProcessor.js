@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Document Processor — extracts text from PDF buffers via pdf-parse and
  * Document Processor — extracts text from PDF buffers via pdf-parse and
  * tokenizes/stems the result using the natural NLP library.
  *

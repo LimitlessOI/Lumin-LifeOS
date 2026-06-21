@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/council-parallel-review.js.
+ */
 const logReviewDecision = (prId, decision) => {
     console.log(`PR ${prId} reviewed with decision: ${decision}`);
 };

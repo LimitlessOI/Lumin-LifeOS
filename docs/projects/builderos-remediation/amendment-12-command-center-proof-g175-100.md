@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G175-100 -->
+
 # Amendment 12: Command Center - Proof G175-100
 
 This document outlines the first proof-of-concept build slice for the Amendment 12 Command Center, focusing on establishing the core command definition and execution flow.

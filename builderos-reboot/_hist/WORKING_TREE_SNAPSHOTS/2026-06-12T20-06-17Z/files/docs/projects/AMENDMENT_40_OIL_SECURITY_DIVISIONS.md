@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: OIL Security Divisions -->
+
 # OIL Security Divisions
 _(formerly AMENDMENT_40_OIL_SECURITY_DIVISIONS.md)_
 

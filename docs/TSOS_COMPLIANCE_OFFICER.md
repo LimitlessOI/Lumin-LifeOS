@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Platform Compliance Officer (“sheriff” pass) -->
+
 # Platform Compliance Officer (“sheriff” pass)
 
 **Also:** `npm run tsos:compliance-officer` / `npm run compliance-officer` / `npm run lifeos:compliance-officer` (same script).

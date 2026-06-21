@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G132-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G132-100
 
 This document serves as the SSOT foundation for proving the correct implementation and data flow for user marketing consent propagation as defined by AMENDMENT_41_MARKETINGOS.

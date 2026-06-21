@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G529 100. -->
+
 ### Proof-Closing Blueprint Note: g529-100 - CommandCenterService Core Definition
 
 This note closes the initial proof for the `CommandCenterService` core definition, establishing its foundational structure and a minimal in-memory task queuing mechanism as per Amendment 12, Phase 1.

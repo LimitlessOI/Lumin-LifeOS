@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema.sql.
 ```sql
 CREATE TABLE clients (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

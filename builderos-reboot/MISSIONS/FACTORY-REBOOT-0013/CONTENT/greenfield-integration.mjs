@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Integration test: greenfield exact_content step via dispatchExecuteStep. */
+/**
+ * SYNOPSIS: Integration test: greenfield exact_content step via dispatchExecuteStep. Integration test: greenfield exact_content step via dispatchExecuteStep. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { repoRootFromScriptMeta, detectFactoryLayout } from './factory-repo-layout.mjs';

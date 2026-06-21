@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Deliberation governance API — v2.7 CnclRoster, scorecard, Hist, CFO, gate, consensus.
  * Deliberation governance API — v2.7 CnclRoster, scorecard, Hist, CFO, gate, consensus.
  *
  * Base: /api/v1/lifeos/deliberation

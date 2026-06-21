@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G24 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G24-100
 Blueprint Note: Initial Service & API Endpoint Proof
 

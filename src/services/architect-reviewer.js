@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: src/services/architect-reviewer.js
+ */
 // src/services/architect-reviewer.js
 
 class ArchitectReviewer {

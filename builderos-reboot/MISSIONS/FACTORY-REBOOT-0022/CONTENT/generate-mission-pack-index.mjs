@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Emit MISSION_PACK_INDEX.json from builderos-reboot/MISSIONS/ (canonical — sync with MISSION_QUEUE.json). */
+/**
+ * SYNOPSIS: Emit MISSION_PACK_INDEX.json from builderos-reboot/MISSIONS/ (canonical — sync with MISSION_QUEUE.json). Emit MISSION_PACK_INDEX.json from builderos-reboot/MISSIONS/ (canonical — sync with MISSION_QUEUE.json). */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

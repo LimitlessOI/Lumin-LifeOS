@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-gate-change-proposals.js
  * services/lifeos-gate-change-proposals.js
  *
  * Persistence for North Star §2.6 ¶8 / Companion §5.5 — gate-change & efficiency

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/nlpProcessor.test.js.
+ */
 ```javascript
 const nlpProcessor = require('../services/nlp-processor');
 

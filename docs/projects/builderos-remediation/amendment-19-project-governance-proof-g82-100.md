@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G82-100 -->
+
 # Amendment 19 Project Governance Proof: G82-100
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

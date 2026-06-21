@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-browser-agent.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-browser-agent.js
  * Browser automation for TC workflows:

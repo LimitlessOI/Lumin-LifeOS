@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G707-100 -->
+
 # Amendment 01: AI Council Proof - G707-100
 
 ## Proof Summary: Initial AI Council Framework Establishment

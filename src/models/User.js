@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/models/User.js.
+ */
 const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
 

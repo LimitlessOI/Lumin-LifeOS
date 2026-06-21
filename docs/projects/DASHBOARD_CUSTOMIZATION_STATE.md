@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Dashboard Local State Contract -->
+
 # LifeOS Dashboard Local State Contract
 
 ## Goals

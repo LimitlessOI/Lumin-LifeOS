@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — timeseries_schema.sql.
 ```sql
 CREATE TABLE sensor_data (
     id SERIAL PRIMARY KEY,

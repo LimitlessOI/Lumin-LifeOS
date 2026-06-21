@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Full Founder Packet Audit v1 -->
+
 # Full Founder Packet Audit v1
 
 ## Scope

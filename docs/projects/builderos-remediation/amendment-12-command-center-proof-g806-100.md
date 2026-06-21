@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G806-100 Remediation -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided in the REPO FILE CONTENTS, leading to assumptions about the specific implementation/proof gap.
 # Amendment 12 Command Center Proof - G806-100 Remediation
 

@@ -1,3 +1,4 @@
+-- SYNOPSIS: BuilderOS artifact — 20260611 Voice Rail V1.
 -- Voice Rail v1 — durable sessions (non-private only)
 CREATE TABLE IF NOT EXISTS voice_rail_sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

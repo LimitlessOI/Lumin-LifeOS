@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G70-G100 Remediation -->
+
 # Amendment 12: Command Center - Proof G70-G100 Remediation
 
 ## Blueprint Note: Next Smallest Build Slice for G70 (System Health Dashboard)

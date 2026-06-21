@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G136-100 -->
+
 # Amendment 12 Command Center Proof - G136-100
 
 ## Blueprint Note: Initial Command Center and Command Definitions

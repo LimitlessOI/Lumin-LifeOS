@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Deploy-triggered self-repair check — runs once on boot or when called.
  * Deploy-triggered self-repair check — runs once on boot or when called.
  * No constant polling. No autonomy escalation beyond approved PB.
  *

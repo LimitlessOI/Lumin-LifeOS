@@ -1,5 +1,5 @@
 /**
- * services/builderos-metrics-reporter.js
+ * SYNOPSIS: services/builderos-metrics-reporter.js
  * Compute all 15 required BuilderOS metrics from autonomous_telemetry_events.
  * All 15 fields always present in return value — null means NO_DATA, not absent.
  *

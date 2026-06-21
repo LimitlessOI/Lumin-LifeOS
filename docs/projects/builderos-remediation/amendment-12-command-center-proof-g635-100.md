@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Class Command — docs/projects/builderos-remediation/amendment-12-command-center-proof-g635-100.md. -->
+
 // src/command-center/command.js
 export class Command {
   constructor(id, handler) {

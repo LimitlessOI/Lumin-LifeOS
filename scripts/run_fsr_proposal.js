@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: Script — Run Fsr Proposal.
+ */
 import { stdin as input, exit } from 'process';
 import { runFSAR } from '../audit/fsar/fsar_runner.js';
 

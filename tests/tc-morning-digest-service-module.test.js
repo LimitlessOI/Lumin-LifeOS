@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Regression: TC morning digest module loads (syntax + exports) without DB.
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * Regression: TC morning digest module loads (syntax + exports) without DB.
  */

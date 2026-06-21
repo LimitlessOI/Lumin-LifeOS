@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Proof (G541-100) -->
+
 # Amendment 09: Life Coaching Proof (G541-100)
 
 This document serves as a proof for the remediation of BuilderOS changes related to Amendment 09: Life Coaching.

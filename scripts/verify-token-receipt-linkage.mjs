@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: This module provides functionality to verify the linkage between token receipts
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  *
  * This module provides functionality to verify the linkage between token receipts

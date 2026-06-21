@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Command Center V2 - g48-100 -->
+
 # Proof-Closing Blueprint Note: Command Center V2 - g48-100
 
 This note closes the proof for the initial API slice of Command Center V2, focusing on the definition and listing of core `Command` entities.

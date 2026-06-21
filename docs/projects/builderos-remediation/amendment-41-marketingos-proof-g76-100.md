@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G76 100. -->
+
 The specification to write a markdown file (`.md`) directly contradicts the OIL verifier's rejection, which indicates it expects executable Node.js code for the target file.
 
 AMENDMENT_41_MARKETINGOS - Proof Closing Note: G76-100 (SSOT Foundation)

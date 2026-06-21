@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 16: WORD KEEPER - Proof G124-100 -->
+
 # AMENDMENT 16: WORD KEEPER - Proof G124-100
 
 ## Blueprint Note: Next Smallest Build Slice

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Current Architecture - Lumin-LifeOS -->
+
 # Current Architecture - Lumin-LifeOS
 
 **Last Updated**: 2025-01-XX  

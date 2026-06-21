@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G47-100 - Initial Project Registration -->
+
 # Amendment 19 Project Governance Proof: G47-100 - Initial Project Registration
 
 **Blueprint Source:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

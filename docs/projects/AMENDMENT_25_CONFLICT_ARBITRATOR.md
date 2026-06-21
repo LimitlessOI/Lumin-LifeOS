@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 25 — Conflict Arbitrator -->
+
 # AMENDMENT 25 — Conflict Arbitrator
 
 | Field | Value |

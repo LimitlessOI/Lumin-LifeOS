@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Enhanced Council Features - Integration Guide -->
+
 # Enhanced Council Features - Integration Guide
 
 This guide explains how to integrate the new Enhanced Council features into the existing LifeOS system.

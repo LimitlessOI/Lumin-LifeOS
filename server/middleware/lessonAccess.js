@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — server/middleware/lessonAccess.js.
+ */
 ```javascript
 module.exports = (req, res, next) => {
     const userRole = req.user.role; // Assuming user role is set in req.user

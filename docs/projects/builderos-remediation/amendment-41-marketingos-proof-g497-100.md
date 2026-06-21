@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G497 100. -->
+
 Amendment 41: MarketingOS Proof - G497-100 (SSOT Foundation)
 
 This document serves as a proof-closing blueprint note for establishing the foundational Single Source of Truth (SSOT) for user marketing consent status between LifeOS and MarketingOS, as outlined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`. This proof (G497-100) validates the successful implementation and operational integrity of the consent synchronization mechanism, ensuring consistent user consent data across platforms.

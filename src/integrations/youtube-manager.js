@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: YouTube Manager Integration
+ */
 // YouTube Manager Integration
 const { YouTubeApiClient } = require('youtube-api-client');
 

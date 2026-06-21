@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260609_deliberation_governance_v27.sql.
 -- Deliberation governance v2.7 — CnclRoster, consensus, scorecard, Hist case, CFO receipts, evidence vault
 -- @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md v2.7
 

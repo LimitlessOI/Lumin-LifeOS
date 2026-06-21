@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G687 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G687-100: Core Service Interface & Initial Implementation
 This proof closes the initial build slice for establishing the `CommandCenterService` interface and a minimal concrete implementation, as outlined in Phase 1 of the AMENDMENT_12_COMMAND_CENTER blueprint. This foundational step defines the contract for the core service and provides a basic operational state.
 ---

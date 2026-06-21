@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g335-100 Remediation -->
+
 The instruction to write a `.md` file at the specified path directly conflicts with the OIL verifier's rejection, which indicates the BuilderOS execution environment attempts to process `.md` files as JavaScript, resulting in an `ERR_UNKNOWN_FILE_EXTENSION`.
 # Command Center V2 Blueprint Proof: g335-100 Remediation
 

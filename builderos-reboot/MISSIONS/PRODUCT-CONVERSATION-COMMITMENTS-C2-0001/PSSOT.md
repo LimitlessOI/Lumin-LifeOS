@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PSSOT — Project Single Source of Truth -->
+
 # PSSOT — Project Single Source of Truth
 
 > **⚠️ NOT founder authority.** Outcome truth → **`FOUNDER_PACKET.md`**. This file is **product truth** (system-maintained). Pre-2026-06-11 content archived in `_hist/PSSOT_2026-06-09.md`.

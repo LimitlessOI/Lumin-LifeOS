@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — project-root/.github/workflows/ci.yml.
 ```yaml
 name: CI
 

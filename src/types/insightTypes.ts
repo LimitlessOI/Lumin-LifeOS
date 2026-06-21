@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ts — src/types/insightTypes.ts.
+ */
 ```typescript
 export interface Insight {
   id: number;

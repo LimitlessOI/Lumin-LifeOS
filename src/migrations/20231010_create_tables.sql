@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231010_create_tables.sql.
 ```sql
 CREATE TABLE user_profiles (
   id SERIAL PRIMARY KEY,

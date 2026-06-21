@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 ```sql
 CREATE TABLE lending_offers (
     id SERIAL PRIMARY KEY,

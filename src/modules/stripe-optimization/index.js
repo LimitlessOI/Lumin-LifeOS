@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/stripe-optimization/index.js.
+ */
 ```javascript
 const router = require('./routes');
 const stripeService = require('./services/stripeService');

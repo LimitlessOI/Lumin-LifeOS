@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/shared/lifeos-widget-lumin-quick.js.
+ */
 (function(){
   const STORAGE_KEY_HISTORY = 'lifeos-lumin-quick-history';
   const API_ENDPOINT = '/api/v1/lifeos/chat';

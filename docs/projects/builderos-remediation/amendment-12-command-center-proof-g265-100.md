@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G265 100. -->
+
 ### Blueprint Note: Amendment 12 Command Center - Proof G265-100
 
 This note closes the proof for the initial implementation of command registration and unregistration within the `CommandCenter`.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G138 100. -->
+
 The OIL verifier rejection indicates a Node.js execution error for a markdown file, implying the verifier is attempting to execute a non-executable document. The provided markdown content is syntactically correct for its file type.
 Amendment 19 Project Governance Proof: G138-100
 Blueprint Source: `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

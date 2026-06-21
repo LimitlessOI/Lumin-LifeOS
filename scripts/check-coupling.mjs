@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: scripts/check-coupling.mjs
  * scripts/check-coupling.mjs
  * Enforces SSOT coupling policy: code changes must be paired with amendment updates.
  * Implements the same rules as policy/ssot-coupling.rego without requiring conftest.

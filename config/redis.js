@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Configuration — Redis.
+ */
 ```javascript
 const Redis = require('ioredis');
 

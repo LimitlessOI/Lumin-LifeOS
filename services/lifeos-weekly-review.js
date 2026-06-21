@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-weekly-review.js
  * services/lifeos-weekly-review.js
  *
  * LifeOS Weekly Review — AI narrative + interactive conversation

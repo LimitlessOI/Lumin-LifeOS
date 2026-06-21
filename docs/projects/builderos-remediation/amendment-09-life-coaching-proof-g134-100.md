@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G134 100. -->
+
 Proof-Closing Blueprint Note: `g134-100` - Life Coaching Session View
 This note closes the proof for `g134-100` and outlines the next smallest build slice.
 

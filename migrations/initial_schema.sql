@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — initial_schema.sql.
 ```sql
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Self-Repair Memory Routes
  * Self-Repair Memory Routes
  *
  * Read-only runtime diagnostics for repair-memory state.

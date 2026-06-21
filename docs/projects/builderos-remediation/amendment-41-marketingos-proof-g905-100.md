@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof: G905-100 - SSOT Foundation for CampaignEvent Data -->
+
 # AMENDMENT_41_MARKETINGOS Proof: G905-100 - SSOT Foundation for CampaignEvent Data
 
 This document outlines the proof-closing blueprint note for establishing the Single Source of Truth (SSOT) foundation for `CampaignEvent` data within MarketingOS, as specified by `AMENDMENT_41_MARKETINGOS.md`.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/taskRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const router = express.Router();

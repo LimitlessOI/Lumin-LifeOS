@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/user-service.js.
+ */
 const db = require('../utils/database');
 
 const createUser = async (email, passwordHash) => {

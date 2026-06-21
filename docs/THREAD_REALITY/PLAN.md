@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Thread Reality Plan (2026-01-26) -->
+
 # Thread Reality Plan (2026-01-26)
 
 ## Missing capability list for reliable self-building

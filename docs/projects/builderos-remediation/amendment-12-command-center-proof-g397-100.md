@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G397-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G397-100
 
 ## Blueprint Note: Next Build Slice - Command Execution Core

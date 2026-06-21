@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-council-builder-routes.js
  * routes/lifeos-council-builder-routes.js
  *
  * Council Builder Dispatch Endpoint

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Token Accounting OS — unified API.
  * Token Accounting OS — unified API.
  * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
  */

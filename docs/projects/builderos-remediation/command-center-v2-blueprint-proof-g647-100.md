@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G647-100 - Initial Command Ingestion -->
+
 # Command Center V2 Blueprint Proof: G647-100 - Initial Command Ingestion
 
 This document outlines the first proof-closing build slice for Command Center V2, focusing on the foundational capability to define and ingest new commands into the system. This slice addresses the immediate gap of establishing a mechanism for commands to enter the Command Center's operational scope.

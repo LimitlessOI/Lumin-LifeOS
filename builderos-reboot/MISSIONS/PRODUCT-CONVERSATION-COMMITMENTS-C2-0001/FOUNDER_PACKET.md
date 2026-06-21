@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet — LifeOS Objective 1: Conversation Commitments v1 -->
+
 # Founder Packet — LifeOS Objective 1: Conversation Commitments v1
 
 **Mission ID:** `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`  

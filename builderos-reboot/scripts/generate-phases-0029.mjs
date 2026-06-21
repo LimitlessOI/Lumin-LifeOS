@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Generate mission pack FACTORY-REBOOT-0029 — TSOS hot path + guardrails. */
+/**
+ * SYNOPSIS: Generate mission pack FACTORY-REBOOT-0029 — TSOS hot path + guardrails. Generate mission pack FACTORY-REBOOT-0029 — TSOS hot path + guardrails. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

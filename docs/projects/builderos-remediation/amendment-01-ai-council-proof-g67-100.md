@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Exports getAiCouncilPolicies — docs/projects/builderos-remediation/amendment-01-ai-council-proof-g67-100.md. -->
+
 ### Proof-Closing Blueprint Note: AI Council Policy Configuration
 
 This document serves as a proof-closing note for the initial implementation slice derived from `AMENDMENT_01_AI_COUNCIL.md`, focusing on establishing the foundational configuration mechanism for AI Council policies within the LifeOS platform.

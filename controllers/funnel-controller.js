@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — controllers/funnel-controller.js.
+ */
 ```javascript
 const FunnelAnalyzer = require('../services/funnel-analyzer');
 const executionQueue = require('../executionQueue'); // assume this is a module that handles task queuing

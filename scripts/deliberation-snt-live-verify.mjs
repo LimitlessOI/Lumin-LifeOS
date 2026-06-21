@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: SNT live verification — deliberation governance pass-3 doctrine checks on Railway.
  * SNT live verification — deliberation governance pass-3 doctrine checks on Railway.
  * Usage: node --import dotenv/config scripts/deliberation-snt-live-verify.mjs
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md

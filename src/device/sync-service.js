@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/device/sync-service.js.
+ */
 ```javascript
 const socketIo = require('socket.io');
 

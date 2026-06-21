@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G173 100. -->
+
 Amendment 41: MarketingOS Proof Gap G173-100 - Blueprint Note
 
 This document outlines the proof-closing blueprint for a specific gap identified in the context of Amendment 41 and MarketingOS integration. This serves as an SSOT foundation for the next C2 build pass.

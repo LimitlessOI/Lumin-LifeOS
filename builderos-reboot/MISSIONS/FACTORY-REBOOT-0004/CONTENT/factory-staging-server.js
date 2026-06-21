@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: BuilderOS artifact — Factory Staging Server.
+ */
 import express from 'express';
 import { registerFactoryRoutes } from './startup/register-routes.js';
 

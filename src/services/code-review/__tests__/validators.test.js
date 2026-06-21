@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/code-review/__tests__/validators.test.js.
+ */
 ```javascript
 const { validateSubmission } = require('../validators/submission');
 

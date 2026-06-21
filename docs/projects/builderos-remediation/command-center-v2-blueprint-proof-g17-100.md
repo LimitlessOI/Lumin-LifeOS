@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G17-100 - Initial Repository & Schema -->
+
 # Command Center V2 Blueprint Proof: G17-100 - Initial Repository & Schema
 
 This document outlines the next smallest blueprint-backed build slice for Command Center V2, focusing on establishing the foundational data persistence layer.

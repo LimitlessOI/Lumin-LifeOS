@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Example endpoints for handling users, sessions, and devices
+ */
 ```javascript
 const express = require('express');
 const jwt = require('jsonwebtoken');

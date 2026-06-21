@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label - Proof G13-100: White Label Configuration Data Model & Basic Service -->
+
 # Amendment 14 White Label - Proof G13-100: White Label Configuration Data Model & Basic Service
 
 ## Blueprint Note for C2 Build Pass

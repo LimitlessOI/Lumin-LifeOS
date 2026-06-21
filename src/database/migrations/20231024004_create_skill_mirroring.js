@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/database/migrations/20231024004_create_skill_mirroring.js.
+ */
 ```javascript
 exports.up = function(knex) {
   return knex.schema.createTable('skill_mirroring', (table) => {

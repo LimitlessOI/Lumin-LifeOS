@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G55-100 - Core API & Schema Definition -->
+
 # Command Center V2 Blueprint Proof: G55-100 - Core API & Schema Definition
 
 This document serves as a proof-closing blueprint note for the G55-100 build slice, focusing on establishing the core API and schema definition for Command Center V2.

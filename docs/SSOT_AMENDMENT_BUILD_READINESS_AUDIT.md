@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment build-readiness audit -->
+
 # Amendment build-readiness audit
 
 **Purpose:** Honest check: *if an agent had only SSOT + repo*, could they implement a project **without inventing missing product law**?  

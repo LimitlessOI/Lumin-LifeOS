@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G800 100. -->
+
 Source blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` content is not provided, so the content for the new proof document is inferred based on its name and context.
 This document serves as proof for the `g800-100` requirement as part of the `AMENDMENT_01_AI_COUNCIL` blueprint remediation.
 

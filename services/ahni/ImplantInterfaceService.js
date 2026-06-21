@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ImplantInterfaceService.js
+ */
 ```javascript
 // ImplantInterfaceService.js
 class ImplantInterfaceService {

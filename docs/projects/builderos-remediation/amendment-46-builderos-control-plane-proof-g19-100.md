@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G19 100. -->
+
 Proof-Closing Blueprint Note: G19-100 - BuilderOS Control Plane Wiring Remediation
 
 This note addresses the wiring of BuilderOS control plane endpoints within `routes/lifeos-council-builder-routes.js` as specified in Amendment 46, following the OIL verifier rejection. The previous rejection was due to the verifier attempting to execute the markdown file as a JavaScript module, indicating a misconfiguration in the verifier's execution context for documentation files. This remediation focuses on the content of the blueprint note itself, detailing the required implementation.

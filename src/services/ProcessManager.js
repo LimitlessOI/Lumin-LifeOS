@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/ProcessManager.js.
+ */
 ```javascript
 const Process = require('../models/Process');
 

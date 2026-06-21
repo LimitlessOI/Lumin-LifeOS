@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G106 100. -->
+
 const fs = require('fs');
 const path = require('path');
 const { validate } = require('jsonschema');

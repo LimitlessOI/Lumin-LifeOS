@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_users_tables.sql.
 ```sql
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,

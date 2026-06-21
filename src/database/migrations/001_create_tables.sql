@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_tables.sql.
 ```sql
 CREATE TABLE edge_devices (
     id SERIAL PRIMARY KEY,

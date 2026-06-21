@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — create_scenarios_table.sql.
 CREATE TABLE scenarios (
   id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users(id),

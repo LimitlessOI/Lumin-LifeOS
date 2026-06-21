@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/emergency-repair.js
  * services/emergency-repair.js
  *
  * Emergency Repair Button — when a critical relationship or life situation

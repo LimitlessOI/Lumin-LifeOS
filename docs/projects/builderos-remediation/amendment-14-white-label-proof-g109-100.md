@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 14: White Label Proof for Client g109-100 -->
+
 # AMENDMENT 14: White Label Proof for Client g109-100
 
 ## Proof Status: Generated

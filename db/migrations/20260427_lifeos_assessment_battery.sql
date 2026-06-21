@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260427_lifeos_assessment_battery.sql.
 -- Migration: Assessment Battery
 -- Creates table for storing user assessment results (attachment style, love language, etc.)
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G855 100. -->
+
 Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G855-100
 This document serves as the proof-closing blueprint note for Amendment 41, specifically addressing the proof gap identified as G855-100 related to MarketingOS integration. The source blueprint `docs/projects/AMENDMENT_41_MARKETINGOS.md` is the SSOT foundation for this work.
 

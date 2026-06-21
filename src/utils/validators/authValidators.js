@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/utils/validators/authValidators.js.
+ */
 ```javascript
 const { body } = require('express-validator');
 

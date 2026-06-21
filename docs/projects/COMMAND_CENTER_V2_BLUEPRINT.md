@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Lumin Command & Control Center v2 — Builder Blueprint -->
+
 # Lumin Command & Control Center v2 — Builder Blueprint
 
 **Status:** Builder handoff — ready for `POST /api/v1/lifeos/builder/build`

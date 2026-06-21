@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-cycle.js
  * services/lifeos-cycle.js
  *
  * LifeOS — Menstrual / Perimenopause Cycle Tracking Service

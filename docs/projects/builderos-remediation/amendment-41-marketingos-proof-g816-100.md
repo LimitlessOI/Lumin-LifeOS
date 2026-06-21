@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G816-100 -->
+
 # AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G816-100
 
 ## 1. Exact Missing Implementation or Proof Gap

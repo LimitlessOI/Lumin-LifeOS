@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Control Plane -->
+
 # BuilderOS Control Plane
 _(formerly AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md)_
 **Status:** IN_BUILD — Phase 1 infrastructure on disk

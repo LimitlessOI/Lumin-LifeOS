@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G808 100. -->
+
 Amendment 41: MarketingOS Proof - G808-100 (SSOT Foundation)
 This document serves as a proof-closing blueprint note for establishing MarketingOS as the Single Source of Truth (SSOT) foundation, specifically addressing the `MarketingCampaign` entity.
 ---

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Supervision = read, grade, fix (operator contract) -->
+
 # Supervision = read, grade, fix (operator contract)
 
 When Adam says **“supervise”** he means:

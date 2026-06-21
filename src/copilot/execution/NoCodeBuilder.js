@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/copilot/execution/NoCodeBuilder.js.
+ */
 ```javascript
 import React from 'react';
 import ReactFlow, { addEdge, Background } from 'react-flow-renderer';

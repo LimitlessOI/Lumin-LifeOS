@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/builder-truth-surface.js
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Startup environment variable validator.
  * Startup environment variable validator.
  * Call validateEnv() before server starts. Logs warnings for optional vars,
  * throws for required vars so Railway redeploy catches misconfigurations immediately.

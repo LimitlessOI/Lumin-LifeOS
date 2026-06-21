@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G30 100. -->
+
 Amendment 14 White-Label Proof: G30-100 - Custom Logo URL Data & API Readiness
 This document serves as a proof-closing blueprint note for the initial foundational slice of Amendment 14, focusing on the data model and API readiness for client-specific white-label logo URLs. This addresses a critical prerequisite for dynamic UI branding.
 ---

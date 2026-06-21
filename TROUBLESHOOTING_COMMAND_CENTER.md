@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔧 Troubleshooting Command Center -->
+
 # 🔧 Troubleshooting Command Center
 
 ## Current Status

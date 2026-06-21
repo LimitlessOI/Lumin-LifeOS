@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BUILDEROS REMEDIATION BLUEPRINT -->
+
 # BUILDEROS REMEDIATION BLUEPRINT
 
 **Project key:** `builderos-remediation`  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Institutional Memory Digest -->
+
 # Institutional Memory Digest
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run memory:seed-lessons`

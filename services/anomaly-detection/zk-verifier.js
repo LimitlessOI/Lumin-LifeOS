@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Zk Verifier.
+ */
 ```javascript
 const snarkjs = require('snarkjs');
 const fs = require('fs');

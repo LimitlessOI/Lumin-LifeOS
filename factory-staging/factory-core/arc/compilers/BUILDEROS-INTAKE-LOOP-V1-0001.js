@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Mechanical compiler — P1-P3 intake loop from ASSET_REUSE + roadmap + repo truth.
+ */
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 

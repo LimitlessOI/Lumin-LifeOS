@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 - MarketingOS EngagedUsers Segment Sync (G828-100) -->
+
 # Proof-Closing Blueprint Note: Amendment 41 - MarketingOS EngagedUsers Segment Sync (G828-100)
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

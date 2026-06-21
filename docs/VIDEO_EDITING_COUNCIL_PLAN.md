@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎬 Open Source Video Editing Council - Complete Plan -->
+
 # 🎬 Open Source Video Editing Council - Complete Plan
 
 ## Overview

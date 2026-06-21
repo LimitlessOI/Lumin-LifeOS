@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G754 100. -->
+
 The specification is contradictory: The task explicitly asks to write a markdown file (`docs/projects/builderos-remediation/amendment-41-marketingos-proof-g754-100.md`) with provided content, but the OIL verifier rejected the previous attempt because it tried to execute the `.md` file as JavaScript, and the prompt also includes a general instruction to "Generate the complete implementation code. Output ONLY the code first". This creates a conflict between producing the specified markdown content and satisfying the verifier's implicit expectation for executable JavaScript. Grounding in the explicit task and provided file content, the markdown content is produced.
 
 AMENDMENT 41: MarketingOS Proof - G754-100 Campaign Performance Summary

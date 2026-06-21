@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 23 — Creator Media OS -->
+
 # AMENDMENT 23 — Creator Media OS
 
 > **Y-STATEMENT:** In the context of creators, businesses, and personal brands needing steady video output without filming and editing every asset manually, facing fragmented tools for scripting, scene generation, editing, likeness, and SEO, we decided to define Creator Media OS as a record-once, generate-many content system to achieve channel-scale video production, accepting that consent, likeness rights, and publishing controls must be explicit from day one.

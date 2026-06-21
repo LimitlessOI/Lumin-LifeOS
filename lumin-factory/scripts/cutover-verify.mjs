@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Verify cutover bundle / standalone repo structure. */
+/**
+ * SYNOPSIS: Verify cutover bundle / standalone repo structure. Verify cutover bundle / standalone repo structure. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { repoRootFromScriptMeta, detectFactoryLayout } from './factory-repo-layout.mjs';

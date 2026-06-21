@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/railway-deploy.yml.
 name: Deploy to Railway
 
 on:

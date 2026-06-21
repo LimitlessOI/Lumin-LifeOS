@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports createConflictInterruptRoutes — routes/lifeos-conflict-interrupt-routes.js.
  * @fileoverview Conflict interrupt routes for LifeOS
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * @module routes/lifeos-conflict-interrupt-routes

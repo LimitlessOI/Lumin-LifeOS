@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G51 100. -->
+
 ### Amendment 46: BuilderOS Control Plane Proof (G51-100) Remediation Note
 
 This document addresses the OIL verifier rejection for `amendment-46-builderos-control-plane-proof-g51-100.md` due to incorrect file type (JS code in MD file). The remediation involves providing the correct markdown proof-closing note and outlining the required code changes for `routes/lifeos-council-builder-routes.js`.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_system_tables.sql.
 ```sql
 CREATE TABLE system_config (
   id SERIAL PRIMARY KEY,

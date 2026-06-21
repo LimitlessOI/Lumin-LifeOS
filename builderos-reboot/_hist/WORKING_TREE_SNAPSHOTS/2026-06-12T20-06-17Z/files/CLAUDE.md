@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CLAUDE.md — LifeOS/LimitlessOS Project Instructions -->
+
 # CLAUDE.md — LifeOS/LimitlessOS Project Instructions
 
 ---

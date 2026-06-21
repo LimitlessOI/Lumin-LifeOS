@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Chat Overlay Manager Service
+ */
 // Chat Overlay Manager Service
 
 class ChatOverlayService {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G796 100. -->
+
 The specification is contradictory regarding the expected output format for the target `.md` file, given the verifier's behavior.
 
 ```javascript

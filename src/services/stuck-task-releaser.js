@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/stuck-task-releaser.js.
+ */
 const db = require('../db');
 const logger = require('../logger');
 const smsAlerts = require('./sms-alerts');

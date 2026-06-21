@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — cleaning_stations.sql.
 ```sql
 CREATE TABLE cleaning_stations (
     id SERIAL PRIMARY KEY,

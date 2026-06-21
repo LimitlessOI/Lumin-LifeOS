@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: HTTP route module — Memory Status Routes.
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 import { Router } from 'express';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Pre-Build Readiness Checklist -->
+
 # Pre-Build Readiness Checklist
 **Every amendment MUST complete this checklist before `build_ready` is set to TRUE.**
 **The builder supervisor will not touch a project that has not passed this gate.**

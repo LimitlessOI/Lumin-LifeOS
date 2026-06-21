@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof: Amendment 19 Project Governance - G20-100: Initial Documentation Standards Established -->
+
 # Proof: Amendment 19 Project Governance - G20-100: Initial Documentation Standards Established
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G575 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof - G575-100
 Proof-Closing Blueprint Note: Builder Control Plane Wiring
 

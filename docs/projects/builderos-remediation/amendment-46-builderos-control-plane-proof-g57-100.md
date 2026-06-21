@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Note: Amendment 46 BuilderOS Control Plane - G57-100 -->
+
 # Proof-Closing Note: Amendment 46 BuilderOS Control Plane - G57-100
 
 ## 1. Exact Missing Implementation or Proof Gap

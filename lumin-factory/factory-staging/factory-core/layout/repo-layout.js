@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Runtime repo layout — standalone Lumin-Factory vs LifeOS monorepo host.
  * Runtime repo layout — standalone Lumin-Factory vs LifeOS monorepo host.
  * @authority Canonical factory runtime — see factory-staging/AGENTS.md
  */

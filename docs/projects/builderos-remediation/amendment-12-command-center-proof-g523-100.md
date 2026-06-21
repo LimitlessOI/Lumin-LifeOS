@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G523 100. -->
+
 The specification is contradictory: it asks to "Write docs/projects/builderos-remediation/amendment-12-command-center-proof-g523-100.md" (a markdown file) but also to "Generate the complete implementation code. Output ONLY the code first." Given the verifier rejection for an `.md` file being treated as code, and the instruction to produce a "proof-closing blueprint note" which is inherently a document, I will complete the markdown document as requested, including code snippets for the implementation details. This fulfills the "implementation-first" and "blueprint note" requirements while providing the requested content for the `.md` file. The verifier's misinterpretation of the `.md` file as executable code is an external tooling issue not resolvable by changing the content type within the specified `.md` file.
 
 AM

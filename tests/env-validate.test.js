@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/env-validate.test.js.
+ */
 const { execSync } = require('child_process');
 
 test('Environment validation script should pass', () => {

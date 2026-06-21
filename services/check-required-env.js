@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Checks if a list of required environment variables are present in process.env.
  * Checks if a list of required environment variables are present in process.env.
  *
  * @param {string[]} varNames - An array of environment variable names to check.

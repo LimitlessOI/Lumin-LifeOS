@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/biocrop/dataCollector.js.
+ */
 const axios = require('axios');
 const csvParser = require('csv-parser');
 const fs = require('fs');

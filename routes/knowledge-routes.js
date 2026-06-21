@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Knowledge Base Routes
  * Knowledge Base Routes
  * Extracted from server.js
  */

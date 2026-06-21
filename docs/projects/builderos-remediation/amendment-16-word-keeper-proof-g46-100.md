@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G46-100 -->
+
 # Amendment 16: Word Keeper - Proof G46-100
 
 ## Blueprint Note: Proof-Closing Build Slice

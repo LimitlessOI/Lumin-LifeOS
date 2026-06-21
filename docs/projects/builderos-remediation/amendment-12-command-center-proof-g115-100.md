@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: G115-100 - CommandCenterService Interface Definition -->
+
 # Proof-Closing Blueprint Note: G115-100 - CommandCenterService Interface Definition
 
 This note closes the proof for the initial definition of the `CommandCenterService` interface, marking the first concrete step towards establishing the Command Center as outlined in Amendment 12.

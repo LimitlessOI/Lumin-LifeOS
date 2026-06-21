@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G1033 100. -->
+
 The specification to write a `.md` file contradicts the verifier's attempt to execute it as a JavaScript module.
 ```markdown
 Command Center V2 Blueprint Proof: G1033-100 Remediation

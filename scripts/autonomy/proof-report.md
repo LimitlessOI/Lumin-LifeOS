@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Autonomy Proof Report -->
+
 # Autonomy Proof Report
 
 - Status: NO TASKS

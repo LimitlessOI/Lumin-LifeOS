@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G59-100 -->
+
 # Amendment 09: Life Coaching - Proof G59-100
 
 This document outlines the next smallest build slice for the Life Coaching feature, following the blueprint `AMENDMENT_09_LIFE_COACHING.md`. This proof-closing note focuses on establishing the foundational data model for coaching sessions.

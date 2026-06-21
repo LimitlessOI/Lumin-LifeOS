@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G42 100. -->
+
 The source blueprint `docs/projects/AMENDMENT_09_LIFE_COACHING.md` was not provided, requiring inference for full context.
 AMENDMENT 09: LIFE COACHING - Proof G42-100: Coach Entity & Basic Listing
 

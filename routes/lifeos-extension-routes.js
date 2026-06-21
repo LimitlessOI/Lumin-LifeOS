@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-extension-routes.js
  * routes/lifeos-extension-routes.js
  *
  * Lumin Universal Overlay — Backend API

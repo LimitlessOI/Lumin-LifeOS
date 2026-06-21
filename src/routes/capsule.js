@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Create a new capsule
+ */
 const express = require('express');
 const router = express.Router();
 const capsuleService = require('../services/capsule-storage');

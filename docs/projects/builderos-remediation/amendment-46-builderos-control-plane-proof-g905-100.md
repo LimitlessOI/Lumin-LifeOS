@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G905 100. -->
+
 Amendment 46 BuilderOS Control Plane Proof - G905-100
 
 Source Blueprint: `docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md`

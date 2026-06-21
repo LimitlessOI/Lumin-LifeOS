@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/components/ProductRecommendationEngine.js.
+ */
 ```javascript
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

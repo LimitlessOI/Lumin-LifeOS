@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G719-100 - Initial Route & Placeholder Component -->
+
 # Command Center V2 Blueprint Proof: G719-100 - Initial Route & Placeholder Component
 
 This proof addresses the foundational step of establishing the Command Center V2's primary route and rendering a placeholder component. This confirms the basic integration path within the existing application structure without introducing business logic or data dependencies.

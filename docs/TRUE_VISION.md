@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TRUE VISION OF LIFEOS / LIMITLESS OS -->
+
 # TRUE VISION OF LIFEOS / LIMITLESS OS
 
 > **This document supersedes everything else. This is the REAL mission.**

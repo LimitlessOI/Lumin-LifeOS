@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260620_founder_interface_roles.sql.
 -- Founder Interface role hardening
 -- Ensure Adam is founder_admin for account-authenticated Founder Interface access.
 

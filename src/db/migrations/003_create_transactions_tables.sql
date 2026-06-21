@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 003_create_transactions_tables.sql.
 ```sql
 CREATE TABLE transactions (
   id SERIAL PRIMARY KEY,

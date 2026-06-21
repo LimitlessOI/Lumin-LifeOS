@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-gate-change-routes.js
  * routes/lifeos-gate-change-routes.js
  *
  * North Star §2.6 ¶8 — Persist gate-change / efficiency hypotheses, run one council

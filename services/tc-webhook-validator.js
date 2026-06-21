@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/tc-webhook-validator.js
  * services/tc-webhook-validator.js
  * Validates inbound webhook signatures from Postmark (email events) and Twilio (SMS events).
  * Exports createTCWebhookValidator({ secret, logger }) → { validatePostmark, validateTwilio }.

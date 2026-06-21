@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: CLI: record operator/Cursor token usage manually.
  * CLI: record operator/Cursor token usage manually.
  * Usage: npm run tokens:operator -- --source cursor --model claude-sonnet-4-6 --input 12000 --output 3000
  * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md

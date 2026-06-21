@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G891-100 -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G891-100
 
 ## Blueprint Note: Wiring `routes/lifeos-council-builder-routes.js`

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: KNOWLEDGE PROCESSOR
  * KNOWLEDGE PROCESSOR
  * Reads dumps from Lumin-Memory/00_INBOX/raw/
  * Outputs to knowledge/index/entries.jsonl

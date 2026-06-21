@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G68 100. -->
+
 Amendment 01: AI Council - Proof G68-100
 Blueprint Reference
 Source: `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

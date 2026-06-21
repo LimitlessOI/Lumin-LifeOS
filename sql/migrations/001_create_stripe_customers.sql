@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_stripe_customers.sql.
 ```sql
 CREATE TABLE stripe_customers (
   id SERIAL PRIMARY KEY,

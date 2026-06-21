@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G199-100 Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof - G199-100 Blueprint Note
 
 **Signal requiring follow-through: This document — SSOT foundation.**

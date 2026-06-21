@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 01: AI COUNCIL ESTABLISHMENT - Proof G45-100 -->
+
 # AMENDMENT 01: AI COUNCIL ESTABLISHMENT - Proof G45-100
 
 ## Blueprint Note: Initial Charter Draft Proof

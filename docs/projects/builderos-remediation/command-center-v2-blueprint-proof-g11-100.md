@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G11 100. -->
+
 // docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g11-100.md
 // Exact implementation code
 const express = require('express');

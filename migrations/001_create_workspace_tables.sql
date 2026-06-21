@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_workspace_tables.sql.
 ```sql
 CREATE TABLE workspace_sessions (
     id SERIAL PRIMARY KEY,

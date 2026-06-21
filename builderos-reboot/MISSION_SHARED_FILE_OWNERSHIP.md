@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Mission shared file ownership -->
+
 # Mission shared file ownership
 
 When the same `target_file` appears in multiple mission blueprints, **only the latest canonical step** produces the current bytes. Re-running an older mission step will fail sha256 verification or overwrite with stale CONTENT.

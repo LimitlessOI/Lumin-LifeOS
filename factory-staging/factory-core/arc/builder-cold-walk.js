@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Cold Builder walk — authoritative handoff test. Zero decision gaps = PASS.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT } from '../builder/run-step.js';

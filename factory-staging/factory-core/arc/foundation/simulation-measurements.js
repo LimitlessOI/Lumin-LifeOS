@@ -1,5 +1,5 @@
 /**
- * Simulation measurement envelope — every sim records falsifiable predictions for Hist to score later.
+ * SYNOPSIS: Simulation measurement envelope — every sim records falsifiable predictions for Hist to score later.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

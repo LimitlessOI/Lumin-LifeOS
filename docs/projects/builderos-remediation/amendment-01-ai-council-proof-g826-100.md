@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G826-100 -->
+
 # Amendment 01: AI Council Proof - G826-100
 
 **Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

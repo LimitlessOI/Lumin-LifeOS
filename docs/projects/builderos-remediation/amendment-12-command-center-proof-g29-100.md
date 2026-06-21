@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G29 100. -->
+
 The specification is contradictory regarding the expected content type for `docs/projects/builderos-remediation/amendment-12-command-center-proof-g29-100.md`. The file path indicates markdown, while the embedded instruction "INSTRUCTION: Generate the complete implementation code. Output ONLY the code first — no explanation before the code block." and the verifier's attempt to execute the `.md` file suggest executable code. The verifier rejection `ERR_UNKNOWN_FILE_EXTENSION` indicates the verifier is attempting to load a `.md` file as a Node.js module, which is an environmental/configuration issue for a markdown file.
 
 Given the primary task is to "Produce a proof-closing blueprint note" (which implies markdown documentation) and the verifier's behavior,

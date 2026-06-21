@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof: AI Council Amendment 01 - Initial Charter Documentation (G1049-100) -->
+
 # Proof: AI Council Amendment 01 - Initial Charter Documentation (G1049-100)
 
 **Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

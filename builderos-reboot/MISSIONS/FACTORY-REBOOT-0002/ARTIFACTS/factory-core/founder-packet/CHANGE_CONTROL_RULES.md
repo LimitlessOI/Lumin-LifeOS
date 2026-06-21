@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Change Control Rules -->
+
 # Change Control Rules
 
 If strategy changes midstream:

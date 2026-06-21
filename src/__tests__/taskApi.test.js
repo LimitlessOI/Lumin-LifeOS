@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/__tests__/taskApi.test.js.
+ */
 ```javascript
 import taskApi from '../services/taskApi';
 import axios from 'axios';

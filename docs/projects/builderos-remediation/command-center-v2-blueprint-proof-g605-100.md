@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G605-100 -->
+
 # Command Center V2 Blueprint Proof: G605-100
 
 ## Proof-Closing Blueprint Note: Basic Command Implementation & Registration

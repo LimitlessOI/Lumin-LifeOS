@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G48 100. -->
+
 Amendment 16: Word Keeper - Proof G48-100
 Blueprint Note: Next Smallest Build Slice - Create Word Functionality
 This note outlines the next smallest, self-contained build slice for the Word Keeper platform, focusing on the core functionality of creating a new word. This slice is designed to be implementation-first, enabling rapid verification and progression to subsequent build passes.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G541 100. -->
+
 Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - G541-100**
 
 Source Blueprint: `docs/projects/AMENDMENT_41_MARKETINGOS.md`

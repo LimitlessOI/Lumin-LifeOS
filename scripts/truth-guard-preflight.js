@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Truth Guard Preflight (fail-closed)
  * Truth Guard Preflight (fail-closed)
  *
  * This script checks that a run wrote proof artifacts and references them.

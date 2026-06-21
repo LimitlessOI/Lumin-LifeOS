@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G343-100 Remediation -->
+
 # Command Center V2 Blueprint Proof: G343-100 Remediation
 
 **Blueprint Note Type:** Proof-Closing Remediation

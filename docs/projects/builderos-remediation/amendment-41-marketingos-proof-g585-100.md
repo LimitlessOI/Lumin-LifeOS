@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G585 100. -->
+
 Amendment 41: MarketingOS Proof - G585-100 (SSOT Foundation)
 This document serves as a proof-closing blueprint note for the foundational Single Source of Truth (SSOT) aspects related to Amendment 41 and MarketingOS integration.
 1. Exact Missing Implementation or Proof Gap

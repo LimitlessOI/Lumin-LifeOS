@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-vision-routes.js
  * routes/lifeos-vision-routes.js
  *
  * LifeOS Phase 11 — Future Vision + Video Production API

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260322_managed_accounts.sql.
 -- Migration: Managed Accounts — autonomous signup credential vault
 -- System-initiated account registrations, encrypted credentials, status tracking
 

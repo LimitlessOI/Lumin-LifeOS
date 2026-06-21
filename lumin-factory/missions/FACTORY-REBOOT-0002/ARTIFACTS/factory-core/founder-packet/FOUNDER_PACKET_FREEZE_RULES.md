@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet Freeze Rules -->
+
 # Founder Packet Freeze Rules
 
 The Founder Packet is frozen only when:

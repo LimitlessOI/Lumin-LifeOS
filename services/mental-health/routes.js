@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Example endpoint for processing therapy session
+ */
 ```javascript
 const express = require('express');
 const router = express.Router();

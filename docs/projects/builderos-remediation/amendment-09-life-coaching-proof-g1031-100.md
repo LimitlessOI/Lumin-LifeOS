@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G1031-100: User Coaching Summary Data Access -->
+
 # Amendment 09: Life Coaching - Proof G1031-100: User Coaching Summary Data Access
 
 ## Proof Point: G1031-100 - Establish foundational data access for a user's assigned Life Coach and upcoming Life Coaching Sessions.

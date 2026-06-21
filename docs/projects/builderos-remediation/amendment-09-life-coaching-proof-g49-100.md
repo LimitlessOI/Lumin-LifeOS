@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Class CoachingSessionModel — docs/projects/builderos-remediation/amendment-09-life-coaching-proof-g49-100.md. -->
+
 // docs/projects/builderos-remediation/amendment-09-life-coaching-proof-g49-100.md
 ---
 title: AMENDMENT_09_LIFE_COACHING - Proof G49-100

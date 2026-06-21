@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G171-100 -->
+
 # Amendment 12: Command Center - Proof G171-100
 
 This document outlines the next smallest build slice for the Amendment 12 Command Center, focusing on establishing core interfaces and the central `CommandCenter` class.

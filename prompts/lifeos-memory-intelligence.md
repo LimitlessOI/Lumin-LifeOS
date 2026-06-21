@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: Memory Intelligence System (AMENDMENT_39) -->
+
 # Domain: Memory Intelligence System (AMENDMENT_39)
 
 ## What this domain does

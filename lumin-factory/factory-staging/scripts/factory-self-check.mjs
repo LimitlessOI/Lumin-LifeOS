@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Local self-check for materialized factory-staging tree. */
+/**
+ * SYNOPSIS: Local self-check for materialized factory-staging tree. Local self-check for materialized factory-staging tree. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

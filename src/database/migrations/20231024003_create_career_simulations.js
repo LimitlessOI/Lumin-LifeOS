@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/database/migrations/20231024003_create_career_simulations.js.
+ */
 ```javascript
 exports.up = function(knex) {
   return knex.schema.createTable('career_simulations', (table) => {

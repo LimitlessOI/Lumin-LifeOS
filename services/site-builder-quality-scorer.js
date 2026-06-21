@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Pure-function HTML quality scorer — no DOM, no dependencies.
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * Pure-function HTML quality scorer — no DOM, no dependencies.
  * Evaluates generated site HTML for conversion readiness with normalized percent scoring.

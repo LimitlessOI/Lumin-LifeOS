@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — TrustEngine.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs-node');
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G49 100. -->
+
 Proof-Closing Blueprint Note: MarketingOS Integration Gap G49-100
 This document serves as the Single Source of Truth (SSOT) foundation for closing the identified proof gap G49-100 related to Amendment 41 (MarketingOS Integration).
 1. Exact Missing Implementation or Proof Gap

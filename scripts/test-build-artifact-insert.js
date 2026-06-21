@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Script — Test Build Artifact Insert.
+ */
 import { createDbPool } from '../services/db.js';
 import { loadRuntimeEnv } from '../config/runtime-env.js';
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createLatestRunManager — startup/latest-run.js.
+ */
 import { promises as fsPromises } from "fs";
 import path from "path";
 

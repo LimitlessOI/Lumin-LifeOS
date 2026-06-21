@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G381 100. -->
+
 Proof-Closing Blueprint Note: G381-100 - BuilderOS Control Plane Wiring
 This note addresses the implementation gap identified in Amendment 46 regarding the BuilderOS control plane, specifically the wiring of build lifecycle events within `routes/lifeos-council-builder-routes.js`.
 

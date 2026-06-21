@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260513_repair_phase1_syntax.sql.
 -- Repair Phase 1: Syntax-broken migrations
 -- Fixes for 2 migrations that failed due to code-level SQL errors:
 --   (1) 20260427_lifeos_conflict_interrupts.sql — markdown ---METADATA--- block at EOF

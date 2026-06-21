@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TSOS LIVE → PROVEN Advancement Plan -->
+
 # TSOS LIVE → PROVEN Advancement Plan
 
 **Created:** 2026-05-29  

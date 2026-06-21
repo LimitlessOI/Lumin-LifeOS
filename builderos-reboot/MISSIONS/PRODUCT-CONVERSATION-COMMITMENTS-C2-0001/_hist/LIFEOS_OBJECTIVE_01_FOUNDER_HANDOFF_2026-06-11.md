@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Objective 1 — Founder handoff (Conductor → System) -->
+
 # LifeOS Objective 1 — Founder handoff (Conductor → System)
 
 **Role:** Adam locked intent. **Conductor packages.** **BuilderOS/CUR/factory executes.**  

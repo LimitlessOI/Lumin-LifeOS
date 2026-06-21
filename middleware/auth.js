@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Auth Middleware (stub) — placeholder Express middleware that currently
  * Auth Middleware (stub) — placeholder Express middleware that currently
  * passes all requests through; intended for future authentication logic.
  *

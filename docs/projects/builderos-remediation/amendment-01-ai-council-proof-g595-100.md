@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G595 100. -->
+
 This document serves as proof for BuilderOS remediation task `g595-100`, confirming the initial definition and establishment of the AI Council as outlined in `docs/projects/AMENDMENT_01_AI_COUNCIL.md`.
 
 **Proof Status:**

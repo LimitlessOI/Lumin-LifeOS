@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G37 100. -->
+
 ### Proof-Closing Blueprint Note: AMENDMENT_12_COMMAND_CENTER - Core Infrastructure G37-100
 
 This note closes the proof for the initial core infrastructure slice of the `CommandCenter` as outlined in `AMENDMENT_12_COMMAND_CENTER.md`. This slice focuses on establishing the foundational interfaces and classes required for command definition and registration, proving the viability of the core component structure before proceeding to execution logic.

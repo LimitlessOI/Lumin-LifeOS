@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/users/user.model.js.
+ */
 const { body } = require('express-validator');
 
 const userValidationRules = () => {

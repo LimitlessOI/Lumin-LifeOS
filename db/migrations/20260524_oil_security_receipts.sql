@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260524_oil_security_receipts.sql.
 -- db/migrations/20260524_oil_security_receipts.sql
 -- OIL Security Alpha receipt spine — append-only audit table.
 -- No UPDATE or DELETE is intentional; receipts are immutable evidence.

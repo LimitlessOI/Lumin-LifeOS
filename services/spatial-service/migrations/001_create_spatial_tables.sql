@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 001 Create Spatial Tables.
 ```sql
 CREATE TABLE spatial_designs (
     id SERIAL PRIMARY KEY,

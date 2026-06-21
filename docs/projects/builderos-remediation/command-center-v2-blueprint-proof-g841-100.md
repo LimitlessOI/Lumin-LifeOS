@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g841-100 - Basic Authentication Integration -->
+
 # Command Center V2 Blueprint Proof: g841-100 - Basic Authentication Integration
 
 ## Proof-Closing Blueprint Note

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/microgrid/nodeManager.js.
+ */
 const axios = require('axios');
 const { Pool } = require('pg');
 const pool = new Pool({

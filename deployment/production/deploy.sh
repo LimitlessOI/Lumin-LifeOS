@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Shell script — Deploy.
 # Script to deploy to production environment
 
 echo "Deploying to production..."

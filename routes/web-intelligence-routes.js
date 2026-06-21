@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Web Intelligence Routes
  * Web Intelligence Routes
  * Extracted from server.js
  */

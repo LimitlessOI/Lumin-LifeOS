@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/child-learning-engine.js
  * services/child-learning-engine.js
  *
  * Age-appropriate curiosity-first content for children.

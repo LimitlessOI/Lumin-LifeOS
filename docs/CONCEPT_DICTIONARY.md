@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CONCEPT DICTIONARY -->
+
 # CONCEPT DICTIONARY
 # [TOKEN] = "expansion"
 

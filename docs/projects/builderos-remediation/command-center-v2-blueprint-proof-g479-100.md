@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g479-100 - Initial Status Endpoint -->
+
 # Command Center V2 Blueprint Proof: g479-100 - Initial Status Endpoint
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, specifically addressing the foundational internal API for status retrieval.

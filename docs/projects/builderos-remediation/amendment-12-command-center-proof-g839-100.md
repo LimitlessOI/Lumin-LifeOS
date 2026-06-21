@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G839-100 - Build Slice Status Reporting -->
+
 The specification is contradictory: it asks for a `.md` file but the verifier rejected the previous attempt due to trying to execute a `.md` file as a Node.js module. I will produce the markdown content as requested by the file extension and "blueprint note" instruction, assuming the verifier's processing will be corrected.
 
 # Amendment 12 Command Center Proof: G839-100 - Build Slice Status Reporting

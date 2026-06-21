@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Environment Setup -->
+
 ```markdown
 # Environment Setup
 

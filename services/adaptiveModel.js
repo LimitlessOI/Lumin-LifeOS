@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Adaptive Learning Engine — trains a brain.js neural network on user preference
  * Adaptive Learning Engine — trains a brain.js neural network on user preference
  * data and exposes a predict() method for personalized recommendations.
  *

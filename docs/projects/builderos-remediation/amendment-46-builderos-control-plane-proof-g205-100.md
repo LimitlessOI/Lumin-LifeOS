@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G205-100 Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G205-100 Remediation
 
 This document outlines the remediation plan and proof for closing the identified gaps in the BuilderOS control plane, specifically addressing the wiring of build lifecycle events within `routes/lifeos-council-builder-routes.js`. This directly responds to the OIL verifier rejection and ensures the BuilderOS governed loop execution is correctly instrumented.

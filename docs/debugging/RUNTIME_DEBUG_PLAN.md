@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Runtime Debugging Plan -->
+
 # Runtime Debugging Plan
 
 ## Current Status

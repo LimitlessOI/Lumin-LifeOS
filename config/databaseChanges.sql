@@ -1,3 +1,4 @@
+-- SYNOPSIS: Configuration — DatabaseChanges.
 ```sql
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,

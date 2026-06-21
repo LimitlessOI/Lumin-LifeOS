@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 003_create_lessons_tables.sql.
 ```sql
 CREATE TABLE lessons (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_crisis_events.sql.
 ```sql
 CREATE TABLE crisis_events (
   id SERIAL PRIMARY KEY,

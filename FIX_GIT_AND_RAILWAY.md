@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔧 Fix Git and Railway Issues - Complete Guide -->
+
 # 🔧 Fix Git and Railway Issues - Complete Guide
 
 ## ✅ What I Fixed

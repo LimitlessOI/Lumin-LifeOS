@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — client/src/components/LessonPlayer.js.
+ */
 ```javascript
 import React from 'react';
 

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260320_adam_twin.sql.
 -- Migration: 20260320_adam_twin
 -- Tables for Adam's digital twin: decision log, profile, outcomes, improvement proposals
 

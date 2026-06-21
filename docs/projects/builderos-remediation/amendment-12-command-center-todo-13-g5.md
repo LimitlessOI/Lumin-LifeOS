@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 12 Command Center - Todo 13 G5 (Project Card Tooltip) -->
+
 # BuilderOS Remediation: Amendment 12 Command Center - Todo 13 G5 (Project Card Tooltip)
 
 This memo outlines the next buildable slice for implementing the "Hover on project card shows tooltip with focus + last worked" feature within BuilderOS, as per `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

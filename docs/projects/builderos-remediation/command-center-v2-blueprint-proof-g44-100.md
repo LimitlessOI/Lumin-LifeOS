@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G44-100 - Core Command Definition and Registry -->
+
 # Command Center V2 Blueprint Proof: G44-100 - Core Command Definition and Registry
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, derived from `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`. It outlines the next smallest, safest, and most foundational step to establish the core command definition and registration mechanism.

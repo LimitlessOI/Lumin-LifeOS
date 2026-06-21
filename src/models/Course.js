@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/models/Course.js.
+ */
 const Joi = require('joi');
 
 const CourseSchema = Joi.object({

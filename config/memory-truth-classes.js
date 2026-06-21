@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: config/memory-truth-classes.js
+ */
 // config/memory-truth-classes.js
 
 /**

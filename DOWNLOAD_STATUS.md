@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 📥 Ollama Model Download Status -->
+
 # 📥 Ollama Model Download Status
 
 **Last Checked**: $(date)

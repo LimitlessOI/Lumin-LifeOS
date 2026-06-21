@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Social Media / MarketingOS Roadmap -->
+
 # Social Media / MarketingOS Roadmap
 
 **Status: ACTIVE — Amendment 41 written 2026-05-30**

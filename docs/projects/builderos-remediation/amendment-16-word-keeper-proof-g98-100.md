@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof: g98-100 -->
+
 # Amendment 16 Word Keeper Proof: g98-100
 
 This document outlines the proof-closing blueprint note for the `g98-100` segment under Amendment 16's Word Keeper mechanism, addressing the identified implementation and proof gaps.

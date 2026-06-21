@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G148 100. -->
+
 **Blueprint Note: Amendment 41 MarketingOS Proof Closure (G148-100)**
 
 **Context:** This document serves as the SSOT foundation for closing the proof gap identified during the OIL verifier rejection for Amendment 41, related to MarketingOS. The primary rejection cause was a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]` when the verifier attempted to execute the `.md` proof document as a Node.js module.

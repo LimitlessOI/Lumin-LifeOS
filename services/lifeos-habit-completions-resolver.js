@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Summarizes habit completion activity for ambient nudges (7-day window).
  * Summarizes habit completion activity for ambient nudges (7-day window).
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

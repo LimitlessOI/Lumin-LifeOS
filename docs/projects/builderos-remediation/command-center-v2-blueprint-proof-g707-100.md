@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G707 100. -->
+
 ### Blueprint Note: g707-100 - Initial Command Entity Definition
 
 This note closes the proof for the initial core type and database schema definition, marking the first concrete build slice for Command Center V2.

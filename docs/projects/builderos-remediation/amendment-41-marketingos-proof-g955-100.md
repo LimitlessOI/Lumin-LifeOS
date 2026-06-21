@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G955 100. -->
+
 AMENDMENT_41_MARKETINGOS Proof - G955-100
 Proof-Closing Blueprint Note
 This document serves as the Single Source of Truth (SSOT) foundation for proving the implementation of `AMENDMENT_41_MARKETINGOS.md`. It outlines the necessary steps to verify the integration and data flow between LifeOS and MarketingOS.

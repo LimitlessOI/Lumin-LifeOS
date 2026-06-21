@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Todo 4 G2. -->
+
 Blueprint Enhancement Memo: Amendment 12 Command Center - Pending Adam Panel (G2)
 
 This memo outlines a builder-ready enhancement for the "Pending Adam panel" task, focusing on the initial display requirements as per `AMENDMENT_12_COMMAND_CENTER.md`.

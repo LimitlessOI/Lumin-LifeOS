@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Founder Voice Rail — preference capture + session routing memory.
  * Founder Voice Rail — preference capture + session routing memory.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

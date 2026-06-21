@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Deterministic code-supervision pass for overlay HTML/CSS/JS (machine layer).
  * Deterministic code-supervision pass for overlay HTML/CSS/JS (machine layer).
  *
  * Does NOT replace Conductor reading Brief/mockups word-for-word; catches:

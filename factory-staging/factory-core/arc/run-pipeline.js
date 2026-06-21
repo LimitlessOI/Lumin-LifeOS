@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: System ARC pipeline — entry gate → simulate → receipts. No agent impersonation.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Continuity Log — Council / LCL / Builder Lane -->
+
 # Continuity Log — Council / LCL / Builder Lane
 
 > Log **only** sessions that touch `services/council-service.js`, `config/codebook*.js`, `services/prompt-translator.js`, `services/lcl-monitor.js`, `routes/lifeos-council-builder-routes.js`, or council-related migrations.

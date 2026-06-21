@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS System Operator — natural conversation backed by real API/tool execution.
  * LifeOS System Operator — natural conversation backed by real API/tool execution.
  * One channel: talk normally; system runs first; model speaks from receipts only.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

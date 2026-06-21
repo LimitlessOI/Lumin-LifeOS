@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Fetches JSON data from a given URL path with an x-command-key header.
  * Fetches JSON data from a given URL path with an x-command-key header.
  * @param {string} baseUrl - The base URL for the API.
  * @param {string} path - The API path relative to the base URL.

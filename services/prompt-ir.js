@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/prompt-ir.js — TCO-A10-NEW + TCO-A11-NEW
  * services/prompt-ir.js — TCO-A10-NEW + TCO-A11-NEW
  *
  * Two capabilities in one file:

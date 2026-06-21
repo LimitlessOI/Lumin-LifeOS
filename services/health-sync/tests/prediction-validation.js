@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Prediction Validation.
+ */
 ```javascript
 const assert = require('assert');
 const anomalyDetector = require('../prediction/anomaly-detector');

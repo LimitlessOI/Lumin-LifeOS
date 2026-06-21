@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G50 100. -->
+
 // docs/projects/builderos-remediation/amendment-01-ai-council-proof-g50-100.md
 ---
 title: Amendment 01: AI Council - Proof G50-100

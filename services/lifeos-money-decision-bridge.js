@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-money-decision-bridge.js
  * services/lifeos-money-decision-bridge.js
  *
  * Bridges the LifeOS Finance layer and the Decision Intelligence layer.

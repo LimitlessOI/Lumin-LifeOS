@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G685-100 Remediation Note -->
+
 # Amendment 16 Word Keeper Proof - G685-100 Remediation Note
 
 This note addresses the OIL verifier rejection related to `docs/projects/builderos-remediation/amendment-16-word-keeper-proof-g685-100.md` and outlines the next smallest build slice to resolve the underlying issue.

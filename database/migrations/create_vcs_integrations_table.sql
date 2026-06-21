@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_vcs_integrations_table.sql.
 ```sql
 CREATE TABLE vcs_integrations (
     id SERIAL PRIMARY KEY,

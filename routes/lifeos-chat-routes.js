@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-chat-routes.js
  * routes/lifeos-chat-routes.js
  *
  * Lumin — LifeOS conversational AI routes

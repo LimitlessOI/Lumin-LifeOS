@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: GPT Review Prompt -->
+
 # GPT Review Prompt
 
 You are acting as `SENTRY` for this blueprint pack.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: OIL self-repair detectors — runtime proof parity, proof-store alignment,
  * OIL self-repair detectors — runtime proof parity, proof-store alignment,
  * and OIL missed-issue receipts. No secrets in output.
  *

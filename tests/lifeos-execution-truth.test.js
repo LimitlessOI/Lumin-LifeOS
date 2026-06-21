@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createLifeOSBuilderOSCommandControlRoutes — tests/lifeos-execution-truth.test.js.
+ */
 import assert from 'node:assert/strict';
 import {
   detectGeneratedLayerViolation,

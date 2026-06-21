@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G911-100 Remediation -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G911-100 Remediation
 
 This document serves as a proof-closing blueprint note for the initial core infrastructure phase (G911-100) of the Command Center.

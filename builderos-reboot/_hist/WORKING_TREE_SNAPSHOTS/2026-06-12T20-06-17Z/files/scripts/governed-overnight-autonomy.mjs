@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: HIST DOMAIN — Historian owns this artifact (read/salvage only).
  * HIST DOMAIN — Historian owns this artifact (read/salvage only).
  * hist_id: HIST-AUTO-006
  * Law: prompts/00-HIST-LEGACY-BOUNDARY.md

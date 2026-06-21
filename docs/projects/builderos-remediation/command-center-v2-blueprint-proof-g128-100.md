@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Command Center V2 Blueprint Proof: G128-100 - Initial Internal Status Endpoint -->
+
 # BuilderOS Command Center V2 Blueprint Proof: G128-100 - Initial Internal Status Endpoint
 
 This document serves as a proof-closing note for the initial build slice of the BuilderOS Command Center V2, addressing the implementation gap identified in the `COMMAND_CENTER_V2_BLUEPRINT.md`. This slice focuses on establishing a foundational, internal-only API endpoint for basic BuilderOS status monitoring.

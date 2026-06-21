@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Gateway.
+ */
 ```javascript
 const axios = require('axios');
 

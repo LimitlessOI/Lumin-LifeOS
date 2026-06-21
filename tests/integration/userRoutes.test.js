@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/integration/userRoutes.test.js.
+ */
 ```javascript
 const request = require('supertest');
 const express = require('express');

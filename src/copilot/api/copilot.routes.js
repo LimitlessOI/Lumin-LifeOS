@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/copilot/api/copilot.routes.js.
+ */
 ```javascript
 import express from 'express';
 import WorkflowEngine from '../execution/WorkflowEngine';

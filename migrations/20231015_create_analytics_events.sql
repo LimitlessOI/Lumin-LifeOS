@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231015_create_analytics_events.sql.
 ```sql
 CREATE TABLE analytics_events (
     event_id SERIAL PRIMARY KEY,

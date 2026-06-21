@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Emit FACTORY-GREENFIELD-0001 — first greenfield (exact_content) mission pack. */
+/**
+ * SYNOPSIS: Emit FACTORY-GREENFIELD-0001 — first greenfield (exact_content) mission pack. Emit FACTORY-GREENFIELD-0001 — first greenfield (exact_content) mission pack. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

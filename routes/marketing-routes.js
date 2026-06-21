@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Registers MarketingRoutes routes/handlers (routes/marketing-routes.js).
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

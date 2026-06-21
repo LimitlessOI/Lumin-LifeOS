@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — container_lifecycle_events.sql.
 ```sql
 CREATE TABLE container_lifecycle_events (
     id SERIAL PRIMARY KEY,

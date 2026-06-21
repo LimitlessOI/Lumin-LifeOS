@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Phase 2 — Cross-council ranking (source-preserving) -->
+
 # Phase 2 — Cross-council ranking (source-preserving)
 
 **Session:** `2026-05-13_capsule-ssot-convergence`  

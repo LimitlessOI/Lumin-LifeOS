@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G144-100 - Initial System Status API -->
+
 # Amendment 12 Command Center Proof: G144-100 - Initial System Status API
 
 This document outlines the proof-closing blueprint note for `g144-100`, focusing on establishing the foundational API for Command Center System Status.

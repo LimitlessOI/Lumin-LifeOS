@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 004_sales_coaching_tables.sql.
 -- ╔══════════════════════════════════════════════════════════════════════════════════╗
 -- ║              SALES COACHING & CALL RECORDING TABLES                             ║
 -- ║              For BoldTrail Real Estate Sales Coaching System                    ║

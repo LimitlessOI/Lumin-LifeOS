@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G1079-100 - Initial Command Definition -->
+
 # Amendment 12 Command Center Proof: G1079-100 - Initial Command Definition
 
 This document outlines the proof-closing blueprint note for the initial implementation slice of a new command within the Command Center, as specified by `AMENDMENT_12_COMMAND_CENTER.md`. This slice focuses on defining the command's structure and a minimal handler stub to establish the foundational types and routing capability.

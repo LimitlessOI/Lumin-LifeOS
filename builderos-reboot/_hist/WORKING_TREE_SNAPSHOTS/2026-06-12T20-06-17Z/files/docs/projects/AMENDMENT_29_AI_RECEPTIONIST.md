@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AI Receptionist -->
+
 # AI Receptionist
 _(formerly AMENDMENT_29_AI_RECEPTIONIST.md)_
 

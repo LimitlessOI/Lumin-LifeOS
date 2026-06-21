@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: MarketingOS Proof G673-100 -->
+
 # Proof-Closing Blueprint Note: MarketingOS Proof G673-100
 
 This document outlines the necessary steps to close the proof gap for "MarketingOS Proof of Engagement Report G673-100" as specified in Amendment 41.

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Run Tesseract on fixture insurance card images and validate parseInsuranceCardText.
  * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
  * Run Tesseract on fixture insurance card images and validate parseInsuranceCardText.
  * Usage: node scripts/test-insurance-card-ocr.mjs

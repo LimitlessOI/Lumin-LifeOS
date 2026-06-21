@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/self-build.yml.
 name: Self Build Every 15 Minutes
 
 on:

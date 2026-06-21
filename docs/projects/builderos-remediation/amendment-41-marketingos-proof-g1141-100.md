@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof (G1141-100) - SSOT Foundation Closure -->
+
 # Amendment 41 MarketingOS Proof (G1141-100) - SSOT Foundation Closure
 
 This document serves as a proof-closing blueprint note for Amendment 41, specifically verifying the foundational role of `docs/projects/AMENDMENT_41_MARKETINGOS.md` as the Single Source of Truth (SSOT) for relevant MarketingOS components.

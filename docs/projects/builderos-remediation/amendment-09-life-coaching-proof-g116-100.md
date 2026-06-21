@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G116-100 -->
+
 # Amendment 09: Life Coaching - Proof G116-100
 
 **Project:** BuilderOS Remediation

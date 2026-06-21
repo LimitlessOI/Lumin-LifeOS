@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Voice Rail capability proof — fails if the system claims what it cannot do.
  * Voice Rail capability proof — fails if the system claims what it cannot do.
  * Run against production: PUBLIC_BASE_URL + COMMAND_CENTER_KEY required.
  *

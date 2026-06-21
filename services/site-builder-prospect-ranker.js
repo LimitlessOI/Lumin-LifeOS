@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Calculates a priority score for a single prospect based on defined criteria.
  * Calculates a priority score for a single prospect based on defined criteria.
  * @param {object} prospect - The prospect object, typically from the `prospect_sites` table.
  * @returns {number} The priority score (0-100).

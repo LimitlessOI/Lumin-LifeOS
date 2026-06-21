@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_traffic_data_table.sql.
 CREATE TABLE traffic_data (
     id SERIAL PRIMARY KEY,
     sensor_id VARCHAR(255) NOT NULL,

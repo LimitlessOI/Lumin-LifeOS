@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260418_lifeos_daily_scorecard.sql.
 -- Migration: 20260418_lifeos_daily_scorecard
 -- LifeOS Daily Scorecard + Most Important Tasks (MITs)
 --

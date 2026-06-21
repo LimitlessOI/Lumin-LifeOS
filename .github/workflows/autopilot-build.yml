@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/autopilot-build.yml.
 name: Autopilot Build (Scheduled + Manual)
 
 on:

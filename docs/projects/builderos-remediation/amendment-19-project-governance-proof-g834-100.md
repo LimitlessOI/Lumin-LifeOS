@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance - Remediation Proof (G834-100) -->
+
 # Amendment 19 Project Governance - Remediation Proof (G834-100)
 
 Document ID: `g834-100`

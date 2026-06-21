@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Generate FACTORY-PROOF-LOOP-0001 mission pack (Phase 11 anchor). */
+/**
+ * SYNOPSIS: Generate FACTORY-PROOF-LOOP-0001 mission pack (Phase 11 anchor). Generate FACTORY-PROOF-LOOP-0001 mission pack (Phase 11 anchor). */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

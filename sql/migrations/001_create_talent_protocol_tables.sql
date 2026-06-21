@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_talent_protocol_tables.sql.
 ```sql
 CREATE TABLE talent_protocol_users (
     id SERIAL PRIMARY KEY,

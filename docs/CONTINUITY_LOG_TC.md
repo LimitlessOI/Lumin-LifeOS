@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Continuity Log — TC Lane -->
+
 # Continuity Log — TC Lane
 
 > Log sessions that primarily change TC routes/services, TC migrations, or Amendment 17 scope.

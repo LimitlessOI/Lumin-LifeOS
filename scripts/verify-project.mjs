@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: scripts/verify-project.mjs
  * scripts/verify-project.mjs
  * Project verifier — reads a manifest JSON, runs all assertions, writes
  * pass/fail to the DB live state, outputs a clean terminal report.

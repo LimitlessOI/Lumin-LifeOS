@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G754 100. -->
+
 Command Center V2 Blueprint Proof: G754-100 - Initial GraphQL Telemetry Endpoint
 This document serves as a proof-closing blueprint note for the Command Center V2 (C2) project, specifically addressing the initial build slice for establishing a foundational GraphQL API for telemetry data, as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` Phase 1 (MVP).
 ---

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 003_create_drone_fleet.sql.
 CREATE TABLE drone_fleet (
     id SERIAL PRIMARY KEY,
     farm_id INT REFERENCES urban_farms(id),

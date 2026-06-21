@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G239-100 Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G239-100 Remediation
 
 This document outlines the remediation plan for the OIL verifier rejection related to Amendment 46, specifically addressing the incorrect file type and detailing the required implementation for the BuilderOS control plane routes.

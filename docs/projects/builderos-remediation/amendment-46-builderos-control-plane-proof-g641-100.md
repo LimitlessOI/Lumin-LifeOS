@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G641-100 -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G641-100
 
 This document outlines the proof-closing blueprint note for the BuilderOS control plane wiring as specified in Amendment 46.

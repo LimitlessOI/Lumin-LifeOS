@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G24 -->
+
 The specification is incomplete as the source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided, preventing the derivation of specific content.
 
 ```javascript

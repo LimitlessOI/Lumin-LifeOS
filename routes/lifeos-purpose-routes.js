@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-purpose-routes.js
  * routes/lifeos-purpose-routes.js
  *
  * LifeOS Phase 6 — Purpose + Dream + Fulfillment API

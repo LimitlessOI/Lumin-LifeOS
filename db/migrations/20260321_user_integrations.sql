@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260321_user_integrations.sql.
 -- Migration: 20260321_user_integrations
 -- Stores OAuth2 tokens for third-party integrations (Google Calendar, etc.)
 

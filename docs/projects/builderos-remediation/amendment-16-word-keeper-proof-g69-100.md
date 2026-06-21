@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 16: WORD KEEPER - Proof G69-100: Data Model & Initial Persistence Setup -->
+
 # AMENDMENT 16: WORD KEEPER - Proof G69-100: Data Model & Initial Persistence Setup
 
 This document outlines the next smallest build slice for the AMENDMENT 16: WORD KEEPER project, focusing on establishing the foundational data model and its initial persistence mechanism.

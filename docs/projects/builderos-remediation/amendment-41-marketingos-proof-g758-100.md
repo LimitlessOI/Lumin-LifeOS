@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G758 100. -->
+
 AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G758-100
 
 1. Exact Missing Implementation or Proof Gap

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231012_create_db_performance_metrics.sql.
 CREATE TABLE db_performance_metrics (
   id SERIAL PRIMARY KEY,
   metric_name VARCHAR(255) NOT NULL,

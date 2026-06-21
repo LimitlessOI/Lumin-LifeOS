@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Quality Regression (Local-Only) — System Spec -->
+
 # Quality Regression (Local-Only) — System Spec
 
 Quality Regression runs gold tasks, scores with rubrics, and emits regression reports.

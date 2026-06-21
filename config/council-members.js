@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createCouncilMembers — config/council-members.js.
+ */
 export const COUNCIL_ALIAS_MAP = {
   claude: "claude_sonnet",    // direct Anthropic only — OpenRouter retired (Adam 2026-05-24)
   anthropic: "claude_sonnet",

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CORE TRUTHS v1.0 -->
+
 # CORE TRUTHS v1.0
 # Last Updated: 2024-12-30
 # Owner: Adam Hopkins

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof - G459-100: SSOT Foundation for User Marketing Opt-In Status -->
+
 # AMENDMENT_41_MARKETINGOS Proof - G459-100: SSOT Foundation for User Marketing Opt-In Status
 
 This document outlines the proof-closing blueprint note for establishing LifeOS as the Single Source of Truth (SSOT) for `user.preferences.marketingOptInStatus` as required by AMENDMENT_41_MARKETINGOS.

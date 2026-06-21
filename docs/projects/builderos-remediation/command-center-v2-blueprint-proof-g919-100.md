@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g919-100 - Initial Registry & Command Definition -->
+
 # Command Center V2 Blueprint Proof: g919-100 - Initial Registry & Command Definition
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, focusing on establishing the foundational command registry and basic command definition.

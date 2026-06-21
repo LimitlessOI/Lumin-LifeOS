@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G824 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G824-100
 This document serves as the SSOT foundation for closing the proof gap related to MarketingOS event `g824-100` as defined in `AMENDMENT_41_MARKETINGOS.md`.
 1. Exact Missing Implementation or Proof Gap

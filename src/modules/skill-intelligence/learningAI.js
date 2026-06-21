@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: learningAI.js
+ */
 ```javascript
 // learningAI.js
 // This module generates personalized learning paths.

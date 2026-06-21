@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — test/quantum-circuit.test.js.
+ */
 ```javascript
 const { runQuantumSimulation } = require('../quantum-climate-core');
 

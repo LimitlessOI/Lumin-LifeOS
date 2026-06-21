@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Video Pipeline Routes
  * Video Pipeline Routes
  * Extracted from server.js
  */

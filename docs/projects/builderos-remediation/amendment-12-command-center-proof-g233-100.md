@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G233-100 -->
+
 # Amendment 12: Command Center - Proof G233-100
 
 ## Blueprint Note: Core Service & API Status Endpoint

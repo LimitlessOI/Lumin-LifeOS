@@ -1,5 +1,5 @@
 /**
- * Founder direct provider test — live API only, no council, no simulation.
+ * SYNOPSIS: Founder direct provider test — live API only, no council, no simulation.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 const PROVIDERS = {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G100-100 -->
+
 # Amendment 12: Command Center - Proof G100-100
 
 This proof-closing blueprint note addresses the initial foundational build slice for the Amendment 12 Command Center.

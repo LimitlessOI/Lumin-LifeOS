@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/funnel.repository.js.
+ */
 ```javascript
 const db = require('../../db');
 

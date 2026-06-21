@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G19 100. -->
+
 ### AMENDMENT_41_MARKETINGOS - Proof G19-100: SSOT Foundation for Campaign Data
 
 This blueprint note addresses the "SSOT foundation" signal for `AMENDMENT_41_MARKETINGOS`, specifically focusing on ensuring `Campaign` data adheres to a Single Source of Truth (SSOT).

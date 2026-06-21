@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/code-review/queue/processor.js.
+ */
 ```javascript
 const { Queue, Worker } = require('bullmq');
 const { reviewCode } = require('../ai/reviewer');

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Curried resolver for ambient / nudge paths: upcoming LifeOS calendar events in a window.
  * Curried resolver for ambient / nudge paths: upcoming LifeOS calendar events in a window.
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

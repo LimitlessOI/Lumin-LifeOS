@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_model_insights_schema.sql.
 ```sql
 -- Create table for caching model insights
 CREATE TABLE model_insights_cache (

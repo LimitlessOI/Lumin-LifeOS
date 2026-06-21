@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports sha256File — builderos-reboot/scripts/mission-lib.mjs.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

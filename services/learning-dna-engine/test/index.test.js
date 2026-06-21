@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Index.Test.
+ */
 ```javascript
 const request = require('supertest');
 const app = require('../index');

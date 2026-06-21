@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎯 Complete Coaching & Goal Tracking System -->
+
 # 🎯 Complete Coaching & Goal Tracking System
 
 ## Overview

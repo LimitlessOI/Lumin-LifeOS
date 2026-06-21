@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof - G154-100: Dynamic Application Logo -->
+
 # Amendment 14 White-Label Proof - G154-100: Dynamic Application Logo
 
 This document outlines the proof-closing blueprint note for the initial white-label build slice, focusing on dynamic application logo configuration.

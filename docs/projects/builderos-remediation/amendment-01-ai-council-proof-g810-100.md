@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof Point: g810-100 - AI Council Initial Member Registration Verification -->
+
 # Proof Point: g810-100 - AI Council Initial Member Registration Verification
 
 **Source Blueprint:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

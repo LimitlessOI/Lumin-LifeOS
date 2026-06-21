@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 16 — Word Keeper & Integrity Engine -->
+
 # AMENDMENT 16 — Word Keeper & Integrity Engine
 **Status:** IN_BUILD
 **Authority:** Subordinate to SSOT North Star Constitution

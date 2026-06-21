@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G129 100. -->
+
 Amendment 16 Word Keeper - Proof G129-100: Initial Word Entry Persistence
 
 This proof-closing blueprint note addresses the foundational persistence layer for the Word Keeper system, specifically focusing on the creation of new word entries.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Game Publisher -->
+
 # Game Publisher
 _(formerly AMENDMENT_06_GAME_PUBLISHER.md)_
 **Status:** LIVE

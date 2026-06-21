@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: src/orchestrator/queue-status.js
+ */
 // src/orchestrator/queue-status.js
 
 const queueData = [

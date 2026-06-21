@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G1077-100 -->
+
 # Amendment 12: Command Center - Proof G1077-100
 
 ## Blueprint Note: Proof-Closing G1077-100

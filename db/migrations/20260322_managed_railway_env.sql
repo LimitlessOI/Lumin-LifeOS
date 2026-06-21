@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260322_managed_railway_env.sql.
 -- Migration: 20260322_managed_railway_env
 -- Managed Railway environment variables + sync audit ledger.
 -- Safe to run multiple times.

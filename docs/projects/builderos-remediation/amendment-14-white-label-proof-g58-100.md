@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G58-100 Initial Theme File -->
+
 # Amendment 14 White-Label Proof: G58-100 Initial Theme File
 
 This document serves as the proof-closing blueprint note for the initial phase of Amendment 14, focusing on the G58-100 white-label proof-of-concept.

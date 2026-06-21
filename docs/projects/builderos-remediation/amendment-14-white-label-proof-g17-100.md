@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof: G17-100 - Tenant Branding Configuration Schema -->
+
 # Amendment 14 White Label Proof: G17-100 - Tenant Branding Configuration Schema
 
 ## Objective

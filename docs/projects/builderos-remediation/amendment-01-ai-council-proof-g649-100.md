@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof - G649-100 -->
+
 # Amendment 01 AI Council Proof - G649-100
 
 This document serves as the proof for the implementation of Amendment 01 as it pertains to AI Council governance, specifically addressing requirement G649-100 within the BuilderOS platform.

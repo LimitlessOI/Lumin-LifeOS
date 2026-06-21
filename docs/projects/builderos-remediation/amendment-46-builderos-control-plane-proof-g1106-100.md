@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1106 100. -->
+
 // routes/lifeos-council-builder-routes.js
 import express from 'express';
 import * as builderosController from '../controllers/builderos-controller.js'; // Assuming this controller exists or will be created

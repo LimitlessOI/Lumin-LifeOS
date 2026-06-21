@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof - G1141-100 -->
+
 The blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` content was not provided, so the content for the new markdown file is inferred based on its purpose.
 
 ```markdown

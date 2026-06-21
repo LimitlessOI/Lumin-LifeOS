@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: S6 Founder Decoder v0 — unit tests
  * S6 Founder Decoder v0 — unit tests
  *
  * Tests that all four modes produce valid output strings.

@@ -1,3 +1,8 @@
+/**
+ * SYNOPSIS: BPB intake gate — rejects if upstream strategy or blueprint shape is incomplete.
+ * WIRED: no — factory CLI/tests only; not on run-founder-intake-direct or execute-mission hot path
+ * INTEGRATE: runDevelopmentStage pre-step + execute-mission.mjs before first write_file step
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT } from '../builder/run-step.js';

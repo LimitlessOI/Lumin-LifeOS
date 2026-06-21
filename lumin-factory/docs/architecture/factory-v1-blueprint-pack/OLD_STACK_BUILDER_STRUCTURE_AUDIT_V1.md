@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Old Stack Builder Structure Audit v1 -->
+
 # Old Stack Builder Structure Audit v1
 
 ## Scope

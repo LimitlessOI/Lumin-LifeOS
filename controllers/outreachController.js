@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — controllers/outreachController.js.
+ */
 const twilio = require('twilio');
 const OutreachLog = require('../models/outreachLog');
 

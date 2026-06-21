@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: sampleCalls.js
+ */
 // sampleCalls.js
 const openai = require('openai');
 const analyzeTranscript = async (transcript) => {

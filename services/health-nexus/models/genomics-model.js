@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Genomics Model.
+ */
 ```javascript
 const torch = require('torch-js');
 

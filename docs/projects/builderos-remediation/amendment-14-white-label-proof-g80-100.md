@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G80-100 - Favicon Configuration -->
+
 # Amendment 14 White-Label Proof: G80-100 - Favicon Configuration
 
 **Blueprint Source:** `docs/projects/AMENDMENT_14_WHITE_LABEL.md`

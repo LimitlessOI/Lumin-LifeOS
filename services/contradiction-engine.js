@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/contradiction-engine.js
  * services/contradiction-engine.js
  *
  * LifeOS Identity Intelligence — Contradiction Engine

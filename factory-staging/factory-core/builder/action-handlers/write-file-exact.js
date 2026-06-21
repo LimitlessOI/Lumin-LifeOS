@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports writeFileExactContract — factory-staging/factory-core/builder/action-handlers/write-file-exact.js.
+ */
 export function writeFileExactContract(step) {
   return {
     actionType: 'write_file_exact',

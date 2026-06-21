@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231010_add_new_tables.sql.
 ```sql
 CREATE TABLE learning_sessions (
     id SERIAL PRIMARY KEY,

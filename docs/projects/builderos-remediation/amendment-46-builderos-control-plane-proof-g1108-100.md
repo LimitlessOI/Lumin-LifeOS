@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1108 100. -->
+
 The specification is contradictory: the target file is a markdown document (`.md`), but the instruction asks to "Output ONLY the code first" and the OIL verifier rejected the previous attempt due to an unknown file extension for `.md`, implying it expects executable code.
 
 ```javascript

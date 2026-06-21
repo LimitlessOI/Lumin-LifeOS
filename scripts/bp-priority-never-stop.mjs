@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.
  * Never-stop BP_PRIORITY runner — retries FAIL until TECHNICAL_PASS or founder_stop.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

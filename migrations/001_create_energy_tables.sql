@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_energy_tables.sql.
 ```sql
 CREATE TABLE energy_assets (
     id SERIAL PRIMARY KEY,

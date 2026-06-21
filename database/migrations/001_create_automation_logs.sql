@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_automation_logs.sql.
 ```sql
 -- Create Processes table
 CREATE TABLE Processes (

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/tc-mailbox-subject.test.js.
+ */
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { emailMatches } from '../services/tc-email-document-service.js';

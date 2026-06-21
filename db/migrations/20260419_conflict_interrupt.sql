@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260419_conflict_interrupt.sql.
 -- Conflict interruption user preferences (per-user)
 -- Enables gentle intervention checks in Lumin chat and conflict routes.
 

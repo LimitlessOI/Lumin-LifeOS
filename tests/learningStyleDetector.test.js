@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/learningStyleDetector.test.js.
+ */
 const LearningStyleDetector = require('../services/learning-analytics/ml-models/learningStyleDetector');
 
 test('learning style prediction', () => {

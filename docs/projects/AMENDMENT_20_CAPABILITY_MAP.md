@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 20 — Capability Map -->
+
 # AMENDMENT 20 — Capability Map
 
 | Field | Value |

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/commerce/AISupportAgent.js.
+ */
 ```javascript
 const { Langchain } = require('langchain');
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: vectorManager.js
+ */
 ```javascript
 // vectorManager.js
 // This module handles skill embeddings using Pinecone.

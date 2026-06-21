@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/unit/userService.test.js.
+ */
 ```javascript
 const UserService = require('../../src/services/userService');
 const UserRepository = require('../../src/repositories/userRepository');

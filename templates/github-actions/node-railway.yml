@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — templates/github-actions/node-railway.yml.
 ```yaml
 name: Node.js CI
 

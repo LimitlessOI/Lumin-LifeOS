@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Enhancement G1. -->
+
 Builder-Ready Blueprint Enhancement: Amendment 09 - Life Coaching (G1)
 This memo outlines the first buildable slice for the Life Coaching Module, focusing on foundational data model definitions without exposing user-facing features.
 ---

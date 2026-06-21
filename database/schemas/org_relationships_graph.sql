@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — org_relationships_graph.sql.
 ```sql
 CREATE TABLE org_relationships_graph (
     relationship_id SERIAL PRIMARY KEY,

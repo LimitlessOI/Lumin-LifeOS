@@ -1,0 +1,65 @@
+{
+  "schema": "file_synopsis_law_v1",
+  "updated_at": "2026-06-21",
+  "law": "Every git-tracked file MUST have a discoverable synopsis. No opt-out. No bypass env var.",
+  "enforcement_layers": [
+    {
+      "layer": 1,
+      "name": "pre-commit",
+      "action": "auto-inject SYNOPSIS + update index + verify staged co-commit",
+      "bypass": "git commit --no-verify skips this — layers 2-4 still apply"
+    },
+    {
+      "layer": 2,
+      "name": "commit-msg",
+      "action": "block indexable files staged without REPO_FILE_SYNOPSIS_INDEX.json",
+      "bypass": "also skipped by --no-verify"
+    },
+    {
+      "layer": 3,
+      "name": "pre-push",
+      "action": "verify synopsis + index freshness for all files in push range; index must co-push",
+      "bypass": "NOT skipped by --no-verify — primary backstop for hook bypass"
+    },
+    {
+      "layer": 4,
+      "name": "ci",
+      "workflow": ".github/workflows/ssot-compliance.yml job file-synopsis-law",
+      "action": "full repo --strict verify on every PR/push to main"
+    },
+    {
+      "layer": 5,
+      "name": "builder-api",
+      "file": "services/deployment-service.js commitToGitHub",
+      "action": "auto-inject SYNOPSIS into enforceable file content before GitHub API commit"
+    },
+    {
+      "layer": 6,
+      "name": "npm-prepare",
+      "action": "npm install runs hooks:install → core.hooksPath=githooks (tracked hooks)"
+    }
+  ],
+  "in_file_formats": {
+    "js_mjs_ts": "/**\\n * SYNOPSIS: <one line>\\n */",
+    "html": "<!-- SYNOPSIS: <one line> -->",
+    "md": "<!-- SYNOPSIS: <one line> --> (after YAML frontmatter if present)",
+    "sql": "-- SYNOPSIS: <one line>",
+    "css": "/* SYNOPSIS: <one line> */",
+    "sh": "# SYNOPSIS: <one line> (after shebang)",
+    "yaml": "# SYNOPSIS: <one line>"
+  },
+  "index_only_formats": ["json"],
+  "canonical_index": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
+  "commands": {
+    "enforce_staged": "npm run lifeos:file-synopsis:enforce",
+    "backfill_all": "npm run lifeos:file-synopsis:backfill",
+    "index_full": "npm run lifeos:file-synopsis:index",
+    "verify_full": "npm run lifeos:file-synopsis:verify",
+    "install_hooks": "npm run hooks:install"
+  },
+  "ai_lookup_order": [
+    "1. builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json (path → synopsis + mtime)",
+    "2. builderos-reboot/governance/BUILDEROS_TOOL_REGISTRY.json (BuilderOS wiring + orphans)",
+    "3. In-file SYNOPSIS header at top of source file"
+  ]
+}

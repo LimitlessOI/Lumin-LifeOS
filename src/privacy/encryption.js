@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/privacy/encryption.js.
+ */
 ```javascript
 const crypto = require('crypto');
 

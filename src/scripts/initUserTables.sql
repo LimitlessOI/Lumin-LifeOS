@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — initUserTables.sql.
 ```sql
 -- Add new columns to the users table
 ALTER TABLE users

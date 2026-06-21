@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup_database.sql.
 CREATE TABLE quantum_jobs (
     job_id SERIAL PRIMARY KEY,
     details JSONB,

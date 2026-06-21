@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof: Amendment 01 - AI Council - G697-100 -->
+
 # Proof: Amendment 01 - AI Council - G697-100
 
 **Source Blueprint:** [docs/projects/AMENDMENT_01_AI_COUNCIL.md](docs/projects/AMENDMENT_01_AI_COUNCIL.md)

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/validation.middleware.js.
+ */
 ```javascript
 const { validationResult } = require('express-validator');
 

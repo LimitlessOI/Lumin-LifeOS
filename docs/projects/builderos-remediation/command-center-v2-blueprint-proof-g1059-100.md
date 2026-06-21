@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G1059-100 Remediation -->
+
 # Command Center V2 Blueprint Proof - G1059-100 Remediation
 
 ## Blueprint Note: Verifier Rejection - Documentation Artifact Processing

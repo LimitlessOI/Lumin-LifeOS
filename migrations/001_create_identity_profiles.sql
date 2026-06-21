@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_identity_profiles.sql.
 CREATE TABLE identity_profiles (
     id SERIAL PRIMARY KEY,
     did VARCHAR(255) UNIQUE NOT NULL,

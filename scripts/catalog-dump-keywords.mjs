@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Lists which files under the canonical bullet+TAB `Lumin-Memory/00_INBOX/raw/` dump
  * Lists which files under the canonical bullet+TAB `Lumin-Memory/00_INBOX/raw/` dump
  * directory match each keyword (via `rg`). Reproducible index for Amendment 38 Stream I
  * and [`docs/CONVERSATION_DUMP_IDEAS_INDEX.md`](../docs/CONVERSATION_DUMP_IDEAS_INDEX.md) §6–§7.

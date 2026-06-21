@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G50 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane (G50-100)
 
 This note addresses the wiring of `routes/lifeos-council-builder-routes.js` for BuilderOS build lifecycle management.

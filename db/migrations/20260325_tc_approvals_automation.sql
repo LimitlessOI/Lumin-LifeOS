@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260325_tc_approvals_automation.sql.
 -- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
 -- TC approvals + automation surface for one-click review/approve/send flows.
 

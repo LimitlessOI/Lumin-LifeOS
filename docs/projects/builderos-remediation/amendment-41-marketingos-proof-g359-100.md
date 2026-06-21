@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G359 100. -->
+
 AMENDMENT 41: MarketingOS Proof - G359-100 Blueprint Note
 Signal: This document — SSOT foundation.
 1. Exact Missing Implementation or Proof Gap

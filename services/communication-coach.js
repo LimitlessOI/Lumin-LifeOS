@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/communication-coach.js
  * services/communication-coach.js
  *
  * Communication Coach — one-on-one AI coaching for communication patterns.

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Platform Compliance Officer — deterministic “sheriff” pass across **TokenSaverOS + all amendment lanes**
  * Platform Compliance Officer — deterministic “sheriff” pass across **TokenSaverOS + all amendment lanes**
  * (North Star §2.13.2, §2.6, §2.10). Chains repo-wide mechanical gates: tests, SSOT/amendment alignment,
  * overlays, handoff, drift hints, manifest readiness; optional remote deploy probes. **No LLM** (Zero-Waste safe).

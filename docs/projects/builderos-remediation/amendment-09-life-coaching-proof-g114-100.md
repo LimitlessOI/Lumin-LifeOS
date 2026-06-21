@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Integration - Proof G114-100: Core Data Model and Repository Foundation -->
+
 # Amendment 09: Life Coaching Integration - Proof G114-100: Core Data Model and Repository Foundation
 
 This document outlines the initial build slice for Amendment 09, focusing on establishing the foundational data model and repository for Life Coaching sessions. This proof point ensures the core data structure and persistence mechanism are in place before proceeding with service logic or API endpoints.

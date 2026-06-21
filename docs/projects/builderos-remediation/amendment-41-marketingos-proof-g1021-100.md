@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1021 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Proof Gap G1021-100
 This document addresses the identified proof gap G1021-100 related to Amendment 41, ensuring the robust and compliant integration of MarketingOS with LifeOS user consent mechanisms.
 ---

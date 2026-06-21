@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/funnelTracker.js.
+ */
 const funnelService = require('./funnelService');
 
 class FunnelTracker {

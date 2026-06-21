@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G21-100 - BuilderOS Loop Status Exposure -->
+
 # Command Center V2 Blueprint Proof: G21-100 - BuilderOS Loop Status Exposure
 
 This document outlines the next smallest build slice to advance the Command Center V2 blueprint, specifically addressing the need for real-time BuilderOS loop status visibility.

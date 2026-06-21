@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TCO Routing Configuration Analysis -->
+
 # TCO Routing Configuration Analysis
 
 **Date**: 2026-01-08

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/models/Client.js.
+ */
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 

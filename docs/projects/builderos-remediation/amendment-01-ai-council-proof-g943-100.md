@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G943 100. -->
+
 Amendment 01: AI Council - Proof G943-100 Closing Note
 This note closes the proof for the conceptual viability and initial high-level definition of the AI Council as outlined in `docs/projects/AMENDMENT_01_AI_COUNCIL.md`. The next logical step is to establish the foundational configuration for the AI Council within the BuilderOS system.
 

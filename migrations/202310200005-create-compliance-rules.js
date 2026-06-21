@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 202310200005-create-compliance-rules.js.
+ */
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {

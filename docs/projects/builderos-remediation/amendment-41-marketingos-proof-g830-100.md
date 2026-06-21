@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof (G830-100) - Blueprint Note -->
+
 # Amendment 41 MarketingOS Proof (G830-100) - Blueprint Note
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the verifier rejection related to `amendment-41-marketingos-proof-g830-100.md`.

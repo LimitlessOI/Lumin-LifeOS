@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Voice Rail v1 — LifeOS communication layer (sessions, intents, staging).
  * Voice Rail v1 — LifeOS communication layer (sessions, intents, staging).
  * Operator policy: no canned/template operator-facing replies — council or fail-closed.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

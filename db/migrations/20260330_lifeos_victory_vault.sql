@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260330_lifeos_victory_vault.sql.
 -- Migration: 20260330_lifeos_victory_vault.sql
 -- LifeOS Growth extension: Victory Vault / Identity Evidence Engine
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

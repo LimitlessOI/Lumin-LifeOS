@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G20 100. -->
+
 Command Center V2 Blueprint Proof: G20-100 - Core Data Ingestion (SystemStatus)
 This document outlines the first proof-closing blueprint note for Command Center V2, focusing on the initial data ingestion pipeline as per the "Phased Rollout Strategy - Phase 1: Core Data Ingestion & Dashboard MVP".
 ---

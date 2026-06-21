@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260328_lifeos_repair.sql.
 -- 20260328_lifeos_repair.sql
 -- ONE-BOOT repair for the LifeOS migration cascade failure.
 --

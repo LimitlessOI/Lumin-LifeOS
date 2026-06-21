@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/commitment-simulator.js
  * services/commitment-simulator.js
  *
  * Commitment Simulator — "Before you commit, see the full cost."

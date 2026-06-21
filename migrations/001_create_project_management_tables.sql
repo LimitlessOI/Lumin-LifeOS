@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_project_management_tables.sql.
 ```sql
 -- Create projects table
 CREATE TABLE projects (

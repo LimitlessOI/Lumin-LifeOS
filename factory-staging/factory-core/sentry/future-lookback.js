@@ -1,5 +1,5 @@
 /**
- * SENTRY future-lookback — structural questions (no council call on hot path).
+ * SYNOPSIS: SENTRY future-lookback — structural questions (no council call on hot path).
  */
 
 const HORIZONS = ['6_month', '1_year', '2_year'];

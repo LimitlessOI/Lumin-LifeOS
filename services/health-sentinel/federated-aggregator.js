@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Placeholder for federated learning aggregation logic
+ */
 ```javascript
 // Placeholder for federated learning aggregation logic
 

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260322_free_tier_usage.sql.
 -- Migration: Free-tier usage tracking in Neon
 -- Replaces ephemeral file-based state (data/free-tier-usage.json)
 -- Survives Railway deploys — resets automatically on new UTC day

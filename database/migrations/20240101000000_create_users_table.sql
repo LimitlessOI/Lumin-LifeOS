@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20240101000000_create_users_table.sql.
 ```sql
 CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

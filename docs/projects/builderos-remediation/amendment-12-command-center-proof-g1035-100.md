@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G1035-100 Remediation -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, leading to assumptions about the specific implementation details.
 # Amendment 12 Command Center Proof: G1035-100 Remediation
 

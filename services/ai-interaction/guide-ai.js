@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Guide Ai.
+ */
 const axios = require('axios');
 
 async function interactWithGuide(userInput) {

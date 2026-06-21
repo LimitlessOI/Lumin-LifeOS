@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeRE OS v1 routes.
  * LifeRE OS v1 routes.
  * Mount at /api/v1/lifere
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

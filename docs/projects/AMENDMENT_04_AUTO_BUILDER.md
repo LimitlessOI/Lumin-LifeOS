@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 04 — Auto-Builder / Self-Programming System -->
+
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution

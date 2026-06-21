@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-oil-bridge.js
+ */
 // services/memory-oil-bridge.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 

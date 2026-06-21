@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G257-100 Remediation -->
+
 # Command Center V2 Blueprint Proof: G257-100 Remediation
 
 This document outlines the next smallest build slice to address the OIL verifier rejection and progress the Command Center V2 blueprint. The previous rejection was due to the verifier attempting to execute a `.md` file as JavaScript, indicating a misconfiguration in the verifier's execution environment rather than an issue with the `.md` file's content itself. This proof focuses on establishing the foundational routing and a placeholder component for Command Center V2 within BuilderOS.

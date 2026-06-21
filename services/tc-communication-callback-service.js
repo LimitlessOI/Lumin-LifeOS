@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-communication-callback-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-communication-callback-service.js
  * Normalizes delivery/reply callbacks into canonical TC communication state.

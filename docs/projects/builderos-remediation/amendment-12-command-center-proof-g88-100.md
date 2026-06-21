@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: g88- -->
+
 The task specifies writing a `.md` file, but the OIL verifier rejects `.md` files when attempting to execute them as Node.js modules, making it impossible to satisfy both the target file extension and the verifier's implicit expectation of an executable JavaScript file. This is a contradiction in the specification.
 
 ```javascript

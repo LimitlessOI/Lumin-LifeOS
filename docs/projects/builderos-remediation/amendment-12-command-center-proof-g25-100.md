@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G25-100 - Basic Command Registration and Execution -->
+
 # Amendment 12 Command Center Proof: G25-100 - Basic Command Registration and Execution
 
 This proof-closing blueprint note addresses the foundational capability of the BuilderOS Command Center: the registration and execution of a basic command. This establishes the core plumbing for future, more complex command implementations.

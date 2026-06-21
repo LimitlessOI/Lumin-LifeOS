@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G339-100 -->
+
 # Amendment 12 Command Center Proof - G339-100
 
 This document serves as a proof-closing blueprint note for Amendment 12, focusing on the initial build slice for the BuilderOS Command Center.

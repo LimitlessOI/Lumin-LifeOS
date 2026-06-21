@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Gap G337-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Gap G337-100
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

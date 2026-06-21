@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Fraud Detector.
+ */
 ```javascript
 function analyzeTransactions(transactions) {
     transactions.forEach(transaction => {

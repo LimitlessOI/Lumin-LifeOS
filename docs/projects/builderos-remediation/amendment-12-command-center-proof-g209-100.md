@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G209 100. -->
+
 Amendment 12 Command Center Proof: G209-100 - Initial API Endpoint Proof
 
 This document outlines the proof-closing blueprint note for the initial apiEP required by the Amendment 12 Command Center. This is the smallest safe build slice to establish foundational data access.

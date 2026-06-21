@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: STOP — Hist / legacy boundary (mandatory before any edit) -->
+
 # STOP — Hist / legacy boundary (mandatory before any edit)
 
 **You must read this before choosing a path.** Do not skip because it is “just docs.”

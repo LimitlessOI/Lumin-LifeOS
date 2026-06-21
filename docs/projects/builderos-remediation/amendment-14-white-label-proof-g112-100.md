@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White Label Proof - G112-100 -->
+
 # Amendment 14: White Label Proof - G112-100
 
 **Project:** BuilderOS Remediation

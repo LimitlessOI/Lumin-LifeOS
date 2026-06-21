@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 005_create_did_anchors.sql.
 CREATE TABLE did_anchors (
     id SERIAL PRIMARY KEY,
     did VARCHAR(255) NOT NULL,

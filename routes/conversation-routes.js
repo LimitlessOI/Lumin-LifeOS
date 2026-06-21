@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Conversation & AI Bot Routes
  * Conversation & AI Bot Routes
  * Extracted from server.js
  */

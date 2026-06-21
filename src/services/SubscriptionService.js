@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/SubscriptionService.js.
+ */
 ```javascript
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const UserService = require('./UserService');

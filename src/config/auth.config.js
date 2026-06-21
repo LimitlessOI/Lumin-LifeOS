@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/config/auth.config.js.
+ */
 ```javascript
 require('dotenv').config();
 

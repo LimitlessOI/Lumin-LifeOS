@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: GET /api/v1/templates
+ */
 const express = require('express');
 const router = express.Router();
 

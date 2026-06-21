@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/index.js.
+ */
 ```javascript
 const express = require('express');
 const { funnelController } = require('../controllers/funnelController');

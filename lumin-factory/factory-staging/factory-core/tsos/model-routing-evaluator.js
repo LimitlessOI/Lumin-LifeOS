@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports modelRoutingEvaluation — lumin-factory/factory-staging/factory-core/tsos/model-routing-evaluator.js.
+ */
 export function modelRoutingEvaluation(entry) {
   return {
     current_tier: entry.current_tier,

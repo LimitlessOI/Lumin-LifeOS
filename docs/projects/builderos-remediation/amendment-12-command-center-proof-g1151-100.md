@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1151 100. -->
+
 Proof-Closing Blueprint Note: Amendment 12 Command Center - G1151-100
 This note closes the proof for the initial foundational build slice related to Amendment 12's Command Center, specifically focusing on establishing a minimal internal apiEP for status aggregation.
 1.  Exact missing implementation or proof gap:

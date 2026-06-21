@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Scenario 4: Deal Closed Celebration SMS -->
+
 # Scenario 4: Deal Closed Celebration SMS
 
 ## Overview

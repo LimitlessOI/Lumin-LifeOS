@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G925 100. -->
+
 ### Blueprint Note: AMENDMENT_01_AI_COUNCIL - Proof G925-100 Closure
 
 This note addresses the closure of proof point G925-100, focusing on the foundational establishment of the AI Council's presence within the BuilderOS configuration.

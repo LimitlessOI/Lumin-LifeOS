@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Script — Generate Top Ideas.
+ */
 import fs from 'fs/promises';
 import path from 'path';
 

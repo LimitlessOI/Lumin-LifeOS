@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/model-performance-routes.js
  * routes/model-performance-routes.js
  *
  * Model Performance Ledger API — exposes leaderboard, per-lens winners,

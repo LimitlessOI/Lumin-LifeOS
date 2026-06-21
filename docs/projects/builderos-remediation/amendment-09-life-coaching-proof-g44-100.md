@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G44-100 Remediation Note -->
+
 The source blueprint file `docs/projects/AMENDMENT_09_LIFE_COACHING.md` was not provided in the REPO FILE CONTENTS, making it impossible to derive a blueprint-backed build slice.
 
 # Amendment 09: Life Coaching - Proof G44-100 Remediation Note

@@ -1,5 +1,5 @@
 /**
- * Canonical Point B — LifeRE Alpha.
+ * SYNOPSIS: Canonical Point B — LifeRE Alpha.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

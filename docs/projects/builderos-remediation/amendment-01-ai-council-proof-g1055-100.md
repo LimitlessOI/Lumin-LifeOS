@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G1055 100. -->
+
 BuilderOS Remediation Proof: AMENDMENT_01_AI_COUNCIL - G1055-100
 
 Blueprint Source: `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

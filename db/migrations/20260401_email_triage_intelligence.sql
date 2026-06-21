@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260401_email_triage_intelligence.sql.
 -- Email triage intelligence upgrade
 -- Adds urgency scoring, brief summaries, negotiation intel, spam tracking, and TC auto-queue
 

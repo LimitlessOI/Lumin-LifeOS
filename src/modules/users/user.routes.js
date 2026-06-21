@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/users/user.routes.js.
+ */
 const express = require('express');
 const { createUser, getUser } = require('./user.controller');
 const { userValidationRules } = require('./user.model');

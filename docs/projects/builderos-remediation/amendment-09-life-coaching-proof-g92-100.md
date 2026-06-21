@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching Proof - Group g92-100: Session Completion and Notes -->
+
 # Amendment 09 Life Coaching Proof - Group g92-100: Session Completion and Notes
 
 This document serves as a proof-closing blueprint note for the `g92-100` build slice of Amendment 09, focusing on the capability for a coach to mark a coaching session as complete and add session notes.

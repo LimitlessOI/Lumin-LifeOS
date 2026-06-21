@@ -1,3 +1,4 @@
+-- SYNOPSIS: Script — Create Projects Table.
 ```sql
 CREATE TABLE projects (
   id SERIAL PRIMARY KEY,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Mechanical ARC compile — snapshots repo files to CONTENT/, emits factory blueprint.
+ */
 import path from 'node:path';
 import { REPO_ROOT } from '../builder/run-step.js';
 import { resolveMissionFolder, missionRel } from './mission-paths.js';

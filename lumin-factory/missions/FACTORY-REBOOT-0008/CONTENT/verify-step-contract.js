@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports loadAcceptanceTestsForMission — lumin-factory/missions/FACTORY-REBOOT-0008/CONTENT/verify-step-contract.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

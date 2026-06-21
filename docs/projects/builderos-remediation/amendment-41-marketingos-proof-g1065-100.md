@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1065 100. -->
+
 Amendment 41: MarketingOS Proof G1065-100 - Proof-Closing Blueprint Note
 This document outlines the necessary steps to close the proof gap for MarketingOS integration point G1065-100, ensuring the SSOT foundation is robust.
 1. Exact Missing Implementation or Proof Gap

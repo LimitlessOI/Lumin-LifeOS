@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎯 Neon Database Optimization Strategy -->
+
 # 🎯 Neon Database Optimization Strategy
 
 ## ⚠️ Important Clarification

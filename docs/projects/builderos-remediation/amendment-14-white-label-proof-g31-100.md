@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof - G31-100 -->
+
 # Amendment 14 White Label Proof - G31-100
 
 This document serves as a proof-of-concept or remediation step for Amendment 14, focusing on white-label capabilities.

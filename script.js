@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — script.js.
+ */
 document.addEventListener('DOMContentLoaded', function() {
     fetchTaskQueue();
     fetchPodStatus();

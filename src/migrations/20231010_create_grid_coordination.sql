@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231010_create_grid_coordination.sql.
 ```sql
 CREATE TABLE grid_coordination (
     id SERIAL PRIMARY KEY,

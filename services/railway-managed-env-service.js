@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.
+ */
 import crypto from "crypto";
 import { encrypt, decrypt } from "../core/tco-encryption.js";
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 41 MarketingOS Proof (G770-100) -->
+
 # BuilderOS Remediation: Amendment 41 MarketingOS Proof (G770-100)
 
 ## Proof-Closing Blueprint Note

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1155 100. -->
+
 Amendment 12: Command Center Proof - G1155-100
 This document serves as a proof-closing blueprint note for the initial build slice of Amendment 12, focusing on establishing the core Command Center data model.
 ---

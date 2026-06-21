@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — vr_schema.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS vr_destinations (
     id SERIAL PRIMARY KEY,

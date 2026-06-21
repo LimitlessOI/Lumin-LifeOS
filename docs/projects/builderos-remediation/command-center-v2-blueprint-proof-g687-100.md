@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G687 100. -->
+
 Command Center V2 Blueprint Proof: g687-100 - Command Execution Logging
 This proof addresses the persistent storage of command execution history, a critical component for auditing, debugging, and operational analysis within Command Center V2. Previous build slices have established core command execution and real-time monitoring. This slice focuses on ensuring that every command's lifecycle, from initiation to completion, is durably recorded.
 ---

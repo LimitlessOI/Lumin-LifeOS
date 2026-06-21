@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Personal Memory Architecture -->
+
 # Personal Memory Architecture
 
 **Agent role:** Historian / Architecture Archaeologist  

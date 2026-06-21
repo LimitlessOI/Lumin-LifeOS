@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/commitment-tracker.js
  * services/commitment-tracker.js
  *
  * Captures, tracks, and prods on commitments made by each LifeOS user.

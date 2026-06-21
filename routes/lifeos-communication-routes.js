@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS Communication OS API routes.
  * LifeOS Communication OS API routes.
  * Conversation-first interface — NOT BuilderOS proof memory.
  *

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260529_builderos_tsos_routing_decisions.sql.
 -- TSOS-G3.1 — routing decision log (shadow mode infrastructure).
 -- Immutable audit of baseline vs TSOS-informed model/task-class selection.
 

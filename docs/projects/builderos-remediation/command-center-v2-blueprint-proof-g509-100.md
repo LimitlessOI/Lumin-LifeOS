@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G509 100. -->
+
 Command Center V2 Blueprint Proof: G509-100 - Command Registry Core
 This document serves as a proof-closing blueprint note for the `CommandRegistry` core component, derived from the `COMMAND_CENTER_V2_BLUEPRINT.md`. It outlines the next smallest build slice required to advance the Command Center V2 implementation, focusing on establishing a functional command registration mechanism.
 ---

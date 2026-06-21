@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260329_lifeos_growth.sql.
 -- Migration: 20260329_lifeos_growth.sql
 -- Module A: Growth & Mastery (Wisdom Library, 10,000 Hours Tracker, Deliberate Practice)
 -- Module B: Relationship Intelligence (Health Score, Apology Engine, Emotional Weather, Family Values)

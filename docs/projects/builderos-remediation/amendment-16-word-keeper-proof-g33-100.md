@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G33-100 -->
+
 # Amendment 16: Word Keeper - Proof G33-100
 
 This document outlines the next smallest blueprint-backed build slice for the Word Keeper feature, focusing on the foundational service initialization and data loading.

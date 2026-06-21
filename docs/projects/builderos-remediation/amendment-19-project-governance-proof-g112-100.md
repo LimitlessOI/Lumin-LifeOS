@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G112-100 - BuilderOS Loop Isolation -->
+
 ASSUMPTIONS: The blueprint `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` outlines requirements for strict isolation of BuilderOS-governed loop execution from LifeOS/TSOS components.
 
 # Amendment 19 Project Governance Proof: G112-100 - BuilderOS Loop Isolation

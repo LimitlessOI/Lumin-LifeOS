@@ -1,5 +1,5 @@
 /**
- * Bootstrap BP_PRIORITY product missions for system path A→B.
+ * SYNOPSIS: Bootstrap BP_PRIORITY product missions for system path A→B.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

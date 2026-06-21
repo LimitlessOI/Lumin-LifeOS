@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: NeuralProcessingEngine.js
+ */
 ```javascript
 // NeuralProcessingEngine.js
 const tf = require('@tensorflow/tfjs');

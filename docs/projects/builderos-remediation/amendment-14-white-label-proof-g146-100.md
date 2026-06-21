@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - G146-100 -->
+
 # Amendment 14: White-Label Proof - G146-100
 
 **Blueprint Source:** `docs/projects/AMENDMENT_14_WHITE_LABEL.md`

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260604_mission_runtime_commitments_patch.sql.
 -- BPB-0001 Mission Runtime — commitments table patch migration
 -- PRESCRIBED: BPB-0001 §13.2 — add mission-runtime columns to pre-existing commitments table
 -- Authority: docs/projects/BPB-0001-MISSION-RUNTIME-V1.md §13.2

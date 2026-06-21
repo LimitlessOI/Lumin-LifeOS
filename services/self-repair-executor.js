@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Bounded autonomous self-repair executor.
  * Bounded autonomous self-repair executor.
  *
  * Runs only SYSTEM_AUTHORIZED_UNDER_PB repairs inside the approved Builder/OIL PB.

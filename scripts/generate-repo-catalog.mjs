@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Full-repo inventory for triage (keep / deprecate / delete) and onboarding.
  * Full-repo inventory for triage (keep / deprecate / delete) and onboarding.
  * Regenerates docs/REPO_CATALOG.md (+ optional JSON). Do not hand-edit the catalog table.
  *

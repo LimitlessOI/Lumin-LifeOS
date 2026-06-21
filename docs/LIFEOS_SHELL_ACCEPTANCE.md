@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS shell acceptance (operator) -->
+
 # LifeOS shell acceptance (operator)
 
 **Purpose:** Fast proof that public overlays and core APIs match **LifeOS P1** expectations before demos or alpha testers.

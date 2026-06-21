@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof Gap G291-100 Closure -->
+
 # Amendment 46: BuilderOS Control Plane Proof Gap G291-100 Closure
 
 ## Blueprint Note

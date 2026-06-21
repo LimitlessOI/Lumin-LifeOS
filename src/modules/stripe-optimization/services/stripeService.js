@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/stripe-optimization/services/stripeService.js.
+ */
 ```javascript
 const Stripe = require('stripe');
 const { OptimizationClient } = require('../models/OptimizationClient');

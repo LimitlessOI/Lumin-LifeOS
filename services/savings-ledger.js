@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/savings-ledger.js — TCO-E01
  * services/savings-ledger.js — TCO-E01
  *
  * Per-request savings receipt. Every AI call records before/after tokens,

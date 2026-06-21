@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/character-builder.js
  * services/character-builder.js
  *
  * LifeOS Children's App — Character Building Engine

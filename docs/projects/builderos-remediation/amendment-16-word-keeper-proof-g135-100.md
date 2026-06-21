@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G135 100. -->
+
 Amendment 16: Word Keeper - Proof G135-100
 Blueprint Note: Next Smallest Build Slice
 This note outlines the next smallest, blueprint-backed build slice for the Amendment 16: Word Keeper project, focusing on establishing the core domain entity and its persistence contract.

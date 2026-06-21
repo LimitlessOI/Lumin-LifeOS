@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_route_metrics.sql.
 ```sql
 CREATE TABLE route_metrics (
     id SERIAL PRIMARY KEY,

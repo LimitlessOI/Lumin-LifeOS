@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/medical-context-generator.js
  * services/medical-context-generator.js
  * Generates a pre-appointment medical context brief.
  * Pulls 90 days of data, patterns, medications, correlations.

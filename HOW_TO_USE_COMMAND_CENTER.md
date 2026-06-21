@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎯 How to Use Command Center -->
+
 # 🎯 How to Use Command Center
 
 ## AI Status Bar (Always Visible)

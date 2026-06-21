@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: LifeOS version overnight — run foundation pipeline on each versioned mission.
  * LifeOS version overnight — run foundation pipeline on each versioned mission.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

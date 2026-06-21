@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G143-100 - Core Command Entity & Internal API -->
+
 # Command Center V2 Blueprint Proof: G143-100 - Core Command Entity & Internal API
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, derived from `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`. It focuses on establishing the foundational data model and a minimal internal API for command management.

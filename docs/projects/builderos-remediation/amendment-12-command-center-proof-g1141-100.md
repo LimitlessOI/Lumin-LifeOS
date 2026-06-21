@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1141 100. -->
+
 Amendment 12: Command Center - Proof G1141-100
 This proof-closing blueprint note addresses the initial, foundational build slice for Amendment 12, focusing on establishing core data structures as outlined in the blueprint.
 ---

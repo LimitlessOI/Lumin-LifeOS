@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Command Center V2 Blueprint Proof (G663-100) -->
+
 # BuilderOS Remediation: Command Center V2 Blueprint Proof (G663-100)
 
 ## Blueprint Note: Phase 1 - API Foundation (G663-100) - Proof Closing

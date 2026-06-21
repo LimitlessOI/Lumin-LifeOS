@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Systematic Debugging Plan - AI Counsel OS -->
+
 # Systematic Debugging Plan - AI Counsel OS
 
 **Date**: 2025-01-13  

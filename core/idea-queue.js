@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: core/idea-queue.js
  * core/idea-queue.js
  * Human-approval gate for the self-building pipeline.
  *

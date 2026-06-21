@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Verify TSOS Platform Kernel Phase 0 wiring.
  * Verify TSOS Platform Kernel Phase 0 wiring.
  * @ssot docs/TSOS_PLATFORM_KERNEL.md
  */

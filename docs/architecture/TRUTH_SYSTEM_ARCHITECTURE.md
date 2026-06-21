@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Truth System Architecture -->
+
 # Truth System Architecture
 
 > **Governance supersession (2026-06-09):** Vocabulary + judgment chain sealed **`docs/BUILDEROS_VOCABULARY.md` v2.7**. Truth spine below unchanged and ratified in v2.7.

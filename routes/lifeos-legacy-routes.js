@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-legacy-routes.js
  * routes/lifeos-legacy-routes.js
  *
  * LifeOS Phase 15 — Legacy, Community & Meta API

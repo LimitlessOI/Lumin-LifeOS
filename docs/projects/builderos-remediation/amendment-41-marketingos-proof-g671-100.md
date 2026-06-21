@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G671 100. -->
+
 Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - G671-100
 This document serves as the SSOT foundation for closing the proof gap related to AMENDMENT_41_MARKETINGOS.
 ---

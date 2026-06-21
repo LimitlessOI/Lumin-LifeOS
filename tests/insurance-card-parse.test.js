@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Deterministic tests for insurance card text parsing (no OCR).
  * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
  * Deterministic tests for insurance card text parsing (no OCR).
  */

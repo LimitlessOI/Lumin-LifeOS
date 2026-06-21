@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G758 100. -->
+
 BuilderOS Remediation: Amendment 01 AI Council Proof (G758-100)
 Source Blueprint: `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/interactionController.js.
+ */
 ```javascript
 const interactionService = require('../services/interactionService');
 const Joi = require('joi');

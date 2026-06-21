@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema.sql.
 ```sql
 CREATE TABLE farm_sensors (
     id SERIAL PRIMARY KEY,

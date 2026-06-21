@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G792 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof - G792-100
 This document serves as a proof-closing blueprint note for Amendment 46, focusing on the required wiring within `routes/lifeos-council-builder-routes.js` to support BuilderOS-only governed loop execution.
 Proof-Closing Blueprint Note

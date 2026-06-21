@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — controllers/travelController.js.
+ */
 ```javascript
 const express = require('express');
 const profileService = require('../services/travel/profileService');

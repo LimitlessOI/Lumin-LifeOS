@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Command Center Routes — LEGACY
  * Command Center Routes — LEGACY
  * Extracted from server.js. Mounted via core/two-tier-system-init.js.
  *

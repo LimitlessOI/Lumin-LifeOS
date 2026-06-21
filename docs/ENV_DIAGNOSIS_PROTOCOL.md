@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Environment diagnosis protocol (mandatory before “env is missing”) -->
+
 # Environment diagnosis protocol (mandatory before “env is missing”)
 
 **Authority:** Implements `docs/SSOT_NORTH_STAR.md` **Article II §2.3** (evidence) for variable claims.  

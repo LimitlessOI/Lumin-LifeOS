@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/self-sabotage-monitor.js
  * services/self-sabotage-monitor.js
  *
  * Self-Sabotage Monitor — detects behavioral sabotage patterns and surfaces

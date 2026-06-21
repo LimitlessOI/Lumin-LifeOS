@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_metrics_tables.sql.
 ```sql
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,

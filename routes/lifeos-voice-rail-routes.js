@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Voice Rail v1 API — canonical communication layer.
  * Voice Rail v1 API — canonical communication layer.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * @ssot builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md

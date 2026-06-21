@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TSOS system language — Conductor ↔ machinery channel -->
+
 # TSOS system language — Conductor ↔ machinery channel
 
 **Authority:** `docs/SSOT_NORTH_STAR.md` → **Article II §2.14**. This file is the **normative lexicon** (tokens, line grammar, templates). **Operational detail:** `docs/SSOT_COMPANION.md` → **§0.5H**.

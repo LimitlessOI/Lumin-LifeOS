@@ -1,5 +1,5 @@
 /**
- * Builder Operations Director — continuous factory health, not audit-by-hand.
+ * SYNOPSIS: Builder Operations Director — continuous factory health, not audit-by-hand.
  * Layers: (1) survival 502/syntax (2) utilization proof vs product (3) founder value.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

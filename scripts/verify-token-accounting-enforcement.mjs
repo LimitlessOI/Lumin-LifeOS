@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Verify Token Accounting enforcement wiring (metered council path + unmetered exceptions).
  * Verify Token Accounting enforcement wiring (metered council path + unmetered exceptions).
  * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
  */

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Sentinel — TSOS Builder Auditor
  * Sentinel — TSOS Builder Auditor
  *
  * The fourth agent. Not a builder. An accountability officer.

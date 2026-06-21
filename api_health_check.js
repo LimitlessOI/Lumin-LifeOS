@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: api_health_check.js
+ */
 // api_health_check.js
 const axios = require('axios');
 const slackNotifier = require('./slack_notifier');

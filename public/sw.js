@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS Service Worker
  * LifeOS Service Worker
  *
  * Enables PWA install on iOS, Android, and desktop.

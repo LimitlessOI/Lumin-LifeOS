@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — init-database.sql.
 ```sql
 CREATE TABLE workflows (
   id SERIAL PRIMARY KEY,

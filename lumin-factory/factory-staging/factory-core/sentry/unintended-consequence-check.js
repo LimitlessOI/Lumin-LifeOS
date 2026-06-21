@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports unintendedConsequenceCheck — lumin-factory/factory-staging/factory-core/sentry/unintended-consequence-check.js.
+ */
 export function unintendedConsequenceCheck({ step, builderResult } = {}) {
   const findings = [];
   const boundary = step?.sandbox_boundary || '';

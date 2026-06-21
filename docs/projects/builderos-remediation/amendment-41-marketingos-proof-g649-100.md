@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G649 100. -->
+
 Amendment 41 MarketingOS Proof - G649-100
 This document serves as a proof-closing blueprint note for Amendment 41, focusing on the `customer_segment_id` integration into MarketingOS.
 

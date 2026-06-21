@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — api/routes/translationRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const { translateText } = require('../../services/translation/engine/translationService');

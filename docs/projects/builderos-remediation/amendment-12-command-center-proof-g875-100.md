@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G875-100 Remediation Note -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, requiring inference of its content for deriving the build slice.
 ```markdown
 # Amendment 12 Command Center Proof - G875-100 Remediation Note

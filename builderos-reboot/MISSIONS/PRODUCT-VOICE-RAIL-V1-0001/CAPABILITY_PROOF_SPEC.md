@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Voice Rail — Capability Proof Spec -->
+
 # Voice Rail — Capability Proof Spec
 
 **Run:** `npm run lifeos:voice-rail:capability-proof`  

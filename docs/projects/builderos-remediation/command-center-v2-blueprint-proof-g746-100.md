@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g746-100 - Core UI and Echo Command -->
+
 # Command Center V2 Blueprint Proof: g746-100 - Core UI and Echo Command
 
 This proof closes the initial gap for the Command Center V2 by establishing the foundational UI components and a minimal command execution loop.

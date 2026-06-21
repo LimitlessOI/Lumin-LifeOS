@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: TSOS Platform Kernel — Phase 0 execution syscall layer.
  * TSOS Platform Kernel — Phase 0 execution syscall layer.
  * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
  */

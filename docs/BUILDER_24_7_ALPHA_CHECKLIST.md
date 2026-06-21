@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder 24/7 — alpha rollout checklist -->
+
 # Builder 24/7 — alpha rollout checklist
 
 Use this for **permanent** supervised automation (not a one-off “overnight” run): one machine or VM with a git working copy, `.env` aligned with Railway builder keys, and PM2 keeping both **API** (`lifeos`) and **builder-daemon** alive.

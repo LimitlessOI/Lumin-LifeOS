@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Autonomous telemetry — durable Neon storage for PB-governed autonomous work.
  * Autonomous telemetry — durable Neon storage for PB-governed autonomous work.
  * Honest token estimates only. No secrets. No prompt contents.
  *

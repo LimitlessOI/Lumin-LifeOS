@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G411-100 - Initial API Surface & Data Model -->
+
 # Command Center V2 Blueprint Proof: G411-100 - Initial API Surface & Data Model
 
 This document serves as a proof-closing note for the initial build slice of the Command Center V2 blueprint, specifically addressing the foundational data model and its exposure via a read-only API endpoint.

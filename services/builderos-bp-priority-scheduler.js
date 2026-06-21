@@ -1,5 +1,5 @@
 /**
- * BP_PRIORITY autonomous queue scheduler.
+ * SYNOPSIS: BP_PRIORITY autonomous queue scheduler.
  * On each tick, spawns bp-priority-never-stop.mjs --once as a child process.
  * Reads builderos-reboot/BP_PRIORITY.json for incomplete missions — runs until
  * queue is clear or founder_stop is active.

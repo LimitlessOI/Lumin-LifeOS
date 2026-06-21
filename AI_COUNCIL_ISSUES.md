@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Critical Issues Preventing AI Council Self-Fixing & Self-Programming -->
+
 # Critical Issues Preventing AI Council Self-Fixing & Self-Programming
 
 ## 🔴 CRITICAL ISSUES

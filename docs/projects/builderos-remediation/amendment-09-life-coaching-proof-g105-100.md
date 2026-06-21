@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G105 100. -->
+
 The provided REPO FILE CONTENTS for `docs/projects/builderos-remediation/amendment-09-life-coaching-proof-g105-100.md` was incomplete, requiring completion based on task instructions.
 Amendment 09 Life Coaching: Proof Gap G105-100 Closure
 

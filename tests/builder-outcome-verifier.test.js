@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Regression: wrong commit content cannot pass requested-outcome verification.
  * Regression: wrong commit content cannot pass requested-outcome verification.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

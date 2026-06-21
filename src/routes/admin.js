@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/admin.js.
+ */
 const express = require('express');
 const router = express.Router();
 const config = require('../config');

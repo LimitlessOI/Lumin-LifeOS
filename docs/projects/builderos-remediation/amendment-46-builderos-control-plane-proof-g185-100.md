@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G185 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 46 BuilderOS Control Plane Remediation (G185-100)
 
 This document outlines the remediation plan and proof for closing the identified gaps in Amendment 46, specifically addressing the wiring of `routes/lifeos-council-builder-routes.js` as per the BuilderOS control plane requirements.

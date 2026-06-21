@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — create_translation_subscriptions_table.sql.
 ```sql
 CREATE TABLE translation_subscriptions (
     id SERIAL PRIMARY KEY,

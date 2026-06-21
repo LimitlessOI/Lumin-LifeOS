@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: SLICE-001 — Conversation Commitments v1 API CRUD proof.
  * SLICE-001 — Conversation Commitments v1 API CRUD proof.
  * PASS = manual create → list → keep/break/snooze on production API.
  * @ssot builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/SLICE_001.json

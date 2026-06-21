@@ -1,3 +1,4 @@
+# SYNOPSIS: Shell script — DeployQuantumSystem.
 ```bash
 #!/bin/bash
 

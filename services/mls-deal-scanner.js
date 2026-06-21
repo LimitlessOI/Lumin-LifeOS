@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: mls-deal-scanner.js
  * mls-deal-scanner.js
  * Scores MLS listings against investor buy-box criteria.
  *

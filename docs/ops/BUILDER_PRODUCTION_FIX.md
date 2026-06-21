@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Council builder: production 404 on `/domains` — diagnosis & fix -->
+
 # Council builder: production 404 on `/domains` — diagnosis & fix
 
 **Authority:** Operational; `docs/SSOT_NORTH_STAR.md` **§2.11a** (builder is P0).  

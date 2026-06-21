@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Registers WebsiteAuditRoutes routes/handlers (routes/website-audit-routes.js).
+ */
 function extractFirstJsonValue(rawText) {
   if (!rawText || typeof rawText !== "string") return null;
 

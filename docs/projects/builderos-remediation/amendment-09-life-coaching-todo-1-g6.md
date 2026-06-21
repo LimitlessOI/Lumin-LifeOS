@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 09 Life Coaching - Todo 1 (G6) -->
+
 # BuilderOS Remediation: Amendment 09 Life Coaching - Todo 1 (G6)
 
 This memo outlines the next buildable slice for extracting Life Coaching feature code from `server.js`, addressing the 900 lines of inline endpoint logic.

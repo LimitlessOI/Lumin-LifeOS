@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G122-100 -->
+
 The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided, requiring inference for the "next smallest blueprint-backed build slice".
 
 ```markdown

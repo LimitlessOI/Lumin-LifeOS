@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Phase 11 full governed loop proof: PD → Founder Packet → BPB → Coder → SENTRY → Historian → TSOS → C2.
  * Phase 11 full governed loop proof: PD → Founder Packet → BPB → Coder → SENTRY → Historian → TSOS → C2.
  * Uses FACTORY-PROOF-LOOP-0001 greenfield step as the coder execution anchor.
  */

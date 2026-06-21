@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: scripts/enforce-mutation-ban.mjs
  * scripts/enforce-mutation-ban.mjs
  * Enforce Zone 3/4 large-file mutation ban before builder attempts.
  *

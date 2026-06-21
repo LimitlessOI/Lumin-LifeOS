@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — migration.sql.
 ```sql
 CREATE TABLE payment_records (
     id SERIAL PRIMARY KEY,

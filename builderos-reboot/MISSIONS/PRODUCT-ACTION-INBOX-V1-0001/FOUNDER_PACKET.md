@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet — LifeOS Action Inbox v1 -->
+
 # Founder Packet — LifeOS Action Inbox v1
 
 **Mission ID:** `PRODUCT-ACTION-INBOX-V1-0001`

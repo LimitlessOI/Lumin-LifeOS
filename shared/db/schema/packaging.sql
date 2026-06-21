@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — packaging.sql.
 ```sql
 CREATE TABLE packaging (
     id SERIAL PRIMARY KEY,

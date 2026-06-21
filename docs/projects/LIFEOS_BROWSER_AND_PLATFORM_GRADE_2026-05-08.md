@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS shell + platform — graded pass (live browser + probes) -->
+
 # LifeOS shell + platform — graded pass (live browser + probes)
 
 **Date:** 2026-05-08  

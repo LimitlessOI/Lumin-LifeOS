@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Website Audit (V0 Proof) — Free Marketing Plan -->
+
 # Website Audit (V0 Proof) — Free Marketing Plan
 
 ## Offer

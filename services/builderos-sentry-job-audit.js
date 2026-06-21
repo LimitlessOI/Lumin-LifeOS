@@ -1,5 +1,5 @@
 /**
- * BuilderOS Sentry boundary audit for queued C2 instructions.
+ * SYNOPSIS: BuilderOS Sentry boundary audit for queued C2 instructions.
  * Deterministic supervisor checks — no council call on this step.
  * Zone 3 files (>150 lines) are not blocked — they are routed to
  * extract-helper patch mode so Builder creates a new Zone 1 helper

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1043 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof - G1043-100
 Proof-Closing Blueprint Note: Wiring `routes/lifeos-council-builder-routes.js`
 This document outlines the implementation plan and verification steps to close the proof gap for wiring the BuilderOS control plane endpoints within `routes/lifeos-council-builder-routes.js`.

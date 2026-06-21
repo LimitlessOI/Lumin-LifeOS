@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_01_AI_COUNCIL_PROOF_G46_100 -->
+
 # AMENDMENT_01_AI_COUNCIL_PROOF_G46_100
 
 ## Proof-Closing Blueprint Note: AI Council Communication Channel Specification

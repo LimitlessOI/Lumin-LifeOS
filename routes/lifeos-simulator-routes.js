@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-simulator-routes.js
  * routes/lifeos-simulator-routes.js
  *
  * Future Self Simulator API

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. */
+/**
+ * SYNOPSIS: Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. Final certification v2 — includes Phase 11 full loop + Phase 12 salvage. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

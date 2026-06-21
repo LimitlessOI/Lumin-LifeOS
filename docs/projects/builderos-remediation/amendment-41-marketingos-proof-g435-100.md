@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note (G435-100) -->
+
 # AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note (G435-100)
 
 This document addresses a critical proof gap identified in the AMENDMENT_41_MARKETINGOS blueprint, which serves as the SSOT foundation for MarketingOS integration.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/tone-intelligence.js
  * services/tone-intelligence.js
  *
  * Analyzes emotional tone and context from conversation text.

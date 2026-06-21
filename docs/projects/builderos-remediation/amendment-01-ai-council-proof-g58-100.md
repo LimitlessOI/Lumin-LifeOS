@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof (G58-100) -->
+
 # Amendment 01 AI Council Proof (G58-100)
 
 ## Purpose

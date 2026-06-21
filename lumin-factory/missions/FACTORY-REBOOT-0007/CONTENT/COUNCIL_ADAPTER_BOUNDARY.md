@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Council Adapter Boundary -->
+
 # Council Adapter Boundary
 
 Council service code exists under `factory-core/canon/services/council-service.js` as a **byte-identical parts-car import**.

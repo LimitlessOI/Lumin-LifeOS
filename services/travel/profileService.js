@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — ProfileService.
+ */
 ```javascript
 const db = require('../../models'); // assuming Sequelize models are set up
 const logger = require('../../utils/logger');

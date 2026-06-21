@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G746 100. -->
+
 AMENDMENT_41_MARKETINGOS Proof - G746 Remediation
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified in `AMENDMENT_41_MARKETINGOS.md` related to `MarketingEvent_G746` processing. It outlines the necessary steps for remediation and verification.
 

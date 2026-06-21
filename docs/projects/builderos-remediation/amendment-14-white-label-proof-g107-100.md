@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G107-100 - Logo Display -->
+
 # Amendment 14 White-Label Proof: G107-100 - Logo Display
 
 **Blueprint Item:** G107-100: White-label Logo Display

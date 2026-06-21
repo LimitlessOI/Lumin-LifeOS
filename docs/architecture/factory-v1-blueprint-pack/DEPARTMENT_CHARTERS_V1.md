@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Department Charters v1 -->
+
 # Department Charters v1
 
 ## Status

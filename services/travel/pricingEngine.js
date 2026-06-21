@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — PricingEngine.
+ */
 ```javascript
 const logger = require('../../utils/logger');
 

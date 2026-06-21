@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/integrations/userIntegration.js.
+ */
 const { getUserById } = require('../../users/userRepository');
 
 class UserIntegration {

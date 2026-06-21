@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — models/index.js.
+ */
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('database', 'username', 'password', {

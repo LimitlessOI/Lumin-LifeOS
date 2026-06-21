@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — MetricsCalculator.
+ */
 class MetricsCalculator {
     calculateProgress(userId, sessionData) {
         // Calculate progress indicators

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Founder chat → foundation pipeline (Point B / mission execute).
  * Founder chat → foundation pipeline (Point B / mission execute).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: G1049-100 API Endpoint for System Status -->
+
 # Proof-Closing Blueprint Note: G1049-100 API Endpoint for System Status
 
 This document serves as a proof-closing note for the `G1049-100: API Endpoint for System Status (Proof of Concept)` build slice, and outlines the next immediate steps for the Command Center V2 development.

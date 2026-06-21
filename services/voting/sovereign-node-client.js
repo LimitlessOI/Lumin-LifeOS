@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Placeholder for sovereign node client service
+ */
 ```javascript
 // Placeholder for sovereign node client service
 module.exports = {

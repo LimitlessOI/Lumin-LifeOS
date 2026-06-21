@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 📋 Open Source Council - What to Look For in Logs -->
+
 # 📋 Open Source Council - What to Look For in Logs
 
 ## ✅ Startup Logs

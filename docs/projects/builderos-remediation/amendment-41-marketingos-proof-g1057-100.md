@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (g1057-100) -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (g1057-100)
 
 This document outlines the proof-closing strategy for gap `g1057-100`, ensuring LifeOS user profile data is the Single Source of Truth (SSOT) for MarketingOS.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/teacher-os-paperwork.js
  * services/teacher-os-paperwork.js
  *
  * Paperwork Eliminator for Teacher OS.

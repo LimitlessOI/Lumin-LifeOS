@@ -1,1 +1,3 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G764 100. -->
+
 The specification is contradictory regarding the expected output format. The task is to write a `.md` file, but the general instruction for output format (and the instruction found in the existing `.md` file content) states "Output ONLY the code first — no explanation before the code block. Then append a line containing exactly

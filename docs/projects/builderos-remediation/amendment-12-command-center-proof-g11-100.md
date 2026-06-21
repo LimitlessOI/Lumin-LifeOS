@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G11-100 -->
+
 # Amendment 12 Command Center Proof - G11-100
 
 ## Blueprint Note: Core Command Center Framework

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: S4 / Task DNA v0 — Queue DNA field validator
  * S4 / Task DNA v0 — Queue DNA field validator
  *
  * Scans all known queue JSON files for optional Task DNA fields.

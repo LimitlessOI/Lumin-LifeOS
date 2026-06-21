@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Salvage review checklist — PRODUCT-CONVERSATION-COMMITMENTS-C2-0001 -->
+
 # Salvage review checklist — PRODUCT-CONVERSATION-COMMITMENTS-C2-0001
 
 **Required before BPB writes BLUEPRINT.json.**

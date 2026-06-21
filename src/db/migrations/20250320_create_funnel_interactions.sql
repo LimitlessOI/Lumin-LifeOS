@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20250320_create_funnel_interactions.sql.
 ```sql
 CREATE TABLE funnel_interactions (
     id SERIAL PRIMARY KEY,

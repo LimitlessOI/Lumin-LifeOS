@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G845 100. -->
+
 The OIL verifier rejection indicates a misconfiguration where a markdown file is being treated as an executable JS module; this output provides the correct markdown content but does not address the verifier's environmental issue.
 Amendment 12 Command Center Proof: G845-100 - Initial ProofOfWork Model & Repository
 

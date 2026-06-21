@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof-Closing Blueprint Note (G531-100) -->
+
 # Amendment 41 MarketingOS Proof-Closing Blueprint Note (G531-100)
 
 **SSOT Foundation:** This document serves as the Single Source of Truth for the remediation of the BuilderOS verifier rejection related to Amendment 41 MarketingOS documentation.

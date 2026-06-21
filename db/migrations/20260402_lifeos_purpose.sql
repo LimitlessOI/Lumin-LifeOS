@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260402_lifeos_purpose.sql.
 -- Migration: 20260402_lifeos_purpose.sql
 -- LifeOS Phase 6 — Purpose Discovery, Dream Funding, Fulfillment Engine
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

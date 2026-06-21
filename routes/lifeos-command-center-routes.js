@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-command-center-routes.js
  * routes/lifeos-command-center-routes.js
  *
  * Read-only aggregate endpoints for the Command & Control Center v2 cockpit.

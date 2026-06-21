@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G113 100. -->
+
 The verifier rejection indicates that the `.md` file is being executed as a Node.js ESM module, leading to an `ERR_UNKNOWN_FILE_EXTENSION`. To repair this, the content of the `.md` file must be valid JavaScript, with markdown content embedded within comments, to allow Node.js to parse it without error. This is an unconventional approach for a markdown file but directly addresses the verifier's runtime error.
 
 ```javascript

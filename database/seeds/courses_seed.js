@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — database/seeds/courses_seed.js.
+ */
 exports.seed = function(knex) {
   return knex('courses').del()
     .then(function() {

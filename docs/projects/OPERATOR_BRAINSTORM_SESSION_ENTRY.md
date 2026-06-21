@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Operator brainstorm & “idea session” — **read this first** -->
+
 # Operator brainstorm & “idea session” — **read this first**
 
 **Purpose:** When Adam asks to **read the brainstorming section**, **have a brainstorming session**, **give me 25 ideas**, **continue where we left off**, or similar — **start here**. This file tells you **exactly** how to behave so he does **not** have to repeat standing instructions each time.

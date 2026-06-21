@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Shared multi-model gate-change debate (round 1 + opposite-argument round 2 +
  * Shared multi-model gate-change debate (round 1 + opposite-argument round 2 +
  * future-back review).
  * Used by routes/lifeos-gate-change-routes.js — runs on the **server** where

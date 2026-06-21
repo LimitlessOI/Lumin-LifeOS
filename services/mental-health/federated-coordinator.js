@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Federated Coordinator.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs');
 const tfFederated = require('@tensorflow/federated');

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-provenance.js
+ */
 // services/memory-provenance.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 

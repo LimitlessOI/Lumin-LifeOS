@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council - Proof G621-100: Initial Role Definition & Persistence -->
+
 # Amendment 01 AI Council - Proof G621-100: Initial Role Definition & Persistence
 
 This document serves as a proof-closing blueprint note for the initial phase of establishing the AI Council, specifically addressing the foundational definition and persistence of AI Council roles.

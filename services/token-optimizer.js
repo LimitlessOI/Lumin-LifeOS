@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/token-optimizer.js
  * services/token-optimizer.js
  * Reduces token usage across every AI call — without losing meaning or burning CPU.
  *

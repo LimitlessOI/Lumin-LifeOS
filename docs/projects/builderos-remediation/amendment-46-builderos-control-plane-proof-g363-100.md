@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof (G363-100) -->
+
 # Amendment 46: BuilderOS Control Plane Proof (G363-100)
 
 ## Missing Implementation / Proof Gap

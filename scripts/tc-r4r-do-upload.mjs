@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: One-shot: resolve a TC transaction → scan mailbox for R4R-style PDFs → upload to TransactionDesk.
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  *
  * One-shot: resolve a TC transaction → scan mailbox for R4R-style PDFs → upload to TransactionDesk.

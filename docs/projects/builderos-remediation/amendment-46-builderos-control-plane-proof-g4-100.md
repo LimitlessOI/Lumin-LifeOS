@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G4 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 46 BuilderOS Control Plane - G4-100 Remediation
 
 This note addresses the required implementation for wiring the BuilderOS build lifecycle events into the control plane, specifically within `routes/lifeos-council-builder-routes.js`, as per the signal requiring follow-through.

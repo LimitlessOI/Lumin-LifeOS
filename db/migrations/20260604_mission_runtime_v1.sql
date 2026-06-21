@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260604_mission_runtime_v1.sql.
 -- BPB-0001 Mission Runtime v1 — Phase 1 DB migration
 -- PRESCRIBED: do not deviate from column names, types, or constraints
 -- Authority: docs/projects/BPB-0001-MISSION-RUNTIME-V1.md §Section 1

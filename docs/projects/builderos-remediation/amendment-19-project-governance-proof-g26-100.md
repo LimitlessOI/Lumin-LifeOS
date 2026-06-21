@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof (G26-100) -->
+
 # Amendment 19 Project Governance Proof (G26-100)
 
 ## Overview of Amendment 19 Project Governance

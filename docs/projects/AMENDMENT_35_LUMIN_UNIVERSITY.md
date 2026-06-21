@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_35: Lumin University -->
+
 # AMENDMENT_35: Lumin University
 
 **Status:** Candidate — Long-Range Specification Phase

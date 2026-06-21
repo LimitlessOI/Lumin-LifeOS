@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G8 100. -->
+
 The instruction to "Generate the complete implementation code" is contradictory as the target file is a markdown document, not executable code.
 
 Proof-Closing Blueprint Note: MarketingOS SSOT Foundation (G8-100)

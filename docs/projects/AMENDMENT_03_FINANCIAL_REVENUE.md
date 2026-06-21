@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 03 — Financial & Revenue System -->
+
 # AMENDMENT 03 — Financial & Revenue System
 **Status:** LIVE (partial)
 **Authority:** Subordinate to SSOT North Star Constitution

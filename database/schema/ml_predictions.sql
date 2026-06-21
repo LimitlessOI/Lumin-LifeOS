@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — ml_predictions.sql.
 ```sql
 CREATE TABLE ml_predictions (
     id SERIAL PRIMARY KEY,

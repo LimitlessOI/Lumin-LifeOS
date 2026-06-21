@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_initial_schema.sql.
 ```sql
 CREATE TABLE vr_rooms (
     id SERIAL PRIMARY KEY,

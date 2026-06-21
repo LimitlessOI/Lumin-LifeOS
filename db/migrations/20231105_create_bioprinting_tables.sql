@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231105_create_bioprinting_tables.sql.
 CREATE TABLE organs (
     id SERIAL PRIMARY KEY,
     type VARCHAR(100) NOT NULL,

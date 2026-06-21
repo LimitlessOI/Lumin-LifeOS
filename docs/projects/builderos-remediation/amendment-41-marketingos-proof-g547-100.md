@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Integration (Proof G547-100) -->
+
 # Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Integration (Proof G547-100)
 
 This document serves as the proof-closing blueprint note for Amendment 41, focusing on the MarketingOS integration as defined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`. It outlines the current implementation gap, the smallest safe build slice to address it, the files to touch, verification steps, and stop conditions.

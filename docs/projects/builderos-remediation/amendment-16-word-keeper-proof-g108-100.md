@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G108-100 -->
+
 # Amendment 16 Word Keeper Proof - G108-100
 
 This document outlines the next smallest build slice for the Amendment 16 Word Keeper blueprint, focusing on establishing the core data model and persistence layer.

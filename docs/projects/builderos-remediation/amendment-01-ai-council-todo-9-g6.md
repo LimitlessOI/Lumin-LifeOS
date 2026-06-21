@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 01 AI Council - TOON Codegen Savings (Task 9-G6) -->
+
 # BuilderOS Remediation: Amendment 01 AI Council - TOON Codegen Savings (Task 9-G6)
 
 This memo outlines a builder-ready enhancement plan to integrate TOON-enabled codegen paths, specifically addressing the "Codegen task type shows >10% savings (TOON now enabled)" section of `AMENDMENT_01_AI_COUNCIL.md`. The goal is to leverage TOON's efficiency gains within BuilderOS without impacting LifeOS user features or TSOS customer surfaces.

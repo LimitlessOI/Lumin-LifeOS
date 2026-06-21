@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 06 — Game Publisher -->
+
 # AMENDMENT 06 — Game Publisher
 **Status:** LIVE
 **Authority:** Subordinate to SSOT North Star Constitution

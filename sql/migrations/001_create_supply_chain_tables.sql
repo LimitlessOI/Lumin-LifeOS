@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_supply_chain_tables.sql.
 ```sql
 CREATE TABLE supply_chain_products (
   id SERIAL PRIMARY KEY,

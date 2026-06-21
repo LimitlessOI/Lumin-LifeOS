@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G541 100. -->
+
 The `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` file is not provided, requiring assumptions about its content for "Slice 1".
 BuilderOS Remediation: Command Center V2 Blueprint Proof (g541-100)
 

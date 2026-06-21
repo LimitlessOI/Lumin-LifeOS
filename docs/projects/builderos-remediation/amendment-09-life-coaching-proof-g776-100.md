@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Integration - Proof Closing G776-100 -->
+
 # Amendment 09: Life Coaching Integration - Proof Closing G776-100
 
 This document serves as the proof-closing blueprint note for the "Core Scheduling & Profile Linkage" (G776-100) build slice of Amendment 09.

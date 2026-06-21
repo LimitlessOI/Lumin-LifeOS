@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 011_complete_ai_tracking.sql.
 -- ╔══════════════════════════════════════════════════════════════════════════════════╗
 -- ║              COMPLETE AI USAGE TRACKING (Creates Everything)                    ║
 -- ║              Creates ai_usage table + enhanced tracking                         ║

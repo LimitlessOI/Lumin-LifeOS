@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G345 100. -->
+
 ### Blueprint Note: AMENDMENT_12_COMMAND_CENTER - Proof G345-100 Remediation Proof Generation
 
 This note addresses the next smallest build slice for enabling remediation proof generation and persistence, specifically for closing out remediation task `g345-100`.

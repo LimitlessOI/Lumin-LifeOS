@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — create_offline_models_table.sql.
 ```sql
 CREATE TABLE offline_models (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof Closing Blueprint Note (g861-100) -->
+
 # Amendment 41 MarketingOS Proof Closing Blueprint Note (g861-100)
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

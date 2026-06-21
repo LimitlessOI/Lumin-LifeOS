@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: C09 Build Closure Contract — unit tests
  * C09 Build Closure Contract — unit tests
  *
  * Tests buildClosureRecord() (pure function — no network, no DB).

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Proof G136-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Proof G136-100
 
 This document serves as a proof-closing blueprint note for a specific gap identified in Amendment 41 concerning MarketingOS integration. It outlines the missing implementation/proof gap, the smallest safe build slice to address it, the initial files to touch, verifier/runtime checks, and stop conditions.

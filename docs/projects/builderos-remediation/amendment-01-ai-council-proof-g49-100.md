@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof - G49-100: Initial Council Configuration Proof -->
+
 # Amendment 01 AI Council Proof - G49-100: Initial Council Configuration Proof
 
 This document serves as a proof-closing blueprint note for the `g49-100` gate, verifying the initial configuration of the AI Council as defined in `docs/projects/AMENDMENT_01_AI_COUNCIL.md`. This remediation step ensures the foundational data for the AI Council is correctly established within BuilderOS internal governance tracking.

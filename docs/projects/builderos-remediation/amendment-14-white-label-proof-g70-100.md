@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G70-100 Completion -->
+
 # Amendment 14 White-Label Proof: G70-100 Completion
 
 ## Purpose

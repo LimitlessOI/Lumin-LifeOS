@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_health_nexus_tables.sql.
 ```sql
 CREATE TABLE health_twins (
     id SERIAL PRIMARY KEY,

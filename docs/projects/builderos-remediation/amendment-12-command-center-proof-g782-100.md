@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Remediation Proof (G782-100) -->
+
 # Amendment 12 Command Center Remediation Proof (G782-100)
 
 ## Document Purpose

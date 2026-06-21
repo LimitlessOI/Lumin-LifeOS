@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — api/routes/integrations.js.
+ */
 ```javascript
 const express = require('express');
 const router = express.Router();

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TC Service -->
+
 # TC Service
 _(formerly AMENDMENT_17_TC_SERVICE.md)_
 

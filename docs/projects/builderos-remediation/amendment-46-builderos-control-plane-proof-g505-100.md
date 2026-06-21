@@ -1,1 +1,3 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G505 100. -->
+
 The instruction to "Generate the complete implementation code. Output ONLY the code first" directly contradicts the primary task to "Write docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g505-100.md". I cannot output only code and also output a markdown file. I will prioritize the explicit file generation

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G403 100. -->
+
 This document outlines the remediation for the `g403-100` proof point, addressing the verifier rejection and defining the next smallest build slice for the Command Center feature.
 
 **1. Exact Missing Implementation or Proof Gap:**

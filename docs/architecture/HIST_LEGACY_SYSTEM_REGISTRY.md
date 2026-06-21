@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Hist — Legacy System & Repo Registry -->
+
 # Hist — Legacy System & Repo Registry
 
 **Status:** `ACTIVE` — operator-locked 2026-05-24 (Adam)  

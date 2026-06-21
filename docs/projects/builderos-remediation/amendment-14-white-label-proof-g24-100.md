@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G24 100. -->
+
 ### Amendment 14 White Label Proof - G24-100 Remediation Note
 
 This note defines the next smallest build slice to achieve verifiable proof for Amendment 14 White Labeling, specifically for client G24-100. The previous rejection was an environmental verifier issue, not a content issue with the Markdown itself.

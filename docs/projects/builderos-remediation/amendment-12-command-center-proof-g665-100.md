@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G665-100 - Build Slice Orchestration -->
+
 # Amendment 12 Command Center Proof: G665-100 - Build Slice Orchestration
 
 This document closes the proof gap for the initial implementation of BuilderOS-governed build slice orchestration, as outlined in `AMENDMENT_12_COMMAND_CENTER.md`. It defines the smallest safe build slice to enable the execution and monitoring of atomic build steps within the BuilderOS loop.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260423_tsos_savings_ledger.sql.
 -- Migration: 20260423_tsos_savings_ledger
 -- GAP-FILL: builder not reachable (local server not running, no PUBLIC_BASE_URL set)
 --

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G33 100. -->
+
 ### Proof-Closing Blueprint Note: AI Council Charter (G33-100)
 
 This note addresses the first foundational deliverable identified in `docs/projects/AMENDMENT_01_AI_COUNCIL.md` under "Initial Deliverables (Phase 1)": the "AI Council Charter". Establishing this charter is the smallest, safest, and most critical next step to formalize the AI Council's existence and operational framework within BuilderOS.

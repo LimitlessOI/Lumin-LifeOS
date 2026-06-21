@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/outreach-engine.js
  * services/outreach-engine.js
  *
  * Executes outreach tasks on behalf of the user.

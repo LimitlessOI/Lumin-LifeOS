@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G285 100. -->
+
 The task asks to write a `.md` file, but the OIL verifier rejects `.md` files by attempting to execute them as JavaScript modules. This implies the verifier expects a different file type for "proof-closing blueprint notes" or has a misconfiguration. I will proceed by generating the `.md` content as requested by the task, as I cannot fix the verifier's behavior.
 Proof-Closing Blueprint Note: Amendment 12 Command Center - g285-100
 

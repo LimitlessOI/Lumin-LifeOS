@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: NotificationService
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * NotificationService
  * - Email via SMTP (Gmail/Workspace) or Postmark, with suppression + event logging

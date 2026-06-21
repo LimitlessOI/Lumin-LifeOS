@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Future-State Adversarial Retrospection (FSAR) — System Spec -->
+
 # Future-State Adversarial Retrospection (FSAR) — System Spec
 
 FSAR is a mandatory, recurring, future-hindsight adversarial review.

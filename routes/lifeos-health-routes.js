@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-health-routes.js
  * routes/lifeos-health-routes.js
  * LifeOS Phase 3 — Health Intelligence API
  * Mounted at /api/v1/lifeos/health

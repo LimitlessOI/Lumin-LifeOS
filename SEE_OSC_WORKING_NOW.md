@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 👀 See Open Source Council Working - RIGHT NOW -->
+
 # 👀 See Open Source Council Working - RIGHT NOW
 
 ## 🎯 The Problem

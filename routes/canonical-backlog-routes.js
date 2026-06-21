@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createCanonicalBacklogRoutes — routes/canonical-backlog-routes.js.
+ */
 import express from 'express';
 
 /**

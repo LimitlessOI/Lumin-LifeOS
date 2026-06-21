@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: recordRevenueEvent + syncStripeRevenue — extracted from server.js.
  * recordRevenueEvent + syncStripeRevenue — extracted from server.js.
  * Factory: createFinancialRevenue({ financialDashboard, incomeDroneSystem, updateROI, getStripeClient })
  */

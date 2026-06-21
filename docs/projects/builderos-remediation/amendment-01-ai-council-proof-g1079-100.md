@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 01 AI Council - Proof G1079-100 -->
+
 # BuilderOS Remediation: Amendment 01 AI Council - Proof G1079-100
 
 This document serves as a proof-closing blueprint note for the initial foundational step of Amendment 01, focusing on establishing the AI Council's core data model within BuilderOS.

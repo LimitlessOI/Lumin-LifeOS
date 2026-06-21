@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: LifeOS overlay UI — Lifeos Theme.
+ */
 (function () {
   const STORAGE_KEY = 'lifeos_theme';
 

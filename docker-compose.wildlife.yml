@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — docker-compose.wildlife.yml.
 ```yaml
 version: '3.8'
 services:

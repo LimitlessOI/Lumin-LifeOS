@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 010_enhanced_ai_usage_tracking_SAFE.sql.
 -- ╔══════════════════════════════════════════════════════════════════════════════════╗
 -- ║              ENHANCED AI USAGE TRACKING (Safe - Extends Existing Table)         ║
 -- ║              Adds 2029 lesson fields to your existing ai_usage table            ║

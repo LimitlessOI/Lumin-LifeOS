@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/chatgpt-import.js
  * services/chatgpt-import.js
  *
  * Imports ChatGPT conversation history export into LifeOS.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G112-100 -->
+
 # Amendment 16 Word Keeper Proof - G112-100
 
 This document serves as a proof-closing blueprint note for the next smallest build slice derived from `docs/projects/AMENDMENT_16_WORD_KEEPER.md`.

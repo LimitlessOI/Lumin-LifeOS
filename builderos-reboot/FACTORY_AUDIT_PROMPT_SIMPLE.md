@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Factory Audit — Simple Prompt (Claude Code) -->
+
 # Factory Audit — Simple Prompt (Claude Code)
 
 Copy **PROMPT START** through **PROMPT END** into Claude Code.

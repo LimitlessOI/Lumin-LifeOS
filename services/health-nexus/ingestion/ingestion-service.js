@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Ingestion Service.
+ */
 ```javascript
 const express = require('express');
 const bodyParser = require('body-parser');

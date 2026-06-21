@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1069 100. -->
+
 Amendment 12 Command Center Proof - G1069-100
 
 Proof-Closing Blueprint Note: Command Center Status API Foundation

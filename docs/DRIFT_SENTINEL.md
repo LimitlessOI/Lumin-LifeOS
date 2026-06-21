@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Drift Sentinel (Local-Only) — System Spec -->
+
 # Drift Sentinel (Local-Only) — System Spec
 
 Drift Sentinel watches the council itself, not the user. It detects consensus drift before it affects outputs.

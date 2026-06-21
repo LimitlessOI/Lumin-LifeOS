@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Drizzle ORM Schema — LifeOS / AI Counsel OS
  * Drizzle ORM Schema — LifeOS / AI Counsel OS
  *
  * SAFE TRANSITION: This coexists with existing raw `pg` queries.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_resource_usage_table.sql.
 CREATE TABLE resource_usage (
     id SERIAL PRIMARY KEY,
     utility_type VARCHAR(255) NOT NULL,

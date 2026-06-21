@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof: G91-100 Remediation -->
+
 The source blueprint `docs/projects/AMENDMENT_14_WHITE_LABEL.md` was not provided, making the specification incomplete.
 # Amendment 14 White Label Proof: G91-100 Remediation
 

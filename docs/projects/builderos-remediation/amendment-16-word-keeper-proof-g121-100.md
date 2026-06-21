@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 16: Word Keeper - Proof G121-100: Core Functionality Integration Proof -->
+
 # AMENDMENT 16: Word Keeper - Proof G121-100: Core Functionality Integration Proof
 
 ## Blueprint Note: Proof-Closing for Initial Word Keeper Feature Set

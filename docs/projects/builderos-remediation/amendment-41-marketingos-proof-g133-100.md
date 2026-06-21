@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: MarketingOS Data Sync Verification (g133-100) -->
+
 # Proof-Closing Blueprint Note: MarketingOS Data Sync Verification (g133-100)
 
 This document outlines the proof-closing steps for `g133-100`, focusing on establishing LifeOS as the SSOT foundation for MarketingOS `campaign_event_log` data.

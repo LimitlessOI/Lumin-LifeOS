@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Setup Ollama Models.
 
 # ╔══════════════════════════════════════════════════════════════════════════════════╗
 # ║                    OLLAMA MODELS SETUP SCRIPT                                    ║

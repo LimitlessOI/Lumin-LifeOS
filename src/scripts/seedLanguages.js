@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/scripts/seedLanguages.js.
+ */
 ```javascript
 const { SupportedLanguage } = require('../models');
 

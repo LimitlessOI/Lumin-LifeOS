@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/conversation-store.js
  * services/conversation-store.js
  * Stores and retrieves all conversations: Claude Code sessions, server AI calls, any channel.
  *

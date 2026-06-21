@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Execute one blueprint step (write_file_exact from content_source_path).
  * Execute one blueprint step (write_file_exact from content_source_path).
  * Usage: node execute-mission-step.mjs FACTORY-REBOOT-0004 S401
  */

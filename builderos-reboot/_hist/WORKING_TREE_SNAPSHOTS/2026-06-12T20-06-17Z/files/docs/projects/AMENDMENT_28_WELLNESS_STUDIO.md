@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Wellness Studio -->
+
 # Wellness Studio
 _(formerly AMENDMENT_28_WELLNESS_STUDIO.md)_
 

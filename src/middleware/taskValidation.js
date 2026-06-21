@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/taskValidation.js.
+ */
 ```javascript
 const { body } = require('express-validator');
 

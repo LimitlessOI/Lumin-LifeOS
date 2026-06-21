@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G413-100 - Initial Data Ingestion Endpoint -->
+
 # Command Center V2 Blueprint Proof: G413-100 - Initial Data Ingestion Endpoint
 
 This document serves as a proof-closing blueprint note for the initial build slice of the Command Center V2 Data Ingestion Layer, as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`. It addresses the foundational step of establishing a basic data reception and persistence mechanism.

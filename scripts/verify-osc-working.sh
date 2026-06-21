@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Verify Osc Working.
 
 # ╔══════════════════════════════════════════════════════════════════════════════════╗
 # ║                    VERIFY OPEN SOURCE COUNCIL IS WORKING                        ║

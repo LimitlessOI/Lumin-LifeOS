@@ -1,1 +1,3 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G225 100. -->
+
 The specification is contradictory: The task explicitly requests a markdown file (`.md`), but the OIL verifier rejected the previous attempt because it tried to execute the `.md` file as a JavaScript module, indicating an expectation for executable code. This output provides the requested markdown content, assuming the verifier's behavior is an external configuration issue that cannot be resolved by altering the file type or content to be executable JS.

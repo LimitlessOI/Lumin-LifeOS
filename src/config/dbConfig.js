@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: PostgreSQL configuration
+ */
 ```javascript
 const { Pool } = require('pg');
 const Redis = require('ioredis');

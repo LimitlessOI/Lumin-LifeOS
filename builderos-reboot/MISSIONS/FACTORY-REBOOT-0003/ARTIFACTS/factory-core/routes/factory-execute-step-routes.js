@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: BuilderOS artifact — Factory Execute Step Routes.
+ */
 export const factoryExecuteStepRoute = {
   method: 'POST',
   path: '/factory/execute-step',

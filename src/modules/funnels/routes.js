@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/routes.js.
+ */
 const express = require('express');
 const funnelController = require('./funnelController');
 const funnelAuth = require('./middleware/funnelAuth');

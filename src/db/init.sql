@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — init.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS generated_content (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema.sql.
 ```sql
 CREATE TABLE nanoparticle_formulations (
     id SERIAL PRIMARY KEY,

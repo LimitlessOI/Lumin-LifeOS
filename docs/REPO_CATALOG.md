@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: REPO_CATALOG — machine-generated inventory -->
+
 # REPO_CATALOG — machine-generated inventory
 
 > **AUTO-GENERATED** — `npm run repo:catalog`  

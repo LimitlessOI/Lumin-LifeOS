@@ -1,5 +1,5 @@
 /**
- * Memory Intelligence Service — Evidence Ladder + Institutional Knowledge
+ * SYNOPSIS: Memory Intelligence Service — Evidence Ladder + Institutional Knowledge
  *
  * Implements the epistemic fact store, lesson library, debate records,
  * agent performance/routing, protocol violations, task authority,

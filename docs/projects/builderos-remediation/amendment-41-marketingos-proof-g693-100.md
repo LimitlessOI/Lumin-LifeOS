@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G693 100. -->
+
 Amendment 41: MarketingOS Proof Gap G693-100 Remediation Blueprint
 Signal requiring follow-through: This document — SSOT foundation.
 This blueprint note addresses the specific proof gap `G693-100` identified within Amendment 41 for MarketingOS, focusing on verifiable end-to-end data flow for a specific campaign type.

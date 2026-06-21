@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260416_lifeos_focus_privacy.sql.
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 -- LifeOS focus sessions, privacy windows, redaction jobs, and command log
 

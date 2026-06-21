@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/stripeCourseService.js.
+ */
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 async function createStripeProduct(course) {

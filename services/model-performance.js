@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/model-performance.js
  * services/model-performance.js
  *
  * Model Performance Ledger — tracks which AI model performs best for each

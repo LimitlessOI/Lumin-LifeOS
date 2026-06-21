@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_integrations_and_integration_events.sql.
 ```sql
 -- Create integrations table
 CREATE TABLE integrations (

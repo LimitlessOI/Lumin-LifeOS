@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/future-self-simulator.js
  * services/future-self-simulator.js
  *
  * Future Self Simulator — the most powerful feature in the platform.

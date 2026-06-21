@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — RecommendationEngine.
+ */
 const tf = require('@tensorflow/tfjs-node');
 const AdaptiveRecommendation = require('../../models/adaptiveRecommendations');
 

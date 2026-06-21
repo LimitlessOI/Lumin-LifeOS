@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: system-rotate-command-key.mjs
  * system-rotate-command-key.mjs
  *
  * Atomically rotates COMMAND_CENTER_KEY — sets it in Railway vault AND updates

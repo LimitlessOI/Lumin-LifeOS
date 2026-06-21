@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Compound improvement loop — between every slice -->
+
 # Compound improvement loop — between every slice
 
 **North Star alignment:** honesty on evidence (§2.6); Conductor supervises the system (§2.11c); session report to Adam when load-bearing (§2.11b).

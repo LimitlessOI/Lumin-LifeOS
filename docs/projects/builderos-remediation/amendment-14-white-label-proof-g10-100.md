@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Labeling Proof - G10-100: Core Configuration Schema -->
+
 # Amendment 14: White-Labeling Proof - G10-100: Core Configuration Schema
 
 ## 1. Introduction

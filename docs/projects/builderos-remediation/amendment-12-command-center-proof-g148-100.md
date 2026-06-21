@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G148-100 -->
+
 # Amendment 12: Command Center - Proof G148-100
 
 This proof-closing blueprint note addresses the initial build slice for the Amendment 12 Command Center, focusing on the core service definition.

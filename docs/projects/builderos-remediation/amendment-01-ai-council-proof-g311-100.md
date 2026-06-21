@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof - G311-100 Remediation -->
+
 The specification is contradictory: the task requires writing a `.md` file, but the verifier rejects `.md` files by attempting to execute them as Node.js modules.
 
 # Amendment 01 AI Council Proof - G311-100 Remediation

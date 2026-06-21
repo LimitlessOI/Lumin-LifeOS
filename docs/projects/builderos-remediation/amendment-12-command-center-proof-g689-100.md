@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G689 100. -->
+
 The verifier rejection indicates a contradiction: the target file `docs/projects/builderos-remediation/amendment-12-command-center-proof-g689-100.md` is a markdown document, but the verifier attempted to load it as a Node.js ESM module, resulting in `ERR_UNKNOWN_FILE_EXTENSION`. This implies a mismatch between the verifier's expectation and the file's intended type.
 
 ```markdown

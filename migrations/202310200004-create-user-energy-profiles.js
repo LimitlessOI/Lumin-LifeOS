@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 202310200004-create-user-energy-profiles.js.
+ */
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {

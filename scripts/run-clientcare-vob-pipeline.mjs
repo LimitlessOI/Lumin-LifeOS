@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Upload an insurance card image and run the full ClientCare pipeline on the LifeOS server:
  * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
  *
  * Upload an insurance card image and run the full ClientCare pipeline on the LifeOS server:

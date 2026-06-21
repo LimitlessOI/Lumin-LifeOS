@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Websocket Manager.
+ */
 const WebSocket = require('ws');
 
 class WebSocketManager {

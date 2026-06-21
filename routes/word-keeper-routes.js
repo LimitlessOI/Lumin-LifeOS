@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/word-keeper-routes.js — Amendment 16 (Word Keeper & Integrity Engine)
  * routes/word-keeper-routes.js — Amendment 16 (Word Keeper & Integrity Engine)
  * @ssot docs/projects/AMENDMENT_16_WORD_KEEPER.md
  *

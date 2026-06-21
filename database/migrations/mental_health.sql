@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — mental_health.sql.
 ```sql
 CREATE TABLE mental_health_sessions (
     id SERIAL PRIMARY KEY,

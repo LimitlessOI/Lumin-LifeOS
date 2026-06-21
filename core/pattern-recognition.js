@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║              CODEBASE PATTERN RECOGNITION SYSTEM                                ║
  * ║              Finds patterns and anti-patterns across entire codebase            ║

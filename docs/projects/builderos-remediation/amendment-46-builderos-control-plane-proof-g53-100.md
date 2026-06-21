@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G53-100 Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G53-100 Remediation
 
 This document addresses the OIL verifier rejection and outlines the implementation plan to close the proof gap for Amendment 46, specifically regarding the BuilderOS control plane build lifecycle management.

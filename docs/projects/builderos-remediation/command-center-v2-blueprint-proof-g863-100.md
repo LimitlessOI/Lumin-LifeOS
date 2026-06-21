@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof Note: Command Center V2 - g863-100 -->
+
 # Blueprint Proof Note: Command Center V2 - g863-100
 
 This note closes the proof for the initial client-side routing and basic component shell for Command Center V2, specifically focusing on the "System Health Overview" component's data fetching and display.

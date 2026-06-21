@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Cloud Sync.
+ */
 ```javascript
 const { Client } = require('pg');
 

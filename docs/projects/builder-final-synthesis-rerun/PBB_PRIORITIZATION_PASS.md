@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — PBB PRIORITIZATION PASS. -->
+
 PBB_PRIORITIZATION_PASS.md
 
 ## PBB Prioritization Pass

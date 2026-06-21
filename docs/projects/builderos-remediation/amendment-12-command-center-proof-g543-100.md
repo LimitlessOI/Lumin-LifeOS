@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G543-100 - Basic Routing and Placeholder Component -->
+
 # Amendment 12 Command Center Proof: G543-100 - Basic Routing and Placeholder Component
 
 This document serves as a proof-closing blueprint note for `g543-100`, focusing on establishing the foundational client-side routing and a minimal placeholder component for the Command Center as outlined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

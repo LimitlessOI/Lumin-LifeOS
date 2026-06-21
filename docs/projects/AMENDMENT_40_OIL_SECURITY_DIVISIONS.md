@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 40 — OIL Security Divisions + Security Alpha Scope -->
+
 # AMENDMENT 40 — OIL Security Divisions + Security Alpha Scope
 
 > **Y-STATEMENT:** In the context of **Builder/OIL operating on Railway with council keys and governed receipts**, facing **real auth/env/memory bypass risk without enterprise budget**, we decided **three OIL security lanes (Adversarial Audit, Verification, Crypto/Harvest Defense) with receipt-native find→fix→verify→close**, accepting **deferred deception/PQC until value and monitoring justify them**.

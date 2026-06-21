@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane: lifeos-council-builder-routes.js Patch Plan (G1) -->
+
 @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
 
 # Amendment 46 BuilderOS Control Plane: lifeos-council-builder-routes.js Patch Plan (G1)

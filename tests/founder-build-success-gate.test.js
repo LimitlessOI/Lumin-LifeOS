@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/founder-build-success-gate.test.js.
+ */
 import assert from 'node:assert/strict';
 import {
   verifyCssPatchLocal,

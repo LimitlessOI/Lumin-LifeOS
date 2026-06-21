@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: AUTONOMOUS-RECOVERY-0002 production proof — inject on Railway, recover via cron ONLY.
  * AUTONOMOUS-RECOVERY-0002 production proof — inject on Railway, recover via cron ONLY.
  * This script orchestrates HTTP calls; it must NOT invoke local factory:autopilot.
  * @ssot builderos-reboot/MISSIONS/AUTONOMOUS-RECOVERY-0001/FOUNDER_PACKET.json

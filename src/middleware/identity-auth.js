@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/identity-auth.js.
+ */
 ```javascript
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto-js');

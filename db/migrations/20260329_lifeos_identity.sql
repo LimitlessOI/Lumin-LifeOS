@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260329_lifeos_identity.sql.
 -- db/migrations/20260329_lifeos_identity.sql
 --
 -- LifeOS Identity Intelligence Layer

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Mission spend snapshot — Railway production telemetry (honest estimates).
  * Mission spend snapshot — Railway production telemetry (honest estimates).
  * Splits raw tokens into buckets so 720h idle churn ≠ value.
  * Writes builderos-reboot/MISSION_SPEND_SNAPSHOT.json

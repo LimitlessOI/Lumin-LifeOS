@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Self-programming service: handleSelfProgramming (internal) and HTTP handler.
  * Self-programming service: handleSelfProgramming (internal) and HTTP handler.
  * All dependencies are provided via getDeps() so server.js can wire and mutate over time.
  */

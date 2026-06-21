@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260328_lifeos_notifications.sql.
 -- Migration: 20260328_lifeos_notifications
 -- LifeOS notification queue and delivery log
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

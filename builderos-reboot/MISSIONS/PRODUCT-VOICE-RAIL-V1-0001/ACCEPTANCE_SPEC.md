@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Acceptance Specification — LifeOS Voice Rail v1 -->
+
 # Acceptance Specification — LifeOS Voice Rail v1
 
 **Mission ID:** `PRODUCT-VOICE-RAIL-V1-0001`  

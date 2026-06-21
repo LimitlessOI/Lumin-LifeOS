@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260323_email_triage.sql.
 -- Email Triage Log
 -- Stores all scanned emails with AI/rule-based category
 

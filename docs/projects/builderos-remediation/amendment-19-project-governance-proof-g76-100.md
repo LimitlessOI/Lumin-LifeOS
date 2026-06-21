@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G76-100 Remediation -->
+
 # Amendment 19 Project Governance Proof: G76-100 Remediation
 
 This document provides the proof and remediation plan for governance range G76-100 under Amendment 19, focusing on BuilderOS-only governed loop execution.

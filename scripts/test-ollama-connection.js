@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Test Ollama Connection and Model Availability
  * Test Ollama Connection and Model Availability
  * Verifies that the AI Counsel OS can connect to your local Ollama instance
  */

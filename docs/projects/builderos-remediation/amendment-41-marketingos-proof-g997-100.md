@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Gap G997-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Gap G997-100
 
 This document serves as a proof-closing blueprint note for the identified gap G997-100 within Amendment 41, pertaining to the MarketingOS integration. The objective is to provide an implementation-first plan to close the specified proof gap, ensuring readiness for the next C2 build pass.

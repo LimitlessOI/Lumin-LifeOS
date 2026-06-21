@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 001 Create Tables.
 ```sql
 CREATE TABLE supply_chain_assets (
   asset_id SERIAL PRIMARY KEY,

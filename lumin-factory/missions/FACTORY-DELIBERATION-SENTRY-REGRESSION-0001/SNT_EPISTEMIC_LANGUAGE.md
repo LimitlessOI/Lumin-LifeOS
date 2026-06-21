@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SNT Epistemic Language — BuilderOS / Cursor Communications -->
+
 # SNT Epistemic Language — BuilderOS / Cursor Communications
 
 **Standing principle for all agents (Cursor, Conductor, SNT, BPB, CDR):**

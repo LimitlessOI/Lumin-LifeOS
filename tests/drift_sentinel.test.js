@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/drift_sentinel.test.js.
+ */
 import assert from 'assert';
 import fs from 'fs/promises';
 import { runDriftCheck } from '../audit/drift/drift_sentinel.js';

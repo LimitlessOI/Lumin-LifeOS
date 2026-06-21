@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_32: Music Talent Studio -->
+
 # AMENDMENT_32: Music Talent Studio
 
 **Status:** Candidate — Specification Phase

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PROJECT CONTEXT -->
+
 # PROJECT CONTEXT
 # Injected into all AI prompts
 

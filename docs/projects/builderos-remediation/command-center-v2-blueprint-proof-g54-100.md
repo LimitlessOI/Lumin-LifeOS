@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Command Registry Foundation (G54-100) -->
+
 # Blueprint Proof: Command Center V2 - Command Registry Foundation (G54-100)
 
 **Source Blueprint:** `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`

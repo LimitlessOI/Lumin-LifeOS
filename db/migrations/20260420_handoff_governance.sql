@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260420_handoff_governance.sql.
 -- Amendment 36 — Builder conductor audit + Kingsman audit trail
 -- Applied automatically on Railway boot with other migrations.
 

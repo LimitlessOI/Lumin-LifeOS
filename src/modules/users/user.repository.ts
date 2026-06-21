@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createUser — src/modules/users/user.repository.ts.
+ */
 ```typescript
 import { PrismaClient } from '@prisma/client';
 import { User } from './user.model';

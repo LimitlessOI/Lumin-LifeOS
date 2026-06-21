@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G141-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G141-100
 
 This document serves as the SSOT foundation for closing proof gap G141-100 related to AMENDMENT_41_MARKETINGOS.

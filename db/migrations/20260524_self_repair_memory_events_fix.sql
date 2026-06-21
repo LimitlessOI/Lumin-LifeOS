@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260524_self_repair_memory_events_fix.sql.
 -- Recovery migration: create self_repair_memory_events if the prior migration failed.
 -- The prior migration (20260524_self_repair_memory_events.sql) was marked applied even
 -- though it failed because the migration runner marks-applied on failure to avoid boot

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260330_lifeos_health.sql.
 -- Migration: 20260330_lifeos_health.sql
 -- LifeOS Phase 3 — Health Intelligence schema
 -- Tables: wearable_data, health_correlations, emergency_events, emergency_contacts

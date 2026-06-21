@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Factory System Audit Prompt v1 -->
+
 # Factory System Audit Prompt v1
 
 **Use with:** Claude Code, Codex, or any cold auditor agent  

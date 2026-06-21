@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G81 100. -->
+
 Proof-Closing Blueprint Note: Amendment 12 Command Center - G81-100
 This note addresses the initial build slice for establishing core data access for the Command Center, specifically focusing on a foundational status endpoint as outlined implicitly by the Amendment 12 blueprint.
 1.  Exact missing implementation or proof gap:

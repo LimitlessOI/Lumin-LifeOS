@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G385 100. -->
+
 Amendment 01 AI Council: Proof G385-100 Closure Note
 
 This document closes proof point G385-100 for Amendment 01 AI Council, focusing on the foundational implementation slice required to establish the council's operational configuration within the LifeOS platform.

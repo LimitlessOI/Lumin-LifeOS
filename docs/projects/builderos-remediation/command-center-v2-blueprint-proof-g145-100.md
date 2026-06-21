@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Data Model Definition (g145-100) -->
+
 # Blueprint Proof: Command Center V2 - Data Model Definition (g145-100)
 
 This proof addresses the initial build slice for Command Center V2, focusing on the foundational "Data Model Definition" as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.

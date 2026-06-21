@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/utils/dockerUtils.js.
+ */
 const Docker = require('dockerode');
 const docker = new Docker();
 

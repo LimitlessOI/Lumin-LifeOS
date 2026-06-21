@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: MEMORY NEON SCHEMA -->
+
 # MEMORY NEON SCHEMA
 
 **Status:** `governing_artifact`  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G495 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Gap G495-100
 Signal requiring follow-through: This document — SSOT foundation.
 

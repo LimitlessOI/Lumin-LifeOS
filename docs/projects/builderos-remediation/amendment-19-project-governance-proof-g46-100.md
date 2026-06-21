@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof: Amendment 19 - Project Governance (G46-100) -->
+
 # Proof: Amendment 19 - Project Governance (G46-100)
 
 ## Governance Item: G46-100 - Project Lead Assignment and Charter Documentation

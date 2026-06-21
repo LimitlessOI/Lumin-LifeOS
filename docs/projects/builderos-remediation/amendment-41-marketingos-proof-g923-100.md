@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G923-100 - SSOT Foundation Verification -->
+
 # Amendment 41 MarketingOS Proof: G923-100 - SSOT Foundation Verification
 
 This document outlines the blueprint for closing the proof gap related to Amendment 41's mandate for `docs/projects/AMENDMENT_41_MARKETINGOS.md` as the Single Source of Truth (SSOT) foundation for MarketingOS.

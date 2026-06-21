@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS Communication OS — identity layer, meeting mode, search, revenue brief.
  * LifeOS Communication OS — identity layer, meeting mode, search, revenue brief.
  * NOT BuilderOS epistemic proof memory.
  *

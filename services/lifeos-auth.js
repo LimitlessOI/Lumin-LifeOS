@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-auth.js
  * services/lifeos-auth.js
  *
  * LifeOS Authentication Service

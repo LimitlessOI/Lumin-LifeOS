@@ -1,5 +1,5 @@
 /**
- * services/web-search-service.js
+ * SYNOPSIS: services/web-search-service.js
  * Internet search for UX best practices, design patterns, and competitor research.
  *
  * Supports:

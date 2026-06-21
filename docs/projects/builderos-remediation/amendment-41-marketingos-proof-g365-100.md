@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G365 100. -->
+
 ### Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - G365-100 Proof
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified in AMENDMENT_41_MARKETINGOS related to G365-100 completion.

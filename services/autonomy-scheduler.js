@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Autonomy scheduler: registers all scheduleAutonomyLoop / scheduleAutonomyOnce tasks.
  * Autonomy scheduler: registers all scheduleAutonomyLoop / scheduleAutonomyOnce tasks.
  * getDeps() returns current refs (pool, crmSequenceRunner, logMonitor, etc.) so server.js only wires once at startup.
  *

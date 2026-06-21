@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema.sql.
 ```sql
 -- Table for farms
 CREATE TABLE farms (

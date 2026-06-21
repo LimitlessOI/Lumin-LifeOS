@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof (G39-100) - Remediation Blueprint -->
+
 # Amendment 41 MarketingOS Proof (G39-100) - Remediation Blueprint
 
 This document serves as the Single Source of Truth (SSOT) foundation for addressing the OIL verifier rejection related to Amendment 41 MarketingOS proof G39-100. The rejection indicated an `ERR_UNKNOWN_FILE_EXTENSION` when attempting to process the `.md` proof file as an executable module. This blueprint outlines the necessary steps to provide a verifiable proof in a format consumable by the BuilderOS verifier.

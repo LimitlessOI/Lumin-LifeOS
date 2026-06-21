@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/processRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const processController = require('../controllers/processController');

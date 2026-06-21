@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1071 100. -->
+
 The specification is contradictory: The task explicitly asks to write a markdown file (`docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g1071-100.md`), but also instructs to "Generate the complete implementation code" and the OIL verifier rejected the previous `.md` file due to an `ERR_UNKNOWN_FILE_EXTENSION`, implying it expected executable JavaScript. This creates a conflict between the specified target file type and the expected output content/type.
 
 Given the instruction to "Generate the complete implementation code" and the verifier's rejection of a `.md` file, the most reasonable assumption to proceed is that the system expects the actual JavaScript implementation for the wiring described in the blueprint note, and that the `.md` file path in the task is either a misdirection or a placeholder for the *result* of this implementation step. Therefore, the output will be the JavaScript code for `routes/lifeos-council-builder-

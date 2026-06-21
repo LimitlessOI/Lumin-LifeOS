@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CONSTITUTION CONFLICTS -->
+
 # CONSTITUTION CONFLICTS
 **Phase 1 — Observation only. No fixes applied. No files edited.**
 **Produced:** 2026-06-13 by Claude Code (read-only pass)

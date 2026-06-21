@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260611_voice_rail_v1.sql.
 -- Voice Rail v1 — durable sessions (non-private only)
 CREATE TABLE IF NOT EXISTS voice_rail_sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

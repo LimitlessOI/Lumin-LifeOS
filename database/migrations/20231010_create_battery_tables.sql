@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231010_create_battery_tables.sql.
 CREATE TABLE battery_units (
   id SERIAL PRIMARY KEY,
   model VARCHAR(255) NOT NULL,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Open Contradictions & Architecture Risk Register -->
+
 # Open Contradictions & Architecture Risk Register
 
 | Field | Value |

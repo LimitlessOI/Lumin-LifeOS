@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 19 Project Governance Proof (G103-100) -->
+
 The specification is incomplete as the content of `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` was not provided, requiring assumptions about its specific governance rules.
 ---
 # BuilderOS Remediation: Amendment 19 Project Governance Proof (G103-100)

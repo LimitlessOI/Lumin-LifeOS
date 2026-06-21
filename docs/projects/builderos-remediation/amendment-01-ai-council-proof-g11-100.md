@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G11-100: Foundational Configuration Establishment -->
+
 # Amendment 01: AI Council - Proof G11-100: Foundational Configuration Establishment
 
 This document outlines the proof-closing blueprint note for establishing the foundational configuration mechanism for the AI Council within BuilderOS, addressing proof point G11-100 as derived from `AMENDMENT_01_AI_COUNCIL.md`.

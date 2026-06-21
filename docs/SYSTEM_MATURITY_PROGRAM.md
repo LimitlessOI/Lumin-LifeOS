@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: System Maturity Program — path to exceptional (10/10) operations -->
+
 # System Maturity Program — path to exceptional (10/10) operations
 
 **SSOT position:** This program implements North Star **Article II §2.10** (observe → grade → fix) and **§2.12** (council for load-bearing technical decisions) at the **platform** level. It does not replace per-amendment backlogs; it **coordinates** them.

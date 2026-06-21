@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G1105 100. -->
+
 Amendment 16: Word Keeper - Proof G1105-100
 Blueprint Note: Next Smallest Build Slice
 

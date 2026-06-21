@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/word-keeper-transcriber.js — Amendment 16 (Word Keeper)
  * services/word-keeper-transcriber.js — Amendment 16 (Word Keeper)
  *
  * Server-side audio transcription pipeline.

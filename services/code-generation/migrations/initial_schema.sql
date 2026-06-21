@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Initial Schema.
 ```sql
 CREATE TABLE code_generation_requests (
     id SERIAL PRIMARY KEY,

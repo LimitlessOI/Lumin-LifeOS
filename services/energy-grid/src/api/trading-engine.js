@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Trading Engine.
+ */
 ```javascript
 const { Client } = require('pg');
 const Web3 = require('web3');

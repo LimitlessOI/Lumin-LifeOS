@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔧 Fix Git and Railway Issues -->
+
 # 🔧 Fix Git and Railway Issues
 
 ## Problem 1: Git Configuration

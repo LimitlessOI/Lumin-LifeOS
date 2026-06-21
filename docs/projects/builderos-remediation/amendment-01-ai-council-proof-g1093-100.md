@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G1093-100 -->
+
 # Amendment 01: AI Council - Proof G1093-100
 
 **Proof of Concept/Completion: Initial AI Council Operational Charter Draft & Internal Review**

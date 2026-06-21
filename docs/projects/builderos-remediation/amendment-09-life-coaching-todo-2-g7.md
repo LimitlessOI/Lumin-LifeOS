@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 09 Life Coaching - Todo 2 (G7) -->
+
 # BuilderOS Remediation: Amendment 09 Life Coaching - Todo 2 (G7)
 
 ## Blueprint Enhancement Memo: Life Coaching Routes Initialization

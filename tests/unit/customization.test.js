@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/unit/customization.test.js.
+ */
 ```javascript
 const { expect } = require('chai');
 const Customization = require('../../src/models/Customization');

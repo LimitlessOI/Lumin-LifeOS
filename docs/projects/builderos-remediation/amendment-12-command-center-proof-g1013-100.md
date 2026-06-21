@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center Integration - Proof G1013-100 -->
+
 # Amendment 12: Command Center Integration - Proof G1013-100
 
 This document serves as a proof-closing blueprint note for the `G1013-100` task, focusing on defining C2 data models and schema as part of Phase 1: Core Data Sync & API.

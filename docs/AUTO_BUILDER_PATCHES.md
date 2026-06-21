@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Auto-Builder Autonomy - Exact Patches -->
+
 # Auto-Builder Autonomy - Exact Patches
 
 ## File 1: core/auto-builder.js

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof (G335-100) - Remediation Blueprint Note -->
+
 The source blueprint `docs/projects/AMENDMENT_41_MARKETINGOS.md` is not provided in the REPO FILE CONTENTS, making it impossible to fully ground the proof-closing blueprint note in its intended context. The content below is a templated structure based on the requirements.
 ---
 # Amendment 41 MarketingOS Proof (G335-100) - Remediation Blueprint Note

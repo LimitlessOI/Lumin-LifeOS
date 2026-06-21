@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G31-100 - Core Command Mechanism -->
+
 # Command Center V2 Blueprint Proof: G31-100 - Core Command Mechanism
 
 This document outlines the first proof-closing build slice for the Command Center V2 blueprint, focusing on establishing the foundational command registration and execution mechanism.

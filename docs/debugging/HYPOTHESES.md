@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Debugging Hypotheses - AI Counsel OS -->
+
 # Debugging Hypotheses - AI Counsel OS
 
 ## Hypothesis A: Invalid Model Keys

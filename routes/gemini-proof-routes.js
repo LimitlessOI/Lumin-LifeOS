@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: routes/gemini-proof-routes.js
+ */
 // routes/gemini-proof-routes.js
 /** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 

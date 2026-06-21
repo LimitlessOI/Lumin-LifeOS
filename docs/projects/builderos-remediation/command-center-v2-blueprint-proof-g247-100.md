@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Initial Command Submission (G247-100) -->
+
 # Blueprint Proof: Command Center V2 - Initial Command Submission (G247-100)
 
 This document outlines the first proof-of-concept build slice for the Command Center V2 blueprint, focusing on establishing the foundational capability to receive and persist a new command.

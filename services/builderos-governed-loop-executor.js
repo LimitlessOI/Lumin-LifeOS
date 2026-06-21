@@ -1,5 +1,5 @@
 /**
- * BuilderOS governed loop executor bridge — single queued job only.
+ * SYNOPSIS: BuilderOS governed loop executor bridge — single queued job only.
  * Sentry boundary audit → BP/PBB plan → Builder dispatch → Sentry verifier → optional one retry.
  *
  * C2 remains intake/status only; this module is explicit runtime glue.

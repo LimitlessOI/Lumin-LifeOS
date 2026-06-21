@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — lumin-factory/missions/FACTORY-REBOOT-0004/CONTENT/factory-staging-server.js.
+ */
 import express from 'express';
 import { registerFactoryRoutes } from './startup/register-routes.js';
 

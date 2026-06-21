@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-family-routes.js
  * routes/lifeos-family-routes.js
  *
  * LifeOS Phase 4 — Family OS API

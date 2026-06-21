@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G483 100. -->
+
 ### Blueprint Note: Command Center V2 - Proof G483-100
 
 This note addresses the initial integration gap for Command Center V2 within the BuilderOS execution loop, focusing on establishing the minimal foundational presence required for subsequent development.

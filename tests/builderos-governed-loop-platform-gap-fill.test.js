@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: js — tests/builderos-governed-loop-platform-gap-fill.test.js.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 import test from 'node:test';

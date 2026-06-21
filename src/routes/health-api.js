@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/health-api.js.
+ */
 const express = require('express');
 const router = express.Router();
 

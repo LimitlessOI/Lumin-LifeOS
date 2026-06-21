@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/database/migrations/20231024001_create_skill_profiles.js.
+ */
 ```javascript
 exports.up = function(knex) {
   return knex.schema.createTable('skill_profiles', (table) => {

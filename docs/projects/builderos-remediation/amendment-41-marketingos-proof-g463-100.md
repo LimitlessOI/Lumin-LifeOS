@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G463-100 - BuilderOS Remediation -->
+
 # Amendment 41: MarketingOS Proof - G463-100 - BuilderOS Remediation
 
 This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41, specifically for goal G463-100, concerning the secure and isolated exposure of BuilderOS-derived marketing performance data to MarketingOS.

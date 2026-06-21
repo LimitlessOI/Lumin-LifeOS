@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-core-routes.js
  * routes/lifeos-core-routes.js
  *
  * LifeOS Phase 1 — The Mirror API

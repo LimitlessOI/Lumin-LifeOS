@@ -1,3 +1,4 @@
+# SYNOPSIS: Service module — Kubernetes Deployment.
 ```yaml
 apiVersion: apps/v1
 kind: Deployment

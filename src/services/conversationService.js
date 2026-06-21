@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/conversationService.js.
+ */
 ```javascript
 const pool = require('../config/database');
 

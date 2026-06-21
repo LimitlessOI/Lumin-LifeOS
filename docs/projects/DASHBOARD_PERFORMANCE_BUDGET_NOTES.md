@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD PERFORMANCE BUDGET NOTES. -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

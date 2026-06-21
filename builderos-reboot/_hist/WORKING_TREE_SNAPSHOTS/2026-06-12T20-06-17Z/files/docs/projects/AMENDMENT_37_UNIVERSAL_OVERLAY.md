@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Universal Overlay Platform -->
+
 # Universal Overlay Platform
 _(formerly AMENDMENT_37_UNIVERSAL_OVERLAY.md)_
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Railway Deployment Checklist for TCO -->
+
 # Railway Deployment Checklist for TCO
 
 **Date**: 2026-01-08

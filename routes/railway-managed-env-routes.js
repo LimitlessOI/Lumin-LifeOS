@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Railway env vault + sync (production spine).
  * Railway env vault + sync (production spine).
  * @authority Legacy production spine — see routes/AGENTS.md. Not canonical factory runtime.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md

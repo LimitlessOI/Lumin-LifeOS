@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Project Governance -->
+
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 

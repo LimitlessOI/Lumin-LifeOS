@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Configuration — MakeComConfig.
+ */
 ```javascript
 require('dotenv').config();
 

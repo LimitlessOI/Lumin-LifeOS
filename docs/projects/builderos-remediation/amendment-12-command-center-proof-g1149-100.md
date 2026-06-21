@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1149 100. -->
+
 Amendment 12: Command Center - Proof G1149-100
 This document outlines the next smallest blueprint-backed build slice for Amendment 12: Command Center, focusing on establishing the core `CommandCenter` singleton and its initialization logic.
 ---

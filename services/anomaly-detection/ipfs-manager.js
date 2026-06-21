@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Ipfs Manager.
+ */
 ```javascript
 const { create } = require('ipfs-http-client');
 

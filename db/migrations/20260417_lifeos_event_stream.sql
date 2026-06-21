@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260417_lifeos_event_stream.sql.
 -- LifeOS unified capture/event stream
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/household-sync.js
  * services/household-sync.js
  *
  * Manages household relationships between LifeOS users.

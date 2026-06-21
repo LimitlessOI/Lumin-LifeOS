@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet Template v2 -->
+
 # Founder Packet Template v2
 
 Required sections:

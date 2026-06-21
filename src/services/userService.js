@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/UserService.js.
+ */
 ```javascript
 const db = require('../db/config');
 

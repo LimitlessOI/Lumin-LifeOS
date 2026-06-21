@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/emotional-pattern-engine.js
  * services/emotional-pattern-engine.js
  *
  * Identifies and tracks recurring emotional patterns for a user.

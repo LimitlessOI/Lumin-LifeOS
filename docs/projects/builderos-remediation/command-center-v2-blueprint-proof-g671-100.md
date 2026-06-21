@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G671-100 Remediation -->
+
 # Command Center V2 Blueprint Proof: G671-100 Remediation
 
 This document outlines the next smallest build slice to address the previous OIL verifier rejection and advance the Command Center V2 (CCv2) implementation. The prior rejection was due to the verifier attempting to execute a `.md` file as a Node.js module, indicating a verifier configuration issue rather than a flaw in the blueprint content itself. This remediation focuses on delivering the first functional, minimal component of CCv2 within BuilderOS.

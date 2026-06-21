@@ -1,5 +1,5 @@
 /**
- * Pre-ARC enrichment artifacts + consensus receipt.
+ * SYNOPSIS: Pre-ARC enrichment artifacts + consensus receipt.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

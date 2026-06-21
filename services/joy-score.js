@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/joy-score.js
  * services/joy-score.js
  *
  * Tracks and computes the Joy Score for a LifeOS user.

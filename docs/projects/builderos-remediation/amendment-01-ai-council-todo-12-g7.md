@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Todo 12 G7. -->
+
 The specification is contradictory: the task requests a `.md` file, but the verifier rejects `.md` files, expecting a Node.js module. I will provide the markdown content as requested by the task, as I cannot resolve the verifier's environmental expectation without violating the target file type.
 
 ```markdown

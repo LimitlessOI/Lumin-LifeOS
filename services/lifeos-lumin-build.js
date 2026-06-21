@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Lumin programming bridge — plan/draft via AI Council + queue work on Adam / builder rails.
  * Lumin programming bridge — plan/draft via AI Council + queue work on Adam / builder rails.
  *
  * Outputs are advisory (council text). Applying patches to the repo still flows through

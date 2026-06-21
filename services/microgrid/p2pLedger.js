@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — P2pLedger.
+ */
 ```javascript
 class Ledger {
     constructor() {

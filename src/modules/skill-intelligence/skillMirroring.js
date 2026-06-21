@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: skillMirroring.js
+ */
 ```javascript
 // skillMirroring.js
 // This module compares user skills with top performers.

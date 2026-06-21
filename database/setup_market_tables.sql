@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup_market_tables.sql.
 ```sql
 CREATE TABLE market_data_points (
     id SERIAL PRIMARY KEY,

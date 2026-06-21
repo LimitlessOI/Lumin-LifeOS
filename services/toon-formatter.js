@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/toon-formatter.js — TCO-A09-NEW
  * services/toon-formatter.js — TCO-A09-NEW
  *
  * TOON: Token-Oriented Object Notation.

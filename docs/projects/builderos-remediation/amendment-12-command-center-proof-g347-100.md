@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_12_COMMAND_CENTER Proof G347-100 -->
+
 # AMENDMENT_12_COMMAND_CENTER Proof G347-100
 
 ## Blueprint Note: Core Command Center Structure

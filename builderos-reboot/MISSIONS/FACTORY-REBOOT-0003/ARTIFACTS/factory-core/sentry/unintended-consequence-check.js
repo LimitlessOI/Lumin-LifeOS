@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports unintendedConsequenceCheck — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/unintended-consequence-check.js.
+ */
 export function unintendedConsequenceCheck({ step, builderResult } = {}) {
   const findings = [];
   const boundary = step?.sandbox_boundary || '';

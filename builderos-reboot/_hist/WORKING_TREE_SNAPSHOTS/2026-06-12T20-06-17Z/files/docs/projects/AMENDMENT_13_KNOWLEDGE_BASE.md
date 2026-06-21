@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Knowledge Base & Web Intelligence -->
+
 # Knowledge Base & Web Intelligence
 _(formerly AMENDMENT_13_KNOWLEDGE_BASE.md)_
 **Status:** LIVE

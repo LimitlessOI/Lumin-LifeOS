@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet -->
+
 # Founder Packet
 
 ## Mission

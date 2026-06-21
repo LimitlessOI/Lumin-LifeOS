@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports readTsosMetrics — factory-staging/factory-core/tsos/tsos-summary.js.
+ */
 import fs from 'node:fs';
 import { getTsosMetricsPath } from './record-step-metrics.js';
 

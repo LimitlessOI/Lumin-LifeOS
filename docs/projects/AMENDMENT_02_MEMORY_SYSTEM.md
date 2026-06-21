@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 02 — Memory Capsule System -->
+
 # AMENDMENT 02 — Memory Capsule System
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
 **Authority:** Subordinate to SSOT North Star Constitution

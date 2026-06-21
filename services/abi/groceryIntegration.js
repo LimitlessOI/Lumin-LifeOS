@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — GroceryIntegration.
+ */
 const axios = require('axios');
 
 async function placeGroceryOrder(userId, orderDetails) {

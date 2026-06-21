@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260326_tc_review_packages.sql.
 -- Migration: 20260326_tc_review_packages
 -- Amendment 17 — TC document review packages for mobile review/approval handoff.
 

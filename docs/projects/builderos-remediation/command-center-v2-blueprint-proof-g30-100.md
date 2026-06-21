@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g30-100 Remediation -->
+
 # Command Center V2 Blueprint Proof: g30-100 Remediation
 
 **Blueprint Source**: `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Self-healing supervised builder daemon — continuous 24/7 autonomous improvement loop (default: no wall-clock stop).
  * Self-healing supervised builder daemon — continuous 24/7 autonomous improvement loop (default: no wall-clock stop).
  *
  * Each cycle tightens supervision and advances the autonomous JSON **`/build`** queue; failures back off and retry.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G387-100 -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G387-100
 
 This document serves as a proof-closing blueprint note for `AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md`, detailing the implementation gap and the path to closure for wiring the BuilderOS control plane routes.

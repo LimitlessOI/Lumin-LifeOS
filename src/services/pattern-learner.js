@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Pattern Learner Service
+ */
 // Pattern Learner Service
 
 const { OpenAI } = require('openai');

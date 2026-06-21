@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: NORTH STAR — EDUCATION AND HEALING MISSION -->
+
 # NORTH STAR — EDUCATION AND HEALING MISSION
 **Version:** 2026-04-04
 **Status:** FOUNDATIONAL PHILOSOPHY — Not a product spec. The WHY behind everything.

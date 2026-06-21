@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof (G685-100) Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof (G685-100) Remediation
 
 This document outlines the remediation for the OIL verifier rejection related to Amendment 46, focusing on the BuilderOS control plane. The previous attempt failed due to an incorrect file type interpretation by the verifier (attempting to execute a `.md` file as JavaScript). This proof-closing blueprint note details the required implementation for `routes/lifeos-council-builder-routes.js`.

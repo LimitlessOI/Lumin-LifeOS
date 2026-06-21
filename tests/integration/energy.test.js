@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/integration/energy.test.js.
+ */
 const request = require('supertest');
 const app = require('../../app'); // Assuming app is your Express app
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ */
 // @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
 
 import { fileURLToPath } from 'url';

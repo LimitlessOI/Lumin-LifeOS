@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: BuilderOS Phase R3 — component maturity gap navigator.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * BuilderOS Phase R3 — component maturity gap navigator.
  *

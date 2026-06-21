@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createTelemetry — services/telemetry.js.
+ */
 import { performance } from "node:perf_hooks";
 
 export class TelemetryRecorder {

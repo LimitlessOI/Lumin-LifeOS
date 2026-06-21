@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: Legacy Core -->
+
 # Domain: Legacy Core
 
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)

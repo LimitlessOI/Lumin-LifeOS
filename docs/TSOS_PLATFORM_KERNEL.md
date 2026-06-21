@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TSOS Platform Kernel — Architecture Index -->
+
 # TSOS Platform Kernel — Architecture Index
 
 | Field | Value |

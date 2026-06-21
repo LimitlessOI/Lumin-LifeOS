@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Complete Deployment Guide -->
+
 # 🚀 Complete Deployment Guide
 
 ## How Railway Auto-Deployment Works

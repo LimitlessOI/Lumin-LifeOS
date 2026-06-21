@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Class CommandCenter — docs/projects/builderos-remediation/amendment-12-command-center-proof-g907-100.md. -->
+
 The instruction to "Generate the complete implementation code" is interpreted as generating the complete content for the target markdown file, which describes the implementation steps and verification.
 
 ```markdown

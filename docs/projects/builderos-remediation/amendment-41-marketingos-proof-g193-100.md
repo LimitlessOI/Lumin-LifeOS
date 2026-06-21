@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G193-100 Remediation -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G193-100 Remediation
 
 This document serves as the SSOT foundation for closing the proof gap identified during the OIL verifier rejection for Amendment 41, specifically concerning MarketingOS proof `g193-100`.

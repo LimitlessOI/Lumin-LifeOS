@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 001 Create Amip Tables.
 ```sql
 -- Create table for users
 CREATE TABLE amip_users (

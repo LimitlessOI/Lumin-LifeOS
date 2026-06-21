@@ -1,5 +1,5 @@
 /**
- * PREDICTION_RECEIPT + MODE_A_TO_B transition — required before IDC exit (HARD).
+ * SYNOPSIS: PREDICTION_RECEIPT + MODE_A_TO_B transition — required before IDC exit (HARD).
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

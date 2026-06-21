@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: S4 Task DNA v0 — validator unit tests
  * S4 Task DNA v0 — validator unit tests
  *
  * Tests validateTaskDNA() and formatReport() against real queue files.

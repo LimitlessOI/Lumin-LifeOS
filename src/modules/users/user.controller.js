@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/users/user.controller.js.
+ */
 const { validationResult } = require('express-validator');
 const userService = require('./user.service');
 

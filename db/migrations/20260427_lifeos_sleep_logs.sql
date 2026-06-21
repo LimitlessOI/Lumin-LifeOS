@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260427_lifeos_sleep_logs.sql.
 CREATE TABLE IF NOT EXISTS sleep_logs (
   id BIGSERIAL PRIMARY KEY,
   user_id BIGINT NOT NULL REFERENCES lifeos_users(id) ON DELETE CASCADE,

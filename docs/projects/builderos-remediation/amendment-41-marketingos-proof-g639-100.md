@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof (G639-100) - Verifier Remediation Blueprint -->
+
 # Amendment 41 MarketingOS Proof (G639-100) - Verifier Remediation Blueprint
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

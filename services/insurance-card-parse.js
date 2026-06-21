@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Pure parsing for insurance card OCR text — shared by ClientCare ops and tests.
  * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
  * Pure parsing for insurance card OCR text — shared by ClientCare ops and tests.
  */

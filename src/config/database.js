@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/config/database.js.
+ */
 ```javascript
 const { Pool } = require('pg');
 

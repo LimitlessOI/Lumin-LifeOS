@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: HTTP route module — Site Builder Discovery Routes.
+ */
 import { Router } from 'express';
 import { exec } from 'child_process';
 import logger from '../services/logger.js';

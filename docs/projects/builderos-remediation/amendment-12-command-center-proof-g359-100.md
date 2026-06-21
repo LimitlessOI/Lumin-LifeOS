@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G359-100 -->
+
 # Amendment 12 Command Center Proof - G359-100
 
 This document outlines the next smallest build slice for the `CommandCenter` as described in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

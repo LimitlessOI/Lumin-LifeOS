@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — models/ResilienceProfile.js.
+ */
 ```javascript
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');

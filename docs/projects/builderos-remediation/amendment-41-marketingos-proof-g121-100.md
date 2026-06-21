@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G121 100. -->
+
 ### Proof-Closing Blueprint Note: MarketingOS Proof-G121-100 Remediation
 
 This document serves as the SSOT foundation for closing the identified proof gap related to MarketingOS Proof-G121-100, as per `AMENDMENT_41_MARKETINGOS.md`.

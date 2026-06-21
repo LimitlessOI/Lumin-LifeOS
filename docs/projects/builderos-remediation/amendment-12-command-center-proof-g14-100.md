@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G14-100 - Basic Task List (Read-Only) -->
+
 # Amendment 12 Command Center Proof: G14-100 - Basic Task List (Read-Only)
 
 This proof-closing blueprint note addresses the initial implementation of the "Basic Task List (read-only)" feature as outlined in Phase 1 of the Command Center blueprint.

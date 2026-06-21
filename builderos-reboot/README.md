@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Reboot Workspace -->
+
 # BuilderOS Reboot Workspace
 
 This directory is the canonical reboot workspace for the new `Lumin / BuilderOS` rebuild.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Gamification Service.
+ */
 const { UserEnergyProfiles } = require('../../models');
 
 async function awardPoints(userId, points) {

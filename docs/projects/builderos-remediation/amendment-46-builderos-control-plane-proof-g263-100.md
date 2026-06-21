@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G263 100. -->
+
 Proof-Closing Blueprint Note: G263-100 - BuilderOS Control Plane Wiring
 
 1.  **Exact Missing Implementation or Proof Gap:**

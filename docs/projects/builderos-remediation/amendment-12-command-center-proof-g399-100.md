@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G399 100. -->
+
 Amendment 12: Command Center Integration - Proof G399-100: Initial Telemetry Schema Definition
 
 This proof-closing note addresses the foundational step of defining the initial telemetry data schema, a prerequisite for all subsequent telemetry ingestion work.

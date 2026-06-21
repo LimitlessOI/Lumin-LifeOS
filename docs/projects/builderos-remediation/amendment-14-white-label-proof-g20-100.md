@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof for G20-100 -->
+
 # Amendment 14: White-Label Proof for G20-100
 
 ## Document Purpose

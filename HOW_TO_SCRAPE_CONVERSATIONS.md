@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🤖 How to Scrape ALL Your AI Conversations -->
+
 # 🤖 How to Scrape ALL Your AI Conversations
 
 ## Quick Start - 3 Steps

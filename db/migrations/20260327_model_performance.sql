@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_model_performance.sql.
 -- Model Performance Ledger: tracks per-model, per-lens verdicts and outcome correlation
 -- @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
 

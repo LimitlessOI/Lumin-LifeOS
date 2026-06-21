@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Integration - Proof G72-100 -->
+
 # Amendment 09: Life Coaching Integration - Proof G72-100
 
 ## Overview

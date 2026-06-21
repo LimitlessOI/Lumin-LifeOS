@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CONSTITUTION INVENTORY -->
+
 # CONSTITUTION INVENTORY
 **Phase 1 — Non-destructive audit only. No consolidation, no rewriting, no deletion.**
 **Produced:** 2026-06-13 by Claude Code (read-only pass)

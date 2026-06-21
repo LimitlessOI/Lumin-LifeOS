@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports recordStepOutcome — factory-v1/historian/record-step-outcome.js.
+ */
 const REQUIRED_FIELDS = ['mission_id', 'blueprint_id', 'step_id', 'builder_status', 'verifier_status', 'timestamp'];
 
 export async function recordStepOutcome(receipt) {

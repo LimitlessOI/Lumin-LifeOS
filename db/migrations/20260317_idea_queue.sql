@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260317_idea_queue.sql.
 -- Migration: 20260317_idea_queue
 -- Adds approval gate columns to the ideas table.
 -- Ideas now require explicit human approval before the auto-builder will touch them.

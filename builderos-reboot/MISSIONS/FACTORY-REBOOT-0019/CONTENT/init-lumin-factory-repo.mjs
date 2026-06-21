@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Initialize lumin-factory/ as git-ready standalone repo from bundle. */
+/**
+ * SYNOPSIS: Initialize lumin-factory/ as git-ready standalone repo from bundle. Initialize lumin-factory/ as git-ready standalone repo from bundle. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';

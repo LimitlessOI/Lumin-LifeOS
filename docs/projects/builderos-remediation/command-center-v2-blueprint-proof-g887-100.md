@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G887-100 - Initial Data Ingestion & Queryability -->
+
 # Command Center V2 Blueprint Proof: G887-100 - Initial Data Ingestion & Queryability
 
 This document outlines the first proof-of-concept (PoC) build slice for the Command Center V2, focusing on establishing the most fundamental capability: ingesting a simple metric from an existing LifeOS service and making it queryable. This directly addresses the "Data Ingestion Layer" and a minimal aspect of the "Real-time Processing Engine

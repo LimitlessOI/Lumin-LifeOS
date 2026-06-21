@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: Script — Run Quarterly Rip Replace.
+ */
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';

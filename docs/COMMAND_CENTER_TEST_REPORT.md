@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LEGACY / REFERENCE ONLY -->
+
 # LEGACY / REFERENCE ONLY
 
 This report describes an older Command Center test pass and older command/control assumptions.

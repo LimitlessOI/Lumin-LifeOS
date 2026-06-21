@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Recompute byte_exact_copy sha256 pins in BLUEPRINT.json from files on disk. */
+/**
+ * SYNOPSIS: Recompute byte_exact_copy sha256 pins in BLUEPRINT.json from files on disk. Recompute byte_exact_copy sha256 pins in BLUEPRINT.json from files on disk. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

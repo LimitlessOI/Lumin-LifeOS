@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof G97-100: Initial Data Model & Migration -->
+
 # Amendment 12 Command Center Proof G97-100: Initial Data Model & Migration
 
 This proof-closing blueprint note addresses the foundational data model for the Command Center, specifically covering the definition and persistence of its core entity.

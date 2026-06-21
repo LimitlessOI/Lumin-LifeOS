@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/database/migrations/20231024002_create_learning_paths.js.
+ */
 ```javascript
 exports.up = function(knex) {
   return knex.schema.createTable('learning_paths', (table) => {

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/migration/users.migration.test.js.
+ */
 const { exec } = require('child_process');
 
 describe('Migration Tests', () => {

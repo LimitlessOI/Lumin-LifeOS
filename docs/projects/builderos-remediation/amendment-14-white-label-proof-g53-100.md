@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof (G53-100) - Build Slice 1: Backend Tenant Config API -->
+
 # Amendment 14 White Label Proof (G53-100) - Build Slice 1: Backend Tenant Config API
 
 ## Proof-Closing Blueprint Note

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/funnel.service.js.
+ */
 ```javascript
 const funnelRepository = require('./funnel.repository');
 

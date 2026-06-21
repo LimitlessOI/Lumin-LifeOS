@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1047 100. -->
+
 The task explicitly requests writing a `.md` file, but the OIL verifier rejected the previous attempt by attempting to execute the `.md` file as JavaScript, indicating a mismatch between the task's file type specification and the verifier's execution context for this path.
 Amendment 46: BuilderOS Control Plane Proof - G1047-100
 

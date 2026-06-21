@@ -1,5 +1,5 @@
 /**
- * Founder CSS commit outcome verifier — git-show parity for founder batch commits.
+ * SYNOPSIS: Founder CSS commit outcome verifier — git-show parity for founder batch commits.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 import { execFile } from 'node:child_process';

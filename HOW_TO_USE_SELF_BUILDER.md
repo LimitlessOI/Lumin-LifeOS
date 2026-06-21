@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔨 Self-Builder System - How to Use -->
+
 # 🔨 Self-Builder System - How to Use
 
 ## Overview

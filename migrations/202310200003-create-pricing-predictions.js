@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 202310200003-create-pricing-predictions.js.
+ */
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {

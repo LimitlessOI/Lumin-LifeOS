@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G125 100. -->
+
 Amendment 01: AI Council - Proof G125-100: Initial Member Registry
 
 Context

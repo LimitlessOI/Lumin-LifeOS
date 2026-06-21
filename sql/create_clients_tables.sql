@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_clients_tables.sql.
 ```sql
 CREATE TABLE clients (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231101_create_integration_tokens_table.sql.
 ```sql
 CREATE TABLE integration_tokens (
     id SERIAL PRIMARY KEY,

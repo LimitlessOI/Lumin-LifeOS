@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-auth-routes.js
  * routes/lifeos-auth-routes.js
  *
  * LifeOS Authentication API

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — ContextProcessor.
+ */
 ```javascript
 function processContext(text, contextData) {
     // Analyze cultural and contextual nuances

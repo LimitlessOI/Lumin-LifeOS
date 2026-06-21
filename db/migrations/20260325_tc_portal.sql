@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260325_tc_portal.sql.
 -- TC portal + communication layer
 -- Adds document requests and communication tracking for agent/client portal views
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: WISDOM_REVIEW_RECEIPT — FOUNDER_PACKET_V2 -->
+
 # WISDOM_REVIEW_RECEIPT — FOUNDER_PACKET_V2
 
 **Role played by:** Claude (Sonnet 4.6), simulating Wisdom per V2's Bootstrap Protocol

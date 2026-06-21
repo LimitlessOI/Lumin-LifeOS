@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — carbon-calculator.js.
+ */
 ```javascript
 function calculateCarbonFootprint(data) {
     let totalCarbon = 0;

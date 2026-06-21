@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G58-100 Remediation -->
+
 # Amendment 09: Life Coaching - Proof G58-100 Remediation
 
 ## Blueprint Note: Proof-Closing for LifeCoachProfile Model Definition

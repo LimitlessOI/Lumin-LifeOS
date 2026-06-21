@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: marketIntegrator.js
+ */
 ```javascript
 // marketIntegrator.js
 // This module integrates job market data.

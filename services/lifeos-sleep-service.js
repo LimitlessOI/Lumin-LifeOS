@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports createSleepService — services/lifeos-sleep-service.js.
  * @fileoverview Sleep tracking service for LifeOS health module
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

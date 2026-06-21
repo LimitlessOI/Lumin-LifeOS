@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/taskController.js.
+ */
 ```javascript
 const Task = require('../models/Task');
 const TaskActivity = require('../models/TaskActivity');

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/components/LeadTable.js.
+ */
 import React from 'react';
 
 const LeadTable = ({ leads, onCallTrigger }) => {

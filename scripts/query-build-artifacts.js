@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: Script — Query Build Artifacts.
+ */
 import "dotenv/config";
 import { createDbPool } from "../services/db.js";
 import { loadRuntimeEnv } from "../config/runtime-env.js";

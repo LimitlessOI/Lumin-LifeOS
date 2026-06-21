@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof (G124-100) - BuilderOS Remediation -->
+
 # Amendment 01: AI Council Proof (G124-100) - BuilderOS Remediation
 
 **Document ID:** G124-100

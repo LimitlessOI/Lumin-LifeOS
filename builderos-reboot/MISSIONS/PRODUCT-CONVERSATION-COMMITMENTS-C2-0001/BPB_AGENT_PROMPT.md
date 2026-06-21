@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BPB Agent Prompt — Copy/paste to BPB session -->
+
 # BPB Agent Prompt — Copy/paste to BPB session
 
 **Mission:** `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`  

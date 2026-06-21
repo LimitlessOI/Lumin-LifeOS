@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center Overlay Testing Guide -->
+
 # Command Center Overlay Testing Guide
 
 ## ✅ What Was Fixed

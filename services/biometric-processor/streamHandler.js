@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Initialize WebSocket server
+ */
 ```javascript
 const WebSocket = require('ws');
 const redis = require('redis');

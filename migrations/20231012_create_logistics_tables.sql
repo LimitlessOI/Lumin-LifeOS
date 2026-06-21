@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231012_create_logistics_tables.sql.
 ```sql
 -- Migration script to create logistics-related tables
 

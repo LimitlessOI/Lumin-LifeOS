@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Create a new goal with cost analysis
+ */
 // src/services/goal-tracker.js
 // Goal tracking system with cost analysis and worth evaluation
 

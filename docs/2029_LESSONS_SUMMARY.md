@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎓 2029 LESSONS - QUICK REFERENCE -->
+
 # 🎓 2029 LESSONS - QUICK REFERENCE
 
 **Based on 3 years of production experience with self-programming AI**

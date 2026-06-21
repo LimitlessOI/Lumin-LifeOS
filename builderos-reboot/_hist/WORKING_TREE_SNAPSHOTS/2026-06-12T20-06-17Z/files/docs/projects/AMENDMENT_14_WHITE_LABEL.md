@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: White-Label Platform -->
+
 # White-Label Platform
 _(formerly AMENDMENT_14_WHITE_LABEL.md)_
 **Status:** BUILDING

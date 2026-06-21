@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Phase 1 — Idea rain (Claude Code independent) -->
+
 # Phase 1 — Idea rain (Claude Code independent)
 
 **Session:** `2026-05-13_capsule-ssot-convergence`  

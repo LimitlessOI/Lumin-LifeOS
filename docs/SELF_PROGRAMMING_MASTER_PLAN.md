@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS/LimitlessOS - Self-Programming Master Plan -->
+
 # LifeOS/LimitlessOS - Self-Programming Master Plan
 
 ## 🎯 North Star Mission

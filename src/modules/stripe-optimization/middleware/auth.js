@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/stripe-optimization/middleware/auth.js.
+ */
 ```javascript
 const { OptimizationClient } = require('../models/OptimizationClient');
 

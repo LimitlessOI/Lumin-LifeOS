@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-legacy-core.js
  * services/lifeos-legacy-core.js
  *
  * Layer-11 legacy core primitives.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 38 — Idea Vault (Captured Conversation Backlog) -->
+
 # AMENDMENT 38 — Idea Vault (Captured Conversation Backlog)
 
 > **Y-STATEMENT:** In the context of **years of multi-model build conversations** spread across **tens of megabytes of exports**, facing **idea loss and mental load**, we decided to maintain a **single SSOT amendment that inventories, maps, and preserves** those ideas (with **provenance**), accepting that **full prose lives in raw dumps** and **shipping specs stay in domain amendments**.

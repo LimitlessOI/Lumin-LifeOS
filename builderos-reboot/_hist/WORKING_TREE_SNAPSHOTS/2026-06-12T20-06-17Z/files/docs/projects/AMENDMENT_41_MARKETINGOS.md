@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: MarketingOS / SocialMediaOS -->
+
 # MarketingOS / SocialMediaOS
 _(formerly AMENDMENT_41_MARKETINGOS.md)_
 

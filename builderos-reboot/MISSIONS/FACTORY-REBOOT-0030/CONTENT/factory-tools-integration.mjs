@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Integration: upstream gates, SENTRY depth, Historian, C2, truth reconcile. */
+/**
+ * SYNOPSIS: Integration: upstream gates, SENTRY depth, Historian, C2, truth reconcile. Integration: upstream gates, SENTRY depth, Historian, C2, truth reconcile. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

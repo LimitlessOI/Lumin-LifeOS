@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_content_tables.sql.
 ```sql
 CREATE TABLE generated_content (
     id SERIAL PRIMARY KEY,

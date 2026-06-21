@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/constitutional-lock.js
  * services/constitutional-lock.js
  *
  * Multi-party consensus enforcement for locked amendments.

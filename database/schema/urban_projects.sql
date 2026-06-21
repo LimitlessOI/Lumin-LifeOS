@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — urban_projects.sql.
 ```sql
 CREATE TABLE urban_projects (
     id SERIAL PRIMARY KEY,

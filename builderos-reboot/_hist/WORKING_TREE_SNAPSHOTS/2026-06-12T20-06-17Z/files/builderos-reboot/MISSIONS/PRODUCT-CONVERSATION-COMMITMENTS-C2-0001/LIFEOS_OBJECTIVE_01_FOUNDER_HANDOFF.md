@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Objective 1 — Founder handoff (Conductor → System) -->
+
 # LifeOS Objective 1 — Founder handoff (Conductor → System)
 
 > **⚠️ SUPERSEDED 2026-06-11** — Active authority is **`FOUNDER_PACKET.md`**. This file archived to `_hist/` for history. Do not use for build decisions.

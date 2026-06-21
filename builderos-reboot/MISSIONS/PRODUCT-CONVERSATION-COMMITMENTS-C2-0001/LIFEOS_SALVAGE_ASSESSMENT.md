@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Salvage Assessment -->
+
 # LifeOS Salvage Assessment
 
 **Mission:** PRODUCT-CONVERSATION-COMMITMENTS-C2-0001  

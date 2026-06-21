@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260606_decision_ledger.sql.
 -- GAP-002 / GAP-017 — Unified founder decision ledger (Phase 1 schema)
 -- @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md §4.4
 

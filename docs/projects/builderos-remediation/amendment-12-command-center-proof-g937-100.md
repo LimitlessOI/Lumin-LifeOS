@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G937 100. -->
+
 AMENDMENT_12_COMMAND_CENTER Proof - G937-100
 This document outlines the first proof-of-concept build slice for the AMENDMENT_12 Command Center, focusing on establishing the foundational C2_CORE_ENGINE module.
 ---

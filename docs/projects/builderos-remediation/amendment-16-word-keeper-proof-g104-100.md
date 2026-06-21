@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G104 100. -->
+
 Amendment 16 Word Keeper Proof - G104-100
 This document outlines the next smallest build slice for the Amendment 16 Word Keeper system, focusing on establishing the foundational write operation.
 ---

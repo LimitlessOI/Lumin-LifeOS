@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G191 100. -->
+
 ### Proof-Closing Blueprint Note: MarketingOS Campaign G191-100 Data Flow Verification
 
 This blueprint note addresses the proof gap for Amendment 41, ensuring the integrity and accuracy of data flow for MarketingOS Campaign G191-100, as foundationalized by `AMENDMENT_41_MARKETINGOS.md`.

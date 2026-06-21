@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — add_market_data_uploads.sql.
 CREATE TABLE market_data_uploads (
     id SERIAL PRIMARY KEY,
     file_name VARCHAR(255) NOT NULL,

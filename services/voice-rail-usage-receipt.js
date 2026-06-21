@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Voice Rail — fetch latest council token/cost receipt after a founder reply.
  * Voice Rail — fetch latest council token/cost receipt after a founder reply.
  * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
  */

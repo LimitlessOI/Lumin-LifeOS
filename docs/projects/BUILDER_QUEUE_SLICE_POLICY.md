@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder queue — comparable slices (telemetry discipline) -->
+
 # Builder queue — comparable slices (telemetry discipline)
 
 If one slice is **`POST /build`** on a Markdown spec and the next rewires a **`40k` overlay**, wall-time trend lines **mix incomparable workloads**. Slowing down is sometimes **chosen quality** or **infra** (**502 retries**), not “regression.”

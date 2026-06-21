@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: config/builder-release-modes.js
+ */
 // config/builder-release-modes.js
 /** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 

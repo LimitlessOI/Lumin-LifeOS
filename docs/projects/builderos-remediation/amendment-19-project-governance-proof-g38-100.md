@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G38-100 - Automated Decision Traceability -->
+
 # Amendment 19 Project Governance Proof: G38-100 - Automated Decision Traceability
 
 **Date:** 2023-10-27

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: OIL Governance Pass Report — Memory Capsule Alpha -->
+
 # OIL Governance Pass Report — Memory Capsule Alpha
 
 **Pass type:** OIL Runtime Governance Pass (Step 4 of 5)  

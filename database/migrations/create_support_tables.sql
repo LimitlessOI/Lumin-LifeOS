@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_support_tables.sql.
 ```sql
 CREATE TABLE support_conversations (
     id SERIAL PRIMARY KEY,

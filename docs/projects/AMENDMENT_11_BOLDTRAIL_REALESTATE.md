@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 11 — BoldTrail Real Estate CRM Integration -->
+
 # AMENDMENT 11 — BoldTrail Real Estate CRM Integration
 **Status:** LIVE (in use)
 **Authority:** Subordinate to SSOT North Star Constitution

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Index.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs-node');
 const { loadModel } = require('../../ml-models/nutrition-recommender/model.json');

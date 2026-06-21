@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Shared command-key gate for operator routes (builder, Railway env, etc.).
  * Shared command-key gate for operator routes (builder, Railway env, etc.).
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */

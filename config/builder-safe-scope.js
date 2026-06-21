@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: config/builder-safe-scope.js
+ */
 // config/builder-safe-scope.js
 /** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 

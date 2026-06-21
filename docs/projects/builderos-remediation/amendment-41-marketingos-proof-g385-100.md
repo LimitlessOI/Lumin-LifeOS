@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G385 100. -->
+
 The specification is contradictory: the task asks to write a `.md` file, but the final instruction asks to "Generate the complete implementation code", which typically refers to executable code, not documentation.
 ```markdown
 Amendment 41: MarketingOS Proof - G385-100 (Proof-Closing Blueprint Note)

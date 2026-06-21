@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Proof of AI Council Acknowledgment (G804-100) -->
+
 # BuilderOS Remediation: Proof of AI Council Acknowledgment (G804-100)
 
 ## Reference Blueprint

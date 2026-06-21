@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Labeling: Proof of Concept - g32-100 (Brand Configuration) -->
+
 # Amendment 14 White Labeling: Proof of Concept - g32-100 (Brand Configuration)
 
 ## 1. Overview

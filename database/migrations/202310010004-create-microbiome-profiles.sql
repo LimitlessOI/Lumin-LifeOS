@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 202310010004-create-microbiome-profiles.sql.
 CREATE TABLE microbiome_profiles (
   id SERIAL PRIMARY KEY,
   variety_id INTEGER REFERENCES biocrop_varieties(id),

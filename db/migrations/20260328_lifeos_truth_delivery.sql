@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260328_lifeos_truth_delivery.sql.
 -- Migration: 20260328_lifeos_truth_delivery
 -- Truth delivery calibration log — learns which style works per user
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

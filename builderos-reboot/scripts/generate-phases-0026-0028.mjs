@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Generate mission packs FACTORY-REBOOT-0026 through 0028 (Phase 11–12 completion). */
+/**
+ * SYNOPSIS: Generate mission packs FACTORY-REBOOT-0026 through 0028 (Phase 11–12 completion). Generate mission packs FACTORY-REBOOT-0026 through 0028 (Phase 11–12 completion). */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G481-100 - SSOT Foundation -->
+
 # Amendment 41 MarketingOS Proof: G481-100 - SSOT Foundation
 
 This document outlines the blueprint for closing the proof gap for `g481-100`, ensuring the foundational Single Source of Truth (SSOT) for MarketingOS campaign metrics is established and verifiable.

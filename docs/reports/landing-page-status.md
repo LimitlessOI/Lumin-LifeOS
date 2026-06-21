@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Landing Page Verification Report -->
+
 # Landing Page Verification Report
 
 ## URL Tested

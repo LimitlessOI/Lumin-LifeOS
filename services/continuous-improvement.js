@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/continuous-improvement.js
  * services/continuous-improvement.js
  * Monitors the system 24/7 for bugs, performance issues, UX problems, and opportunities.
  * Generates improvement proposals for Adam to approve — never auto-implements.

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Batch-score a list of business URLs by opportunity and rank them for cold outreach.
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * Batch-score a list of business URLs by opportunity and rank them for cold outreach.
  *

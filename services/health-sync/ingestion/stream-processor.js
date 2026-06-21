@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Simulate continuous data fetching
+ */
 ```javascript
 const EventEmitter = require('events');
 const axios = require('axios');

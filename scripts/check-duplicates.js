@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Check for duplicate variable declarations in server.js
  * Check for duplicate variable declarations in server.js
  * This prevents deployment failures from duplicate declarations
  */

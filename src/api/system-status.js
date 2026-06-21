@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/api/system-status.js.
+ */
 const express = require('express');
 const db = require('../db');
 const router = express.Router();

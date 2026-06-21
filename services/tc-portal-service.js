@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-portal-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-portal-service.js
  * Agent/client portal read models plus communication and document-request tracking.

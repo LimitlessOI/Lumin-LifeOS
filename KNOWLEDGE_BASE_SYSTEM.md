@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 📚 Knowledge Base & File Upload System -->
+
 # 📚 Knowledge Base & File Upload System
 
 ## Overview

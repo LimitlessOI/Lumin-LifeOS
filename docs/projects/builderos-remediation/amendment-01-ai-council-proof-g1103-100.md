@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G1103-100 Remediation -->
+
 # Amendment 01: AI Council Proof - G1103-100 Remediation
 
 **Document ID:** `amendment-01-ai-council-proof-g1103-100.md`

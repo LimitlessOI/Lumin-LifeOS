@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof-Closing Blueprint Note: G489-100 -->
+
 # Amendment 41 MarketingOS Proof-Closing Blueprint Note: G489-100
 
 This document outlines the blueprint for closing the proof gap for Amendment 41, focusing on the verifiable integration of LifeOS `product_viewed` events with MarketingOS. This serves as the SSOT foundation for the next C2 build pass.

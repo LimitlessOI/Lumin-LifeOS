@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/conversation-router.js.
+ */
 const fs = require('fs');
 const path = require('path');
 

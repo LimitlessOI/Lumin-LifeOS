@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G237 100. -->
+
 The task explicitly requests writing a Markdown file (`.md`), but the OIL verifier rejected the previous attempt due to `ERR_UNKNOWN_FILE_EXTENSION`, indicating it attempted to execute the file as JavaScript. This is a direct contradiction between the specified output file type and the verifier's expectation.
 Amendment 46 BuilderOS Control Plane Proof - G237-100
 

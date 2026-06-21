@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/twilio-webhook-registrar.js
  * services/twilio-webhook-registrar.js
  *
  * Automatically registers the SMS webhook URL with Twilio at server startup.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G71-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G71-100
 
 ## Blueprint Note: Basic Event Handling (G71-G80)

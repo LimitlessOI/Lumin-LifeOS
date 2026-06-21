@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/smoke-test.yml.
 name: Smoke Test
 
 on:

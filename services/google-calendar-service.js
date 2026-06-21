@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/google-calendar-service.js — Amendment 16 (Word Keeper)
  * services/google-calendar-service.js — Amendment 16 (Word Keeper)
  *
  * Google Calendar integration for commitment scheduling.

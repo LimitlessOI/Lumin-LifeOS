@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Factory for the Execution Queue.
+ */
 import { runFSAR } from "../audit/fsar/fsar_runner.js";
 import { evaluateExecutionGate } from "../audit/gating/execution_gate.js";
 

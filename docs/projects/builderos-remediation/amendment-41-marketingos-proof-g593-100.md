@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 - MarketingOS SSOT Foundation (G593-100) -->
+
 # Proof-Closing Blueprint Note: Amendment 41 - MarketingOS SSOT Foundation (G593-100)
 
 This document serves as a proof-closing blueprint note for the "SSOT foundation" signal originating from `docs/projects/AMENDMENT_41_MARKETINGOS.md`. The amendment establishes MarketingOS as the Single Source of Truth for `campaign_performance_metrics`. This note outlines the necessary steps to prove this foundation is implemented and operational.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G713 100. -->
+
 Amendment 12: Command Center - Proof G713-100
 Blueprint Note: Initial API Endpoint Proof
 This note closes the proof for the initial operational readiness of the Command Center API, focusing on a minimal status endpoint.

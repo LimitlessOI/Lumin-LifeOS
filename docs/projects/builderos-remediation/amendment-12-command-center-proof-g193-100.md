@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G193-100 - Core Type Definition -->
+
 # Amendment 12 Command Center Proof: G193-100 - Core Type Definition
 
 This document outlines the proof-closing blueprint note for the initial build slice of the Amendment 12 Command Center, focusing on establishing the foundational types and registration mechanism.

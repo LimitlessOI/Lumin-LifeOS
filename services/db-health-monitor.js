@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: DB Connection Pool Health Monitor
  * DB Connection Pool Health Monitor
  * Tracks pool utilization and warns when approaching Neon connection limits.
  * Neon free tier: 100 connections max. Paid: varies.

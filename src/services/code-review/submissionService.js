@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/code-review/submissionService.js.
+ */
 ```javascript
 const { CodeSubmission, SupportedLanguage } = require('../../models');
 const { v4: uuidv4 } = require('uuid');

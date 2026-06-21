@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Video Generation Pipeline — Replicate API
  * Video Generation Pipeline — Replicate API
  *
  * Turns a text script into a cinematic video:

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 41 — MarketingOS / SocialMediaOS -->
+
 # AMENDMENT 41 — MarketingOS / SocialMediaOS
 
 > **Y-STATEMENT:** In the context of founders and business owners who need consistent, authentic marketing content but hate feeling fake on camera and can't afford an agency, facing fragmented AI tools that produce generic output disconnected from their real voice and story, we decided to build MarketingOS as an AI-powered marketing intelligence and execution system to achieve authentic, founder-led content at scale, accepting that video generation and full publishing automation must wait until text/audio output has proven demand and revenue.

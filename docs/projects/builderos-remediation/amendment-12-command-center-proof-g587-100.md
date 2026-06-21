@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G587 100. -->
+
 Amendment 12 Command Center Proof: G587-100 - Initial Data Model & Repository Skeleton
 This proof-closing blueprint note addresses the foundational data structures and the initial repository interface for the BuilderOS Command Center, as outlined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`. This slice focuses on establishing the core contracts for commands and their persistence.
 ---

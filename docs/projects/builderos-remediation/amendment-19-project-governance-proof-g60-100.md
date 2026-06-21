@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G60-100 - Automated Compliance Checks and Reporting -->
+
 # Amendment 19 Project Governance Proof: G60-100 - Automated Compliance Checks and Reporting
 
 ## Scope

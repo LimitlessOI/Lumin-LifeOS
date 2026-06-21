@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G128 100. -->
+
 Amendment 19 Project Governance Remediation Proof: G128-100
 Blueprint Source: `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`
 This document serves as a proof for the initial build slice derived from Amendment 19 Project Governance blueprint, focusing on establishing foundational project metadata alignment. This proof confirms the identification of the next smallest build slice required to progress the remediation.

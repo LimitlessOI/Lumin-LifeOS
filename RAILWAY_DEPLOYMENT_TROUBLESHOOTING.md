@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚨 Railway Deployment Not Triggering - Troubleshooting -->
+
 # 🚨 Railway Deployment Not Triggering - Troubleshooting
 
 ## **Issue:** Code pushed but Railway not deploying

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CUR overnight mandate — ChC / Conductor -->
+
 # CUR overnight mandate — ChC / Conductor
 
 **Adam handoff — paste this entire file into CUR before bed.**

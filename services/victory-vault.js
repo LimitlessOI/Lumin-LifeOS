@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/victory-vault.js
  * services/victory-vault.js
  *
  * LifeOS Growth extension — Victory Vault / Identity Evidence Engine.

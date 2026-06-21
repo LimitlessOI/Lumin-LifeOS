@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G798 100. -->
+
 Amendment 12: Command Center - Proof G798-100 Blueprint Note
 This note closes the proof for the initial definition of the `CommandCenterService` and outlines the next smallest build slice to progress Phase 1: Service Core.
 ---

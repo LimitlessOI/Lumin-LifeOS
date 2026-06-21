@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — add_account_tier_to_users.sql.
 ```sql
 ALTER TABLE users ADD COLUMN account_tier VARCHAR(50);
 

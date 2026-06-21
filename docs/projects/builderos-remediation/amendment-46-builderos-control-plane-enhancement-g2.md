@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Enhancement G2. -->
+
 AMENDMENT 46: BuilderOS Control Plane Enhancement (G2)
 This memo outlines the next buildable slice for Amendment 46, focusing on the `/build` endpoint within `routes/lifeos-council-builder-routes.js`. The current blueprint lacks a directly buildable safe-scope task, necessitating this enhancement memo to define a clear, actionable path.
 ---

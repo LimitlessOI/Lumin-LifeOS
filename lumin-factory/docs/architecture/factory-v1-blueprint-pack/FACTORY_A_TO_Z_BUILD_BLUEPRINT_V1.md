@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Factory A-to-Z Build Blueprint v1 -->
+
 # Factory A-to-Z Build Blueprint v1
 
 ## Purpose

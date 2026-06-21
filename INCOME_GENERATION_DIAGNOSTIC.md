@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 💰 Income Generation Diagnostic Report -->
+
 # 💰 Income Generation Diagnostic Report
 
 ## Issue: Income Drones Not Generating Revenue

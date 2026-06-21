@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G62 100. -->
+
 ### AMENDMENT_12_COMMAND_CENTER Proof Point G62-100: Core Command Execution Proof
 
 This proof point establishes the foundational capability of the `CommandCenter` to register and execute commands. It focuses on the minimal set of components required to demonstrate a working command execution flow.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G118-100 - Initial Operations List Endpoint -->
+
 # Command Center V2 Blueprint Proof: G118-100 - Initial Operations List Endpoint
 
 This document outlines the next smallest build slice to advance the Command Center V2 blueprint, focusing on establishing a foundational data retrieval mechanism for operations.

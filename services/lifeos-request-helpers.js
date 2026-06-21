@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-request-helpers.js
  * services/lifeos-request-helpers.js
  *
  * Tiny shared helpers used across LifeOS route handlers to harden incoming

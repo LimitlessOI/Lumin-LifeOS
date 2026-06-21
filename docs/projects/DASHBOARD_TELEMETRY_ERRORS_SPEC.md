@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD TELEMETRY ERRORS SPEC. -->
+
 ## Client-Visible Error Envelopes Specification
 
 This document defines the principles and structure for presenting API errors to the LifeOS Dashboard client. The goal is to provide clear, actionable feedback to the user while maintaining privacy and aiding developer debugging.

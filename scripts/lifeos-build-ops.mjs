@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Fetches read-only Lumin build ops aggregates (no AI, no council).
  * Fetches read-only Lumin build ops aggregates (no AI, no council).
  *
  *   LUMIN_SMOKE_BASE_URL=https://... COMMAND_CENTER_KEY=... node scripts/lifeos-build-ops.mjs

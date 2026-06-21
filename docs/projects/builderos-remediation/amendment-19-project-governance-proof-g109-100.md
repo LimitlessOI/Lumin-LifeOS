@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G109 100. -->
+
 Proof-Closing Blueprint Note: Amendment 19 Project Governance - Automated Project Metadata Validation (G109-100)
 This document serves as a proof-closing blueprint note for a critical gap identified in the enforcement of `AMENDMENT_19_PROJECT_GOVERNANCE`. The amendment mandates specific metadata within a `project.json` file at the root of every BuilderOS-managed project. Currently, BuilderOS lacks automated mechanisms to verify compliance with this requirement.
 ---

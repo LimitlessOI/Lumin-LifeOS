@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G563 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G563-100
 Blueprint Note: Initial Data Model Definition
 

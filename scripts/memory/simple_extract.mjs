@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Simple memory extractor - just counts files
+ */
 // Simple memory extractor - just counts files
 import fs from 'fs';
 import path from 'path';

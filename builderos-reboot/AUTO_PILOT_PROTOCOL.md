@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Auto-Pilot Protocol -->
+
 # Auto-Pilot Protocol
 
 This protocol exists so a coding model in Cursor can keep building through multiple sessions without re-deriving the system from chat.

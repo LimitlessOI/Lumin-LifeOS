@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Dashboard Notification Patterns Specification -->
+
 # Dashboard Notification Patterns Specification
 
 This document outlines the desired patterns for dashboard-level notifications, toasts, and snackbars within the LifeOS platform. The goal is to provide a consistent, accessible, and non-intrusive mechanism for communicating important information to the user.

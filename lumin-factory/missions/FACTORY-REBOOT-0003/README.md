@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: FACTORY-REBOOT-0003 -->
+
 # FACTORY-REBOOT-0003
 
 ## Mission

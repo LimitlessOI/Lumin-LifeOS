@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/prompt-translator.js
  * services/prompt-translator.js
  *
  * LifeOS Compression Language (LCL) — Prompt Translator

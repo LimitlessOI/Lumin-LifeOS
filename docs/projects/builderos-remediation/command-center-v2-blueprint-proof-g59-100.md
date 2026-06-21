@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G59 100. -->
+
 Blueprint Proof: CommandCenterV2 - Operation Creation Endpoint (G59-100)
 This document serves as a proof-closing blueprint note for the initial implementation slice of `CommandCenterV2`, focusing on establishing the core API for creating BuilderOS operations.
 ---

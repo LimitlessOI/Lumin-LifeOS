@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ai-performance-tracker.js — extracted from server.js
  * ai-performance-tracker.js — extracted from server.js
  * AI performance tracking and rotation based on performance.
  *

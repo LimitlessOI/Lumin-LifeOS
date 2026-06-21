@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_01_AI_COUNCIL - Proof G21-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_01_AI_COUNCIL - Proof G21-100
 
 **Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

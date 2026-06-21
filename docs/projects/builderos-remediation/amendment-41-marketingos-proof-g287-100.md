@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G287 100. -->
+
 ### Proof-Closing Blueprint Note: MarketingOS Proof G287-100
 
 This document outlines the final steps to close the proof gap for MarketingOS feature `g287-100`, as specified by `AMENDMENT_41_MARKETINGOS.md`. This serves as the SSOT foundation for the next C2 build pass.

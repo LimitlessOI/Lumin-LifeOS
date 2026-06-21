@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G772 100. -->
+
 Amendment 12: Command Center - Proof G772-100
 This document outlines the next smallest build slice for the Amendment 12: Command Center blueprint, focusing on establishing the core `CommandCenter.js` module.
 ---

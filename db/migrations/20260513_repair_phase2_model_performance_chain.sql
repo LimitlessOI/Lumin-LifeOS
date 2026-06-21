@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260513_repair_phase2_model_performance_chain.sql.
 -- Repair Phase 2: model_performance chain + capability_map FK type mismatch
 --
 -- Root cause: model_performance.sql and capability_map.sql declared segment_id as UUID,

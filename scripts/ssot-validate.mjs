@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Replacement for missing scripts/ssot-validate.js (package.json `ssot:validate`).
  * Replacement for missing scripts/ssot-validate.js (package.json `ssot:validate`).
  * Delegates to `ssot-check.js` default mode: changed-files + SSOT amendment alignment.
  *

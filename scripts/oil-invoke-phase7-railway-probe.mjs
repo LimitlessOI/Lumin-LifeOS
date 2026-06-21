@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Invoke Phase 7 live Gemini probe on Railway (runtime secrets).
  * Invoke Phase 7 live Gemini probe on Railway (runtime secrets).
  * Updates phase7-audit-before-done-receipt.json from API response — never prints keys.
  */

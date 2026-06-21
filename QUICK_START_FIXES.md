@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Quick Start: Fix Everything -->
+
 # 🚀 Quick Start: Fix Everything
 
 ## ✅ Code Fixes Applied

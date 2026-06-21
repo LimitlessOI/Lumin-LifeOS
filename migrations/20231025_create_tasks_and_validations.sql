@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231025_create_tasks_and_validations.sql.
 ```sql
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,

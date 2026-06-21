@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G152-100: Core Session Data Model -->
+
 # Amendment 09: Life Coaching - Proof G152-100: Core Session Data Model
 
 This document outlines the initial build slice to establish the foundational data model for Life Coaching Sessions, addressing the first critical proof gap (G152-100) identified in Amendment 09. This slice focuses purely on internal data persistence and access, strictly within BuilderOS safe scope.

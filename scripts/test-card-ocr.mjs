@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Real OCR test — run against card images in ~/Desktop/test-cards/
  * Real OCR test — run against card images in ~/Desktop/test-cards/
  * Usage: node scripts/test-card-ocr.mjs
  */

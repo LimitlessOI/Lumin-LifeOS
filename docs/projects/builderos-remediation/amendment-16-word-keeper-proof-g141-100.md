@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G141 100. -->
+
 AMENDMENT 16 WORD KEEPER - Proof G141-100: Foundational Data Model and Persistence
 This proof-closing blueprint note addresses the initial foundational build slice for the Word Keeper feature, focusing on establishing the core data model and its persistence layer.
 1.  Exact missing implementation or proof gap:

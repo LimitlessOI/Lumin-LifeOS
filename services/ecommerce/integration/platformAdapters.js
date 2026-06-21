@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — PlatformAdapters.
+ */
 const Shopify = require('shopify-api-node');
 const WooCommerceAPI = require('woocommerce-api');
 const config = require('../../config/ecommerceConfig');

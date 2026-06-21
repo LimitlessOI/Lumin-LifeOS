@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/queue/processor.js.
+ */
 const Queue = require('bull');
 const config = require('../config');
 

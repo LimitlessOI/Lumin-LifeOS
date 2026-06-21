@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G929 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G929-100 Blueprint Note
 This note closes proof G929-100 for AMENDMENT 12: COMMAND CENTER, focusing on the initial definition of the core service interface and its primary data model.
 

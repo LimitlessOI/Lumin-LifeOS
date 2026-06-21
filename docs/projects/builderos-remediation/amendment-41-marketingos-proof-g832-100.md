@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - SSOT Foundation (G832-100) -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - SSOT Foundation (G832-100)
 
 This document outlines the proof-closing blueprint note for Amendment 41, focusing on establishing the Single Source of Truth (SSOT) foundation for MarketingOS data within LifeOS.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G16-100 -->
+
 # Amendment 09: Life Coaching - Proof G16-100
 
 **Status:** Blueprint Missing - Cannot Derive Build Slice

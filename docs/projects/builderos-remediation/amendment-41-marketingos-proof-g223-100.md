@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Gap G223-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Gap G223-100
 
 This document serves as the SSOT foundation for closing proof gap G223-100 related to Amendment 41, concerning MarketingOS integration.

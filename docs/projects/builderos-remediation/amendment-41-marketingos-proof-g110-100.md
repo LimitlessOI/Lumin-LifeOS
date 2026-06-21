@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G110 100. -->
+
 ### Amendment 41: MarketingOS Proof G110-100 Remediation Blueprint
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the identified proof gap related to Amendment 41 and MarketingOS integration, specifically for proof G110-100.

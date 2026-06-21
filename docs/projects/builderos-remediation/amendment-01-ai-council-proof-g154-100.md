@@ -3,6 +3,8 @@ blueprint: docs/projects/AMENDMENT_01_AI_COUNCIL.md
 proof_id: g154-100
 status: proof-closed
 ---
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G154 100. -->
+
 
 ### Proof-Closing Blueprint Note: Initial AI Council Configuration
 

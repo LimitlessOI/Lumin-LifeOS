@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20240101_create_recommendations_tables.sql.
 ```sql
 BEGIN;
 

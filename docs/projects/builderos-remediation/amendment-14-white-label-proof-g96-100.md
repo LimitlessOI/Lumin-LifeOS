@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G96-100 Completion Note -->
+
 # Amendment 14 White-Label Proof: G96-100 Completion Note
 
 This document serves as a proof-closing blueprint note for the completion of white-label configurations and verifications for the G96-100 range, as outlined in `docs/projects/AMENDMENT_14_WHITE_LABEL.md`.

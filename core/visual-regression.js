@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║              VISUAL REGRESSION TESTING SYSTEM                                   ║
  * ║              Captures and compares UI to detect unintended visual changes       ║

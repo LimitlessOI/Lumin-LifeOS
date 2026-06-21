@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G175-100 Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G175-100 Remediation
 
 This document outlines the remediation plan to address the OIL verifier rejection related to the BuilderOS control plane, specifically focusing on the required wiring in `routes/lifeos-council-builder-routes.js`.

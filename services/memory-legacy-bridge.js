@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-legacy-bridge.js
+ */
 // services/memory-legacy-bridge.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { randomUUID } from 'crypto';

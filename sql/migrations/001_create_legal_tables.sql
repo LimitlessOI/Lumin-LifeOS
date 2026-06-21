@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_legal_tables.sql.
 ```sql
 -- Migration to create legal tables
 

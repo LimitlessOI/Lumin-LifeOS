@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Story Studio -->
+
 # Story Studio
 _(formerly AMENDMENT_22_STORY_STUDIO.md)_
 

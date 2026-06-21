@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation Certification Report -->
+
 # BuilderOS Remediation Certification Report
 
 **Package:** `builderos-remediation`  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_01_AI_COUNCIL - Proof G583-100: AI Council Decision Logging Mechanism -->
+
 # AMENDMENT_01_AI_COUNCIL - Proof G583-100: AI Council Decision Logging Mechanism
 
 This proof point validates the foundational capability for the AI Council to record its decisions or recommendations within the BuilderOS context.

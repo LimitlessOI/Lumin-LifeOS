@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: LifeOS overlay UI — Lifeos Control Help.
+ */
 (function initLifeOSControlHelpModule() {
   const MOBILE_MEDIA = '(hover: none), (pointer: coarse)';
   const STYLE_ID = 'lifeos-control-help-style';

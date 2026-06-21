@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_user_dashboard_preferences.sql.
 ```sql
 CREATE TABLE user_dashboard_preferences (
     id SERIAL PRIMARY KEY,

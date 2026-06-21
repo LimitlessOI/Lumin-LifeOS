@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g921-100 - Data Model Definition -->
+
 # Command Center V2 Blueprint Proof: g921-100 - Data Model Definition
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, focusing on the foundational data model.

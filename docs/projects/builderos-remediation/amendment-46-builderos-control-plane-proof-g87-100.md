@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G87 100. -->
+
 Amendment 46 BuilderOS Control Plane Proof - G87-100
 
 Blueprint Note: Closing Proof Gap for BuilderOS Control Plane Wiring

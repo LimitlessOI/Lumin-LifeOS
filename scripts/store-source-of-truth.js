@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Store Source of Truth document in database
  * Store Source of Truth document in database
  * Run: node scripts/store-source-of-truth.js
  */

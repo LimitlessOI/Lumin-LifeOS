@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Placeholder for biometric authentication service
+ */
 ```javascript
 // Placeholder for biometric authentication service
 module.exports = {

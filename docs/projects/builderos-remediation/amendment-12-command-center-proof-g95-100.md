@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G95-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G95-100
 
 ## Blueprint Note: Command Center - Comprehensive E2E Validation & Hardening

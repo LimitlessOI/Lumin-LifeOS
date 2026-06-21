@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260404_lifeos_data_ethics.sql.
 -- Migration: 20260404_lifeos_data_ethics.sql
 -- LifeOS Phase 8 — Data Ethics Infrastructure
 -- Tables: data_deletion_log, consent_registry, constitutional_lock, research_aggregate_log

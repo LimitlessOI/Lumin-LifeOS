@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G21-100 -->
+
 # Amendment 16: Word Keeper - Proof G21-100
 
 This proof-closing blueprint note addresses the initial foundational build slice for the Word Keeper platform, focusing on establishing the core data model and repository interface.

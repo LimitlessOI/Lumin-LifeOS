@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: C09 — Build Closure Contract
  * C09 — Build Closure Contract
  *
  * Every task that enters the per-task loop must record exactly one

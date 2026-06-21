@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/conversation-history-routes.js
  * routes/conversation-history-routes.js
  * Review and search all stored conversations (Claude Code sessions + server AI calls).
  *

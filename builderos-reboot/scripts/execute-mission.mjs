@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Execute all steps in a mission blueprint, then run acceptance tests.
  * Execute all steps in a mission blueprint, then run acceptance tests.
  * Procedure (mandatory): pre-build simulate → map decision gaps → execute → acceptance → receipt.
  * Usage: node execute-mission.mjs <mission-id> [--from STEP] [--dry-run]

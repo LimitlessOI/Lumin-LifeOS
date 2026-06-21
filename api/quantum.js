@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — api/quantum.js.
+ */
 const express = require('express');
 const QuantumSimulationEngine = require('../services/QuantumSimulationEngine');
 const router = express.Router();

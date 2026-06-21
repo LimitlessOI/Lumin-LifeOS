@@ -1,3 +1,4 @@
+# SYNOPSIS: Configuration — Hydrosync Config.
 ```yaml
 sensors:
   - id: sensor1

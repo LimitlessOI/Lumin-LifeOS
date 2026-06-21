@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CHAIR_FORECAST_SIMULATION_RECEIPT — FOUNDER_PACKET_V2 -->
+
 # CHAIR_FORECAST_SIMULATION_RECEIPT — FOUNDER_PACKET_V2
 
 **Role played by:** Claude (Sonnet 4.6), simulating Chair/Oracle per V2's Bootstrap Protocol

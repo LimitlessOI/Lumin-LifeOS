@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Idea Engine — generates and stores daily business ideas by querying an AI
  * Idea Engine — generates and stores daily business ideas by querying an AI
  * council member (Ollama or GPT-4o-mini), deduplicating against existing DB records.
  *

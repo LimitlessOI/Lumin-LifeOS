@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/builder-audit-before-done.js
  * services/builder-audit-before-done.js
  *
  * Phase 7 — independent audit-before-done (OIL-only audit receipts).

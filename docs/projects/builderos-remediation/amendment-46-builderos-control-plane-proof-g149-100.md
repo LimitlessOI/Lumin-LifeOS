@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G149 100. -->
+
 Blueprint Note: Amendment 46 BuilderOS Control Plane Proof - G149-100
 This document outlines the proof-closing blueprint note for integrating BuilderOS control plane signals into the LifeOS Council Builder routes.
 

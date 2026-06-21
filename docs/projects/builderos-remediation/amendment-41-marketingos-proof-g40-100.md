@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G40 100. -->
+
 Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G40-100
 This document addresses the proof gap G40-100 identified within AMENDMENT_41_MARKETINGOS, focusing on the reliable transmission and verification of the `user_onboarded_successfully` event to MarketingOS. This event is critical for triggering initial user engagement campaigns and accurate audience segmentation.
 1. Exact Missing Implementation or Proof Gap

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G519 100. -->
+
 ### AMENDMENT_12_COMMAND_CENTER Proof - G519-100
 
 This proof-closing blueprint note addresses the initial implementation slice for the `AMENDMENT_12_COMMAND_CENTER` blueprint.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G42-100 Remediation Note -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G42-100 Remediation Note
 
 This document outlines the remediation plan and proof for the BuilderOS control plane changes, addressing the OIL verifier rejection and ensuring the specified build lifecycle hooks are correctly integrated.

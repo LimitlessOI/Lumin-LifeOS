@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/purpose-discovery.js
  * services/purpose-discovery.js
  *
  * Synthesizes purpose profile from all observed data.

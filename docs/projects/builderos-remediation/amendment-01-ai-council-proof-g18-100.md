@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof - G18-100 -->
+
 # Amendment 01 AI Council Proof - G18-100
 
 This document serves as proof for Amendment 01, as mandated by the AI Council, specifically addressing governance point G18-100 within the BuilderOS remediation efforts.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 003_create_code_metrics.sql.
 ```sql
 CREATE TABLE code_metrics (
     id SERIAL PRIMARY KEY,

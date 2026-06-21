@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G103 100. -->
+
 Amendment 09 Life Coaching - Proof G103-100
 Proof-Closing Blueprint Note
 This note outlines the next smallest build slice for the Life Coaching feature, derived from the AMENDMENT_09_LIFE_COACHING.md blueprint.

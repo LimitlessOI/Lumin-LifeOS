@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: S5 Prediction Loop v0 — validator / report script
  * S5 Prediction Loop v0 — validator / report script
  *
  * Scans data/prediction-loop.jsonl and reports:

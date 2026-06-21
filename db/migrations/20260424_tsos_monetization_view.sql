@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260424_tsos_monetization_view.sql.
 -- Migration: 20260424_tsos_monetization_view
 --
 -- PURPOSE: Rebuild the tsos_savings_report view to expose FULL monetization math.

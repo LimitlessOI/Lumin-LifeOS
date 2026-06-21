@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Memory Framework Design Brief -->
+
 # Memory Framework Design Brief
 **Status:** Draft + build underway — Phase 1 shipped in repo (`AMENDMENT_39`); Phases 2–4 in backlog.  
 **Authored:** 2026-04-26 (Claude Code session)  

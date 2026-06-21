@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet Completeness Checklist -->
+
 # Founder Packet Completeness Checklist
 
 ## Purpose

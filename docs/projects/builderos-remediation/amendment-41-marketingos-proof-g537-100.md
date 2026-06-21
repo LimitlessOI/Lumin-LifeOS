@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof G537-100: Proof-Closing Blueprint Note -->
+
 The source blueprint `docs/projects/AMENDMENT_41_MARKETINGOS.md` was not provided in the REPO FILE CONTENTS, preventing derivation of specific content for the proof-closing blueprint note.
 
 # Amendment 41 MarketingOS Proof G537-100: Proof-Closing Blueprint Note

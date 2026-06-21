@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — AlertEngine.
+ */
 const redis = require('redis');
 
 const ALERT_THRESHOLD = 0.7;

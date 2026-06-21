@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof (G227-100) -->
+
 The specification is contradictory: the task requests a `.md` file, but the verifier expects executable JavaScript content for that path.
 
 ```javascript

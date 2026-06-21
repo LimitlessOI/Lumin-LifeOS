@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Ambient intelligence API — contextual proactive nudges from calendar, MITs, habits.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * Ambient intelligence API — contextual proactive nudges from calendar, MITs, habits.
  * Mounted at /api/v1/lifeos/ambient-intel

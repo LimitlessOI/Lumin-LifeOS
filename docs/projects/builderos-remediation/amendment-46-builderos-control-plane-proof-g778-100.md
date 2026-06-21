@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G778 100. -->
+
 Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane (G778-100)
 
 This note addresses the implementation gap identified in Amendment 46 concerning the BuilderOS Control Plane, specifically the wiring of build lifecycle events within `routes/lifeos-council-builder-routes.js`.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Live Proof Execution Receipt V2 -->
+
 # Live Proof Execution Receipt V2
 
 **Status:** `LIVE PROOF EXECUTED` — primary production evidence captured  

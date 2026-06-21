@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/teacher-os-selfcare.js
  * services/teacher-os-selfcare.js
  *
  * Teacher self-care is a CORE FEATURE of Teacher OS, not a wellness add-on.

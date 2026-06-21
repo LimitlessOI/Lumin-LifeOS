@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260322_schema_patches.sql.
 -- Migration: 20260322_schema_patches
 -- Patches for columns missing from existing tables.
 -- Safe to run multiple times (all use IF NOT EXISTS / DO NOTHING patterns).

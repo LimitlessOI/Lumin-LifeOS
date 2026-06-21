@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Local Cursor-backed pre-push review.
  * Local Cursor-backed pre-push review.
  *
  * Purpose:

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/console.js.
+ */
 const socket = new WebSocket('ws://localhost:3000/stream');
 const outputDiv = document.getElementById('output');
 const inputField = document.getElementById('input');

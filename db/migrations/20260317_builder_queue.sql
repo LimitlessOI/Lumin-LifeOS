@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260317_builder_queue.sql.
 -- Migration: 20260317_builder_queue
 -- Persists the auto-builder product queue to the DB so it survives server restarts.
 -- On startup, auto-builder loads rows with status IN ('queued','in_progress') back into memory.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/shared/lifeos-widget-category-stubs.js.
+ */
 (function(){
     const categoriesData = [
         {

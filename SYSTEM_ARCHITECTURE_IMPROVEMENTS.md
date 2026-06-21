@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🏗️ System Architecture Improvements - Why System Failed & How to Fix -->
+
 # 🏗️ System Architecture Improvements - Why System Failed & How to Fix
 
 ## ❌ **WHY THE SYSTEM COULDN'T FIX THIS**

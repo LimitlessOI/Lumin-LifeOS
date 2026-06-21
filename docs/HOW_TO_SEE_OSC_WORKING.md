@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 👀 How to See Open Source Council Working in Build Logs -->
+
 # 👀 How to See Open Source Council Working in Build Logs
 
 ## Quick Test

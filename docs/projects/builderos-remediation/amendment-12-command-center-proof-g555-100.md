@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G555 100. -->
+
 Amendment 12 Command Center Proof: G555-100 - Initial Command Definition and Registry Structure
 This document serves as a proof-closing blueprint note for the initial build slice of Amendment 12's Command Center, focusing on establishing foundational data structures.
 ---

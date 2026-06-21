@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Class CommandCenter — docs/projects/builderos-remediation/amendment-12-command-center-proof-g317-100.md. -->
+
 import { randomUUID } from 'node:crypto';
 
 export class CommandCenter {

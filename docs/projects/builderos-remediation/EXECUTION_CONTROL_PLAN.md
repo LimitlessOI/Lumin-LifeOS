@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Execution Control Plan -->
+
 # BuilderOS Execution Control Plan
 
 ## Purpose

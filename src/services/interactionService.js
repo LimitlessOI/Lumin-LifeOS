@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/interactionService.js.
+ */
 ```javascript
 const FunnelInteraction = require('../models/FunnelInteraction');
 

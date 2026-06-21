@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PSSOT technical appendix — LifeOS Conversation Commitments + C2 -->
+
 # PSSOT technical appendix — LifeOS Conversation Commitments + C2
 
 > **Master:** read **`PSSOT.md`** first — brainstorm + dump + mission truth.  

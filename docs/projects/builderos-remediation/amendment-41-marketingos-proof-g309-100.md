@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G309-100 - Proof-Closing Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof G309-100 - Proof-Closing Blueprint Note
 
 **Signal:** This document — SSOT foundation.

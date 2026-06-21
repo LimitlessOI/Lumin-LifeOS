@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center - Proof G13-100: Initial API Endpoint for Build Status Summary -->
+
 # Amendment 12 Command Center - Proof G13-100: Initial API Endpoint for Build Status Summary
 
 This document serves as a proof-closing blueprint note for the initial build slice of Amendment 12, focusing on establishing a foundational API endpoint for the BuilderOS Command Center.

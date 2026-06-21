@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/repositories/userRepository.js.
+ */
 ```javascript
 const { Pool } = require('pg');
 const pool = new Pool();

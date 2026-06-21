@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — create_translation_sessions_table.sql.
 ```sql
 CREATE TABLE translation_sessions (
     id SERIAL PRIMARY KEY,

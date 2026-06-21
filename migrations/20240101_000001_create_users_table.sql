@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20240101_000001_create_users_table.sql.
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,

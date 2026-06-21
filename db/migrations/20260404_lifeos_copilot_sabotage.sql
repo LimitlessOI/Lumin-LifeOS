@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260404_lifeos_copilot_sabotage.sql.
 -- ============================================================
 -- Migration: LifeOS Copilot, Emergency Repair, Self-Sabotage
 -- Date: 2026-04-04

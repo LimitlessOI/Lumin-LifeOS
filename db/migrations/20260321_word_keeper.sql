@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260321_word_keeper.sql.
 -- Migration: 20260321_word_keeper
 -- Amendment 16 — Word Keeper & Integrity Engine
 -- All tables for commitment tracking, integrity scoring, mediation.

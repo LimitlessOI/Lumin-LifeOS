@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: LifeOS Action Inbox v1 acceptance — production proof.
  * LifeOS Action Inbox v1 acceptance — production proof.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

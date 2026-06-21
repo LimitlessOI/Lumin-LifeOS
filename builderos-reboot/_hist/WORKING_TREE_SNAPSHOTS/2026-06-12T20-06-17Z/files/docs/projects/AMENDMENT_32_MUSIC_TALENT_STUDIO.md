@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Music Talent Studio -->
+
 # Music Talent Studio
 _(formerly AMENDMENT_32_MUSIC_TALENT_STUDIO.md)_
 

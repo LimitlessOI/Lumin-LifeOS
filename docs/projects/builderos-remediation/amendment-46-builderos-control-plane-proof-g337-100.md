@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G337 100. -->
+
 ### Amendment 46 BuilderOS Control Plane Proof - G337-100 Remediation
 
 This document outlines the remediation plan and proof for closing the identified gaps in Amendment 46, specifically concerning the BuilderOS control plane integration within `routes/lifeos-council-builder-routes.js`.

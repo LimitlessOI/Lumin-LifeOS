@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 💰 Make Money NOW - Complete Guide -->
+
 # 💰 Make Money NOW - Complete Guide
 
 ## ✅ What's Working RIGHT NOW

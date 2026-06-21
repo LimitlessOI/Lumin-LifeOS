@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/dream-builder-child.js
  * services/dream-builder-child.js
  *
  * Child-specific dream tracking service.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports recordOutcome — lumin-factory/missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-outcome.js.
+ */
 export function recordOutcome(entry) {
   return {
     type: 'outcome',

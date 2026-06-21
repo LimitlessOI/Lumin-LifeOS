@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Monitor Ollama Downloads.
 
 # ╔══════════════════════════════════════════════════════════════════════════════════╗
 # ║                    MONITOR OLLAMA MODEL DOWNLOADS                                ║

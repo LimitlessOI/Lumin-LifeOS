@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof (G233-100) - Proof-Closing Blueprint Note -->
+
 The BuilderOS verifier's rejection indicates it attempted to execute the `.md` file as a JavaScript module, leading to an `ERR_UNKNOWN_FILE_EXTENSION`. This is a verifier configuration issue, not a problem with the `.md` file's content itself. The task is to write the `.md` file with a proof-closing blueprint note. The content below addresses the functional proof gap for Amendment 41, assuming the verifier issue will be resolved by the build system.
 
 ```markdown

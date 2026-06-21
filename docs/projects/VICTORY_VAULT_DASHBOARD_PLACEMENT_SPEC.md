@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — VICTORY VAULT DASHBOARD PLACEMENT SPEC. -->
+
 The specification is incomplete due to the missing `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file, which prevents making API assumptions or identifying specific Victory Vault widgets.
 <!DOCTYPE html>
 <html lang="en">

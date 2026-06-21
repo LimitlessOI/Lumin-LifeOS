@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof: G66-100 Remediation -->
+
 # Amendment 16 Word Keeper Proof: G66-100 Remediation
 
 This document serves as a proof-closing blueprint note for the `g66-100` build slice of the Amendment 16 Word Keeper project, focusing on initial data persistence.

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: When high-risk paths are staged, require evidence in commit message body
  * When high-risk paths are staged, require evidence in commit message body
  * (e.g. "evidence:" or "tested:") so deploy/railway changes are not blind.
  *

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Standalone Postmark email helper for Site Builder prospect outreach.
  * Standalone Postmark email helper for Site Builder prospect outreach.
  * Queue `site-builder-postmark-send` kept truncating via council; shipped as GAP-FILL (repair loop RL1).
  *

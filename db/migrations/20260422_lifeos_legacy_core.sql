@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260422_lifeos_legacy_core.sql.
 -- LifeOS Legacy Core (P1): trusted contacts, check-in cadence,
 -- time-capsule delivery, and digital-will completeness.
 

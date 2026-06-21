@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/components/Filters.js.
+ */
 import React from 'react';
 
 const Filters = ({ filter, onFilterChange }) => {

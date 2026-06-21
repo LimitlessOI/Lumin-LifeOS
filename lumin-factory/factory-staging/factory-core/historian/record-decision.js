@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports recordDecision — lumin-factory/factory-staging/factory-core/historian/record-decision.js.
+ */
 export function recordDecision(entry) {
   return {
     type: 'decision',

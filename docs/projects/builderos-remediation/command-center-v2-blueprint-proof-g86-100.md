@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G86-100 - Core Command Definition and Registry -->
+
 # Command Center V2 Blueprint Proof: G86-100 - Core Command Definition and Registry
 
 This proof addresses the foundational elements for defining and registering commands within the Command Center V2, aligning with Phase 1 of the blueprint's phased rollout. It focuses on establishing the `ICommand` interface and the `CommandRegistry` component.

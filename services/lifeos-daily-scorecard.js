@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-daily-scorecard.js
  * services/lifeos-daily-scorecard.js
  *
  * LifeOS Daily Scorecard + Most Important Tasks

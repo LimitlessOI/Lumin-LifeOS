@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — database-schema.sql.
 ```sql
 CREATE TABLE inspections (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder autonomy — idea filters: refine, don’t discard -->
+
 # Builder autonomy — idea filters: refine, don’t discard
 
 **Purpose:** When autonomous builders, councils, or conductors evaluate directions (“filters”), **the job is to sharpen an idea**, not to delete ambition because today’s stack cannot absorb it whole-cloth.

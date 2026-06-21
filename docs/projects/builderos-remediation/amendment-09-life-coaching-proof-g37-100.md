@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G37 100. -->
+
 The verifier rejection indicates that the BuilderOS system attempted to execute `docs/projects/builderos-remediation/amendment-09-life-coaching-proof-g37-100.md` as a JavaScript module, resulting in an `ERR_UNKNOWN_FILE_EXTENSION` for `.md`. The existing content of the `.md` file is a markdown document containing instructions, not executable code.
 
 The task requires "repairing" this rejection by "writing" the specified `.md` file. Given the verifier's expectation of executable code, and the instruction within the `.md` file to "Generate the complete implementation code," the most direct repair is to replace the `.md` file's content with the actual executable JavaScript proof code. This aligns with the BuilderOS attempting

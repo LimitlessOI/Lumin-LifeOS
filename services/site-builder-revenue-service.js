@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Calculates the affiliate revenue forecast based on a given number of converted clients.
+ */
 import logger from './logger.js';
 
 const AFFILIATE_COMMISSIONS = {

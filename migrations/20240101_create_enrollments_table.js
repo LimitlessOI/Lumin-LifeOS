@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 20240101_create_enrollments_table.js.
+ */
 exports.up = function(knex) {
   return knex.schema.createTable('enrollments', function(table) {
     table.increments('id').primary();

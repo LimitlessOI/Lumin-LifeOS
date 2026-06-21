@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/ssot-compliance.yml.
 name: SSOT Compliance
 
 on:
@@ -140,7 +141,19 @@ jobs:
           npm run cold-start:gen
           npm run handoff:self-test
 
-  # ── 8. Amendment readiness (warn-only) ─────────────────────────────────────
+  # ── 9. File synopsis law (HARD — full repo) ─────────────────────────────────
+  file-synopsis-law:
+    name: File Synopsis Law
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify every tracked file indexed + synopsized
+        run: npm run lifeos:file-synopsis:verify
+
+  # ── 10. Amendment readiness (warn-only) ─────────────────────────────────────
   amendment-readiness:
     name: Amendment Readiness (warn-only)
     runs-on: ubuntu-latest

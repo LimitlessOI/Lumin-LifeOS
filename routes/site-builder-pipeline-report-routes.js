@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Standalone Express router for the pipeline report endpoint.
+ */
 import { Router } from 'express';
 import logger from '../services/logger.js';
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/idea-queue-routes.js
  * routes/idea-queue-routes.js
  * REST API for Adam's idea approval queue.
  *

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Tier 1 telemetry validation — shared library.
  * Tier 1 telemetry validation — shared library.
  * @ssot builderos-reboot/SNT_TELEMETRY_DOCTRINE.md
  */

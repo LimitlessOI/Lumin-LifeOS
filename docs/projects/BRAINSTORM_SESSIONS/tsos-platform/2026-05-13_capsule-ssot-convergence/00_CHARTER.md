@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Session charter — 2026-05-13_capsule-ssot-convergence -->
+
 # Session charter — 2026-05-13_capsule-ssot-convergence
 
 | Field | Value |

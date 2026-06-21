@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G883 100. -->
+
 // src/api/routes/aiCouncilRoutes.js
 import express from 'express';
 import { authenticate } from '../middleware/authenticate';

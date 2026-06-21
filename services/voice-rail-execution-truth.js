@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Voice Rail — execution truth enforcement (no background-work theater).
  * Voice Rail — execution truth enforcement (no background-work theater).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

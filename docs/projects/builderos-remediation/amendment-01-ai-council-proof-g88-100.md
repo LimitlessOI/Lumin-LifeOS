@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof - G88-100: Initial Charter Formalization -->
+
 # Amendment 01 AI Council Proof - G88-100: Initial Charter Formalization
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

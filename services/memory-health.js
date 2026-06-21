@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-health.js
+ */
 // services/memory-health.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 

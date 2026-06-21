@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G100 100. -->
+
 Proof: AMENDMENT_01_AI_COUNCIL - Governance Principle G100-100: Initial Council Definition
 Source Blueprint: `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
 Proof Point: G100-100 - Verification of initial AI Council structural definition and foundational membership. This proof confirms the successful definition of the AI Council's core structure and initial membership criteria as outlined in the source blueprint. The foundational elements for governance oversight are now established.

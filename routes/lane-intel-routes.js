@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Horizon + Red-team intel API (Amendment 36).
  * Horizon + Red-team intel API (Amendment 36).
  * Mounted at /api/v1/lifeos/intel
  *

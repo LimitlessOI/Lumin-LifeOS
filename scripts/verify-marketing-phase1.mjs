@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Zone 1 audit module for verifying MarketingOS Phase 1 readiness.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  *
  * Zone 1 audit module for verifying MarketingOS Phase 1 readiness.

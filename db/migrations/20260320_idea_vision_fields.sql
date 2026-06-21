@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260320_idea_vision_fields.sql.
 -- Migration: 20260320_idea_vision_fields
 -- Adds vision capture fields to the ideas table so builders know exactly what Adam wants
 -- Also adds UX research + quality gate result storage

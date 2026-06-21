@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G9 100. -->
+
 The specification is contradictory: the task asks to write a `.md` file with specific content, but the verifier rejects `.md` files as non-executable, and a general instruction asks for "implementation code".
 
 ```javascript

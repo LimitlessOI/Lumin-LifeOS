@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231030_add_acre_tables.sql.
 ```sql
 -- Add necessary tables for ACRE module
 

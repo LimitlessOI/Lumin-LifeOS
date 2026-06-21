@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Brainstorm sessions — consolidated ideas catalog -->
+
 # Brainstorm sessions — consolidated ideas catalog
 
 **Owning registry:** [`projects/AMENDMENT_38_IDEA_VAULT.md`](projects/AMENDMENT_38_IDEA_VAULT.md) — streams, routing, **§6** step **5** (verbatim brainstorm vs coding churn).  

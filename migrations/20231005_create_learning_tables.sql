@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231005_create_learning_tables.sql.
 ```sql
 CREATE TABLE learning_modules (
   id SERIAL PRIMARY KEY,

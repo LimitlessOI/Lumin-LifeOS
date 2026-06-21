@@ -1,1 +1,3 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G69 100. -->
+
 The specification is contradictory: the task requires writing a markdown file (`.md`) containing a descriptive blueprint note, but the OIL verifier attempts to execute this `.md` file as a Node.js module, leading to an `ERR_UNKNOWN_FILE_EXTENSION` error. This makes it impossible to fulfill the task as specified and pass the verifier without changing the target file extension, which is not permitted by the prompt.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Example of how these could be initialized or integrated
+ */
 ```javascript
 import NotificationSystem from './NotificationSystem';
 import UndoManager from './UndoManager';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G957 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 - MarketingOS SSOT Foundation (G957-100)
 Signal Requiring Follow-Through: This document — SSOT foundation.
 ---

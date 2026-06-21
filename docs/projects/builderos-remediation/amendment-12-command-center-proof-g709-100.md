@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G709-100 -->
+
 # Amendment 12 Command Center Proof - G709-100
 
 This document outlines the next build slice for Amendment 12, focusing on closing the identified proof gap.

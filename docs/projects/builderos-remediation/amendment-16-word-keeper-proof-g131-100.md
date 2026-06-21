@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof Closing Note (g131-100) -->
+
 # Amendment 16: Word Keeper - Proof Closing Note (g131-100)
 
 This note closes the current build pass and outlines the next smallest blueprint-backed build slice for Amendment 16: Word Keeper.

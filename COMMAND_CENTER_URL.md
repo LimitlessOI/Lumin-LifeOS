@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔐 Command Center URL & Activation -->
+
 # 🔐 Command Center URL & Activation
 
 ## Your Command Center URL

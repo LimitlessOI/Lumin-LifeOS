@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G357-100 Remediation -->
+
 The specification is incomplete as the source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided in the REPO FILE CONTENTS.
 # Amendment 12 Command Center Proof - G357-100 Remediation
 

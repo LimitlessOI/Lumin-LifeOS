@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Script — Site Builder Follow Up Cron.
+ */
 import pg from 'pg';
 import { NotificationService } from '../core/notification-service.js';
 import { runFollowUpCron } from '../services/prospect-pipeline.js';

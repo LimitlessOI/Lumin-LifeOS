@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G331-100 - MarketingCampaign SSOT Foundation -->
+
 # AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G331-100 - MarketingCampaign SSOT Foundation
 
 This document outlines the necessary steps to close proof G331-100, establishing LifeOS as the Single Source of Truth (SSOT) for core MarketingCampaign metadata, as defined by AMENDMENT_41_MARKETINGOS.

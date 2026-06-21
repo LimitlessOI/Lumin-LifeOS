@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: BuilderOS — unified 4-gate output verification pipeline.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * BuilderOS — unified 4-gate output verification pipeline.
  *

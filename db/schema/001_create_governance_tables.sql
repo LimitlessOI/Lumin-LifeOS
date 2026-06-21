@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_governance_tables.sql.
 ```sql
 CREATE TABLE municipality_data (
     id SERIAL PRIMARY KEY,

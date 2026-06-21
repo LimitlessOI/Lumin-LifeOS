@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║              PREDICTIVE REFACTORING SYSTEM                                      ║
  * ║              Predicts code rot before it happens, suggests refactoring          ║

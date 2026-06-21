@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Personal Finance OS -->
+
 # Personal Finance OS
 _(formerly AMENDMENT_26_PERSONAL_FINANCE_OS.md)_
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md */
+/**
+ * SYNOPSIS: Script — Tokens Health. @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md */
 import 'dotenv/config';
 
 const base = (process.env.PUBLIC_BASE_URL || process.env.BUILDER_BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');

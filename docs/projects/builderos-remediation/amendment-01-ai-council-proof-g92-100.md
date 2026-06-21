@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G92 100. -->
+
 Proof-Closing Blueprint Note: AMENDMENT_01_AI_COUNCIL - g92-100
 This document serves as a proof-closing blueprint note for the `g92-100` build slice, derived from the `AMENDMENT_01_AI_COUNCIL.md` blueprint. It outlines the smallest safe build slice to establish the foundational data model for the AI Council within the LifeOS platform.
 ---

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof (G681-100) - Verifier Remediation Note -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, limiting the ability to derive specific feature-level details for the build slice.
 ```markdown
 # Amendment 12 Command Center Proof (G681-100) - Verifier Remediation Note

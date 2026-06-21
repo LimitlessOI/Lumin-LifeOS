@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G118-100 -->
+
 # Amendment 01: AI Council Proof - G118-100
 
 ## Blueprint Summary: AI Council Establishment

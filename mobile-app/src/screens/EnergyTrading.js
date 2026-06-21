@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — mobile-app/src/screens/EnergyTrading.js.
+ */
 ```javascript
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';

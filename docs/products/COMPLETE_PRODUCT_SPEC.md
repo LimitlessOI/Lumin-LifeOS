@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AI Counsel OS - Complete Product Specification -->
+
 # AI Counsel OS - Complete Product Specification
 
 **Version**: 1.0  

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/aiAnalyzer.js.
+ */
 const { queueTask } = require('../../executionQueue');
 
 class AIAnalyzer {

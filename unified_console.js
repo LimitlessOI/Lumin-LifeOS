@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Unified Console Implementation
+ */
 // Unified Console Implementation
 class UnifiedConsole {
     constructor() {

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Multi-strategy benchmark on shared OHLCV (same fee/slip, next-bar open, causal rules).
  * Multi-strategy benchmark on shared OHLCV (same fee/slip, next-bar open, causal rules).
  *
  * **You cannot maximize raw return and “reliability” with one magic number** — they trade off.

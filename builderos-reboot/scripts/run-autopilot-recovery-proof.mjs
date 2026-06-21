@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: AUTONOMOUS-RECOVERY-0002 proof — simulate hard_stop, invoke ONLY factory:autopilot (no observe manual).
  * AUTONOMOUS-RECOVERY-0002 proof — simulate hard_stop, invoke ONLY factory:autopilot (no observe manual).
  * @ssot builderos-reboot/MISSIONS/AUTONOMOUS-RECOVERY-0001/FOUNDER_PACKET.json
  */

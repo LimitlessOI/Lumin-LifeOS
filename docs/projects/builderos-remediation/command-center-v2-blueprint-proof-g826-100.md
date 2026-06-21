@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Task Management Core CRUD (g826-100) -->
+
 # Blueprint Proof: Command Center V2 - Task Management Core CRUD (g826-100)
 
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, specifically targeting the foundational elements of Task Management as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`. This proof focuses on establishing the core data model and basic GraphQL API for the `Task` entity.

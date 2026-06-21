@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/migrationService.js.
+ */
 const { exec } = require('child_process');
 
 function runMigrations() {

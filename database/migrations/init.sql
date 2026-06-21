@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — init.sql.
 ```sql
 CREATE TABLE neural_devices (
   id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G213-100 - Initial Command Execution Proof -->
+
 # Amendment 12 Command Center Proof: G213-100 - Initial Command Execution Proof
 
 This document outlines the first proof-of-concept build slice for the Amendment 12 Command Center, focusing on establishing the foundational command registration and execution mechanism.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G853-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G853-100
 
 ## Blueprint Note: Initial CommandCenter Class Definition

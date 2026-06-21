@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G739 100. -->
+
 Amendment 12 Command Center Proof: G739-100 - Initial Task Data Exposure
 
 This document outlines the first proof-closing build slice for the BuilderOS Command Center, focusing on establishing the foundational data exposure for task management.

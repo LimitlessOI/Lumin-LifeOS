@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G100-100: Initial Component Shell -->
+
 # Command Center V2 Blueprint Proof - G100-100: Initial Component Shell
 
 This document outlines the first build slice for the Command Center V2, focusing on establishing the foundational UI components as described in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.

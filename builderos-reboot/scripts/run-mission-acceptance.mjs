@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Run ACCEPTANCE_TESTS.json for a mission pack. Exit 0 only if all pass. */
+/**
+ * SYNOPSIS: Run ACCEPTANCE_TESTS.json for a mission pack. Exit 0 only if all pass. Run ACCEPTANCE_TESTS.json for a mission pack. Exit 0 only if all pass. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

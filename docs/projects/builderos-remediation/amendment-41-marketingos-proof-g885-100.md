@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G885 100. -->
+
 Amendment 41 MarketingOS Proof-Closing Blueprint Note: G885-100
 Signal: This document — SSOT foundation.
 ---

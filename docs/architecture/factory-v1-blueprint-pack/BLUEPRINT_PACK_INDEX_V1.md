@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Pack Index v1 -->
+
 # Blueprint Pack Index v1
 
 **Purpose:** Single table of contents for rebuilding the factory system from scratch. Read this first, then follow links in order.

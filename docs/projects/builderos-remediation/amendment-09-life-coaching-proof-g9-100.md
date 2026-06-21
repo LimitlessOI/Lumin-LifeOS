@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G9-100: Initial Session Scheduling Mechanism -->
+
 # Amendment 09: Life Coaching - Proof G9-100: Initial Session Scheduling Mechanism
 
 This document outlines the proof-closing blueprint note for the initial implementation slice of the Life Coaching feature, specifically addressing the core mechanism for scheduling and managing individual coaching sessions.

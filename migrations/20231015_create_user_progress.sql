@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231015_create_user_progress.sql.
 ```sql
 CREATE TABLE user_progress (
     user_id INT NOT NULL,

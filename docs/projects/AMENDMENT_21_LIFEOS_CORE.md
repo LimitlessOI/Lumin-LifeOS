@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Core -->
+
 # LifeOS Core
 _(formerly AMENDMENT_21_LIFEOS_CORE.md)_
 
@@ -64,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-21 — Founder build closed loop: atomic batch commit, live/outcome verification gate, async build jobs, baseline bubble revert. Prior **2026-06-20** — Dashboard Lumin chat persists to `lumin_messages`, loads history with scroll-back, VoiceRail-style explicit “send it” voice post (no pause auto-send), cleaner input chrome, topbar sidebar toggle.
+**Last Updated:** 2026-06-21 — FILE SYNOPSIS LAW: deployment-service commitToGitHub auto-inject. Prior: Founder build closed loop (atomic batch commit, live/outcome verification gate, async build jobs, baseline bubble revert).
 
 ---
 
@@ -1572,7 +1574,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-06-21 | **`services/deployment-service.js`** — `commitManyToGitHub()` (Git Trees API, single atomic commit for multi-file founder CSS patch). **`routes/lifeos-council-builder-routes.js`** — `POST /api/v1/lifeos/builder/execute-batch`. Wired via `server.js` + `startup/register-runtime-routes.js`. | Founder CSS patch committed 4 files as 4 separate SHAs — partial deploy state + theater PASS. | ✅ tests | deploy |
+| 2026-06-21 | **`services/deployment-service.js`** — `commitToGitHub()` auto-injects `SYNOPSIS:` via `ensureSynopsisInContent()` before GitHub API commit (FILE SYNOPSIS LAW layer 5). | Builder/API commits bypass local git hooks; synopsis must be enforced at API boundary too. | ✅ verify | deploy |
 | 2026-06-21 | **`public/overlay/lifeos-dashboard.html`**, **`lifeos-app.html`**, **`sw.js`** — assistant bubble yellow/black applied in **inline CSS** (not theme-overrides alone); theme-overrides cache-bust `?v=`; SW cache `lifeos-v2`. **`founder-css-patch.js`** now commits all 3 surfaces. | PASS on theme-overrides only — SW cache + inline styles hid the change. | deploy |
 | 2026-06-21 | **`routes/lifeos-council-builder-routes.js`** — `validateOverlayNotShrunk` refuses `/execute` when generated HTML lines << on-disk overlay. | Builder stub replaced production shell. | ✅ tests | deploy |
 | 2026-06-21 | **`services/lifeos-execution-truth.js`** — `formatExecutionTruthReply` now surfaces `self_repair` attempt log on founder build FAIL (attempt #, target_file, repair applied). Pairs with `services/founder-build-self-repair.js` in BUILDEROS_ALPHA receipt. | Founder saw identical FAIL with no evidence system retried — failure looked terminal. | ✅ tests | deploy |

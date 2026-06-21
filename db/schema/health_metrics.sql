@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — health_metrics.sql.
 ```sql
 CREATE TABLE health_metrics (
     id SERIAL PRIMARY KEY,

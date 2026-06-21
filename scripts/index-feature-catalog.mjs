@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Index the Feature Index document into the knowledge base
  * Index the Feature Index document into the knowledge base
  * This makes it searchable and automatically injectable into AI prompts
  */

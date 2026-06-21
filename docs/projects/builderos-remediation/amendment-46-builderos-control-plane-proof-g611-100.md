@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G611-100 Remediation Note -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G611-100 Remediation Note
 
 **Context:** The previous verification failed due to a verifier configuration issue (ERR_UNKNOWN_FILE_EXTENSION for .md files), not a semantic error in the proposed amendment. This note addresses the underlying implementation gap identified for the BuilderOS control plane.

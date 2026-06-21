@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Morning briefing assembler — queries calendar, MITs, and habits for today's context.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * Morning briefing assembler — queries calendar, MITs, and habits for today's context.
  */

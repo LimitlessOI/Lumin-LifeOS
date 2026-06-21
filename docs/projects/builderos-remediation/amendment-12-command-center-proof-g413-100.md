@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G413-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G413-100
 
 ## Proof-Closing Blueprint Note

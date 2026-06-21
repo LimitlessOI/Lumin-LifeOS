@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G659-100 Remediation Blueprint -->
+
 # Amendment 41 MarketingOS Proof: G659-100 Remediation Blueprint
 
 This document outlines the proof-closing blueprint for the `g659-100` component of Amendment 41, ensuring its correct integration and operation with MarketingOS. This serves as the SSOT foundation for verifying the implementation.

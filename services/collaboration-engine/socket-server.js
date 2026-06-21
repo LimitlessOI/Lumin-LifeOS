@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Socket Server.
+ */
 ```javascript
 const WebSocket = require('ws');
 

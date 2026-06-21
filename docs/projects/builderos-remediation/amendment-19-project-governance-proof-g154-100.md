@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G154-100 - Project Governance Schema Definition -->
+
 # Amendment 19 Project Governance Proof: G154-100 - Project Governance Schema Definition
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260405_teacher_os.sql.
 -- @ssot docs/projects/AMENDMENT_31_TEACHER_OS.md
 
 CREATE TABLE IF NOT EXISTS teacher_os_teachers (

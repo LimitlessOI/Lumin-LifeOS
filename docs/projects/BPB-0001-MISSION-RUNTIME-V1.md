@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BPB-0001 — Mission Runtime v1 + Shared Adam/Sherry Mission Board -->
+
 # BPB-0001 — Mission Runtime v1 + Shared Adam/Sherry Mission Board
 
 **Type:** Blueprint Builder Document  

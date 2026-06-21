@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G47 100. -->
+
 The specification is contradictory: the task requests a `.md` file, but the OIL verifier rejects it for not being a JavaScript module. I am providing the `.md` content as specified.
 Amendment 12: Command Center - Proof G47-100
 Blueprint Note: Initial CommandCenterService Scaffolding

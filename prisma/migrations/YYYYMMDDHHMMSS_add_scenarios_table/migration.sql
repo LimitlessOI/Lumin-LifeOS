@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — migration.sql.
 ```sql
 -- Create the scenarios table
 CREATE TABLE scenarios (

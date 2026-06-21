@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet — LifeOS Capture Pipeline v2 -->
+
 # Founder Packet — LifeOS Capture Pipeline v2
 
 **Mission ID:** `PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001`

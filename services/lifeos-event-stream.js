@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS unified capture/event stream.
  * LifeOS unified capture/event stream.
  * Turns freeform text into tracked suggestions and optionally applies them.
  *

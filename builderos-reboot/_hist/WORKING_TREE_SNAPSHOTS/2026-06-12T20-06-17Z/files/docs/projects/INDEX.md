@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Project Registry -->
+
 # Project Registry
 _(cold-start: `docs/constitution/NORTH_STAR.md` → this file → `docs/projects/[product-file].md`)_
 **Law:** `docs/SSOT_NORTH_STAR.md` | **Last Updated:** 2026-06-11

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: CLI script to discover wellness businesses for cold outreach.
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * CLI script to discover wellness businesses for cold outreach.
  * Usage: node scripts/site-builder-prospect-discovery.mjs --city='Portland, OR' --type=yoga --count=10

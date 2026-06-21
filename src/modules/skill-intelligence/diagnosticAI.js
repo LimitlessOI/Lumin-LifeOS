@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: diagnosticAI.js
+ */
 ```javascript
 // diagnosticAI.js
 // This module handles skill assessment logic.

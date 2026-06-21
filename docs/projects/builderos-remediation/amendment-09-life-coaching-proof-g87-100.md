@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G87 100. -->
+
 Amendment 09: Life Coaching - Proof G87-100: Core Data Model Definition
 This document outlines the initial proof-of-concept and the next smallest build slice for integrating Life Coaching features into LifeOS, specifically focusing on the foundational data model.
 ---

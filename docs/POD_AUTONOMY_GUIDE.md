@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: POD Autonomy Guide -->
+
 # POD Autonomy Guide
 
 **Purpose:** This guide crystallizes the new “drone pod” architecture so every project is treated like a human engineering cell—ideas get scoped, drones are assigned, telemetry flows, and completion triggers the next iteration without human hand-offs (per the SSOT and companion contract).

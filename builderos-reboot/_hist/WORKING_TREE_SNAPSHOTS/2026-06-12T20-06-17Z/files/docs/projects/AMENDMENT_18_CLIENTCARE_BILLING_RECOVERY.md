@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: ClientCare Billing Recovery -->
+
 # ClientCare Billing Recovery
 _(formerly AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md)_
 **Status:** BUILDING

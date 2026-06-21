@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 12 Command Center Proof (G873-100) -->
+
 # BuilderOS Remediation: Amendment 12 Command Center Proof (G873-100)
 
 ## Proof-Closing Blueprint Note: Establishing Core Command Persistence

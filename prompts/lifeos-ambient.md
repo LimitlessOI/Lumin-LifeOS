@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: Ambient Context (Opt-in Snapshots) -->
+
 # Domain: Ambient Context (Opt-in Snapshots)
 
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)

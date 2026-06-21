@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/models/Task.js.
+ */
 ```javascript
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Pattern Recognition.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs-node');
 

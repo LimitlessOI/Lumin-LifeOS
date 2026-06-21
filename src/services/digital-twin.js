@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Digital Twin Service
+ */
 // Digital Twin Service
 
 const { Client } = require('pg'); // PostgreSQL client

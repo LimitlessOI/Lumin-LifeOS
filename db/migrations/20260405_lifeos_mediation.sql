@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260405_lifeos_mediation.sql.
 -- Migration: 20260405_lifeos_mediation.sql
 -- LifeOS Mediation Engine — consent-first AI-facilitated conflict resolution
 -- Both parties agree to the process; AI is a neutral facilitator only.

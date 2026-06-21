@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 01 — AI Council System -->
+
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §COUNCIL` — current state, files, env, endpoints (built for AI readers).
 > This amendment contains full history, receipts, LCL architecture detail, and competitive analysis.
 

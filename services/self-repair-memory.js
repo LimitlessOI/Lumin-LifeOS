@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Self-repair memory write-back — lessons from real execution logs only.
  * Self-repair memory write-back — lessons from real execution logs only.
  *
  * @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md

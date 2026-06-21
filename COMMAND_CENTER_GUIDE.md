@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎮 Command Center - Complete User Guide -->
+
 # 🎮 Command Center - Complete User Guide
 
 ## Overview

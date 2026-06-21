@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Quarterly Rip-and-Replace Audit -->
+
 # Quarterly Rip-and-Replace Audit
 - id: quarterly_rip_replace_2025-12-15T07-03-31-261Z
 - timestamp: 2025-12-15T07:03:31.262Z

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Brainstorm sessions — multi-model protocol -->
+
 # Brainstorm sessions — multi-model protocol
 
 **Purpose:** Run **structured**, **repeatable** brainstorms where **each model** contributes ideas, **ranking** happens explicitly, **synthesis** produces a second wave, and **triage** yields **build now / later / discard** — without confusing **IDE chat** with **recorded council** (see **`docs/CROSS_AGENT_CHANNEL.md`** and North Star **Article II §2.12**).

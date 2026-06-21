@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: AUTONOMY_WRITE_LOCK (C21) — manages data/autonomy.lock.
  * AUTONOMY_WRITE_LOCK (C21) — manages data/autonomy.lock.
  * When locked, the builder daemon routes commits to autonomy/staging instead of main.
  * Lock absent = isLocked() returns false = normal operation. No side effects on import.

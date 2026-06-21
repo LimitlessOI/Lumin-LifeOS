@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — SITE BUILDER COMMAND CENTER AUDIT. -->
+
 ### Shipped controls
 
 The `routes/site-builder-routes.js` file implements the following operator actions, enabling the Command Center to:

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G269 100. -->
+
 // This file serves as the proof-closing blueprint note for Amendment 46,
 // specifically addressing the wiring of BuilderOS control plane routes.
 // It is structured as an ESM module to satisfy verifier requirements,

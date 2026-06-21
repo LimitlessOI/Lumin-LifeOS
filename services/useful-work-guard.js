@@ -1,5 +1,5 @@
 /**
- * services/useful-work-guard.js
+ * SYNOPSIS: services/useful-work-guard.js
  *
  * Hard enforcement layer: no AI call fires unless it passes a prerequisite check
  * that proves there is real, actionable work to do.

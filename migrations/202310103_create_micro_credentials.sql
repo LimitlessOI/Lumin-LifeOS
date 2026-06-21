@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 202310103_create_micro_credentials.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS micro_credentials (
     id SERIAL PRIMARY KEY,

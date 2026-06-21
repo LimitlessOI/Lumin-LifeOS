@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G22-100 -->
+
 # Amendment 16 Word Keeper Proof - G22-100
 
 This document outlines the next smallest blueprint-backed build slice for the Amendment 16 Word Keeper feature, focusing on establishing the core word persistence and retrieval mechanism.

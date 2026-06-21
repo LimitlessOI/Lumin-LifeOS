@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/future-vision.js
  * services/future-vision.js
  *
  * Future Vision system — helps users see their future with complete clarity.

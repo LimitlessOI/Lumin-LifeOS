@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G739 100. -->
+
 The specification is contradictory: the task asks to write a `.md` file, but the OIL verifier rejected the previous attempt because it tried to execute the `.md` file as a Node.js module, indicating it expects executable JavaScript. This output assumes the verifier expects the *content* of the `.md` file to be valid JavaScript.
 
 ```javascript

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Note: Amendment 41 MarketingOS Proof Closure (G939-100) -->
+
 # Blueprint Note: Amendment 41 MarketingOS Proof Closure (G939-100)
 
 **SSOT Foundation Signal:** This document serves as the Single Source of Truth foundation for closing the proof gap for Amendment 41 MarketingOS within the BuilderOS governed loop.

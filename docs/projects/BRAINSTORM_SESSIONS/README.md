@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BRAINSTORM_SESSIONS (artifact folder) -->
+
 # BRAINSTORM_SESSIONS (artifact folder)
 
 **FIRST — if Adam said “brainstorm / read brainstorming / 25 ideas”:** **`docs/projects/OPERATOR_BRAINSTORM_SESSION_ENTRY.md`** (operator contract + continuity rules).

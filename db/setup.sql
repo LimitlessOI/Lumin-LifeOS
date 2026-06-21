@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup.sql.
 ```sql
 CREATE TABLE workshops (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AI Call Bypass Report -->
+
 # AI Call Bypass Report
 
 **Generated:** 2026-05-31T05:06:45.870Z

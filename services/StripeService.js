@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Stripe Service — creates Stripe Checkout sessions for one-time payments,
  * Stripe Service — creates Stripe Checkout sessions for one-time payments,
  * redirecting to success/cancel URLs from FRONTEND_URL env var.
  *

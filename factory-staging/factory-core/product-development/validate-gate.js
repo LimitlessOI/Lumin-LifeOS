@@ -1,5 +1,5 @@
 /**
- * Product Development gate — BPB may not start unless strategic ambiguity is resolved.
+ * SYNOPSIS: Product Development gate — BPB may not start unless strategic ambiguity is resolved.
  */
 
 const REQUIRED_STRICT = [

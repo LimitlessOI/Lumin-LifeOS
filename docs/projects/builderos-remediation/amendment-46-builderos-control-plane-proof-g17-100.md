@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G17-100 Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G17-100 Remediation
 
 This document outlines the remediation plan and proof-closing steps for the BuilderOS control plane, specifically addressing the integration of build start and completion signals within `routes/lifeos-council-builder-routes.js`.

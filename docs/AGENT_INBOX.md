@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Agent Inbox -->
+
 # Agent Inbox
 
 **Purpose:** Claude, CUR (Cursor), Codex, and C2 resolve disagreements here **before** escalating to Adam. Adam is not the router for AI-vs-AI technical disputes — only for **business/product decisions** in plain English.

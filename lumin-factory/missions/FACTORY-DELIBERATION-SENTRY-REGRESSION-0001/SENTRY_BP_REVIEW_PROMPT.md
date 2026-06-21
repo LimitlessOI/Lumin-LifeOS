@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SENTRY BP Review Prompt — Regression Harness Mission -->
+
 # SENTRY BP Review Prompt — Regression Harness Mission
 
 **Paste into Claude Code. You are SENTRY auditing the BLUEPRINT only — not implementing.**

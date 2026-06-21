@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/adam-logger.js
  * services/adam-logger.js
  * Captures every decision, every word, every preference Adam expresses.
  * This is the foundation of the digital twin — the raw material the profile is built from.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Governed autonomous telemetry session — PB-only, bounded cycles, no escalation.
  * Governed autonomous telemetry session — PB-only, bounded cycles, no escalation.
  *
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md

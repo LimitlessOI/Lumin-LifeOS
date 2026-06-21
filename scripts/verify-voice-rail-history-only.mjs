@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Fail-closed verification that Voice Rail remains history-only.
  * Fail-closed verification that Voice Rail remains history-only.
  */
 import fs from 'node:fs';

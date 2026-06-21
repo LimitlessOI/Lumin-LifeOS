@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — smart_containers.sql.
 ```sql
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 

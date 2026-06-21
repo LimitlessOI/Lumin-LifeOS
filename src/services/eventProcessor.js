@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/eventProcessor.js.
+ */
 ```javascript
 const redis = require('redis');
 const socketIo = require('socket.io');

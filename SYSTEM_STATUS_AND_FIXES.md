@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚨 LIFEOS SYSTEM STATUS & BUG FIXES -->
+
 # 🚨 LIFEOS SYSTEM STATUS & BUG FIXES
 
 **Report Date:** January 10, 2026

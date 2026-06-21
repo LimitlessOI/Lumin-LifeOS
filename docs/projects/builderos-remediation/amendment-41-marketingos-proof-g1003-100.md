@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1003 100. -->
+
 **Proof-Closing Blueprint Note: MarketingOS Alignment with Amendment 41 SSOT**
 
 **Gap ID:** G1003-100

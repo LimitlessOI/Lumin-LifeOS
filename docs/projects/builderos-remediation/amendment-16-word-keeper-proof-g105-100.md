@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G105-100: Initial Data Model & Repository -->
+
 # Amendment 16 Word Keeper Proof - G105-100: Initial Data Model & Repository
 
 This document serves as a proof-closing blueprint note for the initial build slice of Amendment 16, the Word Keeper feature. It addresses the foundational data model and persistence layer required before any higher-level logic or user-facing interactions can be built.

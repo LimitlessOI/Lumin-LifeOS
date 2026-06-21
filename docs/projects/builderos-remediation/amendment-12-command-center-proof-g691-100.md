@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof (G691-100) - Remediation Note -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` is missing, preventing derivation of specific content.
 # Amendment 12 Command Center Proof (G691-100) - Remediation Note
 

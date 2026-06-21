@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G127-100 - Initial Command Registration -->
+
 # Amendment 12 Command Center Proof: G127-100 - Initial Command Registration
 
 This proof-closing blueprint note addresses the foundational capability of the `CommandCenter`: the registration of commands. This is the smallest, safest build slice to establish the core command management mechanism before delving into execution, state, or eventing.

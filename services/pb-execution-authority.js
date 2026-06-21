@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: PB execution authority — no unnecessary Adam bottlenecks inside approved PB boundary.
  * PB execution authority — no unnecessary Adam bottlenecks inside approved PB boundary.
  *
  * @ssot docs/SSOT_COMPANION.md §0.5J

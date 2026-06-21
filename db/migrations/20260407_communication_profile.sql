@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260407_communication_profile.sql.
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS communication_profiles (

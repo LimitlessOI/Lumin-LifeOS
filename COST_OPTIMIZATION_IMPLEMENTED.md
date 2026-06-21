@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Aggressive Cost Optimization Implementation -->
+
 # Aggressive Cost Optimization Implementation
 
 ## 🎯 Goal: Reduce API Costs to 1-5% of Original

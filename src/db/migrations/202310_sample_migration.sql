@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 202310_sample_migration.sql.
 ```sql
 -- Supply Chain Entities Table
 CREATE TABLE IF NOT EXISTS supply_chain_entities (

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Review.Test.
+ */
 const request = require('supertest');
 const app = require('../app');
 

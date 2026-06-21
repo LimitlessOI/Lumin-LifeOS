@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/fabric-network.js.
+ */
 ```javascript
 const { Gateway, Wallets } = require('fabric-network');
 const path = require('path');

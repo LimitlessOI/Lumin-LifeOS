@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔧 Deployment Fixes & Improvements -->
+
 # 🔧 Deployment Fixes & Improvements
 
 ## ❌ **CRITICAL ISSUES FOUND (Causing All Failures)**

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/capability-map.js
  * services/capability-map.js
  *
  * Capability Map: analyzes competitor/industry ideas and maps them to the

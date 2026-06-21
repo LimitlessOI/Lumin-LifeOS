@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_payments.sql.
 ```sql
 CREATE TABLE payments (
   id SERIAL PRIMARY KEY,

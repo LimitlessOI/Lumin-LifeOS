@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G148 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane Wiring (G148-100)
 
 This note addresses the signal to wire `routes/lifeos-council-builder-routes.js` for build start and completion events, including health-based conditional logic.

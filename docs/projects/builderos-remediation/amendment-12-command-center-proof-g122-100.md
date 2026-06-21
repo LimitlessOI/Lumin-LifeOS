@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G122 100. -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` is missing, leading to an incomplete specification for deriving the next build slice. Assumptions have been made based on common API development patterns.
 
 Amendment 12: Command Center Proof - G122-100

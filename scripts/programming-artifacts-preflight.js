@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Programming Artifacts Preflight (fail-closed)
  * Programming Artifacts Preflight (fail-closed)
  * Ensures required artifacts exist for a given run folder.
  */

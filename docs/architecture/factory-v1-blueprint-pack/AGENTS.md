@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Doctrine only / not runtime authority -->
+
 # Doctrine only / not runtime authority
 
 You are in the **factory v1 blueprint pack** — law and build specification, not executable runtime.

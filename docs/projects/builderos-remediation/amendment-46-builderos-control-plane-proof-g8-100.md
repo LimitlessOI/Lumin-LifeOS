@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof Gap 8-100: Build Event Wiring -->
+
 # Amendment 46 BuilderOS Control Plane Proof Gap 8-100: Build Event Wiring
 
 This blueprint note closes the proof gap for wiring build start/complete events in the BuilderOS control plane.

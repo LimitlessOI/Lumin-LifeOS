@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Class CommandCenter — docs/projects/builderos-remediation/amendment-12-command-center-proof-g1087-100.md. -->
+
 Amendment 12 Command Center Proof - G1087-100
 
 This document outlines the next smallest build slice for the BuilderOS Command Center, derived from `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

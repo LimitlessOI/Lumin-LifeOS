@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: ModelRouter Constructor Fix Report -->
+
 # ModelRouter Constructor Fix Report
 
 **Date**: 2026-01-08

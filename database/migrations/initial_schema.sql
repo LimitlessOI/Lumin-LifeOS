@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — initial_schema.sql.
 CREATE TABLE automation_templates (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,

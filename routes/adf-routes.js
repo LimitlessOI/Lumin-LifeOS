@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports createAdfRoutes — routes/adf-routes.js.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 

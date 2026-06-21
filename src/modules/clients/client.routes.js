@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/clients/client.routes.js.
+ */
 ```javascript
 const express = require('express');
 const clientController = require('./client.controller');

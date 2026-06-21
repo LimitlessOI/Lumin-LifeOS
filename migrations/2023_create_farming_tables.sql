@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 2023_create_farming_tables.sql.
 ```sql
 CREATE TABLE farming_pods (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Manifest -->
+
 # Manifest
 
 This export is the external review packet for `FACTORY-0001-v1`.

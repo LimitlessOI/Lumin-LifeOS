@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — server/config/fileStorage.js.
+ */
 ```javascript
 const multer = require('multer');
 const AWS = require('aws-sdk');

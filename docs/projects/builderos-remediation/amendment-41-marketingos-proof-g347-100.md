@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: MarketingOS Proof-G347-100 - Initial Client Integration -->
+
 # Proof-Closing Blueprint Note: MarketingOS Proof-G347-100 - Initial Client Integration
 
 This document serves as the SSOT foundation for the next C2 build pass, focusing on closing the initial proof gap for MarketingOS Proof-G347-100 integration.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_build_ready_gate.sql.
 -- ============================================================
 -- Build Ready Gate
 -- Amendment: docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md

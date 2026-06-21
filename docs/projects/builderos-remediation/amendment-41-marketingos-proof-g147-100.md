@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS: Proof G147-100 - User Consent SSOT Verification -->
+
 # AMENDMENT_41_MARKETINGOS: Proof G147-100 - User Consent SSOT Verification
 
 This document serves as a proof-closing blueprint note for the MarketingOS integration, specifically addressing the Single Source of Truth (SSOT) for user marketing consent preferences.

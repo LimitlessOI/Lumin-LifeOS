@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231025_create_ubi_tables.sql.
 ```sql
 CREATE TABLE ubi_users (
     id SERIAL PRIMARY KEY,

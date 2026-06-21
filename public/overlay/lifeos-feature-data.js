@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: LifeOS overlay UI — Lifeos Feature Data.
+ */
 window.LIFEOS_FEATURE_GUIDES = {
   'lifeos-today.html': {
     title: 'Today',

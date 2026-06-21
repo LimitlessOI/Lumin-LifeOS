@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G983-100 - Initial Command Ingestion API -->
+
 # Command Center V2 Blueprint Proof: G983-100 - Initial Command Ingestion API
 
 This document outlines the proof for the first build slice of the Command Center V2, focusing on establishing a foundational API endpoint for command ingestion.

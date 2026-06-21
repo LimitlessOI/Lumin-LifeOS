@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231020_create_checkout_tables.sql.
 ```sql
 CREATE TABLE user_discount_offers (
     id SERIAL PRIMARY KEY,

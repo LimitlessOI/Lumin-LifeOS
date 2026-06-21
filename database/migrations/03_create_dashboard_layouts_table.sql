@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 03_create_dashboard_layouts_table.sql.
 ```sql
 CREATE TABLE dashboard_layouts (
     id SERIAL PRIMARY KEY,

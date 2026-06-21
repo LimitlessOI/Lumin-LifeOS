@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - Remediation G411-100 -->
+
 # Amendment 46: BuilderOS Control Plane Proof - Remediation G411-100
 
 ## OIL Verifier Rejection Analysis

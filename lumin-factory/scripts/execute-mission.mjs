@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Execute all steps in a mission blueprint, then run acceptance tests.
  * Execute all steps in a mission blueprint, then run acceptance tests.
  * Usage: node execute-mission.mjs FACTORY-REBOOT-0004 [--from S401] [--dry-run]
  */

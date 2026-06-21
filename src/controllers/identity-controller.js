@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/identity-controller.js.
+ */
 ```javascript
 const express = require('express');
 const { createIdentity, verifyIdentity } = require('../services/blockchain-identity-service');

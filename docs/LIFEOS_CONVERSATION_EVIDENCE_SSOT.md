@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Conversation Evidence + Programs Map SSOT -->
+
 # LifeOS Conversation Evidence + Programs Map SSOT
 
 **Purpose:** Canonical product SSOT for local-first conversation capture, evidence-backed coaching, program detection, therapist export, and cross-program "listen in" capability inside LifeOS.

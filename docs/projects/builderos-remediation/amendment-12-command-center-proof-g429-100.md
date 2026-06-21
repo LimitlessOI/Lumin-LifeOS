@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G429-100 - Initial Dashboard Metrics API -->
+
 # Amendment 12 Command Center Proof: G429-100 - Initial Dashboard Metrics API
 
 This document outlines the proof-closing blueprint note for the initial implementation slice of the BuilderOS Command Center, specifically targeting the foundational API for dashboard metrics as part of Phase 1 (MVP).

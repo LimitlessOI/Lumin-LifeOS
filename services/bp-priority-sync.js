@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Sync BP_PRIORITY + mission BLUEPRINT from acceptance receipts (machine law).
  * Sync BP_PRIORITY + mission BLUEPRINT from acceptance receipts (machine law).
  * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
  */

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Intent Model -->
+
 # Founder Intent Model
 
 Purpose:

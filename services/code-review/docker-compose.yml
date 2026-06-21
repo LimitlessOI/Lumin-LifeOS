@@ -1,3 +1,4 @@
+# SYNOPSIS: Service module — Docker Compose.
 ```yaml
 version: '3.8'
 services:

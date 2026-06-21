@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Regenerates docs/AI_COLD_START.md from continuity lane files + INDEX pointer.
  * Regenerates docs/AI_COLD_START.md from continuity lane files + INDEX pointer.
  *
  * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md

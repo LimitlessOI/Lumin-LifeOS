@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Integration - Proof G18-100 -->
+
 # Amendment 09: Life Coaching Integration - Proof G18-100
 
 This document outlines the next smallest blueprint-backed build slice for Amendment 09, focusing on the initial implementation of Coach Profile Management.

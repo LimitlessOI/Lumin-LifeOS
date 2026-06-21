@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Segment Sync Proof (g241-100) -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Segment Sync Proof (g241-100)
 
 This document serves as the SSOT foundation for closing the identified proof gap g241-100 related to Amendment 41, concerning MarketingOS integration.

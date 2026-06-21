@@ -1,5 +1,5 @@
 /**
- * Result scoreboard + release pass gate per founder doctrine.
+ * SYNOPSIS: Result scoreboard + release pass gate per founder doctrine.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

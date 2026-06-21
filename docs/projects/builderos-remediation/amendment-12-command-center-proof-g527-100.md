@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G527-100 Remediation -->
+
 # Amendment 12 Command Center Proof - G527-100 Remediation
 
 This document outlines the next smallest build slice to address the implementation gap identified in `AMENDMENT_12_COMMAND_CENTER.md` for remediation G527-100.

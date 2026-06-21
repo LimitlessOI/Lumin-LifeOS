@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G895-100 - Initial Command Entity API Slice -->
+
 # Command Center V2 Blueprint Proof: G895-100 - Initial Command Entity API Slice
 
 This document serves as a proof-closing note for the initial build slice derived from the `COMMAND_CENTER_V2_BLUEPRINT.md`. It outlines the smallest, safest, and most foundational implementation step to establish the core `Command` entity within the Command Center V2 architecture.

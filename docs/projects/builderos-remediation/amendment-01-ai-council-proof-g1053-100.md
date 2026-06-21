@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof - G1053-100 -->
+
 The verifier rejects `.md` files by attempting to execute them as Node.js modules, which contradicts the task to write a `.md` file.
 # Amendment 01 AI Council Proof - G1053-100
 

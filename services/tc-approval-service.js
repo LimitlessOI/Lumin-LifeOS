@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-approval-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-approval-service.js
  * Approval cockpit state for review / approve / reject / snooze flows.

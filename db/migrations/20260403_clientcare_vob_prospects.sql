@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260403_clientcare_vob_prospects.sql.
 -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
 -- Saved prospect VOB history, insurance-card extraction history, and promotion queue.
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Parse repo-relative target paths and domains from operator/build instructions.
  * Parse repo-relative target paths and domains from operator/build instructions.
  * Shared by Voice Rail command executor and BuilderOS PBB planner.
  *

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G495 100. -->
+
 The specification is contradictory: the task requests a `.md` file, but the OIL verifier rejects it by attempting to execute it as a Node.js module, indicating an expectation for an executable file type at this path.
 
 Command Center V2 Blueprint Proof: G495-100 - Minimal Command History State

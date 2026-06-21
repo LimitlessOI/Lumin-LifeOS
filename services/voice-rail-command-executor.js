@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Voice Rail — founder commands → BuilderOS command-control → builder receipt.
  * Voice Rail — founder commands → BuilderOS command-control → builder receipt.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

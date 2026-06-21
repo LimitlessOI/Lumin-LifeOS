@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Audit module for verifying council bypasses in the LifeOS platform.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  *
  * Audit module for verifying council bypasses in the LifeOS platform.

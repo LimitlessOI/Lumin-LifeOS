@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_make_tables.sql.
 ```sql
 CREATE TABLE make_scenarios (
     id SERIAL PRIMARY KEY,

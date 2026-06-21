@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Council is imported byte-for-byte but NOT live-wired in factory-staging.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

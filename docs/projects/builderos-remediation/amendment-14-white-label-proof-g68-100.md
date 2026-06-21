@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White Label Proof - G68-100 -->
+
 # Amendment 14: White Label Proof - G68-100
 
 ## Goal

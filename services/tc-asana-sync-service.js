@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-asana-sync-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-asana-sync-service.js
  * Asana sync from canonical TC transaction state. Asana is the ops surface, not the source of truth.

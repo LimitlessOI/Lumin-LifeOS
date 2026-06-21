@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: LifeOS overlay UI — Lifeos Founder Interface.
+ */
 (function () {
   'use strict';
 

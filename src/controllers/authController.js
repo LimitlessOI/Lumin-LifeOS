@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/AuthController.js.
+ */
 ```javascript
 const AuthService = require('../services/AuthService');
 

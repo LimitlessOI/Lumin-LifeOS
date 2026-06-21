@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_acos_tables.sql.
 ```sql
 CREATE TABLE climate_indicators (
   id SERIAL PRIMARY KEY,

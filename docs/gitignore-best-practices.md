@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: .gitignore Best Practices -->
+
 ```markdown
 # .gitignore Best Practices
 

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — create_code_review_tables.sql.
 ```sql
 CREATE TABLE code_submissions (
     id SERIAL PRIMARY KEY,

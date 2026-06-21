@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof (G141-100) -->
+
 # Amendment 19 Project Governance Proof (G141-100)
 
 This document serves as a proof-closing blueprint note for Amendment 19 Project Governance, addressing the immediate blockers identified by the OIL verifier and outlining the next steps for implementation.

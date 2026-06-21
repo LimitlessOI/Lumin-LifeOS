@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — consumer_engagements.sql.
 ```sql
 CREATE TABLE consumer_engagements (
     id SERIAL PRIMARY KEY,

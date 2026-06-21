@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Two-Tier AI Council System Initialization
  * Two-Tier AI Council System Initialization
  * Initializes the full two-tier (Tier 0 Ollama + Tier 1 Claude) council system,
  * model router, execution queue, self-programming service, and all dependent modules.

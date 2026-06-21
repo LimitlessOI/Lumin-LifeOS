@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260427_lifeos_decision_review_queue.sql.
 -- Migration: decision_review_queue
 -- Description: Create table for tracking scheduled decision reviews (30-day, 90-day, 1-year)
 

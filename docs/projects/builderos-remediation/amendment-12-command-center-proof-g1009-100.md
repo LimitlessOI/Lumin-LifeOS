@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G1009-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G1009-100
 
 This document outlines the first proof-of-concept build slice for Amendment 12, focusing on establishing the foundational `CommandCenterService` and a minimal API endpoint as part of Phase 1 (G1009-100).

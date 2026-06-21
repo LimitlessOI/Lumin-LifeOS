@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G44-100 -->
+
 # Amendment 16: Word Keeper - Proof G44-100
 
 ## Proof-Closing Blueprint Note

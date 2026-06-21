@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G841-100 -->
+
 # Amendment 12 Command Center Proof: G841-100
 
 This document serves as a proof-closing blueprint note for the initial build slice of the Amendment 12 Command Center, focusing on establishing the foundational persistence for audit logging.

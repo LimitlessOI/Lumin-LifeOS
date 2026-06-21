@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G571-100 Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof - G571-100 Blueprint Note
 
 **SSOT Foundation:** This document serves as the Single Source of Truth for the proof-closing blueprint note regarding MarketingOS signal `g571-100`.

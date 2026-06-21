@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G319-100 Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G319-100 Remediation
 
 This document outlines the remediation plan for the BuilderOS control plane, specifically addressing the integration of build lifecycle tracking and health-based completion checks as per Amendment 46.

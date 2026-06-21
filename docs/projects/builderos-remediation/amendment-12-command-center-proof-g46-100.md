@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G46-100 -->
+
 # Amendment 12 Command Center Proof - G46-100
 
 ## Context: OIL Verifier Rejection

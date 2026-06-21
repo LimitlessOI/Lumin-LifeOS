@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231015_create_vr_tables.sql.
 ```sql
 CREATE TABLE vr_experiences (
     id SERIAL PRIMARY KEY,

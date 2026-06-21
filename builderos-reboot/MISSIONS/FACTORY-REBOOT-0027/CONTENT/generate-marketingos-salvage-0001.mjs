@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Generate first product salvage mission pack (MarketingOS stub per Phase 12). */
+/**
+ * SYNOPSIS: Generate first product salvage mission pack (MarketingOS stub per Phase 12). Generate first product salvage mission pack (MarketingOS stub per Phase 12). */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

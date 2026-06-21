@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G142-100 SSOT Foundation -->
+
 # Amendment 41 MarketingOS Proof: G142-100 SSOT Foundation
 
 This document outlines the blueprint for closing the proof gap for the `g142-100` metric, establishing it as a Single Source of Truth (SSOT) foundation within the LifeOS platform, as required by Amendment 41 MarketingOS.

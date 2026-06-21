@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Prevention hook planner — safe execution plans from CANDIDATE_RULE rows only.
  * Prevention hook planner — safe execution plans from CANDIDATE_RULE rows only.
  * No invariant promotion. Wired hooks are explicit; others are NOT_WIRED.
  *

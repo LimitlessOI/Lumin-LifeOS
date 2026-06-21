@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Run a drift check over council signals.
+ */
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';

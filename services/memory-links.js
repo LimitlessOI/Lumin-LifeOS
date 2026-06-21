@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-links.js
+ */
 // services/memory-links.js
 import { randomUUID } from 'crypto';
 

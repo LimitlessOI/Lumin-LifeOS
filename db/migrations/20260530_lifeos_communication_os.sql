@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260530_lifeos_communication_os.sql.
 -- LifeOS Communication OS — extended comm memory (NOT epistemic_facts / BuilderOS proof memory)
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 

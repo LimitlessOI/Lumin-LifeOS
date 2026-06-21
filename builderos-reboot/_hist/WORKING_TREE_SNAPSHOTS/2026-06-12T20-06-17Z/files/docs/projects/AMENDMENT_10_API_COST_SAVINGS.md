@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: API Cost Savings (TSOS) -->
+
 # API Cost Savings (TSOS)
 _(formerly AMENDMENT_10_API_COST_SAVINGS.md)_
 **Status:** IN_BUILD → B2B product layer now built; awaiting first paying customer + production verification

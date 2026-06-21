@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — cypress/integration/energy-dashboard.spec.js.
+ */
 describe('Energy Dashboard', () => {
   it('should load the dashboard', () => {
     cy.visit('/dashboard');

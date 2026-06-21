@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createSnapshotManager — startup/snapshots.js.
+ */
 export function createSnapshotManager({
   createSystemSnapshotService,
   rollbackToSnapshotService,

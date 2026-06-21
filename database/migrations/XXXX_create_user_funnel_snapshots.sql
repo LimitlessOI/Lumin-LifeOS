@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — XXXX_create_user_funnel_snapshots.sql.
 CREATE TABLE user_funnel_snapshots (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,

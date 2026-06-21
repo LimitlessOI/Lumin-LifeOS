@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Knowledge Context — loads project documentation (SSOT/vision/truths/context)
  * Knowledge Context — loads project documentation (SSOT/vision/truths/context)
  * and the knowledge index into a cached in-memory context
  * that council prompts can draw from at request time.

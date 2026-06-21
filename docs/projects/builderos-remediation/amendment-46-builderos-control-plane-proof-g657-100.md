@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G657-100 Remediation Note -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G657-100 Remediation Note
 
 This note addresses the required wiring for BuilderOS control plane operations within `routes/lifeos-council-builder-routes.js` as part of Amendment 46.

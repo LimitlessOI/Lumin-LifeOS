@@ -1,1 +1,3 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G637 100. -->
+
 The instruction to "Generate the complete implementation code" conflicts with the task to "Write docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g637-100.md" as a `.md` file is documentation, not executable code. I am proceeding by generating the markdown content as the "implementation" for the target `.md` file.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G109 100. -->
+
 The task title specifies writing an `.md` file, but the final instruction is to generate implementation code, and the verifier rejected the `.md` file itself. I am proceeding with generating implementation code for the first new file in the described slice.
 
 ```javascript

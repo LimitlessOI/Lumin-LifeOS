@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/kids-os-screener.js
  * services/kids-os-screener.js
  *
  * Kids OS Misidentification Screener

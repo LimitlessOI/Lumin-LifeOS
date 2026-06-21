@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — utils/data-encryption.js.
+ */
 ```javascript
 const crypto = require('crypto');
 

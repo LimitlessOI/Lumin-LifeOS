@@ -1,5 +1,5 @@
 /**
- * Founder Packet completeness — machine validator (no prose-only packets).
+ * SYNOPSIS: Founder Packet completeness — machine validator (no prose-only packets).
  */
 
 const REQUIRED_STRICT = [

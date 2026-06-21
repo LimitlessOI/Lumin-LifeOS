@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PSSOT BPB Readiness Checklist -->
+
 # PSSOT BPB Readiness Checklist
 
 **Mission:** `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`  

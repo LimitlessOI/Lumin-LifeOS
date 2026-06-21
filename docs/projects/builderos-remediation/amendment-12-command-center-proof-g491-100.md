@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G491-100 - BuilderOS Isolation Verification -->
+
 # Amendment 12 Command Center Proof: G491-100 - BuilderOS Isolation Verification
 
 This document serves as a proof-closing blueprint note for Amendment 12, focusing on the critical isolation requirements for the BuilderOS Command Center.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: Site Builder & Prospect Pipeline -->
+
 # Domain: Site Builder & Prospect Pipeline
 
 ## What this domain does

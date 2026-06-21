@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Auto-Builder Routes
  * Auto-Builder Routes
  * Extracted from server.js
  */

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - G148-100 - Initial Input/Output Loop -->
+
 # Blueprint Proof: Command Center V2 - G148-100 - Initial Input/Output Loop
 
 This document outlines the first proof-closing build slice for the Command Center V2 blueprint, focusing on establishing the fundamental input-output data flow.

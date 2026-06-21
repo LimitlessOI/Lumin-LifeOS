@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260422_tokenos_customers.sql.
 -- ============================================================
 -- TokenOS Customer Registry + B2B Savings Ledger
 -- @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md

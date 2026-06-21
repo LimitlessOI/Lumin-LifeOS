@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Create goal commitment (agent decides if worth it)
+ */
 // src/services/goal-commitment-system.js
 // Goal commitment system where agent decides worth, sets penalties/rewards
 

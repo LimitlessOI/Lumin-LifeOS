@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder autonomy — brainstorm vault -->
+
 # Builder autonomy — brainstorm vault
 
 **Purpose:** Store the multi-agent / continuous-builder idea set in one place. **Not constitutional law** — rank and pull work into amendments when shipped.

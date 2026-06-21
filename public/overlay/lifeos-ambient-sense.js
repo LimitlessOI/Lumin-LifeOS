@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: lifeos-ambient-sense.js — Opt-in, low-power environment hints for LifeOS
  * lifeos-ambient-sense.js — Opt-in, low-power environment hints for LifeOS
  *
  * Collects coarse, privacy-preserving device context (battery %, charging,

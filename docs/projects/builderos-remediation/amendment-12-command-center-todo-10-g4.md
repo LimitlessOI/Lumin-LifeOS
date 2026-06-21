@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 12 Command Center - TODO 10 G4 -->
+
 # BuilderOS Remediation: Amendment 12 Command Center - TODO 10 G4
 
 ## Blueprint Enhancement Memo: `/api/health` Endpoint

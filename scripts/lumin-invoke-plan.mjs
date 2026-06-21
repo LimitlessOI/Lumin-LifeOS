@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: One-shot: POST /api/v1/lifeos/chat/build/plan with a LifeOS P1 goal (council/AI; costs tokens).
  * One-shot: POST /api/v1/lifeos/chat/build/plan with a LifeOS P1 goal (council/AI; costs tokens).
  * Use after DB + keys are valid on the target base URL.
  *

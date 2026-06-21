@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Auth.
+ */
 ```javascript
 const jwt = require('jsonwebtoken');
 

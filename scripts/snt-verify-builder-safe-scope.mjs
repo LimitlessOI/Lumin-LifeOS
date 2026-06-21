@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: SNT verify — builder safe-scope fail-fast + mission pack path.
  * SNT verify — builder safe-scope fail-fast + mission pack path.
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
  */

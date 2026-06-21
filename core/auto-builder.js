@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: AUTO-BUILDER - Anti-Hallucination Edition
  * AUTO-BUILDER - Anti-Hallucination Edition
  * ONE product at a time. Validate everything. Never deploy garbage.
  */

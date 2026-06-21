@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1001 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS Integration (G1001-100)
 This document outlines the necessary steps to close the proof gap for Amendment 41, ensuring the MarketingOS integration defined in `docs/projects/AMENDMENT_41_MARKETINGOS.md` is fully implemented and verifiable at runtime.
 1. Exact Missing Implementation or Proof Gap:

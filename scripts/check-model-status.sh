@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Check Model Status.
 
 # ╔══════════════════════════════════════════════════════════════════════════════════╗
 # ║                    CHECK OLLAMA MODEL DOWNLOAD STATUS                           ║

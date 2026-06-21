@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G38-100 - Initial Command Registry & Echo Command -->
+
 # Command Center V2 Blueprint Proof: G38-100 - Initial Command Registry & Echo Command
 
 This proof-closing blueprint note addresses the foundational mechanism for command definition, registration, and a minimal execution flow within the Command Center V2. It focuses on establishing the `CommandRegistry` and demonstrating a basic `echo` command.

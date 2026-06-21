@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G135-100 - Core Auth & User Entity -->
+
 # Command Center V2 Blueprint Proof: G135-100 - Core Auth & User Entity
 
 ## Blueprint Note: Initial Backend Foundation

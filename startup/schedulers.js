@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createAutonomyScheduler — startup/schedulers.js.
+ */
 import { acquireGovernorHeavyLease, isGovernorAutonomyPaused } from "./governor.js";
 
 export function createAutonomyScheduler(logger) {

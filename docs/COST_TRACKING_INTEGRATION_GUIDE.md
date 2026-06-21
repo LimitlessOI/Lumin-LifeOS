@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 💰 Cost Tracking Integration Guide (2029 Lessons Applied) -->
+
 # 💰 Cost Tracking Integration Guide (2029 Lessons Applied)
 
 **CRITICAL:** This prevents the $47k/month bankruptcy scenario that happened in our future timeline.

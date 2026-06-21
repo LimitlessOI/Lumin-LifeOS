@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/repositories/user.repository.js.
+ */
 ```javascript
 const pool = require('../db'); // Assume a configured pg Pool instance is exported from ../db
 

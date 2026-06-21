@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G15-100 -->
+
 # Amendment 09: Life Coaching - Proof G15-100
 
 ## Objective

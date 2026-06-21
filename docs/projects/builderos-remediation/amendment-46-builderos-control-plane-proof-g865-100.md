@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G865 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof - G865-100
 This document serves as a proof-closing note for Amendment 46, focusing on the BuilderOS control plane enhancements. It addresses the signal requiring follow-through for wiring `routes/lifeos-council-builder-routes.js` to manage build lifecycle events.
 

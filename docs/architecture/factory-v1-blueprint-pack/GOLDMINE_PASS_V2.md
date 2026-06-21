@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Goldmine Pass v2 -->
+
 # Goldmine Pass v2
 
 ## Purpose

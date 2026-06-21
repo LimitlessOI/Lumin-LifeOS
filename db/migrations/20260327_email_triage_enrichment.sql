@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_email_triage_enrichment.sql.
 -- TC email triage enrichment
 -- Adds message identity and preview text for better routing and workspace visibility.
 

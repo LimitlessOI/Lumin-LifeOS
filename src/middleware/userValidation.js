@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/userValidation.js.
+ */
 ```javascript
 const Joi = require('joi');
 

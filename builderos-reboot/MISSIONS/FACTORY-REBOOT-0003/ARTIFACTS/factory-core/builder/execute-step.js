@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports executeStep — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/builder/execute-step.js.
+ */
 export const BUILDER_ALLOWED_STATUSES = [
   'DONE',
   'BLOCKED_RETURN_TO_BPB',

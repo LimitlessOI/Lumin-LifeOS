@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Middleware Integration (G323-100) -->
+
 # Blueprint Proof: Command Center V2 - Middleware Integration (G323-100)
 
 This document serves as a proof-closing blueprint note for the Command Center V2 platform, specifically addressing the integration of Command Middleware.

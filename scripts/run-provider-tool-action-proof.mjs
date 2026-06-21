@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Provider API → tool → LifeOS system proof event — production regression proof.
  * Provider API → tool → LifeOS system proof event — production regression proof.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

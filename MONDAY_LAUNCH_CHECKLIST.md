@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Monday Sales Launch Checklist -->
+
 # 🚀 Monday Sales Launch Checklist
 
 ## ✅ System Status: READY

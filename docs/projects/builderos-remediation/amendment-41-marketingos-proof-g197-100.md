@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G197-100 - User Activity Timestamp Verification -->
+
 # Amendment 41 MarketingOS Proof: G197-100 - User Activity Timestamp Verification
 
 This blueprint note addresses the proof gap for verifying the correct propagation and accessibility of user activity timestamps for MarketingOS integration, as outlined in Amendment 41.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260418_lifeos_auth.sql.
 -- Migration: 20260418_lifeos_auth
 -- LifeOS User Authentication — JWT-based login, sessions, invite codes
 -- Adds auth fields to lifeos_users; creates sessions + invites tables.

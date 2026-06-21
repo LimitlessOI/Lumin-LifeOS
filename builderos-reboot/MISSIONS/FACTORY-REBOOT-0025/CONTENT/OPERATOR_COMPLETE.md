@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Factory Reboot — Complete Operator Guide -->
+
 # Factory Reboot — Complete Operator Guide
 
 ## Status check (Adam's one command)

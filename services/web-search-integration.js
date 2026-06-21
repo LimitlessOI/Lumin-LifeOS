@@ -1,5 +1,5 @@
 /**
- * web-search-integration.js — extracted from server.js
+ * SYNOPSIS: web-search-integration.js — extracted from server.js
  * Web search validation, drift detection, and Gemini web search helpers.
  *
  * Use createWebSearchIntegration(deps) to get bound functions.

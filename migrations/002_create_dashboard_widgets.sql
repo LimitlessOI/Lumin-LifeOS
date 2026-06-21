@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 002_create_dashboard_widgets.sql.
 ```sql
 CREATE TABLE dashboard_widgets (
     id SERIAL PRIMARY KEY,

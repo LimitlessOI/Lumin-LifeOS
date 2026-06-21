@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Scenario 1: New Lead from Website -->
+
 # Scenario 1: New Lead from Website
 
 ## Overview

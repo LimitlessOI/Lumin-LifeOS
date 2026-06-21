@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_orch_notify.sql.
 -- Legacy orch notify — skip when orch_tasks table absent (production LifeOS DB).
 
 DO $$

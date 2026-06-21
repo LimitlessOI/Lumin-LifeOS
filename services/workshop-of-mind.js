@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/workshop-of-mind.js
  * services/workshop-of-mind.js
  *
  * Workshop of the Mind — guided visualization and mental rehearsal.

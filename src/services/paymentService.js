@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Example function to create a payment
+ */
 const stripeClient = require('../config/stripe');
 
 // Example function to create a payment

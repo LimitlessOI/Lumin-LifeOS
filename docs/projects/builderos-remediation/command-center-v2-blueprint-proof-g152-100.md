@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: G152-100 - Command Center V2 Core Data Ingestion MVP -->
+
 # Blueprint Proof: G152-100 - Command Center V2 Core Data Ingestion MVP
 
 This document outlines the next smallest build slice for the Command Center V2, focusing on the initial data ingestion and storage as per Phase 1 of the blueprint.

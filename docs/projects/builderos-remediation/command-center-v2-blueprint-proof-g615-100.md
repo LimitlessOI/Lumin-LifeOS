@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Command Center V2 Blueprint Proof (G615-100) -->
+
 The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided in the REPO FILE CONTENTS, so the specific details of the missing implementation or proof gap are inferred based on the task context.
 ---
 # BuilderOS Remediation: Command Center V2 Blueprint Proof (G615-100)

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup-dao-schema.sql.
 ```sql
 -- Create table for DAO members
 CREATE TABLE IF NOT EXISTS dao_members (

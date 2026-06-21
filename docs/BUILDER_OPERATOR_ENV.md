@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder operator env (names only — never commit values) -->
+
 # Builder operator env (names only — never commit values)
 
 **Purpose:** So a Conductor session can run `npm run builder:preflight` and `POST /api/v1/lifeos/builder/build` without guessing. **Values** live in Railway (or your local shell only). **Do not** paste secrets into git, SSOT, or chat logs.

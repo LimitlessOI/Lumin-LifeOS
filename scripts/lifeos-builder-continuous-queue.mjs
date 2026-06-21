@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: 24×7 supervised autonomous builder queue — executes structured **`POST /builder/build`** tasks from SSOT JSON.
  * 24×7 supervised autonomous builder queue — executes structured **`POST /builder/build`** tasks from SSOT JSON.
  *
  * Same runner **`npm run lifeos:builder:queue`** invokes; the daemon chains it every cycle after probe/full supervise.

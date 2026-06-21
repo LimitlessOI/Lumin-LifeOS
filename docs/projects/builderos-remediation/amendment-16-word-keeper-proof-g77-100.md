@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G77 100. -->
+
 The verifier rejection implies an expectation for Node.js code, which contradicts the instruction to write a markdown file (`.md`).
 AMENDMENT 16: Word Keeper - Proof G77-100
 

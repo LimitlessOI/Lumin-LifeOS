@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G679 100. -->
+
 import { Router } from 'express';
 import {
   recordBuildStart,

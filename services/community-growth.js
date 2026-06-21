@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/community-growth.js
  * services/community-growth.js
  *
  * Module C: Community & Meta Layer — Ideas 21–25

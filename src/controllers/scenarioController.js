@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Add update and delete logic as needed
+ */
 ```javascript
 const Scenario = require('../models/Scenario');
 const { validationResult } = require('express-validator');

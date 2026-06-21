@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: clientcare-billing-service.js
  * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
  * clientcare-billing-service.js
  * Claim rescue queue, payer-window classification, and recovery action planning.

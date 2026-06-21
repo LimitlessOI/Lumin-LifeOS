@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Fails closed when local `main` is behind `origin/main` (fragmented operational reality).
  * Fails closed when local `main` is behind `origin/main` (fragmented operational reality).
  * Run after `git fetch` in CI or before long audits/daemons.
  *

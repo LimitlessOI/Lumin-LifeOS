@@ -15,6 +15,15 @@ while read local_ref local_sha remote_ref remote_sha; do
   if [ $? -ne 0 ]; then
     exit 1
   fi
+  node "$ROOT/scripts/verify-file-synopsis.mjs" --push-range "$range"
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ FILE SYNOPSIS LAW — push blocked."
+    echo "   git commit --no-verify does NOT bypass this gate."
+    echo "   Fix: npm run lifeos:file-synopsis:index && commit index with your changes."
+    echo ""
+    exit 1
+  fi
   node "$ROOT/scripts/cursor-pre-push-review.mjs" --range "$range"
   if [ $? -ne 0 ]; then
     exit 1

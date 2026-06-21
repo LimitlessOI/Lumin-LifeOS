@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SNT Loop Escalation Doctrine — BuilderOS Alpha -->
+
 # SNT Loop Escalation Doctrine — BuilderOS Alpha
 
 **Signed by:** SNT + Conductor consensus  

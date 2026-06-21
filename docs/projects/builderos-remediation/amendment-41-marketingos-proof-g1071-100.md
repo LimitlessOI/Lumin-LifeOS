@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1071 100. -->
+
 AMENDMENT 41 MARKETINGOS PROOF - G1071-100: SSOT Foundation for Customer Profile Marketing Attributes
 This blueprint note addresses the critical proof gap for Amendment 41, ensuring the Single Source of Truth (SSOT) foundation for MarketingOS-driven `CustomerProfile` attributes.
 1.  Exact missing implementation or proof gap:

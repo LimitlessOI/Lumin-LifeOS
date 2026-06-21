@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Registers FactoryRoutes routes/handlers (builderos-reboot/MISSIONS/FACTORY-REBOOT-0007/CONTENT/register-routes.js).
+ */
 import { factoryExecuteStepRoute } from '../factory-core/routes/factory-execute-step-routes.js';
 import { factoryExecuteMissionRoute } from '../factory-core/routes/factory-execute-mission-routes.js';
 import { dispatchExecuteStep } from '../factory-core/builder/run-step.js';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G981-100 -->
+
 # Amendment 16: Word Keeper - Proof G981-100
 
 ## Blueprint Summary: AMENDMENT_16_WORD_KEEPER.md

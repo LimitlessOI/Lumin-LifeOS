@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G629-100 - Verifier Artifact Classification Remediation -->
+
 # Command Center V2 Blueprint Proof: G629-100 - Verifier Artifact Classification Remediation
 
 This proof addresses a critical gap identified during the BuilderOS verification loop, specifically concerning the handling of documentation artifacts within the build process. The Command Center V2 blueprint relies on a robust and predictable build and verification pipeline. The current issue directly impacts the ability to introduce new documentation or non-executable assets without causing verification failures.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: response-cache.js
  * response-cache.js
  * Two-tier AI response cache: L1 in-memory (fast) + L2 Neon DB (survives deploys).
  *

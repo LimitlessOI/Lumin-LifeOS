@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: System capabilities matrix (TokenSaverOS / LifeOS) -->
+
 # System capabilities matrix (TokenSaverOS / LifeOS)
 
 **Purpose:** Single place to answer **“what can the running system do without Adam touching Railway/GitHub UI?”** and **which Railway env vars** it depends on. Use with **`docs/ENV_REGISTRY.md`** (what exists in the vault) and **`docs/ENV_DIAGNOSIS_PROTOCOL.md`** (how to debug).

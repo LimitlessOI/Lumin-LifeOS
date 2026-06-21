@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — create_tables.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS funnel_models (
     id SERIAL PRIMARY KEY,

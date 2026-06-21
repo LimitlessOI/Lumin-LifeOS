@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS Integration (g925-100) -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS Integration (g925-100)
 
 This document serves as a blueprint note to close the proof gap for MarketingOS integration `g925-100` as defined by `AMENDMENT_41_MARKETINGOS.md`.

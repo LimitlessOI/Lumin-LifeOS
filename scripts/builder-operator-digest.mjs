@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Tail recent builder JSONL logs and emit Markdown for §2.11b / continuity paste-in.
  * Tail recent builder JSONL logs and emit Markdown for §2.11b / continuity paste-in.
  * No network / no AI calls.
  *

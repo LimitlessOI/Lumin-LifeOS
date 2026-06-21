@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G111 100. -->
+
 Amendment 41 MarketingOS Proof: G111-100 - Customer Segmentation Tag Propagation
 This document serves as a proof-closing blueprint note for gap G111-100, ensuring the correct propagation of `customer_segmentation_tags` from MarketingOS (as the SSOT) to the LifeOS Customer Profile Service, as defined by `docs/projects/AMENDMENT_41_MARKETINGOS.md`.
 

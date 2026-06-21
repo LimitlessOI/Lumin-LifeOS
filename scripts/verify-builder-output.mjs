@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: scripts/verify-builder-output.mjs
  * scripts/verify-builder-output.mjs
  * Detect when the council builder emitted a stub instead of a real implementation.
  *

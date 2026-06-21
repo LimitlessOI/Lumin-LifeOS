@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║              ENHANCED SAFE AI COUNCIL (Your Implementation + 2029 Lessons)      ║
  * ║              Free-first (Ollama), optional paid fallback, full tracking         ║

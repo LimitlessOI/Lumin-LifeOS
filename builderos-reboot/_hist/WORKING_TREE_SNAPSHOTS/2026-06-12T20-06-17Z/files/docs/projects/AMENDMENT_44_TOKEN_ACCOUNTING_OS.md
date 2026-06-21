@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Token Accounting OS -->
+
 # Token Accounting OS
 _(formerly AMENDMENT_44_TOKEN_ACCOUNTING_OS.md)_
 **Status:** IN_BUILD — schema + services + routes on disk; production row proof requires deploy + `npm run tokens:verify`

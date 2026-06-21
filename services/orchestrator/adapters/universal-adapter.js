@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Universal Adapter.
+ */
 ```javascript
 class UniversalAdapter {
   constructor(name) {

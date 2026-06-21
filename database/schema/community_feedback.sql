@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — community_feedback.sql.
 ```sql
 CREATE TABLE community_feedback (
     id SERIAL PRIMARY KEY,

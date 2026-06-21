@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: js — tests/builderos-governed-proof-parity.test.js.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

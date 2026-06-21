@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Generate mission packs FACTORY-REBOOT-0006 through 0010. */
+/**
+ * SYNOPSIS: Generate mission packs FACTORY-REBOOT-0006 through 0010. Generate mission packs FACTORY-REBOOT-0006 through 0010. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

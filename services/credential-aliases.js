@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: credential-aliases.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  *
  * credential-aliases.js

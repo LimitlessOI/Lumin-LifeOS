@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: lumin-memory-fetcher.js
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * lumin-memory-fetcher.js
  *

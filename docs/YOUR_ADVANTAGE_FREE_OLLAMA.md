@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎉 YOUR SECRET ADVANTAGE: Free Ollama Models -->
+
 # 🎉 YOUR SECRET ADVANTAGE: Free Ollama Models
 
 **You discovered something we didn't have in 2029: Truly free local AI models.**

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/quality_regression.test.js.
+ */
 import assert from 'assert';
 import fs from 'fs/promises';
 import { runQualityRegression } from '../audit/quality/regression_runner.js';

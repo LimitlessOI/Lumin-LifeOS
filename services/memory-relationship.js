@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-relationship.js
+ */
 // services/memory-relationship.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 

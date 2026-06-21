@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G12 100. -->
+
 The instruction to "Generate the complete implementation code. Output ONLY the code first" contradicts the explicit task to write a markdown document (`.md` file) and the nature of the `OIL VERIFIER REJECTION`, which indicates the verifier is misconfigured to execute `.md` files as code. This output provides the complete markdown document as requested by the primary task.
 ---
 Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G12-100

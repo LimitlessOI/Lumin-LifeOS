@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — infrastructure/docker-compose.prod.yml.
 ```yaml
 version: '3.7'
 services:

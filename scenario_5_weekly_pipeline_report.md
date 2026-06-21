@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Scenario 5: Weekly Pipeline Report -->
+
 # Scenario 5: Weekly Pipeline Report
 
 ## Overview

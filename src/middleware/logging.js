@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/logging.js.
+ */
 const winston = require('winston');
 
 const logger = winston.createLogger({

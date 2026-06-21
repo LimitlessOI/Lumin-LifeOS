@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G543-100 Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G543-100 Remediation
 
 This document addresses the OIL verifier rejection for Amendment 46, specifically focusing on the required wiring within `routes/lifeos-council-builder-routes.js` to establish the BuilderOS control plane loop execution.

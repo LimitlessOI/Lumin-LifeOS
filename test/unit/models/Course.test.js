@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — test/unit/models/Course.test.js.
+ */
 const Course = require('../../../src/models/Course');
 
 describe('Course Model', () => {

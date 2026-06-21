@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PASS/DONE Authority Audit V1 -->
+
 # PASS/DONE Authority Audit V1
 
 **Date:** 2026-06-13  

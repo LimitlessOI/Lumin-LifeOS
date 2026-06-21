@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Behavioral fail-closed tests for deliberation governance v2.7 (mock pool — no DATABASE_URL).
  * Behavioral fail-closed tests for deliberation governance v2.7 (mock pool — no DATABASE_URL).
  * Usage: node scripts/deliberation-governance-behavior.mjs
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md

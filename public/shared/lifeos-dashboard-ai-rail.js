@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Contract: Persistent AI Rail (Lumin Rail)
  * Contract: Persistent AI Rail (Lumin Rail)
  * Purpose: To provide a ubiquitous, quick-access AI interaction surface across the LifeOS platform.
  * This script implements the client-side logic for the AI Rail, including UI states,

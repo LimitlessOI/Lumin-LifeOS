@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 20231010123459-create-smart-grid-transactions.js.
+ */
 ```javascript
 'use strict';
 

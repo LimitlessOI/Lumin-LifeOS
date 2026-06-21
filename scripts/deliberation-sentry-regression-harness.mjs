@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Unified SENTRY regression harness — mechanical install via recovery protocol.
  * Unified SENTRY regression harness — mechanical install via recovery protocol.
  * @ssot builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/REGRESSION_PROBE_CATALOG.json
  */

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G173-100 -->
+
 # Amendment 01: AI Council - Proof G173-100
 
 ## Proof Completion Statement

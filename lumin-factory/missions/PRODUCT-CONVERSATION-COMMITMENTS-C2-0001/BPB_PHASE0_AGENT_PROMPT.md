@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BPB Phase 0 Agent Prompt — Founder Refinement + Salvage (no build) -->
+
 # BPB Phase 0 Agent Prompt — Founder Refinement + Salvage (no build)
 
 **Mission:** `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`  

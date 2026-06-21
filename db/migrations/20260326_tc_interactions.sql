@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260326_tc_interactions.sql.
 -- Migration: 20260326_tc_interactions
 -- Amendment 17 — TC interaction capture, lawful recording gate, coaching, and client memory extraction.
 

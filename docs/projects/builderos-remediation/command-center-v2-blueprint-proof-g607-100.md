@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: G607-100 - Command Center V2 Core Backend Initialization -->
+
 # Blueprint Proof: G607-100 - Command Center V2 Core Backend Initialization
 
 **Source Blueprint:** `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`

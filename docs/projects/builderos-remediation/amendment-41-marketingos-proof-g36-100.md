@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G36-100 Campaign Status Integration -->
+
 # AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G36-100 Campaign Status Integration
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/user.test.js.
+ */
 ```javascript
 const request = require('supertest');
 const app = require('../app'); // Assume app.js is your Express app

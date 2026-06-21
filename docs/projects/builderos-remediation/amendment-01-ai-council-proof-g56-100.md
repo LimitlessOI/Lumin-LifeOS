@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 01 AI Council Proof G56-100 -->
+
 # BuilderOS Remediation: Amendment 01 AI Council Proof G56-100
 
 ## Blueprint Note: Proof-Closing Build Slice

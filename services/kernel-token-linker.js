@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports linkTokenReceiptToTask — services/kernel-token-linker.js.
  * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
  */
 

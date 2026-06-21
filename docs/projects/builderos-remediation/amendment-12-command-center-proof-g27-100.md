@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G27-100 -->
+
 # Amendment 12: Command Center - Proof G27-100
 
 ## Blueprint Note: Core Service Interface Definition

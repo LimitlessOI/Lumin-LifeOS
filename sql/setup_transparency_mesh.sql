@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup_transparency_mesh.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS transparency_mesh_settings (
     id SERIAL PRIMARY KEY,

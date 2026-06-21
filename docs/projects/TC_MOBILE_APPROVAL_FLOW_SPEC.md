@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — TC MOBILE APPROVAL FLOW SPEC. -->
+
 Goal
 Enable Transaction Coordinators (TCs) to rapidly approve, reject, or snooze pending items via a secure, single-tap mobile link, streamlining workflow and reducing time to action.
 

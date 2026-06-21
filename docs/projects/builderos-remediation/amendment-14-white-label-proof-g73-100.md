@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof - G73-100 Remediation -->
+
 # Amendment 14 White Label Proof - G73-100 Remediation
 
 This document outlines the next smallest build slice to address a specific proof gap identified in the BuilderOS white-label implementation, following the blueprint `docs/projects/AMENDMENT_14_WHITE_LABEL.md`.

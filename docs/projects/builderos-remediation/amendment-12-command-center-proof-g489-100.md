@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G489-100 -->
+
 # Amendment 12: Command Center - Proof G489-100
 
 This proof-closing blueprint note addresses the initial functional implementation of the `CommandCenter`'s core build slice execution.

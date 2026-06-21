@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Provider Strategy Lock (Decision A) -->
+
 # Provider Strategy Lock (Decision A)
 
 **Status:** LOCKED — 2026-05-24  

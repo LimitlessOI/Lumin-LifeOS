@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_conversations_and_messages.sql.
 ```sql
 CREATE TABLE conversations (
     id SERIAL PRIMARY KEY,

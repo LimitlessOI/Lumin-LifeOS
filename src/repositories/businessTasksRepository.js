@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/repositories/businessTasksRepository.js.
+ */
 ```javascript
 const db = require('../config/db'); // Assuming a db configuration file
 const Task = require('../models/Task');

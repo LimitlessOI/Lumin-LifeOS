@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260329_lifeos_healing.sql.
 -- Migration: 20260329_lifeos_healing
 -- LifeOS Memory & Healing — grief therapy, regression therapy,
 -- loved-one reconstruction, childhood home walkthrough, completion conversations,

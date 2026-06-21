@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AUTONOMOUS-RECOVERY-0001 -->
+
 # AUTONOMOUS-RECOVERY-0001
 
 **P0 platform capability** — exposed by regression mission FAIL.

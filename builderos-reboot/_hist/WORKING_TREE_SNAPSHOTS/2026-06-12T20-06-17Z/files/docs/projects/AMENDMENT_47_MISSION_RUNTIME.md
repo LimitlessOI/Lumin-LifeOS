@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Mission Runtime -->
+
 # Mission Runtime
 _(formerly AMENDMENT_47_MISSION_RUNTIME.md)_
 

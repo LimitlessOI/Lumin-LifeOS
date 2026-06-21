@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G816 100. -->
+
 The specification is contradictory: the task requests writing to a `.md` file, but the OIL verifier rejected the previous attempt because it tried to execute the `.md` file as a Node.js module, indicating an expectation for executable code. The instruction to "Generate the complete implementation code" further implies code. This repair attempt provides Node.js ESM code content, but the verifier will likely still fail due to the `.md` file extension.
 
 ```javascript

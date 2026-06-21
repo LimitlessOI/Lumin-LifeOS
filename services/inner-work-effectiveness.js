@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/inner-work-effectiveness.js
  * services/inner-work-effectiveness.js
  *
  * Correlates inner work practices with actual behavior change.

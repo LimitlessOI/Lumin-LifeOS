@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Quick Start: Connect Your Ollama to AI Counsel OS -->
+
 # 🚀 Quick Start: Connect Your Ollama to AI Counsel OS
 
 ## ✅ Status Check

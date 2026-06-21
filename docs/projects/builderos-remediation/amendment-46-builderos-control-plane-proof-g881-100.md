@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G881 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof - G881-100
 
 Blueprint Note: BuilderOS Control Plane Route Wiring Remediation

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Temporal Adversary
+ */
 import dayjs from 'dayjs';
 
 /**

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G103-100 Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G103-100 Remediation
 
 This document outlines the remediation plan and proof for closing the identified gaps in Amendment 46, specifically addressing the wiring of the BuilderOS control plane routes in `routes/lifeos-council-builder-routes.js`. The previous verifier rejection indicated a syntax error related to the `.md` file itself, which suggests the verifier was attempting to execute the proof document rather than evaluating the proposed code changes. This remediation focuses on providing the concrete implementation steps for the next C2 build pass.

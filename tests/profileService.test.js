@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/profileService.test.js.
+ */
 ```javascript
 const profileService = require('../services/travel/profileService');
 const db = require('../models'); // Sequelize models setup for test

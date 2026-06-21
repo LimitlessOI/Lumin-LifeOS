@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G499 100. -->
+
 // File: routes/lifeos-council-builder-routes.js (proposed additions/modifications)
 
 import express from 'express';

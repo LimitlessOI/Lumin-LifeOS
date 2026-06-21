@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G70-100: Initial Session Data Model & Persistence -->
+
 # Amendment 09: Life Coaching - Proof G70-100: Initial Session Data Model & Persistence
 
 This blueprint note addresses the initial data model definition and persistence for Life Coaching Sessions, covering the G70-100 build slice.

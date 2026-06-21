@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/rateLimiter.js.
+ */
 ```javascript
 const rateLimit = require('express-rate-limit');
 

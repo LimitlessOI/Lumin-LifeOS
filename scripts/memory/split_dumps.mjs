@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Script — Split Dumps.
+ */
 import fs from "fs";
 import path from "path";
 

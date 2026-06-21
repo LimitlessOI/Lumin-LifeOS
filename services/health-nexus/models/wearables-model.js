@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Wearables Model.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs-node');
 

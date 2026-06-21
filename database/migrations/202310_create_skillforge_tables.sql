@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 202310_create_skillforge_tables.sql.
 ```sql
 -- Migration script to create SkillForge related tables
 

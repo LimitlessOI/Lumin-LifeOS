@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — tests/load/energy-load-test.yml.
 config:
   target: 'http://localhost:3000'
   phases:

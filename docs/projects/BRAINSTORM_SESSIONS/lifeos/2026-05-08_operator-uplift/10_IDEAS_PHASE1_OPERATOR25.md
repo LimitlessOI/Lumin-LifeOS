@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Phase 1 — Operator uplift burst (exactly 25) -->
+
 # Phase 1 — Operator uplift burst (exactly 25)
 
 **Convention:** prefixes per **`BRAINSTORM_SESSIONS_PROTOCOL.md`** Phase 1. **Audit:** Vault rows **20 (gaps admission) shipped opt-in**, **digest / risk-band** still NEXT — avoid duplicating verbatim; these push **beyond** vault list.

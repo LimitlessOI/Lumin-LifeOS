@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — XXXX_create_ai_insights_cache.sql.
 CREATE TABLE ai_insights_cache (
     id SERIAL PRIMARY KEY,
     insight_type VARCHAR(255) NOT NULL,

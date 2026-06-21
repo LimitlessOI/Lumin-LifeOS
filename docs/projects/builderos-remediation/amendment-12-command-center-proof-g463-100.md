@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G463 100. -->
+
 Amendment 12 Command Center Proof - G463-100
 
 Blueprint Note: Proof-Closing Build Slice

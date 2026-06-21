@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS alpha — needs assessment & queue rationale -->
+
 # LifeOS alpha — needs assessment & queue rationale
 
 **Updated:** 2026-05-05  

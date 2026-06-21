@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: routes/memory-capsule-routes.js
+ */
 // routes/memory-capsule-routes.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { Router } from 'express';

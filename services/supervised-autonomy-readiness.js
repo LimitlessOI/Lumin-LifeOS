@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Supervised autonomy readiness — aggregates preflight, self-repair, Phase 14,
  * Supervised autonomy readiness — aggregates preflight, self-repair, Phase 14,
  * OIL misses, and proof freshness into one read-only report. No auto-run.
  *

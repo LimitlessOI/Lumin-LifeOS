@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: ARC External Audit Report -->
+
 # ARC External Audit Report
 
 **Auditor:** Claude Code (Sonnet 4.6)

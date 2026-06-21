@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet — LifeOS Commitment Route v2.1 -->
+
 # Founder Packet — LifeOS Commitment Route v2.1
 
 **Mission ID:** `PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001`

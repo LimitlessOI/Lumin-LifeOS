@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Daily token-efficiency scorecard for TokenSaverOS supervision.
  * Daily token-efficiency scorecard for TokenSaverOS supervision.
  *
  * Reads system endpoints and prints:

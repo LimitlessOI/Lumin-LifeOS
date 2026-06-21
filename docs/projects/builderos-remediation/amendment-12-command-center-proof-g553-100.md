@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G553 100. -->
+
 ### Amendment 12: Command Center - Proof G553-100
 
 This proof-closing blueprint note addresses the initial implementation slice for the `CommandCenter` as defined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

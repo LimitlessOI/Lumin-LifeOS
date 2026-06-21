@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/api/controllers/aiModelFunnelController.js.
+ */
 ```javascript
 const AiModelFunnel = require('../../models/AiModelFunnel');
 

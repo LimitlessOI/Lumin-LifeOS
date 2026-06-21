@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS Capture Pipeline v2 — Voice Rail → Action Inbox staging.
  * LifeOS Capture Pipeline v2 — Voice Rail → Action Inbox staging.
  * Non-private Voice Rail messages auto-stage in Action Inbox for review.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md

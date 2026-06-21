@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Agent Inbox — Archive -->
+
 # Agent Inbox — Archive
 
 Resolved agent-to-agent questions. Newest at top.

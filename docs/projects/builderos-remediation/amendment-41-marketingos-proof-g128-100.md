@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 41 MarketingOS Proof G128-100 -->
+
 # BuilderOS Remediation: Amendment 41 MarketingOS Proof G128-100
 
 ## 1. Exact Missing Implementation or Proof Gap

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G133-100 -->
+
 # Amendment 01: AI Council - Proof G133-100
 
 This document serves as a proof-of-concept and initial remediation step for Amendment 01, establishing the AI Council within the BuilderOS platform. Specifically, this proof addresses governance aspect G133-100, focusing on the foundational capability for BuilderOS to internally manage and access AI Council-approved policies.

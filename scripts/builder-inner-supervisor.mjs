@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Runs an "inner supervisor" review pass: POST /api/v1/lifeos/builder/task with mode review,
  * Runs an "inner supervisor" review pass: POST /api/v1/lifeos/builder/task with mode review,
  * injecting prompts/lifeos-builder-inner-supervisor.md + the files you list.
  *

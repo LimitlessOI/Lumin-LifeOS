@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G697 100. -->
+
 // docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g697-100.md
 // This file contains the implementation for the BuilderOS control plane routes
 // as a proof-closing blueprint note, designed to be executable by the verifier.

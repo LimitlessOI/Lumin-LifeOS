@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Command Center — real C2 communication layer.
  * Command Center — real C2 communication layer.
  * Typed/threaded history, explicit send, browser STT/TTS controls, search, and
  * C2 job integration. No fake UI, no mock-only flows.

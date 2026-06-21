@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup-schema.sql.
 ```sql
 CREATE TABLE health_metrics (
     id SERIAL PRIMARY KEY,

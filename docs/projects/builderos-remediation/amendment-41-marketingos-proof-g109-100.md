@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS Proof G109-100 (SSOT Foundation) -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS Proof G109-100 (SSOT Foundation)
 
 This document outlines the necessary steps to close the proof gap for MarketingOS's adherence to the Single Source of Truth (SSOT) principle for `UserSegment_G109`, as defined by Amendment 41.

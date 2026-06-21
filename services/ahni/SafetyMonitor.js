@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: SafetyMonitor.js
+ */
 ```javascript
 // SafetyMonitor.js
 class SafetyMonitor {

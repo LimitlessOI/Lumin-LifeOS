@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G14 100. -->
+
 Amendment 16: Word Keeper - Proof Gap G14-100
 Blueprint Note: Next Smallest Build Slice
 

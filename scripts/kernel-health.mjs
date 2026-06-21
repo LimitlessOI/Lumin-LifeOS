@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Kernel health summary — local DB + optional deploy probe */
+/**
+ * SYNOPSIS: Kernel health summary — local DB + optional deploy probe Kernel health summary — local DB + optional deploy probe */
 import 'dotenv/config';
 import pg from 'pg';
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SNT BuilderOS Alpha — Dual Scoreboard -->
+
 # SNT BuilderOS Alpha — Dual Scoreboard
 
 **Locked:** 2026-06-11  

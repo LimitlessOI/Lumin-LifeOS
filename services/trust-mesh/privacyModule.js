@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — PrivacyModule.
+ */
 ```javascript
 const snarkjs = require('snarkjs');
 

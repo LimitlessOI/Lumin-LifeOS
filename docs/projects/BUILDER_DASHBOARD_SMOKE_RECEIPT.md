@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — BUILDER DASHBOARD SMOKE RECEIPT. -->
+
 SPECIFICATION INCOMPLETE: `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` content was not provided.
 LifeOS Dashboard Builder Smoke Receipt
 

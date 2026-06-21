@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Integration Audit Report -->
+
 # Integration Audit Report
 
 ## Overview

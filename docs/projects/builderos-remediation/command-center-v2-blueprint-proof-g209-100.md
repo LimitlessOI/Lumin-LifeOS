@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G209 100. -->
+
 The task to "repair" the BuilderOS change by modifying the content of `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g209-100.md` is contradictory, as the OIL verifier rejection is due to an `ERR_UNKNOWN_FILE_EXTENSION` when attempting to execute a `.md` file as a Node.js module, a problem external to the file's content.
 
 Command Center V2 Blueprint Proof: G209-100 - Initial DB Schema & Migration Proof

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof (G94-100) -->
+
 The specification is contradictory: The instruction asks to create a `.md` file, but the verifier rejects `.md` files by attempting to execute them as code, meaning the requested output will not pass the current verification step.
 
 # Amendment 14: White-Label Proof (G94-100)

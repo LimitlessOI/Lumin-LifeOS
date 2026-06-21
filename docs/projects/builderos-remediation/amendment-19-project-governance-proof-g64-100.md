@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G64 100. -->
+
 The task specifies writing to a `.md` file, but the OIL verifier rejected the previous attempt with `ERR_UNKNOWN_FILE_EXTENSION` when attempting to load the `.md` file as a Node.js module. This indicates a direct contradiction between the specified file extension and the verifier's expectation for an executable JavaScript module.
 
 ```javascript

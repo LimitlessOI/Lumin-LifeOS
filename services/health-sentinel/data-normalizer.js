@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Placeholder for data normalization logic
+ */
 ```javascript
 // Placeholder for data normalization logic
 

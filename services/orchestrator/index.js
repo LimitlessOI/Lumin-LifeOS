@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Index.
+ */
 ```javascript
 app.post('/api/tasks', (req, res) => {
   const { name, status } = req.body;

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof: G26-100 Remediation -->
+
 The source blueprint `docs/projects/AMENDMENT_14_WHITE_LABEL.md` was not provided, leading to inferred content.
 # Amendment 14 White Label Proof: G26-100 Remediation
 

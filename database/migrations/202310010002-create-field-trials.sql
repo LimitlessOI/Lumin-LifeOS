@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 202310010002-create-field-trials.sql.
 CREATE TABLE field_trials (
   id SERIAL PRIMARY KEY,
   variety_id INTEGER REFERENCES biocrop_varieties(id),

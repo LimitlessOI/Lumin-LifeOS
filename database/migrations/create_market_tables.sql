@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_market_tables.sql.
 ```sql
 -- Create market_reports table
 CREATE TABLE market_reports (

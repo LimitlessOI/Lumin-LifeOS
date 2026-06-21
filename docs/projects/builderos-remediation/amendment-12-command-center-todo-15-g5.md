@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 12 Command Center - Pending Adam Panel (G5) -->
+
 # BuilderOS Remediation: Amendment 12 Command Center - Pending Adam Panel (G5)
 
 ## Blueprint Enhancement Memo

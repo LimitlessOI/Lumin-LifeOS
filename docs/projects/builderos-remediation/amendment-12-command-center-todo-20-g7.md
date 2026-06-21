@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: AMENDMENT_12_COMMAND_CENTER - TODO-20-G7 (Responsive Layout Breakpoints) -->
+
 The blueprint `AMENDMENT_12_COMMAND_CENTER.md` is incomplete regarding specific screen breakpoint definitions.
 
 ```markdown

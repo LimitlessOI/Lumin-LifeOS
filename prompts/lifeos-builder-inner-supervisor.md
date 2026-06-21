@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Inner supervisor — self-audit protocol (builder trains its own reviewer) -->
+
 # Inner supervisor — self-audit protocol (builder trains its own reviewer)
 
 **SSOT lane:** LifeOS Core — `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`  

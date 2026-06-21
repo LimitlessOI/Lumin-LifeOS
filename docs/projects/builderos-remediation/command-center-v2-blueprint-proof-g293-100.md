@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof (G293-100) -->
+
 Content of `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` is missing, preventing accurate derivation of the build slice.
 # Command Center V2 Blueprint Proof (G293-100)
 

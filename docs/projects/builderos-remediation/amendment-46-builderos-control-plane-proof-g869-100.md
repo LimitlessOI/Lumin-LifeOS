@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G869 100. -->
+
 Proof-Closing Blueprint Note: Amendment 46 BuilderOS Control Plane Wiring (G869-100)
 
 This note details the required implementation to wire the BuilderOS control plane endpoints within `routes/lifeos-council-builder-routes.js` as per Amendment 46, ensuring proper build lifecycle management and health-based control.

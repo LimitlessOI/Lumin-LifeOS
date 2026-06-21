@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — initial_tables.sql.
 ```sql
 CREATE TABLE crisis_resources (
     id SERIAL PRIMARY KEY,

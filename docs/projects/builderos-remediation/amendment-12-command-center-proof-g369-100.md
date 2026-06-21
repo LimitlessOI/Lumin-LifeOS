@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G369 100. -->
+
 Proof-Closing Blueprint Note: g369-100 - Initial Command Center Client & Service Connectivity
 This note closes the proof for build slice `g369-100`, focusing on establishing foundational connectivity and service instantiation for the Command Center (C2) integration.
 

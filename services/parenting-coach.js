@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/parenting-coach.js
  * services/parenting-coach.js
  *
  * After-the-moment parenting coaching.

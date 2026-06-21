@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Life Coaching / Personal OS -->
+
 # Life Coaching / Personal OS
 _(formerly AMENDMENT_09_LIFE_COACHING.md)_
 **Status:** LIVE (local use) | Digital Twin: OPERATIONAL

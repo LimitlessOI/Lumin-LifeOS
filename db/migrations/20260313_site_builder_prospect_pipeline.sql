@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260313_site_builder_prospect_pipeline.sql.
 -- Migration: Site Builder + Prospect Pipeline tables
 -- Run against Neon (PostgreSQL) to enable Amendment 05 revenue pipeline
 

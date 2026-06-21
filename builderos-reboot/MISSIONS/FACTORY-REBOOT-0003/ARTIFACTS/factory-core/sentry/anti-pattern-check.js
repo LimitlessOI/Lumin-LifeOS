@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports antiPatternCheck — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/sentry/anti-pattern-check.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT } from '../builder/run-step.js';

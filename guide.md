@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Make.com CRM Automation Scenarios Guide -->
+
 # Make.com CRM Automation Scenarios Guide
 
 ## Overview

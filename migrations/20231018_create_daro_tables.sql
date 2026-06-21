@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231018_create_daro_tables.sql.
 ```sql
 CREATE TABLE daro_nodes (
     id SERIAL PRIMARY KEY,

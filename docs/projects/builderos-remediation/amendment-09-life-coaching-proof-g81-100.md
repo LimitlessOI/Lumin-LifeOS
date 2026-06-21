@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G81 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 09 - Life Coaching (g81-100)
 
 **1. Exact missing implementation or proof gap:**

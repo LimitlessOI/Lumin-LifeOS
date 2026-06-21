@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Quality Regression Report -->
+
 # Quality Regression Report
 - id: quality_regression_2025-12-15T07-01-41-432Z
 - timestamp: 2025-12-15T07:01:41.432Z

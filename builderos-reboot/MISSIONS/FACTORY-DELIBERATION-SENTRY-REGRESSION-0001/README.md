@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: FACTORY-DELIBERATION-SENTRY-REGRESSION-0001 -->
+
 # FACTORY-DELIBERATION-SENTRY-REGRESSION-0001
 
 **SENTRY regression harness** for deliberation v2.7 — first BuilderOS spin test.

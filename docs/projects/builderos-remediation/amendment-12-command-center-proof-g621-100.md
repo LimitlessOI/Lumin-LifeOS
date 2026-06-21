@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G621 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G621-100
 Proof-Closing Blueprint Note for G621-100: Core Infrastructure
 

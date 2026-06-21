@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-alert-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-alert-service.js
  * Escalating alerts for TC blockers, approvals, and deadline-critical issues.

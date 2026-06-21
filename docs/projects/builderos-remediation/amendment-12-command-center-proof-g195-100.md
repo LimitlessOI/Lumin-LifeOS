@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G195-100 - Initial Command Registry & Router Foundation -->
+
 # Amendment 12 Command Center Proof: G195-100 - Initial Command Registry & Router Foundation
 
 This proof-closing blueprint note addresses the foundational implementation of the BuilderOS Command Center, focusing on the core `CommandRegistry` and `CommandRouter` components as outlined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

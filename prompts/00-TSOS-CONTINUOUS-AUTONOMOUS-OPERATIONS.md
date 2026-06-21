@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TSOS Continuous Autonomous Operations Directive -->
+
 # TSOS Continuous Autonomous Operations Directive
 
 **Status:** ACTIVE — 24/7 Continuous Autonomous Operations law for BuilderOS, C2 missions, and Conductor supervision  

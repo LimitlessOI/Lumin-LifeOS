@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G291-100 - SSOT Foundation Verification -->
+
 # Amendment 41 MarketingOS Proof: G291-100 - SSOT Foundation Verification
 
 ## 1. Exact Missing Implementation or Proof Gap

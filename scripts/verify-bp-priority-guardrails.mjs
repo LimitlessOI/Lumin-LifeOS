@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Mechanical enforcement: BP_PRIORITY canonical; Hist domain owns legacy artifacts.
  * Mechanical enforcement: BP_PRIORITY canonical; Hist domain owns legacy artifacts.
  * Exit 0 = PASS, 1 = FAIL (pre-commit + builder:preflight).
  *

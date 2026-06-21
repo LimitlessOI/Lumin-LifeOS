@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_consultants_table.sql.
 ```sql
 CREATE TABLE consultants (
     id SERIAL PRIMARY KEY,

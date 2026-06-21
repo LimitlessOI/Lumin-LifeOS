@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260419_lcl_quality_log.sql.
 -- Migration: 20260419_lcl_quality_log.sql
 -- Purpose: Persistent drift log for the LCL (LifeOS Compression Language) monitor.
 --

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_add_cognitive_state_model.sql.
 ```sql
 -- Add table for cognitive state models
 CREATE TABLE cognitive_states (

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Mechanical BPB fix: add missing probe_id rows to ACCEPTANCE_TESTS from catalog. */
+/**
+ * SYNOPSIS: Mechanical BPB fix: add missing probe_id rows to ACCEPTANCE_TESTS from catalog. Mechanical BPB fix: add missing probe_id rows to ACCEPTANCE_TESTS from catalog. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { missionDir } from './mission-lib.mjs';

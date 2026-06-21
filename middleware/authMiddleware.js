@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Auth Middleware (alternate stub) — empty placeholder reserved for future
  * Auth Middleware (alternate stub) — empty placeholder reserved for future
  * authentication / authorization middleware logic.
  *

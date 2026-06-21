@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G487-100 - Initial Task Management Backend -->
+
 # Amendment 12 Command Center Proof: G487-100 - Initial Task Management Backend
 
 This document outlines the next smallest build slice for the BuilderOS Command Center, focusing on establishing the foundational backend for Task Management as described in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

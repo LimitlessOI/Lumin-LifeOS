@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/customizationRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const CustomizationController = require('../controllers/customizationController');

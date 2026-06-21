@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/code-review/models/Project.js.
+ */
 ```javascript
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../../db/sequelize');

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/supportRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const supportController = require('../controllers/supportController');

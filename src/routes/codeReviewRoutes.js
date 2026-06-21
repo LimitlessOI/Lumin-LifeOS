@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/codeReviewRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const codeReviewController = require('../controllers/codeReviewController');

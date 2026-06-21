@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 003_create_admin_audit_log.sql.
 ```sql
 CREATE TABLE admin_audit_log (
     id SERIAL PRIMARY KEY,

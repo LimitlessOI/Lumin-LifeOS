@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-working.js
+ */
 // services/memory-working.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { createCandidate } from './memory-candidate.js';

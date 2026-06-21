@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G778 100. -->
+
 Amendment 12 Command Center Proof: G778-100 - Command Reception Endpoint Proof
 This proof-closing blueprint note addresses the initial implementation slice for the Amendment 12 Command Center, focusing on establishing the foundational command reception mechanism.
 ---

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Voice Rail — pickable council engines per department (not Anthropic-only).
  * Voice Rail — pickable council engines per department (not Anthropic-only).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

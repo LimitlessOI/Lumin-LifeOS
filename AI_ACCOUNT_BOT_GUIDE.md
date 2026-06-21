@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🤖 AI Account Bot - Extract Ideas from Your AI Conversations -->
+
 # 🤖 AI Account Bot - Extract Ideas from Your AI Conversations
 
 ## Overview

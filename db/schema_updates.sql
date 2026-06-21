@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema_updates.sql.
 -- Add table for energy devices
 CREATE TABLE energy_devices (
     id SERIAL PRIMARY KEY,

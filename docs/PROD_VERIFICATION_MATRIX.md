@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Production verification matrix -->
+
 # Production verification matrix
 
 **Purpose:** Single source of truth for “what works in prod.” All Phase 3 verification results land here. No drift; every row has status, date, command/endpoint, and evidence.

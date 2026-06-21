@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G12-100 -->
+
 # Amendment 12: Command Center - Proof G12-100
 
 This document outlines the next smallest blueprint-backed build slice for Amendment 12, focusing on establishing the foundational interfaces for the Command Center.

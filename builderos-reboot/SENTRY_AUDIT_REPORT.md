@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SENTRY Audit Report -->
+
 # SENTRY Audit Report
 
 **Auditor role:** SENTRY (adversarial, not builder)  

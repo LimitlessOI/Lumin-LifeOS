@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G293-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G293-100
 
 ## Blueprint Note: Initial Database Schema Definition

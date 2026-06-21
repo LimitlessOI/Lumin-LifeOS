@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G55 100. -->
+
 ### Amendment 19 Project Governance Proof - G55-100
 
 This note closes the proof for the initial integration slice of Amendment 19 Project Governance within BuilderOS.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Version Roadmap — Machine Path -->
+
 # LifeOS Version Roadmap — Machine Path
 
 **Authority:** `builderos-reboot/LIFEOS_VERSION_QUEUE.json` (machine queue)  

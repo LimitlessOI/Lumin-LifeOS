@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260521_memory_capsule_core.sql.
 -- db/migrations/20260521_memory_capsule_core.sql
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;

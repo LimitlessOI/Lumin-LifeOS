@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof: AMENDMENT_01_AI_COUNCIL - Gate G399-100 - Initial AI Council Definition & Scope -->
+
 # Proof: AMENDMENT_01_AI_COUNCIL - Gate G399-100 - Initial AI Council Definition & Scope
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

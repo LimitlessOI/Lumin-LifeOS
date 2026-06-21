@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G435 100. -->
+
 Amendment 12 Command Center Proof: G435-100 - Service Status Endpoint (Read-Only)
 
 Proof-Closing Blueprint Note

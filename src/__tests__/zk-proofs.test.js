@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/__tests__/zk-proofs.test.js.
+ */
 ```javascript
 const { generateProof, verifyProof } = require('../zk-proofs');
 

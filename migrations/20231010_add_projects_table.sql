@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231010_add_projects_table.sql.
 ```sql
 CREATE TABLE projects (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

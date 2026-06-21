@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G778-100 - Initial Brand Override Verification -->
+
 # Amendment 14 White-Label Proof: G778-100 - Initial Brand Override Verification
 
 This document outlines the next smallest build slice to prove the foundational white-labeling capability introduced by Amendment 14. The focus is on verifying the ability to override a core branding element via configuration, without impacting LifeOS user features or TSOS customer-facing surfaces.

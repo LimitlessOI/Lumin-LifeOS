@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Load or define a simple model
+ */
 ```javascript
 const express = require('express');
 const tf = require('@tensorflow/tfjs-node');

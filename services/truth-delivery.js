@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/truth-delivery.js
  * services/truth-delivery.js
  *
  * Calibrated truth delivery for LifeOS.

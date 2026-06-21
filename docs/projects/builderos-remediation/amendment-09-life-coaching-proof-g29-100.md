@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof: Amendment 09 Life Coaching - Goal Template Definition (g29-100) -->
+
 # Proof: Amendment 09 Life Coaching - Goal Template Definition (g29-100)
 
 ## Context

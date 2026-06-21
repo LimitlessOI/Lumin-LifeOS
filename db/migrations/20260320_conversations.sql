@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260320_conversations.sql.
 -- Migration: 20260320_conversations
 -- Stores all conversations: Claude Code sessions, server AI calls, and any other channel
 

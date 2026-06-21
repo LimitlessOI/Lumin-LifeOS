@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Kingsman Protocol — minimal runtime audit hook (Phase 1).
  * Kingsman Protocol — minimal runtime audit hook (Phase 1).
  * Logs a one-row audit for every council call so Amendment 33 is not "paper only."
  * Future: policy engine can block or require human approval based on risk_score.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231020_add_recommendation_tables.sql.
 ALTER TABLE user_preferences ADD COLUMN last_recommendation_viewed TIMESTAMP;
 ALTER TABLE product_embeddings ADD COLUMN embedding VECTOR;
 CREATE TABLE recommendation_analytics (

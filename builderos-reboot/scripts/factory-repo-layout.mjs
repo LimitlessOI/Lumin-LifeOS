@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Detect factory repo layout: standalone Lumin-Factory vs legacy LifeOS monorepo.
  * Detect factory repo layout: standalone Lumin-Factory vs legacy LifeOS monorepo.
  * @ssot docs/architecture/factory-v1-blueprint-pack/FACTORY_REBUILD_MANIFEST_V1.md
  */

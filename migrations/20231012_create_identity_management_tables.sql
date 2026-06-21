@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231012_create_identity_management_tables.sql.
 ```sql
 CREATE TABLE identity_dids (
     id SERIAL PRIMARY KEY,

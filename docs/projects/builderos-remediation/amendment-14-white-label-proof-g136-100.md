@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - G136-100 -->
+
 # Amendment 14: White-Label Proof - G136-100
 
 This document serves as a remediation proof for BuilderOS instruction `g136-100`, validating a foundational aspect of Amendment 14: White-Labeling. The core blueprint, `AMENDMENT_14_WHITE_LABEL.md`, outlines the requirements for enabling tenant-specific branding across the LifeOS platform. This specific proof focuses on establishing the mechanism for displaying tenant-specific logos.

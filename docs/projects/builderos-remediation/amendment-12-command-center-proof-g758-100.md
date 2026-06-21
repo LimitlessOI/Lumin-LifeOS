@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof Closing Note for g758-100: Next Build Slice Definition -->
+
 # Proof Closing Note for g758-100: Next Build Slice Definition
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`

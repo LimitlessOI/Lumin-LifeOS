@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G18-100 - Core Role Definition -->
+
 # Amendment 19 Project Governance Proof: G18-100 - Core Role Definition
 
 ## Objective

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Live Proof Consensus Audit V1 -->
+
 # Live Proof Consensus Audit V1
 
 **Status:** `COUNCIL CONSENSUS` — proof planning only; no runtime code modified; no live build executed  

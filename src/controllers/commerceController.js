@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Define endpoints
+ */
 ```javascript
 const UserProfilingService = require('../services/commerce/UserProfilingService');
 const RecommendationEngine = require('../services/commerce/RecommendationEngine');

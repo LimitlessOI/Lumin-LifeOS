@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: crmUI.js
+ */
 // crmUI.js
 const express = require('express');
 const router = express.Router();

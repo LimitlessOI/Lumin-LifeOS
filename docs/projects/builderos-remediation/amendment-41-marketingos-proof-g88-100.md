@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Proof G88-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Proof G88-100
 
 This document serves as the SSOT foundation for closing the implementation gap identified in `AMENDMENT_41_MARKETINGOS.md` regarding the integration and verification of marketing data point `g88-100`.

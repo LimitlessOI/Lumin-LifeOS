@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports registerUser — src/modules/users/user.service.ts.
+ */
 ```typescript
 import { createUser, findUserByEmail } from './user.repository';
 import { hashPassword, verifyPassword } from '../auth/password.utils';

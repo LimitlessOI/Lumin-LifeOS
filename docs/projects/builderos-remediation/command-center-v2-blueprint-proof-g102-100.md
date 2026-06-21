@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G102-100 - Builder Event Schema Definition -->
+
 # Command Center V2 Blueprint Proof: G102-100 - Builder Event Schema Definition
 
 **Source Blueprint:** `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`

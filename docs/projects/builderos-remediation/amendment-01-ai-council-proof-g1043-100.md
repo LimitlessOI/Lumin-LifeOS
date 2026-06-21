@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof - Remediation G1043-100 -->
+
 # Amendment 01 AI Council Proof - Remediation G1043-100
 
 **Document ID:** amendment-01-ai-council-proof-g1043-100.md

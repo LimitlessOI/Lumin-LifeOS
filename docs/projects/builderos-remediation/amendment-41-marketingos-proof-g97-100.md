@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G97 100. -->
+
 The specification asks to write a markdown file (`.md`) with provided content, but the OIL verifier rejected the previous attempt by trying to execute the `.md` file as JavaScript. This indicates a mismatch between the expected file type for the path and the verifier's execution context. My output provides the specified markdown content.
 ---
 BuilderOS Remediation: Amendment 41 MarketingOS Proof G97-100

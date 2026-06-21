@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Historical Features Analysis - server.js -->
+
 # Historical Features Analysis - server.js
 
 ## 🔍 Features Found in Git History

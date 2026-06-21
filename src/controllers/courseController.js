@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/courseController.js.
+ */
 const express = require('express');
 const Course = require('../models/Course');
 const stripeService = require('../services/stripeCourseService');

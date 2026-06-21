@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G657 100. -->
+
 AMENDMENT 41: MarketingOS Proof (G657-100) - Proof-Closing Blueprint Note
 This document serves as the SSOT foundation for closing the proof gap identified in AMENDMENT_41_MARKETINGOS.md, focusing on the verification of MarketingOS data integration within LifeOS.
 ---

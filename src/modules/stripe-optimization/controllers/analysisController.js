@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/stripe-optimization/controllers/analysisController.js.
+ */
 ```javascript
 const { analyzePaymentPatterns } = require('../services/analysisEngine');
 const { OptimizationInsight } = require('../models/OptimizationInsight');

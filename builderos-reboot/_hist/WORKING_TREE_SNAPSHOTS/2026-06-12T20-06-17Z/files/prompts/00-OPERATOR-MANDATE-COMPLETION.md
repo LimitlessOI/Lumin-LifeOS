@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Operator mandate completion — §2.17 (read with every session) -->
+
 # Operator mandate completion — §2.17 (read with every session)
 
 **Supreme law:** `docs/SSOT_NORTH_STAR.md` → **Article II §2.17**

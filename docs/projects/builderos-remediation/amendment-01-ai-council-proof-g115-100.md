@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G115-100 -->
+
 # Amendment 01: AI Council Proof - G115-100
 
 This document serves as a proof-closing blueprint note for the initial build slice related to Amendment 01, establishing the AI Council within the BuilderOS context.

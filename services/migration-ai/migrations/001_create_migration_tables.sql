@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 001 Create Migration Tables.
 ```sql
 CREATE TABLE migration_projects (
     id SERIAL PRIMARY KEY,

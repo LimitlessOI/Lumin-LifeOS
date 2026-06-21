@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof Gap G127-100 -->
+
 # Amendment 16: Word Keeper - Proof Gap G127-100
 
 This document outlines the next smallest blueprint-backed build slice for Amendment 16, focusing on closing a critical proof gap related to the core Word Keeper functionality.

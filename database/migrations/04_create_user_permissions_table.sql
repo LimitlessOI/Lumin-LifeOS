@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 04_create_user_permissions_table.sql.
 ```sql
 CREATE TABLE user_permissions (
     id SERIAL PRIMARY KEY,

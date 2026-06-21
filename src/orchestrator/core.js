@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Mock success rate data
+ */
 ```javascript
 const express = require('express');
 const router = express.Router();

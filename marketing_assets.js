@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Marketing Assets Generation
+ */
 // Marketing Assets Generation
 const fs = require('fs');
 

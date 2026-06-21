@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260418_lifeos_finance_share_scopes.sql.
 -- Migration: 20260418_lifeos_finance_share_scopes
 -- Household shared finance — per-category sharing scope between linked users.
 --

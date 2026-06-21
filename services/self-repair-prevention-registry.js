@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Prevention rule registry — CANDIDATE_RULE only from receipt-backed lessons.
  * Prevention rule registry — CANDIDATE_RULE only from receipt-backed lessons.
  * No invariant promotion. No invented rules.
  *

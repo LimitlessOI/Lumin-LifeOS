@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G605-100 -->
+
 # Amendment 12: Command Center - Proof G605-100
 
 ## Blueprint Note: Initial DB Schema & Service Skeleton

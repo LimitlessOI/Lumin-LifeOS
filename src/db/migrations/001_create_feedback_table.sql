@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_feedback_table.sql.
 ```sql
 CREATE TABLE feedback (
     id SERIAL PRIMARY KEY,

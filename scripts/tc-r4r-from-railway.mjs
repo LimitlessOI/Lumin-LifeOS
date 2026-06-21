@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Uses an active local Railway CLI session to read **COMMAND_CENTER_KEY** from a
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  *
  * Uses an active local Railway CLI session to read **COMMAND_CENTER_KEY** from a

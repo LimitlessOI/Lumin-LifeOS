@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 002_create_crop_sections.sql.
 CREATE TABLE crop_sections (
     id SERIAL PRIMARY KEY,
     farm_id INT REFERENCES urban_farms(id),

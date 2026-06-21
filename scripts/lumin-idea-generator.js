@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: Script — Lumin Idea Generator.
+ */
 import fs from "node:fs/promises";
 import path from "node:path";
 import { spawnSync } from "node:child_process";

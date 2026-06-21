@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching Proof: G10-100 Remediation -->
+
 # Amendment 09 Life Coaching Proof: G10-100 Remediation
 
 This document outlines the next smallest build slice to close the proof gap for G10-100: Proof of Concept: Basic Coaching Session Flow, as defined in `docs/projects/AMENDMENT_09_LIFE_COACHING.md`.

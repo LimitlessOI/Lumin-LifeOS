@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/validators/scenarioValidator.js.
+ */
 ```javascript
 const { body } = require('express-validator');
 

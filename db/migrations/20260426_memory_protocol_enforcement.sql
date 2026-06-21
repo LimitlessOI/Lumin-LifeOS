@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260426_memory_protocol_enforcement.sql.
 -- @ssot docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md
 -- Anti-corner-cutting enforcement: protocol violations + task authority.
 

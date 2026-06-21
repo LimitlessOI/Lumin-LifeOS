@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231016_create_risk_management_tables.sql.
 ```sql
 CREATE TABLE risk_profiles (
     id SERIAL PRIMARY KEY,

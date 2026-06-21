@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Block factory blueprint writes into LifeOS product spine when hosted in monorepo.
  * Block factory blueprint writes into LifeOS product spine when hosted in monorepo.
  * @ssot docs/architecture/factory-v1-blueprint-pack/FACTORY_REBUILD_MANIFEST_V1.md
  */

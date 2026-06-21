@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/api/wildlife.test.js.
+ */
 const request = require('supertest');
 const express = require('express');
 const wildlifeRouter = require('../../api/routes/wildlife');

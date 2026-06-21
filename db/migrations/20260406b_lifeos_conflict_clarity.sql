@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260406b_lifeos_conflict_clarity.sql.
 -- Migration: 20260406b_lifeos_conflict_clarity.sql
 -- Extends coaching_sessions with emotional state tracking and pre-conversation prep.
 -- Adds: emotional_state, delivery_style, pre_conversation_prep columns.

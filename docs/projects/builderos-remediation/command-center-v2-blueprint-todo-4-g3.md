@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Todo 4 G3. -->
+
 ### BuilderOS Remediation: Command Center V2 Blueprint Enhancement Memo (TODO-4-G3)
 
 **Context:** This memo addresses the open task within Build Phase 2 (sections F, H) of `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`, specifically regarding the initial BuilderOS integration with the Command Center's core data model. The goal is to define a smallest buildable slice to unblock progress.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-interaction-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-interaction-service.js
  * Lawful interaction capture, transcript analysis, commitment extraction, client-memory suggestions,

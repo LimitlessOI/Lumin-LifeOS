@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: js — tests/builder-blueprint-gate.test.js.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import test from 'node:test';

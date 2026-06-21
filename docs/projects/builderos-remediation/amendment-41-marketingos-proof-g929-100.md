@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G929-100 - SSOT Foundation -->
+
 # Amendment 41 MarketingOS Proof: G929-100 - SSOT Foundation
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified in Amendment 41, specifically concerning the G929-100 integration point with MarketingOS.

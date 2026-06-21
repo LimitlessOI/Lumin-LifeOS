@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 202310200001-create-energy-devices.js.
+ */
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {

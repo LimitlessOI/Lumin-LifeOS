@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof-Closing Blueprint Note (G52-100) -->
+
 The instruction to write a .md file contradicts the verifier's attempt to execute it as a Node.js module, leading to an ERR_UNKNOWN_FILE_EXTENSION.
 # Amendment 41 MarketingOS Proof-Closing Blueprint Note (G52-100)
 

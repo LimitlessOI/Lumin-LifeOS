@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS program map — canonical SSOT hub -->
+
 # LifeOS program map — canonical SSOT hub
 
 **Purpose:** One place the **system and humans** read before changing navigation, dashboard HTML, or queue order. Stops scattered “ideas” from becoming competing truths.

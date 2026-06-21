@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G137-100 - Core Command Routing -->
+
 # Command Center V2 Blueprint Proof: G137-100 - Core Command Routing
 
 ## Blueprint Note: Next Smallest Build Slice

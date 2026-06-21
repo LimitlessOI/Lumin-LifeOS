@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Shell script — Deploy.
 # Script to deploy to staging environment
 
 echo "Deploying to staging..."

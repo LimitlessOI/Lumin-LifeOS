@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Initial Data Model & Read API (g871-100) -->
+
 # Blueprint Proof: Command Center V2 - Initial Data Model & Read API (g871-100)
 
 This document serves as a proof-closing note for the initial build slice of the Command Center V2 blueprint, focusing on establishing the foundational data model and a read-only API endpoint.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet Template -->
+
 # Founder Packet Template
 ## AIC -> BPB Product Development Handoff
 

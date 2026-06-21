@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching Proof - G883-100 Remediation -->
+
 # Amendment 09 Life Coaching Proof - G883-100 Remediation
 
 ## Proof-Closing Blueprint Note

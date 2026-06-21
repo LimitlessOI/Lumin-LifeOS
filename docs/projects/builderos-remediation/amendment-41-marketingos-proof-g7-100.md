@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G7 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Proof G7-100
 This document serves as a proof-closing blueprint note for `AMENDMENT_41_MARKETINGOS.md`, focusing on establishing the Single Source of Truth (SSOT) foundation for user marketing consent.
 

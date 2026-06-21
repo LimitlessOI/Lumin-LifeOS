@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G185 100. -->
+
 The verifier rejected the target `.md` file due to an attempt to execute it as a Node.js module, which is an external verifier configuration issue, not an error in the markdown content itself. The instruction to "Generate the complete implementation code" is also contradictory for a `.md` file.
 
 Blueprint Proof: Command Center V2 - Initial Command Model and Creation Service (G185-100)

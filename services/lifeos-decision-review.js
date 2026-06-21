@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Manages scheduled reviews of decisions at 30-day and 90-day intervals.
  * @fileoverview Decision Review Service
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Landing Page Implementation
+ */
 // Landing Page Implementation
 const express = require('express');
 const app = express();

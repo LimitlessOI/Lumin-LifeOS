@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231101_create_pipeline_tables.sql.
 ```sql
 CREATE TABLE pipeline_configs (
     id SERIAL PRIMARY KEY,

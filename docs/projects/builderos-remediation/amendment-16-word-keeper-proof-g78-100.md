@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof (G78-100) Remediation Note -->
+
 # Amendment 16 Word Keeper Proof (G78-100) Remediation Note
 
 This document addresses the OIL Verifier rejection related to the processing of documentation files.

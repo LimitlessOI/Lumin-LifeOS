@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: config/codebook-v1.js
  * config/codebook-v1.js
  *
  * LifeOS Compression Language (LCL) — Codebook Version 1

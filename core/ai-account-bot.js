@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                    AI ACCOUNT BOT - Extract Ideas from AI Conversations         ║
  * ║                    Reads ChatGPT, Gemini, Claude, Grok, DeepSeek accounts      ║

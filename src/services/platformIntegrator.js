@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/platformIntegrator.js.
+ */
 ```javascript
 const axios = require('axios');
 

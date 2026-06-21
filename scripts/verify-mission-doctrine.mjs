@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Verify mission doctrine — artifacts, roles, measurements, result truth.
  * Verify mission doctrine — artifacts, roles, measurements, result truth.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

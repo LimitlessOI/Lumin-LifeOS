@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_sql_migrations.sql.
 ```sql
 CREATE TABLE sql_migrations (
     id SERIAL PRIMARY KEY,

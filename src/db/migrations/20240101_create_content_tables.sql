@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20240101_create_content_tables.sql.
 ```sql
 -- Create content table
 CREATE TABLE content (

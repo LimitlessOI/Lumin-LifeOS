@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 16: Word Keeper - Proof Closing Note (G132-100) -->
+
 # AMENDMENT 16: Word Keeper - Proof Closing Note (G132-100)
 
 ## Blueprint Reference

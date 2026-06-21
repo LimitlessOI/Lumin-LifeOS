@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G741-100 - SSOT Foundation Proof-Closing Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof - G741-100 - SSOT Foundation Proof-Closing Blueprint Note
 
 This document serves as a proof-closing blueprint note for Amendment 41, focusing on establishing MarketingOS as the Single Source of Truth (SSOT) for `customer_segmentation_data`.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: account-manager-routes.js
  * account-manager-routes.js
  * API for the autonomous signup agent and credential vault.
  *

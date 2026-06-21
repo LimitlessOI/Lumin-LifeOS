@@ -1,5 +1,5 @@
 /**
- * Mechanical phase repairs — never-stop foundation loop.
+ * SYNOPSIS: Mechanical phase repairs — never-stop foundation loop.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

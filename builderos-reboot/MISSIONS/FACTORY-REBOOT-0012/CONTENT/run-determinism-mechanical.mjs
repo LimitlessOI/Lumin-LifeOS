@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Mechanical determinism check: run dispatch 3x, compare outputs.
  * Mechanical determinism check: run dispatch 3x, compare outputs.
  * Proves executor stability (same-tier proxy for verify/copy missions).
  */

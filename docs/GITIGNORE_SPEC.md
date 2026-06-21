@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: .gitignore Strategy -->
+
 # .gitignore Strategy
 
 ## Root Directory

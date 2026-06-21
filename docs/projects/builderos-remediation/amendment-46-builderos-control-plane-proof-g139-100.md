@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G139 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane Wiring (G139-100)
 
 This note addresses the signal requiring follow-through for wiring `routes/lifeos-council-builder-routes.js` to implement BuilderOS control plane operations.

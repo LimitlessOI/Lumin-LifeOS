@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Operator Usage — Keeping the Build Going -->
+
 # Operator Usage — Keeping the Build Going
 
 ## What you get for continued usage

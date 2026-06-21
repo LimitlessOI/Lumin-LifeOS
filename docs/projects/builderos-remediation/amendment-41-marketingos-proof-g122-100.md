@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G122 100. -->
+
 ### Proof-Closing Blueprint Note: MarketingOS SSOT Foundation (AMENDMENT_41)
 
 **1. Exact missing implementation or proof gap:**

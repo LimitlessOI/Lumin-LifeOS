@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TSOS Hook Boundary -->
+
 # TSOS Hook Boundary
 
 TSOS measures:

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G56-100 -->
+
 # Amendment 12: Command Center - Proof G56-100
 
 This proof-closing blueprint note addresses the initial, smallest build slice for establishing the Command Center, focusing on core service definition and API exposure.

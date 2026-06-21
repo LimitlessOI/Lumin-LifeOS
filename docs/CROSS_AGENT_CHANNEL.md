@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Cross-agent channel (Cursor ↔ Claude Code) -->
+
 # Cross-agent channel (Cursor ↔ Claude Code)
 
 **Not SSOT.** Not constitutional law. **Scratchpad only** — for brainstorming, debate notes, and handoff between tools that do not share one chat transcript.

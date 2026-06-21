@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G1149 100. -->
+
 This document serves as a proof-closing note for the `g1149-100` proof point, which validates the conceptual framework for the AI Council's involvement in BuilderOS remediation processes as outlined in `AMENDMENT_01_AI_COUNCIL.md`.
 
 The `g1149-100` proof point confirms the architectural viability of integrating AI Council oversight into BuilderOS decision flows without disrupting core LifeOS user features or TSOS customer-facing surfaces. Specifically, it validates that BuilderOS can internally generate signals or data points relevant to AI Council governance.

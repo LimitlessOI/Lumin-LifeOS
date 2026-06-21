@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G437 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G437-100
 
 This document serves as a proof-closing blueprint note for the initial build slice of the AMENDMENT 12: COMMAND CENTER project, specifically addressing the foundational db and service layer.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — models/product.js.
+ */
 ```javascript
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');

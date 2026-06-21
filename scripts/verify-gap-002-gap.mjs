@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: A utility to wrap an async promise in a tryCatch block, returning a structured result.
  * A utility to wrap an async promise in a tryCatch block, returning a structured result.
  * @param {Promise<any>} promise The promise to execute.
  * @returns {Promise<{ok: true, data: any} | {ok: false, error: string}>}

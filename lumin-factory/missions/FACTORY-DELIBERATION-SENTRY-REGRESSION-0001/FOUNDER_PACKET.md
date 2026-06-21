@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet — SENTRY Regression Harness (Deliberation v2.7) -->
+
 # Founder Packet — SENTRY Regression Harness (Deliberation v2.7)
 
 **Mission:** `FACTORY-DELIBERATION-SENTRY-REGRESSION-0001`  

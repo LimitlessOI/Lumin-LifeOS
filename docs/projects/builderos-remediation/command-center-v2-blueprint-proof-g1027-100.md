@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G1027-100 - Echo Command Implementation -->
+
 # Command Center V2 Blueprint Proof: G1027-100 - Echo Command Implementation
 
 ## Blueprint Note: Next Smallest Build Slice

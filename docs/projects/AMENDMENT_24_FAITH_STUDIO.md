@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 24 — Faith Studio -->
+
 # AMENDMENT 24 — Faith Studio
 
 > **Y-STATEMENT:** In the context of families, churches, faith educators, and creators wanting sacred scenes rendered respectfully across different traditions, facing doctrinal differences and the risk of irreverent or misleading outputs, we decided to define Faith Studio as a dedicated sacred-content product with tradition-aware interpretation layers to achieve devotional, educational, and private witness experiences, accepting that sacred-mode guardrails must be stricter than general story creation.

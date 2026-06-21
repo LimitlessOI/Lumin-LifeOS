@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 📋 Complete Session Breakdown - Everything We've Built -->
+
 # 📋 Complete Session Breakdown - Everything We've Built
 
 ## 🎯 Session Overview

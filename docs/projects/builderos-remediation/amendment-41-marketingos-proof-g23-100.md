@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G23 100. -->
+
 ### Amendment 41: MarketingOS Proof G23-100 - Proof-Closing Blueprint Note
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified in Amendment 41 for MarketingOS, specifically for G23-100. The objective is to demonstrate BuilderOS-only governed loop execution, ensuring no modification of LifeOS user features or TSOS customer-facing surfaces.

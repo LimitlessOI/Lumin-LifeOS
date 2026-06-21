@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof Closing Note (G88-100) -->
+
 # Amendment 09: Life Coaching - Proof Closing Note (G88-100)
 
 This document serves as a proof-closing note for the `AMENDMENT_09_LIFE_COACHING` blueprint, specifically addressing the `g88-100` build slice. It outlines the next smallest, safe build slice to progress the implementation, focusing on foundational data model and repository layer for the `LifeCoach` entity.

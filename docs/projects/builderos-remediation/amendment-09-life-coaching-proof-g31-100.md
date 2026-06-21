@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G31-100 -->
+
 # Amendment 09: Life Coaching - Proof G31-100
 
 ## Blueprint Note: Proof-Closing Build Slice

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup_database.sql.
 ```sql
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,

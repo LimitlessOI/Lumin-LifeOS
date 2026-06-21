@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: When a blueprint step is fully frozen (byte contract + sandbox), Builder may write spine paths in monorepo mode.
  * When a blueprint step is fully frozen (byte contract + sandbox), Builder may write spine paths in monorepo mode.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

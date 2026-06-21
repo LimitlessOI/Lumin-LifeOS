@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Structured logger — Pino (5-10x faster than Winston, native JSON for Railway)
  * Structured logger — Pino (5-10x faster than Winston, native JSON for Railway)
  *
  * Usage:

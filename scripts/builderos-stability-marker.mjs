@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: --- Core Constants for the Stability Marker ---
  * @file Provides a standardized, versioned stability marker for LifeOS Zone 1 operations.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

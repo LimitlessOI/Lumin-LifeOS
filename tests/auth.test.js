@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/auth.test.js.
+ */
 ```javascript
 const request = require('supertest');
 const app = require('../src/app'); // Assume app.js is setup to export the Express instance

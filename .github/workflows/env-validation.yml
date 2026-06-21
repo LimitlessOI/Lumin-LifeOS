@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/env-validation.yml.
 name: Environment Validation
 
 on:

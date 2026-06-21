@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Scenario 2: Calendar Booking -->
+
 # Scenario 2: Calendar Booking
 
 ## Overview

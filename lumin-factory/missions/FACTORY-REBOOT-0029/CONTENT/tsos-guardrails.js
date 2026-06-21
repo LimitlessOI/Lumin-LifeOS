@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: TSOS guardrails — efficiency measurement only; never mission authority.
  * TSOS guardrails — efficiency measurement only; never mission authority.
  * @see factory-core/tsos/TSOS_HOOK_BOUNDARY.md
  * @see docs/C2_CANONICAL_DEFINITION.md (TSOS ≠ truth/strategy)

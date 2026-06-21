@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-growth-routes.js
  * routes/lifeos-growth-routes.js
  *
  * LifeOS Phase 14 — Growth & Mastery + Relationship Intelligence API

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 20231011 Add Code Reviews Table.
 CREATE TABLE code_reviews (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,

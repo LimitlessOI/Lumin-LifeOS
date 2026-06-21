@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 💰 Revenue Systems Guide - Immediate Money-Making Systems -->
+
 # 💰 Revenue Systems Guide - Immediate Money-Making Systems
 
 ## ✅ What's Been Implemented

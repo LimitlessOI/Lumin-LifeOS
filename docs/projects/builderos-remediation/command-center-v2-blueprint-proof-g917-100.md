@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G917 100. -->
+
 ### Proof-Closing Blueprint Note: Command Center V2 - Build Slice G917-100
 
 This note addresses the initial build slice for Command Center V2, focusing on establishing a foundational API endpoint for BuilderOS internal status. This slice aims to prove the basic routing and accessibility of a new V2 API surface.

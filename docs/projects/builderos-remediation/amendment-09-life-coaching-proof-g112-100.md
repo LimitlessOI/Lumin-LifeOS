@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G112-100 -->
+
 # Amendment 09: Life Coaching - Proof G112-100
 
 This document outlines the first granular build slice for the Life Coaching amendment, focusing on the foundational data model.

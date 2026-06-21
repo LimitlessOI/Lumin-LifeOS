@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports greet — services/test-greet.js.
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  */
 export function greet(name) {

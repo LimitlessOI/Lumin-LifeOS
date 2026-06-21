@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_quantum_tables.sql.
 ```sql
 CREATE TABLE quantum_jobs (
     id SERIAL PRIMARY KEY,

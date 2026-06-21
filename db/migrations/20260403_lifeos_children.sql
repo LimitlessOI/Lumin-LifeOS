@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260403_lifeos_children.sql.
 -- Migration: 20260403_lifeos_children.sql
 -- LifeOS Phase 7 — Children's App schema
 -- Child profiles, dreams, sessions, curiosity threads

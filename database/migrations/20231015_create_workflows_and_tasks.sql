@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231015_create_workflows_and_tasks.sql.
 ```sql
 CREATE TABLE workflows (
     id SERIAL PRIMARY KEY,

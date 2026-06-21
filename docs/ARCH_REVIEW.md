@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Architecture & Health Review - Lumin-LifeOS -->
+
 # Architecture & Health Review - Lumin-LifeOS
 
 **Review Date**: January 5, 2026

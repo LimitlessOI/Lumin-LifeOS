@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS Personal Finance API — mirror / clarity only; not investment advice.
  * LifeOS Personal Finance API — mirror / clarity only; not investment advice.
  * Mounted at /api/v1/lifeos/finance
  *

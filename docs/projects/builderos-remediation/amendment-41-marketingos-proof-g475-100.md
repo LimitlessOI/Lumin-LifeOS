@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: MarketingOS Proof G475-100 -->
+
 # Proof-Closing Blueprint Note: MarketingOS Proof G475-100
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

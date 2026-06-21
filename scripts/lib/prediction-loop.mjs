@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: S5 — Prediction Loop v0
  * S5 — Prediction Loop v0
  *
  * Pure functions: no I/O, no side effects.

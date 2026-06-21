@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports runGAP010GapVerification — scripts/verify-gap-010-gap.mjs.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 const tryCatch = async (promise) => {

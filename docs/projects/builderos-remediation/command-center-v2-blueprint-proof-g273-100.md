@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: CommandCenterV2 - G273-100 -->
+
 # Blueprint Proof: CommandCenterV2 - G273-100
 
 ## Proof-Closing Blueprint Note

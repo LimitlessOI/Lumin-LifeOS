@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260422_gate_change_proposals.sql.
 -- North Star §2.6 ¶8 — Governed efficiency path: persisted proposals + council output.
 -- No automatic gate removal; rows are audit trail for human + council workflow.
 

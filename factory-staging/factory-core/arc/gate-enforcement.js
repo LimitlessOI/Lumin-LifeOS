@@ -1,5 +1,5 @@
 /**
- * Load GATE_ENFORCEMENT_MATRIX and evaluate HARD gates (fail-closed).
+ * SYNOPSIS: Load GATE_ENFORCEMENT_MATRIX and evaluate HARD gates (fail-closed).
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

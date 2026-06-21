@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: email-triage.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  *
  * email-triage.js

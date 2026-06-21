@@ -1,5 +1,5 @@
 /**
- * TSOS-G3 routing decision log — shadow/active infrastructure (G3.3: hypothetical deltas).
+ * SYNOPSIS: TSOS-G3 routing decision log — shadow/active infrastructure (G3.3: hypothetical deltas).
  *
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

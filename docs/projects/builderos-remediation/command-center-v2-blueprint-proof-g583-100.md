@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G583 100. -->
+
 Blueprint Proof: Command Center V2 - Registry Core (G583-100)
 This document outlines the next smallest build slice for the Command Center V2, focusing on the foundational `CommandRegistry` component. This proof closes the gap related to the core mechanism for defining and managing commands.
 ---

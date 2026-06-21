@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/health/dashboard.js.
+ */
 function fetchDashboardData() {
     $.get('/api/health', function(data) {
         $('#current-builds').html(`<h2>Current Builds</h2><pre>${JSON.stringify(data.currentBuilds, null, 2)}</pre>`);

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Add other CRUD operations as needed
+ */
 ```javascript
 const Funnel = require('../models/Funnel');
 

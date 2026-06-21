@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_clientcare_sellable_controls.sql.
 -- @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
 -- Sellable packaging controls for ClientCare billing recovery
 

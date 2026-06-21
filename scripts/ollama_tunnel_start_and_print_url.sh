@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SYNOPSIS: Script — Ollama Tunnel Start And Print Url.
 set -euo pipefail
 
 cleanup() {

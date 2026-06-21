@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/workers/recommendationWorker.js.
+ */
 ```javascript
 exports.process = async (job) => {
     try {

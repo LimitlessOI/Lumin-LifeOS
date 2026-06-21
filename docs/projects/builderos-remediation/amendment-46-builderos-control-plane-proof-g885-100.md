@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G885 100. -->
+
 // routes/lifeos-council-builder-routes.js
 import express from 'express';
 import {

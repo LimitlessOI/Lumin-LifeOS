@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT -->
+
 > **DIGEST:** `docs/constitution/NORTH_STAR.md` + `docs/AGENT_RULES.compact.md` cover operational rules for routine sessions. Read this full document only for constitutional sessions or when a specific section is referenced.
 
 # LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT

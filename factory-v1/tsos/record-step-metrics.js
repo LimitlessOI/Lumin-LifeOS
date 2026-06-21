@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports recordStepMetrics — factory-v1/tsos/record-step-metrics.js.
+ */
 const REQUIRED_FIELDS = ['mission_id', 'blueprint_id', 'step_id', 'status', 'started_at', 'finished_at'];
 
 export async function recordStepMetrics(metrics) {

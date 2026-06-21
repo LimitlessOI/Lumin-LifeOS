@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231014_create_health_schema.sql.
 ```sql
 CREATE TABLE multi_omics_profiles (
     id SERIAL PRIMARY KEY,

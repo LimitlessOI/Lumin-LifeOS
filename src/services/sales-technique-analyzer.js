@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Analyze a call transcript for sales techniques
+ */
 // src/services/sales-technique-analyzer.js
 // Analyzes sales call transcripts to detect poor techniques and good practices
 

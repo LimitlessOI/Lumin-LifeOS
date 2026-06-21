@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports runArchitectureHealthComposite — scripts/verify-architecture-health-composite.mjs.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

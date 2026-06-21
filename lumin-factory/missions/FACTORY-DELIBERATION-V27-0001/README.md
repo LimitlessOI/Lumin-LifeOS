@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: FACTORY-DELIBERATION-V27-0001 — Deliberation governance A→Z -->
+
 # FACTORY-DELIBERATION-V27-0001 — Deliberation governance A→Z
 
 **Purpose:** Ship deliberation v2.7 (seven departments, REP capsules, separation of powers) as a complete FP → BP → code → SENTRY loop.

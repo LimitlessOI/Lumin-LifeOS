@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/oil-daily-summary.js
+ */
 // services/oil-daily-summary.js
 /** @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md */
 

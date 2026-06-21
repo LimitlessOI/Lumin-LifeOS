@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G155-100 -->
+
 The specification is incomplete as the source blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` was not provided.
 ---
 # Amendment 01: AI Council - Proof G155-100

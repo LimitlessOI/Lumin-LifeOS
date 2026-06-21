@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports checkProofFreshness — lumin-factory/factory-staging/factory-core/sentry/proof-freshness.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Facebook Manager Integration
+ */
 // Facebook Manager Integration
 const { FacebookApiClient } = require('facebook-api-client');
 

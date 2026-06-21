@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g80-100 - Initial Status API Endpoint -->
+
 # Command Center V2 Blueprint Proof: g80-100 - Initial Status API Endpoint
 
 This document serves as a proof-closing note for the initial build slice related to establishing the foundational API for Command Center V2 status data, corresponding to blueprint section g80-100.

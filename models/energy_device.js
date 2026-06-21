@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — models/energy_device.js.
+ */
 module.exports = (sequelize) => {
   return sequelize.define('EnergyDevice', {
     id: {

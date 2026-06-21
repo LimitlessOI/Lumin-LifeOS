@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: LifeOS Voice Rail v1 acceptance — production proof.
  * LifeOS Voice Rail v1 acceptance — production proof.
  * @ssot builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/ACCEPTANCE_SPEC.md
  */

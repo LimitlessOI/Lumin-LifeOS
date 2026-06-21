@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Operator dashboard — one JSON aggregate for "is the system okay?" (no UI).
  * Operator dashboard — one JSON aggregate for "is the system okay?" (no UI).
  * Writes `data/operator-dashboard.json` (gitignored). Schema: `docs/OPERATOR_DASHBOARD_JSON.md`.
  *

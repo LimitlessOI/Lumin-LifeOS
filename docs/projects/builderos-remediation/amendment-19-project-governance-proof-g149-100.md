@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G149-100 - Initial Project State Enforcement -->
+
 # Amendment 19 Project Governance Proof: G149-100 - Initial Project State Enforcement
 
 ## 1. Purpose

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — utils/sentimentAnalyzer.js.
+ */
 ```javascript
 function analyze(nlpResult) {
     if (!nlpResult || nlpResult.length === 0) {

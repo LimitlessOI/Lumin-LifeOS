@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260522_builder_audit_before_done_phase7.sql.
 -- Phase 7 — audit-before-done (conditional completion + session linkage)
 -- @ssot docs/projects/builder-final-synthesis-rerun/FINAL_BUILDER_IMPLEMENTATION_ORDER.md Slice 7
 

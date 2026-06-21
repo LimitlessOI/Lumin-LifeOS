@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_tco_tables.sql.
 -- ╔══════════════════════════════════════════════════════════════════════════════════╗
 -- ║                        TCO (TotalCostOptimizer) TABLES                            ║
 -- ║              Database schema for the cost savings proxy service                   ║

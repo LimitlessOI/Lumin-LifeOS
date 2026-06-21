@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G687 100. -->
+
 Amendment 09: Life Coaching - Proof G687-100 Remediation
 
 ## Current Proof Status

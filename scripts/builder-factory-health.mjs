@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Builder factory health — Operations Director CLI.
  * Builder factory health — Operations Director CLI.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

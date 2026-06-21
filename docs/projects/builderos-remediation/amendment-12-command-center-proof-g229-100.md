@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G229 100. -->
+
 Amendment 12: Command Center - Proof G229-100
 This document serves as a proof-closing blueprint note for the initial build slice of Amendment 12, focusing on the foundational `CommandCenterService`.
 ---

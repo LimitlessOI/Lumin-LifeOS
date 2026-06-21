@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231031_create_workspace_tables.sql.
 ```sql
 CREATE TABLE workspace_profiles (
     id SERIAL PRIMARY KEY,

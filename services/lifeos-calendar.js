@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-calendar.js
  * services/lifeos-calendar.js
  *
  * LifeOS native calendar domain plus Google Calendar adapter.

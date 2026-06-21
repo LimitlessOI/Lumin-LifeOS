@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Note: Amendment 41 MarketingOS Proof G407-100 Remediation -->
+
 The instruction to write a `.md` file conflicts with the verifier's rejection of `.md` files when attempting to execute them as JavaScript modules. I will proceed by generating the requested Markdown content, assuming the verifier's behavior is an external configuration issue that will be addressed.
 ---
 # Blueprint Note: Amendment 41 MarketingOS Proof G407-100 Remediation

@@ -1,9 +1,15 @@
+<!-- SYNOPSIS: Continuity Log -->
+
 # Continuity Log
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ---
 
-## [SESSION] 2026-06-21 — Founder build closed loop (Sentry audit fixes)
+## [SESSION] 2026-06-21 — FILE SYNOPSIS LAW (mandatory repo index)
+
+Adam asked for every file indexed with synopsis and impossible to skip. **Shipped:** `REPO_FILE_SYNOPSIS_INDEX.json` (12,090 git-tracked files), mechanical SYNOPSIS backfill (~8,563 in-file headers), enforcement at pre-commit (auto-inject + index co-commit), pre-push, commit-msg, CI (`file-synopsis-law` job), `commitToGitHub` auto-inject, `npm prepare` → `core.hooksPath=githooks`. **Verify:** `npm run lifeos:file-synopsis:verify` PASS. **Next:** GitHub branch protection requiring CI job on `main`.
+
+---
 
 Adam asked to fix all Sentry-audit issues from founder color test theater PASS. **Shipped (`8a7c573707`):** atomic `commitManyToGitHub` + `POST /builder/execute-batch`; `founder-build-success-gate` + `founder-build-outcome` (git diff + live HTML poll); async build jobs (202 + poll); self-repair redeploy-wait-reverify; baseline dark assistant bubbles restored; client `getComputedStyle` bubble proof; routing/normalize fixes; `verify:founder-css:live`. Tests pass. **Next:** Adam retest via Lumin only — *"change response color to yellow with black text"* — expect honest PASS/FAIL with founder visual + client bubble proof lines.
 

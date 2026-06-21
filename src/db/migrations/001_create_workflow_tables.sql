@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_workflow_tables.sql.
 ```sql
 CREATE TABLE workflows (
   id SERIAL PRIMARY KEY,

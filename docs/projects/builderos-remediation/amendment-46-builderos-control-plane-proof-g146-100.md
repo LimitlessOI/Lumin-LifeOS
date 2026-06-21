@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G146-100 Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G146-100 Remediation
 
 This document details the required implementation to close the BuilderOS control plane wiring gap, as per Amendment 46. The previous verifier rejection was an environmental issue related to file type interpretation, not a content error.

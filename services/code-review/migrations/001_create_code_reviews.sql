@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 001 Create Code Reviews.
 ```sql
 CREATE TABLE code_reviews (
   id SERIAL PRIMARY KEY,

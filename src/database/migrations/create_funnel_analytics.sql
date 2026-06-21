@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_funnel_analytics.sql.
 ```sql
 CREATE TABLE funnel_analytics (
     id SERIAL PRIMARY KEY,

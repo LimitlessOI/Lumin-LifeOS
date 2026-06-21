@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blocking Ambiguity or Founder Decision List -->
+
 // docs/projects/builderos-remediation/amendment-09-life-coaching-todo-3-g8.md
 ---
 title: BuilderOS Remediation Amendment 09 Life Coaching Todo 3

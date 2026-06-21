@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Route to serve chat UI
+ */
 const express = require('express');
 const router = express.Router();
 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Script — Run Migration.
+ */
 ```javascript
 const { Client } = require('pg');
 const fs = require('fs');

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/stripe-optimization/services/queueService.js.
+ */
 ```javascript
 const Queue = require('bull');
 const { analyzePaymentPatterns } = require('./analysisEngine');

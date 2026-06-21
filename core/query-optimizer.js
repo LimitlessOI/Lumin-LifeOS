@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║              SELF-OPTIMIZING DATABASE QUERY SYSTEM                              ║
  * ║              Automatically detects and optimizes slow database queries          ║

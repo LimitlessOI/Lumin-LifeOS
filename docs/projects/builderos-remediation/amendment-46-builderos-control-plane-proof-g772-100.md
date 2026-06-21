@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G772 100. -->
+
 The specification is contradictory: the task requests a `.md` file, but the verifier attempts to execute it as a Node.js module, leading to `ERR_UNKNOWN_FILE_EXTENSION`.
 Amendment 46: BuilderOS Control Plane Proof - G772-100
 

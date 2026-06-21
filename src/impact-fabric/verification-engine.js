@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Example schema for data validation
+ */
 ```javascript
 const Joi = require('joi');
 

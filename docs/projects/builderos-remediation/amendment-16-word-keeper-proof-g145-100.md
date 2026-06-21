@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 16: Word Keeper - Proof G145-100 -->
+
 # AMENDMENT 16: Word Keeper - Proof G145-100
 
 ## Blueprint Note: Implement WordKeeperRepository Unit Tests

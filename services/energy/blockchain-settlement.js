@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Blockchain Settlement.
+ */
 const Web3 = require('web3');
 const { Gateway, Wallets } = require('@hyperledger/fabric-sdk-node');
 

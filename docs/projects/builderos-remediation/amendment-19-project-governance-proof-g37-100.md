@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G37 100. -->
+
 Proof-Closing Blueprint Note: Amendment 19 Project Governance - G37-100
 This note outlines the next smallest build slice to advance the proof and implementation of Amendment 19 Project Governance within BuilderOS. The focus for this slice is to establish the foundational capability to locate and parse the Amendment 19 blueprint itself.
 1.  Exact missing implementation or proof gap:

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260417_lifeos_notification_escalation.sql.
 -- LifeOS notification escalation support.
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 

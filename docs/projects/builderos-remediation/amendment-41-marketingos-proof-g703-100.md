@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof - G703-100: SSOT Foundation for MarketingCampaign -->
+
 # Amendment 41 MarketingOS Proof - G703-100: SSOT Foundation for MarketingCampaign
 
 This document outlines the proof-closing blueprint note for establishing the Single Source of Truth (SSOT) foundation for `MarketingCampaign` data, as specified by `AMENDMENT_41_MARKETINGOS.md`.

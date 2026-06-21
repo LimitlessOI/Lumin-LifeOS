@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260418_lifeos_weekly_review.sql.
 -- Migration: 20260418_lifeos_weekly_review
 -- LifeOS Weekly Review — AI-generated weekly narrative + interactive conversation session
 --

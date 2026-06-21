@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Intent Lock -->
+
 # Founder Intent Lock
 
 **Mission:** PRODUCT-CONVERSATION-COMMITMENTS-C2-0001  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Conflict Arbitrator -->
+
 # Conflict Arbitrator
 _(formerly AMENDMENT_25_CONFLICT_ARBITRATOR.md)_
 

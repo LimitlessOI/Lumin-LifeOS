@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/personality/context-adapter.js.
+ */
 ```javascript
 class ContextAdapter {
     constructor(userProfile) {

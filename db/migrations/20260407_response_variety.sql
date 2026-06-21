@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260407_response_variety.sql.
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS response_variety_log (

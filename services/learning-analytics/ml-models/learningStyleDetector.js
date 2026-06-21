@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — LearningStyleDetector.
+ */
 const tf = require('@tensorflow/tfjs-node');
 const brain = require('brain.js');
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Council prompt adapter — bridges legacy `callAI(prompt)` and two-argument
  * Council prompt adapter — bridges legacy `callAI(prompt)` and two-argument
  * `(systemLine, userBody)` call sites to `callCouncilMember(member, prompt, options)`.
  *

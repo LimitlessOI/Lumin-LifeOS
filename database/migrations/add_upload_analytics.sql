@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — add_upload_analytics.sql.
 CREATE TABLE upload_analytics (
     id SERIAL PRIMARY KEY,
     upload_id INT REFERENCES market_data_uploads(id),

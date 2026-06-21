@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Assemble PRE_BUILD_VALIDATION_PACKET from post-ARC receipts.
  * Assemble PRE_BUILD_VALIDATION_PACKET from post-ARC receipts.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

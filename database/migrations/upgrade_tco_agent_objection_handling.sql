@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — upgrade_tco_agent_objection_handling.sql.
 -- ╔══════════════════════════════════════════════════════════════════════════════════╗
 -- ║           TCO AGENT UPGRADE - WORLD-CLASS OBJECTION HANDLING                    ║
 -- ║   Add persistence tracking, objection detection, and negotiation logging         ║

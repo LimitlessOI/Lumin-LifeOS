@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Fail-closed blueprint gate for POST /build on product spine paths (§2.18).
  * Fail-closed blueprint gate for POST /build on product spine paths (§2.18).
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

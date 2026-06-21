@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — XXXX_create_dashboard_widgets.sql.
 CREATE TABLE dashboard_widgets (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,

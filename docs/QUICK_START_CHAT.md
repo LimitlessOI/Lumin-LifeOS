@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Quick Start: Talking to Your AI Council -->
+
 # 🚀 Quick Start: Talking to Your AI Council
 
 ## The Simplest Way

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G74 100. -->
+
 Amendment 41: MarketingOS Proof G74-100 Remediation Blueprint Note
 This document outlines the blueprint for closing the proof gap for Amendment 41, specifically concerning the MarketingOS G74-100 proof mechanism. It serves as the SSOT foundation for the remediation build pass.
 ---

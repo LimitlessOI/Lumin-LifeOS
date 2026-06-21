@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G101 100. -->
+
 Amendment 14 White Label Proof: G101-100 - Dynamic Brand Name Display
 This document outlines the proof-closing blueprint note for a foundational white-label capability: dynamically displaying a configured brand name. This serves as the initial verifiable slice for Amendment 14.
 1. Exact Missing Implementation or Proof Gap

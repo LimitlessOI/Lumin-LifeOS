@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Shell script — Cron Job Setup.
 # Cron job setup script for automatic task cleanup
 
 # Add the cron job to run the cleanup script every 5 minutes

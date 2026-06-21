@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof G6-100 Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof G6-100 Remediation
 
 This document outlines the necessary implementation steps to close the proof gap identified in Amendment 46, specifically addressing the wiring of BuilderOS control plane routes within `routes/lifeos-council-builder-routes.js`. This remediation focuses on enabling the BuilderOS governed loop execution without modifying LifeOS user features or TSOS customer-facing surfaces.

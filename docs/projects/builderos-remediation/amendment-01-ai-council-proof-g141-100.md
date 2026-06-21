@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AI Council Initial Definition (G141-100) -->
+
 # Proof-Closing Blueprint Note: AI Council Initial Definition (G141-100)
 
 This document serves as a proof-closing note for the initial build slice derived from `AMENDMENT_01_AI_COUNCIL.md`. The objective is to establish the foundational definition for the AI Council, moving from conceptual blueprint to initial, verifiable structure.

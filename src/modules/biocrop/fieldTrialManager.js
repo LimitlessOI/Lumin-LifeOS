@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/biocrop/fieldTrialManager.js.
+ */
 const { FieldTrial, BiocropVariety } = require('../../models');
 
 class FieldTrialManager {

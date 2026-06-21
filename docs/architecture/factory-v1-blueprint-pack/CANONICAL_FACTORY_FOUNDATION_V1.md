@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Canonical Factory Foundation v1 -->
+
 # Canonical Factory Foundation v1
 
 ## Status

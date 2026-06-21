@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Machine-Readiness Audit v1 -->
+
 # Blueprint Machine-Readiness Audit v1
 
 ## Question

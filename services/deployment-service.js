@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: deployment-service.js
  * deployment-service.js
  * File protection checks, GitHub commits, and Railway deployment/env-var control.
  *
@@ -23,6 +24,7 @@ import { execFile as execFileCb } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
 import { promises as fsPromises } from 'fs';
+import { ensureSynopsisInContent, isInFileEnforceable } from '../scripts/lib/file-synopsis.mjs';
 
 const execFile = promisify(execFileCb);
 
@@ -108,6 +110,10 @@ export function createDeploymentService(deps) {
         `Valid roots: routes/ services/ db/ startup/ config/ scripts/ public/ docs/ prompts/ core/ middleware/. ` +
         `Re-scope target_file to a valid server path.`
       );
+    }
+
+    if (isInFileEnforceable(normalizedPath)) {
+      content = ensureSynopsisInContent(normalizedPath, content);
     }
 
     // ── package.json protected-scripts guard ──────────────────────────────────

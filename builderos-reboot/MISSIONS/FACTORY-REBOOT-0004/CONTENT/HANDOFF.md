@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Handoff -->
+
 # Handoff
 
 ## For Adam (one command)

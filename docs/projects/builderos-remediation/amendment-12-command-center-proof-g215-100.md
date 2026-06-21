@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G215 100. -->
+
 The specification is contradictory: the task requests a `.md` file, but the OIL verifier rejects `.md` files when attempting to execute them as JavaScript modules, indicating an expectation for executable code.
 
 ```javascript

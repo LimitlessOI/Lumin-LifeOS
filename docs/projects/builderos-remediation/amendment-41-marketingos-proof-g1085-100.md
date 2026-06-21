@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof - G1085-100 -->
+
 # AMENDMENT_41_MARKETINGOS Proof - G1085-100
 
 ## 1. Exact Missing Implementation or Proof Gap

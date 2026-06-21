@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet — LifeOS Voice Rail v1 -->
+
 # Founder Packet — LifeOS Voice Rail v1
 
 **Mission ID:** `PRODUCT-VOICE-RAIL-V1-0001`  

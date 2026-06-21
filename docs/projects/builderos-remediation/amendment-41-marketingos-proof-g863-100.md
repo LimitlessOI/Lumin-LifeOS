@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G863-100 (SSOT Foundation) -->
+
 # Amendment 41: MarketingOS Proof - G863-100 (SSOT Foundation)
 
 This document serves as a proof-closing blueprint note for Amendment 41, focusing on establishing and verifying the Single Source of Truth (SSOT) foundation within MarketingOS.

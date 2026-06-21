@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Grep-based audit of direct AI provider fetch/call bypass paths.
  * Grep-based audit of direct AI provider fetch/call bypass paths.
  * @ssot docs/architecture/AI_CALL_BYPASS_REPORT.md
  */

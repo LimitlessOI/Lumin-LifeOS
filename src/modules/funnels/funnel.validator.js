@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/funnel.validator.js.
+ */
 ```javascript
 const { body, validationResult } = require('express-validator');
 

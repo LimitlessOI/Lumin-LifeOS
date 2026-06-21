@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Founder command class routing — repo/build vs BP vs read vs provider vs system action.
  * Founder command class routing — repo/build vs BP vs read vs provider vs system action.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

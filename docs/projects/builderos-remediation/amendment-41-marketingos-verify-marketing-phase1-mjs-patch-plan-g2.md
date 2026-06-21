@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS: Patch Plan for scripts/verify-marketing-phase1.mjs (G2) -->
+
 @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
 # Amendment 41 MarketingOS: Patch Plan for scripts/verify-marketing-phase1.mjs (G2)
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G49-100 - Custom Logo Display Verification -->
+
 # Amendment 14 White-Label Proof: G49-100 - Custom Logo Display Verification
 
 ## Overview

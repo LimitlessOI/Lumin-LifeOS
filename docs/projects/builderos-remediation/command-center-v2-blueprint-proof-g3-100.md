@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G3 100. -->
+
 Command Center V2 Blueprint Proof: G3-100 - CommandScheduler Interface Definition
 This document serves as a proof-closing blueprint note for the initial step of Generation 3 (G3) of the Command Center V2 build, focusing on Command Scheduling & Eventing.
 ---

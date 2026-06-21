@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G743-100 -->
+
 # Amendment 16 Word Keeper Proof - G743-100
 
 This document outlines the next smallest blueprint-backed build slice for the Amendment 16 Word Keeper project, derived from `docs/projects/AMENDMENT_16_WORD_KEEPER.md`. This proof-closing blueprint note is implementation-first and ready for the next C2 build pass.

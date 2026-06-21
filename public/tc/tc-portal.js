@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/tc/tc-portal.js.
+ */
 (function () {
   let lastWorkspaceTests = null;
   let lastWorkspaceValidation = null;

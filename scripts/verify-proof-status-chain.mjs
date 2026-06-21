@@ -1,4 +1,5 @@
-/** @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md */
+/**
+ * SYNOPSIS: No CLI entry — governed loop modules do not require a CLI entry point @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md */
 const BUILDEROS_C2_PROOF_VERSION = '1.0.0';
 const PROOF_SOURCE = 'builderos-command-control';
 

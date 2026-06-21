@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: SENTRY loop — every aspect built in deliberation v2.7 session.
  * SENTRY loop — every aspect built in deliberation v2.7 session.
  * FP slice → aspect BP (registry) → acceptance → per-aspect SENTRY verdict.
  *

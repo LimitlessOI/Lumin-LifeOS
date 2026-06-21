@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports systemAlphaReadiness — factory-staging/factory-core/readiness/system-alpha-readiness.js.
+ */
 export function systemAlphaReadiness(snapshot) {
   if (snapshot.proofFresh && snapshot.automatedProof) {
     return {

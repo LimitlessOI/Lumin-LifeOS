@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Todo 6 G2. -->
+
 ### Builder-Ready Blueprint Enhancement Memo: Command Center V2 - Aggregate Summary Endpoint
 
 This memo outlines the next buildable slice for the "Add aggregate summary endpoint" task within the Command Center V2 blueprint, addressing current ambiguities and defining a minimal, actionable implementation plan.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G84-100: LifeCoach Entity Schema and Migration -->
+
 # Amendment 09: Life Coaching - Proof G84-100: LifeCoach Entity Schema and Migration
 
 This document outlines the first build slice for the Amendment 09: Life Coaching project, focusing on the foundational `LifeCoach` entity schema definition and its corresponding database migration. This slice establishes the necessary database table for `LifeCoach` instances, enabling subsequent development of repositories

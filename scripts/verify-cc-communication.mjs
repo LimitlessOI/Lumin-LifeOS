@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Smoke + proof-guard checks for Command Center communication UX.
  * Smoke + proof-guard checks for Command Center communication UX.
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */

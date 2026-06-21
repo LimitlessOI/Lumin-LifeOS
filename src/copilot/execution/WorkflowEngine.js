@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/copilot/execution/WorkflowEngine.js.
+ */
 ```javascript
 class WorkflowEngine {
   static async execute(workflowData) {

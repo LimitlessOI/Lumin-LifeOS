@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G583 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G583-100
 Blueprint Note: Core Orchestrator Instantiation Proof
 This note closes the proof for the initial instantiation and basic internal operation of the `CommandCenter` core component, as defined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`. This establishes the foundational execution context for future orchestration logic.

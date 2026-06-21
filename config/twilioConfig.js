@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Placeholder for Twilio configuration
+ */
 // Placeholder for Twilio configuration
 // Use environment variables to store sensitive information
 // const accountSid = process.env.TWILIO_ACCOUNT_SID;

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/nutrition-service.test.js.
+ */
 ```javascript
 const NutritionService = require('../services/nutrition-service');
 

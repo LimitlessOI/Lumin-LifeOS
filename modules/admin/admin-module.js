@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Class AdminModule — modules/admin/admin-module.js.
+ */
 import { requireKey } from "../../src/server/auth/requireKey.js";
 import {
   checkHumanAttentionBudget,

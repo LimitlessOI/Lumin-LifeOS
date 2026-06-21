@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: src/services/escalation-rules.js
+ */
 // src/services/escalation-rules.js
 
 class EscalationRules {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G859 100. -->
+
 Command Center V2 Blueprint Proof - G859-100: Command Input Core
 This document serves as a proof-closing note for the initial build slice of the Command Center V2, focusing on the core command input mechanism.
 ---

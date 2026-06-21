@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Configuration — Env Validator.
+ */
 const Joi = require('joi');
 
 const envSchema = Joi.object({

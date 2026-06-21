@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AI Counsel OS - Runbook -->
+
 # AI Counsel OS - Runbook
 
 **Version**: 1.0.0  

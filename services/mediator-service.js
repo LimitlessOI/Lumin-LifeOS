@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/mediator-service.js — Amendment 16 (Word Keeper)
  * services/mediator-service.js — Amendment 16 (Word Keeper)
  *
  * Conflict de-escalation AI. Uses Gemini as the empathy engine.

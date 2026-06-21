@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Autonomous telemetry + efficiency API routes.
  * Autonomous telemetry + efficiency API routes.
  *
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof (G59-100) -->
+
 # Amendment 46 BuilderOS Control Plane Proof (G59-100)
 
 This document outlines the remediation plan and proof for the BuilderOS control plane, addressing the identified gaps in the `routes/lifeos-council-builder-routes.js` wiring.

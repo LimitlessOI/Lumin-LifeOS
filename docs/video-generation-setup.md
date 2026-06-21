@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Open Source Video Generation Setup -->
+
 # Open Source Video Generation Setup
 
 ## Overview

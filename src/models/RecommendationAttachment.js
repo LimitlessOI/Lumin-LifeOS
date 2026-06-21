@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/models/RecommendationAttachment.js.
+ */
 ```javascript
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../db/sequelize');

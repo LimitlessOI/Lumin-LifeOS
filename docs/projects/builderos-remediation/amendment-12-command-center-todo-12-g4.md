@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Todo 12 G4. -->
+
 BuilderOS Remediation: Amendment 12 Command Center - Projects Panel Data Integration
 
 This memo addresses the "Projects panel renders with real data on page load" task from `AMENDMENT_12_COMMAND_CENTER.md`, currently blocking direct build. The goal is to enable the Projects panel in the Command Center to display actual project data upon page load, adhering to existing architectural patterns.

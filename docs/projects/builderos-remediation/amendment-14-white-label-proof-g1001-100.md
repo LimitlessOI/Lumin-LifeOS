@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G1001 100. -->
+
 Amendment 14 White-Label Proof: G1001-100 - Custom Logo Upload & Retrieval
 This document serves as a proof-closing blueprint note for the initial implementation slice of Amendment 14, focusing on the core white-labeling requirement of custom logo management.
 ---

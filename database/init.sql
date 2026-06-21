@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — init.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS prototype_configs (
     id SERIAL PRIMARY KEY,

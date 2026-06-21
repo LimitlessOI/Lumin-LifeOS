@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-conflict-routes.js
  * routes/lifeos-conflict-routes.js
  *
  * LifeOS Conflict Intelligence + Communication Coaching API

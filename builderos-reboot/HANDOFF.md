@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Handoff -->
+
 # Handoff
 
 ## ⚠️ Deliberation v2.7 (2026-06-10) — WIRED, NOT SHIPPED

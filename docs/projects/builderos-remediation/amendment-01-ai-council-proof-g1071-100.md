@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G1071 100. -->
+
 The instruction to write a `.md` file conflicts with the verifier's attempt to execute it as a Node.js module, leading to an `ERR_UNKNOWN_FILE_EXTENSION`.
 Proof-Closing Blueprint Note: AMENDMENT_01_AI_COUNCIL - Initial Membership & Mandate Definition (G1071-100)
 This document closes the proof gap `G1071-100` for `AMENDMENT_01_AI_COUNCIL`, focusing on the foundational step of defining the AI Council's initial membership and its immediate mandate.

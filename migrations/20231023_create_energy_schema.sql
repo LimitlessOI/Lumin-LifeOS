@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231023_create_energy_schema.sql.
 ```sql
 CREATE TABLE energy_devices (
     id SERIAL PRIMARY KEY,

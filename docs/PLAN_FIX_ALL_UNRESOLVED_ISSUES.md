@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Plan: Fix All Unresolved Issues (Truth & Evidence Protocol) -->
+
 # Plan: Fix All Unresolved Issues (Truth & Evidence Protocol)
 
 **Purpose:** Run this plan by other ML / team for review before implementation.  

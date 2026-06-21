@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G132-100: Core Data Models and Basic CRUD API -->
+
 # Amendment 09: Life Coaching - Proof G132-100: Core Data Models and Basic CRUD API
 
 This document outlines the initial build slice for establishing the foundational data models and basic CRUD API endpoints for Life Coaching features within LifeOS, addressing the `g132-100` proof gap.

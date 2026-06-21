@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AI Council Initial Policy Configuration (g89-100) -->
+
 # Proof-Closing Blueprint Note: AI Council Initial Policy Configuration (g89-100)
 
 **Source Blueprint:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

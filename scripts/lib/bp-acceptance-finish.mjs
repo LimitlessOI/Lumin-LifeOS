@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Mandatory BP sync on product acceptance PASS — single choke point (no oops path).
  * Mandatory BP sync on product acceptance PASS — single choke point (no oops path).
  * @ssot docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md
  */

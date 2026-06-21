@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: TransactionDesk Overlay - Browser Extension
+ */
 // TransactionDesk Overlay - Browser Extension
 
 (function() {

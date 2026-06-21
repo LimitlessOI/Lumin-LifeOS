@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 ```sql
 CREATE TABLE resources (
     id SERIAL PRIMARY KEY,

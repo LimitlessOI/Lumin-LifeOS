@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260331_lifeos_family.sql.
 -- Migration: 20260331_lifeos_family.sql
 -- LifeOS Phase 4 — Family OS schema
 -- Household links, shared commitments, relationship check-ins, conversation debriefs

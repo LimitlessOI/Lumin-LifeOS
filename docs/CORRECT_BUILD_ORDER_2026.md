@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: ✅ CORRECT BUILD ORDER (Based on 2029 Lessons) -->
+
 # ✅ CORRECT BUILD ORDER (Based on 2029 Lessons)
 
 **Date:** January 10, 2026

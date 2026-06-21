@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Analysis Service — sends call transcription text to GPT-4 for analysis and
  * Analysis Service — sends call transcription text to GPT-4 for analysis and
  * extracts next-action items from the model response.
  *

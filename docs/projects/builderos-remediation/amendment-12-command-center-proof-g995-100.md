@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G995-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G995-100
 
 ## Blueprint Note: Core Data Model & Persistence (Slice 1)

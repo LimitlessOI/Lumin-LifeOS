@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 📦 Stripe Installation Guide -->
+
 # 📦 Stripe Installation Guide
 
 ## The Error

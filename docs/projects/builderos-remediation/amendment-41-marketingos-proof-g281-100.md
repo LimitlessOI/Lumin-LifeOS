@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G281 100. -->
+
 The specification is contradictory: the task asks to write a markdown file, but the instruction asks for "implementation code" and the verifier rejected the markdown file for not being valid JavaScript. I am providing the markdown content as the "implementation" for the target file.
 ---
 AMENDMENT 41: MarketingOS Proof - G281-100

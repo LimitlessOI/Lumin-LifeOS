@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Technical Contract: Persistent AI Rail -->
+
 # Technical Contract: Persistent AI Rail
 
 This document outlines the technical contract for the Persistent AI Rail, a new core UI component designed to provide ubiquitous access to Lumin's AI capabilities across the LifeOS platform.

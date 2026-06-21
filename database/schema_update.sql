@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema_update.sql.
 ```sql
 -- Create table for biodegradable materials
 CREATE TABLE biodegradable_materials (

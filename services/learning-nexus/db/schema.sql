@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 ```sql
 CREATE TABLE learning_profiles (
     id SERIAL PRIMARY KEY,

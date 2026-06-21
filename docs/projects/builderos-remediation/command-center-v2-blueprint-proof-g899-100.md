@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - Telemetry State Store Foundation (G899-100) -->
+
 # Blueprint Proof: Command Center V2 - Telemetry State Store Foundation (G899-100)
 
 **Source Blueprint:** `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`

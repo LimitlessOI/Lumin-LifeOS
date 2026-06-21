@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Governance — holds global runtime state (ROI tracker, system metrics,
  * Governance — holds global runtime state (ROI tracker, system metrics,
  * compression metrics, AI performance scores, daily ideas, snapshots) and
  * provides daily-reset / persistence helpers used throughout the server.

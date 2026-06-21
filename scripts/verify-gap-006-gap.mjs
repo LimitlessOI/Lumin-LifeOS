@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Wraps an async function call in a try-catch block to return a structured result.
+ */
 async function fetchJson(baseUrl, path, commandKey) {
   const url = `${baseUrl}${path}`;
   const response = await fetch(url, {

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: continuousSelfImprovement — extracted from server.js.
  * continuousSelfImprovement — extracted from server.js.
  * Factory pattern: call createSelfImprovementLoop(getDeps) to get the bound async function.
  */

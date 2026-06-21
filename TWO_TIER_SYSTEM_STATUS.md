@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Two-Tier System Status Report -->
+
 # Two-Tier System Status Report
 
 **Date**: 2026-01-08

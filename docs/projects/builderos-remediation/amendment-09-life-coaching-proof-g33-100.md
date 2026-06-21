@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Integration - Proof G33-100 -->
+
 # Amendment 09: Life Coaching Integration - Proof G33-100
 
 ## Blueprint Note: Core Service & Data Models Proof

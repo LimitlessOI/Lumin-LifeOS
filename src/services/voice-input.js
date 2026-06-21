@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: voice-input.js
+ */
 // voice-input.js
 
 class VoiceInput {

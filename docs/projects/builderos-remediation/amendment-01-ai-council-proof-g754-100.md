@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 01 AI Council - Proof G754-100 -->
+
 # BuilderOS Remediation: Amendment 01 AI Council - Proof G754-100
 
 **Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

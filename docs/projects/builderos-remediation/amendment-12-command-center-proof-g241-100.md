@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G241-100 -->
+
 # Amendment 12: Command Center - Proof G241-100
 
 This proof-closing blueprint note addresses the initial build slice for Amendment 12, focusing on establishing the foundational `CommandCenterService`.

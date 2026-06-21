@@ -1,5 +1,5 @@
 /**
- * Blueprint freeze check — required fields on every step before build.
+ * SYNOPSIS: Blueprint freeze check — required fields on every step before build.
  */
 
 const STEP_REQUIRED = [

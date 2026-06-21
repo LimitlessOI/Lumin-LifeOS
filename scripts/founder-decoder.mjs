@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: S6 — Founder Decoder / Calm Console v0
  * S6 — Founder Decoder / Calm Console v0
  *
  * Reads existing runtime data and renders plain-English operator modes.

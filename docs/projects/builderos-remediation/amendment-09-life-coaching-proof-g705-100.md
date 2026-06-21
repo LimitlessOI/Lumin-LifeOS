@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G705 100. -->
+
 AMENDMENT 09: Life Coaching Integration - Proof G705-100
 Blueprint Note: Initial CoachProfile Data Model & API Proof
 

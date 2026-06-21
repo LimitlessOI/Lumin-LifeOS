@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: REPO_BUCKET_INDEX — top-level buckets only -->
+
 # REPO_BUCKET_INDEX — top-level buckets only
 
 > **AUTO-GENERATED** — `npm run repo:catalog` (same run as `REPO_CATALOG.md`)  

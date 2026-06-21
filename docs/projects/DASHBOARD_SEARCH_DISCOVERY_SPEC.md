@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD SEARCH DISCOVERY SPEC. -->
+
 ASSUMPTIONS:
 1.  The task "Specify cross-surface discovery" implies creating a specification document.
 2.  Despite the "Generate the complete implementation code" instruction in the output contract, the "defer implementation" in the task means the HTML output should *describe* the features, not *implement* them in JavaScript/CSS/HTML for immediate deployment.

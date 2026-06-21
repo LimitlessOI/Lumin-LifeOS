@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260430_lifeos_habit_completions.sql.
 -- LifeOS habit completion tracking
 -- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 

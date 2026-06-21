@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: public/overlay/word-keeper-panel.js — Amendment 16 (Word Keeper)
  * public/overlay/word-keeper-panel.js — Amendment 16 (Word Keeper)
  *
  * Overlay widget: integrity score chip + quick actions.

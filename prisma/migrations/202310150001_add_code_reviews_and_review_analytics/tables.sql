@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — tables.sql.
 ```sql
 CREATE TABLE code_reviews (
     id SERIAL PRIMARY KEY,

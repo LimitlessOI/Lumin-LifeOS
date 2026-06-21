@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_courses_tables.sql.
 ```sql
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,

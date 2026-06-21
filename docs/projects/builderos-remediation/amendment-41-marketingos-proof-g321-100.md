@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G321 100. -->
+
 BuilderOS Remediation: Amendment 41 MarketingOS Proof (G321-100)
 This document serves as a proof-closing blueprint note for Amendment 41, establishing the SSOT foundation for MarketingOS integration within LifeOS.
 

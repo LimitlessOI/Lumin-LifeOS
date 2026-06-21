@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council - Proof for Guidelines G95-G100 -->
+
 # Amendment 01 AI Council - Proof for Guidelines G95-G100
 
 ## 1. Scope

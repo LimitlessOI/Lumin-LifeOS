@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — client/orchestrator-app/main.js.
+ */
 ```javascript
 import React from 'react';
 import ReactDOM from 'react-dom';

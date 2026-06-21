@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 📊 Council Structures Status Report -->
+
 # 📊 Council Structures Status Report
 
 ## ✅ Open Source Council (OSC)

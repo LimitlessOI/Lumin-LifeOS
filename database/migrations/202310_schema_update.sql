@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 202310_schema_update.sql.
 -- Create or modify the 'users' table
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,

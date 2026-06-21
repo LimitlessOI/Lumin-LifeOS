@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Record an activity
+ */
 // src/services/activity-tracker.js
 // Tracks all agent activities and calculates analytics
 

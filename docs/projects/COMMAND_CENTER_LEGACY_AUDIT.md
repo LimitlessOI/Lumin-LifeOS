@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center Legacy Audit -->
+
 # Command Center Legacy Audit
 
 ## Purpose

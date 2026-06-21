@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G679-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G679-100
 
 ## Blueprint Note: Core CommandCenter.js Module Establishment

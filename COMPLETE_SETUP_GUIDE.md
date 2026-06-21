@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Complete Setup Guide - All New Systems -->
+
 # 🚀 Complete Setup Guide - All New Systems
 
 ## ✅ What Was Just Added

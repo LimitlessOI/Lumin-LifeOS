@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G106 100. -->
+
 ### Blueprint Proof: G106-100 - Core Command Definition and Registry
 
 **1. Exact missing implementation or proof gap:**

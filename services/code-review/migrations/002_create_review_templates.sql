@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 002 Create Review Templates.
 ```sql
 CREATE TABLE review_templates (
   id SERIAL PRIMARY KEY,

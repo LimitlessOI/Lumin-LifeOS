@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof - G144-100: Marketing Campaign Status & Budget SSOT Integration -->
+
 # Amendment 41 MarketingOS Proof - G144-100: Marketing Campaign Status & Budget SSOT Integration
 
 This document outlines the proof-closing blueprint note for gap G144-100, ensuring that the `MarketingCampaign` entity's `status` and `budget` fields, as defined in `AMENDMENT_41_MARKETINGOS.md`, are correctly established as the Single Source of Truth (SSOT) within the LifeOS reporting context.

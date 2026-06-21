@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Service.
+ */
 ```javascript
 const fetch = require('node-fetch');
 

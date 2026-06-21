@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231101_create_quantum_tables.sql.
 CREATE TABLE quantum_strategies (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,

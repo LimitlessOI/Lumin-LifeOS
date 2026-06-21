@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-user-resolver.js
  * services/lifeos-user-resolver.js
  *
  * Single source of truth for resolving a LifeOS user handle or id.

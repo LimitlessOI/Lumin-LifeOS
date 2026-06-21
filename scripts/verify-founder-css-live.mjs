@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Live founder CSS pipeline smoke — verifies overlay HTML does NOT contain test yellow unless requested.
  * Live founder CSS pipeline smoke — verifies overlay HTML does NOT contain test yellow unless requested.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

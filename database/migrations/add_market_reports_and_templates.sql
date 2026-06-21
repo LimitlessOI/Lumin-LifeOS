@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — add_market_reports_and_templates.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS report_templates (
     id SERIAL PRIMARY KEY,

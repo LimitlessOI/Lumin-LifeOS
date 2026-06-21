@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231101_add_financial_tables.sql.
 ```sql
 -- SQL Migration Script for Adding Financial Tables
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: g913-100 - Initial Command Dispatcher -->
+
 # Amendment 12 Command Center Proof: g913-100 - Initial Command Dispatcher
 
 This document serves as a proof-closing blueprint note for build slice `g913-100`, focusing on the foundational implementation of the BuilderOS Command Center's command dispatch mechanism.

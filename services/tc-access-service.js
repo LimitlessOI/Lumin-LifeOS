@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-access-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  *
  * tc-access-service.js

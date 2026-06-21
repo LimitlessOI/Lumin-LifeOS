@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G551-100 -->
+
 # Amendment 12 Command Center Proof - G551-100
 
 This document outlines the first proof-of-concept build slice for the Command Center feature, derived from `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

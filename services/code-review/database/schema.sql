@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 CREATE TABLE code_reviews (
     id SERIAL PRIMARY KEY,
     code TEXT NOT NULL,

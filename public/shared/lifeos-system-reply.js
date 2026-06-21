@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/shared/lifeos-system-reply.js.
+ */
 (function (global) {
   // founder-comms-test-2026-06-20
   'use strict';

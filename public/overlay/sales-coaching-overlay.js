@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: public/overlay/sales-coaching-overlay.js
+ */
 // public/overlay/sales-coaching-overlay.js
 // Sales coaching overlay that can be injected into any page
 

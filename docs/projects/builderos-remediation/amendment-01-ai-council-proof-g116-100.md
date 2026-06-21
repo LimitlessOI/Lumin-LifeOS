@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G116-100: Initial AI Action Logging Mechanism -->
+
 # Amendment 01: AI Council - Proof G116-100: Initial AI Action Logging Mechanism
 
 ## Proof Point Description

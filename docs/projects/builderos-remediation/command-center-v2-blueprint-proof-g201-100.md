@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G201-100 - System Health Metrics UI Integration -->
+
 # Command Center V2 Blueprint Proof: G201-100 - System Health Metrics UI Integration
 
 This document outlines the next smallest build slice for Command Center V2, focusing on the initial UI integration for System Health Metrics, as derived from the overarching `COMMAND_CENTER_V2_BLUEPRINT.md`. This proof addresses a foundational UI component integration, ensuring a safe, verifiable step forward.

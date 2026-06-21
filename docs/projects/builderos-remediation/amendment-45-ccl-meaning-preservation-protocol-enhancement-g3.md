@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 45 CCL Meaning Preservation Protocol Enhancement (G3) -->
+
 # Amendment 45 CCL Meaning Preservation Protocol Enhancement (G3)
 
 This memo outlines the next buildable slice for the Meaning Preservation Protocol, addressing the current lack of directly buildable tasks within the existing blueprint. This enhancement focuses on establishing foundational definitions and a preliminary data model for meaning attributes.

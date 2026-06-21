@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Single Source Runtime Reality — machine snapshot for agents, daemons, and audits.
  * Single Source Runtime Reality — machine snapshot for agents, daemons, and audits.
  * Writes `data/runtime-reality-snapshot.json` (gitignored). Extend fields only with SSOT:
  * `docs/RUNTIME_REALITY_SNAPSHOT.md`.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center Integration - Proof G433-100 -->
+
 # Amendment 12: Command Center Integration - Proof G433-100
 
 This document serves as a proof-closing blueprint note for the initial build slice `g433-100` related to Amendment 12: Command Center Integration. It outlines the foundational steps for establishing the C2 API client and its core data structures within LifeOS.

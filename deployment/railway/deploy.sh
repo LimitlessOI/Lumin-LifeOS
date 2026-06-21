@@ -1,3 +1,4 @@
+# SYNOPSIS: Shell script — Deploy.
 ```bash
 #!/bin/bash
 

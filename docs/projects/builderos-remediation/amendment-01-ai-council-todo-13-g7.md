@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Todo 13 G7. -->
+
 The specification to write a Markdown file (`.md`) contradicts the verifier's expectation to execute a JavaScript module, leading to a `ERR_UNKNOWN_FILE_EXTENSION`.
 
 BuilderOS Remediation: Amendment 01 AI Council - TODO 13 G7 Enhancement Memo

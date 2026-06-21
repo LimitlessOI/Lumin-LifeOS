@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Vocabulary -->
+
 # BuilderOS Vocabulary
 _(formerly AMENDMENT_48_BUILDEROS_VOCABULARY.md)_
 

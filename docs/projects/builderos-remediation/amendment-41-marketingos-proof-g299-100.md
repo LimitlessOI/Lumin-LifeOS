@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G299 100. -->
+
 BuilderOS Remediation: Amendment 41 MarketingOS Proof G299-100
 
 This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41 regarding MarketingOS integration, specifically for proof G299-100.

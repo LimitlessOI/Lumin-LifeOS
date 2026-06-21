@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Setting Up Ollama on Railway (Free AI Models) -->
+
 # 🚀 Setting Up Ollama on Railway (Free AI Models)
 
 ## Why Railway + Ollama?

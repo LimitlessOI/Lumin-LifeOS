@@ -1,3 +1,4 @@
+-- SYNOPSIS: Configuration — Database.
 ```sql
 -- PostgreSQL schema setup for 'circular_resources', 'marketplace_listings', and 'environmental_impact'
 

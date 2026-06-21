@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: g45-100 - Basic Branding Configuration -->
+
 # Amendment 14 White-Label Proof: g45-100 - Basic Branding Configuration
 
 **Blueprint Source:** `docs/projects/AMENDMENT_14_WHITE_LABEL.md`

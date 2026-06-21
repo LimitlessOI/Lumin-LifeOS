@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231005_create_users_and_sessions.sql.
 ```sql
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

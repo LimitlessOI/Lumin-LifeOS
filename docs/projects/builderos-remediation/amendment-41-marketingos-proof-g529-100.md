@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G529-100 - Proof-Closing Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof G529-100 - Proof-Closing Blueprint Note
 
 This document outlines the proof-closing strategy for MarketingOS integration point G529-100, as derived from `AMENDMENT_41_MARKETINGOS.md`. This note serves as the implementation-first blueprint for the next C2 build pass, focusing on verifying the foundational SSOT data flow.

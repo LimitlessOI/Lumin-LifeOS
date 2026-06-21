@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Lumin Factory Staging -->
+
 # Lumin Factory Staging
 
 This directory is the **materialized runtime staging area** for the clean factory rebuild.

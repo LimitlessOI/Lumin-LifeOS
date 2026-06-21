@@ -1,5 +1,5 @@
 /**
- * SNT Review #2 — Translation attack per founder doctrine.
+ * SYNOPSIS: SNT Review #2 — Translation attack per founder doctrine.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: User API Documentation -->
+
 # User API Documentation
 
 ## Endpoints

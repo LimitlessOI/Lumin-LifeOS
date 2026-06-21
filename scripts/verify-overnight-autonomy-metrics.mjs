@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports runOvernightAutonomyMetricsVerification — scripts/verify-overnight-autonomy-metrics.mjs.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G51-100 -->
+
 # AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G51-100
 
 This document outlines the blueprint for closing the proof gap for MarketingOS features/integrations G51-100, as defined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`. This is an SSOT foundation document for the remediation effort.

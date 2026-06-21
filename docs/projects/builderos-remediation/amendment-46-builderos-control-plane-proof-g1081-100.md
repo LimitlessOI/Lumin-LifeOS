@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1081 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 46 BuilderOS Control Plane - G1081-100
 
 This note addresses the implementation gap identified in Amendment 46, specifically regarding the wiring of BuilderOS control plane routes within `routes/lifeos-council-builder-routes.js`.

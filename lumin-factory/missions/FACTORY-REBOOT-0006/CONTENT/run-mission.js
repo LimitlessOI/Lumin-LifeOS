@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports loadBlueprintFromRepo — lumin-factory/missions/FACTORY-REBOOT-0006/CONTENT/run-mission.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { dispatchExecuteStep, REPO_ROOT } from './run-step.js';

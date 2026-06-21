@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/App.js.
+ */
 ```jsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';

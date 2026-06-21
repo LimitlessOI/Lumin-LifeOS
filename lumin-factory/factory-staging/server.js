@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — lumin-factory/factory-staging/server.js.
+ */
 import express from 'express';
 import { registerFactoryRoutes } from './startup/register-routes.js';
 

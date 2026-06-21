@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G535-100 - SSOT Foundation Proof-Closing Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof G535-100 - SSOT Foundation Proof-Closing Blueprint Note
 
 This document outlines the blueprint for closing the proof gap for MarketingOS Proof G535-100, establishing its Single Source of Truth (SSOT) foundation.

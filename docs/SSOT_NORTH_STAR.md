@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LIFEOS / LIMITLESSOS — NORTH STAR CONSTITUTION -->
+
 > **DIGEST:** `docs/constitution/NORTH_STAR.md` — law-only digest for normal sessions. This full text is required only for constitutional edits, constitutional conflicts, and first-time onboarding.
 
 # LIFEOS / LIMITLESSOS — NORTH STAR CONSTITUTION

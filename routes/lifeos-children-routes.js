@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-children-routes.js
  * routes/lifeos-children-routes.js
  *
  * LifeOS Phase 7 — Children's App API

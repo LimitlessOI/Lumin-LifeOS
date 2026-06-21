@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Completion authority regression tests for /builder/build.
  * Completion authority regression tests for /builder/build.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

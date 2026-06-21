@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — extensions/chrome/cognitive-profiler/content.js.
+ */
 ```javascript
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "trackUserBehavior") {

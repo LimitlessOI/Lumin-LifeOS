@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 001 Add Health Data Tables.
 ```sql
 CREATE TABLE health_data (
   id SERIAL PRIMARY KEY,

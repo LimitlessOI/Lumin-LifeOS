@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: FOUNDER_PACKET_V2 — BuilderOS / Lumin Company Foundation -->
+
 # FOUNDER_PACKET_V2 — BuilderOS / Lumin Company Foundation
 
 **Status:** IDC HANDOFF — not supreme law

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof (g431-100) Remediation Note -->
+
 # Amendment 12 Command Center Proof (g431-100) Remediation Note
 
 This document outlines the remediation plan for the `g431-100` proof within the BuilderOS Command Center, following the OIL verifier rejection. The rejection indicated a verifier configuration issue (attempting to execute `.md` as JS), but the underlying task is to ensure the proof itself is complete and verifiable.

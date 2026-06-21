@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G32-100 -->
+
 # Command Center V2 Blueprint Proof - G32-100
 
 ## Blueprint Note: Initial CommandRegistry Implementation

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Cold Builder simulation — mechanical audit, no AI, no session memory.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';

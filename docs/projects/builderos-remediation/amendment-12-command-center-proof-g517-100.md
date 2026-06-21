@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G517-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G517-100
 
 This document outlines the next smallest build slice for the Command Center platform, focusing on establishing the foundational API endpoint as per Phase 1 of the AMENDMENT_12_COMMAND_CENTER blueprint.

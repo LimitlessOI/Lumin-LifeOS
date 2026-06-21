@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G521-100 Remediation Note -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, preventing precise derivation of the missing implementation gap and smallest build slice.
 # Amendment 12 Command Center Proof - G521-100 Remediation Note
 

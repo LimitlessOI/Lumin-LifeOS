@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/config/kafka-config.js.
+ */
 ```js
 module.exports = {
     kafkaHost: 'kafka:9092',

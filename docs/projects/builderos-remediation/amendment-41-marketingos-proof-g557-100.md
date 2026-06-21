@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 41: MarketingOS Proof - G557-100 (SSOT Foundation) -->
+
 # AMENDMENT 41: MarketingOS Proof - G557-100 (SSOT Foundation)
 
 This blueprint note closes the proof for MarketingOS's foundational integration with LifeOS as the Single Source of Truth (SSOT) for customer profiles, as outlined in `AMENDMENT_41_MARKETINGOS.md`.

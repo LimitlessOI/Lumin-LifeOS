@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Create call simulation for practice
+ */
 // src/services/call-simulation-system.js
 // Call simulation and guided practice system
 

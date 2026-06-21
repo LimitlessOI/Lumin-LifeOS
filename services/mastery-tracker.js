@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/mastery-tracker.js
  * services/mastery-tracker.js
  *
  * Module A: Growth & Mastery

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Create a new Bull queue
+ */
 ```javascript
 const Queue = require('bull');
 const { processCodeReview } = require('../services/code-review-service/index');

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** HTTP client for factory-staging API. */
+/**
+ * SYNOPSIS: HTTP client for factory-staging API. HTTP client for factory-staging API. */
 const base = process.env.FACTORY_URL || 'http://127.0.0.1:3099';
 
 async function main() {

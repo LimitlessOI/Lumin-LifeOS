@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_users_tables.sql.
 ```sql
 -- Create users table
 CREATE TABLE IF NOT EXISTS users (

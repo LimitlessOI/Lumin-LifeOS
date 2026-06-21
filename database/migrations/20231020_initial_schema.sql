@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231020_initial_schema.sql.
 CREATE TABLE microgrids (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,

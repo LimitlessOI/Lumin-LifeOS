@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G814 100. -->
+
 AMENDMENT 09: Life Coaching Integration - Proof G814-100
 Blueprint Note: Core Data Model - CoachingSession Definition
 

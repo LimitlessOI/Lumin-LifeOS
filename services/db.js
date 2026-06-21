@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: DB Pool Factory — creates a configured pg connection pool for Neon PostgreSQL,
  * DB Pool Factory — creates a configured pg connection pool for Neon PostgreSQL,
  * enabling SSL when the connection string points to neon.tech.
  *

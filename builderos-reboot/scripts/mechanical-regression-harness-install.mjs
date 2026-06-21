@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Install regression harness + schema + package script (factory_local_runner recovery strategy). */
+/**
+ * SYNOPSIS: Install regression harness + schema + package script (factory_local_runner recovery strategy). Install regression harness + schema + package script (factory_local_runner recovery strategy). */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

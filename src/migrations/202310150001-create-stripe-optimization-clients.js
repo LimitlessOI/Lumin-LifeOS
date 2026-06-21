@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/migrations/202310150001-create-stripe-optimization-clients.js.
+ */
 ```javascript
 'use strict';
 

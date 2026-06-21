@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1061 100. -->
+
 // routes/lifeos-council-builder-routes.js
 import express from 'express';
 // Assuming these services exist and are ESM modules

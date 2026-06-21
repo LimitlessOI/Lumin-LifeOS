@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G447-100 - Core Data Model & API (Proof of Concept) -->
+
 # Command Center V2 Blueprint Proof: G447-100 - Core Data Model & API (Proof of Concept)
 
 ## Blueprint Note: Next Smallest Build Slice

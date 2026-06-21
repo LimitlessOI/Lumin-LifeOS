@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-mediation-routes.js
  * routes/lifeos-mediation-routes.js
  *
  * LifeOS Mediation Engine API

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G417-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Proof G417-100
 
 This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41 concerning MarketingOS segment `g417-100`.

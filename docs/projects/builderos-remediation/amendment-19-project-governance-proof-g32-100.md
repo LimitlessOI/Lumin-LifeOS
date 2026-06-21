@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G32-100 - Initial Role Documentation Verification -->
+
 # Amendment 19 Project Governance Proof: G32-100 - Initial Role Documentation Verification
 
 **Blueprint Source:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Fetches JSON data from a given URL path with a command key header.
+ */
 /*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

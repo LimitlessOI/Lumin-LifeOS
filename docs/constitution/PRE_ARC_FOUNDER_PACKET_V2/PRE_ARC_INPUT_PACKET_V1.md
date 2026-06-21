@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PRE_ARC_INPUT_PACKET_V1 -->
+
 # PRE_ARC_INPUT_PACKET_V1
 
 **Status:** Bootstrap-simulated (manual department role-play per V2 Bootstrap Protocol — automated department systems do not yet exist)

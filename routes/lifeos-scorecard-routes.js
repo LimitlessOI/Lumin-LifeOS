@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-scorecard-routes.js
  * routes/lifeos-scorecard-routes.js
  *
  * LifeOS Daily Scorecard + MIT API + Life Balance Wheel

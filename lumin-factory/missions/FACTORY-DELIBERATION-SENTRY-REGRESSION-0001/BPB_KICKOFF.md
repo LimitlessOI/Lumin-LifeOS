@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BPB kickoff — emit BLUEPRINT.json only -->
+
 # BPB kickoff — emit BLUEPRINT.json only
 
 **Mission:** `FACTORY-DELIBERATION-SENTRY-REGRESSION-0001`  

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: extension/popup.js — Lumin Universal Overlay
  * extension/popup.js — Lumin Universal Overlay
  * Manages the extension popup: login status, connect/disconnect.
  *

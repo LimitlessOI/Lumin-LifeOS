@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G385 100. -->
+
 /**
  * Blueprint Note for Amendment 09: Life Coaching Integration - Proof G385-100
  *

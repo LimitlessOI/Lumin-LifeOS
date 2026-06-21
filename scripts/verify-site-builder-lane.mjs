@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Script — Verify Site Builder Lane.
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  */
 import { spawn } from 'node:child_process';

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Founder Voice Rail — CFO-gated auto routing (cheap first, ramp on need).
  * Founder Voice Rail — CFO-gated auto routing (cheap first, ramp on need).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Todo 6 G3. -->
+
 ### AMENDMENT_12_COMMAND_CENTER - Role-based Access (Todo 6-G3)
 
 This memo enhances the blueprint for implementing role-based access within the Command Center, focusing on a minimal, buildable slice to address the `[high-risk]` designation.

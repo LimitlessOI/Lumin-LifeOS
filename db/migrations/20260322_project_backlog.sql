@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260322_project_backlog.sql.
 -- Migration: 20260322_project_backlog
 -- Project backlog: prioritized queue the autonomy orchestrator works through
 -- when no manual ideas are pending. One project active at a time.

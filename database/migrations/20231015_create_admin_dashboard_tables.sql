@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231015_create_admin_dashboard_tables.sql.
 ```sql
 CREATE TABLE admin_dashboard_preferences (
     id SERIAL PRIMARY KEY,

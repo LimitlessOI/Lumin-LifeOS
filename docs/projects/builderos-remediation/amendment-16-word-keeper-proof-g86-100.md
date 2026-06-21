@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G86-100: Word Search Implementation -->
+
 # Amendment 16 Word Keeper Proof - G86-100: Word Search Implementation
 
 This document outlines the next smallest build slice for the `g86-100` phase of the `AMENDMENT_16_WORD_KEEPER` blueprint, focusing on the implementation of the word search functionality.

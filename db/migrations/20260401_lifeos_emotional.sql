@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260401_lifeos_emotional.sql.
 -- Migration: 20260401_lifeos_emotional.sql
 -- LifeOS Phase 5 — Emotional Intelligence + Parenting schema
 -- Emotional patterns, parenting moments, repair actions, inner work effectiveness

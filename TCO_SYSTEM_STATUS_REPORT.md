@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TCO (TotalCostOptimizer) System Status Report -->
+
 # TCO (TotalCostOptimizer) System Status Report
 
 **Date**: 2026-01-08

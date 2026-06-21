@@ -1,1 +1,3 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G547 100. -->
+
 The specification is contradictory regarding the expected output format for `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g547-100.md`. The task explicitly asks to "Write docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g547-100.md", implying a markdown file. However, the OIL verifier rejected the previous attempt due to an `ERR_UNKNOWN_FILE_EXTENSION` when attempting to execute the `.md` file as a Node.js module. Furthermore, the content of the injected `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g547-100.md` file contains an instruction for me

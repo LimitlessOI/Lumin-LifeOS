@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof: G393-100 - Initial Word Persistence -->
+
 # Amendment 16 Word Keeper Proof: G393-100 - Initial Word Persistence
 
 ---

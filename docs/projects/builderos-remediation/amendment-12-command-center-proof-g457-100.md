@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G457 100. -->
+
 ### Proof-Closing Blueprint Note: AMENDMENT 12: COMMAND CENTER - G457-100
 
 This note addresses the initial implementation proof for the core command dispatch mechanism within the BuilderOS Command Center.

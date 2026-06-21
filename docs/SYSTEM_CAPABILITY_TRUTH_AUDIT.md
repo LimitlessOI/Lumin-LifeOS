@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SYSTEM CAPABILITY TRUTH AUDIT V1 -->
+
 # SYSTEM CAPABILITY TRUTH AUDIT V1
 
 **Status:** `AUTHORITATIVE AUDIT` (repo-truth; not runtime law)  

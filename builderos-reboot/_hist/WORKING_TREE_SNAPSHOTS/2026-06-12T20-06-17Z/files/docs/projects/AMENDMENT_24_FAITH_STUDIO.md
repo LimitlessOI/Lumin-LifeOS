@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Faith Studio -->
+
 # Faith Studio
 _(formerly AMENDMENT_24_FAITH_STUDIO.md)_
 

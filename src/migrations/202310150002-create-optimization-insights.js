@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/migrations/202310150002-create-optimization-insights.js.
+ */
 ```javascript
 'use strict';
 

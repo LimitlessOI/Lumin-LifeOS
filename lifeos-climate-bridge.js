@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — lifeos-climate-bridge.js.
+ */
 ```javascript
 const { runQuantumSimulation } = require('./quantum-climate-core');
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1067 100. -->
+
 The instruction specifies writing a markdown file, but the OIL verifier rejected the previous attempt by trying to execute the .md file as JavaScript, indicating a contradiction in expected file type.
 Amendment 46 BuilderOS Control Plane Proof - G1067-100
 

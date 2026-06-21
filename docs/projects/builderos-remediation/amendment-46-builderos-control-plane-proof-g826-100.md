@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G826 100. -->
+
 The task asks for a `.md` file, but the verifier rejected the previous attempt because it tried to execute the `.md` file as JavaScript, indicating a contradiction in expected file type.
 Amendment 46 BuilderOS Control Plane Proof: G826-100
 

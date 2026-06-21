@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof: G147-100 - Initial Configuration Definition -->
+
 # Amendment 14 White Label Proof: G147-100 - Initial Configuration Definition
 
 This document serves as a proof point for Amendment 14, focusing on the initial steps required for white-label implementation. Specifically, it addresses the foundational configuration definition for white-label features.

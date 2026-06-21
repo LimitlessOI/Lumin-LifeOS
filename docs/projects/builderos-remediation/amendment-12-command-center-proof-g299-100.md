@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G299-100 -->
+
 # Amendment 12: Command Center - Proof G299-100
 
 ## Blueprint Note: Initializing the Core Command Center Module

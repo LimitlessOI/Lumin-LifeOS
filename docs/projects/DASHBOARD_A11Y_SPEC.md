@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Dashboard Shell Accessibility Specification -->
+
 # LifeOS Dashboard Shell Accessibility Specification
 
 This document outlines the accessibility requirements for the LifeOS Dashboard shell, focusing on core interactive elements and user experience. Adherence to these guidelines ensures a robust and inclusive interface for all users, aligning with WCAG principles.

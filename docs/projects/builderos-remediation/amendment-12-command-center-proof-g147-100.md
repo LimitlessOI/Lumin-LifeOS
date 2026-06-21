@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G147-100 -->
+
 # Amendment 12: Command Center - Proof G147-100
 
 ## Blueprint Note: Core CommandCenter Singleton and Command Dispatch

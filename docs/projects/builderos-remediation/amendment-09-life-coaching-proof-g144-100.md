@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G144-100 Remediation -->
+
 # Amendment 09: Life Coaching - Proof G144-100 Remediation
 
 ## Document Purpose

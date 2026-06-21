@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G834 100. -->
+
 Amendment 12 Command Center Proof - G834-100
 
 Proof-Closing Blueprint Note

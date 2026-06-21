@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Memory Intelligence Routes
  * Memory Intelligence Routes
  *
  * API surface for the epistemic fact store, lessons, debates,

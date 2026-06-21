@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Optional live smoke for R4R routes. Requires a running LifeOS API.
  * Optional live smoke for R4R routes. Requires a running LifeOS API.
  *
  *   TC_TX_ID=123 BASE_URL=http://localhost:8080 API_KEY=... node scripts/tc-r4r-smoke.mjs

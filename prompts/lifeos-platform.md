@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: Platform Core (Cross-Cutting Infrastructure) -->
+
 # Domain: Platform Core (Cross-Cutting Infrastructure)
 
 ## What this domain does

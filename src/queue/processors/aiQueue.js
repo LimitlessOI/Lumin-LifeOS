@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/queue/processors/aiQueue.js.
+ */
 ```javascript
 const Queue = require('bull');
 const aiProcessor = require('../../services/aiProcessor');

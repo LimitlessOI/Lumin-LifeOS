@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: G113-100 - Parameterized Commands Core Implementation -->
+
 # Blueprint Proof: G113-100 - Parameterized Commands Core Implementation
 
 ## Proof-Closing Blueprint Note

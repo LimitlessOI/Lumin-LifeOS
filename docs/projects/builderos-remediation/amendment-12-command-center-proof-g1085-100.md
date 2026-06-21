@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G1085-100 -->
+
 # Amendment 12 Command Center Proof - G1085-100
 
 ## Proof-Closing Blueprint Note: Defining CommandCenterOperation Data Model

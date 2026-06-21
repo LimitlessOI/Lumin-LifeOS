@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ts — src/apspan/core/AgentContainer.ts.
+ */
 ```typescript
 import { Mistral7B } from 'ollama';
 

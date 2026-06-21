@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_users_tables.sql.
 ```sql
 -- Migration to create users, user_sessions, and subscription_events tables
 

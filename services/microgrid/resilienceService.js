@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — ResilienceService.
+ */
 ```javascript
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 

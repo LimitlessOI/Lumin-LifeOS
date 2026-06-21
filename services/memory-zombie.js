@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-zombie.js
+ */
 // services/memory-zombie.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 

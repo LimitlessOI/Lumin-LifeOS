@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/response-variety.js
  * services/response-variety.js
  *
  * Response Variety Engine — enforces communication variety across all AI calls.

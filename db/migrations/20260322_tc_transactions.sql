@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260322_tc_transactions.sql.
 -- Migration: Transaction Coordinator (TC) — real estate transaction tracking
 -- Tracks full lifecycle from accepted contract to close of escrow (Nevada / GLVAR)
 

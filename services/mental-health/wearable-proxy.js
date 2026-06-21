@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Wearable Proxy.
+ */
 ```javascript
 const wearableAPI = require('wearable-api-adapters');
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🏠 BoldTrail Integration Status & Implementation Plan -->
+
 # 🏠 BoldTrail Integration Status & Implementation Plan
 
 ## ✅ What Currently Exists

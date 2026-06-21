@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — optimization_engine.js.
+ */
 const { DemandResponseEvent } = require('./models');
 
 async function optimizeDemandResponse() {

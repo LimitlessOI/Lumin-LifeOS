@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — risk-analytics.js.
+ */
 ```javascript
 function analyzeRisk(data) {
     let riskScore = 0;

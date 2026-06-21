@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231010_add_health_tables.sql.
 ```sql
 CREATE TABLE health_baselines (
     user_id UUID PRIMARY KEY,

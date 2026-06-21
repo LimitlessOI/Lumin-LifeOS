@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G835-100 - Expose Core Read-Only Queries -->
+
 # Command Center V2 Blueprint Proof: G835-100 - Expose Core Read-Only Queries
 
 This document serves as a proof-closing blueprint note for the initial API exposure of core data models, derived from the Command Center V2 Blueprint's Phase 1.

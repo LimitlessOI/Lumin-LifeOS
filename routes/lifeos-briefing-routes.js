@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Daily briefing API — morning context assembled from calendar, MITs, habits.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * Daily briefing API — morning context assembled from calendar, MITs, habits.
  * Mounted at /api/v1/lifeos/briefing

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/models/Recommendation.js.
+ */
 ```javascript
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../db/sequelize'); // Assuming sequelize instance is initialized in this file

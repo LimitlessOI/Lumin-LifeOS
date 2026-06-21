@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CODEX SYSTEM WRAPPER (Always-On) -->
+
 # CODEX SYSTEM WRAPPER (Always-On)
 
 > **Platform:** Read [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md) — **North Star §2.6**: never lie or mislead (operators, users, system receipts); correct misunderstandings immediately; fill gaps.

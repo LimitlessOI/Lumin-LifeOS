@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Dashboard Websocket.
+ */
 ```javascript
 const WebSocket = require('ws');
 

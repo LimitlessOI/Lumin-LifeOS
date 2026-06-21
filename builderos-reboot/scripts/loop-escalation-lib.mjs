@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Loop escalation — signature-weighted attempt tracking + strategy change enforcement.
  * Loop escalation — signature-weighted attempt tracking + strategy change enforcement.
  * @ssot builderos-reboot/SNT_LOOP_ESCALATION_DOCTRINE.md
  */

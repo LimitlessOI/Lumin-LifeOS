@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Analytics.
+ */
 const express = require('express');
 const router = express.Router();
 

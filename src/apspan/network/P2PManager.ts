@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Class P2PManager — src/apspan/network/P2PManager.ts.
+ */
 import { createLibp2p } from 'libp2p';
 import { NOISE } from '@chainsafe/libp2p-noise';
 import { TCP } from '@libp2p/tcp';

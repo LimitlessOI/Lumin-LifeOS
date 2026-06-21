@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G439 100. -->
+
 Blueprint Note: AMENDMENT_41_MARKETINGOS Proof Closure (G439-100)
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified in AMENDMENT_41_MARKETINGOS.

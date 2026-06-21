@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup-tables.sql.
 ```sql
 CREATE TABLE funnels (
     id SERIAL PRIMARY KEY,

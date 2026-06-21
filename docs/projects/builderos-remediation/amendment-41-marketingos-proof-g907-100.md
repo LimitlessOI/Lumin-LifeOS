@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (G907-100) -->
+
 # AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (G907-100)
 
 **Signal Requiring Follow-Through:** This document — SSOT foundation.

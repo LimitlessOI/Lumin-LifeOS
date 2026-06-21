@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: scripts/cards/parse-seed.mjs
+ */
 // scripts/cards/parse-seed.mjs
 // Reads todos/ALL_CARDS.md and emits a JSON plan for /api/v1/build/apply-plan
 //

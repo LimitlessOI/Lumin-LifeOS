@@ -1,0 +1,5 @@
+#!/bin/sh
+# Ensures core.hooksPath stays on tracked githooks/ after merge.
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
+[ -d "$ROOT/githooks" ] || exit 0
+git config core.hooksPath githooks 2>/dev/null || true

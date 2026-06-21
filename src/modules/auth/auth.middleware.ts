@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports authenticateJWT — src/modules/auth/auth.middleware.ts.
+ */
 ```typescript
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';

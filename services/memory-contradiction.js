@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-contradiction.js
+ */
 // services/memory-contradiction.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/research-aggregator.js
  * services/research-aggregator.js
  *
  * Privacy-safe aggregation of LifeOS population insights.

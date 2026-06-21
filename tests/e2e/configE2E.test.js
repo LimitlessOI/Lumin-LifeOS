@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/e2e/configE2E.test.js.
+ */
 const request = require('supertest');
 const app = require('../src/app'); // Assuming app is the Express instance
 

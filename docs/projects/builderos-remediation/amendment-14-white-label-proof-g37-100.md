@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - G37-100 -->
+
 # Amendment 14: White-Label Proof - G37-100
 
 ## Document Purpose

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Todo 6 G2. -->
+
 The instruction to "Generate the complete implementation code" contradicts the task to "Write docs/projects/builderos-remediation/amendment-12-command-center-todo-6-g2.md" and the verifier's expectation of executable code for a `.md` file. I am proceeding by providing the markdown content as the "implementation" of the `.md` file.
 BuilderOS Remediation: Amendment 12 Command Center - Role-Based Access (G2)
 This memo addresses the high-risk task: "Role-based access (admin vs client vs agent views)". The blueprint is not directly buildable due to ambiguity regarding the scope and implementation details of these roles.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Kids OS -->
+
 # Kids OS
 _(formerly AMENDMENT_34_KIDS_OS.md)_
 

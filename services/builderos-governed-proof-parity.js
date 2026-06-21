@@ -1,5 +1,5 @@
 /**
- * Governed automatic proof parity after BuilderOS commits that trigger deploy drift.
+ * SYNOPSIS: Governed automatic proof parity after BuilderOS commits that trigger deploy drift.
  * Uses the existing deploy-check → self-repair executor chain (PF-001→PF-002→PF-003).
  * Never manipulates alpha status directly; fail-closed if refresh fails.
  *

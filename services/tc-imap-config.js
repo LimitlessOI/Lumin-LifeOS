@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-imap-config.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  *
  * tc-imap-config.js

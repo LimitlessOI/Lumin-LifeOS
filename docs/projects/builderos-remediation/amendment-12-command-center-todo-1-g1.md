@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: AMENDMENT_12_COMMAND_CENTER - Stage 2, Todo 1 (G1) -->
+
 # BuilderOS Remediation: AMENDMENT_12_COMMAND_CENTER - Stage 2, Todo 1 (G1)
 
 ## Blueprint Enhancement Memo: Runtime Mode Switching

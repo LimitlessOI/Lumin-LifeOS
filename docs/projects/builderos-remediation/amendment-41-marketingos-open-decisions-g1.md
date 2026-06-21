@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Open Decisions G1. -->
+
 Amendment 41 (MarketingOS) - Open Decisions & Next Steps (G1)
 
 This memo outlines the blocking founder decisions for Amendment 41 (MarketingOS) and proposes the smallest buildable next slice that does not violate the blueprint.

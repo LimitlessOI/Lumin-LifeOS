@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/founder-build-outcome.test.js.
+ */
 import assert from 'node:assert/strict';
 import { verifyFounderCssCommitOutcome } from '../services/founder-build-outcome.js';
 

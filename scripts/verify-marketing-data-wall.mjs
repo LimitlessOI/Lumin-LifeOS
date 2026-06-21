@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: The audit is considered successful if no LifeOS imports are found in marketing services.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * @module verify-marketing-data-wall
  * @description This module performs an audit to verify the "data wall" between MarketingOS and LifeOS.

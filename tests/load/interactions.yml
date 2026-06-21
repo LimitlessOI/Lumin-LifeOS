@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — tests/load/interactions.yml.
 ```yaml
 config:
   target: 'http://localhost:3000'

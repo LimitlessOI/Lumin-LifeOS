@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G267 100. -->
+
 Amendment 12 Command Center Proof: G267-100 Follow-Through
 Blueprint Note: Next Build Slice for Command Center API Access
 This document outlines the next smallest blueprint-backed build slice following the completion of proof G267-100, which is assumed to have established the core data model and initial data ingestion for the Amendment 12 Command Center.

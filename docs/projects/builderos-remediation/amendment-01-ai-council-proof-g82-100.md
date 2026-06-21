@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AI Council Initial Registration (g82-100) -->
+
 # Proof-Closing Blueprint Note: AI Council Initial Registration (g82-100)
 
 This note closes the proof for the initial registration and discoverability of the AI Council component within the BuilderOS remediation framework, as outlined in `AMENDMENT_01_AI_COUNCIL.md`.

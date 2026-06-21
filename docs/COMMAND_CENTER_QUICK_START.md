@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LEGACY / REFERENCE ONLY -->
+
 # LEGACY / REFERENCE ONLY
 
 This guide documents an older Command Center workflow and message-routing model.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G721 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof - G721-100
 
 Blueprint Note: Proof-Closing for BuilderOS Control Plane Wiring

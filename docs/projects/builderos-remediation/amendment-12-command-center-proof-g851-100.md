@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G851 100. -->
+
 This proof-closing note addresses the initial foundational data model for the `Command` entity, establishing its schema and a basic persistence mechanism.
 
 **1. Exact Missing Implementation or Proof Gap:**

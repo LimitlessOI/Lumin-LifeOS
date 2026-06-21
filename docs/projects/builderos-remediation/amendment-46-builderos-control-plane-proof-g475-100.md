@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G475 100. -->
+
 Amendment 46 BuilderOS Control Plane Proof: G475-100 - Build Lifecycle Wiring
 
 This document outlines the proof-closing steps for wiring the BuilderOS build lifecycle events (`/build` start and `/build` complete) into `routes/lifeos-council-builder-routes.js`, including health-based conditional completion.

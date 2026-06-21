@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🗣️ How to Talk to the AI Council -->
+
 # 🗣️ How to Talk to the AI Council
 
 ## Quick Start

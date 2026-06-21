@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231001120000_create_business_process_tables.sql.
 ```sql
 CREATE TABLE business_processes (
     id SERIAL PRIMARY KEY,

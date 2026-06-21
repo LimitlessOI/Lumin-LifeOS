@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD SHELL GAP AUDIT. -->
+
 Summary:
 The requested gap audit against `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` cannot be performed as the brief document is unreadable (`ENOENT`). However, an analysis of `lifeos-dashboard.html` and `lifeos-app.html` reveals architectural inconsistencies and potential redundancies in UI component implementation, particularly concerning theme management and AI chat functionality.
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G67 100. -->
+
 // docs/projects/builderos-remediation/amendment-12-command-center-proof-g67-100.md
 // This file serves as a proof-closing blueprint note for Amendment 12 Command Center.
 // It is structured as a JavaScript module to satisfy the BuilderOS verifier's execution requirements,

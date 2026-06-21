@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TCO Sales Agent - World-Class Objection Handling Guide -->
+
 # TCO Sales Agent - World-Class Objection Handling Guide
 
 **Status**: UPGRADED with persistence mode, objection handling, and negotiation authority

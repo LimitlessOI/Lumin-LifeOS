@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G995 100. -->
+
 The verifier rejection indicates that the BuilderOS loop is attempting to execute `docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g995-100.md` as a Node.js module, leading to an `ERR_UNKNOWN_FILE_EXTENSION`. The task explicitly requires writing this `.md` file.
 
 The instruction within the `REPO FILE CONTENTS` for the target file states: "INSTRUCTION: Generate the complete implementation code. Output ONLY the code first — no explanation before the code block. Then append a line containing exactly

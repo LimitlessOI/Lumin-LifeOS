@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Add more routes for update and delete
+ */
 ```javascript
 const express = require('express');
 const { createScenario, getScenario } = require('../controllers/scenarioController');

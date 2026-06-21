@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260525_voice_rail_message_attachments.sql.
 -- Voice Rail — optional file/image attachments on messages (JSON metadata + preview URLs)
 ALTER TABLE voice_rail_messages
   ADD COLUMN IF NOT EXISTS attachments JSONB NOT NULL DEFAULT '[]'::jsonb;

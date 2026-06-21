@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/funnels/funnelRepository.js.
+ */
 const { Pool } = require('pg');
 
 const pool = new Pool();

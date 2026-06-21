@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/recommendationRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const recommendationController = require('../controllers/recommendationController');

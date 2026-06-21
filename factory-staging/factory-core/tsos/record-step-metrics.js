@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Pure transform — no persistence. For tests and full-loop proof.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

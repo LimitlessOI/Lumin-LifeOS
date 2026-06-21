@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Example adapters
+ */
 ```javascript
 class UniversalAdapter {
     constructor(serviceName, apiEndpoint) {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: TokenOS (B2B API Cost Savings) -->
+
 # Domain: TokenOS (B2B API Cost Savings)
 
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)

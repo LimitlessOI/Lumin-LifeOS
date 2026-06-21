@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Session Report - January 9, 2026 -->
+
 # Session Report - January 9, 2026
 
 ## What We Built Today

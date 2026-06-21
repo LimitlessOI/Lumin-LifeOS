@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/components/DailyStats.js.
+ */
 import React from 'react';
 
 const DailyStats = ({ stats }) => {

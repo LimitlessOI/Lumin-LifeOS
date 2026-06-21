@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Lessons Register -->
+
 # Lessons Register
 
 ## Purpose

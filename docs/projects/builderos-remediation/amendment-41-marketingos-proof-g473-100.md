@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: G473-100 - MarketingOS UserEngagementEvent Sync -->
+
 # Proof-Closing Blueprint Note: G473-100 - MarketingOS UserEngagementEvent Sync
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

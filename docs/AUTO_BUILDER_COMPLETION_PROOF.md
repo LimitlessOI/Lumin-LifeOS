@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Auto-Builder Autonomy System - Completion Proof -->
+
 # Auto-Builder Autonomy System - Completion Proof
 
 **Date:** 2026-01-29

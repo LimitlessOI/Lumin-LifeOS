@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/integrity-engine.js — Amendment 16 (Word Keeper)
  * services/integrity-engine.js — Amendment 16 (Word Keeper)
  *
  * Integrity score calculation, gamification, events ledger, and pattern analysis.

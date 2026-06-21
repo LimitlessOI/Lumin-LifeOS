@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G1005-100 - Command Core Schema -->
+
 # Amendment 12 Command Center Proof: G1005-100 - Command Core Schema
 
 This document serves as a proof-closing note for build slice `G1005-100`, which established the initial implementation of the `Command` object's core data model as outlined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`. The successful completion of G1005-100 means the foundational data structures for commands are defined and available within the BuilderOS context.

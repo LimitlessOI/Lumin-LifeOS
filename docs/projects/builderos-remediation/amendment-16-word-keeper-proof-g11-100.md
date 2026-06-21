@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G11 100. -->
+
 Amendment 16: Word Keeper - Proof G11-100 Remediation Note
 This document serves as a proof-closing blueprint note for the "G11-100: Initial Proof-of-Concept for WordUnit Hashing and Merkle Tree Construction" section of the `AMENDMENT_16_WORD_KEEPER.md` blueprint. It outlines the next smallest build slice required to implement the core proof generation logic.
 ---

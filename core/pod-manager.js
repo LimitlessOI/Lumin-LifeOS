@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createPodManager — core/pod-manager.js.
+ */
 import crypto from "crypto";
 
 export class PodManager {

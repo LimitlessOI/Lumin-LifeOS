@@ -1,3 +1,4 @@
+# SYNOPSIS: yaml — src/services/market-analysis/tests/load-test.yaml.
 ```yaml
 config:
   target: 'http://localhost:3000'

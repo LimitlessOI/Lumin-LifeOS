@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🤖 How to Extract Your AI Conversations -->
+
 # 🤖 How to Extract Your AI Conversations
 
 ## Quick Start Guide

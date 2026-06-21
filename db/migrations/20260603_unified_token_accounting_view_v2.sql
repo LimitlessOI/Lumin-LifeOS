@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260603_unified_token_accounting_view_v2.sql.
 -- Migration: 20260603_unified_token_accounting_view_v2
 -- Idempotent unified view — omits token_optimizer_daily when table absent on Neon
 -- @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md

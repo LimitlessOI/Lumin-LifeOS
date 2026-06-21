@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Class ZKIdentity — src/apspan/auth/ZKIdentity.ts.
+ */
 import { groth16 } from 'snarkjs';
 import pino from 'pino';
 

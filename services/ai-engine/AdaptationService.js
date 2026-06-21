@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — AdaptationService.
+ */
 const express = require('express');
 const app = express();
 app.use(express.json());

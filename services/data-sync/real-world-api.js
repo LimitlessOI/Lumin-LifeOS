@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Real World Api.
+ */
 const axios = require('axios');
 
 async function syncRealWorldData() {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G792 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 12 Command Center - Initial Structure (G792-100)
 
 This note closes the initial proof for the foundational structure of the `CommandCenter` as outlined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

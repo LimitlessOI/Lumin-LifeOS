@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G770-100 Remediation -->
+
 The specification is incomplete as `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided, requiring inference of the blueprint's next logical step.
 
 # Command Center V2 Blueprint Proof - G770-100 Remediation

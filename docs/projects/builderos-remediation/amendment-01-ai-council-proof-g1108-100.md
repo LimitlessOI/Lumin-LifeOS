@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G1108 100. -->
+
 Amendment 01: AI Council - Proof G1108-100
 Date: 2023-10-27
 Version: 1.0.0

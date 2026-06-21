@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Council Reconciliation Review V1 -->
+
 # Council Reconciliation Review V1
 
 **Status:** `COUNCIL RECONCILIATION` — synthesis of prior agent audits; not new discovery  

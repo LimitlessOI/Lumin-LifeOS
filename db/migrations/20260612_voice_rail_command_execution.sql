@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260612_voice_rail_command_execution.sql.
 -- Voice Rail — link staged founder commands to BuilderOS command-control jobs
 BEGIN;
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Backlog — Money First & A→Z Sprint -->
+
 # Backlog — Money First & A→Z Sprint
 
 ## Money Offers (ship copy & checklists)

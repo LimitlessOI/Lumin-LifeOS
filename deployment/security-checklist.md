@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Markdown doc — Security Checklist. -->
+
 ```markdown
 ### Security Checklist
 - [ ] Ensure HTTPS is enabled for all communications.

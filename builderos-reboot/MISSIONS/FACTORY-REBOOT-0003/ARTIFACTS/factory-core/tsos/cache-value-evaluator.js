@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports cacheValueEvaluation — builderos-reboot/MISSIONS/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/tsos/cache-value-evaluator.js.
+ */
 export function cacheValueEvaluation(entry) {
   return {
     answer_class: entry.answer_class,

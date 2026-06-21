@@ -1,3 +1,4 @@
+# SYNOPSIS: Script — Run Migrations.
 ```bash
 #!/bin/bash
 

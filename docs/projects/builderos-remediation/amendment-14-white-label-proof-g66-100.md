@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G66 100. -->
+
 Amendment 14: White Label Proof - G66-100
 Proof-Closing Blueprint Note
 

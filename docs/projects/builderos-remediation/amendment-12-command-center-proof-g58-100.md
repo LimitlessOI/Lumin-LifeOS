@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G58-100 -->
+
 # Amendment 12: Command Center - Proof G58-100
 
 This proof-closing blueprint note addresses the initial foundational build slice for Amendment 12, focusing on establishing the core `CommandCenter` class.

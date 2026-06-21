@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G60 100. -->
+
 The instruction to "Generate the complete implementation code" directly conflicts with the target file path `docs/projects/builderos-remediation/amendment-12-command-center-proof-g60-100.md`, which implies a markdown document. The OIL verifier rejection indicates the verifier attempted to execute the `.md` file as code, which is a verifier configuration issue, not a content issue with the markdown itself. I will proceed by completing the markdown document as a proof-closing blueprint note, assuming the "implementation code" instruction refers to describing the implementation within the markdown.
 
 ```markdown

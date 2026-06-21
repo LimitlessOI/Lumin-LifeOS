@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Persists TD form catalog snapshots + operator handling guidance.
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * Persists TD form catalog snapshots + operator handling guidance.
  */

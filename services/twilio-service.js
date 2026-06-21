@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: twilio-service.js — extracted from server.js
  * twilio-service.js — extracted from server.js
  * Phone call / SMS helpers via Twilio.
  *

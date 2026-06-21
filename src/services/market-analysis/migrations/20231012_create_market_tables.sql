@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231012_create_market_tables.sql.
 ```sql
 CREATE TABLE market_data_sources (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Phase 3 — Meta-25 (synthesized — **not** Phase-1 rerun) -->
+
 # Phase 3 — Meta-25 (synthesized — **not** Phase-1 rerun)
 
 **Exactly 25** new ids **`M01–M25`**. References Phase-1 tensions where helpful.

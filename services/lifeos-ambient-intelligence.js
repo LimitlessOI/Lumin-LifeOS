@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-ambient-intelligence.js — contextual proactive nudge assembly (calendar, MITs, habits)
  * services/lifeos-ambient-intelligence.js — contextual proactive nudge assembly (calendar, MITs, habits)
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

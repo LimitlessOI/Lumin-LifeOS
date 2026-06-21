@@ -1,5 +1,5 @@
 /**
- * Mechanical CSS patches for founder UI feedback — no whole-file HTML rewrite.
+ * SYNOPSIS: Mechanical CSS patches for founder UI feedback — no whole-file HTML rewrite.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 import fs from 'node:fs';

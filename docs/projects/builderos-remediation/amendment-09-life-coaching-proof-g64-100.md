@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G64 100. -->
+
 Amendment 09: Life Coaching - Proof G64-100 Closure Note
 Current Build Slice: G64-100 - Proof of Concept: Basic Coach Profile API
 

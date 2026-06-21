@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 48 — BuilderOS Vocabulary (Language Law) -->
+
 # AMENDMENT 48 — BuilderOS Vocabulary (Language Law)
 
 | Field | Value |

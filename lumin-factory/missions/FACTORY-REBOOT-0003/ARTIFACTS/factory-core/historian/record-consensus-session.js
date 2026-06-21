@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports recordConsensusSession — lumin-factory/missions/FACTORY-REBOOT-0003/ARTIFACTS/factory-core/historian/record-consensus-session.js.
+ */
 export function recordConsensusSession(entry) {
   return {
     type: 'consensus_session',

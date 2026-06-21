@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BUILDEROS ALPHA BLUEPRINT -->
+
 # BUILDEROS ALPHA BLUEPRINT
 
 **Product key:** `builderos-alpha`  
@@ -562,6 +564,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-21 | **Quorum escalation ladder:** `services/founder-build-quorum-escalation.js` — 3 solo attempts → CFO gate → 2-AI quorum → apply → 3-AI quorum → apply → Chair synthesis → apply → hard stop; lessons from `lessons_learned` + static founder-build registry; wired into `founder-build-self-repair.js` + founder-interface async jobs. | Adam: single agent must not loop forever; escalate perspectives + Chair automatically. | ✅ tests |
 | 2026-06-21 | **Sentry audit fixes — founder build closed loop:** `commitManyToGitHub` + `POST /builder/execute-batch`; `founder-build-outcome.js`; async build jobs (202 + poll); live content + git-outcome + client bubble proof; baseline dark bubbles restored; routing/normalize fixes; `verify:founder-css:live`. | Sentry audit: theater PASS, partial commits, contaminated baseline, 502, no client proof. | ✅ tests |
 | 2026-06-21 | **`services/founder-build-success-gate.js`** (NEW) + **`services/founder-build-self-repair.js`** + **`services/lifeos-execution-truth.js`** + **`services/founder-css-patch.js`** — founder PASS now requires: 4-file CSS patch (theme + dashboard inline + app inline + sw.js CACHE_NAME bump), deploy SHA sync via `/builder/ready`, live fetch of `/overlay/lifeos-dashboard.html` + `lifeos-app.html` for color tokens; never-stop retries on DEPLOY_NOT_SYNCED (redeploy) and FOUNDER_VISUAL_NOT_VERIFIED (re-commit + SW bump); `FOUNDER_BUILD_TOOL_INVENTORY` wires existing routes/services; **`tests/founder-build-success-gate.test.js`**. | Founder color test got PASS on theme-only commit with "Browser visual NOT auto-verified" — theater PASS. | ✅ tests |
 | 2026-06-21 | **`services/founder-css-patch.js`** + **`services/founder-build-self-repair.js`** — mechanical CSS patch now updates **inline** `.msg.assistant` / `.lumin-msg.assistant` in dashboard + app shell (not theme-overrides alone); commits 3 files; cache-bust theme link. | PASS on theme-overrides only — SW cache-first + inline styles hid yellow bubbles. | deploy |

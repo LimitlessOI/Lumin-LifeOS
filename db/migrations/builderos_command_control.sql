@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — builderos_command_control.sql.
 -- BuilderOS Command & Control Phase 2 schema
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;

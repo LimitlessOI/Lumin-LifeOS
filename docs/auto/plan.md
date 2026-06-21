@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Auto Plan -->
+
 # Auto Plan
 
 Frequent 'build-now' commands indicate potential issues with the autopilot's debounce mechanism.

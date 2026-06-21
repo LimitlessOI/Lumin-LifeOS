@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: extension/background.js — Lumin Universal Overlay
  * extension/background.js — Lumin Universal Overlay
  * Service worker for the browser extension.
  *

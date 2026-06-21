@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof (G120-100) -->
+
 The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided in the REPO FILE CONTENTS, preventing derivation of specific content.
 ```markdown
 # Command Center V2 Blueprint Proof (G120-100)

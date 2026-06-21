@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G661-100 -->
+
 # Command Center V2 Blueprint Proof - G661-100
 
 ## Blueprint Note: Phase 2 - Basic Endpoint Implementation (GET /commands)

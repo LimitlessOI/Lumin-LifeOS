@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/live-copilot.js
  * services/live-copilot.js
  *
  * Live CoPilot Sessions — real-time AI-assisted coaching during an active

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_16_WORD_KEEPER - Proof Closing Note (G89-100) -->
+
 # AMENDMENT_16_WORD_KEEPER - Proof Closing Note (G89-100)
 
 This note closes the proof gap for implementing the foundational read operation for the WordKeeper entity.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_clients_table.sql.
 ```sql
 CREATE TABLE clients (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

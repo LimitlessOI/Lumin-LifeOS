@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center: Proof-Closing Note (G897-100) -->
+
 # Amendment 12 Command Center: Proof-Closing Note (G897-100)
 
 This document serves as a proof-closing note for a critical build slice related to Amendment 12, focusing on the BuilderOS Command Center. It outlines the next smallest implementation step to advance the Command Center's readiness, addressing a specific proof gap identified during previous verification cycles.

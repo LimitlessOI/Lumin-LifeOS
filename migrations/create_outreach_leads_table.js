@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — create_outreach_leads_table.js.
+ */
 const { Sequelize } = require('sequelize');
 const { sequelize } = require('../database');
 

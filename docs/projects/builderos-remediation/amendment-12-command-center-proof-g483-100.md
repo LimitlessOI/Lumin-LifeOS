@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G483-100 -->
+
 # Amendment 12 Command Center Proof - G483-100
 
 **Source Blueprint:** `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` (Not provided in REPO FILE CONTENTS, specific derivation is not possible.)

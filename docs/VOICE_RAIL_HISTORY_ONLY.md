@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Voice Rail — History Only (Failed Program) -->
+
 # Voice Rail — History Only (Failed Program)
 
 Status: **RETIRED / HIST_ONLY**

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G22 100. -->
+
 The specification is contradictory. The task explicitly requests writing to `docs/projects/builderos-remediation/amendment-12-command-center-proof-g22-100.md`, which is a markdown file. However, the OIL verifier rejected the previous attempt with `ERR_UNKNOWN_FILE_EXTENSION` for `.md`, indicating it tried to execute the file as code. Furthermore, the instruction "Generate the complete implementation code. Output ONLY the code first — no explanation before the code block." implies the model's output should be raw code. These points conflict with the `.md` file extension and the nature of a "proof-closing blueprint note" which is a descriptive markdown document.
 
 To resolve this, I will produce a markdown document as requested by the target file path and

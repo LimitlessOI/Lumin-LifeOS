@@ -1,5 +1,5 @@
 /**
- * BuilderOS BP/PBB planner — turns OIL findings into one executable build plan.
+ * SYNOPSIS: BuilderOS BP/PBB planner — turns OIL findings into one executable build plan.
  * Deterministic planner for the minimal governed loop bridge.
  *
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md

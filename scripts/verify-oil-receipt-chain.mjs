@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: This script provides functionality to verify the status of the Kernel
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  *
  * This script provides functionality to verify the status of the Kernel

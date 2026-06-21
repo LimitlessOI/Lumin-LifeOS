@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231015_create_smart_city_tables.sql.
 ```sql
 -- Migration for creating smart city tables
 

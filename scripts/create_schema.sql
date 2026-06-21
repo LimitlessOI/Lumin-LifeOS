@@ -1,3 +1,4 @@
+-- SYNOPSIS: Script — Create Schema.
 ```sql
 CREATE TABLE biodegradable_devices (
     id SERIAL PRIMARY KEY,

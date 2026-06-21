@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/fulfillment-engine.js
  * services/fulfillment-engine.js
  *
  * Consent-gated reorder service.

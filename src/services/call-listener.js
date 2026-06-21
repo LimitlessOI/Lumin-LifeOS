@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: call-listener.js
+ */
 // call-listener.js
 
 import VoiceInput from './voice-input';

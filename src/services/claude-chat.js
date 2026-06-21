@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/claude-chat.js.
+ */
 const { Client } = require('pg');
 const axios = require('axios');
 

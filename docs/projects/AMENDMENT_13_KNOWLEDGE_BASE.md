@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 13 — Knowledge Base & Web Intelligence -->
+
 # AMENDMENT 13 — Knowledge Base & Web Intelligence
 **Status:** LIVE
 **Authority:** Subordinate to SSOT North Star Constitution

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G615 100. -->
+
 import express from 'express';
 import { recordBuildStart, recordBuildComplete, canMarkBuildDone } from '../services/builder-control-plane-service.js';
 import { getLogger } from '../utils/logger.js';

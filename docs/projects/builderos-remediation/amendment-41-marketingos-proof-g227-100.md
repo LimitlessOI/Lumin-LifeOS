@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G227 100. -->
+
 The instruction to write a `.md` file contradicts the OIL verifier's expectation of an executable file, leading to a `TypeError [ERR_UNKNOWN_FILE_EXTENSION]`.
 
 Proof-Closing Blueprint Note: Amendment 41 MarketingOS - G227-100 SSOT Foundation

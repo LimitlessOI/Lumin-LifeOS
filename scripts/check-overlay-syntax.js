@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 /**
+ * SYNOPSIS: Overlay Syntax Checker
  * Overlay Syntax Checker
  * Validates JavaScript syntax in overlay HTML and JS files
  */

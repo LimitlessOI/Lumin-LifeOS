@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/autonomy-orchestrator.js
  * services/autonomy-orchestrator.js
  *
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md

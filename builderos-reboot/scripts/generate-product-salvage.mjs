@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Phase 12: emit PRODUCT_SALVAGE_CANDIDATES.json from amendment registry. */
+/**
+ * SYNOPSIS: Phase 12: emit PRODUCT_SALVAGE_CANDIDATES.json from amendment registry. Phase 12: emit PRODUCT_SALVAGE_CANDIDATES.json from amendment registry. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

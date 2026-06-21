@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/integration/customizationRoutes.test.js.
+ */
 ```javascript
 const request = require('supertest');
 const app = require('../../src/app'); // Assuming app is the Express app

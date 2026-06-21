@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (G617-100) -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - SSOT Foundation (G617-100)
 
 This document addresses the "SSOT foundation" signal for MarketingOS as outlined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`, focusing on closing a critical proof gap related to customer segment data synchronization.

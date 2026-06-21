@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Structural cold-start self-test — fails if critical handoff files are missing
  * Structural cold-start self-test — fails if critical handoff files are missing
  * or Amendment 21 lost its Agent Handoff Notes heading.
  *

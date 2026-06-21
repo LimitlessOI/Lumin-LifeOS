@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G315 100. -->
+
 ### Proof-Closing Blueprint Note: Amendment 41 MarketingOS Proof G315-100 Remediation
 
 This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41 MarketingOS, specifically for proof G315-100, following the OIL verifier rejection.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/services/interactionService.test.js.
+ */
 ```javascript
 const { createInteraction, getInteractions } = require('../../src/services/interactionService');
 const FunnelInteraction = require('../../src/models/FunnelInteraction');

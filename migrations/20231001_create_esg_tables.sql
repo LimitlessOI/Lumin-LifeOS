@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231001_create_esg_tables.sql.
 ```sql
 CREATE TABLE esg_projects (
     id SERIAL PRIMARY KEY,

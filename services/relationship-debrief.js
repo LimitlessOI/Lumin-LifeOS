@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/relationship-debrief.js
  * services/relationship-debrief.js
  *
  * AI-powered post-conversation debrief.

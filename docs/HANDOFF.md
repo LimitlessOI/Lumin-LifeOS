@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SESSION HANDOFF — 2026-03-13 -->
+
 # SESSION HANDOFF — 2026-03-13
 **For:** Next Claude session picking up this work
 **Branch:** pr-cleanup-1

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Word Keeper & Integrity Engine -->
+
 # Word Keeper & Integrity Engine
 _(formerly AMENDMENT_16_WORD_KEEPER.md)_
 **Status:** IN_BUILD

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G455 100. -->
+
 Amendment 41: MarketingOS SSOT Foundation Proof - G455-100
 This document serves as a proof-closing blueprint note for verifying the SSOT foundation integration for MarketingOS, as outlined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`. The signal requiring follow-through is the establishment of this document as the SSOT foundation for proof.
 

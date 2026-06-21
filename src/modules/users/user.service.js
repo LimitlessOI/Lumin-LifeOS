@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/users/user.service.js.
+ */
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const pool = require('../../database/pool');
 

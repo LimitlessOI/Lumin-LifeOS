@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G515 100. -->
+
 The specification asks for a `.md` file, but the verifier rejected the previous attempt because it tried to execute the `.md` file as code. This is a contradiction between the requested output format and the verifier's expectation.
 Command Center V2 Blueprint Proof: G515-100 - Initial Data Model & DB Schema
 

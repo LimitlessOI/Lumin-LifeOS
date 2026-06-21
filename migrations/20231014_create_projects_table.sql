@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231014_create_projects_table.sql.
 ```sql
 CREATE TABLE projects (
     id SERIAL PRIMARY KEY,

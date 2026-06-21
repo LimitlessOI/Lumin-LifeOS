@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: ts — tests/users/user.test.ts.
+ */
 ```typescript
 import { registerUser, loginUser } from '../../src/modules/users/user.service';
 import { jest } from '@jest/globals';

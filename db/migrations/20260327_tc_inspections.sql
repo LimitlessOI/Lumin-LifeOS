@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_tc_inspections.sql.
 -- TC Inspection workflow: scheduling, report receipt, and buyer decision
 -- Decision options: accept_as_is | repair_request | reject_and_cancel
 --

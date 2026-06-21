@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-cycle-routes.js
  * routes/lifeos-cycle-routes.js
  *
  * LifeOS — Menstrual / Perimenopause Cycle Tracking Routes

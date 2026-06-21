@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports runGAP014GapVerification — scripts/verify-gap-014-gap.mjs.
+ */
 /*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * - This script verifies GAP-014, checking for the absence of a platform coverage score

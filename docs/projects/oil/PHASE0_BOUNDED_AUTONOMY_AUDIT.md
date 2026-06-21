@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Phase 0 Audit — Bounded Autonomous Self-Repair -->
+
 # Phase 0 Audit — Bounded Autonomous Self-Repair
 
 > **Date:** 2026-05-24  

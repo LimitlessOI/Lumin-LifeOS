@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Script — Site Builder Preview Expiry Cron.
+ */
 import pg from 'pg';
 import { runPreviewExpiry } from '../services/preview-expiry-cron.js';
 import { fileURLToPath } from 'url';

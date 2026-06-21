@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G877-100 Remediation -->
+
 # Command Center V2 Blueprint Proof: G877-100 Remediation
 
 This document addresses the OIL verifier rejection related to the processing of `.md` files as executable code.

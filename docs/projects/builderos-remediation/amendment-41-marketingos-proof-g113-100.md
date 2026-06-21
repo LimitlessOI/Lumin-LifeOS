@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 - MarketingOS SSOT Foundation (g113-100) -->
+
 # Proof-Closing Blueprint Note: Amendment 41 - MarketingOS SSOT Foundation (g113-100)
 
 This document addresses the identified gap in establishing LifeOS as the Single Source of Truth (SSOT) for marketing campaign data originating from MarketingOS, as outlined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`.

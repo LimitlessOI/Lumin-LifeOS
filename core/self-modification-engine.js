@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: SelfModificationEngine — extracted from server.js
  * SelfModificationEngine — extracted from server.js
  * Handles AI-council-gated self-modification of files.
  *

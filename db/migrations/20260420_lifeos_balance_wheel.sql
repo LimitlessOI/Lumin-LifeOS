@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260420_lifeos_balance_wheel.sql.
 -- 20260420_lifeos_balance_wheel.sql
 -- Life Balance Wheel: 8-area self-rating, tracked over time
 -- Areas: health, relationships, finance, work, growth, spirituality, fun, environment

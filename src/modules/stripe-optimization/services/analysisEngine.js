@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/stripe-optimization/services/analysisEngine.js.
+ */
 ```javascript
 const { retrieveCustomerPayments } = require('./stripeService');
 

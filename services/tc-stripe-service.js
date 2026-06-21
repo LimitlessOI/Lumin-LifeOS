@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/tc-stripe-service.js
+ */
 // services/tc-stripe-service.js
 // @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
 import Stripe from 'stripe';

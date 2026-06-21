@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json */
+/**
+ * SYNOPSIS: Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json Mechanical SENTRY checklist — outputs SENTRY_CHECK_RESULT.json */
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';

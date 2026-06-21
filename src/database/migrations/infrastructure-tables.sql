@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — infrastructure-tables.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS infrastructures (
     id SERIAL PRIMARY KEY,

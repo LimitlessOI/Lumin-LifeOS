@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G743 100. -->
+
 The specification is contradictory: the task explicitly asks to write a markdown file (`.md`), but the BuilderOS verifier attempts to execute this file as a Node.js module, leading to an `ERR_UNKNOWN_FILE_EXTENSION` error. This means the verifier's behavior is incompatible with the requested file type, and a "repair" that satisfies the verifier cannot be achieved by modifying the `.md` file content without violating the instruction to write a markdown document.
 
 Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - G743-100

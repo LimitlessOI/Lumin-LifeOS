@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Configuration -->
+
 # Configuration
 
 This document provides information on setting up and securing environment variables for the application.

@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Test Osc Visible.
 
 # ╔══════════════════════════════════════════════════════════════════════════════════╗
 # ║                    TEST OPEN SOURCE COUNCIL - VISIBLE IN LOGS                    ║

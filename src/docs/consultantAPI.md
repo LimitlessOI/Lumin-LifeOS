@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Consultant API Documentation -->
+
 ```markdown
 # Consultant API Documentation
 

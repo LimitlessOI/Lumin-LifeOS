@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Builder slice throughput meter — ETA to MVP corridor + variance vs baseline.
  * Builder slice throughput meter — ETA to MVP corridor + variance vs baseline.
  *
  * Inputs:

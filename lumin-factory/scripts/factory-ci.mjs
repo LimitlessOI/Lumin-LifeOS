@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Single CI entry: run all factory verification scripts. */
+/**
+ * SYNOPSIS: Single CI entry: run all factory verification scripts. Single CI entry: run all factory verification scripts. */
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

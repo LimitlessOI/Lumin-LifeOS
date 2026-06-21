@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G875 100. -->
+
 The spec is contradictory: The task asks to write a `.md` file containing a blueprint note, but the verifier rejects `.md` files if they are not executable JavaScript.
 Proof-Closing Blueprint Note: AMENDMENT 41 - MarketingOS Proof G875-100
 1. Exact Missing Implementation or Proof Gap

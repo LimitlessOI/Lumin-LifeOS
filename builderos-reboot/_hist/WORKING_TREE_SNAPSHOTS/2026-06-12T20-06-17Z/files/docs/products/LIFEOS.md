@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS — Product Spec -->
+
 # LifeOS — Product Spec
 **Amendment:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` (full history + receipts)
 **Platform:** `docs/products/PLATFORM.md` (Council, Memory, C2 — required enablers)

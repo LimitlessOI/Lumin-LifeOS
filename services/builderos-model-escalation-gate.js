@@ -1,5 +1,5 @@
 /**
- * Model Escalation Gate — enforce cheaper-first, no infra-burn escalation.
+ * SYNOPSIS: Model Escalation Gate — enforce cheaper-first, no infra-burn escalation.
  * @ssot prompts/00-MODEL-ESCALATION-GATE.md
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */

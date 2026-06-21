@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Routes.
+ */
 ```javascript
 const express = require('express');
 const tradingEngine = require('./trading-engine');

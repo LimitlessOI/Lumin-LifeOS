@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Continuity Log — LifeOS Core Lane -->
+
 # Continuity Log — LifeOS Core Lane
 
 > Log sessions that primarily change Amendment 21, LifeOS routes/services, LifeOS migrations, or LifeOS overlays.

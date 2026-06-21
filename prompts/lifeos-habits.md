@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: Habits (Identity Tracker) -->
+
 # Domain: Habits (Identity Tracker)
 
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Regression: orphan PASS receipts forbidden repo-wide (§2.18).
  * Regression: orphan PASS receipts forbidden repo-wide (§2.18).
  * @ssot docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md
  */

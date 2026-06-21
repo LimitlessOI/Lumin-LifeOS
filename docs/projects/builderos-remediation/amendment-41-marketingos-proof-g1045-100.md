@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1045 100. -->
+
 The specification is contradictory: the task asks to write a markdown file, but the OIL verifier attempted to execute it as a Node.js module, indicating an expectation for executable code.
 ---
 Blueprint Note: MarketingOS SSOT Foundation Proof Closure (G1045-100)

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Dashboard Calendar Tile Brief -->
+
 # LifeOS Dashboard Calendar Tile Brief
 
 This document specifies the expected data shape and behavior for the calendar tile displayed on the LifeOS Dashboard (`public/overlay/lifeos-dashboard.html`). It outlines the current implementation's expectations and provides guidance for future enhancements, particularly regarding timezone handling, all-day events, and ICS integration.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 28 — Wellness Studio -->
+
 # AMENDMENT 28 — Wellness Studio
 
 | Field | Value |

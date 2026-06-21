@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231011120000_create_ev_charging_tables.sql.
 ```sql
 CREATE TABLE ev_charging_stations (
     id SERIAL PRIMARY KEY,

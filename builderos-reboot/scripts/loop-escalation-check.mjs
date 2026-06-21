@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Standalone loop escalation check for a mission.
  * Standalone loop escalation check for a mission.
  * Usage: node loop-escalation-check.mjs FACTORY-DELIBERATION-SENTRY-REGRESSION-0001 [--enforce]
  * @ssot builderos-reboot/SNT_LOOP_ESCALATION_DOCTRINE.md

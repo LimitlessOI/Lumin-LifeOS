@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G1033-100 -->
+
 # Amendment 12 Command Center Proof - G1033-100
 
 This document outlines the first proof-closing blueprint note for the Amendment 12 Command Center, focusing on establishing the foundational types and the Command Center's ability to register commands.

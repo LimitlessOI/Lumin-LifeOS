@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 17 — Transaction Coordinator (TC) Service -->
+
 # AMENDMENT 17 — Transaction Coordinator (TC) Service
 
 > **Y-STATEMENT:** In the context of Adam operating as a solo TC serving multiple real estate agents,

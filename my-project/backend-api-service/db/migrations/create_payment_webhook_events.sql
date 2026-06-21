@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_payment_webhook_events.sql.
 ```sql
 CREATE TABLE payment_webhook_events (
   id SERIAL PRIMARY KEY,

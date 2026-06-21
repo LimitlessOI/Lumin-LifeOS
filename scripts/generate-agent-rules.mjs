@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: generate-agent-rules.mjs
  * generate-agent-rules.mjs
  *
  * Generates docs/AGENT_RULES.compact.md — a compressed, machine-readable enforcement

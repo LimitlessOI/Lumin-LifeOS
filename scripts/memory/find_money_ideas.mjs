@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Find money-making ideas in your files
+ */
 // Find money-making ideas in your files
 import fs from 'fs';
 import path from 'path';

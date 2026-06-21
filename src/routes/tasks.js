@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/tasks.js.
+ */
 ```javascript
 const express = require('express');
 const { taskController } = require('../controllers/taskController');

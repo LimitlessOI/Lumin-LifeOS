@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council Proof: G98-100 - AICouncil Singleton Initialization -->
+
 # Amendment 01 AI Council Proof: G98-100 - AICouncil Singleton Initialization
 
 This document outlines the proof-closing blueprint note for the initial implementation and verification of the `AICouncil` singleton within the `LifeOS` platform, addressing the `g98-100` build slice.

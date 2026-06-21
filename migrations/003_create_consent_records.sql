@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 003_create_consent_records.sql.
 CREATE TABLE consent_records (
     id SERIAL PRIMARY KEY,
     identity_id INT REFERENCES identity_profiles(id),

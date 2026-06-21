@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G485-100 -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G485-100
 
 ## Proof-Closing Blueprint Note for AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md

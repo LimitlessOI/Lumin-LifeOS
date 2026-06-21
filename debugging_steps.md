@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Debugging Steps -->
+
 # Debugging Steps
 
 ## Step 1: Review Logs

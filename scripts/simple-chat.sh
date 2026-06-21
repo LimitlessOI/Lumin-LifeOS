@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Simple Chat.
 
 # Simple chat script - just type and get responses
 

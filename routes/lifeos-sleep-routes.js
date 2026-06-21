@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports mountSleepRoutes — routes/lifeos-sleep-routes.js.
+ */
 import express from 'express';
 import { createSleepService } from '../services/lifeos-sleep-service.js';
 import { requireLifeOSUser } from './lifeos-auth-routes.js';

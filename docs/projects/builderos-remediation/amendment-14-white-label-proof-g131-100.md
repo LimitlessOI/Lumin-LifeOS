@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G131-100 - Initial Configuration Schema & Retrieval -->
+
 # Amendment 14 White-Label Proof: G131-100 - Initial Configuration Schema & Retrieval
 
 This document outlines the first build slice for proving the foundational white-label configuration mechanism as per `AMENDMENT_14_WHITE_LABEL.md`. The focus is on defining the configuration structure and implementing a read-only service to retrieve these settings, without impacting existing user features or customer-facing surfaces.

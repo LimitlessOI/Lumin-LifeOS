@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Commitment Detector Service
+ */
 // Commitment Detector Service
 
 const { extractCommitment } = require('../utils/extraction');

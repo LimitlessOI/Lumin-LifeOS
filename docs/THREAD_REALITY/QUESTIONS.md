@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Thread Reality Questions (2026-01-26) -->
+
 # Thread Reality Questions (2026-01-26)
 
 ## A) User Questions (decision blockers)

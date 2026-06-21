@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: middleware/lifeos-auth-middleware.js
  * middleware/lifeos-auth-middleware.js
  *
  * LifeOS per-user authentication middleware.

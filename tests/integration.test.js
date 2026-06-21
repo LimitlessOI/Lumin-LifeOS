@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/integration.test.js.
+ */
 const request = require('supertest');
 const app = require('../api/routes/learningRoutes');
 

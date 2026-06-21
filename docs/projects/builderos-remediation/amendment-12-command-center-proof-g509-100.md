@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof G509-100: Blueprint Note -->
+
 The specification is contradictory regarding the target file type and the verifier's execution expectation, and the source blueprint is missing.
 ```markdown
 # Amendment 12 Command Center Proof G509-100: Blueprint Note

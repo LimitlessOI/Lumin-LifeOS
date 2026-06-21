@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD KEYBOARD SHORTCUTS SPEC. -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

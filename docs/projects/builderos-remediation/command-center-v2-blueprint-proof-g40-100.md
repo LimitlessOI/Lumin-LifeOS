@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof Note: Command Center V2 - g40-100 Remediation -->
+
 # Blueprint Proof Note: Command Center V2 - g40-100 Remediation
 
 This note closes the proof for `g40-100` and outlines the next smallest build slice for Command Center V2, focusing on the foundational data model implementation.

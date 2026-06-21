@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SYNOPSIS: BuilderOS artifact — Compare Run Directories.
 set -euo pipefail
 
 if [ "$#" -lt 2 ]; then

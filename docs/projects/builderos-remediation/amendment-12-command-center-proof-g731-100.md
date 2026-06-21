@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G731 100. -->
+
 // src/services/commandCenter/CommandCenterClient.js
 import fetch from 'node-fetch'; // Assuming node-fetch or similar is available for HTTP requests
 

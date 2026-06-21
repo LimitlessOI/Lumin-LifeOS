@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Factory Tools Completion — Mission 0030 slice -->
+
 # Factory Tools Completion — Mission 0030 slice
 
 **Canonical rebuild doc:** [FACTORY_REBUILD_MANIFEST_V1.md](../docs/architecture/factory-v1-blueprint-pack/FACTORY_REBUILD_MANIFEST_V1.md)  

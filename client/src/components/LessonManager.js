@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — client/src/components/LessonManager.js.
+ */
 ```javascript
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';

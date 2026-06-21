@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/productionIntegrator.js.
+ */
 ```javascript
 const axios = require('axios');
 

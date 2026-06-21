@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G725-100 - Remediation Task Data Layer -->
+
 # Amendment 12 Command Center Proof: G725-100 - Remediation Task Data Layer
 
 This document outlines the next smallest blueprint-backed build slice for the BuilderOS Command Center, focusing on establishing the foundational data layer for the Remediation Queue.

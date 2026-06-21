@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G269 100. -->
+
 // src/api/routes/telemetry.js
 import express from 'express';
 import { TelemetryData } from '../models/TelemetryData';

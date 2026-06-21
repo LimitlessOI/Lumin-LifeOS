@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: signup-agent.js
  * signup-agent.js
  * Orchestrates autonomous account signups.
  * Flow: navigate → fill form → submit → wait for verification email → click link → store creds

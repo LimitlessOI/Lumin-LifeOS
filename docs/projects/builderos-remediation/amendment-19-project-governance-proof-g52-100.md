@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof (G52-100) - Remediation Note -->
+
 The source blueprint `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` was not provided in REPO FILE CONTENTS, preventing the derivation of specific governance details for the proof.
 
 # Amendment 19 Project Governance Proof (G52-100) - Remediation Note

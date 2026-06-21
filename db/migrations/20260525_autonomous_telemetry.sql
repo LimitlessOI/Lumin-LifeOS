@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260525_autonomous_telemetry.sql.
 -- Autonomous telemetry — durable measurement for overnight / PB-governed runs.
 -- No secrets. No prompt contents.
 

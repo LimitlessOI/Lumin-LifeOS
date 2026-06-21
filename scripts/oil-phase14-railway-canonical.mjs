@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Canonical Phase 14 proof path — runs on Railway runtime, writes to Railway Neon.
  * Canonical Phase 14 proof path — runs on Railway runtime, writes to Railway Neon.
  * Local shell must NOT claim ALPHA_READY without this path (or matching proof_store_id).
  *

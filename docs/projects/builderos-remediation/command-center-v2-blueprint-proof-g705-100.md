@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G705-100 - Basic Command Creation via API -->
+
 # Command Center V2 Blueprint Proof: G705-100 - Basic Command Creation via API
 
 ## Proof-Closing Blueprint Note

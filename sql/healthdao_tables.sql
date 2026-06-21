@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — healthdao_tables.sql.
 ```sql
 CREATE TABLE healthdao_users (
     id SERIAL PRIMARY KEY,

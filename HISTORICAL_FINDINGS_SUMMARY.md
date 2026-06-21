@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🔍 Historical Findings Summary -->
+
 # 🔍 Historical Findings Summary
 
 ## What Was Found in Git History

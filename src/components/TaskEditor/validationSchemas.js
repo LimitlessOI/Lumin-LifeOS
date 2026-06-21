@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/components/TaskEditor/validationSchemas.js.
+ */
 ```javascript
 import * as Yup from 'yup';
 

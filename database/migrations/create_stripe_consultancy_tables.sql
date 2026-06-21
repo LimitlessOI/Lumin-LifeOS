@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_stripe_consultancy_tables.sql.
 ```sql
 -- Table for storing Stripe consultancy users
 CREATE TABLE stripe_consultancy_users (

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: LifeOS Capture Pipeline v2 acceptance — Voice Rail → Action Inbox staging.
  * LifeOS Capture Pipeline v2 acceptance — Voice Rail → Action Inbox staging.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

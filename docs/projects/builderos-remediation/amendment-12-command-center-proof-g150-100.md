@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G150-100 - Data Model & Basic API Endpoints -->
+
 # Amendment 12 Command Center Proof: G150-100 - Data Model & Basic API Endpoints
 
 ## Blueprint Note for Build Slice: G150-100

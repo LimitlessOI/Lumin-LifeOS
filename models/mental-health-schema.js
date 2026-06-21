@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — models/mental-health-schema.js.
+ */
 ```javascript
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../database/connection');

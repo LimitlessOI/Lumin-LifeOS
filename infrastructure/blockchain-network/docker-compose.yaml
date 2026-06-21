@@ -1,3 +1,4 @@
+# SYNOPSIS: yaml — infrastructure/blockchain-network/docker-compose.yaml.
 ```yaml
 version: '2'
 

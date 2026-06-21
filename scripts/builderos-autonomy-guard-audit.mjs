@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: BuilderOS-only autonomy execution audit.
  * BuilderOS-only autonomy execution audit.
  *
  * Maps the real autonomous/system execution paths to useful-work guard evidence,

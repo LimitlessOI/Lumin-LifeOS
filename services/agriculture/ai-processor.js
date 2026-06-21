@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Ai Processor.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs-node');
 const { SensorData } = require('../../models/agriculture');

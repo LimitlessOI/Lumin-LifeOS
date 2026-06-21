@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231025_create_health_learning_tables.sql.
 ```sql
 CREATE TABLE health_learning_profiles (
   id SERIAL PRIMARY KEY,

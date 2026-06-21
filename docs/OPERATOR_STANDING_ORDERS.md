@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Operator Standing Orders (Adam) -->
+
 # Operator Standing Orders (Adam)
 
 **Last updated:** 2026-05-24

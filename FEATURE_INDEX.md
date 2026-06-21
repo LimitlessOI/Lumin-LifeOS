@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🗂️ LifeOS Feature Index - Complete System Catalog -->
+
 # 🗂️ LifeOS Feature Index - Complete System Catalog
 
 **Last Updated:** 2025-12-07  

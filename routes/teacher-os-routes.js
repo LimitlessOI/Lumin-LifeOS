@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/teacher-os-routes.js
  * routes/teacher-os-routes.js
  *
  * Teacher OS API — paperwork eliminator, student profiler, self-care,

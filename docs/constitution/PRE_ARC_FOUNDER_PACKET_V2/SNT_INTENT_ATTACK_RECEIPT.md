@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SNT_INTENT_ATTACK_RECEIPT — FOUNDER_PACKET_V2 -->
+
 # SNT_INTENT_ATTACK_RECEIPT — FOUNDER_PACKET_V2
 
 **Role played by:** Claude (Sonnet 4.6), simulating SNT per V2's Bootstrap Protocol ("Manual simulation is acceptable until automated simulation exists")

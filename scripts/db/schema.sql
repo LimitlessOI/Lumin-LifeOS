@@ -1,3 +1,4 @@
+-- SYNOPSIS: Script — Schema.
 ```sql
 CREATE TABLE organ_modules (
     id SERIAL PRIMARY KEY,

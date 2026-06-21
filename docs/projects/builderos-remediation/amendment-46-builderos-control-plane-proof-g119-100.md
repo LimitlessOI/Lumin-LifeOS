@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G119 100. -->
+
 AMENDMENT_46_BUILDEROS_CONTROL_PLANE Proof-Closing Note: G119-100
 
 This note addresses the OIL verifier rejection for Amendment 46, focusing on the BuilderOS control plane. The previous rejection was a syntax error due to the verifier attempting to execute the markdown file as a JavaScript module. This document provides the proof-closing details and the proposed implementation for the required API endpoints.

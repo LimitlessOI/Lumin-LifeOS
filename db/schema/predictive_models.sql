@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — predictive_models.sql.
 ```sql
 CREATE TABLE predictive_models (
     id SERIAL PRIMARY KEY,

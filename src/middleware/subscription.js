@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/subscription.js.
+ */
 ```javascript
 const UserService = require('../services/UserService');
 

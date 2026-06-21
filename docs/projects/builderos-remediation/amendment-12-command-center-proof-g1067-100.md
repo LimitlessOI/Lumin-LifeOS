@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1067 100. -->
+
 Amendment 12: Command Center - Proof G1067-100
 Proof-Closing Blueprint Note
 This document outlines the initial build slice for establishing the foundational components of the Amendment 12 Command Center, focusing on the core service and its primary API interaction point.

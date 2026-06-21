@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Database.
+ */
 ```javascript
 const { Pool } = require('pg');
 require('dotenv').config();

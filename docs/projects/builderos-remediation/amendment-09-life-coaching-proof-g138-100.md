@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching Proof - G138-100 -->
+
 # Amendment 09: Life Coaching Proof - G138-100
 
 ## 1. Exact Missing Implementation or Proof Gap

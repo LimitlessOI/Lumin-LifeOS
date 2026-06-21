@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: TC Service (Transaction Coordinator) -->
+
 # Domain: TC Service (Transaction Coordinator)
 
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)

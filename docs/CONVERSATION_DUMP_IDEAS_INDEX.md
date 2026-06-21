@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: CONVERSATION_DUMP_IDEAS_INDEX — mined threads & backlog themes -->
+
 # CONVERSATION_DUMP_IDEAS_INDEX — mined threads & backlog themes
 
 **Owning SSOT (full idea registry + routing):** [`projects/AMENDMENT_38_IDEA_VAULT.md`](projects/AMENDMENT_38_IDEA_VAULT.md) — **§ Seed catalog** §A–D (ideas, TSOS nuances, actions, **Memory Intelligence / evidence-engine squeeze**); **§ Operator corpus — dual lane**; **§ Portfolio triage queue**. **Evidence engine (facts, debates, lessons, intent drift):** [`projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md`](projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md) + **[`MEMORY_FRAMEWORK_DESIGN_BRIEF.md`](../MEMORY_FRAMEWORK_DESIGN_BRIEF.md)** (25 ideas, open questions, §13 hardening). **Operator model (“study me”):** [`projects/AMENDMENT_09_LIFE_COACHING.md`](projects/AMENDMENT_09_LIFE_COACHING.md) — **Historical exports → Digital Twin**. **LifeOS-native variations:** [`projects/AMENDMENT_21_LIFEOS_CORE.md`](projects/AMENDMENT_21_LIFEOS_CORE.md) § **Idea Vault → LifeOS-native consolidation**.

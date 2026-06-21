@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G68 100. -->
+
 AMENDMENT 16: WORD KEEPER - Proof G68-100
 Blueprint Note: Proof-Closing Build Slice
 This note addresses the initial build slice for AMENDMENT 16: WORD KEEPER, focusing on establishing the foundational data model and persistence layer.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: C2 surface — communication bridge only; never assigns builder work or declares truth.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

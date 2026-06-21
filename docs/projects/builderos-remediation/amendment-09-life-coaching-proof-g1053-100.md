@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G1053-100: Initial Data Model Definition -->
+
 # Amendment 09: Life Coaching - Proof G1053-100: Initial Data Model Definition
 
 This document outlines the first build slice for Amendment 09, focusing on establishing the foundational data model for Life Coaching sessions. This proof point (G1053-100) specifically addresses the definition of the `LifeCoachingSession` data structure.

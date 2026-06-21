@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/code-review/middleware/auth.js.
+ */
 ```javascript
 const jwt = require('jsonwebtoken');
 

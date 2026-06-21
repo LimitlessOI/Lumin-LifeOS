@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Sync ACCEPTANCE_TESTS.json from BLUEPRINT.json exact_output_contract fields.
  * Sync ACCEPTANCE_TESTS.json from BLUEPRINT.json exact_output_contract fields.
  * Adds file_sha256_matches for byte_exact_copy steps; structural checks for S009-style steps.
  */

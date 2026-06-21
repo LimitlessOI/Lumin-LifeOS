@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Core API v1 routes: tasks, ideas, snapshot, drones, comprehensive ideas, vapi, builder health.
  * Core API v1 routes: tasks, ideas, snapshot, drones, comprehensive ideas, vapi, builder health.
  * Register with: registerApiV1CoreRoutes(app, getDeps)
  * getDeps() must return { pool, requireKey, executionQueue, ideaEngine, taskTracker, recallConversationMemory,

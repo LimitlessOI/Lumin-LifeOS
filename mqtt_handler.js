@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — mqtt_handler.js.
+ */
 const mqtt = require('mqtt');
 const amqplib = require('amqplib');
 const { EnergyDevice } = require('./models');

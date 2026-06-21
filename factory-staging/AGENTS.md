@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Canonical factory runtime -->
+
 # Canonical factory runtime
 
 You are in **`factory-staging/`** — the governed factory execute-step system.

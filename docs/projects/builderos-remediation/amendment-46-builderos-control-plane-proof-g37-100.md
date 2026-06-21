@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G37 100. -->
+
 // docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g37-100.md
 // This file serves as a proof-closing note for Amendment 46,
 // addressing the BuilderOS Control Plane wiring requirements.

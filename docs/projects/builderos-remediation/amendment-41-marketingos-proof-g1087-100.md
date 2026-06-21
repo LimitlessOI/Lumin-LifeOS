@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof - G1087-100: Core Segment Sync Verification -->
+
 # Amendment 41 MarketingOS Proof - G1087-100: Core Segment Sync Verification
 
 This document serves as a proof-closing blueprint note for Amendment 41, focusing on the foundational integration point for MarketingOS. It outlines the necessary steps to verify the secure and reliable transmission of user segment data, establishing the SSOT foundation for subsequent MarketingOS features.

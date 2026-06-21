@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G788-100 - Core Execution Loop Initialization -->
+
 # Command Center V2 Blueprint Proof: G788-100 - Core Execution Loop Initialization
 
 This document serves as a proof-closing note for the initial build slice of the Command Center V2 (C2) blueprint, specifically targeting the foundational elements of the "Phase 1: Core Command Execution Loop (MVP)". The goal is to establish the minimal viable command registration and execution flow.

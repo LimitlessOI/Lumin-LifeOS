@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231012_create_db_config_history.sql.
 CREATE TABLE db_config_history (
   id SERIAL PRIMARY KEY,
   config_name VARCHAR(255) NOT NULL,

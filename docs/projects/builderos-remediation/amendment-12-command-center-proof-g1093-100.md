@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1093 100. -->
+
 Amendment 12: Command Center - Proof G1093-100
 Blueprint Note: Core Service Initialization and Command Registration
 

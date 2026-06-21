@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: BuilderOS Control Plane API — measurement health + build ledger.
  * BuilderOS Control Plane API — measurement health + build ledger.
  * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
  */

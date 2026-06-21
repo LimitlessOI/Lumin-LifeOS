@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — TC PORTAL MAP SPEC. -->
+
 (function () {
   let lastWorkspaceTests = null;
   let lastWorkspaceValidation = null;

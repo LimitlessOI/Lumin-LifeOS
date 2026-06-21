@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createCanonicalSystemRoutes — routes/canonical-system-routes.js.
+ */
 import express from 'express';
 
 /**

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G1105 100. -->
+
 Amendment 09: Life Coaching - Proof Gate G1105-100
 
 Objective

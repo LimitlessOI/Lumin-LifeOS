@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Generate FACTORY-REBOOT-0004 mission pack (proof / materialize mission).
  * Generate FACTORY-REBOOT-0004 mission pack (proof / materialize mission).
  * Run from repo root: node builderos-reboot/scripts/generate-factory-reboot-0004.mjs
  */

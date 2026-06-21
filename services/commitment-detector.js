@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/commitment-detector.js — Amendment 16 (Word Keeper)
  * services/commitment-detector.js — Amendment 16 (Word Keeper)
  *
  * Scans 60-second transcript chunks for commitment language.

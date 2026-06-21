@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/conflict-intelligence.js
  * services/conflict-intelligence.js
  *
  * Conflict Intelligence — consent management, conflict recording, and

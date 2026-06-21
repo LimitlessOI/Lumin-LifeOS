@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Class ToolsModule — modules/system/tools-module.js.
+ */
 import { requireKey } from "../../src/server/auth/requireKey.js";
 import {
   checkCommandPresence,

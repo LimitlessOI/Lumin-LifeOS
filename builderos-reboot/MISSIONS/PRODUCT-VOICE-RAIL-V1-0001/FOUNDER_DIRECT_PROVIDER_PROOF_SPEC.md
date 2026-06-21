@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Direct Provider — Production Regression Proof -->
+
 # Founder Direct Provider — Production Regression Proof
 
 **Mission:** `PRODUCT-VOICE-RAIL-V1-0001`  

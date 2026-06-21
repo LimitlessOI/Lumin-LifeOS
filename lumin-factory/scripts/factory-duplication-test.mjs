@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Blueprint duplication test: delete core runtime files, re-materialize missions, verify sha256.
  * Blueprint duplication test: delete core runtime files, re-materialize missions, verify sha256.
  */
 import fs from 'node:fs';

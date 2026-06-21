@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Direct Founder -> LifeOS action bridge.
  * Direct Founder -> LifeOS action bridge.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

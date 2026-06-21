@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Model Escalation Gate -->
+
 # Model Escalation Gate
 
 **Status:** ACTIVE — mandatory before any stronger/more expensive model dispatch  

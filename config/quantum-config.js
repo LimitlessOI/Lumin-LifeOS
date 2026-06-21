@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Configuration — Quantum Config.
+ */
 module.exports = {
     providers: {
         ibmq: {

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Governance Proof - G677-100 -->
+
 # Amendment 01: AI Council Governance Proof - G677-100
 
 ## Document Purpose

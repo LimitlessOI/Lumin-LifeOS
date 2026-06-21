@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Shell script — Download Dumps.
 BASE="https://raw.githubusercontent.com/LimitlessOI/Lumin-LifeOS/main/%E2%80%A2%20Lumin-Memory/00_INBOX/raw"
 DIR="• Lumin-Memory/00_INBOX/raw"
 mkdir -p "$DIR"

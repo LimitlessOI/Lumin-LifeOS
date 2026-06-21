@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G475-100 - Initial ProofEngine Core Logic -->
+
 # Amendment 12 Command Center Proof: G475-100 - Initial ProofEngine Core Logic
 
 This document outlines the proof-closing blueprint note for build slice `g475-100`, focusing on the initial implementation of the `BuilderOS/ProofEngine` core logic as described in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

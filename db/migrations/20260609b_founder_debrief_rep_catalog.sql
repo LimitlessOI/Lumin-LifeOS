@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260609b_founder_debrief_rep_catalog.sql.
 -- Founder debrief persistence + REP catalog registry
 -- @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
 

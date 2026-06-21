@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching - Proof G65-100 Remediation Note -->
+
 # Amendment 09 Life Coaching - Proof G65-100 Remediation Note
 
 **Blueprint Source:** `docs/projects/AMENDMENT_09_LIFE_COACHING.md` (Content not provided in REPO FILE CONTENTS)

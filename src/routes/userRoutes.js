@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/userRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const router = express.Router();

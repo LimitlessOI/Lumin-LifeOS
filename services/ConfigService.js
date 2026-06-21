@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Config Service — thin wrapper around env-validator that provides typed access
  * Config Service — thin wrapper around env-validator that provides typed access
  * to validated environment variables, throwing on unknown keys.
  *

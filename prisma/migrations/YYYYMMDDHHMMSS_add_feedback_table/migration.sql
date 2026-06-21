@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — migration.sql.
 ```sql
 -- Create the feedback table
 CREATE TABLE feedback (

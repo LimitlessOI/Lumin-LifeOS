@@ -1,4 +1,5 @@
-/** @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md — council/env overlap (Ollama policy, spend caps) */
+/**
+ * SYNOPSIS: Exports loadRuntimeEnv — config/runtime-env.js. @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md — council/env overlap (Ollama policy, spend caps) */
 export function loadRuntimeEnv() {
   const {
     DATABASE_URL,

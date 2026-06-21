@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G69-100 - Dynamic Application Logo -->
+
 # Amendment 14 White-Label Proof: G69-100 - Dynamic Application Logo
 
 ## Blueprint Note: Proof-Closing Build Slice

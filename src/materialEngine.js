@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/materialEngine.js.
+ */
 ```javascript
 const { Client } = require('pg');
 const client = new Client();

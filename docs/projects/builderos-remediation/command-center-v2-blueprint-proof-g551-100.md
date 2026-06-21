@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G551 100. -->
+
 The verifier expects to execute this `.md` file as JavaScript, which conflicts with its `.md` extension and intended documentation purpose.
 Blueprint Proof: Command Center V2 - G551-100 - Initial Registry & Model Definition
 This document serves as a proof-closing blueprint note for the initial build slice of Command Center V2, focusing on the foundational `Command` model and `CommandRegistry` component.

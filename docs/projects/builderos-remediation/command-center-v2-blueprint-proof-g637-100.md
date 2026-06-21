@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g637-100 - Initial API Core Definition -->
+
 # Command Center V2 Blueprint Proof: g637-100 - Initial API Core Definition
 
 This document serves as a proof-closing note for the initial build slice of the Command Center V2 API core definition, as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.

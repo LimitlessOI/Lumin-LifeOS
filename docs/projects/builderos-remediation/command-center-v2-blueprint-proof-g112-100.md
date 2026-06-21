@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G112-100 -->
+
 # Command Center V2 Blueprint Proof - G112-100
 
 This document details the first build slice derived from the Command Center V2 Blueprint, focusing on establishing foundational data access for the new platform.

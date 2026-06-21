@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * SYNOPSIS: Script — Run Drift Check.
+ */
 import { stdin as input, exit } from 'process';
 import { runDriftCheck } from '../audit/drift/drift_sentinel.js';
 

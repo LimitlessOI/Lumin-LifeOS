@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_consultants_and_slots.sql.
 CREATE TABLE consultants (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,

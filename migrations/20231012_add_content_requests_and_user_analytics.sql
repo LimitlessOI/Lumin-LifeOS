@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231012_add_content_requests_and_user_analytics.sql.
 ```sql
 -- Migration script to add 'content_requests' and 'user_analytics' tables
 

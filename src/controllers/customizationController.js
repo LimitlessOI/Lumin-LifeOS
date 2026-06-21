@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/customizationController.js.
+ */
 ```javascript
 const CustomizationService = require('../services/customizationService');
 

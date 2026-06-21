@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Model tiers — think vs execute -->
+
 # Model tiers — think vs execute
 
 **Read after:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)  

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 10 — API Cost Savings Service (TokenOS) — *TokenSaverOS (TSOS) B2B lane* -->
+
 # AMENDMENT 10 — API Cost Savings Service (TokenOS) — *TokenSaverOS (TSOS) B2B lane*
 **Status:** IN_BUILD → B2B product layer now built; awaiting first paying customer + production verification
 **Authority:** Subordinate to SSOT North Star Constitution

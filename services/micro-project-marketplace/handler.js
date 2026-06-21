@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Handler.
+ */
 ```javascript
 const express = require('express');
 const app = express();

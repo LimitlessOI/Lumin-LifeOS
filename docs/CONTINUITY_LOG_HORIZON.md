@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Continuity Log — Horizon (competitive / AI landscape) -->
+
 # Continuity Log — Horizon (competitive / AI landscape)
 
 > Sessions that change `services/lane-intel-service.js` (horizon path), `LANE_INTEL_*` env defaults, or Horizon-specific queries.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 17 TC Service Enhancement (G2) -->
+
 # BuilderOS Remediation: Amendment 17 TC Service Enhancement (G2)
 
 This memo outlines the next buildable slice for the AMENDMENT_17_TC_SERVICE blueprint, addressing its current lack of directly actionable safe-scope tasks.

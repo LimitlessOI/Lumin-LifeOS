@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-assistant-service.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-assistant-service.js
  *

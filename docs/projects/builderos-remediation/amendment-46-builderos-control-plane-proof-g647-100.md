@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G647 100. -->
+
 The specification is contradictory: the task asks to write a `.md` file, but the verifier rejection and the instruction "Generate the complete implementation code" imply the content should be executable JavaScript, which is incompatible with the `.md` file extension for Node.js module loading.
 
 ```javascript

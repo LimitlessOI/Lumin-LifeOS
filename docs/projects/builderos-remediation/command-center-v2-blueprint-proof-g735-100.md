@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G735-100 Remediation -->
+
 The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided in the REPO FILE CONTENTS, preventing specific derivation of the proof gap and build slice.
 # Command Center V2 Blueprint Proof: G735-100 Remediation
 

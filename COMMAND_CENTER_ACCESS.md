@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎮 Command Center Access - Overlay Interface -->
+
 # 🎮 Command Center Access - Overlay Interface
 
 ## Quick Access

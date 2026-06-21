@@ -1,3 +1,4 @@
+# SYNOPSIS: Shell script — Project Setup.
 ```bash
 #!/bin/bash
 

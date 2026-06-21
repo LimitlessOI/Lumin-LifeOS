@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Lumin / LimitlessOS Brand Bible -->
+
 # Lumin / LimitlessOS Brand Bible
 
 > This file is read by the AI builder before every design and copy task.

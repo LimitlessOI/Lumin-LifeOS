@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema.sql.
 ```sql
 CREATE TABLE IF NOT EXISTS bpa_clients (
     id SERIAL PRIMARY KEY,

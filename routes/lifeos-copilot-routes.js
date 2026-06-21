@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-copilot-routes.js
  * routes/lifeos-copilot-routes.js
  *
  * LifeOS Live CoPilot + Emergency Repair API

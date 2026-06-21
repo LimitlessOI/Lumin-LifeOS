@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_payments_table.sql.
 ```sql
 CREATE TABLE payments (
     id SERIAL PRIMARY KEY,

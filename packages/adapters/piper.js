@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Piper Adapter
  * Piper Adapter
  * Handles local Piper TTS (Text-to-Speech)
  */

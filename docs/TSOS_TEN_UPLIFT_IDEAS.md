@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TSOS — push grades toward 10 and beyond (idea bank) -->
+
 # TSOS — push grades toward 10 and beyond (idea bank)
 
 **Purpose:** Concrete levers beyond “try harder.” Mix of **repo-native** work and **industry patterns** (routing, caching, SRE). Not all apply at once — pick slices.

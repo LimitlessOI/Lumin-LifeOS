@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G1015 100. -->
+
 AMENDMENT_12_COMMAND_CENTER_PROOF_G1015-100
 Proof-Closing Blueprint Note for G1015-001
 

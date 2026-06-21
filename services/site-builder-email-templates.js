@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/site-builder-email-templates.js
+ */
 // services/site-builder-email-templates.js
 
 /**

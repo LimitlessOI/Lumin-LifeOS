@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/businessTasksController.js.
+ */
 ```javascript
 const BusinessTasksService = require('../services/businessTasksService');
 

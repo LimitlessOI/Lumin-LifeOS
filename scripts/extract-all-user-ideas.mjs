@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Extract all user ideas from knowledge base and conversation history
  * Extract all user ideas from knowledge base and conversation history
  * Catalogs them with full metadata
  */

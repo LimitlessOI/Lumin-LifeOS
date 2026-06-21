@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/integrations/externalSupport.js.
+ */
 ```javascript
 const axios = require('axios');
 

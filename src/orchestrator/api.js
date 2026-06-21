@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: src/orchestrator/api.js
+ */
 // src/orchestrator/api.js
 
 const express = require('express');

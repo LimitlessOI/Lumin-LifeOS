@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports loadROIFromDatabase — startup/roi.js.
+ */
 import dayjs from "dayjs";
 
 export async function loadROIFromDatabase(pool, logger, roiTracker) {

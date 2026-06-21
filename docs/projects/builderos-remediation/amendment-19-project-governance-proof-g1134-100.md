@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof: AMENDMENT_19_PROJECT_GOVERNANCE - Initial Governance Principles (G1134-100) -->
+
 # Proof: AMENDMENT_19_PROJECT_GOVERNANCE - Initial Governance Principles (G1134-100)
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G97-100 -->
+
 # Amendment 09: Life Coaching - Proof G97-100
 
 ## Blueprint Note: Next Smallest Build Slice for G97 (Life Coaching Session Scheduling - Core Model & Creation)

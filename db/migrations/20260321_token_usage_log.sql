@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260321_token_usage_log.sql.
 -- Migration: 20260321_token_usage_log
 -- TCO-E01: Savings Ledger — per-request receipt.
 -- Every AI call records before/after tokens so we can generate

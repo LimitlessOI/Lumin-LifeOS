@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G511 100. -->
+
 The verifier's rejection indicates it attempted to execute a markdown file as JavaScript, which contradicts the explicit `.md` file extension requested for the output.
 Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane Wiring (G511-100)
 

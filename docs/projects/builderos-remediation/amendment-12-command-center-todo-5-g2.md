@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 12 Command Center - Mobile-Responsive Layout (Todo 5, G2) -->
+
 The specification is contradictory: the task asks to write a markdown file, but the verifier expects executable JavaScript, and the output instruction implies the output should be code.
 export const markdownContent = `
 # BuilderOS Remediation: Amendment 12 Command Center - Mobile-Responsive Layout (Todo 5, G2)

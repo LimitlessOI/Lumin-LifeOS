@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G27-100 - Command Status Reporting -->
+
 # Command Center V2 Blueprint Proof: G27-100 - Command Status Reporting
 
 This document addresses the next smallest build slice derived from the Command Center V2 Blueprint, focusing on closing a critical gap in command execution feedback.

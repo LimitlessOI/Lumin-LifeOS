@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Game Publisher Routes
  * Game Publisher Routes
  * Extracted from server.js
  */

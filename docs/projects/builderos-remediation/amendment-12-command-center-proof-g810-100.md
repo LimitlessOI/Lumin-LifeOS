@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G810 100. -->
+
 Amendment 12 Command Center Proof - G810-100
 Blueprint Note: Next Build Slice - Command Registry
 This note closes the proof for the initial implementation of the Command Registry, a foundational component for the BuilderOS Command Center as outlined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` (Phase 2.1).

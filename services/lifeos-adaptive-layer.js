@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Adaptive layer for LifeOS.
  * Adaptive layer for LifeOS.
  *
  * The common core stays stable. AI/policy can adapt what the user sees first,

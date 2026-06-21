@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G133 100. -->
+
 Amendment 12 Command Center Proof: G133-100 - Initial Command Definition and Registry
 This document serves as a proof-closing blueprint note for the initial build slice of the Amendment 12 Command Center. It addresses the foundational elements required to define and manage commands within the BuilderOS context.
 ---

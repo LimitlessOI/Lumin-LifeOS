@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G275 100. -->
+
 AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (g275-100)
 SSOT Foundation: MarketingCampaignUpdate Event Propagation Proof
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap g275-100, specifically verifying the end-to-end propagation and processing of the `MarketingCampaignUpdate` event within the MarketingOS platform.

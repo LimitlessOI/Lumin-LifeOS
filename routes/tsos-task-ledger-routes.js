@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createTsosTaskLedgerRoutes — routes/tsos-task-ledger-routes.js.
+ */
 import express from 'express';
 
 export function createTsosTaskLedgerRoutes({ pool }) {

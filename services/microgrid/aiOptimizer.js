@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — AiOptimizer.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs-node');
 

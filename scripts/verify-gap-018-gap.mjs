@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports runGAP018GapVerification — scripts/verify-gap-018-gap.mjs.
+ */
 /*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * - Verifies the status of critical kernel and BuilderOS control plane health endpoints

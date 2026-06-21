@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Request ID Tracer
  * Request ID Tracer
  * Attaches a unique request ID to every request and response.
  * Enables tracing a specific request through all log lines.

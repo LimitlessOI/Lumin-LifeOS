@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/migrations/20231012000000-create-users-table.js.
+ */
 'use strict';
 
 module.exports = {

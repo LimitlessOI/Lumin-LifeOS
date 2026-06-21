@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — .github/workflows/pr-diff-summary.yml.
 name: PR Diff Summary
 
 on:

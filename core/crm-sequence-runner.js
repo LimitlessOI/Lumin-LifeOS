@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: CRM + Sequence Runner (internal lightweight CRM)
  * CRM + Sequence Runner (internal lightweight CRM)
  *
  * Purpose:

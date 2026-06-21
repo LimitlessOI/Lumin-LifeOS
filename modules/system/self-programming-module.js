@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Self-programming module: registers POST /api/v1/system/self-program with auth and AI safety.
  * Self-programming module: registers POST /api/v1/system/self-program with auth and AI safety.
  */
 export class SelfProgrammingModule {

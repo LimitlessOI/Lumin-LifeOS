@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/video-production.js
  * services/video-production.js
  *
  * Video Production system — generates personalized AI video content using

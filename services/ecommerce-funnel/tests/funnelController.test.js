@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — FunnelController.Test.
+ */
 ```javascript
 const request = require('supertest');
 const app = require('../src/server'); // Assuming server.js exports the app

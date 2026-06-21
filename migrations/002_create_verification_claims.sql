@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 002_create_verification_claims.sql.
 CREATE TABLE verification_claims (
     id SERIAL PRIMARY KEY,
     identity_id INT REFERENCES identity_profiles(id),

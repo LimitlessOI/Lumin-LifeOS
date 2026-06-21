@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G473-100 -->
+
 # Amendment 12 Command Center Proof - G473-100
 
 ## Blueprint Note: Core API Endpoints - Status

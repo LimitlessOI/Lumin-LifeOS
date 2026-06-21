@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — StripeIntegration.
+ */
 ```javascript
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const logger = require('../../utils/logger');

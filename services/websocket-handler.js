@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: WebSocket connection handler — extracted from server.js.
  * WebSocket connection handler — extracted from server.js.
  */
 

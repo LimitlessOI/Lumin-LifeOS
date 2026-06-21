@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Premium API Adapter
  * Premium API Adapter
  * Handles premium API providers (OpenAI, Anthropic, Google, etc.)
  * WITH ROI GATING - only calls when ROI > threshold

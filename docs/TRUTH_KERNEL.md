@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Truth Kernel - Single Source of Truth -->
+
 # LifeOS Truth Kernel - Single Source of Truth
 **Created:** TODAY
 **Status:** ACTIVE

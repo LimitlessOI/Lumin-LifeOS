@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Todo 7 G3. -->
+
 BuilderOS Remediation: Command Center V2 Blueprint - Wire Nav Link from index.html
 This memo addresses the open task "Wire nav link from index.html" from the `COMMAND_CENTER_V2_BLUEPRINT.md`. The blueprint is not directly buildable due to this unchecked task.
 ---

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G85 100. -->
+
 AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (G85-100)
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap related to the `UserEngagementEvent.G85_100_Trigger` event's successful ingestion by MarketingOS, as outlined in `AMENDMENT_41_MARKETINGOS.md`. It defines the necessary steps for BuilderOS to verify this specific integration point.
 ---

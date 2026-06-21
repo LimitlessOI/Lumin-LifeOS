@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof - G23-100 Remediation -->
+
 # Amendment 14 White-Label Proof - G23-100 Remediation
 
 This document addresses the OIL verifier rejection related to the processing of markdown files within the BuilderOS loop, specifically for `amendment-14-white-label-proof-g23-100.md`. The rejection indicates a fundamental misinterpretation of file types by the verifier, attempting to execute `.md` files as Node.js modules.

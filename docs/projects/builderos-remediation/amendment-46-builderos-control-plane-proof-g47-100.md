@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G47-100 -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G47-100
 
 This document serves as a proof-closing note for the implementation of the BuilderOS control plane wiring as specified in `AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md`. It addresses the signal requiring follow-through for `routes/lifeos-council-builder-routes.js`.

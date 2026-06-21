@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/risk-scorer.js
  * services/risk-scorer.js
  *
  * Scores any idea or proposal 1–6 based on what it touches.

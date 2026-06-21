@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/models/Process.js.
+ */
 ```javascript
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');

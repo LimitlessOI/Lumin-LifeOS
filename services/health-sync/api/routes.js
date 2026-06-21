@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Routes.
+ */
 ```javascript
 const express = require('express');
 const streamProcessor = require('../ingestion/stream-processor');

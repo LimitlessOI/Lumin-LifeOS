@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 001 Create Workflow Tables.
 ```sql
 CREATE TABLE workflows (
     id SERIAL PRIMARY KEY,

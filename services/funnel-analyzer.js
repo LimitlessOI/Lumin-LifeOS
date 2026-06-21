@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Funnel Analyzer — queues AI-driven funnel data analysis tasks into the
  * Funnel Analyzer — queues AI-driven funnel data analysis tasks into the
  * execution queue for async processing.
  *

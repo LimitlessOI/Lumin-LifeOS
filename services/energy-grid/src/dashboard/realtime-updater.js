@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Realtime Updater.
+ */
 ```javascript
 const socketIo = require('socket.io');
 const http = require('http');

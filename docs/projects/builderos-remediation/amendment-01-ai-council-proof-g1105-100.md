@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G1105 100. -->
+
 Amendment 01: AI Council - Proof Gate G1105-100
 
 This document serves as the initial proof artifact for `AMENDMENT_01_AI_COUNCIL.md`.

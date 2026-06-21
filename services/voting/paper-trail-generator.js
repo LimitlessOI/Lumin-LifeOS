@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Placeholder for paper audit trail generator
+ */
 ```javascript
 // Placeholder for paper audit trail generator
 module.exports = {

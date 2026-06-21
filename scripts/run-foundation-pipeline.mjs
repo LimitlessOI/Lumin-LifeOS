@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Full foundation pipeline — FOUNDER_PACKET_V2 machine path toward Point B (LifeRE Alpha).
  * Full foundation pipeline — FOUNDER_PACKET_V2 machine path toward Point B (LifeRE Alpha).
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

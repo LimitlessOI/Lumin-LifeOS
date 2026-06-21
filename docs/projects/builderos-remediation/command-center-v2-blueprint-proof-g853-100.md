@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G853 100. -->
+
 // src/types/command.d.ts
 interface Command {
   id: string;

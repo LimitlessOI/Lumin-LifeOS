@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Workspace Status -->
+
 # Workspace Status
 
 **Date:** 2026-05-24  

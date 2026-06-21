@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Operator smoke test for the Lumin programming bridge — calls GET /build/health and optionally
  * Operator smoke test for the Lumin programming bridge — calls GET /build/health and optionally
  * POST /build/plan (costs a council/AI run; opt-in only).
  *

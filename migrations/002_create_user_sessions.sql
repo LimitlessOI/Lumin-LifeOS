@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 002_create_user_sessions.sql.
 ```sql
 CREATE TABLE user_sessions (
     id SERIAL PRIMARY KEY,

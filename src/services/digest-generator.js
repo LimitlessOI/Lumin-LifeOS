@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: digest-generator.js
+ */
 // digest-generator.js
 const twilio = require('twilio');
 const accountSid = 'your_account_sid'; // Your Account SID from www.twilio.com/console

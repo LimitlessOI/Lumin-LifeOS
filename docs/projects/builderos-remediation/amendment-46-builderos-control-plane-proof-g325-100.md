@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 46: BuilderOS Control Plane Proof - G325-100 -->
+
 # AMENDMENT 46: BuilderOS Control Plane Proof - G325-100
 
 ## Proof-Closing Blueprint Note: Builder Control Plane Route Wiring

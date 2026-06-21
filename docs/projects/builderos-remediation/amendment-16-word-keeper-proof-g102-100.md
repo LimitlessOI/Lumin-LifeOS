@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof - G102-100 Remediation -->
+
 The source blueprint `docs/projects/AMENDMENT_16_WORD_KEEPER.md` was not provided, requiring inference for content.
 # Amendment 16 Word Keeper Proof - G102-100 Remediation
 

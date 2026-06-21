@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Moved — Dashboard builder queue SSOT -->
+
 # Moved — Dashboard builder queue SSOT
 
 The dashboard autonomous backlog specification now lives here:

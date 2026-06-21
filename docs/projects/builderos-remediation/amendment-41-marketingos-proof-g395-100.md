@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G395 100. -->
+
 Amendment 41 MarketingOS Proof - G395-100
 This document serves as a proof-closing blueprint note for Amendment 41, focusing on the verification of its integration within MarketingOS, specifically proof point G395-100. This note outlines the exact gap, the minimal build slice to close it, affected files, verification steps, and stop conditions.
 

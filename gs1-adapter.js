@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — gs1-adapter.js.
+ */
 ```javascript
 function formatToGS1(data) {
     // Transform data to GS1/EPCIS standard format

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Model Key Validator
  * Model Key Validator
  * Validates all callCouncilMember calls use correct COUNCIL_MEMBERS keys
  */

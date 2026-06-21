@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Autonomous recovery protocol — strategy forbidden → recover, never terminal stop.
  * Autonomous recovery protocol — strategy forbidden → recover, never terminal stop.
  * @ssot builderos-reboot/MISSIONS/AUTONOMOUS-RECOVERY-0001/FOUNDER_PACKET.json
  */

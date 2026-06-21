@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: OIL Self-Repair Detection Rules & Audit Checklist -->
+
 # OIL Self-Repair Detection Rules & Audit Checklist
 
 **Purpose:** Reusable rules from Command Center / OIL / Builder repair history.  

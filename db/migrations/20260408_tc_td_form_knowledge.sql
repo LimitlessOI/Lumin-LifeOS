@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260408_tc_td_form_knowledge.sql.
 -- @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
 -- Persist TransactionDesk form inventory and operator handling guidance.
 

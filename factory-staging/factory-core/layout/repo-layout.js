@@ -1,5 +1,5 @@
 /**
- * Runtime repo layout — standalone Lumin-Factory vs LifeOS monorepo host.
+ * SYNOPSIS: Runtime repo layout — standalone Lumin-Factory vs LifeOS monorepo host.
  * @authority Canonical factory runtime — see factory-staging/AGENTS.md
  */
 import fs from 'node:fs';

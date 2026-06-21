@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231015_create_code_reviews_table.sql.
 ```sql
 CREATE TABLE code_reviews (
     id SERIAL PRIMARY KEY,

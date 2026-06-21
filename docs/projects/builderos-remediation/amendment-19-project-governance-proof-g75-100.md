@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G75-100 -->
+
 The source blueprint `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` was not provided, so its content for derivation was inferred.
 # Amendment 19 Project Governance Proof: G75-100
 

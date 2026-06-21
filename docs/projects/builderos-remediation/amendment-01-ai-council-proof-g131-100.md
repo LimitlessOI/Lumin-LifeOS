@@ -1,1 +1,3 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G131 100. -->
+
 The specification is contradictory: the task asks to write a `.md` file containing a "proof-closing blueprint note" (implying markdown text), but the OIL verifier rejected the previous attempt because it treated the `.md` file as a JavaScript module and found a syntax error, and the current instruction is to "Generate the complete implementation code. Output ONLY the code first". This implies the content of the `.md` file should be executable JavaScript code to satisfy the verifier, which conflicts with its `.md` extension and "blueprint note" purpose.

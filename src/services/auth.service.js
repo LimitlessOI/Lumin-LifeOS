@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/auth.service.js.
+ */
 ```javascript
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../utils/jwt.utils');

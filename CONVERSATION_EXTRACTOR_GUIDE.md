@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🤖 Conversation Extractor Bot - Deploy Guide -->
+
 # 🤖 Conversation Extractor Bot - Deploy Guide
 
 ## Overview

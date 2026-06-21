@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof Gap: G17-100 - WordKeeperRepository.create() -->
+
 # Amendment 16 Word Keeper Proof Gap: G17-100 - WordKeeperRepository.create()
 
 This document outlines the next smallest build slice for the Word Keeper feature, focusing on establishing the foundational data persistence layer.

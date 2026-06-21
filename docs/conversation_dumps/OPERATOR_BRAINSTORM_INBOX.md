@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Operator brainstorm inbox (verbatim) -->
+
 # Operator brainstorm inbox (verbatim)
 
 **SSOT routing:** [`docs/projects/AMENDMENT_38_IDEA_VAULT.md`](../projects/AMENDMENT_38_IDEA_VAULT.md) — **§6** step **5** (brainstorming = word-for-word; coding tutorials = archival unless still-true integration).

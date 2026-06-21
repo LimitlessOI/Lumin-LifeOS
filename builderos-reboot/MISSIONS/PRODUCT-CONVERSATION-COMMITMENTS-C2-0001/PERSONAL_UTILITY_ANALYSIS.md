@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Personal Utility Analysis -->
+
 # Personal Utility Analysis
 
 **Mission:** PRODUCT-CONVERSATION-COMMITMENTS-C2-0001  

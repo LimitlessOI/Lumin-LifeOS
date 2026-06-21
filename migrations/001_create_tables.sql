@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 001_create_tables.sql.
 ```sql
 CREATE TABLE market_reports (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G219 100. -->
+
 AMENDMENT 12: COMMAND CENTER - Proof G219-100
 Blueprint Note: Next Smallest Build Slice for Command Registry Integration
 This note outlines the next atomic build slice to advance the AMENDMENT 12: COMMAND CENTER blueprint, focusing on establishing the foundational `CommandRegistry` and its initial integration with `CommandCenter`.

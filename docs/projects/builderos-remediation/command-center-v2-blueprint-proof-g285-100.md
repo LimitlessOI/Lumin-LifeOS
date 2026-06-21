@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G285-100 Remediation -->
+
 # Command Center V2 Blueprint Proof - G285-100 Remediation
 
 This document outlines the next smallest build slice for Command Center V2, addressing the immediate implementation gap and providing a path forward for the BuilderOS loop.

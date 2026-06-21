@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-coordinator.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-coordinator.js
  * Main Transaction Coordinator orchestrator — from contract email to close of escrow.

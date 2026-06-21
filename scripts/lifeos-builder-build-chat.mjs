@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: System-authored Lumin chat UI: POST /api/v1/lifeos/builder/build on the RUNNING app.
  * System-authored Lumin chat UI: POST /api/v1/lifeos/builder/build on the RUNNING app.
  * - Prerequisites (KNOW from preflight):
  *   - Deploy must include council builder routes (`GET …/builder/domains` ≠ 404). If 404 → redeploy from `main`.

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Shared git alignment: local HEAD vs `origin/main` (fast-forward behind detection).
  * Shared git alignment: local HEAD vs `origin/main` (fast-forward behind detection).
  *
  * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md

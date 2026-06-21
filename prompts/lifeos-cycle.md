@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Domain: LifeOS Cycle Tracking -->
+
 <!-- prompts/lifeos-cycle.md — LifeOS Cycle Tracking domain context -->
 <!-- @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md -->
 

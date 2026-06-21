@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middleware/auth.middleware.js.
+ */
 ```javascript
 const { verifyToken } = require('../utils/jwt.utils');
 const logger = require('../utils/logger');

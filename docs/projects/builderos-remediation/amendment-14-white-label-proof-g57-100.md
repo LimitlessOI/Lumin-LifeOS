@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof - G57-100 -->
+
 The source blueprint `docs/projects/AMENDMENT_14_WHITE_LABEL.md` was specified but its content was not provided. Therefore, the specific details for the missing implementation/proof gap, build slice, files, verifier checks, and stop conditions cannot be derived. This note provides the required structure, awaiting the blueprint content for specific population.
 
 # Amendment 14 White-Label Proof - G57-100

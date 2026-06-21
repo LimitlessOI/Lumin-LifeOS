@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G756 100. -->
+
 The specification is contradictory: The task explicitly asks to write a `.md` file, but the OIL verifier rejected the previous attempt by trying to execute the `.md` file as a JavaScript module, and the final instruction asks for "implementation code". This implies a mismatch between the expected file type by the verifier/instruction and the specified file type for writing.
 
 Amendment 41 MarketingOS Proof - G756-100

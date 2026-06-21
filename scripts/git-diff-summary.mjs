@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Prints a short summary of the current git diff for CI / PR descriptions.
  * Prints a short summary of the current git diff for CI / PR descriptions.
  *
  * @ssot docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Class CommandCenter — docs/projects/builderos-remediation/amendment-12-command-center-proof-g325-100.md. -->
+
 export class CommandCenter {
   constructor() {
     this._state = { status: 'uninitialized' };

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G67-100 Remediation -->
+
 # Amendment 19 Project Governance Proof: G67-100 Remediation
 
 ## Context

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching - Proof G24-100: Core Session Data Model -->
+
 # Amendment 09 Life Coaching - Proof G24-100: Core Session Data Model
 
 This document outlines the first proof-closing build slice for Amendment 09, focusing on establishing the foundational data model for coaching sessions within LifeOS. This slice aims to define the core structure for a coaching session, enabling future development of scheduling, logging, and progress tracking.

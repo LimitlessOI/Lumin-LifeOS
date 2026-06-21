@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 09 Life Coaching - Weekly Progress Email (G8) -->
+
 # BuilderOS Remediation: Amendment 09 Life Coaching - Weekly Progress Email (G8)
 
 This memo addresses the missing specification for "Weekly progress email schema and scheduling" from `docs/projects/AMENDMENT_09_LIFE_COACHING.md`. The goal is to produce a builder-ready enhancement memo for the smallest buildable next slice.

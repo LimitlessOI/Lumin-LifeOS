@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                    WEB SCRAPER FOR COMPETITIVE INTELLIGENCE                        ║
  * ║                    Scrapes all info we can for business intelligence            ║

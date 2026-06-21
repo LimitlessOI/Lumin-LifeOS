@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Script — Agriculture Data Pipeline.
+ */
 ```javascript
 const { processSensorData } = require('../services/agriculture/ai-processor');
 

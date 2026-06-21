@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - G685-100 Remediation -->
+
 # Amendment 14: White-Label Proof - G685-100 Remediation
 
 ## Overview

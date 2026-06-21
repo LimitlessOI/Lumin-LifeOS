@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G887 100. -->
+
 The specification to write a `.md` file conflicts with the verifier's rejection of `.md` files as executable code.
 AMENDMENT 12: COMMAND CENTER - Proof G887-100
 Blueprint Note: Initial Data Model & Persistence Layer

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: AMENDMENT_01_AI_COUNCIL - Goal G849-100 -->
+
 # Proof-Closing Blueprint Note: AMENDMENT_01_AI_COUNCIL - Goal G849-100
 
 **Blueprint Source:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`

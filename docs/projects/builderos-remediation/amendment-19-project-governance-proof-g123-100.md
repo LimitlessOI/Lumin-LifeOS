@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof - G123-100 -->
+
 # Amendment 19 Project Governance Proof - G123-100
 
 ## Context: Amendment 19 Project Governance Blueprint

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G1011 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof - G1011-100
 
 Proof-Closing Blueprint Note for AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md

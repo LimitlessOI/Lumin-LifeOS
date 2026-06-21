@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof (G893-100) -->
+
 # Amendment 46: BuilderOS Control Plane Proof (G893-100)
 
 ## Proof-Closing Blueprint Note: Amendment 46 - BuilderOS Control Plane Wiring (G893-100)

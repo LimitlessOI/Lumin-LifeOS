@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createTsosEfficiencyRoutes — routes/tsos-efficiency-routes.js.
+ */
 import express from 'express';
 import { buildTsosEvidenceQuality } from '../services/builderos-tsos-evidence.js';
 import { listRoutingDecisions } from '../services/builderos-tsos-routing.js';

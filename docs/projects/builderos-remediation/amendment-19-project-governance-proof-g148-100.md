@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G148 100. -->
+
 // Define the TS interface for ProjectGovernanceConfig
 interface ProjectGovernanceConfig {
   governanceRules: string[];

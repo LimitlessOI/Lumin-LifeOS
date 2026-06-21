@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G116-100 - Initial Core Components -->
+
 # Amendment 12 Command Center Proof: G116-100 - Initial Core Components
 
 This document outlines the first proof-closing build slice for the BuilderOS Command Center, focusing on establishing the foundational data structures and the basic command flow.

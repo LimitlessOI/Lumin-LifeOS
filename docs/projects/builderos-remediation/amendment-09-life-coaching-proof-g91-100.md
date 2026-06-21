@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching: Proof G9.1 - Authentication & Authorization -->
+
 # Amendment 09 Life Coaching: Proof G9.1 - Authentication & Authorization
 
 ## Proof-Closing Blueprint Note: G9.1 Core Authentication & Authorization

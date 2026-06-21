@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Proof: Command Center V2 - G58-100 -->
+
 # Blueprint Proof: Command Center V2 - G58-100
 
 ## Proof-Closing Blueprint Note

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — RabbitMQConfig.
+ */
 const amqp = require('amqplib');
 
 async function setupRabbitMQ() {

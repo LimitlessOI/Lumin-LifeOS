@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G43 100. -->
+
 import { Router } from 'express';
 import builderController from '../controllers/builderController.js';
 import { getHealthStatus } from '../services/healthService.js'; // Assuming a health service exists

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Life Coaching Routes
  * Life Coaching Routes
  * Extracted from server.js
  */

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Adam-OS CRM Foundation Implementation
+ */
 // Adam-OS CRM Foundation Implementation
 class AdamOSCRM {
     constructor() {

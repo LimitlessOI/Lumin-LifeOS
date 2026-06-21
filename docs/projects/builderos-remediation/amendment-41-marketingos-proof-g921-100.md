@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note (G921-100) -->
+
 # AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note (G921-100)
 
 This document serves as the SSOT foundation for closing the proof gap identified in AMENDMENT_41_MARKETINGOS.md, specifically regarding the end-to-end verification of user marketing opt-in status synchronization.

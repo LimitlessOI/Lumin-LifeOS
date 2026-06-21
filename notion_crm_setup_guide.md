@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Notion CRM Setup Guide -->
+
 # Notion CRM Setup Guide
 
 ## Steps to Set Up

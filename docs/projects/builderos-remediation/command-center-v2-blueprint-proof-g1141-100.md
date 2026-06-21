@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G1141-100 - Implement Basic CommandExecutor -->
+
 # Command Center V2 Blueprint Proof: G1141-100 - Implement Basic CommandExecutor
 
 This document outlines the next smallest build slice for the Command Center V2, focusing on the implementation of the `CommandExecutor` to enable actual command execution following routing and registration.

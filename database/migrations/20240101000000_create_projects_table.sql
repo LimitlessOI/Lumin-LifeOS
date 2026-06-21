@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20240101000000_create_projects_table.sql.
 ```sql
 CREATE TABLE projects (
     id SERIAL PRIMARY KEY,

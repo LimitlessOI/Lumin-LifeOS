@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G55-100 - Initial Context Establishment -->
+
 # Amendment 14 White-Label Proof: G55-100 - Initial Context Establishment
 
 ## Objective

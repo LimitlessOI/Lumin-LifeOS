@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G373-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G373-100
 
 ## Blueprint Note: Next Build Slice - Robust Command Execution and Outcome Logging

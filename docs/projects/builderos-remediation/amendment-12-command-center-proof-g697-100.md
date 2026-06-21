@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G697-100 - Core Command Dispatch -->
+
 # Amendment 12 Command Center Proof: G697-100 - Core Command Dispatch
 
 This document outlines the initial proof-closing blueprint note for establishing the foundational command dispatch mechanism within the BuilderOS Command Center, as derived from `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.

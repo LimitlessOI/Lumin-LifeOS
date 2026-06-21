@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G889 100. -->
+
 Amendment 46: BuilderOS Control Plane Proof - G889-100
 
 Blueprint Note: BuilderOS Control Plane Wiring for `/build` Endpoints Remediation

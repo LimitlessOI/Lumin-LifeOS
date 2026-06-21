@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_governance_spec.sql.
 -- ============================================================
 -- Governance Spec Upgrade
 -- Adds segment spec fields, review tiers, market sensitivity,

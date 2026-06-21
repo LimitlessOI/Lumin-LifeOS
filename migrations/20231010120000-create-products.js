@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 20231010120000-create-products.js.
+ */
 ```javascript
 'use strict';
 

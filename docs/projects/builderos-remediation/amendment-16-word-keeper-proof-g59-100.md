@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 16 Word Keeper Proof - G59-100 -->
+
 # BuilderOS Remediation: Amendment 16 Word Keeper Proof - G59-100
 
 ## Proof-Closing Blueprint Note

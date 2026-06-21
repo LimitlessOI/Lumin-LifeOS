@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G123-100: LifeCoach Profile Read API -->
+
 # Amendment 09: Life Coaching - Proof G123-100: LifeCoach Profile Read API
 
 ## Blueprint Note: Next Smallest Build Slice

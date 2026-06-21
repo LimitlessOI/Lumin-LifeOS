@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G595 100. -->
+
 The specification asks for a `.md` file, but the OIL verifier rejects `.md` files as unknown file extensions for execution, indicating a contradiction in expected file type by the verifier.
 Amendment 12 Command Center Proof G595-100: Command Execution Trigger
 This proof-closing blueprint note addresses the initial implementation slice for triggering command execution within the Command Center.

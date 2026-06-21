@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Triggers Railway redeploy via the RUNNING app.
  * Triggers Railway redeploy via the RUNNING app.
  * Tries multiple paths in order:
  *   1. POST /api/v1/railway/deploy          — standard command-key auth

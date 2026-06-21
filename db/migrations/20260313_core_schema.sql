@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260313_core_schema.sql.
 -- LifeOS Core Schema
 -- Extracted from server.js initDatabase()
 -- Generated: 2026-03-13

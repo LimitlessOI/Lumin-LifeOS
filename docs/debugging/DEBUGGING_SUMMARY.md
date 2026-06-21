@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Debugging Summary - AI Counsel OS -->
+
 # Debugging Summary - AI Counsel OS
 
 ## Static Analysis Results

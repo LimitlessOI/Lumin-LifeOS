@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Council Routing Audit v1 -->
+
 # Council Routing Audit v1
 
 **Purpose:** Describe **what is actually happening today** — not the target architecture.  

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/integrity-score.js
  * services/integrity-score.js
  *
  * Computes, stores, and retrieves the Integrity Score for a LifeOS user.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Architecture Consolidation Decision Pack V1 -->
+
 # Architecture Consolidation Decision Pack V1
 
 **Status:** `GOVERNANCE DECISION` — authoritative for consolidation scope; not an implementation plan  

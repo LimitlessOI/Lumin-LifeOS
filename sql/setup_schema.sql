@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setup_schema.sql.
 CREATE TABLE healthcare_drones (
     id SERIAL PRIMARY KEY,
     drone_id VARCHAR(255) UNIQUE NOT NULL,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Conflict Arbitrator - AI-Powered Mediation Overlay -->
+
 # Conflict Arbitrator - AI-Powered Mediation Overlay
 
 **Product Name**: Counsel Arbitrator  

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260519_builder_trust_spine.sql.
 -- ============================================================
 -- Builder Trust Spine — Runtime Tables
 -- Amendment: docs/projects/builder-final-synthesis-rerun/BLUEPRINT.md

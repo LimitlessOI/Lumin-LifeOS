@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G150-100 - SSOT Foundation Verification -->
+
 # Amendment 41 MarketingOS Proof: G150-100 - SSOT Foundation Verification
 
 This document outlines the blueprint for proving the Single Source of Truth (SSOT) foundation for MarketingOS as defined by Amendment 41. The focus is on establishing a verifiable mechanism to confirm data consistency with the designated SSOT.

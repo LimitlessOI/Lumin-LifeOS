@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Remove Neon rows created by adversarial SENTRY live probes.
  * Remove Neon rows created by adversarial SENTRY live probes.
  * Usage:
  *   node --import dotenv/config scripts/deliberation-sentry-probe-cleanup.mjs

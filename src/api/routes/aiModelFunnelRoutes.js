@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/api/routes/aiModelFunnelRoutes.js.
+ */
 ```javascript
 const express = require('express');
 const router = express.Router();

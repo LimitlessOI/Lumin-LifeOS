@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G195-100 - Module Registry Schema -->
+
 # Command Center V2 Blueprint Proof: G195-100 - Module Registry Schema
 
 This document serves as a proof-closing blueprint note for the initial build slice of the Command Center V2 Module Registry Service, as outlined in `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`.

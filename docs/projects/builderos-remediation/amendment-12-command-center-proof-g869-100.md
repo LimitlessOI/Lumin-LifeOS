@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G869-100 Remediation -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided in the REPO FILE CONTENTS, requiring inference for the blueprint-backed build slice.
 
 # Amendment 12 Command Center Proof - G869-100 Remediation

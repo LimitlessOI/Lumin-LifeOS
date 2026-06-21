@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Integration test: dispatchExecuteMission dry-run on 0005. */
+/**
+ * SYNOPSIS: Integration test: dispatchExecuteMission dry-run on 0005. Integration test: dispatchExecuteMission dry-run on 0005. */
 import path from 'node:path';
 import { repoRootFromScriptMeta, detectFactoryLayout } from './factory-repo-layout.mjs';
 

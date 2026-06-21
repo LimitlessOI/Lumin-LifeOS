@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof (G699-100) - BuilderOS Remediation Blueprint -->
+
 # Amendment 41 MarketingOS Proof (G699-100) - BuilderOS Remediation Blueprint
 
 This document serves as the SSOT foundation for closing the proof gap identified during the OIL verifier rejection for Amendment 41, specifically concerning MarketingOS integration with BuilderOS.

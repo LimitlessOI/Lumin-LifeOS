@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — visualization-engine.js.
+ */
 ```javascript
 import * as THREE from 'three';
 import { Deck } from '@deck.gl/core';

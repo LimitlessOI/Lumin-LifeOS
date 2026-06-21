@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Gap G549-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 41 MarketingOS - Gap G549-100
 
 **SSOT Foundation:** This document serves as the Single Source of Truth foundation for closing proof gap G549-100 related to Amendment 41.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TSOS Factory Integration -->
+
 # TSOS Factory Integration
 
 **Status:** Live on execute-step hot path (mission FACTORY-REBOOT-0029)

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Script — Setup.
 ```sql
 -- Create table for code reviews
 CREATE TABLE code_reviews (

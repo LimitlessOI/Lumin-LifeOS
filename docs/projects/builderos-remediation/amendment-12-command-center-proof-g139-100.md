@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G139 100. -->
+
 export const blueprintNote = {
   title: "Proof-Closing Blueprint Note: AMENDMENT_12_COMMAND_CENTER - G139-100",
   description: "This note closes the proof for the initial API read slice of the Command Center feature, identifying the next smallest build slice.",

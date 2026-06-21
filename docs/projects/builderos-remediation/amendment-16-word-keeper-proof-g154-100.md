@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G154 100. -->
+
 This note addresses the next smallest blueprint-backed build slice to close the identified gap in the Word Keeper implementation, as outlined in AMENDMENT_16_WORD_KEEPER.
 
 ### 1. Exact Missing Implementation or Proof Gap

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof (g843-100) -->
+
 Specification is incomplete (missing source blueprint) and contradictory (verifier expects executable, instruction specifies .md).
 # Command Center V2 Blueprint Proof (g843-100)
 

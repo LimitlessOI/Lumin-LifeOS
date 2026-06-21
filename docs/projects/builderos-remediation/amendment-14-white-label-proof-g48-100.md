@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof - G48-100 Remediation Blueprint Note -->
+
 # Amendment 14 White-Label Proof - G48-100 Remediation Blueprint Note
 
 This note outlines the next smallest build slice for Amendment 14, focusing on initial white-label configuration integration within BuilderOS. The previous verifier rejection (ERR_UNKNOWN_FILE_EXTENSION for .md) indicates an environmental issue with the verifier itself, which must be resolved for subsequent passes.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G287-100 Follow-Through -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G287-100 Follow-Through
 
 ## Blueprint Note: Core Infrastructure - CommandCenter.js Initial Stub

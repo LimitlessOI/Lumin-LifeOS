@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof - G1149-100: SSOT Foundation -->
+
 # Amendment 41 MarketingOS Proof - G1149-100: SSOT Foundation
 
 ## 1. Exact Missing Implementation or Proof Gap

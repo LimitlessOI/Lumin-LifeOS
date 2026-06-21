@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G703-100: Initial Policy Store Definition -->
+
 # Amendment 01: AI Council - Proof G703-100: Initial Policy Store Definition
 
 ## Context from Blueprint: `AMENDMENT_01_AI_COUNCIL.md`

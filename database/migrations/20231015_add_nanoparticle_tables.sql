@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231015_add_nanoparticle_tables.sql.
 ```sql
 -- Create nanoparticle_designs table
 CREATE TABLE nanoparticle_designs (

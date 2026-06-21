@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G834 100. -->
+
 Amendment 14: White Label Proof - G834-100
 
 Project Overview (Derived from AMENDMENT_14_WHITE_LABEL.md)

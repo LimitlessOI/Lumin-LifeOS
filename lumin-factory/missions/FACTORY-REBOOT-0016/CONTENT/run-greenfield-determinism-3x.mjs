@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Mechanical greenfield determinism: execute GF001 step 3x into run-a/b/c, compare.
  * Mechanical greenfield determinism: execute GF001 step 3x into run-a/b/c, compare.
  */
 import fs from 'node:fs';

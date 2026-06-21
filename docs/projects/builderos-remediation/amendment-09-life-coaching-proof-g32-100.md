@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G32 100. -->
+
 Amendment 09: Life Coaching - Proof G32-100
 Blueprint Note: Next Smallest Build Slice for G32-100
 This document outlines the next minimal build slice required to advance the "Life Coaching" feature, specifically targeting the foundational elements of Phase 1 (G32-100: Core Service & Data Model).

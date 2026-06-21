@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 12 Command Center - TODO 17-G11 -->
+
 # BuilderOS Remediation: Amendment 12 Command Center - TODO 17-G11
 
 ## Blueprint Enhancement Memo: Mission-Centric Views (Read-Only Slice)

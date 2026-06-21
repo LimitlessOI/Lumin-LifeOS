@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1063 100. -->
+
 Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS SSOT Foundation (G1063-100)
 This document outlines the plan to close the proof gap related to `AMENDMENT_41_MARKETINGOS.md` serving as the Single Source of Truth (SSOT) foundation for MarketingOS.
 

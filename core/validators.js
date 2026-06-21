@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: VALIDATORS - The Hallucination Firewall
  * VALIDATORS - The Hallucination Firewall
  * Nothing passes without validation.
  */

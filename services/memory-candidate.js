@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-candidate.js
+ */
 // services/memory-candidate.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { randomUUID } from 'crypto';

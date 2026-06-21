@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Define constants for the current TSOS cycle.
+ */
 /*
  * @file This module provides functionality to retrieve the current TSOS (Time-Sliced Operating System) cycle marker.
  * It is an integral part of the Zone 1 BuilderOS system, designed to provide consistent

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports resolveMissionFolder — factory-staging/factory-core/arc/mission-paths.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT } from '../builder/run-step.js';

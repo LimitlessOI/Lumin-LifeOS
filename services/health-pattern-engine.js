@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/health-pattern-engine.js
  * services/health-pattern-engine.js
  * Runs weekly correlation analysis: sleep vs mood, HRV vs decisions, glucose vs energy.
  * Stores findings in health_correlations.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G539 100. -->
+
 Amendment 12 Command Center Proof: G539-100 - Initial Operation Status API Slice
 This document outlines the next smallest blueprint-backed build slice for `AMENDMENT_12_COMMAND_CENTER.md`, focusing on establishing a foundational API for BuilderOS operation status.
 ---

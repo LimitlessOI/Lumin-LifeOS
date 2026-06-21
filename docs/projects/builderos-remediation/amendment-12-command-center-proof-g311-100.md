@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G311-100 Remediation -->
+
 # Amendment 12 Command Center Proof: G311-100 Remediation
 
 This document outlines the remediation plan for build slice G311-100, following the OIL verifier rejection due to an `.md` file extension error. The previous attempt was blocked at the verifier configuration level, preventing evaluation of the intended build slice. This remediation focuses on establishing the foundational display for the Command Center.

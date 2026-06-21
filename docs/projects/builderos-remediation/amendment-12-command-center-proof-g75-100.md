@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G75 100. -->
+
 Amendment 12 Command Center Proof: G75-100 - Telemetry Ingestion & Basic Display Proof
 This proof-closing blueprint note addresses the next smallest build slice within the G75-100 range, focusing on establishing the end-to-end pipeline for a foundational telemetry type.
 ---

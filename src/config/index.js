@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/config/index.js.
+ */
 const convict = require('convict');
 const dotenv = require('dotenv');
 dotenv.config();

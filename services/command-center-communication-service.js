@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Command Center communication history + C2-backed operator messaging.
  * Command Center communication history + C2-backed operator messaging.
  * NOT canonical BuilderOS memory — separate from epistemic_facts.
  *

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G649-100 Remediation -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G649-100 Remediation
 
 This document serves as the proof-closing blueprint note for the BuilderOS control plane, addressing the OIL verifier rejection due to incorrect file type interpretation. The previous submission contained JavaScript code in a markdown file. This note details the required implementation for `routes/lifeos-council-builder-routes.js`.

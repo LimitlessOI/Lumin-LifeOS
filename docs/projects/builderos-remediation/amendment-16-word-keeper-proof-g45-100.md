@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G45-100: Initial `word-keeper.json` Definition -->
+
 # Amendment 16: Word Keeper - Proof G45-100: Initial `word-keeper.json` Definition
 
 This document outlines the next smallest build slice for the Word Keeper feature, focusing on the foundational `src/config/word-keeper.json` file.

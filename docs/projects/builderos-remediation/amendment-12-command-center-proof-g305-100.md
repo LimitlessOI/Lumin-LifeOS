@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G305 100. -->
+
 Amendment 12: Command Center - Proof G305-100
 This document outlines the next smallest blueprint-backed build slice for the Amendment 12: Command Center initiative, focusing on establishing the core foundational components.
 ---

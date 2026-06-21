@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G83-100 -->
+
 # Amendment 09: Life Coaching - Proof G83-100
 
 ## Blueprint Note: LifeCoachSession Data Model and Basic Persistence Proof

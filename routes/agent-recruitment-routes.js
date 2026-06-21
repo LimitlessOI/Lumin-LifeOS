@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Agent Recruitment & Onboarding Routes
  * Agent Recruitment & Onboarding Routes
  * Extracted from server.js
  */

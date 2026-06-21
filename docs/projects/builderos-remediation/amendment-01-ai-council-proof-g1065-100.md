@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G1065-100 -->
+
 # Amendment 01: AI Council Proof - G1065-100
 
 **Proof Point:** Initial AI Council operational framework established and foundational policy draft (v0.1) acknowledged.

@@ -1,5 +1,5 @@
 /**
- * Token Accounting OS — universal metered ledger + budget gates + health.
+ * SYNOPSIS: Token Accounting OS — universal metered ledger + budget gates + health.
  * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
  */
 

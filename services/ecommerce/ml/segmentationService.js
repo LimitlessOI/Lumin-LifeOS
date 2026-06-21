@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — SegmentationService.
+ */
 const tf = require('@tensorflow/tfjs-node');
 const brain = require('brain.js');
 const logger = require('../../utils/logger');

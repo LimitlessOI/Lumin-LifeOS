@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Product Development Gate -->
+
 # Product Development Gate
 
 ## Purpose

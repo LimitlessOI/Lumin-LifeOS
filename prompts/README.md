@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: LifeOS Domain Prompt Files -->
+
 # LifeOS Domain Prompt Files
 
 ## What This Directory Is

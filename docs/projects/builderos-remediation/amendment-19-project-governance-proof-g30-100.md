@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G30-100 -->
+
 # Amendment 19 Project Governance Proof: G30-100
 
 ## Proof Target: G30-100 - Establishment of Core Governance Principles and Document Structure

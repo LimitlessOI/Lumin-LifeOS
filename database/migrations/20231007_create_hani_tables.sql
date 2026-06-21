@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231007_create_hani_tables.sql.
 ```sql
 -- SQL script to create the required tables for HANI system
 

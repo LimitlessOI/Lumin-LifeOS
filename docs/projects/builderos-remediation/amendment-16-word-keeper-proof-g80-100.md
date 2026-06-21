@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16: Word Keeper - Proof G80-100 -->
+
 # Amendment 16: Word Keeper - Proof G80-100
 
 ## Blueprint Note: Next Smallest Build Slice (G80-100)

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20231101_create_feedback_history_table.sql.
 ```sql
 CREATE TABLE feedback_history (
     id SERIAL PRIMARY KEY,

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Shared browser voice input/output controls for LifeOS chat surfaces.
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  * Shared browser voice input/output controls for LifeOS chat surfaces.
  */

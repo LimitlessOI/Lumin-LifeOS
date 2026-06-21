@@ -1,1 +1,3 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G129 100. -->
+
 The specification is contradictory: it requests writing a `.md` file while simultaneously instructing to "Generate the complete implementation code" and output "ONLY the code first," and the verifier rejected the previous attempt because it tried to execute the `.md` file as a Node.js module. This indicates a fundamental mismatch between the expected file type and the execution environment. I will proceed by generating JavaScript code that encapsulates the blueprint note, acknowledging that saving it as a `.md` file will likely result in the same verifier error due to the file extension.

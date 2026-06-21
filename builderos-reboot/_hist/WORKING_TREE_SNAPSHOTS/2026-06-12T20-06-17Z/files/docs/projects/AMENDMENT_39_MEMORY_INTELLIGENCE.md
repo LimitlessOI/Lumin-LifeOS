@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Memory Intelligence System -->
+
 # Memory Intelligence System
 _(formerly AMENDMENT_39_MEMORY_INTELLIGENCE.md)_
 

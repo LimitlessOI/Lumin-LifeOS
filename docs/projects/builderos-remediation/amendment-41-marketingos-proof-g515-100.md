@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof: G515-100 - SSOT Foundation Verification -->
+
 # AMENDMENT_41_MARKETINGOS Proof: G515-100 - SSOT Foundation Verification
 
 This document outlines the proof-closing blueprint note for verifying the Single Source of Truth (SSOT) foundation established by `AMENDMENT_41_MARKETINGOS.md` concerning LifeOS user profile data synchronization with MarketingOS.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12 — Command & Control Center -->
+
 > **PLATFORM SPEC:** `docs/products/PLATFORM.md §C2` — current state, files, endpoints, traps (built for AI readers).
 > This amendment contains full history, receipts, and all UI change receipts.
 

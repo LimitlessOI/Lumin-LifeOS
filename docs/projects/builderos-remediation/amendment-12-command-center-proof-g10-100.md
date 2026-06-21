@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G10-100 Remediation -->
+
 # Amendment 12 Command Center Proof - G10-100 Remediation
 
 ## Blueprint Note: OIL Verifier Misconfiguration for Documentation Files

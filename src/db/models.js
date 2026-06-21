@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/db/models.js.
+ */
 ```javascript
 const { Sequelize, DataTypes } = require('sequelize');
 

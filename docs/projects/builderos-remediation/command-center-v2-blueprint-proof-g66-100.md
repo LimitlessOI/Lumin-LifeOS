@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g66-100 Remediation Slice -->
+
 # Command Center V2 Blueprint Proof: g66-100 Remediation Slice
 
 ## Proof-Closing Blueprint Note

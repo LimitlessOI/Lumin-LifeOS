@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/farming/optimizationEngine.js.
+ */
 ```javascript
 const tf = require('@tensorflow/tfjs-node');
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G253 100. -->
+
 ### Blueprint Note: Amendment 12 Command Center - Proof G253-100
 
 **1. Missing Implementation/Proof Gap:**

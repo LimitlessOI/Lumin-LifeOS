@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lifeos-lumin.js
  * services/lifeos-lumin.js
  *
  * Lumin — LifeOS conversational AI

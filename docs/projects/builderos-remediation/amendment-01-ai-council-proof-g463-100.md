@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council: Proof G463-100 -->
+
 # Amendment 01 AI Council: Proof G463-100
 
 This document serves as a proof-closing blueprint note for the initial foundational slice of Amendment 01, focusing on establishing the core data model for the AI Council.

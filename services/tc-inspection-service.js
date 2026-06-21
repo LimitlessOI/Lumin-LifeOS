@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/tc-inspection-service.js
  * services/tc-inspection-service.js
  *
  * Inspection workflow for TC transactions.

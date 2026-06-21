@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — learning-cortex-tables.sql.
 CREATE TABLE learning_profiles (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,

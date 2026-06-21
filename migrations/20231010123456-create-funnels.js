@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 20231010123456-create-funnels.js.
+ */
 ```javascript
 'use strict';
 

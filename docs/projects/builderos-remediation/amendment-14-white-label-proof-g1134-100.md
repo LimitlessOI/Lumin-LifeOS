@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 14 White Label Proof G1134 100. -->
+
 Amendment 14 White-Label Proof: G1134-100 - Proofing Framework Establishment
 Source Blueprint: `docs/projects/AMENDMENT_14_WHITE_LABEL.md`
 This document serves as the initial proof for Amendment 14, establishing the documentation framework for subsequent white-label implementation proofs. It confirms the readiness of the BuilderOS system to track and verify white-label related changes as outlined in the source blueprint.

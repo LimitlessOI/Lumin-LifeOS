@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Chat Panel JavaScript
+ */
 // Chat Panel JavaScript
 
 class ChatOverlayManager {

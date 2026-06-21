@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Fetches JSON data from a specified API endpoint.
  * Fetches JSON data from a specified API endpoint.
  * Handles constructing the URL and setting necessary headers.
  * @param {string} baseUrl - The base URL of the API.

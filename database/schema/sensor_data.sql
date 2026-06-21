@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — sensor_data.sql.
 ```sql
 CREATE TABLE sensor_data (
     id SERIAL PRIMARY KEY,

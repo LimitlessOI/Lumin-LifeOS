@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Constants for API paths
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

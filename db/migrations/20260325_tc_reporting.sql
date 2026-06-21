@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260325_tc_reporting.sql.
 -- TC reporting + seller update support
 -- Showings, feedback, market snapshots, and generated weekly reports
 

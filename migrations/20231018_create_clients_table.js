@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 20231018_create_clients_table.js.
+ */
 ```javascript
 'use strict';
 

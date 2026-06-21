@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G255 100. -->
+
 Proof-Closing Blueprint Note: Amendment 41 - MarketingOS Integration (G255-100)
 Source Blueprint: `docs/projects/AMENDMENT_41_MARKETINGOS.md`
 Signal: SSOT Foundation

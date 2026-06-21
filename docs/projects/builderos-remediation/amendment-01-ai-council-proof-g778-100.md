@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G778 100. -->
+
 Amendment 01: AI Council - Proof G778-100
 This document serves as proof for the initial operationalization slice of the AI Council as outlined in `docs/projects/AMENDMENT_01_AI_COUNCIL.md`.
 ---

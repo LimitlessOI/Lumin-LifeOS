@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof (G50-100) -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, making it impossible to derive specific content for the proof-closing note.
 # Amendment 12 Command Center Proof (G50-100)
 

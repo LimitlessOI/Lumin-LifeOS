@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G153-100 - Blueprint Establishment -->
+
 # Amendment 19 Project Governance Proof: G153-100 - Blueprint Establishment
 
 **Proof ID:** G153-100

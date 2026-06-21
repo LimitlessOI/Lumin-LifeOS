@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_XX — [Project Name] -->
+
 # AMENDMENT_XX — [Project Name]
 
 > **Y-STATEMENT:** In the context of `[situation/use case]`, facing `[concern/challenge]`,

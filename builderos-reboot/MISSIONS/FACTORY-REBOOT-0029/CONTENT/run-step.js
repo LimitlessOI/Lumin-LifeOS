@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports resolveRepoPath — builderos-reboot/MISSIONS/FACTORY-REBOOT-0029/CONTENT/run-step.js.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

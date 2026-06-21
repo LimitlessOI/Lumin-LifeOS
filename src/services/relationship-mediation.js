@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Request mediation
+ */
 // src/services/relationship-mediation.js
 // Relationship mediation system for personal and business conflicts
 

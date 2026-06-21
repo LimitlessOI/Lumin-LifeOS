@@ -1,3 +1,4 @@
+# SYNOPSIS: yml — github/workflows/autopilot-cron.yml.
 name: Autopilot Continuous Build
 
 on:

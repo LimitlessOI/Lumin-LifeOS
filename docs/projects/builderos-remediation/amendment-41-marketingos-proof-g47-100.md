@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G47 100. -->
+
 AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (G47-100)
 SSOT Foundation: This document establishes the Single Source of Truth for closing the G47-100 proof gap related to MarketingOS integration.
 ---

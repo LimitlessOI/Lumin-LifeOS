@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Whisper Adapter
  * Whisper Adapter
  * Handles local Whisper STT (Speech-to-Text)
  */

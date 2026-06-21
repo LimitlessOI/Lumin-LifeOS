@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — RealTimeDataSync.
+ */
 ```javascript
 const WebSocket = require('ws');
 const logger = require('../../utils/logger');

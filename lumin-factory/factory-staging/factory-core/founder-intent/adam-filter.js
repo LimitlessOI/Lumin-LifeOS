@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Founder Intent / Adam Filter — pre-escalation check (measurement only; never assigns work).
  * Founder Intent / Adam Filter — pre-escalation check (measurement only; never assigns work).
  */
 

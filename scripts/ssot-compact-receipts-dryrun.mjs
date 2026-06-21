@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Dry-run: reports amendment markdown files over 900 lines (Change Receipts
  * Dry-run: reports amendment markdown files over 900 lines (Change Receipts
  * compaction candidates). Does not move files.
  *

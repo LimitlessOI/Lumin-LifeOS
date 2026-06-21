@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_16_WORD_KEEPER Remediation: Proof for Guards G91-G100 -->
+
 # AMENDMENT_16_WORD_KEEPER Remediation: Proof for Guards G91-G100
 
 ## Blueprint Note: Proof-Closing for G91-G100 Word Pattern Enforcement

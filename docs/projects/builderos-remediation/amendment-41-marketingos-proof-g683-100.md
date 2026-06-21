@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof - G683-100 Remediation Blueprint -->
+
 # Amendment 41 MarketingOS Proof - G683-100 Remediation Blueprint
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified in Amendment 41, specifically concerning MarketingOS integration within BuilderOS.

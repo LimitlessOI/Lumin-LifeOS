@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD TODAY CATEGORY SPEC. -->
+
 The specification is contradictory, requesting both a Markdown specification and a full HTML file replacement. Prioritizing the HTML output contract, the following HTML provides the requested specification by refactoring existing dashboard sections into the new widget system and embedding layout and API assumptions as comments within the HTML structure.
 
 <!DOCTYPE html>

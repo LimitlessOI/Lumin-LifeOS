@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Create or update perfect day configuration
+ */
 // src/services/perfect-day-system.js
 // Perfect Day system with visualization, goal reading, and daily routine
 

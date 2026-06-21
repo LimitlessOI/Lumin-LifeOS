@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09 Life Coaching: Proof G78-100 -->
+
 # Amendment 09 Life Coaching: Proof G78-100
 
 **Source Blueprint:** `docs/projects/AMENDMENT_09_LIFE_COACHING.md`

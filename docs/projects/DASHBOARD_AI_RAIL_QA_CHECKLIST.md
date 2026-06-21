@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD AI RAIL QA CHECKLIST. -->
+
 The specification is contradictory: it instructs to "produce checklist only against contract Markdown" if injected files are missing, but the contract Markdown itself is missing, making it impossible to produce a checklist *against* it. I am proceeding with the assumption that the "Else" clause provides the intended fallback checklist items.
 
 1.  **Dock Toggle Functionality & Visuals:**

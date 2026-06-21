@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Manages conflict interrupts triggered by escalation detection.
  * @fileoverview Conflict Interrupt Service
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * 

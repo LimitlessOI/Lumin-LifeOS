@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - G65-100 -->
+
 # Amendment 14: White-Label Proof - G65-100
 
 ## Context: Amendment 14 - White-Labeling Platform Support

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G499 100. -->
+
 ### Amendment 12: Command Center - Proof G499-100
 
 This proof-closing blueprint note addresses the initial foundational implementation of the Command Center, focusing on establishing the core architectural components required for command registration and execution.

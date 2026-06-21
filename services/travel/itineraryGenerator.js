@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — ItineraryGenerator.
+ */
 ```javascript
 const { generateRecommendations } = require('../../ml/recommendation_engine.py');
 const db = require('../../models');

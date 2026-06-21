@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS background ticks: commitment prods + notification delivery + conversation ingest
  * LifeOS background ticks: commitment prods + notification delivery + conversation ingest
  * + outreach queue processing + emotional early-warning + truth-style calibration +
  * weekly review.

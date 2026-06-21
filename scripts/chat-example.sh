@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Chat Example.
 
 # ╔══════════════════════════════════════════════════════════════════════════════════╗
 # ║                    EXAMPLE: How to Talk to AI Council                            ║

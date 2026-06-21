@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof for Amendment 01: AI Council - Proof G719-100 -->
+
 # Proof for Amendment 01: AI Council - Proof G719-100
 
 This document serves as a proof point for the initial foundational steps required by Amendment 01 regarding the establishment and operationalization of the AI Council within LifeOS. Specifically, this proof addresses the definition of the core data structure for AI Council membership and roles, a prerequisite for any subsequent feature development related to council operations or access control.

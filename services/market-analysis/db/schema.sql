@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 ```sql
 CREATE TABLE market_analysis_users (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Continuity Log — Security / Red-team -->
+
 # Continuity Log — Security / Red-team
 
 > Sessions that change red-team automation, `npm audit` integration, or **future** active pentest harness.

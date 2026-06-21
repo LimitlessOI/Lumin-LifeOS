@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G752-100 Remediation -->
+
 # Amendment 12 Command Center Proof - G752-100 Remediation
 
 ## Proof-Closing Blueprint Note

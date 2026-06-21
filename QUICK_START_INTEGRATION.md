@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: ⚡ QUICK START: Integrate Overnight Build -->
+
 # ⚡ QUICK START: Integrate Overnight Build
 
 **Time to integrate:** ~5 minutes

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Integration test: dispatchExecuteStep writes proof file via live runtime.
  * Integration test: dispatchExecuteStep writes proof file via live runtime.
  */
 import fs from 'node:fs';

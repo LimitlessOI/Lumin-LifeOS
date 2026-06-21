@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof: G60-100 Remediation Blueprint -->
+
 # Amendment 41 MarketingOS Proof: G60-100 Remediation Blueprint
 
 This document serves as a proof-closing blueprint note for the "G60-100" requirement outlined in `docs/projects/AMENDMENT_41_MARKETINGOS.md`. It addresses the missing implementation and proof gap for ensuring MarketingOS successfully processes user segment data for a cohort of 60-100 users.

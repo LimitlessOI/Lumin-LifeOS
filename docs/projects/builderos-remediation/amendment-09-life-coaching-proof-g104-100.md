@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G104 100. -->
+
 Amendment 09: Life Coaching - Proof G104-100: Initial Session Data Model & API
 This document outlines the next smallest build slice to advance the Life Coaching amendment, specifically addressing the foundational data model and API for coaching sessions.
 Blueprint Note: G104-100 - Core Session Entity & API Endpoint

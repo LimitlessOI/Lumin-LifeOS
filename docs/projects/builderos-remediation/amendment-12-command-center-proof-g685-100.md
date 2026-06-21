@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G685 100. -->
+
 Amendment 12 Command Center Proof: G685-100 - Initial State Management
 This document outlines the first proof-of-concept build slice for the `CommandCenter` as defined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`. The focus is on establishing the foundational state management mechanism, specifically the `StateStore` interface and its initial `FileBasedStateStore` implementation, and integrating it into a skeletal `CommandCenter` for initialization.
 ---

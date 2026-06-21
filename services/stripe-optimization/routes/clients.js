@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: CRUD routes for clients
+ */
 ```javascript
 const express = require('express');
 const router = express.Router();

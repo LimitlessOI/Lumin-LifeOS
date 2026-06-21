@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — databaseSchema.sql.
 ```sql
 CREATE TABLE amtm_vehicles (
     id SERIAL PRIMARY KEY,

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: OIL proof freshness — stale runtime proof must not display as VERIFIED/CURRENT.
  * OIL proof freshness — stale runtime proof must not display as VERIFIED/CURRENT.
  *
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Decision Engine.
+ */
 ```javascript
 const decideAssistant = (context) => {
   // Logic to decide which assistant to use

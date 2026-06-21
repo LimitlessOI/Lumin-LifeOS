@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🎬 Quick Start: Video Editing Council -->
+
 # 🎬 Quick Start: Video Editing Council
 
 ## What is the Video Editing Council?

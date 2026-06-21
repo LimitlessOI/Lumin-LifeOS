@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/cron/task-timeout-cron.js.
+ */
 const cron = require('node-cron');
 const releaseStuckTasks = require('../services/stuck-task-releaser');
 

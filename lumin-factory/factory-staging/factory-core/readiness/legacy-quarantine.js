@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports legacyQuarantine — lumin-factory/factory-staging/factory-core/readiness/legacy-quarantine.js.
+ */
 export function legacyQuarantine(entry) {
   return {
     legacyLiveConflict: entry.legacyLiveConflict,

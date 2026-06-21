@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260422_lifeos_habits.sql.
 -- LifeOS habits lane (P1 parity gap): identity-framed recurring tracker.
 
 CREATE TABLE IF NOT EXISTS habits (

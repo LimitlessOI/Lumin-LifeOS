@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Fetches JSON data from a specified URL path with an x-command-key header.
+ */
 /*
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * This module provides functionality to verify the status of BuilderOS and Kernel

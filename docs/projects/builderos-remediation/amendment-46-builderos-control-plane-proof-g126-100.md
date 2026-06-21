@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G126-100 -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G126-100
 
 This document outlines the implementation plan and proof-closing blueprint note for wiring the BuilderOS control plane routes in `routes/lifeos-council-builder-routes.js` as per Amendment 46.

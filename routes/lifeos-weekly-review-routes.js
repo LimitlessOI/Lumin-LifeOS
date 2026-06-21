@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-weekly-review-routes.js
  * routes/lifeos-weekly-review-routes.js
  *
  * LifeOS Weekly Review API — narrative generation + interactive conversation

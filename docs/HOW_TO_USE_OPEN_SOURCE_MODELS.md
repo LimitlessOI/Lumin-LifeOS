@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🤖 How to Use Open Source Models -->
+
 # 🤖 How to Use Open Source Models
 
 This guide shows you how to download, set up, and interact with the open source AI models in Lumin-LifeOS.

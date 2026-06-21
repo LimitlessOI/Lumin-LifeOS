@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Conflict Arbitrator Service
  * Conflict Arbitrator Service
  * AI-powered mediation and conflict resolution
  * 

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Configuration parameters for the voting protocol
+ */
 ```javascript
 // Configuration parameters for the voting protocol
 module.exports = {

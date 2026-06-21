@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center - Proof G107-100: Base Route and Page Component -->
+
 # Amendment 12 Command Center - Proof G107-100: Base Route and Page Component
 
 This proof-closing blueprint note addresses the initial setup for the Command Center feature, focusing on establishing its foundational routing and a placeholder page component.

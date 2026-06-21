@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: G1011-100 - Initial Build Job Management Slice -->
+
 # Command Center V2 Blueprint Proof: G1011-100 - Initial Build Job Management Slice
 
 This document serves as a proof-closing note for the initial build slice derived from the Command Center V2 Blueprint, addressing the foundational capability for managing build jobs within BuilderOS.

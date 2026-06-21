@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G104-100 -->
+
 # Amendment 01: AI Council - Proof G104-100
 
 ## Blueprint Summary: AMENDMENT_01_AI_COUNCIL

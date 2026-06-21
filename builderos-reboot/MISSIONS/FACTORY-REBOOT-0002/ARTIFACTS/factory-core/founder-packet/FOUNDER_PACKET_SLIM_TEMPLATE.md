@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet — [Mission Name] -->
+
 # Founder Packet — [Mission Name]
 
 **Mission ID:** `[MISSION-ID]`  

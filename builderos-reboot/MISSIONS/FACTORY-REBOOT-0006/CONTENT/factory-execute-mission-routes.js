@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: BuilderOS artifact — Factory Execute Mission Routes.
+ */
 export const factoryExecuteMissionRoute = {
   method: 'POST',
   path: '/factory/execute-mission',

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: ⚡ Quick Integration - Enhanced Safe AI Council -->
+
 # ⚡ Quick Integration - Enhanced Safe AI Council
 
 **Goal:** Enhance your existing `safeAICouncil` function with 2029 lessons in 15 minutes.

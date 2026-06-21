@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: REPO_MASTER_INDEX — where every index lives -->
+
 # REPO_MASTER_INDEX — where every index lives
 
 **Purpose:** One navigation page for **inventory, SSOT, lanes, and ops** — so cold agents and humans do not hunt blindly.  

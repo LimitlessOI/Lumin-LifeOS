@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G28-100 Remediation -->
+
 # Amendment 14 White-Label Proof: G28-100 Remediation
 
 ## Blueprint Note for C2 Build Pass

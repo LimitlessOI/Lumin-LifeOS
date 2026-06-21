@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof: G573-100 -->
+
 # Amendment 46 BuilderOS Control Plane Proof: G573-100
 
 ## Context

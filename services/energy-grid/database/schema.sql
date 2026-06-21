@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 ```sql
 CREATE TABLE energy_profiles (
     id SERIAL PRIMARY KEY,

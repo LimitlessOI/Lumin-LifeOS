@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof G119-100: OIL Verifier Remediation for .md File Execution -->
+
 # Amendment 41 MarketingOS Proof G119-100: OIL Verifier Remediation for .md File Execution
 
 **SSOT Foundation Note**

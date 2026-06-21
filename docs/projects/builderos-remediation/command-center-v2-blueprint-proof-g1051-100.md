@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G1051 100. -->
+
 BuilderOS Remediation: Command Center V2 Blueprint Proof G1051-100
 Source Blueprint: `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md`
 

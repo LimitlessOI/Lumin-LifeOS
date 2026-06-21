@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G95-100 Remediation Blueprint -->
+
 # Amendment 41: MarketingOS Proof - G95-100 Remediation Blueprint
 
 This document outlines the remediation plan to close the proof gap identified for MarketingOS integration, specifically concerning campaign finalization status updates for campaigns in the G95-G100 range. This serves as the SSOT foundation for the next C2 build pass.

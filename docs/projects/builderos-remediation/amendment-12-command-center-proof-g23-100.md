@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G23-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G23-100
 
 ## Blueprint Note: First BuilderOS Command Implementation

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G35 100. -->
+
 // src/builder-os/command-center/types.ts
 
 /**

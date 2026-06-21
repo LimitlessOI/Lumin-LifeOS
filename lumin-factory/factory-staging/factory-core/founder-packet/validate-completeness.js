@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Founder Packet completeness — machine validator (no prose-only packets).
  * Founder Packet completeness — machine validator (no prose-only packets).
  */
 

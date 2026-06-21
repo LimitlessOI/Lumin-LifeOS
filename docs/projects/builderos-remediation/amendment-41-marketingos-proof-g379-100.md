@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS - Proof G379-100: MarketingCampaign SSOT Foundation -->
+
 # AMENDMENT_41_MARKETINGOS - Proof G379-100: MarketingCampaign SSOT Foundation
 
 This document serves as a proof-closing blueprint note for establishing MarketingOS as the Single Source of Truth (SSOT) for `MarketingCampaign` entities, as mandated by `AMENDMENT_41_MARKETINGOS.md`.

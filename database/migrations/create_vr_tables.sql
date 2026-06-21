@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_vr_tables.sql.
 ```sql
 CREATE TABLE vr_environments (
     id SERIAL PRIMARY KEY,

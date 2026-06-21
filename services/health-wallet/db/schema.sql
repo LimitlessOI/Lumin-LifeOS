@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — Schema.
 ```sql
 CREATE TABLE patient_wallets (
   id SERIAL PRIMARY KEY,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — tests/agriculture/sensor.test.js.
+ */
 ```javascript
 const { Sensor } = require('../../models/agriculture');
 const { sequelize } = require('../../models');

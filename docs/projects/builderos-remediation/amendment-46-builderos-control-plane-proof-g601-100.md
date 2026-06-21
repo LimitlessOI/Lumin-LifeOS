@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G601 100. -->
+
 The specification is contradictory: the target file has a `.md` extension, implying a markdown document, but the OIL verifier rejected the previous attempt with `ERR_UNKNOWN_FILE_EXTENSION` when attempting to execute it as a Node.js module. This output assumes the verifier expects executable JavaScript content despite the `.md` extension.
 ---
 // docs/projects/builderos-remediation/amendment-46-builderos-control-plane-proof-g601-100.md

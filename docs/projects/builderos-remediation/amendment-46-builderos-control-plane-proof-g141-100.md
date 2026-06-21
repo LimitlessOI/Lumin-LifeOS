@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof - G141-100 -->
+
 # Amendment 46: BuilderOS Control Plane Proof - G141-100
 
 ## Proof-Closing Blueprint Note

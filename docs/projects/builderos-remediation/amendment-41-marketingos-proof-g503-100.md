@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (g503-100) -->
+
 # AMENDMENT_41_MARKETINGOS: Proof-Closing Blueprint Note (g503-100)
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 16 Word Keeper Proof G27-100 -->
+
 # BuilderOS Remediation: Amendment 16 Word Keeper Proof G27-100
 
 ## Blueprint Note: Closing Proof Gap G27-100

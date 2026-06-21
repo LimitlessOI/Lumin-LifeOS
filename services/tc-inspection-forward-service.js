@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Approval-gated inspection mailbox gather → optional PDF acknowledgment stamp → email → optional TD upload.
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * Approval-gated inspection mailbox gather → optional PDF acknowledgment stamp → email → optional TD upload.
  */

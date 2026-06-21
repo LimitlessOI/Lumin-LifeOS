@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G54-100 - Blueprint Review and Next Slice -->
+
 # Amendment 19 Project Governance Proof: G54-100 - Blueprint Review and Next Slice
 
 **Reference Blueprint:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

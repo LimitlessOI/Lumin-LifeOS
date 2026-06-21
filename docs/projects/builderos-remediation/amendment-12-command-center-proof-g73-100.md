@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G73-100 -->
+
 # Amendment 12 Command Center Proof - G73-100
 
 This document outlines the proof-closing blueprint note for the initial build slice of the Amendment 12 Command Center, focusing on establishing the foundational `CommandCenterCore`.

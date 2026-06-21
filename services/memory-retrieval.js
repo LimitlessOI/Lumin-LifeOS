@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-retrieval.js
+ */
 // services/memory-retrieval.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 import { buildProvenanceChain } from './memory-provenance.js';

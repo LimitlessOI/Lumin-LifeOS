@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G115-100 Remediation -->
+
 # Amendment 09: Life Coaching - Proof G115-100 Remediation
 
 ## Proof Summary: Initial Data Model & Basic Persistence for Coaching Sessions

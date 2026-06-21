@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Drizzle database connection
  * Drizzle database connection
  *
  * Shares the same pg Pool as server.js — no second connection.

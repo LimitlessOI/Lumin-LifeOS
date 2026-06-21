@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G1037 100. -->
+
 Amendment 01: AI Council - Proof G1037-100: Initial Mandate and Scope Definition
 Blueprint Source: `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
 

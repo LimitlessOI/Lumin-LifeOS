@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G283 100. -->
+
 Amendment 12: Command Center - Proof G283-100
 This document provides a proof-closing blueprint note for the next smallest build slice derived from `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`.
 ---

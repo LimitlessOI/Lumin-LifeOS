@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White-Label Proof: G29-100 - Configuration Loading Mechanism -->
+
 # Amendment 14 White-Label Proof: G29-100 - Configuration Loading Mechanism
 
 This document serves as a proof-closing blueprint note for the `g29-100` gate of Amendment 14, focusing on the foundational mechanism for loading white-label configurations.

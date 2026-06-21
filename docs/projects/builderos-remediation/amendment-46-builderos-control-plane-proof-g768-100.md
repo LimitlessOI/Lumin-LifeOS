@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof - G768-100 Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof - G768-100 Remediation
 
 This document outlines the remediation plan for the BuilderOS control plane, addressing the OIL verifier rejection and detailing the implementation steps for the `/build` lifecycle endpoints.

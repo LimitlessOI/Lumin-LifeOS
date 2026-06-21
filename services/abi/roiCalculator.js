@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — RoiCalculator.
+ */
 const HealthRoiMetric = require('../../models/healthRoiMetrics');
 
 async function calculateRoi(userId) {

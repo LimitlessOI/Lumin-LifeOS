@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Kingsman Protocol -->
+
 # Kingsman Protocol
 _(formerly AMENDMENT_33_KINGSMAN_PROTOCOL.md)_
 

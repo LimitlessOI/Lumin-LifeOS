@@ -1,3 +1,4 @@
+-- SYNOPSIS: Script — Projects.
 ```sql
 CREATE TABLE projects (
     id UUID PRIMARY KEY,

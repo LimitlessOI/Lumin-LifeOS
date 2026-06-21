@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g905-100 - Initial Command Definition & Registration -->
+
 # Command Center V2 Blueprint Proof: g905-100 - Initial Command Definition & Registration
 
 This proof addresses the foundational step of defining a `Command` entity within the Command Center V2 system and establishing a mechanism for its registration. This is a prerequisite for any command execution or management functionality.

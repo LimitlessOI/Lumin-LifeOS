@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/incomeDroneCourseService.js.
+ */
 async function linkToIncomeDrone(course) {
   try {
     // Mock integration with income drones

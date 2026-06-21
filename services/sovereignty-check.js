@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/sovereignty-check.js
  * services/sovereignty-check.js
  *
  * Middleware and utility: validates LifeOS actions against user's stated direction.

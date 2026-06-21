@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_processes_tables.sql.
 ```sql
 CREATE TABLE processes (
     id SERIAL PRIMARY KEY,

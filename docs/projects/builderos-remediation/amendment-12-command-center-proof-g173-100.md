@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G173 100. -->
+
 Amendment 12: Command Center Proof - G173-100
 Blueprint Note: System Metric Ingestion Endpoint - Basic API Implementation
 

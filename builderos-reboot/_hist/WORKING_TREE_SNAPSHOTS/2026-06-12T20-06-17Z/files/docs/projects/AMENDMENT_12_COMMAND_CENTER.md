@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center -->
+
 # Command Center
 _(formerly AMENDMENT_12_COMMAND_CENTER.md)_
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: This module fetches manifest data from the LifeOS platform via internal APIs and performs
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * @file scripts/builderos-governance-manifest-audit.mjs
  * @module builderos-governance-manifest-audit

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14 White Label Proof - Remediation (g981-100) -->
+
 # Amendment 14 White Label Proof - Remediation (g981-100)
 
 This document outlines the remediation steps and proof for Amendment 14, focusing on the white-label implementation within BuilderOS. It addresses the previous verifier rejection and details the next steps for a successful C2 build pass.

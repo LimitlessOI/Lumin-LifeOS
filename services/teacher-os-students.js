@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/teacher-os-students.js
  * services/teacher-os-students.js
  *
  * Student profile manager for Teacher OS.

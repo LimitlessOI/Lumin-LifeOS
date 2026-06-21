@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center: Chat API Key Remediation (TODO-9-G3) -->
+
 # Amendment 12 Command Center: Chat API Key Remediation (TODO-9-G3)
 
 ## 1. Blocking Ambiguity / Founder Decision List

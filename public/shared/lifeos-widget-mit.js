@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — public/shared/lifeos-widget-mit.js.
+ */
 (function(){
   let _container = null;
   let _user = null;

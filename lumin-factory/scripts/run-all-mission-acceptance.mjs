@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Run acceptance tests for all emitted factory reboot missions. */
+/**
+ * SYNOPSIS: Run acceptance tests for all emitted factory reboot missions. Run acceptance tests for all emitted factory reboot missions. */
 import { spawnSync } from 'node:child_process';
 import { detectFactoryLayout, repoRootFromScriptMeta, scriptPath } from './factory-repo-layout.mjs';
 

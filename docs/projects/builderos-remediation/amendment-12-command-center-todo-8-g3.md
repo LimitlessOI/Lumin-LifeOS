@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center: Chat Interaction Blueprint Enhancement Memo -->
+
 # Amendment 12 Command Center: Chat Interaction Blueprint Enhancement Memo
 
 This memo enhances the blueprint for the "Chat returns `{ ok: true, response: "..." }` with valid key" task, providing clarity for BuilderOS execution.

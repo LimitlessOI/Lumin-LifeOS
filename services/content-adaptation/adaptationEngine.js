@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — AdaptationEngine.
+ */
 class AdaptationEngine {
     adaptContent(userProfile, content) {
         // Implement rule-based adaptation logic

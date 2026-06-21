@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Debrief Template -->
+
 # Founder Debrief Template
 
 **Status:** Operational template — v2.7 (2026-06-09)  

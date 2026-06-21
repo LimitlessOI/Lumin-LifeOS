@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AI Council Proof - G1035-100: BuilderOS Remediation Amendment 01 -->
+
 # AI Council Proof - G1035-100: BuilderOS Remediation Amendment 01
 
 ## Document Purpose

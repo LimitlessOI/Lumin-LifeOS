@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 002_create_client_onboarding_logs_table.sql.
 ```sql
 CREATE TABLE client_onboarding_logs (
   id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Platform epistemic contract — READ THIS FIRST -->
+
 # Platform epistemic contract — READ THIS FIRST
 
 **Hist / legacy (mandatory — do not skip):** [`00-HIST-LEGACY-BOUNDARY.md`](00-HIST-LEGACY-BOUNDARY.md) — legacy repos and experiment trees are **Hist-owned**; build new work in **`factory-staging/`** or live **production spine** only. Full map: `docs/architecture/HIST_LEGACY_SYSTEM_REGISTRY.md`.

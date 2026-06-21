@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G385 100. -->
+
 Command Center V2 Blueprint Proof: G385-100 - Initial Database Schema
 This document serves as a proof-closing blueprint note for the initial build slice of the Command Center V2 re-platforming effort, specifically addressing the foundational db schema for event ingestion.
 ---

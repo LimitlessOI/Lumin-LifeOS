@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — createWorkflowTables.sql.
 ```sql
 CREATE TABLE workflows (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

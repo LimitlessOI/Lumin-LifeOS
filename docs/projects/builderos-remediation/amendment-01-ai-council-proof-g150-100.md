@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G150 100. -->
+
 Amendment 01 AI Council: Proof-Closing Blueprint Note (G150-100)
 Blueprint Source: `docs/projects/AMENDMENT_01_AI_COUNCIL.md`
 

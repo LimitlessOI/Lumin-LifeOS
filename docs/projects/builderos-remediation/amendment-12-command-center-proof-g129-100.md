@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12: Command Center - Proof G129-100 -->
+
 # Amendment 12: Command Center - Proof G129-100
 
 ## Blueprint Note: Initial Data Model & Schema Definition

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — init_schema.sql.
 -- Initialize 'logistics_events' table
 CREATE TABLE IF NOT EXISTS logistics_events (
     id SERIAL PRIMARY KEY,

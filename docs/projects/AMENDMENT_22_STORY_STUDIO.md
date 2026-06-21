@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 22 — Story Studio -->
+
 # AMENDMENT 22 — Story Studio
 
 > **Y-STATEMENT:** In the context of families, creators, and future licensed-IP partners wanting to turn one story into many media formats, facing fragmented tools that handle storybooks, comics, animation, and rights separately, we decided to define Story Studio as a unified story-to-franchise product to achieve reusable story universes and multi-format publishing, accepting that full cinematic output must come after cheaper format layers prove demand and consistency.

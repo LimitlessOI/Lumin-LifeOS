@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: LifeOS + TSOS operational readiness score (0–100) — deploy parity, builder, core APIs, public shells.
  * LifeOS + TSOS operational readiness score (0–100) — deploy parity, builder, core APIs, public shells.
  *
  * Complements `tsos:doctor` and `tsos:tokens` (token **savings** % is a different axis than **reachability**).

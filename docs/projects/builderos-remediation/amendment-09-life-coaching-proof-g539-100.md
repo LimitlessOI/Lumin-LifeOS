@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G539-100 -->
+
 # Amendment 09: Life Coaching - Proof G539-100
 
 ## Blueprint Summary: AMENDMENT_09_LIFE_COACHING

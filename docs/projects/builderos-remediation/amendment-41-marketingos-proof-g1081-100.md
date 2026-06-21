@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1081 100. -->
+
 Proof-Closing Blueprint Note: AMENDMENT_41_MARKETINGOS - Proof G1081-100
 This note addresses the proof gap G1081-100 as defined in AMENDMENT_41_MARKETINGOS.md, ensuring the foundational SSOT for marketing event logging.
 1. Exact Missing Implementation or Proof Gap

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Conversation Dumps -->
+
 # Conversation Dumps
 
 This folder is for storing conversation history exports that provide context for the AI Counsel OS development.

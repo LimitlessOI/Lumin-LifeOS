@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260329_lifeos_community.sql.
 -- Migration: 20260329_lifeos_community
 -- LifeOS Module A (Health Extensions) + Module B (Purpose & Legacy) + Module C (Community & Meta)
 -- Ideas 16–25: Food as Medicine, Pre-Disease, Monetization, Legacy, Death Meditation,

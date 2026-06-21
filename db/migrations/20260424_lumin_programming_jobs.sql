@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260424_lumin_programming_jobs.sql.
 -- Lumin → project / builder bridge: persisted jobs for plan/draft/pending-adam flows.
 -- Progress UI can poll by id; no AI on INSERT/UPDATE beyond application code.
 

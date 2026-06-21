@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: BoldTrail Real Estate CRM Routes
  * BoldTrail Real Estate CRM Routes
  * Extracted from server.js
  */

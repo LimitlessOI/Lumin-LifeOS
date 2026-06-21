@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Mission Execution Mode -->
+
 # Mission Execution Mode
 
 ## Current mode: verify / copy (not greenfield)

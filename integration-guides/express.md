@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Integrating Auth Generator with Express.js -->
+
 ```markdown
 # Integrating Auth Generator with Express.js
 

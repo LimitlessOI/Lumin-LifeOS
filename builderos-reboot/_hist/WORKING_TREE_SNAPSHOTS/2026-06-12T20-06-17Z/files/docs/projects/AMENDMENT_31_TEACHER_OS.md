@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Teacher OS -->
+
 # Teacher OS
 _(formerly AMENDMENT_31_TEACHER_OS.md)_
 

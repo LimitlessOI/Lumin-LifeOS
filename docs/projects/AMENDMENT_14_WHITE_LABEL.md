@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 14 — White-Label Platform -->
+
 # AMENDMENT 14 — White-Label Platform
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution

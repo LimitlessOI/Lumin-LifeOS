@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: SSOT read sequence — anti-hallucination, anti-drift -->
+
 # SSOT read sequence — anti-hallucination, anti-drift
 
 **Read after:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)  

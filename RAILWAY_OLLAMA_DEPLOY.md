@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 🚀 Deploy Ollama on Railway (Complete Guide) -->
+
 # 🚀 Deploy Ollama on Railway (Complete Guide)
 
 ## Why Railway + Ollama?

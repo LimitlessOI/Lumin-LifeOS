@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Site Builder — Scrape existing site → AI-generates complete click-funnel website
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * Site Builder — Scrape existing site → AI-generates complete click-funnel website
  *

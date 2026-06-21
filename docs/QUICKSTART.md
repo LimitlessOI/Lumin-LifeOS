@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Quickstart Guide -->
+
 # Quickstart Guide
 
 ## Setup

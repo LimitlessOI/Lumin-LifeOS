@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/** Post-restart factory metrics — no deps beyond log file. */
+/**
+ * SYNOPSIS: Post-restart factory metrics — no deps beyond log file. Post-restart factory metrics — no deps beyond log file. */
 import fs from 'node:fs';
 
 const restart = fs.readFileSync('data/bri-runner-restart-ts.txt', 'utf8').trim();

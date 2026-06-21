@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Mechanical SENTRY BP audit — system template (v27 pattern).
  * Mechanical SENTRY BP audit — system template (v27 pattern).
  * Installed by recovery protocol. Env: OBJECTIVE_ID
  * @ssot builderos-reboot/SNT_LOOP_ESCALATION_DOCTRINE.md

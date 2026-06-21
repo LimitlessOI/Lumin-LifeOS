@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — schema_update.sql.
 ```sql
 CREATE TABLE anomaly_models (
   id SERIAL PRIMARY KEY,

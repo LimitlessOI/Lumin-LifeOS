@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G61-100 - Proof-Closing Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof G61-100 - Proof-Closing Blueprint Note
 
 This document serves as the SSOT foundation for closing the proof gap related to Amendment 41, specifically for MarketingOS integration concerning "Goal 61" (G61) and proof identifier "100".

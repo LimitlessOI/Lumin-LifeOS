@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports validateQueueContract — services/builderos-useful-work-contracts.js.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  * @module services/builderos-useful-work-contracts
  * @description Useful work contracts for BuilderOS autonomous execution paths

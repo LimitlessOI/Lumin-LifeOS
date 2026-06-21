@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/decision-intelligence.js
  * services/decision-intelligence.js
  *
  * Decision Intelligence layer — Ideas 5-8

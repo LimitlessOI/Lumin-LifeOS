@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Commitment Tracker Service
+ */
 // Commitment Tracker Service
 
 const { Commitment } = require('../models/commitment');

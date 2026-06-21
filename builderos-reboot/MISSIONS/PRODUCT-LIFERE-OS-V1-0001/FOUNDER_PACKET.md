@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PRODUCT-LIFERE-OS-V1-0001 — LifeRE Alpha -->
+
 # PRODUCT-LIFERE-OS-V1-0001 — LifeRE Alpha
 
 ## Problem

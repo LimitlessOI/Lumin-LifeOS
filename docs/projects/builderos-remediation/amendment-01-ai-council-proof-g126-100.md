@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof Document: Amendment 01 AI Council - Governance Point G126-100 -->
+
 # Proof Document: Amendment 01 AI Council - Governance Point G126-100
 
 ## Context

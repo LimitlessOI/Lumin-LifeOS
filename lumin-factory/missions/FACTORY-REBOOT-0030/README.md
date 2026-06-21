@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: FACTORY-REBOOT-0030 — Factory tools completion -->
+
 # FACTORY-REBOOT-0030 — Factory tools completion
 
 Wires upstream gates, SENTRY depth, Historian hot path, C2/readiness surfaces, and CI proof.

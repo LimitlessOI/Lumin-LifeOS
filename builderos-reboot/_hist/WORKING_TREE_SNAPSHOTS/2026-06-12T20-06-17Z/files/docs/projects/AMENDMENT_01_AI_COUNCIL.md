@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AI Council -->
+
 # AI Council
 _(formerly AMENDMENT_01_AI_COUNCIL.md)_
 

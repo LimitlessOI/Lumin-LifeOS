@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Blueprint Note: Amendment 01 AI Council - Proof G81-100 -->
+
 # Blueprint Note: Amendment 01 AI Council - Proof G81-100
 
 **Proof-Closing Blueprint Note for Amendment 01: AI Council Establishment**

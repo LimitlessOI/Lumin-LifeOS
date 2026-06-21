@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports createDecisionReviewRoutes — routes/lifeos-decision-review-routes.js.
  * @fileoverview Decision Review Routes
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Verify BuilderOS Control Plane — measurement layer readiness.
  * Verify BuilderOS Control Plane — measurement layer readiness.
  * @ssot docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md
  */

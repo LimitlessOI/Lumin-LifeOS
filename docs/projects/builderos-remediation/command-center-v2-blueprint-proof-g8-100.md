@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G8 100. -->
+
 The source blueprint `docs/projects/COMMAND_CENTER_V2_BLUEPRINT.md` was not provided, requiring inference for the build slice.
 Command Center V2 Blueprint Proof - G8-100
 This document outlines the next smallest build slice for the Command Center V2, derived from the core blueprint. The focus is on establishing foundational data structures and a minimal read-only API for internal BuilderOS consumption.

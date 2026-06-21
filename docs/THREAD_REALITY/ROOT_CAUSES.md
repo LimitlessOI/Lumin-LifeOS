@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Thread Reality Root Causes (2026-01-26) -->
+
 # Thread Reality Root Causes (2026-01-26)
 
 ## 1. `GET /api/v1/auto-builder/status` right now returns `builder:null` and `builds.total=0`

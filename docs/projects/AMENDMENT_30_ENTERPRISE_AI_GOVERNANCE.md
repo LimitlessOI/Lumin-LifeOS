@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 30 — Enterprise AI Governance -->
+
 # AMENDMENT 30 — Enterprise AI Governance
 
 | Field | Value |

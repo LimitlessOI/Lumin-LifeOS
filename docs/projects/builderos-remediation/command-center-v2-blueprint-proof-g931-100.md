@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G931-100 -->
+
 # Command Center V2 Blueprint Proof - G931-100
 
 ## Blueprint Note: Phase 1 - Core Metrics API Endpoint

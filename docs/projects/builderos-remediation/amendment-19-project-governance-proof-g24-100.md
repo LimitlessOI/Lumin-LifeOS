@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G24-100 - Initial Project Creation Validation -->
+
 # Amendment 19 Project Governance Proof: G24-100 - Initial Project Creation Validation
 
 ## Blueprint Reference

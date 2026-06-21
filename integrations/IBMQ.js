@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — integrations/IBMQ.js.
+ */
 const { IBMQ } = require('qiskit');
 
 class IBMQIntegration {

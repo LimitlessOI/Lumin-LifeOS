@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 08 — Outreach Automation & CRM -->
+
 # AMENDMENT 08 — Outreach Automation & CRM
 **Status:** LIVE (partial)
 **Authority:** Subordinate to SSOT North Star Constitution

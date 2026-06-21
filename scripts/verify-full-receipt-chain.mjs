@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Exports runFullReceiptChainVerification — scripts/verify-full-receipt-chain.mjs.
  * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
  */
 

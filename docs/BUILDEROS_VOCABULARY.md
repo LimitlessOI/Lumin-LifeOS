@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Vocabulary — Canonical Definitions -->
+
 # BuilderOS Vocabulary — Canonical Definitions
 
 **Status:** LANGUAGE LAW — **SEALED v2.7 for build** (2026-06-09 founder consensus)  

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_tables.sql.
 ```sql
 CREATE TABLE chat_sessions (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_review_metrics_table.sql.
 ```sql
 CREATE TABLE review_metrics (
     id SERIAL PRIMARY KEY,

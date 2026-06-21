@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G419-100 Remediation -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, so the content for the proof-closing note is based on general assumptions about a "Command Center" within BuilderOS.
 # Amendment 12 Command Center Proof - G419-100 Remediation
 

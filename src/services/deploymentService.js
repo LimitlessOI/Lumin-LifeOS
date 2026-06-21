@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/services/deploymentService.js.
+ */
 const pool = require('../config/database');
 
 async function deployApplication(templateId, clientId) {

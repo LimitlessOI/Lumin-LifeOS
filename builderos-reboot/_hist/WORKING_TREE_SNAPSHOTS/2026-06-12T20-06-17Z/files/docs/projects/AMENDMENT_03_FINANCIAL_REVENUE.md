@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Financial & Revenue System -->
+
 # Financial & Revenue System
 _(formerly AMENDMENT_03_FINANCIAL_REVENUE.md)_
 **Status:** LIVE (partial)

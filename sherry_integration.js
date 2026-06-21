@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Sherry Integration Implementation
+ */
 // Sherry Integration Implementation
 class SherryIntegration {
     constructor() {

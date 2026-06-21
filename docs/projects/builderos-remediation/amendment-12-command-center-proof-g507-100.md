@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof: G507-100 - Initial Class Definition -->
+
 # Amendment 12 Command Center Proof: G507-100 - Initial Class Definition
 
 This document serves as a proof-closing blueprint note for the initial implementation slice of the `CommandCenter` as defined in `AMENDMENT_12_COMMAND_CENTER.md`. This slice focuses on establishing the foundational class structure.

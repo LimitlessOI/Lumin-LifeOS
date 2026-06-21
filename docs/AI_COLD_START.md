@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AI Cold Start Packet -->
+
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: core/lifeos-twin-bridge.js
  * core/lifeos-twin-bridge.js
  *
  * Bridge between the Digital Twin (adam_profile / adam_decisions) and LifeOS.

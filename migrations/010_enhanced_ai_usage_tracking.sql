@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 010_enhanced_ai_usage_tracking.sql.
 -- ╔══════════════════════════════════════════════════════════════════════════════════╗
 -- ║              ENHANCED AI USAGE TRACKING (2029 Lessons Applied)                 ║
 -- ║              Prevents the $47k/month bankruptcy scenario                        ║

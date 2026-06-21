@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Builder Execution Retirement Plan V1 -->
+
 # Builder Execution Retirement Plan V1
 
 **Date:** 2026-06-13  

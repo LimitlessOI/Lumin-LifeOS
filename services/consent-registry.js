@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/consent-registry.js
  * services/consent-registry.js
  *
  * Tracks explicit consent for each data-using LifeOS feature.

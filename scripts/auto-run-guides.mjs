@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Auto-run system setup guides
  * Auto-run system setup guides
  * Executes setup steps automatically where possible
  */

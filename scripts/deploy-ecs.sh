@@ -1,3 +1,4 @@
+# SYNOPSIS: Script — Deploy Ecs.
 ```bash
 #!/bin/bash
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║          ENHANCED CONSENSUS PROTOCOL - Unintended Consequences Filter             ║
  * ║          Impact Analysis, Tool Evaluation, Better Implementation                 ║

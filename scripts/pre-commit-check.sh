@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Pre Commit Check.
 # Pre-commit check script
 # Run syntax check and duplicate declaration check before committing
 

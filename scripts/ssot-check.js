@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: ssot-check.js
  * ssot-check.js
  * Scans changed files for @ssot tags and verifies the linked amendment
  * was also updated in the same git commit (or warns if not).
@@ -85,6 +86,26 @@ function extractSsotTag(filePath) {
   }
 }
 
+function isSynopsisOnlyStagedChange(filePath) {
+  try {
+    const diff = execSync(`git diff --cached -- "${filePath}"`, { cwd: ROOT, encoding: 'utf8' });
+    if (!diff.trim()) return false;
+    const addLines = diff.split('\n').filter((l) => l.startsWith('+') && !l.startsWith('+++')).map((l) => l.slice(1));
+    const remLines = diff.split('\n').filter((l) => l.startsWith('-') && !l.startsWith('---')).map((l) => l.slice(1));
+    if (!addLines.length && !remLines.length) return false;
+    const headerLine = (line) =>
+      /SYNOPSIS\s*:/i.test(line)
+      || /^\s*\*\s*$/.test(line)
+      || /^\s*\/\*\*/.test(line)
+      || /^\s*\*\//.test(line)
+      || /^\s*\*\s/.test(line)
+      || /^\s*$/.test(line);
+    return [...addLines, ...remLines].every(headerLine);
+  } catch {
+    return false;
+  }
+}
+
 function amendmentExists(amendmentPath) {
   return existsSync(path.join(ROOT, amendmentPath));
 }
@@ -125,7 +146,8 @@ function checkChangedFiles(pushRange, stagedOnly = false) {
       continue;
     }
 
-    // Check if the amendment was also updated in this change set
+    if (isSynopsisOnlyStagedChange(file)) continue;
+
     const amendmentChanged = changed.some(f => f.includes(path.basename(ssotTag)));
     if (!amendmentChanged) {
       needsAmendmentUpdate.push({ file, ssot: ssotTag });

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: Auto-pilot: run the next pending mission from MISSION_QUEUE.json (dry-run by default).
  * Auto-pilot: run the next pending mission from MISSION_QUEUE.json (dry-run by default).
  * Usage: node builderos-reboot/scripts/autopilot-runner.mjs [--execute]
  */

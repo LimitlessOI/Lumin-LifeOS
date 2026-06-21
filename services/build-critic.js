@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/build-critic.js
  * services/build-critic.js
  *
  * Build Critic Loop — the system reviews its own output before shipping.

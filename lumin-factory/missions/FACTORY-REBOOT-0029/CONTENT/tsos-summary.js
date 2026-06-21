@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports readTsosMetrics — lumin-factory/missions/FACTORY-REBOOT-0029/CONTENT/tsos-summary.js.
+ */
 import fs from 'node:fs';
 import { getTsosMetricsPath } from './record-step-metrics.js';
 

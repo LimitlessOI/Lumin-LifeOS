@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1073 100. -->
+
 Amendment 41 MarketingOS Proof - G1073-100: SSOT Foundation Verification
 This document outlines the blueprint for proving Amendment 41's assertion that MarketingOS is the Single Source of Truth (SSOT) for customer marketing preferences.
 

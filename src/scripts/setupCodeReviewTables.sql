@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — setupCodeReviewTables.sql.
 CREATE TABLE code_review_projects (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,

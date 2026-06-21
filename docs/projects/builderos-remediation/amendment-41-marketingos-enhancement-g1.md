@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Enhancement - G1 Remediation Memo -->
+
 # Amendment 41 MarketingOS Enhancement - G1 Remediation Memo
 
 This memo outlines the current blocking points and the smallest buildable next slice for Amendment 41 (MarketingOS), given that founder decisions currently prevent direct feature code implementation.

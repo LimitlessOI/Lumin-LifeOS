@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build
  * Proves the Council Builder is reachable and reports why POST /api/v1/lifeos/builder/build
  * would fail (auth, GITHUB_TOKEN, DB, etc.). Run before any Conductor work on product paths.
  * That proves e.g. COMMAND_CENTER_KEY / PUBLIC_BASE_URL exist in the service vault without asking Adam to re-screenshot.

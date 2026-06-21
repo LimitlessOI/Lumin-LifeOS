@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Sandbox Service — runs AI-generated code snippets in an isolated temp file
  * Sandbox Service — runs AI-generated code snippets in an isolated temp file
  * via child_process exec (5 s timeout), persisting pass/fail results to the
  * database for audit and escalation decisions.

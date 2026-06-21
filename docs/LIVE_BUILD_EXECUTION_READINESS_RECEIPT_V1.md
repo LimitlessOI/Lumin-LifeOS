@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Live Build Execution Readiness Receipt V1 -->
+
 # Live Build Execution Readiness Receipt V1
 
 **Status:** `READINESS AUDIT` — validation only; no runtime code modified; no live build executed in this mission  

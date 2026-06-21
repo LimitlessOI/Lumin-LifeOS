@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: TSOS overseer daemon — monitors builder lanes, SSOT drift, and evidence health.
  * TSOS overseer daemon — monitors builder lanes, SSOT drift, and evidence health.
  *
  * Purpose:

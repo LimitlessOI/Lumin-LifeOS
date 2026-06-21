@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                      TCO (TotalCostOptimizer) API ROUTES                          ║
  * ║           Proxy service that intercepts and optimizes AI API calls               ║

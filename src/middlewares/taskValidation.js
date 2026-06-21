@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/middlewares/taskValidation.js.
+ */
 ```javascript
 const Joi = require('joi');
 

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G103-100 -->
+
 # Amendment 01: AI Council Proof - G103-100
 
 This document serves as a proof-closing blueprint note for `proof-g103-100` related to `AMENDMENT_01_AI_COUNCIL`. The objective of this proof point is to establish the foundational mechanism for the AI Council to receive BuilderOS remediation signals.

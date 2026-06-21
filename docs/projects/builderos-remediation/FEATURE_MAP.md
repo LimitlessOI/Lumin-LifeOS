@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BUILDEROS REMEDIATION FEATURE MAP -->
+
 # BUILDEROS REMEDIATION FEATURE MAP
 
 **Project key:** `builderos-remediation`

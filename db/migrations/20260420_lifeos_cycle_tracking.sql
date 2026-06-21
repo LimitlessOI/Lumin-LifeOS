@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260420_lifeos_cycle_tracking.sql.
 -- Migration: 20260420_lifeos_cycle_tracking.sql
 -- LifeOS — Menstrual / Perimenopause Cycle Tracking
 --

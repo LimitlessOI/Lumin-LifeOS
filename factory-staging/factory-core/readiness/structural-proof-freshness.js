@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports structuralProofFreshness — factory-staging/factory-core/readiness/structural-proof-freshness.js.
+ */
 export function structuralProofFreshness(entry) {
   return {
     duplicateAuthorityPathsVisible: true,

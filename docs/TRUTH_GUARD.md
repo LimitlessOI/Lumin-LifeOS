@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: TRUTH GUARD (Standing Order) -->
+
 # TRUTH GUARD (Standing Order)
 
 ## Non-Negotiables

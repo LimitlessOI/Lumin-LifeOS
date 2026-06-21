@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-email-monitor.js
  * tc-email-monitor.js
  * Monitors email for incoming real estate contracts (Nevada/GLVAR).
  * Sends TC outbound emails via Postmark (NotificationService).

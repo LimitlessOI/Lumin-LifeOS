@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G845 100. -->
+
 // File: routes/lifeos-council-builder-routes.js
 // Proposed changes to wire BuilderOS control plane endpoints.
 

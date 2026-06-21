@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41 MarketingOS Proof (G373-100) Remediation Blueprint -->
+
 The verifier's rejection indicates a misconfiguration in the BuilderOS loop attempting to execute a markdown file, which contradicts the task of writing a markdown document for a functional proof.
 
 ```markdown

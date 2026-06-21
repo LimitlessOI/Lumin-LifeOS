@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G875 100. -->
+
 Amendment 01: AI Council - Proof G875-100 Closure
 Proof Point: G875-100 - Initial AI Council Charter and Membership Roster Drafted and Approved.
 Status: CLOSED. The initial charter outlining the AI Council's purpose, scope, and preliminary membership roster has been drafted, reviewed, and approved by relevant stakeholders as per the Amendment 01 blueprint. This establishes the foundational governance structure for AI initiatives within LifeOS.

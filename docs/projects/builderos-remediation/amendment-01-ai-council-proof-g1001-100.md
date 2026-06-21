@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 01 Ai Council Proof G1001 100. -->
+
 The source blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` was not provided, requiring inference for detailed markdown content.
 Amendment 01 AI Council: Proof G1001-100 - Initial Model Governance Scope Definition
 

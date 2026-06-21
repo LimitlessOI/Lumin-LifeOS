@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council: Proof G639-100 - BuilderOS AI Decision Logging Foundation -->
+
 # Amendment 01 AI Council: Proof G639-100 - BuilderOS AI Decision Logging Foundation
 
 This document serves as a proof-closing blueprint note for a foundational build slice related to Amendment 01 AI Council, specifically addressing the initial requirement for auditable AI decision logging within the BuilderOS internal execution loop. This slice establishes the core utility for structured AI event logging, enabling future auditability and analysis of AI-driven decisions.

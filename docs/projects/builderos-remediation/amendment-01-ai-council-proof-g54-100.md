@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof Document: Amendment 01 AI Council for Remediation G54-100 -->
+
 # Proof Document: Amendment 01 AI Council for Remediation G54-100
 
 ## Purpose

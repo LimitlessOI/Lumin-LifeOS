@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/recommendationController.js.
+ */
 ```javascript
 const recommendationService = require('../services/recommendationService');
 

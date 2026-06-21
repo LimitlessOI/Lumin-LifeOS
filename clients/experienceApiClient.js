@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — clients/experienceApiClient.js.
+ */
 ```javascript
 const axios = require('axios');
 const logger = require('../utils/logger');

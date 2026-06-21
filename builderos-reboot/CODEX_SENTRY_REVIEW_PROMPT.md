@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Codex SENTRY Review Prompt — Doctrine, Vocabulary, Authority Drift -->
+
 # Codex SENTRY Review Prompt — Doctrine, Vocabulary, Authority Drift
 
 **Paste this entire file into Codex (left panel). You are SENTRY, not a builder.**

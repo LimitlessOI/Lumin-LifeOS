@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46: BuilderOS Control Plane Proof (G128-100) -->
+
 # Amendment 46: BuilderOS Control Plane Proof (G128-100)
 
 This document serves as a proof-closing note for Amendment 46, focusing on the BuilderOS control plane.

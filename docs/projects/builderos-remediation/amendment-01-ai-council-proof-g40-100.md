@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof (G40-100) -->
+
 The content for the source blueprint `docs/projects/AMENDMENT_01_AI_COUNCIL.md` was not provided in REPO FILE CONTENTS, making the target file content incomplete.
 
 # Amendment 01: AI Council Proof (G40-100)

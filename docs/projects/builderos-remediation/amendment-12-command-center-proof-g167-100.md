@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: Command Center - Proof G167-100 -->
+
 # AMENDMENT 12: Command Center - Proof G167-100
 
 ## Blueprint Note: Next Smallest Build Slice for Command Registry Integration

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Database migration — 20231025-create-learning-profiles.js.
+ */
 ```js
 'use strict';
 

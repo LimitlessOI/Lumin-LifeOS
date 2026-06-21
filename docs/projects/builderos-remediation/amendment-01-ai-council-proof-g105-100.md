@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G105-100: Initial Council Definition -->
+
 # Amendment 01: AI Council - Proof G105-100: Initial Council Definition
 
 This document serves as a proof-closing blueprint note for the initial establishment of the AI Council's foundational definition within the LifeOS platform, specifically addressing gate G105-100. This gate focuses on the minimal viable definition required to acknowledge the council's existence and its core membership.

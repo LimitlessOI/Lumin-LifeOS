@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: 💰 Income Generation Analysis -->
+
 # 💰 Income Generation Analysis
 
 ## Current Status

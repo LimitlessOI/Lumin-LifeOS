@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Compliance Engine.
+ */
 const { ComplianceRules } = require('../../models');
 
 async function checkCompliance(userId, transactionData) {

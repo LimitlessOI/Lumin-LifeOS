@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS ambient context — stores lightweight, opt-in device/environment hints
  * LifeOS ambient context — stores lightweight, opt-in device/environment hints
  * (battery, network class, visibility) for Lumin grounding. No microphone data,
  * no continuous AI on ingest.

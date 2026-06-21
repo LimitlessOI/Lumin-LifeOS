@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS — Constitutional Law -->
+
 # BuilderOS — Constitutional Law
 **Status:** SUPREME AUTHORITY (wins all conflicts)
 **Full text:** `docs/SSOT_NORTH_STAR.md` — required for constitutional sessions, first-time onboarding, any conflict

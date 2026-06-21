@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof - G1093-100 -->
+
 # Command Center V2 Blueprint Proof - G1093-100
 
 ## Blueprint Note: Initial API Definition - Command/CommandResponse Messages

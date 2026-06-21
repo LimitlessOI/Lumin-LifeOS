@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/lifeos-emotional-routes.js
  * routes/lifeos-emotional-routes.js
  *
  * LifeOS Phase 5 — Emotional Intelligence + Parenting API

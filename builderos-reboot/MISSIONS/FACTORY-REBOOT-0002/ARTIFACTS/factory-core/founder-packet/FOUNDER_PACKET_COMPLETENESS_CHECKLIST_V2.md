@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Founder Packet Completeness Checklist v2 -->
+
 # Founder Packet Completeness Checklist v2
 
 All must be true:

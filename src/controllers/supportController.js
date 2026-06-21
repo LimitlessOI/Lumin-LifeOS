@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/controllers/supportController.js.
+ */
 ```javascript
 const conversationService = require('../services/conversationService');
 const aiProcessor = require('../services/aiProcessor');

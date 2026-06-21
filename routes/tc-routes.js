@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: tc-routes.js
  * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-routes.js
  * Transaction Coordinator API endpoints.

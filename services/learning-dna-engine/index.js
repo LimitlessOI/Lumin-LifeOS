@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Index.
+ */
 ```javascript
 const express = require('express');
 const app = express();

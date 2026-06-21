@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/clients/client.validators.js.
+ */
 ```javascript
 const { body } = require('express-validator');
 

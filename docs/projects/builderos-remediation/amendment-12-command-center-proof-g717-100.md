@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center: Proof G717-100 - BuilderOS Loop Iteration Display -->
+
 # Amendment 12 Command Center: Proof G717-100 - BuilderOS Loop Iteration Display
 
 This proof-closing blueprint note addresses the initial integration step for displaying the BuilderOS loop iteration count within the Command Center, as outlined in `AMENDMENT_12_COMMAND_CENTER.md`. The current verifier rejection was due to an environment misconfiguration attempting to execute a markdown file, not an issue with the content itself. This note focuses on the next actionable implementation slice.

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Service module — 20231012 Create Course Tables.
 ```sql
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,

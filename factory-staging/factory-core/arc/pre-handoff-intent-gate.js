@@ -1,5 +1,5 @@
 /**
- * Pre-handoff intent gate — development stage ONLY.
+ * SYNOPSIS: Pre-handoff intent gate — development stage ONLY.
  * ARC tells Chair intent is incomplete. Adam is NOT re-questioned after handoff.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */

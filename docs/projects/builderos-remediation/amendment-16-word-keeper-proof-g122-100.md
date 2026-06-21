@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 16 Word Keeper Proof G122-100: Initial Word Persistence & Retrieval -->
+
 # Amendment 16 Word Keeper Proof G122-100: Initial Word Persistence & Retrieval
 
 This blueprint note closes the proof gap for foundational `Word` entity persistence and retrieval, enabling basic data integrity verification.

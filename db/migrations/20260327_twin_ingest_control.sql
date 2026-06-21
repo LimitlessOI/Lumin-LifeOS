@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_twin_ingest_control.sql.
 -- ============================================================
 -- Twin Auto-Ingest Control Table
 -- @ssot docs/projects/AMENDMENT_09_LIFE_COACHING.md

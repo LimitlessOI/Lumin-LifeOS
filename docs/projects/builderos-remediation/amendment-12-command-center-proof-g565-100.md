@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: Command Center - Proof G565-100: Initial Service Definition -->
+
 # AMENDMENT 12: Command Center - Proof G565-100: Initial Service Definition
 
 This document outlines the first proof-of-concept build slice for the Command Center, focusing on establishing the foundational `CommandCenterService`. This slice aims to define the core service class, making it importable and instantiable, as per the "Foundation" phase of the AMENDMENT_12_COMMAND_CENTER blueprint.

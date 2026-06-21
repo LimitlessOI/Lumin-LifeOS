@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT_41_MARKETINGOS Proof G877-100: SSOT Foundation Blueprint Note -->
+
 # AMENDMENT_41_MARKETINGOS Proof G877-100: SSOT Foundation Blueprint Note
 
 This document outlines the proof-closing blueprint for `g877-100`, focusing on establishing the Single Source of Truth (SSOT) foundation for key MarketingOS data points as defined in `AMENDMENT_41_MARKETINGOS.md`.

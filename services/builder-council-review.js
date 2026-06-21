@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/builder-council-review.js
  * services/builder-council-review.js
  *
  * Pre-build council review. Runs BEFORE the builder agent starts any segment.

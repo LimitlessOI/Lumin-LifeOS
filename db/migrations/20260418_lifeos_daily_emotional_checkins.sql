@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260418_lifeos_daily_emotional_checkins.sql.
 -- Migration: 20260418_lifeos_daily_emotional_checkins.sql
 -- LifeOS Phase 5 — Daily Emotional Check-in capture table
 --

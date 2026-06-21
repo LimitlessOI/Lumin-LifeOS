@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260605_mission_runtime_commitments_missing_columns.sql.
 -- Mission Runtime Phase 2 — missing commitments columns
 -- The original `commitments` table (20260328_lifeos_repair.sql) did not include
 -- the columns that mission-ledger.js queries for the household board.

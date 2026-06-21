@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — Zero Knowledge Encryption.
+ */
 ```javascript
 const crypto = require('crypto');
 

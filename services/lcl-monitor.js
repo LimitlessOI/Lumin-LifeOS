@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/lcl-monitor.js
  * services/lcl-monitor.js
  *
  * LCL Drift Monitor — guards the LifeOS Compression Language layer against

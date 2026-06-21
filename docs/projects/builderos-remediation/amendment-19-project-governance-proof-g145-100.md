@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G145 100. -->
+
 The instruction to "Generate the complete implementation code" for a `.md` file is contradictory, as `.md` files contain documentation, not executable code. I am providing the complete markdown content as the "implementation."
 Amendment 19 Project Governance Proof (G145-100)
 

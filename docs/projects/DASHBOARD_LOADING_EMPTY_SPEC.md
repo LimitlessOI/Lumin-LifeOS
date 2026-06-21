@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — DASHBOARD LOADING EMPTY SPEC. -->
+
 ## Dashboard UI State Specification
 
 This document outlines the patterns for skeletons, shimmer effects, optimistic UI considerations, and empty state copy tone for the LifeOS Dashboard, based on existing implementations in `public/overlay/lifeos-dashboard.html`.

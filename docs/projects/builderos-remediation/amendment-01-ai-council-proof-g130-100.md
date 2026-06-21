@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS Remediation: Amendment 01 AI Council - Proof G130-100 -->
+
 # BuilderOS Remediation: Amendment 01 AI Council - Proof G130-100
 
 ## Blueprint Note: AI Council Initial Scope Definition

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G445 100. -->
+
 Amendment 41: MarketingOS Proof - G445-100
 Proof-Closing Blueprint Note
 This document serves as the proof-closing blueprint note for Amendment 41, which establishes the SSOT foundation for MarketingOS integration.

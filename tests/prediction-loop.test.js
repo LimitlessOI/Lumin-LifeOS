@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: S5 Prediction Loop v0 — unit tests
  * S5 Prediction Loop v0 — unit tests
  *
  * Tests makePrediction() and evaluatePrediction() as pure functions.

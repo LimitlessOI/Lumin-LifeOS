@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: ENV_REGISTRY.md — Environment Variable Registry -->
+
 # ENV_REGISTRY.md — Environment Variable Registry
 
 **SSOT Position:** This file sits under `docs/SSOT_COMPANION.md § 0.4` as the canonical env var reference.

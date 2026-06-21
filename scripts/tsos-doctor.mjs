@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: TokenSaverOS build-system doctor.
  * TokenSaverOS build-system doctor.
  *
  * Writes: `data/tsos-doctor-last-run.json` (gitignored) for `tsos:builder` per-step 1–10 self-grade.

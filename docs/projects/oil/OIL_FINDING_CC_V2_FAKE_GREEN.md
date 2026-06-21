@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: OIL Finding — Command Center V2 Fake Green / Fallback Data -->
+
 # OIL Finding — Command Center V2 Fake Green / Fallback Data
 
 **Finding ID:** OIL-SEC-FIND-20260524-002  

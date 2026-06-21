@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 14: White-Label Proof - G128-100 - Initial Branding Configuration -->
+
 # Amendment 14: White-Label Proof - G128-100 - Initial Branding Configuration
 
 **Project:** Amendment 14: White-Labeling

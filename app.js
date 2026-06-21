@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — app.js.
+ */
 const express = require('express');
 const { fetchBiometricData } = require('./services/abi/biometricIngestion');
 const { processBiometricData } = require('./services/abi/recommendationEngine');

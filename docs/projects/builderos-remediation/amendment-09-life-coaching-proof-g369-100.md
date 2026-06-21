@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 09 Life Coaching Proof G369 100. -->
+
 Amendment 09: Life Coaching - Proof G369-100
 This document outlines the next smallest build slice for proving out the core functionality of Amendment 09, focusing on the foundational data model and persistence for a Coaching Session.
 

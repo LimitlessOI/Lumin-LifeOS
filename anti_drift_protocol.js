@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Anti-Drift Protocol Implementation
+ */
 // Anti-Drift Protocol Implementation
 class AntiDriftProtocol {
     constructor() {

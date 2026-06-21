@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 19 Project Governance Proof G77 100. -->
+
 Amendment 19 Project Governance Proof: G77 - Initial Metadata Structure (100)
 Blueprint Reference: `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`
 Proof ID: `g77-100`

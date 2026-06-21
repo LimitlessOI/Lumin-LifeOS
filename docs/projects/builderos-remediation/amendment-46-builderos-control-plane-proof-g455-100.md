@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 46 Builderos Control Plane Proof G455 100. -->
+
 ### AMENDMENT 46 BUILDEROS CONTROL PLANE - PROOF G455-100
 
 **Proof Closing Note for C2 Build Pass**

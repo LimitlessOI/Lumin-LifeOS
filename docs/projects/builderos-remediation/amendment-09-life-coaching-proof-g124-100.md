@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G124-100 -->
+
 # Amendment 09: Life Coaching - Proof G124-100
 
 ## Scope of Proof

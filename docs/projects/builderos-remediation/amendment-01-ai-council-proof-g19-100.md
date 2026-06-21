@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G19-100 Closing Note -->
+
 # Amendment 01: AI Council - Proof G19-100 Closing Note
 
 ## Blueprint Reference

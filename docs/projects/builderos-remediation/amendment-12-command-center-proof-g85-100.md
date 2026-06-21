@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G85 100. -->
+
 The specification is contradictory: the task asks to write a `.md` file, but the verifier rejected the previous `.md` file by attempting to execute it as Node/ESM code, and the final instruction asks for "implementation code" which, in this context, implies Node/ESM.
 
 Amendment 12 Command Center Proof: G85-100 - Initial Remediation Task Orchestration

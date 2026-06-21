@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: FACTORY-0001-v1 -->
+
 # FACTORY-0001-v1
 
 This directory is the exact BPB handoff pack for the first Factory v1 proof mission.

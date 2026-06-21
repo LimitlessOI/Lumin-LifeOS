@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G493 100. -->
+
 Amendment 12 Command Center Proof - G493-100
 This document outlines the first proof-of-concept build slice for the Amendment 12 Command Center, focusing on establishing the foundational service and controller components with a minimal, verifiable command execution flow.
 ---

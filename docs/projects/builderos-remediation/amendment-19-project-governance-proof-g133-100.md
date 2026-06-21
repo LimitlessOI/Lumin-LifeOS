@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Remediation Proof: G133-100 -->
+
 # Amendment 19 Project Governance Remediation Proof: G133-100
 
 ## Proof Point: Initial Remediation Kick-off and Blueprint Alignment

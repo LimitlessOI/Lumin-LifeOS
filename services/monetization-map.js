@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: services/monetization-map.js
  * services/monetization-map.js
  *
  * Bridges `purpose_profiles.economic_paths` (AI-synthesized opportunities) into an

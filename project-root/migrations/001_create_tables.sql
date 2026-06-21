@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_tables.sql.
 ```sql
 CREATE TABLE jest_config_versions (
   id SERIAL PRIMARY KEY,

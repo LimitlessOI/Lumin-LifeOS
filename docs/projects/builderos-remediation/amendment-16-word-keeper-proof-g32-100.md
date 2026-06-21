@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 16: WORD KEEPER - Proof G32-100 -->
+
 # AMENDMENT 16: WORD KEEPER - Proof G32-100
 
 ## Blueprint Note: Core Word Persistence and Uniqueness

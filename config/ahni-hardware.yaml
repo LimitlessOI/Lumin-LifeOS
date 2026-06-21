@@ -1,3 +1,4 @@
+# SYNOPSIS: Configuration — Ahni Hardware.
 wearables:
   port: "/dev/tty-usbserial1"
   baudRate: 9600

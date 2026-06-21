@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Handoff: Ideas-to-Products Review & Suggestions -->
+
 # Handoff: Ideas-to-Products Review & Suggestions
 
 **Purpose:** Another model (or human) should review the codebase and docs, then provide **20 concrete suggestions** to improve how the system develops ideas into products, plus any **missing tools** needed.  

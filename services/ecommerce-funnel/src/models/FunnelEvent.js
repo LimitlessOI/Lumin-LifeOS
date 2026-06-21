@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — FunnelEvent.
+ */
 ```javascript
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');

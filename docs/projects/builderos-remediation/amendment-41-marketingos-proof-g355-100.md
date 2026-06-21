@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: G355-100 - MarketingOS User Segment Update Event Verification -->
+
 # Proof-Closing Blueprint Note: G355-100 - MarketingOS User Segment Update Event Verification
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

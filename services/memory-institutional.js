@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: services/memory-institutional.js
+ */
 // services/memory-institutional.js
 /** @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md */
 

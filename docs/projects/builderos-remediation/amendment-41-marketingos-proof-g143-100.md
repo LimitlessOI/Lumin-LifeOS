@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: MarketingOS SSOT Foundation (g143-100) -->
+
 # Proof-Closing Blueprint Note: MarketingOS SSOT Foundation (g143-100)
 
 **Source Blueprint:** `docs/projects/AMENDMENT_41_MARKETINGOS.md`

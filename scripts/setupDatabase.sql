@@ -1,3 +1,4 @@
+-- SYNOPSIS: Script — SetupDatabase.
 ```sql
 CREATE TABLE feedback (
   id SERIAL PRIMARY KEY,

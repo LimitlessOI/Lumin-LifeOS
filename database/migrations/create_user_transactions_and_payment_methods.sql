@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_user_transactions_and_payment_methods.sql.
 ```sql
 -- Create user_transactions table
 CREATE TABLE user_transactions (

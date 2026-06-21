@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Service module — FunnelAnalysisQueue.
+ */
 ```javascript
 const Queue = require('bull');
 const aiAnalyticsService = require('../services/aiAnalyticsService');

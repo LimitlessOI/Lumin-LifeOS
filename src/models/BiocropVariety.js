@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/models/BiocropVariety.js.
+ */
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../database/connection');
 

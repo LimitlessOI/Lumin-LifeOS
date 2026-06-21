@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council: Proof-of-Concept G27-100 - AI-driven Remediation -->
+
 # Amendment 01 AI Council: Proof-of-Concept G27-100 - AI-driven Remediation
 
 ## Status Update: Initial Proof-of-Concept for G27-100

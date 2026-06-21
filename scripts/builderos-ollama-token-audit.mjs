@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Read-only audit module for summarizing Ollama provider token usage via internal API.
+ */
 import 'dotenv/config';
 import { URL } from 'node:url';
 import { Pool } from 'pg';

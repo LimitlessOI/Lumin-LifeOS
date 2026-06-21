@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Operator Consumption Ledger (OCL1) — manual Cursor/IDE token accounting.
  * Operator Consumption Ledger (OCL1) — manual Cursor/IDE token accounting.
  * @ssot docs/projects/AMENDMENT_44_TOKEN_ACCOUNTING_OS.md
  */

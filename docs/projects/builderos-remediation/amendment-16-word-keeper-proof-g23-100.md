@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 16 Word Keeper Proof G23 100. -->
+
 AMENDMENT_16_WORD_KEEPER - Proof-Closing Blueprint Note (g23-100)
 
 This note closes the `g23-100` build slice for the Word Keeper project, focusing on establishing the foundational data validation schemas.

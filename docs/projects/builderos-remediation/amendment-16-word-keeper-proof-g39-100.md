@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Proof-Closing Blueprint Note: Amendment 16 Word Keeper - G39-100 -->
+
 # Proof-Closing Blueprint Note: Amendment 16 Word Keeper - G39-100
 
 ## Next Smallest Build Slice: Data Model & Initial Migrations

@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260428_commitments_reminder_compat.sql.
 -- Bridge Word Keeper + LifeOS core shapes on `commitments` (same table name, different evolutions).
 -- Reminder cron and some integrity queries reference both naming styles.
 

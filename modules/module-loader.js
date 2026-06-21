@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Registers Modules routes/handlers (modules/module-loader.js).
+ */
 export function registerModules(router, definitions = [], dependencies = {}) {
   const instances = {};
 

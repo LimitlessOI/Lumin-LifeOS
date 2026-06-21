@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Clients API -->
+
 ```markdown
 # Clients API
 

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Voice Rail STT — Whisper prompt terms + post-transcription corrections.
  * Voice Rail STT — Whisper prompt terms + post-transcription corrections.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md

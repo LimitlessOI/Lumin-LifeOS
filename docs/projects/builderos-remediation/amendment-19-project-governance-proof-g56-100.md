@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G56-100 - Initial Governance Structure Establishment -->
+
 # Amendment 19 Project Governance Proof: G56-100 - Initial Governance Structure Establishment
 
 **Blueprint Reference:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

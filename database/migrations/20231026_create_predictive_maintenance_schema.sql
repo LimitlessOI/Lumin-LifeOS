@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 20231026_create_predictive_maintenance_schema.sql.
 ```sql
 -- Create table for assets involved in predictive maintenance
 CREATE TABLE predictive_maintenance_assets (

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Tailwind CDN exit — spike charter (**BUILD_NOW** triage **M02**) -->
+
 # Tailwind CDN exit — spike charter (**BUILD_NOW** triage **M02**)
 
 **Status:** charter only — **no** production CSS swap in this doc.

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 12 Command Center Proof G577 100. -->
+
 Blueprint Note: AMENDMENT_12_COMMAND_CENTER - Proof G577-100
 
 This proof addresses the foundational data model and the initial PoW generation logic as outlined in `docs/projects/AMENDMENT_12_COMMAND_CENTER.md`. It establishes the core components required for subsequent build passes.

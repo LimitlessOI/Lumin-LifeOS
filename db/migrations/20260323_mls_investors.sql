@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260323_mls_investors.sql.
 -- MLS Investor Registry + Deal Match Engine
 -- Stores investor buy-box criteria and deal matches per investor
 

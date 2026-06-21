@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/modules/stripe-optimization/routes.js.
+ */
 ```javascript
 const express = require('express');
 const clientController = require('./controllers/clientController');

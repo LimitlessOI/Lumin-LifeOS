@@ -1,4 +1,5 @@
 #!/bin/bash
+# SYNOPSIS: Script — Setup Video Editing Council.
 
 # ╔══════════════════════════════════════════════════════════════════════════════════╗
 # ║                    VIDEO EDITING COUNCIL SETUP                                   ║

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G6 100. -->
+
 The target file's `.md` extension contradicts the verifier's expectation of executable JavaScript and the embedded instruction to generate implementation code.
 ```javascript
 // docs/projects/builderos-remediation/command-center-v2-blueprint-proof-g6-100.md

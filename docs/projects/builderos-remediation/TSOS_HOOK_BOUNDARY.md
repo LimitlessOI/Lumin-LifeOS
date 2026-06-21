@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS TSOS Internal Hook Boundary Contract -->
+
 # BuilderOS TSOS Internal Hook Boundary Contract
 
 **Closes:** BR-05 (TSOS Boundary Overclaim) from `BLUEPRINT.md`  

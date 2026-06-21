@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createFactoryExecuteStepRoutes — factory-v1/routes/factory-execute-step-routes.js.
+ */
 import express from 'express';
 import { runFrozenStep } from '../runtime/run-frozen-step.js';
 

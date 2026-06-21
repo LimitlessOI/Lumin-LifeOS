@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — 001_create_ecommerce_tables.sql.
 ```sql
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,

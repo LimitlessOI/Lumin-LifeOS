@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/utils/security/password.js.
+ */
 ```javascript
 const bcrypt = require('bcrypt');
 

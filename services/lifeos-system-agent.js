@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS System Agent — repo-aware answers from actual filesystem + git, not canned BP text.
  * LifeOS System Agent — repo-aware answers from actual filesystem + git, not canned BP text.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

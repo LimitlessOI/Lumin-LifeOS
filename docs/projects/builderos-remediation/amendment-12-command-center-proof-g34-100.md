@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof - G34-100 -->
+
 The specification is incomplete as the source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` was not provided, preventing derivation of specific content.
 
 # Amendment 12 Command Center Proof - G34-100

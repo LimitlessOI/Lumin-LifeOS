@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Scores how bad a prospect's EXISTING website is so we know who to pitch first.
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * Scores how bad a prospect's EXISTING website is so we know who to pitch first.
  * High opportunityScore (0-100) = bad site = high priority for cold outreach.

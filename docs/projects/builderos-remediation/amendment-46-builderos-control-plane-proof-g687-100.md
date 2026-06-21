@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 46 BuilderOS Control Plane Proof: G687-100 Remediation -->
+
 # Amendment 46 BuilderOS Control Plane Proof: G687-100 Remediation
 
 ## 1. Missing Implementation / Proof Gap

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: LifeOS ambient context API — opt-in lightweight snapshots + proactive nudges.
  * LifeOS ambient context API — opt-in lightweight snapshots + proactive nudges.
  *
  * Mounted at /api/v1/lifeos/ambient

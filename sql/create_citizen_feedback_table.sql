@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — create_citizen_feedback_table.sql.
 CREATE TABLE citizen_feedback (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g913-100 - Core Command Entity & Service -->
+
 # Command Center V2 Blueprint Proof: g913-100 - Core Command Entity & Service
 
 This document serves as a proof-closing blueprint note for the `g913-100` build slice, focusing on establishing the foundational `Command` entity and its initial service layer for Command Center V2.

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/utils/database.js.
+ */
 const { Pool } = require('pg');
 
 const pool = new Pool({

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Future State Architecture Review V1 -->
+
 # Future State Architecture Review V1
 
 **Status:** `AUTHORITATIVE REVIEW` (external systems architect lens — doc-only)  

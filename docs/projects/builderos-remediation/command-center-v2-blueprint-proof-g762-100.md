@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Command Center V2 Blueprint Proof: g762-100 Remediation -->
+
 The specification to write a `.md` file contradicts the OIL verifier's expectation of an executable file at this path, as evidenced by the `ERR_UNKNOWN_FILE_EXTENSION` rejection.
 
 ```markdown

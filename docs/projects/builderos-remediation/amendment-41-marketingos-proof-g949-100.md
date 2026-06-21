@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof - G949-100 Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof - G949-100 Blueprint Note
 
 This document serves as the Single Source of Truth (SSOT) foundation for closing the proof gap identified in Amendment 41 related to MarketingOS integration for G949-100.

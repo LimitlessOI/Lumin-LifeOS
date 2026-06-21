@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Command Center V2 Blueprint Proof G14 100. -->
+
 ### Blueprint Note: Command Center V2 - Core Interaction Proof (G14-100)
 
 This note closes the proof gap for the foundational user interaction within Command Center V2, focusing on the input-process-output loop.

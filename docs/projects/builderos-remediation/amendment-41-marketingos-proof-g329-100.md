@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 41: MarketingOS Proof G329-100 Remediation Blueprint Note -->
+
 # Amendment 41: MarketingOS Proof G329-100 Remediation Blueprint Note
 
 **SSOT Foundation:** This document serves as the Single Source of Truth for the remediation of the OIL verifier rejection related to Amendment 41 MarketingOS Proof G329-100.

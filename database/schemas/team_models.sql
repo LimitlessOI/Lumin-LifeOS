@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — team_models.sql.
 ```sql
 CREATE TABLE team_models (
     model_id SERIAL PRIMARY KEY,

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports createUserPreferenceGuesser — startup/user-preferences.js.
+ */
 export function createUserPreferenceGuesser({ pool, callCouncilMember, logger }) {
   return async function guessUserDecision(context) {
     try {

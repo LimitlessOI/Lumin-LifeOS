@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: LifeOS Communication OS smoke checks.
  * LifeOS Communication OS smoke checks.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */

@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Efficiency intelligence — aggregates from autonomous_telemetry_events only.
  * Efficiency intelligence — aggregates from autonomous_telemetry_events only.
  * No invented scores; every metric cites row counts / receipt evidence.
  *

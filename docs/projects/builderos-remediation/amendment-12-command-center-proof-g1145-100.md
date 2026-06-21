@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof (G1145-100) -->
+
 # Amendment 12 Command Center Proof (G1145-100)
 
 This document serves as a proof-closing blueprint note for the BuilderOS change, addressing the OIL verifier rejection.

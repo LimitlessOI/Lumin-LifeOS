@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: scripts/import-claude-conversations.js
  * scripts/import-claude-conversations.js
  * Reads all Claude Code JSONL session files and imports them into the conversations DB.
  *

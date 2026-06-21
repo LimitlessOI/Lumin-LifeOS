@@ -1,5 +1,5 @@
 /**
- * Fail-closed doctrine enforcement — no discards, role compliance, result truth wins.
+ * SYNOPSIS: Fail-closed doctrine enforcement — no discards, role compliance, result truth wins.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';

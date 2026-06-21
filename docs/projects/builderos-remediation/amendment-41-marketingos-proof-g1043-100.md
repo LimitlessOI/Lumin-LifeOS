@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G1043 100. -->
+
 ### AMENDMENT 41: MarketingOS Proof G1043-100 Blueprint Note
 
 This document serves as the SSOT foundation for closing the proof gap identified in Amendment 41 regarding MarketingOS data accuracy.

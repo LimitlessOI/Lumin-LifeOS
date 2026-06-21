@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council - Proof G23-100 -->
+
 # Amendment 01: AI Council - Proof G23-100
 
 **Document ID:** `g23-100`

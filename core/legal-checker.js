@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                    LEGAL CHECKER FOR CONTROVERSIAL ITEMS                         ║
  * ║                    Flags potentially illegal or controversial actions            ║

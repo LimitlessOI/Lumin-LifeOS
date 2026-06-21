@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: Exports getStripeClient — startup/environment.js.
+ */
 import process from "node:process";
 import rateLimit from "express-rate-limit";
 import { loadRuntimeEnv } from "../config/runtime-env.js";

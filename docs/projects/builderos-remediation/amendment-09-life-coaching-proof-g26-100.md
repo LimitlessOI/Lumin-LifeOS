@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G26-100 -->
+
 # Amendment 09: Life Coaching - Proof G26-100
 
 ## Blueprint Note: Next Build Slice for Life Coaching Feature

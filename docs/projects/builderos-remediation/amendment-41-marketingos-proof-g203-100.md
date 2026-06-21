@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G203 100. -->
+
 AMENDMENT_41_MARKETINGOS Proof-Closing Blueprint Note: G203-100 - Conversion Event Emission Verification
 This document serves as the SSOT foundation for closing the proof gap identified in AMENDMENT_41_MARKETINGOS related to the reliable emission and processing of `MarketingEvent.Conversion` events.
 1. Exact Missing Implementation or Proof Gap

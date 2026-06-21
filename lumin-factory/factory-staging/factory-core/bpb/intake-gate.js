@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: BPB intake gate — rejects if upstream strategy or blueprint shape is incomplete.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT } from '../builder/run-step.js';

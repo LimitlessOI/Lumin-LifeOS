@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01 AI Council: Proof G112-100 - Initial Policy Artifact Establishment -->
+
 # Amendment 01 AI Council: Proof G112-100 - Initial Policy Artifact Establishment
 
 ## Purpose

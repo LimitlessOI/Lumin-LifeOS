@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: routes/builder-supervisor-routes.js
  * routes/builder-supervisor-routes.js
  *
  * API surface for the headless builder supervisor.

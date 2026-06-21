@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/queues/codeReviewQueue.js.
+ */
 ```javascript
 const Queue = require('bull');
 const analysisEngine = require('../services/code-review/analysisEngine');

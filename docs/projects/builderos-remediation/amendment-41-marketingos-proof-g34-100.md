@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Documentation — Amendment 41 Marketingos Proof G34 100. -->
+
 The instruction to 'Generate the complete implementation code' is interpreted as generating the content for the target markdown file, given the target file extension.
 AMENDMENT_41_MARKETINGOS Proof G34-100: Foundational Event Dispatch
 

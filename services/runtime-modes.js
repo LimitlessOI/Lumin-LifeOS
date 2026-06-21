@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Central runtime safety defaults for autonomy-related env flags.
  * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  *
  * Central runtime safety defaults for autonomy-related env flags.

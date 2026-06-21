@@ -1,4 +1,5 @@
 /**
+ * SYNOPSIS: Shared Phase 14 phase ledger — single source for Railway certify/run-proofs
  * Shared Phase 14 phase ledger — single source for Railway certify/run-proofs
  * and local certification. Reads only builder_audit_receipts (no local JSON files).
  *

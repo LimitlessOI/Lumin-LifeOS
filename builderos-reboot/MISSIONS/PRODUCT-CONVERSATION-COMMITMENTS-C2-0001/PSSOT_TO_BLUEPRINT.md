@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: PSSOT → Blueprint conversion guide -->
+
 # PSSOT → Blueprint conversion guide
 
 **Audience:** BPB  

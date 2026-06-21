@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: AMENDMENT 12: COMMAND CENTER - Proof G379-100 -->
+
 # AMENDMENT 12: COMMAND CENTER - Proof G379-100
 
 ## Blueprint Note: Proof-Closing Build Slice

@@ -1,3 +1,6 @@
+/**
+ * SYNOPSIS: js — src/routes/users.js.
+ */
 ```javascript
 const express = require('express');
 const { userController } = require('../controllers/userController');

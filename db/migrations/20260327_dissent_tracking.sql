@@ -1,3 +1,4 @@
+-- SYNOPSIS: Database migration — 20260327_dissent_tracking.sql.
 -- Dissent tracking — skip when model_verdict_log absent (optional council table).
 DO $$
 BEGIN

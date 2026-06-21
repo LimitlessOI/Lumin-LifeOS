@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 09: Life Coaching - Proof G107-100: LifeCoach Entity and Repository Definition -->
+
 # Amendment 09: Life Coaching - Proof G107-100: LifeCoach Entity and Repository Definition
 
 This document outlines the next smallest build slice for implementing the Life Coaching feature, focusing on the foundational data model and repository.

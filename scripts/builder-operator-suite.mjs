@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /**
+ * SYNOPSIS: One-shot builder pipeline check for Conductor sessions (North Star §2.11a — TSOS).
  * One-shot builder pipeline check for Conductor sessions (North Star §2.11a — TSOS).
  *
  * Runs in order (all steps execute even if an earlier step fails — full picture):

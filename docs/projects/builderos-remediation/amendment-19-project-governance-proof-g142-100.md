@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19 Project Governance Proof: G142-100 - Project Root `project.json` Validation -->
+
 # Amendment 19 Project Governance Proof: G142-100 - Project Root `project.json` Validation
 
 **Source Blueprint:** `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md`

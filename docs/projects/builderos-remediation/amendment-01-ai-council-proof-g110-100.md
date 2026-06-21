@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 01: AI Council Proof - G110-100 -->
+
 # Amendment 01: AI Council Proof - G110-100
 
 **Status:** PROVEN

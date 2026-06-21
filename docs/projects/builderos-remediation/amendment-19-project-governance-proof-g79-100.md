@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 19: Project Governance Proof (G79-100) -->
+
 # Amendment 19: Project Governance Proof (G79-100)
 
 ## 1. Introduction to Project Governance

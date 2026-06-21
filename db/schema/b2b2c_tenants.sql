@@ -1,3 +1,4 @@
+-- SYNOPSIS: SQL — b2b2c_tenants.sql.
 ```sql
 CREATE TABLE b2b2c_tenants (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Amendment 12 Command Center Proof (G335-100) -->
+
 The source blueprint `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` is missing, leading to an incomplete specification for deriving the exact implementation gap.
 # Amendment 12 Command Center Proof (G335-100)
 
