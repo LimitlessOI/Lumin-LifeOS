@@ -68,9 +68,11 @@ function testMechanicalCssPatch() {
     task: 'change response color to yellow with black text',
   });
   assert.equal(patch.ok, true);
-  assert.equal(patch.target_file, 'public/overlay/lifeos-theme-overrides.css');
-  assert.match(patch.output, /\.lumin-msg\.assistant/);
-  assert.match(patch.output, /#ffeb3b|#ffff00/i);
+  assert.equal(patch.files.length, 3);
+  assert.match(patch.files[0].output, /\.lumin-msg\.assistant/);
+  assert.match(patch.files[1].output, /\.msg\.assistant[\s\S]*#ffeb3b/);
+  assert.match(patch.files[2].output, /\.lumin-msg\.assistant[\s\S]*#ffeb3b/);
+  assert.match(patch.files[1].output, /lifeos-theme-overrides\.css\?v=/);
 }
 
 function testCssOnlyRoutesToThemeOverrides() {

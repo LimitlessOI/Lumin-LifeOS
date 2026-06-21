@@ -79,26 +79,38 @@ export async function runFounderBuildWithSelfRepair({
       try {
         const execRes = await commitCssPatchViaBuilder({ baseUrl: base, commandKey, patchResult });
         const execJson = execRes.json || {};
+        const committedFiles = execRes.committed_files || patchResult.files?.map((f) => f.target_file) || [patchResult.target_file];
         const receipt = execJson.ok === true && execJson.committed === true
           ? { pass_fail: 'PASS', blocker: null, lesson: null, fix: null, gap_recommendation: null }
           : buildFailureReceipt(currentTask, {}, execJson);
         const result = enforceExecutionTruth({
           ok: execJson.ok === true,
           committed: execJson.committed === true,
-          target_file: patchResult.target_file,
+          target_file: committedFiles.join(', '),
           sha: execJson.sha || execJson.commit_sha || null,
-          generated_output: patchResult.output,
+          generated_output: patchResult.files?.[0]?.output || patchResult.output,
           first_blocker: receipt.blocker,
           execution_receipt: receipt,
           execution_path: 'founder_css_patch',
-          task_meta: { output_bytes: patchResult.output.length, patch: patchResult.patch },
+          task_meta: {
+            output_bytes: patchResult.files?.[0]?.output?.length || 0,
+            patch: patchResult.patch,
+            committed_files: committedFiles,
+            cache_bust: patchResult.cache_bust,
+          },
           exec_meta: execJson,
         }, { action: 'build', task: currentTask });
         if (result.pass_fail === 'PASS') {
           return {
             ...result,
+            human_summary: `${result.human_summary || ''}\nHard refresh (Cmd+Shift+R) — updated inline CSS in dashboard + app shell + theme overrides.`,
             self_repair: {
-              attempts: [{ attempt: 1, target_file: patchResult.target_file, pass_fail: 'PASS', repair: 'mechanical_css_patch' }],
+              attempts: committedFiles.map((f, i) => ({
+                attempt: i + 1,
+                target_file: f,
+                pass_fail: 'PASS',
+                repair: 'mechanical_css_patch',
+              })),
               repaired: false,
               success_attempt: 1,
             },
