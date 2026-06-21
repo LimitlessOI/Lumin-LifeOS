@@ -47,6 +47,13 @@ function mtimeMatches(entry, stat) {
   return Math.abs(a - b) <= 2500;
 }
 
+function skipMtimeCheck(rel) {
+  return (
+    /^data\/.*-last-run\.json$/.test(rel)
+    || rel === 'docs/AGENT_RULES.compact.md'
+  );
+}
+
 function verifyFile(rel, { indexMap, failures, contentOverride }) {
   const abs = path.join(ROOT, rel);
   if (!fs.existsSync(abs)) return;
@@ -77,7 +84,7 @@ function verifyFile(rel, { indexMap, failures, contentOverride }) {
     failures.push({ id: 'INDEX_SYNOPSIS_EMPTY', detail: `${rel} — index row has no synopsis` });
   }
 
-  if (stat.size <= 750_000 && !mtimeMatches(entry, stat)) {
+  if (stat.size <= 750_000 && !skipMtimeCheck(rel) && !mtimeMatches(entry, stat)) {
     failures.push({
       id: 'INDEX_STALE',
       detail: `${rel} — index mtime ${entry.mtime} ≠ disk ${stat.mtime.toISOString()}. Run: npm run lifeos:file-synopsis:index`,

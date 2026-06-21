@@ -19,23 +19,6 @@ else
   echo ""
   exit 1
 fi
-node "$ROOT/scripts/generate-file-synopsis-index.mjs" --staged 2>&1 && {
-  git add "$ROOT/builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json" 2>/dev/null || true
-  echo "✅ File synopsis index updated"
-} || {
-  echo "❌ File synopsis index update failed"
-  exit 1
-}
-if node "$ROOT/scripts/verify-file-synopsis.mjs" --staged 2>&1; then
-  echo "✅ File synopsis verify (staged + index co-commit)"
-else
-  echo ""
-  echo "❌ FILE SYNOPSIS VERIFY FAILED — commit blocked."
-  echo "   Run: npm run lifeos:file-synopsis:enforce && npm run lifeos:file-synopsis:index"
-  echo "   Do not use git commit --no-verify — pre-push and CI will still block."
-  echo ""
-  exit 1
-fi
 
 # ── 1. JS syntax check (production spine only — skip orphaned services/* subdirs) ─
 STAGED_JS=$(git diff --cached --name-only --diff-filter=ACM | grep '\.js$' \
@@ -186,6 +169,24 @@ else
   echo "   Canonical queue: builderos-reboot/BP_PRIORITY.json"
   echo "   Run: npm run lifeos:bp-priority:verify"
   echo "   PASS receipts must include bp_sync + co-commit BP/blueprint/founder/objective."
+  echo ""
+  exit 1
+fi
+
+# ── 11. FILE SYNOPSIS index + verify (LAST — after hooks that rewrite data/*.json) ─
+node "$ROOT/scripts/generate-file-synopsis-index.mjs" --staged 2>&1 && {
+  git add "$ROOT/builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json" 2>/dev/null || true
+  echo "✅ File synopsis index updated"
+} || {
+  echo "❌ File synopsis index update failed"
+  exit 1
+}
+if node "$ROOT/scripts/verify-file-synopsis.mjs" --staged 2>&1; then
+  echo "✅ File synopsis verify (staged + index co-commit)"
+else
+  echo ""
+  echo "❌ FILE SYNOPSIS VERIFY FAILED — commit blocked."
+  echo "   Run: npm run lifeos:file-synopsis:enforce && npm run lifeos:file-synopsis:index"
   echo ""
   exit 1
 fi
