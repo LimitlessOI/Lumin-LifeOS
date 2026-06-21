@@ -1,0 +1,19 @@
+{
+  "schema": "blueprint_roadmap_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "status": "ARC_HANDOFF",
+  "phases": [
+    {
+      "phase_id": "P4",
+      "name": "Builder Execution",
+      "status": "BUILDER_READY",
+      "intent": "System Builder executes ARC blueprint"
+    },
+    {
+      "phase_id": "P5",
+      "name": "Alpha Acceptance",
+      "status": "BUILDER_READY",
+      "intent": "Acceptance command + founder usability"
+    }
+  ]
+}

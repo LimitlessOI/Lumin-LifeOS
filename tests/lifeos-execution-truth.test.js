@@ -3,7 +3,9 @@ import {
   detectGeneratedLayerViolation,
   detectScopeIncomplete,
   enforceExecutionTruth,
+  sanitizeConversationReply,
 } from '../services/lifeos-execution-truth.js';
+import { isMissionPipelineIntent } from '../services/lifeos-mission-pipeline-executor.js';
 
 const BROKEN_ROUTE_SAMPLE = `const luminDrawer = document.getElementById('lumin-drawer');
 window.luminBootThread = function() { loadLuminChatHistory(); };
@@ -104,6 +106,19 @@ function testEnforceTruthPassWithSha() {
   assert.equal(truth.receipt_truth, 'COMMIT_SHA_PRESENT');
 }
 
+function testSanitizeFalseExecutionClaim() {
+  const raw = 'Mission PRODUCT-LIFERE-OS-V1-0001 has been successfully executed. Build triggered.';
+  const safe = sanitizeConversationReply(raw, { command_truth: 'NO_COMMAND_RAN' });
+  assert.match(safe, /No command ran/i);
+  assert.match(safe, /Execute mission PRODUCT-LIFERE-OS-V1-0001/);
+  assert.ok(!/^Mission PRODUCT.*successfully executed/m.test(safe.split('\n')[0]));
+}
+
+function testMissionPipelineIntentDetectsPointBPacket() {
+  const sample = 'Mission: PRODUCT-LIFERE-OS-V1-0001 — LifeRE Alpha\nPoint A\nPoint B\nFOUNDER SUCCESS TEST\nOperating rules';
+  assert.equal(isMissionPipelineIntent(sample), true);
+}
+
 testRouteStubDetection();
 testMassShrinkDetection();
 testScopeIncomplete();
@@ -111,4 +126,6 @@ testEnforceTruthFailsCommsProofBuild();
 testEnforceTruthRequiresShaOnBuild();
 testValidationRejectedLabelsBuilderAttempted();
 testEnforceTruthPassWithSha();
+testSanitizeFalseExecutionClaim();
+testMissionPipelineIntentDetectsPointBPacket();
 console.log('✅ lifeos-execution-truth.test.js passed');

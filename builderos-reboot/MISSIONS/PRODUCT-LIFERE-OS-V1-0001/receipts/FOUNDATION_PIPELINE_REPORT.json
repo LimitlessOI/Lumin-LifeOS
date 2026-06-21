@@ -1,0 +1,53 @@
+{
+  "schema": "foundation_pipeline_report_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "at": "2026-06-21T02:40:42.467Z",
+  "doctrine": "FOUNDER_PACKET_V2 full machine path",
+  "stages": {
+    "development": {
+      "ok": false,
+      "stage": "development",
+      "violations": [
+        "department:SNT",
+        "department:CHAIR",
+        "development:missing founder packet",
+        "development:FOUNDER_PACKET missing Problem",
+        "development:FOUNDER_PACKET missing Desired Outcome",
+        "development:FOUNDER_PACKET missing FOUNDER SUCCESS TEST",
+        "development:FOUNDER_PACKET missing acceptance command",
+        "development:intent_not_clear outcome:MISSING,user:MISSING,pain:MISSING,value:MISSING,success_metric:MISSING,failure_metric:MISSING,done_definition:MISSING,scope_boundary:MISSING,constraints:MISSING,unacceptable_result:MISSING,ownership:MISSING",
+        "development:INTENT_BASELINE not HANDOFF_READY (missing)",
+        "department:SNT simulation failed (BLOCKED_INTENT_AMBIGUITY)",
+        "department:CHAIR simulation failed (forecast_blocked)"
+      ],
+      "route": {
+        "schema": "upstream_route_v1",
+        "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+        "pushed_by": "ARC",
+        "defect_owner_seat": "Chair",
+        "route_to": "CHAIR",
+        "escalate_to_founder": true,
+        "founder_frame": "Chair failed to synthesize your intent from our conversation — not that you failed to provide it.",
+        "violations": [
+          "department:SNT",
+          "department:CHAIR",
+          "development:missing founder packet",
+          "development:FOUNDER_PACKET missing Problem",
+          "development:FOUNDER_PACKET missing Desired Outcome",
+          "development:FOUNDER_PACKET missing FOUNDER SUCCESS TEST",
+          "development:FOUNDER_PACKET missing acceptance command",
+          "development:intent_not_clear outcome:MISSING,user:MISSING,pain:MISSING,value:MISSING,success_metric:MISSING,failure_metric:MISSING,done_definition:MISSING,scope_boundary:MISSING,constraints:MISSING,unacceptable_result:MISSING,ownership:MISSING",
+          "development:INTENT_BASELINE not HANDOFF_READY (missing)",
+          "department:SNT simulation failed (BLOCKED_INTENT_AMBIGUITY)",
+          "department:CHAIR simulation failed (forecast_blocked)"
+        ],
+        "flow": [
+          "ARC → Chair (handoff incomplete)",
+          "Chair → Adam (Chair acknowledges synthesis failure)",
+          "resolve → back down chain"
+        ],
+        "lesson": "Incomplete handoff clarity = Chair failure. Architect pushes upstream."
+      }
+    }
+  }
+}

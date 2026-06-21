@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-20 — execution-truth: ROUTE_STUB_REWRITE + SCOPE_INCOMPLETE + COMMIT_NO_SHA; revert poisoned command-control routes
+**Last Updated:** 2026-06-20 — mission pipeline routing: Point B / LifeRE packets → foundation loop; sanitize conversation false PASS
 
 ---
 
@@ -562,6 +562,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** + **`services/lifeos-mission-pipeline-executor.js`** — Point B / mission-packet intents route to `runFoundationPipelineLoop` before Lumin conversation; returns honest `COMMAND_RAN` + FAIL until founder success test; `sanitizeConversationReply()` blocks false "successfully executed" when `NO_COMMAND_RAN`. | Founder pasted LifeRE Point B prompt → conversation path claimed mission executed with NO_COMMAND_RAN. | ✅ tests; deploy |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — `routeToBuilder` auto-injects `files: [target_file]` for scoped GAP-FILL patches (fixes prose-refusal when founder names target_file). | Test 5: builder returned 52 bytes prose — no file body in prompt. | ✅ deploy |
 | 2026-06-20 | **Comms enforcement audit:** builder `/execute` SHA surface; founder-interface bridge truth gate; chat IDOR fix; manifest sync — see AMENDMENT_21 receipt row. | User: audit system and fix all comms gaps. | ✅ tests; deploy |
 | 2026-06-20 | **`services/lifeos-execution-truth.js`** + **`routes/lifeos-council-builder-routes.js`** + revert **`routes/lifeos-builderos-command-control-routes.js`** — ROUTE_STUB_REWRITE (browser code in routes/services), SERVER_FILE_MASS_SHRINK, SCOPE_INCOMPLETE (multi-file tasks), COMMIT_NO_SHA blocks build PASS; pre-commit `validateGeneratedOutputForTarget` calls same detector; **`tests/lifeos-execution-truth.test.js`**. Reverted system commit 597324ed45 that replaced Express routes with drawer JS (Railway healthcheck failed). | COMMS PROOF build claimed PASS while committing DOM code to routes — deploy failed, main poisoned. Lessons: layer violation + scope miss + missing SHA must FAIL with autopsy before founder sees PASS. | ✅ tests + node --check |

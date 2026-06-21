@@ -1,0 +1,27 @@
+{
+  "schema": "intent_baseline_v1",
+  "intent_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "tier": 1,
+  "status": "HANDOFF_READY",
+  "created_at": "2026-06-21",
+  "outcome_statement": "Adam opens LifeRE alpha, sees daily command center, top-3 priorities, and nightly debrief draft — without Cursor",
+  "user": "Adam (founder)",
+  "pain": "LifeRE OS v1 must reach Alpha — a founder-usable daily command center for real estate agents. Stopping on pipeline gates without reaching Point B is failure.",
+  "value": "Adam opens LifeRE alpha, sees daily command center, top-3 priorities, and nightly debrief draft — without Cursor",
+  "success_metrics": [
+    "Open /overlay/lifeos-app.html LifeRE path; complete one daily command center cycle; confirm top-3 and debrief visible"
+  ],
+  "failure_metrics": [
+    "TECHNICAL_PASS without founder_usability_pass",
+    "Stop-on-first-FAIL without repair loop"
+  ],
+  "constraints": [
+    "BP_PRIORITY queue authority",
+    "Never-stop repair loop until phase PASS"
+  ],
+  "scope_boundary": "LifeRE light operational copilot: daily command center, top-3 priorities, nightly debrief, compliance guardrails. Extend production spine — no parallel stack.",
+  "unacceptable_result": "Pipeline halts on first gate without repair attempt",
+  "ownership": "System loops and repairs; Adam owns founder usability verdict at Alpha",
+  "priority_fit": "BP_PRIORITY rank 6"
+}

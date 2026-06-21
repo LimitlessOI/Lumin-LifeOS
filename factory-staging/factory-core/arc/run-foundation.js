@@ -33,6 +33,19 @@ import {
   writeChairFailureReceipt,
   writeUpstreamRouteReport,
 } from './upstream-routing.js';
+import { repairForStage } from './foundation/phase-repair.js';
+import { founderStopActive } from './gate-enforcement.js';
+import {
+  recordObstacle,
+  recordCookingSliceObstacle,
+  applySystemAdjustments,
+} from './foundation/obstacle-lesson-loop.js';
+import {
+  evaluatePointBTargetReached,
+  loadPointBTarget,
+  resolvePointBMissionId,
+  ensurePointBMissionFolder,
+} from './foundation/point-b-target.js';
 
 function loadBpPriority(missionId) {
   const p = path.join(REPO_ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -211,4 +224,298 @@ export function runFoundationPipeline(missionIdOrPath, { force = false, dryRun =
     verdict: report.ok ? 'PASS' : 'FAIL',
   });
   return { ok: report.ok, report };
+}
+
+function runPhaseUntilPass({
+  phaseName,
+  missionFolder,
+  cookingSliceSize,
+  totalAttemptsRef,
+  loopReceipt,
+  runFn,
+  maxAttempts = Infinity,
+}) {
+  let lastResult = null;
+  let phaseAttempts = 0;
+  let sliceAttempts = 0;
+  let budgetSlices = 0;
+
+  while (true) {
+    if (Number.isFinite(maxAttempts) && totalAttemptsRef.count >= maxAttempts) {
+      const obstacle = recordObstacle(missionFolder, {
+        phase: phaseName,
+        attempt: phaseAttempts,
+        kind: 'attempt_budget_per_run',
+        violations: [`attempt_budget_per_run exhausted at ${totalAttemptsRef.count}`],
+      });
+      loopReceipt.obstacles.push(obstacle);
+      loopReceipt.stoppage = {
+        reason: 'attempt_budget_per_run',
+        phase: phaseName,
+        stoppage_is_failure: true,
+        stopping_is_failure: true,
+        lesson: 'Per-run attempt cap hit — outer loop must continue toward Point B',
+      };
+      return { ok: false, attempt_budget_exhausted: true, lastResult, obstacle };
+    }
+    const founderStop = founderStopActive();
+    if (founderStop.active) {
+      loopReceipt.stoppage = {
+        reason: 'founder_stop',
+        phase: phaseName,
+        acceptable: true,
+        stoppage_is_failure: false,
+        path: founderStop.path,
+      };
+      return { ok: false, stopped: 'founder_stop', founder_stop: true };
+    }
+
+    phaseAttempts += 1;
+    totalAttemptsRef.count += 1;
+    sliceAttempts += 1;
+
+    lastResult = runFn({ attempt: phaseAttempts, force: phaseAttempts > 1 });
+    const record = {
+      phase: phaseName,
+      attempt: phaseAttempts,
+      slice: budgetSlices + 1,
+      cooking_spent: totalAttemptsRef.count,
+      at: new Date().toISOString(),
+      ok: Boolean(lastResult?.ok),
+    };
+
+    if (lastResult?.ok) {
+      loopReceipt.attempts.push(record);
+      loopReceipt.phases[phaseName] = { ok: true, attempts: phaseAttempts, budget_slices: budgetSlices };
+      return lastResult;
+    }
+
+    const violations = lastResult?.violations
+      || lastResult?.translate?.intake?.violations
+      || [lastResult?.error].filter(Boolean);
+
+    const obstacle = recordObstacle(missionFolder, {
+      phase: phaseName,
+      violations,
+      result: lastResult,
+      attempt: phaseAttempts,
+    });
+    const repair = repairForStage(missionFolder, phaseName, lastResult, { obstacle });
+    applySystemAdjustments(missionFolder, obstacle);
+
+    record.obstacle = obstacle;
+    record.repair = repair;
+    record.violations = violations;
+    loopReceipt.attempts.push(record);
+    loopReceipt.repairs.push(repair);
+    loopReceipt.obstacles = loopReceipt.obstacles || [];
+    loopReceipt.obstacles.push(obstacle);
+
+    if (sliceAttempts >= cookingSliceSize) {
+      budgetSlices += 1;
+      sliceAttempts = 0;
+      loopReceipt.budget_slices = budgetSlices;
+      const sliceObs = recordCookingSliceObstacle(missionFolder, {
+        phase: phaseName,
+        slice: budgetSlices,
+        sliceSize: cookingSliceSize,
+        totalAttempts: totalAttemptsRef.count,
+      });
+      loopReceipt.obstacles.push(sliceObs);
+      applySystemAdjustments(missionFolder, sliceObs);
+    }
+  }
+}
+
+/**
+ * Never-stop foundation loop — obstacles become lessons; route around until Point B (LifeRE Alpha).
+ * Stopping is failure. Only founder_stop halts intentionally.
+ */
+export function runFoundationPipelineLoop(missionIdOrPath, options = {}) {
+  const cookingSliceSize = options.cookingSliceSize
+    ?? options.cookingBudget
+    ?? options.maxTotalAttempts
+    ?? 32;
+  const maxAttempts = options.maxAttempts ?? Infinity;
+  const force = options.force ?? false;
+  const dryRun = options.dryRun ?? false;
+
+  const pointBTarget = loadPointBTarget();
+  ensurePointBMissionFolder();
+  const missionId = resolvePointBMissionId(missionIdOrPath);
+  const folder = resolveMissionFolder(missionId);
+  if (!folder) {
+    return {
+      ok: false,
+      error: 'mission_not_found',
+      point_b: pointBTarget?.label || 'LifeRE Alpha',
+      stoppage: { reason: 'mission_not_found', stoppage_is_failure: true, stopping_is_failure: true },
+    };
+  }
+
+  const started = Date.now();
+  const totalAttemptsRef = { count: 0 };
+  const loopReceipt = {
+    schema: 'foundation_loop_receipt_v3',
+    mission_id: path.basename(folder),
+    point_b_target: pointBTarget?.label || 'LifeRE Alpha',
+    point_b_mission_id: pointBTarget?.mission_id || null,
+    mode: 'obstacle_lesson_never_stop',
+    doctrine: {
+      stopping_is_failure: true,
+      obstacle_is_lesson: true,
+      must_adjust_system: true,
+    },
+    started_at: new Date().toISOString(),
+    cooking_slice_size: cookingSliceSize,
+    attempts: [],
+    phases: {},
+    repairs: [],
+    obstacles: [],
+  };
+
+  if (Number.isFinite(maxAttempts) && maxAttempts <= 0) {
+    loopReceipt.stoppage = { reason: 'max_attempts_zero', stoppage_is_failure: true };
+    return { ok: false, loopReceipt };
+  }
+
+  const phaseOpts = { cookingSliceSize, totalAttemptsRef, loopReceipt, maxAttempts };
+
+  const development = runPhaseUntilPass({
+    phaseName: 'development',
+    missionFolder: folder,
+    ...phaseOpts,
+    runFn: ({ force: retryForce }) => runDevelopmentStage(missionId, { force: force || retryForce }),
+  });
+  if (development?.founder_stop || development?.attempt_budget_exhausted) {
+    finalizeLoopReceipt(loopReceipt, { started, totalAttemptsRef, ok: false, pointB: null });
+    writeJson(path.join(folder, 'receipts/FOUNDATION_LOOP_RECEIPT.json'), loopReceipt);
+    return { ok: false, loopReceipt, founder_stop: Boolean(development?.founder_stop), attempt_budget_exhausted: Boolean(development?.attempt_budget_exhausted) };
+  }
+
+  const corridor = runPhaseUntilPass({
+    phaseName: 'corridor',
+    missionFolder: folder,
+    ...phaseOpts,
+    runFn: () => {
+      const translate = runCorridorStage(missionId, { dryRun });
+      return { ok: translate.ok, translate };
+    },
+  });
+  if (corridor?.founder_stop || corridor?.attempt_budget_exhausted) {
+    finalizeLoopReceipt(loopReceipt, { started, totalAttemptsRef, ok: false, pointB: null });
+    writeJson(path.join(folder, 'receipts/FOUNDATION_LOOP_RECEIPT.json'), loopReceipt);
+    return { ok: false, loopReceipt, founder_stop: Boolean(corridor?.founder_stop), attempt_budget_exhausted: Boolean(corridor?.attempt_budget_exhausted) };
+  }
+
+  if (!dryRun) {
+    const builderEntry = runPhaseUntilPass({
+      phaseName: 'builder_entry',
+      missionFolder: folder,
+      ...phaseOpts,
+      runFn: () => {
+        const gate = evaluateBuilderEntryGate(folder);
+        return { ok: gate.pass, ...gate };
+      },
+    });
+    if (builderEntry?.founder_stop || builderEntry?.attempt_budget_exhausted) {
+      finalizeLoopReceipt(loopReceipt, { started, totalAttemptsRef, ok: false, pointB: null });
+      writeJson(path.join(folder, 'receipts/FOUNDATION_LOOP_RECEIPT.json'), loopReceipt);
+      return { ok: false, loopReceipt, founder_stop: Boolean(builderEntry?.founder_stop), attempt_budget_exhausted: Boolean(builderEntry?.attempt_budget_exhausted) };
+    }
+
+    const builder = runPhaseUntilPass({
+      phaseName: 'builder',
+      missionFolder: folder,
+      ...phaseOpts,
+      runFn: () => runBuilderStage(missionId),
+    });
+    if (builder?.founder_stop || builder?.attempt_budget_exhausted) {
+      finalizeLoopReceipt(loopReceipt, { started, totalAttemptsRef, ok: false, pointB: null });
+      writeJson(path.join(folder, 'receipts/FOUNDATION_LOOP_RECEIPT.json'), loopReceipt);
+      return { ok: false, loopReceipt, founder_stop: Boolean(builder?.founder_stop), attempt_budget_exhausted: Boolean(builder?.attempt_budget_exhausted) };
+    }
+  }
+
+  const finalResult = runPhaseUntilPass({
+    phaseName: 'final_gate',
+    missionFolder: folder,
+    ...phaseOpts,
+    runFn: () => {
+      const bp = loadMissionJson(folder, 'BLUEPRINT.json');
+      const finalGate = evaluatePointBGate(folder, { blueprint: bp });
+      const doctrine = evaluateMissionDoctrine(folder, { blueprint: bp });
+      const pointB = evaluatePointBTargetReached(folder);
+      const violations = [...(finalGate.violations || []), ...(doctrine.violations || [])];
+      const machineOk = finalGate.machine_path_complete && doctrine.pass;
+      const ok = machineOk && pointB.ok;
+      return { ok, finalGate, doctrine, pointB, violations, machineOk };
+    },
+  });
+  if (finalResult?.founder_stop || finalResult?.attempt_budget_exhausted) {
+    finalizeLoopReceipt(loopReceipt, { started, totalAttemptsRef, ok: false, pointB: null });
+    writeJson(path.join(folder, 'receipts/FOUNDATION_LOOP_RECEIPT.json'), loopReceipt);
+    return { ok: false, loopReceipt, founder_stop: Boolean(finalResult?.founder_stop), attempt_budget_exhausted: Boolean(finalResult?.attempt_budget_exhausted) };
+  }
+
+  const pointB = evaluatePointBTargetReached(folder);
+  const pipelineOk = Boolean(pointB.ok);
+
+  if (pipelineOk) {
+    scoreRealityAgainstSimulations(folder);
+    loopReceipt.phases.scoreboard = writeResultScoreboard(folder);
+    loopReceipt.phases.release_gate = evaluateReleasePassGate(folder);
+  } else {
+    loopReceipt.phases.final_gate_detail = finalResult?.finalGate;
+    loopReceipt.phases.doctrine_detail = finalResult?.doctrine;
+    loopReceipt.phases.point_b = pointB;
+  }
+
+  finalizeLoopReceipt(loopReceipt, { started, totalAttemptsRef, ok: pipelineOk, pointB });
+  loopReceipt.point_b_reached = pipelineOk;
+  loopReceipt.awaiting_alpha = !pipelineOk && Boolean(finalResult?.machineOk);
+
+  writeJson(path.join(folder, 'receipts/FOUNDATION_LOOP_RECEIPT.json'), loopReceipt);
+  writeJson(path.join(folder, 'receipts/FOUNDATION_PIPELINE_REPORT.json'), {
+    schema: 'foundation_pipeline_report_v1',
+    mission_id: path.basename(folder),
+    at: new Date().toISOString(),
+    ok: pipelineOk,
+    point_b_reached: pipelineOk,
+    point_b_target: pointBTarget?.label,
+    loop_mode: true,
+    loop_receipt: 'receipts/FOUNDATION_LOOP_RECEIPT.json',
+    obstacle_ledger: 'receipts/OBSTACLE_LESSON_LEDGER.json',
+    stages: loopReceipt.phases,
+    stoppage: loopReceipt.stoppage || null,
+  });
+
+  appendMissionLedger({
+    mission_id: path.basename(folder),
+    event: pipelineOk ? 'point_b_reached' : 'obstacle_loop_in_progress',
+    runner: 'run-foundation.js',
+    latency_ms: loopReceipt.latency_ms,
+    verdict: pipelineOk ? 'POINT_B_PASS' : 'OBSTACLE_NOT_POINT_B',
+    total_attempts: totalAttemptsRef.count,
+    note: pipelineOk ? pointBTarget?.label : `obstacles=${loopReceipt.obstacles?.length || 0}`,
+  });
+
+  return { ok: pipelineOk, loopReceipt, point_b_reached: pipelineOk, pointB };
+}
+
+function finalizeLoopReceipt(loopReceipt, { started, totalAttemptsRef, ok, pointB }) {
+  loopReceipt.finished_at = new Date().toISOString();
+  loopReceipt.ok = ok;
+  loopReceipt.point_b_reached = ok;
+  loopReceipt.total_attempts = totalAttemptsRef.count;
+  loopReceipt.latency_ms = Date.now() - started;
+  loopReceipt.point_b = pointB || null;
+  if (!ok && !loopReceipt.stoppage) {
+    loopReceipt.stoppage = {
+      reason: 'not_at_point_b',
+      stoppage_is_failure: true,
+      stopping_is_failure: true,
+      lesson: 'Did not reach Point B — caller must continue loop; stopping is failure',
+    };
+  }
 }

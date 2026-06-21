@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-06-18",
+  "updated_at": "2026-06-21",
   "operator_lock": "Adam 2026-06-11 — BPs in priority order ARE the queue. No separate mission queue for product work.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "items": [
@@ -111,6 +111,16 @@
       "technical_pass_at": "2026-06-18T02:51:37.404Z",
       "git_sha": "65989ad75fd6f8d7ab933d64adb490afd9248969",
       "production_base": "https://robust-magic-production.up.railway.app"
+    },
+    {
+      "rank": 6,
+      "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+      "founder_packet": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_PACKET.md",
+      "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
+      "blueprint_status": "pending",
+      "acceptance_command": "npm run lifeos:lifere-os:v1-acceptance",
+      "receipt_path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
+      "note": "Point B = LifeRE Alpha. Active product arc — never-stop until founder success test PASS."
     }
   ]
 }

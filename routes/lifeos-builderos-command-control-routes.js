@@ -8,7 +8,12 @@ import { REPO_ROOT } from '../factory-staging/factory-core/builder/run-step.js';
 import { verifyToken } from '../services/lifeos-auth.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 import { resolveLifeOSUserId } from '../services/lifeos-user-resolver.js';
-import { enforceExecutionTruth, formatExecutionTruthReply } from '../services/lifeos-execution-truth.js';
+import { enforceExecutionTruth, formatExecutionTruthReply, sanitizeConversationReply } from '../services/lifeos-execution-truth.js';
+import {
+  isMissionPipelineIntent,
+  extractMissionIdFromText,
+  runFoundationPipelineForFounder,
+} from '../services/lifeos-mission-pipeline-executor.js';
 import {
   createCommandControlJob,
   getCommandControlJob,
@@ -298,7 +303,9 @@ HOW TO RESPOND:
 - No preamble. No throat-clearing. Start with the answer.
 - Be honest about what you know vs. don't know
 - If Adam asks you to take a real system action, tell him to say it as a build/execute command — you cannot commit code yourself; the system will return PASS/FAIL with blocker, lesson, and fix
-- Never claim a UI change shipped unless the system returned COMMITTED with a commit SHA`;
+- Point B missions (LifeRE Alpha, PRODUCT-LIFERE-OS-V1-0001, foundation pipeline): you CANNOT claim executed/triggered/complete — only the foundation pipeline receipt counts
+- Never claim a UI change shipped unless the system returned COMMITTED with a commit SHA
+- Never say "successfully executed" or "build triggered" in conversation mode — that is theater`;
 
       const response = await callCouncilMember('gemini', `${systemPrompt}\n\nAdam: ${userMessage}\n\nLumin:`, {
         maxOutputTokens: 2000,
@@ -957,6 +964,31 @@ HOW TO RESPOND:
         });
       }
 
+      // Point B / mission pipeline — run real foundation loop (not Lumin prose theater)
+      if (!shouldDisplayOnly && isMissionPipelineIntent(cleanedInput)) {
+        const pipelineMission = missionId || extractMissionIdFromText(cleanedInput);
+        if (pipelineMission) {
+          const pipelineResult = runFoundationPipelineForFounder(pipelineMission, { force: force || true });
+          const pipelineReply = formatExecutionTruthReply({
+            ...pipelineResult,
+            action: 'mission_pipeline',
+          });
+          const persistWarning = await persistFounderTurn(req, cleanedInput, pipelineReply);
+          return res.status(200).json({
+            interface: 'LifeOS Founder Interface',
+            action: 'mission_pipeline',
+            source_mode: sourceMode,
+            model_routing: { route: 'foundation_pipeline', complexity: 'high' },
+            auth_mode: req.auth_mode || 'unknown',
+            user_role: req.lifeosUser?.role || null,
+            intake_normalized: intakeNormalized,
+            ...pipelineResult,
+            human_summary: pipelineReply,
+            ...(persistWarning ? { persist_warning: persistWarning } : {}),
+          });
+        }
+      }
+
       // Route build/fix/change requests directly to the builder — same channel the system uses
       if (!shouldDisplayOnly && isBuildRequest(cleanedInput)) {
         const operatorKey = getForwardedOperatorKey(req)
@@ -1025,16 +1057,18 @@ HOW TO RESPOND:
 
       // Conversation — questions, counsel, brainstorm (not execute/build commands)
       if (!explicitExecute && !isBuildRequest(cleanedInput)) {
-      const luminReply = await luminConverse(cleanedInput, getForwardedOperatorKey(req) || process.env.COMMAND_CENTER_KEY);
+      const luminReply = await luminConverse(cleanedInput);
       if (luminReply) {
-        const persistWarning = await persistFounderTurn(req, cleanedInput, luminReply);
+        const safeReply = sanitizeConversationReply(luminReply, { command_truth: 'NO_COMMAND_RAN' });
+        const persistWarning = await persistFounderTurn(req, cleanedInput, safeReply);
         return res.status(200).json({
           ok: true,
           interface: 'LifeOS Founder Interface',
           action: 'conversation',
           command_truth: 'NO_COMMAND_RAN',
           pass_fail: 'NO_COMMAND_RAN',
-          human_summary: luminReply,
+          human_summary: safeReply,
+          conversation_sanitized: safeReply !== luminReply,
           auth_mode: req.auth_mode || 'unknown',
           intake_normalized: intakeNormalized,
           ...(persistWarning ? { persist_warning: persistWarning } : {}),

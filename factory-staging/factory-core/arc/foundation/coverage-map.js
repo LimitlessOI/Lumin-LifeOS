@@ -108,6 +108,7 @@ export function buildFullCoverageMap(missionId, founderText, baseline, queueEntr
 
 export function writeCoverageMap(missionFolder, map) {
   const out = path.join(missionFolder, 'INTENT_COVERAGE_MAP.json');
+  fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, `${JSON.stringify(map, null, 2)}\n`);
   return out;
 }

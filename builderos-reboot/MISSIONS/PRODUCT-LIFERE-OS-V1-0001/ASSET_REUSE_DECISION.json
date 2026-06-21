@@ -1,0 +1,13 @@
+{
+  "schema": "asset_reuse_decision_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "arc_decision_status": "CONFIRMED",
+  "decisions": [
+    {
+      "asset": "production_spine",
+      "decision": "REUSE",
+      "reason": "Extend existing LifeOS / factory-staging spine"
+    }
+  ],
+  "arc_decision": "REUSE repo truth; mechanical ARC host compiler"
+}

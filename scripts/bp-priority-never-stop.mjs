@@ -7,16 +7,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { runFoundationPipeline } from '../factory-staging/factory-core/arc/run-foundation.js';
+import { runFoundationPipelineLoop } from '../factory-staging/factory-core/arc/run-foundation.js';
 import { founderStopActive } from '../factory-staging/factory-core/arc/gate-enforcement.js';
-import { appendMissionLedger } from '../factory-staging/factory-core/arc/foundation/mission-ledger.js';
+import { loadPointBTarget } from '../factory-staging/factory-core/arc/foundation/point-b-target.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(ROOT, 'builderos-reboot/BP_PRIORITY.json');
 const LOG_PATH = path.join(ROOT, 'data/bp-priority-never-stop-log.jsonl');
 
 const once = process.argv.includes('--once');
-const maxRetries = Number(process.argv.find((a) => a.startsWith('--max-retries='))?.split('=')[1] || 5);
 const sleepMs = Number(process.argv.find((a) => a.startsWith('--sleep-ms='))?.split('=')[1] || 60_000);
 
 function log(row) {
@@ -34,7 +33,10 @@ function isComplete(item) {
 }
 
 function activeMission(items) {
-  return [...items].sort((a, b) => a.rank - b.rank).find((i) => !isComplete(i));
+  const pointB = loadPointBTarget();
+  const lifere = (items || []).find((i) => i.mission_id === pointB?.mission_id);
+  if (lifere && !isComplete(lifere)) return lifere;
+  return [...(items || [])].sort((a, b) => a.rank - b.rank).find((i) => !isComplete(i));
 }
 
 function tryRedeploy() {
@@ -61,54 +63,35 @@ function runCycle() {
     return { halt: true, reason: 'queue_complete' };
   }
 
-  log({ event: 'cycle_start', mission_id: mission.mission_id, rank: mission.rank, verdict: mission.verdict });
+  log({ event: 'cycle_start', mission_id: mission.mission_id, rank: mission.rank, verdict: mission.verdict, point_b: loadPointBTarget()?.label });
 
-  let attempt = 0;
-  let last = null;
+  while (true) {
+    if (founderStopActive().active) {
+      log({ event: 'founder_stop' });
+      return { halt: true, reason: 'founder_stop' };
+    }
 
-  while (attempt < maxRetries) {
-    attempt += 1;
     const started = Date.now();
-    last = runFoundationPipeline(mission.mission_id, { force: attempt === 1 });
-    appendMissionLedger({
-      mission_id: mission.mission_id,
-      event: `never_stop_attempt_${attempt}`,
-      runner: 'bp-priority-never-stop.mjs',
-      latency_ms: Date.now() - started,
-      verdict: last.ok ? 'PASS' : 'FAIL',
-    });
+    const last = runFoundationPipelineLoop(mission.mission_id, { force: true, maxAttempts: 64, cookingSliceSize: 32 });
     log({
       event: 'foundation_run',
       mission_id: mission.mission_id,
-      attempt,
       ok: last.ok,
-      violations: last.report?.stages?.final_gate?.violations || [],
+      point_b_reached: last.point_b_reached,
+      total_attempts: last.loopReceipt?.total_attempts,
+      obstacles: last.loopReceipt?.obstacles?.length,
     });
 
-    if (last.ok) break;
-
-    const acceptanceFail = last.report?.stages?.builder?.ok === false;
-    if (acceptanceFail) {
-      const redeploy = tryRedeploy();
-      log({ event: 'redeploy', ok: redeploy.ok, status: redeploy.status });
+    if (last.ok && last.point_b_reached) {
+      return { halt: false, defect: false, mission_id: mission.mission_id, last, point_b: true };
     }
 
-    if (attempt < maxRetries) {
-      spawnSync('sleep', [String(Math.ceil(sleepMs / 1000))], { cwd: ROOT });
+    if (last.founder_stop) {
+      return { halt: true, reason: 'founder_stop' };
     }
-  }
 
-  if (!last?.ok) {
-    log({
-      event: 'RUNNER_HALT_DEFECT',
-      mission_id: mission.mission_id,
-      attempts: attempt,
-      note: 'Fix blocker and re-run; only founder_stop may halt intentionally',
-    });
-    return { halt: false, defect: true, mission_id: mission.mission_id, last };
+    spawnSync('sleep', [String(Math.ceil(sleepMs / 1000))], { cwd: ROOT });
   }
-
-  return { halt: false, defect: false, mission_id: mission.mission_id, last };
 }
 
 if (once) {

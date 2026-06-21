@@ -1,0 +1,20 @@
+{
+  "schema": "point_b_target_v1",
+  "updated_at": "2026-06-21",
+  "operator_lock": "Adam 2026-06-21 — Point B is LifeRE Alpha. PASS only when founder success test satisfied.",
+  "target": {
+    "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+    "label": "LifeRE Alpha",
+    "point_a": "LifeRE stub on production spine — service + routes exist; alpha surface not yet founder-usable",
+    "point_b": "Adam opens LifeRE alpha, sees daily command center, top-3 priorities, and nightly debrief draft — without Cursor",
+    "founder_success_test": "Open /overlay/lifeos-app.html LifeRE path; complete one daily command center cycle; confirm top-3 and debrief visible",
+    "acceptance_command": "npm run lifeos:lifere-os:v1-acceptance",
+    "mission_folder": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001"
+  },
+  "doctrine": {
+    "stopping_is_failure": true,
+    "obstacle_is_lesson": true,
+    "must_adjust_system": true,
+    "never_stop_until": "point_b_reached_or_founder_stop"
+  }
+}

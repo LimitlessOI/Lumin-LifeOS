@@ -453,3 +453,25 @@ export function formatExecutionTruthReply(truth) {
   }
   return lines.join('\n');
 }
+
+const FALSE_EXECUTION_CLAIM = /\b(successfully executed|has been triggered|build has been|mission .{0,40} (complete|completed|executed)|updated according to|necessary files and configurations have been)\b/i;
+
+/**
+ * Strip LLM theater when no command ran — conversation path only.
+ */
+export function sanitizeConversationReply(text, { command_truth = 'NO_COMMAND_RAN' } = {}) {
+  const reply = String(text || '').trim();
+  if (!reply || command_truth !== 'NO_COMMAND_RAN') return reply;
+  if (!FALSE_EXECUTION_CLAIM.test(reply) && !/\b(COMMITTED|deployed to production)\b/i.test(reply)) {
+    return reply;
+  }
+  return [
+    'No command ran — I cannot claim execution or Point B from conversation alone.',
+    '',
+    'To run LifeRE toward Point B, say:',
+    '**Execute mission PRODUCT-LIFERE-OS-V1-0001**',
+    'or resend your Point B packet (the system will auto-route to the foundation pipeline).',
+    '',
+    `(Blocked false claim in model reply: "${reply.slice(0, 120)}…")`,
+  ].join('\n');
+}

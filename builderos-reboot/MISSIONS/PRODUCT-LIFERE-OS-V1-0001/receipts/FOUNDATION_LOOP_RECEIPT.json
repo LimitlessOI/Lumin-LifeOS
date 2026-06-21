@@ -1,0 +1,2015 @@
+{
+  "schema": "foundation_loop_receipt_v3",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "point_b_target": "LifeRE Alpha",
+  "point_b_mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "mode": "obstacle_lesson_never_stop",
+  "doctrine": {
+    "stopping_is_failure": true,
+    "obstacle_is_lesson": true,
+    "must_adjust_system": true
+  },
+  "started_at": "2026-06-21T02:42:53.859Z",
+  "cooking_slice_size": 32,
+  "attempts": [
+    {
+      "phase": "development",
+      "attempt": 1,
+      "slice": 1,
+      "cooking_spent": 1,
+      "at": "2026-06-21T02:42:53.861Z",
+      "ok": true
+    },
+    {
+      "phase": "corridor",
+      "attempt": 1,
+      "slice": 1,
+      "cooking_spent": 2,
+      "at": "2026-06-21T02:42:53.861Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009773875_1",
+        "at": "2026-06-21T02:42:53.875Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 1,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:53.898Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 2,
+      "slice": 1,
+      "cooking_spent": 3,
+      "at": "2026-06-21T02:42:53.903Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009773917_2",
+        "at": "2026-06-21T02:42:53.917Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 2,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:53.939Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 3,
+      "slice": 1,
+      "cooking_spent": 4,
+      "at": "2026-06-21T02:42:53.944Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009773957_3",
+        "at": "2026-06-21T02:42:53.957Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 3,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:53.979Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 4,
+      "slice": 1,
+      "cooking_spent": 5,
+      "at": "2026-06-21T02:42:53.984Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009773997_4",
+        "at": "2026-06-21T02:42:53.997Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 4,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.019Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 5,
+      "slice": 1,
+      "cooking_spent": 6,
+      "at": "2026-06-21T02:42:54.024Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774038_5",
+        "at": "2026-06-21T02:42:54.038Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 5,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.059Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 6,
+      "slice": 1,
+      "cooking_spent": 7,
+      "at": "2026-06-21T02:42:54.064Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774077_6",
+        "at": "2026-06-21T02:42:54.077Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 6,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.098Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 7,
+      "slice": 1,
+      "cooking_spent": 8,
+      "at": "2026-06-21T02:42:54.103Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774117_7",
+        "at": "2026-06-21T02:42:54.117Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 7,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.143Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 8,
+      "slice": 1,
+      "cooking_spent": 9,
+      "at": "2026-06-21T02:42:54.148Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774162_8",
+        "at": "2026-06-21T02:42:54.162Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 8,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.184Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 9,
+      "slice": 1,
+      "cooking_spent": 10,
+      "at": "2026-06-21T02:42:54.189Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774203_9",
+        "at": "2026-06-21T02:42:54.203Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 9,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.223Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 10,
+      "slice": 1,
+      "cooking_spent": 11,
+      "at": "2026-06-21T02:42:54.229Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774242_10",
+        "at": "2026-06-21T02:42:54.242Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 10,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.265Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 11,
+      "slice": 1,
+      "cooking_spent": 12,
+      "at": "2026-06-21T02:42:54.270Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774285_11",
+        "at": "2026-06-21T02:42:54.285Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 11,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.308Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 12,
+      "slice": 1,
+      "cooking_spent": 13,
+      "at": "2026-06-21T02:42:54.313Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774328_12",
+        "at": "2026-06-21T02:42:54.328Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 12,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.355Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 13,
+      "slice": 1,
+      "cooking_spent": 14,
+      "at": "2026-06-21T02:42:54.361Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774374_13",
+        "at": "2026-06-21T02:42:54.374Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 13,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.395Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 14,
+      "slice": 1,
+      "cooking_spent": 15,
+      "at": "2026-06-21T02:42:54.400Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774414_14",
+        "at": "2026-06-21T02:42:54.414Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 14,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.437Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 15,
+      "slice": 1,
+      "cooking_spent": 16,
+      "at": "2026-06-21T02:42:54.441Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774456_15",
+        "at": "2026-06-21T02:42:54.456Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 15,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.478Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 16,
+      "slice": 1,
+      "cooking_spent": 17,
+      "at": "2026-06-21T02:42:54.484Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774497_16",
+        "at": "2026-06-21T02:42:54.497Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 16,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.521Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 17,
+      "slice": 1,
+      "cooking_spent": 18,
+      "at": "2026-06-21T02:42:54.525Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774539_17",
+        "at": "2026-06-21T02:42:54.539Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 17,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.563Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 18,
+      "slice": 1,
+      "cooking_spent": 19,
+      "at": "2026-06-21T02:42:54.568Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774582_18",
+        "at": "2026-06-21T02:42:54.582Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 18,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.604Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 19,
+      "slice": 1,
+      "cooking_spent": 20,
+      "at": "2026-06-21T02:42:54.610Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774623_19",
+        "at": "2026-06-21T02:42:54.623Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 19,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.648Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 20,
+      "slice": 1,
+      "cooking_spent": 21,
+      "at": "2026-06-21T02:42:54.653Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774667_20",
+        "at": "2026-06-21T02:42:54.667Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 20,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.688Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 21,
+      "slice": 1,
+      "cooking_spent": 22,
+      "at": "2026-06-21T02:42:54.693Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774706_21",
+        "at": "2026-06-21T02:42:54.706Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 21,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.727Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 22,
+      "slice": 1,
+      "cooking_spent": 23,
+      "at": "2026-06-21T02:42:54.733Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774746_22",
+        "at": "2026-06-21T02:42:54.746Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 22,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.772Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 23,
+      "slice": 1,
+      "cooking_spent": 24,
+      "at": "2026-06-21T02:42:54.778Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774792_23",
+        "at": "2026-06-21T02:42:54.792Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 23,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.814Z"
+      },
+      "violations": []
+    },
+    {
+      "phase": "corridor",
+      "attempt": 24,
+      "slice": 1,
+      "cooking_spent": 25,
+      "at": "2026-06-21T02:42:54.819Z",
+      "ok": false,
+      "obstacle": {
+        "obstacle_id": "obs_1782009774833_24",
+        "at": "2026-06-21T02:42:54.834Z",
+        "kind": "phase_fail",
+        "phase": "corridor",
+        "attempt": 24,
+        "what_happened": "phase returned not ok",
+        "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+        "route_strategy": "bootstrap_full",
+        "route_action": "bootstrap_development_intake",
+        "fix_steps": [
+          "Route strategy: bootstrap_full (bootstrap_development_intake)",
+          "Re-run failed phase after adjustment",
+          "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+        ],
+        "system_adjustment": {
+          "action": "bootstrap_development_intake",
+          "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+          "recorded_for": "next_repair_attempt"
+        },
+        "point_b_status": "not_reached",
+        "stopping_is_failure": true
+      },
+      "repair": {
+        "stage": "corridor",
+        "violations": [
+          "corridor_fail"
+        ],
+        "route": "bootstrap_full",
+        "repairs": [
+          "bootstrap_development_intake",
+          "arc_translate_rerun"
+        ],
+        "canRetry": true,
+        "at": "2026-06-21T02:42:54.855Z"
+      },
+      "violations": []
+    }
+  ],
+  "phases": {
+    "development": {
+      "ok": true,
+      "attempts": 1,
+      "budget_slices": 0
+    }
+  },
+  "repairs": [
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:53.898Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:53.939Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:53.979Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.019Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.059Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.098Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.143Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.184Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.223Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.265Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.308Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.355Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.395Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.437Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.478Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.521Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.563Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.604Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.648Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.688Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.727Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.772Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.814Z"
+    },
+    {
+      "stage": "corridor",
+      "violations": [
+        "corridor_fail"
+      ],
+      "route": "bootstrap_full",
+      "repairs": [
+        "bootstrap_development_intake",
+        "arc_translate_rerun"
+      ],
+      "canRetry": true,
+      "at": "2026-06-21T02:42:54.855Z"
+    }
+  ],
+  "obstacles": [
+    {
+      "obstacle_id": "obs_1782009773875_1",
+      "at": "2026-06-21T02:42:53.875Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 1,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009773917_2",
+      "at": "2026-06-21T02:42:53.917Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 2,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009773957_3",
+      "at": "2026-06-21T02:42:53.957Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 3,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009773997_4",
+      "at": "2026-06-21T02:42:53.997Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 4,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774038_5",
+      "at": "2026-06-21T02:42:54.038Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 5,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774077_6",
+      "at": "2026-06-21T02:42:54.077Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 6,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774117_7",
+      "at": "2026-06-21T02:42:54.117Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 7,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774162_8",
+      "at": "2026-06-21T02:42:54.162Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 8,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774203_9",
+      "at": "2026-06-21T02:42:54.203Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 9,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774242_10",
+      "at": "2026-06-21T02:42:54.242Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 10,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774285_11",
+      "at": "2026-06-21T02:42:54.285Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 11,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774328_12",
+      "at": "2026-06-21T02:42:54.328Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 12,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774374_13",
+      "at": "2026-06-21T02:42:54.374Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 13,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774414_14",
+      "at": "2026-06-21T02:42:54.414Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 14,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774456_15",
+      "at": "2026-06-21T02:42:54.456Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 15,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774497_16",
+      "at": "2026-06-21T02:42:54.497Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 16,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774539_17",
+      "at": "2026-06-21T02:42:54.539Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 17,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774582_18",
+      "at": "2026-06-21T02:42:54.582Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 18,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774623_19",
+      "at": "2026-06-21T02:42:54.623Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 19,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774667_20",
+      "at": "2026-06-21T02:42:54.667Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 20,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774706_21",
+      "at": "2026-06-21T02:42:54.706Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 21,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774746_22",
+      "at": "2026-06-21T02:42:54.746Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 22,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774792_23",
+      "at": "2026-06-21T02:42:54.792Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 23,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774833_24",
+      "at": "2026-06-21T02:42:54.834Z",
+      "kind": "phase_fail",
+      "phase": "corridor",
+      "attempt": 24,
+      "what_happened": "phase returned not ok",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    },
+    {
+      "obstacle_id": "obs_1782009774875_24",
+      "at": "2026-06-21T02:42:54.875Z",
+      "kind": "attempt_budget_per_run",
+      "phase": "corridor",
+      "attempt": 24,
+      "what_happened": "attempt_budget_per_run exhausted at 25",
+      "lesson": "Obstacle in corridor — not a stop condition. Point B remains LifeRE Alpha.",
+      "route_strategy": "bootstrap_full",
+      "route_action": "bootstrap_development_intake",
+      "fix_steps": [
+        "Route strategy: bootstrap_full (bootstrap_development_intake)",
+        "Re-run failed phase after adjustment",
+        "Verify receipt shows movement toward Point B (LifeRE Alpha)"
+      ],
+      "system_adjustment": {
+        "action": "bootstrap_development_intake",
+        "efficiency_note": "Prefer shortest mechanical repair before re-running expensive builder",
+        "recorded_for": "next_repair_attempt"
+      },
+      "point_b_status": "not_reached",
+      "stopping_is_failure": true
+    }
+  ],
+  "stoppage": {
+    "reason": "attempt_budget_per_run",
+    "phase": "corridor",
+    "stoppage_is_failure": true,
+    "stopping_is_failure": true,
+    "lesson": "Per-run attempt cap hit — outer loop must continue toward Point B"
+  },
+  "finished_at": "2026-06-21T02:42:54.899Z",
+  "ok": false,
+  "point_b_reached": false,
+  "total_attempts": 25,
+  "latency_ms": 1040,
+  "point_b": null
+}

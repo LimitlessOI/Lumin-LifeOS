@@ -76,6 +76,11 @@ function runSntIntentAttack(missionFolder, founderText, baseline, coverage) {
       failure_scenario,
       severity,
       evidence: pass ? 'found in FOUNDER_PACKET or INTENT_BASELINE' : 'missing or ambiguous',
+      evidence_if_wrong: pass
+        ? (severity === 'blocking'
+          ? `Acceptance FAIL or ${failure_scenario}`
+          : undefined)
+        : failure_scenario,
       recommended_action: pass ? 'none' : 'Chair resolves in development — return to conversation',
     });
   };
