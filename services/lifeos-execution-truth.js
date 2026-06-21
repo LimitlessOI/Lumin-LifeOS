@@ -146,7 +146,7 @@ export function enforceExecutionTruth(raw, ctx = {}) {
       receipt_truth = 'COMMIT_BLOCKED';
     }
     const blockerText = String(first_blocker || raw.exec_meta?.error || '');
-    if (/too short|validation|syntax|refusing to commit|stub|layer violation|pre-commit|governance/i.test(blockerText)) {
+    if (/too short|validation|syntax|refusing to commit|stub|layer violation|pre-commit|governance|prose refusal|not code/i.test(blockerText)) {
       failure_code = failure_code || 'VALIDATION_REJECTED';
     } else {
       failure_code = failure_code || 'COMMAND_FAILED';

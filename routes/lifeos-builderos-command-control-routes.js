@@ -139,7 +139,10 @@ Rules:
   }
 
   function inferTargetFileFromTask(task = '') {
-    const m = String(task).match(/(?:public\/overlay\/|public\/shared\/|routes\/|services\/)[\w./-]+\.(?:html|js|css|md|json)/i);
+    const t = String(task || '');
+    const explicit = t.match(/target_file:\s*([^\s]+\.(?:html|js|css|md|json))/i);
+    if (explicit) return explicit[1].replace(/^\//, '');
+    const m = t.match(/(?:public\/overlay\/|public\/shared\/|routes\/|services\/)[\w./-]+\.(?:html|js|css|md|json)/i);
     return m ? m[0] : null;
   }
 
@@ -151,6 +154,9 @@ Rules:
     if (/too short|truncated/i.test(blocker)) {
       lesson = 'Builder output was too short for the target file — commit was correctly refused to avoid corrupting live UI.';
       fix = 'Scope to a minimal patch (one CSS block, one function, one label) instead of rewriting a large HTML file.';
+    } else if (/prose refusal|not code/i.test(blocker)) {
+      lesson = 'Builder returned prose instead of code — usually means the target file was not injected into the prompt.';
+      fix = 'Retry the same GAP-FILL prompt; founder-interface now auto-injects files[] when target_file is named.';
     } else if (taskJson?.cache_hit) {
       lesson = 'Builder returned cached stale output instead of fresh code for this task.';
       fix = 'System now disables cache on build route; retry the same request.';
@@ -324,16 +330,18 @@ HOW TO RESPOND:
       : `http://localhost:${process.env.PORT || 3000}`;
     const headers = { 'Content-Type': 'application/json', 'x-command-key': commandKey };
     const targetFile = inferTargetFileFromTask(task);
+    const taskBody = {
+      task,
+      mode: 'code',
+      useCache: false,
+      target_file: targetFile,
+      ...(targetFile ? { files: [targetFile] } : {}),
+    };
     try {
       const taskRes = await fetch(`${base}/api/v1/lifeos/builder/task`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({
-          task,
-          mode: 'code',
-          useCache: false,
-          target_file: targetFile,
-        }),
+        body: JSON.stringify(taskBody),
       });
       const taskJson = await taskRes.json();
       if (!taskJson.ok || !taskJson.output) {
