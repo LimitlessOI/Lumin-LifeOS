@@ -426,6 +426,21 @@ export function formatExecutionTruthReply(truth) {
   }
   if (truth.first_blocker) lines.push(`Blocker: ${truth.first_blocker}`);
 
+  const repair = truth.self_repair;
+  if (repair?.attempts?.length) {
+    lines.push('');
+    lines.push(`── Self-repair (${repair.attempts.length} attempt(s)) ──`);
+    for (const a of repair.attempts) {
+      const tag = a.repair_applied ? ` → repair: ${a.repair_applied}` : '';
+      lines.push(`• #${a.attempt}: ${a.pass_fail}${a.target_file ? ` · ${a.target_file}` : ''}${a.blocker ? ` · ${a.blocker}` : ''}${tag}`);
+    }
+    if (repair.repaired && repair.success_attempt) {
+      lines.push(`Recovered on attempt ${repair.success_attempt}.`);
+    } else if (repair.exhausted) {
+      lines.push('Repair budget exhausted — say "keep trying" to resume from chat history.');
+    }
+  }
+
   const autopsy = truth.autopsy;
   if (autopsy && truth.pass_fail === 'FAIL') {
     lines.push('');

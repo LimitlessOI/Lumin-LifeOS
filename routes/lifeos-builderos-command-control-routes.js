@@ -10,6 +10,12 @@ import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 import { resolveLifeOSUserId } from '../services/lifeos-user-resolver.js';
 import { enforceExecutionTruth, formatExecutionTruthReply, sanitizeConversationReply } from '../services/lifeos-execution-truth.js';
 import {
+  extractPriorBuildTask,
+  isRepairContinuationIntent,
+  resolveFounderBuildTarget,
+} from '../services/builder-instruction-target.js';
+import { runFounderBuildWithSelfRepair } from '../services/founder-build-self-repair.js';
+import {
   isMissionPipelineIntent,
   extractMissionIdFromText,
   runFoundationPipelineForFounder,
@@ -56,6 +62,34 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
     } catch {
       return 'HISTORY_NOT_SAVED';
     }
+  }
+
+  async function resolveBuildTaskForFounder(req, cleanedInput) {
+    if (!isRepairContinuationIntent(cleanedInput)) return cleanedInput;
+    if (!luminPersist || !pool) return cleanedInput;
+    try {
+      let userId = null;
+      const sub = req.lifeosUser?.sub;
+      if (sub && sub !== 'emergency-key' && /^\d+$/.test(String(sub))) {
+        userId = parseInt(sub, 10);
+      }
+      if (!userId) {
+        const handle = req.auth_mode === 'command_key_fallback'
+          ? 'adam'
+          : (req.lifeosUser?.handle || 'adam');
+        userId = await resolveLifeOSUserId(pool, handle);
+      }
+      if (!userId) return cleanedInput;
+      const thread = await luminPersist.getOrCreateDefaultThread(userId);
+      const messages = await luminPersist.getMessages(thread.id, { limit: 24 });
+      const prior = extractPriorBuildTask(messages, cleanedInput);
+      if (prior) {
+        return `${prior}\n\n[system: founder requested continue repair — never-stop until PASS or new blocker]`;
+      }
+    } catch {
+      /* fail-open — use current text */
+    }
+    return cleanedInput;
   }
 
   function wrapBridgeResultAsTruth(result, task) {
@@ -144,11 +178,7 @@ Rules:
   }
 
   function inferTargetFileFromTask(task = '') {
-    const t = String(task || '');
-    const explicit = t.match(/target_file:\s*([^\s]+\.(?:html|js|css|md|json))/i);
-    if (explicit) return explicit[1].replace(/^\//, '');
-    const m = t.match(/(?:public\/overlay\/|public\/shared\/|routes\/|services\/)[\w./-]+\.(?:html|js|css|md|json)/i);
-    return m ? m[0] : null;
+    return resolveFounderBuildTarget(task);
   }
 
   function buildBuildFailureReceipt(task, taskJson, execJson) {
@@ -156,7 +186,13 @@ Rules:
     let lesson = 'The build path ran but did not produce a committable change.';
     let fix = 'Retry with a smaller scope: name the exact file and the one change you want.';
 
-    if (/too short|truncated/i.test(blocker)) {
+    if (/target_file is required|target_file not in placement/i.test(blocker)) {
+      lesson = 'Build reached execute without target_file — system should auto-infer UI surface and retry (never-stop).';
+      const inferred = resolveFounderBuildTarget(task);
+      fix = inferred
+        ? `System will retry with target_file: ${inferred}. If you still see this, say "keep trying".`
+        : 'Name target_file in the ask (e.g. public/overlay/lifeos-app.html) or say "keep trying" to resume.';
+    } else if (/too short|truncated/i.test(blocker)) {
       lesson = 'Builder output was too short for the target file — commit was correctly refused to avoid corrupting live UI.';
       fix = 'Scope to a minimal patch (one CSS block, one function, one label) instead of rewriting a large HTML file.';
     } else if (/prose refusal|not code/i.test(blocker)) {
@@ -335,82 +371,16 @@ HOW TO RESPOND:
     const base = process.env.PUBLIC_BASE_URL
       ? process.env.PUBLIC_BASE_URL.replace(/\/$/, '')
       : `http://localhost:${process.env.PORT || 3000}`;
-    const headers = { 'Content-Type': 'application/json', 'x-command-key': commandKey };
-    const targetFile = inferTargetFileFromTask(task);
-    const taskBody = {
+    return runFounderBuildWithSelfRepair({
       task,
-      mode: 'code',
-      useCache: false,
-      target_file: targetFile,
-      ...(targetFile ? { files: [targetFile] } : {}),
-    };
-    try {
-      const taskRes = await fetch(`${base}/api/v1/lifeos/builder/task`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(taskBody),
-      });
-      const taskJson = await taskRes.json();
-      if (!taskJson.ok || !taskJson.output) {
-        const receipt = buildBuildFailureReceipt(task, taskJson, { error: taskJson.error || 'Builder task returned no output.' });
-        return enforceExecutionTruth({
-          ok: false,
-          committed: false,
-          first_blocker: receipt.blocker,
-          execution_receipt: receipt,
-          gap_recommendation: receipt.gap_recommendation,
-          execution_path: 'builder_task_execute',
-          task_meta: {
-            cache_hit: taskJson.cache_hit === true,
-            output_bytes: 0,
-            error: taskJson.error || null,
-          },
-        }, { action: 'build', task });
-      }
-      const execRes = await fetch(`${base}/api/v1/lifeos/builder/execute`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          output: taskJson.output,
-          target_file: taskJson.target_file || taskJson.placement?.target_file || targetFile,
-          commit_message: `[system-build] ${task.slice(0, 80)}`,
-        }),
-      });
-      const execJson = await execRes.json();
-      const resolvedTarget = execJson.target_file || taskJson.target_file || taskJson.placement?.target_file || targetFile;
-      const receipt = execJson.ok === true && execJson.committed === true
-        ? { pass_fail: 'PASS', blocker: null, lesson: null, fix: null, gap_recommendation: null }
-        : buildBuildFailureReceipt(task, taskJson, execJson);
-      return enforceExecutionTruth({
-        ok: execJson.ok === true,
-        committed: execJson.committed === true,
-        target_file: resolvedTarget,
-        sha: execJson.sha || execJson.commit_sha || null,
-        generated_output: taskJson.output,
-        first_blocker: receipt.blocker,
-        execution_receipt: receipt,
-        gap_recommendation: execJson.gap_recommendation || receipt.gap_recommendation || null,
-        execution_path: 'builder_task_execute',
-        task_meta: {
-          cache_hit: taskJson.cache_hit === true,
-          output_bytes: typeof taskJson.output === 'string' ? taskJson.output.length : 0,
-          error: taskJson.error || null,
-        },
-        exec_meta: execJson,
-      }, { action: 'build', task });
-    } catch (err) {
-      const receipt = buildBuildFailureReceipt(task, {}, { error: err.message });
-      return enforceExecutionTruth({
-        ok: false,
-        committed: false,
-        first_blocker: err.message,
-        execution_receipt: receipt,
-        execution_path: 'builder_task_execute',
-      }, { action: 'build', task });
-    }
+      commandKey,
+      baseUrl: base,
+      buildFailureReceipt: buildBuildFailureReceipt,
+      enforceExecutionTruth,
+    });
   }
 
-  function getForwardedOperatorKey(req) {
+  function wrapBridgeResultAsTruth(result, task) {
     return req.headers['x-command-key']
       || req.headers['x-command-center-key']
       || req.headers['x-lifeos-key']
@@ -990,18 +960,21 @@ HOW TO RESPOND:
       }
 
       // Route build/fix/change requests directly to the builder — same channel the system uses
-      if (!shouldDisplayOnly && isBuildRequest(cleanedInput)) {
+      const shouldRunFounderBuild = isBuildRequest(cleanedInput) || isRepairContinuationIntent(cleanedInput);
+      if (!shouldDisplayOnly && shouldRunFounderBuild) {
         const operatorKey = getForwardedOperatorKey(req)
           || process.env.COMMAND_CENTER_KEY
           || process.env.LIFEOS_KEY
           || process.env.API_KEY;
         if (operatorKey) {
-          const builderResult = await routeToBuilder(cleanedInput, operatorKey);
+          const buildTask = await resolveBuildTaskForFounder(req, cleanedInput);
+          const builderResult = await routeToBuilder(buildTask, operatorKey);
           const buildReply = formatExecutionTruthReply(builderResult);
           const persistWarning = await persistFounderTurn(req, cleanedInput, buildReply);
           return res.status(200).json({
             interface: 'LifeOS Founder Interface',
             action: 'build',
+            build_task_resolved: buildTask !== cleanedInput,
             ...builderResult,
             human_summary: buildReply,
             ...(persistWarning ? { persist_warning: persistWarning } : {}),
