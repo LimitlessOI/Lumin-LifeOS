@@ -14,7 +14,8 @@ import {
   isRepairContinuationIntent,
   resolveFounderBuildTarget,
 } from '../services/builder-instruction-target.js';
-import { runFounderBuildWithSelfRepair } from '../services/founder-build-self-repair.js';
+import { runFounderBuildWithSelfRepair, startFounderBuildJob, getFounderBuildJobStatus } from '../services/founder-build-self-repair.js';
+import { resolveFounderBuildBaseUrl, assertFounderBuildBaseUrl } from '../services/founder-build-success-gate.js';
 import {
   isMissionPipelineIntent,
   extractMissionIdFromText,
@@ -66,6 +67,10 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
 
   async function resolveBuildTaskForFounder(req, cleanedInput) {
     if (!isRepairContinuationIntent(cleanedInput)) return cleanedInput;
+    const bodyPrior = typeof req.body?.prior_task === 'string' ? req.body.prior_task.trim() : '';
+    if (bodyPrior) {
+      return `${bodyPrior}\n\n[system: founder requested continue repair — never-stop until PASS or new blocker]`;
+    }
     if (!luminPersist || !pool) return cleanedInput;
     try {
       let userId = null;
@@ -240,7 +245,16 @@ Rules:
   }
 
   function isBuildRequest(text) {
-    return /\b(fix|change|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(text);
+    const t = String(text || '');
+    if (/\b(what changed|tell me what changed|show me what changed|what is the|what are the|how many|status of|queue status)\b/i.test(t)
+      && !/\b(change|fix|make|update|set)\b.*\b(color|ui|css|response|reply|bubble)\b/i.test(t)) {
+      return false;
+    }
+    if (/\b(should be|needs to be|want.*(yellow|blue|red|green|color))\b/i.test(t)
+      && /\b(response|reply|bubble|assistant|message|color|background)\b/i.test(t)) {
+      return true;
+    }
+    return /\b(fix|change|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t);
   }
 
   function isDisplayRequest(text) {
@@ -368,15 +382,27 @@ HOW TO RESPOND:
   }
 
   async function routeToBuilder(task, commandKey) {
-    const base = process.env.PUBLIC_BASE_URL
-      ? process.env.PUBLIC_BASE_URL.replace(/\/$/, '')
-      : `http://localhost:${process.env.PORT || 3000}`;
+    const baseCheck = assertFounderBuildBaseUrl(
+      process.env.PUBLIC_BASE_URL
+        ? process.env.PUBLIC_BASE_URL.replace(/\/$/, '')
+        : resolveFounderBuildBaseUrl(),
+    );
+    if (!baseCheck.ok) {
+      return enforceExecutionTruth({
+        ok: false,
+        committed: false,
+        first_blocker: baseCheck.blocker,
+        failure_code: baseCheck.code,
+        execution_path: 'founder_css_patch',
+      }, { action: 'build', task });
+    }
     return runFounderBuildWithSelfRepair({
       task,
       commandKey,
-      baseUrl: base,
+      baseUrl: baseCheck.baseUrl,
       buildFailureReceipt: buildBuildFailureReceipt,
       enforceExecutionTruth,
+      repoRoot: REPO_ROOT,
     });
   }
 
@@ -845,6 +871,29 @@ HOW TO RESPOND:
     }
   });
 
+  router.get('/founder-interface/build-job/:jobId', requireFounderInterfaceAuth, (req, res) => {
+    const job = getFounderBuildJobStatus(req.params.jobId);
+    if (!job) {
+      return res.status(404).json({ ok: false, pass_fail: 'FAIL', error: 'Build job not found' });
+    }
+    if (job.status === 'running') {
+      return res.status(202).json({
+        ok: true,
+        job_id: job.id,
+        status: 'running',
+        pass_fail: 'RUNNING',
+        command_truth: 'BUILD_ATTEMPTED',
+      });
+    }
+    return res.status(200).json({
+      ok: job.result?.pass_fail === 'PASS',
+      job_id: job.id,
+      status: job.status,
+      ...(job.result || {}),
+      human_summary: job.result ? formatExecutionTruthReply(job.result) : null,
+    });
+  });
+
   router.post('/founder-interface/message', requireFounderInterfaceAuth, async (req, res, next) => {
     try {
       const originalText = typeof req.body?.text === 'string' ? req.body.text.trim() : '';
@@ -867,7 +916,10 @@ HOW TO RESPOND:
       }
 
       // Normalize input first: fix misspellings, voice-to-text errors, garbled phrasing
-      const cleanedInput = await normalizeInputText(originalText);
+      const buildIntentEarly = isBuildRequest(originalText) || isRepairContinuationIntent(originalText);
+      const cleanedInput = buildIntentEarly
+        ? originalText.trim()
+        : await normalizeInputText(originalText);
       const inputWasCleaned = cleanedInput !== originalText;
 
       const inferredDisplayScope = summarizeDisplayRequest(cleanedInput);
@@ -979,6 +1031,32 @@ HOW TO RESPOND:
           || process.env.API_KEY;
         if (operatorKey) {
           const buildTask = await resolveBuildTaskForFounder(req, cleanedInput);
+          const useAsync = req.body?.async !== false && process.env.FOUNDER_BUILD_ASYNC !== '0';
+          if (useAsync) {
+            const userId = req.lifeosUser?.sub || null;
+            const jobId = startFounderBuildJob({
+              task: buildTask,
+              commandKey: operatorKey,
+              baseUrl: resolveFounderBuildBaseUrl(),
+              buildFailureReceipt: buildBuildFailureReceipt,
+              enforceExecutionTruth,
+              repoRoot: REPO_ROOT,
+              userId,
+            });
+            const persistWarning = await persistFounderTurn(req, cleanedInput, `Build started — job ${jobId.slice(0, 8)}…`);
+            return res.status(202).json({
+              interface: 'LifeOS Founder Interface',
+              action: 'build',
+              async: true,
+              job_id: jobId,
+              poll_url: `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`,
+              pass_fail: 'RUNNING',
+              command_truth: 'BUILD_ATTEMPTED',
+              human_summary: `Build running asynchronously — poll until PASS or FAIL.\nJob: ${jobId}`,
+              build_task_resolved: buildTask !== cleanedInput,
+              ...(persistWarning ? { persist_warning: persistWarning } : {}),
+            });
+          }
           const builderResult = await routeToBuilder(buildTask, operatorKey);
           const buildReply = formatExecutionTruthReply(builderResult);
           const persistWarning = await persistFounderTurn(req, cleanedInput, buildReply);

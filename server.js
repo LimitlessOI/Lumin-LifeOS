@@ -670,6 +670,7 @@ const {
   isFileProtected,
   triggerDeployment,
   commitToGitHub,
+  commitManyToGitHub,
   setRailwayEnvVar,
   getRailwayEnvVars,
 } = createDeploymentService({
@@ -1019,6 +1020,7 @@ const { tcCoordinator, wkIntegrityEngine } = await registerRuntimeRoutes(app, {
   sendAlertCall,
   makePhoneCall,
     commitToGitHub,
+    commitManyToGitHub,
     savingsLedger,
     tokenAccounting,
     builderOSControlPlane,

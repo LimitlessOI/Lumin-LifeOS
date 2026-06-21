@@ -1295,9 +1295,9 @@
     }
     .lumin-msg.assistant {
       align-self: flex-start;
-      background: #ffeb3b;
-      border: 1px solid #f9d800;
-      color: #000000;
+      background: #1e2030;
+      border: 1px solid #3d4266;
+      color: #e8e8f0;
       border-bottom-left-radius: 4px;
     }
     .lumin-msg.thinking {
@@ -1401,10 +1401,11 @@
     .lumin-send-btn:hover { opacity: 0.85; }
     .lumin-send-btn:disabled { opacity: 0.4; cursor: default; }
   </style>
-  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css?v=20260621b">
+  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
   <script src="/overlay/lifeos-voice.js"></script>
   <script src="/overlay/lifeos-ambient-sense.js"></script>
   <script src="/shared/lifeos-system-reply.js?v=20260620e"></script>
+  <script src="/shared/lifeos-founder-bubble-proof.js?v=20260621a"></script>
 </head>
 <body>
 
@@ -2641,6 +2642,31 @@ function luminRenderHistory(messages) {
   container.scrollTop = container.scrollHeight;
 }
 
+function appendClientBubbleProof(reply, data) {
+  const colors = data?.founder_verification?.client_check?.expected_colors;
+  if (!colors || !window.LifeOSFounderBubbleProof) return reply;
+  const proof = LifeOSFounderBubbleProof.verifyFounderBubbleColors(colors);
+  const tag = proof.ok ? 'Client bubble proof: PASS' : `Client bubble proof: FAIL (dashboard ${proof.dashboard?.background || '?'}, app ${proof.app?.background || '?'})`;
+  return `${reply}\n${tag}`;
+}
+
+async function pollFounderBuildJob(jobId, pollUrl) {
+  const deadline = Date.now() + 300000;
+  while (Date.now() < deadline) {
+    const res = await fetch(pollUrl || `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`, {
+      credentials: 'same-origin',
+      headers: await directSystemHeaders(),
+    });
+    const data = await res.json();
+    if (res.status === 202 || data.pass_fail === 'RUNNING') {
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+      continue;
+    }
+    return { res, data };
+  }
+  return { res: { ok: false, status: 504 }, data: { pass_fail: 'FAIL', first_blocker: 'Build job timed out after 5 minutes.' } };
+}
+
 async function luminSend() {
   const input = document.getElementById('lumin-input');
   const msg   = (input.value || '').trim();
@@ -2673,18 +2699,24 @@ async function luminSend() {
           source_mode: 'text',
           conversational_mode: true,
           dictate_then_send: false,
+          async: true,
         }
       : { user: USER || 'adam', message: msg };
     const endpoint = USE_DIRECT_SYSTEM_CHAT
       ? DIRECT_SYSTEM_ENDPOINT
       : `${CHAT_BASE}/threads/${luminState.threadId}/messages`;
-    const res  = await fetch(endpoint, {
+    let res  = await fetch(endpoint, {
       method: 'POST',
       credentials: 'same-origin',
       headers: H,
       body: JSON.stringify(reqBody),
     });
-    const data = await res.json();
+    let data = await res.json();
+    if (USE_DIRECT_SYSTEM_CHAT && res.status === 202 && data.job_id) {
+      const polled = await pollFounderBuildJob(data.job_id, data.poll_url);
+      res = polled.res;
+      data = polled.data;
+    }
 
     // Remove thinking bubble
     document.getElementById(thinkId)?.remove();
@@ -2701,7 +2733,9 @@ async function luminSend() {
         const retryData = await retry.json();
         if (retry.ok) {
           document.getElementById(thinkId)?.remove();
-          _appendLuminMsg('assistant', formatDirectSystemReply(retryData), new Date().toISOString(), true);
+          let reply = formatDirectSystemReply(retryData);
+          reply = appendClientBubbleProof(reply, retryData);
+          _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
           return;
         }
       }
@@ -2710,7 +2744,9 @@ async function luminSend() {
     }
 
     if (USE_DIRECT_SYSTEM_CHAT && data) {
-      _appendLuminMsg('assistant', formatDirectSystemReply(data), new Date().toISOString(), true);
+      let reply = formatDirectSystemReply(data);
+      reply = appendClientBubbleProof(reply, data);
+      _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');
       }

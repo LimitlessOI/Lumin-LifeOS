@@ -9,7 +9,7 @@
 <title>Dashboard · LifeOS</title>
 <!-- Theme must load before anything renders to avoid flash -->
 <script src="/overlay/lifeos-theme.js"></script>
-<link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css?v=20260621b">
+<link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
 <link rel="stylesheet" href="../shared/lifeos-dashboard-tokens.css">
 <link rel="stylesheet" href="../shared/lifeos-dashboard-ai-rail.css">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -556,10 +556,10 @@ border-bottom-right-radius: var(--radius-sm);
 }
 .msg.assistant {
 align-self: flex-start;
-background: #ffeb3b;
-color: #000000;
+background: #1e2030;
+color: #e8e8f0;
 border-bottom-left-radius: var(--radius-sm);
-border: 1px solid #f9d800;
+border: 1px solid #3d4266;
 }
 .msg.ambient {
 align-self: flex-start;
@@ -882,6 +882,7 @@ gap: 16px;
 <!-- Voice module must be non-module (IIFE) -->
 <script src="/shared/lifeos-voice-chat.js?v=20260620b"></script>
 <script src="/shared/lifeos-system-reply.js?v=20260620e"></script>
+<script src="/shared/lifeos-founder-bubble-proof.js?v=20260621a"></script>
 <script src="../shared/lifeos-dashboard-ai-rail.js"></script>
 <script type="module">
 const CTX = window.LifeOSBootstrap.getLifeOSContext();
@@ -1249,6 +1250,26 @@ async function initChatHistory() {
 chatMessages.addEventListener('scroll', () => {
   if (chatMessages.scrollTop <= 64) loadOlderChatMessages();
 });
+async function pollFounderBuildJob(jobId, pollUrl) {
+  const deadline = Date.now() + 300000;
+  while (Date.now() < deadline) {
+    const r = await API(pollUrl || `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`);
+    const d = await r.json();
+    if (r.status === 202 || d.pass_fail === 'RUNNING') {
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+      continue;
+    }
+    return { r, d };
+  }
+  return { r: { ok: false, status: 504 }, d: { pass_fail: 'FAIL', first_blocker: 'Build job timed out after 5 minutes.' } };
+}
+function appendClientBubbleProof(reply, data) {
+  const colors = data?.founder_verification?.client_check?.expected_colors;
+  if (!colors || !window.LifeOSFounderBubbleProof) return reply;
+  const proof = LifeOSFounderBubbleProof.verifyFounderBubbleColors(colors);
+  const tag = proof.ok ? 'Client bubble proof: PASS' : `Client bubble proof: FAIL (dashboard ${proof.dashboard?.background || '?'}, app ${proof.app?.background || '?'})`;
+  return `${reply}\n${tag}`;
+}
 async function sendMessage() {
 const text = chatInput.value.trim();
 if (!text || voiceSendBusy) return;
@@ -1259,17 +1280,24 @@ typingIndicator.classList.add('show');
 try {
 const r = await API('/api/v1/lifeos/builderos/command-control/founder-interface/message', {
 method: 'POST',
-body: JSON.stringify({ text, action: 'auto', stage: 'system', conversational_mode: true })
+body: JSON.stringify({ text, action: 'auto', stage: 'system', conversational_mode: true, async: true })
 });
-const d = await r.json();
+let d = await r.json();
+let finalRes = r;
+if (r.status === 202 && d.job_id) {
+  const polled = await pollFounderBuildJob(d.job_id, d.poll_url);
+  finalRes = polled.r;
+  d = polled.d;
+}
 typingIndicator.classList.remove('show');
-if (r.ok) {
-const reply = (window.LifeOSSystemReply && window.LifeOSSystemReply.format)
+if (finalRes.ok || d.pass_fail === 'PASS' || d.pass_fail === 'FAIL') {
+let reply = (window.LifeOSSystemReply && window.LifeOSSystemReply.format)
   ? window.LifeOSSystemReply.format(d)
   : (d.human_summary || d.stdout || d.response || d.reply || (d.pass_fail === 'PASS' ? 'Done.' : `System: ${d.reason || d.pass_fail || 'processed'}`));
-addMessage(d.pass_fail === 'FAIL' || d.ok === false ? 'ambient' : 'assistant', reply);
+reply = appendClientBubbleProof(reply, d);
+addMessage('assistant', reply);
 if (dashboardVoice && typeof dashboardVoice.speak === 'function') dashboardVoice.speak(reply);
-} else if (r.status === 401) {
+} else if (finalRes.status === 401) {
 const loginUrl = (d && d.redirect) ? d.redirect : `/overlay/lifeos-login.html?next=${encodeURIComponent(location.pathname + location.search)}`;
 if (!localStorage.getItem('lifeos_refresh_token')) window.location.href = loginUrl;
 else {

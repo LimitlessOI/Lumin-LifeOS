@@ -62,17 +62,22 @@ function testAugmentTaskAddsTargetFile() {
   assert.match(out, /GAP-FILL/);
 }
 
+function testCssOnlyAllowsAddYellow() {
+  assert.equal(isCssOnlyUiFeedback('add a yellow background to assistant responses'), true);
+}
+
 function testMechanicalCssPatch() {
   const patch = applyAssistantBubbleCssPatch({
     root: process.cwd(),
     task: 'change response color to yellow with black text',
   });
   assert.equal(patch.ok, true);
-  assert.equal(patch.files.length, 3);
+  assert.equal(patch.files.length, 4);
   assert.match(patch.files[0].output, /\.lumin-msg\.assistant/);
   assert.match(patch.files[1].output, /\.msg\.assistant[\s\S]*#ffeb3b/);
   assert.match(patch.files[2].output, /\.lumin-msg\.assistant[\s\S]*#ffeb3b/);
   assert.match(patch.files[1].output, /lifeos-theme-overrides\.css\?v=/);
+  assert.match(patch.files[3].output, /CACHE_NAME/);
 }
 
 function testCssOnlyRoutesToThemeOverrides() {
@@ -85,6 +90,7 @@ function testCssOnlyNotStructural() {
   assert.equal(isCssOnlyUiFeedback('change response color to yellow'), true);
 }
 
+testCssOnlyAllowsAddYellow();
 testMechanicalCssPatch();
 testCssOnlyRoutesToThemeOverrides();
 testCssOnlyNotStructural();

@@ -389,7 +389,7 @@ Queue: queued=${summary.queued || 0}, running=${summary.running || 0}, blocked=$
   function init() {
     if (!getKey() && !getAccessToken()) {
       document.getElementById('thread').innerHTML =
-        '<div class="empty">Login required — open <a href="/lifeos-founder-interface" style="color:var(--accent)">Founder Interface</a> or <a href="/overlay/lifeos-login.html?next=%2Flifeos-communication" style="color:var(--accent)">LifeOS Login</a>.</div>';
+        '<div class="empty">Login required — open <a href="/lifeos?direct_system=1" style="color:var(--accent)">LifeOS</a> or <a href="/overlay/lifeos-login.html?next=%2Flifeos%3Fdirect_system%3D1" style="color:var(--accent)">LifeOS Login</a>.</div>';
     }
     loadModes();
     loadDomains();

@@ -867,8 +867,8 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-20",
-  "last_receipt": "2026-06-20 comms-enforcement-audit-gaps",
-  "last_change_summary": "Execution-truth audit: SHA on /execute, bridge truth gate, chat IDOR fix, manifest sync",
+  "last_updated": "2026-06-21",
+  "last_receipt": "2026-06-21 founder-build-closed-loop-sentry-audit",
+  "last_change_summary": "Atomic batch commit, live/outcome verification gate, async build jobs, client bubble proof",
   "ssot_receipt_tail": "Voice Rail auto-stages to Action Inbox; approved inbox commitments route to lifeos_commitments."
 }

@@ -115,6 +115,7 @@ export async function registerRuntimeRoutes(app, deps) {
     sendAlertCall,
     makePhoneCall,
     commitToGitHub,
+    commitManyToGitHub,
   } = deps;
 
   const councilChatAI = callCouncilMember
@@ -353,6 +354,7 @@ export async function registerRuntimeRoutes(app, deps) {
     getCachedResponse,
     cacheResponse,
     commitToGitHub,
+    commitManyToGitHub,
     platformKernel: deps.platformKernel,
   })(app);
 

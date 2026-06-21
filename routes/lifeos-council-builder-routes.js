@@ -711,6 +711,7 @@ export function createLifeOSCouncilBuilderRoutes({
   getCachedResponse,
   cacheResponse,
   commitToGitHub,
+  commitManyToGitHub,
   platformKernel,
 }) {
   const log = logger || console;
@@ -1643,6 +1644,92 @@ export function createLifeOSCouncilBuilderRoutes({
     }
   }
 
+  async function executeBatch(req, res) {
+    const { files, commit_message, branch } = req.body || {};
+    if (!Array.isArray(files) || !files.length) {
+      return res.status(400).json({ ok: false, error: 'files[] is required' });
+    }
+    if (typeof commitManyToGitHub !== 'function') {
+      return res.status(503).json({
+        ok: false,
+        error: 'commitManyToGitHub not available — GITHUB_TOKEN may be missing',
+        committed: false,
+      });
+    }
+
+    const cleaned = [];
+    for (const file of files) {
+      const target_file = String(file?.target_file || file?.path || '').trim();
+      let output = file?.output ?? file?.content ?? '';
+      if (!target_file || !output) {
+        return res.status(400).json({ ok: false, error: 'Each file requires target_file and output' });
+      }
+
+      if (/\.html$/i.test(target_file)) {
+        const extracted = extractHtmlFromOutput(output);
+        if (extracted !== output) output = extracted;
+      } else if (/\.(js|mjs|cjs)$/i.test(target_file)) {
+        output = fixAsteriskShorthandParams(extractJavaScriptFromOutput(output));
+      } else if (/\.(css|scss|sass|less)$/i.test(target_file)) {
+        output = extractCssFromOutput(output);
+      }
+
+      const validationError = validateGeneratedOutputForTarget(target_file, output);
+      if (validationError) {
+        return res.status(422).json({
+          ok: false,
+          error: validationError,
+          committed: false,
+          target_file,
+          failed_file: target_file,
+        });
+      }
+      cleaned.push({ target_file, output });
+    }
+
+    const msg = commit_message || `[system-build] batch ${cleaned.length} files`;
+    try {
+      const commitResult = await commitManyToGitHub(
+        cleaned.map((f) => ({ path: f.target_file, content: f.output })),
+        msg,
+        branch || undefined,
+      );
+      const commitSha = commitResult?.sha || null;
+      const committed_files = cleaned.map((f) => f.target_file);
+      for (const file of cleaned) {
+        const mirrorExec = await mirrorCommittedContentToRepoRoot(file.target_file, file.output);
+        if (!mirrorExec.ok) {
+          log.warn({ target_file: file.target_file, reason: mirrorExec.reason }, '[BUILDER] mirror failed after execute-batch');
+        }
+        await insertBuilderAudit({
+          domain: null,
+          task: `execute-batch: ${file.target_file}`,
+          model_used: 'system',
+          rawOutput: file.output,
+          cache_hit: false,
+          placement: { target_file: file.target_file },
+          status: 'committed',
+          committed: true,
+          routingKey: 'council.builder.execute_batch',
+          mode: 'execute',
+        });
+      }
+      return res.json({
+        ok: true,
+        committed: true,
+        batch: true,
+        target_file: committed_files.join(', '),
+        committed_files,
+        commit_message: msg,
+        sha: commitSha,
+        commit_sha: commitSha,
+      });
+    } catch (err) {
+      log.error({ err: err.message }, '[BUILDER] /execute-batch commit failed');
+      return res.status(500).json({ ok: false, error: err.message, committed: false });
+    }
+  }
+
   // ── Route auto-wiring ─────────────────────────────────────────────────────────
   // Called after /build successfully commits a routes/lifeos-*-routes.js file.
   // Reads startup/register-runtime-routes.js from GitHub, adds import + app.use(), commits.
@@ -2482,6 +2569,7 @@ export function createLifeOSCouncilBuilderRoutes({
     app.get(`${base}/gaps`, requireKey, getBuilderGaps);
     // §2.11 execution endpoints — the system writes and commits code
     app.post(`${base}/execute`, requireKey, executeOutput);
+    app.post(`${base}/execute-batch`, requireKey, executeBatch);
     app.post(
       `${base}/build`,
       requireKey,

@@ -158,13 +158,3 @@ html[data-theme="light"] .toast {
 html[data-theme="light"] .spinner {
   border-color: rgba(15, 23, 42, 0.14) !important;
 }
-
-/* founder-assistant-bubble-style:start */
-/* Lumin + dashboard assistant reply bubbles — founder UI preference */
-.lumin-msg.assistant,
-.msg.assistant {
-  background: #ffeb3b !important;
-  border-color: #f9d800 !important;
-  color: #000000 !important;
-}
-/* founder-assistant-bubble-style:end */

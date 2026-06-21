@@ -227,6 +227,161 @@ export function createDeploymentService(deps) {
     return { ok: true, sha: commitSha };
   }
 
+  function normalizeRepoRelativePath(filePath) {
+    const rawPath = String(filePath || '').replace(/\\/g, '/').trim();
+    const rawParts = rawPath.replace(/^\/+/, '').split('/').filter(Boolean);
+    const normalizedPath = path.posix.normalize(rawPath).replace(/^\/+/, '');
+    const pathParts = normalizedPath.split('/').filter(Boolean);
+    if (
+      !normalizedPath
+      || rawParts.length === 0
+      || rawParts.some((part) => part === '.' || part === '..')
+      || pathParts.length === 0
+      || pathParts.some((part) => part === '.' || part === '..')
+    ) {
+      throw new Error(`commitToGitHub BLOCKED: invalid repo-relative path "${filePath}"`);
+    }
+    const topDir = pathParts[0];
+    if (COMMIT_FORBIDDEN_TOP_DIRS.has(topDir)) {
+      throw new Error(
+        `commitToGitHub BLOCKED: "${normalizedPath}" targets forbidden directory "${topDir}/".`,
+      );
+    }
+    return normalizedPath;
+  }
+
+  async function commitManyToGitHub(fileEntries, message, branch) {
+    const token = GITHUB_TOKEN?.trim();
+    if (!token) throw new Error('GITHUB_TOKEN not configured');
+    if (!GITHUB_REPO) throw new Error('GITHUB_REPO not configured');
+    if (!Array.isArray(fileEntries) || !fileEntries.length) {
+      throw new Error('commitManyToGitHub requires at least one file');
+    }
+
+    const targetBranch = branch || GITHUB_DEPLOY_BRANCH || 'main';
+    const [owner, repo] = GITHUB_REPO.split('/');
+    const authHeaders = {
+      Authorization: `token ${token}`,
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+    };
+
+    const tree = [];
+    const paths = [];
+    for (const entry of fileEntries) {
+      const normalizedPath = normalizeRepoRelativePath(entry.path || entry.target_file);
+      const content = String(entry.content ?? entry.output ?? '');
+      paths.push(normalizedPath);
+
+      if (normalizedPath === 'package.json') {
+        let parsed;
+        try {
+          parsed = JSON.parse(content);
+        } catch {
+          throw new Error('commitManyToGitHub BLOCKED: package.json content is not valid JSON.');
+        }
+        const requiredScripts = ['repo:sync-check', 'lifeos:verify:ui-map'];
+        const missing = requiredScripts.filter((s) => !parsed?.scripts?.[s]);
+        if (missing.length) {
+          throw new Error(`commitManyToGitHub BLOCKED: package.json missing scripts: ${missing.join(', ')}`);
+        }
+      }
+
+      if (/\.(js|mjs|cjs)$/i.test(normalizedPath)) {
+        const tmpDir = await fsPromises.mkdtemp(path.join(tmpdir(), 'lifeos-batch-commit-'));
+        const tmpFile = path.join(tmpDir, path.basename(normalizedPath));
+        await fsPromises.writeFile(tmpFile, content, 'utf8');
+        try {
+          await execFile('node', ['--check', tmpFile]);
+        } catch (err) {
+          const detail = err?.stderr || err?.message || 'syntax error';
+          throw new Error(
+            `commitManyToGitHub BLOCKED: JS syntax check failed for "${normalizedPath}": ${detail}`,
+          );
+        } finally {
+          await fsPromises.unlink(tmpFile).catch(() => {});
+          await fsPromises.rmdir(tmpDir).catch(() => {});
+        }
+      }
+
+      const blobRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/blobs`, {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({ content, encoding: 'utf-8' }),
+      });
+      if (!blobRes.ok) {
+        const err = await blobRes.json().catch(() => ({}));
+        throw new Error(err.message || `GitHub blob create failed for ${normalizedPath}`);
+      }
+      const blob = await blobRes.json();
+      tree.push({ path: normalizedPath, mode: '100644', type: 'blob', sha: blob.sha });
+    }
+
+    const refRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
+      { headers: authHeaders },
+    );
+    if (!refRes.ok) {
+      const err = await refRes.json().catch(() => ({}));
+      throw new Error(err.message || `Could not read ref heads/${targetBranch}`);
+    }
+    const refData = await refRes.json();
+    const baseCommitSha = refData?.object?.sha;
+    if (!baseCommitSha) throw new Error('Missing base commit SHA for batch commit');
+
+    const baseCommitRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/commits/${baseCommitSha}`,
+      { headers: authHeaders },
+    );
+    if (!baseCommitRes.ok) throw new Error('Could not read base commit for batch commit');
+    const baseCommit = await baseCommitRes.json();
+    const baseTreeSha = baseCommit?.tree?.sha;
+    if (!baseTreeSha) throw new Error('Missing base tree SHA for batch commit');
+
+    const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
+      method: 'POST',
+      headers: authHeaders,
+      body: JSON.stringify({ base_tree: baseTreeSha, tree }),
+    });
+    if (!treeRes.ok) {
+      const err = await treeRes.json().catch(() => ({}));
+      throw new Error(err.message || 'GitHub tree create failed');
+    }
+    const treeData = await treeRes.json();
+
+    const commitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/commits`, {
+      method: 'POST',
+      headers: authHeaders,
+      body: JSON.stringify({
+        message: message || `[system-build] batch ${paths.length} files`,
+        tree: treeData.sha,
+        parents: [baseCommitSha],
+      }),
+    });
+    if (!commitRes.ok) {
+      const err = await commitRes.json().catch(() => ({}));
+      throw new Error(err.message || 'GitHub commit create failed');
+    }
+    const commitData = await commitRes.json();
+    const commitSha = commitData?.sha || null;
+
+    const updateRefRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
+      {
+        method: 'PATCH',
+        headers: authHeaders,
+        body: JSON.stringify({ sha: commitSha, force: false }),
+      },
+    );
+    if (!updateRefRes.ok) {
+      const err = await updateRefRes.json().catch(() => ({}));
+      throw new Error(err.message || 'GitHub ref update failed');
+    }
+
+    console.log(`✅ [DEPLOY] Batch committed ${paths.length} files → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
+    return { ok: true, sha: commitSha, paths };
+  }
+
   // ── triggerDeployment ──────────────────────────────────────────────────────
   /**
    * Commit multiple files to main, which triggers Railway auto-deploy.
@@ -385,6 +540,7 @@ export function createDeploymentService(deps) {
   return {
     isFileProtected,
     commitToGitHub,
+    commitManyToGitHub,
     triggerDeployment,
     triggerRailwayRedeploy,
     setRailwayEnvVar,

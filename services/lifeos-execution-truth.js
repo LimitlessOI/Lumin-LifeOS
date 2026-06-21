@@ -220,17 +220,63 @@ export function enforceExecutionTruth(raw, ctx = {}) {
       lesson = lesson || 'PASS on build requires commit SHA in the receipt — COMMIT_CLAIMED_NO_SHA is not proof.';
       fix = fix || 'Fix builder /execute to return sha; retry only after SHA is present in response.';
     } else {
-      pass_fail = 'PASS';
-      command_truth = 'COMMITTED';
-      receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
-      first_blocker = null;
+      let passCandidate = true;
+      const founderRequired = raw.founder_verification_required === true
+        || raw.execution_path === 'founder_css_patch';
+      const committedFiles = Array.isArray(raw.task_meta?.committed_files)
+        ? raw.task_meta.committed_files.map((f) => String(f).replace(/^\//, ''))
+        : [];
+      if (founderRequired && raw.execution_path === 'founder_css_patch') {
+        const requiredCss = [
+          'public/overlay/lifeos-theme-overrides.css',
+          'public/overlay/lifeos-dashboard.html',
+          'public/overlay/lifeos-app.html',
+          'public/overlay/sw.js',
+        ];
+        const missingCss = requiredCss.filter((f) => !committedFiles.includes(f));
+        if (missingCss.length) {
+          failure_code = 'SCOPE_INCOMPLETE';
+          first_blocker = `CSS patch PASS requires ${requiredCss.join(', ')} — missing: ${missingCss.join(', ')}.`;
+          passCandidate = false;
+          command_truth = 'COMMITTED';
+          receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
+          lesson = lesson || 'Theme-only commit does not change what founder sees — inline CSS in dashboard + app is required.';
+          fix = fix || 'Mechanical patch must commit theme + dashboard + app inline styles + service worker cache bump.';
+        }
+      }
+      const founderVerification = raw.founder_verification;
+      if (passCandidate && founderRequired) {
+        if (!founderVerification || founderVerification.ok !== true) {
+          failure_code = founderVerification?.code || 'FOUNDER_VISUAL_NOT_VERIFIED';
+          first_blocker = founderVerification?.blocker
+            || 'Commit succeeded but founder-visible outcome was not verified on live deploy.';
+          passCandidate = false;
+          command_truth = 'COMMITTED';
+          receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
+          lesson = lesson || 'PASS on UI/CSS builds requires live overlay proof — commit alone is not enough.';
+          fix = fix || 'Wait for deploy SHA sync, verify /overlay/lifeos-dashboard.html contains expected CSS, bump SW cache if stale.';
+        }
+      }
+      if (passCandidate) {
+        pass_fail = 'PASS';
+        command_truth = 'COMMITTED';
+        receipt_truth = sha ? 'COMMIT_SHA_PRESENT' : 'COMMIT_CLAIMED_NO_SHA';
+        first_blocker = null;
+      } else {
+        pass_fail = 'FAIL';
+      }
     }
   }
 
+  const founderVerified = raw.founder_verification?.ok === true;
   const human_summary = pass_fail === 'PASS'
-    ? (sha
-      ? `Wrote ${targetFile} · commit ${String(sha).slice(0, 12)}. Hard refresh after deploy SHA updates. Browser visual NOT auto-verified.`
-      : `Wrote ${targetFile}. Commit claimed; SHA not returned. Hard refresh after deploy — verify visually.`)
+    ? (founderVerified
+      ? (sha
+        ? `Wrote ${targetFile} · commit ${String(sha).slice(0, 12)} · founder visual verified on live deploy. Hard refresh once if service worker cached old CSS.`
+        : `Wrote ${targetFile} · founder visual verified. Hard refresh once if bubbles look stale.`)
+      : (sha
+        ? `Wrote ${targetFile} · commit ${String(sha).slice(0, 12)}. Deploy sync + live CSS verification required before PASS.`
+        : `Wrote ${targetFile}. Commit claimed; SHA not returned.`))
     : null;
 
   const autopsy = pass_fail === 'FAIL'
@@ -276,6 +322,7 @@ export function enforceExecutionTruth(raw, ctx = {}) {
     human_summary,
     action,
     execution_path: raw.execution_path || null,
+    founder_verification: raw.founder_verification || null,
   };
 }
 
@@ -339,8 +386,11 @@ export function buildExecutionAutopsy({
     lessons.push('Dock/UI features must extend #lumin-drawer in place; never replace the shell.');
   } else if (failure_code === 'OK_WITHOUT_COMMIT') {
     lessons.push('Builder codegen can succeed while commit is refused (validation, truncation, governance).');
-  } else if (failure_code === 'COMMIT_NO_SHA') {
+  } else   if (failure_code === 'COMMIT_NO_SHA') {
     lessons.push('Build PASS requires commit SHA — without it the founder cannot verify deploy or revert.');
+  } else if (failure_code === 'FOUNDER_VISUAL_NOT_VERIFIED' || failure_code === 'DEPLOY_NOT_SYNCED') {
+    lessons.push('UI/CSS PASS requires live overlay proof — commit to git is necessary but not sufficient.');
+    lessons.push('Inline CSS in dashboard + app shell beats theme-overrides alone; service worker cache can hide changes.');
   } else if (cacheHit) {
     lessons.push('Cached builder output is not fresh code for a new task.');
   } else {
@@ -379,6 +429,14 @@ function buildFixSteps({ failure_code, targetFile, task, action }) {
       'Inspect POST /api/v1/lifeos/builder/execute response — sha must flow from commitToGitHub.',
       'Do not show PASS in founder chat until SHA is present.',
       'After SHA confirmed: verify Railway deploy SHA matches before founder visual test.',
+    ];
+  }
+
+  if (failure_code === 'FOUNDER_VISUAL_NOT_VERIFIED' || failure_code === 'DEPLOY_NOT_SYNCED' || failure_code === 'LOCAL_CSS_MISSING') {
+    return [
+      'System retries: redeploy → wait for deploy SHA → fetch live /overlay/lifeos-dashboard.html + lifeos-app.html for CSS tokens.',
+      'Mechanical patch must update inline .msg.assistant and .lumin-msg.assistant plus bump sw.js CACHE_NAME.',
+      'Founder: hard refresh (Cmd+Shift+R) once after PASS — unregister service worker if bubbles still wrong.',
     ];
   }
 
@@ -421,6 +479,18 @@ export function formatExecutionTruthReply(truth) {
   if (truth.execution_path) lines.push(`Path: ${truth.execution_path}`);
   if (truth.target_file) lines.push(`File: ${truth.target_file}`);
   if (truth.sha) lines.push(`Commit: ${String(truth.sha).slice(0, 12)}`);
+  if (truth.founder_verification?.ok === true) {
+    lines.push(`Founder visual: VERIFIED (${truth.founder_verification.code || 'live'})`);
+    if (truth.founder_verification.client_check?.expected_colors) {
+      const c = truth.founder_verification.client_check.expected_colors;
+      lines.push(`Expected bubbles: bg ${c.background} · text ${c.color}`);
+    }
+    if (truth.founder_verification.deploy_warning) {
+      lines.push(`Deploy note: ${truth.founder_verification.deploy_warning}`);
+    }
+  } else if (truth.founder_verification?.code && truth.pass_fail === 'FAIL') {
+    lines.push(`Founder visual: ${truth.founder_verification.code}`);
+  }
   if (truth.persist_warning === 'HISTORY_NOT_SAVED') {
     lines.push('Warning: chat history was not saved — refresh may lose this turn.');
   }

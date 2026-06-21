@@ -28,6 +28,14 @@
     if (data.target_file) lines.push(`File: ${data.target_file}`);
     const sha = data.sha || data.commit_sha;
     if (sha) lines.push(`Commit: ${String(sha).slice(0, 12)}`);
+    if (data.founder_verification?.ok === true) {
+      lines.push(`Founder visual: VERIFIED (${data.founder_verification.code || 'live'})`);
+      const colors = data.founder_verification.client_check?.expected_colors;
+      if (colors) lines.push(`Expected bubbles: bg ${colors.background} · text ${colors.color}`);
+      if (data.founder_verification.deploy_warning) lines.push(`Deploy note: ${data.founder_verification.deploy_warning}`);
+    } else if (data.founder_verification?.code && passFail === 'FAIL') {
+      lines.push(`Founder visual: ${data.founder_verification.code}`);
+    }
     const blocker = data.first_blocker || data.error || data.reason;
     if (blocker) lines.push(`Blocker: ${blocker}`);
     if (data.persist_warning === 'HISTORY_NOT_SAVED') {

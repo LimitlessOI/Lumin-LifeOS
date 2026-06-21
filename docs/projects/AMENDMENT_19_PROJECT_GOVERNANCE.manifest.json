@@ -187,6 +187,6 @@
   ],
   "last_verified_at": "2026-05-28",
   "verification_passed": null,
-  "last_updated": "2026-06-17",
-  "ssot_receipt_tail": "Mount createLifeOSSystemProofRoutes at /api/v1/lifeos (provider tool-action proof v2.35)."
+  "last_updated": "2026-06-21",
+  "ssot_receipt_tail": "commitManyToGitHub wired into council builder routes for atomic multi-file founder CSS commits."
 }
