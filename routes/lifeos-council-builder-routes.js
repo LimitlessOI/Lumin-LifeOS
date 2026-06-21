@@ -30,6 +30,7 @@
  */
 
 import { readdir, readFile, writeFile, unlink, mkdtemp, mkdir } from 'fs/promises';
+import { readFileSync, existsSync } from 'fs';
 import { join, dirname, resolve, relative, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
@@ -631,12 +632,30 @@ function extractHtmlFromOutput(text) {
 }
 
 
+function validateOverlayNotShrunk(targetFile, output) {
+  const rel = String(targetFile || '').replace(/^\//, '');
+  const minLines = rel === 'public/overlay/lifeos-app.html' ? 2000
+    : rel === 'public/overlay/lifeos-dashboard.html' ? 400
+      : 0;
+  if (!minLines) return null;
+  const full = join(REPO_ROOT, rel);
+  if (!existsSync(full)) return null;
+  const existingLines = readFileSync(full, 'utf8').split('\n').length;
+  const newLines = String(output || '').split('\n').length;
+  if (existingLines >= minLines && newLines < minLines) {
+    return `refusing overlay shrink: ${rel} is ${existingLines} lines on disk but output is ${newLines} lines — use public/overlay/lifeos-theme-overrides.css for CSS-only UI changes`;
+  }
+  return null;
+}
+
 function validateGeneratedOutputForTarget(targetFile, output) {
   const target = String(targetFile || '').toLowerCase();
   const text = String(output || '').trim();
   if (!text) return 'generated output is empty';
   const layerViolation = detectGeneratedLayerViolation(targetFile, text);
   if (layerViolation) return layerViolation.detail;
+  const shrinkError = validateOverlayNotShrunk(targetFile, text);
+  if (shrinkError) return shrinkError;
   if (target.endsWith('.html')) {
     if (text.length < 1000) return 'generated HTML is too short; refusing to commit likely truncated output';
     if (!/^[\s]*</.test(text)) return 'generated HTML must start with <!DOCTYPE or <html (no preamble or markdown)';

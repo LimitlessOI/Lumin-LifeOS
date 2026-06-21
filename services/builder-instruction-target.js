@@ -21,7 +21,25 @@ const UI_FEEDBACK_RE =
 
 const RESPONSE_UI_RE = /\b(responses?|reply|replies|assistant message|your message|your response)\b/i;
 
+const STRUCTURAL_UI_RE = /\b(add|remove|create|delete|new page|new screen|route|api|function|wire|implement|component|drawer control|dock button)\b/i;
+
 export const CANONICAL_FOUNDER_UI_TARGET = 'public/overlay/lifeos-app.html';
+export const CANONICAL_FOUNDER_CSS_TARGET = 'public/overlay/lifeos-theme-overrides.css';
+
+/** Color/style-only founder feedback — must not rewrite lifeos-app.html. */
+export function isCssOnlyUiFeedback(instruction = '') {
+  const t = String(instruction || '');
+  if (STRUCTURAL_UI_RE.test(t)) return false;
+  if (!UI_FEEDBACK_RE.test(t) && !RESPONSE_UI_RE.test(t)) return false;
+  if (extractTargetFileFromInstruction(t)) {
+    const p = extractTargetFileFromInstruction(t);
+    if (/\.css$/i.test(p)) return true;
+    if (/lifeos-app\.html/i.test(p) && (UI_FEEDBACK_RE.test(t) || RESPONSE_UI_RE.test(t))) return true;
+  }
+  return /\b(color|colour|background|font|yellow|black text|text color|style)\b/i.test(t)
+    || (RESPONSE_UI_RE.test(t) && /\b(change|make|set|update)\b/i.test(t));
+}
+
 
 /**
  * Resolve target_file when founder gives product/UI feedback without naming a path.
@@ -47,6 +65,9 @@ export function inferTargetFileFromFounderFeedback(instruction) {
     return { target_file: 'public/overlay/lifeos-voice-rail-v1.html', source: 'keyword_match', confidence: 'medium' };
   }
   if (UI_FEEDBACK_RE.test(text) || RESPONSE_UI_RE.test(text)) {
+    if (isCssOnlyUiFeedback(text)) {
+      return { target_file: CANONICAL_FOUNDER_CSS_TARGET, source: 'css_only_heuristic', confidence: 'high' };
+    }
     return { target_file: CANONICAL_FOUNDER_UI_TARGET, source: 'ui_heuristic', confidence: 'medium' };
   }
   return null;
@@ -62,6 +83,16 @@ export function resolveFounderBuildTarget(instruction) {
 export function augmentTaskWithGapFillScope(task, targetFile) {
   const base = String(task || '').trim();
   if (base.includes(`target_file: ${targetFile}`)) return base;
+  if (/\.css$/i.test(String(targetFile || ''))) {
+    return [
+      base,
+      '',
+      'CSS PATCH ONLY — append or update rules in the existing stylesheet.',
+      `target_file: ${targetFile}`,
+      'Output ONLY valid CSS (no HTML, no markdown fences).',
+      'For Lumin chat replies use selectors: .lumin-msg.assistant, .msg.assistant',
+    ].join('\n');
+  }
   return [
     base,
     '',
@@ -95,6 +126,7 @@ export function extractPriorBuildTask(recentMessages, currentText) {
     const content = String(m?.content || m?.text || m?.user_message || '').trim();
     if (role !== 'user' || !content || content === currentText) continue;
     if (isRepairContinuationIntent(content)) continue;
+    if (/── Autopsy|Fix path \(execute|GAP-FILL: patch|COMMITTED_HARMFUL|Self-repair/i.test(content)) continue;
     if (/\b(fix|change|color|colour|make|update|add|remove|set|adjust|improve|build|implement)\b/i.test(content)) {
       return content;
     }

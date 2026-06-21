@@ -6,7 +6,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-21 — founder build self-repair: infer target_file for UI feedback + never-stop retry loop
+**Last Updated:** 2026-06-21 — restore lifeos-app shell + CSS-only founder patch (no HTML rewrite)
 
 ---
 
@@ -562,6 +562,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-21 | **Emergency restore + CSS-only path:** **`public/overlay/lifeos-app.html`** restored (2855 lines — builder stub at 23ee89f641 had collapsed shell to 101 lines). **`services/founder-css-patch.js`** (NEW) — mechanical yellow/black assistant bubble patch → `lifeos-theme-overrides.css` (no LLM, no HTML rewrite). **`builder-instruction-target.js`** — css-only UI feedback routes to theme-overrides not lifeos-app.html. **`routes/lifeos-council-builder-routes.js`** — `validateOverlayNotShrunk` blocks commit when output lines << on-disk overlay. **`lifeos-dashboard.html`** links theme-overrides. | Founder color ask is trivial CSS but builder kept whole-file rewriting lifeos-app.html → truncate or harmful stub (COMMITTED_HARMFUL_STUB). | ✅ tests; deploy |
 | 2026-06-21 | **`routes/lifeos-builderos-command-control-routes.js`** — hotfix: restore `getForwardedOperatorKey` (accidentally overwritten by duplicate `wrapBridgeResultAsTruth` — caused immediate 500 on all founder build asks); trim `generated_output` from HTTP JSON. | Dashboard "change response color" → Internal server error in 0.4s. | ✅ local repro; deploy |
 | 2026-06-21 | **`services/founder-build-self-repair.js`** (NEW) + **`services/builder-instruction-target.js`** + **`routes/lifeos-builderos-command-control-routes.js`** + **`services/lifeos-execution-truth.js`** — never-stop founder build: auto-infer `target_file` for UI/color/chat feedback (default `public/overlay/lifeos-app.html`); retry up to 5× on `target_file is required` / truncation; "keep trying" resumes prior build ask from Lumin thread history; self-repair attempt log in FAIL receipts. **`tests/founder-build-self-repair.test.js`**. | Founder UI asks ("change response color to yellow") hit execute with no target_file and stopped at FAIL every time — failure was treated as terminal, not a lesson. | ✅ tests; deploy |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** + **`services/lifeos-mission-pipeline-executor.js`** — Point B / mission-packet intents route to `runFoundationPipelineLoop` before Lumin conversation; returns honest `COMMAND_RAN` + FAIL until founder success test; `sanitizeConversationReply()` blocks false "successfully executed" when `NO_COMMAND_RAN`. | Founder pasted LifeRE Point B prompt → conversation path claimed mission executed with NO_COMMAND_RAN. | ✅ tests; deploy |

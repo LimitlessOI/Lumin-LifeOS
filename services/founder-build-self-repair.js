@@ -7,19 +7,30 @@ import {
   CANONICAL_FOUNDER_UI_TARGET,
   inferTargetFileFromFounderFeedback,
   isMissingTargetFileBlocker,
+  isCssOnlyUiFeedback,
   resolveFounderBuildTarget,
 } from './builder-instruction-target.js';
+import {
+  applyAssistantBubbleCssPatch,
+  commitCssPatchViaBuilder,
+} from './founder-css-patch.js';
 
 export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = 5;
 
 function isRetriableBlocker(blocker = '') {
   const b = String(blocker);
   if (isMissingTargetFileBlocker(b)) return true;
-  if (/prose refusal|not code|too short|truncated/i.test(b)) return true;
+  if (/prose refusal|not code|too short|truncated|overlay shrink|refusing overlay|theme-overrides\.css/i.test(b)) return true;
+  if (/OVERLAY_STUB|production shell requires/i.test(b)) return true;
   return false;
 }
 
 function pickRepairTarget(task, currentTarget, blocker) {
+  if (/OVERLAY_STUB|overlay shrink|production shell requires|too short.*html/i.test(String(blocker))) {
+    if (isCssOnlyUiFeedback(task)) {
+      return { targetFile: 'public/overlay/lifeos-theme-overrides.css', repair: 'css_only_reroute' };
+    }
+  }
   if (isMissingTargetFileBlocker(blocker)) {
     const inferred = inferTargetFileFromFounderFeedback(task);
     if (inferred?.target_file && inferred.target_file !== currentTarget) {
@@ -56,10 +67,50 @@ export async function runFounderBuildWithSelfRepair({
   maxAttempts = DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS,
   buildFailureReceipt,
   enforceExecutionTruth,
+  repoRoot = process.cwd(),
 }) {
   const base = String(baseUrl || '').replace(/\/$/, '');
   const headers = { 'Content-Type': 'application/json', 'x-command-key': commandKey };
   let currentTask = String(task || '').trim();
+
+  if (isCssOnlyUiFeedback(currentTask)) {
+    const patchResult = applyAssistantBubbleCssPatch({ root: repoRoot, task: currentTask });
+    if (patchResult.ok) {
+      try {
+        const execRes = await commitCssPatchViaBuilder({ baseUrl: base, commandKey, patchResult });
+        const execJson = execRes.json || {};
+        const receipt = execJson.ok === true && execJson.committed === true
+          ? { pass_fail: 'PASS', blocker: null, lesson: null, fix: null, gap_recommendation: null }
+          : buildFailureReceipt(currentTask, {}, execJson);
+        const result = enforceExecutionTruth({
+          ok: execJson.ok === true,
+          committed: execJson.committed === true,
+          target_file: patchResult.target_file,
+          sha: execJson.sha || execJson.commit_sha || null,
+          generated_output: patchResult.output,
+          first_blocker: receipt.blocker,
+          execution_receipt: receipt,
+          execution_path: 'founder_css_patch',
+          task_meta: { output_bytes: patchResult.output.length, patch: patchResult.patch },
+          exec_meta: execJson,
+        }, { action: 'build', task: currentTask });
+        if (result.pass_fail === 'PASS') {
+          return {
+            ...result,
+            self_repair: {
+              attempts: [{ attempt: 1, target_file: patchResult.target_file, pass_fail: 'PASS', repair: 'mechanical_css_patch' }],
+              repaired: false,
+              success_attempt: 1,
+            },
+          };
+        }
+        currentTask = augmentTaskWithGapFillScope(currentTask, patchResult.target_file);
+      } catch {
+        /* fall through to LLM path */
+      }
+    }
+  }
+
   let targetFile = resolveFounderBuildTarget(currentTask);
   const attempts = [];
 

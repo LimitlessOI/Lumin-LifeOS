@@ -4,18 +4,20 @@ import {
   CANONICAL_FOUNDER_UI_TARGET,
   extractPriorBuildTask,
   inferTargetFileFromFounderFeedback,
+  isCssOnlyUiFeedback,
   isMissingTargetFileBlocker,
   isRepairContinuationIntent,
   resolveFounderBuildTarget,
 } from '../services/builder-instruction-target.js';
+import { applyAssistantBubbleCssPatch } from '../services/founder-css-patch.js';
 
 function testInfersUiTargetFromColorRequest() {
   const hit = inferTargetFileFromFounderFeedback(
     'can you change the color of your responses from black to yellow with black text',
   );
   assert.ok(hit);
-  assert.equal(hit.target_file, CANONICAL_FOUNDER_UI_TARGET);
-  assert.equal(hit.source, 'ui_heuristic');
+  assert.equal(hit.target_file, 'public/overlay/lifeos-theme-overrides.css');
+  assert.equal(hit.source, 'css_only_heuristic');
 }
 
 function testExplicitPathWins() {
@@ -28,7 +30,7 @@ function testExplicitPathWins() {
 function testResolveFounderBuildTarget() {
   assert.equal(
     resolveFounderBuildTarget('make responses yellow in the chat'),
-    CANONICAL_FOUNDER_UI_TARGET,
+    'public/overlay/lifeos-theme-overrides.css',
   );
   assert.equal(resolveFounderBuildTarget('what is the queue status'), null);
 }
@@ -60,7 +62,30 @@ function testAugmentTaskAddsTargetFile() {
   assert.match(out, /GAP-FILL/);
 }
 
-testInfersUiTargetFromColorRequest();
+function testMechanicalCssPatch() {
+  const patch = applyAssistantBubbleCssPatch({
+    root: process.cwd(),
+    task: 'change response color to yellow with black text',
+  });
+  assert.equal(patch.ok, true);
+  assert.equal(patch.target_file, 'public/overlay/lifeos-theme-overrides.css');
+  assert.match(patch.output, /\.lumin-msg\.assistant/);
+  assert.match(patch.output, /#ffeb3b|#ffff00/i);
+}
+
+function testCssOnlyRoutesToThemeOverrides() {
+  const target = resolveFounderBuildTarget('change response color to yellow with black text');
+  assert.equal(target, 'public/overlay/lifeos-theme-overrides.css');
+}
+
+function testCssOnlyNotStructural() {
+  assert.equal(isCssOnlyUiFeedback('add a new drawer button'), false);
+  assert.equal(isCssOnlyUiFeedback('change response color to yellow'), true);
+}
+
+testMechanicalCssPatch();
+testCssOnlyRoutesToThemeOverrides();
+testCssOnlyNotStructural();
 testExplicitPathWins();
 testResolveFounderBuildTarget();
 testMissingTargetBlocker();
