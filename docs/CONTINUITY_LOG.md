@@ -3,6 +3,12 @@
 
 ---
 
+## [SESSION] 2026-06-21 — Founder build closed loop (Sentry audit fixes)
+
+Adam asked to fix all Sentry-audit issues from founder color test theater PASS. **Shipped (`8a7c573707`):** atomic `commitManyToGitHub` + `POST /builder/execute-batch`; `founder-build-success-gate` + `founder-build-outcome` (git diff + live HTML poll); async build jobs (202 + poll); self-repair redeploy-wait-reverify; baseline dark assistant bubbles restored; client `getComputedStyle` bubble proof; routing/normalize fixes; `verify:founder-css:live`. Tests pass. **Next:** Adam retest via Lumin only — *"change response color to yellow with black text"* — expect honest PASS/FAIL with founder visual + client bubble proof lines.
+
+---
+
 ## [SESSION] 2026-06-20 — Comms enforcement audit (full stack)
 
 Full audit of founder-interface / builder / chat / truth-gate stack. Fixed: builder `/execute` now returns commit SHA (unblocks build PASS); terminal-bridge paths run through `enforceExecutionTruth`; conversation no longer shows ✅ PASS; chat thread IDOR on message read + stream auth; command-key fallback sets consistent `lifeosUser`; `persist_warning` when DB write fails; overlay line-count stub detection; dashboard login returns to same page. Manifest synced with comms files. Deploy pending.
