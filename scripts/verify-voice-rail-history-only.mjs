@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * SYNOPSIS: Fail-closed verification that Voice Rail remains history-only.
- * Fail-closed verification that Voice Rail remains history-only.
+ * SYNOPSIS: Verifies Voice Rail stays API-only while founder UI routes through lifeos-app.
+ * Verifies Voice Rail stays API-only while founder UI routes through lifeos-app.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -20,11 +20,11 @@ function fail(msg) {
 }
 
 const runtimeRoutes = read('startup/register-runtime-routes.js');
-if (runtimeRoutes.includes('createLifeOSVoiceRailRoutes')) {
-  fail('runtime still imports Voice Rail route factory');
+if (!runtimeRoutes.includes('createLifeOSVoiceRailRoutes')) {
+  fail('runtime no longer imports Voice Rail route factory');
 }
-if (/\/api\/v1\/lifeos\/voice-rail/.test(runtimeRoutes) && !runtimeRoutes.includes('intentionally not mounted')) {
-  fail('runtime appears to mount /api/v1/lifeos/voice-rail');
+if (!/\/api\/v1\/lifeos\/voice-rail/.test(runtimeRoutes)) {
+  fail('runtime no longer mounts /api/v1/lifeos/voice-rail');
 }
 
 const pkg = JSON.parse(read('package.json'));
@@ -38,6 +38,17 @@ for (const key of blockedScripts) {
   if (!String(scripts[key]).includes('hist-voice-rail-retired.mjs')) {
     fail(`package.json script "${key}" is not routed to retired guard`);
   }
+}
+
+const publicRoutes = read('routes/public-routes.js');
+if (!publicRoutes.includes('app.get("/voice-rail"')) {
+  fail('public /voice-rail redirect is missing');
+}
+if (!publicRoutes.includes('res.redirect(301, "/lifeos?direct_system=1")')) {
+  fail('public /voice-rail no longer redirects to /lifeos?direct_system=1');
+}
+if (!publicRoutes.includes('app.get("/overlay/lifeos-voice-rail-v1.html"')) {
+  fail('legacy Voice Rail overlay redirect is missing');
 }
 
 console.log('VOICE_RAIL_HISTORY_ONLY_PASS');

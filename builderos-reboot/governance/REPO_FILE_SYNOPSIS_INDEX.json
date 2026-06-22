@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T17:48:33.388Z",
+  "generated_at": "2026-06-22T17:52:02.184Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12123,
   "files": [
@@ -39763,9 +39763,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 450186,
-      "mtime": "2026-06-22T17:40:09.468Z",
-      "indexed_at": "2026-06-22T17:48:33.388Z"
+      "bytes": 450330,
+      "mtime": "2026-06-22T17:50:37.421Z",
+      "indexed_at": "2026-06-22T17:52:02.184Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40532,9 +40532,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 459372,
-      "mtime": "2026-06-21T22:25:01.464Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 460281,
+      "mtime": "2026-06-22T17:50:37.536Z",
+      "indexed_at": "2026-06-22T17:52:02.184Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -83574,10 +83574,10 @@
     },
     {
       "path": "scripts/verify-voice-rail-history-only.mjs",
-      "synopsis": "Fail-closed verification that Voice Rail remains history-only.",
-      "bytes": 1369,
-      "mtime": "2026-06-21T21:39:10.760Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "synopsis": "Verifies Voice Rail stays API-only while founder UI routes through lifeos-app.",
+      "bytes": 1807,
+      "mtime": "2026-06-22T17:50:37.311Z",
+      "indexed_at": "2026-06-22T17:52:02.184Z"
     },
     {
       "path": "scripts/web-intake.js",
