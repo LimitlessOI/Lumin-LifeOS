@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T21:30:26.250Z",
+  "generated_at": "2026-06-22T21:32:08.251Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12126,
   "files": [
@@ -69909,9 +69909,9 @@
     {
       "path": "railway.toml",
       "synopsis": "toml — railway.toml.",
-      "bytes": 40,
-      "mtime": "2025-12-22T18:15:17.095Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 175,
+      "mtime": "2026-06-22T21:32:05.964Z",
+      "indexed_at": "2026-06-22T21:32:08.251Z"
     },
     {
       "path": "README.md",

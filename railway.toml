@@ -1,2 +1,2 @@
-[hooks]
-predeploy = "node-pg-migrate up"
+# Railway hooks — migrations run on app boot via startup/migrations, not predeploy.
+# node-pg-migrate is not in package.json; predeploy hook caused instant deploy failures.
