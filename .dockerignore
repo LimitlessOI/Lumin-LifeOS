@@ -85,7 +85,7 @@ go.sum
 backups/
 builderos-reboot/_hist/
 builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json
-factory-staging/
+# factory-staging/ — MUST ship: production spine imports run-step, point-b-gate, run-foundation at boot
 data/
 .cursor/
 assets/
