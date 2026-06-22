@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T21:05:30.528Z",
+  "generated_at": "2026-06-22T21:26:33.690Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12126,
   "files": [
@@ -71981,9 +71981,9 @@
     {
       "path": "scripts/install-git-hooks.mjs",
       "synopsis": "Install tracked git hooks — sets core.hooksPath=githooks so hooks cannot drift or be skipped by stale copies.",
-      "bytes": 1150,
-      "mtime": "2026-06-21T21:50:19.525Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 1558,
+      "mtime": "2026-06-22T21:26:25.349Z",
+      "indexed_at": "2026-06-22T21:26:33.690Z",
       "ssot": [
         "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md"
       ]

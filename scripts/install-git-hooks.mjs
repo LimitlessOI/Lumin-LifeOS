@@ -12,9 +12,18 @@ import { execSync } from 'node:child_process';
 const ROOT = process.cwd();
 const HOOKS = path.join(ROOT, 'githooks');
 
-if (!fs.existsSync(path.join(ROOT, '.git'))) {
-  console.error('Not a git repository root.');
-  process.exit(1);
+function shouldSkipHookInstall() {
+  if (['1', 'true', 'yes'].includes(String(process.env.SKIP_GIT_HOOKS || '').toLowerCase())) return true;
+  if (process.env.CI === 'true') return true;
+  if (process.env.RAILWAY === 'true' || process.env.RAILWAY_ENVIRONMENT) return true;
+  if (fs.existsSync('/.dockerenv')) return true;
+  if (!fs.existsSync(path.join(ROOT, '.git'))) return true;
+  return false;
+}
+
+if (shouldSkipHookInstall()) {
+  console.log('skip git hooks install (CI/Docker/non-git checkout)');
+  process.exit(0);
 }
 
 if (!fs.existsSync(HOOKS)) {
