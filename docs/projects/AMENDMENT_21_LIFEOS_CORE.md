@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-20 — repo-root + factory-arc-loader decouple spine boot from factory-staging
+**Last Updated:** 2026-06-22 — Track founder-intake-gate.js for Railway boot. Prior: repo-root + factory-arc-loader decouple.
 
 ---
 

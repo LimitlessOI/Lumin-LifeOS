@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T21:56:47.127Z",
+  "generated_at": "2026-06-22T21:57:18.848Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12133,
+  "file_count": 12134,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40540,9 +40540,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 462786,
-      "mtime": "2026-06-22T21:56:16.290Z",
-      "indexed_at": "2026-06-22T21:56:47.127Z"
+      "bytes": 463159,
+      "mtime": "2026-06-22T21:57:17.495Z",
+      "indexed_at": "2026-06-22T21:57:18.848Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41031,9 +41031,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 126060,
-      "mtime": "2026-06-22T21:56:14.223Z",
-      "indexed_at": "2026-06-22T21:56:47.127Z"
+      "bytes": 126491,
+      "mtime": "2026-06-22T21:57:09.910Z",
+      "indexed_at": "2026-06-22T21:57:18.848Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -85419,6 +85419,16 @@
       "bytes": 6895,
       "mtime": "2026-06-21T21:38:59.038Z",
       "indexed_at": "2026-06-21T22:31:43.118Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/founder-intake-gate.js",
+      "synopsis": "Founder execute spine — Action Inbox capture + BPB intake gate before build/terminal.",
+      "bytes": 2925,
+      "mtime": "2026-06-22T21:56:49.732Z",
+      "indexed_at": "2026-06-22T21:57:18.848Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

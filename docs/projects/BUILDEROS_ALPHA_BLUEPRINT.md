@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-20 — production spine repo-root (no factory-staging boot import)
+**Last Updated:** 2026-06-22 — Track founder-intake-gate.js (Railway boot import). Prior: production spine repo-root decouple.
 ---
 
 ## 0. Purpose
@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-22 | **`services/founder-intake-gate.js`** (NEW, tracked) — Action Inbox capture + BPB intake gate; imported at boot by `lifeos-builderos-command-control-routes.js` since Lumin Chair commit but file was never committed → Railway `ERR_MODULE_NOT_FOUND` on `npm start`. | Deploy 88b4add passed build, failed healthcheck: missing module in Docker image. | ✅ node --check | deploy |
 | 2026-06-20 | **Railway boot fix:** `services/repo-root.js` + lazy `factory-arc-loader.js` — production spine no longer static-imports `factory-staging/.../run-step.js` at boot; `Dockerfile` RUN verifies factory-staging ships; `.dockerignore` `/build/` only (not `builder/`). | Railway crash loop ERR_MODULE_NOT_FOUND run-step.js despite dockerignore fix. | ✅ node --check + boot import | deploy |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — replaced parallel display/mission/build/point-b/Lumin-fallback branches with single `runLuminChairTurn()` from `services/lumin-chair-orchestrator.js`; all founder subroutines (display, mission, blueprint_execute, build, execute, counsel, point_b) dispatch through Lumin Chair envelope. | Founder doctrine: Lumin is Chair; runtime was multi-desk switchboard with Lumin last. | ✅ node --check + chair tests | deploy |
 | 2026-06-21 | **Quorum escalation ladder:** `services/founder-build-quorum-escalation.js` — 3 solo attempts → CFO gate → 2-AI quorum → apply → 3-AI quorum → apply → Chair synthesis → apply → hard stop; lessons from `lessons_learned` + static founder-build registry; wired into `founder-build-self-repair.js` + founder-interface async jobs. | Adam: single agent must not loop forever; escalate perspectives + Chair automatically. | ✅ tests |
