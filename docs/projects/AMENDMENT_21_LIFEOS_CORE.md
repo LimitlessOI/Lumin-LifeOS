@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-22 — Railway Docker build unblock: COPY hook script before `npm ci`. Prior: FILE SYNOPSIS LAW deployment-service auto-inject.
+**Last Updated:** 2026-06-20 — Lumin Chair single front door (lumin-chair-orchestrator + founder-communication-format)
 
 ---
 

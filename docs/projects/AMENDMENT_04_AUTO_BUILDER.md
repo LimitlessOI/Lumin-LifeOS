@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-20 — foundation never-stop repair loop (phase-repair.js + runFoundationPipelineLoop)
+**Last Updated:** 2026-06-20 — point-b-navigator wired as Lumin Chair point_b subroutine (not parallel founder route)
 
 ---
 
@@ -161,6 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-20 | **`services/point-b-navigator.js`** — Point B navigator invoked only via Lumin Chair `point_b` channel (`lumin-chair-orchestrator.js`); no longer a sibling parallel route on founder-interface. | Founder: Point B orchestration must be subroutine of Lumin Chair, not separate desk. | ✅ chair + navigator tests | deploy |
 | 2026-06-22 | **Point B spine audit repairs** — restored `scripts/run-point-b-gate.mjs`; fixed `studio-simulation.js` scope for direct product-host missions; `point-b-gate.js` accepts no-gap builder sim receipts; restored `builder-pre-build-simulate.mjs`; `bpb/intake-gate.js` accepts legacy `FOUNDER_PACKET.md + INTENT_BASELINE.json`; `mission-lib.mjs` now honors frozen legacy-write policy; `execute-mission.mjs` writes `BUILDER_RUN_RECEIPT.json` before Point B/doctrine evaluation; updated LifeOS product authority block and continuity truth | Audit found mechanical gate drift and false negatives across Foundation → Builder → Point B; machine path needed to clear honestly before founder usability | ✅ local foundation loop + point-b gate + tests | `node scripts/run-foundation-pipeline.mjs PRODUCT-LIFERE-OS-V1-0001 --once --force` |
 | 2026-06-22 | **Point B Autonomous Driver** — `services/point-b-navigator.js`, `services/obstacle-web-research.js`, founder-interface default → navigator + `GET …/point-b/status`, `lifeos-lifere.html` + app LifeRE nav/Point B strip, `BLUEPRINT.json` for LifeRE, acceptance v2 (DOM markers), `execute-mission.mjs` BPB intake + execute-step + SENTRY, `builderos-bp-priority-scheduler.js` useful-work-guard, OBSTACLE_LESSON_LEDGER trimmed (5586→200), tool registry wired flags | Adam: system picks next gate toward Point B without path choices | ✅ acceptance + navigator tests | `npm run lifeos:lifere-os:v1-acceptance` |
 | 2026-06-21 | **Point B = LifeRE Alpha + obstacle doctrine** — `POINT_B_TARGET.json`, `obstacle-lesson-loop.js`, `point-b-target.js`, loop v3, LifeRE on BP_PRIORITY rank 6, acceptance script | Adam: Point B is LifeRE Alpha; obstacles are lessons; stopping is failure | ✅ 5/5 tests | `npm run builderos:foundation:pipeline -- --bounded` |

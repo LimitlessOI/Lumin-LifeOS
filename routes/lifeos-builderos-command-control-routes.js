@@ -20,11 +20,6 @@ import {
 import { runFounderBuildWithSelfRepair, startFounderBuildJob, getFounderBuildJobStatus } from '../services/founder-build-self-repair.js';
 import { resolveFounderBuildBaseUrl, assertFounderBuildBaseUrl } from '../services/founder-build-success-gate.js';
 import {
-  isMissionPipelineIntent,
-  extractMissionIdFromText,
-  runFoundationPipelineForFounder,
-} from '../services/lifeos-mission-pipeline-executor.js';
-import {
   createCommandControlJob,
   getCommandControlJob,
   listCommandControlJobs,
@@ -34,11 +29,32 @@ import {
   updateCommandControlJobExecution,
 } from '../services/builderos-command-control-service.js';
 import { executeCommandControlJob } from '../services/builderos-governed-loop-executor.js';
+import {
+  createFounderIntakeGate,
+  runBpbIntakeGateForMission,
+  formatInboxGateBlocker,
+} from '../services/founder-intake-gate.js';
+import {
+  evaluatePointBNavigator,
+  formatPointBStatusSummary,
+} from '../services/point-b-navigator.js';
+import {
+  runLuminChairTurn,
+  isExplicitExecuteCommand,
+  isBuildRequest,
+} from '../services/lumin-chair-orchestrator.js';
+import { createBuilderOSControlPlaneService } from '../services/builderos-control-plane-service.js';
 
 export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
   const luminPersist = pool
     ? createLifeOSLumin({ pool, callAI: null, logger: { info: () => {}, error: () => {}, warn: () => {} } })
+    : null;
+  const founderIntakeGate = pool
+    ? createFounderIntakeGate({ pool, logger: { info: () => {}, warn: () => {}, error: () => {} } })
+    : null;
+  const controlPlane = pool
+    ? createBuilderOSControlPlaneService({ pool, logger: { info: () => {}, warn: () => {}, error: () => {} } })
     : null;
 
   const EXECUTE_ALLOWED_ROLES = new Set(['founder_admin', 'operator', 'admin']);
@@ -178,13 +194,6 @@ Rules:
     }
   }
 
-  function isExplicitExecuteCommand(text = '') {
-    const t = String(text || '').trim();
-    if (!t) return false;
-    if (/^\s*(execute|run|go|ship)\s*[.!]?\s*$/i.test(t)) return true;
-    return /\b(execute it|do it now|run it now|ship it|go ahead|make it happen|just do it|execute that|run that|do that now|get it done|execute this)\b/i.test(t);
-  }
-
   function inferTargetFileFromTask(task = '') {
     return resolveFounderBuildTarget(task);
   }
@@ -245,19 +254,6 @@ Rules:
       lines.push(note);
     }
     return lines.join('\n');
-  }
-
-  function isBuildRequest(text) {
-    const t = String(text || '');
-    if (/\b(what changed|tell me what changed|show me what changed|what is the|what are the|how many|status of|queue status)\b/i.test(t)
-      && !/\b(change|fix|make|update|set)\b.*\b(color|ui|css|response|reply|bubble)\b/i.test(t)) {
-      return false;
-    }
-    if (/\b(should be|needs to be|want.*(yellow|blue|red|green|color))\b/i.test(t)
-      && /\b(response|reply|bubble|assistant|message|color|background)\b/i.test(t)) {
-      return true;
-    }
-    return /\b(fix|change|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t);
   }
 
   function isDisplayRequest(text) {
@@ -579,14 +575,17 @@ HOW TO RESPOND:
   async function buildDisplayBundle({ scope = 'overview', missionId = null }) {
     const jobs = pool ? await listCommandControlJobs(pool, { limit: 20 }) : [];
     const haltState = pool ? await getCommandControlHaltState(pool) : null;
+    const pointB = await evaluatePointBNavigator({ callAI: callCouncilMember, includeWebResearch: false });
     const scoped = String(scope || 'overview').toLowerCase();
     const missionJobs = missionId
       ? jobs.filter((job) => String(job.instruction || '').includes(String(missionId)))
       : [];
     return {
       scope: scoped,
-      mission_id: missionId || null,
+      mission_id: missionId || pointB.mission_id || null,
       halt_state: haltState,
+      point_b: pointB,
+      point_b_summary: formatPointBStatusSummary(pointB),
       recent_jobs: jobs,
       mission_jobs: missionJobs,
       queue_summary: {
@@ -876,7 +875,7 @@ HOW TO RESPOND:
     }
   });
 
-  router.get('/founder-interface/build-job/:jobId', requireFounderInterfaceAuth, (req, res) => {
+  router.get('/founder-interface/build-job/:jobId', requireFounderInterfaceAuth, async (req, res) => {
     const job = getFounderBuildJobStatus(req.params.jobId);
     if (!job) {
       return res.status(404).json({ ok: false, pass_fail: 'FAIL', error: 'Build job not found' });
@@ -890,13 +889,40 @@ HOW TO RESPOND:
         command_truth: 'BUILD_ATTEMPTED',
       });
     }
+    let control_plane_done = null;
+    if (controlPlane && job.id) {
+      try {
+        control_plane_done = await controlPlane.canMarkBuildDone({ task_id: job.id, allow_exception: true });
+      } catch (err) {
+        control_plane_done = { allowed: false, reason: err.message };
+      }
+    }
+    const pass = job.result?.pass_fail === 'PASS';
+    const doneAllowed = control_plane_done?.allowed !== false;
     return res.status(200).json({
-      ok: job.result?.pass_fail === 'PASS',
+      ok: pass && doneAllowed,
       job_id: job.id,
       status: job.status,
+      control_plane_done: control_plane_done,
       ...(job.result || {}),
       human_summary: job.result ? formatExecutionTruthReply(job.result) : null,
     });
+  });
+
+  router.get('/point-b/status', requireFounderInterfaceAuth, async (req, res) => {
+    try {
+      const pointB = await evaluatePointBNavigator({
+        callAI: callCouncilMember,
+        includeWebResearch: req.query.research === '1',
+      });
+      return res.status(200).json({
+        ok: true,
+        point_b: pointB,
+        human_summary: formatPointBStatusSummary(pointB),
+      });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
+    }
   });
 
   router.post('/founder-interface/message', requireFounderInterfaceAuth, async (req, res, next) => {
@@ -956,242 +982,102 @@ HOW TO RESPOND:
         }
       }
 
-      const modelRouting = {
-        route: shouldDisplayOnly ? 'cheap_display_path' : 'execution_path',
-        complexity: shouldDisplayOnly ? 'low' : 'high',
-        estimated_cost_tier: shouldDisplayOnly ? 'cheap' : 'medium',
-      };
-
-      if (shouldDisplayOnly) {
-        const displayBundle = await buildDisplayBundle({
-          scope: req.body?.display_scope || inferredDisplayScope,
-          missionId,
+      let inboxGate = null;
+      if (!shouldDisplayOnly && founderIntakeGate) {
+        inboxGate = await founderIntakeGate.captureAndGate(req, {
+          text: cleanedInput,
+          sessionId: req.body?.session_id || null,
+          forceApprove: force || explicitExecute,
+          autoApproveRoles: EXECUTE_ALLOWED_ROLES,
         });
-        const displayResult = {
-          pass_fail: 'NO_COMMAND_RAN',
-          first_blocker: null,
-          human_summary: `Rendered ${displayBundle.scope} display from live system data.`,
-          display: displayBundle,
-        };
-        const plainEnglish = await translateToPlainEnglish(cleanedInput, displayResult);
-        const displayReply = plainEnglish || displayResult.human_summary;
-        const persistWarning = await persistFounderTurn(req, cleanedInput, displayReply);
-        return res.status(200).json({
-          ok: true,
-          interface: 'LifeOS Founder Interface',
-          action: 'display',
-          source_mode: sourceMode,
-          dictate_then_send: dictateThenSend,
-          conversational_mode: conversationalMode,
-          model_routing: modelRouting,
-          command_truth: 'NO_COMMAND_RAN',
-          pass_fail: 'NO_COMMAND_RAN',
-          reason: 'Display request only; no BuilderOS execution requested.',
-          command_executed: null,
-          exit_code: null,
-          receipt_truth: 'NO_RECEIPT',
-          receipt_paths: [],
-          artifact_paths: [],
-          first_blocker: null,
-          human_summary: plainEnglish || displayResult.human_summary,
-          display: displayBundle,
-          auth_mode: req.auth_mode || 'unknown',
-          user_role: req.lifeosUser?.role || null,
-          intake_normalized: false,
-          ...(persistWarning ? { persist_warning: persistWarning } : {}),
-        });
-      }
-
-      // Point B / mission pipeline — run real foundation loop (not Lumin prose theater)
-      if (!shouldDisplayOnly && isMissionPipelineIntent(cleanedInput)) {
-        const pipelineMission = missionId || extractMissionIdFromText(cleanedInput);
-        if (pipelineMission) {
-          const pipelineResult = runFoundationPipelineForFounder(pipelineMission, { force: force || true });
-          const pipelineReply = formatExecutionTruthReply({
-            ...pipelineResult,
-            action: 'mission_pipeline',
-          });
-          const persistWarning = await persistFounderTurn(req, cleanedInput, pipelineReply);
+        if (inboxGate?.private) {
+          const privateReply = 'Private — not saved. Session only.';
+          await persistFounderTurn(req, cleanedInput, privateReply);
           return res.status(200).json({
+            ok: true,
             interface: 'LifeOS Founder Interface',
-            action: 'mission_pipeline',
-            source_mode: sourceMode,
-            model_routing: { route: 'foundation_pipeline', complexity: 'high' },
-            auth_mode: req.auth_mode || 'unknown',
-            user_role: req.lifeosUser?.role || null,
-            intake_normalized: intakeNormalized,
-            ...pipelineResult,
-            human_summary: pipelineReply,
-            ...(persistWarning ? { persist_warning: persistWarning } : {}),
-          });
-        }
-      }
-
-      // Route build/fix/change requests directly to the builder — same channel the system uses
-      const shouldRunFounderBuild = isBuildRequest(cleanedInput) || isRepairContinuationIntent(cleanedInput);
-      if (!shouldDisplayOnly && shouldRunFounderBuild) {
-        const operatorKey = getForwardedOperatorKey(req)
-          || process.env.COMMAND_CENTER_KEY
-          || process.env.LIFEOS_KEY
-          || process.env.API_KEY;
-        if (operatorKey) {
-          const buildTask = await resolveBuildTaskForFounder(req, cleanedInput);
-          const useAsync = req.body?.async !== false && process.env.FOUNDER_BUILD_ASYNC !== '0';
-          if (useAsync) {
-            const userId = req.lifeosUser?.sub || null;
-            const jobId = startFounderBuildJob({
-              task: buildTask,
-              commandKey: operatorKey,
-              baseUrl: resolveFounderBuildBaseUrl(),
-              buildFailureReceipt: buildBuildFailureReceipt,
-              enforceExecutionTruth,
-              repoRoot: REPO_ROOT,
-              userId,
-              callCouncilMember,
-              pool,
-            });
-            const persistWarning = await persistFounderTurn(req, cleanedInput, `Build started — job ${jobId.slice(0, 8)}…`);
-            return res.status(202).json({
-              interface: 'LifeOS Founder Interface',
-              action: 'build',
-              async: true,
-              job_id: jobId,
-              poll_url: `/api/v1/lifeos/builderos/command-control/founder-interface/build-job/${jobId}`,
-              pass_fail: 'RUNNING',
-              command_truth: 'BUILD_ATTEMPTED',
-              human_summary: `Build running asynchronously — poll until PASS or FAIL.\nJob: ${jobId}`,
-              build_task_resolved: buildTask !== cleanedInput,
-              ...(persistWarning ? { persist_warning: persistWarning } : {}),
-            });
-          }
-          const builderResult = await routeToBuilder(buildTask, operatorKey);
-          const buildReply = formatExecutionTruthReply(builderResult);
-          const persistWarning = await persistFounderTurn(req, cleanedInput, buildReply);
-          return res.status(200).json({
-            interface: 'LifeOS Founder Interface',
-            action: 'build',
-            build_task_resolved: buildTask !== cleanedInput,
-            ...founderBuildResponsePayload(builderResult),
-            human_summary: buildReply,
-            ...(persistWarning ? { persist_warning: persistWarning } : {}),
-          });
-        }
-        const missingKeyTruth = enforceExecutionTruth({
-          ok: false,
-          committed: false,
-          failure_code: 'BUILDER_KEY_MISSING',
-          first_blocker: 'Build request requires operator command key — cannot dispatch to builder.',
-          execution_path: 'builder_task_execute',
-        }, { action: 'build', task: cleanedInput });
-        const missingKeyReply = formatExecutionTruthReply(missingKeyTruth);
-        const persistWarning = await persistFounderTurn(req, cleanedInput, missingKeyReply);
-        return res.status(503).json({
-          interface: 'LifeOS Founder Interface',
-          action: 'build',
-          ...missingKeyTruth,
-          human_summary: missingKeyReply,
-          ...(persistWarning ? { persist_warning: persistWarning } : {}),
-        });
-      }
-
-      // Explicit execute ("execute it", action=execute) → terminal bridge, not conversation theater
-      if (!shouldDisplayOnly && explicitExecute && !isBuildRequest(cleanedInput)) {
-        const result = await runTerminalBridgeIntake({
-          text: normalizedText || cleanedInput,
-          textFile: req.body?.text_file || null,
-          stage,
-          missionId,
-          force,
-        });
-        const truth = wrapBridgeResultAsTruth(result, cleanedInput);
-        const executeReply = formatExecutionTruthReply(truth);
-        const persistWarning = await persistFounderTurn(req, cleanedInput, executeReply);
-        return res.status(200).json({
-          interface: 'LifeOS Founder Interface',
-          action: 'execute',
-          source_mode: sourceMode,
-          dictate_then_send: dictateThenSend,
-          conversational_mode: conversationalMode,
-          model_routing: modelRouting,
-          auth_mode: req.auth_mode || 'unknown',
-          user_role: req.lifeosUser?.role || null,
-          execution_path: 'terminal_bridge',
-          intake_normalized: intakeNormalized,
-          ...result,
-          ...truth,
-          human_summary: executeReply,
-          ...(persistWarning ? { persist_warning: persistWarning } : {}),
-        });
-      }
-
-      // Conversation — questions, counsel, brainstorm (not execute/build commands)
-      if (!explicitExecute && !isBuildRequest(cleanedInput)) {
-      const luminReply = await luminConverse(cleanedInput);
-      if (luminReply) {
-        const safeReply = sanitizeConversationReply(luminReply, { command_truth: 'NO_COMMAND_RAN' });
-        const persistWarning = await persistFounderTurn(req, cleanedInput, safeReply);
-        return res.status(200).json({
-          ok: true,
-          interface: 'LifeOS Founder Interface',
-          action: 'conversation',
-          command_truth: 'NO_COMMAND_RAN',
-          pass_fail: 'NO_COMMAND_RAN',
-          human_summary: safeReply,
-          conversation_sanitized: safeReply !== luminReply,
-          auth_mode: req.auth_mode || 'unknown',
-          intake_normalized: intakeNormalized,
-          ...(persistWarning ? { persist_warning: persistWarning } : {}),
-        });
-      }
-      }
-
-      // Default execution path for structured build/change intents
-      if (!['development', 'system'].includes(stage)) {
-        return res.status(400).json({
-          ok: false,
-          interface: 'LifeOS Founder Interface',
-          action: 'execute',
-          command_truth: 'NO_COMMAND_RAN',
-          pass_fail: 'FAIL',
-          reason: 'NO_COMMAND_RAN',
-          error: 'stage must be development or system',
-          human_summary: formatExecutionSummary({
-            pass_fail: 'FAIL',
-            action: 'execute',
+            action: 'private',
             command_truth: 'NO_COMMAND_RAN',
-            first_blocker: 'stage must be development or system',
-            execution_receipt: {
-              lesson: 'Execute requests require stage=system or stage=development.',
-              fix: 'Resend with stage: system (default in dashboard chat).',
-            },
-          }),
-        });
+            pass_fail: 'NO_COMMAND_RAN',
+            human_summary: privateReply,
+            classification: inboxGate.classification,
+            auth_mode: req.auth_mode || 'unknown',
+          });
+        }
+        const inboxBlocker = formatInboxGateBlocker(inboxGate);
+        if (inboxBlocker) {
+          const persistWarning = await persistFounderTurn(req, cleanedInput, inboxBlocker);
+          return res.status(200).json({
+            ok: true,
+            interface: 'LifeOS Founder Interface',
+            action: 'staged',
+            command_truth: 'NO_COMMAND_RAN',
+            pass_fail: 'NO_COMMAND_RAN',
+            reason: 'ACTION_INBOX_STAGED',
+            inbox_item_id: inboxGate.inbox_item_id,
+            classification: inboxGate.classification,
+            human_summary: inboxBlocker,
+            auth_mode: req.auth_mode || 'unknown',
+            ...(persistWarning ? { persist_warning: persistWarning } : {}),
+          });
+        }
       }
 
-      const result = await runTerminalBridgeIntake({
-        text: normalizedText,
+      const useTerminalForBuild = inboxGate?.requires_terminal === true;
+      const operatorKey = getForwardedOperatorKey(req)
+        || process.env.COMMAND_CENTER_KEY
+        || process.env.LIFEOS_KEY
+        || process.env.API_KEY;
+      const userId = req.lifeosUser?.sub || null;
+
+      const chairResult = await runLuminChairTurn({
+        req,
+        cleanedInput,
+        normalizedText,
         textFile: req.body?.text_file || null,
         stage,
         missionId,
         force,
-      });
-      const truth = wrapBridgeResultAsTruth(result, cleanedInput);
-      const terminalReply = formatExecutionTruthReply(truth);
-      const persistWarning = await persistFounderTurn(req, cleanedInput, terminalReply);
-      return res.status(200).json({
-        interface: 'LifeOS Founder Interface',
-        action: 'execute',
-        source_mode: sourceMode,
-        dictate_then_send: dictateThenSend,
-        conversational_mode: conversationalMode,
-        model_routing: modelRouting,
+        shouldDisplayOnly,
+        explicitExecute,
+        executeIntent,
+        useTerminalForBuild,
+        inferredDisplayScope,
+        displayScope: req.body?.display_scope,
+        sourceMode,
+        dictateThenSend,
+        conversationalMode,
+        intakeNormalized,
+        inboxGate,
         auth_mode: req.auth_mode || 'unknown',
         user_role: req.lifeosUser?.role || null,
-        execution_path: 'terminal_bridge',
-        intake_normalized: intakeNormalized,
-        ...result,
-        ...truth,
-        human_summary: terminalReply,
+        useAsync: req.body?.async !== false && process.env.FOUNDER_BUILD_ASYNC !== '0',
+        userId,
+      }, {
+        buildDisplayBundle,
+        translateToPlainEnglish,
+        runBpbIntakeGateForMission,
+        runTerminalBridgeIntake,
+        wrapBridgeResultAsTruth,
+        formatExecutionTruthReply,
+        luminConverse,
+        sanitizeConversationReply,
+        routeToBuilder,
+        founderBuildResponsePayload,
+        startFounderBuildJob,
+        resolveBuildTaskForFounder,
+        buildBuildFailureReceipt,
+        enforceExecutionTruth,
+        founderBuildBaseUrl: resolveFounderBuildBaseUrl(),
+        repoRoot: REPO_ROOT,
+        operatorKey,
+        callCouncilMember,
+        pool,
+      });
+
+      const persistWarning = await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary);
+      return res.status(chairResult.statusCode).json({
+        ...chairResult.body,
         ...(persistWarning ? { persist_warning: persistWarning } : {}),
       });
     } catch (error) {

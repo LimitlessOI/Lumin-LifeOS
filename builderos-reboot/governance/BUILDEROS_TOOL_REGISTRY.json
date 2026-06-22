@@ -504,10 +504,56 @@
       "path": "factory-staging/factory-core/arc/run-foundation.js",
       "synopsis": "Foundation pipeline — department sims, gates, point-b (CLI/intake path).",
       "factory_cli": true
+    },
+    {
+      "path": "services/lumin-chair-orchestrator.js",
+      "synopsis": "Lumin Chair — single front door classifier + subroutine dispatch for founder-interface/message.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/founder-communication-format.js",
+      "synopsis": "Founder card format — DONE synopsis + bullets / NEXT + why.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/point-b-navigator.js",
+      "synopsis": "Point B next-action brain — Lumin Chair point_b subroutine + GET point-b/status + app strip.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/obstacle-web-research.js",
+      "synopsis": "Brave/Perplexity/AI research when obstacles block Point B progress.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/founder-intake-gate.js",
+      "synopsis": "Action Inbox capture + auto-approve before founder-interface execute.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/action-inbox.js",
+      "synopsis": "Capture/classify/stage founder messages; bp_build_request staging.",
+      "founder_spine": true
+    },
+    {
+      "path": "services/builderos-bp-priority-scheduler.js",
+      "synopsis": "BUILDEROS_AUTOPILOT=1 tick — useful-work-guard wrapped BP_PRIORITY runner.",
+      "founder_spine": false,
+      "scheduler": true
+    },
+    {
+      "path": "factory-staging/factory-core/bpb/intake-gate.js",
+      "synopsis": "BPB intake on execute-mission.mjs + founder mission pipeline.",
+      "factory_cli": true
+    },
+    {
+      "path": "builderos-reboot/scripts/execute-mission.mjs",
+      "synopsis": "execute-step + SENTRY per write_file_exact step + BPB intake pre-step.",
+      "factory_cli": true
     }
   ],
   "factory_stack_on_cli_not_spine": {
-    "synopsis": "Proven in mission packs / run-foundation.js — not in execute-mission.mjs hot path or founder chat",
+    "synopsis": "execute-mission.mjs now wires execute-step + SENTRY; remaining modules CLI/foundation only",
     "modules": [
       "factory-staging/factory-core/arc/foundation/pre-handoff-intent-gate.js",
       "factory-staging/factory-core/arc/foundation/doctrine-enforcement.js",

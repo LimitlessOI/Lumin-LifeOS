@@ -872,8 +872,9 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-22",
-  "last_receipt": "2026-06-22 lifere-boldtrail-exp-sync",
+  "last_updated": "2026-06-20",
+  "last_receipt": "2026-06-20 lumin-chair-single-front-door",
+  "last_change_summary": "Lumin Chair orchestrator — single founder-interface front door"
   "last_change_summary": "LifeRE daily command center syncs BoldTrail EXP pipeline with approval-gated follow-up write-back",
   "ssot_receipt_tail": "Voice Rail auto-stages to Action Inbox; approved inbox commitments route to lifeos_commitments."
 }

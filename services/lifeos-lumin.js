@@ -1,20 +1,5 @@
 /**
- * SYNOPSIS: services/lifeos-lumin.js
- * services/lifeos-lumin.js
- *
- * Lumin — LifeOS conversational AI
- *
- * Lumin is the AI you talk to anytime. Like Alexa, but it knows everything
- * about your life. You ask it anything. It answers as a trusted advisor with
- * full context from your LifeOS data — not a generic chatbot.
- *
- * Every response is shaped by the response variety engine and communication
- * profile so it doesn't sound the same every time and it learns what works for
- * the specific person it's talking to.
- *
- * Modes: general / mirror / coach / finance / relationship / health / planning
- * Context: `buildContextSnapshot(userId, { mode })` loads base LifeOS slice + mode-specific DB hints (finance transactions, health rows, relationship checkins, etc.).
- *
+ * SYNOPSIS: Lumin Chair — governed operating mind of LifeOS (not a side chatbot or reception desk).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 

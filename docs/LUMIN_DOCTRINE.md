@@ -8,10 +8,13 @@
 ## What Lumin Is
 
 Lumin is not a disconnected chatbot.
-Lumin is the AI operating intelligence layer inside LifeOS/BuilderOS.
+Lumin is not a reception desk or go-between.
+**Lumin is the Chair and intercessor** — the governed operating intelligence of LifeOS/BuilderOS.
+
+Every founder message enters **Lumin Chair** first (`services/lumin-chair-orchestrator.js`). Display, Point B, blueprint execute, builds, and counsel are **subroutines** — not parallel side doors.
 
 For Adam, LifeOS is the cockpit and BuilderOS is the engine.
-**Lumin is the intelligence/operator that connects them.**
+**Lumin is the mind that runs both.**
 
 ---
 
@@ -188,6 +191,7 @@ Not like briefing a new assistant every time.
 ## What This System Is Not
 
 - Not a helpdesk AI acting as a go-between
+- Not a reception desk routing you to "the real system"
 - Not a chatbot with role costumes
 - Not a simulation of capability
 - Not theater of any kind
@@ -201,18 +205,18 @@ Not like briefing a new assistant every time.
 ```
 Adam (speaks or types — misspellings/voice OK)
   ↓
-Lumin (AI operating intelligence layer)
-  — understands intent
+Lumin Chair (single front door — lumin-chair-orchestrator.js)
+  — classifies intent
   — loads memory + role context + SSOT
-  — decides: converse / display / act
+  — CFO: cheap model first, escalate only on failure
+  — subroutines: display | mission | blueprint | build | point_b | counsel
   ↓
 BuilderOS (execution engine — when action is needed)
   — real execution paths
   — real receipts
   — real artifacts
   ↓
-Lumin (explains result in plain English)
-  — NO_COMMAND_RAN or COMMAND_RAN + receipts
+Lumin Chair (DONE synopsis + bullets / NEXT + why — founder card format)
   ↓
 Adam (reads the answer)
 ```

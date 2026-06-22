@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T21:41:48.891Z",
+  "generated_at": "2026-06-22T21:44:36.978Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12126,
+  "file_count": 12130,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28836,9 +28836,9 @@
     {
       "path": "builderos-reboot/governance/BUILDEROS_TOOL_REGISTRY.json",
       "synopsis": "*/ header (129 factory + builderos files backfilled 2026-06-21)\"",
-      "bytes": 24969,
-      "mtime": "2026-06-21T21:39:30.030Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 26699,
+      "mtime": "2026-06-22T21:23:59.580Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z",
       "synopsis_index_only": true
     },
     {
@@ -28876,9 +28876,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3637670,
-      "mtime": "2026-06-22T21:05:20.307Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z"
+      "bytes": 3639050,
+      "mtime": "2026-06-22T21:44:23.155Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40114,9 +40114,9 @@
     {
       "path": "docs/LUMIN_DOCTRINE.md",
       "synopsis": "LUMIN DOCTRINE — Canonical Specification",
-      "bytes": 8293,
-      "mtime": "2026-06-21T21:37:55.455Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 8705,
+      "mtime": "2026-06-22T21:23:34.857Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z"
     },
     {
       "path": "docs/marketing/video-scripts.md",
@@ -40333,17 +40333,17 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.manifest.json",
       "synopsis": "Documentation — AMENDMENT 04 AUTO BUILDER.Manifest.",
-      "bytes": 455,
-      "mtime": "2026-06-18T03:39:40.191Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 449,
+      "mtime": "2026-06-22T21:44:31.120Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 31241,
-      "mtime": "2026-06-22T17:40:17.751Z",
-      "indexed_at": "2026-06-22T17:48:33.388Z"
+      "bytes": 31586,
+      "mtime": "2026-06-22T21:44:13.631Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -40532,17 +40532,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26185,
-      "mtime": "2026-06-22T21:05:11.639Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "bytes": 26281,
+      "mtime": "2026-06-22T21:44:30.948Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 462451,
-      "mtime": "2026-06-22T21:41:44.539Z",
-      "indexed_at": "2026-06-22T21:41:48.891Z"
+      "bytes": 462418,
+      "mtime": "2026-06-22T21:44:06.586Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41031,9 +41031,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 125173,
-      "mtime": "2026-06-21T21:37:59.656Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 125671,
+      "mtime": "2026-06-22T21:44:08.261Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -70339,9 +70339,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 49635,
-      "mtime": "2026-06-21T21:39:03.809Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 43262,
+      "mtime": "2026-06-22T21:23:24.735Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -85374,6 +85374,16 @@
       ]
     },
     {
+      "path": "services/founder-communication-format.js",
+      "synopsis": "Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).",
+      "bytes": 3244,
+      "mtime": "2026-06-22T21:22:16.830Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/founder-css-patch.js",
       "synopsis": "Mechanical CSS patches for founder UI feedback — no whole-file HTML rewrite.",
       "bytes": 8137,
@@ -86186,10 +86196,10 @@
     },
     {
       "path": "services/lifeos-lumin.js",
-      "synopsis": "services/lifeos-lumin.js",
-      "bytes": 20152,
-      "mtime": "2026-06-21T21:39:15.274Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "synopsis": "Lumin Chair — governed operating mind of LifeOS (not a side chatbot or reception desk).",
+      "bytes": 19472,
+      "mtime": "2026-06-22T21:23:26.257Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86350,6 +86360,16 @@
       "bytes": 1612,
       "mtime": "2026-06-21T21:39:15.546Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "services/lumin-chair-orchestrator.js",
+      "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
+      "bytes": 16481,
+      "mtime": "2026-06-22T21:22:38.357Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "services/lumin-memory-fetcher.js",
@@ -86981,6 +87001,16 @@
       "ssot": [
         "docs/SSOT_COMPANION.md §0.5J",
         "docs/SSOT_NORTH_STAR.md Article II §2.16"
+      ]
+    },
+    {
+      "path": "services/point-b-navigator.js",
+      "synopsis": "Point B navigator — reads POINT_B_TARGET.json and returns next gate action.",
+      "bytes": 11133,
+      "mtime": "2026-06-22T21:23:49.313Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
     },
     {
@@ -92049,6 +92079,13 @@
       "bytes": 298,
       "mtime": "2026-06-21T21:40:27.776Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "tests/lumin-chair-orchestrator.test.js",
+      "synopsis": "js — tests/lumin-chair-orchestrator.test.js.",
+      "bytes": 1964,
+      "mtime": "2026-06-22T21:44:00.365Z",
+      "indexed_at": "2026-06-22T21:44:36.978Z"
     },
     {
       "path": "tests/mental-health-integration.test.js",
