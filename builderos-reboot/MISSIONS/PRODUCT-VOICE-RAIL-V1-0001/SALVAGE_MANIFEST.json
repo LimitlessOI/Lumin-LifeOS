@@ -1,0 +1,50 @@
+{
+  "schema": "mission_salvage_manifest_v1",
+  "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+  "status": "SCRAPPED_SALVAGE",
+  "operator_lock": "Adam 2026-06-22 — Voice Rail program scrapped. Salvage reusable pieces only; do not revive as standalone product.",
+  "scrapped_surface": {
+    "standalone_product": true,
+    "overlay_ui": "public/overlay/lifeos-voice-rail-v1.html",
+    "canonical_url": "/overlay/lifeos-voice-rail-v1.html",
+    "public_alias": "/voice-rail",
+    "note": "Redirects to /lifeos?direct_system=1. Not active queue work."
+  },
+  "salvage_reuse": [
+    {
+      "path": "services/voice-rail-stt.js",
+      "use": "Server STT (Whisper) — /api/v1/lifeos/voice-rail/stt"
+    },
+    {
+      "path": "services/voice-rail-tts.js",
+      "use": "Server TTS — /api/v1/lifeos/voice-rail/tts"
+    },
+    {
+      "path": "services/voice-rail-attachments.js",
+      "use": "Image attachment describe/normalize if Chair needs multimodal intake"
+    },
+    {
+      "path": "config/voice-rail-stt-vocabulary.js",
+      "use": "Domain vocabulary for STT normalization"
+    },
+    {
+      "path": "public/shared/lifeos-voice-chat.js",
+      "use": "Browser mic, dictation, committed-text semantics"
+    },
+    {
+      "path": "public/overlay/lifeos-voice.js",
+      "use": "Wake word → Lumin Chair (founder-interface/message only)"
+    },
+    {
+      "path": "services/voice-rail-command-executor.js",
+      "use": "Extract target file from instruction — salvage for builder routing hints only via Chair"
+    }
+  ],
+  "do_not_revive": [
+    "Standalone Voice Rail overlay as founder front door",
+    "Command side doors that bypass Lumin Chair + Founder Packet V2 gates",
+    "Voice Rail as BP_PRIORITY active rank"
+  ],
+  "active_path": "Lumin Chair → services/lumin-chair-orchestrator.js → Founder Packet V2 enforcement",
+  "hist_doc": "docs/VOICE_RAIL_HISTORY_ONLY.md"
+}

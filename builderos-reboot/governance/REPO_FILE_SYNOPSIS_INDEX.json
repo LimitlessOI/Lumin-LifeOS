@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T22:42:36.250Z",
+  "generated_at": "2026-06-22T23:58:31.125Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12146,
+  "file_count": 12155,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28844,9 +28844,17 @@
     {
       "path": "builderos-reboot/governance/CHAIR_INTENT_PROTOCOL.json",
       "synopsis": "BuilderOS artifact — CHAIR INTENT PROTOCOL.",
-      "bytes": 1354,
-      "mtime": "2026-06-22T22:41:35.455Z",
-      "indexed_at": "2026-06-22T22:42:36.250Z",
+      "bytes": 1615,
+      "mtime": "2026-06-22T22:55:31.244Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/governance/CHAIR_STRATEGIC_INTELLIGENCE.json",
+      "synopsis": "BuilderOS artifact — CHAIR STRATEGIC INTELLIGENCE.",
+      "bytes": 2071,
+      "mtime": "2026-06-22T22:55:40.861Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "synopsis_index_only": true
     },
     {
@@ -28866,11 +28874,19 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/governance/FOUNDER_PACKET_V2_CHAIR_RUNTIME.json",
+      "synopsis": "BuilderOS artifact — FOUNDER PACKET V2 CHAIR RUNTIME.",
+      "bytes": 1656,
+      "mtime": "2026-06-22T22:54:39.370Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/governance/GATE_ENFORCEMENT_MATRIX.json",
       "synopsis": "BuilderOS artifact — GATE ENFORCEMENT MATRIX.",
-      "bytes": 4899,
-      "mtime": "2026-06-20T20:13:23.895Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 5657,
+      "mtime": "2026-06-22T22:55:31.146Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "synopsis_index_only": true
     },
     {
@@ -29087,6 +29103,13 @@
       "bytes": 16729,
       "mtime": "2026-06-21T21:37:38.462Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/CHAIR-FP-V2-LIVE-0001/FOUNDER_PACKET.md",
+      "synopsis": "Founder Packet — Chair FP V2 Live Enforcement (audit)",
+      "bytes": 5636,
+      "mtime": "2026-06-22T22:57:22.572Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/FACTORY-DELIBERATION-SENTRY-REGRESSION-0001/ACCEPTANCE_TESTS.json",
@@ -34260,6 +34283,14 @@
       "bytes": 3697,
       "mtime": "2026-06-21T17:21:46.396Z",
       "indexed_at": "2026-06-21T22:31:43.118Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/SALVAGE_MANIFEST.json",
+      "synopsis": "BuilderOS artifact — SALVAGE MANIFEST.",
+      "bytes": 1893,
+      "mtime": "2026-06-22T22:54:37.232Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "synopsis_index_only": true
     },
     {
@@ -40122,9 +40153,9 @@
     {
       "path": "docs/LUMIN_DOCTRINE.md",
       "synopsis": "LUMIN DOCTRINE — Canonical Specification",
-      "bytes": 10633,
-      "mtime": "2026-06-22T22:42:22.511Z",
-      "indexed_at": "2026-06-22T22:42:36.250Z"
+      "bytes": 11297,
+      "mtime": "2026-06-22T22:55:47.353Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z"
     },
     {
       "path": "docs/marketing/video-scripts.md",
@@ -40541,16 +40572,16 @@
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
       "bytes": 26278,
-      "mtime": "2026-06-22T21:56:16.292Z",
-      "indexed_at": "2026-06-22T21:56:47.127Z",
+      "mtime": "2026-06-22T23:58:12.172Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 464457,
-      "mtime": "2026-06-22T22:42:24.759Z",
-      "indexed_at": "2026-06-22T22:42:36.250Z"
+      "bytes": 464916,
+      "mtime": "2026-06-22T22:55:50.921Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -40863,16 +40894,16 @@
       "path": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 46 BUILDEROS CONTROL PLANE.Manifest.",
       "bytes": 526,
-      "mtime": "2026-06-03T04:58:43.047Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T23:58:14.880Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md",
       "synopsis": "BuilderOS Control Plane",
-      "bytes": 16182,
-      "mtime": "2026-06-21T21:37:59.281Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 16168,
+      "mtime": "2026-06-22T23:57:49.707Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z"
     },
     {
       "path": "docs/projects/AMENDMENT_47_MISSION_RUNTIME.md",
@@ -41039,9 +41070,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 128081,
-      "mtime": "2026-06-22T22:28:50.889Z",
-      "indexed_at": "2026-06-22T22:28:56.661Z"
+      "bytes": 128403,
+      "mtime": "2026-06-22T23:57:47.431Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -60556,9 +60587,9 @@
     {
       "path": "docs/VOICE_RAIL_HISTORY_ONLY.md",
       "synopsis": "Voice Rail — History Only (Failed Program)",
-      "bytes": 1310,
-      "mtime": "2026-06-22T22:14:15.319Z",
-      "indexed_at": "2026-06-22T22:14:41.143Z"
+      "bytes": 1905,
+      "mtime": "2026-06-22T22:55:33.386Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z"
     },
     {
       "path": "docs/YOUR_ADVANTAGE_FREE_OLLAMA.md",
@@ -68301,9 +68332,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 19848,
-      "mtime": "2026-06-22T21:28:56.767Z",
-      "indexed_at": "2026-06-22T21:28:58.650Z",
+      "bytes": 19899,
+      "mtime": "2026-06-22T22:55:40.246Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "synopsis_index_only": true
     },
     {
@@ -70347,9 +70378,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 43731,
-      "mtime": "2026-06-22T22:28:43.603Z",
-      "indexed_at": "2026-06-22T22:28:56.661Z",
+      "bytes": 44658,
+      "mtime": "2026-06-22T23:57:38.061Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -73182,6 +73213,13 @@
       "ssot": [
         "docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
       ]
+    },
+    {
+      "path": "scripts/verify-chair-fp-v2-enforcement.mjs",
+      "synopsis": "Verifies Founder Packet V2 hard enforcement on live Lumin Chair.",
+      "bytes": 2538,
+      "mtime": "2026-06-22T22:55:38.153Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z"
     },
     {
       "path": "scripts/verify-council-bypass-audit.mjs",
@@ -84054,9 +84092,9 @@
     {
       "path": "services/bp-priority-sync.js",
       "synopsis": "Sync BP_PRIORITY + mission BLUEPRINT from acceptance receipts (machine law).",
-      "bytes": 16457,
-      "mtime": "2026-06-21T21:39:11.726Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 16492,
+      "mtime": "2026-06-22T22:56:03.373Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "ssot": [
         "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md"
       ]
@@ -84434,11 +84472,21 @@
       ]
     },
     {
+      "path": "services/chair-founder-packet-v2-enforcement.js",
+      "synopsis": "Founder Packet V2 — hard enforcement on live Lumin Chair turns.",
+      "bytes": 10950,
+      "mtime": "2026-06-22T22:55:54.691Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/chair-intent-protocol.js",
       "synopsis": "Chair Intent Protocol — ask until understood, then execute toward founder Point B.",
-      "bytes": 7292,
-      "mtime": "2026-06-22T22:42:28.146Z",
-      "indexed_at": "2026-06-22T22:42:36.250Z",
+      "bytes": 7704,
+      "mtime": "2026-06-22T22:55:41.644Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -84446,9 +84494,9 @@
     {
       "path": "services/chair-truth-gate.js",
       "synopsis": "Fail-closed exit gate — no Chair response leaves without receipt-backed PASS.",
-      "bytes": 3356,
-      "mtime": "2026-06-22T22:25:19.543Z",
-      "indexed_at": "2026-06-22T22:26:26.971Z",
+      "bytes": 3849,
+      "mtime": "2026-06-22T22:55:18.098Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86453,9 +86501,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 19637,
-      "mtime": "2026-06-22T22:42:21.442Z",
-      "indexed_at": "2026-06-22T22:42:36.250Z",
+      "bytes": 23334,
+      "mtime": "2026-06-22T22:55:11.875Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86466,6 +86514,16 @@
       "bytes": 16306,
       "mtime": "2026-06-21T21:39:15.564Z",
       "indexed_at": "2026-06-21T22:31:43.118Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/lumin-strategic-intelligence.js",
+      "synopsis": "Lumin Chair strategic intelligence — ideas, gaps, competitors, future simulations.",
+      "bytes": 8555,
+      "mtime": "2026-06-22T22:46:28.745Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -91972,6 +92030,13 @@
       "indexed_at": "2026-06-21T22:31:43.118Z"
     },
     {
+      "path": "tests/chair-founder-packet-v2-enforcement.test.js",
+      "synopsis": "js — tests/chair-founder-packet-v2-enforcement.test.js.",
+      "bytes": 2356,
+      "mtime": "2026-06-22T22:55:40.119Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z"
+    },
+    {
       "path": "tests/chair-intent-protocol.test.js",
       "synopsis": "js — tests/chair-intent-protocol.test.js.",
       "bytes": 1227,
@@ -92233,6 +92298,13 @@
       "bytes": 2443,
       "mtime": "2026-06-22T22:19:00.943Z",
       "indexed_at": "2026-06-22T22:26:26.971Z"
+    },
+    {
+      "path": "tests/lumin-strategic-intelligence.test.js",
+      "synopsis": "js — tests/lumin-strategic-intelligence.test.js.",
+      "bytes": 1339,
+      "mtime": "2026-06-22T22:46:53.363Z",
+      "indexed_at": "2026-06-22T23:58:31.125Z"
     },
     {
       "path": "tests/mental-health-integration.test.js",

@@ -434,7 +434,7 @@ export function checkOrphanProductPassReceipts({ root }) {
 
   const bp = loadBpPriority({ root });
   const registeredReceipts = new Set(
-    (bp.items || []).map((i) => i.receipt_path).filter(Boolean),
+    [...(bp.items || []), ...(bp.scrapped_items || [])].map((i) => i.receipt_path).filter(Boolean),
   );
 
   for (const name of fs.readdirSync(receiptDir)) {

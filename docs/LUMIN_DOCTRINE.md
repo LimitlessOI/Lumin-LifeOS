@@ -98,6 +98,20 @@ If a tool reports success but Adam's intent is not satisfied → **FAIL**, not P
 
 ---
 
+## Chair Strategic Intelligence (Founder Packet V2 — enforced)
+
+**Authority:** `docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md` — not duplicate JSON.
+
+**Runtime enforcement:** `services/chair-founder-packet-v2-enforcement.js` + gate `CHAIR_FP_V2_LIVE` in `GATE_ENFORCEMENT_MATRIX.json`.
+
+**Governance:** `builderos-reboot/governance/FOUNDER_PACKET_V2_CHAIR_RUNTIME.json`
+
+**Live artifacts:** `data/chair-live/INTENT_COVERAGE_MAP.json`, `CHAIR_FORECAST_SIMULATION_RECEIPT.json`, `chair-turns.jsonl`, `data/adf-predictions/`
+
+**Voice Rail:** SCRAPPED — salvage only. See `docs/VOICE_RAIL_HISTORY_ONLY.md` + `SALVAGE_MANIFEST.json`.
+
+---
+
 ## Conversation Preservation (Non-Negotiable)
 
 Every conversation Lumin has with Adam must be **fully preserved** — not just logged and forgotten.

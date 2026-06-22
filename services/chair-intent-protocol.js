@@ -3,9 +3,8 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 import { loadPointBTarget } from './point-b-target-lite.js';
-import {
-  isMissionPipelineIntent,
-} from './lifeos-mission-pipeline-executor.js';
+import { isMissionPipelineIntent } from './lifeos-mission-pipeline-executor.js';
+import { formatStrategicBriefSection } from './lumin-strategic-intelligence.js';
 import {
   assessFounderBuildClarity,
   paraphraseFounderAsk,
@@ -16,12 +15,14 @@ import {
 } from './founder-governance-clarify.js';
 
 export const CHAIR_INTENT_PROTOCOL = {
-  version: 'chair_intent_protocol_v1',
-  chair_job: 'Ask until founder intent is understood; then execute toward Point B.',
+  version: 'chair_intent_protocol_v2',
+  supreme_authority: 'docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md',
+  chair_job: 'Ask until founder intent is understood; offer ideas/gaps; then execute toward Point B.',
   point_b_defined_by: 'founder_communications_intent',
   tools_not_destination:
     'Governance, SSOT, receipts, and pipelines are tools accountable to efficiency and A→B results — not the destination.',
   only_result: 'Point A reached Point B as Adam defined it.',
+  scoreboard: 'Results are the scoreboard. Reality scores predictions.',
 };
 
 export function draftFounderOutcomeHypothesis(text = '', pointBTarget = null) {
@@ -138,7 +139,7 @@ export function assessChairIntentUnderstanding(cleanedInput = '', opts = {}) {
   };
 }
 
-export function formatChairIntentClarifySummary(understanding = {}) {
+export function formatChairIntentClarifySummary(understanding = {}, strategicBrief = null) {
   const lines = [
     '🔍 CHAIR — UNDERSTANDING YOUR INTENT',
     '',
@@ -174,5 +175,11 @@ export function formatChairIntentClarifySummary(understanding = {}) {
     'Nothing executes until intent is clear. Reply with answers, or **confirm** + your choice.',
     'When I understand — I get busy delivering it through the real system.',
   );
+
+  if (strategicBrief) {
+    const extra = formatStrategicBriefSection(strategicBrief);
+    if (extra) lines.push(extra);
+  }
+
   return lines.join('\n');
 }

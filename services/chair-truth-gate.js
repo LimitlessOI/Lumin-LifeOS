@@ -79,5 +79,15 @@ export function enforceChairTruthExit(truth = {}, channel = '') {
     }
   }
 
+  if (out.fp_v2_enforcement && out.fp_v2_enforcement.execute_cleared === false) {
+    const execChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
+    if (execChannels.includes(channel)) {
+      out.pass_fail = 'FAIL';
+      out.ok = false;
+      out.truth_gate_violation = out.truth_gate_violation || 'BLOCKED_CHAIR_FP_V2';
+      out.first_blocker = out.first_blocker || out.fp_v2_enforcement.violations?.[0] || 'Founder Packet V2 gate blocked execute';
+    }
+  }
+
   return out;
 }

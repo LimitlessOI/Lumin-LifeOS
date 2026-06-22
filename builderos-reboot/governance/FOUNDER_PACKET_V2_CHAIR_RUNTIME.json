@@ -1,0 +1,35 @@
+{
+  "schema": "founder_packet_v2_chair_runtime_v1",
+  "updated_at": "2026-06-22",
+  "operator_lock": "Adam 2026-06-22 — Live Lumin Chair MUST follow Founder Packet V2. No duplicate doctrine.",
+  "supreme_authority": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
+  "nssot_override": "docs/SSOT_NORTH_STAR.md wins on conflict until amended",
+  "enforced_on": [
+    "POST /api/v1/lifeos/builderos/command-control/founder-interface/message",
+    "services/lumin-chair-orchestrator.js"
+  ],
+  "hard_gates": {
+    "gate_id": "CHAIR_FP_V2_LIVE",
+    "blocker": "BLOCKED_CHAIR_FP_V2",
+    "matrix": "builderos-reboot/governance/GATE_ENFORCEMENT_MATRIX.json"
+  },
+  "chair_must": {
+    "offer_not_listen_only": ["ideas", "gaps", "missing_pieces", "competitive_context", "future_look_back"],
+    "ask_until_understood": "INTENT_AMBIGUITY gate — no CODE_EXECUTE until intent clear",
+    "forecast_receipt": "CHAIR_FORECAST_SIMULATION_RECEIPT per strategic turn",
+    "predictions_scored": "data/adf-predictions/ — Hist scores vs reality",
+    "scoreboard": "Results are all that matter — truth gate blocks false PASS"
+  },
+  "horizons_months": [6, 12, 24, 36, 60, 120],
+  "competitive_intel": {
+    "lane": "services/lane-intel-service.js",
+    "online": "BRAVE_SEARCH_API_KEY or PERPLEXITY_API_KEY",
+    "env": "LANE_INTEL_ENABLED=1"
+  },
+  "runtime_module": "services/chair-founder-packet-v2-enforcement.js",
+  "artifacts": {
+    "live_coverage": "data/chair-live/INTENT_COVERAGE_MAP.json",
+    "live_forecast": "data/chair-live/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
+    "session_log": "data/chair-live/chair-turns.jsonl"
+  }
+}

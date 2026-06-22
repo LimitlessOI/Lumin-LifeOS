@@ -23,6 +23,15 @@ import {
   isGovernanceOrSsotIntent,
 } from './founder-governance-clarify.js';
 import {
+  enforceFounderPacketV2ChairTurn,
+  formatFpV2BlockSummary,
+  FP_V2_CHAIR_LAW,
+} from './chair-founder-packet-v2-enforcement.js';
+import {
+  gatherStrategicBriefForChair,
+  formatStrategicBriefSection,
+} from './lumin-strategic-intelligence.js';
+import {
   assessChairIntentUnderstanding,
   formatChairIntentClarifySummary,
   CHAIR_INTENT_PROTOCOL,
@@ -111,7 +120,34 @@ export function isChairActionableTurn(text = '', { shouldDisplayOnly = false } =
     || isExplicitExecuteCommand(text);
 }
 
-function chairIntentClarifyResponse(ctx, understanding, summary) {
+function chairFpV2BlockResponse(ctx, enforcement, channel) {
+  const summary = formatFpV2BlockSummary(enforcement);
+  const truth = finalizeTruth({
+    ok: false,
+    pass_fail: 'FAIL',
+    command_truth: 'NO_COMMAND_RAN',
+    receipt_truth: enforcement.blocker,
+    action: channel || 'fp_v2_blocked',
+    fp_v2_enforcement: enforcement,
+    first_blocker: enforcement.violations?.[0] || enforcement.blocker,
+    human_summary_technical: summary,
+    done_synopsis: 'Blocked — Founder Packet V2 requires understanding + Chair offers before execute.',
+    next_synopsis: 'Answer clarify questions or confirm intent.',
+    next_why: FP_V2_CHAIR_LAW.scoreboard,
+  }, channel || 'fp_v2_blocked');
+  return {
+    statusCode: 200,
+    body: chairEnvelope(channel || 'fp_v2_blocked', {
+      ...truth,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+    }),
+  };
+}
+
+function chairIntentClarifyResponse(ctx, understanding, summary, fpV2 = null) {
   const truth = finalizeTruth({
     ok: true,
     pass_fail: 'CLARIFY',
@@ -119,6 +155,8 @@ function chairIntentClarifyResponse(ctx, understanding, summary) {
     receipt_truth: 'INTENT_NOT_YET_UNDERSTOOD',
     action: 'intent_clarify',
     chair_intent_protocol: CHAIR_INTENT_PROTOCOL.version,
+    fp_v2_enforcement: fpV2,
+    founder_packet_v2_authority: FP_V2_CHAIR_LAW.authority,
     intent: understanding,
     human_summary_technical: summary,
     done_synopsis: 'Chair is asking until your intent is clear — then it executes.',
@@ -207,6 +245,7 @@ export async function runLuminChairTurn(ctx, deps) {
   } = ctx;
 
   const skipIntentGate = force || confirmIntent;
+  const pointBTarget = loadPointBTarget();
 
   if (!skipIntentGate && isChairActionableTurn(cleanedInput, { shouldDisplayOnly })) {
     let expandedTask = cleanedInput;
@@ -215,22 +254,60 @@ export async function runLuminChairTurn(ctx, deps) {
     }
     const understanding = assessChairIntentUnderstanding(cleanedInput, {
       expandedTask,
-      pointBTarget: loadPointBTarget(),
+      pointBTarget,
       includeBuild: isBuildRequest(cleanedInput) || isFounderShipOrUsabilityIntent(cleanedInput),
       includeGovernance: isGovernanceOrSsotIntent(cleanedInput),
       includeMissionPipeline: isMissionPipelineIntent(cleanedInput),
     });
-    if (!understanding.intent_understood) {
-      const summary = formatChairIntentClarifySummary(understanding);
+    const fpV2 = await enforceFounderPacketV2ChairTurn({
+      cleanedInput,
+      understanding,
+      pool: deps.pool,
+      callAI: deps.callCouncilMember,
+      pointBTarget,
+      confirmIntent: false,
+      channel: null,
+    });
+    if (!understanding.intent_understood || !fpV2.execute_cleared) {
+      const summary = formatChairIntentClarifySummary(understanding, fpV2.strategic_brief);
       return chairIntentClarifyResponse(
         { intakeNormalized, sourceMode, auth_mode, user_role },
-        understanding,
+        { ...understanding, strategic_brief: fpV2.strategic_brief },
         summary,
+        fpV2,
       );
     }
   }
 
   const channel = classifyChairIntent(ctx);
+
+  let fpV2Enforcement = null;
+  if (!shouldDisplayOnly && channel !== 'display') {
+    const understandingForChannel = assessChairIntentUnderstanding(cleanedInput, {
+      expandedTask: cleanedInput,
+      pointBTarget,
+      includeBuild: isBuildRequest(cleanedInput),
+      includeGovernance: isGovernanceOrSsotIntent(cleanedInput),
+      includeMissionPipeline: isMissionPipelineIntent(cleanedInput),
+    });
+    fpV2Enforcement = await enforceFounderPacketV2ChairTurn({
+      cleanedInput,
+      understanding: understandingForChannel,
+      pool: deps.pool,
+      callAI: deps.callCouncilMember,
+      pointBTarget,
+      confirmIntent: skipIntentGate,
+      channel,
+    });
+    const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
+    if (executeChannels.includes(channel) && !fpV2Enforcement.execute_cleared) {
+      return chairFpV2BlockResponse(
+        { intakeNormalized, sourceMode, auth_mode, user_role },
+        fpV2Enforcement,
+        channel,
+      );
+    }
+  }
 
   switch (channel) {
     case 'display': {
@@ -435,15 +512,25 @@ export async function runLuminChairTurn(ctx, deps) {
         autoRun: true,
         callAI: deps.callCouncilMember,
       });
+      const strategicBrief = fpV2Enforcement?.strategic_brief
+        || await gatherStrategicBriefForChair({
+          cleanedInput,
+          pool: deps.pool,
+          callAI: deps.callCouncilMember,
+          pointBTarget,
+        }).catch(() => null);
+      const strategicSection = formatStrategicBriefSection(strategicBrief);
       const technical = deps.formatExecutionTruthReply({ ...pbResult, action: 'point_b' });
       const truth = finalizeTruth({
         ...pbResult,
         action: 'point_b',
-        human_summary_technical: technical,
+        human_summary_technical: strategicSection ? `${technical}${strategicSection}` : technical,
         done_synopsis: pbResult.human_summary?.split('\n')[0] || pbResult.human_summary,
         next_synopsis: pbResult.point_b?.next_action ? `Next gate: ${pbResult.point_b.next_action}` : undefined,
         next_why: pbResult.point_b?.blocker || undefined,
         point_b: pbResult.point_b,
+        strategic_brief: strategicBrief,
+        fp_v2_enforcement: fpV2Enforcement,
       }, channel);
       return {
         statusCode: pbResult.run?.async ? 202 : 200,
@@ -452,8 +539,17 @@ export async function runLuminChairTurn(ctx, deps) {
     }
 
     case 'counsel': {
+      const strategicBrief = fpV2Enforcement?.strategic_brief
+        || await gatherStrategicBriefForChair({
+          cleanedInput,
+          pool: deps.pool,
+          callAI: deps.callCouncilMember,
+          pointBTarget,
+        }).catch(() => null);
+      const strategicSection = formatStrategicBriefSection(strategicBrief);
       const luminReply = await deps.luminConverse(cleanedInput);
-      const safeReply = deps.sanitizeConversationReply(luminReply, { command_truth: 'NO_COMMAND_RAN' });
+      const combinedReply = strategicSection ? `${luminReply}${strategicSection}` : luminReply;
+      const safeReply = deps.sanitizeConversationReply(combinedReply, { command_truth: 'NO_COMMAND_RAN' });
       const truth = finalizeTruth({
         ok: true,
         action: 'counsel',
@@ -461,7 +557,9 @@ export async function runLuminChairTurn(ctx, deps) {
         pass_fail: 'NO_COMMAND_RAN',
         done_synopsis: 'Counsel only — no system command ran.',
         human_summary_technical: safeReply,
-        conversation_sanitized: safeReply !== luminReply,
+        conversation_sanitized: safeReply !== combinedReply,
+        strategic_brief: strategicBrief,
+        fp_v2_enforcement: fpV2Enforcement,
       }, channel);
       return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, auth_mode }) };
     }

@@ -1,7 +1,10 @@
 {
   "schema": "chair_intent_protocol_v1",
   "updated_at": "2026-06-22",
-  "operator_lock": "Adam 2026-06-22 — Chair asks until intent understood; then executes toward Point B.",
+  "operator_lock": "Adam 2026-06-22 — Chair asks until intent understood; enforces Founder Packet V2.",
+  "supreme_authority": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
+  "fp_v2_runtime": "builderos-reboot/governance/FOUNDER_PACKET_V2_CHAIR_RUNTIME.json",
+  "fp_v2_enforcement_module": "services/chair-founder-packet-v2-enforcement.js",
   "chair_job": {
     "primary": "Ask questions until founder intent is understood — what should happen or be built.",
     "then": "Execute through real system paths until Point B (founder-defined) is reached or blocked honestly."

@@ -10,6 +10,23 @@
   "primary_metric": "founder_interruptions_before_alpha",
   "gates": [
     {
+      "gate_id": "CHAIR_FP_V2_LIVE",
+      "blocker": "BLOCKED_CHAIR_FP_V2",
+      "enforcement": "HARD",
+      "requires": [
+        "FOUNDER_PACKET_V2 authority",
+        "intent_understood before CODE_EXECUTE",
+        "CHAIR_FORECAST_SIMULATION_RECEIPT per live turn",
+        "chair offers ideas/gaps (not listen-only)",
+        "predictions filed to data/adf-predictions",
+        "live INTENT_COVERAGE_MAP in data/chair-live/",
+        "truth gate blocks false PASS"
+      ],
+      "runtime_module": "services/chair-founder-packet-v2-enforcement.js",
+      "authority_doc": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
+      "governance_json": "builderos-reboot/governance/FOUNDER_PACKET_V2_CHAIR_RUNTIME.json"
+    },
+    {
       "gate_id": "IDC_EXIT",
       "blocker": "BLOCKED_CONTINUE_IDC",
       "enforcement": "HARD",

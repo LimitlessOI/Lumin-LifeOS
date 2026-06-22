@@ -1,0 +1,48 @@
+{
+  "schema": "chair_strategic_intelligence_v1",
+  "updated_at": "2026-06-22",
+  "superseded_by": "docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md",
+  "runtime_authority": "builderos-reboot/governance/FOUNDER_PACKET_V2_CHAIR_RUNTIME.json",
+  "enforcement_module": "services/chair-founder-packet-v2-enforcement.js",
+  "operator_lock": "Adam 2026-06-22 — alias only; Founder Packet V2 is supreme for Chair strategic law.",
+  "chair_role_beyond_listen": {
+    "must_offer": [
+      "ideas",
+      "gaps",
+      "missing_pieces",
+      "contrarian_or_better_paths",
+      "competitive_context",
+      "future_look_back_simulations"
+    ],
+    "not_sufficient": "Paraphrase and confirm only — Chair is the strategic expert on what is happening now and where tech is going."
+  },
+  "competitive_intelligence": {
+    "always_on": true,
+    "online_sources": ["Brave Search", "Perplexity", "lane_intel_horizon_runs"],
+    "runtime_service": "services/lane-intel-service.js",
+    "api": "GET /api/v1/lifeos/intel/horizon/latest, POST .../horizon/run",
+    "env": "LANE_INTEL_ENABLED=1, BRAVE_SEARCH_API_KEY or PERPLEXITY_API_KEY"
+  },
+  "future_simulation": {
+    "horizons_months": [6, 12, 24, 36, 60, 120],
+    "diminishing_return_after_months": 36,
+    "questions_per_horizon": [
+      "What does this product look like?",
+      "What will we wish we learned today?",
+      "What should we change now?",
+      "How does our stack vs competitors?"
+    ],
+    "label_uncertainty": "THINK/GUESS beyond 24 months — variables unknowable; still record for scoreboard."
+  },
+  "scoreboard": {
+    "rule": "Reality is the scoreboard. Results are all that matter.",
+    "predictions": "Record falsifiable predictions; score later vs outcomes — never treat verbal agreement as resolved.",
+    "ledger_paths": [
+      "data/adf-predictions/",
+      "data/chair-strategic-predictions.jsonl",
+      "factory prediction receipts (Hist lane)"
+    ]
+  },
+  "runtime_module": "services/lumin-strategic-intelligence.js",
+  "doctrine_doc": "docs/LUMIN_DOCTRINE.md"
+}
