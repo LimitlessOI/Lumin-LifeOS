@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T21:57:18.848Z",
+  "generated_at": "2026-06-22T22:01:33.492Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12134,
+  "file_count": 12135,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40341,9 +40341,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 32015,
-      "mtime": "2026-06-22T21:56:41.323Z",
-      "indexed_at": "2026-06-22T21:56:47.127Z"
+      "bytes": 32278,
+      "mtime": "2026-06-22T22:01:26.877Z",
+      "indexed_at": "2026-06-22T22:01:33.492Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -41031,9 +41031,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 126491,
-      "mtime": "2026-06-22T21:57:09.910Z",
-      "indexed_at": "2026-06-22T21:57:18.848Z"
+      "bytes": 126940,
+      "mtime": "2026-06-22T22:01:25.658Z",
+      "indexed_at": "2026-06-22T22:01:33.492Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -85356,12 +85356,12 @@
     {
       "path": "services/founder-build-quorum-escalation.js",
       "synopsis": "Founder build quorum escalation — solo cap → 2-AI → 3-AI → Chair (no endless loops).",
+      "bytes": 12604,
+      "mtime": "2026-06-21T22:50:46.685Z",
+      "indexed_at": "2026-06-22T22:01:33.492Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
-      ],
-      "bytes": 12489,
-      "mtime": "2026-06-21T21:23:40.434Z",
-      "indexed_at": "2026-06-21T21:26:00.277Z"
+      ]
     },
     {
       "path": "services/founder-build-self-repair.js",
@@ -86857,6 +86857,16 @@
       "bytes": 622,
       "mtime": "2026-06-21T21:39:16.755Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "services/obstacle-web-research.js",
+      "synopsis": "Web research for obstacle lessons — how others solved similar blockers.",
+      "bytes": 1843,
+      "mtime": "2026-06-22T17:21:28.095Z",
+      "indexed_at": "2026-06-22T22:01:33.492Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
     },
     {
       "path": "services/oil-daily-summary.js",

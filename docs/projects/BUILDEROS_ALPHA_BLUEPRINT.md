@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-22 — Track founder-intake-gate.js (Railway boot import). Prior: production spine repo-root decouple.
+**Last Updated:** 2026-06-22 — Track founder-build-quorum-escalation.js + obstacle-web-research.js (never committed, boot crash)
 ---
 
 ## 0. Purpose
@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-22 | **`services/founder-build-quorum-escalation.js`** (NEW, tracked) — wired from `founder-build-self-repair.js` since 2026-06-21 but never committed → Railway `ERR_MODULE_NOT_FOUND` on boot. **`services/obstacle-web-research.js`** same. Dockerfile RUN now asserts both exist before image ships. | Second boot crash after factory-staging fix — import graph referenced local-only files. | ✅ node --check + import test | deploy |
 | 2026-06-22 | **`services/founder-intake-gate.js`** (NEW, tracked) — Action Inbox capture + BPB intake gate; imported at boot by `lifeos-builderos-command-control-routes.js` since Lumin Chair commit but file was never committed → Railway `ERR_MODULE_NOT_FOUND` on `npm start`. | Deploy 88b4add passed build, failed healthcheck: missing module in Docker image. | ✅ node --check | deploy |
 | 2026-06-20 | **Railway boot fix:** `services/repo-root.js` + lazy `factory-arc-loader.js` — production spine no longer static-imports `factory-staging/.../run-step.js` at boot; `Dockerfile` RUN verifies factory-staging ships; `.dockerignore` `/build/` only (not `builder/`). | Railway crash loop ERR_MODULE_NOT_FOUND run-step.js despite dockerignore fix. | ✅ node --check + boot import | deploy |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — replaced parallel display/mission/build/point-b/Lumin-fallback branches with single `runLuminChairTurn()` from `services/lumin-chair-orchestrator.js`; all founder subroutines (display, mission, blueprint_execute, build, execute, counsel, point_b) dispatch through Lumin Chair envelope. | Founder doctrine: Lumin is Chair; runtime was multi-desk switchboard with Lumin last. | ✅ node --check + chair tests | deploy |
