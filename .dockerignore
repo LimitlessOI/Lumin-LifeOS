@@ -80,3 +80,14 @@ go.sum
 # Other
 .cache/
 .parcel-cache/
+
+# Slim Docker context — runtime spine only (synopsis backfill bloated COPY . .)
+backups/
+builderos-reboot/_hist/
+builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json
+factory-staging/
+data/
+.cursor/
+assets/
+products/
+agent-transcripts/
