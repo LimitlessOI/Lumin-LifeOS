@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T22:30:39.493Z",
+  "generated_at": "2026-06-22T22:42:36.250Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12143,
+  "file_count": 12146,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28842,6 +28842,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/governance/CHAIR_INTENT_PROTOCOL.json",
+      "synopsis": "BuilderOS artifact — CHAIR INTENT PROTOCOL.",
+      "bytes": 1354,
+      "mtime": "2026-06-22T22:41:35.455Z",
+      "indexed_at": "2026-06-22T22:42:36.250Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/governance/DEPARTMENT_ROLE_CONTRACT.json",
       "synopsis": "BuilderOS artifact — DEPARTMENT ROLE CONTRACT.",
       "bytes": 4542,
@@ -34303,9 +34311,9 @@
     {
       "path": "builderos-reboot/POINT_B_TARGET.json",
       "synopsis": "BuilderOS artifact — POINT B TARGET.",
-      "bytes": 992,
-      "mtime": "2026-06-21T02:39:28.151Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 1411,
+      "mtime": "2026-06-22T22:42:11.720Z",
+      "indexed_at": "2026-06-22T22:42:36.250Z",
       "synopsis_index_only": true
     },
     {
@@ -40114,9 +40122,9 @@
     {
       "path": "docs/LUMIN_DOCTRINE.md",
       "synopsis": "LUMIN DOCTRINE — Canonical Specification",
-      "bytes": 8705,
-      "mtime": "2026-06-22T21:23:34.857Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z"
+      "bytes": 10633,
+      "mtime": "2026-06-22T22:42:22.511Z",
+      "indexed_at": "2026-06-22T22:42:36.250Z"
     },
     {
       "path": "docs/marketing/video-scripts.md",
@@ -40540,9 +40548,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 464386,
-      "mtime": "2026-06-22T22:30:33.454Z",
-      "indexed_at": "2026-06-22T22:30:39.493Z"
+      "bytes": 464457,
+      "mtime": "2026-06-22T22:42:24.759Z",
+      "indexed_at": "2026-06-22T22:42:36.250Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -84426,6 +84434,16 @@
       ]
     },
     {
+      "path": "services/chair-intent-protocol.js",
+      "synopsis": "Chair Intent Protocol — ask until understood, then execute toward founder Point B.",
+      "bytes": 7292,
+      "mtime": "2026-06-22T22:42:28.146Z",
+      "indexed_at": "2026-06-22T22:42:36.250Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/chair-truth-gate.js",
       "synopsis": "Fail-closed exit gate — no Chair response leaves without receipt-backed PASS.",
       "bytes": 3356,
@@ -85477,9 +85495,9 @@
     {
       "path": "services/founder-intent-clarify.js",
       "synopsis": "Detect ambiguous founder build asks — paraphrase, assumptions, confirm before execute.",
-      "bytes": 6005,
-      "mtime": "2026-06-22T22:28:22.787Z",
-      "indexed_at": "2026-06-22T22:28:56.661Z",
+      "bytes": 6124,
+      "mtime": "2026-06-22T22:41:52.120Z",
+      "indexed_at": "2026-06-22T22:42:36.250Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86435,9 +86453,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 19580,
-      "mtime": "2026-06-22T22:30:30.953Z",
-      "indexed_at": "2026-06-22T22:30:39.493Z",
+      "bytes": 19637,
+      "mtime": "2026-06-22T22:42:21.442Z",
+      "indexed_at": "2026-06-22T22:42:36.250Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -91952,6 +91970,13 @@
       "bytes": 605,
       "mtime": "2026-06-21T21:39:27.985Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "tests/chair-intent-protocol.test.js",
+      "synopsis": "js — tests/chair-intent-protocol.test.js.",
+      "bytes": 1227,
+      "mtime": "2026-06-22T22:42:13.512Z",
+      "indexed_at": "2026-06-22T22:42:36.250Z"
     },
     {
       "path": "tests/chair-truth-gate.test.js",

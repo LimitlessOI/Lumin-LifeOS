@@ -19,15 +19,14 @@ import { wrapChairHumanSummary } from './founder-communication-format.js';
 import { enforceChairTruthExit } from './chair-truth-gate.js';
 import { expandFounderBuildTask, isFounderShipOrUsabilityIntent, resolveExplicitChairChannel } from './founder-chair-intent.js';
 import {
-  assessFounderBuildClarity,
-  formatClarifySummary,
-  isFounderConfirmIntent,
-} from './founder-intent-clarify.js';
-import {
   assessGovernanceClarity,
-  formatGovernanceClarifySummary,
   isGovernanceOrSsotIntent,
 } from './founder-governance-clarify.js';
+import {
+  assessChairIntentUnderstanding,
+  formatChairIntentClarifySummary,
+  CHAIR_INTENT_PROTOCOL,
+} from './chair-intent-protocol.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXECUTE_MISSION = path.join(REPO_ROOT, 'builderos-reboot/scripts/execute-mission.mjs');
@@ -100,6 +99,44 @@ export function classifyChairIntent(ctx = {}) {
   return 'point_b';
 }
 
+export function isChairActionableTurn(text = '', { shouldDisplayOnly = false } = {}) {
+  if (shouldDisplayOnly) return false;
+  if (isPureCounselQuestion(text)) return false;
+  if (isRepairContinuationIntent(text)) return false;
+  return isBuildRequest(text)
+    || isFounderShipOrUsabilityIntent(text)
+    || isGovernanceOrSsotIntent(text)
+    || isMissionPipelineIntent(text)
+    || isBlueprintExecuteIntent(text)
+    || isExplicitExecuteCommand(text);
+}
+
+function chairIntentClarifyResponse(ctx, understanding, summary) {
+  const truth = finalizeTruth({
+    ok: true,
+    pass_fail: 'CLARIFY',
+    command_truth: 'NO_COMMAND_RAN',
+    receipt_truth: 'INTENT_NOT_YET_UNDERSTOOD',
+    action: 'intent_clarify',
+    chair_intent_protocol: CHAIR_INTENT_PROTOCOL.version,
+    intent: understanding,
+    human_summary_technical: summary,
+    done_synopsis: 'Chair is asking until your intent is clear — then it executes.',
+    next_synopsis: 'Answer the questions or confirm A/B/C — Point B is what YOU want, not process theater.',
+    next_why: CHAIR_INTENT_PROTOCOL.tools_not_destination,
+  }, 'intent_clarify');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('intent_clarify', {
+      ...truth,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+    }),
+  };
+}
+
 export function modelRoutingForChannel(channel) {
   switch (channel) {
     case 'display':
@@ -166,34 +203,31 @@ export async function runLuminChairTurn(ctx, deps) {
     auth_mode,
     user_role,
     confirmIntent,
+    shouldDisplayOnly,
   } = ctx;
 
-  const skipGovernanceClarify = force || confirmIntent;
-  if (!skipGovernanceClarify && isGovernanceOrSsotIntent(cleanedInput)) {
-    const gov = assessGovernanceClarity(cleanedInput);
-    const summary = formatGovernanceClarifySummary(gov);
-    const truth = finalizeTruth({
-      ok: true,
-      pass_fail: 'CLARIFY',
-      command_truth: 'NO_COMMAND_RAN',
-      receipt_truth: 'GOVERNANCE_LAYER_UNCONFIRMED',
-      action: 'governance_clarify',
-      governance: gov,
-      human_summary_technical: summary,
-      done_synopsis: 'Governance / SSOT / protocol — pick the right layer before anything runs.',
-      next_synopsis: 'Reply confirm A–E for product build, change receipt, gate-change council, NSSOT amendment, or queue.',
-      next_why: 'Law changes, code changes, and queue changes use different paths — mixing them is how we lied before.',
-    }, 'governance_clarify');
-    return {
-      statusCode: 200,
-      body: chairEnvelope('governance_clarify', {
-        ...truth,
-        intake_normalized: intakeNormalized,
-        source_mode: sourceMode,
-        auth_mode,
-        user_role,
-      }),
-    };
+  const skipIntentGate = force || confirmIntent;
+
+  if (!skipIntentGate && isChairActionableTurn(cleanedInput, { shouldDisplayOnly })) {
+    let expandedTask = cleanedInput;
+    if (isBuildRequest(cleanedInput) || isRepairContinuationIntent(cleanedInput)) {
+      expandedTask = await deps.resolveBuildTaskForFounder(ctx.req, cleanedInput);
+    }
+    const understanding = assessChairIntentUnderstanding(cleanedInput, {
+      expandedTask,
+      pointBTarget: loadPointBTarget(),
+      includeBuild: isBuildRequest(cleanedInput) || isFounderShipOrUsabilityIntent(cleanedInput),
+      includeGovernance: isGovernanceOrSsotIntent(cleanedInput),
+      includeMissionPipeline: isMissionPipelineIntent(cleanedInput),
+    });
+    if (!understanding.intent_understood) {
+      const summary = formatChairIntentClarifySummary(understanding);
+      return chairIntentClarifyResponse(
+        { intakeNormalized, sourceMode, auth_mode, user_role },
+        understanding,
+        summary,
+      );
+    }
   }
 
   const channel = classifyChairIntent(ctx);
@@ -331,35 +365,6 @@ export async function runLuminChairTurn(ctx, deps) {
         return { statusCode: 503, body: chairEnvelope(channel, truth) };
       }
       const buildTask = await deps.resolveBuildTaskForFounder(ctx.req, cleanedInput);
-      const skipClarify = ctx.force || ctx.confirmIntent || isRepairContinuationIntent(cleanedInput);
-      if (!skipClarify) {
-        const clarity = assessFounderBuildClarity(cleanedInput, buildTask);
-        if (clarity.needs_clarify) {
-          const summary = formatClarifySummary(clarity);
-          const truth = finalizeTruth({
-            ok: true,
-            pass_fail: 'CLARIFY',
-            command_truth: 'NO_COMMAND_RAN',
-            receipt_truth: 'AWAITING_FOUNDER_CONFIRM',
-            action: 'clarify',
-            clarify: clarity,
-            human_summary_technical: summary,
-            done_synopsis: 'Need your confirmation before any code runs.',
-            next_synopsis: 'Reply A/B/C or rewrite the ask, then say confirm.',
-            next_why: 'Stops wrong file, receipt scan, or build when you meant something else.',
-          }, 'clarify');
-          return {
-            statusCode: 200,
-            body: chairEnvelope('clarify', {
-              ...truth,
-              intake_normalized: intakeNormalized,
-              source_mode: sourceMode,
-              auth_mode,
-              user_role,
-            }),
-          };
-        }
-      }
       if (ctx.useAsync) {
         const jobId = deps.startFounderBuildJob({
           task: buildTask,

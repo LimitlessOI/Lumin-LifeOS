@@ -16,7 +16,8 @@ export function isFounderConfirmIntent(text = '') {
   const t = String(text || '').trim();
   if (/^confirm\b/i.test(t)) return true;
   if (/^(yes|yep|do it|build it|proceed|go ahead|option [abc123]|#[123])\b/i.test(t)) return true;
-  return /\b(confirm intent|yes build|yes — build|approved — build)\b/i.test(t);
+  if (/\b(that'?s (what i want|right|correct)|intent understood|yes — (build|do it)|approved — build)\b/i.test(t)) return true;
+  return /\b(confirm intent|yes build|get busy|deliver it)\b/i.test(t);
 }
 
 export function paraphraseFounderAsk(text = '') {
