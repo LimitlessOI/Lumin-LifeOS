@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T22:28:56.661Z",
+  "generated_at": "2026-06-22T22:30:39.493Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12141,
+  "file_count": 12143,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40540,9 +40540,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 464335,
-      "mtime": "2026-06-22T22:28:47.378Z",
-      "indexed_at": "2026-06-22T22:28:56.661Z"
+      "bytes": 464386,
+      "mtime": "2026-06-22T22:30:33.454Z",
+      "indexed_at": "2026-06-22T22:30:39.493Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -85454,6 +85454,17 @@
       ]
     },
     {
+      "path": "services/founder-governance-clarify.js",
+      "synopsis": "Governance / SSOT / North Star asks — clarify layer + right-way routing.",
+      "bytes": 6338,
+      "mtime": "2026-06-22T22:30:17.833Z",
+      "indexed_at": "2026-06-22T22:30:39.493Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+        "on touched .js files.',"
+      ]
+    },
+    {
       "path": "services/founder-intake-gate.js",
       "synopsis": "Founder execute spine — Action Inbox capture + BPB intake gate before build/terminal.",
       "bytes": 2925,
@@ -86424,9 +86435,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 18287,
-      "mtime": "2026-06-22T22:28:36.442Z",
-      "indexed_at": "2026-06-22T22:28:56.661Z",
+      "bytes": 19580,
+      "mtime": "2026-06-22T22:30:30.953Z",
+      "indexed_at": "2026-06-22T22:30:39.493Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -92072,6 +92083,13 @@
       "ssot": [
         "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md"
       ]
+    },
+    {
+      "path": "tests/founder-governance-clarify.test.js",
+      "synopsis": "js — tests/founder-governance-clarify.test.js.",
+      "bytes": 1046,
+      "mtime": "2026-06-22T22:30:31.803Z",
+      "indexed_at": "2026-06-22T22:30:39.493Z"
     },
     {
       "path": "tests/founder-intent-clarify.test.js",

@@ -23,6 +23,11 @@ import {
   formatClarifySummary,
   isFounderConfirmIntent,
 } from './founder-intent-clarify.js';
+import {
+  assessGovernanceClarity,
+  formatGovernanceClarifySummary,
+  isGovernanceOrSsotIntent,
+} from './founder-governance-clarify.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXECUTE_MISSION = path.join(REPO_ROOT, 'builderos-reboot/scripts/execute-mission.mjs');
@@ -145,7 +150,6 @@ function finalizeTruth(truth, channel) {
 }
 
 export async function runLuminChairTurn(ctx, deps) {
-  const channel = classifyChairIntent(ctx);
   const {
     cleanedInput,
     normalizedText,
@@ -161,7 +165,38 @@ export async function runLuminChairTurn(ctx, deps) {
     inboxGate,
     auth_mode,
     user_role,
+    confirmIntent,
   } = ctx;
+
+  const skipGovernanceClarify = force || confirmIntent;
+  if (!skipGovernanceClarify && isGovernanceOrSsotIntent(cleanedInput)) {
+    const gov = assessGovernanceClarity(cleanedInput);
+    const summary = formatGovernanceClarifySummary(gov);
+    const truth = finalizeTruth({
+      ok: true,
+      pass_fail: 'CLARIFY',
+      command_truth: 'NO_COMMAND_RAN',
+      receipt_truth: 'GOVERNANCE_LAYER_UNCONFIRMED',
+      action: 'governance_clarify',
+      governance: gov,
+      human_summary_technical: summary,
+      done_synopsis: 'Governance / SSOT / protocol — pick the right layer before anything runs.',
+      next_synopsis: 'Reply confirm A–E for product build, change receipt, gate-change council, NSSOT amendment, or queue.',
+      next_why: 'Law changes, code changes, and queue changes use different paths — mixing them is how we lied before.',
+    }, 'governance_clarify');
+    return {
+      statusCode: 200,
+      body: chairEnvelope('governance_clarify', {
+        ...truth,
+        intake_normalized: intakeNormalized,
+        source_mode: sourceMode,
+        auth_mode,
+        user_role,
+      }),
+    };
+  }
+
+  const channel = classifyChairIntent(ctx);
 
   switch (channel) {
     case 'display': {
