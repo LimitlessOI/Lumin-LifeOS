@@ -218,7 +218,10 @@ export function registerPublicRoutes(app, {
       return res.redirect(302, '/lifeos?direct_system=1');
     }
     if (!isFounderInterfaceAuthenticated(req)) {
-      const next = encodeURIComponent('/lifeos?direct_system=1');
+      const qs = new URLSearchParams(req.query || {});
+      qs.set('direct_system', '1');
+      if (String(req.query?.lumin_voice || '').trim() === '1') qs.set('lumin_voice', '1');
+      const next = encodeURIComponent(`/lifeos?${qs.toString()}`);
       return res.redirect(302, `/overlay/lifeos-login.html?next=${next}`);
     }
     const filePath = resolveOverlayFile("lifeos-app.html", ["html"]);

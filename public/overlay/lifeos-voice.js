@@ -21,17 +21,23 @@
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
 
+  const WAKE_RE = /\b(hey[\s,]+)?(lumin|lumen|loom in|loomen)\b/i;
+  const SLEEP_RE = /\b(goodbye|bye|stop|cancel|quiet|sleep)\s+(lumin|lumen)\b|\bstop listening\b/i;
+
   const state = {
     alwaysOn:     false,
+    wakeWordMode: false,
+    conversationActive: false,
     recognizer:   null,
-    onTranscript: null,   // callback for always-on transcripts
+    onTranscript: null,
+    onWake:       null,
+    onSleep:      null,
     _injectDone:  false,
-    _wakeLock:    null,   // WakeLockSentinel
-    _hourlyTimer: null,   // setInterval handle for hourly restarts
-    _startTime:   null,   // when the current always-on session started
-    /** True while user wants always-on but we paused because document is hidden */
+    _wakeLock:    null,
+    _hourlyTimer: null,
+    _silenceTimer: null,
+    _startTime:   null,
     suspendedHidden: false,
-    /** null = auto (no wake lock on coarse pointer / phones), 'never' | 'always' */
     wakeLockPreference: null,
   };
 
@@ -118,19 +124,33 @@
      * Visual: shell's global mic button pulses red.
      */
     toggleAlwaysListen(onTranscript) {
+      return LuminVoice.toggleWakeWordListen({ onTranscript, wakeWordMode: false });
+    },
+
+    /**
+     * Alexa-style: always listening for "Lumin" / "Hey Lumin", then one-on-one until silence or goodbye.
+     * @param {{ onTranscript?: Function, onWake?: Function, onSleep?: Function, wakeWordMode?: boolean }} opts
+     */
+    toggleWakeWordListen(opts = {}) {
       if (!SR) { _noSupport(); return false; }
 
       if (state.alwaysOn) {
         _stopAlwaysOn();
         return false;
-      } else {
-        state.onTranscript = onTranscript;
-        _startAlwaysOn();
-        return true;
       }
+
+      state.onTranscript = typeof opts.onTranscript === 'function' ? opts.onTranscript : null;
+      state.onWake = typeof opts.onWake === 'function' ? opts.onWake : null;
+      state.onSleep = typeof opts.onSleep === 'function' ? opts.onSleep : null;
+      state.wakeWordMode = opts.wakeWordMode !== false;
+      state.conversationActive = false;
+      _startAlwaysOn();
+      return true;
     },
 
     isAlwaysOn() { return state.alwaysOn; },
+    isConversationActive() { return state.conversationActive; },
+    isWakeWordMode() { return state.wakeWordMode; },
 
     /**
      * Auto-inject mic icons next to every input/textarea with data-voice="true".
@@ -195,6 +215,71 @@
     _setGlobalMicState(!state.suspendedHidden);
   }
 
+  function stripWakePrefix(text) {
+    return String(text || '')
+      .replace(/^\s*(hey[\s,]+)?(lumin|lumen|loom in|loomen)[\s,!:.-]*/i, '')
+      .trim();
+  }
+
+  function _clearSilenceTimer() {
+    clearTimeout(state._silenceTimer);
+    state._silenceTimer = null;
+  }
+
+  function _armSilenceTimer() {
+    if (!state.wakeWordMode || !state.conversationActive) return;
+    _clearSilenceTimer();
+    state._silenceTimer = setTimeout(() => {
+      if (!state.conversationActive) return;
+      state.conversationActive = false;
+      document.dispatchEvent(new CustomEvent('lumin-sleep', { detail: { reason: 'silence' } }));
+      if (state.onSleep) state.onSleep({ reason: 'silence' });
+    }, 10000);
+  }
+
+  function _enterConversation(fromWakeText) {
+    state.conversationActive = true;
+    document.dispatchEvent(new CustomEvent('lumin-wake', { detail: { transcript: fromWakeText || '' } }));
+    if (state.onWake) state.onWake({ transcript: fromWakeText || '' });
+    _armSilenceTimer();
+  }
+
+  function _exitConversation(reason) {
+    state.conversationActive = false;
+    _clearSilenceTimer();
+    document.dispatchEvent(new CustomEvent('lumin-sleep', { detail: { reason: reason || 'manual' } }));
+    if (state.onSleep) state.onSleep({ reason: reason || 'manual' });
+  }
+
+  function _handleWakeWordFinal(finalText) {
+    const raw = String(finalText || '').trim();
+    if (!raw) return;
+
+    if (state.wakeWordMode && SLEEP_RE.test(raw) && state.conversationActive) {
+      _exitConversation('goodbye');
+      return;
+    }
+
+    if (state.wakeWordMode && !state.conversationActive) {
+      if (!WAKE_RE.test(raw)) return;
+      _enterConversation(raw);
+      const rest = stripWakePrefix(raw);
+      if (rest && state.onTranscript) state.onTranscript(rest, { wake: true, voice: true });
+      return;
+    }
+
+    if (state.wakeWordMode && state.conversationActive) {
+      _armSilenceTimer();
+      const payload = stripWakePrefix(raw);
+      if (payload && state.onTranscript) state.onTranscript(payload, { wake: false, voice: true });
+      return;
+    }
+
+    if (finalText.trim() && state.onTranscript) {
+      state.onTranscript(finalText.trim(), { wake: false, voice: true });
+    }
+  }
+
   function _spawnRecognizer() {
     const rec = new SR();
     rec.lang = 'en-US';
@@ -207,11 +292,12 @@
         if (e.results[i].isFinal) final += e.results[i][0].transcript + ' ';
         else interim += e.results[i][0].transcript;
       }
-      if (final.trim() && state.onTranscript) {
-        state.onTranscript(final.trim(), false);
+      if (final.trim()) {
+        _handleWakeWordFinal(final.trim());
       }
       if (interim) {
-        document.dispatchEvent(new CustomEvent('lumin-voice-interim', { detail: interim }));
+        const show = state.wakeWordMode && state.conversationActive ? stripWakePrefix(interim) : interim;
+        document.dispatchEvent(new CustomEvent('lumin-voice-interim', { detail: show }));
       }
     };
 
@@ -241,7 +327,10 @@
 
   function _stopAlwaysOn() {
     state.alwaysOn = false;
+    state.conversationActive = false;
+    state.wakeWordMode = false;
     state.suspendedHidden = false;
+    _clearSilenceTimer();
     clearInterval(state._hourlyTimer);
     state._hourlyTimer = null;
     try { state.recognizer?.stop(); } catch {}

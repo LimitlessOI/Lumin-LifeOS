@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T22:05:26.382Z",
+  "generated_at": "2026-06-22T22:14:41.143Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12136,
   "files": [
@@ -40437,9 +40437,9 @@
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
       "synopsis": "AMENDMENT 12 — Command & Control Center",
-      "bytes": 98219,
-      "mtime": "2026-06-21T21:37:58.586Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 98427,
+      "mtime": "2026-06-22T22:14:35.098Z",
+      "indexed_at": "2026-06-22T22:14:41.143Z"
     },
     {
       "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
@@ -40540,9 +40540,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 463159,
-      "mtime": "2026-06-22T21:57:17.495Z",
-      "indexed_at": "2026-06-22T21:57:18.848Z"
+      "bytes": 463705,
+      "mtime": "2026-06-22T22:14:24.411Z",
+      "indexed_at": "2026-06-22T22:14:41.143Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -60548,9 +60548,9 @@
     {
       "path": "docs/VOICE_RAIL_HISTORY_ONLY.md",
       "synopsis": "Voice Rail — History Only (Failed Program)",
-      "bytes": 891,
-      "mtime": "2026-06-21T21:37:56.698Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 1310,
+      "mtime": "2026-06-22T22:14:15.319Z",
+      "indexed_at": "2026-06-22T22:14:41.143Z"
     },
     {
       "path": "docs/YOUR_ADVANTAGE_FREE_OLLAMA.md",
@@ -69119,9 +69119,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 114920,
-      "mtime": "2026-06-22T22:05:13.274Z",
-      "indexed_at": "2026-06-22T22:05:26.382Z"
+      "bytes": 118227,
+      "mtime": "2026-06-22T22:14:20.830Z",
+      "indexed_at": "2026-06-22T22:14:41.143Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -69468,9 +69468,9 @@
     {
       "path": "public/overlay/lifeos-voice.js",
       "synopsis": "lifeos-voice.js — Global voice-to-text utility for LifeOS overlays",
-      "bytes": 12378,
-      "mtime": "2026-06-21T21:39:02.073Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 15494,
+      "mtime": "2026-06-22T22:13:43.920Z",
+      "indexed_at": "2026-06-22T22:14:41.143Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -70860,9 +70860,9 @@
     {
       "path": "routes/public-routes.js",
       "synopsis": "Public HTML entry routes for operator-facing overlays and portals.",
-      "bytes": 10605,
-      "mtime": "2026-06-21T21:39:04.808Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 10788,
+      "mtime": "2026-06-22T22:14:16.040Z",
+      "indexed_at": "2026-06-22T22:14:41.143Z",
       "ssot": [
         "docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
       ]

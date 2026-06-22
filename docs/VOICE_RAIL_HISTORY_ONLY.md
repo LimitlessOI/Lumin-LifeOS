@@ -2,9 +2,16 @@
 
 # Voice Rail — History Only (Failed Program)
 
-Status: **RETIRED / HIST_ONLY**
+Status: **RETIRED / HIST_ONLY** (product surface)
 
-Voice Rail is retained for historical analysis and lessons learned. It is **not** an active BuilderOS execution interface.
+Voice Rail as a **standalone founder program** is retired. Legacy overlay URLs redirect to **`/lifeos?direct_system=1`**.
+
+**What remains (intentionally):**
+- **`/api/v1/lifeos/voice-rail/stt` + `/tts`** — server STT/TTS utilities
+- **`public/overlay/lifeos-voice.js`** — browser mic + **"Lumin" wake word** → **Lumin Chair** only (`founder-interface/message` → `lumin-chair-orchestrator.js`)
+
+**What is gone:**
+- Voice Rail overlay UI, capability-proof npm scripts, command→builder side doors outside Lumin Chair
 
 ## Enforcement
 

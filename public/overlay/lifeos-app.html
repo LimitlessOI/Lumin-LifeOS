@@ -1429,7 +1429,7 @@
     .lumin-send-btn:disabled { opacity: 0.4; cursor: default; }
   </style>
   <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
-  <script src="/overlay/lifeos-voice.js"></script>
+  <script src="/overlay/lifeos-voice.js?v=20260622"></script>
   <script src="/overlay/lifeos-ambient-sense.js"></script>
   <script src="/shared/lifeos-system-reply.js?v=20260620e"></script>
   <script src="/shared/lifeos-founder-bubble-proof.js?v=20260621a"></script>
@@ -1599,7 +1599,7 @@
       <span class="topbar-icon" id="topbar-icon">📊</span>
       <span class="topbar-title" id="topbar-title">Dashboard</span>
       <div class="topbar-actions">
-        <button class="topbar-btn" id="voice-btn" onclick="toggleAlwaysListen()" title="Toggle always-on voice">🎙</button>
+        <button class="topbar-btn" id="voice-btn" onclick="toggleLuminWakeListen()" title="Say &quot;Lumin&quot; to talk to the Chair">🎙</button>
         <button class="topbar-btn" onclick="toggleLuminDrawer()" title="Talk to Lumin" style="font-size:18px;">◎</button>
         <button class="topbar-btn" onclick="openQuickCapture()" title="Quick capture">✦</button>
         <button class="topbar-btn" id="theme-toggle-topbar" onclick="cycleTheme()" title="Toggle theme">☀︎</button>
@@ -1614,7 +1614,7 @@
         <div class="mobile-logo-icon">◎</div>
         <span class="mobile-section-name" id="mobile-section-name">Dashboard</span>
       </div>
-      <button class="topbar-btn" id="voice-btn-mob" onclick="toggleAlwaysListen()" title="Voice" style="min-width:44px;min-height:44px;">🎙</button>
+      <button class="topbar-btn" id="voice-btn-mob" onclick="toggleLuminWakeListen()" title="Say Lumin" style="min-width:44px;min-height:44px;">🎙</button>
       <button class="topbar-btn" onclick="toggleLuminDrawer()" title="Lumin" style="min-width:44px;min-height:44px;font-size:18px;">◎</button>
       <button class="topbar-btn" id="theme-toggle-mobile" onclick="cycleTheme()" title="Toggle theme" style="min-width:44px;min-height:44px;">☀︎</button>
       <button class="topbar-btn" onclick="openSettings()" title="Settings" style="min-width:44px;min-height:44px;">⚙</button>
@@ -2021,6 +2021,7 @@ function applyShellLayoutFromQuery() {
   // URL shortcut — canonical: ?page=lifeos-dashboard.html&layout=auto
   const launchPage = new URLSearchParams(location.search).get('page');
   const directSystemLaunch = new URLSearchParams(location.search).get('direct_system');
+  const luminVoiceLaunch = new URLSearchParams(location.search).get('lumin_voice');
   if (launchPage && PAGE_META[launchPage]) {
     loadPage(launchPage);
     const nav = document.querySelector(`[data-page="${launchPage}"]`);
@@ -2038,6 +2039,9 @@ function applyShellLayoutFromQuery() {
   }
   if (directSystemLaunch === '1') {
     setTimeout(() => openLuminDrawer(), 150);
+  }
+  if (luminVoiceLaunch !== '0' && (directSystemLaunch === '1' || luminVoiceLaunch === '1')) {
+    setTimeout(() => initLuminWakeWordListen(), 800);
   }
   initFeatureHelp();
 
@@ -2542,6 +2546,8 @@ const luminState = {
   dock: 'right',
   pinned: false,
   minimized: false,
+  voiceTurn: false,
+  wakeListenActive: false,
 };
 
 const LUMIN_DOCK_KEY = 'lifeos_lumin_dock_position';
@@ -2710,23 +2716,23 @@ async function pollFounderBuildJob(jobId, pollUrl) {
   return { res: { ok: false, status: 504 }, data: { pass_fail: 'FAIL', first_blocker: 'Build job timed out after 5 minutes.' } };
 }
 
-async function luminSend() {
+async function luminSend(opts = {}) {
   const input = document.getElementById('lumin-input');
-  const msg   = (input.value || '').trim();
+  const msg   = (opts.text || input.value || '').trim();
   if (!msg || luminState.sending) return;
+  const voiceTurn = opts.voice === true || luminState.voiceTurn;
+  luminState.voiceTurn = false;
   if (!USE_DIRECT_SYSTEM_CHAT && !luminState.threadId) { await luminCreateThread(); }
 
   // Remove empty state
   document.getElementById('lumin-empty')?.remove();
 
-  // Optimistic user bubble
   _appendLuminMsg('user', msg, new Date().toISOString(), true);
   input.value = '';
   luminAutoResize(input);
 
-  // Thinking indicator
   const thinkId = 'lumin-think-' + Date.now();
-  _appendLuminMsgRaw(thinkId, 'thinking', 'Lumin Chair is working…');
+  _appendLuminMsgRaw(thinkId, 'thinking', voiceTurn ? 'Lumin Chair is listening…' : 'Lumin Chair is working…');
 
   luminState.sending = true;
   document.getElementById('lumin-send-btn').disabled = true;
@@ -2739,10 +2745,10 @@ async function luminSend() {
           text: msg,
           action: 'auto',
           stage: 'system',
-          source_mode: 'text',
+          source_mode: voiceTurn ? 'voice' : 'text',
           conversational_mode: true,
           dictate_then_send: false,
-          async: true,
+          async: voiceTurn ? false : true,
         }
       : { user: USER || 'adam', message: msg };
     const endpoint = USE_DIRECT_SYSTEM_CHAT
@@ -2790,11 +2796,13 @@ async function luminSend() {
       let reply = formatDirectSystemReply(data);
       reply = appendClientBubbleProof(reply, data);
       _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
+      if (voiceTurn) speakLuminReply(reply);
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');
       }
     } else if (data.ok && data.assistant_message) {
       _appendLuminMsg('assistant', data.assistant_message.content, data.assistant_message.created_at, true);
+      if (voiceTurn) speakLuminReply(data.assistant_message.content);
       // Badge on FAB if drawer is closed
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');
@@ -2808,7 +2816,12 @@ async function luminSend() {
   } finally {
     luminState.sending = false;
     document.getElementById('lumin-send-btn').disabled = false;
-    document.getElementById('lumin-status-text').textContent = 'Ready';
+    const statusEl = document.getElementById('lumin-status-text');
+    if (statusEl) {
+      statusEl.textContent = luminState.wakeListenActive
+        ? (LuminVoice?.isConversationActive?.() ? 'Lumin is with you' : 'Say "Lumin" when ready')
+        : 'Ready';
+    }
   }
 }
 
@@ -2900,25 +2913,98 @@ function luminVoiceInput() {
   LuminVoice.startForInput(input, micBtn);
 }
 
-/* ── Global always-on voice toggle ─────────────────────────── */
-function toggleAlwaysListen() {
-  if (!window.LuminVoice) { toast('Voice input not available in this browser.'); return; }
-  const active = LuminVoice.toggleAlwaysListen((transcript) => {
-    // Route transcript to Lumin drawer
-    if (!luminState.open) openLuminDrawer();
-    const input = document.getElementById('lumin-input');
+/* Voice — wake word "Lumin" → Lumin Chair only (Voice Rail product surface retired) */
+function routeVoiceToLuminChair(transcript, meta = {}) {
+  if (!transcript || luminState.sending) return;
+  if (!luminState.open) openLuminDrawer();
+  const input = document.getElementById('lumin-input');
+  if (input) {
     input.value = transcript;
     luminAutoResize(input);
-    // Auto-send after a short pause
-    clearTimeout(toggleAlwaysListen._sendTimer);
-    toggleAlwaysListen._sendTimer = setTimeout(() => {
-      if (input.value.trim()) luminSend();
-    }, 800);
-  });
-  toast(active ? '🎙 Listening while LifeOS is open — pauses in background to save battery' : 'Voice off');
+  }
+  document.getElementById('lumin-status-text').textContent = meta.wake
+    ? 'Lumin is with you — speak'
+    : 'Sending to Lumin Chair…';
+  luminState.voiceTurn = true;
+  luminSend({ text: transcript, voice: true });
 }
 
-/* Listen for interim voice (live typing preview) */
+function speakLuminReply(text) {
+  if (!window.speechSynthesis || !text) return;
+  const plain = String(text)
+    .replace(/\b(PASS|FAIL|COMMAND_RAN|NO_COMMAND_RAN)\b/g, '')
+    .replace(/— Lumin Chair ·[^\n]*/g, '')
+    .trim()
+    .slice(0, 600);
+  if (!plain) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(plain);
+    u.rate = 1;
+    u.lang = 'en-US';
+    window.speechSynthesis.speak(u);
+  } catch { /* non-fatal */ }
+}
+
+function toggleLuminWakeListen() {
+  if (!window.LuminVoice) { toast('Voice requires Chrome or Safari.'); return; }
+  const active = LuminVoice.toggleWakeWordListen({
+    onTranscript: (text) => routeVoiceToLuminChair(text, { voice: true }),
+    onWake: () => {
+      if (!luminState.open) openLuminDrawer();
+      document.getElementById('lumin-status-text').textContent = 'Say your question…';
+      toast('Lumin is listening');
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.frequency.value = 880;
+        g.gain.value = 0.04;
+        o.start(); o.stop(ctx.currentTime + 0.12);
+      } catch { /* optional chime */ }
+    },
+    onSleep: () => {
+      document.getElementById('lumin-status-text').textContent = 'Say "Lumin" when ready';
+      toast('Lumin paused — say "Lumin" again');
+    },
+  });
+  luminState.wakeListenActive = active;
+  toast(active ? '🎙 Say "Lumin" or "Hey Lumin" — Chair only, no theater' : 'Wake word off');
+}
+
+function initLuminWakeWordListen() {
+  if (!window.LuminVoice || luminState.wakeListenActive) return;
+  if (localStorage.getItem('lifeos_lumin_wake') === '0') return;
+  const started = LuminVoice.toggleWakeWordListen({
+    onTranscript: (text) => routeVoiceToLuminChair(text, { voice: true }),
+    onWake: () => {
+      if (!luminState.open) openLuminDrawer();
+      document.getElementById('lumin-status-text').textContent = 'Say your question…';
+    },
+    onSleep: () => {
+      document.getElementById('lumin-status-text').textContent = 'Say "Lumin" when ready';
+    },
+  });
+  luminState.wakeListenActive = !!started;
+  if (started) {
+    document.getElementById('lumin-status-text').textContent = 'Say "Lumin" when ready';
+    toast('Say "Lumin" to talk to the Chair');
+  }
+}
+
+function toggleAlwaysListen() { toggleLuminWakeListen(); }
+
+document.addEventListener('lumin-wake', () => {
+  if (!luminState.open) openLuminDrawer();
+});
+document.addEventListener('lumin-sleep', () => {
+  const el = document.getElementById('lumin-interim');
+  if (el) el.textContent = '';
+});
+document.addEventListener('lumin-voice-error', () => {
+  toast('Microphone permission needed — tap 🎙 to enable');
+});
 document.addEventListener('lumin-voice-interim', (e) => {
   const el = document.getElementById('lumin-interim');
   if (el) {

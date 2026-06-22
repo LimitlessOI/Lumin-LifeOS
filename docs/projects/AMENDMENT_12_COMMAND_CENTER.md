@@ -16,7 +16,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-06-20 — legacy overlay HTML bypasses now redirected and `/lifeos` hard-funnels to canonical direct-system launch |
+| **Last Updated** | 2026-06-22 — `/lifeos` login handoff preserves `lumin_voice=1` for wake-word launch |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -296,6 +296,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-06-22 | **`routes/public-routes.js`** — `/lifeos` login redirect preserves `lumin_voice=1` in `next=` so post-auth launch auto-enables Lumin wake word. | Adam: one link to open LifeOS + say "Lumin" to Chair. | AM12 + AM21 | deploy |
 | 2026-05-24 | **`public/shared/lifeos-voice-chat.js` — laptop mic Auto routing:** `scoreAudioInput` / `pickPreferredAudioInputDevice` / `resolveAutoAudioDeviceId` prefer MacBook built-in; block Continuity/iPhone; resolve device id before opening stream; `getActiveMicLabel()`. Shared by Voice Rail + Command Center surfaces. | Adam: laptop browser used phone mic via Apple Continuity | AM12 | pending deploy |
 | 2026-06-20 | **Final route-layer centralization hardening:** `routes/public-routes.js` now redirects direct legacy overlay HTML entrypoints (`/overlay/lifeos-voice-rail-v1.html`, `/overlay/lifeos-command-center.html`, `/overlay/lifeos-founder-interface.html`, `/overlay/c2-mission-dashboard.html`) to `/lifeos?direct_system=1`, and `/lifeos` now hard-funnels to `?direct_system=1` before auth guard. | Independent audit reported residual `/overlay/*` bypasses and non-canonical `/lifeos` path. This closes those route-layer bypasses for one-surface direct-system launch. | AM12 + AM21 consolidation follow-through | pending deploy |
 | 2026-06-20 | **Legacy surface deactivation follow-through:** `routes/public-routes.js` now redirects `/command-center`, `/lifeos-command-center`, `/mission-dashboard`, `/lifeos-founder-interface`, `/c2-terminal-bridge`, and `/voice-rail` to canonical `/lifeos?direct_system=1`. | Audit showed one-surface claim was inflated while alternate command/voice entrypoints still remained live. This closes that mismatch at public-entry route layer. | AM12 + AM21 consolidation | pending deploy |
