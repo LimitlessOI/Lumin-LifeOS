@@ -19,7 +19,7 @@
         "has_outcome": true,
         "has_success_test": true,
         "has_acceptance": true,
-        "bytes": 832
+        "bytes": 893
       }
     },
     "intent_coverage": {

@@ -10,6 +10,7 @@ import {
   missionDir as layoutMissionDir,
   repoRootFromScriptMeta,
 } from './factory-repo-layout.mjs';
+import { shouldBlockLegacyWrite } from './blueprint-write-policy.mjs';
 
 export const REPO_ROOT = repoRootFromScriptMeta(import.meta.url);
 export const FACTORY_LAYOUT = detectFactoryLayout(REPO_ROOT);
@@ -122,7 +123,7 @@ export function writeFileExactStep(step) {
     };
   }
 
-  if (isLegacyWriteTarget(step.target_file, FACTORY_LAYOUT)) {
+  if (isLegacyWriteTarget(step.target_file, FACTORY_LAYOUT) && shouldBlockLegacyWrite(step, FACTORY_LAYOUT)) {
     return {
       ok: false,
       status: 'BLOCKED_RETURN_TO_BPB',

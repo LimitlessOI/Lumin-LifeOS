@@ -236,6 +236,7 @@ export function simulateBlueprintSteps(blueprint, { missionFolder, trustArcPipel
     steps,
     all_gaps: stepsOut,
     summary: {
+      evaluated_steps: blueprintSteps.length,
       total_gaps: totalGaps,
       blocking_gaps: blockingGaps,
       clear_to_build: blockingGaps === 0,

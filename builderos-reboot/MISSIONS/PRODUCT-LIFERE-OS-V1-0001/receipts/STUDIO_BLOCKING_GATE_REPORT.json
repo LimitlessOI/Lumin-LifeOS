@@ -1,0 +1,13 @@
+{
+  "schema": "studio_blocking_gate_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "pass": false,
+  "in_scope": true,
+  "verdict": "STUDIO_CONCERNS",
+  "violations": [
+    "studio:STUDIO_CONCERNS",
+    "studio:friction:Adam cannot trust staging visibility",
+    "studio:friction:Trust collapse at Alpha"
+  ],
+  "enforcement": "HARD"
+}

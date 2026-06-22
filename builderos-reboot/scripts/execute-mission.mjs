@@ -25,6 +25,9 @@ import {
   sortStepsByDependencies,
   writeFileExactStep,
 } from './mission-lib.mjs';
+import { runVerification, appendStepReceipt } from '../../factory-staging/factory-core/sentry/run-verification.js';
+import { executeStep } from '../../factory-staging/factory-core/builder/execute-step.js';
+import { runBpbIntakeGate } from '../../factory-staging/factory-core/bpb/intake-gate.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = REPO_ROOT;
@@ -44,6 +47,14 @@ if (!missionId) {
 
 const blueprint = loadBlueprint(missionId);
 const missionFolder = missionDir(missionId);
+
+const intakeGate = runBpbIntakeGate(missionId, { skip_if_missing: true });
+if (intakeGate && !intakeGate.ok && intakeGate.status !== 'SKIP') {
+  console.error('BLOCKED — BPB intake gate failed:');
+  for (const v of intakeGate.violations || []) console.error(`  - ${v}`);
+  process.exit(1);
+}
+
 const builderEntry = evaluateBuilderEntryGate(missionFolder);
 if (!builderEntry.pass) {
   console.error('BLOCKED_RETURN_TO_ARC_OR_IDC — builder entry gate failed:');
@@ -106,9 +117,28 @@ for (const step of steps) {
     continue;
   }
 
+  const stepContext = executeStep(step, { mission_id: missionId, blueprint_id: blueprint.blueprint_id });
   const result = writeFileExactStep(step);
+  const builderResult = {
+    status: result.ok ? 'DONE' : 'FAILED_VERIFICATION',
+    summary: result.summary || result.gap_type || 'step_failed',
+    target_file: result.target_file,
+  };
+  const sentry = runVerification(step, builderResult, { mission_id: missionId });
+  appendStepReceipt({
+    mission_id: missionId,
+    step_id: step.step_id,
+    builder: stepContext,
+    sentry,
+    builder_result: builderResult,
+  });
+
   if (!result.ok) {
-    console.error('FAILED', result);
+    console.error('FAILED', result, sentry);
+    process.exit(1);
+  }
+  if (sentry.implementation_status !== 'PASS') {
+    console.error('SENTRY_FAIL', sentry);
     process.exit(1);
   }
   stepResults.push({
@@ -163,10 +193,24 @@ const runReceipt = {
   acceptance_exit_code: acceptance.status ?? 1,
 };
 
-const pointB = evaluatePointBGate(missionDir(missionId), { blueprint });
 const receiptPath = path.join(missionDir(missionId), 'BUILDER_RUN_RECEIPT.json');
 const receiptDir = path.join(missionDir(missionId), 'receipts');
 fs.mkdirSync(receiptDir, { recursive: true });
+const acceptanceOk = (acceptance.status ?? 1) === 0;
+runReceipt.verdict = acceptanceOk ? 'TECHNICAL_PASS' : 'FAIL';
+
+appendMissionLedger({
+  mission_id: missionId,
+  event: 'builder_execute_complete',
+  runner: 'execute-mission.mjs',
+  blueprint_id: blueprint.blueprint_id || missionId,
+  latency_ms: stepResults.length * 1000,
+  verdict: runReceipt.verdict,
+});
+
+fs.writeFileSync(receiptPath, `${JSON.stringify(runReceipt, null, 2)}\n`);
+
+const pointB = evaluatePointBGate(missionDir(missionId), { blueprint });
 fs.writeFileSync(path.join(receiptDir, 'POINT_B_GATE_REPORT.json'), `${JSON.stringify(pointB, null, 2)}\n`);
 
 runReceipt.point_b = {
@@ -178,15 +222,13 @@ runReceipt.point_b = {
   awaiting_founder_alpha: pointB.machine_path_complete && !pointB.alpha_reached,
   violations: pointB.violations,
 };
-const acceptanceOk = (acceptance.status ?? 1) === 0;
+
 if (acceptanceOk && pointB.alpha_reached) {
   runReceipt.verdict = 'PASS';
 } else if (acceptanceOk && pointB.machine_path_complete) {
   runReceipt.verdict = 'TECHNICAL_PASS';
 } else if (acceptanceOk && pointB.proof_lap_only && pointB.infrastructure_only) {
   runReceipt.verdict = 'INFRA_PASS';
-} else if (acceptanceOk) {
-  runReceipt.verdict = 'TECHNICAL_PASS';
 } else {
   runReceipt.verdict = 'FAIL';
 }
@@ -194,15 +236,6 @@ if (acceptanceOk && pointB.alpha_reached) {
 runReceipt.machine_path_complete = pointB.machine_path_complete;
 runReceipt.alpha_reached = pointB.alpha_reached;
 runReceipt.awaiting_founder_alpha = pointB.machine_path_complete && !pointB.alpha_reached;
-
-appendMissionLedger({
-  mission_id: missionId,
-  event: 'builder_execute_complete',
-  runner: 'execute-mission.mjs',
-  blueprint_id: blueprint.blueprint_id || missionId,
-  latency_ms: stepResults.length * 1000,
-  verdict: runReceipt.verdict,
-});
 
 scoreRealityAgainstSimulations(missionFolder);
 writeResultScoreboard(missionFolder);

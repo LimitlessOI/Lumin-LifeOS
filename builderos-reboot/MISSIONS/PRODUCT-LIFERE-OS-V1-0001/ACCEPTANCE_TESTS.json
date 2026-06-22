@@ -1,0 +1,16 @@
+[
+  {
+    "test_id": "AT-LRE-S01-1",
+    "step_id": "LRE-S01",
+    "type": "file_sha256_matches",
+    "target": "public/overlay/lifeos-lifere.html",
+    "expected_sha256": "6e9d735acd42424229bf8fb68ec334e4ba95216a201c9944b9223730cbd60a69"
+  },
+  {
+    "test_id": "AT-LRE-S02-1",
+    "step_id": "LRE-S02",
+    "type": "file_sha256_matches",
+    "target": "public/overlay/lifeos-app.html",
+    "expected_sha256": "3e9d70ba2bc90b8d9bd3813059be8c15edb4b93dacbbd1ec2f7ed541d48e5fbc"
+  }
+]

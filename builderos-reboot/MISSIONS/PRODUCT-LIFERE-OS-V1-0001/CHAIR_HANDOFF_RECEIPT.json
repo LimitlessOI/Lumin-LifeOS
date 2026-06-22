@@ -1,7 +1,7 @@
 {
   "schema": "chair_handoff_receipt_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "handoff_at": "2026-06-21T02:42:54.901Z",
+  "handoff_at": "2026-06-22T17:34:07.460Z",
   "from_stage": "development",
   "to_stage": "protected_corridor",
   "locked_by": "Chair",

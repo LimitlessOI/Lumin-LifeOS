@@ -1,19 +1,27 @@
 {
   "schema": "blueprint_roadmap_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "roadmap_id": "PRODUCT-LIFERE-OS-V1-0001-ROADMAP",
   "status": "ARC_HANDOFF",
+  "updated_at": "2026-06-22",
+  "intent_source": "FOUNDER_PACKET.md + existing BLUEPRINT.json",
+  "boundary_note": "Product mission on BP_PRIORITY queue — not meta proof lap",
+  "full_map_note": "A→Z for this product scope; P4/P5 BUILDER_READY when blueprint complete",
   "phases": [
     {
       "phase_id": "P4",
-      "name": "Builder Execution",
+      "name": "Phase P4",
       "status": "BUILDER_READY",
-      "intent": "System Builder executes ARC blueprint"
+      "intent": "Blueprint steps tagged P4",
+      "builder_outcome": "Steps marked complete in legacy blueprint — ARC re-hosts as write_file_exact",
+      "alpha_signal": "Phase P4 artifacts exist"
     },
     {
       "phase_id": "P5",
       "name": "Alpha Acceptance",
       "status": "BUILDER_READY",
-      "intent": "Acceptance command + founder usability"
+      "intent": "Acceptance command + founder usability verdict"
     }
-  ]
+  ],
+  "primary_metric": "founder_usability_pass"
 }

@@ -167,28 +167,26 @@ UI: `lifeos-decisions.html`
 
 ---
 
-## CURRENT BP — Conversation Commitments v1
+## CURRENT POINT B TARGET — LifeRE Alpha
 
-**Mission ID:** `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`  
-**Authority:** `builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/FOUNDER_PACKET.md` (outcome truth — read this first)
+**Mission ID:** `PRODUCT-LIFERE-OS-V1-0001`  
+**Authority:** `builderos-reboot/POINT_B_TARGET.json` + `builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_PACKET.md`
 
-**Priority:** Primary mission. BuilderOS is support unless it directly blocks delivery.
+**Target doctrine:** Point B is not the same thing as queue rank. The active product work queue lives in `builderos-reboot/BP_PRIORITY.json`. The current Point B lock for the foundation loop is `LifeRE Alpha`.
 
-**FOUNDER SUCCESS TEST:** Adam voluntarily uses this feature again within 48 hours of first successful use.
+**FOUNDER SUCCESS TEST:** Open `/overlay/lifeos-app.html` on the LifeRE path, complete one daily command center cycle, and confirm top-3 priorities plus nightly debrief are visible without Cursor.
 
-**Acceptance command:** `npm run lifeos:conversation-commitments:v1-acceptance`
+**Acceptance command:** `npm run lifeos:lifere-os:v1-acceptance`
 
 **PASS (both required):**
-1. Technical — command exit 0 + `products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json` verdict PASS
-2. Founder usability — real conversation, accurate extractions, Adam wants to use it again tomorrow
+1. Technical — command exit 0 + `products/receipts/LIFERE_OS_V1_ACCEPTANCE.json` verdict PASS
+2. Founder usability — Adam confirms the LifeRE path is founder-usable in the real overlay, not just structurally present
 
-**Status:** NOT COMPLETE (acceptance command not yet system-authored)
+**Status:** TECHNICAL_PASS_ONLY — `OBJECTIVE_VERDICT.json` says `founder_usability_pass: false`, so Point B is not yet honestly complete.
 
-**System path:** Founder packet → PSSOT (product truth) → BLUEPRINT.json (HOW) → execute → receipt. Billing is **not** a gate.
+**Queue authority:** `builderos-reboot/BP_PRIORITY.json` is the ordered BP queue for product work. Do not infer queue rank from the Point B target block and do not infer Point B from queue rank alone.
 
-**Archive:** Pre-split docs in mission `_hist/` — history only, not active authority.
-
-**When COMPLETE:** clear this block, receipt in amendment + `logs/changes.jsonl`.
+**System path:** Founder packet → PSSOT / target lock → BLUEPRINT.json (HOW) → execute → acceptance → founder usability truth.
 
 ---
 

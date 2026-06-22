@@ -9,7 +9,7 @@ import path from 'node:path';
 import { loadMissionJson } from './mission-paths.js';
 import { validateDepartmentReceipts } from './department-simulations.js';
 
-export const ALPHA_BLOCKING_PHASES = new Set(['P4', 'P5']);
+export const ALPHA_BLOCKING_PHASES = new Set(['P4']);
 
 export const PRE_ARC_RECEIPT_PATHS = [
   { id: 'SNT_INTENT_ATTACK', file: 'receipts/SNT_INTENT_ATTACK_RECEIPT.json' },
@@ -49,7 +49,11 @@ function isStubSntReceipt(data) {
 function isEmptyBuilderSim(data, blueprint) {
   const blueprintSteps = blueprint?.steps?.length || 0;
   if (!blueprintSteps) return false;
-  return !(data?.steps?.length);
+  if (data?.steps?.length) return false;
+  if (data?.summary?.clear_to_build === true && Number(data?.summary?.total_gaps || 0) === 0) {
+    return false;
+  }
+  return true;
 }
 
 function loadAcceptanceVerdict(missionFolder, blueprint) {

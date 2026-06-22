@@ -4,7 +4,9 @@
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "tier": 1,
   "status": "HANDOFF_READY",
-  "created_at": "2026-06-21",
+  "created_at": "2026-06-22",
+  "amendment_pack": "docs/constitution/AMENDMENT_PACK_V2.0A.md",
+  "proof_lap_only": false,
   "outcome_statement": "Adam opens LifeRE alpha, sees daily command center, top-3 priorities, and nightly debrief draft — without Cursor",
   "user": "Adam (founder)",
   "pain": "LifeRE OS v1 must reach Alpha — a founder-usable daily command center for real estate agents. Stopping on pipeline gates without reaching Point B is failure.",
@@ -14,14 +16,19 @@
   ],
   "failure_metrics": [
     "TECHNICAL_PASS without founder_usability_pass",
-    "Stop-on-first-FAIL without repair loop"
+    "Auto-execution without Adam approval"
   ],
   "constraints": [
     "BP_PRIORITY queue authority",
-    "Never-stop repair loop until phase PASS"
+    "BuilderOS system path only — no agent hand-build"
   ],
   "scope_boundary": "LifeRE light operational copilot: daily command center, top-3 priorities, nightly debrief, compliance guardrails. Extend production spine — no parallel stack.",
-  "unacceptable_result": "Pipeline halts on first gate without repair attempt",
-  "ownership": "System loops and repairs; Adam owns founder usability verdict at Alpha",
-  "priority_fit": "BP_PRIORITY rank 6"
+  "unacceptable_result": "Partial blueprint labeled Alpha; bypass of staging/approval gates",
+  "ownership": "ARC emits machine twin; Builder executes; Adam owns founder usability verdict",
+  "priority_fit": "BP_PRIORITY rank 6",
+  "point_model": {
+    "A": "Vision — Adam provides FP in development stage",
+    "B": "Chair locks handoff — corridor protected; Adam done until Alpha",
+    "C": "Alpha — Adam evaluates outcome only"
+  }
 }

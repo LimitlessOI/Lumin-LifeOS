@@ -1,0 +1,53 @@
+{
+  "schema": "builder_run_receipt_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "blueprint_id": "LIFERE-OS-V1-2026-06-21",
+  "run_at": "2026-06-22T17:34:07.880Z",
+  "runner": "builderos-reboot/scripts/execute-mission.mjs",
+  "procedure": [
+    "builder_pre_build_simulate",
+    "decision_gap_map",
+    "pre_build_validation_packet",
+    "write_file_exact_steps",
+    "acceptance_tests",
+    "point_b_gate"
+  ],
+  "pre_build": {
+    "status": "PRE_BUILD_PASS",
+    "blocking_gaps": 0,
+    "receipt": "receipts/BUILDER_PRE_BUILD_SIMULATION.json"
+  },
+  "steps_executed": 2,
+  "step_results": [
+    {
+      "step_id": "LRE-S01",
+      "status": "DONE",
+      "target_file": "public/overlay/lifeos-lifere.html",
+      "sha256": "6e9d735acd42424229bf8fb68ec334e4ba95216a201c9944b9223730cbd60a69"
+    },
+    {
+      "step_id": "LRE-S02",
+      "status": "DONE",
+      "target_file": "public/overlay/lifeos-app.html",
+      "sha256": "3e9d70ba2bc90b8d9bd3813059be8c15edb4b93dacbbd1ec2f7ed541d48e5fbc"
+    }
+  ],
+  "acceptance_exit_code": 0,
+  "verdict": "TECHNICAL_PASS",
+  "point_b": {
+    "handoff_pass": true,
+    "machine_path_complete": true,
+    "alpha_reached": false,
+    "status": "MACHINE_PATH_PASS_AWAITING_ALPHA",
+    "proof_lap_only": false,
+    "awaiting_founder_alpha": true,
+    "violations": []
+  },
+  "machine_path_complete": true,
+  "alpha_reached": false,
+  "awaiting_founder_alpha": true,
+  "doctrine": {
+    "pass": true,
+    "violations": []
+  }
+}

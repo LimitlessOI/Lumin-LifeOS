@@ -5,6 +5,16 @@
 
 ---
 
+## [SESSION] 2026-06-22 — Point B Autonomous Driver (plan complete)
+
+Implemented Point B navigator spine: `point-b-navigator.js` + `obstacle-web-research.js` wire into founder-interface default path and `GET /point-b/status`; LifeRE Alpha surface (`lifeos-lifere.html`, app nav + Point B strip); `BLUEPRINT.json` with executable steps; acceptance v2 checks DOM markers; `execute-mission.mjs` BPB intake + SENTRY; BP scheduler wrapped with useful-work-guard; control-plane DONE on build-job poll; OBSTACLE_LESSON_LEDGER trimmed 5586→200 entries. **`npm run lifeos:lifere-os:v1-acceptance` PASS.** **Next:** Adam founder usability on LifeRE path; foundation loop to clear post-ARC receipts for full machine path; set `BUILDEROS_AUTOPILOT=1` on Railway if not already.
+
+## [SESSION] 2026-06-22 — Point B spine audit repairs (machine path cleared)
+
+Audit repairs completed on the active Point B path. Fixed: missing `builderos:point-b:gate` runner; LifeOS authority block now distinguishes queue priority vs Point B target; Studio gate no longer invents staging friction for direct product-host missions; builder simulation no-gap receipts no longer fail as “empty”; missing `builder-pre-build-simulate.mjs` restored; BPB intake accepts legacy `FOUNDER_PACKET.md + INTENT_BASELINE.json` missions; monorepo frozen-byte writes now honor the existing write policy; `execute-mission.mjs` now writes builder receipt before Point B/doctrine evaluation. **Result:** `node scripts/run-foundation-pipeline.mjs PRODUCT-LIFERE-OS-V1-0001 --once --force` exits 0, `npm run builderos:point-b:gate` returns `MACHINE_PATH_PASS_AWAITING_ALPHA`, and founder usability remains the only honest blocker. **Live runtime:** `npm run builder:preflight` reached Railway, but reported stale deploy (`98ee72f` vs local `ea76e48`) and `VOICE_RAIL_HISTORY_ONLY_FAIL` still active on runtime. **Next:** founder usability verdict on LifeRE path; commit/push/redeploy to move live runtime onto repaired SHA.
+
+---
+
 ## [SESSION] 2026-06-21 — FILE SYNOPSIS LAW (mandatory repo index)
 
 Adam asked for every file indexed with synopsis and impossible to skip. **Shipped:** `REPO_FILE_SYNOPSIS_INDEX.json` (12,090 git-tracked files), mechanical SYNOPSIS backfill (~8,563 in-file headers), enforcement at pre-commit (auto-inject + index co-commit), pre-push, commit-msg, CI (`file-synopsis-law` job), `commitToGitHub` auto-inject, `npm prepare` → `core.hooksPath=githooks`. **Verify:** `npm run lifeos:file-synopsis:verify` PASS. **Next:** GitHub branch protection requiring CI job on `main`.

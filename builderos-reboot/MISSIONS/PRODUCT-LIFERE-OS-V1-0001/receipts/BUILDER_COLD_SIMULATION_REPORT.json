@@ -1,0 +1,26 @@
+{
+  "schema": "builder_cold_simulation_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "blueprint_id": "LIFERE-OS-V1-2026-06-21",
+  "simulated_by": "factory-core/arc/builder-cold-walk.js",
+  "simulated_at": "2026-06-22T17:34:07.464Z",
+  "builder_runtime": "builderos-reboot/scripts/execute-mission.mjs",
+  "steps": [
+    {
+      "step_id": "LRE-S01",
+      "decision_gap": null,
+      "blocked": false
+    },
+    {
+      "step_id": "LRE-S02",
+      "decision_gap": null,
+      "blocked": false
+    }
+  ],
+  "summary": {
+    "decision_gaps": 0,
+    "total_gaps": 0,
+    "handoff_to_builder": true,
+    "architect_pass": true
+  }
+}

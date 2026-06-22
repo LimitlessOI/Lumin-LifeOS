@@ -1,0 +1,94 @@
+{
+  "schema": "result_scoreboard_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "at": "2026-06-22T17:34:07.898Z",
+  "intended": "Adam opens LifeRE alpha, sees daily command center, top-3 priorities, and nightly debrief draft — without Cursor",
+  "built": "TECHNICAL_PASS",
+  "happened": "TECHNICAL_PASS",
+  "matched_intent": false,
+  "evidence": {
+    "acceptance_receipt": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
+    "builder_receipt": "BUILDER_RUN_RECEIPT.json",
+    "tests_passed": [
+      "LRE-T01_service_file",
+      "LRE-T01b_top3_export",
+      "LRE-T02_routes_file",
+      "LRE-T02b_top3_route",
+      "LRE-T04_lifere_page",
+      "LRE-T04b_daily_marker",
+      "LRE-T04c_top3_marker",
+      "LRE-T04d_debrief_marker",
+      "LRE-T05_app_lifere_path",
+      "LRE-T05b_lifere_nav",
+      "LRE-T05c_point_b_strip",
+      "LRE-T06_blueprint",
+      "LRE-T07_navigator",
+      "bp_sync_mandatory",
+      "LRE-T03_bp_sync"
+    ]
+  },
+  "failed": [],
+  "changed": [],
+  "learned": [],
+  "no_narrative": true,
+  "simulation_vs_reality": [
+    {
+      "metric_id": "acceptance_pass",
+      "seat": "Builder",
+      "predicted": "PASS",
+      "actual": "PASS",
+      "how_we_know_if_wrong": "BUILDER_RUN_RECEIPT.acceptance_exit_code and acceptance receipt verdict",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "technical_pass",
+      "seat": "CFO",
+      "predicted": "LIKELY",
+      "actual": "TECHNICAL_PASS",
+      "how_we_know_if_wrong": "OBJECTIVE_VERDICT.verdict after acceptance",
+      "match": false,
+      "variance": "predicted \"LIKELY\" got \"TECHNICAL_PASS\"",
+      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "deploy_required",
+      "seat": "CFO",
+      "predicted": true,
+      "actual": true,
+      "how_we_know_if_wrong": "Production acceptance implies deploy occurred or was unnecessary",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "intent_measurable",
+      "seat": "SNT",
+      "predicted": "clear",
+      "actual": "clear",
+      "how_we_know_if_wrong": "IDC exit gate or acceptance FAIL on scope drift",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_by": "Hist"
+    },
+    {
+      "metric_id": "blocking_attack_count",
+      "seat": "SNT",
+      "predicted": 0,
+      "actual": 0,
+      "how_we_know_if_wrong": "attacks with severity=blocking and pass=false",
+      "match": true,
+      "variance": null,
+      "scored_at": "2026-06-22T17:34:07.892Z",
+      "scored_by": "Hist"
+    }
+  ],
+  "twin_drift_pass": false,
+  "twin_drift_count": 1,
+  "scored_by": "Hist"
+}

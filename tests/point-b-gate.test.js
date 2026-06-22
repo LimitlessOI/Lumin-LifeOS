@@ -5,7 +5,12 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { evaluatePointBGate, evaluateCorridorEntered, isStubSntReceipt } from '../factory-staging/factory-core/arc/point-b-gate.js';
+import {
+  evaluatePointBGate,
+  evaluateCorridorEntered,
+  isStubSntReceipt,
+  isEmptyBuilderSim,
+} from '../factory-staging/factory-core/arc/point-b-gate.js';
 import { evaluatePreHandoffIntentGate } from '../factory-staging/factory-core/arc/pre-handoff-intent-gate.js';
 import {
   runDepartmentSimulations,
@@ -18,8 +23,8 @@ import {
 } from '../factory-staging/factory-core/arc/foundation/prediction-receipt.js';
 import { buildUpstreamRoute } from '../factory-staging/factory-core/arc/upstream-routing.js';
 
-const INTAKE = path.join(process.cwd(), 'builderos-reboot/MISSIONS/BUILDEROS-INTAKE-LOOP-V1-0001');
 const INBOX = path.join(process.cwd(), 'builderos-reboot/MISSIONS/PRODUCT-ACTION-INBOX-V1-0001');
+const LIFERE = path.join(process.cwd(), 'builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001');
 
 describe('department + upstream doctrine', () => {
   it('stub department receipts are detected', () => {
@@ -81,10 +86,29 @@ describe('department + upstream doctrine', () => {
     );
   });
 
-  it('proof lap is not product machine path', () => {
-    const report = evaluatePointBGate(INTAKE, {
-      blueprint: JSON.parse(fs.readFileSync(path.join(INTAKE, 'BLUEPRINT.json'), 'utf8')),
+  it('clean no-gap builder simulation is not treated as empty', () => {
+    assert.equal(
+      isEmptyBuilderSim(
+        {
+          steps: [],
+          summary: {
+            evaluated_steps: 2,
+            total_gaps: 0,
+            clear_to_build: true,
+          },
+        },
+        {
+          steps: [{ step_id: 'A' }, { step_id: 'B' }],
+        },
+      ),
+      false,
+    );
+  });
+
+  it('active Point B mission is not treated as proof lap', () => {
+    const report = evaluatePointBGate(LIFERE, {
+      blueprint: JSON.parse(fs.readFileSync(path.join(LIFERE, 'BLUEPRINT.json'), 'utf8')),
     });
-    assert.equal(report.status, 'PROOF_LAP_NOT_PRODUCT_PATH');
+    assert.equal(report.proof_lap_only, false);
   });
 });

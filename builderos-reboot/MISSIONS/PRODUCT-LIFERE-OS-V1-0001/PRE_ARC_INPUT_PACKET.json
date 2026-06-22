@@ -1,7 +1,7 @@
 {
   "schema": "pre_arc_input_packet_v2",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "assembled_at": "2026-06-21T02:42:55.349Z",
+  "assembled_at": "2026-06-22T17:34:07.461Z",
   "assembled_by": "foundation/pre-arc-enrichment.js",
   "doctrine": "FOUNDER_PACKET_V2 full minimum contents",
   "manifest": [

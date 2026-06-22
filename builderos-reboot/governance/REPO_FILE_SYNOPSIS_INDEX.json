@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-21T22:31:45.021Z",
+  "generated_at": "2026-06-22T17:48:33.388Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12098,
+  "file_count": 12123,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28693,9 +28693,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 7035,
-      "mtime": "2026-06-21T02:57:32.321Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 7425,
+      "mtime": "2026-06-22T17:34:07.876Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
@@ -28876,9 +28876,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3628553,
-      "mtime": "2026-06-21T22:31:44.379Z",
-      "indexed_at": "2026-06-21T22:31:45.021Z"
+      "bytes": 3636730,
+      "mtime": "2026-06-22T17:48:14.451Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33399,28 +33399,74 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/ACCEPTANCE_TESTS.json",
+      "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
+      "bytes": 484,
+      "mtime": "2026-06-22T17:34:07.520Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/ARC_RUN_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — ARC RUN RECEIPT.",
+      "bytes": 961,
+      "mtime": "2026-06-22T17:34:07.583Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/ASSET_REUSE_DECISION.json",
       "synopsis": "BuilderOS artifact — ASSET REUSE DECISION.",
-      "bytes": 354,
-      "mtime": "2026-06-21T02:42:55.349Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 937,
+      "mtime": "2026-06-22T17:34:07.456Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT_ROADMAP.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT ROADMAP.",
-      "bytes": 451,
-      "mtime": "2026-06-21T02:42:55.349Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 968,
+      "mtime": "2026-06-22T17:34:07.456Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.",
+      "bytes": 3669,
+      "mtime": "2026-06-22T17:34:07.876Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BUILDER_RUN_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — BUILDER RUN RECEIPT.",
+      "bytes": 1471,
+      "mtime": "2026-06-22T17:34:07.890Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/CHAIR_HANDOFF_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CHAIR HANDOFF RECEIPT.",
       "bytes": 561,
-      "mtime": "2026-06-21T02:42:54.901Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.461Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/CONTENT/LRE-S01/lifeos-lifere.html",
+      "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
+      "bytes": 9185,
+      "mtime": "2026-06-22T17:34:07.463Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/CONTENT/LRE-S02/lifeos-app.html",
+      "synopsis": "HTML page: LifeOS",
+      "bytes": 114253,
+      "mtime": "2026-06-22T17:34:07.463Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/DO_NOT_INVENT.json",
@@ -33441,24 +33487,24 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/IDC_CONSENSUS_RECEIPT.json",
       "synopsis": "BuilderOS artifact — IDC CONSENSUS RECEIPT.",
       "bytes": 708,
-      "mtime": "2026-06-21T02:42:55.350Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.460Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/INTENT_BASELINE.json",
       "synopsis": "BuilderOS artifact — INTENT BASELINE.",
-      "bytes": 1445,
-      "mtime": "2026-06-21T02:42:55.349Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 1779,
+      "mtime": "2026-06-22T17:34:07.456Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/INTENT_COVERAGE_MAP.json",
       "synopsis": "BuilderOS artifact — INTENT COVERAGE MAP.",
       "bytes": 5905,
-      "mtime": "2026-06-21T02:42:55.349Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.459Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
@@ -33481,48 +33527,104 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/KNOWN_RISKS.json",
       "synopsis": "BuilderOS artifact — KNOWN RISKS.",
       "bytes": 137,
-      "mtime": "2026-06-21T02:42:55.349Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.460Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/MODE_A_TO_B_TRANSITION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — MODE A TO B TRANSITION RECEIPT.",
       "bytes": 332,
-      "mtime": "2026-06-21T02:42:55.349Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.459Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
+      "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
+      "bytes": 997,
+      "mtime": "2026-06-22T17:34:07.876Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/PRE_ARC_INPUT_PACKET.json",
       "synopsis": "BuilderOS artifact — PRE ARC INPUT PACKET.",
       "bytes": 2714,
-      "mtime": "2026-06-21T02:42:55.350Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.461Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/PRE_BUILD_VALIDATION_PACKET.json",
+      "synopsis": "BuilderOS artifact — PRE BUILD VALIDATION PACKET.",
+      "bytes": 608,
+      "mtime": "2026-06-22T17:34:07.706Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/PREDICTION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — PREDICTION RECEIPT.",
-      "bytes": 791,
-      "mtime": "2026-06-21T02:42:55.349Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 1018,
+      "mtime": "2026-06-22T17:34:07.898Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/ARC_TWIN_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — ARC TWIN SIMULATION RECEIPT.",
+      "bytes": 414,
+      "mtime": "2026-06-22T17:34:07.468Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/BUILDER_COLD_SIMULATION_REPORT.json",
+      "synopsis": "BuilderOS artifact — BUILDER COLD SIMULATION REPORT.",
+      "bytes": 634,
+      "mtime": "2026-06-22T17:34:07.467Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/BUILDER_ENTRY_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — BUILDER ENTRY GATE REPORT.",
+      "bytes": 1443,
+      "mtime": "2026-06-22T17:30:20.654Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/BUILDER_PRE_BUILD_SIMULATION.json",
+      "synopsis": "BuilderOS artifact — BUILDER PRE BUILD SIMULATION.",
+      "bytes": 2032,
+      "mtime": "2026-06-22T17:34:07.653Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/BUILDER_SIMULATION_REPORT.json",
+      "synopsis": "BuilderOS artifact — BUILDER SIMULATION REPORT.",
+      "bytes": 400,
+      "mtime": "2026-06-22T17:34:07.468Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/CFO_RESOURCE_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CFO RESOURCE SIMULATION RECEIPT.",
-      "bytes": 1268,
-      "mtime": "2026-06-21T02:42:55.350Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 1287,
+      "mtime": "2026-06-22T17:34:07.459Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/CHAIR_FORECAST_SIMULATION_RECEIPT.json",
       "synopsis": "BuilderOS artifact — CHAIR FORECAST SIMULATION RECEIPT.",
       "bytes": 3335,
-      "mtime": "2026-06-21T02:42:55.350Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.459Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
@@ -33531,6 +33633,14 @@
       "bytes": 679,
       "mtime": "2026-06-21T02:40:46.303Z",
       "indexed_at": "2026-06-21T22:31:43.118Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/CORRIDOR_ENTERED_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — CORRIDOR ENTERED GATE REPORT.",
+      "bytes": 1675,
+      "mtime": "2026-06-22T17:34:07.467Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
@@ -33544,9 +33654,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/FOUNDATION_PIPELINE_REPORT.json",
       "synopsis": "BuilderOS artifact — FOUNDATION PIPELINE REPORT.",
-      "bytes": 2625,
-      "mtime": "2026-06-21T02:40:42.474Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 50147,
+      "mtime": "2026-06-22T17:34:07.900Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
@@ -33558,26 +33668,67 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/MISSION_DOCTRINE_REPORT.json",
+      "synopsis": "BuilderOS artifact — MISSION DOCTRINE REPORT.",
+      "bytes": 4057,
+      "mtime": "2026-06-22T17:34:07.900Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/OBSTACLE_LESSON_LEDGER.json",
-      "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 5264814,
-      "mtime": "2026-06-21T02:42:55.348Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "synopsis": "BuilderOS artifact — OBSTACLE LESSON LEDGER.",
+      "bytes": 188840,
+      "mtime": "2026-06-22T17:21:26.358Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/POINT_B_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — POINT B GATE REPORT.",
+      "bytes": 6353,
+      "mtime": "2026-06-22T17:34:18.860Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/PRE_HANDOFF_INTENT_GATE_REPORT.json",
       "synopsis": "BuilderOS artifact — PRE HANDOFF INTENT GATE REPORT.",
       "bytes": 2036,
-      "mtime": "2026-06-21T02:42:54.901Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.461Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/SNT_INTENT_ATTACK_RECEIPT.json",
       "synopsis": "BuilderOS artifact — SNT INTENT ATTACK RECEIPT.",
       "bytes": 2621,
-      "mtime": "2026-06-21T02:42:55.350Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.459Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/SNT_TRANSLATION_ATTACK_REPORT.json",
+      "synopsis": "BuilderOS artifact — SNT TRANSLATION ATTACK REPORT.",
+      "bytes": 1802,
+      "mtime": "2026-06-22T17:34:07.468Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/STUDIO_BLOCKING_GATE_REPORT.json",
+      "synopsis": "BuilderOS artifact — STUDIO BLOCKING GATE REPORT.",
+      "bytes": 340,
+      "mtime": "2026-06-22T17:29:21.468Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/STUDIO_EXPERIENCE_SIMULATION_RECEIPT.json",
+      "synopsis": "BuilderOS artifact — STUDIO EXPERIENCE SIMULATION RECEIPT.",
+      "bytes": 479,
+      "mtime": "2026-06-22T17:34:07.468Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
@@ -33586,6 +33737,14 @@
       "bytes": 1451476,
       "mtime": "2026-06-21T02:42:55.355Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/TWIN_DRIFT_REPORT.json",
+      "synopsis": "BuilderOS artifact — TWIN DRIFT REPORT.",
+      "bytes": 2005,
+      "mtime": "2026-06-22T17:34:07.893Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/UPSTREAM_ROUTE_REPORT.json",
@@ -33599,8 +33758,16 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/WISDOM_REVIEW_RECEIPT.json",
       "synopsis": "BuilderOS artifact — WISDOM REVIEW RECEIPT.",
       "bytes": 1229,
-      "mtime": "2026-06-21T02:42:55.350Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-22T17:34:07.459Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/RESULT_SCOREBOARD.json",
+      "synopsis": "BuilderOS artifact — RESULT SCOREBOARD.",
+      "bytes": 2836,
+      "mtime": "2026-06-22T17:34:07.898Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "synopsis_index_only": true
     },
     {
@@ -34226,6 +34393,16 @@
       "indexed_at": "2026-06-21T22:31:43.118Z"
     },
     {
+      "path": "builderos-reboot/scripts/builder-pre-build-simulate.mjs",
+      "synopsis": "Builder pre-build simulation — maps step decision gaps before execute-mission writes files.",
+      "bytes": 5000,
+      "mtime": "2026-06-22T17:32:24.431Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
       "path": "builderos-reboot/scripts/compare-run-directories.sh",
       "synopsis": "BuilderOS artifact — Compare Run Directories.",
       "bytes": 963,
@@ -34266,9 +34443,9 @@
     {
       "path": "builderos-reboot/scripts/execute-mission.mjs",
       "synopsis": "Execute all steps in a mission blueprint, then run acceptance tests.",
-      "bytes": 8590,
-      "mtime": "2026-06-21T21:37:43.903Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 9912,
+      "mtime": "2026-06-22T17:33:56.889Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -34467,9 +34644,9 @@
     {
       "path": "builderos-reboot/scripts/mission-lib.mjs",
       "synopsis": "Exports sha256File — builderos-reboot/scripts/mission-lib.mjs.",
-      "bytes": 4793,
-      "mtime": "2026-06-21T21:37:44.406Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 4912,
+      "mtime": "2026-06-22T17:33:25.423Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "builderos-reboot/scripts/mission-recovery-owner.mjs",
@@ -39586,9 +39763,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 448197,
-      "mtime": "2026-06-21T22:24:58.353Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 450186,
+      "mtime": "2026-06-22T17:40:09.468Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40098,9 +40275,9 @@
     {
       "path": "docs/products/LIFEOS.md",
       "synopsis": "LifeOS — Product Spec",
-      "bytes": 12343,
-      "mtime": "2026-06-21T21:37:58.252Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 12620,
+      "mtime": "2026-06-22T17:28:49.696Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "docs/products/LLM_FEEDBACK_REQUEST.md",
@@ -40164,9 +40341,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 29762,
-      "mtime": "2026-06-21T21:37:58.395Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 31241,
+      "mtime": "2026-06-22T17:40:17.751Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -60728,9 +60905,9 @@
     {
       "path": "factory-staging/factory-core/arc/foundation/studio-simulation.js",
       "synopsis": "Studio experience simulation when UX/product feel in scope.",
-      "bytes": 2319,
-      "mtime": "2026-06-21T21:38:59.046Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 3450,
+      "mtime": "2026-06-22T17:30:14.808Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -60755,9 +60932,9 @@
     {
       "path": "factory-staging/factory-core/arc/point-b-gate.js",
       "synopsis": "Point B corridor + B→C machine path + Point C Alpha gates.",
-      "bytes": 12560,
-      "mtime": "2026-06-21T21:38:59.047Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 12695,
+      "mtime": "2026-06-22T17:33:25.528Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -60792,9 +60969,9 @@
     {
       "path": "factory-staging/factory-core/arc/simulate-blueprint-steps.js",
       "synopsis": "Cold Builder simulation — mechanical audit, no AI, no session memory.",
-      "bytes": 7987,
-      "mtime": "2026-06-21T21:38:43.777Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 8033,
+      "mtime": "2026-06-22T17:30:55.692Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "factory-staging/factory-core/arc/sync-acceptance.js",
@@ -60840,9 +61017,9 @@
     {
       "path": "factory-staging/factory-core/bpb/intake-gate.js",
       "synopsis": "BPB intake gate — rejects if upstream strategy or blueprint shape is incomplete.",
-      "bytes": 3916,
-      "mtime": "2026-06-21T21:39:43.008Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 4574,
+      "mtime": "2026-06-22T17:32:58.965Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "factory-staging/factory-core/builder/action-handlers/write-file-exact.js",
@@ -68311,6 +68488,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
+      "synopsis": "Product receipt — LIFERE OS V1 ACCEPTANCE.",
+      "bytes": 1005,
+      "mtime": "2026-06-22T17:34:07.876Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/VOICE_RAIL_CAPABILITY_PROOF.json",
       "synopsis": "Product receipt — VOICE RAIL CAPABILITY PROOF.",
       "bytes": 18852,
@@ -72379,6 +72564,16 @@
       "indexed_at": "2026-06-21T22:31:43.118Z",
       "ssot": [
         "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/FOUNDER_PACKET.md"
+      ]
+    },
+    {
+      "path": "scripts/run-point-b-gate.mjs",
+      "synopsis": "Verifies the current Point B target mission and emits a machine-readable gate receipt.",
+      "bytes": 2320,
+      "mtime": "2026-06-22T17:28:49.577Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
     },
     {
@@ -91906,9 +92101,9 @@
     {
       "path": "tests/point-b-gate.test.js",
       "synopsis": "js — tests/point-b-gate.test.js.",
-      "bytes": 3492,
-      "mtime": "2026-06-21T21:39:28.597Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 3910,
+      "mtime": "2026-06-22T17:31:24.450Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "tests/prediction-loop.test.js",
@@ -91967,6 +92162,13 @@
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
+    },
+    {
+      "path": "tests/studio-simulation.test.js",
+      "synopsis": "js — tests/studio-simulation.test.js.",
+      "bytes": 1405,
+      "mtime": "2026-06-22T17:30:14.911Z",
+      "indexed_at": "2026-06-22T17:48:33.388Z"
     },
     {
       "path": "tests/tc-mailbox-subject.test.js",

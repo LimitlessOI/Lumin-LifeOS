@@ -2,7 +2,7 @@
   "schema": "intent_coverage_map_v2",
   "intent_id": "PRODUCT-LIFERE-OS-V1-0001",
   "tier": 1,
-  "updated_at": "2026-06-21",
+  "updated_at": "2026-06-22",
   "snt_regrade_required": false,
   "dimensions": [
     {

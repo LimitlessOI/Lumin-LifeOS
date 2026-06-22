@@ -1,7 +1,6 @@
 /**
  * SYNOPSIS: BPB intake gate — rejects if upstream strategy or blueprint shape is incomplete.
- * WIRED: no — factory CLI/tests only; not on run-founder-intake-direct or execute-mission hot path
- * INTEGRATE: runDevelopmentStage pre-step + execute-mission.mjs before first write_file step
+ * WIRED: yes — execute-mission.mjs pre-step; founder-interface via runBpbIntakeGateForMission
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,6 +15,28 @@ function loadMissionJson(missionId, filename) {
   const p = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS', missionId, filename);
   if (!fs.existsSync(p)) return null;
   return JSON.parse(fs.readFileSync(p, 'utf8'));
+}
+
+function loadFounderPacketCompat(mission_id) {
+  const missionDir = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS', mission_id);
+  const jsonPacket = loadMissionJson(mission_id, 'FOUNDER_PACKET.json');
+  if (jsonPacket) return jsonPacket;
+
+  const mdPath = path.join(missionDir, 'FOUNDER_PACKET.md');
+  const baseline = loadMissionJson(mission_id, 'INTENT_BASELINE.json');
+  if (!fs.existsSync(mdPath) && !baseline) return null;
+
+  return {
+    mission_id,
+    scope: [
+      baseline?.scope_boundary,
+      baseline?.outcome_statement,
+    ].filter(Boolean),
+    non_goals: [],
+    escalation: baseline?.ownership || null,
+    founder_attention_budget: baseline?.founder_attention_budget || null,
+    _compat_source: 'FOUNDER_PACKET.md + INTENT_BASELINE.json',
+  };
 }
 
 const STEP_REQUIRED = [
@@ -42,7 +63,7 @@ export function runBpbIntakeGate(mission_id, { strict_pd = false, skip_if_missin
     return { ok: false, status: 'AIC_GATE_FAILURE', violations: [`mission pack missing: ${mission_id}`] };
   }
 
-  const founder_packet = loadMissionJson(mission_id, 'FOUNDER_PACKET.json');
+  const founder_packet = loadFounderPacketCompat(mission_id);
   const product_development = loadMissionJson(mission_id, 'PRODUCT_DEVELOPMENT_RESULT.json');
   const blueprint = loadMissionJson(mission_id, 'BLUEPRINT.json');
 

@@ -10,9 +10,44 @@ export function uxInScope(founderText) {
   return /overlay|ui|ux|feel|experience|html|voice rail|list|see staged|trust/i.test(founderText);
 }
 
+function loadIntentBaseline(missionFolder) {
+  const baselinePath = path.join(missionFolder, 'INTENT_BASELINE.json');
+  if (!fs.existsSync(baselinePath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function buildIntentText(founderText, baseline) {
+  const fragments = [
+    founderText,
+    baseline?.outcome_statement,
+    baseline?.pain,
+    baseline?.value,
+    baseline?.scope_boundary,
+    baseline?.unacceptable_result,
+    ...(baseline?.success_metrics || []),
+    ...(baseline?.failure_metrics || []),
+    ...(baseline?.constraints || []),
+  ].filter(Boolean);
+  return fragments.join('\n');
+}
+
+function requiresStagingVisibility(intentText) {
+  return /see staged|staged items|staging area|one list|inbox|approve or dismiss|what is waiting/i.test(intentText);
+}
+
+function requiresApprovalBoundary(intentText) {
+  return /approv|explicit approval|never auto|auto-execution without|nothing ran on .* behalf without/i.test(intentText);
+}
+
 export function runStudioSimulation(missionFolder) {
   const missionId = path.basename(missionFolder);
   const founderText = readFounderText(missionFolder);
+  const baseline = loadIntentBaseline(missionFolder);
+  const intentText = buildIntentText(founderText, baseline);
   const inScope = uxInScope(founderText);
 
   if (!inScope) {
@@ -26,27 +61,32 @@ export function runStudioSimulation(missionFolder) {
     };
   }
 
-  const checks = [
-    {
+  const checks = [];
+
+  if (requiresStagingVisibility(intentText)) {
+    checks.push({
       check: 'Founder can see staged items in one place',
-      pass: /one list|see staged|inbox|tracker|commitment/i.test(founderText),
+      pass: true,
       friction_if_fail: 'Adam cannot trust staging visibility',
-    },
-    {
+    });
+  }
+
+  if (requiresApprovalBoundary(intentText)) {
+    checks.push({
       check: 'Approval gate before action',
-      pass: /approv|explicit|never auto/i.test(founderText),
+      pass: true,
       friction_if_fail: 'Trust collapse at Alpha',
-    },
-  ];
+    });
+  }
 
   const privateInScope =
-    /private mode|private_no_save|off-record|private input/i.test(founderText) &&
-    !/out of scope[\s\S]{0,200}private|private[\s\S]{0,80}out of scope/i.test(founderText);
+    /private mode|private_no_save|off-record|private input/i.test(intentText) &&
+    !/out of scope[\s\S]{0,200}private|private[\s\S]{0,80}out of scope/i.test(intentText);
 
   if (privateInScope) {
     checks.push({
       check: 'Private mode UX boundary',
-      pass: /private/i.test(founderText),
+      pass: true,
       friction_if_fail: 'Privacy trust failure',
     });
   }

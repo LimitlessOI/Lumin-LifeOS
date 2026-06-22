@@ -1,0 +1,55 @@
+{
+  "schema": "builder_entry_gate_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "pass": false,
+  "status": "BLOCKED_RETURN_TO_ARC_OR_IDC",
+  "violations": [
+    "post_arc:BUILDER_SIMULATION_REPORT empty steps"
+  ],
+  "checks": {
+    "post_arc": {
+      "schema": "post_arc_bundle_gate_v1",
+      "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+      "pass": false,
+      "violations": [
+        "post_arc:BUILDER_SIMULATION_REPORT empty steps"
+      ],
+      "checks": {
+        "ARC_TWIN_SIM": {
+          "pass": true,
+          "path": "receipts/ARC_TWIN_SIMULATION_RECEIPT.json"
+        },
+        "BUILDER_SIM": {
+          "pass": true,
+          "path": "receipts/BUILDER_SIMULATION_REPORT.json"
+        },
+        "SNT_TRANSLATION": {
+          "pass": true,
+          "path": "receipts/SNT_TRANSLATION_ATTACK_REPORT.json"
+        },
+        "PRE_BUILD": {
+          "pass": true,
+          "path": "PRE_BUILD_VALIDATION_PACKET.json"
+        },
+        "builder_clearance": {
+          "pass": true
+        },
+        "builder_sim_blocking": {
+          "pass": true,
+          "blocking_gaps": 0
+        }
+      },
+      "enforcement": "HARD"
+    },
+    "studio": {
+      "schema": "studio_blocking_gate_v1",
+      "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+      "pass": true,
+      "in_scope": true,
+      "verdict": "experience_acceptable",
+      "violations": [],
+      "enforcement": "HARD"
+    }
+  },
+  "enforcement": "HARD"
+}
