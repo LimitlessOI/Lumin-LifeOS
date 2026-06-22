@@ -17,6 +17,7 @@ import {
   isRepairContinuationIntent,
   resolveFounderBuildTarget,
 } from '../services/builder-instruction-target.js';
+import { expandFounderBuildTask, isFounderShipOrUsabilityIntent } from '../services/founder-chair-intent.js';
 import { runFounderBuildWithSelfRepair, startFounderBuildJob, getFounderBuildJobStatus } from '../services/founder-build-self-repair.js';
 import { resolveFounderBuildBaseUrl, assertFounderBuildBaseUrl } from '../services/founder-build-success-gate.js';
 import {
@@ -85,35 +86,38 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
   }
 
   async function resolveBuildTaskForFounder(req, cleanedInput) {
-    if (!isRepairContinuationIntent(cleanedInput)) return cleanedInput;
-    const bodyPrior = typeof req.body?.prior_task === 'string' ? req.body.prior_task.trim() : '';
-    if (bodyPrior) {
-      return `${bodyPrior}\n\n[system: founder requested continue repair — never-stop until PASS or new blocker]`;
+    let task = cleanedInput;
+    if (isRepairContinuationIntent(cleanedInput)) {
+      const bodyPrior = typeof req.body?.prior_task === 'string' ? req.body.prior_task.trim() : '';
+      if (bodyPrior) {
+        task = `${bodyPrior}\n\n[system: founder requested continue repair — never-stop until PASS or new blocker]`;
+      } else if (luminPersist && pool) {
+        try {
+          let userId = null;
+          const sub = req.lifeosUser?.sub;
+          if (sub && sub !== 'emergency-key' && /^\d+$/.test(String(sub))) {
+            userId = parseInt(sub, 10);
+          }
+          if (!userId) {
+            const handle = req.auth_mode === 'command_key_fallback'
+              ? 'adam'
+              : (req.lifeosUser?.handle || 'adam');
+            userId = await resolveLifeOSUserId(pool, handle);
+          }
+          if (userId) {
+            const thread = await luminPersist.getOrCreateDefaultThread(userId);
+            const messages = await luminPersist.getMessages(thread.id, { limit: 24 });
+            const prior = extractPriorBuildTask(messages, cleanedInput);
+            if (prior) {
+              task = `${prior}\n\n[system: founder requested continue repair — never-stop until PASS or new blocker]`;
+            }
+          }
+        } catch {
+          /* fail-open — use current text */
+        }
+      }
     }
-    if (!luminPersist || !pool) return cleanedInput;
-    try {
-      let userId = null;
-      const sub = req.lifeosUser?.sub;
-      if (sub && sub !== 'emergency-key' && /^\d+$/.test(String(sub))) {
-        userId = parseInt(sub, 10);
-      }
-      if (!userId) {
-        const handle = req.auth_mode === 'command_key_fallback'
-          ? 'adam'
-          : (req.lifeosUser?.handle || 'adam');
-        userId = await resolveLifeOSUserId(pool, handle);
-      }
-      if (!userId) return cleanedInput;
-      const thread = await luminPersist.getOrCreateDefaultThread(userId);
-      const messages = await luminPersist.getMessages(thread.id, { limit: 24 });
-      const prior = extractPriorBuildTask(messages, cleanedInput);
-      if (prior) {
-        return `${prior}\n\n[system: founder requested continue repair — never-stop until PASS or new blocker]`;
-      }
-    } catch {
-      /* fail-open — use current text */
-    }
-    return cleanedInput;
+    return expandFounderBuildTask(task);
   }
 
   function wrapBridgeResultAsTruth(result, task) {
@@ -947,7 +951,7 @@ HOW TO RESPOND:
       }
 
       // Normalize input first: fix misspellings, voice-to-text errors, garbled phrasing
-      const buildIntentEarly = isBuildRequest(originalText) || isRepairContinuationIntent(originalText);
+      const buildIntentEarly = isBuildRequest(originalText) || isRepairContinuationIntent(originalText) || isFounderShipOrUsabilityIntent(originalText);
       const cleanedInput = buildIntentEarly
         ? originalText.trim()
         : await normalizeInputText(originalText);
@@ -1052,6 +1056,7 @@ HOW TO RESPOND:
         auth_mode: req.auth_mode || 'unknown',
         user_role: req.lifeosUser?.role || null,
         useAsync: req.body?.async !== false && process.env.FOUNDER_BUILD_ASYNC !== '0',
+        explicitAction: action,
         userId,
       }, {
         buildDisplayBundle,

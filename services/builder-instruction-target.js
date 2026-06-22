@@ -71,6 +71,9 @@ export function inferTargetFileFromFounderFeedback(instruction) {
   if (/voice.?rail/i.test(text)) {
     return { target_file: 'public/overlay/lifeos-voice-rail-v1.html', source: 'keyword_match', confidence: 'medium' };
   }
+  if (/\b(lifere|life-?re)\b/i.test(text)) {
+    return { target_file: 'public/overlay/lifeos-lifere.html', source: 'keyword_match', confidence: 'medium' };
+  }
   if (UI_FEEDBACK_RE.test(text) || RESPONSE_UI_RE.test(text)) {
     if (isCssOnlyUiFeedback(text)) {
       return { target_file: CANONICAL_FOUNDER_CSS_TARGET, source: 'css_only_heuristic', confidence: 'high' };

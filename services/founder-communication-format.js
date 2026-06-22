@@ -18,7 +18,9 @@ function bulletLines(items, max = 5) {
 export function formatFounderCard(truth = {}) {
   const pass = truth.pass_fail === 'PASS';
   const running = truth.pass_fail === 'RUNNING';
-  const icon = pass ? '✅' : running ? '⏳' : truth.pass_fail === 'FAIL' ? '❌' : 'ℹ️';
+  const technicalOnly = truth.receipt_truth === 'TECHNICAL_ONLY_AWAITING_FOUNDER';
+  const icon = pass ? '✅' : running || technicalOnly ? '⏳' : truth.pass_fail === 'FAIL' ? '❌' : 'ℹ️';
+  const statusLabel = pass ? 'DONE' : running ? 'RUNNING' : technicalOnly ? 'AWAITING FOUNDER' : truth.pass_fail === 'FAIL' ? 'NOT DONE' : 'STATUS';
   const action = truth.action || truth.chair_channel || 'response';
 
   const doneSynopsis = truth.done_synopsis
@@ -27,12 +29,16 @@ export function formatFounderCard(truth = {}) {
       ? `Completed ${action.replace(/_/g, ' ')}.`
       : running
         ? `${action.replace(/_/g, ' ')} is running.`
-        : truth.pass_fail === 'FAIL'
-          ? `${action.replace(/_/g, ' ')} failed.`
-          : firstSentence(truth.human_summary) || 'No command ran — counsel only.');
+        : technicalOnly
+          ? `Machine path ran — founder usability not confirmed yet.`
+          : truth.pass_fail === 'FAIL'
+            ? `${action.replace(/_/g, ' ')} failed.`
+            : firstSentence(truth.human_summary) || 'No command ran — counsel only.');
 
   const doneBullets = truth.done_bullets || truth.human_summary_card?.done_bullets || [];
   if (!doneBullets.length) {
+    if (truth.chair_channel) doneBullets.push(`Channel: ${truth.chair_channel}`);
+    if (truth.execution_kind) doneBullets.push(`Kind: ${truth.execution_kind}`);
     if (truth.command_truth) doneBullets.push(`Command: ${truth.command_truth}`);
     if (truth.receipt_truth) doneBullets.push(`Receipt: ${truth.receipt_truth}`);
     if (truth.execution_path) doneBullets.push(`Path: ${truth.execution_path}`);
@@ -56,9 +62,15 @@ export function formatFounderCard(truth = {}) {
     nextBullets.push(truth.point_b.next_script);
   }
 
-  const lines = [`${icon} DONE`, doneSynopsis, ...bulletLines(doneBullets)];
-  if (nextSynopsis || nextBullets.length) {
-    lines.push('', 'NEXT', nextSynopsis || 'Continue toward Point B.', ...(nextWhy ? [`Why: ${nextWhy}`] : []), ...bulletLines(nextBullets));
+  const lines = [`${icon} ${statusLabel}`, doneSynopsis, ...bulletLines(doneBullets)];
+  if (nextSynopsis || nextBullets.length || technicalOnly) {
+    lines.push(
+      '',
+      'NEXT',
+      nextSynopsis || (technicalOnly ? 'Open LifeRE and confirm daily command center usability.' : 'Continue toward Point B.'),
+      ...(nextWhy || technicalOnly ? [`Why: ${nextWhy || 'Machine receipts passed; Alpha requires your YES on founder usability.'}`] : []),
+      ...bulletLines(nextBullets),
+    );
   }
   return lines.join('\n');
 }

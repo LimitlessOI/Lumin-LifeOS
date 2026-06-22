@@ -16,6 +16,8 @@ import { isRepairContinuationIntent } from './builder-instruction-target.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { wrapChairHumanSummary } from './founder-communication-format.js';
+import { enforceChairTruthExit } from './chair-truth-gate.js';
+import { expandFounderBuildTask, isFounderShipOrUsabilityIntent, resolveExplicitChairChannel } from './founder-chair-intent.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXECUTE_MISSION = path.join(REPO_ROOT, 'builderos-reboot/scripts/execute-mission.mjs');
@@ -56,7 +58,8 @@ export function isBuildRequest(text) {
     && /\b(response|reply|bubble|assistant|message|color|background)\b/i.test(t)) {
     return true;
   }
-  return /\b(fix|change|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t);
+  return /\b(fix|change|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t)
+    || isFounderShipOrUsabilityIntent(t);
 }
 
 export function classifyChairIntent(ctx = {}) {
@@ -65,15 +68,22 @@ export function classifyChairIntent(ctx = {}) {
     shouldDisplayOnly = false,
     explicitExecute = false,
     useTerminalForBuild = false,
+    explicitAction = 'auto',
   } = ctx;
 
+  const forced = resolveExplicitChairChannel(explicitAction, { useTerminalForBuild });
+  if (forced) return forced;
+
   if (shouldDisplayOnly) return 'display';
-  if (isMissionPipelineIntent(cleanedInput)) return 'mission_pipeline';
   if (isBlueprintExecuteIntent(cleanedInput)) return 'blueprint_execute';
+
+  if (explicitExecute && isExplicitExecuteCommand(cleanedInput)) return 'execute';
 
   const shouldRunFounderBuild = isBuildRequest(cleanedInput) || isRepairContinuationIntent(cleanedInput);
   if (shouldRunFounderBuild && useTerminalForBuild) return 'build_terminal';
   if (shouldRunFounderBuild) return 'build_async';
+
+  if (isMissionPipelineIntent(cleanedInput)) return 'mission_pipeline';
 
   if (explicitExecute && !isBuildRequest(cleanedInput)) return 'execute';
   if (isPureCounselQuestion(cleanedInput)) return 'counsel';
@@ -118,13 +128,14 @@ function chairEnvelope(channel, body) {
 }
 
 function finalizeTruth(truth, channel) {
-  const technical = truth.human_summary_technical || truth.human_summary || '';
+  const gated = enforceChairTruthExit(truth, channel);
+  const technical = gated.human_summary_technical || gated.human_summary || '';
+  const withChannel = { ...gated, chair_channel: channel };
   return {
-    ...truth,
-    action: truth.action || channel,
-    chair_channel: channel,
+    ...withChannel,
+    action: gated.action || channel,
     human_summary_technical: technical,
-    human_summary: wrapChairHumanSummary({ ...truth, chair_channel: channel }, technical),
+    human_summary: wrapChairHumanSummary(withChannel, technical),
   };
 }
 

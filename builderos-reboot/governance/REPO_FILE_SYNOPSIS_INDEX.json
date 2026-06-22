@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T22:14:41.143Z",
+  "generated_at": "2026-06-22T22:26:26.971Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12136,
+  "file_count": 12139,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28876,9 +28876,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3639050,
-      "mtime": "2026-06-22T21:44:23.155Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z"
+      "bytes": 3642087,
+      "mtime": "2026-06-22T22:26:19.560Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40540,9 +40540,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 463705,
-      "mtime": "2026-06-22T22:14:24.411Z",
-      "indexed_at": "2026-06-22T22:14:41.143Z"
+      "bytes": 463959,
+      "mtime": "2026-06-22T22:25:49.054Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41031,9 +41031,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 127319,
-      "mtime": "2026-06-22T22:05:23.576Z",
-      "indexed_at": "2026-06-22T22:05:26.382Z"
+      "bytes": 127814,
+      "mtime": "2026-06-22T22:26:14.249Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -70339,9 +70339,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 43235,
-      "mtime": "2026-06-22T21:55:30.087Z",
-      "indexed_at": "2026-06-22T21:56:47.127Z",
+      "bytes": 43544,
+      "mtime": "2026-06-22T22:25:42.872Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -84113,9 +84113,9 @@
     {
       "path": "services/builder-instruction-target.js",
       "synopsis": "Parse repo-relative target paths and domains from operator/build instructions.",
-      "bytes": 7671,
-      "mtime": "2026-06-21T21:39:11.859Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 7832,
+      "mtime": "2026-06-22T22:25:43.073Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -84423,6 +84423,16 @@
       "indexed_at": "2026-06-21T22:31:43.118Z",
       "ssot": [
         "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md"
+      ]
+    },
+    {
+      "path": "services/chair-truth-gate.js",
+      "synopsis": "Fail-closed exit gate — no Chair response leaves without receipt-backed PASS.",
+      "bytes": 3356,
+      "mtime": "2026-06-22T22:25:19.543Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
     },
     {
@@ -85394,11 +85404,21 @@
       ]
     },
     {
+      "path": "services/founder-chair-intent.js",
+      "synopsis": "Founder natural language → structured build task + explicit Chair channel map.",
+      "bytes": 2063,
+      "mtime": "2026-06-22T22:25:26.595Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/founder-communication-format.js",
       "synopsis": "Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).",
-      "bytes": 3244,
-      "mtime": "2026-06-22T21:22:16.830Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z",
+      "bytes": 3993,
+      "mtime": "2026-06-22T22:25:33.069Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86237,9 +86257,9 @@
     {
       "path": "services/lifeos-mission-pipeline-executor.js",
       "synopsis": "Founder chat → foundation pipeline (Point B / mission execute).",
-      "bytes": 4058,
-      "mtime": "2026-06-22T21:55:35.112Z",
-      "indexed_at": "2026-06-22T21:56:47.127Z",
+      "bytes": 5398,
+      "mtime": "2026-06-22T22:18:59.721Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86394,9 +86414,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 16447,
-      "mtime": "2026-06-22T21:55:35.698Z",
-      "indexed_at": "2026-06-22T21:56:47.127Z",
+      "bytes": 16979,
+      "mtime": "2026-06-22T22:25:57.231Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -91913,6 +91933,13 @@
       "indexed_at": "2026-06-21T22:31:43.118Z"
     },
     {
+      "path": "tests/chair-truth-gate.test.js",
+      "synopsis": "js — tests/chair-truth-gate.test.js.",
+      "bytes": 1795,
+      "mtime": "2026-06-22T22:25:46.979Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z"
+    },
+    {
       "path": "tests/closure-contract.test.js",
       "synopsis": "C09 Build Closure Contract — unit tests",
       "bytes": 7607,
@@ -92143,9 +92170,9 @@
     {
       "path": "tests/lumin-chair-orchestrator.test.js",
       "synopsis": "js — tests/lumin-chair-orchestrator.test.js.",
-      "bytes": 1964,
-      "mtime": "2026-06-22T21:44:00.365Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z"
+      "bytes": 2443,
+      "mtime": "2026-06-22T22:19:00.943Z",
+      "indexed_at": "2026-06-22T22:26:26.971Z"
     },
     {
       "path": "tests/mental-health-integration.test.js",

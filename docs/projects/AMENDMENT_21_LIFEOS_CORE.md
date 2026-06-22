@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-22 — Lumin wake word → Lumin Chair only (Voice Rail surface retired). Prior: founder-intake-gate.js Railway boot.
+**Last Updated:** 2026-06-22 — mission pipeline honesty gate (technical ≠ founder Point B). Prior: Lumin wake word → Lumin Chair only.
 
 ---
 
@@ -1574,7 +1574,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-06-22 | **Lumin wake word (Alexa-style) → Lumin Chair only** — `lifeos-voice.js` wake word mode ("Lumin"/"Hey Lumin"); `lifeos-app.html` routes voice to `founder-interface/message` only (no Voice Rail theater); sync voice replies via `speechSynthesis`; auto-start with `?lumin_voice=1`. `docs/VOICE_RAIL_HISTORY_ONLY.md` clarifies STT/TTS API remains, product surface retired. | Adam: deactivate Voice Rail product; say Lumin → one-on-one with Chair; honest comms only. | ✅ browser SR | deploy + founder mic test |
+| 2026-06-22 | **Chair truth exit gate + founder intent translation (GAP-FILL):** `services/chair-truth-gate.js` — fail-closed exit gate; `mission_pipeline` = `RECEIPT_SCAN_ONLY`; blocks Alpha/Point B PASS without `founder_usability_pass`. `services/founder-chair-intent.js` — `expandFounderBuildTask` (LifeRE → `lifeos-lifere.html`), explicit `action: build|execute` channel override. `lumin-chair-orchestrator.js` — gate wired in `finalizeTruth`; ship/usability verbs → `build_async`. `founder-communication-format.js` — shows Channel + Kind. Prior slice: pipeline honesty + build-before-pipeline routing. | Adam: instant PASS theater + vague LifeRE asks misrouted to receipt scan not code execution. | ✅ chair-truth + orchestrator tests | deploy + founder build retry |
 | 2026-06-22 | **`services/founder-intake-gate.js`** (NEW, tracked) — Action Inbox capture + BPB intake gate for founder-interface/message; wired in command-control since Lumin Chair but never committed → Railway boot `ERR_MODULE_NOT_FOUND`. | Deploy passed Docker build, failed healthcheck on missing service file. | ✅ node --check | deploy |
 | 2026-06-22 | **Railway Docker build unblock (GAP-FILL):** `Dockerfile` — `COPY scripts/install-git-hooks.mjs` before `RUN npm ci --omit=dev`; `prepare` was invoking missing script in layer 1 (~32s build fail). **`.dockerignore`** — fix invalid `• Lumin-Memory/` pattern → `Lumin-Memory/`. Reproduced locally: `npm ci` without script → MODULE_NOT_FOUND; with script → PASS (skip hooks in Docker). | Adam screenshot: all deploys since June 21 failed at Build image; LifeRE Point B fixes stuck on `98ee72f`. | ✅ local repro + fix | Railway build SUCCESS → LifeRE overlay live |
 | 2026-06-22 | **Voice Rail founder-surface verifier corrected** — `scripts/verify-voice-rail-history-only.mjs` now enforces the actual boundary: Voice Rail API stays mounted for system communication, while public `/voice-rail` and `overlay/lifeos-voice-rail-v1.html` entrypoints redirect into `lifeos-app`. | Point B audit found `builder:preflight` failing on a stale verifier that contradicted runtime mounts, continuity, and canonical Voice Rail docs. | ✅ preflight policy aligned | `npm run builder:preflight` |

@@ -10,6 +10,7 @@ import {
   isExplicitExecuteCommand,
   isPureCounselQuestion,
 } from '../services/lumin-chair-orchestrator.js';
+import { isMissionPipelineIntent } from '../services/lifeos-mission-pipeline-executor.js';
 
 test('build the blueprint routes to blueprint_execute not build_async', () => {
   const msg = 'build the blueprint';
@@ -63,5 +64,15 @@ test('explicit execute without build routes execute', () => {
       explicitExecute: isExplicitExecuteCommand('ship it'),
     }),
     'execute',
+  );
+});
+
+test('build LifeRE Point B usability routes build_async not mission_pipeline', () => {
+  const msg = 'Build LifeRE Point B usability — auto-load daily command on open';
+  assert.equal(isBuildRequest(msg), true);
+  assert.equal(isMissionPipelineIntent(msg), false);
+  assert.equal(
+    classifyChairIntent({ cleanedInput: msg, useTerminalForBuild: false }),
+    'build_async',
   );
 });

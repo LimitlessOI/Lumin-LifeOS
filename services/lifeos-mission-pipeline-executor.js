@@ -17,8 +17,19 @@ export function extractMissionIdFromText(text = '') {
   return loadPointBTarget()?.mission_id || null;
 }
 
+export function readMissionObjectiveVerdict(missionId) {
+  const p = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS', missionId, 'OBJECTIVE_VERDICT.json');
+  if (!fs.existsSync(p)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(p, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
 export function isMissionPipelineIntent(text = '') {
   const t = String(text);
+  if (/^\s*build\b/i.test(t)) return false;
   if (/\bPRODUCT-[A-Z0-9-]+-\d+\b/.test(t)) return true;
   if (/Point B|POINT_B_TARGET|LifeRE Alpha|foundation:pipeline|builderos:foundation/i.test(t)) return true;
   if (/FOUNDER SUCCESS TEST/i.test(t) && /Point A|Operating rules|machine path/i.test(t)) return true;
@@ -63,36 +74,57 @@ export async function runFoundationPipelineForFounder(missionId, { maxAttempts =
   ].filter((rel) => fs.existsSync(path.join(missionFolder, rel)));
 
   const obstacleCount = loop.obstacles?.length || 0;
-  const pointBReached = Boolean(result.point_b_reached);
+  const machinePathPass = Boolean(result.point_b_reached);
+  const objectiveVerdict = readMissionObjectiveVerdict(missionId);
+  const founderUsabilityPass = objectiveVerdict?.founder_usability_pass === true;
+  const founderPointB = machinePathPass && founderUsabilityPass;
+  const latencyMs = Date.now() - started;
 
   let human_summary;
-  if (pointBReached) {
-    human_summary = `Point B reached — ${target?.label || 'LifeRE Alpha'}. Acceptance and founder success test satisfied.`;
+  if (founderPointB) {
+    human_summary = `Point B reached — ${target?.label || 'LifeRE Alpha'}. Founder success test satisfied.`;
+  } else if (machinePathPass) {
+    human_summary = [
+      `COMMAND_RAN: foundation pipeline finished in ${latencyMs}ms (in-process, not deploy proof).`,
+      `TECHNICAL PASS only — machine path ran; founder_usability_pass is still false.`,
+      `Alpha NOT reached. Open LifeRE in lifeos-app, run the daily command cycle, then confirm usability PASS.`,
+      objectiveVerdict?.founder_success_test || 'See OBJECTIVE_VERDICT.json founder_success_test.',
+    ].join(' ');
   } else {
     human_summary = [
       `COMMAND_RAN: foundation pipeline toward ${target?.label || 'Point B'}.`,
       `Mission ${missionId}: ${loop.total_attempts || 0} attempts, ${obstacleCount} obstacles recorded (lessons + route adjustments).`,
-      'Not at Point B yet — this is FAIL until LifeRE Alpha founder success test PASS.',
+      'Not at Point B yet — FAIL until machine path + founder usability both PASS.',
       pointB.lesson || loop.stoppage?.lesson || 'See OBSTACLE_LESSON_LEDGER.json for fix steps.',
     ].join(' ');
   }
 
   return {
-    ok: pointBReached,
-    point_b_reached: pointBReached,
-    pass_fail: pointBReached ? 'PASS' : 'FAIL',
+    ok: founderPointB,
+    point_b_reached: founderPointB,
+    machine_path_pass: machinePathPass,
+    founder_usability_pass: founderUsabilityPass,
+    pass_fail: founderPointB ? 'PASS' : 'FAIL',
     command_truth: 'COMMAND_RAN',
-    receipt_truth: pointBReached ? 'POINT_B_REACHED' : 'OBSTACLE_NOT_POINT_B',
+    receipt_truth: founderPointB
+      ? 'POINT_B_REACHED'
+      : machinePathPass
+        ? 'TECHNICAL_ONLY_AWAITING_FOUNDER'
+        : 'OBSTACLE_NOT_POINT_B',
     execution_path: 'foundation_pipeline_loop',
     mission_id: missionId,
     command_executed: `npm run builderos:foundation:pipeline -- ${missionId}`,
-    exit_code: pointBReached ? 0 : 1,
+    exit_code: founderPointB ? 0 : 1,
     total_attempts: loop.total_attempts || 0,
     obstacle_count: obstacleCount,
-    first_blocker: pointBReached ? null : (pointB.lesson || 'Not at Point B (LifeRE Alpha)'),
+    first_blocker: founderPointB
+      ? null
+      : machinePathPass
+        ? 'founder_usability_pass is false — your LifeRE usability test is still required'
+        : (pointB.lesson || 'Not at Point B (LifeRE Alpha)'),
     receipt_paths: receiptPaths.map((r) => `builderos-reboot/MISSIONS/${missionId}/${r}`),
     phases: loop.phases,
-    latency_ms: Date.now() - started,
+    latency_ms: latencyMs,
     human_summary,
     loop_receipt: loop,
     point_b: pointB,
