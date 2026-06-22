@@ -18,9 +18,10 @@ function bulletLines(items, max = 5) {
 export function formatFounderCard(truth = {}) {
   const pass = truth.pass_fail === 'PASS';
   const running = truth.pass_fail === 'RUNNING';
+  const clarify = truth.pass_fail === 'CLARIFY';
   const technicalOnly = truth.receipt_truth === 'TECHNICAL_ONLY_AWAITING_FOUNDER';
-  const icon = pass ? '✅' : running || technicalOnly ? '⏳' : truth.pass_fail === 'FAIL' ? '❌' : 'ℹ️';
-  const statusLabel = pass ? 'DONE' : running ? 'RUNNING' : technicalOnly ? 'AWAITING FOUNDER' : truth.pass_fail === 'FAIL' ? 'NOT DONE' : 'STATUS';
+  const icon = pass ? '✅' : running ? '⏳' : clarify ? '🔍' : technicalOnly ? '⏳' : truth.pass_fail === 'FAIL' ? '❌' : 'ℹ️';
+  const statusLabel = pass ? 'DONE' : running ? 'RUNNING' : clarify ? 'CLARIFY' : technicalOnly ? 'AWAITING FOUNDER' : truth.pass_fail === 'FAIL' ? 'NOT DONE' : 'STATUS';
   const action = truth.action || truth.chair_channel || 'response';
 
   const doneSynopsis = truth.done_synopsis
@@ -31,7 +32,9 @@ export function formatFounderCard(truth = {}) {
         ? `${action.replace(/_/g, ' ')} is running.`
         : technicalOnly
           ? `Machine path ran — founder usability not confirmed yet.`
-          : truth.pass_fail === 'FAIL'
+          : clarify
+            ? 'Confirm intent before code runs.'
+            : truth.pass_fail === 'FAIL'
             ? `${action.replace(/_/g, ' ')} failed.`
             : firstSentence(truth.human_summary) || 'No command ran — counsel only.');
 

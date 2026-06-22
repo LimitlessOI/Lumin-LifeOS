@@ -18,6 +18,7 @@ import {
   resolveFounderBuildTarget,
 } from '../services/builder-instruction-target.js';
 import { expandFounderBuildTask, isFounderShipOrUsabilityIntent } from '../services/founder-chair-intent.js';
+import { isFounderConfirmIntent } from '../services/founder-intent-clarify.js';
 import { runFounderBuildWithSelfRepair, startFounderBuildJob, getFounderBuildJobStatus } from '../services/founder-build-self-repair.js';
 import { resolveFounderBuildBaseUrl, assertFounderBuildBaseUrl } from '../services/founder-build-success-gate.js';
 import {
@@ -1057,6 +1058,7 @@ HOW TO RESPOND:
         user_role: req.lifeosUser?.role || null,
         useAsync: req.body?.async !== false && process.env.FOUNDER_BUILD_ASYNC !== '0',
         explicitAction: action,
+        confirmIntent: req.body?.confirm_intent === true || force || isFounderConfirmIntent(cleanedInput),
         userId,
       }, {
         buildDisplayBundle,

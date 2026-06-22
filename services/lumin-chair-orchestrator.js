@@ -18,6 +18,11 @@ import { loadPointBTarget } from './point-b-target-lite.js';
 import { wrapChairHumanSummary } from './founder-communication-format.js';
 import { enforceChairTruthExit } from './chair-truth-gate.js';
 import { expandFounderBuildTask, isFounderShipOrUsabilityIntent, resolveExplicitChairChannel } from './founder-chair-intent.js';
+import {
+  assessFounderBuildClarity,
+  formatClarifySummary,
+  isFounderConfirmIntent,
+} from './founder-intent-clarify.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXECUTE_MISSION = path.join(REPO_ROOT, 'builderos-reboot/scripts/execute-mission.mjs');
@@ -291,6 +296,35 @@ export async function runLuminChairTurn(ctx, deps) {
         return { statusCode: 503, body: chairEnvelope(channel, truth) };
       }
       const buildTask = await deps.resolveBuildTaskForFounder(ctx.req, cleanedInput);
+      const skipClarify = ctx.force || ctx.confirmIntent || isRepairContinuationIntent(cleanedInput);
+      if (!skipClarify) {
+        const clarity = assessFounderBuildClarity(cleanedInput, buildTask);
+        if (clarity.needs_clarify) {
+          const summary = formatClarifySummary(clarity);
+          const truth = finalizeTruth({
+            ok: true,
+            pass_fail: 'CLARIFY',
+            command_truth: 'NO_COMMAND_RAN',
+            receipt_truth: 'AWAITING_FOUNDER_CONFIRM',
+            action: 'clarify',
+            clarify: clarity,
+            human_summary_technical: summary,
+            done_synopsis: 'Need your confirmation before any code runs.',
+            next_synopsis: 'Reply A/B/C or rewrite the ask, then say confirm.',
+            next_why: 'Stops wrong file, receipt scan, or build when you meant something else.',
+          }, 'clarify');
+          return {
+            statusCode: 200,
+            body: chairEnvelope('clarify', {
+              ...truth,
+              intake_normalized: intakeNormalized,
+              source_mode: sourceMode,
+              auth_mode,
+              user_role,
+            }),
+          };
+        }
+      }
       if (ctx.useAsync) {
         const jobId = deps.startFounderBuildJob({
           task: buildTask,
