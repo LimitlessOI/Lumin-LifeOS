@@ -44,9 +44,9 @@ test/
 *.spec.js
 coverage/
 
-# Build artifacts
-dist/
-build/
+# Build artifacts (root only — do not match factory-core/builder/)
+/dist/
+/build/
 *.log
 logs/
 

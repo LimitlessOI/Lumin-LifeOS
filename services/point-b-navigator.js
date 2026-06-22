@@ -9,11 +9,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { loadPointBTarget, evaluatePointBTargetReached } from '../factory-staging/factory-core/arc/foundation/point-b-target.js';
-import { evaluatePointBGate } from '../factory-staging/factory-core/arc/point-b-gate.js';
-import { evaluateBuilderEntryGate } from '../factory-staging/factory-core/arc/foundation/builder-entry-gate.js';
-import { founderStopActive } from '../factory-staging/factory-core/arc/gate-enforcement.js';
-import { loadMissionJson } from '../factory-staging/factory-core/arc/mission-paths.js';
+import { loadPointBTarget } from './point-b-target-lite.js';
+import { loadFactoryArcModules } from './factory-arc-loader.js';
 import { runFoundationPipelineForFounder } from './lifeos-mission-pipeline-executor.js';
 import { researchObstacleBlocker } from './obstacle-web-research.js';
 
@@ -76,6 +73,31 @@ export function isPointBStatusIntent(text = '') {
 }
 
 export async function evaluatePointBNavigator({ callAI, includeWebResearch = true } = {}) {
+  let factory;
+  try {
+    factory = await loadFactoryArcModules();
+  } catch (err) {
+    const target = loadPointBTarget();
+    return {
+      ok: false,
+      label: target?.label || null,
+      mission_id: target?.mission_id || null,
+      phase: 'factory_unavailable',
+      next_action: 'founder_stop',
+      blocker: `factory-staging not available: ${err.message}`,
+      progress_pct: 0,
+      founder_success_test: target?.founder_success_test || null,
+    };
+  }
+
+  const {
+    evaluatePointBTargetReached,
+    evaluatePointBGate,
+    evaluateBuilderEntryGate,
+    founderStopActive,
+    loadMissionJson,
+  } = factory;
+
   const stop = founderStopActive();
   const target = loadPointBTarget();
   if (!target?.mission_id) {
@@ -229,7 +251,7 @@ function spawnDetached(command, args, { cwd = REPO_ROOT } = {}) {
   return { spawned: true, pid: child.pid };
 }
 
-export function runPointBNextAction(status, { asyncSpawn = true, callAI } = {}) {
+export async function runPointBNextAction(status, { asyncSpawn = true, callAI } = {}) {
   const missionId = status?.mission_id;
   if (!missionId || !status?.next_action) {
     return { ok: false, skipped: true, reason: 'no_action' };
@@ -245,15 +267,11 @@ export function runPointBNextAction(status, { asyncSpawn = true, callAI } = {}) 
     case 'compile_blueprint': {
       if (asyncSpawn) {
         setImmediate(() => {
-          try {
-            runFoundationPipelineForFounder(missionId, { force: true, maxAttempts: 32 });
-          } catch {
-            // logged in foundation receipts
-          }
+          runFoundationPipelineForFounder(missionId, { force: true, maxAttempts: 32 }).catch(() => {});
         });
         return { ok: true, async: true, action: status.next_action, execution_path: 'foundation_pipeline_loop' };
       }
-      const dev = runFoundationPipelineForFounder(missionId, { force: true, maxAttempts: 32 });
+      const dev = await runFoundationPipelineForFounder(missionId, { force: true, maxAttempts: 32 });
       return { ok: dev.ok, async: false, action: status.next_action, result: dev };
     }
 
@@ -283,7 +301,7 @@ export async function handlePointBFounderMessage(text, opts = {}) {
   const autoRun = opts.autoRun !== false && (
     isPointBStatusIntent(text) || !isPureCounselQuestion(text)
   );
-  const run = autoRun ? runPointBNextAction(status, opts) : { skipped: true, reason: 'counsel_only' };
+  const run = autoRun ? await runPointBNextAction(status, opts) : { skipped: true, reason: 'counsel_only' };
   const human_summary = formatPointBStatusSummary(status);
   return {
     ok: status.ok,

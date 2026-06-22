@@ -1,13 +1,12 @@
 /**
  * SYNOPSIS: Founder chat → foundation pipeline (Point B / mission execute).
- * Founder chat → foundation pipeline (Point B / mission execute).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { REPO_ROOT } from '../factory-staging/factory-core/builder/run-step.js';
-import { runFoundationPipelineLoop } from '../factory-staging/factory-core/arc/run-foundation.js';
-import { loadPointBTarget } from '../factory-staging/factory-core/arc/foundation/point-b-target.js';
+import { REPO_ROOT } from './repo-root.js';
+import { loadPointBTarget } from './point-b-target-lite.js';
+import { loadFactoryArcModules } from './factory-arc-loader.js';
 
 export function extractMissionIdFromText(text = '') {
   const t = String(text);
@@ -27,8 +26,26 @@ export function isMissionPipelineIntent(text = '') {
   return false;
 }
 
-export function runFoundationPipelineForFounder(missionId, { maxAttempts = 32, force = true, dryRun = false } = {}) {
+export async function runFoundationPipelineForFounder(missionId, { maxAttempts = 32, force = true, dryRun = false } = {}) {
   const started = Date.now();
+  let runFoundationPipelineLoop;
+  try {
+    ({ runFoundationPipelineLoop } = await loadFactoryArcModules());
+  } catch (err) {
+    return {
+      ok: false,
+      point_b_reached: false,
+      pass_fail: 'FAIL',
+      command_truth: 'NO_COMMAND_RAN',
+      receipt_truth: 'FACTORY_STAGING_UNAVAILABLE',
+      execution_path: 'foundation_pipeline_loop',
+      mission_id: missionId,
+      first_blocker: `factory-staging not available: ${err.message}`,
+      human_summary: `FAIL: foundation pipeline unavailable — ${err.message}`,
+      latency_ms: Date.now() - started,
+    };
+  }
+
   const result = runFoundationPipelineLoop(missionId, {
     force,
     dryRun,

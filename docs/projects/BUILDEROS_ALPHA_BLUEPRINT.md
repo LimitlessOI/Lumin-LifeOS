@@ -8,8 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-20 — Lumin Chair orchestrator replaces parallel founder-interface switchboard
-
+**Last Updated:** 2026-06-20 — production spine repo-root (no factory-staging boot import)
 ---
 
 ## 0. Purpose
@@ -564,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-20 | **Railway boot fix:** `services/repo-root.js` + lazy `factory-arc-loader.js` — production spine no longer static-imports `factory-staging/.../run-step.js` at boot; `Dockerfile` RUN verifies factory-staging ships; `.dockerignore` `/build/` only (not `builder/`). | Railway crash loop ERR_MODULE_NOT_FOUND run-step.js despite dockerignore fix. | ✅ node --check + boot import | deploy |
 | 2026-06-20 | **`routes/lifeos-builderos-command-control-routes.js`** — replaced parallel display/mission/build/point-b/Lumin-fallback branches with single `runLuminChairTurn()` from `services/lumin-chair-orchestrator.js`; all founder subroutines (display, mission, blueprint_execute, build, execute, counsel, point_b) dispatch through Lumin Chair envelope. | Founder doctrine: Lumin is Chair; runtime was multi-desk switchboard with Lumin last. | ✅ node --check + chair tests | deploy |
 | 2026-06-21 | **Quorum escalation ladder:** `services/founder-build-quorum-escalation.js` — 3 solo attempts → CFO gate → 2-AI quorum → apply → 3-AI quorum → apply → Chair synthesis → apply → hard stop; lessons from `lessons_learned` + static founder-build registry; wired into `founder-build-self-repair.js` + founder-interface async jobs. | Adam: single agent must not loop forever; escalate perspectives + Chair automatically. | ✅ tests |
 | 2026-06-21 | **Sentry audit fixes — founder build closed loop:** `commitManyToGitHub` + `POST /builder/execute-batch`; `founder-build-outcome.js`; async build jobs (202 + poll); live content + git-outcome + client bubble proof; baseline dark bubbles restored; routing/normalize fixes; `verify:founder-css:live`. | Sentry audit: theater PASS, partial commits, contaminated baseline, 502, no client proof. | ✅ tests |

@@ -7,7 +7,7 @@ import express from 'express';
 import { buildContextForPrompt, storeMemory } from '../core/memory-system.js';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
-import { REPO_ROOT } from '../factory-staging/factory-core/builder/run-step.js';
+import { REPO_ROOT } from '../services/repo-root.js';
 import { verifyToken } from '../services/lifeos-auth.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 import { resolveLifeOSUserId } from '../services/lifeos-user-resolver.js';

@@ -14,7 +14,7 @@ import {
 } from './lifeos-mission-pipeline-executor.js';
 import { isRepairContinuationIntent } from './builder-instruction-target.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
-import { loadPointBTarget } from '../factory-staging/factory-core/arc/foundation/point-b-target.js';
+import { loadPointBTarget } from './point-b-target-lite.js';
 import { wrapChairHumanSummary } from './founder-communication-format.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -201,7 +201,7 @@ export async function runLuminChairTurn(ctx, deps) {
         }, channel);
         return { statusCode: 200, body: chairEnvelope(channel, truth) };
       }
-      const pipelineResult = runFoundationPipelineForFounder(pipelineMission, { force: force || true });
+      const pipelineResult = await runFoundationPipelineForFounder(pipelineMission, { force: force || true });
       const truth = finalizeTruth({
         ...pipelineResult,
         action: 'mission_pipeline',

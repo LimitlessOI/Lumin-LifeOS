@@ -11,6 +11,11 @@ RUN npm ci --omit=dev
 
 COPY . .
 
+RUN test -f factory-staging/factory-core/builder/run-step.js \
+  && node --check routes/lifeos-builderos-command-control-routes.js \
+  && node --check services/lumin-chair-orchestrator.js \
+  || (echo "FATAL: factory-staging or spine routes missing from Docker image" >&2 && exit 1)
+
 EXPOSE 3000
 
 CMD ["node", "server.js"]

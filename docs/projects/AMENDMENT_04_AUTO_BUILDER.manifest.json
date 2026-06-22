@@ -7,6 +7,6 @@
   "status": "active",
   "build_ready": true,
   "last_updated": "2026-06-20",
-  "last_receipt": "2026-06-20 point-b-lumin-chair-subroutine",
-  "last_change_summary": "Point B navigator as Lumin Chair point_b subroutine"
+  "last_receipt": "2026-06-20 railway-boot-factory-arc-loader",
+  "last_change_summary": "Lazy factory-arc-loader + repo-root — Railway boot decoupling"
 }

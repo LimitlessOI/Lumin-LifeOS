@@ -1,19 +1,14 @@
 /**
- * SYNOPSIS: BP_PRIORITY autonomous queue scheduler.
- * On each tick, spawns bp-priority-never-stop.mjs --once as a child process.
- * Reads builderos-reboot/BP_PRIORITY.json for incomplete missions — runs until
- * queue is clear or founder_stop is active.
- *
- * Enable on Railway: BUILDEROS_AUTOPILOT=1
- * Interval env: BUILDEROS_AUTOPILOT_INTERVAL_MS (default 30 min)
- * Boot delay env: BUILDEROS_AUTOPILOT_BOOT_DELAY_MS (default 2 min)
- *
+ * SYNOPSIS: BP_PRIORITY autonomous queue scheduler — useful-work-guard wrapped.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { createUsefulWorkGuard } from './useful-work-guard.js';
+import { loadPointBTarget } from './point-b-target-lite.js';
+import { loadFactoryArcModules } from './factory-arc-loader.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BP_PATH = path.join(REPO_ROOT, 'builderos-reboot/BP_PRIORITY.json');
@@ -111,6 +106,40 @@ export function runBpPriorityOnce({ logger } = {}) {
   });
 }
 
+const guardedBpPriorityTick = createUsefulWorkGuard({
+  taskName: 'BP-PRIORITY-SCHEDULER',
+  purpose: 'Advance Point B mission via foundation pipeline when BP_PRIORITY has incomplete work',
+  prerequisites: async () => {
+    if (process.env.BUILDEROS_AUTOPILOT !== '1') {
+      return { ok: false, reason: 'BUILDEROS_AUTOPILOT not enabled' };
+    }
+    try {
+      const { founderStopActive } = await loadFactoryArcModules();
+      const stop = founderStopActive();
+      if (stop.active) {
+        return { ok: false, reason: 'founder_stop_active' };
+      }
+    } catch {
+      return { ok: false, reason: 'factory_staging_unavailable' };
+    }
+    if (!fs.existsSync(RUNNER_SCRIPT)) {
+      return { ok: false, reason: 'runner_script_missing' };
+    }
+    return { ok: true, reason: null };
+  },
+  workCheck: async () => {
+    const count = queueHasIncompleteWork() ? 1 : 0;
+    const target = loadPointBTarget();
+    return {
+      count,
+      description: count
+        ? `Incomplete BP_PRIORITY work toward ${target?.label || 'Point B'}`
+        : 'BP_PRIORITY queue complete',
+    };
+  },
+  execute: async ({ logger } = {}) => runBpPriorityOnce({ logger }),
+});
+
 /**
  * Start the scheduler. Requires BUILDEROS_AUTOPILOT=1 on Railway (explicit opt-in).
  */
@@ -126,12 +155,7 @@ export function startBpPriorityScheduler({ logger } = {}) {
   logger?.info?.({ intervalMs, bootDelayMs }, '[BP-PRIORITY-SCHEDULER] starting — autonomous mission queue active');
 
   const tick = async () => {
-    if (!queueHasIncompleteWork()) {
-      logger?.info?.('[BP-PRIORITY-SCHEDULER] queue complete — no incomplete missions');
-      return;
-    }
-    logger?.info?.('[BP-PRIORITY-SCHEDULER] incomplete missions found — running foundation pipeline');
-    await runBpPriorityOnce({ logger });
+    await guardedBpPriorityTick({ logger });
   };
 
   setTimeout(() => {

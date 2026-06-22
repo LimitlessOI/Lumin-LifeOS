@@ -1,0 +1,34 @@
+/**
+ * SYNOPSIS: Lazy-load factory-staging arc modules (avoids boot crash if tree missing).
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ */
+
+let cached = null;
+
+export async function loadFactoryArcModules() {
+  if (cached) return cached;
+  const [
+    pointBTarget,
+    pointBGate,
+    builderEntryGate,
+    gateEnforcement,
+    missionPaths,
+    runFoundation,
+  ] = await Promise.all([
+    import('../factory-staging/factory-core/arc/foundation/point-b-target.js'),
+    import('../factory-staging/factory-core/arc/point-b-gate.js'),
+    import('../factory-staging/factory-core/arc/foundation/builder-entry-gate.js'),
+    import('../factory-staging/factory-core/arc/gate-enforcement.js'),
+    import('../factory-staging/factory-core/arc/mission-paths.js'),
+    import('../factory-staging/factory-core/arc/run-foundation.js'),
+  ]);
+  cached = {
+    ...pointBTarget,
+    ...pointBGate,
+    ...builderEntryGate,
+    ...gateEnforcement,
+    ...missionPaths,
+    ...runFoundation,
+  };
+  return cached;
+}

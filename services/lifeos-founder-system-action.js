@@ -7,8 +7,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { runSystemDirectStatusProbes } from './voice-rail-system-direct.js';
 import { detectSystemActionIntent } from './lifeos-founder-command-class.js';
-import { REPO_ROOT } from '../factory-staging/factory-core/builder/run-step.js';
-import { runDevelopmentStage } from '../factory-staging/factory-core/arc/run-foundation.js';
+import { REPO_ROOT } from './repo-root.js';
+import { loadFactoryArcModules } from './factory-arc-loader.js';
 
 const RECEIPT_SOURCE = 'voice_rail_founder_system_action';
 const RECEIPT_CHANNEL = 'founder_system_action';
@@ -246,7 +246,13 @@ async function executeFounderIntakeAction({
   const entrypointReceiptPath = path.join(missionFolder, 'receipts', 'VOICE_RAIL_INTAKE_ENTRYPOINT_RECEIPT.json');
   writeJson(entrypointReceiptPath, entrypointReceipt);
 
-  const dev = runDevelopmentStage(missionId, { force: false });
+  let dev = { ok: false, error: 'factory_staging_unavailable' };
+  try {
+    const { runDevelopmentStage } = await loadFactoryArcModules();
+    dev = runDevelopmentStage(missionId, { force: false });
+  } catch (err) {
+    dev = { ok: false, error: err.message };
+  }
   const chairHandoffReceiptPath = path.join(missionFolder, 'CHAIR_HANDOFF_RECEIPT.json');
   const handoffExists = fs.existsSync(chairHandoffReceiptPath);
 

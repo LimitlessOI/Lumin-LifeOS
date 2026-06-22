@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T21:49:53.508Z",
+  "generated_at": "2026-06-22T21:56:47.127Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12130,
+  "file_count": 12133,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40333,17 +40333,17 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.manifest.json",
       "synopsis": "Documentation — AMENDMENT 04 AUTO BUILDER.Manifest.",
-      "bytes": 449,
-      "mtime": "2026-06-22T21:44:31.120Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z",
+      "bytes": 462,
+      "mtime": "2026-06-22T21:56:41.798Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 31586,
-      "mtime": "2026-06-22T21:44:13.631Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z"
+      "bytes": 32015,
+      "mtime": "2026-06-22T21:56:41.323Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -40532,17 +40532,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26281,
-      "mtime": "2026-06-22T21:44:30.948Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z",
+      "bytes": 26278,
+      "mtime": "2026-06-22T21:56:16.292Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 462418,
-      "mtime": "2026-06-22T21:44:06.586Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z"
+      "bytes": 462786,
+      "mtime": "2026-06-22T21:56:16.290Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41031,9 +41031,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 125671,
-      "mtime": "2026-06-22T21:44:08.261Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z"
+      "bytes": 126060,
+      "mtime": "2026-06-22T21:56:14.223Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -70339,9 +70339,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 43262,
-      "mtime": "2026-06-22T21:23:24.735Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z",
+      "bytes": 43235,
+      "mtime": "2026-06-22T21:55:30.087Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -84183,10 +84183,10 @@
     },
     {
       "path": "services/builderos-bp-priority-scheduler.js",
-      "synopsis": "BP_PRIORITY autonomous queue scheduler.",
-      "bytes": 4947,
-      "mtime": "2026-06-21T21:38:59.029Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "synopsis": "BP_PRIORITY autonomous queue scheduler — useful-work-guard wrapped.",
+      "bytes": 5699,
+      "mtime": "2026-06-22T21:55:51.281Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -85304,6 +85304,16 @@
       "indexed_at": "2026-06-21T22:31:43.118Z"
     },
     {
+      "path": "services/factory-arc-loader.js",
+      "synopsis": "Lazy-load factory-staging arc modules (avoids boot crash if tree missing).",
+      "bytes": 1010,
+      "mtime": "2026-06-22T21:55:18.180Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
       "path": "services/factory-autopilot-scheduler.js",
       "synopsis": "HIST DOMAIN — Historian owns this artifact (read/salvage only).",
       "bytes": 4393,
@@ -86117,9 +86127,9 @@
     {
       "path": "services/lifeos-founder-system-action.js",
       "synopsis": "Founder system actions — harmless receipts + governed BuilderOS founder intake path.",
-      "bytes": 10865,
-      "mtime": "2026-06-21T21:39:15.126Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 11003,
+      "mtime": "2026-06-22T21:55:59.102Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86207,9 +86217,9 @@
     {
       "path": "services/lifeos-mission-pipeline-executor.js",
       "synopsis": "Founder chat → foundation pipeline (Point B / mission execute).",
-      "bytes": 3646,
-      "mtime": "2026-06-21T21:39:15.292Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 4058,
+      "mtime": "2026-06-22T21:55:35.112Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86364,9 +86374,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 16481,
-      "mtime": "2026-06-22T21:22:38.357Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z",
+      "bytes": 16447,
+      "mtime": "2026-06-22T21:55:35.698Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87006,9 +87016,19 @@
     {
       "path": "services/point-b-navigator.js",
       "synopsis": "Point B navigator — reads POINT_B_TARGET.json and returns next gate action.",
-      "bytes": 11133,
-      "mtime": "2026-06-22T21:23:49.313Z",
-      "indexed_at": "2026-06-22T21:44:36.978Z",
+      "bytes": 11314,
+      "mtime": "2026-06-22T21:55:41.766Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
+      "path": "services/point-b-target-lite.js",
+      "synopsis": "Read POINT_B_TARGET.json without factory-staging boot dependency.",
+      "bytes": 551,
+      "mtime": "2026-06-22T21:55:09.116Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -87143,6 +87163,16 @@
       "indexed_at": "2026-06-21T22:31:43.118Z",
       "ssot": [
         "docs/projects/AMENDMENT_16_WORD_KEEPER.md"
+      ]
+    },
+    {
+      "path": "services/repo-root.js",
+      "synopsis": "Canonical repo root for production spine (not factory-staging).",
+      "bytes": 430,
+      "mtime": "2026-06-22T21:55:07.874Z",
+      "indexed_at": "2026-06-22T21:56:47.127Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
     },
     {
