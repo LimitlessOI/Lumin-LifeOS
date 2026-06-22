@@ -35,7 +35,7 @@ docs/*
 !docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 !docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json
 !docs/CONTINUITY_LOG.md
-• Lumin-Memory/
+Lumin-Memory/
 
 # Tests
 tests/
