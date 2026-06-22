@@ -6,6 +6,12 @@
  */
 import express from 'express';
 import { createLifeREOSService } from '../services/lifere-os-v1.js';
+import {
+  enrichDailyCommandCenter,
+  fetchBoldTrailPipeline,
+  getBoldTrailConnectionStatus,
+  pushApprovedFollowUp,
+} from '../services/lifere-boldtrail-bridge.js';
 
 export function createLifeRERoutes({ requireKey }) {
   const router = express.Router();
@@ -15,8 +21,41 @@ export function createLifeRERoutes({ requireKey }) {
     res.json(service.health());
   });
 
-  router.post('/daily-command-center', requireKey, (req, res) => {
-    res.json({ ok: true, result: service.dailyCommandCenter(req.body || {}) });
+  router.get('/boldtrail/status', requireKey, async (_req, res) => {
+    try {
+      const status = await getBoldTrailConnectionStatus();
+      res.json({ ok: true, boldtrail: status });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/boldtrail/pipeline', requireKey, async (req, res) => {
+    try {
+      const limit = Number(req.query.limit) || 50;
+      const assignedAgentId = req.query.assigned_agent_id || null;
+      const pipeline = await fetchBoldTrailPipeline({ limit, assignedAgentId });
+      res.json({ ok: pipeline.ok, result: pipeline });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/daily-command-center', requireKey, async (req, res) => {
+    try {
+      const enriched = await enrichDailyCommandCenter(req.body || {});
+      res.json({ ok: true, result: service.dailyCommandCenter(enriched) });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/top-3', requireKey, (req, res) => {
+    res.json({ ok: true, result: service.top3Priorities(req.query || {}) });
+  });
+
+  router.post('/top-3', requireKey, (req, res) => {
+    res.json({ ok: true, result: service.top3Priorities(req.body || {}) });
   });
 
   router.post('/nightly-debrief', requireKey, (req, res) => {
@@ -35,8 +74,45 @@ export function createLifeRERoutes({ requireKey }) {
     res.json({ ok: true, result: service.socialLite(req.body || {}) });
   });
 
-  router.post('/follow-up/lite', requireKey, (req, res) => {
-    res.json({ ok: true, result: service.followUpLite(req.body || {}) });
+  router.post('/follow-up/lite', requireKey, async (req, res) => {
+    try {
+      const pipeline = await fetchBoldTrailPipeline({ limit: 25 });
+      if (pipeline.ok && pipeline.contacts.length) {
+        const queue = pipeline.contacts.slice(0, 10).map((contact, index) => ({
+          rank: index + 1,
+          lead: contact.name,
+          contact_id: contact.id,
+          status_label: contact.status_label,
+          message_draft: `Hey ${contact.name.split(' ')[0] || 'there'}, wanted to make sure you got the options I sent.`,
+          execute_external: false,
+          requires_agent_approval: true,
+          source: 'boldtrail',
+        }));
+        res.json({ ok: true, result: { queue, source: 'boldtrail' } });
+        return;
+      }
+      res.json({ ok: true, result: service.followUpLite(req.body || {}) });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/follow-up/approve', requireKey, async (req, res) => {
+    try {
+      const { contact_id, message, agent_label } = req.body || {};
+      const result = await pushApprovedFollowUp({
+        contactId: contact_id,
+        message,
+        agentLabel: agent_label || 'LifeRE',
+      });
+      if (!result.ok) {
+        res.status(result.error === 'BoldTrail API not configured' ? 503 : 400).json(result);
+        return;
+      }
+      res.json({ ok: true, result });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.post('/tc/extract-lite', requireKey, (req, res) => {

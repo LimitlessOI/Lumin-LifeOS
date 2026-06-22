@@ -1,20 +1,11 @@
 /**
- * SYNOPSIS: BoldTrail integration notes (evidence-based):
- */
-// src/integrations/boldtrail.js (FULL)
-import axios from "axios";
-
-/**
- * BoldTrail integration notes (evidence-based):
- * - Inside Real Estate's "BoldTrail Public API" documentation hub points to kvCORE Public API v2.
- * - Base URL: https://api.kvcore.com (docs). Auth: Authorization: Bearer <JWT>.
- * - There is no public evidence of an "AI assistant API" endpoint in the public docs.
+ * SYNOPSIS: BoldTrail / kvCORE Public API v2 client for CRM data flows.
+ * @ssot docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md
  *
- * Therefore:
- * - We support kvCORE v2 public API for CRM data flows (contacts/users/etc).
- * - We keep a "legacy" BoldTrail base URL override for private/vendor deployments if needed.
- * - We do NOT guess AI endpoints; we return fallback unless explicitly enabled and confirmed.
+ * Inside Real Estate Public API → kvCORE v2. Base URL: https://api.kvcore.com
+ * Auth: Authorization: Bearer JWT. No public AI assistant API — CRM data flows only.
  */
+import axios from "axios";
 
 function getConfig() {
   const token = (process.env.BOLDTRAIL_API_KEY || process.env.KVCORE_API_TOKEN || "").trim();
@@ -132,8 +123,85 @@ export async function probeBoldTrailApi() {
  * These functions fail soft (return ok:false) and never throw.
  */
 export async function listContacts({ limit = 25, page = 1 } = {}) {
+  return listContactsFiltered({ limit, page });
+}
+
+export async function listContactsFiltered({
+  limit = 25,
+  page = 1,
+  status = null,
+  assignedAgentId = null,
+  leadTypes = null,
+} = {}) {
   if (!isBoldTrailAPIAvailable()) return { ok: false, reason: "missing_token" };
-  return await request("GET", `/contacts?limit=${encodeURIComponent(limit)}&page=${encodeURIComponent(page)}`);
+
+  const params = new URLSearchParams();
+  params.set("limit", String(limit));
+  params.set("page", String(page));
+  if (status != null && status !== "") params.set("filter[status]", String(status));
+  if (assignedAgentId != null && assignedAgentId !== "") {
+    params.set("filter[assigned_agent_id]", String(assignedAgentId));
+  }
+  if (Array.isArray(leadTypes)) {
+    for (const leadType of leadTypes) {
+      if (leadType) params.append("filter[leadtype][]", String(leadType));
+    }
+  }
+
+  return await request("GET", `/contacts?${params.toString()}`);
+}
+
+export function extractContactsFromResponse(data) {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data.data)) return data.data;
+  if (Array.isArray(data.contacts)) return data.contacts;
+  if (data.data && Array.isArray(data.data.contacts)) return data.data.contacts;
+  if (data.data && Array.isArray(data.data.data)) return data.data.data;
+  return [];
+}
+
+export function normalizeBoldTrailContact(raw) {
+  if (!raw || typeof raw !== "object") return null;
+
+  const id = raw.id ?? raw.contact_id ?? raw.contactId;
+  if (id == null) return null;
+
+  const first = String(raw.first_name || raw.firstName || "").trim();
+  const last = String(raw.last_name || raw.lastName || "").trim();
+  const name = String(raw.name || "").trim()
+    || [first, last].filter(Boolean).join(" ")
+    || String(raw.email || raw.phone || `Contact ${id}`).trim();
+
+  const statusRaw = raw.status ?? raw.lead_status ?? raw.leadStatus;
+  const statusNum = statusRaw == null || statusRaw === "" ? null : Number(statusRaw);
+
+  return {
+    id: String(id),
+    name,
+    email: String(raw.email || "").trim() || null,
+    phone: String(raw.phone || raw.cell_phone || raw.mobile || "").trim() || null,
+    status: Number.isFinite(statusNum) ? statusNum : null,
+    status_label: statusLabelFromCode(statusNum),
+    assigned_agent_id: raw.assigned_agent_id ?? raw.assignedAgentId ?? null,
+    source: String(raw.source || raw.lead_source || "").trim() || null,
+    updated_at: raw.updated_at || raw.updatedAt || raw.last_activity || null,
+  };
+}
+
+function statusLabelFromCode(code) {
+  const map = {
+    0: "new",
+    1: "client",
+    2: "closed",
+    3: "sphere",
+    4: "active",
+    5: "pending",
+    6: "pending",
+    7: "prospect",
+  };
+  if (code == null || !Number.isFinite(code)) return "unknown";
+  return map[code] || "unknown";
 }
 
 export async function createOrUpdateContact(contact = {}) {

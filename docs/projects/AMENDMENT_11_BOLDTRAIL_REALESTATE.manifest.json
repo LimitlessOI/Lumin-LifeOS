@@ -1,0 +1,18 @@
+{
+  "project_id": "boldtrail_real_estate",
+  "name": "BoldTrail Real Estate CRM",
+  "amendment_path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
+  "status": "live",
+  "owned_files": [
+    "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
+    "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.manifest.json",
+    "src/integrations/boldtrail.js",
+    "routes/boldtrail-routes.js",
+    "routes/boldtrail-coaching-routes.js",
+    "public/overlay/boldtrail.html",
+    "services/lifere-boldtrail-bridge.js"
+  ],
+  "last_updated": "2026-06-22",
+  "last_receipt": "2026-06-22 lifere-boldtrail-bridge",
+  "last_change_summary": "LifeRE reads BoldTrail pipeline; approval-gated note write-back"
+}

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T17:52:02.184Z",
+  "generated_at": "2026-06-22T21:05:30.528Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12123,
+  "file_count": 12126,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28694,8 +28694,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 7425,
-      "mtime": "2026-06-22T17:34:07.876Z",
-      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "mtime": "2026-06-22T20:57:53.664Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
       "synopsis_index_only": true
     },
     {
@@ -28876,9 +28876,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3636730,
-      "mtime": "2026-06-22T17:48:14.451Z",
-      "indexed_at": "2026-06-22T17:48:33.388Z"
+      "bytes": 3637670,
+      "mtime": "2026-06-22T21:05:20.307Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33434,8 +33434,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3669,
-      "mtime": "2026-06-22T17:34:07.876Z",
-      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "mtime": "2026-06-22T20:57:53.664Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
       "synopsis_index_only": true
     },
     {
@@ -33542,9 +33542,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 997,
-      "mtime": "2026-06-22T17:34:07.876Z",
-      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "bytes": 1147,
+      "mtime": "2026-06-22T20:57:53.664Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
       "synopsis_index_only": true
     },
     {
@@ -33687,8 +33687,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/POINT_B_GATE_REPORT.json",
       "synopsis": "BuilderOS artifact — POINT B GATE REPORT.",
       "bytes": 6353,
-      "mtime": "2026-06-22T17:34:18.860Z",
-      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "mtime": "2026-06-22T18:48:45.178Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
       "synopsis_index_only": true
     },
     {
@@ -40412,11 +40412,19 @@
       "indexed_at": "2026-06-21T22:31:43.118Z"
     },
     {
+      "path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.manifest.json",
+      "synopsis": "Documentation — AMENDMENT 11 BOLDTRAIL REALESTATE.Manifest.",
+      "bytes": 701,
+      "mtime": "2026-06-22T21:05:10.184Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
       "synopsis": "AMENDMENT 11 — BoldTrail Real Estate CRM Integration",
-      "bytes": 6424,
-      "mtime": "2026-06-21T21:37:58.566Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 7267,
+      "mtime": "2026-06-22T20:57:41.328Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z"
     },
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json",
@@ -40524,17 +40532,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 25994,
-      "mtime": "2026-06-21T20:59:49.332Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 26185,
+      "mtime": "2026-06-22T21:05:11.639Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 460281,
-      "mtime": "2026-06-22T17:50:37.536Z",
-      "indexed_at": "2026-06-22T17:52:02.184Z"
+      "bytes": 461082,
+      "mtime": "2026-06-22T20:57:52.615Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -68490,9 +68498,9 @@
     {
       "path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFERE OS V1 ACCEPTANCE.",
-      "bytes": 1005,
-      "mtime": "2026-06-22T17:34:07.876Z",
-      "indexed_at": "2026-06-22T17:48:33.388Z",
+      "bytes": 1155,
+      "mtime": "2026-06-22T20:57:53.664Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
       "synopsis_index_only": true
     },
     {
@@ -69351,6 +69359,13 @@
       "bytes": 25303,
       "mtime": "2026-06-21T21:39:01.776Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "public/overlay/lifeos-lifere.html",
+      "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
+      "bytes": 15021,
+      "mtime": "2026-06-22T20:57:33.687Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -70710,9 +70725,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS v1 routes.",
-      "bytes": 2084,
-      "mtime": "2026-06-21T21:39:04.555Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 4786,
+      "mtime": "2026-06-22T20:57:17.146Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -72535,9 +72550,9 @@
     {
       "path": "scripts/run-lifere-os-v1-acceptance.mjs",
       "synopsis": "LifeRE OS v1 acceptance — Point B proof for LifeRE Alpha.",
-      "bytes": 2252,
-      "mtime": "2026-06-21T21:39:08.395Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 4257,
+      "mtime": "2026-06-22T20:57:37.489Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -86300,11 +86315,21 @@
       ]
     },
     {
+      "path": "services/lifere-boldtrail-bridge.js",
+      "synopsis": "LifeRE ↔ BoldTrail bridge — pipeline read + approval-gated write-back.",
+      "bytes": 7170,
+      "mtime": "2026-06-22T20:57:08.442Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/lifere-os-v1.js",
       "synopsis": "LifeRE OS v1 service — light operational copilot for real estate agents.",
-      "bytes": 6837,
-      "mtime": "2026-06-21T21:39:15.510Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 8319,
+      "mtime": "2026-06-22T20:57:13.231Z",
+      "indexed_at": "2026-06-22T21:05:30.528Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

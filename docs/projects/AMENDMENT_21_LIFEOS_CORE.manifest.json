@@ -195,7 +195,12 @@
     "services/lifeos-system-agent.js",
     "services/voice-rail-intent-router.js",
     "db/migrations/20260612_voice_rail_founder_routing_state.sql",
-    "public/overlay/lifeos-ambient-sense.js"
+    "public/overlay/lifeos-ambient-sense.js",
+    "routes/lifere-os-routes.js",
+    "services/lifere-os-v1.js",
+    "services/lifere-boldtrail-bridge.js",
+    "public/overlay/lifeos-lifere.html",
+    "scripts/run-lifere-os-v1-acceptance.mjs"
   ],
   "assertions": [
     {
@@ -867,8 +872,8 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-21",
-  "last_receipt": "2026-06-21 founder-build-closed-loop-sentry-audit",
-  "last_change_summary": "Atomic batch commit, live/outcome verification gate, async build jobs, client bubble proof",
+  "last_updated": "2026-06-22",
+  "last_receipt": "2026-06-22 lifere-boldtrail-exp-sync",
+  "last_change_summary": "LifeRE daily command center syncs BoldTrail EXP pipeline with approval-gated follow-up write-back",
   "ssot_receipt_tail": "Voice Rail auto-stages to Action Inbox; approved inbox commitments route to lifeos_commitments."
 }

@@ -1,11 +1,11 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-06-22T17:34:07.875Z",
+  "generated_at": "2026-06-22T20:57:53.663Z",
   "objective_id": "PRODUCT-LIFERE-OS-V1-0001",
   "objective_name": "LifeRE OS v1 (LifeRE Alpha)",
   "verdict": "TECHNICAL_PASS",
   "receipt": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
-  "git_sha": "ea76e488f0d176ecb3bc24e5d4ab7bab93a7ba1e",
+  "git_sha": "660df778902e17197a32103ae36447557c082dcf",
   "tests_passed": [
     "LRE-T01_service_file",
     "LRE-T01b_top3_export",
@@ -20,6 +20,10 @@
     "LRE-T05c_point_b_strip",
     "LRE-T06_blueprint",
     "LRE-T07_navigator",
+    "LRE-T08_boldtrail_bridge",
+    "LRE-T08b_boldtrail_status_route",
+    "LRE-T08c_lifere_boldtrail_marker",
+    "LRE-T08d_followup_approve_route",
     "bp_sync_mandatory",
     "LRE-T03_bp_sync"
   ],

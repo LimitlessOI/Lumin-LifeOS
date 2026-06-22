@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: LifeRE Alpha — daily command center (Point B surface) -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>LifeRE — Daily Command Center</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --lifere-accent: #0ea5e9;
+      --bg: #0a0a0f;
+      --card: #111118;
+      --border: #1e1e2e;
+      --text: #e8e8f0;
+      --muted: #888;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .root {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 28px 18px 80px;
+    }
+    .page-header {
+      margin-bottom: 28px;
+      border-left: 4px solid var(--lifere-accent);
+      padding-left: 14px;
+    }
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .page-header p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--lifere-accent);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .priority-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .priority-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      background: rgba(14, 165, 233, 0.06);
+      border-radius: 8px;
+      border: 1px solid rgba(14, 165, 233, 0.15);
+    }
+    .priority-rank {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--lifere-accent);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .priority-task { font-size: 14px; font-weight: 600; }
+    .priority-why { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .blocker-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .blocker-tag {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #1a1a2a;
+      color: #bbb;
+    }
+    .debrief-row { font-size: 13px; margin-bottom: 8px; color: #ccc; }
+    .debrief-label { color: var(--lifere-accent); font-weight: 600; margin-right: 6px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .btn {
+      border: 1px solid var(--border);
+      background: #17171f;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--lifere-accent);
+      border-color: var(--lifere-accent);
+      color: #fff;
+    }
+    .status-line { font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .empty { color: var(--muted); font-size: 13px; }
+    .boldtrail-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      background: rgba(14, 165, 233, 0.08);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 10px;
+      font-size: 13px;
+    }
+    .boldtrail-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #152032;
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+    .boldtrail-pill.ok { background: rgba(34, 197, 94, 0.15); color: #86efac; }
+    .boldtrail-pill.warn { background: rgba(251, 191, 36, 0.12); color: #fcd34d; }
+    .boldtrail-link { color: var(--lifere-accent); text-decoration: none; font-weight: 600; }
+    .followup-item {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: #12121a;
+    }
+    .followup-meta { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .followup-draft { font-size: 13px; color: #ddd; margin-bottom: 10px; line-height: 1.45; }
+    .followup-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-sm { padding: 6px 10px; font-size: 12px; }
+    .btn-success { background: #166534; border-color: #166534; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="root" data-lifere="daily-command-center" id="lifere-daily-command-center">
+    <header class="page-header">
+      <h1>LifeRE Daily Command Center</h1>
+      <p id="lifere-dateline">Loading…</p>
+    </header>
+
+    <div class="boldtrail-strip" data-lifere="boldtrail-sync" id="lifere-boldtrail-strip">
+      <span class="boldtrail-pill warn" id="lifere-bt-status">BoldTrail: checking…</span>
+      <span class="boldtrail-pill" id="lifere-bt-new">New: —</span>
+      <span class="boldtrail-pill" id="lifere-bt-active">Active: —</span>
+      <span class="boldtrail-pill" id="lifere-bt-prospect">Prospect: —</span>
+      <a class="boldtrail-link" href="https://boldtrail.exprealty.com" target="_blank" rel="noopener">Open BoldTrail ↗</a>
+    </div>
+
+    <section class="section" data-lifere="top-3-priorities" id="lifere-top-3">
+      <div class="section-title">Top 3 Priorities</div>
+      <ul class="priority-list" id="lifere-priority-list">
+        <li class="empty">Loading priorities…</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <div class="section-title">Blocker Scan</div>
+      <div class="blocker-tags" id="lifere-blockers"></div>
+    </section>
+
+    <section class="section" data-lifere="boldtrail-follow-up" id="lifere-follow-up">
+      <div class="section-title">BoldTrail Follow-Up Queue</div>
+      <p class="empty" id="lifere-followup-empty">Load command center to pull CRM queue.</p>
+      <div id="lifere-followup-list"></div>
+    </section>
+
+    <section class="section" data-lifere="nightly-debrief" id="lifere-nightly-debrief">
+      <div class="section-title">Nightly Debrief Draft</div>
+      <div id="lifere-debrief-body">
+        <p class="empty">Run debrief to seed tomorrow's top 3.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="lifere-run-debrief">Generate debrief draft</button>
+        <button type="button" class="btn" id="lifere-refresh">Refresh command center</button>
+      </div>
+      <p class="status-line" id="lifere-status"></p>
+    </section>
+  </div>
+
+  <script>
+    (async function initLifeRE() {
+      const dateline = document.getElementById('lifere-dateline');
+      const list = document.getElementById('lifere-priority-list');
+      const blockersEl = document.getElementById('lifere-blockers');
+      const debriefBody = document.getElementById('lifere-debrief-body');
+      const statusEl = document.getElementById('lifere-status');
+      const btStatus = document.getElementById('lifere-bt-status');
+      const btNew = document.getElementById('lifere-bt-new');
+      const btActive = document.getElementById('lifere-bt-active');
+      const btProspect = document.getElementById('lifere-bt-prospect');
+      const followUpList = document.getElementById('lifere-followup-list');
+      const followUpEmpty = document.getElementById('lifere-followup-empty');
+      const now = new Date();
+      dateline.textContent = now.toLocaleDateString(undefined, {
+        weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+      });
+
+      async function apiFetch(path, options) {
+        const ctx = window.LifeOSAuth?.();
+        if (ctx?.fetchWithAuth) return ctx.fetchWithAuth(path, options);
+        const headers = { 'Content-Type': 'application/json', ...(options?.headers || {}) };
+        const key = ctx?.KEY || localStorage.getItem('commandKey');
+        if (key) headers['x-command-key'] = key;
+        return fetch(path, { ...options, headers });
+      }
+
+      function renderPriorities(focus) {
+        const items = focus || [];
+        if (!items.length) {
+          list.innerHTML = '<li class="empty">No priorities yet.</li>';
+          return;
+        }
+        list.innerHTML = items.map((p) => `
+          <li class="priority-item">
+            <span class="priority-rank">${p.rank || '?'}</span>
+            <div>
+              <div class="priority-task">${escapeHtml(p.task || '')}</div>
+              <div class="priority-why">${escapeHtml(p.why_now || '')}</div>
+            </div>
+          </li>
+        `).join('');
+      }
+
+      function renderBlockers(tags) {
+        blockersEl.innerHTML = (tags || []).map((t) =>
+          `<span class="blocker-tag">${escapeHtml(t)}</span>`).join('') || '<span class="empty">None flagged</span>';
+      }
+
+      function renderBoldTrailStrip(boldtrail) {
+        if (!boldtrail) {
+          btStatus.textContent = 'BoldTrail: not checked';
+          btStatus.className = 'boldtrail-pill warn';
+          return;
+        }
+        if (boldtrail.connected) {
+          btStatus.textContent = 'BoldTrail: connected';
+          btStatus.className = 'boldtrail-pill ok';
+        } else {
+          btStatus.textContent = `BoldTrail: ${boldtrail.reason || 'offline'}`;
+          btStatus.className = 'boldtrail-pill warn';
+        }
+        const s = boldtrail.pipeline_summary || {};
+        btNew.textContent = `New: ${s.new ?? '—'}`;
+        btActive.textContent = `Active: ${s.active ?? '—'}`;
+        btProspect.textContent = `Prospect: ${s.prospect ?? '—'}`;
+      }
+
+      let lastFollowUpQueue = [];
+
+      function renderFollowUpQueue(queue) {
+        lastFollowUpQueue = queue || [];
+        const items = lastFollowUpQueue;
+        if (!items.length) {
+          followUpEmpty.style.display = 'block';
+          followUpEmpty.textContent = 'No BoldTrail follow-ups in queue.';
+          followUpList.innerHTML = '';
+          return;
+        }
+        followUpEmpty.style.display = 'none';
+        followUpList.innerHTML = items.map((item, idx) => `
+          <div class="followup-item" data-contact-id="${escapeHtml(item.contact_id || '')}">
+            <div class="followup-meta">#${item.rank || '?'} · ${escapeHtml(item.lead || '')} · ${escapeHtml(item.status_label || 'lead')}</div>
+            <div class="followup-draft">${escapeHtml(item.message_draft || '')}</div>
+            <div class="followup-actions">
+              <button type="button" class="btn btn-sm btn-success lifere-approve-followup" data-queue-idx="${idx}">
+                Approve → log to BoldTrail
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+        followUpList.querySelectorAll('.lifere-approve-followup').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const idx = Number(btn.getAttribute('data-queue-idx'));
+            const item = lastFollowUpQueue[idx];
+            if (!item?.contact_id || !item?.message_draft) return;
+            btn.disabled = true;
+            statusEl.textContent = 'Writing note to BoldTrail…';
+            try {
+              const res = await apiFetch('/api/v1/lifere/follow-up/approve', {
+                method: 'POST',
+                body: JSON.stringify({
+                  contact_id: item.contact_id,
+                  message: item.message_draft,
+                }),
+              });
+              const data = await res.json();
+              if (!data.ok) throw new Error(data.error || 'Approve failed');
+              btn.textContent = 'Logged ✓';
+              statusEl.textContent = 'Follow-up note saved to BoldTrail (approval gate passed).';
+            } catch (err) {
+              btn.disabled = false;
+              statusEl.textContent = `Approve failed: ${err.message}`;
+            }
+          });
+        });
+      }
+
+      function renderDebrief(debrief) {
+        if (!debrief) {
+          debriefBody.innerHTML = '<p class="empty">No debrief yet.</p>';
+          return;
+        }
+        const wins = (debrief.wins || []).map((w) => `<div class="debrief-row"><span class="debrief-label">Win:</span>${escapeHtml(w)}</div>`).join('');
+        const losses = (debrief.losses || []).map((l) => `<div class="debrief-row"><span class="debrief-label">Loss:</span>${escapeHtml(l)}</div>`).join('');
+        const seeds = (debrief.next_day_top_3_seed || []).map((s) =>
+          `<div class="debrief-row"><span class="debrief-label">Tomorrow:</span>${escapeHtml(s.title || '')}</div>`).join('');
+        debriefBody.innerHTML = `
+          ${wins || '<div class="debrief-row">No wins logged.</div>'}
+          ${losses}
+          <div class="debrief-row" style="margin-top:10px"><span class="debrief-label">Summary:</span>${escapeHtml(debrief.summary || '')}</div>
+          ${seeds ? `<div style="margin-top:12px"><div class="section-title" style="margin-bottom:8px">Tomorrow seed</div>${seeds}</div>` : ''}
+        `;
+      }
+
+      function escapeHtml(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      async function loadCommandCenter() {
+        statusEl.textContent = 'Loading…';
+        try {
+          const res = await apiFetch('/api/v1/lifere/daily-command-center', {
+            method: 'POST',
+            body: JSON.stringify({ agent: 'founder', backlog: [] }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'API error');
+          renderPriorities(data.result?.daily_focus);
+          renderBlockers(data.result?.blocker_scan);
+          renderBoldTrailStrip(data.result?.boldtrail);
+          renderFollowUpQueue(data.result?.boldtrail?.follow_up_queue);
+          statusEl.textContent = data.result?.boldtrail?.connected
+            ? 'Command center loaded from BoldTrail pipeline.'
+            : 'Command center loaded (BoldTrail fallback).';
+        } catch (err) {
+          statusEl.textContent = `Load failed: ${err.message}`;
+        }
+      }
+
+      async function runDebrief() {
+        statusEl.textContent = 'Generating debrief…';
+        try {
+          const res = await apiFetch('/api/v1/lifere/nightly-debrief', {
+            method: 'POST',
+            body: JSON.stringify({ wins: [], losses: [], notes: 'End of day debrief draft' }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'API error');
+          renderDebrief(data.result);
+          statusEl.textContent = 'Debrief draft ready.';
+        } catch (err) {
+          statusEl.textContent = `Debrief failed: ${err.message}`;
+        }
+      }
+
+      document.getElementById('lifere-run-debrief').addEventListener('click', runDebrief);
+      document.getElementById('lifere-refresh').addEventListener('click', loadCommandCenter);
+      await loadCommandCenter();
+    })();
+  </script>
+</body>
+</html>

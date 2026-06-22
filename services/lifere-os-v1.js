@@ -70,7 +70,23 @@ export function createLifeREOSService() {
     };
   }
 
-  function dailyCommandCenter({ agent = 'agent', backlog = [] } = {}) {
+  function dailyCommandCenter({ agent = 'agent', backlog = [], boldtrail = null } = {}) {
+    if (boldtrail?.connected && boldtrail.top3?.length) {
+      return {
+        agent: ensureText(agent) || 'agent',
+        daily_focus: boldtrail.top3,
+        top_3_priorities: boldtrail.top3,
+        blocker_scan: boldtrail.blocker_scan || [],
+        boldtrail: {
+          connected: true,
+          pipeline_summary: boldtrail.pipeline_summary,
+          follow_up_queue: boldtrail.follow_up_queue || [],
+          portal_url: boldtrail.portal_url || 'https://boldtrail.exprealty.com',
+          source: 'boldtrail',
+        },
+      };
+    }
+
     const top3 = top3FromBacklog(backlog);
     return {
       agent: ensureText(agent) || 'agent',
@@ -79,8 +95,26 @@ export function createLifeREOSService() {
         { rank: 2, task: 'follow up on 5 warm leads', why_now: 'conversion' },
         { rank: 3, task: 'post 1 value social update', why_now: 'visibility' },
       ],
-      blocker_scan: ['missing docs', 'follow-up delay', 'compliance uncertainty'],
+      top_3_priorities: top3.length ? top3 : [
+        { rank: 1, task: 'prospect 10 people', why_now: 'new pipeline' },
+        { rank: 2, task: 'follow up on 5 warm leads', why_now: 'conversion' },
+        { rank: 3, task: 'post 1 value social update', why_now: 'visibility' },
+      ],
+      blocker_scan: boldtrail?.connected === false
+        ? ['BoldTrail API not connected — showing LifeRE defaults', ...(boldtrail?.blocker_scan || [])]
+        : ['missing docs', 'follow-up delay', 'compliance uncertainty'],
+      boldtrail: boldtrail ? {
+        connected: !!boldtrail.connected,
+        reason: boldtrail.reason || null,
+        portal_url: boldtrail.portal_url || 'https://boldtrail.exprealty.com',
+        source: boldtrail.connected ? 'boldtrail' : 'fallback',
+      } : null,
     };
+  }
+
+  function top3Priorities({ backlog = [] } = {}) {
+    const center = dailyCommandCenter({ backlog });
+    return { priorities: center.top_3_priorities || center.daily_focus };
   }
 
   function nightlyDebrief({ wins = [], losses = [], notes = '' } = {}) {
@@ -200,6 +234,7 @@ export function createLifeREOSService() {
     PILLARS,
     health,
     dailyCommandCenter,
+    top3Priorities,
     nightlyDebrief,
     educationContext,
     salesCoach,
