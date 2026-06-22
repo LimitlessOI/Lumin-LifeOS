@@ -18,6 +18,7 @@ RUN test -f factory-staging/factory-core/builder/run-step.js \
   && node --check routes/lifeos-builderos-command-control-routes.js \
   && node --check services/founder-build-self-repair.js \
   && node --check services/lumin-chair-orchestrator.js \
+  && node scripts/verify-spine-imports.mjs \
   && node -e "import('./services/founder-build-self-repair.js')" \
   || (echo "FATAL: spine module missing from Docker image" >&2 && exit 1)
 

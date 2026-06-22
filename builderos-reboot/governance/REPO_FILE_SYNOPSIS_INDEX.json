@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T22:01:33.492Z",
+  "generated_at": "2026-06-22T22:05:26.382Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12135,
+  "file_count": 12136,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41031,9 +41031,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 126940,
-      "mtime": "2026-06-22T22:01:25.658Z",
-      "indexed_at": "2026-06-22T22:01:33.492Z"
+      "bytes": 127319,
+      "mtime": "2026-06-22T22:05:23.576Z",
+      "indexed_at": "2026-06-22T22:05:26.382Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -69119,9 +69119,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 114619,
-      "mtime": "2026-06-22T21:34:47.281Z",
-      "indexed_at": "2026-06-22T21:34:54.837Z"
+      "bytes": 114920,
+      "mtime": "2026-06-22T22:05:13.274Z",
+      "indexed_at": "2026-06-22T22:05:26.382Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -69230,9 +69230,9 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 40475,
-      "mtime": "2026-06-21T21:39:01.426Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 40472,
+      "mtime": "2026-06-22T22:05:13.147Z",
+      "indexed_at": "2026-06-22T22:05:26.382Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -83525,6 +83525,16 @@
       "indexed_at": "2026-06-21T22:31:43.118Z",
       "ssot": [
         "docs/projects/AMENDMENT_05_SITE_BUILDER.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-spine-imports.mjs",
+      "synopsis": "Fail if routes/spine import .js files not tracked in git (Railway boot crash guard).",
+      "bytes": 2751,
+      "mtime": "2026-06-22T22:05:19.213Z",
+      "indexed_at": "2026-06-22T22:05:26.382Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
     },
     {

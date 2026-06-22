@@ -2847,9 +2847,17 @@ async function directSystemHeaders() {
 
 function formatDirectSystemReply(data) {
   if (window.LifeOSSystemReply && typeof window.LifeOSSystemReply.format === 'function') {
-    return window.LifeOSSystemReply.format(data);
+    const formatted = window.LifeOSSystemReply.format(data);
+    if (data.lumin_chair && data.chair_channel) {
+      return `${formatted}\n\n— Lumin Chair · ${data.chair_channel}`;
+    }
+    return formatted;
   }
-  return data.human_summary || data.reason || data.error || 'No response from system.';
+  const base = data.human_summary || data.reason || data.error || 'No response from system.';
+  if (data.lumin_chair && data.chair_channel) {
+    return `${base}\n\n— Lumin Chair · ${data.chair_channel}`;
+  }
+  return base;
 }
 
 function luminHandleKey(e) {
