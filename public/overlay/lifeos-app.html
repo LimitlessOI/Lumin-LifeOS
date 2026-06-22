@@ -528,6 +528,32 @@
       .lumin-quick-sub { display: none; }
     }
 
+    .point-b-strip {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 7px 14px 8px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(14, 165, 233, 0.06);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .point-b-strip strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .point-b-strip .point-b-pct {
+      color: #0ea5e9;
+      font-weight: 700;
+    }
+    .point-b-strip .point-b-blocker {
+      color: #f59e0b;
+      flex: 1;
+      min-width: 120px;
+    }
+
     /* ═══════════════════════════════════════════════════════
        MOBILE CHROME
     ═══════════════════════════════════════════════════════ */
@@ -1451,6 +1477,10 @@
         <span class="nav-icon">☀️</span>
         <span class="nav-label">Today</span>
       </a>
+      <a class="nav-item" id="nav-lifere" data-page="lifeos-lifere.html" data-label="LifeRE" data-lifere-nav="true" onclick="navigate(this)" href="#">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">LifeRE</span>
+      </a>
       <a class="nav-item" id="nav-chat" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="navigate(this)" href="#">
         <span class="nav-icon">💬</span>
         <span class="nav-label">Chat</span>
@@ -1591,14 +1621,21 @@
     </div>
 
     <button type="button" class="lumin-quick-bar" id="lumin-quick-bar" onclick="openLuminFromQuickBar()"
-      aria-label="Open Lumin — ask anything or use voice">
+      aria-label="Open Lumin Chair — speak or type">
       <span class="lumin-quick-icon" aria-hidden="true">◎</span>
       <span class="lumin-quick-copy">
-        <span class="lumin-quick-title">Talk to your system directly…</span>
-        <span class="lumin-quick-sub">Voice or type. Messages route through the terminal bridge and return human-readable execution truth.</span>
+        <span class="lumin-quick-title">Lumin Chair — speak or type</span>
+        <span class="lumin-quick-sub">One mind for LifeOS. Orchestrates builds, Point B, and counsel — honest receipts only.</span>
       </span>
       <span class="lumin-quick-chev" aria-hidden="true">›</span>
     </button>
+
+    <div id="point-b-strip" class="point-b-strip" data-point-b-strip="true" data-lifere="point-b-status" aria-live="polite">
+      <strong id="point-b-label">Point B · LifeRE Alpha</strong>
+      <span class="point-b-pct" id="point-b-pct">—</span>
+      <span id="point-b-phase"></span>
+      <span class="point-b-blocker" id="point-b-blocker"></span>
+    </div>
 
     <!-- Content iframe -->
     <iframe class="content-frame" id="content-frame"
@@ -1657,6 +1694,10 @@
     <div class="more-item" data-page="lifeos-today.html" data-label="Today" onclick="mobileNavFromMore('lifeos-today.html','Today','--c-today')">
       <span class="more-item-icon">☀️</span>
       <span class="more-item-label">Today</span>
+    </div>
+    <div class="more-item" data-page="lifeos-lifere.html" data-label="LifeRE" onclick="mobileNavFromMore('lifeos-lifere.html','LifeRE','--c-today')">
+      <span class="more-item-icon">🏠</span>
+      <span class="more-item-label">LifeRE</span>
     </div>
     <div class="more-item" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="mobileNavFromMore('lifeos-chat.html','Lumin Chat','--c-coach')">
       <span class="more-item-icon">💬</span>
@@ -1837,8 +1878,8 @@
   <div class="lumin-drawer-header">
     <div class="lumin-drawer-avatar">◎</div>
     <div class="lumin-drawer-title">
-      <strong>Lumin</strong>
-      <span id="lumin-status-text">Ready</span>
+      <strong>Lumin Chair</strong>
+      <span id="lumin-status-text">Ready — your intercessor</span>
     </div>
     <div class="lumin-dock-controls" id="lumin-dock-controls">
       <button type="button" class="lumin-dock-btn active" data-dock="right" onclick="setLuminDock('right')">Side</button>
@@ -1866,7 +1907,7 @@
       <textarea
         class="lumin-input"
         id="lumin-input"
-        placeholder="Message Lumin…"
+        placeholder="Message Lumin Chair…"
         rows="4"
         onkeydown="luminHandleKey(event)"
         oninput="luminAutoResize(this)"></textarea>
@@ -1897,6 +1938,7 @@ function overlayUrl(page) { return `/overlay/${page}`; }
 /* Page metadata */
 const PAGE_META = {
   'lifeos-today.html':     { title: 'Today',      icon: '☀️',  color: '--c-today'     },
+  'lifeos-lifere.html':    { title: 'LifeRE',     icon: '🏠',  color: '--c-today'     },
   'lifeos-dashboard.html': { title: 'Dashboard', icon: '📊',  color: '--c-dashboard' },
   'lifeos-mirror.html':    { title: 'Mirror',     icon: '🔮',  color: '--c-mirror'    },
   'lifeos-engine.html':    { title: 'Engine',     icon: '⚡',  color: '--c-engine'    },
@@ -2684,11 +2726,11 @@ async function luminSend() {
 
   // Thinking indicator
   const thinkId = 'lumin-think-' + Date.now();
-  _appendLuminMsgRaw(thinkId, 'thinking', 'Lumin is thinking…');
+  _appendLuminMsgRaw(thinkId, 'thinking', 'Lumin Chair is working…');
 
   luminState.sending = true;
   document.getElementById('lumin-send-btn').disabled = true;
-  document.getElementById('lumin-status-text').textContent = 'Thinking…';
+  document.getElementById('lumin-status-text').textContent = 'Working…';
 
   const H = await directSystemHeaders();
   try {
@@ -2875,6 +2917,38 @@ document.addEventListener('lumin-voice-interim', (e) => {
     el.textContent = e.detail ? `"${e.detail}"` : '';
     if (!luminState.open && e.detail) openLuminDrawer();
   }
+});
+</script>
+
+<script>
+async function refreshPointBStrip() {
+  const strip = document.getElementById('point-b-strip');
+  if (!strip) return;
+  try {
+    const ctx = window.LifeOSAuth?.();
+    const headers = { Accept: 'application/json' };
+    let res;
+    if (ctx?.fetchWithAuth) {
+      res = await ctx.fetchWithAuth('/api/v1/lifeos/builderos/command-control/point-b/status');
+    } else {
+      const key = ctx?.KEY || localStorage.getItem('commandKey');
+      if (key) headers['x-command-key'] = key;
+      res = await fetch('/api/v1/lifeos/builderos/command-control/point-b/status', { headers });
+    }
+    if (!res.ok) return;
+    const data = await res.json();
+    const s = data.point_b || data;
+    document.getElementById('point-b-label').textContent = `Point B · ${s.label || 'LifeRE Alpha'}`;
+    document.getElementById('point-b-pct').textContent = `${s.progress_pct ?? 0}%`;
+    document.getElementById('point-b-phase').textContent = s.phase ? `· ${s.phase}` : '';
+    document.getElementById('point-b-blocker').textContent = s.blocker ? s.blocker : '';
+  } catch {
+    // non-fatal — strip stays at defaults
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  refreshPointBStrip();
+  setInterval(refreshPointBStrip, 120000);
 });
 </script>
 

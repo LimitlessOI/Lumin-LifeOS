@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T21:32:08.251Z",
+  "generated_at": "2026-06-22T21:34:54.837Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12126,
   "files": [
@@ -69119,9 +69119,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 111785,
-      "mtime": "2026-06-21T21:39:01.169Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 114619,
+      "mtime": "2026-06-22T21:34:47.281Z",
+      "indexed_at": "2026-06-22T21:34:54.837Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -69363,9 +69363,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 15021,
-      "mtime": "2026-06-22T20:57:33.687Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z"
+      "bytes": 15073,
+      "mtime": "2026-06-22T21:34:48.498Z",
+      "indexed_at": "2026-06-22T21:34:54.837Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",

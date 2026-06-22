@@ -195,6 +195,7 @@
 
   <script>
     (async function initLifeRE() {
+      const CTX = window.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false }) || null;
       const dateline = document.getElementById('lifere-dateline');
       const list = document.getElementById('lifere-priority-list');
       const blockersEl = document.getElementById('lifere-blockers');
@@ -212,10 +213,9 @@
       });
 
       async function apiFetch(path, options) {
-        const ctx = window.LifeOSAuth?.();
-        if (ctx?.fetchWithAuth) return ctx.fetchWithAuth(path, options);
+        if (CTX?.fetchWithAuth) return CTX.fetchWithAuth(path, options);
         const headers = { 'Content-Type': 'application/json', ...(options?.headers || {}) };
-        const key = ctx?.KEY || localStorage.getItem('commandKey');
+        const key = CTX?.KEY || localStorage.getItem('commandKey');
         if (key) headers['x-command-key'] = key;
         return fetch(path, { ...options, headers });
       }
