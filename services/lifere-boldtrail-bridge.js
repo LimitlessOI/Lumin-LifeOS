@@ -154,6 +154,8 @@ export function buildFollowUpQueueFromBoldTrail(contacts, { limit = 10 } = {}) {
       contact_id: contact.id,
       lead: contact.name,
       status_label: contact.status_label,
+      recipient_phone: contact.phone || null,
+      recipient_email: contact.email || null,
       message_draft: `Hey ${contact.name.split(' ')[0] || 'there'}, quick check-in — still planning to move forward? Happy to help with next steps.`,
       execute_external: false,
       requires_agent_approval: true,

@@ -18,6 +18,8 @@ export function createLifeREFollowUpOS({ pool = null } = {}) {
         lead: contact.name,
         contact_id: contact.id,
         status_label: contact.status_label,
+        recipient_phone: contact.phone || null,
+        recipient_email: contact.email || null,
         message_draft: `Hey ${(contact.name || '').split(' ')[0] || 'there'}, wanted to follow up on your home search.`,
         execute_external: false,
         requires_agent_approval: true,
@@ -27,13 +29,22 @@ export function createLifeREFollowUpOS({ pool = null } = {}) {
     return [];
   }
 
-  async function draftFollowUp({ userId, contactId, message }) {
+  async function draftFollowUp({ userId, contactId, message, contactMeta = {} }) {
     const { level } = await permission.getAutonomyLevel({ userId, actionType: 'email_lead' });
+    const channel = contactMeta.channel || (contactMeta.recipient_email ? 'email' : 'sms');
     const queued = await comms.queueDraft({
+      tenantId: contactMeta.tenant_id || 'default',
       userId,
-      actionType: 'email_lead',
+      actionType: channel === 'email' ? 'email_lead' : 'sms_lead',
       draft: message,
-      payload: { contact_id: contactId },
+      payload: {
+        contact_id: contactId,
+        recipient_name: contactMeta.recipient_name || contactMeta.lead,
+        recipient_phone: contactMeta.recipient_phone || contactMeta.phone,
+        recipient_email: contactMeta.recipient_email || contactMeta.email,
+        channel,
+        source: contactMeta.source || 'follow_up_os',
+      },
     });
     return { ok: true, autonomy_level: level, queue: queued };
   }

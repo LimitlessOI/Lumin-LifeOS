@@ -254,6 +254,8 @@
     <section class="section tab-panel" id="lifere-approval-queue" data-tab-panel="approval">
       <div class="section-title">Approval Queue</div>
       <div id="approval-list" class="empty">No pending drafts.</div>
+      <div class="section-title" style="margin-top:14px">Recent sends</div>
+      <div id="comms-log-list" class="status-line"></div>
     </section>
 
     <section class="section tab-panel" id="lifere-coaching-panel" data-tab-panel="coaching">
@@ -280,7 +282,7 @@
     <section class="section tab-panel" id="lifere-scenario-panel" data-tab-panel="scenario">
       <div class="section-title">Scenario Engine</div>
       <button type="button" class="btn btn-primary" id="scenario-compare-btn">Compare BuilderOS vs Prospecting (20h)</button>
-      <pre id="scenario-output" class="status-line"></pre>
+      <pre id="scenario-output" class="panel-grid"></pre>
       <div id="lifere-council-trace" class="status-line"></div>
       <div class="section-title" style="margin-top:1rem">Learning Pipeline</div>
       <div class="panel-row">Playbook entries: <span id="learning-playbook-count">—</span></div>
@@ -300,6 +302,8 @@
       <div class="section-title" style="margin-top:12px">Active TC Deals</div>
       <div id="tc-deal-list" class="followup-actions"></div>
       <div id="tc-deal-detail" data-lifere="tc-deal-detail"></div>
+      <div class="section-title" style="margin-top:12px">Buyer pipeline</div>
+      <div id="buyer-pipeline-list"></div>
       <div id="outreach-task-list" class="status-line" style="margin-top:12px"></div>
       <button type="button" class="btn" id="client-comms-draft-btn">Draft client status update</button>
       <button type="button" class="btn" id="outreach-process-btn">Process outreach queue</button>
@@ -392,12 +396,46 @@
             <div class="followup-meta">#${item.rank || '?'} · ${escapeHtml(item.lead || '')} · ${escapeHtml(item.status_label || 'lead')}</div>
             <div class="followup-draft">${escapeHtml(item.message_draft || '')}</div>
             <div class="followup-actions">
+              <button type="button" class="btn btn-sm btn-primary lifere-queue-followup" data-queue-idx="${idx}">
+                Queue for approval
+              </button>
               <button type="button" class="btn btn-sm btn-success lifere-approve-followup" data-queue-idx="${idx}">
-                Approve → log to BoldTrail
+                Log to BoldTrail
               </button>
             </div>
           </div>
         `).join('');
+
+        followUpList.querySelectorAll('.lifere-queue-followup').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const idx = Number(btn.getAttribute('data-queue-idx'));
+            const item = lastFollowUpQueue[idx];
+            if (!item?.contact_id || !item?.message_draft) return;
+            btn.disabled = true;
+            statusEl.textContent = 'Queuing follow-up for approval…';
+            try {
+              const res = await apiFetch('/api/v1/lifere/follow-up/draft', {
+                method: 'POST',
+                body: JSON.stringify({
+                  contact_id: item.contact_id,
+                  message: item.message_draft,
+                  lead: item.lead,
+                  recipient_phone: item.recipient_phone,
+                  recipient_email: item.recipient_email,
+                  source: 'boldtrail_follow_up',
+                }),
+              });
+              const data = await res.json();
+              if (!data.ok) throw new Error(data.error || 'Queue failed');
+              btn.textContent = 'Queued ✓';
+              statusEl.textContent = 'Follow-up in approval queue — open Approval tab to send.';
+              await loadApprovalQueue();
+            } catch (err) {
+              btn.disabled = false;
+              statusEl.textContent = `Queue failed: ${err.message}`;
+            }
+          });
+        });
 
         followUpList.querySelectorAll('.lifere-approve-followup').forEach((btn) => {
           btn.addEventListener('click', async () => {
@@ -640,6 +678,21 @@
         await loadPerformance();
       });
 
+      async function loadCommsLog() {
+        const el = document.getElementById('comms-log-list');
+        if (!el) return;
+        try {
+          const res = await apiFetch('/api/v1/lifere/client-comms/log?user_id=adam&limit=5');
+          const data = await res.json();
+          const entries = data.entries || [];
+          el.innerHTML = entries.length
+            ? entries.map((e) => `<div class="panel-row">${escapeHtml(e.channel)} · ${escapeHtml(e.client_ref)} · ${e.sent_at ? 'sent' : 'pending'} · ${escapeHtml((e.body || '').slice(0, 60))}</div>`).join('')
+            : '<span class="empty">No comms logged yet.</span>';
+        } catch (_) {
+          el.innerHTML = '<span class="empty">Comms log unavailable.</span>';
+        }
+      }
+
       async function loadApprovalQueue() {
         const res = await apiFetch('/api/v1/lifere/approval-queue?user_id=adam');
         const data = await res.json();
@@ -671,12 +724,59 @@
               const sent = j.executed?.ok ? ' and sent via outreach' : (j.status === 'rejected' ? '' : ' (logged — check recipient phone/email in payload)');
               statusEl.textContent = `Draft ${j.status}${sent}.`;
               await loadApprovalQueue();
+              await loadCommsLog();
             } catch (err) {
               btn.disabled = false;
               statusEl.textContent = `Approval action failed: ${err.message}`;
             }
           });
         });
+        await loadCommsLog();
+      }
+
+      function renderBuyerPipeline(clients) {
+        const el = document.getElementById('buyer-pipeline-list');
+        if (!el) return;
+        if (!clients?.length) {
+          el.innerHTML = '<p class="empty">No buyer clients — boot seeds demo on next deploy.</p>';
+          return;
+        }
+        el.innerHTML = clients.map((c) => `
+          <div class="info-card">
+            <div class="info-card-title">${escapeHtml(c.client_ref)} · ${escapeHtml(c.stage || 'intake')}</div>
+            <div class="info-card-body">Beds: ${escapeHtml(String(c.search_criteria?.beds ?? '—'))} · Offer: ${escapeHtml(c.offer_prep_status || '—')}</div>
+            <div class="followup-actions" style="margin-top:8px">
+              <button type="button" class="btn btn-sm btn-primary lifere-advance-buyer" data-ref="${escapeHtml(c.client_ref)}">Advance stage</button>
+            </div>
+          </div>
+        `).join('');
+        el.querySelectorAll('.lifere-advance-buyer').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            const r = await apiFetch(`/api/v1/lifere/deals/buyers/${encodeURIComponent(btn.dataset.ref)}/advance`, {
+              method: 'POST', body: JSON.stringify({ user_id: 'adam' }),
+            });
+            const j = await r.json();
+            statusEl.textContent = j.ok ? `Buyer ${btn.dataset.ref}: ${j.prior_stage} → ${j.new_stage}` : `Advance failed: ${j.error}`;
+            await loadDealsPanel();
+          });
+        });
+      }
+
+      function renderScenario(data) {
+        const el = document.getElementById('scenario-output');
+        const ranked = data.ranked_by_goal || data.paths || [];
+        if (!ranked.length) {
+          el.innerHTML = '<p class="empty">No scenario results.</p>';
+          return;
+        }
+        el.innerHTML = ranked.map((p, i) => `
+          <div class="info-card">
+            <div class="info-card-title">#${i + 1} ${escapeHtml(p.id || p.path_id || 'path')}</div>
+            <div class="info-card-body">Score: ${escapeHtml(String(p.weighted_score ?? p.score ?? '—'))}</div>
+            <div class="info-card-meta">${escapeHtml(JSON.stringify(p.allocations || p.projection || {}).slice(0, 120))}</div>
+          </div>
+        `).join('');
       }
 
       async function loadCoaching() {
@@ -734,7 +834,7 @@
           }),
         });
         const data = await res.json();
-        document.getElementById('scenario-output').textContent = JSON.stringify(data.ranked_by_goal || data, null, 2);
+        renderScenario(data);
         const council = await apiFetch('/api/v1/lifere/council/deliberate', {
           method: 'POST', body: JSON.stringify({ user_id: 'adam', intent: 'forecast scenario', message: 'Compare paths' }),
         });
@@ -772,6 +872,7 @@
         });
         document.getElementById('buyer-client-count').textContent = (bj.clients || []).length;
         document.getElementById('seller-listing-count').textContent = (sj.listings || []).length;
+        renderBuyerPipeline(bj.clients || []);
         document.getElementById('outreach-queue-count').textContent = (outj.tasks || []).length;
         const tasks = outj.tasks || [];
         document.getElementById('outreach-task-list').innerHTML = tasks.slice(0, 5).map((t) =>

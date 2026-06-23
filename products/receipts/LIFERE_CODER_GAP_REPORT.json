@@ -5,12 +5,11 @@
   "acceptance": "npm run lifeos:lifere-alpha-readiness",
   "runtime_checks": 14,
   "closed_this_session": [
-    "GAP-04 partial: approval resolve now enqueues + executes via Am 08 outreach bridge",
-    "GAP-04 partial: client comms draft carries recipient payload for send path",
-    "GAP-04 partial: lifere_client_comms_log written on approve",
-    "UI: Chair brief readable cards (renderChairBrief)",
-    "UI: TC deal picker + readable deal detail cards",
-    "UI: approval resolve shows send status feedback"
+    "GAP-10 partial: buyer stage advance API + Deals tab pipeline UI",
+    "GAP-04 partial: BoldTrail follow-up queues to approval with recipient phone/email",
+    "GAP-04 partial: alpha daily cycle seeds approval draft for founder test",
+    "GAP-04 partial: client comms log API + Approval tab recent sends",
+    "Boot: demo buyer client seeded when empty"
   ],
   "gaps_remaining": [
     {

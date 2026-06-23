@@ -682,6 +682,26 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     res.json(await dealSide.listSellerListings({ tenantId: tenantId(req), userId: userId(req) }));
   });
 
+  router.post('/deals/buyers/:ref/advance', requireKey, async (req, res) => {
+    try {
+      res.json(await dealSide.advanceBuyerStage({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        clientRef: req.params.ref,
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/client-comms/log', requireKey, async (req, res) => {
+    res.json(await clientComms.listCommsLog({
+      tenantId: tenantId(req),
+      userId: userId(req),
+      limit: Number(req.query.limit) || 25,
+    }));
+  });
+
   router.get('/recruiting/pipeline', requireKey, async (req, res) => {
     res.json(await recruiting.listPipeline({ tenantId: tenantId(req), userId: userId(req) }));
   });
@@ -761,6 +781,14 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
       userId: userId(req),
       contactId: req.body?.contact_id,
       message: req.body?.message,
+      contactMeta: {
+        tenant_id: tenantId(req),
+        lead: req.body?.lead || req.body?.recipient_name,
+        recipient_phone: req.body?.recipient_phone,
+        recipient_email: req.body?.recipient_email,
+        channel: req.body?.channel,
+        source: req.body?.source || 'follow_up_draft',
+      },
     }));
   });
 

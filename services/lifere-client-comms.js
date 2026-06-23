@@ -145,5 +145,18 @@ export function createLifeREClientComms({ pool = null, outreach = null, logger =
     };
   }
 
-  return { renderTemplate, queueDraft, resolveQueueItem, templates: CLIENT_COMMS_TEMPLATES };
+  async function listCommsLog({ tenantId = 'default', userId, limit = 25 } = {}) {
+    if (!pool) return { ok: true, entries: [] };
+    const { rows } = await pool.query(
+      `SELECT id, client_ref, channel, template_id, body, sent_at, approval_queue_id
+       FROM lifere_client_comms_log
+       WHERE tenant_id = $1 AND user_id = $2
+       ORDER BY sent_at DESC NULLS LAST, id DESC
+       LIMIT $3`,
+      [tenantId, userId, limit]
+    );
+    return { ok: true, entries: rows };
+  }
+
+  return { renderTemplate, queueDraft, resolveQueueItem, listCommsLog, templates: CLIENT_COMMS_TEMPLATES };
 }

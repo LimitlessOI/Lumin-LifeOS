@@ -47,6 +47,9 @@ step('AUD-06_deal_workflow', dealSide.includes('listBuyerClients') || dealSide.i
 step('AUD-07_deal_detail_ui', html.includes('tc-deal-detail') && html.includes('loadDealDetail'));
 step('AUD-07b_chair_readable_ui', html.includes('renderChairBrief') && html.includes('info-card'));
 step('AUD-12_approval_execute_on_resolve', clientComms.includes('resolveQueueItem') && routes.includes('resolveQueueItem'));
+step('AUD-13_buyer_advance_route', routes.includes('/deals/buyers/:ref/advance') && dealSide.includes('advanceBuyerStage'));
+step('AUD-14_comms_log_route', routes.includes('/client-comms/log') && clientComms.includes('listCommsLog'));
+step('AUD-15_alpha_approval_seed', fs.readFileSync(path.join(ROOT, 'services/lifere-alpha-daily-cycle.js'), 'utf8').includes('approval_draft_seeded'));
 step('AUD-08_ssot_lifere_v1', /AMENDMENT_LIFERE/.test(lifereV1));
 step('AUD-09_migrations', fs.existsSync(path.join(ROOT, 'db/migrations/20260613_lifere_twin_framework.sql')));
 step('AUD-10_w1_w6_services', fs.readdirSync(path.join(ROOT, 'services')).filter((f) => f.startsWith('lifere-')).length >= 25);

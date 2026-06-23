@@ -94,8 +94,31 @@ export function createLifeREDealSideOS({ pool = null } = {}) {
     return { ok: true, listings };
   }
 
+  async function advanceBuyerStage({ tenantId = 'default', userId, clientRef }) {
+    const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'buyer' }) || { clients: {} };
+    const client = twin.clients?.[clientRef];
+    if (!client) return { ok: false, error: 'client_not_found' };
+
+    const stage = buyerWorkflowStage(client);
+    const patches = {
+      intake: { search_criteria: { ...(client.search_criteria || {}), beds: client.search_criteria?.beds || 3, area: client.search_criteria?.area || 'local' } },
+      searching: { showing_schedule: [...(client.showing_schedule || []), { at: new Date().toISOString(), note: 'Showing scheduled' }] },
+      showing_active: { offer_prep_status: 'preparing' },
+      offer_prep: { offer_prep_status: 'submitted' },
+      offer_submitted: { offer_prep_status: 'submitted' },
+    };
+    const patch = patches[stage] || {};
+    const result = await upsertBuyer({ tenantId, userId, clientRef, patch });
+    const updated = twinStore.readTwin({ tenantId, userId, moduleKey: 'buyer' })?.clients?.[clientRef];
+    return {
+      ...result,
+      prior_stage: stage,
+      new_stage: buyerWorkflowStage(updated || {}),
+    };
+  }
+
   return {
     getBuyer, upsertBuyer, getSeller, upsertSeller,
-    listBuyerClients, listSellerListings, buyerWorkflowStage,
+    listBuyerClients, listSellerListings, buyerWorkflowStage, advanceBuyerStage,
   };
 }
