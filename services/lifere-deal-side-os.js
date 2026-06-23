@@ -89,9 +89,41 @@ export function createLifeREDealSideOS({ pool = null } = {}) {
     const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'seller' }) || { listings: {} };
     const listings = Object.entries(twin.listings || {}).map(([ref, data]) => ({
       listing_ref: ref,
+      stage: sellerWorkflowStage(data),
       ...data,
     }));
     return { ok: true, listings };
+  }
+
+  function sellerWorkflowStage(listing = {}) {
+    if (listing.weekly_report_draft) return 'reporting';
+    if ((listing.showing_feedback || []).length >= 2) return 'feedback_review';
+    if ((listing.showing_feedback || []).length > 0) return 'showing_active';
+    if (listing.listing_health === 'pending') return 'pre_listing';
+    return 'active';
+  }
+
+  async function advanceSellerStage({ tenantId = 'default', userId, listingRef }) {
+    const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'seller' }) || { listings: {} };
+    const listing = twin.listings?.[listingRef];
+    if (!listing) return { ok: false, error: 'listing_not_found' };
+
+    const stage = sellerWorkflowStage(listing);
+    const patches = {
+      pre_listing: { listing_health: 'active' },
+      active: { showing_feedback: [...(listing.showing_feedback || []), { at: new Date().toISOString(), note: 'Showing completed' }] },
+      showing_active: { showing_feedback: [...(listing.showing_feedback || []), { at: new Date().toISOString(), note: 'Additional showing feedback' }] },
+      feedback_review: { weekly_report_draft: `Weekly update for ${listingRef}: strong interest, pricing holding.` },
+      reporting: { listing_health: 'active', weekly_report_draft: listing.weekly_report_draft },
+    };
+    const patch = patches[stage] || {};
+    const result = await upsertSeller({ tenantId, userId, listingRef, patch });
+    const updated = twinStore.readTwin({ tenantId, userId, moduleKey: 'seller' })?.listings?.[listingRef];
+    return {
+      ...result,
+      prior_stage: stage,
+      new_stage: sellerWorkflowStage(updated || {}),
+    };
   }
 
   async function advanceBuyerStage({ tenantId = 'default', userId, clientRef }) {
@@ -119,6 +151,7 @@ export function createLifeREDealSideOS({ pool = null } = {}) {
 
   return {
     getBuyer, upsertBuyer, getSeller, upsertSeller,
-    listBuyerClients, listSellerListings, buyerWorkflowStage, advanceBuyerStage,
+    listBuyerClients, listSellerListings, buyerWorkflowStage, sellerWorkflowStage,
+    advanceBuyerStage, advanceSellerStage,
   };
 }

@@ -86,6 +86,28 @@ export async function bootLifeRE({ pool = null, logger = console } = {}) {
       });
       logger.info?.('[LIFERE-BOOT] Demo buyer client seeded');
     }
+
+    const sellerTwin = twinStore.readTwin({ userId: 'adam', moduleKey: 'seller' });
+    if (!sellerTwin?.listings || Object.keys(sellerTwin.listings).length === 0) {
+      await twinStore.writeTwin({
+        userId: 'adam',
+        moduleKey: 'seller',
+        twinKey: 'seller',
+        payload: {
+          schema: 'lifere_seller_twin_v1',
+          listings: {
+            demo_listing_001: {
+              listing_health: 'active',
+              address: '123 Demo St',
+              showing_feedback: [],
+              weekly_report_draft: null,
+            },
+          },
+        },
+        receiptMeta: { source: 'lifere_boot' },
+      });
+      logger.info?.('[LIFERE-BOOT] Demo seller listing seeded');
+    }
   }
 
   const marriageEdge = path.join(ROOT, 'data/twins/default/relationships/adam_sherry_marriage.json');

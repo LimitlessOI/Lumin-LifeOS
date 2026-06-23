@@ -40,6 +40,8 @@ function interpolate(template, vars) {
   return template.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] ?? '');
 }
 
+import { pushApprovedFollowUp } from './lifere-boldtrail-bridge.js';
+
 export function createLifeREClientComms({ pool = null, outreach = null, logger = console } = {}) {
   function renderTemplate({ templateId, channel = 'sms', vars = {} }) {
     const tpl = CLIENT_COMMS_TEMPLATES[templateId];
@@ -136,12 +138,22 @@ export function createLifeREClientComms({ pool = null, outreach = null, logger =
       logger.warn?.(`[LIFERE-COMMS] comms log insert failed: ${err.message}`);
     }
 
+    let boldtrail = null;
+    if (payload.contact_id && item.draft_text) {
+      boldtrail = await pushApprovedFollowUp({
+        contactId: payload.contact_id,
+        message: item.draft_text,
+        agentLabel: 'LifeRE',
+      });
+    }
+
     return {
       ok: true,
       status: 'approved',
       executed,
+      boldtrail,
       task_id: executed?.task_id || null,
-      label: executed?.ok ? 'KNOW' : 'THINK',
+      label: executed?.ok || boldtrail?.ok ? 'KNOW' : 'THINK',
     };
   }
 

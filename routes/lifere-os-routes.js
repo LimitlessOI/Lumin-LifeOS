@@ -694,6 +694,18 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     }
   });
 
+  router.post('/deals/sellers/:ref/advance', requireKey, async (req, res) => {
+    try {
+      res.json(await dealSide.advanceSellerStage({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        listingRef: req.params.ref,
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/client-comms/log', requireKey, async (req, res) => {
     res.json(await clientComms.listCommsLog({
       tenantId: tenantId(req),

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T19:04:33.025Z",
+  "generated_at": "2026-06-23T19:05:24.182Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12287,
   "files": [
@@ -41309,17 +41309,17 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
       "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
-      "bytes": 1017,
-      "mtime": "2026-06-23T19:03:32.000Z",
-      "indexed_at": "2026-06-23T19:04:02.484Z",
+      "bytes": 991,
+      "mtime": "2026-06-23T19:05:09.491Z",
+      "indexed_at": "2026-06-23T19:05:24.182Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 9079,
-      "mtime": "2026-06-23T19:04:25.620Z",
-      "indexed_at": "2026-06-23T19:04:33.025Z"
+      "bytes": 9070,
+      "mtime": "2026-06-23T19:05:09.343Z",
+      "indexed_at": "2026-06-23T19:05:24.182Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -69067,9 +69067,9 @@
     {
       "path": "products/receipts/LIFERE_SELF_AUDIT.json",
       "synopsis": "Product receipt — LIFERE SELF AUDIT.",
-      "bytes": 994,
-      "mtime": "2026-06-23T19:03:34.423Z",
-      "indexed_at": "2026-06-23T19:04:02.484Z",
+      "bytes": 1024,
+      "mtime": "2026-06-23T19:05:15.613Z",
+      "indexed_at": "2026-06-23T19:05:24.182Z",
       "synopsis_index_only": true
     },
     {
@@ -69932,9 +69932,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 46328,
-      "mtime": "2026-06-23T19:04:25.707Z",
-      "indexed_at": "2026-06-23T19:04:33.025Z"
+      "bytes": 48065,
+      "mtime": "2026-06-23T19:05:08.824Z",
+      "indexed_at": "2026-06-23T19:05:24.182Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -71294,9 +71294,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 34183,
-      "mtime": "2026-06-23T19:04:17.080Z",
-      "indexed_at": "2026-06-23T19:04:33.025Z",
+      "bytes": 34532,
+      "mtime": "2026-06-23T19:05:02.474Z",
+      "indexed_at": "2026-06-23T19:05:24.182Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -73186,9 +73186,9 @@
     {
       "path": "scripts/run-lifere-self-audit.mjs",
       "synopsis": "LifeRE self-audit — coder gap scan with machine receipts.",
-      "bytes": 4522,
-      "mtime": "2026-06-23T19:03:31.538Z",
-      "indexed_at": "2026-06-23T19:04:02.484Z",
+      "bytes": 4734,
+      "mtime": "2026-06-23T19:05:08.401Z",
+      "indexed_at": "2026-06-23T19:05:24.182Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -87251,9 +87251,9 @@
     {
       "path": "services/lifere-boot.js",
       "synopsis": "LifeRE boot — seed twins, permissions, founder extensions on startup.",
-      "bytes": 3590,
-      "mtime": "2026-06-23T19:03:14.036Z",
-      "indexed_at": "2026-06-23T19:04:02.484Z",
+      "bytes": 4310,
+      "mtime": "2026-06-23T19:05:00.999Z",
+      "indexed_at": "2026-06-23T19:05:24.182Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -87271,9 +87271,9 @@
     {
       "path": "services/lifere-client-comms.js",
       "synopsis": "LifeRE client communication templates and draft queue.",
-      "bytes": 5900,
-      "mtime": "2026-06-23T19:03:08.020Z",
-      "indexed_at": "2026-06-23T19:04:02.484Z",
+      "bytes": 6246,
+      "mtime": "2026-06-23T19:04:56.635Z",
+      "indexed_at": "2026-06-23T19:05:24.182Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -87301,9 +87301,9 @@
     {
       "path": "services/lifere-deal-side-os.js",
       "synopsis": "LifeRE buyer and seller OS — module twin projections.",
-      "bytes": 5523,
-      "mtime": "2026-06-23T19:03:03.245Z",
-      "indexed_at": "2026-06-23T19:04:02.484Z",
+      "bytes": 7245,
+      "mtime": "2026-06-23T19:04:59.826Z",
+      "indexed_at": "2026-06-23T19:05:24.182Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]

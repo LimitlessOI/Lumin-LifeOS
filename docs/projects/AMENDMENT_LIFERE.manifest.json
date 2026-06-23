@@ -21,6 +21,6 @@
     "products/receipts/LIFERE_*.json"
   ],
   "last_updated": "2026-06-13",
-  "last_receipt": "2026-06-13 depth-push buyer-advance follow-up-approval alpha-seed",
-  "last_change_summary": "Buyer advance workflow; follow-up queues to approval; alpha cycle seeds draft; comms log"
+  "last_receipt": "2026-06-13 seller-advance boldtrail-writeback",
+  "last_change_summary": "Seller workflow advance; BoldTrail note on approval resolve; demo seller boot seed"
 }

@@ -134,7 +134,7 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
-| 2026-06-13 | **Receptionist → approval** — `POST /receptionist/calls/:id/follow-up-draft`; Ops tab call list + draft button; learning playbook cards | Adam: keep going | ✅ | deploy |
+| 2026-06-13 | **Seller advance + BoldTrail write-back** — seller stage API/UI; approval resolve logs BoldTrail note when contact_id present | Adam: keep building | ✅ | deploy |
 | 2026-06-13 | **Audit fix batch** — approval resolve → Am 08 execute + comms log; Chair/Deals readable UI; gap report updated | Adam: audit + fill gaps + keep going | ✅ self-audit + readiness | Adam alpha test |
 | 2026-06-13 | **Outreach scheduler + founder attempt + approval UI** — `lifere-outreach-scheduler.js` on boot; `POST /alpha/founder-attempt` + `LIFERE_FOUNDER_ATTEMPT.json`; `GET /follow-up/queue`; approval approve/reject in overlay | Adam: keep pushing integration depth | ✅ readiness PASS | deploy; Adam alpha test + quote |
 | 2026-06-13 | **Alpha daily cycle** — `lifere-alpha-daily-cycle.js`, `POST /alpha/daily-cycle`, UI button, `/health/deep`, E2E T10 | Adam: one-click alpha test path | ✅ RT-13 | deploy + Adam test |

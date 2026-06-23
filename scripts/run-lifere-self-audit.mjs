@@ -48,6 +48,8 @@ step('AUD-07_deal_detail_ui', html.includes('tc-deal-detail') && html.includes('
 step('AUD-07b_chair_readable_ui', html.includes('renderChairBrief') && html.includes('info-card'));
 step('AUD-12_approval_execute_on_resolve', clientComms.includes('resolveQueueItem') && routes.includes('resolveQueueItem'));
 step('AUD-13_buyer_advance_route', routes.includes('/deals/buyers/:ref/advance') && dealSide.includes('advanceBuyerStage'));
+step('AUD-13b_seller_advance_route', routes.includes('/deals/sellers/:ref/advance') && dealSide.includes('advanceSellerStage'));
+step('AUD-16_boldtrail_on_approve', clientComms.includes('pushApprovedFollowUp'));
 step('AUD-14_comms_log_route', routes.includes('/client-comms/log') && clientComms.includes('listCommsLog'));
 step('AUD-15_alpha_approval_seed', fs.readFileSync(path.join(ROOT, 'services/lifere-alpha-daily-cycle.js'), 'utf8').includes('approval_draft_seeded'));
 step('AUD-08_ssot_lifere_v1', /AMENDMENT_LIFERE/.test(lifereV1));

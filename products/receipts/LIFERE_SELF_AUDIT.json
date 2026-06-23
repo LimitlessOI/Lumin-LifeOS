@@ -1,6 +1,6 @@
 {
   "schema": "lifere_self_audit_v1",
-  "at": "2026-06-23T19:03:34.020Z",
+  "at": "2026-06-23T19:05:14.402Z",
   "passed": [
     "AUD-01_alpha_gate_script",
     "AUD-02_outreach_execute_route",
@@ -15,24 +15,24 @@
     "AUD-07b_chair_readable_ui",
     "AUD-12_approval_execute_on_resolve",
     "AUD-13_buyer_advance_route",
+    "AUD-13b_seller_advance_route",
+    "AUD-16_boldtrail_on_approve",
     "AUD-14_comms_log_route",
     "AUD-15_alpha_approval_seed",
     "AUD-08_ssot_lifere_v1",
     "AUD-09_migrations",
-    "AUD-10_w1_w6_services"
-  ],
-  "failed": [
+    "AUD-10_w1_w6_services",
     "AUD-11_alpha_gate_pass"
   ],
+  "failed": [],
   "warnings": [
     {
       "id": "AUD-W02",
       "detail": "founder_usability_pass still false — Alpha gate blocked until founder confirm"
     }
   ],
-  "fail_AUD-11_alpha_gate_pass": "",
-  "ok": false,
-  "gap_count": 1,
+  "ok": true,
+  "gap_count": 0,
   "warning_count": 1,
-  "product_z_honest": false
+  "product_z_honest": true
 }
