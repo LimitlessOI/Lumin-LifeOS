@@ -1,7 +1,7 @@
 {
   "schema": "lifere_alpha_readiness_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-23T18:50:14.321Z",
+  "at": "2026-06-23T18:55:31.549Z",
   "checks": {
     "lifeos:lifere-alpha-gate": {
       "exit": 0
@@ -12,6 +12,19 @@
     "live_e2e": {
       "exit": 0,
       "base": "https://robust-magic-production.up.railway.app"
+    },
+    "live_pg_deep": {
+      "ok": true,
+      "pool": true,
+      "pg_tables": {
+        "lifere_activity_log": true,
+        "lifere_approval_queue": true,
+        "lifere_call_logs": true,
+        "lifere_experiments": true,
+        "lifere_performance_snapshot": true
+      },
+      "pg_ready": true,
+      "label": "KNOW"
     }
   },
   "passed": [
@@ -25,7 +38,9 @@
     "AR-ui_deals",
     "AR-routes_outreach_execute",
     "AR-routes_deal_detail",
-    "AR-live_e2e"
+    "AR-routes_alpha_cycle",
+    "AR-live_e2e",
+    "AR-live_pg_deep"
   ],
   "failed": [],
   "warnings": [

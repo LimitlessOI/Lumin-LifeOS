@@ -143,6 +143,15 @@
     .followup-meta { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
     .followup-draft { font-size: 13px; color: #ddd; margin-bottom: 10px; line-height: 1.45; }
     .followup-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .approval-item {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: #12121a;
+    }
+    .approval-draft { font-size: 13px; color: #ddd; margin: 8px 0 10px; line-height: 1.45; }
+    .btn-danger { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
     .btn-sm { padding: 6px 10px; font-size: 12px; }
     .btn-success { background: #166534; border-color: #166534; color: #fff; }
     .panel-grid { display: grid; gap: 12px; }
@@ -438,7 +447,15 @@
           renderPriorities(data.result?.daily_focus);
           renderBlockers(data.result?.blocker_scan);
           renderBoldTrailStrip(data.result?.boldtrail);
-          renderFollowUpQueue(data.result?.boldtrail?.follow_up_queue);
+          let followQueue = data.result?.boldtrail?.follow_up_queue;
+          if (!followQueue?.length) {
+            try {
+              const fq = await apiFetch('/api/v1/lifere/follow-up/queue?user_id=adam');
+              const fqData = await fq.json();
+              followQueue = fqData.queue || [];
+            } catch (_) { /* non-fatal */ }
+          }
+          renderFollowUpQueue(followQueue);
           if (data.result?.chair) {
             const c = data.result.chair;
             if (c.tradeoff_prose) document.getElementById('lifere-lifeos-tradeoff').textContent = c.tradeoff_prose;
@@ -477,22 +494,24 @@
       document.getElementById('lifere-alpha-cycle-btn')?.addEventListener('click', async () => {
         statusEl.textContent = 'Running alpha daily cycle…';
         try {
-          const res = await apiFetch('/api/v1/lifere/alpha/daily-cycle', {
+          const res = await apiFetch('/api/v1/lifere/alpha/founder-attempt', {
             method: 'POST',
             body: JSON.stringify({
               user_id: 'adam',
               goal_gci: 30000,
               activity_counts: { conversations: 8, calls: 3, appointments_set: 1 },
               debrief_notes: 'Alpha test cycle from UI',
+              source: 'overlay_ui',
             }),
           });
           const data = await res.json();
           if (!data.ok) throw new Error('Cycle incomplete');
           renderPriorities(data.daily_focus || data.top_3);
           renderDebrief(data.debrief);
-          statusEl.textContent = `Alpha cycle PASS — ${data.steps?.length || 0} steps`;
+          statusEl.textContent = `Alpha cycle PASS — ${data.steps?.length || 0} steps · receipt logged`;
           await loadPerformance();
           await loadApprovalQueue();
+          await loadCommandCenter();
         } catch (err) {
           statusEl.textContent = `Alpha cycle failed: ${err.message}`;
         }
@@ -542,7 +561,37 @@
         const data = await res.json();
         const el = document.getElementById('approval-list');
         if (!data.items?.length) { el.textContent = 'No pending drafts.'; return; }
-        el.innerHTML = data.items.map((i) => `<div class="panel-row">${escapeHtml(i.action_type)}: ${escapeHtml(i.draft_text?.slice(0, 80) || '')}</div>`).join('');
+        el.innerHTML = data.items.map((i) => `
+          <div class="approval-item" data-approval-id="${escapeHtml(String(i.id))}">
+            <div class="followup-meta">${escapeHtml(i.action_type || 'draft')} · ${escapeHtml(i.created_at || '')}</div>
+            <div class="approval-draft">${escapeHtml(i.draft_text || '')}</div>
+            <div class="followup-actions">
+              <button type="button" class="btn btn-sm btn-success lifere-approval-approve" data-id="${escapeHtml(String(i.id))}">Approve</button>
+              <button type="button" class="btn btn-sm btn-danger lifere-approval-reject" data-id="${escapeHtml(String(i.id))}">Reject</button>
+            </div>
+          </div>
+        `).join('');
+
+        el.querySelectorAll('.lifere-approval-approve, .lifere-approval-reject').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const id = btn.getAttribute('data-id');
+            const status = btn.classList.contains('lifere-approval-reject') ? 'rejected' : 'approved';
+            btn.disabled = true;
+            try {
+              const r = await apiFetch(`/api/v1/lifere/approval-queue/${id}/resolve`, {
+                method: 'POST',
+                body: JSON.stringify({ status, user_id: 'adam' }),
+              });
+              const j = await r.json();
+              if (!j.ok) throw new Error(j.error || 'Resolve failed');
+              statusEl.textContent = `Draft ${status}.`;
+              await loadApprovalQueue();
+            } catch (err) {
+              btn.disabled = false;
+              statusEl.textContent = `Approval action failed: ${err.message}`;
+            }
+          });
+        });
       }
 
       async function loadCoaching() {

@@ -37,6 +37,8 @@ const html = fs.readFileSync(path.join(ROOT, 'public/overlay/lifeos-lifere.html'
 step('AUD-01_alpha_gate_script', fs.existsSync(path.join(ROOT, 'scripts/run-lifere-alpha-e2e.mjs')));
 step('AUD-02_outreach_execute_route', routes.includes('/outreach/execute') && outreach.includes('executeTaskById'));
 step('AUD-02b_alpha_daily_cycle', routes.includes('/alpha/daily-cycle'));
+step('AUD-02c_founder_attempt', routes.includes('/alpha/founder-attempt'));
+step('AUD-02d_follow_up_queue', routes.includes('/follow-up/queue'));
 step('AUD-03_outreach_approve_route', routes.includes('/outreach/approve') && outreach.includes('approveTask'));
 step('AUD-04_vapi_lifere_fanout', fs.readFileSync(path.join(ROOT, 'core/vapi-integration.js'), 'utf8').includes('lifere-receptionist-bridge'));
 step('AUD-05_council_llm_hook', council.includes('callCouncilMember'));

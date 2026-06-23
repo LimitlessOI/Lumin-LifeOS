@@ -395,11 +395,13 @@ async function bootBuilderOSPriorityQueue(deps) {
 }
 
 async function bootLifeREDomain(deps) {
-  const { pool, logger } = deps;
+  const { pool, logger, notificationService, sendSMS } = deps;
   try {
     const { bootLifeRE } = await import('../services/lifere-boot.js');
     await bootLifeRE({ pool, logger });
-    logger?.info?.('[BOOT] LifeRE twins + permissions initialized');
+    const { startLifeREOutreachScheduler } = await import('../services/lifere-outreach-scheduler.js');
+    startLifeREOutreachScheduler({ pool, notificationService, sendSMS, logger });
+    logger?.info?.('[BOOT] LifeRE twins + permissions + outreach scheduler initialized');
   } catch (err) {
     logger?.warn?.({ err: err.message }, '[BOOT] LifeRE boot failed (non-fatal)');
   }

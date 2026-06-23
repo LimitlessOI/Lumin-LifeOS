@@ -40,6 +40,7 @@ import { createLifeRELearningPipeline } from '../services/lifere-learning-pipeli
 import { createLifeREChairService } from '../services/lifere-chair-service.js';
 import { createLifeRECommandCenter } from '../services/lifere-command-center.js';
 import { createLifeREAlphaDailyCycle } from '../services/lifere-alpha-daily-cycle.js';
+import { createLifeREFounderAttempt } from '../services/lifere-founder-attempt.js';
 import { pickModel } from '../services/lifere-model-router.js';
 
 function userId(req) {
@@ -83,6 +84,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const chairService = createLifeREChairService({ pool });
   const learning = createLifeRELearningPipeline({ pool });
   const alphaCycle = createLifeREAlphaDailyCycle({ pool, logger });
+  const founderAttempt = createLifeREFounderAttempt({ pool, logger });
 
   router.get('/health', requireKey, (_req, res) => {
     res.json({
@@ -132,6 +134,34 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
         debriefNotes: req.body?.debrief_notes,
       });
       res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/alpha/founder-attempt', requireKey, async (req, res) => {
+    try {
+      const result = await founderAttempt.recordAttempt({
+        userId: userId(req),
+        tenantId: tenantId(req),
+        goalGci: Number(req.body?.goal_gci) || 30000,
+        activityCounts: req.body?.activity_counts,
+        debriefNotes: req.body?.debrief_notes || 'Founder alpha attempt',
+        source: req.body?.source || 'api',
+      });
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/follow-up/queue', requireKey, async (req, res) => {
+    try {
+      const queue = await followUpOS.prioritizeQueue({
+        userId: userId(req),
+        limit: Number(req.query.limit) || 10,
+      });
+      res.json({ ok: true, queue, count: queue.length });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }

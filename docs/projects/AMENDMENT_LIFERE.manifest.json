@@ -21,6 +21,6 @@
     "products/receipts/LIFERE_*.json"
   ],
   "last_updated": "2026-06-13",
-  "last_receipt": "2026-06-13 learning-pipeline + vapi-ingest + chair-relationship",
-  "last_change_summary": "W1-W6 runtime; learning pipeline; receptionist vapi hook; chair relationship guardrails"
+  "last_receipt": "2026-06-13 outreach-scheduler + founder-attempt + approval-ui",
+  "last_change_summary": "Outreach scheduler on boot; founder attempt receipt; approval queue UI; follow-up queue route"
 }

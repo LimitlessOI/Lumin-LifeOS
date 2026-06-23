@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T18:54:05.458Z",
+  "generated_at": "2026-06-23T18:56:09.729Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12284,
+  "file_count": 12286,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40936,9 +40936,9 @@
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 44331,
-      "mtime": "2026-06-23T11:49:06.632Z",
-      "indexed_at": "2026-06-23T11:49:51.364Z"
+      "bytes": 44574,
+      "mtime": "2026-06-23T18:56:03.308Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -41309,17 +41309,17 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
       "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
-      "bytes": 1014,
-      "mtime": "2026-06-23T11:46:51.771Z",
-      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "bytes": 1018,
+      "mtime": "2026-06-23T18:55:44.728Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 8337,
-      "mtime": "2026-06-23T18:52:09.539Z",
-      "indexed_at": "2026-06-23T18:52:14.743Z"
+      "bytes": 8669,
+      "mtime": "2026-06-23T18:55:46.120Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -68939,9 +68939,9 @@
     {
       "path": "products/receipts/LIFERE_ALPHA_READINESS.json",
       "synopsis": "Product receipt — LIFERE ALPHA READINESS.",
-      "bytes": 911,
-      "mtime": "2026-06-23T18:50:21.338Z",
-      "indexed_at": "2026-06-23T18:50:27.199Z",
+      "bytes": 1296,
+      "mtime": "2026-06-23T18:55:40.344Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z",
       "synopsis_index_only": true
     },
     {
@@ -69924,9 +69924,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 33181,
-      "mtime": "2026-06-23T18:51:14.279Z",
-      "indexed_at": "2026-06-23T18:52:14.743Z"
+      "bytes": 35464,
+      "mtime": "2026-06-23T18:55:27.610Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -71286,9 +71286,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 30537,
-      "mtime": "2026-06-23T18:51:08.217Z",
-      "indexed_at": "2026-06-23T18:52:14.743Z",
+      "bytes": 31627,
+      "mtime": "2026-06-23T18:55:23.320Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -73178,9 +73178,9 @@
     {
       "path": "scripts/run-lifere-self-audit.mjs",
       "synopsis": "LifeRE self-audit — coder gap scan with machine receipts.",
-      "bytes": 3667,
-      "mtime": "2026-06-23T18:51:20.649Z",
-      "indexed_at": "2026-06-23T18:52:14.743Z",
+      "bytes": 3813,
+      "mtime": "2026-06-23T18:55:49.432Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -87331,6 +87331,16 @@
       ]
     },
     {
+      "path": "services/lifere-founder-attempt.js",
+      "synopsis": "LifeRE founder attempt — runs alpha cycle and persists attempt receipt.",
+      "bytes": 1888,
+      "mtime": "2026-06-23T18:55:17.184Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
       "path": "services/lifere-founder-extensions.js",
       "synopsis": "LifeRE founder extension twins — Adam/Sherry household only.",
       "bytes": 1843,
@@ -87416,6 +87426,16 @@
       "bytes": 3061,
       "mtime": "2026-06-23T11:53:06.478Z",
       "indexed_at": "2026-06-23T11:53:44.224Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-outreach-scheduler.js",
+      "synopsis": "LifeRE outreach scheduler — processes approved outreach tasks on interval.",
+      "bytes": 1416,
+      "mtime": "2026-06-23T18:55:03.564Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -92629,9 +92649,9 @@
     {
       "path": "startup/boot-domains.js",
       "synopsis": "boot-domains.js",
-      "bytes": 16915,
-      "mtime": "2026-06-23T11:45:32.240Z",
-      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "bytes": 17151,
+      "mtime": "2026-06-23T18:54:52.362Z",
+      "indexed_at": "2026-06-23T18:56:09.729Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]

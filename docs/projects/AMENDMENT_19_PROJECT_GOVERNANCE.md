@@ -3,7 +3,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-13 — LifeRE W1–W6 boot + route deps (pool, council, outreach).
+**Last Updated:** 2026-06-13 — LifeRE outreach scheduler on boot (useful-work guard).
 
 | Field | Value |
 |---|---|
@@ -204,6 +204,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-06-13 | **`startup/boot-domains.js`** — `bootLifeREDomain()` starts `lifere-outreach-scheduler` (15m useful-work guard for approved Am 08 tasks). | LifeRE outreach must execute without manual queue polling. | ✅ readiness PASS | deploy |
 | 2026-06-13 | **`startup/boot-domains.js`** — `bootLifeREDomain()` seeds founder twins + marriage edge on boot. **`startup/register-runtime-routes.js`** — pass `pool`, `callCouncilMember`, `notificationService`, `sendSMS` into `createLifeRERoutes`. | LifeRE Alpha runtime must boot and wire Am 08/17/29 bridges on Railway. | ✅ alpha-gate PASS | deploy + live E2E |
 | 2026-06-13 | **`startup/boot-domains.js`** — FP V2 boot defaults ON: Chair prediction score + lane intel schedulers (opt-out `CHAIR_PREDICTION_SCORE_ENABLED=0` / `LANE_INTEL_*=0`). | Adam: always-on scoreboard + competitor monitoring unless explicitly disabled. | ✅ preflight | deploy |
 | 2026-06-17 | **`startup/boot-domains.js`** — added `import { startBpPriorityScheduler }` + `bootBuilderOSPriorityQueue(deps)` function + wired to `Promise.allSettled` in `bootAllDomains`. Requires `BUILDEROS_AUTOPILOT=1` env var to activate. | BuilderOS BP_PRIORITY queue needed to run autonomously on Railway without founder present; scheduler enabled via env flag to prevent unintended burns. | AM19 boot wiring | pending Railway env set + deploy |
