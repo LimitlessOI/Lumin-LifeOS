@@ -737,6 +737,35 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     res.json(await receptionist.listRecentCalls({ userId: userId(req) }));
   });
 
+  router.post('/receptionist/calls/:callId/follow-up-draft', requireKey, async (req, res) => {
+    try {
+      const { calls } = await receptionist.listRecentCalls({ userId: userId(req), limit: 50 });
+      const call = (calls || []).find((c) => c.call_id === req.params.callId);
+      if (!call) {
+        res.status(404).json({ ok: false, error: 'call_not_found' });
+        return;
+      }
+      const draft = req.body?.message
+        || `Hi — thanks for calling. Following up on your ${call.intent || 'inquiry'}. When is a good time to connect?`;
+      const queued = await clientComms.queueDraft({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        actionType: 'sms_lead',
+        draft,
+        payload: {
+          source: 'receptionist_call',
+          call_id: call.call_id,
+          recipient_phone: call.caller_number,
+          recipient_name: call.summary?.replace(/^Inbound:\s*/, '').split('—')[0]?.trim(),
+          channel: 'sms',
+        },
+      });
+      res.json({ ok: true, call_id: call.call_id, queued });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/receptionist/vapi-end', async (req, res) => {
     const callData = req.body?.call || req.body?.message?.call || req.body;
     res.json(await receptionist.ingestVapiCallEnded({

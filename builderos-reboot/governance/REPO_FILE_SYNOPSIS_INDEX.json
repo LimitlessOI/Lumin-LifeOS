@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T19:04:02.484Z",
+  "generated_at": "2026-06-23T19:04:33.025Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12287,
   "files": [
@@ -41317,9 +41317,9 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 9113,
-      "mtime": "2026-06-23T19:03:31.605Z",
-      "indexed_at": "2026-06-23T19:04:02.484Z"
+      "bytes": 9079,
+      "mtime": "2026-06-23T19:04:25.620Z",
+      "indexed_at": "2026-06-23T19:04:33.025Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -69932,9 +69932,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 44814,
-      "mtime": "2026-06-23T19:03:31.244Z",
-      "indexed_at": "2026-06-23T19:04:02.484Z"
+      "bytes": 46328,
+      "mtime": "2026-06-23T19:04:25.707Z",
+      "indexed_at": "2026-06-23T19:04:33.025Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -71294,9 +71294,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 33029,
-      "mtime": "2026-06-23T19:03:16.313Z",
-      "indexed_at": "2026-06-23T19:04:02.484Z",
+      "bytes": 34183,
+      "mtime": "2026-06-23T19:04:17.080Z",
+      "indexed_at": "2026-06-23T19:04:33.025Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]

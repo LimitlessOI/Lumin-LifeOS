@@ -276,6 +276,7 @@
       <div id="lifere-finance-panel" class="panel-row">Runway: <span id="finance-runway">—</span></div>
       <div id="lifere-opportunity-panel" class="panel-row">Signals: <span id="opportunity-count">—</span></div>
       <div id="lifere-receptionist-panel" class="panel-row" data-lifere="receptionist-calls">Inbound calls: <span id="receptionist-call-count">—</span></div>
+      <div id="receptionist-call-list"></div>
       <div id="lifere-transaction-panel" class="panel-row">TC: surface via /transaction/:dealId</div>
     </section>
 
@@ -287,7 +288,7 @@
       <div class="section-title" style="margin-top:1rem">Learning Pipeline</div>
       <div class="panel-row">Playbook entries: <span id="learning-playbook-count">—</span></div>
       <button type="button" class="btn" id="learning-status-btn">Refresh learning status</button>
-      <pre id="learning-output" class="status-line" data-lifere="learning-status"></pre>
+      <div id="learning-output" class="panel-grid" data-lifere="learning-status"></div>
     </section>
 
     <section class="section tab-panel" data-tab-panel="chair" data-lifere="chair-brief">
@@ -811,13 +812,35 @@
         document.getElementById('finance-runway').textContent = fj.runway_months ?? fj.projected_gci ?? '—';
         document.getElementById('opportunity-count').textContent = (oj.signals || []).length;
         document.getElementById('receptionist-call-count').textContent = (cj.calls || []).length;
+        const callEl = document.getElementById('receptionist-call-list');
+        const calls = cj.calls || [];
+        callEl.innerHTML = calls.slice(0, 5).map((call) => `
+          <div class="info-card">
+            <div class="info-card-title">${escapeHtml(call.summary || call.call_id)}</div>
+            <div class="info-card-meta">${escapeHtml(call.intent || '')} · ${escapeHtml(call.lead_score || '')}</div>
+            <button type="button" class="btn btn-sm btn-primary lifere-call-followup" data-call-id="${escapeHtml(call.call_id)}">Draft follow-up</button>
+          </div>
+        `).join('') || '';
+        callEl.querySelectorAll('.lifere-call-followup').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            await apiFetch(`/api/v1/lifere/receptionist/calls/${encodeURIComponent(btn.dataset.callId)}/follow-up-draft`, {
+              method: 'POST', body: JSON.stringify({ user_id: 'adam' }),
+            });
+            statusEl.textContent = 'Receptionist follow-up queued for approval.';
+            await loadApprovalQueue();
+          });
+        });
       }
 
       document.getElementById('learning-status-btn')?.addEventListener('click', async () => {
         const res = await apiFetch('/api/v1/lifere/learning/status');
         const data = await res.json();
         document.getElementById('learning-playbook-count').textContent = (data.playbook || []).length;
-        document.getElementById('learning-output').textContent = JSON.stringify(data, null, 2);
+        const entries = (data.playbook || []).slice(0, 4);
+        document.getElementById('learning-output').innerHTML = entries.length
+          ? entries.map((p) => `<div class="info-card"><div class="info-card-title">${escapeHtml(p.title || p.id || 'playbook')}</div><div class="info-card-body">${escapeHtml(p.summary || p.insight || '')}</div></div>`).join('')
+          : '<p class="empty">No playbook entries yet.</p>';
       });
 
       document.getElementById('scenario-compare-btn')?.addEventListener('click', async () => {
