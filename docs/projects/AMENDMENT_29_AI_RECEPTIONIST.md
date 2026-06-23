@@ -172,4 +172,5 @@ CREATE TABLE IF NOT EXISTS call_logs (
 
 | Date | Change | Author |
 |---|---|---|
+| 2026-06-13 | `core/vapi-integration.js` — call-ended webhook fans out to LifeRE receptionist bridge (`ingestVapiCallEnded`) | Coder |
 | 2026-04-04 | Initial draft — sourced from GPT dump 01/02 and LifeOS_LimitlessOS dump 002; full feature set, revenue model, architecture | Claude |

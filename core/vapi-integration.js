@@ -1,9 +1,6 @@
 /**
- * SYNOPSIS: ╔══════════════════════════════════════════════════════════════════════════════════╗
- * ╔══════════════════════════════════════════════════════════════════════════════════╗
- * ║                    VAPI PHONE SYSTEM INTEGRATION                                   ║
- * ║                    Complete Vapi integration for phone calls                      ║
- * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * SYNOPSIS: Vapi phone system integration — calls + webhook; fans out call-ended to LifeRE.
+ * @ssot docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md
  */
 
 export class VapiIntegration {

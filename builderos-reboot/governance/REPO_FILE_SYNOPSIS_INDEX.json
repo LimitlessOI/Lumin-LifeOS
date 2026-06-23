@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T11:53:44.224Z",
+  "generated_at": "2026-06-23T11:54:02.073Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12279,
   "files": [
@@ -36465,10 +36465,13 @@
     },
     {
       "path": "core/vapi-integration.js",
-      "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 6590,
-      "mtime": "2026-06-23T11:53:11.135Z",
-      "indexed_at": "2026-06-23T11:53:44.224Z"
+      "synopsis": "Vapi phone system integration — calls + webhook; fans out call-ended to LifeRE.",
+      "bytes": 5775,
+      "mtime": "2026-06-23T11:53:57.709Z",
+      "indexed_at": "2026-06-23T11:54:02.073Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md"
+      ]
     },
     {
       "path": "core/video-editing-council.js",
@@ -41068,9 +41071,9 @@
     {
       "path": "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md",
       "synopsis": "AMENDMENT 29 — AI Receptionist (Zoom Phone Overlay)",
-      "bytes": 7406,
-      "mtime": "2026-06-21T21:37:58.948Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 7544,
+      "mtime": "2026-06-23T11:54:00.141Z",
+      "indexed_at": "2026-06-23T11:54:02.073Z"
     },
     {
       "path": "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.manifest.json",
