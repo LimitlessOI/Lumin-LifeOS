@@ -1,0 +1,38 @@
+{
+  "schema": "lifere_action_types_v1",
+  "default_outbound_level": 1,
+  "levels": {
+    "0": "suggest_only",
+    "1": "draft",
+    "2": "draft_queue",
+    "3": "pattern_execute",
+    "4": "bounded_autonomy",
+    "5": "full_autonomy"
+  },
+  "action_types": [
+    { "id": "sms_client", "default_level": 1, "bounds_fields": ["max_per_day", "recipient_class"] },
+    { "id": "sms_lead", "default_level": 1, "bounds_fields": ["max_per_day"] },
+    { "id": "email_client", "default_level": 1, "bounds_fields": ["max_per_day"] },
+    { "id": "email_lead", "default_level": 1, "bounds_fields": ["max_per_day"] },
+    { "id": "boldtrail_note", "default_level": 2, "bounds_fields": ["max_per_day"] },
+    { "id": "boldtrail_tag", "default_level": 2, "bounds_fields": ["max_per_day"] },
+    { "id": "post_social", "default_level": 1, "bounds_fields": ["channels[]"] },
+    { "id": "post_facebook_group", "default_level": 2, "bounds_fields": ["group_id"] },
+    { "id": "comment_reply", "default_level": 2, "bounds_fields": ["platform"] },
+    { "id": "dm_reply", "default_level": 2, "bounds_fields": ["platform"] },
+    { "id": "youtube_publish", "default_level": 2, "bounds_fields": [] },
+    { "id": "outreach_sequence_step", "default_level": 2, "bounds_fields": ["sequence_id"] },
+    { "id": "receptionist_handoff", "default_level": 3, "bounds_fields": ["approved_template_hash"] },
+    { "id": "recruiting_outreach", "default_level": 2, "bounds_fields": ["max_per_day"] },
+    { "id": "tc_client_update", "default_level": 2, "bounds_fields": ["deal_id"] },
+    { "id": "clickfunnels_webhook_write", "default_level": 1, "bounds_fields": [] },
+    { "id": "ad_budget_change", "default_level": 0, "bounds_fields": [] },
+    { "id": "scenario_auto_execute", "default_level": 0, "bounds_fields": [] },
+    { "id": "learning_weight_update", "default_level": 4, "bounds_fields": ["max_delta_per_week"] },
+    { "id": "founder_governance_read", "default_level": 5, "bounds_fields": ["founder_extension_only"] }
+  ],
+  "founder_overrides_adam": {
+    "boldtrail_note": 4,
+    "receptionist_handoff": 3
+  }
+}

@@ -322,8 +322,15 @@ export async function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/lifeos/commitment-route", createCommitmentRouteRoutes({ pool, requireKey, logger }));
   logger.info("✅ [COMMITMENT-ROUTE] Routes mounted at /api/v1/lifeos/commitment-route");
 
-  app.use("/api/v1/lifere", createLifeRERoutes({ requireKey }));
-  logger.info("✅ [LIFERE-OS] Routes mounted at /api/v1/lifere");
+  app.use("/api/v1/lifere", createLifeRERoutes({
+    requireKey,
+    pool,
+    logger,
+    callCouncilMember,
+    notificationService,
+    sendSMS,
+  }));
+  logger.info("✅ [LIFERE-OS] Routes mounted at /api/v1/lifere (W1–W6)");
 
   app.use("/api/v1/lifeos/ambient", createLifeOSAmbientRoutes({ pool, requireKey, logger }));
   logger.info("✅ [LIFEOS-AMBIENT] Routes mounted at /api/v1/lifeos/ambient");

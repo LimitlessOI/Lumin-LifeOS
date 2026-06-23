@@ -1,0 +1,17 @@
+{
+  "schema": "lifere_personal_twin_v1",
+  "name": "Adam",
+  "roles": [
+    "founder",
+    "agent",
+    "tc"
+  ],
+  "timezone": "America/Chicago",
+  "motivations": [
+    "family",
+    "freedom",
+    "impact"
+  ],
+  "label": "THINK",
+  "updated_at": "2026-06-23T11:47:19.155Z"
+}

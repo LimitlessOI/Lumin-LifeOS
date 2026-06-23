@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-06-22",
+  "updated_at": "2026-06-23",
   "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BPs in priority order ARE the queue.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
@@ -108,8 +108,8 @@
       "note": "Point B = LifeRE Alpha. Founder success test = lifeos-app LifeRE path + daily cycle.",
       "verdict": "TECHNICAL_PASS",
       "receipt_verdict": "PASS",
-      "technical_pass_at": "2026-06-22T22:05:00.927Z",
-      "git_sha": "73340afc69f9b7e78f20911c4932f671b1faba2f",
+      "technical_pass_at": "2026-06-23T11:48:46.849Z",
+      "git_sha": "7c19d2f00a170b6cea30fc7802ea3ea0397006f9",
       "production_base": "",
       "build_method": "system-build",
       "founder_usability_pass": false,

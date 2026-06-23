@@ -1,0 +1,103 @@
+{
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "blueprint_id": "LIFERE-OS-V1-2026-06-21",
+  "blueprint_status": "complete",
+  "scope": "lifere_alpha_point_b",
+  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
+  "authority": "builderos-reboot/POINT_B_TARGET.json",
+  "acceptance_command": "npm run lifeos:lifere-os:v1-acceptance",
+  "allowed_action_types": [
+    "write_file_exact"
+  ],
+  "non_goals": [
+    "No shell_command steps in Builder — acceptance at blueprint root only"
+  ],
+  "intent_sources": [
+    "FOUNDER_PACKET.md",
+    "INTENT_BASELINE.json",
+    "ASSET_REUSE_DECISION.json",
+    "BLUEPRINT_ROADMAP.json",
+    "BLUEPRINT.json (legacy host)"
+  ],
+  "compile_mode": "product_host",
+  "hosted_from": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
+  "steps": [
+    {
+      "step_id": "LRE-S01",
+      "phase_id": "P4",
+      "title": "LifeRE daily command center page",
+      "target_file": "public/overlay/lifeos-lifere.html",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/CONTENT/LRE-S01/lifeos-lifere.html"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "6e9d735acd42424229bf8fb68ec334e4ba95216a201c9944b9223730cbd60a69"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/CONTENT/LRE-S01/lifeos-lifere.html"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LRE-S01-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "public/overlay/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-22T17:33:31.379Z",
+      "git_sha": "ea76e488f0d176ecb3bc24e5d4ab7bab93a7ba1e"
+    },
+    {
+      "step_id": "LRE-S02",
+      "phase_id": "P4",
+      "title": "lifeos-app LifeRE nav + Point B status strip",
+      "target_file": "public/overlay/lifeos-app.html",
+      "action_type": "write_file_exact",
+      "exact_inputs": {
+        "content_source_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/CONTENT/LRE-S02/lifeos-app.html"
+      },
+      "exact_output_contract": {
+        "type": "byte_exact_copy",
+        "sha256": "3e9d70ba2bc90b8d9bd3813059be8c15edb4b93dacbbd1ec2f7ed541d48e5fbc"
+      },
+      "allowed_context_files": [
+        "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/CONTENT/LRE-S02/lifeos-app.html"
+      ],
+      "forbidden_context_files": [
+        "**"
+      ],
+      "dependencies": [
+        "LRE-S01"
+      ],
+      "non_goals": [
+        "No agent improvisation — byte contract only"
+      ],
+      "acceptance_test_ids": [
+        "AT-LRE-S02-1"
+      ],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_ARC",
+      "sandbox_boundary": "public/overlay/**",
+      "authority_owner": "ARC",
+      "on_block": "BLOCKED_RETURN_TO_ARC",
+      "status": "complete",
+      "completed_at": "2026-06-22T17:33:31.379Z",
+      "git_sha": "ea76e488f0d176ecb3bc24e5d4ab7bab93a7ba1e"
+    }
+  ],
+  "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
+  "authored_by": "ARC",
+  "completed_at": "2026-06-22T17:33:31.379Z",
+  "git_sha": "ea76e488f0d176ecb3bc24e5d4ab7bab93a7ba1e",
+  "receipt_path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
+  "receipt_verdict": "PASS",
+  "build_method": "system-build"
+}

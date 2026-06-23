@@ -1,0 +1,41 @@
+{
+  "schema": "lifere_az_acceptance_v1",
+  "at": "2026-06-23T11:48:47.880Z",
+  "point_z": "PASS",
+  "waves": {
+    "w1": {
+      "exit": 0,
+      "stdout": "{\n  \"wave\": \"W1\",\n  \"passed\": [\n    \"LRE-W1-T01\",\n    \"LRE-W1-T02\",\n    \"LRE-W1-T03\",\n    \"LRE-W1-T04\",\n    \"LRE-W1-T05\",\n    \"LRE-W1-T06\"\n  ],\n  \"failed\": [],\n  \"ok\": true\n}"
+    },
+    "w2": {
+      "exit": 0,
+      "stdout": "{\n  \"wave\": \"W2\",\n  \"passed\": [\n    \"LRE-W2-T01\",\n    \"LRE-W2-T02\",\n    \"LRE-W2-T03\",\n    \"LRE-W2-T04\",\n    \"LRE-W2-T05\"\n  ],\n  \"failed\": [],\n  \"ok\": true\n}"
+    },
+    "w3": {
+      "exit": 0,
+      "stdout": "{\n  \"wave\": \"W3\",\n  \"passed\": [\n    \"LRE-W3-T01\",\n    \"LRE-W3-T02\",\n    \"LRE-W3-T03\",\n    \"LRE-W3-T04\"\n  ],\n  \"failed\": [],\n  \"ok\": true\n}"
+    },
+    "w4": {
+      "exit": 0,
+      "stdout": "{\n  \"wave\": \"W4\",\n  \"passed\": [\n    \"LRE-W4-T01\",\n    \"LRE-W4-T02\",\n    \"LRE-W4-T03\",\n    \"LRE-W4-T04\",\n    \"LRE-W4-T05\"\n  ],\n  \"failed\": [],\n  \"ok\": true\n}"
+    },
+    "w5": {
+      "exit": 0,
+      "stdout": "{\n  \"wave\": \"W5\",\n  \"passed\": [\n    \"LRE-W5-T01\",\n    \"LRE-W5-T02\",\n    \"LRE-W5-T03\",\n    \"LRE-W5-T04\",\n    \"LRE-W5-T05\"\n  ],\n  \"failed\": [],\n  \"ok\": true\n}"
+    },
+    "w6": {
+      "exit": 0,
+      "stdout": "{\n  \"wave\": \"W6\",\n  \"passed\": [\n    \"LRE-W6-T01\",\n    \"LRE-W6-T02\",\n    \"LRE-W6-T03\",\n    \"LRE-W6-T04\",\n    \"LRE-W6-T05\",\n    \"LRE-W6-T06\"\n  ],\n  \"failed\": [],\n  \"ok\": true\n}"
+    },
+    "unit_tests": {
+      "exit": 0
+    },
+    "runtime_integration": {
+      "exit": 0,
+      "stdout": "{\n  \"schema\": \"lifere_runtime_integration_v1\",\n  \"passed\": [\n    \"RT-01_performance_bottleneck\",\n    \"RT-02_twin_store_roundtrip\",\n    \"RT-03_scenario_ranked\",\n    \"RT-04_receptionist_lead_twin\",\n    \"RT-05_buyer_os\",\n    \"RT-06_council_roles\",\n    \"RT-07_tc_status_engine\",\n    \"RT-08_chair_brief\",\n    \"RT-09_unified_command_center\",\n    \"RT-10_learning_pipeline\"\n  ],\n  \"failed\": [],\n  \"ok\": true\n}"
+    },
+    "integration_wiring": {
+      "exit": 0
+    }
+  }
+}

@@ -394,10 +394,22 @@ async function bootBuilderOSPriorityQueue(deps) {
   }
 }
 
+async function bootLifeREDomain(deps) {
+  const { pool, logger } = deps;
+  try {
+    const { bootLifeRE } = await import('../services/lifere-boot.js');
+    await bootLifeRE({ pool, logger });
+    logger?.info?.('[BOOT] LifeRE twins + permissions initialized');
+  } catch (err) {
+    logger?.warn?.({ err: err.message }, '[BOOT] LifeRE boot failed (non-fatal)');
+  }
+}
+
 export async function bootAllDomains(deps) {
   const { pool, logger } = deps;
   await autoSeedEpistemicFacts(pool, logger);
   await bootDeliberationRepCatalog(deps);
+  await bootLifeREDomain(deps);
   await Promise.allSettled([
     bootGLVARMonitor(deps),
     bootEmailTriage(deps),

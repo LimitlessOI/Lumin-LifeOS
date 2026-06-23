@@ -1,0 +1,9 @@
+{
+  "schema": "lifere_goal_twin_v1",
+  "weights": {
+    "income": 0.4,
+    "family": 0.3,
+    "freedom": 0.3
+  },
+  "updated_at": "2026-06-23T11:48:47.769Z"
+}

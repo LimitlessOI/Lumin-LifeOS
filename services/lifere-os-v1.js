@@ -1,7 +1,7 @@
 /**
  * SYNOPSIS: LifeRE OS v1 service — light operational copilot for real estate agents.
  * LifeRE OS v1 service — light operational copilot for real estate agents.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/projects/AMENDMENT_LIFERE.md
  */
 
 const PILLARS = [

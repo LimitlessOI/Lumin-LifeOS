@@ -1,0 +1,12 @@
+{
+  "schema": "lifere_marriage_twin_v1",
+  "edge_id": "adam_sherry_marriage",
+  "parties": [
+    "adam",
+    "sherry"
+  ],
+  "shared_goals": [
+    "family_dinner_4x_week"
+  ],
+  "updated_at": "2026-06-23T11:44:04.266Z"
+}

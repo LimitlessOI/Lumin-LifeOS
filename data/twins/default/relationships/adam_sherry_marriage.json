@@ -1,0 +1,18 @@
+{
+  "schema": "lifere_relationship_twin_v1",
+  "edge_id": "adam_sherry_marriage",
+  "type": "marriage",
+  "parties": [
+    "adam",
+    "sherry"
+  ],
+  "trust_level": 0.92,
+  "friction_points": [
+    "schedule_overload",
+    "builder_hours"
+  ],
+  "shared_goals": [
+    "family_dinner_4x_week"
+  ],
+  "updated_at": "2026-06-23T11:47:19.156Z"
+}

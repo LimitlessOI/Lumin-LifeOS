@@ -1,0 +1,202 @@
+{
+  "schema": "lifere_blueprint_roadmap_v1",
+  "roadmap_id": "LIFERE-MASTER-2026-06-13",
+  "point_b_mission": "PRODUCT-LIFERE-MASTER-BLUEPRINT-0001",
+  "point_b_definition": "Full digital twin + master blueprint + builder corridors — coder implements without product decisions",
+  "alpha_mission_historical": "PRODUCT-LIFERE-OS-V1-0001",
+  "authority": "docs/LIFERE_MASTER_BLUEPRINT.md",
+  "builder_spec": "docs/LIFERE_BUILDER_DIGITAL_TWIN.md",
+  "twin_spec": "docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md",
+  "locked_configs": [
+    "config/lifere-council-roles.json",
+    "config/lifere-action-types.json",
+    "config/lifere-video-types.json",
+    "config/lifere-coaching-modules.json"
+  ],
+  "waves": [
+    {
+      "wave_id": "W1",
+      "mission_id": "PRODUCT-LIFERE-W1-0001",
+      "title": "Twin storage + Performance Twin + Command Center",
+      "purpose": "Universal twin framework bootstrap; funnel math; daily command; Chair performance questions",
+      "depends_on": [],
+      "modules": [1, 2, 23, 32, 37, 38, 39],
+      "features": [
+        "lifere_twin_storage_schema",
+        "lifere_activity_log",
+        "lifere_performance_twin_service",
+        "lifere_performance_routes",
+        "command_center_performance_panel",
+        "permission_twin_defaults_level_1"
+      ],
+      "files_touched": [
+        "db/migrations/20260613_lifere_twin_framework.sql",
+        "services/lifere-twin-store.js",
+        "services/lifere-performance-twin.js",
+        "routes/lifere-os-routes.js",
+        "public/overlay/lifeos-lifere.html",
+        "scripts/run-lifere-w1-acceptance.mjs",
+        "tests/lifere-performance-twin.test.js"
+      ],
+      "acceptance_command": "npm run lifeos:lifere-w1-acceptance",
+      "receipt_path": "products/receipts/LIFERE_W1_ACCEPTANCE.json",
+      "status": "blueprint_ready"
+    },
+    {
+      "wave_id": "W2",
+      "mission_id": "PRODUCT-LIFERE-W2-0001",
+      "title": "Permission Twin + Follow-Up + Client Communication + LifeOS crosscheck",
+      "purpose": "Autonomy ladder in DB; approval queue; client templates; life-optimal tradeoffs",
+      "depends_on": ["W1"],
+      "modules": [3, 4, 38, 40],
+      "features": [
+        "lifere_permission_grants",
+        "lifere_approval_queue",
+        "follow_up_os_v2",
+        "client_communication_templates",
+        "lifeos_crosscheck_service"
+      ],
+      "files_touched": [
+        "db/migrations/20260620_lifere_permissions_comms.sql",
+        "services/lifere-permission-twin.js",
+        "services/lifere-client-comms.js",
+        "services/lifere-follow-up-os.js",
+        "services/lifere-lifeos-crosscheck.js",
+        "services/lifere-boldtrail-bridge.js",
+        "routes/lifere-os-routes.js",
+        "public/overlay/lifeos-lifere.html",
+        "scripts/run-lifere-w2-acceptance.mjs"
+      ],
+      "acceptance_command": "npm run lifeos:lifere-w2-acceptance",
+      "receipt_path": "products/receipts/LIFERE_W2_ACCEPTANCE.json",
+      "status": "blueprint_ready"
+    },
+    {
+      "wave_id": "W3",
+      "mission_id": "PRODUCT-LIFERE-W3-0001",
+      "title": "Personality Twin + Skill + Coaching (24 modules)",
+      "purpose": "10-draft voice calibration; skill drills; coaching library; motivation accountability",
+      "depends_on": ["W1"],
+      "modules": [16, 21, 22, 24, 26],
+      "features": [
+        "communication_twin_calibration",
+        "skill_practice_engine",
+        "coaching_curriculum_24",
+        "motivation_accountability"
+      ],
+      "files_touched": [
+        "db/migrations/20260627_lifere_skill_coaching.sql",
+        "services/lifere-personality-calibration.js",
+        "services/lifere-skill-coaching.js",
+        "config/lifere-coaching-modules.json",
+        "routes/lifere-os-routes.js",
+        "public/overlay/lifeos-lifere.html",
+        "scripts/run-lifere-w3-acceptance.mjs"
+      ],
+      "acceptance_command": "npm run lifeos:lifere-w3-acceptance",
+      "receipt_path": "products/receipts/LIFERE_W3_ACCEPTANCE.json",
+      "status": "blueprint_ready"
+    },
+    {
+      "wave_id": "W4",
+      "mission_id": "PRODUCT-LIFERE-W4-0001",
+      "title": "MarketingModule (RE) — full A-to-Z marketing lane",
+      "purpose": "30 video types; hook/YouTube research; scripts; calendar; FB; DM; funnel; ad ROI",
+      "depends_on": ["W3"],
+      "modules": [8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20],
+      "features": [
+        "hook_research_jobs",
+        "video_type_library_30",
+        "content_calendar",
+        "funnel_webhook_ingress",
+        "marketing_attribution",
+        "social_engagement_queue",
+        "youtube_research"
+      ],
+      "files_touched": [
+        "db/migrations/20260704_lifere_marketing.sql",
+        "services/lifere-marketing-module.js",
+        "services/lifere-funnel-ingress.js",
+        "services/lifere-social-engagement.js",
+        "services/lifere-youtube-research.js",
+        "config/lifere-video-types.json",
+        "routes/lifere-os-routes.js",
+        "public/overlay/lifeos-lifere.html",
+        "scripts/run-lifere-w4-acceptance.mjs"
+      ],
+      "acceptance_command": "npm run lifeos:lifere-w4-acceptance",
+      "receipt_path": "products/receipts/LIFERE_W4_ACCEPTANCE.json",
+      "status": "blueprint_ready"
+    },
+    {
+      "wave_id": "W5",
+      "mission_id": "PRODUCT-LIFERE-W5-0001",
+      "title": "Buyer/Seller + TC + Recruiting + Finance + Opportunity + Receptionist + Outreach",
+      "purpose": "Deal-side OS; Am17 TC surface; team growth; runway; market signals; Am29/Am08 bridges",
+      "depends_on": ["W2"],
+      "modules": [5, 6, 7, 25, 26, 27, 28, 29, 30, 31],
+      "features": [
+        "buyer_os_panel",
+        "seller_listing_os_panel",
+        "transaction_surface_am17",
+        "recruiting_os",
+        "finance_runway",
+        "opportunity_scanner",
+        "receptionist_bridge_am29",
+        "outreach_bridge_am08"
+      ],
+      "files_touched": [
+        "db/migrations/20260711_lifere_ops.sql",
+        "services/lifere-transaction-surface.js",
+        "services/lifere-recruiting-os.js",
+        "services/lifere-finance-runway.js",
+        "services/lifere-opportunity-os.js",
+        "services/lifere-receptionist-bridge.js",
+        "services/lifere-outreach-bridge.js",
+        "routes/lifere-os-routes.js",
+        "public/overlay/lifeos-lifere.html",
+        "scripts/run-lifere-w5-acceptance.mjs"
+      ],
+      "acceptance_command": "npm run lifeos:lifere-w5-acceptance",
+      "receipt_path": "products/receipts/LIFERE_W5_ACCEPTANCE.json",
+      "status": "blueprint_ready"
+    },
+    {
+      "wave_id": "W6",
+      "mission_id": "PRODUCT-LIFERE-W6-0001",
+      "title": "Founder Extensions + Relationship + Scenario + Learning + Council",
+      "purpose": "Adam/Sherry/Marriage/Family/Household/Founder Gov; relationship edges; scenario/OCE; experiment engines; Lumin council router",
+      "depends_on": ["W1", "W4"],
+      "modules": [37],
+      "features": [
+        "founder_extension_twins",
+        "relationship_twin",
+        "scenario_engine",
+        "opportunity_cost_engine",
+        "experiment_engine",
+        "best_practice_engine",
+        "strategy_evolution_engine",
+        "lifere_council_router",
+        "lifere_model_router"
+      ],
+      "files_touched": [
+        "db/migrations/20260718_lifere_engines.sql",
+        "services/lifere-scenario-engine.js",
+        "services/lifere-experiment-engine.js",
+        "services/lifere-best-practice-engine.js",
+        "services/lifere-strategy-evolution-engine.js",
+        "services/lifere-relationship-twin.js",
+        "services/lifere-founder-extensions.js",
+        "services/lifere-council-router.js",
+        "services/lifere-model-router.js",
+        "config/lifere-council-roles.json",
+        "routes/lifere-os-routes.js",
+        "public/overlay/lifeos-lifere.html",
+        "scripts/run-lifere-w6-acceptance.mjs"
+      ],
+      "acceptance_command": "npm run lifeos:lifere-w6-acceptance",
+      "receipt_path": "products/receipts/LIFERE_W6_ACCEPTANCE.json",
+      "status": "blueprint_ready"
+    }
+  ]
+}

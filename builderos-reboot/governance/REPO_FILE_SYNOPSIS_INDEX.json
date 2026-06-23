@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T01:49:08.329Z",
+  "generated_at": "2026-06-23T11:49:51.364Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12170,
+  "file_count": 12277,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28694,8 +28694,8 @@
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
       "bytes": 6503,
-      "mtime": "2026-06-22T22:56:03.994Z",
-      "indexed_at": "2026-06-23T00:00:56.553Z",
+      "mtime": "2026-06-23T11:48:46.850Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "synopsis_index_only": true
     },
     {
@@ -28900,9 +28900,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3648958,
-      "mtime": "2026-06-23T00:55:31.516Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z"
+      "bytes": 3684441,
+      "mtime": "2026-06-23T11:49:41.500Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33430,6 +33430,56 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-MASTER-BLUEPRINT-0001/ACCEPTANCE_CRITERIA.md",
+      "synopsis": "LifeRE Master Blueprint — Acceptance Criteria",
+      "bytes": 1383,
+      "mtime": "2026-06-23T11:48:57.176Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-MASTER-BLUEPRINT-0001/ASSUMPTIONS.md",
+      "synopsis": "LifeRE — Assumptions",
+      "bytes": 844,
+      "mtime": "2026-06-23T11:48:57.191Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-MASTER-BLUEPRINT-0001/AUDIT_CHECKLIST.md",
+      "synopsis": "LifeRE Master Blueprint — Audit Checklist",
+      "bytes": 2198,
+      "mtime": "2026-06-23T11:48:57.206Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-MASTER-BLUEPRINT-0001/BLUEPRINT_ROADMAP.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT ROADMAP.",
+      "bytes": 8057,
+      "mtime": "2026-06-23T06:08:39.408Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-MASTER-BLUEPRINT-0001/BUILDER_DIGITAL_TWIN.md",
+      "synopsis": "LifeRE Builder Digital Twin (mission copy)",
+      "bytes": 506,
+      "mtime": "2026-06-23T11:48:57.222Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-MASTER-BLUEPRINT-0001/DECISION_LOG.md",
+      "synopsis": "LifeRE — Decision Log",
+      "bytes": 1568,
+      "mtime": "2026-06-23T11:48:57.238Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-MASTER-BLUEPRINT-0001/FOUNDER_PACKET.md",
+      "synopsis": "PRODUCT-LIFERE-MASTER-BLUEPRINT-0001 — Founder Packet",
+      "bytes": 1514,
+      "mtime": "2026-06-23T06:02:19.136Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/ACCEPTANCE_TESTS.json",
       "synopsis": "BuilderOS artifact — ACCEPTANCE TESTS.",
       "bytes": 484,
@@ -33465,8 +33515,16 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3669,
-      "mtime": "2026-06-22T22:05:00.928Z",
-      "indexed_at": "2026-06-23T00:00:56.553Z",
+      "mtime": "2026-06-23T11:48:46.850Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.PREV.json",
+      "synopsis": "BuilderOS artifact — BLUEPRINT.PREV.",
+      "bytes": 3669,
+      "mtime": "2026-06-22T17:34:07.468Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "synopsis_index_only": true
     },
     {
@@ -33513,6 +33571,14 @@
       "bytes": 903,
       "mtime": "2026-06-21T21:37:41.663Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/FOUNDER_USABILITY_CONFIRM.json",
+      "synopsis": "BuilderOS artifact — FOUNDER USABILITY CONFIRM.",
+      "bytes": 390,
+      "mtime": "2026-06-23T00:54:52.763Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
     },
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/IDC_CONSENSUS_RECEIPT.json",
@@ -33574,8 +33640,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
       "bytes": 1147,
-      "mtime": "2026-06-22T22:05:00.929Z",
-      "indexed_at": "2026-06-23T00:00:56.553Z",
+      "mtime": "2026-06-23T11:48:46.851Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "synopsis_index_only": true
     },
     {
@@ -33718,8 +33784,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/receipts/POINT_B_GATE_REPORT.json",
       "synopsis": "BuilderOS artifact — POINT B GATE REPORT.",
       "bytes": 6353,
-      "mtime": "2026-06-22T18:48:45.178Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "mtime": "2026-06-22T22:05:00.747Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "synopsis_index_only": true
     },
     {
@@ -35414,6 +35480,38 @@
       "synopsis_index_only": true
     },
     {
+      "path": "config/lifere-action-types.json",
+      "synopsis": "Configuration — Lifere Action Types.",
+      "bytes": 2094,
+      "mtime": "2026-06-23T06:07:23.574Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "config/lifere-coaching-modules.json",
+      "synopsis": "Configuration — Lifere Coaching Modules.",
+      "bytes": 2870,
+      "mtime": "2026-06-23T06:07:33.649Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "config/lifere-council-roles.json",
+      "synopsis": "Configuration — Lifere Council Roles.",
+      "bytes": 3624,
+      "mtime": "2026-06-23T06:07:20.681Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "config/lifere-video-types.json",
+      "synopsis": "Configuration — Lifere Video Types.",
+      "bytes": 3994,
+      "mtime": "2026-06-23T06:07:27.646Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "config/makeComConfig.js",
       "synopsis": "Configuration — MakeComConfig.",
       "bytes": 213,
@@ -36556,6 +36654,102 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/lifere-scenarios/adam/sc_1782215044208.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215044208.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:44:04.208Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215047221.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215047221.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:44:07.222Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215055179.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215055179.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:44:15.180Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215059082.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215059082.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:44:19.082Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215063499.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215063499.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:44:23.500Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215066339.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215066339.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:44:26.340Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215074517.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215074517.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:44:34.518Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215161082.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215161082.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:46:01.082Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215173303.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215173303.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:46:13.303Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215220087.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215220087.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:47:00.088Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215240240.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215240240.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:47:20.241Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/lifere-scenarios/adam/sc_1782215327770.json",
+      "synopsis": "JSON data/config — data/lifere-scenarios/adam/sc_1782215327770.json.",
+      "bytes": 535,
+      "mtime": "2026-06-23T11:48:47.771Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/memories.json",
       "synopsis": "JSON data/config — data/memories.json.",
       "bytes": 75132,
@@ -36577,6 +36771,110 @@
       "bytes": 4280,
       "mtime": "2026-05-14T20:51:31.514Z",
       "indexed_at": "2026-06-21T22:31:43.118Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/future.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/future.json.",
+      "bytes": 372,
+      "mtime": "2026-06-23T11:48:47.817Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/goal.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/goal.json.",
+      "bytes": 159,
+      "mtime": "2026-06-23T11:48:47.770Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/modules/buyer.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/modules/buyer.json.",
+      "bytes": 342,
+      "mtime": "2026-06-23T11:48:47.771Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/modules/lead.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/modules/lead.json.",
+      "bytes": 2131,
+      "mtime": "2026-06-23T11:48:47.771Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/performance.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/performance.json.",
+      "bytes": 170,
+      "mtime": "2026-06-23T11:47:19.157Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/personal.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/personal.json.",
+      "bytes": 278,
+      "mtime": "2026-06-23T11:47:19.156Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/relationships/adam_sherry_marriage.json",
+      "synopsis": "JSON data/config — data/twins/default/relationships/adam_sherry_marriage.json.",
+      "bytes": 343,
+      "mtime": "2026-06-23T11:47:19.157Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/founder/adam/adam.json",
+      "synopsis": "JSON data/config — data/twins/founder/adam/adam.json.",
+      "bytes": 279,
+      "mtime": "2026-06-23T11:44:04.266Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/founder/governance/founder.json",
+      "synopsis": "JSON data/config — data/twins/founder/governance/founder.json.",
+      "bytes": 185,
+      "mtime": "2026-06-23T11:44:04.267Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/founder/household/family.json",
+      "synopsis": "JSON data/config — data/twins/founder/household/family.json.",
+      "bytes": 108,
+      "mtime": "2026-06-23T11:44:04.267Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/founder/household/household.json",
+      "synopsis": "JSON data/config — data/twins/founder/household/household.json.",
+      "bytes": 108,
+      "mtime": "2026-06-23T11:44:04.267Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/founder/household/marriage.json",
+      "synopsis": "JSON data/config — data/twins/founder/household/marriage.json.",
+      "bytes": 221,
+      "mtime": "2026-06-23T11:44:04.267Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/founder/sherry/sherry.json",
+      "synopsis": "JSON data/config — data/twins/founder/sherry/sherry.json.",
+      "bytes": 164,
+      "mtime": "2026-06-23T11:44:04.266Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "synopsis_index_only": true
     },
     {
@@ -38597,11 +38895,25 @@
       "indexed_at": "2026-06-21T22:31:43.118Z"
     },
     {
+      "path": "db/migrations/20260613_lifere_twin_framework.sql",
+      "synopsis": "Database migration — 20260613_lifere_twin_framework.sql.",
+      "bytes": 6995,
+      "mtime": "2026-06-23T11:48:57.255Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
       "path": "db/migrations/20260620_founder_interface_roles.sql",
       "synopsis": "Database migration — 20260620_founder_interface_roles.sql.",
       "bytes": 277,
       "mtime": "2026-06-21T21:37:53.429Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "db/migrations/20260624_lifere_call_logs.sql",
+      "synopsis": "LifeRE receptionist call logs (Am 29 bridge table).",
+      "bytes": 577,
+      "mtime": "2026-06-23T11:45:17.652Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
@@ -40130,6 +40442,56 @@
       "indexed_at": "2026-06-21T22:31:43.118Z"
     },
     {
+      "path": "docs/LIFERE_A_TO_Z_FEATURE_MAP.md",
+      "synopsis": "LifeRE — A-to-Z Feature Map (end-state)",
+      "bytes": 12463,
+      "mtime": "2026-06-23T05:17:29.485Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "docs/LIFERE_BLUEPRINT_ROADMAP.json",
+      "synopsis": "Documentation — LIFERE BLUEPRINT ROADMAP.",
+      "bytes": 8057,
+      "mtime": "2026-06-23T06:08:31.911Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/LIFERE_BUILDER_DIGITAL_TWIN.md",
+      "synopsis": "LifeRE — Builder Digital Twin (complete A-to-Z, zero product decisions)",
+      "bytes": 34888,
+      "mtime": "2026-06-23T06:08:55.679Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md",
+      "synopsis": "LifeRE — Full Digital Twin Blueprint (Universal Framework + Founder Extensions)",
+      "bytes": 13917,
+      "mtime": "2026-06-23T06:08:20.100Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "docs/LIFERE_GAP_AUDIT.md",
+      "synopsis": "LifeRE — Gap Audit (exists vs missing vs scattered)",
+      "bytes": 6803,
+      "mtime": "2026-06-23T05:17:36.121Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "docs/LIFERE_MASTER_BLUEPRINT.md",
+      "synopsis": "LifeRE — Master A-to-Z Blueprint (Point B = blueprint complete)",
+      "bytes": 8441,
+      "mtime": "2026-06-23T06:08:34.304Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
+      "path": "docs/LIFERE_PROMPT_PART_TWO_ADDENDUM.md",
+      "synopsis": "LifeRE Architect Prompt — Part Two Addendum (paste after main prompt)",
+      "bytes": 6832,
+      "mtime": "2026-06-23T06:03:01.792Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
+    },
+    {
       "path": "docs/LIVE_BUILD_EXECUTION_READINESS_RECEIPT_V1.md",
       "synopsis": "Live Build Execution Readiness Receipt V1",
       "bytes": 14226,
@@ -40317,6 +40679,13 @@
       "bytes": 12620,
       "mtime": "2026-06-22T17:28:49.696Z",
       "indexed_at": "2026-06-22T17:48:33.388Z"
+    },
+    {
+      "path": "docs/products/LIFERE.md",
+      "synopsis": "LifeRE — Real Estate Business Operating System (full product doctrine)",
+      "bytes": 12452,
+      "mtime": "2026-06-23T06:08:38.782Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
     },
     {
       "path": "docs/products/LLM_FEEDBACK_REQUEST.md",
@@ -40549,17 +40918,17 @@
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 19 PROJECT GOVERNANCE.Manifest.",
-      "bytes": 6268,
-      "mtime": "2026-06-23T00:55:40.865Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z",
+      "bytes": 6272,
+      "mtime": "2026-06-23T11:49:33.170Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 43972,
-      "mtime": "2026-06-23T00:55:25.685Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z"
+      "bytes": 44331,
+      "mtime": "2026-06-23T11:49:06.632Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -40926,6 +41295,21 @@
       "bytes": 8790,
       "mtime": "2026-06-21T21:37:59.320Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
+      "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
+      "bytes": 1014,
+      "mtime": "2026-06-23T11:46:51.771Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/projects/AMENDMENT_LIFERE.md",
+      "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
+      "bytes": 7576,
+      "mtime": "2026-06-23T11:48:46.168Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -68332,9 +68716,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 19982,
-      "mtime": "2026-06-23T00:54:40.744Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z",
+      "bytes": 20872,
+      "mtime": "2026-06-23T11:48:35.968Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "synopsis_index_only": true
     },
     {
@@ -68535,11 +68919,123 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/LIFERE_ALPHA_E2E.json",
+      "synopsis": "Product receipt — LIFERE ALPHA E2E.",
+      "bytes": 718,
+      "mtime": "2026-06-23T11:48:47.047Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_AZ_ACCEPTANCE.json",
+      "synopsis": "Product receipt — LIFERE AZ ACCEPTANCE.",
+      "bytes": 2202,
+      "mtime": "2026-06-23T11:48:47.881Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_CODER_GAP_REPORT.json",
+      "synopsis": "Product receipt — LIFERE CODER GAP REPORT.",
+      "bytes": 3715,
+      "mtime": "2026-06-23T11:47:14.905Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215055180.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215055180.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:44:15.181Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215059083.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215059083.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:44:19.083Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215063500.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215063500.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:44:23.501Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215066340.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215066340.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:44:26.340Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215074518.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215074518.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:44:34.519Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215161083.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215161083.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:46:01.083Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215173304.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215173304.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:46:13.304Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215220088.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215220088.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:47:00.088Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215240241.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215240241.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:47:20.242Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782215327771.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782215327771.",
+      "bytes": 236,
+      "mtime": "2026-06-23T11:48:47.772Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFERE OS V1 ACCEPTANCE.",
       "bytes": 1155,
-      "mtime": "2026-06-22T22:05:00.928Z",
-      "indexed_at": "2026-06-23T00:00:56.553Z",
+      "mtime": "2026-06-23T11:48:46.851Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_RUNTIME_INTEGRATION.json",
+      "synopsis": "Product receipt — LIFERE RUNTIME INTEGRATION.",
+      "bytes": 438,
+      "mtime": "2026-06-23T11:48:47.818Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "synopsis_index_only": true
     },
     {
@@ -69402,9 +69898,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 15073,
-      "mtime": "2026-06-22T21:34:48.498Z",
-      "indexed_at": "2026-06-22T21:34:54.837Z"
+      "bytes": 29173,
+      "mtime": "2026-06-23T11:46:48.174Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -70763,12 +71259,12 @@
     },
     {
       "path": "routes/lifere-os-routes.js",
-      "synopsis": "LifeRE OS v1 routes.",
-      "bytes": 4786,
-      "mtime": "2026-06-22T20:57:17.146Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
+      "bytes": 27992,
+      "mtime": "2026-06-23T11:46:43.830Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "ssot": [
-        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+        "docs/projects/AMENDMENT_LIFERE.md"
       ]
     },
     {
@@ -72594,6 +73090,26 @@
       ]
     },
     {
+      "path": "scripts/run-lifere-alpha-e2e.mjs",
+      "synopsis": "LifeRE Alpha E2E — founder success test at API layer (daily + top-3 + debrief).",
+      "bytes": 4988,
+      "mtime": "2026-06-23T11:48:35.374Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-lifere-az-acceptance.mjs",
+      "synopsis": "LifeRE A-to-Z acceptance — runs W1–W6 + unit + runtime integration.",
+      "bytes": 1975,
+      "mtime": "2026-06-23T11:45:54.496Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
       "path": "scripts/run-lifere-os-v1-acceptance.mjs",
       "synopsis": "LifeRE OS v1 acceptance — Point B proof for LifeRE Alpha.",
       "bytes": 4257,
@@ -72601,6 +73117,76 @@
       "indexed_at": "2026-06-22T21:05:30.528Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
+      "path": "scripts/run-lifere-runtime-integration.mjs",
+      "synopsis": "LifeRE runtime integration smoke — exercises services without HTTP.",
+      "bytes": 4698,
+      "mtime": "2026-06-23T11:46:49.227Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-lifere-w1-acceptance.mjs",
+      "synopsis": "LifeRE W1 acceptance.",
+      "bytes": 1321,
+      "mtime": "2026-06-23T11:41:42.302Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-lifere-w2-acceptance.mjs",
+      "synopsis": "LifeRE W2 acceptance.",
+      "bytes": 1116,
+      "mtime": "2026-06-23T11:41:43.908Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-lifere-w3-acceptance.mjs",
+      "synopsis": "LifeRE W3 acceptance.",
+      "bytes": 996,
+      "mtime": "2026-06-23T11:41:45.142Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-lifere-w4-acceptance.mjs",
+      "synopsis": "LifeRE W4 acceptance.",
+      "bytes": 1108,
+      "mtime": "2026-06-23T11:41:46.326Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-lifere-w5-acceptance.mjs",
+      "synopsis": "LifeRE W5 acceptance.",
+      "bytes": 992,
+      "mtime": "2026-06-23T11:41:47.493Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-lifere-w6-acceptance.mjs",
+      "synopsis": "LifeRE W6 acceptance.",
+      "bytes": 1635,
+      "mtime": "2026-06-23T11:41:49.077Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
       ]
     },
     {
@@ -72696,6 +73282,16 @@
       "indexed_at": "2026-06-21T22:31:43.118Z",
       "ssot": [
         "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md"
+      ]
+    },
+    {
+      "path": "scripts/seed-lifere-founder-twins.mjs",
+      "synopsis": "Seed founder extension twin files for Adam household.",
+      "bytes": 2050,
+      "mtime": "2026-06-23T11:44:02.253Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
       ]
     },
     {
@@ -86559,23 +87155,333 @@
       ]
     },
     {
+      "path": "services/lifere-best-practice-engine.js",
+      "synopsis": "LifeRE best practice engine — promote winning experiments.",
+      "bytes": 619,
+      "mtime": "2026-06-23T11:40:59.106Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
       "path": "services/lifere-boldtrail-bridge.js",
       "synopsis": "LifeRE ↔ BoldTrail bridge — pipeline read + approval-gated write-back.",
-      "bytes": 7170,
-      "mtime": "2026-06-22T20:57:08.442Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "bytes": 7162,
+      "mtime": "2026-06-23T11:42:23.113Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "ssot": [
-        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-boot.js",
+      "synopsis": "LifeRE boot — seed twins, permissions, founder extensions on startup.",
+      "bytes": 2876,
+      "mtime": "2026-06-23T11:46:10.125Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-chair-service.js",
+      "synopsis": "LifeRE Chair aggregator — answers founder chair questions in one call.",
+      "bytes": 3642,
+      "mtime": "2026-06-23T11:46:42.429Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-client-comms.js",
+      "synopsis": "LifeRE client communication templates and draft queue.",
+      "bytes": 2608,
+      "mtime": "2026-06-23T11:40:22.925Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-command-center.js",
+      "synopsis": "LifeRE unified command center — BoldTrail + Performance + LifeOS crosscheck.",
+      "bytes": 2951,
+      "mtime": "2026-06-23T11:45:12.815Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-council-router.js",
+      "synopsis": "LifeRE council router — invokes live council when callCouncilMember provided.",
+      "bytes": 3851,
+      "mtime": "2026-06-23T11:43:23.854Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-deal-side-os.js",
+      "synopsis": "LifeRE buyer and seller OS — module twin projections.",
+      "bytes": 3169,
+      "mtime": "2026-06-23T11:43:21.642Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-experiment-engine.js",
+      "synopsis": "LifeRE experiment engine — A/B with receipts.",
+      "bytes": 1138,
+      "mtime": "2026-06-23T11:40:59.035Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-finance-runway.js",
+      "synopsis": "LifeRE finance runway and GCI forecast.",
+      "bytes": 1373,
+      "mtime": "2026-06-23T11:40:46.540Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-follow-up-os.js",
+      "synopsis": "LifeRE follow-up OS — BoldTrail queue + permission + approval.",
+      "bytes": 1602,
+      "mtime": "2026-06-23T11:43:21.426Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-founder-extensions.js",
+      "synopsis": "LifeRE founder extension twins — Adam/Sherry household only.",
+      "bytes": 1843,
+      "mtime": "2026-06-23T11:48:41.153Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-funnel-ingress.js",
+      "synopsis": "LifeRE ClickFunnels webhook ingress (stub without secret).",
+      "bytes": 1007,
+      "mtime": "2026-06-23T11:40:39.478Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-learning-pipeline.js",
+      "synopsis": "LifeRE learning pipeline — experiment → best practice → strategy evolution.",
+      "bytes": 2120,
+      "mtime": "2026-06-23T11:46:07.343Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-lifeos-crosscheck.js",
+      "synopsis": "LifeRE LifeOS crosscheck — life-optimal vs business-optimal tradeoffs.",
+      "bytes": 2228,
+      "mtime": "2026-06-23T11:40:25.145Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-marketing-module.js",
+      "synopsis": "LifeRE MarketingModule — hooks, scripts, calendar, ROI.",
+      "bytes": 5077,
+      "mtime": "2026-06-23T11:45:35.862Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-model-router.js",
+      "synopsis": "LifeRE model router — CFO cheap-model-first ladder.",
+      "bytes": 636,
+      "mtime": "2026-06-23T11:41:08.127Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-opportunity-os.js",
+      "synopsis": "LifeRE opportunity OS — expireds, FSBOs, niche signals.",
+      "bytes": 1356,
+      "mtime": "2026-06-23T11:40:48.432Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
       ]
     },
     {
       "path": "services/lifere-os-v1.js",
       "synopsis": "LifeRE OS v1 service — light operational copilot for real estate agents.",
-      "bytes": 8319,
-      "mtime": "2026-06-22T20:57:13.231Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "bytes": 8311,
+      "mtime": "2026-06-23T11:43:53.436Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "ssot": [
-        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-outreach-bridge.js",
+      "synopsis": "LifeRE Outreach bridge — Am 08 outreach-engine integration.",
+      "bytes": 1872,
+      "mtime": "2026-06-23T11:43:14.428Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-performance-twin.js",
+      "synopsis": "LifeRE Performance Twin — funnel math, bottleneck, goal reverse calculator.",
+      "bytes": 7316,
+      "mtime": "2026-06-23T11:40:14.184Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-permission-twin.js",
+      "synopsis": "LifeRE Permission Twin — autonomy ladder 0–5 per action type.",
+      "bytes": 2755,
+      "mtime": "2026-06-23T11:40:19.599Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-personality-calibration.js",
+      "synopsis": "LifeRE personality calibration — 10-draft voice learning.",
+      "bytes": 1911,
+      "mtime": "2026-06-23T11:40:27.349Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-receptionist-bridge.js",
+      "synopsis": "LifeRE receptionist bridge — inbound lead → Lead Twin + optional action inbox.",
+      "bytes": 4377,
+      "mtime": "2026-06-23T11:46:40.205Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-recruiting-os.js",
+      "synopsis": "LifeRE recruiting OS pipeline.",
+      "bytes": 1116,
+      "mtime": "2026-06-23T11:40:44.874Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-relationship-twin.js",
+      "synopsis": "LifeRE relationship twin edge store.",
+      "bytes": 1973,
+      "mtime": "2026-06-23T11:41:02.205Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-scenario-engine.js",
+      "synopsis": "LifeRE scenario engine + opportunity cost.",
+      "bytes": 3365,
+      "mtime": "2026-06-23T11:40:56.788Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-skill-coaching.js",
+      "synopsis": "LifeRE skill coaching — 24 modules, drills, performance link.",
+      "bytes": 2438,
+      "mtime": "2026-06-23T11:40:31.096Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-social-engagement.js",
+      "synopsis": "LifeRE social comment/DM engagement suggestions.",
+      "bytes": 1224,
+      "mtime": "2026-06-23T11:40:41.128Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-strategy-evolution-engine.js",
+      "synopsis": "LifeRE strategy evolution — update recommendation weights only.",
+      "bytes": 974,
+      "mtime": "2026-06-23T11:40:59.818Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-transaction-surface.js",
+      "synopsis": "LifeRE transaction surface — Am 17 tc-status-engine integration.",
+      "bytes": 1926,
+      "mtime": "2026-06-23T11:44:31.688Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-twin-store.js",
+      "synopsis": "LifeRE per-user twin file store with optional PG mirror.",
+      "bytes": 3228,
+      "mtime": "2026-06-23T11:44:12.540Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-youtube-research.js",
+      "synopsis": "LifeRE YouTube research (501 without API key, manual fallback).",
+      "bytes": 1008,
+      "mtime": "2026-06-23T11:40:41.937Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
       ]
     },
     {
@@ -91657,9 +92563,9 @@
     {
       "path": "startup/boot-domains.js",
       "synopsis": "boot-domains.js",
-      "bytes": 16514,
-      "mtime": "2026-06-23T00:54:14.266Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z",
+      "bytes": 16915,
+      "mtime": "2026-06-23T11:45:32.240Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]
@@ -91712,9 +92618,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 29861,
-      "mtime": "2026-06-21T21:39:26.980Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 29961,
+      "mtime": "2026-06-23T11:43:43.522Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]
@@ -92405,6 +93311,26 @@
       "bytes": 4843,
       "mtime": "2026-06-21T21:39:28.424Z",
       "indexed_at": "2026-06-21T22:31:43.118Z"
+    },
+    {
+      "path": "tests/lifere-chair-service.test.js",
+      "synopsis": "LifeRE Chair service unit tests.",
+      "bytes": 990,
+      "mtime": "2026-06-23T11:47:12.666Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "tests/lifere-performance-twin.test.js",
+      "synopsis": "LifeRE Performance Twin unit tests.",
+      "bytes": 1292,
+      "mtime": "2026-06-23T11:41:40.531Z",
+      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
     },
     {
       "path": "tests/load-test.yml",

@@ -1,0 +1,30 @@
+{
+  "schema": "lifere_coaching_modules_v1",
+  "count": 24,
+  "modules": [
+    { "id": "new_agents", "label": "New agents", "skill_key": "new_agent_fundamentals", "drill_minutes_default": 15 },
+    { "id": "experienced_agents", "label": "Experienced agents", "skill_key": "advanced_pipeline", "drill_minutes_default": 20 },
+    { "id": "niche_discovery", "label": "Niche discovery", "skill_key": "niche_positioning", "drill_minutes_default": 20 },
+    { "id": "scripts", "label": "Scripts", "skill_key": "conversational_scripts", "drill_minutes_default": 15 },
+    { "id": "objections", "label": "Objections", "skill_key": "objection_handling", "drill_minutes_default": 20 },
+    { "id": "open_houses", "label": "Open houses", "skill_key": "open_house_conversion", "drill_minutes_default": 15 },
+    { "id": "listings", "label": "Listings", "skill_key": "listing_presentation", "drill_minutes_default": 25 },
+    { "id": "buyers", "label": "Buyers", "skill_key": "buyer_consult", "drill_minutes_default": 25 },
+    { "id": "relocation", "label": "Relocation", "skill_key": "relocation_buyer", "drill_minutes_default": 20 },
+    { "id": "luxury", "label": "Luxury", "skill_key": "luxury_client", "drill_minutes_default": 25 },
+    { "id": "investors", "label": "Investors", "skill_key": "investor_math", "drill_minutes_default": 25 },
+    { "id": "expireds", "label": "Expireds", "skill_key": "expired_listing", "drill_minutes_default": 20 },
+    { "id": "fsbos", "label": "FSBOs", "skill_key": "fsbo_conversation", "drill_minutes_default": 20 },
+    { "id": "soi", "label": "SOI", "skill_key": "sphere_of_influence", "drill_minutes_default": 15 },
+    { "id": "recruiting", "label": "Recruiting", "skill_key": "recruiting_pitch", "drill_minutes_default": 20 },
+    { "id": "content_creation", "label": "Content creation", "skill_key": "on_camera_delivery", "drill_minutes_default": 20 },
+    { "id": "follow_up", "label": "Follow-up", "skill_key": "speed_to_lead", "drill_minutes_default": 15 },
+    { "id": "negotiation", "label": "Negotiation", "skill_key": "offer_negotiation", "drill_minutes_default": 25 },
+    { "id": "listing_marketing", "label": "Listing marketing", "skill_key": "listing_marketing_plan", "drill_minutes_default": 20 },
+    { "id": "buyer_rep_agreement", "label": "Buyer rep", "skill_key": "buyer_rep_pitch", "drill_minutes_default": 15 },
+    { "id": "team_leadership", "label": "Team leadership", "skill_key": "team_lead_coaching", "drill_minutes_default": 25 },
+    { "id": "time_management", "label": "Time management", "skill_key": "time_blocking_re", "drill_minutes_default": 15 },
+    { "id": "financial_planning", "label": "Financial planning", "skill_key": "gci_planning", "drill_minutes_default": 20 },
+    { "id": "client_experience", "label": "Client experience", "skill_key": "white_glove_comms", "drill_minutes_default": 20 }
+  ]
+}

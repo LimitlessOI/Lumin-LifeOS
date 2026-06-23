@@ -1,0 +1,22 @@
+{
+  "schema": "lifere_alpha_e2e_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "at": "2026-06-23T11:48:47.012Z",
+  "mode": "in_process",
+  "passed": [
+    "LRE-E2E-T01_daily_marker",
+    "LRE-E2E-T02_top3_marker",
+    "LRE-E2E-T03_debrief_marker",
+    "LRE-E2E-T04_app_nav",
+    "LRE-E2E-T05_health",
+    "LRE-E2E-T06_daily_command_center",
+    "LRE-E2E-T07_top3",
+    "LRE-E2E-T08_nightly_debrief",
+    "LRE-E2E-T09_chair_brief"
+  ],
+  "failed": [],
+  "ok": true,
+  "founder_success_test": "Open lifeos-app LifeRE path; daily command center + top-3 + debrief visible",
+  "founder_usability_pass": false,
+  "note": "Machine E2E PASS does not set founder_usability_pass — Adam confirm required for Alpha gate"
+}

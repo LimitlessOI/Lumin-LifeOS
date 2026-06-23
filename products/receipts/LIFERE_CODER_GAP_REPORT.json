@@ -1,0 +1,91 @@
+{
+  "schema": "lifere_coder_gap_report_v1",
+  "at": "2026-06-23T11:42:09.833Z",
+  "build_status": "structural_point_z_pass",
+  "acceptance": "npm run lifeos:lifere-az-acceptance",
+  "runtime_checks": 10,
+  "latest_additions": [
+    "lifere-learning-pipeline.js — experiment → playbook → strategy weights",
+    "POST /api/v1/lifere/receptionist/vapi-end — Vapi call-ended ingest",
+    "GET /api/v1/lifere/receptionist/calls — inbound call history",
+    "Chair brief relationship_guardrails from marriage twin edge",
+    "AMENDMENT_LIFERE.manifest.json"
+  ],
+  "gaps_requiring_non_coder_role": [
+    {
+      "id": "GAP-01",
+      "area": "External credentials",
+      "issue": "ClickFunnels webhook returns 501 without CLICKFUNNELS_WEBHOOK_SECRET; YouTube research 501 without YOUTUBE_DATA_API_KEY",
+      "role": "Operator / Founder",
+      "blueprint_says": "Stub until creds — not coder decision"
+    },
+    {
+      "id": "GAP-02",
+      "area": "Live database",
+      "issue": "Services degrade gracefully without pool; migration applies on Railway boot — not verified live in this session",
+      "role": "Operator deploy",
+      "coder_action": "Migration file exists; pool wired in register-runtime-routes"
+    },
+    {
+      "id": "GAP-03",
+      "area": "Am 17 TC integration",
+      "issue": "Transaction surface probes tc_transactions table; schema may differ in prod",
+      "role": "Architect / TC owner",
+      "coder_action": "Thin wrapper only per blueprint"
+    },
+    {
+      "id": "GAP-04",
+      "area": "Am 29 Receptionist / Am 08 Outreach",
+      "issue": "Outreach bridge calls outreach-engine when pool present; receptionist has vapi-end ingest + call_logs — full Vapi assistant config still operator",
+      "role": "Architect integration receipt",
+      "coder_action": "Wire Vapi webhook URL to POST /api/v1/lifere/receptionist/vapi-end for LifeRE lead twin"
+    },
+    {
+      "id": "GAP-05",
+      "area": "Council deliberation",
+      "issue": "Council router selects roles and returns synthesis strings — not full LLM multi-agent deliberation",
+      "role": "Architect / Chair",
+      "coder_action": "Router + config locked; LLM invoke is next layer"
+    },
+    {
+      "id": "GAP-06",
+      "area": "Marketing research quality",
+      "issue": "Hook/YouTube research uses seeded THINK data, not real API backtests",
+      "role": "Product / credentials",
+      "blueprint_allows": "THINK label + manual CSV fallback W4"
+    },
+    {
+      "id": "GAP-07",
+      "area": "Founder usability",
+      "issue": "Alpha founder_usability_pass still false — structural PASS ≠ Adam daily-driver PASS",
+      "role": "Founder",
+      "not_coder_scope": true
+    },
+    {
+      "id": "GAP-08",
+      "area": "Sherry account / household twins",
+      "issue": "Sherry LifeOS login provisioning incomplete in LifeOS",
+      "role": "Founder / LifeOS",
+      "coder_action": "Founder twin paths + 403 gates implemented"
+    },
+    {
+      "id": "GAP-09",
+      "area": "SSOT drift",
+      "issue": "lifere-os-v1.js still @ssot Am 21 (legacy alpha service)",
+      "role": "Coder cleanup",
+      "minor": true
+    },
+    {
+      "id": "GAP-10",
+      "area": "Buyer/Seller OS depth",
+      "issue": "Buyer/seller routes return minimal projection objects — not full deal workflows",
+      "role": "Architect",
+      "note": "Blueprint W5 listed panels; deep CRM deal logic may need Am 11 expansion"
+    }
+  ],
+  "coder_decisions_avoided": [
+    "Used blueprint defaults for $30k goal, $8500 commission, funnel stages",
+    "Used locked config JSON for council, autonomy, video types, coaching modules",
+    "Did not invent new product scope beyond BUILDER_DIGITAL_TWIN"
+  ]
+}

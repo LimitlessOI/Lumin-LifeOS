@@ -1,0 +1,6 @@
+{
+  "schema": "lifere_founder_governance_twin_v1",
+  "bp_priority_ref": "builderos-reboot/BP_PRIORITY.json",
+  "no_personal_secrets": true,
+  "updated_at": "2026-06-23T11:44:04.266Z"
+}

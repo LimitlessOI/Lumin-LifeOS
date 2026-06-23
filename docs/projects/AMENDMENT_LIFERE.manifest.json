@@ -1,0 +1,26 @@
+{
+  "project_id": "lifere",
+  "name": "LifeRE Real Estate Business OS",
+  "amendment_path": "docs/projects/AMENDMENT_LIFERE.md",
+  "status": "active",
+  "owned_files": [
+    "docs/projects/AMENDMENT_LIFERE.md",
+    "docs/projects/AMENDMENT_LIFERE.manifest.json",
+    "docs/products/LIFERE.md",
+    "docs/LIFERE_MASTER_BLUEPRINT.md",
+    "docs/LIFERE_BUILDER_DIGITAL_TWIN.md",
+    "docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md",
+    "config/lifere-*.json",
+    "services/lifere-*.js",
+    "routes/lifere-os-routes.js",
+    "public/overlay/lifeos-lifere.html",
+    "db/migrations/20260613_lifere_twin_framework.sql",
+    "db/migrations/20260624_lifere_call_logs.sql",
+    "scripts/run-lifere-*-acceptance.mjs",
+    "tests/lifere-*.test.js",
+    "products/receipts/LIFERE_*.json"
+  ],
+  "last_updated": "2026-06-13",
+  "last_receipt": "2026-06-13 learning-pipeline + vapi-ingest + chair-relationship",
+  "last_change_summary": "W1-W6 runtime; learning pipeline; receptionist vapi hook; chair relationship guardrails"
+}

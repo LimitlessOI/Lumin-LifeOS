@@ -1,0 +1,87 @@
+{
+  "schema": "lifere_council_roles_v1",
+  "dispute_resolution_order": ["Sentry", "CFO", "Advocate", "Chair", "Adam"],
+  "lumin_role": "router",
+  "roles": {
+    "Chair": {
+      "invoke_when": ["every_turn", "dispute_tie", "life_business_tradeoff"],
+      "authority_ceiling": "orchestrate_no_silent_execute",
+      "inputs": ["all_twins_scoped", "intent", "receipts"],
+      "outputs": ["plain_english_answer", "receipt_path", "next_action"],
+      "escalation": "Adam when sovereignty or unknown blocker"
+    },
+    "CFO": {
+      "invoke_when": ["cost", "roi", "model_pick", "ad_spend"],
+      "authority_ceiling": "block_expensive_path",
+      "inputs": ["Performance", "Finance", "Marketing", "model_cost_log"],
+      "outputs": ["cheapest_capable_model", "cost_estimate", "roi_note"],
+      "escalation": "Chair if block conflicts with user goal"
+    },
+    "Builder": {
+      "invoke_when": ["build", "blueprint", "deploy", "mission"],
+      "authority_ceiling": "route_to_builderos_only",
+      "inputs": ["Founder_Governance", "BP_PRIORITY"],
+      "outputs": ["mission_id", "builder_packet_ref"],
+      "escalation": "Chair if not build intent"
+    },
+    "Sentry": {
+      "invoke_when": ["risk", "compliance", "honesty", "tcpa", "fair_housing"],
+      "authority_ceiling": "veto_outbound",
+      "inputs": ["Permission", "draft_content", "compliance_rules"],
+      "outputs": ["pass", "veto_reason", "required_edit"],
+      "escalation": "Advocate then Adam on sovereignty conflict"
+    },
+    "Wisdom": {
+      "invoke_when": ["lessons", "drift", "pattern_history"],
+      "authority_ceiling": "advisory",
+      "inputs": ["Memory", "receipts", "Best_Practice_Engine"],
+      "outputs": ["lesson_summary", "playbook_ref"],
+      "escalation": "Chair"
+    },
+    "Oracle": {
+      "invoke_when": ["forecast", "scenario", "opportunity_cost"],
+      "authority_ceiling": "advisory",
+      "inputs": ["Future", "Scenario", "Goal", "Performance"],
+      "outputs": ["likely_outcomes", "path_rankings", "label"],
+      "escalation": "Chair"
+    },
+    "Advocate": {
+      "invoke_when": ["user_sovereignty", "dark_pattern_risk", "overreach"],
+      "authority_ceiling": "veto_manipulation",
+      "inputs": ["Goal", "Personal", "Permission"],
+      "outputs": ["user_first_recommendation"],
+      "escalation": "Adam"
+    },
+    "Marketing_Director": {
+      "invoke_when": ["content", "ads", "hooks", "calendar", "social"],
+      "authority_ceiling": "draft_queue_level_2",
+      "inputs": ["Marketing", "Content", "Communication", "Personality"],
+      "outputs": ["drafts", "calendar_rows", "hook_rankings"],
+      "escalation": "Sentry on compliance"
+    },
+    "Recruiting_Director": {
+      "invoke_when": ["recruit", "hire", "onboard", "team_growth"],
+      "authority_ceiling": "draft_queue_level_2",
+      "inputs": ["Recruiting", "Business", "Performance"],
+      "outputs": ["candidate_queue", "agenda_drafts", "follow_up_drafts"],
+      "escalation": "Sentry on employment_law"
+    },
+    "TC_Director": {
+      "invoke_when": ["transaction", "deadline", "missing_doc", "tc_blocker"],
+      "authority_ceiling": "draft_queue_level_2",
+      "inputs": ["Transaction", "Client", "Am17_tc_state"],
+      "outputs": ["status_drafts", "deadline_alerts", "missing_doc_list"],
+      "escalation": "Sentry on legal_claims"
+    }
+  },
+  "intent_regex_map": {
+    "build": ["Builder"],
+    "cost": ["CFO"],
+    "risk": ["Sentry"],
+    "forecast": ["Oracle", "Chair"],
+    "content": ["Marketing_Director"],
+    "recruit": ["Recruiting_Director"],
+    "transaction": ["TC_Director"],
+    "default": ["Chair"]
+  }
+}

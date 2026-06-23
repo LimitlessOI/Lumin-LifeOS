@@ -3,7 +3,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-13 — FP V2 boot defaults ON for prediction score + lane intel (opt-out only).
+**Last Updated:** 2026-06-13 — LifeRE W1–W6 boot + route deps (pool, council, outreach).
 
 | Field | Value |
 |---|---|
@@ -204,6 +204,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-06-13 | **`startup/boot-domains.js`** — `bootLifeREDomain()` seeds founder twins + marriage edge on boot. **`startup/register-runtime-routes.js`** — pass `pool`, `callCouncilMember`, `notificationService`, `sendSMS` into `createLifeRERoutes`. | LifeRE Alpha runtime must boot and wire Am 08/17/29 bridges on Railway. | ✅ alpha-gate PASS | deploy + live E2E |
 | 2026-06-13 | **`startup/boot-domains.js`** — FP V2 boot defaults ON: Chair prediction score + lane intel schedulers (opt-out `CHAIR_PREDICTION_SCORE_ENABLED=0` / `LANE_INTEL_*=0`). | Adam: always-on scoreboard + competitor monitoring unless explicitly disabled. | ✅ preflight | deploy |
 | 2026-06-17 | **`startup/boot-domains.js`** — added `import { startBpPriorityScheduler }` + `bootBuilderOSPriorityQueue(deps)` function + wired to `Promise.allSettled` in `bootAllDomains`. Requires `BUILDEROS_AUTOPILOT=1` env var to activate. | BuilderOS BP_PRIORITY queue needed to run autonomously on Railway without founder present; scheduler enabled via env flag to prevent unintended burns. | AM19 boot wiring | pending Railway env set + deploy |
 | 2026-06-21 | **`startup/register-runtime-routes.js`** — pass `commitManyToGitHub` into council builder routes for `POST /builder/execute-batch` (atomic multi-file founder CSS commits). | Founder CSS patch used 4 sequential commits — partial deploy state. | AM19 wiring | deploy |

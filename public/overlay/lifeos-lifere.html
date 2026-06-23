@@ -145,6 +145,15 @@
     .followup-actions { display: flex; gap: 8px; flex-wrap: wrap; }
     .btn-sm { padding: 6px 10px; font-size: 12px; }
     .btn-success { background: #166534; border-color: #166534; color: #fff; }
+    .panel-grid { display: grid; gap: 12px; }
+    .panel-row { font-size: 13px; margin-bottom: 8px; color: #ccc; }
+    .panel-label { color: var(--lifere-accent); font-weight: 600; margin-right: 6px; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .tab-btn { font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border); background: #17171f; color: var(--text); cursor: pointer; }
+    .tab-btn.active { background: var(--lifere-accent); border-color: var(--lifere-accent); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    input, select, textarea { background: #12121a; border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 6px 8px; font-size: 13px; width: 100%; margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -190,6 +199,82 @@
         <button type="button" class="btn" id="lifere-refresh">Refresh command center</button>
       </div>
       <p class="status-line" id="lifere-status"></p>
+    </section>
+
+    <div class="tabs" id="lifere-tabs">
+      <button type="button" class="tab-btn active" data-tab="performance">Performance</button>
+      <button type="button" class="tab-btn" data-tab="approval">Approval Queue</button>
+      <button type="button" class="tab-btn" data-tab="coaching">Coaching</button>
+      <button type="button" class="tab-btn" data-tab="marketing">Marketing</button>
+      <button type="button" class="tab-btn" data-tab="ops">Ops</button>
+      <button type="button" class="tab-btn" data-tab="scenario">Scenario</button>
+      <button type="button" class="tab-btn" data-tab="chair">Chair Brief</button>
+      <button type="button" class="tab-btn" data-tab="deals">Deals</button>
+    </div>
+
+    <section class="section tab-panel active" id="lifere-performance-panel" data-tab-panel="performance">
+      <div class="section-title">Performance Twin</div>
+      <div class="panel-row"><span class="panel-label">Bottleneck:</span><span id="perf-bottleneck" data-lifere-perf="bottleneck">—</span></div>
+      <div class="panel-row"><span class="panel-label">Next hour:</span><span id="perf-next-hour" data-lifere-perf="next-hour">—</span></div>
+      <div class="panel-row"><span class="panel-label">$30k math:</span><span id="perf-goal-math">—</span></div>
+      <div class="panel-row" id="lifere-lifeos-tradeoff"></div>
+      <form id="activity-form">
+        <input type="number" name="conversations" placeholder="Conversations today" min="0" />
+        <input type="number" name="calls" placeholder="Calls" min="0" />
+        <input type="number" name="appointments_set" placeholder="Appointments set" min="0" />
+        <button type="button" class="btn btn-primary" id="activity-save-btn">Log activity</button>
+      </form>
+    </section>
+
+    <section class="section tab-panel" id="lifere-approval-queue" data-tab-panel="approval">
+      <div class="section-title">Approval Queue</div>
+      <div id="approval-list" class="empty">No pending drafts.</div>
+    </section>
+
+    <section class="section tab-panel" id="lifere-coaching-panel" data-tab-panel="coaching">
+      <div class="section-title">Skill Coaching</div>
+      <div id="coaching-modules" class="panel-grid"></div>
+    </section>
+
+    <section class="section tab-panel" id="lifere-marketing-panel" data-tab-panel="marketing">
+      <div class="section-title">Marketing Module</div>
+      <div id="marketing-video-types"></div>
+      <button type="button" class="btn" id="marketing-research-hooks">Research hooks</button>
+      <pre id="marketing-output" class="status-line"></pre>
+    </section>
+
+    <section class="section tab-panel" data-tab-panel="ops">
+      <div class="section-title">Recruiting · Finance · Opportunity</div>
+      <div id="lifere-recruiting-panel" class="panel-row">Recruiting: <span id="recruiting-count">—</span></div>
+      <div id="lifere-finance-panel" class="panel-row">Runway: <span id="finance-runway">—</span></div>
+      <div id="lifere-opportunity-panel" class="panel-row">Signals: <span id="opportunity-count">—</span></div>
+      <div id="lifere-receptionist-panel" class="panel-row" data-lifere="receptionist-calls">Inbound calls: <span id="receptionist-call-count">—</span></div>
+      <div id="lifere-transaction-panel" class="panel-row">TC: surface via /transaction/:dealId</div>
+    </section>
+
+    <section class="section tab-panel" id="lifere-scenario-panel" data-tab-panel="scenario">
+      <div class="section-title">Scenario Engine</div>
+      <button type="button" class="btn btn-primary" id="scenario-compare-btn">Compare BuilderOS vs Prospecting (20h)</button>
+      <pre id="scenario-output" class="status-line"></pre>
+      <div id="lifere-council-trace" class="status-line"></div>
+      <div class="section-title" style="margin-top:1rem">Learning Pipeline</div>
+      <div class="panel-row">Playbook entries: <span id="learning-playbook-count">—</span></div>
+      <button type="button" class="btn" id="learning-status-btn">Refresh learning status</button>
+      <pre id="learning-output" class="status-line" data-lifere="learning-status"></pre>
+    </section>
+
+    <section class="section tab-panel" data-tab-panel="chair" data-lifere="chair-brief">
+      <div class="section-title">Lumin Chair Brief</div>
+      <button type="button" class="btn btn-primary" id="chair-brief-btn">Load Chair Brief</button>
+      <pre id="chair-brief-output" class="status-line"></pre>
+    </section>
+
+    <section class="section tab-panel" data-tab-panel="deals" id="lifere-buyer-panel">
+      <div class="section-title">Buyer · Seller · TC · Outreach</div>
+      <div class="panel-row">Active TC deals: <span id="tc-deal-list">—</span></div>
+      <div class="panel-row">Outreach queue: <span id="outreach-queue-count">—</span></div>
+      <button type="button" class="btn" id="client-comms-draft-btn">Draft client status update</button>
+      <pre id="deals-output" class="status-line"></pre>
     </section>
   </div>
 
@@ -346,6 +431,14 @@
           renderBlockers(data.result?.blocker_scan);
           renderBoldTrailStrip(data.result?.boldtrail);
           renderFollowUpQueue(data.result?.boldtrail?.follow_up_queue);
+          if (data.result?.chair) {
+            const c = data.result.chair;
+            if (c.tradeoff_prose) document.getElementById('lifere-lifeos-tradeoff').textContent = c.tradeoff_prose;
+            if (c.next_action?.reason) document.getElementById('perf-next-hour').textContent = c.next_action.reason;
+          }
+          if (data.result?.performance?.bottleneck_stage) {
+            document.getElementById('perf-bottleneck').textContent = data.result.performance.bottleneck_stage;
+          }
           statusEl.textContent = data.result?.boldtrail?.connected
             ? 'Command center loaded from BoldTrail pipeline.'
             : 'Command center loaded (BoldTrail fallback).';
@@ -372,7 +465,153 @@
 
       document.getElementById('lifere-run-debrief').addEventListener('click', runDebrief);
       document.getElementById('lifere-refresh').addEventListener('click', loadCommandCenter);
+
+      document.querySelectorAll('.tab-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+          document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
+          btn.classList.add('active');
+          document.querySelectorAll(`[data-tab-panel="${btn.dataset.tab}"]`).forEach((p) => p.classList.add('active'));
+        });
+      });
+
+      async function loadPerformance() {
+        try {
+          const uid = 'adam';
+          const [b, n, g, x] = await Promise.all([
+            apiFetch(`/api/v1/lifere/performance/bottleneck?user_id=${uid}`),
+            apiFetch(`/api/v1/lifere/performance/next-hour?user_id=${uid}`),
+            apiFetch(`/api/v1/lifere/performance/goal-math?user_id=${uid}&goal_gci=30000`),
+            apiFetch(`/api/v1/lifere/lifeos/crosscheck?user_id=${uid}`),
+          ]);
+          const bj = await b.json();
+          const nj = await n.json();
+          const gj = await g.json();
+          const xj = await x.json();
+          document.getElementById('perf-bottleneck').textContent = bj.bottleneck?.recommendation || '—';
+          document.getElementById('perf-next-hour').textContent = nj.recommendation?.reason || '—';
+          document.getElementById('perf-goal-math').textContent = JSON.stringify(gj.activities_to_goal?.conversations_needed ?? '—');
+          document.getElementById('lifere-lifeos-tradeoff').textContent = xj.tradeoff_prose || '';
+        } catch (err) {
+          document.getElementById('perf-bottleneck').textContent = `Error: ${err.message}`;
+        }
+      }
+
+      document.getElementById('activity-save-btn')?.addEventListener('click', async () => {
+        const form = document.getElementById('activity-form');
+        const counts = {};
+        form.querySelectorAll('input[name]').forEach((inp) => { counts[inp.name] = Number(inp.value) || 0; });
+        await apiFetch('/api/v1/lifere/activity/log', { method: 'POST', body: JSON.stringify({ user_id: 'adam', counts }) });
+        await loadPerformance();
+      });
+
+      async function loadApprovalQueue() {
+        const res = await apiFetch('/api/v1/lifere/approval-queue?user_id=adam');
+        const data = await res.json();
+        const el = document.getElementById('approval-list');
+        if (!data.items?.length) { el.textContent = 'No pending drafts.'; return; }
+        el.innerHTML = data.items.map((i) => `<div class="panel-row">${escapeHtml(i.action_type)}: ${escapeHtml(i.draft_text?.slice(0, 80) || '')}</div>`).join('');
+      }
+
+      async function loadCoaching() {
+        const res = await apiFetch('/api/v1/lifere/coaching/modules');
+        const data = await res.json();
+        document.getElementById('coaching-modules').innerHTML = (data.modules || []).slice(0, 6).map((m) =>
+          `<div class="panel-row">${escapeHtml(m.label)} (${m.drill_minutes_default}m)</div>`).join('');
+      }
+
+      async function loadMarketing() {
+        const res = await apiFetch('/api/v1/lifere/marketing/video-types');
+        const data = await res.json();
+        document.getElementById('marketing-video-types').textContent = `${data.count || 0} video types loaded`;
+      }
+
+      document.getElementById('marketing-research-hooks')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/marketing/research/hooks', {
+          method: 'POST', body: JSON.stringify({ user_id: 'adam', niche: 'real_estate', market: 'local', count: 3 }),
+        });
+        document.getElementById('marketing-output').textContent = JSON.stringify(await res.json(), null, 2);
+      });
+
+      async function loadOps() {
+        const [r, f, o, c] = await Promise.all([
+          apiFetch('/api/v1/lifere/recruiting/pipeline?user_id=adam'),
+          apiFetch('/api/v1/lifere/finance/forecast?user_id=adam'),
+          apiFetch('/api/v1/lifere/opportunity/signals?user_id=adam'),
+          apiFetch('/api/v1/lifere/receptionist/calls?user_id=adam'),
+        ]);
+        const rj = await r.json(); const fj = await f.json(); const oj = await o.json(); const cj = await c.json();
+        document.getElementById('recruiting-count').textContent = (rj.candidates || []).length;
+        document.getElementById('finance-runway').textContent = fj.runway_months ?? fj.projected_gci ?? '—';
+        document.getElementById('opportunity-count').textContent = (oj.signals || []).length;
+        document.getElementById('receptionist-call-count').textContent = (cj.calls || []).length;
+      }
+
+      document.getElementById('learning-status-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/learning/status');
+        const data = await res.json();
+        document.getElementById('learning-playbook-count').textContent = (data.playbook || []).length;
+        document.getElementById('learning-output').textContent = JSON.stringify(data, null, 2);
+      });
+
+      document.getElementById('scenario-compare-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/scenario/compare', {
+          method: 'POST',
+          body: JSON.stringify({
+            user_id: 'adam',
+            horizon_days: 90,
+            paths: [
+              { id: 'builderos_20h', allocations: { builderos_hours: 20, prospecting_hours: 0, family_hours: 0 } },
+              { id: 'prospect_20h', allocations: { builderos_hours: 0, prospecting_hours: 20, family_hours: 0 } },
+            ],
+            goal_weights: { income: 0.4, family: 0.35, freedom: 0.25 },
+          }),
+        });
+        const data = await res.json();
+        document.getElementById('scenario-output').textContent = JSON.stringify(data.ranked_by_goal || data, null, 2);
+        const council = await apiFetch('/api/v1/lifere/council/deliberate', {
+          method: 'POST', body: JSON.stringify({ user_id: 'adam', intent: 'forecast scenario', message: 'Compare paths' }),
+        });
+        document.getElementById('lifere-council-trace').textContent = `Council: ${(await council.json()).roles_invoked?.join(', ') || ''}`;
+      });
+
+      document.getElementById('chair-brief-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/chair/brief?user_id=adam&goal_gci=30000');
+        document.getElementById('chair-brief-output').textContent = JSON.stringify(await res.json(), null, 2);
+      });
+
+      async function loadDealsPanel() {
+        const [tx, out] = await Promise.all([
+          apiFetch('/api/v1/lifere/transaction/list'),
+          apiFetch('/api/v1/lifere/outreach/queue?user_id=adam'),
+        ]);
+        const txj = await tx.json();
+        const outj = await out.json();
+        document.getElementById('tc-deal-list').textContent = (txj.deals || []).map((d) => d.property_address || d.id).join(', ') || 'none';
+        document.getElementById('outreach-queue-count').textContent = (outj.tasks || []).length;
+      }
+
+      document.getElementById('client-comms-draft-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/client-comms/draft', {
+          method: 'POST',
+          body: JSON.stringify({
+            user_id: 'adam',
+            template_id: 'status_update',
+            channel: 'sms',
+            vars: { client_name: 'Client', status: 'Under contract', next_step: 'Inspection Friday' },
+          }),
+        });
+        document.getElementById('deals-output').textContent = JSON.stringify(await res.json(), null, 2);
+        await loadApprovalQueue();
+      });
+
       await loadCommandCenter();
+      await loadPerformance();
+      await loadApprovalQueue();
+      await loadCoaching();
+      await loadMarketing();
+      await loadOps();
+      await loadDealsPanel();
     })();
   </script>
 </body>

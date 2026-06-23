@@ -1,0 +1,66 @@
+/**
+ * SYNOPSIS: LifeRE transaction surface — Am 17 tc-status-engine integration.
+ * @ssot docs/projects/AMENDMENT_LIFERE.md
+ */
+import { createTCStatusEngine } from './tc-status-engine.js';
+
+export function createLifeRETransactionSurface({ pool = null } = {}) {
+  const statusEngine = createTCStatusEngine();
+
+  async function getDealStatus({ dealId }) {
+    if (!pool) {
+      return {
+        ok: true,
+        deal_id: dealId,
+        stage: 'unknown',
+        blockers: [],
+        label: 'THINK',
+        source: 'stub_no_db',
+      };
+    }
+
+    try {
+      const { rows } = await pool.query('SELECT * FROM tc_transactions WHERE id = $1 LIMIT 1', [dealId]);
+      if (!rows[0]) {
+        return { ok: true, deal_id: dealId, stage: 'not_found', blockers: [], label: 'KNOW' };
+      }
+
+      const { rows: events } = await pool.query(
+        `SELECT * FROM tc_transaction_events WHERE transaction_id = $1 ORDER BY created_at DESC`,
+        [dealId]
+      );
+
+      const state = statusEngine.deriveTransactionState({ transaction: rows[0], events });
+      return {
+        ok: true,
+        deal_id: dealId,
+        property_address: rows[0].property_address,
+        close_date: rows[0].close_date,
+        ...state,
+        label: 'KNOW',
+        source: 'am17',
+      };
+    } catch (err) {
+      return {
+        ok: true,
+        deal_id: dealId,
+        stage: 'tc_error',
+        blockers: [{ message: err.message }],
+        label: 'THINK',
+        source: 'am17_error',
+      };
+    }
+  }
+
+  async function listActiveDeals({ limit = 25 } = {}) {
+    if (!pool) return { ok: true, deals: [] };
+    const { rows } = await pool.query(
+      `SELECT id, property_address, status, close_date FROM tc_transactions
+       WHERE status IN ('active','pending') ORDER BY close_date ASC NULLS LAST LIMIT $1`,
+      [limit]
+    );
+    return { ok: true, deals: rows };
+  }
+
+  return { getDealStatus, listActiveDeals };
+}

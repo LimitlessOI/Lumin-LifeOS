@@ -1,0 +1,15 @@
+{
+  "schema": "lifere_future_twin_v1",
+  "current_path_projection": {
+    "90d": {
+      "note": "If current behavior continues, pipeline velocity stays flat without prospecting increase.",
+      "label": "THINK"
+    }
+  },
+  "confidence": 0.5,
+  "assumptions": [
+    "Based on recent activity trends"
+  ],
+  "label": "THINK",
+  "updated_at": "2026-06-23T11:48:47.816Z"
+}
