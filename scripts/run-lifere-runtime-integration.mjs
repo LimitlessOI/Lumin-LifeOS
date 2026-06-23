@@ -107,9 +107,9 @@ const listed = await dealSide.listBuyerClients({ userId: 'adam' });
 step('RT-12_buyer_workflow_list', listed.clients?.some((c) => c.stage === 'searching'));
 
 const { createLifeREAlphaDailyCycle } = await import('../services/lifere-alpha-daily-cycle.js');
-const alpha = createLifeREAlphaDailyCycle();
-const cycle = await alpha.runDailyCycle({ userId: 'adam' });
-step('RT-13_alpha_daily_cycle', cycle.ok && cycle.steps?.length >= 4);
+const alphaDaily = createLifeREAlphaDailyCycle();
+const alphaCycleResult = await alphaDaily.runDailyCycle({ userId: 'adam' });
+step('RT-13_alpha_daily_cycle', alphaCycleResult.ok && alphaCycleResult.steps?.length >= 4);
 
 report.ok = report.failed.length === 0;
 const out = path.join(ROOT, 'products/receipts/LIFERE_RUNTIME_INTEGRATION.json');

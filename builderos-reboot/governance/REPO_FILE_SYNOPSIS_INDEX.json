@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T18:52:14.743Z",
+  "generated_at": "2026-06-23T18:54:05.458Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12284,
   "files": [
@@ -73168,9 +73168,9 @@
     {
       "path": "scripts/run-lifere-runtime-integration.mjs",
       "synopsis": "LifeRE runtime integration smoke — exercises services without HTTP.",
-      "bytes": 5590,
-      "mtime": "2026-06-23T18:51:22.413Z",
-      "indexed_at": "2026-06-23T18:52:14.743Z",
+      "bytes": 5633,
+      "mtime": "2026-06-23T18:53:58.745Z",
+      "indexed_at": "2026-06-23T18:54:05.458Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
