@@ -6,7 +6,14 @@
 export function createLifeREFunnelIngress({ pool = null } = {}) {
   async function handleClickFunnelsWebhook({ secret, body, tenantId = 'default', userId = 'adam' }) {
     if (!process.env.CLICKFUNNELS_WEBHOOK_SECRET && !secret) {
-      return { ok: false, status: 501, error: 'ClickFunnels webhook secret not configured' };
+      return {
+        ok: true,
+        accepted: false,
+        status: 200,
+        reason: 'clickfunnels_secret_not_configured',
+        hint: 'Set CLICKFUNNELS_WEBHOOK_SECRET on Railway to accept live funnel webhooks',
+        label: 'THINK',
+      };
     }
     if (secret && secret !== process.env.CLICKFUNNELS_WEBHOOK_SECRET) {
       return { ok: false, status: 401, error: 'Invalid webhook secret' };

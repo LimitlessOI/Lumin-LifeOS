@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T11:54:02.073Z",
+  "generated_at": "2026-06-23T18:50:27.199Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12279,
+  "file_count": 12282,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40452,6 +40452,13 @@
       "indexed_at": "2026-06-23T11:49:51.364Z"
     },
     {
+      "path": "docs/LIFERE_ALPHA_AUDIT_AGENT_PROMPT.md",
+      "synopsis": "LifeRE Alpha Audit — Agent Prompt",
+      "bytes": 7253,
+      "mtime": "2026-06-23T18:50:25.465Z",
+      "indexed_at": "2026-06-23T18:50:27.199Z"
+    },
+    {
       "path": "docs/LIFERE_BLUEPRINT_ROADMAP.json",
       "synopsis": "Documentation — LIFERE BLUEPRINT ROADMAP.",
       "bytes": 8057,
@@ -41310,9 +41317,9 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 7811,
-      "mtime": "2026-06-23T11:53:33.175Z",
-      "indexed_at": "2026-06-23T11:53:44.224Z"
+      "bytes": 8134,
+      "mtime": "2026-06-23T18:49:41.014Z",
+      "indexed_at": "2026-06-23T18:50:27.199Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -68719,9 +68726,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 20946,
-      "mtime": "2026-06-23T11:53:21.265Z",
-      "indexed_at": "2026-06-23T11:53:44.224Z",
+      "bytes": 21030,
+      "mtime": "2026-06-23T18:49:39.590Z",
+      "indexed_at": "2026-06-23T18:50:27.199Z",
       "synopsis_index_only": true
     },
     {
@@ -68927,6 +68934,14 @@
       "bytes": 718,
       "mtime": "2026-06-23T11:48:47.047Z",
       "indexed_at": "2026-06-23T11:49:51.364Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_ALPHA_READINESS.json",
+      "synopsis": "Product receipt — LIFERE ALPHA READINESS.",
+      "bytes": 911,
+      "mtime": "2026-06-23T18:50:21.338Z",
+      "indexed_at": "2026-06-23T18:50:27.199Z",
       "synopsis_index_only": true
     },
     {
@@ -73106,6 +73121,16 @@
       "bytes": 4988,
       "mtime": "2026-06-23T11:48:35.374Z",
       "indexed_at": "2026-06-23T11:49:51.364Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-lifere-alpha-readiness.mjs",
+      "synopsis": "LifeRE alpha readiness — machine gate for founder alpha testing.",
+      "bytes": 3746,
+      "mtime": "2026-06-23T18:50:13.067Z",
+      "indexed_at": "2026-06-23T18:50:27.199Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -87298,9 +87323,9 @@
     {
       "path": "services/lifere-funnel-ingress.js",
       "synopsis": "LifeRE ClickFunnels webhook ingress (stub without secret).",
-      "bytes": 1007,
-      "mtime": "2026-06-23T11:40:39.478Z",
-      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "bytes": 1170,
+      "mtime": "2026-06-23T18:49:39.426Z",
+      "indexed_at": "2026-06-23T18:50:27.199Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -87498,9 +87523,9 @@
     {
       "path": "services/lifere-youtube-research.js",
       "synopsis": "LifeRE YouTube research (501 without API key, manual fallback).",
-      "bytes": 1008,
-      "mtime": "2026-06-23T11:40:41.937Z",
-      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "bytes": 1214,
+      "mtime": "2026-06-23T18:49:38.309Z",
+      "indexed_at": "2026-06-23T18:50:27.199Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]

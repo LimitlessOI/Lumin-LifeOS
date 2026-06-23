@@ -1,0 +1,40 @@
+{
+  "schema": "lifere_alpha_readiness_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "at": "2026-06-23T18:50:14.321Z",
+  "checks": {
+    "lifeos:lifere-alpha-gate": {
+      "exit": 0
+    },
+    "lifeos:lifere-self-audit": {
+      "exit": 0
+    },
+    "live_e2e": {
+      "exit": 0,
+      "base": "https://robust-magic-production.up.railway.app"
+    }
+  },
+  "passed": [
+    "AR-lifeos:lifere-alpha-gate",
+    "AR-lifeos:lifere-self-audit",
+    "AR-v1_acceptance_pass",
+    "AR-ui_daily",
+    "AR-ui_top3",
+    "AR-ui_debrief",
+    "AR-ui_chair",
+    "AR-ui_deals",
+    "AR-routes_outreach_execute",
+    "AR-routes_deal_detail",
+    "AR-live_e2e"
+  ],
+  "failed": [],
+  "warnings": [
+    {
+      "id": "AR-W03",
+      "detail": "founder_usability_pass false — ready for alpha TESTING but not Alpha gate closed"
+    }
+  ],
+  "ok": true,
+  "ready_for_alpha_testing": true,
+  "ready_for_alpha_gate": false
+}
