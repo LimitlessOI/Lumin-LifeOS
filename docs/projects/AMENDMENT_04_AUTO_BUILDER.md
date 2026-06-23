@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-20 — lazy factory-arc-loader + repo-root spine boot decoupling
+**Last Updated:** 2026-06-22 — factory-arc-loader exports evaluateIdcExitGate for FP V2 unified gate.
 
 ---
 
@@ -161,6 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-22 | **`services/founder-packet-v2-unified-gate.js`** + **`factory-arc-loader.js`** — FP V2 end-to-end: live Chair + IDC exit + builder entry on all execute paths; council `/build`, founder routeToBuilder, terminal bridge gated. | Adam: full Founder Packet V2 enforcement not just Chair prompt. | ✅ unified gate tests | deploy |
 | 2026-06-22 | **`services/obstacle-web-research.js`** tracked — imported by point-b-navigator at boot; was local-only. Dockerfile spine file asserts added. | Same class of boot crash as quorum-escalation — wired but not in git. | ✅ node --check | deploy |
 | 2026-06-20 | **Railway boot fix:** `services/repo-root.js`, `services/point-b-target-lite.js`, `services/factory-arc-loader.js` — production spine lazy-loads factory-staging; point-b-navigator + bp-priority-scheduler no longer static-import arc modules at boot. `Dockerfile` RUN verifies `run-step.js` in image. | Railway healthcheck fail: ERR_MODULE_NOT_FOUND run-step.js — dockerignore had excluded factory-staging. | ✅ boot import test | deploy |
 | 2026-06-20 | **`services/point-b-navigator.js`** — Point B navigator invoked only via Lumin Chair `point_b` channel (`lumin-chair-orchestrator.js`); no longer a sibling parallel route on founder-interface. | Founder: Point B orchestration must be subroutine of Lumin Chair, not separate desk. | ✅ chair + navigator tests | deploy |

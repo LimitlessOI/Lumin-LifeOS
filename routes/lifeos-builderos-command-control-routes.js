@@ -46,6 +46,11 @@ import {
   isBuildRequest,
 } from '../services/lumin-chair-orchestrator.js';
 import { createBuilderOSControlPlaneService } from '../services/builderos-control-plane-service.js';
+import {
+  enforceBeforeBuilderDispatch,
+  formatUnifiedGateBlockSummary,
+} from '../services/founder-packet-v2-unified-gate.js';
+import { loadPointBTarget } from '../services/point-b-target-lite.js';
 
 export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
@@ -394,7 +399,28 @@ HOW TO RESPOND:
     }
   }
 
-  async function routeToBuilder(task, commandKey) {
+  async function routeToBuilder(task, commandKey, opts = {}) {
+    const pointB = loadPointBTarget();
+    const gate = await enforceBeforeBuilderDispatch({
+      task,
+      missionId: opts.missionId || pointB?.mission_id || pointB?.target?.mission_id,
+      pool,
+      callAI: callCouncilMember,
+      confirmIntent: opts.confirmIntent === true,
+      platformGapFill: opts.platform_gap_fill === true,
+      platformGapFillReason: opts.platform_gap_fill_reason,
+    });
+    if (!gate.execute_cleared) {
+      return enforceExecutionTruth({
+        ok: false,
+        committed: false,
+        first_blocker: gate.violations?.[0] || gate.blocker,
+        failure_code: 'BLOCKED_FOUNDER_PACKET_V2',
+        execution_path: 'founder_css_patch',
+        human_summary_technical: formatUnifiedGateBlockSummary(gate),
+        fp_v2_gate: gate,
+      }, { action: 'build', task });
+    }
     const baseCheck = assertFounderBuildBaseUrl(
       process.env.PUBLIC_BASE_URL
         ? process.env.PUBLIC_BASE_URL.replace(/\/$/, '')
@@ -681,6 +707,26 @@ HOW TO RESPOND:
 
 
   async function runTerminalBridgeIntake({ text, textFile, stage, missionId, force }) {
+    const pointB = loadPointBTarget();
+    const gate = await enforceBeforeBuilderDispatch({
+      task: text || textFile || '',
+      missionId: missionId || pointB?.mission_id || pointB?.target?.mission_id,
+      pool,
+      callAI: callCouncilMember,
+      confirmIntent: force === true,
+    });
+    if (!gate.execute_cleared) {
+      return {
+        ok: false,
+        pass_fail: 'FAIL',
+        exit_code: 1,
+        first_blocker: gate.violations?.[0] || gate.blocker,
+        failure_code: 'BLOCKED_FOUNDER_PACKET_V2',
+        human_summary: formatUnifiedGateBlockSummary(gate),
+        fp_v2_gate: gate,
+        command_executed: null,
+      };
+    }
     const cmd = buildFounderIntakeCommand({
       text: text || null,
       textFile: textFile || null,

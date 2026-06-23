@@ -23,10 +23,9 @@ import {
   isGovernanceOrSsotIntent,
 } from './founder-governance-clarify.js';
 import {
-  enforceFounderPacketV2ChairTurn,
-  formatFpV2BlockSummary,
-  FP_V2_CHAIR_LAW,
-} from './chair-founder-packet-v2-enforcement.js';
+  enforceFounderPacketV2Unified,
+  formatUnifiedGateBlockSummary,
+} from './founder-packet-v2-unified-gate.js';
 import {
   gatherStrategicBriefForChair,
   formatStrategicBriefSection,
@@ -121,19 +120,19 @@ export function isChairActionableTurn(text = '', { shouldDisplayOnly = false } =
 }
 
 function chairFpV2BlockResponse(ctx, enforcement, channel) {
-  const summary = formatFpV2BlockSummary(enforcement);
+  const summary = formatUnifiedGateBlockSummary(enforcement);
   const truth = finalizeTruth({
     ok: false,
     pass_fail: 'FAIL',
     command_truth: 'NO_COMMAND_RAN',
-    receipt_truth: enforcement.blocker,
+    receipt_truth: enforcement.blocker || 'BLOCKED_FOUNDER_PACKET_V2',
     action: channel || 'fp_v2_blocked',
     fp_v2_enforcement: enforcement,
     first_blocker: enforcement.violations?.[0] || enforcement.blocker,
     human_summary_technical: summary,
-    done_synopsis: 'Blocked — Founder Packet V2 requires understanding + Chair offers before execute.',
-    next_synopsis: 'Answer clarify questions or confirm intent.',
-    next_why: FP_V2_CHAIR_LAW.scoreboard,
+    done_synopsis: 'Blocked — Founder Packet V2 end-to-end gate failed.',
+    next_synopsis: 'Fix IDC/builder blockers or clarify intent via Chair.',
+    next_why: 'Results are the scoreboard.',
   }, channel || 'fp_v2_blocked');
   return {
     statusCode: 200,
@@ -156,7 +155,7 @@ function chairIntentClarifyResponse(ctx, understanding, summary, fpV2 = null) {
     action: 'intent_clarify',
     chair_intent_protocol: CHAIR_INTENT_PROTOCOL.version,
     fp_v2_enforcement: fpV2,
-    founder_packet_v2_authority: FP_V2_CHAIR_LAW.authority,
+    founder_packet_v2_authority: 'docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md',
     intent: understanding,
     human_summary_technical: summary,
     done_synopsis: 'Chair is asking until your intent is clear — then it executes.',
@@ -259,9 +258,8 @@ export async function runLuminChairTurn(ctx, deps) {
       includeGovernance: isGovernanceOrSsotIntent(cleanedInput),
       includeMissionPipeline: isMissionPipelineIntent(cleanedInput),
     });
-    const fpV2 = await enforceFounderPacketV2ChairTurn({
+    const fpV2 = await enforceFounderPacketV2Unified({
       cleanedInput,
-      understanding,
       pool: deps.pool,
       callAI: deps.callCouncilMember,
       pointBTarget,
@@ -269,10 +267,10 @@ export async function runLuminChairTurn(ctx, deps) {
       channel: null,
     });
     if (!understanding.intent_understood || !fpV2.execute_cleared) {
-      const summary = formatChairIntentClarifySummary(understanding, fpV2.strategic_brief);
+      const summary = formatChairIntentClarifySummary(understanding, fpV2.chair?.strategic_brief);
       return chairIntentClarifyResponse(
         { intakeNormalized, sourceMode, auth_mode, user_role },
-        { ...understanding, strategic_brief: fpV2.strategic_brief },
+        { ...understanding, strategic_brief: fpV2.chair?.strategic_brief },
         summary,
         fpV2,
       );
@@ -290,9 +288,10 @@ export async function runLuminChairTurn(ctx, deps) {
       includeGovernance: isGovernanceOrSsotIntent(cleanedInput),
       includeMissionPipeline: isMissionPipelineIntent(cleanedInput),
     });
-    fpV2Enforcement = await enforceFounderPacketV2ChairTurn({
+    fpV2Enforcement = await enforceFounderPacketV2Unified({
       cleanedInput,
       understanding: understandingForChannel,
+      missionId,
       pool: deps.pool,
       callAI: deps.callCouncilMember,
       pointBTarget,
@@ -512,7 +511,7 @@ export async function runLuminChairTurn(ctx, deps) {
         autoRun: true,
         callAI: deps.callCouncilMember,
       });
-      const strategicBrief = fpV2Enforcement?.strategic_brief
+      const strategicBrief = fpV2Enforcement?.chair?.strategic_brief
         || await gatherStrategicBriefForChair({
           cleanedInput,
           pool: deps.pool,
@@ -539,7 +538,7 @@ export async function runLuminChairTurn(ctx, deps) {
     }
 
     case 'counsel': {
-      const strategicBrief = fpV2Enforcement?.strategic_brief
+      const strategicBrief = fpV2Enforcement?.chair?.strategic_brief
         || await gatherStrategicBriefForChair({
           cleanedInput,
           pool: deps.pool,

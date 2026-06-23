@@ -563,7 +563,8 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
-| 2026-06-22 | **`routes/lifeos-builderos-command-control-routes.js`** — Lumin counsel system prompt cites Founder Packet V2 + `chair-founder-packet-v2-enforcement.js` (strategic offers, forecast receipts, scoreboard). | Adam: FP V2 is Chair law on live founder interface. | ✅ chair tests | deploy |
+| 2026-06-22 | **`routes/lifeos-builderos-command-control-routes.js`** — FP V2 unified gate on `routeToBuilder` + `runTerminalBridgeIntake`. | Close builder bypass outside Chair. | ✅ | deploy |
+| 2026-06-22 | Lumin counsel system prompt cites Founder Packet V2 + `chair-founder-packet-v2-enforcement.js` (strategic offers, forecast receipts, scoreboard). | Adam: FP V2 is Chair law on live founder interface. | ✅ chair tests | deploy |
 | 2026-06-22 | **`routes/lifeos-builderos-command-control-routes.js`** — `confirm_intent` + `isFounderConfirmIntent()` bypass clarify gate; pairs with `founder-intent-clarify.js`. | Founder must confirm before builder runs on ambiguous asks. | ✅ tests | deploy |
 | 2026-06-22 | **`routes/lifeos-builderos-command-control-routes.js`** + **`services/builder-instruction-target.js`** — `expandFounderBuildTask()` adds `target_file` for LifeRE/usability asks; build intent skips AI normalizeInputText for ship/usability verbs; passes `explicitAction` to Chair. Pairs with Am.21 `chair-truth-gate.js` + `founder-chair-intent.js`. | Founder vague LifeRE usability text hit receipt scan not builder; translation dropped build intent. | ✅ chair tests | deploy |
 | 2026-06-22 | **`scripts/verify-spine-imports.mjs`** + Dockerfile RUN — blocks deploy when spine imports untracked/missing modules (quorum-escalation class). Dashboard + app show Lumin Chair copy; app surfaces `chair_channel` on replies. | Boot crash pattern: wired imports never committed. Machine path PASS awaiting founder Alpha. | ✅ verify-spine + acceptance | deploy |

@@ -14,6 +14,7 @@ export async function loadFactoryArcModules() {
     gateEnforcement,
     missionPaths,
     runFoundation,
+    idcExitGate,
   ] = await Promise.all([
     import('../factory-staging/factory-core/arc/foundation/point-b-target.js'),
     import('../factory-staging/factory-core/arc/point-b-gate.js'),
@@ -21,6 +22,7 @@ export async function loadFactoryArcModules() {
     import('../factory-staging/factory-core/arc/gate-enforcement.js'),
     import('../factory-staging/factory-core/arc/mission-paths.js'),
     import('../factory-staging/factory-core/arc/run-foundation.js'),
+    import('../factory-staging/factory-core/arc/foundation/idc-exit-gate.js'),
   ]);
   cached = {
     ...pointBTarget,
@@ -29,6 +31,7 @@ export async function loadFactoryArcModules() {
     ...gateEnforcement,
     ...missionPaths,
     ...runFoundation,
+    ...idcExitGate,
   };
   return cached;
 }

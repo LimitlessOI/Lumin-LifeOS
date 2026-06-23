@@ -6,7 +6,7 @@
   "amendment": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
   "status": "active",
   "build_ready": true,
-  "last_updated": "2026-06-20",
+  "last_updated": "2026-06-22",
   "last_receipt": "2026-06-20 railway-boot-factory-arc-loader",
   "last_change_summary": "Lazy factory-arc-loader + repo-root — Railway boot decoupling"
 }

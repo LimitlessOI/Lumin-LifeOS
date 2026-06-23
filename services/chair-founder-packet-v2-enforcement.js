@@ -228,7 +228,14 @@ export async function enforceFounderPacketV2ChairTurn({
   const offersOk = chairOffersPresent(strategicBrief);
   const intentOk = understanding ? understanding.intent_understood === true : false;
   const coverageOk = coverage.tier1_load_bearing_ready || confirmIntent;
-  const executeChannels = new Set(['build_async', 'build_terminal', 'blueprint_execute', 'execute']);
+  const executeChannels = new Set([
+    'build_async',
+    'build_terminal',
+    'blueprint_execute',
+    'execute',
+    'builder_api',
+    'terminal_bridge',
+  ]);
   const isExecute = executeChannels.has(channel);
 
   const violations = [];

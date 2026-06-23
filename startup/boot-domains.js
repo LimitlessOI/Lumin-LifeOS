@@ -177,6 +177,21 @@ async function bootLifeOSScheduled(deps) {
  */
 // ── Twin Auto-Ingest (conversation → adam_decisions → adam_profile) ───────────
 // ── Lane intel (Horizon + Red-team) — Amendment 36 ────────────────────────────
+async function bootChairPredictionScore(deps) {
+  const { logger } = deps;
+  if (process.env.CHAIR_PREDICTION_SCORE_ENABLED !== '1') {
+    logger?.info?.('[BOOT] Chair prediction score tick OFF (set CHAIR_PREDICTION_SCORE_ENABLED=1)');
+    return;
+  }
+  try {
+    const { registerChairPredictionScoreScheduler } = await import('../services/chair-prediction-score-scheduler.js');
+    registerChairPredictionScoreScheduler({ logger });
+    logger?.info?.('[BOOT] Chair prediction score scheduler active (Founder Packet V2 scoreboard)');
+  } catch (err) {
+    logger?.warn?.(`[BOOT] Chair prediction score scheduler failed: ${err.message}`);
+  }
+}
+
 async function bootLaneIntel(deps) {
   const { pool, logger, callCouncilMember } = deps;
   // Budget / launch gate — no Horizon or Red-team ticks unless explicitly enabled (costs tokens + npm CPU).
@@ -390,6 +405,7 @@ export async function bootAllDomains(deps) {
     bootTCDeadlineCron(deps),
     bootLifeOSScheduled(deps),
     bootLaneIntel(deps),
+    bootChairPredictionScore(deps),
     bootTwinAutoIngest(deps),
     bootOILDailySummary(deps),
     bootSelfRepairDeployCheck(deps),

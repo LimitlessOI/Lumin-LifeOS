@@ -64,6 +64,10 @@ import {
   seedBuilderDeliberation,
   finalizeBuilderDeliberation,
 } from '../services/builder-deliberation-hook.js';
+import {
+  enforceBeforeBuilderDispatch,
+  formatUnifiedGateBlockSummary,
+} from '../services/founder-packet-v2-unified-gate.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -1818,6 +1822,24 @@ export function createLifeOSCouncilBuilderRoutes({
 
     if (!taskBody.task) {
       return res.status(400).json({ ok: false, error: 'task is required' });
+    }
+
+    const fpV2Gate = await enforceBeforeBuilderDispatch({
+      task: taskBody.task,
+      missionId: taskBody.mission_id,
+      pool,
+      callAI: callCouncilMember,
+      platformGapFill: taskBody.platform_gap_fill === true,
+      platformGapFillReason: taskBody.platform_gap_fill_reason,
+    });
+    if (!fpV2Gate.execute_cleared) {
+      return res.status(422).json({
+        ok: false,
+        error: 'BLOCKED_FOUNDER_PACKET_V2',
+        violations: fpV2Gate.violations,
+        detail: formatUnifiedGateBlockSummary(fpV2Gate),
+        committed: false,
+      });
     }
 
     // Spec contamination gate — reject specs that contain raw HTML/code from a prior build output.

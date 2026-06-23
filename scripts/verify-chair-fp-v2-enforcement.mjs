@@ -28,8 +28,15 @@ if (!runtime.supreme_authority?.includes('FOUNDER_PACKET_V2')) {
 }
 
 const orchestrator = read('services/lumin-chair-orchestrator.js');
-if (!orchestrator.includes('enforceFounderPacketV2ChairTurn')) {
-  fail('lumin-chair-orchestrator.js must call enforceFounderPacketV2ChairTurn');
+if (!orchestrator.includes('enforceFounderPacketV2Unified')) {
+  fail('lumin-chair-orchestrator.js must call enforceFounderPacketV2Unified');
+}
+if (!fs.existsSync(path.join(ROOT, 'services/founder-packet-v2-unified-gate.js'))) {
+  fail('founder-packet-v2-unified-gate.js missing');
+}
+const councilBuilder = read('routes/lifeos-council-builder-routes.js');
+if (!councilBuilder.includes('enforceBeforeBuilderDispatch')) {
+  fail('lifeos-council-builder-routes.js /build must use enforceBeforeBuilderDispatch');
 }
 if (!orchestrator.includes('chairFpV2BlockResponse')) {
   fail('lumin-chair-orchestrator.js must block execute on FP V2 failure');

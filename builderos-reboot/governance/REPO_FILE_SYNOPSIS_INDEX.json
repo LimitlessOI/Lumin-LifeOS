@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-22T23:58:31.125Z",
+  "generated_at": "2026-06-23T00:00:44.591Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12155,
+  "file_count": 12158,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40373,16 +40373,16 @@
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.manifest.json",
       "synopsis": "Documentation — AMENDMENT 04 AUTO BUILDER.Manifest.",
       "bytes": 462,
-      "mtime": "2026-06-22T21:56:41.798Z",
-      "indexed_at": "2026-06-22T21:56:47.127Z",
+      "mtime": "2026-06-23T00:00:37.230Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 32278,
-      "mtime": "2026-06-22T22:01:26.877Z",
-      "indexed_at": "2026-06-22T22:01:33.492Z"
+      "bytes": 32634,
+      "mtime": "2026-06-23T00:00:25.948Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -40550,16 +40550,16 @@
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 19 PROJECT GOVERNANCE.Manifest.",
       "bytes": 6268,
-      "mtime": "2026-06-21T20:59:48.571Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "mtime": "2026-06-23T00:00:37.343Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 43550,
-      "mtime": "2026-06-21T21:37:58.731Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z"
+      "bytes": 43687,
+      "mtime": "2026-06-23T00:00:26.703Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -40579,9 +40579,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 464916,
-      "mtime": "2026-06-22T22:55:50.921Z",
-      "indexed_at": "2026-06-22T23:58:31.125Z"
+      "bytes": 465208,
+      "mtime": "2026-06-23T00:00:27.724Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41070,9 +41070,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 128403,
-      "mtime": "2026-06-22T23:57:47.431Z",
-      "indexed_at": "2026-06-22T23:58:31.125Z"
+      "bytes": 128541,
+      "mtime": "2026-06-23T00:00:29.208Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -70378,9 +70378,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 44658,
-      "mtime": "2026-06-22T23:57:38.061Z",
-      "indexed_at": "2026-06-22T23:58:31.125Z",
+      "bytes": 46350,
+      "mtime": "2026-06-22T23:59:09.204Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -70479,9 +70479,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 107655,
-      "mtime": "2026-06-21T21:39:04.024Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 108362,
+      "mtime": "2026-06-22T23:59:38.561Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -73217,9 +73217,9 @@
     {
       "path": "scripts/verify-chair-fp-v2-enforcement.mjs",
       "synopsis": "Verifies Founder Packet V2 hard enforcement on live Lumin Chair.",
-      "bytes": 2538,
-      "mtime": "2026-06-22T22:55:38.153Z",
-      "indexed_at": "2026-06-22T23:58:31.125Z"
+      "bytes": 2901,
+      "mtime": "2026-06-22T23:59:47.166Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z"
     },
     {
       "path": "scripts/verify-council-bypass-audit.mjs",
@@ -84474,9 +84474,9 @@
     {
       "path": "services/chair-founder-packet-v2-enforcement.js",
       "synopsis": "Founder Packet V2 — hard enforcement on live Lumin Chair turns.",
-      "bytes": 10950,
-      "mtime": "2026-06-22T22:55:54.691Z",
-      "indexed_at": "2026-06-22T23:58:31.125Z",
+      "bytes": 11013,
+      "mtime": "2026-06-23T00:00:08.359Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -84487,6 +84487,16 @@
       "bytes": 7704,
       "mtime": "2026-06-22T22:55:41.644Z",
       "indexed_at": "2026-06-22T23:58:31.125Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/chair-prediction-score-scheduler.js",
+      "synopsis": "Score due Chair/ADF predictions — Founder Packet V2 scoreboard loop.",
+      "bytes": 2467,
+      "mtime": "2026-06-22T23:58:52.936Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -85392,9 +85402,9 @@
     {
       "path": "services/factory-arc-loader.js",
       "synopsis": "Lazy-load factory-staging arc modules (avoids boot crash if tree missing).",
-      "bytes": 1010,
-      "mtime": "2026-06-22T21:55:18.180Z",
-      "indexed_at": "2026-06-22T21:56:47.127Z",
+      "bytes": 1126,
+      "mtime": "2026-06-22T23:59:57.580Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -85546,6 +85556,16 @@
       "bytes": 6124,
       "mtime": "2026-06-22T22:41:52.120Z",
       "indexed_at": "2026-06-22T22:42:36.250Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/founder-packet-v2-unified-gate.js",
+      "synopsis": "Founder Packet V2 unified gate — live Chair + IDC + Builder entry on all execute paths.",
+      "bytes": 6416,
+      "mtime": "2026-06-22T23:59:37.133Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86501,9 +86521,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 23334,
-      "mtime": "2026-06-22T22:55:11.875Z",
-      "indexed_at": "2026-06-22T23:58:31.125Z",
+      "bytes": 23401,
+      "mtime": "2026-06-22T23:59:02.025Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -91557,9 +91577,9 @@
     {
       "path": "startup/boot-domains.js",
       "synopsis": "boot-domains.js",
-      "bytes": 16000,
-      "mtime": "2026-06-21T21:39:26.860Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 16682,
+      "mtime": "2026-06-22T23:59:44.223Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]
@@ -92187,6 +92207,13 @@
       "bytes": 1084,
       "mtime": "2026-06-22T22:28:44.562Z",
       "indexed_at": "2026-06-22T22:28:56.661Z"
+    },
+    {
+      "path": "tests/founder-packet-v2-unified-gate.test.js",
+      "synopsis": "js — tests/founder-packet-v2-unified-gate.test.js.",
+      "bytes": 1718,
+      "mtime": "2026-06-22T23:59:46.364Z",
+      "indexed_at": "2026-06-23T00:00:44.591Z"
     },
     {
       "path": "tests/fsar_artifact.test.js",
