@@ -67,5 +67,35 @@ export function createLifeREDealSideOS({ pool = null } = {}) {
     return { ok: true, listing_ref: listingRef, seller: twin.listings[listingRef] };
   }
 
-  return { getBuyer, upsertBuyer, getSeller, upsertSeller };
+  function buyerWorkflowStage(buyer = {}) {
+    if (buyer.offer_prep_status === 'submitted') return 'offer_submitted';
+    if (buyer.offer_prep_status === 'preparing') return 'offer_prep';
+    if ((buyer.showing_schedule || []).length > 0) return 'showing_active';
+    if (Object.keys(buyer.search_criteria || {}).length > 0) return 'searching';
+    return 'intake';
+  }
+
+  async function listBuyerClients({ tenantId = 'default', userId }) {
+    const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'buyer' }) || { clients: {} };
+    const clients = Object.entries(twin.clients || {}).map(([ref, data]) => ({
+      client_ref: ref,
+      stage: buyerWorkflowStage(data),
+      ...data,
+    }));
+    return { ok: true, clients };
+  }
+
+  async function listSellerListings({ tenantId = 'default', userId }) {
+    const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'seller' }) || { listings: {} };
+    const listings = Object.entries(twin.listings || {}).map(([ref, data]) => ({
+      listing_ref: ref,
+      ...data,
+    }));
+    return { ok: true, listings };
+  }
+
+  return {
+    getBuyer, upsertBuyer, getSeller, upsertSeller,
+    listBuyerClients, listSellerListings, buyerWorkflowStage,
+  };
 }

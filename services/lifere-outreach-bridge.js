@@ -57,5 +57,33 @@ export function createLifeREOutreachBridge({ pool = null, notificationService = 
     return { ok: true, tasks: rows };
   }
 
-  return { enqueueSequence, listPendingTasks };
+  async function approveTask({ taskId, userId }) {
+    if (!pool) return { ok: false, error: 'no_pool' };
+    const { rows } = await pool.query(
+      `UPDATE lifeos_outreach_tasks SET approved = true, updated_at = NOW()
+       WHERE id = $1 AND user_id = $2 RETURNING *`,
+      [taskId, userId]
+    );
+    if (!rows[0]) return { ok: false, error: 'task_not_found' };
+    return { ok: true, task: rows[0], label: 'KNOW' };
+  }
+
+  async function executeTaskById({ taskId, userId }) {
+    if (!engine) return { ok: false, error: 'no_engine' };
+    const { rows } = await pool.query(
+      `SELECT * FROM lifeos_outreach_tasks WHERE id = $1 AND user_id = $2 LIMIT 1`,
+      [taskId, userId]
+    );
+    if (!rows[0]) return { ok: false, error: 'task_not_found' };
+    const result = await engine.executeTask(rows[0]);
+    return { ok: result.ok, result, task_id: taskId, label: result.ok ? 'KNOW' : 'THINK' };
+  }
+
+  async function processQueue({ userId }) {
+    if (!engine) return { ok: true, executed: 0, label: 'THINK' };
+    const summary = await engine.processQueue();
+    return { ok: true, ...summary, user_id: userId, label: 'KNOW' };
+  }
+
+  return { enqueueSequence, listPendingTasks, approveTask, executeTaskById, processQueue };
 }

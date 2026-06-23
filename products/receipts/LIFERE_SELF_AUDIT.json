@@ -1,0 +1,28 @@
+{
+  "schema": "lifere_self_audit_v1",
+  "at": "2026-06-23T11:53:34.540Z",
+  "passed": [
+    "AUD-01_alpha_gate_script",
+    "AUD-02_outreach_execute_route",
+    "AUD-03_outreach_approve_route",
+    "AUD-04_vapi_lifere_fanout",
+    "AUD-05_council_llm_hook",
+    "AUD-06_deal_workflow",
+    "AUD-07_deal_detail_ui",
+    "AUD-08_ssot_lifere_v1",
+    "AUD-09_migrations",
+    "AUD-10_w1_w6_services",
+    "AUD-11_alpha_gate_pass"
+  ],
+  "failed": [],
+  "warnings": [
+    {
+      "id": "AUD-W02",
+      "detail": "founder_usability_pass still false — Alpha gate blocked until founder confirm"
+    }
+  ],
+  "ok": true,
+  "gap_count": 0,
+  "warning_count": 1,
+  "product_z_honest": true
+}

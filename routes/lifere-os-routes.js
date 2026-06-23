@@ -574,8 +574,20 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   });
 
   router.get('/transaction/:dealId', requireKey, async (req, res) => {
+    const detail = req.query.detail === '1' || req.query.detail === 'true';
+    if (detail) {
+      return res.json(await transaction.getDealDetail({ dealId: req.params.dealId }));
+    }
     const result = await transaction.getDealStatus({ dealId: req.params.dealId });
     res.json(result);
+  });
+
+  router.get('/deals/buyers', requireKey, async (req, res) => {
+    res.json(await dealSide.listBuyerClients({ tenantId: tenantId(req), userId: userId(req) }));
+  });
+
+  router.get('/deals/sellers', requireKey, async (req, res) => {
+    res.json(await dealSide.listSellerListings({ tenantId: tenantId(req), userId: userId(req) }));
   });
 
   router.get('/recruiting/pipeline', requireKey, async (req, res) => {
@@ -638,6 +650,18 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
 
   router.get('/outreach/queue', requireKey, async (req, res) => {
     res.json(await outreach.listPendingTasks({ userId: userId(req) }));
+  });
+
+  router.post('/outreach/approve/:taskId', requireKey, async (req, res) => {
+    res.json(await outreach.approveTask({ taskId: req.params.taskId, userId: userId(req) }));
+  });
+
+  router.post('/outreach/execute/:taskId', requireKey, async (req, res) => {
+    res.json(await outreach.executeTaskById({ taskId: req.params.taskId, userId: userId(req) }));
+  });
+
+  router.post('/outreach/process-queue', requireKey, async (req, res) => {
+    res.json(await outreach.processQueue({ userId: userId(req) }));
   });
 
   router.post('/follow-up/draft', requireKey, async (req, res) => {

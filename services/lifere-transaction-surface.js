@@ -62,5 +62,31 @@ export function createLifeRETransactionSurface({ pool = null } = {}) {
     return { ok: true, deals: rows };
   }
 
-  return { getDealStatus, listActiveDeals };
+  async function getDealDetail({ dealId }) {
+    const status = await getDealStatus({ dealId });
+    if (!pool || status.stage === 'not_found') {
+      return { ok: true, ...status, events: [], documents: [] };
+    }
+    try {
+      const { rows: events } = await pool.query(
+        `SELECT event_type, created_at, payload FROM tc_transaction_events
+         WHERE transaction_id = $1 ORDER BY created_at DESC LIMIT 30`,
+        [dealId]
+      );
+      const { rows: txRows } = await pool.query('SELECT documents FROM tc_transactions WHERE id = $1', [dealId]);
+      const documents = txRows[0]?.documents || {};
+      return {
+        ok: true,
+        ...status,
+        events,
+        documents,
+        next_actions: (status.blockers || []).map((b) => b.message || b).slice(0, 5),
+        label: 'KNOW',
+      };
+    } catch (err) {
+      return { ok: true, ...status, events: [], error: err.message, label: 'THINK' };
+    }
+  }
+
+  return { getDealStatus, listActiveDeals, getDealDetail };
 }

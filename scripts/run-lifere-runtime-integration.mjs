@@ -95,6 +95,17 @@ const cycle = await learning.runLearningCycle({
 });
 step('RT-10_learning_pipeline', cycle.ok && Boolean(cycle.experiment_id));
 
+const { createLifeREOutreachBridge } = await import('../services/lifere-outreach-bridge.js');
+const outBridge = createLifeREOutreachBridge();
+const enq = await outBridge.enqueueSequence({
+  userId: 'adam', sequenceId: 'rt-test', recipientRef: 'lead-1', draft: 'Follow up test',
+});
+step('RT-11_outreach_enqueue', enq.ok && enq.queued === true);
+
+await dealSide.upsertBuyer({ userId: 'adam', clientRef: 'client-rt', patch: { search_criteria: { beds: 4 } } });
+const listed = await dealSide.listBuyerClients({ userId: 'adam' });
+step('RT-12_buyer_workflow_list', listed.clients?.some((c) => c.stage === 'searching'));
+
 report.ok = report.failed.length === 0;
 const out = path.join(ROOT, 'products/receipts/LIFERE_RUNTIME_INTEGRATION.json');
 fs.mkdirSync(path.dirname(out), { recursive: true });

@@ -272,8 +272,12 @@
     <section class="section tab-panel" data-tab-panel="deals" id="lifere-buyer-panel">
       <div class="section-title">Buyer · Seller · TC · Outreach</div>
       <div class="panel-row">Active TC deals: <span id="tc-deal-list">—</span></div>
+      <div class="panel-row">Buyers: <span id="buyer-client-count">—</span> · Sellers: <span id="seller-listing-count">—</span></div>
       <div class="panel-row">Outreach queue: <span id="outreach-queue-count">—</span></div>
+      <div id="outreach-task-list" class="status-line"></div>
+      <pre id="tc-deal-detail" class="status-line" data-lifere="tc-deal-detail"></pre>
       <button type="button" class="btn" id="client-comms-draft-btn">Draft client status update</button>
+      <button type="button" class="btn" id="outreach-process-btn">Process outreach queue</button>
       <pre id="deals-output" class="status-line"></pre>
     </section>
   </div>
@@ -580,16 +584,54 @@
         document.getElementById('chair-brief-output').textContent = JSON.stringify(await res.json(), null, 2);
       });
 
+      async function loadDealDetail(dealId) {
+        if (!dealId) return;
+        const res = await apiFetch(`/api/v1/lifere/transaction/${dealId}?detail=1`);
+        document.getElementById('tc-deal-detail').textContent = JSON.stringify(await res.json(), null, 2);
+      }
+
       async function loadDealsPanel() {
-        const [tx, out] = await Promise.all([
+        const [tx, out, buyers, sellers] = await Promise.all([
           apiFetch('/api/v1/lifere/transaction/list'),
           apiFetch('/api/v1/lifere/outreach/queue?user_id=adam'),
+          apiFetch('/api/v1/lifere/deals/buyers?user_id=adam'),
+          apiFetch('/api/v1/lifere/deals/sellers?user_id=adam'),
         ]);
         const txj = await tx.json();
         const outj = await out.json();
-        document.getElementById('tc-deal-list').textContent = (txj.deals || []).map((d) => d.property_address || d.id).join(', ') || 'none';
+        const bj = await buyers.json();
+        const sj = await sellers.json();
+        const deals = txj.deals || [];
+        document.getElementById('tc-deal-list').textContent = deals.map((d) => d.property_address || d.id).join(', ') || 'none';
+        document.getElementById('buyer-client-count').textContent = (bj.clients || []).length;
+        document.getElementById('seller-listing-count').textContent = (sj.listings || []).length;
         document.getElementById('outreach-queue-count').textContent = (outj.tasks || []).length;
+        const tasks = outj.tasks || [];
+        document.getElementById('outreach-task-list').innerHTML = tasks.slice(0, 5).map((t) =>
+          `<div class="panel-row">${escapeHtml(t.recipient_name || t.id)} (${escapeHtml(t.status)}) 
+            <button type="button" class="btn" data-approve-task="${t.id}">Approve</button>
+            <button type="button" class="btn" data-exec-task="${t.id}">Execute</button></div>`).join('') || '';
+        document.querySelectorAll('[data-approve-task]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            await apiFetch(`/api/v1/lifere/outreach/approve/${btn.dataset.approveTask}`, { method: 'POST', body: JSON.stringify({ user_id: 'adam' }) });
+            await loadDealsPanel();
+          });
+        });
+        document.querySelectorAll('[data-exec-task]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const r = await apiFetch(`/api/v1/lifere/outreach/execute/${btn.dataset.execTask}`, { method: 'POST', body: JSON.stringify({ user_id: 'adam' }) });
+            document.getElementById('deals-output').textContent = JSON.stringify(await r.json(), null, 2);
+            await loadDealsPanel();
+          });
+        });
+        if (deals[0]?.id) await loadDealDetail(deals[0].id);
       }
+
+      document.getElementById('outreach-process-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/outreach/process-queue', { method: 'POST', body: JSON.stringify({ user_id: 'adam' }) });
+        document.getElementById('deals-output').textContent = JSON.stringify(await res.json(), null, 2);
+        await loadDealsPanel();
+      });
 
       document.getElementById('client-comms-draft-btn')?.addEventListener('click', async () => {
         const res = await apiFetch('/api/v1/lifere/client-comms/draft', {

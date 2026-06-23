@@ -141,6 +141,14 @@ export class VapiIntegration {
     );
 
     console.log(`📞 [VAPI] Call ended: ${callData.id}`);
+
+    try {
+      const { createLifeREReceptionistBridge } = await import('../services/lifere-receptionist-bridge.js');
+      const bridge = createLifeREReceptionistBridge({ pool: this.pool, logger: console });
+      await bridge.ingestVapiCallEnded({ callData, userId: 'adam' });
+    } catch (err) {
+      console.warn('[VAPI] LifeRE receptionist fan-out skip:', err.message);
+    }
   }
 
   /**
