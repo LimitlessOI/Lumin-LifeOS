@@ -21,6 +21,6 @@
     "products/receipts/LIFERE_*.json"
   ],
   "last_updated": "2026-06-13",
-  "last_receipt": "2026-06-13 outreach-scheduler + founder-attempt + approval-ui",
-  "last_change_summary": "Outreach scheduler on boot; founder attempt receipt; approval queue UI; follow-up queue route"
+  "last_receipt": "2026-06-13 audit-fix approval-execute + chair/deals UI",
+  "last_change_summary": "Approval resolve executes outreach; readable Chair/Deals UI; gap report closed items"
 }

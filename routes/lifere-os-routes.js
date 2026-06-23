@@ -57,7 +57,8 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const twinStore = createLifeRETwinStore({ pool, logger });
   const performance = createLifeREPerformanceTwin({ pool });
   const permission = createLifeREPermissionTwin({ pool });
-  const clientComms = createLifeREClientComms({ pool });
+  const outreach = createLifeREOutreachBridge({ pool, notificationService, sendSMS, logger });
+  const clientComms = createLifeREClientComms({ pool, outreach, logger });
   const lifeosCrosscheck = createLifeRELifeOSCrosscheck({ pool });
   const personality = createLifeREPersonalityCalibration({ pool });
   const coaching = createLifeRESkillCoaching({ pool });
@@ -70,7 +71,6 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const finance = createLifeREFinanceRunway({ pool });
   const opportunity = createLifeREOpportunityOS({ pool });
   const receptionist = createLifeREReceptionistBridge({ pool, logger });
-  const outreach = createLifeREOutreachBridge({ pool, notificationService, sendSMS, logger });
   const scenario = createLifeREScenarioEngine({ pool });
   const experiment = createLifeREExperimentEngine({ pool });
   const bestPractice = createLifeREBestPracticeEngine();
@@ -438,13 +438,22 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   });
 
   router.post('/approval-queue/:id/resolve', requireKey, async (req, res) => {
-    if (!pool) return res.json({ ok: true, persisted: false });
-    const status = req.body?.status === 'rejected' ? 'rejected' : 'approved';
-    await pool.query(
-      `UPDATE lifere_approval_queue SET status = $1, resolved_at = now(), resolved_by = $2 WHERE id = $3`,
-      [status, userId(req), req.params.id]
-    );
-    res.json({ ok: true, status });
+    try {
+      const status = req.body?.status === 'rejected' ? 'rejected' : 'approved';
+      const result = await clientComms.resolveQueueItem({
+        queueId: req.params.id,
+        tenantId: tenantId(req),
+        userId: userId(req),
+        status,
+      });
+      if (!result.ok) {
+        res.status(404).json(result);
+        return;
+      }
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.post('/client-comms/draft', requireKey, async (req, res) => {
@@ -456,8 +465,16 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     const queued = await clientComms.queueDraft({
       tenantId: tenantId(req),
       userId: userId(req),
+      actionType: req.body?.action_type || `${req.body?.channel || 'sms'}_client`,
       draft: rendered.body,
-      payload: { template_id: rendered.template_id, channel: rendered.channel },
+      payload: {
+        template_id: rendered.template_id,
+        channel: rendered.channel,
+        recipient_name: req.body?.vars?.client_name,
+        recipient_phone: req.body?.recipient_phone || req.body?.vars?.recipient_phone,
+        recipient_email: req.body?.recipient_email || req.body?.vars?.recipient_email,
+        contact_id: req.body?.contact_id,
+      },
     });
     res.json({ ok: true, rendered, queued });
   });

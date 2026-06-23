@@ -1,0 +1,30 @@
+{
+  "schema": "lifere_alpha_audit_v1",
+  "at": "2026-06-23T19:01:50.070Z",
+  "auditor": "cursor-agent",
+  "findings_fixed": [
+    {
+      "id": "AUD-FIX-01",
+      "issue": "Approval queue approve only updated DB status — no send",
+      "fix": "clientComms.resolveQueueItem enqueues + executes via outreach bridge; logs lifere_client_comms_log"
+    },
+    {
+      "id": "AUD-FIX-02",
+      "issue": "Client comms draft missing recipient payload for send path",
+      "fix": "draft route stores recipient_phone/email/contact_id in payload"
+    },
+    {
+      "id": "AUD-FIX-03",
+      "issue": "Chair brief and TC deal detail showed raw JSON",
+      "fix": "renderChairBrief + renderDealDetail info cards; deal picker buttons"
+    }
+  ],
+  "gates": {
+    "self_audit": "PASS",
+    "alpha_readiness": "PASS",
+    "ready_for_alpha_testing": true,
+    "ready_for_alpha_gate": false,
+    "founder_blocker": "GAP-07 founder_usability_pass false"
+  },
+  "gaps_open": ["GAP-01", "GAP-03", "GAP-05", "GAP-07", "GAP-08", "GAP-10"]
+}

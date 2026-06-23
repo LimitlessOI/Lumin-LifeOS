@@ -32,6 +32,7 @@ const vapiCore = fs.readFileSync(path.join(ROOT, 'routes/api-v1-core.js'), 'utf8
 const council = fs.readFileSync(path.join(ROOT, 'services/lifere-council-router.js'), 'utf8');
 const dealSide = fs.readFileSync(path.join(ROOT, 'services/lifere-deal-side-os.js'), 'utf8');
 const lifereV1 = fs.readFileSync(path.join(ROOT, 'services/lifere-os-v1.js'), 'utf8');
+const clientComms = fs.readFileSync(path.join(ROOT, 'services/lifere-client-comms.js'), 'utf8');
 const html = fs.readFileSync(path.join(ROOT, 'public/overlay/lifeos-lifere.html'), 'utf8');
 
 step('AUD-01_alpha_gate_script', fs.existsSync(path.join(ROOT, 'scripts/run-lifere-alpha-e2e.mjs')));
@@ -44,6 +45,8 @@ step('AUD-04_vapi_lifere_fanout', fs.readFileSync(path.join(ROOT, 'core/vapi-int
 step('AUD-05_council_llm_hook', council.includes('callCouncilMember'));
 step('AUD-06_deal_workflow', dealSide.includes('listBuyerClients') || dealSide.includes('buyerWorkflowStage'));
 step('AUD-07_deal_detail_ui', html.includes('tc-deal-detail') && html.includes('loadDealDetail'));
+step('AUD-07b_chair_readable_ui', html.includes('renderChairBrief') && html.includes('info-card'));
+step('AUD-12_approval_execute_on_resolve', clientComms.includes('resolveQueueItem') && routes.includes('resolveQueueItem'));
 step('AUD-08_ssot_lifere_v1', /AMENDMENT_LIFERE/.test(lifereV1));
 step('AUD-09_migrations', fs.existsSync(path.join(ROOT, 'db/migrations/20260613_lifere_twin_framework.sql')));
 step('AUD-10_w1_w6_services', fs.readdirSync(path.join(ROOT, 'services')).filter((f) => f.startsWith('lifere-')).length >= 25);

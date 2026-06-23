@@ -1,15 +1,16 @@
 {
   "schema": "lifere_coder_gap_report_v1",
-  "at": "2026-06-23T12:00:00.000Z",
-  "build_status": "product_z_in_progress",
-  "acceptance": "npm run lifeos:lifere-self-audit",
-  "runtime_checks": 12,
+  "at": "2026-06-23T19:05:00.000Z",
+  "build_status": "alpha_testing_ready",
+  "acceptance": "npm run lifeos:lifere-alpha-readiness",
+  "runtime_checks": 14,
   "closed_this_session": [
-    "GAP-04 partial: Vapi call-ended fans out to LifeRE receptionist bridge",
-    "GAP-04 partial: outreach approve/execute/process-queue routes + UI",
-    "GAP-09: lifere-os-v1 @ssot AMENDMENT_LIFERE",
-    "GAP-10 partial: buyer workflow stages, list buyers/sellers, TC deal detail API + UI",
-    "GAP-05 partial: council already invokes callCouncilMember when server provides it"
+    "GAP-04 partial: approval resolve now enqueues + executes via Am 08 outreach bridge",
+    "GAP-04 partial: client comms draft carries recipient payload for send path",
+    "GAP-04 partial: lifere_client_comms_log written on approve",
+    "UI: Chair brief readable cards (renderChairBrief)",
+    "UI: TC deal picker + readable deal detail cards",
+    "UI: approval resolve shows send status feedback"
   ],
   "gaps_remaining": [
     {
@@ -34,12 +35,25 @@
     {
       "id": "GAP-03",
       "area": "Am 17 TC",
-      "issue": "Deal detail depends on tc_transactions schema in prod",
+      "issue": "Deal detail depends on tc_transactions schema in prod — verify with real deals",
       "role": "Verify on live PG after migration"
+    },
+    {
+      "id": "GAP-05",
+      "area": "Council",
+      "issue": "Router + optional LLM — not full multi-agent deliberation in LifeRE shell",
+      "role": "Post-alpha depth"
+    },
+    {
+      "id": "GAP-10",
+      "area": "Buyer/seller CRM",
+      "issue": "List counts + twin projections — no deep stage workflows or BoldTrail write-back",
+      "role": "Post-alpha depth"
     }
   ],
   "coder_decisions_avoided": [
     "Blueprint defaults for metrics and funnel",
-    "Locked config JSON for council, video types, coaching"
+    "Locked config JSON for council, video types, coaching",
+    "Setting founder_usability_pass without Adam quote"
   ]
 }

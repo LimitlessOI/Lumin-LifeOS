@@ -40,7 +40,7 @@ function interpolate(template, vars) {
   return template.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] ?? '');
 }
 
-export function createLifeREClientComms({ pool = null } = {}) {
+export function createLifeREClientComms({ pool = null, outreach = null, logger = console } = {}) {
   function renderTemplate({ templateId, channel = 'sms', vars = {} }) {
     const tpl = CLIENT_COMMS_TEMPLATES[templateId];
     if (!tpl) throw new Error(`Unknown template: ${templateId}`);
@@ -60,5 +60,90 @@ export function createLifeREClientComms({ pool = null } = {}) {
     return { ok: true, queue_id: rows[0].id, status: rows[0].status, persisted: true };
   }
 
-  return { renderTemplate, queueDraft, templates: CLIENT_COMMS_TEMPLATES };
+  async function resolveQueueItem({
+    queueId,
+    tenantId = 'default',
+    userId,
+    status = 'approved',
+  } = {}) {
+    if (!pool) {
+      return { ok: true, persisted: false, status };
+    }
+
+    const { rows } = await pool.query(
+      `SELECT * FROM lifere_approval_queue
+       WHERE id = $1 AND tenant_id = $2 AND user_id = $3 AND status = 'pending' LIMIT 1`,
+      [queueId, tenantId, userId]
+    );
+    if (!rows[0]) {
+      return { ok: false, error: 'queue_item_not_found' };
+    }
+
+    const item = rows[0];
+    const resolvedStatus = status === 'rejected' ? 'rejected' : 'approved';
+
+    await pool.query(
+      `UPDATE lifere_approval_queue SET status = $1, resolved_at = now(), resolved_by = $2 WHERE id = $3`,
+      [resolvedStatus, userId, queueId]
+    );
+
+    if (resolvedStatus === 'rejected') {
+      return { ok: true, status: 'rejected', executed: null };
+    }
+
+    const payload = item.payload && typeof item.payload === 'object' ? item.payload : {};
+    const channel = payload.channel || (String(item.action_type || '').includes('email') ? 'email' : 'sms');
+    let executed = null;
+
+    if (outreach) {
+      const enq = await outreach.enqueueSequence({
+        userId,
+        sequenceId: `approval-queue-${queueId}`,
+        recipientRef: payload.contact_id || payload.recipient_name || payload.client_ref || 'client',
+        draft: item.draft_text,
+        channel,
+        recipientEmail: payload.recipient_email,
+        recipientPhone: payload.recipient_phone,
+        recipientName: payload.recipient_name || payload.client_name,
+        approved: true,
+      });
+      if (enq.task_id) {
+        executed = await outreach.executeTaskById({ taskId: enq.task_id, userId });
+      } else {
+        executed = { ok: true, note: 'queued_without_task_id', enqueue: enq, label: 'THINK' };
+      }
+    } else {
+      executed = { ok: false, reason: 'no_outreach_bridge', label: 'THINK' };
+    }
+
+    try {
+      await pool.query(
+        `INSERT INTO lifere_client_comms_log
+          (tenant_id, user_id, client_ref, channel, template_id, body, sent_at, approval_queue_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+        [
+          tenantId,
+          userId,
+          payload.contact_id || payload.recipient_name || 'unknown',
+          channel,
+          payload.template_id || item.action_type || 'manual',
+          item.draft_text,
+          executed?.ok ? new Date() : null,
+          queueId,
+        ]
+      );
+    } catch (err) {
+      logger.warn?.(`[LIFERE-COMMS] comms log insert failed: ${err.message}`);
+    }
+
+    return {
+      ok: true,
+      status: 'approved',
+      executed,
+      task_id: executed?.task_id || null,
+      label: executed?.ok ? 'KNOW' : 'THINK',
+    };
+  }
+
+  return { renderTemplate, queueDraft, resolveQueueItem, templates: CLIENT_COMMS_TEMPLATES };
 }
