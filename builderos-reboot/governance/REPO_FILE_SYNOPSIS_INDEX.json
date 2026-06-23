@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T00:55:46.757Z",
+  "generated_at": "2026-06-23T01:15:51.322Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12161,
+  "file_count": 12164,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40571,17 +40571,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26273,
-      "mtime": "2026-06-23T00:55:41.310Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z",
+      "bytes": 26280,
+      "mtime": "2026-06-23T01:15:47.301Z",
+      "indexed_at": "2026-06-23T01:15:51.322Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 465797,
-      "mtime": "2026-06-23T00:54:40.456Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z"
+      "bytes": 466164,
+      "mtime": "2026-06-23T01:15:46.546Z",
+      "indexed_at": "2026-06-23T01:15:51.322Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -73224,9 +73224,9 @@
     {
       "path": "scripts/verify-chair-fp-v2-enforcement.mjs",
       "synopsis": "Verifies Founder Packet V2 hard enforcement on live Lumin Chair.",
-      "bytes": 4093,
-      "mtime": "2026-06-23T00:54:30.769Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z"
+      "bytes": 4360,
+      "mtime": "2026-06-23T01:15:46.832Z",
+      "indexed_at": "2026-06-23T01:15:51.322Z"
     },
     {
       "path": "scripts/verify-council-bypass-audit.mjs",
@@ -84499,6 +84499,16 @@
       ]
     },
     {
+      "path": "services/chair-life-admin.js",
+      "synopsis": "Life admin Chair turn — coupons, errands, appointments (web search + counsel).",
+      "bytes": 2212,
+      "mtime": "2026-06-23T01:15:33.452Z",
+      "indexed_at": "2026-06-23T01:15:51.322Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/chair-prediction-score-scheduler.js",
       "synopsis": "Score due Chair/ADF predictions against mission reality — Founder Packet V2 scoreboard.",
       "bytes": 6624,
@@ -85568,6 +85578,16 @@
       ]
     },
     {
+      "path": "services/founder-life-admin-intent.js",
+      "synopsis": "Founder personal-life asks — errands, coupons, appointments (not builder/code).",
+      "bytes": 2728,
+      "mtime": "2026-06-23T01:15:25.583Z",
+      "indexed_at": "2026-06-23T01:15:51.322Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/founder-packet-v2-unified-gate.js",
       "synopsis": "Founder Packet V2 unified gate — live Chair + IDC + Builder entry on all execute paths.",
       "bytes": 8668,
@@ -86538,9 +86558,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 23401,
-      "mtime": "2026-06-22T23:59:02.025Z",
-      "indexed_at": "2026-06-23T00:00:44.591Z",
+      "bytes": 24611,
+      "mtime": "2026-06-23T01:15:41.222Z",
+      "indexed_at": "2026-06-23T01:15:51.322Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -92227,6 +92247,13 @@
       "bytes": 1084,
       "mtime": "2026-06-22T22:28:44.562Z",
       "indexed_at": "2026-06-22T22:28:56.661Z"
+    },
+    {
+      "path": "tests/founder-life-admin-intent.test.js",
+      "synopsis": "js — tests/founder-life-admin-intent.test.js.",
+      "bytes": 1255,
+      "mtime": "2026-06-23T01:15:42.372Z",
+      "indexed_at": "2026-06-23T01:15:51.322Z"
     },
     {
       "path": "tests/founder-packet-v2-unified-gate.test.js",

@@ -35,6 +35,8 @@ import {
   formatChairIntentClarifySummary,
   CHAIR_INTENT_PROTOCOL,
 } from './chair-intent-protocol.js';
+import { isFounderPersonalLifeIntent, isProductBuildChangeVerb } from './founder-life-admin-intent.js';
+import { runLifeAdminChairTurn } from './chair-life-admin.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXECUTE_MISSION = path.join(REPO_ROOT, 'builderos-reboot/scripts/execute-mission.mjs');
@@ -65,6 +67,7 @@ export function isPureCounselQuestion(text = '') {
 }
 
 export function isBuildRequest(text) {
+  if (isFounderPersonalLifeIntent(text)) return false;
   if (isBlueprintExecuteIntent(text)) return false;
   const t = String(text || '');
   if (/\b(what changed|tell me what changed|show me what changed|what is the|what are the|how many|status of|queue status)\b/i.test(t)
@@ -75,7 +78,8 @@ export function isBuildRequest(text) {
     && /\b(response|reply|bubble|assistant|message|color|background)\b/i.test(t)) {
     return true;
   }
-  return /\b(fix|change|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t)
+  return /\b(fix|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t)
+    || isProductBuildChangeVerb(t)
     || isFounderShipOrUsabilityIntent(t);
 }
 
@@ -92,6 +96,7 @@ export function classifyChairIntent(ctx = {}) {
   if (forced) return forced;
 
   if (shouldDisplayOnly) return 'display';
+  if (isFounderPersonalLifeIntent(cleanedInput)) return 'life_admin';
   if (isBlueprintExecuteIntent(cleanedInput)) return 'blueprint_execute';
 
   if (explicitExecute && isExplicitExecuteCommand(cleanedInput)) return 'execute';
@@ -109,6 +114,7 @@ export function classifyChairIntent(ctx = {}) {
 
 export function isChairActionableTurn(text = '', { shouldDisplayOnly = false } = {}) {
   if (shouldDisplayOnly) return false;
+  if (isFounderPersonalLifeIntent(text)) return false;
   if (isPureCounselQuestion(text)) return false;
   if (isRepairContinuationIntent(text)) return false;
   return isBuildRequest(text)
@@ -180,6 +186,8 @@ export function modelRoutingForChannel(channel) {
       return { route: 'lumin_chair_display', complexity: 'low', estimated_cost_tier: 'cheap' };
     case 'counsel':
       return { route: 'lumin_chair_counsel', complexity: 'low', estimated_cost_tier: 'cheap' };
+    case 'life_admin':
+      return { route: 'lumin_chair_life_admin', complexity: 'low', estimated_cost_tier: 'cheap' };
     case 'point_b':
       return { route: 'lumin_chair_point_b', complexity: 'high', estimated_cost_tier: 'medium' };
     case 'blueprint_execute':
@@ -280,7 +288,7 @@ export async function runLuminChairTurn(ctx, deps) {
   const channel = classifyChairIntent(ctx);
 
   let fpV2Enforcement = null;
-  if (!shouldDisplayOnly && channel !== 'display') {
+  if (!shouldDisplayOnly && channel !== 'display' && channel !== 'life_admin') {
     const understandingForChannel = assessChairIntentUnderstanding(cleanedInput, {
       expandedTask: cleanedInput,
       pointBTarget,
@@ -561,6 +569,29 @@ export async function runLuminChairTurn(ctx, deps) {
         fp_v2_enforcement: fpV2Enforcement,
       }, channel);
       return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, auth_mode }) };
+    }
+
+    case 'life_admin': {
+      const lifeResult = await runLifeAdminChairTurn(cleanedInput, {
+        callAI: deps.callCouncilMember,
+        luminConverse: deps.luminConverse,
+        sanitizeConversationReply: deps.sanitizeConversationReply,
+      });
+      const truth = finalizeTruth({
+        ...lifeResult,
+        human_summary_technical: lifeResult.human_summary_technical,
+        fp_v2_enforcement: null,
+      }, channel);
+      return {
+        statusCode: 200,
+        body: chairEnvelope(channel, {
+          ...truth,
+          intake_normalized: intakeNormalized,
+          source_mode: sourceMode,
+          auth_mode,
+          user_role,
+        }),
+      };
     }
 
     default: {

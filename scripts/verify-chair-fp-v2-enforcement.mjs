@@ -28,6 +28,12 @@ if (!runtime.supreme_authority?.includes('FOUNDER_PACKET_V2')) {
 }
 
 const orchestrator = read('services/lumin-chair-orchestrator.js');
+if (!orchestrator.includes('life_admin')) {
+  fail('lumin-chair-orchestrator.js must route personal life asks to life_admin channel');
+}
+if (!fs.existsSync(path.join(ROOT, 'services/founder-life-admin-intent.js'))) {
+  fail('founder-life-admin-intent.js missing');
+}
 if (!orchestrator.includes('enforceFounderPacketV2Unified')) {
   fail('lumin-chair-orchestrator.js must call enforceFounderPacketV2Unified');
 }
