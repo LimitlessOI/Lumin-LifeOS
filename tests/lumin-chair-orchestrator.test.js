@@ -46,13 +46,13 @@ test('display-only flag wins first', () => {
   );
 });
 
-test('pure counsel question routes counsel', () => {
+test('pure counsel question routes lumin (unified front door)', () => {
   const msg = 'what is the meaning of focus?';
   assert.equal(isPureCounselQuestion(msg), true);
-  assert.equal(classifyChairIntent({ cleanedInput: msg }), 'counsel');
+  assert.equal(classifyChairIntent({ cleanedInput: msg }), 'lumin');
 });
 
-test('point b default for ambiguous continue language', () => {
+test('LifeRE next-step language routes point_b', () => {
   const msg = 'what should we do next on LifeRE';
   assert.equal(classifyChairIntent({ cleanedInput: msg }), 'point_b');
 });

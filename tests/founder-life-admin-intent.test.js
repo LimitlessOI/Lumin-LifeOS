@@ -19,7 +19,7 @@ test('oil change + coupon is personal life not build', () => {
   assert.equal(isFounderPersonalLifeIntent(OIL_MSG), true);
   assert.equal(isBuildRequest(OIL_MSG), false);
   assert.equal(isChairActionableTurn(OIL_MSG), false);
-  assert.equal(classifyChairIntent({ cleanedInput: OIL_MSG }), 'life_admin');
+  assert.equal(classifyChairIntent({ cleanedInput: OIL_MSG }), 'lumin');
 });
 
 test('oil change alone is not product build change verb', () => {

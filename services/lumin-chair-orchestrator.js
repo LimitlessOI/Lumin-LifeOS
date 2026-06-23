@@ -18,10 +18,7 @@ import { loadPointBTarget } from './point-b-target-lite.js';
 import { wrapChairHumanSummary } from './founder-communication-format.js';
 import { enforceChairTruthExit } from './chair-truth-gate.js';
 import { expandFounderBuildTask, isFounderShipOrUsabilityIntent, resolveExplicitChairChannel } from './founder-chair-intent.js';
-import {
-  assessGovernanceClarity,
-  isGovernanceOrSsotIntent,
-} from './founder-governance-clarify.js';
+import { isGovernanceOrSsotIntent } from './founder-governance-clarify.js';
 import {
   enforceFounderPacketV2Unified,
   formatUnifiedGateBlockSummary,
@@ -36,93 +33,38 @@ import {
   CHAIR_INTENT_PROTOCOL,
 } from './chair-intent-protocol.js';
 import { isFounderPersonalLifeIntent, isProductBuildChangeVerb } from './founder-life-admin-intent.js';
-import { runLifeAdminChairTurn } from './chair-life-admin.js';
+import {
+  resolveChairContext,
+  requiresPreExecuteClarify,
+  chairChannelFromContext,
+} from './chair-context-classifier.js';
+import { runLuminUnifiedTurn } from './chair-lumin-unified.js';
+import {
+  isBlueprintExecuteIntent,
+  isBuildRequest,
+  isExplicitExecuteCommand,
+  isPureCounselQuestion,
+} from './chair-intent-signals.js';
+
+export {
+  isBlueprintExecuteIntent,
+  isBuildRequest,
+  isExplicitExecuteCommand,
+  isPureCounselQuestion,
+} from './chair-intent-signals.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXECUTE_MISSION = path.join(REPO_ROOT, 'builderos-reboot/scripts/execute-mission.mjs');
 
-export function isExplicitExecuteCommand(text = '') {
-  const t = String(text || '').trim();
-  if (!t) return false;
-  if (/^\s*(execute|run|go|ship)\s*[.!]?\s*$/i.test(t)) return true;
-  return /\b(execute it|do it now|run it now|ship it|go ahead|make it happen|just do it|execute that|run that|do that now|get it done|execute this)\b/i.test(t);
-}
-
-export function isBlueprintExecuteIntent(text = '') {
-  const t = String(text || '');
-  if (/\b(build|run|execute)\s+(the\s+)?blueprint\b/i.test(t)) return true;
-  if (/\bexecute\s+(the\s+)?mission\b/i.test(t)) return true;
-  if (/\brun\s+execute[- ]?mission\b/i.test(t)) return true;
-  if (/\bexecute\s+PRODUCT-[A-Z0-9-]+\b/i.test(t)) return true;
-  return false;
-}
-
-export function isPureCounselQuestion(text = '') {
-  const t = String(text || '').trim();
-  if (!/\?\s*$/.test(t)) return false;
-  if (/\b(status|keep going|point b|continue|progress|execute|build|fix|change|lifere|mission|blueprint)\b/i.test(t)) {
-    return false;
-  }
-  return true;
-}
-
-export function isBuildRequest(text) {
-  if (isFounderPersonalLifeIntent(text)) return false;
-  if (isBlueprintExecuteIntent(text)) return false;
-  const t = String(text || '');
-  if (/\b(what changed|tell me what changed|show me what changed|what is the|what are the|how many|status of|queue status)\b/i.test(t)
-    && !/\b(change|fix|make|update|set)\b.*\b(color|ui|css|response|reply|bubble)\b/i.test(t)) {
-    return false;
-  }
-  if (/\b(should be|needs to be|want.*(yellow|blue|red|green|color))\b/i.test(t)
-    && /\b(response|reply|bubble|assistant|message|color|background)\b/i.test(t)) {
-    return true;
-  }
-  return /\b(fix|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t)
-    || isProductBuildChangeVerb(t)
-    || isFounderShipOrUsabilityIntent(t);
-}
-
 export function classifyChairIntent(ctx = {}) {
-  const {
-    cleanedInput = '',
-    shouldDisplayOnly = false,
-    explicitExecute = false,
-    useTerminalForBuild = false,
-    explicitAction = 'auto',
-  } = ctx;
-
-  const forced = resolveExplicitChairChannel(explicitAction, { useTerminalForBuild });
+  const forced = resolveExplicitChairChannel(ctx.explicitAction, { useTerminalForBuild: ctx.useTerminalForBuild });
   if (forced) return forced;
-
-  if (shouldDisplayOnly) return 'display';
-  if (isFounderPersonalLifeIntent(cleanedInput)) return 'life_admin';
-  if (isBlueprintExecuteIntent(cleanedInput)) return 'blueprint_execute';
-
-  if (explicitExecute && isExplicitExecuteCommand(cleanedInput)) return 'execute';
-
-  const shouldRunFounderBuild = isBuildRequest(cleanedInput) || isRepairContinuationIntent(cleanedInput);
-  if (shouldRunFounderBuild && useTerminalForBuild) return 'build_terminal';
-  if (shouldRunFounderBuild) return 'build_async';
-
-  if (isMissionPipelineIntent(cleanedInput)) return 'mission_pipeline';
-
-  if (explicitExecute && !isBuildRequest(cleanedInput)) return 'execute';
-  if (isPureCounselQuestion(cleanedInput)) return 'counsel';
-  return 'point_b';
+  return chairChannelFromContext(ctx.cleanedInput || '', ctx);
 }
 
-export function isChairActionableTurn(text = '', { shouldDisplayOnly = false } = {}) {
-  if (shouldDisplayOnly) return false;
-  if (isFounderPersonalLifeIntent(text)) return false;
-  if (isPureCounselQuestion(text)) return false;
-  if (isRepairContinuationIntent(text)) return false;
-  return isBuildRequest(text)
-    || isFounderShipOrUsabilityIntent(text)
-    || isGovernanceOrSsotIntent(text)
-    || isMissionPipelineIntent(text)
-    || isBlueprintExecuteIntent(text)
-    || isExplicitExecuteCommand(text);
+export function isChairActionableTurn(text = '', ctx = {}) {
+  if (ctx.shouldDisplayOnly) return false;
+  return requiresPreExecuteClarify(text, ctx);
 }
 
 function chairFpV2BlockResponse(ctx, enforcement, channel) {
@@ -185,9 +127,9 @@ export function modelRoutingForChannel(channel) {
     case 'display':
       return { route: 'lumin_chair_display', complexity: 'low', estimated_cost_tier: 'cheap' };
     case 'counsel':
-      return { route: 'lumin_chair_counsel', complexity: 'low', estimated_cost_tier: 'cheap' };
     case 'life_admin':
-      return { route: 'lumin_chair_life_admin', complexity: 'low', estimated_cost_tier: 'cheap' };
+    case 'lumin':
+      return { route: 'lumin_chair_unified', complexity: 'low', estimated_cost_tier: 'cheap' };
     case 'point_b':
       return { route: 'lumin_chair_point_b', complexity: 'high', estimated_cost_tier: 'medium' };
     case 'blueprint_execute':
@@ -249,12 +191,21 @@ export async function runLuminChairTurn(ctx, deps) {
     user_role,
     confirmIntent,
     shouldDisplayOnly,
+    explicitExecute,
+    useTerminalForBuild,
+    explicitAction = 'auto',
   } = ctx;
 
   const skipIntentGate = force || confirmIntent;
   const pointBTarget = loadPointBTarget();
+  const contextOpts = {
+    shouldDisplayOnly,
+    explicitExecute,
+    useTerminalForBuild,
+    explicitAction,
+  };
 
-  if (!skipIntentGate && isChairActionableTurn(cleanedInput, { shouldDisplayOnly })) {
+  if (!skipIntentGate && requiresPreExecuteClarify(cleanedInput, contextOpts)) {
     let expandedTask = cleanedInput;
     if (isBuildRequest(cleanedInput) || isRepairContinuationIntent(cleanedInput)) {
       expandedTask = await deps.resolveBuildTaskForFounder(ctx.req, cleanedInput);
@@ -285,10 +236,12 @@ export async function runLuminChairTurn(ctx, deps) {
     }
   }
 
-  const channel = classifyChairIntent(ctx);
+  const chairContext = resolveChairContext(cleanedInput, contextOpts);
+  const channel = chairContext.channel;
 
   let fpV2Enforcement = null;
-  if (!shouldDisplayOnly && channel !== 'display' && channel !== 'life_admin') {
+  const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
+  if (!shouldDisplayOnly && channel !== 'display' && channel !== 'lumin' && channel !== 'counsel' && channel !== 'life_admin') {
     const understandingForChannel = assessChairIntentUnderstanding(cleanedInput, {
       expandedTask: cleanedInput,
       pointBTarget,
@@ -545,46 +498,30 @@ export async function runLuminChairTurn(ctx, deps) {
       };
     }
 
-    case 'counsel': {
-      const strategicBrief = fpV2Enforcement?.chair?.strategic_brief
-        || await gatherStrategicBriefForChair({
-          cleanedInput,
-          pool: deps.pool,
-          callAI: deps.callCouncilMember,
-          pointBTarget,
-        }).catch(() => null);
-      const strategicSection = formatStrategicBriefSection(strategicBrief);
-      const luminReply = await deps.luminConverse(cleanedInput);
-      const combinedReply = strategicSection ? `${luminReply}${strategicSection}` : luminReply;
-      const safeReply = deps.sanitizeConversationReply(combinedReply, { command_truth: 'NO_COMMAND_RAN' });
-      const truth = finalizeTruth({
-        ok: true,
-        action: 'counsel',
-        command_truth: 'NO_COMMAND_RAN',
-        pass_fail: 'NO_COMMAND_RAN',
-        done_synopsis: 'Counsel only — no system command ran.',
-        human_summary_technical: safeReply,
-        conversation_sanitized: safeReply !== combinedReply,
-        strategic_brief: strategicBrief,
-        fp_v2_enforcement: fpV2Enforcement,
-      }, channel);
-      return { statusCode: 200, body: chairEnvelope(channel, { ...truth, intake_normalized: intakeNormalized, auth_mode }) };
-    }
-
-    case 'life_admin': {
-      const lifeResult = await runLifeAdminChairTurn(cleanedInput, {
+    case 'counsel':
+    case 'life_admin':
+    case 'lumin': {
+      const strategicBrief = await gatherStrategicBriefForChair({
+        cleanedInput,
+        pool: deps.pool,
+        callAI: deps.callCouncilMember,
+        pointBTarget,
+      }).catch(() => null);
+      const luminResult = await runLuminUnifiedTurn(cleanedInput, {
         callAI: deps.callCouncilMember,
         luminConverse: deps.luminConverse,
         sanitizeConversationReply: deps.sanitizeConversationReply,
-      });
+        strategicBrief,
+        pointBTarget,
+      }, chairContext);
       const truth = finalizeTruth({
-        ...lifeResult,
-        human_summary_technical: lifeResult.human_summary_technical,
+        ...luminResult,
+        chair_context: chairContext,
         fp_v2_enforcement: null,
-      }, channel);
+      }, channel === 'counsel' || channel === 'life_admin' ? 'lumin' : channel);
       return {
         statusCode: 200,
-        body: chairEnvelope(channel, {
+        body: chairEnvelope('lumin', {
           ...truth,
           intake_normalized: intakeNormalized,
           source_mode: sourceMode,

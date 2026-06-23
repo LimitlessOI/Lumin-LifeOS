@@ -28,8 +28,11 @@ if (!runtime.supreme_authority?.includes('FOUNDER_PACKET_V2')) {
 }
 
 const orchestrator = read('services/lumin-chair-orchestrator.js');
-if (!orchestrator.includes('life_admin')) {
-  fail('lumin-chair-orchestrator.js must route personal life asks to life_admin channel');
+if (!orchestrator.includes('resolveChairContext') && !orchestrator.includes('chair-context-classifier')) {
+  fail('lumin-chair-orchestrator.js must use chair-context-classifier for routing');
+}
+if (!orchestrator.includes("'lumin'")) {
+  fail('lumin-chair-orchestrator.js must route personal/conversation to lumin channel');
 }
 if (!fs.existsSync(path.join(ROOT, 'services/founder-life-admin-intent.js'))) {
   fail('founder-life-admin-intent.js missing');

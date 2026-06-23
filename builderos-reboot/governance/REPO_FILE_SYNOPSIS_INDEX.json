@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T01:15:51.322Z",
+  "generated_at": "2026-06-23T01:25:56.612Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12164,
+  "file_count": 12168,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40572,16 +40572,16 @@
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
       "bytes": 26280,
-      "mtime": "2026-06-23T01:15:47.301Z",
-      "indexed_at": "2026-06-23T01:15:51.322Z",
+      "mtime": "2026-06-23T01:25:43.786Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 466164,
-      "mtime": "2026-06-23T01:15:46.546Z",
-      "indexed_at": "2026-06-23T01:15:51.322Z"
+      "bytes": 466558,
+      "mtime": "2026-06-23T01:25:31.793Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41070,9 +41070,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 128819,
-      "mtime": "2026-06-23T00:54:45.864Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z"
+      "bytes": 129116,
+      "mtime": "2026-06-23T01:25:51.080Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -70378,9 +70378,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 47886,
-      "mtime": "2026-06-23T00:54:27.150Z",
-      "indexed_at": "2026-06-23T00:55:46.757Z",
+      "bytes": 48044,
+      "mtime": "2026-06-23T01:25:13.824Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -73224,9 +73224,9 @@
     {
       "path": "scripts/verify-chair-fp-v2-enforcement.mjs",
       "synopsis": "Verifies Founder Packet V2 hard enforcement on live Lumin Chair.",
-      "bytes": 4360,
-      "mtime": "2026-06-23T01:15:46.832Z",
-      "indexed_at": "2026-06-23T01:15:51.322Z"
+      "bytes": 4549,
+      "mtime": "2026-06-23T01:25:30.628Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z"
     },
     {
       "path": "scripts/verify-council-bypass-audit.mjs",
@@ -84479,6 +84479,16 @@
       ]
     },
     {
+      "path": "services/chair-context-classifier.js",
+      "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
+      "bytes": 7984,
+      "mtime": "2026-06-23T01:25:40.371Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/chair-founder-packet-v2-enforcement.js",
       "synopsis": "Founder Packet V2 — hard enforcement on live Lumin Chair turns.",
       "bytes": 11013,
@@ -84499,11 +84509,31 @@
       ]
     },
     {
+      "path": "services/chair-intent-signals.js",
+      "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
+      "bytes": 2277,
+      "mtime": "2026-06-23T01:24:37.171Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/chair-life-admin.js",
       "synopsis": "Life admin Chair turn — coupons, errands, appointments (web search + counsel).",
       "bytes": 2212,
       "mtime": "2026-06-23T01:15:33.452Z",
       "indexed_at": "2026-06-23T01:15:51.322Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/chair-lumin-unified.js",
+      "synopsis": "Unified Lumin turn — personal life + counsel + command context (one front door).",
+      "bytes": 3277,
+      "mtime": "2026-06-23T01:24:40.933Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86558,9 +86588,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 24611,
-      "mtime": "2026-06-23T01:15:41.222Z",
-      "indexed_at": "2026-06-23T01:15:51.322Z",
+      "bytes": 21335,
+      "mtime": "2026-06-23T01:25:17.844Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -92090,6 +92120,13 @@
       "indexed_at": "2026-06-21T22:31:43.118Z"
     },
     {
+      "path": "tests/chair-context-classifier.test.js",
+      "synopsis": "js — tests/chair-context-classifier.test.js.",
+      "bytes": 1735,
+      "mtime": "2026-06-23T01:25:29.385Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z"
+    },
+    {
       "path": "tests/chair-founder-packet-v2-enforcement.test.js",
       "synopsis": "js — tests/chair-founder-packet-v2-enforcement.test.js.",
       "bytes": 2356,
@@ -92251,9 +92288,9 @@
     {
       "path": "tests/founder-life-admin-intent.test.js",
       "synopsis": "js — tests/founder-life-admin-intent.test.js.",
-      "bytes": 1255,
-      "mtime": "2026-06-23T01:15:42.372Z",
-      "indexed_at": "2026-06-23T01:15:51.322Z"
+      "bytes": 1250,
+      "mtime": "2026-06-23T01:25:20.440Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z"
     },
     {
       "path": "tests/founder-packet-v2-unified-gate.test.js",
@@ -92376,9 +92413,9 @@
     {
       "path": "tests/lumin-chair-orchestrator.test.js",
       "synopsis": "js — tests/lumin-chair-orchestrator.test.js.",
-      "bytes": 2443,
-      "mtime": "2026-06-22T22:19:00.943Z",
-      "indexed_at": "2026-06-22T22:26:26.971Z"
+      "bytes": 2453,
+      "mtime": "2026-06-23T01:25:30.308Z",
+      "indexed_at": "2026-06-23T01:25:56.612Z"
     },
     {
       "path": "tests/lumin-strategic-intelligence.test.js",

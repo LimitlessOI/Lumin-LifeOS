@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-22 — Lumin counsel prompt: Founder Packet V2 hard enforcement + strategic intelligence mandate (command-control routes).
+**Last Updated:** 2026-06-13 — Lumin unified context: personal life + command + build (chair-context-classifier).
 ---
 
 ## 0. Purpose
@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-13 | **`routes/lifeos-builderos-command-control-routes.js`** — Lumin prompt: personal OS + command center unified; life vs code context; no target_file theater on errands. Pairs with `chair-context-classifier.js`. | Adam: LifeOS must understand context — personal everything AND builder when asked. | ✅ | deploy |
 | 2026-06-13 | **`services/founder-build-self-repair.js`** — `enforceBeforeBuilderDispatch` at loop entry; **`routes/lifeos-builderos-command-control-routes.js`** — `POST /founder-interface/confirm-usability`. | Close founder build + usability bypass gaps. | ✅ | deploy |
 | 2026-06-22 | **`routes/lifeos-builderos-command-control-routes.js`** — FP V2 unified gate on `routeToBuilder` + `runTerminalBridgeIntake`. | Close builder bypass outside Chair. | ✅ | deploy |
 | 2026-06-22 | Lumin counsel system prompt cites Founder Packet V2 + `chair-founder-packet-v2-enforcement.js` (strategic offers, forecast receipts, scoreboard). | Adam: FP V2 is Chair law on live founder interface. | ✅ chair tests | deploy |
