@@ -1,7 +1,7 @@
 {
   "schema": "lifere_os_v1_acceptance_v2",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "started_at": "2026-06-22T20:57:53.650Z",
+  "started_at": "2026-06-22T22:05:00.916Z",
   "tests_passed": [
     "LRE-T01_service_file",
     "LRE-T01b_top3_export",
@@ -26,8 +26,8 @@
   "tests_failed": [],
   "founder_usability_pass": false,
   "point_b": "LifeRE Alpha — acceptance must PASS before Point B claim",
-  "completed_at": "2026-06-22T20:57:53.663Z",
-  "git_sha": "660df778902e17197a32103ae36447557c082dcf",
+  "completed_at": "2026-06-22T22:05:00.927Z",
+  "git_sha": "73340afc69f9b7e78f20911c4932f671b1faba2f",
   "verdict": "PASS",
   "bp_sync": {
     "updated": [

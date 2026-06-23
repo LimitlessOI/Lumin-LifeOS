@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T00:00:44.591Z",
+  "generated_at": "2026-06-23T00:00:56.553Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12158,
   "files": [
@@ -28693,9 +28693,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 7425,
-      "mtime": "2026-06-22T20:57:53.664Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "bytes": 6503,
+      "mtime": "2026-06-22T22:56:03.994Z",
+      "indexed_at": "2026-06-23T00:00:56.553Z",
       "synopsis_index_only": true
     },
     {
@@ -33465,8 +33465,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3669,
-      "mtime": "2026-06-22T20:57:53.664Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "mtime": "2026-06-22T22:05:00.928Z",
+      "indexed_at": "2026-06-23T00:00:56.553Z",
       "synopsis_index_only": true
     },
     {
@@ -33574,8 +33574,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
       "bytes": 1147,
-      "mtime": "2026-06-22T20:57:53.664Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "mtime": "2026-06-22T22:05:00.929Z",
+      "indexed_at": "2026-06-23T00:00:56.553Z",
       "synopsis_index_only": true
     },
     {
@@ -34088,9 +34088,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1113,
-      "mtime": "2026-06-18T03:41:16.584Z",
-      "indexed_at": "2026-06-21T22:31:43.118Z",
+      "bytes": 1352,
+      "mtime": "2026-06-22T22:55:42.133Z",
+      "indexed_at": "2026-06-23T00:00:56.553Z",
       "synopsis_index_only": true
     },
     {
@@ -68538,8 +68538,8 @@
       "path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFERE OS V1 ACCEPTANCE.",
       "bytes": 1155,
-      "mtime": "2026-06-22T20:57:53.664Z",
-      "indexed_at": "2026-06-22T21:05:30.528Z",
+      "mtime": "2026-06-22T22:05:00.928Z",
+      "indexed_at": "2026-06-23T00:00:56.553Z",
       "synopsis_index_only": true
     },
     {
