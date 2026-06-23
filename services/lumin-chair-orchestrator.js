@@ -39,6 +39,7 @@ import {
   chairChannelFromContext,
 } from './chair-context-classifier.js';
 import { runLuminUnifiedTurn } from './chair-lumin-unified.js';
+import { shouldAttachStrategicBrief } from './chair-lumin-personal-mode.js';
 import {
   isBlueprintExecuteIntent,
   isBuildRequest,
@@ -501,12 +502,14 @@ export async function runLuminChairTurn(ctx, deps) {
     case 'counsel':
     case 'life_admin':
     case 'lumin': {
-      const strategicBrief = await gatherStrategicBriefForChair({
-        cleanedInput,
-        pool: deps.pool,
-        callAI: deps.callCouncilMember,
-        pointBTarget,
-      }).catch(() => null);
+      const strategicBrief = shouldAttachStrategicBrief(cleanedInput, chairContext)
+        ? await gatherStrategicBriefForChair({
+          cleanedInput,
+          pool: deps.pool,
+          callAI: deps.callCouncilMember,
+          pointBTarget,
+        }).catch(() => null)
+        : null;
       const luminResult = await runLuminUnifiedTurn(cleanedInput, {
         callAI: deps.callCouncilMember,
         luminConverse: deps.luminConverse,
@@ -518,7 +521,7 @@ export async function runLuminChairTurn(ctx, deps) {
         ...luminResult,
         chair_context: chairContext,
         fp_v2_enforcement: null,
-      }, channel === 'counsel' || channel === 'life_admin' ? 'lumin' : channel);
+      }, 'lumin');
       return {
         statusCode: 200,
         body: chairEnvelope('lumin', {

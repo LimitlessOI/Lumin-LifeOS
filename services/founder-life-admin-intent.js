@@ -71,3 +71,17 @@ export function formatLifeAdminCounselPreamble(searchResult = null) {
   if (searchResult.source) lines.push(`(source: ${searchResult.source})`);
   return lines.join('\n');
 }
+
+export function formatErrandCouponFallback(text = '') {
+  const t = String(text || '');
+  if (!/\b(oil change|coupon|jiffy|valvoline|midas|take 5)\b/i.test(t)) return '';
+  return [
+    '',
+    '── Coupon starting points (open on your phone — no location assumed) ──',
+    '• Jiffy Lube offers: https://www.jiffylube.com/offers',
+    '• Valvoline promotions: https://www.valvoline.com/offers/',
+    '• Take 5 coupons: https://www.take5.com/oil-change/coupons/',
+    '• Midas local offers: https://www.midas.com/rebates-and-promotions',
+    'Show the coupon before service starts; offers vary by location.',
+  ].join('\n');
+}

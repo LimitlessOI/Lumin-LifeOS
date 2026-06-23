@@ -15,7 +15,7 @@ export function executionKindForChannel(channel = '') {
   if (['build_async', 'build_terminal', 'blueprint_execute', 'execute', 'terminal_default'].includes(channel)) {
     return 'CODE_EXECUTE';
   }
-  if (channel === 'counsel' || channel === 'display') return 'NO_COMMAND';
+  if (channel === 'counsel' || channel === 'display' || channel === 'lumin') return 'NO_COMMAND';
   if (channel === 'point_b') return 'NAVIGATOR';
   return 'UNKNOWN';
 }

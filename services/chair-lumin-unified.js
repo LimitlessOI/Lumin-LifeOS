@@ -6,9 +6,18 @@ import { createWebSearchService } from './web-search-service.js';
 import {
   buildLifeAdminSearchQuery,
   formatLifeAdminCounselPreamble,
+  formatErrandCouponFallback,
+  isFounderPersonalLifeIntent,
 } from './founder-life-admin-intent.js';
 import { detectDualIntent } from './chair-context-classifier.js';
+import { shouldAttachStrategicBrief } from './chair-lumin-personal-mode.js';
 import { formatStrategicBriefSection } from './lumin-strategic-intelligence.js';
+
+function searchBlockIsUseful(searchResult) {
+  if (!searchResult?.results?.length) return false;
+  if (searchResult.source === 'ai_knowledge') return false;
+  return true;
+}
 
 export async function runLuminUnifiedTurn(cleanedInput, deps = {}, chairContext = {}) {
   const {
@@ -20,8 +29,11 @@ export async function runLuminUnifiedTurn(cleanedInput, deps = {}, chairContext 
   } = deps;
 
   const dual = detectDualIntent(cleanedInput);
+  const personalTurn = chairContext.personal_search !== false
+    && (dual.personal || isFounderPersonalLifeIntent(cleanedInput) || ['personal_life', 'conversation'].includes(chairContext.domain));
+
   let searchBlock = '';
-  if (chairContext.personal_search !== false && (dual.personal || chairContext.domain === 'personal_life')) {
+  if (personalTurn) {
     const searchSvc = createWebSearchService({
       BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
       PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
@@ -30,25 +42,36 @@ export async function runLuminUnifiedTurn(cleanedInput, deps = {}, chairContext 
     try {
       const query = buildLifeAdminSearchQuery(cleanedInput);
       const searchResult = await searchSvc.search(query, { count: 5 });
-      searchBlock = formatLifeAdminCounselPreamble(searchResult);
+      searchBlock = searchBlockIsUseful(searchResult)
+        ? formatLifeAdminCounselPreamble(searchResult)
+        : formatErrandCouponFallback(cleanedInput);
     } catch {
-      searchBlock = '';
+      searchBlock = formatErrandCouponFallback(cleanedInput);
+    }
+    if (!searchBlock && /\b(coupon|oil change)\b/i.test(cleanedInput)) {
+      searchBlock = formatErrandCouponFallback(cleanedInput);
     }
   }
 
-  const strategicSection = strategicBrief ? formatStrategicBriefSection(strategicBrief) : '';
+  const attachStrategic = shouldAttachStrategicBrief(cleanedInput, chairContext);
+  const strategicSection = attachStrategic && strategicBrief
+    ? formatStrategicBriefSection(strategicBrief)
+    : '';
+
   const contextPreamble = [
-    'CONTEXT FOR THIS TURN:',
+    personalTurn ? 'PERSONAL LIFE TURN — not a software build.' : 'LUMIN COUNSEL TURN.',
+    'HONESTY (mandatory):',
+    '- Do NOT invent your location, drive time, shop hours, calendar, or vehicle maintenance history unless explicitly listed under WHAT I KNOW FROM MEMORY or in verified search results below.',
+    '- If you lack city/ZIP or schedule data, say so and give national coupon links or ask one clarifying question.',
+    '- No Point B, founder success test, or LifeRE talk on personal errands unless Adam asked about the product.',
+    '- No numbered option menus unless he asked for options — answer like a chief of staff in plain prose.',
+    '',
     `- Domain: ${chairContext.domain || 'conversation'}`,
-    '- Adam is using LifeOS as his personal operating system AND command/control center.',
-    '- This is NOT a software build request unless he named product surfaces (HTML, routes, LifeRE, deploy, etc.).',
-    '- Answer the human question first — errands, coupons, timing, life decisions, strategy.',
-    '- Do NOT ask about target_file, LifeRE HTML, or builder surfaces for personal-life questions.',
     dual.dual
-      ? '- DUAL INTENT: he also hinted at a product/code change — answer the life part now; mention he can say "confirm build" for the code part.'
+      ? '- He may also want a code change later — answer life part now; mention "confirm build" only if product surfaces were named.'
       : '',
-    searchBlock ? `\nWeb search results (cite if useful):\n${searchBlock}` : '',
-    pointBTarget?.label ? `\nProgram anchor (background only): ${pointBTarget.label}` : '',
+    searchBlock ? `\nVerified / fallback links to use:\n${searchBlock}` : '',
+    !personalTurn && pointBTarget?.label ? `\nProgram anchor (only if relevant): ${pointBTarget.label}` : '',
   ].filter(Boolean).join('\n');
 
   const luminReply = await luminConverse(`${contextPreamble}\n\nAdam: ${cleanedInput}`);
@@ -59,15 +82,21 @@ export async function runLuminUnifiedTurn(cleanedInput, deps = {}, chairContext 
     ok: true,
     action: 'lumin',
     chair_domain: chairContext.domain || 'conversation',
+    personal_turn: personalTurn,
     command_truth: 'NO_COMMAND_RAN',
     pass_fail: 'NO_COMMAND_RAN',
     dual_intent: dual.dual ? { personal: true, build: true } : null,
     human_summary_technical: safeReply,
     conversation_sanitized: safeReply !== combined,
-    done_synopsis: 'Lumin — personal + counsel (no code executed unless you asked a separate build).',
-    next_synopsis: dual.dual
-      ? 'Reply with life follow-up, or "confirm build" + what to change in the product.'
-      : 'Keep talking — LifeOS handles life and code from this same front door.',
-    strategic_brief: strategicBrief,
+    done_synopsis: personalTurn
+      ? null
+      : 'Lumin — counsel (no code executed unless you asked a separate build).',
+    next_synopsis: personalTurn
+      ? null
+      : (dual.dual
+        ? 'Reply with follow-up, or "confirm build" + what to change in the product.'
+        : null),
+    strategic_brief: attachStrategic ? strategicBrief : null,
+    errand_search_block: searchBlock || null,
   };
 }

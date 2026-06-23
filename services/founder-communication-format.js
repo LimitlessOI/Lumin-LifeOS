@@ -2,6 +2,7 @@
  * SYNOPSIS: Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+import { shouldUsePersonalLuminCard } from './chair-lumin-personal-mode.js';
 
 function firstSentence(text, max = 160) {
   const t = String(text || '').trim();
@@ -79,6 +80,9 @@ export function formatFounderCard(truth = {}) {
 }
 
 export function wrapChairHumanSummary(truth, technicalReply) {
+  if (shouldUsePersonalLuminCard(truth)) {
+    return String(technicalReply || truth.human_summary || '').trim();
+  }
   const card = formatFounderCard({ ...truth, human_summary: technicalReply || truth.human_summary });
   const technical = String(technicalReply || '').trim();
   if (!technical || technical === card) return card;
