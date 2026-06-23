@@ -67,6 +67,7 @@ for (const [id, pattern] of [
 const routes = fs.readFileSync(path.join(ROOT, 'routes/lifere-os-routes.js'), 'utf8');
 step('AR-routes_outreach_execute', routes.includes('/outreach/execute'));
 step('AR-routes_deal_detail', routes.includes('getDealDetail'));
+step('AR-routes_alpha_cycle', routes.includes('/alpha/daily-cycle'));
 
 if (BASE) {
   const key = process.env.COMMAND_CENTER_KEY || process.env.COMMAND_KEY || '';
@@ -78,6 +79,11 @@ if (BASE) {
     });
     report.checks.live_e2e = { exit: r.status, base: BASE };
     step('AR-live_e2e', r.status === 0, r.stdout?.slice(-200));
+
+    const deep = await fetch(`${BASE}/api/v1/lifere/health/deep`, { headers: { 'x-command-key': key } });
+    const deepJson = await deep.json().catch(() => ({}));
+    report.checks.live_pg_deep = deepJson;
+    step('AR-live_pg_deep', deep.status === 200 && deepJson.pool === true);
   } else {
     report.warnings.push({ id: 'AR-W01', detail: 'LIFERE_ALPHA_BASE_URL set but no COMMAND_CENTER_KEY — skip live E2E' });
   }

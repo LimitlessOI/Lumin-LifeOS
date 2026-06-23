@@ -95,6 +95,9 @@ async function runApiCycle(baseUrl) {
 
   const brief = await request(baseUrl, 'GET', '/api/v1/lifere/chair/brief?user_id=adam');
   step('LRE-E2E-T09_chair_brief', brief.status === 200 && brief.json?.what_should_i_do_next != null);
+
+  const cycle = await request(baseUrl, 'POST', '/api/v1/lifere/alpha/daily-cycle', { user_id: 'adam', goal_gci: 30000 });
+  step('LRE-E2E-T10_alpha_daily_cycle', cycle.status === 200 && cycle.json?.ok === true && cycle.json?.steps?.every((s) => s.ok));
 }
 
 let local;

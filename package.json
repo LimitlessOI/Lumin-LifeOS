@@ -95,6 +95,7 @@
     "lifeos:lifere-alpha-gate": "node scripts/run-lifere-os-v1-acceptance.mjs && node scripts/run-lifere-alpha-e2e.mjs && node scripts/run-lifere-az-acceptance.mjs",
     "lifeos:lifere-self-audit": "node scripts/run-lifere-self-audit.mjs",
     "lifeos:lifere-alpha-readiness": "node scripts/run-lifere-alpha-readiness.mjs",
+    "lifeos:lifere-pg-verify": "node scripts/run-lifere-pg-verify.mjs",
     "lifeos:capture-pipeline:v2-acceptance": "node scripts/run-capture-pipeline-v2-acceptance.mjs",
     "lifeos:commitment-route:v2-acceptance": "node scripts/run-commitment-route-v2-acceptance.mjs",
     "lifeos:versions:overnight": "node scripts/lifeos-versions-overnight.mjs",

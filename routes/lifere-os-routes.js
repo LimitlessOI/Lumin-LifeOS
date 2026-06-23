@@ -39,6 +39,7 @@ import { createLifeREFollowUpOS } from '../services/lifere-follow-up-os.js';
 import { createLifeRELearningPipeline } from '../services/lifere-learning-pipeline.js';
 import { createLifeREChairService } from '../services/lifere-chair-service.js';
 import { createLifeRECommandCenter } from '../services/lifere-command-center.js';
+import { createLifeREAlphaDailyCycle } from '../services/lifere-alpha-daily-cycle.js';
 import { pickModel } from '../services/lifere-model-router.js';
 
 function userId(req) {
@@ -81,6 +82,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const commandCenter = createLifeRECommandCenter({ pool, logger });
   const chairService = createLifeREChairService({ pool });
   const learning = createLifeRELearningPipeline({ pool });
+  const alphaCycle = createLifeREAlphaDailyCycle({ pool, logger });
 
   router.get('/health', requireKey, (_req, res) => {
     res.json({
@@ -90,6 +92,49 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
       council_live: !!callCouncilMember,
       integrations: ['am08_outreach', 'am17_tc', 'am29_receptionist', 'vapi_ingest', 'boldtrail'],
     });
+  });
+
+  router.get('/health/deep', requireKey, async (_req, res) => {
+    const tables = [
+      'lifere_activity_log', 'lifere_approval_queue', 'lifere_call_logs',
+      'lifere_experiments', 'lifere_performance_snapshot',
+    ];
+    const pgTables = {};
+    if (pool) {
+      for (const t of tables) {
+        try {
+          const { rows } = await pool.query(
+            `SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name=$1) AS ok`,
+            [t],
+          );
+          pgTables[t] = rows[0]?.ok === true;
+        } catch {
+          pgTables[t] = false;
+        }
+      }
+    }
+    res.json({
+      ok: true,
+      pool: !!pool,
+      pg_tables: pgTables,
+      pg_ready: pool ? Object.values(pgTables).every(Boolean) : null,
+      label: pool && Object.values(pgTables).every(Boolean) ? 'KNOW' : 'THINK',
+    });
+  });
+
+  router.post('/alpha/daily-cycle', requireKey, async (req, res) => {
+    try {
+      const result = await alphaCycle.runDailyCycle({
+        userId: userId(req),
+        tenantId: tenantId(req),
+        goalGci: Number(req.body?.goal_gci) || 30000,
+        activityCounts: req.body?.activity_counts,
+        debriefNotes: req.body?.debrief_notes,
+      });
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.get('/boldtrail/status', requireKey, async (_req, res) => {

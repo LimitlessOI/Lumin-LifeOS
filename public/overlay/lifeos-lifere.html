@@ -163,6 +163,11 @@
       <p id="lifere-dateline">Loading…</p>
     </header>
 
+    <div class="actions" style="margin-bottom:16px">
+      <button type="button" class="btn btn-primary" id="lifere-alpha-cycle-btn" data-lifere="alpha-daily-cycle">Run Alpha Daily Cycle</button>
+      <button type="button" class="btn" id="lifere-refresh">Refresh</button>
+    </div>
+
     <div class="boldtrail-strip" data-lifere="boldtrail-sync" id="lifere-boldtrail-strip">
       <span class="boldtrail-pill warn" id="lifere-bt-status">BoldTrail: checking…</span>
       <span class="boldtrail-pill" id="lifere-bt-new">New: —</span>
@@ -196,7 +201,6 @@
       </div>
       <div class="actions">
         <button type="button" class="btn btn-primary" id="lifere-run-debrief">Generate debrief draft</button>
-        <button type="button" class="btn" id="lifere-refresh">Refresh command center</button>
       </div>
       <p class="status-line" id="lifere-status"></p>
     </section>
@@ -469,6 +473,30 @@
 
       document.getElementById('lifere-run-debrief').addEventListener('click', runDebrief);
       document.getElementById('lifere-refresh').addEventListener('click', loadCommandCenter);
+
+      document.getElementById('lifere-alpha-cycle-btn')?.addEventListener('click', async () => {
+        statusEl.textContent = 'Running alpha daily cycle…';
+        try {
+          const res = await apiFetch('/api/v1/lifere/alpha/daily-cycle', {
+            method: 'POST',
+            body: JSON.stringify({
+              user_id: 'adam',
+              goal_gci: 30000,
+              activity_counts: { conversations: 8, calls: 3, appointments_set: 1 },
+              debrief_notes: 'Alpha test cycle from UI',
+            }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error('Cycle incomplete');
+          renderPriorities(data.daily_focus || data.top_3);
+          renderDebrief(data.debrief);
+          statusEl.textContent = `Alpha cycle PASS — ${data.steps?.length || 0} steps`;
+          await loadPerformance();
+          await loadApprovalQueue();
+        } catch (err) {
+          statusEl.textContent = `Alpha cycle failed: ${err.message}`;
+        }
+      });
 
       document.querySelectorAll('.tab-btn').forEach((btn) => {
         btn.addEventListener('click', () => {

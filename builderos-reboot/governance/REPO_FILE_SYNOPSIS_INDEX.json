@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-23T18:50:27.199Z",
+  "generated_at": "2026-06-23T18:52:14.743Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12282,
+  "file_count": 12284,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41317,9 +41317,9 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 8134,
-      "mtime": "2026-06-23T18:49:41.014Z",
-      "indexed_at": "2026-06-23T18:50:27.199Z"
+      "bytes": 8337,
+      "mtime": "2026-06-23T18:52:09.539Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -68726,9 +68726,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 21030,
-      "mtime": "2026-06-23T18:49:39.590Z",
-      "indexed_at": "2026-06-23T18:50:27.199Z",
+      "bytes": 21102,
+      "mtime": "2026-06-23T18:51:21.968Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z",
       "synopsis_index_only": true
     },
     {
@@ -69924,9 +69924,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 31966,
-      "mtime": "2026-06-23T11:53:19.744Z",
-      "indexed_at": "2026-06-23T11:53:44.224Z"
+      "bytes": 33181,
+      "mtime": "2026-06-23T18:51:14.279Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -71286,9 +71286,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 29028,
-      "mtime": "2026-06-23T11:53:15.691Z",
-      "indexed_at": "2026-06-23T11:53:44.224Z",
+      "bytes": 30537,
+      "mtime": "2026-06-23T18:51:08.217Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -73118,9 +73118,9 @@
     {
       "path": "scripts/run-lifere-alpha-e2e.mjs",
       "synopsis": "LifeRE Alpha E2E — founder success test at API layer (daily + top-3 + debrief).",
-      "bytes": 4988,
-      "mtime": "2026-06-23T11:48:35.374Z",
-      "indexed_at": "2026-06-23T11:49:51.364Z",
+      "bytes": 5242,
+      "mtime": "2026-06-23T18:51:15.276Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -73128,9 +73128,9 @@
     {
       "path": "scripts/run-lifere-alpha-readiness.mjs",
       "synopsis": "LifeRE alpha readiness — machine gate for founder alpha testing.",
-      "bytes": 3746,
-      "mtime": "2026-06-23T18:50:13.067Z",
-      "indexed_at": "2026-06-23T18:50:27.199Z",
+      "bytes": 4100,
+      "mtime": "2026-06-23T18:51:59.040Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -73156,11 +73156,21 @@
       ]
     },
     {
+      "path": "scripts/run-lifere-pg-verify.mjs",
+      "synopsis": "Verify LifeRE Postgres tables exist (local DATABASE_URL or skip).",
+      "bytes": 2436,
+      "mtime": "2026-06-23T18:51:58.271Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
       "path": "scripts/run-lifere-runtime-integration.mjs",
       "synopsis": "LifeRE runtime integration smoke — exercises services without HTTP.",
-      "bytes": 5315,
-      "mtime": "2026-06-23T11:53:29.839Z",
-      "indexed_at": "2026-06-23T11:53:44.224Z",
+      "bytes": 5590,
+      "mtime": "2026-06-23T18:51:22.413Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -73168,9 +73178,9 @@
     {
       "path": "scripts/run-lifere-self-audit.mjs",
       "synopsis": "LifeRE self-audit — coder gap scan with machine receipts.",
-      "bytes": 3593,
-      "mtime": "2026-06-23T11:53:30.078Z",
-      "indexed_at": "2026-06-23T11:53:44.224Z",
+      "bytes": 3667,
+      "mtime": "2026-06-23T18:51:20.649Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -87198,6 +87208,16 @@
       "indexed_at": "2026-06-21T22:31:43.118Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-alpha-daily-cycle.js",
+      "synopsis": "LifeRE alpha daily cycle — one-shot founder success test orchestration.",
+      "bytes": 2767,
+      "mtime": "2026-06-23T18:51:36.132Z",
+      "indexed_at": "2026-06-23T18:52:14.743Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
       ]
     },
     {
