@@ -31,6 +31,7 @@ import {
   buildQuorumFailureEnvelope,
   recordFounderEscalationLesson,
 } from './founder-build-quorum-escalation.js';
+import { enforceBeforeBuilderDispatch, formatUnifiedGateBlockSummary } from './founder-packet-v2-unified-gate.js';
 
 export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = FOUNDER_SOLO_ATTEMPT_MAX;
 const POST_JSON_TIMEOUT_MS = Number(process.env.FOUNDER_POST_JSON_TIMEOUT_MS || '120000');
@@ -443,6 +444,27 @@ export async function runFounderBuildWithSelfRepair(options) {
   const base = String(baseUrl || '').replace(/\/$/, '');
   const headers = { 'Content-Type': 'application/json', 'x-command-key': commandKey };
   let currentTask = String(task || '').trim();
+
+  const fpV2Gate = await enforceBeforeBuilderDispatch({
+    task: currentTask,
+    pool,
+    callAI: callCouncilMember,
+    confirmIntent: options.confirmIntent === true,
+    platformGapFill: options.platform_gap_fill === true,
+    platformGapFillReason: options.platform_gap_fill_reason,
+  });
+  if (!fpV2Gate.execute_cleared) {
+    const blocker = fpV2Gate.violations?.[0] || 'BLOCKED_FOUNDER_PACKET_V2';
+    const failure = enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: blocker,
+      failure_code: 'BLOCKED_FOUNDER_PACKET_V2',
+      human_summary: formatUnifiedGateBlockSummary(fpV2Gate),
+      execution_path: 'founder_build_self_repair',
+    }, { action: 'build', task: currentTask });
+    return { ...failure, fp_v2_gate: fpV2Gate };
+  }
 
   if (isCssOnlyUiFeedback(currentTask)) {
     return runCssPatchWithVerification({

@@ -161,6 +161,8 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-13 | **`services/railway-managed-env-service.js`** — allowlist FP V2 production env keys (`CHAIR_PREDICTION_SCORE_ENABLED`, `LANE_INTEL_*`, search API keys). | Managed-env bulk can enable scoreboard + lane intel on Railway. | ✅ | `npm run system:fp-v2:production-env` |
+| 2026-06-13 | **`execute-mission.mjs`** — IDC exit gate before builder entry (pairs with unified FP V2 mission gate). | Close CLI bypass on mission execute spawn paths. | ✅ verify-chair-fp-v2 | deploy |
 | 2026-06-22 | **`services/founder-packet-v2-unified-gate.js`** + **`factory-arc-loader.js`** — FP V2 end-to-end: live Chair + IDC exit + builder entry on all execute paths; council `/build`, founder routeToBuilder, terminal bridge gated. | Adam: full Founder Packet V2 enforcement not just Chair prompt. | ✅ unified gate tests | deploy |
 | 2026-06-22 | **`services/obstacle-web-research.js`** tracked — imported by point-b-navigator at boot; was local-only. Dockerfile spine file asserts added. | Same class of boot crash as quorum-escalation — wired but not in git. | ✅ node --check | deploy |
 | 2026-06-20 | **Railway boot fix:** `services/repo-root.js`, `services/point-b-target-lite.js`, `services/factory-arc-loader.js` — production spine lazy-loads factory-staging; point-b-navigator + bp-priority-scheduler no longer static-import arc modules at boot. `Dockerfile` RUN verifies `run-step.js` in image. | Railway healthcheck fail: ERR_MODULE_NOT_FOUND run-step.js — dockerignore had excluded factory-staging. | ✅ boot import test | deploy |

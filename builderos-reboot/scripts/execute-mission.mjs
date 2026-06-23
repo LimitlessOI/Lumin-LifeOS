@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { runBuilderPreBuildSimulate } from './builder-pre-build-simulate.mjs';
 import { evaluatePointBGate } from '../../factory-staging/factory-core/arc/point-b-gate.js';
 import { evaluateBuilderEntryGate } from '../../factory-staging/factory-core/arc/foundation/builder-entry-gate.js';
+import { evaluateIdcExitGate } from '../../factory-staging/factory-core/arc/foundation/idc-exit-gate.js';
 import { appendMissionLedger } from '../../factory-staging/factory-core/arc/foundation/mission-ledger.js';
 import { founderStopActive, isHardGate } from '../../factory-staging/factory-core/arc/gate-enforcement.js';
 import { scoreRealityAgainstSimulations } from '../../factory-staging/factory-core/arc/foundation/reality-score.js';
@@ -52,6 +53,20 @@ const intakeGate = runBpbIntakeGate(missionId, { skip_if_missing: true });
 if (intakeGate && !intakeGate.ok && intakeGate.status !== 'SKIP') {
   console.error('BLOCKED — BPB intake gate failed:');
   for (const v of intakeGate.violations || []) console.error(`  - ${v}`);
+  process.exit(1);
+}
+
+const idcExit = evaluateIdcExitGate(missionFolder);
+if (!idcExit.pass) {
+  console.error('BLOCKED_RETURN_TO_IDC — IDC exit gate failed:');
+  for (const v of idcExit.violations) console.error(`  - ${v}`);
+  appendMissionLedger({
+    mission_id: missionId,
+    event: 'idc_exit_gate_fail',
+    runner: 'execute-mission.mjs',
+    verdict: 'BLOCKED',
+    violations: idcExit.violations,
+  });
   process.exit(1);
 }
 

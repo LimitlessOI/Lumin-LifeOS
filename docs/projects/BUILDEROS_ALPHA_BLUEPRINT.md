@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-13 | **`services/founder-build-self-repair.js`** — `enforceBeforeBuilderDispatch` at loop entry; **`routes/lifeos-builderos-command-control-routes.js`** — `POST /founder-interface/confirm-usability`. | Close founder build + usability bypass gaps. | ✅ | deploy |
 | 2026-06-22 | **`routes/lifeos-builderos-command-control-routes.js`** — FP V2 unified gate on `routeToBuilder` + `runTerminalBridgeIntake`. | Close builder bypass outside Chair. | ✅ | deploy |
 | 2026-06-22 | Lumin counsel system prompt cites Founder Packet V2 + `chair-founder-packet-v2-enforcement.js` (strategic offers, forecast receipts, scoreboard). | Adam: FP V2 is Chair law on live founder interface. | ✅ chair tests | deploy |
 | 2026-06-22 | **`routes/lifeos-builderos-command-control-routes.js`** — `confirm_intent` + `isFounderConfirmIntent()` bypass clarify gate; pairs with `founder-intent-clarify.js`. | Founder must confirm before builder runs on ambiguous asks. | ✅ tests | deploy |

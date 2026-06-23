@@ -6,7 +6,7 @@
   "amendment": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
   "status": "active",
   "build_ready": true,
-  "last_updated": "2026-06-22",
-  "last_receipt": "2026-06-20 railway-boot-factory-arc-loader",
-  "last_change_summary": "Lazy factory-arc-loader + repo-root — Railway boot decoupling"
+  "last_updated": "2026-06-13",
+  "last_receipt": "2026-06-13 fp-v2-gap-closure",
+  "last_change_summary": "FP V2 mission CLI gate, Hist auto-score, founder usability confirm, builder API gates"
 }

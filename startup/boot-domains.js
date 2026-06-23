@@ -179,8 +179,8 @@ async function bootLifeOSScheduled(deps) {
 // ── Lane intel (Horizon + Red-team) — Amendment 36 ────────────────────────────
 async function bootChairPredictionScore(deps) {
   const { logger } = deps;
-  if (process.env.CHAIR_PREDICTION_SCORE_ENABLED !== '1') {
-    logger?.info?.('[BOOT] Chair prediction score tick OFF (set CHAIR_PREDICTION_SCORE_ENABLED=1)');
+  if (process.env.CHAIR_PREDICTION_SCORE_ENABLED === '0') {
+    logger?.info?.('[BOOT] Chair prediction score tick OFF (CHAIR_PREDICTION_SCORE_ENABLED=0)');
     return;
   }
   try {
@@ -194,13 +194,12 @@ async function bootChairPredictionScore(deps) {
 
 async function bootLaneIntel(deps) {
   const { pool, logger, callCouncilMember } = deps;
-  // Budget / launch gate — no Horizon or Red-team ticks unless explicitly enabled (costs tokens + npm CPU).
-  if (process.env.LANE_INTEL_ENABLED !== '1') {
-    logger?.info?.('[BOOT] Lane intel execution OFF (set LANE_INTEL_ENABLED=1 after launch/budget approval)');
+  if (process.env.LANE_INTEL_ENABLED === '0') {
+    logger?.info?.('[BOOT] Lane intel execution OFF (LANE_INTEL_ENABLED=0)');
     return;
   }
-  if (process.env.LANE_INTEL_ENABLE_SCHEDULED !== '1') {
-    logger?.info?.('[BOOT] Lane intel schedulers off (set LANE_INTEL_ENABLE_SCHEDULED=1 to enable ticks)');
+  if (process.env.LANE_INTEL_ENABLE_SCHEDULED === '0') {
+    logger?.info?.('[BOOT] Lane intel schedulers off (LANE_INTEL_ENABLE_SCHEDULED=0)');
     return;
   }
   try {

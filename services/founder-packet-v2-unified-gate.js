@@ -10,6 +10,8 @@ import { loadPointBTarget } from './point-b-target-lite.js';
 import { extractMissionIdFromText } from './lifeos-mission-pipeline-executor.js';
 import { assessChairIntentUnderstanding } from './chair-intent-protocol.js';
 import { loadFactoryArcModules } from './factory-arc-loader.js';
+import { evaluateIdcExitGate } from '../factory-staging/factory-core/arc/foundation/idc-exit-gate.js';
+import { evaluateBuilderEntryGate } from '../factory-staging/factory-core/arc/foundation/builder-entry-gate.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MISSIONS_ROOT = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS');
@@ -118,6 +120,10 @@ export async function enforceFounderPacketV2Unified({
     violations.push(
       'MISSION_BOUNDARY — CODE_EXECUTE requires mission_id on active BP mission or platform_gap_fill with reason (Founder Packet V2)',
     );
+  } else if (isExecute && gapOk && !confirmIntent) {
+    violations.push(
+      'PLATFORM_GAP_FILL requires confirm_intent from founder (Founder Packet V2 — no ad-hoc bypass)',
+    );
   }
 
   const missionGatesPass = !isExecute
@@ -151,6 +157,65 @@ export async function enforceFounderPacketV2Unified({
     pre_arc_bundle: preArcBundle,
     mission_id: resolvedMissionId,
     understanding: resolvedUnderstanding,
+  };
+}
+
+/**
+ * Sync mission IDC + builder gate for CLI spawn paths (execute-mission, Point B navigator).
+ */
+export function evaluateMissionFpV2GateSync(missionFolder) {
+  if (!missionFolder || !fs.existsSync(missionFolder)) {
+    return {
+      pass: false,
+      blocker: 'BLOCKED_FOUNDER_PACKET_V2',
+      violations: ['MISSION_FOLDER_MISSING'],
+      idc_exit: null,
+      builder_entry: null,
+      pre_arc_bundle: null,
+    };
+  }
+
+  const missionId = path.basename(missionFolder);
+  const idcExit = evaluateIdcExitGate(missionFolder);
+  const builderEntry = evaluateBuilderEntryGate(missionFolder);
+  const violations = [
+    ...(idcExit.pass ? [] : idcExit.violations.map((v) => `IDC_EXIT:${v}`)),
+    ...(builderEntry.pass ? [] : builderEntry.violations.map((v) => `BUILDER_ENTRY:${v}`)),
+  ];
+
+  const preArcBundle = {
+    schema: 'pre_arc_live_bundle_v1',
+    mission_id: missionId,
+    at: new Date().toISOString(),
+    idc_exit: idcExit,
+    builder_entry: builderEntry,
+    source: 'evaluateMissionFpV2GateSync',
+  };
+  fs.mkdirSync(LIVE_DIR, { recursive: true });
+  fs.writeFileSync(
+    path.join(LIVE_DIR, 'PRE_ARC_LIVE_BUNDLE.json'),
+    `${JSON.stringify(preArcBundle, null, 2)}\n`,
+  );
+  appendJsonl(path.join(LIVE_DIR, 'unified-gate.jsonl'), {
+    schema: 'fp_v2_unified_gate_v1',
+    at: new Date().toISOString(),
+    channel: 'mission_cli',
+    mission_id: missionId,
+    execute_cleared: violations.length === 0,
+    violations,
+    idc_pass: idcExit.pass,
+    builder_entry_pass: builderEntry.pass,
+  });
+
+  return {
+    pass: violations.length === 0,
+    execute_cleared: violations.length === 0,
+    blocker: violations.length ? 'BLOCKED_FOUNDER_PACKET_V2' : null,
+    violations,
+    idc_exit: idcExit,
+    builder_entry: builderEntry,
+    pre_arc_bundle: preArcBundle,
+    mission_id: missionId,
   };
 }
 
@@ -192,7 +257,7 @@ export async function enforceBeforeBuilderDispatch({
     missionId,
     pool,
     callAI,
-    confirmIntent,
+    confirmIntent: confirmIntent || gapOk,
     channel: 'builder_api',
     platformGapFill: gapOk,
   });

@@ -46,4 +46,13 @@ test('blocks execute without mission and without gap fill', async () => {
   assert.ok(result.violations.some((v) => /INTENT_AMBIGUITY|MISSION_BOUNDARY|LISTEN_ONLY/i.test(v)));
 });
 
+test('evaluateMissionFpV2GateSync passes LifeRE mission folder', async () => {
+  const { evaluateMissionFpV2GateSync } = await import('../services/founder-packet-v2-unified-gate.js');
+  const folder = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001');
+  const gate = evaluateMissionFpV2GateSync(folder);
+  assert.equal(gate.idc_exit?.pass, true);
+  assert.equal(gate.builder_entry?.pass, true);
+  assert.equal(gate.pass, true);
+});
+
 console.log('✅ founder-packet-v2-unified-gate.test.js passed');

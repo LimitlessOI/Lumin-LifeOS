@@ -1078,6 +1078,27 @@ export function createLifeOSCouncilBuilderRoutes({
       return res.status(400).json({ ok: false, error: 'task is required' });
     }
 
+    const executionOnly = execution_only === true;
+    if (mode === 'code' && !executionOnly) {
+      const fpV2Gate = await enforceBeforeBuilderDispatch({
+        task,
+        missionId: req.body?.mission_id,
+        pool,
+        callAI: callCouncilMember,
+        confirmIntent: req.body?.confirm_intent === true,
+        platformGapFill: req.body?.platform_gap_fill === true,
+        platformGapFillReason: req.body?.platform_gap_fill_reason,
+      });
+      if (!fpV2Gate.execute_cleared) {
+        return res.status(422).json({
+          ok: false,
+          error: 'BLOCKED_FOUNDER_PACKET_V2',
+          violations: fpV2Gate.violations,
+          detail: formatUnifiedGateBlockSummary(fpV2Gate),
+        });
+      }
+    }
+
     let domainContext = '';
     let domainLoaded = false;
     if (domain) {
@@ -1096,7 +1117,6 @@ export function createLifeOSCouncilBuilderRoutes({
       log.info({ count: filesInjectSummaries.length, paths: filesInjectSummaries.map(s => s.path) }, '[BUILDER] Injected repo file bodies for files[]');
     }
 
-    const executionOnly = execution_only === true;
     const routingKey =
       mode === 'code' && executionOnly && !model
         ? 'council.builder.code_execute'
@@ -1510,9 +1530,28 @@ export function createLifeOSCouncilBuilderRoutes({
   // §2.11: This is the step that makes the SYSTEM the author, not the Conductor.
 
   async function executeOutput(req, res) {
-    const { output, target_file, commit_message, branch } = req.body || {};
+    const { output, target_file, commit_message, branch, task: bodyTask, mission_id: bodyMissionId } = req.body || {};
     if (!output) return res.status(400).json({ ok: false, error: 'output is required' });
     if (!target_file) return res.status(400).json({ ok: false, error: 'target_file is required' });
+
+    const fpV2Gate = await enforceBeforeBuilderDispatch({
+      task: bodyTask || `commit ${target_file}`,
+      missionId: bodyMissionId,
+      pool,
+      callAI: callCouncilMember,
+      confirmIntent: req.body?.confirm_intent === true,
+      platformGapFill: req.body?.platform_gap_fill === true,
+      platformGapFillReason: req.body?.platform_gap_fill_reason,
+    });
+    if (!fpV2Gate.execute_cleared) {
+      return res.status(422).json({
+        ok: false,
+        error: 'BLOCKED_FOUNDER_PACKET_V2',
+        violations: fpV2Gate.violations,
+        detail: formatUnifiedGateBlockSummary(fpV2Gate),
+        committed: false,
+      });
+    }
 
     if (typeof commitToGitHub !== 'function') {
       const gapRecommendation = await recordBuilderGap({
@@ -1829,6 +1868,7 @@ export function createLifeOSCouncilBuilderRoutes({
       missionId: taskBody.mission_id,
       pool,
       callAI: callCouncilMember,
+      confirmIntent: taskBody.confirm_intent === true,
       platformGapFill: taskBody.platform_gap_fill === true,
       platformGapFillReason: taskBody.platform_gap_fill_reason,
     });

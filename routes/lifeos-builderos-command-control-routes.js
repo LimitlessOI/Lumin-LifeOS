@@ -51,6 +51,10 @@ import {
   formatUnifiedGateBlockSummary,
 } from '../services/founder-packet-v2-unified-gate.js';
 import { loadPointBTarget } from '../services/point-b-target-lite.js';
+import {
+  confirmFounderUsability,
+  scorePredictionsForMissionUsability,
+} from '../services/founder-usability-confirm.js';
 
 export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
@@ -979,6 +983,41 @@ HOW TO RESPOND:
         ok: true,
         point_b: pointB,
         human_summary: formatPointBStatusSummary(pointB),
+      });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/founder-interface/confirm-usability', requireFounderInterfaceAuth, async (req, res) => {
+    try {
+      const role = String(req.lifeosUser?.role || '').toLowerCase();
+      if (!EXECUTE_ALLOWED_ROLES.has(role)) {
+        return res.status(403).json({
+          ok: false,
+          error: 'ROLE_FORBIDDEN',
+          reason: 'Only founder/operator roles may confirm usability',
+        });
+      }
+      const missionId = req.body?.mission_id ? String(req.body.mission_id) : null;
+      const pass = req.body?.pass === true;
+      const quote = typeof req.body?.quote === 'string' ? req.body.quote.trim() : '';
+      const result = confirmFounderUsability({
+        missionId,
+        pass,
+        quote,
+        actor: req.lifeosUser?.email || req.lifeosUser?.id || role,
+      });
+      if (!result.ok) {
+        return res.status(422).json(result);
+      }
+      const scored = await scorePredictionsForMissionUsability(missionId, { pass, quote });
+      return res.status(200).json({
+        ...result,
+        prediction_scoring: scored,
+        human_summary: pass
+          ? `Founder usability PASS recorded for ${missionId}. Point B may be reached if all gates clear.`
+          : `Founder usability FAIL recorded for ${missionId}. Alpha claim blocked until you pass.`,
       });
     } catch (err) {
       return res.status(500).json({ ok: false, error: err.message });

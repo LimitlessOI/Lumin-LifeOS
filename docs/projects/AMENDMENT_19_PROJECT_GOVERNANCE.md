@@ -3,7 +3,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-22 — boot-domains registers Chair prediction score scheduler (FP V2 scoreboard loop).
+**Last Updated:** 2026-06-13 — FP V2 boot defaults ON for prediction score + lane intel (opt-out only).
 
 | Field | Value |
 |---|---|
@@ -204,6 +204,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-06-13 | **`startup/boot-domains.js`** — FP V2 boot defaults ON: Chair prediction score + lane intel schedulers (opt-out `CHAIR_PREDICTION_SCORE_ENABLED=0` / `LANE_INTEL_*=0`). | Adam: always-on scoreboard + competitor monitoring unless explicitly disabled. | ✅ preflight | deploy |
 | 2026-06-17 | **`startup/boot-domains.js`** — added `import { startBpPriorityScheduler }` + `bootBuilderOSPriorityQueue(deps)` function + wired to `Promise.allSettled` in `bootAllDomains`. Requires `BUILDEROS_AUTOPILOT=1` env var to activate. | BuilderOS BP_PRIORITY queue needed to run autonomously on Railway without founder present; scheduler enabled via env flag to prevent unintended burns. | AM19 boot wiring | pending Railway env set + deploy |
 | 2026-06-21 | **`startup/register-runtime-routes.js`** — pass `commitManyToGitHub` into council builder routes for `POST /builder/execute-batch` (atomic multi-file founder CSS commits). | Founder CSS patch used 4 sequential commits — partial deploy state. | AM19 wiring | deploy |
 | 2026-06-20 | **`startup/register-runtime-routes.js`** — Founder Interface security wiring: ensured `createLifeOSBuilderOSCommandControlRoutes` mounts before generic key-only route groups so JWT role middleware runs first for founder-interface endpoints; disabled active Voice Rail route mount and logged retirement warning path so runtime stays history-only for Voice Rail. | Founder Interface execute/login flow was being intercepted by legacy `requireKey` middleware ordering, causing auth false-negatives and role gates to fail; Voice Rail must remain retired as a non-runtime authority path. | AM19 runtime composition | pending deploy |

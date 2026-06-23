@@ -872,8 +872,8 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-22",
-  "last_receipt": "2026-06-20 railway-boot-repo-root",
+  "last_updated": "2026-06-13",
+  "last_receipt": "2026-06-13 fp-v2-gap-closure",
   "last_change_summary": "Production spine repo-root — no factory-staging static boot import"
   "last_change_summary": "LifeRE daily command center syncs BoldTrail EXP pipeline with approval-gated follow-up write-back",
   "ssot_receipt_tail": "Voice Rail auto-stages to Action Inbox; approved inbox commitments route to lifeos_commitments."

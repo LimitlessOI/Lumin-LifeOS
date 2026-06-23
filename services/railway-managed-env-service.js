@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Exports createRailwayManagedEnvService — services/railway-managed-env-service.js.
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import crypto from "crypto";
 import { encrypt, decrypt } from "../core/tco-encryption.js";
@@ -48,6 +49,14 @@ const DEFAULT_ALLOWED_KEYS = new Set([
   "IMAP_PASS",
   "IMAP_PORT",
   "FOUNDER_INTERFACE_ALLOW_KEY_FALLBACK",
+  "CHAIR_PREDICTION_SCORE_ENABLED",
+  "LANE_INTEL_ENABLED",
+  "LANE_INTEL_ENABLE_SCHEDULED",
+  "LANE_INTEL_TICK_MS",
+  "LANE_INTEL_HORIZON_COOLDOWN_DAYS",
+  "LANE_INTEL_REDTEAM_COOLDOWN_DAYS",
+  "BRAVE_SEARCH_API_KEY",
+  "PERPLEXITY_API_KEY",
 ]);
 
 const BLOCKED_KEYS = new Set([

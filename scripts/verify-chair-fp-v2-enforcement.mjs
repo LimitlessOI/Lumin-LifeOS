@@ -34,9 +34,31 @@ if (!orchestrator.includes('enforceFounderPacketV2Unified')) {
 if (!fs.existsSync(path.join(ROOT, 'services/founder-packet-v2-unified-gate.js'))) {
   fail('founder-packet-v2-unified-gate.js missing');
 }
+const unifiedGate = read('services/founder-packet-v2-unified-gate.js');
+if (!unifiedGate.includes('evaluateMissionFpV2GateSync')) {
+  fail('founder-packet-v2-unified-gate.js must export evaluateMissionFpV2GateSync');
+}
+const executeMission = read('builderos-reboot/scripts/execute-mission.mjs');
+if (!executeMission.includes('evaluateIdcExitGate')) {
+  fail('execute-mission.mjs must run IDC exit gate before builder execute');
+}
+const pointBNav = read('services/point-b-navigator.js');
+if (!pointBNav.includes('evaluateMissionFpV2GateSync')) {
+  fail('point-b-navigator.js must gate run_execute_mission via FP V2 mission gate');
+}
 const councilBuilder = read('routes/lifeos-council-builder-routes.js');
 if (!councilBuilder.includes('enforceBeforeBuilderDispatch')) {
   fail('lifeos-council-builder-routes.js /build must use enforceBeforeBuilderDispatch');
+}
+if (!councilBuilder.includes("mode === 'code' && !executionOnly")) {
+  fail('lifeos-council-builder-routes.js /task must gate code mode via enforceBeforeBuilderDispatch');
+}
+if (!fs.existsSync(path.join(ROOT, 'services/founder-usability-confirm.js'))) {
+  fail('founder-usability-confirm.js missing');
+}
+const histScore = read('services/chair-prediction-score-scheduler.js');
+if (!histScore.includes('hist_auto_score') && !histScore.includes('scoreOnePrediction')) {
+  fail('chair-prediction-score-scheduler.js must auto-score predictions against reality');
 }
 if (!orchestrator.includes('chairFpV2BlockResponse')) {
   fail('lumin-chair-orchestrator.js must block execute on FP V2 failure');

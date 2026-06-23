@@ -13,6 +13,7 @@ import { loadPointBTarget } from './point-b-target-lite.js';
 import { loadFactoryArcModules } from './factory-arc-loader.js';
 import { runFoundationPipelineForFounder } from './lifeos-mission-pipeline-executor.js';
 import { researchObstacleBlocker } from './obstacle-web-research.js';
+import { evaluateMissionFpV2GateSync } from './founder-packet-v2-unified-gate.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXECUTE_MISSION = path.join(REPO_ROOT, 'builderos-reboot/scripts/execute-mission.mjs');
@@ -276,6 +277,20 @@ export async function runPointBNextAction(status, { asyncSpawn = true, callAI } 
     }
 
     case 'run_execute_mission': {
+      const target = loadPointBTarget();
+      const folder = missionFolder(missionId, target);
+      const missionGate = evaluateMissionFpV2GateSync(folder);
+      if (!missionGate.pass) {
+        return {
+          ok: false,
+          async: false,
+          action: status.next_action,
+          reason: 'BLOCKED_FOUNDER_PACKET_V2',
+          violations: missionGate.violations,
+          idc_exit: missionGate.idc_exit,
+          builder_entry: missionGate.builder_entry,
+        };
+      }
       if (asyncSpawn) {
         spawnDetached(process.execPath, [EXECUTE_MISSION, missionId]);
         return { ok: true, async: true, action: status.next_action, execution_path: 'execute_mission' };
