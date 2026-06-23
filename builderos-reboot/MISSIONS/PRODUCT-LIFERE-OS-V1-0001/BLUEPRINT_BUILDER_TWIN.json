@@ -1,0 +1,121 @@
+{
+  "schema": "blueprint_builder_twin_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "authority": "This file is the machine-readable build twin. Doctrine: docs/LIFERE_BUILDER_DIGITAL_TWIN.md. Coder builds FROM this twin — not retroactive receipts.",
+  "updated_at": "2026-06-13",
+  "git_sha_anchor": "872e6b53b7",
+  "program_state": {
+    "mechanical_point_b": "complete",
+    "runtime_w1_w6": "shipped",
+    "alpha_testing": "ready",
+    "founder_usability": "blocked",
+    "label": "Alpha runtime active — founder gate open"
+  },
+  "primary_metric": "founder_usability_pass",
+  "acceptance_commands": {
+    "machine_gate": "npm run lifeos:lifere-alpha-gate",
+    "alpha_readiness": "npm run lifeos:lifere-alpha-readiness",
+    "self_audit": "npm run lifeos:lifere-self-audit",
+    "founder_success_test": "Open /overlay/lifeos-lifere.html → Run Alpha Daily Cycle"
+  },
+  "waves": {
+    "W1": {
+      "name": "Performance Twin + command center",
+      "status": "shipped",
+      "services": ["lifere-performance-twin.js", "lifere-command-center.js", "lifere-alpha-daily-cycle.js"],
+      "ui": ["daily-command-center", "top-3", "nightly-debrief", "alpha-daily-cycle"],
+      "remaining": []
+    },
+    "W2": {
+      "name": "Permissions + approval + client comms",
+      "status": "shipped",
+      "services": ["lifere-permission-twin.js", "lifere-client-comms.js", "lifere-outreach-bridge.js"],
+      "routes": ["/approval-queue", "/approval-queue/:id/resolve", "/client-comms/*"],
+      "remaining": ["Prove real SMS/email delivery with production creds"]
+    },
+    "W3": {
+      "name": "Personality + coaching",
+      "status": "shipped_partial",
+      "services": ["lifere-personality-calibration.js", "lifere-skill-coaching.js"],
+      "remaining": ["Full 24-module drill UX polish"]
+    },
+    "W4": {
+      "name": "Marketing + SocialMediaOS",
+      "status": "shipped_partial",
+      "services": [
+        "lifere-marketing-module.js",
+        "lifere-social-engagement.js",
+        "lifere-socialmediaos-bridge.js",
+        "marketing-coach.js",
+        "marketing-content-engine.js"
+      ],
+      "routes": [
+        "/api/v1/lifere/marketing/*",
+        "/api/v1/lifere/marketing/socialmediaos/*"
+      ],
+      "integration": {
+        "am41_adapter": "lifere-socialmediaos-bridge.js",
+        "data_wall": "Am41 services must not import LifeRE PG — adapter only",
+        "publish_gate": "All social posts → lifere_approval_queue → outreach/BoldTrail"
+      },
+      "remaining": [
+        "Mount standalone Am41 spine at /api/v1/marketing/* (Phase 1 orphan routes)",
+        "YouTube API creds for research",
+        "ClickFunnels webhook creds",
+        "Auto-publish Phase 5 (approval-only today)"
+      ]
+    },
+    "W5": {
+      "name": "Buyer/seller + TC + outreach + receptionist",
+      "status": "shipped_partial",
+      "services": [
+        "lifere-deal-side-os.js",
+        "lifere-transaction-surface.js",
+        "lifere-receptionist-bridge.js",
+        "lifere-outreach-scheduler.js"
+      ],
+      "remaining": [
+        "TC list uses address column (fixed) — verify with real tc_transactions rows",
+        "Outreach user_id resolves via lifeos_users (fixed)",
+        "Deep BoldTrail CRM write-back beyond notes",
+        "Sherry login provisioning"
+      ]
+    },
+    "W6": {
+      "name": "Founder extensions + scenario + learning + council",
+      "status": "shipped_partial",
+      "services": [
+        "lifere-scenario-engine.js",
+        "lifere-learning-pipeline.js",
+        "lifere-council-router.js",
+        "lifere-chair-service.js"
+      ],
+      "remaining": ["Full multi-agent council in LifeRE context"]
+    }
+  },
+  "integrations": {
+    "boldtrail_am11": { "status": "live", "read": true, "write": "notes_on_approval" },
+    "outreach_am08": { "status": "live_partial", "scheduler": true, "user_id_resolve": true },
+    "tc_am17": { "status": "live_partial", "schema": "tc_transactions.address not property_address" },
+    "receptionist_am29": { "status": "live_partial", "vapi_fanout": true },
+    "socialmediaos_am41": { "status": "adapter_live", "mount_spine": false }
+  },
+  "ui_surface": {
+    "canonical": "public/overlay/lifeos-lifere.html",
+    "app_nav": "public/overlay/lifeos-app.html",
+    "tabs": ["performance", "approval", "coaching", "marketing", "ops", "scenario", "chair", "deals"],
+    "marketing_socialmediaos_panel": "required_in_W4"
+  },
+  "build_queue_next": [
+    { "id": "BQ-01", "task": "SocialMediaOS UI panel in marketing tab", "wave": "W4" },
+    { "id": "BQ-02", "task": "Verify transaction/list + outreach/queue live after schema fixes", "wave": "W5" },
+    { "id": "BQ-03", "task": "Mount Am41 marketing spine OR document adapter-only forever", "wave": "W4" },
+    { "id": "BQ-04", "task": "Founder alpha test + quote", "owner": "founder", "wave": "gate" },
+    { "id": "BQ-05", "task": "lifeos-app.html parity with standalone overlay", "wave": "UI" }
+  ],
+  "non_goals_now": [
+    "Do not set founder_usability_pass without founder quote",
+    "Do not claim program Z / end-state LifeRE complete",
+    "Do not duplicate Am41 publisher inside LifeRE — adapter + approval gate only"
+  ]
+}

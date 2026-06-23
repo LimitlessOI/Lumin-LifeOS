@@ -41,6 +41,7 @@ import { createLifeREChairService } from '../services/lifere-chair-service.js';
 import { createLifeRECommandCenter } from '../services/lifere-command-center.js';
 import { createLifeREAlphaDailyCycle } from '../services/lifere-alpha-daily-cycle.js';
 import { createLifeREFounderAttempt } from '../services/lifere-founder-attempt.js';
+import { createLifeRESocialMediaOSBridge } from '../services/lifere-socialmediaos-bridge.js';
 import { pickModel } from '../services/lifere-model-router.js';
 
 function userId(req) {
@@ -85,14 +86,15 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const learning = createLifeRELearningPipeline({ pool });
   const alphaCycle = createLifeREAlphaDailyCycle({ pool, logger });
   const founderAttempt = createLifeREFounderAttempt({ pool, logger });
+  const socialMediaOS = createLifeRESocialMediaOSBridge({ pool, notificationService, sendSMS, callCouncilMember, logger });
 
   router.get('/health', requireKey, (_req, res) => {
     res.json({
       ...service.health(),
-      waves: 'W1-W6',
+      waves: 'W1-W6+SMO',
       pool: !!pool,
       council_live: !!callCouncilMember,
-      integrations: ['am08_outreach', 'am17_tc', 'am29_receptionist', 'vapi_ingest', 'boldtrail'],
+      integrations: ['am08_outreach', 'am17_tc', 'am29_receptionist', 'am41_socialmediaos', 'vapi_ingest', 'boldtrail'],
     });
   });
 
@@ -607,13 +609,55 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   });
 
   router.post('/marketing/social/suggest-reply', requireKey, async (req, res) => {
-    const fn = req.body?.platform === 'dm' ? social.suggestDmReply : social.suggestCommentReply;
-    const result = await fn({
+    const result = await socialMediaOS.suggestSocialReply({
+      userId: userId(req),
+      tenantId: tenantId(req),
       platform: req.body?.platform || 'facebook',
       context: req.body?.context,
-      userId: userId(req),
+      mode: req.body?.platform === 'dm' ? 'dm' : 'comment',
     });
     res.json(result);
+  });
+
+  router.get('/marketing/socialmediaos/status', requireKey, async (_req, res) => {
+    res.json(await socialMediaOS.status());
+  });
+
+  router.post('/marketing/socialmediaos/coach', requireKey, async (req, res) => {
+    res.json(await socialMediaOS.coachSession({
+      userId: userId(req),
+      message: req.body?.message,
+      history: req.body?.history || [],
+    }));
+  });
+
+  router.post('/marketing/socialmediaos/content-pack', requireKey, async (req, res) => {
+    res.json(await socialMediaOS.transcriptToContentPack({
+      transcript: req.body?.transcript,
+      userId: userId(req),
+      tenantId: tenantId(req),
+      niche: req.body?.niche || 'real_estate',
+    }));
+  });
+
+  router.post('/marketing/socialmediaos/queue-post', requireKey, async (req, res) => {
+    res.json(await socialMediaOS.queueContentPost({
+      userId: userId(req),
+      tenantId: tenantId(req),
+      body: req.body?.body,
+      channel: req.body?.channel || 'facebook',
+      platform: req.body?.platform,
+    }));
+  });
+
+  router.post('/marketing/socialmediaos/pipeline', requireKey, async (req, res) => {
+    res.json(await socialMediaOS.runPipeline({
+      userId: userId(req),
+      tenantId: tenantId(req),
+      coachMessage: req.body?.coach_message,
+      transcript: req.body?.transcript,
+      videoTypeId: req.body?.video_type_id || 'market_update_60',
+    }));
   });
 
   router.post('/marketing/funnel/webhook', async (req, res) => {

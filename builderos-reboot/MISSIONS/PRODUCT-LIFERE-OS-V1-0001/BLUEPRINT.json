@@ -2,8 +2,12 @@
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "blueprint_id": "LIFERE-OS-V1-2026-06-21",
   "blueprint_status": "complete",
-  "scope": "lifere_alpha_point_b",
-  "summary": "Mechanical ARC host — legacy blueprint re-emitted as write_file_exact byte contracts",
+  "runtime_status": "alpha_runtime_active",
+  "mechanical_host_status": "complete",
+  "builder_twin_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT_BUILDER_TWIN.json",
+  "builder_doctrine": "docs/LIFERE_BUILDER_DIGITAL_TWIN.md",
+  "scope": "lifere_alpha_point_b_plus_runtime",
+  "summary": "Mechanical host (LRE-S01/S02) complete. Runtime build authority = BLUEPRINT_BUILDER_TWIN.json — coder builds FROM twin, not retroactive receipts.",
   "authority": "builderos-reboot/POINT_B_TARGET.json",
   "acceptance_command": "npm run lifeos:lifere-os:v1-acceptance",
   "allowed_action_types": [
@@ -53,8 +57,8 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-23T11:48:46.849Z",
-      "git_sha": "7c19d2f00a170b6cea30fc7802ea3ea0397006f9"
+      "completed_at": "2026-06-23T22:34:48.467Z",
+      "git_sha": "872e6b53b7ce368e8cefa397bf97989a1df7f462"
     },
     {
       "step_id": "LRE-S02",
@@ -89,14 +93,14 @@
       "authority_owner": "ARC",
       "on_block": "BLOCKED_RETURN_TO_ARC",
       "status": "complete",
-      "completed_at": "2026-06-23T11:48:46.849Z",
-      "git_sha": "7c19d2f00a170b6cea30fc7802ea3ea0397006f9"
+      "completed_at": "2026-06-23T22:34:48.467Z",
+      "git_sha": "872e6b53b7ce368e8cefa397bf97989a1df7f462"
     }
   ],
   "compiled_by": "factory-core/arc/compilers/product-blueprint-host.js",
   "authored_by": "ARC",
-  "completed_at": "2026-06-23T11:48:46.849Z",
-  "git_sha": "7c19d2f00a170b6cea30fc7802ea3ea0397006f9",
+  "completed_at": "2026-06-23T22:34:48.467Z",
+  "git_sha": "872e6b53b7ce368e8cefa397bf97989a1df7f462",
   "receipt_path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "system-build"

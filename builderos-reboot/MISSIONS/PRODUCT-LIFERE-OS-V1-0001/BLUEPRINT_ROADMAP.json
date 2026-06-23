@@ -2,26 +2,44 @@
   "schema": "blueprint_roadmap_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "roadmap_id": "PRODUCT-LIFERE-OS-V1-0001-ROADMAP",
-  "status": "ARC_HANDOFF",
-  "updated_at": "2026-06-22",
-  "intent_source": "FOUNDER_PACKET.md + existing BLUEPRINT.json",
-  "boundary_note": "Product mission on BP_PRIORITY queue — not meta proof lap",
-  "full_map_note": "A→Z for this product scope; P4/P5 BUILDER_READY when blueprint complete",
+  "status": "ALPHA_RUNTIME_ACTIVE",
+  "updated_at": "2026-06-13",
+  "builder_twin": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT_BUILDER_TWIN.json",
+  "doctrine": "docs/LIFERE_BUILDER_DIGITAL_TWIN.md",
+  "boundary_note": "Mechanical BLUEPRINT.json (LRE-S01/S02) = Point B artifacts only. Runtime A→Z builds from BLUEPRINT_BUILDER_TWIN.json.",
+  "primary_metric": "founder_usability_pass",
   "phases": [
     {
       "phase_id": "P4",
-      "name": "Phase P4",
-      "status": "BUILDER_READY",
-      "intent": "Blueprint steps tagged P4",
-      "builder_outcome": "Steps marked complete in legacy blueprint — ARC re-hosts as write_file_exact",
-      "alpha_signal": "Phase P4 artifacts exist"
+      "name": "Point B UI artifacts",
+      "status": "COMPLETE",
+      "intent": "Byte-exact lifeos-lifere.html + lifeos-app nav"
     },
     {
       "phase_id": "P5",
-      "name": "Alpha Acceptance",
-      "status": "BUILDER_READY",
-      "intent": "Acceptance command + founder usability verdict"
+      "name": "Alpha machine acceptance",
+      "status": "COMPLETE",
+      "intent": "npm run lifeos:lifere-alpha-gate PASS"
+    },
+    {
+      "phase_id": "W1-W6",
+      "name": "Runtime waves",
+      "status": "SHIPPED_PARTIAL",
+      "intent": "Services + routes + UI tabs per LIFERE_BUILDER_DIGITAL_TWIN.md"
+    },
+    {
+      "phase_id": "W4-SMO",
+      "name": "SocialMediaOS adapter stack",
+      "status": "IN_PROGRESS",
+      "intent": "Am41 coach/content-pack via lifere-socialmediaos-bridge → approval queue",
+      "acceptance": "GET /api/v1/lifere/marketing/socialmediaos/status + UI panel"
+    },
+    {
+      "phase_id": "ALPHA-GATE",
+      "name": "Founder usability",
+      "status": "BLOCKED",
+      "intent": "founder_usability_pass true + quote",
+      "owner": "founder"
     }
-  ],
-  "primary_metric": "founder_usability_pass"
+  ]
 }

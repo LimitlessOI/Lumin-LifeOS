@@ -34,7 +34,7 @@ export function createLifeRETransactionSurface({ pool = null } = {}) {
       return {
         ok: true,
         deal_id: dealId,
-        property_address: rows[0].property_address,
+        property_address: rows[0].address || rows[0].property_address,
         close_date: rows[0].close_date,
         ...state,
         label: 'KNOW',
@@ -54,12 +54,16 @@ export function createLifeRETransactionSurface({ pool = null } = {}) {
 
   async function listActiveDeals({ limit = 25 } = {}) {
     if (!pool) return { ok: true, deals: [] };
-    const { rows } = await pool.query(
-      `SELECT id, property_address, status, close_date FROM tc_transactions
-       WHERE status IN ('active','pending') ORDER BY close_date ASC NULLS LAST LIMIT $1`,
-      [limit]
-    );
-    return { ok: true, deals: rows };
+    try {
+      const { rows } = await pool.query(
+        `SELECT id, address AS property_address, status, close_date FROM tc_transactions
+         WHERE status IN ('active','pending') ORDER BY close_date ASC NULLS LAST LIMIT $1`,
+        [limit],
+      );
+      return { ok: true, deals: rows };
+    } catch (err) {
+      return { ok: true, deals: [], error: err.message, label: 'THINK', source: 'am17_list_error' };
+    }
   }
 
   async function getDealDetail({ dealId }) {
