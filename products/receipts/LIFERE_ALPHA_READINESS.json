@@ -1,7 +1,7 @@
 {
   "schema": "lifere_alpha_readiness_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-23T19:01:50.070Z",
+  "at": "2026-06-24T00:26:03.746Z",
   "checks": {
     "lifeos:lifere-alpha-gate": {
       "exit": 0
@@ -21,7 +21,8 @@
         "lifere_approval_queue": true,
         "lifere_call_logs": true,
         "lifere_experiments": true,
-        "lifere_performance_snapshot": true
+        "lifere_performance_snapshot": true,
+        "lifere_content_briefs": true
       },
       "pg_ready": true,
       "label": "KNOW"
@@ -36,6 +37,10 @@
     "AR-ui_debrief",
     "AR-ui_chair",
     "AR-ui_deals",
+    "AR-ui_content_brief",
+    "AR-ui_alpha_banner",
+    "AR-routes_alpha_readiness",
+    "AR-routes_alpha_confirm",
     "AR-routes_outreach_execute",
     "AR-routes_deal_detail",
     "AR-routes_alpha_cycle",
@@ -51,5 +56,8 @@
   ],
   "ok": true,
   "ready_for_alpha_testing": true,
-  "ready_for_alpha_gate": false
+  "ready_for_alpha_gate": false,
+  "alpha_ready": true,
+  "canonical_url": "/overlay/lifeos-app.html?page=lifeos-lifere.html",
+  "founder_close_path": "Run Alpha Daily Cycle → Confirm Alpha PASS (12+ char quote) in LifeRE banner"
 }

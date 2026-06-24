@@ -133,6 +133,24 @@
       color: #fff;
     }
     .status-line { font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .alpha-ready-banner {
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      background: rgba(34, 197, 94, 0.08);
+    }
+    .alpha-ready-banner.pending {
+      border-color: rgba(251, 191, 36, 0.35);
+      background: rgba(251, 191, 36, 0.08);
+    }
+    .alpha-ready-banner h2 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .alpha-ready-banner p { font-size: 13px; color: var(--lifere-body-text); line-height: 1.45; }
+    .alpha-checklist { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .alpha-checklist li { font-size: 12px; color: var(--muted); }
+    .alpha-checklist li.ok { color: #86efac; }
+    .alpha-checklist li.pending { color: #fcd34d; }
+    .alpha-confirm-box { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
     .empty { color: var(--muted); font-size: 13px; }
     .boldtrail-strip {
       display: flex;
@@ -216,6 +234,22 @@
         <button type="button" class="btn lifere-theme-btn" id="lifere-theme-toggle" title="Toggle light/dark theme" aria-label="Toggle theme">☀︎</button>
       </div>
     </header>
+
+    <section class="alpha-ready-banner pending" id="lifere-alpha-ready-banner" data-lifere="alpha-ready-banner">
+      <h2 id="alpha-ready-title">Alpha status — checking…</h2>
+      <p id="alpha-ready-detail">Verifying machine gates and live API…</p>
+      <ul class="alpha-checklist" id="alpha-ready-checklist"></ul>
+      <div class="alpha-confirm-box" id="alpha-confirm-box" hidden>
+        <div class="section-title" style="margin-bottom:8px">Close Alpha gate (founder only)</div>
+        <p class="status-line">After a successful daily cycle, confirm usability with your own words (12+ characters).</p>
+        <textarea id="alpha-founder-quote" rows="2" placeholder="e.g. LifeRE daily cycle works — top 3, debrief, and deals load. Alpha PASS."></textarea>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="alpha-confirm-pass-btn">Confirm Alpha PASS</button>
+          <button type="button" class="btn" id="alpha-confirm-fail-btn">Report issue (FAIL)</button>
+        </div>
+        <p class="status-line" id="alpha-confirm-status"></p>
+      </div>
+    </section>
 
     <div class="actions" style="margin-bottom:16px">
       <button type="button" class="btn btn-primary" id="lifere-alpha-cycle-btn" data-lifere="alpha-daily-cycle">Run Alpha Daily Cycle</button>
@@ -633,12 +667,75 @@
           renderPriorities(data.daily_focus || data.top_3);
           renderDebrief(data.debrief);
           statusEl.textContent = `Alpha cycle PASS — ${data.steps?.length || 0} steps · receipt logged`;
+          document.getElementById('alpha-confirm-box')?.removeAttribute('hidden');
+          document.getElementById('alpha-confirm-status').textContent = 'Cycle passed — confirm Alpha PASS below when ready.';
+          await loadAlphaReadiness();
           await loadPerformance();
           await loadApprovalQueue();
           await loadCommandCenter();
         } catch (err) {
           statusEl.textContent = `Alpha cycle failed: ${err.message}`;
         }
+      });
+
+      async function loadAlphaReadiness() {
+        const banner = document.getElementById('lifere-alpha-ready-banner');
+        const title = document.getElementById('alpha-ready-title');
+        const detail = document.getElementById('alpha-ready-detail');
+        const list = document.getElementById('alpha-ready-checklist');
+        const confirmBox = document.getElementById('alpha-confirm-box');
+        try {
+          const res = await apiFetch('/api/v1/lifere/alpha/readiness');
+          const data = await res.json();
+          const ready = data.ready_for_alpha_testing === true;
+          const gate = data.ready_for_alpha_gate === true;
+          banner?.classList.toggle('pending', !ready || !gate);
+          if (gate) {
+            title.textContent = 'Alpha gate CLOSED — founder PASS recorded';
+            detail.textContent = data.next_action || 'Continue building Record Mode + SMOS depth.';
+            confirmBox?.setAttribute('hidden', '');
+          } else if (ready) {
+            title.textContent = 'Alpha READY — machine gates PASS';
+            detail.textContent = data.next_action || 'Run Alpha Daily Cycle, then confirm PASS.';
+            confirmBox?.removeAttribute('hidden');
+          } else {
+            title.textContent = 'Alpha not ready — fix machine gates';
+            detail.textContent = data.next_action || 'Contact builder — readiness failed.';
+          }
+          list.innerHTML = (data.checklist || []).map((c) => {
+            const cls = c.ok === true ? 'ok' : c.ok === false ? 'pending' : '';
+            const mark = c.ok === true ? '✓' : c.ok === false ? '○' : '—';
+            return `<li class="${cls}">${mark} ${escapeHtml(c.label)}</li>`;
+          }).join('');
+        } catch (err) {
+          title.textContent = 'Alpha status unavailable';
+          detail.textContent = err.message;
+        }
+      }
+
+      document.getElementById('alpha-confirm-pass-btn')?.addEventListener('click', async () => {
+        const quote = document.getElementById('alpha-founder-quote')?.value?.trim() || '';
+        const status = document.getElementById('alpha-confirm-status');
+        status.textContent = 'Submitting founder PASS…';
+        const res = await apiFetch('/api/v1/lifere/alpha/confirm-usability', {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', pass: true, quote, mission_id: 'PRODUCT-LIFERE-OS-V1-0001' }),
+        });
+        const data = await res.json();
+        status.textContent = data.ok
+          ? 'Alpha gate closed — founder PASS recorded.'
+          : (data.error || 'Confirm failed');
+        if (data.ok) await loadAlphaReadiness();
+      });
+
+      document.getElementById('alpha-confirm-fail-btn')?.addEventListener('click', async () => {
+        const quote = document.getElementById('alpha-founder-quote')?.value?.trim() || 'Alpha FAIL — issue found during founder test';
+        const status = document.getElementById('alpha-confirm-status');
+        await apiFetch('/api/v1/lifere/alpha/confirm-usability', {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', pass: false, quote, mission_id: 'PRODUCT-LIFERE-OS-V1-0001' }),
+        });
+        status.textContent = 'FAIL recorded — builder will prioritize fixes.';
       });
 
       document.querySelectorAll('.tab-btn').forEach((btn) => {
@@ -1173,6 +1270,7 @@
         await loadApprovalQueue();
       });
 
+      await loadAlphaReadiness();
       await loadCommandCenter();
       await loadPerformance();
       await loadApprovalQueue();

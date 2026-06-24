@@ -136,6 +136,7 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-06-24 | **Alpha ready surface** — banner UI, `GET /alpha/readiness`, `POST /alpha/confirm-usability`, `lifere-alpha-readiness-surface.js`, BP `alpha_ready` | Adam: need alpha ready | ✅ machine PASS | Adam: run cycle + confirm PASS |
 | 2026-06-24 | **SMOS Content Brief v1** — `lifere-content-brief-engine.js`, migration, brief-before-coach gate, UI panel, routes | Adam: brief-first workflow is hard law | ✅ tests + self-audit | deploy; Record Mode v1 |
 | 2026-06-13 | **LifeOS Service Doctrine proxy** — LifeRE + SMOS inherit `LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md`; stack registry; doctrine in bridge + verify gate | Adam: hard-wire philosophy across all stacks | ✅ verify PASS | deploy |
 | 2026-06-13 | **SocialMediaOS + builder twin BP** — `lifere-socialmediaos-bridge.js`, routes `/marketing/socialmediaos/*`, UI panel; `BLUEPRINT_BUILDER_TWIN.json` as build authority; TC/outreach 502 fixes | Adam: BP must be twin you build from | ✅ | deploy + founder test |

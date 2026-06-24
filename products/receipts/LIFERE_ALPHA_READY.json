@@ -1,0 +1,18 @@
+{
+  "schema": "lifere_alpha_ready_v1",
+  "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+  "at": "2026-06-24T00:30:00.000Z",
+  "alpha_ready": true,
+  "ready_for_alpha_testing": true,
+  "ready_for_alpha_gate": false,
+  "founder_usability_pass": false,
+  "canonical_url": "/overlay/lifeos-app.html?page=lifeos-lifere.html",
+  "founder_path": [
+    "Open canonical URL in LifeOS shell",
+    "Verify green Alpha READY banner + checklist",
+    "Click Run Alpha Daily Cycle",
+    "Confirm Alpha PASS with 12+ char quote in banner"
+  ],
+  "verify_command": "npm run lifeos:lifere-alpha-ready",
+  "note": "Machine alpha ready. Gate closes only after founder confirm quote."
+}

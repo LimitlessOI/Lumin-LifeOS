@@ -1,15 +1,16 @@
 {
   "schema": "lifere_coder_gap_report_v1",
-  "at": "2026-06-23T19:05:00.000Z",
-  "build_status": "alpha_testing_ready",
-  "acceptance": "npm run lifeos:lifere-alpha-readiness",
+  "at": "2026-06-24T00:30:00.000Z",
+  "build_status": "alpha_ready",
+  "acceptance": "npm run lifeos:lifere-alpha-ready",
   "runtime_checks": 14,
   "closed_this_session": [
     "GAP-10 partial: buyer stage advance API + Deals tab pipeline UI",
     "GAP-04 partial: BoldTrail follow-up queues to approval with recipient phone/email",
     "GAP-04 partial: alpha daily cycle seeds approval draft for founder test",
     "GAP-04 partial: client comms log API + Approval tab recent sends",
-    "Boot: demo buyer client seeded when empty"
+    "Alpha ready banner + founder confirm path in LifeRE UI",
+    "GET /alpha/readiness + POST /alpha/confirm-usability routes"
   ],
   "gaps_remaining": [
     {
@@ -21,7 +22,7 @@
     {
       "id": "GAP-07",
       "area": "Founder usability",
-      "issue": "founder_usability_pass false — Adam confirm required for Alpha",
+      "issue": "founder_usability_pass false — close via LifeRE banner Confirm Alpha PASS (12+ char quote)",
       "role": "Founder",
       "not_coder_scope": true
     },

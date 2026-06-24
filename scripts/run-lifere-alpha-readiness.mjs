@@ -60,11 +60,15 @@ for (const [id, pattern] of [
   ['AR-ui_debrief', /data-lifere="nightly-debrief"/],
   ['AR-ui_chair', /data-lifere="chair-brief"/],
   ['AR-ui_deals', /data-lifere="tc-deal-detail"/],
+  ['AR-ui_content_brief', /data-lifere="content-brief"/],
+  ['AR-ui_alpha_banner', /data-lifere="alpha-ready-banner"/],
 ]) {
   step(id, pattern.test(markers));
 }
 
 const routes = fs.readFileSync(path.join(ROOT, 'routes/lifere-os-routes.js'), 'utf8');
+step('AR-routes_alpha_readiness', routes.includes('/alpha/readiness'));
+step('AR-routes_alpha_confirm', routes.includes('/alpha/confirm-usability'));
 step('AR-routes_outreach_execute', routes.includes('/outreach/execute'));
 step('AR-routes_deal_detail', routes.includes('getDealDetail'));
 step('AR-routes_alpha_cycle', routes.includes('/alpha/daily-cycle'));
@@ -101,6 +105,9 @@ if (verdict.founder_usability_pass !== true) {
 report.ok = report.failed.length === 0;
 report.ready_for_alpha_testing = report.ok;
 report.ready_for_alpha_gate = report.ok && verdict.founder_usability_pass === true;
+report.alpha_ready = report.ready_for_alpha_testing;
+report.canonical_url = '/overlay/lifeos-app.html?page=lifeos-lifere.html';
+report.founder_close_path = 'Run Alpha Daily Cycle → Confirm Alpha PASS (12+ char quote) in LifeRE banner';
 
 const out = path.join(ROOT, 'products/receipts/LIFERE_ALPHA_READINESS.json');
 fs.writeFileSync(out, `${JSON.stringify(report, null, 2)}\n`);

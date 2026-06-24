@@ -22,7 +22,7 @@
     "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
     "config/lifeos-stack-registry.json"
   ],
-  "last_updated": "2026-06-13",
-  "last_receipt": "2026-06-13 lifeos-service-doctrine-proxy",
-  "last_change_summary": "LifeRE proxies LifeOS service doctrine; stack-not-product law"
+  "last_updated": "2026-06-24",
+  "last_receipt": "2026-06-24 alpha-ready-surface",
+  "last_change_summary": "Alpha ready banner, readiness API, founder confirm path"
 }

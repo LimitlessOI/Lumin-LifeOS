@@ -58,6 +58,11 @@ step('AUD-19_content_brief_gate',
   && routes.includes('/marketing/content-brief/generate')
   && html.includes('data-lifere="content-brief"')
   && smoBridge.includes('assertApprovedBrief'));
+step('AUD-20_alpha_ready_surface',
+  fs.existsSync(path.join(ROOT, 'services/lifere-alpha-readiness-surface.js'))
+  && routes.includes('/alpha/readiness')
+  && routes.includes('/alpha/confirm-usability')
+  && html.includes('data-lifere="alpha-ready-banner"'));
 step('AUD-14_comms_log_route', routes.includes('/client-comms/log') && clientComms.includes('listCommsLog'));
 step('AUD-15_alpha_approval_seed', fs.readFileSync(path.join(ROOT, 'services/lifere-alpha-daily-cycle.js'), 'utf8').includes('approval_draft_seeded'));
 step('AUD-08_ssot_lifere_v1', /AMENDMENT_LIFERE/.test(lifereV1));

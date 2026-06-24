@@ -41,6 +41,8 @@ import { createLifeREChairService } from '../services/lifere-chair-service.js';
 import { createLifeRECommandCenter } from '../services/lifere-command-center.js';
 import { createLifeREAlphaDailyCycle } from '../services/lifere-alpha-daily-cycle.js';
 import { createLifeREFounderAttempt } from '../services/lifere-founder-attempt.js';
+import { getLifeREAlphaReadinessSurface } from '../services/lifere-alpha-readiness-surface.js';
+import { confirmFounderUsability } from '../services/founder-usability-confirm.js';
 import { createLifeRESocialMediaOSBridge } from '../services/lifere-socialmediaos-bridge.js';
 import { pickModel } from '../services/lifere-model-router.js';
 
@@ -152,6 +154,39 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
         source: req.body?.source || 'api',
       });
       res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/alpha/readiness', requireKey, async (_req, res) => {
+    try {
+      const deep = await pool?.query?.(
+        `SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='lifere_activity_log') AS ok`
+      ).catch(() => null);
+      const pgOk = deep?.rows?.[0]?.ok === true;
+      res.json(getLifeREAlphaReadinessSurface({ pool: pgOk }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/alpha/confirm-usability', requireKey, async (req, res) => {
+    try {
+      const pass = req.body?.pass === true || req.body?.pass === 'true';
+      const result = confirmFounderUsability({
+        missionId: req.body?.mission_id || 'PRODUCT-LIFERE-OS-V1-0001',
+        pass,
+        quote: req.body?.quote || req.body?.founder_quote || '',
+        actor: req.body?.actor || userId(req),
+      });
+      if (!result.ok) {
+        return res.status(400).json(result);
+      }
+      res.json({
+        ...result,
+        readiness: getLifeREAlphaReadinessSurface({ pool: Boolean(pool) }),
+      });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }
