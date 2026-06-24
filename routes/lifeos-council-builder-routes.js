@@ -68,6 +68,7 @@ import {
   enforceBeforeBuilderDispatch,
   formatUnifiedGateBlockSummary,
 } from '../services/founder-packet-v2-unified-gate.js';
+import { classifyBuilderGap, summarizeGapFamilies } from '../services/builderos-gap-classifier.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -894,6 +895,11 @@ export function createLifeOSCouncilBuilderRoutes({
       domain,
       next_platform_fix: fixes[stage] || 'Repair the builder/platform path before retrying product work.',
       remote_system_truth: REMOTE_SYSTEM_TRUTH,
+      ...classifyBuilderGap({
+        failure_stage: stage,
+        failure_reason: reason,
+        target_file: targetFile,
+      }),
     };
   }
 
@@ -999,13 +1005,26 @@ export function createLifeOSCouncilBuilderRoutes({
       mode,
       domain,
     });
+    const gapClass = classifyBuilderGap({
+      failure_stage: stage,
+      failure_reason: reason,
+      target_file: targetFile || placement?.target_file || null,
+      gap_recommendation: gapRecommendation,
+      status,
+    });
     await insertBuilderAudit({
       domain,
       task,
       model_used: modelUsed,
       rawOutput,
       cache_hit: cacheHit,
-      placement,
+      placement: {
+        ...(placement || {}),
+        target_file: targetFile || placement?.target_file || null,
+        failure_family: gapClass.failure_family,
+        playbook: gapClass.playbook,
+        repairable: gapClass.repairable,
+      },
       status,
       failureStage: stage,
       failureReason: reason,
@@ -1900,28 +1919,9 @@ export function createLifeOSCouncilBuilderRoutes({
       }
     }
 
-    let deliberationSessionId = null;
-    try {
-      const delibSeed = await seedBuilderDeliberation(pool, taskBody, log);
-      if (!delibSeed.ok && !delibSeed.skipped) {
-        return res.status(422).json({
-          ok: false,
-          error: 'deliberation_gate_fail',
-          violations: delibSeed.violations || delibSeed.errors,
-          deliberation_session_id: delibSeed.session_id,
-          committed: false,
-        });
-      }
-      deliberationSessionId = delibSeed.session_id || null;
-    } catch (delibErr) {
-      log.error({ err: delibErr.message }, '[BUILDER] deliberation seed failed — fail-closed');
-      return res.status(422).json({
-        ok: false,
-        error: 'deliberation_seed_failed',
-        detail: delibErr.message,
-        committed: false,
-      });
-    }
+    const executionTier = String(
+      taskBody.metadata?.execution_tier || taskBody.execution_tier || 'LOAD_BEARING',
+    ).toUpperCase();
 
     if (typeof commitToGitHub !== 'function') {
       const gapRecommendation = await recordBuilderGap({
@@ -1942,9 +1942,52 @@ export function createLifeOSCouncilBuilderRoutes({
       });
     }
 
-    // Fail-fast safe-scope — do not burn council tokens when target is known and blocked.
-    if (target_file && !isSafeTarget(target_file)) {
+    if (!target_file || !String(target_file).trim()) {
+      const gapRecommendation = await recordBuilderGap({
+        domain: taskBody.domain || null,
+        task: taskBody.task,
+        status: 'needs_target',
+        stage: 'placement',
+        reason: 'target_file is required for POST /build — pass explicit target_file before generation',
+        routingKey: 'council.builder.code',
+        mode: taskBody.mode || 'code',
+        executionOnly: taskBody.execution_only === true,
+      });
+      return res.status(422).json({
+        ok: false,
+        error: 'target_file is required for POST /build',
+        committed: false,
+        gap_recommendation: gapRecommendation,
+      });
+    }
+
+    if (!isSafeTarget(target_file)) {
       return respondSafeScopeBlocked(res, { resolvedTarget: target_file, taskBody });
+    }
+
+    let deliberationSessionId = null;
+    if (executionTier !== 'MECHANICAL') {
+      try {
+        const delibSeed = await seedBuilderDeliberation(pool, taskBody, log);
+        if (!delibSeed.ok && !delibSeed.skipped) {
+          return res.status(422).json({
+            ok: false,
+            error: 'deliberation_gate_fail',
+            violations: delibSeed.violations || delibSeed.errors,
+            deliberation_session_id: delibSeed.session_id,
+            committed: false,
+          });
+        }
+        deliberationSessionId = delibSeed.session_id || null;
+      } catch (delibErr) {
+        log.error({ err: delibErr.message }, '[BUILDER] deliberation seed failed — fail-closed');
+        return res.status(422).json({
+          ok: false,
+          error: 'deliberation_seed_failed',
+          detail: delibErr.message,
+          committed: false,
+        });
+      }
     }
 
     // Step 1: Generate via council (reuse dispatchTask logic inline)
@@ -2012,8 +2055,9 @@ export function createLifeOSCouncilBuilderRoutes({
         placement,
       });
       // Return output without committing — caller must supply target_file
-      return res.json({
-        ok: true,
+      return res.status(422).json({
+        ok: false,
+        error: 'target_file not in placement metadata and not provided',
         output: generatedOutput,
         placement,
         model_used,
@@ -2598,19 +2642,52 @@ export function createLifeOSCouncilBuilderRoutes({
       res.json({
         ok: true,
         count: rows.length,
-        gaps: rows.map(r => ({
-          id: r.id,
-          created_at: r.created_at,
-          domain: r.domain,
-          task_preview: r.task_preview,
-          model_used: r.model_used,
-          status: r.placement_json?.status || null,
-          failure_stage: r.placement_json?.failure_stage || null,
-          failure_reason: r.placement_json?.failure_reason || null,
-          target_file: r.placement_json?.target_file || null,
-          routing_key: r.placement_json?.routing_key || null,
-          gap_recommendation: r.placement_json?.gap_recommendation || null,
-        })),
+        gap_families: summarizeGapFamilies(
+          rows.map((r) => {
+            const base = {
+              failure_stage: r.placement_json?.failure_stage || null,
+              failure_reason: r.placement_json?.failure_reason || null,
+              target_file: r.placement_json?.target_file || null,
+              gap_recommendation: r.placement_json?.gap_recommendation || null,
+              status: r.placement_json?.status || null,
+              failure_family: r.placement_json?.failure_family || null,
+            };
+            return base.failure_family && base.failure_family !== 'other'
+              ? base
+              : { ...base, ...classifyBuilderGap(base) };
+          }),
+        ),
+        gaps: rows.map((r) => {
+          const base = {
+            id: r.id,
+            created_at: r.created_at,
+            domain: r.domain,
+            task_preview: r.task_preview,
+            model_used: r.model_used,
+            status: r.placement_json?.status || null,
+            failure_stage: r.placement_json?.failure_stage || null,
+            failure_reason: r.placement_json?.failure_reason || null,
+            target_file: r.placement_json?.target_file || null,
+            routing_key: r.placement_json?.routing_key || null,
+            gap_recommendation: r.placement_json?.gap_recommendation || null,
+            committed: r.placement_json?.committed ?? null,
+          };
+          const storedFamily = r.placement_json?.failure_family;
+          const classified = classifyBuilderGap({
+            failure_stage: base.failure_stage,
+            failure_reason: base.failure_reason,
+            target_file: base.target_file,
+            gap_recommendation: base.gap_recommendation,
+            status: base.status,
+          });
+          return {
+            ...base,
+            failure_family: storedFamily && storedFamily !== 'other' ? storedFamily : classified.failure_family,
+            playbook: r.placement_json?.playbook || classified.playbook,
+            repairable: r.placement_json?.repairable ?? classified.repairable,
+            classifier: classified.classifier,
+          };
+        }),
       });
     } catch (err) {
       log.error({ err: err.message }, '[BUILDER] /gaps query failed');

@@ -1,0 +1,70 @@
+{
+  "schema": "lumin_chair_direct_connection_parity_v1",
+  "at": "2026-06-24T18:56:18.971Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "passed": [
+    "T1_open_lifere",
+    "T2_point_b",
+    "T3_alpha_cycle",
+    "T4_counsel_no_theater",
+    "T5_do_prefix_build",
+    "T6_fail_carries_lesson",
+    "T7_display_no_execute_claim",
+    "T8_truth_lockdown_stamp",
+    "LOCAL-wiring",
+    "LOCAL-truth"
+  ],
+  "failed": [],
+  "results": {
+    "T1_open_lifere": {
+      "status": 200,
+      "chair_channel": "system_action",
+      "command_truth": "COMMAND_RAN",
+      "pass_fail": "PASS",
+      "summary_head": "✅ DONE\nNavigated to lifeos-lifere.html\n• Channel: system_action\n• Kind: SYSTEM_EXECUTE\n• Command: COMMAND_RAN"
+    },
+    "T2_point_b": {
+      "status": 200,
+      "chair_channel": "system_action",
+      "command_truth": "COMMAND_RAN",
+      "pass_fail": "PASS",
+      "summary_head": "✅ DONE\nPoint B: LifeRE Alpha (PRODUCT-LIFERE-OS-V1-0001)\n• Channel: system_action\n• Kind: SYSTEM_EXECUTE\n• Command: COMMAND_RAN"
+    },
+    "T3_alpha_cycle": {
+      "status": 200,
+      "chair_channel": "system_action",
+      "command_truth": "COMMAND_RAN",
+      "pass_fail": "PASS",
+      "summary_head": "✅ DONE\nAlpha daily cycle ran — 6/6 steps passed.\n• Channel: system_action\n• Kind: SYSTEM_EXECUTE\n• Command: COMMAND_RAN"
+    },
+    "T4_counsel_no_theater": {
+      "status": 200,
+      "chair_channel": "chair",
+      "command_truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "summary_head": "💬 Counsel only · nothing executed You've got a few options to consider for an oil change. According to the verified search, you can check out coupons from Jiffy Lube, Valvoline, Take 5, and Midas. Ea"
+    },
+    "T5_do_prefix_build": {
+      "status": 200,
+      "chair_channel": "build_async",
+      "command_truth": "NO_COMMAND_RAN",
+      "pass_fail": "FAIL",
+      "summary_head": "❌ NOT DONE\nBlocked — Founder Packet V2 end-to-end gate failed.\n• Channel: build_async\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: BLOCKED_FOUNDER_PACKET_V2\n• Blocker: INTENT_AMBIGUITY — "
+    },
+    "T6_fail_carries_lesson": {
+      "status": 202,
+      "chair_channel": "build_async",
+      "command_truth": "BUILD_ATTEMPTED",
+      "pass_fail": "RUNNING",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 62380d89… — poll until PASS or FAIL ── Technical ──\nBuild running asynchronously — job 62380d89-b86e-4b90-8bb7-63b466ba2c5f"
+    },
+    "T7_display_no_execute_claim": {
+      "status": 200,
+      "chair_channel": "display",
+      "command_truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "summary_head": "💬 Counsel only · nothing executed Rendered overview display from live system data. To execute: say `do: …` or name an action (`open LifeRE`, `run alpha cycle`, `redeploy`)."
+    }
+  },
+  "ok": true
+}

@@ -3,7 +3,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-24 — boot truth scoreboard + Wisdom auditor schedulers. Prior: LifeRE founder confirm commitManyToGitHub.
+**Last Updated:** 2026-06-13 — BuilderOS harness platform wiring + builder-safe-scope receipts path. Prior: boot truth scoreboard + Wisdom auditor schedulers.
 
 | Field | Value |
 |---|---|
@@ -204,6 +204,8 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-06-13 | **BuilderOS harness platform stack** — canonical executor, gap classifier, compound improvement, harness toolkit, governed loop codegen repair, operational verify scripts; `config/builder-safe-scope.js` receipts path; council builder fail-fast + MECHANICAL tier. | Adam: honest operational 10/10 BuilderOS machine — program, self-repair, compound improve; not structural theater. | ✅ local operational verify 10/10 | push + deploy |
+| 2026-06-24 | **`config/builder-safe-scope.js`** — add `products/receipts/` to `SAFE_WRITE_PATHS` for mission acceptance receipts. | BuilderOS harness + product receipts need commit-capable safe scope. | ✅ isSafeTarget | deploy |
 | 2026-06-24 | **`startup/register-runtime-routes.js`** — pass `commitManyToGitHub` into `createLifeRERoutes` for founder usability confirm persistence. | Alpha confirm on Railway was ephemeral filesystem-only. | ✅ | deploy |
 | 2026-06-13 | **`startup/boot-domains.js`** — `bootLifeREDomain()` starts `lifere-outreach-scheduler` (15m useful-work guard for approved Am 08 tasks). | LifeRE outreach must execute without manual queue polling. | ✅ readiness PASS | deploy |
 | 2026-06-13 | **`startup/boot-domains.js`** — `bootLifeREDomain()` seeds founder twins + marriage edge on boot. **`startup/register-runtime-routes.js`** — pass `pool`, `callCouncilMember`, `notificationService`, `sendSMS` into `createLifeRERoutes`. | LifeRE Alpha runtime must boot and wire Am 08/17/29 bridges on Railway. | ✅ alpha-gate PASS | deploy + live E2E |

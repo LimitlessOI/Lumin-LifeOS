@@ -1,0 +1,85 @@
+#!/usr/bin/env node
+/**
+ * SYNOPSIS: Pre-build gate for canonical harness — ready, deploy, doctrine, env.
+ * Usage: node scripts/builderos-pre-build-gate.mjs [--allow-stale]
+ * @ssot builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json
+ */
+import 'dotenv/config';
+import { spawnSync } from 'node:child_process';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const allowStale = process.argv.includes('--allow-stale');
+
+function check(id, ok, detail) {
+  return { id, ok: Boolean(ok), detail: ok ? detail || 'PASS' : detail };
+}
+
+function resolveBaseUrl() {
+  return (process.env.PUBLIC_BASE_URL || process.env.BUILDER_BASE_URL || '').replace(/\/$/, '');
+}
+
+function resolveCommandKey() {
+  return process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY || '';
+}
+
+async function fetchReady(baseUrl, commandKey) {
+  const paths = ['/api/v1/lifeos/builder/ready', '/ready'];
+  for (const p of paths) {
+    const res = await fetch(`${baseUrl}${p}`, {
+      headers: commandKey ? { 'x-command-key': commandKey } : {},
+    });
+    if (res.status === 404) continue;
+    const json = await res.json().catch(() => null);
+    return { ok: res.ok, json, path: p, status: res.status };
+  }
+  return { ok: false, json: null, path: null, status: 404 };
+}
+
+const checks = [];
+const baseUrl = resolveBaseUrl();
+const commandKey = resolveCommandKey();
+
+checks.push(check('PBG-01', Boolean(baseUrl), baseUrl ? `base=${baseUrl}` : 'PUBLIC_BASE_URL missing'));
+checks.push(check('PBG-02', Boolean(commandKey), commandKey ? 'command key present' : 'COMMAND_CENTER_KEY missing'));
+
+if (baseUrl && commandKey) {
+  const ready = await fetchReady(baseUrl, commandKey);
+  const builder = ready.json?.builder || {};
+  checks.push(check('PBG-03', ready.ok, ready.ok ? `GET ${ready.path} OK` : `ready HTTP ${ready.status}`));
+  checks.push(
+    check(
+      'PBG-04',
+      builder.commitToGitHub === true,
+      builder.commitToGitHub ? 'commitToGitHub available' : 'commit path not ready',
+    ),
+  );
+}
+
+const doctrine = spawnSync(process.execPath, ['scripts/verify-lifeos-service-doctrine.mjs'], {
+  cwd: ROOT,
+  encoding: 'utf8',
+});
+checks.push(check('PBG-05', doctrine.status === 0, 'service doctrine verify'));
+
+const deployArgs = ['run', 'builderos:deploy:verify'];
+if (allowStale) deployArgs.push('--', '--allow-ahead');
+const deploy = spawnSync('npm', deployArgs, { cwd: ROOT, encoding: 'utf8' });
+checks.push(
+  check(
+    'PBG-06',
+    allowStale ? deploy.status === 0 : deploy.status === 0,
+    deploy.status === 0 ? 'deploy SHA fresh' : 'deploy stale or diverged (use --allow-stale to bypass)',
+  ),
+);
+
+const report = {
+  schema: 'builderos_pre_build_gate_v1',
+  generated_at: new Date().toISOString(),
+  checks,
+  ok: checks.every((c) => c.ok),
+};
+
+console.log(JSON.stringify(report, null, 2));
+process.exit(report.ok ? 0 : 1);

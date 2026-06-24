@@ -23,6 +23,9 @@
 import express from 'express';
 import { createEmergencyRepair } from '../services/emergency-repair.js';
 import { createLiveCopilot }     from '../services/live-copilot.js';
+import { luminConnectionGuardMiddleware } from '../services/lumin-connection-guard.js';
+
+const blockLegacyCopilotMessage = luminConnectionGuardMiddleware('copilot_session_message');
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 import { safeLimit, safeId }      from '../services/lifeos-request-helpers.js';
 
@@ -137,10 +140,8 @@ export function createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember 
     }
   });
 
-  // ── POST /sessions/:id/message ────────────────────────────────────────────
-  // Send a message in an active session and receive guidance.
-  // Body: { user?, message }
-  router.post('/sessions/:id/message', requireKey, async (req, res) => {
+  // ── POST /sessions/:id/message — RETIRED when LUMIN_SINGLE_CONNECTION=1 ──
+  router.post('/sessions/:id/message', requireKey, blockLegacyCopilotMessage, async (req, res) => {
     try {
       const { user, message } = req.body || {};
 

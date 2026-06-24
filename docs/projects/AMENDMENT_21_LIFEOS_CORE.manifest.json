@@ -883,8 +883,8 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-24",
-  "last_receipt": "2026-06-13 lifeos-service-doctrine-hard-wire",
-  "last_change_summary": "Point B DNA + truth enforcement stack locked",
-  "ssot_receipt_tail": "Voice Rail auto-stages to Action Inbox; approved inbox commitments route to lifeos_commitments."
+  "last_updated": "2026-06-13",
+  "last_receipt": "2026-06-13 single-lumin-connection-law",
+  "last_change_summary": "Single Lumin connection — founder-interface canonical; legacy chat 410",
+  "ssot_receipt_tail": "LUMIN_SINGLE_CONNECTION=1 blocks legacy chat/copilot POST; lifeos-app drawer is canonical UI path."
 }

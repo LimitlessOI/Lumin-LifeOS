@@ -70,3 +70,25 @@ export function isProofLapMission(missionFolder) {
     return false;
   }
 }
+
+const TIER_PATH = path.join(REPO_ROOT, 'builderos-reboot/governance/BUILDEROS_EXECUTION_TIER.json');
+
+export function loadExecutionTierConfig() {
+  if (!fs.existsSync(TIER_PATH)) return { tiers: {} };
+  try {
+    return JSON.parse(fs.readFileSync(TIER_PATH, 'utf8'));
+  } catch {
+    return { tiers: {} };
+  }
+}
+
+export function isGateRequiredForTier(gateId, executionTier = 'LOAD_BEARING') {
+  const tier = String(executionTier || 'LOAD_BEARING').toUpperCase();
+  const cfg = loadExecutionTierConfig();
+  const def = cfg.tiers?.[tier];
+  if (!def) return isHardGate(gateId);
+  if ((def.gates_skipped || []).includes(gateId)) return false;
+  if ((def.gates_required || []).includes(gateId)) return true;
+  if (tier === 'MECHANICAL') return false;
+  return isHardGate(gateId);
+}

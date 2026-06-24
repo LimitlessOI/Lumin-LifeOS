@@ -27,7 +27,7 @@
           "mission → services/lifeos-mission-pipeline-executor.js → runFoundationPipelineForFounder",
           "execute → spawn scripts/run-founder-intake-direct.mjs → runDevelopmentStage",
           "feedback_patch → POST /api/v1/lifeos/builder/build (UI tweaks — skips terminal intake)",
-          "lumin_fallback → services/lifeos-lumin.js"
+          "lumin_fallback → RETIRED — use founder-interface/message (LUMIN_CONNECTION_LAW.json)"
         ]
       },
       {
@@ -549,6 +549,26 @@
     {
       "path": "builderos-reboot/scripts/execute-mission.mjs",
       "synopsis": "execute-step + SENTRY per write_file_exact step + BPB intake pre-step.",
+      "factory_cli": true
+    },
+    {
+      "path": "services/builderos-harness-toolkit.js",
+      "synopsis": "Harness tool manifest audit + platform gap rollup for BuilderOS machine scoreboard.",
+      "factory_cli": true
+    },
+    {
+      "path": "scripts/builderos-run-mission.mjs",
+      "synopsis": "Run all MECHANICAL blueprint steps via canonical executor + acceptance + receipt.",
+      "factory_cli": true
+    },
+    {
+      "path": "services/builderos-gap-classifier.js",
+      "synopsis": "Unified builder failure-family classifier for /gaps + compound + verify.",
+      "factory_cli": true
+    },
+    {
+      "path": "services/builderos-canonical-executor.js",
+      "synopsis": "Single canonical path: mission step → POST /build + codegen self-repair.",
       "factory_cli": true
     }
   ],

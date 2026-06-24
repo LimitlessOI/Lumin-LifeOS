@@ -17,6 +17,10 @@ import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 import { createLifeOSLuminBuild } from '../services/lifeos-lumin-build.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 import { createRequireLifeOSUserOrKey } from '../middleware/lifeos-auth-middleware.js';
+import { luminConnectionGuardMiddleware } from '../services/lumin-connection-guard.js';
+
+const blockLegacyChat = luminConnectionGuardMiddleware('chat_messages');
+const blockLegacyChatStream = luminConnectionGuardMiddleware('chat_stream');
 
 export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMember, logger }) {
   const router = express.Router();
@@ -142,8 +146,8 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
     }
   });
 
-  // ── POST /threads/:id/messages — send a message, get Lumin's reply ───────────
-  router.post('/threads/:id/messages', requireChatAuth, async (req, res) => {
+  // ── POST /threads/:id/messages — RETIRED when LUMIN_SINGLE_CONNECTION=1 (use founder-interface) ──
+  router.post('/threads/:id/messages', requireChatAuth, blockLegacyChat, async (req, res) => {
     try {
       const userId = await resolveRequestUserId(req);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
@@ -171,7 +175,7 @@ export function createLifeOSChatRoutes({ pool, requireKey, callAI, callCouncilMe
   //   data: {"token":"word "}      — one or more words
   //   data: {"done":true,"user_message":{...},"reply":{...}}   — final
   //   data: {"error":"..."}        — on failure
-  router.post('/threads/:id/messages/stream', requireChatAuth, async (req, res) => {
+  router.post('/threads/:id/messages/stream', requireChatAuth, blockLegacyChatStream, async (req, res) => {
     const userId = await resolveRequestUserId(req);
     if (!userId) { res.status(404).json({ ok: false, error: 'User not found' }); return; }
     const threadId = parseInt(req.params.id, 10);

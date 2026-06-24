@@ -1,0 +1,26 @@
+{
+  "mission_id": "BUILDEROS-HARNESS-PROOF-0001",
+  "blueprint_id": "BUILDEROS-HARNESS-PROOF-0001-v1",
+  "scope": "builderos_operational_harness_mechanical",
+  "execution_tier": "MECHANICAL",
+  "allowed_action_types": ["write_file_exact"],
+  "steps": [
+    {
+      "step_id": "BH001",
+      "phase_id": "P0",
+      "title": "Write BuilderOS operational proof receipt",
+      "target_file": "builderos-reboot/MISSIONS/BUILDEROS-HARNESS-PROOF-0001/receipts/OPERATIONAL_PROOF.json",
+      "action_type": "write_file_exact",
+      "execution_tier": "MECHANICAL",
+      "platform_gap_fill": true,
+      "platform_gap_fill_reason": "GAP-FILL: BuilderOS harness mechanical proof — canonical executor live verification receipt only.",
+      "content_or_patch_contract": "Write ONLY valid JSON (no markdown, no prose). Schema:\n{\"schema\":\"builderos_operational_proof_v1\",\"generated_at\":\"<ISO8601 UTC>\",\"canonical_path\":\"builderos_canonical_v1\",\"mission_id\":\"BUILDEROS-HARNESS-PROOF-0001\",\"step_id\":\"BH001\",\"ok\":true}\nUse the current UTC timestamp for generated_at.",
+      "dependencies": [],
+      "non_goals": ["Do not modify any file other than the target receipt."],
+      "acceptance_test_ids": ["AT-BH001-1"],
+      "blocked_return_type_on_failure": "BLOCKED_RETURN_TO_BPB",
+      "authority_owner": "Coder",
+      "on_block": "BLOCKED_RETURN_TO_BPB"
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+{
+  "schema": "builderos_harness_tools_v1",
+  "updated_at": "2026-06-24",
+  "purpose": "BuilderOS machine harness — tools required for 4 pillars (not LifeRE product). Honest wiring truth for agents.",
+  "authority": "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json",
+  "audit_command": "npm run builderos:harness:audit",
+  "pillars": {
+    "envisioned_workflow": {
+      "label": "Mission → blueprint → build → receipt",
+      "tools": [
+        {
+          "id": "working_definition",
+          "path": "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json",
+          "npm": "builderos:working-definition:verify",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "canonical_executor",
+          "path": "services/builderos-canonical-executor.js",
+          "npm": "builderos:canonical:manifest",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "mission_step",
+          "path": "scripts/builderos-run-mission-step.mjs",
+          "npm": "builderos:mission-step",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "mission_run",
+          "path": "scripts/builderos-run-mission.mjs",
+          "npm": "builderos:mission-run",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "execution_tier",
+          "path": "builderos-reboot/governance/BUILDEROS_EXECUTION_TIER.json",
+          "npm": null,
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "bp_priority",
+          "path": "builderos-reboot/BP_PRIORITY.json",
+          "npm": "builderos:bp-priority:once",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "pre_build_gate",
+          "path": "scripts/builderos-pre-build-gate.mjs",
+          "npm": "builderos:pre-build-gate",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "harness_proof_mission",
+          "path": "builderos-reboot/MISSIONS/BUILDEROS-HARNESS-PROOF-0001/BLUEPRINT.json",
+          "npm": "builderos:operational-proof",
+          "tier": "proof",
+          "status": "wired"
+        }
+      ]
+    },
+    "real_programming": {
+      "label": "Commit code via canonical /build with routing",
+      "tools": [
+        {
+          "id": "builder_routes",
+          "path": "routes/lifeos-council-builder-routes.js",
+          "npm": "lifeos:builder:probe",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "routing_policy",
+          "path": "services/builderos-routing-policy.js",
+          "npm": null,
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "safe_scope",
+          "path": "config/builder-safe-scope.js",
+          "npm": null,
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "gap_classifier",
+          "path": "services/builderos-gap-classifier.js",
+          "npm": "builderos:gap:families",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "deploy_verify",
+          "path": "scripts/builderos-deploy-verify.mjs",
+          "npm": "builderos:deploy:verify",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "builder_output_verifier",
+          "path": "scripts/builderos-builder-output-verifier.mjs",
+          "npm": null,
+          "tier": "recommended",
+          "status": "wired"
+        },
+        {
+          "id": "factory_execute_step",
+          "path": "factory-staging/factory-core/builder/execute-step.js",
+          "npm": null,
+          "tier": "platform_gap",
+          "status": "partial",
+          "note": "CLI/factory only — production spine uses canonical /build until cutover receipt"
+        }
+      ]
+    },
+    "self_repair": {
+      "label": "Classify failures + repair dispatch",
+      "tools": [
+        {
+          "id": "codegen_self_repair",
+          "path": "services/builderos-codegen-self-repair.js",
+          "npm": null,
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "governed_loop",
+          "path": "services/builderos-governed-loop-executor.js",
+          "npm": null,
+          "tier": "required",
+          "status": "wired",
+          "note": "C2 jobs + codegen repair wired; founder async path separate"
+        },
+        {
+          "id": "self_repair_executor",
+          "path": "services/self-repair-executor.js",
+          "npm": null,
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "founder_build_self_repair",
+          "path": "services/founder-build-self-repair.js",
+          "npm": null,
+          "tier": "recommended",
+          "status": "wired",
+          "note": "Founder path — not canonical harness primary"
+        },
+        {
+          "id": "builder_retry_plan",
+          "path": "scripts/builderos-builder-retry-plan.mjs",
+          "npm": null,
+          "tier": "recommended",
+          "status": "wired"
+        }
+      ]
+    },
+    "compound_improvement": {
+      "label": "Every failure logs a lever",
+      "tools": [
+        {
+          "id": "compound_improvement",
+          "path": "services/builderos-compound-improvement.js",
+          "npm": "builderos:compound:summary",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "compound_doc",
+          "path": "docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md",
+          "npm": null,
+          "tier": "required",
+          "status": "wired"
+        },
+        {
+          "id": "failure_memory",
+          "path": "scripts/lib/builder-failure-memory.mjs",
+          "npm": null,
+          "tier": "recommended",
+          "status": "wired"
+        },
+        {
+          "id": "operational_proof",
+          "path": "scripts/builderos-run-operational-proof.mjs",
+          "npm": "builderos:operational-proof",
+          "tier": "proof",
+          "status": "wired"
+        }
+      ]
+    }
+  },
+  "cross_cutting": {
+    "tools": [
+      {
+        "id": "harness_toolkit",
+        "path": "services/builderos-harness-toolkit.js",
+        "npm": "builderos:harness:tools",
+        "tier": "required",
+        "status": "wired"
+      },
+      {
+        "id": "harness_gap_audit",
+        "path": "scripts/builderos-harness-gap-audit.mjs",
+        "npm": "builderos:harness:audit",
+        "tier": "required",
+        "status": "wired"
+      },
+      {
+        "id": "working_definition_operational",
+        "path": "scripts/verify-builderos-working-definition.mjs",
+        "npm": "builderos:working-definition:verify:operational",
+        "tier": "required",
+        "status": "wired"
+      },
+      {
+        "id": "tool_registry",
+        "path": "builderos-reboot/governance/BUILDEROS_TOOL_REGISTRY.json",
+        "npm": "builderos:tools:registry",
+        "tier": "recommended",
+        "status": "wired"
+      },
+      {
+        "id": "worktree_supervisor",
+        "path": "scripts/autonomy/builder-supervisor.js",
+        "npm": null,
+        "tier": "parallel",
+        "status": "wired",
+        "note": "Parallel workers — not primary canonical path"
+      }
+    ]
+  },
+  "industry_patterns_missing_on_spine": [
+    {
+      "pattern": "openhands_workspace_isolation",
+      "have": "factory-staging/factory-core/builder/sandbox.js",
+      "need": "Wire sandbox into production /build or canonical executor worktree mode",
+      "priority": "P1"
+    },
+    {
+      "pattern": "claude_code_hooks_fail_closed",
+      "have": "services/builderos-precommit-governance.js",
+      "need": "Unified pre-build hook calling builderos-pre-build-gate before every autonomous dispatch",
+      "priority": "P1"
+    },
+    {
+      "pattern": "codex_isolated_task_dispatch",
+      "have": "scripts/autonomy/builder-supervisor.js",
+      "need": "Default mission-run should offer --worktree for zone-3 targets",
+      "priority": "P2"
+    },
+    {
+      "pattern": "evidence_backed_completion",
+      "have": "services/builderos-control-plane-service.js",
+      "need": "Canonical mission-run should attach DONE gate receipt to mission folder",
+      "priority": "P1"
+    }
+  ],
+  "platform_integration_gaps": [
+    {
+      "rank": 1,
+      "id": "deploy_stale_local",
+      "summary": "Harness fixes local — production /build may lag until commit+push+redeploy",
+      "tool": "builderos:deploy:verify",
+      "fix": "npm run builderos:deploy:verify && commit push redeploy"
+    },
+    {
+      "rank": 2,
+      "id": "factory_cutover",
+      "summary": "execute-mission.mjs uses factory execute-step; canonical harness uses /build — two hot paths",
+      "tool": "builderos:mission-run --canonical",
+      "fix": "Use mission-run for MECHANICAL; factory path for full ARC stack"
+    },
+    {
+      "rank": 3,
+      "id": "founder_spine_orphans",
+      "summary": "Tool registry lists action-inbox, control-plane, token-accounting as not on founder spine",
+      "tool": "builderos:tools:registry",
+      "fix": "See BUILDEROS_TOOL_REGISTRY.json integration_roadmap phases 1-5"
+    },
+    {
+      "rank": 4,
+      "id": "legacy_queues",
+      "summary": "Hist MISSION_QUEUE + builder-daemon compete with BP_PRIORITY",
+      "tool": null,
+      "fix": "BUILDER_QUEUE_ENABLED=0; use builderos:bp-priority:once only"
+    },
+    {
+      "rank": 5,
+      "id": "mechanical_deliberation",
+      "summary": "MECHANICAL tier deliberation skip requires deploy of council-builder routes",
+      "tool": "builderos:deploy:verify",
+      "fix": "Deploy routes patch from harness audit session"
+    }
+  ]
+}

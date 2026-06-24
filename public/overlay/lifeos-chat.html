@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<!-- SYNOPSIS: HTML page: Lumin — LifeOS -->
+<!-- SYNOPSIS: LEGACY HIST — full chat UI; default redirects to canonical Lumin in lifeos-app -->
+<!-- @legacy Retired generative path. ?legacy_hist=1 for read-only archive. Canonical: lifeos-app Lumin drawer → founder-interface/message -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lumin — LifeOS</title>
+  <script>
+    (function () {
+      if (!new URLSearchParams(location.search).get('legacy_hist')) {
+        location.replace('/overlay/lifeos-app.html?direct_system=1&lumin_voice=1');
+      }
+    })();
+  </script>
   <script src="/overlay/lifeos-bootstrap.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

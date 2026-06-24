@@ -1,0 +1,37 @@
+{
+  "schema": "builderos_execution_tier_v1",
+  "updated_at": "2026-06-24",
+  "purpose": "Trim governance overkill on mechanical blueprint execution; keep HARD gates on load-bearing work.",
+  "tiers": {
+    "MECHANICAL": {
+      "description": "Approved BLUEPRINT.json step with target_file and acceptance_test_ids",
+      "gates_skipped": [
+        "IDC_EXIT",
+        "POST_ARC_BUNDLE",
+        "SIMULATION_FIDELITY",
+        "STUDIO_BLOCKING"
+      ],
+      "gates_required": [
+        "LIFEOS_SERVICE_DOCTRINE",
+        "safe_scope",
+        "syntax_verify",
+        "acceptance_script"
+      ],
+      "deliberation_on_build": false,
+      "metadata_field": "execution_tier=MECHANICAL"
+    },
+    "LOAD_BEARING": {
+      "description": "New product scope, architecture, or founder packet without blueprint",
+      "gates_required": "all HARD in GATE_ENFORCEMENT_MATRIX.json",
+      "deliberation_on_build": true
+    },
+    "PLATFORM": {
+      "description": "BuilderOS / routes / services spine",
+      "gates_required": "all HARD + kernel_wrap + done_gate",
+      "deliberation_on_build": true,
+      "safe_scope_enforced": true
+    }
+  },
+  "default_for_mission_execute": "MECHANICAL",
+  "authority": "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json"
+}

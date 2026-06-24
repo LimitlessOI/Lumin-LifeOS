@@ -1,0 +1,47 @@
+{
+  "levers_applied": {
+    "SYNTAX_FAIL::inner_review_syntax_gate": {
+      "lever": "inner_review_syntax_gate",
+      "playbook": "SYNTAX_FAIL",
+      "first_at": "2026-06-24T18:43:19.963Z",
+      "count": 7,
+      "last_at": "2026-06-24T18:54:02.532Z"
+    },
+    "DONE_GATE_BLOCKED::kernel_wrap_build_ledger": {
+      "lever": "kernel_wrap_build_ledger",
+      "playbook": "DONE_GATE_BLOCKED",
+      "first_at": "2026-06-24T18:48:23.949Z",
+      "count": 1,
+      "last_at": "2026-06-24T18:48:23.949Z"
+    },
+    "UNKNOWN::builder_gaps_pattern_review": {
+      "lever": "builder_gaps_pattern_review",
+      "playbook": "UNKNOWN",
+      "first_at": "2026-06-24T18:48:35.817Z",
+      "count": 1,
+      "last_at": "2026-06-24T18:48:35.817Z"
+    },
+    "SAFE_SCOPE_BLOCKED::safe_scope_prefix_or_retry": {
+      "lever": "safe_scope_prefix_or_retry",
+      "playbook": "SAFE_SCOPE_BLOCKED",
+      "first_at": "2026-06-24T18:51:38.086Z",
+      "count": 5,
+      "last_at": "2026-06-24T18:54:02.533Z"
+    },
+    "MISSING_TARGET::blueprint_target_file_required": {
+      "lever": "blueprint_target_file_required",
+      "playbook": "MISSING_TARGET",
+      "first_at": "2026-06-24T18:52:13.033Z",
+      "count": 2,
+      "last_at": "2026-06-24T18:52:20.803Z"
+    }
+  },
+  "failure_counts": {
+    "SYNTAX_FAIL::inner_review_syntax_gate": 7,
+    "DONE_GATE_BLOCKED::kernel_wrap_build_ledger": 1,
+    "UNKNOWN::builder_gaps_pattern_review": 3,
+    "SAFE_SCOPE_BLOCKED::safe_scope_prefix_or_retry": 5,
+    "MISSING_TARGET::blueprint_target_file_required": 2
+  },
+  "last_improvement_at": "2026-06-24T18:54:02.533Z"
+}

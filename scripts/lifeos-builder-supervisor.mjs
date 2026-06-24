@@ -29,6 +29,7 @@ import path from 'path';
 import { pathToFileURL } from 'url';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+import { classifyBuilderGap, summarizeGapFamilies } from '../services/builderos-gap-classifier.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -303,43 +304,31 @@ async function analyzeBuilderGaps() {
       return;
     }
 
-    const patterns = {};
-    for (const g of gaps) {
-      const reason = String(g.failure_reason || '');
-      let bucket;
-      if (/\*[A-Za-z_$]/.test(reason)) bucket = 'asterisk-params (*rk/*ccm)';
-      else if (/--- REPO FILE/i.test(reason)) bucket = 'repo-file-marker leaked into JS';
-      else if (/<!DOCTYPE|SyntaxError.*'<'/.test(reason)) bucket = 'HTML emitted for JS target';
-      else if (/generated HTML is missing|truncated before <body/i.test(reason)) bucket = 'HTML truncation';
-      else if (/generated HTML is too short/i.test(reason)) bucket = 'HTML too short';
-      else if (/empty/i.test(reason)) bucket = 'empty output';
-      else if (/syntax/i.test(g.failure_stage)) bucket = 'other syntax error';
-      else if (/validation/i.test(g.failure_stage)) bucket = 'other validation failure';
-      else bucket = 'other';
-      patterns[bucket] = (patterns[bucket] || 0) + 1;
-    }
-    const sorted = Object.entries(patterns).sort((a, b) => b[1] - a[1]);
-    const total = gaps.length;
+    const enriched = gaps.map((g) => ({
+      ...g,
+      ...(g.failure_family && g.failure_family !== 'other' ? {} : classifyBuilderGap(g)),
+    }));
+    const stats = summarizeGapFamilies(enriched);
+    const sorted = Object.entries(stats.buckets).sort((a, b) => b[1] - a[1]);
+    const total = stats.total;
 
-    // Truth level: RECEIPT — these are DB rows from real past failures, not live probes
     const scope = domain ? `domain=${domain} ` : '';
     console.log(
       `\n[supervisor] RECEIPT: ${total} builder gap records (${scope}limit=${limit} — past failures, not a live probe):`,
     );
     for (const [pat, count] of sorted) {
       const pct = Math.round((count / total) * 100);
-      const fixed = /asterisk-params|repo-file-marker|HTML emitted for JS/.test(pat) ? ' [sanitizer fix deployed]' : '';
-      console.log(`  ${count}x (${pct}%) ${pat}${fixed}`);
+      console.log(`  ${count}x (${pct}%) ${pat}`);
     }
+    console.log(`[supervisor] KNOW: other bucket ${stats.otherPct}% (${stats.other} unclassified)`);
     const topPattern = sorted[0]?.[0];
     const topCount = sorted[0]?.[1] || 0;
-    if (topCount >= 3) {
-      const isKnownFixed = /asterisk-params|repo-file-marker|HTML emitted for JS/.test(topPattern);
-      if (isKnownFixed) {
-        console.log(`[supervisor] THINK: "${topPattern}" was the top failure — sanitizer fix committed; watch gaps after next deploy to confirm.`);
-      } else {
-        console.log(`[supervisor] RECEIPT: Highest-yield unresolved pattern: "${topPattern}" (${topCount} hits). Step 3 lever — docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`);
-      }
+    if (topCount >= 3 && topPattern !== 'other') {
+      console.log(
+        `[supervisor] RECEIPT: Highest-yield failure family: "${topPattern}" (${topCount} hits). Step 3 lever — docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`,
+      );
+    } else if (stats.otherPct > 25) {
+      console.log('[supervisor] THINK: other bucket >25% — run gap classifier deploy or review unclassified reasons.');
     }
     console.log();
   } catch {

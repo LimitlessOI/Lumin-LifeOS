@@ -22,6 +22,12 @@ import { emitTSOSHookReading, buildTsosHookPayloadFromGovernedCommit } from './b
 import { scheduleProofParityAfterGovernedCommit } from './builderos-governed-proof-parity.js';
 import { looksLikeBuilderProseRefusal } from './builder-instruction-target.js';
 import { verifyGovernedOutcomeBeforePass } from './builder-outcome-verifier.js';
+import {
+  classifyCodegenFailure,
+  buildCodegenRepairDispatch,
+  mergeRepairIntoPlan,
+} from './builderos-codegen-self-repair.js';
+import { recordCompoundImprovement } from './builderos-compound-improvement.js';
 
 function resolveBaseUrl(explicit) {
   return (
@@ -376,13 +382,74 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   }
 
   if (!builderResult.ok || !builderResult.committed) {
-    const blocker = resolveBuilderDispatchBlocker(builderResult, plan);
-    await updateCommandControlJobExecution(pool, jobId, {
-      status: 'failed',
+    let blocker = resolveBuilderDispatchBlocker(builderResult, plan);
+    const failureClass = classifyCodegenFailure({
       blocker,
-      result_json: { builder_output: trace.builder_output, builder_raw: builderResult.raw },
+      code: builderResult.raw?.code,
+      error: builderResult.error,
+      builderResult,
+      httpStatus: builderResult.http_status,
     });
-    return { ok: false, error: 'builder_failed', stage: 'builder_dispatch', trace, blocker };
+    recordCompoundImprovement({
+      source: 'governed_loop',
+      mission_id: job.mission_id || null,
+      target_file: plan.target_file,
+      blocker,
+      code: builderResult.raw?.code,
+      error: builderResult.error,
+      builderResult,
+      httpStatus: builderResult.http_status,
+      success: false,
+    });
+
+    if (failureClass.repairable && !trace.codegen_repair?.attempted) {
+      const repairPatch = buildCodegenRepairDispatch(failureClass, { plan, job, attempt: 1 });
+      if (repairPatch && repairPatch.action !== 'run_self_repair_chain') {
+        plan = mergeRepairIntoPlan(plan, repairPatch);
+        trace.codegen_repair = { attempted: true, playbook: failureClass.playbook, attempt: 1 };
+        await updateCommandControlJobExecution(pool, jobId, {
+          receipt: { stage: 'codegen_self_repair', playbook: failureClass.playbook, attempt: 1 },
+        });
+        builderResult = await dispatchBuilderPlan(plan, {
+          baseUrl,
+          commandKey,
+          task_id: `cc-${jobId}-repair1`,
+          blueprint_id: job.blueprint_id || plan.blueprint_id,
+          job,
+        });
+        trace.builder_output = {
+          ...trace.builder_output,
+          repair_attempt: 1,
+          committed: builderResult.committed,
+          playbook: failureClass.playbook,
+          model_used: builderResult.model_used,
+          error: builderResult.error,
+        };
+        if (builderResult.ok && builderResult.committed) {
+          recordCompoundImprovement({
+            source: 'governed_loop',
+            mission_id: job.mission_id || null,
+            target_file: plan.target_file,
+            success: true,
+          });
+        }
+      }
+    }
+
+    if (!builderResult.ok || !builderResult.committed) {
+      blocker = resolveBuilderDispatchBlocker(builderResult, plan);
+      await updateCommandControlJobExecution(pool, jobId, {
+        status: 'failed',
+        blocker,
+        result_json: {
+          builder_output: trace.builder_output,
+          builder_raw: builderResult.raw,
+          codegen_repair: trace.codegen_repair || null,
+          failure_class: failureClass,
+        },
+      });
+      return { ok: false, error: 'builder_failed', stage: 'builder_dispatch', trace, blocker };
+    }
   }
 
   let verifierResult = await verifyBuilderOutput(builderResult.target_file, builderResult.output);

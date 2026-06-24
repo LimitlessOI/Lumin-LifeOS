@@ -6,6 +6,7 @@ import { detectDualIntent } from './chair-context-classifier.js';
 import { gatherChairNativeFacts } from './chair-native-facts.js';
 import { translateChairPersonality } from './chair-personality-translate.js';
 import { formatStrategicBriefSection } from './lumin-strategic-intelligence.js';
+import { getDoctrinePromptBlock } from './lifeos-service-doctrine.js';
 
 export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext = {}) {
   const {
@@ -24,6 +25,11 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     memoryContext,
     strategicBrief,
   }, chairContext);
+
+  const doctrineBlock = getDoctrinePromptBlock();
+  if (doctrineBlock && !systemFacts.lifeos_service_doctrine) {
+    systemFacts.lifeos_service_doctrine = doctrineBlock;
+  }
 
   let voice = await translatePersonality({
     callAI,

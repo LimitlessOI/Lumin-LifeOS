@@ -46,6 +46,23 @@ For Adam, LifeOS is the cockpit and BuilderOS is the engine.
 
 ---
 
+## Single connection law (Adam 2026-06-24 — locked)
+
+**One true path for founder ↔ Lumin communication:**
+
+| Layer | Canonical |
+|-------|-----------|
+| **API** | `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` |
+| **Runtime** | `services/lumin-chair-orchestrator.js` → `runLuminChairTurn` |
+| **UI** | `/overlay/lifeos-app.html` Lumin drawer (`USE_DIRECT_SYSTEM_CHAT=true`) |
+| **Verify** | `npm run lifeos:lumin:connection:verify:live` |
+
+**Retired (history-only):** `POST /api/v1/lifeos/chat/threads/:id/messages`, stream, copilot session message, standalone `lifeos-chat.html` (redirects unless `?legacy_hist=1`).
+
+**Enforcement:** `LUMIN_SINGLE_CONNECTION=1` (default) → legacy generative paths return **410** with `LUMIN_LEGACY_PATH_RETIRED`. Authority: `builderos-reboot/governance/LUMIN_CONNECTION_LAW.json`.
+
+---
+
 ## What Lumin Must Have
 
 1. **Conversational ability** — real conversation, brainstorming, counsel

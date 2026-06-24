@@ -1,0 +1,75 @@
+{
+  "schema": "lumin_connection_law_v1",
+  "updated_at": "2026-06-24",
+  "operator_lock": "Adam — one true Lumin connection. Legacy comm paths are history-only.",
+  "canonical": {
+    "founder_message": {
+      "method": "POST",
+      "path": "/api/v1/lifeos/builderos/command-control/founder-interface/message",
+      "poll_build_job": "GET /api/v1/lifeos/builderos/command-control/founder-interface/build-job/:jobId",
+      "runtime": "services/lumin-chair-orchestrator.js → runLuminChairTurn",
+      "ui_primary": "/overlay/lifeos-app.html (Lumin drawer, USE_DIRECT_SYSTEM_CHAT=true)"
+    },
+    "doctrine": "docs/LUMIN_DOCTRINE.md",
+    "verify": "npm run lifeos:lumin:connection:verify",
+    "live_verify": "npm run lifeos:lumin:connection:verify:live"
+  },
+  "enforcement": {
+    "env_flag": "LUMIN_SINGLE_CONNECTION",
+    "default": "1",
+    "disabled_when": "LUMIN_SINGLE_CONNECTION=0",
+    "http_status_retired": 410,
+    "error_code": "LUMIN_LEGACY_PATH_RETIRED"
+  },
+  "retired_generative_paths": [
+    {
+      "id": "chat_messages",
+      "method": "POST",
+      "path_pattern": "/api/v1/lifeos/chat/threads/:id/messages",
+      "was": "services/lifeos-lumin.js direct LLM chat (bypassed Chair)",
+      "hist_domain": "History — read thread/messages GET only"
+    },
+    {
+      "id": "chat_stream",
+      "method": "POST",
+      "path_pattern": "/api/v1/lifeos/chat/threads/:id/messages/stream",
+      "was": "SSE streaming chat bypassing Chair",
+      "hist_domain": "History"
+    },
+    {
+      "id": "copilot_session_message",
+      "method": "POST",
+      "path_pattern": "/api/v1/lifeos/copilot/sessions/:id/message",
+      "was": "Legacy copilot live session chat",
+      "hist_domain": "History"
+    }
+  ],
+  "history_only_surfaces": [
+    {
+      "path": "/overlay/lifeos-founder-interface.html",
+      "status": "redirect",
+      "redirect_to": "/overlay/lifeos-app.html"
+    },
+    {
+      "path": "/overlay/lifeos-chat.html",
+      "status": "redirect_unless_legacy_hist",
+      "redirect_to": "/overlay/lifeos-app.html?direct_system=1",
+      "legacy_query": "legacy_hist=1"
+    },
+    {
+      "path": "/api/v1/lifeos/chat/build/*",
+      "status": "utility_not_comms",
+      "note": "Programming bridge (plan/draft/pending_adam) — not founder↔Lumin conversation; separate from retired chat paths"
+    }
+  ],
+  "allowed_read_paths": [
+    "GET /api/v1/lifeos/chat/threads",
+    "GET /api/v1/lifeos/chat/threads/:id/messages",
+    "GET /api/v1/lifeos/chat/build/jobs"
+  ],
+  "forbidden_runtime_patterns": [
+    "Parallel if/else founder routing outside lumin-chair-orchestrator",
+    "lifeos-lumin.js chat() for new founder turns when single-connection enforced",
+    "UI calling /api/v1/lifeos/chat/threads/*/messages for send"
+  ]
+}

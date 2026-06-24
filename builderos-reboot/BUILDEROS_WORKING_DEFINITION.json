@@ -1,0 +1,67 @@
+{
+  "schema": "builderos_working_definition_v1",
+  "updated_at": "2026-06-24",
+  "operator_lock": "Adam — BuilderOS only (not LifeRE product). 10/10 = real loop, not theater.",
+  "benchmark": "Envision → program → self-repair → compound improve — without fake green.",
+  "pillars": {
+    "envisioned_workflow": {
+      "label": "Works as BuilderOS machine (mission → blueprint → build → receipt)",
+      "weight": 0.25,
+      "pass_requires_all": true
+    },
+    "real_programming": {
+      "label": "Can program — commits code via canonical harness with routing",
+      "weight": 0.25,
+      "pass_requires_all": true
+    },
+    "self_repair": {
+      "label": "Fixes itself — detect, classify, repair codegen + ops failures",
+      "weight": 0.25,
+      "pass_requires_all": true
+    },
+    "compound_improvement": {
+      "label": "Improves itself — every failure logs a lever; platform compounds",
+      "weight": 0.25,
+      "pass_requires_all": true
+    }
+  },
+  "canonical_path": {
+    "id": "builderos_canonical_v1",
+    "primary": "services/builderos-canonical-executor.js → POST /api/v1/lifeos/builder/build",
+    "governed": "services/builderos-governed-loop-executor.js",
+    "parallel": "scripts/autonomy/builder-supervisor.js (worktree workers)",
+    "deprecated_unless_opt_in": [
+      "routes/auto-builder-routes.js",
+      "scripts/lifeos-builder-continuous-queue.mjs without BUILDER_QUEUE_ENABLED=1"
+    ]
+  },
+  "execution_tiers": {
+    "MECHANICAL": "Blueprint step with target_file + acceptance_test_ids — skip ARC/IDC/post-ARC HARD gates",
+    "LOAD_BEARING": "Architecture/product decisions — full gate stack",
+    "PLATFORM": "BuilderOS spine changes — deliberation + safe-scope + kernel wrap"
+  },
+  "verify_command": "npm run builderos:working-definition:verify",
+  "verify_operational_command": "npm run builderos:working-definition:verify:operational",
+  "harness_audit_command": "npm run builderos:harness:audit",
+  "harness_tools_manifest": "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json",
+  "pre_build_gate_command": "npm run builderos:pre-build-gate",
+  "required_tooling": [
+    "builderos:mission-step",
+    "builderos:mission-run",
+    "builderos:pre-build-gate",
+    "builderos:deploy:verify",
+    "builderos:gap:families",
+    "builderos:compound:summary",
+    "builderos:harness:audit",
+    "builderos:operational-proof"
+  ],
+  "min_score_each_pillar": 10,
+  "honesty_law": "Structural 10/10 = wiring exists. Operational 10/10 = live ready + gap health + repair proof + compound from production failures. Calling structural operational is fake green.",
+  "industry_patterns_adopted": [
+    "cursor_planner_worker_handoffs",
+    "codex_isolated_task_dispatch",
+    "claude_code_hooks_fail_closed",
+    "openhands_workspace_isolation",
+    "evidence_backed_completion"
+  ]
+}

@@ -1483,7 +1483,7 @@
         <span class="nav-icon">🏠</span>
         <span class="nav-label">LifeRE</span>
       </a>
-      <a class="nav-item" id="nav-chat" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-chat" data-label="Lumin" onclick="openLuminFromQuickBar(); return false;" href="#">
         <span class="nav-icon">💬</span>
         <span class="nav-label">Chat</span>
       </a>
@@ -1701,7 +1701,7 @@
       <span class="more-item-icon">🏠</span>
       <span class="more-item-label">LifeRE</span>
     </div>
-    <div class="more-item" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="mobileNavFromMore('lifeos-chat.html','Lumin Chat','--c-coach')">
+    <div class="more-item" data-label="Lumin" onclick="openLuminFromQuickBar(); closeMobileMore();">
       <span class="more-item-icon">💬</span>
       <span class="more-item-label">Chat</span>
     </div>
@@ -2644,10 +2644,8 @@ function closeLuminDrawer() {
 }
 
 function openFullChat() {
-  closeLuminDrawer();
-  loadPage('lifeos-chat.html');
-  // Active nav item
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  openLuminDrawer();
+  document.getElementById('lumin-input')?.focus();
 }
 
 /* Boot: load default thread (same as dashboard chat) */
