@@ -188,11 +188,24 @@ html[data-theme="light"] [data-lifere="daily-command-center"] .deal-pick.active 
 }
 
 /* founder-assistant-bubble-style:start */
-/* Lumin + dashboard assistant reply bubbles — founder UI preference */
+/* Lumin + dashboard assistant reply bubbles — readable in light and dark */
 .lumin-msg.assistant,
 .msg.assistant {
-  background: #f0f0f0 !important;
-  border-color: #f0f0f0 !important;
-  color: #f0f0f0 !important;
+  background: var(--bg-surface2, #eef0f4) !important;
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.08)) !important;
+  border-color: var(--border, rgba(0, 0, 0, 0.08)) !important;
+  color: var(--text-primary, #1a1a2e) !important;
+}
+html[data-theme="light"] .lumin-msg.assistant,
+html[data-theme="light"] .msg.assistant {
+  background: #f5f5f7 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #1a1a2e !important;
+}
+html[data-theme="dark"] .lumin-msg.assistant,
+html[data-theme="dark"] .msg.assistant {
+  background: var(--bg-surface2, #1e1e28) !important;
+  border-color: var(--border, rgba(255, 255, 255, 0.08)) !important;
+  color: var(--text-primary, #e8e8f0) !important;
 }
 /* founder-assistant-bubble-style:end */

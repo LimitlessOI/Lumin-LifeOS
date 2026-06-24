@@ -84,15 +84,33 @@ export function parseAssistantBubbleColors(task = '') {
   return { background, border, color };
 }
 
+export function ensureAssistantBubbleContrast(colors) {
+  const bg = String(colors?.background || '').toLowerCase();
+  const fg = String(colors?.color || '').toLowerCase();
+  if (!bg || !fg || bg !== fg) return colors;
+  const hex = bg.replace('#', '');
+  if (hex.length !== 6) {
+    colors.color = '#1a1a2e';
+    return colors;
+  }
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  colors.color = lum > 0.55 ? '#1a1a2e' : '#e8e8f0';
+  return colors;
+}
+
 export function buildAssistantBubbleCssBlock({ background, border, color }) {
+  const safe = ensureAssistantBubbleContrast({ background, border, color });
   return [
     MARKER_START,
     '/* Lumin + dashboard assistant reply bubbles — founder UI preference */',
     '.lumin-msg.assistant,',
     '.msg.assistant {',
-    `  background: ${background} !important;`,
-    `  border-color: ${border} !important;`,
-    `  color: ${color} !important;`,
+    `  background: ${safe.background} !important;`,
+    `  border-color: ${safe.border} !important;`,
+    `  color: ${safe.color} !important;`,
     '}',
     MARKER_END,
   ].join('\n');
@@ -149,7 +167,7 @@ export function bumpServiceWorkerCache(swContent) {
 export function applyAssistantBubbleCssPatch({ root, task, cacheBust = null }) {
   const bust = cacheBust || `f${Date.now()}`;
   if (!isCssOnlyUiFeedback(task)) return { ok: false, reason: 'not_css_only_ui' };
-  const colors = parseAssistantBubbleColors(task);
+  const colors = ensureAssistantBubbleContrast(parseAssistantBubbleColors(task));
   if (!colors) return { ok: false, reason: 'no_color_intent' };
 
   const themeAbs = path.join(root, ASSISTANT_BUBBLE_CSS_TARGET);

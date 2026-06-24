@@ -10,7 +10,7 @@
 <title>Dashboard · LifeOS</title>
 <!-- Theme must load before anything renders to avoid flash -->
 <script src="/overlay/lifeos-theme.js"></script>
-<link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css?v=f1782277916523">
+<link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css?v=20260519e">
 <link rel="stylesheet" href="../shared/lifeos-dashboard-tokens.css">
 <link rel="stylesheet" href="../shared/lifeos-dashboard-ai-rail.css">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -557,10 +557,10 @@ border-bottom-right-radius: var(--radius-sm);
 }
 .msg.assistant {
 align-self: flex-start;
-background: #f0f0f0;
-color: #f0f0f0;
+background: var(--bg-surface2);
+color: var(--text-primary);
 border-bottom-left-radius: var(--radius-sm);
-border: 1px solid #f0f0f0;
+border: 1px solid var(--border);
 }
 
 
@@ -1390,14 +1390,12 @@ spaceMicHeld = false;
 if (dashboardVoice) dashboardVoice.stopMic();
 });
 // ── Initial loads ──
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 CTX.startSessionKeepAlive();
+await CTX.refreshIfNeeded();
 initDashboardVoice();
 initChatHistory();
-loadMITs();
-loadCalendar();
-loadGoals();
-loadScores();
+await Promise.allSettled([loadMITs(), loadCalendar(), loadGoals(), loadScores()]);
 // Set initial theme
 const savedTheme = localStorage.getItem('lifeos_theme');
 if (savedTheme) {

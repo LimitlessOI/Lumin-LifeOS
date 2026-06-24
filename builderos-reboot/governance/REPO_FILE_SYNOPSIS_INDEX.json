@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T22:51:25.188Z",
+  "generated_at": "2026-06-24T22:58:15.680Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12383,
   "files": [
@@ -41113,9 +41113,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 479481,
-      "mtime": "2026-06-24T22:51:19.454Z",
-      "indexed_at": "2026-06-24T22:51:25.188Z"
+      "bytes": 479379,
+      "mtime": "2026-06-24T22:58:01.544Z",
+      "indexed_at": "2026-06-24T22:58:15.680Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41619,9 +41619,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 134118,
-      "mtime": "2026-06-24T21:10:56.210Z",
-      "indexed_at": "2026-06-24T21:11:00.154Z"
+      "bytes": 134401,
+      "mtime": "2026-06-24T22:58:12.188Z",
+      "indexed_at": "2026-06-24T22:58:15.680Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -69948,9 +69948,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 126888,
-      "mtime": "2026-06-24T22:51:06.556Z",
-      "indexed_at": "2026-06-24T22:51:25.188Z"
+      "bytes": 126912,
+      "mtime": "2026-06-24T22:58:09.297Z",
+      "indexed_at": "2026-06-24T22:58:15.680Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -70059,9 +70059,9 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 40514,
-      "mtime": "2026-06-24T22:51:06.158Z",
-      "indexed_at": "2026-06-24T22:51:25.188Z"
+      "bytes": 40601,
+      "mtime": "2026-06-24T22:57:53.680Z",
+      "indexed_at": "2026-06-24T22:58:15.680Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -70255,9 +70255,9 @@
     {
       "path": "public/overlay/lifeos-theme-overrides.css",
       "synopsis": "LifeOS overlay UI — Lifeos Theme Overrides.",
-      "bytes": 6669,
-      "mtime": "2026-06-24T05:13:23.336Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 7273,
+      "mtime": "2026-06-24T22:57:52.205Z",
+      "indexed_at": "2026-06-24T22:58:15.680Z"
     },
     {
       "path": "public/overlay/lifeos-theme.js",
@@ -70398,9 +70398,9 @@
     {
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
-      "bytes": 7112,
-      "mtime": "2026-06-24T22:51:06.556Z",
-      "indexed_at": "2026-06-24T22:51:25.188Z",
+      "bytes": 7109,
+      "mtime": "2026-06-24T22:57:56.018Z",
+      "indexed_at": "2026-06-24T22:58:15.680Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86809,9 +86809,9 @@
     {
       "path": "services/founder-css-patch.js",
       "synopsis": "Mechanical CSS patches for founder UI feedback — no whole-file HTML rewrite.",
-      "bytes": 8137,
-      "mtime": "2026-06-21T21:38:59.038Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 8852,
+      "mtime": "2026-06-24T22:57:56.282Z",
+      "indexed_at": "2026-06-24T22:58:15.680Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
