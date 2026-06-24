@@ -91,4 +91,16 @@ describe('truth-lockdown', () => {
     }, 'chair');
     assert.equal(locked.truth_lockdown_applied, true);
   });
+
+  it('does not mangle counsel disclaimer on second lockdown pass', () => {
+    const counselCard = '💬 Counsel only · nothing executed\n\nCheck your manual for oil intervals.\n\nTo execute: say `do: …`';
+    const out = enforceTruthLockdown({
+      pass_fail: 'NO_COMMAND_RAN',
+      command_truth: 'NO_COMMAND_RAN',
+      human_summary: counselCard,
+      founder_card_applied: true,
+    }, 'chair');
+    assert.doesNotMatch(out.human_summary || '', /\[removed —/);
+    assert.match(out.human_summary || '', /Counsel only/i);
+  });
 });

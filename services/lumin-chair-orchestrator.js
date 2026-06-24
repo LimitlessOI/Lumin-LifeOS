@@ -39,6 +39,7 @@ import {
   resolveChairContext,
   requiresPreExecuteClarify,
   chairChannelFromContext,
+  hasHighConfidenceBuildTarget,
 } from './chair-context-classifier.js';
 import { runChairNativeTurn } from './chair-lumin-unified.js';
 import { translateChairPersonality } from './chair-personality-translate.js';
@@ -210,13 +211,18 @@ function finalizeTruth(truth, channel) {
   const locked = enforceTruthLockdown(truth, channel);
   const technical = locked.human_summary_technical || locked.human_summary || '';
   const withChannel = { ...locked, chair_channel: channel };
-  const wrapped = {
+  const humanSummary = wrapChairHumanSummary(withChannel, technical);
+  const final = enforceTruthLockdown({
     ...withChannel,
     action: locked.action || channel,
     human_summary_technical: technical,
-    human_summary: wrapChairHumanSummary(withChannel, technical),
-  };
-  return enforceTruthLockdown({ ...wrapped, human_summary: wrapped.human_summary }, channel);
+    human_summary: humanSummary,
+    founder_card_applied: true,
+  }, channel);
+  if (humanSummary) {
+    final.human_summary = humanSummary;
+  }
+  return final;
 }
 
 function systemActionChairResponse(ctx, result) {
@@ -270,9 +276,12 @@ export async function runLuminChairTurn(ctx, deps) {
   const actionSource = ctx.originalText || cleanedInput;
   const effectiveInput = doPrefix.text || cleanedInput;
   const forceExecute = doPrefix.forcedExecute || confirmIntent;
+  const likelyBuild = isBuildRequest(effectiveInput)
+    || isRepairContinuationIntent(effectiveInput)
+    || hasHighConfidenceBuildTarget(effectiveInput);
 
   const skipIntentGate = force || forceExecute;
-  if (!skipIntentGate) {
+  if (!skipIntentGate && (!conversationalMode || likelyBuild)) {
     const wisdom = assessFounderUtteranceWisdom(effectiveInput, { confirmIntent: forceExecute });
     if (wisdom.needs_clarification) {
       return chairWisdomClarifyResponse(
@@ -306,7 +315,7 @@ export async function runLuminChairTurn(ctx, deps) {
     forceExecute,
   };
 
-  if (!skipIntentGate && requiresPreExecuteClarify(effectiveInput, contextOpts)) {
+  if (!skipIntentGate && (!conversationalMode || likelyBuild) && requiresPreExecuteClarify(effectiveInput, contextOpts)) {
     let expandedTask = effectiveInput;
     if (isBuildRequest(effectiveInput) || isRepairContinuationIntent(effectiveInput)) {
       expandedTask = await deps.resolveBuildTaskForFounder(ctx.req, effectiveInput);

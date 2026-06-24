@@ -43,7 +43,7 @@ export function formatFounderCard(truth = {}) {
             : truth.pass_fail === 'FAIL'
             ? `${action.replace(/_/g, ' ')} failed.`
             : noCommand
-              ? 'No command ran — counsel only.'
+              ? 'Nothing executed — counsel only.'
               : firstSentence(truth.human_summary) || 'Status update.');
 
   const doneBullets = truth.done_bullets || truth.human_summary_card?.done_bullets || [];

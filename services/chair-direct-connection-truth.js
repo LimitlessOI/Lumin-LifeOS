@@ -90,7 +90,7 @@ export function formatDirectConnectionReply(truth = {}, counselText = '') {
     return lines.join('\n').trim();
   }
 
-  const header = '💬 Counsel only · No command ran';
+  const header = '💬 Counsel only · nothing executed';
   const hint = 'To execute: say `do: …` or name an action (`open LifeRE`, `run alpha cycle`, `redeploy`).';
   const body = scrubbed || counselText || '';
   const theater = detectCounselTheater(counselText, commandTruth);

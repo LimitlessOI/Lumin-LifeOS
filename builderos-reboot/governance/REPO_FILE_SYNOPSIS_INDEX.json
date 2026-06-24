@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T05:09:06.262Z",
+  "generated_at": "2026-06-24T05:11:21.130Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12348,
   "files": [
@@ -41042,9 +41042,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 474376,
-      "mtime": "2026-06-24T05:08:43.150Z",
-      "indexed_at": "2026-06-24T05:09:06.262Z"
+      "bytes": 474822,
+      "mtime": "2026-06-24T05:11:13.992Z",
+      "indexed_at": "2026-06-24T05:11:21.130Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -70439,9 +70439,9 @@
     {
       "path": "public/shared/lifeos-system-reply.js",
       "synopsis": "js — public/shared/lifeos-system-reply.js.",
-      "bytes": 3755,
-      "mtime": "2026-06-21T21:39:02.652Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z"
+      "bytes": 3880,
+      "mtime": "2026-06-24T05:11:02.613Z",
+      "indexed_at": "2026-06-24T05:11:21.130Z"
     },
     {
       "path": "public/shared/lifeos-voice-chat.js",
@@ -85431,9 +85431,9 @@
     {
       "path": "services/chair-direct-connection-truth.js",
       "synopsis": "Lumin direct connection truth — personality OK, execution claims must match receipts.",
-      "bytes": 4843,
-      "mtime": "2026-06-24T05:06:36.787Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z",
+      "bytes": 4845,
+      "mtime": "2026-06-24T05:11:02.381Z",
+      "indexed_at": "2026-06-24T05:11:21.130Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86532,9 +86532,9 @@
     {
       "path": "services/founder-communication-format.js",
       "synopsis": "Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).",
-      "bytes": 5467,
-      "mtime": "2026-06-24T02:57:09.201Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z",
+      "bytes": 5469,
+      "mtime": "2026-06-24T05:11:02.533Z",
+      "indexed_at": "2026-06-24T05:11:21.130Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87991,9 +87991,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 25528,
-      "mtime": "2026-06-24T05:06:36.789Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z",
+      "bytes": 25882,
+      "mtime": "2026-06-24T05:11:01.998Z",
+      "indexed_at": "2026-06-24T05:11:21.130Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89812,9 +89812,9 @@
     {
       "path": "services/truth-lockdown.js",
       "synopsis": "Supreme fail-closed truth gate — no founder reply leaves without receipt-backed claims.",
-      "bytes": 9034,
-      "mtime": "2026-06-24T05:06:36.790Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z",
+      "bytes": 10032,
+      "mtime": "2026-06-24T05:10:55.429Z",
+      "indexed_at": "2026-06-24T05:11:21.130Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -94179,9 +94179,9 @@
     {
       "path": "tests/truth-lockdown.test.js",
       "synopsis": "Truth lockdown — fail-closed compliance tests.",
-      "bytes": 3256,
-      "mtime": "2026-06-24T05:06:36.792Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z",
+      "bytes": 3797,
+      "mtime": "2026-06-24T05:11:05.477Z",
+      "indexed_at": "2026-06-24T05:11:21.130Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

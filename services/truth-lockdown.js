@@ -30,7 +30,7 @@ const FALSE_PASS_WHOLE = [
 
 const EXECUTE_CLAIM_WITHOUT_COMMAND = [
   /\b(i (ran|executed|triggered|started|dispatched))\b/i,
-  /\b(command (ran|executed|completed))\b/i,
+  /\b(the command (ran|executed|completed))\b/i,
   /\b(build (is )?(running|complete|done))\b/i,
   /\b(changes (are|have been) (live|deployed|applied))\b/i,
 ];
@@ -45,21 +45,51 @@ function textBlob(truth = {}) {
 }
 
 function scrubField(text, commandTruth, passFail) {
-  let out = scrubCounselTheater(String(text || ''), commandTruth);
-  if (passFail === 'FAIL') {
-    for (const re of FALSE_SUCCESS_WHEN_FAIL) {
-      if (re.test(out)) {
-        out = out.replace(re, '[removed — FAIL receipt; claim not proven]');
+  let out = String(text || '');
+  if (!out.trim()) return '';
+
+  if (out.includes('[removed —')) {
+    return out.replace(/\s{2,}/g, ' ').trim();
+  }
+
+  const lines = out.split('\n');
+  const protectedLine = (line) => {
+    const trimmed = line.trimStart();
+    return trimmed.startsWith('💬 Counsel only')
+      || trimmed.startsWith('✅ Done · Command:')
+      || trimmed.startsWith('⏳ Build attempted')
+      || trimmed.startsWith('To execute:')
+      || trimmed.startsWith('✅ DONE')
+      || trimmed.startsWith('❌ NOT DONE')
+      || trimmed.startsWith('⏳ RUNNING')
+      || trimmed.startsWith('🔍 CLARIFY')
+      || trimmed.startsWith('ℹ️')
+      || trimmed.startsWith('NEXT')
+      || trimmed.startsWith('Why:')
+      || trimmed.startsWith('── Technical ──')
+      || /^•\s/.test(trimmed);
+  };
+
+  out = lines.map((line) => {
+    if (protectedLine(line)) return line;
+    let scrubbed = scrubCounselTheater(line, commandTruth);
+    if (passFail === 'FAIL') {
+      for (const re of FALSE_SUCCESS_WHEN_FAIL) {
+        if (re.test(scrubbed)) {
+          scrubbed = scrubbed.replace(re, '[removed — FAIL receipt; claim not proven]');
+        }
       }
     }
-  }
-  if (commandTruth === 'NO_COMMAND_RAN') {
-    for (const re of EXECUTE_CLAIM_WITHOUT_COMMAND) {
-      if (re.test(out)) {
-        out = out.replace(re, '[removed — no command ran]');
+    if (commandTruth === 'NO_COMMAND_RAN') {
+      for (const re of EXECUTE_CLAIM_WITHOUT_COMMAND) {
+        if (re.test(scrubbed)) {
+          scrubbed = scrubbed.replace(re, '[removed — no command ran]');
+        }
       }
     }
-  }
+    return scrubbed;
+  }).join('\n');
+
   return out.replace(/\s{2,}/g, ' ').trim();
 }
 
