@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-22 — mission pipeline honesty gate (technical ≠ founder Point B). Prior: Lumin wake word → Lumin Chair only.
+**Last Updated:** 2026-06-24 — context router v1 + Chair doctrine inject. Prior: mission pipeline honesty gate (technical ≠ founder Point B).
 
 ---
 
@@ -1598,6 +1598,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-24 | **Context router v1 + Chair doctrine inject** — `lifeos-context-router.js`, `GET /api/v1/lifeos/context/suggest`, shell `?stack=lifere`; `chair-lumin-unified.js` injects `getDoctrinePromptBlock()` on every Lumin turn. | Adam: fluid OS — auto-surface stacks; doctrine everywhere not just command-control. | ✅ context-router tests | deploy |
 | 2026-06-13 | **LifeOS Service & Epistemology Doctrine HARD wired** — `docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md`, `services/lifeos-service-doctrine.js`, `config/lifeos-personal-twin-schema.json`, `config/lifeos-stack-registry.json`, `LIFEOS_SERVICE_DOCTRINE_RUNTIME.json`, `verify-lifeos-service-doctrine.mjs` in `builder:preflight`, GATE `LIFEOS_SERVICE_DOCTRINE`, Lumin + SMOS prompt inject, founder packet ASSUMPTIONS/NOT_THIS/ALWAYS fields. LifeRE proxies via Am LIFERE. | Adam: capture all nuances — serve don't decide, per-person whys, truth law, fluid OS, SMOS role — hard compliance all stacks. | ✅ doctrine verify + tests | deploy |
 | 2026-06-13 | **Personal Lumin mode:** skip strategic brief + Point B theater on errands; plain prose UI (no NO_COMMAND_RAN card); coupon link fallback; honesty prompt bans invented location/schedule/history. | Adam: oil change reply hallucinated Jiffy Lube distance + appended founder success test garbage. | ✅ personal mode tests | deploy |
 | 2026-06-13 | **Lumin unified context classifier:** `chair-context-classifier.js` + `chair-lumin-unified.js` — life vs code vs command; default `lumin` help (not Point B / builder CLARIFY); clarify only on high-confidence product build without target. | Adam: LifeOS must be personal everything + command center + coder — context-aware, not keyword theater. | ✅ context tests | deploy |

@@ -1,0 +1,24 @@
+{
+  "schema": "lifere_content_brief_v1",
+  "required_before": ["coach", "script", "record", "pipeline"],
+  "fields": {
+    "topic": "string",
+    "persona": {
+      "label": "string",
+      "description": "string",
+      "pain_points": ["string"],
+      "why_anchor": "string|null"
+    },
+    "competitor_intel": [{ "name": "string", "angle": "string", "gap": "string", "label": "KNOW|THINK|GUESS" }],
+    "tags": ["string"],
+    "seo_pack": {
+      "title_candidates": ["string"],
+      "description": "string",
+      "keywords": ["string"]
+    },
+    "content_gaps": ["string"],
+    "target_platforms": ["youtube", "shorts", "tiktok", "instagram", "linkedin", "facebook"],
+    "record_mode_hint": "solo_director|interview_extraction|read_as_me|read_aloud|look_at_this",
+    "workflow_gate": "approve_before_coach_script_record"
+  }
+}

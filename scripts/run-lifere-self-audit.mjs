@@ -52,6 +52,12 @@ step('AUD-13b_seller_advance_route', routes.includes('/deals/sellers/:ref/advanc
 step('AUD-16_boldtrail_on_approve', clientComms.includes('pushApprovedFollowUp'));
 step('AUD-17_socialmediaos_bridge', fs.existsSync(path.join(ROOT, 'services/lifere-socialmediaos-bridge.js')) && routes.includes('/marketing/socialmediaos/status'));
 step('AUD-18_builder_twin', fs.existsSync(path.join(ROOT, 'builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT_BUILDER_TWIN.json')));
+const smoBridge = fs.readFileSync(path.join(ROOT, 'services/lifere-socialmediaos-bridge.js'), 'utf8');
+step('AUD-19_content_brief_gate',
+  fs.existsSync(path.join(ROOT, 'services/lifere-content-brief-engine.js'))
+  && routes.includes('/marketing/content-brief/generate')
+  && html.includes('data-lifere="content-brief"')
+  && smoBridge.includes('assertApprovedBrief'));
 step('AUD-14_comms_log_route', routes.includes('/client-comms/log') && clientComms.includes('listCommsLog'));
 step('AUD-15_alpha_approval_seed', fs.readFileSync(path.join(ROOT, 'services/lifere-alpha-daily-cycle.js'), 'utf8').includes('approval_draft_seeded'));
 step('AUD-08_ssot_lifere_v1', /AMENDMENT_LIFERE/.test(lifereV1));

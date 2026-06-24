@@ -5,6 +5,7 @@
 import { createLifeREMarketingModule } from './lifere-marketing-module.js';
 import { createLifeREClientComms } from './lifere-client-comms.js';
 import { createLifeREOutreachBridge } from './lifere-outreach-bridge.js';
+import { createLifeREContentBriefEngine } from './lifere-content-brief-engine.js';
 import { getDoctrinePromptBlock, validateUserFacingCopy } from './lifeos-service-doctrine.js';
 
 export function createLifeRESocialMediaOSBridge({
@@ -13,10 +14,12 @@ export function createLifeRESocialMediaOSBridge({
   sendSMS = null,
   callCouncilMember = null,
   logger = console,
+  contentBriefEngine = null,
 } = {}) {
   const outreach = createLifeREOutreachBridge({ pool, notificationService, sendSMS, logger });
   const comms = createLifeREClientComms({ pool, outreach, logger });
   const marketing = createLifeREMarketingModule({ pool });
+  const briefEngine = contentBriefEngine || createLifeREContentBriefEngine({ pool, marketing, logger });
 
   async function status() {
     return {
@@ -31,20 +34,35 @@ export function createLifeRESocialMediaOSBridge({
         lifere_marketing: 'lifere-marketing-module.js',
       },
       publish_mode: 'approval_queue_only',
+      workflow_order: ['content_brief', 'coach', 'record', 'post', 'publish'],
+      brief_gate: 'approve_before_coach_script_record',
       data_wall: 'Am41 must not import LifeRE PG tables — adapter boundary only',
       label: 'KNOW',
     };
   }
 
-  async function coachSession({ userId = 'adam', message, history = [] }) {
+  async function coachSession({ userId = 'adam', tenantId = 'default', message, history = [], briefId = null, bypassBriefGate = false }) {
     if (!message?.trim()) {
       return { ok: false, error: 'message required' };
     }
+
+    const gate = await briefEngine.assertApprovedBrief({
+      tenantId,
+      userId,
+      briefId,
+      bypass: bypassBriefGate,
+    });
+    if (!gate.ok) {
+      return { ok: false, ...gate };
+    }
+
+    const briefBlock = gate.brief ? briefEngine.formatBriefForPrompt(gate.brief) : '';
+
     try {
       if (callCouncilMember) {
         const reply = await callCouncilMember({
           member: 'marketing',
-          message: `${getDoctrinePromptBlock()}\n\nMarketing coach for real estate agent. User says: ${message}`,
+          message: `${getDoctrinePromptBlock()}\n\n${briefBlock}\n\nMarketing coach for real estate agent. User says: ${message}`,
           userId,
         });
         const text = reply?.content || reply?.response || reply?.text || String(reply || '');
@@ -52,15 +70,17 @@ export function createLifeRESocialMediaOSBridge({
           ok: true,
           response: text.slice(0, 2000) || 'Coach response empty.',
           hookDetected: /next step|action|call to action/i.test(text),
+          brief_id: gate.brief_id || briefId,
           label: 'KNOW',
         };
       }
-      const fallback = `This week: turn "${message.slice(0, 80)}" into one 60-second market update video + 3 comment replies.`;
+      const fallback = `Brief locked on "${gate.brief?.topic || 'topic'}". This week: turn "${message.slice(0, 80)}" into one 60-second market update video + 3 comment replies.`;
       const copyCheck = validateUserFacingCopy(fallback);
       return {
         ok: true,
         response: fallback,
         hookDetected: true,
+        brief_id: gate.brief_id || briefId,
         label: 'THINK',
         doctrine_ok: copyCheck.ok,
       };
@@ -131,14 +151,28 @@ export function createLifeRESocialMediaOSBridge({
     coachMessage = null,
     transcript = null,
     videoTypeId = 'market_update_60',
+    briefId = null,
+    bypassBriefGate = false,
   } = {}) {
     const steps = [];
     let coach = null;
     let pack = null;
     let script = null;
 
+    const gate = await briefEngine.assertApprovedBrief({ tenantId, userId, briefId, bypass: bypassBriefGate });
+    steps.push({ step: 'content_brief', ok: gate.ok === true });
+    if (!gate.ok) {
+      return { ok: false, steps, error: gate.error, code: gate.code, hint: gate.hint, label: 'KNOW' };
+    }
+
     if (coachMessage) {
-      coach = await coachSession({ userId, message: coachMessage });
+      coach = await coachSession({
+        userId,
+        tenantId,
+        message: coachMessage,
+        briefId: gate.brief_id || briefId,
+        bypassBriefGate: true,
+      });
       steps.push({ step: 'coach', ok: coach.ok === true });
     }
     if (transcript) {
@@ -161,6 +195,7 @@ export function createLifeRESocialMediaOSBridge({
       coach,
       content_pack: pack,
       script,
+      brief_id: gate.brief_id || briefId,
       label: steps.every((s) => s.ok) ? 'KNOW' : 'THINK',
     };
   }
@@ -173,5 +208,6 @@ export function createLifeRESocialMediaOSBridge({
     suggestSocialReply,
     runPipeline,
     marketing,
+    briefEngine,
   };
 }

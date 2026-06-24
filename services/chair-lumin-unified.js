@@ -12,6 +12,7 @@ import {
 import { detectDualIntent } from './chair-context-classifier.js';
 import { shouldAttachStrategicBrief } from './chair-lumin-personal-mode.js';
 import { formatStrategicBriefSection } from './lumin-strategic-intelligence.js';
+import { getDoctrinePromptBlock } from './lifeos-service-doctrine.js';
 
 function searchBlockIsUseful(searchResult) {
   if (!searchResult?.results?.length) return false;
@@ -59,6 +60,7 @@ export async function runLuminUnifiedTurn(cleanedInput, deps = {}, chairContext 
     : '';
 
   const contextPreamble = [
+    getDoctrinePromptBlock(),
     personalTurn ? 'PERSONAL LIFE TURN — not a software build.' : 'LUMIN COUNSEL TURN.',
     'HONESTY (mandatory):',
     '- Do NOT invent your location, drive time, shop hours, calendar, or vehicle maintenance history unless explicitly listed under WHAT I KNOW FROM MEMORY or in verified search results below.',

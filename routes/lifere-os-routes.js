@@ -101,7 +101,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   router.get('/health/deep', requireKey, async (_req, res) => {
     const tables = [
       'lifere_activity_log', 'lifere_approval_queue', 'lifere_call_logs',
-      'lifere_experiments', 'lifere_performance_snapshot',
+      'lifere_experiments', 'lifere_performance_snapshot', 'lifere_content_briefs',
     ];
     const pgTables = {};
     if (pool) {
@@ -581,16 +581,64 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
 
   router.post('/marketing/script/generate', requireKey, async (req, res) => {
     try {
+      const gate = await socialMediaOS.briefEngine.assertApprovedBrief({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        briefId: req.body?.brief_id,
+        bypass: req.body?.bypass_brief_gate === true,
+      });
+      if (!gate.ok) {
+        return res.status(428).json(gate);
+      }
       const result = await marketing.generateScript({
         tenantId: tenantId(req),
         userId: userId(req),
         videoTypeId: req.body?.video_type_id,
         hookText: req.body?.hook_id || req.body?.hook_text,
       });
-      res.json(result);
+      res.json({ ...result, brief_id: gate.brief_id || req.body?.brief_id });
     } catch (error) {
       res.status(400).json({ ok: false, error: error.message });
     }
+  });
+
+  router.post('/marketing/content-brief/generate', requireKey, async (req, res) => {
+    res.json(await socialMediaOS.briefEngine.generateBrief({
+      tenantId: tenantId(req),
+      userId: userId(req),
+      topic: req.body?.topic,
+      persona: req.body?.persona || {},
+      competitors: req.body?.competitors || [],
+      platforms: req.body?.platforms || req.body?.target_platforms,
+      market: req.body?.market,
+    }));
+  });
+
+  router.post('/marketing/content-brief/:id/approve', requireKey, async (req, res) => {
+    res.json(await socialMediaOS.briefEngine.approveBrief({
+      tenantId: tenantId(req),
+      userId: userId(req),
+      briefId: req.params.id,
+      approvedBy: req.body?.approved_by || userId(req),
+    }));
+  });
+
+  router.get('/marketing/content-brief', requireKey, async (req, res) => {
+    res.json(await socialMediaOS.briefEngine.listBriefs({
+      tenantId: tenantId(req),
+      userId: userId(req),
+      limit: Number(req.query?.limit) || 10,
+    }));
+  });
+
+  router.get('/marketing/content-brief/:id', requireKey, async (req, res) => {
+    const brief = await socialMediaOS.briefEngine.getBriefById({
+      tenantId: tenantId(req),
+      userId: userId(req),
+      briefId: req.params.id,
+    });
+    if (!brief) return res.status(404).json({ ok: false, error: 'brief not found' });
+    res.json({ ok: true, brief });
   });
 
   router.post('/marketing/calendar/plan', requireKey, async (req, res) => {
@@ -626,8 +674,11 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   router.post('/marketing/socialmediaos/coach', requireKey, async (req, res) => {
     res.json(await socialMediaOS.coachSession({
       userId: userId(req),
+      tenantId: tenantId(req),
       message: req.body?.message,
       history: req.body?.history || [],
+      briefId: req.body?.brief_id,
+      bypassBriefGate: req.body?.bypass_brief_gate === true,
     }));
   });
 
@@ -657,6 +708,8 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
       coachMessage: req.body?.coach_message,
       transcript: req.body?.transcript,
       videoTypeId: req.body?.video_type_id || 'market_update_60',
+      briefId: req.body?.brief_id,
+      bypassBriefGate: req.body?.bypass_brief_gate === true,
     }));
   });
 

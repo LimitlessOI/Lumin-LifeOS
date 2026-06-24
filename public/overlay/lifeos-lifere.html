@@ -300,9 +300,18 @@
       <div class="section-title">Marketing Module</div>
       <div id="marketing-video-types"></div>
       <button type="button" class="btn" id="marketing-research-hooks">Research hooks</button>
+      <div class="section-title" style="margin-top:14px" data-lifere="content-brief">Content Brief (required first)</div>
+      <p class="status-line" id="smo-brief-status">No approved brief — generate and approve before coach/script.</p>
+      <input type="text" id="smo-brief-topic" placeholder="Brief topic — e.g. relocating to Las Vegas in 2026" style="width:100%;margin-bottom:8px" />
+      <textarea id="smo-brief-persona" rows="2" placeholder="Target persona — e.g. woman 40s relocating from Midwest…"></textarea>
+      <div class="followup-actions">
+        <button type="button" class="btn btn-primary" id="smo-brief-generate-btn">Generate brief</button>
+        <button type="button" class="btn" id="smo-brief-approve-btn" disabled>Approve brief</button>
+      </div>
+      <pre id="smo-brief-output" class="panel-grid" style="font-size:12px;max-height:160px;overflow:auto"></pre>
       <div class="section-title" style="margin-top:14px">SocialMediaOS (Am 41 adapter)</div>
       <p class="status-line" id="smo-status">Loading stack status…</p>
-      <textarea id="smo-coach-input" rows="2" placeholder="Coach: what content should I create this week?"></textarea>
+      <textarea id="smo-coach-input" rows="2" placeholder="Coach unlocks after brief is approved…" disabled></textarea>
       <textarea id="smo-transcript-input" rows="3" placeholder="Paste transcript for content pack extraction…"></textarea>
       <div class="followup-actions">
         <button type="button" class="btn btn-primary" id="smo-coach-btn">Run coach</button>
@@ -896,6 +905,40 @@
           : `<div class="info-card"><div class="info-card-body">${escapeHtml(JSON.stringify(data).slice(0, 400))}</div></div>`;
       }
 
+      let activeBriefId = null;
+      let approvedBriefId = null;
+
+      function setBriefUiState({ draftId = null, approvedId = null, statusText = null } = {}) {
+        if (draftId) activeBriefId = draftId;
+        if (approvedId) approvedBriefId = approvedId;
+        const coachInput = document.getElementById('smo-coach-input');
+        const approveBtn = document.getElementById('smo-brief-approve-btn');
+        const briefStatus = document.getElementById('smo-brief-status');
+        const unlocked = Boolean(approvedBriefId);
+        if (coachInput) {
+          coachInput.disabled = !unlocked;
+          coachInput.placeholder = unlocked
+            ? 'Coach: what content should I create this week?'
+            : 'Coach unlocks after brief is approved…';
+        }
+        if (approveBtn) approveBtn.disabled = !activeBriefId || activeBriefId === approvedBriefId;
+        if (briefStatus && statusText) briefStatus.textContent = statusText;
+        else if (briefStatus) {
+          briefStatus.textContent = unlocked
+            ? `Approved brief #${approvedBriefId} — coach/script unlocked`
+            : activeBriefId
+              ? `Draft brief #${activeBriefId} — approve to unlock coach`
+              : 'No approved brief — generate and approve before coach/script.';
+        }
+      }
+
+      async function loadContentBriefState() {
+        const res = await apiFetch('/api/v1/lifere/marketing/content-brief?user_id=adam');
+        const data = await res.json();
+        const approved = (data.briefs || []).find((b) => b.status === 'approved');
+        if (approved) setBriefUiState({ approvedId: String(approved.id), statusText: `Approved: ${approved.topic}` });
+      }
+
       async function loadMarketing() {
         const [vt, smo] = await Promise.all([
           apiFetch('/api/v1/lifere/marketing/video-types'),
@@ -904,10 +947,41 @@
         const vtj = await vt.json();
         const smoj = await smo.json();
         document.getElementById('marketing-video-types').textContent = `${vtj.count || 0} video types loaded`;
+        const gateNote = smoj.brief_gate ? ` · ${smoj.brief_gate}` : '';
         document.getElementById('smo-status').textContent = smoj.ok
-          ? `SocialMediaOS adapter live — ${(smoj.modules && Object.keys(smoj.modules).join(', ')) || 'coach + content pack'}`
+          ? `SocialMediaOS adapter live — ${(smoj.modules && Object.keys(smoj.modules).join(', ')) || 'coach + content pack'}${gateNote}`
           : 'SocialMediaOS status unavailable';
+        await loadContentBriefState();
       }
+
+      document.getElementById('smo-brief-generate-btn')?.addEventListener('click', async () => {
+        const topic = document.getElementById('smo-brief-topic')?.value?.trim() || '';
+        const personaDesc = document.getElementById('smo-brief-persona')?.value?.trim() || '';
+        const res = await apiFetch('/api/v1/lifere/marketing/content-brief/generate', {
+          method: 'POST',
+          body: JSON.stringify({
+            user_id: 'adam',
+            topic: topic || 'Las Vegas relocation market update',
+            persona: { description: personaDesc },
+            platforms: ['youtube', 'facebook', 'instagram'],
+          }),
+        });
+        const data = await res.json();
+        document.getElementById('smo-brief-output').textContent = JSON.stringify(data.brief || data, null, 2);
+        if (data.brief_id) setBriefUiState({ draftId: String(data.brief_id) });
+        renderMarketingOutput(data, 'Content brief draft');
+      });
+
+      document.getElementById('smo-brief-approve-btn')?.addEventListener('click', async () => {
+        if (!activeBriefId) return;
+        const res = await apiFetch(`/api/v1/lifere/marketing/content-brief/${activeBriefId}/approve`, {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam' }),
+        });
+        const data = await res.json();
+        if (data.ok) setBriefUiState({ approvedId: String(activeBriefId) });
+        renderMarketingOutput(data, 'Brief approved');
+      });
 
       document.getElementById('marketing-research-hooks')?.addEventListener('click', async () => {
         const res = await apiFetch('/api/v1/lifere/marketing/research/hooks', {
@@ -919,9 +993,14 @@
       document.getElementById('smo-coach-btn')?.addEventListener('click', async () => {
         const message = document.getElementById('smo-coach-input')?.value || '';
         const res = await apiFetch('/api/v1/lifere/marketing/socialmediaos/coach', {
-          method: 'POST', body: JSON.stringify({ user_id: 'adam', message }),
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', message, brief_id: approvedBriefId }),
         });
-        renderMarketingOutput(await res.json(), 'Coach session');
+        const data = await res.json();
+        if (data.code === 'content_brief_not_approved') {
+          setBriefUiState({ statusText: data.hint || 'Approve a content brief first.' });
+        }
+        renderMarketingOutput(data, 'Coach session');
       });
 
       document.getElementById('smo-content-pack-btn')?.addEventListener('click', async () => {
@@ -946,6 +1025,7 @@
           method: 'POST',
           body: JSON.stringify({
             user_id: 'adam',
+            brief_id: approvedBriefId,
             coach_message: document.getElementById('smo-coach-input')?.value || null,
             transcript: document.getElementById('smo-transcript-input')?.value || null,
             video_type_id: 'market_update_60',

@@ -71,5 +71,14 @@ if (!lifereBridge.includes('lifeos-service-doctrine')) {
   fail('lifere-socialmediaos-bridge must import lifeos-service-doctrine');
 }
 
+const chairUnified = read('services/chair-lumin-unified.js');
+if (!chairUnified.includes('lifeos-service-doctrine')) {
+  fail('chair-lumin-unified must import lifeos-service-doctrine prompt block');
+}
+
+if (!fs.existsSync(path.join(ROOT, 'services/lifere-content-brief-engine.js'))) {
+  fail('lifere-content-brief-engine.js required for SMOS brief-first law');
+}
+
 console.log('LIFEOS_SERVICE_DOCTRINE_VERIFY: PASS');
 process.exit(0);

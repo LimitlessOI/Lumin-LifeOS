@@ -2018,8 +2018,11 @@ function applyShellLayoutFromQuery() {
     syncSidebarToggleButtons();
   }
 
-  // URL shortcut — canonical: ?page=lifeos-dashboard.html&layout=auto
-  const launchPage = new URLSearchParams(location.search).get('page');
+  // URL shortcut — canonical: ?page=lifeos-dashboard.html&layout=auto&stack=lifere
+  let launchPage = new URLSearchParams(location.search).get('page');
+  const stackParam = new URLSearchParams(location.search).get('stack');
+  if (!launchPage && stackParam === 'lifere') launchPage = 'lifeos-lifere.html';
+  if (!launchPage && stackParam === 'socialmediaos') launchPage = 'lifeos-lifere.html';
   const directSystemLaunch = new URLSearchParams(location.search).get('direct_system');
   const luminVoiceLaunch = new URLSearchParams(location.search).get('lumin_voice');
   if (launchPage && PAGE_META[launchPage]) {

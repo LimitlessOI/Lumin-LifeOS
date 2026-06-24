@@ -1,0 +1,90 @@
+{
+  "schema": "lifeos_doctrine_live_probe_v1",
+  "at": "2026-06-24T00:18:26.792Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "passed": [
+    {
+      "id": "LOCAL-doctrine_service",
+      "detail": ""
+    },
+    {
+      "id": "LOCAL-doctrine_doc",
+      "detail": ""
+    },
+    {
+      "id": "LOCAL-lifere_theme_overrides",
+      "detail": ""
+    },
+    {
+      "id": "LOCAL-lifere_theme_toggle",
+      "detail": ""
+    },
+    {
+      "id": "LOCAL-lifere_shell_hint",
+      "detail": ""
+    },
+    {
+      "id": "LOCAL-personal_twin_v2",
+      "detail": ""
+    },
+    {
+      "id": "LIVE-deploy_sha",
+      "detail": "490d25da1cba"
+    },
+    {
+      "id": "LIVE-lifere_html",
+      "detail": "200"
+    },
+    {
+      "id": "LIVE-html_theme_overrides",
+      "detail": ""
+    },
+    {
+      "id": "LIVE-html_theme_toggle",
+      "detail": ""
+    },
+    {
+      "id": "LIVE-html_shell_hint",
+      "detail": ""
+    },
+    {
+      "id": "LIVE-html_theme_js",
+      "detail": ""
+    },
+    {
+      "id": "LIVE-_api_v1_lifere_health",
+      "detail": "200"
+    },
+    {
+      "id": "LIVE-_api_v1_lifere_health_deep",
+      "detail": "200"
+    },
+    {
+      "id": "LIVE-_api_v1_lifere_transaction_list",
+      "detail": "200"
+    },
+    {
+      "id": "LIVE-_api_v1_lifere_outreach_queue_user_id_ad",
+      "detail": "200"
+    },
+    {
+      "id": "LIVE-_api_v1_lifere_marketing_socialmediaos_s",
+      "detail": "200"
+    },
+    {
+      "id": "LIVE-_api_v1_lifere_daily_command_center",
+      "detail": "200"
+    },
+    {
+      "id": "LIVE-_api_v1_lifere_marketing_socialmediaos_c",
+      "detail": "200"
+    },
+    {
+      "id": "LIVE-smo_doctrine_ref",
+      "detail": ""
+    }
+  ],
+  "failed": [],
+  "warnings": [],
+  "ok": true
+}

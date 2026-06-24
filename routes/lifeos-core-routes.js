@@ -67,6 +67,7 @@ import { createLifeOSScoreboardService }   from '../services/lifeos-scoreboard.j
 import { createLifeOSAdaptiveLayerService } from '../services/lifeos-adaptive-layer.js';
 import { safeDays, safeLimit, safeId }     from '../services/lifeos-request-helpers.js';
 import { createCouncilPromptAdapter }     from '../services/council-prompt-adapter.js';
+import { suggestStack } from '../services/lifeos-context-router.js';
 
 export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, logger, sendSMS, sendAlertCall = null, makePhoneCall = null }) {
   const router = express.Router();
@@ -149,6 +150,17 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
+  });
+
+  router.get('/context/suggest', requireKey, (req, res) => {
+    res.json({
+      ok: true,
+      ...suggestStack({
+        text: req.query?.q || req.query?.text || '',
+        explicitStack: req.query?.stack || null,
+        page: req.query?.page || null,
+      }),
+    });
   });
 
   // ── USERS ─────────────────────────────────────────────────────────────────
