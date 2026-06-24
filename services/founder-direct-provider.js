@@ -2,6 +2,7 @@
  * SYNOPSIS: Founder direct provider test — live API only, no council, no simulation.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+import { applyAiProseTruthEnvelope } from './ai-prose-truth-envelope.js';
 const PROVIDERS = {
   gpt: { provider: 'openai', label: 'GPT' },
   openai: { provider: 'openai', label: 'GPT' },
@@ -30,6 +31,31 @@ function modelFor(provider) {
   return process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 }
 
+function envelopeDirectText(text) {
+  if (!text) return text;
+  const { text: safe } = applyAiProseTruthEnvelope(String(text), {
+    command_truth: 'NO_COMMAND_RAN',
+    pass_fail: 'NO_COMMAND_RAN',
+    taskType: 'founder_direct_provider',
+    source: 'founder_direct_provider',
+  });
+  return safe;
+}
+
+function stampDirectResult(result) {
+  if (!result || typeof result !== 'object') return result;
+  const out = {
+    ...result,
+    counsel_only: true,
+    command_truth: 'NO_COMMAND_RAN',
+    pass_fail: result.ok ? 'NO_COMMAND_RAN' : 'FAIL',
+  };
+  if (typeof out.text === 'string') {
+    out.text = envelopeDirectText(out.text);
+  }
+  return out;
+}
+
 export function parseFounderDirectProviderUtterance(utterance) {
   const raw = String(utterance || '').trim();
   const m = raw.match(/^talk to (gpt|openai|claude|anthropic|gemini|google)\s*:\s*(.*)$/i);
@@ -41,7 +67,7 @@ export function parseFounderDirectProviderUtterance(utterance) {
   return { provider: mapped.provider, label: mapped.label, prompt };
 }
 
-export async function callFounderDirectProvider({ provider, prompt }) {
+async function _callFounderDirectProviderRaw({ provider, prompt }) {
   const timestamp = new Date().toISOString();
   const model = modelFor(provider);
   const apiKey = apiKeyFor(provider);
@@ -203,6 +229,10 @@ export async function callFounderDirectProvider({ provider, prompt }) {
       latency_ms: Date.now() - started,
     };
   }
+}
+
+export async function callFounderDirectProvider(args) {
+  return stampDirectResult(await _callFounderDirectProviderRaw(args));
 }
 
 export function formatFounderDirectProviderReply(result) {

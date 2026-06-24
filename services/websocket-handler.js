@@ -1,7 +1,9 @@
 /**
  * SYNOPSIS: WebSocket connection handler — extracted from server.js.
- * WebSocket connection handler — extracted from server.js.
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+
+import { truthGateOutbound } from './truth-enforcement-spine.js';
 
 /**
  * @param {import('ws').WebSocketServer} wss
@@ -64,15 +66,16 @@ export function setupWebSocketHandler(wss, {
             });
 
             const response = await callCouncilWithFailover(text, member);
-            ws.send(
-              JSON.stringify({
-                type: "response",
-                response,
-                member,
-                blindSpotsDetected: blindSpots.length,
-                timestamp: new Date().toISOString(),
-              })
-            );
+            const payload = truthGateOutbound({
+              type: "response",
+              response,
+              member,
+              blindSpotsDetected: blindSpots.length,
+              command_truth: "NO_COMMAND_RAN",
+              pass_fail: "NO_COMMAND_RAN",
+              timestamp: new Date().toISOString(),
+            }, "websocket");
+            ws.send(JSON.stringify(payload));
           } catch (error) {
             ws.send(
               JSON.stringify({

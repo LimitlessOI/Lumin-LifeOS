@@ -17,7 +17,8 @@ import {
 export const CHAIR_INTENT_PROTOCOL = {
   version: 'chair_intent_protocol_v2',
   supreme_authority: 'docs/constitution/FOUNDER_PACKET_V2_BUILDEROS_MASTER_ARCHITECTURE.md',
-  chair_job: 'Ask until founder intent is understood; offer ideas/gaps; then execute toward Point B.',
+  point_b_dna: 'docs/constitution/POINT_B_DNA.md',
+  chair_job: 'Ask until founder intent is understood; flesh broad vision with synergy; then execute toward founder Point B.',
   point_b_defined_by: 'founder_communications_intent',
   tools_not_destination:
     'Governance, SSOT, receipts, and pipelines are tools accountable to efficiency and A→B results — not the destination.',

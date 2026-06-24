@@ -4,11 +4,15 @@
  */
 
 import { createResponseVariety } from './response-variety.js';
+import { scrubProseForStorage } from './truth-enforcement-spine.js';
+import { getPointBDnaPromptBlock } from './point-b-dna.js';
 
 const CONTEXT_WINDOW = 20; // last N messages to send as context
 
 /** Prepended to every Lumin system prompt — North Star Article II §2.6 + AMENDMENT_21 epistemic contract + prompts/00-LIFEOS-AGENT-CONTRACT.md */
-const LUMIN_EPISTEMIC_CONTRACT = `Non-negotiable (North Star §2.6 — no lies, no misleading; law is mandatory):
+const LUMIN_EPISTEMIC_CONTRACT = `${getPointBDnaPromptBlock()}
+
+Non-negotiable (North Star §2.6 — no lies, no misleading; law is mandatory):
 - Never lie; never mislead (including confident tone when evidence is missing). If a fact is not verified from context, say so and label uncertainty plainly.
 - These rules are not optional for speed: no cutting corners, no lazy skips — if you cannot verify, say you cannot; do not guess as fact.
 - Never let the user operate on a misunderstanding: the moment you detect a wrong premise, missing piece, or ambiguous term, correct it before continuing with advice or plans.
@@ -198,12 +202,13 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     const fullPrompt = `${systemPrompt}\n\n${historyText ? `--- Conversation ---\n${historyText}\n\n` : ''}User: ${userMessage}\n\nLumin:`;
 
     const aiReply = await callAI(fullPrompt);
+    const safeReply = scrubProseForStorage(aiReply, { taskType: 'lumin_chat', command_truth: 'NO_COMMAND_RAN' });
 
     // Log the styles used so variety engine learns what not to repeat
     await variety.logResponse({
       userId,
       styles:          styles || {},
-      responsePreview: aiReply,
+      responsePreview: safeReply,
       context:         thread.mode,
     });
 
@@ -211,7 +216,7 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     const { rows: [assistantMsg] } = await pool.query(
       `INSERT INTO lumin_messages (thread_id, user_id, role, content)
        VALUES ($1, $2, 'assistant', $3) RETURNING *`,
-      [threadId, userId, aiReply]
+      [threadId, userId, safeReply]
     );
 
     // Update thread last_message_at
@@ -227,7 +232,10 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     const thread = await getThread(threadId, userId);
     if (!thread) throw Object.assign(new Error('Thread not found'), { status: 404 });
     const userText = String(userMessage || '').trim();
-    const assistantText = String(assistantMessage || '').trim();
+    const assistantText = scrubProseForStorage(
+      String(assistantMessage || '').trim(),
+      { taskType: 'lumin_record_exchange', command_truth: 'NO_COMMAND_RAN' },
+    );
     if (!userText || !assistantText) {
       throw Object.assign(new Error('user_message and assistant_message required'), { status: 400 });
     }

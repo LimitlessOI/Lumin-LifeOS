@@ -3,7 +3,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-24 — LifeRE founder confirm gets commitManyToGitHub. Prior: LifeRE outreach scheduler on boot.
+**Last Updated:** 2026-06-24 — boot truth scoreboard + Wisdom auditor schedulers. Prior: LifeRE founder confirm commitManyToGitHub.
 
 | Field | Value |
 |---|---|
@@ -287,4 +287,5 @@ Required runtime truths:
 | 2026-03-28 | Declared env-registry health as a build-time governance surface and surfaced it in Command Center | Builders must know which envs exist and which are missing before assuming runtime capability, without revealing secret values | ✅ | pending | pending |
 | 2026-05-28 | `startup/register-runtime-routes.js` — clarified comment on `/api/v1/memory` compat alias mount from "Legacy evidence alias" to `CANONICAL_EVIDENCE compat path — scripts call /api/v1/memory/* (no /evidence prefix). Same handler as /evidence; not a legacy route. do_not_use_for_builderos_proof: false.` Logger message updated to match. | Memory namespace audit Phase 2: remove ambiguity between the CANONICAL_EVIDENCE compat alias and the LEGACY_COMPAT memory surfaces without deleting any routes. | ✅ `node --check startup/register-runtime-routes.js` |
 | 2026-06-20 | `startup/register-runtime-routes.js` — pass `callCouncilMember` to `createLifeOSBuilderOSCommandControlRoutes`. Previously the command-control route factory received only `{ pool, requireKey }`. Adding `callCouncilMember` enables the translation layer inside the route to call Gemini and convert raw machine output to plain English before the founder sees it. | Founder interface was returning raw BuilderOS status codes and blocker labels instead of human-readable answers. |
+| 2026-06-24 | **`startup/boot-domains.js`** — `bootTruthScoreboard`, `bootWisdomTruthAuditor` on domain boot | Point B DNA: reality promotes epistemic facts; Wisdom red-teams truth gates | ✅ verify scripts | deploy |
 | 2026-06-20 | **`startup/register-runtime-routes.js`:** Re-mounted `/api/v1/lifeos/voice-rail` for TTS/STT endpoints used by Lumin dashboard chat (ElevenLabs/OpenAI nova female voice). | Voice Rail TTS was retired from runtime but Lumin chat needs server-side natural voice readback. | AM19 wiring | pending deploy |

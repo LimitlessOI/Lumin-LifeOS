@@ -18,6 +18,7 @@ import { createLCLMonitor } from "./lcl-monitor.js";
 import { CODE_SYMBOLS } from "../config/codebook-v1.js";
 import { kingsmanAudit } from "./kingsman-gate.js";
 import { sanitizeJsonResponse } from "../core/json-sanitizer.js";
+import { envelopeCouncilMemberOutput } from "./ai-prose-truth-envelope.js";
 import {
   getCachedResponse as _rcGet,
   cacheResponse as _rcSet,
@@ -864,6 +865,14 @@ export function createCouncilService({
     }
     member = resolvedMember;
     const founderComms = options.founderComms === true || options.taskType === 'voice_rail_department';
+
+    function deliverCouncilText(rawText, taskTypeForEnvelope = options.taskType || 'general') {
+      const { text, envelope } = envelopeCouncilMemberOutput(rawText, options, taskTypeForEnvelope, member);
+      if (envelope.theater_blocked || envelope.voice_lie_blocked) {
+        console.warn(`🛡️ [TRUTH-ENVELOPE] blocked deception (${envelope.hits.slice(0, 2).join('; ')}) member=${member} task=${taskTypeForEnvelope}`);
+      }
+      return text;
+    }
     // config is declared later, after selectOptimalModel may rewrite member
     if (!COUNCIL_MEMBERS[member]) {
       throw new Error(`Unknown member: ${member}`);
@@ -1065,7 +1074,7 @@ export function createCouncilService({
           qualityMethod: "rules-engine",
         }).catch(() => {});
 
-      return text;
+      return deliverCouncilText(text, taskType);
     }
 
     if (ruleDecision.action === "override") {
@@ -1111,7 +1120,7 @@ export function createCouncilService({
             cacheHit: true,
             costUSD: 0,
           }).catch(() => {});
-        return cached;
+        return deliverCouncilText(cached, taskType);
       }
     }
 
@@ -1440,7 +1449,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         // LCL drift inspection — fire-and-forget, never blocks response
         lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
 
-        return text;
+        return deliverCouncilText(text, taskType);
       }
 
       if (config.provider === "gemini" || config.provider === "google") {
@@ -1532,7 +1541,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         // LCL drift inspection — fire-and-forget, never blocks response
         lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
 
-        return text;
+        return deliverCouncilText(text, taskType);
       }
 
       if (config.provider === "ollama" || member.startsWith("ollama_")) {
@@ -1596,7 +1605,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
         lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
 
-        return text;
+        return deliverCouncilText(text, taskType);
       }
 
       if (config.provider === "deepseek") {
@@ -1663,7 +1672,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
 
-        return text;
+        return deliverCouncilText(text, taskType);
       }
 
       if (config.provider === "anthropic") {
@@ -1739,7 +1748,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
         lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
 
-        return text;
+        return deliverCouncilText(text, taskType);
       }
 
       throw new Error(

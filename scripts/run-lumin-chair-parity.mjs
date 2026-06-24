@@ -48,6 +48,25 @@ const TESTS = [
     expectChannel: 'build_async',
     allowPassFail: ['RUNNING', 'FAIL', 'PASS'],
   },
+  {
+    id: 'T6_fail_carries_lesson',
+    text: 'do: rewrite entire server.js from scratch with new architecture',
+    expectChannel: 'build_async',
+    allowPassFail: ['RUNNING', 'FAIL'],
+    requireLessonOnFail: true,
+  },
+  {
+    id: 'T7_display_no_execute_claim',
+    text: 'display queue status and recent jobs',
+    action: 'display',
+    expectChannel: 'display',
+    expectTruth: 'NO_COMMAND_RAN',
+    forbidTheaterInSummary: true,
+  },
+  {
+    id: 'T8_truth_lockdown_stamp',
+    requireLockdown: true,
+  },
 ];
 
 const report = {
@@ -64,26 +83,43 @@ function fail(id, detail) {
   report[`fail_${id}`] = detail;
 }
 
-async function postMessage(text) {
+async function postMessage(text, action) {
   const res = await fetch(`${BASE}${ENDPOINT}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       ...(KEY ? { 'x-command-key': KEY } : {}),
     },
-    body: JSON.stringify({ text, action: 'auto', conversational_mode: true }),
+    body: JSON.stringify({
+      text,
+      action: action || 'auto',
+      conversational_mode: true,
+    }),
   });
   const json = await res.json().catch(() => ({}));
   return { status: res.status, json };
 }
 
 for (const t of TESTS) {
+  if (t.id === 'T8_truth_lockdown_stamp') {
+    if (!fs.existsSync(path.join(ROOT, 'services/truth-lockdown.js'))) {
+      fail(t.id, 'truth-lockdown.js missing');
+    } else {
+      const src = fs.readFileSync(path.join(ROOT, 'services/lumin-chair-orchestrator.js'), 'utf8');
+      if (!src.includes('enforceTruthLockdown')) {
+        fail(t.id, 'orchestrator missing enforceTruthLockdown');
+      } else {
+        report.passed.push(t.id);
+      }
+    }
+    continue;
+  }
   if (!KEY) {
     fail(t.id, 'COMMAND_CENTER_KEY missing — cannot probe live founder-interface');
     continue;
   }
   try {
-    const { status, json } = await postMessage(t.text);
+    const { status, json } = await postMessage(t.text, t.action);
     report.results[t.id] = {
       status,
       chair_channel: json.chair_channel,
@@ -128,6 +164,17 @@ for (const t of TESTS) {
         fail(t.id, `theater in summary: ${theater.hits.slice(0, 2).join('; ')}`);
         continue;
       }
+    }
+    if (t.requireLessonOnFail && json.pass_fail === 'FAIL') {
+      const lesson = json.execution_receipt?.lesson || json.autopsy?.lessons?.[0];
+      if (!lesson) {
+        fail(t.id, 'FAIL without lesson in execution_receipt or autopsy');
+        continue;
+      }
+    }
+    if (t.requireLockdown && json.truth_lockdown_applied !== true) {
+      fail(t.id, 'truth_lockdown_applied missing from response (deploy truth-lockdown slice)');
+      continue;
     }
     report.passed.push(t.id);
   } catch (err) {

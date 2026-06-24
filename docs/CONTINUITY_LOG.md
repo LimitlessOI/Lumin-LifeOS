@@ -5,6 +5,22 @@
 
 ---
 
+## [SESSION] 2026-06-24 — Point B DNA locked (supreme purpose)
+
+Adam locked Point B DNA into system constitution — sole purpose A→B, intention equation (results=scorecard only), synergy 1+1=3, mechanics serve B not replace it, Chair fleshes broad vision, deception forbidden. **Shipped locally:** `docs/constitution/POINT_B_DNA.md`, `POINT_B_DNA.json`, `point-b-dna.js` (stamps all truth-gated API responses), agent contract + LUMIN_DOCTRINE + North Star digest, HARD `npm run lifeos:point-b:dna:verify` in preflight. Prior truth spine + Wisdom auditor local. **Next:** commit + deploy.
+
+## [SESSION] 2026-06-24 — Truth enforcement spine (full-stack)
+
+Adam directive: Wisdom as truth overseer — red-team truth gates (Sentry-for-truth), founder assumption challenge ("what do you mean?"), grain-of-salt on all founder input until confirmed. **Shipped locally:** `wisdom-truth-auditor.js` + Chair `wisdom_clarify` gate + boot scheduler + preflight. Prior spine work also local. **Verify:** run `npm run lifeos:wisdom:audit`. **Next:** commit + deploy on Adam approval.
+
+---
+
+## [SESSION] 2026-06-13 — SMOS Content Brief v1 + context router
+
+Shipped **brief-first SMOS law** in code: `lifere-content-brief-engine.js` + PG migration `lifere_content_briefs`, routes `/marketing/content-brief/*`, **hard gate** on coach/script/pipeline until brief approved. LifeRE Marketing tab: generate → approve → coach unlocks. **Context router v1:** `lifeos-context-router.js`, `GET /api/v1/lifeos/context/suggest`, shell `?stack=lifere`. **Chair doctrine:** `chair-lumin-unified.js` injects doctrine on every turn. Live probe **24/24 PASS** on deploy `9a27be62ba`. **Next:** Record Mode v1 (camera, scroll bullets, READ blocks).
+
+---
+
 ## [SESSION] 2026-06-13 — LifeOS Service & Epistemology Doctrine HARD wired
 
 Captured full founder-thread nuance (serve don't decide, per-person whys, serve/cost mirror, fluid OS, SMOS director law, truth-identifying system, time as root resource, Be-Do-Have without magic, founder packet assumption bridge) in `docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md`. Runtime: `services/lifeos-service-doctrine.js`; HARD gate `LIFEOS_SERVICE_DOCTRINE` in `builder:preflight`; Lumin + SMOS prompt inject; LifeRE proxies via Am LIFERE; Personal Twin v2 schema + Adam `personal.json`; receipt `products/receipts/LIFEOS_SERVICE_DOCTRINE_WIRED.json`. **Verify:** `npm run lifeos:service-doctrine:verify` PASS.

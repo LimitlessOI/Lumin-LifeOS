@@ -5,6 +5,22 @@
 
 ---
 
+## Point B DNA (Adam 2026-06-24 — supreme purpose, locked)
+
+**Authority:** `docs/constitution/POINT_B_DNA.md` · **Verify:** `npm run lifeos:point-b:dna:verify`
+
+This is **why the system exists**. Cannot be misread:
+
+- **Sole purpose:** Point A → Point B as Adam defines B — honest scoreboard, no deception.
+- **Equation:** 100% intention + mechanics solved = **results only** (not moral good/bad).
+- **Intention = why; mechanics = how** — governance, receipts, twin format are **tools**, not the destination.
+- **Synergy:** Human + AI > sum of parts (1+1=3). Chair fleshes **broad vision** → refine → build → scoreboard.
+- **Partial ≠ B.** Process PASS without arrival at B = **FAIL**.
+
+All agents read DNA before product work. Runtime stamps `point_b_dna_version` on truth-gated responses. System purpose code: `point_a_to_point_b`.
+
+---
+
 ## What Lumin Is (Adam 2026-06-24 — locked)
 
 Lumin is **not a chatbot**. Lumin is **not a personality overlay** on top of the system.

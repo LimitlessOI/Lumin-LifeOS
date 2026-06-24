@@ -3,7 +3,7 @@
 # AMENDMENT 02 — Memory Capsule System
 **Status:** ACTIVE — CAPSULE MEMORY CANONICAL, LEGACY NARRATIVE PARTIALLY ARCHIVED
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-05-24 — batch factory recovery + runtime separation push (founder Railway test)
+**Last Updated:** 2026-06-24 — truth write gates on memory-system + conversation-store; memory-write-gate wired. Prior: 2026-05-24 batch factory recovery.
 
 ---
 
@@ -165,6 +165,7 @@ While competitors store memories as passive retrievable notes, LifeOS memory is 
 
 ## Change Receipts
 
+| 2026-06-24 | **`core/memory-system.js`**, **`services/memory-write-gate.js`**, **`services/conversation-store.js`**, **`startup/memory.js`** — AI prose gated on write; assistant conversation rows scrubbed; theater blocked | Point B DNA / truth stack: no falsehoods in memory corpus | ✅ truth-gap tests | deploy |
 | 2026-05-24 | **`routes/memory-routes.js`** — legacy memory router no longer applies `requireKey` to non-`/memories` paths under `/api` (unblocked LifeOS public login). | Auth regression: all `/api/v1/lifeos/auth/*` returned 401 without command key. | GAP-FILL | pending deploy |
 | 2026-05-24 | Batch push: factory runtime separation, AUTONOMOUS-RECOVERY-0001, regression harness, lumin-factory bundle — founder-requested Railway test deploy | routes/services/startup + factory-staging + builderos-reboot | Adam audit+push directive |
 

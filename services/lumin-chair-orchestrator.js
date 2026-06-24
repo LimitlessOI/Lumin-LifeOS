@@ -18,6 +18,7 @@ import { loadPointBTarget } from './point-b-target-lite.js';
 import { wrapChairHumanSummary } from './founder-communication-format.js';
 import { enforceChairTruthExit } from './chair-truth-gate.js';
 import { enforceDirectConnectionTruth } from './chair-direct-connection-truth.js';
+import { enforceTruthLockdown } from './truth-lockdown.js';
 import { expandFounderBuildTask, isFounderShipOrUsabilityIntent, resolveExplicitChairChannel } from './founder-chair-intent.js';
 import { isGovernanceOrSsotIntent } from './founder-governance-clarify.js';
 import {
@@ -49,6 +50,12 @@ import {
   isPureCounselQuestion,
 } from './chair-intent-signals.js';
 import { stripChairDoPrefix, tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
+import {
+  assessFounderUtteranceWisdom,
+  formatWisdomClarifySummary,
+  WISDOM_TRUTH_AUDITOR_VERSION,
+} from './wisdom-truth-auditor.js';
+import { getPointBDnaPromptBlock, POINT_B_DNA_VERSION } from './point-b-dna.js';
 
 export {
   isBlueprintExecuteIntent,
@@ -126,6 +133,35 @@ function chairIntentClarifyResponse(ctx, understanding, summary, fpV2 = null) {
   };
 }
 
+function chairWisdomClarifyResponse(ctx, wisdom) {
+  const summary = formatWisdomClarifySummary(wisdom);
+  const truth = finalizeTruth({
+    ok: true,
+    pass_fail: 'CLARIFY',
+    command_truth: 'NO_COMMAND_RAN',
+    receipt_truth: 'WISDOM_ASSUMPTION_CHALLENGE',
+    action: 'wisdom_clarify',
+    wisdom_auditor: WISDOM_TRUTH_AUDITOR_VERSION,
+    founder_input_epistemic: wisdom.epistemic_label,
+    founder_input_treated_as: wisdom.founder_input_treated_as,
+    wisdom_assessment: wisdom,
+    human_summary_technical: summary,
+    done_synopsis: 'Wisdom paused execution — assumptions must be clarified before lock.',
+    next_synopsis: 'Answer the questions or confirm intent explicitly. No random moment scripts the system.',
+    next_why: wisdom.wisdom_note,
+  }, 'wisdom_clarify');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('wisdom_clarify', {
+      ...truth,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+    }),
+  };
+}
+
 export function modelRoutingForChannel(channel) {
   switch (channel) {
     case 'display':
@@ -163,22 +199,24 @@ function chairEnvelope(channel, body) {
     interface: 'Lumin Chair',
     lumin_chair: true,
     chair_channel: channel,
+    point_b_dna_version: POINT_B_DNA_VERSION,
+    system_purpose: 'point_a_to_point_b',
     model_routing: modelRoutingForChannel(channel),
     ...body,
   };
 }
 
 function finalizeTruth(truth, channel) {
-  const gated = enforceChairTruthExit(truth, channel);
-  const connected = enforceDirectConnectionTruth({ ...gated, chair_channel: channel });
-  const technical = connected.human_summary_technical || connected.human_summary || '';
-  const withChannel = { ...connected, chair_channel: channel };
-  return {
+  const locked = enforceTruthLockdown(truth, channel);
+  const technical = locked.human_summary_technical || locked.human_summary || '';
+  const withChannel = { ...locked, chair_channel: channel };
+  const wrapped = {
     ...withChannel,
-    action: connected.action || channel,
+    action: locked.action || channel,
     human_summary_technical: technical,
     human_summary: wrapChairHumanSummary(withChannel, technical),
   };
+  return enforceTruthLockdown({ ...wrapped, human_summary: wrapped.human_summary }, channel);
 }
 
 function systemActionChairResponse(ctx, result) {
@@ -233,6 +271,17 @@ export async function runLuminChairTurn(ctx, deps) {
   const effectiveInput = doPrefix.text || cleanedInput;
   const forceExecute = doPrefix.forcedExecute || confirmIntent;
 
+  const skipIntentGate = force || forceExecute;
+  if (!skipIntentGate) {
+    const wisdom = assessFounderUtteranceWisdom(effectiveInput, { confirmIntent: forceExecute });
+    if (wisdom.needs_clarification) {
+      return chairWisdomClarifyResponse(
+        { intakeNormalized, sourceMode, auth_mode, user_role },
+        wisdom,
+      );
+    }
+  }
+
   const systemAction = await tryLuminChairSystemAction(actionSource, {
     pool: deps.pool,
     logger: deps.logger || console,
@@ -247,7 +296,6 @@ export async function runLuminChairTurn(ctx, deps) {
     );
   }
 
-  const skipIntentGate = force || forceExecute;
   const pointBTarget = loadPointBTarget();
   const contextOpts = {
     shouldDisplayOnly,
@@ -335,13 +383,12 @@ export async function runLuminChairTurn(ctx, deps) {
         human_summary: `Rendered ${displayBundle.scope} display from live system data.`,
         display: displayBundle,
       };
-      const plainEnglish = await deps.translateToPlainEnglish(cleanedInput, displayResult);
       const truth = finalizeTruth({
         ok: true,
         action: 'display',
         command_truth: 'NO_COMMAND_RAN',
         pass_fail: 'NO_COMMAND_RAN',
-        human_summary_technical: plainEnglish || displayResult.human_summary,
+        human_summary_technical: displayResult.human_summary,
         display: displayBundle,
       }, channel);
       return { statusCode: 200, body: chairEnvelope(channel, truth) };

@@ -1,0 +1,28 @@
+{
+  "schema": "truth_enforcement_audit_v1",
+  "at": "2026-06-24T03:43:41.257Z",
+  "ok": true,
+  "violations": [],
+  "scanned_dirs": [
+    "routes",
+    "services",
+    "core",
+    "middleware",
+    "startup"
+  ],
+  "allow_direct_llm": [
+    "services/council-service.js",
+    "services/founder-direct-provider.js",
+    "services/founder-provider-tool-action.js",
+    "services/builder-council-review.js",
+    "services/voice-rail-attachments.js",
+    "services/voice-rail-stt.js",
+    "services/voice-rail-tts.js",
+    "services/word-keeper-transcriber.js",
+    "services/builder-audit-before-done.js",
+    "services/capability-map.js",
+    "core/tier0-council.js",
+    "routes/tco-routes.js",
+    "routes/gemini-proof-routes.js"
+  ]
+}

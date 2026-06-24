@@ -1,10 +1,9 @@
 /**
- * SYNOPSIS: services/conversation-store.js
- * services/conversation-store.js
- * Stores and retrieves all conversations: Claude Code sessions, server AI calls, any channel.
- *
- * Exports: createConversationStore(pool) → { save, search, get, getAll, summarize }
+ * SYNOPSIS: services/conversation-store.js — conversation persistence with truth scrub on assistant writes.
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
  */
+
+import { scrubProseForStorage } from './truth-enforcement-spine.js';
 
 export function createConversationStore(pool) {
   // ── Save a full conversation ───────────────────────────────────────────────
@@ -71,6 +70,14 @@ export function createConversationStore(pool) {
       const msg = messages[i];
       if (!msg.content || !msg.role) continue;
 
+      let content = typeof msg.content === 'string' ? msg.content : JSON.stringify(msg.content);
+      if (msg.role === 'assistant' || msg.role === 'model' || msg.role === 'ai') {
+        content = scrubProseForStorage(content, {
+          taskType: 'conversation_store',
+          command_truth: 'NO_COMMAND_RAN',
+        });
+      }
+
       try {
         await pool.query(
           `INSERT INTO conversation_messages
@@ -80,7 +87,7 @@ export function createConversationStore(pool) {
             conversationId,
             sessionId,
             msg.role,
-            typeof msg.content === 'string' ? msg.content : JSON.stringify(msg.content),
+            content,
             i,
             msg.timestamp || null,
             msg.metadata ? JSON.stringify(msg.metadata) : null,

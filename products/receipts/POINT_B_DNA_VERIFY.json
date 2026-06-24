@@ -1,0 +1,8 @@
+{
+  "schema": "point_b_dna_verify_v1",
+  "version": "point_b_dna_v1",
+  "at": "2026-06-24T04:26:12.032Z",
+  "ok": true,
+  "failures": [],
+  "supreme_authority": "docs/constitution/POINT_B_DNA.md"
+}

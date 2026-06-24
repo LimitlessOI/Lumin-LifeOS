@@ -14,6 +14,11 @@ const FALSE_ACTION_SENTENCE = [
   /\b(deployed to production|committed to (git|github)|pushed to main)\b/i,
   /\b(done!|all set!|you're all set)\b/i,
   /\bwhat would you like to do first\b/i,
+  /\b(i (ran|executed|triggered|dispatched|started) (the|your|a)?)\b/i,
+  /\b(build (is )?(complete|done|running)|mission (is )?complete)\b/i,
+  /\b(alpha (is )?reached|point b (is )?reached)\b/i,
+  /\b(no blockers|everything (looks|is) good|ready for production)\b/i,
+  /\b(i('ve| have)? (fixed|patched|updated|shipped) (it|that|the))\b/i,
 ];
 
 const FALSE_ACTION_WHOLE = [

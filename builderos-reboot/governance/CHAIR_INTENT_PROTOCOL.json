@@ -36,5 +36,7 @@
     "founder_point_b_verdict"
   ],
   "runtime_module": "services/chair-intent-protocol.js",
-  "doctrine_doc": "docs/LUMIN_DOCTRINE.md"
+  "doctrine_doc": "docs/LUMIN_DOCTRINE.md",
+  "point_b_dna": "builderos-reboot/governance/POINT_B_DNA.json",
+  "point_b_dna_doc": "docs/constitution/POINT_B_DNA.md"
 }

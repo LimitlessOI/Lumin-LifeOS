@@ -1,0 +1,65 @@
+/**
+ * SYNOPSIS: Express middleware — every res.json passes through truth spine before leaving.
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ */
+import { enforceTruthOnResponseBody, TRUTH_SPINE_VERSION } from '../services/truth-enforcement-spine.js';
+
+function inferChannel(req) {
+  if (req.path?.includes('founder-interface')) return 'founder_interface';
+  if (req.path?.includes('voice-rail')) return 'voice_rail';
+  if (req.path?.includes('/chat')) return 'chat';
+  if (req.path?.includes('lifere')) return 'lifere';
+  return 'api';
+}
+
+export function createTruthResponseEnforcer({ logger } = {}) {
+  return function truthResponseEnforcer(req, res, next) {
+    if (req.path?.startsWith('/overlay/') || req.path?.startsWith('/public/')) {
+      return next();
+    }
+
+    const channel = inferChannel(req);
+    const originalJson = res.json.bind(res);
+    const originalSend = res.send.bind(res);
+
+    res.json = function truthGatedJson(body) {
+      try {
+        const locked = enforceTruthOnResponseBody(body, channel, req);
+        return originalJson(locked);
+      } catch (err) {
+        logger?.warn?.({ err: err.message, path: req.path }, '[TRUTH-SPINE] res.json gate error');
+        return originalJson({
+          ok: false,
+          pass_fail: 'FAIL',
+          command_truth: 'NO_COMMAND_RAN',
+          first_blocker: `Truth spine blocked malformed response: ${err.message}`,
+          truth_spine_version: TRUTH_SPINE_VERSION,
+        });
+      }
+    };
+
+    res.send = function truthGatedSend(body) {
+      try {
+        if (body && typeof body === 'object' && !Buffer.isBuffer(body)) {
+          return originalSend(enforceTruthOnResponseBody(body, channel, req));
+        }
+        if (typeof body === 'string') {
+          const trimmed = body.trimStart();
+          if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+            const parsed = JSON.parse(body);
+            if (parsed && typeof parsed === 'object') {
+              return originalSend(JSON.stringify(enforceTruthOnResponseBody(parsed, channel, req)));
+            }
+          }
+        }
+      } catch (err) {
+        logger?.warn?.({ err: err.message, path: req.path }, '[TRUTH-SPINE] res.send gate error');
+      }
+      return originalSend(body);
+    };
+
+    next();
+  };
+}
+
+export default createTruthResponseEnforcer;

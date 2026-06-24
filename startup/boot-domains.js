@@ -177,6 +177,46 @@ async function bootLifeOSScheduled(deps) {
  */
 // ── Twin Auto-Ingest (conversation → adam_decisions → adam_profile) ───────────
 // ── Lane intel (Horizon + Red-team) — Amendment 36 ────────────────────────────
+async function bootTruthScoreboard(deps) {
+  const { pool, logger } = deps;
+  if (process.env.TRUTH_SCOREBOARD_ENABLED === '0') {
+    logger?.info?.('[BOOT] Truth scoreboard tick OFF (TRUTH_SCOREBOARD_ENABLED=0)');
+    return;
+  }
+  try {
+    const { registerTruthScoreboardScheduler, runTruthScoreboardTick } = await import('../services/truth-scoreboard-worker.js');
+    registerTruthScoreboardScheduler({ pool, logger });
+    await runTruthScoreboardTick({ pool, logger }).catch((err) => {
+      logger?.warn?.(`[BOOT] Truth scoreboard initial tick: ${err.message}`);
+    });
+    logger?.info?.('[BOOT] Truth scoreboard scheduler active (epistemic promotion from receipts)');
+  } catch (err) {
+    logger?.warn?.(`[BOOT] Truth scoreboard scheduler failed: ${err.message}`);
+  }
+}
+
+async function bootWisdomTruthAuditor(deps) {
+  const { logger } = deps;
+  if (process.env.WISDOM_TRUTH_AUDITOR_ENABLED === '0') {
+    logger?.info?.('[BOOT] Wisdom truth auditor OFF (WISDOM_TRUTH_AUDITOR_ENABLED=0)');
+    return;
+  }
+  try {
+    const { registerWisdomTruthAuditorScheduler, runWisdomTruthAudit } = await import('../services/wisdom-truth-auditor.js');
+    registerWisdomTruthAuditorScheduler({ logger });
+    const report = await runWisdomTruthAudit({ logger }).catch((err) => {
+      logger?.warn?.(`[BOOT] Wisdom truth audit initial run: ${err.message}`);
+      return null;
+    });
+    if (report && !report.ok) {
+      logger?.warn?.({ probe_fail_count: report.probe_fail_count }, '[BOOT] Wisdom truth audit found weaknesses at boot');
+    }
+    logger?.info?.('[BOOT] Wisdom truth auditor active (adversarial probes + enforcement gap scan)');
+  } catch (err) {
+    logger?.warn?.(`[BOOT] Wisdom truth auditor failed: ${err.message}`);
+  }
+}
+
 async function bootChairPredictionScore(deps) {
   const { logger } = deps;
   if (process.env.CHAIR_PREDICTION_SCORE_ENABLED === '0') {
@@ -418,6 +458,8 @@ export async function bootAllDomains(deps) {
     bootTCDeadlineCron(deps),
     bootLifeOSScheduled(deps),
     bootLaneIntel(deps),
+    bootTruthScoreboard(deps),
+    bootWisdomTruthAuditor(deps),
     bootChairPredictionScore(deps),
     bootTwinAutoIngest(deps),
     bootOILDailySummary(deps),

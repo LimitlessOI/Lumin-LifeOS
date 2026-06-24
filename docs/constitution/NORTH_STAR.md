@@ -16,6 +16,8 @@ This file is the essential law digest: what every agent must know before touchin
 
 **Lumin's purpose:** governed mission execution that continuously increases justified trust while reducing required human intervention. Autonomy expands only when trust is earned through evidence, outcomes, calibration, and repeated successful challenge.
 
+**Point B DNA (supreme purpose):** `docs/constitution/POINT_B_DNA.md` — the system exists **only** for Point A → Point B as the founder defines B; synergy (1+1=3); mechanics serve B, never replace it. Verify: `npm run lifeos:point-b:dna:verify`.
+
 **Healing mission (§1.1):** Platform revenue funds healing research. When healing is found, it goes free. No charge for healing. Ever.
 
 **Education mission (§1.2):** Protect the love of learning in every child. It is a mission domain equal in weight to every other constitutional commitment.

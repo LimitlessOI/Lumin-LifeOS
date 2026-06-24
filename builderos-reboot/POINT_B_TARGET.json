@@ -18,6 +18,9 @@
     "never_stop_until": "point_b_reached_or_founder_stop",
     "point_b_defined_by": "founder_communications_intent",
     "tools_not_destination": "Governance, SSOT, receipts, and pipelines are tools accountable to A→B results — not the destination.",
+    "point_b_dna_version": "point_b_dna_v1",
+    "point_b_dna": "builderos-reboot/governance/POINT_B_DNA.json",
+    "synergy": "Human + AI > sum of parts — Chair fleshes broad vision with honest scoreboard",
     "chair_job": "Ask until founder intent understood; then execute through real paths until Point B is reached or blocked honestly.",
     "chair_intent_protocol": "builderos-reboot/governance/CHAIR_INTENT_PROTOCOL.json"
   }

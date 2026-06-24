@@ -1,9 +1,20 @@
 /**
  * SYNOPSIS: Exports createMemoryHandlers — startup/memory.js.
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+import { gateMemoryWrite } from '../services/memory-write-gate.js';
+
 export function createMemoryHandlers({ pool, logger }) {
   async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
     try {
+      const gated = gateMemoryWrite('conversation_memory', aiResponse, {
+        aiOrigin: true,
+        source: context.source || 'conversation_memory',
+      });
+      if (!gated.allowed) {
+        logger.warn('[MEMORY] Blocked conversation_memory write — theater or missing stamp');
+        return null;
+      }
       const memId = `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       await pool.query(
         `INSERT INTO conversation_memory
@@ -12,7 +23,7 @@ export function createMemoryHandlers({ pool, logger }) {
         [
           memId,
           orchestratorMessage,
-          aiResponse,
+          gated.content,
           JSON.stringify(context),
           JSON.stringify({
             type: context.type || "conversation",

@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-24 | **`truth-lockdown.js` + `routes/lifeos-builderos-command-control-routes.js`** — `lockFounderResponse()` on every founder-interface JSON exit; display path drops LLM `translateToPlainEnglish`. | Adam: supreme truth gate — no prose/receipt mismatch | ✅ verify-truth-lockdown | deploy |
 | 2026-06-24 | **`chair-native-facts.js` + `chair-personality-translate.js`** — Lumin IS Chair; personality translates SYSTEM_FACTS only; routes pass `loadChairMemoryContext` + `translateChairPersonality`. | Adam: not chat overlay — Chair is the runtime | ✅ parity | deploy |
 | 2026-06-24 | **`routes/lifeos-builderos-command-control-routes.js`** — skip Gemini `normalizeInputText` when `shouldSkipInputNormalize()` (system commands + do: prefix). | Rewriter garbled "open LifeRE" before system_action routing. | ✅ parity | deploy |
 | 2026-06-24 | **`routes/lifeos-builderos-command-control-routes.js`** — DIRECT CONNECTION LAW in Lumin prompt: never claim open/navigate/schedule/commit; system header is sole execution truth. | Adam: counsel theater claiming actions ran when NO_COMMAND_RAN. | ✅ parity gate | deploy |

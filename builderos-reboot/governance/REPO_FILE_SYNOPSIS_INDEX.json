@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T02:57:39.582Z",
+  "generated_at": "2026-06-24T04:32:32.161Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12318,
+  "file_count": 12346,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28844,9 +28844,9 @@
     {
       "path": "builderos-reboot/governance/CHAIR_INTENT_PROTOCOL.json",
       "synopsis": "BuilderOS artifact — CHAIR INTENT PROTOCOL.",
-      "bytes": 1615,
-      "mtime": "2026-06-22T22:55:31.244Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 1737,
+      "mtime": "2026-06-24T04:25:40.651Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "synopsis_index_only": true
     },
     {
@@ -28906,11 +28906,19 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/governance/POINT_B_DNA.json",
+      "synopsis": "BuilderOS artifact — POINT B DNA.",
+      "bytes": 2753,
+      "mtime": "2026-06-24T04:25:12.935Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3694388,
-      "mtime": "2026-06-24T00:29:15.641Z",
-      "indexed_at": "2026-06-24T00:29:33.227Z"
+      "bytes": 3706746,
+      "mtime": "2026-06-24T04:32:00.166Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -34424,9 +34432,9 @@
     {
       "path": "builderos-reboot/POINT_B_TARGET.json",
       "synopsis": "BuilderOS artifact — POINT B TARGET.",
-      "bytes": 1411,
-      "mtime": "2026-06-22T22:42:11.720Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 1621,
+      "mtime": "2026-06-24T04:25:53.709Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "synopsis_index_only": true
     },
     {
@@ -35656,6 +35664,14 @@
       "indexed_at": "2026-06-24T00:29:15.109Z"
     },
     {
+      "path": "config/truth-governance-hypotheses.json",
+      "synopsis": "Configuration — Truth Governance Hypotheses.",
+      "bytes": 1825,
+      "mtime": "2026-06-24T04:25:45.786Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "config/twilioConfig.js",
       "synopsis": "Placeholder for Twilio configuration",
       "bytes": 324,
@@ -36197,9 +36213,9 @@
     {
       "path": "core/memory-system.js",
       "synopsis": "MEMORY SYSTEM - LEGACY CRUD MEMORY STORE",
-      "bytes": 7039,
-      "mtime": "2026-06-21T21:37:47.394Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 7602,
+      "mtime": "2026-06-24T03:45:54.131Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md"
       ]
@@ -40080,9 +40096,16 @@
     {
       "path": "docs/constitution/NORTH_STAR.md",
       "synopsis": "BuilderOS — Constitutional Law",
-      "bytes": 6154,
-      "mtime": "2026-06-23T05:15:54.596Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 6405,
+      "mtime": "2026-06-24T04:25:56.616Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
+    },
+    {
+      "path": "docs/constitution/POINT_B_DNA.md",
+      "synopsis": "Point B DNA — supreme purpose of LifeOS/BuilderOS (cannot be misread)",
+      "bytes": 5121,
+      "mtime": "2026-06-24T04:25:19.176Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/constitution/PRE_ARC_FOUNDER_PACKET_V2/CFO_RESOURCE_SIMULATION_RECEIPT.md",
@@ -40164,9 +40187,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 451619,
-      "mtime": "2026-06-24T00:24:09.371Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 452702,
+      "mtime": "2026-06-24T04:26:21.116Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -40579,9 +40602,9 @@
     {
       "path": "docs/LUMIN_DOCTRINE.md",
       "synopsis": "LUMIN DOCTRINE — Canonical Specification",
-      "bytes": 11934,
-      "mtime": "2026-06-24T02:57:12.361Z",
-      "indexed_at": "2026-06-24T02:57:39.582Z"
+      "bytes": 12791,
+      "mtime": "2026-06-24T04:26:08.411Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/marketing/video-scripts.md",
@@ -40768,32 +40791,32 @@
     {
       "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json",
       "synopsis": "Documentation — AMENDMENT 01 AI COUNCIL.Manifest.",
-      "bytes": 4975,
-      "mtime": "2026-06-02T00:03:54.592Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 5044,
+      "mtime": "2026-06-24T04:32:09.636Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
       "synopsis": "AMENDMENT 01 — AI Council System",
-      "bytes": 48817,
-      "mtime": "2026-06-21T21:37:58.336Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 49186,
+      "mtime": "2026-06-24T03:45:53.768Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.manifest.json",
       "synopsis": "Documentation — AMENDMENT 02 MEMORY SYSTEM.Manifest.",
-      "bytes": 4746,
-      "mtime": "2026-06-23T04:33:54.061Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 4975,
+      "mtime": "2026-06-24T04:32:09.643Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
       "synopsis": "AMENDMENT 02 — Memory Capsule System",
-      "bytes": 17618,
-      "mtime": "2026-06-21T21:37:58.356Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 17989,
+      "mtime": "2026-06-24T04:31:45.433Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md",
@@ -40982,17 +41005,17 @@
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 19 PROJECT GOVERNANCE.Manifest.",
-      "bytes": 6272,
-      "mtime": "2026-06-23T11:49:33.170Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 6341,
+      "mtime": "2026-06-24T04:32:09.643Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 44839,
-      "mtime": "2026-06-24T00:29:25.783Z",
-      "indexed_at": "2026-06-24T00:29:33.227Z"
+      "bytes": 45072,
+      "mtime": "2026-06-24T04:31:47.528Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -41004,17 +41027,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26574,
-      "mtime": "2026-06-24T00:10:27.418Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 26539,
+      "mtime": "2026-06-24T04:32:22.820Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 470907,
-      "mtime": "2026-06-24T02:57:25.272Z",
-      "indexed_at": "2026-06-24T02:57:39.582Z"
+      "bytes": 473873,
+      "mtime": "2026-06-24T04:26:01.250Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41267,16 +41290,16 @@
       "path": "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 39 MEMORY INTELLIGENCE.Manifest.",
       "bytes": 1477,
-      "mtime": "2026-06-02T00:03:54.594Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "mtime": "2026-06-24T04:32:16.508Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md",
       "synopsis": "AMENDMENT 39 — Memory Intelligence System",
-      "bytes": 21566,
-      "mtime": "2026-06-21T21:37:59.203Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 21896,
+      "mtime": "2026-06-24T03:45:54.169Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/projects/AMENDMENT_40_OIL_SECURITY_DIVISIONS.manifest.json",
@@ -41371,9 +41394,9 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 10666,
-      "mtime": "2026-06-24T00:35:14.995Z",
-      "indexed_at": "2026-06-24T00:35:27.384Z"
+      "bytes": 10979,
+      "mtime": "2026-06-24T04:31:49.267Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -41518,9 +41541,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 130504,
-      "mtime": "2026-06-24T02:57:31.795Z",
-      "indexed_at": "2026-06-24T02:57:39.582Z"
+      "bytes": 130809,
+      "mtime": "2026-06-24T03:45:53.569Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -67485,6 +67508,16 @@
       "indexed_at": "2026-06-24T00:29:15.109Z"
     },
     {
+      "path": "middleware/truth-response-enforcer.js",
+      "synopsis": "Express middleware — every res.json passes through truth spine before leaving.",
+      "bytes": 2327,
+      "mtime": "2026-06-24T03:45:54.207Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "migrations/001_create_acos_tables.sql",
       "synopsis": "Database migration — 001_create_acos_tables.sql.",
       "bytes": 783,
@@ -68780,9 +68813,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 21643,
-      "mtime": "2026-06-24T02:43:26.164Z",
-      "indexed_at": "2026-06-24T02:44:12.484Z",
+      "bytes": 22301,
+      "mtime": "2026-06-24T04:25:42.518Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "synopsis_index_only": true
     },
     {
@@ -69159,6 +69192,38 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/POINT_B_DNA_VERIFY.json",
+      "synopsis": "Product receipt — POINT B DNA VERIFY.",
+      "bytes": 198,
+      "mtime": "2026-06-24T04:26:12.033Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
+      "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
+      "bytes": 2356,
+      "mtime": "2026-06-24T03:43:41.786Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
+      "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
+      "bytes": 736,
+      "mtime": "2026-06-24T03:43:41.258Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
+      "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
+      "bytes": 1078,
+      "mtime": "2026-06-24T03:54:57.736Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/VOICE_RAIL_CAPABILITY_PROOF.json",
       "synopsis": "Product receipt — VOICE RAIL CAPABILITY PROOF.",
       "bytes": 18852,
@@ -69172,6 +69237,14 @@
       "bytes": 1150,
       "mtime": "2026-06-18T03:41:16.584Z",
       "indexed_at": "2026-06-24T00:29:15.109Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
+      "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
+      "bytes": 890,
+      "mtime": "2026-06-24T03:54:57.417Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "synopsis_index_only": true
     },
     {
@@ -69262,9 +69335,9 @@
     {
       "path": "prompts/00-LIFEOS-AGENT-CONTRACT.md",
       "synopsis": "Platform epistemic contract — READ THIS FIRST",
-      "bytes": 9317,
-      "mtime": "2026-06-24T00:08:35.564Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 10144,
+      "mtime": "2026-06-24T04:25:40.578Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "prompts/00-LIFEOS-SERVICE-DOCTRINE.md",
@@ -71001,9 +71074,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 48858,
-      "mtime": "2026-06-24T02:57:19.359Z",
-      "indexed_at": "2026-06-24T02:57:39.582Z",
+      "bytes": 47571,
+      "mtime": "2026-06-24T04:31:17.366Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -71862,6 +71935,16 @@
       "bytes": 43470,
       "mtime": "2026-06-21T21:39:05.516Z",
       "indexed_at": "2026-06-24T00:29:15.109Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "scripts/audit-truth-enforcement.mjs",
+      "synopsis": "Audit entire repo for truth enforcement bypass paths — fail-closed in preflight.",
+      "bytes": 4182,
+      "mtime": "2026-06-24T03:45:54.224Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -73369,9 +73452,9 @@
     {
       "path": "scripts/run-lumin-chair-parity.mjs",
       "synopsis": "Lumin Chair direct-connection parity — live API must match execution truth.",
-      "bytes": 5025,
-      "mtime": "2026-06-24T02:57:09.277Z",
-      "indexed_at": "2026-06-24T02:57:39.582Z",
+      "bytes": 6526,
+      "mtime": "2026-06-24T03:45:53.883Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -73431,6 +73514,16 @@
       ]
     },
     {
+      "path": "scripts/run-truth-scoreboard-tick.mjs",
+      "synopsis": "Run truth scoreboard tick + receipt validation report.",
+      "bytes": 1040,
+      "mtime": "2026-06-24T03:45:54.093Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md"
+      ]
+    },
+    {
       "path": "scripts/run-voice-rail-capability-proof.mjs",
       "synopsis": "Voice Rail capability proof — fails if the system claims what it cannot do.",
       "bytes": 14408,
@@ -73449,6 +73542,16 @@
       "indexed_at": "2026-06-24T00:29:15.109Z",
       "ssot": [
         "builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/ACCEPTANCE_SPEC.md"
+      ]
+    },
+    {
+      "path": "scripts/run-wisdom-truth-audit.mjs",
+      "synopsis": "Wisdom truth auditor CLI — adversarial probes + enforcement gap scan (preflight).",
+      "bytes": 1322,
+      "mtime": "2026-06-24T03:54:27.240Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
     },
     {
@@ -74479,6 +74582,16 @@
       ]
     },
     {
+      "path": "scripts/verify-point-b-dna.mjs",
+      "synopsis": "Verify Point B DNA locked — constitution, runtime, preflight (HARD).",
+      "bytes": 2922,
+      "mtime": "2026-06-24T04:26:08.393Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/constitution/POINT_B_DNA.md"
+      ]
+    },
+    {
       "path": "scripts/verify-project.mjs",
       "synopsis": "scripts/verify-project.mjs",
       "bytes": 17662,
@@ -74496,6 +74609,16 @@
       "indexed_at": "2026-06-24T00:29:15.109Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-receipt-truth.mjs",
+      "synopsis": "Validate product receipts — no PASS without proof.",
+      "bytes": 824,
+      "mtime": "2026-06-24T03:45:54.112Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
     },
     {
@@ -84431,6 +84554,16 @@
       ]
     },
     {
+      "path": "scripts/verify-truth-lockdown.mjs",
+      "synopsis": "Static proof — truth lockdown wired on all founder exit paths.",
+      "bytes": 5788,
+      "mtime": "2026-06-24T04:25:44.050Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "scripts/verify-tsos-platform-kernel.mjs",
       "synopsis": "Verify TSOS Platform Kernel Phase 0 wiring.",
       "bytes": 2988,
@@ -84488,9 +84621,9 @@
     {
       "path": "server.js",
       "synopsis": "╔══════════════════════════════════════════════════════════════════════════════════╗",
-      "bytes": 71202,
-      "mtime": "2026-06-21T21:39:10.832Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 71435,
+      "mtime": "2026-06-24T03:45:53.728Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
     },
     {
       "path": "server/config/fileStorage.js",
@@ -84714,6 +84847,16 @@
       "bytes": 3078,
       "mtime": "2026-06-21T21:39:11.386Z",
       "indexed_at": "2026-06-24T00:29:15.109Z"
+    },
+    {
+      "path": "services/ai-prose-truth-envelope.js",
+      "synopsis": "Universal AI prose envelope — every council output scrubbed vs execution truth.",
+      "bytes": 6117,
+      "mtime": "2026-06-24T03:45:53.979Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_01_AI_COUNCIL.md"
+      ]
     },
     {
       "path": "services/amip/db/migrations/001_create_amip_tables.sql",
@@ -85281,9 +85424,9 @@
     {
       "path": "services/chair-direct-connection-truth.js",
       "synopsis": "Lumin direct connection truth — personality OK, execution claims must match receipts.",
-      "bytes": 4502,
-      "mtime": "2026-06-24T02:43:16.811Z",
-      "indexed_at": "2026-06-24T02:44:12.484Z",
+      "bytes": 4843,
+      "mtime": "2026-06-24T03:45:53.865Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -85301,9 +85444,9 @@
     {
       "path": "services/chair-intent-protocol.js",
       "synopsis": "Chair Intent Protocol — ask until understood, then execute toward founder Point B.",
-      "bytes": 7704,
-      "mtime": "2026-06-22T22:55:41.644Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 7778,
+      "mtime": "2026-06-24T04:25:43.794Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -85361,9 +85504,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Chair personality translate — voice layer on real system facts only (not fake chat).",
-      "bytes": 2420,
-      "mtime": "2026-06-24T02:56:46.532Z",
-      "indexed_at": "2026-06-24T02:57:39.582Z",
+      "bytes": 2892,
+      "mtime": "2026-06-24T03:45:53.902Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -85797,10 +85940,13 @@
     },
     {
       "path": "services/conversation-store.js",
-      "synopsis": "services/conversation-store.js",
-      "bytes": 6910,
-      "mtime": "2026-06-21T21:39:12.688Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "synopsis": "services/conversation-store.js — conversation persistence with truth scrub on assistant writes.",
+      "bytes": 7149,
+      "mtime": "2026-06-24T04:31:36.717Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md"
+      ]
     },
     {
       "path": "services/council-bypass-audit.js",
@@ -85835,9 +85981,9 @@
     {
       "path": "services/council-service.js",
       "synopsis": "Council routing, token/LCL/savings, and model failover for platform AI calls.",
-      "bytes": 76667,
-      "mtime": "2026-06-23T04:33:54.017Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 77415,
+      "mtime": "2026-06-24T03:45:53.706Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_01_AI_COUNCIL.md"
       ]
@@ -86399,9 +86545,9 @@
     {
       "path": "services/founder-direct-provider.js",
       "synopsis": "Founder direct provider test — live API only, no council, no simulation.",
-      "bytes": 6895,
-      "mtime": "2026-06-21T21:38:59.038Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 7751,
+      "mtime": "2026-06-24T03:45:53.808Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87261,9 +87407,9 @@
     {
       "path": "services/lifeos-lumin.js",
       "synopsis": "Lumin Chair — governed operating mind of LifeOS (not a side chatbot or reception desk).",
-      "bytes": 19472,
-      "mtime": "2026-06-22T21:23:26.257Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 19862,
+      "mtime": "2026-06-24T04:25:31.053Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87491,9 +87637,9 @@
     {
       "path": "services/lifere-council-router.js",
       "synopsis": "LifeRE council router — invokes live council when callCouncilMember provided.",
-      "bytes": 3851,
-      "mtime": "2026-06-23T11:43:23.854Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 4495,
+      "mtime": "2026-06-24T03:45:53.847Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -87828,9 +87974,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 23919,
-      "mtime": "2026-06-24T02:57:08.572Z",
-      "indexed_at": "2026-06-24T02:57:39.582Z",
+      "bytes": 25528,
+      "mtime": "2026-06-24T04:25:28.760Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88122,6 +88268,16 @@
       "bytes": 2587,
       "mtime": "2026-06-21T21:39:16.327Z",
       "indexed_at": "2026-06-24T00:29:15.109Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md"
+      ]
+    },
+    {
+      "path": "services/memory-write-gate.js",
+      "synopsis": "Memory write gate — no AI prose stored without epistemic stamp + envelope scrub.",
+      "bytes": 4490,
+      "mtime": "2026-06-24T03:45:54.051Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md"
       ]
@@ -88498,6 +88654,16 @@
       ]
     },
     {
+      "path": "services/point-b-dna.js",
+      "synopsis": "Point B DNA — runtime stamp + prompt inject; supreme purpose enforcement.",
+      "bytes": 4180,
+      "mtime": "2026-06-24T04:31:37.893Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/point-b-navigator.js",
       "synopsis": "Point B navigator — reads POINT_B_TARGET.json and returns next gate action.",
       "bytes": 11893,
@@ -88621,6 +88787,16 @@
       "mtime": "2025-12-22T18:15:07.184Z",
       "indexed_at": "2026-06-24T00:29:15.109Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "services/receipt-truth-validator.js",
+      "synopsis": "Receipt truth validator — PASS claims must carry proof, not theater.",
+      "bytes": 5003,
+      "mtime": "2026-06-24T03:45:54.034Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "services/relationship-debrief.js",
@@ -89607,6 +89783,36 @@
       ]
     },
     {
+      "path": "services/truth-enforcement-spine.js",
+      "synopsis": "Truth enforcement spine — single import for all truth gates in production.",
+      "bytes": 5882,
+      "mtime": "2026-06-24T04:25:27.480Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/truth-lockdown.js",
+      "synopsis": "Supreme fail-closed truth gate — no founder reply leaves without receipt-backed claims.",
+      "bytes": 9034,
+      "mtime": "2026-06-24T03:45:53.921Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/truth-scoreboard-worker.js",
+      "synopsis": "Truth scoreboard worker — reality results promote/demote epistemic facts.",
+      "bytes": 7873,
+      "mtime": "2026-06-24T03:45:54.072Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md"
+      ]
+    },
+    {
       "path": "services/tsos-platform-kernel.js",
       "synopsis": "TSOS Platform Kernel — Phase 0 execution syscall layer.",
       "bytes": 14849,
@@ -89889,9 +90095,12 @@
     {
       "path": "services/websocket-handler.js",
       "synopsis": "WebSocket connection handler — extracted from server.js.",
-      "bytes": 2812,
-      "mtime": "2026-06-21T21:39:19.733Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 2987,
+      "mtime": "2026-06-24T04:31:37.466Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "services/wildlife/alertEngine.js",
@@ -89920,6 +90129,16 @@
       "bytes": 716,
       "mtime": "2026-06-21T21:39:19.802Z",
       "indexed_at": "2026-06-24T00:29:15.109Z"
+    },
+    {
+      "path": "services/wisdom-truth-auditor.js",
+      "synopsis": "Wisdom truth auditor — red-team truth gates, scan enforcement gaps, challenge assumptions.",
+      "bytes": 11823,
+      "mtime": "2026-06-24T03:54:25.713Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "services/word-keeper-transcriber.js",
@@ -92897,9 +93116,9 @@
     {
       "path": "startup/boot-domains.js",
       "synopsis": "boot-domains.js",
-      "bytes": 17151,
-      "mtime": "2026-06-23T18:54:52.362Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 18963,
+      "mtime": "2026-06-24T03:54:44.784Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]
@@ -92945,9 +93164,12 @@
     {
       "path": "startup/memory.js",
       "synopsis": "Exports createMemoryHandlers — startup/memory.js.",
-      "bytes": 1596,
-      "mtime": "2026-06-21T21:39:26.963Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 2036,
+      "mtime": "2026-06-24T03:45:54.298Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "startup/register-runtime-routes.js",
@@ -93209,6 +93431,16 @@
       "bytes": 911,
       "mtime": "2026-06-21T21:39:27.680Z",
       "indexed_at": "2026-06-24T00:29:15.109Z"
+    },
+    {
+      "path": "tests/ai-prose-truth-envelope.test.js",
+      "synopsis": "AI prose truth envelope tests.",
+      "bytes": 2024,
+      "mtime": "2026-06-24T03:45:53.998Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_01_AI_COUNCIL.md"
+      ]
     },
     {
       "path": "tests/api.test.js",
@@ -93815,6 +94047,16 @@
       "indexed_at": "2026-06-24T00:29:15.109Z"
     },
     {
+      "path": "tests/point-b-dna.test.js",
+      "synopsis": "Point B DNA — supreme purpose enforcement tests.",
+      "bytes": 1979,
+      "mtime": "2026-06-24T04:25:38.168Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/constitution/POINT_B_DNA.md"
+      ]
+    },
+    {
       "path": "tests/point-b-gate.test.js",
       "synopsis": "js — tests/point-b-gate.test.js.",
       "bytes": 3910,
@@ -93911,6 +94153,23 @@
       "indexed_at": "2026-06-24T00:29:15.109Z"
     },
     {
+      "path": "tests/truth-gap-closure.test.js",
+      "synopsis": "Memory write gate + receipt validator tests.",
+      "bytes": 1924,
+      "mtime": "2026-06-24T03:45:54.150Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z"
+    },
+    {
+      "path": "tests/truth-lockdown.test.js",
+      "synopsis": "Truth lockdown — fail-closed compliance tests.",
+      "bytes": 3256,
+      "mtime": "2026-06-24T03:45:53.939Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "tests/unit_tests.js",
       "synopsis": "js — tests/unit_tests.js.",
       "bytes": 448,
@@ -93989,6 +94248,16 @@
       "bytes": 577,
       "mtime": "2026-06-21T21:39:28.943Z",
       "indexed_at": "2026-06-24T00:29:15.109Z"
+    },
+    {
+      "path": "tests/wisdom-truth-auditor.test.js",
+      "synopsis": "Wisdom truth auditor — assumption gate + adversarial probe tests.",
+      "bytes": 1921,
+      "mtime": "2026-06-24T03:54:28.566Z",
+      "indexed_at": "2026-06-24T04:32:32.161Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "TROUBLESHOOTING_COMMAND_CENTER.md",

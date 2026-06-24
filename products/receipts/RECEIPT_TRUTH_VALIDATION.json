@@ -1,0 +1,111 @@
+{
+  "schema": "receipt_truth_validation_v1",
+  "at": "2026-06-24T03:43:41.785Z",
+  "ok": true,
+  "checked": 17,
+  "failures": [],
+  "results": [
+    {
+      "file": "ACTION_INBOX_V1_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "BUILDEROS_INTAKE_LOOP_V1_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "CAPTURE_PIPELINE_V2_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "COMMITMENT_ROUTE_V2_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "LIFERE_ALPHA_AUDIT_20260623.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "LIFERE_ALPHA_READINESS.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "LIFERE_AZ_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "LIFERE_FULL_AUDIT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "LIFERE_OS_V1_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "LIFERE_PG_VERIFY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "LIFERE_SELF_AUDIT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "RECEIPT_TRUTH_VALIDATION.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "TRUTH_ENFORCEMENT_AUDIT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "TRUTH_LOCKDOWN_VERIFY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    },
+    {
+      "file": "VOICE_RAIL_V1_ACCEPTANCE.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": true
+    }
+  ]
+}

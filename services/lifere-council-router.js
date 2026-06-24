@@ -6,8 +6,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pickModel } from './lifere-model-router.js';
+import { applyAiProseTruthEnvelope } from './ai-prose-truth-envelope.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+function envelopeCouncilRoleProse(text, role) {
+  const { text: safe, envelope } = applyAiProseTruthEnvelope(text, {
+    source: 'lifere_council_router',
+    taskType: 'lifere_council',
+    command_truth: 'NO_COMMAND_RAN',
+    pass_fail: 'NO_COMMAND_RAN',
+  });
+  return { summary: safe, truth_envelope: envelope, role };
+}
 
 function loadCouncilConfig() {
   return JSON.parse(fs.readFileSync(path.join(ROOT, 'config/lifere-council-roles.json'), 'utf8'));
@@ -50,7 +61,9 @@ export async function runCouncilDeliberation({
         const prompt = `[LifeRE ${role}] Intent: ${intent}\nUser: ${userId}\nMessage: ${message || ''}\nRespond in 2-3 sentences as ${role}. Label uncertainty THINK if inferring.`;
         const member = role === 'Chair' ? 'anthropic' : 'gemini';
         const raw = await callCouncilMember(member, prompt, { maxTokens: 300, taskType: 'lifere_council' });
-        summary = typeof raw === 'string' ? raw : raw?.content || summary;
+        const rawText = typeof raw === 'string' ? raw : raw?.content || summary;
+        const enveloped = envelopeCouncilRoleProse(rawText, role);
+        summary = enveloped.summary;
       } catch (err) {
         logger.warn?.(`[lifere-council] ${role} skip:`, err.message);
       }
@@ -70,7 +83,8 @@ export async function runCouncilDeliberation({
     try {
       const synthesisPrompt = `Synthesize these council role notes into plain English for the founder (2-4 sentences):\n${role_outputs.map((r) => `${r.role}: ${r.summary}`).join('\n')}`;
       const raw = await callCouncilMember('anthropic', synthesisPrompt, { maxTokens: 400, taskType: 'lifere_chair' });
-      chair_answer = typeof raw === 'string' ? raw : raw?.content || chair_answer;
+      const rawText = typeof raw === 'string' ? raw : raw?.content || chair_answer;
+      chair_answer = envelopeCouncilRoleProse(rawText, 'Chair').summary;
     } catch {
       /* keep role_outputs chair */
     }
@@ -95,6 +109,8 @@ export async function runCouncilDeliberation({
     roles_invoked: roles,
     model: modelPick,
     live_council: Boolean(callCouncilMember),
+    counsel_only: true,
+    command_truth: 'NO_COMMAND_RAN',
   };
 }
 

@@ -1,0 +1,33 @@
+{
+  "schema": "truth_lockdown_verify_v1",
+  "at": "2026-06-24T03:54:57.734Z",
+  "ok": true,
+  "failures": [],
+  "checks": [
+    "services/lumin-chair-orchestrator.js",
+    "services/truth-lockdown.js",
+    "services/chair-truth-gate.js",
+    "services/chair-direct-connection-truth.js",
+    "services/council-service.js",
+    "services/ai-prose-truth-envelope.js",
+    "services/lifere-council-router.js",
+    "services/memory-write-gate.js",
+    "services/receipt-truth-validator.js",
+    "services/truth-scoreboard-worker.js",
+    "core/memory-system.js",
+    "startup/boot-domains.js",
+    "services/lifeos-execution-truth.js",
+    "services/truth-enforcement-spine.js",
+    "middleware/truth-response-enforcer.js",
+    "server.js",
+    "services/lifeos-lumin.js",
+    "services/websocket-handler.js",
+    "services/conversation-store.js",
+    "startup/memory.js",
+    "services/chair-personality-translate.js",
+    "services/founder-direct-provider.js",
+    "services/wisdom-truth-auditor.js",
+    "services/lumin-chair-orchestrator.js",
+    "startup/boot-domains.js"
+  ]
+}

@@ -12,6 +12,7 @@ import { verifyToken } from '../services/lifeos-auth.js';
 import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 import { resolveLifeOSUserId } from '../services/lifeos-user-resolver.js';
 import { enforceExecutionTruth, formatExecutionTruthReply, sanitizeConversationReply } from '../services/lifeos-execution-truth.js';
+import { enforceTruthLockdown } from '../services/truth-lockdown.js';
 import {
   extractPriorBuildTask,
   isRepairContinuationIntent,
@@ -97,6 +98,10 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
     }
   }
 
+  function lockFounderResponse(body, channel = 'founder_interface') {
+    return enforceTruthLockdown(body, channel);
+  }
+
   async function resolveBuildTaskForFounder(req, cleanedInput) {
     let task = cleanedInput;
     if (isRepairContinuationIntent(cleanedInput)) {
@@ -175,39 +180,8 @@ Input: ${rawText}`,
     }
   }
 
-  async function translateToPlainEnglish(originalText, result) {
-    if (typeof callCouncilMember !== 'function') return null;
-    try {
-      const systemContext = [
-        result.pass_fail === 'NO_COMMAND_RAN' ? `Status: No command was run. This was a read/display request.` : `Status: ${result.pass_fail}`,
-        result.first_blocker ? `Blocker hit: ${result.first_blocker}` : '',
-        result.human_summary ? `System summary: ${result.human_summary}` : '',
-        result.display ? `Live data was returned: jobs=${result.display.recent_jobs?.length ?? 0}, halted=${result.display.halt_state?.halted ?? false}` : '',
-      ].filter(Boolean).join('\n');
-
-      const translationPrompt = `You are the plain-English voice of LifeOS, a personal operating system for the founder Adam.
-The founder just sent this message to the system: "${originalText}"
-
-Here is what the system actually did:
-${systemContext}
-
-Write 1-3 sentences in plain, direct English explaining exactly what happened and what it means for Adam.
-Rules:
-- Never lie. If it failed, say it failed and why in simple terms.
-- If it succeeded, say what was done.
-- If it was a status/display request, summarize the key info.
-- Use plain English. No jargon. No "BuilderOS", "SNT", "receipt_paths". Say what it means in human terms.
-- If blocked by a review step: explain that the system requires a formal approval process for changes, and plain-English questions work fine but build commands go through a gate.
-- Be honest. Be brief.`;
-      const response = await callCouncilMember('gemini', translationPrompt, { maxTokens: 200, taskType: 'chat' });
-
-      const text = typeof response === 'string'
-        ? response
-        : response?.content || response?.text || response?.message || null;
-      return text ? String(text).trim().slice(0, 1200) : null;
-    } catch {
-      return null;
-    }
+  async function translateToPlainEnglish() {
+    return null;
   }
 
   function inferTargetFileFromTask(task = '') {
@@ -405,7 +379,13 @@ HOW TO RESPOND:
         user: userMessage,
         lumin: reply,
         timestamp: new Date().toISOString(),
-      }, { confidence: 0.8 }).catch(() => {});
+      }, {
+        confidence: 0.8,
+        aiOrigin: true,
+        epistemic_label: 'THINK',
+        command_truth: 'NO_COMMAND_RAN',
+        taskType: 'lifeos.lumin.chat',
+      }).catch(() => {});
 
       return reply;
     } catch {
@@ -1103,7 +1083,7 @@ HOW TO RESPOND:
         if (inboxGate?.private) {
           const privateReply = 'Private — not saved. Session only.';
           await persistFounderTurn(req, cleanedInput, privateReply);
-          return res.status(200).json({
+          return res.status(200).json(lockFounderResponse({
             ok: true,
             interface: 'LifeOS Founder Interface',
             action: 'private',
@@ -1112,12 +1092,12 @@ HOW TO RESPOND:
             human_summary: privateReply,
             classification: inboxGate.classification,
             auth_mode: req.auth_mode || 'unknown',
-          });
+          }, 'private'));
         }
         const inboxBlocker = formatInboxGateBlocker(inboxGate);
         if (inboxBlocker) {
           const persistWarning = await persistFounderTurn(req, cleanedInput, inboxBlocker);
-          return res.status(200).json({
+          return res.status(200).json(lockFounderResponse({
             ok: true,
             interface: 'LifeOS Founder Interface',
             action: 'staged',
@@ -1129,7 +1109,7 @@ HOW TO RESPOND:
             human_summary: inboxBlocker,
             auth_mode: req.auth_mode || 'unknown',
             ...(persistWarning ? { persist_warning: persistWarning } : {}),
-          });
+          }, 'staged'));
         }
       }
 
@@ -1191,8 +1171,9 @@ HOW TO RESPOND:
       });
 
       const persistWarning = await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary);
+      const locked = lockFounderResponse(chairResult.body, chairResult.body.chair_channel || 'founder_interface');
       return res.status(chairResult.statusCode).json({
-        ...chairResult.body,
+        ...locked,
         ...(persistWarning ? { persist_warning: persistWarning } : {}),
       });
     } catch (error) {

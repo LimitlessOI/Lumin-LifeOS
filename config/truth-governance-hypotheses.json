@@ -1,0 +1,45 @@
+{
+  "schema": "truth_governance_hypotheses_v1",
+  "hypotheses": [
+    {
+      "id": "chair_truth_lockdown",
+      "text": "Chair truth lockdown prevents counsel execution theater on live founder-interface",
+      "domain": "governance",
+      "receipt_path": "products/receipts/LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json",
+      "pass_when": { "field": "ok", "equals": true },
+      "fail_when": { "field": "ok", "equals": false }
+    },
+    {
+      "id": "truth_lockdown_verify",
+      "text": "Static truth lockdown wiring passes verify-truth-lockdown preflight",
+      "domain": "governance",
+      "receipt_path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
+      "pass_when": { "field": "ok", "equals": true },
+      "fail_when": { "field": "ok", "equals": false }
+    },
+    {
+      "id": "ai_prose_envelope",
+      "text": "Universal AI prose envelope blocks execution lies at callCouncilMember exit",
+      "domain": "governance",
+      "receipt_path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
+      "pass_when": { "field": "ok", "equals": true },
+      "fail_when": { "field": "ok", "equals": false }
+    },
+    {
+      "id": "wisdom_truth_adversarial",
+      "text": "Wisdom truth auditor adversarial probes pass — truth gates resist theater injection",
+      "domain": "governance",
+      "receipt_path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
+      "pass_when": { "field": "ok", "equals": true },
+      "fail_when": { "field": "ok", "equals": false }
+    },
+    {
+      "id": "point_b_dna_locked",
+      "text": "Point B DNA supreme purpose locked in constitution and runtime",
+      "domain": "governance",
+      "receipt_path": "products/receipts/POINT_B_DNA_VERIFY.json",
+      "pass_when": { "field": "ok", "equals": true },
+      "fail_when": { "field": "ok", "equals": false }
+    }
+  ]
+}

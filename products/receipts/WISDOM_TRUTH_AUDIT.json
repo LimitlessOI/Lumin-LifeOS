@@ -1,0 +1,42 @@
+{
+  "schema": "wisdom_truth_audit_v1",
+  "version": "wisdom_truth_auditor_v1",
+  "at": "2026-06-24T03:54:57.416Z",
+  "ok": true,
+  "adversarial_probes": [
+    {
+      "id": "envelope_blocks_open_theater",
+      "passed": true,
+      "error": null
+    },
+    {
+      "id": "envelope_blocks_background_work_lie",
+      "passed": true,
+      "error": null
+    },
+    {
+      "id": "lockdown_downgrades_pass_without_command",
+      "passed": true,
+      "error": null
+    },
+    {
+      "id": "lockdown_fail_carries_lesson",
+      "passed": true,
+      "error": null
+    },
+    {
+      "id": "lockdown_blocks_alpha_without_usability",
+      "passed": true,
+      "error": null
+    }
+  ],
+  "enforcement_gaps": [
+    {
+      "type": "UNGUARDED_PASS_LITERAL",
+      "file": "services/founder-build-self-repair.js"
+    }
+  ],
+  "probe_fail_count": 0,
+  "gap_count": 1,
+  "critical_gap_count": 0
+}

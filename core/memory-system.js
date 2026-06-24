@@ -11,6 +11,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { gateMemoryWrite, sanitizeLegacyMemoryContent } from '../services/memory-write-gate.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,12 +47,19 @@ async function initMemoryStore() {
 
 // Store a memory with validation
 async function storeMemory(category, content, options = {}) {
+  const gated = gateMemoryWrite(category, content, { ...options, aiOrigin: options.aiOrigin !== false });
+  if (!gated.allowed) {
+    console.log(`🛡️ [MEMORY] Blocked by truth gate: ${gated.reason || 'not allowed'}`);
+    return null;
+  }
+
   const memory = {
     id: `mem_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     category,
-    content,
-    type: options.type || MEMORY_TYPES.AI_INFERRED,
-    confidence: options.confidence || 0.5,
+    content: gated.content,
+    type: gated.options.type || options.type || MEMORY_TYPES.AI_INFERRED,
+    confidence: gated.options.confidence ?? options.confidence ?? 0.5,
+    truth_stamp: gated.stamp || options.truth_stamp || null,
     source: {
       conversation_id: options.conversationId || null,
       timestamp: new Date().toISOString(),
@@ -97,7 +105,10 @@ async function storeMemory(category, content, options = {}) {
 // Retrieve memories with confidence filtering
 async function retrieveMemories(category, options = {}) {
   const store = await loadMemoryStore();
-  let memories = store[category] || [];
+  let memories = (store[category] || []).map((m) => ({
+    ...m,
+    content: sanitizeLegacyMemoryContent(m.content, category),
+  }));
   
   // Filter by minimum confidence
   const minConfidence = options.minConfidence || 0.5;

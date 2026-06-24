@@ -3,6 +3,8 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
+import { applyAiProseTruthEnvelope } from './ai-prose-truth-envelope.js';
+
 const TRANSLATE_PROMPT = `You are the voice of Lumin Chair inside LifeOS/BuilderOS.
 
 CRITICAL — YOU ARE NOT A SEPARATE CHATBOT:
@@ -42,7 +44,15 @@ Lumin Chair:`;
     const text = typeof response === 'string'
       ? response
       : response?.content || response?.text || null;
-    return text?.trim() || formatFactsFallback(systemFacts);
+    const raw = text?.trim() || formatFactsFallback(systemFacts);
+    const commandRan = systemFacts.command_ran === true;
+    const { text: safe } = applyAiProseTruthEnvelope(raw, {
+      command_truth: commandRan ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
+      pass_fail: commandRan ? undefined : 'NO_COMMAND_RAN',
+      taskType: 'lumin_chair_translate',
+      source: 'chair_personality_translate',
+    });
+    return safe || formatFactsFallback(systemFacts);
   } catch {
     return formatFactsFallback(systemFacts);
   }

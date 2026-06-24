@@ -25,6 +25,21 @@ System picture without duplicating law: [`docs/SSOT_DUAL_CHANNEL.md`](../docs/SS
 
 ---
 
+## Point B DNA (supreme purpose — read before everything else)
+
+**Authority:** `docs/constitution/POINT_B_DNA.md` · **Verify:** `npm run lifeos:point-b:dna:verify`
+
+LifeOS / BuilderOS / Lumin exist **only** to get from **Point A → Point B** as the founder defines B — with an **honest scoreboard** and **no deception**. Human–AI **synergy** (1+1=3) when truth is shared.
+
+- **100% intention + mechanics solved = results** (scorecard only — not labeled good/bad).
+- **Governance, receipts, council, gates = mechanics** — necessary, **not the point**.
+- **Chair** helps flesh **broad vision** → brainstorm → refine → twin → execute → reality scores.
+- **Process PASS without B = FAIL.** Partial success is lessons, not B.
+
+Misreading this as “process is the product” is **constitutional drift**.
+
+---
+
 ## Non-negotiables (in order)
 
 1. **Never lie.**  

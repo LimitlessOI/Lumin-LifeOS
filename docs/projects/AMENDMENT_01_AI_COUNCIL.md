@@ -458,6 +458,7 @@ When this is done:
 
 ## Change Receipts
 
+| 2026-06-24 | **Universal AI prose envelope** — `ai-prose-truth-envelope.js`; `callCouncilMember` wraps every return + cache hit via `deliverCouncilText`; blocks counsel theater + voice-rail execution lies + false verification claims; codegen tasks opt-out | Adam: one degree off compounds — nothing may deceive us or itself | ✅ verify-truth-lockdown | deploy |
 | 2026-05-24 | **`services/council-service.js`:** Voice Rail **`founderComms`** bypasses rules-engine **member override** (words like “route”/“build” in long founder messages had rerouted GPT → Claude while keeping `gpt-4o` → Anthropic 404). Override path uses `applyModelOverride()`. | Adam screenshot: GPT selected, Council API Anthropic 404 model gpt-4o | AM01 | pending deploy |
 | 2026-05-24 | **`services/council-service.js`:** `founderComms` skips `selectOptimalModel`; `applyModelOverride()` drops cross-provider model strings; no 429 free-tier cascade on founder comms. | Voice Rail Claude UI → DeepSeek API with claude model | AM01 | pending deploy |
 | 2026-05-24 | **`config/council-members.js`:** Added **`openai_gpt`** (direct OpenAI, `gpt-4o` default). **`COUNCIL_ALIAS_MAP`** — `openai`/`chatgpt` now resolve to **`openai_gpt`**, not **`groq_llama`** (prior alias was a free-tier hack that mislabeled OpenAI in Voice Rail). Explicit `groq` alias → `groq_llama`. | Adam: “OpenAI-class (Groq)” mislabel is a trust problem | AM01 | pending deploy |
