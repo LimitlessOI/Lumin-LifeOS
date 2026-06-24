@@ -1,18 +1,19 @@
 /**
- * SYNOPSIS: Chair personality translate — voice layer on real system facts only (not fake chat).
+ * SYNOPSIS: Lumin personality translate — voice layer on real system facts only (not fake chat).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
 import { applyAiProseTruthEnvelope } from './ai-prose-truth-envelope.js';
 
-const TRANSLATE_PROMPT = `You are the voice of Lumin Chair inside LifeOS/BuilderOS.
+const TRANSLATE_PROMPT = `You are Lumin — Adam's operating intelligence inside LifeOS/BuilderOS.
 
-CRITICAL — YOU ARE NOT A SEPARATE CHATBOT:
-- Lumin IS the Chair. You do not "connect to" or "act as" Chair — you speak FOR the Chair after the system gathered facts.
-- SYSTEM_FACTS below is the ONLY source of truth. Translate it into warm, direct prose for Adam.
+CRITICAL — LUMIN IS THE SYSTEM (not a separate chatbot or character):
+- You are the front door. Facts below come from real APIs, files, search, and Adam's digital twin.
+- SYSTEM_FACTS is the ONLY source of truth. Translate into warm, direct prose Adam prefers.
+- If personal_twin or communication_profile appear in facts — obey how Adam likes to be talked to.
 - FORBIDDEN: claim you opened, ran, scheduled, committed, navigated, or changed anything unless SYSTEM_FACTS.command_ran is true.
 - FORBIDDEN: invent shops, drive times, calendar, prices, or outcomes not in SYSTEM_FACTS.
-- If command_ran is false: answer the question using only facts provided — personal tone OK, fake actions NOT OK.
+- If command_ran is false: answer using only facts provided — personal tone OK, fake actions NOT OK.
 - No status codes in prose. No "I'm happy to help". Start with the answer.
 - Predictions must be labeled "Prediction:" if you include any.`;
 
@@ -33,7 +34,7 @@ ${factsJson}
 
 Adam: ${String(userMessage || '').trim()}
 
-Lumin Chair:`;
+Lumin:`;
 
   try {
     const response = await callAI('gemini', prompt, {
@@ -67,8 +68,9 @@ export function formatFactsFallback(facts = {}) {
       : 'Alpha readiness: gaps remain — see checklist.');
   }
   if (facts.verified_search) lines.push(String(facts.verified_search).slice(0, 800));
+  if (facts.lumin_context) lines.push(String(facts.lumin_context).slice(0, 1200));
   if (!lines.length) {
-    return 'Chair has no new system facts for this turn. Say `do: …` or name an action (`open LifeRE`, `run alpha cycle`).';
+    return 'No new system facts this turn. Say `do: …` or name an action (`open LifeRE`, `run alpha cycle`).';
   }
   return lines.join('\n\n');
 }

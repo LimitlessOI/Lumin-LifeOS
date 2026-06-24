@@ -1623,10 +1623,10 @@
     </div>
 
     <button type="button" class="lumin-quick-bar" id="lumin-quick-bar" onclick="openLuminFromQuickBar()"
-      aria-label="Open Lumin Chair — speak or type">
+      aria-label="Open Lumin — speak or type">
       <span class="lumin-quick-icon" aria-hidden="true">◎</span>
       <span class="lumin-quick-copy">
-        <span class="lumin-quick-title">Lumin Chair — speak or type</span>
+        <span class="lumin-quick-title">Lumin — speak or type</span>
         <span class="lumin-quick-sub">Real execution — say "open LifeRE", "run alpha cycle", or "do: fix X". Receipts only, no theater.</span>
       </span>
       <span class="lumin-quick-chev" aria-hidden="true">›</span>
@@ -1880,8 +1880,8 @@
   <div class="lumin-drawer-header">
     <div class="lumin-drawer-avatar">◎</div>
     <div class="lumin-drawer-title">
-      <strong>Lumin Chair</strong>
-      <span id="lumin-status-text">Chair online — system path first</span>
+      <strong>Lumin</strong>
+      <span id="lumin-status-text">Online — knows you, acts when asked</span>
     </div>
     <div class="lumin-dock-controls" id="lumin-dock-controls">
       <button type="button" class="lumin-dock-btn active" data-dock="right" onclick="setLuminDock('right')">Side</button>
@@ -1899,8 +1899,8 @@
   <div class="lumin-messages" id="lumin-messages">
     <div class="lumin-empty" id="lumin-empty">
       <div class="lumin-empty-icon">◎</div>
-      <div>Speak to the Chair</div>
-      <div style="font-size:11px;opacity:0.6;margin-top:4px;">Real execution first · personality translates facts</div>
+      <div>Talk to Lumin</div>
+      <div style="font-size:11px;opacity:0.6;margin-top:4px;">Counsel · execute · learns your style · `do:` to run</div>
     </div>
   </div>
 
@@ -1909,13 +1909,14 @@
       <textarea
         class="lumin-input"
         id="lumin-input"
-        placeholder="Chair — say what to run (open LifeRE, run alpha cycle) or ask anything"
+        placeholder="Lumin — ask anything, or `do: open LifeRE` / `do: fix …` to execute"
         rows="4"
         onkeydown="luminHandleKey(event)"
         oninput="luminAutoResize(this)"></textarea>
       <button class="lumin-input-mic" id="lumin-mic-btn" onclick="luminVoiceInput()" title="Voice input">🎙</button>
     </div>
     <button class="lumin-send-btn" id="lumin-send-btn" onclick="luminSend()" title="Send">↑</button>
+    <button type="button" class="lumin-dock-btn" id="lumin-save-moment-btn" onclick="luminSaveLastMoment()" title="Save last reply as lesson/moment">★</button>
   </div>
 </div>
 
@@ -2553,6 +2554,7 @@ const luminState = {
   minimized: false,
   voiceTurn: false,
   wakeListenActive: false,
+  lastReply: '',
 };
 
 const LUMIN_DOCK_KEY = 'lifeos_lumin_dock_position';
@@ -2751,7 +2753,7 @@ async function luminSend(opts = {}) {
   luminAutoResize(input);
 
   const thinkId = 'lumin-think-' + Date.now();
-  _appendLuminMsgRaw(thinkId, 'thinking', voiceTurn ? 'Lumin Chair is listening…' : 'Lumin Chair is working…');
+  _appendLuminMsgRaw(thinkId, 'thinking', voiceTurn ? 'Lumin is listening…' : 'Lumin is working…');
 
   luminState.sending = true;
   document.getElementById('lumin-send-btn').disabled = true;
@@ -2815,6 +2817,7 @@ async function luminSend(opts = {}) {
     if (USE_DIRECT_SYSTEM_CHAT && data) {
       let reply = formatDirectSystemReply(data);
       reply = appendClientBubbleProof(reply, data);
+      luminState.lastReply = reply;
       _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
       applyLuminShellAction(data);
       if (voiceTurn) speakLuminReply(reply);
@@ -2881,17 +2884,31 @@ async function directSystemHeaders() {
 
 function formatDirectSystemReply(data) {
   if (window.LifeOSSystemReply && typeof window.LifeOSSystemReply.format === 'function') {
-    const formatted = window.LifeOSSystemReply.format(data);
-    if (data.lumin_chair && data.chair_channel) {
-      return `${formatted}\n\n— Lumin Chair · ${data.chair_channel}`;
-    }
-    return formatted;
+    return window.LifeOSSystemReply.format(data);
   }
-  const base = data.human_summary || data.reason || data.error || 'No response from system.';
-  if (data.lumin_chair && data.chair_channel) {
-    return `${base}\n\n— Lumin Chair · ${data.chair_channel}`;
+  return data.human_summary || data.reason || data.error || 'No response from system.';
+}
+
+async function luminSaveLastMoment() {
+  const body = String(luminState.lastReply || '').trim();
+  if (!body) {
+    toast('Nothing to save yet — talk to Lumin first');
+    return;
   }
-  return base;
+  const title = body.split('\n')[0].slice(0, 120);
+  try {
+    const H = await directSystemHeaders();
+    const res = await fetch('/api/v1/lifeos/lumin/moments', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: H,
+      body: JSON.stringify({ user: 'adam', clip_type: 'lesson', title, body, tags: ['saved', 'manual'] }),
+    });
+    const data = await res.json();
+    toast(data.ok ? 'Saved to your twin' : (data.error || 'Save failed'));
+  } catch {
+    toast('Save failed');
+  }
 }
 
 function luminHandleKey(e) {
@@ -2934,7 +2951,7 @@ function luminVoiceInput() {
   LuminVoice.startForInput(input, micBtn);
 }
 
-/* Voice — wake word "Lumin" → Lumin Chair only (Voice Rail product surface retired) */
+/* Voice — wake word "Lumin" → Lumin only (Voice Rail product surface retired) */
 function routeVoiceToLuminChair(transcript, meta = {}) {
   if (!transcript || luminState.sending) return;
   if (!luminState.open) openLuminDrawer();
@@ -2945,7 +2962,7 @@ function routeVoiceToLuminChair(transcript, meta = {}) {
   }
   document.getElementById('lumin-status-text').textContent = meta.wake
     ? 'Lumin is with you — speak'
-    : 'Sending to Lumin Chair…';
+    : 'Sending to Lumin…';
   luminState.voiceTurn = true;
   luminSend({ text: transcript, voice: true });
 }
@@ -2954,7 +2971,7 @@ function speakLuminReply(text) {
   if (!window.speechSynthesis || !text) return;
   const plain = String(text)
     .replace(/\b(PASS|FAIL|COMMAND_RAN|NO_COMMAND_RAN)\b/g, '')
-    .replace(/— Lumin Chair ·[^\n]*/g, '')
+    .replace(/— Lumin ·[^\n]*/g, '')
     .trim()
     .slice(0, 600);
   if (!plain) return;

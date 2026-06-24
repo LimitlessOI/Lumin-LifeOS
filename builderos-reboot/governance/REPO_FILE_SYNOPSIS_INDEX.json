@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T05:13:31.100Z",
+  "generated_at": "2026-06-24T05:18:42.783Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12348,
+  "file_count": 12351,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -38989,6 +38989,13 @@
       "indexed_at": "2026-06-24T05:13:29.458Z"
     },
     {
+      "path": "db/migrations/20260624_lumin_learning_layer.sql",
+      "synopsis": "Database migration — 20260624_lumin_learning_layer.sql.",
+      "bytes": 1791,
+      "mtime": "2026-06-24T05:18:11.714Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z"
+    },
+    {
       "path": "db/migrations/builderos_command_control.sql",
       "synopsis": "Database migration — builderos_command_control.sql.",
       "bytes": 1596,
@@ -41034,17 +41041,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26588,
-      "mtime": "2026-06-24T05:09:00.500Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z",
+      "bytes": 26674,
+      "mtime": "2026-06-24T05:18:01.563Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 475149,
-      "mtime": "2026-06-24T05:13:23.411Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z"
+      "bytes": 475654,
+      "mtime": "2026-06-24T05:18:02.932Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41548,9 +41555,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 130809,
-      "mtime": "2026-06-24T05:06:36.784Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z"
+      "bytes": 131117,
+      "mtime": "2026-06-24T05:18:22.337Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -69861,9 +69868,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 120439,
-      "mtime": "2026-06-24T05:13:23.335Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z"
+      "bytes": 120999,
+      "mtime": "2026-06-24T05:17:48.178Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -70105,9 +70112,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 70025,
-      "mtime": "2026-06-24T05:08:34.568Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z"
+      "bytes": 71248,
+      "mtime": "2026-06-24T05:17:57.424Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -71081,9 +71088,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 47571,
-      "mtime": "2026-06-24T05:06:36.785Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z",
+      "bytes": 48562,
+      "mtime": "2026-06-24T05:17:18.399Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -71172,9 +71179,9 @@
     {
       "path": "routes/lifeos-core-routes.js",
       "synopsis": "routes/lifeos-core-routes.js",
-      "bytes": 60128,
-      "mtime": "2026-06-24T05:08:23.814Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z",
+      "bytes": 62875,
+      "mtime": "2026-06-24T05:17:26.659Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -85501,19 +85508,19 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 3586,
-      "mtime": "2026-06-24T02:56:44.003Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z",
+      "bytes": 4352,
+      "mtime": "2026-06-24T05:17:05.386Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
     },
     {
       "path": "services/chair-personality-translate.js",
-      "synopsis": "Chair personality translate — voice layer on real system facts only (not fake chat).",
-      "bytes": 2892,
-      "mtime": "2026-06-24T05:06:36.788Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z",
+      "synopsis": "Lumin personality translate — voice layer on real system facts only (not fake chat).",
+      "bytes": 3054,
+      "mtime": "2026-06-24T05:17:01.688Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -85643,9 +85650,9 @@
     {
       "path": "services/coaching-conversation-monitor.js",
       "synopsis": "Monitors conversation_messages → coaching lessons + commitments + calendar.",
-      "bytes": 11040,
-      "mtime": "2026-06-24T05:08:06.640Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z",
+      "bytes": 12229,
+      "mtime": "2026-06-24T05:18:01.840Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87991,9 +87998,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 25882,
-      "mtime": "2026-06-24T05:11:01.998Z",
-      "indexed_at": "2026-06-24T05:13:29.458Z",
+      "bytes": 25921,
+      "mtime": "2026-06-24T05:17:07.220Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88004,6 +88011,26 @@
       "bytes": 7807,
       "mtime": "2026-06-24T02:47:20.559Z",
       "indexed_at": "2026-06-24T05:13:29.458Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/lumin-context-loader.js",
+      "synopsis": "Loads Adam's twin + communication profile + recent learning for Lumin prompts.",
+      "bytes": 5110,
+      "mtime": "2026-06-24T05:16:34.211Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/lumin-conversation-learner.js",
+      "synopsis": "Learns preferences, contacts, CRM notes, and success moments from conversations → twin.",
+      "bytes": 9985,
+      "mtime": "2026-06-24T05:16:43.735Z",
+      "indexed_at": "2026-06-24T05:18:42.783Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

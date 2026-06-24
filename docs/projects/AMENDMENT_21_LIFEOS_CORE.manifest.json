@@ -82,6 +82,8 @@
     "services/lifeos-finance.js",
     "services/lifeos-scheduled-jobs.js",
     "services/coaching-conversation-monitor.js",
+    "services/lumin-context-loader.js",
+    "services/lumin-conversation-learner.js",
     "routes/lifeos-finance-routes.js",
     "public/overlay/lifeos-today.html",
     "public/overlay/lifeos-quick-entry.html",

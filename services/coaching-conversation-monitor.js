@@ -3,6 +3,8 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
+import { createLuminContextLoader } from './lumin-context-loader.js';
+
 function safeJsonParse(text, fallback) {
   try {
     return JSON.parse(text);
@@ -249,6 +251,25 @@ ${transcript}`;
       });
     }
 
+    let learningResult = null;
+    if (messages.length && callAI) {
+      try {
+        const { createLuminConversationLearner } = await import('./lumin-conversation-learner.js');
+        const learner = createLuminConversationLearner({ pool, callAI, logger });
+        const { rows: userRow } = await pool.query(
+          `SELECT user_handle FROM lifeos_users WHERE id = $1 LIMIT 1`,
+          [userId],
+        ).catch(() => ({ rows: [] }));
+        learningResult = await learner.learnFromMessages({
+          userId,
+          userHandle: userRow[0]?.user_handle || 'adam',
+          messages,
+        });
+      } catch (err) {
+        logger.warn?.('[COACHING-MONITOR] learner failed:', err.message);
+      }
+    }
+
     let lessonsRecorded = [];
     if (messages.length && callAI) {
       const { lessons } = await extractCoachingInsights(messages);
@@ -281,6 +302,7 @@ ${transcript}`;
       last_message_id: newWatermark,
       lessons: lessonsRecorded,
       pending_events: ingestResult.events?.length || 0,
+      learning: learningResult,
     };
   }
 
@@ -305,6 +327,14 @@ ${transcript}`;
       return actions.some((a) => a.status === 'suggested');
     });
 
+    const loader = pool ? createLuminContextLoader({ pool, logger }) : null;
+    const pendingContacts = loader
+      ? await loader.loadPendingContactUpdates(userId, 10)
+      : [];
+    const recentMoments = loader
+      ? await loader.loadRecentMoments(userId, 8)
+      : [];
+
     let overdueCount = 0;
     let openCount = 0;
     if (commitments?.getOverdue && commitments?.getOpen) {
@@ -322,6 +352,8 @@ ${transcript}`;
       control,
       lessons,
       pending_events: pending,
+      pending_contact_updates: pendingContacts,
+      recent_moments: recentMoments,
       overdue_commitments: overdueCount,
       open_commitments: openCount,
       ingest_status: ingestStatus,

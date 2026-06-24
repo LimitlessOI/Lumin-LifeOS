@@ -197,8 +197,9 @@ function spawnExecuteMission(missionId) {
 
 function chairEnvelope(channel, body) {
   return {
-    interface: 'Lumin Chair',
+    interface: 'Lumin',
     lumin_chair: true,
+    lumin: true,
     chair_channel: channel,
     point_b_dna_version: POINT_B_DNA_VERSION,
     system_purpose: 'point_a_to_point_b',
@@ -629,6 +630,7 @@ export async function runLuminChairTurn(ctx, deps) {
         sanitizeConversationReply: deps.sanitizeConversationReply,
         memoryContext,
         pool: deps.pool,
+        userId: ctx.userId,
         strategicBrief,
       }, chairContext);
       const truth = finalizeTruth({

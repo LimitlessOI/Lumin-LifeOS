@@ -336,6 +336,10 @@
       <div id="coaching-lessons" class="panel-grid"></div>
       <div class="section-title" style="margin-top:14px">Pending actions (todos · calendar)</div>
       <div id="coaching-pending-actions" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Captured moments</div>
+      <div id="coaching-moments" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Contact updates heard</div>
+      <div id="coaching-contacts" class="panel-grid"></div>
       <div class="section-title" style="margin-top:14px">Skill drills</div>
       <div id="coaching-modules" class="panel-grid"></div>
     </section>
@@ -387,7 +391,7 @@
     </section>
 
     <section class="section tab-panel" data-tab-panel="chair" data-lifere="chair-brief">
-      <div class="section-title">Lumin Chair Brief</div>
+      <div class="section-title">Lumin Brief</div>
       <button type="button" class="btn btn-primary" id="chair-brief-btn">Load Chair Brief</button>
       <div id="chair-brief-output" class="panel-grid" style="margin-top:12px"></div>
     </section>
@@ -1046,6 +1050,18 @@
               </div>`;
           }).join('')
           : '<p class="empty">Nothing waiting — new commitments from conversations land here until you approve.</p>';
+
+        const momentsEl = document.getElementById('coaching-moments');
+        const moments = feed.recent_moments || [];
+        momentsEl.innerHTML = moments.length
+          ? moments.map((m) => `<div class="info-card"><div class="info-card-title">${escapeHtml(m.title)}</div><div class="info-card-body">${escapeHtml(String(m.body || '').slice(0, 160))}</div></div>`).join('')
+          : '<p class="empty">Successes and lessons appear here as Lumin listens.</p>';
+
+        const contactsEl = document.getElementById('coaching-contacts');
+        const contacts = feed.pending_contact_updates || [];
+        contactsEl.innerHTML = contacts.length
+          ? contacts.map((c) => `<div class="panel-row">${escapeHtml(c.contact_name)} · ${escapeHtml(c.field_name)}: ${escapeHtml(c.field_value)}</div>`).join('')
+          : '<p class="empty">When you mention birthdays or details in conversation, they queue here for your contacts/CRM.</p>';
 
         pendingEl.querySelectorAll('.coaching-apply-btn').forEach((btn) => {
           btn.addEventListener('click', async () => {

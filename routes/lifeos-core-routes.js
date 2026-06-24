@@ -64,6 +64,8 @@ import { createLifeOSCalendarService }     from '../services/lifeos-calendar.js'
 import { createLifeOSEventStreamService }  from '../services/lifeos-event-stream.js';
 import { createCoachingConversationMonitor } from '../services/coaching-conversation-monitor.js';
 import { createMemoryIntelligenceService } from '../services/memory-intelligence-service.js';
+import { createLuminContextLoader } from '../services/lumin-context-loader.js';
+import { createLuminConversationLearner } from '../services/lumin-conversation-learner.js';
 import { makeLifeOSUserResolver }          from '../services/lifeos-user-resolver.js';
 import { createLifeOSScoreboardService }   from '../services/lifeos-scoreboard.js';
 import { createLifeOSAdaptiveLayerService } from '../services/lifeos-adaptive-layer.js';
@@ -119,6 +121,8 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     commitments,
     logger: log,
   });
+  const luminContext = createLuminContextLoader({ pool, callAI, logger: log });
+  const luminLearner = createLuminConversationLearner({ pool, callAI, logger: log });
   const scoreboard   = createLifeOSScoreboardService({ pool, integrity, joy, focusPrivacy });
   const adaptive     = createLifeOSAdaptiveLayerService({ pool, scoreboard });
 
@@ -929,6 +933,67 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
         autoApplyActions: Boolean(auto_apply),
       });
       res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/lumin/me', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const handle = String(user).toLowerCase();
+      const [context, personal, moments, contacts] = await Promise.all([
+        luminContext.buildPromptContext({ userId, userHandle: handle }),
+        luminContext.loadPersonalTwin(handle),
+        luminContext.loadRecentMoments(userId, 8),
+        luminContext.loadPendingContactUpdates(userId, 10),
+      ]);
+      res.json({
+        ok: true,
+        lumin: true,
+        user_id: userId,
+        personal_twin: personal,
+        prompt_context: context,
+        recent_moments: moments,
+        pending_contact_updates: contacts,
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/lumin/moments', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', limit = 20 } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const moments = await luminContext.loadRecentMoments(userId, safeLimit(limit, 20, 50));
+      res.json({ ok: true, moments, count: moments.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/lumin/moments', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', clip_type = 'lesson', title, body, tags = [] } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      if (!String(title || body || '').trim()) {
+        return res.status(400).json({ ok: false, error: 'title or body required' });
+      }
+      const clip = await luminLearner.saveMoment({
+        userId,
+        clipType: clip_type,
+        title: String(title || body).trim().slice(0, 200),
+        body: String(body || title).trim(),
+        source: req.body?.source || 'manual',
+        sourceRef: req.body?.source_ref || null,
+        tags: Array.isArray(tags) ? tags : ['saved'],
+      });
+      res.status(201).json({ ok: true, clip });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

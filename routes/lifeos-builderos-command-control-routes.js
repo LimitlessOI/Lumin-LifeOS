@@ -13,6 +13,8 @@ import { createLifeOSLumin } from '../services/lifeos-lumin.js';
 import { resolveLifeOSUserId } from '../services/lifeos-user-resolver.js';
 import { enforceExecutionTruth, formatExecutionTruthReply, sanitizeConversationReply } from '../services/lifeos-execution-truth.js';
 import { enforceTruthLockdown } from '../services/truth-lockdown.js';
+import { createLuminContextLoader } from '../services/lumin-context-loader.js';
+import { createLuminConversationLearner } from '../services/lumin-conversation-learner.js';
 import {
   extractPriorBuildTask,
   isRepairContinuationIntent,
@@ -70,6 +72,8 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
   const controlPlane = pool
     ? createBuilderOSControlPlaneService({ pool, logger: { info: () => {}, warn: () => {}, error: () => {} } })
     : null;
+  const luminContext = pool ? createLuminContextLoader({ pool, callAI: callCouncilMember }) : null;
+  const luminLearner = pool ? createLuminConversationLearner({ pool, callAI: callCouncilMember }) : null;
 
   const EXECUTE_ALLOWED_ROLES = new Set(['founder_admin', 'operator', 'admin']);
 
@@ -92,6 +96,13 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
       if (!userId) return 'HISTORY_NOT_SAVED';
       const thread = await luminPersist.getOrCreateDefaultThread(userId);
       await luminPersist.recordExchange(thread.id, userId, userMessage, reply);
+      if (luminLearner) {
+        await luminLearner.recordTurnFeedback({
+          userId,
+          userMessage,
+          luminReply: reply,
+        }).catch(() => {});
+      }
       return null;
     } catch {
       return 'HISTORY_NOT_SAVED';
@@ -251,6 +262,18 @@ Input: ${rawText}`,
   }
 
   async function loadLuminMemory() {
+    if (luminContext && pool) {
+      try {
+        const { rows } = await pool.query(
+          `SELECT id FROM lifeos_users WHERE user_handle = 'adam' AND active = TRUE LIMIT 1`,
+        ).catch(() => ({ rows: [] }));
+        const ctx = await luminContext.buildPromptContext({
+          userId: rows[0]?.id || null,
+          userHandle: 'adam',
+        });
+        if (ctx) return ctx;
+      } catch { /* fall through */ }
+    }
     try {
       const { default: fsp } = await import('fs/promises');
       const { join } = await import('path');

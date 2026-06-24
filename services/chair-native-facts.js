@@ -14,6 +14,7 @@ import {
 } from './founder-life-admin-intent.js';
 import { hasProductBuildContext } from './chair-context-classifier.js';
 import { gatherStrategicBriefForChair } from './lumin-strategic-intelligence.js';
+import { createLuminContextLoader } from './lumin-context-loader.js';
 
 function searchBlockIsUseful(searchResult) {
   if (!searchResult?.results?.length) return false;
@@ -40,8 +41,28 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     verified_search: null,
     memory_context: deps.memoryContext || null,
     strategic_brief: deps.strategicBrief || null,
-    chair_note: 'Lumin is the Chair — these facts come from system APIs/files, not roleplay.',
+    chair_note: 'Lumin is the operating intelligence — facts from system APIs/files/twin, not roleplay.',
   };
+
+  if (deps.pool) {
+    try {
+      const loader = createLuminContextLoader({ pool: deps.pool, callAI: deps.callAI });
+      let numericUserId = deps.userId || null;
+      if (!numericUserId && deps.pool) {
+        const { rows } = await deps.pool.query(
+          `SELECT id FROM lifeos_users WHERE user_handle = 'adam' AND active = TRUE LIMIT 1`,
+        ).catch(() => ({ rows: [] }));
+        numericUserId = rows[0]?.id || null;
+      }
+      facts.lumin_context = await loader.buildPromptContext({
+        userId: numericUserId,
+        userHandle: 'adam',
+      });
+      facts.personal_twin = await loader.loadPersonalTwin('adam');
+    } catch {
+      /* non-fatal */
+    }
+  }
 
   if (!personalTurn || hasProductBuildContext(text)) {
     try {
