@@ -27,7 +27,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'fs/promises';
 import { tmpdir } from 'os';
 import path from 'path';
 import { pathToFileURL } from 'url';
-import { execFile } from 'child_process';
+import { execFile, spawnSync } from 'node:child_process';
 import { promisify } from 'util';
 import { classifyBuilderGap, summarizeGapFamilies } from '../services/builderos-gap-classifier.js';
 
@@ -370,6 +370,17 @@ async function main() {
     await analyzeBuilderGaps();
     if (consequenceLens) printConsequenceLensReminder();
     return;
+  }
+
+  const gate = spawnSync('npm', ['run', 'builderos:pre-build-gate', '--', '--allow-stale'], {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+    shell: true,
+  });
+  if (gate.status !== 0) {
+    console.error(gate.stdout || gate.stderr);
+    console.error('Pre-build gate failed — run npm run builderos:deploy:verify and npm run system:railway:redeploy');
+    process.exit(gate.status || 1);
   }
 
   console.log('Checking builder readiness...');

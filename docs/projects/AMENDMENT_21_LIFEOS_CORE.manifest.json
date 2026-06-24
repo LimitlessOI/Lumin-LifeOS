@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-13",
-  "last_receipt": "2026-06-13 single-lumin-connection-law",
-  "last_change_summary": "Single Lumin connection — founder-interface canonical; legacy chat 410",
-  "ssot_receipt_tail": "LUMIN_SINGLE_CONNECTION=1 blocks legacy chat/copilot POST; lifeos-app drawer is canonical UI path."
+  "last_receipt": "2026-06-13 railway-deploy-pipeline-fix",
+  "last_change_summary": "Restore server.js composition root; deploy SHA polling; block server.js commits",
+  "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
 }

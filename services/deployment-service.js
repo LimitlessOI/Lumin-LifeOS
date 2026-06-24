@@ -25,8 +25,21 @@ import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
 import { promises as fsPromises } from 'fs';
 import { ensureSynopsisInContent, isInFileEnforceable } from '../scripts/lib/file-synopsis.mjs';
+import { BLOCKED_WRITE_PATHS } from '../config/builder-safe-scope.js';
 
 const execFile = promisify(execFileCb);
+
+function assertNotBuilderBlockedPath(normalizedPath, label = 'commitToGitHub') {
+  for (const blocked of BLOCKED_WRITE_PATHS) {
+    const b = String(blocked || '').replace(/\/$/, '');
+    if (normalizedPath === b || normalizedPath.startsWith(blocked)) {
+      throw new Error(
+        `${label} BLOCKED: "${normalizedPath}" is protected by builder-safe-scope. ` +
+        'Composition root and constitutional paths require operator GAP-FILL — not autonomous /build.',
+      );
+    }
+  }
+}
 
 // Directories that are not part of the Express server.
 // commitToGitHub hard-blocks any path whose first segment is in this set.
@@ -111,6 +124,8 @@ export function createDeploymentService(deps) {
         `Re-scope target_file to a valid server path.`
       );
     }
+
+    assertNotBuilderBlockedPath(normalizedPath);
 
     if (isInFileEnforceable(normalizedPath)) {
       content = ensureSynopsisInContent(normalizedPath, content);
@@ -253,6 +268,7 @@ export function createDeploymentService(deps) {
         `commitToGitHub BLOCKED: "${normalizedPath}" targets forbidden directory "${topDir}/".`,
       );
     }
+    assertNotBuilderBlockedPath(normalizedPath, 'commitManyToGitHub');
     return normalizedPath;
   }
 

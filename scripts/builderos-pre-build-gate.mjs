@@ -5,6 +5,7 @@
  * @ssot builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json
  */
 import 'dotenv/config';
+import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -62,6 +63,24 @@ const doctrine = spawnSync(process.execPath, ['scripts/verify-lifeos-service-doc
   encoding: 'utf8',
 });
 checks.push(check('PBG-05', doctrine.status === 0, 'service doctrine verify'));
+
+const serverPath = path.join(ROOT, 'server.js');
+let serverOk = false;
+let serverDetail = 'server.js missing';
+try {
+  const serverSrc = fs.readFileSync(serverPath, 'utf8');
+  const compositionRoot =
+    serverSrc.includes('COMPOSITION ROOT') &&
+    !serverSrc.includes("./src/app.js") &&
+    serverSrc.length > 500;
+  serverOk = compositionRoot;
+  serverDetail = compositionRoot
+    ? 'server.js composition root intact'
+    : 'server.js corrupted (builder rewrite — restore composition root before deploy)';
+} catch (e) {
+  serverDetail = e.message;
+}
+checks.push(check('PBG-05b', serverOk, serverDetail));
 
 const deployArgs = ['run', 'builderos:deploy:verify'];
 if (allowStale) deployArgs.push('--', '--allow-ahead');

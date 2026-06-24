@@ -5,15 +5,17 @@
  * Tries multiple paths in order:
  *   1. POST /api/v1/railway/deploy          — standard command-key auth
  *   2. POST /api/v1/railway/managed-env/self-redeploy — railway-token auth
- *      (works when COMMAND_CENTER_KEY is out of sync but RAILWAY_TOKEN is known)
- *   3. POST /api/v1/railway/managed-env/build-from-latest — force a fresh build from latest GitHub source
- *      (useful when runtime is serving a stale image even after restart-style redeploys)
+ *   3. POST /api/v1/railway/managed-env/build-from-latest — fresh build from GitHub HEAD (explicit SHA when known)
  *   4. `railway redeploy`                   — local Railway CLI fallback when repo is linked
+ *
+ * Success requires deploy_commit_sha on /builder/ready to match origin/main (not just /healthz).
  *
  * Env:
  *   PUBLIC_BASE_URL | BUILDER_BASE_URL | LUMIN_SMOKE_BASE_URL
  *   COMMAND_CENTER_KEY | COMMAND_KEY | LIFEOS_KEY | API_KEY
  *   RAILWAY_TOKEN  (optional — enables self-redeploy fallback)
+ *   REDEPLOY_WAIT_MS (default 600000) — max wait for SHA parity
+ *   REDEPLOY_POLL_MS (default 10000)
  *
  * Usage:
  *   npm run system:railway:redeploy
@@ -22,7 +24,7 @@
  */
 
 import 'dotenv/config';
-import { execFile } from 'node:child_process';
+import { execFile, spawnSync } from 'node:child_process';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
@@ -42,14 +44,27 @@ const key =
   '';
 
 const railwayToken = process.env.RAILWAY_TOKEN || '';
-const waitMs = Number(process.env.REDEPLOY_WAIT_MS || '180000');
-const pollMs = Number(process.env.REDEPLOY_POLL_MS || '5000');
+const waitMs = Number(process.env.REDEPLOY_WAIT_MS || '600000');
+const pollMs = Number(process.env.REDEPLOY_POLL_MS || '10000');
 
-async function tryDeploy(url, headers) {
+function shaPrefix(a, b) {
+  if (!a || !b) return false;
+  const x = String(a).trim();
+  const y = String(b).trim();
+  return x.slice(0, 12) === y.slice(0, 12) || x.startsWith(y) || y.startsWith(x);
+}
+
+function originMainSha() {
+  spawnSync('git', ['fetch', 'origin', 'main'], { encoding: 'utf8' });
+  const r = spawnSync('git', ['rev-parse', 'origin/main'], { encoding: 'utf8' });
+  return r.status === 0 ? String(r.stdout || '').trim() : null;
+}
+
+async function tryDeploy(url, headers, body = '{}') {
   const r = await fetch(url, {
     method: 'POST',
     headers: { 'content-type': 'application/json', ...headers },
-    body: '{}',
+    body,
   });
   const text = await r.text();
   let json;
@@ -57,11 +72,12 @@ async function tryDeploy(url, headers) {
   return { status: r.status, ok: r.ok, json };
 }
 
-async function tryBuildFromLatest(headers) {
+async function tryBuildFromLatest(headers, commitSha) {
+  const body = commitSha ? JSON.stringify({ commit_sha: commitSha }) : '{}';
   const r = await fetch(`${base}/api/v1/railway/managed-env/build-from-latest`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', ...headers },
-    body: '{}',
+    body,
   });
   const text = await r.text();
   let json;
@@ -69,15 +85,92 @@ async function tryBuildFromLatest(headers) {
   return { status: r.status, ok: r.ok, json };
 }
 
-async function getStatus(path) {
+async function fetchLatestDeployment(headers) {
+  const r = await fetch(`${base}/api/v1/railway/managed-env/deployments/latest`, {
+    headers: { ...headers },
+  });
+  const json = await r.json().catch(() => ({}));
+  return { status: r.status, ok: r.ok, json };
+}
+
+async function fetchDeploymentLogs(headers, deploymentId, limit = 30) {
+  const r = await fetch(
+    `${base}/api/v1/railway/managed-env/deployments/${deploymentId}/logs?limit=${limit}`,
+    { headers: { ...headers } },
+  );
+  return r.json().catch(() => ({}));
+}
+
+async function liveReadyShape() {
   try {
-    const r = await fetch(`${base}${path}`, {
+    const r = await fetch(`${base}/api/v1/lifeos/builder/ready`, {
       headers: key ? { 'x-command-key': key } : {},
     });
-    return { status: r.status, ok: r.ok };
+    const text = await r.text();
+    let json = null;
+    try { json = JSON.parse(text); } catch {}
+    return {
+      status: r.status,
+      hasBuilderReady: Boolean(json?.ok),
+      hasCodegen: Boolean(json?.codegen),
+      policyRevision: json?.codegen?.policy_revision || null,
+      deployCommitSha: json?.codegen?.deploy_commit_sha || null,
+    };
   } catch (err) {
-    return { status: 0, ok: false, error: err?.cause?.code || err?.code || err?.message };
+    return {
+      status: 0,
+      hasBuilderReady: false,
+      hasCodegen: false,
+      error: err?.cause?.code || err?.code || err?.message,
+    };
   }
+}
+
+async function waitForDeployShaParity(targetSha) {
+  const headers = key ? { 'x-command-key': key } : {};
+  const deadline = Date.now() + waitMs;
+  console.log(`\nWaiting up to ${Math.round(waitMs / 1000)}s for deploy SHA parity with ${targetSha?.slice(0, 12)}…`);
+
+  while (Date.now() < deadline) {
+    const ready = await liveReadyShape();
+    const liveSha = ready.deployCommitSha;
+    const latest = await fetchLatestDeployment(headers);
+    const dep = latest.json?.deployment;
+    const depStatus = dep?.status || 'unknown';
+    const depSha = dep?.meta?.commitHash || null;
+
+    console.log(
+      `  ready=${ready.status} live_sha=${liveSha?.slice(0, 12) || '?'} ` +
+      `deployment=${depStatus} dep_sha=${depSha?.slice(0, 12) || '?'}`,
+    );
+
+    if (depStatus === 'FAILED') {
+      const logs = dep?.id ? await fetchDeploymentLogs(headers, dep.id, 40) : {};
+      const tail = (logs.logs || []).slice(-15).map((l) => l.message).filter(Boolean);
+      console.error('\n❌ Latest Railway deployment FAILED.');
+      if (depSha) console.error(`   commit: ${depSha}`);
+      if (dep?.meta?.commitMessage) console.error(`   message: ${dep.meta.commitMessage}`);
+      for (const line of tail) console.error(`   log: ${String(line).slice(0, 240)}`);
+      return { ok: false, reason: 'deployment_failed', liveSha, depSha, depStatus };
+    }
+
+    if (targetSha && shaPrefix(liveSha, targetSha)) {
+      console.log(`\n✅ Deploy SHA parity: production running ${liveSha?.slice(0, 12)}\n`);
+      return { ok: true, liveSha, depSha, depStatus };
+    }
+
+    if (depStatus === 'SUCCESS' && targetSha && depSha && shaPrefix(depSha, targetSha) && !shaPrefix(liveSha, targetSha)) {
+      console.warn('  Deployment SUCCESS but /ready SHA lagging — continuing poll…');
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, pollMs));
+  }
+
+  const final = await liveReadyShape();
+  console.error('\n⚠️ Redeploy triggered but deploy SHA did not match origin/main before timeout.');
+  console.error(`   target=${targetSha?.slice(0, 12)} live=${final.deployCommitSha?.slice(0, 12) || '?'}`);
+  console.error('Run: npm run builderos:deploy:verify && GET /railway/managed-env/deployments/latest\n');
+  return { ok: false, reason: 'timeout', liveSha: final.deployCommitSha };
 }
 
 async function commandMaybe(command, args = []) {
@@ -111,67 +204,19 @@ async function tryRailwayCliRedeploy() {
   const status = await commandMaybe('railway', ['status']);
   if (!status.ok) {
     console.warn('Railway CLI fallback unavailable: repo is not linked (`railway status` failed).');
-    const detail = [status.stdout, status.stderr].filter(Boolean).join('\n').slice(0, 500);
-    if (detail) console.warn(detail);
     return false;
   }
 
   console.log('Trying Railway CLI fallback: railway redeploy …');
-  const redeploy = await commandMaybe('railway', ['redeploy']);
+  const redeploy = await commandMaybe('railway', ['redeploy', '--yes']);
   const output = [redeploy.stdout, redeploy.stderr].filter(Boolean).join('\n');
   if (output) console.log(output.slice(0, 2000));
-  if (!redeploy.ok) {
-    console.error('Railway CLI redeploy failed.');
-    return false;
-  }
-  return true;
+  return redeploy.ok;
 }
 
-async function waitForLiveDeploy() {
-  const deadline = Date.now() + waitMs;
-  console.log(`\nWaiting up to ${Math.round(waitMs / 1000)}s for live deploy verification…`);
-  while (Date.now() < deadline) {
-    const health = await getStatus('/healthz');
-    const domains = await getStatus('/api/v1/lifeos/builder/domains');
-    const routeExists = domains.ok || domains.status === 401 || domains.status === 403;
-    console.log(`  /healthz=${health.status || health.error} /builder/domains=${domains.status || domains.error}`);
-
-    if (health.status === 200 && routeExists) {
-      console.log('\n✅ Live deploy verified: health is green and builder route exists.\n');
-      return true;
-    }
-
-    await new Promise((resolve) => setTimeout(resolve, pollMs));
-  }
-
-  console.error('\n⚠️ Redeploy was triggered, but live verification did not become green before timeout.');
-  console.error('Run: npm run tsos:doctor\n');
-  return false;
-}
-
-async function liveReadyShape() {
-  try {
-    const r = await fetch(`${base}/api/v1/lifeos/builder/ready`, {
-      headers: key ? { 'x-command-key': key } : {},
-    });
-    const text = await r.text();
-    let json = null;
-    try { json = JSON.parse(text); } catch {}
-    return {
-      status: r.status,
-      hasBuilderReady: Boolean(json?.ok),
-      hasCodegen: Boolean(json?.codegen),
-      policyRevision: json?.codegen?.policy_revision || null,
-      deployCommitSha: json?.codegen?.deploy_commit_sha || null,
-    };
-  } catch (err) {
-    return {
-      status: 0,
-      hasBuilderReady: false,
-      hasCodegen: false,
-      error: err?.cause?.code || err?.code || err?.message,
-    };
-  }
+async function finishAfterTrigger(targetSha) {
+  const parity = await waitForDeployShaParity(targetSha);
+  process.exit(parity.ok ? 0 : 1);
 }
 
 async function main() {
@@ -180,22 +225,25 @@ async function main() {
     process.exit(2);
   }
 
-  // ── Path 1: standard command-key deploy ────────────────────────────────────
+  const targetSha = originMainSha();
+  if (targetSha) {
+    console.log(`Target origin/main SHA: ${targetSha.slice(0, 12)}`);
+  }
+
+  const headers = key ? { 'x-command-key': key } : {};
+
   if (key) {
-    console.log(`Trying POST /api/v1/railway/deploy with command key…`);
-    const { status, ok, json } = await tryDeploy(
-      `${base}/api/v1/railway/deploy`,
-      { 'x-command-key': key },
-    );
+    console.log('Trying POST /api/v1/railway/deploy with command key…');
+    const { status, ok, json } = await tryDeploy(`${base}/api/v1/railway/deploy`, headers);
     if (ok && json.ok) {
       console.log(JSON.stringify(json, null, 2));
       console.log('\n✅ Redeploy triggered via command-key path.\n');
-      process.exit((await waitForLiveDeploy()) ? 0 : 1);
+      await finishAfterTrigger(targetSha);
+      return;
     }
     if (status === 410 && json?.error === 'LEGACY_RAILWAY_CONTROL_DISABLED') {
-      console.warn(`⚠️  Legacy /railway/deploy disabled (410) — using build-from-latest…`);
+      console.warn('⚠️  Legacy /railway/deploy disabled (410) — using build-from-latest…');
     } else if (status !== 401 && status !== 403) {
-      // Non-auth failure — surface it
       console.error(`HTTP ${status}:`, JSON.stringify(json));
       process.exit(1);
     } else {
@@ -205,9 +253,8 @@ async function main() {
     console.warn('No command key in env — skipping command-key path.');
   }
 
-  // ── Path 2: railway-token self-redeploy (no command key needed) ─────────────
   if (railwayToken) {
-    console.log(`Trying POST /api/v1/railway/managed-env/self-redeploy with RAILWAY_TOKEN…`);
+    console.log('Trying POST /api/v1/railway/managed-env/self-redeploy with RAILWAY_TOKEN…');
     const { status, ok, json } = await tryDeploy(
       `${base}/api/v1/railway/managed-env/self-redeploy`,
       { 'x-railway-token': railwayToken },
@@ -215,22 +262,23 @@ async function main() {
     if (ok && json.ok) {
       console.log(JSON.stringify(json, null, 2));
       console.log('\n✅ Redeploy triggered via RAILWAY_TOKEN self-redeploy path.\n');
-      process.exit((await waitForLiveDeploy()) ? 0 : 1);
+      await finishAfterTrigger(targetSha);
+      return;
     }
     console.error(`HTTP ${status}:`, JSON.stringify(json));
     process.exit(1);
   }
 
-  // ── Path 3: force fresh build from latest source when command key works ─────
   if (key) {
     const readyBefore = await liveReadyShape();
     console.log('Live builder-ready shape before build-from-latest:', JSON.stringify(readyBefore));
-    console.log(`Trying POST /api/v1/railway/managed-env/build-from-latest with command key…`);
-    const { status, ok, json } = await tryBuildFromLatest({ 'x-command-key': key });
+    console.log(`Trying POST /api/v1/railway/managed-env/build-from-latest (commit=${targetSha?.slice(0, 12) || 'latest'})…`);
+    const { status, ok, json } = await tryBuildFromLatest(headers, targetSha);
     if (ok && json.ok) {
       console.log(JSON.stringify(json, null, 2));
       console.log('\n✅ Fresh build from latest source triggered.\n');
-      process.exit((await waitForLiveDeploy()) ? 0 : 1);
+      await finishAfterTrigger(targetSha);
+      return;
     }
     if (status !== 401 && status !== 403) {
       console.error(`HTTP ${status}:`, JSON.stringify(json));
@@ -239,13 +287,12 @@ async function main() {
     console.warn(`⚠️  build-from-latest auth failed (${status}) — trying Railway CLI fallback…`);
   }
 
-  // ── Path 4: local Railway CLI fallback ──────────────────────────────────────
   if (await tryRailwayCliRedeploy()) {
     console.log('\n✅ Redeploy triggered via Railway CLI fallback.\n');
-    process.exit((await waitForLiveDeploy()) ? 0 : 1);
+    await finishAfterTrigger(targetSha);
+    return;
   }
 
-  // ── No viable auth ──────────────────────────────────────────────────────────
   console.error(
     '\n❌ No viable auth for redeploy.\n' +
     '   • Set COMMAND_CENTER_KEY matching Railway vault, OR\n' +
@@ -256,7 +303,7 @@ async function main() {
   process.exit(2);
 }
 
-main().catch(e => {
+main().catch((e) => {
   console.error(e);
   process.exit(1);
 });

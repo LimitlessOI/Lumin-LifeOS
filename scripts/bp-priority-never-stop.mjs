@@ -44,10 +44,19 @@ function tryRedeploy() {
   const r = spawnSync('npm', ['run', 'system:railway:redeploy'], {
     cwd: ROOT,
     encoding: 'utf8',
-    timeout: 120_000,
+    timeout: 720_000,
     shell: true,
   });
   return { ok: r.status === 0, status: r.status, stderr: String(r.stderr || '').slice(0, 300) };
+}
+
+function runPreBuildGate() {
+  const r = spawnSync('npm', ['run', 'builderos:pre-build-gate', '--', '--allow-stale'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    shell: true,
+  });
+  return { ok: r.status === 0, status: r.status, stdout: String(r.stdout || '').slice(0, 500) };
 }
 
 function runCycle() {
@@ -55,6 +64,14 @@ function runCycle() {
   if (stop.active) {
     log({ event: 'founder_stop', path: stop.path });
     return { halt: true, reason: 'founder_stop' };
+  }
+
+  const gate = runPreBuildGate();
+  if (!gate.ok) {
+    log({ event: 'pre_build_gate_fail', status: gate.status, detail: gate.stdout });
+    const redeploy = tryRedeploy();
+    log({ event: 'pre_build_gate_redeploy', ok: redeploy.ok, status: redeploy.status });
+    return { halt: false, reason: 'pre_build_gate_fail' };
   }
 
   const queue = loadQueue();
