@@ -326,7 +326,17 @@
     </section>
 
     <section class="section tab-panel" id="lifere-coaching-panel" data-tab-panel="coaching">
-      <div class="section-title">Skill Coaching</div>
+      <div class="section-title">Conversation Coach</div>
+      <p class="status-line" id="coaching-monitor-status">Monitoring your conversations for lessons and commitments…</p>
+      <div class="followup-actions">
+        <button type="button" class="btn btn-primary" id="coaching-scan-btn">Scan conversations now</button>
+        <span class="status-line" id="coaching-stats"></span>
+      </div>
+      <div class="section-title" style="margin-top:14px">Lessons you're learning</div>
+      <div id="coaching-lessons" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Pending actions (todos · calendar)</div>
+      <div id="coaching-pending-actions" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Skill drills</div>
       <div id="coaching-modules" class="panel-grid"></div>
     </section>
 
@@ -987,11 +997,86 @@
       }
 
       async function loadCoaching() {
-        const res = await apiFetch('/api/v1/lifere/coaching/modules');
-        const data = await res.json();
-        document.getElementById('coaching-modules').innerHTML = (data.modules || []).slice(0, 6).map((m) =>
+        const [modulesRes, feedRes] = await Promise.all([
+          apiFetch('/api/v1/lifere/coaching/modules'),
+          apiFetch('/api/v1/lifeos/coaching/feed?user=adam'),
+        ]);
+        const modulesData = await modulesRes.json();
+        document.getElementById('coaching-modules').innerHTML = (modulesData.modules || []).slice(0, 6).map((m) =>
           `<div class="panel-row">${escapeHtml(m.label)} (${m.drill_minutes_default}m)</div>`).join('');
+
+        const feed = await feedRes.json();
+        const statusEl = document.getElementById('coaching-monitor-status');
+        const statsEl = document.getElementById('coaching-stats');
+        if (feed.ok) {
+          const lastScan = feed.control?.last_scan_at
+            ? new Date(feed.control.last_scan_at).toLocaleString()
+            : 'not yet';
+          statusEl.textContent = `Last scan: ${lastScan}. Open commitments: ${feed.open_commitments ?? '—'}. Overdue: ${feed.overdue_commitments ?? '—'}.`;
+          statsEl.textContent = feed.pending_events?.length
+            ? `${feed.pending_events.length} item(s) need your OK`
+            : 'No pending captures';
+        } else {
+          statusEl.textContent = feed.error || 'Could not load coaching feed';
+        }
+
+        const lessonsEl = document.getElementById('coaching-lessons');
+        const lessons = feed.lessons || [];
+        lessonsEl.innerHTML = lessons.length
+          ? lessons.map((l) => `
+            <div class="info-card">
+              <div class="info-card-title">${escapeHtml(l.problem)}</div>
+              <div class="info-card-body">${escapeHtml(l.solution)}</div>
+              <div class="info-card-meta">${escapeHtml((l.tags || []).join(' · '))}</div>
+            </div>`).join('')
+          : '<p class="empty">No coaching lessons captured yet — scan runs every 10 minutes when new conversations exist.</p>';
+
+        const pendingEl = document.getElementById('coaching-pending-actions');
+        const pending = feed.pending_events || [];
+        pendingEl.innerHTML = pending.length
+          ? pending.map((ev) => {
+            const actions = (ev.actions || []).filter((a) => a.status === 'suggested');
+            const actionLines = actions.map((a) =>
+              `<li>${escapeHtml(a.action_type)}: ${escapeHtml(a.title)}</li>`).join('');
+            return `
+              <div class="info-card" data-event-id="${ev.id}">
+                <div class="info-card-body">${escapeHtml(String(ev.text_content || '').slice(0, 180))}</div>
+                <ul class="status-line">${actionLines}</ul>
+                <button type="button" class="btn btn-primary coaching-apply-btn" data-event-id="${ev.id}">Add to todos / calendar</button>
+              </div>`;
+          }).join('')
+          : '<p class="empty">Nothing waiting — new commitments from conversations land here until you approve.</p>';
+
+        pendingEl.querySelectorAll('.coaching-apply-btn').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            const r = await apiFetch(`/api/v1/lifeos/events/${encodeURIComponent(btn.dataset.eventId)}/apply`, {
+              method: 'POST',
+              body: JSON.stringify({ user: 'adam' }),
+            });
+            const j = await r.json();
+            btn.textContent = j.ok ? 'Applied ✓' : (j.error || 'Failed');
+            if (j.ok) await loadCoaching();
+          });
+        });
       }
+
+      document.getElementById('coaching-scan-btn')?.addEventListener('click', async () => {
+        const btn = document.getElementById('coaching-scan-btn');
+        btn.disabled = true;
+        btn.textContent = 'Scanning…';
+        const r = await apiFetch('/api/v1/lifeos/coaching/scan', {
+          method: 'POST',
+          body: JSON.stringify({ user: 'adam', limit: 80, auto_apply: true }),
+        });
+        const j = await r.json();
+        btn.disabled = false;
+        btn.textContent = 'Scan conversations now';
+        document.getElementById('coaching-stats').textContent = j.ok
+          ? `Scanned ${j.messages_scanned || 0} messages · ${j.lessons_recorded || 0} lessons · ${j.actions_applied || 0} auto-applied`
+          : (j.error || 'Scan failed');
+        await loadCoaching();
+      });
 
       function renderMarketingOutput(data, title) {
         const el = document.getElementById('marketing-output');

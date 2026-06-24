@@ -25,10 +25,13 @@ import { createEmotionalPatternEngine } from './emotional-pattern-engine.js';
 import { createTruthDelivery } from './truth-delivery.js';
 import { createLifeOSWeeklyReview } from './lifeos-weekly-review.js';
 import { createUsefulWorkGuard, requireTableRows } from './useful-work-guard.js';
+import { createCoachingConversationMonitor } from './coaching-conversation-monitor.js';
+import { createMemoryIntelligenceService } from './memory-intelligence-service.js';
 
 const COMMITMENT_INTERVAL_MS    = parseInt(process.env.LIFEOS_COMMITMENT_PROD_MS || '', 10) || 15 * 60 * 1000;
 const NOTIFICATION_INTERVAL_MS  = parseInt(process.env.LIFEOS_NOTIFICATION_PROCESS_MS || '', 10) || 60 * 1000;
 const EVENT_INGEST_INTERVAL_MS  = parseInt(process.env.LIFEOS_EVENT_INGEST_MS || '', 10) || 10 * 60 * 1000;
+const COACHING_MONITOR_MS       = parseInt(process.env.LIFEOS_COACHING_MONITOR_MS || '', 10) || 10 * 60 * 1000;
 const OUTREACH_INTERVAL_MS      = parseInt(process.env.LIFEOS_OUTREACH_PROCESS_MS || '', 10) || 5 * 60 * 1000;
 const EARLY_WARNING_INTERVAL_MS = parseInt(process.env.LIFEOS_EARLY_WARNING_MS || '', 10) || 60 * 60 * 1000;    // hourly
 const CALIBRATION_INTERVAL_MS   = parseInt(process.env.LIFEOS_CALIBRATION_MS || '', 10) || 24 * 60 * 60 * 1000; // daily
@@ -149,19 +152,19 @@ export function startLifeOSScheduledJobs(deps) {
     },
     workCheck: requireTableRows(
       pool,
-      // conversation_messages exists in the LifeOS schema; we count messages
-      // from the last 48h that have not been ingested into the event stream.
-      // If either table is absent (older env) we still return 0 which is safe.
       `SELECT COALESCE((
          SELECT COUNT(*)::int
-         FROM conversation_messages m
-         LEFT JOIN lifeos_events e
-           ON e.source_ref = ('conversation_message:' || m.id)
-         WHERE m.created_at > NOW() - INTERVAL '48 hours'
-           AND e.id IS NULL
+           FROM conversation_messages cm
+          WHERE cm.role = 'user'
+            AND cm.content IS NOT NULL
+            AND length(trim(cm.content)) > 20
+            AND cm.id > COALESCE((
+              SELECT MAX(c.last_conversation_message_id)
+                FROM lifeos_event_ingest_control c
+            ), 0)
        ), 0) AS count`,
       [],
-      'unclassified conversation messages'
+      'un-ingested conversation messages'
     ),
     execute: async () => {
       const tracker      = createCommitmentTracker(pool, callAI);
@@ -186,6 +189,66 @@ export function startLifeOSScheduledJobs(deps) {
         log.info(`[LIFEOS-SCHED] Event stream ingested conversation messages: ${total}`);
       }
       return { ingested: total };
+    },
+    logger,
+  });
+
+  const coachingMonitorTick = createUsefulWorkGuard({
+    taskName: 'lifeos_coaching_conversation_monitor',
+    purpose: 'Scan new conversations for coaching lessons, commitments, and calendar actions',
+    prerequisites: async () => {
+      if (!callAI) return { ok: false, reason: 'callAI not configured' };
+      return { ok: true };
+    },
+    workCheck: requireTableRows(
+      pool,
+      `SELECT COALESCE((
+         SELECT COUNT(*)::int
+           FROM conversation_messages cm
+          WHERE cm.content IS NOT NULL
+            AND length(trim(cm.content)) > 12
+            AND cm.id > COALESCE((
+              SELECT MAX(c.last_conversation_message_id)
+                FROM lifeos_coaching_monitor_control c
+            ), 0)
+       ), 0) AS count`,
+      [],
+      'unprocessed coaching conversation messages',
+    ),
+    execute: async () => {
+      const tracker = createCommitmentTracker(pool, callAI);
+      const calendar = createLifeOSCalendarService(pool);
+      const focusPrivacy = createLifeOSFocusPrivacyService(pool);
+      const events = createLifeOSEventStreamService({
+        pool, callAI, commitments: tracker, calendar, focusPrivacy, logger,
+      });
+      const memoryIntel = createMemoryIntelligenceService(pool, logger);
+      const monitor = createCoachingConversationMonitor({
+        pool,
+        callAI,
+        eventStream: events,
+        memoryIntel,
+        commitments: tracker,
+        logger,
+      });
+      const { rows: users } = await pool.query(
+        `SELECT id FROM lifeos_users WHERE active = TRUE ORDER BY id ASC LIMIT 25`,
+      );
+      let lessons = 0;
+      let applied = 0;
+      for (const user of users) {
+        const result = await monitor.scanUser({
+          userId: user.id,
+          limit: 50,
+          autoApplyActions: true,
+        });
+        lessons += Number(result.lessons_recorded || 0);
+        applied += Number(result.actions_applied || 0);
+      }
+      if (lessons > 0 || applied > 0) {
+        log.info(`[LIFEOS-SCHED] Coaching monitor: ${lessons} lessons, ${applied} actions applied`);
+      }
+      return { lessons, applied };
     },
     logger,
   });
@@ -410,6 +473,7 @@ export function startLifeOSScheduledJobs(deps) {
   timers.push(setInterval(commitmentTick, COMMITMENT_INTERVAL_MS));
   timers.push(setInterval(notificationTick, NOTIFICATION_INTERVAL_MS));
   timers.push(setInterval(eventIngestTick, EVENT_INGEST_INTERVAL_MS));
+  timers.push(setInterval(coachingMonitorTick, COACHING_MONITOR_MS));
   timers.push(setInterval(outreachTick, OUTREACH_INTERVAL_MS));
   timers.push(setInterval(earlyWarningTick, EARLY_WARNING_INTERVAL_MS));
   timers.push(setInterval(calibrationTick, CALIBRATION_INTERVAL_MS));
@@ -417,10 +481,11 @@ export function startLifeOSScheduledJobs(deps) {
   commitmentTick();
   notificationTick();
   eventIngestTick();
+  coachingMonitorTick();
   outreachTick();
   // Early warning runs first time after 10 minutes to let the system warm up
   setTimeout(earlyWarningTick, 10 * 60 * 1000);
 
-  log.info(`[LIFEOS-SCHED] Started (commitment every ${COMMITMENT_INTERVAL_MS}ms, notification every ${NOTIFICATION_INTERVAL_MS}ms, event ingest every ${EVENT_INGEST_INTERVAL_MS}ms, outreach every ${OUTREACH_INTERVAL_MS}ms, early-warning every ${EARLY_WARNING_INTERVAL_MS}ms, weekly-review check every ${WEEKLY_REVIEW_CHECK_MS}ms)`);
+  log.info(`[LIFEOS-SCHED] Started (commitment every ${COMMITMENT_INTERVAL_MS}ms, notification every ${NOTIFICATION_INTERVAL_MS}ms, event ingest every ${EVENT_INGEST_INTERVAL_MS}ms, coaching monitor every ${COACHING_MONITOR_MS}ms, outreach every ${OUTREACH_INTERVAL_MS}ms, early-warning every ${EARLY_WARNING_INTERVAL_MS}ms, weekly-review check every ${WEEKLY_REVIEW_CHECK_MS}ms)`);
   return { started: true, timers };
 }

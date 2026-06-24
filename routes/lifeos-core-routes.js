@@ -62,6 +62,8 @@ import { createCommitmentSimulator }       from '../services/commitment-simulato
 import { createLifeOSFocusPrivacyService } from '../services/lifeos-focus-privacy.js';
 import { createLifeOSCalendarService }     from '../services/lifeos-calendar.js';
 import { createLifeOSEventStreamService }  from '../services/lifeos-event-stream.js';
+import { createCoachingConversationMonitor } from '../services/coaching-conversation-monitor.js';
+import { createMemoryIntelligenceService } from '../services/memory-intelligence-service.js';
 import { makeLifeOSUserResolver }          from '../services/lifeos-user-resolver.js';
 import { createLifeOSScoreboardService }   from '../services/lifeos-scoreboard.js';
 import { createLifeOSAdaptiveLayerService } from '../services/lifeos-adaptive-layer.js';
@@ -106,6 +108,15 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     commitments,
     calendar,
     focusPrivacy,
+    logger: log,
+  });
+  const memoryIntel  = createMemoryIntelligenceService(pool, log);
+  const coachingMonitor = createCoachingConversationMonitor({
+    pool,
+    callAI,
+    eventStream,
+    memoryIntel,
+    commitments,
     logger: log,
   });
   const scoreboard   = createLifeOSScoreboardService({ pool, integrity, joy, focusPrivacy });
@@ -886,6 +897,37 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       if (!eventId) return res.status(400).json({ ok: false, error: 'invalid event id' });
       const result = await eventStream.applyEvent(userId, eventId);
       if (!result) return res.status(404).json({ ok: false, error: 'Event not found' });
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/coaching/feed', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', lesson_limit = 12, event_limit = 15 } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const feed = await coachingMonitor.getFeed(userId, {
+        lessonLimit: safeLimit(lesson_limit, 12, 50),
+        eventLimit: safeLimit(event_limit, 15, 50),
+      });
+      res.json({ ok: true, ...feed });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/coaching/scan', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', limit = 50, auto_apply = true } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const result = await coachingMonitor.scanUser({
+        userId,
+        limit: safeLimit(limit, 50, 100),
+        autoApplyActions: Boolean(auto_apply),
+      });
       res.json({ ok: true, ...result });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });

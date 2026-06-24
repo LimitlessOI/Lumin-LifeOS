@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T05:07:11.276Z",
+  "generated_at": "2026-06-24T05:09:06.262Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12346,
+  "file_count": 12348,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28916,9 +28916,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3706745,
-      "mtime": "2026-06-24T05:06:59.904Z",
-      "indexed_at": "2026-06-24T05:07:11.276Z"
+      "bytes": 3707390,
+      "mtime": "2026-06-24T05:08:51.185Z",
+      "indexed_at": "2026-06-24T05:09:06.262Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -38968,6 +38968,13 @@
       "indexed_at": "2026-06-24T05:06:58.726Z"
     },
     {
+      "path": "db/migrations/20260624_coaching_conversation_monitor.sql",
+      "synopsis": "Database migration — 20260624_coaching_conversation_monitor.sql.",
+      "bytes": 566,
+      "mtime": "2026-06-24T05:08:47.739Z",
+      "indexed_at": "2026-06-24T05:09:06.262Z"
+    },
+    {
       "path": "db/migrations/20260624_lifere_call_logs.sql",
       "synopsis": "LifeRE receptionist call logs (Am 29 bridge table).",
       "bytes": 577,
@@ -41027,17 +41034,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26539,
-      "mtime": "2026-06-24T05:06:36.781Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z",
+      "bytes": 26588,
+      "mtime": "2026-06-24T05:09:00.500Z",
+      "indexed_at": "2026-06-24T05:09:06.262Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 473873,
-      "mtime": "2026-06-24T05:06:36.782Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z"
+      "bytes": 474376,
+      "mtime": "2026-06-24T05:08:43.150Z",
+      "indexed_at": "2026-06-24T05:09:06.262Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -70098,9 +70105,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 65363,
-      "mtime": "2026-06-24T00:29:02.018Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z"
+      "bytes": 70025,
+      "mtime": "2026-06-24T05:08:34.568Z",
+      "indexed_at": "2026-06-24T05:09:06.262Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -71165,9 +71172,9 @@
     {
       "path": "routes/lifeos-core-routes.js",
       "synopsis": "routes/lifeos-core-routes.js",
-      "bytes": 58513,
-      "mtime": "2026-06-24T00:21:34.397Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z",
+      "bytes": 60128,
+      "mtime": "2026-06-24T05:08:23.814Z",
+      "indexed_at": "2026-06-24T05:09:06.262Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -85634,6 +85641,16 @@
       ]
     },
     {
+      "path": "services/coaching-conversation-monitor.js",
+      "synopsis": "Monitors conversation_messages → coaching lessons + commitments + calendar.",
+      "bytes": 11040,
+      "mtime": "2026-06-24T05:08:06.640Z",
+      "indexed_at": "2026-06-24T05:09:06.262Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/code-generation/backend/package.json",
       "synopsis": "Service module — Package.",
       "bytes": 476,
@@ -87467,9 +87484,9 @@
     {
       "path": "services/lifeos-scheduled-jobs.js",
       "synopsis": "LifeOS background ticks: commitment prods + notification delivery + conversation ingest",
-      "bytes": 18439,
-      "mtime": "2026-06-21T21:39:15.381Z",
-      "indexed_at": "2026-06-24T05:06:58.726Z",
+      "bytes": 20869,
+      "mtime": "2026-06-24T05:08:18.987Z",
+      "indexed_at": "2026-06-24T05:09:06.262Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

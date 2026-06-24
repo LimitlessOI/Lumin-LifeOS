@@ -81,6 +81,7 @@
     "db/migrations/20260408_lifeos_finance_and_prefs.sql",
     "services/lifeos-finance.js",
     "services/lifeos-scheduled-jobs.js",
+    "services/coaching-conversation-monitor.js",
     "routes/lifeos-finance-routes.js",
     "public/overlay/lifeos-today.html",
     "public/overlay/lifeos-quick-entry.html",
