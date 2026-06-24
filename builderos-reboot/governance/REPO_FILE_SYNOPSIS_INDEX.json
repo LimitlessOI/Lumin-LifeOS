@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T22:58:15.680Z",
+  "generated_at": "2026-06-24T23:45:06.110Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12383,
   "files": [
@@ -41113,9 +41113,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 479379,
-      "mtime": "2026-06-24T22:58:01.544Z",
-      "indexed_at": "2026-06-24T22:58:15.680Z"
+      "bytes": 479297,
+      "mtime": "2026-06-24T23:44:56.273Z",
+      "indexed_at": "2026-06-24T23:45:06.110Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -69948,9 +69948,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 126912,
-      "mtime": "2026-06-24T22:58:09.297Z",
-      "indexed_at": "2026-06-24T22:58:15.680Z"
+      "bytes": 128107,
+      "mtime": "2026-06-24T23:44:48.920Z",
+      "indexed_at": "2026-06-24T23:45:06.110Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -70398,9 +70398,9 @@
     {
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
-      "bytes": 7109,
-      "mtime": "2026-06-24T22:57:56.018Z",
-      "indexed_at": "2026-06-24T22:58:15.680Z",
+      "bytes": 7107,
+      "mtime": "2026-06-24T23:44:35.841Z",
+      "indexed_at": "2026-06-24T23:45:06.110Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

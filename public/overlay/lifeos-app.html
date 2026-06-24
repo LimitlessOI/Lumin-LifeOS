@@ -124,7 +124,7 @@
       overflow: hidden;
       transition: width var(--transition);
       position: relative;
-      z-index: 50;
+      z-index: 100;
     }
     .sidebar.mini { width: var(--sidebar-w-mini); }
 
@@ -394,6 +394,7 @@
       flex-direction: column;
       overflow: hidden;
       min-width: 0;
+      position: relative;
     }
 
     /* Desktop topbar */
@@ -1213,9 +1214,9 @@
       50%       { opacity: 0.5; }
     }
 
-    /* Drawer backdrop */
+    /* Drawer backdrop — scoped to .main so sidebar stays clickable */
     .lumin-backdrop {
-      position: fixed;
+      position: absolute;
       inset: 0;
       background: rgba(0,0,0,0.35);
       z-index: 970;
@@ -1561,15 +1562,15 @@
     <div class="nav-scroll">
 
       <div class="nav-group-label">Daily</div>
-      <a class="nav-item active" id="nav-dashboard" data-page="lifeos-dashboard.html" data-label="Dashboard" onclick="navigate(this)" href="#">
+      <a class="nav-item active" id="nav-dashboard" data-page="lifeos-dashboard.html" data-label="Dashboard" href="#" role="button">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Dashboard</span>
       </a>
-      <a class="nav-item" id="nav-today"     data-page="lifeos-today.html"     data-label="Today"      onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-today"     data-page="lifeos-today.html"     data-label="Today"      href="#" role="button">
         <span class="nav-icon">☀️</span>
         <span class="nav-label">Today</span>
       </a>
-      <a class="nav-item" id="nav-lifere" data-page="lifeos-lifere.html" data-label="LifeRE" data-lifere-nav="true" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-lifere" data-page="lifeos-lifere.html" data-label="LifeRE" data-lifere-nav="true" href="#" role="button">
         <span class="nav-icon">🏠</span>
         <span class="nav-label">LifeRE</span>
       </a>
@@ -1577,101 +1578,101 @@
         <span class="nav-icon">💬</span>
         <span class="nav-label">Chat</span>
       </a>
-      <a class="nav-item"        id="nav-mirror"    data-page="lifeos-mirror.html"    data-label="Mirror"     onclick="navigate(this)" href="#">
+      <a class="nav-item"        id="nav-mirror"    data-page="lifeos-mirror.html"    data-label="Mirror"     href="#" role="button">
         <span class="nav-icon">🔮</span>
         <span class="nav-label">Mirror</span>
       </a>
-      <a class="nav-item"        id="nav-engine"    data-page="lifeos-engine.html"    data-label="Engine"     onclick="navigate(this)" href="#">
+      <a class="nav-item"        id="nav-engine"    data-page="lifeos-engine.html"    data-label="Engine"     href="#" role="button">
         <span class="nav-icon">⚡</span>
         <span class="nav-label">Engine</span>
       </a>
 
       <div class="nav-divider"></div>
       <div class="nav-group-label">Life &amp; Relationships</div>
-      <a class="nav-item" id="nav-health"   data-page="lifeos-health.html"    data-label="Health"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-health"   data-page="lifeos-health.html"    data-label="Health"     href="#" role="button">
         <span class="nav-icon">🌿</span>
         <span class="nav-label">Health</span>
       </a>
-      <a class="nav-item" id="nav-inner"    data-page="lifeos-inner.html"     data-label="Inner Work" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-inner"    data-page="lifeos-inner.html"     data-label="Inner Work" href="#" role="button">
         <span class="nav-icon">🌊</span>
         <span class="nav-label">Inner Work</span>
       </a>
-      <a class="nav-item" id="nav-family"   data-page="lifeos-family.html"    data-label="Family"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-family"   data-page="lifeos-family.html"    data-label="Family"     href="#" role="button">
         <span class="nav-icon">🏡</span>
         <span class="nav-label">Family</span>
       </a>
-      <a class="nav-item" id="nav-purpose"  data-page="lifeos-purpose.html"   data-label="Purpose"    onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-purpose"  data-page="lifeos-purpose.html"   data-label="Purpose"    href="#" role="button">
         <span class="nav-icon">🎯</span>
         <span class="nav-label">Purpose</span>
       </a>
-      <a class="nav-item" id="nav-children" data-page="lifeos-child.html"     data-label="Children"   onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-children" data-page="lifeos-child.html"     data-label="Children"   href="#" role="button">
         <span class="nav-icon">⭐</span>
         <span class="nav-label">Children</span>
       </a>
 
       <div class="nav-divider"></div>
       <div class="nav-group-label">Support</div>
-      <a class="nav-item" id="nav-conflict"  data-page="lifeos-conflict.html"  data-label="Conflict"   onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-conflict"  data-page="lifeos-conflict.html"  data-label="Conflict"   href="#" role="button">
         <span class="nav-icon">🔥</span><span class="nav-label">Conflict</span>
       </a>
-      <a class="nav-item" id="nav-mediation" data-page="lifeos-mediation.html" data-label="Mediation"  onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-mediation" data-page="lifeos-mediation.html" data-label="Mediation"  href="#" role="button">
         <span class="nav-icon">⚖️</span>
         <span class="nav-label">Mediation</span>
       </a>
-      <a class="nav-item" id="nav-coach"    data-page="lifeos-coach.html"     data-label="Coach"      onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-coach"    data-page="lifeos-coach.html"     data-label="Coach"      href="#" role="button">
         <span class="nav-icon">💬</span>
         <span class="nav-label">Coach</span>
       </a>
 
       <div class="nav-divider"></div>
       <div class="nav-group-label">Self</div>
-      <a class="nav-item" id="nav-identity"  data-page="lifeos-identity.html"  data-label="Identity"   onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-identity"  data-page="lifeos-identity.html"  data-label="Identity"   href="#" role="button">
         <span class="nav-icon">🔑</span>
         <span class="nav-label">Identity</span>
       </a>
-      <a class="nav-item" id="nav-decisions" data-page="lifeos-decisions.html" data-label="Decisions"  onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-decisions" data-page="lifeos-decisions.html" data-label="Decisions"  href="#" role="button">
         <span class="nav-icon">🧭</span>
         <span class="nav-label">Decisions</span>
       </a>
-      <a class="nav-item" id="nav-balance"   data-page="lifeos-balance-wheel.html" data-label="Balance Wheel" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-balance"   data-page="lifeos-balance-wheel.html" data-label="Balance Wheel" href="#" role="button">
         <span class="nav-icon">⚖</span><span class="nav-label">Balance</span>
       </a>
-      <a class="nav-item" id="nav-growth"    data-page="lifeos-growth.html"    data-label="Growth"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-growth"    data-page="lifeos-growth.html"    data-label="Growth"     href="#" role="button">
         <span class="nav-icon">🌱</span>
         <span class="nav-label">Growth</span>
       </a>
-      <a class="nav-item" id="nav-habits"    data-page="lifeos-habits.html"    data-label="Habits"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-habits"    data-page="lifeos-habits.html"    data-label="Habits"     href="#" role="button">
         <span class="nav-icon">🔥</span>
         <span class="nav-label">Habits</span>
       </a>
-      <a class="nav-item" id="nav-cycle"     data-page="lifeos-cycle.html"     data-label="Cycle"      onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-cycle"     data-page="lifeos-cycle.html"     data-label="Cycle"      href="#" role="button">
         <span class="nav-icon">🌑</span>
         <span class="nav-label">Cycle</span>
       </a>
-      <a class="nav-item" id="nav-weekly" data-page="lifeos-weekly-review.html" data-label="Weekly Review" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-weekly" data-page="lifeos-weekly-review.html" data-label="Weekly Review" href="#" role="button">
         <span class="nav-icon">📋</span>
         <span class="nav-label">Weekly</span>
       </a>
-      <a class="nav-item" id="nav-victory" data-page="lifeos-victory-vault.html" data-label="Victory Vault" onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-victory" data-page="lifeos-victory-vault.html" data-label="Victory Vault" href="#" role="button">
         <span class="nav-icon">🏆</span>
         <span class="nav-label">Wins</span>
       </a>
-      <a class="nav-item" id="nav-finance"   data-page="lifeos-finance.html"   data-label="Finance"    onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-finance"   data-page="lifeos-finance.html"   data-label="Finance"    href="#" role="button">
         <span class="nav-icon">💰</span>
         <span class="nav-label">Finance</span>
       </a>
 
       <div class="nav-divider"></div>
       <div class="nav-group-label">Legacy</div>
-      <a class="nav-item" id="nav-vision"    data-page="lifeos-vision.html"    data-label="Vision"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-vision"    data-page="lifeos-vision.html"    data-label="Vision"     href="#" role="button">
         <span class="nav-icon">🔭</span>
         <span class="nav-label">Vision</span>
       </a>
-      <a class="nav-item" id="nav-legacy"    data-page="lifeos-legacy.html"    data-label="Legacy"     onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-legacy"    data-page="lifeos-legacy.html"    data-label="Legacy"     href="#" role="button">
         <span class="nav-icon">🏛️</span>
         <span class="nav-label">Legacy</span>
       </a>
-      <a class="nav-item" id="nav-healing"   data-page="lifeos-healing.html"   data-label="Healing"    onclick="navigate(this)" href="#">
+      <a class="nav-item" id="nav-healing"   data-page="lifeos-healing.html"   data-label="Healing"    href="#" role="button">
         <span class="nav-icon">🌸</span>
         <span class="nav-label">Healing</span>
       </a>
@@ -1684,6 +1685,7 @@
 
   <!-- Main -->
   <div class="main">
+    <div class="lumin-backdrop" id="lumin-backdrop" onclick="closeLuminDrawer()"></div>
 
     <!-- Desktop topbar -->
     <div class="topbar" id="topbar">
@@ -1976,7 +1978,6 @@
 </button>
 
 <!-- Lumin Drawer -->
-<div class="lumin-backdrop" id="lumin-backdrop" onclick="closeLuminDrawer()"></div>
 <div class="lumin-drawer dock-right" id="lumin-drawer">
   <div class="lumin-drawer-header">
     <div class="lumin-drawer-avatar">◎</div>
@@ -2124,8 +2125,10 @@ function applyShellLayoutFromQuery() {
   document.getElementById('sidebar-user-name').textContent  = NAME;
   document.getElementById('sidebar-user-handle').textContent = '@' + USER;
   document.getElementById('st-handle').textContent          = '@' + USER;
-  document.getElementById('st-key').value                   = KEY;
-  document.getElementById('st-name').value                  = NAME;
+  const stKeyEl = document.getElementById('st-key');
+  if (stKeyEl) stKeyEl.value = KEY;
+  const stNameEl = document.getElementById('st-name');
+  if (stNameEl) stNameEl.value = NAME;
   applyThemeUi(THEME);
 
   // Restore last page (unless URL overrides below)
@@ -2177,6 +2180,7 @@ function applyShellLayoutFromQuery() {
     setTimeout(() => initLuminWakeWordListen(), 800);
   }
   initFeatureHelp();
+  bindShellNavigation();
 
   if (window.LifeOSAmbientSense && localStorage.getItem('lifeos_ambient_sense') === '1') {
     LifeOSAmbientSense.start({ getCtx: () => CTX, userHandle: USER });
@@ -2219,9 +2223,15 @@ function showInstallBanner(promptEvent) {
 /* ── Navigation ──────────────────────────────────────────────── */
 function loadPage(page) {
   const meta = PAGE_META[page];
-  if (!meta) return;
+  if (!meta) {
+    console.warn('[LifeOS] Unknown page:', page);
+    toast('That page is not available yet.');
+    return;
+  }
 
-  document.getElementById('content-frame').src = overlayUrl(page);
+  const frame = document.getElementById('content-frame');
+  const nextUrl = `${overlayUrl(page)}?shell=1&_=${Date.now()}`;
+  if (frame) frame.src = nextUrl;
   currentPage  = page;
   currentTitle = meta.title;
 
@@ -2290,12 +2300,48 @@ window.addEventListener('storage', (event) => {
   if (event.key === 'lifeos_theme') applyThemeUi(event.newValue || 'dark');
 });
 
-function navigate(el) {
-  if (!el.dataset.page) return;
+function navigate(el, evt) {
+  if (evt) evt.preventDefault();
+  if (!el || !el.dataset.page) return false;
+  hideFeatureHelp();
+  if (!luminState.pinned) closeLuminDrawer();
   loadPage(el.dataset.page);
   closeMobileSidebar();
   return false;
 }
+
+function bindShellNavigation() {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar) {
+    sidebar.addEventListener('click', (e) => {
+      const item = e.target.closest('a.nav-item[data-page]');
+      if (!item) return;
+      navigate(item, e);
+    });
+  }
+  const bottomNav = document.getElementById('mobile-bottomnav');
+  if (bottomNav) {
+    bottomNav.addEventListener('click', (e) => {
+      const tab = e.target.closest('.mob-tab[data-page]');
+      if (!tab) return;
+      e.preventDefault();
+      mobileNav(tab);
+    });
+  }
+  const moreSheet = document.getElementById('more-sheet');
+  if (moreSheet) {
+    moreSheet.addEventListener('click', (e) => {
+      const item = e.target.closest('.more-item[data-page]');
+      if (!item) return;
+      e.preventDefault();
+      mobileNavFromMore(item.dataset.page, item.dataset.label || '', item.dataset.color || '--c-dashboard');
+    });
+  }
+}
+
+window.navigate = navigate;
+window.loadPage = loadPage;
+window.mobileNav = mobileNav;
 
 function mobileNav(el) {
   const page = el.dataset.page;
