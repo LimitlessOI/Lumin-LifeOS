@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T05:11:21.130Z",
+  "generated_at": "2026-06-24T05:13:07.111Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12348,
   "files": [
@@ -41042,9 +41042,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 474822,
-      "mtime": "2026-06-24T05:11:13.992Z",
-      "indexed_at": "2026-06-24T05:11:21.130Z"
+      "bytes": 475149,
+      "mtime": "2026-06-24T05:13:03.599Z",
+      "indexed_at": "2026-06-24T05:13:07.111Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -86532,9 +86532,9 @@
     {
       "path": "services/founder-communication-format.js",
       "synopsis": "Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).",
-      "bytes": 5469,
-      "mtime": "2026-06-24T05:11:02.533Z",
-      "indexed_at": "2026-06-24T05:11:21.130Z",
+      "bytes": 5423,
+      "mtime": "2026-06-24T05:12:57.802Z",
+      "indexed_at": "2026-06-24T05:13:07.111Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89812,9 +89812,9 @@
     {
       "path": "services/truth-lockdown.js",
       "synopsis": "Supreme fail-closed truth gate — no founder reply leaves without receipt-backed claims.",
-      "bytes": 10032,
-      "mtime": "2026-06-24T05:10:55.429Z",
-      "indexed_at": "2026-06-24T05:11:21.130Z",
+      "bytes": 10093,
+      "mtime": "2026-06-24T05:12:41.507Z",
+      "indexed_at": "2026-06-24T05:13:07.111Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

@@ -91,8 +91,7 @@ export function wrapChairHumanSummary(truth, technicalReply) {
   const isCounsel = commandTruth === 'NO_COMMAND_RAN'
     && (['lumin', 'chair', 'counsel', 'life_admin'].includes(truth.chair_channel)
       || truth.action === 'lumin'
-      || truth.action === 'chair'
-      || truth.pass_fail === 'NO_COMMAND_RAN');
+      || truth.action === 'chair');
 
   if (shouldUsePersonalLuminCard(truth)) {
     const scrubbed = scrubCounselTheater(technicalReply || truth.human_summary || '', commandTruth);

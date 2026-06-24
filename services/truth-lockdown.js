@@ -90,7 +90,7 @@ function scrubField(text, commandTruth, passFail) {
     return scrubbed;
   }).join('\n');
 
-  return out.replace(/\s{2,}/g, ' ').trim();
+  return out.replace(/[^\S\n]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
 }
 
 function detectFalseSuccessOnFail(text = '') {
@@ -205,7 +205,7 @@ function scrubAllProse(truth = {}) {
   if (out.human_summary_technical != null) {
     out.human_summary_technical = scrubField(out.human_summary_technical, commandTruth, passFail);
   }
-  if (out.human_summary != null) {
+  if (out.human_summary != null && !out.founder_card_applied) {
     out.human_summary = scrubField(out.human_summary, commandTruth, passFail);
   }
   if (out.done_synopsis != null) {
