@@ -40,7 +40,8 @@ const TESTS = [
     expectChannel: 'chair',
     expectTruth: 'NO_COMMAND_RAN',
     forbidTheaterInSummary: true,
-    summaryMustInclude: 'Counsel only',
+    summaryMustNotInclude: 'Counsel only',
+    requireDirectConnection: true,
   },
   {
     id: 'T5_do_prefix_build',
@@ -156,6 +157,14 @@ for (const t of TESTS) {
     const summary = String(json.human_summary || '');
     if (t.summaryMustInclude && !summary.includes(t.summaryMustInclude)) {
       fail(t.id, `summary missing "${t.summaryMustInclude}"`);
+      continue;
+    }
+    if (t.summaryMustNotInclude && summary.includes(t.summaryMustNotInclude)) {
+      fail(t.id, `summary still includes forbidden "${t.summaryMustNotInclude}"`);
+      continue;
+    }
+    if (t.requireDirectConnection && json.direct_connection !== true) {
+      fail(t.id, 'direct_connection !== true');
       continue;
     }
     if (t.forbidTheaterInSummary) {

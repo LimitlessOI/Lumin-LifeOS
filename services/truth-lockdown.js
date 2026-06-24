@@ -7,6 +7,7 @@
 import {
   detectCounselTheater,
   scrubCounselTheater,
+  isDirectLuminConnection,
 } from './chair-direct-connection-truth.js';
 import { enforceChairTruthExit } from './chair-truth-gate.js';
 import { enforceDirectConnectionTruth } from './chair-direct-connection-truth.js';
@@ -213,7 +214,9 @@ function scrubAllProse(truth = {}) {
   }
 
   if (theater.violation && commandTruth === 'NO_COMMAND_RAN' && !out.human_summary_technical?.trim()) {
-    out.human_summary_technical = 'Counsel only — no command ran. Theater claims were blocked.';
+    out.human_summary_technical = isDirectLuminConnection(out)
+      ? 'I removed a false action claim — nothing ran this turn.'
+      : 'Counsel only — no command ran. Theater claims were blocked.';
   }
 
   return out;

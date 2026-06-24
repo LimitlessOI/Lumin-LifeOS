@@ -5,6 +5,8 @@
 import { shouldUsePersonalLuminCard } from './chair-lumin-personal-mode.js';
 import {
   formatDirectConnectionReply,
+  formatConversationalLuminReply,
+  isDirectLuminConnection,
   scrubCounselTheater,
 } from './chair-direct-connection-truth.js';
 
@@ -96,13 +98,18 @@ export function wrapChairHumanSummary(truth, technicalReply) {
   if (shouldUsePersonalLuminCard(truth)) {
     const scrubbed = scrubCounselTheater(technicalReply || truth.human_summary || '', commandTruth);
     if (isCounsel) {
-      return formatDirectConnectionReply(truth, scrubbed);
+      return isDirectLuminConnection(truth)
+        ? formatConversationalLuminReply(truth, scrubbed)
+        : formatDirectConnectionReply(truth, scrubbed);
     }
     return scrubbed;
   }
 
   if (isCounsel) {
-    return formatDirectConnectionReply(truth, scrubCounselTheater(technicalReply || '', commandTruth));
+    const scrubbed = scrubCounselTheater(technicalReply || '', commandTruth);
+    return isDirectLuminConnection(truth)
+      ? formatConversationalLuminReply(truth, scrubbed)
+      : formatDirectConnectionReply(truth, scrubbed);
   }
 
   if (truth.chair_channel === 'system_action' && commandTruth === 'COMMAND_RAN') {

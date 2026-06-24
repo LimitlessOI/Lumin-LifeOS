@@ -200,6 +200,7 @@ function chairEnvelope(channel, body) {
     interface: 'Lumin',
     lumin_chair: true,
     lumin: true,
+    direct_connection: body.direct_connection !== false,
     chair_channel: channel,
     point_b_dna_version: POINT_B_DNA_VERSION,
     system_purpose: 'point_a_to_point_b',
@@ -636,12 +637,16 @@ export async function runLuminChairTurn(ctx, deps) {
       const truth = finalizeTruth({
         ...chairResult,
         chair_context: chairContext,
+        conversational_mode: conversationalMode,
+        direct_connection: true,
         fp_v2_enforcement: null,
       }, 'chair');
       return {
         statusCode: 200,
         body: chairEnvelope('chair', {
           ...truth,
+          conversational_mode: conversationalMode,
+          direct_connection: true,
           intake_normalized: intakeNormalized,
           source_mode: sourceMode,
           auth_mode,

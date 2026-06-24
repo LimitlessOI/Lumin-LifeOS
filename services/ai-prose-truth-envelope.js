@@ -75,6 +75,15 @@ function scrubFalseVerification(text, commandTruth) {
   return out;
 }
 
+function scrubVoiceExecutionLie(text = '') {
+  const sentences = String(text || '').split(/(?<=[.!?])\s+/).filter(Boolean);
+  const kept = [];
+  for (const sentence of sentences) {
+    if (!detectExecutionLie(sentence).lied) kept.push(sentence);
+  }
+  return kept.join(' ').trim();
+}
+
 function appendUncertaintyFooter(text, envelope) {
   if (envelope.theater_blocked || envelope.voice_lie_blocked) {
     return text;
@@ -129,9 +138,7 @@ export function applyAiProseTruthEnvelope(rawText = '', ctx = {}) {
     envelope.hits.push(...theater.hits);
     const scrubbed = scrubCounselTheater(text, commandTruth);
     envelope.stripped_sentences = text.split(/(?<=[.!?])\s+/).length - scrubbed.split(/(?<=[.!?])\s+/).filter(Boolean).length;
-    text = scrubbed || (commandTruth === 'NO_COMMAND_RAN'
-      ? 'Counsel only — I cannot claim any action ran. Say what you need executed explicitly.'
-      : text);
+    text = scrubbed;
   }
 
   if (commandTruth === 'NO_COMMAND_RAN') {
@@ -139,7 +146,7 @@ export function applyAiProseTruthEnvelope(rawText = '', ctx = {}) {
     if (voiceLie.lied) {
       envelope.voice_lie_blocked = true;
       envelope.hits.push(...voiceLie.violations);
-      text = 'Counsel only — sync chat cannot claim background work, progress, or pipeline execution without a receipt.';
+      text = scrubVoiceExecutionLie(text);
     }
     text = scrubFalseVerification(text, commandTruth);
     if (UNLABELED_CERTAINTY.some((re) => re.test(text)) && !/\b(KNOW|THINK|GUESS)\b/.test(text)) {

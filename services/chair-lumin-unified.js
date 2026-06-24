@@ -56,16 +56,13 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     command_truth: 'NO_COMMAND_RAN',
     pass_fail: 'NO_COMMAND_RAN',
     execution_kind: 'CHAIR_FACTS',
+    direct_connection: true,
     dual_intent: dual.dual ? { personal: true, build: true } : null,
     human_summary_technical: safeReply,
-  chair_native_facts: systemFacts,
+    chair_native_facts: systemFacts,
     conversation_sanitized: safeReply !== voice,
-    done_synopsis: systemFacts.personal_turn
-      ? null
-      : 'Chair — system facts loaded (no execute this turn).',
-    next_synopsis: dual.dual
-      ? 'Reply with follow-up, or `do: …` to execute.'
-      : (systemFacts.personal_turn ? null : 'Name an action or `do: …` to run the system.'),
+    done_synopsis: null,
+    next_synopsis: null,
     strategic_brief: systemFacts.strategic_brief || null,
     errand_search_block: systemFacts.verified_search || null,
   };

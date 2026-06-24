@@ -25,13 +25,14 @@ describe('ai-prose-truth-envelope', () => {
     assert.equal(envelope.skipped, true);
   });
 
-  it('blocks voice-rail background work lies', () => {
+  it('blocks voice-rail background work lies without counsel-only boilerplate', () => {
     const { text, envelope } = applyAiProseTruthEnvelope(
       'I am still actively working on the blueprint alignment and will report back when complete.',
       { command_truth: 'NO_COMMAND_RAN', taskType: 'voice_rail_department' },
     );
     assert.equal(envelope.voice_lie_blocked, true);
-    assert.match(text, /Counsel only|sync chat/i);
+    assert.doesNotMatch(text, /Counsel only|sync chat/i);
+    assert.doesNotMatch(text, /actively working on the blueprint/i);
   });
 
   it('scrubs false verification without command', () => {

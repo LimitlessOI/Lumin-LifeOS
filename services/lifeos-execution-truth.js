@@ -564,7 +564,7 @@ export function sanitizeConversationReply(text, { command_truth = 'NO_COMMAND_RA
   const scrubbed = scrubCounselTheater(text, command_truth);
   const theater = detectCounselTheater(text, command_truth);
   if (theater.violation && !scrubbed.trim()) {
-    return 'No command ran — I cannot claim I opened, changed, or executed anything. Say `do: …` to run a real command.';
+    return 'I cannot claim that action ran — nothing executed. Tell me what to run.';
   }
   if (scrubbed.trim()) return scrubbed;
 

@@ -67,10 +67,40 @@ export function scrubCounselTheater(text = '', commandTruth = 'NO_COMMAND_RAN') 
   return kept.join(' ').trim();
 }
 
+const DIRECT_LUMIN_CHANNELS = new Set(['lumin', 'chair', 'counsel', 'life_admin', 'founder_interface']);
+
+export function isDirectLuminConnection(truth = {}) {
+  if (truth.direct_connection === false) return false;
+  if (truth.direct_connection === true || truth.conversational_mode === true) return true;
+  const channel = truth.chair_channel || truth.action || '';
+  return truth.lumin_chair === true && DIRECT_LUMIN_CHANNELS.has(channel);
+}
+
+export function formatConversationalLuminReply(truth = {}, counselText = '') {
+  const commandTruth = truth.command_truth || 'NO_COMMAND_RAN';
+  const scrubbed = scrubCounselTheater(counselText, commandTruth);
+  const theater = detectCounselTheater(counselText, commandTruth);
+
+  if (commandTruth === 'COMMAND_RAN' || commandTruth === 'COMMITTED' || commandTruth === 'BUILD_ATTEMPTED') {
+    return formatDirectConnectionReply(truth, counselText);
+  }
+
+  const body = (scrubbed || counselText || '').trim();
+  if (body) return body;
+  if (theater.violation || truth.theater_blocked) {
+    return 'I removed a false action claim — nothing ran this turn. Tell me what to execute and I will.';
+  }
+  return '';
+}
+
 export function formatDirectConnectionReply(truth = {}, counselText = '') {
   const commandTruth = truth.command_truth || 'NO_COMMAND_RAN';
   const channel = truth.chair_channel || truth.action || 'lumin';
   const scrubbed = scrubCounselTheater(counselText, commandTruth);
+
+  if (isDirectLuminConnection(truth) && commandTruth === 'NO_COMMAND_RAN') {
+    return formatConversationalLuminReply(truth, counselText);
+  }
 
   if (commandTruth === 'COMMAND_RAN' || commandTruth === 'COMMITTED' || commandTruth === 'BUILD_ATTEMPTED') {
     const header = commandTruth === 'COMMITTED'
@@ -90,7 +120,7 @@ export function formatDirectConnectionReply(truth = {}, counselText = '') {
     return lines.join('\n').trim();
   }
 
-  const header = '💬 Counsel only · nothing executed';
+  const header = '💬 Counsel only · No command ran';
   const hint = 'To execute: say `do: …` or name an action (`open LifeRE`, `run alpha cycle`, `redeploy`).';
   const body = scrubbed || counselText || '';
   const theater = detectCounselTheater(counselText, commandTruth);

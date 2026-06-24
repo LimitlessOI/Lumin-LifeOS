@@ -5,7 +5,19 @@
 
 ---
 
-## [SESSION] 2026-06-24 — Point B DNA locked (supreme purpose)
+## [SESSION] 2026-05-19 — Ambient Listen v1
+
+Adam: ambient listening now — sleeping when quiet, wake on speech, decide if note-worthy, commitments auto-log + keep/renegotiate. **Shipped:** `lumin-ambient-capture.js`, `/ambient/process|status`, `lifeos-ambient-listener.js`, ambient pill in `lifeos-app.html`, commitment renegotiate helpers. **GAP-FILL:** hand-coded (user urgency). **Next:** deploy → Adam toggles Ambient pill → say "I will call Frank by Friday" → verify Word Keeper / commitments list.
+
+---
+
+Adam: conductor tests every LifeRE button/API before founder alpha. **Shipped:** `run-lifere-agent-alpha.mjs` (117 checks), `verify-agent-alpha-gate.mjs`, HARD `AGENT_ALPHA` + `FOUNDER_ALPHA` gates in BuilderOS governance, founder confirm blocked until `agent_alpha_pass`, UI banner shows founder unlock only after agent pass. **Fixed:** `pickModel` ReferenceError on `/council/deliberate`. **Verify:** `npm run lifeos:lifere-agent-alpha` PASS; `lifeos:agent-alpha-gate:verify` PASS. **Next:** deploy → Adam founder alpha in banner.
+
+---
+
+Adam: audit and fix issues/gaps after W2–W5 build batches. **Fixed:** `lifere-permission-twin.js` used nonexistent `updated_at` column (→ `granted_at`); `GET /twins/:key` now resolves module twins with fallback + UI `data-kind`; counsel header drift in `chair-direct-connection-truth.js` aligned to SSOT (`Counsel only · No command ran`); extended self-audit AUD-24–29, W5 T06–T08, RT-14 module twin; refreshed `docs/LIFERE_GAP_AUDIT.md`. **Verify:** `npm run lifeos:lifere-self-audit` 0 gaps; `lifeos:lifere-az-acceptance` PASS; truth unit tests PASS. **Still open:** `founder_usability_pass: false`; local slices not deployed; live full-audit needs `COMMAND_CENTER_KEY` in shell.
+
+---
 
 Adam locked Point B DNA into system constitution — sole purpose A→B, intention equation (results=scorecard only), synergy 1+1=3, mechanics serve B not replace it, Chair fleshes broad vision, deception forbidden. **Shipped locally:** `docs/constitution/POINT_B_DNA.md`, `POINT_B_DNA.json`, `point-b-dna.js` (stamps all truth-gated API responses), agent contract + LUMIN_DOCTRINE + North Star digest, HARD `npm run lifeos:point-b:dna:verify` in preflight. Prior truth spine + Wisdom auditor local. **Next:** commit + deploy.
 
@@ -14,6 +26,10 @@ Adam locked Point B DNA into system constitution — sole purpose A→B, intenti
 Adam directive: Wisdom as truth overseer — red-team truth gates (Sentry-for-truth), founder assumption challenge ("what do you mean?"), grain-of-salt on all founder input until confirmed. **Shipped locally:** `wisdom-truth-auditor.js` + Chair `wisdom_clarify` gate + boot scheduler + preflight. Prior spine work also local. **Verify:** run `npm run lifeos:wisdom:audit`. **Next:** commit + deploy on Adam approval.
 
 ---
+
+---
+
+Adam: fix fake Lumin connection — counsel-only boilerplate on every conversational turn made drawer feel disconnected despite founder-interface canonical path. **Shipped:** `formatConversationalLuminReply`, `direct_connection` on chair envelope, personality prompt "You ARE the Chair", removed counsel header/`do:` nag on conversational path; ai-prose envelope scrubs without replacing entire reply. **Verify:** truth unit tests 19/19 PASS. **Next:** deploy → send normal message (no `do:`) → reply should be plain Lumin prose, no "Counsel only" header.
 
 ## [SESSION] 2026-06-13 — SMOS Content Brief v1 + context router
 

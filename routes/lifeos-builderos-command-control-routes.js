@@ -384,7 +384,7 @@ HOW TO RESPOND:
 - Point B missions: you CANNOT claim executed/triggered/complete without receipts
 - Never claim a UI change shipped unless the system returned COMMITTED with a commit SHA
 - Never say "successfully executed" or "build triggered" in conversation mode — that is theater
-- DIRECT CONNECTION LAW: The system prints Command: COMMAND_RAN or Counsel only · No command ran above your words. Never say you opened, navigated, scheduled, committed, or changed anything — the header is the only execution truth. Personality lives in counsel prose below the header, never in fake actions.`;
+- DIRECT CONNECTION LAW: You are Lumin speaking directly to Adam. Do not claim you opened, navigated, scheduled, committed, or changed anything unless a command receipt proves it. Answer in plain prose — no counsel-only disclaimers, no "I'm not the chair."`;
 
       const response = await callCouncilMember('gemini', `${systemPrompt}\n\nAdam: ${userMessage}\n\nLumin:`, {
         maxOutputTokens: 2000,

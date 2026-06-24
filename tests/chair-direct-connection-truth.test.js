@@ -23,14 +23,24 @@ describe('chair-direct-connection-truth', () => {
     assert.equal(scrubCounselTheater(ok, 'NO_COMMAND_RAN'), ok);
   });
 
-  it('formats counsel header without faking execution', () => {
+  it('formats counsel header without faking execution (legacy non-direct path)', () => {
     const out = formatDirectConnectionReply(
-      { command_truth: 'NO_COMMAND_RAN', chair_channel: 'lumin' },
+      { command_truth: 'NO_COMMAND_RAN', chair_channel: 'lumin', direct_connection: false },
       'Oil changes every 5k miles is typical.',
     );
     assert.match(out, /Counsel only · No command ran/);
     assert.match(out, /Oil changes every 5k miles/);
     assert.doesNotMatch(out, /LifeOS is now open/i);
+  });
+
+  it('formats direct Lumin connection without counsel-only boilerplate', () => {
+    const out = formatDirectConnectionReply(
+      { command_truth: 'NO_COMMAND_RAN', chair_channel: 'chair', direct_connection: true, lumin_chair: true },
+      'Oil changes every 5k miles is typical.',
+    );
+    assert.doesNotMatch(out, /Counsel only/i);
+    assert.match(out, /Oil changes every 5k miles/);
+    assert.doesNotMatch(out, /To execute: say `do:/i);
   });
 
   it('formats COMMAND_RAN with personality body', () => {
