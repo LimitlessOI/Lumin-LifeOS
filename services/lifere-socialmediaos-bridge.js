@@ -60,18 +60,20 @@ export function createLifeRESocialMediaOSBridge({
 
     try {
       if (callCouncilMember) {
-        const reply = await callCouncilMember({
-          member: 'marketing',
-          message: `${getDoctrinePromptBlock()}\n\n${briefBlock}\n\nMarketing coach for real estate agent. User says: ${message}`,
-          userId,
+        const prompt = `${getDoctrinePromptBlock()}\n\n${briefBlock}\n\nMarketing coach for real estate agent. User says: ${message}`;
+        const raw = await callCouncilMember('anthropic', prompt, {
+          maxTokens: 800,
+          taskType: 'lifere_smos_coach',
         });
-        const text = reply?.content || reply?.response || reply?.text || String(reply || '');
+        const text = typeof raw === 'string'
+          ? raw
+          : raw?.content || raw?.response || raw?.text || String(raw || '');
         return {
           ok: true,
           response: text.slice(0, 2000) || 'Coach response empty.',
           hookDetected: /next step|action|call to action/i.test(text),
           brief_id: gate.brief_id || briefId,
-          label: 'KNOW',
+          label: text.length > 20 ? 'KNOW' : 'THINK',
         };
       }
       const fallback = `Brief locked on "${gate.brief?.topic || 'topic'}". This week: turn "${message.slice(0, 80)}" into one 60-second market update video + 3 comment replies.`;

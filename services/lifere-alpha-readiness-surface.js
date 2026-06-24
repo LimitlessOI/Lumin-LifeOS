@@ -20,7 +20,7 @@ function readJson(rel, fallback = null) {
   }
 }
 
-export function getLifeREAlphaReadinessSurface({ pool = null } = {}) {
+export function getLifeREAlphaReadinessSurface({ pool = null, pgTablesOk = null } = {}) {
   const verdict = readJson(`builderos-reboot/MISSIONS/${MISSION_ID}/OBJECTIVE_VERDICT.json`, {});
   const readiness = readJson('products/receipts/LIFERE_ALPHA_READINESS.json', {});
   const html = fs.existsSync(path.join(ROOT, 'public/overlay/lifeos-lifere.html'))
@@ -47,7 +47,7 @@ export function getLifeREAlphaReadinessSurface({ pool = null } = {}) {
   const checklist = [
     { id: 'technical_pass', label: 'Machine acceptance PASS', ok: technicalPass },
     { id: 'alpha_readiness', label: 'Alpha readiness gate PASS', ok: machineReady },
-    { id: 'live_pg', label: 'Live PostgreSQL connected', ok: pool === true || pool === null ? null : Boolean(pool) },
+    { id: 'live_pg', label: 'Live PostgreSQL connected', ok: pgTablesOk === true ? true : (pool === false ? false : null) },
     { id: 'ui_markers', label: 'Founder UI markers present', ok: uiMarkers.every((m) => m.present) },
     { id: 'founder_confirm', label: 'Founder usability confirmed', ok: founderPass },
   ];

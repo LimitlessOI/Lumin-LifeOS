@@ -16,6 +16,12 @@ const TABLES = [
   'lifere_experiments',
   'lifere_performance_snapshot',
   'lifere_relationship_edges',
+  'lifere_content_briefs',
+  'lifere_client_comms_log',
+  'lifere_content_calendar',
+  'lifere_hook_library',
+  'lifeos_outreach_tasks',
+  'lifeos_users',
 ];
 
 const report = { schema: 'lifere_pg_verify_v1', at: new Date().toISOString(), passed: [], failed: [], skipped: false };

@@ -66,6 +66,16 @@ export async function bootLifeRE({ pool = null, logger = console } = {}) {
       logger.warn?.('[LIFERE-BOOT] Permission seed skip:', err.message);
     }
 
+    try {
+      await pool.query(
+        `INSERT INTO lifeos_users (user_handle, display_name, active, tier, role)
+         VALUES ('adam', 'Adam Hopkins', true, 'founder', 'founder')
+         ON CONFLICT (user_handle) DO NOTHING`,
+      );
+    } catch (err) {
+      logger.warn?.('[LIFERE-BOOT] lifeos_users adam seed skip:', err.message);
+    }
+
     const buyerTwin = twinStore.readTwin({ userId: 'adam', moduleKey: 'buyer' });
     if (!buyerTwin?.clients || Object.keys(buyerTwin.clients).length === 0) {
       await twinStore.writeTwin({

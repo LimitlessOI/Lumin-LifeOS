@@ -1,7 +1,7 @@
 {
   "schema": "lifere_alpha_readiness_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-24T00:26:03.746Z",
+  "at": "2026-06-24T00:34:58.580Z",
   "checks": {
     "lifeos:lifere-alpha-gate": {
       "exit": 0
@@ -45,6 +45,8 @@
     "AR-routes_deal_detail",
     "AR-routes_alpha_cycle",
     "AR-live_e2e",
+    "AR-live_alpha_banner_html",
+    "AR-live_alpha_readiness_api",
     "AR-live_pg_deep"
   ],
   "failed": [],

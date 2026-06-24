@@ -3046,7 +3046,41 @@ async function refreshPointBStrip() {
 document.addEventListener('DOMContentLoaded', () => {
   refreshPointBStrip();
   setInterval(refreshPointBStrip, 120000);
+  maybeRouteFromContextIntent();
 });
+
+async function maybeRouteFromContextIntent() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('page') || params.get('stack')) return;
+  const intent = sessionStorage.getItem('lifeos_context_intent');
+  if (!intent) return;
+  try {
+    const ctx = window.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false });
+    const headers = {};
+    const key = ctx?.KEY || localStorage.getItem('commandKey');
+    if (key) headers['x-command-key'] = key;
+    const res = await fetch(`/api/v1/lifeos/context/suggest?q=${encodeURIComponent(intent)}`, { headers });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.stack_id === 'lifere') {
+      sessionStorage.removeItem('lifeos_context_intent');
+      loadPage('lifeos-lifere.html');
+      const nav = document.querySelector('[data-page="lifeos-lifere.html"]');
+      if (nav) {
+        document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
+        nav.classList.add('active');
+      }
+    }
+  } catch {
+    /* non-fatal */
+  }
+}
+
+window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
+  if (!text?.trim()) return;
+  sessionStorage.setItem('lifeos_context_intent', text.trim());
+  maybeRouteFromContextIntent();
+};
 </script>
 
 <script>

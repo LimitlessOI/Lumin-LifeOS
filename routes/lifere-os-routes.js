@@ -5,7 +5,6 @@
 import express from 'express';
 import { createLifeREOSService } from '../services/lifere-os-v1.js';
 import {
-  enrichDailyCommandCenter,
   fetchBoldTrailPipeline,
   getBoldTrailConnectionStatus,
   pushApprovedFollowUp,
@@ -19,7 +18,6 @@ import { createLifeREPersonalityCalibration } from '../services/lifere-personali
 import { createLifeRESkillCoaching } from '../services/lifere-skill-coaching.js';
 import { createLifeREMarketingModule } from '../services/lifere-marketing-module.js';
 import { createLifeREFunnelIngress } from '../services/lifere-funnel-ingress.js';
-import { createLifeRESocialEngagement } from '../services/lifere-social-engagement.js';
 import { createLifeREYouTubeResearch } from '../services/lifere-youtube-research.js';
 import { createLifeRETransactionSurface } from '../services/lifere-transaction-surface.js';
 import { createLifeRERecruitingOS } from '../services/lifere-recruiting-os.js';
@@ -30,7 +28,6 @@ import { createLifeREOutreachBridge } from '../services/lifere-outreach-bridge.j
 import { createLifeREScenarioEngine } from '../services/lifere-scenario-engine.js';
 import { createLifeREExperimentEngine } from '../services/lifere-experiment-engine.js';
 import { createLifeREBestPracticeEngine } from '../services/lifere-best-practice-engine.js';
-import { createLifeREStrategyEvolutionEngine } from '../services/lifere-strategy-evolution-engine.js';
 import { createLifeRERelationshipTwin } from '../services/lifere-relationship-twin.js';
 import { createLifeREFounderExtensions, assertFounderAccess } from '../services/lifere-founder-extensions.js';
 import { createLifeRECouncilRouter } from '../services/lifere-council-router.js';
@@ -67,7 +64,6 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const coaching = createLifeRESkillCoaching({ pool });
   const marketing = createLifeREMarketingModule({ pool });
   const funnel = createLifeREFunnelIngress({ pool });
-  const social = createLifeRESocialEngagement({ pool });
   const youtube = createLifeREYouTubeResearch();
   const transaction = createLifeRETransactionSurface({ pool });
   const recruiting = createLifeRERecruitingOS({ pool });
@@ -77,7 +73,6 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const scenario = createLifeREScenarioEngine({ pool });
   const experiment = createLifeREExperimentEngine({ pool });
   const bestPractice = createLifeREBestPracticeEngine();
-  const strategy = createLifeREStrategyEvolutionEngine();
   const relationship = createLifeRERelationshipTwin({ pool });
   const founder = createLifeREFounderExtensions();
   const council = createLifeRECouncilRouter({ callCouncilMember, logger });
@@ -165,7 +160,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
         `SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='lifere_activity_log') AS ok`
       ).catch(() => null);
       const pgOk = deep?.rows?.[0]?.ok === true;
-      res.json(getLifeREAlphaReadinessSurface({ pool: pgOk }));
+      res.json(getLifeREAlphaReadinessSurface({ pool: Boolean(pool), pgTablesOk: pgOk }));
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }
@@ -186,7 +181,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
       }
       res.json({
         ...result,
-        readiness: getLifeREAlphaReadinessSurface({ pool: Boolean(pool) }),
+        readiness: getLifeREAlphaReadinessSurface({ pool: Boolean(pool), pgTablesOk: null }),
       });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
@@ -639,24 +634,33 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   });
 
   router.post('/marketing/content-brief/generate', requireKey, async (req, res) => {
-    res.json(await socialMediaOS.briefEngine.generateBrief({
-      tenantId: tenantId(req),
-      userId: userId(req),
-      topic: req.body?.topic,
-      persona: req.body?.persona || {},
-      competitors: req.body?.competitors || [],
-      platforms: req.body?.platforms || req.body?.target_platforms,
-      market: req.body?.market,
-    }));
+    try {
+      res.json(await socialMediaOS.briefEngine.generateBrief({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        topic: req.body?.topic,
+        persona: req.body?.persona || {},
+        competitors: req.body?.competitors || [],
+        platforms: req.body?.platforms || req.body?.target_platforms,
+        market: req.body?.market,
+      }));
+    } catch (error) {
+      const code = /lifere_content_briefs|does not exist/i.test(error.message) ? 503 : 400;
+      res.status(code).json({ ok: false, error: error.message, code: 'content_brief_failed' });
+    }
   });
 
   router.post('/marketing/content-brief/:id/approve', requireKey, async (req, res) => {
-    res.json(await socialMediaOS.briefEngine.approveBrief({
-      tenantId: tenantId(req),
-      userId: userId(req),
-      briefId: req.params.id,
-      approvedBy: req.body?.approved_by || userId(req),
-    }));
+    try {
+      res.json(await socialMediaOS.briefEngine.approveBrief({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        briefId: req.params.id,
+        approvedBy: req.body?.approved_by || userId(req),
+      }));
+    } catch (error) {
+      res.status(400).json({ ok: false, error: error.message });
+    }
   });
 
   router.get('/marketing/content-brief', requireKey, async (req, res) => {
@@ -912,6 +916,13 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   });
 
   router.post('/receptionist/vapi-end', async (req, res) => {
+    const vapiSecret = process.env.VAPI_WEBHOOK_SECRET || process.env.VAPI_SECRET;
+    if (vapiSecret) {
+      const provided = req.headers['x-vapi-secret'] || req.headers['x-webhook-secret'] || req.body?.secret;
+      if (provided !== vapiSecret) {
+        return res.status(401).json({ ok: false, error: 'unauthorized' });
+      }
+    }
     const callData = req.body?.call || req.body?.message?.call || req.body;
     res.json(await receptionist.ingestVapiCallEnded({
       callData,

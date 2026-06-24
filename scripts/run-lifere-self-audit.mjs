@@ -63,6 +63,9 @@ step('AUD-20_alpha_ready_surface',
   && routes.includes('/alpha/readiness')
   && routes.includes('/alpha/confirm-usability')
   && html.includes('data-lifere="alpha-ready-banner"'));
+step('AUD-21_smo_council_signature', /callCouncilMember\('anthropic', prompt/.test(smoBridge));
+step('AUD-22_context_router_wired', fs.readFileSync(path.join(ROOT, 'public/overlay/lifeos-app.html'), 'utf8').includes('lifeosSetContextIntent'));
+step('AUD-23_vapi_webhook_guard', routes.includes('VAPI_WEBHOOK_SECRET'));
 step('AUD-14_comms_log_route', routes.includes('/client-comms/log') && clientComms.includes('listCommsLog'));
 step('AUD-15_alpha_approval_seed', fs.readFileSync(path.join(ROOT, 'services/lifere-alpha-daily-cycle.js'), 'utf8').includes('approval_draft_seeded'));
 step('AUD-08_ssot_lifere_v1', /AMENDMENT_LIFERE/.test(lifereV1));

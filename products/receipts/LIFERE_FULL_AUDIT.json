@@ -1,0 +1,86 @@
+{
+  "schema": "lifere_full_audit_v1",
+  "at": "2026-06-24T00:34:41.195Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "machine": {
+    "lifeos:lifere-alpha-readiness": 0,
+    "lifeos:lifere-self-audit": 0,
+    "lifeos:service-doctrine:verify": 0
+  },
+  "live": {
+    "LIVE-_api_v1_lifere_alpha_readiness": {
+      "status": 200,
+      "ok": true
+    },
+    "LIVE-_api_v1_lifeos_context_suggest": {
+      "status": 200,
+      "ok": true
+    },
+    "LIVE-_api_v1_lifere_outreach_queue": {
+      "status": 200,
+      "ok": true
+    },
+    "LIVE-_api_v1_lifere_marketing_content_brief_g": {
+      "status": 200,
+      "ok": true
+    }
+  },
+  "wiring": {},
+  "gaps": [
+    {
+      "id": "GAP-01",
+      "area": "External credentials",
+      "issue": "ClickFunnels 501; YouTube 501 without API keys",
+      "role": "Operator / Founder"
+    },
+    {
+      "id": "GAP-08",
+      "area": "Sherry account",
+      "issue": "LifeOS login provisioning for Sherry",
+      "role": "Founder / LifeOS"
+    },
+    {
+      "id": "GAP-03",
+      "area": "Am 17 TC",
+      "issue": "Deal detail depends on tc_transactions schema in prod — verify with real deals",
+      "role": "Verify on live PG after migration"
+    },
+    {
+      "id": "GAP-05",
+      "area": "Council",
+      "issue": "Router + optional LLM — not full multi-agent deliberation in LifeRE shell",
+      "role": "Post-alpha depth"
+    },
+    {
+      "id": "GAP-10",
+      "area": "Buyer/seller CRM",
+      "issue": "List counts + twin projections — no deep stage workflows or BoldTrail write-back",
+      "role": "Post-alpha depth"
+    }
+  ],
+  "fixed_this_run": [],
+  "passed": [
+    "MACHINE-lifeos:lifere-alpha-readiness",
+    "MACHINE-lifeos:lifere-self-audit",
+    "MACHINE-lifeos:service-doctrine:verify",
+    "WIRE-smo_council_signature",
+    "WIRE-context_router_api",
+    "WIRE-vapi_secret_gate",
+    "WIRE-boot_adam_user",
+    "LIVE-_api_v1_lifere_alpha_readiness",
+    "LIVE-_api_v1_lifeos_context_suggest",
+    "LIVE-_api_v1_lifere_outreach_queue",
+    "LIVE-_api_v1_lifere_marketing_content_brief_g",
+    "LIVE-alpha_banner"
+  ],
+  "failed": [],
+  "warnings": [
+    {
+      "id": "GAP-GAP-07",
+      "detail": "founder_usability_pass false — close via LifeRE banner Confirm Alpha PASS (12+ char quote)"
+    }
+  ],
+  "ok": true,
+  "alpha_ready": true,
+  "founder_blocker": true
+}

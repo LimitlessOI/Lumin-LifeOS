@@ -10,6 +10,9 @@ export function createLifeREOutreachBridge({ pool = null, notificationService = 
 
   async function resolveUser(userKey) {
     const id = await resolveLifeOSUserId(pool, userKey);
+    if (pool && id == null) {
+      throw new Error(`lifeos_users row missing for "${userKey}" — run lifere boot seed`);
+    }
     return id ?? userKey;
   }
 

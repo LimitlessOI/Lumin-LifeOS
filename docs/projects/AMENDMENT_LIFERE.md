@@ -136,6 +136,7 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-06-24 | **Full audit fix batch** — SMOS council signature, alpha PG checklist, outreach user_id fail-closed + adam boot seed, Vapi webhook guard, context router in lifeos-app, dead route imports removed, PG verify 12 tables, `run-lifere-full-audit.mjs` | Adam: audit broken/gaps/disconnected/enforcement | ✅ full-audit 12/12 PASS | deploy; Adam founder confirm |
 | 2026-06-24 | **Alpha live verification + founder confirm persist** — live E2E T11–T13, readiness checks live banner/API, `lifere-founder-usability-persist.js` commits verdict to GitHub | Live was 1 deploy behind alpha banner; confirm was ephemeral on Railway | ✅ | redeploy + Adam confirm |
 | 2026-06-24 | **SMOS Content Brief v1** — `lifere-content-brief-engine.js`, migration, brief-before-coach gate, UI panel, routes | Adam: brief-first workflow is hard law | ✅ tests + self-audit | deploy; Record Mode v1 |
 | 2026-06-13 | **LifeOS Service Doctrine proxy** — LifeRE + SMOS inherit `LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md`; stack registry; doctrine in bridge + verify gate | Adam: hard-wire philosophy across all stacks | ✅ verify PASS | deploy |
