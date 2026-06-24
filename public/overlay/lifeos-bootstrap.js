@@ -23,13 +23,19 @@
     localStorage.removeItem(REFRESH_KEY);
   }
 
+  function decodeB64Url(str) {
+    const b64 = String(str || '').replace(/-/g, '+').replace(/_/g, '/');
+    const pad = b64.length % 4 ? '='.repeat(4 - (b64.length % 4)) : '';
+    return atob(b64 + pad);
+  }
+
   /** Decode the JWT payload (no verification — that happens server-side). */
   function decodeToken(token) {
     if (!token) return null;
     try {
       const parts = token.split('.');
       if (parts.length < 2) return null;
-      return JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+      return JSON.parse(decodeB64Url(parts[1]));
     } catch { return null; }
   }
 
@@ -201,12 +207,20 @@
       }
     }
 
+    function syncTokenFromStorage() {
+      const stored = getAccessToken();
+      if (stored) token = stored;
+      return token;
+    }
+
     function headers(extra = {}) {
+      syncTokenFromStorage();
       const h = { 'Content-Type': 'application/json', ...extra };
-      // Signed-in founder: account JWT is the credential for Lumin / Chair and LifeOS APIs.
-      // Command key is legacy operator fallback only when there is no valid session.
-      if (token && isTokenValid(token)) {
-        h['Authorization'] = `Bearer ${token}`;
+      // Always send account JWT when present — server validates expiry/signature.
+      // Command key is legacy operator fallback only when there is no session token.
+      const access = getAccessToken() || token || '';
+      if (access) {
+        h['Authorization'] = `Bearer ${access}`;
       } else if (key) {
         h['x-command-key'] = key;
       }
@@ -214,16 +228,18 @@
     }
 
     async function refreshIfNeeded() {
+      syncTokenFromStorage();
       if (token && isTokenValid(token)) return token;
-      if (!getRefreshToken()) return token && isTokenValid(token) ? token : '';
+      if (!getRefreshToken()) return getAccessToken() || '';
       const newToken = await attemptRefresh();
       if (newToken) { token = newToken; return token; }
-      return '';
+      return getAccessToken() || '';
     }
 
     async function requireAuth(redirectUrl = '/overlay/lifeos-login.html') {
       await refreshIfNeeded();
-      if (token && isTokenValid(token)) return true;
+      syncTokenFromStorage();
+      if (getAccessToken() || getRefreshToken()) return true;
       const next = encodeURIComponent(location.pathname + location.search);
       location.href = `${redirectUrl}?next=${next}`;
       return false;
@@ -231,6 +247,7 @@
 
     async function fetchWithAuth(url, options = {}) {
       await refreshIfNeeded();
+      syncTokenFromStorage();
       const opts = {
         credentials: 'same-origin',
         ...options,

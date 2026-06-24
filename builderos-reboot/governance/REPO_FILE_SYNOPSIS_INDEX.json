@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T22:44:08.208Z",
+  "generated_at": "2026-06-24T22:51:25.188Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12383,
   "files": [
@@ -41010,9 +41010,9 @@
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
       "synopsis": "AMENDMENT 12 — Command & Control Center",
-      "bytes": 98427,
-      "mtime": "2026-06-22T22:14:35.098Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 98863,
+      "mtime": "2026-06-24T22:51:21.275Z",
+      "indexed_at": "2026-06-24T22:51:25.188Z"
     },
     {
       "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
@@ -41113,9 +41113,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 479400,
-      "mtime": "2026-06-24T22:43:34.907Z",
-      "indexed_at": "2026-06-24T22:44:08.208Z"
+      "bytes": 479481,
+      "mtime": "2026-06-24T22:51:19.454Z",
+      "indexed_at": "2026-06-24T22:51:25.188Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -69948,9 +69948,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 127074,
-      "mtime": "2026-06-24T22:39:38.812Z",
-      "indexed_at": "2026-06-24T22:44:08.208Z"
+      "bytes": 126888,
+      "mtime": "2026-06-24T22:51:06.556Z",
+      "indexed_at": "2026-06-24T22:51:25.188Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -69969,9 +69969,9 @@
     {
       "path": "public/overlay/lifeos-bootstrap.js",
       "synopsis": "Shared overlay bootstrap — JWT/command key context, headers, and (when embedded)",
-      "bytes": 13048,
-      "mtime": "2026-06-24T22:39:37.384Z",
-      "indexed_at": "2026-06-24T22:44:08.208Z",
+      "bytes": 13520,
+      "mtime": "2026-06-24T22:51:03.498Z",
+      "indexed_at": "2026-06-24T22:51:25.188Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -70060,8 +70060,8 @@
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
       "bytes": 40514,
-      "mtime": "2026-06-24T22:39:45.330Z",
-      "indexed_at": "2026-06-24T22:44:08.208Z"
+      "mtime": "2026-06-24T22:51:06.158Z",
+      "indexed_at": "2026-06-24T22:51:25.188Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -70199,9 +70199,9 @@
     {
       "path": "public/overlay/lifeos-login.html",
       "synopsis": "HTML page: LifeOS — Sign in",
-      "bytes": 16057,
-      "mtime": "2026-06-24T22:41:03.304Z",
-      "indexed_at": "2026-06-24T22:44:08.208Z"
+      "bytes": 16093,
+      "mtime": "2026-06-24T22:51:05.356Z",
+      "indexed_at": "2026-06-24T22:51:25.188Z"
     },
     {
       "path": "public/overlay/lifeos-mediation.html",
@@ -70398,9 +70398,9 @@
     {
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
-      "bytes": 7113,
-      "mtime": "2026-06-24T22:39:45.145Z",
-      "indexed_at": "2026-06-24T22:44:08.208Z",
+      "bytes": 7112,
+      "mtime": "2026-06-24T22:51:06.556Z",
+      "indexed_at": "2026-06-24T22:51:25.188Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

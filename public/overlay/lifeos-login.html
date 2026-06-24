@@ -308,6 +308,7 @@
     try {
       const r = await fetch(`${API}/api/v1/lifeos/auth/login`, {
         method: 'POST',
+        credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <script src="/overlay/lifeos-bootstrap.js?v=20260519c"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260519d"></script>
   <script src="/overlay/lifeos-theme.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
@@ -2180,13 +2180,6 @@ function applyShellLayoutFromQuery() {
 
   if (window.LifeOSAmbientSense && localStorage.getItem('lifeos_ambient_sense') === '1') {
     LifeOSAmbientSense.start({ getCtx: () => CTX, userHandle: USER });
-  }
-
-  // PWA: service worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    });
   }
 
   const frame = document.getElementById('content-frame');

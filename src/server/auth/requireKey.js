@@ -1,8 +1,11 @@
 /**
  * SYNOPSIS: Shared command-key gate for operator routes (builder, Railway env, etc.).
  * Shared command-key gate for operator routes (builder, Railway env, etc.).
+ * Accepts LifeOS account JWT (Bearer) when it is not the operator command key.
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
+
+import { verifyToken } from '../../../services/lifeos-auth.js';
 
 /** Railway / shell / .env often include a trailing newline — without trim, `includes()` fails and clients see 401. */
 function normalizeKey(value) {
@@ -75,6 +78,16 @@ export function createRequireKey(options = {}) {
       const provided = normalizeKey(raw);
 
       if (provided && configuredValues.includes(provided)) return next();
+
+      // Founder app shell: account login JWT (not the operator command key).
+      if (bearerToken && !configuredValues.includes(bearerToken)) {
+        try {
+          req.lifeosUser = verifyToken(bearerToken);
+          req.auth_mode = 'account_jwt';
+          return next();
+        } catch { /* fall through */ }
+      }
+
       return res.status(401).json({ ok: false, error: "Unauthorized" });
     } catch (e) {
       return next(e);
