@@ -46,6 +46,7 @@ import {
   isExplicitExecuteCommand,
   isPureCounselQuestion,
 } from './chair-intent-signals.js';
+import { stripChairDoPrefix, tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
 
 export {
   isBlueprintExecuteIntent,
@@ -133,6 +134,8 @@ export function modelRoutingForChannel(channel) {
       return { route: 'lumin_chair_unified', complexity: 'low', estimated_cost_tier: 'cheap' };
     case 'point_b':
       return { route: 'lumin_chair_point_b', complexity: 'high', estimated_cost_tier: 'medium' };
+    case 'system_action':
+      return { route: 'lumin_chair_system_action', complexity: 'low', estimated_cost_tier: 'cheap' };
     case 'blueprint_execute':
     case 'mission_pipeline':
       return { route: 'lumin_chair_mission', complexity: 'high', estimated_cost_tier: 'medium' };
@@ -174,6 +177,30 @@ function finalizeTruth(truth, channel) {
   };
 }
 
+function systemActionChairResponse(ctx, result) {
+  const truth = finalizeTruth({
+    ok: result.ok === true,
+    pass_fail: result.ok === true ? 'PASS' : 'FAIL',
+    command_truth: result.command_truth || (result.executed ? 'COMMAND_RAN' : 'NO_COMMAND_RAN'),
+    action: result.action_type || 'system_action',
+    human_summary_technical: result.human_summary,
+    shell_action: result.shell_action || null,
+    execution_receipt: result.receipt || null,
+    done_synopsis: result.done_synopsis || result.human_summary,
+    first_blocker: result.error || null,
+  }, 'system_action');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('system_action', {
+      ...truth,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+    }),
+  };
+}
+
 export async function runLuminChairTurn(ctx, deps) {
   const {
     cleanedInput,
@@ -197,29 +224,49 @@ export async function runLuminChairTurn(ctx, deps) {
     explicitAction = 'auto',
   } = ctx;
 
-  const skipIntentGate = force || confirmIntent;
+  const doPrefix = stripChairDoPrefix(cleanedInput);
+  const effectiveInput = doPrefix.text || cleanedInput;
+  const forceExecute = doPrefix.forcedExecute || confirmIntent;
+
+  const systemAction = await tryLuminChairSystemAction(effectiveInput, {
+    pool: deps.pool,
+    logger: deps.logger || console,
+    operatorKey: deps.operatorKey,
+    founderBuildBaseUrl: deps.founderBuildBaseUrl,
+    userId: ctx.userId,
+  });
+  if (systemAction.matched) {
+    return systemActionChairResponse(
+      { intakeNormalized, sourceMode, auth_mode, user_role },
+      systemAction,
+    );
+  }
+
+  const skipIntentGate = force || forceExecute;
   const pointBTarget = loadPointBTarget();
   const contextOpts = {
     shouldDisplayOnly,
-    explicitExecute,
+    explicitExecute: explicitExecute || forceExecute,
     useTerminalForBuild,
-    explicitAction,
+    explicitAction: forceExecute && isBuildRequest(effectiveInput) ? 'build' : explicitAction,
+    confirmIntent: forceExecute,
+    forceExecute,
   };
 
-  if (!skipIntentGate && requiresPreExecuteClarify(cleanedInput, contextOpts)) {
-    let expandedTask = cleanedInput;
-    if (isBuildRequest(cleanedInput) || isRepairContinuationIntent(cleanedInput)) {
-      expandedTask = await deps.resolveBuildTaskForFounder(ctx.req, cleanedInput);
+  if (!skipIntentGate && requiresPreExecuteClarify(effectiveInput, contextOpts)) {
+    let expandedTask = effectiveInput;
+    if (isBuildRequest(effectiveInput) || isRepairContinuationIntent(effectiveInput)) {
+      expandedTask = await deps.resolveBuildTaskForFounder(ctx.req, effectiveInput);
     }
-    const understanding = assessChairIntentUnderstanding(cleanedInput, {
+    const understanding = assessChairIntentUnderstanding(effectiveInput, {
       expandedTask,
       pointBTarget,
-      includeBuild: isBuildRequest(cleanedInput) || isFounderShipOrUsabilityIntent(cleanedInput),
-      includeGovernance: isGovernanceOrSsotIntent(cleanedInput),
-      includeMissionPipeline: isMissionPipelineIntent(cleanedInput),
+      includeBuild: isBuildRequest(effectiveInput) || isFounderShipOrUsabilityIntent(effectiveInput),
+      includeGovernance: isGovernanceOrSsotIntent(effectiveInput),
+      includeMissionPipeline: isMissionPipelineIntent(effectiveInput),
     });
     const fpV2 = await enforceFounderPacketV2Unified({
-      cleanedInput,
+      cleanedInput: effectiveInput,
       pool: deps.pool,
       callAI: deps.callCouncilMember,
       pointBTarget,
@@ -237,21 +284,21 @@ export async function runLuminChairTurn(ctx, deps) {
     }
   }
 
-  const chairContext = resolveChairContext(cleanedInput, contextOpts);
+  const chairContext = resolveChairContext(effectiveInput, contextOpts);
   const channel = chairContext.channel;
 
   let fpV2Enforcement = null;
   const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
   if (!shouldDisplayOnly && channel !== 'display' && channel !== 'lumin' && channel !== 'counsel' && channel !== 'life_admin') {
-    const understandingForChannel = assessChairIntentUnderstanding(cleanedInput, {
-      expandedTask: cleanedInput,
+    const understandingForChannel = assessChairIntentUnderstanding(effectiveInput, {
+      expandedTask: effectiveInput,
       pointBTarget,
-      includeBuild: isBuildRequest(cleanedInput),
-      includeGovernance: isGovernanceOrSsotIntent(cleanedInput),
-      includeMissionPipeline: isMissionPipelineIntent(cleanedInput),
+      includeBuild: isBuildRequest(effectiveInput),
+      includeGovernance: isGovernanceOrSsotIntent(effectiveInput),
+      includeMissionPipeline: isMissionPipelineIntent(effectiveInput),
     });
     fpV2Enforcement = await enforceFounderPacketV2Unified({
-      cleanedInput,
+      cleanedInput: effectiveInput,
       understanding: understandingForChannel,
       missionId,
       pool: deps.pool,
@@ -402,7 +449,7 @@ export async function runLuminChairTurn(ctx, deps) {
         }, channel);
         return { statusCode: 503, body: chairEnvelope(channel, truth) };
       }
-      const buildTask = await deps.resolveBuildTaskForFounder(ctx.req, cleanedInput);
+      const buildTask = await deps.resolveBuildTaskForFounder(ctx.req, effectiveInput);
       if (ctx.useAsync) {
         const jobId = deps.startFounderBuildJob({
           task: buildTask,
@@ -429,7 +476,7 @@ export async function runLuminChairTurn(ctx, deps) {
           inbox_item_id: inboxGate?.inbox_item_id || null,
           classification: inboxGate?.classification || null,
         }, channel);
-        return { statusCode: 202, body: chairEnvelope(channel, { ...truth, build_task_resolved: buildTask !== cleanedInput }) };
+        return { statusCode: 202, body: chairEnvelope(channel, { ...truth, build_task_resolved: buildTask !== effectiveInput }) };
       }
       const builderResult = await deps.routeToBuilder(buildTask, operatorKey);
       const truth = finalizeTruth({
@@ -439,7 +486,7 @@ export async function runLuminChairTurn(ctx, deps) {
         inbox_item_id: inboxGate?.inbox_item_id || null,
         classification: inboxGate?.classification || null,
       }, channel);
-      return { statusCode: 200, body: chairEnvelope(channel, { ...truth, build_task_resolved: buildTask !== cleanedInput }) };
+      return { statusCode: 200, body: chairEnvelope(channel, { ...truth, build_task_resolved: buildTask !== effectiveInput }) };
     }
 
     case 'execute': {
@@ -510,7 +557,7 @@ export async function runLuminChairTurn(ctx, deps) {
           pointBTarget,
         }).catch(() => null)
         : null;
-      const luminResult = await runLuminUnifiedTurn(cleanedInput, {
+      const luminResult = await runLuminUnifiedTurn(effectiveInput, {
         callAI: deps.callCouncilMember,
         luminConverse: deps.luminConverse,
         sanitizeConversationReply: deps.sanitizeConversationReply,

@@ -1,0 +1,212 @@
+/**
+ * SYNOPSIS: Lumin Chair system actions — real execution before counsel theater.
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ */
+import { loadPointBTarget } from './point-b-target-lite.js';
+import { createLifeREAlphaDailyCycle } from './lifere-alpha-daily-cycle.js';
+import { getLifeREAlphaReadinessSurface } from './lifere-alpha-readiness-surface.js';
+import { executeLifeOSDirectAction } from './lifeos-direct-action.js';
+
+const DO_PREFIX = /^\s*(do|execute|run)\s*:\s*/i;
+
+export function stripChairDoPrefix(text = '') {
+  const raw = String(text || '').trim();
+  if (!DO_PREFIX.test(raw)) {
+    return { text: raw, forcedExecute: false };
+  }
+  return { text: raw.replace(DO_PREFIX, '').trim(), forcedExecute: true };
+}
+
+export function parseLuminChairSystemAction(text = '') {
+  const t = String(text || '').trim();
+  if (!t) return { matched: false, action_type: null };
+
+  const rules = [
+    {
+      action_type: 'open_lifere',
+      test: /\b(open|go to|show|launch|switch to)\s+(lifere|life\s*re)\b/i,
+      shell_action: { type: 'navigate', page: 'lifeos-lifere.html', stack: 'lifere' },
+    },
+    {
+      action_type: 'open_dashboard',
+      test: /\b(open|go to|show)\s+(the\s+)?dashboard\b/i,
+      shell_action: { type: 'navigate', page: 'lifeos-dashboard.html' },
+    },
+    {
+      action_type: 'open_chat',
+      test: /\b(open|go to)\s+(full\s+)?(chat|history)\b/i,
+      shell_action: { type: 'navigate', page: 'lifeos-chat.html' },
+    },
+    {
+      action_type: 'run_lifere_alpha_cycle',
+      test: /\b(run|start|do)\s+(the\s+)?(alpha|lifere)\s+(daily\s+)?cycle\b/i,
+    },
+    {
+      action_type: 'lifere_alpha_readiness',
+      test: /\b(alpha\s+readiness|alpha\s+ready|am i alpha ready|check alpha)\b/i,
+    },
+    {
+      action_type: 'redeploy',
+      test: /\b(redeploy|deploy latest|ship to railway|push live)\b/i,
+    },
+    {
+      action_type: 'point_b_status',
+      test: /\b(point b|what(?:'s| is) point b|current (program|mission|priority))\b/i,
+    },
+  ];
+
+  for (const rule of rules) {
+    if (rule.test.test(t)) {
+      return { matched: true, action_type: rule.action_type, shell_action: rule.shell_action || null };
+    }
+  }
+  return { matched: false, action_type: null };
+}
+
+async function triggerManagedRedeploy({ baseUrl, operatorKey, logger }) {
+  if (!operatorKey) {
+    return { ok: false, error: 'operator_key_missing' };
+  }
+  const url = `${String(baseUrl || '').replace(/\/$/, '')}/api/v1/railway/managed-env/build-from-latest`;
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-command-key': operatorKey,
+      },
+      body: JSON.stringify({}),
+    });
+    const data = await res.json().catch(() => ({}));
+    return { ok: res.ok && data.ok !== false, status: res.status, data, error: data.error || null };
+  } catch (err) {
+    logger?.warn?.('[LUMIN-CHAIR-ACTION] redeploy failed:', err.message);
+    return { ok: false, error: err.message };
+  }
+}
+
+export async function tryLuminChairSystemAction(text, deps = {}) {
+  const { pool, logger = console, operatorKey, founderBuildBaseUrl, userId } = deps;
+
+  const direct = userId
+    ? await executeLifeOSDirectAction(pool, {
+      userId,
+      text,
+      baseUrl: founderBuildBaseUrl,
+    })
+    : { matched: false };
+
+  if (direct.matched) {
+    return {
+      matched: true,
+      executed: direct.executed === true,
+      action_type: direct.action_type || 'direct_action',
+      ok: direct.ok === true,
+      human_summary: direct.visible_founder_message || direct.error || 'Direct action complete.',
+      receipt: direct.result_record || direct.proof_record || null,
+      command_truth: direct.executed ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
+    };
+  }
+
+  const parsed = parseLuminChairSystemAction(text);
+  if (!parsed.matched) {
+    return { matched: false, executed: false, action_type: null };
+  }
+
+  if (parsed.shell_action) {
+    const label = parsed.action_type === 'open_lifere' ? 'LifeRE' : parsed.shell_action.page;
+    return {
+      matched: true,
+      executed: true,
+      action_type: parsed.action_type,
+      ok: true,
+      command_truth: 'COMMAND_RAN',
+      shell_action: parsed.shell_action,
+      human_summary: `Opening ${label} now — navigation is executing in your shell.`,
+      done_synopsis: `Navigated to ${parsed.shell_action.page}`,
+    };
+  }
+
+  try {
+    switch (parsed.action_type) {
+      case 'run_lifere_alpha_cycle': {
+        const cycle = createLifeREAlphaDailyCycle({ pool, logger });
+        const result = await cycle.runDailyCycle({ userId: 'adam' });
+        const ok = result.ok === true;
+        return {
+          matched: true,
+          executed: true,
+          action_type: parsed.action_type,
+          ok,
+          command_truth: 'COMMAND_RAN',
+          human_summary: ok
+            ? `Alpha daily cycle ran — ${result.steps?.filter((s) => s.ok).length || 0}/${result.steps?.length || 0} steps passed.`
+            : `Alpha daily cycle failed: ${result.error || 'unknown'}`,
+          receipt: result,
+        };
+      }
+      case 'lifere_alpha_readiness': {
+        const surface = getLifeREAlphaReadinessSurface({ pool: Boolean(pool), pgTablesOk: null });
+        const failed = (surface.checklist || []).filter((c) => c.ok === false);
+        return {
+          matched: true,
+          executed: true,
+          action_type: parsed.action_type,
+          ok: surface.ready_for_alpha_testing === true,
+          command_truth: 'COMMAND_RAN',
+          human_summary: surface.ready_for_alpha_testing
+            ? 'Alpha readiness: PASS — ready for founder testing.'
+            : `Alpha readiness: gaps remain — ${failed.map((f) => f.label).join('; ') || 'see checklist'}`,
+          receipt: surface,
+        };
+      }
+      case 'redeploy': {
+        const base = founderBuildBaseUrl || process.env.PUBLIC_BASE_URL || process.env.RAILWAY_PUBLIC_DOMAIN;
+        const redeploy = await triggerManagedRedeploy({
+          baseUrl: base?.startsWith('http') ? base : `https://${base}`,
+          operatorKey,
+          logger,
+        });
+        return {
+          matched: true,
+          executed: redeploy.ok === true,
+          action_type: parsed.action_type,
+          ok: redeploy.ok === true,
+          command_truth: redeploy.ok ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
+          human_summary: redeploy.ok
+            ? 'Redeploy triggered — build-from-latest is running on Railway.'
+            : `Redeploy failed: ${redeploy.error || redeploy.data?.error || 'unknown'}`,
+          receipt: redeploy.data || redeploy,
+        };
+      }
+      case 'point_b_status': {
+        const target = loadPointBTarget();
+        const summary = target?.label
+          ? `Point B: ${target.label} (${target.mission_id || 'no mission id'})`
+          : 'Point B target not loaded — check builderos-reboot/BP_PRIORITY.json';
+        return {
+          matched: true,
+          executed: true,
+          action_type: parsed.action_type,
+          ok: Boolean(target?.mission_id),
+          command_truth: 'COMMAND_RAN',
+          human_summary: summary,
+          receipt: target,
+        };
+      }
+      default:
+        return { matched: false, executed: false, action_type: null };
+    }
+  } catch (err) {
+    logger?.warn?.('[LUMIN-CHAIR-ACTION]', err.message);
+    return {
+      matched: true,
+      executed: false,
+      action_type: parsed.action_type,
+      ok: false,
+      command_truth: 'NO_COMMAND_RAN',
+      human_summary: `System action failed: ${err.message}`,
+      error: err.message,
+    };
+  }
+}

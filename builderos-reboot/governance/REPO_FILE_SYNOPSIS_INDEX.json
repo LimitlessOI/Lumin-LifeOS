@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T00:35:27.384Z",
+  "generated_at": "2026-06-24T00:51:32.990Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12312,
+  "file_count": 12313,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41012,9 +41012,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 469501,
-      "mtime": "2026-06-24T00:22:00.959Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z"
+      "bytes": 469912,
+      "mtime": "2026-06-24T00:51:23.252Z",
+      "indexed_at": "2026-06-24T00:51:32.990Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -69781,9 +69781,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 119768,
-      "mtime": "2026-06-24T00:34:13.511Z",
-      "indexed_at": "2026-06-24T00:35:27.384Z"
+      "bytes": 120377,
+      "mtime": "2026-06-24T00:51:06.929Z",
+      "indexed_at": "2026-06-24T00:51:32.990Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -85261,9 +85261,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 7984,
-      "mtime": "2026-06-23T01:25:40.371Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 8348,
+      "mtime": "2026-06-24T00:50:45.292Z",
+      "indexed_at": "2026-06-24T00:51:32.990Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87788,9 +87788,19 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 21440,
-      "mtime": "2026-06-23T01:48:46.070Z",
-      "indexed_at": "2026-06-24T00:29:15.109Z",
+      "bytes": 23315,
+      "mtime": "2026-06-24T00:51:12.631Z",
+      "indexed_at": "2026-06-24T00:51:32.990Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/lumin-chair-system-actions.js",
+      "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
+      "bytes": 7600,
+      "mtime": "2026-06-24T00:50:42.925Z",
+      "indexed_at": "2026-06-24T00:51:32.990Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

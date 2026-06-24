@@ -1625,7 +1625,7 @@
       <span class="lumin-quick-icon" aria-hidden="true">◎</span>
       <span class="lumin-quick-copy">
         <span class="lumin-quick-title">Lumin Chair — speak or type</span>
-        <span class="lumin-quick-sub">One mind for LifeOS. Orchestrates builds, Point B, and counsel — honest receipts only.</span>
+        <span class="lumin-quick-sub">Real execution — say "open LifeRE", "run alpha cycle", or "do: fix X". Receipts only, no theater.</span>
       </span>
       <span class="lumin-quick-chev" aria-hidden="true">›</span>
     </button>
@@ -1907,7 +1907,7 @@
       <textarea
         class="lumin-input"
         id="lumin-input"
-        placeholder="Message Lumin Chair…"
+        placeholder="Talk to Lumin — or do: fix/add/change something (real execution)"
         rows="4"
         onkeydown="luminHandleKey(event)"
         oninput="luminAutoResize(this)"></textarea>
@@ -2719,6 +2719,20 @@ async function pollFounderBuildJob(jobId, pollUrl) {
   return { res: { ok: false, status: 504 }, data: { pass_fail: 'FAIL', first_blocker: 'Build job timed out after 5 minutes.' } };
 }
 
+function applyLuminShellAction(data) {
+  const sa = data?.shell_action;
+  if (!sa) return;
+  if (sa.type === 'navigate' && sa.page) {
+    loadPage(sa.page);
+    document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
+    const nav = document.querySelector(`[data-page="${sa.page}"]`);
+    if (nav) nav.classList.add('active');
+    if (sa.stack === 'lifere') {
+      try { sessionStorage.setItem('lifeos_stack', 'lifere'); } catch {}
+    }
+  }
+}
+
 async function luminSend(opts = {}) {
   const input = document.getElementById('lumin-input');
   const msg   = (opts.text || input.value || '').trim();
@@ -2788,6 +2802,7 @@ async function luminSend(opts = {}) {
           let reply = formatDirectSystemReply(retryData);
           reply = appendClientBubbleProof(reply, retryData);
           _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
+          applyLuminShellAction(retryData);
           return;
         }
       }
@@ -2799,6 +2814,7 @@ async function luminSend(opts = {}) {
       let reply = formatDirectSystemReply(data);
       reply = appendClientBubbleProof(reply, data);
       _appendLuminMsg('assistant', reply, new Date().toISOString(), true);
+      applyLuminShellAction(data);
       if (voiceTurn) speakLuminReply(reply);
       if (!luminState.open) {
         document.getElementById('lumin-fab-badge').classList.add('show');

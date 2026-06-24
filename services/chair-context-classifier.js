@@ -33,6 +33,8 @@ export function hasProductBuildContext(text = '') {
 
 export function hasHighConfidenceBuildTarget(text = '') {
   const t = String(text || '');
+  if (/^\s*(do|execute|run)\s*:/i.test(t)) return true;
+  if (/\b(fix|add|change|implement|wire|update)\s+(this|that|it)\b/i.test(t)) return true;
   if (isFounderConfirmIntent(t)) return true;
   if (/target_file:\s*\S+/i.test(t)) return true;
   if (extractTargetFileFromInstruction(t)) return true;
@@ -60,6 +62,7 @@ export function computeContextScores(text = '') {
   if (isProductBuildChangeVerb(t)) scores.build += 4;
   if (isRepairContinuationIntent(t)) scores.build += 8;
   if (hasHighConfidenceBuildTarget(t)) scores.build += 6;
+  if (/\b(fix|add|change|implement|wire|update)\s+(this|that|it)\b/i.test(t)) scores.build += 10;
 
   if (isBlueprintExecuteIntent(t)) scores.system += 12;
   if (isExplicitExecuteCommand(t)) scores.system += 8;
@@ -252,6 +255,8 @@ export function resolveChairContext(text = '', ctx = {}) {
 }
 
 export function requiresPreExecuteClarify(text = '', ctx = {}) {
+  if (ctx.confirmIntent || ctx.forceExecute) return false;
+  if (/^\s*(do|execute|run)\s*:/i.test(text)) return false;
   const resolved = resolveChairContext(text, ctx);
   return resolved.requires_execute_clarify === true;
 }
