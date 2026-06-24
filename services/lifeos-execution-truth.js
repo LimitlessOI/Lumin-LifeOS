@@ -6,6 +6,7 @@
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+import { scrubCounselTheater, detectCounselTheater } from './chair-direct-connection-truth.js';
 
 const LARGE_OVERLAY_PATHS = [
   'public/overlay/lifeos-app.html',
@@ -560,6 +561,13 @@ const FALSE_EXECUTION_CLAIM = /\b(successfully executed|has been triggered|build
  * Strip LLM theater when no command ran — conversation path only.
  */
 export function sanitizeConversationReply(text, { command_truth = 'NO_COMMAND_RAN' } = {}) {
+  const scrubbed = scrubCounselTheater(text, command_truth);
+  const theater = detectCounselTheater(text, command_truth);
+  if (theater.violation && !scrubbed.trim()) {
+    return 'No command ran — I cannot claim I opened, changed, or executed anything. Say `do: …` to run a real command.';
+  }
+  if (scrubbed.trim()) return scrubbed;
+
   const reply = String(text || '').trim();
   if (!reply || command_truth !== 'NO_COMMAND_RAN') return reply;
   if (!FALSE_EXECUTION_CLAIM.test(reply) && !/\b(COMMITTED|deployed to production)\b/i.test(reply)) {

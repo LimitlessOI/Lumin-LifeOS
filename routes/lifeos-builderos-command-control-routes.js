@@ -384,7 +384,8 @@ HOW TO RESPOND:
 - Code/build: when he clearly asks to change the product, the system runs builder — you explain outcomes honestly (PASS/FAIL + receipt)
 - Point B missions: you CANNOT claim executed/triggered/complete without receipts
 - Never claim a UI change shipped unless the system returned COMMITTED with a commit SHA
-- Never say "successfully executed" or "build triggered" in conversation mode — that is theater`;
+- Never say "successfully executed" or "build triggered" in conversation mode — that is theater
+- DIRECT CONNECTION LAW: The system prints Command: COMMAND_RAN or Counsel only · No command ran above your words. Never say you opened, navigated, scheduled, committed, or changed anything — the header is the only execution truth. Personality lives in counsel prose below the header, never in fake actions.`;
 
       const response = await callCouncilMember('gemini', `${systemPrompt}\n\nAdam: ${userMessage}\n\nLumin:`, {
         maxOutputTokens: 2000,

@@ -16,6 +16,7 @@ export function executionKindForChannel(channel = '') {
     return 'CODE_EXECUTE';
   }
   if (channel === 'counsel' || channel === 'display' || channel === 'lumin') return 'NO_COMMAND';
+  if (channel === 'system_action') return 'SYSTEM_EXECUTE';
   if (channel === 'point_b') return 'NAVIGATOR';
   return 'UNKNOWN';
 }

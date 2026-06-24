@@ -17,6 +17,7 @@ import { handlePointBFounderMessage } from './point-b-navigator.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { wrapChairHumanSummary } from './founder-communication-format.js';
 import { enforceChairTruthExit } from './chair-truth-gate.js';
+import { enforceDirectConnectionTruth } from './chair-direct-connection-truth.js';
 import { expandFounderBuildTask, isFounderShipOrUsabilityIntent, resolveExplicitChairChannel } from './founder-chair-intent.js';
 import { isGovernanceOrSsotIntent } from './founder-governance-clarify.js';
 import {
@@ -167,11 +168,12 @@ function chairEnvelope(channel, body) {
 
 function finalizeTruth(truth, channel) {
   const gated = enforceChairTruthExit(truth, channel);
-  const technical = gated.human_summary_technical || gated.human_summary || '';
-  const withChannel = { ...gated, chair_channel: channel };
+  const connected = enforceDirectConnectionTruth({ ...gated, chair_channel: channel });
+  const technical = connected.human_summary_technical || connected.human_summary || '';
+  const withChannel = { ...connected, chair_channel: channel };
   return {
     ...withChannel,
-    action: gated.action || channel,
+    action: connected.action || channel,
     human_summary_technical: technical,
     human_summary: wrapChairHumanSummary(withChannel, technical),
   };

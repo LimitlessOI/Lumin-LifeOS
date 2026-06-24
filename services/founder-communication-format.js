@@ -3,6 +3,10 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 import { shouldUsePersonalLuminCard } from './chair-lumin-personal-mode.js';
+import {
+  formatDirectConnectionReply,
+  scrubCounselTheater,
+} from './chair-direct-connection-truth.js';
 
 function firstSentence(text, max = 160) {
   const t = String(text || '').trim();
@@ -21,8 +25,9 @@ export function formatFounderCard(truth = {}) {
   const running = truth.pass_fail === 'RUNNING';
   const clarify = truth.pass_fail === 'CLARIFY';
   const technicalOnly = truth.receipt_truth === 'TECHNICAL_ONLY_AWAITING_FOUNDER';
-  const icon = pass ? '✅' : running ? '⏳' : clarify ? '🔍' : technicalOnly ? '⏳' : truth.pass_fail === 'FAIL' ? '❌' : 'ℹ️';
-  const statusLabel = pass ? 'DONE' : running ? 'RUNNING' : clarify ? 'CLARIFY' : technicalOnly ? 'AWAITING FOUNDER' : truth.pass_fail === 'FAIL' ? 'NOT DONE' : 'STATUS';
+  const noCommand = truth.command_truth === 'NO_COMMAND_RAN' || truth.pass_fail === 'NO_COMMAND_RAN';
+  const icon = pass ? '✅' : running ? '⏳' : clarify ? '🔍' : technicalOnly ? '⏳' : truth.pass_fail === 'FAIL' ? '❌' : noCommand ? '💬' : 'ℹ️';
+  const statusLabel = pass ? 'DONE' : running ? 'RUNNING' : clarify ? 'CLARIFY' : technicalOnly ? 'AWAITING FOUNDER' : truth.pass_fail === 'FAIL' ? 'NOT DONE' : noCommand ? 'COUNSEL ONLY' : 'STATUS';
   const action = truth.action || truth.chair_channel || 'response';
 
   const doneSynopsis = truth.done_synopsis
@@ -37,7 +42,9 @@ export function formatFounderCard(truth = {}) {
             ? 'Confirm intent before code runs.'
             : truth.pass_fail === 'FAIL'
             ? `${action.replace(/_/g, ' ')} failed.`
-            : firstSentence(truth.human_summary) || 'No command ran — counsel only.');
+            : noCommand
+              ? 'No command ran — counsel only.'
+              : firstSentence(truth.human_summary) || 'Status update.');
 
   const doneBullets = truth.done_bullets || truth.human_summary_card?.done_bullets || [];
   if (!doneBullets.length) {
@@ -80,9 +87,27 @@ export function formatFounderCard(truth = {}) {
 }
 
 export function wrapChairHumanSummary(truth, technicalReply) {
+  const commandTruth = truth.command_truth || 'NO_COMMAND_RAN';
+  const isCounsel = commandTruth === 'NO_COMMAND_RAN'
+    && (truth.chair_channel === 'lumin' || truth.action === 'lumin' || truth.pass_fail === 'NO_COMMAND_RAN');
+
   if (shouldUsePersonalLuminCard(truth)) {
-    return String(technicalReply || truth.human_summary || '').trim();
+    const scrubbed = scrubCounselTheater(technicalReply || truth.human_summary || '', commandTruth);
+    if (isCounsel) {
+      return formatDirectConnectionReply(truth, scrubbed);
+    }
+    return scrubbed;
   }
+
+  if (isCounsel) {
+    return formatDirectConnectionReply(truth, scrubCounselTheater(technicalReply || '', commandTruth));
+  }
+
+  if (truth.chair_channel === 'system_action' && commandTruth === 'COMMAND_RAN') {
+    const card = formatFounderCard({ ...truth, human_summary: technicalReply || truth.human_summary });
+    return card;
+  }
+
   const card = formatFounderCard({ ...truth, human_summary: technicalReply || truth.human_summary });
   const technical = String(technicalReply || '').trim();
   if (!technical || technical === card) return card;
