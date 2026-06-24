@@ -204,6 +204,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-05-19 | **`startup/register-runtime-routes.js`** — `createRequireLifeOSUserOrKey(requireKey)` as `requireUserOrKey` for founder LifeOS API mounts (core, finance, briefing, lifere, ambient, etc.); chat keeps raw requireKey (wraps internally). | Account JWT after lifeos-login must work for dashboard/Lumin without COMMAND_CENTER_KEY in browser. | ✅ node --check | deploy |
 | 2026-06-13 | **BuilderOS harness platform stack** — canonical executor, gap classifier, compound improvement, harness toolkit, governed loop codegen repair, operational verify scripts; `config/builder-safe-scope.js` receipts path; council builder fail-fast + MECHANICAL tier. | Adam: honest operational 10/10 BuilderOS machine — program, self-repair, compound improve; not structural theater. | ✅ local operational verify 10/10 | push + deploy |
 | 2026-06-24 | **`config/builder-safe-scope.js`** — add `products/receipts/` to `SAFE_WRITE_PATHS` for mission acceptance receipts. | BuilderOS harness + product receipts need commit-capable safe scope. | ✅ isSafeTarget | deploy |
 | 2026-06-24 | **`startup/register-runtime-routes.js`** — pass `commitManyToGitHub` into `createLifeRERoutes` for founder usability confirm persistence. | Alpha confirm on Railway was ephemeral filesystem-only. | ✅ | deploy |

@@ -161,7 +161,16 @@
       || localStorage.getItem('lifeos_key')
     );
     if (isPlaceholderKey(localStorage.getItem('commandKey'))) clearStoredKeys();
-    if (!key && promptForKey) key = normalizeCommandKey(window.prompt(keyPrompt) || '');
+    const hasAccountSession = !!(getAccessToken() || getRefreshToken());
+    // Never block the founder with window.prompt — account login is the auth path.
+    if (!key && promptForKey && !hasAccountSession) {
+      const onLoginPage = /lifeos-login\.html/i.test(String(location.pathname || ''));
+      const inIframe = typeof window !== 'undefined' && window.parent !== window;
+      if (!onLoginPage && !inIframe) {
+        const next = encodeURIComponent(location.pathname + location.search);
+        location.replace(`/overlay/lifeos-login.html?next=${next}`);
+      }
+    }
     if (key) persistKey(key);
 
     // User handle — from JWT payload first, then URL param, then localStorage
@@ -194,11 +203,12 @@
 
     function headers(extra = {}) {
       const h = { 'Content-Type': 'application/json', ...extra };
-      // Always send command key when we have one (URL ?key= / localStorage).
-      // Stale JWT in storage must not shadow a valid founder key — that caused Voice Rail 401s.
-      if (key) h['x-command-key'] = key;
+      // Signed-in founder: account JWT is the credential for Lumin / Chair and LifeOS APIs.
+      // Command key is legacy operator fallback only when there is no valid session.
       if (token && isTokenValid(token)) {
         h['Authorization'] = `Bearer ${token}`;
+      } else if (key) {
+        h['x-command-key'] = key;
       }
       return h;
     }

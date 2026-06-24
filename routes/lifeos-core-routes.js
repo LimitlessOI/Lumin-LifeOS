@@ -66,6 +66,8 @@ import { createCoachingConversationMonitor } from '../services/coaching-conversa
 import { createMemoryIntelligenceService } from '../services/memory-intelligence-service.js';
 import { createLuminContextLoader } from '../services/lumin-context-loader.js';
 import { createLuminConversationLearner } from '../services/lumin-conversation-learner.js';
+import { createLuminAmbientCapture } from '../services/lumin-ambient-capture.js';
+import { createActionInbox } from '../services/action-inbox.js';
 import { makeLifeOSUserResolver }          from '../services/lifeos-user-resolver.js';
 import { createLifeOSScoreboardService }   from '../services/lifeos-scoreboard.js';
 import { createLifeOSAdaptiveLayerService } from '../services/lifeos-adaptive-layer.js';
@@ -123,11 +125,25 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
   });
   const luminContext = createLuminContextLoader({ pool, callAI, logger: log });
   const luminLearner = createLuminConversationLearner({ pool, callAI, logger: log });
+  const actionInbox = createActionInbox({ pool, logger: log });
+  const ambientCapture = createLuminAmbientCapture({
+    pool,
+    callAI,
+    commitments,
+    eventStream,
+    actionInbox,
+    luminLearner,
+    logger: log,
+  });
   const scoreboard   = createLifeOSScoreboardService({ pool, integrity, joy, focusPrivacy });
   const adaptive     = createLifeOSAdaptiveLayerService({ pool, scoreboard });
 
   // Helper: resolve user_id from handle or id (shared + case-insensitive)
   const resolveUserId = makeLifeOSUserResolver(pool);
+
+  function resolveRequestUser(req, fallback = 'adam') {
+    return String(req.lifeosUser?.handle || req.body?.user || req.query?.user || fallback).trim() || fallback;
+  }
 
   // ── STATUS (ops / overlays) ───────────────────────────────────────────────
   router.get('/status', requireKey, async (_req, res) => {
@@ -871,6 +887,46 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
         autoApply: Boolean(auto_apply),
       });
       res.status(201).json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── AMBIENT LISTEN (opt-in voice capture — sleeping until speech) ───────────
+  router.get('/ambient/status', requireKey, async (_req, res) => {
+    res.json({
+      ok: true,
+      service: 'lumin-ambient-capture',
+      states: ['off', 'sleeping', 'listening', 'processing'],
+      consent_required: true,
+      stores_audio: false,
+      auth: 'account_jwt_preferred',
+      endpoints: {
+        process: 'POST /api/v1/lifeos/ambient/process',
+      },
+    });
+  });
+
+  router.post('/ambient/process', requireKey, async (req, res) => {
+    try {
+      const {
+        text,
+        channel = 'ambient_voice',
+        auto_apply_commitments = true,
+        metadata = {},
+      } = req.body || {};
+      const user = resolveRequestUser(req);
+      if (!String(text || '').trim()) return res.status(400).json({ ok: false, error: 'text is required' });
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const result = await ambientCapture.processUtterance({
+        userId,
+        text,
+        channel,
+        autoApplyCommitments: Boolean(auto_apply_commitments),
+        metadata,
+      });
+      res.status(result.persisted ? 201 : 200).json(result);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

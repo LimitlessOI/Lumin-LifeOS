@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="/overlay/lifeos-bootstrap.js?v=20260620c"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260519c"></script>
   <title>LifeOS — Sign in</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -270,8 +270,16 @@
   // Store original labels
   document.querySelectorAll('.btn').forEach(b => b.dataset.label = b.textContent);
 
+  const LAST_EMAIL_KEY = 'lifeos_last_login_email';
+  const savedEmail = localStorage.getItem(LAST_EMAIL_KEY);
+  if (savedEmail) {
+    document.getElementById('login-email').value = savedEmail;
+  }
+
   // ── After auth: store tokens + redirect ──────────────────────────────────────
   function handleAuthSuccess(data) {
+    const email = document.getElementById('login-email')?.value?.trim();
+    if (email) localStorage.setItem(LAST_EMAIL_KEY, email);
     if (data.access_token)  localStorage.setItem('lifeos_access_token', data.access_token);
     if (data.refresh_token) localStorage.setItem('lifeos_refresh_token', data.refresh_token);
     if (data.user) {
@@ -281,6 +289,10 @@
       localStorage.setItem('lifeos_tier', data.user.tier || 'free');
       localStorage.setItem('lifeos_role', data.user.role || 'member');
     }
+    // Account login replaces command-key auth for the app shell and Lumin Chair.
+    localStorage.removeItem('commandKey');
+    localStorage.removeItem('command_key');
+    localStorage.removeItem('lifeos_key');
     // Redirect to the app (or wherever the user came from)
     const redir = new URLSearchParams(location.search).get('next') || '/overlay/lifeos-app.html';
     location.href = redir;

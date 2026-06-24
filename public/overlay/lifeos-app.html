@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <script src="/overlay/lifeos-bootstrap.js?v=20260620c"></script>
+  <script src="/overlay/lifeos-bootstrap.js?v=20260519c"></script>
   <script src="/overlay/lifeos-theme.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
@@ -553,6 +553,96 @@
       flex: 1;
       min-width: 120px;
     }
+
+    .ambient-pill {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 7px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.5);
+      font-size: 11px;
+    }
+    .ambient-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .ambient-pill-btn:hover { background: rgba(255,255,255,0.08); }
+    .ambient-pill-btn[data-mode="sleeping"] {
+      border-color: rgba(99, 102, 241, 0.45);
+      color: #a5b4fc;
+    }
+    .ambient-pill-btn[data-mode="listening"] {
+      border-color: rgba(34, 197, 94, 0.55);
+      color: #86efac;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.15);
+    }
+    .ambient-pill-btn[data-mode="processing"] {
+      border-color: rgba(245, 158, 11, 0.55);
+      color: #fcd34d;
+    }
+    .ambient-pill-btn[data-mode="off"] { opacity: 0.85; }
+    .ambient-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.5;
+    }
+    .ambient-pill-btn[data-mode="sleeping"] .ambient-dot {
+      animation: ambient-pulse 2.4s ease-in-out infinite;
+    }
+    .ambient-pill-btn[data-mode="listening"] .ambient-dot {
+      opacity: 1;
+      animation: ambient-pulse 1s ease-in-out infinite;
+    }
+    @keyframes ambient-pulse {
+      0%, 100% { opacity: 0.35; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+    .ambient-pill-hint {
+      color: var(--text-muted);
+      flex: 1;
+      min-width: 100px;
+    }
+    .ambient-toast {
+      position: fixed;
+      bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      max-width: min(92vw, 420px);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-primary);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    }
+    .ambient-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .ambient-toast[data-kind="commitment"] { border-color: rgba(34, 197, 94, 0.5); }
+    .ambient-toast[data-kind="renegotiate"] { border-color: rgba(245, 158, 11, 0.5); }
+    .ambient-toast[data-kind="note"] { border-color: rgba(99, 102, 241, 0.5); }
+    .ambient-toast[data-kind="error"] { border-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
 
     /* ═══════════════════════════════════════════════════════
        MOBILE CHROME
@@ -1639,6 +1729,16 @@
       <span class="point-b-blocker" id="point-b-blocker"></span>
     </div>
 
+    <div id="ambient-pill" class="ambient-pill" aria-live="polite">
+      <button type="button" class="ambient-pill-btn" id="ambient-toggle" data-mode="off" aria-pressed="false"
+        title="Ambient listen — sleeps when silent, captures commitments and notes">
+        <span class="ambient-dot" aria-hidden="true"></span>
+        <span id="ambient-label">Ambient off</span>
+      </button>
+      <span class="ambient-pill-hint" id="ambient-hint">Uses your LifeOS account · stays signed in · mic sleeps when quiet</span>
+    </div>
+    <div id="ambient-toast" class="ambient-toast" role="status" aria-live="polite"></div>
+
     <!-- Content iframe -->
     <iframe class="content-frame" id="content-frame"
       src="/overlay/lifeos-dashboard.html"
@@ -1806,11 +1906,12 @@
         <input class="settings-input" id="st-name" placeholder="Adam" autocomplete="off" />
       </div>
     </div>
-    <div class="settings-section">
-      <div class="settings-section-title">API Access</div>
+    <div class="settings-section" id="settings-operator-section" style="display:none;">
+      <div class="settings-section-title">Operator fallback (optional)</div>
+      <p class="settings-hint">Lumin / Chair uses your signed-in account — that is your full system path. Command key is only a backup for headless scripts when no browser session exists.</p>
       <div class="settings-row">
         <div class="settings-label">Command Key</div>
-        <input class="settings-input" id="st-key" type="password" placeholder="Enter command key…" autocomplete="off" />
+        <input class="settings-input" id="st-key" type="password" placeholder="Optional — not needed for Lumin" autocomplete="off" />
       </div>
     </div>
     <div class="settings-section" id="settings-invites-section" style="display:none;">
@@ -1924,9 +2025,35 @@
 
 <script>
 /* ── State ──────────────────────────────────────────────────── */
-const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: false });
 CTX.startSessionKeepAlive();
-CTX.refreshIfNeeded().catch(() => {});
+(async function bootAccountSession() {
+  await CTX.refreshIfNeeded();
+  const token = localStorage.getItem('lifeos_access_token');
+  const refresh = localStorage.getItem('lifeos_refresh_token');
+  if (!token && !refresh) {
+    await CTX.requireAuth('/overlay/lifeos-login.html?next=' + encodeURIComponent(location.pathname + location.search));
+    return;
+  }
+  if (!CTX.authenticated && refresh) {
+    await CTX.refreshIfNeeded();
+  }
+  syncAccountUiFromContext();
+})().catch(() => {});
+
+function syncAccountUiFromContext() {
+  const ctx = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: false });
+  USER = ctx.USER || USER;
+  NAME = localStorage.getItem('lifeos_name') || (USER ? USER.charAt(0).toUpperCase() + USER.slice(1) : 'You');
+  const av = document.getElementById('user-avatar');
+  const sn = document.getElementById('sidebar-user-name');
+  const sh = document.getElementById('sidebar-user-handle');
+  const sth = document.getElementById('st-handle');
+  if (av) av.textContent = NAME.charAt(0).toUpperCase();
+  if (sn) sn.textContent = NAME;
+  if (sh) sh.textContent = '@' + USER;
+  if (sth) sth.textContent = '@' + USER;
+}
 luminBootThread().catch(() => {});
 initLuminDock();
 let KEY   = CTX.KEY;
@@ -2381,6 +2508,8 @@ function openSettings(e) {
       gateSec.style.display = 'none';
     }
   }
+  const opSec = document.getElementById('settings-operator-section');
+  if (opSec) opSec.style.display = CTX.role === 'admin' ? '' : 'none';
 }
 function closeSettings() {
   document.getElementById('settings-panel').classList.remove('open');
@@ -2513,8 +2642,10 @@ function openQuickCapture() {
 function signOut(e) {
   e && e.stopPropagation();
   if (confirm('Sign out? You will need to sign in again.')) {
-    if (window.LifeOSBootstrap && typeof window.LifeOSBootstrap.clearTokens === 'function') {
-      window.LifeOSBootstrap.clearTokens();
+    const ctx = window.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false });
+    if (ctx?.logout) {
+      ctx.logout();
+      return;
     }
     localStorage.removeItem('commandKey');
     localStorage.removeItem('command_key');
@@ -3055,16 +3186,7 @@ async function refreshPointBStrip() {
   const strip = document.getElementById('point-b-strip');
   if (!strip) return;
   try {
-    const ctx = window.LifeOSAuth?.();
-    const headers = { Accept: 'application/json' };
-    let res;
-    if (ctx?.fetchWithAuth) {
-      res = await ctx.fetchWithAuth('/api/v1/lifeos/builderos/command-control/point-b/status');
-    } else {
-      const key = ctx?.KEY || localStorage.getItem('commandKey');
-      if (key) headers['x-command-key'] = key;
-      res = await fetch('/api/v1/lifeos/builderos/command-control/point-b/status', { headers });
-    }
+    const res = await CTX.fetchWithAuth('/api/v1/lifeos/builderos/command-control/point-b/status');
     if (!res.ok) return;
     const data = await res.json();
     const s = data.point_b || data;
@@ -3088,11 +3210,7 @@ async function maybeRouteFromContextIntent() {
   const intent = sessionStorage.getItem('lifeos_context_intent');
   if (!intent) return;
   try {
-    const ctx = window.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false });
-    const headers = {};
-    const key = ctx?.KEY || localStorage.getItem('commandKey');
-    if (key) headers['x-command-key'] = key;
-    const res = await fetch(`/api/v1/lifeos/context/suggest?q=${encodeURIComponent(intent)}`, { headers });
+    const res = await CTX.fetchWithAuth(`/api/v1/lifeos/context/suggest?q=${encodeURIComponent(intent)}`);
     if (!res.ok) return;
     const data = await res.json();
     if (data.stack_id === 'lifere') {
@@ -3114,6 +3232,56 @@ window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
   sessionStorage.setItem('lifeos_context_intent', text.trim());
   maybeRouteFromContextIntent();
 };
+</script>
+
+<script src="/shared/lifeos-ambient-listener.js?v=20260519b"></script>
+<script>
+(function initAmbientListen() {
+  const btn = document.getElementById('ambient-toggle');
+  const label = document.getElementById('ambient-label');
+  const hint = document.getElementById('ambient-hint');
+  const toast = document.getElementById('ambient-toast');
+  let toastTimer = null;
+
+  const MODE_COPY = {
+    off: { label: 'Ambient off', hint: 'Click to listen — sleeps when quiet, logs commitments & notes' },
+    sleeping: { label: 'Sleeping · ears open', hint: 'Silent — will wake when you speak' },
+    listening: { label: 'Listening', hint: 'Speech detected — deciding what to save' },
+    processing: { label: 'Noting…', hint: 'Adding to commitments or your twin' },
+  };
+
+  function renderMode(mode) {
+    const copy = MODE_COPY[mode] || MODE_COPY.off;
+    if (btn) {
+      btn.dataset.mode = mode;
+      btn.setAttribute('aria-pressed', mode !== 'off' ? 'true' : 'false');
+    }
+    if (label) label.textContent = copy.label;
+    if (hint) hint.textContent = copy.hint;
+  }
+
+  function showAmbientToast(message, kind) {
+    if (!toast || !message) return;
+    toast.textContent = message;
+    toast.dataset.kind = kind || 'note';
+    toast.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
+  }
+
+  if (!window.LifeOSAmbientListener) return;
+
+  window.LifeOSAmbientListener.init({
+    onStateChange: renderMode,
+    onToast: showAmbientToast,
+  });
+  renderMode(window.LifeOSAmbientListener.getMode());
+
+  btn?.addEventListener('click', async () => {
+    await window.LifeOSAmbientListener.toggle();
+    renderMode(window.LifeOSAmbientListener.getMode());
+  });
+})();
 </script>
 
 <script>

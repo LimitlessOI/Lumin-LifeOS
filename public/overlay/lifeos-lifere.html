@@ -241,7 +241,7 @@
       <ul class="alpha-checklist" id="alpha-ready-checklist"></ul>
       <div class="alpha-confirm-box" id="alpha-confirm-box" hidden>
         <div class="section-title" style="margin-bottom:8px">Close Alpha gate (founder only)</div>
-        <p class="status-line">After a successful daily cycle, confirm usability with your own words (12+ characters).</p>
+        <p class="status-line">Agent alpha must PASS first (every button + API tested). Then confirm usability with your own words (12+ characters).</p>
         <textarea id="alpha-founder-quote" rows="2" placeholder="e.g. LifeRE daily cycle works — top 3, debrief, and deals load. Alpha PASS."></textarea>
         <div class="actions">
           <button type="button" class="btn btn-primary" id="alpha-confirm-pass-btn">Confirm Alpha PASS</button>
@@ -264,6 +264,17 @@
       <a class="boldtrail-link" href="https://boldtrail.exprealty.com" target="_blank" rel="noopener">Open BoldTrail ↗</a>
     </div>
 
+    <section class="section" id="lifere-next-hour-card" data-lifere="performance-next-hour">
+      <div class="section-title">Next Hour Recommendation</div>
+      <div id="lifere-next-hour-body" class="priority-task">Loading performance + CRM guidance…</div>
+      <div id="lifere-goal-math-strip" class="status-line" style="margin-top:8px"></div>
+    </section>
+
+    <section class="section" id="lifere-motivation-strip" data-lifere="motivation-milestones">
+      <div class="section-title">Business Milestones</div>
+      <div id="lifere-milestones" class="blocker-tags"></div>
+    </section>
+
     <section class="section" data-lifere="top-3-priorities" id="lifere-top-3">
       <div class="section-title">Top 3 Priorities</div>
       <ul class="priority-list" id="lifere-priority-list">
@@ -278,6 +289,7 @@
 
     <section class="section" data-lifere="boldtrail-follow-up" id="lifere-follow-up">
       <div class="section-title">BoldTrail Follow-Up Queue</div>
+      <div class="panel-row" id="follow-up-metrics">Speed-to-lead: loading…</div>
       <p class="empty" id="lifere-followup-empty">Load command center to pull CRM queue.</p>
       <div id="lifere-followup-list"></div>
     </section>
@@ -296,8 +308,11 @@
     <div class="tabs" id="lifere-tabs">
       <button type="button" class="tab-btn active" data-tab="performance">Performance</button>
       <button type="button" class="tab-btn" data-tab="approval">Approval Queue</button>
+      <button type="button" class="tab-btn" data-tab="clients">Clients</button>
       <button type="button" class="tab-btn" data-tab="coaching">Coaching</button>
       <button type="button" class="tab-btn" data-tab="marketing">Marketing</button>
+      <button type="button" class="tab-btn" data-tab="life">Life</button>
+      <button type="button" class="tab-btn" data-tab="twins">Twins</button>
       <button type="button" class="tab-btn" data-tab="ops">Ops</button>
       <button type="button" class="tab-btn" data-tab="scenario">Scenario</button>
       <button type="button" class="tab-btn" data-tab="chair">Chair Brief</button>
@@ -321,8 +336,47 @@
     <section class="section tab-panel" id="lifere-approval-queue" data-tab-panel="approval">
       <div class="section-title">Approval Queue</div>
       <div id="approval-list" class="empty">No pending drafts.</div>
+      <div class="section-title" style="margin-top:14px">Permission tiers (editable)</div>
+      <div id="permission-tiers" class="status-line">Loading…</div>
+      <div id="permission-grants-editor" class="panel-grid"></div>
       <div class="section-title" style="margin-top:14px">Recent sends</div>
       <div id="comms-log-list" class="status-line"></div>
+    </section>
+
+    <section class="section tab-panel" id="lifere-clients-panel" data-tab-panel="clients" data-lifere="client-comms-os">
+      <div class="section-title">Client Communication OS</div>
+      <p class="status-line">Buyer/seller updates in your voice — SMS or email — approval required before send.</p>
+      <div class="panel-row">
+        <span class="panel-label">Side:</span>
+        <select id="comms-side" style="width:auto;max-width:140px;margin-bottom:0">
+          <option value="buyer">Buyer</option>
+          <option value="seller">Seller</option>
+        </select>
+      </div>
+      <label class="panel-label" for="comms-client-ref">Client / listing ref</label>
+      <select id="comms-client-ref"><option value="">— select —</option></select>
+      <label class="panel-label" for="comms-template">Template</label>
+      <select id="comms-template"><option value="">Loading templates…</option></select>
+      <label class="panel-label" for="comms-channel">Channel</label>
+      <select id="comms-channel">
+        <option value="sms">SMS (short)</option>
+        <option value="email">Email (long)</option>
+      </select>
+      <div id="comms-var-fields"></div>
+      <label class="panel-label" for="comms-contact-phone">Recipient phone (optional)</label>
+      <input type="tel" id="comms-contact-phone" placeholder="+1…" />
+      <label class="panel-label" for="comms-contact-email">Recipient email (optional)</label>
+      <input type="email" id="comms-contact-email" placeholder="client@…" />
+      <label class="panel-label" for="comms-boldtrail-id">BoldTrail contact ID (optional — saves note on approve)</label>
+      <input type="text" id="comms-boldtrail-id" placeholder="kvCORE contact id" />
+      <div class="section-title" style="margin-top:14px">Preview</div>
+      <pre id="comms-preview" class="panel-grid" style="font-size:12px;white-space:pre-wrap;min-height:72px">Select template and client to preview.</pre>
+      <div class="followup-actions">
+        <button type="button" class="btn" id="comms-suggest-vars-btn">Fill from deal context</button>
+        <button type="button" class="btn" id="comms-preview-btn">Refresh preview</button>
+        <button type="button" class="btn btn-primary" id="comms-queue-btn">Queue for approval</button>
+      </div>
+      <p class="status-line" id="comms-status"></p>
     </section>
 
     <section class="section tab-panel" id="lifere-coaching-panel" data-tab-panel="coaching">
@@ -342,12 +396,55 @@
       <div id="coaching-contacts" class="panel-grid"></div>
       <div class="section-title" style="margin-top:14px">Skill drills</div>
       <div id="coaching-modules" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Agent voice calibration (#21)</div>
+      <textarea id="personality-draft-input" rows="2" placeholder="Paste a draft you wrote or AI generated…"></textarea>
+      <div class="followup-actions">
+        <button type="button" class="btn personality-rate-btn" data-rating="5">Rate 5 — sounds like me</button>
+        <button type="button" class="btn personality-rate-btn" data-rating="2">Rate 2 — too generic</button>
+      </div>
+      <p class="status-line" id="personality-calibrate-status"></p>
+      <div class="section-title" style="margin-top:14px">RE onboarding curriculum (#26)</div>
+      <div id="education-progress-bar" class="status-line">Loading progress…</div>
+      <div id="education-curriculum-list" class="panel-grid"></div>
+      <button type="button" class="btn" id="education-context-btn">Get contextual education</button>
+      <pre id="education-context-output" class="status-line" style="white-space:pre-wrap;font-size:12px"></pre>
     </section>
 
     <section class="section tab-panel" id="lifere-marketing-panel" data-tab-panel="marketing" data-lifere="marketing-module">
       <div class="section-title">Marketing Module</div>
       <div id="marketing-video-types"></div>
       <button type="button" class="btn" id="marketing-research-hooks">Research hooks</button>
+      <div class="section-title" style="margin-top:14px">YouTube strategy (#12–13)</div>
+      <input type="text" id="youtube-market-input" placeholder="Market / city — e.g. Las Vegas" />
+      <input type="text" id="youtube-channel-url" placeholder="Your or competitor channel URL (optional)" />
+      <div class="followup-actions">
+        <button type="button" class="btn" id="youtube-strategy-btn">Build channel strategy</button>
+        <button type="button" class="btn" id="youtube-research-btn">Research topics</button>
+      </div>
+      <pre id="youtube-strategy-output" class="panel-grid" style="font-size:12px;max-height:120px;overflow:auto"></pre>
+      <div class="section-title" style="margin-top:14px">Script · B-roll · Recording coach (#15–17)</div>
+      <select id="script-video-type"><option value="market_update_60">Market update (60s)</option></select>
+      <input type="text" id="script-hook-input" placeholder="Custom hook (optional)" />
+      <div class="followup-actions">
+        <button type="button" class="btn btn-primary" id="script-generate-btn">Generate script</button>
+        <button type="button" class="btn" id="recording-coach-btn">Recording coach</button>
+      </div>
+      <pre id="script-output" class="panel-grid" style="font-size:12px;max-height:140px;overflow:auto"></pre>
+      <div class="section-title" style="margin-top:14px">Thumbnail / title / SEO (#18)</div>
+      <div class="followup-actions">
+        <button type="button" class="btn" id="thumbnail-seo-btn">Generate title + thumbnail brief</button>
+      </div>
+      <pre id="thumbnail-seo-output" class="panel-grid" style="font-size:12px;max-height:120px;overflow:auto"></pre>
+      <div class="section-title" style="margin-top:14px">Posting calendar (#19)</div>
+      <div class="followup-actions">
+        <button type="button" class="btn" id="calendar-plan-btn">Plan 2 weeks</button>
+        <button type="button" class="btn" id="calendar-refresh-btn">Refresh calendar</button>
+      </div>
+      <div id="calendar-list" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Ad spend / ROI (#20)</div>
+      <div id="ads-roi-panel" class="status-line">Loading ad campaigns…</div>
+      <div class="section-title" style="margin-top:14px">Hook library</div>
+      <div id="hook-library-list" class="panel-grid"></div>
       <div class="section-title" style="margin-top:14px" data-lifere="content-brief">Content Brief (required first)</div>
       <p class="status-line" id="smo-brief-status">No approved brief — generate and approve before coach/script.</p>
       <input type="text" id="smo-brief-topic" placeholder="Brief topic — e.g. relocating to Las Vegas in 2026" style="width:100%;margin-bottom:8px" />
@@ -367,16 +464,69 @@
         <button type="button" class="btn" id="smo-pipeline-btn">Full pipeline</button>
       </div>
       <div id="marketing-output" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Comment / DM engagement</div>
+      <textarea id="social-engage-context" rows="2" placeholder="Paste comment or DM context…"></textarea>
+      <div class="followup-actions">
+        <button type="button" class="btn" id="social-comment-btn">Suggest comment reply</button>
+        <button type="button" class="btn" id="social-dm-btn">Suggest DM reply</button>
+      </div>
+      <div class="section-title" style="margin-top:14px">Funnels (ClickFunnels)</div>
+      <p class="status-line" id="funnel-summary-line">Loading funnel captures…</p>
+      <div id="funnel-events-list" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Facebook group / community (#10)</div>
+      <input type="text" id="community-group-name" placeholder="Group name — e.g. Vegas Home Buyers & Sellers" />
+      <div class="followup-actions">
+        <button type="button" class="btn" id="community-plan-btn">Build 2-week group plan</button>
+        <button type="button" class="btn btn-primary" id="community-post-btn">Draft group post</button>
+        <button type="button" class="btn" id="community-mod-btn">Moderation tips</button>
+      </div>
+      <pre id="community-output" class="panel-grid" style="font-size:12px;max-height:120px;overflow:auto"></pre>
     </section>
 
-    <section class="section tab-panel" data-tab-panel="ops">
-      <div class="section-title">Recruiting · Finance · Opportunity</div>
-      <div id="lifere-recruiting-panel" class="panel-row">Recruiting: <span id="recruiting-count">—</span></div>
-      <div id="lifere-finance-panel" class="panel-row">Runway: <span id="finance-runway">—</span></div>
-      <div id="lifere-opportunity-panel" class="panel-row">Signals: <span id="opportunity-count">—</span></div>
+    <section class="section tab-panel" id="lifere-life-panel" data-tab-panel="life" data-lifere="lifeos-integration">
+      <div class="section-title">LifeOS Integration (#40)</div>
+      <p class="status-line">Business goals cross-checked against commitments, calendar load, and health signals.</p>
+      <div id="life-integration-body" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Market intelligence (#31)</div>
+      <input type="text" id="market-city-input" placeholder="Market — e.g. Las Vegas" value="local" />
+      <button type="button" class="btn btn-primary" id="market-snapshot-btn">Load market snapshot</button>
+      <pre id="market-snapshot-output" class="panel-grid" style="font-size:12px;white-space:pre-wrap"></pre>
+      <div id="market-angles-list" class="panel-grid"></div>
+    </section>
+
+    <section class="section tab-panel" id="lifere-twins-panel" data-tab-panel="twins" data-lifere="digital-twins">
+      <div class="section-title">Digital Twins (#32–36)</div>
+      <p class="status-line">Per-user twin projections — evidence-backed updates only.</p>
+      <button type="button" class="btn btn-primary" id="twins-refresh-btn">Refresh twin summary</button>
+      <div id="twins-summary-list" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Inspect twin</div>
+      <select id="twin-inspect-key"><option value="">— select twin —</option></select>
+      <pre id="twin-inspect-output" class="panel-grid" style="font-size:11px;max-height:200px;overflow:auto"></pre>
+    </section>
+
+    <section class="section tab-panel" data-tab-panel="ops" id="lifere-ops-panel">
+      <div class="section-title">Transaction / TC OS (Am 17)</div>
+      <div class="panel-row">Active files: <span id="tc-active-count">—</span> · Critical blockers: <span id="tc-critical-count">—</span></div>
+      <div class="followup-actions">
+        <a class="btn" href="/tc/agent-portal.html" target="_blank" rel="noopener">Agent portal ↗</a>
+        <a class="btn" href="/tc/client-portal.html" target="_blank" rel="noopener">Client portal ↗</a>
+        <a class="btn" href="/tc/tc-assistant.html" target="_blank" rel="noopener">TC assistant ↗</a>
+        <button type="button" class="btn" id="tc-ops-refresh-btn">Refresh TC</button>
+      </div>
+      <div id="tc-ops-deal-list" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">AI Receptionist (Am 29)</div>
       <div id="lifere-receptionist-panel" class="panel-row" data-lifere="receptionist-calls">Inbound calls: <span id="receptionist-call-count">—</span></div>
       <div id="receptionist-call-list"></div>
-      <div id="lifere-transaction-panel" class="panel-row">TC: surface via /transaction/:dealId</div>
+      <div class="section-title" style="margin-top:14px">Opportunity OS</div>
+      <div id="lifere-opportunity-panel" class="panel-row">Signals: <span id="opportunity-count">—</span></div>
+      <button type="button" class="btn btn-sm" id="opportunity-scan-btn">Run opportunity scan</button>
+      <div id="opportunity-signal-list" class="panel-grid"></div>
+      <div class="section-title" style="margin-top:14px">Recruiting · Finance</div>
+      <div id="lifere-recruiting-panel" class="panel-row">Recruiting pipeline: <span id="recruiting-count">—</span></div>
+      <input type="text" id="recruit-candidate-name" placeholder="Candidate name" />
+      <button type="button" class="btn btn-sm" id="recruit-add-btn">Add to pipeline</button>
+      <div id="recruit-pipeline-list" class="panel-grid"></div>
+      <div id="lifere-finance-panel" class="panel-row">Runway / forecast: <span id="finance-runway">—</span></div>
     </section>
 
     <section class="section tab-panel" id="lifere-scenario-panel" data-tab-panel="scenario">
@@ -402,6 +552,15 @@
       <div class="section-title" style="margin-top:12px">Active TC Deals</div>
       <div id="tc-deal-list" class="followup-actions"></div>
       <div id="tc-deal-detail" data-lifere="tc-deal-detail"></div>
+      <div class="section-title" style="margin-top:12px">Buyer workspace</div>
+      <div id="buyer-workspace-panel" class="panel-grid">
+        <p class="empty">Select a buyer card → View workspace, or use Draft message.</p>
+      </div>
+      <div id="buyer-objection-panel" hidden>
+        <input type="text" id="buyer-objection-input" placeholder="Paste buyer objection — e.g. we want to wait for rates" />
+        <button type="button" class="btn btn-primary" id="buyer-objection-coach-btn">Get objection coaching</button>
+        <pre id="buyer-objection-output" class="status-line" style="white-space:pre-wrap"></pre>
+      </div>
       <div class="section-title" style="margin-top:12px">Buyer pipeline</div>
       <div id="buyer-pipeline-list"></div>
       <div class="section-title" style="margin-top:12px">Seller pipeline</div>
@@ -612,13 +771,26 @@
         try {
           const res = await apiFetch('/api/v1/lifere/daily-command-center', {
             method: 'POST',
-            body: JSON.stringify({ agent: 'founder', backlog: [] }),
+            body: JSON.stringify({ user_id: 'adam', agent: 'founder', goal_gci: 30000, backlog: [] }),
           });
           const data = await res.json();
           if (!data.ok) throw new Error(data.error || 'API error');
-          renderPriorities(data.result?.daily_focus);
+          renderPriorities(data.result?.daily_focus || data.result?.top_3_priorities);
           renderBlockers(data.result?.blocker_scan);
           renderBoldTrailStrip(data.result?.boldtrail);
+          const chair = data.result?.chair || {};
+          const nextBody = document.getElementById('lifere-next-hour-body');
+          const goalStrip = document.getElementById('lifere-goal-math-strip');
+          if (nextBody) {
+            const na = chair.next_action || {};
+            nextBody.textContent = na.reason || na.action || 'Log activity and connect BoldTrail for personalized next hour.';
+          }
+          if (goalStrip) {
+            const g = data.result?.performance?.activities_to_goal || chair.closest_to_30k;
+            goalStrip.textContent = g?.conversations_needed
+              ? `$30k path: ~${g.conversations_needed} conversations · ${g.closings_needed || '—'} closings needed`
+              : (chair.tradeoff_prose || '');
+          }
           let followQueue = data.result?.boldtrail?.follow_up_queue;
           if (!followQueue?.length) {
             try {
@@ -628,19 +800,119 @@
             } catch (_) { /* non-fatal */ }
           }
           renderFollowUpQueue(followQueue);
-          if (data.result?.chair) {
-            const c = data.result.chair;
-            if (c.tradeoff_prose) document.getElementById('lifere-lifeos-tradeoff').textContent = c.tradeoff_prose;
-            if (c.next_action?.reason) document.getElementById('perf-next-hour').textContent = c.next_action.reason;
+          await loadFollowUpMetrics();
+          if (chair.tradeoff_prose) {
+            const tradeEl = document.getElementById('lifere-lifeos-tradeoff');
+            if (tradeEl) tradeEl.textContent = chair.tradeoff_prose;
+          }
+          if (chair.next_action?.reason) {
+            const perfNext = document.getElementById('perf-next-hour');
+            if (perfNext) perfNext.textContent = chair.next_action.reason;
           }
           if (data.result?.performance?.bottleneck_stage) {
-            document.getElementById('perf-bottleneck').textContent = data.result.performance.bottleneck_stage;
+            const perfBn = document.getElementById('perf-bottleneck');
+            if (perfBn) perfBn.textContent = data.result.performance.bottleneck_stage;
           }
           statusEl.textContent = data.result?.boldtrail?.connected
-            ? 'Command center loaded from BoldTrail pipeline.'
+            ? 'Command center loaded — performance + BoldTrail merged.'
             : 'Command center loaded (BoldTrail fallback).';
         } catch (err) {
           statusEl.textContent = `Load failed: ${err.message}`;
+        }
+      }
+
+      async function loadFollowUpMetrics() {
+        const el = document.getElementById('follow-up-metrics');
+        if (!el) return;
+        try {
+          const res = await apiFetch('/api/v1/lifere/follow-up/metrics?user_id=adam');
+          const data = await res.json();
+          el.textContent = `Queue: ${data.queue_depth ?? '—'} · Sent (7d): ${data.follow_ups_sent_7d ?? 0} · Target response: ${data.speed_to_lead?.target_minutes ?? 15} min`;
+        } catch (_) {
+          el.textContent = 'Follow-up metrics unavailable.';
+        }
+      }
+
+      async function loadTwinsSummary() {
+        const list = document.getElementById('twins-summary-list');
+        const select = document.getElementById('twin-inspect-key');
+        try {
+          const res = await apiFetch('/api/v1/lifere/twins/summary?user_id=adam');
+          const data = await res.json();
+          const twins = data.twins || [];
+          if (list) {
+            list.innerHTML = twins.length
+              ? twins.map((t) => `<div class="panel-row">${escapeHtml(t.kind)} · ${escapeHtml(t.twin_key)} · ${escapeHtml(t.updated_at || '—')}</div>`).join('')
+              : '<p class="empty">No twins on disk yet — boot seeds on deploy.</p>';
+          }
+          if (select) {
+            select.innerHTML = ['<option value="">— select twin —</option>']
+              .concat(twins.map((t) => `<option value="${escapeHtml(t.twin_key)}" data-kind="${escapeHtml(t.kind)}">${escapeHtml(t.kind)} / ${escapeHtml(t.twin_key)}</option>`)).join('');
+          }
+        } catch (err) {
+          if (list) list.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`;
+        }
+      }
+
+      document.getElementById('twins-refresh-btn')?.addEventListener('click', loadTwinsSummary);
+      document.getElementById('twin-inspect-key')?.addEventListener('change', async (e) => {
+        const key = e.target.value;
+        const out = document.getElementById('twin-inspect-output');
+        if (!key || !out) return;
+        const kind = e.target.selectedOptions?.[0]?.dataset?.kind || '';
+        const moduleQ = kind === 'module' ? '&module=1' : '';
+        const res = await apiFetch(`/api/v1/lifere/twins/${encodeURIComponent(key)}?user_id=adam${moduleQ}`);
+        const data = await res.json();
+        out.textContent = JSON.stringify(data.twin || data, null, 2);
+      });
+
+      async function loadEducationProgress() {
+        const bar = document.getElementById('education-progress-bar');
+        const list = document.getElementById('education-curriculum-list');
+        try {
+          const [prog, cur] = await Promise.all([
+            apiFetch('/api/v1/lifere/education/progress?user_id=adam'),
+            apiFetch('/api/v1/lifere/education/curriculum?user_id=adam'),
+          ]);
+          const p = await prog.json();
+          const c = await cur.json();
+          if (bar) bar.textContent = `Onboarding: ${p.completed_count}/${p.total} modules (${p.percent}%)`;
+          if (list) {
+            list.innerHTML = (p.steps || c.track || []).map((step) => `
+              <div class="info-card">
+                <div class="info-card-title">${step.completed ? '✓' : '○'} ${escapeHtml(step.title || step.label || step.module_id)}</div>
+                <div class="followup-actions" style="margin-top:6px">
+                  ${step.completed ? '' : `<button type="button" class="btn btn-sm education-complete-btn" data-module="${escapeHtml(step.module_id)}">Mark complete</button>`}
+                </div>
+              </div>
+            `).join('');
+            list.querySelectorAll('.education-complete-btn').forEach((btn) => {
+              btn.addEventListener('click', async () => {
+                await apiFetch('/api/v1/lifere/education/complete', {
+                  method: 'POST',
+                  body: JSON.stringify({ user_id: 'adam', module_id: btn.dataset.module, score: 8 }),
+                });
+                await loadEducationProgress();
+              });
+            });
+          }
+        } catch (_) {
+          if (bar) bar.textContent = 'Education progress unavailable.';
+        }
+      }
+
+      async function loadMotivation() {
+        const el = document.getElementById('lifere-milestones');
+        if (!el) return;
+        try {
+          const res = await apiFetch('/api/v1/lifere/motivation/milestones?user_id=adam');
+          const data = await res.json();
+          const items = data.milestones || [];
+          el.innerHTML = items.map((m) =>
+            `<span class="blocker-tag" style="${m.earned ? 'border-color:var(--lifere-accent);color:var(--lifere-accent)' : ''}">${m.earned ? '✓ ' : ''}${escapeHtml(m.label)}</span>`
+          ).join('') || '<span class="empty">No milestones yet.</span>';
+        } catch (_) {
+          el.innerHTML = '<span class="empty">Milestones unavailable.</span>';
         }
       }
 
@@ -708,19 +980,25 @@
           }
           const data = await res.json();
           const ready = data.ready_for_alpha_testing === true;
+          const founderReady = data.ready_for_founder_alpha === true;
           const gate = data.ready_for_alpha_gate === true;
           banner?.classList.toggle('pending', !ready || !gate);
           if (gate) {
             title.textContent = 'Alpha gate CLOSED — founder PASS recorded';
             detail.textContent = data.next_action || 'Continue building Record Mode + SMOS depth.';
             confirmBox?.setAttribute('hidden', '');
-          } else if (ready) {
-            title.textContent = 'Alpha READY — machine gates PASS';
+          } else if (founderReady) {
+            title.textContent = 'Founder alpha unlocked — agent tested all features';
             detail.textContent = data.next_action || 'Run Alpha Daily Cycle, then confirm PASS.';
             confirmBox?.removeAttribute('hidden');
+          } else if (ready) {
+            title.textContent = 'Machine ready — waiting on agent alpha';
+            detail.textContent = data.next_action || 'Conductor must run agent alpha before you test.';
+            confirmBox?.setAttribute('hidden', '');
           } else {
             title.textContent = 'Alpha not ready — fix machine gates';
             detail.textContent = data.next_action || 'Contact builder — readiness failed.';
+            confirmBox?.setAttribute('hidden', '');
           }
           list.innerHTML = (data.checklist || []).map((c) => {
             const cls = c.ok === true ? 'ok' : c.ok === false ? 'pending' : '';
@@ -766,8 +1044,167 @@
           document.querySelectorAll(`[data-tab-panel="${btn.dataset.tab}"]`).forEach((p) => p.classList.add('active'));
           if (btn.dataset.tab === 'chair') loadChairBrief();
           if (btn.dataset.tab === 'deals') loadDealsPanel();
+          if (btn.dataset.tab === 'clients') loadClientCommsPanel();
+          if (btn.dataset.tab === 'ops') loadOps();
+          if (btn.dataset.tab === 'life') loadLifeIntegration();
+          if (btn.dataset.tab === 'twins') loadTwinsSummary();
         });
       });
+
+      let commsVarState = {};
+      let commsTemplates = [];
+
+      function switchToClientsTab(side, ref) {
+        document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
+        document.querySelector('.tab-btn[data-tab="clients"]')?.classList.add('active');
+        document.querySelectorAll('[data-tab-panel="clients"]').forEach((p) => p.classList.add('active'));
+        const sideEl = document.getElementById('comms-side');
+        if (sideEl && side) sideEl.value = side;
+        loadClientCommsPanel(ref);
+      }
+
+      function renderCommsVarFields(vars = {}) {
+        commsVarState = { ...vars };
+        const el = document.getElementById('comms-var-fields');
+        if (!el) return;
+        const keys = Object.keys(vars);
+        if (!keys.length) {
+          el.innerHTML = '<p class="status-line">Use “Fill from deal context” after selecting a client.</p>';
+          return;
+        }
+        el.innerHTML = keys.map((key) => `
+          <label class="panel-label" for="comms-var-${escapeHtml(key)}">${escapeHtml(key.replace(/_/g, ' '))}</label>
+          <input type="text" id="comms-var-${escapeHtml(key)}" data-comms-var="${escapeHtml(key)}" value="${escapeHtml(String(vars[key] ?? ''))}" />
+        `).join('');
+        el.querySelectorAll('[data-comms-var]').forEach((inp) => {
+          inp.addEventListener('input', () => {
+            commsVarState[inp.dataset.commsVar] = inp.value;
+          });
+        });
+      }
+
+      function readCommsVarState() {
+        document.querySelectorAll('[data-comms-var]').forEach((inp) => {
+          commsVarState[inp.dataset.commsVar] = inp.value;
+        });
+        return { ...commsVarState };
+      }
+
+      async function refreshCommsPreview() {
+        const status = document.getElementById('comms-status');
+        const preview = document.getElementById('comms-preview');
+        const templateId = document.getElementById('comms-template')?.value;
+        const channel = document.getElementById('comms-channel')?.value || 'sms';
+        if (!templateId) {
+          preview.textContent = 'Select a template.';
+          return;
+        }
+        try {
+          const res = await apiFetch('/api/v1/lifere/client-comms/preview', {
+            method: 'POST',
+            body: JSON.stringify({
+              user_id: 'adam',
+              template_id: templateId,
+              channel,
+              vars: readCommsVarState(),
+            }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'Preview failed');
+          preview.textContent = data.preview?.body || '—';
+          status.textContent = `Preview (${channel}) · approval required before send.`;
+        } catch (err) {
+          preview.textContent = `Error: ${err.message}`;
+        }
+      }
+
+      async function loadClientCommsPanel(preselectRef = null) {
+        const refSelect = document.getElementById('comms-client-ref');
+        const side = document.getElementById('comms-side')?.value || 'buyer';
+        try {
+          const [tplRes, buyersRes, sellersRes] = await Promise.all([
+            apiFetch('/api/v1/lifere/client-comms/templates?user_id=adam'),
+            apiFetch('/api/v1/lifere/deals/buyers?user_id=adam'),
+            apiFetch('/api/v1/lifere/deals/sellers?user_id=adam'),
+          ]);
+          const tplData = await tplRes.json();
+          commsTemplates = tplData.templates || [];
+          const tplEl = document.getElementById('comms-template');
+          if (tplEl) {
+            tplEl.innerHTML = commsTemplates.map((t) =>
+              `<option value="${escapeHtml(t.id)}">${escapeHtml(t.label || t.id)}</option>`).join('');
+          }
+          const buyers = (await buyersRes.json()).clients || [];
+          const sellers = (await sellersRes.json()).listings || [];
+          const refs = side === 'seller'
+            ? sellers.map((s) => s.listing_ref)
+            : buyers.map((b) => b.client_ref);
+          if (refSelect) {
+            refSelect.innerHTML = ['<option value="">— select —</option>']
+              .concat(refs.map((r) => `<option value="${escapeHtml(r)}">${escapeHtml(r)}</option>`)).join('');
+            if (preselectRef && refs.includes(preselectRef)) refSelect.value = preselectRef;
+          }
+          if (preselectRef || refSelect?.value) {
+            await fillCommsFromContext();
+          }
+        } catch (err) {
+          document.getElementById('comms-status').textContent = `Load failed: ${err.message}`;
+        }
+      }
+
+      async function fillCommsFromContext() {
+        const ref = document.getElementById('comms-client-ref')?.value;
+        const side = document.getElementById('comms-side')?.value || 'buyer';
+        if (!ref) return;
+        const res = await apiFetch(`/api/v1/lifere/client-comms/suggest-vars?user_id=adam&ref=${encodeURIComponent(ref)}&side=${encodeURIComponent(side)}`);
+        const data = await res.json();
+        renderCommsVarFields(data.vars || {});
+        await refreshCommsPreview();
+      }
+
+      document.getElementById('comms-side')?.addEventListener('change', () => loadClientCommsPanel());
+      document.getElementById('comms-client-ref')?.addEventListener('change', fillCommsFromContext);
+      document.getElementById('comms-template')?.addEventListener('change', refreshCommsPreview);
+      document.getElementById('comms-channel')?.addEventListener('change', refreshCommsPreview);
+      document.getElementById('comms-suggest-vars-btn')?.addEventListener('click', fillCommsFromContext);
+      document.getElementById('comms-preview-btn')?.addEventListener('click', refreshCommsPreview);
+      document.getElementById('comms-queue-btn')?.addEventListener('click', async () => {
+        const status = document.getElementById('comms-status');
+        const templateId = document.getElementById('comms-template')?.value;
+        const channel = document.getElementById('comms-channel')?.value || 'sms';
+        const ref = document.getElementById('comms-client-ref')?.value;
+        if (!templateId || !ref) {
+          status.textContent = 'Select client and template first.';
+          return;
+        }
+        const vars = readCommsVarState();
+        vars.client_name = vars.client_name || ref.replace(/_/g, ' ');
+        try {
+          const res = await apiFetch('/api/v1/lifere/client-comms/draft', {
+            method: 'POST',
+            body: JSON.stringify({
+              user_id: 'adam',
+              template_id: templateId,
+              channel,
+              vars,
+              contact_id: document.getElementById('comms-boldtrail-id')?.value || undefined,
+              recipient_phone: document.getElementById('comms-contact-phone')?.value || undefined,
+              recipient_email: document.getElementById('comms-contact-email')?.value || undefined,
+            }),
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'Queue failed');
+          status.textContent = data.queued?.queue_id
+            ? `Queued #${data.queued.queue_id} — open Approval Queue tab to send.`
+            : 'Draft created — check Approval Queue.';
+          await loadApprovalQueue();
+        } catch (err) {
+          status.textContent = `Queue failed: ${err.message}`;
+        }
+      });
+
+      window.__lifereOpenClientComms = switchToClientsTab;
 
       function renderChairBrief(data) {
         const el = document.getElementById('chair-brief-output');
@@ -835,6 +1272,10 @@
             <div class="info-card-body">Stage: ${escapeHtml(data.stage || '—')} · Close: ${escapeHtml(data.close_date || 'TBD')}</div>
             ${blockers.length ? `<div class="info-card-meta">Blockers: ${escapeHtml(blockers.join('; '))}</div>` : ''}
             ${events ? `<div class="info-card-meta">Recent: ${escapeHtml(events)}</div>` : ''}
+            ${data.portal_links ? `<div class="followup-actions" style="margin-top:8px">
+              <a class="btn btn-sm" href="${escapeHtml(data.portal_links.agent)}" target="_blank" rel="noopener">Agent portal</a>
+              <a class="btn btn-sm" href="${escapeHtml(data.portal_links.client)}" target="_blank" rel="noopener">Client portal</a>
+            </div>` : ''}
           </div>
         `;
       }
@@ -885,10 +1326,15 @@
       }
 
       async function loadApprovalQueue() {
+        await loadPermissionTiers();
         const res = await apiFetch('/api/v1/lifere/approval-queue?user_id=adam');
         const data = await res.json();
         const el = document.getElementById('approval-list');
-        if (!data.items?.length) { el.textContent = 'No pending drafts.'; return; }
+        if (!data.items?.length) {
+          el.textContent = 'No pending drafts.';
+          await loadCommsLog();
+          return;
+        }
         el.innerHTML = data.items.map((i) => `
           <div class="approval-item" data-approval-id="${escapeHtml(String(i.id))}">
             <div class="followup-meta">${escapeHtml(i.action_type || 'draft')} · ${escapeHtml(i.created_at || '')}</div>
@@ -938,10 +1384,43 @@
             <div class="info-card-title">${escapeHtml(l.listing_ref)} · ${escapeHtml(l.stage || 'active')}</div>
             <div class="info-card-body">${escapeHtml(l.address || l.listing_health || '—')}</div>
             <div class="followup-actions" style="margin-top:8px">
+              <button type="button" class="btn btn-sm lifere-view-seller" data-ref="${escapeHtml(l.listing_ref)}">View listing</button>
+              <button type="button" class="btn btn-sm lifere-weekly-seller" data-ref="${escapeHtml(l.listing_ref)}">Weekly report</button>
               <button type="button" class="btn btn-sm btn-primary lifere-advance-seller" data-ref="${escapeHtml(l.listing_ref)}">Advance stage</button>
+              <button type="button" class="btn btn-sm lifere-comms-seller" data-ref="${escapeHtml(l.listing_ref)}">Draft message</button>
             </div>
           </div>
         `).join('');
+        el.querySelectorAll('.lifere-view-seller').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const r = await apiFetch(`/api/v1/lifere/seller/${encodeURIComponent(btn.dataset.ref)}/workspace?user_id=adam`);
+            const j = await r.json();
+            statusEl.textContent = j.ok
+              ? `Seller ${btn.dataset.ref}: ${j.stage} · ${j.showing_count} showings · report ${j.weekly_report_draft ? 'ready' : 'pending'}`
+              : `Seller workspace failed: ${j.error}`;
+            if (j.weekly_report_draft) {
+              document.getElementById('deals-output').textContent = j.weekly_report_draft;
+            }
+          });
+        });
+        el.querySelectorAll('.lifere-weekly-seller').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            const r = await apiFetch(`/api/v1/lifere/seller/${encodeURIComponent(btn.dataset.ref)}/weekly-report`, {
+              method: 'POST', body: JSON.stringify({ user_id: 'adam' }),
+            });
+            const j = await r.json();
+            statusEl.textContent = j.ok ? 'Weekly seller report generated — use Clients tab to send.' : `Report failed: ${j.error}`;
+            if (j.weekly_report_draft) {
+              document.getElementById('deals-output').textContent = j.weekly_report_draft;
+              switchToClientsTab('seller', btn.dataset.ref);
+              const tpl = document.getElementById('comms-template');
+              if (tpl) tpl.value = 'weekly_seller_report';
+            }
+            btn.disabled = false;
+            await loadDealsPanel();
+          });
+        });
         el.querySelectorAll('.lifere-advance-seller').forEach((btn) => {
           btn.addEventListener('click', async () => {
             btn.disabled = true;
@@ -953,7 +1432,60 @@
             await loadDealsPanel();
           });
         });
+        el.querySelectorAll('.lifere-comms-seller').forEach((btn) => {
+          btn.addEventListener('click', () => switchToClientsTab('seller', btn.dataset.ref));
+        });
       }
+
+      let activeBuyerRef = null;
+
+      async function loadBuyerWorkspace(clientRef) {
+        activeBuyerRef = clientRef;
+        const panel = document.getElementById('buyer-workspace-panel');
+        const objectionPanel = document.getElementById('buyer-objection-panel');
+        if (!panel || !clientRef) return;
+        try {
+          const res = await apiFetch(`/api/v1/lifere/buyer/${encodeURIComponent(clientRef)}/workspace?user_id=adam`);
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'Workspace unavailable');
+          const checklist = (data.offer_prep_checklist || []).map((c) =>
+            `${c.done ? '✓' : '○'} ${c.label}`).join('\n');
+          panel.innerHTML = `
+            <div class="info-card">
+              <div class="info-card-title">${escapeHtml(data.client_ref)} · ${escapeHtml(data.stage)}</div>
+              <div class="info-card-body">Offer prep: ${escapeHtml(data.offer_prep_status || '—')}</div>
+              <div class="info-card-meta">Search: ${escapeHtml(JSON.stringify(data.search_criteria || {}))}</div>
+              <div class="info-card-meta">Showings: ${(data.showing_schedule || []).length}</div>
+              <div class="info-card-meta" style="white-space:pre-wrap;margin-top:8px">Offer checklist:\n${escapeHtml(checklist)}</div>
+            </div>
+          `;
+          if (objectionPanel) objectionPanel.hidden = false;
+        } catch (err) {
+          panel.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`;
+        }
+      }
+
+      document.getElementById('buyer-objection-coach-btn')?.addEventListener('click', async () => {
+        const out = document.getElementById('buyer-objection-output');
+        if (!activeBuyerRef) {
+          out.textContent = 'Open a buyer workspace first.';
+          return;
+        }
+        const objection = document.getElementById('buyer-objection-input')?.value?.trim() || '';
+        const res = await apiFetch(`/api/v1/lifere/buyer/${encodeURIComponent(activeBuyerRef)}/objection-coach`, {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', objection }),
+        });
+        const data = await res.json();
+        const c = data.coaching || {};
+        out.textContent = [
+          `Acknowledge: ${c.acknowledge || '—'}`,
+          `Reframe: ${c.reframe || '—'}`,
+          `Ask: ${c.question || '—'}`,
+          `Fair housing: ${c.fair_housing_reminder || '—'}`,
+        ].join('\n\n');
+        await loadBuyerWorkspace(activeBuyerRef);
+      });
 
       function renderBuyerPipeline(clients) {
         const el = document.getElementById('buyer-pipeline-list');
@@ -967,10 +1499,15 @@
             <div class="info-card-title">${escapeHtml(c.client_ref)} · ${escapeHtml(c.stage || 'intake')}</div>
             <div class="info-card-body">Beds: ${escapeHtml(String(c.search_criteria?.beds ?? '—'))} · Offer: ${escapeHtml(c.offer_prep_status || '—')}</div>
             <div class="followup-actions" style="margin-top:8px">
+              <button type="button" class="btn btn-sm lifere-view-buyer" data-ref="${escapeHtml(c.client_ref)}">View workspace</button>
               <button type="button" class="btn btn-sm btn-primary lifere-advance-buyer" data-ref="${escapeHtml(c.client_ref)}">Advance stage</button>
+              <button type="button" class="btn btn-sm lifere-comms-buyer" data-ref="${escapeHtml(c.client_ref)}">Draft message</button>
             </div>
           </div>
         `).join('');
+        el.querySelectorAll('.lifere-view-buyer').forEach((btn) => {
+          btn.addEventListener('click', () => loadBuyerWorkspace(btn.dataset.ref));
+        });
         el.querySelectorAll('.lifere-advance-buyer').forEach((btn) => {
           btn.addEventListener('click', async () => {
             btn.disabled = true;
@@ -981,6 +1518,9 @@
             statusEl.textContent = j.ok ? `Buyer ${btn.dataset.ref}: ${j.prior_stage} → ${j.new_stage}` : `Advance failed: ${j.error}`;
             await loadDealsPanel();
           });
+        });
+        el.querySelectorAll('.lifere-comms-buyer').forEach((btn) => {
+          btn.addEventListener('click', () => switchToClientsTab('buyer', btn.dataset.ref));
         });
       }
 
@@ -1151,12 +1691,291 @@
         const vtj = await vt.json();
         const smoj = await smo.json();
         document.getElementById('marketing-video-types').textContent = `${vtj.count || 0} video types loaded`;
+        const scriptSelect = document.getElementById('script-video-type');
+        if (scriptSelect && vtj.types?.length) {
+          scriptSelect.innerHTML = vtj.types.slice(0, 15).map((t) =>
+            `<option value="${escapeHtml(t.id)}">${escapeHtml(t.label || t.id)}</option>`).join('');
+        }
         const gateNote = smoj.brief_gate ? ` · ${smoj.brief_gate}` : '';
         document.getElementById('smo-status').textContent = smoj.ok
           ? `SocialMediaOS adapter live — ${(smoj.modules && Object.keys(smoj.modules).join(', ')) || 'coach + content pack'}${gateNote}`
           : 'SocialMediaOS status unavailable';
+        try {
+          const [fs, fe, hooks, cal, ads] = await Promise.all([
+            apiFetch('/api/v1/lifere/marketing/funnel/summary?user_id=adam'),
+            apiFetch('/api/v1/lifere/marketing/funnel/events?user_id=adam&limit=8'),
+            apiFetch('/api/v1/lifere/marketing/hooks/library?user_id=adam&limit=8'),
+            apiFetch('/api/v1/lifere/marketing/calendar?user_id=adam'),
+            apiFetch('/api/v1/lifere/marketing/ads/roi?user_id=adam'),
+          ]);
+          const summary = await fs.json();
+          const events = await fe.json();
+          const hookData = await hooks.json();
+          const calData = await cal.json();
+          const adsData = await ads.json();
+          const line = document.getElementById('funnel-summary-line');
+          if (line) {
+            line.textContent = summary.captures
+              ? `${summary.captures} funnel capture(s) across ${(summary.funnels || []).length} funnel(s)`
+              : 'No funnel events yet — set CLICKFUNNELS_WEBHOOK_SECRET on Railway for live capture.';
+          }
+          const listEl = document.getElementById('funnel-events-list');
+          if (listEl) {
+            listEl.innerHTML = (events.events || []).map((e) =>
+              `<div class="panel-row">${escapeHtml(e.funnel_id)} · ${escapeHtml(e.step)} · ${escapeHtml(e.lead_ref || '—')}</div>`
+            ).join('') || '<p class="empty">No events logged.</p>';
+          }
+          const hookEl = document.getElementById('hook-library-list');
+          if (hookEl) {
+            hookEl.innerHTML = (hookData.hooks || []).map((h) =>
+              `<div class="panel-row">${escapeHtml(h.hook_text)} · ${escapeHtml(String(h.performance_score ?? ''))}</div>`
+            ).join('') || '<p class="empty">Run hook research to populate library.</p>';
+          }
+          const calEl = document.getElementById('calendar-list');
+          if (calEl) {
+            calEl.innerHTML = (calData.rows || []).slice(0, 10).map((r) =>
+              `<div class="panel-row">${escapeHtml(r.video_type_id || '—')} · ${r.scheduled_at ? new Date(r.scheduled_at).toLocaleDateString() : '—'} · ${escapeHtml(r.status || 'planned')}</div>`
+            ).join('') || '<p class="empty">No calendar entries — click Plan 2 weeks.</p>';
+          }
+          const adsEl = document.getElementById('ads-roi-panel');
+          if (adsEl) {
+            const camps = adsData.campaigns || [];
+            adsEl.textContent = camps.length
+              ? camps.map((c) => `${c.campaign_name || c.id}: spend ${c.spend ?? '—'} → leads ${c.leads ?? '—'}`).join(' · ')
+              : 'No ad spend logged — connect campaigns via API or manual entry.';
+          }
+        } catch (_) { /* optional */ }
         await loadContentBriefState();
       }
+
+      let lastScriptOutline = [];
+
+      async function loadLifeIntegration() {
+        const body = document.getElementById('life-integration-body');
+        if (!body) return;
+        try {
+          const res = await apiFetch('/api/v1/lifere/lifeos/integration?user_id=adam');
+          const data = await res.json();
+          const weights = data.goal_weights || {};
+          body.innerHTML = `
+            <div class="info-card">
+              <div class="info-card-title">Goal weights</div>
+              <div class="info-card-body">Income ${Math.round((weights.income || 0) * 100)}% · Family ${Math.round((weights.family || 0) * 100)}% · Freedom ${Math.round((weights.freedom || 0) * 100)}% · Health ${Math.round((weights.health || 0) * 100)}%</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-title">Commitments & health</div>
+              <div class="info-card-body">Open commitments: ${data.open_commitments ?? '—'} · Health check-ins (7d): ${data.health_checkins_7d ?? '—'}</div>
+              ${data.tradeoff_prose ? `<div class="info-card-meta">${escapeHtml(data.tradeoff_prose)}</div>` : ''}
+              ${data.life_optimal_alternate?.reason ? `<div class="info-card-meta">Alternate: ${escapeHtml(data.life_optimal_alternate.reason)}</div>` : ''}
+            </div>
+            <div class="info-card">
+              <div class="info-card-title">Protect life quality</div>
+              <div class="info-card-body">${data.protect_life_quality ? '⚠️ Consider calendar/health before pushing GCI' : '✓ No major life-quality conflict detected'}</div>
+            </div>
+          `;
+        } catch (err) {
+          body.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`;
+        }
+      }
+
+      async function loadTransactionOps() {
+        const listEl = document.getElementById('tc-ops-deal-list');
+        try {
+          const res = await apiFetch('/api/v1/lifere/transaction/workspace?user_id=adam');
+          const data = await res.json();
+          document.getElementById('tc-active-count').textContent = data.summary?.active_count ?? '0';
+          document.getElementById('tc-critical-count').textContent = data.summary?.critical_blockers ?? '0';
+          const deals = data.deals || [];
+          if (!listEl) return;
+          listEl.innerHTML = deals.length ? deals.map((d) => {
+            const blockers = (d.blockers || []).slice(0, 2).map((b) => b.message || b).join('; ');
+            const missing = (d.missing_documents || []).length;
+            const links = d.portal_links || {};
+            return `
+              <div class="info-card">
+                <div class="info-card-title">${escapeHtml(d.property_address || d.deal_id)}</div>
+                <div class="info-card-body">Stage: ${escapeHtml(d.stage || '—')} · Close: ${escapeHtml(d.close_date || 'TBD')}</div>
+                ${blockers ? `<div class="info-card-meta">${escapeHtml(blockers)}</div>` : ''}
+                ${missing ? `<div class="info-card-meta">${missing} missing doc(s)</div>` : ''}
+                <div class="followup-actions" style="margin-top:8px">
+                  <a class="btn btn-sm" href="${escapeHtml(links.agent || '/tc/agent-portal.html')}" target="_blank" rel="noopener">Agent</a>
+                  <a class="btn btn-sm" href="${escapeHtml(links.client || '/tc/client-portal.html')}" target="_blank" rel="noopener">Client</a>
+                  <button type="button" class="btn btn-sm lifere-tc-detail" data-deal-id="${escapeHtml(String(d.deal_id))}">Detail</button>
+                  <button type="button" class="btn btn-sm lifere-tc-comms" data-deal-id="${escapeHtml(String(d.deal_id))}">Draft update</button>
+                </div>
+              </div>
+            `;
+          }).join('') : '<p class="empty">No active TC deals in database — Am 17 seeds on deploy.</p>';
+          listEl.querySelectorAll('.lifere-tc-detail').forEach((btn) => {
+            btn.addEventListener('click', () => loadDealDetail(btn.dataset.dealId));
+          });
+          listEl.querySelectorAll('.lifere-tc-comms').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              switchToClientsTab('buyer', null);
+              const tpl = document.getElementById('comms-template');
+              if (tpl) tpl.value = 'milestone';
+              fillCommsFromContext();
+            });
+          });
+        } catch (err) {
+          if (listEl) listEl.innerHTML = `<p class="empty">TC workspace error: ${escapeHtml(err.message)}</p>`;
+        }
+      }
+
+      async function loadOps() {
+        const [r, f, o, c, tc] = await Promise.all([
+          apiFetch('/api/v1/lifere/recruiting/pipeline?user_id=adam'),
+          apiFetch('/api/v1/lifere/finance/forecast?user_id=adam'),
+          apiFetch('/api/v1/lifere/opportunity/signals?user_id=adam'),
+          apiFetch('/api/v1/lifere/receptionist/calls?user_id=adam'),
+          loadTransactionOps(),
+        ]);
+        const rj = await r.json(); const fj = await f.json(); const oj = await o.json(); const cj = await c.json();
+        document.getElementById('recruiting-count').textContent = (rj.candidates || []).length;
+        const recruitList = document.getElementById('recruit-pipeline-list');
+        if (recruitList) {
+          recruitList.innerHTML = (rj.candidates || []).slice(0, 8).map((c) =>
+            `<div class="panel-row">${escapeHtml(c.candidate_name || c.name || '—')} · ${escapeHtml(c.stage || 'prospect')}</div>`
+          ).join('') || '<p class="empty">No recruiting candidates yet.</p>';
+        }
+        document.getElementById('finance-runway').textContent = fj.runway_months ?? fj.projected_gci ?? '—';
+        document.getElementById('opportunity-count').textContent = (oj.signals || []).length;
+        const oppEl = document.getElementById('opportunity-signal-list');
+        if (oppEl) {
+          oppEl.innerHTML = (oj.signals || []).slice(0, 6).map((s) => `
+            <div class="info-card">
+              <div class="info-card-title">${escapeHtml(s.signal_type || 'signal')} · score ${escapeHtml(String(s.score ?? '—'))}</div>
+              <div class="info-card-body">${escapeHtml(s.address_or_mls || '—')}</div>
+            </div>
+          `).join('') || '<p class="empty">No opportunity signals — run scan from API.</p>';
+        }
+        document.getElementById('receptionist-call-count').textContent = (cj.calls || []).length;
+        const callEl = document.getElementById('receptionist-call-list');
+        const calls = cj.calls || [];
+        callEl.innerHTML = calls.slice(0, 5).map((call) => `
+          <div class="info-card">
+            <div class="info-card-title">${escapeHtml(call.summary || call.call_id)}</div>
+            <div class="info-card-meta">${escapeHtml(call.intent || '')} · ${escapeHtml(call.lead_score || '')}</div>
+            <button type="button" class="btn btn-sm btn-primary lifere-call-followup" data-call-id="${escapeHtml(call.call_id)}">Draft follow-up</button>
+          </div>
+        `).join('') || '<p class="empty">No inbound calls logged yet.</p>';
+        callEl.querySelectorAll('.lifere-call-followup').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            await apiFetch(`/api/v1/lifere/receptionist/calls/${encodeURIComponent(btn.dataset.callId)}/follow-up-draft`, {
+              method: 'POST', body: JSON.stringify({ user_id: 'adam' }),
+            });
+            statusEl.textContent = 'Receptionist follow-up queued for approval.';
+            await loadApprovalQueue();
+            await loadCommandCenter();
+          });
+        });
+        await tc;
+      }
+
+      document.getElementById('recruit-add-btn')?.addEventListener('click', async () => {
+        const name = document.getElementById('recruit-candidate-name')?.value?.trim();
+        if (!name) return;
+        await apiFetch('/api/v1/lifere/recruiting/pipeline', {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', candidate_name: name, stage: 'prospect' }),
+        });
+        document.getElementById('recruit-candidate-name').value = '';
+        await loadOps();
+      });
+
+      document.getElementById('social-comment-btn')?.addEventListener('click', async () => {
+        const context = document.getElementById('social-engage-context')?.value?.trim() || '';
+        const res = await apiFetch('/api/v1/lifere/marketing/social/suggest-reply', {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', platform: 'facebook', context }),
+        });
+        renderMarketingOutput(await res.json(), 'Comment reply (queued for approval)');
+        await loadApprovalQueue();
+      });
+
+      document.getElementById('social-dm-btn')?.addEventListener('click', async () => {
+        const context = document.getElementById('social-engage-context')?.value?.trim() || '';
+        const res = await apiFetch('/api/v1/lifere/marketing/social/suggest-reply', {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', platform: 'dm', context }),
+        });
+        renderMarketingOutput(await res.json(), 'DM reply (queued for approval)');
+        await loadApprovalQueue();
+      });
+
+      async function loadPermissionTiers() {
+        const el = document.getElementById('permission-tiers');
+        const editor = document.getElementById('permission-grants-editor');
+        try {
+          const res = await apiFetch('/api/v1/lifere/permissions/list?user_id=adam');
+          const data = await res.json();
+          const grants = data.grants || [];
+          if (el) {
+            el.textContent = `${grants.length} action types · source: ${data.source || 'config'}`;
+          }
+          if (editor) {
+            editor.innerHTML = grants.slice(0, 12).map((g) => `
+              <div class="panel-row">
+                ${escapeHtml(g.action_type || g.label)}: level ${g.autonomy_level ?? g.level ?? 2}
+                <button type="button" class="btn btn-sm perm-bump" data-action="${escapeHtml(g.action_type)}" data-level="${Math.min(5, (g.autonomy_level ?? 2) + 1)}">+1 tier</button>
+              </div>
+            `).join('');
+            editor.querySelectorAll('.perm-bump').forEach((btn) => {
+              btn.addEventListener('click', async () => {
+                await apiFetch(`/api/v1/lifere/permissions/${encodeURIComponent(btn.dataset.action)}`, {
+                  method: 'PUT',
+                  body: JSON.stringify({ user_id: 'adam', autonomy_level: Number(btn.dataset.level) }),
+                });
+                await loadApprovalQueue();
+              });
+            });
+          }
+        } catch (_) {
+          if (el) el.textContent = 'Permission twin unavailable.';
+        }
+      }
+
+      document.getElementById('opportunity-scan-btn')?.addEventListener('click', async () => {
+        await apiFetch('/api/v1/lifere/opportunity/scan', { method: 'POST', body: JSON.stringify({ user_id: 'adam' }) });
+        await loadOps();
+      });
+
+      document.getElementById('community-plan-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/community/content-plan', {
+          method: 'POST',
+          body: JSON.stringify({
+            user_id: 'adam',
+            group_name: document.getElementById('community-group-name')?.value?.trim() || 'Local RE community',
+            weeks: 2,
+          }),
+        });
+        document.getElementById('community-output').textContent = JSON.stringify(await res.json(), null, 2);
+      });
+
+      document.getElementById('community-post-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/community/post-draft', {
+          method: 'POST',
+          body: JSON.stringify({
+            user_id: 'adam',
+            group_name: document.getElementById('community-group-name')?.value?.trim(),
+            theme: 'Market update',
+          }),
+        });
+        const data = await res.json();
+        document.getElementById('community-output').textContent = JSON.stringify(data, null, 2);
+        await loadApprovalQueue();
+      });
+
+      document.getElementById('community-mod-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/community/moderation', {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', flagged_comments: [] }),
+        });
+        document.getElementById('community-output').textContent = JSON.stringify(await res.json(), null, 2);
+      });
+
+      document.getElementById('tc-ops-refresh-btn')?.addEventListener('click', loadTransactionOps);
 
       document.getElementById('smo-brief-generate-btn')?.addEventListener('click', async () => {
         const topic = document.getElementById('smo-brief-topic')?.value?.trim() || '';
@@ -1188,10 +2007,95 @@
       });
 
       document.getElementById('marketing-research-hooks')?.addEventListener('click', async () => {
+        const market = document.getElementById('youtube-market-input')?.value?.trim() || 'local';
         const res = await apiFetch('/api/v1/lifere/marketing/research/hooks', {
-          method: 'POST', body: JSON.stringify({ user_id: 'adam', niche: 'real_estate', market: 'local', count: 3 }),
+          method: 'POST', body: JSON.stringify({ user_id: 'adam', niche: 'real_estate', market, count: 5 }),
         });
         renderMarketingOutput(await res.json(), 'Hook research');
+        await loadMarketing();
+      });
+
+      document.getElementById('youtube-strategy-btn')?.addEventListener('click', async () => {
+        const market = document.getElementById('youtube-market-input')?.value?.trim() || 'local';
+        const res = await apiFetch('/api/v1/lifere/marketing/youtube/strategy', {
+          method: 'POST', body: JSON.stringify({ user_id: 'adam', market }),
+        });
+        const data = await res.json();
+        document.getElementById('youtube-strategy-output').textContent = JSON.stringify(data, null, 2);
+      });
+
+      document.getElementById('youtube-research-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/marketing/research/youtube', {
+          method: 'POST',
+          body: JSON.stringify({
+            user_id: 'adam',
+            channel_url: document.getElementById('youtube-channel-url')?.value?.trim(),
+            query: document.getElementById('youtube-market-input')?.value?.trim() || 'local market',
+          }),
+        });
+        renderMarketingOutput(await res.json(), 'YouTube topics');
+      });
+
+      document.getElementById('script-generate-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/marketing/script/generate', {
+          method: 'POST',
+          body: JSON.stringify({
+            user_id: 'adam',
+            video_type_id: document.getElementById('script-video-type')?.value,
+            hook_text: document.getElementById('script-hook-input')?.value?.trim(),
+          }),
+        });
+        const data = await res.json();
+        lastScriptOutline = data.script_outline || data.result?.script_outline || [];
+        document.getElementById('script-output').textContent = JSON.stringify(data, null, 2);
+      });
+
+      document.getElementById('recording-coach-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/marketing/recording-coach', {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', script_outline: lastScriptOutline }),
+        });
+        document.getElementById('script-output').textContent = JSON.stringify(await res.json(), null, 2);
+      });
+
+      document.getElementById('thumbnail-seo-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/marketing/thumbnail-seo', {
+          method: 'POST',
+          body: JSON.stringify({
+            user_id: 'adam',
+            video_type_id: document.getElementById('script-video-type')?.value,
+            hook_text: document.getElementById('script-hook-input')?.value?.trim(),
+            city: document.getElementById('youtube-market-input')?.value?.trim() || 'local',
+          }),
+        });
+        document.getElementById('thumbnail-seo-output').textContent = JSON.stringify(await res.json(), null, 2);
+      });
+
+      document.getElementById('calendar-plan-btn')?.addEventListener('click', async () => {
+        await apiFetch('/api/v1/lifere/marketing/calendar/plan', {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', weeks: 2, channels: ['youtube', 'facebook', 'instagram'] }),
+        });
+        await loadMarketing();
+      });
+
+      document.getElementById('calendar-refresh-btn')?.addEventListener('click', loadMarketing);
+
+      document.getElementById('market-snapshot-btn')?.addEventListener('click', async () => {
+        const market = document.getElementById('market-city-input')?.value?.trim() || 'local';
+        const [snap, angles] = await Promise.all([
+          apiFetch(`/api/v1/lifere/market/snapshot?user_id=adam&market=${encodeURIComponent(market)}`),
+          apiFetch(`/api/v1/lifere/market/content-angles?user_id=adam&market=${encodeURIComponent(market)}`),
+        ]);
+        const snapData = await snap.json();
+        const angleData = await angles.json();
+        document.getElementById('market-snapshot-output').textContent = JSON.stringify(snapData, null, 2);
+        const el = document.getElementById('market-angles-list');
+        if (el) {
+          el.innerHTML = (angleData.angles || []).map((a) =>
+            `<div class="info-card"><div class="info-card-title">#${a.rank} ${escapeHtml(a.hook_angle)}</div></div>`
+          ).join('') || '';
+        }
       });
 
       document.getElementById('smo-coach-btn')?.addEventListener('click', async () => {
@@ -1237,39 +2141,6 @@
         });
         renderMarketingOutput(await res.json(), 'Full pipeline');
       });
-
-      async function loadOps() {
-        const [r, f, o, c] = await Promise.all([
-          apiFetch('/api/v1/lifere/recruiting/pipeline?user_id=adam'),
-          apiFetch('/api/v1/lifere/finance/forecast?user_id=adam'),
-          apiFetch('/api/v1/lifere/opportunity/signals?user_id=adam'),
-          apiFetch('/api/v1/lifere/receptionist/calls?user_id=adam'),
-        ]);
-        const rj = await r.json(); const fj = await f.json(); const oj = await o.json(); const cj = await c.json();
-        document.getElementById('recruiting-count').textContent = (rj.candidates || []).length;
-        document.getElementById('finance-runway').textContent = fj.runway_months ?? fj.projected_gci ?? '—';
-        document.getElementById('opportunity-count').textContent = (oj.signals || []).length;
-        document.getElementById('receptionist-call-count').textContent = (cj.calls || []).length;
-        const callEl = document.getElementById('receptionist-call-list');
-        const calls = cj.calls || [];
-        callEl.innerHTML = calls.slice(0, 5).map((call) => `
-          <div class="info-card">
-            <div class="info-card-title">${escapeHtml(call.summary || call.call_id)}</div>
-            <div class="info-card-meta">${escapeHtml(call.intent || '')} · ${escapeHtml(call.lead_score || '')}</div>
-            <button type="button" class="btn btn-sm btn-primary lifere-call-followup" data-call-id="${escapeHtml(call.call_id)}">Draft follow-up</button>
-          </div>
-        `).join('') || '';
-        callEl.querySelectorAll('.lifere-call-followup').forEach((btn) => {
-          btn.addEventListener('click', async () => {
-            btn.disabled = true;
-            await apiFetch(`/api/v1/lifere/receptionist/calls/${encodeURIComponent(btn.dataset.callId)}/follow-up-draft`, {
-              method: 'POST', body: JSON.stringify({ user_id: 'adam' }),
-            });
-            statusEl.textContent = 'Receptionist follow-up queued for approval.';
-            await loadApprovalQueue();
-          });
-        });
-      }
 
       document.getElementById('learning-status-btn')?.addEventListener('click', async () => {
         const res = await apiFetch('/api/v1/lifere/learning/status');
@@ -1363,26 +2234,46 @@
         await loadDealsPanel();
       });
 
-      document.getElementById('client-comms-draft-btn')?.addEventListener('click', async () => {
-        const res = await apiFetch('/api/v1/lifere/client-comms/draft', {
-          method: 'POST',
-          body: JSON.stringify({
-            user_id: 'adam',
-            template_id: 'status_update',
-            channel: 'sms',
-            vars: { client_name: 'Client', status: 'Under contract', next_step: 'Inspection Friday' },
-          }),
+      document.querySelectorAll('.personality-rate-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const draft = document.getElementById('personality-draft-input')?.value?.trim();
+          if (!draft) {
+            document.getElementById('personality-calibrate-status').textContent = 'Paste a draft first.';
+            return;
+          }
+          const res = await apiFetch('/api/v1/lifere/personality/calibrate', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: 'adam', draft_text: draft, rating: Number(btn.dataset.rating) }),
+          });
+          const data = await res.json();
+          document.getElementById('personality-calibrate-status').textContent = data.ok
+            ? `Calibrated — rating ${btn.dataset.rating} recorded for voice twin.`
+            : (data.error || 'Calibration failed');
         });
-        document.getElementById('deals-output').textContent = JSON.stringify(await res.json(), null, 2);
-        await loadApprovalQueue();
+      });
+
+      document.getElementById('education-context-btn')?.addEventListener('click', async () => {
+        const res = await apiFetch('/api/v1/lifere/education/context', {
+          method: 'POST',
+          body: JSON.stringify({ user_id: 'adam', topic: 'new_agent_onboarding', stage: 'intake' }),
+        });
+        const data = await res.json();
+        document.getElementById('education-context-output').textContent = JSON.stringify(data.result || data, null, 2);
+      });
+
+      document.getElementById('client-comms-draft-btn')?.addEventListener('click', () => {
+        switchToClientsTab('buyer', null);
       });
 
       await loadAlphaReadiness();
+      await loadMotivation();
       await loadCommandCenter();
       await loadPerformance();
       await loadApprovalQueue();
       await loadCoaching();
+      await loadEducationProgress();
       await loadMarketing();
+      await loadLifeIntegration();
       await loadOps();
       await loadDealsPanel();
     })();

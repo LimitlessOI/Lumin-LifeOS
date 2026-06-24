@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T21:11:00.154Z",
+  "generated_at": "2026-06-24T22:44:08.208Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12381,
+  "file_count": 12383,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28948,9 +28948,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3717695,
-      "mtime": "2026-06-24T20:56:00.129Z",
-      "indexed_at": "2026-06-24T20:56:00.726Z"
+      "bytes": 3719140,
+      "mtime": "2026-06-24T22:43:57.793Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41091,9 +41091,9 @@
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 45788,
-      "mtime": "2026-06-24T20:34:41.961Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 46171,
+      "mtime": "2026-06-24T22:43:34.939Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -41113,9 +41113,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 477540,
-      "mtime": "2026-06-24T21:10:21.667Z",
-      "indexed_at": "2026-06-24T21:11:00.154Z"
+      "bytes": 479400,
+      "mtime": "2026-06-24T22:43:34.907Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -69948,9 +69948,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 120848,
-      "mtime": "2026-06-24T20:34:41.963Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 127074,
+      "mtime": "2026-06-24T22:39:38.812Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -69969,9 +69969,9 @@
     {
       "path": "public/overlay/lifeos-bootstrap.js",
       "synopsis": "Shared overlay bootstrap — JWT/command key context, headers, and (when embedded)",
-      "bytes": 12536,
-      "mtime": "2026-06-21T21:39:01.217Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 13048,
+      "mtime": "2026-06-24T22:39:37.384Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -69993,16 +69993,16 @@
     {
       "path": "public/overlay/lifeos-child.html",
       "synopsis": "HTML page: My Journey — LifeOS Kids",
-      "bytes": 14535,
-      "mtime": "2026-06-21T21:39:01.265Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 14536,
+      "mtime": "2026-06-24T22:39:39.258Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-coach.html",
       "synopsis": "HTML page: Communication Coach — LifeOS",
-      "bytes": 52736,
-      "mtime": "2026-06-21T21:39:01.286Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 52737,
+      "mtime": "2026-06-24T22:39:39.227Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-command-center.html",
@@ -70059,16 +70059,16 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 40491,
-      "mtime": "2026-06-24T05:13:23.336Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 40514,
+      "mtime": "2026-06-24T22:39:45.330Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
       "synopsis": "HTML page: Decision Intelligence — LifeOS",
-      "bytes": 37287,
-      "mtime": "2026-06-21T21:39:01.446Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 37288,
+      "mtime": "2026-06-24T22:39:39.253Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-ds.css",
@@ -70080,23 +70080,23 @@
     {
       "path": "public/overlay/lifeos-engine.html",
       "synopsis": "HTML page: The Engine — LifeOS",
-      "bytes": 20963,
-      "mtime": "2026-06-21T21:39:01.482Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 20964,
+      "mtime": "2026-06-24T22:39:39.235Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-ethics.html",
       "synopsis": "HTML page: Ethics & Privacy - LifeOS",
-      "bytes": 10080,
-      "mtime": "2026-06-21T21:39:01.501Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 10081,
+      "mtime": "2026-06-24T22:39:39.241Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-family.html",
       "synopsis": "HTML page: Family OS — LifeOS",
-      "bytes": 25547,
-      "mtime": "2026-06-21T21:39:01.523Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 25548,
+      "mtime": "2026-06-24T22:39:39.233Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-feature-data.js",
@@ -70115,9 +70115,9 @@
     {
       "path": "public/overlay/lifeos-finance.html",
       "synopsis": "HTML page: LifeOS · Finance",
-      "bytes": 39546,
-      "mtime": "2026-06-21T21:39:01.579Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 39547,
+      "mtime": "2026-06-24T22:39:39.240Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-founder-interface.html",
@@ -70136,9 +70136,9 @@
     {
       "path": "public/overlay/lifeos-growth.html",
       "synopsis": "HTML page: Growth — LifeOS",
-      "bytes": 54310,
-      "mtime": "2026-06-21T21:39:01.636Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 54311,
+      "mtime": "2026-06-24T22:39:39.247Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-habits.html",
@@ -70150,16 +70150,16 @@
     {
       "path": "public/overlay/lifeos-healing.html",
       "synopsis": "HTML page: Memory & Healing — LifeOS",
-      "bytes": 40117,
-      "mtime": "2026-06-21T21:39:01.677Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 40118,
+      "mtime": "2026-06-24T22:39:39.222Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-health.html",
       "synopsis": "HTML page: Health Intelligence — LifeOS",
-      "bytes": 28068,
-      "mtime": "2026-06-21T21:39:01.696Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 28069,
+      "mtime": "2026-06-24T22:39:39.236Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-household.html",
@@ -70171,37 +70171,37 @@
     {
       "path": "public/overlay/lifeos-identity.html",
       "synopsis": "HTML page: Identity — LifeOS",
-      "bytes": 34122,
-      "mtime": "2026-06-21T21:39:01.735Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 34123,
+      "mtime": "2026-06-24T22:39:39.238Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-inner.html",
       "synopsis": "HTML page: Inner Work — LifeOS",
-      "bytes": 18228,
-      "mtime": "2026-06-21T21:39:01.756Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 18229,
+      "mtime": "2026-06-24T22:39:39.230Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-legacy.html",
       "synopsis": "HTML page: Legacy & Community — LifeOS",
-      "bytes": 25303,
-      "mtime": "2026-06-21T21:39:01.776Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 25304,
+      "mtime": "2026-06-24T22:39:39.232Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 71248,
-      "mtime": "2026-06-24T05:17:57.424Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 122021,
+      "mtime": "2026-06-24T21:28:00.821Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
       "synopsis": "HTML page: LifeOS — Sign in",
-      "bytes": 15513,
-      "mtime": "2026-06-23T05:15:54.595Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 16057,
+      "mtime": "2026-06-24T22:41:03.304Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-mediation.html",
@@ -70213,44 +70213,44 @@
     {
       "path": "public/overlay/lifeos-mirror.html",
       "synopsis": "HTML page: The Mirror — LifeOS",
-      "bytes": 34887,
-      "mtime": "2026-06-21T21:39:01.837Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 34888,
+      "mtime": "2026-06-24T22:39:39.254Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-notifications.html",
       "synopsis": "HTML page: Notifications — LifeOS",
-      "bytes": 17419,
-      "mtime": "2026-06-21T21:39:01.857Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 17420,
+      "mtime": "2026-06-24T22:39:39.229Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-onboarding.html",
       "synopsis": "HTML page: Welcome — LifeOS",
-      "bytes": 31210,
-      "mtime": "2026-06-21T21:39:01.876Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 31211,
+      "mtime": "2026-06-24T22:39:39.244Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-parent-view.html",
       "synopsis": "HTML page: Parent View — LifeOS",
-      "bytes": 28255,
-      "mtime": "2026-06-21T21:39:01.897Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 28256,
+      "mtime": "2026-06-24T22:39:39.225Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-purpose.html",
       "synopsis": "HTML page: Purpose &amp; Dreams — LifeOS",
-      "bytes": 42450,
-      "mtime": "2026-06-21T21:39:01.916Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 42451,
+      "mtime": "2026-06-24T22:39:39.249Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-quick-entry.html",
       "synopsis": "HTML page: LifeOS Quick Entry",
-      "bytes": 28459,
-      "mtime": "2026-06-21T21:39:01.936Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 28460,
+      "mtime": "2026-06-24T22:39:39.245Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-theme-overrides.css",
@@ -70269,9 +70269,9 @@
     {
       "path": "public/overlay/lifeos-today.html",
       "synopsis": "HTML page: Today — LifeOS",
-      "bytes": 77813,
-      "mtime": "2026-06-21T21:39:02.000Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 77814,
+      "mtime": "2026-06-24T22:39:39.251Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-victory-vault.html",
@@ -70283,9 +70283,9 @@
     {
       "path": "public/overlay/lifeos-vision.html",
       "synopsis": "HTML page: Your Future — LifeOS",
-      "bytes": 41441,
-      "mtime": "2026-06-21T21:39:02.037Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 41442,
+      "mtime": "2026-06-24T22:39:39.256Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z"
     },
     {
       "path": "public/overlay/lifeos-voice-rail-v1.html",
@@ -70398,9 +70398,9 @@
     {
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
-      "bytes": 7099,
-      "mtime": "2026-06-24T05:13:23.337Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 7113,
+      "mtime": "2026-06-24T22:39:45.145Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -70467,6 +70467,16 @@
       "bytes": 8858,
       "mtime": "2026-06-21T21:39:02.501Z",
       "indexed_at": "2026-06-24T20:55:58.879Z"
+    },
+    {
+      "path": "public/shared/lifeos-ambient-listener.js",
+      "synopsis": "Opt-in ambient voice listener — sleeps when silent, wakes on speech, sends finals to /ambient/process.",
+      "bytes": 9178,
+      "mtime": "2026-06-24T22:19:26.838Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "public/shared/lifeos-chat-composer.css",
@@ -71259,9 +71269,9 @@
     {
       "path": "routes/lifeos-core-routes.js",
       "synopsis": "routes/lifeos-core-routes.js",
-      "bytes": 62875,
-      "mtime": "2026-06-24T05:17:26.659Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 64802,
+      "mtime": "2026-06-24T22:24:48.316Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86075,9 +86085,9 @@
     {
       "path": "services/commitment-tracker.js",
       "synopsis": "services/commitment-tracker.js",
-      "bytes": 11580,
-      "mtime": "2026-06-21T21:39:12.420Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 13179,
+      "mtime": "2026-06-24T21:39:03.845Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88244,6 +88254,16 @@
       "bytes": 1612,
       "mtime": "2026-06-21T21:39:15.546Z",
       "indexed_at": "2026-06-24T20:55:58.879Z"
+    },
+    {
+      "path": "services/lumin-ambient-capture.js",
+      "synopsis": "Classifies ambient voice utterances — ignore, note, commitment, renegotiate.",
+      "bytes": 11032,
+      "mtime": "2026-06-24T21:39:44.645Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "services/lumin-chair-orchestrator.js",
@@ -93478,9 +93498,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 29985,
-      "mtime": "2026-06-24T00:28:55.278Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 30874,
+      "mtime": "2026-06-24T22:25:03.947Z",
+      "indexed_at": "2026-06-24T22:44:08.208Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]

@@ -149,6 +149,44 @@ export function createCommitmentTracker(pool, callAI) {
     return rows[0] || null;
   }
 
+  async function findMatchingOpen(userId, text) {
+    const open = await getOpen(userId, { limit: 40 });
+    if (!open.length) return null;
+    const words = String(text || '').toLowerCase().split(/\W+/).filter((w) => w.length > 3);
+    if (!words.length) return null;
+
+    let best = null;
+    let bestScore = 0;
+    for (const c of open) {
+      const titleWords = String(c.title || '').toLowerCase().split(/\W+/).filter(Boolean);
+      const overlap = words.filter((w) => titleWords.some((tw) => tw.includes(w) || w.includes(tw))).length;
+      if (overlap > bestScore && overlap >= 2) {
+        bestScore = overlap;
+        best = c;
+      }
+    }
+    return best;
+  }
+
+  async function renegotiateCommitment({ commitmentId, userId, newDueAt, reason, sourceRef }) {
+    const note = `[renegotiated ${new Date().toISOString()}] ${String(reason || '').slice(0, 400)}`;
+    const { rows } = await pool.query(`
+      UPDATE commitments
+      SET due_at = COALESCE($3::timestamptz, due_at),
+          description = TRIM(COALESCE(description, '') || E'\n' || $4),
+          remind_at = CASE
+            WHEN $3::timestamptz IS NOT NULL THEN $3::timestamptz - interval '2 hours'
+            ELSE NOW() + interval '4 hours'
+          END,
+          snoozed_until = NOW() + interval '4 hours',
+          source_ref = COALESCE($5, source_ref),
+          updated_at = NOW()
+      WHERE id = $1 AND user_id = $2 AND status = 'open'
+      RETURNING *
+    `, [commitmentId, userId, newDueAt || null, note, sourceRef || null]);
+    return rows[0] || null;
+  }
+
   async function getRecentHistory(userId, { days = 30, limit = 200 } = {}) {
     const { rows } = await pool.query(`
       SELECT * FROM commitments
@@ -323,6 +361,8 @@ Return ONLY the JSON array, no explanation.`;
     getOverdue,
     getDueForProd,
     getById,
+    findMatchingOpen,
+    renegotiateCommitment,
     getRecentHistory,
     extractCommitments,
     ingestFromMessage,
