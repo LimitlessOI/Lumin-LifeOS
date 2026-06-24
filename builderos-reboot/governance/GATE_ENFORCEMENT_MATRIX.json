@@ -10,6 +10,21 @@
   "primary_metric": "founder_interruptions_before_alpha",
   "gates": [
     {
+      "gate_id": "LIFEOS_SERVICE_DOCTRINE",
+      "blocker": "BLOCKED_SERVICE_DOCTRINE",
+      "enforcement": "HARD",
+      "requires": [
+        "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+        "lifeos:service-doctrine:verify PASS",
+        "stacks proxy doctrine — not separate products",
+        "Personal Twin per-person motivation — no one-size templates",
+        "Lumin prompt injects doctrine block"
+      ],
+      "runtime_module": "services/lifeos-service-doctrine.js",
+      "authority_doc": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+      "governance_json": "builderos-reboot/governance/LIFEOS_SERVICE_DOCTRINE_RUNTIME.json"
+    },
+    {
       "gate_id": "CHAIR_FP_V2_LIVE",
       "blocker": "BLOCKED_CHAIR_FP_V2",
       "enforcement": "HARD",

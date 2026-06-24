@@ -3,6 +3,7 @@
 # SSOT read sequence — anti-hallucination, anti-drift
 
 **Read after:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md)  
+**Service doctrine (mandatory for LifeOS + all stacks):** [`00-LIFEOS-SERVICE-DOCTRINE.md`](00-LIFEOS-SERVICE-DOCTRINE.md)  
 **Pairs with:** [`00-MODEL-TIERS-THINK-VS-EXECUTE.md`](00-MODEL-TIERS-THINK-VS-EXECUTE.md), [`docs/SSOT_DUAL_CHANNEL.md`](../docs/SSOT_DUAL_CHANNEL.md)
 
 ---
@@ -24,6 +25,7 @@ Use this **before** writing or dispatching `/builder/build`.
 | A1b | `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` → **Approved Product Backlog** → **PRIORITY ALIGNMENT** | Operator **program** order (e.g. LifeOS = P1) — **must** re-read when LifeOS work conflicts with older “revenue-chain-first” memory. |
 | A2 | `docs/CONTINUITY_INDEX.md` → **your lane log** (newest entry) | What the last session actually did. |
 | A3 | `prompts/00-LIFEOS-AGENT-CONTRACT.md` | §2.6 / §2.11 / §2.15 baseline. |
+| A3b | `prompts/00-LIFEOS-SERVICE-DOCTRINE.md` | Service, sovereignty, epistemology — all stacks inherit. |
 | A4 | `prompts/<domain>.md` (if any) | 30-second domain truth. |
 | A5 | Owning amendment: **Agent Handoff** + last **3–5 Change Receipts** | Specced state vs stubbed. |
 | A6 | **Only if** editing constitutional text: full `docs/SSOT_NORTH_STAR.md` and/or `docs/SSOT_COMPANION.md` (read-before-write) | Supreme law edits. |

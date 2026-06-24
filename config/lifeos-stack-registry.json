@@ -1,0 +1,52 @@
+{
+  "schema": "lifeos_stack_registry_v1",
+  "authority": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+  "platform": {
+    "id": "lifeos",
+    "canonical_shell": "public/overlay/lifeos-app.html",
+    "shared_spine": [
+      "communication",
+      "approval_gate",
+      "personal_twin",
+      "theme_light_dark",
+      "lumin_chair",
+      "truth_labels"
+    ]
+  },
+  "stacks": [
+    {
+      "stack_id": "lifere",
+      "label": "LifeRE Real Estate",
+      "parent": "lifeos",
+      "is_separate_product": false,
+      "stack_page": "public/overlay/lifeos-lifere.html",
+      "shell_entry": "/overlay/lifeos-app.html?page=lifeos-lifere.html",
+      "api_namespace": "/api/v1/lifere",
+      "doctrine_proxy": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+      "amendment": "docs/projects/AMENDMENT_LIFERE.md"
+    },
+    {
+      "stack_id": "socialmediaos",
+      "label": "SocialMediaOS",
+      "parent": "lifeos",
+      "is_separate_product": false,
+      "adapter": "services/lifere-socialmediaos-bridge.js",
+      "doctrine_proxy": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+      "amendment": "docs/projects/AMENDMENT_41_MARKETINGOS.md"
+    },
+    {
+      "stack_id": "builderos",
+      "label": "BuilderOS Command",
+      "parent": "lifeos",
+      "is_separate_product": false,
+      "routes": "/api/v1/lifeos/builderos/command-control",
+      "doctrine_proxy": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md"
+    }
+  ],
+  "fluid_os_rules": [
+    "Context router selects active stack from utterance or observed activity",
+    "Shell chrome constant; stack panels fluid",
+    "No stack may bypass personal_twin or truth_labels",
+    "Standalone stack URLs show shell hint only — not canonical product entry"
+  ]
+}

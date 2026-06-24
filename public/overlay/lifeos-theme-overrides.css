@@ -159,3 +159,30 @@ html[data-theme="light"] .toast {
 html[data-theme="light"] .spinner {
   border-color: rgba(15, 23, 42, 0.14) !important;
 }
+
+/* LifeRE stack (lifeos-lifere.html) */
+html[data-theme="light"] [data-lifere="daily-command-center"] .section,
+html[data-theme="light"] [data-lifere="daily-command-center"] .followup-item,
+html[data-theme="light"] [data-lifere="daily-command-center"] .approval-item,
+html[data-theme="light"] [data-lifere="daily-command-center"] .info-card,
+html[data-theme="light"] [data-lifere="daily-command-center"] .lifere-shell-hint {
+  background: var(--bg-surface) !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="light"] [data-lifere="daily-command-center"] .priority-item {
+  background: rgba(14, 165, 233, 0.08) !important;
+  border-color: rgba(14, 165, 233, 0.2) !important;
+}
+
+html[data-theme="light"] [data-lifere="daily-command-center"] .boldtrail-strip {
+  background: rgba(14, 165, 233, 0.06) !important;
+}
+
+html[data-theme="light"] [data-lifere="daily-command-center"] .tab-btn.active,
+html[data-theme="light"] [data-lifere="daily-command-center"] .btn-primary,
+html[data-theme="light"] [data-lifere="daily-command-center"] .deal-pick.active {
+  background: var(--lifere-accent, #0ea5e9) !important;
+  border-color: var(--lifere-accent, #0ea5e9) !important;
+  color: #fff !important;
+}

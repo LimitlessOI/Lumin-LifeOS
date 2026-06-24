@@ -5,7 +5,11 @@
 
 ---
 
-## [SESSION] 2026-06-22 — Point B Autonomous Driver (plan complete)
+## [SESSION] 2026-06-13 — LifeOS Service & Epistemology Doctrine HARD wired
+
+Captured full founder-thread nuance (serve don't decide, per-person whys, serve/cost mirror, fluid OS, SMOS director law, truth-identifying system, time as root resource, Be-Do-Have without magic, founder packet assumption bridge) in `docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md`. Runtime: `services/lifeos-service-doctrine.js`; HARD gate `LIFEOS_SERVICE_DOCTRINE` in `builder:preflight`; Lumin + SMOS prompt inject; LifeRE proxies via Am LIFERE; Personal Twin v2 schema + Adam `personal.json`; receipt `products/receipts/LIFEOS_SERVICE_DOCTRINE_WIRED.json`. **Verify:** `npm run lifeos:service-doctrine:verify` PASS.
+
+---
 
 Implemented Point B navigator spine: `point-b-navigator.js` + `obstacle-web-research.js` wire into founder-interface default path and `GET /point-b/status`; LifeRE Alpha surface (`lifeos-lifere.html`, app nav + Point B strip); `BLUEPRINT.json` with executable steps; acceptance v2 checks DOM markers; `execute-mission.mjs` BPB intake + SENTRY; BP scheduler wrapped with useful-work-guard; control-plane DONE on build-job poll; OBSTACLE_LESSON_LEDGER trimmed 5586→200 entries. **`npm run lifeos:lifere-os:v1-acceptance` PASS.** **Next:** Adam founder usability on LifeRE path; foundation loop to clear post-ARC receipts for full machine path; set `BUILDEROS_AUTOPILOT=1` on Railway if not already.
 

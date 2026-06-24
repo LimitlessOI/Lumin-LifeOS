@@ -1,17 +1,37 @@
 {
-  "schema": "lifere_personal_twin_v1",
+  "schema": "lifeos_personal_twin_v2",
   "name": "Adam",
-  "roles": [
-    "founder",
-    "agent",
-    "tc"
-  ],
+  "roles": ["founder", "agent", "tc"],
   "timezone": "America/Chicago",
-  "motivations": [
-    "family",
-    "freedom",
-    "impact"
+  "coaching_tolerance": "open",
+  "break_intent": "curious",
+  "superpowers": ["on-camera riff", "market intuition", "community building", "direct communication"],
+  "unwanted_busywork": ["SEO metadata copy-paste", "video editing", "comment threading across platforms", "scheduling uploads"],
+  "liked_busywork": [],
+  "whys": [
+    {
+      "id": "why_europe_partner",
+      "label": "Europe with partner",
+      "story": "Trip she always wanted; doing it together when the life supports it.",
+      "feeling": "promise kept, romance, pride",
+      "linked_activities": ["consistent_marketing", "pipeline_health", "life_quality"],
+      "never_use_as_template_for_others": true
+    },
+    {
+      "id": "why_go_vegas_community",
+      "label": "Go Vegas community",
+      "story": "17k Facebook group — local trust and value-first presence.",
+      "feeling": "impact, belonging, authority without hype",
+      "linked_activities": ["socialmediaos", "comment_value_add"],
+      "never_use_as_template_for_others": true
+    }
   ],
-  "label": "THINK",
-  "updated_at": "2026-06-23T11:47:19.155Z"
+  "motivations_legacy_tags": ["family", "freedom", "impact"],
+  "demotivators": ["AI theater", "generic templates", "governance ceremony without results"],
+  "autopilot_programs": [],
+  "serve_me_map": [],
+  "habit_loops": [],
+  "goal_reviews": [],
+  "label": "KNOW",
+  "updated_at": "2026-06-13"
 }

@@ -7,16 +7,21 @@
   <script src="/overlay/lifeos-theme.js"></script>
   <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
-  <title>LifeRE — Daily Command Center</title>
+  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>LifeRE — LifeOS Real Estate Stack</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --lifere-accent: #0ea5e9;
-      --bg: #0a0a0f;
-      --card: #111118;
-      --border: #1e1e2e;
-      --text: #e8e8f0;
-      --muted: #888;
+      --bg: var(--bg-base, #0a0a0f);
+      --card: var(--bg-surface, #111118);
+      --border: var(--border, rgba(255, 255, 255, 0.07));
+      --text: var(--text-primary, #e8e8f0);
+      --muted: var(--text-secondary, #888);
+      --lifere-elevated: var(--bg-surface2, #12121a);
+      --lifere-btn-bg: var(--bg-surface, #17171f);
+      --lifere-body-text: var(--text-primary, #ddd);
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -34,6 +39,24 @@
       border-left: 4px solid var(--lifere-accent);
       padding-left: 14px;
     }
+    .page-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .lifere-theme-btn { flex-shrink: 0; min-width: 44px; min-height: 44px; }
+    .lifere-shell-hint {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--lifere-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      line-height: 1.45;
+    }
+    .lifere-shell-hint a { color: var(--lifere-accent); font-weight: 600; }
     .page-header h1 {
       font-size: 22px;
       font-weight: 700;
@@ -89,15 +112,15 @@
       font-size: 12px;
       padding: 4px 10px;
       border-radius: 999px;
-      background: #1a1a2a;
-      color: #bbb;
+      background: var(--lifere-elevated);
+      color: var(--muted);
     }
-    .debrief-row { font-size: 13px; margin-bottom: 8px; color: #ccc; }
+    .debrief-row { font-size: 13px; margin-bottom: 8px; color: var(--lifere-body-text); }
     .debrief-label { color: var(--lifere-accent); font-weight: 600; margin-right: 6px; }
     .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
     .btn {
       border: 1px solid var(--border);
-      background: #17171f;
+      background: var(--lifere-btn-bg);
       color: var(--text);
       border-radius: 8px;
       padding: 8px 14px;
@@ -126,8 +149,8 @@
     .boldtrail-pill {
       padding: 4px 10px;
       border-radius: 999px;
-      background: #152032;
-      color: #cbd5e1;
+      background: var(--lifere-elevated);
+      color: var(--lifere-body-text);
       font-size: 12px;
     }
     .boldtrail-pill.ok { background: rgba(34, 197, 94, 0.15); color: #86efac; }
@@ -138,50 +161,60 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       margin-bottom: 10px;
-      background: #12121a;
+      background: var(--lifere-elevated);
     }
     .followup-meta { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .followup-draft { font-size: 13px; color: #ddd; margin-bottom: 10px; line-height: 1.45; }
+    .followup-draft { font-size: 13px; color: var(--lifere-body-text); margin-bottom: 10px; line-height: 1.45; }
     .followup-actions { display: flex; gap: 8px; flex-wrap: wrap; }
     .approval-item {
       padding: 12px;
       border: 1px solid var(--border);
       border-radius: 8px;
       margin-bottom: 10px;
-      background: #12121a;
+      background: var(--lifere-elevated);
     }
-    .approval-draft { font-size: 13px; color: #ddd; margin: 8px 0 10px; line-height: 1.45; }
+    .approval-draft { font-size: 13px; color: var(--lifere-body-text); margin: 8px 0 10px; line-height: 1.45; }
     .btn-danger { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
     .info-card {
       padding: 12px;
       border: 1px solid var(--border);
       border-radius: 8px;
       margin-bottom: 10px;
-      background: #12121a;
+      background: var(--lifere-elevated);
     }
     .info-card-title { font-size: 12px; color: var(--lifere-accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
-    .info-card-body { font-size: 13px; color: #ddd; line-height: 1.5; }
+    .info-card-body { font-size: 13px; color: var(--lifere-body-text); line-height: 1.5; }
     .info-card-meta { font-size: 12px; color: var(--muted); margin-top: 6px; }
     .deal-pick { display: inline-block; margin: 0 6px 6px 0; }
     .deal-pick.active { background: var(--lifere-accent); border-color: var(--lifere-accent); color: #fff; }
     .btn-sm { padding: 6px 10px; font-size: 12px; }
     .btn-success { background: #166534; border-color: #166534; color: #fff; }
     .panel-grid { display: grid; gap: 12px; }
-    .panel-row { font-size: 13px; margin-bottom: 8px; color: #ccc; }
+    .panel-row { font-size: 13px; margin-bottom: 8px; color: var(--lifere-body-text); }
     .panel-label { color: var(--lifere-accent); font-weight: 600; margin-right: 6px; }
     .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .tab-btn { font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border); background: #17171f; color: var(--text); cursor: pointer; }
+    .tab-btn { font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--lifere-btn-bg); color: var(--text); cursor: pointer; }
     .tab-btn.active { background: var(--lifere-accent); border-color: var(--lifere-accent); color: #fff; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
-    input, select, textarea { background: #12121a; border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 6px 8px; font-size: 13px; width: 100%; margin-bottom: 8px; }
+    input, select, textarea { background: var(--lifere-elevated); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 6px 8px; font-size: 13px; width: 100%; margin-bottom: 8px; }
   </style>
 </head>
 <body>
   <div class="root" data-lifere="daily-command-center" id="lifere-daily-command-center">
+    <div class="lifere-shell-hint" id="lifere-shell-hint" hidden>
+      LifeRE is a stack inside LifeOS — not a separate product.
+      <a href="/overlay/lifeos-app.html?page=lifeos-lifere.html">Open in LifeOS app shell ↗</a>
+      · Communication, twins, and approval flow are shared across stacks.
+    </div>
     <header class="page-header">
-      <h1>LifeRE Daily Command Center</h1>
-      <p id="lifere-dateline">Loading…</p>
+      <div class="page-header-row">
+        <div>
+          <h1>LifeRE · Real Estate Stack</h1>
+          <p id="lifere-dateline">Loading…</p>
+        </div>
+        <button type="button" class="btn lifere-theme-btn" id="lifere-theme-toggle" title="Toggle light/dark theme" aria-label="Toggle theme">☀︎</button>
+      </div>
     </header>
 
     <div class="actions" style="margin-bottom:16px">
@@ -341,6 +374,26 @@
       dateline.textContent = now.toLocaleDateString(undefined, {
         weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
       });
+
+      const inAppShell = window.self !== window.top;
+      const shellHint = document.getElementById('lifere-shell-hint');
+      const themeBtn = document.getElementById('lifere-theme-toggle');
+      if (shellHint && !inAppShell) shellHint.hidden = false;
+      if (themeBtn && inAppShell) themeBtn.style.display = 'none';
+
+      function syncThemeBtn() {
+        if (!themeBtn) return;
+        const theme = window.__lifeosTheme?.get?.() || localStorage.getItem('lifeos_theme') || 'dark';
+        themeBtn.textContent = theme === 'light' ? '☀︎' : '☾';
+        themeBtn.title = theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+      }
+      syncThemeBtn();
+      themeBtn?.addEventListener('click', () => {
+        const cur = window.__lifeosTheme?.get?.() || 'dark';
+        window.__lifeosTheme?.set?.(cur === 'light' ? 'dark' : 'light');
+        syncThemeBtn();
+      });
+      window.addEventListener('storage', (e) => { if (e.key === 'lifeos_theme') syncThemeBtn(); });
 
       async function apiFetch(path, options) {
         if (CTX?.fetchWithAuth) return CTX.fetchWithAuth(path, options);

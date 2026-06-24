@@ -1,0 +1,30 @@
+{
+  "schema": "lifeos_service_doctrine_runtime_v1",
+  "supreme_authority": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+  "updated_at": "2026-06-13",
+  "enforcement": "HARD",
+  "gate_id": "LIFEOS_SERVICE_DOCTRINE",
+  "verify_command": "npm run lifeos:service-doctrine:verify",
+  "runtime_module": "services/lifeos-service-doctrine.js",
+  "prompt_injection_targets": [
+    "routes/lifeos-builderos-command-control-routes.js",
+    "services/lumin-chair-orchestrator.js"
+  ],
+  "proxy_stacks": ["lifere", "socialmediaos", "builderos"],
+  "prohibited_patterns": [
+    "one-size-fits-all motivation",
+    "GCI as primary motivator in user-facing copy",
+    "manipulation or dark patterns",
+    "magic manifestation without cost tradeoff",
+    "separate product framing for stacks",
+    "truth without KNOW/THINK/GUESS label when uncertain"
+  ],
+  "required_artifacts": [
+    "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+    "config/lifeos-personal-twin-schema.json",
+    "config/lifeos-stack-registry.json",
+    "prompts/00-LIFEOS-SERVICE-DOCTRINE.md",
+    "services/lifeos-service-doctrine.js",
+    "scripts/verify-lifeos-service-doctrine.mjs"
+  ]
+}

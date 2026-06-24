@@ -8,7 +8,7 @@
     "mandatory_read": "builderos-reboot/AGENTS.md"
   },
   "queue_id": "BP-PRIORITY-0001",
-  "updated_at": "2026-06-23",
+  "updated_at": "2026-06-13",
   "operator_lock": "Adam 2026-06-22 — Voice Rail SCRAPPED (salvage only). BPs in priority order ARE the queue.",
   "lifeos_version_queue": "builderos-reboot/LIFEOS_VERSION_QUEUE.json",
   "scrapped_items": [
@@ -104,6 +104,9 @@
       "blueprint_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
       "builder_twin_path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT_BUILDER_TWIN.json",
       "builder_doctrine": "docs/LIFERE_BUILDER_DIGITAL_TWIN.md",
+      "lifeos_service_doctrine": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+      "service_doctrine_receipt": "products/receipts/LIFEOS_SERVICE_DOCTRINE_WIRED.json",
+      "service_doctrine_verify": "npm run lifeos:service-doctrine:verify",
       "blueprint_status": "complete",
       "runtime_status": "alpha_runtime_active",
       "acceptance_command": "npm run lifeos:lifere-os:v1-acceptance",

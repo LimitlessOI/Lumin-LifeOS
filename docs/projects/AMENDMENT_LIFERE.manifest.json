@@ -18,9 +18,11 @@
     "db/migrations/20260624_lifere_call_logs.sql",
     "scripts/run-lifere-*-acceptance.mjs",
     "tests/lifere-*.test.js",
-    "products/receipts/LIFERE_*.json"
+    "products/receipts/LIFEOS_SERVICE_DOCTRINE_WIRED.json",
+    "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+    "config/lifeos-stack-registry.json"
   ],
   "last_updated": "2026-06-13",
-  "last_receipt": "2026-06-13 socialmediaos-adapter builder-twin-bp",
-  "last_change_summary": "SocialMediaOS bridge; BLUEPRINT_BUILDER_TWIN; TC/outreach fixes"
+  "last_receipt": "2026-06-13 lifeos-service-doctrine-proxy",
+  "last_change_summary": "LifeRE proxies LifeOS service doctrine; stack-not-product law"
 }

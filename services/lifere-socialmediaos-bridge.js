@@ -5,6 +5,7 @@
 import { createLifeREMarketingModule } from './lifere-marketing-module.js';
 import { createLifeREClientComms } from './lifere-client-comms.js';
 import { createLifeREOutreachBridge } from './lifere-outreach-bridge.js';
+import { getDoctrinePromptBlock, validateUserFacingCopy } from './lifeos-service-doctrine.js';
 
 export function createLifeRESocialMediaOSBridge({
   pool = null,
@@ -23,6 +24,7 @@ export function createLifeRESocialMediaOSBridge({
       stack: 'lifere_socialmediaos_v1',
       authority: 'docs/projects/AMENDMENT_41_MARKETINGOS.md',
       adapter: 'lifere-socialmediaos-bridge',
+      doctrine: 'docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md',
       modules: {
         coach: callCouncilMember ? 'callCouncilMember' : 'template_fallback',
         content_engine: 'marketing-content-engine.js',
@@ -42,7 +44,7 @@ export function createLifeRESocialMediaOSBridge({
       if (callCouncilMember) {
         const reply = await callCouncilMember({
           member: 'marketing',
-          message: `Marketing coach for real estate agent. User says: ${message}`,
+          message: `${getDoctrinePromptBlock()}\n\nMarketing coach for real estate agent. User says: ${message}`,
           userId,
         });
         const text = reply?.content || reply?.response || reply?.text || String(reply || '');
@@ -53,11 +55,14 @@ export function createLifeRESocialMediaOSBridge({
           label: 'KNOW',
         };
       }
+      const fallback = `This week: turn "${message.slice(0, 80)}" into one 60-second market update video + 3 comment replies.`;
+      const copyCheck = validateUserFacingCopy(fallback);
       return {
         ok: true,
-        response: `This week: turn "${message.slice(0, 80)}" into one 60-second market update video + 3 comment replies.`,
+        response: fallback,
         hookDetected: true,
         label: 'THINK',
+        doctrine_ok: copyCheck.ok,
       };
     } catch (err) {
       logger.warn?.('[LIFERE-SMO] coach skip:', err.message);

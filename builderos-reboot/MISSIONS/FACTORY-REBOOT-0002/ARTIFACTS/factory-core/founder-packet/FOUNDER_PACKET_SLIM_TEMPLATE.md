@@ -26,6 +26,36 @@
 
 ---
 
+## ASSUMPTIONS_I_MAKE
+
+[What the founder assumes the system already knows — tacit context cold agents miss]
+
+---
+
+## NOT_THIS
+
+[Explicit negations — e.g. "LifeRE is not a separate product", "not one-size motivation"]
+
+---
+
+## ALWAYS
+
+[Non-negotiables for this mission — e.g. light+dark theme, LifeOS shell-first, no manipulation]
+
+---
+
+## WHY_STATEMENTS (when human motivation applies)
+
+[Per-person emotional outcomes in founder's words — not GCI templates; optional for pure infra missions]
+
+---
+
+## OPEN_QUESTIONS
+
+[Unresolved until founder locks — remove when answered]
+
+---
+
 ## FOUNDER SUCCESS TEST
 
 **[One sentence. No ambiguity. Example: "Adam voluntarily uses this again within 48 hours."]**

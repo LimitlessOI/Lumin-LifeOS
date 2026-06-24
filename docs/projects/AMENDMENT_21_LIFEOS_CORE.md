@@ -88,6 +88,30 @@ Help each person become who they say they want to be — not who we think they s
 
 ---
 
+## Service, Sovereignty & Epistemology Doctrine (NON-NEGOTIABLE)
+
+**Full law:** `docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md`  
+**Agent read:** `prompts/00-LIFEOS-SERVICE-DOCTRINE.md`  
+**Verify:** `npm run lifeos:service-doctrine:verify` (HARD in `builder:preflight`)  
+**Runtime:** `services/lifeos-service-doctrine.js`
+
+All LifeOS features and **all stack modules** (LifeRE, SocialMediaOS, LimitlessOS slices) **inherit** this doctrine by proxy — they may add domain detail; they **may not** weaken:
+
+1. **Serve, don't decide** — costs, benefits, pros, cons; user chooses with best attainable truth.
+2. **Per-person motivation** — Personal Twin `whys[]`; never one-size GCI/millionaire/Europe templates.
+3. **Time as root resource** — money as meter/stored time; intentional or not — both have tradeoffs.
+4. **Mirror: "Does it serve me?"** — pattern benefits + costs; no forced breaks without user choice.
+5. **Be → Do → Have** — identity upstream; honest steps; no magic without tradeoffs.
+6. **Truth-identifying system** — KNOW/THINK/GUESS/DON'T KNOW; law = repeated pass, always scrutinizable.
+7. **No manipulation, hype, theater.**
+8. **Fluid OS** — one shell (`lifeos-app.html`); stacks plug in; LifeRE ≠ separate product.
+9. **Busywork policy** — remove unwanted; organize liked; amplify superpowers.
+10. **SMOS stack** — brief-first director/producer/editor; `coaching_tolerance` adapts intensity.
+
+**Founder packet bridge:** `ASSUMPTIONS_I_MAKE`, `NOT_THIS`, `ALWAYS`, `WHY_STATEMENTS`, `OPEN_QUESTIONS` in slim template.
+
+---
+
 ## Constitutional Principles
 
 ### 1. Sovereignty
@@ -1574,6 +1598,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-13 | **LifeOS Service & Epistemology Doctrine HARD wired** — `docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md`, `services/lifeos-service-doctrine.js`, `config/lifeos-personal-twin-schema.json`, `config/lifeos-stack-registry.json`, `LIFEOS_SERVICE_DOCTRINE_RUNTIME.json`, `verify-lifeos-service-doctrine.mjs` in `builder:preflight`, GATE `LIFEOS_SERVICE_DOCTRINE`, Lumin + SMOS prompt inject, founder packet ASSUMPTIONS/NOT_THIS/ALWAYS fields. LifeRE proxies via Am LIFERE. | Adam: capture all nuances — serve don't decide, per-person whys, truth law, fluid OS, SMOS role — hard compliance all stacks. | ✅ doctrine verify + tests | deploy |
 | 2026-06-13 | **Personal Lumin mode:** skip strategic brief + Point B theater on errands; plain prose UI (no NO_COMMAND_RAN card); coupon link fallback; honesty prompt bans invented location/schedule/history. | Adam: oil change reply hallucinated Jiffy Lube distance + appended founder success test garbage. | ✅ personal mode tests | deploy |
 | 2026-06-13 | **Lumin unified context classifier:** `chair-context-classifier.js` + `chair-lumin-unified.js` — life vs code vs command; default `lumin` help (not Point B / builder CLARIFY); clarify only on high-confidence product build without target. | Adam: LifeOS must be personal everything + command center + coder — context-aware, not keyword theater. | ✅ context tests | deploy |
 | 2026-06-13 | **Life admin Chair channel (GAP-FILL):** `founder-life-admin-intent.js` + `chair-life-admin.js` — oil change/coupon/errands route to `life_admin` (web search + counsel), not builder CLARIFY. Fixed `isBuildRequest` false positive on "oil **change**". | Adam: simple errand ask hit LifeRE target_file clarify theater. | ✅ life-admin tests | deploy |

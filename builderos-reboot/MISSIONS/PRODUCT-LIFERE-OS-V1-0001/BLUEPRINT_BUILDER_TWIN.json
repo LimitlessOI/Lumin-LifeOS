@@ -101,8 +101,10 @@
     "socialmediaos_am41": { "status": "adapter_live", "mount_spine": false }
   },
   "ui_surface": {
-    "canonical": "public/overlay/lifeos-lifere.html",
-    "app_nav": "public/overlay/lifeos-app.html",
+    "canonical_shell": "public/overlay/lifeos-app.html",
+    "canonical_stack_page": "public/overlay/lifeos-lifere.html",
+    "architecture": "LifeRE is a stack module inside LifeOS — not a separate product URL. Standalone lifere page is dev/alpha fallback only.",
+    "app_nav": "public/overlay/lifeos-app.html?page=lifeos-lifere.html",
     "tabs": ["performance", "approval", "coaching", "marketing", "ops", "scenario", "chair", "deals"],
     "marketing_socialmediaos_panel": "required_in_W4"
   },

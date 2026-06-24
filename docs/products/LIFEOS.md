@@ -30,6 +30,15 @@ Purpose is medicine. The single most treatable root cause of human suffering is 
 
 ---
 
+## Service & epistemology doctrine (HARD — all stacks inherit)
+
+**Full law:** `docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md`  
+**Verify:** `npm run lifeos:service-doctrine:verify` (in `builder:preflight`)
+
+LifeOS is a **fluid adaptive OS** — one shell, stacks plug in (LifeRE, SMOS, etc.). We **serve, don't decide**: costs, benefits, pros, cons with best attainable truth. Motivation is **per-person** (Personal Twin), not one-size GCI templates. **Time** is the root resource. **Truth** is proven in the world, labeled KNOW/THINK/GUESS, law always open to scrutiny. Remove unwanted busywork; organize liked busywork; amplify superpowers. No manipulation, hype, or theater.
+
+---
+
 ## PRODUCT LAYERS (what it is)
 
 | Layer | Name | Core capability |

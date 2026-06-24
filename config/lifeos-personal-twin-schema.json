@@ -1,0 +1,72 @@
+{
+  "schema": "lifeos_personal_twin_v2",
+  "authority": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+  "description": "Per-person twin — motivation and patterns are NEVER one-size-fits-all",
+  "required_for_full": ["user_id"],
+  "fields": {
+    "whys": {
+      "type": "array",
+      "item_schema": {
+        "id": "string",
+        "label": "string",
+        "story": "string",
+        "feeling": "string",
+        "linked_activities": "string[]",
+        "never_use_as_template_for_others": true
+      }
+    },
+    "demotivators": { "type": "array", "items": "string" },
+    "superpowers": { "type": "array", "items": "string" },
+    "unwanted_busywork": { "type": "array", "items": "string" },
+    "liked_busywork": { "type": "array", "items": "string" },
+    "autopilot_programs": {
+      "type": "array",
+      "item_schema": {
+        "trigger": "string",
+        "behavior": "string",
+        "benefit": "string",
+        "cost": "string",
+        "serves_me": "boolean|null"
+      }
+    },
+    "serve_me_map": {
+      "type": "array",
+      "item_schema": {
+        "pattern_id": "string",
+        "benefits": "string[]",
+        "costs": "string[]",
+        "user_choice": "keep|change|explore"
+      }
+    },
+    "habit_loops": {
+      "type": "array",
+      "item_schema": { "cue": "string", "routine": "string", "reward": "string" }
+    },
+    "coaching_tolerance": {
+      "type": "enum",
+      "values": ["open", "moderate", "gentle"],
+      "default": "moderate"
+    },
+    "break_intent": {
+      "type": "enum",
+      "values": ["none", "curious", "active"],
+      "default": "none"
+    },
+    "goal_reviews": {
+      "type": "array",
+      "item_schema": {
+        "goal": "string",
+        "benefits": "string[]",
+        "costs": "string[]",
+        "time_cost": "string",
+        "still_wants": "boolean|null",
+        "reviewed_at": "iso8601"
+      }
+    },
+    "motivations_legacy_tags": {
+      "type": "array",
+      "items": "string",
+      "note": "Abstract tags only — whys[] holds real fuel"
+    }
+  }
+}

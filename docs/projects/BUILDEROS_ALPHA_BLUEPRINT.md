@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-13 — Personal Lumin mode: no strategic/Point B theater on errands; plain prose replies.
+**Last Updated:** 2026-06-13 — LifeOS service doctrine injected into Lumin counsel prompt.
 ---
 
 ## 0. Purpose
@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-13 | **`routes/lifeos-builderos-command-control-routes.js`** — injects `getDoctrinePromptBlock()` from `services/lifeos-service-doctrine.js` into Lumin system prompt (serve don't decide, per-person whys, truth epistemology). | LifeOS service doctrine HARD law must apply to founder counsel path. | ✅ doctrine verify | deploy |
 | 2026-06-13 | **`founder-communication-format.js`** + **`chair-lumin-personal-mode.js`** — personal `lumin` turns: plain prose only (no status card / strategic footer). | Life errand replies must not show NO_COMMAND_RAN theater. | ✅ | deploy |
 | 2026-06-13 | **`routes/lifeos-builderos-command-control-routes.js`** — Lumin prompt: personal OS + command center unified; life vs code context; no target_file theater on errands. Pairs with `chair-context-classifier.js`. | Adam: LifeOS must understand context — personal everything AND builder when asked. | ✅ | deploy |
 | 2026-06-13 | **`services/founder-build-self-repair.js`** — `enforceBeforeBuilderDispatch` at loop entry; **`routes/lifeos-builderos-command-control-routes.js`** — `POST /founder-interface/confirm-usability`. | Close founder build + usability bypass gaps. | ✅ | deploy |

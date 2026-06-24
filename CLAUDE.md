@@ -26,7 +26,8 @@ Claude, CUR, Codex, and C2 **fight disagreements out here first**. Adam is not t
 2. `docs/AGENT_RULES.compact.md` — enforcement packet (~800 tokens, covers all operational rules)
 3. `prompts/00-HIST-LEGACY-BOUNDARY.md` — STOP read (legacy vs active) — do not skip
 4. `prompts/00-SYSTEM-AUTHORITY-LAYERS.md` — which repo layer is canonical
-5. `docs/products/INDEX.md` — product registry + priority order
+5. `prompts/00-LIFEOS-SERVICE-DOCTRINE.md` — service, sovereignty, epistemology (all stacks)
+6. `docs/products/INDEX.md` — product registry + priority order
 6. `docs/products/[product].md` — the product you're building (e.g. `docs/products/LIFEOS.md`)
 7. `docs/CONTINUITY_LOG.md` — latest session summary and handoff state
 

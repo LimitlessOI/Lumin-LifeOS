@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createLifeRETwinStore } from './lifere-twin-store.js';
+import { enrichPersonalTwin } from './lifeos-service-doctrine.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -45,6 +46,8 @@ export function createLifeREMarketingModule({ pool = null } = {}) {
     if (!vt) throw new Error(`Unknown video type: ${videoTypeId}`);
 
     const comm = twinStore.readTwin({ tenantId, userId, twinKey: 'communication' });
+    const personal = enrichPersonalTwin(twinStore.readTwin({ tenantId, userId, twinKey: 'personal' }) || {});
+    const why = personal.whys?.[0];
     const hook = hookText || vt.hook_angle;
 
     return {
@@ -57,6 +60,7 @@ export function createLifeREMarketingModule({ pool = null } = {}) {
       conversational_prompts: ['Say this like you are talking to a friend at coffee.', 'Pause after the hook.'],
       retention_pattern_notes: 'Pattern: hook → proof → personal beat → CTA',
       thumbnail_notes: 'Face + bold number or map pin',
+      why_anchor: why?.label || null,
       label: 'THINK',
       personality_phrases: comm?.phrases?.slice(0, 3) || [],
     };

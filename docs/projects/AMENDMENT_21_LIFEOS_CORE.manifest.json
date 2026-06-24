@@ -200,7 +200,15 @@
     "services/lifere-os-v1.js",
     "services/lifere-boldtrail-bridge.js",
     "public/overlay/lifeos-lifere.html",
-    "scripts/run-lifere-os-v1-acceptance.mjs"
+    "scripts/run-lifere-os-v1-acceptance.mjs",
+    "services/lifeos-service-doctrine.js",
+    "scripts/verify-lifeos-service-doctrine.mjs",
+    "tests/lifeos-service-doctrine.test.js",
+    "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+    "prompts/00-LIFEOS-SERVICE-DOCTRINE.md",
+    "config/lifeos-personal-twin-schema.json",
+    "config/lifeos-stack-registry.json",
+    "builderos-reboot/governance/LIFEOS_SERVICE_DOCTRINE_RUNTIME.json"
   ],
   "assertions": [
     {
@@ -873,8 +881,7 @@
     ]
   },
   "last_updated": "2026-06-13",
-  "last_receipt": "2026-06-13 personal-lumin-mode",
-  "last_change_summary": "Production spine repo-root — no factory-staging static boot import"
-  "last_change_summary": "LifeRE daily command center syncs BoldTrail EXP pipeline with approval-gated follow-up write-back",
+  "last_receipt": "2026-06-13 lifeos-service-doctrine-hard-wire",
+  "last_change_summary": "LifeOS service/epistemology doctrine HARD gate + Lumin inject + Personal Twin v2"
   "ssot_receipt_tail": "Voice Rail auto-stages to Action Inbox; approved inbox commitments route to lifeos_commitments."
 }

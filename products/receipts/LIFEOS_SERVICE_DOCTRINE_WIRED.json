@@ -1,0 +1,39 @@
+{
+  "schema": "lifeos_service_doctrine_receipt_v1",
+  "verdict": "DOCTRINE_WIRED",
+  "receipt_verdict": "PASS",
+  "verified_at": "2026-06-13",
+  "verify_command": "npm run lifeos:service-doctrine:verify",
+  "bp_sync": {
+    "updated": ["builderos-reboot/BP_PRIORITY.json"],
+    "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+    "at": "2026-06-13T00:00:00.000Z"
+  },
+  "authority": "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+  "gate_id": "LIFEOS_SERVICE_DOCTRINE",
+  "enforcement": "HARD",
+  "preflight": "builder:preflight",
+  "proxy_stacks": ["lifere", "socialmediaos", "builderos"],
+  "artifacts": [
+    "docs/LIFEOS_SERVICE_AND_EPISTEMOLOGY_DOCTRINE.md",
+    "prompts/00-LIFEOS-SERVICE-DOCTRINE.md",
+    "config/lifeos-personal-twin-schema.json",
+    "config/lifeos-stack-registry.json",
+    "services/lifeos-service-doctrine.js",
+    "builderos-reboot/governance/LIFEOS_SERVICE_DOCTRINE_RUNTIME.json",
+    "scripts/verify-lifeos-service-doctrine.mjs",
+    "tests/lifeos-service-doctrine.test.js"
+  ],
+  "runtime_wired": [
+    "routes/lifeos-builderos-command-control-routes.js",
+    "services/lifere-socialmediaos-bridge.js",
+    "services/lifere-marketing-module.js"
+  ],
+  "amendments_updated": [
+    "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+    "docs/projects/AMENDMENT_LIFERE.md",
+    "docs/products/LIFEOS.md"
+  ],
+  "founder_packet_fields": ["ASSUMPTIONS_I_MAKE", "NOT_THIS", "ALWAYS", "WHY_STATEMENTS", "OPEN_QUESTIONS"],
+  "label": "KNOW"
+}
