@@ -3,7 +3,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-13 — LifeRE outreach scheduler on boot (useful-work guard).
+**Last Updated:** 2026-06-24 — LifeRE founder confirm gets commitManyToGitHub. Prior: LifeRE outreach scheduler on boot.
 
 | Field | Value |
 |---|---|
@@ -204,6 +204,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-06-24 | **`startup/register-runtime-routes.js`** — pass `commitManyToGitHub` into `createLifeRERoutes` for founder usability confirm persistence. | Alpha confirm on Railway was ephemeral filesystem-only. | ✅ | deploy |
 | 2026-06-13 | **`startup/boot-domains.js`** — `bootLifeREDomain()` starts `lifere-outreach-scheduler` (15m useful-work guard for approved Am 08 tasks). | LifeRE outreach must execute without manual queue polling. | ✅ readiness PASS | deploy |
 | 2026-06-13 | **`startup/boot-domains.js`** — `bootLifeREDomain()` seeds founder twins + marriage edge on boot. **`startup/register-runtime-routes.js`** — pass `pool`, `callCouncilMember`, `notificationService`, `sendSMS` into `createLifeRERoutes`. | LifeRE Alpha runtime must boot and wire Am 08/17/29 bridges on Railway. | ✅ alpha-gate PASS | deploy + live E2E |
 | 2026-06-13 | **`startup/boot-domains.js`** — FP V2 boot defaults ON: Chair prediction score + lane intel schedulers (opt-out `CHAIR_PREDICTION_SCORE_ENABLED=0` / `LANE_INTEL_*=0`). | Adam: always-on scoreboard + competitor monitoring unless explicitly disabled. | ✅ preflight | deploy |

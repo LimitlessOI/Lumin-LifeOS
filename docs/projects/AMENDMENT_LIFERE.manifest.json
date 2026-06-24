@@ -23,6 +23,6 @@
     "config/lifeos-stack-registry.json"
   ],
   "last_updated": "2026-06-24",
-  "last_receipt": "2026-06-24 alpha-ready-surface",
-  "last_change_summary": "Alpha ready banner, readiness API, founder confirm path"
+  "last_receipt": "2026-06-24 alpha-live-verify-persist",
+  "last_change_summary": "Live alpha E2E checks + founder confirm GitHub persist"
 }

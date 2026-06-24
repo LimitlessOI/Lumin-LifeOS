@@ -42,7 +42,7 @@ import { createLifeRECommandCenter } from '../services/lifere-command-center.js'
 import { createLifeREAlphaDailyCycle } from '../services/lifere-alpha-daily-cycle.js';
 import { createLifeREFounderAttempt } from '../services/lifere-founder-attempt.js';
 import { getLifeREAlphaReadinessSurface } from '../services/lifere-alpha-readiness-surface.js';
-import { confirmFounderUsability } from '../services/founder-usability-confirm.js';
+import { confirmAndPersistFounderUsability } from '../services/lifere-founder-usability-persist.js';
 import { createLifeRESocialMediaOSBridge } from '../services/lifere-socialmediaos-bridge.js';
 import { pickModel } from '../services/lifere-model-router.js';
 
@@ -54,7 +54,7 @@ function tenantId(req) {
   return req.body?.tenant_id || req.query?.tenant_id || 'default';
 }
 
-export function createLifeRERoutes({ requireKey, pool = null, logger = console, callCouncilMember = null, notificationService = null, sendSMS = null }) {
+export function createLifeRERoutes({ requireKey, pool = null, logger = console, callCouncilMember = null, notificationService = null, sendSMS = null, commitManyToGitHub = null }) {
   const router = express.Router();
   const service = createLifeREOSService();
   const twinStore = createLifeRETwinStore({ pool, logger });
@@ -174,11 +174,12 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   router.post('/alpha/confirm-usability', requireKey, async (req, res) => {
     try {
       const pass = req.body?.pass === true || req.body?.pass === 'true';
-      const result = confirmFounderUsability({
+      const result = await confirmAndPersistFounderUsability({
         missionId: req.body?.mission_id || 'PRODUCT-LIFERE-OS-V1-0001',
         pass,
         quote: req.body?.quote || req.body?.founder_quote || '',
         actor: req.body?.actor || userId(req),
+        commitManyToGitHub,
       });
       if (!result.ok) {
         return res.status(400).json(result);

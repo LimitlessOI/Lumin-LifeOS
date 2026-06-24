@@ -98,6 +98,20 @@ async function runApiCycle(baseUrl) {
 
   const cycle = await request(baseUrl, 'POST', '/api/v1/lifere/alpha/daily-cycle', { user_id: 'adam', goal_gci: 30000 });
   step('LRE-E2E-T10_alpha_daily_cycle', cycle.status === 200 && cycle.json?.ok === true && cycle.json?.steps?.every((s) => s.ok));
+
+  const readiness = await request(baseUrl, 'GET', '/api/v1/lifere/alpha/readiness');
+  step(
+    'LRE-E2E-T11_alpha_readiness',
+    readiness.status === 200 && readiness.json?.ready_for_alpha_testing === true,
+    JSON.stringify(readiness.json).slice(0, 160),
+  );
+
+  if (USE_LIVE) {
+    const htmlRes = await fetch(`${baseUrl}/overlay/lifeos-lifere.html`);
+    const html = await htmlRes.text();
+    step('LRE-E2E-T12_live_alpha_banner', htmlRes.status === 200 && html.includes('data-lifere="alpha-ready-banner"'));
+    step('LRE-E2E-T13_live_content_brief', html.includes('data-lifere="content-brief"'));
+  }
 }
 
 let local;

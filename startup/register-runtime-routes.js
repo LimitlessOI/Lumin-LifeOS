@@ -329,6 +329,7 @@ export async function registerRuntimeRoutes(app, deps) {
     callCouncilMember,
     notificationService,
     sendSMS,
+    commitManyToGitHub,
   }));
   logger.info("✅ [LIFERE-OS] Routes mounted at /api/v1/lifere (W1–W6)");
 

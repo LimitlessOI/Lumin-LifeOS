@@ -84,6 +84,18 @@ if (BASE) {
     report.checks.live_e2e = { exit: r.status, base: BASE };
     step('AR-live_e2e', r.status === 0, r.stdout?.slice(-200));
 
+    const liveHtml = await fetch(`${BASE}/overlay/lifeos-lifere.html`);
+    const htmlText = await liveHtml.text();
+    step('AR-live_alpha_banner_html', liveHtml.status === 200 && htmlText.includes('data-lifere="alpha-ready-banner"'));
+
+    const liveReady = await fetch(`${BASE}/api/v1/lifere/alpha/readiness`, { headers: { 'x-command-key': key } });
+    const liveReadyJson = await liveReady.json().catch(() => ({}));
+    step(
+      'AR-live_alpha_readiness_api',
+      liveReady.status === 200 && liveReadyJson.ready_for_alpha_testing === true,
+      `status ${liveReady.status}`,
+    );
+
     const deep = await fetch(`${BASE}/api/v1/lifere/health/deep`, { headers: { 'x-command-key': key } });
     const deepJson = await deep.json().catch(() => ({}));
     report.checks.live_pg_deep = deepJson;

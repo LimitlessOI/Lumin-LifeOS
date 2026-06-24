@@ -686,6 +686,12 @@
         const confirmBox = document.getElementById('alpha-confirm-box');
         try {
           const res = await apiFetch('/api/v1/lifere/alpha/readiness');
+          if (res.status === 404) {
+            title.textContent = 'Deploy catching up — alpha surface not live yet';
+            detail.textContent = 'Refresh in 2–3 min after deploy, or open from latest commit.';
+            list.innerHTML = '<li class="pending">○ /alpha/readiness not on this deploy yet</li>';
+            return;
+          }
           const data = await res.json();
           const ready = data.ready_for_alpha_testing === true;
           const gate = data.ready_for_alpha_gate === true;
