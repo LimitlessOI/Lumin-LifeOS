@@ -37,7 +37,7 @@ const TESTS = [
   {
     id: 'T4_counsel_no_theater',
     text: 'should I get an oil change this week?',
-    expectChannel: 'lumin',
+    expectChannel: 'chair',
     expectTruth: 'NO_COMMAND_RAN',
     forbidTheaterInSummary: true,
     summaryMustInclude: 'Counsel only',

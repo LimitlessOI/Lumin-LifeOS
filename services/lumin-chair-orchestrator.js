@@ -39,7 +39,8 @@ import {
   requiresPreExecuteClarify,
   chairChannelFromContext,
 } from './chair-context-classifier.js';
-import { runLuminUnifiedTurn } from './chair-lumin-unified.js';
+import { runChairNativeTurn } from './chair-lumin-unified.js';
+import { translateChairPersonality } from './chair-personality-translate.js';
 import { shouldAttachStrategicBrief } from './chair-lumin-personal-mode.js';
 import {
   isBlueprintExecuteIntent,
@@ -132,7 +133,8 @@ export function modelRoutingForChannel(channel) {
     case 'counsel':
     case 'life_admin':
     case 'lumin':
-      return { route: 'lumin_chair_unified', complexity: 'low', estimated_cost_tier: 'cheap' };
+    case 'chair':
+      return { route: 'lumin_chair_native', complexity: 'low', estimated_cost_tier: 'cheap' };
     case 'point_b':
       return { route: 'lumin_chair_point_b', complexity: 'high', estimated_cost_tier: 'medium' };
     case 'system_action':
@@ -292,7 +294,8 @@ export async function runLuminChairTurn(ctx, deps) {
 
   let fpV2Enforcement = null;
   const executeChannels = ['build_async', 'build_terminal', 'blueprint_execute', 'execute'];
-  if (!shouldDisplayOnly && channel !== 'display' && channel !== 'lumin' && channel !== 'counsel' && channel !== 'life_admin') {
+  const counselChannels = new Set(['display', 'lumin', 'counsel', 'life_admin', 'chair']);
+  if (!shouldDisplayOnly && !counselChannels.has(channel)) {
     const understandingForChannel = assessChairIntentUnderstanding(effectiveInput, {
       expandedTask: effectiveInput,
       pointBTarget,
@@ -551,30 +554,35 @@ export async function runLuminChairTurn(ctx, deps) {
 
     case 'counsel':
     case 'life_admin':
-    case 'lumin': {
-      const strategicBrief = shouldAttachStrategicBrief(cleanedInput, chairContext)
+    case 'lumin':
+    case 'chair': {
+      const memoryContext = deps.loadChairMemoryContext
+        ? await deps.loadChairMemoryContext().catch(() => null)
+        : null;
+      const strategicBrief = shouldAttachStrategicBrief(effectiveInput, chairContext)
         ? await gatherStrategicBriefForChair({
-          cleanedInput,
+          cleanedInput: effectiveInput,
           pool: deps.pool,
           callAI: deps.callCouncilMember,
           pointBTarget,
         }).catch(() => null)
         : null;
-      const luminResult = await runLuminUnifiedTurn(effectiveInput, {
+      const chairResult = await runChairNativeTurn(effectiveInput, {
         callAI: deps.callCouncilMember,
-        luminConverse: deps.luminConverse,
+        translatePersonality: deps.translateChairPersonality || translateChairPersonality,
         sanitizeConversationReply: deps.sanitizeConversationReply,
+        memoryContext,
+        pool: deps.pool,
         strategicBrief,
-        pointBTarget,
       }, chairContext);
       const truth = finalizeTruth({
-        ...luminResult,
+        ...chairResult,
         chair_context: chairContext,
         fp_v2_enforcement: null,
-      }, 'lumin');
+      }, 'chair');
       return {
         statusCode: 200,
-        body: chairEnvelope('lumin', {
+        body: chairEnvelope('chair', {
           ...truth,
           intake_normalized: intakeNormalized,
           source_mode: sourceMode,

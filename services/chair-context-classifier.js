@@ -131,9 +131,10 @@ export function resolveChairContext(text = '', ctx = {}) {
       build: useTerminalForBuild ? 'build_terminal' : 'build_async',
       execute: 'execute',
       display: 'display',
-      counsel: 'lumin',
-      life_admin: 'lumin',
-      lumin: 'lumin',
+      counsel: 'chair',
+      life_admin: 'chair',
+      lumin: 'chair',
+      chair: 'chair',
       mission_pipeline: 'mission_pipeline',
       blueprint_execute: 'blueprint_execute',
       point_b: 'point_b',
@@ -178,7 +179,7 @@ export function resolveChairContext(text = '', ctx = {}) {
 
   if (dual.dual) {
     return {
-      channel: 'lumin',
+      channel: 'chair',
       domain: 'dual',
       confidence: 0.85,
       requires_execute_clarify: false,
@@ -190,7 +191,7 @@ export function resolveChairContext(text = '', ctx = {}) {
 
   if (scores.personal >= 5 && scores.build < 5) {
     return {
-      channel: 'lumin',
+      channel: 'chair',
       domain: 'personal_life',
       confidence: Math.min(1, scores.personal / 10),
       requires_execute_clarify: false,
@@ -224,7 +225,7 @@ export function resolveChairContext(text = '', ctx = {}) {
 
   if (scores.governance >= 6 && isGovernanceOrSsotIntent(t)) {
     return {
-      channel: 'lumin',
+      channel: 'chair',
       domain: 'governance',
       confidence: 0.8,
       requires_execute_clarify: false,
@@ -245,7 +246,7 @@ export function resolveChairContext(text = '', ctx = {}) {
   }
 
   return {
-    channel: 'lumin',
+    channel: 'chair',
     domain: 'conversation',
     confidence: 0.6,
     requires_execute_clarify: false,

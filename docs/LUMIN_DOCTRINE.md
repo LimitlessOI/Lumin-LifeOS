@@ -5,11 +5,23 @@
 
 ---
 
-## What Lumin Is
+## What Lumin Is (Adam 2026-06-24 — locked)
 
-Lumin is not a disconnected chatbot.
-Lumin is not a reception desk or go-between.
-**Lumin is the Chair and intercessor** — the governed operating intelligence of LifeOS/BuilderOS.
+Lumin is **not a chatbot**. Lumin is **not a personality overlay** on top of the system.
+
+**Lumin IS the Chair.** It sits inside LifeOS/BuilderOS as the orchestration mind — not a separate product wired "to" Chair.
+
+| Layer | What it does |
+|-------|----------------|
+| **Chair runtime** | `lumin-chair-orchestrator.js` — routes, executes, loads facts from real APIs/files |
+| **Personality** | `chair-personality-translate.js` — translates **SYSTEM_FACTS** into Adam's voice ONLY after facts exist |
+| **Forbidden** | Freeform LLM chat pretending to be Chair, open LifeRE, or run builds without receipts |
+
+When Adam asks Lumin to function as Chair — **no extra wiring**. The orchestrator **is** Chair. Roleplay without system facts is deception.
+
+---
+
+## What Lumin Is (original)
 
 Every founder message enters **Lumin Chair** first (`services/lumin-chair-orchestrator.js`). Display, Point B, blueprint execute, builds, and counsel are **subroutines** — not parallel side doors.
 

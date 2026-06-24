@@ -46,6 +46,7 @@ import {
   isBuildRequest,
 } from '../services/lumin-chair-orchestrator.js';
 import { parseLuminChairSystemAction, stripChairDoPrefix, shouldSkipInputNormalize } from '../services/lumin-chair-system-actions.js';
+import { translateChairPersonality } from '../services/chair-personality-translate.js';
 import { createBuilderOSControlPlaneService } from '../services/builderos-control-plane-service.js';
 import {
   enforceBeforeBuilderDispatch,
@@ -1173,6 +1174,8 @@ HOW TO RESPOND:
         wrapBridgeResultAsTruth,
         formatExecutionTruthReply,
         luminConverse,
+        loadChairMemoryContext: loadLuminMemory,
+        translateChairPersonality,
         sanitizeConversationReply,
         routeToBuilder,
         founderBuildResponsePayload,

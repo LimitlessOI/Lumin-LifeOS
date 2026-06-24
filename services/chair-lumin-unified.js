@@ -1,104 +1,68 @@
 /**
- * SYNOPSIS: Unified Lumin turn — personal life + counsel + command context (one front door).
+ * SYNOPSIS: Chair native turn — Lumin IS the Chair; personality translates real facts only.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
-import { createWebSearchService } from './web-search-service.js';
-import {
-  buildLifeAdminSearchQuery,
-  formatLifeAdminCounselPreamble,
-  formatErrandCouponFallback,
-  isFounderPersonalLifeIntent,
-} from './founder-life-admin-intent.js';
 import { detectDualIntent } from './chair-context-classifier.js';
-import { shouldAttachStrategicBrief } from './chair-lumin-personal-mode.js';
+import { gatherChairNativeFacts } from './chair-native-facts.js';
+import { translateChairPersonality } from './chair-personality-translate.js';
 import { formatStrategicBriefSection } from './lumin-strategic-intelligence.js';
-import { getDoctrinePromptBlock } from './lifeos-service-doctrine.js';
 
-function searchBlockIsUseful(searchResult) {
-  if (!searchResult?.results?.length) return false;
-  if (searchResult.source === 'ai_knowledge') return false;
-  return true;
-}
-
-export async function runLuminUnifiedTurn(cleanedInput, deps = {}, chairContext = {}) {
+export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext = {}) {
   const {
     callAI,
-    luminConverse,
+    translatePersonality = translateChairPersonality,
     sanitizeConversationReply,
+    memoryContext = null,
     strategicBrief = null,
-    pointBTarget = null,
+    pool = null,
   } = deps;
 
   const dual = detectDualIntent(cleanedInput);
-  const personalTurn = chairContext.personal_search !== false
-    && (dual.personal || isFounderPersonalLifeIntent(cleanedInput) || ['personal_life', 'conversation'].includes(chairContext.domain));
+  const systemFacts = await gatherChairNativeFacts(cleanedInput, {
+    callAI,
+    pool,
+    memoryContext,
+    strategicBrief,
+  }, chairContext);
 
-  let searchBlock = '';
-  if (personalTurn) {
-    const searchSvc = createWebSearchService({
-      BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
-      PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
-      callAI,
-    });
-    try {
-      const query = buildLifeAdminSearchQuery(cleanedInput);
-      const searchResult = await searchSvc.search(query, { count: 5 });
-      searchBlock = searchBlockIsUseful(searchResult)
-        ? formatLifeAdminCounselPreamble(searchResult)
-        : formatErrandCouponFallback(cleanedInput);
-    } catch {
-      searchBlock = formatErrandCouponFallback(cleanedInput);
-    }
-    if (!searchBlock && /\b(coupon|oil change)\b/i.test(cleanedInput)) {
-      searchBlock = formatErrandCouponFallback(cleanedInput);
-    }
+  let voice = await translatePersonality({
+    callAI,
+    userMessage: cleanedInput,
+    systemFacts,
+  });
+
+  const strategicSection = systemFacts.strategic_brief
+    ? formatStrategicBriefSection(systemFacts.strategic_brief)
+    : '';
+  if (strategicSection && !voice.includes('strategic')) {
+    voice = `${voice}\n\n${strategicSection}`;
   }
 
-  const attachStrategic = shouldAttachStrategicBrief(cleanedInput, chairContext);
-  const strategicSection = attachStrategic && strategicBrief
-    ? formatStrategicBriefSection(strategicBrief)
-    : '';
-
-  const contextPreamble = [
-    getDoctrinePromptBlock(),
-    personalTurn ? 'PERSONAL LIFE TURN — not a software build.' : 'LUMIN COUNSEL TURN.',
-    'HONESTY (mandatory):',
-    '- Do NOT invent your location, drive time, shop hours, calendar, or vehicle maintenance history unless explicitly listed under WHAT I KNOW FROM MEMORY or in verified search results below.',
-    '- If you lack city/ZIP or schedule data, say so and give national coupon links or ask one clarifying question.',
-    '- No Point B, founder success test, or LifeRE talk on personal errands unless Adam asked about the product.',
-    '- No numbered option menus unless he asked for options — answer like a chief of staff in plain prose.',
-    '',
-    `- Domain: ${chairContext.domain || 'conversation'}`,
-    dual.dual
-      ? '- He may also want a code change later — answer life part now; mention "confirm build" only if product surfaces were named.'
-      : '',
-    searchBlock ? `\nVerified / fallback links to use:\n${searchBlock}` : '',
-    !personalTurn && pointBTarget?.label ? `\nProgram anchor (only if relevant): ${pointBTarget.label}` : '',
-  ].filter(Boolean).join('\n');
-
-  const luminReply = await luminConverse(`${contextPreamble}\n\nAdam: ${cleanedInput}`);
-  const combined = [luminReply, strategicSection].filter(Boolean).join('');
-  const safeReply = sanitizeConversationReply(combined, { command_truth: 'NO_COMMAND_RAN' });
+  const safeReply = sanitizeConversationReply
+    ? sanitizeConversationReply(voice, { command_truth: 'NO_COMMAND_RAN' })
+    : voice;
 
   return {
     ok: true,
-    action: 'lumin',
+    action: 'chair',
     chair_domain: chairContext.domain || 'conversation',
-    personal_turn: personalTurn,
+    personal_turn: systemFacts.personal_turn,
     command_truth: 'NO_COMMAND_RAN',
     pass_fail: 'NO_COMMAND_RAN',
+    execution_kind: 'CHAIR_FACTS',
     dual_intent: dual.dual ? { personal: true, build: true } : null,
     human_summary_technical: safeReply,
-    conversation_sanitized: safeReply !== combined,
-    done_synopsis: personalTurn
+  chair_native_facts: systemFacts,
+    conversation_sanitized: safeReply !== voice,
+    done_synopsis: systemFacts.personal_turn
       ? null
-      : 'Lumin — counsel (no code executed unless you asked a separate build).',
-    next_synopsis: personalTurn
-      ? null
-      : (dual.dual
-        ? 'Reply with follow-up, or "confirm build" + what to change in the product.'
-        : null),
-    strategic_brief: attachStrategic ? strategicBrief : null,
-    errand_search_block: searchBlock || null,
+      : 'Chair — system facts loaded (no execute this turn).',
+    next_synopsis: dual.dual
+      ? 'Reply with follow-up, or `do: …` to execute.'
+      : (systemFacts.personal_turn ? null : 'Name an action or `do: …` to run the system.'),
+    strategic_brief: systemFacts.strategic_brief || null,
+    errand_search_block: systemFacts.verified_search || null,
   };
 }
+
+export { runChairNativeTurn as runLuminUnifiedTurn };
