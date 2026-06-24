@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-24 — Lumin direct connection law in counsel prompt.
+**Last Updated:** 2026-06-13 — industry dispatch gate + live gap audit (OpenHands/Claude Code patterns).
 ---
 
 ## 0. Purpose
@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-13 | **`services/builderos-dispatch-gate.js`**, canonical/governed/queue wiring, **`scripts/builderos-run-mission.mjs`** DONE_GATE + `--worktree`, harness live gap filter | Adam: adopt industry PreToolUse fail-closed + evidence receipts; honest 10 beyond verifier theater | ✅ harness audit + operational verify | deploy |
 | 2026-06-24 | **`builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json`**, **`services/builderos-harness-toolkit.js`**, **`scripts/builderos-harness-gap-audit.mjs`**, **`scripts/builderos-run-mission.mjs`**, **`scripts/builderos-pre-build-gate.mjs`**, **`scripts/builderos-deploy-verify.mjs`**, **`scripts/builderos-gap-families.mjs`**, **`scripts/builderos-compound-summary.mjs`** | Adam: full harness gap audit + missing CLI tools cataloged and added | ✅ `npm run builderos:harness:audit` | deploy |
 | 2026-06-24 | **`routes/lifeos-council-builder-routes.js`** — `/build` fail-fast `target_file` + safe-scope before council; skip deliberation on `MECHANICAL`; placement miss returns 422; **`services/builderos-compound-improvement.js`** gap-aware classification; **`scripts/lifeos-builder-supervisor.mjs`** unified gap families | Adam: audit fix — stop token burn, honest failure families, no fake probe compound rows | ✅ verify + tests | deploy |
 | 2026-06-24 | **`services/builderos-gap-classifier.js`**, **`services/builderos-canonical-executor.js`**, **`routes/lifeos-council-builder-routes.js`**, **`scripts/verify-builderos-working-definition.mjs`**, **`scripts/builderos-run-operational-proof.mjs`**, mission **`BUILDEROS-HARNESS-PROOF-0001`** | Adam: operational 10/10 — gap families classified (0% other), live canonical build committed on Railway (`2939323f`), compound log production entries | ✅ `npm run builderos:working-definition:verify:operational` exit 0 | deploy gap classifier + safe-scope |

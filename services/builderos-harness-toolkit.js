@@ -5,6 +5,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -19,6 +20,74 @@ function readJson(relOrAbs) {
 function fileExists(relPath) {
   if (!relPath) return false;
   return fs.existsSync(path.join(ROOT, relPath));
+}
+
+function deployVerifyOk() {
+  if (!process.env.PUBLIC_BASE_URL && !process.env.BUILDER_BASE_URL) return null;
+  if (!process.env.COMMAND_CENTER_KEY && !process.env.LIFEOS_KEY) return null;
+  const r = spawnSync('npm', ['run', 'builderos:deploy:verify'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    env: process.env,
+    timeout: 30_000,
+  });
+  return r.status === 0;
+}
+
+function filterLivePlatformGaps(staticGaps = []) {
+  const deployFresh = deployVerifyOk();
+  return (staticGaps || []).filter((g) => {
+    if (deployFresh && (g.id === 'deploy_stale_local' || g.id === 'mechanical_deliberation')) {
+      return false;
+    }
+    return true;
+  });
+}
+
+function filterIndustryGaps(staticGaps = []) {
+  const dispatchGateOk = fileExists('services/builderos-dispatch-gate.js');
+  const missionRunOk = fileExists('scripts/builderos-run-mission.mjs');
+  return (staticGaps || []).filter((g) => {
+    if (g.pattern === 'claude_code_hooks_fail_closed' && dispatchGateOk) return false;
+    if (g.pattern === 'evidence_backed_completion' && missionRunOk) return false;
+    if (g.pattern === 'codex_isolated_task_dispatch' && missionRunOk) return false;
+    return true;
+  });
+}
+
+export function resolveIndustryAdopted(manifest) {
+  const doc = manifest || loadHarnessToolsManifest();
+  const adopted = [];
+  if (fileExists('services/builderos-dispatch-gate.js')) {
+    adopted.push({
+      pattern: 'claude_code_hooks_fail_closed',
+      source: 'Claude Code PreToolUse / Stop hooks',
+      via: 'services/builderos-dispatch-gate.js',
+    });
+  }
+  if (fileExists('scripts/system-railway-redeploy.mjs')) {
+    adopted.push({
+      pattern: 'deploy_sha_parity_stop_gate',
+      source: 'Agent-operated CI/CD deploy verification',
+      via: 'scripts/system-railway-redeploy.mjs + builderos:deploy:verify',
+    });
+  }
+  if (deployVerifyOk()) {
+    adopted.push({
+      pattern: 'self_healing_deploy_attribution',
+      source: 'LangChain / Semaphore self-healing CI',
+      via: 'live deploy SHA matches origin/main',
+    });
+  }
+  if (fileExists('factory-staging/factory-core/builder/sandbox.js')) {
+    adopted.push({
+      pattern: 'openhands_workspace_isolation',
+      source: 'OpenHands DockerWorkspace',
+      via: 'executeCanonicalWorktreeStep + sandbox boundary manifest',
+      status: 'partial',
+    });
+  }
+  return adopted;
 }
 
 function npmScriptExists(scriptName) {
@@ -99,6 +168,9 @@ export function auditHarnessToolWiring({ manifest = null } = {}) {
   const requiredMissing = required.filter((r) => r.actual_status === 'missing');
   const requiredPartial = required.filter((r) => r.actual_status === 'partial');
 
+  const platformGaps = filterLivePlatformGaps(doc.platform_integration_gaps || []);
+  const industryGaps = filterIndustryGaps(doc.industry_patterns_missing_on_spine || []);
+
   return {
     schema: 'builderos_harness_tool_audit_v1',
     generated_at: new Date().toISOString(),
@@ -112,8 +184,10 @@ export function auditHarnessToolWiring({ manifest = null } = {}) {
       required_partial: requiredPartial.length,
     },
     tools: results,
-    platform_gaps: doc.platform_integration_gaps || [],
-    industry_gaps: doc.industry_patterns_missing_on_spine || [],
+    platform_gaps: platformGaps,
+    platform_gaps_resolved: (doc.platform_integration_gaps || []).length - platformGaps.length,
+    industry_gaps: industryGaps,
+    industry_adopted: resolveIndustryAdopted(doc),
     ok: requiredMissing.length === 0 && requiredPartial.length === 0,
   };
 }

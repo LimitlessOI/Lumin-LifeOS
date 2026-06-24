@@ -150,6 +150,7 @@
     "builderos:deploy:verify": "node scripts/builderos-deploy-verify.mjs",
     "builderos:gap:families": "node scripts/builderos-gap-families.mjs",
     "builderos:pre-build-gate": "node scripts/builderos-pre-build-gate.mjs",
+    "builderos:dispatch:gate": "node scripts/builderos-dispatch-gate.mjs",
     "builderos:mission-run": "node scripts/builderos-run-mission.mjs",
     "builder:preflight:fast": "node scripts/council-builder-preflight.mjs && node scripts/verify-lifeos-service-doctrine.mjs && node scripts/verify-builderos-working-definition.mjs && node scripts/verify-lumin-connection.mjs",
     "builderos:pre-handoff:gate": "node scripts/run-pre-handoff-intent-gate.mjs",

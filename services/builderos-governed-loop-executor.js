@@ -28,6 +28,7 @@ import {
   mergeRepairIntoPlan,
 } from './builderos-codegen-self-repair.js';
 import { recordCompoundImprovement } from './builderos-compound-improvement.js';
+import { runDispatchGate } from './builderos-dispatch-gate.js';
 
 function resolveBaseUrl(explicit) {
   return (
@@ -256,6 +257,15 @@ export async function executeCommandControlJob(pool, jobId, options = {}) {
   const commandKey = resolveCommandKey(options.commandKey);
   if (!commandKey) {
     return { ok: false, error: 'command_key_missing', stage: 'preflight' };
+  }
+
+  const dispatchGate = await runDispatchGate({
+    allowStaleDeploy: options.allow_stale_deploy !== false,
+    baseUrl,
+    commandKey,
+  });
+  if (!dispatchGate.ok) {
+    return { ok: false, error: 'dispatch_gate_blocked', stage: 'preflight', gate: dispatchGate };
   }
 
   if (options.controlPlaneHealthCheck !== false && options.fetchControlPlaneHealth) {

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T20:56:00.726Z",
+  "generated_at": "2026-06-24T21:11:00.154Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12379,
+  "file_count": 12381,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28852,9 +28852,9 @@
     {
       "path": "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json",
       "synopsis": "BuilderOS artifact — BUILDEROS HARNESS TOOLS.",
-      "bytes": 9764,
-      "mtime": "2026-06-24T20:34:41.955Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 10039,
+      "mtime": "2026-06-24T21:09:56.999Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
       "synopsis_index_only": true
     },
     {
@@ -36747,9 +36747,9 @@
     {
       "path": "data/builderos-harness-gap-audit.json",
       "synopsis": "JSON data/config — data/builderos-harness-gap-audit.json.",
-      "bytes": 13548,
-      "mtime": "2026-06-24T20:55:44.811Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 13543,
+      "mtime": "2026-06-24T21:10:41.186Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
       "synopsis_index_only": true
     },
     {
@@ -41105,17 +41105,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26704,
-      "mtime": "2026-06-24T20:55:45.734Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 26701,
+      "mtime": "2026-06-24T21:10:27.656Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 477120,
-      "mtime": "2026-06-24T20:55:45.735Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 477540,
+      "mtime": "2026-06-24T21:10:21.667Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41619,9 +41619,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 133757,
-      "mtime": "2026-06-24T20:34:41.962Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 134118,
+      "mtime": "2026-06-24T21:10:56.210Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -68891,9 +68891,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 24244,
-      "mtime": "2026-06-24T20:34:41.963Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 24319,
+      "mtime": "2026-06-24T21:10:08.185Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
       "synopsis_index_only": true
     },
     {
@@ -72285,6 +72285,16 @@
       ]
     },
     {
+      "path": "scripts/builderos-dispatch-gate.mjs",
+      "synopsis": "Run unified BuilderOS dispatch gate (fail-closed preflight).",
+      "bytes": 532,
+      "mtime": "2026-06-24T21:10:04.622Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
+      "ssot": [
+        "services/builderos-dispatch-gate.js"
+      ]
+    },
+    {
       "path": "scripts/builderos-gap-families.mjs",
       "synopsis": "Live builder gap failure-family report (classifier-enriched).",
       "bytes": 2215,
@@ -72377,9 +72387,9 @@
     {
       "path": "scripts/builderos-run-mission.mjs",
       "synopsis": "Run all MECHANICAL blueprint steps through canonical executor.",
-      "bytes": 4238,
-      "mtime": "2026-06-24T20:34:41.966Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 5471,
+      "mtime": "2026-06-24T21:10:18.009Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
       "ssot": [
         "services/builderos-canonical-executor.js"
       ]
@@ -73014,9 +73024,9 @@
     {
       "path": "scripts/lifeos-builder-continuous-queue.mjs",
       "synopsis": "24×7 supervised autonomous builder queue — executes structured **`POST /builder/build`** tasks from SSOT JSON.",
-      "bytes": 46905,
-      "mtime": "2026-06-21T21:39:07.186Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 47211,
+      "mtime": "2026-06-24T21:10:19.043Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -85405,9 +85415,9 @@
     {
       "path": "services/builderos-canonical-executor.js",
       "synopsis": "BuilderOS canonical execution — single autonomous programming entry point.",
-      "bytes": 8843,
-      "mtime": "2026-06-24T20:34:41.967Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 10158,
+      "mtime": "2026-06-24T21:09:46.476Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -85464,6 +85474,16 @@
       ]
     },
     {
+      "path": "services/builderos-dispatch-gate.js",
+      "synopsis": "Fail-closed pre-dispatch gate for all autonomous BuilderOS paths (Claude Code PreToolUse pattern).",
+      "bytes": 5363,
+      "mtime": "2026-06-24T21:09:42.168Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
+      ]
+    },
+    {
       "path": "services/builderos-gap-classifier.js",
       "synopsis": "Unified builder gap failure-family classifier (gaps API + supervisor + verify).",
       "bytes": 3710,
@@ -85476,9 +85496,9 @@
     {
       "path": "services/builderos-governed-loop-executor.js",
       "synopsis": "BuilderOS governed loop executor bridge — single queued job only.",
-      "bytes": 25409,
-      "mtime": "2026-06-24T20:34:41.968Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 25744,
+      "mtime": "2026-06-24T21:09:46.477Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -85496,9 +85516,9 @@
     {
       "path": "services/builderos-harness-toolkit.js",
       "synopsis": "BuilderOS harness toolkit — manifest, wiring audit, platform gap rollup.",
-      "bytes": 4656,
-      "mtime": "2026-06-24T20:34:41.968Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 7301,
+      "mtime": "2026-06-24T21:10:03.038Z",
+      "indexed_at": "2026-06-24T21:11:00.154Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]

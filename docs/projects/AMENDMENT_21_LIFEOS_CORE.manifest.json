@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-13",
-  "last_receipt": "2026-06-13 railway-deploy-pipeline-fix",
-  "last_change_summary": "Restore server.js composition root; deploy SHA polling; block server.js commits",
+  "last_receipt": "2026-06-13 industry-pattern-dispatch-gate",
+  "last_change_summary": "Dispatch gate on all autonomous paths; DONE_GATE receipts; live gap audit",
   "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
 }

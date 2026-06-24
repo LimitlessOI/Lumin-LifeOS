@@ -37,6 +37,7 @@ import { validateQueueContract } from '../services/builderos-useful-work-contrac
 import { isLocked, getLock } from './lib/autonomy-write-lock.mjs';
 import { buildClosureRecord } from './lib/closure-contract.mjs';
 import { makePrediction, evaluatePrediction } from './lib/prediction-loop.mjs';
+import { runDispatchGate } from '../services/builderos-dispatch-gate.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -632,6 +633,14 @@ function selectQueueSlice(tasks, { startIdx, max, wrap, quarantinedIds }) {
 
 async function main() {
   exitIfLegacyQueueQuarantined();
+
+  if (!hasFlag('--dry-run') && !hasFlag('--skip-gate')) {
+    const gate = await runDispatchGate({ allowStaleDeploy: true });
+    if (!gate.ok) {
+      console.error(JSON.stringify(gate, null, 2));
+      process.exit(1);
+    }
+  }
 
   const dry = hasFlag('--dry-run');
   const max = parseInt(

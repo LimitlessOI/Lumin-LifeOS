@@ -1,12 +1,12 @@
 {
   "schema": "builderos_harness_tool_audit_v1",
-  "generated_at": "2026-06-24T18:54:01.359Z",
+  "generated_at": "2026-06-24T21:10:40.063Z",
   "summary": {
-    "total": 29,
-    "wired": 28,
+    "total": 30,
+    "wired": 29,
     "partial": 1,
     "missing": 0,
-    "required_total": 20,
+    "required_total": 21,
     "required_missing": 0,
     "required_partial": 0
   },
@@ -376,6 +376,19 @@
       "note": null
     },
     {
+      "id": "dispatch_gate",
+      "pillar": "cross_cutting",
+      "path": "services/builderos-dispatch-gate.js",
+      "npm": "builderos:dispatch:gate",
+      "tier": "required",
+      "declared_status": "wired",
+      "actual_status": "wired",
+      "path_exists": true,
+      "npm_script_exists": true,
+      "issues": [],
+      "note": "Claude Code PreToolUse pattern — fail-closed before every autonomous dispatch"
+    },
+    {
       "id": "worktree_supervisor",
       "pillar": "cross_cutting",
       "path": "scripts/autonomy/builder-supervisor.js",
@@ -390,13 +403,6 @@
     }
   ],
   "platform_gaps": [
-    {
-      "rank": 1,
-      "id": "deploy_stale_local",
-      "summary": "Harness fixes local — production /build may lag until commit+push+redeploy",
-      "tool": "builderos:deploy:verify",
-      "fix": "npm run builderos:deploy:verify && commit push redeploy"
-    },
     {
       "rank": 2,
       "id": "factory_cutover",
@@ -417,39 +423,38 @@
       "summary": "Hist MISSION_QUEUE + builder-daemon compete with BP_PRIORITY",
       "tool": null,
       "fix": "BUILDER_QUEUE_ENABLED=0; use builderos:bp-priority:once only"
-    },
-    {
-      "rank": 5,
-      "id": "mechanical_deliberation",
-      "summary": "MECHANICAL tier deliberation skip requires deploy of council-builder routes",
-      "tool": "builderos:deploy:verify",
-      "fix": "Deploy routes patch from harness audit session"
     }
   ],
+  "platform_gaps_resolved": 2,
   "industry_gaps": [
     {
       "pattern": "openhands_workspace_isolation",
       "have": "factory-staging/factory-core/builder/sandbox.js",
       "need": "Wire sandbox into production /build or canonical executor worktree mode",
       "priority": "P1"
-    },
+    }
+  ],
+  "industry_adopted": [
     {
       "pattern": "claude_code_hooks_fail_closed",
-      "have": "services/builderos-precommit-governance.js",
-      "need": "Unified pre-build hook calling builderos-pre-build-gate before every autonomous dispatch",
-      "priority": "P1"
+      "source": "Claude Code PreToolUse / Stop hooks",
+      "via": "services/builderos-dispatch-gate.js"
     },
     {
-      "pattern": "codex_isolated_task_dispatch",
-      "have": "scripts/autonomy/builder-supervisor.js",
-      "need": "Default mission-run should offer --worktree for zone-3 targets",
-      "priority": "P2"
+      "pattern": "deploy_sha_parity_stop_gate",
+      "source": "Agent-operated CI/CD deploy verification",
+      "via": "scripts/system-railway-redeploy.mjs + builderos:deploy:verify"
     },
     {
-      "pattern": "evidence_backed_completion",
-      "have": "services/builderos-control-plane-service.js",
-      "need": "Canonical mission-run should attach DONE gate receipt to mission folder",
-      "priority": "P1"
+      "pattern": "self_healing_deploy_attribution",
+      "source": "LangChain / Semaphore self-healing CI",
+      "via": "live deploy SHA matches origin/main"
+    },
+    {
+      "pattern": "openhands_workspace_isolation",
+      "source": "OpenHands DockerWorkspace",
+      "via": "executeCanonicalWorktreeStep + sandbox boundary manifest",
+      "status": "partial"
     }
   ],
   "ok": true,

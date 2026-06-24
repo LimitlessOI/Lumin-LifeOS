@@ -14,6 +14,7 @@ import {
   mergeRepairIntoPlan,
 } from './builderos-codegen-self-repair.js';
 import { recordCompoundImprovement } from './builderos-compound-improvement.js';
+import { runDispatchGate } from './builderos-dispatch-gate.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -129,6 +130,21 @@ export async function executeCanonicalBlueprintStep({
     return { ok: false, error: 'command_key_missing', stage: 'preflight', canonical_path: CANONICAL_PATH_ID };
   }
 
+  const gate = await runDispatchGate({
+    allowStaleDeploy: true,
+    baseUrl: resolvedBase,
+    commandKey: resolvedKey,
+  });
+  if (!gate.ok) {
+    return {
+      ok: false,
+      error: 'dispatch_gate_blocked',
+      stage: 'preflight',
+      gate,
+      canonical_path: CANONICAL_PATH_ID,
+    };
+  }
+
   if (dryRun) {
     return { ok: true, dry_run: true, plan, step, canonical_path: CANONICAL_PATH_ID };
   }
@@ -160,6 +176,33 @@ export async function executeCanonicalBlueprintStep({
     lastResult = dispatch;
 
     if (dispatch.committed) {
+      if (/\.(js|mjs|cjs)$/i.test(plan.target_file || '')) {
+        const absTarget = path.join(ROOT, plan.target_file);
+        if (fs.existsSync(absTarget)) {
+          const syntax = spawnSync(process.execPath, ['--check', absTarget], { encoding: 'utf8' });
+          if (syntax.status !== 0) {
+            recordCompoundImprovement({
+              source: 'canonical_executor',
+              mission_id: missionId,
+              step_id: step.step_id,
+              target_file: plan.target_file,
+              blocker: 'POST_BUILD_SYNTAX_FAIL',
+              success: false,
+            });
+            return {
+              ok: false,
+              committed: true,
+              syntax_check_failed: true,
+              attempt,
+              plan,
+              step,
+              dispatch,
+              canonical_path: CANONICAL_PATH_ID,
+              blocker: 'POST_BUILD_SYNTAX_FAIL',
+            };
+          }
+        }
+      }
       recordCompoundImprovement({
         source: 'canonical_executor',
         mission_id: missionId,

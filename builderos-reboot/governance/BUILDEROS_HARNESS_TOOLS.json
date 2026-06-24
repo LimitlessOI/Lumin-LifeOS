@@ -228,6 +228,14 @@
         "status": "wired"
       },
       {
+        "id": "dispatch_gate",
+        "path": "services/builderos-dispatch-gate.js",
+        "npm": "builderos:dispatch:gate",
+        "tier": "required",
+        "status": "wired",
+        "note": "Claude Code PreToolUse pattern — fail-closed before every autonomous dispatch"
+      },
+      {
         "id": "worktree_supervisor",
         "path": "scripts/autonomy/builder-supervisor.js",
         "npm": null,
@@ -246,9 +254,9 @@
     },
     {
       "pattern": "claude_code_hooks_fail_closed",
-      "have": "services/builderos-precommit-governance.js",
-      "need": "Unified pre-build hook calling builderos-pre-build-gate before every autonomous dispatch",
-      "priority": "P1"
+      "have": "services/builderos-dispatch-gate.js",
+      "need": "Wire dispatch gate into continuous-queue when BUILDER_QUEUE_ENABLED=1",
+      "priority": "P2"
     },
     {
       "pattern": "codex_isolated_task_dispatch",
@@ -258,9 +266,9 @@
     },
     {
       "pattern": "evidence_backed_completion",
-      "have": "services/builderos-control-plane-service.js",
-      "need": "Canonical mission-run should attach DONE gate receipt to mission folder",
-      "priority": "P1"
+      "have": "services/builderos-build-done-gate-helper.js",
+      "need": "Wire control-plane canMarkBuildDone on founder job poll (phase 3 roadmap)",
+      "priority": "P2"
     }
   ],
   "platform_integration_gaps": [

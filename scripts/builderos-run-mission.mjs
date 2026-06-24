@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Run all MECHANICAL blueprint steps through canonical executor.
- * Usage: node scripts/builderos-run-mission.mjs MISSION_ID [--from STEP] [--dry-run] [--skip-gate]
+ * Usage: node scripts/builderos-run-mission.mjs MISSION_ID [--from STEP] [--dry-run] [--skip-gate] [--worktree]
  * @ssot services/builderos-canonical-executor.js
  */
 import 'dotenv/config';
@@ -11,32 +11,35 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   executeCanonicalBlueprintStep,
+  executeCanonicalWorktreeStep,
   loadMissionBlueprint,
 } from '../services/builderos-canonical-executor.js';
 import { recordCompoundImprovement } from '../services/builderos-compound-improvement.js';
+import { evaluateBuildDoneGate } from '../services/builderos-build-done-gate-helper.js';
+import { runDispatchGate } from '../services/builderos-dispatch-gate.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');
 const skipGate = args.includes('--skip-gate');
+const useWorktree = args.includes('--worktree');
 const fromIdx = args.indexOf('--from');
 const fromStep = fromIdx >= 0 ? args[fromIdx + 1] : null;
 const positional = args.filter((a, i) => !a.startsWith('--') && i !== fromIdx + 1);
 const missionId = positional[0];
 
 if (!missionId) {
-  console.error('Usage: node scripts/builderos-run-mission.mjs <MISSION_ID> [--from STEP] [--dry-run] [--skip-gate]');
+  console.error(
+    'Usage: node scripts/builderos-run-mission.mjs <MISSION_ID> [--from STEP] [--dry-run] [--skip-gate] [--worktree]',
+  );
   process.exit(1);
 }
 
 if (!skipGate && !dryRun) {
-  const gate = spawnSync('npm', ['run', 'builderos:pre-build-gate', '--', '--allow-stale'], {
-    cwd: ROOT,
-    encoding: 'utf8',
-  });
-  if (gate.status !== 0) {
-    console.error(gate.stdout || gate.stderr);
-    process.exit(gate.status || 1);
+  const gate = await runDispatchGate({ allowStaleDeploy: true });
+  if (!gate.ok) {
+    console.error(JSON.stringify(gate, null, 2));
+    process.exit(1);
   }
 }
 
@@ -65,13 +68,16 @@ for (const step of steps) {
     continue;
   }
 
-  const outcome = await executeCanonicalBlueprintStep({
-    missionId,
-    stepId: step.step_id,
-    dryRun,
-    maxRepairAttempts: 2,
-  });
-  results.push({ step_id: step.step_id, ...outcome });
+  const zone3 = useWorktree || step.zone === 3 || step.sandbox_boundary || step.execution_zone === 'worktree';
+  const outcome = zone3
+    ? executeCanonicalWorktreeStep({ missionId, stepId: step.step_id, dryRun })
+    : await executeCanonicalBlueprintStep({
+        missionId,
+        stepId: step.step_id,
+        dryRun,
+        maxRepairAttempts: 2,
+      });
+  results.push({ step_id: step.step_id, zone3, ...outcome });
   if (!outcome.ok) {
     allOk = false;
     recordCompoundImprovement({
@@ -107,32 +113,56 @@ if (allOk && acceptance && !dryRun) {
   if (r.status !== 0) allOk = false;
 }
 
+const committedCount = results.filter((r) => r.committed).length;
+const doneGate = evaluateBuildDoneGate({
+  buildResult: {
+    ok: allOk,
+    committed: committedCount > 0,
+    status: allOk ? 'PASS' : 'FAIL',
+    commit_sha: committedCount > 0 ? 'mission_run_commits' : null,
+  },
+  controlPlaneAvailable: false,
+});
+
 const report = {
   schema: 'builderos_canonical_mission_run_v1',
   generated_at: new Date().toISOString(),
   mission_id: missionId,
   dry_run: dryRun,
+  worktree_mode: useWorktree,
   steps: results,
   acceptance: acceptanceResult,
+  done_gate: doneGate,
   ok: allOk,
 };
 
-const receiptPath = path.join(
-  ROOT,
-  'builderos-reboot/MISSIONS',
-  missionId,
-  'receipts',
-  'CANONICAL_RUN.json',
-);
+const receiptDir = path.join(ROOT, 'builderos-reboot/MISSIONS', missionId, 'receipts');
+const receiptPath = path.join(receiptDir, 'CANONICAL_RUN.json');
+const doneGatePath = path.join(receiptDir, 'DONE_GATE.json');
+
 if (!dryRun) {
   try {
-    fs.mkdirSync(path.dirname(receiptPath), { recursive: true });
+    fs.mkdirSync(receiptDir, { recursive: true });
     fs.writeFileSync(receiptPath, `${JSON.stringify(report, null, 2)}\n`);
+    fs.writeFileSync(
+      doneGatePath,
+      `${JSON.stringify(
+        {
+          schema: 'builderos_mission_done_gate_v1',
+          generated_at: new Date().toISOString(),
+          mission_id: missionId,
+          ...doneGate,
+        },
+        null,
+        2,
+      )}\n`,
+    );
     report.receipt_path = path.relative(ROOT, receiptPath);
+    report.done_gate_receipt_path = path.relative(ROOT, doneGatePath);
   } catch {
     /* non-fatal */
   }
 }
 
 console.log(JSON.stringify(report, null, 2));
-process.exit(allOk ? 0 : 1);
+process.exit(report.ok ? 0 : 1);
