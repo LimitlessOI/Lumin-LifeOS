@@ -17,6 +17,13 @@ export function stripChairDoPrefix(text = '') {
   return { text: raw.replace(DO_PREFIX, '').trim(), forcedExecute: true };
 }
 
+export function shouldSkipInputNormalize(text = '') {
+  const t = String(text || '').trim();
+  if (!t) return false;
+  if (DO_PREFIX.test(t)) return true;
+  return parseLuminChairSystemAction(t).matched;
+}
+
 export function parseLuminChairSystemAction(text = '') {
   const t = String(text || '').trim();
   if (!t) return { matched: false, action_type: null };

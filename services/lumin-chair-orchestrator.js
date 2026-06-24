@@ -227,10 +227,11 @@ export async function runLuminChairTurn(ctx, deps) {
   } = ctx;
 
   const doPrefix = stripChairDoPrefix(cleanedInput);
+  const actionSource = ctx.originalText || cleanedInput;
   const effectiveInput = doPrefix.text || cleanedInput;
   const forceExecute = doPrefix.forcedExecute || confirmIntent;
 
-  const systemAction = await tryLuminChairSystemAction(effectiveInput, {
+  const systemAction = await tryLuminChairSystemAction(actionSource, {
     pool: deps.pool,
     logger: deps.logger || console,
     operatorKey: deps.operatorKey,

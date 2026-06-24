@@ -1598,6 +1598,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-24 | **Normalize skip for system commands** — `shouldSkipInputNormalize()` bypasses Gemini input rewriter for `open LifeRE`, `run alpha cycle`, `do:` — rewriter was destroying action verbs before routing | Parity T1–T3 failed: counsel instead of system_action | ✅ parity | deploy |
 | 2026-06-24 | **Lumin direct connection truth v1** — `chair-direct-connection-truth.js` scrubs counsel theater; counsel header `Counsel only · No command ran`; `run-lumin-chair-parity.mjs` live gate + unit tests in preflight | Adam: fake access violation — personality OK, execution truth non-negotiable | ✅ unit + parity | deploy |
 | 2026-06-24 | **Lumin Chair real execution v2** — `lumin-chair-system-actions.js` runs system commands (open LifeRE, alpha cycle, redeploy, Point B) before counsel; `do:`/`execute:` skips clarify theater; UI applies `shell_action` navigation; fix/add/this routes to builder not chat-only. | Adam: can't communicate with system — counsel theater without execution. | ✅ chair verify | deploy + Adam test |
 | 2026-06-24 | **Context router v1 + Chair doctrine inject** — `lifeos-context-router.js`, `GET /api/v1/lifeos/context/suggest`, shell `?stack=lifere`; `chair-lumin-unified.js` injects `getDoctrinePromptBlock()` on every Lumin turn. | Adam: fluid OS — auto-surface stacks; doctrine everywhere not just command-control. | ✅ context-router tests | deploy |

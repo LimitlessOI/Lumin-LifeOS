@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-24 | **`routes/lifeos-builderos-command-control-routes.js`** — skip Gemini `normalizeInputText` when `shouldSkipInputNormalize()` (system commands + do: prefix). | Rewriter garbled "open LifeRE" before system_action routing. | ✅ parity | deploy |
 | 2026-06-24 | **`routes/lifeos-builderos-command-control-routes.js`** — DIRECT CONNECTION LAW in Lumin prompt: never claim open/navigate/schedule/commit; system header is sole execution truth. | Adam: counsel theater claiming actions ran when NO_COMMAND_RAN. | ✅ parity gate | deploy |
 | 2026-06-13 | **`routes/lifeos-builderos-command-control-routes.js`** — injects `getDoctrinePromptBlock()` from `services/lifeos-service-doctrine.js` into Lumin system prompt (serve don't decide, per-person whys, truth epistemology). | LifeOS service doctrine HARD law must apply to founder counsel path. | ✅ doctrine verify | deploy |
 | 2026-06-13 | **`founder-communication-format.js`** + **`chair-lumin-personal-mode.js`** — personal `lumin` turns: plain prose only (no status card / strategic footer). | Life errand replies must not show NO_COMMAND_RAN theater. | ✅ | deploy |

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T02:44:12.484Z",
+  "generated_at": "2026-06-24T02:47:38.506Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12316,
   "files": [
@@ -41012,9 +41012,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 470253,
-      "mtime": "2026-06-24T02:43:55.814Z",
-      "indexed_at": "2026-06-24T02:44:12.484Z"
+      "bytes": 470553,
+      "mtime": "2026-06-24T02:47:29.525Z",
+      "indexed_at": "2026-06-24T02:47:38.506Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41518,9 +41518,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 129961,
-      "mtime": "2026-06-24T02:44:05.249Z",
-      "indexed_at": "2026-06-24T02:44:12.484Z"
+      "bytes": 130222,
+      "mtime": "2026-06-24T02:47:31.402Z",
+      "indexed_at": "2026-06-24T02:47:38.506Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -71001,9 +71001,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 48394,
-      "mtime": "2026-06-24T02:43:41.162Z",
-      "indexed_at": "2026-06-24T02:44:12.484Z",
+      "bytes": 48686,
+      "mtime": "2026-06-24T02:47:12.886Z",
+      "indexed_at": "2026-06-24T02:47:38.506Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -73369,9 +73369,9 @@
     {
       "path": "scripts/run-lumin-chair-parity.mjs",
       "synopsis": "Lumin Chair direct-connection parity — live API must match execution truth.",
-      "bytes": 5063,
-      "mtime": "2026-06-24T02:43:23.912Z",
-      "indexed_at": "2026-06-24T02:44:12.484Z",
+      "bytes": 5025,
+      "mtime": "2026-06-24T02:47:11.837Z",
+      "indexed_at": "2026-06-24T02:47:38.506Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87808,9 +87808,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 23502,
-      "mtime": "2026-06-24T02:43:05.530Z",
-      "indexed_at": "2026-06-24T02:44:12.484Z",
+      "bytes": 23557,
+      "mtime": "2026-06-24T02:47:09.292Z",
+      "indexed_at": "2026-06-24T02:47:38.506Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87818,9 +87818,9 @@
     {
       "path": "services/lumin-chair-system-actions.js",
       "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
-      "bytes": 7600,
-      "mtime": "2026-06-24T00:50:42.925Z",
-      "indexed_at": "2026-06-24T00:51:32.990Z",
+      "bytes": 7807,
+      "mtime": "2026-06-24T02:47:20.559Z",
+      "indexed_at": "2026-06-24T02:47:38.506Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

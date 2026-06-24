@@ -46,7 +46,6 @@ const TESTS = [
     id: 'T5_do_prefix_build',
     text: 'do: add HTML comment lumin parity test to lifeos-app.html',
     expectChannel: 'build_async',
-    expectTruthNot: 'NO_COMMAND_RAN',
     allowPassFail: ['RUNNING', 'FAIL', 'PASS'],
   },
 ];

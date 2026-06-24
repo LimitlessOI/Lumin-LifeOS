@@ -45,6 +45,7 @@ import {
   isExplicitExecuteCommand,
   isBuildRequest,
 } from '../services/lumin-chair-orchestrator.js';
+import { parseLuminChairSystemAction, stripChairDoPrefix, shouldSkipInputNormalize } from '../services/lumin-chair-system-actions.js';
 import { createBuilderOSControlPlaneService } from '../services/builderos-control-plane-service.js';
 import {
   enforceBeforeBuilderDispatch,
@@ -1055,7 +1056,8 @@ HOW TO RESPOND:
 
       // Normalize input first: fix misspellings, voice-to-text errors, garbled phrasing
       const buildIntentEarly = isBuildRequest(originalText) || isRepairContinuationIntent(originalText) || isFounderShipOrUsabilityIntent(originalText);
-      const cleanedInput = buildIntentEarly
+      const skipNormalize = buildIntentEarly || shouldSkipInputNormalize(originalText);
+      const cleanedInput = skipNormalize
         ? originalText.trim()
         : await normalizeInputText(originalText);
       const inputWasCleaned = cleanedInput !== originalText;
@@ -1139,6 +1141,7 @@ HOW TO RESPOND:
 
       const chairResult = await runLuminChairTurn({
         req,
+        originalText,
         cleanedInput,
         normalizedText,
         textFile: req.body?.text_file || null,
@@ -1160,7 +1163,7 @@ HOW TO RESPOND:
         user_role: req.lifeosUser?.role || null,
         useAsync: req.body?.async !== false && process.env.FOUNDER_BUILD_ASYNC !== '0',
         explicitAction: action,
-        confirmIntent: req.body?.confirm_intent === true || force || isFounderConfirmIntent(cleanedInput),
+        confirmIntent: req.body?.confirm_intent === true || force || isFounderConfirmIntent(cleanedInput) || stripChairDoPrefix(originalText).forcedExecute,
         userId,
       }, {
         buildDisplayBundle,
