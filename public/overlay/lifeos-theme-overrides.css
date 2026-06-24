@@ -186,3 +186,13 @@ html[data-theme="light"] [data-lifere="daily-command-center"] .deal-pick.active 
   border-color: var(--lifere-accent, #0ea5e9) !important;
   color: #fff !important;
 }
+
+/* founder-assistant-bubble-style:start */
+/* Lumin + dashboard assistant reply bubbles — founder UI preference */
+.lumin-msg.assistant,
+.msg.assistant {
+  background: #f0f0f0 !important;
+  border-color: #f0f0f0 !important;
+  color: #f0f0f0 !important;
+}
+/* founder-assistant-bubble-style:end */
