@@ -4,15 +4,15 @@
     "owner_department": "Historian",
     "status": "HIST_OWNED",
     "hist_id": "HIST-AUTO-002",
-    "role": "Generated mission pack index — historian archive only",
-    "do_not_use_for": "LifeOS product work orchestration",
+    "role": "Mission pack index — historian archive only",
+    "do_not_use_for": "LifeOS product work orchestration or deciding what to build next",
     "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json",
     "mandatory_read": "prompts/00-HIST-LEGACY-BOUNDARY.md"
   },
-  "generated_at": "2026-06-11T07:53:05.787Z",
+  "generated_at": "2026-06-25T23:44:33.383Z",
   "source_of_truth": "builderos-reboot/MISSION_QUEUE.json",
-  "mission_count": 39,
-  "missions_complete": 34,
+  "mission_count": 48,
+  "missions_complete": 37,
   "missions": [
     {
       "mission_id": "FACTORY-REBOOT-0001",
@@ -262,19 +262,80 @@
       "blueprint_id": "FACTORY-DELIBERATION-SENTRY-REGRESSION-0001-v1",
       "scope": "deliberation_v27_sentry_regression_harness",
       "steps": 6,
-      "status": "mission_failed"
+      "status": "complete"
     },
     {
       "mission_id": "AUTONOMOUS-RECOVERY-0001",
       "steps": 0,
-      "status": "ready",
+      "status": "complete",
       "error": "no_blueprint"
     },
     {
       "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+      "blueprint_id": "CONVERSATION-COMMITMENTS-V1-2026-06-11",
+      "scope": "conversation_commitments_v1_end_to_end",
+      "steps": 5,
+      "status": "complete"
+    },
+    {
+      "mission_id": "BUILDEROS-HARNESS-PROOF-0001",
+      "blueprint_id": "BUILDEROS-HARNESS-PROOF-0001-v1",
+      "scope": "builderos_operational_harness_mechanical",
+      "steps": 1,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "BUILDEROS-INTAKE-LOOP-V1-0001",
       "steps": 0,
-      "status": "pssot_complete",
+      "status": "unknown",
       "error": "no_blueprint"
+    },
+    {
+      "mission_id": "CHAIR-FP-V2-LIVE-0001",
+      "steps": 0,
+      "status": "unknown",
+      "error": "no_blueprint"
+    },
+    {
+      "mission_id": "PRODUCT-ACTION-INBOX-V1-0001",
+      "blueprint_id": "ACTION-INBOX-V1-2026-06-12",
+      "scope": "action_inbox_v1_middle_layer",
+      "steps": 5,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+      "blueprint_id": "CAPTURE-PIPELINE-V2-2026-06-16",
+      "scope": "lifeos_capture_pipeline_v2",
+      "steps": 5,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001",
+      "blueprint_id": "COMMITMENT-ROUTE-V2-2026-06-16",
+      "scope": "lifeos_commitment_route_v2",
+      "steps": 4,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-LIFERE-MASTER-BLUEPRINT-0001",
+      "steps": 0,
+      "status": "unknown",
+      "error": "no_blueprint"
+    },
+    {
+      "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+      "blueprint_id": "LIFERE-OS-V1-2026-06-21",
+      "scope": "lifere_alpha_point_b_plus_runtime",
+      "steps": 2,
+      "status": "unknown"
+    },
+    {
+      "mission_id": "PRODUCT-VOICE-RAIL-V1-0001",
+      "blueprint_id": "VOICE-RAIL-V1-2026-06-11",
+      "scope": "voice_rail_v1_communication_layer",
+      "steps": 6,
+      "status": "unknown"
     },
     {
       "mission_id": "SENTRY-ASPECT-A08",

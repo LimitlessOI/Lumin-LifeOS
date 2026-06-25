@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:40:18.188Z",
+  "generated_at": "2026-06-25T23:45:30.690Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12550,
   "files": [
@@ -29193,9 +29193,9 @@
     {
       "path": "builderos-reboot/MISSION_PACK_INDEX.json",
       "synopsis": "BuilderOS artifact — MISSION PACK INDEX.",
-      "bytes": 8047,
-      "mtime": "2026-06-23T04:33:54.048Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 9862,
+      "mtime": "2026-06-25T23:45:23.919Z",
+      "indexed_at": "2026-06-25T23:45:30.690Z",
       "synopsis_index_only": true
     },
     {
@@ -41749,9 +41749,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 35626,
-      "mtime": "2026-06-25T23:33:11.084Z",
-      "indexed_at": "2026-06-25T23:33:22.416Z"
+      "bytes": 35423,
+      "mtime": "2026-06-25T23:45:05.332Z",
+      "indexed_at": "2026-06-25T23:45:30.690Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -86395,9 +86395,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 29059,
-      "mtime": "2026-06-25T23:32:58.972Z",
-      "indexed_at": "2026-06-25T23:33:22.416Z",
+      "bytes": 32303,
+      "mtime": "2026-06-25T23:45:04.209Z",
+      "indexed_at": "2026-06-25T23:45:30.690Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

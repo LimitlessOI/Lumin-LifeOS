@@ -73,7 +73,7 @@ RULES:
 3. NEVER put a .md file as a step — documentation files are NOT steps
 4. NEVER use type esm_script for a .js or .md file — only for standalone .mjs acceptance scripts
 5. deps: only step IDs defined earlier in this same steps array
-6. GAP_FLAG: if something is truly unknown, use "GAP_FLAG: [what is missing]" as the field value
+6. GAP_FLAG: only in purpose when truly unknown — NEVER in type field; NEVER use GAP_FLAG after founder answered
 7. Do NOT include: imports, exports, behavior, routes, sql DDL, factory signatures — those are for execution
 8. Keep purpose to one sentence maximum
 9. acceptance_cmd in _meta must be a real node command (e.g. "node scripts/verify-socialmediaos.mjs")
@@ -124,7 +124,71 @@ function detectGaps(blueprintJson) {
       answer: null,
     });
   }
+  for (const step of blueprintJson?.steps || []) {
+    const file = String(step.file || '').toLowerCase();
+    if (file.endsWith('.md')) {
+      gaps.push({
+        id: `gap_${gaps.length + 1}`,
+        description: `${step.file} is documentation — not a build step`,
+        field_context: 'file',
+        resolved: false,
+        answer: null,
+      });
+    }
+  }
   return gaps;
+}
+
+function stripInvalidSteps(blueprint) {
+  if (!Array.isArray(blueprint?.steps)) return blueprint;
+  blueprint.steps = blueprint.steps.filter((s) => {
+    const file = String(s.file || '').toLowerCase();
+    const type = String(s.type || '');
+    const purpose = String(s.purpose || '');
+    if (file.endsWith('.md')) return false;
+    if (type.includes('GAP_FLAG') || purpose.includes('GAP_FLAG')) return false;
+    return Boolean(file);
+  });
+  return blueprint;
+}
+
+function founderRequestedPhase1Infra(gapAnswers) {
+  const text = Object.values(gapAnswers || {}).join(' ').toLowerCase();
+  return /phase 1|migration|service\.js|routes\.js|verify-|scaffold/.test(text);
+}
+
+function productFileSlug(productName) {
+  return String(productName || 'product').replace(/[^a-z0-9]/gi, '').toLowerCase() || 'product';
+}
+
+function productStepPrefix(productName) {
+  const slug = productFileSlug(productName);
+  if (slug.startsWith('socialmedia')) return 'SMS';
+  return slug.slice(0, 3).toUpperCase() || 'PRD';
+}
+
+function scaffoldPhase1Steps({ productName, parentSsot }) {
+  const slug = productFileSlug(productName);
+  const prefix = productStepPrefix(productName);
+  const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const tag = parentSsot || 'docs/projects/AMENDMENT_XX.md';
+  return [
+    { id: `${prefix}-P1-001`, file: `db/migrations/${date}_${slug}_core.sql`, type: 'sql', purpose: `Core ${slug} tables and indexes`, deps: [], ssot_tag: tag },
+    { id: `${prefix}-P1-002`, file: `services/${slug}-service.js`, type: 'esm', purpose: `Core ${slug} business logic`, deps: [`${prefix}-P1-001`], ssot_tag: tag },
+    { id: `${prefix}-P1-003`, file: `routes/${slug}-routes.js`, type: 'esm', purpose: `HTTP API routes for ${slug}`, deps: [`${prefix}-P1-002`], ssot_tag: tag },
+    { id: `${prefix}-P1-004`, file: `scripts/verify-${slug}.mjs`, type: 'esm_script', purpose: `Acceptance verification for ${slug}`, deps: [`${prefix}-P1-003`], ssot_tag: tag },
+  ];
+}
+
+function finalizeBlueprint(blueprint, { productName, parentSsot, gapAnswers = null } = {}) {
+  stripInvalidSteps(blueprint);
+  let gaps = detectGaps(blueprint);
+  if ((gaps.length > 0 || (blueprint.steps?.length || 0) < 3) && founderRequestedPhase1Infra(gapAnswers)) {
+    blueprint.steps = scaffoldPhase1Steps({ productName, parentSsot });
+    gaps = detectGaps(blueprint);
+  }
+  blueprint._gaps = gaps;
+  return { blueprint, gaps };
 }
 
 function detectConsequenceFlags(blueprintJson) {
@@ -248,9 +312,13 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
         regeneratePrompt,
         { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
       );
-      const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
-      const gaps = detectGaps(blueprint);
-      blueprint._gaps = gaps;
+      let blueprint = parseBlueprintFromAiResponse(blueprintRaw);
+      const { blueprint: finalized, gaps } = finalizeBlueprint(blueprint, {
+        productName: session.product_name,
+        parentSsot: oldBlueprint._meta?.parent_ssot,
+        gapAnswers,
+      });
+      blueprint = finalized;
       blueprint._meta = {
         ...oldBlueprint._meta,
         ...blueprint._meta,
@@ -273,6 +341,12 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
   }
 
   async function _runBackfill(sessionId, amendmentText) {
+    const { rows: sessionRows } = await pool.query(
+      'SELECT product_name FROM blueprint_intake_sessions WHERE id = $1',
+      [sessionId]
+    );
+    const productName = sessionRows[0]?.product_name;
+
     const codebaseScan = await scanCodebasePatterns();
     await updateSession(pool, sessionId, { codebase_scan_json: codebaseScan });
 
@@ -289,11 +363,13 @@ Phase 1 code infrastructure (migration, service, routes, verify script) belongs 
       `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`,
       { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
     );
-    const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
+    let blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 
-    // Step 3: gap detection
-    const gaps = detectGaps(blueprint);
-    blueprint._gaps = gaps;
+    const { blueprint: finalized, gaps } = finalizeBlueprint(blueprint, {
+      productName,
+      parentSsot: blueprint._meta?.parent_ssot,
+    });
+    blueprint = finalized;
     blueprint._meta = { ...blueprint._meta, blueprint_version: '1.0.0-intake', generated_by: 'blueprint-intake-service', scanned_at: codebaseScan.scanned_at };
 
     const newStatus = gaps.length > 0 ? 'gap_collection' : 'arc_review';
