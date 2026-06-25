@@ -1,68 +1,33 @@
 {
   "schema": "lumin_terminal_connection_proof_v1",
-  "generated_at": "2026-06-25T22:20:46.652Z",
+  "generated_at": "2026-06-25T22:27:57.199Z",
   "production_base": "https://robust-magic-production.up.railway.app",
-  "deploy_sha": "f9323f90d72317b3864a5a806022bd5b7e35a362",
+  "deploy_sha": "a904933a000419211242d819a6edf32c838c91a5",
   "endpoint": "/api/v1/lifeos/builderos/command-control/founder-interface/message",
-  "auth": "x-command-key (command_key_fallback founder_admin)",
-  "verdict": "TERMINAL_COMMANDS_PROVEN_CONVERSATION_NOT",
-  "terminal_commands": {
-    "proven_count": 3,
-    "total_count": 3,
-    "cases": [
-      {
-        "text": "open LifeRE",
-        "command_truth": "COMMAND_RAN",
-        "chair_channel": "system_action",
-        "shell_action": "lifeos-lifere.html",
-        "pass": true
-      },
-      {
-        "text": "what is point b",
-        "command_truth": "COMMAND_RAN",
-        "chair_channel": "system_action",
-        "pass": true
-      },
-      {
-        "text": "run alpha cycle",
-        "command_truth": "COMMAND_RAN",
-        "chair_channel": "system_action",
-        "detail": "Alpha daily cycle ran — 6/6 steps passed",
-        "pass": true
-      }
-    ]
-  },
-  "display_path": {
-    "text": "display queue status",
-    "command_truth": "NO_COMMAND_RAN",
-    "chair_channel": "display",
-    "honest_no_execute": true,
-    "pass": true
-  },
-  "conversation_failures": [
-    {
-      "text": "should I get an oil change this week?",
-      "action": "auto",
-      "issue": "Misrouted to display queue — does not answer the question",
-      "chair_channel": "display",
-      "command_truth": "NO_COMMAND_RAN",
-      "ui_uses_this": true,
-      "note": "lifeos-app.html sends action:auto"
-    },
-    {
-      "text": "should I get an oil change this week?",
-      "action": "counsel",
-      "issue": "Chair channel but reply about Point B alpha path — not oil change counsel",
-      "chair_channel": "chair",
-      "command_truth": "NO_COMMAND_RAN",
-      "summary_head": "The machine path is finished, and the system is awaiting the final alpha state."
-    }
-  ],
+  "verdict": "PROVEN_TERMINAL_AND_CONVERSATION",
   "parity_suite": {
     "script": "npm run lifeos:lumin-chair:parity",
-    "passed": ["T1_open_lifere", "T2_point_b", "T3_alpha_cycle", "T5", "T6", "T7", "T8"],
-    "failed": ["T4_counsel_no_theater"],
-    "fail_reason": "oil change auto → display !== chair"
+    "ok": true,
+    "passed_all": true,
+    "failed": []
   },
-  "operator_summary": "System commands behave like a real terminal (COMMAND_RAN with receipts). Normal conversation in the app (action:auto) is NOT proven — casual questions can hit queue display instead of Lumin counsel."
+  "conversation_live_t4": {
+    "text": "should I get an oil change this week?",
+    "action": "auto",
+    "chair_channel": "chair",
+    "command_truth": "NO_COMMAND_RAN",
+    "not_display": true,
+    "not_queue_theater": true,
+    "summary_sample": "You're considering an oil change this week. According to Jiffy Lube, Valvoline..."
+  },
+  "terminal_commands_proven": [
+    "open LifeRE → COMMAND_RAN",
+    "what is point b → COMMAND_RAN",
+    "run alpha cycle → COMMAND_RAN"
+  ],
+  "verify_commands": [
+    "npm run lifeos:lumin-chair:parity",
+    "npm run lifeos:lumin:conversation:verify:live",
+    "npm run lifeos:lumin:connection:verify:live"
+  ]
 }

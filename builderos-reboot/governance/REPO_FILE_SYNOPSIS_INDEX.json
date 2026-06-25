@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T22:26:07.369Z",
+  "generated_at": "2026-06-25T22:28:08.184Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12534,
   "files": [
@@ -70203,9 +70203,9 @@
     {
       "path": "products/receipts/LUMIN_TERMINAL_CONNECTION_PROOF.json",
       "synopsis": "Product receipt — LUMIN TERMINAL CONNECTION PROOF.",
-      "bytes": 2496,
-      "mtime": "2026-06-25T22:21:11.895Z",
-      "indexed_at": "2026-06-25T22:26:07.369Z",
+      "bytes": 1156,
+      "mtime": "2026-06-25T22:28:06.230Z",
+      "indexed_at": "2026-06-25T22:28:08.184Z",
       "synopsis_index_only": true
     },
     {
