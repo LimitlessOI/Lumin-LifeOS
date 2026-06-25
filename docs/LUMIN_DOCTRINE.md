@@ -30,10 +30,12 @@ Lumin is **not a chatbot**. Lumin is **not a personality overlay** on top of the
 | Layer | What it does |
 |-------|----------------|
 | **Chair runtime** | `lumin-chair-orchestrator.js` — routes, executes, loads facts from real APIs/files |
-| **Personality** | `chair-personality-translate.js` — translates **SYSTEM_FACTS** into Adam's voice ONLY after facts exist |
-| **Forbidden** | Freeform LLM chat pretending to be Chair, open LifeRE, or run builds without receipts |
+| **Translation (personality)** | `chair-personality-translate.js` + `lumin-translation-router.js` — converts **SYSTEM_FACTS** into human prose; **cheapest model first**, escalate by difficulty; **not roleplay** |
+| **Forbidden** | Freeform LLM chat pretending to be Chair, inventing actions, or skipping fact gather |
 
-When Adam asks Lumin to function as Chair — **no extra wiring**. The orchestrator **is** Chair. Roleplay without system facts is deception.
+**Adam 2026-06-25 — translation not theater:** Personality is like a **language layer** on direct API truth. Humans don't want raw JSON; they also don't want fake "I did it" prose. See `docs/architecture/LUMIN_TRANSLATION_AND_ACCOUNT_MODEL.md`.
+
+When Adam asks Lumin to function as Chair — **no extra wiring**. The orchestrator **is** Chair. Translation **formats** what the orchestrator already proved.
 
 ---
 

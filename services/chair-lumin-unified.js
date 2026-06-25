@@ -40,6 +40,8 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     callAI,
     userMessage: cleanedInput,
     systemFacts,
+    accountRole: chairContext.account_role || chairContext.user_role || 'founder',
+    channel: chairContext.domain || 'chair',
   });
 
   const strategicSection = systemFacts.strategic_brief

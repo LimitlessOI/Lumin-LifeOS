@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T21:54:25.985Z",
+  "generated_at": "2026-06-25T22:01:20.156Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12522,
+  "file_count": 12524,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -39970,6 +39970,13 @@
       "indexed_at": "2026-06-25T21:54:24.956Z"
     },
     {
+      "path": "docs/architecture/LUMIN_TRANSLATION_AND_ACCOUNT_MODEL.md",
+      "synopsis": "Lumin — translation layer, cost routing, account capabilities, fluid UI",
+      "bytes": 4409,
+      "mtime": "2026-06-25T22:00:39.681Z",
+      "indexed_at": "2026-06-25T22:01:20.156Z"
+    },
+    {
       "path": "docs/architecture/MEMORY_ARCHITECTURE_ARCHAEOLOGY.md",
       "synopsis": "Memory Architecture Archaeology",
       "bytes": 29823,
@@ -41465,9 +41472,9 @@
     {
       "path": "docs/LUMIN_DOCTRINE.md",
       "synopsis": "LUMIN DOCTRINE — Canonical Specification",
-      "bytes": 13648,
-      "mtime": "2026-06-24T20:34:41.961Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z"
+      "bytes": 14001,
+      "mtime": "2026-06-25T22:00:41.431Z",
+      "indexed_at": "2026-06-25T22:01:20.156Z"
     },
     {
       "path": "docs/marketing/video-scripts.md",
@@ -41905,9 +41912,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 482503,
-      "mtime": "2026-06-25T21:54:01.697Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z"
+      "bytes": 484065,
+      "mtime": "2026-06-25T22:01:12.077Z",
+      "indexed_at": "2026-06-25T22:01:20.156Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -86763,9 +86770,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 2603,
-      "mtime": "2026-06-25T18:34:35.676Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 2731,
+      "mtime": "2026-06-25T22:00:45.275Z",
+      "indexed_at": "2026-06-25T22:01:20.156Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86782,10 +86789,10 @@
     },
     {
       "path": "services/chair-personality-translate.js",
-      "synopsis": "Lumin personality translate — voice layer on real system facts only (not fake chat).",
-      "bytes": 3208,
-      "mtime": "2026-06-24T23:51:12.852Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
+      "bytes": 3063,
+      "mtime": "2026-06-25T22:00:45.229Z",
+      "indexed_at": "2026-06-25T22:01:20.156Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89346,6 +89353,16 @@
       "bytes": 8555,
       "mtime": "2026-06-22T22:46:28.745Z",
       "indexed_at": "2026-06-25T21:54:24.956Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/lumin-translation-router.js",
+      "synopsis": "Lumin translation routing — cheapest model first, escalate by difficulty + account role.",
+      "bytes": 4425,
+      "mtime": "2026-06-25T22:00:55.023Z",
+      "indexed_at": "2026-06-25T22:01:20.156Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
