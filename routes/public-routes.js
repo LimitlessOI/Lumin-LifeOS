@@ -225,12 +225,7 @@ export function registerPublicRoutes(app, {
     }
     const filePath = path.join(__dirname, "public", "downloads", "lifeos.apk");
     if (!fs.existsSync(filePath)) {
-      return res.status(404).json({
-        ok: false,
-        error: "APK not built yet",
-        install_page: "/install",
-        build: "npm run mobile:build:android",
-      });
+      return res.redirect(302, "/install?reason=apk-not-built");
     }
     res.set({
       "Content-Type": "application/vnd.android.package-archive",
@@ -248,10 +243,10 @@ export function registerPublicRoutes(app, {
     return sendPublicFileNoCache(res, filePath);
   });
 
-  app.get("/download/lifeos.ipa", (_req, res) => {
+  app.get("/download/lifeos.ipa", (req, res) => {
     const filePath = path.join(__dirname, "public", "downloads", "lifeos.ipa");
     if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ ok: false, error: "IPA not built yet", install_page: "/install" });
+      return res.redirect(302, "/install?reason=ipa-not-built");
     }
     res.set("Content-Type", "application/octet-stream");
     return res.sendFile(filePath);

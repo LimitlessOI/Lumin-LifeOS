@@ -296,6 +296,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-05-19 | **`routes/public-routes.js` + `lifeos-install.html`** — missing APK/IPA no longer returns JSON (Safari saved error as file); redirect to `/install`; iPhone saved-file alert. | Adam: download saved a file, not an app. | ✅ node --check | deploy |
 | 2026-05-19 | **`routes/public-routes.js` + `lifeos-install.html`** — iPhone install fix: hide APK card on iOS, promote Add to Home Screen; redirect `/download/lifeos.apk` on iPhone UA to `/install` (unsupported file type was Android APK/JSON on Apple). | Adam: unsupported file type on iPhone at install page. | ✅ node --check | deploy |
 | 2026-05-19 | **`routes/public-routes.js`** — `/install`, `/download`, `/download/release.json`, `/download/lifeos.apk`, `/download/lifeos-ios.plist`, `/download/lifeos.ipa` for direct app install without stores. | Adam: real download link, not browser-only URL. | ✅ node --check | deploy + build APK/IPA |
 | 2026-05-19 | **`src/server/auth/requireKey.js`** — after command-key mismatch, accept valid LifeOS account JWT in `Authorization: Bearer` (`verifyToken`, sets `req.lifeosUser`, `req.auth_mode=account_jwt`). Routes still on raw `requireKey` now work for signed-in founder without operator key. | Adam: logged in but LifeOS APIs returned Unauthorized — Bearer JWT was not command key and was rejected. | ✅ node --check | deploy |

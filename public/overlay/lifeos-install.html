@@ -90,10 +90,12 @@
 <body>
   <div class="wrap">
     <div class="logo">LifeOS</div>
-    <p class="tag">Install the app directly — no App Store or Play Store required.</p>
+    <p class="tag">On iPhone there is <strong>no install file yet</strong> — use Add to Home Screen below.</p>
     <p id="platform-hint"></p>
-
-    <p id="platform-hint"></p>
+    <div class="alert" id="saved-file-alert" style="display:none;">
+      That saved file is <strong>not an app</strong> — our server returned an error document because the real
+      install file is not built yet. You can delete it from Files. Follow <strong>Add to Home Screen</strong> below.
+    </div>
     <div class="alert" id="ios-alert" style="display:none;">
       <strong>iPhone cannot install .apk files.</strong> Those are Android only. On iPhone, use
       <strong>Add to Home Screen</strong> below (works now), or wait for our signed iOS build.
@@ -115,7 +117,7 @@
       <span class="badge wait" id="android-badge">Checking…</span>
       <h2>Android — download APK</h2>
       <p>Tap below to download and install. You may need to allow installs from your browser (unknown sources).</p>
-      <a class="btn disabled" id="android-btn" href="#" download>Download LifeOS.apk</a>
+      <button type="button" class="btn disabled" id="android-btn" disabled>Not built yet — Android only</button>
       <ol class="steps" id="android-steps" style="display:none;margin-top:12px;">
         <li>Tap <strong>Download LifeOS.apk</strong></li>
         <li>Open the downloaded file → <strong>Install</strong></li>
@@ -150,7 +152,13 @@
     const isIOS = /iPhone|iPad|iPod/i.test(ua);
     const hint = document.getElementById('platform-hint');
     const iosAlert = document.getElementById('ios-alert');
+    const savedAlert = document.getElementById('saved-file-alert');
     const androidCard = document.getElementById('card-android');
+    const qs = new URLSearchParams(location.search);
+
+    if (qs.get('from') === 'apk-on-ios' || qs.get('reason') === 'apk-not-built' || qs.get('reason') === 'ipa-not-built') {
+      if (savedAlert) savedAlert.style.display = '';
+    }
 
     if (isIOS) {
       hint.textContent = 'iPhone detected — use Add to Home Screen (not APK download).';
@@ -182,12 +190,14 @@
 
     const origin = location.origin;
 
-    if (!isIOS && release?.android?.available) {
+    if (!isIOS && release?.android?.available && androidBtn) {
       androidBadge.textContent = 'Ready · v' + (release.android.version || '1');
       androidBadge.className = 'badge ready';
-      androidBtn.href = release.android.download_url || '/download/lifeos.apk';
+      const apkUrl = release.android.download_url || '/download/lifeos.apk';
+      androidBtn.disabled = false;
       androidBtn.classList.remove('disabled');
       androidBtn.textContent = 'Download LifeOS.apk';
+      androidBtn.onclick = () => { location.href = apkUrl; };
       androidSteps.style.display = '';
     } else if (!isIOS && androidBadge) {
       androidBadge.textContent = 'Build pending';
