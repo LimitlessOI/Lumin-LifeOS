@@ -93,11 +93,5 @@ jobs:
             echo "No APK changes to commit."
             exit 0
           fi
-          git commit -m "$(cat <<'EOF'
-[mobile] Build LifeOS Android APK for direct install
-
-Debug APK copied to public/downloads/lifeos.apk; release.json android.available=true.
-Install: /install on Railway after deploy.
-EOF
-)"
+          git commit -m "[mobile] Build LifeOS Android APK for direct install"
           git push

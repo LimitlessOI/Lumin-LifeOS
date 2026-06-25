@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T19:05:58.229Z",
+  "generated_at": "2026-06-25T19:07:04.150Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12411,
+  "file_count": 12412,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -35,9 +35,9 @@
     {
       "path": ".github/workflows/build-lifeos-android.yml",
       "synopsis": "yml — .github/workflows/build-lifeos-android.yml.",
-      "bytes": 2992,
-      "mtime": "2026-06-25T19:05:53.702Z",
-      "indexed_at": "2026-06-25T19:05:58.229Z"
+      "bytes": 2842,
+      "mtime": "2026-06-25T19:07:00.271Z",
+      "indexed_at": "2026-06-25T19:07:04.150Z"
     },
     {
       "path": ".github/workflows/cards-from-seed.yml",
@@ -278,6 +278,13 @@
       "bytes": 213,
       "mtime": "2026-06-19T08:42:10.000Z",
       "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/README.md",
+      "synopsis": "LifeOS Android (Capacitor)",
+      "bytes": 410,
+      "mtime": "2026-06-25T19:07:03.624Z",
+      "indexed_at": "2026-06-25T19:07:04.150Z"
     },
     {
       "path": "anti_drift_protocol.js",
