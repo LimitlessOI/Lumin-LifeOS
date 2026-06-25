@@ -145,7 +145,7 @@
     const patchPreview = document.getElementById('patch-preview');
     const statusPill = document.getElementById('status-pill');
     let CTX = null;
-    const FOUNDER_MESSAGE = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
+    let onboardingThreadId = null;
     let suggestedPatch = null;
 
     function bubble(text, role) {
@@ -178,37 +178,27 @@
       try { return JSON.parse(fence[1].trim()); } catch { return null; }
     }
 
-    function formatReply(data) {
-      if (window.LifeOSSystemReply?.format) return LifeOSSystemReply.format(data);
-      return data.human_summary || data.error || 'No response';
-    }
-
     async function sendMessage(text) {
       const msg = String(text || '').trim();
       if (!msg) return;
       bubble(msg, 'user');
       input.value = '';
-      statusPill.textContent = 'Lumin thinking…';
-      const res = await CTX.fetchWithAuth(FOUNDER_MESSAGE, {
-        method: 'POST',
-        body: JSON.stringify({
-          text: msg,
-          action: 'auto',
-          conversational_mode: true,
-          source_mode: 'listening_setup',
-          async: false,
-        }),
+      statusPill.textContent = 'Lumen thinking…';
+      const res = await api('/onboarding/message', {
+        message: msg,
+        thread_id: onboardingThreadId,
       });
       const data = await res.json();
-      if (!res.ok && !data.human_summary) {
+      if (!res.ok || !data.ok) {
         bubble(data.error || 'Something went wrong.', 'lumen');
         statusPill.textContent = 'Error';
         return;
       }
-      const reply = formatReply(data);
-      bubble(reply, 'lumen');
-      showPatch(extractListeningPatch(reply));
-      statusPill.textContent = data.direct_connection ? 'Direct · Lumin' : 'Ready';
+      onboardingThreadId = data.thread_id || onboardingThreadId;
+      const reply = data.reply?.content || data.reply?.text || '';
+      bubble(reply || 'No response.', 'lumen');
+      showPatch(data.suggested_patch || extractListeningPatch(reply));
+      statusPill.textContent = 'Listening setup · Lumen';
     }
 
     document.getElementById('composer').addEventListener('submit', (e) => {
@@ -236,13 +226,13 @@
     });
 
     CTX = await LifeOSBootstrap.init({ requireAuth: true, promptForKey: false });
-    statusPill.textContent = 'Ready';
+    statusPill.textContent = 'Listening setup · Lumen';
 
     const prof = await api('/profile');
     const pdata = await prof.json();
     if (pdata.ok && !pdata.onboarding_done) {
       bubble(
-        "Hi — I'm Lumin. This page is for **listening & privacy preferences only** (mic schedules, family guard, clips).\n\n"
+        "Hi — I'm Lumen. This page is for **listening & privacy preferences only** (mic schedules, family guard, clips).\n\n"
         + "For system commands, builds, and LifeOS — use the **Lumin drawer** in the main app.\n\n"
         + "Nothing turns on until you choose. What matters most — family tone, wake word, scheduled listening, or keep everything off?",
         'lumen'

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T21:53:31.425Z",
+  "generated_at": "2026-06-25T21:54:17.048Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12522,
   "files": [
@@ -29040,8 +29040,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3757420,
-      "mtime": "2026-06-25T21:53:30.815Z",
-      "indexed_at": "2026-06-25T21:53:31.425Z"
+      "mtime": "2026-06-25T21:54:04.078Z",
+      "indexed_at": "2026-06-25T21:54:17.048Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41905,9 +41905,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 482035,
-      "mtime": "2026-06-25T18:37:30.745Z",
-      "indexed_at": "2026-06-25T21:53:30.436Z"
+      "bytes": 482503,
+      "mtime": "2026-06-25T21:54:01.697Z",
+      "indexed_at": "2026-06-25T21:54:17.048Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -70842,9 +70842,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 140300,
-      "mtime": "2026-06-25T19:21:42.480Z",
-      "indexed_at": "2026-06-25T21:53:30.436Z"
+      "bytes": 140478,
+      "mtime": "2026-06-25T21:53:40.320Z",
+      "indexed_at": "2026-06-25T21:54:17.048Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -71107,9 +71107,9 @@
     {
       "path": "public/overlay/lifeos-listening-setup.html",
       "synopsis": "Lumen conversational listening & privacy onboarding",
-      "bytes": 9016,
-      "mtime": "2026-06-25T18:33:27.848Z",
-      "indexed_at": "2026-06-25T21:53:30.436Z"
+      "bytes": 8719,
+      "mtime": "2026-06-25T21:53:53.324Z",
+      "indexed_at": "2026-06-25T21:54:17.048Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",

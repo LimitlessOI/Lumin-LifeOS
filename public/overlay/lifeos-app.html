@@ -1952,7 +1952,7 @@
     </div>
     <div class="settings-section" id="settings-operator-section" style="display:none;">
       <div class="settings-section-title">Operator fallback (optional)</div>
-      <p class="settings-hint">Lumin / Chair uses your signed-in account — that is your full system path. Command key is only a backup for headless scripts when no browser session exists.</p>
+      <p class="settings-hint">Lumin uses your signed-in account. Default turns are counsel only — nothing runs until you ask to build or execute (<code>do:</code>).</p>
       <div class="settings-row">
         <div class="settings-label">Command Key</div>
         <input class="settings-input" id="st-key" type="password" placeholder="Optional — not needed for Lumin" autocomplete="off" />
@@ -2055,7 +2055,7 @@
     <div class="lumin-drawer-avatar">◎</div>
     <div class="lumin-drawer-title">
       <strong>Lumin</strong>
-      <span id="lumin-status-text">Direct · Lumin Chair</span>
+      <span id="lumin-status-text">Counsel · Lumin</span>
     </div>
     <div class="lumin-dock-controls" id="lumin-dock-controls">
       <button type="button" class="lumin-dock-btn active" data-dock="right" onclick="setLuminDock('right')">Side</button>
@@ -2074,7 +2074,7 @@
     <div class="lumin-empty" id="lumin-empty">
       <div class="lumin-empty-icon">◎</div>
       <div>Talk to Lumin</div>
-      <div style="font-size:11px;opacity:0.6;margin-top:4px;">Direct connection · Lumin · your LifeOS front door</div>
+      <div style="font-size:11px;opacity:0.6;margin-top:4px;">Counsel by default · say <code style="opacity:0.9">do:</code> or ask to build to execute</div>
     </div>
   </div>
 
@@ -2955,12 +2955,17 @@ function luminFilterDirectHistory(messages) {
 function updateLuminConnectionStatus(data) {
   const el = document.getElementById('lumin-status-text');
   if (!el) return;
-  if (data?.direct_connection === true || data?.lumin_chair === true) {
-    el.textContent = 'Direct · Lumin Chair';
-    return;
-  }
   if (data?.pass_fail === 'RUNNING' || data?.async) {
     el.textContent = 'Running · polling job';
+    return;
+  }
+  const ct = data?.command_truth;
+  if (ct === 'COMMITTED' || ct === 'COMMAND_RAN' || ct === 'BUILD_ATTEMPTED') {
+    el.textContent = 'Executed · Lumin';
+    return;
+  }
+  if (ct === 'NO_COMMAND_RAN' || data?.conversational_mode) {
+    el.textContent = 'Counsel · Lumin';
     return;
   }
   el.textContent = 'Lumin';
@@ -2968,7 +2973,7 @@ function updateLuminConnectionStatus(data) {
 
 async function luminBootThread() {
   if (USE_DIRECT_SYSTEM_CHAT) {
-    updateLuminConnectionStatus({ direct_connection: true, lumin_chair: true });
+    updateLuminConnectionStatus({ command_truth: 'NO_COMMAND_RAN', conversational_mode: true });
     try {
       const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/default`);
       const data = await res.json();
@@ -3176,7 +3181,7 @@ async function luminSend(opts = {}) {
           ? 'Lumin is with you'
           : 'Say "Lumin" when ready';
       } else if (USE_DIRECT_SYSTEM_CHAT) {
-        statusEl.textContent = 'Direct · Lumin Chair';
+        statusEl.textContent = 'Counsel · Lumin';
       } else {
         statusEl.textContent = 'Ready';
       }
