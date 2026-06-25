@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:19:56.016Z",
+  "generated_at": "2026-06-25T23:23:43.463Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12542,
   "files": [
@@ -41749,9 +41749,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 35048,
-      "mtime": "2026-06-25T23:19:45.521Z",
-      "indexed_at": "2026-06-25T23:19:56.016Z"
+      "bytes": 35062,
+      "mtime": "2026-06-25T23:23:31.690Z",
+      "indexed_at": "2026-06-25T23:23:43.463Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -86362,9 +86362,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 25700,
-      "mtime": "2026-06-25T23:19:20.997Z",
-      "indexed_at": "2026-06-25T23:19:56.016Z",
+      "bytes": 25553,
+      "mtime": "2026-06-25T23:23:23.481Z",
+      "indexed_at": "2026-06-25T23:23:43.463Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

@@ -52,27 +52,26 @@ const BLUEPRINT_GEN_SYSTEM = (patterns) => {
     existing_routes: (patterns.existing_routes || []).slice(0, 20),
     scanned_at: patterns.scanned_at,
   };
-  return `You are BuilderOS ARC generating a machine-readable blueprint JSON.
+  return `You are BuilderOS ARC generating a SKELETON blueprint JSON.
 
-CODEBASE PATTERNS (use these exactly — verified against live project):
+IMPORTANT: This is a routing skeleton — NOT a full implementation. Steps contain only routing metadata.
+Full file implementations are generated at execution time. Keep the output SHORT and COMPLETE.
+
+CODEBASE PATTERNS:
 ${JSON.stringify(slim)}
 
-BLUEPRINT FORMAT RULES:
-1. Root object must have: _meta, env, steps[]
-2. _meta must have: product, phase, parent_ssot, blueprint_version, build_rule, ssot_tag, acceptance_cmd
-3. Each step must have: id (SMS-P1-NNN), file, type (sql|esm|esm_script|html), deps (array of step IDs), ssot_tag
-4. SQL steps: include full idempotent DDL in "sql" field
-5. ESM service steps: include factory_export, imports[], exports[] with sig and behavior[] arrays
-6. Route steps: include export (factory fn), ctx_destructure, imports[], routes[] with full behavior[]
-7. HTML steps: include template reference, on_load behavior, element descriptions
-8. Script steps: include run command, exit_0_means, tests[] with assert strings
-9. For EVERY import: must be from installed_packages list in codebase patterns OR add to packages_to_install
-10. For EVERY AI call: use callCouncilMember from ctx, alias from patterns.ai_call_pattern.aliases
-11. For EVERY auth check: use patterns.auth_pattern.owner_id_guard exactly
-12. For EVERY DB column typed owner_id: use TEXT NOT NULL (JWT sub is a string, not a PG UUID)
-13. GAP_FLAG rule: if you cannot determine a value from intent or patterns, write "GAP_FLAG: [describe exactly what is missing]" as the value
+SKELETON FORMAT (every field required, no extras):
+{"_meta":{"product":"...","phase":1,"parent_ssot":"...","blueprint_version":"1.0.0-skeleton","build_rule":"ARC_SKELETON","ssot_tag":"docs/projects/AMENDMENT_XX.md","acceptance_cmd":"node scripts/verify-PRODUCT.mjs"},"env":["ENV_VAR_NAME"],"steps":[{"id":"XXX-P1-001","file":"db/migrations/YYYYMMDD_name.sql","type":"sql","purpose":"one sentence","deps":[],"ssot_tag":"..."},{"id":"XXX-P1-002","file":"services/name.js","type":"esm","purpose":"one sentence","deps":["XXX-P1-001"],"ssot_tag":"..."}]}
 
-Return ONLY a valid JSON object. No markdown, no code fences. Use compact JSON (no extra whitespace or indentation).`;
+RULES:
+1. id format: PRODUCT_ABBREV-P1-NNN (e.g. SMS-P1-001 for SocialMediaOS)
+2. type: sql | esm | esm_script | html
+3. deps: only step IDs defined earlier in this same steps array
+4. GAP_FLAG: if something is truly unknown, use "GAP_FLAG: [what is missing]" as the field value
+5. Do NOT include: imports, exports, behavior, routes, sql DDL, factory signatures — those are for execution
+6. Keep purpose to one sentence maximum
+
+Return ONLY the compact JSON skeleton. No markdown, no fences, no commentary.`;
 };
 
 const GAP_CONVERSATION_SYSTEM = `You are Lumin (the BuilderOS Chair). A blueprint has gaps that need founder input to resolve.
@@ -227,7 +226,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
     // Step 2: generate blueprint
     const blueprintRaw = await callCouncilMember('claude',
       `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`,
-      { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
+      { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
     );
     const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 
@@ -310,7 +309,7 @@ Ask ONE question at a time. Be brief.`;
         const intent = parseBlueprintFromAiResponse(jsonMatch[0]);
         const blueprintRaw = await callCouncilMember('claude',
           `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
+          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
         );
         const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
         const gaps = detectGaps(blueprint);
