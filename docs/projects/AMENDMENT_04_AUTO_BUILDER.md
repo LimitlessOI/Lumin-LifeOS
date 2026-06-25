@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-25 — Blueprint is now a routing skeleton (id/file/type/purpose/deps only); full impl at execution time. Fits in 3000 tokens.
+**Last Updated:** 2026-06-25 — Fix blueprint rules: prohibit .md files as steps; clarify esm_script=executable .mjs only; add acceptance_cmd rule.
 
 ---
 

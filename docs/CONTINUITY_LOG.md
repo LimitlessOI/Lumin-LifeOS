@@ -5,6 +5,24 @@
 
 ---
 
+## [SESSION] 2026-06-25 — Overlay founder-alpha ready (local PASS, deploy pending)
+
+Adam: don't stop until founder alpha ready — everything works. **Shipped locally:** 18 missing LifeRE API routes (`lifere-alpha-surface-api.js` + routes); surgical HTML comment build path (`founder-overlay-surgical-patch.js`); intent clarify for explicit HTML comment asks; overlay alpha battery script. **Agent battery:** `npm run lifeos:overlay:alpha:battery` PASS; LifeRE agent-alpha **117/117**; lifere-alpha-gate PASS; preflight + static PASS. **Lumin (production, prior deploy):** parity 9/9, connection 5/5. **Receipt:** `products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json`. **Blocker:** commit+deploy to Railway before Adam session; `founder_usability_pass` still Adam-only. **Next:** deploy → Adam 5-step checklist in readiness receipt.
+
+---
+
+## [SESSION] 2026-06-25 — Overlay alpha readiness (conductor-led, Adam parked)
+
+Adam: keep refining overlay + alpha-test until ready for **his** alpha; Mac desktop app **parked** until overlay/programs stable; wants every feature aspect working. **Agent battery (live production):** `lifeos:lumin-chair:parity` 9/9 PASS; `alpha-test-lumin-connection` chat vs terminal 5/5 parity; conversation routing live PASS; `builder:preflight` + truth unit tests PASS; `lifeos:supervise:static` PASS; `lifeos:lifere-agent-alpha` **99/117** (18 marketing/comms API failures). **Build via Lumin:** routes correctly; small HTML comment patch fails overlay-shrink guard (honest FAIL, not theater). **Receipt:** `products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json`. **Verdict:** NOT founder-ready — conductor continues. **Next:** stub/fix 18 LifeRE API gaps; surgical overlay patch path; re-run battery before inviting Adam.
+
+---
+
+## [SESSION] 2026-06-25 — Blueprint Intake backfill E2E working (7 fixes to unblock)
+
+Backfill flow is fully functional end-to-end. Session `d53c2c7b` for SocialMediaOS: intent extracted ✅, skeleton blueprint generated ✅, 0 gaps ✅, ARC review ran ✅ (8 critical — all real blueprint quality issues, not system failures). ARC correctly caught: Claude mapped 7 Markdown docs as `esm_script` steps (wrong type); acceptance criteria missing. Fixed blueprint generation rules to prohibit .md files as steps and clarify esm_script vs esm. **Seven fixes to get here:** (1) `json_extract` taskType skips truth envelope; (2) `systemPrompt` → `systemPromptOverride`; (3) `taskType:codegen+allowModelDowngrade:false` keeps Claude, not Groq-413; (4) CLI timeout 300s; (5) async backfill via `setImmediate` + CLI polling; (6) slim patterns 28KB→6KB; (7) blueprint skeleton format (routing only, no inline DDL/behavior). **Open:** chair orchestrator `blueprint_execute` still only routes to mission ID, not adjustment/greenfield intent.
+
+---
+
 ## [SESSION] 2026-06-25 — Blueprint Intake Service + ARC pipeline (BuilderOS self-sufficient)
 
 Adam: make BuilderOS generate its own blueprints from existing amendments; fix ARC gaps; build three intake flows (backfill/greenfield/adjustment). **Shipped:** `db/migrations/20260625_blueprint_intake.sql` (intake sessions table); `services/blueprint-codebase-scanner.js` (live codebase grounding before every gen); `services/blueprint-intake.js` (all three flows + gap detection + ARC review); `routes/blueprint-intake-routes.js` (9 endpoints + chair-hook); `scripts/run-arc-entry-gate.mjs`, `run-arc-pipeline.mjs`, `run-blueprint-intake.mjs`; wired into `core/two-tier-system-init.js`; npm scripts `blueprint:intake*`; Amendment 04 SSOT updated. Also upgraded blueprint v1.0.0 → v1.1.0 (17 CRITICAL gaps fixed: wrong auth field, wrong AI import pattern, missing column, wrong transcriber method). **Open gaps:** (1) chair orchestrator `blueprint_execute` doesn't detect adjustment/greenfield intent — only routes to mission ID; (2) CLI AI review needs council-service bridge; (3) gap answer patching is all-or-nothing (by design). **Verify:** `npm run blueprint:intake:list` (needs DB). **Next:** wire chair-orchestrator to detect "adjust" vs "execute" and call `/api/v1/blueprint/chair-hook`.

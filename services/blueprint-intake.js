@@ -65,11 +65,18 @@ SKELETON FORMAT (every field required, no extras):
 
 RULES:
 1. id format: PRODUCT_ABBREV-P1-NNN (e.g. SMS-P1-001 for SocialMediaOS)
-2. type: sql | esm | esm_script | html
-3. deps: only step IDs defined earlier in this same steps array
-4. GAP_FLAG: if something is truly unknown, use "GAP_FLAG: [what is missing]" as the field value
-5. Do NOT include: imports, exports, behavior, routes, sql DDL, factory signatures — those are for execution
-6. Keep purpose to one sentence maximum
+2. type values and what they mean:
+   - sql → a .sql file containing DDL (migrations)
+   - esm → a .js service or route module (factory function, exports something)
+   - esm_script → an executable .mjs acceptance test script (run with node, not imported)
+   - html → a .html file in public/
+3. NEVER put a .md file as a step — documentation files are NOT steps
+4. NEVER use type esm_script for a .js or .md file — only for standalone .mjs acceptance scripts
+5. deps: only step IDs defined earlier in this same steps array
+6. GAP_FLAG: if something is truly unknown, use "GAP_FLAG: [what is missing]" as the field value
+7. Do NOT include: imports, exports, behavior, routes, sql DDL, factory signatures — those are for execution
+8. Keep purpose to one sentence maximum
+9. acceptance_cmd in _meta must be a real node command (e.g. "node scripts/verify-socialmediaos.mjs")
 
 Return ONLY the compact JSON skeleton. No markdown, no fences, no commentary.`;
 };

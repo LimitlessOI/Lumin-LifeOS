@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:23:43.463Z",
+  "generated_at": "2026-06-25T23:27:03.679Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12542,
   "files": [
@@ -40414,9 +40414,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 456671,
-      "mtime": "2026-06-25T22:28:46.323Z",
-      "indexed_at": "2026-06-25T22:30:59.030Z"
+      "bytes": 459479,
+      "mtime": "2026-06-25T23:26:45.785Z",
+      "indexed_at": "2026-06-25T23:27:03.679Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41749,9 +41749,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 35062,
-      "mtime": "2026-06-25T23:23:31.690Z",
-      "indexed_at": "2026-06-25T23:23:43.463Z"
+      "bytes": 35058,
+      "mtime": "2026-06-25T23:26:52.135Z",
+      "indexed_at": "2026-06-25T23:27:03.679Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -86362,9 +86362,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 25553,
-      "mtime": "2026-06-25T23:23:23.481Z",
-      "indexed_at": "2026-06-25T23:23:43.463Z",
+      "bytes": 26086,
+      "mtime": "2026-06-25T23:26:30.138Z",
+      "indexed_at": "2026-06-25T23:27:03.679Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
