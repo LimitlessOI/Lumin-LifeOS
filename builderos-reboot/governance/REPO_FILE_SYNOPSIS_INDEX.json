@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-24T23:52:49.442Z",
+  "generated_at": "2026-06-25T06:40:42.119Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12383,
+  "file_count": 12384,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41113,9 +41113,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 479831,
-      "mtime": "2026-06-24T23:51:55.032Z",
-      "indexed_at": "2026-06-24T23:52:49.442Z"
+      "bytes": 480282,
+      "mtime": "2026-06-25T06:40:35.214Z",
+      "indexed_at": "2026-06-25T06:40:42.119Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -69948,9 +69948,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 128104,
-      "mtime": "2026-06-24T23:51:27.650Z",
-      "indexed_at": "2026-06-24T23:52:49.442Z"
+      "bytes": 132262,
+      "mtime": "2026-06-25T06:40:33.173Z",
+      "indexed_at": "2026-06-25T06:40:42.119Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -70398,9 +70398,9 @@
     {
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
-      "bytes": 7107,
-      "mtime": "2026-06-24T23:44:35.841Z",
-      "indexed_at": "2026-06-24T23:45:06.110Z",
+      "bytes": 7113,
+      "mtime": "2026-06-25T06:40:33.375Z",
+      "indexed_at": "2026-06-25T06:40:42.119Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -70525,6 +70525,16 @@
       "bytes": 772,
       "mtime": "2026-06-21T21:39:02.613Z",
       "indexed_at": "2026-06-24T20:55:58.879Z"
+    },
+    {
+      "path": "public/shared/lifeos-family-tone-guard.js",
+      "synopsis": "Family Tone Guard — opt-in mic watch for yelling (continuous vibrate until calm)",
+      "bytes": 10265,
+      "mtime": "2026-06-25T06:40:40.190Z",
+      "indexed_at": "2026-06-25T06:40:42.119Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "public/shared/lifeos-founder-bubble-proof.js",

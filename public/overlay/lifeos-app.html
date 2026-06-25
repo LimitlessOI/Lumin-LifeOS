@@ -594,6 +594,20 @@
       color: #fcd34d;
     }
     .ambient-pill-btn[data-mode="off"] { opacity: 0.85; }
+    .family-guard-pill .ambient-pill-btn[data-mode="watching"] {
+      border-color: rgba(244, 114, 182, 0.45);
+      background: rgba(244, 114, 182, 0.08);
+    }
+    .family-guard-pill .ambient-pill-btn[data-mode="yelling"] {
+      border-color: rgba(239, 68, 68, 0.65);
+      background: rgba(239, 68, 68, 0.14);
+      color: #fecaca;
+    }
+    .family-guard-pill .ambient-pill-btn[data-mode="yelling"] .ambient-dot {
+      background: #ef4444;
+      opacity: 1;
+      animation: ambient-pulse 0.55s ease-in-out infinite;
+    }
     .ambient-dot {
       width: 7px;
       height: 7px;
@@ -1741,6 +1755,15 @@
     </div>
     <div id="ambient-toast" class="ambient-toast" role="status" aria-live="polite"></div>
 
+    <div id="family-guard-pill" class="ambient-pill family-guard-pill" aria-live="polite">
+      <button type="button" class="ambient-pill-btn" id="family-guard-toggle" data-mode="off" aria-pressed="false"
+        title="Family tone guard — vibrates when you yell or get snippy (mic stays on device, not recorded)">
+        <span class="ambient-dot" aria-hidden="true"></span>
+        <span id="family-guard-label">Family guard off</span>
+      </button>
+      <span class="ambient-pill-hint" id="family-guard-hint">Tap to watch tone — yell = vibrate until calm · snippy/mean = one pulse</span>
+    </div>
+
     <!-- Content iframe -->
     <iframe class="content-frame" id="content-frame"
       src="/overlay/lifeos-dashboard.html"
@@ -1927,6 +1950,15 @@
       <p class="settings-hint">Named bodies for <code>POST /api/v1/lifeos/gate-change/run-preset</code> (multi-model debate runs on the server). Copy a CLI line — you still need <code>COMMAND_CENTER_KEY</code> and <code>PUBLIC_BASE_URL</code> in your shell to execute it.</p>
       <button type="button" class="settings-invite-btn" onclick="loadGateChangePresets()">Refresh list</button>
       <div class="admin-invites-list" id="gate-presets-list"></div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-section-title">Family tone guard</div>
+      <p class="settings-hint">Phone mic listens locally — nothing is uploaded or recorded. Sustained yelling vibrates until you calm down. Snippy or mean words give one vibration nudge. Works best with LifeOS open on your phone (PWA/home screen).</p>
+      <label class="settings-row" style="cursor:pointer;user-select:none;">
+        <input type="checkbox" id="st-family-guard" style="margin-right:10px;" />
+        <span class="settings-label" style="flex:1;">Enable family tone guard</span>
+      </label>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
@@ -2529,6 +2561,8 @@ function openSettings(e) {
   document.getElementById('settings-backdrop').classList.add('open');
   const amb = document.getElementById('st-ambient');
   if (amb && window.LifeOSAmbientSense) amb.checked = LifeOSAmbientSense.enabled();
+  const fg = document.getElementById('st-family-guard');
+  if (fg && window.LifeOSFamilyToneGuard) fg.checked = LifeOSFamilyToneGuard.isEnabled();
   const invSec = document.getElementById('settings-invites-section');
   if (invSec) {
     if (CTX.role === 'admin') {
@@ -2657,6 +2691,14 @@ function saveSettings() {
     LifeOSAmbientSense.setEnabled(!!amb.checked);
     if (amb.checked) {
       LifeOSAmbientSense.start({ getCtx: () => CTX, userHandle: USER });
+    }
+  }
+  const fg = document.getElementById('st-family-guard');
+  if (fg && window.LifeOSFamilyToneGuard) {
+    if (fg.checked && !LifeOSFamilyToneGuard.isEnabled()) {
+      LifeOSFamilyToneGuard.toggle();
+    } else if (!fg.checked && LifeOSFamilyToneGuard.isEnabled()) {
+      LifeOSFamilyToneGuard.setEnabled(false);
     }
   }
   document.getElementById('sidebar-user-name').textContent = name || NAME;
@@ -3273,7 +3315,57 @@ window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
 };
 </script>
 
+<script src="/shared/lifeos-family-tone-guard.js?v=20260519a"></script>
 <script src="/shared/lifeos-ambient-listener.js?v=20260519b"></script>
+<script>
+(function initFamilyToneGuard() {
+  const btn = document.getElementById('family-guard-toggle');
+  const label = document.getElementById('family-guard-label');
+  const hint = document.getElementById('family-guard-hint');
+  const toast = document.getElementById('ambient-toast');
+  let toastTimer = null;
+
+  const MODE_COPY = {
+    off: { label: 'Family guard off', hint: 'Tap to watch tone — yell = vibrate until calm · snippy/mean = one pulse' },
+    watching: { label: 'Family guard on', hint: 'Listening locally — not recorded · yell or snippy tone triggers vibration' },
+    yelling: { label: 'Yelling — calm down', hint: 'Phone vibrating until volume drops — breathe' },
+  };
+
+  function showGuardToast(message, kind) {
+    if (!toast || !message) return;
+    toast.textContent = message;
+    toast.dataset.kind = kind || 'note';
+    toast.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
+  }
+
+  function renderMode(mode) {
+    const copy = MODE_COPY[mode] || MODE_COPY.off;
+    if (btn) {
+      btn.dataset.mode = mode;
+      btn.setAttribute('aria-pressed', mode !== 'off' ? 'true' : 'false');
+    }
+    if (label) label.textContent = copy.label;
+    if (hint) hint.textContent = copy.hint;
+  }
+
+  if (!window.LifeOSFamilyToneGuard) return;
+
+  window.LifeOSFamilyToneGuard.init({
+    onStateChange: renderMode,
+    onToast: showGuardToast,
+  });
+  renderMode(window.LifeOSFamilyToneGuard.getMode());
+
+  btn?.addEventListener('click', async () => {
+    await window.LifeOSFamilyToneGuard.toggle();
+    renderMode(window.LifeOSFamilyToneGuard.getMode());
+    const fg = document.getElementById('st-family-guard');
+    if (fg) fg.checked = window.LifeOSFamilyToneGuard.isEnabled();
+  });
+})();
+</script>
 <script>
 (function initAmbientListen() {
   const btn = document.getElementById('ambient-toggle');
