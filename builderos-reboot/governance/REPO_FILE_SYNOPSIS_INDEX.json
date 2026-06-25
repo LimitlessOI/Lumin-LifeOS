@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:46:37.094Z",
+  "generated_at": "2026-06-25T23:46:47.253Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12550,
+  "file_count": 12552,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -42307,9 +42307,9 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 12456,
-      "mtime": "2026-06-25T23:46:32.832Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z"
+      "bytes": 12560,
+      "mtime": "2026-06-25T23:46:46.628Z",
+      "indexed_at": "2026-06-25T23:46:47.253Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -69951,6 +69951,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/CRM_ALPHA_TEST.json",
+      "synopsis": "Product receipt — CRM ALPHA TEST.",
+      "bytes": 606,
+      "mtime": "2026-06-25T23:46:46.629Z",
+      "indexed_at": "2026-06-25T23:46:47.253Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/CURSOR_SESSION_2A4739F2.json",
       "synopsis": "Product receipt — CURSOR SESSION 2A4739F2.",
       "bytes": 1811,
@@ -73656,6 +73664,16 @@
       "bytes": 216,
       "mtime": "2026-06-21T21:39:06.272Z",
       "indexed_at": "2026-06-25T23:46:35.171Z"
+    },
+    {
+      "path": "scripts/crm-alpha-test.mjs",
+      "synopsis": "Alpha test CRM — BoldTrail connection, create bogus contact, ambient CRM capture, note write-back.",
+      "bytes": 4900,
+      "mtime": "2026-06-25T23:46:46.629Z",
+      "indexed_at": "2026-06-25T23:46:47.253Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
     },
     {
       "path": "scripts/cursor-pre-push-review.mjs",
