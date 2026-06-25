@@ -1,0 +1,60 @@
+{
+  "schema": "cursor_session_archive_v1",
+  "at": "2026-06-25T21:51:59.222Z",
+  "session_id": "bc7e829e-89c2-4510-af6b-ec1d910d9f51",
+  "session_short": "bc7e829e",
+  "date": "2026-06-20",
+  "raw": "docs/conversation_dumps/raw/cursor-bc7e829e-89c2-4510-af6b-ec1d910d9f51.jsonl",
+  "master": "docs/conversation_dumps/2026-06-20-cursor-session-bc7e829e-MASTER.md",
+  "product_files": [
+    {
+      "id": "LIFEOS_LUMIN",
+      "file": "docs/conversation_dumps/by-product/sessions/bc7e829e/LIFEOS-LUMIN-CHAIR.md",
+      "pairs": 73
+    },
+    {
+      "id": "BUILDEROS",
+      "file": "docs/conversation_dumps/by-product/sessions/bc7e829e/BUILDEROS-AUTONOMOUS.md",
+      "pairs": 70
+    },
+    {
+      "id": "PLATFORM",
+      "file": "docs/conversation_dumps/by-product/sessions/bc7e829e/PLATFORM-OPS.md",
+      "pairs": 57
+    },
+    {
+      "id": "GOVERNANCE",
+      "file": "docs/conversation_dumps/by-product/sessions/bc7e829e/GOVERNANCE-SSOT.md",
+      "pairs": 41
+    },
+    {
+      "id": "GENERAL",
+      "file": "docs/conversation_dumps/by-product/sessions/bc7e829e/GENERAL-MISC.md",
+      "pairs": 41
+    },
+    {
+      "id": "MODELS",
+      "file": "docs/conversation_dumps/by-product/sessions/bc7e829e/MODELS-OPS.md",
+      "pairs": 36
+    },
+    {
+      "id": "LIFERE",
+      "file": "docs/conversation_dumps/by-product/sessions/bc7e829e/LIFERE-ALPHA.md",
+      "pairs": 14
+    },
+    {
+      "id": "MEMORY_HIST",
+      "file": "docs/conversation_dumps/by-product/sessions/bc7e829e/MEMORY-HIST.md",
+      "pairs": 9
+    },
+    {
+      "id": "TC_SKYSLOPE",
+      "file": "docs/conversation_dumps/by-product/sessions/bc7e829e/TC-SKYSLOPE.md",
+      "pairs": 3
+    }
+  ],
+  "pair_count": 148,
+  "turn_count": 509,
+  "opening_preview": "Build: services/builderos-build-done-gate-helper.js\n\nAction:\nCreate a small helper module that implements BuilderOS DONE gate enforcement logic for the /build path without directly patching the Zone 3 file routes/lifeos-council-builder-rout",
+  "ok": true
+}

@@ -242,11 +242,12 @@ Mission folder (Alpha machine path): `builderos-reboot/MISSIONS/PRODUCT-LIFERE-O
 
 ## Founder conversation archive (Cursor)
 
+**Full index:** [`docs/conversation_dumps/CURSOR_SESSIONS_INDEX.md`](../conversation_dumps/CURSOR_SESSIONS_INDEX.md)
+
 | Session | Topic | Archive |
 |---------|-------|---------|
-| `e9b7659e` (2026-06-13) | LifeRE alpha, agent-alpha gate, marketing/SMOS, founder usability | [`docs/conversation_dumps/by-product/LIFERE-ALPHA.md`](../conversation_dumps/by-product/LIFERE-ALPHA.md) |
-
-Master session index: [`docs/conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md`](../conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md)
+| `e9b7659e` | LifeRE alpha, agent-alpha gate, marketing/SMOS | [`by-product/sessions/e9b7659e/LIFERE-ALPHA.md`](../conversation_dumps/by-product/sessions/e9b7659e/LIFERE-ALPHA.md) |
+| `7449d204` | LifeOS/SSOT programming review | [`by-product/sessions/7449d204/`](../conversation_dumps/by-product/sessions/7449d204/) |
 
 ---
 

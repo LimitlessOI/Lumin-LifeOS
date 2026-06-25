@@ -377,16 +377,12 @@ Large GPT exports that were **under-mapped** vs Streams D–E alone. **Full rout
 
 ## 12. Cursor agent session archives (structured)
 
-| Session ID | Date | Pairs | Master index | Receipt |
-|------------|------|------:|--------------|---------|
-| `e9b7659e-ef91-4a2e-911e-16e735386b9e` | 2026-06-13 | 741 | [`conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md`](conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md) | [`products/receipts/CURSOR_SESSION_E9B7659E.json`](../products/receipts/CURSOR_SESSION_E9B7659E.json) |
+**Canonical index:** [`conversation_dumps/CURSOR_SESSIONS_INDEX.md`](conversation_dumps/CURSOR_SESSIONS_INDEX.md) — **9 parent sessions** (743 + 315 + 314 + … exchange pairs). Batch receipt: [`products/receipts/CURSOR_SESSIONS_BATCH.json`](../products/receipts/CURSOR_SESSIONS_BATCH.json).
 
-**Product buckets:** `docs/conversation_dumps/by-product/` — LIFEOS-LUMIN-CHAIR, BUILDEROS-AUTONOMOUS, TC-SKYSLOPE, LIFERE-ALPHA, PLATFORM-OPS, GOVERNANCE-SSOT, MEMORY-HIST, CLIENTCARE-BILLING, GENERAL-MISC.
+**Re-archive:** `npm run lifeos:archive-cursor-transcripts:all`
 
-**Re-archive command:** `npm run lifeos:archive-cursor-transcript -- <path-to.jsonl> [sessionId] [YYYY-MM-DD]`
-
-**Product SSOT pointers:** [`docs/products/LIFEOS.md`](products/LIFEOS.md) (Lumin archive table), [`docs/products/LIFERE.md`](products/LIFERE.md).
+**Product SSOT pointers:** [`docs/products/LIFEOS.md`](products/LIFEOS.md), [`docs/products/LIFERE.md`](products/LIFERE.md).
 
 ---
 
-*Last updated: 2026-06-13 — **§12** Cursor session `e9b7659e` archived (741 pairs, by-product buckets). Prior: 2026-04-25 **§11** operator priority.*
+*Last updated: 2026-06-25 — **§12** all 9 Cursor parent sessions archived; per-session `by-product/sessions/<id>/`. Prior: 2026-06-13 single session e9b7659e.*

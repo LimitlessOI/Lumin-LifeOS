@@ -67,12 +67,14 @@ Lumin is the default way in. Persistent "Ask Lumin…" strip in the overlay. Lea
 
 ### Founder conversation archive (Cursor)
 
+**Full index (all sessions):** [`docs/conversation_dumps/CURSOR_SESSIONS_INDEX.md`](../conversation_dumps/CURSOR_SESSIONS_INDEX.md)
+
 | Session | Topic | Archive |
 |---------|-------|---------|
-| `e9b7659e` (2026-06-13) | Direct Lumin/Chair connection, listening merge, fake-connection fix, single connection law, browser agent verify | [`docs/conversation_dumps/by-product/LIFEOS-LUMIN-CHAIR.md`](../conversation_dumps/by-product/LIFEOS-LUMIN-CHAIR.md) |
-| Master index (all products in session) | Full session | [`docs/conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md`](../conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md) |
+| `e9b7659e` | Direct Lumin/Chair, listening, BuilderOS overnight, TC/SkySlope, browser verify | [`by-product/sessions/e9b7659e/`](../conversation_dumps/by-product/sessions/e9b7659e/) |
+| `7449d204` | SSOT + LifeOS programming review/fix | [`by-product/sessions/7449d204/`](../conversation_dumps/by-product/sessions/7449d204/) |
 
-Re-archive: `npm run lifeos:archive-cursor-transcript -- <path-to.jsonl> [sessionId]`
+Re-archive all: `npm run lifeos:archive-cursor-transcripts:all`
 
 ---
 

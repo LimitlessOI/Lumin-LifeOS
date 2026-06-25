@@ -5,9 +5,9 @@
 
 ---
 
-## [SESSION] 2026-06-13 — Cursor transcript archive (e9b7659e)
+## [SESSION] 2026-06-25 — All Cursor parent sessions archived (9/9)
 
-Adam: preserve every back-and-forth from Cursor session for receipts/history; product conversations routed to product files. **Shipped:** `scripts/archive-cursor-transcript.mjs`; raw jsonl + master index + 9 product buckets (741 pairs); receipt `CURSOR_SESSION_E9B7659E.json`; pointers in `LIFEOS.md`, `LIFERE.md`, `CONVERSATION_DUMP_IDEAS_INDEX` §12. **Re-run:** `npm run lifeos:archive-cursor-transcript`. **Next:** archive other agent-transcript UUIDs on demand; optional agent browser verify slice.
+Adam: archive every Cursor agent session, not just one. **Shipped:** `archive-all-cursor-transcripts.mjs` + per-session `by-product/sessions/<id>/`; **9 sessions** indexed in `CURSOR_SESSIONS_INDEX.md`; batch receipt `CURSOR_SESSIONS_BATCH.json`. **Re-run:** `npm run lifeos:archive-cursor-transcripts:all`. **Not automatic** on new agent open — run batch or add hook later.
 
 ---
 

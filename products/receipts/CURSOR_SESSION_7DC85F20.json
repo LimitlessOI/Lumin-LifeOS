@@ -1,0 +1,65 @@
+{
+  "schema": "cursor_session_archive_v1",
+  "at": "2026-06-25T21:51:59.195Z",
+  "session_id": "7dc85f20-7a8e-48cc-9045-a75ef3097193",
+  "session_short": "7dc85f20",
+  "date": "2026-06-22",
+  "raw": "docs/conversation_dumps/raw/cursor-7dc85f20-7a8e-48cc-9045-a75ef3097193.jsonl",
+  "master": "docs/conversation_dumps/2026-06-22-cursor-session-7dc85f20-MASTER.md",
+  "product_files": [
+    {
+      "id": "PLATFORM",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/PLATFORM-OPS.md",
+      "pairs": 55
+    },
+    {
+      "id": "LIFEOS_LUMIN",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/LIFEOS-LUMIN-CHAIR.md",
+      "pairs": 53
+    },
+    {
+      "id": "BUILDEROS",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/BUILDEROS-AUTONOMOUS.md",
+      "pairs": 50
+    },
+    {
+      "id": "GENERAL",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/GENERAL-MISC.md",
+      "pairs": 42
+    },
+    {
+      "id": "GOVERNANCE",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/GOVERNANCE-SSOT.md",
+      "pairs": 15
+    },
+    {
+      "id": "MODELS",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/MODELS-OPS.md",
+      "pairs": 15
+    },
+    {
+      "id": "LIFERE",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/LIFERE-ALPHA.md",
+      "pairs": 11
+    },
+    {
+      "id": "MEMORY_HIST",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/MEMORY-HIST.md",
+      "pairs": 7
+    },
+    {
+      "id": "TC_SKYSLOPE",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/TC-SKYSLOPE.md",
+      "pairs": 1
+    },
+    {
+      "id": "CLIENTCARE",
+      "file": "docs/conversation_dumps/by-product/sessions/7dc85f20/CLIENTCARE-BILLING.md",
+      "pairs": 1
+    }
+  ],
+  "pair_count": 145,
+  "turn_count": 1254,
+  "opening_preview": "Tuesday, Jun 9, 2026, 11:55 AM (UTC-7)\nThe prompt (copy-paste)\nYou are an independent auditor, not a builder. Verify what exists. Run the commands. Report truthfully.\n\nRules: Ceiling = BOOTSTRAP_AND_STAGING_READY (not FULLY_MACHINE_READY). ",
+  "ok": true
+}

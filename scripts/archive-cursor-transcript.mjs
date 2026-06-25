@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /**
  * SYNOPSIS: Archive a Cursor agent transcript (.jsonl) into docs/conversation_dumps/.
- * Archive a Cursor agent transcript (.jsonl) into docs/conversation_dumps/.
  * @ssot docs/projects/AMENDMENT_38_IDEA_VAULT.md
  */
 import fs from 'node:fs';
@@ -10,20 +9,25 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_RAW = path.join(ROOT, 'docs/conversation_dumps/raw');
-const OUT_BY_PRODUCT = path.join(ROOT, 'docs/conversation_dumps/by-product');
+const OUT_BY_PRODUCT = path.join(ROOT, 'docs/conversation_dumps/by-product/sessions');
 
 const PRODUCT_RULES = [
-  { id: 'LIFEOS_LUMIN', label: 'LifeOS / Lumin / Chair / direct connection', file: 'LIFEOS-LUMIN-CHAIR.md', re: /\blumin\b|\blumen\b|direct connection|fake connection|founder-interface|counsel only|drawer|listening setup|wake word|lifeos-app|chair\b|single connection/i },
-  { id: 'BUILDEROS', label: 'BuilderOS / TSOS / autonomous / alpha', file: 'BUILDEROS-AUTONOMOUS.md', re: /builderos|builder os|tsos|autonomous|alpha_ready|proof refresh|governed loop|execute-mission|bp_priority|gap-fill|command.?control|c2 conductor|overnight/i },
+  { id: 'LIFEOS_LUMIN', label: 'LifeOS / Lumin / Chair / direct connection', file: 'LIFEOS-LUMIN-CHAIR.md', re: /\blumin\b|\blumen\b|direct connection|fake connection|founder-interface|counsel only|drawer|listening setup|wake word|lifeos-app|chair\b|single connection|lifeos program/i },
+  { id: 'BUILDEROS', label: 'BuilderOS / TSOS / autonomous / alpha', file: 'BUILDEROS-AUTONOMOUS.md', re: /builderos|builder os|tsos|autonomous|alpha_ready|proof refresh|governed loop|execute-mission|bp_priority|gap-fill|command.?control|c2 conductor|overnight|done.gate|server\.js/i },
   { id: 'TC_SKYSLOPE', label: 'TC / SkySlope / eXp / transaction coordinator', file: 'TC-SKYSLOPE.md', re: /skyslope|sky slope|transaction coordinator|\btc\b|exp okta|glvar|transaction desk|imap.*tc|tc integration/i },
   { id: 'LIFERE', label: 'LifeRE / real estate alpha', file: 'LIFERE-ALPHA.md', re: /lifere|life re|real estate alpha|marketingos|smos|content brief|agent portal/i },
   { id: 'CLIENTCARE', label: 'ClientCare billing', file: 'CLIENTCARE-BILLING.md', re: /clientcare|client care|billing recovery|vob/i },
-  { id: 'PLATFORM', label: 'Platform / deploy / Railway / env / agent browser', file: 'PLATFORM-OPS.md', re: /railway|deploy|push to git|env registry|environment variable|browser verify|use my app|mcp browser|agent session|\.env\b/i },
+  { id: 'PLATFORM', label: 'Platform / deploy / Railway / env / agent browser', file: 'PLATFORM-OPS.md', re: /railway|deploy|push to git|env registry|environment variable|browser verify|use my app|mcp browser|agent session|\.env\b|modulariz|server\.js|curser|cursor/i },
   { id: 'MEMORY_HIST', label: 'Memory / Historian / archaeology', file: 'MEMORY-HIST.md', re: /historian|archaeolog|memory system|memories\.json|digital twin|idea vault/i },
-  { id: 'GOVERNANCE', label: 'Governance / NSSOT / founder packet', file: 'GOVERNANCE-SSOT.md', re: /nssot|north star|founder packet|amendment|ssot|truth enforcement|wisdom|opposition|assumption/i },
+  { id: 'GOVERNANCE', label: 'Governance / NSSOT / founder packet', file: 'GOVERNANCE-SSOT.md', re: /nssot|north star|founder packet|amendment|ssot|truth enforcement|wisdom|opposition|assumption|review all ssot/i },
+  { id: 'MODELS', label: 'Models / open source / Codex', file: 'MODELS-OPS.md', re: /open.?source model|codex|ope sorece|anthropic|gemini|together|openrouter/i },
 ];
 
 const SKIP_USER_RE = /^(Briefly inform the user about the task result|If the available MCP tools do not fully support)/i;
+
+export function sessionShortId(sessionId) {
+  return String(sessionId).slice(0, 8);
+}
 
 function cleanText(raw) {
   let t = String(raw || '');
@@ -36,7 +40,6 @@ function cleanText(raw) {
 function isNoise(text) {
   if (!text) return true;
   if (SKIP_USER_RE.test(text)) return true;
-  if (text.startsWith('[ADAM AUTHORIZED]') && text.length < 120 && /continuation directive/i.test(text)) return false;
   return false;
 }
 
@@ -48,7 +51,7 @@ function classify(text) {
   return hits.length ? hits : ['GENERAL'];
 }
 
-function parseTranscript(filePath) {
+export function parseTranscript(filePath) {
   const lines = fs.readFileSync(filePath, 'utf8').trim().split('\n');
   const turns = [];
   for (const line of lines) {
@@ -69,7 +72,7 @@ function parseTranscript(filePath) {
   return turns;
 }
 
-function pairTurns(turns) {
+export function pairTurns(turns) {
   const pairs = [];
   let pendingUser = null;
   for (const t of turns) {
@@ -89,8 +92,15 @@ function mdEscape(s) {
   return String(s || '').replace(/\r/g, '');
 }
 
+function firstUserPreview(pairs) {
+  const p = pairs.find((x) => x.user && x.user.length > 20);
+  return p ? mdEscape(p.user).slice(0, 240) : 'Cursor agent session';
+}
+
 function writeProductFiles(pairs, sessionId, date) {
-  fs.mkdirSync(OUT_BY_PRODUCT, { recursive: true });
+  const shortId = sessionShortId(sessionId);
+  const sessionDir = path.join(OUT_BY_PRODUCT, shortId);
+  fs.mkdirSync(sessionDir, { recursive: true });
   const buckets = Object.fromEntries(PRODUCT_RULES.map((r) => [r.id, []]));
   buckets.GENERAL = [];
 
@@ -106,7 +116,8 @@ function writeProductFiles(pairs, sessionId, date) {
   for (const rule of PRODUCT_RULES) {
     const items = buckets[rule.id] || [];
     if (!items.length) continue;
-    const outPath = path.join(OUT_BY_PRODUCT, rule.file);
+    const rel = `docs/conversation_dumps/by-product/sessions/${shortId}/${rule.file}`;
+    const outPath = path.join(sessionDir, rule.file);
     const header = `# ${rule.label}\n\n**Session:** \`${sessionId}\` · **Archived:** ${date}  \n**Source:** \`docs/conversation_dumps/raw/cursor-${sessionId}.jsonl\`  \n**Pairs in this bucket:** ${items.length}\n\n---\n\n`;
     const body = items.map((p) => {
       const a = p.assistant
@@ -115,31 +126,34 @@ function writeProductFiles(pairs, sessionId, date) {
       return `## Exchange ${p.idx}\n\n**Adam / operator:**\n\n${mdEscape(p.user).slice(0, 8000)}${p.user.length > 8000 ? '\n\n…[user message truncated]' : ''}${a}\n\n---\n`;
     }).join('\n');
     fs.writeFileSync(outPath, header + body);
-    written.push({ id: rule.id, file: `docs/conversation_dumps/by-product/${rule.file}`, pairs: items.length });
+    written.push({ id: rule.id, file: rel, pairs: items.length });
   }
 
   if (buckets.GENERAL.length) {
-    const outPath = path.join(OUT_BY_PRODUCT, 'GENERAL-MISC.md');
+    const rel = `docs/conversation_dumps/by-product/sessions/${shortId}/GENERAL-MISC.md`;
+    const outPath = path.join(sessionDir, 'GENERAL-MISC.md');
     const header = `# General / uncategorized\n\n**Session:** \`${sessionId}\` · **Pairs:** ${buckets.GENERAL.length}\n\n---\n\n`;
     const body = buckets.GENERAL.slice(0, 200).map((p) => `## Exchange ${p.idx}\n\n**User:** ${mdEscape(p.user).slice(0, 2000)}\n\n---\n`).join('\n');
     fs.writeFileSync(outPath, header + body + (buckets.GENERAL.length > 200 ? `\n\n_…${buckets.GENERAL.length - 200} more pairs in raw jsonl._\n` : ''));
-    written.push({ id: 'GENERAL', file: 'docs/conversation_dumps/by-product/GENERAL-MISC.md', pairs: buckets.GENERAL.length });
+    written.push({ id: 'GENERAL', file: rel, pairs: buckets.GENERAL.length });
   }
   return written;
 }
 
 function writeMasterDigest(pairs, sessionId, date, productFiles) {
-  const outPath = path.join(ROOT, 'docs/conversation_dumps', `${date}-cursor-session-${sessionId.slice(0, 8)}-MASTER.md`);
-  const userCount = pairs.length;
+  const shortId = sessionShortId(sessionId);
+  const outPath = path.join(ROOT, 'docs/conversation_dumps', `${date}-cursor-session-${shortId}-MASTER.md`);
   const topics = productFiles.sort((a, b) => b.pairs - a.pairs);
   const recent = pairs.slice(-25);
+  const preview = firstUserPreview(pairs);
 
   let md = `# Cursor session archive — master index
 
 **Session ID:** \`${sessionId}\`  
 **Archived:** ${date}  
 **Raw transcript:** [\`docs/conversation_dumps/raw/cursor-${sessionId}.jsonl\`](raw/cursor-${sessionId}.jsonl)  
-**Exchange pairs (user → assistant):** ${userCount}  
+**Exchange pairs (user → assistant):** ${pairs.length}  
+**Opening prompt (preview):** ${preview}  
 **Cursor transcript path (local):** \`~/.cursor/projects/Users-adamhopkins-Projects-Lumin-LifeOS/agent-transcripts/${sessionId}/${sessionId}.jsonl\`
 
 ---
@@ -153,9 +167,7 @@ function writeMasterDigest(pairs, sessionId, date, productFiles) {
     md += `| ${t.id} | [\`${t.file}\`](${t.file.replace('docs/conversation_dumps/', '')}) | ${t.pairs} |\n`;
   }
 
-  md += `\n---\n\n## Session arc (high level)\n\n`;
-  md += `This session spans governed overnight BuilderOS runs, alpha/proof remediation, LifeOS/Lumin direct-connection fixes, TC/SkySlope env questions, LifeRE alpha work, and operator directives on push-by-default + browser-based agent verification.\n\n`;
-  md += `Use **product bucket files** for full back-and-forth on a topic. Use **raw jsonl** for complete machine replay.\n\n`;
+  md += `\n---\n\n## Session arc\n\n${preview}\n\nUse **product bucket files** under \`by-product/sessions/${shortId}/\` for full back-and-forth. Use **raw jsonl** for complete machine replay.\n\n`;
   md += `---\n\n## Last 25 exchanges (most recent context)\n\n`;
 
   for (const p of recent) {
@@ -168,17 +180,16 @@ function writeMasterDigest(pairs, sessionId, date, productFiles) {
   }
 
   fs.writeFileSync(outPath, md);
-  return outPath;
+  return outPath.replace(`${ROOT}/`, '');
 }
 
-function main() {
-  const src = process.argv[2];
-  const sessionId = process.argv[3] || path.basename(src, '.jsonl');
-  const date = process.argv[4] || new Date().toISOString().slice(0, 10);
-
+export function archiveTranscript(src, sessionId, date = new Date().toISOString().slice(0, 10), { force = false } = {}) {
   if (!src || !fs.existsSync(src)) {
-    console.error('Usage: node scripts/archive-cursor-transcript.mjs <path-to.jsonl> [sessionId] [YYYY-MM-DD]');
-    process.exit(1);
+    throw new Error(`Transcript not found: ${src}`);
+  }
+  const receiptPath = path.join(ROOT, 'products/receipts', `CURSOR_SESSION_${sessionShortId(sessionId).toUpperCase()}.json`);
+  if (!force && fs.existsSync(receiptPath)) {
+    return { skipped: true, session_id: sessionId, receipt: receiptPath.replace(`${ROOT}/`, '') };
   }
 
   fs.mkdirSync(OUT_RAW, { recursive: true });
@@ -194,18 +205,37 @@ function main() {
     schema: 'cursor_session_archive_v1',
     at: new Date().toISOString(),
     session_id: sessionId,
+    session_short: sessionShortId(sessionId),
     date,
     raw: `docs/conversation_dumps/raw/cursor-${sessionId}.jsonl`,
     master,
     product_files: productFiles,
     pair_count: pairs.length,
     turn_count: turns.length,
+    opening_preview: firstUserPreview(pairs),
     ok: true,
   };
-  const receiptPath = path.join(ROOT, 'products/receipts', `CURSOR_SESSION_${sessionId.slice(0, 8).toUpperCase()}.json`);
   fs.writeFileSync(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`);
-
-  console.log(JSON.stringify(receipt, null, 2));
+  return receipt;
 }
 
-main();
+function main() {
+  const force = process.argv.includes('--force');
+  const args = process.argv.slice(2).filter((a) => a !== '--force');
+  const src = args[0];
+  const sessionId = args[1] || path.basename(src, '.jsonl');
+  const date = args[2] || new Date().toISOString().slice(0, 10);
+
+  if (!src) {
+    console.error('Usage: node scripts/archive-cursor-transcript.mjs [--force] <path-to.jsonl> [sessionId] [YYYY-MM-DD]');
+    process.exit(1);
+  }
+
+  const result = archiveTranscript(src, sessionId, date, { force });
+  console.log(JSON.stringify(result, null, 2));
+  if (result.skipped) process.exit(0);
+}
+
+if (process.argv[1] && process.argv[1].endsWith('archive-cursor-transcript.mjs')) {
+  main();
+}

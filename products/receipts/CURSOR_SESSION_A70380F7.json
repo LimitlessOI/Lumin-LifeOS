@@ -1,0 +1,45 @@
+{
+  "schema": "cursor_session_archive_v1",
+  "at": "2026-06-25T21:51:59.199Z",
+  "session_id": "a70380f7-8f58-4a21-ab97-85b1e7bf54c0",
+  "session_short": "a70380f7",
+  "date": "2026-04-07",
+  "raw": "docs/conversation_dumps/raw/cursor-a70380f7-8f58-4a21-ab97-85b1e7bf54c0.jsonl",
+  "master": "docs/conversation_dumps/2026-04-07-cursor-session-a70380f7-MASTER.md",
+  "product_files": [
+    {
+      "id": "CLIENTCARE",
+      "file": "docs/conversation_dumps/by-product/sessions/a70380f7/CLIENTCARE-BILLING.md",
+      "pairs": 19
+    },
+    {
+      "id": "PLATFORM",
+      "file": "docs/conversation_dumps/by-product/sessions/a70380f7/PLATFORM-OPS.md",
+      "pairs": 6
+    },
+    {
+      "id": "GENERAL",
+      "file": "docs/conversation_dumps/by-product/sessions/a70380f7/GENERAL-MISC.md",
+      "pairs": 5
+    },
+    {
+      "id": "LIFEOS_LUMIN",
+      "file": "docs/conversation_dumps/by-product/sessions/a70380f7/LIFEOS-LUMIN-CHAIR.md",
+      "pairs": 1
+    },
+    {
+      "id": "GOVERNANCE",
+      "file": "docs/conversation_dumps/by-product/sessions/a70380f7/GOVERNANCE-SSOT.md",
+      "pairs": 1
+    },
+    {
+      "id": "MODELS",
+      "file": "docs/conversation_dumps/by-product/sessions/a70380f7/MODELS-OPS.md",
+      "pairs": 1
+    }
+  ],
+  "pair_count": 26,
+  "turn_count": 351,
+  "opening_preview": "can you look over how I use curser and how i can use it better with the new upgrad or whatever",
+  "ok": true
+}

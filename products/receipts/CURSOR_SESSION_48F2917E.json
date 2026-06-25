@@ -1,0 +1,45 @@
+{
+  "schema": "cursor_session_archive_v1",
+  "at": "2026-06-25T21:51:59.107Z",
+  "session_id": "48f2917e-ff58-4594-b72a-57a005b6ff33",
+  "session_short": "48f2917e",
+  "date": "2026-03-15",
+  "raw": "docs/conversation_dumps/raw/cursor-48f2917e-ff58-4594-b72a-57a005b6ff33.jsonl",
+  "master": "docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md",
+  "product_files": [
+    {
+      "id": "PLATFORM",
+      "file": "docs/conversation_dumps/by-product/sessions/48f2917e/PLATFORM-OPS.md",
+      "pairs": 5
+    },
+    {
+      "id": "MODELS",
+      "file": "docs/conversation_dumps/by-product/sessions/48f2917e/MODELS-OPS.md",
+      "pairs": 4
+    },
+    {
+      "id": "LIFEOS_LUMIN",
+      "file": "docs/conversation_dumps/by-product/sessions/48f2917e/LIFEOS-LUMIN-CHAIR.md",
+      "pairs": 2
+    },
+    {
+      "id": "BUILDEROS",
+      "file": "docs/conversation_dumps/by-product/sessions/48f2917e/BUILDEROS-AUTONOMOUS.md",
+      "pairs": 2
+    },
+    {
+      "id": "GENERAL",
+      "file": "docs/conversation_dumps/by-product/sessions/48f2917e/GENERAL-MISC.md",
+      "pairs": 2
+    },
+    {
+      "id": "GOVERNANCE",
+      "file": "docs/conversation_dumps/by-product/sessions/48f2917e/GOVERNANCE-SSOT.md",
+      "pairs": 1
+    }
+  ],
+  "pair_count": 8,
+  "turn_count": 22,
+  "opening_preview": "can i set up so that codex is running from this windo",
+  "ok": true
+}

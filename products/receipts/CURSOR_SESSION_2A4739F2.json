@@ -1,0 +1,60 @@
+{
+  "schema": "cursor_session_archive_v1",
+  "at": "2026-06-25T21:51:59.088Z",
+  "session_id": "2a4739f2-5f27-4db3-9ecf-2fe06fe4b616",
+  "session_short": "2a4739f2",
+  "date": "2026-04-29",
+  "raw": "docs/conversation_dumps/raw/cursor-2a4739f2-5f27-4db3-9ecf-2fe06fe4b616.jsonl",
+  "master": "docs/conversation_dumps/2026-04-29-cursor-session-2a4739f2-MASTER.md",
+  "product_files": [
+    {
+      "id": "GENERAL",
+      "file": "docs/conversation_dumps/by-product/sessions/2a4739f2/GENERAL-MISC.md",
+      "pairs": 57
+    },
+    {
+      "id": "PLATFORM",
+      "file": "docs/conversation_dumps/by-product/sessions/2a4739f2/PLATFORM-OPS.md",
+      "pairs": 36
+    },
+    {
+      "id": "GOVERNANCE",
+      "file": "docs/conversation_dumps/by-product/sessions/2a4739f2/GOVERNANCE-SSOT.md",
+      "pairs": 29
+    },
+    {
+      "id": "MODELS",
+      "file": "docs/conversation_dumps/by-product/sessions/2a4739f2/MODELS-OPS.md",
+      "pairs": 17
+    },
+    {
+      "id": "BUILDEROS",
+      "file": "docs/conversation_dumps/by-product/sessions/2a4739f2/BUILDEROS-AUTONOMOUS.md",
+      "pairs": 16
+    },
+    {
+      "id": "LIFEOS_LUMIN",
+      "file": "docs/conversation_dumps/by-product/sessions/2a4739f2/LIFEOS-LUMIN-CHAIR.md",
+      "pairs": 11
+    },
+    {
+      "id": "MEMORY_HIST",
+      "file": "docs/conversation_dumps/by-product/sessions/2a4739f2/MEMORY-HIST.md",
+      "pairs": 10
+    },
+    {
+      "id": "TC_SKYSLOPE",
+      "file": "docs/conversation_dumps/by-product/sessions/2a4739f2/TC-SKYSLOPE.md",
+      "pairs": 5
+    },
+    {
+      "id": "CLIENTCARE",
+      "file": "docs/conversation_dumps/by-product/sessions/2a4739f2/CLIENTCARE-BILLING.md",
+      "pairs": 4
+    }
+  ],
+  "pair_count": 121,
+  "turn_count": 1203,
+  "opening_preview": "are you adding the ope sorece models yet?",
+  "ok": true
+}

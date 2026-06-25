@@ -1,0 +1,65 @@
+{
+  "schema": "cursor_session_archive_v1",
+  "at": "2026-06-25T21:51:59.172Z",
+  "session_id": "7449d204-3aee-4e6c-8c8b-ca8f89ff9be4",
+  "session_short": "7449d204",
+  "date": "2026-06-25",
+  "raw": "docs/conversation_dumps/raw/cursor-7449d204-3aee-4e6c-8c8b-ca8f89ff9be4.jsonl",
+  "master": "docs/conversation_dumps/2026-06-25-cursor-session-7449d204-MASTER.md",
+  "product_files": [
+    {
+      "id": "GOVERNANCE",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/GOVERNANCE-SSOT.md",
+      "pairs": 124
+    },
+    {
+      "id": "GENERAL",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/GENERAL-MISC.md",
+      "pairs": 102
+    },
+    {
+      "id": "PLATFORM",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/PLATFORM-OPS.md",
+      "pairs": 88
+    },
+    {
+      "id": "BUILDEROS",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/BUILDEROS-AUTONOMOUS.md",
+      "pairs": 68
+    },
+    {
+      "id": "LIFEOS_LUMIN",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/LIFEOS-LUMIN-CHAIR.md",
+      "pairs": 53
+    },
+    {
+      "id": "MODELS",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/MODELS-OPS.md",
+      "pairs": 38
+    },
+    {
+      "id": "CLIENTCARE",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/CLIENTCARE-BILLING.md",
+      "pairs": 33
+    },
+    {
+      "id": "TC_SKYSLOPE",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/TC-SKYSLOPE.md",
+      "pairs": 16
+    },
+    {
+      "id": "MEMORY_HIST",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/MEMORY-HIST.md",
+      "pairs": 12
+    },
+    {
+      "id": "LIFERE",
+      "file": "docs/conversation_dumps/by-product/sessions/7449d204/LIFERE-ALPHA.md",
+      "pairs": 11
+    }
+  ],
+  "pair_count": 315,
+  "turn_count": 3848,
+  "opening_preview": "please review all ssot's and please review the lifeOS programing and look for any issues with it and fix them",
+  "ok": true
+}

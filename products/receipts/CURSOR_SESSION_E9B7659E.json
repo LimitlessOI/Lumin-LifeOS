@@ -1,58 +1,65 @@
 {
   "schema": "cursor_session_archive_v1",
-  "at": "2026-06-25T21:44:50.529Z",
+  "at": "2026-06-25T21:51:59.399Z",
   "session_id": "e9b7659e-ef91-4a2e-911e-16e735386b9e",
-  "date": "2026-06-13",
+  "session_short": "e9b7659e",
+  "date": "2026-06-25",
   "raw": "docs/conversation_dumps/raw/cursor-e9b7659e-ef91-4a2e-911e-16e735386b9e.jsonl",
-  "master": "/Users/adamhopkins/Projects/Lumin-LifeOS/docs/conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md",
+  "master": "docs/conversation_dumps/2026-06-25-cursor-session-e9b7659e-MASTER.md",
   "product_files": [
     {
       "id": "GENERAL",
-      "file": "docs/conversation_dumps/by-product/GENERAL-MISC.md",
-      "pairs": 299
-    },
-    {
-      "id": "BUILDEROS",
-      "file": "docs/conversation_dumps/by-product/BUILDEROS-AUTONOMOUS.md",
-      "pairs": 231
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/GENERAL-MISC.md",
+      "pairs": 266
     },
     {
       "id": "PLATFORM",
-      "file": "docs/conversation_dumps/by-product/PLATFORM-OPS.md",
-      "pairs": 199
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/PLATFORM-OPS.md",
+      "pairs": 252
+    },
+    {
+      "id": "BUILDEROS",
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/BUILDEROS-AUTONOMOUS.md",
+      "pairs": 237
     },
     {
       "id": "GOVERNANCE",
-      "file": "docs/conversation_dumps/by-product/GOVERNANCE-SSOT.md",
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/GOVERNANCE-SSOT.md",
       "pairs": 174
     },
     {
       "id": "LIFEOS_LUMIN",
-      "file": "docs/conversation_dumps/by-product/LIFEOS-LUMIN-CHAIR.md",
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/LIFEOS-LUMIN-CHAIR.md",
       "pairs": 130
     },
     {
+      "id": "MODELS",
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/MODELS-OPS.md",
+      "pairs": 118
+    },
+    {
       "id": "LIFERE",
-      "file": "docs/conversation_dumps/by-product/LIFERE-ALPHA.md",
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/LIFERE-ALPHA.md",
       "pairs": 64
     },
     {
       "id": "MEMORY_HIST",
-      "file": "docs/conversation_dumps/by-product/MEMORY-HIST.md",
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/MEMORY-HIST.md",
       "pairs": 58
     },
     {
       "id": "TC_SKYSLOPE",
-      "file": "docs/conversation_dumps/by-product/TC-SKYSLOPE.md",
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/TC-SKYSLOPE.md",
       "pairs": 24
     },
     {
       "id": "CLIENTCARE",
-      "file": "docs/conversation_dumps/by-product/CLIENTCARE-BILLING.md",
+      "file": "docs/conversation_dumps/by-product/sessions/e9b7659e/CLIENTCARE-BILLING.md",
       "pairs": 4
     }
   ],
-  "pair_count": 741,
-  "turn_count": 8176,
+  "pair_count": 743,
+  "turn_count": 8203,
+  "opening_preview": "how do i find the last conversations we had",
   "ok": true
 }

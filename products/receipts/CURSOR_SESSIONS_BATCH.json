@@ -1,0 +1,83 @@
+{
+  "schema": "cursor_session_archive_batch_v1",
+  "at": "2026-06-25T21:51:59.399Z",
+  "sessions_found": 9,
+  "archived": 9,
+  "skipped": 0,
+  "failed": 0,
+  "index": "docs/conversation_dumps/CURSOR_SESSIONS_INDEX.md",
+  "sessions": [
+    {
+      "session_id": "e9b7659e-ef91-4a2e-911e-16e735386b9e",
+      "session_short": "e9b7659e",
+      "pair_count": 743,
+      "skipped": false,
+      "ok": true,
+      "master": "docs/conversation_dumps/2026-06-25-cursor-session-e9b7659e-MASTER.md"
+    },
+    {
+      "session_id": "7449d204-3aee-4e6c-8c8b-ca8f89ff9be4",
+      "session_short": "7449d204",
+      "pair_count": 315,
+      "skipped": false,
+      "ok": true,
+      "master": "docs/conversation_dumps/2026-06-25-cursor-session-7449d204-MASTER.md"
+    },
+    {
+      "session_id": "d5421079-0fbd-44ee-b176-acdd63fd445a",
+      "session_short": "d5421079",
+      "pair_count": 314,
+      "skipped": false,
+      "ok": true,
+      "master": "docs/conversation_dumps/2026-05-13-cursor-session-d5421079-MASTER.md"
+    },
+    {
+      "session_id": "bc7e829e-89c2-4510-af6b-ec1d910d9f51",
+      "session_short": "bc7e829e",
+      "pair_count": 148,
+      "skipped": false,
+      "ok": true,
+      "master": "docs/conversation_dumps/2026-06-20-cursor-session-bc7e829e-MASTER.md"
+    },
+    {
+      "session_id": "7dc85f20-7a8e-48cc-9045-a75ef3097193",
+      "session_short": "7dc85f20",
+      "pair_count": 145,
+      "skipped": false,
+      "ok": true,
+      "master": "docs/conversation_dumps/2026-06-22-cursor-session-7dc85f20-MASTER.md"
+    },
+    {
+      "session_id": "2a4739f2-5f27-4db3-9ecf-2fe06fe4b616",
+      "session_short": "2a4739f2",
+      "pair_count": 121,
+      "skipped": false,
+      "ok": true,
+      "master": "docs/conversation_dumps/2026-04-29-cursor-session-2a4739f2-MASTER.md"
+    },
+    {
+      "session_id": "34afb0d1-e574-45d7-a794-7c3a308eaa26",
+      "session_short": "34afb0d1",
+      "pair_count": 107,
+      "skipped": false,
+      "ok": true,
+      "master": "docs/conversation_dumps/2026-06-14-cursor-session-34afb0d1-MASTER.md"
+    },
+    {
+      "session_id": "a70380f7-8f58-4a21-ab97-85b1e7bf54c0",
+      "session_short": "a70380f7",
+      "pair_count": 26,
+      "skipped": false,
+      "ok": true,
+      "master": "docs/conversation_dumps/2026-04-07-cursor-session-a70380f7-MASTER.md"
+    },
+    {
+      "session_id": "48f2917e-ff58-4594-b72a-57a005b6ff33",
+      "session_short": "48f2917e",
+      "pair_count": 8,
+      "skipped": false,
+      "ok": true,
+      "master": "docs/conversation_dumps/2026-03-15-cursor-session-48f2917e-MASTER.md"
+    }
+  ]
+}
