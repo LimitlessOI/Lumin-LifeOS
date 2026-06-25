@@ -9,7 +9,7 @@ import {
   getBoldTrailConnectionStatus,
   pushApprovedFollowUp,
 } from '../services/lifere-boldtrail-bridge.js';
-import { createOrUpdateContact } from '../src/integrations/boldtrail.js';
+import { createOrUpdateContact, extractCreatedContactId } from '../src/integrations/boldtrail.js';
 import { createLifeRETwinStore, ForbiddenCrossUserError } from '../services/lifere-twin-store.js';
 import { createLifeREPerformanceTwin } from '../services/lifere-performance-twin.js';
 import { createLifeREPermissionTwin } from '../services/lifere-permission-twin.js';
@@ -234,7 +234,13 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
         limit: Number(req.query.limit) || 50,
         assignedAgentId: req.query.assigned_agent_id || null,
       });
-      res.json({ ok: pipeline.ok, result: pipeline });
+      res.json({
+        ok: pipeline.ok,
+        connected: pipeline.connected,
+        contacts: pipeline.contacts || [],
+        summary: pipeline.summary || null,
+        result: pipeline,
+      });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }
@@ -242,7 +248,7 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
 
   router.post('/boldtrail/contacts', requireKey, async (req, res) => {
     try {
-      const { name, first_name, last_name, email, phone, source, meta } = req.body || {};
+      const { name, first_name, last_name, email, phone, source, meta, note, tags } = req.body || {};
       if (!name && !email && !phone) {
         return res.status(400).json({ ok: false, error: 'name, email, or phone required' });
       }
@@ -253,6 +259,8 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
         email,
         phone,
         source: source || 'LifeRE',
+        note: note || (meta?.note ? String(meta.note) : undefined),
+        tags: tags || (meta?.alpha ? ['LifeRE-alpha'] : undefined),
         meta: meta || { created_by: 'lifere_api', alpha: true },
       });
       if (!result.ok) {
@@ -261,9 +269,17 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
           error: result.reason || result.error || 'boldtrail_create_failed',
           status: result.status || null,
           detail: result.data || null,
+          endpoint: result.endpoint || null,
         });
       }
-      res.status(201).json({ ok: true, boldtrail: result.data, raw_status: result.status });
+      const contactId = result.contact_id || extractCreatedContactId(result.data);
+      res.status(201).json({
+        ok: true,
+        contact_id: contactId,
+        boldtrail: result.data,
+        endpoint: result.endpoint || null,
+        raw_status: result.status,
+      });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }

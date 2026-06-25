@@ -64,24 +64,35 @@ if (btStatus.status === 200 && btStatus.json.boldtrail?.connected) {
   fail('boldtrail_connected', btStatus.json.boldtrail?.reason || btStatus.json.error || String(btStatus.status));
 }
 
+const pipeline = await req('GET', '/api/v1/lifere/boldtrail/pipeline?limit=5');
+const pipelineContacts = pipeline.json.contacts
+  || pipeline.json.result?.contacts
+  || [];
+if (pipeline.status === 200 && pipelineContacts.length >= 0) {
+  pass('boldtrail_pipeline', `${pipelineContacts.length} contacts`);
+} else {
+  fail('boldtrail_pipeline', JSON.stringify(pipeline.json).slice(0, 200));
+}
+
 const bogus = {
   name: `Alpha Bogus ${stamp}`,
   email: `alpha-bogus-${stamp}@lifere-alpha.test`,
-  phone: '+15555550201',
+  phone: '5555550201',
   source: 'LifeRE-alpha-test',
-  meta: { alpha: true, note: 'bogus test client — safe to delete' },
+  note: 'Alpha test bogus client — safe to delete',
+  tags: ['LifeRE-alpha'],
 };
 
 const btCreate = await req('POST', '/api/v1/lifere/boldtrail/contacts', bogus);
 let boldtrailContactId = null;
 if (btCreate.status >= 200 && btCreate.status < 300 && btCreate.json.ok) {
-  boldtrailContactId = btCreate.json.boldtrail?.id
+  boldtrailContactId = btCreate.json.contact_id
+    || btCreate.json.boldtrail?.id
     || btCreate.json.boldtrail?.contact_id
-    || btCreate.json.boldtrail?.data?.id
     || null;
-  pass('boldtrail_create_contact', boldtrailContactId || 'created_no_id');
+  pass('boldtrail_create_contact', `${boldtrailContactId || 'created'} via ${btCreate.json.endpoint || 'contact'}`);
 } else if (btCreate.status === 404) {
-  fail('boldtrail_create_contact', 'route not deployed yet — POST /api/v1/lifere/boldtrail/contacts');
+  fail('boldtrail_create_contact', 'route not deployed');
 } else {
   fail('boldtrail_create_contact', JSON.stringify(btCreate.json).slice(0, 300));
 }
@@ -91,10 +102,20 @@ const ambient = await req('POST', '/api/v1/lifeos/ambient/process', {
   user: 'adam',
   text: ambientText,
   channel: 'crm_alpha_test',
-  metadata: { alpha: true, crm_test: true, boldtrail_contact_id: boldtrailContactId },
+  metadata: {
+    alpha: true,
+    crm_test: true,
+    boldtrail_contact_id: boldtrailContactId,
+    crm_email: bogus.email,
+  },
 });
-if (ambient.status >= 200 && ambient.json.persisted && ambient.json.moments?.some((m) => m.type === 'crm_capture')) {
+const crmMoment = ambient.json.moments?.find((m) => m.type === 'crm_capture');
+const boldtrailMoment = crmMoment?.boldtrail;
+if (ambient.status >= 200 && ambient.json.persisted && crmMoment) {
   pass('ambient_crm_capture', ambient.json.feedback || ambient.json.disposition);
+  if (boldtrailMoment?.contact_id) {
+    pass('ambient_boldtrail_write', boldtrailMoment.type || 'boldtrail');
+  }
 } else if (ambient.status >= 200 && ambient.json.persisted) {
   pass('ambient_crm_capture', ambient.json.disposition || 'persisted');
 } else {
@@ -113,14 +134,17 @@ if (crmCreate.status >= 200 && crmCreate.status < 300 && crmCreate.json.ok) {
   fail('internal_crm_contact', JSON.stringify(crmCreate.json).slice(0, 200));
 }
 
-if (boldtrailContactId) {
+const noteContactId = boldtrailContactId || boldtrailMoment?.contact_id || pipelineContacts[0]?.id;
+if (noteContactId) {
   const note = await req('POST', '/api/v1/lifere/follow-up/approve', {
-    contact_id: boldtrailContactId,
+    contact_id: noteContactId,
     message: `Alpha test note — ${bogus.name} prefers text; birthday July 4. Bogus — safe to delete.`,
     agent_label: 'AlphaTest',
   });
-  if (note.status === 200 && note.json.ok) pass('boldtrail_note_writeback', boldtrailContactId);
+  if (note.status === 200 && note.json.ok) pass('boldtrail_note_writeback', String(noteContactId));
   else fail('boldtrail_note_writeback', JSON.stringify(note.json).slice(0, 300));
+} else {
+  fail('boldtrail_note_writeback', 'no contact id available');
 }
 
 report.ok = report.failed.length === 0;

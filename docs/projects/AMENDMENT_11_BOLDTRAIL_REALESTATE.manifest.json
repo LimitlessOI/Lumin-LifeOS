@@ -12,7 +12,7 @@
     "public/overlay/boldtrail.html",
     "services/lifere-boldtrail-bridge.js"
   ],
-  "last_updated": "2026-06-22",
-  "last_receipt": "2026-06-22 lifere-boldtrail-bridge",
-  "last_change_summary": "LifeRE reads BoldTrail pipeline; approval-gated note write-back"
+  "last_updated": "2026-06-25",
+  "last_receipt": "2026-06-25 kvcore-contact-create-and-note-endpoints",
+  "last_change_summary": "boldtrail.js POST /contact + action/note; ambient BoldTrail CRM capture"
 }

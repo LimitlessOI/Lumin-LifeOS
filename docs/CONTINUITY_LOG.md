@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-06-25 — CRM alpha fixes (BoldTrail create + note endpoints)
+
+Adam: *fix the issues* on CRM alpha — BoldTrail create 405, note write-back 404, ambient→BoldTrail not wired. **GAP-FILL:** `boldtrail.js` uses kvCORE `POST /contact` (not `/contacts`) and `POST/PUT /contact/:id/action/note` for notes; restored `tryBoldTrailCrmCapture` in `lumin-ambient-moment-router.js`; added `scripts/alpha-test-lumin-connection.mjs` + `npm run lifeos:crm:alpha:test`. **Live before deploy:** connected + pipeline + internal CRM + ambient inbox ✅; create + note ❌ (old deploy). **Next:** commit → redeploy → re-run `npm run lifeos:crm:alpha:test`.
+
+---
+
 ## [SESSION] 2026-06-25 — Ambient Listen v2 + overlay deploy queue
 
 Adam: ambient must work from jump — calendar auto-add, CRM capture, coachable moments, crisis vibrate + mediation consent on speaker. **Shipped locally:** `lumin-ambient-moment-router.js` (appointment→calendar, CRM→inbox/client_notes, coachable→snapshots); wired into `lumin-ambient-capture.js`; `POST /ambient/crisis-signal`; listening orchestrator posts crisis + spoken mediation consent offer; ambient toasts show moments. **Smoke:** `npm run lifeos:ambient:moment-smoke` 6/6 PASS; overlay alpha battery PASS. **Honest limit:** web ambient needs app foreground; true background vibrate when app closed = native Capacitor phase (documented in `/ambient/status`). **Next:** commit+deploy → Adam toggles Ambient + Family Tone Guard → say "appointment tomorrow" / "client birthday June 12" / test yelling vibrate with spouse consent flow.

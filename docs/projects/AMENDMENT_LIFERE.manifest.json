@@ -23,6 +23,6 @@
     "config/lifeos-stack-registry.json"
   ],
   "last_updated": "2026-06-25",
-  "last_receipt": "2026-06-25 crm-alpha-boldtrail-contacts-route",
-  "last_change_summary": "POST /lifere/boldtrail/contacts + CRM alpha test script"
+  "last_receipt": "2026-06-25 kvcore-contact-create-and-note-endpoints",
+  "last_change_summary": "BoldTrail kvCORE POST /contact + action/note; ambient CRM write-back; crm-alpha-test script"
 }

@@ -204,25 +204,113 @@ function statusLabelFromCode(code) {
   return map[code] || "unknown";
 }
 
-export async function createOrUpdateContact(contact = {}) {
-  if (!isBoldTrailAPIAvailable()) return { ok: false, reason: "missing_token" };
-  // kvCORE typically matches on email/phone; exact schema varies, so we pass a conservative payload.
+function splitName(name) {
+  const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return { first: null, last: null };
+  if (parts.length === 1) return { first: parts[0], last: null };
+  return { first: parts[0], last: parts.slice(1).join(" ") };
+}
+
+export function extractCreatedContactId(data) {
+  if (!data || typeof data !== "object") return null;
+  const candidates = [
+    data.id,
+    data.contact_id,
+    data.contactId,
+    data.data?.id,
+    data.data?.contact_id,
+    data.contact?.id,
+  ];
+  for (const c of candidates) {
+    if (c != null && String(c).trim()) return String(c);
+  }
+  return null;
+}
+
+export async function findContactByEmail(email) {
+  if (!isBoldTrailAPIAvailable() || !email) return null;
+  const normalized = String(email).trim().toLowerCase();
+  const attempts = [
+    `/contacts?limit=10&filter[email]=${encodeURIComponent(normalized)}`,
+    `/contacts?limit=50&page=1`,
+  ];
+  for (const path of attempts) {
+    const r = await request("GET", path);
+    if (!r.ok) continue;
+    const rows = extractContactsFromResponse(r.data)
+      .map(normalizeBoldTrailContact)
+      .filter(Boolean);
+    const hit = rows.find((c) => String(c.email || "").toLowerCase() === normalized);
+    if (hit) return hit;
+  }
+  return null;
+}
+
+function buildKvCoreContactPayload(contact = {}) {
+  const split = splitName(contact.name);
   const payload = {
-    name: contact.name || undefined,
-    first_name: contact.first_name || undefined,
-    last_name: contact.last_name || undefined,
+    first_name: contact.first_name || split.first || undefined,
+    last_name: contact.last_name || split.last || undefined,
     email: contact.email || undefined,
+    cell_phone_1: contact.phone || contact.cell_phone_1 || undefined,
     phone: contact.phone || undefined,
     source: contact.source || "LifeOS",
+    note: contact.note || undefined,
+    tags: Array.isArray(contact.tags) ? contact.tags : undefined,
+    lead_status: contact.lead_status ?? contact.status ?? undefined,
+    lead_type: contact.lead_type || undefined,
     meta: contact.meta || undefined,
   };
-  return await request("POST", "/contacts", payload);
+  for (const key of Object.keys(payload)) {
+    if (payload[key] === undefined) delete payload[key];
+  }
+  return payload;
+}
+
+export async function createOrUpdateContact(contact = {}) {
+  if (!isBoldTrailAPIAvailable()) return { ok: false, reason: "missing_token" };
+
+  const payload = buildKvCoreContactPayload(contact);
+  const attempts = [
+    { method: "POST", path: "/contact" },
+    { method: "POST", path: "/contacts" },
+    { method: "PUT", path: "/contact" },
+  ];
+
+  let last = null;
+  for (const attempt of attempts) {
+    const r = await request(attempt.method, attempt.path, payload);
+    last = { ...r, endpoint: attempt.path, method: attempt.method };
+    if (r.ok) {
+      return {
+        ...last,
+        contact_id: extractCreatedContactId(r.data),
+      };
+    }
+    if (r.status === 405 || r.status === 404) continue;
+    return last;
+  }
+  return last || { ok: false, reason: "create_failed" };
 }
 
 export async function addContactNote(contactId, text) {
   if (!isBoldTrailAPIAvailable()) return { ok: false, reason: "missing_token" };
   if (!contactId || !text) return { ok: false, reason: "missing_params" };
-  return await request("POST", `/contacts/${encodeURIComponent(contactId)}/notes`, { text: String(text) });
+  const noteBody = { note: String(text), text: String(text) };
+  const id = encodeURIComponent(contactId);
+  const attempts = [
+    { method: "POST", path: `/contact/${id}/action/note`, body: noteBody },
+    { method: "PUT", path: `/contact/${id}/action/note`, body: noteBody },
+    { method: "POST", path: `/contacts/${id}/notes`, body: noteBody },
+    { method: "POST", path: `/contact/${id}/notes`, body: noteBody },
+  ];
+  for (const attempt of attempts) {
+    const r = await request(attempt.method, attempt.path, attempt.body);
+    if (r.ok) return { ...r, endpoint: attempt.path, method: attempt.method };
+    if (r.status === 405 || r.status === 404) continue;
+    return r;
+  }
+  return { ok: false, reason: "note_failed" };
 }
 
 export async function tagContact(contactId, tag) {

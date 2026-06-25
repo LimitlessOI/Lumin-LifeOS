@@ -1,8 +1,16 @@
 /**
- * SYNOPSIS: Routes ambient utterances to calendar, CRM inbox, and coachable-moment logs.
+ * SYNOPSIS: Routes ambient utterances to calendar, CRM inbox, BoldTrail notes, and coachable-moment logs.
  * Runs alongside commitment/note classification — no raw audio stored.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+
+import {
+  addContactNote,
+  createOrUpdateContact,
+  extractCreatedContactId,
+  findContactByEmail,
+  isBoldTrailAPIAvailable,
+} from '../src/integrations/boldtrail.js';
 
 const APPOINTMENT_MARKERS = [
   /\b(?:appointment|meeting|showing|open house|inspection|closing|call with|zoom with|meet with)\b/i,
@@ -97,9 +105,61 @@ function extractAppointmentTitle(text) {
   return body.slice(0, 80) || 'Calendar item';
 }
 
+function extractEmail(text) {
+  const m = String(text || '').match(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/i);
+  return m?.[0]?.toLowerCase() || null;
+}
+
 function extractContactHint(text) {
   const m = String(text || '').match(/\b(?:client|with|for)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/);
   return m?.[1]?.trim() || null;
+}
+
+async function tryBoldTrailCrmCapture(body, contactHint, metadata, logger) {
+  if (!isBoldTrailAPIAvailable()) return null;
+
+  const noteText = `[LifeOS Ambient] ${String(body || '').trim().slice(0, 500)}`;
+  const email = metadata.boldtrail_email || metadata.crm_email || extractEmail(body);
+  let contactId = metadata.boldtrail_contact_id || null;
+
+  try {
+    if (!contactId && email) {
+      const found = await findContactByEmail(email);
+      contactId = found?.id || null;
+    }
+
+    if (contactId) {
+      const note = await addContactNote(contactId, noteText);
+      if (note.ok) {
+        return {
+          type: 'boldtrail_note',
+          contact_id: contactId,
+          endpoint: note.endpoint || null,
+        };
+      }
+    }
+
+    if (email || contactHint) {
+      const create = await createOrUpdateContact({
+        name: contactHint || 'Ambient Contact',
+        email: email || undefined,
+        note: noteText,
+        source: 'LifeOS-ambient',
+        tags: ['LifeOS-ambient'],
+      });
+      const newId = create.contact_id || extractCreatedContactId(create.data);
+      if (create.ok && newId) {
+        return {
+          type: 'boldtrail_contact_created',
+          contact_id: newId,
+          endpoint: create.endpoint || null,
+        };
+      }
+    }
+  } catch (err) {
+    logger.warn?.('[ambient-moment] BoldTrail CRM skipped:', err.message);
+  }
+  return null;
 }
 
 export function detectMomentSignals(text) {
@@ -222,12 +282,15 @@ export function createLuminAmbientMomentRouter({
 
       clientNoteId = await tryCrmClientNote(userId, body, contactHint);
 
-      if (inboxId || clientNoteId) {
+      const boldtrailMoment = await tryBoldTrailCrmCapture(body, contactHint, metadata, logger);
+
+      if (inboxId || clientNoteId || boldtrailMoment) {
         moments.push({
           type: 'crm_capture',
           inbox_id: inboxId,
           client_note_id: clientNoteId,
           contact_hint: contactHint,
+          boldtrail: boldtrailMoment,
         });
       }
     }

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:51:07.160Z",
+  "generated_at": "2026-06-25T23:57:40.850Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12552,
+  "file_count": 12553,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29047,9 +29047,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3767211,
-      "mtime": "2026-06-25T23:49:52.879Z",
-      "indexed_at": "2026-06-25T23:49:52.968Z"
+      "bytes": 3767580,
+      "mtime": "2026-06-25T23:57:24.585Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40414,9 +40414,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 460405,
-      "mtime": "2026-06-25T23:29:03.694Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z"
+      "bytes": 461073,
+      "mtime": "2026-06-25T23:56:59.559Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41822,17 +41822,17 @@
     {
       "path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 11 BOLDTRAIL REALESTATE.Manifest.",
-      "bytes": 701,
-      "mtime": "2026-06-22T21:05:10.184Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 726,
+      "mtime": "2026-06-25T23:57:30.672Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
       "synopsis": "AMENDMENT 11 — BoldTrail Real Estate CRM Integration",
-      "bytes": 7267,
-      "mtime": "2026-06-22T20:57:41.328Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z"
+      "bytes": 7700,
+      "mtime": "2026-06-25T23:56:53.316Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z"
     },
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json",
@@ -41940,17 +41940,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26707,
-      "mtime": "2026-06-25T23:29:39.313Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 26716,
+      "mtime": "2026-06-25T23:57:33.988Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 487984,
-      "mtime": "2026-06-25T23:29:21.678Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z"
+      "bytes": 488460,
+      "mtime": "2026-06-25T23:56:57.239Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42299,17 +42299,17 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
       "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
-      "bytes": 1082,
-      "mtime": "2026-06-25T23:49:47.292Z",
-      "indexed_at": "2026-06-25T23:51:07.160Z",
+      "bytes": 1124,
+      "mtime": "2026-06-25T23:56:57.957Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 12813,
-      "mtime": "2026-06-25T23:48:51.722Z",
-      "indexed_at": "2026-06-25T23:51:07.160Z"
+      "bytes": 13293,
+      "mtime": "2026-06-25T23:56:49.416Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -69740,9 +69740,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 26566,
-      "mtime": "2026-06-25T23:46:07.325Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 26630,
+      "mtime": "2026-06-25T23:56:48.777Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z",
       "synopsis_index_only": true
     },
     {
@@ -72614,9 +72614,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 46540,
-      "mtime": "2026-06-25T23:48:47.053Z",
-      "indexed_at": "2026-06-25T23:51:07.160Z",
+      "bytes": 47094,
+      "mtime": "2026-06-25T23:55:32.006Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -73047,6 +73047,16 @@
       "indexed_at": "2026-06-25T23:46:35.171Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
+      ]
+    },
+    {
+      "path": "scripts/alpha-test-lumin-connection.mjs",
+      "synopsis": "Live alpha — Lumin founder-interface chat vs terminal command parity.",
+      "bytes": 2843,
+      "mtime": "2026-06-25T23:55:55.683Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
     },
     {
@@ -73668,9 +73678,9 @@
     {
       "path": "scripts/crm-alpha-test.mjs",
       "synopsis": "Alpha test CRM — BoldTrail connection, create bogus contact, ambient CRM capture, note write-back.",
-      "bytes": 4900,
-      "mtime": "2026-06-25T23:46:46.629Z",
-      "indexed_at": "2026-06-25T23:46:47.253Z",
+      "bytes": 5683,
+      "mtime": "2026-06-25T23:56:00.798Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -89485,19 +89495,19 @@
     {
       "path": "services/lumin-ambient-capture.js",
       "synopsis": "Classifies ambient voice utterances — ignore, note, commitment, renegotiate;",
-      "bytes": 13406,
-      "mtime": "2026-06-25T23:28:28.097Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 13618,
+      "mtime": "2026-06-25T23:56:07.736Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
     },
     {
       "path": "services/lumin-ambient-moment-router.js",
-      "synopsis": "Routes ambient utterances to calendar, CRM inbox, and coachable-moment logs.",
-      "bytes": 8459,
-      "mtime": "2026-06-25T23:28:48.359Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "synopsis": "Routes ambient utterances to calendar, CRM inbox, BoldTrail notes, and coachable-moment logs.",
+      "bytes": 10345,
+      "mtime": "2026-06-25T23:55:49.462Z",
+      "indexed_at": "2026-06-25T23:57:40.850Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

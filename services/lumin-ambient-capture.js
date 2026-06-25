@@ -380,7 +380,11 @@ function summarizeMoments(moments = []) {
   const parts = [];
   for (const m of moments) {
     if (m.type === 'calendar_event') parts.push(`Calendar: ${m.title || 'event'}`);
-    if (m.type === 'crm_capture') parts.push('CRM note captured');
+    if (m.type === 'crm_capture') {
+      if (m.boldtrail?.type === 'boldtrail_note') parts.push('BoldTrail note added');
+      else if (m.boldtrail?.type === 'boldtrail_contact_created') parts.push('BoldTrail contact created');
+      else parts.push('CRM note captured');
+    }
     if (m.type === 'coachable_moment') {
       parts.push(m.polarity === 'strength' ? 'Coachable win saved' : 'Coachable moment saved');
     }
