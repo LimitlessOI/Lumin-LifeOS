@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T18:37:49.826Z",
+  "generated_at": "2026-06-25T18:44:30.551Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12400,
   "files": [
@@ -41105,17 +41105,17 @@
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 19 PROJECT GOVERNANCE.Manifest.",
-      "bytes": 6389,
-      "mtime": "2026-06-24T20:34:41.961Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 6340,
+      "mtime": "2026-06-25T18:44:26.403Z",
+      "indexed_at": "2026-06-25T18:44:30.551Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 46478,
-      "mtime": "2026-06-25T17:05:14.522Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z"
+      "bytes": 46783,
+      "mtime": "2026-06-25T18:44:21.660Z",
+      "indexed_at": "2026-06-25T18:44:30.551Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -93643,9 +93643,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 31149,
-      "mtime": "2026-06-25T17:03:43.024Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z",
+      "bytes": 31223,
+      "mtime": "2026-06-25T18:44:03.155Z",
+      "indexed_at": "2026-06-25T18:44:30.551Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]

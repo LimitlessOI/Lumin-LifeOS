@@ -3,7 +3,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-05-19 — Mount `/api/v1/lifeos/listening` (Listening Profile routes). Prior: 2026-06-13 — BuilderOS harness platform wiring + builder-safe-scope receipts path.
+**Last Updated:** 2026-06-13 — Restore missing `createLifeOSChatRoutes` import (Railway boot crash). Prior: Mount `/api/v1/lifeos/listening`.
 
 | Field | Value |
 |---|---|
@@ -204,6 +204,7 @@ Required runtime truths:
 
 ## Change Receipts
 
+| 2026-06-13 | **`startup/register-runtime-routes.js`** — restore missing `import { createLifeOSChatRoutes }` (ReferenceError crashed Railway boot on deploy 2728eed). | GAP-FILL: deploy FAILED `createLifeOSChatRoutes is not defined` at register-runtime-routes.js:294 — import dropped while chat mount remained. | ✅ node --check | redeploy |
 | 2026-05-19 | **`startup/register-runtime-routes.js`** — `createRequireLifeOSUserOrKey(requireKey)` as `requireUserOrKey` for founder LifeOS API mounts (core, finance, briefing, lifere, ambient, etc.); chat keeps raw requireKey (wraps internally). | Account JWT after lifeos-login must work for dashboard/Lumin without COMMAND_CENTER_KEY in browser. | ✅ node --check | deploy |
 | 2026-06-13 | **BuilderOS harness platform stack** — canonical executor, gap classifier, compound improvement, harness toolkit, governed loop codegen repair, operational verify scripts; `config/builder-safe-scope.js` receipts path; council builder fail-fast + MECHANICAL tier. | Adam: honest operational 10/10 BuilderOS machine — program, self-repair, compound improve; not structural theater. | ✅ local operational verify 10/10 | push + deploy |
 | 2026-06-24 | **`config/builder-safe-scope.js`** — add `products/receipts/` to `SAFE_WRITE_PATHS` for mission acceptance receipts. | BuilderOS harness + product receipts need commit-capable safe scope. | ✅ isSafeTarget | deploy |

@@ -50,6 +50,7 @@ import { createLifeOSBacktestRoutes } from "../routes/lifeos-backtest-routes.js"
 import { createLifeOSWeeklyReviewRoutes } from "../routes/lifeos-weekly-review-routes.js";
 import { createLifeOSScorecardRoutes } from "../routes/lifeos-scorecard-routes.js";
 import { createLifeOSListeningRoutes } from "../routes/lifeos-listening-routes.js";
+import { createLifeOSChatRoutes } from "../routes/lifeos-chat-routes.js";
 import { createLifeOSVoiceRailRoutes } from "../routes/lifeos-voice-rail-routes.js";
 import { createActionInboxRoutes } from "../routes/action-inbox-routes.js";
 import { createCapturePipelineRoutes } from "../routes/capture-pipeline-routes.js";
