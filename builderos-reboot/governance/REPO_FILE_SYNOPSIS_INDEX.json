@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:27:03.679Z",
+  "generated_at": "2026-06-25T23:29:59.760Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12542,
+  "file_count": 12549,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29047,9 +29047,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3763688,
-      "mtime": "2026-06-25T22:30:39.877Z",
-      "indexed_at": "2026-06-25T22:30:59.030Z"
+      "bytes": 3766243,
+      "mtime": "2026-06-25T23:29:51.076Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40414,9 +40414,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 459479,
-      "mtime": "2026-06-25T23:26:45.785Z",
-      "indexed_at": "2026-06-25T23:27:03.679Z"
+      "bytes": 460405,
+      "mtime": "2026-06-25T23:29:03.694Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41941,16 +41941,16 @@
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
       "bytes": 26707,
-      "mtime": "2026-06-25T18:37:44.201Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "mtime": "2026-06-25T23:29:39.313Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 487062,
-      "mtime": "2026-06-25T22:25:59.010Z",
-      "indexed_at": "2026-06-25T22:26:07.369Z"
+      "bytes": 487984,
+      "mtime": "2026-06-25T23:29:21.678Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42300,16 +42300,16 @@
       "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
       "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
       "bytes": 1072,
-      "mtime": "2026-06-24T00:29:12.593Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "mtime": "2026-06-25T23:29:43.133Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 10979,
-      "mtime": "2026-06-25T21:45:57.300Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z"
+      "bytes": 12186,
+      "mtime": "2026-06-25T23:29:39.172Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -42454,9 +42454,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 135363,
-      "mtime": "2026-06-25T22:25:59.653Z",
-      "indexed_at": "2026-06-25T22:26:07.369Z"
+      "bytes": 135778,
+      "mtime": "2026-06-25T23:29:26.116Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -69740,9 +69740,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 26227,
-      "mtime": "2026-06-25T22:26:57.386Z",
-      "indexed_at": "2026-06-25T22:30:59.030Z",
+      "bytes": 26566,
+      "mtime": "2026-06-25T23:28:59.245Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "synopsis_index_only": true
     },
     {
@@ -70047,6 +70047,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/LIFERE_AGENT_ALPHA.json",
+      "synopsis": "Product receipt — LIFERE AGENT ALPHA.",
+      "bytes": 3361,
+      "mtime": "2026-06-25T23:28:56.605Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/LIFERE_ALPHA_AUDIT_20260623.json",
       "synopsis": "Product receipt — LIFERE ALPHA AUDIT 20260623.",
       "bytes": 1026,
@@ -70212,6 +70220,14 @@
       "bytes": 2968,
       "mtime": "2026-06-25T21:45:57.301Z",
       "indexed_at": "2026-06-25T21:54:24.956Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json",
+      "synopsis": "Product receipt — LUMIN OVERLAY ALPHA READINESS.",
+      "bytes": 2738,
+      "mtime": "2026-06-25T22:58:42.659Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "synopsis_index_only": true
     },
     {
@@ -71437,9 +71453,9 @@
     {
       "path": "public/shared/lifeos-ambient-listener.js",
       "synopsis": "Opt-in ambient voice listener — sleeps when silent, wakes on speech, sends finals to /ambient/process.",
-      "bytes": 9178,
-      "mtime": "2026-06-24T22:19:26.838Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 9484,
+      "mtime": "2026-06-25T23:28:39.547Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -71512,9 +71528,9 @@
     {
       "path": "public/shared/lifeos-listening-orchestrator.js",
       "synopsis": "Listening orchestrator — profile sync, schedule, family guard, ambient, vault, mediation offer.",
-      "bytes": 9197,
-      "mtime": "2026-06-25T17:05:05.734Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 10356,
+      "mtime": "2026-06-25T23:28:38.827Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -72285,9 +72301,9 @@
     {
       "path": "routes/lifeos-core-routes.js",
       "synopsis": "routes/lifeos-core-routes.js",
-      "bytes": 64802,
-      "mtime": "2026-06-24T22:24:48.316Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 66094,
+      "mtime": "2026-06-25T23:28:34.119Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -72590,9 +72606,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 40034,
-      "mtime": "2026-06-25T21:45:57.302Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 45440,
+      "mtime": "2026-06-25T22:56:44.925Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -73024,6 +73040,13 @@
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
+    },
+    {
+      "path": "scripts/ambient-moment-smoke.mjs",
+      "synopsis": "Local smoke test for ambient moment detection (no DB/API).",
+      "bytes": 1820,
+      "mtime": "2026-06-25T23:28:50.389Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z"
     },
     {
       "path": "scripts/amendment-readiness-check.mjs",
@@ -74771,6 +74794,16 @@
       "indexed_at": "2026-06-25T21:54:24.956Z",
       "ssot": [
         "builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/FOUNDER_PACKET.md"
+      ]
+    },
+    {
+      "path": "scripts/run-overlay-alpha-battery.mjs",
+      "synopsis": "Agent alpha battery — Lumin + LifeRE overlay readiness (local + optional live).",
+      "bytes": 1781,
+      "mtime": "2026-06-25T22:58:28.963Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
     },
     {
@@ -87905,9 +87938,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 22250,
-      "mtime": "2026-06-23T00:54:23.698Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 25522,
+      "mtime": "2026-06-25T22:57:29.786Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -87996,9 +88029,9 @@
     {
       "path": "services/founder-intent-clarify.js",
       "synopsis": "Detect ambiguous founder build asks — paraphrase, assumptions, confirm before execute.",
-      "bytes": 6124,
-      "mtime": "2026-06-22T22:41:52.120Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 6323,
+      "mtime": "2026-06-25T22:57:14.887Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88011,6 +88044,16 @@
       "indexed_at": "2026-06-25T21:54:24.956Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/founder-overlay-surgical-patch.js",
+      "synopsis": "Mechanical overlay HTML patches — insert comments/markers without LLM whole-file rewrite.",
+      "bytes": 4161,
+      "mtime": "2026-06-25T22:57:11.274Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
     },
     {
@@ -88995,6 +89038,16 @@
       ]
     },
     {
+      "path": "services/lifere-alpha-surface-api.js",
+      "synopsis": "LifeRE alpha surface — routes UI expects but were missing from lifere-os-routes.",
+      "bytes": 10583,
+      "mtime": "2026-06-25T22:56:24.579Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
       "path": "services/lifere-best-practice-engine.js",
       "synopsis": "LifeRE best practice engine — promote winning experiments.",
       "bytes": 619,
@@ -89403,10 +89456,20 @@
     },
     {
       "path": "services/lumin-ambient-capture.js",
-      "synopsis": "Classifies ambient voice utterances — ignore, note, commitment, renegotiate.",
-      "bytes": 11032,
-      "mtime": "2026-06-24T21:39:44.645Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "synopsis": "Classifies ambient voice utterances — ignore, note, commitment, renegotiate;",
+      "bytes": 13406,
+      "mtime": "2026-06-25T23:28:28.097Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/lumin-ambient-moment-router.js",
+      "synopsis": "Routes ambient utterances to calendar, CRM inbox, and coachable-moment logs.",
+      "bytes": 8459,
+      "mtime": "2026-06-25T23:28:48.359Z",
+      "indexed_at": "2026-06-25T23:29:59.760Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

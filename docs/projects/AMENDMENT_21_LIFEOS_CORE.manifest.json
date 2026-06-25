@@ -883,7 +883,7 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-13",
+  "last_updated": "2026-06-25",
   "last_receipt": "2026-06-13 direct-lumin-listening-merge",
   "last_change_summary": "Listening setup via founder-interface; drawer keeps direct Lumin Chair connection",
   "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."

@@ -1,0 +1,64 @@
+{
+  "schema": "lumin_overlay_alpha_readiness_v1",
+  "updated_at": "2026-06-25T22:59:00.000Z",
+  "verdict": "AGENT_ALPHA_PASS_LOCAL_DEPLOY_TO_PRODUCTION",
+  "production_base": "https://robust-magic-production.up.railway.app",
+  "ready_for_adam_alpha": true,
+  "deploy_required_before_adam": true,
+  "deploy_reason": "LifeRE 18 API routes + surgical HTML patch + intent clarify shipped locally this session — not on Railway until commit+push+redeploy",
+  "adam_alpha_blockers_after_deploy": [
+    "founder_usability_pass — only Adam can sign off LifeRE/Point B usability",
+    "Mac desktop app — parked per Adam directive"
+  ],
+  "battery": {
+    "local": "npm run lifeos:overlay:alpha:battery — PASS (2026-06-25)",
+    "live_lumin": "npm run lifeos:overlay:alpha:battery:live — Lumin parity was PASS pre-deploy; re-run after deploy",
+    "receipt": "products/receipts/OVERLAY_ALPHA_BATTERY.json"
+  },
+  "layers": {
+    "lumin_connection": {
+      "status": "PASS",
+      "evidence": [
+        "lifeos:lumin-chair:parity 9/9 (production, pre-this-session deploy)",
+        "alpha-test-lumin-connection chat vs terminal 5/5",
+        "lifeos:lumin:conversation:verify:live"
+      ]
+    },
+    "system_commands": {
+      "status": "PASS",
+      "proven": ["open LifeRE", "what is point b", "run alpha cycle", "display queue status"]
+    },
+    "build_via_chat": {
+      "status": "FIXED_LOCAL",
+      "notes": "Surgical HTML comment path via founder-overlay-surgical-patch.js + self-repair; CSS-only path unchanged; deploy to verify on production"
+    },
+    "lifere_program": {
+      "status": "PASS",
+      "agent_alpha": { "passed": 117, "failed": 0, "agent_alpha_pass": true },
+      "receipt": "products/receipts/LIFERE_AGENT_ALPHA.json"
+    },
+    "overlay_shell": {
+      "status": "PASS",
+      "evidence": ["lifeos:supervise:static", "builder:preflight"]
+    },
+    "mac_desktop_app": {
+      "status": "PARKED"
+    }
+  },
+  "adam_first_session": {
+    "url": "https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1",
+    "login": "https://robust-magic-production.up.railway.app/overlay/lifeos-login.html",
+    "steps": [
+      "1. Open LifeOS from URL above and sign in",
+      "2. Ask Lumin: should I get an oil change this week? — expect counsel, not queue display",
+      "3. Say: open LifeRE — expect navigation",
+      "4. In LifeRE, click through tabs — buttons should load without API errors",
+      "5. Optional: do: change response color to yellow with black text — expect honest PASS/FAIL with proof"
+    ]
+  },
+  "verify_commands": [
+    "npm run lifeos:overlay:alpha:battery",
+    "npm run lifeos:overlay:alpha:battery:live",
+    "npm run lifeos:lifere-agent-alpha"
+  ]
+}

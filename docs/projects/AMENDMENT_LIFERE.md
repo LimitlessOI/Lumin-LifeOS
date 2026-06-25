@@ -8,7 +8,7 @@
 | **Status** | **FOUNDING** — doctrine + twin blueprint shipped 2026-06-13 |
 | **Authority** | Subordinate to SSOT North Star Constitution |
 | **Lifecycle** | `active` (program) / Alpha slice `technical_pass` |
-| **Last Updated** | 2026-06-24 — lifere-council-router AI prose envelope (counsel_only). Prior: full audit fix batch |
+| **Last Updated** | 2026-06-25 — lifere-alpha-surface-api 117/117 agent alpha. Prior: full audit fix batch |
 | **Verification (Alpha)** | `npm run lifeos:lifere-os:v1-acceptance` |
 | **Verification (Alpha readiness)** | `npm run lifeos:lifere-alpha-readiness` |
 | **Audit agent prompt** | `docs/LIFERE_ALPHA_AUDIT_AGENT_PROMPT.md` |
@@ -136,7 +136,10 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
-| 2026-06-24 | **`services/lifere-council-router.js`** — `applyAiProseTruthEnvelope`, counsel_only stamp on council path | Truth stack: LifeRE council cannot claim execution without receipt | ✅ lockdown verify | deploy |
+| 2026-06-25 | **`services/lifere-alpha-surface-api.js`** (NEW) + **`routes/lifere-os-routes.js`** — 18 missing LifeRE UI API routes (follow-up metrics, education, motivation, funnel, market, community, comms preview, YouTube coach, opportunity scan, lifeos integration) | Agent alpha 99/117 → 117/117; LifeRE tabs were 404 | ✅ `npm run lifeos:lifere-agent-alpha` PASS | deploy; Adam alpha |
+| 2026-06-25 | **`services/founder-overlay-surgical-patch.js`** + **`founder-build-self-repair.js`** + **`founder-intent-clarify.js`** — mechanical HTML comment inserts without whole-file regen | Lumin build sliver failed overlay-shrink guard | ✅ local patch test | deploy; live build verify |
+| 2026-06-25 | **`scripts/run-overlay-alpha-battery.mjs`** + **`npm run lifeos:overlay:alpha:battery`** — conductor alpha battery | Adam: don't stop until founder-alpha ready | ✅ local battery PASS | `lifeos:overlay:alpha:battery:live` after deploy |
+| 2026-06-25 | **`products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json`** — founder alpha entry steps | Single readiness receipt for Adam | ✅ | Adam opens `/lifeos?layout=desktop` after deploy |
 | 2026-06-24 | **Full audit fix batch** — SMOS council signature, alpha PG checklist, outreach user_id fail-closed + adam boot seed, Vapi webhook guard, context router in lifeos-app, dead route imports removed, PG verify 12 tables, `run-lifere-full-audit.mjs` | Adam: audit broken/gaps/disconnected/enforcement | ✅ full-audit 12/12 PASS | deploy; Adam founder confirm |
 | 2026-06-24 | **Alpha live verification + founder confirm persist** — live E2E T11–T13, readiness checks live banner/API, `lifere-founder-usability-persist.js` commits verdict to GitHub | Live was 1 deploy behind alpha banner; confirm was ephemeral on Railway | ✅ | redeploy + Adam confirm |
 | 2026-06-24 | **SMOS Content Brief v1** — `lifere-content-brief-engine.js`, migration, brief-before-coach gate, UI panel, routes | Adam: brief-first workflow is hard law | ✅ tests + self-audit | deploy; Record Mode v1 |
@@ -163,4 +166,6 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 | **A–Z receipt** | `products/receipts/LIFERE_AZ_ACCEPTANCE.json` — structural PASS |
 | **Alpha mission** | `PRODUCT-LIFERE-OS-V1-0001` — historical corridor |
 | **@ssot** | New lifere services → `AMENDMENT_LIFERE.md`; `lifere-os-v1.js` still Am 21 until repoint |
-| **Voice Rail** | Hist only — do not route LifeRE users to `/voice-rail` |
+| **Agent alpha** | `npm run lifeos:lifere-agent-alpha` — **117/117 PASS** (2026-06-25). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
+| **Founder alpha** | **READY after deploy** — `products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json`. Mac desktop **parked**. |
+| **Next** | Commit + Railway redeploy → Adam runs 5-step checklist in readiness receipt |

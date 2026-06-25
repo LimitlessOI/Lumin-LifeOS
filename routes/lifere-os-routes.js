@@ -42,6 +42,7 @@ import { getLifeREAlphaReadinessSurface } from '../services/lifere-alpha-readine
 import { confirmAndPersistFounderUsability } from '../services/lifere-founder-usability-persist.js';
 import { createLifeRESocialMediaOSBridge } from '../services/lifere-socialmediaos-bridge.js';
 import { pickModel } from '../services/lifere-model-router.js';
+import { createLifeREAlphaSurfaceAPI } from '../services/lifere-alpha-surface-api.js';
 
 function userId(req) {
   return req.body?.user_id || req.query?.user_id || 'adam';
@@ -84,6 +85,16 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   const alphaCycle = createLifeREAlphaDailyCycle({ pool, logger });
   const founderAttempt = createLifeREFounderAttempt({ pool, logger });
   const socialMediaOS = createLifeRESocialMediaOSBridge({ pool, notificationService, sendSMS, callCouncilMember, logger });
+  const alphaSurface = createLifeREAlphaSurfaceAPI({
+    pool,
+    followUpOS,
+    funnel,
+    marketing,
+    clientComms,
+    lifeosCrosscheck,
+    opportunity,
+    youtube,
+  });
 
   router.get('/health', requireKey, (_req, res) => {
     res.json({
@@ -200,6 +211,14 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     }
   });
 
+  router.get('/follow-up/metrics', requireKey, async (req, res) => {
+    try {
+      res.json(await alphaSurface.getFollowUpMetrics({ userId: userId(req) }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/boldtrail/status', requireKey, async (_req, res) => {
     try {
       res.json({ ok: true, boldtrail: await getBoldTrailConnectionStatus() });
@@ -256,6 +275,54 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
 
   router.post('/education/context', requireKey, (req, res) => {
     res.json({ ok: true, result: service.educationContext(req.body || {}) });
+  });
+
+  router.get('/education/progress', requireKey, (req, res) => {
+    try {
+      res.json(alphaSurface.readEducationProgress(tenantId(req), userId(req)));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/education/curriculum', requireKey, (_req, res) => {
+    res.json(alphaSurface.getEducationCurriculum());
+  });
+
+  router.post('/education/complete', requireKey, async (req, res) => {
+    try {
+      const result = await alphaSurface.completeEducationModule({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        moduleId: req.body?.module_id,
+        score: req.body?.score,
+      });
+      res.json(result);
+    } catch (error) {
+      res.status(400).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/motivation/milestones', requireKey, async (req, res) => {
+    try {
+      res.json(await alphaSurface.getMotivationState({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/lifeos/integration', requireKey, async (req, res) => {
+    try {
+      res.json(await alphaSurface.getLifeOSIntegration({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.post('/sales/coach', requireKey, (req, res) => {
@@ -587,6 +654,18 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     res.json({ ok: true, templates: Object.keys(clientComms.templates || {}) });
   });
 
+  router.post('/client-comms/preview', requireKey, (req, res) => {
+    try {
+      res.json(alphaSurface.previewClientComms({
+        templateId: req.body?.template_id,
+        channel: req.body?.channel || 'sms',
+        vars: req.body?.vars || {},
+      }));
+    } catch (error) {
+      res.status(400).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/experiments/playbook', requireKey, (_req, res) => {
     res.json(bestPractice.listPlaybook());
   });
@@ -608,6 +687,78 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
       query: req.body?.query,
     });
     res.status(result.status || 200).json(result);
+  });
+
+  router.post('/marketing/youtube/strategy', requireKey, async (req, res) => {
+    try {
+      res.json(await alphaSurface.youtubeStrategy({
+        market: req.body?.market || 'local',
+        userId: userId(req),
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/marketing/recording-coach', requireKey, (req, res) => {
+    res.json(alphaSurface.recordingCoach({
+      scriptOutline: req.body?.script_outline,
+      scriptExcerpt: req.body?.script_excerpt,
+    }));
+  });
+
+  router.post('/marketing/thumbnail-seo', requireKey, (req, res) => {
+    res.json(alphaSurface.thumbnailSeo({
+      videoTypeId: req.body?.video_type_id,
+      hookText: req.body?.hook_text,
+      city: req.body?.city || req.body?.market || 'local',
+    }));
+  });
+
+  router.get('/marketing/funnel/summary', requireKey, async (req, res) => {
+    try {
+      res.json(await alphaSurface.getFunnelSummary({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/marketing/funnel/events', requireKey, async (req, res) => {
+    try {
+      res.json(await alphaSurface.listFunnelEvents({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        limit: req.query.limit,
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/marketing/hooks/library', requireKey, async (req, res) => {
+    try {
+      res.json(await alphaSurface.listHookLibrary({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        limit: req.query.limit,
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/market/snapshot', requireKey, (req, res) => {
+    res.json(alphaSurface.getMarketSnapshot({ market: req.query.market || 'local' }));
+  });
+
+  router.get('/market/content-angles', requireKey, (req, res) => {
+    res.json(alphaSurface.getMarketContentAngles({
+      market: req.query.market || 'local',
+      userId: userId(req),
+    }));
   });
 
   router.post('/marketing/script/generate', requireKey, async (req, res) => {
@@ -873,6 +1024,17 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     res.json(await opportunity.rankOpportunities({ tenantId: tenantId(req), userId: userId(req) }));
   });
 
+  router.post('/opportunity/scan', requireKey, async (req, res) => {
+    try {
+      res.json(await alphaSurface.scanOpportunities({
+        tenantId: tenantId(req),
+        userId: userId(req),
+      }));
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/receptionist/summary', requireKey, async (req, res) => {
     res.json(await receptionist.inboundSummary({
       callId: req.body?.call_id,
@@ -1064,6 +1226,26 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
       userId: userId(req),
     });
     res.json({ ok: true, ...result, model: pickModel({ taskComplexity: req.body?.complexity || 'low' }) });
+  });
+
+  router.post('/community/content-plan', requireKey, (req, res) => {
+    res.json(alphaSurface.communityContentPlan({
+      groupName: req.body?.group_name,
+      weeks: Number(req.body?.weeks) || 2,
+    }));
+  });
+
+  router.post('/community/post-draft', requireKey, (req, res) => {
+    res.json(alphaSurface.communityPostDraft({
+      groupName: req.body?.group_name,
+      theme: req.body?.theme || req.body?.topic,
+    }));
+  });
+
+  router.post('/community/moderation', requireKey, (req, res) => {
+    res.json(alphaSurface.communityModeration({
+      flaggedComments: req.body?.flagged_comments || [],
+    }));
   });
 
   return router;

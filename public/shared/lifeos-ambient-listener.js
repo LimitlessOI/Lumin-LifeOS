@@ -136,11 +136,16 @@
         return;
       }
       if (data.persisted && data.disposition !== 'ignore') {
+        const momentHint = Array.isArray(data.moments) && data.moments.length
+          ? ` · ${data.moments.map((m) => m.type).join(', ')}`
+          : '';
         const label = data.disposition === 'commitment'
-          ? `Commitment logged: ${(data.commitments?.[0]?.title || body).slice(0, 80)}`
+          ? `Commitment logged: ${(data.commitments?.[0]?.title || body).slice(0, 80)}${momentHint}`
           : data.disposition === 'renegotiate'
-            ? (data.feedback || 'Commitment renegotiated')
-            : (data.feedback || 'Noted for your twin');
+            ? (data.feedback || 'Commitment renegotiated') + momentHint
+            : data.disposition === 'moment'
+              ? (data.feedback || 'Saved from ambient listen')
+              : (data.feedback || 'Noted for your twin') + momentHint;
         showToast(label, data.disposition);
       }
     } catch (err) {

@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-06-25 — Ambient Listen v2 + overlay deploy queue
+
+Adam: ambient must work from jump — calendar auto-add, CRM capture, coachable moments, crisis vibrate + mediation consent on speaker. **Shipped locally:** `lumin-ambient-moment-router.js` (appointment→calendar, CRM→inbox/client_notes, coachable→snapshots); wired into `lumin-ambient-capture.js`; `POST /ambient/crisis-signal`; listening orchestrator posts crisis + spoken mediation consent offer; ambient toasts show moments. **Smoke:** `npm run lifeos:ambient:moment-smoke` 6/6 PASS; overlay alpha battery PASS. **Honest limit:** web ambient needs app foreground; true background vibrate when app closed = native Capacitor phase (documented in `/ambient/status`). **Next:** commit+deploy → Adam toggles Ambient + Family Tone Guard → say "appointment tomorrow" / "client birthday June 12" / test yelling vibrate with spouse consent flow.
+
+---
+
 ## [SESSION] 2026-06-25 — Overlay founder-alpha ready (local PASS, deploy pending)
 
 Adam: don't stop until founder alpha ready — everything works. **Shipped locally:** 18 missing LifeRE API routes (`lifere-alpha-surface-api.js` + routes); surgical HTML comment build path (`founder-overlay-surgical-patch.js`); intent clarify for explicit HTML comment asks; overlay alpha battery script. **Agent battery:** `npm run lifeos:overlay:alpha:battery` PASS; LifeRE agent-alpha **117/117**; lifere-alpha-gate PASS; preflight + static PASS. **Lumin (production, prior deploy):** parity 9/9, connection 5/5. **Receipt:** `products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json`. **Blocker:** commit+deploy to Railway before Adam session; `founder_usability_pass` still Adam-only. **Next:** deploy → Adam 5-step checklist in readiness receipt.

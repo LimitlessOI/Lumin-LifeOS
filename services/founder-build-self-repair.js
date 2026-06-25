@@ -15,6 +15,12 @@ import {
   commitCssPatchViaBuilder,
 } from './founder-css-patch.js';
 import {
+  applySurgicalHtmlCommentPatch,
+  commitSurgicalPatchViaBuilder,
+  isSurgicalHtmlCommentPatch,
+  parseSurgicalHtmlCommentPatch,
+} from './founder-overlay-surgical-patch.js';
+import {
   assertFounderBuildBaseUrl,
   runFounderSuccessGate,
   triggerRailwayRedeploy,
@@ -49,6 +55,10 @@ function isRetriableBlocker(blocker = '', code = '') {
 
 function pickRepairTarget(task, currentTarget, blocker) {
   if (/OVERLAY_STUB|overlay shrink|production shell requires|too short.*html/i.test(String(blocker))) {
+    if (isSurgicalHtmlCommentPatch(task)) {
+      const spec = parseSurgicalHtmlCommentPatch(task);
+      return { targetFile: spec?.targetFile || currentTarget, repair: 'surgical_html_comment' };
+    }
     if (isCssOnlyUiFeedback(task)) {
       return { targetFile: 'public/overlay/lifeos-theme-overrides.css', repair: 'css_only_reroute' };
     }
@@ -107,6 +117,17 @@ async function tryApplyQuorumPlan({
   if (!plan?.augmented_task) return null;
   const approach = String(plan.fix_approach || 'builder_execute');
   const nextTask = String(plan.augmented_task).trim() || task;
+
+  if (approach === 'surgical_html_comment' || isSurgicalHtmlCommentPatch(nextTask) || isSurgicalHtmlCommentPatch(task)) {
+    return runSurgicalHtmlPatchWithVerification({
+      task: nextTask,
+      commandKey,
+      baseUrl,
+      repoRoot,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+    });
+  }
 
   if (approach === 'css_patch' || isCssOnlyUiFeedback(nextTask) || isCssOnlyUiFeedback(task)) {
     return runCssPatchWithVerification({
@@ -426,6 +447,79 @@ async function runCssPatchWithVerification({
   return baseFailure;
 }
 
+async function runSurgicalHtmlPatchWithVerification({
+  task,
+  commandKey,
+  baseUrl,
+  repoRoot,
+  buildFailureReceipt,
+  enforceExecutionTruth,
+}) {
+  const baseCheck = assertFounderBuildBaseUrl(baseUrl);
+  if (!baseCheck.ok) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: baseCheck.blocker,
+      failure_code: baseCheck.code,
+      execution_path: 'founder_surgical_html_patch',
+    }, { action: 'build', task });
+  }
+
+  const patchResult = applySurgicalHtmlCommentPatch({ root: repoRoot, task });
+  if (!patchResult.ok) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: patchResult.reason || 'surgical_patch_failed',
+      failure_code: 'SURGICAL_PATCH_FAILED',
+      execution_path: 'founder_surgical_html_patch',
+    }, { action: 'build', task });
+  }
+
+  let execRes;
+  try {
+    execRes = await commitSurgicalPatchViaBuilder({
+      baseUrl: baseCheck.baseUrl,
+      commandKey,
+      patchResult,
+    });
+  } catch (err) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: err.message,
+      execution_path: 'founder_surgical_html_patch',
+    }, { action: 'build', task });
+  }
+
+  const execJson = execRes.json || {};
+  const committedFiles = execRes.committed_files || patchResult.files?.map((f) => f.target_file) || [];
+  if (!execJson.ok || !execJson.committed) {
+    const receipt = buildFailureReceipt(task, {}, execJson);
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: receipt.blocker,
+      execution_receipt: receipt,
+      execution_path: 'founder_surgical_html_patch',
+    }, { action: 'build', task });
+  }
+
+  return enforceExecutionTruth({
+    ok: true,
+    committed: true,
+    target_file: committedFiles.join(', ') || patchResult.files?.[0]?.target_file,
+    sha: execJson.sha || execJson.commit_sha || null,
+    human_summary: patchResult.already_present
+      ? `Comment already present in ${patchResult.files?.[0]?.target_file}`
+      : `Surgical HTML comment applied to ${patchResult.files?.[0]?.target_file}`,
+    execution_path: 'founder_surgical_html_patch',
+    task_meta: { patch: patchResult.patch, comment: patchResult.comment },
+    exec_meta: execJson,
+  }, { action: 'build', task });
+}
+
 export async function runFounderBuildWithSelfRepair(options) {
   const {
     task,
@@ -464,6 +558,17 @@ export async function runFounderBuildWithSelfRepair(options) {
       execution_path: 'founder_build_self_repair',
     }, { action: 'build', task: currentTask });
     return { ...failure, fp_v2_gate: fpV2Gate };
+  }
+
+  if (isSurgicalHtmlCommentPatch(currentTask)) {
+    return runSurgicalHtmlPatchWithVerification({
+      task: currentTask,
+      commandKey,
+      baseUrl: base,
+      repoRoot,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+    });
   }
 
   if (isCssOnlyUiFeedback(currentTask)) {

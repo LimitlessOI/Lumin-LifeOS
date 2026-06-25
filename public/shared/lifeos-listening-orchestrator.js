@@ -152,15 +152,37 @@
     return data;
   }
 
+  async function postCrisisSignal(kind, extra = {}) {
+    const ctx = state.getCtx?.() || global.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false });
+    const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+    const payload = {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: ctx?.headers ? ctx.headers(headers) : headers,
+      body: JSON.stringify({
+        user: ctx?.USER || global.localStorage?.getItem('lifeos_user') || 'adam',
+        kind,
+        metadata: { ...extra, client: 'lifeos-listening-orchestrator' },
+      }),
+    };
+    const url = '/api/v1/lifeos/ambient/crisis-signal';
+    try {
+      if (ctx?.fetchWithAuth) await ctx.fetchWithAuth(url, payload);
+      else await fetch(url, payload);
+    } catch (_) {}
+  }
+
   function offerMediationIfEnabled(reason) {
     const fg = state.profile?.family_guard;
     if (!fg?.offer_mediation) return;
-    const msg = 'Want Lumen to help mediate this? Tap to open mediation.';
+    const msg = 'Want Lumin to help mediate this? Tap to open mediation.';
     toast(msg, 'mediation');
     if (fg.speak_mediation_offer && global.speechSynthesis) {
       try {
-        const u = new SpeechSynthesisUtterance('Hey — do you want me to help mediate this?');
-        u.rate = 0.95;
+        const u = new SpeechSynthesisUtterance(
+          'Hey — I noticed things are heated. Would you both be open to me helping open the escalator and get everyone to a better place? Say yes if you consent.'
+        );
+        u.rate = 0.92;
         global.speechSynthesis.speak(u);
       } catch (_) {}
     }
@@ -169,6 +191,7 @@
 
   function hookFamilyGuardEvents() {
     global.addEventListener('lifeos-family-guard-yelling-start', () => {
+      postCrisisSignal('yelling_start', { mediation_offer: Boolean(state.profile?.family_guard?.offer_mediation) });
       if (shouldCaptureConflictClip() && state.clipRecorder) {
         state.clipRecorder.start('conflict', 'Conflict moment');
       }
@@ -180,6 +203,7 @@
       state.clipRecorder?.stopEarly?.();
     });
     global.addEventListener('lifeos-family-guard-snippy', () => {
+      postCrisisSignal('snippy_tone', { mediation_offer: Boolean(state.profile?.family_guard?.offer_mediation) });
       if (state.profile?.family_guard?.offer_mediation) {
         offerMediationIfEnabled('snippy');
       }

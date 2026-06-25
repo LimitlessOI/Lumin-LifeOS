@@ -1,8 +1,11 @@
 /**
- * SYNOPSIS: Classifies ambient voice utterances — ignore, note, commitment, renegotiate.
- * Opt-in only; no raw audio stored. Feeds commitments, event stream, action inbox, twin learner.
+ * SYNOPSIS: Classifies ambient voice utterances — ignore, note, commitment, renegotiate;
+ * routes calendar, CRM, and coachable moments via lumin-ambient-moment-router.
+ * Opt-in only; no raw audio stored.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+
+import { detectMomentSignals } from './lumin-ambient-moment-router.js';
 
 const NOISE_ONLY = /^(yeah|yes|no|ok|okay|uh|um|hmm|thanks|thank you|hi|hello|hey|cool|nice|right|sure|mm-hmm|mhm)\.?$/i;
 
@@ -82,14 +85,16 @@ function quickGate(text) {
   const hasCommitment = COMMITMENT_MARKERS.some((re) => re.test(body));
   const hasRenegotiate = RENEGOTIATE_MARKERS.some((re) => re.test(body));
   const hasNote = NOTEWORTHY_MARKERS.some((re) => re.test(body));
+  const moments = detectMomentSignals(body);
+  const hasMoment = moments.appointment || moments.crm || moments.coachablePositive || moments.coachableImprove;
 
-  if (!hasCommitment && !hasRenegotiate && !hasNote && body.length < 40) {
+  if (!hasCommitment && !hasRenegotiate && !hasNote && !hasMoment && body.length < 40) {
     return { skip: true, reason: 'casual_chatter' };
   }
 
   return {
     skip: false,
-    signals: { hasCommitment, hasRenegotiate, hasNote, length: body.length },
+    signals: { hasCommitment, hasRenegotiate, hasNote, hasMoment, moments, length: body.length },
   };
 }
 
@@ -100,6 +105,7 @@ export function createLuminAmbientCapture({
   eventStream = null,
   actionInbox = null,
   luminLearner = null,
+  momentRouter = null,
   logger = console,
 }) {
   async function logSnapshot(userId, payload) {
@@ -174,6 +180,19 @@ Rules:
     const body = String(text || '').trim();
     const gate = quickGate(body);
     if (gate.skip) {
+      const moments = momentRouter
+        ? await momentRouter.applyMoments({ userId, text: body, metadata })
+        : [];
+      if (moments.length) {
+        return {
+          ok: true,
+          disposition: 'moment',
+          reason: gate.reason,
+          persisted: true,
+          moments,
+          feedback: summarizeMoments(moments),
+        };
+      }
       return {
         ok: true,
         disposition: 'ignore',
@@ -187,12 +206,27 @@ Rules:
     const minConfidence = classification.disposition === 'commitment' ? 0.68 : 0.72;
 
     if (classification.disposition === 'ignore' || confidence < minConfidence) {
+      const moments = momentRouter
+        ? await momentRouter.applyMoments({ userId, text: body, metadata })
+        : [];
       await logSnapshot(userId, {
-        type: 'utterance_ignored',
+        type: moments.length ? 'utterance_moment_only' : 'utterance_ignored',
         text_preview: body.slice(0, 120),
         reason: classification.reason || 'low_confidence',
         confidence,
+        moments,
       });
+      if (moments.length) {
+        return {
+          ok: true,
+          disposition: 'moment',
+          reason: classification.reason || 'classified_ignore',
+          confidence,
+          persisted: true,
+          moments,
+          feedback: summarizeMoments(moments),
+        };
+      }
       return {
         ok: true,
         disposition: 'ignore',
@@ -297,6 +331,14 @@ Rules:
       });
     }
 
+    if (momentRouter) {
+      result.moments = await momentRouter.applyMoments({ userId, text: body, metadata });
+      if (result.moments?.length) {
+        const momentLine = summarizeMoments(result.moments);
+        result.feedback = result.feedback ? `${result.feedback} ${momentLine}` : momentLine;
+      }
+    }
+
     await logSnapshot(userId, {
       type: 'utterance_processed',
       disposition: result.disposition,
@@ -304,13 +346,44 @@ Rules:
       text_preview: body.slice(0, 160),
       commitment_ids: (result.commitments || []).map((c) => c.id),
       renegotiated_id: result.renegotiated?.id || null,
+      moments: result.moments || [],
     });
 
     return result;
   }
 
+  async function logCrisisSignal({
+    userId,
+    kind,
+    partnerConsent = null,
+    metadata = {},
+  }) {
+    const payload = {
+      type: 'crisis_signal',
+      kind: String(kind || 'unknown'),
+      partner_consent: partnerConsent,
+      metadata,
+      at: new Date().toISOString(),
+    };
+    await logSnapshot(userId, payload);
+    return { ok: true, logged: true, kind: payload.kind };
+  }
+
   return {
     quickGate,
     processUtterance,
+    logCrisisSignal,
   };
+}
+
+function summarizeMoments(moments = []) {
+  const parts = [];
+  for (const m of moments) {
+    if (m.type === 'calendar_event') parts.push(`Calendar: ${m.title || 'event'}`);
+    if (m.type === 'crm_capture') parts.push('CRM note captured');
+    if (m.type === 'coachable_moment') {
+      parts.push(m.polarity === 'strength' ? 'Coachable win saved' : 'Coachable moment saved');
+    }
+  }
+  return parts.length ? parts.join(' · ') : '';
 }

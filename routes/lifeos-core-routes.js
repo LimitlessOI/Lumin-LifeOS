@@ -67,6 +67,7 @@ import { createMemoryIntelligenceService } from '../services/memory-intelligence
 import { createLuminContextLoader } from '../services/lumin-context-loader.js';
 import { createLuminConversationLearner } from '../services/lumin-conversation-learner.js';
 import { createLuminAmbientCapture } from '../services/lumin-ambient-capture.js';
+import { createLuminAmbientMomentRouter } from '../services/lumin-ambient-moment-router.js';
 import { createActionInbox } from '../services/action-inbox.js';
 import { makeLifeOSUserResolver }          from '../services/lifeos-user-resolver.js';
 import { createLifeOSScoreboardService }   from '../services/lifeos-scoreboard.js';
@@ -126,6 +127,12 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
   const luminContext = createLuminContextLoader({ pool, callAI, logger: log });
   const luminLearner = createLuminConversationLearner({ pool, callAI, logger: log });
   const actionInbox = createActionInbox({ pool, logger: log });
+  const momentRouter = createLuminAmbientMomentRouter({
+    pool,
+    calendar,
+    actionInbox,
+    logger: log,
+  });
   const ambientCapture = createLuminAmbientCapture({
     pool,
     callAI,
@@ -133,6 +140,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     eventStream,
     actionInbox,
     luminLearner,
+    momentRouter,
     logger: log,
   });
   const scoreboard   = createLifeOSScoreboardService({ pool, integrity, joy, focusPrivacy });
@@ -901,10 +909,38 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       consent_required: true,
       stores_audio: false,
       auth: 'account_jwt_preferred',
+      capabilities: [
+        'commitments_auto_log',
+        'commitment_renegotiate',
+        'calendar_auto_create',
+        'crm_auto_capture',
+        'coachable_moments',
+        'crisis_signal_log',
+      ],
+      background_note: 'Web ambient requires app foreground; native Capacitor app needed for true background vibrate.',
       endpoints: {
         process: 'POST /api/v1/lifeos/ambient/process',
+        crisis: 'POST /api/v1/lifeos/ambient/crisis-signal',
       },
     });
+  });
+
+  router.post('/ambient/crisis-signal', requireKey, async (req, res) => {
+    try {
+      const { kind, partner_consent, metadata = {} } = req.body || {};
+      const user = resolveRequestUser(req);
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const result = await ambientCapture.logCrisisSignal({
+        userId,
+        kind: kind || 'relationship_stress',
+        partnerConsent: partner_consent ?? null,
+        metadata,
+      });
+      res.status(201).json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
   });
 
   router.post('/ambient/process', requireKey, async (req, res) => {

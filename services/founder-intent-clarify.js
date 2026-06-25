@@ -88,6 +88,10 @@ export function assessFounderBuildClarity(cleanedInput = '', expandedTask = '') 
     return { needs_clarify: false, paraphrase: paraphraseFounderAsk(text), assumptions: [], options: [], inferred_target: resolvedTarget };
   }
 
+  if (explicitPath && /\bhtml comment\b/i.test(text)) {
+    return { needs_clarify: false, paraphrase: paraphraseFounderAsk(text), assumptions: [], options: [], inferred_target: explicitPath };
+  }
+
   if (explicitPath && OUTCOME_MARKERS.test(text)) {
     return { needs_clarify: false, paraphrase: paraphraseFounderAsk(text), assumptions: [], options: [], inferred_target: explicitPath };
   }
