@@ -114,15 +114,18 @@ export function resolveChairContext(text = '', ctx = {}) {
     explicitAction = 'auto',
   } = ctx;
 
-  if (shouldDisplayOnly) {
-    return {
-      channel: 'display',
-      domain: 'display',
-      confidence: 1,
-      requires_execute_clarify: false,
-      personal_search: false,
-      scores: computeContextScores(t),
-    };
+  if (shouldDisplayOnly && !isFounderPersonalLifeIntent(t) && !CONVERSATION_MARKERS.test(t)) {
+    const scores = computeContextScores(t);
+    if (scores.personal < 5) {
+      return {
+        channel: 'display',
+        domain: 'display',
+        confidence: 1,
+        requires_execute_clarify: false,
+        personal_search: false,
+        scores,
+      };
+    }
   }
 
   if (explicitAction && explicitAction !== 'auto') {
@@ -142,11 +145,11 @@ export function resolveChairContext(text = '', ctx = {}) {
     if (map[forced]) {
       return {
         channel: map[forced],
-        domain: forced,
+        domain: isFounderPersonalLifeIntent(t) ? 'personal_life' : forced,
         confidence: 1,
         requires_execute_clarify: ['build_async', 'build_terminal'].includes(map[forced])
           && !hasHighConfidenceBuildTarget(t),
-        personal_search: ['lumin', 'counsel', 'life_admin'].includes(map[forced]),
+        personal_search: isFounderPersonalLifeIntent(t) || ['lumin', 'counsel', 'life_admin'].includes(forced),
         scores: computeContextScores(t),
       };
     }

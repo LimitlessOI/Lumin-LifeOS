@@ -49,6 +49,8 @@ import {
   isBuildRequest,
 } from '../services/lumin-chair-orchestrator.js';
 import { parseLuminChairSystemAction, stripChairDoPrefix, shouldSkipInputNormalize } from '../services/lumin-chair-system-actions.js';
+import { isFounderPersonalLifeIntent } from '../services/founder-life-admin-intent.js';
+import { isExplicitDisplayOnlyRequest } from '../services/lumin-conversation-routing.js';
 import { translateChairPersonality } from '../services/chair-personality-translate.js';
 import { createBuilderOSControlPlaneService } from '../services/builderos-control-plane-service.js';
 import {
@@ -1060,7 +1062,9 @@ HOW TO RESPOND:
 
       // Normalize input first: fix misspellings, voice-to-text errors, garbled phrasing
       const buildIntentEarly = isBuildRequest(originalText) || isRepairContinuationIntent(originalText) || isFounderShipOrUsabilityIntent(originalText);
-      const skipNormalize = buildIntentEarly || shouldSkipInputNormalize(originalText);
+      const skipNormalize = buildIntentEarly
+        || shouldSkipInputNormalize(originalText)
+        || isFounderPersonalLifeIntent(originalText);
       const cleanedInput = skipNormalize
         ? originalText.trim()
         : await normalizeInputText(originalText);
@@ -1069,12 +1073,7 @@ HOW TO RESPOND:
       const inferredDisplayScope = summarizeDisplayRequest(cleanedInput);
       const explicitExecute = action === 'execute' || isExplicitExecuteCommand(cleanedInput);
       const executeIntent = isLikelyExecuteIntent(cleanedInput) || explicitExecute;
-      const shouldDisplayOnly = !explicitExecute && (
-        action === 'display'
-        || (action === 'auto'
-          && !executeIntent
-          && /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt)\b/i.test(cleanedInput))
-      );
+      const shouldDisplayOnly = !explicitExecute && isExplicitDisplayOnlyRequest(cleanedInput, action);
       const normalizedText = shouldDisplayOnly ? cleanedInput : normalizeFounderExecuteIntent(cleanedInput);
       const intakeNormalized = inputWasCleaned || normalizedText !== cleanedInput;
 

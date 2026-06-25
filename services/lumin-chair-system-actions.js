@@ -6,6 +6,7 @@ import { loadPointBTarget } from './point-b-target-lite.js';
 import { createLifeREAlphaDailyCycle } from './lifere-alpha-daily-cycle.js';
 import { getLifeREAlphaReadinessSurface } from './lifere-alpha-readiness-surface.js';
 import { executeLifeOSDirectAction } from './lifeos-direct-action.js';
+import { isFounderPersonalLifeIntent } from './founder-life-admin-intent.js';
 
 const DO_PREFIX = /^\s*(do|execute|run)\s*:\s*/i;
 
@@ -21,6 +22,7 @@ export function shouldSkipInputNormalize(text = '') {
   const t = String(text || '').trim();
   if (!t) return false;
   if (DO_PREFIX.test(t)) return true;
+  if (isFounderPersonalLifeIntent(t)) return true;
   return parseLuminChairSystemAction(t).matched;
 }
 

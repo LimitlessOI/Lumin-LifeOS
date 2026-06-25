@@ -113,6 +113,9 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
   }
 
   if (personalTurn) {
+    facts.chair_note = `${facts.chair_note} Personal life turn — answer the user's question directly; do not recite Point B, alpha, or builder queue unless they asked.`;
+    facts.point_b_target = null;
+    facts.point_b_summary = null;
     const searchSvc = createWebSearchService({
       BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
       PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,

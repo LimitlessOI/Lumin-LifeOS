@@ -84,6 +84,12 @@ export async function translateChairPersonality({
     }
   }
 
+  if (systemFacts.personal_turn) {
+    promptBase += `\n\n[PERSONAL TURN — mandatory]
+Answer the user's life/errand question directly using verified_search and personal_twin when present.
+Do NOT summarize Point B, builder queue, alpha status, or platform progress unless they explicitly asked.`;
+  }
+
   const factsJson = JSON.stringify(systemFacts, null, 2);
   const buildPrompt = (retry = false) => `${promptBase}${retry ? ANTI_FORMULA_RETRY_SUFFIX : ''}
 

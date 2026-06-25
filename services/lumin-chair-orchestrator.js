@@ -35,7 +35,8 @@ import {
   formatChairIntentClarifySummary,
   CHAIR_INTENT_PROTOCOL,
 } from './chair-intent-protocol.js';
-import { isFounderPersonalLifeIntent, isProductBuildChangeVerb } from './founder-life-admin-intent.js';
+import { isFounderPersonalLifeIntent } from './founder-life-admin-intent.js';
+import { coerceDisplayMisrouteToChair } from './lumin-conversation-routing.js';
 import {
   resolveChairContext,
   requiresPreExecuteClarify,
@@ -349,7 +350,10 @@ export async function runLuminChairTurn(ctx, deps) {
     }
   }
 
-  const chairContext = resolveChairContext(effectiveInput, contextOpts);
+  const chairContext = coerceDisplayMisrouteToChair(
+    effectiveInput,
+    resolveChairContext(effectiveInput, contextOpts),
+  );
   const channel = chairContext.channel;
 
   let fpV2Enforcement = null;

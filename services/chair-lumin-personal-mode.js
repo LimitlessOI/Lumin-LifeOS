@@ -9,9 +9,9 @@ const PRODUCT_STRATEGY_MARKERS = /\b(lifere|point b|alpha|revenue|competitor|roa
 
 export function isPersonalLuminDomain(chairContext = {}) {
   const domain = chairContext.domain || '';
-  if (['personal_life', 'conversation'].includes(domain)) return true;
+  if (['personal_life', 'conversation', 'counsel', 'life_admin'].includes(domain)) return true;
   if (domain === 'dual' && chairContext.personal_search) return true;
-  return false;
+  return Boolean(chairContext.personal_search);
 }
 
 export function shouldAttachStrategicBrief(cleanedInput = '', chairContext = {}) {

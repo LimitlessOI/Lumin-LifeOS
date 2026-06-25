@@ -70,6 +70,12 @@ const commLaw = spawnSync(process.execPath, ['scripts/verify-lumin-communication
 });
 checks.push(check('PBG-05c', commLaw.status === 0, 'Lumin Communication Law verify'));
 
+const convRoute = spawnSync(process.execPath, ['scripts/verify-lumin-conversation-routing.mjs'], {
+  cwd: ROOT,
+  encoding: 'utf8',
+});
+checks.push(check('PBG-05d', convRoute.status === 0, 'Lumin conversation routing verify'));
+
 const serverPath = path.join(ROOT, 'server.js');
 let serverOk = false;
 let serverDetail = 'server.js missing';

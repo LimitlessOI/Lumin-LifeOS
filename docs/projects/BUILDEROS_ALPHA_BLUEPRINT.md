@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-25 | **`routes/lifeos-builderos-command-control-routes.js` + `services/lumin-conversation-routing.js`** — conversation never routes to display queue; personal life skips input normalize; live T4 parity target. | Adam: terminal + conversation = real system, no theater | ✅ verify | deploy |
 | 2026-06-25 | **`routes/lifeos-builderos-command-control-routes.js`** — pass `userHandle` from `req.lifeosUser` into `runLuminChairTurn` for per-user twin + Communication Law variety. | Adam: universal digital twin + communication DNA lock | ✅ syntax | deploy |
 | 2026-05-19 | **`services/founder-css-patch.js`** — `ensureAssistantBubbleContrast()` prevents assistant bubble patches where text color equals background (invisible replies). | Adam: Lumin chat replies rendered as empty grey blocks after CSS patch. | ✅ node --check | deploy |
 | 2026-06-13 | **`services/builderos-dispatch-gate.js`**, canonical/governed/queue wiring, **`scripts/builderos-run-mission.mjs`** DONE_GATE + `--worktree`, harness live gap filter | Adam: adopt industry PreToolUse fail-closed + evidence receipts; honest 10 beyond verifier theater | ✅ harness audit + operational verify | deploy |
