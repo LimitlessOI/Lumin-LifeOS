@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-25 — Fix: slim patterns in system prompt (28KB→6KB); blueprint maxOutputTokens 8000.
+**Last Updated:** 2026-06-25 — Backfill now async: POST returns session_id immediately, setImmediate fires AI in background, CLI polls every 5s.
 
 ---
 

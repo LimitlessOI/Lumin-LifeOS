@@ -193,9 +193,7 @@ Server: ${BASE_URL}
         process.exit(1);
       }
 
-      console.log(`  Step 1/3: Scanning codebase patterns... (on server)`);
-      console.log(`  Step 2/3: Extracting product intent via ARC...`);
-      console.log(`  Step 3/3: Generating blueprint...\n`);
+      console.log(`  Submitting to server (async — will poll for completion)...\n`);
 
       const result = await api('POST', '/api/v1/blueprint/intake/backfill', {
         product_name: product,
@@ -203,21 +201,49 @@ Server: ${BASE_URL}
         amendment_text: amendmentText,
       });
 
-      console.log(`Session ID: ${result.session_id}`);
+      const sessionId = result.session_id;
+      console.log(`Session ID: ${sessionId}`);
       console.log(`Status:     ${result.status}`);
-      console.log(`Gaps found: ${result.gap_count}`);
 
-      if (result.gap_count > 0) {
+      // Poll until blueprint generation completes (or fails)
+      const TERMINAL = new Set(['gap_collection', 'arc_review', 'ready', 'failed']);
+      process.stdout.write('  Processing');
+      let session;
+      for (let i = 0; i < 60; i++) {
+        await new Promise(r => setTimeout(r, 5000));
+        process.stdout.write('.');
+        const data = await api('GET', `/api/v1/blueprint/intake/${sessionId}`);
+        session = data.session;
+        if (TERMINAL.has(session.status)) break;
+      }
+      console.log();
+
+      if (!session || !TERMINAL.has(session.status)) {
+        console.error('\nTimed out waiting for blueprint generation (5 min).');
+        console.error(`Check status: node scripts/run-blueprint-intake.mjs --session ${sessionId}`);
+        process.exit(1);
+      }
+
+      if (session.status === 'failed') {
+        console.error('\nBlueprint generation failed. Check server logs.');
+        process.exit(1);
+      }
+
+      const gaps = (session.gaps_json || []).filter(g => !g.resolved);
+      console.log(`Status:     ${session.status}`);
+      console.log(`Gaps found: ${gaps.length}`);
+
+      if (gaps.length > 0) {
         console.log('\nOpen gaps (need your input):');
-        result.gaps.forEach(g => console.log(`  ${g.id}: ${g.description}`));
+        gaps.forEach(g => console.log(`  ${g.id}: ${g.description}`));
         console.log('\nAnswer each gap:');
-        result.gaps.forEach(g => {
-          console.log(`  node scripts/run-blueprint-intake.mjs --session ${result.session_id} --answer ${g.id} "your answer"`);
+        gaps.forEach(g => {
+          console.log(`  node scripts/run-blueprint-intake.mjs --session ${sessionId} --answer ${g.id} "your answer"`);
         });
         process.exit(1);
       } else {
         console.log('\nNo gaps. Running ARC review...');
-        const arc = await api('POST', `/api/v1/blueprint/intake/${result.session_id}/arc`);
+        const arc = await api('POST', `/api/v1/blueprint/intake/${sessionId}/arc`);
         if (arc.ready_to_execute) {
           console.log('ARC: PASS — blueprint ready to execute');
         } else {

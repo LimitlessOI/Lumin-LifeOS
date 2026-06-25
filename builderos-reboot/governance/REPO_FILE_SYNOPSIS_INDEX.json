@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:10:36.537Z",
+  "generated_at": "2026-06-25T23:15:11.895Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12541,
   "files": [
@@ -41742,9 +41742,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 35024,
-      "mtime": "2026-06-25T23:10:24.287Z",
-      "indexed_at": "2026-06-25T23:10:36.537Z"
+      "bytes": 35056,
+      "mtime": "2026-06-25T23:14:58.671Z",
+      "indexed_at": "2026-06-25T23:15:11.895Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -71870,9 +71870,9 @@
     {
       "path": "routes/blueprint-intake-routes.js",
       "synopsis": "Blueprint Intake API — backfill existing amendments, greenfield conversations,",
-      "bytes": 11257,
-      "mtime": "2026-06-25T22:40:39.039Z",
-      "indexed_at": "2026-06-25T22:42:38.886Z",
+      "bytes": 11185,
+      "mtime": "2026-06-25T23:14:28.685Z",
+      "indexed_at": "2026-06-25T23:15:11.895Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -74504,9 +74504,9 @@
     {
       "path": "scripts/run-blueprint-intake.mjs",
       "synopsis": "CLI tool for Blueprint Intake — backfill any existing amendment into a blueprint via Railway API.",
-      "bytes": 9161,
-      "mtime": "2026-06-25T23:01:32.383Z",
-      "indexed_at": "2026-06-25T23:02:13.352Z",
+      "bytes": 10107,
+      "mtime": "2026-06-25T23:14:47.141Z",
+      "indexed_at": "2026-06-25T23:15:11.895Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -86355,9 +86355,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 25451,
-      "mtime": "2026-06-25T23:10:09.487Z",
-      "indexed_at": "2026-06-25T23:10:36.537Z",
+      "bytes": 25672,
+      "mtime": "2026-06-25T23:14:16.756Z",
+      "indexed_at": "2026-06-25T23:15:11.895Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

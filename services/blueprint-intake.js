@@ -190,51 +190,58 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
   // ── FLOW 1: Backfill (existing amendment → blueprint) ─────────────────────
   // amendmentText takes precedence over amendmentFile — CLI reads locally and passes text,
   // so the server doesn't need to find the file (docs/ is excluded from Railway Docker image).
+  // Returns immediately with session_id; AI processing runs in background.
   async function startBackfill({ amendmentFile, amendmentText: inlineText, productName, ownerId = null }) {
-    const codebaseScan = await scanCodebasePatterns();
     const amendmentText = inlineText || readAmendment(amendmentFile);
 
     const { rows } = await pool.query(
       `INSERT INTO blueprint_intake_sessions
-         (product_name, amendment_file, flow_type, status, codebase_scan_json, owner_id)
-       VALUES ($1, $2, 'backfill', 'extracting', $3, $4) RETURNING id`,
-      [productName, amendmentFile, JSON.stringify(codebaseScan), ownerId]
+         (product_name, amendment_file, flow_type, status, owner_id)
+       VALUES ($1, $2, 'backfill', 'extracting', $3) RETURNING id`,
+      [productName, amendmentFile || null, ownerId]
     );
     const sessionId = rows[0].id;
 
-    try {
-      // Step 1: extract intent
-      const intentRaw = await callCouncilMember('claude',
-        `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
-        { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 1500, taskType: 'codegen', allowModelDowngrade: false }
-      );
-      const intent = parseBlueprintFromAiResponse(intentRaw);
-      await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
-
-      // Step 2: generate blueprint
-      const blueprintRaw = await callCouncilMember('claude',
-        `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
-      );
-      const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
-
-      // Step 3: gap detection
-      const gaps = detectGaps(blueprint);
-      blueprint._gaps = gaps;
-      blueprint._meta = { ...blueprint._meta, blueprint_version: '1.0.0-intake', generated_by: 'blueprint-intake-service', scanned_at: codebaseScan.scanned_at };
-
-      const newStatus = gaps.length > 0 ? 'gap_collection' : 'arc_review';
-      await updateSession(pool, sessionId, {
-        blueprint_json: blueprint,
-        gaps_json: gaps,
-        status: newStatus,
+    // Process in background — Railway keeps the event loop alive
+    setImmediate(() => {
+      _runBackfill(sessionId, amendmentText).catch(err => {
+        updateSession(pool, sessionId, { status: 'failed' }).catch(() => {});
       });
+    });
 
-      return { sessionId, status: newStatus, gapCount: gaps.length, gaps };
-    } catch (err) {
-      await updateSession(pool, sessionId, { status: 'failed' });
-      throw err;
-    }
+    return { sessionId, status: 'extracting' };
+  }
+
+  async function _runBackfill(sessionId, amendmentText) {
+    const codebaseScan = await scanCodebasePatterns();
+    await updateSession(pool, sessionId, { codebase_scan_json: codebaseScan });
+
+    // Step 1: extract intent
+    const intentRaw = await callCouncilMember('claude',
+      `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
+      { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 1500, taskType: 'codegen', allowModelDowngrade: false }
+    );
+    const intent = parseBlueprintFromAiResponse(intentRaw);
+    await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
+
+    // Step 2: generate blueprint
+    const blueprintRaw = await callCouncilMember('claude',
+      `PRODUCT INTENT:\n${JSON.stringify(intent)}\n\nGenerate the complete blueprint JSON now.`,
+      { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
+    );
+    const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
+
+    // Step 3: gap detection
+    const gaps = detectGaps(blueprint);
+    blueprint._gaps = gaps;
+    blueprint._meta = { ...blueprint._meta, blueprint_version: '1.0.0-intake', generated_by: 'blueprint-intake-service', scanned_at: codebaseScan.scanned_at };
+
+    const newStatus = gaps.length > 0 ? 'gap_collection' : 'arc_review';
+    await updateSession(pool, sessionId, {
+      blueprint_json: blueprint,
+      gaps_json: gaps,
+      status: newStatus,
+    });
   }
 
   // ── FLOW 2: Greenfield (conversation → spec → blueprint) ──────────────────

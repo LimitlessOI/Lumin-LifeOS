@@ -22,16 +22,14 @@ export function createBlueprintIntakeRoutes(app, ctx) {
         return res.status(400).json({ error: 'product_name and (amendment_file or amendment_text) required' });
       }
       const ownerId = req.lifeosUser?.sub || null;
+      // startBackfill returns immediately; AI runs in background
       const result = await intake.startBackfill({ amendmentFile: amendment_file, amendmentText: amendment_text, productName: product_name, ownerId });
       return res.status(202).json({
         ok: true,
         session_id: result.sessionId,
         status: result.status,
-        gap_count: result.gapCount,
-        gaps: result.gaps,
-        next: result.gapCount > 0
-          ? `POST /api/v1/blueprint/intake/${result.sessionId}/answer to resolve each gap`
-          : `POST /api/v1/blueprint/intake/${result.sessionId}/arc to run ARC review`,
+        async: true,
+        next: `Poll GET /api/v1/blueprint/intake/${result.sessionId} until status is gap_collection or arc_review`,
       });
     } catch (err) {
       return res.status(500).json({ error: err.message });
