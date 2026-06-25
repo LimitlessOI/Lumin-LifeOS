@@ -180,6 +180,36 @@ function scaffoldPhase1Steps({ productName, parentSsot }) {
   ];
 }
 
+function dedupeVerifySteps(blueprint, productName) {
+  const slug = productFileSlug(productName);
+  const canonical = `scripts/verify-${slug}.mjs`;
+  const verifySteps = (blueprint.steps || []).filter(s => s.type === 'esm_script');
+  if (verifySteps.length <= 1) {
+    if (blueprint._meta) blueprint._meta.acceptance_cmd = `node ${canonical}`;
+    return blueprint;
+  }
+  blueprint.steps = (blueprint.steps || []).filter((s) => {
+    if (s.type !== 'esm_script') return true;
+    return s.file === canonical;
+  });
+  if (!blueprint.steps.some(s => s.file === canonical)) {
+    const prefix = productStepPrefix(productName);
+    const lastDep = blueprint.steps.filter(s => s.type === 'esm').pop()?.id
+      || blueprint.steps[blueprint.steps.length - 1]?.id
+      || `${prefix}-P1-003`;
+    blueprint.steps.push({
+      id: `${prefix}-P1-004`,
+      file: canonical,
+      type: 'esm_script',
+      purpose: `Acceptance verification for ${slug}`,
+      deps: [lastDep],
+      ssot_tag: blueprint._meta?.ssot_tag || 'docs/projects/AMENDMENT_XX.md',
+    });
+  }
+  if (blueprint._meta) blueprint._meta.acceptance_cmd = `node ${canonical}`;
+  return blueprint;
+}
+
 function finalizeBlueprint(blueprint, { productName, parentSsot, gapAnswers = null } = {}) {
   stripInvalidSteps(blueprint);
   let gaps = detectGaps(blueprint);
@@ -187,6 +217,8 @@ function finalizeBlueprint(blueprint, { productName, parentSsot, gapAnswers = nu
     blueprint.steps = scaffoldPhase1Steps({ productName, parentSsot });
     gaps = detectGaps(blueprint);
   }
+  dedupeVerifySteps(blueprint, productName);
+  gaps = detectGaps(blueprint);
   blueprint._gaps = gaps;
   return { blueprint, gaps };
 }
@@ -621,6 +653,9 @@ Ask ONE question at a time. Be brief.`;
     const blueprint = session.blueprint_json;
     if (!blueprint) throw new Error('NoBlueprintYet: run startBackfill or continueGreenfield first');
 
+    dedupeVerifySteps(blueprint, session.product_name);
+    await updateSession(pool, sessionId, { blueprint_json: blueprint, status: 'arc_review' });
+
     const arcPrompt = `Review this SKELETON blueprint for execution readiness. Steps are routing metadata only (id, file, type, purpose, deps, ssot_tag).
 
 For each step check:
@@ -650,7 +685,7 @@ Return JSON:
     const arcReport = parseBlueprintFromAiResponse(arcRaw);
 
     const newStatus = arcReport.ready_to_execute ? 'ready' : 'gap_collection';
-    await updateSession(pool, sessionId, { arc_report_json: arcReport, status: newStatus });
+    await updateSession(pool, sessionId, { arc_report_json: arcReport, blueprint_json: blueprint, status: newStatus });
 
     // If ready, write blueprint to disk
     if (arcReport.ready_to_execute && session.amendment_file) {

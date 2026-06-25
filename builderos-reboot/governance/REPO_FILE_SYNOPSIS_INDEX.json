@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:49:52.823Z",
+  "generated_at": "2026-06-25T23:50:59.209Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12552,
   "files": [
@@ -29047,9 +29047,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3766582,
-      "mtime": "2026-06-25T23:46:36.495Z",
-      "indexed_at": "2026-06-25T23:46:37.094Z"
+      "bytes": 3767211,
+      "mtime": "2026-06-25T23:49:52.879Z",
+      "indexed_at": "2026-06-25T23:49:52.968Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41749,9 +41749,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 35423,
-      "mtime": "2026-06-25T23:46:23.047Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z"
+      "bytes": 35747,
+      "mtime": "2026-06-25T23:50:51.038Z",
+      "indexed_at": "2026-06-25T23:50:59.209Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -86413,9 +86413,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 32303,
-      "mtime": "2026-06-25T23:46:23.048Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 33718,
+      "mtime": "2026-06-25T23:50:22.760Z",
+      "indexed_at": "2026-06-25T23:50:59.209Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
