@@ -20,6 +20,7 @@
 
 import express from 'express';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+import { getStackRegistry } from '../services/lifeos-service-doctrine.js';
 
 function parseAllowedOrigin(raw) {
   try {
@@ -82,6 +83,29 @@ export function createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMembe
     }
     if (req.method === 'OPTIONS') return res.sendStatus(204);
     next();
+  });
+
+  // ── GET /shell — universal overlay platform manifest (native app + PWA + extension) ──
+  router.get('/shell', (_req, res) => {
+    try {
+      const reg = getStackRegistry();
+      res.json({
+        ok: true,
+        role: 'universal_overlay_platform',
+        description: 'Every LifeOS program runs inside this shell. Native app = same overlay platform as browser.',
+        canonical_shell: '/lifeos',
+        canonical_shell_file: reg.platform?.canonical_shell || 'public/overlay/lifeos-app.html',
+        native_entry: '/lifeos?native=1&layout=mobile&direct_system=1',
+        pwa_entry: '/overlay/lifeos-app.html',
+        extension_frame: '/extension/frame.html',
+        shared_spine: reg.platform?.shared_spine || [],
+        stacks: reg.stacks || [],
+        fluid_os_rules: reg.fluid_os_rules || [],
+        update_channel: 'railway_deploy',
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
   });
 
   // ── GET /status — bootstrap auth check ──────────────────────────────────

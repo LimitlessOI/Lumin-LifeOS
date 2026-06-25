@@ -1,16 +1,38 @@
 <!DOCTYPE html>
-<!-- SYNOPSIS: HTML page: LifeOS -->
+<!-- SYNOPSIS: Native Universal Overlay bootstrap — loads canonical LifeOS shell from Railway -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0f" />
   <title>LifeOS</title>
-  <meta name="theme-color" content="#6c63ff" />
-  <script>
-    location.replace('/overlay/lifeos-login.html?next=/overlay/lifeos-app.html&native=1');
-  </script>
+  <style>
+    html, body { margin: 0; min-height: 100vh; background: #0a0a0f; color: #e8e8f0; font-family: system-ui, sans-serif; }
+    .boot { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 12px; padding: 24px; text-align: center; }
+    .logo { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+    .sub { color: #8888aa; font-size: 14px; max-width: 320px; line-height: 1.45; }
+    .spin { width: 28px; height: 28px; border: 3px solid rgba(108,99,255,0.25); border-top-color: #6c63ff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
-<body style="background:#0a0a0f;color:#e8e8f0;font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;">
-  <p>Opening LifeOS…</p>
+<body>
+  <div class="boot" id="boot">
+    <div class="logo">LifeOS</div>
+    <div class="spin" aria-hidden="true"></div>
+    <p class="sub">Universal overlay — all your programs live here.</p>
+  </div>
+  <script>
+    (function () {
+      var PRODUCTION = 'https://robust-magic-production.up.railway.app';
+      var origin = location.origin;
+      var isLocal = /localhost|127\.0\.0\.1|capacitor:/.test(origin);
+      var base = isLocal ? PRODUCTION : origin.replace(/\/$/, '');
+      var target = base + '/lifeos?native=1&layout=mobile&direct_system=1';
+      try {
+        localStorage.setItem('lifeos_native_shell_v1', '1');
+      } catch (_) {}
+      location.replace(target);
+    })();
+  </script>
 </body>
 </html>

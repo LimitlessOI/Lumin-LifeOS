@@ -3,21 +3,28 @@
   "appName": "LifeOS",
   "webDir": "mobile/www",
   "server": {
-    "url": "https://robust-magic-production.up.railway.app",
+    "url": "https://robust-magic-production.up.railway.app/lifeos?native=1&layout=mobile&direct_system=1",
     "androidScheme": "https",
-    "cleartext": false
+    "cleartext": false,
+    "allowNavigation": [
+      "robust-magic-production.up.railway.app",
+      "*.up.railway.app"
+    ]
   },
   "plugins": {
     "SplashScreen": {
       "launchAutoHide": true,
-      "backgroundColor": "#0a0a0f"
+      "backgroundColor": "#0a0a0f",
+      "showSpinner": false
     }
   },
   "ios": {
     "contentInset": "automatic",
-    "backgroundColor": "#0a0a0f"
+    "backgroundColor": "#0a0a0f",
+    "scheme": "LifeOS"
   },
   "android": {
-    "backgroundColor": "#0a0a0f"
+    "backgroundColor": "#0a0a0f",
+    "allowMixedContent": false
   }
 }

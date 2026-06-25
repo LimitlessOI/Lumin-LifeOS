@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <script src="/overlay/lifeos-bootstrap.js?v=20260519d"></script>
+  <script src="/shared/lifeos-native-shell.js?v=20260519e"></script>
   <script src="/overlay/lifeos-theme.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
@@ -1986,8 +1987,8 @@
         <span class="settings-link" onclick="loadPage('lifeos-clip-vault.html','Clip Vault','--c-mirror'); closeSettings()">Open →</span>
       </div>
       <div class="settings-row">
-        <div class="settings-label">Install phone app</div>
-        <span class="settings-link" onclick="alert('Add LifeOS to Home Screen (Safari Share) or run npm run mobile:ios / mobile:android for native shell.')">How →</span>
+        <div class="settings-label">Native app (Universal Overlay)</div>
+        <span class="settings-link" onclick="alert('LifeOS native app = this same shell with a home-screen icon.\\n\\nOn Mac: npm run mobile:add:ios then npm run mobile:ios\\n\\nOr Safari → Share → Add to Home Screen for PWA.')">Build / install →</span>
       </div>
     </div>
     <div class="settings-divider"></div>

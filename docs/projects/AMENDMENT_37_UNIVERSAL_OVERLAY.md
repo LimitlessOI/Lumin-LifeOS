@@ -15,7 +15,7 @@ Cold agent: read `docs/AI_COLD_START.md` + `docs/CONTINUITY_LOG.md` before touch
 | **Lifecycle** | `active-build` |
 | **Reversibility** | `reversible` |
 | **Stability** | `evolving` |
-| **Last Updated** | 2026-04-20 — Founding document + full P0 scaffold shipped. Extension routes mounted in register-runtime-routes.js. Amendment 37 registered in INDEX.md. node --check passes. See `## Change Receipts`. |
+| **Last Updated** | 2026-05-19 — Native app wired as Universal Overlay shell (Capacitor → `/lifeos` = `lifeos-app.html`); `GET /api/v1/extension/shell`; `lifeos-native-shell.js`. Prior: 2026-04-20 founding scaffold. |
 | **Verification Command** | `node --check public/extension/frame.js && node --check routes/lifeos-extension-routes.js` |
 
 ---
@@ -56,6 +56,29 @@ Browser Page (any site)
 ```
 
 **The iframe IS the update channel.** Deploy to Railway → every open browser tab with the extension gets the new UI on next activation. Zero user action required.
+
+### Native app = same universal shell (Capacitor)
+
+The **phone home-screen app is not a separate product.** It loads the same canonical shell as the browser:
+
+```
+Native app (iOS / Android)
+  └── Capacitor WebView
+        └── GET /lifeos  →  public/overlay/lifeos-app.html
+              ├── Lumen + listening + shared spine
+              ├── Stack nav (LifeRE, Today, Mirror, …)
+              └── iframe → stack pages (config/lifeos-stack-registry.json)
+```
+
+| Client | Entry | SSOT |
+|--------|-------|------|
+| Native app | `/lifeos?native=1&layout=mobile` | `capacitor.config.json`, `mobile/README.md` |
+| PWA | `/overlay/lifeos-app.html` or `/lifeos` | `lifeos.webmanifest` |
+| Chrome extension (other sites) | `extension/content.js` → `/extension/frame.html` | This amendment |
+
+Bridge: `public/shared/lifeos-native-shell.js`. Platform manifest: `GET /api/v1/extension/shell`.
+
+**⚠️ INCOMPLETE:** Overlay-on-arbitrary-websites inside the native app (in-app browser + frame inject) is P2 — extension covers desktop browser today.
 
 ### Communication bridge
 
@@ -263,6 +286,7 @@ User on insurance portal
 - [x] Real-time update check in content.js (background.js alarm + version.json polling)
 
 ### P1 — Next session
+- [x] **Native Universal Overlay app (Capacitor)** — `capacitor.config.json` loads `/lifeos`; `lifeos-native-shell.js`; `GET /api/v1/extension/shell`; `mobile/README.md` (2026-05-19)
 - [ ] Struggle detection engine (dwell timer, click repeat, edit cycle counter)
 - [ ] Proactive toast system (non-blocking, dismissible, preference-learned)
 - [ ] Form field schema inference (label association, ARIA, placeholder fallback)
@@ -288,8 +312,8 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | P1 items above — struggle detection engine + form field schema inference. Also: add extension icons to `extension/icons/` |
-| **Known gaps** | Extension icons are placeholder paths — need actual PNG assets before Chrome will load the extension. Fill-form currently maps only basic `lifeos_users` fields (name, handle) — insurance/DOB fields come with `insurance_profiles` table (P2). Struggle detection signals are wired as constants in content.js but the proactive toast bridge to the iframe is not yet built. |
+| **Next build** | P1 — struggle detection + form fill. Native: run `npm run mobile:add:ios` on Adam's Mac, enable Background Audio in Xcode. P2 — in-app browser overlay on mobile for external sites. |
+| **Known gaps** | Extension icons placeholder. Native `ios/`/`android/` folders created on first `mobile:add:*` — not committed until operator runs locally. Fill-form maps basic user fields only. |
 | **⚠️ IN PROGRESS** | None — founding doc + scaffold complete as of 2026-04-21 |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
@@ -301,5 +325,6 @@ User on insurance portal
 
 | Date | What Changed | Why | Verified | Status |
 |---|---|---|---|---|
+| 2026-05-19 | **Native app = Universal Overlay shell:** Capacitor config → `/lifeos?native=1` (`lifeos-app.html`); `public/shared/lifeos-native-shell.js` (Capacitor detect, deep links, app foreground sync); `GET /api/v1/extension/shell` (stack registry manifest); `mobile/www/index.html` bootstrap; `extension/content.js` FRAME_ORIGIN → production Railway URL; `mobile/README.md` doctrine. | Adam: native app must be the overlay platform all programs sit on — not a separate mini-app. | ✅ node --check | pending deploy |
 | 2026-04-20 | Founding document created; full architecture spec, feature spec, struggle detection design, form fill data flow, approved backlog | Adam: build web-first overlay above everything, real-time updates, proactive help, do-it-for-me form fill, fluid UI, universal platform | ✅ | complete |
 | 2026-04-20 | Extension scaffold shipped: `extension/manifest.json`, `extension/content.js`, `extension/background.js`, `extension/popup.html`, `extension/popup.js`; server overlay: `public/extension/frame.html`, `public/extension/frame.js`, `public/extension/version.json`; backend: `routes/lifeos-extension-routes.js` (status, context, fill-form, chat); mounted in `startup/register-runtime-routes.js`; registered in `docs/projects/INDEX.md` | Build the foundation that all overlay features sit on | ✅ node --check PASS | complete |

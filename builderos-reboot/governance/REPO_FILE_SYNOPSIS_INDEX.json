@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T17:05:20.699Z",
+  "generated_at": "2026-06-25T17:33:32.542Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12394,
+  "file_count": 12395,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -35087,9 +35087,9 @@
     {
       "path": "capacitor.config.json",
       "synopsis": "JSON data/config — capacitor.config.json.",
-      "bytes": 471,
-      "mtime": "2026-06-25T17:04:15.088Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z",
+      "bytes": 706,
+      "mtime": "2026-06-25T17:32:50.266Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z",
       "synopsis_index_only": true
     },
     {
@@ -41128,9 +41128,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 481110,
-      "mtime": "2026-06-25T17:04:43.125Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z"
+      "bytes": 481486,
+      "mtime": "2026-06-25T17:33:18.542Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -41360,9 +41360,9 @@
     {
       "path": "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
       "synopsis": "AMENDMENT 37 — Universal Overlay Platform",
-      "bytes": 14257,
-      "mtime": "2026-06-21T21:37:59.164Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 15919,
+      "mtime": "2026-06-25T17:33:07.080Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z"
     },
     {
       "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json",
@@ -61231,9 +61231,9 @@
     {
       "path": "extension/content.js",
       "synopsis": "extension/content.js — Lumin Universal Overlay",
-      "bytes": 15096,
-      "mtime": "2026-06-21T21:38:50.499Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 15204,
+      "mtime": "2026-06-25T17:32:58.655Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z",
       "ssot": [
         "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md"
       ]
@@ -68565,17 +68565,17 @@
     },
     {
       "path": "mobile/README.md",
-      "synopsis": "LifeOS Native Shell (Capacitor)",
-      "bytes": 1347,
-      "mtime": "2026-06-25T17:05:08.151Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z"
+      "synopsis": "Native Universal Overlay shell (Capacitor)",
+      "bytes": 2856,
+      "mtime": "2026-06-25T17:32:53.150Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z"
     },
     {
       "path": "mobile/www/index.html",
-      "synopsis": "HTML page: LifeOS",
-      "bytes": 579,
-      "mtime": "2026-06-25T17:05:08.167Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z"
+      "synopsis": "Native Universal Overlay bootstrap — loads canonical LifeOS shell from Railway",
+      "bytes": 1751,
+      "mtime": "2026-06-25T17:32:47.749Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z"
     },
     {
       "path": "MODELROUTER_FIX_REPORT.md",
@@ -69977,9 +69977,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 137257,
-      "mtime": "2026-06-25T17:04:49.031Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z"
+      "bytes": 137427,
+      "mtime": "2026-06-25T17:32:57.867Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -70441,9 +70441,9 @@
     {
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
-      "bytes": 7282,
-      "mtime": "2026-06-25T17:04:41.053Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z",
+      "bytes": 7280,
+      "mtime": "2026-06-25T17:32:58.892Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -70604,6 +70604,16 @@
       "indexed_at": "2026-06-25T17:05:20.699Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "public/shared/lifeos-native-shell.js",
+      "synopsis": "Native Universal Overlay shell — Capacitor bridge; same platform as lifeos-app + extension overlay.",
+      "bytes": 4741,
+      "mtime": "2026-06-25T17:32:44.475Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md"
       ]
     },
     {
@@ -71432,9 +71442,9 @@
     {
       "path": "routes/lifeos-extension-routes.js",
       "synopsis": "routes/lifeos-extension-routes.js",
-      "bytes": 12706,
-      "mtime": "2026-06-21T21:39:04.184Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 13755,
+      "mtime": "2026-06-25T17:32:46.101Z",
+      "indexed_at": "2026-06-25T17:33:32.542Z",
       "ssot": [
         "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md"
       ]
