@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-25 — Fix: taskType json_extract (skips truth envelope), resilient JSON parser, CLI sessionArg off-by-one.
+**Last Updated:** 2026-06-25 — Fix: systemPrompt → systemPromptOverride (council-service uses Override key, not systemPrompt).
 
 ---
 

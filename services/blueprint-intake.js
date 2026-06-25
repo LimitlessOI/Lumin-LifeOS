@@ -190,7 +190,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
       // Step 1: extract intent
       const intentRaw = await callCouncilMember('claude',
         `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
-        { systemPrompt: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 3000, taskType: 'json_extract' }
+        { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 3000, taskType: 'json_extract' }
       );
       const intent = parseBlueprintFromAiResponse(intentRaw);
       await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
@@ -198,7 +198,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
       // Step 2: generate blueprint
       const blueprintRaw = await callCouncilMember('claude',
         `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-        { systemPrompt: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
+        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
       );
       const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 
@@ -247,7 +247,7 @@ Ask ONE question at a time. Be brief and direct. You are Lumin — conversationa
 
     const firstResponse = await callCouncilMember('claude',
       firstMessage,
-      { systemPrompt: greenfieldSystem, maxOutputTokens: 500, taskType: 'general' }
+      { systemPromptOverride: greenfieldSystem, maxOutputTokens: 500, taskType: 'general' }
     );
 
     const conversation = [
@@ -275,7 +275,7 @@ Ask ONE question at a time. Be brief.`;
     const messages = [...conversation, { role: 'user', content: userMessage }];
     const response = await callCouncilMember('claude',
       messages.map(m => `${m.role.toUpperCase()}: ${m.content}`).join('\n\n'),
-      { systemPrompt: greenfieldSystem, maxOutputTokens: 600, taskType: 'general' }
+      { systemPromptOverride: greenfieldSystem, maxOutputTokens: 600, taskType: 'general' }
     );
 
     messages.push({ role: 'assistant', content: response });
@@ -287,7 +287,7 @@ Ask ONE question at a time. Be brief.`;
         const intent = parseBlueprintFromAiResponse(jsonMatch[0]);
         const blueprintRaw = await callCouncilMember('claude',
           `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-          { systemPrompt: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
+          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
         );
         const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
         const gaps = detectGaps(blueprint);
@@ -337,7 +337,7 @@ Ask ONE question at a time. Be brief.`;
     try {
       const patchedRaw = await callCouncilMember('claude',
         `FOUNDER ADJUSTMENT REQUEST:\n${adjustmentText}`,
-        { systemPrompt: ADJUSTMENT_SYSTEM(existingBlueprint, codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
+        { systemPromptOverride: ADJUSTMENT_SYSTEM(existingBlueprint, codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
       );
       const patched = parseBlueprintFromAiResponse(patchedRaw);
       const gaps = detectGaps(patched);
@@ -387,7 +387,7 @@ Ask ONE question at a time. Be brief.`;
 
     const response = await callCouncilMember('claude',
       `${gapContext}\n\nCurrent message from founder: ${userMessage}`,
-      { systemPrompt: GAP_CONVERSATION_SYSTEM, maxOutputTokens: 400, taskType: 'general' }
+      { systemPromptOverride: GAP_CONVERSATION_SYSTEM, maxOutputTokens: 400, taskType: 'general' }
     );
     messages.push({ role: 'assistant', content: response });
 
@@ -473,7 +473,7 @@ Return JSON:
 
     const arcRaw = await callCouncilMember('claude',
       `BLUEPRINT TO REVIEW:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
-      { systemPrompt: arcPrompt, maxOutputTokens: 3000, taskType: 'json_extract' }
+      { systemPromptOverride: arcPrompt, maxOutputTokens: 3000, taskType: 'json_extract' }
     );
     const arcReport = parseBlueprintFromAiResponse(arcRaw);
 
