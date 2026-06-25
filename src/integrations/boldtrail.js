@@ -296,7 +296,13 @@ export async function createOrUpdateContact(contact = {}) {
 export async function addContactNote(contactId, text) {
   if (!isBoldTrailAPIAvailable()) return { ok: false, reason: "missing_token" };
   if (!contactId || !text) return { ok: false, reason: "missing_params" };
-  const noteBody = { note: String(text), text: String(text) };
+  const noteText = String(text);
+  const noteBody = {
+    note: noteText,
+    text: noteText,
+    details: noteText,
+    body: noteText,
+  };
   const id = encodeURIComponent(contactId);
   const attempts = [
     { method: "POST", path: `/contact/${id}/action/note`, body: noteBody },

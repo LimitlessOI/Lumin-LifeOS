@@ -13,6 +13,6 @@
     "services/lifere-boldtrail-bridge.js"
   ],
   "last_updated": "2026-06-25",
-  "last_receipt": "2026-06-25 kvcore-contact-create-and-note-endpoints",
-  "last_change_summary": "boldtrail.js POST /contact + action/note; ambient BoldTrail CRM capture"
+  "last_receipt": "2026-06-25 action-note-details-field",
+  "last_change_summary": "addContactNote sends details field for kvCORE action/note 422 fix"
 }

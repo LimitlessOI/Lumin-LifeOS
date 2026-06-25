@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:57:40.850Z",
+  "generated_at": "2026-06-25T23:59:40.805Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12553,
   "files": [
@@ -41822,17 +41822,17 @@
     {
       "path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 11 BOLDTRAIL REALESTATE.Manifest.",
-      "bytes": 726,
-      "mtime": "2026-06-25T23:57:30.672Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z",
+      "bytes": 705,
+      "mtime": "2026-06-25T23:59:39.554Z",
+      "indexed_at": "2026-06-25T23:59:40.805Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
       "synopsis": "AMENDMENT 11 — BoldTrail Real Estate CRM Integration",
-      "bytes": 7700,
-      "mtime": "2026-06-25T23:56:53.316Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z"
+      "bytes": 7913,
+      "mtime": "2026-06-25T23:59:39.112Z",
+      "indexed_at": "2026-06-25T23:59:40.805Z"
     },
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json",
