@@ -11,7 +11,7 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
-const CACHE_NAME   = 'lifeos-v20260519-family-tone-guard';
+const CACHE_NAME   = 'lifeos-v20260519-listening-lumen-abc';
 const OFFLINE_URL  = '/overlay/lifeos-app.html';
 
 // App shell files to pre-cache on install
@@ -21,7 +21,11 @@ const PRECACHE = [
   '/overlay/lifeos-today.html',
   '/overlay/lifeos-mirror.html',
   '/overlay/lifeos-quick-entry.html',
-  '/overlay/lifeos-bootstrap.js',
+  '/overlay/lifeos-listening-setup.html',
+  '/overlay/lifeos-clip-vault.html',
+  '/shared/lifeos-local-vault.js',
+  '/shared/lifeos-listening-orchestrator.js',
+  '/shared/lifeos-family-tone-guard.js',
   '/overlay/manifest.json',
 ];
 

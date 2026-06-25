@@ -1,0 +1,23 @@
+{
+  "appId": "org.hopkinsgroup.lifeos",
+  "appName": "LifeOS",
+  "webDir": "mobile/www",
+  "server": {
+    "url": "https://robust-magic-production.up.railway.app",
+    "androidScheme": "https",
+    "cleartext": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "backgroundColor": "#0a0a0f"
+    }
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "backgroundColor": "#0a0a0f"
+  },
+  "android": {
+    "backgroundColor": "#0a0a0f"
+  }
+}

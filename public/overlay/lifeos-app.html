@@ -608,6 +608,15 @@
       opacity: 1;
       animation: ambient-pulse 0.55s ease-in-out infinite;
     }
+    .listening-pill .ambient-pill-btn[data-mode="on"] {
+      border-color: rgba(108, 99, 255, 0.55);
+      background: rgba(108, 99, 255, 0.12);
+    }
+    .listening-pill .ambient-pill-btn[data-mode="on"] .ambient-dot {
+      background: #6c63ff;
+      opacity: 1;
+      animation: ambient-pulse 2s ease-in-out infinite;
+    }
     .ambient-dot {
       width: 7px;
       height: 7px;
@@ -1755,6 +1764,15 @@
     </div>
     <div id="ambient-toast" class="ambient-toast" role="status" aria-live="polite"></div>
 
+    <div id="listening-pill" class="ambient-pill listening-pill" aria-live="polite">
+      <button type="button" class="ambient-pill-btn" id="listening-master-toggle" data-mode="off" aria-pressed="false"
+        title="Listening master — schedules, wake word, family guard per your Lumen profile">
+        <span class="ambient-dot" aria-hidden="true"></span>
+        <span id="listening-label">Listening off</span>
+      </button>
+      <span class="ambient-pill-hint" id="listening-hint"><a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Talk with Lumen</a> to set preferences · tap to turn on/off</span>
+    </div>
+
     <div id="family-guard-pill" class="ambient-pill family-guard-pill" aria-live="polite">
       <button type="button" class="ambient-pill-btn" id="family-guard-toggle" data-mode="off" aria-pressed="false"
         title="Family tone guard — vibrates when you yell or get snippy (mic stays on device, not recorded)">
@@ -1950,6 +1968,27 @@
       <p class="settings-hint">Named bodies for <code>POST /api/v1/lifeos/gate-change/run-preset</code> (multi-model debate runs on the server). Copy a CLI line — you still need <code>COMMAND_CENTER_KEY</code> and <code>PUBLIC_BASE_URL</code> in your shell to execute it.</p>
       <button type="button" class="settings-invite-btn" onclick="loadGateChangePresets()">Refresh list</button>
       <div class="admin-invites-list" id="gate-presets-list"></div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-section-title">Listening &amp; Lumen</div>
+      <p class="settings-hint">100% opt-in. Talk with Lumen to choose modes, schedules, and privacy. Audio clips stay on this device unless you opt in otherwise.</p>
+      <label class="settings-row" style="cursor:pointer;user-select:none;">
+        <input type="checkbox" id="st-listening-master" style="margin-right:10px;" />
+        <span class="settings-label" style="flex:1;">Master listening switch</span>
+      </label>
+      <div class="settings-row">
+        <div class="settings-label">Setup with Lumen</div>
+        <span class="settings-link" onclick="window.location.href='/overlay/lifeos-listening-setup.html'">Open conversation →</span>
+      </div>
+      <div class="settings-row">
+        <div class="settings-label">Clip vault (device)</div>
+        <span class="settings-link" onclick="loadPage('lifeos-clip-vault.html','Clip Vault','--c-mirror'); closeSettings()">Open →</span>
+      </div>
+      <div class="settings-row">
+        <div class="settings-label">Install phone app</div>
+        <span class="settings-link" onclick="alert('Add LifeOS to Home Screen (Safari Share) or run npm run mobile:ios / mobile:android for native shell.')">How →</span>
+      </div>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
@@ -2563,6 +2602,10 @@ function openSettings(e) {
   if (amb && window.LifeOSAmbientSense) amb.checked = LifeOSAmbientSense.enabled();
   const fg = document.getElementById('st-family-guard');
   if (fg && window.LifeOSFamilyToneGuard) fg.checked = LifeOSFamilyToneGuard.isEnabled();
+  const lm = document.getElementById('st-listening-master');
+  if (lm && window.LifeOSListeningOrchestrator) {
+    lm.checked = LifeOSListeningOrchestrator.getStatus().master;
+  }
   const invSec = document.getElementById('settings-invites-section');
   if (invSec) {
     if (CTX.role === 'admin') {
@@ -2700,6 +2743,10 @@ function saveSettings() {
     } else if (!fg.checked && LifeOSFamilyToneGuard.isEnabled()) {
       LifeOSFamilyToneGuard.setEnabled(false);
     }
+  }
+  const lm = document.getElementById('st-listening-master');
+  if (lm && window.LifeOSListeningOrchestrator) {
+    LifeOSListeningOrchestrator.setMaster(!!lm.checked);
   }
   document.getElementById('sidebar-user-name').textContent = name || NAME;
   document.getElementById('user-avatar').textContent       = (name || NAME).charAt(0).toUpperCase();
@@ -3315,8 +3362,70 @@ window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
 };
 </script>
 
-<script src="/shared/lifeos-family-tone-guard.js?v=20260519a"></script>
+<script src="/shared/lifeos-local-vault.js?v=20260519c"></script>
+<script src="/shared/lifeos-listening-orchestrator.js?v=20260519c"></script>
+<script src="/shared/lifeos-family-tone-guard.js?v=20260519d"></script>
 <script src="/shared/lifeos-ambient-listener.js?v=20260519b"></script>
+<script>
+(function initListeningOrchestrator() {
+  const btn = document.getElementById('listening-master-toggle');
+  const label = document.getElementById('listening-label');
+  const hint = document.getElementById('listening-hint');
+  const toast = document.getElementById('ambient-toast');
+  let toastTimer = null;
+
+  function showToast(message, kind) {
+    if (!toast || !message) return;
+    toast.textContent = message;
+    toast.dataset.kind = kind || 'note';
+    toast.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('visible'), 5200);
+  }
+
+  function renderStatus(st) {
+    const on = st?.master && st?.profile?.mode !== 'off';
+    if (btn) {
+      btn.dataset.mode = on ? 'on' : 'off';
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    if (label) label.textContent = on ? 'Listening on' : 'Listening off';
+    if (hint && st?.profile?.mode) {
+      hint.innerHTML = `Mode: <strong>${st.profile.mode.replace(/_/g, ' ')}</strong> · <a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Talk with Lumen</a>`;
+    }
+    const lm = document.getElementById('st-listening-master');
+    if (lm) lm.checked = !!st?.master;
+  }
+
+  if (!window.LifeOSListeningOrchestrator) return;
+
+  window.LifeOSListeningOrchestrator.init({
+    getCtx: () => CTX,
+    onProfileChange: renderStatus,
+    onToast: showToast,
+  }).then(() => renderStatus(LifeOSListeningOrchestrator.getStatus()));
+
+  btn?.addEventListener('click', async () => {
+    const st = LifeOSListeningOrchestrator.getStatus();
+    await LifeOSListeningOrchestrator.setMaster(!st.master);
+    renderStatus(LifeOSListeningOrchestrator.getStatus());
+  });
+
+  document.addEventListener('lifeos-mediation-offer', () => {
+    if (confirm('Open mediation with Lumen?')) {
+      loadPage('lifeos-mediation.html', 'Mediation', '--c-relationship');
+    }
+  });
+
+  document.addEventListener('lifeos-lumen-wake', (e) => {
+    const text = e.detail?.text || '';
+    if (/capture|commitment|meeting|notes/i.test(text)) {
+      showToast('Lumen heard you — processing…', 'wake');
+    }
+    openLuminDrawer?.();
+  });
+})();
+</script>
 <script>
 (function initFamilyToneGuard() {
   const btn = document.getElementById('family-guard-toggle');

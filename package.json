@@ -52,6 +52,11 @@
     "lifeos:lumin-chair:parity": "node scripts/run-lumin-chair-parity.mjs",
     "lifeos:lumin:connection:verify": "node scripts/verify-lumin-connection.mjs && node --test tests/lumin-connection-guard.test.js",
     "lifeos:lumin:connection:verify:live": "node scripts/verify-lumin-connection.mjs --live",
+    "mobile:sync": "npx cap sync",
+    "mobile:ios": "npx cap open ios",
+    "mobile:android": "npx cap open android",
+    "mobile:add:ios": "npx cap add ios",
+    "mobile:add:android": "npx cap add android",
     "lifeos:service-doctrine:verify": "node scripts/verify-lifeos-service-doctrine.mjs",
     "lifeos:service-doctrine:live-probe": "node --import dotenv/config scripts/probe-lifeos-doctrine-live.mjs",
     "lifeos:bp-priority:verify": "node scripts/verify-bp-priority-guardrails.mjs && node scripts/verify-file-synopsis.mjs --strict",
@@ -101,7 +106,9 @@
     "lifeos:lifere-az-acceptance": "node scripts/run-lifere-az-acceptance.mjs",
     "lifeos:lifere-runtime-integration": "node scripts/run-lifere-runtime-integration.mjs",
     "lifeos:lifere-alpha-e2e": "node scripts/run-lifere-alpha-e2e.mjs",
-    "lifeos:lifere-alpha-gate": "node scripts/run-lifere-os-v1-acceptance.mjs && node scripts/run-lifere-alpha-e2e.mjs && node scripts/run-lifere-az-acceptance.mjs",
+    "lifeos:lifere-agent-alpha": "node scripts/run-lifere-agent-alpha.mjs",
+    "lifeos:agent-alpha-gate:verify": "node scripts/verify-agent-alpha-gate.mjs",
+    "lifeos:lifere-alpha-gate": "node scripts/run-lifere-os-v1-acceptance.mjs && node scripts/run-lifere-alpha-e2e.mjs && node scripts/run-lifere-az-acceptance.mjs && node scripts/run-lifere-agent-alpha.mjs",
     "lifeos:lifere-self-audit": "node scripts/run-lifere-self-audit.mjs",
     "lifeos:lifere-alpha-readiness": "node scripts/run-lifere-alpha-readiness.mjs",
     "lifeos:lifere-alpha-ready": "node scripts/run-lifere-alpha-readiness.mjs",
@@ -252,6 +259,9 @@
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.1.86",
+    "@capacitor/app": "^7.1.2",
+    "@capacitor/core": "^7.6.7",
+    "@capacitor/splash-screen": "^7.0.5",
     "acorn": "^8.15.0",
     "bullmq": "^5.71.0",
     "commander": "^11.1.0",
@@ -283,6 +293,9 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@capacitor/android": "^7.6.7",
+    "@capacitor/cli": "^7.6.7",
+    "@capacitor/ios": "^7.6.7",
     "drizzle-kit": "^0.22.8",
     "ioredis-mock": "^8.13.1",
     "pm2": "^5.3.0"

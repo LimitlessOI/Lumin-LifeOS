@@ -33,6 +33,8 @@ const MODE_SYSTEM_PROMPTS = {
   health: `You are Lumin in Health mode. You have access to the user's health data. Help them see patterns — sleep, energy, HRV trends, how they feel on different days. Recommend they consult their doctor for medical decisions. You provide insight, not diagnosis.`,
 
   planning: `You are Lumin in Planning mode. Help the user think through the week or goals ahead. Be concrete. Ask about blockers. Help them turn vague intentions into committed actions with dates. Surface what keeps getting deferred.`,
+
+  listening_onboarding: `You are Lumen in Listening Setup mode. Guide the user through opt-in listening, capture, and privacy choices with honesty and warmth.`,
 };
 
 function buildSystemPrompt(mode, contextData, varietyGuidance, profileSummary) {
@@ -49,7 +51,7 @@ function buildSystemPrompt(mode, contextData, varietyGuidance, profileSummary) {
     parts.push(`\nCurrent LifeOS context:\n${JSON.stringify(contextData, null, 2)}`);
   }
 
-  parts.push(`\nYour name is Lumin. You can be addressed as "Lumin" or "hey Lumin" or similar. Keep responses conversational — not essays unless the question calls for depth. No hollow openers like "Great question!" or "Certainly!"`);
+  parts.push(`\nYour name is Lumen (users may say Lumin — same companion). Address yourself as Lumen in user-facing text. Keep responses conversational — not essays unless the question calls for depth. No hollow openers like "Great question!" or "Certainly!"`);
 
   return parts.join('\n');
 }
@@ -225,6 +227,43 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
       [threadId]
     );
 
+    return { user_message: userMsg, reply: assistantMsg };
+  }
+
+  /** Onboarding / governed flows — custom system prompt, skips variety wrap when override supplied. */
+  async function chatWithSystemOverride(threadId, userId, userMessage, {
+    systemPrompt: overridePrompt,
+    contextData = {},
+    contentType = 'text',
+  } = {}) {
+    if (!callAI) throw new Error('AI not available');
+    const thread = await getThread(threadId, userId);
+    if (!thread) throw Object.assign(new Error('Thread not found'), { status: 404 });
+
+    const { rows: [userMsg] } = await pool.query(
+      `INSERT INTO lumin_messages (thread_id, user_id, role, content, content_type)
+       VALUES ($1, $2, 'user', $3, $4) RETURNING *`,
+      [threadId, userId, userMessage, contentType]
+    );
+
+    const history = await getMessages(threadId, { limit: CONTEXT_WINDOW });
+    const systemPrompt = overridePrompt || buildSystemPrompt(thread.mode, contextData, null, null);
+    const historyText = history
+      .slice(0, -1)
+      .map(m => `${m.role === 'user' ? 'User' : 'Lumen'}: ${m.content}`)
+      .join('\n\n');
+
+    const fullPrompt = `${systemPrompt}\n\nCurrent context:\n${JSON.stringify(contextData, null, 2)}\n\n${historyText ? `--- Conversation ---\n${historyText}\n\n` : ''}User: ${userMessage}\n\nLumen:`;
+    const aiReply = await callAI(fullPrompt);
+    const safeReply = scrubProseForStorage(aiReply, { taskType: 'lumen_onboarding', command_truth: 'NO_COMMAND_RAN' });
+
+    const { rows: [assistantMsg] } = await pool.query(
+      `INSERT INTO lumin_messages (thread_id, user_id, role, content)
+       VALUES ($1, $2, 'assistant', $3) RETURNING *`,
+      [threadId, userId, safeReply]
+    );
+
+    await pool.query(`UPDATE lumin_threads SET last_message_at = NOW() WHERE id = $1`, [threadId]);
     return { user_message: userMsg, reply: assistantMsg };
   }
 
@@ -461,6 +500,7 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     reactToMessage,
     searchMessages,
     chat,
+    chatWithSystemOverride,
     recordExchange,
     getOrCreateDefaultThread,
     buildContextSnapshot,

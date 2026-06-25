@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: On-device clip vault — conflict/win moments, therapist metadata export -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clip Vault — LifeOS</title>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <script src="/shared/lifeos-local-vault.js?v=20260519c"></script>
+  <style>
+    body { font-family: system-ui; background: #0a0a0f; color: #e8e8f0; margin: 0; padding: 20px; }
+    h1 { font-size: 18px; }
+    .hint { color: #8888aa; font-size: 13px; margin: 8px 0 16px; }
+    .clip { border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+    .kind { font-size: 11px; text-transform: uppercase; color: #6c63ff; }
+    button { margin-right: 8px; margin-top: 8px; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; }
+    .danger { background: #ef4444; color: #fff; }
+    .primary { background: #6c63ff; color: #fff; }
+  </style>
+</head>
+<body>
+  <h1>Clip vault (this device only)</h1>
+  <p class="hint">Audio stays on your phone. Export shares metadata for your therapist — not the audio file unless you choose to share it separately.</p>
+  <div id="list"></div>
+  <button class="primary" id="export-btn">Export metadata for therapist</button>
+  <button class="danger" id="clear-btn">Delete all clips on this device</button>
+  <script>
+  (async function () {
+    const list = document.getElementById('list');
+    async function render() {
+      const clips = await LifeOSLocalVault.listClips({ limit: 100 });
+      list.innerHTML = clips.length ? '' : '<p class="hint">No clips yet.</p>';
+      clips.forEach((c) => {
+        const el = document.createElement('div');
+        el.className = 'clip';
+        el.innerHTML = `<div class="kind">${c.kind}</div><strong>${c.label || 'Moment'}</strong><div class="hint">${c.created_at} · ${Math.round((c.duration_ms||0)/1000)}s</div>`;
+        const play = document.createElement('button');
+        play.textContent = 'Play';
+        play.className = 'primary';
+        play.onclick = async () => {
+          const row = await LifeOSLocalVault.getClip(c.id);
+          if (!row?.blob) return;
+          const url = URL.createObjectURL(row.blob);
+          new Audio(url).play();
+        };
+        const del = document.createElement('button');
+        del.textContent = 'Delete';
+        del.onclick = async () => { await LifeOSLocalVault.deleteClip(c.id); render(); };
+        el.appendChild(play);
+        el.appendChild(del);
+        list.appendChild(el);
+      });
+    }
+    document.getElementById('export-btn').onclick = async () => {
+      const clips = await LifeOSLocalVault.listClips({ limit: 100 });
+      const pack = await LifeOSLocalVault.exportForTherapist(clips.map((c) => c.id));
+      await navigator.clipboard.writeText(JSON.stringify(pack, null, 2));
+      alert('Metadata copied to clipboard.');
+    };
+    document.getElementById('clear-btn').onclick = async () => {
+      if (!confirm('Delete all clips on this device permanently?')) return;
+      await LifeOSLocalVault.deleteAll();
+      render();
+    };
+    await LifeOSBootstrap.init({ requireAuth: true, promptForKey: false });
+    render();
+  })();
+  </script>
+</body>
+</html>

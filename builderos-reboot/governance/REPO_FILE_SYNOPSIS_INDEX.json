@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T06:40:42.119Z",
+  "generated_at": "2026-06-25T17:05:20.699Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12384,
+  "file_count": 12394,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -35085,6 +35085,14 @@
       "indexed_at": "2026-06-24T20:55:58.879Z"
     },
     {
+      "path": "capacitor.config.json",
+      "synopsis": "JSON data/config — capacitor.config.json.",
+      "bytes": 471,
+      "mtime": "2026-06-25T17:04:15.088Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "carbon-calculator.js",
       "synopsis": "js — carbon-calculator.js.",
       "bytes": 340,
@@ -38794,6 +38802,13 @@
       "indexed_at": "2026-06-24T20:55:58.879Z"
     },
     {
+      "path": "db/migrations/20260519_lifeos_listening_profile.sql",
+      "synopsis": "Database migration — 20260519_lifeos_listening_profile.sql.",
+      "bytes": 1034,
+      "mtime": "2026-06-25T17:05:08.135Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z"
+    },
+    {
       "path": "db/migrations/20260521_memory_capsule_core.sql",
       "synopsis": "Database migration — 20260521_memory_capsule_core.sql.",
       "bytes": 2699,
@@ -41091,9 +41106,9 @@
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 46171,
-      "mtime": "2026-06-24T22:43:34.939Z",
-      "indexed_at": "2026-06-24T22:44:08.208Z"
+      "bytes": 46478,
+      "mtime": "2026-06-25T17:05:14.522Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -41113,9 +41128,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 480282,
-      "mtime": "2026-06-25T06:40:35.214Z",
-      "indexed_at": "2026-06-25T06:40:42.119Z"
+      "bytes": 481110,
+      "mtime": "2026-06-25T17:04:43.125Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -68549,6 +68564,20 @@
       "indexed_at": "2026-06-24T20:55:58.879Z"
     },
     {
+      "path": "mobile/README.md",
+      "synopsis": "LifeOS Native Shell (Capacitor)",
+      "bytes": 1347,
+      "mtime": "2026-06-25T17:05:08.151Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z"
+    },
+    {
+      "path": "mobile/www/index.html",
+      "synopsis": "HTML page: LifeOS",
+      "bytes": 579,
+      "mtime": "2026-06-25T17:05:08.167Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z"
+    },
+    {
       "path": "MODELROUTER_FIX_REPORT.md",
       "synopsis": "ModelRouter Constructor Fix Report",
       "bytes": 6743,
@@ -68883,17 +68912,17 @@
     {
       "path": "package-lock.json",
       "synopsis": "JSON data/config — package-lock.json.",
-      "bytes": 299004,
-      "mtime": "2026-06-24T20:34:41.963Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 335408,
+      "mtime": "2026-06-25T17:05:01.169Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
       "synopsis_index_only": true
     },
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 24319,
-      "mtime": "2026-06-24T21:10:08.185Z",
-      "indexed_at": "2026-06-24T21:11:00.154Z",
+      "bytes": 24936,
+      "mtime": "2026-06-25T17:05:01.096Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
       "synopsis_index_only": true
     },
     {
@@ -69948,9 +69977,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 132262,
-      "mtime": "2026-06-25T06:40:33.173Z",
-      "indexed_at": "2026-06-25T06:40:42.119Z"
+      "bytes": 137257,
+      "mtime": "2026-06-25T17:04:49.031Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -69996,6 +70025,13 @@
       "bytes": 14536,
       "mtime": "2026-06-24T22:39:39.258Z",
       "indexed_at": "2026-06-24T22:44:08.208Z"
+    },
+    {
+      "path": "public/overlay/lifeos-clip-vault.html",
+      "synopsis": "On-device clip vault — conflict/win moments, therapist metadata export",
+      "bytes": 3293,
+      "mtime": "2026-06-25T17:04:29.251Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z"
     },
     {
       "path": "public/overlay/lifeos-coach.html",
@@ -70195,6 +70231,13 @@
       "bytes": 122021,
       "mtime": "2026-06-24T21:28:00.821Z",
       "indexed_at": "2026-06-24T22:44:08.208Z"
+    },
+    {
+      "path": "public/overlay/lifeos-listening-setup.html",
+      "synopsis": "Lumen conversational listening & privacy onboarding",
+      "bytes": 8220,
+      "mtime": "2026-06-25T17:04:14.394Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -70398,9 +70441,9 @@
     {
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
-      "bytes": 7113,
-      "mtime": "2026-06-25T06:40:33.375Z",
-      "indexed_at": "2026-06-25T06:40:42.119Z",
+      "bytes": 7282,
+      "mtime": "2026-06-25T17:04:41.053Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -70529,9 +70572,9 @@
     {
       "path": "public/shared/lifeos-family-tone-guard.js",
       "synopsis": "Family Tone Guard — opt-in mic watch for yelling (continuous vibrate until calm)",
-      "bytes": 10265,
-      "mtime": "2026-06-25T06:40:40.190Z",
-      "indexed_at": "2026-06-25T06:40:42.119Z",
+      "bytes": 10782,
+      "mtime": "2026-06-25T17:04:01.096Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -70542,6 +70585,26 @@
       "bytes": 1886,
       "mtime": "2026-06-21T21:39:02.631Z",
       "indexed_at": "2026-06-24T20:55:58.879Z"
+    },
+    {
+      "path": "public/shared/lifeos-listening-orchestrator.js",
+      "synopsis": "Listening orchestrator — profile sync, schedule, family guard, ambient, vault, mediation offer.",
+      "bytes": 9197,
+      "mtime": "2026-06-25T17:05:05.734Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "public/shared/lifeos-local-vault.js",
+      "synopsis": "Local clip vault — encrypted-at-rest IndexedDB audio on device only (conflict/win/commitment).",
+      "bytes": 5964,
+      "mtime": "2026-06-25T17:03:48.130Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
     },
     {
       "path": "public/shared/lifeos-system-reply.js",
@@ -71462,6 +71525,16 @@
       "bytes": 19488,
       "mtime": "2026-06-23T05:15:54.596Z",
       "indexed_at": "2026-06-24T20:55:58.879Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "routes/lifeos-listening-routes.js",
+      "synopsis": "Listening Profile routes — preferences, Lumen onboarding, privacy matrix.",
+      "bytes": 4346,
+      "mtime": "2026-06-25T17:03:12.698Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87689,6 +87762,16 @@
       ]
     },
     {
+      "path": "services/lifeos-listening-profile.js",
+      "synopsis": "Listening Profile — opt-in ambient, capture, family guard, schedule prefs for Lumen onboarding.",
+      "bytes": 7720,
+      "mtime": "2026-06-25T17:04:41.103Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/lifeos-lumin-build.js",
       "synopsis": "Lumin programming bridge — plan/draft via AI Council + queue work on Adam / builder rails.",
       "bytes": 16683,
@@ -87701,9 +87784,9 @@
     {
       "path": "services/lifeos-lumin.js",
       "synopsis": "Lumin Chair — governed operating mind of LifeOS (not a side chatbot or reception desk).",
-      "bytes": 19862,
-      "mtime": "2026-06-24T05:06:36.789Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 21873,
+      "mtime": "2026-06-25T17:03:38.747Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -93508,9 +93591,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 30874,
-      "mtime": "2026-06-24T22:25:03.947Z",
-      "indexed_at": "2026-06-24T22:44:08.208Z",
+      "bytes": 31149,
+      "mtime": "2026-06-25T17:03:43.024Z",
+      "indexed_at": "2026-06-25T17:05:20.699Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]

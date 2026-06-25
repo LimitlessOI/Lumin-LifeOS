@@ -144,9 +144,11 @@
     if (kind === 'mean') {
       pulseOnce(480);
       showToast('Mean tone — pause and breathe', 'mean');
+      try { global.dispatchEvent(new CustomEvent('lifeos-family-guard-snippy', { detail: { kind: 'mean' } })); } catch (_) {}
     } else {
       pulseOnce(380);
       showToast(kind === 'yelling_words' ? 'Raised voice — ease up' : 'Snippy tone — soften', 'snippy');
+      try { global.dispatchEvent(new CustomEvent('lifeos-family-guard-snippy', { detail: { kind } })); } catch (_) {}
     }
   }
 
@@ -156,9 +158,15 @@
     if (active) {
       startVibrateLoop();
       showToast('Yelling detected — phone vibrating until you calm', 'yelling');
+      try {
+        global.dispatchEvent(new CustomEvent('lifeos-family-guard-yelling-start', { detail: { stream: state.micStream } }));
+      } catch (_) {}
     } else {
       stopVibrateLoop();
       showToast('Volume back down — good reset', 'calm');
+      try {
+        global.dispatchEvent(new CustomEvent('lifeos-family-guard-yelling-end'));
+      } catch (_) {}
     }
     notifyState();
   }
