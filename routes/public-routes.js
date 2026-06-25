@@ -218,7 +218,11 @@ export function registerPublicRoutes(app, {
     return sendPublicFileNoCache(res, filePath);
   });
 
-  app.get("/download/lifeos.apk", (_req, res) => {
+  app.get("/download/lifeos.apk", (req, res) => {
+    const ua = String(req.headers["user-agent"] || "");
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+      return res.redirect(302, "/install?from=apk-on-ios");
+    }
     const filePath = path.join(__dirname, "public", "downloads", "lifeos.apk");
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({

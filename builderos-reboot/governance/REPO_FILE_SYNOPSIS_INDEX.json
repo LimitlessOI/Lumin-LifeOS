@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T18:31:05.780Z",
+  "generated_at": "2026-06-25T18:34:17.261Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12400,
   "files": [
@@ -41032,9 +41032,9 @@
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
       "synopsis": "AMENDMENT 12 — Command & Control Center",
-      "bytes": 99175,
-      "mtime": "2026-06-25T18:30:55.541Z",
-      "indexed_at": "2026-06-25T18:31:05.780Z"
+      "bytes": 99519,
+      "mtime": "2026-06-25T18:34:12.120Z",
+      "indexed_at": "2026-06-25T18:34:17.261Z"
     },
     {
       "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
@@ -70236,9 +70236,9 @@
     {
       "path": "public/overlay/lifeos-install.html",
       "synopsis": "Direct install — Android APK + iOS ad-hoc OTA (no App Store)",
-      "bytes": 7757,
-      "mtime": "2026-06-25T18:30:28.424Z",
-      "indexed_at": "2026-06-25T18:31:05.780Z"
+      "bytes": 8773,
+      "mtime": "2026-06-25T18:34:01.115Z",
+      "indexed_at": "2026-06-25T18:34:17.261Z"
     },
     {
       "path": "public/overlay/lifeos-legacy.html",
@@ -71814,9 +71814,9 @@
     {
       "path": "routes/public-routes.js",
       "synopsis": "Public HTML entry routes for operator-facing overlays and portals.",
-      "bytes": 12859,
-      "mtime": "2026-06-25T18:30:39.271Z",
-      "indexed_at": "2026-06-25T18:31:05.780Z",
+      "bytes": 13020,
+      "mtime": "2026-06-25T18:34:03.002Z",
+      "indexed_at": "2026-06-25T18:34:17.261Z",
       "ssot": [
         "docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
       ]
