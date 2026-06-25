@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T18:44:30.551Z",
+  "generated_at": "2026-06-25T19:05:58.229Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12400,
+  "file_count": 12411,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -31,6 +31,13 @@
       "bytes": 3846,
       "mtime": "2026-06-21T21:40:25.416Z",
       "indexed_at": "2026-06-24T20:55:58.879Z"
+    },
+    {
+      "path": ".github/workflows/build-lifeos-android.yml",
+      "synopsis": "yml — .github/workflows/build-lifeos-android.yml.",
+      "bytes": 2992,
+      "mtime": "2026-06-25T19:05:53.702Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
     },
     {
       "path": ".github/workflows/cards-from-seed.yml",
@@ -201,6 +208,76 @@
       "mtime": "2025-12-10T04:15:39.842Z",
       "indexed_at": "2026-06-24T20:55:58.879Z",
       "synopsis_index_only": true
+    },
+    {
+      "path": "android/app/src/main/AndroidManifest.xml",
+      "synopsis": "xml — android/app/src/main/AndroidManifest.xml.",
+      "bytes": 1529,
+      "mtime": "2026-06-19T08:42:10.000Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml",
+      "synopsis": "xml — android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml.",
+      "bytes": 1880,
+      "mtime": "2026-06-19T08:42:10.000Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "synopsis": "xml — android/app/src/main/res/drawable/ic_launcher_background.xml.",
+      "bytes": 5606,
+      "mtime": "2026-06-19T08:42:10.000Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/app/src/main/res/layout/activity_main.xml",
+      "synopsis": "xml — android/app/src/main/res/layout/activity_main.xml.",
+      "bytes": 535,
+      "mtime": "2026-06-19T08:42:10.000Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "synopsis": "xml — android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml.",
+      "bytes": 265,
+      "mtime": "2026-06-19T08:42:10.000Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "synopsis": "xml — android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml.",
+      "bytes": 265,
+      "mtime": "2026-06-19T08:42:10.000Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/app/src/main/res/values/ic_launcher_background.xml",
+      "synopsis": "xml — android/app/src/main/res/values/ic_launcher_background.xml.",
+      "bytes": 120,
+      "mtime": "2026-06-19T08:42:10.000Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/app/src/main/res/values/strings.xml",
+      "synopsis": "xml — android/app/src/main/res/values/strings.xml.",
+      "bytes": 298,
+      "mtime": "2026-06-25T19:05:08.303Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/app/src/main/res/values/styles.xml",
+      "synopsis": "xml — android/app/src/main/res/values/styles.xml.",
+      "bytes": 823,
+      "mtime": "2026-06-19T08:42:10.000Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
+    },
+    {
+      "path": "android/app/src/main/res/xml/file_paths.xml",
+      "synopsis": "xml — android/app/src/main/res/xml/file_paths.xml.",
+      "bytes": 213,
+      "mtime": "2026-06-19T08:42:10.000Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
     },
     {
       "path": "anti_drift_protocol.js",
@@ -40723,9 +40800,9 @@
     {
       "path": "docs/mobile/DIRECT_INSTALL.md",
       "synopsis": "Direct install (no App Store / Play Store)",
-      "bytes": 2252,
-      "mtime": "2026-06-25T18:31:01.386Z",
-      "indexed_at": "2026-06-25T18:31:05.780Z"
+      "bytes": 2834,
+      "mtime": "2026-06-25T19:05:44.789Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
     },
     {
       "path": "docs/mockups/DASHBOARD_UI_MAP.md",
@@ -41367,9 +41444,9 @@
     {
       "path": "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
       "synopsis": "AMENDMENT 37 — Universal Overlay Platform",
-      "bytes": 16254,
-      "mtime": "2026-06-25T18:30:54.436Z",
-      "indexed_at": "2026-06-25T18:31:05.780Z"
+      "bytes": 16732,
+      "mtime": "2026-06-25T19:05:48.481Z",
+      "indexed_at": "2026-06-25T19:05:58.229Z"
     },
     {
       "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json",

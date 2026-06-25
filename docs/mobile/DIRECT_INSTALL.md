@@ -11,12 +11,23 @@ This is a **real app download**, not “open in browser” — once the APK/IPA 
 
 ## Android (easiest — true tap-to-download)
 
+### Option A — GitHub Actions (no Android Studio on your Mac)
+
+1. Push includes `android/` + `.github/workflows/build-lifeos-android.yml`.
+2. **Actions → Build LifeOS Android APK → Run workflow** (or auto-runs on `android/**` changes to `main`).
+3. Workflow builds debug APK, commits `public/downloads/lifeos.apk`, pushes → Railway deploys.
+4. On the phone: open **`/install`** → **Download LifeOS.apk** → Install.
+
+Artifact also available under the workflow run (30-day retention) if you need the APK before deploy finishes.
+
+### Option B — Local build
+
 1. On a machine with **Android Studio** installed:
    ```bash
    npm run mobile:add:android   # once
    npm run mobile:build:android
    ```
-2. Deploy to Railway (commit includes `public/downloads/lifeos.apk` + updated `release.json`).
+2. Deploy to Railway (`git add -f public/downloads/lifeos.apk` — file is gitignored but force-add works).
 3. On the phone: open **`/install`** → **Download LifeOS.apk** → Install.
 
 No Play Store. User may need to allow “Install unknown apps” for their browser.

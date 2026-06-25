@@ -312,8 +312,8 @@ User on insurance portal
 | Field | Value |
 |---|---|
 | **Lane log** | `docs/CONTINUITY_LOG.md` (cross-cutting) |
-| **Next build** | P1 — struggle detection + form fill. Native: run `npm run mobile:add:ios` on Adam's Mac, enable Background Audio in Xcode. P2 — in-app browser overlay on mobile for external sites. |
-| **Known gaps** | Extension icons placeholder. Native `ios/`/`android/` folders created on first `mobile:add:*` — not committed until operator runs locally. Fill-form maps basic user fields only. |
+| **Next build** | **Android APK:** GitHub Actions `Build LifeOS Android APK` → deploy → `/install` download. **iOS:** ad-hoc IPA when Adam has Xcode + UDIDs (not App Store yet). P1 — struggle detection + form fill. |
+| **Known gaps** | Extension icons placeholder. **iOS `ios/`** not created (CocoaPods/Xcode required on Mac). **Android `android/`** committed; APK built in CI not on operator Mac. Fill-form maps basic user fields only. |
 | **⚠️ IN PROGRESS** | None — founding doc + scaffold complete as of 2026-04-21 |
 | **How to load extension in Chrome** | Go to `chrome://extensions` → Enable Developer Mode → Load Unpacked → select the `extension/` folder in this repo |
 
@@ -325,6 +325,7 @@ User on insurance portal
 
 | Date | What Changed | Why | Verified | Status |
 |---|---|---|---|---|
+| 2026-05-19 | **Android CI build + committed `android/`:** `.github/workflows/build-lifeos-android.yml` (ubuntu, SDK 35, `assembleDebug`, artifact + auto-commit APK to `public/downloads/`); `docs/mobile/DIRECT_INSTALL.md` Option A GitHub Actions. | Adam: build real app for direct download outside stores — no App Store / Play Store until tested; no Xcode session now. | pending CI | APK on `/install` after workflow + Railway deploy |
 | 2026-05-19 | **Direct install (no stores):** `/install`, `/download/lifeos.apk|ipa|ios.plist`, `release.json`, `lifeos-install.html`, `build-lifeos-android-apk.mjs`, `build-lifeos-ios-adhoc.mjs`, `docs/mobile/DIRECT_INSTALL.md`. | Adam: downloadable app without App Store / Play Store. | ✅ node --check | build + deploy binaries |
 | 2026-05-19 | **Native app = Universal Overlay shell:** Capacitor config → `/lifeos?native=1` (`lifeos-app.html`); `public/shared/lifeos-native-shell.js` (Capacitor detect, deep links, app foreground sync); `GET /api/v1/extension/shell` (stack registry manifest); `mobile/www/index.html` bootstrap; `extension/content.js` FRAME_ORIGIN → production Railway URL; `mobile/README.md` doctrine. | Adam: native app must be the overlay platform all programs sit on — not a separate mini-app. | ✅ node --check | pending deploy |
 | 2026-04-20 | Founding document created; full architecture spec, feature spec, struggle detection design, form fill data flow, approved backlog | Adam: build web-first overlay above everything, real-time updates, proactive help, do-it-for-me form fill, fluid UI, universal platform | ✅ | complete |
