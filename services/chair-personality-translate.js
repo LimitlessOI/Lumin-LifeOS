@@ -8,6 +8,12 @@ import {
   classifyLuminTranslationTurn,
   callTranslationWithEscalation,
 } from './lumin-translation-router.js';
+import { createResponseVariety } from './response-variety.js';
+import {
+  enforceCommunicationLaw,
+  loadLuminCommunicationLaw,
+  isLuminCommunicationLawEnforced,
+} from './lumin-communication-guard.js';
 
 const TRANSLATE_PROMPT = `You are the human-language translator for Lumin (LifeOS operating intelligence).
 
@@ -17,9 +23,17 @@ THIS IS TRANSLATION — like turning API output into conversation — NOT rolepl
 - SYSTEM_FACTS is the ONLY source of truth.
 - Never invent shops, times, prices, calendar events, or outcomes not in SYSTEM_FACTS.
 - Never claim you opened, ran, built, scheduled, committed, or changed anything unless SYSTEM_FACTS.command_ran is true.
-- If personal_twin or communication_profile appear — match how this person prefers to be spoken to.
-- Start with the answer. No "I'm happy to help". No fake action claims.
+- If personal_twin, lumin_context, or communication profile appear — match how THIS person speaks and prefers to be spoken to.
+- Mirror their rhythm: vary openings, length, and endings. Do NOT use a fixed ChatGPT formula every turn.
+- Start with the answer when possible. No "I'm happy to help". No "Great question". No fake action claims.
 - Predictions must be labeled "Prediction:" if you include any.`;
+
+const ANTI_FORMULA_RETRY_SUFFIX = `
+
+[COMMUNICATION LAW — RETRY]
+Your prior draft used forbidden formula phrases. Rewrite in plain human language:
+- No "happy to help", "great question", "here's the thing", "let me break this down", validation sandwich.
+- Match this user's twin/profile voice. Be direct. Vary structure from your last reply.`;
 
 export async function translateChairPersonality({
   callAI,
@@ -27,6 +41,8 @@ export async function translateChairPersonality({
   systemFacts = {},
   accountRole = 'founder',
   channel = 'chair',
+  pool = null,
+  userId = null,
 } = {}) {
   if (typeof callAI !== 'function') {
     return formatFactsFallback(systemFacts);
@@ -39,8 +55,37 @@ export async function translateChairPersonality({
     channel,
   });
 
+  let varietyStyles = null;
+  let promptBase = TRANSLATE_PROMPT;
+
+  if (pool && userId) {
+    try {
+      const variety = createResponseVariety({ pool });
+      const wrapped = await variety.wrapPromptWithVariety({
+        userId,
+        systemPrompt: TRANSLATE_PROMPT,
+        userPrompt: userMessage,
+        callAI,
+      });
+      promptBase = wrapped.systemPrompt;
+      varietyStyles = wrapped.styles;
+    } catch {
+      /* non-fatal — proceed with base prompt */
+    }
+  }
+
+  if (isLuminCommunicationLawEnforced()) {
+    const law = loadLuminCommunicationLaw();
+    const principles = (law.supreme_principles || [])
+      .map((p) => `- ${p.id}: ${p.text}`)
+      .join('\n');
+    if (principles) {
+      promptBase += `\n\n[LUMIN COMMUNICATION LAW — mandatory]\n${principles}`;
+    }
+  }
+
   const factsJson = JSON.stringify(systemFacts, null, 2);
-  const prompt = `${TRANSLATE_PROMPT}
+  const buildPrompt = (retry = false) => `${promptBase}${retry ? ANTI_FORMULA_RETRY_SUFFIX : ''}
 
 SYSTEM_FACTS:
 ${factsJson}
@@ -49,15 +94,14 @@ User: ${String(userMessage || '').trim()}
 
 Lumin:`;
 
-  try {
+  async function runTranslation(retry = false) {
     const { text: raw, model_used } = await callTranslationWithEscalation({
       callAI,
-      prompt,
+      prompt: buildPrompt(retry),
       routing,
     });
-    const body = raw?.trim() || formatFactsFallback(systemFacts);
     const commandRan = systemFacts.command_ran === true;
-    const { text: safe } = applyAiProseTruthEnvelope(body, {
+    const { text: safe } = applyAiProseTruthEnvelope(raw?.trim() || '', {
       command_truth: commandRan ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
       pass_fail: commandRan ? undefined : 'NO_COMMAND_RAN',
       taskType: 'lumin_chair_translate',
@@ -65,7 +109,38 @@ Lumin:`;
       model_used,
       translation_routing: routing,
     });
-    return safe || formatFactsFallback(systemFacts);
+    const enforced = enforceCommunicationLaw(safe || formatFactsFallback(systemFacts), {
+      stylesUsed: varietyStyles,
+      retried: retry,
+    });
+    const body = enforced.text && enforced.text.trim().length >= 8
+      ? enforced.text
+      : formatFactsFallback(systemFacts);
+    return { text: body, receipt: enforced.receipt, model_used, passed: enforced.passed && Boolean(enforced.text) };
+  }
+
+  try {
+    let result = await runTranslation(false);
+    if (!result.passed && isLuminCommunicationLawEnforced()) {
+      result = await runTranslation(true);
+      result.receipt = { ...result.receipt, retried: true };
+    }
+
+    if (pool && userId && varietyStyles) {
+      try {
+        const variety = createResponseVariety({ pool });
+        await variety.logResponse({
+          userId,
+          styles: varietyStyles,
+          responsePreview: result.text,
+          context: channel,
+        });
+      } catch {
+        /* non-fatal */
+      }
+    }
+
+    return result.text || formatFactsFallback(systemFacts);
   } catch {
     return formatFactsFallback(systemFacts);
   }
@@ -82,7 +157,7 @@ export function formatFactsFallback(facts = {}) {
   if (facts.verified_search) lines.push(String(facts.verified_search).slice(0, 800));
   if (facts.lumin_context) lines.push(String(facts.lumin_context).slice(0, 1200));
   if (!lines.length) {
-    return 'I am here — what do you need?';
+    return 'What do you need?';
   }
   return lines.join('\n\n');
 }

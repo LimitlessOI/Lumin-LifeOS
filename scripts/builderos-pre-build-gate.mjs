@@ -64,6 +64,12 @@ const doctrine = spawnSync(process.execPath, ['scripts/verify-lifeos-service-doc
 });
 checks.push(check('PBG-05', doctrine.status === 0, 'service doctrine verify'));
 
+const commLaw = spawnSync(process.execPath, ['scripts/verify-lumin-communication-law.mjs'], {
+  cwd: ROOT,
+  encoding: 'utf8',
+});
+checks.push(check('PBG-05c', commLaw.status === 0, 'Lumin Communication Law verify'));
+
 const serverPath = path.join(ROOT, 'server.js');
 let serverOk = false;
 let serverDetail = 'server.js missing';

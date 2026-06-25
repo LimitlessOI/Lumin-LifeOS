@@ -48,17 +48,40 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     try {
       const loader = createLuminContextLoader({ pool: deps.pool, callAI: deps.callAI });
       let numericUserId = deps.userId || null;
-      if (!numericUserId && deps.pool) {
+      let userHandle = deps.userHandle || chairContext.user_handle || null;
+
+      if (numericUserId && !userHandle) {
+        const { rows } = await deps.pool.query(
+          `SELECT user_handle FROM lifeos_users WHERE id = $1 AND active = TRUE LIMIT 1`,
+          [numericUserId],
+        ).catch(() => ({ rows: [] }));
+        userHandle = rows[0]?.user_handle || null;
+      }
+
+      if (!numericUserId && userHandle) {
+        const { rows } = await deps.pool.query(
+          `SELECT id FROM lifeos_users WHERE user_handle = $1 AND active = TRUE LIMIT 1`,
+          [userHandle],
+        ).catch(() => ({ rows: [] }));
+        numericUserId = rows[0]?.id || null;
+      }
+
+      if (!numericUserId && !userHandle) {
+        userHandle = 'adam';
         const { rows } = await deps.pool.query(
           `SELECT id FROM lifeos_users WHERE user_handle = 'adam' AND active = TRUE LIMIT 1`,
         ).catch(() => ({ rows: [] }));
         numericUserId = rows[0]?.id || null;
       }
+
+      userHandle = userHandle || 'adam';
+
       facts.lumin_context = await loader.buildPromptContext({
         userId: numericUserId,
-        userHandle: 'adam',
+        userHandle,
       });
-      facts.personal_twin = await loader.loadPersonalTwin('adam');
+      facts.personal_twin = await loader.loadPersonalTwin(userHandle);
+      facts.twin_user_handle = userHandle;
     } catch {
       /* non-fatal */
     }

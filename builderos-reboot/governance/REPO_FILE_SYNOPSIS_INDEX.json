@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T22:01:20.156Z",
+  "generated_at": "2026-06-25T22:12:13.391Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12524,
+  "file_count": 12530,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29013,6 +29013,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json",
+      "synopsis": "BuilderOS artifact — LUMIN COMMUNICATION LAW.",
+      "bytes": 3444,
+      "mtime": "2026-06-25T22:11:29.691Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "builderos-reboot/governance/LUMIN_CONNECTION_LAW.json",
       "synopsis": "BuilderOS artifact — LUMIN CONNECTION LAW.",
       "bytes": 2769,
@@ -39712,6 +39720,13 @@
       "indexed_at": "2026-06-25T21:54:24.956Z"
     },
     {
+      "path": "docs/architecture/DIGITAL_TWIN_DOCTRINE.md",
+      "synopsis": "Digital Twin — universal per-person understanding (capsules = evidence layer)",
+      "bytes": 5754,
+      "mtime": "2026-06-25T22:09:54.644Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z"
+    },
+    {
       "path": "docs/architecture/DOC_REORG_RECEIPT.md",
       "synopsis": "DOC REORGANIZATION — PHASE 1 RECEIPT",
       "bytes": 2263,
@@ -39972,9 +39987,9 @@
     {
       "path": "docs/architecture/LUMIN_TRANSLATION_AND_ACCOUNT_MODEL.md",
       "synopsis": "Lumin — translation layer, cost routing, account capabilities, fluid UI",
-      "bytes": 4409,
-      "mtime": "2026-06-25T22:00:39.681Z",
-      "indexed_at": "2026-06-25T22:01:20.156Z"
+      "bytes": 5021,
+      "mtime": "2026-06-25T22:10:00.842Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z"
     },
     {
       "path": "docs/architecture/MEMORY_ARCHITECTURE_ARCHAEOLOGY.md",
@@ -40283,6 +40298,13 @@
       "bytes": 39455,
       "mtime": "2026-06-23T05:15:54.596Z",
       "indexed_at": "2026-06-25T21:54:24.956Z"
+    },
+    {
+      "path": "docs/constitution/LUMIN_COMMUNICATION_DNA.md",
+      "synopsis": "Lumin Communication DNA — translation not formula; twin-matched voice (constitutional)",
+      "bytes": 3219,
+      "mtime": "2026-06-25T22:11:28.471Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z"
     },
     {
       "path": "docs/constitution/NORTH_STAR.md",
@@ -41472,9 +41494,9 @@
     {
       "path": "docs/LUMIN_DOCTRINE.md",
       "synopsis": "LUMIN DOCTRINE — Canonical Specification",
-      "bytes": 14001,
-      "mtime": "2026-06-25T22:00:41.431Z",
-      "indexed_at": "2026-06-25T22:01:20.156Z"
+      "bytes": 16065,
+      "mtime": "2026-06-25T22:11:39.150Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z"
     },
     {
       "path": "docs/marketing/video-scripts.md",
@@ -41912,9 +41934,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 484065,
-      "mtime": "2026-06-25T22:01:12.077Z",
-      "indexed_at": "2026-06-25T22:01:20.156Z"
+      "bytes": 486526,
+      "mtime": "2026-06-25T22:11:32.212Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42418,9 +42440,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 134750,
-      "mtime": "2026-06-24T23:52:13.885Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z"
+      "bytes": 135059,
+      "mtime": "2026-06-25T22:12:04.255Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -69704,9 +69726,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 25264,
-      "mtime": "2026-06-25T21:51:46.129Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 25587,
+      "mtime": "2026-06-25T22:09:31.021Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
       "synopsis_index_only": true
     },
     {
@@ -72140,9 +72162,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 48510,
-      "mtime": "2026-06-24T23:51:23.235Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 48587,
+      "mtime": "2026-06-25T22:04:49.460Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -73389,9 +73411,9 @@
     {
       "path": "scripts/builderos-pre-build-gate.mjs",
       "synopsis": "Pre-build gate for canonical harness — ready, deploy, doctrine, env.",
-      "bytes": 3589,
-      "mtime": "2026-06-24T20:55:45.736Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 3808,
+      "mtime": "2026-06-25T22:11:30.540Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
       "ssot": [
         "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json"
       ]
@@ -75642,6 +75664,16 @@
       "bytes": 3299,
       "mtime": "2026-06-24T00:21:44.833Z",
       "indexed_at": "2026-06-25T21:54:24.956Z"
+    },
+    {
+      "path": "scripts/verify-lumin-communication-law.mjs",
+      "synopsis": "Verify Lumin Communication Law wiring — anti-formula + twin-matched translation.",
+      "bytes": 1393,
+      "mtime": "2026-06-25T22:10:00.659Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
+      "ssot": [
+        "builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json"
+      ]
     },
     {
       "path": "scripts/verify-lumin-connection.mjs",
@@ -86770,9 +86802,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 2731,
-      "mtime": "2026-06-25T22:00:45.275Z",
-      "indexed_at": "2026-06-25T22:01:20.156Z",
+      "bytes": 2876,
+      "mtime": "2026-06-25T22:09:25.085Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86780,9 +86812,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 4352,
-      "mtime": "2026-06-24T05:17:05.386Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 5145,
+      "mtime": "2026-06-25T22:04:34.072Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86790,9 +86822,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 3063,
-      "mtime": "2026-06-25T22:00:45.229Z",
-      "indexed_at": "2026-06-25T22:01:20.156Z",
+      "bytes": 5644,
+      "mtime": "2026-06-25T22:09:54.634Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89290,9 +89322,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 26604,
-      "mtime": "2026-06-25T18:34:50.264Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 26721,
+      "mtime": "2026-06-25T22:04:57.771Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89303,6 +89335,16 @@
       "bytes": 7807,
       "mtime": "2026-06-24T02:47:20.559Z",
       "indexed_at": "2026-06-25T21:54:24.956Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/lumin-communication-guard.js",
+      "synopsis": "Lumin Communication Law — anti-formula enforcement + wiring audit for human translation layer.",
+      "bytes": 6390,
+      "mtime": "2026-06-25T22:11:43.325Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89319,10 +89361,10 @@
     },
     {
       "path": "services/lumin-context-loader.js",
-      "synopsis": "Loads Adam's twin + communication profile + recent learning for Lumin prompts.",
-      "bytes": 5110,
-      "mtime": "2026-06-24T05:16:34.211Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "synopsis": "Loads per-user twin + communication profile + recent learning for Lumin prompts.",
+      "bytes": 5129,
+      "mtime": "2026-06-25T22:04:32.278Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95328,6 +95370,13 @@
       "bytes": 2453,
       "mtime": "2026-06-23T01:25:30.308Z",
       "indexed_at": "2026-06-25T21:54:24.956Z"
+    },
+    {
+      "path": "tests/lumin-communication-law.test.js",
+      "synopsis": "Lumin Communication Law — anti-formula + wiring audit tests.",
+      "bytes": 1508,
+      "mtime": "2026-06-25T22:09:15.979Z",
+      "indexed_at": "2026-06-25T22:12:13.391Z"
     },
     {
       "path": "tests/lumin-connection-guard.test.js",

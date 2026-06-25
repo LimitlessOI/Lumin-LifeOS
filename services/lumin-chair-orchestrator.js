@@ -637,11 +637,13 @@ export async function runLuminChairTurn(ctx, deps) {
         memoryContext,
         pool: deps.pool,
         userId: ctx.userId,
+        userHandle: ctx.userHandle || null,
         strategicBrief,
         listeningOnboarding,
       }, {
         ...chairContext,
         domain: sourceMode === 'listening_setup' ? 'listening_onboarding' : chairContext.domain,
+        user_handle: ctx.userHandle || chairContext.user_handle || null,
       });
       const truth = finalizeTruth({
         ...chairResult,

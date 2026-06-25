@@ -24,6 +24,8 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     pool,
     memoryContext,
     strategicBrief,
+    userId: deps.userId || null,
+    userHandle: deps.userHandle || chairContext.user_handle || null,
   }, chairContext);
 
   const doctrineBlock = getDoctrinePromptBlock();
@@ -42,6 +44,8 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     systemFacts,
     accountRole: chairContext.account_role || chairContext.user_role || 'founder',
     channel: chairContext.domain || 'chair',
+    pool,
+    userId: deps.userId || null,
   });
 
   const strategicSection = systemFacts.strategic_brief

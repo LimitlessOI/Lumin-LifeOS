@@ -22,6 +22,8 @@ Human-facing prose (tone from communication_profile / twin)
 
 **Not theater:** the translator never invents actions, never claims execution unless `command_ran: true` in facts.
 
+**Communication law (DNA):** `builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json` — anti-ChatGPT-formula, twin-matched voice, mandatory variety. Verify: `npm run lifeos:lumin:communication:verify`. Wired in `chair-personality-translate.js` via `response-variety.js` + `lumin-communication-guard.js`.
+
 **Not a separate chatbot:** the orchestrator (`lumin-chair-orchestrator.js`) gathers facts and routes execution; translation only formats output.
 
 ---
@@ -51,23 +53,30 @@ Escalation signals: token volume, build/strategy/legal keywords, Point B channel
 | **Counsel + personal LifeOS** | Yes | Yes |
 | **Capture preferences & UI directives** | Yes | Yes |
 | **Fluid UI (pin, layout, modules)** | Yes | Yes — **scoped to their account** |
-| **Twin simulation ("would Adam/user like this?")** | Full | Per-user twin — **for their UX only** |
+| **Twin simulation (how to help this person)** | Founder twin + platform | **Same twin engine** — simulates best help for **their** life & UX |
 | **Product backlog input** | Routes to builder queue | **Logged as feedback** — not build authority |
 
 **Nobody except founder/operator commands what the platform builds.** Everyone else: ideas, fixes, layout wishes → **captured → simulated → applied when safe**.
 
 ---
 
-## Preference capture & reaction simulation
+## Digital Twin (every person — not founder-only)
 
-When a user says *"I want communication pinned here"* or *"this layout annoys me"*:
+**Product term:** Digital Twin = complete understanding of a person (memory + context + patterns).  
+**Capsules** = evidence chunks that feed the twin (internal/storage term).
 
-1. **Capture** — store in `lifeos_users.flourishing_prefs` (e.g. `ui_directives[]`, `pinned_modules[]`, `layout_overrides`)
-2. **Simulate** — twin + Wisdom run: *Prediction: they would prefer X because past choices Y*
-3. **Consistent feedback** — if the same ask repeats, escalate from log → auto-apply safe UI change → queue product fix
-4. **Apply** — fluid UI reads prefs and re-renders (Adaptive Panel Runtime — Amendment 21 backlog)
+Each user's twin answers: *How can this system best help them?* — layout, tone, timing, automation, anticipation. Goal: understanding **deeper than any human, including themselves** (aspirational; honest when evidence is thin).
 
-Founder twin simulates **Adam's** reactions for **platform** decisions. Member twins simulate **their** reactions for **their** shell only.
+See `docs/architecture/DIGITAL_TWIN_DOCTRINE.md`.
+
+When a user says *"pin communication here"*:
+
+1. **Capture** — `flourishing_prefs` / twin `communication` + `ui_directives`
+2. **Simulate** — twin: *Prediction: they would prefer X because past Y*
+3. **Consistent feedback** — repeat signals → auto-apply safe UI → product intake if platform-wide
+4. **Apply** — fluid shell reads twin-backed prefs
+
+**Founder** twin additionally informs platform/build decisions. **Member** twins scope to their account only.
 
 ---
 

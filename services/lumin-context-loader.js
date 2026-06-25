@@ -1,5 +1,5 @@
 /**
- * SYNOPSIS: Loads Adam's twin + communication profile + recent learning for Lumin prompts.
+ * SYNOPSIS: Loads per-user twin + communication profile + recent learning for Lumin prompts.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 import fs from 'node:fs';
@@ -26,7 +26,7 @@ export function createLuminContextLoader({ pool, callAI = null, logger = console
   async function loadPersonalTwin(userHandle = 'adam') {
     const fromStore = twinStore.readTwin({ tenantId: 'default', userId: userHandle, twinKey: 'personal' });
     if (fromStore) return fromStore;
-    return readJsonSafe(path.join(ROOT, 'data/twins/default/adam/personal.json'));
+    return readJsonSafe(path.join(ROOT, 'data/twins/default', userHandle, 'personal.json'));
   }
 
   async function loadRecentLessons(limit = 6) {
@@ -89,12 +89,12 @@ export function createLuminContextLoader({ pool, callAI = null, logger = console
 
     if (commProfile && userId) {
       const profileBlock = await commProfile.getProfileForPrompt(userId).catch(() => '');
-      if (profileBlock) parts.push(`HOW TO TALK TO ADAM:\n${profileBlock}`);
+      if (profileBlock) parts.push(`HOW TO TALK TO THIS USER:\n${profileBlock}`);
     }
 
     const lessons = await loadRecentLessons(5);
     if (lessons.length) {
-      parts.push(`RECENT LESSONS (from his conversations):\n${lessons.map((l) => `- ${l.problem} → ${l.solution}`).join('\n')}`);
+      parts.push(`RECENT LESSONS (from their conversations):\n${lessons.map((l) => `- ${l.problem} → ${l.solution}`).join('\n')}`);
     }
 
     if (userId) {

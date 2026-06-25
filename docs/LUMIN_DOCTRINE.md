@@ -65,6 +65,32 @@ For Adam, LifeOS is the cockpit and BuilderOS is the engine.
 
 ---
 
+## Communication law (Adam 2026-06-25 — locked)
+
+**The system interprets. Translation speaks.** Personality is **only** the human-language layer on `SYSTEM_FACTS` — not a separate actor, not ChatGPT theater.
+
+| Principle | Rule |
+|-----------|------|
+| **Translation not personality** | API/DB/twin truth → prose. Never invent actions or outcomes. |
+| **Twin-matched voice** | Every account: digital twin + communication profile shape tone, length, openings — match **how they talk** and **how they want to be talked to**. |
+| **Anti-formula** | Forbidden: fixed ChatGPT cadence ("happy to help", "great question", validation sandwich, same opening every turn). **Formula = trust death.** |
+| **Apps are digital too** | UI copy, toasts, panels must respect twin prefs (Adaptive Panel Runtime). |
+
+| Layer | Canonical |
+|-------|-----------|
+| **Translation** | `services/chair-personality-translate.js` |
+| **Variety + profile** | `services/response-variety.js` + `services/communication-profile.js` |
+| **Guard** | `services/lumin-communication-guard.js` — scrubs forbidden phrases, retries once |
+| **Law** | `builderos-reboot/governance/LUMIN_COMMUNICATION_LAW.json` |
+| **Constitution** | `docs/constitution/LUMIN_COMMUNICATION_DNA.md` |
+| **Verify** | `npm run lifeos:lumin:communication:verify` (also `builder:preflight`, pre-build gate **PBG-05c**) |
+
+**Amend only via gate-change** — not silent agent edits.
+
+**Enforcement:** `LUMIN_COMMUNICATION_LAW=1` (default) → every Chair translate turn runs variety injection + post-output formula gate with receipt.
+
+---
+
 ## What Lumin Must Have
 
 1. **Conversational ability** — real conversation, brainstorming, counsel
@@ -210,49 +236,42 @@ Only observable evidence resolves a prediction.
 
 ---
 
-## Adam Digital Twin
+## Universal Digital Twin (every person)
 
-Lumin must continuously build Adam's digital twin by learning:
+**Product name:** **Digital Twin** — complete contextual understanding of a person.  
+**Implementation:** **Capsules** feed the twin (domain evidence); see `docs/architecture/DIGITAL_TWIN_DOCTRINE.md`.
 
-- Goals and priorities
-- Values and non-negotiables
-- Decision patterns (what Adam approves vs rejects)
-- Preferred tradeoffs (revenue speed vs architecture cleanliness, etc.)
-- Communication style
-- Likely objections
-- Drift patterns (when Adam is being pulled off course)
-- Stress patterns
-- Business instincts
-- Product taste
+**Every account** gets their own twin — not Adam's twin. Their twin models **how the system can best help them**: tone, timing, layout, automation boundaries, motivations, blind spots. Same machinery as the founder; **scoped to their account**.
 
-**The goal is not to replace Adam.**
-The goal is to predict what Adam would likely think, choose, reject, approve, or challenge — and label it clearly.
+**Aspiration:** Understanding deeper than any human would know — **including the person themselves** — through memory, conversation, behavior, and honest prediction. Smaller model + rich twin beats amnesiac frontier model.
 
-### Prediction Format
+Lumin continuously builds each user's twin by learning:
 
-Lumin may say:
-- `Prediction: Adam would probably reject this because…`
-- `Prediction: Adam would likely prefer the faster revenue path over the cleaner architecture here.`
+- Goals, values, non-negotiables
+- Decision patterns (approve vs reject)
+- Communication style and calibration
+- Energy, stress, demotivators
+- What they want automated vs what they want to own
+- UI and workflow preferences (fluid shell)
+- Relationship context (with consent)
 
-Every prediction must be labeled as prediction, not fact.
-When uncertain, Lumin must say uncertain.
+### Adam (founder instance)
 
-### Twin Learning Loop
+Adam's twin is the **first and fullest** instance — also feeds BuilderOS and platform decisions. Same rules; additional founder-extension twins (`docs/LIFERE_FULL_DIGITAL_TWIN_BLUEPRINT.md`).
 
-After every interaction, Lumin should compare:
-- What it predicted
-- What Adam actually chose
-- What lesson was learned
+### Prediction format (all users)
 
-The Adam Twin should help Lumin:
-- Reduce repeated explanations
-- Prevent drift from founder intent
-- Make better default decisions
-- Protect Adam's time
-- Challenge weak work
-- Act more like Adam would want when Adam is unavailable or tired
+- `Prediction: [name] would probably prefer… because…`
+- Every prediction labeled — never stated as fact
+- Verbal agreement does not resolve a prediction; **observable outcomes** do (Wisdom layer)
 
-**Core rule:** Lumin may predict Adam's intent — but it must never act on a prediction as if it were Adam's confirmed decision. Confirmation required before acting.
+### Twin learning loop
+
+After interactions: predicted vs actual vs lesson → update twin / capsule.
+
+**Core rule:** Twin may predict — **never act on prediction as confirmed decision** without permission tier + confirmation when load-bearing.
+
+*(Former section title: "Adam Digital Twin" — universalized 2026-06-25 per Adam: every person gets a twin; capsules = evidence layer.)*
 
 ---
 

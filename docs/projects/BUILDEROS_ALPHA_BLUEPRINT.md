@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-13 — industry dispatch gate + live gap audit (OpenHands/Claude Code patterns).
+**Last Updated:** 2026-06-25 — pass `userHandle` into Lumin Chair for per-user twin + Communication Law. Prior: 2026-06-13 industry dispatch gate.
 ---
 
 ## 0. Purpose
@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-25 | **`routes/lifeos-builderos-command-control-routes.js`** — pass `userHandle` from `req.lifeosUser` into `runLuminChairTurn` for per-user twin + Communication Law variety. | Adam: universal digital twin + communication DNA lock | ✅ syntax | deploy |
 | 2026-05-19 | **`services/founder-css-patch.js`** — `ensureAssistantBubbleContrast()` prevents assistant bubble patches where text color equals background (invisible replies). | Adam: Lumin chat replies rendered as empty grey blocks after CSS patch. | ✅ node --check | deploy |
 | 2026-06-13 | **`services/builderos-dispatch-gate.js`**, canonical/governed/queue wiring, **`scripts/builderos-run-mission.mjs`** DONE_GATE + `--worktree`, harness live gap filter | Adam: adopt industry PreToolUse fail-closed + evidence receipts; honest 10 beyond verifier theater | ✅ harness audit + operational verify | deploy |
 | 2026-06-24 | **`builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json`**, **`services/builderos-harness-toolkit.js`**, **`scripts/builderos-harness-gap-audit.mjs`**, **`scripts/builderos-run-mission.mjs`**, **`scripts/builderos-pre-build-gate.mjs`**, **`scripts/builderos-deploy-verify.mjs`**, **`scripts/builderos-gap-families.mjs`**, **`scripts/builderos-compound-summary.mjs`** | Adam: full harness gap audit + missing CLI tools cataloged and added | ✅ `npm run builderos:harness:audit` | deploy |

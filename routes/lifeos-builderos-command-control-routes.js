@@ -1142,6 +1142,7 @@ HOW TO RESPOND:
         || process.env.LIFEOS_KEY
         || process.env.API_KEY;
       const userId = req.lifeosUser?.sub || null;
+      const userHandle = req.lifeosUser?.handle || null;
 
       const chairResult = await runLuminChairTurn({
         req,
@@ -1169,6 +1170,7 @@ HOW TO RESPOND:
         explicitAction: action,
         confirmIntent: req.body?.confirm_intent === true || force || isFounderConfirmIntent(cleanedInput) || stripChairDoPrefix(originalText).forcedExecute,
         userId,
+        userHandle,
       }, {
         buildDisplayBundle,
         translateToPlainEnglish,
