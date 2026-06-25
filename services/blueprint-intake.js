@@ -190,7 +190,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
       // Step 1: extract intent
       const intentRaw = await callCouncilMember('claude',
         `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
-        { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 3000, taskType: 'json_extract' }
+        { systemPromptOverride: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
       );
       const intent = parseBlueprintFromAiResponse(intentRaw);
       await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
@@ -198,7 +198,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
       // Step 2: generate blueprint
       const blueprintRaw = await callCouncilMember('claude',
         `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
+        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
       );
       const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 
@@ -287,7 +287,7 @@ Ask ONE question at a time. Be brief.`;
         const intent = parseBlueprintFromAiResponse(jsonMatch[0]);
         const blueprintRaw = await callCouncilMember('claude',
           `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
+          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
         );
         const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
         const gaps = detectGaps(blueprint);
@@ -337,7 +337,7 @@ Ask ONE question at a time. Be brief.`;
     try {
       const patchedRaw = await callCouncilMember('claude',
         `FOUNDER ADJUSTMENT REQUEST:\n${adjustmentText}`,
-        { systemPromptOverride: ADJUSTMENT_SYSTEM(existingBlueprint, codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
+        { systemPromptOverride: ADJUSTMENT_SYSTEM(existingBlueprint, codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
       );
       const patched = parseBlueprintFromAiResponse(patchedRaw);
       const gaps = detectGaps(patched);
@@ -473,7 +473,7 @@ Return JSON:
 
     const arcRaw = await callCouncilMember('claude',
       `BLUEPRINT TO REVIEW:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
-      { systemPromptOverride: arcPrompt, maxOutputTokens: 3000, taskType: 'json_extract' }
+      { systemPromptOverride: arcPrompt, maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
     );
     const arcReport = parseBlueprintFromAiResponse(arcRaw);
 
