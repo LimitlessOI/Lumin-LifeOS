@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T22:58:02.579Z",
+  "generated_at": "2026-06-25T23:02:13.352Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12541,
   "files": [
@@ -41743,8 +41743,8 @@
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
       "bytes": 35058,
-      "mtime": "2026-06-25T22:57:51.265Z",
-      "indexed_at": "2026-06-25T22:58:02.579Z"
+      "mtime": "2026-06-25T23:02:01.504Z",
+      "indexed_at": "2026-06-25T23:02:13.352Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -74505,8 +74505,8 @@
       "path": "scripts/run-blueprint-intake.mjs",
       "synopsis": "CLI tool for Blueprint Intake — backfill any existing amendment into a blueprint via Railway API.",
       "bytes": 9161,
-      "mtime": "2026-06-25T22:43:42.349Z",
-      "indexed_at": "2026-06-25T22:45:41.403Z",
+      "mtime": "2026-06-25T23:01:32.383Z",
+      "indexed_at": "2026-06-25T23:02:13.352Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -86356,8 +86356,8 @@
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
       "bytes": 24714,
-      "mtime": "2026-06-25T22:57:37.447Z",
-      "indexed_at": "2026-06-25T22:58:02.579Z",
+      "mtime": "2026-06-25T23:01:47.036Z",
+      "indexed_at": "2026-06-25T23:02:13.352Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

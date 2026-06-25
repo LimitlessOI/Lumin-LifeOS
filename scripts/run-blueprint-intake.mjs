@@ -34,7 +34,7 @@ async function api(method, path, body) {
     method,
     headers: HEADERS,
     body: body ? JSON.stringify(body) : undefined,
-    signal: AbortSignal.timeout(120_000),
+    signal: AbortSignal.timeout(300_000),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${data.error || JSON.stringify(data)}`);
