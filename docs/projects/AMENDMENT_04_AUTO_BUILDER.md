@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-25 — Fix: CLI timeout 300s; trim maxOutputTokens (intent 1500, blueprint 4000) to stay within Railway 300s HTTP timeout.
+**Last Updated:** 2026-06-25 — Fix: compact JSON in system prompts; blueprint maxOutputTokens 6000; compact output instruction.
 
 ---
 
