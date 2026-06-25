@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-25 — Fix: amendment text sent via API body (docs/ excluded from Railway Docker image); CLI uses HTTP-first pattern; arc-entry-gate structural-only.
+**Last Updated:** 2026-06-25 — Fix: taskType json_extract (skips truth envelope), resilient JSON parser, CLI sessionArg off-by-one.
 
 ---
 

@@ -146,8 +146,16 @@ function readAmendment(amendmentFile) {
 }
 
 function parseBlueprintFromAiResponse(raw) {
-  const cleaned = raw.trim().replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
-  return JSON.parse(cleaned);
+  const stripped = raw.trim().replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+  // Try direct parse first
+  try { return JSON.parse(stripped); } catch {}
+  // Extract first {...} block if AI included preamble text
+  const start = stripped.indexOf('{');
+  const end = stripped.lastIndexOf('}');
+  if (start !== -1 && end > start) {
+    try { return JSON.parse(stripped.slice(start, end + 1)); } catch {}
+  }
+  throw new SyntaxError(`AI response is not JSON: ${stripped.slice(0, 120)}...`);
 }
 
 async function updateSession(pool, id, updates) {
@@ -182,7 +190,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
       // Step 1: extract intent
       const intentRaw = await callCouncilMember('claude',
         `Amendment to analyze:\n\n${amendmentText.slice(0, 12000)}`,
-        { systemPrompt: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 3000, taskType: 'general' }
+        { systemPrompt: INTENT_EXTRACT_SYSTEM, maxOutputTokens: 3000, taskType: 'json_extract' }
       );
       const intent = parseBlueprintFromAiResponse(intentRaw);
       await updateSession(pool, sessionId, { extracted_intent_json: intent, status: 'generating' });
@@ -190,7 +198,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
       // Step 2: generate blueprint
       const blueprintRaw = await callCouncilMember('claude',
         `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-        { systemPrompt: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'general' }
+        { systemPrompt: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
       );
       const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 
@@ -279,7 +287,7 @@ Ask ONE question at a time. Be brief.`;
         const intent = parseBlueprintFromAiResponse(jsonMatch[0]);
         const blueprintRaw = await callCouncilMember('claude',
           `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-          { systemPrompt: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'general' }
+          { systemPrompt: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
         );
         const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
         const gaps = detectGaps(blueprint);
@@ -329,7 +337,7 @@ Ask ONE question at a time. Be brief.`;
     try {
       const patchedRaw = await callCouncilMember('claude',
         `FOUNDER ADJUSTMENT REQUEST:\n${adjustmentText}`,
-        { systemPrompt: ADJUSTMENT_SYSTEM(existingBlueprint, codebaseScan), maxOutputTokens: 8000, taskType: 'general' }
+        { systemPrompt: ADJUSTMENT_SYSTEM(existingBlueprint, codebaseScan), maxOutputTokens: 8000, taskType: 'json_extract' }
       );
       const patched = parseBlueprintFromAiResponse(patchedRaw);
       const gaps = detectGaps(patched);
@@ -465,7 +473,7 @@ Return JSON:
 
     const arcRaw = await callCouncilMember('claude',
       `BLUEPRINT TO REVIEW:\n${JSON.stringify(blueprint, null, 2).slice(0, 12000)}`,
-      { systemPrompt: arcPrompt, maxOutputTokens: 3000, taskType: 'general' }
+      { systemPrompt: arcPrompt, maxOutputTokens: 3000, taskType: 'json_extract' }
     );
     const arcReport = parseBlueprintFromAiResponse(arcRaw);
 

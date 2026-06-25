@@ -57,7 +57,8 @@ async function main() {
   const args = process.argv.slice(2);
   const amendmentArg = args[args.indexOf('--amendment') + 1];
   const listMode = args.includes('--list');
-  const sessionArg = args[args.indexOf('--session') + 1] || (args[0] && !args[0].startsWith('--') ? args[0] : null);
+  const sessionIdx = args.indexOf('--session');
+  const sessionArg = sessionIdx !== -1 ? args[sessionIdx + 1] : null;
   const arcMode = args.includes('--arc');
   const answerMode = args.includes('--answer');
   const answerGapId = answerMode ? args[args.indexOf('--answer') + 1] : null;
