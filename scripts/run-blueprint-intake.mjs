@@ -149,7 +149,34 @@ Server: ${BASE_URL}
       console.log(`  All resolved: ${data.all_resolved}`);
       console.log(`  Remaining: ${data.remaining_gaps}`);
       if (data.all_resolved) {
-        console.log('\nAll gaps resolved. Run --arc to validate:');
+        console.log('\nRegenerating blueprint with gap corrections (polling)...');
+        const TERMINAL = new Set(['gap_collection', 'arc_review', 'ready', 'failed']);
+        process.stdout.write('  Processing');
+        let session;
+        for (let i = 0; i < 60; i++) {
+          await new Promise(r => setTimeout(r, 5000));
+          process.stdout.write('.');
+          const poll = await api('GET', `/api/v1/blueprint/intake/${sessionArg}`);
+          session = poll.session;
+          if (TERMINAL.has(session.status)) break;
+        }
+        console.log();
+        if (!session || !TERMINAL.has(session.status)) {
+          console.error('\nTimed out waiting for gap regeneration (5 min).');
+          process.exit(1);
+        }
+        if (session.status === 'failed') {
+          console.error(`\nRegeneration failed: ${session.error_message || 'unknown error'}`);
+          process.exit(1);
+        }
+        console.log(`  Status: ${session.status}`);
+        const open = (session.gaps_json || []).filter(g => !g.resolved);
+        if (open.length > 0) {
+          console.log(`\n${open.length} new gap(s) after regeneration:`);
+          open.forEach(g => console.log(`  ${g.id}: ${g.description}`));
+          process.exit(1);
+        }
+        console.log('\nNo open gaps. Run --arc to validate:');
         console.log(`  node scripts/run-blueprint-intake.mjs --session ${sessionArg} --arc`);
       }
       return;

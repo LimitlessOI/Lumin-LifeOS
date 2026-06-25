@@ -218,6 +218,60 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
     return { sessionId, status: 'extracting' };
   }
 
+  async function _applyGapAnswersAndRegenerate(sessionId, session, gapAnswers) {
+    try {
+      const codebaseScan = session.codebase_scan_json || await scanCodebasePatterns();
+      const intent = session.extracted_intent_json;
+      const oldBlueprint = session.blueprint_json;
+      if (!intent || !oldBlueprint) {
+        throw new Error('MissingIntentOrBlueprint: cannot regenerate without prior intake data');
+      }
+
+      const gapContext = Object.entries(gapAnswers).map(([id, answer]) => {
+        const gap = (session.gaps_json || []).find(g => g.id === id);
+        return `- ${id}${gap?.description ? `: ${gap.description}` : ''}\n  Founder answer: ${answer}`;
+      }).join('\n');
+
+      const regeneratePrompt = `PRODUCT INTENT:
+${JSON.stringify(intent)}
+
+PREVIOUS BLUEPRINT (had structural gaps — do not copy invalid steps):
+${JSON.stringify(oldBlueprint).slice(0, 12000)}
+
+FOUNDER GAP RESOLUTIONS — apply exactly; remove steps that violate these answers:
+${gapContext}
+
+Regenerate a complete corrected skeleton blueprint JSON. Documentation .md files are NOT steps.
+Phase 1 code infrastructure (migration, service, routes, verify script) belongs in steps when the founder asked for it.`;
+
+      const blueprintRaw = await callCouncilMember('claude',
+        regeneratePrompt,
+        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 3000, taskType: 'codegen', allowModelDowngrade: false }
+      );
+      const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
+      const gaps = detectGaps(blueprint);
+      blueprint._gaps = gaps;
+      blueprint._meta = {
+        ...oldBlueprint._meta,
+        ...blueprint._meta,
+        blueprint_version: '1.0.0-intake-corrected',
+        generated_by: 'blueprint-intake-service',
+        gap_corrections_applied_at: new Date().toISOString(),
+        scanned_at: codebaseScan.scanned_at,
+      };
+
+      const newStatus = gaps.length > 0 ? 'gap_collection' : 'arc_review';
+      await updateSession(pool, sessionId, {
+        blueprint_json: blueprint,
+        gaps_json: gaps,
+        status: newStatus,
+      });
+    } catch (err) {
+      await updateSession(pool, sessionId, { status: 'failed', error_message: err.message });
+      throw err;
+    }
+  }
+
   async function _runBackfill(sessionId, amendmentText) {
     const codebaseScan = await scanCodebasePatterns();
     await updateSession(pool, sessionId, { codebase_scan_json: codebaseScan });
@@ -433,12 +487,25 @@ Ask ONE question at a time. Be brief.`;
     }
 
     const allResolved = gaps.every(g => g.resolved);
-    await updateSession(pool, sessionId, {
-      conversation_json: messages,
-      gaps_json: gaps,
-      gap_answers_json: gapAnswers,
-      status: allResolved ? 'arc_review' : 'gap_collection',
-    });
+    if (allResolved) {
+      await updateSession(pool, sessionId, {
+        conversation_json: messages,
+        gaps_json: gaps,
+        gap_answers_json: gapAnswers,
+        status: 'generating',
+      });
+      const sessionSnapshot = { ...session, gaps_json: gaps, gap_answers_json: gapAnswers };
+      setImmediate(() => {
+        _applyGapAnswersAndRegenerate(sessionId, sessionSnapshot, gapAnswers).catch(() => {});
+      });
+    } else {
+      await updateSession(pool, sessionId, {
+        conversation_json: messages,
+        gaps_json: gaps,
+        gap_answers_json: gapAnswers,
+        status: 'gap_collection',
+      });
+    }
 
     return { response, allResolved, openGapCount: gaps.filter(g => !g.resolved).length };
   }
@@ -458,14 +525,10 @@ Ask ONE question at a time. Be brief.`;
     const allResolved = gaps.every(g => g.resolved);
 
     if (allResolved) {
-      // Apply answers to blueprint and move to arc_review
-      const patched = applyGapAnswers(session.blueprint_json, gapAnswers);
-      patched._gaps = gaps;
-      await updateSession(pool, sessionId, {
-        gaps_json: gaps,
-        gap_answers_json: gapAnswers,
-        blueprint_json: patched,
-        status: 'arc_review',
+      await updateSession(pool, sessionId, { gaps_json: gaps, gap_answers_json: gapAnswers, status: 'generating' });
+      const sessionSnapshot = { ...session, gaps_json: gaps, gap_answers_json: gapAnswers };
+      setImmediate(() => {
+        _applyGapAnswersAndRegenerate(sessionId, sessionSnapshot, gapAnswers).catch(() => {});
       });
     } else {
       await updateSession(pool, sessionId, { gaps_json: gaps, gap_answers_json: gapAnswers });
@@ -482,12 +545,16 @@ Ask ONE question at a time. Be brief.`;
     const blueprint = session.blueprint_json;
     if (!blueprint) throw new Error('NoBlueprintYet: run startBackfill or continueGreenfield first');
 
-    const arcPrompt = `Review this blueprint for gaps. For each step, check:
-1. All imports exist in installed_packages
-2. All AI calls use valid council aliases (claude, gemini, openai)
-3. All DB columns have explicit types and nullability
-4. All route behaviors are specific enough to implement without guessing
-5. No references to packages that need installation without being listed in packages_to_install
+    const arcPrompt = `Review this SKELETON blueprint for execution readiness. Steps are routing metadata only (id, file, type, purpose, deps, ssot_tag).
+
+For each step check:
+1. type matches file extension (sql / esm for .js / esm_script for .mjs / html)
+2. NEVER .md files as steps — documentation is not executable code
+3. esm_script is only for standalone node .mjs verification scripts
+4. purpose is one actionable build sentence — not gap-resolution prose pasted into fields
+5. deps reference only step IDs defined earlier in steps[]
+6. acceptance_cmd in _meta is a real node command for a verify script in steps[]
+7. No orphan verify scripts referencing artifacts missing from steps[]
 
 Return JSON:
 {

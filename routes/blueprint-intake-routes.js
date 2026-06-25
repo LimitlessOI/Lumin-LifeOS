@@ -143,7 +143,7 @@ export function createBlueprintIntakeRoutes(app, ctx) {
         all_resolved: result.allResolved,
         remaining_gaps: result.remainingGaps,
         next: result.allResolved
-          ? `POST /api/v1/blueprint/intake/${req.params.id}/arc`
+          ? `Poll GET /api/v1/blueprint/intake/${req.params.id} until arc_review, then POST .../arc`
           : 'Answer remaining gaps',
       });
     } catch (err) {

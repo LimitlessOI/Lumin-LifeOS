@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-25 — Fix blueprint rules: prohibit .md files as steps; clarify esm_script=executable .mjs only; add acceptance_cmd rule.
+**Last Updated:** 2026-06-25 — Gap answers trigger blueprint regeneration (not string replace); skeleton ARC review rules.
 
 ---
 
@@ -161,6 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-25 | **FIX: `services/blueprint-intake.js` + `scripts/run-blueprint-intake.mjs`** — when all gaps resolved, `_applyGapAnswersAndRegenerate()` calls Claude with founder answers + prior blueprint (structural gaps can't be string-replaced). CLI polls after last gap answer until `arc_review`. ARC prompt updated for skeleton format (no behavior arrays). | SocialMediaOS gap answers left broken steps (`.md` as `esm_script`, gap prose in `purpose`). | ✅ syntax pass; deploy + live backfill test pending | Re-answer gaps on session or fresh `--amendment AMENDMENT_41` then `--arc` |
 | 2026-06-25 | **FIX: `services/blueprint-intake.js` + `routes/blueprint-intake-routes.js`** — backfill now accepts `amendment_text` in body (previously required file path on server, but `docs/` is excluded from Railway Docker image via `.dockerignore:docs/*`). `scripts/run-blueprint-intake.mjs` rewritten to HTTP-first pattern (reads file locally, POSTs text to Railway API). `scripts/run-arc-entry-gate.mjs` simplified to structural-only check — AI review now lives exclusively in `/api/v1/blueprint/intake/:id/arc`. | Live test revealed AmendmentNotFound on Railway because docs/ not in Docker image. | ✅ syntax pass + live GET /api/v1/blueprint/intake returns 200 | `node scripts/run-blueprint-intake.mjs --amendment docs/projects/AMENDMENT_41_MARKETINGOS.md` |
 | 2026-06-25 | **Blueprint Intake Service (5 files)** — `db/migrations/20260625_blueprint_intake.sql` (blueprint_intake_sessions table with flow_type + status machine); `services/blueprint-codebase-scanner.js` (live pattern scan before every blueprint gen); `services/blueprint-intake.js` (three flows: backfill/greenfield/adjustment, gap detection, ARC review, answer gaps); `routes/blueprint-intake-routes.js` (9 endpoints including chair-hook); `scripts/run-arc-entry-gate.mjs` + `scripts/run-arc-pipeline.mjs` + `scripts/run-blueprint-intake.mjs` (CLI backfill tool). Wired into `core/two-tier-system-init.js`. npm scripts: `blueprint:intake`, `blueprint:intake:list`. GAP REMAINING: chair-orchestrator `blueprint_execute` channel doesn't detect adjustment/greenfield intent yet — only routes to mission ID. CLI AI review won't work until council-service export is bridged. | Adam: build the Blueprint Intake Service for all three flows; fix BuilderOS so it can generate its own blueprints from existing amendments | ⚠️ syntax pass; chair-hook wired; ARC gate wired | `npm run blueprint:intake:list` |
 | 2026-06-13 | **`services/railway-managed-env-service.js`** — allowlist FP V2 production env keys (`CHAIR_PREDICTION_SCORE_ENABLED`, `LANE_INTEL_*`, search API keys). | Managed-env bulk can enable scoreboard + lane intel on Railway. | ✅ | `npm run system:fp-v2:production-env` |
