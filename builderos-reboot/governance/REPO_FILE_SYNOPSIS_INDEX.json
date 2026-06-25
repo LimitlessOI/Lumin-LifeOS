@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T19:09:12.490Z",
+  "generated_at": "2026-06-25T19:22:16.686Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12412,
+  "file_count": 12413,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -38,6 +38,13 @@
       "bytes": 2842,
       "mtime": "2026-06-25T19:09:09.435Z",
       "indexed_at": "2026-06-25T19:09:12.490Z"
+    },
+    {
+      "path": ".github/workflows/build-lifeos-ios.yml",
+      "synopsis": "yml — .github/workflows/build-lifeos-ios.yml.",
+      "bytes": 4759,
+      "mtime": "2026-06-25T19:22:08.893Z",
+      "indexed_at": "2026-06-25T19:22:16.686Z"
     },
     {
       "path": ".github/workflows/cards-from-seed.yml",
@@ -29032,9 +29039,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3724403,
-      "mtime": "2026-06-25T18:37:20.732Z",
-      "indexed_at": "2026-06-25T18:37:49.826Z"
+      "bytes": 3727887,
+      "mtime": "2026-06-25T19:22:11.331Z",
+      "indexed_at": "2026-06-25T19:22:16.686Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40807,9 +40814,9 @@
     {
       "path": "docs/mobile/DIRECT_INSTALL.md",
       "synopsis": "Direct install (no App Store / Play Store)",
-      "bytes": 2834,
-      "mtime": "2026-06-25T19:05:44.789Z",
-      "indexed_at": "2026-06-25T19:05:58.229Z"
+      "bytes": 3121,
+      "mtime": "2026-06-25T19:22:02.943Z",
+      "indexed_at": "2026-06-25T19:22:16.686Z"
     },
     {
       "path": "docs/mockups/DASHBOARD_UI_MAP.md",
@@ -41451,9 +41458,9 @@
     {
       "path": "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
       "synopsis": "AMENDMENT 37 — Universal Overlay Platform",
-      "bytes": 16732,
-      "mtime": "2026-06-25T19:05:48.481Z",
-      "indexed_at": "2026-06-25T19:05:58.229Z"
+      "bytes": 17106,
+      "mtime": "2026-06-25T19:22:05.616Z",
+      "indexed_at": "2026-06-25T19:22:16.686Z"
     },
     {
       "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json",
@@ -69860,9 +69867,9 @@
     {
       "path": "public/downloads/release.json",
       "synopsis": "JSON data/config — public/downloads/release.json.",
-      "bytes": 707,
-      "mtime": "2026-06-25T18:30:17.857Z",
-      "indexed_at": "2026-06-25T18:31:05.780Z",
+      "bytes": 786,
+      "mtime": "2026-06-25T19:21:52.656Z",
+      "indexed_at": "2026-06-25T19:22:16.686Z",
       "synopsis_index_only": true
     },
     {
@@ -70076,9 +70083,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 138884,
-      "mtime": "2026-06-25T18:34:43.878Z",
-      "indexed_at": "2026-06-25T18:37:49.826Z"
+      "bytes": 140300,
+      "mtime": "2026-06-25T19:21:42.480Z",
+      "indexed_at": "2026-06-25T19:22:16.686Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -70319,10 +70326,10 @@
     },
     {
       "path": "public/overlay/lifeos-install.html",
-      "synopsis": "Direct install — Android APK + iOS ad-hoc OTA (no App Store)",
-      "bytes": 9511,
-      "mtime": "2026-06-25T18:37:00.942Z",
-      "indexed_at": "2026-06-25T18:37:09.493Z"
+      "synopsis": "Direct install — iPhone home screen + Android APK + iOS ad-hoc OTA",
+      "bytes": 11396,
+      "mtime": "2026-06-25T19:21:39.133Z",
+      "indexed_at": "2026-06-25T19:22:16.686Z"
     },
     {
       "path": "public/overlay/lifeos-legacy.html",
@@ -70715,9 +70722,9 @@
     {
       "path": "public/shared/lifeos-native-shell.js",
       "synopsis": "Native Universal Overlay shell — Capacitor bridge; same platform as lifeos-app + extension overlay.",
-      "bytes": 4741,
-      "mtime": "2026-06-25T17:32:44.475Z",
-      "indexed_at": "2026-06-25T17:33:32.542Z",
+      "bytes": 5304,
+      "mtime": "2026-06-25T19:21:26.642Z",
+      "indexed_at": "2026-06-25T19:22:16.686Z",
       "ssot": [
         "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md"
       ]

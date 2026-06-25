@@ -27,6 +27,16 @@
     }
   }
 
+  /** iPhone/iPad Add to Home Screen — treat like native shell (no Capacitor). */
+  function detectPwaStandalone() {
+    try {
+      if (global.navigator?.standalone === true) return true;
+      return global.matchMedia?.('(display-mode: standalone)')?.matches === true;
+    } catch {
+      return false;
+    }
+  }
+
   function markNative() {
     state.isNative = true;
     try {
@@ -118,8 +128,19 @@
   }
 
   async function init(opts = {}) {
-    if (detectCapacitor() || detectNativeParam() || global.localStorage?.getItem(LS_NATIVE_FLAG) === '1') {
+    if (
+      detectCapacitor()
+      || detectNativeParam()
+      || detectPwaStandalone()
+      || global.localStorage?.getItem(LS_NATIVE_FLAG) === '1'
+    ) {
       markNative();
+      if (detectPwaStandalone()) {
+        state.platform = 'ios-pwa';
+        try {
+          document.documentElement?.setAttribute('data-lifeos-pwa', '1');
+        } catch (_) {}
+      }
     }
     await loadShellConfig();
     await initCapacitorPlugins();

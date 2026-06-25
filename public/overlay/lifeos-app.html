@@ -2276,6 +2276,22 @@ function applyShellLayoutFromQuery() {
       setTimeout(() => showInstallBanner(deferredInstall), 2000);
     }
   });
+
+  // iPhone Safari: Add to Home Screen (no beforeinstallprompt on iOS)
+  (function maybeShowIosInstallHint() {
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isSafari = isIOS && /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS/i.test(ua);
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    if (!isSafari || standalone) return;
+    const dismissed = localStorage.getItem('lifeos_ios_install_dismissed');
+    const visits = parseInt(localStorage.getItem('lifeos_visits') || '0', 10) + 1;
+    localStorage.setItem('lifeos_visits', String(visits));
+    if (dismissed === '1' && visits < 5) return;
+    if (visits >= 1) {
+      setTimeout(showIosInstallBanner, 1500);
+    }
+  })();
 })();
 
 function showInstallBanner(promptEvent) {
@@ -2290,6 +2306,22 @@ function showInstallBanner(promptEvent) {
   document.body.appendChild(b);
   requestAnimationFrame(() => b.classList.add('show'));
   setTimeout(() => { b.classList.remove('show'); setTimeout(() => b.remove(), 400); }, 9000);
+}
+
+function showIosInstallBanner() {
+  if (document.getElementById('ios-install-banner')) return;
+  const b = document.createElement('div');
+  b.id = 'ios-install-banner';
+  b.innerHTML = `<span class="banner-icon">📲</span> Tap Share → Add to Home Screen <span class="banner-close">✕</span>`;
+  b.style.cursor = 'pointer';
+  b.querySelector('.banner-close').onclick = (e) => {
+    e.stopPropagation();
+    localStorage.setItem('lifeos_ios_install_dismissed', '1');
+    b.remove();
+  };
+  b.onclick = () => { location.href = '/install'; };
+  document.body.appendChild(b);
+  requestAnimationFrame(() => b.classList.add('show'));
 }
 
 /* ── Navigation ──────────────────────────────────────────────── */

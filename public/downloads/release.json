@@ -18,7 +18,8 @@
   },
   "web_pwa": {
     "available": true,
-    "url": "/lifeos",
-    "notes": "Safari → Share → Add to Home Screen (no store, instant)."
+    "url": "/install",
+    "iphone_ready": true,
+    "notes": "iPhone: open /install in Safari → Add to Home Screen (works today, no App Store)."
   }
 }

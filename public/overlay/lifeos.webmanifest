@@ -1,14 +1,14 @@
 {
   "id": "/lifeos",
-  "name": "LifeOS — LimitlessOS",
+  "name": "LifeOS",
   "short_name": "LifeOS",
-  "description": "Your personal operating system. Commitments, clarity, growth, family, and truth — all in one place.",
-  "start_url": "/overlay/lifeos-app.html",
-  "scope": "/overlay/",
+  "description": "Your personal operating system — commitments, clarity, family, and truth in one place.",
+  "start_url": "/lifeos?direct_system=1&layout=mobile&source=homescree",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a0a0f",
-  "theme_color": "#6c63ff",
+  "theme_color": "#0a0a0f",
   "categories": ["productivity", "lifestyle", "health"],
   "icons": [
     {
@@ -26,24 +26,17 @@
   ],
   "shortcuts": [
     {
-      "name": "Daily Mirror",
-      "short_name": "Mirror",
-      "description": "Open your daily mirror",
-      "url": "/overlay/lifeos-mirror.html",
-      "icons": [{ "src": "/overlay/icons/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Quick Entry",
-      "short_name": "Entry",
-      "description": "Log a thought or commitment",
-      "url": "/overlay/lifeos-quick-entry.html",
+      "name": "Lumen setup",
+      "short_name": "Lumen",
+      "description": "Listening profile and voice setup",
+      "url": "/overlay/lifeos-listening-setup.html",
       "icons": [{ "src": "/overlay/icons/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Today",
       "short_name": "Today",
       "description": "See what's on deck for today",
-      "url": "/overlay/lifeos-today.html",
+      "url": "/lifeos?direct_system=1&page=today",
       "icons": [{ "src": "/overlay/icons/icon-192.png", "sizes": "192x192" }]
     }
   ],

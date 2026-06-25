@@ -9,7 +9,34 @@ This is a **real app download**, not “open in browser” — once the APK/IPA 
 
 ---
 
-## Android (easiest — true tap-to-download)
+## iPhone — install today (Add to Home Screen)
+
+**This works on your iPhone right now** — no App Store, no Xcode, no waiting for Android.
+
+1. Open **Safari** (not Chrome): **https://robust-magic-production.up.railway.app/install**
+2. Tap **Open LifeOS in Safari** → sign in if asked
+3. Tap **Share** (square with arrow at bottom)
+4. **Add to Home Screen** → **Add**
+5. Open **LifeOS** from your home screen — full-screen app, same universal overlay
+
+The home-screen icon loads `/lifeos` with mobile layout. Updates deploy from Railway automatically (no App Store review cycle).
+
+---
+
+## iPhone — signed .ipa later (no App Store)
+
+Apple **does not** allow unsigned `.ipa` downloads. When you have an **Apple Developer account** ($99/yr):
+
+1. Register your iPhone **UDID** at developer.apple.com
+2. Add GitHub secrets: `IOS_P12_BASE64`, `IOS_P12_PASSWORD`, `IOS_PROFILE_BASE64`, `APPLE_TEAM_ID`
+3. **Actions → Build LifeOS iOS IPA → Run workflow**
+4. User opens **`/install`** → **Install LifeOS on iPhone** (OTA link)
+
+**Until IPA is built:** use **Add to Home Screen** (above).
+
+---
+
+## Android (tap-to-download APK)
 
 ### Option A — GitHub Actions (no Android Studio on your Mac)
 
@@ -31,25 +58,6 @@ Artifact also available under the workflow run (30-day retention) if you need th
 3. On the phone: open **`/install`** → **Download LifeOS.apk** → Install.
 
 No Play Store. User may need to allow “Install unknown apps” for their browser.
-
----
-
-## iPhone (direct install — no App Store, but Apple rules apply)
-
-Apple **does not** allow random `.ipa` links without signing. We use **ad-hoc OTA install**:
-
-1. **Apple Developer account** ($99/yr)
-2. Register each iPhone **UDID** in developer.apple.com
-3. Xcode → Archive → **Ad Hoc** → export `.ipa`
-4. ```bash
-   LIFEOS_IPA=/path/to/LifeOS.ipa npm run mobile:build:ios:adhoc
-   ```
-5. Deploy `lifeos.ipa`, `lifeos-ios.plist`, `release.json` (`ios.available: true`)
-6. User opens **`/install`** → **Install LifeOS on iPhone**
-
-This is **not** the App Store. It is **not** a scam sideload — it is the standard enterprise/ad-hoc channel Apple allows for registered devices (up to 100/year on standard accounts).
-
-**Until IPA is built:** Safari → `/lifeos` → Add to Home Screen.
 
 ---
 
