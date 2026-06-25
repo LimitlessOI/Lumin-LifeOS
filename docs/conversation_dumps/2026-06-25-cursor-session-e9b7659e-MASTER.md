@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: Cursor session archive — master index -->
+
 # Cursor session archive — master index
 
 **Session ID:** `e9b7659e-ef91-4a2e-911e-16e735386b9e`  

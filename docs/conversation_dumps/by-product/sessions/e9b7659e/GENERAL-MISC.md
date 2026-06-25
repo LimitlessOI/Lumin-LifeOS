@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: General / uncategorized -->
+
 # General / uncategorized
 
 **Session:** `e9b7659e-ef91-4a2e-911e-16e735386b9e` · **Pairs:** 266

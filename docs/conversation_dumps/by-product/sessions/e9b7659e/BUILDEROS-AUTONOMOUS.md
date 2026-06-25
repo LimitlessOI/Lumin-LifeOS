@@ -1,3 +1,5 @@
+<!-- SYNOPSIS: BuilderOS / TSOS / autonomous / alpha -->
+
 # BuilderOS / TSOS / autonomous / alpha
 
 **Session:** `e9b7659e-ef91-4a2e-911e-16e735386b9e` · **Archived:** 2026-06-25  
