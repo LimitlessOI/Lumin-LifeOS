@@ -23,6 +23,6 @@
     "config/lifeos-stack-registry.json"
   ],
   "last_updated": "2026-06-25",
-  "last_receipt": "2026-06-24 alpha-live-verify-persist",
-  "last_change_summary": "Live alpha E2E checks + founder confirm GitHub persist"
+  "last_receipt": "2026-06-25 crm-alpha-boldtrail-contacts-route",
+  "last_change_summary": "POST /lifere/boldtrail/contacts + CRM alpha test script"
 }

@@ -9,6 +9,7 @@ import {
   getBoldTrailConnectionStatus,
   pushApprovedFollowUp,
 } from '../services/lifere-boldtrail-bridge.js';
+import { createOrUpdateContact } from '../src/integrations/boldtrail.js';
 import { createLifeRETwinStore, ForbiddenCrossUserError } from '../services/lifere-twin-store.js';
 import { createLifeREPerformanceTwin } from '../services/lifere-performance-twin.js';
 import { createLifeREPermissionTwin } from '../services/lifere-permission-twin.js';
@@ -234,6 +235,35 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
         assignedAgentId: req.query.assigned_agent_id || null,
       });
       res.json({ ok: pipeline.ok, result: pipeline });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/boldtrail/contacts', requireKey, async (req, res) => {
+    try {
+      const { name, first_name, last_name, email, phone, source, meta } = req.body || {};
+      if (!name && !email && !phone) {
+        return res.status(400).json({ ok: false, error: 'name, email, or phone required' });
+      }
+      const result = await createOrUpdateContact({
+        name,
+        first_name,
+        last_name,
+        email,
+        phone,
+        source: source || 'LifeRE',
+        meta: meta || { created_by: 'lifere_api', alpha: true },
+      });
+      if (!result.ok) {
+        return res.status(result.status || 503).json({
+          ok: false,
+          error: result.reason || result.error || 'boldtrail_create_failed',
+          status: result.status || null,
+          detail: result.data || null,
+        });
+      }
+      res.status(201).json({ ok: true, boldtrail: result.data, raw_status: result.status });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }

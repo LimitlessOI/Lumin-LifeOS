@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:50:59.209Z",
+  "generated_at": "2026-06-25T23:51:07.160Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12552,
   "files": [
@@ -42299,17 +42299,17 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
       "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
-      "bytes": 1072,
-      "mtime": "2026-06-25T23:29:43.133Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 1082,
+      "mtime": "2026-06-25T23:49:47.292Z",
+      "indexed_at": "2026-06-25T23:51:07.160Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 12560,
-      "mtime": "2026-06-25T23:46:46.628Z",
-      "indexed_at": "2026-06-25T23:46:47.253Z"
+      "bytes": 12813,
+      "mtime": "2026-06-25T23:48:51.722Z",
+      "indexed_at": "2026-06-25T23:51:07.160Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -72614,9 +72614,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 45440,
-      "mtime": "2026-06-25T23:45:52.117Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 46540,
+      "mtime": "2026-06-25T23:48:47.053Z",
+      "indexed_at": "2026-06-25T23:51:07.160Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]

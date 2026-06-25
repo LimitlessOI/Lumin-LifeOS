@@ -136,6 +136,7 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-06-25 | **`routes/lifere-os-routes.js`** — `POST /api/v1/lifere/boldtrail/contacts` wraps `createOrUpdateContact` (prior commit missed route body) | Adam CRM alpha — add bogus BoldTrail client | ✅ node --check | redeploy + crm-alpha-test |
 | 2026-06-25 | **`POST /api/v1/lifere/boldtrail/contacts`** + **`scripts/crm-alpha-test.mjs`** — alpha CRM: create bogus BoldTrail contact, ambient capture, internal crm_contacts, note write-back probe | Adam: alpha test CRM connection + add bogus client | ✅ partial live (BoldTrail connected; create route pending deploy) | redeploy + `npm run lifeos:crm:alpha:test` |
 | 2026-06-25 | **`services/lifere-alpha-surface-api.js`** (NEW) + **`routes/lifere-os-routes.js`** — 18 missing LifeRE UI API routes (follow-up metrics, education, motivation, funnel, market, community, comms preview, YouTube coach, opportunity scan, lifeos integration) | Agent alpha 99/117 → 117/117; LifeRE tabs were 404 | ✅ `npm run lifeos:lifere-agent-alpha` PASS | deploy; Adam alpha |
 | 2026-06-25 | **`services/founder-overlay-surgical-patch.js`** + **`founder-build-self-repair.js`** + **`founder-intent-clarify.js`** — mechanical HTML comment inserts without whole-file regen | Lumin build sliver failed overlay-shrink guard | ✅ local patch test | deploy; live build verify |
