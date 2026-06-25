@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:15:11.895Z",
+  "generated_at": "2026-06-25T23:19:56.016Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12541,
+  "file_count": 12542,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -39174,6 +39174,13 @@
       "indexed_at": "2026-06-25T21:54:24.956Z"
     },
     {
+      "path": "db/migrations/20260625_blueprint_intake_error.sql",
+      "synopsis": "Database migration — 20260625_blueprint_intake_error.sql.",
+      "bytes": 245,
+      "mtime": "2026-06-25T23:19:14.622Z",
+      "indexed_at": "2026-06-25T23:19:56.016Z"
+    },
+    {
       "path": "db/migrations/20260625_blueprint_intake.sql",
       "synopsis": "Database migration — 20260625_blueprint_intake.sql.",
       "bytes": 1649,
@@ -41742,9 +41749,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 35056,
-      "mtime": "2026-06-25T23:14:58.671Z",
-      "indexed_at": "2026-06-25T23:15:11.895Z"
+      "bytes": 35048,
+      "mtime": "2026-06-25T23:19:45.521Z",
+      "indexed_at": "2026-06-25T23:19:56.016Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -74504,9 +74511,9 @@
     {
       "path": "scripts/run-blueprint-intake.mjs",
       "synopsis": "CLI tool for Blueprint Intake — backfill any existing amendment into a blueprint via Railway API.",
-      "bytes": 10107,
-      "mtime": "2026-06-25T23:14:47.141Z",
-      "indexed_at": "2026-06-25T23:15:11.895Z",
+      "bytes": 10132,
+      "mtime": "2026-06-25T23:19:31.350Z",
+      "indexed_at": "2026-06-25T23:19:56.016Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -86355,9 +86362,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 25672,
-      "mtime": "2026-06-25T23:14:16.756Z",
-      "indexed_at": "2026-06-25T23:15:11.895Z",
+      "bytes": 25700,
+      "mtime": "2026-06-25T23:19:20.997Z",
+      "indexed_at": "2026-06-25T23:19:56.016Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

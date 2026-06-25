@@ -225,7 +225,7 @@ Server: ${BASE_URL}
       }
 
       if (session.status === 'failed') {
-        console.error('\nBlueprint generation failed. Check server logs.');
+        console.error(`\nBlueprint generation failed: ${session.error_message || 'unknown error'}`);
         process.exit(1);
       }
 

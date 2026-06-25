@@ -205,7 +205,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
     // Process in background — Railway keeps the event loop alive
     setImmediate(() => {
       _runBackfill(sessionId, amendmentText).catch(err => {
-        updateSession(pool, sessionId, { status: 'failed' }).catch(() => {});
+        updateSession(pool, sessionId, { status: 'failed', error_message: err.message }).catch(() => {});
       });
     });
 
