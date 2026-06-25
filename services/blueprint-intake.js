@@ -37,10 +37,25 @@ Required shape:
 If a section is unclear or missing from the amendment: use the string "UNKNOWN" for that field's value.
 Do NOT invent requirements. Only extract what is stated or clearly implied.`;
 
-const BLUEPRINT_GEN_SYSTEM = (patterns) => `You are BuilderOS ARC generating a machine-readable blueprint JSON.
+const BLUEPRINT_GEN_SYSTEM = (patterns) => {
+  // Trim large arrays to prevent system prompt bloat; Claude only needs the shape, not all 450 names
+  const slim = {
+    installed_packages: patterns.installed_packages,
+    not_installed: patterns.not_installed,
+    route_factory: patterns.route_factory,
+    auth_pattern: patterns.auth_pattern,
+    ai_call_pattern: patterns.ai_call_pattern,
+    db_pattern: patterns.db_pattern,
+    registration_pattern: patterns.registration_pattern,
+    existing_tables: (patterns.existing_tables || []).slice(0, 30),
+    existing_services: (patterns.existing_services || []).slice(0, 30),
+    existing_routes: (patterns.existing_routes || []).slice(0, 20),
+    scanned_at: patterns.scanned_at,
+  };
+  return `You are BuilderOS ARC generating a machine-readable blueprint JSON.
 
 CODEBASE PATTERNS (use these exactly — verified against live project):
-${JSON.stringify(patterns)}
+${JSON.stringify(slim)}
 
 BLUEPRINT FORMAT RULES:
 1. Root object must have: _meta, env, steps[]
@@ -58,6 +73,7 @@ BLUEPRINT FORMAT RULES:
 13. GAP_FLAG rule: if you cannot determine a value from intent or patterns, write "GAP_FLAG: [describe exactly what is missing]" as the value
 
 Return ONLY a valid JSON object. No markdown, no code fences. Use compact JSON (no extra whitespace or indentation).`;
+};
 
 const GAP_CONVERSATION_SYSTEM = `You are Lumin (the BuilderOS Chair). A blueprint has gaps that need founder input to resolve.
 
@@ -198,7 +214,7 @@ export function createBlueprintIntakeService(pool, callCouncilMember) {
       // Step 2: generate blueprint
       const blueprintRaw = await callCouncilMember('claude',
         `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', allowModelDowngrade: false }
+        { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
       );
       const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
 
@@ -287,7 +303,7 @@ Ask ONE question at a time. Be brief.`;
         const intent = parseBlueprintFromAiResponse(jsonMatch[0]);
         const blueprintRaw = await callCouncilMember('claude',
           `PRODUCT INTENT:\n${JSON.stringify(intent, null, 2)}\n\nGenerate the complete blueprint JSON now.`,
-          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 6000, taskType: 'codegen', allowModelDowngrade: false }
+          { systemPromptOverride: BLUEPRINT_GEN_SYSTEM(codebaseScan), maxOutputTokens: 8000, taskType: 'codegen', allowModelDowngrade: false }
         );
         const blueprint = parseBlueprintFromAiResponse(blueprintRaw);
         const gaps = detectGaps(blueprint);

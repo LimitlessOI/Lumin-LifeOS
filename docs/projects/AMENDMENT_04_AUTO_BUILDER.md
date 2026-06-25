@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-25 — Fix: compact JSON in system prompts; blueprint maxOutputTokens 6000; compact output instruction.
+**Last Updated:** 2026-06-25 — Fix: slim patterns in system prompt (28KB→6KB); blueprint maxOutputTokens 8000.
 
 ---
 
