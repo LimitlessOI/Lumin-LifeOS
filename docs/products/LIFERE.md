@@ -240,6 +240,16 @@ Mission folder (Alpha machine path): `builderos-reboot/MISSIONS/PRODUCT-LIFERE-O
 
 ---
 
+## Founder conversation archive (Cursor)
+
+| Session | Topic | Archive |
+|---------|-------|---------|
+| `e9b7659e` (2026-06-13) | LifeRE alpha, agent-alpha gate, marketing/SMOS, founder usability | [`docs/conversation_dumps/by-product/LIFERE-ALPHA.md`](../conversation_dumps/by-product/LIFERE-ALPHA.md) |
+
+Master session index: [`docs/conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md`](../conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md)
+
+---
+
 ## Agent Handoff Notes
 
 | Field | Value |

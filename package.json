@@ -50,6 +50,7 @@
     "lifeos:wisdom:audit": "node scripts/run-wisdom-truth-audit.mjs",
     "lifeos:truth:receipts": "node scripts/verify-receipt-truth.mjs",
     "lifeos:lumin-chair:parity": "node scripts/run-lumin-chair-parity.mjs",
+    "lifeos:archive-cursor-transcript": "node scripts/archive-cursor-transcript.mjs",
     "lifeos:lumin:connection:verify": "node scripts/verify-lumin-connection.mjs && node --test tests/lumin-connection-guard.test.js",
     "lifeos:lumin:connection:verify:live": "node scripts/verify-lumin-connection.mjs --live",
     "mobile:sync": "npx cap sync",

@@ -5,7 +5,11 @@
 
 ---
 
-## [SESSION] 2026-05-19 — Ambient Listen v1
+## [SESSION] 2026-06-13 — Cursor transcript archive (e9b7659e)
+
+Adam: preserve every back-and-forth from Cursor session for receipts/history; product conversations routed to product files. **Shipped:** `scripts/archive-cursor-transcript.mjs`; raw jsonl + master index + 9 product buckets (741 pairs); receipt `CURSOR_SESSION_E9B7659E.json`; pointers in `LIFEOS.md`, `LIFERE.md`, `CONVERSATION_DUMP_IDEAS_INDEX` §12. **Re-run:** `npm run lifeos:archive-cursor-transcript`. **Next:** archive other agent-transcript UUIDs on demand; optional agent browser verify slice.
+
+---
 
 Adam: ambient listening now — sleeping when quiet, wake on speech, decide if note-worthy, commitments auto-log + keep/renegotiate. **Shipped:** `lumin-ambient-capture.js`, `/ambient/process|status`, `lifeos-ambient-listener.js`, ambient pill in `lifeos-app.html`, commitment renegotiate helpers. **GAP-FILL:** hand-coded (user urgency). **Next:** deploy → Adam toggles Ambient pill → say "I will call Frank by Friday" → verify Word Keeper / commitments list.
 

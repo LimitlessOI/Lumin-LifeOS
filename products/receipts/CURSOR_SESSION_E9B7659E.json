@@ -1,0 +1,58 @@
+{
+  "schema": "cursor_session_archive_v1",
+  "at": "2026-06-25T21:44:50.529Z",
+  "session_id": "e9b7659e-ef91-4a2e-911e-16e735386b9e",
+  "date": "2026-06-13",
+  "raw": "docs/conversation_dumps/raw/cursor-e9b7659e-ef91-4a2e-911e-16e735386b9e.jsonl",
+  "master": "/Users/adamhopkins/Projects/Lumin-LifeOS/docs/conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md",
+  "product_files": [
+    {
+      "id": "GENERAL",
+      "file": "docs/conversation_dumps/by-product/GENERAL-MISC.md",
+      "pairs": 299
+    },
+    {
+      "id": "BUILDEROS",
+      "file": "docs/conversation_dumps/by-product/BUILDEROS-AUTONOMOUS.md",
+      "pairs": 231
+    },
+    {
+      "id": "PLATFORM",
+      "file": "docs/conversation_dumps/by-product/PLATFORM-OPS.md",
+      "pairs": 199
+    },
+    {
+      "id": "GOVERNANCE",
+      "file": "docs/conversation_dumps/by-product/GOVERNANCE-SSOT.md",
+      "pairs": 174
+    },
+    {
+      "id": "LIFEOS_LUMIN",
+      "file": "docs/conversation_dumps/by-product/LIFEOS-LUMIN-CHAIR.md",
+      "pairs": 130
+    },
+    {
+      "id": "LIFERE",
+      "file": "docs/conversation_dumps/by-product/LIFERE-ALPHA.md",
+      "pairs": 64
+    },
+    {
+      "id": "MEMORY_HIST",
+      "file": "docs/conversation_dumps/by-product/MEMORY-HIST.md",
+      "pairs": 58
+    },
+    {
+      "id": "TC_SKYSLOPE",
+      "file": "docs/conversation_dumps/by-product/TC-SKYSLOPE.md",
+      "pairs": 24
+    },
+    {
+      "id": "CLIENTCARE",
+      "file": "docs/conversation_dumps/by-product/CLIENTCARE-BILLING.md",
+      "pairs": 4
+    }
+  ],
+  "pair_count": 741,
+  "turn_count": 8176,
+  "ok": true
+}

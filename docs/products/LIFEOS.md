@@ -65,6 +65,15 @@ Lumin is the default way in. Persistent "Ask Lumin…" strip in the overlay. Lea
 **Shipped:** shell strip, drawer, voice hooks, onboarding conversation, commitment auto-ingest.
 **Backlog:** deeper conversation → structured fields / calendar automation (Commitments v1 is the first proof mission).
 
+### Founder conversation archive (Cursor)
+
+| Session | Topic | Archive |
+|---------|-------|---------|
+| `e9b7659e` (2026-06-13) | Direct Lumin/Chair connection, listening merge, fake-connection fix, single connection law, browser agent verify | [`docs/conversation_dumps/by-product/LIFEOS-LUMIN-CHAIR.md`](../conversation_dumps/by-product/LIFEOS-LUMIN-CHAIR.md) |
+| Master index (all products in session) | Full session | [`docs/conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md`](../conversation_dumps/2026-06-13-cursor-session-e9b7659e-MASTER.md) |
+
+Re-archive: `npm run lifeos:archive-cursor-transcript -- <path-to.jsonl> [sessionId]`
+
 ---
 
 ## BUILD STATE

@@ -48,3 +48,19 @@ The AI Counsel OS will scan these files during development to:
 - Maintain consistency with previous discussions
 - Reference implementation details
 - Preserve context across sessions
+
+## Cursor agent session archives (2026-06-13+)
+
+When Adam asks to preserve a Cursor chat thread:
+
+```bash
+npm run lifeos:archive-cursor-transcript -- ~/.cursor/projects/.../agent-transcripts/<uuid>/<uuid>.jsonl
+```
+
+**Outputs:**
+- `raw/cursor-<sessionId>.jsonl` — full machine replay
+- `YYYY-MM-DD-cursor-session-<id>-MASTER.md` — index + recent exchanges
+- `by-product/*.md` — back-and-forth sorted by product (LifeOS/Lumin, BuilderOS, TC, LifeRE, …)
+- `products/receipts/CURSOR_SESSION_<ID>.json` — archive receipt
+
+**Latest session:** [`2026-06-13-cursor-session-e9b7659e-MASTER.md`](2026-06-13-cursor-session-e9b7659e-MASTER.md) (741 exchange pairs)
