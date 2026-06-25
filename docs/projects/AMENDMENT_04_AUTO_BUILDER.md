@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-22 — factory-arc-loader exports evaluateIdcExitGate for FP V2 unified gate.
+**Last Updated:** 2026-06-25 — Blueprint Intake Service: three flows (backfill, greenfield, adjustment), codebase scanner, ARC pipeline scripts, DB migration.
 
 ---
 
@@ -161,6 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-25 | **Blueprint Intake Service (5 files)** — `db/migrations/20260625_blueprint_intake.sql` (blueprint_intake_sessions table with flow_type + status machine); `services/blueprint-codebase-scanner.js` (live pattern scan before every blueprint gen); `services/blueprint-intake.js` (three flows: backfill/greenfield/adjustment, gap detection, ARC review, answer gaps); `routes/blueprint-intake-routes.js` (9 endpoints including chair-hook); `scripts/run-arc-entry-gate.mjs` + `scripts/run-arc-pipeline.mjs` + `scripts/run-blueprint-intake.mjs` (CLI backfill tool). Wired into `core/two-tier-system-init.js`. npm scripts: `blueprint:intake`, `blueprint:intake:list`. GAP REMAINING: chair-orchestrator `blueprint_execute` channel doesn't detect adjustment/greenfield intent yet — only routes to mission ID. CLI AI review won't work until council-service export is bridged. | Adam: build the Blueprint Intake Service for all three flows; fix BuilderOS so it can generate its own blueprints from existing amendments | ⚠️ syntax pass; chair-hook wired; ARC gate wired | `npm run blueprint:intake:list` |
 | 2026-06-13 | **`services/railway-managed-env-service.js`** — allowlist FP V2 production env keys (`CHAIR_PREDICTION_SCORE_ENABLED`, `LANE_INTEL_*`, search API keys). | Managed-env bulk can enable scoreboard + lane intel on Railway. | ✅ | `npm run system:fp-v2:production-env` |
 | 2026-06-13 | **`execute-mission.mjs`** — IDC exit gate before builder entry (pairs with unified FP V2 mission gate). | Close CLI bypass on mission execute spawn paths. | ✅ verify-chair-fp-v2 | deploy |
 | 2026-06-22 | **`services/founder-packet-v2-unified-gate.js`** + **`factory-arc-loader.js`** — FP V2 end-to-end: live Chair + IDC exit + builder entry on all execute paths; council `/build`, founder routeToBuilder, terminal bridge gated. | Adam: full Founder Packet V2 enforcement not just Chair prompt. | ✅ unified gate tests | deploy |

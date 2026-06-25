@@ -34,6 +34,7 @@ import { createBillingRoutes } from '../routes/billing-routes.js';
 import { createKnowledgeRoutes } from '../routes/knowledge-routes.js';
 import { createConversationRoutes } from '../routes/conversation-routes.js';
 import { createCommandCenterRoutes } from '../routes/command-center-routes.js';
+import { createBlueprintIntakeRoutes } from '../routes/blueprint-intake-routes.js';
 
 export async function initializeTwoTierSystem(deps) {
   const directedMode = process.env.LIFEOS_DIRECTED_MODE !== 'false';
@@ -874,6 +875,7 @@ export async function initializeTwoTierSystem(deps) {
     createKnowledgeRoutes(app, routeCtx);
     createConversationRoutes(app, routeCtx);
     createCommandCenterRoutes(app, routeCtx);
+    createBlueprintIntakeRoutes(app, routeCtx);
     logger.info('✅ [STARTUP] All modular routes registered');
 
   } catch (error) {

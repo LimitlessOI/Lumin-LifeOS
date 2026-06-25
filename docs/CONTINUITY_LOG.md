@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-06-25 — Blueprint Intake Service + ARC pipeline (BuilderOS self-sufficient)
+
+Adam: make BuilderOS generate its own blueprints from existing amendments; fix ARC gaps; build three intake flows (backfill/greenfield/adjustment). **Shipped:** `db/migrations/20260625_blueprint_intake.sql` (intake sessions table); `services/blueprint-codebase-scanner.js` (live codebase grounding before every gen); `services/blueprint-intake.js` (all three flows + gap detection + ARC review); `routes/blueprint-intake-routes.js` (9 endpoints + chair-hook); `scripts/run-arc-entry-gate.mjs`, `run-arc-pipeline.mjs`, `run-blueprint-intake.mjs`; wired into `core/two-tier-system-init.js`; npm scripts `blueprint:intake*`; Amendment 04 SSOT updated. Also upgraded blueprint v1.0.0 → v1.1.0 (17 CRITICAL gaps fixed: wrong auth field, wrong AI import pattern, missing column, wrong transcriber method). **Open gaps:** (1) chair orchestrator `blueprint_execute` doesn't detect adjustment/greenfield intent — only routes to mission ID; (2) CLI AI review needs council-service bridge; (3) gap answer patching is all-or-nothing (by design). **Verify:** `npm run blueprint:intake:list` (needs DB). **Next:** wire chair-orchestrator to detect "adjust" vs "execute" and call `/api/v1/blueprint/chair-hook`.
+
+---
+
 ## [SESSION] 2026-06-25 — All Cursor parent sessions archived (9/9)
 
 Adam: archive every Cursor agent session, not just one. **Shipped:** `archive-all-cursor-transcripts.mjs` + per-session `by-product/sessions/<id>/`; **9 sessions** indexed in `CURSOR_SESSIONS_INDEX.md`; batch receipt `CURSOR_SESSIONS_BATCH.json`. **Re-run:** `npm run lifeos:archive-cursor-transcripts:all`. **Not automatic** on new agent open — run batch or add hook later.

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T22:28:08.184Z",
+  "generated_at": "2026-06-25T22:30:59.030Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12534,
+  "file_count": 12541,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29047,9 +29047,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3757420,
-      "mtime": "2026-06-25T21:54:25.324Z",
-      "indexed_at": "2026-06-25T21:54:25.985Z"
+      "bytes": 3763688,
+      "mtime": "2026-06-25T22:30:39.877Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -36653,9 +36653,9 @@
     {
       "path": "core/two-tier-system-init.js",
       "synopsis": "Two-Tier AI Council System Initialization",
-      "bytes": 39618,
-      "mtime": "2026-06-21T21:37:48.113Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z",
+      "bytes": 39750,
+      "mtime": "2026-06-25T22:25:20.743Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z",
       "ssot": [
         "docs/projects/AMENDMENT_05_SITE_BUILDER.md"
       ]
@@ -39174,6 +39174,13 @@
       "indexed_at": "2026-06-25T21:54:24.956Z"
     },
     {
+      "path": "db/migrations/20260625_blueprint_intake.sql",
+      "synopsis": "Database migration — 20260625_blueprint_intake.sql.",
+      "bytes": 1649,
+      "mtime": "2026-06-25T22:29:05.438Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z"
+    },
+    {
       "path": "db/migrations/builderos_command_control.sql",
       "synopsis": "Database migration — builderos_command_control.sql.",
       "bytes": 1596,
@@ -40400,9 +40407,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 455367,
-      "mtime": "2026-06-25T21:52:18.380Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z"
+      "bytes": 456671,
+      "mtime": "2026-06-25T22:28:46.323Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41735,9 +41742,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 33126,
-      "mtime": "2026-06-23T00:55:18.517Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z"
+      "bytes": 34297,
+      "mtime": "2026-06-25T22:28:24.627Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -41750,9 +41757,9 @@
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
       "synopsis": "AMENDMENT 05 — Site Builder & Prospect Pipeline",
-      "bytes": 48351,
-      "mtime": "2026-06-21T21:37:58.417Z",
-      "indexed_at": "2026-06-25T21:54:24.956Z"
+      "bytes": 48801,
+      "mtime": "2026-06-25T22:29:34.199Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z"
     },
     {
       "path": "docs/projects/AMENDMENT_06_GAME_PUBLISHER.md",
@@ -69726,9 +69733,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 25999,
-      "mtime": "2026-06-25T22:25:50.824Z",
-      "indexed_at": "2026-06-25T22:26:07.369Z",
+      "bytes": 26227,
+      "mtime": "2026-06-25T22:26:57.386Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z",
       "synopsis_index_only": true
     },
     {
@@ -71859,6 +71866,16 @@
       "bytes": 3071,
       "mtime": "2026-06-21T21:39:03.195Z",
       "indexed_at": "2026-06-25T21:54:24.956Z"
+    },
+    {
+      "path": "routes/blueprint-intake-routes.js",
+      "synopsis": "Blueprint Intake API — backfill existing amendments, greenfield conversations,",
+      "bytes": 11001,
+      "mtime": "2026-06-25T22:24:01.947Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
     },
     {
       "path": "routes/boldtrail-coaching-routes.js",
@@ -74462,6 +74479,36 @@
       "indexed_at": "2026-06-25T21:54:24.956Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-arc-entry-gate.mjs",
+      "synopsis": "ARC entry gate — validate a blueprint file for gaps before execution is allowed.",
+      "bytes": 4935,
+      "mtime": "2026-06-25T22:24:24.499Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
+      "path": "scripts/run-arc-pipeline.mjs",
+      "synopsis": "Full ARC pipeline — entry gate → AI review → write blueprint → signal executor.",
+      "bytes": 4818,
+      "mtime": "2026-06-25T22:26:50.953Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
+      "path": "scripts/run-blueprint-intake.mjs",
+      "synopsis": "CLI tool for Blueprint Intake — backfill any existing amendment into a blueprint.",
+      "bytes": 7770,
+      "mtime": "2026-06-25T22:24:55.161Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
     },
     {
@@ -86294,6 +86341,26 @@
       "bytes": 811,
       "mtime": "2026-06-21T21:39:11.690Z",
       "indexed_at": "2026-06-25T21:54:24.956Z"
+    },
+    {
+      "path": "services/blueprint-codebase-scanner.js",
+      "synopsis": "Scans the live project for patterns a blueprint generator must know before writing specs.",
+      "bytes": 9418,
+      "mtime": "2026-06-25T22:20:16.060Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
+      "path": "services/blueprint-intake.js",
+      "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
+      "bytes": 23897,
+      "mtime": "2026-06-25T22:23:11.288Z",
+      "indexed_at": "2026-06-25T22:30:59.030Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
     },
     {
       "path": "services/bp-priority-queue.js",
