@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:33:22.416Z",
+  "generated_at": "2026-06-25T23:40:18.188Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12549,
+  "file_count": 12550,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -42307,9 +42307,9 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 12186,
-      "mtime": "2026-06-25T23:29:39.172Z",
-      "indexed_at": "2026-06-25T23:29:59.760Z"
+      "bytes": 12456,
+      "mtime": "2026-06-25T23:40:15.094Z",
+      "indexed_at": "2026-06-25T23:40:18.188Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -89243,6 +89243,16 @@
       "bytes": 636,
       "mtime": "2026-06-23T11:41:08.127Z",
       "indexed_at": "2026-06-25T21:54:24.956Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
+      "path": "services/lifere-motivation-twin.js",
+      "synopsis": "LifeRE motivation twin — outcome-linked milestones (no dark patterns).",
+      "bytes": 3092,
+      "mtime": "2026-06-25T21:55:07.719Z",
+      "indexed_at": "2026-06-25T23:40:18.188Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
