@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T17:33:32.542Z",
+  "generated_at": "2026-06-25T18:31:05.780Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12395,
+  "file_count": 12400,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40721,6 +40721,13 @@
       "indexed_at": "2026-06-24T20:55:58.879Z"
     },
     {
+      "path": "docs/mobile/DIRECT_INSTALL.md",
+      "synopsis": "Direct install (no App Store / Play Store)",
+      "bytes": 2252,
+      "mtime": "2026-06-25T18:31:01.386Z",
+      "indexed_at": "2026-06-25T18:31:05.780Z"
+    },
+    {
       "path": "docs/mockups/DASHBOARD_UI_MAP.md",
       "synopsis": "LifeOS Dashboard — machine-readable UI map",
       "bytes": 4275,
@@ -41025,9 +41032,9 @@
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
       "synopsis": "AMENDMENT 12 — Command & Control Center",
-      "bytes": 98863,
-      "mtime": "2026-06-24T22:51:21.275Z",
-      "indexed_at": "2026-06-24T22:51:25.188Z"
+      "bytes": 99175,
+      "mtime": "2026-06-25T18:30:55.541Z",
+      "indexed_at": "2026-06-25T18:31:05.780Z"
     },
     {
       "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
@@ -41360,9 +41367,9 @@
     {
       "path": "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md",
       "synopsis": "AMENDMENT 37 — Universal Overlay Platform",
-      "bytes": 15919,
-      "mtime": "2026-06-25T17:33:07.080Z",
-      "indexed_at": "2026-06-25T17:33:32.542Z"
+      "bytes": 16254,
+      "mtime": "2026-06-25T18:30:54.436Z",
+      "indexed_at": "2026-06-25T18:31:05.780Z"
     },
     {
       "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json",
@@ -68920,9 +68927,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 24936,
-      "mtime": "2026-06-25T17:05:01.096Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z",
+      "bytes": 25082,
+      "mtime": "2026-06-25T18:30:39.963Z",
+      "indexed_at": "2026-06-25T18:31:05.780Z",
       "synopsis_index_only": true
     },
     {
@@ -69767,6 +69774,14 @@
       "indexed_at": "2026-06-24T20:55:58.879Z"
     },
     {
+      "path": "public/downloads/release.json",
+      "synopsis": "JSON data/config — public/downloads/release.json.",
+      "bytes": 707,
+      "mtime": "2026-06-25T18:30:17.857Z",
+      "indexed_at": "2026-06-25T18:31:05.780Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "public/extension/frame.html",
       "synopsis": "HTML page: Lumin Overlay",
       "bytes": 15443,
@@ -70217,6 +70232,13 @@
       "bytes": 18229,
       "mtime": "2026-06-24T22:39:39.230Z",
       "indexed_at": "2026-06-24T22:44:08.208Z"
+    },
+    {
+      "path": "public/overlay/lifeos-install.html",
+      "synopsis": "Direct install — Android APK + iOS ad-hoc OTA (no App Store)",
+      "bytes": 7757,
+      "mtime": "2026-06-25T18:30:28.424Z",
+      "indexed_at": "2026-06-25T18:31:05.780Z"
     },
     {
       "path": "public/overlay/lifeos-legacy.html",
@@ -71792,9 +71814,9 @@
     {
       "path": "routes/public-routes.js",
       "synopsis": "Public HTML entry routes for operator-facing overlays and portals.",
-      "bytes": 10788,
-      "mtime": "2026-06-22T22:14:16.040Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z",
+      "bytes": 12859,
+      "mtime": "2026-06-25T18:30:39.271Z",
+      "indexed_at": "2026-06-25T18:31:05.780Z",
       "ssot": [
         "docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
       ]
@@ -72224,6 +72246,26 @@
       "bytes": 2198,
       "mtime": "2026-06-21T21:39:05.645Z",
       "indexed_at": "2026-06-24T20:55:58.879Z"
+    },
+    {
+      "path": "scripts/build-lifeos-android-apk.mjs",
+      "synopsis": "Build LifeOS Android APK (debug, sideload-ready) and copy to public/downloads/.",
+      "bytes": 2386,
+      "mtime": "2026-06-25T18:31:01.401Z",
+      "indexed_at": "2026-06-25T18:31:05.780Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md"
+      ]
+    },
+    {
+      "path": "scripts/build-lifeos-ios-adhoc.mjs",
+      "synopsis": "iOS ad-hoc IPA + OTA manifest for direct install (no App Store).",
+      "bytes": 3428,
+      "mtime": "2026-06-25T18:31:01.416Z",
+      "indexed_at": "2026-06-25T18:31:05.780Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md"
+      ]
     },
     {
       "path": "scripts/build-task.js",

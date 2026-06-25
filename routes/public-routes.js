@@ -203,6 +203,56 @@ export function registerPublicRoutes(app, {
     return next();
   });
 
+  // Direct install (no App Store / Play Store) — AMENDMENT_37
+  app.get("/install", (_req, res) => {
+    const filePath = path.join(__dirname, "public", "overlay", "lifeos-install.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("Install page not found.");
+  });
+  app.get("/download", (_req, res) => res.redirect(302, "/install"));
+
+  app.get("/download/release.json", (_req, res) => {
+    const filePath = path.join(__dirname, "public", "downloads", "release.json");
+    if (!fs.existsSync(filePath)) return res.status(404).json({ ok: false, error: "release.json missing" });
+    res.set("Content-Type", "application/json");
+    return sendPublicFileNoCache(res, filePath);
+  });
+
+  app.get("/download/lifeos.apk", (_req, res) => {
+    const filePath = path.join(__dirname, "public", "downloads", "lifeos.apk");
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({
+        ok: false,
+        error: "APK not built yet",
+        install_page: "/install",
+        build: "npm run mobile:build:android",
+      });
+    }
+    res.set({
+      "Content-Type": "application/vnd.android.package-archive",
+      "Content-Disposition": 'attachment; filename="LifeOS.apk"',
+    });
+    return res.sendFile(filePath);
+  });
+
+  app.get("/download/lifeos-ios.plist", (_req, res) => {
+    const filePath = path.join(__dirname, "public", "downloads", "lifeos-ios.plist");
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).send("iOS install manifest not ready — register device UDID first.");
+    }
+    res.set("Content-Type", "application/xml");
+    return sendPublicFileNoCache(res, filePath);
+  });
+
+  app.get("/download/lifeos.ipa", (_req, res) => {
+    const filePath = path.join(__dirname, "public", "downloads", "lifeos.ipa");
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ ok: false, error: "IPA not built yet", install_page: "/install" });
+    }
+    res.set("Content-Type", "application/octet-stream");
+    return res.sendFile(filePath);
+  });
+
   // Convenience aliases so LifeOS shell subpages also work when loaded from /lifeos.
   app.get("/lifeos-:slug.html", (req, res, next) => {
     const slug = String(req.params.slug || "").trim();

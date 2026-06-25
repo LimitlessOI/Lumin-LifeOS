@@ -101,3 +101,8 @@ data/governed-autonomy-overnight.lock
 data/builder-factory-health.json
 data/builder-daemon-state.*.json
 .claude/worktrees/
+
+# Mobile direct-install binaries (built locally; release.json tracks availability)
+public/downloads/*.apk
+public/downloads/*.ipa
+public/downloads/lifeos-ios.plist

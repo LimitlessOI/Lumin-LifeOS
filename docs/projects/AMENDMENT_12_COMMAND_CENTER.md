@@ -296,6 +296,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-05-19 | **`routes/public-routes.js`** — `/install`, `/download`, `/download/release.json`, `/download/lifeos.apk`, `/download/lifeos-ios.plist`, `/download/lifeos.ipa` for direct app install without stores. | Adam: real download link, not browser-only URL. | ✅ node --check | deploy + build APK/IPA |
 | 2026-05-19 | **`src/server/auth/requireKey.js`** — after command-key mismatch, accept valid LifeOS account JWT in `Authorization: Bearer` (`verifyToken`, sets `req.lifeosUser`, `req.auth_mode=account_jwt`). Routes still on raw `requireKey` now work for signed-in founder without operator key. | Adam: logged in but LifeOS APIs returned Unauthorized — Bearer JWT was not command key and was rejected. | ✅ node --check | deploy |
 | 2026-06-22 | **`routes/public-routes.js`** — `/lifeos` login redirect preserves `lumin_voice=1` in `next=` so post-auth launch auto-enables Lumin wake word. | Adam: one link to open LifeOS + say "Lumin" to Chair. | AM12 + AM21 | deploy |
 | 2026-05-24 | **`public/shared/lifeos-voice-chat.js` — laptop mic Auto routing:** `scoreAudioInput` / `pickPreferredAudioInputDevice` / `resolveAutoAudioDeviceId` prefer MacBook built-in; block Continuity/iPhone; resolve device id before opening stream; `getActiveMicLabel()`. Shared by Voice Rail + Command Center surfaces. | Adam: laptop browser used phone mic via Apple Continuity | AM12 | pending deploy |

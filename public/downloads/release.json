@@ -1,0 +1,24 @@
+{
+  "schema": "lifeos_direct_install_v1",
+  "updated_at": null,
+  "android": {
+    "available": false,
+    "version": "1.0.0",
+    "build": null,
+    "download_url": "/download/lifeos.apk",
+    "min_android": "8.0",
+    "notes": "Enable Settings → Install unknown apps for your browser, then tap Download."
+  },
+  "ios": {
+    "available": false,
+    "version": "1.0.0",
+    "build": null,
+    "ota_manifest_url": "/download/lifeos-ios.plist",
+    "notes": "Requires your device UDID in the ad-hoc profile. Not App Store — direct install from our server."
+  },
+  "web_pwa": {
+    "available": true,
+    "url": "/lifeos",
+    "notes": "Safari → Share → Add to Home Screen (no store, instant)."
+  }
+}

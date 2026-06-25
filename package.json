@@ -57,6 +57,8 @@
     "mobile:android": "npx cap open android",
     "mobile:add:ios": "npx cap add ios",
     "mobile:add:android": "npx cap add android",
+    "mobile:build:android": "node scripts/build-lifeos-android-apk.mjs",
+    "mobile:build:ios:adhoc": "node scripts/build-lifeos-ios-adhoc.mjs",
     "lifeos:service-doctrine:verify": "node scripts/verify-lifeos-service-doctrine.mjs",
     "lifeos:service-doctrine:live-probe": "node --import dotenv/config scripts/probe-lifeos-doctrine-live.mjs",
     "lifeos:bp-priority:verify": "node scripts/verify-bp-priority-guardrails.mjs && node scripts/verify-file-synopsis.mjs --strict",

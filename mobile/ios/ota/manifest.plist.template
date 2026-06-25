@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  iOS over-the-air install manifest (ad-hoc or enterprise — NOT App Store).
+  Copy to public/downloads/lifeos-ios.plist after build; replace PUBLIC_BASE_URL and IPA filename.
+  @ssot docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md
+-->
+<plist version="1.0">
+<dict>
+  <key>items</key>
+  <array>
+    <dict>
+      <key>assets</key>
+      <array>
+        <dict>
+          <key>kind</key>
+          <string>software-package</string>
+          <key>url</key>
+          <string>https://robust-magic-production.up.railway.app/download/lifeos.ipa</string>
+        </dict>
+      </array>
+      <key>metadata</key>
+      <dict>
+        <key>bundle-identifier</key>
+        <string>org.hopkinsgroup.lifeos</string>
+        <key>bundle-version</key>
+        <string>1.0.0</string>
+        <key>kind</key>
+        <string>software</string>
+        <key>title</key>
+        <string>LifeOS</string>
+      </dict>
+    </dict>
+  </array>
+</dict>
+</plist>

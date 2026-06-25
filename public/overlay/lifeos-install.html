@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!-- SYNOPSIS: Direct install — Android APK + iOS ad-hoc OTA (no App Store) -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Install LifeOS</title>
+  <link rel="apple-touch-icon" href="/overlay/icons/icon-192.png" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #14141c;
+      --text: #e8e8f0;
+      --muted: #8888aa;
+      --accent: #6c63ff;
+      --green: #22c55e;
+      --warn: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px 20px calc(32px + env(safe-area-inset-bottom));
+    }
+    .wrap { max-width: 420px; margin: 0 auto; }
+    .logo { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+    .tag { color: var(--muted); font-size: 15px; line-height: 1.45; margin-bottom: 28px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .card h2 { font-size: 16px; margin-bottom: 8px; }
+    .card p { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      color: #fff;
+      background: var(--accent);
+    }
+    .btn:disabled, .btn.disabled {
+      opacity: 0.45;
+      pointer-events: none;
+      background: #333;
+    }
+    .btn.secondary { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--text); margin-top: 10px; }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .badge.ready { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge.wait { background: rgba(245,158,11,0.15); color: var(--warn); }
+    .steps { font-size: 13px; color: var(--muted); line-height: 1.55; }
+    .steps li { margin-left: 18px; margin-bottom: 6px; }
+    .foot { margin-top: 24px; font-size: 12px; color: var(--muted); text-align: center; }
+    .foot a { color: var(--accent); }
+    #platform-hint { font-size: 13px; color: var(--green); margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="logo">LifeOS</div>
+    <p class="tag">Install the app directly — no App Store or Play Store required.</p>
+    <p id="platform-hint"></p>
+
+    <div class="card" id="card-android">
+      <span class="badge wait" id="android-badge">Checking…</span>
+      <h2>Android — download APK</h2>
+      <p>Tap below to download and install. You may need to allow installs from your browser (unknown sources).</p>
+      <a class="btn disabled" id="android-btn" href="#" download>Download LifeOS.apk</a>
+      <ol class="steps" id="android-steps" style="display:none;margin-top:12px;">
+        <li>Tap <strong>Download LifeOS.apk</strong></li>
+        <li>Open the downloaded file → <strong>Install</strong></li>
+        <li>If blocked: Settings → allow this browser to install unknown apps</li>
+      </ol>
+    </div>
+
+    <div class="card" id="card-ios">
+      <span class="badge wait" id="ios-badge">Checking…</span>
+      <h2>iPhone — direct install</h2>
+      <p id="ios-desc">Installs from our server (ad-hoc). Not the App Store. Your device must be registered first.</p>
+      <a class="btn disabled" id="ios-btn" href="#">Install LifeOS on iPhone</a>
+      <ol class="steps" id="ios-steps-wait" style="margin-top:12px;">
+        <li>Send your iPhone <strong>UDID</strong> to register (Settings → General → About, or connect to Mac)</li>
+        <li>After we build your install, return here — tap <strong>Install</strong></li>
+        <li>Settings → General → VPN & Device Management → <strong>Trust</strong> if prompted</li>
+      </ol>
+      <ol class="steps" id="ios-steps-ready" style="display:none;margin-top:12px;">
+        <li>Tap <strong>Install LifeOS on iPhone</strong> below</li>
+        <li>Confirm when iOS asks to install</li>
+        <li>Trust the developer cert if Settings prompts you</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <span class="badge ready">Available now</span>
+      <h2>iPhone — Add to Home Screen</h2>
+      <p>Works immediately in Safari while we prepare your direct iOS build.</p>
+      <a class="btn secondary" href="/lifeos">Open LifeOS in Safari</a>
+      <ol class="steps" style="margin-top:12px;">
+        <li>Open the link above in <strong>Safari</strong></li>
+        <li>Share → <strong>Add to Home Screen</strong></li>
+      </ol>
+    </div>
+
+    <p class="foot">Universal overlay — all programs run inside LifeOS.<br />
+      <a href="/lifeos">Open web app</a> · <a href="/overlay/lifeos-listening-setup.html">Lumen setup</a></p>
+  </div>
+
+  <script>
+  (async function () {
+    const ua = navigator.userAgent || '';
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const hint = document.getElementById('platform-hint');
+    if (isAndroid) hint.textContent = 'Detected Android — use Download APK below.';
+    else if (isIOS) hint.textContent = 'Detected iPhone — use direct install or Add to Home Screen.';
+
+    let release = null;
+    try {
+      const res = await fetch('/download/release.json?_=' + Date.now());
+      release = await res.json();
+    } catch (_) {}
+
+    const androidBtn = document.getElementById('android-btn');
+    const androidBadge = document.getElementById('android-badge');
+    const androidSteps = document.getElementById('android-steps');
+    const iosBtn = document.getElementById('ios-btn');
+    const iosBadge = document.getElementById('ios-badge');
+    const iosWait = document.getElementById('ios-steps-wait');
+    const iosReady = document.getElementById('ios-steps-ready');
+
+    const origin = location.origin;
+
+    if (release?.android?.available) {
+      androidBadge.textContent = 'Ready · v' + (release.android.version || '1');
+      androidBadge.className = 'badge ready';
+      androidBtn.href = release.android.download_url || '/download/lifeos.apk';
+      androidBtn.classList.remove('disabled');
+      androidBtn.textContent = 'Download LifeOS.apk';
+      androidSteps.style.display = '';
+    } else {
+      androidBadge.textContent = 'Build pending';
+      androidBadge.className = 'badge wait';
+      androidBtn.textContent = 'APK not on server yet';
+      document.getElementById('ios-desc').textContent += ' Android APK: run npm run mobile:build:android on a machine with Android Studio, then deploy.';
+    }
+
+    if (release?.ios?.available) {
+      const plistUrl = origin + (release.ios.ota_manifest_url || '/download/lifeos-ios.plist');
+      const ota = 'itms-services://?action=download-manifest&url=' + encodeURIComponent(plistUrl);
+      iosBadge.textContent = 'Ready · v' + (release.ios.version || '1');
+      iosBadge.className = 'badge ready';
+      iosBtn.href = ota;
+      iosBtn.classList.remove('disabled');
+      iosWait.style.display = 'none';
+      iosReady.style.display = '';
+    } else {
+      iosBadge.textContent = 'Register device first';
+      iosBadge.className = 'badge wait';
+      iosBtn.textContent = 'Install link coming after UDID registration';
+    }
+  })();
+  </script>
+</body>
+</html>
