@@ -6,7 +6,7 @@
   'use strict';
   function formatLifeOSSystemReply(data) {
     if (!data || typeof data !== 'object') return 'No response from system.';
-    if (data.lumin_chair && String(data.human_summary || '').trim()) {
+    if ((data.lumin_chair || data.direct_connection) && String(data.human_summary || '').trim()) {
       return String(data.human_summary).trim();
     }
     if (data.autopsy && data.pass_fail === 'FAIL') {

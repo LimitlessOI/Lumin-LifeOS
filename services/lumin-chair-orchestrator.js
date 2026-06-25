@@ -14,6 +14,7 @@ import {
 } from './lifeos-mission-pipeline-executor.js';
 import { isRepairContinuationIntent } from './builder-instruction-target.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
+import { buildListeningOnboardingContext } from './lifeos-listening-profile.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { wrapChairHumanSummary } from './founder-communication-format.js';
 import { enforceChairTruthExit } from './chair-truth-gate.js';
@@ -617,7 +618,11 @@ export async function runLuminChairTurn(ctx, deps) {
       const memoryContext = deps.loadChairMemoryContext
         ? await deps.loadChairMemoryContext().catch(() => null)
         : null;
+      const listeningOnboarding = sourceMode === 'listening_setup' && deps.pool
+        ? await buildListeningOnboardingContext(deps.pool, ctx.userId).catch(() => null)
+        : null;
       const strategicBrief = shouldAttachStrategicBrief(effectiveInput, chairContext)
+        && sourceMode !== 'listening_setup'
         ? await gatherStrategicBriefForChair({
           cleanedInput: effectiveInput,
           pool: deps.pool,
@@ -633,7 +638,11 @@ export async function runLuminChairTurn(ctx, deps) {
         pool: deps.pool,
         userId: ctx.userId,
         strategicBrief,
-      }, chairContext);
+        listeningOnboarding,
+      }, {
+        ...chairContext,
+        domain: sourceMode === 'listening_setup' ? 'listening_onboarding' : chairContext.domain,
+      });
       const truth = finalizeTruth({
         ...chairResult,
         chair_context: chairContext,

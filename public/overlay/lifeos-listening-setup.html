@@ -9,6 +9,7 @@
   <meta name="theme-color" content="#6c63ff" />
   <script src="/overlay/lifeos-bootstrap.js"></script>
   <script src="/overlay/lifeos-voice.js"></script>
+  <script src="/shared/lifeos-system-reply.js?v=20260625a"></script>
   <style>
     :root {
       --bg: #0a0a0f;
@@ -119,8 +120,8 @@
   <header>
     <a class="back" href="/overlay/lifeos-app.html">← LifeOS</a>
     <div>
-      <h1>Talk with Lumen</h1>
-      <p>Listening, privacy &amp; capture — 100% opt-in</p>
+      <h1>Listening setup</h1>
+      <p>Opt-in mic &amp; privacy — system commands use Lumin in the main app</p>
     </div>
     <span class="status-pill" id="status-pill">Loading…</span>
   </header>
@@ -144,7 +145,7 @@
     const patchPreview = document.getElementById('patch-preview');
     const statusPill = document.getElementById('status-pill');
     let CTX = null;
-    let threadId = null;
+    const FOUNDER_MESSAGE = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
     let suggestedPatch = null;
 
     function bubble(text, role) {
@@ -170,24 +171,44 @@
       applyBar.classList.add('visible');
     }
 
+    function extractListeningPatch(text) {
+      const body = String(text || '');
+      const fence = body.match(/```listening_profile\s*([\s\S]*?)```/i);
+      if (!fence) return null;
+      try { return JSON.parse(fence[1].trim()); } catch { return null; }
+    }
+
+    function formatReply(data) {
+      if (window.LifeOSSystemReply?.format) return LifeOSSystemReply.format(data);
+      return data.human_summary || data.error || 'No response';
+    }
+
     async function sendMessage(text) {
       const msg = String(text || '').trim();
       if (!msg) return;
       bubble(msg, 'user');
       input.value = '';
-      statusPill.textContent = 'Lumen thinking…';
-      const res = await api('/onboarding/message', { message: msg, thread_id: threadId });
+      statusPill.textContent = 'Lumin thinking…';
+      const res = await CTX.fetchWithAuth(FOUNDER_MESSAGE, {
+        method: 'POST',
+        body: JSON.stringify({
+          text: msg,
+          action: 'auto',
+          conversational_mode: true,
+          source_mode: 'listening_setup',
+          async: false,
+        }),
+      });
       const data = await res.json();
-      if (!data.ok) {
+      if (!res.ok && !data.human_summary) {
         bubble(data.error || 'Something went wrong.', 'lumen');
         statusPill.textContent = 'Error';
         return;
       }
-      threadId = data.thread_id;
-      const reply = data.reply?.content || data.reply || '';
+      const reply = formatReply(data);
       bubble(reply, 'lumen');
-      showPatch(data.suggested_patch);
-      statusPill.textContent = 'Ready';
+      showPatch(extractListeningPatch(reply));
+      statusPill.textContent = data.direct_connection ? 'Direct · Lumin' : 'Ready';
     }
 
     document.getElementById('composer').addEventListener('submit', (e) => {
@@ -221,9 +242,9 @@
     const pdata = await prof.json();
     if (pdata.ok && !pdata.onboarding_done) {
       bubble(
-        "Hi — I'm Lumen. I'd like to help you the way *you* want to be helped.\n\n"
-        + "Nothing turns on until you choose. We can talk through listening modes, what stays on your phone, win moments vs conflict clips, family guard, schedules, and therapist export.\n\n"
-        + "What matters most to you right now — family tone, wake-word only, scheduled listening, or keeping everything off?",
+        "Hi — I'm Lumin. This page is for **listening & privacy preferences only** (mic schedules, family guard, clips).\n\n"
+        + "For system commands, builds, and LifeOS — use the **Lumin drawer** in the main app.\n\n"
+        + "Nothing turns on until you choose. What matters most — family tone, wake word, scheduled listening, or keep everything off?",
         'lumen'
       );
     } else if (pdata.ok) {

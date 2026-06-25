@@ -1771,7 +1771,7 @@
         <span class="ambient-dot" aria-hidden="true"></span>
         <span id="listening-label">Listening off</span>
       </button>
-      <span class="ambient-pill-hint" id="listening-hint"><a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Talk with Lumen</a> to set preferences · tap to turn on/off</span>
+      <span class="ambient-pill-hint" id="listening-hint"><a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Listening prefs</a> · system talk → Lumin drawer</span>
     </div>
 
     <div id="family-guard-pill" class="ambient-pill family-guard-pill" aria-live="polite">
@@ -1973,7 +1973,7 @@
     <div class="settings-divider"></div>
     <div class="settings-section">
       <div class="settings-section-title">Listening &amp; Lumen</div>
-      <p class="settings-hint">100% opt-in. Talk with Lumen to choose modes, schedules, and privacy. Audio clips stay on this device unless you opt in otherwise.</p>
+      <p class="settings-hint">100% opt-in. Use Listening setup for mic schedules and privacy. System talk stays in the Lumin drawer.</p>
       <label class="settings-row" style="cursor:pointer;user-select:none;">
         <input type="checkbox" id="st-listening-master" style="margin-right:10px;" />
         <span class="settings-label" style="flex:1;">Master listening switch</span>
@@ -2055,7 +2055,7 @@
     <div class="lumin-drawer-avatar">◎</div>
     <div class="lumin-drawer-title">
       <strong>Lumin</strong>
-      <span id="lumin-status-text">Online — knows you, acts when asked</span>
+      <span id="lumin-status-text">Direct · Lumin Chair</span>
     </div>
     <div class="lumin-dock-controls" id="lumin-dock-controls">
       <button type="button" class="lumin-dock-btn active" data-dock="right" onclick="setLuminDock('right')">Side</button>
@@ -2908,8 +2908,45 @@ function openFullChat() {
   document.getElementById('lumin-input')?.focus();
 }
 
-/* Boot: load default thread (same as dashboard chat) */
+/* Boot: direct Chair path uses founder-interface; legacy thread GET is history-only */
+const LUMIN_LEGACY_COUNSEL_RE = /Counsel only ·|nothing executed — counsel only|To execute: say `do:/i;
+
+function luminFilterDirectHistory(messages) {
+  if (!Array.isArray(messages)) return [];
+  return messages.filter((m) => {
+    const body = String(m.content || '');
+    if (m.role === 'assistant' && LUMIN_LEGACY_COUNSEL_RE.test(body)) return false;
+    return true;
+  });
+}
+
+function updateLuminConnectionStatus(data) {
+  const el = document.getElementById('lumin-status-text');
+  if (!el) return;
+  if (data?.direct_connection === true || data?.lumin_chair === true) {
+    el.textContent = 'Direct · Lumin Chair';
+    return;
+  }
+  if (data?.pass_fail === 'RUNNING' || data?.async) {
+    el.textContent = 'Running · polling job';
+    return;
+  }
+  el.textContent = 'Lumin';
+}
+
 async function luminBootThread() {
+  if (USE_DIRECT_SYSTEM_CHAT) {
+    updateLuminConnectionStatus({ direct_connection: true, lumin_chair: true });
+    try {
+      const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/default`);
+      const data = await res.json();
+      if (data.ok && data.thread?.id) {
+        luminState.threadId = data.thread.id;
+        await luminLoadMessages();
+      }
+    } catch { /* fresh session */ }
+    return;
+  }
   try {
     const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/default`);
     const data = await res.json();
@@ -2939,7 +2976,8 @@ async function luminLoadMessages() {
     const res = await CTX.fetchWithAuth(`${CHAT_BASE}/threads/${luminState.threadId}/messages?limit=80`);
     const data = await res.json();
     if (data.ok && data.messages?.length) {
-      luminRenderHistory(data.messages);
+      const rows = USE_DIRECT_SYSTEM_CHAT ? luminFilterDirectHistory(data.messages) : data.messages;
+      if (rows.length) luminRenderHistory(rows);
     }
   } catch {}
 }
@@ -3027,7 +3065,7 @@ async function luminSend(opts = {}) {
           source_mode: voiceTurn ? 'voice' : 'text',
           conversational_mode: true,
           dictate_then_send: false,
-          async: voiceTurn ? false : true,
+          async: false,
         }
       : { user: USER || 'adam', message: msg };
     const endpoint = USE_DIRECT_SYSTEM_CHAT
@@ -3073,6 +3111,7 @@ async function luminSend(opts = {}) {
     }
 
     if (USE_DIRECT_SYSTEM_CHAT && data) {
+      updateLuminConnectionStatus(data);
       let reply = formatDirectSystemReply(data);
       reply = appendClientBubbleProof(reply, data);
       luminState.lastReply = reply;
@@ -3100,9 +3139,15 @@ async function luminSend(opts = {}) {
     document.getElementById('lumin-send-btn').disabled = false;
     const statusEl = document.getElementById('lumin-status-text');
     if (statusEl) {
-      statusEl.textContent = luminState.wakeListenActive
-        ? (LuminVoice?.isConversationActive?.() ? 'Lumin is with you' : 'Say "Lumin" when ready')
-        : 'Ready';
+      if (luminState.wakeListenActive) {
+        statusEl.textContent = LuminVoice?.isConversationActive?.()
+          ? 'Lumin is with you'
+          : 'Say "Lumin" when ready';
+      } else if (USE_DIRECT_SYSTEM_CHAT) {
+        statusEl.textContent = 'Direct · Lumin Chair';
+      } else {
+        statusEl.textContent = 'Ready';
+      }
     }
   }
 }
@@ -3392,7 +3437,7 @@ window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
     }
     if (label) label.textContent = on ? 'Listening on' : 'Listening off';
     if (hint && st?.profile?.mode) {
-      hint.innerHTML = `Mode: <strong>${st.profile.mode.replace(/_/g, ' ')}</strong> · <a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Talk with Lumen</a>`;
+      hint.innerHTML = `Mode: <strong>${st.profile.mode.replace(/_/g, ' ')}</strong> · <a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Listening prefs</a>`;
     }
     const lm = document.getElementById('st-listening-master');
     if (lm) lm.checked = !!st?.master;
@@ -3419,9 +3464,10 @@ window.lifeosSetContextIntent = function lifeosSetContextIntent(text) {
   });
 
   document.addEventListener('lifeos-lumen-wake', (e) => {
-    const text = e.detail?.text || '';
-    if (/capture|commitment|meeting|notes/i.test(text)) {
-      showToast('Lumen heard you — processing…', 'wake');
+    const text = String(e.detail?.text || '').trim();
+    if (text) {
+      routeVoiceToLuminChair(text, { wake: true });
+      return;
     }
     openLuminDrawer?.();
   });

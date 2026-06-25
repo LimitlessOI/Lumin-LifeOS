@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T18:37:09.493Z",
+  "generated_at": "2026-06-25T18:37:49.826Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12400,
   "files": [
@@ -28948,9 +28948,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3719140,
-      "mtime": "2026-06-24T23:52:21.333Z",
-      "indexed_at": "2026-06-24T23:52:49.442Z"
+      "bytes": 3724403,
+      "mtime": "2026-06-25T18:37:20.732Z",
+      "indexed_at": "2026-06-25T18:37:49.826Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41127,17 +41127,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26715,
-      "mtime": "2026-06-24T23:52:42.161Z",
-      "indexed_at": "2026-06-24T23:52:49.442Z",
+      "bytes": 26707,
+      "mtime": "2026-06-25T18:37:44.201Z",
+      "indexed_at": "2026-06-25T18:37:49.826Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 481486,
-      "mtime": "2026-06-25T17:33:18.542Z",
-      "indexed_at": "2026-06-25T17:33:32.542Z"
+      "bytes": 482035,
+      "mtime": "2026-06-25T18:37:30.745Z",
+      "indexed_at": "2026-06-25T18:37:49.826Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -69992,9 +69992,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 137427,
-      "mtime": "2026-06-25T17:32:57.867Z",
-      "indexed_at": "2026-06-25T17:33:32.542Z"
+      "bytes": 138884,
+      "mtime": "2026-06-25T18:34:43.878Z",
+      "indexed_at": "2026-06-25T18:37:49.826Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -70257,9 +70257,9 @@
     {
       "path": "public/overlay/lifeos-listening-setup.html",
       "synopsis": "Lumen conversational listening & privacy onboarding",
-      "bytes": 8220,
-      "mtime": "2026-06-25T17:04:14.394Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z"
+      "bytes": 9016,
+      "mtime": "2026-06-25T18:33:27.848Z",
+      "indexed_at": "2026-06-25T18:37:49.826Z"
     },
     {
       "path": "public/overlay/lifeos-login.html",
@@ -70641,9 +70641,9 @@
     {
       "path": "public/shared/lifeos-system-reply.js",
       "synopsis": "js — public/shared/lifeos-system-reply.js.",
-      "bytes": 3880,
-      "mtime": "2026-06-24T05:11:02.613Z",
-      "indexed_at": "2026-06-24T20:55:58.879Z"
+      "bytes": 3908,
+      "mtime": "2026-06-25T18:32:57.866Z",
+      "indexed_at": "2026-06-25T18:37:49.826Z"
     },
     {
       "path": "public/shared/lifeos-voice-chat.js",
@@ -85893,9 +85893,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 2359,
-      "mtime": "2026-06-24T23:51:11.049Z",
-      "indexed_at": "2026-06-24T23:52:49.442Z",
+      "bytes": 2603,
+      "mtime": "2026-06-25T18:34:35.676Z",
+      "indexed_at": "2026-06-25T18:37:49.826Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87816,9 +87816,9 @@
     {
       "path": "services/lifeos-listening-profile.js",
       "synopsis": "Listening Profile — opt-in ambient, capture, family guard, schedule prefs for Lumen onboarding.",
-      "bytes": 7720,
-      "mtime": "2026-06-25T17:04:41.103Z",
-      "indexed_at": "2026-06-25T17:05:20.699Z",
+      "bytes": 8605,
+      "mtime": "2026-06-25T18:34:50.250Z",
+      "indexed_at": "2026-06-25T18:37:49.826Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88413,9 +88413,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 26146,
-      "mtime": "2026-06-24T23:51:23.811Z",
-      "indexed_at": "2026-06-24T23:52:49.442Z",
+      "bytes": 26604,
+      "mtime": "2026-06-25T18:34:50.264Z",
+      "indexed_at": "2026-06-25T18:37:49.826Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

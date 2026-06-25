@@ -40,11 +40,51 @@ export const DEFAULT_LISTENING_PROFILE = {
 
 const MODE_PRIVACY = {
   off: { mic: false, server_text: false, local_audio: false, label: 'Everything off' },
-  wake_word: { mic: true, server_text: false, local_audio: false, label: 'Wake word only — say Lumen to activate' },
+  wake_word: { mic: true, server_text: false, local_audio: false, label: 'Wake word only — say Lumin to activate' },
   scheduled: { mic: true, server_text: false, local_audio: false, label: 'Scheduled window — mic active in your chosen hours' },
   conflict_only: { mic: true, server_text: false, local_audio: true, label: 'Conflict-only — local mic; clips on device if enabled' },
   ambient_full: { mic: true, server_text: true, local_audio: false, label: 'Full ambient — text may go to LifeOS server; no raw audio' },
 };
+
+export const LISTENING_ONBOARDING_PROMPT = `You are Lumin — Adam's LifeOS front door (user may say Lumen; treat as the same).
+
+This is a **Listening & Privacy onboarding** conversation. Your job:
+1. Welcome warmly. Nothing turns on until the user explicitly chooses.
+2. Walk topics one at a time: listening modes, physical controls, what is stored where, family/partner consent, win moments vs conflict clips, therapist export.
+3. For each topic: explain **benefits**, **precautions**, and **honest limits** (browser vs native app; iOS background mic needs the LifeOS phone app).
+4. Never claim "nothing ever touches our servers" globally — be mode-specific:
+   - off / wake_word / conflict_only with clips: audio stays on device unless they opt in
+   - ambient_full: **text transcripts** may go to LifeOS to log commitments — **not raw audio**
+5. Never claim immunity from government/compelled access — say: we don't build surveillance in, don't sell data, user can delete, minimal retention by design.
+6. Partner/household features require **separate opt-in** from each person.
+7. When the user confirms choices, output a fenced block they can apply:
+
+\`\`\`listening_profile
+{ "mode": "conflict_only", "master_enabled": true, "capture": { "conflict_clips": true }, ... }
+\`\`\`
+
+Only include keys the user agreed to. Ask before enabling anything sensitive.
+Keep responses conversational — 2–4 short paragraphs max unless they ask for depth.
+System commands and builds belong in the main Lumin drawer — this page is prefs only.`;
+
+export async function buildListeningOnboardingContext(pool, userRef, { handle = 'adam' } = {}) {
+  if (!pool) return null;
+  let userId = userRef;
+  if (!userId || !/^\d+$/.test(String(userId))) {
+    const { makeLifeOSUserResolver } = await import('./lifeos-user-resolver.js');
+    const resolveUserId = makeLifeOSUserResolver(pool);
+    userId = await resolveUserId(handle);
+  }
+  if (!userId) return null;
+  const listening = createLifeOSListeningProfile({ pool });
+  const current = await listening.getProfile(userId);
+  return {
+    listening_profile: current.profile,
+    privacy_matrix: MODE_PRIVACY,
+    onboarding_done: current.onboarding_done,
+    onboarding_instructions: LISTENING_ONBOARDING_PROMPT,
+  };
+}
 
 function deepMerge(base, patch) {
   if (!patch || typeof patch !== 'object') return base;
@@ -144,25 +184,7 @@ export function createLifeOSListeningProfile({ pool, callAI, logger }) {
     }
   }
 
-  const LUMEN_ONBOARDING_SYSTEM = `You are Lumen — the LifeOS companion (user may say Lumin; treat as the same).
-
-This is a **Listening & Privacy onboarding** conversation. Your job:
-1. Welcome warmly. Nothing turns on until the user explicitly chooses.
-2. Walk topics one at a time: listening modes, physical controls, what is stored where, family/partner consent, win moments vs conflict clips, therapist export.
-3. For each topic: explain **benefits**, **precautions**, and **honest limits** (browser vs native app; iOS background mic needs the LifeOS phone app).
-4. Never claim "nothing ever touches our servers" globally — be mode-specific:
-   - off / wake_word / conflict_only with clips: audio stays on device unless they opt in
-   - ambient_full: **text transcripts** may go to LifeOS to log commitments — **not raw audio**
-5. Never claim immunity from government/compelled access — say: we don't build surveillance in, don't sell data, user can delete, minimal retention by design.
-6. Partner/household features require **separate opt-in** from each person.
-7. When the user confirms choices, output a fenced block they can apply:
-
-\`\`\`listening_profile
-{ "mode": "conflict_only", "master_enabled": true, "capture": { "conflict_clips": true }, ... }
-\`\`\`
-
-Only include keys the user agreed to. Ask before enabling anything sensitive.
-Keep responses conversational — 2–4 short paragraphs max unless they ask for depth.`;
+  const LUMEN_ONBOARDING_SYSTEM = LISTENING_ONBOARDING_PROMPT;
 
   async function onboardingChat(userId, userMessage, { threadId, luminChat } = {}) {
     if (!luminChat) throw new Error('luminChat required');

@@ -31,6 +31,11 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     systemFacts.lifeos_service_doctrine = doctrineBlock;
   }
 
+  if (deps.listeningOnboarding) {
+    systemFacts.listening_onboarding = deps.listeningOnboarding;
+    systemFacts.chair_note = `${systemFacts.chair_note} Listening setup mode — output listening_profile fence when user confirms prefs.`;
+  }
+
   let voice = await translatePersonality({
     callAI,
     userMessage: cleanedInput,
