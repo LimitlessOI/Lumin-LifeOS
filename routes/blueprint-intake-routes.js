@@ -12,15 +12,17 @@ export function createBlueprintIntakeRoutes(app, ctx) {
   const intake = createBlueprintIntakeService(pool, callCouncilMember);
 
   // ── FLOW 1: Backfill — read existing amendment → generate blueprint ────────
-  // Body: { amendment_file: "docs/projects/AMENDMENT_41_MARKETINGOS.md", product_name: "SocialMediaOS" }
+  // Body: { amendment_file: "...", product_name: "SocialMediaOS" }
+  //   OR: { amendment_text: "<full amendment content>", product_name: "SocialMediaOS", amendment_file: "...(label only)" }
+  // CLI sends amendment_text so the server never needs to find the file on disk.
   app.post('/api/v1/blueprint/intake/backfill', requireKey, async (req, res) => {
     try {
-      const { amendment_file, product_name } = req.body;
-      if (!amendment_file || !product_name) {
-        return res.status(400).json({ error: 'amendment_file and product_name required' });
+      const { amendment_file, amendment_text, product_name } = req.body;
+      if ((!amendment_file && !amendment_text) || !product_name) {
+        return res.status(400).json({ error: 'product_name and (amendment_file or amendment_text) required' });
       }
       const ownerId = req.lifeosUser?.sub || null;
-      const result = await intake.startBackfill({ amendmentFile: amendment_file, productName: product_name, ownerId });
+      const result = await intake.startBackfill({ amendmentFile: amendment_file, amendmentText: amendment_text, productName: product_name, ownerId });
       return res.status(202).json({
         ok: true,
         session_id: result.sessionId,

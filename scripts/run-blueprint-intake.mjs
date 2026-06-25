@@ -1,105 +1,138 @@
 #!/usr/bin/env node
 /**
- * SYNOPSIS: CLI tool for Blueprint Intake — backfill any existing amendment into a blueprint.
- * Usage: node scripts/run-blueprint-intake.mjs --amendment docs/projects/AMENDMENT_41_MARKETINGOS.md
- *        node scripts/run-blueprint-intake.mjs --list
- *        node scripts/run-blueprint-intake.mjs --session <id> --arc
- *        node scripts/run-blueprint-intake.mjs --session <id> --answer gap_1 "the answer"
+ * SYNOPSIS: CLI tool for Blueprint Intake — backfill any existing amendment into a blueprint via Railway API.
+ * Reads amendment files locally then sends content to the live server, so no amendment files
+ * need to be in the Railway Docker image.
+ *
+ * Usage:
+ *   node scripts/run-blueprint-intake.mjs --amendment docs/projects/AMENDMENT_41_MARKETINGOS.md
+ *   node scripts/run-blueprint-intake.mjs --list
+ *   node scripts/run-blueprint-intake.mjs --session <id>
+ *   node scripts/run-blueprint-intake.mjs --session <id> --arc
+ *   node scripts/run-blueprint-intake.mjs --session <id> --answer gap_1 "the answer"
+ *
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import 'dotenv/config';
-import pg from 'pg';
+import fs from 'node:fs';
+import path from 'node:path';
 
-const { Pool } = pg;
+const ROOT = path.resolve(import.meta.dirname, '..');
+const BASE_URL = (process.env.API_BASE_URL || 'https://robust-magic-production.up.railway.app').replace(/\/$/, '');
+const KEY = process.env.COMMAND_CENTER_KEY;
+
+if (!KEY) {
+  console.error('COMMAND_CENTER_KEY not set — add it to .env');
+  process.exit(1);
+}
+
+const HEADERS = { 'Content-Type': 'application/json', 'x-command-center-key': KEY };
+
+async function api(method, path, body) {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method,
+    headers: HEADERS,
+    body: body ? JSON.stringify(body) : undefined,
+    signal: AbortSignal.timeout(120_000),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${data.error || JSON.stringify(data)}`);
+  return data;
+}
+
+function readAmendmentLocal(amendmentArg) {
+  const candidates = [
+    amendmentArg,
+    path.join(ROOT, amendmentArg),
+    path.join(ROOT, 'docs/projects', amendmentArg),
+  ];
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return { text: fs.readFileSync(p, 'utf8'), resolvedPath: p };
+  }
+  throw new Error(`Amendment not found locally: ${amendmentArg}`);
+}
 
 async function main() {
   const args = process.argv.slice(2);
   const amendmentArg = args[args.indexOf('--amendment') + 1];
   const listMode = args.includes('--list');
-  const sessionArg = args[args.indexOf('--session') + 1];
+  const sessionArg = args[args.indexOf('--session') + 1] || (args[0] && !args[0].startsWith('--') ? args[0] : null);
   const arcMode = args.includes('--arc');
   const answerMode = args.includes('--answer');
   const answerGapId = answerMode ? args[args.indexOf('--answer') + 1] : null;
   const answerText = answerMode ? args[args.indexOf('--answer') + 2] : null;
   const productArg = args[args.indexOf('--product') + 1];
+  const statusFilter = args[args.indexOf('--status') + 1];
 
   if (!amendmentArg && !listMode && !sessionArg) {
     console.log(`
 Blueprint Intake CLI
 ────────────────────
 Backfill an existing amendment:
+  node scripts/run-blueprint-intake.mjs --amendment docs/projects/AMENDMENT_41_MARKETINGOS.md
+
+Backfill with explicit product name:
   node scripts/run-blueprint-intake.mjs --amendment docs/projects/AMENDMENT_41_MARKETINGOS.md --product "SocialMediaOS"
 
 List all intake sessions:
   node scripts/run-blueprint-intake.mjs --list
 
-Check a session status:
+Filter by status:
+  node scripts/run-blueprint-intake.mjs --list --status gap_collection
+
+Check a session:
   node scripts/run-blueprint-intake.mjs --session <id>
 
-Run ARC review on a session:
+Run ARC review:
   node scripts/run-blueprint-intake.mjs --session <id> --arc
 
 Answer a gap:
   node scripts/run-blueprint-intake.mjs --session <id> --answer gap_1 "The answer is..."
+
+Server: ${BASE_URL}
 `);
     process.exit(0);
   }
 
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
-  let callCouncilMember;
-  try {
-    const mod = await import('../services/council-service.js');
-    callCouncilMember = mod.callCouncilMember;
-  } catch (err) {
-    console.error('council-service not available:', err.message);
-    process.exit(1);
-  }
-
-  const { createBlueprintIntakeService } = await import('../services/blueprint-intake.js');
-  const svc = createBlueprintIntakeService(pool, callCouncilMember);
-
   try {
     if (listMode) {
-      const sessions = await svc.listSessions({});
-      if (sessions.length === 0) {
+      const url = statusFilter ? `/api/v1/blueprint/intake?status=${statusFilter}` : '/api/v1/blueprint/intake';
+      const data = await api('GET', url);
+      if (data.count === 0) {
         console.log('No intake sessions found.');
       } else {
-        console.log(`\nBlueprint Intake Sessions (${sessions.length}):`);
+        console.log(`\nBlueprint Intake Sessions (${data.count}):`);
         console.log('─'.repeat(80));
-        for (const s of sessions) {
-          console.log(`  ${s.id}`);
-          console.log(`    Product:  ${s.product_name}`);
-          console.log(`    Flow:     ${s.flow_type}`);
-          console.log(`    Status:   ${s.status}`);
-          console.log(`    Amendment:${s.amendment_file || '(none)'}`);
-          console.log(`    Updated:  ${s.updated_at}`);
+        for (const s of data.sessions) {
+          const badge = s.status === 'ready' ? '✅' : s.status === 'gap_collection' ? '⚠️ ' : s.status === 'failed' ? '❌' : '🔄';
+          console.log(`  ${badge} ${s.id}`);
+          console.log(`      Product:  ${s.product_name}`);
+          console.log(`      Flow:     ${s.flow_type}`);
+          console.log(`      Status:   ${s.status}`);
+          console.log(`      Updated:  ${new Date(s.updated_at).toLocaleString()}`);
           console.log();
         }
       }
-      process.exit(0);
+      return;
     }
 
     if (sessionArg && arcMode) {
       console.log(`\nRunning ARC review on session ${sessionArg}...`);
-      const result = await svc.runArcReview(sessionArg);
+      const data = await api('POST', `/api/v1/blueprint/intake/${sessionArg}/arc`);
+      const r = data.arc_report;
       console.log(`\nARC Report:`);
-      console.log(`  Status:   ${result.status}`);
-      console.log(`  Ready:    ${result.arcReport.ready_to_execute}`);
-      console.log(`  Critical: ${result.arcReport.total_critical}`);
-      console.log(`  Moderate: ${result.arcReport.total_moderate}`);
-      console.log(`  Minor:    ${result.arcReport.total_minor}`);
-      if (result.arcReport.critical?.length) {
+      console.log(`  Status:   ${data.status}`);
+      console.log(`  Ready:    ${data.ready_to_execute}`);
+      console.log(`  Critical: ${r?.total_critical ?? 0}`);
+      console.log(`  Moderate: ${r?.total_moderate ?? 0}`);
+      console.log(`  Minor:    ${r?.total_minor ?? 0}`);
+      if (r?.critical?.length) {
         console.log('\nCritical Issues:');
-        result.arcReport.critical.forEach(c => console.log(`  [${c.step_id}] ${c.issue}`));
+        r.critical.forEach(c => console.log(`  [${c.step_id}] ${c.issue}`));
       }
-      if (result.arcReport.ready_to_execute) {
-        const session = await svc.getSession(sessionArg);
-        console.log(`\nBlueprint written to: ${session.blueprint_file}`);
-        console.log('Ready to execute via: npm run builderos:bp-priority:never-stop');
-      }
-      process.exit(result.arcReport.ready_to_execute ? 0 : 1);
+      if (data.ready_to_execute) console.log('\nReady: POST /api/v1/builder/run to execute blueprint.');
+      process.exit(data.ready_to_execute ? 0 : 1);
     }
 
     if (sessionArg && answerMode) {
@@ -107,85 +140,95 @@ Answer a gap:
         console.error('Usage: --session <id> --answer <gap_id> "<answer text>"');
         process.exit(1);
       }
-      console.log(`Answering gap ${answerGapId} on session ${sessionArg}...`);
-      const result = await svc.answerGap({ sessionId: sessionArg, gapId: answerGapId, answer: answerText });
-      console.log(`  Resolved: ${result.resolved}`);
-      console.log(`  All resolved: ${result.allResolved}`);
-      console.log(`  Remaining: ${result.remainingGaps}`);
-      if (result.allResolved) {
-        console.log('\nAll gaps resolved. Run --arc to validate and write blueprint.');
+      const data = await api('POST', `/api/v1/blueprint/intake/${sessionArg}/answer`, {
+        gap_id: answerGapId,
+        answer: answerText,
+      });
+      console.log(`  Resolved: ${data.resolved}`);
+      console.log(`  All resolved: ${data.all_resolved}`);
+      console.log(`  Remaining: ${data.remaining_gaps}`);
+      if (data.all_resolved) {
+        console.log('\nAll gaps resolved. Run --arc to validate:');
+        console.log(`  node scripts/run-blueprint-intake.mjs --session ${sessionArg} --arc`);
       }
-      process.exit(0);
+      return;
     }
 
     if (sessionArg) {
-      const session = await svc.getSession(sessionArg);
-      if (!session) {
-        console.error(`Session not found: ${sessionArg}`);
-        process.exit(1);
-      }
-      const gaps = session.gaps_json || [];
-      console.log(`\nSession: ${session.id}`);
-      console.log(`  Product: ${session.product_name}`);
-      console.log(`  Flow:    ${session.flow_type}`);
-      console.log(`  Status:  ${session.status}`);
-      console.log(`  Gaps:    ${gaps.length} total, ${gaps.filter(g => !g.resolved).length} open`);
-      if (gaps.filter(g => !g.resolved).length > 0) {
+      const data = await api('GET', `/api/v1/blueprint/intake/${sessionArg}`);
+      const s = data.session;
+      const gaps = s.gaps_json || [];
+      const open = gaps.filter(g => !g.resolved);
+      console.log(`\nSession: ${s.id}`);
+      console.log(`  Product: ${s.product_name}`);
+      console.log(`  Flow:    ${s.flow_type}`);
+      console.log(`  Status:  ${s.status}`);
+      console.log(`  Gaps:    ${gaps.length} total, ${open.length} open`);
+      if (open.length > 0) {
         console.log('\nOpen gaps:');
-        gaps.filter(g => !g.resolved).forEach(g => {
+        open.forEach(g => {
           console.log(`  ${g.id}: ${g.description}`);
-          console.log(`    Fix: node scripts/run-blueprint-intake.mjs --session ${session.id} --answer ${g.id} "your answer"`);
+          console.log(`    → node scripts/run-blueprint-intake.mjs --session ${s.id} --answer ${g.id} "your answer"`);
         });
       }
-      process.exit(0);
+      return;
     }
 
     if (amendmentArg) {
       const product = productArg || amendmentArg.split('/').pop().replace(/^AMENDMENT_\d+_/, '').replace('.md', '');
-      console.log(`\nStarting blueprint intake...`);
+      console.log(`\nStarting blueprint intake:`);
       console.log(`  Amendment: ${amendmentArg}`);
       console.log(`  Product:   ${product}`);
-      console.log(`  Scanning codebase patterns...`);
-      console.log(`  Extracting product intent...`);
-      console.log(`  Generating blueprint...\n`);
+      console.log(`  Server:    ${BASE_URL}`);
 
-      const result = await svc.startBackfill({ amendmentFile: amendmentArg, productName: product });
-
-      console.log(`Session ID: ${result.sessionId}`);
-      console.log(`Status:     ${result.status}`);
-      console.log(`Gaps found: ${result.gapCount}`);
-
-      if (result.gapCount > 0) {
-        console.log('\nOpen gaps (need your input):');
-        result.gaps.forEach(g => {
-          console.log(`  ${g.id}: ${g.description}`);
-        });
-        console.log(`\nAnswer gaps:`);
-        result.gaps.forEach(g => {
-          console.log(`  node scripts/run-blueprint-intake.mjs --session ${result.sessionId} --answer ${g.id} "your answer"`);
-        });
-        console.log(`\nOr use the API:`);
-        console.log(`  POST /api/v1/blueprint/intake/${result.sessionId}/gap-chat`);
-        console.log(`  POST /api/v1/blueprint/intake/${result.sessionId}/answer`);
-      } else {
-        console.log('\nNo gaps. Running ARC review...');
-        const arc = await svc.runArcReview(result.sessionId);
-        console.log(`ARC: ${arc.arcReport.ready_to_execute ? 'PASS — ready to execute' : 'FAIL — critical issues found'}`);
-        if (!arc.arcReport.ready_to_execute) {
-          arc.arcReport.critical?.forEach(c => console.log(`  CRITICAL [${c.step_id}]: ${c.issue}`));
-        } else {
-          const session = await svc.getSession(result.sessionId);
-          console.log(`Blueprint: ${session.blueprint_file}`);
-        }
+      // Read amendment locally — file not available on Railway
+      let amendmentText;
+      try {
+        const { text, resolvedPath } = readAmendmentLocal(amendmentArg);
+        amendmentText = text;
+        console.log(`  File:      ${resolvedPath} (${Math.round(text.length / 1024)}KB)`);
+      } catch (err) {
+        console.error(`\n${err.message}`);
+        process.exit(1);
       }
 
-      process.exit(result.gapCount === 0 ? 0 : 1);
+      console.log(`  Step 1/3: Scanning codebase patterns... (on server)`);
+      console.log(`  Step 2/3: Extracting product intent via ARC...`);
+      console.log(`  Step 3/3: Generating blueprint...\n`);
+
+      const result = await api('POST', '/api/v1/blueprint/intake/backfill', {
+        product_name: product,
+        amendment_file: amendmentArg,
+        amendment_text: amendmentText,
+      });
+
+      console.log(`Session ID: ${result.session_id}`);
+      console.log(`Status:     ${result.status}`);
+      console.log(`Gaps found: ${result.gap_count}`);
+
+      if (result.gap_count > 0) {
+        console.log('\nOpen gaps (need your input):');
+        result.gaps.forEach(g => console.log(`  ${g.id}: ${g.description}`));
+        console.log('\nAnswer each gap:');
+        result.gaps.forEach(g => {
+          console.log(`  node scripts/run-blueprint-intake.mjs --session ${result.session_id} --answer ${g.id} "your answer"`);
+        });
+        process.exit(1);
+      } else {
+        console.log('\nNo gaps. Running ARC review...');
+        const arc = await api('POST', `/api/v1/blueprint/intake/${result.session_id}/arc`);
+        if (arc.ready_to_execute) {
+          console.log('ARC: PASS — blueprint ready to execute');
+        } else {
+          console.log(`ARC: FAIL — ${arc.arc_report?.total_critical || 0} critical issues`);
+          arc.arc_report?.critical?.forEach(c => console.log(`  CRITICAL [${c.step_id}]: ${c.issue}`));
+          process.exit(1);
+        }
+      }
     }
   } catch (err) {
-    console.error('Error:', err.message);
+    console.error(`\nError: ${err.message}`);
     process.exit(1);
-  } finally {
-    await pool.end();
   }
 }
 

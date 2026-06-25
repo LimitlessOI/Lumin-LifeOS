@@ -164,9 +164,11 @@ async function updateSession(pool, id, updates) {
 export function createBlueprintIntakeService(pool, callCouncilMember) {
 
   // ── FLOW 1: Backfill (existing amendment → blueprint) ─────────────────────
-  async function startBackfill({ amendmentFile, productName, ownerId = null }) {
+  // amendmentText takes precedence over amendmentFile — CLI reads locally and passes text,
+  // so the server doesn't need to find the file (docs/ is excluded from Railway Docker image).
+  async function startBackfill({ amendmentFile, amendmentText: inlineText, productName, ownerId = null }) {
     const codebaseScan = await scanCodebasePatterns();
-    const amendmentText = readAmendment(amendmentFile);
+    const amendmentText = inlineText || readAmendment(amendmentFile);
 
     const { rows } = await pool.query(
       `INSERT INTO blueprint_intake_sessions

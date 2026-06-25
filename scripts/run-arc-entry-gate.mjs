@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 /**
- * SYNOPSIS: ARC entry gate — validate a blueprint file for gaps before execution is allowed.
+ * SYNOPSIS: ARC entry gate — structural + GAP_FLAG validation of a blueprint file.
+ * For AI-powered review, use: POST /api/v1/blueprint/intake/:id/arc
  * Usage: node scripts/run-arc-entry-gate.mjs <blueprint-file-path>
- * Exit 0 = ready to execute. Exit 1 = gaps found or file invalid.
+ * Exit 0 = structurally valid. Exit 1 = gaps or missing fields.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
-import pg from 'pg';
-import { createBlueprintIntakeService } from '../services/blueprint-intake.js';
 
-const { Pool } = pg;
 const ROOT = path.resolve(import.meta.dirname, '..');
 
 async function main() {
@@ -42,19 +40,18 @@ async function main() {
   if (gapMatches.length > 0) {
     console.error(`\n[ARC ENTRY GATE] FAIL — ${gapMatches.length} unresolved GAP_FLAG(s):\n`);
     gapMatches.forEach((m, i) => console.error(`  ${i + 1}. ${m[1]}`));
-    console.error('\nResolve gaps before executing: POST /api/v1/blueprint/intake/:id/answer');
+    console.error('\nResolve gaps: POST /api/v1/blueprint/intake/:id/answer');
     process.exit(1);
   }
 
-  // Check required top-level fields
-  const required = ['_meta', 'steps'];
-  const missing = required.filter(k => !blueprint[k]);
+  // Required top-level fields
+  const missing = ['_meta', 'steps'].filter(k => !blueprint[k]);
   if (missing.length > 0) {
     console.error(`[ARC ENTRY GATE] FAIL — Missing required fields: ${missing.join(', ')}`);
     process.exit(1);
   }
 
-  // Check each step for required fields
+  // Step field validation
   const stepIssues = [];
   for (const step of blueprint.steps || []) {
     if (!step.id) stepIssues.push(`Step missing id`);
@@ -63,62 +60,43 @@ async function main() {
     if (!step.ssot_tag) stepIssues.push(`Step ${step.id || '?'} missing ssot_tag`);
     if (!step.deps) stepIssues.push(`Step ${step.id || '?'} missing deps array`);
   }
-
   if (stepIssues.length > 0) {
     console.error(`[ARC ENTRY GATE] FAIL — Step validation errors:`);
     stepIssues.forEach(i => console.error(`  - ${i}`));
     process.exit(1);
   }
 
-  // Optional: run AI-powered ARC review if DB available
-  if (process.env.DATABASE_URL && !process.argv.includes('--no-ai')) {
-    try {
-      const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-      let callCouncilMember;
-      try {
-        const mod = await import('../services/council-service.js');
-        callCouncilMember = mod.callCouncilMember;
-      } catch {
-        console.log('[ARC] council-service not available — skipping AI review');
-      }
-
-      if (callCouncilMember) {
-        const svc = createBlueprintIntakeService(pool, callCouncilMember);
-        // Create a temporary session for the ARC review
-        const { rows } = await pool.query(
-          `INSERT INTO blueprint_intake_sessions (product_name, flow_type, status, blueprint_json)
-           VALUES ($1, 'backfill', 'arc_review', $2) RETURNING id`,
-          [blueprint._meta?.product || 'unknown', JSON.stringify(blueprint)]
-        );
-        const sessionId = rows[0].id;
-        const result = await svc.runArcReview(sessionId);
-
-        console.log('\n[ARC ENTRY GATE] AI Review complete:');
-        console.log(`  Critical: ${result.arcReport.total_critical}`);
-        console.log(`  Moderate: ${result.arcReport.total_moderate}`);
-        console.log(`  Minor:    ${result.arcReport.total_minor}`);
-        console.log(`  Ready:    ${result.arcReport.ready_to_execute}`);
-
-        // Clean up temp session
-        await pool.query('DELETE FROM blueprint_intake_sessions WHERE id = $1', [sessionId]);
-        await pool.end();
-
-        if (!result.arcReport.ready_to_execute) {
-          console.error('\n[ARC ENTRY GATE] FAIL — AI review found critical issues');
-          result.arcReport.critical?.forEach(c => console.error(`  CRITICAL [${c.step_id}]: ${c.issue}`));
-          process.exit(1);
-        }
-      }
-    } catch (err) {
-      console.warn(`[ARC] AI review skipped: ${err.message}`);
+  // Dependency order validation
+  const stepIds = new Set((blueprint.steps || []).map(s => s.id));
+  const depErrors = [];
+  for (const step of blueprint.steps || []) {
+    for (const dep of step.deps || []) {
+      if (!stepIds.has(dep)) depErrors.push(`Step ${step.id} depends on unknown step: ${dep}`);
     }
+  }
+  if (depErrors.length > 0) {
+    console.error(`[ARC ENTRY GATE] FAIL — Dependency errors:`);
+    depErrors.forEach(e => console.error(`  ${e}`));
+    process.exit(1);
+  }
+
+  // Protected file check
+  const neverTouch = [...(blueprint._meta?.never_touch || []), 'server.js', 'services/word-keeper-transcriber.js', 'services/council-service.js', 'config/council-members.js', 'core/two-tier-system-init.js'];
+  const fileConflicts = (blueprint.steps || [])
+    .filter(s => s.file && neverTouch.includes(s.file))
+    .map(s => `Step ${s.id} writes to protected file: ${s.file}`);
+  if (fileConflicts.length > 0) {
+    console.error(`[ARC ENTRY GATE] FAIL — Protected file conflicts:`);
+    fileConflicts.forEach(e => console.error(`  ${e}`));
+    process.exit(1);
   }
 
   console.log(`\n[ARC ENTRY GATE] PASS`);
   console.log(`  Blueprint: ${blueprintPath}`);
-  console.log(`  Product: ${blueprint._meta?.product || 'unknown'}`);
-  console.log(`  Steps: ${(blueprint.steps || []).length}`);
-  console.log(`  Version: ${blueprint._meta?.blueprint_version || 'unknown'}`);
+  console.log(`  Product:   ${blueprint._meta?.product || 'unknown'}`);
+  console.log(`  Version:   ${blueprint._meta?.blueprint_version || 'unknown'}`);
+  console.log(`  Steps:     ${(blueprint.steps || []).length}`);
+  console.log(`\n  For AI review: POST /api/v1/blueprint/intake/<session_id>/arc`);
   process.exit(0);
 }
 
