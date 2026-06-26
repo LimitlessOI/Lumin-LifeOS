@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **NL UI build routing fix** — rounded/visual tweaks → HTML build not color-only CSS; `alpha_probe` skips DB thread merge in battery; PRODUCT_MARKERS button/drawer/lumin | B2 rounded FAIL no_color_intent; Q bleed in battery | ⚠️ deploy | `founder-chat:alpha:battery` |
 | 2026-06-26 | **CSS build bugfix + alpha battery** — `effectiveSkipQuorum` in `runCssPatchWithVerification`; `run-founder-chat-alpha-battery.mjs`; NL UI auto-build; factual web search | Adam alpha: build must build, Q must answer | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
 | 2026-06-26 | **Question-only guard** — `isQuestionOnlyUtterance` skips work executor for "what/how SMOS" counsel turns | SMOS workflow question re-ran content package | ✅ deploy pending | `founder-intent-compiler.js` |
 | 2026-06-26 | **SMOS intent regex** — `founder-intent-compiler.js` catches Social Media OS / content-for-topic without "video" keyword; communication law forbids paraphrase + faux-emotion openings | Adam SMOS ask → counsel theater | ✅ deploy pending | `tests/founder-intent-compiler.test.js` |

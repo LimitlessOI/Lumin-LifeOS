@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-26 css-build-effectiveSkipQuorum-fix",
+  "last_receipt": "2026-06-26 nl-ui-visual-build-routing-alpha-probe",
   "last_change_summary": "Founder chat alpha battery; NL UI auto-build; factual web search on counsel",
   "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
 }

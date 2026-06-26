@@ -19,7 +19,7 @@ import {
   isFounderUiBehaviorChangeRequest,
 } from './chair-intent-signals.js';
 
-const PRODUCT_MARKERS = /\b(html|css|\.js|\.mjs|route|routes\/|services\/|overlay|lifere|lifeos-app|deploy|railway|builder|commit|target_file|ui|nav|bubble|server|migration|blueprint|mission|ssot|amendment|api\/|public\/|npm run|gap-fill)\b/i;
+const PRODUCT_MARKERS = /\b(html|css|\.js|\.mjs|route|routes\/|services\/|overlay|lifere|lifeos-app|deploy|railway|builder|commit|target_file|ui|nav|bubble|button|drawer|lumin|panel|send|server|migration|blueprint|mission|ssot|amendment|api\/|public\/|npm run|gap-fill)\b/i;
 
 const SYSTEM_STATUS_MARKERS = /\b(point b|alpha|progress|keep going|continue building|machine path|receipt scan|queue status|what(?:'s| is) next)\b/i;
 

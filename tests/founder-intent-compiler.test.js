@@ -13,9 +13,9 @@ import { executeFounderWorkIntent } from '../services/founder-work-executors.js'
 import { resolveChairContext } from '../services/chair-context-classifier.js';
 import { isCssOnlyUiFeedback } from '../services/builder-instruction-target.js';
 
-test('rounded send button is CSS UI feedback', () => {
+test('rounded send button routes to build_async not css-only patch', () => {
   const msg = 'make the send button in the lumin drawer slightly more rounded';
-  assert.equal(isCssOnlyUiFeedback(msg), true);
+  assert.equal(isCssOnlyUiFeedback(msg), false);
   const ctx = resolveChairContext(msg, { confirmIntent: true });
   assert.equal(ctx.channel, 'build_async');
 });

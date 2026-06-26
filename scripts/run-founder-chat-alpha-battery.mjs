@@ -54,6 +54,7 @@ async function send(id, text, opts = {}) {
       text,
       action: 'auto',
       conversational_mode: true,
+      alpha_probe: true,
       ui_context: opts.ui_context || { surface: 'lifeos-app' },
       conversation_history: opts.history || [],
     }),

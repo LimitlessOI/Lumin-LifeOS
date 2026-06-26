@@ -1185,6 +1185,7 @@ HOW TO RESPOND:
         userHandle,
         conversationHistory: Array.isArray(req.body?.conversation_history) ? req.body.conversation_history : [],
         uiContext: req.body?.ui_context && typeof req.body.ui_context === 'object' ? req.body.ui_context : null,
+        alphaProbe: req.body?.alpha_probe === true,
       }, {
         buildDisplayBundle,
         translateToPlainEnglish,

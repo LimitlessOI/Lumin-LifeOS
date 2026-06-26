@@ -353,10 +353,11 @@ export async function runLuminChairTurn(ctx, deps) {
     conversationHistory = [],
     uiContext = null,
     userHandle = null,
+    alphaProbe = false,
   } = ctx;
 
   let mergedHistory = conversationHistory;
-  if (deps.luminPersist && ctx.userId) {
+  if (!alphaProbe && deps.luminPersist && ctx.userId) {
     const serverHist = await loadFounderThreadHistory(deps.luminPersist, ctx.userId, { limit: 24 });
     mergedHistory = mergeConversationHistory(serverHist, conversationHistory, { max: 24 });
   }
@@ -376,7 +377,7 @@ export async function runLuminChairTurn(ctx, deps) {
     forceExecute = true;
   } else if (!doPrefix.forcedExecute && isBuildRequest(effectiveInput) && hasProductBuildContext(effectiveInput)) {
     const inferred = inferTargetFileFromFounderFeedback(effectiveInput);
-    if (inferred?.target_file && inferred.confidence === 'high') {
+    if (inferred?.target_file && ['high', 'medium'].includes(inferred.confidence)) {
       effectiveInput = `do: ${effectiveInput}\ntarget_file: ${inferred.target_file}`;
       forceExecute = true;
     }
