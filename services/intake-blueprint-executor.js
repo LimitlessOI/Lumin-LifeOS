@@ -8,7 +8,7 @@ import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
 
 const REFERENCE_FILES_BY_TYPE = {
   esm: ['services/action-inbox.js'],
-  esm_script: ['scripts/verify-project.mjs'],
+  esm_script: ['scripts/verify-marketing-phase1.mjs'],
   html: ['public/overlay/lifeos-app.html'],
 };
 
@@ -45,7 +45,7 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
     esm: isRouteFile
       ? 'Route factory: export function createXxxRoutes({ pool, requireKey, logger }) — express.Router(), requireKey on protected routes, owner_id from req.lifeosUser?.sub. Do NOT import ../../core/* paths.'
       : 'Service factory: export function createXxx({ pool, logger }) — use pool.query(sql, params). Do NOT import ../../core/db.js or stripe SDK directly. Match reference file style in files[].',
-    esm_script: 'Standalone node .mjs acceptance script — #!/usr/bin/env node, node built-ins only, must pass node --check. Exit 0 on PASS, process.exit(1) on FAIL. No markdown fences. Match scripts/verify-project.mjs structure.',
+    esm_script: 'Standalone node .mjs acceptance script — #!/usr/bin/env node, executable JavaScript ONLY (NOT a JSON manifest). fetch + x-command-key HTTP probes. Exit 0 on PASS, process.exit(1) on FAIL. No markdown fences.',
     html: 'HTML overlay page in public/overlay/',
   }[step.type] || 'Implement per blueprint purpose.';
 

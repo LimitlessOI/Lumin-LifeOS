@@ -602,6 +602,12 @@ function validateSqlMigrationContent(sqlContent) {
   return { ok: true };
 }
 
+function looksLikeJsonManifestInsteadOfJs(content, target) {
+  if (!/scripts\/verify-.*\.mjs$/i.test(String(target || ''))) return false;
+  const t = String(content || '').trimStart();
+  return t.startsWith('{') && /"project_id"|"required_files"|"required_routes"/.test(t);
+}
+
 async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
   let tmpFile = null;
   try {
@@ -2250,6 +2256,34 @@ export function createLifeOSCouncilBuilderRoutes({
     // A model is never trusted because it's smart — it must be checked.
     const isJsFile = /\.(js|mjs|cjs)$/.test(resolvedTarget);
     if (isJsFile) {
+      if (looksLikeJsonManifestInsteadOfJs(generatedOutput, resolvedTarget)) {
+        log.warn({ resolvedTarget }, '[BUILDER] verify script returned JSON manifest — retry as executable .mjs');
+        let manifestRetryCapture = null;
+        const manifestRetryRes = {
+          status(code) { return { json(d) { manifestRetryCapture = { code, data: d }; } }; },
+          json(d) { manifestRetryCapture = { code: 200, data: d }; },
+        };
+        await dispatchTask({
+          body: {
+            ...taskBody,
+            target_file: resolvedTarget || target_file,
+            mode: taskBody.mode || 'code',
+            useCache: false,
+            execution_only: false,
+            model: 'gemini_flash',
+            max_output_tokens: 16384,
+            spec: [
+              taskBody.spec,
+              'CRITICAL: Output executable JavaScript .mjs file — NOT a JSON manifest, NOT verify-project.json.',
+              'Use fetch() + process.env.PUBLIC_BASE_URL + process.env.COMMAND_CENTER_KEY to probe HTTP routes.',
+            ].filter(Boolean).join('\n'),
+          },
+        }, manifestRetryRes);
+        if (manifestRetryCapture?.code === 200 && manifestRetryCapture.data?.ok && manifestRetryCapture.data.output) {
+          generatedOutput = manifestRetryCapture.data.output;
+          model_used = manifestRetryCapture.data.model_used;
+        }
+      }
       const chk = await verifyGeneratedJavaScriptWithNodeCheck(generatedOutput, resolvedTarget);
       const syntaxOk = chk.ok;
       const syntaxError = chk.error || null;

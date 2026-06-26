@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:54:49.665Z",
+  "generated_at": "2026-06-26T00:57:12.085Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12567,
   "files": [
@@ -41763,9 +41763,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 37919,
-      "mtime": "2026-06-26T00:52:42.839Z",
-      "indexed_at": "2026-06-26T00:52:47.446Z"
+      "bytes": 38181,
+      "mtime": "2026-06-26T00:57:03.445Z",
+      "indexed_at": "2026-06-26T00:57:12.085Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -41962,9 +41962,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 490413,
-      "mtime": "2026-06-26T00:36:56.035Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z"
+      "bytes": 490396,
+      "mtime": "2026-06-26T00:56:56.454Z",
+      "indexed_at": "2026-06-26T00:57:12.085Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -72365,9 +72365,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 117826,
-      "mtime": "2026-06-26T00:36:56.036Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 119482,
+      "mtime": "2026-06-26T00:56:52.216Z",
+      "indexed_at": "2026-06-26T00:57:12.085Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88531,9 +88531,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 11321,
-      "mtime": "2026-06-26T00:52:29.836Z",
-      "indexed_at": "2026-06-26T00:52:47.446Z",
+      "bytes": 11326,
+      "mtime": "2026-06-26T00:56:38.690Z",
+      "indexed_at": "2026-06-26T00:57:12.085Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

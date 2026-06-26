@@ -161,7 +161,8 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
-| 2026-06-26 | **Acceptance verify runtime skip** — paired with BUILDEROS_ALPHA verifier fix; esm_script forbids pg/pool imports. | MOS-P1-005 runtime gate false fail. | ⚠️ deploy + re-run MOS-P1-005 | intake execute |
+| 2026-06-26 | **Verify script not JSON** — esm_script spec forbids JSON manifest; reference verify-marketing-phase1.mjs; builder auto-retry on JSON output. | MOS-P1-005 emitted project manifest JSON instead of .mjs. | ⚠️ deploy + re-run MOS-P1-005 | intake execute |
+| 2026-06-26 | **Acceptance verify runtime skip** — paired with BUILDEROS_ALPHA verifier fix; esm_script forbids pg/pool imports. | MOS-P1-005 runtime gate false fail. | ✅ argv fix deployed | intake execute |
 | 2026-06-26 | **Verify script intake hints** — esm_script uses verify-project.mjs reference; inject all impl files; shebang/main structure spec. | MOS-P1-005 syntax fail (unclosed block comment). | ✅ syntax pass | intake execute |
 | 2026-06-26 | **Intake token budget** — esm steps request 16k max_output_tokens; drop amendment from files[]; style-guide-only hint. | MOS-P1-002 truncated mid-file (verifier syntax fail). | ✅ MOS-P1-002/003 committed | see BUILDEROS_ALPHA receipt |
 | 2026-06-26 | **Intake executor codebase grounding** — `scanCodebasePatterns()` injected into step spec; reference files (action-inbox service/routes); forbidden import list. Governance retry passes `target_file`. | MOS-P1-002 blocked precommit governance (WRONG_IMPORT ../../core/*). | ⚠️ deploy + re-run from MOS-P1-002 | `blueprint:intake:execute --from MOS-P1-002` |
