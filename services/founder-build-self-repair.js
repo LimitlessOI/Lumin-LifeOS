@@ -26,6 +26,11 @@ import {
   isVoiceSendWireOrder,
 } from './founder-voice-send-patch.js';
 import {
+  applyEnterKeySendWirePatch,
+  commitEnterKeySendPatchViaBuilder,
+  isEnterKeySendWireOrder,
+} from './founder-enter-send-patch.js';
+import {
   assertFounderBuildBaseUrl,
   runFounderSuccessGate,
   triggerRailwayRedeploy,
@@ -130,6 +135,17 @@ async function tryApplyQuorumPlan({
 
   if (approach === 'surgical_html_comment' || isSurgicalHtmlCommentPatch(nextTask) || isSurgicalHtmlCommentPatch(task)) {
     return runSurgicalHtmlPatchWithVerification({
+      task: nextTask,
+      commandKey,
+      baseUrl,
+      repoRoot,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+    });
+  }
+
+  if (approach === 'enter_key_send_wire' || isEnterKeySendWireOrder(nextTask) || isEnterKeySendWireOrder(task)) {
+    return runEnterKeySendPatchWithVerification({
       task: nextTask,
       commandKey,
       baseUrl,
@@ -656,6 +672,92 @@ async function runVoiceSendPatchWithVerification({
   }, { action: 'build', task });
 }
 
+async function runEnterKeySendPatchWithVerification({
+  task,
+  commandKey,
+  baseUrl,
+  repoRoot,
+  buildFailureReceipt,
+  enforceExecutionTruth,
+}) {
+  const baseCheck = assertFounderBuildBaseUrl(baseUrl);
+  if (!baseCheck.ok) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: baseCheck.blocker,
+      failure_code: baseCheck.code,
+      execution_path: 'founder_enter_send_patch',
+    }, { action: 'build', task });
+  }
+
+  const patchResult = applyEnterKeySendWirePatch({ root: repoRoot, task });
+  if (!patchResult.ok) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: patchResult.reason || 'enter_send_patch_failed',
+      failure_code: 'ENTER_SEND_PATCH_FAILED',
+      execution_path: 'founder_enter_send_patch',
+    }, { action: 'build', task });
+  }
+
+  if (patchResult.already_present) {
+    return enforceExecutionTruth({
+      ok: true,
+      committed: false,
+      pass_fail: 'PASS',
+      target_file: patchResult.files?.map((f) => f.target_file).join(', '),
+      human_summary: `Enter-to-send already wired (${patchResult.files?.map((f) => f.target_file).join(', ')}). Hard refresh once if behavior looks stale.`,
+      execution_path: 'founder_enter_send_patch',
+      task_meta: { patch: patchResult.patch, already_present: true },
+    }, { action: 'build', task });
+  }
+
+  let execRes;
+  try {
+    execRes = await commitEnterKeySendPatchViaBuilder({
+      baseUrl: baseCheck.baseUrl,
+      commandKey,
+      patchResult,
+    });
+  } catch (err) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: err.message,
+      execution_path: 'founder_enter_send_patch',
+    }, { action: 'build', task });
+  }
+
+  const execJson = execRes.json || {};
+  const committedFiles = execRes.committed_files || patchResult.files?.map((f) => f.target_file) || [];
+  if (!execJson.ok || !execJson.committed) {
+    const receipt = buildFailureReceipt(task, {}, execJson);
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: receipt.blocker,
+      execution_receipt: receipt,
+      execution_path: 'founder_enter_send_patch',
+    }, { action: 'build', task });
+  }
+
+  await triggerRailwayRedeploy({ baseUrl: baseCheck.baseUrl, commandKey });
+
+  return enforceExecutionTruth({
+    ok: true,
+    committed: true,
+    pass_fail: 'PASS',
+    target_file: committedFiles.join(', '),
+    sha: execJson.sha || execJson.commit_sha || null,
+    human_summary: `Enter sends message (Shift+Enter = newline) in ${committedFiles.join(', ')}. Hard refresh once.`,
+    execution_path: 'founder_enter_send_patch',
+    task_meta: { patch: patchResult.patch },
+    exec_meta: execJson,
+  }, { action: 'build', task });
+}
+
 export async function runFounderBuildWithSelfRepair(options) {
   const {
     task,
@@ -711,6 +813,17 @@ export async function runFounderBuildWithSelfRepair(options) {
 
   if (isVoiceSendWireOrder(currentTask)) {
     return runVoiceSendPatchWithVerification({
+      task: currentTask,
+      commandKey,
+      baseUrl: base,
+      repoRoot,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+    });
+  }
+
+  if (isEnterKeySendWireOrder(currentTask)) {
+    return runEnterKeySendPatchWithVerification({
       task: currentTask,
       commandKey,
       baseUrl: base,

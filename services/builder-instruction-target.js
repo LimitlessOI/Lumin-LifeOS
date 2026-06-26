@@ -90,6 +90,13 @@ export function inferTargetFileFromFounderFeedback(instruction) {
     && /\b(send|post|submit|message)\b/i.test(text)) {
     return { target_file: CANONICAL_FOUNDER_UI_TARGET, source: 'voice_send_heuristic', confidence: 'high' };
   }
+  if (/\b(enter|return key|hit enter|press enter)\b/i.test(text)
+    && /\b(send|post|submit|message|chat|box|field|textarea|typing)\b/i.test(text)) {
+    const surface = /\b(lumin drawer|lumin-input|lifeos-app)\b/i.test(text)
+      ? CANONICAL_FOUNDER_UI_TARGET
+      : 'public/overlay/lifeos-dashboard.html';
+    return { target_file: surface, source: 'enter_send_heuristic', confidence: 'high' };
+  }
   if (/\b(lifere|life-?re)\b/i.test(text)) {
     return { target_file: 'public/overlay/lifeos-lifere.html', source: 'keyword_match', confidence: 'medium' };
   }

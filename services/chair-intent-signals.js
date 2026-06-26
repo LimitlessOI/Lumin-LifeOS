@@ -33,18 +33,37 @@ export function isPureCounselQuestion(text = '') {
   return true;
 }
 
-/** Founder repair order — must route to build or fail-closed ack, never counsel deflection. */
+/** Founder meta-repair order — governance probe, not a normal product change request. */
 export function isFounderRepairOrderIntent(text = '') {
   const t = String(text || '').trim();
   if (!t || /^\s*(do|execute|run)\s*:/i.test(t)) return false;
+  // Normal product asks ("I want you to make it so Enter sends…") are builds, not repair probes.
+  if (/\b(want|need|like|please)\b.*\b(you to )?make (it|this) (so|where|when)\b/i.test(t)) return false;
+  if (/\b(hit|press|when I) (enter|return)\b/i.test(t) && /\b(send|message|chat|box|field|textarea)\b/i.test(t)) {
+    return false;
+  }
   if (/\bmake that change\b/i.test(t)) return true;
   if (/\bfix the fact that\b/i.test(t)) return true;
   if (/\bdon'?t tell me (what|about|the)\b/i.test(t)) return true;
   if (/\b(you'?re|you are) supposed to (fix|make|do|repair)\b/i.test(t)) return true;
   if (/\bdirect connection\b/i.test(t) && /\b(repair|fix|change|make)\b/i.test(t)) return true;
-  if (/\b(tell you to|you to) (fix|repair|make)\b/i.test(t)) return true;
+  if (/\b(i told you to|tell you to) (fix|repair)\b/i.test(t)) return true;
   if (/\bmake that change\b.*\bwhen I say\b/i.test(t)) return true;
   return false;
+}
+
+/** Natural-language UI behavior change — infer surface and auto-execute (no repair-order HALT). */
+export function isFounderUiBehaviorChangeRequest(text = '') {
+  const t = String(text || '').trim();
+  if (!t) return null;
+  const enterSend = /\b(enter|return key|hit enter|press enter|newline|line break)\b/i.test(t)
+    && /\b(send|post|submit|message|chat|box|field|textarea|input|typing|type out|response)\b/i.test(t);
+  const shiftEnter = /\bshift\+enter|shift enter\b/i.test(t) && /\b(newline|line break|next line)\b/i.test(t);
+  if (!enterSend && !shiftEnter) return null;
+  const target = /\b(lumin drawer|lumin-input|lifeos-app|app shell)\b/i.test(t)
+    ? 'public/overlay/lifeos-app.html'
+    : 'public/overlay/lifeos-dashboard.html';
+  return { target_file: target, kind: 'enter_key_send' };
 }
 
 export function isBuildRequest(text) {

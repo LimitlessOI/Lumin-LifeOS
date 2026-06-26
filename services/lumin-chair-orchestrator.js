@@ -12,7 +12,7 @@ import {
   extractMissionIdFromText,
   runFoundationPipelineForFounder,
 } from './lifeos-mission-pipeline-executor.js';
-import { isRepairContinuationIntent, extractTargetFileFromInstruction } from './builder-instruction-target.js';
+import { isRepairContinuationIntent, extractTargetFileFromInstruction, resolveFounderBuildTarget } from './builder-instruction-target.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
 import { buildListeningOnboardingContext } from './lifeos-listening-profile.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
@@ -52,6 +52,7 @@ import {
   isExplicitExecuteCommand,
   isPureCounselQuestion,
   isFounderRepairOrderIntent,
+  isFounderUiBehaviorChangeRequest,
 } from './chair-intent-signals.js';
 import { stripChairDoPrefix, tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
 import {
@@ -312,8 +313,13 @@ export async function runLuminChairTurn(ctx, deps) {
 
   const doPrefix = stripChairDoPrefix(cleanedInput);
   const actionSource = ctx.originalText || cleanedInput;
-  const effectiveInput = doPrefix.text || cleanedInput;
-  const forceExecute = doPrefix.forcedExecute || confirmIntent;
+  let effectiveInput = doPrefix.text || cleanedInput;
+  let forceExecute = doPrefix.forcedExecute || confirmIntent;
+  const uiBehavior = isFounderUiBehaviorChangeRequest(effectiveInput);
+  if (uiBehavior && !doPrefix.forcedExecute) {
+    effectiveInput = `do: ${effectiveInput}\ntarget_file: ${uiBehavior.target_file}`;
+    forceExecute = true;
+  }
   const likelyBuild = isBuildRequest(effectiveInput)
     || isRepairContinuationIntent(effectiveInput)
     || hasHighConfidenceBuildTarget(effectiveInput);
@@ -351,6 +357,7 @@ export async function runLuminChairTurn(ctx, deps) {
     isFounderRepairOrderIntent(effectiveInput)
     && !forceExecute
     && !extractTargetFileFromInstruction(effectiveInput)
+    && !resolveFounderBuildTarget(effectiveInput)
   ) {
     return chairRepairOrderAckResponse({
       intakeNormalized,

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T16:11:13.033Z",
+  "generated_at": "2026-06-26T16:19:06.107Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12581,
+  "file_count": 12582,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 492866,
-      "mtime": "2026-06-26T16:11:04.145Z",
-      "indexed_at": "2026-06-26T16:11:11.043Z"
+      "bytes": 493211,
+      "mtime": "2026-06-26T16:18:28.019Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42500,9 +42500,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 139949,
-      "mtime": "2026-06-26T16:07:26.631Z",
-      "indexed_at": "2026-06-26T16:11:11.043Z"
+      "bytes": 140221,
+      "mtime": "2026-06-26T16:18:59.995Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -74737,9 +74737,9 @@
     {
       "path": "scripts/run-direct-execution-point-b-live.mjs",
       "synopsis": "Point B direct execution — prove do: orders BUILD and complete on production.",
-      "bytes": 6176,
-      "mtime": "2026-06-26T16:07:26.632Z",
-      "indexed_at": "2026-06-26T16:11:11.043Z",
+      "bytes": 6510,
+      "mtime": "2026-06-26T16:18:09.085Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86692,9 +86692,9 @@
     {
       "path": "services/builder-instruction-target.js",
       "synopsis": "Parse repo-relative target paths and domains from operator/build instructions.",
-      "bytes": 8918,
-      "mtime": "2026-06-26T15:55:17.780Z",
-      "indexed_at": "2026-06-26T16:11:11.043Z",
+      "bytes": 9322,
+      "mtime": "2026-06-26T16:17:27.146Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -87087,9 +87087,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 8769,
-      "mtime": "2026-06-26T15:56:22.880Z",
-      "indexed_at": "2026-06-26T16:11:11.043Z",
+      "bytes": 9144,
+      "mtime": "2026-06-26T16:18:20.912Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87127,9 +87127,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 3048,
-      "mtime": "2026-06-26T15:18:19.447Z",
-      "indexed_at": "2026-06-26T16:11:11.043Z",
+      "bytes": 4196,
+      "mtime": "2026-06-26T16:17:25.627Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88168,9 +88168,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 31449,
-      "mtime": "2026-06-26T16:07:26.634Z",
-      "indexed_at": "2026-06-26T16:11:11.043Z",
+      "bytes": 34929,
+      "mtime": "2026-06-26T16:18:00.808Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -88233,6 +88233,16 @@
       "indexed_at": "2026-06-26T16:11:11.043Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/founder-enter-send-patch.js",
+      "synopsis": "Mechanical Enter-to-send for dashboard + Lumin drawer chat inputs.",
+      "bytes": 5250,
+      "mtime": "2026-06-26T16:18:36.189Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
     },
     {
@@ -89737,9 +89747,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 29031,
-      "mtime": "2026-06-26T15:56:31.163Z",
-      "indexed_at": "2026-06-26T16:11:11.043Z",
+      "bytes": 29373,
+      "mtime": "2026-06-26T16:17:47.803Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95461,9 +95471,9 @@
     {
       "path": "tests/chair-context-classifier.test.js",
       "synopsis": "js — tests/chair-context-classifier.test.js.",
-      "bytes": 2134,
-      "mtime": "2026-06-26T15:19:39.026Z",
-      "indexed_at": "2026-06-26T16:11:11.043Z"
+      "bytes": 2523,
+      "mtime": "2026-06-26T16:18:02.475Z",
+      "indexed_at": "2026-06-26T16:19:06.107Z"
     },
     {
       "path": "tests/chair-direct-connection-truth.test.js",

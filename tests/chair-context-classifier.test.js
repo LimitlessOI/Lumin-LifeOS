@@ -50,4 +50,11 @@ test('founder repair order detected and scores build path', () => {
   assert.equal(ctx.channel, 'build_async');
 });
 
+test('natural enter-send ask is product build not repair-order HALT', () => {
+  const msg = 'I want you to make it so when I hit enter after typing out a response in this box for it to send the message instead of go down to the next line';
+  assert.equal(isFounderRepairOrderIntent(msg), false);
+  const ctx = resolveChairContext(msg, {});
+  assert.equal(ctx.channel, 'build_async');
+});
+
 console.log('✅ chair-context-classifier.test.js passed');

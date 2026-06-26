@@ -16,6 +16,7 @@ import {
   isExplicitExecuteCommand,
   isBuildRequest,
   isFounderRepairOrderIntent,
+  isFounderUiBehaviorChangeRequest,
 } from './chair-intent-signals.js';
 
 const PRODUCT_MARKERS = /\b(html|css|\.js|\.mjs|route|routes\/|services\/|overlay|lifere|lifeos-app|deploy|railway|builder|commit|target_file|ui|nav|bubble|server|migration|blueprint|mission|ssot|amendment|api\/|public\/|npm run|gap-fill)\b/i;
@@ -64,6 +65,7 @@ export function computeContextScores(text = '') {
   if (isProductBuildChangeVerb(t)) scores.build += 4;
   if (isRepairContinuationIntent(t)) scores.build += 8;
   if (isFounderRepairOrderIntent(t)) scores.build += 12;
+  if (isFounderUiBehaviorChangeRequest(t)) scores.build += 20;
   if (hasHighConfidenceBuildTarget(t)) scores.build += 6;
   if (/\b(fix|add|change|implement|wire|update)\s+(this|that|it)\b/i.test(t)) scores.build += 10;
 
@@ -165,6 +167,17 @@ export function resolveChairContext(text = '', ctx = {}) {
     return {
       channel: 'blueprint_execute',
       domain: 'system_execute',
+      confidence: 1,
+      requires_execute_clarify: false,
+      personal_search: false,
+      scores,
+    };
+  }
+
+  if (isFounderUiBehaviorChangeRequest(t)) {
+    return {
+      channel: useTerminalForBuild ? 'build_terminal' : 'build_async',
+      domain: 'product_build',
       confidence: 1,
       requires_execute_clarify: false,
       personal_search: false,

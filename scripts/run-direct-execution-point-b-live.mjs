@@ -104,6 +104,14 @@ const PROBES = [
     pollUntil: ['PASS', 'FAIL'],
     allowAlreadyPresent: true,
   },
+  {
+    id: 'D5_adam_enter_natural',
+    text: 'I want you to make it so when I hit enter after typing out a response in this box for it to send the message instead of go down to the next line',
+    expectChannel: 'build_async',
+    expectTruth: 'BUILD_ATTEMPTED',
+    pollUntil: ['PASS', 'FAIL'],
+    allowAlreadyPresent: true,
+  },
 ];
 
 if (!BASE || !KEY) {
