@@ -8,7 +8,7 @@ import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
 
 const REFERENCE_FILES_BY_TYPE = {
   esm: ['services/action-inbox.js'],
-  esm_script: ['scripts/verify-marketing-phase1.mjs'],
+  esm_script: ['scripts/verify-project.mjs'],
   html: ['public/overlay/lifeos-app.html'],
 };
 
@@ -45,7 +45,7 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
     esm: isRouteFile
       ? 'Route factory: export function createXxxRoutes({ pool, requireKey, logger }) — express.Router(), requireKey on protected routes, owner_id from req.lifeosUser?.sub. Do NOT import ../../core/* paths.'
       : 'Service factory: export function createXxx({ pool, logger }) — use pool.query(sql, params). Do NOT import ../../core/db.js or stripe SDK directly. Match reference file style in files[].',
-    esm_script: 'Standalone node .mjs acceptance script — exit 0 on PASS, non-zero on FAIL.',
+    esm_script: 'Standalone node .mjs acceptance script — #!/usr/bin/env node, node built-ins only, must pass node --check. Exit 0 on PASS, process.exit(1) on FAIL. No markdown fences. Match scripts/verify-project.mjs structure.',
     html: 'HTML overlay page in public/overlay/',
   }[step.type] || 'Implement per blueprint purpose.';
 
@@ -86,6 +86,10 @@ function formatScanHints(step, scan) {
     lines.push(`DB pattern: ${scan.db_pattern?.source || 'pool from ctx — plain SQL in .sql files only'}`);
     lines.push(`Idempotent DDL: ${scan.db_pattern?.idempotent || 'CREATE TABLE IF NOT EXISTS'}`);
   }
+  if (step.type === 'esm_script') {
+    lines.push('Verify script: fetch JSON from PUBLIC_BASE_URL + COMMAND_CENTER_KEY env; probe routes created in prior blueprint steps.');
+    lines.push('Structure: shebang → imports → async main() → main().catch(() => process.exit(1)); no unclosed block comments.');
+  }
   if (step.type === 'esm') {
     lines.push(`DB: ${scan.db_pattern?.source || 'pool.query(sql, params) — pool injected via factory, never ../../core/*'}`);
     lines.push(`Auth: ${scan.auth_pattern?.owner_id_guard || 'req.lifeosUser?.sub for owner_id'}`);
@@ -110,6 +114,13 @@ function depsToContextFiles(step, blueprint) {
   }
   for (const ref of REFERENCE_FILES_BY_TYPE[step.type] || []) {
     if (!files.includes(ref)) files.push(ref);
+  }
+  if (step.type === 'esm_script') {
+    for (const s of blueprint.steps || []) {
+      if (s.type === 'esm_script' || s.id === step.id) continue;
+      const f = stepTargetFile(s);
+      if (f && !files.includes(f)) files.push(f);
+    }
   }
   if (step.type === 'esm' && /routes\//.test(String(stepTargetFile(step) || ''))) {
     const routeRef = 'routes/action-inbox-routes.js';
