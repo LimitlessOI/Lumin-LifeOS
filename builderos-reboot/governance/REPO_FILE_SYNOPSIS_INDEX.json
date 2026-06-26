@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T01:03:33.702Z",
+  "generated_at": "2026-06-26T01:06:12.031Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12567,
   "files": [
@@ -35447,9 +35447,9 @@
     {
       "path": "config/builder-safe-scope.js",
       "synopsis": "config/builder-safe-scope.js",
-      "bytes": 2122,
-      "mtime": "2026-06-24T20:34:41.959Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 2289,
+      "mtime": "2026-06-26T01:05:09.937Z",
+      "indexed_at": "2026-06-26T01:06:12.031Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]
@@ -41962,9 +41962,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 490671,
-      "mtime": "2026-06-26T01:03:25.572Z",
-      "indexed_at": "2026-06-26T01:03:33.702Z"
+      "bytes": 490970,
+      "mtime": "2026-06-26T01:05:52.571Z",
+      "indexed_at": "2026-06-26T01:06:12.031Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -72365,9 +72365,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 122250,
-      "mtime": "2026-06-26T01:02:35.972Z",
-      "indexed_at": "2026-06-26T01:03:33.702Z",
+      "bytes": 122291,
+      "mtime": "2026-06-26T01:05:10.630Z",
+      "indexed_at": "2026-06-26T01:06:12.031Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87667,9 +87667,9 @@
     {
       "path": "services/deployment-service.js",
       "synopsis": "deployment-service.js",
-      "bytes": 23914,
-      "mtime": "2026-06-24T20:55:45.737Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 24186,
+      "mtime": "2026-06-26T01:05:14.878Z",
+      "indexed_at": "2026-06-26T01:06:12.031Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95408,9 +95408,9 @@
     {
       "path": "tests/deployment-service-package-guard.test.js",
       "synopsis": "Regression tests for the package.json protected-scripts guard in",
-      "bytes": 4680,
-      "mtime": "2026-06-21T21:39:28.068Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 5534,
+      "mtime": "2026-06-26T01:05:48.673Z",
+      "indexed_at": "2026-06-26T01:06:12.031Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

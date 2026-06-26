@@ -124,3 +124,29 @@ test('guard — non-package.json files are not blocked by guard', async () => {
     );
   }
 });
+
+test('safe-scope — startup/register-runtime-routes.js blocked without allowRouteRegistration', async () => {
+  const { commitToGitHub } = makeService();
+  await assert.rejects(
+    () => commitToGitHub('startup/register-runtime-routes.js', '// routes', 'test'),
+    /builder-safe-scope/,
+  );
+});
+
+test('safe-scope — allowRouteRegistration bypasses startup block for register-runtime-routes.js', async () => {
+  const { commitToGitHub } = makeService();
+  try {
+    await commitToGitHub(
+      'startup/register-runtime-routes.js',
+      'export async function registerRuntimeRoutes() {}',
+      'wire test',
+      'main',
+      { allowRouteRegistration: true },
+    );
+  } catch (err) {
+    assert.ok(
+      !err.message.includes('builder-safe-scope'),
+      `Route registration bypass should skip safe-scope block: ${err.message}`,
+    );
+  }
+});

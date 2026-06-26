@@ -44,6 +44,9 @@ export const BLOCKED_WRITE_PATHS = Object.freeze([
   'docs/SSOT_COMPANION.md',
 ]);
 
+/** Sole startup path BuilderOS may append route imports/mounts (autoWireRoute only). */
+export const ROUTE_REGISTRATION_FILE = 'startup/register-runtime-routes.js';
+
 // Task types the supervised Builder may execute without extra approval.
 export const SAFE_TASK_TYPES = Object.freeze([
   'create_service',

@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-26 — intake blueprint executor codebase grounding + FPv2 double-gate fix for ARC-ready builds.
+**Last Updated:** 2026-06-26 — route registration safe-scope bypass for autoWireRoute.
 
 ---
 
@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **`deployment-service.js` + `builder-safe-scope.js`** — `allowRouteRegistration` bypass for `startup/register-runtime-routes.js` only; `autoWireRoute` passes flag. | wire-route blocked by builder-safe-scope on entire `startup/` prefix. | ⚠️ deploy + wire socialmediaos + re-run MOS-P1-003/005 | intake execute |
 | 2026-06-26 | **`routes/lifeos-council-builder-routes.js`** — product route auto-wire (`routes/*-routes.js`), `POST /builder/wire-route`, mount path `/api/v1/{product}`. | MOS-P1-003 socialmediaos routes never registered. | ⚠️ deploy + wire + re-run routes step | intake execute |
 | 2026-06-26 | **`routes/lifeos-council-builder-routes.js`** — detect JSON manifest masquerading as verify-*.mjs; auto-retry as executable JS. | MOS-P1-005 model output JSON not JavaScript. | ✅ fixed | intake execute |
 | 2026-06-26 | **FPv2 double-gate fix** — `dispatchTask` verifies intake clearance; `/build` passes target_file. | MOS-P1-001 INTENT_AMBIGUITY at dispatchTask. | ✅ deployed | see above |

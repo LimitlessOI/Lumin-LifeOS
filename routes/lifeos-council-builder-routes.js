@@ -1932,7 +1932,8 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
       REGISTER_PATH,
       current,
       `[system-build] wire ${exportName} to register-runtime-routes.js`,
-      branch
+      branch,
+      { allowRouteRegistration: true },
     );
     const mirrorReg = await mirrorCommittedContentToRepoRoot(REGISTER_PATH, current);
     if (!mirrorReg.ok) {

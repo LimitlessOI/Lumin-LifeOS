@@ -25,11 +25,14 @@ import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
 import { promises as fsPromises } from 'fs';
 import { ensureSynopsisInContent, isInFileEnforceable } from '../scripts/lib/file-synopsis.mjs';
-import { BLOCKED_WRITE_PATHS } from '../config/builder-safe-scope.js';
+import { BLOCKED_WRITE_PATHS, ROUTE_REGISTRATION_FILE } from '../config/builder-safe-scope.js';
 
 const execFile = promisify(execFileCb);
 
-function assertNotBuilderBlockedPath(normalizedPath, label = 'commitToGitHub') {
+function assertNotBuilderBlockedPath(normalizedPath, label = 'commitToGitHub', { allowRouteRegistration = false } = {}) {
+  if (allowRouteRegistration && normalizedPath === ROUTE_REGISTRATION_FILE) {
+    return;
+  }
   for (const blocked of BLOCKED_WRITE_PATHS) {
     const b = String(blocked || '').replace(/\/$/, '');
     if (normalizedPath === b || normalizedPath.startsWith(blocked)) {
@@ -91,7 +94,7 @@ export function createDeploymentService(deps) {
    * @param {string} message    — commit message
    * @param {string} [branch]   — target branch (default: GITHUB_DEPLOY_BRANCH → 'main')
    */
-  async function commitToGitHub(filePath, content, message, branch) {
+  async function commitToGitHub(filePath, content, message, branch, options = {}) {
     const token = GITHUB_TOKEN?.trim();
     if (!token) throw new Error('GITHUB_TOKEN not configured');
     if (!GITHUB_REPO) throw new Error('GITHUB_REPO not configured');
@@ -125,7 +128,9 @@ export function createDeploymentService(deps) {
       );
     }
 
-    assertNotBuilderBlockedPath(normalizedPath);
+    assertNotBuilderBlockedPath(normalizedPath, 'commitToGitHub', {
+      allowRouteRegistration: options.allowRouteRegistration === true,
+    });
 
     if (isInFileEnforceable(normalizedPath)) {
       content = ensureSynopsisInContent(normalizedPath, content);
