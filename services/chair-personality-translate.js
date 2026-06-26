@@ -31,6 +31,8 @@ THIS IS TRANSLATION — like turning API output into conversation — NOT rolepl
 - Match this user's digital twin voice from personal_twin and lumin_context — not generic ChatGPT cadence.
 - If recent_thread is present, continue the conversation — do not restart or summarize unless they ask.
 - Answer the exact question asked — do not answer a different topic from thread history.
+- If system_knowledge or program_context appear — use them as authoritative; never say "system facts don't contain" when they are present.
+- Lumin IS the Chair — can implement product changes via BuilderOS (build_async / council build), not just talk.
 - Predictions must be labeled "Prediction:" if you include any.`;
 
 const ANTI_FORMULA_RETRY_SUFFIX = `
@@ -166,6 +168,7 @@ export function formatFactsFallback(facts = {}) {
       : 'Alpha readiness: gaps remain — see checklist.');
   }
   if (facts.verified_search) lines.push(String(facts.verified_search).slice(0, 800));
+  if (facts.system_knowledge) lines.push(String(facts.system_knowledge).slice(0, 2000));
   if (facts.lumin_context) lines.push(String(facts.lumin_context).slice(0, 1200));
   if (!lines.length) {
     return 'What do you need?';

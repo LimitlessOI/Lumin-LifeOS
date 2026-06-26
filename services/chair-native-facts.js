@@ -16,6 +16,8 @@ import { hasProductBuildContext } from './chair-context-classifier.js';
 import { isBuildRequest } from './chair-intent-signals.js';
 import { gatherStrategicBriefForChair } from './lumin-strategic-intelligence.js';
 import { createLuminContextLoader } from './lumin-context-loader.js';
+import { gatherChairSystemKnowledge, needsSystemKnowledge } from './chair-system-knowledge.js';
+import { loadKnowledgeContext, getKnowledgeContext } from './knowledge-context.js';
 
 function searchBlockIsUseful(searchResult) {
   if (!searchResult?.results?.length) return false;
@@ -30,7 +32,7 @@ function needsGeneralWebSearch(text = '', chairContext = {}) {
   if (isFounderPersonalLifeIntent(t)) return false;
   if (hasProductBuildContext(t) && isBuildRequest(t)) return false;
   if (/^\s*(do|execute|run)\s*:/i.test(t)) return false;
-  if (/\b(point b|alpha|lifere|ssot|amendment|deploy|railway|builder|queue status|target_file)\b/i.test(t)) {
+  if (/\b(point b|alpha|lifere|ssot|amendment|deploy|railway|builder|queue status|target_file|smos|social media os)\b/i.test(t)) {
     return false;
   }
   if (/\?\s*$/.test(t)) return true;
@@ -78,8 +80,27 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     verified_search: null,
     memory_context: deps.memoryContext || null,
     strategic_brief: deps.strategicBrief || null,
-    chair_note: 'Lumin is the operating intelligence — facts from system APIs/files/twin, not roleplay.',
+    chair_note: 'Lumin is the operating intelligence — facts from system APIs/files/twin/SSOT, not roleplay. Lumin IS the Chair and can implement via BuilderOS build_async.',
+    system_knowledge: null,
+    program_context: null,
+    builder_capability: null,
   };
+
+  if (!getKnowledgeContext()) {
+    await loadKnowledgeContext().catch(() => null);
+  }
+
+  try {
+    const sysKnow = await gatherChairSystemKnowledge(text);
+    facts.system_knowledge = sysKnow.formatted || null;
+    facts.program_context = sysKnow.programs?.length ? sysKnow.programs : null;
+    facts.builder_capability = sysKnow.builder;
+    if (sysKnow.programs?.length) {
+      facts.chair_note = `${facts.chair_note} Answer using program_context and system_knowledge — do not claim the system lacks this; do not answer a different topic.`;
+    }
+  } catch {
+    /* non-fatal */
+  }
 
   if (deps.pool) {
     try {
@@ -154,7 +175,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     facts.point_b_target = null;
     facts.point_b_summary = null;
     await attachVerifiedSearch(facts, text, deps);
-  } else if (needsGeneralWebSearch(text, chairContext)) {
+  } else if (needsGeneralWebSearch(text, chairContext) && !needsSystemKnowledge(text)) {
     facts.chair_note = `${facts.chair_note} Factual question — use verified_search when present; answer directly; do not CLARIFY or paraphrase the question back.`;
     await attachVerifiedSearch(facts, text, deps);
   }

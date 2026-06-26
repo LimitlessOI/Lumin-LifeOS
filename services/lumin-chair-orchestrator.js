@@ -828,6 +828,7 @@ export async function runLuminChairTurn(ctx, deps) {
           source_mode: sourceMode,
           auth_mode,
           user_role,
+          chair_native_facts: chairResult.chair_native_facts || null,
         }),
       };
     }

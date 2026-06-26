@@ -13,8 +13,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = (process.env.PUBLIC_BASE_URL || process.env.LIFERE_ALPHA_BASE_URL || '').replace(/\/$/, '');
 const KEY = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || '';
 const ENDPOINT = '/api/v1/lifeos/builderos/command-control/founder-interface/message';
-const POLL_MS = 4000;
-const POLL_MAX = 45;
+const POLL_MS = 5000;
+const POLL_MAX = 90;
 
 const report = {
   schema: 'founder_chat_alpha_battery_v1',
@@ -70,6 +70,8 @@ async function send(id, text, opts = {}) {
     job_id: json.job_id,
     summary_head: summary.slice(0, 220),
     has_verified_search: Boolean(json.chair_native_facts?.verified_search || summary.includes('search')),
+    has_system_knowledge: Boolean(json.chair_native_facts?.system_knowledge),
+    program_context: json.chair_native_facts?.program_context || null,
   };
   return { res, json, summary };
 }
@@ -113,7 +115,25 @@ const PROBES = [
     expectChannel: 'chair',
     expectTruth: 'NO_COMMAND_RAN',
     forbidClarify: true,
+    requireSystemKnowledge: true,
+    summaryMustInclude: [/brief|coach|record|publish|content_brief/i],
     summaryMustNotInclude: ['5-video package', 'you want'],
+  },
+  {
+    id: 'Q2b_smos_steps',
+    text: 'walk me through our SMOS process step by step',
+    expectChannel: 'chair',
+    expectTruth: 'NO_COMMAND_RAN',
+    forbidClarify: true,
+    requireSystemKnowledge: true,
+    summaryMustInclude: [/coach|brief|record|post|publish/i],
+  },
+  {
+    id: 'Q_chair_builder',
+    text: 'can you as Lumin the chair build a change to lifeos-app through BuilderOS?',
+    expectChannel: 'chair',
+    expectTruth: 'NO_COMMAND_RAN',
+    summaryMustInclude: [/build|builder|build_async|do:/i],
   },
   {
     id: 'Q3_factual_search',
@@ -160,6 +180,20 @@ for (const probe of PROBES) {
       const theater = detectCounselTheater(summary, json.command_truth);
       if (theater.violation) {
         fail(probe.id, `theater: ${theater.hits.join('; ')}`);
+        continue;
+      }
+    }
+    if (probe.requireSystemKnowledge && !report.results[probe.id].has_system_knowledge) {
+      fail(probe.id, 'missing system_knowledge in chair_native_facts');
+      continue;
+    }
+    if (probe.summaryMustInclude?.length) {
+      const ok = probe.summaryMustInclude.some((p) => {
+        const re = p instanceof RegExp ? p : new RegExp(p, 'i');
+        return re.test(summary);
+      });
+      if (!ok) {
+        fail(probe.id, `missing required answer content: ${summary.slice(0, 120)}`);
         continue;
       }
     }
