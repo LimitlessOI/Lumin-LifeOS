@@ -884,8 +884,7 @@
     ]
   },
   "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-26 direct-order-build-pipeline-db-persist",
-  "last_change_summary": "do: orders route to build not display; founder build jobs persisted to PG for poll"
-  "last_change_summary": "Agent alpha scripts restored; crm_contact_notes; verifier CLI guard",
+  "last_receipt": "2026-06-26 smos-intent-regex-anti-paraphrase",
+  "last_change_summary": "SMOS content intent regex; communication law anti-paraphrase; unified founder chat c135aa1262",
   "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
 }

@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-26 — route registration safe-scope bypass for autoWireRoute.
+**Last Updated:** 2026-06-26 — SMOS content intent regex + anti-paraphrase law; unified founder chat deployed `c135aa1262`.
 
 ---
 
@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **SMOS intent regex** — `founder-intent-compiler.js` catches Social Media OS / content-for-topic without "video" keyword; communication law forbids paraphrase + faux-emotion openings | Adam SMOS ask → counsel theater | ✅ deploy pending | `tests/founder-intent-compiler.test.js` |
 | 2026-06-26 | **Unified conversation slice** — `lumin-thread-context.js` DB thread merge; SMOS content executor replaces generic video templates; twin voice + anti-paraphrase; wisdom/FPv2 clarify skipped on pure chat | Adam: ChatGPT-like talk + SMOS process + twin, not template theater | ⚠️ deploy | `founder-smos-content-executor.js` |
 | 2026-06-26 | **Intent history bleed fix** — `detectWorkIntent` uses current message only; CSS turns skip video executor (yellow bubble ask no longer re-fires 5-video package from thread) | Adam: fainter yellow → wrong video package reply | ⚠️ deploy | `tests/founder-intent-compiler.test.js` |
 | 2026-06-26 | **CSS NL + SW cache bust** — `isCssOnlyUiFeedback` → auto `do:` build; `hasProductBuildContext` includes CSS; SW `CACHE_NAME` bump; `client_version` on chat POST | Adam yellow ask → counsel "can't adjust"; browser stale shell vs terminal PASS | ⚠️ deploy | founder-interface/message |

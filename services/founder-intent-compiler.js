@@ -6,7 +6,9 @@
 const FRUSTRATION_MARKERS = /\b(just do|do what i|stop repeating|don't repeat|do not repeat|what i asked|what i fucking|see how you do|shut up and|enough questions|quit asking)\b/i;
 
 const VIDEO_PACKAGE_MARKERS = /\b(video|videos|content package|video package)\b/i;
-const VIDEO_PACKAGE_ACTION = /\b(package|make|create|plan|build|need|want|produce|draft|prepare|scripts?|hooks?|formulas?)\b/i;
+const SMOS_MARKERS = /\b(social media os|smos|content brief|our process|socialmediaos)\b/i;
+const CONTENT_TOPIC_MARKERS = /\b(content|scripts?|hooks?|brief|relocation|relocation content)\b/i;
+const VIDEO_PACKAGE_ACTION = /\b(package|make|create|plan|build|need|want|produce|draft|prepare|scripts?|hooks?|formulas?|follow|start|run)\b/i;
 
 function normalizeHistory(history = []) {
   if (!Array.isArray(history)) return [];
@@ -59,8 +61,34 @@ export function detectWorkIntent(utterance = '', history = []) {
       params: { count: parseVideoCount(bare) },
       confidence: 0.92,
       execute_now: true,
-      paraphrase: `Create a ${parseVideoCount(bare)}-video content package.`,
+      paraphrase: null,
       source: 'regex_video_package',
+    };
+  }
+
+  if (SMOS_MARKERS.test(bare) && VIDEO_PACKAGE_ACTION.test(bare)) {
+    return {
+      version: 'founder_intent_compiler_v1',
+      intent: 'work',
+      executor: 'socialmediaos_content',
+      params: { count: parseVideoCount(bare) },
+      confidence: 0.94,
+      execute_now: true,
+      paraphrase: null,
+      source: 'regex_smos',
+    };
+  }
+
+  if (CONTENT_TOPIC_MARKERS.test(bare) && VIDEO_PACKAGE_ACTION.test(bare) && /\b(for|about|on)\s+/i.test(bare)) {
+    return {
+      version: 'founder_intent_compiler_v1',
+      intent: 'work',
+      executor: 'socialmediaos_content',
+      params: { count: parseVideoCount(bare) },
+      confidence: 0.88,
+      execute_now: true,
+      paraphrase: null,
+      source: 'regex_content_topic',
     };
   }
 

@@ -57,6 +57,13 @@ test('isFounderFrustrationContinuation', () => {
   assert.equal(isFounderFrustrationContinuation('hello lumin'), false);
 });
 
+test('detectWorkIntent — SMOS process without video keyword', () => {
+  const compiled = detectWorkIntent('I need content for relocation — follow our Social Media OS process', []);
+  assert.equal(compiled?.intent, 'work');
+  assert.equal(compiled?.executor, 'socialmediaos_content');
+  assert.equal(compiled?.execute_now, true);
+});
+
 test('executeFounderWorkIntent — video package uses SMOS path', async () => {
   const compiled = detectWorkIntent('make a package for five videos about relocation', []);
   const result = await executeFounderWorkIntent(compiled, {

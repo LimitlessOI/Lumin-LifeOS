@@ -5,7 +5,11 @@
 
 ---
 
-## [SESSION] 2026-06-26 — Alpha battery 8/8 green; T7 display routing + deploy unblock
+## [SESSION] 2026-06-26 — Unified founder chat: DB thread + SMOS executor + twin voice
+
+Shipped `c135aa1262` + SMOS regex fix: founder chat loads `lumin_threads` server-side, content/video work runs through `founder-smos-content-executor.js` (brief → coach → scripts from SMOS, not generic templates). Anti-paraphrase law extended. Live: CSS → build_async; SMOS utterance → work_execute after second deploy.
+
+---
 
 Adam: *alpha test it, use it, break it, keep refining.* **Break-it found:** `lumin-chair-parity` T7 — `action:display` + "display queue status" returned `chair_channel: chair` with counsel prose. **Root cause:** Gemini `normalizeInputText` rewrote display commands before routing (local classifier was correct). **Fixed (GAP-FILL):** skip normalize via `shouldSkipInputNormalize(text, action)`; orchestrator bypasses wisdom + system-action on display-only; `coerceDisplayMisrouteToChair` respects explicit display. **Deploy blocker:** `20260626_socialmediaos.sql` was JS in a `.sql` file → boot FAILED; rewrote as PostgreSQL DDL. **Live deploy:** `8cff7166612a`. **Battery:** overlay alpha **8/8 PASS** (parity T1–T8, agent alpha, break-it 16/16, CRM 7/7). **Founder path:** sign in → `/lifeos?layout=desktop&direct_system=1` → LifeRE banner "Founder alpha unlocked" → Alpha Daily Cycle → Confirm Alpha PASS (12+ chars). **`founder_usability_pass`** still Adam-only.
 

@@ -67,12 +67,21 @@
     "feel free to",
     "don't hesitate to",
     "as an ai",
-    "as a language model"
+    "as a language model",
+    "just to be clear",
+    "to confirm",
+    "you want me to",
+    "you want",
+    "you'd like",
+    "you would like",
+    "you're looking for",
+    "you are looking for"
   ],
   "forbidden_opening_patterns": [
     "^\\s*(great question|absolutely|certainly|of course|sure thing|i'd be happy|i would be happy|i'm happy|i am happy)",
     "^\\s*here('s| is) (what|how|the thing)",
-    "^\\s*let me (help|break|walk|explain)"
+    "^\\s*let me (help|break|walk|explain)",
+    "^\\s*(anxiety|i'm detecting|i detect|i sense|i'm sensing)"
   ],
   "required_wiring": [
     "chair-personality-translate.js imports lumin-communication-guard and response-variety",
