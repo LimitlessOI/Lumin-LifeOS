@@ -1,11 +1,11 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-06-23T22:34:48.467Z",
+  "generated_at": "2026-06-26T06:31:15.533Z",
   "objective_id": "PRODUCT-LIFERE-OS-V1-0001",
   "objective_name": "LifeRE OS v1 (LifeRE Alpha)",
   "verdict": "TECHNICAL_PASS",
   "receipt": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
-  "git_sha": "872e6b53b7ce368e8cefa397bf97989a1df7f462",
+  "git_sha": "",
   "tests_passed": [
     "LRE-T01_service_file",
     "LRE-T01b_top3_export",
@@ -30,5 +30,8 @@
   "tests_failed": [],
   "founder_usability_pass": false,
   "acceptance_command": "npm run lifeos:lifere-os:v1-acceptance",
-  "founder_success_test": "Open lifeos-app LifeRE path; daily command center + top-3 + debrief visible"
+  "founder_success_test": "Open lifeos-app LifeRE path; daily command center + top-3 + debrief visible",
+  "founder_usability_at": "2026-06-26T06:31:59.584Z",
+  "founder_usability_quote": "sentry probe fail - ignore",
+  "founder_usability_actor": "adam"
 }

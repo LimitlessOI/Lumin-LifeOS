@@ -2,9 +2,9 @@
   "schema": "founder_usability_confirm_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
   "pass": false,
-  "quote": null,
-  "actor": "founder",
-  "at": "2026-06-23T00:54:52.760Z",
+  "quote": "sentry probe fail - ignore",
+  "actor": "adam",
+  "at": "2026-06-26T06:31:59.584Z",
   "objective_verdict": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
   "founder_success_test": "Open lifeos-app LifeRE path; daily command center + top-3 + debrief visible"
 }
