@@ -66,6 +66,7 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
       `SSOT: ${ssot}`,
       typeHint,
       scanHints,
+      'Reference files in files[] are STYLE GUIDES ONLY — write a complete new file for target_file; do not paste partial copies.',
       'Do not modify server.js or core/two-tier-system-init.js — register routes via existing factory pattern only.',
     ].filter(Boolean).join('\n'),
     blueprint_intake_session_id: sessionId,
@@ -73,6 +74,7 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
     platform_gap_fill: true,
     platform_gap_fill_reason: `GAP-FILL: mechanical intake blueprint step ${step.id} for ${product} — ARC-ready session ${sessionId}, founder gaps resolved`,
     commit_message: `[system-build] ${product} ${step.id} ${targetFile}`,
+    ...(step.type === 'esm' || step.type === 'esm_script' ? { max_output_tokens: 16384 } : {}),
     files: depsToContextFiles(step, blueprint),
   };
 }
@@ -113,8 +115,7 @@ function depsToContextFiles(step, blueprint) {
     const routeRef = 'routes/action-inbox-routes.js';
     if (!files.includes(routeRef)) files.push(routeRef);
   }
-  if (blueprint._meta?.parent_ssot) files.push(blueprint._meta.parent_ssot);
-  return files.slice(0, 8);
+  return files.slice(0, 6);
 }
 
 export async function loadIntakeSession(sessionId, { pool = null, baseUrl = null, commandKey = null } = {}) {

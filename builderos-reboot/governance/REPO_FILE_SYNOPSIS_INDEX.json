@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:39:15.691Z",
+  "generated_at": "2026-06-26T00:39:33.974Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12565,
   "files": [
@@ -41763,9 +41763,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 37203,
-      "mtime": "2026-06-26T00:36:56.034Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z"
+      "bytes": 37463,
+      "mtime": "2026-06-26T00:39:28.933Z",
+      "indexed_at": "2026-06-26T00:39:33.974Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -42468,9 +42468,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 136105,
-      "mtime": "2026-06-26T00:23:31.032Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z"
+      "bytes": 136412,
+      "mtime": "2026-06-26T00:39:27.898Z",
+      "indexed_at": "2026-06-26T00:39:33.974Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -86878,9 +86878,9 @@
     {
       "path": "services/builderos-precommit-governance.js",
       "synopsis": "BuilderOS pre-commit governance wrapper.",
-      "bytes": 2346,
-      "mtime": "2026-06-21T21:38:59.034Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z",
+      "bytes": 3534,
+      "mtime": "2026-06-26T00:39:13.019Z",
+      "indexed_at": "2026-06-26T00:39:33.974Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/builderos-remediation/BLUEPRINT.md"
@@ -88524,9 +88524,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 10339,
-      "mtime": "2026-06-26T00:36:56.036Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z",
+      "bytes": 10492,
+      "mtime": "2026-06-26T00:39:08.695Z",
+      "indexed_at": "2026-06-26T00:39:33.974Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

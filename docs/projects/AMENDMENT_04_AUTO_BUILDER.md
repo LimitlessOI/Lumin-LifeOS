@@ -161,6 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-26 | **Intake token budget** — esm steps request 16k max_output_tokens; drop amendment from files[]; style-guide-only hint. | MOS-P1-002 truncated mid-file (verifier syntax fail). | ⚠️ deploy + re-run MOS-P1-002 | see BUILDEROS_ALPHA receipt |
 | 2026-06-26 | **Intake executor codebase grounding** — `scanCodebasePatterns()` injected into step spec; reference files (action-inbox service/routes); forbidden import list. Governance retry passes `target_file`. | MOS-P1-002 blocked precommit governance (WRONG_IMPORT ../../core/*). | ⚠️ deploy + re-run from MOS-P1-002 | `blueprint:intake:execute --from MOS-P1-002` |
 | 2026-06-26 | **SQL migration validation** — `validateSqlMigrationContent()` rejects JS in `.sql`; auto-retry gemini_flash. Reverted invalid migration. | groq emitted JS as SQL → Railway boot FAILED. | ⚠️ re-run from MOS-P1-001 | see above |
 | 2026-06-26 | **Builder empty-output retry** — `/build` retries with `gemini_flash` when `code_execute` returns empty; intake executor uses fast path only for `sql` steps. | MOS-P1-002 service step: groq code_execute empty output after migration committed. | ✅ superseded — all intake steps now gemini_flash | re-run intake execute from MOS-P1-001 |
