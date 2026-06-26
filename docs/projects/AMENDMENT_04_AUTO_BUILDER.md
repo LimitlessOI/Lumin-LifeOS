@@ -161,7 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
-| 2026-06-26 | **`intake-blueprint-executor.js`** — route scan hints match deps-object factory (requireKey, not rk/app,ctx). | Conflicting hints caused wrong route signature on MOS-P1-003. | ⚠️ re-run MOS-P1-003 | intake execute |
+| 2026-06-26 | **`intake-blueprint-executor.js`** — verify reference → verify-builderos-working-definition; `buildRouteProbeHints` injects real mount paths; forbid marketingos hallucinations. | MOS-P1-005 probed fake /marketingos/* paths from stale reference. | ⚠️ re-run MOS-P1-005 | intake execute |
 | 2026-06-26 | **Product route auto-wire** — `autoWireRoute` handles all `routes/*-routes.js` (not only lifeos-*); `POST /builder/wire-route`; intake executor wires after route step + runs acceptance_cmd. | SocialMediaOS routes committed but never mounted; verify script double-read body. | ⚠️ deploy + re-test MOS-P1-003/005 | `wire-route` + intake execute |
 | 2026-06-26 | **Acceptance verify runtime skip** — paired with BUILDEROS_ALPHA verifier fix; esm_script forbids pg/pool imports. | MOS-P1-005 runtime gate false fail. | ✅ argv fix deployed | intake execute |
 | 2026-06-26 | **Verify script intake hints** — esm_script uses verify-project.mjs reference; inject all impl files; shebang/main structure spec. | MOS-P1-005 syntax fail (unclosed block comment). | ✅ syntax pass | intake execute |

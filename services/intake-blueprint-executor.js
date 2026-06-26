@@ -13,7 +13,7 @@ const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const REFERENCE_FILES_BY_TYPE = {
   esm: ['services/action-inbox.js'],
-  esm_script: ['scripts/verify-marketing-phase1.mjs'],
+  esm_script: ['scripts/verify-builderos-working-definition.mjs'],
   html: ['public/overlay/lifeos-app.html'],
 };
 
@@ -54,7 +54,7 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
     html: 'HTML overlay page in public/overlay/',
   }[step.type] || 'Implement per blueprint purpose.';
 
-  const scanHints = formatScanHints(step, scan);
+  const scanHints = formatScanHints(step, scan, blueprint);
 
   return {
     domain: 'lifeos',
@@ -96,12 +96,28 @@ export function deriveRouteMountPath(routeFilePath, override = null) {
   return `/api/v1/${base}`;
 }
 
+export function buildRouteProbeHints(blueprint) {
+  const routeStep = (blueprint?.steps || []).find(
+    (s) => s.type === 'esm' && /routes\//.test(String(stepTargetFile(s) || '')),
+  );
+  if (!routeStep) return '';
+  const mount = deriveRouteMountPath(stepTargetFile(routeStep));
+  return [
+    `VERIFY PROBES — mount base ${mount}. Parse router.get/post/put paths from routes file in files[] ONLY.`,
+    `Minimum probes with x-command-key (expect HTTP 200 and ok:true where applicable):`,
+    `  GET ${mount}/sessions`,
+    `  POST ${mount}/validate-payment-link with body { link: "https://buy.stripe.com/test" }`,
+    `FORBIDDEN probe paths: /api/v1/marketingos/*, /integrations, /schedule/*, /rate-limits, or any path not declared in routes file.`,
+    `Do NOT copy stale tests from verify-marketing-phase1.mjs.`,
+  ].join('\n');
+}
+
 function isRouteStepFile(targetFile) {
   return /routes\//.test(String(targetFile || ''));
 }
 
-function formatScanHints(step, scan) {
-  if (!scan) return '';
+function formatScanHints(step, scan, blueprint = null) {
+  if (!scan && step.type !== 'esm_script') return '';
   const lines = [];
   if (step.type === 'sql') {
     lines.push(`DB pattern: ${scan.db_pattern?.source || 'pool from ctx — plain SQL in .sql files only'}`);
@@ -109,9 +125,11 @@ function formatScanHints(step, scan) {
   }
   if (step.type === 'esm_script') {
     lines.push('Verify script: fetch JSON from PUBLIC_BASE_URL + COMMAND_CENTER_KEY env; probe routes created in prior blueprint steps.');
-    lines.push('Structure: shebang → imports (node built-ins only) → async main() → main().catch(() => process.exit(1)); no unclosed block comments.');
+    lines.push('Structure: shebang → imports (node built-ins only) → export async function runAudit() → main().catch(() => process.exit(1)); no unclosed block comments.');
     lines.push('FORBIDDEN in verify scripts: pg, pool, database imports — use fetch + x-command-key HTTP probes only.');
     lines.push('Read response body once: const text = await response.text(); then JSON.parse(text) — never response.json().catch(() => response.text()).');
+    const probeHints = blueprint ? buildRouteProbeHints(blueprint) : '';
+    if (probeHints) lines.push(probeHints);
   }
   if (step.type === 'esm') {
     lines.push(`DB: ${scan.db_pattern?.source || 'pool.query(sql, params) — pool injected via factory, never ../../core/*'}`);
