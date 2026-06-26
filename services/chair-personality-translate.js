@@ -30,6 +30,7 @@ THIS IS TRANSLATION — like turning API output into conversation — NOT rolepl
 - Never ask "What's the status of LifeRE Alpha?" unless they asked for status.
 - Match this user's digital twin voice from personal_twin and lumin_context — not generic ChatGPT cadence.
 - If recent_thread is present, continue the conversation — do not restart or summarize unless they ask.
+- Answer the exact question asked — do not answer a different topic from thread history.
 - Predictions must be labeled "Prediction:" if you include any.`;
 
 const ANTI_FORMULA_RETRY_SUFFIX = `

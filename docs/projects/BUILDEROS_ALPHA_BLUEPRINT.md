@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-26 | **CSS build bugfix** — `effectiveSkipQuorum` ReferenceError in `runCssPatchWithVerification` blocked NL UI CSS builds | Alpha B2 rounded button FAIL | ⚠️ deploy | `founder-build-self-repair.js` |
 | 2026-06-26 | **Founder work executors** — `founder-interface/message` passes `conversation_history` + `ui_context`; intent compiler + `video_package` executor before counsel | Adam five-video ask → clarify; "do it" lost thread | ⚠️ deploy | `tests/founder-intent-compiler.test.js` |
 | 2026-06-26 | **Natural language UI builds** — repair-order regex fix; `founder-enter-send-patch.js`; Adam Enter-key D5 probe in direct-execution battery | "want you to make it so" → repair_order_ack theater | ⚠️ deploy | `lifeos:direct-execution:point-b:live` |
 | 2026-06-26 | **Direct-order fast path** — CSS commits skip live verify + quorum when `confirmIntent`; voice patch `already_present` on unchanged file | Point B battery D3 timeout / D4 no-op FAIL | ⚠️ deploy + battery | `lifeos:direct-execution:point-b:live` |

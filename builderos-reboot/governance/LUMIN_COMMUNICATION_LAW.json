@@ -83,7 +83,7 @@
     "^\\s*(great question|absolutely|certainly|of course|sure thing|i'd be happy|i would be happy|i'm happy|i am happy)",
     "^\\s*here('s| is) (what|how|the thing)",
     "^\\s*let me (help|break|walk|explain)",
-    "^\\s*(anxiety|i'm detecting|i detect|i sense|i'm sensing)"
+    "^\\s*(anxiety|i'm detecting|i detect|i sense|i'm sensing|uncertainty in your)"
   ],
   "required_wiring": [
     "chair-personality-translate.js imports lumin-communication-guard and response-variety",

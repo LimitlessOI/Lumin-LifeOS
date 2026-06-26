@@ -187,20 +187,15 @@ for (const probe of PROBES) {
         continue;
       }
       if (probe.requirePass && polled.pf !== 'PASS') {
-        fail(probe.id, `final ${polled.pf}`);
+        fail(probe.id, `final ${polled.pf}: ${polled.json.first_blocker || ''}`);
         continue;
       }
-      if (probe.allowAlreadyPresent && polled.pf === 'PASS') {
-        report.passed.push(probe.id);
-        continue;
-      }
-      if (probe.allowAlreadyPresent && polled.pf === 'FAIL' && /already|no change|already_present/i.test(String(polled.json.human_summary || ''))) {
-        report.passed.push(probe.id);
-        continue;
-      }
-      if (polled.pf !== 'PASS' && probe.requirePass) {
-        fail(probe.id, `final ${polled.pf}`);
-        continue;
+      if (polled.pf === 'FAIL') {
+        const already = /already|no change|already_present/i.test(String(polled.json.human_summary || polled.json.first_blocker || ''));
+        if (!(probe.allowAlreadyPresent && already)) {
+          fail(probe.id, `final FAIL: ${polled.json.first_blocker || 'unknown'}`);
+          continue;
+        }
       }
     }
     report.passed.push(probe.id);

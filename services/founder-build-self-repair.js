@@ -287,6 +287,7 @@ async function runCssPatchWithVerification({
   pool = null,
   quorumStage = null,
 }) {
+  const effectiveSkipQuorum = skipQuorum === true;
   const baseCheck = assertFounderBuildBaseUrl(baseUrl);
   if (!baseCheck.ok) {
     const failure = enforceExecutionTruth({
