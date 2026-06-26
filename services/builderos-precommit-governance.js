@@ -16,7 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const VERIFIER_SCRIPT = join(ROOT, 'scripts', 'builderos-builder-output-verifier.mjs');
 
-function runUnifiedVerifierOnContent(content, originalLines = null) {
+function runUnifiedVerifierOnContent(content, originalLines = null, resolvedTarget = null) {
   const tempPath = join(tmpdir(), `builderos-precommit-${Date.now()}.mjs`);
   try {
     writeFileSync(tempPath, content, 'utf8');
@@ -24,6 +24,7 @@ function runUnifiedVerifierOnContent(content, originalLines = null) {
     if (originalLines !== null && originalLines !== undefined) {
       args.push(String(originalLines));
     }
+    if (resolvedTarget) args.push(resolvedTarget);
     const run = spawnSync('node', args, { stdio: 'pipe' });
     let body = null;
     try {
@@ -58,7 +59,7 @@ async function runPrecommitGovernance(opts) {
     };
   }
 
-  const verifier = runUnifiedVerifierOnContent(finalOutput, opts.originalLines ?? null);
+  const verifier = runUnifiedVerifierOnContent(finalOutput, opts.originalLines ?? null, opts.resolvedTarget ?? null);
   if (!verifier.ok && opts.retryFn && verifier.body?.first_failure === 'syntax') {
     const retrySpec = [
       'CRITICAL: Complete syntactically valid file — no truncation, no partial paste from reference files.',
@@ -73,7 +74,7 @@ async function runPrecommitGovernance(opts) {
     }
     if (syntaxRetry?.ok && syntaxRetry.output) {
       finalOutput = syntaxRetry.output;
-      const retryVerifier = runUnifiedVerifierOnContent(finalOutput, opts.originalLines ?? null);
+      const retryVerifier = runUnifiedVerifierOnContent(finalOutput, opts.originalLines ?? null, opts.resolvedTarget ?? null);
       if (retryVerifier.ok) {
         return {
           decision: 'allow_commit',

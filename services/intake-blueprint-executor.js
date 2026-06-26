@@ -88,7 +88,8 @@ function formatScanHints(step, scan) {
   }
   if (step.type === 'esm_script') {
     lines.push('Verify script: fetch JSON from PUBLIC_BASE_URL + COMMAND_CENTER_KEY env; probe routes created in prior blueprint steps.');
-    lines.push('Structure: shebang → imports → async main() → main().catch(() => process.exit(1)); no unclosed block comments.');
+    lines.push('Structure: shebang → imports (node built-ins only) → async main() → main().catch(() => process.exit(1)); no unclosed block comments.');
+    lines.push('FORBIDDEN in verify scripts: pg, pool, database imports — use fetch + x-command-key HTTP probes only.');
   }
   if (step.type === 'esm') {
     lines.push(`DB: ${scan.db_pattern?.source || 'pool.query(sql, params) — pool injected via factory, never ../../core/*'}`);

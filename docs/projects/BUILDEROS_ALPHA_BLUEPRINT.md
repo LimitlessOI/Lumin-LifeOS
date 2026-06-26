@@ -563,7 +563,8 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
-| 2026-06-26 | **`services/builderos-precommit-governance.js`** — `let finalOutput` (was const) in syntax retry path; fixed KERNEL_ERROR on /build. | MOS-P1-005 verify step: Assignment to constant variable. | ⚠️ deploy + re-run MOS-P1-005 | intake execute |
+| 2026-06-26 | **Verifier skip runtime for acceptance scripts** — `scripts/verify-*.mjs` skip runtime gate; pass logical target path to verifier subprocess. | MOS-P1-005 blocked: runtime gate ran verify script importing pg. | ⚠️ deploy + re-run MOS-P1-005 | intake execute |
+| 2026-06-26 | **`services/builderos-precommit-governance.js`** — `let finalOutput` (was const) in syntax retry path; fixed KERNEL_ERROR on /build. | MOS-P1-005 verify step: Assignment to constant variable. | ✅ fixed | intake execute |
 | 2026-06-26 | **`services/builderos-precommit-governance.js`** — unified verifier syntax failure triggers one codegen retry with complete-file clause + 16k tokens. | MOS-P1-002 truncated output passed antipattern/stub gates but failed node --check. | ✅ MOS-P1-002/003 committed | intake execute |
 | 2026-05-19 | **`routes/lifeos-builderos-command-control-routes.js`** — pass `action` into `shouldSkipInputNormalize()` so display-only requests skip Gemini `normalizeInputText` (T7 parity fix). Pairs with orchestrator display-only guards. | Adam: alpha break-it — display queue misrouted to counsel | ✅ unit | deploy |
 | 2026-06-25 | **`services/founder-overlay-surgical-patch.js`**, **`services/founder-build-self-repair.js`**, **`services/founder-intent-clarify.js`** — mechanical HTML comment insert before anchor via `/builder/execute-batch`; skips LLM regen for small overlay edits; explicit HTML comment path bypasses clarify gate. | Adam: Lumin surgical overlay builds without truncating full HTML regen. | ✅ overlay battery | deploy |

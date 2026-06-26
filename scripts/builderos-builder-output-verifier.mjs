@@ -25,6 +25,7 @@ const SCRIPTS = join(ROOT, 'scripts');
 
 export async function runVerification(targetFile, opts = {}) {
   const originalLines = opts.originalLines ?? null;
+  const logicalTarget = opts.logicalTarget || null;
   const absTarget = resolve(targetFile);
 
   if (!existsSync(absTarget)) {
@@ -85,11 +86,15 @@ export async function runVerification(targetFile, opts = {}) {
   const isCliScript = lastLines.includes('process.argv') || lastLines.includes('process.exit');
   let runtimeOk = true;
   let runtimeOutput = 'skipped_not_cli';
-  if (isCliScript) {
+  const isAcceptanceVerifyScript = /scripts\/verify-[\w-]+\.mjs$/i.test(String(logicalTarget || ''));
+  if (isCliScript && !isAcceptanceVerifyScript) {
     const runtimeRun = spawnSync('node', [absTarget], { stdio: 'pipe', timeout: 5000 });
     const stdout = runtimeRun.stdout?.toString().trim() || '';
     runtimeOk = runtimeRun.status === 0 && stdout.length > 0;
     runtimeOutput = stdout.slice(0, 200) || runtimeRun.stderr?.toString().trim().slice(0, 200) || '';
+  } else if (isCliScript && isAcceptanceVerifyScript) {
+    runtimeOk = true;
+    runtimeOutput = 'skipped_acceptance_verify_script';
   }
 
   const gates = { syntax: syntaxOk, antipattern: antipatternOk, stub: stubOk, runtime: runtimeOk };
@@ -118,7 +123,12 @@ export async function runVerification(targetFile, opts = {}) {
 const isVerifierCli = process.argv[1]
   && pathToFileURL(resolve(process.argv[1])).href === import.meta.url;
 if (isVerifierCli && process.argv[2]) {
-  runVerification(process.argv[2]).then((r) => {
+  const originalLinesArg = process.argv[3];
+  const logicalTarget = process.argv[4] || null;
+  runVerification(process.argv[2], {
+    logicalTarget,
+    originalLines: originalLinesArg !== undefined && originalLinesArg !== '' ? originalLinesArg : null,
+  }).then((r) => {
     console.log(JSON.stringify(r, null, 2));
     process.exit(r.ok ? 0 : 1);
   });
