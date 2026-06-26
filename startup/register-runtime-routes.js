@@ -98,6 +98,7 @@ import { createMemorySelfRepairRoutes } from "../routes/memory-self-repair-route
 import createMemoryStatusRoutes from "../routes/memory-status-routes.js";
 import { createRequireLifeOSUserOrKey } from "../middleware/lifeos-auth-middleware.js";
 
+import { createSocialmediaosRoutes } from "../routes/socialmediaos-routes.js";
 export async function registerRuntimeRoutes(app, deps) {
   const {
     pool,
@@ -525,6 +526,9 @@ export async function registerRuntimeRoutes(app, deps) {
   // Memory Capsule Alpha — governed product memory (AMENDMENT_02)
   app.use('/api/v1/memory/capsules', createMemoryCapsuleRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-CAPSULE] Routes mounted at /api/v1/memory/capsules/{signal,retrieve,health,capsule/:id,correct}');
+
+  app.use("/api/v1/socialmediaos", createSocialmediaosRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  logger.info('✅ [SOCIALMEDIAOS] Routes mounted at /api/v1/socialmediaos');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)
   app.use('/api/v1/memory/evidence', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
