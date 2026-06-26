@@ -69,6 +69,7 @@ import {
   formatUnifiedGateBlockSummary,
 } from '../services/founder-packet-v2-unified-gate.js';
 import { classifyBuilderGap, summarizeGapFamilies } from '../services/builderos-gap-classifier.js';
+import { verifyIntakeSessionBuildClearance } from '../services/intake-blueprint-executor.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -1882,6 +1883,24 @@ export function createLifeOSCouncilBuilderRoutes({
       return res.status(400).json({ ok: false, error: 'task is required' });
     }
 
+    let intakeClearance = null;
+    if (taskBody.blueprint_intake_session_id && target_file) {
+      intakeClearance = await verifyIntakeSessionBuildClearance(
+        pool,
+        taskBody.blueprint_intake_session_id,
+        target_file,
+        taskBody.blueprint_step_id || null,
+      );
+      if (!intakeClearance.ok) {
+        return res.status(422).json({
+          ok: false,
+          error: 'INTAKE_BLUEPRINT_CLEARANCE_DENIED',
+          detail: intakeClearance,
+          committed: false,
+        });
+      }
+    }
+
     const fpV2Gate = await enforceBeforeBuilderDispatch({
       task: taskBody.task,
       missionId: taskBody.mission_id,
@@ -1890,6 +1909,7 @@ export function createLifeOSCouncilBuilderRoutes({
       confirmIntent: taskBody.confirm_intent === true,
       platformGapFill: taskBody.platform_gap_fill === true,
       platformGapFillReason: taskBody.platform_gap_fill_reason,
+      intakeSessionClearance: intakeClearance,
     });
     if (!fpV2Gate.execute_cleared) {
       return res.status(422).json({
@@ -2076,6 +2096,8 @@ export function createLifeOSCouncilBuilderRoutes({
       mission_id: taskBody.mission_id,
       platform_gap_fill: taskBody.platform_gap_fill === true,
       platform_gap_fill_reason: taskBody.platform_gap_fill_reason,
+      blueprint_json: intakeClearance?.blueprint || null,
+      intake_session_id: taskBody.blueprint_intake_session_id || null,
     });
     if (!blueprintGate.ok) {
       return res.status(422).json({

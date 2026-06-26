@@ -250,7 +250,17 @@ export async function enforceBeforeBuilderDispatch({
   confirmIntent = false,
   platformGapFill = false,
   platformGapFillReason = '',
+  intakeSessionClearance = null,
 } = {}) {
+  if (intakeSessionClearance?.ok && intakeSessionClearance?.verified_ready) {
+    return {
+      pass: true,
+      execute_cleared: true,
+      violations: [],
+      intake_session_clearance: intakeSessionClearance,
+      channel: 'builder_api',
+    };
+  }
   const gapOk = platformGapFill && String(platformGapFillReason || '').trim().length >= 40;
   return enforceFounderPacketV2Unified({
     cleanedInput: task,

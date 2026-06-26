@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-25 — dedupeVerifySteps before ARC; gap regen scaffolds Phase 1 when Claude returns GAP_FLAG.
+**Last Updated:** 2026-06-26 — Intake blueprint executor wires ARC-ready sessions to BuilderOS /build.
 
 ---
 
@@ -161,6 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-26 | **Intake blueprint executor** — `services/intake-blueprint-executor.js`, `scripts/run-intake-blueprint.mjs`, `POST /api/v1/blueprint/intake/:id/execute`; `routes/lifeos-council-builder-routes.js` intake session FPv2 clearance; `builder-blueprint-gate.js` skeleton `step.file`. | SocialMediaOS builder test: `/build` blocked INTENT_AMBIGUITY after ARC PASS. | ✅ syntax; live execute pending | `npm run blueprint:intake:execute -- --session <id>` |
 | 2026-06-25 | **FIX: `services/blueprint-intake.js`** — `dedupeVerifySteps` removes orphan verify scripts before ARC; keeps canonical `verify-{slug}.mjs` aligned with `acceptance_cmd`. | ARC critical on MOS-P1-004 verify-project.mjs orphan. | ✅ pushed; live ARC retest pending | `--session ... --arc` |
 | 2026-06-25 | **FIX: `services/blueprint-intake.js`** — `stripInvalidSteps` removes `.md`/GAP_FLAG steps; `scaffoldPhase1Steps` applies when founder answers request Phase 1 infra (Claude was putting GAP_FLAG in `type` instead of real steps). | Gap regen left 2 invalid steps; founder answers ignored. | ✅ live on 51e85ea — gap regen → arc_review with 4 Phase 1 steps | Fresh backfill + gap answers |
 | 2026-06-25 | **FIX: `services/blueprint-intake.js` + `routes/blueprint-intake-routes.js`** — backfill now accepts `amendment_text` in body (previously required file path on server, but `docs/` is excluded from Railway Docker image via `.dockerignore:docs/*`). `scripts/run-blueprint-intake.mjs` rewritten to HTTP-first pattern (reads file locally, POSTs text to Railway API). `scripts/run-arc-entry-gate.mjs` simplified to structural-only check — AI review now lives exclusively in `/api/v1/blueprint/intake/:id/arc`. | Live test revealed AmendmentNotFound on Railway because docs/ not in Docker image. | ✅ syntax pass + live GET /api/v1/blueprint/intake returns 200 | `node scripts/run-blueprint-intake.mjs --amendment docs/projects/AMENDMENT_41_MARKETINGOS.md` |

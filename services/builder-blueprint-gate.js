@@ -54,13 +54,16 @@ function resolveBlueprintPath({ blueprint_path, blueprint_id, mission_id }) {
 function blueprintCoversTarget(blueprint, targetFile) {
   const rel = normalizeRel(targetFile);
   const steps = blueprint?.steps || [];
-  return steps.some((step) => normalizeRel(step.target_file) === rel);
+  return steps.some((step) => {
+    const candidate = normalizeRel(step.target_file || step.file);
+    return candidate === rel;
+  });
 }
 
 /**
  * @returns {{ ok: true, blueprint_path: string } | { ok: false, error: string, hint?: string }}
  */
-export function checkBuildBlueprintGate({ target_file, blueprint_path, blueprint_id, mission_id, platform_gap_fill, platform_gap_fill_reason }) {
+export function checkBuildBlueprintGate({ target_file, blueprint_path, blueprint_id, mission_id, platform_gap_fill, platform_gap_fill_reason, blueprint_json, intake_session_id }) {
   const targetFile = normalizeRel(target_file);
   if (!targetFile || !isProductSpineTarget(targetFile)) {
     return { ok: true, blueprint_path: null, skipped: true };
@@ -76,6 +79,18 @@ export function checkBuildBlueprintGate({ target_file, blueprint_path, blueprint
       error: 'blueprint_gate_platform_gap_fill_reason',
       hint: 'platform_gap_fill requires platform_gap_fill_reason (min 40 chars) for product spine targets',
     };
+  }
+
+  if (blueprint_json?.steps?.length) {
+    if (!blueprintCoversTarget(blueprint_json, targetFile)) {
+      return {
+        ok: false,
+        error: 'blueprint_gate_target_not_in_scope',
+        hint: `${targetFile} is not listed in intake blueprint steps`,
+        intake_session_id: intake_session_id || null,
+      };
+    }
+    return { ok: true, blueprint_path: null, intake_session_id: intake_session_id || null };
   }
 
   const resolved = resolveBlueprintPath({ blueprint_path, blueprint_id, mission_id });

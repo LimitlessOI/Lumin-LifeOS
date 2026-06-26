@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:08:49.105Z",
+  "generated_at": "2026-06-26T00:12:43.698Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12557,
+  "file_count": 12559,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41756,9 +41756,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 35747,
-      "mtime": "2026-06-25T23:50:51.038Z",
-      "indexed_at": "2026-06-25T23:50:59.209Z"
+      "bytes": 36197,
+      "mtime": "2026-06-26T00:12:28.568Z",
+      "indexed_at": "2026-06-26T00:12:43.698Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -41955,9 +41955,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 488587,
-      "mtime": "2026-06-26T00:08:31.667Z",
-      "indexed_at": "2026-06-26T00:08:49.105Z"
+      "bytes": 488940,
+      "mtime": "2026-06-26T00:12:35.098Z",
+      "indexed_at": "2026-06-26T00:12:43.698Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -69747,9 +69747,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 26718,
-      "mtime": "2026-06-26T00:04:45.489Z",
-      "indexed_at": "2026-06-26T00:08:49.105Z",
+      "bytes": 26801,
+      "mtime": "2026-06-26T00:12:05.933Z",
+      "indexed_at": "2026-06-26T00:12:43.698Z",
       "synopsis_index_only": true
     },
     {
@@ -71916,9 +71916,9 @@
     {
       "path": "routes/blueprint-intake-routes.js",
       "synopsis": "Blueprint Intake API — backfill existing amendments, greenfield conversations,",
-      "bytes": 11221,
-      "mtime": "2026-06-25T23:33:00.709Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 12217,
+      "mtime": "2026-06-26T00:11:52.724Z",
+      "indexed_at": "2026-06-26T00:12:43.698Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -72334,9 +72334,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 112956,
-      "mtime": "2026-06-25T21:45:57.302Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 113756,
+      "mtime": "2026-06-26T00:11:37.757Z",
+      "indexed_at": "2026-06-26T00:12:43.698Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -74651,6 +74651,16 @@
       "bytes": 5077,
       "mtime": "2026-06-21T21:39:08.338Z",
       "indexed_at": "2026-06-25T23:46:35.171Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
+      "path": "scripts/run-intake-blueprint.mjs",
+      "synopsis": "Execute an ARC-ready intake blueprint through BuilderOS — observe failures, fix builder not product by hand.",
+      "bytes": 2583,
+      "mtime": "2026-06-26T00:11:56.542Z",
+      "indexed_at": "2026-06-26T00:12:43.698Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -86515,9 +86525,9 @@
     {
       "path": "services/builder-blueprint-gate.js",
       "synopsis": "Fail-closed blueprint gate for POST /build on product spine paths (§2.18).",
-      "bytes": 3697,
-      "mtime": "2026-06-23T05:15:54.596Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 4222,
+      "mtime": "2026-06-26T00:11:24.300Z",
+      "indexed_at": "2026-06-26T00:12:43.698Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -88122,9 +88132,9 @@
     {
       "path": "services/founder-packet-v2-unified-gate.js",
       "synopsis": "Founder Packet V2 unified gate — live Chair + IDC + Builder entry on all execute paths.",
-      "bytes": 8668,
-      "mtime": "2026-06-23T00:53:56.047Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 8958,
+      "mtime": "2026-06-26T00:11:20.900Z",
+      "indexed_at": "2026-06-26T00:12:43.698Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88458,6 +88468,16 @@
       "indexed_at": "2026-06-25T23:46:35.171Z",
       "ssot": [
         "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md"
+      ]
+    },
+    {
+      "path": "services/intake-blueprint-executor.js",
+      "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
+      "bytes": 7855,
+      "mtime": "2026-06-26T00:12:03.937Z",
+      "indexed_at": "2026-06-26T00:12:43.698Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
     },
     {

@@ -6,6 +6,7 @@
  */
 
 import { createBlueprintIntakeService } from '../services/blueprint-intake.js';
+import { executeIntakeBlueprint } from '../services/intake-blueprint-executor.js';
 
 export function createBlueprintIntakeRoutes(app, ctx) {
   const { pool, requireKey, callCouncilMember } = ctx;
@@ -148,6 +149,28 @@ export function createBlueprintIntakeRoutes(app, ctx) {
       });
     } catch (err) {
       return res.status(err.message.startsWith('SessionNotFound') ? 404 : 500).json({ error: err.message });
+    }
+  });
+
+  // ── Execute — run ARC-ready intake blueprint through BuilderOS ─────────────
+  app.post('/api/v1/blueprint/intake/:id/execute', requireKey, async (req, res) => {
+    try {
+      const baseUrl = process.env.PUBLIC_BASE_URL || `${req.protocol}://${req.get('host')}`;
+      const commandKey = req.headers['x-command-center-key'] || req.headers['x-command-key'] || req.headers['x-lifeos-key'];
+      const result = await executeIntakeBlueprint({
+        pool,
+        sessionId: req.params.id,
+        baseUrl,
+        commandKey,
+        fromStepId: req.body?.from_step || null,
+        dryRun: req.body?.dry_run === true,
+      });
+      if (!result.ok) {
+        return res.status(422).json({ ok: false, ...result });
+      }
+      return res.status(200).json({ ok: true, ...result });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
     }
   });
 

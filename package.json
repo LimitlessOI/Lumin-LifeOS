@@ -181,6 +181,7 @@
     "blueprint:intake": "node scripts/run-blueprint-intake.mjs",
     "blueprint:intake:backfill": "node scripts/run-blueprint-intake.mjs --amendment",
     "blueprint:intake:list": "node scripts/run-blueprint-intake.mjs --list",
+    "blueprint:intake:execute": "node scripts/run-intake-blueprint.mjs --session",
     "voice-rail:history-only:verify": "node scripts/verify-voice-rail-history-only.mjs",
     "builderos:bp-priority:never-stop": "node scripts/bp-priority-never-stop.mjs",
     "builderos:bp-priority:once": "node scripts/bp-priority-never-stop.mjs --once",
