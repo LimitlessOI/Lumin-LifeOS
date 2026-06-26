@@ -154,7 +154,9 @@ function stripInvalidSteps(blueprint) {
 
 function founderRequestedPhase1Infra(gapAnswers) {
   const text = Object.values(gapAnswers || {}).join(' ').toLowerCase();
-  return /phase 1|migration|service\.js|routes\.js|verify-|scaffold/.test(text);
+  return /\bphase\s*(?:1|one)\s+(?:code\s+)?infrastructure\b/.test(text)
+    || /\bscaffold\s+phase\s*(?:1|one)\b/.test(text)
+    || /\b(?:scaffold|generate|create|build)\s+(?:the\s+)?(?:phase\s*(?:1|one)\s+)?(?:code\s+)?infrastructure\b/.test(text);
 }
 
 function productFileSlug(productName) {
@@ -633,16 +635,19 @@ Ask ONE question at a time. Be brief.`;
     );
     messages.push({ role: 'assistant', content: response });
 
-    // Extract answers for specific gaps from the conversation
+    // Extract answers for the addressed gap without bulk-resolving every open gap on generic confirmations.
     const gapAnswers = { ...(session.gap_answers_json || {}) };
-    for (const gap of openGaps) {
-      if (userMessage.toLowerCase().includes(gap.id.toLowerCase()) ||
-          response.toLowerCase().includes('got it') ||
-          response.toLowerCase().includes('confirmed')) {
-        gapAnswers[gap.id] = userMessage;
-        gap.resolved = true;
-        gap.answer = userMessage;
-      }
+    const userLower = userMessage.toLowerCase();
+    const responseLower = response.toLowerCase();
+    const mentionedGaps = openGaps.filter(g => userLower.includes(g.id.toLowerCase()));
+    const confirmedCurrentGap = /\b(got it|confirmed|understood)\b/.test(responseLower);
+    const gapsToResolve = mentionedGaps.length > 0
+      ? mentionedGaps
+      : (confirmedCurrentGap && openGaps[0] ? [openGaps[0]] : []);
+    for (const gap of gapsToResolve) {
+      gapAnswers[gap.id] = userMessage;
+      gap.resolved = true;
+      gap.answer = userMessage;
     }
 
     const allResolved = gaps.every(g => g.resolved);
@@ -674,6 +679,9 @@ Ask ONE question at a time. Be brief.`;
     const { rows } = await pool.query('SELECT * FROM blueprint_intake_sessions WHERE id = $1', [sessionId]);
     if (!rows[0]) throw new Error('SessionNotFound: ' + sessionId);
     const session = rows[0];
+    if (session.status !== 'gap_collection') {
+      throw new Error(`SessionNotInGapCollection: status=${session.status}`);
+    }
     const gaps = session.gaps_json || [];
     const gap = gaps.find(g => g.id === gapId);
     if (!gap) throw new Error(`GapNotFound: ${gapId}`);

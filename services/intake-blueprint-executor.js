@@ -305,7 +305,7 @@ export function runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey) {
 }
 
 function intakeAutoRedeployEnabled() {
-  const raw = String(process.env.INTAKE_AUTO_REDEPLOY ?? '1').trim();
+  const raw = String(process.env.INTAKE_AUTO_REDEPLOY ?? '0').trim();
   return !/^0|false|no$/i.test(raw);
 }
 
