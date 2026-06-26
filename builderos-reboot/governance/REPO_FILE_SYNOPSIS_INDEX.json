@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T19:59:51.749Z",
+  "generated_at": "2026-06-26T20:41:06.215Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12592,
+  "file_count": 12593,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41986,17 +41986,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26705,
-      "mtime": "2026-06-26T19:59:45.564Z",
-      "indexed_at": "2026-06-26T19:59:50.043Z",
+      "bytes": 26708,
+      "mtime": "2026-06-26T20:40:34.022Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 496353,
-      "mtime": "2026-06-26T19:59:45.569Z",
-      "indexed_at": "2026-06-26T19:59:50.043Z"
+      "bytes": 496487,
+      "mtime": "2026-06-26T20:40:46.251Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42500,9 +42500,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 141131,
-      "mtime": "2026-06-26T19:38:04.282Z",
-      "indexed_at": "2026-06-26T19:59:50.043Z"
+      "bytes": 141367,
+      "mtime": "2026-06-26T20:40:30.833Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -87137,9 +87137,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 4233,
-      "mtime": "2026-06-26T17:36:39.059Z",
-      "indexed_at": "2026-06-26T19:59:50.043Z",
+      "bytes": 4380,
+      "mtime": "2026-06-26T20:39:54.425Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87207,9 +87207,9 @@
     {
       "path": "services/chair-program-direct-answer.js",
       "synopsis": "Direct program answers from system_knowledge — no counsel drift on SMOS/SSOT asks.",
-      "bytes": 3156,
-      "mtime": "2026-06-26T19:59:45.571Z",
-      "indexed_at": "2026-06-26T19:59:50.043Z",
+      "bytes": 4754,
+      "mtime": "2026-06-26T20:39:39.783Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88198,9 +88198,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 34980,
-      "mtime": "2026-06-26T19:30:59.087Z",
-      "indexed_at": "2026-06-26T19:59:50.043Z",
+      "bytes": 35537,
+      "mtime": "2026-06-26T20:40:13.214Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -88208,9 +88208,9 @@
     {
       "path": "services/founder-build-success-gate.js",
       "synopsis": "Founder build success gate — PASS requires atomic commit + outcome + live content + client proof spec.",
-      "bytes": 12886,
-      "mtime": "2026-06-21T21:38:59.038Z",
-      "indexed_at": "2026-06-26T19:59:50.043Z",
+      "bytes": 12933,
+      "mtime": "2026-06-26T20:40:28.937Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -88385,6 +88385,16 @@
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/architecture/BUILDEROS_CONTINUOUS_AUDIT_TO_EXCELLENCE_PROTOCOL.md"
+      ]
+    },
+    {
+      "path": "services/founder-visual-ui-patch.js",
+      "synopsis": "Mechanical visual UI patches (border-radius, etc.) — fast path, not full council HTML rewrite.",
+      "bytes": 3204,
+      "mtime": "2026-06-26T20:39:33.221Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
     },
     {
@@ -89807,9 +89817,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 33271,
-      "mtime": "2026-06-26T19:48:05.149Z",
-      "indexed_at": "2026-06-26T19:59:50.043Z",
+      "bytes": 33551,
+      "mtime": "2026-06-26T20:40:19.161Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95578,10 +95588,10 @@
     },
     {
       "path": "tests/chair-program-direct-answer.test.js",
-      "synopsis": "js — tests/chair-program-direct-answer.test.js.",
-      "bytes": 779,
-      "mtime": "2026-06-26T19:59:45.571Z",
-      "indexed_at": "2026-06-26T19:59:50.043Z"
+      "synopsis": "Direct program answers — SMOS/connection from SSOT, no counsel drift.",
+      "bytes": 2010,
+      "mtime": "2026-06-26T20:40:21.711Z",
+      "indexed_at": "2026-06-26T20:41:06.215Z"
     },
     {
       "path": "tests/chair-system-knowledge.test.js",

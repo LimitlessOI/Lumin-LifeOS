@@ -1,20 +1,43 @@
 /**
- * SYNOPSIS: js — tests/chair-program-direct-answer.test.js.
+ * SYNOPSIS: Direct program answers — SMOS/connection from SSOT, no counsel drift.
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {
-  shouldUseDirectProgramAnswer,
-  formatDirectProgramAnswer,
-} from '../services/chair-program-direct-answer.js';
+import { shouldUseDirectProgramAnswer, formatDirectProgramAnswer } from '../services/chair-program-direct-answer.js';
+import { isVisualUiPatchRequest } from '../services/founder-visual-ui-patch.js';
 
-test('direct SMOS answer — workflow steps present', () => {
-  const facts = {
-    personal_turn: false,
-    system_knowledge: 'Workflow: content_brief → coach → record',
-    program_context: [{ id: 'smos', amendment: 'docs/projects/AMENDMENT_41_MARKETINGOS.md' }],
-  };
-  assert.equal(shouldUseDirectProgramAnswer('what does our SMOS workflow look like?', facts), true);
-  const ans = formatDirectProgramAnswer('SMOS workflow for relocation', facts);
-  assert.match(ans, /brief|coach|record|publish/i);
+const SMOS_FACTS = {
+  lumin_is_chair: true,
+  personal_turn: false,
+  program_context: [{ id: 'smos', amendment: 'docs/projects/AMENDMENT_41_MARKETINGOS.md' }],
+  system_knowledge: 'Lumin IS the Chair — SMOS workflow brief → coach → record → post → publish',
+  builder_capability: { build_async: true },
+};
+
+test('SMOS workflow question uses direct answer', () => {
+  const q = 'what does our Social Media OS workflow look like for relocation content?';
+  assert.equal(shouldUseDirectProgramAnswer(q, SMOS_FACTS), true);
+  const ans = formatDirectProgramAnswer(q, SMOS_FACTS);
+  assert.match(ans, /brief/i);
+  assert.match(ans, /coach/i);
+  assert.match(ans, /publish/i);
+  assert.match(ans, /relocation/i);
+});
+
+test('connection question uses direct answer', () => {
+  const q = 'are you connected to the LifeOS system APIs right now?';
+  assert.equal(shouldUseDirectProgramAnswer(q, { lumin_is_chair: true, builder_capability: {} }), true);
+  const ans = formatDirectProgramAnswer(q, { lumin_is_chair: true });
+  assert.match(ans, /same system/i);
+  assert.match(ans, /founder-interface\/message/i);
+});
+
+test('counsel-only builder explain does not false-trigger build request path', async () => {
+  const { isBuildRequest } = await import('../services/chair-intent-signals.js');
+  const q = 'explain how you as Lumin the chair implement a lifeos-app change through BuilderOS — counsel only, do not run a build';
+  assert.equal(isBuildRequest(q), false);
+});
+
+test('rounded send button is visual UI patch', () => {
+  assert.equal(isVisualUiPatchRequest('make the send button in the lumin drawer slightly more rounded'), true);
 });

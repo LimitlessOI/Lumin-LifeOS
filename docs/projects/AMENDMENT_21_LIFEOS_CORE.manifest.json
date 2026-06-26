@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-26 chair-program-direct-answer-smos",
-  "last_change_summary": "Founder chat alpha battery; NL UI auto-build; factual web search on counsel",
+  "last_receipt": "2026-06-26 chair-system-knowledge-direct-link",
+  "last_change_summary": "SSOT/synopsis counsel facts; direct SMOS answers; visual UI mechanical patch",
   "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
 }

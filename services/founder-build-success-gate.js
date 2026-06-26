@@ -267,7 +267,7 @@ export async function verifyCssPatchLive({ baseUrl, patchResult }) {
 }
 
 export function founderVerificationRequired(task, executionPath) {
-  if (executionPath === 'founder_css_patch') return true;
+  if (executionPath === 'founder_css_patch' || executionPath === 'founder_visual_ui_patch') return true;
   return isCssOnlyUiFeedback(task);
 }
 

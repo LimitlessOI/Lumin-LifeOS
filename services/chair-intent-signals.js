@@ -70,6 +70,9 @@ export function isBuildRequest(text) {
   if (isFounderPersonalLifeIntent(text)) return false;
   if (isBlueprintExecuteIntent(text)) return false;
   const t = String(text || '');
+  if (/\b(counsel only|do not run|don't run|without building|without running|explain how you|walk me through)\b/i.test(t)) {
+    return false;
+  }
   if (/\b(what changed|tell me what changed|show me what changed|what is the|what are the|how many|status of|queue status)\b/i.test(t)
     && !/\b(change|fix|make|update|set)\b.*\b(color|ui|css|response|reply|bubble)\b/i.test(t)) {
     return false;

@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-26 | **Chair system knowledge + visual UI patch** — SSOT/synopsis in counsel facts; direct SMOS answers; mechanical border-radius patch | Alpha gaps: counsel drift, B2 timeout | ⚠️ deploy | `chair-system-knowledge.js` |
 | 2026-06-26 | **CSS-only misroute fix** — rounded/layout on lifeos-app.html → HTML council build not founder_css_patch | Alpha B2 | ⚠️ deploy | `builder-instruction-target.js` |
 | 2026-06-26 | **NL UI visual build routing** — rounded/button tweaks → HTML council build not `no_color_intent` CSS path; `alpha_probe` thread isolation | Alpha B2 FAIL | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
 | 2026-06-26 | **CSS build bugfix** — `effectiveSkipQuorum` ReferenceError in `runCssPatchWithVerification` blocked NL UI CSS builds | Alpha B2 rounded button FAIL | ⚠️ deploy | `founder-build-self-repair.js` |

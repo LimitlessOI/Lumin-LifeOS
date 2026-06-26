@@ -15,6 +15,10 @@ import {
   commitCssPatchViaBuilder,
 } from './founder-css-patch.js';
 import {
+  applyVisualUiPatch,
+  isVisualUiPatchRequest,
+} from './founder-visual-ui-patch.js';
+import {
   applySurgicalHtmlCommentPatch,
   commitSurgicalPatchViaBuilder,
   isSurgicalHtmlCommentPatch,
@@ -286,6 +290,8 @@ async function runCssPatchWithVerification({
   callCouncilMember = null,
   pool = null,
   quorumStage = null,
+  patchFn = applyAssistantBubbleCssPatch,
+  executionPath = 'founder_css_patch',
 }) {
   const effectiveSkipQuorum = skipQuorum === true;
   const baseCheck = assertFounderBuildBaseUrl(baseUrl);
@@ -295,7 +301,7 @@ async function runCssPatchWithVerification({
       committed: false,
       first_blocker: baseCheck.blocker,
       failure_code: baseCheck.code,
-      execution_path: 'founder_css_patch',
+      execution_path: executionPath,
     }, { action: 'build', task });
     return failure;
   }
@@ -308,7 +314,7 @@ async function runCssPatchWithVerification({
   let redeployTriggered = false;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-    const patchResult = applyAssistantBubbleCssPatch({
+    const patchResult = patchFn({
       root: repoRoot,
       task,
       cacheBust: cacheBust || undefined,
@@ -353,7 +359,7 @@ async function runCssPatchWithVerification({
         generated_output: patchResult.files?.[0]?.output || '',
         first_blocker: null,
         execution_receipt: { pass_fail: 'PASS', blocker: null, lesson: null, fix: null },
-        execution_path: 'founder_css_patch',
+        execution_path: executionPath,
         founder_verification_required: false,
         task_meta: {
           output_bytes: patchResult.files?.[0]?.output?.length || 0,
@@ -378,7 +384,7 @@ async function runCssPatchWithVerification({
 
     let verification = await runFounderSuccessGate({
       task,
-      executionPath: 'founder_css_patch',
+      executionPath,
       patchResult,
       commitSha: sha,
       baseUrl: verifiedBase,
@@ -405,7 +411,7 @@ async function runCssPatchWithVerification({
         generated_output: patchResult.files?.[0]?.output || '',
         first_blocker: null,
         execution_receipt: { pass_fail: 'PASS', blocker: null, lesson: null, fix: null },
-        execution_path: 'founder_css_patch',
+        execution_path: executionPath,
         founder_verification: verification,
         founder_verification_required: true,
         task_meta: {
@@ -456,7 +462,7 @@ async function runCssPatchWithVerification({
           committed: true,
           target_file: committedFiles.join(', '),
           sha,
-          execution_path: 'founder_css_patch',
+          execution_path: executionPath,
           founder_verification: verification,
           founder_verification_required: true,
           task_meta: { committed_files: committedFiles, cache_bust: patchResult.cache_bust },
@@ -480,7 +486,7 @@ async function runCssPatchWithVerification({
     sha: execJson.sha || execJson.commit_sha || null,
     first_blocker: lastVerification?.blocker || receipt.blocker,
     execution_receipt: receipt,
-    execution_path: 'founder_css_patch',
+    execution_path: executionPath,
     founder_verification: lastVerification,
     founder_verification_required: true,
     failure_code: lastVerification?.code || null,
@@ -507,7 +513,7 @@ async function runCssPatchWithVerification({
       callCouncilMember,
       pool,
       baseFailure,
-      executionPath: 'founder_css_patch',
+      executionPath,
     });
   }
 
@@ -831,6 +837,25 @@ export async function runFounderBuildWithSelfRepair(options) {
       repoRoot,
       buildFailureReceipt,
       enforceExecutionTruth,
+    });
+  }
+
+  if (isVisualUiPatchRequest(currentTask)) {
+    return runCssPatchWithVerification({
+      task: currentTask,
+      commandKey,
+      baseUrl: base,
+      repoRoot,
+      maxAttempts,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+      skipQuorum: effectiveSkipQuorum,
+      skipLiveVerification: directOrder,
+      callCouncilMember,
+      pool,
+      quorumStage,
+      patchFn: applyVisualUiPatch,
+      executionPath: 'founder_visual_ui_patch',
     });
   }
 
