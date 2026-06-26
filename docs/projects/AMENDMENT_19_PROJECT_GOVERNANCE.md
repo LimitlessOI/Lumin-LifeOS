@@ -3,7 +3,7 @@
 # Project Governance
 _(formerly AMENDMENT_19_PROJECT_GOVERNANCE.md)_
 
-**Last Updated:** 2026-06-26 — GAP-FILL socialmediaos mount uses (app, ctx) until intake regenerates deps-object routes.
+**Last Updated:** 2026-06-26 — socialmediaos deps-object mount after MOS-P1-003 regen; autoWire remount on signature change.
 
 | Field | Value |
 |---|---|
@@ -204,7 +204,8 @@ Required runtime truths:
 
 ## Change Receipts
 
-| 2026-06-26 | **`startup/register-runtime-routes.js`** — socialmediaos mount: `createSocialmediaosRoutes(app, { pool, requireKey, rk, logger })` — autoWire had used deps-object call on (app,ctx) factory. | Deploy FAILED TypeError ctx undefined line 530. | ⚠️ redeploy + MOS-P1-003 deps-object regen | intake execute |
+| 2026-06-26 | **`startup/register-runtime-routes.js`** — deps-object mount `createSocialmediaosRoutes({ pool, requireKey, logger })` after MOS-P1-003 regen. | Prior (app,ctx) mount wrong after route factory regen. | ⚠️ redeploy + acceptance | intake execute |
+| 2026-06-26 | **`startup/register-runtime-routes.js`** — socialmediaos mount: `createSocialmediaosRoutes(app, { pool, requireKey, rk, logger })` — autoWire had used deps-object call on (app,ctx) factory. | Deploy FAILED TypeError ctx undefined line 530. | ✅ superseded by deps-object regen | intake execute |
 | 2026-06-13 | **`startup/register-runtime-routes.js`** — restore missing `import { createLifeOSChatRoutes }` (ReferenceError crashed Railway boot on deploy 2728eed). | GAP-FILL: deploy FAILED `createLifeOSChatRoutes is not defined` at register-runtime-routes.js:294 — import dropped while chat mount remained. | ✅ node --check | redeploy |
 | 2026-05-19 | **`startup/register-runtime-routes.js`** — `createRequireLifeOSUserOrKey(requireKey)` as `requireUserOrKey` for founder LifeOS API mounts (core, finance, briefing, lifere, ambient, etc.); chat keeps raw requireKey (wraps internally). | Account JWT after lifeos-login must work for dashboard/Lumin without COMMAND_CENTER_KEY in browser. | ✅ node --check | deploy |
 | 2026-06-13 | **BuilderOS harness platform stack** — canonical executor, gap classifier, compound improvement, harness toolkit, governed loop codegen repair, operational verify scripts; `config/builder-safe-scope.js` receipts path; council builder fail-fast + MECHANICAL tier. | Adam: honest operational 10/10 BuilderOS machine — program, self-repair, compound improve; not structural theater. | ✅ local operational verify 10/10 | push + deploy |

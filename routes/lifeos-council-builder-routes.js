@@ -1908,11 +1908,37 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
     const fileData = await getRes.json();
     let current = Buffer.from(fileData.content, 'base64').toString('utf8');
 
-    // Already wired?
-    if (current.includes(exportName)) return { ok: true, reason: 'already wired', skipped: true };
-
-    // Derive mount path from file name
     const mountPath = deriveRouteMountPath(routeFilePath, mountPathOverride);
+    const mountCall = buildRouteMountCall(exportName, routeFileContent, mountPath);
+    const mountLine = mountCall.split('\n')[0].trim();
+    const mountLineRe = new RegExp(
+      `app\\.use\\("${mountPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}",[^;]+;\\)`,
+    );
+
+    // Already wired — refresh mount call if route factory signature changed
+    if (current.includes(exportName)) {
+      const existingMount = current.match(mountLineRe);
+      if (existingMount && existingMount[0] !== mountLine) {
+        current = current.replace(mountLineRe, mountLine);
+        await commitToGitHub(
+          REGISTER_PATH,
+          current,
+          `[system-build] remount ${exportName} at ${mountPath}`,
+          branch,
+          { allowRouteRegistration: true },
+        );
+        const mirrorReg = await mirrorCommittedContentToRepoRoot(REGISTER_PATH, current);
+        if (!mirrorReg.ok) {
+          log.warn(
+            { path: REGISTER_PATH, reason: mirrorReg.reason },
+            '[BUILDER] Runtime repo mirror failed after autoWireRoute remount',
+          );
+        }
+        return { ok: true, exportName, mountPath, committed: true, remounted: true };
+      }
+      return { ok: true, reason: 'already wired', skipped: true };
+    }
+
     const label = mountPath.split('/').filter(Boolean).pop()?.replace(/-/g, '_').toUpperCase() || 'ROUTES';
 
     // Build import line
@@ -1922,8 +1948,6 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
     const fnStart = current.indexOf('export async function registerRuntimeRoutes');
     if (fnStart === -1) return { ok: false, reason: 'could not find registerRuntimeRoutes in file' };
     current = current.slice(0, fnStart) + importLine + current.slice(fnStart);
-
-    const mountCall = buildRouteMountCall(exportName, routeFileContent, mountPath);
 
     // Insert mount: just before the Memory Intelligence mount (last reliable anchor before return)
     const memAnchor = "  // Memory Intelligence";

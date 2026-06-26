@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T01:19:01.857Z",
+  "generated_at": "2026-06-26T01:22:55.055Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12569,
   "files": [
@@ -41940,9 +41940,9 @@
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 47089,
-      "mtime": "2026-06-26T01:15:47.075Z",
-      "indexed_at": "2026-06-26T01:15:50.412Z"
+      "bytes": 47349,
+      "mtime": "2026-06-26T01:22:50.073Z",
+      "indexed_at": "2026-06-26T01:22:55.055Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -41962,9 +41962,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 491482,
-      "mtime": "2026-06-26T01:18:54.339Z",
-      "indexed_at": "2026-06-26T01:19:01.857Z"
+      "bytes": 491510,
+      "mtime": "2026-06-26T01:22:38.592Z",
+      "indexed_at": "2026-06-26T01:22:55.055Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -72365,9 +72365,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 122895,
-      "mtime": "2026-06-26T01:18:32.644Z",
-      "indexed_at": "2026-06-26T01:19:01.857Z",
+      "bytes": 123897,
+      "mtime": "2026-06-26T01:22:32.498Z",
+      "indexed_at": "2026-06-26T01:22:55.055Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -94905,9 +94905,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 31519,
-      "mtime": "2026-06-26T01:15:29.982Z",
-      "indexed_at": "2026-06-26T01:15:50.412Z",
+      "bytes": 31492,
+      "mtime": "2026-06-26T01:22:25.287Z",
+      "indexed_at": "2026-06-26T01:22:55.055Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]

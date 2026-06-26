@@ -1606,7 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-06-26 | **`builderos-codegen-normalize.js`** — expand LCL codebook symbols on builder output before gates (paired with BUILDEROS_ALPHA receipt). | MOS-P1-003 raw *exp/*rk in generated JS. | ⚠️ deploy + re-run MOS-P1-003 | intake execute |
+| 2026-06-26 | **`startup/register-runtime-routes.js` + autoWireRoute remount** — deps-object mount after MOS-P1-003 regen; remount when factory signature changes. | Boot mount still (app,ctx) after routes regen to deps-object. | ⚠️ redeploy + acceptance | intake execute |
 | 2026-06-26 | **`startup/register-runtime-routes.js`** — GAP-FILL mount fix: pass `(app, ctx)` to createSocialmediaosRoutes until MOS-P1-003 regenerates deps-object factory. | Deploy FAILED: ctx undefined at boot (wrong autoWire mount). | ⚠️ deploy + re-run MOS-P1-003 | intake execute |
 | 2026-06-26 | **`deployment-service.js` + `builder-safe-scope.js`** — `allowRouteRegistration` bypass for `startup/register-runtime-routes.js` only; `autoWireRoute` passes flag. | wire-route blocked by builder-safe-scope on entire `startup/` prefix. | ✅ wired socialmediaos | intake execute |
 | 2026-06-26 | **`routes/lifeos-council-builder-routes.js`** — product route auto-wire (`routes/*-routes.js`), `POST /builder/wire-route`, mount path `/api/v1/{product}`. | MOS-P1-003 socialmediaos routes never registered. | ⚠️ deploy + wire + re-run routes step | intake execute |
