@@ -6,7 +6,8 @@
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
 import { spawnSync } from 'child_process';
-import { dirname, resolve } from 'path';
+import { readFileSync, existsSync } from 'fs';
+import { dirname, resolve, join } from 'path';
 import { fileURLToPath } from 'url';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -96,6 +97,33 @@ export function deriveRouteMountPath(routeFilePath, override = null) {
   return `/api/v1/${base}`;
 }
 
+export function buildVerifyFileHints(blueprint) {
+  const lines = [];
+  for (const step of blueprint?.steps || []) {
+    const rel = stepTargetFile(step);
+    if (!rel || !existsSync(join(REPO_ROOT, rel))) continue;
+    const content = readFileSync(join(REPO_ROOT, rel), 'utf8');
+    if (step.type === 'sql') {
+      for (const match of content.matchAll(/CREATE TABLE IF NOT EXISTS\s+(\w+)/gi)) {
+        lines.push(`DB check: assert migration includes literal 'CREATE TABLE IF NOT EXISTS ${match[1]}'`);
+      }
+    }
+    if (step.type === 'esm' && /routes\//.test(rel)) {
+      lines.push(`Route signature check: assert routes file includes exact factory line from ${rel}`);
+      if (content.includes('validate-payment-link') || content.includes('validateStripe')) {
+        lines.push('POST validate-payment-link probe: expect HTTP 200, json.ok===true, and (json.valid===true OR json.validationResult?.valid===true)');
+      }
+    }
+    if (step.type === 'esm' && /services\//.test(rel)) {
+      const exportMatch = content.match(/export function create\w+/);
+      if (exportMatch) {
+        lines.push(`Service check: assert ${rel} includes '${exportMatch[0]}'`);
+      }
+    }
+  }
+  return lines.join('\n');
+}
+
 export function buildRouteProbeHints(blueprint) {
   const routeStep = (blueprint?.steps || []).find(
     (s) => s.type === 'esm' && /routes\//.test(String(stepTargetFile(s) || '')),
@@ -130,6 +158,8 @@ function formatScanHints(step, scan, blueprint = null) {
     lines.push('Read response body once: const text = await response.text(); then JSON.parse(text) — never response.json().catch(() => response.text()).');
     const probeHints = blueprint ? buildRouteProbeHints(blueprint) : '';
     if (probeHints) lines.push(probeHints);
+    const fileHints = blueprint ? buildVerifyFileHints(blueprint) : '';
+    if (fileHints) lines.push(fileHints);
   }
   if (step.type === 'esm') {
     lines.push(`DB: ${scan.db_pattern?.source || 'pool.query(sql, params) — pool injected via factory, never ../../core/*'}`);
@@ -361,6 +391,8 @@ export async function executeIntakeBlueprint({
         results,
       };
     }
+
+    spawnSync('git', ['pull', 'origin', 'main', '--ff-only'], { cwd: REPO_ROOT, encoding: 'utf8' });
 
     const routeWiredFromBuild = buildResult.body?.route_wired;
     if (isRouteStepFile(targetFile)) {
