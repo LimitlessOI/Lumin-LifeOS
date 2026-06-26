@@ -1,6 +1,6 @@
 {
   "schema": "overlay_alpha_battery_v1",
-  "at": "2026-06-26T00:15:27.877Z",
+  "at": "2026-06-26T21:03:40.057Z",
   "mode": "live",
   "passed": [
     "builder:preflight",
@@ -8,12 +8,10 @@
     "agent-alpha-gate",
     "supervise-static",
     "alpha-break-it",
+    "lumin-chair-parity",
     "alpha-connection",
     "conversation-live"
   ],
-  "failed": [
-    "lumin-chair-parity"
-  ],
-  "ok": false,
-  "fail_lumin-chair-parity": "\n> ai-counsel-os@1.0.0 lifeos:lumin-chair:parity\n> node scripts/run-lumin-chair-parity.mjs\n\n{\n  \"schema\": \"lumin_chair_direct_connection_parity_v1\",\n  \"at\": \"2026-06-26T00:16:18.731Z\",\n  \"base\": \"https://robust-magic-production.up.railway.app\",\n  \"passed\": [\n    \"T1_open_lifere\",\n    \"T2_point_b\",\n    \"T3_alpha_cycle\",\n    \"T4_counsel_no_theater\",\n    \"T5_do_prefix_build\",\n    \"T6_fail_carries_les"
+  "failed": [],
+  "ok": true
 }

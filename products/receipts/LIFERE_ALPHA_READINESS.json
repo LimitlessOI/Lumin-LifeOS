@@ -1,7 +1,7 @@
 {
   "schema": "lifere_alpha_readiness_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-24T00:34:58.580Z",
+  "at": "2026-06-26T21:04:41.843Z",
   "checks": {
     "lifeos:lifere-alpha-gate": {
       "exit": 0
@@ -25,7 +25,12 @@
         "lifere_content_briefs": true
       },
       "pg_ready": true,
-      "label": "KNOW"
+      "label": "KNOW",
+      "truth_spine_applied": true,
+      "truth_spine_version": "truth_enforcement_spine_v1",
+      "point_b_dna_version": "point_b_dna_v1",
+      "system_purpose": "point_a_to_point_b",
+      "synergy_model": "human_ai_greater_than_sum"
     }
   },
   "passed": [

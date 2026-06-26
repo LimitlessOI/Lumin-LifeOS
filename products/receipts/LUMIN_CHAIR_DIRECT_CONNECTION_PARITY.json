@@ -1,6 +1,6 @@
 {
   "schema": "lumin_chair_direct_connection_parity_v1",
-  "at": "2026-06-26T00:16:42.582Z",
+  "at": "2026-06-26T21:05:08.903Z",
   "base": "https://robust-magic-production.up.railway.app",
   "passed": [
     "T1_open_lifere",
@@ -9,13 +9,13 @@
     "T4_counsel_no_theater",
     "T5_do_prefix_build",
     "T6_fail_carries_lesson",
+    "T7_display_no_execute_claim",
+    "T9_repair_order_no_deflect",
     "T8_truth_lockdown_stamp",
     "LOCAL-wiring",
     "LOCAL-truth"
   ],
-  "failed": [
-    "T7_display_no_execute_claim"
-  ],
+  "failed": [],
   "results": {
     "T1_open_lifere": {
       "status": 200,
@@ -43,30 +43,36 @@
       "chair_channel": "chair",
       "command_truth": "NO_COMMAND_RAN",
       "pass_fail": "NO_COMMAND_RAN",
-      "summary_head": "I don't have details on your vehicle's last oil change or current mileage to advise on whether an oil change is needed this week. If you are considering one, there are several current offers available"
+      "summary_head": "From verified web search:\n── Coupon starting points (open on your phone — no location assumed) ──\n• Jiffy Lube offers: https://www.jiffylube.com/offers\n• Valvoline promotions: https://www.valvoline.co"
     },
     "T5_do_prefix_build": {
-      "status": 200,
+      "status": 202,
       "chair_channel": "build_async",
-      "command_truth": "NO_COMMAND_RAN",
-      "pass_fail": "FAIL",
-      "summary_head": "❌ NOT DONE\nBlocked — Founder Packet V2 end-to-end gate failed.\n• Channel: build_async\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: BLOCKED_FOUNDER_PACKET_V2\n• Blocker: INTENT_AMBIGUITY — "
+      "command_truth": "BUILD_ATTEMPTED",
+      "pass_fail": "RUNNING",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job db6fec08… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job db6fec08-d0ad-4eb3-982f-9f49518e5191"
     },
     "T6_fail_carries_lesson": {
       "status": 202,
       "chair_channel": "build_async",
       "command_truth": "BUILD_ATTEMPTED",
       "pass_fail": "RUNNING",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 0f6902aa… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 0f6902aa-a746-4d42-8df0-6e81ad169ed1"
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 1451dc2e… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 1451dc2e-e9e4-43a4-82ca-0c9b814e2101"
     },
     "T7_display_no_execute_claim": {
       "status": 200,
-      "chair_channel": "chair",
+      "chair_channel": "display",
       "command_truth": "NO_COMMAND_RAN",
       "pass_fail": "NO_COMMAND_RAN",
-      "summary_head": "You're weighing whether to focus on follow-ups or prospecting today. I don't have enough context on your current goals or pipeline to offer a specific recommendation. What outcome are you aiming for t"
+      "summary_head": "💬 COUNSEL ONLY\nNothing executed — counsel only.\n• Channel: display\n• Kind: NO_COMMAND\n• Command: NO_COMMAND_RAN\n\n── Technical ──\nRendered queue display from live system data."
+    },
+    "T9_repair_order_no_deflect": {
+      "status": 200,
+      "chair_channel": "repair_order_ack",
+      "command_truth": "NO_COMMAND_RAN",
+      "pass_fail": "CLARIFY",
+      "summary_head": "🔍 CLARIFY\nRepair intent locked — awaiting target, not counsel deflection.\n• Channel: repair_order_ack\n• Kind: UNKNOWN\n• Command: NO_COMMAND_RAN\n• Receipt: REPAIR_ORDER_AWAITING_TARGET\n\nNEXT\nSay `do: "
     }
   },
-  "fail_T7_display_no_execute_claim": "channel chair !== display",
-  "ok": false
+  "ok": true
 }

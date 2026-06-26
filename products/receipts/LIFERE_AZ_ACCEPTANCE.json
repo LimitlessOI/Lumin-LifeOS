@@ -1,6 +1,6 @@
 {
   "schema": "lifere_az_acceptance_v1",
-  "at": "2026-06-23T11:48:47.880Z",
+  "at": "2026-06-26T21:05:44.346Z",
   "point_z": "PASS",
   "waves": {
     "w1": {
@@ -32,7 +32,7 @@
     },
     "runtime_integration": {
       "exit": 0,
-      "stdout": "{\n  \"schema\": \"lifere_runtime_integration_v1\",\n  \"passed\": [\n    \"RT-01_performance_bottleneck\",\n    \"RT-02_twin_store_roundtrip\",\n    \"RT-03_scenario_ranked\",\n    \"RT-04_receptionist_lead_twin\",\n    \"RT-05_buyer_os\",\n    \"RT-06_council_roles\",\n    \"RT-07_tc_status_engine\",\n    \"RT-08_chair_brief\",\n    \"RT-09_unified_command_center\",\n    \"RT-10_learning_pipeline\"\n  ],\n  \"failed\": [],\n  \"ok\": true\n}"
+      "stdout": "{\n  \"schema\": \"lifere_runtime_integration_v1\",\n  \"passed\": [\n    \"RT-01_performance_bottleneck\",\n    \"RT-02_twin_store_roundtrip\",\n    \"RT-03_scenario_ranked\",\n    \"RT-04_receptionist_lead_twin\",\n    \"RT-05_buyer_os\",\n    \"RT-06_council_roles\",\n    \"RT-07_tc_status_engine\",\n    \"RT-08_chair_brief\",\n    \"RT-09_unified_command_center\",\n    \"RT-10_learning_pipeline\",\n    \"RT-11_outreach_enqueue\",\n    \"RT-12_buyer_workflow_list\",\n    \"RT-13_alpha_daily_cycle\"\n  ],\n  \"failed\": [],\n  \"ok\": true\n}"
     },
     "integration_wiring": {
       "exit": 0

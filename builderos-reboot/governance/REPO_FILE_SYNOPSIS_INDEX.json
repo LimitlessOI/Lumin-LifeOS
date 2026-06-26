@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T20:58:56.637Z",
+  "generated_at": "2026-06-26T21:06:43.897Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12595,
+  "file_count": 12606,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28754,9 +28754,9 @@
     {
       "path": "builderos-reboot/AGENTS.md",
       "synopsis": "Machine layer / mission-pack authority",
-      "bytes": 4030,
-      "mtime": "2026-06-21T21:37:38.201Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z"
+      "bytes": 4377,
+      "mtime": "2026-06-26T20:59:23.447Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z"
     },
     {
       "path": "builderos-reboot/ALPHA_MISSION_TELEMETRY_CONTRACT.json",
@@ -28784,9 +28784,9 @@
     {
       "path": "builderos-reboot/BP_PRIORITY.json",
       "synopsis": "BuilderOS artifact — BP PRIORITY.",
-      "bytes": 7132,
-      "mtime": "2026-06-26T20:41:04.033Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 8127,
+      "mtime": "2026-06-26T21:05:43.374Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -29055,9 +29055,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3781318,
-      "mtime": "2026-06-26T20:56:59.265Z",
-      "indexed_at": "2026-06-26T20:56:59.894Z"
+      "bytes": 3784589,
+      "mtime": "2026-06-26T21:06:35.523Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -33694,8 +33694,8 @@
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/BLUEPRINT.json",
       "synopsis": "BuilderOS artifact — BLUEPRINT.",
       "bytes": 3994,
-      "mtime": "2026-06-26T20:41:04.032Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:05:43.374Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -33818,9 +33818,9 @@
     {
       "path": "builderos-reboot/MISSIONS/PRODUCT-LIFERE-OS-V1-0001/OBJECTIVE_VERDICT.json",
       "synopsis": "BuilderOS artifact — OBJECTIVE VERDICT.",
-      "bytes": 1277,
-      "mtime": "2026-06-26T20:41:19.187Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 1293,
+      "mtime": "2026-06-26T21:05:44.571Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -36832,8 +36832,8 @@
       "path": "data/bp-priority-guardrails-last-run.json",
       "synopsis": "JSON data/config — data/bp-priority-guardrails-last-run.json.",
       "bytes": 3222,
-      "mtime": "2026-06-26T20:56:49.108Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:06:43.839Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -40460,9 +40460,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 464265,
-      "mtime": "2026-06-26T20:58:55.014Z",
-      "indexed_at": "2026-06-26T20:58:56.637Z"
+      "bytes": 465855,
+      "mtime": "2026-06-26T21:06:19.449Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -69999,9 +69999,9 @@
     {
       "path": "products/receipts/CRM_ALPHA_TEST.json",
       "synopsis": "Product receipt — CRM ALPHA TEST.",
-      "bytes": 794,
-      "mtime": "2026-06-26T20:41:04.032Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 795,
+      "mtime": "2026-06-26T21:04:56.864Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -70088,32 +70088,40 @@
       "path": "products/receipts/DIRECT_EXECUTION_POINT_B_LIVE.json",
       "synopsis": "Product receipt — DIRECT EXECUTION POINT B LIVE.",
       "bytes": 3057,
-      "mtime": "2026-06-26T20:53:33.488Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:05:39.999Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/FOUNDER_ALPHA_READINESS_AUDIT.json",
       "synopsis": "Product receipt — FOUNDER ALPHA READINESS AUDIT.",
-      "bytes": 4939,
-      "mtime": "2026-06-26T16:19:21.727Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 5042,
+      "mtime": "2026-06-26T21:05:40.320Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — FOUNDER CHAT ALPHA BATTERY.",
       "bytes": 7723,
-      "mtime": "2026-06-26T20:58:23.635Z",
-      "indexed_at": "2026-06-26T20:58:56.637Z",
+      "mtime": "2026-06-26T21:00:01.436Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/GOVERNANCE_COVENANT_LIVE.json",
+      "synopsis": "Product receipt — GOVERNANCE COVENANT LIVE.",
+      "bytes": 637,
+      "mtime": "2026-06-26T21:05:40.016Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/LIFEOS_ALPHA_BREAK_IT.json",
       "synopsis": "Product receipt — LIFEOS ALPHA BREAK IT.",
-      "bytes": 1361,
-      "mtime": "2026-06-26T16:19:21.727Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 1706,
+      "mtime": "2026-06-26T21:05:07.897Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -70136,8 +70144,8 @@
       "path": "products/receipts/LIFERE_AGENT_ALPHA.json",
       "synopsis": "Product receipt — LIFERE AGENT ALPHA.",
       "bytes": 3556,
-      "mtime": "2026-06-26T20:41:04.032Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:05:44.571Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -70151,17 +70159,17 @@
     {
       "path": "products/receipts/LIFERE_ALPHA_E2E.json",
       "synopsis": "Product receipt — LIFERE ALPHA E2E.",
-      "bytes": 755,
-      "mtime": "2026-06-26T16:19:21.728Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 790,
+      "mtime": "2026-06-26T21:05:43.558Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/LIFERE_ALPHA_READINESS.json",
       "synopsis": "Product receipt — LIFERE ALPHA READINESS.",
-      "bytes": 1720,
-      "mtime": "2026-06-26T16:19:21.728Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 1959,
+      "mtime": "2026-06-26T21:04:51.733Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -70175,9 +70183,9 @@
     {
       "path": "products/receipts/LIFERE_AZ_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFERE AZ ACCEPTANCE.",
-      "bytes": 2202,
-      "mtime": "2026-06-26T16:19:21.728Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 2305,
+      "mtime": "2026-06-26T21:05:44.347Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -70269,6 +70277,86 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507795129.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507795129.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:03:15.129Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507798058.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507798058.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:03:18.059Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507882948.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507882948.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:04:42.949Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507883266.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507883266.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:04:43.267Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507884517.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507884517.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:04:44.518Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507884834.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507884834.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:04:44.834Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507892992.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507892992.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:04:52.993Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507893310.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507893310.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:04:53.311Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507944242.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507944242.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:05:44.242Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/LIFERE_COUNCIL_1782507944559.json",
+      "synopsis": "Product receipt — LIFERE COUNCIL 1782507944559.",
+      "bytes": 236,
+      "mtime": "2026-06-26T21:05:44.559Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/LIFERE_FULL_AUDIT.json",
       "synopsis": "Product receipt — LIFERE FULL AUDIT.",
       "bytes": 2365,
@@ -70280,48 +70368,48 @@
       "path": "products/receipts/LIFERE_OS_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFERE OS V1 ACCEPTANCE.",
       "bytes": 1155,
-      "mtime": "2026-06-26T20:41:04.032Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:05:43.374Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/LIFERE_RUNTIME_INTEGRATION.json",
       "synopsis": "Product receipt — LIFERE RUNTIME INTEGRATION.",
-      "bytes": 501,
-      "mtime": "2026-06-26T16:19:21.728Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 532,
+      "mtime": "2026-06-26T21:05:44.286Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/LIFERE_SELF_AUDIT.json",
       "synopsis": "Product receipt — LIFERE SELF AUDIT.",
-      "bytes": 1257,
-      "mtime": "2026-06-26T16:19:21.729Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 1323,
+      "mtime": "2026-06-26T21:04:53.328Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/LUMIN_ALPHA_CONNECTION_TEST.json",
       "synopsis": "Product receipt — LUMIN ALPHA CONNECTION TEST.",
       "bytes": 318,
-      "mtime": "2026-06-26T16:19:21.729Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:04:39.758Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json",
       "synopsis": "Product receipt — LUMIN CHAIR DIRECT CONNECTION PARITY.",
-      "bytes": 3058,
-      "mtime": "2026-06-26T20:41:04.032Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 3428,
+      "mtime": "2026-06-26T21:05:16.686Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json",
       "synopsis": "Product receipt — LUMIN OVERLAY ALPHA READINESS.",
       "bytes": 2186,
-      "mtime": "2026-06-26T16:19:21.729Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:05:40.320Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -70335,41 +70423,41 @@
     {
       "path": "products/receipts/OVERLAY_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — OVERLAY ALPHA BATTERY.",
-      "bytes": 816,
-      "mtime": "2026-06-26T20:41:04.032Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 341,
+      "mtime": "2026-06-26T21:04:41.651Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 198,
-      "mtime": "2026-06-26T20:41:04.032Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:03:42.016Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 3017,
-      "mtime": "2026-06-26T20:41:04.031Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:03:41.503Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 736,
-      "mtime": "2026-06-26T20:41:04.031Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:03:42.351Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1149,
-      "mtime": "2026-06-26T20:41:04.031Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "mtime": "2026-06-26T21:05:08.493Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {
@@ -70391,9 +70479,9 @@
     {
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
-      "bytes": 890,
-      "mtime": "2026-06-26T20:41:04.031Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 1001,
+      "mtime": "2026-06-26T21:05:08.728Z",
+      "indexed_at": "2026-06-26T21:06:43.897Z",
       "synopsis_index_only": true
     },
     {

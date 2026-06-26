@@ -1,7 +1,7 @@
 {
   "schema": "lifere_alpha_e2e_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-23T19:03:52.534Z",
+  "at": "2026-06-26T21:05:43.522Z",
   "mode": "in_process",
   "passed": [
     "LRE-E2E-T01_daily_marker",
@@ -13,7 +13,8 @@
     "LRE-E2E-T07_top3",
     "LRE-E2E-T08_nightly_debrief",
     "LRE-E2E-T09_chair_brief",
-    "LRE-E2E-T10_alpha_daily_cycle"
+    "LRE-E2E-T10_alpha_daily_cycle",
+    "LRE-E2E-T11_alpha_readiness"
   ],
   "failed": [],
   "ok": true,

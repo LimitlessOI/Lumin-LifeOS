@@ -1,6 +1,6 @@
 {
   "schema": "bp_priority_guardrails_v1",
-  "checked_at": "2026-06-26T20:42:58.108Z",
+  "checked_at": "2026-06-26T21:06:35.409Z",
   "verdict": "PASS",
   "owner_department": "Historian",
   "registry": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",

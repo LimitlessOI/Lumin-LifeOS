@@ -1,7 +1,7 @@
 {
   "schema": "wisdom_truth_audit_v1",
   "version": "wisdom_truth_auditor_v1",
-  "at": "2026-06-26T15:47:36.667Z",
+  "at": "2026-06-26T21:05:08.727Z",
   "ok": true,
   "adversarial_probes": [
     {
@@ -34,9 +34,13 @@
     {
       "type": "UNGUARDED_PASS_LITERAL",
       "file": "services/founder-build-self-repair.js"
+    },
+    {
+      "type": "UNGUARDED_PASS_LITERAL",
+      "file": "services/founder-smos-content-executor.js"
     }
   ],
   "probe_fail_count": 0,
-  "gap_count": 1,
+  "gap_count": 2,
   "critical_gap_count": 0
 }

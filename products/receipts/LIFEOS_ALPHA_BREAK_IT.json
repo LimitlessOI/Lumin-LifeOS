@@ -1,6 +1,6 @@
 {
   "schema": "lifeos_alpha_break_it_v1",
-  "at": "2026-06-26T00:16:00.258Z",
+  "at": "2026-06-26T21:04:57.057Z",
   "base": "https://robust-magic-production.up.railway.app",
   "passed": [
     "auth_fail_closed",
@@ -18,7 +18,12 @@
     "static_lifeos_login",
     "lumin_counsel_break_it",
     "lumin_command_break_it",
-    "boldtrail_dup_create_no_crash"
+    "boldtrail_dup_create_no_crash",
+    "sentry_buyer_workspace",
+    "sentry_seller_workspace",
+    "sentry_comms_suggest",
+    "sentry_buyer_objection",
+    "sentry_seller_weekly"
   ],
   "failed": [],
   "ok": true,
@@ -27,15 +32,20 @@
   "pass_ambient_calendar_moment": "Marcus",
   "pass_ambient_commitment": "note",
   "pass_ambient_crm_moment": "boldtrail_contact_created",
-  "pass_ambient_internal_crm_note": "4",
+  "pass_ambient_internal_crm_note": "31",
   "pass_ambient_crisis_signal": "relationship_stress",
   "pass_lifere_alpha_readiness": "agent_pass",
   "pass_lifere_founder_cycle": "has focus",
-  "pass_static_lifeos_app": "140529",
-  "pass_static_lifeos_lifere": "122381",
+  "pass_static_lifeos_app": "144522",
+  "pass_static_lifeos_lifere": "123372",
   "pass_static_lifeos_login": "16093",
   "pass_lumin_counsel_break_it": "chair",
   "pass_lumin_command_break_it": "COMMAND_RAN",
   "pass_boldtrail_dup_create_no_crash": "first=201 second=409",
+  "pass_sentry_buyer_workspace": "200",
+  "pass_sentry_seller_workspace": "200",
+  "pass_sentry_comms_suggest": "200",
+  "pass_sentry_buyer_objection": "200",
+  "pass_sentry_seller_weekly": "200",
   "break_it_pass": true
 }

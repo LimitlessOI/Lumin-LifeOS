@@ -24,12 +24,15 @@ You are in **`builderos-reboot/`** — governed mission packs and factory proofs
 | Artifact | Role |
 |----------|------|
 | **`BP_PRIORITY.json`** | ONLY ordered list of product BPs to execute (rank 1 = active) |
+| **`docs/products/PRODUCT_REGISTRY.json`** | Canonical product homes; read before mission details when shaping context |
 | `MISSIONS/<id>/FOUNDER_PACKET.md` | Verbal digital twin — intended reality (WHAT) |
 | `MISSIONS/<id>/BLUEPRINT.json` | Machine-buildable twin — ARC instructions (HOW) |
 | `MISSIONS/<id>/OBJECTIVE_VERDICT.json` | Result scoreboard |
 | Named acceptance npm script | PROOF |
 
 **Governance (read first):** `docs/constitution/AMENDMENT_PACK_V2.0A.md` — intent front-loaded; no founder re-questions after handoff except defects or new reality. Metric: founder interruptions before Alpha.
+
+**Product-home law:** product truth should be discovered from `docs/products/<product-id>/` before falling back to `docs/projects/AMENDMENT_*` files. Amendment files remain law/receipt anchors, not the primary product home.
 
 **Registries:** `governance/ARTIFACT_ALIAS_REGISTRY.json`, `governance/GATE_ENFORCEMENT_MATRIX.json`, `governance/DEPARTMENT_ROLE_CONTRACT.json`, `governance/MISSION_PHASE_ARTIFACTS.json`
 

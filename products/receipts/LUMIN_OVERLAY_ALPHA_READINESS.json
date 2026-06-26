@@ -1,9 +1,9 @@
 {
   "schema": "lumin_overlay_alpha_readiness_v1",
-  "updated_at": "2026-06-26T00:37:29.487Z",
+  "updated_at": "2026-06-26T21:03:39.891Z",
   "verdict": "CLEARED_FOR_FOUNDER_ALPHA",
   "production_base": "https://robust-magic-production.up.railway.app",
-  "deploy_sha": "c23fc63ae47facc9aa347bf3ba44d97d79599876",
+  "deploy_sha": "bce674b1925b1fe02fc1058cab4c55dcb993835b",
   "ready_for_adam_alpha": true,
   "deploy_required_before_adam": false,
   "battery": {

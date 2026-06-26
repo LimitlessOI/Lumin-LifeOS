@@ -1,0 +1,32 @@
+{
+  "schema": "governance_covenant_live_v1",
+  "at": "2026-06-26T21:05:08.098Z",
+  "ok": true,
+  "covenant_loop": "probe → receipt → fix → redeploy → reprobe",
+  "passed": [
+    "SUITE-truth_lockdown",
+    "SUITE-wisdom_audit",
+    "SUITE-chair_parity",
+    "SUITE-direct_execution_point_b"
+  ],
+  "failed": [],
+  "suites": {
+    "truth_lockdown": {
+      "ok": true,
+      "exit": 0
+    },
+    "wisdom_audit": {
+      "ok": true,
+      "exit": 0
+    },
+    "chair_parity": {
+      "ok": true,
+      "exit": 0
+    },
+    "direct_execution_point_b": {
+      "ok": true,
+      "exit": 0
+    }
+  },
+  "governance_effective": true
+}

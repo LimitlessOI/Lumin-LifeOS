@@ -1,6 +1,6 @@
 {
   "schema": "lumin_alpha_connection_v1",
-  "at": "2026-06-26T00:16:28.097Z",
+  "at": "2026-06-26T21:04:35.964Z",
   "base": "https://robust-magic-production.up.railway.app",
   "passed": [
     "chat_counsel",

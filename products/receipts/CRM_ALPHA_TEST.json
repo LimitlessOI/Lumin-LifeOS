@@ -1,6 +1,6 @@
 {
   "schema": "crm_alpha_test_v1",
-  "at": "2026-06-26T00:08:16.324Z",
+  "at": "2026-06-26T21:04:53.498Z",
   "base": "https://robust-magic-production.up.railway.app",
   "passed": [
     "boldtrail_connected",
@@ -14,11 +14,11 @@
   "failed": [],
   "pass_boldtrail_connected": "/contacts?limit=1",
   "pass_boldtrail_pipeline": "5 contacts",
-  "pass_boldtrail_create_contact": "144464148 via /contact",
+  "pass_boldtrail_create_contact": "144482872 via /contact",
   "pass_ambient_crm_capture": "Noted for your twin and action inbox. BoldTrail note added",
   "pass_ambient_boldtrail_write": "boldtrail_note",
-  "pass_internal_crm_contact": "9",
-  "pass_boldtrail_note_writeback": "144464148",
+  "pass_internal_crm_contact": "19",
+  "pass_boldtrail_note_writeback": "144482872",
   "ok": true,
   "agent_alpha_pass": true
 }

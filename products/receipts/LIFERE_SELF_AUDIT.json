@@ -1,8 +1,10 @@
 {
   "schema": "lifere_self_audit_v1",
-  "at": "2026-06-24T00:34:59.987Z",
+  "at": "2026-06-26T21:04:51.927Z",
   "passed": [
     "AUD-01_alpha_gate_script",
+    "AUD-01b_agent_alpha_script",
+    "AUD-01c_agent_alpha_gate",
     "AUD-02_outreach_execute_route",
     "AUD-02b_alpha_daily_cycle",
     "AUD-02c_founder_attempt",
