@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T22:01:00.196Z",
+  "generated_at": "2026-06-26T23:00:33.438Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12607,
+  "file_count": 12608,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29201,9 +29201,9 @@
     {
       "path": "builderos-reboot/MISSION_PACK_INDEX.json",
       "synopsis": "BuilderOS artifact — MISSION PACK INDEX.",
-      "bytes": 9862,
-      "mtime": "2026-06-26T20:28:33.499Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z",
+      "bytes": 9723,
+      "mtime": "2026-06-26T23:00:06.530Z",
+      "indexed_at": "2026-06-26T23:00:33.438Z",
       "synopsis_index_only": true
     },
     {
@@ -34831,9 +34831,9 @@
     {
       "path": "builderos-reboot/scripts/generate-mission-pack-index.mjs",
       "synopsis": "HIST DOMAIN — Historian owns this artifact (read/salvage only).",
-      "bytes": 2013,
-      "mtime": "2026-06-23T04:33:54.048Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z"
+      "bytes": 2278,
+      "mtime": "2026-06-26T23:00:01.700Z",
+      "indexed_at": "2026-06-26T23:00:33.438Z"
     },
     {
       "path": "builderos-reboot/scripts/generate-phases-0006-0010.mjs",
@@ -41883,17 +41883,17 @@
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json",
       "synopsis": "Documentation — AMENDMENT 12 COMMAND CENTER.Manifest.",
-      "bytes": 6338,
-      "mtime": "2026-06-26T22:00:27.169Z",
-      "indexed_at": "2026-06-26T22:01:00.196Z",
+      "bytes": 6321,
+      "mtime": "2026-06-26T22:56:20.751Z",
+      "indexed_at": "2026-06-26T23:00:33.438Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
       "synopsis": "AMENDMENT 12 — Command & Control Center",
-      "bytes": 100205,
-      "mtime": "2026-06-26T21:56:58.463Z",
-      "indexed_at": "2026-06-26T22:01:00.196Z"
+      "bytes": 101103,
+      "mtime": "2026-06-26T22:56:14.491Z",
+      "indexed_at": "2026-06-26T23:00:33.438Z"
     },
     {
       "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
@@ -70437,6 +70437,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/REAL_APP_E2E.json",
+      "synopsis": "Product receipt — REAL APP E2E.",
+      "bytes": 1814,
+      "mtime": "2026-06-26T22:55:48.223Z",
+      "indexed_at": "2026-06-26T23:00:33.438Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
       "bytes": 3017,
@@ -71100,8 +71108,8 @@
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
       "bytes": 144558,
-      "mtime": "2026-06-26T21:07:02.243Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z"
+      "mtime": "2026-06-26T22:55:16.212Z",
+      "indexed_at": "2026-06-26T23:00:33.438Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -72931,9 +72939,9 @@
     {
       "path": "routes/public-routes.js",
       "synopsis": "Public HTML entry routes for operator-facing overlays and portals.",
-      "bytes": 13824,
-      "mtime": "2026-06-26T21:56:21.815Z",
-      "indexed_at": "2026-06-26T22:01:00.196Z",
+      "bytes": 13790,
+      "mtime": "2026-06-26T22:34:50.622Z",
+      "indexed_at": "2026-06-26T23:00:33.438Z",
       "ssot": [
         "docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
       ]
@@ -75136,9 +75144,9 @@
     {
       "path": "scripts/run-real-app-e2e.mjs",
       "synopsis": "Real-app E2E — Playwright drives the actual Railway UI like a founder would.",
-      "bytes": 16216,
-      "mtime": "2026-06-26T21:56:29.674Z",
-      "indexed_at": "2026-06-26T22:01:00.196Z",
+      "bytes": 16683,
+      "mtime": "2026-06-26T22:55:24.263Z",
+      "indexed_at": "2026-06-26T23:00:33.438Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

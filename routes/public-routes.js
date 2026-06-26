@@ -272,8 +272,7 @@ export function registerPublicRoutes(app, {
     const expectedKey = String(COMMAND_CENTER_KEY || '').trim();
     if (queryKey && expectedKey && queryKey === expectedKey) {
       try {
-        const now = Math.floor(Date.now() / 1000);
-        const token = signToken({ handle: 'adam', role: 'admin', tier: 'founder', iat: now, exp: now + 86400 });
+        const token = signToken({ handle: 'adam', role: 'admin', tier: 'founder', iat: Date.now(), exp: Date.now() + 86400000 });
         res.cookie('lifeos_access_token', token, {
           httpOnly: true, sameSite: 'lax',
           secure: process.env.NODE_ENV === 'production',

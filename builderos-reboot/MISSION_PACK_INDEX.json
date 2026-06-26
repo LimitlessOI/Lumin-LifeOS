@@ -1,15 +1,13 @@
 {
   "_authority": {
     "domain": "Hist",
+    "hist_id": "HIST-AUTO-002",
     "owner_department": "Historian",
     "status": "HIST_OWNED",
-    "hist_id": "HIST-AUTO-002",
-    "role": "Mission pack index — historian archive only",
-    "do_not_use_for": "LifeOS product work orchestration or deciding what to build next",
-    "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json",
-    "mandatory_read": "prompts/00-HIST-LEGACY-BOUNDARY.md"
+    "role": "Mission pack index — generated from MISSION_QUEUE.json",
+    "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
   },
-  "generated_at": "2026-06-25T23:44:33.383Z",
+  "generated_at": "2026-06-26T23:00:06.529Z",
   "source_of_truth": "builderos-reboot/MISSION_QUEUE.json",
   "mission_count": 48,
   "missions_complete": 37,

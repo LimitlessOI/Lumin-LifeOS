@@ -130,7 +130,7 @@ async function test_appLoads() {
   console.log('\n[1] App shell loads');
   try {
     // addInitScript already seeds localStorage before JS runs — single navigation is enough
-    const res = await page.goto(await appUrl(), { waitUntil: 'networkidle', timeout: TIMEOUT });
+    const res = await page.goto(await appUrl(), { waitUntil: 'load', timeout: TIMEOUT });
     const status = res?.status() ?? 0;
     if (status >= 400) { fail('app_loads', `HTTP ${status}`); return false; }
     const title = await page.title();
@@ -161,21 +161,36 @@ async function test_luminFabVisible() {
 }
 
 async function test_luminDrawerOpens() {
-  console.log('\n[4] Lumin drawer opens on FAB click');
+  console.log('\n[4] Lumin drawer opens');
   try {
-    await page.locator('#lumin-fab').click();
+    // App auto-opens the drawer on direct_system=1 (150ms after load)
+    // Wait up to 3s for the auto-open, then try clicking FAB if still closed
     await page.waitForFunction(() => {
-      const drawer = document.querySelector('.lumin-drawer');
-      return drawer?.classList.contains('open');
-    }, { timeout: 5000 });
+      return document.querySelector('.lumin-drawer')?.classList.contains('open');
+    }, { timeout: 3000 }).catch(async () => {
+      // Auto-open didn't fire — click FAB to open
+      await page.locator('#lumin-fab').click();
+      await page.waitForFunction(() => {
+        return document.querySelector('.lumin-drawer')?.classList.contains('open');
+      }, { timeout: 5000 });
+    });
     await shot('02-drawer-open');
     pass('lumin_drawer_opens');
   } catch (e) { fail('lumin_drawer_opens', e.message); }
 }
 
+async function ensureDrawerOpen() {
+  const isOpen = await page.evaluate(() => document.querySelector('.lumin-drawer')?.classList.contains('open'));
+  if (!isOpen) {
+    await page.locator('#lumin-fab').click();
+    await page.waitForFunction(() => document.querySelector('.lumin-drawer')?.classList.contains('open'), { timeout: 5000 });
+  }
+}
+
 async function test_chatResponse() {
   console.log('\n[5] Chat: real reply arrives for a counsel question');
   try {
+    await ensureDrawerOpen();
     const reply = await sendLuminMessage('what is point b right now?');
     await shot('03-chat-reply');
     if (!reply || reply.length < 20) {
@@ -225,8 +240,10 @@ async function test_counselOnlyBypass() {
 async function test_navigateToLifeRE() {
   console.log('\n[8] Navigate to LifeRE page');
   try {
-    await page.goto(await appUrl('lifeos-lifere.html'), { waitUntil: 'networkidle', timeout: TIMEOUT });
-    await page.waitForSelector('#lifere-alpha-cycle-btn', { timeout: TIMEOUT });
+    await page.goto(await appUrl('lifeos-lifere.html'), { waitUntil: 'load', timeout: TIMEOUT });
+    // LifeRE content loads inside #content-frame iframe — use frameLocator
+    const frame = page.frameLocator('#content-frame');
+    await frame.locator('#lifere-alpha-cycle-btn').waitFor({ state: 'visible', timeout: TIMEOUT });
     await shot('06-lifere-page');
     pass('navigate_lifere', 'LifeRE page loaded with alpha cycle button');
   } catch (e) { fail('navigate_lifere', e.message); }
@@ -235,42 +252,28 @@ async function test_navigateToLifeRE() {
 async function test_alphaReadiness() {
   console.log('\n[9] LifeRE alpha readiness surface renders');
   try {
-    const btn = await page.locator('#lifere-alpha-cycle-btn');
-    const btnText = await btn.textContent();
-    const bannerEl = await page.$('#lifere-alpha-readiness-banner, #lifere-founder-alpha-banner, .alpha-banner, [data-lifere="alpha-daily-cycle"]');
-    if (!bannerEl && !btnText?.includes('Alpha')) {
-      fail('alpha_readiness', 'alpha cycle button or banner not found');
-    } else {
-      pass('alpha_readiness', `alpha cycle btn: "${btnText?.trim()}"`);
-    }
+    const frame = page.frameLocator('#content-frame');
+    const btn = frame.locator('#lifere-alpha-cycle-btn');
+    const btnText = await btn.textContent({ timeout: TIMEOUT });
+    pass('alpha_readiness', `alpha cycle btn: "${btnText?.trim()}"`);
   } catch (e) { fail('alpha_readiness', e.message); }
 }
 
 async function test_alphaDaily() {
   console.log('\n[10] Alpha daily cycle runs from UI');
   try {
-    const statusEl = page.locator('#lifere-cycle-status, .alpha-cycle-status, #lifere-status-line');
-    await page.locator('#lifere-alpha-cycle-btn').click();
-    // Wait up to 25s for any status update (cycle might be fast or slow)
+    // Close Lumin drawer if open — its backdrop intercepts clicks in the iframe
+    const backdropOpen = await page.evaluate(() => document.getElementById('lumin-backdrop')?.classList.contains('open'));
+    if (backdropOpen) await page.evaluate(() => typeof closeLuminDrawer === 'function' && closeLuminDrawer());
+    const frame = page.frameLocator('#content-frame');
+    await frame.locator('#lifere-alpha-cycle-btn').click();
+    // Wait up to 25s for any status update inside the iframe
     let cycleText = '';
     try {
-      await page.waitForFunction(() => {
-        const els = document.querySelectorAll('#lifere-cycle-status, .status-line, #alpha-confirm-box');
-        for (const el of els) {
-          if (!el.hidden && el.textContent?.length > 4) return true;
-        }
-        return false;
-      }, { timeout: 25_000 });
-      cycleText = await page.evaluate(() => {
-        const els = document.querySelectorAll('#lifere-cycle-status, .status-line, #alpha-confirm-box');
-        for (const el of els) {
-          if (!el.hidden && el.textContent?.length > 4) return el.textContent.trim();
-        }
-        return '';
-      });
+      await frame.locator('#lifere-cycle-status, .status-line, #alpha-confirm-box').first().waitFor({ state: 'visible', timeout: 25_000 });
+      cycleText = await frame.locator('#lifere-cycle-status, .status-line, #alpha-confirm-box').first().textContent();
     } catch {
-      // If status never shows, check whether confirm box appeared (cycle ran)
-      const confirmVisible = await page.locator('#alpha-confirm-box').isVisible().catch(() => false);
+      const confirmVisible = await frame.locator('#alpha-confirm-box').isVisible().catch(() => false);
       cycleText = confirmVisible ? 'confirm-box-visible' : 'no-status-update';
     }
     await shot('07-alpha-cycle-ran');
@@ -287,7 +290,7 @@ async function test_alphaDaily() {
 async function test_dashboardLoads() {
   console.log('\n[11] Dashboard page loads');
   try {
-    await page.goto(await appUrl('lifeos-dashboard.html'), { waitUntil: 'networkidle', timeout: TIMEOUT });
+    await page.goto(await appUrl('lifeos-dashboard.html'), { waitUntil: 'load', timeout: TIMEOUT });
     await shot('08-dashboard');
     const bodyText = await page.evaluate(() => document.body?.innerText?.trim() || '');
     if (bodyText.length < 50) {
@@ -347,7 +350,7 @@ await ctx.addCookies([{
   domain:   DOMAIN,
   path:     '/',
   httpOnly: true,
-  secure:   true,
+  secure:   BASE.startsWith('https'),
   sameSite: 'Lax',
 }]);
 

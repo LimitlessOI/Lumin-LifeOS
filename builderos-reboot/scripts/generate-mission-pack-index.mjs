@@ -39,6 +39,14 @@ const entries = dirNames.map((missionId) => {
 });
 
 const index = {
+  _authority: {
+    domain: 'Hist',
+    hist_id: 'HIST-AUTO-002',
+    owner_department: 'Historian',
+    status: 'HIST_OWNED',
+    role: 'Mission pack index — generated from MISSION_QUEUE.json',
+    canonical_work_queue: 'builderos-reboot/BP_PRIORITY.json',
+  },
   generated_at: new Date().toISOString(),
   source_of_truth: 'builderos-reboot/MISSION_QUEUE.json',
   mission_count: entries.length,

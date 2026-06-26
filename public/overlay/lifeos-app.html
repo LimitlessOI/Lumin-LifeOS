@@ -2204,7 +2204,6 @@ function syncAccountUiFromContext() {
   if (sth) sth.textContent = '@' + USER;
 }
 luminBootThread().catch(() => {});
-initLuminDock();
 let KEY   = CTX.KEY;
 let USER  = CTX.USER;
 let NAME  = localStorage.getItem('lifeos_name') || (USER.charAt(0).toUpperCase() + USER.slice(1));
@@ -2929,6 +2928,7 @@ const luminState = {
 const LUMIN_DOCK_KEY = 'lifeos_lumin_dock_position';
 const LUMIN_PIN_KEY = 'lifeos_lumin_dock_pinned';
 const LUMIN_MIN_KEY = 'lifeos_lumin_dock_minimized';
+initLuminDock();
 
 function initLuminDock() {
   const drawer = document.getElementById('lumin-drawer');

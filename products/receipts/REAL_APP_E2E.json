@@ -1,0 +1,76 @@
+{
+  "schema": "real_app_e2e_v1",
+  "at": "2026-06-26T22:55:39.998Z",
+  "base": "http://localhost:3000",
+  "ok": true,
+  "passed": [
+    "app_loads",
+    "no_js_errors",
+    "lumin_fab_visible",
+    "lumin_drawer_opens",
+    "chat_response",
+    "smos_question",
+    "counsel_only_bypass",
+    "navigate_lifere",
+    "alpha_readiness",
+    "alpha_daily_cycle",
+    "dashboard_loads",
+    "page_nav",
+    "login_page"
+  ],
+  "failed": [],
+  "results": {
+    "app_loads": {
+      "ok": true,
+      "detail": "HTTP 200, title=\"LifeOS\""
+    },
+    "no_js_errors": {
+      "ok": true,
+      "detail": "1 console.error(s)"
+    },
+    "lumin_fab_visible": {
+      "ok": true,
+      "detail": ""
+    },
+    "lumin_drawer_opens": {
+      "ok": true,
+      "detail": ""
+    },
+    "chat_response": {
+      "ok": true,
+      "detail": "136 chars: \"✅ DONE\nPoint B: LifeRE Alpha (PRODUCT-LIFERE-OS-V1-0001)\n• Channel: system_actio…\""
+    },
+    "smos_question": {
+      "ok": true,
+      "detail": "workflow present, no bleed"
+    },
+    "counsel_only_bypass": {
+      "ok": true,
+      "detail": "counseled without running build"
+    },
+    "navigate_lifere": {
+      "ok": true,
+      "detail": "LifeRE page loaded with alpha cycle button"
+    },
+    "alpha_readiness": {
+      "ok": true,
+      "detail": "alpha cycle btn: \"Run Alpha Daily Cycle\""
+    },
+    "alpha_daily_cycle": {
+      "ok": true,
+      "detail": "cycle ran: \"\n        Close Alpha gate (founder only)\n        Agent alpha must PASS first (every button + API tested). Then confirm u\""
+    },
+    "dashboard_loads": {
+      "ok": true,
+      "detail": "2171 chars visible"
+    },
+    "page_nav": {
+      "ok": true,
+      "detail": "3 pages loaded cleanly"
+    },
+    "login_page": {
+      "ok": true,
+      "detail": "HTTP 200"
+    }
+  }
+}

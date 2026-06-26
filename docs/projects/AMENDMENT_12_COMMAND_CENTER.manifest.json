@@ -195,6 +195,6 @@
   ],
   "last_verified_at": "2026-05-31",
   "last_updated": "2026-06-26",
-  "ssot_receipt_tail": "routes/public-routes.js: ?commandKey URL param bootstrap — mints JWT, sets cookie, redirects clean for E2E browser auth.",
+  "ssot_receipt_tail": "lifeos-app.html: luminState TDZ fixed — initLuminDock() moved after const declarations. E2E 13/13 PASS.",
   "verification_passed": null
 }
