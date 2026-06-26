@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:12:43.698Z",
+  "generated_at": "2026-06-26T00:13:47.715Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12559,
+  "file_count": 12561,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -42306,17 +42306,17 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
       "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
-      "bytes": 1091,
-      "mtime": "2026-06-26T00:08:26.727Z",
-      "indexed_at": "2026-06-26T00:08:49.105Z",
+      "bytes": 1117,
+      "mtime": "2026-06-26T00:13:41.109Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 13634,
-      "mtime": "2026-06-26T00:07:41.484Z",
-      "indexed_at": "2026-06-26T00:08:49.105Z"
+      "bytes": 13991,
+      "mtime": "2026-06-26T00:13:28.446Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -69747,9 +69747,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 26801,
-      "mtime": "2026-06-26T00:12:05.933Z",
-      "indexed_at": "2026-06-26T00:12:43.698Z",
+      "bytes": 26872,
+      "mtime": "2026-06-26T00:13:17.822Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z",
       "synopsis_index_only": true
     },
     {
@@ -70046,6 +70046,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/LIFEOS_ALPHA_BREAK_IT.json",
+      "synopsis": "Product receipt — LIFEOS ALPHA BREAK IT.",
+      "bytes": 1365,
+      "mtime": "2026-06-26T00:13:37.608Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/LIFEOS_DOCTRINE_LIVE_PROBE.json",
       "synopsis": "Product receipt — LIFEOS DOCTRINE LIVE PROBE.",
       "bytes": 1749,
@@ -70240,9 +70248,9 @@
     {
       "path": "products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json",
       "synopsis": "Product receipt — LUMIN OVERLAY ALPHA READINESS.",
-      "bytes": 2738,
-      "mtime": "2026-06-25T22:58:42.659Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 1609,
+      "mtime": "2026-06-26T00:13:26.072Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z",
       "synopsis_index_only": true
     },
     {
@@ -70257,8 +70265,8 @@
       "path": "products/receipts/OVERLAY_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — OVERLAY ALPHA BATTERY.",
       "bytes": 319,
-      "mtime": "2026-06-26T00:08:16.141Z",
-      "indexed_at": "2026-06-26T00:08:49.105Z",
+      "mtime": "2026-06-26T00:11:29.635Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z",
       "synopsis_index_only": true
     },
     {
@@ -71190,9 +71198,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 122021,
-      "mtime": "2026-06-24T21:28:00.821Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z"
+      "bytes": 122381,
+      "mtime": "2026-06-26T00:13:18.239Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
@@ -74144,6 +74152,16 @@
       ]
     },
     {
+      "path": "scripts/lifeos-alpha-break-it.mjs",
+      "synopsis": "Live break-it alpha — stress edge cases beyond standard batteries.",
+      "bytes": 8083,
+      "mtime": "2026-06-26T00:11:52.712Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "scripts/lifeos-build-ops.mjs",
       "synopsis": "Fetches read-only Lumin build ops aggregates (no AI, no council).",
       "bytes": 1398,
@@ -74862,9 +74880,9 @@
     {
       "path": "scripts/run-overlay-alpha-battery.mjs",
       "synopsis": "Agent alpha battery — Lumin + LifeRE overlay readiness (local + optional live).",
-      "bytes": 2250,
-      "mtime": "2026-06-26T00:05:37.831Z",
-      "indexed_at": "2026-06-26T00:08:49.105Z",
+      "bytes": 2340,
+      "mtime": "2026-06-26T00:13:19.348Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89113,9 +89131,9 @@
     {
       "path": "services/lifere-alpha-readiness-surface.js",
       "synopsis": "LifeRE alpha readiness surface — machine status for founder UI + API.",
-      "bytes": 3552,
-      "mtime": "2026-06-25T21:45:57.304Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 4253,
+      "mtime": "2026-06-26T00:13:15.750Z",
+      "indexed_at": "2026-06-26T00:13:47.715Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]

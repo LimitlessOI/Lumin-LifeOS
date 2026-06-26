@@ -30,6 +30,10 @@ const steps = [
 ];
 
 if (live) {
+  steps.push(['alpha-break-it', 'npm', ['run', 'lifeos:alpha:break-it']]);
+}
+
+if (live) {
   steps.push(['lumin-chair-parity', 'npm', ['run', 'lifeos:lumin-chair:parity']]);
   steps.push(['alpha-connection', 'node', ['scripts/alpha-test-lumin-connection.mjs']]);
   steps.push(['conversation-live', 'npm', ['run', 'lifeos:lumin:conversation:verify:live']]);

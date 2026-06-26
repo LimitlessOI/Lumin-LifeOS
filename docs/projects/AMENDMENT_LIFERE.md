@@ -136,6 +136,7 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-06-26 | **Alpha banner fix** — `lifere-alpha-readiness-surface.js` uses `OBJECTIVE_VERDICT.agent_alpha_pass` (products/receipts excluded from Docker); adds `ready_for_founder_alpha`; `lifeos-alpha-break-it.mjs` (16 stress checks); overlay battery includes break-it | Adam: alpha test use it break it | ✅ live break-it 16/16 | deploy banner fix |
 | 2026-06-26 | **Restored agent alpha scripts** — `run-lifere-agent-alpha.mjs` (119 checks incl BoldTrail), `verify-agent-alpha-gate.mjs`; live mode via `LIFERE_AGENT_ALPHA_LIVE=1`; overlay battery loads `.env` | Scripts were never committed — overlay battery failed file-not-found | ✅ live 119/119 + battery PASS | deploy migration |
 | 2026-06-25 | **`src/integrations/boldtrail.js`** — kvCORE create tries `POST /contact` then fallbacks; notes use `POST/PUT /contact/:id/action/note`; **`services/lumin-ambient-moment-router.js`** wires BoldTrail auto-capture; **`scripts/crm-alpha-test.mjs`** + **`scripts/alpha-test-lumin-connection.mjs`**; pipeline top-level `contacts` | Adam: fix CRM alpha — BoldTrail create 405 + ambient→CRM write-back | ✅ node --check | deploy + `npm run lifeos:crm:alpha:test` |
 | 2026-06-25 | **`routes/lifere-os-routes.js`** — `POST /api/v1/lifere/boldtrail/contacts` wraps `createOrUpdateContact` (prior commit missed route body) | Adam CRM alpha — add bogus BoldTrail client | ✅ node --check | redeploy + crm-alpha-test |

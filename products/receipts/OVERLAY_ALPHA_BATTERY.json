@@ -1,6 +1,6 @@
 {
   "schema": "overlay_alpha_battery_v1",
-  "at": "2026-06-26T00:07:41.513Z",
+  "at": "2026-06-26T00:10:50.134Z",
   "mode": "live",
   "passed": [
     "builder:preflight",

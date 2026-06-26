@@ -23,6 +23,7 @@ function readJson(rel, fallback = null) {
 export function getLifeREAlphaReadinessSurface({ pool = null, pgTablesOk = null } = {}) {
   const verdict = readJson(`builderos-reboot/MISSIONS/${MISSION_ID}/OBJECTIVE_VERDICT.json`, {});
   const readiness = readJson('products/receipts/LIFERE_ALPHA_READINESS.json', {});
+  const agentReceipt = readJson('products/receipts/LIFERE_AGENT_ALPHA.json', {});
   const html = fs.existsSync(path.join(ROOT, 'public/overlay/lifeos-lifere.html'))
     ? fs.readFileSync(path.join(ROOT, 'public/overlay/lifeos-lifere.html'), 'utf8')
     : '';
@@ -41,18 +42,25 @@ export function getLifeREAlphaReadinessSurface({ pool = null, pgTablesOk = null 
   }));
 
   const technicalPass = ['TECHNICAL_PASS', 'PASS'].includes(String(verdict.verdict || '').toUpperCase());
-  const machineReady = readiness.ready_for_alpha_testing === true || readiness.ok === true;
+  const agentAlphaPass = verdict.agent_alpha_pass === true || agentReceipt.agent_alpha_pass === true;
   const founderPass = verdict.founder_usability_pass === true;
+  // products/receipts/ is excluded from Railway Docker context — prefer verdict + agent receipt when present.
+  const machineReady = agentAlphaPass
+    || readiness.ready_for_alpha_testing === true
+    || readiness.ok === true
+    || technicalPass;
 
   const checklist = [
     { id: 'technical_pass', label: 'Machine acceptance PASS', ok: technicalPass },
+    { id: 'agent_alpha', label: 'Agent alpha (119 checks)', ok: agentAlphaPass },
     { id: 'alpha_readiness', label: 'Alpha readiness gate PASS', ok: machineReady },
     { id: 'live_pg', label: 'Live PostgreSQL connected', ok: pgTablesOk === true ? true : (pool === false ? false : null) },
     { id: 'ui_markers', label: 'Founder UI markers present', ok: uiMarkers.every((m) => m.present) },
     { id: 'founder_confirm', label: 'Founder usability confirmed', ok: founderPass },
   ];
 
-  const readyForTesting = technicalPass && checklist.find((c) => c.id === 'ui_markers')?.ok !== false;
+  const readyForTesting = technicalPass && agentAlphaPass && checklist.find((c) => c.id === 'ui_markers')?.ok !== false;
+  const readyForFounderAlpha = readyForTesting && !founderPass;
   const readyForGate = readyForTesting && founderPass;
 
   return {
@@ -61,8 +69,10 @@ export function getLifeREAlphaReadinessSurface({ pool = null, pgTablesOk = null 
     mission_id: MISSION_ID,
     at: new Date().toISOString(),
     verdict: verdict.verdict || null,
+    agent_alpha_pass: agentAlphaPass,
     founder_usability_pass: founderPass,
     ready_for_alpha_testing: readyForTesting,
+    ready_for_founder_alpha: readyForFounderAlpha,
     ready_for_alpha_gate: readyForGate,
     founder_success_test: verdict.founder_success_test
       || 'Open lifeos-app LifeRE path; run Alpha Daily Cycle; confirm PASS with quote',
@@ -71,10 +81,12 @@ export function getLifeREAlphaReadinessSurface({ pool = null, pgTablesOk = null 
     ui_markers: uiMarkers,
     next_action: founderPass
       ? 'Alpha gate closed — continue Record Mode v1 + SMOS depth'
-      : readyForTesting
+      : readyForFounderAlpha
         ? 'Run Alpha Daily Cycle → Confirm Alpha PASS with your quote (12+ chars)'
-        : 'Fix failing machine gates — run npm run lifeos:lifere-alpha-readiness',
-    label: founderPass ? 'KNOW' : readyForTesting ? 'THINK' : 'GUESS',
+        : agentAlphaPass
+          ? 'Machine gates pass — refresh if banner stale'
+          : 'Conductor must run agent alpha before founder test',
+    label: founderPass ? 'KNOW' : readyForFounderAlpha ? 'THINK' : agentAlphaPass ? 'THINK' : 'GUESS',
   };
 }
 

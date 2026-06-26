@@ -90,4 +90,7 @@ data/
 .cursor/
 assets/
 products/
+!products/receipts/LIFERE_AGENT_ALPHA.json
+!products/receipts/OVERLAY_ALPHA_BATTERY.json
+!products/receipts/LIFEOS_ALPHA_BREAK_IT.json
 agent-transcripts/

@@ -980,7 +980,7 @@
           }
           const data = await res.json();
           const ready = data.ready_for_alpha_testing === true;
-          const founderReady = data.ready_for_founder_alpha === true;
+          const founderReady = data.ready_for_founder_alpha === true || (data.agent_alpha_pass === true && !data.founder_usability_pass);
           const gate = data.ready_for_alpha_gate === true;
           banner?.classList.toggle('pending', !ready || !gate);
           if (gate) {
@@ -989,6 +989,10 @@
             confirmBox?.setAttribute('hidden', '');
           } else if (founderReady) {
             title.textContent = 'Founder alpha unlocked — agent tested all features';
+            detail.textContent = data.next_action || 'Run Alpha Daily Cycle, then confirm PASS.';
+            confirmBox?.removeAttribute('hidden');
+          } else if (ready && data.agent_alpha_pass) {
+            title.textContent = 'Agent alpha PASS — conductor verified all features';
             detail.textContent = data.next_action || 'Run Alpha Daily Cycle, then confirm PASS.';
             confirmBox?.removeAttribute('hidden');
           } else if (ready) {

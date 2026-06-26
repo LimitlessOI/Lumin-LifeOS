@@ -119,6 +119,7 @@
     "lifeos:overlay:alpha:battery:live": "node scripts/run-overlay-alpha-battery.mjs --live",
     "lifeos:overlay:alpha:connection": "node scripts/alpha-test-lumin-connection.mjs",
     "lifeos:crm:alpha:test": "node scripts/crm-alpha-test.mjs",
+    "lifeos:alpha:break-it": "node scripts/lifeos-alpha-break-it.mjs",
     "lifeos:ambient:moment-smoke": "node scripts/ambient-moment-smoke.mjs",
     "lifeos:agent-alpha-gate:verify": "node scripts/verify-agent-alpha-gate.mjs",
     "lifeos:lifere-alpha-gate": "node scripts/run-lifere-os-v1-acceptance.mjs && node scripts/run-lifere-alpha-e2e.mjs && node scripts/run-lifere-az-acceptance.mjs && node scripts/run-lifere-agent-alpha.mjs",

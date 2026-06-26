@@ -23,6 +23,6 @@
     "config/lifeos-stack-registry.json"
   ],
   "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-26 agent-alpha-scripts-restored",
-  "last_change_summary": "run-lifere-agent-alpha + verify-agent-alpha-gate; live battery 119/119"
+  "last_receipt": "2026-06-26 alpha-banner-readiness-surface-fix",
+  "last_change_summary": "Banner uses OBJECTIVE_VERDICT agent_alpha; break-it script; dockerignore receipt whitelist"
 }
