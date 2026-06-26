@@ -71,6 +71,29 @@ async function main() {
       check('IGR-08', intakeList.ok, intakeList.ok ? 'GET /blueprint/intake OK' : `intake API HTTP ${intakeList.status}`),
     );
 
+    const backfillHint = await fetch(`${baseUrl}/api/v1/blueprint/intake/backfill`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(commandKey ? { 'x-command-key': commandKey } : {}),
+      },
+      body: JSON.stringify({
+        product_name: 'IntakeGateProbe',
+        amendment_file: 'docs/projects/AMENDMENT_41_MARKETINGOS.md',
+      }),
+    });
+    const backfillJson = await backfillHint.json().catch(() => ({}));
+    const hintOk = backfillHint.status === 400 && backfillJson.error === 'amendment_text_required';
+    checks.push(
+      check(
+        'IGR-11',
+        hintOk,
+        hintOk
+          ? 'backfill without amendment_text returns actionable 400'
+          : `backfill hint probe HTTP ${backfillHint.status} error=${backfillJson.error || 'unknown'}`,
+      ),
+    );
+
     const golden = await runIntakeRegressionHarness({
       mode: 'acceptance_only',
       baseUrl,

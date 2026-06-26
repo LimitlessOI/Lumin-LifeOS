@@ -161,6 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-26 | **Intake UX fixes** — backfill 400 when amendment_text missing on Railway; ARC/chair/CLI next steps point to `POST /blueprint/intake/:id/execute`; chair-hook backfill mode; IGR-11 hint probe. | Founder hit AmendmentNotFound 500 and stale `/builder/run` execute hints. | ⚠️ deploy + IGR-11 | `npm run builderos:intake:ready` |
 | 2026-06-26 | **Founder intake ready gate** — `scripts/builderos-intake-ready-gate.mjs` + `npm run builderos:intake:ready` (IGR-01..10: env, builder ready, deploy fresh, intake API, golden acceptance, pre-build gate). | Adam alpha → founder intake handoff needs one command proof. | ✅ IGR 10/10 PASS | `npm run builderos:intake:ready` |
 | 2026-06-26 | **`intake-blueprint-executor.js`** — post-execute auto-redeploy + acceptance re-probe (`INTAKE_AUTO_REDEPLOY=1` default). | Committed intake steps need live deploy before HTTP acceptance is valid. | ⚠️ deploy + re-test execute | intake execute |
 | 2026-06-26 | **`blueprint-intake.js`** — `loadExistingBlueprintForAmendment` DB fallback when `docs/` absent on Railway; best-effort disk write. | Adjust flow BlueprintNotFound on production Docker image. | ⚠️ deploy + adjust smoke | POST /blueprint/intake/adjust |

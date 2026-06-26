@@ -251,17 +251,36 @@ function applyGapAnswers(blueprintJson, answers) {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+function amendmentReadableOnDisk(amendmentFile) {
+  const candidates = [
+    amendmentFile,
+    path.join(ROOT, amendmentFile),
+    path.join(ROOT, 'docs/projects', amendmentFile),
+    path.join(ROOT, 'docs/projects', path.basename(amendmentFile)),
+  ];
+  return candidates.some((p) => fs.existsSync(p));
+}
+
+function amendmentNotFoundError(amendmentFile) {
+  return new Error(
+    `AmendmentNotFound: ${amendmentFile}. On Railway (docs/ not in image) pass amendment_text in POST body, or run: node scripts/run-blueprint-intake.mjs --amendment ${amendmentFile}`,
+  );
+}
+
 function readAmendment(amendmentFile) {
   const candidates = [
     amendmentFile,
     path.join(ROOT, amendmentFile),
     path.join(ROOT, 'docs/projects', amendmentFile),
+    path.join(ROOT, 'docs/projects', path.basename(amendmentFile)),
   ];
   for (const p of candidates) {
     if (fs.existsSync(p)) return fs.readFileSync(p, 'utf8');
   }
-  throw new Error(`AmendmentNotFound: ${amendmentFile}`);
+  throw amendmentNotFoundError(amendmentFile);
 }
+
+export { amendmentReadableOnDisk };
 
 async function loadExistingBlueprintForAmendment(pool, amendmentFile) {
   const blueprintPath = path.join(

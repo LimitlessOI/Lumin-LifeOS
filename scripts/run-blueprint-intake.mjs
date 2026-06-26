@@ -60,6 +60,7 @@ async function main() {
   const sessionIdx = args.indexOf('--session');
   const sessionArg = sessionIdx !== -1 ? args[sessionIdx + 1] : null;
   const arcMode = args.includes('--arc');
+  const executeMode = args.includes('--execute');
   const answerMode = args.includes('--answer');
   const answerGapId = answerMode ? args[args.indexOf('--answer') + 1] : null;
   const answerText = answerMode ? args[args.indexOf('--answer') + 2] : null;
@@ -87,6 +88,9 @@ Check a session:
 
 Run ARC review:
   node scripts/run-blueprint-intake.mjs --session <id> --arc
+
+Execute ready blueprint:
+  node scripts/run-blueprint-intake.mjs --session <id> --execute
 
 Answer a gap:
   node scripts/run-blueprint-intake.mjs --session <id> --answer gap_1 "The answer is..."
@@ -118,6 +122,20 @@ Server: ${BASE_URL}
       return;
     }
 
+    if (sessionArg && executeMode) {
+      console.log(`\nExecuting intake blueprint for session ${sessionArg}...`);
+      const data = await api('POST', `/api/v1/blueprint/intake/${sessionArg}/execute`, {});
+      console.log(`  Steps run: ${data.steps_run}`);
+      console.log(`  OK: ${data.ok}`);
+      if (data.acceptance) {
+        console.log(`  Acceptance: ${data.acceptance.ok ? 'PASS' : 'FAIL'}`);
+      }
+      if (data.post_deploy?.redeploy?.ok) {
+        console.log('  Post-execute redeploy: OK');
+      }
+      process.exit(data.ok ? 0 : 1);
+    }
+
     if (sessionArg && arcMode) {
       console.log(`\nRunning ARC review on session ${sessionArg}...`);
       const data = await api('POST', `/api/v1/blueprint/intake/${sessionArg}/arc`);
@@ -132,7 +150,10 @@ Server: ${BASE_URL}
         console.log('\nCritical Issues:');
         r.critical.forEach(c => console.log(`  [${c.step_id}] ${c.issue}`));
       }
-      if (data.ready_to_execute) console.log('\nReady: POST /api/v1/builder/run to execute blueprint.');
+      if (data.ready_to_execute) {
+        console.log(`\nReady: npm run blueprint:intake:execute -- --session ${sessionArg}`);
+        console.log(`   or: POST /api/v1/blueprint/intake/${sessionArg}/execute`);
+      }
       process.exit(data.ready_to_execute ? 0 : 1);
     }
 
@@ -273,6 +294,7 @@ Server: ${BASE_URL}
         const arc = await api('POST', `/api/v1/blueprint/intake/${sessionId}/arc`);
         if (arc.ready_to_execute) {
           console.log('ARC: PASS — blueprint ready to execute');
+          console.log(`  npm run blueprint:intake:execute -- --session ${sessionId}`);
         } else {
           console.log(`ARC: FAIL — ${arc.arc_report?.total_critical || 0} critical issues`);
           arc.arc_report?.critical?.forEach(c => console.log(`  CRITICAL [${c.step_id}]: ${c.issue}`));

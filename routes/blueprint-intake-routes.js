@@ -5,7 +5,7 @@
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
-import { createBlueprintIntakeService } from '../services/blueprint-intake.js';
+import { createBlueprintIntakeService, amendmentReadableOnDisk } from '../services/blueprint-intake.js';
 import { executeIntakeBlueprint } from '../services/intake-blueprint-executor.js';
 
 export function createBlueprintIntakeRoutes(app, ctx) {
@@ -21,6 +21,12 @@ export function createBlueprintIntakeRoutes(app, ctx) {
       const { amendment_file, amendment_text, product_name } = req.body;
       if ((!amendment_file && !amendment_text) || !product_name) {
         return res.status(400).json({ error: 'product_name and (amendment_file or amendment_text) required' });
+      }
+      if (!amendment_text && amendment_file && !amendmentReadableOnDisk(amendment_file)) {
+        return res.status(400).json({
+          error: 'amendment_text_required',
+          detail: `Amendment file not on server (docs/ excluded from Railway image). Include amendment_text in body or run: node scripts/run-blueprint-intake.mjs --amendment ${amendment_file}`,
+        });
       }
       const ownerId = req.lifeosUser?.sub || null;
       // startBackfill returns immediately; AI runs in background
@@ -184,7 +190,7 @@ export function createBlueprintIntakeRoutes(app, ctx) {
         arc_report: result.arcReport,
         ready_to_execute: result.arcReport.ready_to_execute,
         next: result.arcReport.ready_to_execute
-          ? `POST /api/v1/builder/run to execute blueprint`
+          ? `POST /api/v1/blueprint/intake/${req.params.id}/execute`
           : `${result.arcReport.total_critical} critical gaps remain — resolve before executing`,
       });
     } catch (err) {
@@ -232,11 +238,34 @@ export function createBlueprintIntakeRoutes(app, ctx) {
   // ── Chair/Lumin direct hook — receives adjustment from conversational turn ──
   // Called by chair-orchestrator when channel === 'blueprint_execute' and
   // the message is an ADJUSTMENT (not an execute command for an existing mission).
-  // Body: { session_text: "...", amendment_file: "...", mode: "adjust|greenfield|backfill" }
+  // Body: { session_text: "...", amendment_file: "...", mode: "adjust|greenfield|backfill", product_name?, amendment_text? }
   app.post('/api/v1/blueprint/chair-hook', requireKey, async (req, res) => {
     try {
-      const { session_text, amendment_file, mode = 'adjust' } = req.body;
+      const { session_text, amendment_file, mode = 'adjust', product_name, amendment_text } = req.body;
       const ownerId = req.lifeosUser?.sub || null;
+
+      if (mode === 'backfill' && amendment_file) {
+        const inlineText = amendment_text || session_text;
+        if (!inlineText) {
+          return res.status(400).json({ error: 'amendment_text or session_text required for backfill mode' });
+        }
+        if (!product_name) {
+          return res.status(400).json({ error: 'product_name required for backfill mode' });
+        }
+        const result = await intake.startBackfill({
+          amendmentFile: amendment_file,
+          amendmentText: inlineText,
+          productName: product_name,
+          ownerId,
+        });
+        return res.status(202).json({
+          ok: true,
+          mode: 'backfill',
+          session_id: result.sessionId,
+          status: result.status,
+          reply_to_chair: `Backfill started for ${product_name}. Poll GET /api/v1/blueprint/intake/${result.sessionId} until arc_review or ready.`,
+        });
+      }
 
       if (mode === 'adjust' && amendment_file) {
         const result = await intake.startAdjustment({
@@ -269,7 +298,7 @@ export function createBlueprintIntakeRoutes(app, ctx) {
         });
       }
 
-      return res.status(400).json({ error: 'mode must be adjust or greenfield; backfill requires amendment_file' });
+      return res.status(400).json({ error: 'mode must be adjust, greenfield, or backfill (with amendment_file + amendment_text)' });
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }

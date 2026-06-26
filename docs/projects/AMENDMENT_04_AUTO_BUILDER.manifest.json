@@ -7,6 +7,6 @@
   "status": "active",
   "build_ready": true,
   "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-26 founder-intake-ready-gate",
-  "last_change_summary": "IGR founder gate, adjust DB fallback on Railway, post-execute auto-redeploy, daemon intake regression default"
+  "last_receipt": "2026-06-26 intake-ux-hints",
+  "last_change_summary": "Backfill 400 hint on Railway, correct intake execute next steps, chair-hook backfill, IGR-11"
 }

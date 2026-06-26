@@ -2,7 +2,9 @@
 /**
  * SYNOPSIS: Full ARC pipeline — entry gate → AI review → write blueprint → signal executor.
  * Usage: node scripts/run-arc-pipeline.mjs <blueprint-file-path> [--execute]
- * --execute: after passing ARC, POST /api/v1/builder/run to trigger BuilderOS execution.
+ * --execute: legacy mission trigger only — for intake blueprints use:
+ *   npm run blueprint:intake:execute -- --session <uuid>
+ *   or: node scripts/run-blueprint-intake.mjs --session <uuid> --execute
  * Exit 0 = passed and (optionally) executed. Exit 1 = failed.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
@@ -96,7 +98,8 @@ console.log('[ARC PIPELINE] Step 4 PASS');
 
 // Step 5: Optional execution
 if (shouldExecute) {
-  console.log('\n[ARC PIPELINE] Step 5: Triggering BuilderOS executor...');
+  console.log('\n[ARC PIPELINE] Step 5: Triggering legacy /builder/run (mission path — not intake)...');
+  console.warn('[ARC PIPELINE] For intake sessions use: npm run blueprint:intake:execute -- --session <uuid>');
   const apiBase = process.env.API_BASE_URL || 'http://localhost:3001';
   const commandKey = process.env.COMMAND_CENTER_KEY || process.env.X_COMMAND_KEY;
   if (!commandKey) {
