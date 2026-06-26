@@ -113,6 +113,13 @@
           "note": "Golden intake sessions — acceptance-only catches builder drift without full rebuild"
         },
         {
+          "id": "deploy_verify",
+          "path": "scripts/builderos-deploy-verify.mjs",
+          "npm": "builderos:deploy:verify",
+          "tier": "required",
+          "status": "wired"
+        },
+        {
           "id": "builder_output_verifier",
           "path": "scripts/builderos-builder-output-verifier.mjs",
           "npm": null,

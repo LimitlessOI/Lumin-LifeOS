@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T01:32:25.099Z",
+  "generated_at": "2026-06-26T01:36:50.206Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12574,
   "files": [
@@ -28943,9 +28943,9 @@
     {
       "path": "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json",
       "synopsis": "BuilderOS artifact — BUILDEROS HARNESS TOOLS.",
-      "bytes": 10434,
-      "mtime": "2026-06-26T01:31:57.470Z",
-      "indexed_at": "2026-06-26T01:32:25.099Z",
+      "bytes": 10647,
+      "mtime": "2026-06-26T01:36:46.562Z",
+      "indexed_at": "2026-06-26T01:36:50.206Z",
       "synopsis_index_only": true
     },
     {
