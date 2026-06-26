@@ -159,7 +159,12 @@ export function applyVoiceSendWirePatch({ root, task }) {
   output = patchLuminVoiceInputFallback(output);
 
   if (output === existing) {
-    return { ok: false, reason: 'no_change' };
+    return {
+      ok: true,
+      patch: 'voice_send_wire',
+      files: [{ target_file: VOICE_SEND_APP_TARGET, output: existing }],
+      already_present: true,
+    };
   }
 
   return {

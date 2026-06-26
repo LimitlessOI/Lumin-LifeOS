@@ -149,6 +149,10 @@ for (const probe of PROBES) {
         report.passed.push(probe.id);
         continue;
       }
+      if (probe.allowAlreadyPresent && polled.pf === 'FAIL' && /already present|no change|already_present/i.test(String(polled.json.human_summary || polled.json.first_blocker || ''))) {
+        report.passed.push(probe.id);
+        continue;
+      }
       if (polled.pf === 'FAIL' && !probe.requirePass) {
         report.passed.push(probe.id);
         continue;

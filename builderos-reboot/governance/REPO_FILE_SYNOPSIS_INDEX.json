@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T15:57:40.420Z",
+  "generated_at": "2026-06-26T16:07:09.965Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12581,
   "files": [
@@ -42500,9 +42500,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 139681,
-      "mtime": "2026-06-26T15:57:07.168Z",
-      "indexed_at": "2026-06-26T15:57:38.522Z"
+      "bytes": 139949,
+      "mtime": "2026-06-26T16:07:06.451Z",
+      "indexed_at": "2026-06-26T16:07:09.965Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -74737,9 +74737,9 @@
     {
       "path": "scripts/run-direct-execution-point-b-live.mjs",
       "synopsis": "Point B direct execution — prove do: orders BUILD and complete on production.",
-      "bytes": 5926,
-      "mtime": "2026-06-26T15:56:38.913Z",
-      "indexed_at": "2026-06-26T15:57:38.522Z",
+      "bytes": 6176,
+      "mtime": "2026-06-26T16:06:45.163Z",
+      "indexed_at": "2026-06-26T16:07:09.965Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88168,9 +88168,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 30161,
-      "mtime": "2026-06-26T15:48:49.518Z",
-      "indexed_at": "2026-06-26T15:57:38.522Z",
+      "bytes": 31449,
+      "mtime": "2026-06-26T16:06:47.088Z",
+      "indexed_at": "2026-06-26T16:07:09.965Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -88330,9 +88330,9 @@
     {
       "path": "services/founder-voice-send-patch.js",
       "synopsis": "Mechanical voice \"send it\" wire for Lumin drawer — no whole-file HTML rewrite.",
-      "bytes": 7048,
-      "mtime": "2026-06-26T15:48:49.518Z",
-      "indexed_at": "2026-06-26T15:57:38.522Z",
+      "bytes": 7171,
+      "mtime": "2026-06-26T16:06:31.249Z",
+      "indexed_at": "2026-06-26T16:07:09.965Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]

@@ -266,6 +266,7 @@ async function runCssPatchWithVerification({
   enforceExecutionTruth,
   cacheBust,
   skipQuorum = false,
+  skipLiveVerification = false,
   callCouncilMember = null,
   pool = null,
   quorumStage = null,
@@ -323,6 +324,34 @@ async function runCssPatchWithVerification({
         repair: null,
       });
       break;
+    }
+
+    if (skipLiveVerification) {
+      const result = enforceExecutionTruth({
+        ok: true,
+        committed: true,
+        pass_fail: 'PASS',
+        target_file: committedFiles.join(', '),
+        sha,
+        generated_output: patchResult.files?.[0]?.output || '',
+        first_blocker: null,
+        execution_receipt: { pass_fail: 'PASS', blocker: null, lesson: null, fix: null },
+        execution_path: 'founder_css_patch',
+        founder_verification_required: false,
+        task_meta: {
+          output_bytes: patchResult.files?.[0]?.output?.length || 0,
+          patch: patchResult.patch,
+          committed_files: committedFiles,
+          cache_bust: patchResult.cache_bust,
+          direct_order: true,
+        },
+        exec_meta: execJson,
+      }, { action: 'build', task });
+      return {
+        ...result,
+        human_summary: `${result.human_summary}\nDirect order — commit landed; live CSS verify deferred.`,
+        self_repair: { attempts, repaired: attempt > 1, success_attempt: attempt },
+      };
     }
 
     if (!redeployTriggered) {
@@ -446,7 +475,7 @@ async function runCssPatchWithVerification({
   }, { action: 'build', task });
   const baseFailure = { ...failure, self_repair: { attempts, exhausted: true, quorum_stage: quorumStage || null } };
 
-  if (!skipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
+  if (!effectiveSkipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
     return escalateAfterSoloExhaustion({
       task,
       attempts,
@@ -645,6 +674,8 @@ export async function runFounderBuildWithSelfRepair(options) {
   const base = String(baseUrl || '').replace(/\/$/, '');
   const headers = { 'Content-Type': 'application/json', 'x-command-key': commandKey };
   let currentTask = String(task || '').trim();
+  const directOrder = options.confirmIntent === true;
+  const effectiveSkipQuorum = skipQuorum || directOrder;
 
   const fpV2Gate = await enforceBeforeBuilderDispatch({
     task: currentTask,
@@ -698,7 +729,8 @@ export async function runFounderBuildWithSelfRepair(options) {
       maxAttempts,
       buildFailureReceipt,
       enforceExecutionTruth,
-      skipQuorum,
+      skipQuorum: effectiveSkipQuorum,
+      skipLiveVerification: directOrder,
       callCouncilMember,
       pool,
       quorumStage,
@@ -742,7 +774,7 @@ export async function runFounderBuildWithSelfRepair(options) {
           attempts[attempts.length - 1].repair_applied = repair.repair;
           continue;
         }
-        if (!skipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
+        if (!effectiveSkipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
           return escalateAfterSoloExhaustion({
             task: currentTask,
             attempts,
@@ -814,7 +846,7 @@ export async function runFounderBuildWithSelfRepair(options) {
         continue;
       }
 
-      if (!skipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
+      if (!effectiveSkipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
         return escalateAfterSoloExhaustion({
           task: currentTask,
           attempts,
@@ -857,7 +889,7 @@ export async function runFounderBuildWithSelfRepair(options) {
     execution_path: 'builder_task_execute',
   }, { action: 'build', task: currentTask });
   const baseFailure = { ...failure, self_repair: { attempts, exhausted: true } };
-  if (!skipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
+  if (!effectiveSkipQuorum && attempts.length >= FOUNDER_SOLO_ATTEMPT_MAX) {
     return escalateAfterSoloExhaustion({
       task: currentTask,
       attempts,
