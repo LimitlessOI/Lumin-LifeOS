@@ -527,7 +527,7 @@ export async function registerRuntimeRoutes(app, deps) {
   app.use('/api/v1/memory/capsules', createMemoryCapsuleRoutes({ pool, requireKey }));
   logger.info('✅ [MEMORY-CAPSULE] Routes mounted at /api/v1/memory/capsules/{signal,retrieve,health,capsule/:id,correct}');
 
-  app.use("/api/v1/socialmediaos", createSocialmediaosRoutes({ pool, requireKey: requireUserOrKey, logger }));
+  app.use("/api/v1/socialmediaos", createSocialmediaosRoutes(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));
   logger.info('✅ [SOCIALMEDIAOS] Routes mounted at /api/v1/socialmediaos');
 
   // Memory Intelligence — canonical BuilderOS evidence memory (AMENDMENT_39)

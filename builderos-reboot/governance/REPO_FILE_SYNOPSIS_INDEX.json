@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T01:09:37.091Z",
+  "generated_at": "2026-06-26T01:15:50.412Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12567,
   "files": [
@@ -41940,9 +41940,9 @@
     {
       "path": "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
       "synopsis": "Project Governance",
-      "bytes": 46783,
-      "mtime": "2026-06-25T18:44:21.660Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z"
+      "bytes": 47089,
+      "mtime": "2026-06-26T01:15:47.075Z",
+      "indexed_at": "2026-06-26T01:15:50.412Z"
     },
     {
       "path": "docs/projects/AMENDMENT_20_CAPABILITY_MAP.md",
@@ -41962,9 +41962,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 491333,
-      "mtime": "2026-06-26T01:09:07.522Z",
-      "indexed_at": "2026-06-26T01:09:37.091Z"
+      "bytes": 491230,
+      "mtime": "2026-06-26T01:15:37.043Z",
+      "indexed_at": "2026-06-26T01:15:50.412Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -94895,9 +94895,9 @@
     {
       "path": "startup/register-runtime-routes.js",
       "synopsis": "Runtime route composition for the main Express app.",
-      "bytes": 31223,
-      "mtime": "2026-06-25T18:44:03.155Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 31519,
+      "mtime": "2026-06-26T01:15:29.982Z",
+      "indexed_at": "2026-06-26T01:15:50.412Z",
       "ssot": [
         "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md"
       ]
