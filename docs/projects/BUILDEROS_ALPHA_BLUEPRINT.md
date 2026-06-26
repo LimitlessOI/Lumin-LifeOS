@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-26 — intake regression golden-path harness wired into pre-build gate + supervisor probe.
+**Last Updated:** 2026-06-26 — unified founder chat: DB thread + SMOS executor + twin voice (not template video theater).
 ---
 
 ## 0. Purpose

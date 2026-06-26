@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **Unified conversation slice** — `lumin-thread-context.js` DB thread merge; SMOS content executor replaces generic video templates; twin voice + anti-paraphrase; wisdom/FPv2 clarify skipped on pure chat | Adam: ChatGPT-like talk + SMOS process + twin, not template theater | ⚠️ deploy | `founder-smos-content-executor.js` |
 | 2026-06-26 | **Intent history bleed fix** — `detectWorkIntent` uses current message only; CSS turns skip video executor (yellow bubble ask no longer re-fires 5-video package from thread) | Adam: fainter yellow → wrong video package reply | ⚠️ deploy | `tests/founder-intent-compiler.test.js` |
 | 2026-06-26 | **CSS NL + SW cache bust** — `isCssOnlyUiFeedback` → auto `do:` build; `hasProductBuildContext` includes CSS; SW `CACHE_NAME` bump; `client_version` on chat POST | Adam yellow ask → counsel "can't adjust"; browser stale shell vs terminal PASS | ⚠️ deploy | founder-interface/message |
 | 2026-06-26 | **Founder work execution (GAP-FILL)** — `founder-intent-compiler.js` (thread bind + video_package detect); `founder-work-executors.js`; orchestrator `work_execute` before counsel; dashboard + app send `conversation_history` + `ui_context`; Point B facts only when asked; always scrub LifeRE status deflection | Adam: five-video ask → clarify theater; "do it" lost context → LifeRE Alpha deflection | ⚠️ deploy + Adam retry | `tests/founder-intent-compiler.test.js` |

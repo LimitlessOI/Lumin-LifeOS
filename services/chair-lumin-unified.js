@@ -7,6 +7,7 @@ import { gatherChairNativeFacts } from './chair-native-facts.js';
 import { translateChairPersonality } from './chair-personality-translate.js';
 import { formatStrategicBriefSection } from './lumin-strategic-intelligence.js';
 import { getDoctrinePromptBlock } from './lifeos-service-doctrine.js';
+import { formatThreadForPrompt } from './lumin-thread-context.js';
 
 export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext = {}) {
   const {
@@ -36,6 +37,12 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
   if (deps.listeningOnboarding) {
     systemFacts.listening_onboarding = deps.listeningOnboarding;
     systemFacts.chair_note = `${systemFacts.chair_note} Listening setup mode — output listening_profile fence when user confirms prefs.`;
+  }
+
+  const threadHist = chairContext.conversation_history || deps.conversationHistory || [];
+  if (threadHist.length) {
+    systemFacts.recent_thread = formatThreadForPrompt(threadHist);
+    systemFacts.chair_note = `${systemFacts.chair_note} Continue the thread naturally — do not paraphrase Adam's request back; do not ask obvious confirm questions.`;
   }
 
   let voice = await translatePersonality({

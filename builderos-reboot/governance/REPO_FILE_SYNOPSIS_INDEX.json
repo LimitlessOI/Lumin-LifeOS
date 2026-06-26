@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T18:42:55.709Z",
+  "generated_at": "2026-06-26T18:57:40.134Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12585,
+  "file_count": 12587,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 494317,
-      "mtime": "2026-06-26T18:42:46.065Z",
-      "indexed_at": "2026-06-26T18:42:53.759Z"
+      "bytes": 494662,
+      "mtime": "2026-06-26T18:57:18.153Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42500,9 +42500,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 140514,
-      "mtime": "2026-06-26T17:36:36.863Z",
-      "indexed_at": "2026-06-26T18:42:53.759Z"
+      "bytes": 140850,
+      "mtime": "2026-06-26T18:57:37.295Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -72296,9 +72296,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 49313,
-      "mtime": "2026-06-26T16:34:01.475Z",
-      "indexed_at": "2026-06-26T18:42:53.759Z",
+      "bytes": 49335,
+      "mtime": "2026-06-26T18:56:49.971Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -87157,9 +87157,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 2876,
-      "mtime": "2026-06-25T22:09:25.085Z",
-      "indexed_at": "2026-06-26T18:42:53.759Z",
+      "bytes": 3301,
+      "mtime": "2026-06-26T18:56:17.822Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87177,9 +87177,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 6160,
-      "mtime": "2026-06-26T16:34:01.476Z",
-      "indexed_at": "2026-06-26T18:42:53.759Z",
+      "bytes": 6398,
+      "mtime": "2026-06-26T18:56:16.956Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88327,6 +88327,16 @@
       ]
     },
     {
+      "path": "services/founder-smos-content-executor.js",
+      "synopsis": "Social Media OS content executor — brief → coach → pack (not generic video templates).",
+      "bytes": 5349,
+      "mtime": "2026-06-26T18:55:26.312Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/founder-usability-confirm.js",
       "synopsis": "Founder usability confirm — only Adam can set founder_usability_pass true.",
       "bytes": 4613,
@@ -88359,10 +88369,10 @@
     },
     {
       "path": "services/founder-work-executors.js",
-      "synopsis": "Founder work executors — deliverables (video packages, etc.), not counsel theater.",
-      "bytes": 3768,
-      "mtime": "2026-06-26T16:34:01.476Z",
-      "indexed_at": "2026-06-26T18:42:53.759Z",
+      "synopsis": "Founder work executors — SMOS content + system deliverables (not template theater).",
+      "bytes": 1582,
+      "mtime": "2026-06-26T18:55:37.392Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89767,9 +89777,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 32097,
-      "mtime": "2026-06-26T18:42:46.066Z",
-      "indexed_at": "2026-06-26T18:42:53.759Z",
+      "bytes": 32707,
+      "mtime": "2026-06-26T18:57:11.694Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89850,6 +89860,16 @@
       "bytes": 8555,
       "mtime": "2026-06-22T22:46:28.745Z",
       "indexed_at": "2026-06-26T18:42:53.759Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "services/lumin-thread-context.js",
+      "synopsis": "Server-side founder thread — DB history for unified Lumin conversation.",
+      "bytes": 1697,
+      "mtime": "2026-06-26T18:55:21.726Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95674,9 +95694,9 @@
     {
       "path": "tests/founder-intent-compiler.test.js",
       "synopsis": "js — tests/founder-intent-compiler.test.js.",
-      "bytes": 3006,
-      "mtime": "2026-06-26T18:42:46.066Z",
-      "indexed_at": "2026-06-26T18:42:53.759Z"
+      "bytes": 3140,
+      "mtime": "2026-06-26T18:56:51.450Z",
+      "indexed_at": "2026-06-26T18:57:40.134Z"
     },
     {
       "path": "tests/founder-life-admin-intent.test.js",

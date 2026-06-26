@@ -57,11 +57,16 @@ test('isFounderFrustrationContinuation', () => {
   assert.equal(isFounderFrustrationContinuation('hello lumin'), false);
 });
 
-test('executeFounderWorkIntent — video package produces PASS', async () => {
-  const compiled = detectWorkIntent('make a package for five videos', []);
-  const result = await executeFounderWorkIntent(compiled, { pool: null, userId: 'adam' });
+test('executeFounderWorkIntent — video package uses SMOS path', async () => {
+  const compiled = detectWorkIntent('make a package for five videos about relocation', []);
+  const result = await executeFounderWorkIntent(compiled, {
+    pool: null,
+    userId: 'adam',
+    userHandle: 'adam',
+    utterance: 'make a package for five videos about relocation',
+  });
   assert.equal(result.ok, true);
   assert.equal(result.command_truth, 'COMMAND_RAN');
-  assert.equal(result.package.videos.length, 5);
-  assert.match(result.human_summary, /5-video package ready/i);
+  assert.equal(result.action_type, 'socialmediaos_content');
+  assert.match(result.human_summary, /SMOS|brief|video scripts/i);
 });

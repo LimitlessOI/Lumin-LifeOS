@@ -1207,6 +1207,7 @@ HOW TO RESPOND:
         operatorKey,
         callCouncilMember,
         pool,
+        luminPersist,
       });
 
       const persistWarning = await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary);

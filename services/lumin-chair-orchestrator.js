@@ -67,6 +67,10 @@ import {
   isFounderFrustrationContinuation,
 } from './founder-intent-compiler.js';
 import { executeFounderWorkIntent } from './founder-work-executors.js';
+import {
+  loadFounderThreadHistory,
+  mergeConversationHistory,
+} from './lumin-thread-context.js';
 
 export {
   isBlueprintExecuteIntent,
@@ -347,11 +351,18 @@ export async function runLuminChairTurn(ctx, deps) {
     explicitAction = 'auto',
     conversationHistory = [],
     uiContext = null,
+    userHandle = null,
   } = ctx;
+
+  let mergedHistory = conversationHistory;
+  if (deps.luminPersist && ctx.userId) {
+    const serverHist = await loadFounderThreadHistory(deps.luminPersist, ctx.userId, { limit: 24 });
+    mergedHistory = mergeConversationHistory(serverHist, conversationHistory, { max: 24 });
+  }
 
   const doPrefix = stripChairDoPrefix(cleanedInput);
   const actionSource = ctx.originalText || cleanedInput;
-  let effectiveInput = bindContinuationUtterance(doPrefix.text || cleanedInput, conversationHistory);
+  let effectiveInput = bindContinuationUtterance(doPrefix.text || cleanedInput, mergedHistory);
   let forceExecute = doPrefix.forcedExecute || confirmIntent || isFounderFrustrationContinuation(cleanedInput);
   const uiBehavior = isFounderUiBehaviorChangeRequest(effectiveInput);
   if (uiBehavior && !doPrefix.forcedExecute) {
@@ -375,7 +386,7 @@ export async function runLuminChairTurn(ctx, deps) {
     if (!cssTurn) {
       const compiled = await compileFounderIntent({
         utterance: effectiveInput,
-        conversationHistory,
+        conversationHistory: mergedHistory,
         uiContext,
         callAI: deps.callCouncilMember,
       });
@@ -383,7 +394,11 @@ export async function runLuminChairTurn(ctx, deps) {
         const workResult = await executeFounderWorkIntent(compiled, {
           pool: deps.pool,
           userId: ctx.userId,
+          userHandle: userHandle || ctx.userHandle || 'adam',
           tenantId: ctx.tenantId || 'default',
+          callCouncilMember: deps.callCouncilMember,
+          founderRole: user_role,
+          utterance: effectiveInput,
         });
         if (workResult) {
           return chairWorkExecutorResponse(
@@ -394,7 +409,7 @@ export async function runLuminChairTurn(ctx, deps) {
       }
     }
   }
-  if (!skipIntentGate && (!conversationalMode || likelyBuild) && !displayOnlyTurn) {
+  if (!skipIntentGate && likelyBuild && !displayOnlyTurn) {
     const wisdom = assessFounderUtteranceWisdom(effectiveInput, { confirmIntent: forceExecute });
     if (wisdom.needs_clarification) {
       return chairWisdomClarifyResponse(
@@ -446,7 +461,7 @@ export async function runLuminChairTurn(ctx, deps) {
     forceExecute,
   };
 
-  if (!skipIntentGate && (!conversationalMode || likelyBuild) && requiresPreExecuteClarify(effectiveInput, contextOpts)) {
+  if (!skipIntentGate && likelyBuild && requiresPreExecuteClarify(effectiveInput, contextOpts)) {
     let expandedTask = effectiveInput;
     if (isBuildRequest(effectiveInput) || isRepairContinuationIntent(effectiveInput)) {
       expandedTask = await deps.resolveBuildTaskForFounder(ctx.req, effectiveInput);
@@ -785,7 +800,8 @@ export async function runLuminChairTurn(ctx, deps) {
       }, {
         ...chairContext,
         domain: sourceMode === 'listening_setup' ? 'listening_onboarding' : chairContext.domain,
-        user_handle: ctx.userHandle || chairContext.user_handle || null,
+        user_handle: ctx.userHandle || userHandle || chairContext.user_handle || null,
+        conversation_history: mergedHistory,
       });
       const truth = finalizeTruth({
         ...chairResult,
