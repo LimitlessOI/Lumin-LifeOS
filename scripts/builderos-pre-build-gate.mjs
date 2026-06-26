@@ -105,6 +105,29 @@ checks.push(
   ),
 );
 
+const skipIntakeRegression = /^1|true|yes$/i.test(String(process.env.BUILDEROS_SKIP_INTAKE_REGRESSION || '').trim());
+if (!skipIntakeRegression && baseUrl && commandKey) {
+  const intakeRegression = spawnSync('npm', ['run', 'builderos:intake:regression:acceptance'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    env: process.env,
+    timeout: 120_000,
+  });
+  checks.push(
+    check(
+      'PBG-07',
+      intakeRegression.status === 0,
+      intakeRegression.status === 0
+        ? 'intake golden-path acceptance PASS'
+        : 'intake regression failed — run npm run builderos:intake:regression:acceptance',
+    ),
+  );
+} else if (skipIntakeRegression) {
+  checks.push(check('PBG-07', true, 'skipped (BUILDEROS_SKIP_INTAKE_REGRESSION=1)'));
+} else {
+  checks.push(check('PBG-07', true, 'skipped (no PUBLIC_BASE_URL or COMMAND_CENTER_KEY)'));
+}
+
 const report = {
   schema: 'builderos_pre_build_gate_v1',
   generated_at: new Date().toISOString(),

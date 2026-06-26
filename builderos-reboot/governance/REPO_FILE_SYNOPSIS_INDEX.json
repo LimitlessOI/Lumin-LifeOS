@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T01:28:28.796Z",
+  "generated_at": "2026-06-26T01:32:25.099Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12569,
+  "file_count": 12574,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28943,9 +28943,17 @@
     {
       "path": "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json",
       "synopsis": "BuilderOS artifact — BUILDEROS HARNESS TOOLS.",
-      "bytes": 10039,
-      "mtime": "2026-06-24T21:09:56.999Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 10434,
+      "mtime": "2026-06-26T01:31:57.470Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
+      "synopsis": "BuilderOS artifact — BUILDEROS INTAKE REGRESSION HARNESS.",
+      "bytes": 752,
+      "mtime": "2026-06-26T01:31:28.827Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
       "synopsis_index_only": true
     },
     {
@@ -36860,6 +36868,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/builderos-intake-regression-last-run.json",
+      "synopsis": "Exports createSocialmediaosRoutes — data/builderos-intake-regression-last-run.json.",
+      "bytes": 1981,
+      "mtime": "2026-06-26T01:32:10.540Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/governed-autonomy-backlog-state.meta.json",
       "synopsis": "JSON data/config — data/governed-autonomy-backlog-state.meta.json.",
       "bytes": 466,
@@ -41763,9 +41779,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 38856,
-      "mtime": "2026-06-26T01:28:23.278Z",
-      "indexed_at": "2026-06-26T01:28:28.796Z"
+      "bytes": 39107,
+      "mtime": "2026-06-26T01:32:07.150Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -42468,9 +42484,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 137925,
-      "mtime": "2026-06-26T01:18:43.428Z",
-      "indexed_at": "2026-06-26T01:19:01.857Z"
+      "bytes": 138334,
+      "mtime": "2026-06-26T01:32:10.719Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -69754,9 +69770,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 26952,
-      "mtime": "2026-06-26T00:37:23.574Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 27163,
+      "mtime": "2026-06-26T01:31:52.473Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
       "synopsis_index_only": true
     },
     {
@@ -73525,6 +73541,16 @@
       ]
     },
     {
+      "path": "scripts/builderos-intake-regression-harness.mjs",
+      "synopsis": "Golden intake blueprint regression — acceptance-only (default), dry-run, or full rebuild.",
+      "bytes": 1955,
+      "mtime": "2026-06-26T01:31:36.500Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
+      ]
+    },
+    {
       "path": "scripts/builderos-ollama-token-audit.mjs",
       "synopsis": "Read-only audit module for summarizing Ollama provider token usage via internal API.",
       "bytes": 5881,
@@ -73547,9 +73573,9 @@
     {
       "path": "scripts/builderos-pre-build-gate.mjs",
       "synopsis": "Pre-build gate for canonical harness — ready, deploy, doctrine, env.",
-      "bytes": 4037,
-      "mtime": "2026-06-25T22:25:54.123Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 4885,
+      "mtime": "2026-06-26T01:31:44.047Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
       "ssot": [
         "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json"
       ]
@@ -74254,9 +74280,9 @@
     {
       "path": "scripts/lifeos-builder-supervisor.mjs",
       "synopsis": "Supervised builder runner for LifeOS dashboard work.",
-      "bytes": 20709,
-      "mtime": "2026-06-24T20:55:45.736Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 21378,
+      "mtime": "2026-06-26T01:31:45.902Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86844,6 +86870,16 @@
       ]
     },
     {
+      "path": "services/builderos-intake-regression-harness.js",
+      "synopsis": "Golden intake blueprint regression — acceptance-only and dry-run dispatch probes.",
+      "bytes": 6841,
+      "mtime": "2026-06-26T01:31:34.483Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
+      ]
+    },
+    {
       "path": "services/builderos-live-enforcement-pass.js",
       "synopsis": "Exports summarizeBuilderEvidence — services/builderos-live-enforcement-pass.js.",
       "bytes": 1087,
@@ -88541,9 +88577,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 17331,
-      "mtime": "2026-06-26T01:28:13.148Z",
-      "indexed_at": "2026-06-26T01:28:28.796Z",
+      "bytes": 17432,
+      "mtime": "2026-06-26T01:31:41.664Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -95311,6 +95347,16 @@
       "bytes": 2036,
       "mtime": "2026-06-21T21:39:27.935Z",
       "indexed_at": "2026-06-26T00:45:25.440Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
+      ]
+    },
+    {
+      "path": "tests/builderos-intake-regression-harness.test.js",
+      "synopsis": "js — tests/builderos-intake-regression-harness.test.js.",
+      "bytes": 1252,
+      "mtime": "2026-06-26T01:32:23.374Z",
+      "indexed_at": "2026-06-26T01:32:25.099Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]

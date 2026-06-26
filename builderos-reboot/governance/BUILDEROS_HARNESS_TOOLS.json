@@ -1,6 +1,6 @@
 {
   "schema": "builderos_harness_tools_v1",
-  "updated_at": "2026-06-24",
+  "updated_at": "2026-06-26",
   "purpose": "BuilderOS machine harness — tools required for 4 pillars (not LifeRE product). Honest wiring truth for agents.",
   "authority": "builderos-reboot/BUILDEROS_WORKING_DEFINITION.json",
   "audit_command": "npm run builderos:harness:audit",
@@ -98,11 +98,19 @@
           "status": "wired"
         },
         {
-          "id": "deploy_verify",
-          "path": "scripts/builderos-deploy-verify.mjs",
-          "npm": "builderos:deploy:verify",
+          "id": "intake_blueprint_executor",
+          "path": "services/intake-blueprint-executor.js",
+          "npm": "blueprint:intake:execute",
           "tier": "required",
           "status": "wired"
+        },
+        {
+          "id": "intake_regression_harness",
+          "path": "builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
+          "npm": "builderos:intake:regression:acceptance",
+          "tier": "required",
+          "status": "wired",
+          "note": "Golden intake sessions — acceptance-only catches builder drift without full rebuild"
         },
         {
           "id": "builder_output_verifier",

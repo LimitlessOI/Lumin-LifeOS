@@ -161,7 +161,8 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
-| 2026-06-26 | **`intake-blueprint-executor.js`** — `buildVerifyFileHints` from blueprint SQL/routes; git pull before acceptance run. | Verify assertions wrong (IF NOT EXISTS, validationResult); local script stale vs GitHub. | ⚠️ re-run MOS-P1-005 | intake execute |
+| 2026-06-26 | **Intake regression harness** — golden session registry + acceptance-only probe; pre-build PBG-07. | Builder platform fixes need automated regression without full MOS rebuild spend. | ✅ wired | `builderos:intake:regression:acceptance` |
+| 2026-06-26 | **`intake-blueprint-executor.js`** — `buildVerifyFileHints` from blueprint SQL/routes; git pull before acceptance run. | Verify assertions wrong (IF NOT EXISTS, validationResult); local script stale vs GitHub. | ✅ MOS-P1-005 PASS | intake execute |
 | 2026-06-26 | **`intake-blueprint-executor.js`** — verify reference → verify-builderos-working-definition; `buildRouteProbeHints` injects real mount paths; forbid marketingos hallucinations. | MOS-P1-005 probed fake /marketingos/* paths from stale reference. | ⚠️ re-run MOS-P1-005 | intake execute |
 | 2026-06-26 | **Product route auto-wire** — `autoWireRoute` handles all `routes/*-routes.js` (not only lifeos-*); `POST /builder/wire-route`; intake executor wires after route step + runs acceptance_cmd. | SocialMediaOS routes committed but never mounted; verify script double-read body. | ⚠️ deploy + re-test MOS-P1-003/005 | `wire-route` + intake execute |
 | 2026-06-26 | **Acceptance verify runtime skip** — paired with BUILDEROS_ALPHA verifier fix; esm_script forbids pg/pool imports. | MOS-P1-005 runtime gate false fail. | ✅ argv fix deployed | intake execute |

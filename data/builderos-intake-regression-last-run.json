@@ -1,0 +1,26 @@
+{
+  "schema": "builderos_intake_regression_report_v1",
+  "generated_at": "2026-06-26T01:32:10.538Z",
+  "harness_path": "/Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/governance/BUILDEROS_INTAKE_REGRESSION_HARNESS.json",
+  "harness_updated_at": "2026-06-26",
+  "session_count": 1,
+  "base_url": "https://robust-magic-production.up.railway.app",
+  "ok": true,
+  "mode": "acceptance_only",
+  "results": [
+    {
+      "harness_id": "socialmediaos-p1-golden",
+      "session_id": "3e6105c4-f5e9-4037-bb57-5451acc2ea59",
+      "product": "SocialMediaOS",
+      "acceptance_cmd": "node scripts/verify-socialmediaos.mjs",
+      "ok": true,
+      "acceptance": {
+        "ok": true,
+        "status": 0,
+        "script": "scripts/verify-socialmediaos.mjs",
+        "stdout_tail": "--- SocialMediaOS Phase 1 Acceptance Script Results ---\n[PASS] FILE-01: db/migrations/20260626_socialmediaos.sql exists\n[PASS] FILE-02: services/socialmediaos-service.js exists\n[PASS] FILE-03: routes/socialmediaos-routes.js exists\n[PASS] DB-01: Migration includes socialmediaos_sessions table creation\n[PASS] DB-02: Migration includes socialmediaos_content_packs table creation\n[PASS] SVC-01: Service exports createMarketingOSFactory\n[PASS] RTE-01: Routes file includes exact factory signature: export function createSocialmediaosRoutes({ pool, requireKey, logger }) {\n[PASS] HTTP-01: GET https://robust-magic-production.up.railway.app/api/v1/socialmediaos/sessions -> Status: 200, OK: true, Detail: {\"ok\":true,\"sessions\":[],\"count\":0,\"truth_spine_applied\":true,\"truth_spine_version\":\"truth_enforceme\n[PASS] HTTP-02: POST https://robust-magic-production.up.railway.app/api/v1/socialmediaos/validate-payment-link -> Status: 200, OK: true, Valid: true, Detail: {\"ok\":true,\"validationResult\":{\"valid\":true,\"reason\":null},\"truth_spine_applied\":true,\"truth_spine_v\n\nAll SocialMediaOS Phase 1 acceptance checks passed!\n",
+        "stderr_tail": ""
+      }
+    }
+  ]
+}

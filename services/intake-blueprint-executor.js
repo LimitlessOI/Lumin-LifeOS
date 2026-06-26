@@ -423,6 +423,7 @@ export async function executeIntakeBlueprint({
   const acceptanceCmd = resolvedBlueprint._meta?.acceptance_cmd;
   let acceptance = null;
   if (acceptanceCmd && !dryRun) {
+    spawnSync('git', ['pull', 'origin', 'main', '--ff-only'], { cwd: REPO_ROOT, encoding: 'utf8' });
     acceptance = runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
   }
 

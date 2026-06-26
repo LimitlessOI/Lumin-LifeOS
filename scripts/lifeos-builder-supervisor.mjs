@@ -368,6 +368,23 @@ async function main() {
     console.log(`KNOW: /ready HTTP 200 — commitToGitHub=${Boolean(readyJson?.builder?.commitToGitHub)} council=${Boolean(readyJson?.builder?.callCouncilMember)}`);
     console.log('NOT-PROVEN: council output quality, output correctness, or platform stability under load — probe does not test these.');
     await analyzeBuilderGaps();
+    const runIntakeRegression =
+      hasFlag('--intake-regression') ||
+      /^1|true|yes$/i.test(String(process.env.BUILDER_DAEMON_INTAKE_REGRESSION || '').trim());
+    if (runIntakeRegression && base) {
+      console.log('Intake regression (acceptance-only golden paths)...');
+      const ir = spawnSync('npm', ['run', 'builderos:intake:regression:acceptance'], {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        shell: true,
+        env: process.env,
+      });
+      if (ir.status !== 0) {
+        console.error(ir.stdout || ir.stderr);
+        process.exit(ir.status || 1);
+      }
+      console.log('KNOW: Intake regression acceptance PASS.');
+    }
     if (consequenceLens) printConsequenceLensReminder();
     return;
   }

@@ -1,0 +1,17 @@
+{
+  "schema": "builderos_intake_regression_harness_v1",
+  "updated_at": "2026-06-26",
+  "purpose": "Golden intake blueprint sessions — acceptance-only regression catches builder/platform drift without re-spending council tokens on full rebuilds.",
+  "audit_command": "npm run builderos:intake:regression:acceptance",
+  "sessions": [
+    {
+      "id": "socialmediaos-p1-golden",
+      "session_id": "3e6105c4-f5e9-4037-bb57-5451acc2ea59",
+      "product": "SocialMediaOS",
+      "acceptance_cmd": "node scripts/verify-socialmediaos.mjs",
+      "purpose": "Intake → /build → wire → acceptance golden path (MOS-P1-001..005)",
+      "last_known_pass": "2026-06-26",
+      "tags": ["intake", "route-wire", "codebook-normalize", "zone3"]
+    }
+  ]
+}
