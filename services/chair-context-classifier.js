@@ -15,6 +15,7 @@ import {
   isBlueprintExecuteIntent,
   isExplicitExecuteCommand,
   isBuildRequest,
+  isFounderRepairOrderIntent,
 } from './chair-intent-signals.js';
 
 const PRODUCT_MARKERS = /\b(html|css|\.js|\.mjs|route|routes\/|services\/|overlay|lifere|lifeos-app|deploy|railway|builder|commit|target_file|ui|nav|bubble|server|migration|blueprint|mission|ssot|amendment|api\/|public\/|npm run|gap-fill)\b/i;
@@ -28,6 +29,7 @@ export function hasProductBuildContext(text = '') {
   return PRODUCT_MARKERS.test(t)
     || isFounderShipOrUsabilityIntent(t)
     || isRepairContinuationIntent(t)
+    || isFounderRepairOrderIntent(t)
     || isProductBuildChangeVerb(t);
 }
 
@@ -61,6 +63,7 @@ export function computeContextScores(text = '') {
   if (isBuildRequest(t)) scores.build += 5;
   if (isProductBuildChangeVerb(t)) scores.build += 4;
   if (isRepairContinuationIntent(t)) scores.build += 8;
+  if (isFounderRepairOrderIntent(t)) scores.build += 12;
   if (hasHighConfidenceBuildTarget(t)) scores.build += 6;
   if (/\b(fix|add|change|implement|wire|update)\s+(this|that|it)\b/i.test(t)) scores.build += 10;
 

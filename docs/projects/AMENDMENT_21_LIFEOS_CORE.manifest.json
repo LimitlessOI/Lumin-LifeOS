@@ -884,7 +884,8 @@
     ]
   },
   "last_updated": "2026-06-26",
-  "last_receipt": "2026-05-19 lumin-display-routing-skip-normalize-t7-parity",
+  "last_receipt": "2026-06-26 governance-covenant-repair-order-ack",
+  "last_change_summary": "Founder repair orders → repair_order_ack (no counsel deflection); governance covenant live loop"
   "last_change_summary": "Agent alpha scripts restored; crm_contact_notes; verifier CLI guard",
   "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
 }

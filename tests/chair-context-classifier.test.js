@@ -7,6 +7,7 @@ import {
   resolveChairContext,
   requiresPreExecuteClarify,
 } from '../services/chair-context-classifier.js';
+import { isFounderRepairOrderIntent } from '../services/chair-intent-signals.js';
 import { classifyChairIntent } from '../services/lumin-chair-orchestrator.js';
 
 const OIL_MSG = 'pretty worried I got to get an oil change should I get to do that on the way out can you find a coupon for me';
@@ -40,6 +41,13 @@ test('vague product build requires clarify', () => {
 test('explicit target skips clarify', () => {
   const msg = 'change bubble color target_file: public/overlay/lifeos-theme-overrides.css';
   assert.equal(requiresPreExecuteClarify(msg, {}), false);
+});
+
+test('founder repair order detected and scores build path', () => {
+  const msg = "you're supposed to fix this — make that change, don't tell me what the problem is";
+  assert.equal(isFounderRepairOrderIntent(msg), true);
+  const ctx = resolveChairContext(msg, {});
+  assert.equal(ctx.channel, 'build_async');
 });
 
 console.log('✅ chair-context-classifier.test.js passed');

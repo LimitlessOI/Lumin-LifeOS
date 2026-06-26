@@ -12,7 +12,7 @@ import {
   extractMissionIdFromText,
   runFoundationPipelineForFounder,
 } from './lifeos-mission-pipeline-executor.js';
-import { isRepairContinuationIntent } from './builder-instruction-target.js';
+import { isRepairContinuationIntent, extractTargetFileFromInstruction } from './builder-instruction-target.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
 import { buildListeningOnboardingContext } from './lifeos-listening-profile.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
@@ -51,6 +51,7 @@ import {
   isBuildRequest,
   isExplicitExecuteCommand,
   isPureCounselQuestion,
+  isFounderRepairOrderIntent,
 } from './chair-intent-signals.js';
 import { stripChairDoPrefix, tryLuminChairSystemAction } from './lumin-chair-system-actions.js';
 import {
@@ -132,6 +133,39 @@ function chairIntentClarifyResponse(ctx, understanding, summary, fpV2 = null) {
       source_mode: ctx.sourceMode,
       auth_mode: ctx.auth_mode,
       user_role: ctx.user_role,
+    }),
+  };
+}
+
+function chairRepairOrderAckResponse(ctx) {
+  const summary = [
+    'Repair order received — no command ran yet.',
+    'Covenant: I execute or say honestly I cannot — I do not explain the bug back at you.',
+    'Give me a concrete target: `do: …` or name the file/UI area to change.',
+  ].join('\n');
+  const truth = finalizeTruth({
+    ok: true,
+    pass_fail: 'CLARIFY',
+    command_truth: 'NO_COMMAND_RAN',
+    receipt_truth: 'REPAIR_ORDER_AWAITING_TARGET',
+    action: 'repair_order_ack',
+    repair_order_blocked_counsel: true,
+    human_summary_technical: summary,
+    done_synopsis: 'Repair intent locked — awaiting target, not counsel deflection.',
+    next_synopsis: 'Say `do: fix X in …` or point at the exact UI/file.',
+    next_why: 'Direct connection covenant: execute or HALT honestly.',
+    direct_connection: true,
+  }, 'repair_order_ack');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('repair_order_ack', {
+      ...truth,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+      conversational_mode: ctx.conversationalMode,
+      direct_connection: true,
     }),
   };
 }
@@ -311,6 +345,20 @@ export async function runLuminChairTurn(ctx, deps) {
         systemAction,
       );
     }
+  }
+
+  if (
+    isFounderRepairOrderIntent(effectiveInput)
+    && !forceExecute
+    && !extractTargetFileFromInstruction(effectiveInput)
+  ) {
+    return chairRepairOrderAckResponse({
+      intakeNormalized,
+      sourceMode,
+      auth_mode,
+      user_role,
+      conversationalMode,
+    });
   }
 
   const pointBTarget = loadPointBTarget();
@@ -624,6 +672,15 @@ export async function runLuminChairTurn(ctx, deps) {
     case 'life_admin':
     case 'lumin':
     case 'chair': {
+      if (isFounderRepairOrderIntent(effectiveInput) && !forceExecute) {
+        return chairRepairOrderAckResponse({
+          intakeNormalized,
+          sourceMode,
+          auth_mode,
+          user_role,
+          conversationalMode,
+        });
+      }
       const memoryContext = deps.loadChairMemoryContext
         ? await deps.loadChairMemoryContext().catch(() => null)
         : null;

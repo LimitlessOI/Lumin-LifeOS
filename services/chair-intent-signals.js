@@ -33,6 +33,20 @@ export function isPureCounselQuestion(text = '') {
   return true;
 }
 
+/** Founder repair order — must route to build or fail-closed ack, never counsel deflection. */
+export function isFounderRepairOrderIntent(text = '') {
+  const t = String(text || '').trim();
+  if (!t || /^\s*(do|execute|run)\s*:/i.test(t)) return false;
+  if (/\bmake that change\b/i.test(t)) return true;
+  if (/\bfix the fact that\b/i.test(t)) return true;
+  if (/\bdon'?t tell me (what|about|the)\b/i.test(t)) return true;
+  if (/\b(you'?re|you are) supposed to (fix|make|do|repair)\b/i.test(t)) return true;
+  if (/\bdirect connection\b/i.test(t) && /\b(repair|fix|change|make)\b/i.test(t)) return true;
+  if (/\b(tell you to|you to) (fix|repair|make)\b/i.test(t)) return true;
+  if (/\bmake that change\b.*\bwhen I say\b/i.test(t)) return true;
+  return false;
+}
+
 export function isBuildRequest(text) {
   if (isFounderPersonalLifeIntent(text)) return false;
   if (isBlueprintExecuteIntent(text)) return false;

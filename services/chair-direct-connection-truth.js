@@ -21,13 +21,22 @@ const FALSE_ACTION_SENTENCE = [
   /\b(i('ve| have)? (fixed|patched|updated|shipped) (it|that|the))\b/i,
 ];
 
+/** Counsel deflection when founder ordered repair — meta-analysis instead of execute/HALT. */
+const REPAIR_DEFLECTION_SENTENCE = [
+  /\bthis suggests a disconnect\b/i,
+  /\byou'?re testing (conversation|the|how)\b/i,
+  /\b(you|your) (said|say) a sentence\b/i,
+  /\bexpecting it to send\b/i,
+  /\bwhat is the current status of the LifeRE\b/i,
+];
+
 const FALSE_ACTION_WHOLE = [
   /^lifeos is now open/i,
   /^opening lifeos/i,
   /^i('ve| have) opened/i,
 ];
 
-export function detectCounselTheater(text = '', commandTruth = 'NO_COMMAND_RAN') {
+export function detectCounselTheater(text = '', commandTruth = 'NO_COMMAND_RAN', opts = {}) {
   if (commandTruth !== 'NO_COMMAND_RAN') return { violation: false, hits: [] };
   const t = String(text || '').trim();
   if (!t) return { violation: false, hits: [] };
@@ -35,9 +44,15 @@ export function detectCounselTheater(text = '', commandTruth = 'NO_COMMAND_RAN')
   for (const re of FALSE_ACTION_WHOLE) {
     if (re.test(t)) hits.push(re.source);
   }
+  const sentenceRes = opts.repairOrderIntent ? [...FALSE_ACTION_SENTENCE, ...REPAIR_DEFLECTION_SENTENCE] : FALSE_ACTION_SENTENCE;
   for (const sentence of t.split(/(?<=[.!?])\s+/)) {
-    for (const re of FALSE_ACTION_SENTENCE) {
+    for (const re of sentenceRes) {
       if (re.test(sentence)) hits.push(sentence.slice(0, 80));
+    }
+  }
+  if (opts.repairOrderIntent) {
+    for (const re of REPAIR_DEFLECTION_SENTENCE) {
+      if (re.test(t)) hits.push(re.source);
     }
   }
   return { violation: hits.length > 0, hits: [...new Set(hits)] };

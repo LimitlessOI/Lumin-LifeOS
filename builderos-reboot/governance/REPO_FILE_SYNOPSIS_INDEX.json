@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T06:38:09.776Z",
+  "generated_at": "2026-06-26T15:19:53.807Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12578,
+  "file_count": 12579,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41986,17 +41986,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26711,
-      "mtime": "2026-06-26T00:31:13.094Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 26826,
+      "mtime": "2026-06-26T15:19:49.117Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 491510,
-      "mtime": "2026-06-26T01:22:38.592Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z"
+      "bytes": 491971,
+      "mtime": "2026-06-26T15:19:48.877Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -69786,9 +69786,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 27241,
-      "mtime": "2026-06-26T01:39:29.925Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 27488,
+      "mtime": "2026-06-26T15:19:23.905Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z",
       "synopsis_index_only": true
     },
     {
@@ -73218,9 +73218,9 @@
     {
       "path": "scripts/audit-founder-alpha-ready.mjs",
       "synopsis": "Founder alpha readiness audit — one receipt Adam/conductor trust before founder session.",
-      "bytes": 6566,
-      "mtime": "2026-06-26T00:37:20.640Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 6628,
+      "mtime": "2026-06-26T15:19:19.425Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -74766,6 +74766,16 @@
       ]
     },
     {
+      "path": "scripts/run-governance-covenant-live.mjs",
+      "synopsis": "Governance covenant live loop — prove covenants hold on production, receipt failures.",
+      "bytes": 1835,
+      "mtime": "2026-06-26T15:19:07.715Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "scripts/run-intake-blueprint.mjs",
       "synopsis": "Execute an ARC-ready intake blueprint through BuilderOS — observe failures, fix builder not product by hand.",
       "bytes": 3295,
@@ -74938,9 +74948,9 @@
     {
       "path": "scripts/run-lumin-chair-parity.mjs",
       "synopsis": "Lumin Chair direct-connection parity — live API must match execution truth.",
-      "bytes": 6891,
-      "mtime": "2026-06-24T23:51:35.180Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 7660,
+      "mtime": "2026-06-26T15:19:27.261Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87067,9 +87077,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 8590,
-      "mtime": "2026-06-25T22:25:42.256Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 8714,
+      "mtime": "2026-06-26T15:18:22.184Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87077,9 +87087,9 @@
     {
       "path": "services/chair-direct-connection-truth.js",
       "synopsis": "Lumin direct connection truth — personality OK, execution claims must match receipts.",
-      "bytes": 6146,
-      "mtime": "2026-06-24T23:51:08.668Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 6763,
+      "mtime": "2026-06-26T15:18:23.333Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87107,9 +87117,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 2277,
-      "mtime": "2026-06-23T01:24:37.171Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 3048,
+      "mtime": "2026-06-26T15:18:19.447Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89707,9 +89717,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 27065,
-      "mtime": "2026-06-26T00:18:59.437Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 28888,
+      "mtime": "2026-06-26T15:18:51.982Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95431,9 +95441,9 @@
     {
       "path": "tests/chair-context-classifier.test.js",
       "synopsis": "js — tests/chair-context-classifier.test.js.",
-      "bytes": 1735,
-      "mtime": "2026-06-23T01:25:29.385Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z"
+      "bytes": 2134,
+      "mtime": "2026-06-26T15:19:39.026Z",
+      "indexed_at": "2026-06-26T15:19:53.807Z"
     },
     {
       "path": "tests/chair-direct-connection-truth.test.js",

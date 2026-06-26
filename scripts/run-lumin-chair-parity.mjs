@@ -65,6 +65,14 @@ const TESTS = [
     forbidTheaterInSummary: true,
   },
   {
+    id: 'T9_repair_order_no_deflect',
+    text: "you're supposed to fix this — make that change, don't tell me what the problem is",
+    expectChannel: 'repair_order_ack',
+    expectTruth: 'NO_COMMAND_RAN',
+    summaryMustInclude: 'Repair order received',
+    forbidSummaryPatterns: [/suggests a disconnect/i, /current status of the LifeRE/i, /you're testing/i],
+  },
+  {
     id: 'T8_truth_lockdown_stamp',
     requireLockdown: true,
   },
@@ -166,6 +174,18 @@ for (const t of TESTS) {
     if (t.requireDirectConnection && json.direct_connection !== true) {
       fail(t.id, 'direct_connection !== true');
       continue;
+    }
+    if (t.forbidSummaryPatterns) {
+      const summaryForPatterns = String(json.human_summary || '');
+      let patternHit = false;
+      for (const re of t.forbidSummaryPatterns) {
+        if (re.test(summaryForPatterns)) {
+          fail(t.id, `forbidden deflection pattern: ${re.source}`);
+          patternHit = true;
+          break;
+        }
+      }
+      if (patternHit) continue;
     }
     if (t.forbidTheaterInSummary) {
       const theater = detectCounselTheater(summary, json.command_truth);

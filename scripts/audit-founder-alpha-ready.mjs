@@ -54,6 +54,7 @@ for (const [id, script] of [
   ['lifere_self_audit', 'lifeos:lifere-self-audit'],
   ['crm_alpha', 'lifeos:crm:alpha:test'],
   ['alpha_break_it', 'lifeos:alpha:break-it'],
+  ['governance_covenant', 'lifeos:governance:covenant:live'],
 ]) {
   const r = runNpm(script);
   report.suites[id] = { ok: r.ok, exit: r.exit };
