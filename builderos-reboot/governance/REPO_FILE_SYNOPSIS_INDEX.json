@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T16:34:20.484Z",
+  "generated_at": "2026-06-26T17:36:13.128Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12585,
   "files": [
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 493703,
-      "mtime": "2026-06-26T16:34:01.471Z",
-      "indexed_at": "2026-06-26T16:34:09.210Z"
+      "bytes": 494013,
+      "mtime": "2026-06-26T17:36:07.009Z",
+      "indexed_at": "2026-06-26T17:36:13.128Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -70995,9 +70995,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 143471,
-      "mtime": "2026-06-26T16:34:01.474Z",
-      "indexed_at": "2026-06-26T16:34:09.210Z"
+      "bytes": 143510,
+      "mtime": "2026-06-26T17:35:47.545Z",
+      "indexed_at": "2026-06-26T17:36:13.128Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -71113,9 +71113,9 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 41003,
-      "mtime": "2026-06-26T16:34:01.475Z",
-      "indexed_at": "2026-06-26T16:34:09.210Z"
+      "bytes": 41034,
+      "mtime": "2026-06-26T17:35:47.538Z",
+      "indexed_at": "2026-06-26T17:36:13.128Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -71466,9 +71466,9 @@
     {
       "path": "public/overlay/sw.js",
       "synopsis": "LifeOS Service Worker",
-      "bytes": 7261,
-      "mtime": "2026-06-26T16:34:01.391Z",
-      "indexed_at": "2026-06-26T16:34:09.210Z",
+      "bytes": 7266,
+      "mtime": "2026-06-26T17:35:46.117Z",
+      "indexed_at": "2026-06-26T17:36:13.128Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87087,9 +87087,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 9144,
-      "mtime": "2026-06-26T16:19:23.025Z",
-      "indexed_at": "2026-06-26T16:34:09.210Z",
+      "bytes": 9174,
+      "mtime": "2026-06-26T17:32:39.914Z",
+      "indexed_at": "2026-06-26T17:36:13.128Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87127,9 +87127,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 4196,
-      "mtime": "2026-06-26T16:19:23.025Z",
-      "indexed_at": "2026-06-26T16:34:09.210Z",
+      "bytes": 4233,
+      "mtime": "2026-06-26T17:32:40.646Z",
+      "indexed_at": "2026-06-26T17:36:13.128Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88279,9 +88279,9 @@
     {
       "path": "services/founder-intent-compiler.js",
       "synopsis": "Founder intent compiler — English + thread context → structured work execution.",
-      "bytes": 5749,
-      "mtime": "2026-06-26T16:34:01.476Z",
-      "indexed_at": "2026-06-26T16:34:09.210Z",
+      "bytes": 5775,
+      "mtime": "2026-06-26T17:35:46.109Z",
+      "indexed_at": "2026-06-26T17:36:13.128Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89767,9 +89767,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 31538,
-      "mtime": "2026-06-26T16:34:01.476Z",
-      "indexed_at": "2026-06-26T16:34:09.210Z",
+      "bytes": 31924,
+      "mtime": "2026-06-26T17:32:43.717Z",
+      "indexed_at": "2026-06-26T17:36:13.128Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95674,9 +95674,9 @@
     {
       "path": "tests/founder-intent-compiler.test.js",
       "synopsis": "js — tests/founder-intent-compiler.test.js.",
-      "bytes": 1870,
-      "mtime": "2026-06-26T16:34:01.477Z",
-      "indexed_at": "2026-06-26T16:34:09.210Z"
+      "bytes": 2566,
+      "mtime": "2026-06-26T17:34:48.269Z",
+      "indexed_at": "2026-06-26T17:36:13.128Z"
     },
     {
       "path": "tests/founder-life-admin-intent.test.js",

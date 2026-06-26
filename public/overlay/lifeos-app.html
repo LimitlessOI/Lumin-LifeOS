@@ -3129,6 +3129,7 @@ async function luminSend(opts = {}) {
             focused_element: '#lumin-input',
             page: location.pathname + location.search,
           },
+          client_version: '20260626f',
         }
       : { user: USER || 'adam', message: msg };
     const endpoint = USE_DIRECT_SYSTEM_CHAT

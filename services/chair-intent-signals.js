@@ -74,8 +74,8 @@ export function isBuildRequest(text) {
     && !/\b(change|fix|make|update|set)\b.*\b(color|ui|css|response|reply|bubble)\b/i.test(t)) {
     return false;
   }
-  if (/\b(should be|needs to be|want.*(yellow|blue|red|green|color))\b/i.test(t)
-    && /\b(response|reply|bubble|assistant|message|color|background)\b/i.test(t)) {
+  if (/\b(should be|needs to be|want.*(yellow|blue|red|green|color|faint|lighter|darker))\b/i.test(t)
+    && /\b(response|reply|bubble|assistant|message|color|background|down there|here)\b/i.test(t)) {
     return true;
   }
   return /\b(fix|update|add|remove|delete|create|make|build|improve|edit|modify|resize|increase|decrease|enable|disable|install|configure|rename|move|replace|set|reset|adjust|implement|wire|connect|upgrade|rewrite|refactor)\b/i.test(t)

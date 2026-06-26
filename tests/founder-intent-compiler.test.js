@@ -9,6 +9,7 @@ import {
   isFounderFrustrationContinuation,
 } from '../services/founder-intent-compiler.js';
 import { executeFounderWorkIntent } from '../services/founder-work-executors.js';
+import { resolveChairContext } from '../services/chair-context-classifier.js';
 
 test('detectWorkIntent — five video package', () => {
   const msg = "we're going to make five videos so I want the package on five videos";
@@ -16,6 +17,19 @@ test('detectWorkIntent — five video package', () => {
   assert.equal(intent.executor, 'video_package');
   assert.equal(intent.params.count, 5);
   assert.equal(intent.execute_now, true);
+});
+
+test('detectWorkIntent — detailed five video script ask', () => {
+  const msg = 'Make me five videos that are in line with the formulas we have been working with. The research hooks intro endings full scripts bullet points';
+  const intent = detectWorkIntent(msg, []);
+  assert.equal(intent?.executor, 'video_package');
+  assert.equal(intent?.params?.count, 5);
+});
+
+test('yellow background routes to build_async not chair', () => {
+  const msg = 'The yellow background down there, I want that much more fainter yellow.';
+  const ctx = resolveChairContext(msg, {});
+  assert.equal(ctx.channel, 'build_async');
 });
 
 test('bindContinuationUtterance — frustration binds prior task', () => {

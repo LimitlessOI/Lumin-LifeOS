@@ -1310,6 +1310,7 @@ body: JSON.stringify({
   async: true,
   conversation_history: buildConversationHistoryPayload(),
   ui_context: { surface: 'lifeos-dashboard', focused_element: '#chat-input', page: location.pathname + location.search },
+  client_version: '20260626f',
 })
 });
 let d = await r.json();

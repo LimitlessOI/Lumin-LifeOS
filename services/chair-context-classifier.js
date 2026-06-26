@@ -28,6 +28,7 @@ const CONVERSATION_MARKERS = /\b( worried|feel|think about|should i|can you find
 export function hasProductBuildContext(text = '') {
   const t = String(text || '');
   return PRODUCT_MARKERS.test(t)
+    || isCssOnlyUiFeedback(t)
     || isFounderShipOrUsabilityIntent(t)
     || isRepairContinuationIntent(t)
     || isFounderRepairOrderIntent(t)

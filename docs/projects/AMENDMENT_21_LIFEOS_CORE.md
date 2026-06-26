@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **CSS NL + SW cache bust** — `isCssOnlyUiFeedback` → auto `do:` build; `hasProductBuildContext` includes CSS; SW `CACHE_NAME` bump; `client_version` on chat POST | Adam yellow ask → counsel "can't adjust"; browser stale shell vs terminal PASS | ⚠️ deploy | founder-interface/message |
 | 2026-06-26 | **Founder work execution (GAP-FILL)** — `founder-intent-compiler.js` (thread bind + video_package detect); `founder-work-executors.js`; orchestrator `work_execute` before counsel; dashboard + app send `conversation_history` + `ui_context`; Point B facts only when asked; always scrub LifeRE status deflection | Adam: five-video ask → clarify theater; "do it" lost context → LifeRE Alpha deflection | ⚠️ deploy + Adam retry | `tests/founder-intent-compiler.test.js` |
 | 2026-06-26 | **Natural language UI builds (Adam Enter probe)** — `isFounderRepairOrderIntent` no longer hijacks "want you to make it so…"; `isFounderUiBehaviorChangeRequest` + `founder-enter-send-patch.js`; orchestrator auto `do:` wrap | Adam dashboard ask got repair_order_ack not build | ⚠️ deploy + D5 probe | founder-interface/message |
 | 2026-06-26 | **`lifeos-execution-truth.js`** — direct-order CSS skips live visual gate when `founder_verification_required:false`; idempotent `already_present` → PASS | Point B battery D3/D4 FAIL after commit | ✅ battery green | `lifeos:direct-execution:point-b:live` |

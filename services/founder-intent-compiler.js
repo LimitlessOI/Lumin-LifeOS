@@ -6,7 +6,7 @@
 const FRUSTRATION_MARKERS = /\b(just do|do what i|stop repeating|don't repeat|do not repeat|what i asked|what i fucking|see how you do|shut up and|enough questions|quit asking)\b/i;
 
 const VIDEO_PACKAGE_MARKERS = /\b(video|videos|content package|video package)\b/i;
-const VIDEO_PACKAGE_ACTION = /\b(package|make|create|plan|build|need|want|produce|draft|prepare)\b/i;
+const VIDEO_PACKAGE_ACTION = /\b(package|make|create|plan|build|need|want|produce|draft|prepare|scripts?|hooks?|formulas?)\b/i;
 
 function normalizeHistory(history = []) {
   if (!Array.isArray(history)) return [];

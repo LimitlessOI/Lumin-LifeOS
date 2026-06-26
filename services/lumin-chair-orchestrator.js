@@ -12,7 +12,7 @@ import {
   extractMissionIdFromText,
   runFoundationPipelineForFounder,
 } from './lifeos-mission-pipeline-executor.js';
-import { isRepairContinuationIntent, extractTargetFileFromInstruction, resolveFounderBuildTarget } from './builder-instruction-target.js';
+import { isRepairContinuationIntent, extractTargetFileFromInstruction, resolveFounderBuildTarget, isCssOnlyUiFeedback } from './builder-instruction-target.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
 import { buildListeningOnboardingContext } from './lifeos-listening-profile.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
@@ -356,6 +356,11 @@ export async function runLuminChairTurn(ctx, deps) {
   const uiBehavior = isFounderUiBehaviorChangeRequest(effectiveInput);
   if (uiBehavior && !doPrefix.forcedExecute) {
     effectiveInput = `do: ${effectiveInput}\ntarget_file: ${uiBehavior.target_file}`;
+    forceExecute = true;
+  } else if (isCssOnlyUiFeedback(effectiveInput) && !doPrefix.forcedExecute) {
+    const cssTarget = resolveFounderBuildTarget(effectiveInput)
+      || (uiContext?.surface === 'lifeos-app' ? 'public/overlay/lifeos-app.html' : 'public/overlay/lifeos-dashboard.html');
+    effectiveInput = `do: ${effectiveInput}\ntarget_file: ${cssTarget}`;
     forceExecute = true;
   }
   const likelyBuild = isBuildRequest(effectiveInput)
