@@ -41,7 +41,12 @@ export function isCssOnlyUiFeedback(instruction = '') {
   if (extractTargetFileFromInstruction(t)) {
     const p = extractTargetFileFromInstruction(t);
     if (/\.css$/i.test(p)) return true;
-    if (/lifeos-app\.html/i.test(p) && (UI_FEEDBACK_RE.test(t) || RESPONSE_UI_RE.test(t))) return true;
+    if (/lifeos-app\.html/i.test(p) && (UI_FEEDBACK_RE.test(t) || RESPONSE_UI_RE.test(t))) {
+      if (/\b(voice|send it|dictat|mic|listening|speech|wire|implement|function|post message|click send|submit)\b/i.test(t)) {
+        return false;
+      }
+      return true;
+    }
   }
   return /\b(color|colour|background|font|yellow|black text|text color|style)\b/i.test(t)
     || (RESPONSE_UI_RE.test(t) && /\b(change|make|set|update)\b/i.test(t));
@@ -107,13 +112,23 @@ export function augmentTaskWithGapFillScope(task, targetFile) {
       'For Lumin chat replies use selectors: .lumin-msg.assistant, .msg.assistant',
     ].join('\n');
   }
+  if (/\.html$/i.test(String(targetFile || ''))) {
+    return [
+      base,
+      '',
+      'GAP-FILL scoped HTML/JS patch ONLY.',
+      `target_file: ${targetFile}`,
+      'DO NOT rewrite the whole file.',
+      'Change only the script block or DOM wiring needed for this request.',
+    ].join('\n');
+  }
   return [
     base,
     '',
     'GAP-FILL scoped patch ONLY.',
     `target_file: ${targetFile}`,
     'DO NOT rewrite the whole file.',
-    'Change only the CSS/DOM block needed for this request.',
+    'Change only the block needed for this request.',
   ].join('\n');
 }
 

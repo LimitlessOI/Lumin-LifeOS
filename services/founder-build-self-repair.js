@@ -21,6 +21,11 @@ import {
   parseSurgicalHtmlCommentPatch,
 } from './founder-overlay-surgical-patch.js';
 import {
+  applyVoiceSendWirePatch,
+  commitVoiceSendPatchViaBuilder,
+  isVoiceSendWireOrder,
+} from './founder-voice-send-patch.js';
+import {
   assertFounderBuildBaseUrl,
   runFounderSuccessGate,
   triggerRailwayRedeploy,
@@ -45,6 +50,7 @@ import { enforceBeforeBuilderDispatch, formatUnifiedGateBlockSummary } from './f
 
 export const DEFAULT_MAX_FOUNDER_BUILD_ATTEMPTS = FOUNDER_SOLO_ATTEMPT_MAX;
 const POST_JSON_TIMEOUT_MS = Number(process.env.FOUNDER_POST_JSON_TIMEOUT_MS || '120000');
+const FOUNDER_BUILD_JOB_TIMEOUT_MS = Number(process.env.FOUNDER_BUILD_JOB_TIMEOUT_MS || '480000');
 
 function isRetriableBlocker(blocker = '', code = '') {
   const b = String(blocker);
@@ -124,6 +130,17 @@ async function tryApplyQuorumPlan({
 
   if (approach === 'surgical_html_comment' || isSurgicalHtmlCommentPatch(nextTask) || isSurgicalHtmlCommentPatch(task)) {
     return runSurgicalHtmlPatchWithVerification({
+      task: nextTask,
+      commandKey,
+      baseUrl,
+      repoRoot,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+    });
+  }
+
+  if (approach === 'voice_send_wire' || isVoiceSendWireOrder(nextTask) || isVoiceSendWireOrder(task)) {
+    return runVoiceSendPatchWithVerification({
       task: nextTask,
       commandKey,
       baseUrl,
@@ -524,6 +541,92 @@ async function runSurgicalHtmlPatchWithVerification({
   }, { action: 'build', task });
 }
 
+async function runVoiceSendPatchWithVerification({
+  task,
+  commandKey,
+  baseUrl,
+  repoRoot,
+  buildFailureReceipt,
+  enforceExecutionTruth,
+}) {
+  const baseCheck = assertFounderBuildBaseUrl(baseUrl);
+  if (!baseCheck.ok) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: baseCheck.blocker,
+      failure_code: baseCheck.code,
+      execution_path: 'founder_voice_send_patch',
+    }, { action: 'build', task });
+  }
+
+  const patchResult = applyVoiceSendWirePatch({ root: repoRoot, task });
+  if (!patchResult.ok) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: patchResult.reason || 'voice_send_patch_failed',
+      failure_code: 'VOICE_SEND_PATCH_FAILED',
+      execution_path: 'founder_voice_send_patch',
+    }, { action: 'build', task });
+  }
+
+  if (patchResult.already_present) {
+    return enforceExecutionTruth({
+      ok: true,
+      committed: false,
+      pass_fail: 'PASS',
+      target_file: patchResult.files?.[0]?.target_file,
+      human_summary: `Voice send wire already present in ${patchResult.files?.[0]?.target_file}`,
+      execution_path: 'founder_voice_send_patch',
+      task_meta: { patch: patchResult.patch, already_present: true },
+    }, { action: 'build', task });
+  }
+
+  let execRes;
+  try {
+    execRes = await commitVoiceSendPatchViaBuilder({
+      baseUrl: baseCheck.baseUrl,
+      commandKey,
+      patchResult,
+    });
+  } catch (err) {
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: err.message,
+      execution_path: 'founder_voice_send_patch',
+    }, { action: 'build', task });
+  }
+
+  const execJson = execRes.json || {};
+  const committedFiles = execRes.committed_files || patchResult.files?.map((f) => f.target_file) || [];
+  if (!execJson.ok || !execJson.committed) {
+    const receipt = buildFailureReceipt(task, {}, execJson);
+    return enforceExecutionTruth({
+      ok: false,
+      committed: false,
+      first_blocker: receipt.blocker,
+      execution_receipt: receipt,
+      execution_path: 'founder_voice_send_patch',
+    }, { action: 'build', task });
+  }
+
+  await triggerRailwayRedeploy({ baseUrl: baseCheck.baseUrl, commandKey });
+
+  return enforceExecutionTruth({
+    ok: true,
+    committed: true,
+    pass_fail: 'PASS',
+    target_file: committedFiles.join(', ') || patchResult.files?.[0]?.target_file,
+    sha: execJson.sha || execJson.commit_sha || null,
+    human_summary: `Voice "send it" wired in ${patchResult.files?.[0]?.target_file}. Hard refresh once, then dictate and say "send it".`,
+    execution_path: 'founder_voice_send_patch',
+    task_meta: { patch: patchResult.patch },
+    exec_meta: execJson,
+  }, { action: 'build', task });
+}
+
 export async function runFounderBuildWithSelfRepair(options) {
   const {
     task,
@@ -566,6 +669,17 @@ export async function runFounderBuildWithSelfRepair(options) {
 
   if (isSurgicalHtmlCommentPatch(currentTask)) {
     return runSurgicalHtmlPatchWithVerification({
+      task: currentTask,
+      commandKey,
+      baseUrl: base,
+      repoRoot,
+      buildFailureReceipt,
+      enforceExecutionTruth,
+    });
+  }
+
+  if (isVoiceSendWireOrder(currentTask)) {
+    return runVoiceSendPatchWithVerification({
       task: currentTask,
       commandKey,
       baseUrl: base,
@@ -777,7 +891,14 @@ export function startFounderBuildJob(options) {
   }
   setImmediate(async () => {
     try {
-      const result = await runFounderBuildWithSelfRepair(options);
+      const buildPromise = runFounderBuildWithSelfRepair(options);
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(
+          () => reject(new Error(`founder_build_job_timeout after ${FOUNDER_BUILD_JOB_TIMEOUT_MS}ms`)),
+          FOUNDER_BUILD_JOB_TIMEOUT_MS,
+        );
+      });
+      const result = await Promise.race([buildPromise, timeoutPromise]);
       setFounderBuildJobResult(jobId, result);
       if (options.pool) {
         await persistFounderBuildJobResult(options.pool, jobId, result).catch((err) => {

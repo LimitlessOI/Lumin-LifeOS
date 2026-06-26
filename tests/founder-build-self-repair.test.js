@@ -13,6 +13,10 @@ import {
   resolveFounderBuildTarget,
 } from '../services/builder-instruction-target.js';
 import { applyAssistantBubbleCssPatch } from '../services/founder-css-patch.js';
+import {
+  applyVoiceSendWirePatch,
+  isVoiceSendWireOrder,
+} from '../services/founder-voice-send-patch.js';
 
 function testInfersUiTargetFromColorRequest() {
   const hit = inferTargetFileFromFounderFeedback(
@@ -91,7 +95,29 @@ function testCssOnlyRoutesToThemeOverrides() {
 function testCssOnlyNotStructural() {
   assert.equal(isCssOnlyUiFeedback('add a new drawer button'), false);
   assert.equal(isCssOnlyUiFeedback('change response color to yellow'), true);
+  assert.equal(
+    isCssOnlyUiFeedback('fix voice send in public/overlay/lifeos-app.html — post message like click send'),
+    false,
+  );
 }
+
+function testVoiceSendWireOrder() {
+  const order = 'do: fix voice send in public/overlay/lifeos-app.html — when user says send it after dictation, post message like click send. Receipt the change.';
+  assert.equal(isVoiceSendWireOrder(order), true);
+  assert.equal(isCssOnlyUiFeedback(order), false);
+}
+
+function testVoiceSendMechanicalPatch() {
+  const order = 'fix voice send in public/overlay/lifeos-app.html — say send it to post';
+  const patch = applyVoiceSendWirePatch({ root: process.cwd(), task: order });
+  assert.equal(patch.ok, true);
+  assert.match(patch.files[0].output, /founder-lumin-voice-send:start/);
+  assert.match(patch.files[0].output, /lifeos-voice-chat\.js/);
+  assert.match(patch.files[0].output, /dictate_then_send: voiceTurn,/);
+}
+
+testVoiceSendWireOrder();
+testVoiceSendMechanicalPatch();
 
 testCssOnlyAllowsAddYellow();
 testMechanicalCssPatch();

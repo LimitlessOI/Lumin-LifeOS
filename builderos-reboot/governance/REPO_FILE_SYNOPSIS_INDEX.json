@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T15:34:38.761Z",
+  "generated_at": "2026-06-26T15:48:39.603Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12579,
+  "file_count": 12580,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29055,9 +29055,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3775988,
-      "mtime": "2026-06-26T15:34:38.160Z",
-      "indexed_at": "2026-06-26T15:34:38.761Z"
+      "bytes": 3776348,
+      "mtime": "2026-06-26T15:48:33.595Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -36831,9 +36831,9 @@
     {
       "path": "data/bp-priority-guardrails-last-run.json",
       "synopsis": "JSON data/config — data/bp-priority-guardrails-last-run.json.",
-      "bytes": 3155,
-      "mtime": "2026-06-26T15:34:26.264Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z",
+      "bytes": 3222,
+      "mtime": "2026-06-26T15:48:39.542Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z",
       "synopsis_index_only": true
     },
     {
@@ -42500,9 +42500,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 138785,
-      "mtime": "2026-06-26T15:34:28.202Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z"
+      "bytes": 139268,
+      "mtime": "2026-06-26T15:48:29.344Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -70328,32 +70328,32 @@
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 198,
-      "mtime": "2026-06-26T15:34:26.267Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z",
+      "mtime": "2026-06-26T15:47:36.185Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 2883,
-      "mtime": "2026-06-26T15:34:26.267Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z",
+      "bytes": 3017,
+      "mtime": "2026-06-26T15:47:35.483Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 736,
-      "mtime": "2026-06-26T15:34:26.267Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z",
+      "mtime": "2026-06-26T15:47:36.543Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
       "bytes": 1149,
-      "mtime": "2026-06-26T15:34:26.267Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z",
+      "mtime": "2026-06-26T15:47:35.848Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z",
       "synopsis_index_only": true
     },
     {
@@ -70376,8 +70376,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 890,
-      "mtime": "2026-06-26T15:34:26.267Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z",
+      "mtime": "2026-06-26T15:47:36.669Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z",
       "synopsis_index_only": true
     },
     {
@@ -86682,9 +86682,9 @@
     {
       "path": "services/builder-instruction-target.js",
       "synopsis": "Parse repo-relative target paths and domains from operator/build instructions.",
-      "bytes": 8068,
-      "mtime": "2026-06-26T15:34:28.203Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z",
+      "bytes": 8537,
+      "mtime": "2026-06-26T15:47:53.963Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -88158,9 +88158,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 26323,
-      "mtime": "2026-06-26T15:34:28.203Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z",
+      "bytes": 30161,
+      "mtime": "2026-06-26T15:48:11.581Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -88315,6 +88315,16 @@
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/architecture/BUILDEROS_CONTINUOUS_AUDIT_TO_EXCELLENCE_PROTOCOL.md"
+      ]
+    },
+    {
+      "path": "services/founder-voice-send-patch.js",
+      "synopsis": "Mechanical voice \"send it\" wire for Lumin drawer — no whole-file HTML rewrite.",
+      "bytes": 7048,
+      "mtime": "2026-06-26T15:48:30.961Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
     },
     {
@@ -95586,9 +95596,9 @@
     {
       "path": "tests/founder-build-self-repair.test.js",
       "synopsis": "js — tests/founder-build-self-repair.test.js.",
-      "bytes": 3889,
-      "mtime": "2026-06-21T21:39:28.204Z",
-      "indexed_at": "2026-06-26T15:34:36.773Z"
+      "bytes": 4964,
+      "mtime": "2026-06-26T15:48:18.277Z",
+      "indexed_at": "2026-06-26T15:48:39.603Z"
     },
     {
       "path": "tests/founder-build-success-gate.test.js",
