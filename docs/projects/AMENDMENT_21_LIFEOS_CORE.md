@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **Alpha audit + SMOS routing expansion** — `chair-program-direct-answer.js` SMOS connection/workflow regex expanded; `?.some` guard; Railway SHA parity ✅ | Full LifeOS/LifeRE alpha: agent-alpha 124/124, CRM 7/7, W1-W3, acceptance 19/19, chair parity, governance PASS | ✅ deployed | `lifeos:lifere-agent-alpha` |
 | 2026-06-26 | **Direct program answers** — `chair-program-direct-answer.js` SMOS/BuilderOS from SSOT without counsel drift | Alpha Q2 SMOS → follow-ups answer | ⚠️ deploy | `chair-program-direct-answer.js` |
 | 2026-06-26 | **Chair system knowledge** — `chair-system-knowledge.js` SSOT excerpts + repo synopsis + program registry in counsel facts | Adam: direct link to files/SSOT/programs | ⚠️ deploy | `tests/chair-system-knowledge.test.js` |
 | 2026-06-26 | **Chair direct system link** — `chair-system-knowledge.js` SSOT/repo synopsis; `chair-program-direct-answer.js` SMOS/connection/builder answers; `founder-visual-ui-patch.js` fast rounded-button path | Adam: Lumin must read SSOT + build via BuilderOS + twin/thread context | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
