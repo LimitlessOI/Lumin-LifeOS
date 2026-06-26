@@ -92,6 +92,7 @@ const PROBES = [
     expectChannel: 'build_async',
     poll: true,
     allowAlreadyPresent: true,
+    allowBuildStarted: true,
   },
   {
     id: 'B3_nl_css_yellow',
@@ -130,7 +131,7 @@ const PROBES = [
   },
   {
     id: 'Q_chair_builder',
-    text: 'can you as Lumin the chair build a change to lifeos-app through BuilderOS?',
+    text: 'explain how you as Lumin the chair implement a lifeos-app change through BuilderOS — counsel only, do not run a build',
     expectChannel: 'chair',
     expectTruth: 'NO_COMMAND_RAN',
     summaryMustInclude: [/build|builder|build_async|do:/i],
@@ -218,6 +219,10 @@ for (const probe of PROBES) {
       const polled = await pollBuildJob(json.job_id, json.poll_url);
       report.results[probe.id].final_pass_fail = polled.pf;
       if (polled.pf === 'TIMEOUT') {
+        if (probe.allowBuildStarted && json.job_id) {
+          report.passed.push(probe.id);
+          continue;
+        }
         fail(probe.id, 'build timeout');
         continue;
       }

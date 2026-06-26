@@ -96,7 +96,9 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     facts.program_context = sysKnow.programs?.length ? sysKnow.programs : null;
     facts.builder_capability = sysKnow.builder;
     if (sysKnow.programs?.length) {
+      facts.program_context = sysKnow.programs;
       facts.chair_note = `${facts.chair_note} Answer using program_context and system_knowledge — do not claim the system lacks this; do not answer a different topic.`;
+      facts.personal_turn = false;
     }
   } catch {
     /* non-fatal */

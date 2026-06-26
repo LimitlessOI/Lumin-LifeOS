@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-26 — chair-system-knowledge: SSOT/repo/program context wired into Lumin counsel + expanded alpha battery.
+**Last Updated:** 2026-06-26 — chair-system-knowledge + direct program answers; alpha battery expanded.
 
 ---
 
@@ -1606,7 +1606,10 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-06-26 | **CSS-only misroute fix** — `isCssOnlyUiFeedback` no longer treats rounded/layout `lifeos-app.html` orders as color CSS patch; search includes ai_knowledge fallback | B2 still founder_css_patch on prod | ⚠️ deploy | `builder-instruction-target.js` | — rounded/visual tweaks → HTML build not color-only CSS; `alpha_probe` skips DB thread merge in battery; PRODUCT_MARKERS button/drawer/lumin | B2 rounded FAIL no_color_intent; Q bleed in battery | ⚠️ deploy | `founder-chat:alpha:battery` |
+| 2026-06-26 | **Direct program answers** — `chair-program-direct-answer.js` SMOS/BuilderOS from SSOT without counsel drift | Alpha Q2 SMOS → follow-ups answer | ⚠️ deploy | `chair-program-direct-answer.js` |
+| 2026-06-26 | **Chair system knowledge** — `chair-system-knowledge.js` SSOT excerpts + repo synopsis + program registry in counsel facts | Adam: direct link to files/SSOT/programs | ⚠️ deploy | `tests/chair-system-knowledge.test.js` |
+| 2026-06-26 | **CSS-only misroute fix** — `isCssOnlyUiFeedback` no longer treats rounded/layout `lifeos-app.html` as color CSS patch | B2 founder_css_patch | ⚠️ deploy | `builder-instruction-target.js` |
+| 2026-06-26 | **NL UI build routing** — rounded/visual → HTML council build; `alpha_probe` isolates battery turns | B2 no_color_intent | ⚠️ deploy | `founder-chat:alpha:battery` |
 | 2026-06-26 | **CSS build bugfix + alpha battery** — `effectiveSkipQuorum` in `runCssPatchWithVerification`; `run-founder-chat-alpha-battery.mjs`; NL UI auto-build; factual web search | Adam alpha: build must build, Q must answer | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
 | 2026-06-26 | **Question-only guard** — `isQuestionOnlyUtterance` skips work executor for "what/how SMOS" counsel turns | SMOS workflow question re-ran content package | ✅ deploy pending | `founder-intent-compiler.js` |
 | 2026-06-26 | **SMOS intent regex** — `founder-intent-compiler.js` catches Social Media OS / content-for-topic without "video" keyword; communication law forbids paraphrase + faux-emotion openings | Adam SMOS ask → counsel theater | ✅ deploy pending | `tests/founder-intent-compiler.test.js` |

@@ -8,6 +8,7 @@ import { translateChairPersonality } from './chair-personality-translate.js';
 import { formatStrategicBriefSection } from './lumin-strategic-intelligence.js';
 import { getDoctrinePromptBlock } from './lifeos-service-doctrine.js';
 import { formatThreadForPrompt } from './lumin-thread-context.js';
+import { shouldUseDirectProgramAnswer, formatDirectProgramAnswer } from './chair-program-direct-answer.js';
 
 export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext = {}) {
   const {
@@ -45,15 +46,21 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
     systemFacts.chair_note = `${systemFacts.chair_note} Continue the thread naturally — do not paraphrase Adam's request back; do not ask obvious confirm questions.`;
   }
 
-  let voice = await translatePersonality({
-    callAI,
-    userMessage: cleanedInput,
-    systemFacts,
-    accountRole: chairContext.account_role || chairContext.user_role || 'founder',
-    channel: chairContext.domain || 'chair',
-    pool,
-    userId: deps.userId || null,
-  });
+  let voice;
+  if (shouldUseDirectProgramAnswer(cleanedInput, systemFacts)) {
+    voice = formatDirectProgramAnswer(cleanedInput, systemFacts);
+  }
+  if (!voice) {
+    voice = await translatePersonality({
+      callAI,
+      userMessage: cleanedInput,
+      systemFacts,
+      accountRole: chairContext.account_role || chairContext.user_role || 'founder',
+      channel: chairContext.domain || 'chair',
+      pool,
+      userId: deps.userId || null,
+    });
+  }
 
   const strategicSection = systemFacts.strategic_brief
     ? formatStrategicBriefSection(systemFacts.strategic_brief)
