@@ -634,14 +634,18 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
   });
 
   router.post('/personality/calibrate', requireKey, async (req, res) => {
-    const result = await personality.recordDraftRating({
-      tenantId: tenantId(req),
-      userId: userId(req),
-      draftText: req.body?.draft_text,
-      rating: Number(req.body?.rating),
-      feedback: req.body?.feedback,
-    });
-    res.json({ ok: true, result });
+    try {
+      const result = await personality.recordDraftRating({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        draftText: req.body?.draft_text || req.body?.sample || '',
+        rating: Number(req.body?.rating ?? 5),
+        feedback: req.body?.feedback || '',
+      });
+      res.json({ ok: true, result });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.get('/coaching/modules', requireKey, (_req, res) => {

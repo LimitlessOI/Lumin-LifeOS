@@ -11,9 +11,20 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const live = process.argv.includes('--live');
 
+function loadEnv() {
+  const fp = path.join(ROOT, '.env');
+  if (!fs.existsSync(fp)) return;
+  for (const line of fs.readFileSync(fp, 'utf8').split('\n')) {
+    const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!m || process.env[m[1]]) continue;
+    process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+  }
+}
+loadEnv();
+
 const steps = [
   ['builder:preflight', 'npm', ['run', 'builder:preflight']],
-  ['lifere-agent-alpha', 'npm', ['run', 'lifeos:lifere-agent-alpha']],
+  ['lifere-agent-alpha', 'node', ['scripts/run-lifere-agent-alpha.mjs']],
   ['agent-alpha-gate', 'npm', ['run', 'lifeos:agent-alpha-gate:verify']],
   ['supervise-static', 'npm', ['run', 'lifeos:supervise:static']],
 ];
@@ -34,7 +45,10 @@ const report = {
 };
 
 for (const [id, cmd, args] of steps) {
-  const r = spawnSync(cmd, args, { cwd: ROOT, encoding: 'utf8', stdio: 'pipe' });
+  const env = live && id === 'lifere-agent-alpha'
+    ? { ...process.env, LIFERE_AGENT_ALPHA_LIVE: '1' }
+    : process.env;
+  const r = spawnSync(cmd, args, { cwd: ROOT, encoding: 'utf8', stdio: 'pipe', env });
   const ok = r.status === 0;
   if (ok) report.passed.push(id);
   else {

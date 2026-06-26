@@ -1,0 +1,16 @@
+{
+  "schema": "overlay_alpha_battery_v1",
+  "at": "2026-06-26T00:07:41.513Z",
+  "mode": "live",
+  "passed": [
+    "builder:preflight",
+    "lifere-agent-alpha",
+    "agent-alpha-gate",
+    "supervise-static",
+    "lumin-chair-parity",
+    "alpha-connection",
+    "conversation-live"
+  ],
+  "failed": [],
+  "ok": true
+}

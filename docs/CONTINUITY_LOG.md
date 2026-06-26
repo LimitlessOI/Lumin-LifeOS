@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-06-26 — Gap fill: agent alpha scripts + overlay battery live green
+
+Adam: *keep fixing, find the gaps.* **Found:** missing `run-lifere-agent-alpha.mjs` / `verify-agent-alpha-gate.mjs` (never committed); live agent alpha 401 without `.env` load; `--live` argv hijacked `builderos-builder-output-verifier` CLI; ambient CRM used nonexistent `client_notes` table. **Fixed:** restored 119-check agent alpha + gate scripts; `crm_contact_notes` migration + ambient router; verifier `isVerifierCli` guard; personality calibrate fail-closed; overlay battery loads env + `LIFERE_AGENT_ALPHA_LIVE=1`. **Live:** overlay battery **7/7 PASS**, CRM alpha **7/7 PASS**, agent alpha **119/119 PASS**. **Next:** deploy → Adam founder alpha on LifeRE banner.
+
+---
+
 ## [SESSION] 2026-06-25 — CRM alpha fixes (BoldTrail create + note endpoints)
 
 Adam: *fix the issues* on CRM alpha — BoldTrail create 405, note write-back 404, ambient→BoldTrail not wired. **GAP-FILL:** `boldtrail.js` uses kvCORE `POST /contact` (not `/contacts`) and `POST/PUT /contact/:id/action/note` for notes; restored `tryBoldTrailCrmCapture` in `lumin-ambient-moment-router.js`; added `scripts/alpha-test-lumin-connection.mjs` + `npm run lifeos:crm:alpha:test`. **Live before deploy:** connected + pipeline + internal CRM + ambient inbox ✅; create + note ❌ (old deploy). **Next:** commit → redeploy → re-run `npm run lifeos:crm:alpha:test`.

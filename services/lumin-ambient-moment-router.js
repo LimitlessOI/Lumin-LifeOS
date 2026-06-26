@@ -195,26 +195,29 @@ export function createLuminAmbientMomentRouter({
   async function tryCrmClientNote(userId, text, contactHint) {
     try {
       const { rows: tables } = await pool.query(
-        `SELECT to_regclass('public.client_notes') AS reg`,
+        `SELECT to_regclass('public.crm_contact_notes') AS reg`,
       );
       if (!tables[0]?.reg) return null;
       const note = String(text || '').trim().slice(0, 2000);
+      const hint = contactHint ? `%${contactHint}%` : '%';
       const { rows } = await pool.query(
-        `INSERT INTO client_notes (client_id, note, created_at)
+        `INSERT INTO crm_contact_notes (contact_id, user_id, note, source, created_at)
          VALUES (
            COALESCE(
-             (SELECT id FROM clients WHERE name ILIKE $2 LIMIT 1),
-             (SELECT id FROM clients ORDER BY updated_at DESC NULLS LAST LIMIT 1)
+             (SELECT id FROM crm_contacts WHERE name ILIKE $3 LIMIT 1),
+             (SELECT id FROM crm_contacts ORDER BY updated_at DESC NULLS LAST LIMIT 1)
            ),
+           $2,
            $1,
+           'lifeos-ambient',
            NOW()
          )
          RETURNING id`,
-        [note, contactHint || '%'],
+        [note, userId || 'adam', hint],
       );
       return rows[0]?.id || null;
     } catch (err) {
-      logger.warn?.('[ambient-moment] client_notes insert skipped:', err.message);
+      logger.warn?.('[ambient-moment] crm_contact_notes insert skipped:', err.message);
       return null;
     }
   }

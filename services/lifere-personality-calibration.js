@@ -9,11 +9,15 @@ export function createLifeREPersonalityCalibration({ pool = null } = {}) {
 
   async function recordDraftRating({ tenantId = 'default', userId, draftText, rating, feedback = '' }) {
     if (pool) {
-      await pool.query(
-        `INSERT INTO lifere_voice_calibration (tenant_id, user_id, draft_text, rating, feedback)
-         VALUES ($1,$2,$3,$4,$5)`,
-        [tenantId, userId, draftText, rating, feedback]
-      );
+      try {
+        await pool.query(
+          `INSERT INTO lifere_voice_calibration (tenant_id, user_id, draft_text, rating, feedback)
+           VALUES ($1,$2,$3,$4,$5)`,
+          [tenantId, userId, draftText, rating, feedback],
+        );
+      } catch (err) {
+        /* PG optional — file twin store is source of truth for alpha */
+      }
     }
 
     const personality = twinStore.readTwin({ tenantId, userId, twinKey: 'personality' }) || {

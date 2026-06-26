@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:01:29.725Z",
+  "generated_at": "2026-06-26T00:08:49.105Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12553,
+  "file_count": 12557,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -39188,6 +39188,13 @@
       "indexed_at": "2026-06-25T23:46:35.171Z"
     },
     {
+      "path": "db/migrations/20260626_crm_contact_notes.sql",
+      "synopsis": "CRM contact notes for ambient capture and internal CRM write-back.",
+      "bytes": 569,
+      "mtime": "2026-06-26T00:04:06.842Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z"
+    },
+    {
       "path": "db/migrations/builderos_command_control.sql",
       "synopsis": "Database migration — builderos_command_control.sql.",
       "bytes": 1596,
@@ -40414,9 +40421,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 461073,
-      "mtime": "2026-06-25T23:56:59.559Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z"
+      "bytes": 461841,
+      "mtime": "2026-06-26T00:08:34.188Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41940,17 +41947,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26686,
-      "mtime": "2026-06-26T00:01:21.730Z",
-      "indexed_at": "2026-06-26T00:01:29.725Z",
+      "bytes": 26704,
+      "mtime": "2026-06-26T00:08:31.185Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 488197,
-      "mtime": "2026-06-26T00:01:21.728Z",
-      "indexed_at": "2026-06-26T00:01:29.725Z"
+      "bytes": 488587,
+      "mtime": "2026-06-26T00:08:31.667Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42299,17 +42306,17 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
       "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
-      "bytes": 1124,
-      "mtime": "2026-06-25T23:56:57.957Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z",
+      "bytes": 1091,
+      "mtime": "2026-06-26T00:08:26.727Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 13293,
-      "mtime": "2026-06-25T23:56:49.416Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z"
+      "bytes": 13634,
+      "mtime": "2026-06-26T00:07:41.484Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -69740,9 +69747,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 26630,
-      "mtime": "2026-06-25T23:56:48.777Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z",
+      "bytes": 26718,
+      "mtime": "2026-06-26T00:04:45.489Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "synopsis_index_only": true
     },
     {
@@ -69953,9 +69960,9 @@
     {
       "path": "products/receipts/CRM_ALPHA_TEST.json",
       "synopsis": "Product receipt — CRM ALPHA TEST.",
-      "bytes": 606,
-      "mtime": "2026-06-25T23:46:46.629Z",
-      "indexed_at": "2026-06-25T23:46:47.253Z",
+      "bytes": 794,
+      "mtime": "2026-06-26T00:08:22.428Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "synopsis_index_only": true
     },
     {
@@ -70057,9 +70064,9 @@
     {
       "path": "products/receipts/LIFERE_AGENT_ALPHA.json",
       "synopsis": "Product receipt — LIFERE AGENT ALPHA.",
-      "bytes": 3361,
-      "mtime": "2026-06-25T23:45:46.965Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 3413,
+      "mtime": "2026-06-26T00:08:02.514Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "synopsis_index_only": true
     },
     {
@@ -70244,6 +70251,14 @@
       "bytes": 1156,
       "mtime": "2026-06-25T22:28:06.230Z",
       "indexed_at": "2026-06-25T23:46:35.171Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/OVERLAY_ALPHA_BATTERY.json",
+      "synopsis": "Product receipt — OVERLAY ALPHA BATTERY.",
+      "bytes": 319,
+      "mtime": "2026-06-26T00:08:16.141Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "synopsis_index_only": true
     },
     {
@@ -72614,9 +72629,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 47094,
-      "mtime": "2026-06-25T23:55:32.006Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z",
+      "bytes": 47250,
+      "mtime": "2026-06-26T00:07:05.020Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -73343,9 +73358,9 @@
     {
       "path": "scripts/builderos-builder-output-verifier.mjs",
       "synopsis": "BuilderOS — unified 4-gate output verification pipeline.",
-      "bytes": 4792,
-      "mtime": "2026-06-21T21:39:05.864Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 5008,
+      "mtime": "2026-06-26T00:05:32.477Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -74651,6 +74666,16 @@
       ]
     },
     {
+      "path": "scripts/run-lifere-agent-alpha.mjs",
+      "synopsis": "LifeRE Agent Alpha — conductor tests every UI button wiring + API surface before founder alpha.",
+      "bytes": 14402,
+      "mtime": "2026-06-26T00:06:59.923Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
+      ]
+    },
+    {
       "path": "scripts/run-lifere-alpha-e2e.mjs",
       "synopsis": "LifeRE Alpha E2E — founder success test at API layer (daily + top-3 + debrief).",
       "bytes": 5854,
@@ -74723,9 +74748,9 @@
     {
       "path": "scripts/run-lifere-self-audit.mjs",
       "synopsis": "LifeRE self-audit — coder gap scan with machine receipts.",
-      "bytes": 5994,
-      "mtime": "2026-06-25T21:45:57.303Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 6205,
+      "mtime": "2026-06-26T00:04:10.690Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -74827,9 +74852,9 @@
     {
       "path": "scripts/run-overlay-alpha-battery.mjs",
       "synopsis": "Agent alpha battery — Lumin + LifeRE overlay readiness (local + optional live).",
-      "bytes": 1781,
-      "mtime": "2026-06-25T22:58:28.963Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 2250,
+      "mtime": "2026-06-26T00:05:37.831Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -75366,6 +75391,16 @@
       "indexed_at": "2026-06-25T23:46:35.171Z",
       "ssot": [
         "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md"
+      ]
+    },
+    {
+      "path": "scripts/verify-agent-alpha-gate.mjs",
+      "synopsis": "HARD gate — founder alpha blocked until agent_alpha_pass receipt exists.",
+      "bytes": 1640,
+      "mtime": "2026-06-26T00:03:44.605Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
       ]
     },
     {
@@ -89358,9 +89393,9 @@
     {
       "path": "services/lifere-personality-calibration.js",
       "synopsis": "LifeRE personality calibration — 10-draft voice learning.",
-      "bytes": 1911,
-      "mtime": "2026-06-23T11:40:27.349Z",
-      "indexed_at": "2026-06-25T23:46:35.171Z",
+      "bytes": 2039,
+      "mtime": "2026-06-26T00:07:03.609Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -89505,9 +89540,9 @@
     {
       "path": "services/lumin-ambient-moment-router.js",
       "synopsis": "Routes ambient utterances to calendar, CRM inbox, BoldTrail notes, and coachable-moment logs.",
-      "bytes": 10345,
-      "mtime": "2026-06-25T23:55:49.462Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z",
+      "bytes": 10495,
+      "mtime": "2026-06-26T00:04:08.053Z",
+      "indexed_at": "2026-06-26T00:08:49.105Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

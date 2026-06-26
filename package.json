@@ -114,6 +114,7 @@
     "lifeos:lifere-runtime-integration": "node scripts/run-lifere-runtime-integration.mjs",
     "lifeos:lifere-alpha-e2e": "node scripts/run-lifere-alpha-e2e.mjs",
     "lifeos:lifere-agent-alpha": "node scripts/run-lifere-agent-alpha.mjs",
+    "lifeos:lifere-agent-alpha:live": "node scripts/run-lifere-agent-alpha.mjs --live",
     "lifeos:overlay:alpha:battery": "node scripts/run-overlay-alpha-battery.mjs",
     "lifeos:overlay:alpha:battery:live": "node scripts/run-overlay-alpha-battery.mjs --live",
     "lifeos:overlay:alpha:connection": "node scripts/alpha-test-lumin-connection.mjs",

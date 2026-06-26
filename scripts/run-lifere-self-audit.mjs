@@ -36,6 +36,8 @@ const clientComms = fs.readFileSync(path.join(ROOT, 'services/lifere-client-comm
 const html = fs.readFileSync(path.join(ROOT, 'public/overlay/lifeos-lifere.html'), 'utf8');
 
 step('AUD-01_alpha_gate_script', fs.existsSync(path.join(ROOT, 'scripts/run-lifere-alpha-e2e.mjs')));
+step('AUD-01b_agent_alpha_script', fs.existsSync(path.join(ROOT, 'scripts/run-lifere-agent-alpha.mjs')));
+step('AUD-01c_agent_alpha_gate', fs.existsSync(path.join(ROOT, 'scripts/verify-agent-alpha-gate.mjs')));
 step('AUD-02_outreach_execute_route', routes.includes('/outreach/execute') && outreach.includes('executeTaskById'));
 step('AUD-02b_alpha_daily_cycle', routes.includes('/alpha/daily-cycle'));
 step('AUD-02c_founder_attempt', routes.includes('/alpha/founder-attempt'));

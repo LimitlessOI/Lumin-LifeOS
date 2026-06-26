@@ -18,7 +18,7 @@
 import { spawnSync } from 'child_process';
 import { writeFileSync, existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 const ROOT = join(fileURLToPath(import.meta.url), '../..');
 const SCRIPTS = join(ROOT, 'scripts');
@@ -114,8 +114,10 @@ export async function runVerification(targetFile, opts = {}) {
   return result;
 }
 
-// CLI entry
-if (process.argv[2]) {
+// CLI entry — only when this file is the direct node entrypoint (not when imported).
+const isVerifierCli = process.argv[1]
+  && pathToFileURL(resolve(process.argv[1])).href === import.meta.url;
+if (isVerifierCli && process.argv[2]) {
   runVerification(process.argv[2]).then((r) => {
     console.log(JSON.stringify(r, null, 2));
     process.exit(r.ok ? 0 : 1);

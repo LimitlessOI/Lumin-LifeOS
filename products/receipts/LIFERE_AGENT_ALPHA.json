@@ -1,8 +1,8 @@
 {
   "schema": "lifere_agent_alpha_v1",
   "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
-  "at": "2026-06-25T23:28:56.512Z",
-  "mode": "in_process",
+  "at": "2026-06-26T00:07:44.520Z",
+  "mode": "live",
   "passed": [
     "BTN-alpha-confirm-pass-btn",
     "BTN-alpha-confirm-fail-btn",
@@ -94,6 +94,8 @@
     "API-outreach-queue",
     "API-market-snapshot",
     "API-market-angles",
+    "API-boldtrail-status",
+    "API-boldtrail-pipeline",
     "API-brief-generate",
     "API-brief-approve",
     "API-daily-cc",
@@ -127,5 +129,5 @@
   "agent_alpha_pass": true,
   "ok": true,
   "founder_alpha_blocked_until": "Agent alpha PASS — founder may begin usability test",
-  "git_sha": "96bf0220c88c78e8cb9cd2b9048f115e5a9bae36"
+  "git_sha": "2fffb854e55d7670d0df37e5f6fb22bcb7b0b84c"
 }

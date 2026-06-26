@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-25",
-  "last_receipt": "2026-06-25 alpha-test-lumin-connection-text-field",
-  "last_change_summary": "founder-interface alpha test uses text not message",
+  "last_receipt": "2026-06-26 gap-fill-agent-alpha-crm-notes-verifier",
+  "last_change_summary": "Agent alpha scripts restored; crm_contact_notes; verifier CLI guard",
   "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
 }
