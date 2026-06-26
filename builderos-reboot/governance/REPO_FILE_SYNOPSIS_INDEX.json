@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T06:34:33.052Z",
+  "generated_at": "2026-06-26T06:38:09.776Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12577,
+  "file_count": 12578,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29055,9 +29055,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3775312,
-      "mtime": "2026-06-26T06:34:31.778Z",
-      "indexed_at": "2026-06-26T06:34:33.052Z"
+      "bytes": 3775620,
+      "mtime": "2026-06-26T06:37:51.067Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -37046,9 +37046,9 @@
     {
       "path": "data/twins/default/adam/modules/buyer.json",
       "synopsis": "JSON data/config — data/twins/default/adam/modules/buyer.json.",
-      "bytes": 342,
-      "mtime": "2026-06-26T06:33:07.275Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 1195,
+      "mtime": "2026-06-26T06:37:21.910Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "synopsis_index_only": true
     },
     {
@@ -37057,6 +37057,14 @@
       "bytes": 2131,
       "mtime": "2026-06-26T06:33:07.275Z",
       "indexed_at": "2026-06-26T06:34:31.382Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "data/twins/default/adam/modules/seller.json",
+      "synopsis": "JSON data/config — data/twins/default/adam/modules/seller.json.",
+      "bytes": 463,
+      "mtime": "2026-06-26T06:37:21.910Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "synopsis_index_only": true
     },
     {
@@ -42337,17 +42345,17 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
       "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
-      "bytes": 1192,
-      "mtime": "2026-06-26T00:39:13.018Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 1153,
+      "mtime": "2026-06-26T06:37:56.792Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 14953,
-      "mtime": "2026-06-26T00:37:25.760Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z"
+      "bytes": 15197,
+      "mtime": "2026-06-26T06:37:39.611Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -70111,9 +70119,9 @@
     {
       "path": "products/receipts/LIFERE_AGENT_ALPHA.json",
       "synopsis": "Product receipt — LIFERE AGENT ALPHA.",
-      "bytes": 3413,
-      "mtime": "2026-06-26T06:33:07.275Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 3556,
+      "mtime": "2026-06-26T06:37:21.920Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "synopsis_index_only": true
     },
     {
@@ -72684,9 +72692,9 @@
     {
       "path": "routes/lifere-os-routes.js",
       "synopsis": "LifeRE OS routes — full A-to-Z API (W1–W6).",
-      "bytes": 47250,
-      "mtime": "2026-06-26T00:07:05.020Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 49970,
+      "mtime": "2026-06-26T06:37:13.765Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -74238,9 +74246,9 @@
     {
       "path": "scripts/lifeos-alpha-break-it.mjs",
       "synopsis": "Live break-it alpha — stress edge cases beyond standard batteries.",
-      "bytes": 8083,
-      "mtime": "2026-06-26T00:11:52.712Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 8988,
+      "mtime": "2026-06-26T06:35:51.081Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -74780,9 +74788,9 @@
     {
       "path": "scripts/run-lifere-agent-alpha.mjs",
       "synopsis": "LifeRE Agent Alpha — conductor tests every UI button wiring + API surface before founder alpha.",
-      "bytes": 14402,
-      "mtime": "2026-06-26T00:06:59.923Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 15214,
+      "mtime": "2026-06-26T06:37:15.201Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -89282,9 +89290,9 @@
     {
       "path": "services/lifere-boot.js",
       "synopsis": "LifeRE boot — seed twins, permissions, founder extensions on startup.",
-      "bytes": 4659,
-      "mtime": "2026-06-24T00:33:56.445Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 5355,
+      "mtime": "2026-06-26T06:37:27.704Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -89302,9 +89310,9 @@
     {
       "path": "services/lifere-client-comms.js",
       "synopsis": "LifeRE client communication templates and draft queue.",
-      "bytes": 6246,
-      "mtime": "2026-06-25T21:45:57.305Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 7483,
+      "mtime": "2026-06-26T06:35:39.694Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]
@@ -89342,9 +89350,9 @@
     {
       "path": "services/lifere-deal-side-os.js",
       "synopsis": "LifeRE buyer and seller OS — module twin projections.",
-      "bytes": 7245,
-      "mtime": "2026-06-25T21:45:57.305Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 11101,
+      "mtime": "2026-06-26T06:35:34.519Z",
+      "indexed_at": "2026-06-26T06:38:09.776Z",
       "ssot": [
         "docs/projects/AMENDMENT_LIFERE.md"
       ]

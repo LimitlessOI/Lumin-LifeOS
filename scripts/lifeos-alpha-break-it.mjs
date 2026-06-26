@@ -179,6 +179,20 @@ if (c1.status >= 200 && c1.status < 300 && c2.status < 500) {
   pass('boldtrail_dup_create_no_crash', `first=${c1.status} second=${c2.status}`);
 } else fail('boldtrail_dup_create_no_crash', `c1=${c1.status} c2=${c2.status} ${c2.text}`);
 
+// ── Sentry: UI deal/comms routes (404 = founder alpha break) ──
+const sentryUi = [
+  ['sentry_buyer_workspace', 'GET', '/api/v1/lifere/buyer/demo_buyer_001/workspace?user_id=adam'],
+  ['sentry_seller_workspace', 'GET', '/api/v1/lifere/seller/demo_listing_001/workspace?user_id=adam'],
+  ['sentry_comms_suggest', 'GET', '/api/v1/lifere/client-comms/suggest-vars?user_id=adam&ref=demo_buyer_001&side=buyer'],
+  ['sentry_buyer_objection', 'POST', '/api/v1/lifere/buyer/demo_buyer_001/objection-coach', { user_id: 'adam', objection: 'sentry probe' }],
+  ['sentry_seller_weekly', 'POST', '/api/v1/lifere/seller/demo_listing_001/weekly-report', { user_id: 'adam' }],
+];
+for (const [id, method, url, body] of sentryUi) {
+  const r = await req(method, url, body);
+  if (r.status !== 404 && r.status < 500 && r.json?.ok !== false) pass(id, String(r.status));
+  else fail(id, `${r.status} ${r.text}`);
+}
+
 report.ok = report.failed.length === 0;
 report.break_it_pass = report.ok;
 const out = path.join(ROOT, 'products/receipts/LIFEOS_ALPHA_BREAK_IT.json');

@@ -170,5 +170,41 @@ export function createLifeREClientComms({ pool = null, outreach = null, logger =
     return { ok: true, entries: rows };
   }
 
-  return { renderTemplate, queueDraft, resolveQueueItem, listCommsLog, templates: CLIENT_COMMS_TEMPLATES };
+  async function suggestVarsFromDeal({ dealSide, tenantId = 'default', userId, ref, side = 'buyer' }) {
+    if (!ref) return { ok: false, error: 'ref required' };
+    if (String(side).toLowerCase() === 'seller') {
+      const ws = await dealSide.getSellerWorkspace({ tenantId, userId, listingRef: ref });
+      if (!ws.ok) return ws;
+      return {
+        ok: true,
+        vars: {
+          client_name: ref.replace(/_/g, ' '),
+          address: ws.address || ref,
+          summary: ws.weekly_report_draft || `Listing ${ref} — ${ws.showing_count} showing(s) this week.`,
+          status: ws.stage,
+          next_step: ws.weekly_report_draft ? 'Review and send weekly report' : 'Schedule showings',
+        },
+      };
+    }
+    const ws = await dealSide.getBuyerWorkspace({ tenantId, userId, clientRef: ref });
+    if (!ws.ok) return ws;
+    return {
+      ok: true,
+      vars: {
+        client_name: ref.replace(/_/g, ' '),
+        status: ws.stage,
+        next_step: ws.offer_prep_status === 'preparing' ? 'Finalize offer terms' : 'Schedule next showing',
+        milestone: ws.offer_prep_status === 'submitted' ? 'Offer submitted' : 'Search in progress',
+      },
+    };
+  }
+
+  return {
+    renderTemplate,
+    queueDraft,
+    resolveQueueItem,
+    listCommsLog,
+    suggestVarsFromDeal,
+    templates: CLIENT_COMMS_TEMPLATES,
+  };
 }

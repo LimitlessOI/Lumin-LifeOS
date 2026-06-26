@@ -8,7 +8,7 @@
 | **Status** | **FOUNDING** — doctrine + twin blueprint shipped 2026-06-13 |
 | **Authority** | Subordinate to SSOT North Star Constitution |
 | **Lifecycle** | `active` (program) / Alpha slice `technical_pass` |
-| **Last Updated** | 2026-06-25 — lifere-alpha-surface-api 117/117 agent alpha. Prior: full audit fix batch |
+| **Last Updated** | 2026-06-26 — sentry UI routes (workspace, comms suggest-vars, objection, weekly) + agent alpha 124/124 |
 | **Verification (Alpha)** | `npm run lifeos:lifere-os:v1-acceptance` |
 | **Verification (Alpha readiness)** | `npm run lifeos:lifere-alpha-readiness` |
 | **Audit agent prompt** | `docs/LIFERE_ALPHA_AUDIT_AGENT_PROMPT.md` |
@@ -136,7 +136,7 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
-| 2026-06-26 | **`scripts/audit-founder-alpha-ready.mjs`** + **`npm run lifeos:founder-alpha:audit`** — consolidates overlay battery, readiness, CRM, break-it; writes `FOUNDER_ALPHA_READINESS_AUDIT.json` + refreshes `LUMIN_OVERLAY_ALPHA_READINESS.json` | Adam: audit work before founder alpha | ✅ | Adam session |
+| 2026-06-26 | **Sentry UI routes (GAP-FILL)** — `routes/lifere-os-routes.js`: `GET /buyer/:ref/workspace`, `POST .../objection-coach`, `GET /seller/:ref/workspace`, `POST .../weekly-report`, `GET /client-comms/suggest-vars`; **`services/lifere-deal-side-os.js`** workspace/coach/weekly; **`services/lifere-client-comms.js`** `suggestVarsFromDeal`; **`services/lifere-boot.js`** `ensureDemoDealTwins` (merge demo_buyer_001/demo_listing_001); agent-alpha + break-it probes | Sentry found overlay buttons 404 on production — routes UI called but agent battery missed | ✅ local 124/124 | redeploy + live founder-alpha audit |
 | 2026-06-26 | **`public/overlay/lifeos-lifere.html`** — standalone page redirects to login when no JWT; 401 shows "Sign in" not "Alpha not ready"; shell hint links canonical `/lifeos?...&page=lifeos-lifere.html` | Misleading banner blocked Adam alpha | ✅ UX | deploy |
 | 2026-06-26 | **Alpha banner fix** — `lifere-alpha-readiness-surface.js` uses `OBJECTIVE_VERDICT.agent_alpha_pass` (products/receipts excluded from Docker); adds `ready_for_founder_alpha`; `lifeos-alpha-break-it.mjs` (16 stress checks); overlay battery includes break-it | Adam: alpha test use it break it | ✅ live break-it 16/16 | deploy banner fix |
 | 2026-06-26 | **Restored agent alpha scripts** — `run-lifere-agent-alpha.mjs` (119 checks incl BoldTrail), `verify-agent-alpha-gate.mjs`; live mode via `LIFERE_AGENT_ALPHA_LIVE=1`; overlay battery loads `.env` | Scripts were never committed — overlay battery failed file-not-found | ✅ live 119/119 + battery PASS | deploy migration |
@@ -173,7 +173,7 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 | **A–Z receipt** | `products/receipts/LIFERE_AZ_ACCEPTANCE.json` — structural PASS |
 | **Alpha mission** | `PRODUCT-LIFERE-OS-V1-0001` — historical corridor |
 | **@ssot** | New lifere services → `AMENDMENT_LIFERE.md`; `lifere-os-v1.js` still Am 21 until repoint |
-| **Agent alpha** | `npm run lifeos:lifere-agent-alpha:live` — **119/119 PASS** (2026-06-26). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
-| **Founder alpha** | **CLEARED** — `npm run lifeos:founder-alpha:audit` → `FOUNDER_ALPHA_READINESS_AUDIT.json` + `LUMIN_OVERLAY_ALPHA_READINESS.json`. Live deploy must include `lifeos-lifere.html` auth redirect (standalone page → login, not false "Alpha not ready"). |
+| **Agent alpha** | `npm run lifeos:lifere-agent-alpha:live` — **124/124 PASS** (2026-06-26 sentry routes). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
+| **Founder alpha** | **CLEARED pending deploy** — sentry fixed 5 UI 404s locally; production still 404 until redeploy. Run `npm run lifeos:founder-alpha:audit` after deploy. |
 | **Adam entry** | `https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html` — sign in first. **`founder_usability_pass`** = Adam-only via Confirm PASS. |
 | **Next** | Adam founder session → confirm PASS quote → optional BoldTrail test contact cleanup |

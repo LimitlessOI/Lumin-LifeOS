@@ -20,6 +20,13 @@ const SELLER_DEFAULT = {
   price_guidance_notes: [],
 };
 
+const OFFER_PREP_CHECKLIST = [
+  { id: 'preapproval', label: 'Pre-approval letter current' },
+  { id: 'comps', label: 'Comparable sales reviewed' },
+  { id: 'terms', label: 'Offer terms aligned with client goals' },
+  { id: 'timeline', label: 'Closing timeline confirmed' },
+];
+
 export function createLifeREDealSideOS({ pool = null } = {}) {
   const twinStore = createLifeRETwinStore({ pool });
 
@@ -75,6 +82,14 @@ export function createLifeREDealSideOS({ pool = null } = {}) {
     return 'intake';
   }
 
+  function sellerWorkflowStage(listing = {}) {
+    if (listing.weekly_report_draft) return 'reporting';
+    if ((listing.showing_feedback || []).length >= 2) return 'feedback_review';
+    if ((listing.showing_feedback || []).length > 0) return 'showing_active';
+    if (listing.listing_health === 'pending') return 'pre_listing';
+    return 'active';
+  }
+
   async function listBuyerClients({ tenantId = 'default', userId }) {
     const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'buyer' }) || { clients: {} };
     const clients = Object.entries(twin.clients || {}).map(([ref, data]) => ({
@@ -95,12 +110,74 @@ export function createLifeREDealSideOS({ pool = null } = {}) {
     return { ok: true, listings };
   }
 
-  function sellerWorkflowStage(listing = {}) {
-    if (listing.weekly_report_draft) return 'reporting';
-    if ((listing.showing_feedback || []).length >= 2) return 'feedback_review';
-    if ((listing.showing_feedback || []).length > 0) return 'showing_active';
-    if (listing.listing_health === 'pending') return 'pre_listing';
-    return 'active';
+  async function getBuyerWorkspace({ tenantId = 'default', userId, clientRef }) {
+    const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'buyer' }) || { clients: {} };
+    const client = twin.clients?.[clientRef];
+    if (!client) return { ok: false, error: 'client_not_found' };
+    const stage = buyerWorkflowStage(client);
+    const prepDone = client.offer_prep_status === 'preparing' || client.offer_prep_status === 'submitted';
+    return {
+      ok: true,
+      client_ref: clientRef,
+      stage,
+      offer_prep_status: client.offer_prep_status || 'not_started',
+      search_criteria: client.search_criteria || {},
+      showing_schedule: client.showing_schedule || [],
+      offer_prep_checklist: OFFER_PREP_CHECKLIST.map((item) => ({
+        ...item,
+        done: prepDone || item.id === 'preapproval',
+      })),
+      label: 'THINK',
+    };
+  }
+
+  async function getSellerWorkspace({ tenantId = 'default', userId, listingRef }) {
+    const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'seller' }) || { listings: {} };
+    const listing = twin.listings?.[listingRef];
+    if (!listing) return { ok: false, error: 'listing_not_found' };
+    return {
+      ok: true,
+      listing_ref: listingRef,
+      stage: sellerWorkflowStage(listing),
+      listing_health: listing.listing_health || 'active',
+      showing_count: (listing.showing_feedback || []).length,
+      weekly_report_draft: listing.weekly_report_draft || null,
+      address: listing.address || listingRef.replace(/_/g, ' '),
+      label: 'THINK',
+    };
+  }
+
+  async function coachObjection({ tenantId = 'default', userId, clientRef, objection = '' }) {
+    const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'buyer' }) || { clients: {} };
+    const client = twin.clients?.[clientRef];
+    if (!client) return { ok: false, error: 'client_not_found' };
+    const text = String(objection || '').trim() || 'general hesitation';
+    const coaching = {
+      acknowledge: `I hear your concern about "${text.slice(0, 120)}".`,
+      reframe: 'Many buyers pause here — it usually means you want clarity before committing.',
+      question: 'What would need to be true for you to feel confident moving forward this week?',
+      fair_housing_reminder: 'Avoid steering or assumptions about protected classes; focus on needs and timeline.',
+    };
+    const note = { at: new Date().toISOString(), objection: text, coaching };
+    await upsertBuyer({
+      tenantId,
+      userId,
+      clientRef,
+      patch: { objection_notes: [...(client.objection_notes || []), note] },
+    });
+    return { ok: true, coaching, client_ref: clientRef, label: 'THINK' };
+  }
+
+  async function generateWeeklyReport({ tenantId = 'default', userId, listingRef }) {
+    const twin = twinStore.readTwin({ tenantId, userId, moduleKey: 'seller' }) || { listings: {} };
+    const listing = twin.listings?.[listingRef];
+    if (!listing) return { ok: false, error: 'listing_not_found' };
+    const showings = (listing.showing_feedback || []).length;
+    const draft = listing.weekly_report_draft
+      || `Weekly seller update for ${listingRef}: ${showings} showing(s) this period. `
+        + 'Interest level steady; recommend reviewing price feedback before next open house.';
+    await upsertSeller({ tenantId, userId, listingRef, patch: { weekly_report_draft: draft } });
+    return { ok: true, listing_ref: listingRef, weekly_report_draft: draft, label: 'THINK' };
   }
 
   async function advanceSellerStage({ tenantId = 'default', userId, listingRef }) {
@@ -150,8 +227,19 @@ export function createLifeREDealSideOS({ pool = null } = {}) {
   }
 
   return {
-    getBuyer, upsertBuyer, getSeller, upsertSeller,
-    listBuyerClients, listSellerListings, buyerWorkflowStage, sellerWorkflowStage,
-    advanceBuyerStage, advanceSellerStage,
+    getBuyer,
+    upsertBuyer,
+    getSeller,
+    upsertSeller,
+    listBuyerClients,
+    listSellerListings,
+    buyerWorkflowStage,
+    sellerWorkflowStage,
+    advanceBuyerStage,
+    advanceSellerStage,
+    getBuyerWorkspace,
+    getSellerWorkspace,
+    coachObjection,
+    generateWeeklyReport,
   };
 }

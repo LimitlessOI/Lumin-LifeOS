@@ -704,6 +704,25 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     res.json({ ok: true, templates: Object.keys(clientComms.templates || {}) });
   });
 
+  router.get('/client-comms/suggest-vars', requireKey, async (req, res) => {
+    try {
+      const result = await clientComms.suggestVarsFromDeal({
+        dealSide,
+        tenantId: tenantId(req),
+        userId: userId(req),
+        ref: req.query.ref || req.query.client_ref,
+        side: req.query.side || 'buyer',
+      });
+      if (!result.ok) {
+        const code = result.error === 'client_not_found' || result.error === 'listing_not_found' ? 404 : 400;
+        return res.status(code).json(result);
+      }
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/client-comms/preview', requireKey, (req, res) => {
     try {
       res.json(alphaSurface.previewClientComms({
@@ -977,6 +996,39 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
     res.json(await dealSide.getBuyer({ tenantId: tenantId(req), userId: userId(req), clientRef: req.params.clientRef }));
   });
 
+  router.get('/buyer/:clientRef/workspace', requireKey, async (req, res) => {
+    try {
+      const result = await dealSide.getBuyerWorkspace({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        clientRef: req.params.clientRef,
+      });
+      if (!result.ok && (result.error === 'client_not_found')) {
+        return res.status(404).json(result);
+      }
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/buyer/:clientRef/objection-coach', requireKey, async (req, res) => {
+    try {
+      const result = await dealSide.coachObjection({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        clientRef: req.params.clientRef,
+        objection: req.body?.objection || req.body?.text || '',
+      });
+      if (!result.ok && result.error === 'client_not_found') {
+        return res.status(404).json(result);
+      }
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.put('/buyer/:clientRef', requireKey, async (req, res) => {
     res.json(await dealSide.upsertBuyer({
       tenantId: tenantId(req),
@@ -988,6 +1040,38 @@ export function createLifeRERoutes({ requireKey, pool = null, logger = console, 
 
   router.get('/seller/:listingRef', requireKey, async (req, res) => {
     res.json(await dealSide.getSeller({ tenantId: tenantId(req), userId: userId(req), listingRef: req.params.listingRef }));
+  });
+
+  router.get('/seller/:listingRef/workspace', requireKey, async (req, res) => {
+    try {
+      const result = await dealSide.getSellerWorkspace({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        listingRef: req.params.listingRef,
+      });
+      if (!result.ok && result.error === 'listing_not_found') {
+        return res.status(404).json(result);
+      }
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/seller/:listingRef/weekly-report', requireKey, async (req, res) => {
+    try {
+      const result = await dealSide.generateWeeklyReport({
+        tenantId: tenantId(req),
+        userId: userId(req),
+        listingRef: req.params.listingRef,
+      });
+      if (!result.ok && result.error === 'listing_not_found') {
+        return res.status(404).json(result);
+      }
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.put('/seller/:listingRef', requireKey, async (req, res) => {

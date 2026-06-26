@@ -10,6 +10,8 @@ import { fileURLToPath } from 'node:url';
 import express from 'express';
 import { execSync } from 'node:child_process';
 import { createLifeRERoutes } from '../routes/lifere-os-routes.js';
+import { ensureDemoDealTwins } from '../services/lifere-boot.js';
+import { createLifeRETwinStore } from '../services/lifere-twin-store.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MISSION_ID = 'PRODUCT-LIFERE-OS-V1-0001';
@@ -147,6 +149,9 @@ const GET_PROBES = [
   ['API-market-angles', 'GET', '/api/v1/lifere/market/content-angles?user_id=adam&market=local'],
   ['API-boldtrail-status', 'GET', '/api/v1/lifere/boldtrail/status'],
   ['API-boldtrail-pipeline', 'GET', '/api/v1/lifere/boldtrail/pipeline?limit=5'],
+  ['API-buyer-workspace', 'GET', '/api/v1/lifere/buyer/demo_buyer_001/workspace?user_id=adam'],
+  ['API-seller-workspace', 'GET', '/api/v1/lifere/seller/demo_listing_001/workspace?user_id=adam'],
+  ['API-comms-suggest-vars', 'GET', '/api/v1/lifere/client-comms/suggest-vars?user_id=adam&ref=demo_buyer_001&side=buyer'],
 ];
 
 const POST_PROBES = [
@@ -175,9 +180,12 @@ const POST_PROBES = [
   ['API-education-ctx', 'POST', '/api/v1/lifere/education/context', { user_id: 'adam', topic: 'buyer', stage: 'searching' }],
   ['API-personality', 'POST', '/api/v1/lifere/personality/calibrate', { user_id: 'adam', draft_text: 'Direct and warm follow-up.', rating: 5, feedback: 'agent alpha probe' }],
   ['API-outreach-process', 'POST', '/api/v1/lifere/outreach/process-queue', { user_id: 'adam' }],
+  ['API-buyer-objection', 'POST', '/api/v1/lifere/buyer/demo_buyer_001/objection-coach', { user_id: 'adam', objection: 'agent alpha probe' }],
+  ['API-seller-weekly', 'POST', '/api/v1/lifere/seller/demo_listing_001/weekly-report', { user_id: 'adam' }],
 ];
 
 async function startLocalApp() {
+  await ensureDemoDealTwins({ twinStore: createLifeRETwinStore({ pool: null }), userId: 'adam' });
   const app = express();
   app.use(express.json());
   const requireKey = (req, res, next) => {

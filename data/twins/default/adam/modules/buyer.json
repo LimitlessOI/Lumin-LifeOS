@@ -10,7 +10,29 @@
         "beds": 3
       },
       "updated_at": "2026-06-23T11:48:47.771Z"
+    },
+    "demo_buyer_001": {
+      "search_criteria": {
+        "beds": 3,
+        "area": "local",
+        "budget_max": 450000
+      },
+      "showing_schedule": [],
+      "offer_prep_status": "not_started",
+      "objection_notes": [
+        {
+          "at": "2026-06-26T06:37:21.909Z",
+          "objection": "agent alpha probe",
+          "coaching": {
+            "acknowledge": "I hear your concern about \"agent alpha probe\".",
+            "reframe": "Many buyers pause here — it usually means you want clarity before committing.",
+            "question": "What would need to be true for you to feel confident moving forward this week?",
+            "fair_housing_reminder": "Avoid steering or assumptions about protected classes; focus on needs and timeline."
+          }
+        }
+      ],
+      "updated_at": "2026-06-26T06:37:21.909Z"
     }
   },
-  "updated_at": "2026-06-23T11:48:47.771Z"
+  "updated_at": "2026-06-26T06:37:21.909Z"
 }

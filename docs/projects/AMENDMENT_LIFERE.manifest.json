@@ -23,7 +23,6 @@
     "config/lifeos-stack-registry.json"
   ],
   "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-26 founder-alpha-audit + lifere-auth-redirect",
-  "last_receipt": "2026-06-26 alpha-banner-readiness-surface-fix",
-  "last_change_summary": "Banner uses OBJECTIVE_VERDICT agent_alpha; break-it script; dockerignore receipt whitelist"
+  "last_receipt": "2026-06-26 sentry-ui-routes-workspace-comms",
+  "last_change_summary": "GAP-FILL: buyer/seller workspace, suggest-vars, objection-coach, weekly-report routes + ensureDemoDealTwins; agent alpha 124/124"
 }

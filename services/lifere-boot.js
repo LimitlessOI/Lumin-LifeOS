@@ -32,6 +32,68 @@ const ADAM_DEFAULTS = {
   },
 };
 
+const DEMO_BUYER_CLIENT = {
+  search_criteria: { beds: 3, area: 'local', budget_max: 450000 },
+  showing_schedule: [],
+  offer_prep_status: 'not_started',
+};
+
+const DEMO_SELLER_LISTING = {
+  listing_health: 'active',
+  address: '123 Demo St',
+  showing_feedback: [],
+  weekly_report_draft: null,
+};
+
+/** Ensures alpha/sentry demo refs exist for UI + agent-alpha probes (merge, never wipe). */
+export async function ensureDemoDealTwins({ twinStore, userId = 'adam', logger = console } = {}) {
+  if (!twinStore) return { ok: false, error: 'twinStore required' };
+
+  const buyerTwin = twinStore.readTwin({ userId, moduleKey: 'buyer' }) || {
+    schema: 'lifere_buyer_twin_v1',
+    clients: {},
+  };
+  buyerTwin.clients = buyerTwin.clients || {};
+  let buyerSeeded = false;
+  if (!buyerTwin.clients.demo_buyer_001) {
+    buyerTwin.clients.demo_buyer_001 = { ...DEMO_BUYER_CLIENT };
+    buyerSeeded = true;
+  }
+  if (buyerSeeded || !twinStore.readTwin({ userId, moduleKey: 'buyer' })) {
+    await twinStore.writeTwin({
+      userId,
+      moduleKey: 'buyer',
+      twinKey: 'buyer',
+      payload: buyerTwin,
+      receiptMeta: { source: 'lifere_demo_seed' },
+    });
+    logger.info?.('[LIFERE-BOOT] Demo buyer client ensured');
+  }
+
+  const sellerTwin = twinStore.readTwin({ userId, moduleKey: 'seller' }) || {
+    schema: 'lifere_seller_twin_v1',
+    listings: {},
+  };
+  sellerTwin.listings = sellerTwin.listings || {};
+  let sellerSeeded = false;
+  if (!sellerTwin.listings.demo_listing_001) {
+    sellerTwin.listings.demo_listing_001 = { ...DEMO_SELLER_LISTING };
+    sellerSeeded = true;
+  }
+  if (sellerSeeded || !twinStore.readTwin({ userId, moduleKey: 'seller' })) {
+    await twinStore.writeTwin({
+      userId,
+      moduleKey: 'seller',
+      twinKey: 'seller',
+      payload: sellerTwin,
+      receiptMeta: { source: 'lifere_demo_seed' },
+    });
+    logger.info?.('[LIFERE-BOOT] Demo seller listing ensured');
+  }
+
+  return { ok: true, buyerSeeded, sellerSeeded };
+}
+
 export async function bootLifeRE({ pool = null, logger = console } = {}) {
   const twinStore = createLifeRETwinStore({ pool, logger });
   const permission = createLifeREPermissionTwin({ pool });
@@ -76,48 +138,9 @@ export async function bootLifeRE({ pool = null, logger = console } = {}) {
       logger.warn?.('[LIFERE-BOOT] lifeos_users adam seed skip:', err.message);
     }
 
-    const buyerTwin = twinStore.readTwin({ userId: 'adam', moduleKey: 'buyer' });
-    if (!buyerTwin?.clients || Object.keys(buyerTwin.clients).length === 0) {
-      await twinStore.writeTwin({
-        userId: 'adam',
-        moduleKey: 'buyer',
-        twinKey: 'buyer',
-        payload: {
-          schema: 'lifere_buyer_twin_v1',
-          clients: {
-            demo_buyer_001: {
-              search_criteria: { beds: 3, area: 'local', budget_max: 450000 },
-              showing_schedule: [],
-              offer_prep_status: 'not_started',
-            },
-          },
-        },
-        receiptMeta: { source: 'lifere_boot' },
-      });
-      logger.info?.('[LIFERE-BOOT] Demo buyer client seeded');
-    }
-
-    const sellerTwin = twinStore.readTwin({ userId: 'adam', moduleKey: 'seller' });
-    if (!sellerTwin?.listings || Object.keys(sellerTwin.listings).length === 0) {
-      await twinStore.writeTwin({
-        userId: 'adam',
-        moduleKey: 'seller',
-        twinKey: 'seller',
-        payload: {
-          schema: 'lifere_seller_twin_v1',
-          listings: {
-            demo_listing_001: {
-              listing_health: 'active',
-              address: '123 Demo St',
-              showing_feedback: [],
-              weekly_report_draft: null,
-            },
-          },
-        },
-        receiptMeta: { source: 'lifere_boot' },
-      });
-      logger.info?.('[LIFERE-BOOT] Demo seller listing seeded');
-    }
+    await ensureDemoDealTwins({ twinStore, userId: 'adam', logger });
+  } else {
+    await ensureDemoDealTwins({ twinStore, userId: 'adam', logger });
   }
 
   const marriageEdge = path.join(ROOT, 'data/twins/default/relationships/adam_sherry_marriage.json');
