@@ -1,30 +1,165 @@
 {
   "schema": "founder_chat_alpha_battery_v1",
-  "at": "2026-06-26T20:34:53.367Z",
+  "at": "2026-06-26T20:58:03.682Z",
   "base": "https://robust-magic-production.up.railway.app",
-  "ok": false,
+  "ok": true,
   "passed": [
-    "B1_do_build",
-    "B2_nl_ui_rounded",
-    "B3_nl_css_yellow",
     "Q1_counsel_no_clarify",
-    "Q4_connection_truth"
-  ],
-  "failed": [
     "Q2_smos_workflow_question",
     "Q2b_smos_steps",
     "Q_chair_builder",
-    "Q3_factual_search"
+    "Q3_factual_search",
+    "Q4_connection_truth",
+    "B1_do_build",
+    "B2_nl_ui_rounded",
+    "B3_nl_css_yellow"
   ],
+  "failed": [],
   "results": {
+    "Q1_counsel_no_clarify": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "From verified web search:\nLive search unavailable for: should I prioritize follow-ups or prospecting today?.",
+      "has_verified_search": true,
+      "has_system_knowledge": true,
+      "program_context": null
+    },
+    "Q2_smos_workflow_question": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "Our Social Media OS workflow (LifeRE, from your SSOT and `lifere-socialmediaos-bridge.js`):\n\nFor **relocation content**: brief topic = relocation market you serve; hooks come from brief + research pack, then scripts per ",
+      "has_verified_search": true,
+      "has_system_knowledge": true,
+      "program_context": [
+        {
+          "id": "smos",
+          "amendment": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+          "services": [
+            "services/lifere-socialmediaos-bridge.js",
+            "services/lifere-content-brief-engine.js",
+            "services/founder-smos-content-executor.js"
+          ],
+          "canonical": {
+            "program": "Social Media OS (LifeRE)",
+            "authority": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+            "workflow_order": [
+              "content_brief",
+              "coach",
+              "record",
+              "post",
+              "publish"
+            ],
+            "brief_gate": "Approved content brief required before coach/scripts/record",
+            "founder_chat_executor": "founder-smos-content-executor.js → lifere-socialmediaos-bridge.js",
+            "api_prefix": "/api/v1/lifere/marketing/socialmediaos/",
+            "overlay": "public/overlay/lifeos-lifere.html"
+          }
+        }
+      ]
+    },
+    "Q2b_smos_steps": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "Our Social Media OS workflow (LifeRE, from your SSOT and `lifere-socialmediaos-bridge.js`):\n\n1. **Content brief** — topic/market locked; founder approves brief before scripts. 2. **Coach** — council session on the approv",
+      "has_verified_search": false,
+      "has_system_knowledge": true,
+      "program_context": [
+        {
+          "id": "smos",
+          "amendment": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+          "services": [
+            "services/lifere-socialmediaos-bridge.js",
+            "services/lifere-content-brief-engine.js",
+            "services/founder-smos-content-executor.js"
+          ],
+          "canonical": {
+            "program": "Social Media OS (LifeRE)",
+            "authority": "docs/projects/AMENDMENT_41_MARKETINGOS.md",
+            "workflow_order": [
+              "content_brief",
+              "coach",
+              "record",
+              "post",
+              "publish"
+            ],
+            "brief_gate": "Approved content brief required before coach/scripts/record",
+            "founder_chat_executor": "founder-smos-content-executor.js → lifere-socialmediaos-bridge.js",
+            "api_prefix": "/api/v1/lifere/marketing/socialmediaos/",
+            "overlay": "public/overlay/lifeos-lifere.html"
+          }
+        }
+      ]
+    },
+    "Q_chair_builder": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "Yes. Lumin is the Chair — product changes go through BuilderOS, not theater. **How:** say what you want in the founder drawer (`/founder-interface/message`). UI/CSS orders route to `build_async` (council + commit). Expli",
+      "has_verified_search": false,
+      "has_system_knowledge": true,
+      "program_context": [
+        {
+          "id": "builderos",
+          "amendment": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
+          "services": [
+            "routes/lifeos-council-builder-routes.js",
+            "services/builderos-command-control-service.js"
+          ],
+          "canonical": null
+        },
+        {
+          "id": "lumin_chair",
+          "amendment": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+          "services": [
+            "services/lumin-chair-orchestrator.js",
+            "services/chair-lumin-unified.js",
+            "routes/lifeos-builderos-command-control-routes.js"
+          ],
+          "canonical": null
+        }
+      ]
+    },
+    "Q3_factual_search": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "From verified web search: the federal funds rate federal funds rate?. Full search:\nLive search unavailable for: what is the current federal funds rate?.",
+      "has_verified_search": true,
+      "has_system_knowledge": true,
+      "program_context": null
+    },
+    "Q4_connection_truth": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "Yes — same system, same API. Lumin IS the Chair. This drawer hits `POST /api/v1/lifeos/builderos/command-control/founder-interface/message` — the same path the platform uses. I load your **digital twin**, **DB thread**, ",
+      "has_verified_search": true,
+      "has_system_knowledge": true,
+      "program_context": null
+    },
     "B1_do_build": {
       "http": 202,
       "channel": "build_async",
       "truth": "BUILD_ATTEMPTED",
       "pass_fail": "RUNNING",
       "action": "build",
-      "job_id": "a174e913-4efb-4bca-bebf-7355d07e21be",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job a174e913… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job a174e913-4efb-4bca-bebf-7355d07e21be",
+      "job_id": "0885f0ca-718a-467b-ac02-b30c2d0af713",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 0885f0ca… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 0885f0ca-718a-467b-ac02-b30c2d0af713",
       "has_verified_search": false,
       "has_system_knowledge": false,
       "program_context": null,
@@ -36,12 +171,12 @@
       "truth": "BUILD_ATTEMPTED",
       "pass_fail": "RUNNING",
       "action": "build",
-      "job_id": "459cd883-b6e6-436a-a901-691e161d36e2",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 459cd883… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 459cd883-b6e6-436a-a901-691e161d36e2",
+      "job_id": "bdd2a15f-c76b-4a46-96f0-f18c9438b0d4",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job bdd2a15f… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job bdd2a15f-c76b-4a46-96f0-f18c9438b0d4",
       "has_verified_search": false,
       "has_system_knowledge": false,
       "program_context": null,
-      "final_pass_fail": "TIMEOUT"
+      "final_pass_fail": "PASS"
     },
     "B3_nl_css_yellow": {
       "http": 202,
@@ -49,82 +184,12 @@
       "truth": "BUILD_ATTEMPTED",
       "pass_fail": "RUNNING",
       "action": "build",
-      "job_id": "a7a1906d-2c86-4ffc-80c9-cf79f10e7bf9",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job a7a1906d… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job a7a1906d-2c86-4ffc-80c9-cf79f10e7bf9",
+      "job_id": "f4d218d2-3b38-4c9c-a748-26724ac330ee",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job f4d218d2… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job f4d218d2-3b38-4c9c-a748-26724ac330ee",
       "has_verified_search": false,
       "has_system_knowledge": false,
       "program_context": null,
       "final_pass_fail": "PASS"
-    },
-    "Q1_counsel_no_clarify": {
-      "http": 200,
-      "channel": "chair",
-      "truth": "NO_COMMAND_RAN",
-      "pass_fail": "NO_COMMAND_RAN",
-      "action": "chair",
-      "summary_head": "Based on your verified search and personal twin, it seems guidance on how to allocate your time today. Your personal twin indicates high receptivity and a willingness to engage in direct communication. Considering your c",
-      "has_verified_search": true,
-      "has_system_knowledge": true,
-      "program_context": null
-    },
-    "Q2_smos_workflow_question": {
-      "http": 200,
-      "channel": "chair",
-      "truth": "NO_COMMAND_RAN",
-      "pass_fail": "NO_COMMAND_RAN",
-      "action": "chair",
-      "summary_head": "Yeah. Verified search shows no recent follow-ups or prospecting tasks assigned to you.",
-      "has_verified_search": true,
-      "has_system_knowledge": true,
-      "program_context": null
-    },
-    "Q2b_smos_steps": {
-      "http": 200,
-      "channel": "chair",
-      "truth": "NO_COMMAND_RAN",
-      "pass_fail": "NO_COMMAND_RAN",
-      "action": "chair",
-      "summary_head": "Based on your verified search and personal twin, it appears that your current priority is to make money fast. [unverified — no system query ran] knowledge, the current business model is to take 20% of customer API saving",
-      "has_verified_search": true,
-      "has_system_knowledge": true,
-      "program_context": null
-    },
-    "Q_chair_builder": {
-      "http": 200,
-      "channel": "build_terminal",
-      "truth": "NO_COMMAND_RAN",
-      "pass_fail": "FAIL",
-      "action": "execute",
-      "summary_head": "❌ NOT DONE\nexecute failed.\n• Channel: build_terminal\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: NO_RECEIPT\n• Path: terminal_bridge\n\nNEXT\nFix: INTENT_AMBIGUITY — ask until understood before CODE_EXECUTE\n\n──",
-      "has_verified_search": false,
-      "has_system_knowledge": false,
-      "program_context": null
-    },
-    "Q3_factual_search": {
-      "http": 200,
-      "channel": "chair",
-      "truth": "NO_COMMAND_RAN",
-      "pass_fail": "NO_COMMAND_RAN",
-      "action": "chair",
-      "summary_head": "Prioritizing follow-ups or prospecting often depends on what you're aiming for right now. Each approach tends to yield different kinds of results over different timelines.",
-      "has_verified_search": false,
-      "has_system_knowledge": true,
-      "program_context": null
-    },
-    "Q4_connection_truth": {
-      "http": 200,
-      "channel": "chair",
-      "truth": "NO_COMMAND_RAN",
-      "pass_fail": "NO_COMMAND_RAN",
-      "action": "chair",
-      "summary_head": "To help you weigh whether follow-ups or prospecting makes more sense for today, what are you hoping to achieve, or what feels most urgent right now?",
-      "has_verified_search": false,
-      "has_system_knowledge": true,
-      "program_context": null
     }
-  },
-  "fail_Q2_smos_workflow_question": "missing required answer content: Yeah. Verified search shows no recent follow-ups or prospecting tasks assigned to you.",
-  "fail_Q2b_smos_steps": "missing required answer content: Based on your verified search and personal twin, it appears that your current priority is to make money fast. [unverifie",
-  "fail_Q_chair_builder": "channel build_terminal !== chair",
-  "fail_Q3_factual_search": "no answer-like content: Prioritizing follow-ups or prospecting often depends on what you're aiming for right now. Each approach tends to yield d"
+  }
 }

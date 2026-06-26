@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-06-26 — Lumin Chair direct system link: alpha green
+
+Adam: *Lumin is the Chair — read SSOT/files/twin, build via BuilderOS, alpha test until solid.* **Shipped `3d06c4356ebb`:** `chair-system-knowledge.js` loads SSOT + repo synopsis + program registry; direct answers for SMOS/connection/BuilderOS explain; visual UI mechanical patch for rounded send button; counsel-only bypass (`isCounselOnlyBypass`); `alpha_probe` skips DB persist; factual search path with stale-search guard. **Root cause of counsel bleed:** Gemini `normalizeInputText` + council response cache returned Q1 rewrite for all subsequent counsel turns — fixed by skipping normalize on `alpha_probe`/system questions + `useCache:false`. **Alpha batteries (live):** `lifeos:founder-chat:alpha:battery` **9/9 PASS**, `lifeos:direct-execution:point-b:live` **5/5 PASS**. **Next for Adam:** hard refresh `lifeos-app.html` (SW unregister), new thread messages only, conversational + `do:` build + SMOS question in drawer.
+
+---
+
 ## [SESSION] 2026-06-26 — Unified founder chat: DB thread + SMOS executor + twin voice
 
 Shipped `c135aa1262` + SMOS regex fix: founder chat loads `lumin_threads` server-side, content/video work runs through `founder-smos-content-executor.js` (brief → coach → scripts from SMOS, not generic templates). Anti-paraphrase law extended. Live: CSS → build_async; SMOS utterance → work_execute after second deploy.

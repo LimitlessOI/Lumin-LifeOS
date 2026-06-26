@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T20:56:59.894Z",
+  "generated_at": "2026-06-26T20:58:56.637Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12595,
   "files": [
@@ -40460,9 +40460,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 463252,
-      "mtime": "2026-06-26T20:28:33.432Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z"
+      "bytes": 464265,
+      "mtime": "2026-06-26T20:58:55.014Z",
+      "indexed_at": "2026-06-26T20:58:56.637Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 498069,
-      "mtime": "2026-06-26T20:56:50.111Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z"
+      "bytes": 498108,
+      "mtime": "2026-06-26T20:58:50.581Z",
+      "indexed_at": "2026-06-26T20:58:56.637Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -70103,9 +70103,9 @@
     {
       "path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — FOUNDER CHAT ALPHA BATTERY.",
-      "bytes": 5652,
-      "mtime": "2026-06-26T20:56:49.109Z",
-      "indexed_at": "2026-06-26T20:56:57.985Z",
+      "bytes": 7723,
+      "mtime": "2026-06-26T20:58:23.635Z",
+      "indexed_at": "2026-06-26T20:58:56.637Z",
       "synopsis_index_only": true
     },
     {
