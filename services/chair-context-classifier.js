@@ -40,8 +40,8 @@ export function hasHighConfidenceBuildTarget(text = '') {
   if (isFounderConfirmIntent(t)) return true;
   if (/target_file:\s*\S+/i.test(t)) return true;
   if (extractTargetFileFromInstruction(t)) return true;
-  if (isCssOnlyUiFeedback(t)) return true;
   if (/\bpublic\/overlay\/[\w.-]+\.(html|css|js)\b/i.test(t)) return true;
+  if (/\b(lifeos-app|lifeos-lifere|lifeos-dashboard|lifeos-login)\.html\b/i.test(t)) return true;
   return false;
 }
 

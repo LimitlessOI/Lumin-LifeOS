@@ -9,6 +9,7 @@ import { enforceFounderPacketV2ChairTurn } from './chair-founder-packet-v2-enfor
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { extractMissionIdFromText } from './lifeos-mission-pipeline-executor.js';
 import { assessChairIntentUnderstanding } from './chair-intent-protocol.js';
+import { isDirectExecuteOrder } from './founder-intent-clarify.js';
 import { loadFactoryArcModules } from './factory-arc-loader.js';
 import { evaluateIdcExitGate } from '../factory-staging/factory-core/arc/foundation/idc-exit-gate.js';
 import { evaluateBuilderEntryGate } from '../factory-staging/factory-core/arc/foundation/builder-entry-gate.js';
@@ -68,6 +69,11 @@ export async function enforceFounderPacketV2Unified({
 } = {}) {
   const gapOk = platformGapFill === true;
   const pointB = pointBTarget || loadPointBTarget();
+  const programMissionId = missionId
+    || extractMissionIdFromText(String(cleanedInput || ''))
+    || pointB?.mission_id
+    || pointB?.target?.mission_id
+    || null;
   const resolvedUnderstanding = understanding || await assessUnderstandingForGate(cleanedInput);
 
   const chair = await enforceFounderPacketV2ChairTurn({
@@ -83,7 +89,7 @@ export async function enforceFounderPacketV2Unified({
   const violations = [...(chair.violations || [])];
   const isExecute = EXECUTE_CHANNELS.has(channel);
   const { mission_id: resolvedMissionId, folder: missionFolder } = resolveMissionFolder({
-    missionId,
+    missionId: programMissionId,
     cleanedInput,
     pointBTarget: pointB,
   });
@@ -262,13 +268,20 @@ export async function enforceBeforeBuilderDispatch({
     };
   }
   const gapOk = platformGapFill && String(platformGapFillReason || '').trim().length >= 40;
+  const pointB = loadPointBTarget();
+  const programMissionId = missionId
+    || extractMissionIdFromText(String(task || ''))
+    || pointB?.mission_id
+    || pointB?.target?.mission_id
+    || null;
   return enforceFounderPacketV2Unified({
     cleanedInput: task,
-    missionId,
+    missionId: programMissionId,
     pool,
     callAI,
-    confirmIntent: confirmIntent || gapOk,
+    confirmIntent: confirmIntent || gapOk || isDirectExecuteOrder(task),
     channel: 'builder_api',
     platformGapFill: gapOk,
+    pointBTarget: pointB,
   });
 }

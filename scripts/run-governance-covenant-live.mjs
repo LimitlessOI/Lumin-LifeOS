@@ -35,6 +35,7 @@ for (const [id, script] of [
   ['truth_lockdown', 'lifeos:truth-lockdown:verify'],
   ['wisdom_audit', 'lifeos:wisdom:audit'],
   ['chair_parity', 'lifeos:lumin-chair-parity:live'],
+  ['direct_execution_point_b', 'lifeos:direct-execution:point-b:live'],
 ]) {
   const r = runNpm(script);
   report.suites[id] = { ok: r.ok, exit: r.exit };

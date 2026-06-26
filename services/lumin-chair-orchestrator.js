@@ -423,7 +423,7 @@ export async function runLuminChairTurn(ctx, deps) {
     fpV2Enforcement = await enforceFounderPacketV2Unified({
       cleanedInput: effectiveInput,
       understanding: understandingForChannel,
-      missionId,
+      missionId: missionId || pointBTarget?.mission_id || pointBTarget?.target?.mission_id || null,
       pool: deps.pool,
       callAI: deps.callCouncilMember,
       pointBTarget,

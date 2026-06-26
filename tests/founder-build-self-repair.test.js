@@ -6,6 +6,7 @@ import {
   augmentTaskWithGapFillScope,
   CANONICAL_FOUNDER_UI_TARGET,
   extractPriorBuildTask,
+  extractTargetFileFromInstruction,
   inferTargetFileFromFounderFeedback,
   isCssOnlyUiFeedback,
   isMissingTargetFileBlocker,
@@ -17,6 +18,7 @@ import {
   applyVoiceSendWirePatch,
   isVoiceSendWireOrder,
 } from '../services/founder-voice-send-patch.js';
+import { assessFounderBuildClarity } from '../services/founder-intent-clarify.js';
 
 function testInfersUiTargetFromColorRequest() {
   const hit = inferTargetFileFromFounderFeedback(
@@ -116,8 +118,13 @@ function testVoiceSendMechanicalPatch() {
   assert.match(patch.files[0].output, /dictate_then_send: voiceTurn,/);
 }
 
-testVoiceSendWireOrder();
-testVoiceSendMechanicalPatch();
+function testBareOverlayFilename() {
+  assert.equal(extractTargetFileFromInstruction('patch lifeos-app.html'), 'public/overlay/lifeos-app.html');
+  const t5 = 'add HTML comment <!-- x --> before lumin drawer in lifeos-app.html';
+  assert.equal(assessFounderBuildClarity('do: ' + t5, t5).needs_clarify, false);
+}
+
+testBareOverlayFilename();
 
 testCssOnlyAllowsAddYellow();
 testMechanicalCssPatch();

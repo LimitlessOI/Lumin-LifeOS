@@ -9,10 +9,20 @@
 const TARGET_FILE_RE =
   /\b((?:scripts|services|routes|public|config|startup|db\/migrations|builderos-reboot)\/[\w./-]+\.(?:mjs|cjs|js|html|sql|md|json))\b/i;
 
+const BARE_OVERLAY_FILE_RE =
+  /\b(lifeos-app|lifeos-lifere|lifeos-dashboard|lifeos-login|lifeos-communication-os)\.(html|js)\b/i;
+
+export function resolveBareOverlayFilename(text = '') {
+  const match = String(text || '').match(BARE_OVERLAY_FILE_RE);
+  if (!match) return null;
+  return `public/overlay/${match[1]}.${match[2]}`;
+}
+
 export function extractTargetFileFromInstruction(instruction) {
   const text = String(instruction || '');
   const match = text.match(TARGET_FILE_RE);
-  return match?.[1]?.replace(/\\/g, '/') || null;
+  if (match?.[1]) return match[1].replace(/\\/g, '/');
+  return resolveBareOverlayFilename(text);
 }
 
 const EXPLICIT_TARGET_RE = /target_file:\s*([^\s]+\.(?:html|js|css|md|json))/i;

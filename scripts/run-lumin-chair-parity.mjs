@@ -45,9 +45,10 @@ const TESTS = [
   },
   {
     id: 'T5_do_prefix_build',
-    text: 'do: add HTML comment lumin parity test to lifeos-app.html',
+    text: 'do: add HTML comment <!-- lumin parity probe --> immediately before lumin drawer in lifeos-app.html',
     expectChannel: 'build_async',
-    allowPassFail: ['RUNNING', 'FAIL', 'PASS'],
+    expectTruth: 'BUILD_ATTEMPTED',
+    allowPassFail: ['RUNNING', 'PASS'],
   },
   {
     id: 'T6_fail_carries_lesson',

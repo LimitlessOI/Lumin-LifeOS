@@ -11,6 +11,10 @@ import {
   buildFutureLookBackPrompts,
   buildLocalStrategicNotes,
 } from './lumin-strategic-intelligence.js';
+import { resolveFounderBuildTarget } from './builder-instruction-target.js';
+import { isSurgicalHtmlCommentPatch } from './founder-overlay-surgical-patch.js';
+import { isVoiceSendWireOrder } from './founder-voice-send-patch.js';
+import { isDirectExecuteOrder } from './founder-intent-clarify.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LIVE_DIR = path.join(REPO_ROOT, 'data/chair-live');
@@ -226,7 +230,14 @@ export async function enforceFounderPacketV2ChairTurn({
   });
 
   const offersOk = chairOffersPresent(strategicBrief);
-  const intentOk = understanding ? understanding.intent_understood === true : false;
+  const executableTarget = resolveFounderBuildTarget(cleanedInput);
+  const directExecuteLocked = confirmIntent && (
+    isDirectExecuteOrder(cleanedInput)
+    || Boolean(executableTarget)
+    || isSurgicalHtmlCommentPatch(cleanedInput)
+    || isVoiceSendWireOrder(cleanedInput)
+  );
+  const intentOk = (understanding ? understanding.intent_understood === true : false) || directExecuteLocked;
   const coverageOk = coverage.tier1_load_bearing_ready || confirmIntent;
   const executeChannels = new Set([
     'build_async',

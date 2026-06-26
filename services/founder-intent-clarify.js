@@ -6,11 +6,16 @@ import {
   extractTargetFileFromInstruction,
   isCssOnlyUiFeedback,
   resolveFounderBuildTarget,
+  resolveBareOverlayFilename,
 } from './builder-instruction-target.js';
 import { expandFounderBuildTask } from './founder-chair-intent.js';
 
 const OUTCOME_MARKERS = /\b(so that|when i|on open|when open|visible|show|load|auto-?load|fix|error|broken|not working|daily|top-?3|debrief|color|yellow|nav|strip|button|wire|connect|working|usability)\b/i;
 const BUILD_VERB = /\b(fix|change|update|add|remove|create|make|build|implement|wire|ship|get it working|make it work)\b/i;
+
+export function isDirectExecuteOrder(text = '') {
+  return /^\s*(do|execute|run)\s*:/i.test(String(text || '').trim());
+}
 
 export function isFounderConfirmIntent(text = '') {
   const t = String(text || '').trim();
@@ -78,25 +83,49 @@ export function assessFounderBuildClarity(cleanedInput = '', expandedTask = '') 
   const text = String(cleanedInput || '').trim();
   const task = String(expandedTask || text).trim();
   const explicitPath = extractTargetFileFromInstruction(text);
+  const bareOverlay = resolveBareOverlayFilename(text);
   const targetInTask = task.match(/target_file:\s*(\S+)/i)?.[1]?.replace(/^\//, '');
   const resolvedTarget = targetInTask || explicitPath || resolveFounderBuildTarget(task) || resolveFounderBuildTarget(text);
 
   const assumptions = [];
   const options = [];
 
+  if (isDirectExecuteOrder(text) && resolvedTarget) {
+    return {
+      needs_clarify: false,
+      paraphrase: paraphraseFounderAsk(text),
+      assumptions: [],
+      options: [],
+      inferred_target: resolvedTarget,
+      direct_order: true,
+    };
+  }
+
   if (isCssOnlyUiFeedback(text) && resolvedTarget?.includes('.css')) {
     return { needs_clarify: false, paraphrase: paraphraseFounderAsk(text), assumptions: [], options: [], inferred_target: resolvedTarget };
   }
 
-  if (explicitPath && /\bhtml comment\b/i.test(text)) {
-    return { needs_clarify: false, paraphrase: paraphraseFounderAsk(text), assumptions: [], options: [], inferred_target: explicitPath };
+  if ((explicitPath || bareOverlay) && /\bhtml comment\b/i.test(text)) {
+    return {
+      needs_clarify: false,
+      paraphrase: paraphraseFounderAsk(text),
+      assumptions: [],
+      options: [],
+      inferred_target: explicitPath || bareOverlay || resolvedTarget,
+    };
   }
 
-  if (explicitPath && OUTCOME_MARKERS.test(text)) {
-    return { needs_clarify: false, paraphrase: paraphraseFounderAsk(text), assumptions: [], options: [], inferred_target: explicitPath };
+  if ((explicitPath || bareOverlay) && OUTCOME_MARKERS.test(text)) {
+    return {
+      needs_clarify: false,
+      paraphrase: paraphraseFounderAsk(text),
+      assumptions: [],
+      options: [],
+      inferred_target: explicitPath || bareOverlay || resolvedTarget,
+    };
   }
 
-  if (resolvedTarget && !explicitPath) {
+  if (resolvedTarget && !explicitPath && !bareOverlay) {
     assumptions.push(`Assumption: I would edit \`${resolvedTarget}\` — you did not name a file.`);
   }
 
@@ -130,7 +159,7 @@ export function assessFounderBuildClarity(cleanedInput = '', expandedTask = '') 
 
   const needs_clarify = assumptions.length > 0 && (
     assumptions.length >= 2
-    || (resolvedTarget && !explicitPath)
+    || (resolvedTarget && !explicitPath && !bareOverlay)
     || !resolvedTarget
   );
 

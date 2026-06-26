@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **Point B direct execution (GAP-FILL)** — `resolveBareOverlayFilename`; `isDirectExecuteOrder` skips clarify; FPv2 `directExecuteLocked` when `confirmIntent`+target; LifeRE mission auto-bound in unified gate; `run-direct-execution-point-b-live.mjs` in governance covenant | Adam: do: orders must execute, not INTENT_AMBIGUITY theater | ⚠️ deploy + live battery | `npm run lifeos:direct-execution:point-b:live` |
 | 2026-06-26 | **Governance covenant lock (GAP-FILL)** — `isFounderRepairOrderIntent` + `repair_order_ack` (execute or HALT, no counsel deflection); parity T9; `run-governance-covenant-live.mjs` | Adam: repair orders got chatbot analysis | ✅ unit + T9 | deploy |
 | 2026-06-26 | **Direct order build pipeline (GAP-FILL)** — `do:` not hijacked by display when text contains "receipt"; async founder jobs persisted to `builderos_command_control_jobs`; DB poll fallback; voice/send target heuristic; `confirmIntent` on async builds | Adam: direct order must build + durable poll | ⚠️ deploy + live test | founder-interface message |
 | 2026-06-26 | **`startup/register-runtime-routes.js` + autoWireRoute remount** — deps-object mount after MOS-P1-003 regen; remount when factory signature changes. | Boot mount still (app,ctx) after routes regen to deps-object. | ⚠️ redeploy + acceptance | intake execute |
