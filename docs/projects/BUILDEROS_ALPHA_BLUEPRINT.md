@@ -563,7 +563,8 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
-| 2026-06-26 | **`builderos-precommit-governance.js`** — always pass argv[3] placeholder so logical target hits argv[4] for verify runtime skip. | MOS-P1-005 runtime skip never fired — wrong argv slot. | ⚠️ deploy + re-run | intake execute |
+| 2026-06-26 | **Product route auto-wire + wire-route endpoint + VERIFY_DOUBLE_BODY_READ antipattern.** | MOS-P1-003 not mounted; MOS-P1-005 fetch body bug. | ⚠️ deploy + re-test | intake execute |
+| 2026-06-26 | **`builderos-precommit-governance.js`** — always pass argv[3] placeholder so logical target hits argv[4] for verify runtime skip. | MOS-P1-005 runtime skip never fired — wrong argv slot. | ✅ fixed | intake execute |
 | 2026-06-26 | **Verifier skip runtime for acceptance scripts** — `scripts/verify-*.mjs` skip runtime gate; pass logical target path to verifier subprocess. | MOS-P1-005 blocked: runtime gate ran verify script importing pg. | ⚠️ deploy + re-run MOS-P1-005 | intake execute |
 | 2026-06-26 | **`services/builderos-precommit-governance.js`** — `let finalOutput` (was const) in syntax retry path; fixed KERNEL_ERROR on /build. | MOS-P1-005 verify step: Assignment to constant variable. | ✅ fixed | intake execute |
 | 2026-06-26 | **`services/builderos-precommit-governance.js`** — unified verifier syntax failure triggers one codegen retry with complete-file clause + 16k tokens. | MOS-P1-002 truncated output passed antipattern/stub gates but failed node --check. | ✅ MOS-P1-002/003 committed | intake execute |

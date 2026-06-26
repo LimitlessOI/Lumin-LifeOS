@@ -142,6 +142,16 @@ export function scanForGroqAntipatterns(filePath) {
     }
   }
 
+  // PATTERN 13: verify scripts that double-read fetch response body
+  if (/verify-.*\.mjs$/i.test(filePath) && content.includes('.json().catch') && content.includes('response.text()')) {
+    findings.push({
+      pattern: 'VERIFY_DOUBLE_BODY_READ',
+      line: 'response.json().catch(() => response.text())',
+      lineNum: 0,
+      severity: 'HIGH',
+    });
+  }
+
   const highCount = findings.filter(f => f.severity === 'HIGH').length;
   return { ok: highCount === 0, filePath, lineCount: lines.length, findings };
 }

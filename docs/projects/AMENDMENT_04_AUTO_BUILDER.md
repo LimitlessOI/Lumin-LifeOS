@@ -161,7 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
-| 2026-06-26 | **Verify script not JSON** — esm_script spec forbids JSON manifest; reference verify-marketing-phase1.mjs; builder auto-retry on JSON output. | MOS-P1-005 emitted project manifest JSON instead of .mjs. | ⚠️ deploy + re-run MOS-P1-005 | intake execute |
+| 2026-06-26 | **Product route auto-wire** — `autoWireRoute` handles all `routes/*-routes.js` (not only lifeos-*); `POST /builder/wire-route`; intake executor wires after route step + runs acceptance_cmd. | SocialMediaOS routes committed but never mounted; verify script double-read body. | ⚠️ deploy + re-test MOS-P1-003/005 | `wire-route` + intake execute |
 | 2026-06-26 | **Acceptance verify runtime skip** — paired with BUILDEROS_ALPHA verifier fix; esm_script forbids pg/pool imports. | MOS-P1-005 runtime gate false fail. | ✅ argv fix deployed | intake execute |
 | 2026-06-26 | **Verify script intake hints** — esm_script uses verify-project.mjs reference; inject all impl files; shebang/main structure spec. | MOS-P1-005 syntax fail (unclosed block comment). | ✅ syntax pass | intake execute |
 | 2026-06-26 | **Intake token budget** — esm steps request 16k max_output_tokens; drop amendment from files[]; style-guide-only hint. | MOS-P1-002 truncated mid-file (verifier syntax fail). | ✅ MOS-P1-002/003 committed | see BUILDEROS_ALPHA receipt |

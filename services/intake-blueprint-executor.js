@@ -5,6 +5,11 @@
 
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
+import { spawnSync } from 'child_process';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const REFERENCE_FILES_BY_TYPE = {
   esm: ['services/action-inbox.js'],
@@ -43,7 +48,7 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
   const typeHint = {
     sql: 'Plain PostgreSQL migration (.sql file). CREATE TABLE IF NOT EXISTS, CREATE INDEX IF NOT EXISTS. SQL comments use -- only. No JavaScript, no import/export, no pool.query wrappers.',
     esm: isRouteFile
-      ? 'Route factory: export function createXxxRoutes({ pool, requireKey, logger }) — express.Router(), requireKey on protected routes, owner_id from req.lifeosUser?.sub. Do NOT import ../../core/* paths.'
+      ? 'Route factory: export function createXxxRoutes({ pool, requireKey, logger }) — returns express.Router(). Use requireKey on protected routes (NEVER rk). Deps-object signature only — NOT (app, ctx). owner_id from req.lifeosUser?.sub.'
       : 'Service factory: export function createXxx({ pool, logger }) — use pool.query(sql, params). Do NOT import ../../core/db.js or stripe SDK directly. Match reference file style in files[].',
     esm_script: 'Standalone node .mjs acceptance script — #!/usr/bin/env node, executable JavaScript ONLY (NOT a JSON manifest). fetch + x-command-key HTTP probes. Exit 0 on PASS, process.exit(1) on FAIL. No markdown fences.',
     html: 'HTML overlay page in public/overlay/',
@@ -75,8 +80,24 @@ export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null 
     platform_gap_fill_reason: `GAP-FILL: mechanical intake blueprint step ${step.id} for ${product} — ARC-ready session ${sessionId}, founder gaps resolved`,
     commit_message: `[system-build] ${product} ${step.id} ${targetFile}`,
     ...(step.type === 'esm' || step.type === 'esm_script' ? { max_output_tokens: 16384 } : {}),
+    ...(isRouteFile ? { mount_path: deriveRouteMountPath(targetFile) } : {}),
     files: depsToContextFiles(step, blueprint),
   };
+}
+
+export function deriveRouteMountPath(routeFilePath, override = null) {
+  if (override) return override;
+  const base = String(routeFilePath || '')
+    .replace(/^routes\//, '')
+    .replace(/-routes\.js$/, '');
+  if (base.startsWith('lifeos-')) {
+    return `/api/v1/lifeos/${base.replace(/^lifeos-/, '')}`;
+  }
+  return `/api/v1/${base}`;
+}
+
+function isRouteStepFile(targetFile) {
+  return /routes\//.test(String(targetFile || ''));
 }
 
 function formatScanHints(step, scan) {
@@ -90,6 +111,7 @@ function formatScanHints(step, scan) {
     lines.push('Verify script: fetch JSON from PUBLIC_BASE_URL + COMMAND_CENTER_KEY env; probe routes created in prior blueprint steps.');
     lines.push('Structure: shebang → imports (node built-ins only) → async main() → main().catch(() => process.exit(1)); no unclosed block comments.');
     lines.push('FORBIDDEN in verify scripts: pg, pool, database imports — use fetch + x-command-key HTTP probes only.');
+    lines.push('Read response body once: const text = await response.text(); then JSON.parse(text) — never response.json().catch(() => response.text()).');
   }
   if (step.type === 'esm') {
     lines.push(`DB: ${scan.db_pattern?.source || 'pool.query(sql, params) — pool injected via factory, never ../../core/*'}`);
@@ -196,6 +218,44 @@ export async function verifyIntakeSessionBuildClearance(pool, sessionId, targetF
   };
 }
 
+export async function postWireRoute(baseUrl, commandKey, targetFile, mountPath = null) {
+  const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/wire-route`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-command-key': commandKey },
+    body: JSON.stringify({
+      target_file: targetFile,
+      ...(mountPath ? { mount_path: mountPath } : {}),
+    }),
+  });
+  let json;
+  const text = await res.text();
+  try { json = JSON.parse(text); } catch { json = { raw: text.slice(0, 800) }; }
+  return { ok: res.ok && json?.ok === true, status: res.status, body: json };
+}
+
+export function runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey) {
+  const cmd = String(acceptanceCmd || '').trim();
+  const nodeMatch = cmd.match(/^node\s+(\S+)/);
+  if (!nodeMatch) {
+    return { ok: false, error: 'acceptance_cmd_must_be_node_script', cmd };
+  }
+  const scriptRel = nodeMatch[1];
+  const scriptAbs = resolve(REPO_ROOT, scriptRel);
+  const env = {
+    ...process.env,
+    PUBLIC_BASE_URL: baseUrl.replace(/\/$/, ''),
+    COMMAND_CENTER_KEY: commandKey || process.env.COMMAND_CENTER_KEY || '',
+  };
+  const r = spawnSync('node', [scriptAbs], { env, encoding: 'utf8', cwd: REPO_ROOT });
+  return {
+    ok: r.status === 0,
+    status: r.status,
+    stdout: (r.stdout || '').slice(-4000),
+    stderr: (r.stderr || '').slice(-2000),
+    script: scriptRel,
+  };
+}
+
 export async function postBuilderBuild(baseUrl, commandKey, body) {
   const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`, {
     method: 'POST',
@@ -283,7 +343,44 @@ export async function executeIntakeBlueprint({
         results,
       };
     }
+
+    const routeWiredFromBuild = buildResult.body?.route_wired;
+    if (isRouteStepFile(targetFile)) {
+      if (routeWiredFromBuild?.ok && !routeWiredFromBuild?.skipped) {
+        row.route_wired = routeWiredFromBuild;
+      } else if (!routeWiredFromBuild?.skipped) {
+        const wireResult = await postWireRoute(
+          baseUrl,
+          commandKey,
+          targetFile,
+          deriveRouteMountPath(targetFile),
+        );
+        row.route_wired = wireResult.body?.route_wired || wireResult.body;
+        if (!wireResult.ok) {
+          return {
+            ok: false,
+            error: 'route_wire_failed',
+            failed_step: step.id,
+            target_file: targetFile,
+            route_wired: row.route_wired,
+            results,
+          };
+        }
+      }
+    }
   }
 
-  return { ok: true, steps_run: results.length, results, blueprint: resolvedBlueprint };
+  const acceptanceCmd = resolvedBlueprint._meta?.acceptance_cmd;
+  let acceptance = null;
+  if (acceptanceCmd && !dryRun) {
+    acceptance = runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
+  }
+
+  return {
+    ok: acceptance ? acceptance.ok : true,
+    steps_run: results.length,
+    results,
+    blueprint: resolvedBlueprint,
+    ...(acceptance ? { acceptance, error: acceptance.ok ? undefined : 'acceptance_failed' } : {}),
+  };
 }

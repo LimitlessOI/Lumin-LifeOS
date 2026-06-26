@@ -1841,6 +1841,46 @@ export function createLifeOSCouncilBuilderRoutes({
   // Called after /build successfully commits a routes/lifeos-*-routes.js file.
   // Reads startup/register-runtime-routes.js from GitHub, adds import + app.use(), commits.
   // This makes the builder self-sufficient — no Conductor needed to wire routes manually.
+function deriveRouteMountPath(routeFilePath, override = null) {
+  if (override) return override;
+  const base = String(routeFilePath || '')
+    .replace(/^routes\//, '')
+    .replace(/-routes\.js$/, '');
+  if (base.startsWith('lifeos-')) {
+    return `/api/v1/lifeos/${base.replace(/^lifeos-/, '')}`;
+  }
+  return `/api/v1/${base}`;
+}
+
+function isProductRoutesFile(routeFilePath) {
+  return /^routes\/[a-z0-9-]+-routes\.js$/i.test(String(routeFilePath || ''));
+}
+
+function buildRouteMountCall(exportName, routeFileContent, mountPath) {
+  const returnsRouter = /return\s+router\s*;/.test(routeFileContent);
+  const usesAppCtx = /export\s+(?:async\s+)?function\s+\w+\s*\(\s*app\s*,\s*ctx\s*\)/.test(routeFileContent);
+  const isMountStyle = exportName.startsWith('mount');
+  const label = mountPath.split('/').filter(Boolean).pop()?.replace(/-/g, '_').toUpperCase() || 'ROUTES';
+
+  if (isMountStyle) {
+    return `  ${exportName}(app, { pool });\n  logger.info('✅ [${label}] Routes mounted at ${mountPath}');\n`;
+  }
+  if (returnsRouter || !usesAppCtx) {
+    return `  app.use("${mountPath}", ${exportName}({ pool, requireKey: requireUserOrKey, logger }));\n  logger.info('✅ [${label}] Routes mounted at ${mountPath}');\n`;
+  }
+  return `  ${exportName}(app, { pool, requireKey: requireUserOrKey, callCouncilMember, logger });\n  logger.info('✅ [${label}] Routes registered via ${exportName}');\n`;
+}
+
+async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch }) {
+  const getRes = await fetch(
+    `https://api.github.com/repos/${owner}/${repoName}/contents/${filePath}?ref=${branch}`,
+    { headers: { Authorization: `token ${token}`, 'Cache-Control': 'no-cache' } },
+  );
+  if (!getRes.ok) return { ok: false, reason: `could not read ${filePath}: HTTP ${getRes.status}` };
+  const fileData = await getRes.json();
+  return { ok: true, content: Buffer.from(fileData.content, 'base64').toString('utf8') };
+}
+
   async function autoWireRoute(routeFilePath, routeFileContent, mountPathOverride) {
     const REGISTER_PATH = 'startup/register-runtime-routes.js';
     const token = process.env.GITHUB_TOKEN?.trim();
@@ -1866,13 +1906,9 @@ export function createLifeOSCouncilBuilderRoutes({
     // Already wired?
     if (current.includes(exportName)) return { ok: true, reason: 'already wired', skipped: true };
 
-    // Derive mount path from file name: routes/lifeos-victory-vault-routes.js → /api/v1/lifeos/victory-vault
-    const namePart = routeFilePath
-      .replace(/^routes\//, '')
-      .replace(/-routes\.js$/, '')
-      .replace(/^lifeos-/, '');
-    const mountPath = mountPathOverride || `/api/v1/lifeos/${namePart}`;
-    const label = namePart.replace(/-/g, '_').toUpperCase();
+    // Derive mount path from file name
+    const mountPath = deriveRouteMountPath(routeFilePath, mountPathOverride);
+    const label = mountPath.split('/').filter(Boolean).pop()?.replace(/-/g, '_').toUpperCase() || 'ROUTES';
 
     // Build import line
     const importLine = `import { ${exportName} } from "../${routeFilePath}";\n`;
@@ -1882,11 +1918,7 @@ export function createLifeOSCouncilBuilderRoutes({
     if (fnStart === -1) return { ok: false, reason: 'could not find registerRuntimeRoutes in file' };
     current = current.slice(0, fnStart) + importLine + current.slice(fnStart);
 
-    // Detect mount call pattern (mountXxx vs createXxx)
-    const isMountStyle = exportName.startsWith('mount');
-    const mountCall = isMountStyle
-      ? `  ${exportName}(app, { pool });\n  logger.info('✅ [${label}] Routes mounted at ${mountPath}');\n`
-      : `  app.use("${mountPath}", ${exportName}({ pool, requireKey, callCouncilMember, logger }));\n  logger.info('✅ [${label}] Routes mounted at ${mountPath}');\n`;
+    const mountCall = buildRouteMountCall(exportName, routeFileContent, mountPath);
 
     // Insert mount: just before the Memory Intelligence mount (last reliable anchor before return)
     const memAnchor = "  // Memory Intelligence";
@@ -1910,6 +1942,33 @@ export function createLifeOSCouncilBuilderRoutes({
       );
     }
     return { ok: true, exportName, mountPath, committed: true };
+  }
+
+  async function wireRouteFromGitHub(req, res) {
+    const { target_file: targetFile, mount_path: mountPathOverride } = req.body || {};
+    if (!targetFile) {
+      return res.status(400).json({ ok: false, error: 'target_file is required' });
+    }
+    if (!isProductRoutesFile(targetFile)) {
+      return res.status(422).json({ ok: false, error: 'target_file must match routes/*-routes.js' });
+    }
+    const token = process.env.GITHUB_TOKEN?.trim();
+    const repo = process.env.GITHUB_REPO;
+    if (!token || !repo) {
+      return res.status(503).json({ ok: false, error: 'GITHUB_TOKEN or GITHUB_REPO not set' });
+    }
+    const [owner, repoName] = repo.split('/');
+    const branch = process.env.GITHUB_DEPLOY_BRANCH || 'main';
+    const fetched = await fetchGitHubFileContent(targetFile, { token, owner, repoName, branch });
+    if (!fetched.ok) {
+      return res.status(422).json({ ok: false, error: fetched.reason });
+    }
+    try {
+      const routeWired = await autoWireRoute(targetFile, fetched.content, mountPathOverride || null);
+      return res.json({ ok: routeWired?.ok === true, route_wired: routeWired, target_file: targetFile });
+    } catch (err) {
+      return res.status(500).json({ ok: false, error: err.message, target_file: targetFile });
+    }
   }
 
   // ── POST /build ───────────────────────────────────────────────────────────────
@@ -2554,7 +2613,7 @@ export function createLifeOSCouncilBuilderRoutes({
       // If the committed file is a LifeOS routes file, automatically add the import
       // and app.use() to startup/register-runtime-routes.js so the builder wires itself.
       let routeWired = null;
-      const isNewRoutesFile = /^routes\/lifeos-.*-routes\.js$/.test(resolvedTarget);
+      const isNewRoutesFile = isProductRoutesFile(resolvedTarget);
       if (isNewRoutesFile) {
         try {
           routeWired = await autoWireRoute(resolvedTarget, generatedOutput, mount_path || null);
@@ -2861,6 +2920,7 @@ export function createLifeOSCouncilBuilderRoutes({
     // §2.11 execution endpoints — the system writes and commits code
     app.post(`${base}/execute`, requireKey, executeOutput);
     app.post(`${base}/execute-batch`, requireKey, executeBatch);
+    app.post(`${base}/wire-route`, requireKey, wireRouteFromGitHub);
     app.post(
       `${base}/build`,
       requireKey,

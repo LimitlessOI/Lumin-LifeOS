@@ -52,13 +52,26 @@ async function main() {
   if (!result.ok) {
     console.error('\nFAILED:', result.error);
     if (result.failed_step) console.error(`  Step: ${result.failed_step} (${result.target_file})`);
+    if (result.acceptance) {
+      console.error('\nAcceptance:', result.acceptance.ok ? 'PASS' : 'FAIL');
+      if (!result.acceptance.ok && result.acceptance.stdout) {
+        console.error(result.acceptance.stdout.slice(-1500));
+      }
+    }
     if (result.builder) console.error(JSON.stringify(result.builder, null, 2).slice(0, 1500));
     process.exit(1);
   }
 
   console.log(`\nDone — ${result.steps_run} step(s) committed via BuilderOS.`);
+  if (result.acceptance) {
+    console.log(`Acceptance: ${result.acceptance.ok ? 'PASS' : 'FAIL'} (${result.blueprint?._meta?.acceptance_cmd})`);
+    if (!result.acceptance.ok) {
+      console.error(result.acceptance.stdout?.slice(-1500) || result.acceptance.stderr?.slice(-500));
+      process.exit(1);
+    }
+  }
   const acceptance = result.blueprint?._meta?.acceptance_cmd;
-  if (acceptance && !dryRun) {
+  if (acceptance && !dryRun && !result.acceptance) {
     console.log(`\nNext: run acceptance — ${acceptance}`);
   }
 }

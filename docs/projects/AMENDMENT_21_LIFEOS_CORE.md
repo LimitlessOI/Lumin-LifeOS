@@ -1606,7 +1606,8 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
-| 2026-06-26 | **`routes/lifeos-council-builder-routes.js`** — detect JSON manifest masquerading as verify-*.mjs; auto-retry as executable JS. | MOS-P1-005 model output JSON not JavaScript. | ⚠️ deploy + re-run | intake execute |
+| 2026-06-26 | **`routes/lifeos-council-builder-routes.js`** — product route auto-wire (`routes/*-routes.js`), `POST /builder/wire-route`, mount path `/api/v1/{product}`. | MOS-P1-003 socialmediaos routes never registered. | ⚠️ deploy + wire + re-run routes step | intake execute |
+| 2026-06-26 | **`routes/lifeos-council-builder-routes.js`** — detect JSON manifest masquerading as verify-*.mjs; auto-retry as executable JS. | MOS-P1-005 model output JSON not JavaScript. | ✅ fixed | intake execute |
 | 2026-06-26 | **FPv2 double-gate fix** — `dispatchTask` verifies intake clearance; `/build` passes target_file. | MOS-P1-001 INTENT_AMBIGUITY at dispatchTask. | ✅ deployed | see above |
 | 2026-06-26 | **Builder SQL gate + intake executor** — reject JS-in-`.sql`; revert invalid `20260626_socialmediaos.sql`; intake sql hint fixed; all steps `gemini_flash`. | Railway deploy FAILED: migration syntax error at `//`. | ⚠️ IN PROGRESS: redeploy + re-run SocialMediaOS intake test | `blueprint:intake:execute` |
 | 2026-05-19 | **`db/migrations/20260626_socialmediaos.sql`** — GAP-FILL attempt (superseded 2026-06-26): builder had emitted JS in `.sql`; revert + platform SQL gate is canonical fix. | Deploy blocked startup | superseded | see 2026-06-26 row |
