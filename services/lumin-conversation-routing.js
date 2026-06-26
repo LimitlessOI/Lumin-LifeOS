@@ -23,7 +23,8 @@ export function isExplicitDisplayOnlyRequest(text = '', action = 'auto') {
   return DISPLAY_MARKERS.test(t);
 }
 
-export function coerceDisplayMisrouteToChair(text = '', chairContext = {}) {
+export function coerceDisplayMisrouteToChair(text = '', chairContext = {}, opts = {}) {
+  if (opts.explicitAction === 'display' || opts.shouldDisplayOnly) return chairContext;
   if (chairContext.channel !== 'display') return chairContext;
   if (!isConversationTurn(text)) return chairContext;
   return {

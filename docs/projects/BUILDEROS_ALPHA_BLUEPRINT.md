@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-05-19 | **`routes/lifeos-builderos-command-control-routes.js`** — pass `action` into `shouldSkipInputNormalize()` so display-only requests skip Gemini `normalizeInputText` (T7 parity fix). Pairs with orchestrator display-only guards. | Adam: alpha break-it — display queue misrouted to counsel | ✅ unit | deploy |
 | 2026-06-25 | **`services/founder-overlay-surgical-patch.js`**, **`services/founder-build-self-repair.js`**, **`services/founder-intent-clarify.js`** — mechanical HTML comment insert before anchor via `/builder/execute-batch`; skips LLM regen for small overlay edits; explicit HTML comment path bypasses clarify gate. | Adam: Lumin surgical overlay builds without truncating full HTML regen. | ✅ overlay battery | deploy |
 | 2026-06-25 | **`routes/lifeos-builderos-command-control-routes.js` + `services/lumin-conversation-routing.js`** — conversation never routes to display queue; personal life skips input normalize; live T4 parity target. | Adam: terminal + conversation = real system, no theater | ✅ verify | deploy |
 | 2026-06-25 | **`routes/lifeos-builderos-command-control-routes.js`** — pass `userHandle` from `req.lifeosUser` into `runLuminChairTurn` for per-user twin + Communication Law variety. | Adam: universal digital twin + communication DNA lock | ✅ syntax | deploy |

@@ -285,7 +285,8 @@ export async function runLuminChairTurn(ctx, deps) {
     || hasHighConfidenceBuildTarget(effectiveInput);
 
   const skipIntentGate = force || forceExecute;
-  if (!skipIntentGate && (!conversationalMode || likelyBuild)) {
+  const displayOnlyTurn = shouldDisplayOnly || explicitAction === 'display';
+  if (!skipIntentGate && (!conversationalMode || likelyBuild) && !displayOnlyTurn) {
     const wisdom = assessFounderUtteranceWisdom(effectiveInput, { confirmIntent: forceExecute });
     if (wisdom.needs_clarification) {
       return chairWisdomClarifyResponse(
@@ -295,18 +296,21 @@ export async function runLuminChairTurn(ctx, deps) {
     }
   }
 
-  const systemAction = await tryLuminChairSystemAction(actionSource, {
-    pool: deps.pool,
-    logger: deps.logger || console,
-    operatorKey: deps.operatorKey,
-    founderBuildBaseUrl: deps.founderBuildBaseUrl,
-    userId: ctx.userId,
-  });
-  if (systemAction.matched) {
-    return systemActionChairResponse(
-      { intakeNormalized, sourceMode, auth_mode, user_role },
-      systemAction,
-    );
+  let systemAction = { matched: false };
+  if (!displayOnlyTurn) {
+    systemAction = await tryLuminChairSystemAction(actionSource, {
+      pool: deps.pool,
+      logger: deps.logger || console,
+      operatorKey: deps.operatorKey,
+      founderBuildBaseUrl: deps.founderBuildBaseUrl,
+      userId: ctx.userId,
+    });
+    if (systemAction.matched) {
+      return systemActionChairResponse(
+        { intakeNormalized, sourceMode, auth_mode, user_role },
+        systemAction,
+      );
+    }
   }
 
   const pointBTarget = loadPointBTarget();
@@ -353,6 +357,7 @@ export async function runLuminChairTurn(ctx, deps) {
   const chairContext = coerceDisplayMisrouteToChair(
     effectiveInput,
     resolveChairContext(effectiveInput, contextOpts),
+    { explicitAction, shouldDisplayOnly },
   );
   const channel = chairContext.channel;
 

@@ -1063,7 +1063,7 @@ HOW TO RESPOND:
       // Normalize input first: fix misspellings, voice-to-text errors, garbled phrasing
       const buildIntentEarly = isBuildRequest(originalText) || isRepairContinuationIntent(originalText) || isFounderShipOrUsabilityIntent(originalText);
       const skipNormalize = buildIntentEarly
-        || shouldSkipInputNormalize(originalText)
+        || shouldSkipInputNormalize(originalText, action)
         || isFounderPersonalLifeIntent(originalText);
       const cleanedInput = skipNormalize
         ? originalText.trim()

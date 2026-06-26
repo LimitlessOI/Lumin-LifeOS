@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:16:18.317Z",
+  "generated_at": "2026-06-26T00:24:03.435Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12562,
   "files": [
@@ -29048,8 +29048,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3770483,
-      "mtime": "2026-06-26T00:16:17.738Z",
-      "indexed_at": "2026-06-26T00:16:18.317Z"
+      "mtime": "2026-06-26T00:23:55.895Z",
+      "indexed_at": "2026-06-26T00:24:03.435Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41954,17 +41954,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26704,
-      "mtime": "2026-06-26T00:08:31.185Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 26711,
+      "mtime": "2026-06-26T00:23:49.771Z",
+      "indexed_at": "2026-06-26T00:24:03.435Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 489243,
-      "mtime": "2026-06-26T00:16:08.139Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z"
+      "bytes": 489652,
+      "mtime": "2026-06-26T00:23:32.241Z",
+      "indexed_at": "2026-06-26T00:24:03.435Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42468,9 +42468,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 135778,
-      "mtime": "2026-06-25T23:29:26.116Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z"
+      "bytes": 136105,
+      "mtime": "2026-06-26T00:23:31.032Z",
+      "indexed_at": "2026-06-26T00:24:03.435Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -72248,9 +72248,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 48666,
-      "mtime": "2026-06-25T22:25:15.985Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 48674,
+      "mtime": "2026-06-26T00:18:57.737Z",
+      "indexed_at": "2026-06-26T00:24:03.435Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -89595,9 +89595,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 26834,
-      "mtime": "2026-06-25T22:25:27.750Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 27065,
+      "mtime": "2026-06-26T00:18:59.437Z",
+      "indexed_at": "2026-06-26T00:24:03.435Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89605,9 +89605,9 @@
     {
       "path": "services/lumin-chair-system-actions.js",
       "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
-      "bytes": 7936,
-      "mtime": "2026-06-25T22:25:25.979Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 8093,
+      "mtime": "2026-06-26T00:18:58.520Z",
+      "indexed_at": "2026-06-26T00:24:03.435Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89655,9 +89655,9 @@
     {
       "path": "services/lumin-conversation-routing.js",
       "synopsis": "Conversation vs display routing — personal talk never hits queue display theater.",
-      "bytes": 2448,
-      "mtime": "2026-06-25T22:25:13.241Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 2547,
+      "mtime": "2026-06-26T00:18:57.737Z",
+      "indexed_at": "2026-06-26T00:24:03.435Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95671,9 +95671,9 @@
     {
       "path": "tests/lumin-conversation-routing.test.js",
       "synopsis": "Conversation routing — personal talk never display theater.",
-      "bytes": 1480,
-      "mtime": "2026-06-25T22:25:46.115Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z"
+      "bytes": 2160,
+      "mtime": "2026-06-26T00:18:57.962Z",
+      "indexed_at": "2026-06-26T00:24:03.435Z"
     },
     {
       "path": "tests/lumin-strategic-intelligence.test.js",
