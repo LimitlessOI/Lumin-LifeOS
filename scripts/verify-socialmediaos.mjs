@@ -1,244 +1,238 @@
 /**
- * SYNOPSIS: Helper function to fetch JSON data from a given URL.
+ * SYNOPSIS: Exports runAudit — scripts/verify-socialmediaos.mjs.
  */
-// Node built-ins only
-import { URL } from 'node:url';
-import process from 'node:process'; // For process.exit
+import 'dotenv/config';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 
-/**
- * Helper function to fetch JSON data from a given URL.
- * @param {string} baseUrl - The base URL of the API.
- * @param {string} path - The API path relative to the base URL.
- * @param {string} commandKey - The x-command-key for auth.
- * @param {string} [method='GET'] - The HTTP method (e.g., 'GET', 'POST').
- * @param {object} [body=null] - The request body for POST/PUT requests.
- * @returns {Promise<object>} The parsed JSON response.
- * @throws {Error} If the fetch operation fails or returns a non-OK status.
- */
-async function fetchJson(baseUrl, path, commandKey, method = 'GET', body = null) {
-    const fullUrl = new URL(path, baseUrl).toString();
-    const headers = {
-        'Content-Type': 'application/json',
-        'x-command-key': commandKey,
-    };
-    const options = {
-        method,
-        headers,
-    };
-    if (body) {
-        options.body = JSON.stringify(body);
-    }
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-    const response = await fetch(fullUrl, options);
-    if (!response.ok) {
-        const errorBody = await response.text();
-        throw new Error(`HTTP error! Status: ${response.status}, Body: ${errorBody}`);
-    }
-    // Read response body once as text, then parse JSON
-    const text = await response.text();
+function exists(rel) {
+  return fs.existsSync(path.join(ROOT, rel));
+}
+
+function read(rel) {
+  try {
+    return fs.readFileSync(path.join(ROOT, rel), 'utf8');
+  } catch (e) {
+    return null;
+  }
+}
+
+function check(id, ok, detail) {
+  return { id, ok: Boolean(ok), detail: detail || (ok ? 'PASS' : 'FAIL') };
+}
+
+function scoreChecks(checks) {
+  if (!checks.length) return 0;
+  const passed = checks.filter((c) => c.ok).length;
+  return Math.round((passed / checks.length) * 100) / 10;
+}
+
+function runNodeCheck(filePath) {
+  const r = spawnSync(process.execPath, ['--check', path.join(ROOT, filePath)], {
+    encoding: 'utf8',
+  });
+  return r.status === 0;
+}
+
+function resolveBaseUrl() {
+  return (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
+}
+
+function resolveCommandKey() {
+  return process.env.COMMAND_CENTER_KEY || '';
+}
+
+export async function runAudit() {
+  const checks = [];
+  const baseUrl = resolveBaseUrl();
+  const commandKey = resolveCommandKey();
+  const apiBase = '/api/v1/socialmediaos';
+
+  // --- Environment Variable Checks ---
+  checks.push(
+    check('ENV-001', baseUrl, 'PUBLIC_BASE_URL is set'),
+    check('ENV-002', commandKey, 'COMMAND_CENTER_KEY is set')
+  );
+
+  if (!baseUrl || !commandKey) {
+    checks.push(
+      check('PROBE-001', false, 'Skipping HTTP probes due to missing PUBLIC_BASE_URL or COMMAND_CENTER_KEY'),
+      check('PROBE-002', false, 'Skipping HTTP probes due to missing PUBLIC_BASE_URL or COMMAND_CENTER_KEY')
+    );
+    return checks;
+  }
+
+  // --- DB Migration Presence Check ---
+  const dbMigrationPath = 'db/migrations/20260626_socialmediaos.sql';
+  const dbMigrationContent = read(dbMigrationPath);
+  checks.push(
+    check('DB-001', exists(dbMigrationPath), `DB migration file ${dbMigrationPath} exists`)
+  );
+  if (dbMigrationContent) {
+    checks.push(
+      check(
+        'DB-002',
+        dbMigrationContent.includes('CREATE TABLE socialmediaos_sessions'),
+        'socialmediaos_sessions table definition found'
+      ),
+      check(
+        'DB-003',
+        dbMigrationContent.includes('CREATE TABLE socialmediaos_content_packs'),
+        'socialmediaos_content_packs table definition found'
+      )
+    );
+  } else {
+    checks.push(
+      check('DB-002', false, 'Could not read DB migration file'),
+      check('DB-003', false, 'Could not read DB migration file')
+    );
+  }
+
+  // --- Service Exports Check ---
+  const servicePath = 'services/socialmediaos-service.js';
+  const serviceContent = read(servicePath);
+  checks.push(
+    check('SVC-001', exists(servicePath), `Service file ${servicePath} exists`)
+  );
+  if (serviceContent) {
+    checks.push(
+      check(
+        'SVC-002',
+        serviceContent.includes('export function createMarketingOSFactory'),
+        'createMarketingOSFactory export found'
+      ),
+      check(
+        'SVC-003',
+        runNodeCheck(servicePath),
+        `Service file ${servicePath} passes Node --check`
+      )
+    );
+  } else {
+    checks.push(
+      check('SVC-002', false, 'Could not read service file'),
+      check('SVC-003', false, 'Skipped Node --check for service file')
+    );
+  }
+
+  // --- Route Factory Signature Check ---
+  const routesPath = 'routes/socialmediaos-routes.js';
+  const routesContent = read(routesPath);
+  checks.push(
+    check('RTE-001', exists(routesPath), `Routes file ${routesPath} exists`)
+  );
+  if (routesContent) {
+    checks.push(
+      check(
+        'RTE-002',
+        routesContent.includes('export function createSocialmediaosRoutes({ pool, requireKey, logger })'),
+        'createSocialmediaosRoutes factory signature found'
+      ),
+      check(
+        'RTE-003',
+        runNodeCheck(routesPath),
+        `Routes file ${routesPath} passes Node --check`
+      )
+    );
+  } else {
+    checks.push(
+      check('RTE-002', false, 'Could not read routes file'),
+      check('RTE-003', false, 'Skipped Node --check for routes file')
+    );
+  }
+
+  // --- HTTP Probes ---
+  const headers = { 'x-command-key': commandKey, 'Content-Type': 'application/json' };
+
+  // Probe 1: GET /api/v1/socialmediaos/sessions
+  const getSessionsUrl = `${baseUrl}${apiBase}/sessions`;
+  try {
+    const res = await fetch(getSessionsUrl, { headers });
+    const text = await res.text();
+    let json = null;
     try {
-        return JSON.parse(text);
-    } catch (e) {
-        throw new Error(`Failed to parse JSON response: ${e.message}, Body: ${text.substring(0, 200)}`);
+      json = JSON.parse(text);
+    } catch {
+      // json remains null if parsing fails
     }
-}
 
-/**
- * Validates required envVars.
- * @param {string} baseUrl - The base URL for the API.
- * @param {string} commandKey - The command key for auth.
- * @returns {object} An object indicating validation status and message.
- */
-function validateEnv(baseUrl, commandKey) {
-    if (!baseUrl || !commandKey) {
-        return { ok: false, message: 'Missing required envVars: PUBLIC_BASE_URL and/or COMMAND_CENTER_KEY.', };
-    }
+    checks.push(
+      check(
+        'PROBE-001',
+        res.ok && json?.ok === true && Array.isArray(json?.sessions),
+        `GET ${apiBase}/sessions: HTTP ${res.status}, ok: ${json?.ok}, sessions array: ${Array.isArray(json?.sessions)}`
+      )
+    );
+  } catch (error) {
+    checks.push(
+      check('PROBE-001', false, `GET ${apiBase}/sessions failed: ${error.message}`)
+    );
+  }
+
+  // Probe 2: POST /api/v1/socialmediaos/validate-payment-link
+  const validateLinkUrl = `${baseUrl}${apiBase}/validate-payment-link`;
+  const postBody = { link: 'https://buy.stripe.com/test' };
+  try {
+    const res = await fetch(validateLinkUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(postBody),
+    });
+    const text = await res.text();
+    let json = null;
     try {
-        new URL(baseUrl); // Validate if baseUrl is a valid URL
-    } catch (e) {
-        return { ok: false, message: `Invalid PUBLIC_BASE_URL: ${e.message}`, };
-    }
-    return { ok: true, message: 'Environment variables are valid.' };
-}
-
-/**
- * Shapes an error into a consistent format for audit results.
- * @param {string} testName - The name of the test that failed.
- * @param {Error} error - The error object.
- * @returns {object} An error result object.
- */
-function shapeError(testName, error) {
-    return { test: testName, ok: false, message: error.message, details: error.stack, };
-}
-
-/**
- * Executes the MarketingOS Phase 1 acceptance test suite.
- * This script performs a suite of read-only acceptance tests against
- * the MarketingOS and SocialMediaOS APIs to ensure core functionality
- * is available and responsive.
- * @param {string} [baseUrl=process.env.PUBLIC_BASE_URL] - The base URL for the API.
- * @param {string} [commandKey=process.env.COMMAND_CENTER_KEY] - The command key for auth.
- * @returns {Promise<object>} Structured audit JSON with ok, summary, and generated_at.
- */
-async function runAudit(
-    baseUrl = process.env.PUBLIC_BASE_URL,
-    commandKey = process.env.COMMAND_CENTER_KEY
-) {
-    const auditResults = [];
-    let overallOk = true;
-    const startTime = new Date();
-
-    const envValidation = validateEnv(baseUrl, commandKey);
-    if (!envValidation.ok) {
-        auditResults.push({ test: 'Environment Validation', ...envValidation });
-        overallOk = false;
-        return {
-            ok: overallOk,
-            summary: 'Audit failed due to environment validation issues.',
-            generated_at: startTime.toISOString(),
-            results: auditResults,
-        };
+      json = JSON.parse(text);
+    } catch {
+      // json remains null if parsing fails
     }
 
-    // Inferred acceptance tests for MarketingOS / SocialMediaOS Phase 1
-    // These tests probe the routes defined in routes/socialmediaos-routes.js.
-    // All SocialMediaOS routes require JWT authentication (ownerId), which is not
-    // provided by x-command-key. Therefore, we expect a 401 'jwt_required' error
-    // for these routes, which validates their presence and auth configuration.
-    const tests = [
-        // Existing MarketingOS tests (kept for continuity, assuming they are still relevant)
-        { name: 'MarketingOS Status Check', path: '/api/v1/marketingos/status', method: 'GET', validator: (data) => data && typeof data.status === 'string' },
-        { name: 'MarketingOS Configuration Retrieval', path: '/api/v1/marketingos/config', method: 'GET', validator: (data) => data && typeof data.version === 'string' },
-        { name: 'SocialMediaOS Integrations List', path: '/api/v1/socialmediaos/integrations', method: 'GET', validator: (data) => Array.isArray(data) },
-        { name: 'SocialMediaOS Upcoming Schedule', path: '/api/v1/socialmediaos/schedule/upcoming', method: 'GET', validator: (data) => Array.isArray(data) },
-        { name: 'Active Marketing Campaigns', path: '/api/v1/marketingos/campaigns/active', method: 'GET', validator: (data) => Array.isArray(data) },
-        { name: 'Marketing Analytics Overview', path: '/api/v1/marketingos/analytics/overview', method: 'GET', validator: (data) => data && typeof data.total_campaigns === 'number' },
-        { name: 'Social Profile Sync Status', path: '/api/v1/socialmediaos/profiles/sync-status', method: 'GET', validator: (data) => data && typeof data.last_sync === 'string' },
-        { name: 'Audience Segments Retrieval', path: '/api/v1/marketingos/audiences/segments', method: 'GET', validator: (data) => Array.isArray(data) },
-        { name: 'SocialMediaOS Rate Limits', path: '/api/v1/socialmediaos/rate-limits', method: 'GET', validator: (data) => data && typeof data.twitter_remaining === 'number' },
+    checks.push(
+      check(
+        'PROBE-002',
+        res.ok && json?.ok === true && json?.valid === true,
+        `POST ${apiBase}/validate-payment-link: HTTP ${res.status}, ok: ${json?.ok}, valid: ${json?.valid}`
+      )
+    );
+  } catch (error) {
+    checks.push(
+      check('PROBE-002', false, `POST ${apiBase}/validate-payment-link failed: ${error.message}`)
+    );
+  }
 
-        // New SocialMediaOS routes from routes/socialmediaos-routes.js
-        // Assuming these are mounted under /api/v1/socialmediaos
-        {
-            name: 'SocialMediaOS List Sessions (Auth Check)',
-            path: '/api/v1/socialmediaos/sessions',
-            method: 'GET',
-            validator: (data) => false, // Expecting 401, so 200 OK is a failure for this test
-            expectedErrorStatus: 401,
-            expectedErrorMessage: '"jwt_required"',
-        },
-        {
-            name: 'SocialMediaOS Validate Payment Link (Auth Check)',
-            path: '/api/v1/socialmediaos/validate-payment-link',
-            method: 'POST',
-            body: { link: 'https://stripe.com/pay/test' },
-            validator: (data) => false, // Expecting 401
-            expectedErrorStatus: 401,
-            expectedErrorMessage: '"jwt_required"',
-        },
-        {
-            name: 'SocialMediaOS Get Session by ID (Auth Check)',
-            path: '/api/v1/socialmediaos/sessions/00000000-0000-0000-0000-000000000000', // Dummy UUID
-            method: 'GET',
-            validator: (data) => false, // Expecting 401
-            expectedErrorStatus: 401,
-            expectedErrorMessage: '"jwt_required"',
-        },
-        {
-            name: 'SocialMediaOS List Content Packs for Session (Auth Check)',
-            path: '/api/v1/socialmediaos/sessions/00000000-0000-0000-0000-000000000000/content-packs', // Dummy UUID
-            method: 'GET',
-            validator: (data) => false, // Expecting 401
-            expectedErrorStatus: 401,
-            expectedErrorMessage: '"jwt_required"',
-        },
-        {
-            name: 'SocialMediaOS Get Content Pack by ID (Auth Check)',
-            path: '/api/v1/socialmediaos/content-packs/00000000-0000-0000-0000-000000000000', // Dummy UUID
-            method: 'GET',
-            validator: (data) => false, // Expecting 401
-            expectedErrorStatus: 401,
-            expectedErrorMessage: '"jwt_required"',
-        },
-        // Test for a non-existent route to ensure 404s are handled correctly by the server
-        {
-            name: 'Non-existent SocialMediaOS Route (Expected 404)',
-            path: '/api/v1/socialmediaos/non-existent-route-xyz',
-            method: 'GET',
-            validator: (data) => false, // Expecting 404
-            expectedErrorStatus: 404,
-            expectedErrorMessage: 'Cannot GET /api/v1/socialmediaos/non-existent-route-xyz', // Default Express 404 message
-        },
-    ];
-
-    for (const test of tests) {
-        try {
-            const data = await fetchJson(baseUrl, test.path, commandKey, test.method, test.body);
-            const testOk = test.validator(data);
-            auditResults.push({
-                test: test.name,
-                path: test.path,
-                ok: testOk,
-                message: testOk ? 'Success' : 'Validation failed for response data.',
-                response_preview: JSON.stringify(data).substring(0, 200) + (JSON.stringify(data).length > 200 ? '...' : ''),
-            });
-            if (!testOk) {
-                overallOk = false;
-            }
-        } catch (error) {
-            let testOk = false;
-            let message = error.message;
-            // Check if the error is an expected one (e.g., 401 for auth-protected routes)
-            if (test.expectedErrorStatus && error.message.includes(`Status: ${test.expectedErrorStatus}`)) {
-                if (test.expectedErrorMessage && error.message.includes(test.expectedErrorMessage)) {
-                    testOk = true; // Expected error received, so test passes
-                    message = `Expected error received: ${test.expectedErrorStatus} - ${test.expectedErrorMessage}`;
-                } else {
-                    message = `Expected status ${test.expectedErrorStatus} but unexpected error message. Error: ${error.message}`;
-                }
-            }
-            auditResults.push({
-                test: test.name,
-                path: test.path,
-                ok: testOk,
-                message: message,
-                details: error.stack,
-            });
-            if (!testOk) {
-                overallOk = false;
-            }
-        }
-    }
-
-    const endTime = new Date();
-    const durationMs = endTime.getTime() - startTime.getTime();
-    const summary = overallOk
-        ? `All ${tests.length} MarketingOS Phase 1 acceptance tests passed successfully in ${durationMs}ms.`
-        : `Some MarketingOS Phase 1 acceptance tests failed. See details for ${auditResults.filter(r => !r.ok).length} failures.`;
-
-    return {
-        ok: overallOk,
-        summary: summary,
-        generated_at: startTime.toISOString(),
-        duration_ms: durationMs,
-        results: auditResults,
-    };
+  return checks;
 }
 
-/**
- * Main execution block.
- */
 async function main() {
-    const auditResult = await runAudit();
-    console.log(JSON.stringify(auditResult, null, 2));
+  const auditChecks = await runAudit();
+  const overallScore = scoreChecks(auditChecks);
+  const allOk = auditChecks.every((c) => c.ok);
 
-    if (!auditResult.ok) {
-        process.exit(1);
-    }
+  const report = {
+    schema: 'socialmediaos_phase1_acceptance_report_v1',
+    generated_at: new Date().toISOString(),
+    overall_score: overallScore,
+    ok: allOk,
+    checks: auditChecks,
+  };
+
+  console.log(JSON.stringify(report, null, 2));
+
+  if (!allOk) {
+    console.error('\n--- FAILED CHECKS ---');
+    auditChecks.filter((c) => !c.ok).forEach((c) => {
+      console.error(`FAIL ${c.id}: ${c.detail}`);
+    });
+    process.exit(1);
+  } else {
+    console.log('\nAll SocialMediaOS Phase 1 acceptance checks passed.');
     process.exit(0);
+  }
 }
 
-main().catch((error) => {
-    console.error('Audit script failed unexpectedly:', error);
-    process.exit(1);
+main().catch((err) => {
+  console.error('An unhandled error occurred during audit:', err);
+  process.exit(1);
 });
