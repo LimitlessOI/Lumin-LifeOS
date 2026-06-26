@@ -32,6 +32,7 @@ import {
   setCommandControlHalt,
   getCommandControlHaltState,
   updateCommandControlJobExecution,
+  loadFounderBuildJobFromDb,
 } from '../services/builderos-command-control-service.js';
 import { executeCommandControlJob } from '../services/builderos-governed-loop-executor.js';
 import {
@@ -955,7 +956,14 @@ HOW TO RESPOND:
   });
 
   router.get('/founder-interface/build-job/:jobId', requireFounderInterfaceAuth, async (req, res) => {
-    const job = getFounderBuildJobStatus(req.params.jobId);
+    let job = getFounderBuildJobStatus(req.params.jobId);
+    if (!job && pool) {
+      try {
+        job = await loadFounderBuildJobFromDb(pool, req.params.jobId);
+      } catch (err) {
+        console.warn('[founder-interface/build-job] db load failed:', err.message);
+      }
+    }
     if (!job) {
       return res.status(404).json({ ok: false, pass_fail: 'FAIL', error: 'Build job not found' });
     }
@@ -1073,7 +1081,12 @@ HOW TO RESPOND:
       const inferredDisplayScope = summarizeDisplayRequest(cleanedInput);
       const explicitExecute = action === 'execute' || isExplicitExecuteCommand(cleanedInput);
       const executeIntent = isLikelyExecuteIntent(cleanedInput) || explicitExecute;
-      const shouldDisplayOnly = !explicitExecute && isExplicitDisplayOnlyRequest(cleanedInput, action);
+      const doPrefix = stripChairDoPrefix(originalText);
+      const shouldDisplayOnly = !explicitExecute
+        && !doPrefix.forcedExecute
+        && !buildIntentEarly
+        && action !== 'build'
+        && isExplicitDisplayOnlyRequest(cleanedInput, action);
       const normalizedText = shouldDisplayOnly ? cleanedInput : normalizeFounderExecuteIntent(cleanedInput);
       const intakeNormalized = inputWasCleaned || normalizedText !== cleanedInput;
 

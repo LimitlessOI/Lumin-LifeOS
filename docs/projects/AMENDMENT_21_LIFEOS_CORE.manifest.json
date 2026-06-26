@@ -884,8 +884,8 @@
     ]
   },
   "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-26 governance-covenant-repair-order-ack",
-  "last_change_summary": "Founder repair orders → repair_order_ack (no counsel deflection); governance covenant live loop"
+  "last_receipt": "2026-06-26 direct-order-build-pipeline-db-persist",
+  "last_change_summary": "do: orders route to build not display; founder build jobs persisted to PG for poll"
   "last_change_summary": "Agent alpha scripts restored; crm_contact_notes; verifier CLI guard",
   "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
 }

@@ -71,6 +71,10 @@ export function inferTargetFileFromFounderFeedback(instruction) {
   if (/voice.?rail/i.test(text)) {
     return { target_file: 'public/overlay/lifeos-voice-rail-v1.html', source: 'keyword_match', confidence: 'medium' };
   }
+  if (/\b(voice|dictat|mic|listening|speech|send it)\b/i.test(text)
+    && /\b(send|post|submit|message)\b/i.test(text)) {
+    return { target_file: CANONICAL_FOUNDER_UI_TARGET, source: 'voice_send_heuristic', confidence: 'high' };
+  }
   if (/\b(lifere|life-?re)\b/i.test(text)) {
     return { target_file: 'public/overlay/lifeos-lifere.html', source: 'keyword_match', confidence: 'medium' };
   }

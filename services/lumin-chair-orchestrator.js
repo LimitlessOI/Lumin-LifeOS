@@ -583,6 +583,7 @@ export async function runLuminChairTurn(ctx, deps) {
           userId: ctx.userId,
           callCouncilMember: deps.callCouncilMember,
           pool: deps.pool,
+          confirmIntent: ctx.confirmIntent || forceExecute,
         });
         const truth = finalizeTruth({
           ok: true,

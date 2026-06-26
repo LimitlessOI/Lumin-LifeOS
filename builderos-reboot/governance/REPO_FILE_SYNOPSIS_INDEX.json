@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T15:19:53.807Z",
+  "generated_at": "2026-06-26T15:34:15.860Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12579,
   "files": [
@@ -41986,17 +41986,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26826,
-      "mtime": "2026-06-26T15:19:49.117Z",
-      "indexed_at": "2026-06-26T15:19:53.807Z",
+      "bytes": 26813,
+      "mtime": "2026-06-26T15:33:53.557Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 491971,
-      "mtime": "2026-06-26T15:19:48.877Z",
-      "indexed_at": "2026-06-26T15:19:53.807Z"
+      "bytes": 492149,
+      "mtime": "2026-06-26T15:33:53.555Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42500,9 +42500,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 138334,
-      "mtime": "2026-06-26T01:32:10.719Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z"
+      "bytes": 138785,
+      "mtime": "2026-06-26T15:34:11.046Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -72296,9 +72296,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 48674,
-      "mtime": "2026-06-26T00:18:57.737Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 49087,
+      "mtime": "2026-06-26T15:33:26.679Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -86682,9 +86682,9 @@
     {
       "path": "services/builder-instruction-target.js",
       "synopsis": "Parse repo-relative target paths and domains from operator/build instructions.",
-      "bytes": 7832,
-      "mtime": "2026-06-22T22:25:43.073Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 8068,
+      "mtime": "2026-06-26T15:33:07.829Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -86824,9 +86824,9 @@
     {
       "path": "services/builderos-command-control-service.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 6150,
-      "mtime": "2026-06-21T21:38:43.806Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 8688,
+      "mtime": "2026-06-26T15:33:20.674Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -88158,9 +88158,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 25522,
-      "mtime": "2026-06-25T22:57:29.786Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 26323,
+      "mtime": "2026-06-26T15:33:24.800Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
@@ -89717,9 +89717,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 28888,
-      "mtime": "2026-06-26T15:18:51.982Z",
-      "indexed_at": "2026-06-26T15:19:53.807Z",
+      "bytes": 28948,
+      "mtime": "2026-06-26T15:33:25.385Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89777,9 +89777,9 @@
     {
       "path": "services/lumin-conversation-routing.js",
       "synopsis": "Conversation vs display routing — personal talk never hits queue display theater.",
-      "bytes": 2547,
-      "mtime": "2026-06-26T00:18:57.737Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z",
+      "bytes": 3108,
+      "mtime": "2026-06-26T15:33:08.098Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95820,9 +95820,9 @@
     {
       "path": "tests/lumin-conversation-routing.test.js",
       "synopsis": "Conversation routing — personal talk never display theater.",
-      "bytes": 2160,
-      "mtime": "2026-06-26T00:18:57.962Z",
-      "indexed_at": "2026-06-26T06:34:31.382Z"
+      "bytes": 1468,
+      "mtime": "2026-06-26T15:33:37.262Z",
+      "indexed_at": "2026-06-26T15:34:15.860Z"
     },
     {
       "path": "tests/lumin-strategic-intelligence.test.js",

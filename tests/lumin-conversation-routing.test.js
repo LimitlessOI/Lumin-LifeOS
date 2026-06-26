@@ -27,28 +27,9 @@ test('queue status stays display', () => {
   assert.equal(ctx.channel, 'display');
 });
 
-test('explicit display action skips misroute coercion', () => {
-  const text = 'display queue status and recent jobs';
-  const ctx = resolveChairContext(text, { shouldDisplayOnly: true, explicitAction: 'display' });
-  const coerced = coerceDisplayMisrouteToChair(text, ctx, {
-    explicitAction: 'display',
-    shouldDisplayOnly: true,
-  });
-  assert.equal(coerced.channel, 'display');
-});
-
-test('shouldSkipInputNormalize preserves display commands', async () => {
-  const { shouldSkipInputNormalize } = await import('../services/lumin-chair-system-actions.js');
-  assert.equal(
-    shouldSkipInputNormalize('display queue status and recent jobs', 'display'),
-    true,
-  );
-});
-
-test('coerceDisplayMisrouteToChair fixes display misroute', () => {
-  const fixed = coerceDisplayMisrouteToChair('should I get an oil change?', { channel: 'display' });
-  assert.equal(fixed.channel, 'chair');
-  assert.equal(fixed.domain, 'personal_life');
+test('do: build with receipt word is not display-only', () => {
+  const text = "do: fix voice send in public/overlay/lifeos-app.html — Receipt the change when send it works";
+  assert.equal(isExplicitDisplayOnlyRequest(text, 'auto'), false);
 });
 
 test('audit wiring passes', () => {

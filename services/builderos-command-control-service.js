@@ -183,3 +183,73 @@ export async function updateCommandControlJobExecution(pool, jobId, patch = {}) 
   );
   return result.rows[0] || null;
 }
+
+const FOUNDER_INTERFACE_JOB_KIND = 'founder_interface_build';
+
+/** Durable job row for async founder builds — survives Railway multi-instance poll. */
+export async function createFounderInterfaceBuildJobRecord(pool, { id, instruction, userId = null } = {}) {
+  if (!pool || !id) return null;
+  const result = await pool.query(
+    `INSERT INTO builderos_command_control_jobs
+       (id, instruction, requested_by, status, metadata_json, result_json, receipts_json)
+     VALUES ($1::uuid, $2, 'founder_interface_async', 'running', $3::jsonb, $4::jsonb, '[]'::jsonb)
+     ON CONFLICT (id) DO UPDATE SET
+       status = 'running',
+       updated_at = NOW()
+     RETURNING id, status, instruction, metadata_json, result_json`,
+    [
+      id,
+      String(instruction || '').trim(),
+      JSON.stringify({ kind: FOUNDER_INTERFACE_JOB_KIND, user_id: userId }),
+      JSON.stringify({ pass_fail: 'RUNNING', async: true }),
+    ],
+  );
+  return result.rows[0] || null;
+}
+
+export function mapDbRowToFounderBuildJob(row) {
+  if (!row || row.metadata_json?.kind !== FOUNDER_INTERFACE_JOB_KIND) return null;
+  const founderResult = row.result_json?.founder_result || row.result_json || {};
+  const running = row.status === 'running' || row.status === 'queued' || row.status === 'retrying';
+  if (running) {
+    return {
+      id: row.id,
+      task: row.instruction,
+      status: 'running',
+      result: null,
+    };
+  }
+  const pass = founderResult.pass_fail === 'PASS' || row.status === 'committed' || row.status === 'deployed';
+  return {
+    id: row.id,
+    task: row.instruction,
+    status: pass ? 'completed' : 'failed',
+    result: {
+      ...founderResult,
+      pass_fail: founderResult.pass_fail || (pass ? 'PASS' : 'FAIL'),
+      first_blocker: founderResult.first_blocker || row.blocker || null,
+    },
+  };
+}
+
+export async function loadFounderBuildJobFromDb(pool, jobId) {
+  const row = await getCommandControlJob(pool, jobId);
+  return mapDbRowToFounderBuildJob(row);
+}
+
+export async function persistFounderBuildJobResult(pool, jobId, result = {}) {
+  if (!pool || !jobId) return null;
+  const pass = result.pass_fail === 'PASS';
+  const status = pass ? 'committed' : 'failed';
+  return updateCommandControlJobExecution(pool, jobId, {
+    status,
+    blocker: result.first_blocker || result.blocker || null,
+    result_json: {
+      founder_result: result,
+      pass_fail: result.pass_fail,
+      committed: result.committed === true,
+      target_file: result.target_file || null,
+      sha: result.sha || null,
+    },
+  });
+}

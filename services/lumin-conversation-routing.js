@@ -3,10 +3,14 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 import { isFounderPersonalLifeIntent } from './founder-life-admin-intent.js';
+import { stripChairDoPrefix } from './lumin-chair-system-actions.js';
+import { isBuildRequest } from './chair-intent-signals.js';
+import { isRepairContinuationIntent } from './builder-instruction-target.js';
 
 const CONVERSATION_MARKERS = /\b(should i|could i|would i|help me|how do i|what do you think|talk to me|worried|feel like|am i connected|quick check|tell me about|any advice)\b/i;
 
-const DISPLAY_MARKERS = /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt|how many|list jobs|what is the queue)\b/i;
+/** Display intent — "receipt" alone must not hijack build orders (e.g. "Receipt the change"). */
+const DISPLAY_MARKERS = /\b(show|display|view)\b|\b(status|queue|jobs|graph|chart|summary|blocker)\b|\b(how many|list jobs|what is the queue)\b|\breceipts?\b(?!\s+the\s+(change|fix|update|patch))/i;
 
 export function isConversationTurn(text = '') {
   const t = String(text || '').trim();
@@ -17,8 +21,11 @@ export function isConversationTurn(text = '') {
 
 export function isExplicitDisplayOnlyRequest(text = '', action = 'auto') {
   if (String(action || '').toLowerCase() === 'display') return true;
-  if (String(action || '').toLowerCase() !== 'auto') return false;
+  if (String(action || '').toLowerCase() === 'build') return false;
   const t = String(text || '').trim();
+  if (stripChairDoPrefix(t).forcedExecute) return false;
+  if (isBuildRequest(t) || isRepairContinuationIntent(t)) return false;
+  if (String(action || '').toLowerCase() !== 'auto') return false;
   if (isConversationTurn(t)) return false;
   return DISPLAY_MARKERS.test(t);
 }

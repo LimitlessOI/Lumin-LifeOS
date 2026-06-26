@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-26 | **Direct order build pipeline** — `createFounderInterfaceBuildJobRecord` + `persistFounderBuildJobResult` + `loadFounderBuildJobFromDb` in `builderos-command-control-service.js`; `startFounderBuildJob` PG mirror; poll endpoint DB fallback; voice/send → `lifeos-app.html` in `builder-instruction-target.js` | Adam: async founder builds lost on poll (404) / multi-instance | ⚠️ deploy + live order | founder-interface/build-job |
 | 2026-06-26 | **Intake regression harness** — `BUILDEROS_INTAKE_REGRESSION_HARNESS.json`, `builderos-intake-regression-harness.js/mjs`; PBG-07 in pre-build gate; supervisor `--intake-regression`. | SocialMediaOS golden path should re-run acceptance on every builder deploy without full council rebuild. | ✅ SocialMediaOS session registered | `npm run builderos:intake:regression:acceptance` |
 | 2026-06-26 | **`builderos-codegen-normalize.js`** — expand LCL codebook symbols (`*exp`, `*rk`, `*jok`) on builder output before syntax/governance; wired in precommit + /build. | MOS-P1-003 retry output had raw codebook symbols — SYMBOL_TO_FULL existed but unused. | ⚠️ deploy + re-run MOS-P1-003 | intake execute |
 | 2026-06-26 | **`builderos-build-pipeline.js`** — Zone 3 gate bypass when `intakeBlueprintStep` (blueprint_intake_session_id on /build). | MOS-P1-003 blocked ZONE3_PATCH_REQUIRED on 211-line routes file. | ⚠️ deploy + re-run MOS-P1-003 | intake execute |

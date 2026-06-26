@@ -32,6 +32,10 @@ import {
   setFounderBuildJobResult,
 } from './founder-build-job-store.js';
 import {
+  createFounderInterfaceBuildJobRecord,
+  persistFounderBuildJobResult,
+} from './builderos-command-control-service.js';
+import {
   FOUNDER_SOLO_ATTEMPT_MAX,
   runFounderBuildQuorumEscalation,
   buildQuorumFailureEnvelope,
@@ -762,16 +766,34 @@ export async function runFounderBuildWithSelfRepair(options) {
 
 export function startFounderBuildJob(options) {
   const jobId = createFounderBuildJob({ task: options.task, userId: options.userId || null });
+  if (options.pool) {
+    createFounderInterfaceBuildJobRecord(options.pool, {
+      id: jobId,
+      instruction: options.task,
+      userId: options.userId || null,
+    }).catch((err) => {
+      console.warn('[founder-build-job] db persist failed:', err.message);
+    });
+  }
   setImmediate(async () => {
     try {
       const result = await runFounderBuildWithSelfRepair(options);
       setFounderBuildJobResult(jobId, result);
+      if (options.pool) {
+        await persistFounderBuildJobResult(options.pool, jobId, result).catch((err) => {
+          console.warn('[founder-build-job] db result persist failed:', err.message);
+        });
+      }
     } catch (err) {
-      setFounderBuildJobResult(jobId, {
+      const failResult = {
         pass_fail: 'FAIL',
         first_blocker: err.message,
-        execution_path: 'founder_css_patch',
-      });
+        execution_path: 'founder_build_self_repair',
+      };
+      setFounderBuildJobResult(jobId, failResult);
+      if (options.pool) {
+        await persistFounderBuildJobResult(options.pool, jobId, failResult).catch(() => {});
+      }
     }
   });
   return jobId;
