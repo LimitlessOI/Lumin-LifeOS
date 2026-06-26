@@ -1,7 +1,7 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-06-26T22:55:39.998Z",
-  "base": "http://localhost:3000",
+  "at": "2026-06-26T23:10:07.233Z",
+  "base": "https://robust-magic-production.up.railway.app",
   "ok": true,
   "passed": [
     "app_loads",
@@ -26,7 +26,7 @@
     },
     "no_js_errors": {
       "ok": true,
-      "detail": "1 console.error(s)"
+      "detail": "0 console.error(s)"
     },
     "lumin_fab_visible": {
       "ok": true,
@@ -62,7 +62,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "2171 chars visible"
+      "detail": "11915 chars visible"
     },
     "page_nav": {
       "ok": true,
