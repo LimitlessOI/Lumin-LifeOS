@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:24:03.435Z",
+  "generated_at": "2026-06-26T00:30:14.405Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12562,
   "files": [
@@ -39196,10 +39196,10 @@
     },
     {
       "path": "db/migrations/20260626_socialmediaos.sql",
-      "synopsis": "Exports up — db/migrations/20260626_socialmediaos.sql.",
-      "bytes": 2661,
-      "mtime": "2026-06-26T00:16:08.065Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z"
+      "synopsis": "SocialMediaOS sessions + content packs tables.",
+      "bytes": 1663,
+      "mtime": "2026-06-26T00:30:06.346Z",
+      "indexed_at": "2026-06-26T00:30:14.405Z"
     },
     {
       "path": "db/migrations/builderos_command_control.sql",
@@ -41962,9 +41962,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 489652,
-      "mtime": "2026-06-26T00:23:32.241Z",
-      "indexed_at": "2026-06-26T00:24:03.435Z"
+      "bytes": 489947,
+      "mtime": "2026-06-26T00:30:12.550Z",
+      "indexed_at": "2026-06-26T00:30:14.405Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
