@@ -70,6 +70,9 @@ async function main() {
       process.exit(1);
     }
   }
+  if (result.post_deploy?.redeploy?.ok) {
+    console.log('Post-execute: redeploy OK, acceptance re-probed on live deploy.');
+  }
   const acceptance = result.blueprint?._meta?.acceptance_cmd;
   if (acceptance && !dryRun && !result.acceptance) {
     console.log(`\nNext: run acceptance — ${acceptance}`);

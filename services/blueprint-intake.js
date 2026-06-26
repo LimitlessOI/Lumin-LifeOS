@@ -263,6 +263,47 @@ function readAmendment(amendmentFile) {
   throw new Error(`AmendmentNotFound: ${amendmentFile}`);
 }
 
+async function loadExistingBlueprintForAmendment(pool, amendmentFile) {
+  const blueprintPath = path.join(
+    ROOT,
+    'docs/projects',
+    path.basename(String(amendmentFile).replace('.md', '.blueprint.json')),
+  );
+  try {
+    return JSON.parse(fs.readFileSync(blueprintPath, 'utf8'));
+  } catch {
+    /* Railway image excludes docs/ — fall back to latest intake session blueprint */
+  }
+
+  const basename = path.basename(amendmentFile);
+  const { rows } = await pool.query(
+    `SELECT blueprint_json FROM blueprint_intake_sessions
+     WHERE amendment_file IN ($1, $2)
+       AND blueprint_json IS NOT NULL
+     ORDER BY updated_at DESC
+     LIMIT 1`,
+    [amendmentFile, basename],
+  );
+  if (rows[0]?.blueprint_json) return rows[0].blueprint_json;
+
+  throw new Error(`BlueprintNotFound: ${amendmentFile} — run backfill first`);
+}
+
+function tryWriteBlueprintFile(amendmentFile, blueprint) {
+  const blueprintPath = path.join(
+    ROOT,
+    'docs/projects',
+    path.basename(String(amendmentFile).replace('.md', '.blueprint.json')),
+  );
+  try {
+    fs.mkdirSync(path.dirname(blueprintPath), { recursive: true });
+    fs.writeFileSync(blueprintPath, JSON.stringify(blueprint, null, 2) + '\n');
+    return blueprintPath;
+  } catch {
+    return null;
+  }
+}
+
 function parseBlueprintFromAiResponse(raw) {
   const stripped = raw.trim().replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
   // Try direct parse first
@@ -499,15 +540,7 @@ Ask ONE question at a time. Be brief.`;
 
   // ── FLOW 3: Adjustment (founder says change X → ARC patches blueprint) ─────
   async function startAdjustment({ amendmentFile, adjustmentText, ownerId = null }) {
-    const blueprintFile = amendmentFile.replace('.md', '.blueprint.json');
-    const blueprintPath = path.join(ROOT, 'docs/projects', path.basename(blueprintFile));
-
-    let existingBlueprint;
-    try {
-      existingBlueprint = JSON.parse(fs.readFileSync(blueprintPath, 'utf8'));
-    } catch {
-      throw new Error(`BlueprintNotFound: ${blueprintPath} — run backfill first`);
-    }
+    const existingBlueprint = await loadExistingBlueprintForAmendment(pool, amendmentFile);
 
     const codebaseScan = await scanCodebasePatterns();
     const productName = existingBlueprint._meta?.product || path.basename(amendmentFile, '.md');
@@ -543,9 +576,8 @@ Ask ONE question at a time. Be brief.`;
         status: newStatus,
       });
 
-      // Write updated blueprint file
       if (gaps.length === 0) {
-        fs.writeFileSync(blueprintPath, JSON.stringify(patched, null, 2) + '\n');
+        tryWriteBlueprintFile(amendmentFile, patched);
       }
 
       return {
@@ -687,12 +719,12 @@ Return JSON:
     const newStatus = arcReport.ready_to_execute ? 'ready' : 'gap_collection';
     await updateSession(pool, sessionId, { arc_report_json: arcReport, blueprint_json: blueprint, status: newStatus });
 
-    // If ready, write blueprint to disk
     if (arcReport.ready_to_execute && session.amendment_file) {
-      const blueprintFile = path.join(ROOT, 'docs/projects',
-        path.basename(session.amendment_file).replace('.md', '.blueprint.json'));
-      fs.writeFileSync(blueprintFile, JSON.stringify(blueprint, null, 2) + '\n');
-      await updateSession(pool, sessionId, { blueprint_file: blueprintFile, status: 'ready' });
+      const blueprintFile = tryWriteBlueprintFile(session.amendment_file, blueprint);
+      await updateSession(pool, sessionId, {
+        ...(blueprintFile ? { blueprint_file: blueprintFile } : {}),
+        status: 'ready',
+      });
     }
 
     return { arcReport, status: newStatus };

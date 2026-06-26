@@ -113,6 +113,14 @@
           "note": "Golden intake sessions — acceptance-only catches builder drift without full rebuild"
         },
         {
+          "id": "intake_ready_gate",
+          "path": "scripts/builderos-intake-ready-gate.mjs",
+          "npm": "builderos:intake:ready",
+          "tier": "required",
+          "status": "wired",
+          "note": "Founder gate IGR-01..10 before greenfield/backfill/adjust intake"
+        },
+        {
           "id": "deploy_verify",
           "path": "scripts/builderos-deploy-verify.mjs",
           "npm": "builderos:deploy:verify",

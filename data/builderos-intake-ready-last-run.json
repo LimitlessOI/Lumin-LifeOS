@@ -1,0 +1,65 @@
+{
+  "schema": "builderos_intake_ready_gate_v1",
+  "generated_at": "2026-06-26T01:40:11.414Z",
+  "ready_for_founder_intake": true,
+  "ok": true,
+  "checks": [
+    {
+      "id": "IGR-01",
+      "ok": true,
+      "detail": "base=https://robust-magic-production.up.railway.app"
+    },
+    {
+      "id": "IGR-02",
+      "ok": true,
+      "detail": "COMMAND_CENTER_KEY present"
+    },
+    {
+      "id": "IGR-03",
+      "ok": true,
+      "detail": "GET /builder/ready OK"
+    },
+    {
+      "id": "IGR-04",
+      "ok": true,
+      "detail": "commitToGitHub available"
+    },
+    {
+      "id": "IGR-05",
+      "ok": true,
+      "detail": "callCouncilMember available"
+    },
+    {
+      "id": "IGR-06",
+      "ok": true,
+      "detail": "pool available"
+    },
+    {
+      "id": "IGR-07",
+      "ok": true,
+      "detail": "deploy SHA fresh"
+    },
+    {
+      "id": "IGR-08",
+      "ok": true,
+      "detail": "GET /blueprint/intake OK"
+    },
+    {
+      "id": "IGR-09",
+      "ok": true,
+      "detail": "golden intake acceptance PASS"
+    },
+    {
+      "id": "IGR-10",
+      "ok": true,
+      "detail": "pre-build gate PASS (incl PBG-07)"
+    }
+  ],
+  "founder_next": {
+    "greenfield": "POST /api/v1/blueprint/intake/greenfield { product_name, message }",
+    "backfill": "POST /api/v1/blueprint/intake/backfill { product_name, amendment_file }",
+    "adjust": "POST /api/v1/blueprint/intake/adjust { amendment_file, adjustment }",
+    "after_arc_ready": "POST /api/v1/blueprint/intake/:id/execute",
+    "cli_execute": "npm run blueprint:intake:execute -- --session <uuid>"
+  }
+}

@@ -103,6 +103,11 @@ const overnightPauseMin = Math.max(1, Number(process.env.BUILDER_DAEMON_QUEUE_PA
 const superviseModel = process.env.BUILDER_SUPERVISE_MODEL || "gemini_flash";
 /** full = doc+JS smoke (/build council); probe = GET /ready + /domains only (default — huge token saver). none = skip autonomous queue step only */
 const superviseMode = (process.env.BUILDER_DAEMON_SUPERVISE_MODE || "probe").toLowerCase();
+/** Default on — golden intake acceptance on every probe cycle. Set BUILDER_DAEMON_INTAKE_REGRESSION=0 to disable. */
+const intakeRegressionOnProbe = !/^0|false|no$/i.test(
+  String(process.env.BUILDER_DAEMON_INTAKE_REGRESSION ?? "1").trim(),
+);
+const intakeRegressionArgs = intakeRegressionOnProbe ? ["--intake-regression"] : [];
 const superviseFullEvery = Math.max(0, Number(process.env.BUILDER_DAEMON_FULL_EVERY || "6"));
 const queueLane = process.env.BUILDER_TASK_LANE || "";
 /** When true, each supervise leg passes `--consequence-lens` (stdout premortem / unintended-consequences reminder — no extra council spend). */
@@ -495,6 +500,7 @@ async function runCycle(cycleNo, sessionThroughput) {
   } else {
     supervise = await runNodeScript(path.join(ROOT, "scripts", "lifeos-builder-supervisor.mjs"), [
       "--probe-only",
+      ...intakeRegressionArgs,
       ...superviseLensArgs,
       ...superviseSkipDocArgs,
     ]);

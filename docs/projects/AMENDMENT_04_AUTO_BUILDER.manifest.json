@@ -7,6 +7,6 @@
   "status": "active",
   "build_ready": true,
   "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-13 fp-v2-gap-closure",
-  "last_change_summary": "FP V2 mission CLI gate, Hist auto-score, founder usability confirm, builder API gates"
+  "last_receipt": "2026-06-26 founder-intake-ready-gate",
+  "last_change_summary": "IGR founder gate, adjust DB fallback on Railway, post-execute auto-redeploy, daemon intake regression default"
 }

@@ -186,6 +186,7 @@
     "blueprint:intake:execute": "node scripts/run-intake-blueprint.mjs --session",
     "builderos:intake:regression": "node scripts/builderos-intake-regression-harness.mjs",
     "builderos:intake:regression:acceptance": "node scripts/builderos-intake-regression-harness.mjs --acceptance-only",
+    "builderos:intake:ready": "node scripts/builderos-intake-ready-gate.mjs",
     "voice-rail:history-only:verify": "node scripts/verify-voice-rail-history-only.mjs",
     "builderos:bp-priority:never-stop": "node scripts/bp-priority-never-stop.mjs",
     "builderos:bp-priority:once": "node scripts/bp-priority-never-stop.mjs --once",

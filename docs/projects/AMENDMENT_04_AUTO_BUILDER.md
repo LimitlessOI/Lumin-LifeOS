@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-26 — intake scan hints enforce deps-object route factory; Zone 3 rewrite allowed for intake steps.
+**Last Updated:** 2026-06-26 — founder intake ready gate (IGR-01..10); adjust loads blueprint from DB on Railway; post-execute auto-redeploy.
 
 ---
 
@@ -161,6 +161,10 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-26 | **Founder intake ready gate** — `scripts/builderos-intake-ready-gate.mjs` + `npm run builderos:intake:ready` (IGR-01..10: env, builder ready, deploy fresh, intake API, golden acceptance, pre-build gate). | Adam alpha → founder intake handoff needs one command proof. | ✅ IGR 10/10 PASS | `npm run builderos:intake:ready` |
+| 2026-06-26 | **`intake-blueprint-executor.js`** — post-execute auto-redeploy + acceptance re-probe (`INTAKE_AUTO_REDEPLOY=1` default). | Committed intake steps need live deploy before HTTP acceptance is valid. | ⚠️ deploy + re-test execute | intake execute |
+| 2026-06-26 | **`blueprint-intake.js`** — `loadExistingBlueprintForAmendment` DB fallback when `docs/` absent on Railway; best-effort disk write. | Adjust flow BlueprintNotFound on production Docker image. | ⚠️ deploy + adjust smoke | POST /blueprint/intake/adjust |
+| 2026-06-26 | **`lifeos-builder-daemon.mjs`** — intake regression on probe cycles by default (`BUILDER_DAEMON_INTAKE_REGRESSION=1`). | Catch intake drift while daemon supervises. | ✅ wired | daemon probe cycle |
 | 2026-06-26 | **Intake regression harness** — golden session registry + acceptance-only probe; pre-build PBG-07. | Builder platform fixes need automated regression without full MOS rebuild spend. | ✅ wired | `builderos:intake:regression:acceptance` |
 | 2026-06-26 | **`intake-blueprint-executor.js`** — `buildVerifyFileHints` from blueprint SQL/routes; git pull before acceptance run. | Verify assertions wrong (IF NOT EXISTS, validationResult); local script stale vs GitHub. | ✅ MOS-P1-005 PASS | intake execute |
 | 2026-06-26 | **`intake-blueprint-executor.js`** — verify reference → verify-builderos-working-definition; `buildRouteProbeHints` injects real mount paths; forbid marketingos hallucinations. | MOS-P1-005 probed fake /marketingos/* paths from stale reference. | ⚠️ re-run MOS-P1-005 | intake execute |

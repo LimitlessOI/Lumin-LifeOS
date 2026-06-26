@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T01:36:50.206Z",
+  "generated_at": "2026-06-26T06:27:51.320Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12574,
+  "file_count": 12576,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -28943,9 +28943,9 @@
     {
       "path": "builderos-reboot/governance/BUILDEROS_HARNESS_TOOLS.json",
       "synopsis": "BuilderOS artifact — BUILDEROS HARNESS TOOLS.",
-      "bytes": 10647,
-      "mtime": "2026-06-26T01:36:46.562Z",
-      "indexed_at": "2026-06-26T01:36:50.206Z",
+      "bytes": 10953,
+      "mtime": "2026-06-26T06:27:19.408Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
       "synopsis_index_only": true
     },
     {
@@ -29055,9 +29055,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3771947,
-      "mtime": "2026-06-26T00:45:26.670Z",
-      "indexed_at": "2026-06-26T00:45:31.502Z"
+      "bytes": 3775062,
+      "mtime": "2026-06-26T06:27:31.310Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -36868,11 +36868,19 @@
       "synopsis_index_only": true
     },
     {
+      "path": "data/builderos-intake-ready-last-run.json",
+      "synopsis": "JSON data/config — data/builderos-intake-ready-last-run.json.",
+      "bytes": 1579,
+      "mtime": "2026-06-26T01:40:11.414Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "data/builderos-intake-regression-last-run.json",
-      "synopsis": "Exports createSocialmediaosRoutes — data/builderos-intake-regression-last-run.json.",
-      "bytes": 1981,
-      "mtime": "2026-06-26T01:32:10.540Z",
-      "indexed_at": "2026-06-26T01:32:25.099Z",
+      "synopsis": "JSON data/config — data/builderos-intake-regression-last-run.json.",
+      "bytes": 1858,
+      "mtime": "2026-06-26T01:40:11.397Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
       "synopsis_index_only": true
     },
     {
@@ -41771,17 +41779,17 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.manifest.json",
       "synopsis": "Documentation — AMENDMENT 04 AUTO BUILDER.Manifest.",
-      "bytes": 470,
-      "mtime": "2026-06-26T00:31:12.659Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 502,
+      "mtime": "2026-06-26T06:27:45.110Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 39107,
-      "mtime": "2026-06-26T01:32:07.150Z",
-      "indexed_at": "2026-06-26T01:32:25.099Z"
+      "bytes": 40226,
+      "mtime": "2026-06-26T06:27:18.666Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -69770,9 +69778,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 27163,
-      "mtime": "2026-06-26T01:31:52.473Z",
-      "indexed_at": "2026-06-26T01:32:25.099Z",
+      "bytes": 27241,
+      "mtime": "2026-06-26T01:39:29.925Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
       "synopsis_index_only": true
     },
     {
@@ -73541,6 +73549,16 @@
       ]
     },
     {
+      "path": "scripts/builderos-intake-ready-gate.mjs",
+      "synopsis": "Founder gate — is BuilderOS ready for blueprint intake (greenfield/backfill/adjust)?",
+      "bytes": 4999,
+      "mtime": "2026-06-26T01:41:34.897Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
+      ]
+    },
+    {
       "path": "scripts/builderos-intake-regression-harness.mjs",
       "synopsis": "Golden intake blueprint regression — acceptance-only (default), dry-run, or full rebuild.",
       "bytes": 1955,
@@ -74260,9 +74278,9 @@
     {
       "path": "scripts/lifeos-builder-daemon.mjs",
       "synopsis": "Self-healing supervised builder daemon — continuous 24/7 autonomous improvement loop (default: no wall-clock stop).",
-      "bytes": 36744,
-      "mtime": "2026-06-23T05:15:54.596Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 37108,
+      "mtime": "2026-06-26T01:39:32.282Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -74742,9 +74760,9 @@
     {
       "path": "scripts/run-intake-blueprint.mjs",
       "synopsis": "Execute an ARC-ready intake blueprint through BuilderOS — observe failures, fix builder not product by hand.",
-      "bytes": 3165,
-      "mtime": "2026-06-26T01:03:12.551Z",
-      "indexed_at": "2026-06-26T01:03:33.702Z",
+      "bytes": 3295,
+      "mtime": "2026-06-26T01:39:27.308Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -86552,9 +86570,9 @@
     {
       "path": "services/blueprint-intake.js",
       "synopsis": "Blueprint Intake Service — three flows: backfill existing amendment, greenfield",
-      "bytes": 33718,
-      "mtime": "2026-06-25T23:50:22.760Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 34499,
+      "mtime": "2026-06-26T01:41:19.477Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]
@@ -88577,9 +88595,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 17432,
-      "mtime": "2026-06-26T01:31:41.664Z",
-      "indexed_at": "2026-06-26T01:32:25.099Z",
+      "bytes": 19421,
+      "mtime": "2026-06-26T01:39:50.602Z",
+      "indexed_at": "2026-06-26T06:27:51.320Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

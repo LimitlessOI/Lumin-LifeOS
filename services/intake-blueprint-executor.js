@@ -304,6 +304,54 @@ export function runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey) {
   };
 }
 
+function intakeAutoRedeployEnabled() {
+  const raw = String(process.env.INTAKE_AUTO_REDEPLOY ?? '1').trim();
+  return !/^0|false|no$/i.test(raw);
+}
+
+function runIntakeRedeploy({ timeoutMs = 720_000 } = {}) {
+  const r = spawnSync('npm', ['run', 'system:railway:redeploy'], {
+    cwd: REPO_ROOT,
+    encoding: 'utf8',
+    shell: true,
+    timeout: timeoutMs,
+  });
+  return {
+    ok: r.status === 0,
+    status: r.status,
+    stdout: (r.stdout || '').slice(-4000),
+    stderr: (r.stderr || '').slice(-2000),
+  };
+}
+
+export function runPostIntakeDeployAndAcceptance({
+  baseUrl,
+  commandKey,
+  acceptanceCmd,
+  hadCommits = true,
+} = {}) {
+  if (!hadCommits || !acceptanceCmd) {
+    return { ok: true, skipped: true, reason: hadCommits ? 'no_acceptance_cmd' : 'no_commits' };
+  }
+  if (!intakeAutoRedeployEnabled()) {
+    return { ok: true, skipped: true, reason: 'INTAKE_AUTO_REDEPLOY disabled' };
+  }
+
+  const redeploy = runIntakeRedeploy();
+  if (!redeploy.ok) {
+    return { ok: false, error: 'redeploy_failed', redeploy };
+  }
+
+  spawnSync('git', ['pull', 'origin', 'main', '--ff-only'], { cwd: REPO_ROOT, encoding: 'utf8' });
+  const postAcceptance = runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
+  return {
+    ok: postAcceptance.ok === true,
+    redeploy: { ok: true },
+    post_acceptance: postAcceptance,
+    error: postAcceptance.ok ? undefined : 'post_deploy_acceptance_failed',
+  };
+}
+
 export async function postBuilderBuild(baseUrl, commandKey, body) {
   const res = await fetch(`${baseUrl.replace(/\/$/, '')}/api/v1/lifeos/builder/build`, {
     method: 'POST',
@@ -422,16 +470,37 @@ export async function executeIntakeBlueprint({
 
   const acceptanceCmd = resolvedBlueprint._meta?.acceptance_cmd;
   let acceptance = null;
+  let postDeploy = null;
+  const hadCommits = results.some((r) => r.committed === true);
+
   if (acceptanceCmd && !dryRun) {
     spawnSync('git', ['pull', 'origin', 'main', '--ff-only'], { cwd: REPO_ROOT, encoding: 'utf8' });
     acceptance = runBlueprintAcceptance(acceptanceCmd, baseUrl, commandKey);
   }
 
+  if (!dryRun && hadCommits && acceptance?.ok === true) {
+    postDeploy = runPostIntakeDeployAndAcceptance({
+      baseUrl,
+      commandKey,
+      acceptanceCmd,
+      hadCommits: true,
+    });
+    if (postDeploy?.post_acceptance) {
+      acceptance = postDeploy.post_acceptance;
+    }
+  }
+
+  const overallOk = (acceptance ? acceptance.ok : true) && (postDeploy?.ok !== false);
+
   return {
-    ok: acceptance ? acceptance.ok : true,
+    ok: overallOk,
     steps_run: results.length,
     results,
     blueprint: resolvedBlueprint,
-    ...(acceptance ? { acceptance, error: acceptance.ok ? undefined : 'acceptance_failed' } : {}),
+    ...(acceptance ? { acceptance } : {}),
+    ...(postDeploy ? { post_deploy: postDeploy } : {}),
+    error: overallOk
+      ? undefined
+      : postDeploy?.error || (acceptance?.ok === false ? 'acceptance_failed' : undefined),
   };
 }
