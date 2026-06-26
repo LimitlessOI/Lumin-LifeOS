@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **FPv2 double-gate fix** — `dispatchTask` now verifies intake session clearance (same as `/build`); internal `/build` dispatch passes `target_file` so ARC-ready blueprints skip INTENT_AMBIGUITY on codegen. | MOS-P1-001 blocked at dispatchTask after `/build` clearance passed. | ⚠️ deploy + re-run intake | `blueprint:intake:execute` |
 | 2026-06-26 | **Builder SQL gate + intake executor** — reject JS-in-`.sql`; revert invalid `20260626_socialmediaos.sql`; intake sql hint fixed; all steps `gemini_flash`. | Railway deploy FAILED: migration syntax error at `//`. | ⚠️ IN PROGRESS: redeploy + re-run SocialMediaOS intake test | `blueprint:intake:execute` |
 | 2026-05-19 | **`db/migrations/20260626_socialmediaos.sql`** — GAP-FILL attempt (superseded 2026-06-26): builder had emitted JS in `.sql`; revert + platform SQL gate is canonical fix. | Deploy blocked startup | superseded | see 2026-06-26 row |
 | 2026-05-19 | **Lumin display routing (GAP-FILL)** — `shouldSkipInputNormalize(text, action)` skips Gemini rewrite for display-only; orchestrator skips wisdom + system-action intercept when `shouldDisplayOnly`/`action:display`; `coerceDisplayMisrouteToChair` never coerces explicit display. **Root cause:** T7 parity — normalize turned "display queue status" into counsel text → `chair_channel: chair`. | Adam: alpha test / break-it / keep refining — overlay battery T7 | ✅ unit tests | push + redeploy → parity T7 live |

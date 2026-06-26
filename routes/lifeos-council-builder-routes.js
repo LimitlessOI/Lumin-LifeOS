@@ -1127,6 +1127,15 @@ export function createLifeOSCouncilBuilderRoutes({
 
     const executionOnly = execution_only === true;
     if (mode === 'code' && !executionOnly) {
+      let intakeSessionClearance = null;
+      if (req.body?.blueprint_intake_session_id && bodyTargetFile) {
+        intakeSessionClearance = await verifyIntakeSessionBuildClearance(
+          pool,
+          req.body.blueprint_intake_session_id,
+          bodyTargetFile,
+          req.body.blueprint_step_id || null,
+        );
+      }
       const fpV2Gate = await enforceBeforeBuilderDispatch({
         task,
         missionId: req.body?.mission_id,
@@ -1135,6 +1144,7 @@ export function createLifeOSCouncilBuilderRoutes({
         confirmIntent: req.body?.confirm_intent === true,
         platformGapFill: req.body?.platform_gap_fill === true,
         platformGapFillReason: req.body?.platform_gap_fill_reason,
+        intakeSessionClearance,
       });
       if (!fpV2Gate.execute_cleared) {
         return res.status(422).json({
@@ -2047,7 +2057,7 @@ export function createLifeOSCouncilBuilderRoutes({
         json(data) { captured = { code: 200, data }; },
       };
       // /build must NEVER use cache — every build call needs fresh generation for its spec.
-      await dispatchTask({ body: { ...taskBody, mode: taskBody.mode || 'code', useCache: false } }, mockRes);
+      await dispatchTask({ body: { ...taskBody, target_file, mode: taskBody.mode || 'code', useCache: false } }, mockRes);
 
       if (!captured || captured.code !== 200 || !captured.data?.ok) {
         const errMsg = captured?.data?.error || 'Council call failed';
@@ -2073,6 +2083,7 @@ export function createLifeOSCouncilBuilderRoutes({
         await dispatchTask({
           body: {
             ...taskBody,
+            target_file,
             mode: taskBody.mode || 'code',
             useCache: false,
             execution_only: false,
@@ -2346,6 +2357,7 @@ export function createLifeOSCouncilBuilderRoutes({
         await dispatchTask({
           body: {
             ...taskBody,
+            target_file: resolvedTarget || target_file,
             mode: taskBody.mode || 'code',
             useCache: false,
             execution_only: false,
