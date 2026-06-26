@@ -46,7 +46,7 @@ function runUnifiedVerifierOnContent(content, originalLines = null) {
 
 async function runPrecommitGovernance(opts) {
   const pipelineResult = await runBuildPipeline(opts);
-  const finalOutput = pipelineResult.retryOutput || opts.generatedOutput;
+  let finalOutput = pipelineResult.retryOutput || opts.generatedOutput;
 
   if (!pipelineResult.ok) {
     return {
