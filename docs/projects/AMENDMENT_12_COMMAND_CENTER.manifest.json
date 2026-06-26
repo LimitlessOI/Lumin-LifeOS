@@ -194,7 +194,7 @@
     }
   ],
   "last_verified_at": "2026-05-31",
-  "last_updated": "2026-05-24",
-  "ssot_receipt_tail": "lifeos-voice-chat.js Auto mic prefers MacBook built-in; blocks Continuity devices.",
+  "last_updated": "2026-06-26",
+  "ssot_receipt_tail": "routes/public-routes.js: ?commandKey URL param bootstrap — mints JWT, sets cookie, redirects clean for E2E browser auth.",
   "verification_passed": null
 }

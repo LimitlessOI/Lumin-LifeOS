@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T21:07:20.141Z",
+  "generated_at": "2026-06-26T22:01:00.196Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12606,
+  "file_count": 12607,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29055,9 +29055,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3784528,
-      "mtime": "2026-06-26T21:07:09.900Z",
-      "indexed_at": "2026-06-26T21:07:20.141Z"
+      "bytes": 3784877,
+      "mtime": "2026-06-26T22:00:42.615Z",
+      "indexed_at": "2026-06-26T22:01:00.196Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41883,17 +41883,17 @@
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json",
       "synopsis": "Documentation — AMENDMENT 12 COMMAND CENTER.Manifest.",
-      "bytes": 6298,
-      "mtime": "2026-06-12T21:05:46.240Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z",
+      "bytes": 6338,
+      "mtime": "2026-06-26T22:00:27.169Z",
+      "indexed_at": "2026-06-26T22:01:00.196Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
       "synopsis": "AMENDMENT 12 — Command & Control Center",
-      "bytes": 99783,
-      "mtime": "2026-06-25T18:37:02.962Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z"
+      "bytes": 100205,
+      "mtime": "2026-06-26T21:56:58.463Z",
+      "indexed_at": "2026-06-26T22:01:00.196Z"
     },
     {
       "path": "docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md",
@@ -69786,9 +69786,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 27678,
-      "mtime": "2026-06-26T19:27:02.462Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z",
+      "bytes": 27771,
+      "mtime": "2026-06-26T21:28:24.203Z",
+      "indexed_at": "2026-06-26T22:01:00.196Z",
       "synopsis_index_only": true
     },
     {
@@ -72931,9 +72931,9 @@
     {
       "path": "routes/public-routes.js",
       "synopsis": "Public HTML entry routes for operator-facing overlays and portals.",
-      "bytes": 12863,
-      "mtime": "2026-06-25T18:37:00.947Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z",
+      "bytes": 13824,
+      "mtime": "2026-06-26T21:56:21.815Z",
+      "indexed_at": "2026-06-26T22:01:00.196Z",
       "ssot": [
         "docs/projects/AMENDMENT_12_COMMAND_CENTER.md"
       ]
@@ -75129,6 +75129,16 @@
       "bytes": 5353,
       "mtime": "2026-06-21T21:39:08.469Z",
       "indexed_at": "2026-06-26T21:07:08.591Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "scripts/run-real-app-e2e.mjs",
+      "synopsis": "Real-app E2E — Playwright drives the actual Railway UI like a founder would.",
+      "bytes": 16216,
+      "mtime": "2026-06-26T21:56:29.674Z",
+      "indexed_at": "2026-06-26T22:01:00.196Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

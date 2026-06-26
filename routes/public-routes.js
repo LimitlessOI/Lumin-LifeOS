@@ -3,7 +3,7 @@
  * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  * Public HTML entry routes for operator-facing overlays and portals.
  */
-import { verifyToken } from '../services/lifeos-auth.js';
+import { verifyToken, signToken } from '../services/lifeos-auth.js';
 
 export function registerPublicRoutes(app, {
   fs,
@@ -266,6 +266,26 @@ export function registerPublicRoutes(app, {
     if (directSystem !== '1') {
       return res.redirect(302, '/lifeos?direct_system=1');
     }
+
+    // E2E / browser-session bootstrap: commandKey in URL → set auth cookie → redirect clean
+    const queryKey = String(req.query?.commandKey || req.query?.command_key || '').trim();
+    const expectedKey = String(COMMAND_CENTER_KEY || '').trim();
+    if (queryKey && expectedKey && queryKey === expectedKey) {
+      try {
+        const now = Math.floor(Date.now() / 1000);
+        const token = signToken({ handle: 'adam', role: 'admin', tier: 'founder', iat: now, exp: now + 86400 });
+        res.cookie('lifeos_access_token', token, {
+          httpOnly: true, sameSite: 'lax',
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 86400 * 1000, path: '/',
+        });
+        const qs = new URLSearchParams(req.query || {});
+        qs.delete('commandKey');
+        qs.delete('command_key');
+        return res.redirect(302, `/lifeos?${qs.toString()}`);
+      } catch { /* fall through to normal auth check */ }
+    }
+
     if (!isFounderInterfaceAuthenticated(req)) {
       const qs = new URLSearchParams(req.query || {});
       qs.set('direct_system', '1');
