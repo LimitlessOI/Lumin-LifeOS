@@ -55,7 +55,12 @@ export function isCssOnlyUiFeedback(instruction = '') {
       if (/\b(voice|send it|dictat|mic|listening|speech|wire|implement|function|post message|click send|submit)\b/i.test(t)) {
         return false;
       }
-      return true;
+      if (/\b(rounded|round|radius|border-radius|bigger|smaller|width|height|padding|margin|opacity|layout|position)\b/i.test(t)
+        && !/\b(color|colour|background|font|yellow|blue|red|green|style)\b/i.test(t)) {
+        return false;
+      }
+      return /\b(color|colour|background|font|yellow|black text|text color|style|faint|lighter|darker)\b/i.test(t)
+        || (RESPONSE_UI_RE.test(t) && /\b(change|make|set|update)\b/i.test(t));
     }
   }
   return /\b(color|colour|background|font|yellow|black text|text color|style)\b/i.test(t)

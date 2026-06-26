@@ -13,12 +13,18 @@ import { executeFounderWorkIntent } from '../services/founder-work-executors.js'
 import { resolveChairContext } from '../services/chair-context-classifier.js';
 import { isCssOnlyUiFeedback } from '../services/builder-instruction-target.js';
 
+test('do-wrapped rounded button is not css-only patch', () => {
+  const t = 'do: make the send button in the lumin drawer slightly more rounded\ntarget_file: public/overlay/lifeos-app.html';
+  assert.equal(isCssOnlyUiFeedback(t), false);
+});
+
 test('rounded send button routes to build_async not css-only patch', () => {
   const msg = 'make the send button in the lumin drawer slightly more rounded';
   assert.equal(isCssOnlyUiFeedback(msg), false);
   const ctx = resolveChairContext(msg, { confirmIntent: true });
   assert.equal(ctx.channel, 'build_async');
 });
+
 test('detectWorkIntent — five video package', () => {
   const msg = "we're going to make five videos so I want the package on five videos";
   const intent = detectWorkIntent(msg, []);

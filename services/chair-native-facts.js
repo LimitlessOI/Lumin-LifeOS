@@ -48,10 +48,12 @@ async function attachVerifiedSearch(facts, text, deps) {
   try {
     const query = buildLifeAdminSearchQuery(text) || String(text).slice(0, 160);
     const searchResult = await searchSvc.search(query, { count: 5 });
-    facts.verified_search = searchBlockIsUseful(searchResult)
-      ? formatLifeAdminCounselPreamble(searchResult)
-      : formatErrandCouponFallback(text);
-    facts.search_source = searchResult?.source || null;
+    if (searchResult?.results?.length) {
+      facts.verified_search = formatLifeAdminCounselPreamble(searchResult);
+      facts.search_source = searchResult.source || null;
+    } else {
+      facts.verified_search = formatErrandCouponFallback(text);
+    }
   } catch {
     facts.verified_search = formatErrandCouponFallback(text);
   }
