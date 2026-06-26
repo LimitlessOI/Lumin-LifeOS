@@ -6,10 +6,10 @@ import { createMarketingOSFactory } from '../services/socialmediaos-service.js';
 
 export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
   const router = express.Router();
-  const marketingOS = createMarketingOSFactory({ pool, logger });
+  const socialMediaOS = createMarketingOSFactory({ pool, logger });
 
-  // Middleware to extract ownerId and enforce JWT auth
-  const authenticateOwner = (req, res, next) => {
+  // Middleware to extract ownerId from JWT and enforce authentication
+  const getOwnerId = (req, res, next) => {
     const ownerId = req.lifeosUser?.sub || null;
     if (!ownerId) {
       return res.status(401).json({ error: 'jwt_required' });
@@ -20,10 +20,10 @@ export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
 
   // --- Session Management Endpoints ---
 
-  router.post('/sessions', requireKey, authenticateOwner, async (req, res, next) => {
+  router.post('/sessions', requireKey, getOwnerId, async (req, res, next) => {
     try {
       const { scheduledFor, initialStatus } = req.body;
-      const session = await marketingOS.createSession({
+      const session = await socialMediaOS.createSession({
         ownerId: req.ownerId,
         scheduledFor,
         initialStatus,
@@ -35,10 +35,10 @@ export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
     }
   });
 
-  router.get('/sessions', requireKey, authenticateOwner, async (req, res, next) => {
+  router.get('/sessions', requireKey, getOwnerId, async (req, res, next) => {
     try {
       const { status, limit } = req.query;
-      const sessions = await marketingOS.listSessions({
+      const sessions = await socialMediaOS.listSessions({
         ownerId: req.ownerId,
         status,
         limit,
@@ -50,11 +50,10 @@ export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
     }
   });
 
-  router.get('/sessions/:sessionId', requireKey, authenticateOwner, async (req, res, next) => {
+  router.get('/sessions/:id', requireKey, getOwnerId, async (req, res, next) => {
     try {
-      const { sessionId } = req.params;
-      const session = await marketingOS.getSession({
-        sessionId,
+      const session = await socialMediaOS.getSession({
+        sessionId: req.params.id,
         ownerId: req.ownerId,
       });
       res.json({ ok: true, session });
@@ -64,12 +63,11 @@ export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
     }
   });
 
-  router.put('/sessions/:sessionId', requireKey, authenticateOwner, async (req, res, next) => {
+  router.put('/sessions/:id', requireKey, getOwnerId, async (req, res, next) => {
     try {
-      const { sessionId } = req.params;
       const { status, scheduledFor, startedAt, completedAt, deliveryStatus, deliveryErrorMessage } = req.body;
-      const updatedSession = await marketingOS.updateSession({
-        sessionId,
+      const updatedSession = await socialMediaOS.updateSession({
+        sessionId: req.params.id,
         ownerId: req.ownerId,
         status,
         scheduledFor,
@@ -80,55 +78,52 @@ export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
       });
       res.json({ ok: true, updatedSession });
     } catch (err) {
-      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
       if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
+      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
       next(err);
     }
   });
 
   // --- Content Pack Management Endpoints ---
 
-  router.post('/sessions/:sessionId/content-packs', requireKey, authenticateOwner, async (req, res, next) => {
+  router.post('/sessions/:sessionId/content-packs', requireKey, getOwnerId, async (req, res, next) => {
     try {
-      const { sessionId } = req.params;
       const { scheduledFor, initialStatus } = req.body;
-      const contentPack = await marketingOS.createContentPack({
-        sessionId,
+      const contentPack = await socialMediaOS.createContentPack({
+        sessionId: req.params.sessionId,
         ownerId: req.ownerId,
         scheduledFor,
         initialStatus,
       });
       res.json({ ok: true, contentPack });
     } catch (err) {
-      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
       if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
+      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
       next(err);
     }
   });
 
-  router.get('/sessions/:sessionId/content-packs', requireKey, authenticateOwner, async (req, res, next) => {
+  router.get('/sessions/:sessionId/content-packs', requireKey, getOwnerId, async (req, res, next) => {
     try {
-      const { sessionId } = req.params;
       const { status, limit } = req.query;
-      const contentPacks = await marketingOS.listContentPacksForSession({
-        sessionId,
+      const contentPacks = await socialMediaOS.listContentPacksForSession({
+        sessionId: req.params.sessionId,
         ownerId: req.ownerId,
         status,
         limit,
       });
       res.json({ ok: true, contentPacks, count: contentPacks.length });
     } catch (err) {
-      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
       if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
+      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
       next(err);
     }
   });
 
-  router.get('/content-packs/:contentPackId', requireKey, authenticateOwner, async (req, res, next) => {
+  router.get('/content-packs/:id', requireKey, getOwnerId, async (req, res, next) => {
     try {
-      const { contentPackId } = req.params;
-      const contentPack = await marketingOS.getContentPack({
-        contentPackId,
+      const contentPack = await socialMediaOS.getContentPack({
+        contentPackId: req.params.id,
         ownerId: req.ownerId,
       });
       res.json({ ok: true, contentPack });
@@ -138,12 +133,11 @@ export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
     }
   });
 
-  router.put('/content-packs/:contentPackId', requireKey, authenticateOwner, async (req, res, next) => {
+  router.put('/content-packs/:id', requireKey, getOwnerId, async (req, res, next) => {
     try {
-      const { contentPackId } = req.params;
       const { status, scheduledFor, publishedAt, deliveryStatus, deliveryErrorMessage } = req.body;
-      const updatedContentPack = await marketingOS.updateContentPack({
-        contentPackId,
+      const updatedContentPack = await socialMediaOS.updateContentPack({
+        contentPackId: req.params.id,
         ownerId: req.ownerId,
         status,
         scheduledFor,
@@ -153,22 +147,21 @@ export function createSocialmediaosRoutes({ pool, requireKey, logger }) {
       });
       res.json({ ok: true, updatedContentPack });
     } catch (err) {
-      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
       if (err.status === 404) return res.status(404).json({ ok: false, error: err.message });
+      if (err.status === 400) return res.status(400).json({ ok: false, error: err.message });
       next(err);
     }
   });
 
   // --- Payment Link Validation Endpoint ---
 
-  router.post('/validate-payment-link', requireKey, authenticateOwner, async (req, res, next) => {
+  router.post('/validate-payment-link', requireKey, getOwnerId, async (req, res, next) => {
     try {
       const { link } = req.body;
-      const validationResult = marketingOS.validateStripePaymentLink({ link });
+      const validationResult = socialMediaOS.validateStripePaymentLink({ link });
       res.json({ ok: true, validationResult });
     } catch (err) {
-      // validateStripePaymentLink is synchronous and doesn't throw,
-      // but including next(err) for consistency with other routes.
+      // validateStripePaymentLink is synchronous and doesn't throw, but for consistency
       next(err);
     }
   });
