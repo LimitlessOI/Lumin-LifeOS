@@ -31,7 +31,7 @@
   "founder_usability_pass": false,
   "acceptance_command": "npm run lifeos:lifere-os:v1-acceptance",
   "founder_success_test": "Open lifeos-app LifeRE path; daily command center + top-3 + debrief visible",
-  "founder_usability_at": "2026-06-26T06:31:59.584Z",
-  "founder_usability_quote": "sentry probe fail - ignore",
+  "founder_usability_at": "2026-06-26T20:38:38.119Z",
+  "founder_usability_quote": "Alpha FAIL — issue found during founder test",
   "founder_usability_actor": "adam"
 }
