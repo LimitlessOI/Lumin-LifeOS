@@ -36,7 +36,19 @@ for (const m of queue.missions) {
 }
 
 const pass = results.filter((r) => r.httpStatus).every((r) => r.ok);
-const receipt = { run_at: new Date().toISOString(), pass, results };
+const receipt = {
+  _authority: {
+    domain: 'Hist',
+    hist_id: 'HIST-AUTO-003',
+    owner_department: 'Historian',
+    status: 'HIST_OWNED',
+    role: 'Queue dry-run receipt — autopilot queue validation',
+    canonical_work_queue: 'builderos-reboot/BP_PRIORITY.json',
+  },
+  run_at: new Date().toISOString(),
+  pass,
+  results,
+};
 fs.writeFileSync(path.join(REPO_ROOT, 'builderos-reboot/QUEUE_DRY_RUN_RECEIPT.json'), `${JSON.stringify(receipt, null, 2)}\n`);
 console.log(JSON.stringify(receipt, null, 2));
 process.exit(pass ? 0 : 1);

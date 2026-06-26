@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T23:00:33.438Z",
+  "generated_at": "2026-06-26T23:08:23.938Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12608,
   "files": [
@@ -34618,9 +34618,9 @@
     {
       "path": "builderos-reboot/QUEUE_DRY_RUN_RECEIPT.json",
       "synopsis": "BuilderOS artifact — QUEUE DRY RUN RECEIPT.",
-      "bytes": 4935,
-      "mtime": "2026-06-26T00:01:29.033Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z",
+      "bytes": 4969,
+      "mtime": "2026-06-26T23:08:11.202Z",
+      "indexed_at": "2026-06-26T23:08:23.938Z",
       "synopsis_index_only": true
     },
     {
@@ -34641,9 +34641,9 @@
     {
       "path": "builderos-reboot/scripts/autopilot-run-queue.mjs",
       "synopsis": "HIST DOMAIN — Historian owns this artifact (read/salvage only).",
-      "bytes": 1646,
-      "mtime": "2026-06-23T04:33:54.049Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z"
+      "bytes": 1914,
+      "mtime": "2026-06-26T23:07:59.270Z",
+      "indexed_at": "2026-06-26T23:08:23.938Z"
     },
     {
       "path": "builderos-reboot/scripts/autopilot-runner.mjs",
@@ -69778,9 +69778,9 @@
     {
       "path": "package-lock.json",
       "synopsis": "JSON data/config — package-lock.json.",
-      "bytes": 335408,
-      "mtime": "2026-06-25T17:05:01.169Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z",
+      "bytes": 336944,
+      "mtime": "2026-06-26T21:24:22.891Z",
+      "indexed_at": "2026-06-26T23:08:23.938Z",
       "synopsis_index_only": true
     },
     {

@@ -1,13 +1,13 @@
 {
   "_authority": {
     "domain": "Hist",
+    "hist_id": "HIST-AUTO-003",
     "owner_department": "Historian",
     "status": "HIST_OWNED",
-    "hist_id": "HIST-AUTO-003",
-    "role": "Autopilot dry-run receipt — historian evidence only",
+    "role": "Queue dry-run receipt — autopilot queue validation",
     "canonical_work_queue": "builderos-reboot/BP_PRIORITY.json"
   },
-  "run_at": "2026-06-11T07:53:03.032Z",
+  "run_at": "2026-06-26T23:08:11.201Z",
   "pass": true,
   "results": [
     {
@@ -228,7 +228,9 @@
     },
     {
       "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
-      "status": "no_blueprint"
+      "httpStatus": 200,
+      "ok": true,
+      "steps_total": 5
     }
   ]
 }
