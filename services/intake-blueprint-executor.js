@@ -117,8 +117,8 @@ function formatScanHints(step, scan) {
     lines.push(`DB: ${scan.db_pattern?.source || 'pool.query(sql, params) — pool injected via factory, never ../../core/*'}`);
     lines.push(`Auth: ${scan.auth_pattern?.owner_id_guard || 'req.lifeosUser?.sub for owner_id'}`);
     if (/routes\//.test(String(stepTargetFile(step) || ''))) {
-      lines.push(`Route factory: ${scan.route_factory?.signature || 'createXxxRoutes(app, ctx)'}`);
-      lines.push(`ctx keys: ${(scan.registration_pattern?.routeCtx_keys || scan.route_factory?.ctx_available || []).slice(0, 8).join(', ')}`);
+      lines.push(`Route factory: export function createXxxRoutes({ pool, requireKey, logger }) — returns express.Router(); use requireKey (NEVER rk)`);
+      lines.push(`Mount pattern: app.use(mountPath, createXxxRoutes({ pool, requireKey, logger }))`);
     } else {
       lines.push('Service factory: export function createXxx({ pool, logger }) — match services/action-inbox.js pattern');
     }

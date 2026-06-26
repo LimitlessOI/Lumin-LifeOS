@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T01:06:12.031Z",
+  "generated_at": "2026-06-26T01:09:37.091Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12567,
   "files": [
@@ -41763,9 +41763,9 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 38273,
-      "mtime": "2026-06-26T01:03:24.546Z",
-      "indexed_at": "2026-06-26T01:03:33.702Z"
+      "bytes": 38510,
+      "mtime": "2026-06-26T01:09:24.914Z",
+      "indexed_at": "2026-06-26T01:09:37.091Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -41962,9 +41962,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 490970,
-      "mtime": "2026-06-26T01:05:52.571Z",
-      "indexed_at": "2026-06-26T01:06:12.031Z"
+      "bytes": 491333,
+      "mtime": "2026-06-26T01:09:07.522Z",
+      "indexed_at": "2026-06-26T01:09:37.091Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42468,9 +42468,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 137340,
-      "mtime": "2026-06-26T01:03:25.566Z",
-      "indexed_at": "2026-06-26T01:03:33.702Z"
+      "bytes": 137584,
+      "mtime": "2026-06-26T01:09:24.916Z",
+      "indexed_at": "2026-06-26T01:09:37.091Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -72365,9 +72365,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 122291,
-      "mtime": "2026-06-26T01:05:10.630Z",
-      "indexed_at": "2026-06-26T01:06:12.031Z",
+      "bytes": 122800,
+      "mtime": "2026-06-26T01:09:06.802Z",
+      "indexed_at": "2026-06-26T01:09:37.091Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86714,9 +86714,9 @@
     {
       "path": "services/builderos-build-pipeline.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 5983,
-      "mtime": "2026-06-21T21:38:43.805Z",
-      "indexed_at": "2026-06-26T00:45:25.440Z",
+      "bytes": 6060,
+      "mtime": "2026-06-26T01:08:55.453Z",
+      "indexed_at": "2026-06-26T01:09:37.091Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -88531,9 +88531,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 14784,
-      "mtime": "2026-06-26T01:03:05.805Z",
-      "indexed_at": "2026-06-26T01:03:33.702Z",
+      "bytes": 14797,
+      "mtime": "2026-06-26T01:08:55.842Z",
+      "indexed_at": "2026-06-26T01:09:37.091Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

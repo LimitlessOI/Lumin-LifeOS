@@ -68,7 +68,8 @@ async function runBuildPipeline(opts) {
   if (zoneResult.zone === 4) {
     return { ok: false, shouldCommit: false, failureType: 'ZONE4_BLOCKED', zoneResult, retryAttempted: false, gates: null };
   }
-  if (zoneResult.zone === 3) {
+  const intakeRewrite = opts.intakeBlueprintStep === true;
+  if (zoneResult.zone === 3 && !intakeRewrite) {
     return { ok: false, shouldCommit: false, failureType: 'ZONE3_PATCH_REQUIRED', zoneResult, retryAttempted: false, gates: null };
   }
   const gateResult = await runInMemoryGates(opts.generatedOutput, opts.resolvedTarget, opts.originalLines);

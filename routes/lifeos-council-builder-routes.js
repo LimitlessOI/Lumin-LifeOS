@@ -43,6 +43,7 @@ import { BUILDER_MODE, BUILDER_MODE_RULES, DEFAULT_BUILDER_MODE } from '../confi
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
+import { classifyBuildTarget } from '../services/builderos-patch-mode-policy.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
 import { looksLikeBuilderProseRefusal } from '../services/builder-instruction-target.js';
 import { checkBuildBlueprintGate } from '../services/builder-blueprint-gate.js';
@@ -1865,10 +1866,13 @@ function buildRouteMountCall(exportName, routeFileContent, mountPath) {
   if (isMountStyle) {
     return `  ${exportName}(app, { pool });\n  logger.info('✅ [${label}] Routes mounted at ${mountPath}');\n`;
   }
-  if (returnsRouter || !usesAppCtx) {
-    return `  app.use("${mountPath}", ${exportName}({ pool, requireKey: requireUserOrKey, logger }));\n  logger.info('✅ [${label}] Routes mounted at ${mountPath}');\n`;
+  if (usesAppCtx && returnsRouter) {
+    return `  app.use("${mountPath}", ${exportName}(app, { pool, requireKey: requireUserOrKey, rk: requireUserOrKey, logger }));\n  logger.info('✅ [${label}] Routes mounted at ${mountPath}');\n`;
   }
-  return `  ${exportName}(app, { pool, requireKey: requireUserOrKey, callCouncilMember, logger });\n  logger.info('✅ [${label}] Routes registered via ${exportName}');\n`;
+  if (usesAppCtx) {
+    return `  ${exportName}(app, { pool, requireKey: requireUserOrKey, callCouncilMember, logger });\n  logger.info('✅ [${label}] Routes registered via ${exportName}');\n`;
+  }
+  return `  app.use("${mountPath}", ${exportName}({ pool, requireKey: requireUserOrKey, logger }));\n  logger.info('✅ [${label}] Routes mounted at ${mountPath}');\n`;
 }
 
 async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch }) {
@@ -2401,10 +2405,12 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
       log.info({ resolvedTarget }, '[BUILDER] pre-commit syntax check passed');
 
       // ── Pre-commit governance (anti-pattern + stub + unified verifier) ────
+      const zoneMeta = classifyBuildTarget(resolve(process.cwd(), resolvedTarget));
       const govResult = await runPrecommitGovernance({
         generatedOutput,
         resolvedTarget,
-        originalLines: null,
+        originalLines: zoneMeta.lineCount > 0 ? zoneMeta.lineCount : null,
+        intakeBlueprintStep: Boolean(taskBody.blueprint_intake_session_id),
         taskBody,
         retryFn: async (retryBody) => {
           let retryCapture = null;
