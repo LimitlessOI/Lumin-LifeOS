@@ -11,6 +11,7 @@ import { tmpdir } from 'os';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { runBuildPipeline } from './builderos-build-pipeline.js';
+import { normalizeBuilderCodegenOutput } from './builderos-codegen-normalize.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -43,8 +44,11 @@ function runUnifiedVerifierOnContent(content, originalLines = null, resolvedTarg
 }
 
 async function runPrecommitGovernance(opts) {
-  const pipelineResult = await runBuildPipeline(opts);
-  let finalOutput = pipelineResult.retryOutput || opts.generatedOutput;
+  const normalizedInput = normalizeBuilderCodegenOutput(opts.generatedOutput || '');
+  const pipelineResult = await runBuildPipeline({ ...opts, generatedOutput: normalizedInput });
+  let finalOutput = pipelineResult.retryOutput
+    ? normalizeBuilderCodegenOutput(pipelineResult.retryOutput)
+    : normalizedInput;
 
   if (!pipelineResult.ok) {
     return {
@@ -70,7 +74,7 @@ async function runPrecommitGovernance(opts) {
       syntaxRetry = null;
     }
     if (syntaxRetry?.ok && syntaxRetry.output) {
-      finalOutput = syntaxRetry.output;
+      finalOutput = normalizeBuilderCodegenOutput(syntaxRetry.output);
       const retryVerifier = runUnifiedVerifierOnContent(finalOutput, opts.originalLines ?? null, opts.resolvedTarget ?? null);
       if (retryVerifier.ok) {
         return {

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T01:15:50.412Z",
+  "generated_at": "2026-06-26T01:19:01.857Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12567,
+  "file_count": 12569,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41962,9 +41962,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 491230,
-      "mtime": "2026-06-26T01:15:37.043Z",
-      "indexed_at": "2026-06-26T01:15:50.412Z"
+      "bytes": 491482,
+      "mtime": "2026-06-26T01:18:54.339Z",
+      "indexed_at": "2026-06-26T01:19:01.857Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42468,9 +42468,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 137584,
-      "mtime": "2026-06-26T01:09:24.916Z",
-      "indexed_at": "2026-06-26T01:09:37.091Z"
+      "bytes": 137925,
+      "mtime": "2026-06-26T01:18:43.428Z",
+      "indexed_at": "2026-06-26T01:19:01.857Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -72365,9 +72365,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 122800,
-      "mtime": "2026-06-26T01:09:06.802Z",
-      "indexed_at": "2026-06-26T01:09:37.091Z",
+      "bytes": 122895,
+      "mtime": "2026-06-26T01:18:32.644Z",
+      "indexed_at": "2026-06-26T01:19:01.857Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -86733,6 +86733,16 @@
       ]
     },
     {
+      "path": "services/builderos-codegen-normalize.js",
+      "synopsis": "Expand LCL codebook symbols in builder codegen output before syntax/governance gates.",
+      "bytes": 1027,
+      "mtime": "2026-06-26T01:18:31.602Z",
+      "indexed_at": "2026-06-26T01:19:01.857Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
+      ]
+    },
+    {
       "path": "services/builderos-codegen-self-repair.js",
       "synopsis": "BuilderOS codegen failure classifier + repair dispatch (industry harness patterns).",
       "bytes": 6076,
@@ -86885,9 +86895,9 @@
     {
       "path": "services/builderos-precommit-governance.js",
       "synopsis": "BuilderOS pre-commit governance wrapper.",
-      "bytes": 3637,
-      "mtime": "2026-06-26T00:54:39.829Z",
-      "indexed_at": "2026-06-26T00:54:49.665Z",
+      "bytes": 3938,
+      "mtime": "2026-06-26T01:18:40.039Z",
+      "indexed_at": "2026-06-26T01:19:01.857Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/builderos-remediation/BLUEPRINT.md"
@@ -95253,6 +95263,16 @@
       "indexed_at": "2026-06-26T00:45:25.440Z",
       "ssot": [
         "docs/projects/AMENDMENT_46_BUILDEROS_CONTROL_PLANE.md"
+      ]
+    },
+    {
+      "path": "tests/builderos-codegen-normalize.test.js",
+      "synopsis": "Exports and — tests/builderos-codegen-normalize.test.js.",
+      "bytes": 1043,
+      "mtime": "2026-06-26T01:18:50.355Z",
+      "indexed_at": "2026-06-26T01:19:01.857Z",
+      "ssot": [
+        "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
     },
     {

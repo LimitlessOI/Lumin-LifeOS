@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-26 — Zone 3 intake blueprint rewrite bypass in build pipeline.
+**Last Updated:** 2026-06-26 — LCL codebook symbol expansion on builder output before governance gates.
 ---
 
 ## 0. Purpose
@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-26 | **`builderos-codegen-normalize.js`** — expand LCL codebook symbols (`*exp`, `*rk`, `*jok`) on builder output before syntax/governance; wired in precommit + /build. | MOS-P1-003 retry output had raw codebook symbols — SYMBOL_TO_FULL existed but unused. | ⚠️ deploy + re-run MOS-P1-003 | intake execute |
 | 2026-06-26 | **`builderos-build-pipeline.js`** — Zone 3 gate bypass when `intakeBlueprintStep` (blueprint_intake_session_id on /build). | MOS-P1-003 blocked ZONE3_PATCH_REQUIRED on 211-line routes file. | ⚠️ deploy + re-run MOS-P1-003 | intake execute |
 | 2026-06-26 | **Product route auto-wire + wire-route endpoint + VERIFY_DOUBLE_BODY_READ antipattern.** | MOS-P1-003 not mounted; MOS-P1-005 fetch body bug. | ⚠️ deploy + re-test | intake execute |
 | 2026-06-26 | **`builderos-precommit-governance.js`** — always pass argv[3] placeholder so logical target hits argv[4] for verify runtime skip. | MOS-P1-005 runtime skip never fired — wrong argv slot. | ✅ fixed | intake execute |

@@ -43,6 +43,7 @@ import { BUILDER_MODE, BUILDER_MODE_RULES, DEFAULT_BUILDER_MODE } from '../confi
 import { isSafeTarget } from '../config/builder-safe-scope.js';
 import { writeSecurityReceipt, SECURITY_RECEIPT_TYPES } from '../services/oil-security-receipts.js';
 import { runPrecommitGovernance } from '../services/builderos-precommit-governance.js';
+import { normalizeBuilderCodegenOutput } from '../services/builderos-codegen-normalize.js';
 import { classifyBuildTarget } from '../services/builderos-patch-mode-policy.js';
 import { applyBuilderRoutingPolicy } from '../services/builderos-routing-policy.js';
 import { looksLikeBuilderProseRefusal } from '../services/builder-instruction-target.js';
@@ -2250,7 +2251,7 @@ async function fetchGitHubFileContent(filePath, { token, owner, repoName, branch
       }
     }
     if (/\.(js|mjs|cjs)$/i.test(resolvedTarget)) {
-      const extractedJs = fixAsteriskShorthandParams(extractJavaScriptFromOutput(generatedOutput));
+      const extractedJs = normalizeBuilderCodegenOutput(extractJavaScriptFromOutput(generatedOutput));
       if (extractedJs !== generatedOutput) {
         log.info(
           { resolvedTarget, stripped: generatedOutput.length - extractedJs.length },
