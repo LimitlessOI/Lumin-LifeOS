@@ -40,6 +40,10 @@ export const CANONICAL_FOUNDER_CSS_TARGET = 'public/overlay/lifeos-theme-overrid
 /** Color/style-only founder feedback — must not rewrite lifeos-app.html. */
 export function isCssOnlyUiFeedback(instruction = '') {
   const t = String(instruction || '');
+  if (/\b(rounded|round|radius|fainter|lighter|darker|bigger|smaller|opacity|padding|margin|border-radius|border)\b/i.test(t)
+    && UI_FEEDBACK_RE.test(t)) {
+    return true;
+  }
   if (/\b(add|set|make|change|update)\s+(a\s+)?(yellow|blue|red|green|purple|orange|pink|white|black)\b/i.test(t)
     && /\b(color|background|style|response|reply|bubble|message|assistant)\b/i.test(t)) {
     return true;

@@ -13,6 +13,7 @@ import {
   isFounderPersonalLifeIntent,
 } from './founder-life-admin-intent.js';
 import { hasProductBuildContext } from './chair-context-classifier.js';
+import { isBuildRequest } from './chair-intent-signals.js';
 import { gatherStrategicBriefForChair } from './lumin-strategic-intelligence.js';
 import { createLuminContextLoader } from './lumin-context-loader.js';
 
@@ -20,6 +21,40 @@ function searchBlockIsUseful(searchResult) {
   if (!searchResult?.results?.length) return false;
   if (searchResult.source === 'ai_knowledge') return false;
   return true;
+}
+
+/** Factual question — not system/build/status; may need live web search. */
+function needsGeneralWebSearch(text = '', chairContext = {}) {
+  const t = String(text || '').trim();
+  if (!t) return false;
+  if (isFounderPersonalLifeIntent(t)) return false;
+  if (hasProductBuildContext(t) && isBuildRequest(t)) return false;
+  if (/^\s*(do|execute|run)\s*:/i.test(t)) return false;
+  if (/\b(point b|alpha|lifere|ssot|amendment|deploy|railway|builder|queue status|target_file)\b/i.test(t)) {
+    return false;
+  }
+  if (/\?\s*$/.test(t)) return true;
+  if (/^(what|who|when|where|why|how|is|are|does|did|can|could|tell me about)\b/i.test(t)) return true;
+  if (chairContext.personal_search) return true;
+  return false;
+}
+
+async function attachVerifiedSearch(facts, text, deps) {
+  const searchSvc = createWebSearchService({
+    BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
+    PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
+    callAI: deps.callAI,
+  });
+  try {
+    const query = buildLifeAdminSearchQuery(text) || String(text).slice(0, 160);
+    const searchResult = await searchSvc.search(query, { count: 5 });
+    facts.verified_search = searchBlockIsUseful(searchResult)
+      ? formatLifeAdminCounselPreamble(searchResult)
+      : formatErrandCouponFallback(text);
+    facts.search_source = searchResult?.source || null;
+  } catch {
+    facts.verified_search = formatErrandCouponFallback(text);
+  }
 }
 
 export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}) {
@@ -116,20 +151,10 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     facts.chair_note = `${facts.chair_note} Personal life turn — answer the user's question directly; do not recite Point B, alpha, or builder queue unless they asked.`;
     facts.point_b_target = null;
     facts.point_b_summary = null;
-    const searchSvc = createWebSearchService({
-      BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
-      PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
-      callAI: deps.callAI,
-    });
-    try {
-      const query = buildLifeAdminSearchQuery(text);
-      const searchResult = await searchSvc.search(query, { count: 5 });
-      facts.verified_search = searchBlockIsUseful(searchResult)
-        ? formatLifeAdminCounselPreamble(searchResult)
-        : formatErrandCouponFallback(text);
-    } catch {
-      facts.verified_search = formatErrandCouponFallback(text);
-    }
+    await attachVerifiedSearch(facts, text, deps);
+  } else if (needsGeneralWebSearch(text, chairContext)) {
+    facts.chair_note = `${facts.chair_note} Factual question — use verified_search when present; answer directly; do not CLARIFY or paraphrase the question back.`;
+    await attachVerifiedSearch(facts, text, deps);
   }
 
   if (!facts.strategic_brief && deps.pool && !personalTurn && hasProductBuildContext(text)) {

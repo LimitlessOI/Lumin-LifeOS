@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-26 — SMOS content intent regex + anti-paraphrase law; unified founder chat deployed `c135aa1262`.
+**Last Updated:** 2026-06-26 — founder chat alpha battery; NL UI auto-build + factual web search on counsel turns.
 
 ---
 

@@ -11,7 +11,14 @@ import {
 } from '../services/founder-intent-compiler.js';
 import { executeFounderWorkIntent } from '../services/founder-work-executors.js';
 import { resolveChairContext } from '../services/chair-context-classifier.js';
+import { isCssOnlyUiFeedback } from '../services/builder-instruction-target.js';
 
+test('rounded send button is CSS UI feedback', () => {
+  const msg = 'make the send button in the lumin drawer slightly more rounded';
+  assert.equal(isCssOnlyUiFeedback(msg), true);
+  const ctx = resolveChairContext(msg, { confirmIntent: true });
+  assert.equal(ctx.channel, 'build_async');
+});
 test('detectWorkIntent — five video package', () => {
   const msg = "we're going to make five videos so I want the package on five videos";
   const intent = detectWorkIntent(msg, []);

@@ -2,7 +2,7 @@
  * SYNOPSIS: Chair context classifier — life vs code vs command (default help, not builder theater).
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
-import { isRepairContinuationIntent, extractTargetFileFromInstruction, isCssOnlyUiFeedback } from './builder-instruction-target.js';
+import { isRepairContinuationIntent, extractTargetFileFromInstruction, isCssOnlyUiFeedback, inferTargetFileFromFounderFeedback } from './builder-instruction-target.js';
 import { isFounderConfirmIntent } from './founder-intent-clarify.js';
 import { isGovernanceOrSsotIntent } from './founder-governance-clarify.js';
 import { isMissionPipelineIntent } from './lifeos-mission-pipeline-executor.js';
@@ -44,6 +44,8 @@ export function hasHighConfidenceBuildTarget(text = '') {
   if (extractTargetFileFromInstruction(t)) return true;
   if (/\bpublic\/overlay\/[\w.-]+\.(html|css|js)\b/i.test(t)) return true;
   if (/\b(lifeos-app|lifeos-lifere|lifeos-dashboard|lifeos-login)\.html\b/i.test(t)) return true;
+  const inferred = inferTargetFileFromFounderFeedback(t);
+  if (inferred?.confidence === 'high') return true;
   return false;
 }
 

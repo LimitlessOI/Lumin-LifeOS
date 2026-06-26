@@ -12,7 +12,7 @@ import {
   extractMissionIdFromText,
   runFoundationPipelineForFounder,
 } from './lifeos-mission-pipeline-executor.js';
-import { isRepairContinuationIntent, extractTargetFileFromInstruction, resolveFounderBuildTarget, isCssOnlyUiFeedback } from './builder-instruction-target.js';
+import { isRepairContinuationIntent, extractTargetFileFromInstruction, resolveFounderBuildTarget, isCssOnlyUiFeedback, inferTargetFileFromFounderFeedback } from './builder-instruction-target.js';
 import { handlePointBFounderMessage } from './point-b-navigator.js';
 import { buildListeningOnboardingContext } from './lifeos-listening-profile.js';
 import { loadPointBTarget } from './point-b-target-lite.js';
@@ -42,6 +42,7 @@ import {
   requiresPreExecuteClarify,
   chairChannelFromContext,
   hasHighConfidenceBuildTarget,
+  hasProductBuildContext,
 } from './chair-context-classifier.js';
 import { runChairNativeTurn } from './chair-lumin-unified.js';
 import { translateChairPersonality } from './chair-personality-translate.js';
@@ -373,6 +374,12 @@ export async function runLuminChairTurn(ctx, deps) {
       || (uiContext?.surface === 'lifeos-app' ? 'public/overlay/lifeos-app.html' : 'public/overlay/lifeos-dashboard.html');
     effectiveInput = `do: ${effectiveInput}\ntarget_file: ${cssTarget}`;
     forceExecute = true;
+  } else if (!doPrefix.forcedExecute && isBuildRequest(effectiveInput) && hasProductBuildContext(effectiveInput)) {
+    const inferred = inferTargetFileFromFounderFeedback(effectiveInput);
+    if (inferred?.target_file && inferred.confidence === 'high') {
+      effectiveInput = `do: ${effectiveInput}\ntarget_file: ${inferred.target_file}`;
+      forceExecute = true;
+    }
   }
   const likelyBuild = isBuildRequest(effectiveInput)
     || isRepairContinuationIntent(effectiveInput)

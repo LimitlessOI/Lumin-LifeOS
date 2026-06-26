@@ -75,7 +75,9 @@
     "you'd like",
     "you would like",
     "you're looking for",
-    "you are looking for"
+    "you are looking for",
+    "not connected to the real system",
+    "i am not connected"
   ],
   "forbidden_opening_patterns": [
     "^\\s*(great question|absolutely|certainly|of course|sure thing|i'd be happy|i would be happy|i'm happy|i am happy)",
