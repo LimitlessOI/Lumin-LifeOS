@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T20:42:58.173Z",
+  "generated_at": "2026-06-26T20:43:35.141Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12593,
+  "file_count": 12595,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -36832,8 +36832,8 @@
       "path": "data/bp-priority-guardrails-last-run.json",
       "synopsis": "JSON data/config — data/bp-priority-guardrails-last-run.json.",
       "bytes": 3222,
-      "mtime": "2026-06-26T20:41:18.141Z",
-      "indexed_at": "2026-06-26T20:41:23.897Z",
+      "mtime": "2026-06-26T20:43:35.081Z",
+      "indexed_at": "2026-06-26T20:43:35.141Z",
       "synopsis_index_only": true
     },
     {
@@ -70085,11 +70085,27 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/DIRECT_EXECUTION_POINT_B_LIVE.json",
+      "synopsis": "Product receipt — DIRECT EXECUTION POINT B LIVE.",
+      "bytes": 3057,
+      "mtime": "2026-06-26T20:43:34.296Z",
+      "indexed_at": "2026-06-26T20:43:35.141Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/FOUNDER_ALPHA_READINESS_AUDIT.json",
       "synopsis": "Product receipt — FOUNDER ALPHA READINESS AUDIT.",
       "bytes": 4939,
       "mtime": "2026-06-26T16:19:21.727Z",
       "indexed_at": "2026-06-26T20:41:23.897Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "products/receipts/FOUNDER_CHAT_ALPHA_BATTERY.json",
+      "synopsis": "Product receipt — FOUNDER CHAT ALPHA BATTERY.",
+      "bytes": 5652,
+      "mtime": "2026-06-26T20:43:34.297Z",
+      "indexed_at": "2026-06-26T20:43:35.141Z",
       "synopsis_index_only": true
     },
     {

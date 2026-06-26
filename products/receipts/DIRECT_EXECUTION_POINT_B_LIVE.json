@@ -1,0 +1,75 @@
+{
+  "schema": "direct_execution_point_b_live_v1",
+  "at": "2026-06-26T20:42:33.015Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "ok": true,
+  "point_b_execution": "direct_orders_must_build",
+  "passed": [
+    "D1_system_open_lifere",
+    "D2_do_surgical_comment",
+    "D3_do_css_yellow",
+    "D4_do_voice_send_already",
+    "D5_adam_enter_natural"
+  ],
+  "failed": [],
+  "results": {
+    "D1_system_open_lifere": {
+      "http": 200,
+      "chair_channel": "system_action",
+      "command_truth": "COMMAND_RAN",
+      "pass_fail": "PASS",
+      "job_id": null,
+      "execution_path": null,
+      "summary_head": "✅ DONE\nNavigated to lifeos-lifere.html\n• Channel: system_action\n• Kind: SYSTEM_EXECUTE\n• Command: COMMAND_RAN"
+    },
+    "D2_do_surgical_comment": {
+      "http": 202,
+      "chair_channel": "build_async",
+      "command_truth": "BUILD_ATTEMPTED",
+      "pass_fail": "RUNNING",
+      "job_id": "8652c784-d3fa-4cb7-9302-737fb9943004",
+      "execution_path": null,
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 8652c784… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 8652c784-d3fa-4cb7-9302-737fb9943004",
+      "final_pass_fail": "PASS",
+      "final_path": "founder_surgical_html_patch",
+      "committed": true
+    },
+    "D3_do_css_yellow": {
+      "http": 202,
+      "chair_channel": "build_async",
+      "command_truth": "BUILD_ATTEMPTED",
+      "pass_fail": "RUNNING",
+      "job_id": "cf1c0f9e-7c5c-49c1-96d5-b4740070922d",
+      "execution_path": null,
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job cf1c0f9e… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job cf1c0f9e-7c5c-49c1-96d5-b4740070922d",
+      "final_pass_fail": "PASS",
+      "final_path": "founder_css_patch",
+      "committed": true
+    },
+    "D4_do_voice_send_already": {
+      "http": 202,
+      "chair_channel": "build_async",
+      "command_truth": "BUILD_ATTEMPTED",
+      "pass_fail": "RUNNING",
+      "job_id": "2243fac8-c50e-4964-8dda-a74514841f84",
+      "execution_path": null,
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 2243fac8… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 2243fac8-c50e-4964-8dda-a74514841f84",
+      "final_pass_fail": "PASS",
+      "final_path": "founder_voice_send_patch",
+      "committed": false
+    },
+    "D5_adam_enter_natural": {
+      "http": 202,
+      "chair_channel": "build_async",
+      "command_truth": "BUILD_ATTEMPTED",
+      "pass_fail": "RUNNING",
+      "job_id": "819038ae-9be2-4d11-bfe4-7a47d522aa0f",
+      "execution_path": null,
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 819038ae… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 819038ae-9be2-4d11-bfe4-7a47d522aa0f",
+      "final_pass_fail": "PASS",
+      "final_path": "founder_enter_send_patch",
+      "committed": false
+    }
+  },
+  "point_b_reached": true
+}

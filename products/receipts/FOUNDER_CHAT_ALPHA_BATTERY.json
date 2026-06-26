@@ -1,0 +1,130 @@
+{
+  "schema": "founder_chat_alpha_battery_v1",
+  "at": "2026-06-26T20:34:53.367Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "ok": false,
+  "passed": [
+    "B1_do_build",
+    "B2_nl_ui_rounded",
+    "B3_nl_css_yellow",
+    "Q1_counsel_no_clarify",
+    "Q4_connection_truth"
+  ],
+  "failed": [
+    "Q2_smos_workflow_question",
+    "Q2b_smos_steps",
+    "Q_chair_builder",
+    "Q3_factual_search"
+  ],
+  "results": {
+    "B1_do_build": {
+      "http": 202,
+      "channel": "build_async",
+      "truth": "BUILD_ATTEMPTED",
+      "pass_fail": "RUNNING",
+      "action": "build",
+      "job_id": "a174e913-4efb-4bca-bebf-7355d07e21be",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job a174e913… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job a174e913-4efb-4bca-bebf-7355d07e21be",
+      "has_verified_search": false,
+      "has_system_knowledge": false,
+      "program_context": null,
+      "final_pass_fail": "PASS"
+    },
+    "B2_nl_ui_rounded": {
+      "http": 202,
+      "channel": "build_async",
+      "truth": "BUILD_ATTEMPTED",
+      "pass_fail": "RUNNING",
+      "action": "build",
+      "job_id": "459cd883-b6e6-436a-a901-691e161d36e2",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 459cd883… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 459cd883-b6e6-436a-a901-691e161d36e2",
+      "has_verified_search": false,
+      "has_system_knowledge": false,
+      "program_context": null,
+      "final_pass_fail": "TIMEOUT"
+    },
+    "B3_nl_css_yellow": {
+      "http": 202,
+      "channel": "build_async",
+      "truth": "BUILD_ATTEMPTED",
+      "pass_fail": "RUNNING",
+      "action": "build",
+      "job_id": "a7a1906d-2c86-4ffc-80c9-cf79f10e7bf9",
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job a7a1906d… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job a7a1906d-2c86-4ffc-80c9-cf79f10e7bf9",
+      "has_verified_search": false,
+      "has_system_knowledge": false,
+      "program_context": null,
+      "final_pass_fail": "PASS"
+    },
+    "Q1_counsel_no_clarify": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "Based on your verified search and personal twin, it seems guidance on how to allocate your time today. Your personal twin indicates high receptivity and a willingness to engage in direct communication. Considering your c",
+      "has_verified_search": true,
+      "has_system_knowledge": true,
+      "program_context": null
+    },
+    "Q2_smos_workflow_question": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "Yeah. Verified search shows no recent follow-ups or prospecting tasks assigned to you.",
+      "has_verified_search": true,
+      "has_system_knowledge": true,
+      "program_context": null
+    },
+    "Q2b_smos_steps": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "Based on your verified search and personal twin, it appears that your current priority is to make money fast. [unverified — no system query ran] knowledge, the current business model is to take 20% of customer API saving",
+      "has_verified_search": true,
+      "has_system_knowledge": true,
+      "program_context": null
+    },
+    "Q_chair_builder": {
+      "http": 200,
+      "channel": "build_terminal",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "FAIL",
+      "action": "execute",
+      "summary_head": "❌ NOT DONE\nexecute failed.\n• Channel: build_terminal\n• Kind: CODE_EXECUTE\n• Command: NO_COMMAND_RAN\n• Receipt: NO_RECEIPT\n• Path: terminal_bridge\n\nNEXT\nFix: INTENT_AMBIGUITY — ask until understood before CODE_EXECUTE\n\n──",
+      "has_verified_search": false,
+      "has_system_knowledge": false,
+      "program_context": null
+    },
+    "Q3_factual_search": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "Prioritizing follow-ups or prospecting often depends on what you're aiming for right now. Each approach tends to yield different kinds of results over different timelines.",
+      "has_verified_search": false,
+      "has_system_knowledge": true,
+      "program_context": null
+    },
+    "Q4_connection_truth": {
+      "http": 200,
+      "channel": "chair",
+      "truth": "NO_COMMAND_RAN",
+      "pass_fail": "NO_COMMAND_RAN",
+      "action": "chair",
+      "summary_head": "To help you weigh whether follow-ups or prospecting makes more sense for today, what are you hoping to achieve, or what feels most urgent right now?",
+      "has_verified_search": false,
+      "has_system_knowledge": true,
+      "program_context": null
+    }
+  },
+  "fail_Q2_smos_workflow_question": "missing required answer content: Yeah. Verified search shows no recent follow-ups or prospecting tasks assigned to you.",
+  "fail_Q2b_smos_steps": "missing required answer content: Based on your verified search and personal twin, it appears that your current priority is to make money fast. [unverifie",
+  "fail_Q_chair_builder": "channel build_terminal !== chair",
+  "fail_Q3_factual_search": "no answer-like content: Prioritizing follow-ups or prospecting often depends on what you're aiming for right now. Each approach tends to yield d"
+}
