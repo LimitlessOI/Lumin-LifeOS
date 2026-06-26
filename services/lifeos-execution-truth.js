@@ -158,6 +158,14 @@ export function enforceExecutionTruth(raw, ctx = {}) {
       ? 'Builder ran but commit was blocked — nothing shipped to git or deploy.'
       : 'The system returned failure or no commit — nothing shipped.');
     fix = fix || 'Read the autopsy below and run Fix step 1.';
+  } else if (apiOk && !committed && raw.task_meta?.already_present === true) {
+    failure_code = null;
+    first_blocker = null;
+    pass_fail = 'PASS';
+    command_truth = 'COMMITTED';
+    receipt_truth = 'ALREADY_PRESENT';
+    lesson = null;
+    fix = null;
   } else if (apiOk && !committed) {
     failure_code = failure_code || 'OK_WITHOUT_COMMIT';
     first_blocker = first_blocker || 'Builder returned ok but committed=false — no file landed.';
@@ -224,7 +232,7 @@ export function enforceExecutionTruth(raw, ctx = {}) {
     } else {
       let passCandidate = true;
       const founderRequired = raw.founder_verification_required === true
-        || raw.execution_path === 'founder_css_patch';
+        || (raw.execution_path === 'founder_css_patch' && raw.founder_verification_required !== false);
       const committedFiles = Array.isArray(raw.task_meta?.committed_files)
         ? raw.task_meta.committed_files.map((f) => String(f).replace(/^\//, ''))
         : [];

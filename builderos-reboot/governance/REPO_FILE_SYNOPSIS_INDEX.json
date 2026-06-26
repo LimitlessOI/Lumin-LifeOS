@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T16:07:33.869Z",
+  "generated_at": "2026-06-26T16:10:53.213Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12581,
   "files": [
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 492582,
-      "mtime": "2026-06-26T15:57:24.527Z",
-      "indexed_at": "2026-06-26T16:07:31.870Z"
+      "bytes": 492866,
+      "mtime": "2026-06-26T16:10:49.800Z",
+      "indexed_at": "2026-06-26T16:10:53.213Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -89000,9 +89000,9 @@
     {
       "path": "services/lifeos-execution-truth.js",
       "synopsis": "Hard execution-truth gate — never emit PASS / COMMITTED without proof.",
-      "bytes": 27890,
-      "mtime": "2026-06-24T23:51:21.985Z",
-      "indexed_at": "2026-06-26T16:07:31.870Z",
+      "bytes": 28200,
+      "mtime": "2026-06-26T16:10:42.623Z",
+      "indexed_at": "2026-06-26T16:10:53.213Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
