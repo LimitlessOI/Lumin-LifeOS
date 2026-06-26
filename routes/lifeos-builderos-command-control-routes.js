@@ -1211,7 +1211,9 @@ HOW TO RESPOND:
         luminPersist,
       });
 
-      const persistWarning = await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary);
+      const persistWarning = req.body?.alpha_probe === true
+        ? 'ALPHA_PROBE_SKIP_PERSIST'
+        : await persistFounderTurn(req, cleanedInput, chairResult.body.human_summary);
       const locked = lockFounderResponse(chairResult.body, chairResult.body.chair_channel || 'founder_interface');
       return res.status(chairResult.statusCode).json({
         ...locked,

@@ -8,7 +8,7 @@ import { translateChairPersonality } from './chair-personality-translate.js';
 import { formatStrategicBriefSection } from './lumin-strategic-intelligence.js';
 import { getDoctrinePromptBlock } from './lifeos-service-doctrine.js';
 import { formatThreadForPrompt } from './lumin-thread-context.js';
-import { shouldUseDirectProgramAnswer, formatDirectProgramAnswer } from './chair-program-direct-answer.js';
+import { shouldUseDirectProgramAnswer, formatDirectProgramAnswer, shouldUseDirectFactualAnswer, formatDirectFactualAnswer } from './chair-program-direct-answer.js';
 
 export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext = {}) {
   const {
@@ -49,6 +49,9 @@ export async function runChairNativeTurn(cleanedInput, deps = {}, chairContext =
   let voice;
   if (shouldUseDirectProgramAnswer(cleanedInput, systemFacts)) {
     voice = formatDirectProgramAnswer(cleanedInput, systemFacts);
+  }
+  if (!voice && shouldUseDirectFactualAnswer(cleanedInput, systemFacts)) {
+    voice = formatDirectFactualAnswer(cleanedInput, systemFacts);
   }
   if (!voice) {
     voice = await translatePersonality({

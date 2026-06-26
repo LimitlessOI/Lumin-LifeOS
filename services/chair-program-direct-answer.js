@@ -2,31 +2,69 @@
  * SYNOPSIS: Direct program answers from system_knowledge — no counsel drift on SMOS/SSOT asks.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+import { needsSystemKnowledge } from './chair-system-knowledge.js';
+
+const SMOS_TOPIC = /\b(smos|social media os|socialmediaos|relocation content|content brief|marketing os)\b/i;
+const SMOS_WORKFLOW = /\b(smos|social media os|socialmediaos|workflow|relocation|content brief)\b/i;
 
 export function shouldUseDirectProgramAnswer(input = '', systemFacts = {}) {
   const t = String(input || '').trim();
-  if (!t || systemFacts.personal_turn) return false;
+  if (!t) return false;
   if (/^\s*(do|execute|run)\s*:/i.test(t)) return false;
-  if (/\b(counsel only|do not run|don't run|without building|without running)\b/i.test(t)) return false;
+
+  const counselOnly = /\b(counsel only|do not run|don't run|without building|without running)\b/i.test(t);
+  const explainAsk = /\b(explain|how do you|how you|walk me through|describe|tell me how)\b/i.test(t);
+  if (counselOnly && !explainAsk) return false;
 
   if (/\b(connected|connection|system api|lifeos api|apis right now)\b/i.test(t) && /\b(you|lumin|chair|are you)\b/i.test(t)) {
     return Boolean(systemFacts.lumin_is_chair || systemFacts.builder_capability);
   }
 
-  if (!systemFacts.system_knowledge && !systemFacts.program_context?.length) return false;
+  const hasSys = Boolean(systemFacts.system_knowledge) || Boolean(systemFacts.program_context?.length);
+  if (!hasSys && !(counselOnly && explainAsk && systemFacts.builder_capability)) return false;
 
-  return systemFacts.program_context?.some((p) => {
-    if (p.id === 'smos') {
-      return /\b(smos|social media os|socialmediaos|workflow|relocation|content brief|marketing os)\b/i.test(t);
-    }
+  if (systemFacts.program_context?.some((p) => {
+    if (p.id === 'smos') return SMOS_WORKFLOW.test(t);
     if (p.id === 'builderos') return /\b(builderos|builder os|builder pipeline)\b/i.test(t);
     if (p.id === 'lumin_chair') {
       return /\b(lumin|the chair|builderos|builder)\b/i.test(t)
-        && /\b(build|implement|change|how do you|how you)\b/i.test(t);
+        && /\b(build|implement|change|how do you|how you|explain)\b/i.test(t);
     }
     if (p.id === 'ssot') return /\b(ssot|north star|amendment)\b/i.test(t);
     return false;
-  }) || (/\b(smos|social media os)\b/i.test(t) && systemFacts.system_knowledge);
+  })) return true;
+
+  if (SMOS_TOPIC.test(t) && systemFacts.system_knowledge) return true;
+  if (counselOnly && explainAsk && systemFacts.builder_capability) return true;
+  return false;
+}
+
+export function shouldUseDirectFactualAnswer(input = '', systemFacts = {}) {
+  const t = String(input || '').trim();
+  if (!t || needsSystemKnowledge(t)) return false;
+  if (/^\s*(do|execute|run)\s*:/i.test(t)) return false;
+  const search = String(systemFacts.verified_search || '').trim();
+  if (search.length < 24) return false;
+  if (/\?\s*$/.test(t)) return true;
+  return /^(what|who|when|where|why|how|is|are|does|did|can|could|tell me about)\b/i.test(t);
+}
+
+export function formatDirectFactualAnswer(input = '', systemFacts = {}) {
+  const t = String(input || '').trim();
+  const search = String(systemFacts.verified_search || '').trim();
+  if (!search) return null;
+
+  const source = systemFacts.search_source || 'web search';
+  if (/\bfederal funds rate\b/i.test(t) || /\bfed funds\b/i.test(t)) {
+    const rateHint = search.match(
+      /\d+(?:\.\d+)?\s*(?:%|percent)|target range[^.\n]{0,160}|federal funds rate[^.\n]{0,200}/i,
+    );
+    if (rateHint) {
+      return `From verified ${source}: the federal funds rate ${rateHint[0].replace(/^the federal funds rate\s*/i, '')}. Full search:\n${search.slice(0, 900)}`;
+    }
+  }
+
+  return `From verified ${source}:\n${search.slice(0, 1200)}`;
 }
 
 export function formatDirectProgramAnswer(input = '', systemFacts = {}) {
@@ -44,7 +82,7 @@ export function formatDirectProgramAnswer(input = '', systemFacts = {}) {
 
   const programs = systemFacts.program_context || [];
   const smos = programs.find((p) => p.id === 'smos');
-  if (smos && /\b(smos|social media os|socialmediaos|workflow|relocation|content brief)\b/i.test(t)) {
+  if ((smos || SMOS_TOPIC.test(t)) && SMOS_WORKFLOW.test(t)) {
     const lines = [
       'Our Social Media OS workflow (LifeRE, from your SSOT and `lifere-socialmediaos-bridge.js`):',
       '',
@@ -65,7 +103,9 @@ export function formatDirectProgramAnswer(input = '', systemFacts = {}) {
   }
 
   const chair = programs.find((p) => p.id === 'lumin_chair');
-  if (chair && /\b(lumin|chair|builderos|builder)\b/i.test(t) && /\b(build|implement|change|how)\b/i.test(t)) {
+  const builderExplain = /\b(lumin|chair|builderos|builder)\b/i.test(t)
+    && /\b(build|implement|change|how|explain)\b/i.test(t);
+  if ((chair || builderExplain || systemFacts.builder_capability) && builderExplain) {
     return [
       'Yes. Lumin is the Chair — product changes go through BuilderOS, not theater.',
       '',

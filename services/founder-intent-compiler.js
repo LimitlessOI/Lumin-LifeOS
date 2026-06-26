@@ -52,7 +52,9 @@ const EXECUTE_VERBS = /\b(make|create|build|need|want|produce|draft|prepare|foll
 export function isQuestionOnlyUtterance(utterance = '') {
   const bare = String(utterance || '').trim();
   if (!bare) return false;
-  return QUESTION_OPENING.test(bare) && !EXECUTE_VERBS.test(bare);
+  if (/\b(counsel only|do not run|don't run|without building|without running)\b/i.test(bare)) return true;
+  const stripped = bare.replace(/\b(do not|don't)\s+run\b/gi, ' ');
+  return QUESTION_OPENING.test(bare) && !EXECUTE_VERBS.test(stripped);
 }
 
 /** Fast deterministic detect — current utterance only (history is not re-run intent). */

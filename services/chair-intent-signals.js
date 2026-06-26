@@ -66,9 +66,21 @@ export function isFounderUiBehaviorChangeRequest(text = '') {
   return { target_file: target, kind: 'enter_key_send' };
 }
 
+/** Explain-only — must stay on counsel/chair, never build_terminal or build_async. */
+export function isCounselOnlyBypass(text = '') {
+  const t = String(text || '').trim();
+  if (!t) return false;
+  if (!/\b(counsel only|do not run a build|don't run a build|do not run|don't run|without building|without running)\b/i.test(t)) {
+    return false;
+  }
+  return /\b(explain|describe|tell me how|walk me through|how do you|how you|how would you)\b/i.test(t)
+    || /\?\s*$/.test(t);
+}
+
 export function isBuildRequest(text) {
   if (isFounderPersonalLifeIntent(text)) return false;
   if (isBlueprintExecuteIntent(text)) return false;
+  if (isCounselOnlyBypass(text)) return false;
   const t = String(text || '');
   if (/\b(counsel only|do not run|don't run|without building|without running|explain how you|walk me through)\b/i.test(t)) {
     return false;

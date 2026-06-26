@@ -32,7 +32,7 @@ function needsGeneralWebSearch(text = '', chairContext = {}) {
   if (isFounderPersonalLifeIntent(t)) return false;
   if (hasProductBuildContext(t) && isBuildRequest(t)) return false;
   if (/^\s*(do|execute|run)\s*:/i.test(t)) return false;
-  if (/\b(point b|alpha|lifere|ssot|amendment|deploy|railway|builder|queue status|target_file|smos|social media os)\b/i.test(t)) {
+  if (/\b(point b|lifere alpha|alpha readiness|alpha battery|alpha test|lifere|ssot|amendment|deploy|railway|builder os|builder pipeline|queue status|target_file|smos|social media os)\b/i.test(t)) {
     return false;
   }
   if (/\?\s*$/.test(t)) return true;
@@ -54,16 +54,22 @@ async function attachVerifiedSearch(facts, text, deps) {
       facts.verified_search = formatLifeAdminCounselPreamble(searchResult);
       facts.search_source = searchResult.source || null;
     } else {
-      facts.verified_search = formatErrandCouponFallback(text);
+      const fallback = formatErrandCouponFallback(text);
+      facts.verified_search = fallback || `Live search returned no snippets for: ${query.slice(0, 120)}. (source: none)`;
+      facts.search_source = searchResult?.source || null;
     }
   } catch {
-    facts.verified_search = formatErrandCouponFallback(text);
+    const fallback = formatErrandCouponFallback(text);
+    facts.verified_search = fallback || `Live search unavailable for: ${String(text).slice(0, 120)}.`;
   }
 }
 
 export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}) {
   const text = String(input || '').trim();
-  const personalTurn = chairContext.personal_search !== false
+  const systemQuestion = needsSystemKnowledge(text);
+  const personalTurn = !chairContext.alpha_probe
+    && !systemQuestion
+    && chairContext.personal_search !== false
     && (isFounderPersonalLifeIntent(text) || ['personal_life', 'conversation'].includes(chairContext.domain));
 
   const facts = {
@@ -78,7 +84,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     point_b_status: null,
     alpha_readiness: null,
     verified_search: null,
-    memory_context: deps.memoryContext || null,
+    memory_context: chairContext.alpha_probe ? null : (deps.memoryContext || null),
     strategic_brief: deps.strategicBrief || null,
     chair_note: 'Lumin is the operating intelligence — facts from system APIs/files/twin/SSOT, not roleplay. Lumin IS the Chair and can implement via BuilderOS build_async.',
     system_knowledge: null,
@@ -98,6 +104,8 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     if (sysKnow.programs?.length) {
       facts.program_context = sysKnow.programs;
       facts.chair_note = `${facts.chair_note} Answer using program_context and system_knowledge — do not claim the system lacks this; do not answer a different topic.`;
+    }
+    if (sysKnow.programs?.length || systemQuestion) {
       facts.personal_turn = false;
     }
   } catch {

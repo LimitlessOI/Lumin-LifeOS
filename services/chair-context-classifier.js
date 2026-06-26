@@ -15,6 +15,7 @@ import {
   isBlueprintExecuteIntent,
   isExplicitExecuteCommand,
   isBuildRequest,
+  isCounselOnlyBypass,
   isFounderRepairOrderIntent,
   isFounderUiBehaviorChangeRequest,
 } from './chair-intent-signals.js';
@@ -93,6 +94,10 @@ export function computeContextScores(text = '') {
   if (scores.personal >= 5 && scores.build > 0 && !PRODUCT_MARKERS.test(t)) {
     scores.build = Math.max(0, scores.build - 8);
   }
+  if (isCounselOnlyBypass(t)) {
+    scores.build = 0;
+    scores.personal += 2;
+  }
 
   return scores;
 }
@@ -165,6 +170,17 @@ export function resolveChairContext(text = '', ctx = {}) {
 
   const scores = computeContextScores(t);
   const dual = detectDualIntent(t);
+
+  if (isCounselOnlyBypass(t)) {
+    return {
+      channel: 'chair',
+      domain: 'counsel',
+      confidence: 1,
+      requires_execute_clarify: false,
+      personal_search: false,
+      scores,
+    };
+  }
 
   if (isBlueprintExecuteIntent(t)) {
     return {

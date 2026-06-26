@@ -784,9 +784,11 @@ export async function runLuminChairTurn(ctx, deps) {
           conversationalMode,
         });
       }
-      const memoryContext = deps.loadChairMemoryContext
-        ? await deps.loadChairMemoryContext().catch(() => null)
-        : null;
+      const memoryContext = ctx.alphaProbe
+        ? null
+        : (deps.loadChairMemoryContext
+          ? await deps.loadChairMemoryContext().catch(() => null)
+          : null);
       const listeningOnboarding = sourceMode === 'listening_setup' && deps.pool
         ? await buildListeningOnboardingContext(deps.pool, ctx.userId).catch(() => null)
         : null;
@@ -814,6 +816,7 @@ export async function runLuminChairTurn(ctx, deps) {
         domain: sourceMode === 'listening_setup' ? 'listening_onboarding' : chairContext.domain,
         user_handle: ctx.userHandle || userHandle || chairContext.user_handle || null,
         conversation_history: mergedHistory,
+        alpha_probe: ctx.alphaProbe === true,
       });
       const truth = finalizeTruth({
         ...chairResult,

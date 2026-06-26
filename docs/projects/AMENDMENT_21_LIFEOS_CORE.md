@@ -66,7 +66,7 @@ This contract tightens the **human–agent truth channel**; it does not relax No
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-06-26 — chair-system-knowledge + direct program answers; alpha battery expanded.
+**Last Updated:** 2026-06-26 — counsel routing hardening (counsel-only→chair, alpha_probe no persist, factual search direct path).
 
 ---
 
@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **Counsel routing hardening** — `isCounselOnlyBypass` forces chair (not build_terminal) for explain+counsel-only; `alpha_probe` skips `persistFounderTurn`; system questions clear `personal_turn`; `shouldUseDirectFactualAnswer` for web search; bare `alpha` no longer blocks factual search | Alpha battery Q_chair_builder→build_terminal; Q3 SMOS bleed from DB persist; Q2 blocked by personal_turn | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
 | 2026-06-26 | **Alpha audit + SMOS routing expansion** — `chair-program-direct-answer.js` SMOS connection/workflow regex expanded; `?.some` guard; Railway SHA parity ✅ | Full LifeOS/LifeRE alpha: agent-alpha 124/124, CRM 7/7, W1-W3, acceptance 19/19, chair parity, governance PASS | ✅ deployed | `lifeos:lifere-agent-alpha` |
 | 2026-06-26 | **Direct program answers** — `chair-program-direct-answer.js` SMOS/BuilderOS from SSOT without counsel drift | Alpha Q2 SMOS → follow-ups answer | ⚠️ deploy | `chair-program-direct-answer.js` |
 | 2026-06-26 | **Chair system knowledge** — `chair-system-knowledge.js` SSOT excerpts + repo synopsis + program registry in counsel facts | Adam: direct link to files/SSOT/programs | ⚠️ deploy | `tests/chair-system-knowledge.test.js` |

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T20:43:56.297Z",
+  "generated_at": "2026-06-26T20:47:30.392Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12595,
   "files": [
@@ -29056,8 +29056,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3781318,
-      "mtime": "2026-06-26T20:43:44.858Z",
-      "indexed_at": "2026-06-26T20:43:56.297Z"
+      "mtime": "2026-06-26T20:47:18.660Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 496820,
-      "mtime": "2026-06-26T20:43:28.084Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z"
+      "bytes": 497319,
+      "mtime": "2026-06-26T20:46:56.807Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42500,9 +42500,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 141639,
-      "mtime": "2026-06-26T20:43:28.084Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z"
+      "bytes": 141941,
+      "mtime": "2026-06-26T20:47:11.975Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -72312,9 +72312,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 49387,
-      "mtime": "2026-06-26T19:34:35.471Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 49465,
+      "mtime": "2026-06-26T20:46:27.782Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -87113,9 +87113,9 @@
     {
       "path": "services/chair-context-classifier.js",
       "synopsis": "Chair context classifier — life vs code vs command (default help, not builder theater).",
-      "bytes": 9351,
-      "mtime": "2026-06-26T19:34:35.472Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 9668,
+      "mtime": "2026-06-26T20:46:10.643Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87153,9 +87153,9 @@
     {
       "path": "services/chair-intent-signals.js",
       "synopsis": "Chair intent signal helpers — shared by orchestrator and context classifier.",
-      "bytes": 4380,
-      "mtime": "2026-06-26T20:41:19.267Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 4913,
+      "mtime": "2026-06-26T20:46:08.718Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87183,9 +87183,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 3591,
-      "mtime": "2026-06-26T19:59:45.570Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 3793,
+      "mtime": "2026-06-26T20:46:19.091Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87193,9 +87193,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 7826,
-      "mtime": "2026-06-26T19:59:45.570Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 8368,
+      "mtime": "2026-06-26T20:46:32.331Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87223,9 +87223,9 @@
     {
       "path": "services/chair-program-direct-answer.js",
       "synopsis": "Direct program answers from system_knowledge — no counsel drift on SMOS/SSOT asks.",
-      "bytes": 4754,
-      "mtime": "2026-06-26T20:41:19.268Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 6559,
+      "mtime": "2026-06-26T20:46:18.065Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88325,9 +88325,9 @@
     {
       "path": "services/founder-intent-compiler.js",
       "synopsis": "Founder intent compiler — English + thread context → structured work execution.",
-      "bytes": 7539,
-      "mtime": "2026-06-26T19:02:59.727Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 7718,
+      "mtime": "2026-06-26T20:46:27.782Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89833,9 +89833,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 33551,
-      "mtime": "2026-06-26T20:41:19.268Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 33643,
+      "mtime": "2026-06-26T20:46:28.593Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95605,9 +95605,9 @@
     {
       "path": "tests/chair-program-direct-answer.test.js",
       "synopsis": "Direct program answers — SMOS/connection from SSOT, no counsel drift.",
-      "bytes": 2010,
-      "mtime": "2026-06-26T20:41:19.268Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z"
+      "bytes": 2622,
+      "mtime": "2026-06-26T20:46:28.803Z",
+      "indexed_at": "2026-06-26T20:47:30.392Z"
     },
     {
       "path": "tests/chair-system-knowledge.test.js",
