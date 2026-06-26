@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:52:47.446Z",
+  "generated_at": "2026-06-26T00:54:49.665Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12567,
   "files": [
@@ -42468,9 +42468,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 136901,
-      "mtime": "2026-06-26T00:52:33.306Z",
-      "indexed_at": "2026-06-26T00:52:47.446Z"
+      "bytes": 137151,
+      "mtime": "2026-06-26T00:54:45.614Z",
+      "indexed_at": "2026-06-26T00:54:49.665Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -86885,9 +86885,9 @@
     {
       "path": "services/builderos-precommit-governance.js",
       "synopsis": "BuilderOS pre-commit governance wrapper.",
-      "bytes": 3664,
-      "mtime": "2026-06-26T00:52:12.626Z",
-      "indexed_at": "2026-06-26T00:52:47.446Z",
+      "bytes": 3637,
+      "mtime": "2026-06-26T00:54:39.829Z",
+      "indexed_at": "2026-06-26T00:54:49.665Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/builderos-remediation/BLUEPRINT.md"

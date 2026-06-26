@@ -20,10 +20,7 @@ function runUnifiedVerifierOnContent(content, originalLines = null, resolvedTarg
   const tempPath = join(tmpdir(), `builderos-precommit-${Date.now()}.mjs`);
   try {
     writeFileSync(tempPath, content, 'utf8');
-    const args = [VERIFIER_SCRIPT, tempPath];
-    if (originalLines !== null && originalLines !== undefined) {
-      args.push(String(originalLines));
-    }
+    const args = [VERIFIER_SCRIPT, tempPath, originalLines !== null && originalLines !== undefined ? String(originalLines) : ''];
     if (resolvedTarget) args.push(resolvedTarget);
     const run = spawnSync('node', args, { stdio: 'pipe' });
     let body = null;
