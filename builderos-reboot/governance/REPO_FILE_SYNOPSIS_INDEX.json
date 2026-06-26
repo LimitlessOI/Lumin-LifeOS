@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T20:52:17.593Z",
+  "generated_at": "2026-06-26T20:53:10.248Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12595,
   "files": [
@@ -29056,8 +29056,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3781318,
-      "mtime": "2026-06-26T20:47:18.660Z",
-      "indexed_at": "2026-06-26T20:47:30.392Z"
+      "mtime": "2026-06-26T20:52:48.887Z",
+      "indexed_at": "2026-06-26T20:53:10.248Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 497633,
-      "mtime": "2026-06-26T20:52:10.786Z",
-      "indexed_at": "2026-06-26T20:52:17.593Z"
+      "bytes": 498088,
+      "mtime": "2026-06-26T20:52:39.444Z",
+      "indexed_at": "2026-06-26T20:53:10.248Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -89843,9 +89843,9 @@
     {
       "path": "services/lumin-chair-system-actions.js",
       "synopsis": "Lumin Chair system actions — real execution before counsel theater.",
-      "bytes": 8093,
-      "mtime": "2026-06-26T00:18:58.520Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 8201,
+      "mtime": "2026-06-26T20:48:49.172Z",
+      "indexed_at": "2026-06-26T20:53:10.248Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

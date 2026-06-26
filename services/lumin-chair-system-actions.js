@@ -8,6 +8,7 @@ import { getLifeREAlphaReadinessSurface } from './lifere-alpha-readiness-surface
 import { executeLifeOSDirectAction } from './lifeos-direct-action.js';
 import { isFounderPersonalLifeIntent } from './founder-life-admin-intent.js';
 import { isExplicitDisplayOnlyRequest } from './lumin-conversation-routing.js';
+import { isCounselOnlyBypass } from './chair-intent-signals.js';
 
 const DO_PREFIX = /^\s*(do|execute|run)\s*:\s*/i;
 
@@ -25,6 +26,7 @@ export function shouldSkipInputNormalize(text = '', action = 'auto') {
   if (DO_PREFIX.test(t)) return true;
   if (isFounderPersonalLifeIntent(t)) return true;
   if (isExplicitDisplayOnlyRequest(t, action)) return true;
+  if (isCounselOnlyBypass(t)) return true;
   return parseLuminChairSystemAction(t).matched;
 }
 
