@@ -39,10 +39,12 @@ export function buildStepDispatchBody(step, blueprint, sessionId) {
     html: 'HTML overlay page in public/overlay/',
   }[step.type] || 'Implement per blueprint purpose.';
 
+  const useFastExecute = step.type === 'sql';
   return {
     domain: 'lifeos',
     mode: 'code',
-    execution_only: true,
+    execution_only: useFastExecute,
+    ...(useFastExecute ? {} : { model: 'gemini_flash' }),
     target_file: targetFile,
     task: `[intake-blueprint] ${step.id}: ${step.purpose || product}`,
     spec: [

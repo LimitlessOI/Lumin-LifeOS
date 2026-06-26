@@ -2039,6 +2039,28 @@ export function createLifeOSCouncilBuilderRoutes({
       routing_key = captured.data.routing_key;
       domain_context_loaded = captured.data.domain_context_loaded;
       domain = captured.data.domain;
+
+      if (!String(generatedOutput || '').trim() && taskBody.execution_only === true) {
+        log.warn({ target_file }, '[BUILDER] code_execute returned empty — retry with gemini_flash');
+        captured = null;
+        await dispatchTask({
+          body: {
+            ...taskBody,
+            mode: taskBody.mode || 'code',
+            useCache: false,
+            execution_only: false,
+            model: 'gemini_flash',
+          },
+        }, mockRes);
+        if (captured?.code === 200 && captured.data?.ok && captured.data.output) {
+          generatedOutput = captured.data.output;
+          placement = captured.data.placement;
+          model_used = captured.data.model_used;
+          routing_key = captured.data.routing_key;
+          domain_context_loaded = captured.data.domain_context_loaded;
+          domain = captured.data.domain;
+        }
+      }
     } catch (err) {
       const gapRecommendation = await recordBuilderGap({
         domain: taskBody.domain || null,
