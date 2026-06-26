@@ -49,6 +49,7 @@ import {
   isExplicitExecuteCommand,
   isBuildRequest,
 } from '../services/lumin-chair-orchestrator.js';
+import { needsSystemKnowledge } from '../services/chair-system-knowledge.js';
 import { parseLuminChairSystemAction, stripChairDoPrefix, shouldSkipInputNormalize } from '../services/lumin-chair-system-actions.js';
 import { isFounderPersonalLifeIntent } from '../services/founder-life-admin-intent.js';
 import { isExplicitDisplayOnlyRequest } from '../services/lumin-conversation-routing.js';
@@ -183,7 +184,7 @@ Rules:
 - Output ONLY the cleaned text. No explanation, no prefix, no quotes.
 
 Input: ${rawText}`,
-        { maxTokens: 300, taskType: 'chat' }
+        { maxTokens: 300, taskType: 'chat', useCache: false }
       );
       const cleaned = typeof response === 'string'
         ? response
@@ -1072,7 +1073,9 @@ HOW TO RESPOND:
       const buildIntentEarly = isBuildRequest(originalText) || isRepairContinuationIntent(originalText) || isFounderShipOrUsabilityIntent(originalText);
       const skipNormalize = buildIntentEarly
         || shouldSkipInputNormalize(originalText, action)
-        || isFounderPersonalLifeIntent(originalText);
+        || isFounderPersonalLifeIntent(originalText)
+        || req.body?.alpha_probe === true
+        || needsSystemKnowledge(originalText);
       const cleanedInput = skipNormalize
         ? originalText.trim()
         : await normalizeInputText(originalText);

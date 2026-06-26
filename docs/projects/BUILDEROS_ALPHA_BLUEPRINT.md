@@ -563,7 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
-| 2026-06-26 | **Alpha probe isolation** — `founder-interface/message` skips `persistFounderTurn` when `alpha_probe:true`; counsel-only explain routes to chair not build_terminal | Battery cross-turn SMOS bleed; Q_chair_builder false execute | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
+| 2026-06-26 | **Alpha probe normalize skip** — `founder-interface/message` skips input normalize on alpha_probe/system questions; `useCache:false` on normalize | Counsel turns all returned Q1 cached normalize/answer | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
 | 2026-06-26 | **Alpha audit — `founder-visual-ui-patch.js` committed** — alpha battery confirms fast border-radius path live; Railway SHA parity ✅ | overlay battery 4/4, direct action PASS, governance covenant PASS | ✅ deployed | `lifeos:overlay:alpha:battery` |
 | 2026-06-26 | **Chair system knowledge + visual UI patch** — SSOT/synopsis in counsel facts; direct SMOS answers; mechanical border-radius patch | Alpha gaps: counsel drift, B2 timeout | ⚠️ deploy | `chair-system-knowledge.js` |
 | 2026-06-26 | **CSS-only misroute fix** — rounded/layout on lifeos-app.html → HTML council build not founder_css_patch | Alpha B2 | ⚠️ deploy | `builder-instruction-target.js` |

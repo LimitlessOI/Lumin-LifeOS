@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T20:53:43.543Z",
+  "generated_at": "2026-06-26T20:56:40.054Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12595,
   "files": [
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 498088,
-      "mtime": "2026-06-26T20:53:34.476Z",
-      "indexed_at": "2026-06-26T20:53:41.788Z"
+      "bytes": 498069,
+      "mtime": "2026-06-26T20:56:25.670Z",
+      "indexed_at": "2026-06-26T20:56:40.054Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42500,9 +42500,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 141941,
-      "mtime": "2026-06-26T20:47:11.975Z",
-      "indexed_at": "2026-06-26T20:53:41.788Z"
+      "bytes": 141916,
+      "mtime": "2026-06-26T20:56:26.097Z",
+      "indexed_at": "2026-06-26T20:56:40.054Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -72312,9 +72312,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 49465,
-      "mtime": "2026-06-26T20:46:27.782Z",
-      "indexed_at": "2026-06-26T20:53:41.788Z",
+      "bytes": 49648,
+      "mtime": "2026-06-26T20:56:33.478Z",
+      "indexed_at": "2026-06-26T20:56:40.054Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
