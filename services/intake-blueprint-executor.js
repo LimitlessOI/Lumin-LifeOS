@@ -4,6 +4,13 @@
  */
 
 import { isSafeTarget } from '../config/builder-safe-scope.js';
+import { scanCodebasePatterns } from './blueprint-codebase-scanner.js';
+
+const REFERENCE_FILES_BY_TYPE = {
+  esm: ['services/action-inbox.js'],
+  esm_script: ['scripts/verify-marketing-phase1.mjs'],
+  html: ['public/overlay/lifeos-app.html'],
+};
 
 export function sortIntakeSteps(steps = []) {
   const byId = new Map(steps.map((s) => [s.id, s]));
@@ -28,16 +35,21 @@ export function stepTargetFile(step) {
   return step?.file || step?.target_file || null;
 }
 
-export function buildStepDispatchBody(step, blueprint, sessionId) {
+export function buildStepDispatchBody(step, blueprint, sessionId, { scan = null } = {}) {
   const targetFile = stepTargetFile(step);
   const product = blueprint._meta?.product || 'product';
   const ssot = step.ssot_tag || blueprint._meta?.parent_ssot || blueprint._meta?.ssot_tag || '';
+  const isRouteFile = step.type === 'esm' && /routes\//.test(String(targetFile || ''));
   const typeHint = {
     sql: 'Plain PostgreSQL migration (.sql file). CREATE TABLE IF NOT EXISTS, CREATE INDEX IF NOT EXISTS. SQL comments use -- only. No JavaScript, no import/export, no pool.query wrappers.',
-    esm: 'ESM module — factory pattern for routes; export functions for services. Match existing codebase patterns.',
+    esm: isRouteFile
+      ? 'Route factory: export function createXxxRoutes({ pool, requireKey, logger }) — express.Router(), requireKey on protected routes, owner_id from req.lifeosUser?.sub. Do NOT import ../../core/* paths.'
+      : 'Service factory: export function createXxx({ pool, logger }) — use pool.query(sql, params). Do NOT import ../../core/db.js or stripe SDK directly. Match reference file style in files[].',
     esm_script: 'Standalone node .mjs acceptance script — exit 0 on PASS, non-zero on FAIL.',
     html: 'HTML overlay page in public/overlay/',
   }[step.type] || 'Implement per blueprint purpose.';
+
+  const scanHints = formatScanHints(step, scan);
 
   return {
     domain: 'lifeos',
@@ -53,8 +65,9 @@ export function buildStepDispatchBody(step, blueprint, sessionId) {
       `Purpose: ${step.purpose || 'implement step'}`,
       `SSOT: ${ssot}`,
       typeHint,
+      scanHints,
       'Do not modify server.js or core/two-tier-system-init.js — register routes via existing factory pattern only.',
-    ].join('\n'),
+    ].filter(Boolean).join('\n'),
     blueprint_intake_session_id: sessionId,
     blueprint_step_id: step.id,
     platform_gap_fill: true,
@@ -64,6 +77,27 @@ export function buildStepDispatchBody(step, blueprint, sessionId) {
   };
 }
 
+function formatScanHints(step, scan) {
+  if (!scan) return '';
+  const lines = [];
+  if (step.type === 'sql') {
+    lines.push(`DB pattern: ${scan.db_pattern?.source || 'pool from ctx — plain SQL in .sql files only'}`);
+    lines.push(`Idempotent DDL: ${scan.db_pattern?.idempotent || 'CREATE TABLE IF NOT EXISTS'}`);
+  }
+  if (step.type === 'esm') {
+    lines.push(`DB: ${scan.db_pattern?.source || 'pool.query(sql, params) — pool injected via factory, never ../../core/*'}`);
+    lines.push(`Auth: ${scan.auth_pattern?.owner_id_guard || 'req.lifeosUser?.sub for owner_id'}`);
+    if (/routes\//.test(String(stepTargetFile(step) || ''))) {
+      lines.push(`Route factory: ${scan.route_factory?.signature || 'createXxxRoutes(app, ctx)'}`);
+      lines.push(`ctx keys: ${(scan.registration_pattern?.routeCtx_keys || scan.route_factory?.ctx_available || []).slice(0, 8).join(', ')}`);
+    } else {
+      lines.push('Service factory: export function createXxx({ pool, logger }) — match services/action-inbox.js pattern');
+    }
+    lines.push('FORBIDDEN: ../../core/db.js, ../../core/stripe.js, direct @anthropic-ai/sdk or openai imports');
+  }
+  return lines.filter(Boolean).join('\n');
+}
+
 function depsToContextFiles(step, blueprint) {
   const files = [];
   const byId = new Map((blueprint.steps || []).map((s) => [s.id, s]));
@@ -71,6 +105,13 @@ function depsToContextFiles(step, blueprint) {
     const dep = byId.get(depId);
     const f = dep && stepTargetFile(dep);
     if (f && !files.includes(f)) files.push(f);
+  }
+  for (const ref of REFERENCE_FILES_BY_TYPE[step.type] || []) {
+    if (!files.includes(ref)) files.push(ref);
+  }
+  if (step.type === 'esm' && /routes\//.test(String(stepTargetFile(step) || ''))) {
+    const routeRef = 'routes/action-inbox-routes.js';
+    if (!files.includes(routeRef)) files.push(routeRef);
   }
   if (blueprint._meta?.parent_ssot) files.push(blueprint._meta.parent_ssot);
   return files.slice(0, 8);
@@ -180,6 +221,13 @@ export async function executeIntakeBlueprint({
     return { ok: false, error: 'no_blueprint_steps' };
   }
 
+  let scanPatterns = null;
+  try {
+    scanPatterns = await scanCodebasePatterns();
+  } catch {
+    scanPatterns = null;
+  }
+
   const steps = sortIntakeSteps(resolvedBlueprint.steps);
   let started = !fromStepId;
   const results = [];
@@ -191,7 +239,7 @@ export async function executeIntakeBlueprint({
     }
 
     const targetFile = stepTargetFile(step);
-    const dispatch = buildStepDispatchBody(step, resolvedBlueprint, sessionId);
+    const dispatch = buildStepDispatchBody(step, resolvedBlueprint, sessionId, { scan: scanPatterns });
 
     if (dryRun) {
       results.push({ step_id: step.id, target_file: targetFile, dry_run: true, dispatch });

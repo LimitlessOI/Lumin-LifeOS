@@ -2318,7 +2318,14 @@ export function createLifeOSCouncilBuilderRoutes({
             status(c) { return { json(d) { retryCapture = { code: c, data: d }; } }; },
             json(d) { retryCapture = { code: 200, data: d }; },
           };
-          await dispatchTask({ body: { ...retryBody, mode: retryBody.mode || 'code', useCache: false } }, mockRetryRes);
+          await dispatchTask({
+            body: {
+              ...retryBody,
+              target_file: resolvedTarget || target_file,
+              mode: retryBody.mode || 'code',
+              useCache: false,
+            },
+          }, mockRetryRes);
           if (!retryCapture?.data?.ok) return { ok: false, error: retryCapture?.data?.error || 'council_failed' };
           return { ok: true, output: retryCapture.data.output, model_used: retryCapture.data.model_used };
         },
