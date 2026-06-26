@@ -58,6 +58,7 @@ async function send(id, text, opts = {}) {
       ui_context: opts.ui_context || { surface: 'lifeos-app' },
       conversation_history: opts.history || [],
     }),
+    cache: 'no-store',
   });
   const json = await res.json().catch(() => ({}));
   const summary = String(json.human_summary || json.human_summary_technical || json.summary || '');
@@ -77,31 +78,6 @@ async function send(id, text, opts = {}) {
 }
 
 const PROBES = [
-  {
-    id: 'B1_do_build',
-    text: 'do: add HTML comment <!-- founder-chat-alpha-probe --> as first line inside <body> in public/overlay/lifeos-app.html',
-    expectTruth: 'BUILD_ATTEMPTED',
-    expectChannel: 'build_async',
-    poll: true,
-    requirePass: true,
-  },
-  {
-    id: 'B2_nl_ui_rounded',
-    text: 'make the send button in the lumin drawer slightly more rounded',
-    expectTruth: 'BUILD_ATTEMPTED',
-    expectChannel: 'build_async',
-    poll: true,
-    allowAlreadyPresent: true,
-    allowBuildStarted: true,
-  },
-  {
-    id: 'B3_nl_css_yellow',
-    text: 'make the assistant chat bubbles a bit fainter yellow',
-    expectTruth: 'BUILD_ATTEMPTED',
-    expectChannel: 'build_async',
-    poll: true,
-    allowAlreadyPresent: true,
-  },
   {
     id: 'Q1_counsel_no_clarify',
     text: 'should I prioritize follow-ups or prospecting today?',
@@ -150,6 +126,31 @@ const PROBES = [
     expectChannel: 'chair',
     expectTruth: 'NO_COMMAND_RAN',
     summaryMustNotInclude: ['not connected to the real system', 'I am not connected'],
+  },
+  {
+    id: 'B1_do_build',
+    text: 'do: add HTML comment <!-- founder-chat-alpha-probe --> as first line inside <body> in public/overlay/lifeos-app.html',
+    expectTruth: 'BUILD_ATTEMPTED',
+    expectChannel: 'build_async',
+    poll: true,
+    requirePass: true,
+  },
+  {
+    id: 'B2_nl_ui_rounded',
+    text: 'make the send button in the lumin drawer slightly more rounded',
+    expectTruth: 'BUILD_ATTEMPTED',
+    expectChannel: 'build_async',
+    poll: true,
+    allowAlreadyPresent: true,
+    allowBuildStarted: true,
+  },
+  {
+    id: 'B3_nl_css_yellow',
+    text: 'make the assistant chat bubbles a bit fainter yellow',
+    expectTruth: 'BUILD_ATTEMPTED',
+    expectChannel: 'build_async',
+    poll: true,
+    allowAlreadyPresent: true,
   },
 ];
 

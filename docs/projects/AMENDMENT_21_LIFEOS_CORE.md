@@ -1606,6 +1606,7 @@ Read first for Phase 1 build:
 
 ## Change Receipts
 
+| 2026-06-26 | **Counsel stale-search guard** — system questions force SSOT direct path; factual answers reject cross-question verified_search bleed; alpha battery counsel-before-build order | Q2 after Q1 returned Q1 search fallback; program_context stale | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
 | 2026-06-26 | **Counsel routing hardening** — `isCounselOnlyBypass` forces chair (not build_terminal) for explain+counsel-only; `alpha_probe` skips `persistFounderTurn`; system questions clear `personal_turn`; `shouldUseDirectFactualAnswer` for web search; bare `alpha` no longer blocks factual search | Alpha battery Q_chair_builder→build_terminal; Q3 SMOS bleed from DB persist; Q2 blocked by personal_turn | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
 | 2026-06-26 | **Alpha audit + SMOS routing expansion** — `chair-program-direct-answer.js` SMOS connection/workflow regex expanded; `?.some` guard; Railway SHA parity ✅ | Full LifeOS/LifeRE alpha: agent-alpha 124/124, CRM 7/7, W1-W3, acceptance 19/19, chair parity, governance PASS | ✅ deployed | `lifeos:lifere-agent-alpha` |
 | 2026-06-26 | **Direct program answers** — `chair-program-direct-answer.js` SMOS/BuilderOS from SSOT without counsel drift | Alpha Q2 SMOS → follow-ups answer | ⚠️ deploy | `chair-program-direct-answer.js` |

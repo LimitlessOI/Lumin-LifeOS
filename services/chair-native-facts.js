@@ -203,5 +203,10 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     }
   }
 
-  return facts;
+  if (needsSystemKnowledge(text)) {
+    facts.verified_search = null;
+    facts.personal_turn = false;
+  }
+
+  return JSON.parse(JSON.stringify(facts));
 }

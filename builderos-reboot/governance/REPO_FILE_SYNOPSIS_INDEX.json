@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T20:47:30.392Z",
+  "generated_at": "2026-06-26T20:52:17.593Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12595,
   "files": [
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 497319,
-      "mtime": "2026-06-26T20:46:56.807Z",
-      "indexed_at": "2026-06-26T20:47:30.392Z"
+      "bytes": 497633,
+      "mtime": "2026-06-26T20:52:10.786Z",
+      "indexed_at": "2026-06-26T20:52:17.593Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -74773,9 +74773,9 @@
     {
       "path": "scripts/run-founder-chat-alpha-battery.mjs",
       "synopsis": "Founder chat alpha — build must build, questions must answer, search when unknown.",
-      "bytes": 8946,
-      "mtime": "2026-06-26T19:59:45.570Z",
-      "indexed_at": "2026-06-26T20:43:43.551Z",
+      "bytes": 8969,
+      "mtime": "2026-06-26T20:52:06.840Z",
+      "indexed_at": "2026-06-26T20:52:17.593Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87183,9 +87183,9 @@
     {
       "path": "services/chair-lumin-unified.js",
       "synopsis": "Chair native turn — Lumin IS the Chair; personality translates real facts only.",
-      "bytes": 3793,
-      "mtime": "2026-06-26T20:46:19.091Z",
-      "indexed_at": "2026-06-26T20:47:30.392Z",
+      "bytes": 3985,
+      "mtime": "2026-06-26T20:51:57.726Z",
+      "indexed_at": "2026-06-26T20:52:17.593Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87193,9 +87193,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 8368,
-      "mtime": "2026-06-26T20:46:32.331Z",
-      "indexed_at": "2026-06-26T20:47:30.392Z",
+      "bytes": 8504,
+      "mtime": "2026-06-26T20:51:57.095Z",
+      "indexed_at": "2026-06-26T20:52:17.593Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87223,9 +87223,9 @@
     {
       "path": "services/chair-program-direct-answer.js",
       "synopsis": "Direct program answers from system_knowledge — no counsel drift on SMOS/SSOT asks.",
-      "bytes": 6559,
-      "mtime": "2026-06-26T20:46:18.065Z",
-      "indexed_at": "2026-06-26T20:47:30.392Z",
+      "bytes": 6857,
+      "mtime": "2026-06-26T20:51:57.096Z",
+      "indexed_at": "2026-06-26T20:52:17.593Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

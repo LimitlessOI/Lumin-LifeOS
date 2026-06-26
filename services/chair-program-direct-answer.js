@@ -45,6 +45,11 @@ export function shouldUseDirectFactualAnswer(input = '', systemFacts = {}) {
   if (/^\s*(do|execute|run)\s*:/i.test(t)) return false;
   const search = String(systemFacts.verified_search || '').trim();
   if (search.length < 24) return false;
+  const qTokens = t.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter((w) => w.length > 4);
+  if (qTokens.length) {
+    const hits = qTokens.filter((w) => search.toLowerCase().includes(w)).length;
+    if (hits < Math.min(2, Math.max(1, Math.ceil(qTokens.length * 0.2)))) return false;
+  }
   if (/\?\s*$/.test(t)) return true;
   return /^(what|who|when|where|why|how|is|are|does|did|can|could|tell me about)\b/i.test(t);
 }
