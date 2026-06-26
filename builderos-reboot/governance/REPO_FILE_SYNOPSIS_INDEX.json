@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T17:37:13.542Z",
+  "generated_at": "2026-06-26T18:42:33.048Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12585,
   "files": [
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 494013,
-      "mtime": "2026-06-26T17:36:39.054Z",
-      "indexed_at": "2026-06-26T17:37:11.503Z"
+      "bytes": 494317,
+      "mtime": "2026-06-26T18:42:28.950Z",
+      "indexed_at": "2026-06-26T18:42:33.048Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -88279,9 +88279,9 @@
     {
       "path": "services/founder-intent-compiler.js",
       "synopsis": "Founder intent compiler — English + thread context → structured work execution.",
-      "bytes": 5775,
-      "mtime": "2026-06-26T17:36:39.059Z",
-      "indexed_at": "2026-06-26T17:37:11.503Z",
+      "bytes": 5872,
+      "mtime": "2026-06-26T18:42:13.669Z",
+      "indexed_at": "2026-06-26T18:42:33.048Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -89767,9 +89767,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 31924,
-      "mtime": "2026-06-26T17:36:39.059Z",
-      "indexed_at": "2026-06-26T17:37:11.503Z",
+      "bytes": 32097,
+      "mtime": "2026-06-26T18:42:15.783Z",
+      "indexed_at": "2026-06-26T18:42:33.048Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95674,9 +95674,9 @@
     {
       "path": "tests/founder-intent-compiler.test.js",
       "synopsis": "js — tests/founder-intent-compiler.test.js.",
-      "bytes": 2566,
-      "mtime": "2026-06-26T17:36:39.061Z",
-      "indexed_at": "2026-06-26T17:37:11.503Z"
+      "bytes": 3006,
+      "mtime": "2026-06-26T18:42:22.025Z",
+      "indexed_at": "2026-06-26T18:42:33.048Z"
     },
     {
       "path": "tests/founder-life-admin-intent.test.js",

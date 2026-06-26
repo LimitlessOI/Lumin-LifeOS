@@ -371,23 +371,26 @@ export async function runLuminChairTurn(ctx, deps) {
   const displayOnlyTurn = shouldDisplayOnly || explicitAction === 'display';
 
   if (!displayOnlyTurn && conversationalMode) {
-    const compiled = await compileFounderIntent({
-      utterance: effectiveInput,
-      conversationHistory,
-      uiContext,
-      callAI: deps.callCouncilMember,
-    });
-    if (compiled?.execute_now && compiled.intent === 'work') {
-      const workResult = await executeFounderWorkIntent(compiled, {
-        pool: deps.pool,
-        userId: ctx.userId,
-        tenantId: ctx.tenantId || 'default',
+    const cssTurn = isCssOnlyUiFeedback(cleanedInput) || isCssOnlyUiFeedback(doPrefix.text || cleanedInput);
+    if (!cssTurn) {
+      const compiled = await compileFounderIntent({
+        utterance: effectiveInput,
+        conversationHistory,
+        uiContext,
+        callAI: deps.callCouncilMember,
       });
-      if (workResult) {
-        return chairWorkExecutorResponse(
-          { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
-          workResult,
-        );
+      if (compiled?.execute_now && compiled.intent === 'work') {
+        const workResult = await executeFounderWorkIntent(compiled, {
+          pool: deps.pool,
+          userId: ctx.userId,
+          tenantId: ctx.tenantId || 'default',
+        });
+        if (workResult) {
+          return chairWorkExecutorResponse(
+            { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
+            workResult,
+          );
+        }
       }
     }
   }

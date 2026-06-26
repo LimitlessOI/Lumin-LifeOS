@@ -44,21 +44,22 @@ function parseVideoCount(text = '') {
   return Number.isFinite(n) && n > 0 ? Math.min(n, 10) : 5;
 }
 
-/** Fast deterministic detect — no model latency for common founder work. */
+/** Fast deterministic detect — current utterance only (history is not re-run intent). */
 export function detectWorkIntent(utterance = '', history = []) {
   const t = String(utterance || '').trim();
-  const hist = normalizeHistory(history);
-  const combined = [t, ...hist.map((h) => h.content)].join('\n');
+  // Strip auto-wrapped do:/target_file — detect from founder words only
+  const bare = t.replace(/^\s*(do|execute|run)\s*:\s*/i, '').replace(/\ntarget_file:\s*\S+/gi, '').trim();
+  if (!bare) return null;
 
-  if (VIDEO_PACKAGE_MARKERS.test(combined) && VIDEO_PACKAGE_ACTION.test(combined)) {
+  if (VIDEO_PACKAGE_MARKERS.test(bare) && VIDEO_PACKAGE_ACTION.test(bare)) {
     return {
       version: 'founder_intent_compiler_v1',
       intent: 'work',
       executor: 'video_package',
-      params: { count: parseVideoCount(combined) },
+      params: { count: parseVideoCount(bare) },
       confidence: 0.92,
       execute_now: true,
-      paraphrase: `Create a ${parseVideoCount(combined)}-video content package.`,
+      paraphrase: `Create a ${parseVideoCount(bare)}-video content package.`,
       source: 'regex_video_package',
     };
   }

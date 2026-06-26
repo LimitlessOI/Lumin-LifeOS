@@ -26,6 +26,15 @@ test('detectWorkIntent — detailed five video script ask', () => {
   assert.equal(intent?.params?.count, 5);
 });
 
+test('detectWorkIntent — ignores thread history (no video re-fire on CSS ask)', () => {
+  const msg = 'in the communication boxes yours is in yellow I would like your yellow to be a lot fainter yellow';
+  const hist = [
+    { role: 'user', content: 'Make me five videos with hooks scripts and formulas' },
+    { role: 'assistant', content: 'Done — 5-video package ready.' },
+  ];
+  assert.equal(detectWorkIntent(msg, hist), null);
+});
+
 test('yellow background routes to build_async not chair', () => {
   const msg = 'The yellow background down there, I want that much more fainter yellow.';
   const ctx = resolveChairContext(msg, {});
