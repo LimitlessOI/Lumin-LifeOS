@@ -6,7 +6,7 @@
   "amendment": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
   "status": "active",
   "build_ready": true,
-  "last_updated": "2026-06-13",
+  "last_updated": "2026-06-26",
   "last_receipt": "2026-06-13 fp-v2-gap-closure",
   "last_change_summary": "FP V2 mission CLI gate, Hist auto-score, founder usability confirm, builder API gates"
 }

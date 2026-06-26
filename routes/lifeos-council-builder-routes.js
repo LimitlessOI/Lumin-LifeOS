@@ -575,6 +575,33 @@ function fixAsteriskShorthandParams(s) {
   });
 }
 
+function validateSqlMigrationContent(sqlContent) {
+  const s = String(sqlContent || '').trim();
+  if (!s) return { ok: false, error: 'SQL migration is empty' };
+
+  const jsMarkers = [
+    { pattern: /^\s*\/\//m, error: 'JavaScript // comments are invalid in SQL migrations — use -- comments only' },
+    { pattern: /\bimport\s+/i, error: 'JavaScript import statements are invalid in .sql migrations' },
+    { pattern: /\bexport\s+/i, error: 'JavaScript export statements are invalid in .sql migrations' },
+    { pattern: /\bawait\s+/i, error: 'JavaScript await is invalid in .sql migrations' },
+    { pattern: /\basync\s+function/i, error: 'JavaScript async function is invalid in .sql migrations' },
+    { pattern: /client\.query|pool\.connect|pool\.query\s*\(/i, error: 'JavaScript pool.query wrappers are invalid — emit plain PostgreSQL DDL only' },
+    { pattern: /`[\s\S]*?\bCREATE\b/i, error: 'SQL must not be wrapped in JavaScript template literals' },
+    { pattern: /\bfunction\s+up\s*\(/i, error: 'Migration runner functions are invalid — emit plain PostgreSQL DDL only' },
+  ];
+
+  for (const { pattern, error } of jsMarkers) {
+    if (pattern.test(s)) return { ok: false, error };
+  }
+
+  const sqlKeywords = /\b(CREATE|ALTER|INSERT|UPDATE|DELETE|SELECT|DROP|GRANT|REVOKE|TRUNCATE|WITH)\b/i;
+  if (!sqlKeywords.test(s)) {
+    return { ok: false, error: 'No recognizable SQL keywords (CREATE, ALTER, etc.)' };
+  }
+
+  return { ok: true };
+}
+
 async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
   let tmpFile = null;
   try {
@@ -2308,10 +2335,37 @@ export function createLifeOSCouncilBuilderRoutes({
     // ── SQL validation gate ───────────────────────────────────────────────────
     const isSqlFile = /\.sql$/.test(resolvedTarget);
     if (isSqlFile) {
-      const sqlContent = generatedOutput.trim();
-      const sqlKeywords = /\b(CREATE|ALTER|INSERT|UPDATE|DELETE|SELECT|DROP|GRANT|REVOKE|TRUNCATE|WITH)\b/i;
-      if (!sqlContent || !sqlKeywords.test(sqlContent)) {
-        log.error({ resolvedTarget }, '[BUILDER] SQL validation failed — no valid SQL keywords');
+      let sqlCheck = validateSqlMigrationContent(generatedOutput);
+      if (!sqlCheck.ok && model_used !== 'gemini_flash') {
+        log.warn({ resolvedTarget, reason: sqlCheck.error, model_used }, '[BUILDER] SQL validation failed — retry with gemini_flash');
+        let retryCapture = null;
+        const mockRetryRes = {
+          status(code) { return { json(data) { retryCapture = { code, data }; } }; },
+          json(data) { retryCapture = { code: 200, data }; },
+        };
+        await dispatchTask({
+          body: {
+            ...taskBody,
+            mode: taskBody.mode || 'code',
+            useCache: false,
+            execution_only: false,
+            model: 'gemini_flash',
+            spec: [
+              taskBody.spec,
+              'CRITICAL: target is a .sql migration file. Output plain PostgreSQL DDL only.',
+              'Use CREATE TABLE IF NOT EXISTS and CREATE INDEX IF NOT EXISTS.',
+              'SQL comments must use -- only. No JavaScript, no import/export, no pool.query wrappers.',
+            ].filter(Boolean).join('\n'),
+          },
+        }, mockRetryRes);
+        if (retryCapture?.code === 200 && retryCapture.data?.ok && retryCapture.data.output) {
+          generatedOutput = retryCapture.data.output;
+          model_used = retryCapture.data.model_used;
+          sqlCheck = validateSqlMigrationContent(generatedOutput);
+        }
+      }
+      if (!sqlCheck.ok) {
+        log.error({ resolvedTarget, reason: sqlCheck.error }, '[BUILDER] SQL validation failed');
         const gapRecommendation = await recordBuilderGap({
           domain,
           task: taskBody.task,
@@ -2319,7 +2373,7 @@ export function createLifeOSCouncilBuilderRoutes({
           rawOutput: generatedOutput,
           status: 'failed',
           stage: 'sql',
-          reason: 'SQL validation failed — content does not contain recognizable SQL keywords',
+          reason: `SQL validation failed — ${sqlCheck.error}`,
           targetFile: resolvedTarget,
           routingKey: routing_key,
           mode: taskBody.mode || 'code',
@@ -2328,7 +2382,7 @@ export function createLifeOSCouncilBuilderRoutes({
         });
         return res.status(422).json({
           ok: false,
-          error: 'SQL validation failed — content does not contain recognizable SQL keywords',
+          error: `SQL validation failed — ${sqlCheck.error}`,
           output: generatedOutput,
           target_file: resolvedTarget,
           committed: false,

@@ -1,6 +1,6 @@
 {
   "schema": "truth_lockdown_verify_v1",
-  "at": "2026-06-24T03:54:57.734Z",
+  "at": "2026-06-26T00:18:49.677Z",
   "ok": true,
   "failures": [],
   "checks": [
@@ -28,6 +28,8 @@
     "services/founder-direct-provider.js",
     "services/wisdom-truth-auditor.js",
     "services/lumin-chair-orchestrator.js",
-    "startup/boot-domains.js"
+    "startup/boot-domains.js",
+    "services/point-b-dna.js",
+    "docs/constitution/POINT_B_DNA.md"
   ]
 }

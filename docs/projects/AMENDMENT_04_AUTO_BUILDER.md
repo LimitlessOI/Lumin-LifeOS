@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-26 — Intake blueprint executor wires ARC-ready sessions to BuilderOS /build.
+**Last Updated:** 2026-06-26 — SQL migration validation rejects JS-in-.sql; intake executor uses gemini_flash for all steps.
 
 ---
 
@@ -161,7 +161,8 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
-| 2026-06-26 | **Builder empty-output retry** — `/build` retries with `gemini_flash` when `code_execute` returns empty; intake executor uses fast path only for `sql` steps. | MOS-P1-002 service step: groq code_execute empty output after migration committed. | ✅ MOS-P1-001 committed live; step 2 fix pending deploy | re-run intake execute from MOS-P1-002 |
+| 2026-06-26 | **SQL migration validation** — `validateSqlMigrationContent()` rejects JS (`import`, `//`, `pool.query`, template literals) in `.sql`; auto-retry with `gemini_flash` + DDL-only spec. Intake executor: fixed sql typeHint (was wrongly suggesting pool.query); all steps use `gemini_flash`. Reverted invalid `20260626_socialmediaos.sql` (groq emitted JS → Railway boot FAILED). | SocialMediaOS builder test: MOS-P1-001 committed JS as SQL; deploy blocked. | ⚠️ IN PROGRESS: re-run intake from MOS-P1-001 after deploy | `npm run blueprint:intake:execute -- --session 3e6105c4-...` |
+| 2026-06-26 | **Builder empty-output retry** — `/build` retries with `gemini_flash` when `code_execute` returns empty; intake executor uses fast path only for `sql` steps. | MOS-P1-002 service step: groq code_execute empty output after migration committed. | ✅ superseded — all intake steps now gemini_flash | re-run intake execute from MOS-P1-001 |
 | 2026-06-26 | **Intake blueprint executor** — `services/intake-blueprint-executor.js`, `scripts/run-intake-blueprint.mjs`, `POST /api/v1/blueprint/intake/:id/execute`; `routes/lifeos-council-builder-routes.js` intake session FPv2 clearance; `builder-blueprint-gate.js` skeleton `step.file`. | SocialMediaOS builder test: `/build` blocked INTENT_AMBIGUITY after ARC PASS. | ✅ step 1 migration committed | `npm run blueprint:intake:execute -- --session <id>` |
 | 2026-06-25 | **FIX: `services/blueprint-intake.js`** — `dedupeVerifySteps` removes orphan verify scripts before ARC; keeps canonical `verify-{slug}.mjs` aligned with `acceptance_cmd`. | ARC critical on MOS-P1-004 verify-project.mjs orphan. | ✅ pushed; live ARC retest pending | `--session ... --arc` |
 | 2026-06-25 | **FIX: `services/blueprint-intake.js`** — `stripInvalidSteps` removes `.md`/GAP_FLAG steps; `scaffoldPhase1Steps` applies when founder answers request Phase 1 infra (Claude was putting GAP_FLAG in `type` instead of real steps). | Gap regen left 2 invalid steps; founder answers ignored. | ✅ live on 51e85ea — gap regen → arc_review with 4 Phase 1 steps | Fresh backfill + gap answers |

@@ -1,0 +1,13 @@
+{
+  "schema": "lumin_alpha_connection_v1",
+  "at": "2026-06-26T00:16:28.097Z",
+  "base": "https://robust-magic-production.up.railway.app",
+  "passed": [
+    "chat_counsel",
+    "chat_system_command"
+  ],
+  "failed": [],
+  "ok": true,
+  "pass_chat_counsel": "lumin_chair",
+  "pass_chat_system_command": "COMMAND_RAN"
+}

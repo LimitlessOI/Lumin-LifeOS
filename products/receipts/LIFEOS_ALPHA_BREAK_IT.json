@@ -1,6 +1,6 @@
 {
   "schema": "lifeos_alpha_break_it_v1",
-  "at": "2026-06-26T00:13:29.740Z",
+  "at": "2026-06-26T00:16:00.258Z",
   "base": "https://robust-magic-production.up.railway.app",
   "passed": [
     "auth_fail_closed",
@@ -27,12 +27,12 @@
   "pass_ambient_calendar_moment": "Marcus",
   "pass_ambient_commitment": "note",
   "pass_ambient_crm_moment": "boldtrail_contact_created",
-  "pass_ambient_internal_crm_note": "3",
+  "pass_ambient_internal_crm_note": "4",
   "pass_ambient_crisis_signal": "relationship_stress",
-  "pass_lifere_alpha_readiness": "TECHNICAL_PASS",
+  "pass_lifere_alpha_readiness": "agent_pass",
   "pass_lifere_founder_cycle": "has focus",
   "pass_static_lifeos_app": "140529",
-  "pass_static_lifeos_lifere": "122021",
+  "pass_static_lifeos_lifere": "122381",
   "pass_static_lifeos_login": "16093",
   "pass_lumin_counsel_break_it": "chair",
   "pass_lumin_command_break_it": "COMMAND_RAN",

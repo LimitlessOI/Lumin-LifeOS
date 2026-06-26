@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:30:14.405Z",
+  "generated_at": "2026-06-26T00:31:19.288Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12562,
+  "file_count": 12563,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29047,9 +29047,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3770483,
-      "mtime": "2026-06-26T00:23:55.895Z",
-      "indexed_at": "2026-06-26T00:24:03.435Z"
+      "bytes": 3770473,
+      "mtime": "2026-06-26T00:31:06.554Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -36824,8 +36824,8 @@
       "path": "data/bp-priority-guardrails-last-run.json",
       "synopsis": "JSON data/config — data/bp-priority-guardrails-last-run.json.",
       "bytes": 3222,
-      "mtime": "2026-06-26T00:16:06.549Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "mtime": "2026-06-26T00:31:19.228Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
@@ -41756,16 +41756,16 @@
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.manifest.json",
       "synopsis": "Documentation — AMENDMENT 04 AUTO BUILDER.Manifest.",
       "bytes": 470,
-      "mtime": "2026-06-23T00:55:40.705Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "mtime": "2026-06-26T00:31:12.659Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 36556,
-      "mtime": "2026-06-26T00:16:08.138Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z"
+      "bytes": 37174,
+      "mtime": "2026-06-26T00:30:49.411Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -41955,16 +41955,16 @@
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
       "bytes": 26711,
-      "mtime": "2026-06-26T00:23:49.771Z",
-      "indexed_at": "2026-06-26T00:24:03.435Z",
+      "mtime": "2026-06-26T00:31:13.094Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 489947,
-      "mtime": "2026-06-26T00:30:12.550Z",
-      "indexed_at": "2026-06-26T00:30:14.405Z"
+      "bytes": 490227,
+      "mtime": "2026-06-26T00:30:51.652Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -70055,9 +70055,9 @@
     {
       "path": "products/receipts/LIFEOS_ALPHA_BREAK_IT.json",
       "synopsis": "Product receipt — LIFEOS ALPHA BREAK IT.",
-      "bytes": 1365,
-      "mtime": "2026-06-26T00:13:37.608Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 1361,
+      "mtime": "2026-06-26T00:16:18.541Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
@@ -70245,11 +70245,19 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/LUMIN_ALPHA_CONNECTION_TEST.json",
+      "synopsis": "Product receipt — LUMIN ALPHA CONNECTION TEST.",
+      "bytes": 318,
+      "mtime": "2026-06-26T00:16:36.127Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json",
       "synopsis": "Product receipt — LUMIN CHAIR DIRECT CONNECTION PARITY.",
-      "bytes": 2968,
-      "mtime": "2026-06-26T00:13:45.708Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 3058,
+      "mtime": "2026-06-26T00:16:59.194Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
@@ -70271,41 +70279,41 @@
     {
       "path": "products/receipts/OVERLAY_ALPHA_BATTERY.json",
       "synopsis": "Product receipt — OVERLAY ALPHA BATTERY.",
-      "bytes": 319,
-      "mtime": "2026-06-26T00:11:29.635Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 816,
+      "mtime": "2026-06-26T00:16:38.831Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/POINT_B_DNA_VERIFY.json",
       "synopsis": "Product receipt — POINT B DNA VERIFY.",
       "bytes": 198,
-      "mtime": "2026-06-26T00:16:06.551Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "mtime": "2026-06-26T00:18:49.885Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/RECEIPT_TRUTH_VALIDATION.json",
       "synopsis": "Product receipt — RECEIPT TRUTH VALIDATION.",
-      "bytes": 2356,
-      "mtime": "2026-06-26T00:16:06.551Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 2883,
+      "mtime": "2026-06-26T00:18:49.367Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_ENFORCEMENT_AUDIT.json",
       "synopsis": "Product receipt — TRUTH ENFORCEMENT AUDIT.",
       "bytes": 736,
-      "mtime": "2026-06-26T00:16:06.551Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "mtime": "2026-06-26T00:18:50.168Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
       "path": "products/receipts/TRUTH_LOCKDOWN_VERIFY.json",
       "synopsis": "Product receipt — TRUTH LOCKDOWN VERIFY.",
-      "bytes": 1078,
-      "mtime": "2026-06-26T00:16:06.551Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 1149,
+      "mtime": "2026-06-26T00:18:49.678Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
@@ -70328,8 +70336,8 @@
       "path": "products/receipts/WISDOM_TRUTH_AUDIT.json",
       "synopsis": "Product receipt — WISDOM TRUTH AUDIT.",
       "bytes": 890,
-      "mtime": "2026-06-26T00:16:06.551Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "mtime": "2026-06-26T00:18:50.288Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "synopsis_index_only": true
     },
     {
@@ -72349,9 +72357,9 @@
     {
       "path": "routes/lifeos-council-builder-routes.js",
       "synopsis": "routes/lifeos-council-builder-routes.js",
-      "bytes": 114631,
-      "mtime": "2026-06-26T00:16:08.140Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 117225,
+      "mtime": "2026-06-26T00:30:42.422Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88498,9 +88506,9 @@
     {
       "path": "services/intake-blueprint-executor.js",
       "synopsis": "Execute ARC-ready intake skeleton blueprints step-by-step via POST /lifeos/builder/build.",
-      "bytes": 7969,
-      "mtime": "2026-06-26T00:16:08.142Z",
-      "indexed_at": "2026-06-26T00:16:16.437Z",
+      "bytes": 7931,
+      "mtime": "2026-06-26T00:30:42.501Z",
+      "indexed_at": "2026-06-26T00:31:19.288Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

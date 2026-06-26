@@ -1,6 +1,6 @@
 {
   "schema": "lumin_chair_direct_connection_parity_v1",
-  "at": "2026-06-24T18:56:18.971Z",
+  "at": "2026-06-26T00:16:42.582Z",
   "base": "https://robust-magic-production.up.railway.app",
   "passed": [
     "T1_open_lifere",
@@ -9,12 +9,13 @@
     "T4_counsel_no_theater",
     "T5_do_prefix_build",
     "T6_fail_carries_lesson",
-    "T7_display_no_execute_claim",
     "T8_truth_lockdown_stamp",
     "LOCAL-wiring",
     "LOCAL-truth"
   ],
-  "failed": [],
+  "failed": [
+    "T7_display_no_execute_claim"
+  ],
   "results": {
     "T1_open_lifere": {
       "status": 200,
@@ -42,7 +43,7 @@
       "chair_channel": "chair",
       "command_truth": "NO_COMMAND_RAN",
       "pass_fail": "NO_COMMAND_RAN",
-      "summary_head": "💬 Counsel only · nothing executed You've got a few options to consider for an oil change. According to the verified search, you can check out coupons from Jiffy Lube, Valvoline, Take 5, and Midas. Ea"
+      "summary_head": "I don't have details on your vehicle's last oil change or current mileage to advise on whether an oil change is needed this week. If you are considering one, there are several current offers available"
     },
     "T5_do_prefix_build": {
       "status": 200,
@@ -56,15 +57,16 @@
       "chair_channel": "build_async",
       "command_truth": "BUILD_ATTEMPTED",
       "pass_fail": "RUNNING",
-      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 62380d89… — poll until PASS or FAIL ── Technical ──\nBuild running asynchronously — job 62380d89-b86e-4b90-8bb7-63b466ba2c5f"
+      "summary_head": "⏳ RUNNING\nBuild job started.\n• Job 0f6902aa… — poll until PASS or FAIL\n\n── Technical ──\nBuild running asynchronously — job 0f6902aa-a746-4d42-8df0-6e81ad169ed1"
     },
     "T7_display_no_execute_claim": {
       "status": 200,
-      "chair_channel": "display",
+      "chair_channel": "chair",
       "command_truth": "NO_COMMAND_RAN",
       "pass_fail": "NO_COMMAND_RAN",
-      "summary_head": "💬 Counsel only · nothing executed Rendered overview display from live system data. To execute: say `do: …` or name an action (`open LifeRE`, `run alpha cycle`, `redeploy`)."
+      "summary_head": "You're weighing whether to focus on follow-ups or prospecting today. I don't have enough context on your current goals or pipeline to offer a specific recommendation. What outcome are you aiming for t"
     }
   },
-  "ok": true
+  "fail_T7_display_no_execute_claim": "channel chair !== display",
+  "ok": false
 }

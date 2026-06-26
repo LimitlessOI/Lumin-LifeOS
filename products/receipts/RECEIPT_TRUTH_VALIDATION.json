@@ -1,8 +1,8 @@
 {
   "schema": "receipt_truth_validation_v1",
-  "at": "2026-06-24T03:43:41.785Z",
+  "at": "2026-06-26T00:18:49.366Z",
   "ok": true,
-  "checked": 17,
+  "checked": 21,
   "failures": [],
   "results": [
     {
@@ -66,19 +66,37 @@
       "claims_pass": true
     },
     {
-      "file": "LIFERE_PG_VERIFY.json",
-      "ok": true,
-      "violations": [],
-      "claims_pass": false
-    },
-    {
       "file": "LIFERE_SELF_AUDIT.json",
       "ok": true,
       "violations": [],
       "claims_pass": false
     },
     {
+      "file": "LUMIN_ALPHA_CONNECTION_TEST.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
       "file": "LUMIN_CHAIR_DIRECT_CONNECTION_PARITY.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "LUMIN_OVERLAY_ALPHA_READINESS.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "LUMIN_TERMINAL_CONNECTION_PROOF.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
+    },
+    {
+      "file": "POINT_B_DNA_VERIFY.json",
       "ok": true,
       "violations": [],
       "claims_pass": true
@@ -106,6 +124,12 @@
       "ok": true,
       "violations": [],
       "claims_pass": true
+    },
+    {
+      "file": "WISDOM_TRUTH_AUDIT.json",
+      "ok": true,
+      "violations": [],
+      "claims_pass": false
     }
   ]
 }

@@ -33,18 +33,17 @@ export function buildStepDispatchBody(step, blueprint, sessionId) {
   const product = blueprint._meta?.product || 'product';
   const ssot = step.ssot_tag || blueprint._meta?.parent_ssot || blueprint._meta?.ssot_tag || '';
   const typeHint = {
-    sql: 'SQL migration (CREATE TABLE IF NOT EXISTS, idempotent indexes). Use pool.query from ctx — owner_id TEXT from req.lifeosUser.sub.',
+    sql: 'Plain PostgreSQL migration (.sql file). CREATE TABLE IF NOT EXISTS, CREATE INDEX IF NOT EXISTS. SQL comments use -- only. No JavaScript, no import/export, no pool.query wrappers.',
     esm: 'ESM module — factory pattern for routes; export functions for services. Match existing codebase patterns.',
     esm_script: 'Standalone node .mjs acceptance script — exit 0 on PASS, non-zero on FAIL.',
     html: 'HTML overlay page in public/overlay/',
   }[step.type] || 'Implement per blueprint purpose.';
 
-  const useFastExecute = step.type === 'sql';
   return {
     domain: 'lifeos',
     mode: 'code',
-    execution_only: useFastExecute,
-    ...(useFastExecute ? {} : { model: 'gemini_flash' }),
+    execution_only: false,
+    model: 'gemini_flash',
     target_file: targetFile,
     task: `[intake-blueprint] ${step.id}: ${step.purpose || product}`,
     spec: [
