@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T00:37:05.031Z",
+  "generated_at": "2026-06-26T00:39:15.691Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12563,
+  "file_count": 12565,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -40430,7 +40430,7 @@
       "synopsis": "Continuity Log",
       "bytes": 462918,
       "mtime": "2026-06-26T00:36:56.110Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z"
+      "indexed_at": "2026-06-26T00:39:15.691Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42313,17 +42313,17 @@
     {
       "path": "docs/projects/AMENDMENT_LIFERE.manifest.json",
       "synopsis": "Documentation — AMENDMENT LIFERE.Manifest.",
-      "bytes": 1117,
-      "mtime": "2026-06-26T00:13:41.109Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z",
+      "bytes": 1192,
+      "mtime": "2026-06-26T00:39:13.018Z",
+      "indexed_at": "2026-06-26T00:39:15.691Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_LIFERE.md",
       "synopsis": "AMENDMENT LIFERE — Real Estate Business Operating System (founding law)",
-      "bytes": 13991,
-      "mtime": "2026-06-26T00:13:28.446Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z"
+      "bytes": 14953,
+      "mtime": "2026-06-26T00:37:25.760Z",
+      "indexed_at": "2026-06-26T00:39:15.691Z"
     },
     {
       "path": "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
@@ -69754,9 +69754,9 @@
     {
       "path": "package.json",
       "synopsis": "enforce\": \"node scripts/file-synopsis-enforce.mjs --staged --auto-fix\",",
-      "bytes": 26872,
-      "mtime": "2026-06-26T00:13:17.822Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z",
+      "bytes": 26952,
+      "mtime": "2026-06-26T00:37:23.574Z",
+      "indexed_at": "2026-06-26T00:39:15.691Z",
       "synopsis_index_only": true
     },
     {
@@ -70053,6 +70053,14 @@
       "synopsis_index_only": true
     },
     {
+      "path": "products/receipts/FOUNDER_ALPHA_READINESS_AUDIT.json",
+      "synopsis": "Product receipt — FOUNDER ALPHA READINESS AUDIT.",
+      "bytes": 4939,
+      "mtime": "2026-06-26T00:39:06.939Z",
+      "indexed_at": "2026-06-26T00:39:15.691Z",
+      "synopsis_index_only": true
+    },
+    {
       "path": "products/receipts/LIFEOS_ALPHA_BREAK_IT.json",
       "synopsis": "Product receipt — LIFEOS ALPHA BREAK IT.",
       "bytes": 1367,
@@ -70263,9 +70271,9 @@
     {
       "path": "products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json",
       "synopsis": "Product receipt — LUMIN OVERLAY ALPHA READINESS.",
-      "bytes": 1609,
-      "mtime": "2026-06-26T00:13:26.072Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z",
+      "bytes": 2186,
+      "mtime": "2026-06-26T00:39:06.940Z",
+      "indexed_at": "2026-06-26T00:39:15.691Z",
       "synopsis_index_only": true
     },
     {
@@ -71213,9 +71221,9 @@
     {
       "path": "public/overlay/lifeos-lifere.html",
       "synopsis": "LifeRE Alpha — daily command center (Point B surface)",
-      "bytes": 122381,
-      "mtime": "2026-06-26T00:13:18.239Z",
-      "indexed_at": "2026-06-26T00:37:03.202Z"
+      "bytes": 123372,
+      "mtime": "2026-06-26T00:37:11.192Z",
+      "indexed_at": "2026-06-26T00:39:15.691Z"
     },
     {
       "path": "public/overlay/lifeos-listening-setup.html",
@@ -73166,6 +73174,16 @@
       "indexed_at": "2026-06-26T00:37:03.202Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
+      "path": "scripts/audit-founder-alpha-ready.mjs",
+      "synopsis": "Founder alpha readiness audit — one receipt Adam/conductor trust before founder session.",
+      "bytes": 6566,
+      "mtime": "2026-06-26T00:37:20.640Z",
+      "indexed_at": "2026-06-26T00:39:15.691Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_LIFERE.md"
       ]
     },
     {

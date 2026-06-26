@@ -222,7 +222,7 @@
   <div class="root" data-lifere="daily-command-center" id="lifere-daily-command-center">
     <div class="lifere-shell-hint" id="lifere-shell-hint" hidden>
       LifeRE is a stack inside LifeOS — not a separate product.
-      <a href="/overlay/lifeos-app.html?page=lifeos-lifere.html">Open in LifeOS app shell ↗</a>
+      <a id="lifere-shell-login-link" href="/overlay/lifeos-login.html?next=%2Flifeos%3Flayout%3Ddesktop%26direct_system%3D1%26page%3Dlifeos-lifere.html">Sign in and open LifeRE in LifeOS ↗</a>
       · Communication, twins, and approval flow are shared across stacks.
     </div>
     <header class="page-header">
@@ -596,6 +596,16 @@
       const themeBtn = document.getElementById('lifere-theme-toggle');
       if (shellHint && !inAppShell) shellHint.hidden = false;
       if (themeBtn && inAppShell) themeBtn.style.display = 'none';
+
+      const founderEntry = '/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html';
+      const loginUrl = `/overlay/lifeos-login.html?next=${encodeURIComponent(founderEntry)}`;
+      if (!inAppShell && CTX) {
+        await CTX.refreshIfNeeded?.();
+        if (!CTX.authenticated && !CTX.KEY) {
+          location.replace(loginUrl);
+          return;
+        }
+      }
 
       function syncThemeBtn() {
         if (!themeBtn) return;
@@ -972,6 +982,14 @@
         const confirmBox = document.getElementById('alpha-confirm-box');
         try {
           const res = await apiFetch('/api/v1/lifere/alpha/readiness');
+          if (res.status === 401 || res.status === 403) {
+            banner?.classList.add('pending');
+            title.textContent = 'Sign in to start founder alpha';
+            detail.innerHTML = `Your session is required. <a href="${loginUrl}">Sign in to LifeOS</a> — then open LifeRE from the app shell.`;
+            list.innerHTML = '<li class="pending">○ Account sign-in required (not a machine gate failure)</li>';
+            confirmBox?.setAttribute('hidden', '');
+            return;
+          }
           if (res.status === 404) {
             title.textContent = 'Deploy catching up — alpha surface not live yet';
             detail.textContent = 'Refresh in 2–3 min after deploy, or open from latest commit.';

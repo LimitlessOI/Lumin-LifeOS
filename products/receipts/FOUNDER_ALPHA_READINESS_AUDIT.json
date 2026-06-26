@@ -1,0 +1,161 @@
+{
+  "schema": "founder_alpha_readiness_audit_v1",
+  "at": "2026-06-26T00:37:29.487Z",
+  "production_base": "https://robust-magic-production.up.railway.app",
+  "deploy_sha": "c23fc63ae47facc9aa347bf3ba44d97d79599876",
+  "conductor_verdict": "CLEARED_FOR_FOUNDER_ALPHA",
+  "ready_for_adam_alpha": true,
+  "founder_usability_pass": false,
+  "suites": {
+    "overlay_battery_live": {
+      "ok": true,
+      "exit": 0
+    },
+    "lifere_alpha_readiness": {
+      "ok": true,
+      "exit": 0
+    },
+    "lifere_self_audit": {
+      "ok": true,
+      "exit": 0
+    },
+    "crm_alpha": {
+      "ok": true,
+      "exit": 0
+    },
+    "alpha_break_it": {
+      "ok": true,
+      "exit": 0
+    }
+  },
+  "live_api": {
+    "readiness": {
+      "ok": true,
+      "schema": "lifere_alpha_readiness_surface_v1",
+      "mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+      "at": "2026-06-26T00:39:07.043Z",
+      "verdict": "TECHNICAL_PASS",
+      "agent_alpha_pass": true,
+      "founder_usability_pass": false,
+      "ready_for_alpha_testing": true,
+      "ready_for_founder_alpha": true,
+      "ready_for_alpha_gate": false,
+      "founder_success_test": "Open lifeos-app LifeRE path; daily command center + top-3 + debrief visible",
+      "canonical_url": "/overlay/lifeos-app.html?page=lifeos-lifere.html",
+      "checklist": [
+        {
+          "id": "technical_pass",
+          "label": "Machine acceptance PASS",
+          "ok": true
+        },
+        {
+          "id": "agent_alpha",
+          "label": "Agent alpha (119 checks)",
+          "ok": true
+        },
+        {
+          "id": "alpha_readiness",
+          "label": "Alpha readiness gate PASS",
+          "ok": true
+        },
+        {
+          "id": "live_pg",
+          "label": "Live PostgreSQL connected",
+          "ok": true
+        },
+        {
+          "id": "ui_markers",
+          "label": "Founder UI markers present",
+          "ok": true
+        },
+        {
+          "id": "founder_confirm",
+          "label": "Founder usability confirmed",
+          "ok": false
+        }
+      ],
+      "ui_markers": [
+        {
+          "id": "daily-command-center",
+          "present": true
+        },
+        {
+          "id": "top-3-priorities",
+          "present": true
+        },
+        {
+          "id": "nightly-debrief",
+          "present": true
+        },
+        {
+          "id": "chair-brief",
+          "present": true
+        },
+        {
+          "id": "content-brief",
+          "present": true
+        },
+        {
+          "id": "alpha-daily-cycle",
+          "present": true
+        },
+        {
+          "id": "alpha-ready-banner",
+          "present": true
+        }
+      ],
+      "next_action": "Run Alpha Daily Cycle → Confirm Alpha PASS with your quote (12+ chars)",
+      "label": "THINK",
+      "truth_lockdown": "truth_lockdown_v1",
+      "chair_channel": "lifere",
+      "execution_kind": "UNKNOWN",
+      "truth_lockdown_applied": true,
+      "results_are_scoreboard": true,
+      "truth_spine_applied": true,
+      "truth_spine_version": "truth_enforcement_spine_v1",
+      "point_b_dna_version": "point_b_dna_v1",
+      "system_purpose": "point_a_to_point_b",
+      "synergy_model": "human_ai_greater_than_sum"
+    }
+  },
+  "passed": [
+    "SUITE-overlay_battery_live",
+    "SUITE-lifere_alpha_readiness",
+    "SUITE-lifere_self_audit",
+    "SUITE-crm_alpha",
+    "SUITE-alpha_break_it",
+    "LIVE-builder-ready",
+    "LIVE-lifere-readiness",
+    "LIVE-agent-alpha-pass"
+  ],
+  "failed": [],
+  "warnings": [
+    {
+      "id": "FOUNDER-USABILITY-PENDING",
+      "detail": "Expected — only Adam closes Alpha gate via Confirm PASS in LifeRE banner"
+    }
+  ],
+  "ok": true,
+  "adam_first_session": {
+    "login": "https://robust-magic-production.up.railway.app/overlay/lifeos-login.html",
+    "entry": "https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html",
+    "alt_entry": "https://robust-magic-production.up.railway.app/overlay/lifeos-app.html?page=lifeos-lifere.html",
+    "steps": [
+      "Sign in at lifeos-login.html (account — not command key)",
+      "Land on LifeRE — banner: \"Founder alpha unlocked — agent tested all features\"",
+      "Click Run Alpha Daily Cycle — top 3 + debrief should populate",
+      "Tab Performance, Clients, Marketing, Deals, Chair Brief — no Unauthorized errors",
+      "Optional: toggle Ambient + Family guard in main LifeOS shell sidebar pills",
+      "When satisfied: Confirm Alpha PASS with 12+ character quote in banner"
+    ],
+    "known_limits": [
+      "Web ambient mic = foreground only; background vibrate needs native app",
+      "ClickFunnels live capture needs CLICKFUNNELS_WEBHOOK_SECRET on Railway",
+      "Empty CRM/deal lists OK on fresh DB — boot seeds may appear after cycle"
+    ],
+    "verify_commands": [
+      "npm run lifeos:founder-alpha:audit",
+      "npm run lifeos:overlay:alpha:battery:live"
+    ]
+  }
+}

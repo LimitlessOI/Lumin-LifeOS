@@ -5,6 +5,12 @@
 
 ---
 
+## [SESSION] 2026-06-26 — Alpha battery 8/8 green; T7 display routing + deploy unblock
+
+Adam: *alpha test it, use it, break it, keep refining.* **Break-it found:** `lumin-chair-parity` T7 — `action:display` + "display queue status" returned `chair_channel: chair` with counsel prose. **Root cause:** Gemini `normalizeInputText` rewrote display commands before routing (local classifier was correct). **Fixed (GAP-FILL):** skip normalize via `shouldSkipInputNormalize(text, action)`; orchestrator bypasses wisdom + system-action on display-only; `coerceDisplayMisrouteToChair` respects explicit display. **Deploy blocker:** `20260626_socialmediaos.sql` was JS in a `.sql` file → boot FAILED; rewrote as PostgreSQL DDL. **Live deploy:** `8cff7166612a`. **Battery:** overlay alpha **8/8 PASS** (parity T1–T8, agent alpha, break-it 16/16, CRM 7/7). **Founder path:** sign in → `/lifeos?layout=desktop&direct_system=1` → LifeRE banner "Founder alpha unlocked" → Alpha Daily Cycle → Confirm Alpha PASS (12+ chars). **`founder_usability_pass`** still Adam-only.
+
+---
+
 ## [SESSION] 2026-06-26 — Gap fill: agent alpha scripts + overlay battery live green
 
 Adam: *keep fixing, find the gaps.* **Found:** missing `run-lifere-agent-alpha.mjs` / `verify-agent-alpha-gate.mjs` (never committed); live agent alpha 401 without `.env` load; `--live` argv hijacked `builderos-builder-output-verifier` CLI; ambient CRM used nonexistent `client_notes` table. **Fixed:** restored 119-check agent alpha + gate scripts; `crm_contact_notes` migration + ambient router; verifier `isVerifierCli` guard; personality calibrate fail-closed; overlay battery loads env + `LIFERE_AGENT_ALPHA_LIVE=1`. **Live:** overlay battery **7/7 PASS**, CRM alpha **7/7 PASS**, agent alpha **119/119 PASS**. **Next:** deploy → Adam founder alpha on LifeRE banner.

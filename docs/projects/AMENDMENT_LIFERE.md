@@ -136,6 +136,8 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 
 | Date | Change | Why | State | Next |
 |------|--------|-----|-------|------|
+| 2026-06-26 | **`scripts/audit-founder-alpha-ready.mjs`** + **`npm run lifeos:founder-alpha:audit`** — consolidates overlay battery, readiness, CRM, break-it; writes `FOUNDER_ALPHA_READINESS_AUDIT.json` + refreshes `LUMIN_OVERLAY_ALPHA_READINESS.json` | Adam: audit work before founder alpha | ✅ | Adam session |
+| 2026-06-26 | **`public/overlay/lifeos-lifere.html`** — standalone page redirects to login when no JWT; 401 shows "Sign in" not "Alpha not ready"; shell hint links canonical `/lifeos?...&page=lifeos-lifere.html` | Misleading banner blocked Adam alpha | ✅ UX | deploy |
 | 2026-06-26 | **Alpha banner fix** — `lifere-alpha-readiness-surface.js` uses `OBJECTIVE_VERDICT.agent_alpha_pass` (products/receipts excluded from Docker); adds `ready_for_founder_alpha`; `lifeos-alpha-break-it.mjs` (16 stress checks); overlay battery includes break-it | Adam: alpha test use it break it | ✅ live break-it 16/16 | deploy banner fix |
 | 2026-06-26 | **Restored agent alpha scripts** — `run-lifere-agent-alpha.mjs` (119 checks incl BoldTrail), `verify-agent-alpha-gate.mjs`; live mode via `LIFERE_AGENT_ALPHA_LIVE=1`; overlay battery loads `.env` | Scripts were never committed — overlay battery failed file-not-found | ✅ live 119/119 + battery PASS | deploy migration |
 | 2026-06-25 | **`src/integrations/boldtrail.js`** — kvCORE create tries `POST /contact` then fallbacks; notes use `POST/PUT /contact/:id/action/note`; **`services/lumin-ambient-moment-router.js`** wires BoldTrail auto-capture; **`scripts/crm-alpha-test.mjs`** + **`scripts/alpha-test-lumin-connection.mjs`**; pipeline top-level `contacts` | Adam: fix CRM alpha — BoldTrail create 405 + ambient→CRM write-back | ✅ node --check | deploy + `npm run lifeos:crm:alpha:test` |
@@ -171,6 +173,7 @@ See Am 11, 17, 08, 29, 41 file lists in `LIFERE_GAP_AUDIT.md`.
 | **A–Z receipt** | `products/receipts/LIFERE_AZ_ACCEPTANCE.json` — structural PASS |
 | **Alpha mission** | `PRODUCT-LIFERE-OS-V1-0001` — historical corridor |
 | **@ssot** | New lifere services → `AMENDMENT_LIFERE.md`; `lifere-os-v1.js` still Am 21 until repoint |
-| **Agent alpha** | `npm run lifeos:lifere-agent-alpha` — **117/117 PASS** (2026-06-25). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
-| **Founder alpha** | **READY after deploy** — `products/receipts/LUMIN_OVERLAY_ALPHA_READINESS.json`. Mac desktop **parked**. |
-| **Next** | Commit + Railway redeploy → Adam runs 5-step checklist in readiness receipt |
+| **Agent alpha** | `npm run lifeos:lifere-agent-alpha:live` — **119/119 PASS** (2026-06-26). Receipt: `products/receipts/LIFERE_AGENT_ALPHA.json` |
+| **Founder alpha** | **CLEARED** — `npm run lifeos:founder-alpha:audit` → `FOUNDER_ALPHA_READINESS_AUDIT.json` + `LUMIN_OVERLAY_ALPHA_READINESS.json`. Live deploy must include `lifeos-lifere.html` auth redirect (standalone page → login, not false "Alpha not ready"). |
+| **Adam entry** | `https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html` — sign in first. **`founder_usability_pass`** = Adam-only via Confirm PASS. |
+| **Next** | Adam founder session → confirm PASS quote → optional BoldTrail test contact cleanup |
