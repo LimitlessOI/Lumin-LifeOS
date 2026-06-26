@@ -7,6 +7,7 @@ import {
   bindContinuationUtterance,
   detectWorkIntent,
   isFounderFrustrationContinuation,
+  isQuestionOnlyUtterance,
 } from '../services/founder-intent-compiler.js';
 import { executeFounderWorkIntent } from '../services/founder-work-executors.js';
 import { resolveChairContext } from '../services/chair-context-classifier.js';
@@ -55,6 +56,11 @@ test('bindContinuationUtterance — frustration binds prior task', () => {
 test('isFounderFrustrationContinuation', () => {
   assert.equal(isFounderFrustrationContinuation('do not repeat back to me'), true);
   assert.equal(isFounderFrustrationContinuation('hello lumin'), false);
+});
+
+test('detectWorkIntent — question about SMOS is not work', () => {
+  assert.equal(detectWorkIntent('what does our SMOS workflow look like for me?', []), null);
+  assert.equal(isQuestionOnlyUtterance('what does our SMOS workflow look like for me?'), true);
 });
 
 test('detectWorkIntent — SMOS process without video keyword', () => {

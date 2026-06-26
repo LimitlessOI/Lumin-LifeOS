@@ -46,12 +46,22 @@ function parseVideoCount(text = '') {
   return Number.isFinite(n) && n > 0 ? Math.min(n, 10) : 5;
 }
 
+const QUESTION_OPENING = /^(what|how|why|when|where|who|which|can you|could you|tell me|describe|explain|do you know)\b/i;
+const EXECUTE_VERBS = /\b(make|create|build|need|want|produce|draft|prepare|follow|start|run|package|do it|just do)\b/i;
+
+export function isQuestionOnlyUtterance(utterance = '') {
+  const bare = String(utterance || '').trim();
+  if (!bare) return false;
+  return QUESTION_OPENING.test(bare) && !EXECUTE_VERBS.test(bare);
+}
+
 /** Fast deterministic detect — current utterance only (history is not re-run intent). */
 export function detectWorkIntent(utterance = '', history = []) {
   const t = String(utterance || '').trim();
   // Strip auto-wrapped do:/target_file — detect from founder words only
   const bare = t.replace(/^\s*(do|execute|run)\s*:\s*/i, '').replace(/\ntarget_file:\s*\S+/gi, '').trim();
   if (!bare) return null;
+  if (isQuestionOnlyUtterance(bare)) return null;
 
   if (VIDEO_PACKAGE_MARKERS.test(bare) && VIDEO_PACKAGE_ACTION.test(bare)) {
     return {
@@ -119,6 +129,17 @@ export async function compileFounderIntent({
   callAI = null,
 } = {}) {
   const bound = bindContinuationUtterance(utterance, conversationHistory);
+  if (isQuestionOnlyUtterance(bound)) {
+    return {
+      version: 'founder_intent_compiler_v1',
+      intent: 'counsel',
+      executor: null,
+      confidence: 0.9,
+      execute_now: false,
+      paraphrase: null,
+      source: 'question_only',
+    };
+  }
   const fast = detectWorkIntent(bound, conversationHistory);
   if (fast) return { ...fast, bound_utterance: bound !== utterance ? bound : undefined };
 
