@@ -1284,6 +1284,13 @@ function appendClientBubbleProof(reply, data) {
   const tag = proof.ok ? 'Client bubble proof: PASS' : `Client bubble proof: FAIL (dashboard ${proof.dashboard?.background || '?'}, app ${proof.app?.background || '?'})`;
   return `${reply}\n${tag}`;
 }
+function buildConversationHistoryPayload() {
+  return chatHistory
+    .filter((m) => m.role === 'user' || m.role === 'assistant')
+    .slice(0, -1)
+    .slice(-12)
+    .map((m) => ({ role: m.role, content: m.content }));
+}
 async function sendMessage() {
 const text = chatInput.value.trim();
 if (!text || voiceSendBusy) return;
@@ -1294,7 +1301,15 @@ typingIndicator.classList.add('show');
 try {
 const r = await API('/api/v1/lifeos/builderos/command-control/founder-interface/message', {
 method: 'POST',
-body: JSON.stringify({ text, action: 'auto', stage: 'system', conversational_mode: true, async: true })
+body: JSON.stringify({
+  text,
+  action: 'auto',
+  stage: 'system',
+  conversational_mode: true,
+  async: true,
+  conversation_history: buildConversationHistoryPayload(),
+  ui_context: { surface: 'lifeos-dashboard', focused_element: '#chat-input', page: location.pathname + location.search },
+})
 });
 let d = await r.json();
 let finalRes = r;

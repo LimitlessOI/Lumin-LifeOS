@@ -44,16 +44,14 @@ export function detectCounselTheater(text = '', commandTruth = 'NO_COMMAND_RAN',
   for (const re of FALSE_ACTION_WHOLE) {
     if (re.test(t)) hits.push(re.source);
   }
-  const sentenceRes = opts.repairOrderIntent ? [...FALSE_ACTION_SENTENCE, ...REPAIR_DEFLECTION_SENTENCE] : FALSE_ACTION_SENTENCE;
+  const sentenceRes = [...FALSE_ACTION_SENTENCE, ...REPAIR_DEFLECTION_SENTENCE];
   for (const sentence of t.split(/(?<=[.!?])\s+/)) {
     for (const re of sentenceRes) {
       if (re.test(sentence)) hits.push(sentence.slice(0, 80));
     }
   }
-  if (opts.repairOrderIntent) {
-    for (const re of REPAIR_DEFLECTION_SENTENCE) {
-      if (re.test(t)) hits.push(re.source);
-    }
+  for (const re of REPAIR_DEFLECTION_SENTENCE) {
+    if (re.test(t)) hits.push(re.source);
   }
   return { violation: hits.length > 0, hits: [...new Set(hits)] };
 }
@@ -68,7 +66,8 @@ export function scrubCounselTheater(text = '', commandTruth = 'NO_COMMAND_RAN') 
 
   for (const sentence of sentences) {
     const bad = FALSE_ACTION_SENTENCE.some((re) => re.test(sentence))
-      || FALSE_ACTION_WHOLE.some((re) => re.test(sentence));
+      || FALSE_ACTION_WHOLE.some((re) => re.test(sentence))
+      || REPAIR_DEFLECTION_SENTENCE.some((re) => re.test(sentence));
     if (bad) {
       stripped += 1;
       continue;

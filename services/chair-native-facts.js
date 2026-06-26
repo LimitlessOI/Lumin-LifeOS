@@ -87,7 +87,7 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     }
   }
 
-  if (!personalTurn || hasProductBuildContext(text)) {
+  if ((!personalTurn || hasProductBuildContext(text)) && /\b(point b|alpha|lifere alpha|progress|status|machine path|readiness|what(?:'s| is) next)\b/i.test(text)) {
     try {
       facts.point_b_status = await evaluatePointBNavigator({
         callAI: deps.callAI,

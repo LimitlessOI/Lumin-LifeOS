@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T16:19:32.770Z",
+  "generated_at": "2026-06-26T16:33:38.943Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12582,
+  "file_count": 12585,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -29055,9 +29055,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3777057,
-      "mtime": "2026-06-26T16:19:32.151Z",
-      "indexed_at": "2026-06-26T16:19:32.770Z"
+      "bytes": 3778021,
+      "mtime": "2026-06-26T16:33:30.012Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41994,9 +41994,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 493211,
-      "mtime": "2026-06-26T16:19:23.020Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z"
+      "bytes": 493703,
+      "mtime": "2026-06-26T16:32:29.625Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -42500,9 +42500,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 140221,
-      "mtime": "2026-06-26T16:19:23.024Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z"
+      "bytes": 140514,
+      "mtime": "2026-06-26T16:33:11.823Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -70995,9 +70995,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 142792,
-      "mtime": "2026-06-26T16:19:22.947Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z"
+      "bytes": 143435,
+      "mtime": "2026-06-26T16:32:02.993Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -71113,9 +71113,9 @@
     {
       "path": "public/overlay/lifeos-dashboard.html",
       "synopsis": "HTML page: Dashboard · LifeOS",
-      "bytes": 40587,
-      "mtime": "2026-06-26T16:19:22.948Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z"
+      "bytes": 41002,
+      "mtime": "2026-06-26T16:31:52.257Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z"
     },
     {
       "path": "public/overlay/lifeos-decisions.html",
@@ -72296,9 +72296,9 @@
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
       "synopsis": "@ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
-      "bytes": 49087,
-      "mtime": "2026-06-26T15:34:28.202Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z",
+      "bytes": 49313,
+      "mtime": "2026-06-26T16:31:45.555Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
@@ -87097,9 +87097,9 @@
     {
       "path": "services/chair-direct-connection-truth.js",
       "synopsis": "Lumin direct connection truth — personality OK, execution claims must match receipts.",
-      "bytes": 6763,
-      "mtime": "2026-06-26T15:18:23.333Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z",
+      "bytes": 6740,
+      "mtime": "2026-06-26T16:31:47.246Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87167,9 +87167,9 @@
     {
       "path": "services/chair-native-facts.js",
       "synopsis": "Chair native facts — real system state Lumin IS (not chat overlay).",
-      "bytes": 5384,
-      "mtime": "2026-06-25T22:25:35.384Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z",
+      "bytes": 5495,
+      "mtime": "2026-06-26T16:31:46.579Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -87177,9 +87177,9 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 5947,
-      "mtime": "2026-06-25T22:25:37.177Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z",
+      "bytes": 6160,
+      "mtime": "2026-06-26T16:31:46.719Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88198,9 +88198,9 @@
     {
       "path": "services/founder-communication-format.js",
       "synopsis": "Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).",
-      "bytes": 5709,
-      "mtime": "2026-06-24T23:51:09.896Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z",
+      "bytes": 5867,
+      "mtime": "2026-06-26T16:32:47.689Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -88277,6 +88277,16 @@
       ]
     },
     {
+      "path": "services/founder-intent-compiler.js",
+      "synopsis": "Founder intent compiler — English + thread context → structured work execution.",
+      "bytes": 5749,
+      "mtime": "2026-06-26T16:31:29.091Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+      ]
+    },
+    {
       "path": "services/founder-life-admin-intent.js",
       "synopsis": "Founder personal-life asks — errands, coupons, appointments (not builder/code).",
       "bytes": 3372,
@@ -88345,6 +88355,16 @@
       "indexed_at": "2026-06-26T16:19:30.736Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
+      ]
+    },
+    {
+      "path": "services/founder-work-executors.js",
+      "synopsis": "Founder work executors — deliverables (video packages, etc.), not counsel theater.",
+      "bytes": 3768,
+      "mtime": "2026-06-26T16:31:32.298Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z",
+      "ssot": [
+        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
     },
     {
@@ -89747,9 +89767,9 @@
     {
       "path": "services/lumin-chair-orchestrator.js",
       "synopsis": "Lumin Chair — single front door for founder messages (orchestrates all channels).",
-      "bytes": 29373,
-      "mtime": "2026-06-26T16:19:23.026Z",
-      "indexed_at": "2026-06-26T16:19:30.736Z",
+      "bytes": 31538,
+      "mtime": "2026-06-26T16:32:17.418Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -95650,6 +95670,13 @@
       "bytes": 1084,
       "mtime": "2026-06-22T22:28:44.562Z",
       "indexed_at": "2026-06-26T16:19:30.736Z"
+    },
+    {
+      "path": "tests/founder-intent-compiler.test.js",
+      "synopsis": "js — tests/founder-intent-compiler.test.js.",
+      "bytes": 1870,
+      "mtime": "2026-06-26T16:33:00.294Z",
+      "indexed_at": "2026-06-26T16:33:38.943Z"
     },
     {
       "path": "tests/founder-life-admin-intent.test.js",

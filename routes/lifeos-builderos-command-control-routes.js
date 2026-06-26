@@ -1183,6 +1183,8 @@ HOW TO RESPOND:
         confirmIntent: req.body?.confirm_intent === true || force || isFounderConfirmIntent(cleanedInput) || stripChairDoPrefix(originalText).forcedExecute,
         userId,
         userHandle,
+        conversationHistory: Array.isArray(req.body?.conversation_history) ? req.body.conversation_history : [],
+        uiContext: req.body?.ui_context && typeof req.body.ui_context === 'object' ? req.body.ui_context : null,
       }, {
         buildDisplayBundle,
         translateToPlainEnglish,

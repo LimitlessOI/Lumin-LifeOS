@@ -2865,6 +2865,7 @@ const luminState = {
   voiceTurn: false,
   wakeListenActive: false,
   lastReply: '',
+  chatHistory: [],
 };
 
 const LUMIN_DOCK_KEY = 'lifeos_lumin_dock_position';
@@ -3121,6 +3122,12 @@ async function luminSend(opts = {}) {
           conversational_mode: true,
           dictate_then_send: voiceTurn,
           async: false,
+          conversation_history: buildLuminConversationHistoryPayload(),
+          ui_context: {
+            surface: 'lifeos-app',
+            focused_element: '#lumin-input',
+            page: location.pathname + location.search,
+          },
         }
       : { user: USER || 'adam', message: msg };
     const endpoint = USE_DIRECT_SYSTEM_CHAT
@@ -3215,6 +3222,10 @@ function _appendLuminMsg(role, content, createdAt, scroll) {
   div.innerHTML = `<div style="white-space:pre-wrap;word-break:break-word;">${_escHtml(content)}</div>${time ? `<div class="lumin-msg-time">${time}</div>` : ''}`;
   container.appendChild(div);
   if (scroll) container.scrollTop = container.scrollHeight;
+  if (role === 'user' || role === 'assistant') {
+    luminState.chatHistory.push({ role, content: String(content || '') });
+    if (luminState.chatHistory.length > 40) luminState.chatHistory.shift();
+  }
 }
 
 function _appendLuminMsgRaw(id, role, content) {
@@ -3229,6 +3240,13 @@ function _appendLuminMsgRaw(id, role, content) {
 
 function _escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function buildLuminConversationHistoryPayload() {
+  return luminState.chatHistory
+    .slice(0, -1)
+    .slice(-12)
+    .map((m) => ({ role: m.role, content: m.content }));
 }
 
 async function directSystemHeaders() {

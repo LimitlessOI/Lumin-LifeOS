@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-26 | **Founder work executors** — `founder-interface/message` passes `conversation_history` + `ui_context`; intent compiler + `video_package` executor before counsel | Adam five-video ask → clarify; "do it" lost thread | ⚠️ deploy | `tests/founder-intent-compiler.test.js` |
 | 2026-06-26 | **Natural language UI builds** — repair-order regex fix; `founder-enter-send-patch.js`; Adam Enter-key D5 probe in direct-execution battery | "want you to make it so" → repair_order_ack theater | ⚠️ deploy | `lifeos:direct-execution:point-b:live` |
 | 2026-06-26 | **Direct-order fast path** — CSS commits skip live verify + quorum when `confirmIntent`; voice patch `already_present` on unchanged file | Point B battery D3 timeout / D4 no-op FAIL | ⚠️ deploy + battery | `lifeos:direct-execution:point-b:live` |
 | 2026-06-26 | **Point B direct execution lock** — bare overlay filenames (`lifeos-app.html`); `do:` orders bypass INTENT_AMBIGUITY when target resolvable; LifeRE mission auto-bound for FPv2; `run-direct-execution-point-b-live.mjs` in governance covenant | Adam: tell system to do something → it must do it (not CLARIFY theater) | ⚠️ deploy + live battery | `npm run lifeos:direct-execution:point-b:live` |

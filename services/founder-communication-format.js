@@ -117,6 +117,10 @@ export function wrapChairHumanSummary(truth, technicalReply) {
     return card;
   }
 
+  if (truth.chair_channel === 'work_execute' && commandTruth === 'COMMAND_RAN') {
+    return String(technicalReply || truth.human_summary || '').trim();
+  }
+
   const card = formatFounderCard({ ...truth, human_summary: technicalReply || truth.human_summary });
   const technical = String(technicalReply || '').trim();
   if (!technical || technical === card) return card;

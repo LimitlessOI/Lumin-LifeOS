@@ -61,6 +61,12 @@ import {
   WISDOM_TRUTH_AUDITOR_VERSION,
 } from './wisdom-truth-auditor.js';
 import { getPointBDnaPromptBlock, POINT_B_DNA_VERSION } from './point-b-dna.js';
+import {
+  bindContinuationUtterance,
+  compileFounderIntent,
+  isFounderFrustrationContinuation,
+} from './founder-intent-compiler.js';
+import { executeFounderWorkIntent } from './founder-work-executors.js';
 
 export {
   isBlueprintExecuteIntent,
@@ -213,6 +219,8 @@ export function modelRoutingForChannel(channel) {
       return { route: 'lumin_chair_point_b', complexity: 'high', estimated_cost_tier: 'medium' };
     case 'system_action':
       return { route: 'lumin_chair_system_action', complexity: 'low', estimated_cost_tier: 'cheap' };
+    case 'work_execute':
+      return { route: 'lumin_chair_work_execute', complexity: 'medium', estimated_cost_tier: 'cheap' };
     case 'blueprint_execute':
     case 'mission_pipeline':
       return { route: 'lumin_chair_mission', complexity: 'high', estimated_cost_tier: 'medium' };
@@ -264,6 +272,34 @@ function finalizeTruth(truth, channel) {
   return final;
 }
 
+function chairWorkExecutorResponse(ctx, result) {
+  const truth = finalizeTruth({
+    ok: result.ok !== false,
+    pass_fail: result.pass_fail || (result.ok ? 'PASS' : 'FAIL'),
+    command_truth: result.command_truth || (result.ok ? 'COMMAND_RAN' : 'NO_COMMAND_RAN'),
+    action: result.action_type || 'work_execute',
+    action_type: result.action_type,
+    work_receipt: result.receipt || null,
+    work_package: result.package || null,
+    intent_compiler: result.intent_compiler || null,
+    human_summary_technical: result.human_summary || result.error || 'Work executed.',
+    direct_connection: true,
+    conversational_mode: ctx.conversationalMode,
+  }, 'work_execute');
+  return {
+    statusCode: 200,
+    body: chairEnvelope('work_execute', {
+      ...truth,
+      intake_normalized: ctx.intakeNormalized,
+      source_mode: ctx.sourceMode,
+      auth_mode: ctx.auth_mode,
+      user_role: ctx.user_role,
+      conversational_mode: ctx.conversationalMode,
+      direct_connection: true,
+    }),
+  };
+}
+
 function systemActionChairResponse(ctx, result) {
   const truth = finalizeTruth({
     ok: result.ok === true,
@@ -309,12 +345,14 @@ export async function runLuminChairTurn(ctx, deps) {
     explicitExecute,
     useTerminalForBuild,
     explicitAction = 'auto',
+    conversationHistory = [],
+    uiContext = null,
   } = ctx;
 
   const doPrefix = stripChairDoPrefix(cleanedInput);
   const actionSource = ctx.originalText || cleanedInput;
-  let effectiveInput = doPrefix.text || cleanedInput;
-  let forceExecute = doPrefix.forcedExecute || confirmIntent;
+  let effectiveInput = bindContinuationUtterance(doPrefix.text || cleanedInput, conversationHistory);
+  let forceExecute = doPrefix.forcedExecute || confirmIntent || isFounderFrustrationContinuation(cleanedInput);
   const uiBehavior = isFounderUiBehaviorChangeRequest(effectiveInput);
   if (uiBehavior && !doPrefix.forcedExecute) {
     effectiveInput = `do: ${effectiveInput}\ntarget_file: ${uiBehavior.target_file}`;
@@ -326,6 +364,28 @@ export async function runLuminChairTurn(ctx, deps) {
 
   const skipIntentGate = force || forceExecute;
   const displayOnlyTurn = shouldDisplayOnly || explicitAction === 'display';
+
+  if (!displayOnlyTurn && conversationalMode) {
+    const compiled = await compileFounderIntent({
+      utterance: effectiveInput,
+      conversationHistory,
+      uiContext,
+      callAI: deps.callCouncilMember,
+    });
+    if (compiled?.execute_now && compiled.intent === 'work') {
+      const workResult = await executeFounderWorkIntent(compiled, {
+        pool: deps.pool,
+        userId: ctx.userId,
+        tenantId: ctx.tenantId || 'default',
+      });
+      if (workResult) {
+        return chairWorkExecutorResponse(
+          { intakeNormalized, sourceMode, auth_mode, user_role, conversationalMode },
+          workResult,
+        );
+      }
+    }
+  }
   if (!skipIntentGate && (!conversationalMode || likelyBuild) && !displayOnlyTurn) {
     const wisdom = assessFounderUtteranceWisdom(effectiveInput, { confirmIntent: forceExecute });
     if (wisdom.needs_clarification) {
