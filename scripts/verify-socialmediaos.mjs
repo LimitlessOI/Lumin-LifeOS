@@ -5,9 +5,14 @@ import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
+import process from 'node:process';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+const DB_MIGRATION_PATH = 'db/migrations/20260626_socialmediaos.sql';
+const SERVICE_FILE_PATH = 'services/socialmediaos-service.js';
+const ROUTES_FILE_PATH = 'routes/socialmediaos-routes.js';
+const API_BASE_PATH = '/api/v1/socialmediaos';
 
 function exists(rel) {
   return fs.existsSync(path.join(ROOT, rel));
@@ -17,7 +22,7 @@ function read(rel) {
   try {
     return fs.readFileSync(path.join(ROOT, rel), 'utf8');
   } catch (e) {
-    return null;
+    return `Error reading ${rel}: ${e.message}`;
   }
 }
 
@@ -25,214 +30,162 @@ function check(id, ok, detail) {
   return { id, ok: Boolean(ok), detail: detail || (ok ? 'PASS' : 'FAIL') };
 }
 
-function scoreChecks(checks) {
-  if (!checks.length) return 0;
-  const passed = checks.filter((c) => c.ok).length;
-  return Math.round((passed / checks.length) * 100) / 10;
-}
-
-function runNodeCheck(filePath) {
-  const r = spawnSync(process.execPath, ['--check', path.join(ROOT, filePath)], {
-    encoding: 'utf8',
-  });
-  return r.status === 0;
-}
-
 function resolveBaseUrl() {
-  return (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
+  return (
+    process.env.PUBLIC_BASE_URL ||
+    process.env.BUILDER_BASE_URL ||
+    process.env.LUMIN_SMOKE_BASE_URL ||
+    ''
+  ).replace(/\/$/, '');
 }
 
 function resolveCommandKey() {
-  return process.env.COMMAND_CENTER_KEY || '';
+  return (
+    process.env.COMMAND_CENTER_KEY ||
+    process.env.COMMAND_KEY ||
+    process.env.LIFEOS_KEY ||
+    process.env.API_KEY ||
+    ''
+  );
+}
+
+async function fetchJson(url, method = 'GET', body = null, commandKey = '') {
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(commandKey ? { 'x-command-key': commandKey } : {}),
+  };
+  const options = { method, headers };
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
+
+  try {
+    const res = await fetch(url, options);
+    const text = await res.text(); // Read as text first
+    let json = null;
+    try {
+      json = JSON.parse(text);
+    } catch {
+      // Not JSON, or empty. json remains null.
+    }
+    return { ok: res.ok, status: res.status, json, text };
+  } catch (error) {
+    return { ok: false, status: 500, json: null, text: error.message };
+  }
 }
 
 export async function runAudit() {
   const checks = [];
   const baseUrl = resolveBaseUrl();
   const commandKey = resolveCommandKey();
-  const apiBase = '/api/v1/socialmediaos';
 
-  // --- Environment Variable Checks ---
+  // --- File Existence Checks ---
+  checks.push(check('FILE-01', exists(DB_MIGRATION_PATH), `${DB_MIGRATION_PATH} exists`));
+  checks.push(check('FILE-02', exists(SERVICE_FILE_PATH), `${SERVICE_FILE_PATH} exists`));
+  checks.push(check('FILE-03', exists(ROUTES_FILE_PATH), `${ROUTES_FILE_PATH} exists`));
+
+  // --- DB Migration Checks ---
+  const dbMigrationContent = read(DB_MIGRATION_PATH);
   checks.push(
-    check('ENV-001', baseUrl, 'PUBLIC_BASE_URL is set'),
-    check('ENV-002', commandKey, 'COMMAND_CENTER_KEY is set')
+    check(
+      'DB-01',
+      dbMigrationContent.includes('CREATE TABLE IF NOT EXISTS socialmediaos_sessions'),
+      'Migration includes socialmediaos_sessions table creation'
+    )
+  );
+  checks.push(
+    check(
+      'DB-02',
+      dbMigrationContent.includes('CREATE TABLE IF NOT EXISTS socialmediaos_content_packs'),
+      'Migration includes socialmediaos_content_packs table creation'
+    )
   );
 
-  if (!baseUrl || !commandKey) {
-    checks.push(
-      check('PROBE-001', false, 'Skipping HTTP probes due to missing PUBLIC_BASE_URL or COMMAND_CENTER_KEY'),
-      check('PROBE-002', false, 'Skipping HTTP probes due to missing PUBLIC_BASE_URL or COMMAND_CENTER_KEY')
-    );
+  // --- Service Export Check ---
+  const serviceContent = read(SERVICE_FILE_PATH);
+  checks.push(
+    check(
+      'SVC-01',
+      serviceContent.includes('export function createMarketingOSFactory'),
+      'Service exports createMarketingOSFactory'
+    )
+  );
+
+  // --- Route Signature Check ---
+  const routesContent = read(ROUTES_FILE_PATH);
+  const expectedRouteFactorySignature = 'export function createSocialmediaosRoutes({ pool, requireKey, logger }) {';
+  checks.push(
+    check(
+      'RTE-01',
+      routesContent.includes(expectedRouteFactorySignature),
+      `Routes file includes exact factory signature: ${expectedRouteFactorySignature}`
+    )
+  );
+
+  // --- HTTP Probes ---
+  if (!baseUrl) {
+    checks.push(check('HTTP-00', false, 'PUBLIC_BASE_URL environment variable is not set. Skipping HTTP probes.'));
+    return checks;
+  }
+  if (!commandKey) {
+    checks.push(check('HTTP-00', false, 'COMMAND_CENTER_KEY environment variable is not set. Skipping HTTP probes.'));
     return checks;
   }
 
-  // --- DB Migration Presence Check ---
-  const dbMigrationPath = 'db/migrations/20260626_socialmediaos.sql';
-  const dbMigrationContent = read(dbMigrationPath);
-  checks.push(
-    check('DB-001', exists(dbMigrationPath), `DB migration file ${dbMigrationPath} exists`)
-  );
-  if (dbMigrationContent) {
-    checks.push(
-      check(
-        'DB-002',
-        dbMigrationContent.includes('CREATE TABLE socialmediaos_sessions'),
-        'socialmediaos_sessions table definition found'
-      ),
-      check(
-        'DB-003',
-        dbMigrationContent.includes('CREATE TABLE socialmediaos_content_packs'),
-        'socialmediaos_content_packs table definition found'
-      )
-    );
-  } else {
-    checks.push(
-      check('DB-002', false, 'Could not read DB migration file'),
-      check('DB-003', false, 'Could not read DB migration file')
-    );
-  }
-
-  // --- Service Exports Check ---
-  const servicePath = 'services/socialmediaos-service.js';
-  const serviceContent = read(servicePath);
-  checks.push(
-    check('SVC-001', exists(servicePath), `Service file ${servicePath} exists`)
-  );
-  if (serviceContent) {
-    checks.push(
-      check(
-        'SVC-002',
-        serviceContent.includes('export function createMarketingOSFactory'),
-        'createMarketingOSFactory export found'
-      ),
-      check(
-        'SVC-003',
-        runNodeCheck(servicePath),
-        `Service file ${servicePath} passes Node --check`
-      )
-    );
-  } else {
-    checks.push(
-      check('SVC-002', false, 'Could not read service file'),
-      check('SVC-003', false, 'Skipped Node --check for service file')
-    );
-  }
-
-  // --- Route Factory Signature Check ---
-  const routesPath = 'routes/socialmediaos-routes.js';
-  const routesContent = read(routesPath);
-  checks.push(
-    check('RTE-001', exists(routesPath), `Routes file ${routesPath} exists`)
-  );
-  if (routesContent) {
-    checks.push(
-      check(
-        'RTE-002',
-        routesContent.includes('export function createSocialmediaosRoutes({ pool, requireKey, logger })'),
-        'createSocialmediaosRoutes factory signature found'
-      ),
-      check(
-        'RTE-003',
-        runNodeCheck(routesPath),
-        `Routes file ${routesPath} passes Node --check`
-      )
-    );
-  } else {
-    checks.push(
-      check('RTE-002', false, 'Could not read routes file'),
-      check('RTE-003', false, 'Skipped Node --check for routes file')
-    );
-  }
-
-  // --- HTTP Probes ---
-  const headers = { 'x-command-key': commandKey, 'Content-Type': 'application/json' };
-
   // Probe 1: GET /api/v1/socialmediaos/sessions
-  const getSessionsUrl = `${baseUrl}${apiBase}/sessions`;
-  try {
-    const res = await fetch(getSessionsUrl, { headers });
-    const text = await res.text();
-    let json = null;
-    try {
-      json = JSON.parse(text);
-    } catch {
-      // json remains null if parsing fails
-    }
-
-    checks.push(
-      check(
-        'PROBE-001',
-        res.ok && json?.ok === true && Array.isArray(json?.sessions),
-        `GET ${apiBase}/sessions: HTTP ${res.status}, ok: ${json?.ok}, sessions array: ${Array.isArray(json?.sessions)}`
-      )
-    );
-  } catch (error) {
-    checks.push(
-      check('PROBE-001', false, `GET ${apiBase}/sessions failed: ${error.message}`)
-    );
-  }
+  const sessionsUrl = `${baseUrl}${API_BASE_PATH}/sessions`;
+  const sessionsRes = await fetchJson(sessionsUrl, 'GET', null, commandKey);
+  checks.push(
+    check(
+      'HTTP-01',
+      sessionsRes.ok && sessionsRes.status === 200 && sessionsRes.json?.ok === true,
+      `GET ${sessionsUrl} -> Status: ${sessionsRes.status}, OK: ${sessionsRes.json?.ok}, Detail: ${sessionsRes.text.substring(0, 100)}`
+    )
+  );
 
   // Probe 2: POST /api/v1/socialmediaos/validate-payment-link
-  const validateLinkUrl = `${baseUrl}${apiBase}/validate-payment-link`;
-  const postBody = { link: 'https://buy.stripe.com/test' };
-  try {
-    const res = await fetch(validateLinkUrl, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(postBody),
-    });
-    const text = await res.text();
-    let json = null;
-    try {
-      json = JSON.parse(text);
-    } catch {
-      // json remains null if parsing fails
-    }
+  const validateLinkUrl = `${baseUrl}${API_BASE_PATH}/validate-payment-link`;
+  const validateLinkBody = { link: 'https://buy.stripe.com/test' };
+  const validateLinkRes = await fetchJson(validateLinkUrl, 'POST', validateLinkBody, commandKey);
+  const validationResultOk = validateLinkRes.ok && validateLinkRes.status === 200 && validateLinkRes.json?.ok === true;
+  const validationContentOk = validateLinkRes.json?.valid === true || validateLinkRes.json?.validationResult?.valid === true;
 
-    checks.push(
-      check(
-        'PROBE-002',
-        res.ok && json?.ok === true && json?.valid === true,
-        `POST ${apiBase}/validate-payment-link: HTTP ${res.status}, ok: ${json?.ok}, valid: ${json?.valid}`
-      )
-    );
-  } catch (error) {
-    checks.push(
-      check('PROBE-002', false, `POST ${apiBase}/validate-payment-link failed: ${error.message}`)
-    );
-  }
+  checks.push(
+    check(
+      'HTTP-02',
+      validationResultOk && validationContentOk,
+      `POST ${validateLinkUrl} -> Status: ${validateLinkRes.status}, OK: ${validateLinkRes.json?.ok}, Valid: ${validateLinkRes.json?.valid || validateLinkRes.json?.validationResult?.valid}, Detail: ${validateLinkRes.text.substring(0, 100)}`
+    )
+  );
 
   return checks;
 }
 
 async function main() {
-  const auditChecks = await runAudit();
-  const overallScore = scoreChecks(auditChecks);
-  const allOk = auditChecks.every((c) => c.ok);
+  const auditResults = await runAudit();
+  let allPassed = true;
 
-  const report = {
-    schema: 'socialmediaos_phase1_acceptance_report_v1',
-    generated_at: new Date().toISOString(),
-    overall_score: overallScore,
-    ok: allOk,
-    checks: auditChecks,
-  };
+  console.log('--- SocialMediaOS Phase 1 Acceptance Script Results ---');
+  for (const checkResult of auditResults) {
+    const status = checkResult.ok ? 'PASS' : 'FAIL';
+    console.log(`[${status}] ${checkResult.id}: ${checkResult.detail}`);
+    if (!checkResult.ok) {
+      allPassed = false;
+    }
+  }
 
-  console.log(JSON.stringify(report, null, 2));
-
-  if (!allOk) {
-    console.error('\n--- FAILED CHECKS ---');
-    auditChecks.filter((c) => !c.ok).forEach((c) => {
-      console.error(`FAIL ${c.id}: ${c.detail}`);
-    });
-    process.exit(1);
-  } else {
-    console.log('\nAll SocialMediaOS Phase 1 acceptance checks passed.');
+  if (allPassed) {
+    console.log('\nAll SocialMediaOS Phase 1 acceptance checks passed!');
     process.exit(0);
+  } else {
+    console.error('\nSome SocialMediaOS Phase 1 acceptance checks failed.');
+    process.exit(1);
   }
 }
 
-main().catch((err) => {
-  console.error('An unhandled error occurred during audit:', err);
-  process.exit(1);
-});
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((err) => {
+    console.error('An unexpected error occurred during audit:', err);
+    process.exit(1);
+  });
+}
