@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-25",
-  "last_receipt": "2026-06-25 ambient-boldtrail-crm-capture",
-  "last_change_summary": "Ambient moment router writes BoldTrail notes/contacts; alpha-test-lumin-connection script",
+  "last_receipt": "2026-06-25 alpha-test-lumin-connection-text-field",
+  "last_change_summary": "founder-interface alpha test uses text not message",
   "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
 }

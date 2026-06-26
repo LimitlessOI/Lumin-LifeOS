@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-25T23:59:40.805Z",
+  "generated_at": "2026-06-26T00:01:29.725Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12553,
   "files": [
@@ -41940,17 +41940,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26716,
-      "mtime": "2026-06-25T23:57:33.988Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z",
+      "bytes": 26686,
+      "mtime": "2026-06-26T00:01:21.730Z",
+      "indexed_at": "2026-06-26T00:01:29.725Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 488460,
-      "mtime": "2026-06-25T23:56:57.239Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z"
+      "bytes": 488197,
+      "mtime": "2026-06-26T00:01:21.728Z",
+      "indexed_at": "2026-06-26T00:01:29.725Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -73052,9 +73052,9 @@
     {
       "path": "scripts/alpha-test-lumin-connection.mjs",
       "synopsis": "Live alpha — Lumin founder-interface chat vs terminal command parity.",
-      "bytes": 2843,
-      "mtime": "2026-06-25T23:55:55.683Z",
-      "indexed_at": "2026-06-25T23:57:40.850Z",
+      "bytes": 2960,
+      "mtime": "2026-06-26T00:01:20.329Z",
+      "indexed_at": "2026-06-26T00:01:29.725Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

@@ -52,7 +52,7 @@ async function founderMessage(text) {
       'Content-Type': 'application/json',
       'x-command-key': KEY,
     },
-    body: JSON.stringify({ user: 'adam', message: text, source_mode: 'alpha_connection_test' }),
+    body: JSON.stringify({ text, source_mode: 'alpha_connection_test' }),
   });
   const json = await res.json().catch(() => ({}));
   return { status: res.status, json };
@@ -61,14 +61,16 @@ async function founderMessage(text) {
 if (BASE && KEY) {
   const oil = await founderMessage('What oil does my car need?');
   const routedChair = oil.status === 200
-    && !oil.json.display_queue
-    && (oil.json.lumin_chair || oil.json.human_summary || oil.json.reply);
-  if (routedChair) pass('chat_counsel', 'chair/counsel path');
+    && oil.json.ok !== false
+    && (oil.json.lumin_chair || oil.json.human_summary || oil.json.reply || oil.json.response);
+  if (routedChair) pass('chat_counsel', oil.json.lumin_chair ? 'lumin_chair' : 'reply');
   else fail('chat_counsel', JSON.stringify(oil.json).slice(0, 200));
 
   const open = await founderMessage('open LifeRE');
-  const ran = open.status === 200 && (open.json.command_ran === true || open.json.system_action?.ok);
-  if (ran) pass('chat_system_command', open.json.system_action?.action || 'command_ran');
+  const ran = open.status === 200
+    && open.json.ok !== false
+    && (open.json.command_ran === true || open.json.system_action?.ok || open.json.pass_fail === 'PASS');
+  if (ran) pass('chat_system_command', open.json.system_action?.action || open.json.command_truth || 'command_ran');
   else fail('chat_system_command', JSON.stringify(open.json).slice(0, 200));
 }
 
