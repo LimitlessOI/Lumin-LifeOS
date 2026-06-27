@@ -32,6 +32,9 @@ export function isMissionPipelineIntent(text = '') {
   if (/^\s*build\b/i.test(t)) return false;
   if (/\bPRODUCT-[A-Z0-9-]+-\d+\b/.test(t)) return true;
   if (/Point B|POINT_B_TARGET|LifeRE Alpha|foundation:pipeline|builderos:foundation/i.test(t)) return true;
+  if (/\b(continue|keep going|advance|move)\b.*\b(point b|lifere alpha|alpha)\b/i.test(t)) return true;
+  if (/\bnext required step\b/i.test(t) && /\b(point b|lifere|alpha|mission)\b/i.test(t)) return true;
+  if (/\breceipt scan only\b/i.test(t) && /\b(machine path|point b|lifere|alpha)\b/i.test(t)) return true;
   if (/FOUNDER SUCCESS TEST/i.test(t) && /Point A|Operating rules|machine path/i.test(t)) return true;
   if (/never[- ]stop|obstacle.*lesson|stopping is failure/i.test(t) && /lifere|alpha|mission/i.test(t)) return true;
   return false;

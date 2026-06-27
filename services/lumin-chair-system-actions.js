@@ -64,7 +64,7 @@ export function parseLuminChairSystemAction(text = '') {
     },
     {
       action_type: 'point_b_status',
-      test: /\b(point b|what(?:'s| is) point b|current (program|mission|priority))\b/i,
+      test: /\b(what(?:'s| is) point b|point b status|status of point b|current (program|mission|priority))\b/i,
     },
   ];
 

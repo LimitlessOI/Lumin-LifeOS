@@ -18,6 +18,9 @@ export function isExplicitExecuteCommand(text = '') {
 export function isBlueprintExecuteIntent(text = '') {
   const t = String(text || '');
   if (/\b(build|run|execute)\s+(the\s+)?blueprint\b/i.test(t)) return true;
+  if (/\b(build|run|execute)\s+the\s+next\s+blueprint\s+step\b/i.test(t)) return true;
+  if (/\bnext\b.*\bblueprint\b.*\bstep\b/i.test(t)) return true;
+  if (/\bbuild\b.*\bnext\b.*\bstep\b.*\bPRODUCT-[A-Z0-9-]+\b/i.test(t)) return true;
   if (/\bexecute\s+(the\s+)?mission\b/i.test(t)) return true;
   if (/\brun\s+execute[- ]?mission\b/i.test(t)) return true;
   if (/\bexecute\s+PRODUCT-[A-Z0-9-]+\b/i.test(t)) return true;
