@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T21:51:27.128Z",
+  "generated_at": "2026-06-27T22:08:39.479Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12645,
   "files": [
@@ -41791,17 +41791,17 @@
     {
       "path": "docs/products/boldtrail/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 2178,
-      "mtime": "2026-06-27T21:46:04.299Z",
-      "indexed_at": "2026-06-27T21:51:27.128Z",
+      "bytes": 2164,
+      "mtime": "2026-06-27T22:08:06.397Z",
+      "indexed_at": "2026-06-27T22:08:39.479Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/boldtrail/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BoldTrail CRM Integration",
-      "bytes": 3561,
-      "mtime": "2026-06-27T21:44:50.257Z",
-      "indexed_at": "2026-06-27T21:51:27.128Z"
+      "bytes": 3508,
+      "mtime": "2026-06-27T22:07:53.086Z",
+      "indexed_at": "2026-06-27T22:08:39.479Z"
     },
     {
       "path": "docs/products/BUILD_PLAN.md",
@@ -41906,9 +41906,9 @@
     {
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
-      "bytes": 7581,
-      "mtime": "2026-06-27T21:48:44.518Z",
-      "indexed_at": "2026-06-27T21:51:27.128Z",
+      "bytes": 7648,
+      "mtime": "2026-06-27T22:08:19.497Z",
+      "indexed_at": "2026-06-27T22:08:39.479Z",
       "synopsis_index_only": true
     },
     {
