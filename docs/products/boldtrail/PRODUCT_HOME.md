@@ -76,6 +76,11 @@ If a new product needs CRM access:
 2. Do not duplicate BoldTrail logic in the consuming product
 3. If the integration needs new behavior, add it here and update AMENDMENT_11
 
+## Conversations
+
+All BoldTrail integration conversations, session dumps, and replacement planning notes live at:  
+`docs/products/boldtrail/conversations/YYYY-MM-DD-topic.md`
+
 ## History anchor
 
 `docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md` — full law, DB schema, API spec, session receipts.

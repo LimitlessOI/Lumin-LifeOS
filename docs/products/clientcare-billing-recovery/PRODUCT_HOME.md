@@ -68,6 +68,11 @@ No formal mission receipts. No BuilderOS acceptance command defined.
 
 The most important first action is the FOUNDER_PACKET. The code scaffolding exists; it needs a spec target.
 
+## Conversations
+
+All ClientCare conversations, brainstorms, and session dumps live at:  
+`docs/products/clientcare-billing-recovery/conversations/YYYY-MM-DD-topic.md`
+
 ## History anchor
 
 `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` — full law, operating model, vendor facts, session receipts.

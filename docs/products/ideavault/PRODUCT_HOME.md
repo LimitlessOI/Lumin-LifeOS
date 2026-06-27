@@ -1,65 +1,62 @@
-<!-- SYNOPSIS: Canonical product home — IdeaVault (Idea Queue + Backlog Engine) -->
+<!-- SYNOPSIS: IdeaVault — platform tool for idea and conversation intake/routing -->
 
-# IdeaVault Product Home
+# IdeaVault Platform Tool
 
 **Canonical home:** this file  
+**Type:** `PLATFORM_TOOL` — not a product, not in the BuilderOS mission queue  
 **Product id:** `ideavault`  
-**Primary runtime surface:** `routes/idea-queue-routes.js` (internal admin API)  
 **Law anchor:** `docs/projects/AMENDMENT_38_IDEA_VAULT.md`  
 **Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`
 
-## Mission
+## What it does
 
-IdeaVault is an internal product: a registry and queue engine for ideas captured from multi-model build conversations and operator brainstorms. It prevents idea loss, routes themes to the correct owning amendment or product, and gives the BuilderOS and Chair layers a structured intake surface for new build ideas.
+IdeaVault is an intake and routing tool. Its job is to make sure no idea or conversation gets lost — and that whatever is captured ends up in the right place.
 
-**This is an internal admin tool, not a user-facing SaaS product.**  
-It does not have a consumer UI. It serves Adam and the build pipeline.
+**Intake sources:**
+- Conversations with Chair/Lumin that surface product ideas mid-session
+- Operator brainstorms pasted directly
+- BuilderOS gap analysis output
+- Any agent that identifies a feature worth preserving
 
-## Readiness state
+**Routing output:**
+- Ideas related to a specific product → `docs/products/<product-id>/conversations/`
+- Cross-product or platform ideas → `docs/projects/AMENDMENT_38_IDEA_VAULT.md` catalog
+- Ideas with no clear owner → `docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md` (pending triage)
 
-`PARTIAL_CODE_PRESENT`
+## The conversations convention
 
-The law anchor (AMENDMENT_38) is extensive. A runtime queue route and engine service exist. However, no mission pack (FOUNDER_PACKET / BLUEPRINT.json) exists to formally specify what "IdeaVault working" means in production. The amendment itself says the product is `LIVE (documentation / backlog SSOT — not a shipping product surface)`.
+Every product folder follows this pattern:
 
-The code exists for an API surface. The open question is whether IdeaVault warrants a standalone mission or should be absorbed into LifeOS as an admin feature of the Chair layer.
+```
+docs/products/<product-id>/
+  PRODUCT_HOME.md
+  FILE_MANIFEST.json
+  AGENTS.md
+  conversations/          ← all conversations, brainstorms, session dumps for this product live here
+    YYYY-MM-DD-topic.md
+```
 
-## Owned runtime files
+IdeaVault is the tool that routes conversations into those folders. The folders are the destination. IdeaVault is the mechanism.
 
-Defined in full at `docs/products/ideavault/FILE_MANIFEST.json`.
+## Runtime files
 
-Routes:
-- `routes/idea-queue-routes.js`
+- `routes/idea-queue-routes.js` — intake API for programmatic idea submission
+- `services/idea-engine.js`, `services/idea-engine/index.js` — classification and routing engine
 
-Services:
-- `services/idea-engine.js`
-- `services/idea-engine/index.js`
+These are platform-layer utilities. They are not owned by any single product. Any product or system agent can call them.
 
-Docs:
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — canonical idea catalog (law anchor)
-- `docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md` — verbatim brainstorm pastes
-- `IMMEDIATE_FEATURES_AND_REVOLUTIONARY_IDEAS.md` — repo-root dated feature/idea list
+## What does NOT live here
 
-## Receipts
+IdeaVault does not own the ideas themselves. Ideas live in:
+- Their product's `conversations/` folder (if product-specific)
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` (cross-product catalog and law)
+- `IMMEDIATE_FEATURES_AND_REVOLUTIONARY_IDEAS.md` (repo-root dated brainstorm log)
 
-No formal mission receipts. No BuilderOS acceptance command defined.
+## Conversations
 
-## Shared dependencies
-
-| System | Owner | Pointer |
-|--------|-------|---------|
-| AI Council (idea classification) | Platform | `docs/projects/AMENDMENT_01_AI_COUNCIL.md` |
-| Memory (idea provenance tracking) | Platform | `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md` |
-| BuilderOS queue | Machine | `builderos-reboot/BP_PRIORITY.json` |
-
-## Decision required before blueprint-ready
-
-IdeaVault has partial code but ambiguous product scope. Before a FOUNDER_PACKET can be written, one decision is required:
-
-**Option A:** Standalone product — IdeaVault gets its own mission, acceptance criteria, and formal queue position.  
-**Option B:** LifeOS feature — merge `idea-queue-routes.js` and `idea-engine.js` into LifeOS product home and remove IdeaVault as a separate product.
-
-The amendment is large and should be preserved as law either way. Only the runtime product scope needs clarification.
+IdeaVault-specific conversations (about the tool itself, not ideas it contains) live at:  
+`docs/products/ideavault/conversations/YYYY-MM-DD-topic.md`
 
 ## History anchor
 
-`docs/projects/AMENDMENT_38_IDEA_VAULT.md` — full idea registry, catalog, cross-links to owning amendments, review protocol.
+`docs/projects/AMENDMENT_38_IDEA_VAULT.md` — full idea registry, catalog, cross-product index, review protocol.

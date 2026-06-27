@@ -124,13 +124,13 @@
       "point_b_authority": null,
       "bp_priority_mission_ids": [],
       "default_runtime_surface": null,
-      "status": "ACTIVE_PRODUCT_HOME",
-      "readiness_state": "PARTIAL_CODE_PRESENT",
-      "blueprint_score": 4,
+      "status": "PLATFORM_TOOL",
+      "readiness_state": "PLATFORM_TOOL",
+      "blueprint_score": null,
       "notes": [
-        "Internal documentation/backlog SSOT — not a user-facing SaaS product.",
-        "Scope decision open: standalone product vs. LifeOS admin feature.",
-        "Route and engine services exist for internal API use only."
+        "Platform tool — not a product, not in BuilderOS mission queue.",
+        "Intake and routing engine: routes conversations/ideas to docs/products/<id>/conversations/ or AMENDMENT_38 catalog.",
+        "idea-queue-routes.js and idea-engine.js are platform utilities any product can call."
       ]
     },
     {

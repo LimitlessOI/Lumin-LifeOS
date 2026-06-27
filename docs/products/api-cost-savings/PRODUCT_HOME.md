@@ -75,6 +75,11 @@ No formal mission receipts. No BuilderOS acceptance command defined.
 
 The landing page is live. The tech works. The gap is customer acquisition spec, not code.
 
+## Conversations
+
+All API Cost Savings conversations, brainstorms, and customer acquisition session dumps live at:  
+`docs/products/api-cost-savings/conversations/YYYY-MM-DD-topic.md`
+
 ## History anchor
 
 `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md` — full law, 5-layer stack spec, 50-idea savings brainstorm, session receipts.
