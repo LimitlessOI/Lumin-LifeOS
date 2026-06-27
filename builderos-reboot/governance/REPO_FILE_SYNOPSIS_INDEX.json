@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T21:33:51.085Z",
+  "generated_at": "2026-06-27T21:36:41.337Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12625,
   "files": [
@@ -42054,17 +42054,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 27099,
-      "mtime": "2026-06-27T20:50:12.644Z",
-      "indexed_at": "2026-06-27T20:54:17.008Z",
+      "bytes": 27191,
+      "mtime": "2026-06-27T21:36:26.902Z",
+      "indexed_at": "2026-06-27T21:36:41.337Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 515934,
-      "mtime": "2026-06-27T20:50:12.647Z",
-      "indexed_at": "2026-06-27T20:54:17.008Z"
+      "bytes": 516989,
+      "mtime": "2026-06-27T21:36:05.149Z",
+      "indexed_at": "2026-06-27T21:36:41.337Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -90103,11 +90103,11 @@
     {
       "path": "services/lumin-conversation-routing.js",
       "synopsis": "Conversation vs display routing — personal talk never hits queue display theater.",
-      "bytes": 3759,
-      "mtime": "2026-06-27T20:50:13.440Z",
-      "indexed_at": "2026-06-27T20:54:17.008Z",
+      "bytes": 3894,
+      "mtime": "2026-06-27T21:35:54.126Z",
+      "indexed_at": "2026-06-27T21:36:41.337Z",
       "ssot": [
-        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
