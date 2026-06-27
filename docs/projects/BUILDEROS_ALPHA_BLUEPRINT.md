@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-26 — counsel routing hardening; alpha_probe skips founder thread persist.
+**Last Updated:** 2026-06-27 — founder BuilderOS platform repairs now classify as GAP-FILL before FPv2 gate.
 ---
 
 ## 0. Purpose
@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-27 | **Founder BuilderOS GAP-FILL routing** — `runFounderBuildWithSelfRepair()` now derives `platform_gap_fill` for BuilderOS platform repair orders before `enforceBeforeBuilderDispatch()` and forwards it into `/builder/task` + `/builder/execute`. | Live founder drawer build on BuilderOS file hit `BLOCKED_FOUNDER_PACKET_V2` instead of self-repairing a platform truth drift. | ⚠️ deploy + live founder re-run | `founder-build-self-repair.js` |
 | 2026-06-26 | **Alpha probe normalize skip** — `founder-interface/message` skips input normalize on alpha_probe/system questions; `useCache:false` on normalize | Counsel turns all returned Q1 cached normalize/answer | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
 | 2026-06-26 | **Alpha audit — `founder-visual-ui-patch.js` committed** — alpha battery confirms fast border-radius path live; Railway SHA parity ✅ | overlay battery 4/4, direct action PASS, governance covenant PASS | ✅ deployed | `lifeos:overlay:alpha:battery` |
 | 2026-06-26 | **Chair system knowledge + visual UI patch** — SSOT/synopsis in counsel facts; direct SMOS answers; mechanical border-radius patch | Alpha gaps: counsel drift, B2 timeout | ⚠️ deploy | `chair-system-knowledge.js` |

@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T20:31:10.174Z",
+  "generated_at": "2026-06-27T20:51:56.210Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12625,
   "files": [
@@ -42568,9 +42568,9 @@
     {
       "path": "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md",
       "synopsis": "BUILDEROS ALPHA BLUEPRINT",
-      "bytes": 141916,
-      "mtime": "2026-06-27T20:27:22.684Z",
-      "indexed_at": "2026-06-27T20:30:49.341Z"
+      "bytes": 142386,
+      "mtime": "2026-06-27T20:51:40.135Z",
+      "indexed_at": "2026-06-27T20:51:56.210Z"
     },
     {
       "path": "docs/projects/builderos-remediation/ALPHA_SCOPE.md",
@@ -88424,9 +88424,9 @@
     {
       "path": "services/founder-build-self-repair.js",
       "synopsis": "Never-stop founder build loop — infer target_file, retry on repairable blockers.",
-      "bytes": 35537,
-      "mtime": "2026-06-27T20:27:23.279Z",
-      "indexed_at": "2026-06-27T20:30:49.341Z",
+      "bytes": 36105,
+      "mtime": "2026-06-27T20:50:27.035Z",
+      "indexed_at": "2026-06-27T20:51:56.210Z",
       "ssot": [
         "docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md"
       ]
