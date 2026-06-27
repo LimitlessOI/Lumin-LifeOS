@@ -10,7 +10,7 @@
 - and capable of deploying new `.mjs` files into the `scripts` directory.
 - It serves as a fundamental check for the builder's health and readiness.
  */
-// ui-e2e-build-proof: 2026-06-27T02:17:41.645Z
+// ui-e2e-build-proof: 2026-06-27T04:42:02.809Z
 // --- Constants ---
 /*
 - The version identifier for this specific smoke test script.
