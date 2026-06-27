@@ -4,6 +4,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  runLuminChairTurn,
   classifyChairIntent,
   isBlueprintExecuteIntent,
   isBuildRequest,
@@ -46,10 +47,10 @@ test('display-only flag wins first', () => {
   );
 });
 
-test('pure counsel question routes lumin (unified front door)', () => {
+test('pure counsel question routes chair (unified front door)', () => {
   const msg = 'what is the meaning of focus?';
   assert.equal(isPureCounselQuestion(msg), true);
-  assert.equal(classifyChairIntent({ cleanedInput: msg }), 'lumin');
+  assert.equal(classifyChairIntent({ cleanedInput: msg }), 'chair');
 });
 
 test('LifeRE next-step language routes point_b', () => {
@@ -75,4 +76,35 @@ test('build LifeRE Point B usability routes build_async not mission_pipeline', (
     classifyChairIntent({ cleanedInput: msg, useTerminalForBuild: false }),
     'build_async',
   );
+});
+
+test('chair native turn loads memory context for the active user, not hardcoded adam', async () => {
+  let seenArgs = null;
+  const result = await runLuminChairTurn({
+    cleanedInput: 'I keep overcommitting and I need help thinking through that pattern.',
+    normalizedText: 'I keep overcommitting and I need help thinking through that pattern.',
+    sourceMode: 'text',
+    conversationalMode: true,
+    explicitAction: 'auto',
+    shouldDisplayOnly: false,
+    explicitExecute: false,
+    userId: 42,
+    userHandle: 'sherry',
+    conversationHistory: [],
+    alphaProbe: false,
+  }, {
+    loadChairMemoryContext: async (args) => {
+      seenArgs = args;
+      return 'PERSONAL TWIN:\nName: Sherry';
+    },
+    callCouncilMember: async () => '',
+    translateChairPersonality: async ({ systemFacts }) => `memory=${systemFacts.memory_context || 'none'}`,
+    sanitizeConversationReply: (text) => text,
+    pool: null,
+  });
+
+  assert.deepEqual(seenArgs, { userId: 42, userHandle: 'sherry' });
+  assert.equal(result.statusCode, 200);
+  assert.equal(result.body.chair_channel, 'chair');
+  assert.match(result.body.human_summary_technical, /Sherry/);
 });

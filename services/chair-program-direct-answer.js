@@ -43,6 +43,12 @@ export function shouldUseDirectFactualAnswer(input = '', systemFacts = {}) {
   const t = String(input || '').trim();
   if (!t || needsSystemKnowledge(t)) return false;
   if (/^\s*(do|execute|run)\s*:/i.test(t)) return false;
+  if (
+    systemFacts.recent_thread
+    && /\b(just|earlier|previous|this thread|remember|asked you|told you|we said|exact phrase|code phrase)\b/i.test(t)
+  ) {
+    return false;
+  }
   const search = String(systemFacts.verified_search || '').trim();
   if (search.length < 24) return false;
   const qTokens = t.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter((w) => w.length > 4);

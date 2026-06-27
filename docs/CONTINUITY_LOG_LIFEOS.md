@@ -8,6 +8,21 @@
 
 ---
 
+## [BUILD] Update 2026-06-27 — Founder continuity hardening (user-scoped memory + thread recall guard)
+
+### What happened
+- **Live founder continuity probe failed in the exact way Adam warned about.** Turn 1: chair acknowledged a thread-only phrase (`iron-harbor-...`) correctly. Turn 2: “What exact phrase did I just ask you to remember for this thread?” answered from `verified_search` instead of thread context.
+- **Two defects caused it.** `routes/lifeos-builderos-command-control-routes.js` built prompt context through `loadLuminMemory()` with a hardcoded `adam` lookup instead of the active request user. Separately, `services/chair-program-direct-answer.js` allowed thread-referential questions to short-circuit into the direct factual-search path whenever a search block existed.
+- **Fix shipped locally.** `services/lumin-chair-orchestrator.js` now passes `userId`/`userHandle` into `loadChairMemoryContext()`. The route memory loader now resolves the active user when building prompt context. The direct factual-answer fast path now refuses recall-style prompts when `recent_thread` exists, forcing the chair to answer from thread continuity instead of web-search theater.
+
+### Verification
+- `node --test tests/chair-program-direct-answer.test.js tests/lumin-chair-orchestrator.test.js` → PASS
+- `node --test tests/chair-direct-connection-truth.test.js tests/lumin-conversation-routing.test.js` → PASS
+- Live pre-fix probe documented: first turn stored phrase, second turn incorrectly answered from `verified_search`.
+
+### Next step
+Push/deploy the continuity fix, rerun the live founder memory probe, then continue driving BuilderOS through the founder UI path until the next autonomous-build blocker is concrete.
+
 ## [BUILD] Update 2026-06-27 — Founder Point B execute routing hardening
 
 ### What happened

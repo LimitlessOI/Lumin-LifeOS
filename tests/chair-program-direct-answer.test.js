@@ -3,7 +3,11 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { shouldUseDirectProgramAnswer, formatDirectProgramAnswer } from '../services/chair-program-direct-answer.js';
+import {
+  shouldUseDirectProgramAnswer,
+  formatDirectProgramAnswer,
+  shouldUseDirectFactualAnswer,
+} from '../services/chair-program-direct-answer.js';
 import { isVisualUiPatchRequest } from '../services/founder-visual-ui-patch.js';
 
 const SMOS_FACTS = {
@@ -53,4 +57,12 @@ test('counsel-only builder explain does not false-trigger build request path', a
 
 test('rounded send button is visual UI patch', () => {
   assert.equal(isVisualUiPatchRequest('make the send button in the lumin drawer slightly more rounded'), true);
+});
+
+test('thread recall question does not short-circuit to factual search', () => {
+  const q = 'What exact phrase did I just ask you to remember for this thread?';
+  assert.equal(shouldUseDirectFactualAnswer(q, {
+    recent_thread: 'Adam: Remember iron-harbor-123456\nLumin: Noted.',
+    verified_search: 'Live search unavailable for: What exact phrase did I just ask you to remember for this thread?.',
+  }), false);
 });

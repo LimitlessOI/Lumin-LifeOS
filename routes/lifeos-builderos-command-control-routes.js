@@ -1,7 +1,7 @@
 /**
- * SYNOPSIS: @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * SYNOPSIS: @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
-// @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+// @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 
 import express from 'express';
 import { buildContextForPrompt, storeMemory } from '../core/memory-system.js';
@@ -265,15 +265,21 @@ Input: ${rawText}`,
     return /\b(show|display|view|status|queue|jobs|graph|chart|summary|blocker|receipt|how many|what is|what are|list|count|tell me)\b/i.test(text);
   }
 
-  async function loadLuminMemory() {
+  async function loadLuminMemory({ userId = null, userHandle = null } = {}) {
     if (luminContext && pool) {
       try {
-        const { rows } = await pool.query(
-          `SELECT id FROM lifeos_users WHERE user_handle = 'adam' AND active = TRUE LIMIT 1`,
-        ).catch(() => ({ rows: [] }));
+        let resolvedUserId = userId;
+        const resolvedHandle = String(userHandle || 'adam').toLowerCase();
+        if (!resolvedUserId) {
+          const { rows } = await pool.query(
+            `SELECT id FROM lifeos_users WHERE user_handle = $1 AND active = TRUE LIMIT 1`,
+            [resolvedHandle],
+          ).catch(() => ({ rows: [] }));
+          resolvedUserId = rows[0]?.id || null;
+        }
         const ctx = await luminContext.buildPromptContext({
-          userId: rows[0]?.id || null,
-          userHandle: 'adam',
+          userId: resolvedUserId,
+          userHandle: resolvedHandle,
         });
         if (ctx) return ctx;
       } catch { /* fall through */ }

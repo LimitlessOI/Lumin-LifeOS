@@ -787,7 +787,10 @@ export async function runLuminChairTurn(ctx, deps) {
       const memoryContext = ctx.alphaProbe
         ? null
         : (deps.loadChairMemoryContext
-          ? await deps.loadChairMemoryContext().catch(() => null)
+          ? await deps.loadChairMemoryContext({
+            userId: ctx.userId || null,
+            userHandle: ctx.userHandle || userHandle || null,
+          }).catch(() => null)
           : null);
       const listeningOnboarding = sourceMode === 'listening_setup' && deps.pool
         ? await buildListeningOnboardingContext(deps.pool, ctx.userId).catch(() => null)
