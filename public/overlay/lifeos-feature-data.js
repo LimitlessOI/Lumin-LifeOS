@@ -2,6 +2,14 @@
  * SYNOPSIS: LifeOS overlay UI — Lifeos Feature Data.
  */
 window.LIFEOS_FEATURE_GUIDES = {
+  'lifeos-dashboard.html': {
+    title: 'Dashboard',
+    short: 'The founder-facing control deck for what is live now: current state, proof surfaces, and fast entry into the system.',
+    bullets: ['See the system at a glance', 'Jump into the next useful surface without hunting'],
+    details: ['Dashboard is the operational front door, not the deep-work page.', 'It should make live status and immediate actions obvious.'],
+    visualTitle: 'Dashboard scan',
+    visualSteps: ['Check system state', 'Spot priority surfaces', 'Enter the right lane', 'Act quickly']
+  },
   'lifeos-today.html': {
     title: 'Today',
     short: 'Your operating snapshot for the day: state, priorities, focus, health, and what needs attention.',
@@ -148,6 +156,22 @@ window.LIFEOS_FEATURE_GUIDES = {
     visualTitle: 'Development loop',
     visualSteps: ['Capture a child moment', 'Tag growth or need', 'Review with parent/teacher context', 'Build continuity over years']
   },
+  'lifeos-lifere.html': {
+    title: 'LifeRE',
+    short: 'The real-estate operating lane inside LifeOS for content, pipeline, follow-up, and production proof.',
+    bullets: ['Run the revenue lane from inside LifeOS', 'Tie actions to actual receipts and follow-through'],
+    details: ['LifeRE is a product lane, not just a page.', 'It is where founder commands, business execution, and proof loops meet current real-estate work.'],
+    visualTitle: 'LifeRE flow',
+    visualSteps: ['Read the lane', 'Run the next move', 'Collect proof', 'Advance the mission']
+  },
+  'lifeos-conflict.html': {
+    title: 'Conflict',
+    short: 'A direct conflict-handling lane for recurring triggers, hard conversations, and repair attempts.',
+    bullets: ['Catch repeated conflict patterns', 'Move from escalation toward repair'],
+    details: ['Conflict is the sharper edge of relationship support.', 'It exists so recurring friction can be seen clearly instead of normalized.'],
+    visualTitle: 'Conflict loop',
+    visualSteps: ['Name the trigger', 'Separate pattern from person', 'Choose de-escalation', 'Attempt repair']
+  },
   'lifeos-mediation.html': {
     title: 'Mediation',
     short: 'Neutral structure for conflict, hard conversations, and repair attempts.',
@@ -172,6 +196,30 @@ window.LIFEOS_FEATURE_GUIDES = {
     visualTitle: 'Identity test',
     visualSteps: ['State identity claim', 'Collect evidence', 'Surface contradictions', 'Choose a truer next move']
   },
+  'lifeos-habits.html': {
+    title: 'Habits',
+    short: 'Habit tracking with behavioral truth: what repeats, what breaks, and what is starting to compound.',
+    bullets: ['Track repetition honestly', 'See which habits are stabilizing the rest of life'],
+    details: ['Habits should measure real recurrence, not good intentions.', 'Use it to see whether consistency is actually improving.'],
+    visualTitle: 'Habit loop',
+    visualSteps: ['Define habit', 'Log repetitions', 'Review adherence', 'Adjust the system around reality']
+  },
+  'lifeos-cycle.html': {
+    title: 'Cycle',
+    short: 'A cycle-awareness lane for recurring physical, emotional, or seasonal patterns that affect behavior.',
+    bullets: ['See repeating cycles sooner', 'Adjust plans based on known pattern windows'],
+    details: ['Cycle is for recurrence that changes capacity or behavior over time.', 'It prevents every low or spike from feeling random.'],
+    visualTitle: 'Cycle awareness',
+    visualSteps: ['Log the cycle signal', 'Track recurrence', 'Compare impact', 'Plan with foresight']
+  },
+  'lifeos-chat.html': {
+    title: 'Lumin Chat',
+    short: 'The direct conversational lane with Lumin when you want a larger dedicated chat surface than the drawer.',
+    bullets: ['Stay in one thread for deeper work', 'Use the same Chair connection in a larger canvas'],
+    details: ['Lumin Chat is still the Chair, just in a fuller conversation surface.', 'It should feel continuous with the drawer, not like a separate bot.'],
+    visualTitle: 'Chat lane',
+    visualSteps: ['Open the thread', 'Continue context', 'Ask or execute', 'Keep proof in view']
+  },
   'lifeos-decisions.html': {
     title: 'Decisions',
     short: 'Decision intelligence: context, bias checks, and second-order thinking before major choices.',
@@ -179,6 +227,14 @@ window.LIFEOS_FEATURE_GUIDES = {
     details: ['Decisions records the conditions around choices and helps detect recurring bias or bad timing.', 'Use it for high-cost choices, not every trivial option.'],
     visualTitle: 'Decision quality loop',
     visualSteps: ['Frame the decision', 'Check bias and state', 'Choose deliberately', 'Review outcomes later']
+  },
+  'lifeos-balance-wheel.html': {
+    title: 'Balance Wheel',
+    short: 'A whole-life balance scan that shows which domains are overfed, neglected, or destabilizing the rest of the system.',
+    bullets: ['See imbalance before it becomes drift', 'Compare current load across domains in one place'],
+    details: ['Balance Wheel is the panoramic check, not the daily operator view.', 'Use it to catch when one area is cannibalizing the rest of life even if raw output still looks good.'],
+    visualTitle: 'Balance review',
+    visualSteps: ['Score each domain', 'Spot sharp asymmetry', 'Choose what to rebalance', 'Turn it into concrete next actions']
   },
   'lifeos-growth.html': {
     title: 'Growth',
@@ -195,6 +251,14 @@ window.LIFEOS_FEATURE_GUIDES = {
     details: ['Finance keeps money from becoming an invisible force acting on your life.', 'It should support clarity and values, not false precision or financial advice.'],
     visualTitle: 'Finance loop',
     visualSteps: ['Capture money flow', 'Review categories and goals', 'Spot stress points', 'Adjust behavior']
+  },
+  'lifeos-backtest.html': {
+    title: 'Backtest',
+    short: 'A hindsight lane for checking how a decision, model, or operating guess would have scored against reality.',
+    bullets: ['Score guesses against outcomes', 'Improve future judgment with evidence'],
+    details: ['Backtest is where simulation meets the scoreboard.', 'Use it to reduce repeated self-deception and sharpen forecasting.'],
+    visualTitle: 'Backtest path',
+    visualSteps: ['Choose the claim', 'Compare it to outcomes', 'Score the miss or hit', 'Feed the lesson back in']
   },
   'lifeos-vision.html': {
     title: 'Vision',
@@ -220,6 +284,22 @@ window.LIFEOS_FEATURE_GUIDES = {
     visualTitle: 'Healing process',
     visualSteps: ['Set consent and framing', 'Enter the memory safely', 'Process and repair', 'Exit with integration']
   },
+  'lifeos-weekly-review.html': {
+    title: 'Weekly Review',
+    short: 'A weekly reset lane for summarizing wins, misses, drift, and the next corrections that matter most.',
+    bullets: ['Close the week with evidence', 'Start the next week without stale fog'],
+    details: ['Weekly Review is the medium-horizon reflection loop between Today and long-range Vision.', 'It should tighten the operating rhythm instead of becoming paperwork.'],
+    visualTitle: 'Weekly review loop',
+    visualSteps: ['Review the week', 'Name the truth', 'Choose corrections', 'Set the next cadence']
+  },
+  'lifeos-victory-vault.html': {
+    title: 'Victory Vault',
+    short: 'A durable wins archive so progress, proof, and identity evidence do not disappear the moment the day gets hard.',
+    bullets: ['Store real wins', 'Use evidence to fight discouragement and drift'],
+    details: ['Victory Vault is not vanity storage.', 'It is an evidence bank for remembering what has already been proven.'],
+    visualTitle: 'Win capture loop',
+    visualSteps: ['Capture the win', 'Tag why it mattered', 'Review during doubt', 'Reinforce the identity evidence']
+  },
   'lifeos-ethics.html': {
     title: 'Ethics & Privacy',
     short: 'The control surface for sovereignty, privacy, deletion, and how LifeOS is allowed to act.',
@@ -227,6 +307,14 @@ window.LIFEOS_FEATURE_GUIDES = {
     details: ['Ethics & Privacy is where the system explains its boundaries and gives you control over capture and retention.', 'This exists so trust is operational, not implied.'],
     visualTitle: 'Control model',
     visualSteps: ['Set boundaries', 'Grant or revoke consent', 'Review captured data', 'Delete or redact when needed']
+  },
+  'lifeos-clip-vault.html': {
+    title: 'Clip Vault',
+    short: 'An on-device evidence vault for saved moments, conflict clips, and therapist-exportable metadata.',
+    bullets: ['Keep sensitive clips local to the device', 'Export structured metadata without pretending raw audio should always leave the phone'],
+    details: ['Clip Vault is for intentional capture, not hidden surveillance.', 'It exists so meaningful moments can be reviewed later with strong local-first boundaries.'],
+    visualTitle: 'Clip handling',
+    visualSteps: ['Save a moment deliberately', 'Keep audio local', 'Review or delete clips', 'Export only what is needed']
   },
   'lifeos-onboarding.html': {
     title: 'Onboarding',

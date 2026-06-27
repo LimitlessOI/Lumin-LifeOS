@@ -1,0 +1,104 @@
+<!-- SYNOPSIS: Canonical product home — LifeOS -->
+
+# LifeOS Product Home
+
+**Canonical home:** this file  
+**Product id:** `lifeos`  
+**Primary runtime surface:** `/lifeos`  
+**Law anchors:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/constitution/NORTH_STAR.md`  
+**Machine queue:** `builderos-reboot/BP_PRIORITY.json`
+
+## Mission
+
+LifeOS is the human operating system.
+
+It is the Chair-facing, truth-first, adaptive shell that helps a person move from who they are to who they intend to become, without manipulation, theater, or fake certainty.
+
+It is also a fluid workspace: the same Lumin surface must be able to pivot the visible shell toward the page, stack, and working lane implied by founder intent instead of forcing the founder to navigate a fixed app manually.
+
+## Ownership model
+
+LifeOS owns the personal operating layer:
+- Lumin / Chair front door
+- mirror / commitments / integrity / joy
+- emotional, family, purpose, identity, decisions
+- conversation memory and coaching surfaces
+
+LifeOS does **not** own:
+- LifeRE business specialization
+- MarketingOS platform doctrine
+- TC system of record
+- generic platform governance law
+
+Those are dependencies or sibling products.
+
+## Owned runtime files
+
+Primary owned files are defined in:
+- `docs/products/lifeos/FILE_MANIFEST.json`
+
+High-signal owned surfaces:
+- `services/lumin-chair-orchestrator.js`
+- `services/chair-lumin-unified.js`
+- `services/chair-system-knowledge.js`
+- `services/lifeos-context-router.js`
+- `services/lifeos-system-agent.js`
+- `routes/lifeos-chat-routes.js`
+- `routes/lifeos-core-routes.js`
+- `routes/lifeos-family-routes.js`
+- `routes/lifeos-emotional-routes.js`
+- `routes/lifeos-purpose-routes.js`
+- `public/overlay/lifeos-app.html`
+- `public/overlay/lifeos-studio-shell.js`
+
+## Shared dependencies
+
+LifeOS depends on shared systems but does not own them:
+- platform doctrine and constitutional law
+- BuilderOS mission-pack system
+- Token accounting / model tiering enforcement
+- product queue and Point B lock
+
+Use pointers, not duplication:
+- `docs/products/PRODUCT_REGISTRY.json`
+- `builderos-reboot/governance/LUMIN_OPERATING_MODEL.json`
+- `builderos-reboot/BP_PRIORITY.json`
+- `builderos-reboot/POINT_B_TARGET.json`
+
+## Active missions
+
+Active LifeOS product missions:
+- `PRODUCT-CONVERSATION-COMMITMENTS-C2-0001`
+- `PRODUCT-ACTION-INBOX-V1-0001`
+- `PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001`
+- `PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001`
+
+## Shared-with / crossover products
+
+### LifeRE
+
+LifeRE is a sibling product built on top of LifeOS.
+
+Relationship:
+- LifeOS owns the general human shell
+- LifeRE owns the real-estate specialization
+
+### Voice Rail
+
+Voice Rail is not an active product.
+
+Status:
+- `SCRAPPED_SALVAGE_ONLY`
+
+## History anchors
+
+Use these for law/history/receipts, not as the primary product home:
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+- `docs/conversation_dumps/`
+- `builderos-reboot/MISSIONS/PRODUCT-*`
+
+## Rule for agents
+
+If a file belongs to LifeOS product behavior, `@ssot` should point here or to `docs/products/lifeos/FILE_MANIFEST.json` for ownership lookup.
+
+Do not default back to `AMENDMENT_21` unless the change is truly constitutional/history-level.
