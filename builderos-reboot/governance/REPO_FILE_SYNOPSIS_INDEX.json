@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T17:22:14.426Z",
+  "generated_at": "2026-06-27T17:26:58.985Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12624,
   "files": [
@@ -41848,17 +41848,17 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.manifest.json",
       "synopsis": "Documentation — AMENDMENT 04 AUTO BUILDER.Manifest.",
-      "bytes": 685,
-      "mtime": "2026-06-27T17:22:04.889Z",
-      "indexed_at": "2026-06-27T17:22:14.426Z",
+      "bytes": 681,
+      "mtime": "2026-06-27T17:26:49.300Z",
+      "indexed_at": "2026-06-27T17:26:58.985Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 46880,
-      "mtime": "2026-06-27T17:22:04.888Z",
-      "indexed_at": "2026-06-27T17:22:14.426Z"
+      "bytes": 47639,
+      "mtime": "2026-06-27T17:26:49.300Z",
+      "indexed_at": "2026-06-27T17:26:58.985Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -86991,9 +86991,9 @@
     {
       "path": "services/builderos-bp-priority-scheduler.js",
       "synopsis": "BP_PRIORITY autonomous queue scheduler — useful-work-guard wrapped.",
-      "bytes": 7389,
-      "mtime": "2026-06-27T17:22:04.888Z",
-      "indexed_at": "2026-06-27T17:22:14.426Z",
+      "bytes": 8199,
+      "mtime": "2026-06-27T17:26:31.772Z",
+      "indexed_at": "2026-06-27T17:26:58.985Z",
       "ssot": [
         "docs/projects/AMENDMENT_04_AUTO_BUILDER.md"
       ]

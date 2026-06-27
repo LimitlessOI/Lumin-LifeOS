@@ -7,6 +7,6 @@
   "status": "active",
   "build_ready": true,
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 directed-mode-carveout-for-canonical-bp-scheduler",
-  "last_change_summary": "The canonical BP scheduler now runs as an explicit PB-authorized directed-mode lane when BUILDEROS_AUTOPILOT=1, fixing the live conflict where the runtime could report autopilot enabled yet useful-work-guard skipped every queue cycle as generic directed-mode autonomy."
+  "last_receipt": "2026-06-27 queue-complete-healthy-idle-receipt-for-canonical-bp-scheduler",
+  "last_change_summary": "The canonical BP scheduler now writes a recent healthy-idle receipt when the BP queue is complete, fixing the live false blocker where autonomy continuity looked stale even though the governed scheduler was enabled and correctly finding no work to do."
 }

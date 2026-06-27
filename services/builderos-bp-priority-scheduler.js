@@ -151,6 +151,31 @@ export function runBpPriorityOnce({ logger } = {}) {
   });
 }
 
+function recordGuardedOutcome(outcome, { logger } = {}) {
+  const ranAt = new Date().toISOString();
+  state.lastRunAt = ranAt;
+  state.lastError = null;
+  if (outcome?.reason === 'no_work') {
+    state.lastExitCode = 0;
+    writeReceipt({
+      ok: true,
+      skipped: true,
+      reason: outcome.reason,
+      detail: outcome.detail || 'BP_PRIORITY queue complete',
+      ran_at: ranAt,
+    });
+    logger?.info?.({ reason: outcome.reason }, '[BP-PRIORITY-SCHEDULER] healthy idle — queue complete');
+  } else if (outcome?.skipped) {
+    writeReceipt({
+      ok: false,
+      skipped: true,
+      reason: outcome.reason || 'skipped',
+      detail: outcome.detail || null,
+      ran_at: ranAt,
+    });
+  }
+}
+
 const guardedBpPriorityTick = createUsefulWorkGuard({
   taskName: 'BP-PRIORITY-SCHEDULER',
   purpose: 'Advance Point B mission via foundation pipeline when BP_PRIORITY has incomplete work',
@@ -203,7 +228,10 @@ export function startBpPriorityScheduler({ logger } = {}) {
   logger?.info?.({ intervalMs, bootDelayMs }, '[BP-PRIORITY-SCHEDULER] starting — autonomous mission queue active');
 
   const tick = async () => {
-    await guardedBpPriorityTick({ logger });
+    const outcome = await guardedBpPriorityTick({ logger });
+    if (outcome?.skipped) {
+      recordGuardedOutcome(outcome, { logger });
+    }
   };
 
   setTimeout(() => {
