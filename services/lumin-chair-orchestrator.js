@@ -357,7 +357,12 @@ export async function runLuminChairTurn(ctx, deps) {
     alphaProbe = false,
   } = ctx;
 
-  let resolvedUserId = ctx.userId || null;
+  const rawUserId = ctx.userId;
+  let resolvedUserId = (
+    Number.isInteger(rawUserId)
+      ? rawUserId
+      : (/^\d+$/.test(String(rawUserId || '').trim()) ? parseInt(String(rawUserId).trim(), 10) : null)
+  );
   if (!alphaProbe && !resolvedUserId && deps.resolveUserId && (ctx.userHandle || userHandle)) {
     resolvedUserId = await deps.resolveUserId(ctx.userHandle || userHandle).catch(() => null);
   }

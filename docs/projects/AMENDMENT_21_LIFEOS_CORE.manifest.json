@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 founder-command-key-handle-fallback",
-  "last_change_summary": "Founder command-key requests now default to the Adam handle before continuity logic runs, closing the last route-level identity gap in thread recall.",
-  "ssot_receipt_tail": "Live founder probes kept failing continuity until the route itself supplied a stable handle under command-key fallback; deploy and rerun recall probes before certifying continuity."
+  "last_receipt": "2026-06-27 founder-auth-sentinel-id-fix",
+  "last_change_summary": "Founder continuity no longer treats auth sentinel strings like \"emergency-key\" as real user ids; the chair resolves the founder's numeric id by handle before loading persisted thread history.",
+  "ssot_receipt_tail": "The remaining continuity drift was a truthy sentinel userId blocking handle-based thread resolution. Local regressions pass; deploy and rerun the founder memory probe before certifying continuity."
 }

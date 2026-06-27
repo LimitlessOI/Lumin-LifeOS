@@ -152,6 +152,51 @@ test('chair native turn resolves server thread history by handle when userId is 
   assert.match(result.body.human_summary_technical, /Adam:|Lumin:/);
 });
 
+test('chair native turn ignores non-numeric auth sentinel userId and resolves by handle', async () => {
+  let resolvedHandle = null;
+  let seenThreadUserId = null;
+  const result = await runLuminChairTurn({
+    cleanedInput: 'What exact phrase did I just ask you to remember for this thread?',
+    normalizedText: 'What exact phrase did I just ask you to remember for this thread?',
+    sourceMode: 'text',
+    conversationalMode: true,
+    explicitAction: 'auto',
+    shouldDisplayOnly: false,
+    explicitExecute: false,
+    userId: 'emergency-key',
+    userHandle: 'adam',
+    conversationHistory: [],
+    alphaProbe: false,
+  }, {
+    luminPersist: {
+      async getOrCreateDefaultThread(userId) {
+        seenThreadUserId = userId;
+        return { id: `thread-${userId}` };
+      },
+      async getMessages() {
+        return [
+          { role: 'user', content: 'Remember iron-harbor-654321' },
+          { role: 'assistant', content: 'I saw iron-harbor-654321.' },
+        ];
+      },
+    },
+    resolveUserId: async (handle) => {
+      resolvedHandle = handle;
+      return 88;
+    },
+    loadChairMemoryContext: async () => '',
+    callCouncilMember: async () => '',
+    translateChairPersonality: async ({ systemFacts }) => systemFacts.recent_thread || 'no-thread',
+    sanitizeConversationReply: (text) => text,
+    pool: null,
+  });
+
+  assert.equal(resolvedHandle, 'adam');
+  assert.equal(seenThreadUserId, 88);
+  assert.equal(result.statusCode, 200);
+  assert.match(result.body.human_summary_technical, /iron-harbor-654321/);
+});
+
 test('command-key founder route defaults handle to adam for continuity', () => {
   assert.equal(resolveFounderCommandControlHandle({ auth_mode: 'command_key_fallback', lifeosUser: {} }), 'adam');
   assert.equal(resolveFounderCommandControlHandle({ auth_mode: 'jwt', lifeosUser: { handle: 'sherry' } }), 'sherry');

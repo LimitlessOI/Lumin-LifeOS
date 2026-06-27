@@ -8,6 +8,20 @@
 
 ---
 
+## [BUILD] Update 2026-06-27 — Founder continuity hardening v3 (auth sentinel ids no longer block thread recall)
+
+### What happened
+- **A third continuity defect remained after the first two fixes.** The founder route under command-key fallback still passed `userId = "emergency-key"` into `runLuminChairTurn()`.
+- **Root cause was a truthy auth sentinel.** Because `"emergency-key"` is truthy, the chair treated it like a real user id and skipped handle-based founder id resolution, so persisted thread history could still miss and recall prompts could still fall into search.
+- **Fix shipped locally.** `services/lumin-chair-orchestrator.js` now accepts only numeric `userId` values and otherwise resolves the founder’s numeric id from handle before loading thread history. `tests/lumin-chair-orchestrator.test.js` now covers the exact sentinel-id case that was breaking continuity parity.
+
+### Verification
+- `node --test tests/lumin-chair-orchestrator.test.js tests/chair-program-direct-answer.test.js`
+- `node --test tests/chair-direct-connection-truth.test.js tests/lumin-conversation-routing.test.js`
+
+### Next
+Deploy this third continuity fix, rerun the live founder phrase-recall probe, then keep pushing BuilderOS through the founder UI path until the next real autonomous-build blocker is concrete.
+
 ## [BUILD] Update 2026-06-27 — Founder continuity hardening v2 (handle-only auth now loads thread history)
 
 ### What happened
