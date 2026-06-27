@@ -1,6 +1,10 @@
-<!-- SYNOPSIS: LifeRE — Gap Audit (exists vs missing vs scattered) -->
+<!-- SYNOPSIS: LifeRE — Gap Audit — HISTORICAL_SNAPSHOT — NOT LIVE AUTHORITY -->
 
 # LifeRE — Gap Audit
+
+**HISTORICAL_SNAPSHOT** — point-in-time scan from 2026-06-13. **NOT LIVE AUTHORITY.**
+
+For current LifeRE truth: [`docs/products/lifere/PRODUCT_HOME.md`](products/lifere/PRODUCT_HOME.md)
 
 **Date:** 2026-06-13
 **Authority:** Founder Handoff packet

@@ -46,6 +46,18 @@ else
   exit 1
 fi
 
+# ── 2b. Product-home drift (HARD — lifeos + lifere manifest-owned files) ─────
+if node "$ROOT/scripts/ssot-check.js" --staged-product-enforce 2>&1; then
+  echo "✅ Product-home @ssot (lifeos + lifere)"
+else
+  echo ""
+  echo "❌ PRODUCT-HOME VIOLATION: manifest-owned file uses flat stub or foreign amendment @ssot."
+  echo "   Fix: @ssot docs/products/<product>/PRODUCT_HOME.md"
+  echo "   Verify: npm run lifeos:product-home:verify"
+  echo ""
+  exit 1
+fi
+
 # ── 3. SSOT read-before-write gate (HARD for interactive sessions) ─────────────
 # When editing an SSOT amendment, the agent must confirm they read the FULL file
 # in this session — not from memory. Token limits = HALT. Partial = blind patch.

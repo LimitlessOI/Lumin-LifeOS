@@ -6,6 +6,7 @@
  *
  * Usage: npm run factory:deliberation-v27:sentry-loop
  * @ssot docs/projects/AMENDMENT_48_BUILDEROS_VOCABULARY.md
+ * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  */
 import fs from 'node:fs';
 import path from 'node:path';

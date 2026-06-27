@@ -3,6 +3,7 @@
  * SYNOPSIS: LifeOS Commitment Route v2.1 acceptance.
  * LifeOS Commitment Route v2.1 acceptance.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  */
 import 'dotenv/config';
 import fs from 'node:fs';

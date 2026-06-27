@@ -1,6 +1,10 @@
-<!-- SYNOPSIS: Conversation Dumps -->
+<!-- SYNOPSIS: Conversation Dumps — NOT AUTHORITATIVE — see AUTHORITY_BOUNDARIES -->
 
 # Conversation Dumps
+
+**Status: NOT AUTHORITATIVE** — these are brainstorm and session archives, not product law.
+
+See `docs/products/AUTHORITY_BOUNDARIES.md` (AUTHORITY_BOUNDARIES) for the full boundary rule.
 
 This folder is for storing conversation history exports that provide context for the AI Counsel OS development.
 

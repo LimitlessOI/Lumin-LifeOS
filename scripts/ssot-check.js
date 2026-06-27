@@ -2,25 +2,37 @@
 /**
  * SYNOPSIS: ssot-check.js
  * ssot-check.js
- * Scans changed files for @ssot tags and verifies the linked amendment
+ * Scans changed files for @ssot tags and verifies the linked SSOT document
  * was also updated in the same git commit (or warns if not).
  *
  * Usage:
- *   node scripts/ssot-check.js            — check all staged/changed files
- *   node scripts/ssot-check.js --all      — scan entire codebase for missing @ssot tags
- *   node scripts/ssot-check.js --report   — full drift report (all amendments vs files)
+ *   node scripts/ssot-check.js                 — check staged/changed source files (co-commit)
+ *   node scripts/ssot-check.js --staged-only   — pre-commit: staged files only
+ *   node scripts/ssot-check.js --all           — scan routes/services/core/startup for missing @ssot
+ *   node scripts/ssot-check.js --report        — amendment status + tag audit
+ *   node scripts/ssot-check.js --product-debt  — manifest-owned files on wrong @ssot (warn-style)
+ *   node scripts/ssot-check.js --product-enforce — full product-home drift audit (exit 1 on hard violations)
+ *   node scripts/ssot-check.js --staged-product-enforce — pre-commit: block staged regressions
  *
- * Install as a git hook:
- *   echo 'node scripts/ssot-check.js' >> .git/hooks/pre-push
- *   chmod +x .git/hooks/pre-push
- *
- * @ssot docs/projects/INDEX.md
+ * @ssot docs/products/PRODUCT_REGISTRY.json
  */
 
 import { execSync } from 'child_process';
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  auditManifestOwnedSources,
+  auditProductPrompts,
+  auditStagedProductRegression,
+  buildOwnedIndex,
+  extractSsotTag as extractSsotFromContent,
+  formatViolation,
+  isManifestOwnedSource,
+  loadProductManifests,
+  resolveCoCommitPaths,
+  sharedSsotPaths,
+} from './lib/product-home-enforce.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -36,20 +48,18 @@ const COLORS = {
 
 const c = (color, text) => `${COLORS[color]}${text}${COLORS.reset}`;
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+const MANIFEST_SOURCE_PREFIXES = [
+  'routes/', 'services/', 'core/', 'startup/', 'middleware/', 'config/',
+  'public/', 'scripts/', 'tests/',
+];
 
 function getChangedFiles(pushRange, stagedOnly = false) {
   try {
     if (pushRange) {
-      // Pre-push mode: only check files in the commits being pushed.
-      // pushRange is "<remoteRef>..<localRef>" e.g. "origin/main..HEAD"
-      // Uses diff-tree to list files changed in those commits (not working tree).
       const files = execSync(`git diff --name-only ${pushRange}`, { cwd: ROOT })
         .toString().trim().split('\n').filter(Boolean);
       return files;
     }
-    // Pre-commit mode: staged only by default (avoids false-positives from
-    // unrelated unstaged working-tree changes across long multi-session work).
     const staged = execSync('git diff --cached --name-only', { cwd: ROOT })
       .toString().trim().split('\n').filter(Boolean);
     if (stagedOnly) return staged;
@@ -79,8 +89,7 @@ function getAllSourceFiles() {
 function extractSsotTag(filePath) {
   try {
     const content = readFileSync(path.join(ROOT, filePath), 'utf8');
-    const match = content.match(/@ssot\s+(docs\/projects\/[^\s*]+)/);
-    return match ? match[1] : null;
+    return extractSsotFromContent(content);
   } catch {
     return null;
   }
@@ -106,13 +115,13 @@ function isSynopsisOnlyStagedChange(filePath) {
   }
 }
 
-function amendmentExists(amendmentPath) {
-  return existsSync(path.join(ROOT, amendmentPath));
+function ssotExists(ssotPath) {
+  return existsSync(path.join(ROOT, ssotPath));
 }
 
-function getAmendmentLastUpdated(amendmentPath) {
+function getSsotLastUpdated(ssotPath) {
   try {
-    const content = readFileSync(path.join(ROOT, amendmentPath), 'utf8');
+    const content = readFileSync(path.join(ROOT, ssotPath), 'utf8');
     const match = content.match(/\*\*Last Updated:\*\*\s*(.+)/);
     return match ? match[1].trim() : 'unknown';
   } catch {
@@ -120,10 +129,65 @@ function getAmendmentLastUpdated(amendmentPath) {
   }
 }
 
-// ── Main modes ────────────────────────────────────────────────────────────────
+function getAmendmentLastUpdated(ssotPath) {
+  return getSsotLastUpdated(ssotPath);
+}
+
+function changedMatchesCoCommit(changed, coPaths) {
+  return changed.some((f) =>
+    coPaths.some((p) => f === p || f.endsWith(`/${p}`) || path.basename(f) === path.basename(p))
+  );
+}
+
+function isCoCommitSourceFile(file) {
+  if (!file.match(/\.(js|ts|mjs)$/)) return false;
+  if (file.includes('docs/')) return false;
+  return MANIFEST_SOURCE_PREFIXES.some((p) => file.startsWith(p));
+}
+
+function reportProductHomeDebt(manifests) {
+  const violations = [
+    ...auditManifestOwnedSources(manifests, ROOT, { includeDebt: true }),
+    ...auditProductPrompts(ROOT),
+  ];
+  console.log(c('bold', '\n📦 Product-home migration debt (lifeos + lifere)\n'));
+  if (!violations.length) {
+    console.log(c('green', '✅ All manifest-owned sources and product prompts use canonical product homes.\n'));
+    return 0;
+  }
+  for (const v of violations) {
+    console.log(`  ${c('cyan', v.file)}`);
+    console.log(`    → ${c('yellow', v.kind)}${v.tag ? ` (${v.tag})` : ''} — expected ${v.expected}\n`);
+  }
+  console.log(c('yellow', `⚠️  ${violations.length} product-home drift issue(s).\n`));
+  return 1;
+}
+
+function enforceProductHome({ stagedOnly = false } = {}) {
+  const manifests = loadProductManifests(ROOT);
+  const violations = [
+    ...auditManifestOwnedSources(manifests, ROOT),
+    ...auditProductPrompts(ROOT),
+  ];
+  if (stagedOnly) {
+    const staged = getChangedFiles(null, true);
+    violations.push(...auditStagedProductRegression(manifests, ROOT, staged));
+  }
+  console.log(c('bold', `\n🛡️  Product-home enforcement (lifeos + lifere)${stagedOnly ? ' [staged]' : ''}\n`));
+  if (!violations.length) {
+    console.log(c('green', '✅ No product-home drift detected.\n'));
+    return 0;
+  }
+  for (const v of violations) {
+    console.log(`  ${c('red', formatViolation(v))}`);
+  }
+  console.log(c('red', `\n❌ ${violations.length} violation(s) — use canonical product home @ssot, not flat stubs or foreign amendments.\n`));
+  return 1;
+}
 
 function checkChangedFiles(pushRange, stagedOnly = false) {
   const changed = getChangedFiles(pushRange, stagedOnly);
+  const manifests = loadProductManifests(ROOT);
   if (!changed.length) {
     console.log(c('green', '✅ No changed files to check.'));
     return 0;
@@ -131,52 +195,63 @@ function checkChangedFiles(pushRange, stagedOnly = false) {
 
   console.log(c('bold', `\n🔍 SSOT Check — ${changed.length} changed file(s)\n`));
 
-  const needsAmendmentUpdate = [];
+  const needsSsotUpdate = [];
   const missingTag = [];
+  const productRegressions = auditStagedProductRegression(manifests, ROOT, changed);
 
   for (const file of changed) {
-    // Skip non-source files and the amendments themselves
-    if (!file.match(/\.(js|ts)$/) || file.includes('docs/') || file.includes('scripts/')) continue;
-    if (!file.match(/^(routes|services|core|startup)\//)) continue;
-    if (!existsSync(path.join(ROOT, file))) continue; // e.g. deleted in working tree; do not false-flag @ssot
+    if (!isCoCommitSourceFile(file)) continue;
+    if (!existsSync(path.join(ROOT, file))) continue;
 
     const ssotTag = extractSsotTag(file);
     if (!ssotTag) {
-      missingTag.push(file);
+      if (isManifestOwnedSource(file, manifests)) missingTag.push(file);
       continue;
     }
 
     if (isSynopsisOnlyStagedChange(file)) continue;
 
-    const amendmentChanged = changed.some(f => f.includes(path.basename(ssotTag)));
-    if (!amendmentChanged) {
-      needsAmendmentUpdate.push({ file, ssot: ssotTag });
+    const coPaths = resolveCoCommitPaths(ssotTag, file, manifests);
+    const ssotChanged = changedMatchesCoCommit(changed, coPaths);
+    if (!ssotChanged) {
+      needsSsotUpdate.push({ file, ssot: ssotTag, coPaths });
     }
   }
 
   let exitCode = 0;
 
-  if (needsAmendmentUpdate.length) {
-    console.log(c('yellow', '⚠️  Files changed without updating their SSOT amendment:\n'));
-    for (const { file, ssot } of needsAmendmentUpdate) {
-      const lastUpdated = getAmendmentLastUpdated(ssot);
-      console.log(`  ${c('cyan', file)}`);
-      console.log(`    → ${c('yellow', ssot)} (last updated: ${lastUpdated})\n`);
+  if (productRegressions.length) {
+    console.log(c('red', '❌ Product-home regression in changed manifest-owned files:\n'));
+    for (const v of productRegressions) {
+      console.log(`  ${c('cyan', v.file)} → ${c('red', v.kind)} (${v.tag || 'missing'})`);
     }
-    console.log(c('yellow', 'Update the listed amendments before pushing.\n'));
+    console.log('');
+    exitCode = 1;
+  }
+
+  if (needsSsotUpdate.length) {
+    console.log(c('yellow', '⚠️  Files changed without updating their SSOT document:\n'));
+    for (const { file, ssot } of needsSsotUpdate) {
+      const lastUpdated = getSsotLastUpdated(ssot);
+      const owned = isManifestOwnedSource(file, manifests);
+      const hint = owned ? ' (update PRODUCT_HOME.md or FILE_MANIFEST.json)' : '';
+      console.log(`  ${c('cyan', file)}`);
+      console.log(`    → ${c('yellow', ssot)} (last updated: ${lastUpdated})${hint}\n`);
+    }
+    console.log(c('yellow', 'Update the listed SSOT documents before pushing.\n'));
     exitCode = 1;
   }
 
   if (missingTag.length) {
-    console.log(c('yellow', '⚠️  Source files missing @ssot tag:\n'));
+    console.log(c('yellow', '⚠️  Manifest-owned source files missing @ssot tag:\n'));
     for (const file of missingTag) {
       console.log(`  ${c('cyan', file)}`);
     }
-    console.log(c('yellow', '\nAdd @ssot docs/projects/AMENDMENT_XX.md to their JSDoc header.\n'));
-    // Warning only, not a hard fail
+    console.log(c('yellow', '\nAdd @ssot docs/products/<product>/PRODUCT_HOME.md to JSDoc header.\n'));
+    exitCode = 1;
   }
 
-  if (!needsAmendmentUpdate.length && !missingTag.length) {
+  if (!needsSsotUpdate.length && !missingTag.length && !productRegressions.length) {
     console.log(c('green', '✅ All changed files have up-to-date SSOT references.\n'));
   }
 
@@ -193,7 +268,7 @@ function scanAllForMissingTags() {
   for (const file of files) {
     const tag = extractSsotTag(file);
     if (tag) {
-      tagged.push({ file, tag, exists: amendmentExists(tag) });
+      tagged.push({ file, tag, exists: ssotExists(tag) });
     } else {
       missing.push(file);
     }
@@ -209,7 +284,7 @@ function scanAllForMissingTags() {
 
   const brokenLinks = tagged.filter(t => !t.exists);
   if (brokenLinks.length) {
-    console.log(c('red', '\n❌ Files pointing to non-existent amendments:'));
+    console.log(c('red', '\n❌ Files pointing to non-existent SSOT documents:'));
     for (const { file, tag } of brokenLinks) {
       console.log(`  ${c('cyan', file)} → ${c('red', tag)}`);
     }
@@ -236,22 +311,21 @@ function fullReport() {
   scanAllForMissingTags();
 }
 
-// ── Entry point ───────────────────────────────────────────────────────────────
-
 const args = process.argv.slice(2);
 
 if (args.includes('--all')) {
   scanAllForMissingTags();
 } else if (args.includes('--report')) {
   fullReport();
+} else if (args.includes('--product-debt')) {
+  process.exit(reportProductHomeDebt(loadProductManifests(ROOT)));
+} else if (args.includes('--product-enforce')) {
+  process.exit(enforceProductHome({ stagedOnly: false }));
+} else if (args.includes('--staged-product-enforce')) {
+  process.exit(enforceProductHome({ stagedOnly: true }));
 } else {
-  // Support --push-range <range> for pre-push hook use (avoids false-positives
-  // from unrelated working-tree changes by checking only the pushed commits).
   const rangeIdx = args.indexOf('--push-range');
   const pushRange = rangeIdx >= 0 ? args[rangeIdx + 1] : null;
-  // --staged-only: only check git-cached (staged) files, skip working-tree changes.
-  // The pre-commit hook passes this to avoid false-positives from unrelated
-  // unstaged modifications left over from prior sessions.
   const stagedOnly = args.includes('--staged-only');
   process.exit(checkChangedFiles(pushRange, stagedOnly));
 }

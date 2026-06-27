@@ -3,6 +3,7 @@
  * Commitment Route v2.1 API — inbox commitment → lifeos_commitments.
  * Mount at: /api/v1/lifeos/commitment-route
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  */
 import express from 'express';
 import { createLifeOSCommitmentRoute } from '../services/lifeos-commitment-route.js';
