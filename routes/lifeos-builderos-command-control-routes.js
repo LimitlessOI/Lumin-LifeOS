@@ -65,6 +65,12 @@ import {
   scorePredictionsForMissionUsability,
 } from '../services/founder-usability-confirm.js';
 
+export function resolveFounderCommandControlHandle(req) {
+  return req?.auth_mode === 'command_key_fallback'
+    ? 'adam'
+    : (req?.lifeosUser?.handle || 'adam');
+}
+
 export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
   const luminPersist = pool
@@ -92,9 +98,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
         userId = parseInt(sub, 10);
       }
       if (!userId) {
-        const handle = req.auth_mode === 'command_key_fallback'
-          ? 'adam'
-          : (req.lifeosUser?.handle || 'adam');
+        const handle = resolveFounderCommandControlHandle(req);
         userId = await resolveLifeOSUserId(pool, handle);
       }
       if (!userId) return 'HISTORY_NOT_SAVED';
@@ -131,9 +135,7 @@ export function createLifeOSBuilderOSCommandControlRoutes({ pool, requireKey, ca
             userId = parseInt(sub, 10);
           }
           if (!userId) {
-            const handle = req.auth_mode === 'command_key_fallback'
-              ? 'adam'
-              : (req.lifeosUser?.handle || 'adam');
+            const handle = resolveFounderCommandControlHandle(req);
             userId = await resolveLifeOSUserId(pool, handle);
           }
           if (userId) {
@@ -1163,7 +1165,7 @@ HOW TO RESPOND:
         || process.env.LIFEOS_KEY
         || process.env.API_KEY;
       const userId = req.lifeosUser?.sub || null;
-      const userHandle = req.lifeosUser?.handle || null;
+      const userHandle = resolveFounderCommandControlHandle(req);
 
       const chairResult = await runLuminChairTurn({
         req,

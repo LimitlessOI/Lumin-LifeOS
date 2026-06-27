@@ -12,6 +12,7 @@ import {
   isPureCounselQuestion,
 } from '../services/lumin-chair-orchestrator.js';
 import { isMissionPipelineIntent } from '../services/lifeos-mission-pipeline-executor.js';
+import { resolveFounderCommandControlHandle } from '../routes/lifeos-builderos-command-control-routes.js';
 
 test('build the blueprint routes to blueprint_execute not build_async', () => {
   const msg = 'build the blueprint';
@@ -149,4 +150,9 @@ test('chair native turn resolves server thread history by handle when userId is 
   assert.equal(resolvedHandle, 'adam');
   assert.equal(result.statusCode, 200);
   assert.match(result.body.human_summary_technical, /Adam:|Lumin:/);
+});
+
+test('command-key founder route defaults handle to adam for continuity', () => {
+  assert.equal(resolveFounderCommandControlHandle({ auth_mode: 'command_key_fallback', lifeosUser: {} }), 'adam');
+  assert.equal(resolveFounderCommandControlHandle({ auth_mode: 'jwt', lifeosUser: { handle: 'sherry' } }), 'sherry');
 });
