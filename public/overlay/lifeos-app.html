@@ -2334,72 +2334,6 @@
 </button>
 
 <!-- Lumin Drawer -->
-<!-- alpha-connection-test 2026-06-25T23:41:44 -->
-<!-- point-b-direct-exec-probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- lumin-build-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- lumin parity probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- lumin parity probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- lumin parity probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- founder-chat-alpha-probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- point-b-direct-exec-probe -->
-<!-- lumin parity probe -->
-<!-- lumin parity probe -->
-<!-- point-b-direct-exec-probe -->
 <div class="lumin-drawer dock-right" id="lumin-drawer">
   <div class="lumin-drawer-header">
     <div class="lumin-drawer-avatar">◎</div>
@@ -3417,6 +3351,36 @@ function appendClientBubbleProof(reply, data) {
   return `${reply}\n${tag}`;
 }
 
+const LUMIN_SEND_TIMEOUT_MS = 45000;
+
+async function luminReadJsonSafe(res) {
+  const raw = await res.text();
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {
+      ok: false,
+      error: raw.slice(0, 500) || `Unexpected response (${res.status})`,
+    };
+  }
+}
+
+async function luminFetchJsonWithTimeout(url, init = {}, timeoutMs = LUMIN_SEND_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, {
+      ...init,
+      signal: controller.signal,
+    });
+    const data = await luminReadJsonSafe(res);
+    return { res, data };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 async function pollFounderBuildJob(jobId, pollUrl) {
   const deadline = Date.now() + 300000;
   while (Date.now() < deadline) {
@@ -3495,13 +3459,12 @@ async function luminSend(opts = {}) {
     const endpoint = USE_DIRECT_SYSTEM_CHAT
       ? DIRECT_SYSTEM_ENDPOINT
       : `${CHAT_BASE}/threads/${luminState.threadId}/messages`;
-    let res  = await fetch(endpoint, {
+    let { res, data } = await luminFetchJsonWithTimeout(endpoint, {
       method: 'POST',
       credentials: 'same-origin',
       headers: H,
       body: JSON.stringify(reqBody),
     });
-    let data = await res.json();
     if (USE_DIRECT_SYSTEM_CHAT && res.status === 202 && data.job_id) {
       const polled = await pollFounderBuildJob(data.job_id, data.poll_url);
       res = polled.res;
@@ -3514,13 +3477,14 @@ async function luminSend(opts = {}) {
     if (res.status === 401 || res.status === 403) {
       const renewed = await CTX.refreshIfNeeded();
       if (renewed) {
-        const retry = await fetch(endpoint, {
+        const retryResult = await luminFetchJsonWithTimeout(endpoint, {
           method: 'POST',
           credentials: 'same-origin',
           headers: await directSystemHeaders(),
           body: JSON.stringify(reqBody),
         });
-        const retryData = await retry.json();
+        const retry = retryResult.res;
+        const retryData = retryResult.data;
         if (retry.ok) {
           document.getElementById(thinkId)?.remove();
           let reply = formatDirectSystemReply(retryData);
@@ -3557,7 +3521,10 @@ async function luminSend(opts = {}) {
     }
   } catch (err) {
     document.getElementById(thinkId)?.remove();
-    _appendLuminMsgRaw(null, 'assistant', `Connection error: ${err.message}`);
+    const message = err?.name === 'AbortError'
+      ? 'Lumin timed out waiting for the system. Nothing completed on this turn. Try again.'
+      : `Connection error: ${err.message}`;
+    _appendLuminMsgRaw(null, 'assistant', message);
   } finally {
     luminState.sending = false;
     document.getElementById('lumin-send-btn').disabled = false;
@@ -3694,6 +3661,7 @@ function initLuminDrawerVoiceSend() {
   luminDrawerVoiceCtrl = LifeOSVoiceChat.attach({
     inputId: 'lumin-input',
     buttonId: 'lumin-mic-btn',
+    statusId: 'lumin-status-text',
     iconOnly: true,
     idleText: 'Tap mic or hold Space — say "send it" to post',
     voiceSendEnabled: true,
@@ -3739,10 +3707,15 @@ document.addEventListener('DOMContentLoaded', () => { initLuminDrawerVoiceSend()
 function luminVoiceInput() {
   if (window.LifeOSVoiceChat) {
     initLuminDrawerVoiceSend();
-    luminDrawerVoiceCtrl?.startMic();
+    if (luminDrawerVoiceCtrl?.startMic) {
+      luminDrawerVoiceCtrl.startMic();
+      return;
+    }
+  }
+  if (!window.LuminVoice) {
+    toast('Voice input is unavailable right now.');
     return;
   }
-  if (!window.LuminVoice) return;
   const input  = document.getElementById('lumin-input');
   const micBtn = document.getElementById('lumin-mic-btn');
   LuminVoice.startForInput(input, micBtn);
@@ -3863,7 +3836,28 @@ async function refreshPointBStrip() {
     if (labelEl) labelEl.textContent = `${prefix} · ${s.label || 'LifeRE Alpha'}`;
     document.getElementById('point-b-pct').textContent = `${s.progress_pct ?? 0}%`;
     document.getElementById('point-b-phase').textContent = s.phase ? `· ${s.phase}` : '';
-    document.getElementById('point-b-blocker').textContent = s.blocker ? s.blocker : '';
+    const blockerEl = document.getElementById('point-b-blocker');
+    if (blockerEl) {
+      if (s.next_action === 'founder_usability_check') {
+        blockerEl.textContent = `${s.blocker || ''} → Open LifeRE, run Alpha Daily Cycle, Confirm Alpha PASS (12+ chars)`;
+      } else {
+        blockerEl.textContent = s.blocker ? s.blocker : '';
+      }
+    }
+    if (s.next_action === 'founder_usability_check') {
+      strip.style.cursor = 'pointer';
+      strip.title = 'Open LifeRE alpha confirm';
+      strip.onclick = () => {
+        loadPage('lifeos-lifere.html');
+        setTimeout(() => {
+          document.getElementById('content-frame')?.contentWindow?.postMessage?.({ type: 'lifere-focus-alpha-confirm' }, '*');
+        }, 800);
+      };
+    } else {
+      strip.style.cursor = '';
+      strip.title = '';
+      strip.onclick = null;
+    }
   } catch {
     // non-fatal — strip stays at defaults
   }
@@ -3871,6 +3865,9 @@ async function refreshPointBStrip() {
 document.addEventListener('DOMContentLoaded', () => {
   refreshPointBStrip();
   setInterval(refreshPointBStrip, 120000);
+  window.addEventListener('message', (e) => {
+    if (e.data?.type === 'lifeos-point-b-refresh') refreshPointBStrip();
+  });
   maybeRouteFromContextIntent();
 });
 

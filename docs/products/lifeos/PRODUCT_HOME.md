@@ -6,7 +6,8 @@
 **Product id:** `lifeos`  
 **Primary runtime surface:** `/lifeos`  
 **Law anchors:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/constitution/NORTH_STAR.md`  
-**Machine queue:** `builderos-reboot/BP_PRIORITY.json`
+**Machine queue:** `builderos-reboot/BP_PRIORITY.json`  
+**Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`
 
 ## Mission
 
@@ -102,3 +103,10 @@ Use these for law/history/receipts, not as the primary product home:
 If a file belongs to LifeOS product behavior, `@ssot` should point here or to `docs/products/lifeos/FILE_MANIFEST.json` for ownership lookup.
 
 Do not default back to `AMENDMENT_21` unless the change is truly constitutional/history-level.
+
+## 2026-06-27 founder path hardening receipts
+
+- Founder advice prompts that are really prioritization or judgment calls must stay in chair counsel; they must not fall into verified-web-search fallback just because they end with a question mark.
+- `GET /api/v1/lifeos/auth/me` now falls back to founder handle lookup for valid handle-only JWTs, not just command-key fallback, so founder-shell auth does not degrade into a false `404 User not found`.
+- Removed 66 probe-debris HTML comments (alpha/parity/point-b probe labels) from `public/overlay/lifeos-app.html` lines 2337-2402.
+- Replaced Tailwind CDN Play script (`cdn.tailwindcss.com`) with inline minimal CSS in `lifeos-dashboard.html`, `lifeos-victory-vault.html`, and `site-builder-command-center.html` — eliminates the "Tailwind CDN is for development only" console.warn from the founder shell iframe.

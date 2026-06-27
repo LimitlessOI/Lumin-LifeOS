@@ -1,8 +1,8 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-06-27T16:29:32.810Z",
+  "at": "2026-06-27T23:19:22.156Z",
   "base": "https://robust-magic-production.up.railway.app",
-  "ok": false,
+  "ok": true,
   "passed": [
     "app_loads",
     "no_js_errors",
@@ -18,11 +18,10 @@
     "dashboard_loads",
     "page_nav",
     "login_page",
-    "logged_out_redirect_shape"
-  ],
-  "failed": [
+    "logged_out_redirect_shape",
     "logged_out_overlay_redirect_shape"
   ],
+  "failed": [],
   "results": {
     "app_loads": {
       "ok": true,
@@ -70,7 +69,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "22820 chars visible"
+      "detail": "26142 chars visible"
     },
     "page_nav": {
       "ok": true,
@@ -85,8 +84,8 @@
       "detail": "/lifeos?layout=desktop&direct_system=1"
     },
     "logged_out_overlay_redirect_shape": {
-      "ok": false,
-      "detail": "nested next detected: https://robust-magic-production.up.railway.app/overlay/lifeos-login.html?next=%2Foverlay%2Flifeos-app.html%3Fdirect_system%3D1?next=%2Foverlay%2Flifeos-app.html%3Fdirect_system%3D1"
+      "ok": true,
+      "detail": "/overlay/lifeos-app.html?direct_system=1"
     }
   }
 }
