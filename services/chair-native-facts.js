@@ -70,10 +70,11 @@ async function attachVerifiedSearch(facts, text, deps) {
 export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}) {
   const text = String(input || '').trim();
   const systemQuestion = needsSystemKnowledge(text);
+  const explicitPersonalLifeIntent = isFounderPersonalLifeIntent(text);
   const personalTurn = !chairContext.alpha_probe
     && !systemQuestion
     && chairContext.personal_search !== false
-    && (isFounderPersonalLifeIntent(text) || ['personal_life', 'conversation'].includes(chairContext.domain));
+    && (explicitPersonalLifeIntent || chairContext.domain === 'personal_life');
 
   const facts = {
     schema: 'chair_native_facts_v1',
@@ -187,7 +188,9 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     facts.chair_note = `${facts.chair_note} Personal life turn — answer the user's question directly; do not recite Point B, alpha, or builder queue unless they asked.`;
     facts.point_b_target = null;
     facts.point_b_summary = null;
-    await attachVerifiedSearch(facts, text, deps);
+    if (explicitPersonalLifeIntent) {
+      await attachVerifiedSearch(facts, text, deps);
+    }
   } else if (needsGeneralWebSearch(text, chairContext) && !needsSystemKnowledge(text)) {
     facts.chair_note = `${facts.chair_note} Factual question — use verified_search when present; answer directly; do not CLARIFY or paraphrase the question back.`;
     await attachVerifiedSearch(facts, text, deps);
