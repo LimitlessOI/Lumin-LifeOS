@@ -8,6 +8,7 @@ import { isBuildRequest } from './chair-intent-signals.js';
 import { isRepairContinuationIntent } from './builder-instruction-target.js';
 
 const CONVERSATION_MARKERS = /\b(should i|could i|would i|help me|how do i|what do you think|talk to me|worried|feel like|am i connected|quick check|tell me about|any advice)\b/i;
+const CONTINUE_TO_PASS_MARKERS = /\b(keep going|continue|advance|do the next|next machine step)\b.*\b(pass|exact blocker|point b|alpha|mission|blueprint)\b/i;
 
 /** Display intent — "receipt" alone must not hijack build orders (e.g. "Receipt the change"). */
 const DISPLAY_MARKERS = /\b(show|display|view)\b|\b(status|queue|jobs|graph|chart|summary|blocker)\b|\b(how many|list jobs|what is the queue)\b|\breceipts?\b(?!\s+the\s+(change|fix|update|patch))/i;
@@ -27,6 +28,7 @@ export function isExplicitDisplayOnlyRequest(text = '', action = 'auto') {
   const t = String(text || '').trim();
   if (stripChairDoPrefix(t).forcedExecute) return false;
   if (isBuildRequest(t) || isRepairContinuationIntent(t)) return false;
+  if (CONTINUE_TO_PASS_MARKERS.test(t)) return false;
   if (String(action || '').toLowerCase() !== 'auto') return false;
   if (isConversationTurn(t)) return false;
   if (SYSTEM_STATUS_MARKERS.test(t) && SYSTEM_STATUS_TARGETS.test(t)) return false;
@@ -56,6 +58,7 @@ export function auditLuminConversationRoutingWiring() {
   add('CONV-02', isConversationTurn('should I get an oil change this week?'), 'oil change is conversation');
   add('CONV-03', !isExplicitDisplayOnlyRequest('should I get an oil change this week?', 'auto'), 'oil change not display-only');
   add('CONV-04', isExplicitDisplayOnlyRequest('display queue status', 'auto'), 'queue status is display');
+  add('CONV-04b', !isExplicitDisplayOnlyRequest('keep going until pass or exact blocker', 'auto'), 'continue-to-pass is not display');
   add(
     'CONV-05',
     coerceDisplayMisrouteToChair('should I get an oil change?', { channel: 'display' }).channel === 'chair',

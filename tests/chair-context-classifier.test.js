@@ -69,4 +69,16 @@ test('continue toward point b routes to point_b not mission_pipeline', () => {
   assert.equal(ctx.channel, 'point_b');
 });
 
+test('keep going until pass stays in point_b continuation lane', () => {
+  const msg = 'keep going until pass or exact blocker';
+  const ctx = resolveChairContext(msg, {});
+  assert.equal(ctx.channel, 'point_b');
+});
+
+test('explicit execute mission for known mission routes to point_b', () => {
+  const msg = 'run execute mission for PRODUCT-LIFERE-OS-V1-0001';
+  const ctx = resolveChairContext(msg, {});
+  assert.equal(ctx.channel, 'point_b');
+});
+
 console.log('✅ chair-context-classifier.test.js passed');

@@ -6,6 +6,7 @@ import { isRepairContinuationIntent, extractTargetFileFromInstruction, isCssOnly
 import { isFounderConfirmIntent } from './founder-intent-clarify.js';
 import { isGovernanceOrSsotIntent } from './founder-governance-clarify.js';
 import { isMissionPipelineIntent } from './lifeos-mission-pipeline-executor.js';
+import { isPointBExecuteIntent, isPointBStatusIntent } from './point-b-navigator.js';
 import { isFounderShipOrUsabilityIntent } from './founder-chair-intent.js';
 import {
   isFounderPersonalLifeIntent,
@@ -23,6 +24,7 @@ import {
 const PRODUCT_MARKERS = /\b(html|css|\.js|\.mjs|route|routes\/|services\/|overlay|lifere|lifeos-app|deploy|railway|builder|commit|target_file|ui|nav|bubble|button|drawer|lumin|panel|send|server|migration|blueprint|mission|ssot|amendment|api\/|public\/|npm run|gap-fill)\b/i;
 
 const SYSTEM_STATUS_MARKERS = /\b(point b|alpha|progress|keep going|continue building|machine path|receipt scan|queue status|what(?:'s| is) next)\b/i;
+const CONTINUE_TO_PASS_MARKERS = /\b(keep going|continue|advance|do the next|next machine step)\b.*\b(pass|exact blocker)\b/i;
 
 const CONVERSATION_MARKERS = /\b( worried|feel|think about|should i|can you find|help me|what do you|how do i|coupon|appointment|errand|family|kids|wife|health|sleep|money|budget)\b/i;
 
@@ -75,8 +77,11 @@ export function computeContextScores(text = '') {
 
   if (isBlueprintExecuteIntent(t)) scores.system += 12;
   if (isExplicitExecuteCommand(t)) scores.system += 8;
+  if (isPointBExecuteIntent(t)) scores.system += 10;
+  if (isPointBStatusIntent(t)) scores.system += 4;
   if (isMissionPipelineIntent(t)) scores.system += 6;
   if (SYSTEM_STATUS_MARKERS.test(t)) scores.system += 5;
+  if (CONTINUE_TO_PASS_MARKERS.test(t)) scores.system += 8;
   if (/\b(status|progress|blocker|receipt scan)\b/i.test(t) && /\b(mission|blueprint|point b|alpha|lifere|build step|step you just started)\b/i.test(t)) {
     scores.system += 8;
   }
@@ -186,6 +191,16 @@ export function resolveChairContext(text = '', ctx = {}) {
   }
 
   if (isBlueprintExecuteIntent(t)) {
+    if (isPointBExecuteIntent(t)) {
+      return {
+        channel: 'point_b',
+        domain: 'system_ops',
+        confidence: 1,
+        requires_execute_clarify: false,
+        personal_search: false,
+        scores,
+      };
+    }
     return {
       channel: 'blueprint_execute',
       domain: 'system_execute',

@@ -32,6 +32,11 @@ test('blueprint status follow-up is not trapped in display-only routing', () => 
   assert.equal(isExplicitDisplayOnlyRequest(text, 'auto'), false);
 });
 
+test('keep going until pass is not trapped in display-only routing', () => {
+  const text = 'keep going until pass or exact blocker';
+  assert.equal(isExplicitDisplayOnlyRequest(text, 'auto'), false);
+});
+
 test('do: build with receipt word is not display-only', () => {
   const text = "do: fix voice send in public/overlay/lifeos-app.html — Receipt the change when send it works";
   assert.equal(isExplicitDisplayOnlyRequest(text, 'auto'), false);

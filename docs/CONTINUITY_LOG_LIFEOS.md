@@ -22,6 +22,24 @@
 ### Next
 Deploy this classifier fix, rerun the live founder continue-to-Point-B probe, then continue walking the founder UI path until the next autonomy blocker is concrete.
 
+## [BUILD] Update 2026-06-27 — Founder continuation-language hardening + LifeRE truth-split audit
+
+### What happened
+- **Two founder-language defects remained after Point B routing was repaired.** Natural continuation shorthand like `keep going until pass or exact blocker` still fell into display/counsel, and explicit `run execute mission for PRODUCT-LIFERE-OS-V1-0001` was being classified as generic blueprint execution and blocked by Founder Packet ambiguity instead of entering the governed Point B mission loop.
+- **Routing is now tightened around actual founder phrasing.** `services/lumin-conversation-routing.js` keeps continue-to-pass language out of display-only routing, and `services/chair-context-classifier.js` now routes those shorthand continuation asks plus explicit product mission execution into the Point B lane.
+- **A real truth split was also surfaced, not fixed over.** Local mission artifacts for `PRODUCT-LIFERE-OS-V1-0001` currently show acceptance `PASS` and `BUILDER_RUN_RECEIPT.verdict = TECHNICAL_PASS`, while the live founder endpoint still reports `machine:acceptance FAIL — result truth wins over corridor pass`. That contradiction is now explicitly recorded as unresolved.
+
+### Verification
+- `node --test tests/lumin-conversation-routing.test.js tests/chair-context-classifier.test.js tests/point-b-navigator.test.js tests/lumin-chair-orchestrator.test.js`
+- `node --test tests/chair-direct-connection-truth.test.js tests/chair-program-direct-answer.test.js`
+- Live founder probe (current deploy `66ad2bd0939d2931570de2aa91ef9f0f63758a8d`):
+  - `continue building toward point b until pass or exact blocker` → `point_b`, `RUNNING`, `execute_mission`
+  - `keep going until pass or exact blocker` → wrong on live before this patch (`display` / `NO_COMMAND_RAN`)
+  - `run execute mission for PRODUCT-LIFERE-OS-V1-0001` → wrong on live before this patch (`blueprint_execute` → FPv2 ambiguity block)
+
+### Next
+Deploy the continuation-language fix, rerun the founder continuation battery on Railway, then trace whether the live Point B gate is reading stale acceptance receipts or stale runtime files.
+
 ## [BUILD] Update 2026-06-27 — Founder continuity hardening v3 (auth sentinel ids no longer block thread recall)
 
 ### What happened
