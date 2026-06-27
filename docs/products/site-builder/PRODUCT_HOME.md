@@ -86,6 +86,11 @@ No formal mission receipts. No BuilderOS acceptance command defined yet.
 
 No code needed. Infrastructure is built. Only env vars + mission formalization needed.
 
+## Conversations
+
+All Site Builder conversations, brainstorms, and session dumps live at:  
+`docs/products/site-builder/conversations/YYYY-MM-DD-topic.md`
+
 ## History anchor
 
 `docs/projects/AMENDMENT_05_SITE_BUILDER.md` — full law, DB schema, API endpoints, email flow, session receipts.

@@ -102,6 +102,11 @@ Do not duplicate shared doctrine here. Use pointers.
 
 No code scaffolding needed. Code exists. Gap is spec → mission formalization only.
 
+## Conversations
+
+All TC Service conversations, brainstorms, and session dumps live at:  
+`docs/products/tc-service/conversations/YYYY-MM-DD-topic.md`
+
 ## History anchor
 
 `docs/projects/AMENDMENT_17_TC_SERVICE.md` — full law, technical spec, receipts, session history.

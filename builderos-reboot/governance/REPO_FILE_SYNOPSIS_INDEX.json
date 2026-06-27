@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T22:09:02.449Z",
+  "generated_at": "2026-06-27T22:12:50.291Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 11171,
+  "file_count": 11172,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -34184,9 +34184,9 @@
     {
       "path": "docs/products/api-cost-savings/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — API Cost Savings (TokenOS / TSOS)",
-      "bytes": 3724,
-      "mtime": "2026-06-27T22:02:10.248Z",
-      "indexed_at": "2026-06-27T22:02:41.910Z"
+      "bytes": 3909,
+      "mtime": "2026-06-27T22:12:49.760Z",
+      "indexed_at": "2026-06-27T22:12:50.291Z"
     },
     {
       "path": "docs/products/BLUEPRINT_READINESS_RANKING.md",
@@ -34213,9 +34213,9 @@
     {
       "path": "docs/products/boldtrail/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — BoldTrail CRM Integration",
-      "bytes": 3508,
-      "mtime": "2026-06-27T22:09:01.931Z",
-      "indexed_at": "2026-06-27T22:09:02.449Z"
+      "bytes": 3685,
+      "mtime": "2026-06-27T22:12:49.759Z",
+      "indexed_at": "2026-06-27T22:12:50.291Z"
     },
     {
       "path": "docs/products/BUILD_PLAN.md",
@@ -34223,6 +34223,13 @@
       "bytes": 8989,
       "mtime": "2026-06-27T22:02:10.247Z",
       "indexed_at": "2026-06-27T22:02:41.910Z"
+    },
+    {
+      "path": "docs/products/CANONICAL_PRODUCT_HOME_RULES.md",
+      "synopsis": "Canonical product-home law",
+      "bytes": 3698,
+      "mtime": "2026-06-27T22:12:49.762Z",
+      "indexed_at": "2026-06-27T22:12:50.291Z"
     },
     {
       "path": "docs/products/clientcare-billing-recovery/AGENTS.md",
@@ -34242,9 +34249,9 @@
     {
       "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — ClientCare Billing Recovery",
-      "bytes": 3623,
-      "mtime": "2026-06-27T22:02:10.249Z",
-      "indexed_at": "2026-06-27T22:02:41.910Z"
+      "bytes": 3792,
+      "mtime": "2026-06-27T22:12:49.758Z",
+      "indexed_at": "2026-06-27T22:12:50.291Z"
     },
     {
       "path": "docs/products/COMPLETE_PRODUCT_SPEC.md",
@@ -34270,17 +34277,17 @@
     {
       "path": "docs/products/ideavault/FILE_MANIFEST.json",
       "synopsis": "Documentation — FILE MANIFEST.",
-      "bytes": 1525,
-      "mtime": "2026-06-27T22:02:10.250Z",
-      "indexed_at": "2026-06-27T22:02:41.910Z",
+      "bytes": 1560,
+      "mtime": "2026-06-27T22:12:49.754Z",
+      "indexed_at": "2026-06-27T22:12:50.291Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/products/ideavault/PRODUCT_HOME.md",
-      "synopsis": "Canonical product home — IdeaVault (Idea Queue + Backlog Engine)",
-      "bytes": 3020,
-      "mtime": "2026-06-27T22:02:10.250Z",
-      "indexed_at": "2026-06-27T22:02:41.910Z"
+      "synopsis": "IdeaVault — platform tool for idea and conversation intake/routing",
+      "bytes": 2444,
+      "mtime": "2026-06-27T22:12:49.753Z",
+      "indexed_at": "2026-06-27T22:12:50.291Z"
     },
     {
       "path": "docs/products/LIFEOS_VERSION_ROADMAP.md",
@@ -34320,9 +34327,9 @@
     {
       "path": "docs/products/PRODUCT_REGISTRY.json",
       "synopsis": "Documentation — PRODUCT REGISTRY.",
-      "bytes": 7648,
-      "mtime": "2026-06-27T22:09:01.933Z",
-      "indexed_at": "2026-06-27T22:09:02.449Z",
+      "bytes": 7707,
+      "mtime": "2026-06-27T22:12:49.761Z",
+      "indexed_at": "2026-06-27T22:12:50.291Z",
       "synopsis_index_only": true
     },
     {
@@ -34343,9 +34350,9 @@
     {
       "path": "docs/products/site-builder/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — Site Builder & Prospect Pipeline",
-      "bytes": 3908,
-      "mtime": "2026-06-27T22:02:10.251Z",
-      "indexed_at": "2026-06-27T22:02:41.910Z"
+      "bytes": 4064,
+      "mtime": "2026-06-27T22:12:49.757Z",
+      "indexed_at": "2026-06-27T22:12:50.291Z"
     },
     {
       "path": "docs/products/tc-service/AGENTS.md",
@@ -34365,9 +34372,9 @@
     {
       "path": "docs/products/tc-service/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — TC Service (Transaction Coordinator)",
-      "bytes": 5227,
-      "mtime": "2026-06-27T22:02:10.251Z",
-      "indexed_at": "2026-06-27T22:02:41.910Z"
+      "bytes": 5379,
+      "mtime": "2026-06-27T22:12:49.756Z",
+      "indexed_at": "2026-06-27T22:12:50.291Z"
     },
     {
       "path": "docs/PROJECT_CONTEXT.md",

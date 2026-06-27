@@ -4,10 +4,10 @@
   "canonical_home": "docs/products/ideavault/PRODUCT_HOME.md",
   "updated_at": "2026-06-27",
   "ownership_policy": "pointer_not_duplication",
-  "readiness_state": "PARTIAL_CODE_PRESENT",
+  "readiness_state": "PLATFORM_TOOL",
   "mission_pack": null,
   "acceptance_command": null,
-  "note": "IdeaVault is primarily a documentation/backlog SSOT — not a user-facing SaaS product surface. Runtime files exist for internal API use only.",
+  "note": "Platform tool — not a product, not in BuilderOS mission queue. Intake and routing engine for ideas and conversations. Routes to docs/products/<id>/conversations/ or AMENDMENT_38 catalog.",
   "owned_files": [
     "docs/products/ideavault/PRODUCT_HOME.md",
     "docs/products/ideavault/FILE_MANIFEST.json",
@@ -36,5 +36,5 @@
   "history_anchors": [
     "docs/projects/AMENDMENT_38_IDEA_VAULT.md"
   ],
-  "open_decision": "Decide: standalone product with its own mission queue, or absorb into LifeOS as a Chair admin feature. This determines whether a FOUNDER_PACKET is warranted."
+  "conversations_convention": "docs/products/<product-id>/conversations/ — IdeaVault routes incoming ideas and conversations to the correct product's conversations/ folder"
 }
