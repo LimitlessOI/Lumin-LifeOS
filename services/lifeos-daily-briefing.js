@@ -5,21 +5,33 @@
  */
 
 export function createDailyBriefingService(pool, callCouncilMember) {
+  async function queryRowsOrEmpty(sql, params) {
+    try {
+      const result = await pool.query(sql, params);
+      return result.rows;
+    } catch (err) {
+      // Briefing should degrade instead of 500ing when an optional module table is absent.
+      if (err?.code === '42P01') return [];
+      throw err;
+    }
+  }
+
   async function assembleBriefing(userId) {
     const today = new Date().toISOString().slice(0, 10);
 
-    const [eventsRes, mitsRes, habitsRes] = await Promise.all([
-      pool.query(
+    const [calendarEvents, mits, habitStreaks] = await Promise.all([
+      queryRowsOrEmpty(
         `SELECT title, starts_at, ends_at, location FROM lifeos_calendar_events
          WHERE user_id = $1 AND date(starts_at AT TIME ZONE 'UTC') = $2 ORDER BY starts_at`,
         [userId, today]
       ),
-      pool.query(
-        `SELECT text, completed FROM lifeos_mits
-         WHERE user_id = $1 AND date(created_at AT TIME ZONE 'UTC') = $2`,
+      queryRowsOrEmpty(
+        `SELECT title, status, notes, position FROM daily_mits
+         WHERE user_id = $1 AND mit_date = $2
+         ORDER BY position ASC`,
         [userId, today]
       ),
-      pool.query(
+      queryRowsOrEmpty(
         `SELECT h.id, h.name,
            COUNT(c.id) FILTER (WHERE c.completed_date >= CURRENT_DATE - 6) AS recent_completions
          FROM lifeos_habits h
@@ -31,10 +43,10 @@ export function createDailyBriefingService(pool, callCouncilMember) {
 
     return {
       date: new Date().toISOString(),
-      calendarEvents: eventsRes.rows,
-      mits: mitsRes.rows,
-      habitStreaks: habitsRes.rows,
-      summary: `${eventsRes.rows.length} events, ${mitsRes.rows.filter(m => !m.completed).length} pending MITs, ${habitsRes.rows.length} tracked habits`,
+      calendarEvents,
+      mits,
+      habitStreaks,
+      summary: `${calendarEvents.length} events, ${mits.filter((m) => m.status !== 'done').length} pending MITs, ${habitStreaks.length} tracked habits`,
     };
   }
 

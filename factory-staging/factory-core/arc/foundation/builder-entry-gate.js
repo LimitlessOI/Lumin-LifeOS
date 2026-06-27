@@ -69,6 +69,7 @@ export function evaluatePostArcBundleGate(missionFolder) {
 export function evaluateStudioBlockingGate(missionFolder) {
   const missionId = path.basename(missionFolder);
   const studio = loadJsonIfExists(path.join(missionFolder, 'receipts/STUDIO_EXPERIENCE_SIMULATION_RECEIPT.json'));
+  const studioPacket = loadJsonIfExists(path.join(missionFolder, 'STUDIO_DESIGN_PACKET.json'));
 
   if (!studio) {
     return {
@@ -98,6 +99,12 @@ export function evaluateStudioBlockingGate(missionFolder) {
     for (const fp of studio.friction_points || []) {
       violations.push(`studio:friction:${fp}`);
     }
+  }
+  if (studio.in_scope === true && studioPacket == null) {
+    violations.push('studio:missing STUDIO_DESIGN_PACKET.json');
+  }
+  if (studio.in_scope === true && studioPacket && !studioPacket.implementation_contract) {
+    violations.push('studio:design packet missing implementation contract');
   }
 
   return {

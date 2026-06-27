@@ -13,6 +13,7 @@ import { isDirectExecuteOrder } from './founder-intent-clarify.js';
 import { loadFactoryArcModules } from './factory-arc-loader.js';
 import { evaluateIdcExitGate } from '../factory-staging/factory-core/arc/foundation/idc-exit-gate.js';
 import { evaluateBuilderEntryGate } from '../factory-staging/factory-core/arc/foundation/builder-entry-gate.js';
+import { runStudioSimulation } from '../factory-staging/factory-core/arc/foundation/studio-simulation.js';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MISSIONS_ROOT = path.join(REPO_ROOT, 'builderos-reboot/MISSIONS');
@@ -101,6 +102,7 @@ export async function enforceFounderPacketV2Unified({
   if (isExecute && missionFolder) {
     const arc = await loadFactoryArcModules();
     idcExit = arc.evaluateIdcExitGate(missionFolder);
+    runStudioSimulation(missionFolder);
     builderEntry = arc.evaluateBuilderEntryGate(missionFolder);
 
     preArcBundle = {
@@ -183,6 +185,7 @@ export function evaluateMissionFpV2GateSync(missionFolder) {
 
   const missionId = path.basename(missionFolder);
   const idcExit = evaluateIdcExitGate(missionFolder);
+  runStudioSimulation(missionFolder);
   const builderEntry = evaluateBuilderEntryGate(missionFolder);
   const violations = [
     ...(idcExit.pass ? [] : idcExit.violations.map((v) => `IDC_EXIT:${v}`)),

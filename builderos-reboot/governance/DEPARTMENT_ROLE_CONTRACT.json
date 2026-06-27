@@ -34,11 +34,12 @@
       "must_answer": [
         "What is opportunity cost?",
         "Is this within budget for rank?",
-        "Does deploy/acceptance cost exist?"
+        "Does deploy/acceptance cost exist?",
+        "Is low-cost burst compute justified, or is cheap-tier sufficient?"
       ],
       "receipts": ["CFO_RESOURCE_SIMULATION_RECEIPT", "PREDICTION_RECEIPT"],
       "required_fields": ["roi_note", "resource_burden", "verdict", "pass"],
-      "measurement_fields": ["PREDICTION_RECEIPT.pre_build.estimated_duration_minutes", "PREDICTION_RECEIPT.pre_build.estimated_deploy_required"]
+      "measurement_fields": ["PREDICTION_RECEIPT.pre_build.estimated_duration_minutes", "PREDICTION_RECEIPT.pre_build.estimated_deploy_required", "PREDICTION_RECEIPT.predictions[].check_window"]
     },
     "WISDOM": {
       "title": "Wisdom / Hist lane",
@@ -78,25 +79,29 @@
     },
     "Studio": {
       "title": "Design / UX",
-      "role": "Experience simulation when UI/product feel in scope — blocking when in_scope",
+      "role": "Design engine + experience simulation when UI/product feel in scope — emits a governed design packet and blocks generic template-grade design before build",
       "must_answer": [
         "Is UX in scope?",
-        "What friction points remain?"
+        "What exact design system packet does Builder follow?",
+        "What friction points remain?",
+        "Would this feel generic or safe-average to a founder using it live?",
+        "What must be explicit for cutting-edge design before code starts?"
       ],
-      "receipts": ["STUDIO_EXPERIENCE_SIMULATION_RECEIPT"],
+      "receipts": ["STUDIO_EXPERIENCE_SIMULATION_RECEIPT", "STUDIO_DESIGN_ENGINE_RECEIPT", "STUDIO_DESIGN_PACKET"],
       "required_fields": ["in_scope", "verdict"],
-      "measurement_fields": ["friction_points"]
+      "measurement_fields": ["friction_points", "measurements[].how_we_know_if_wrong", "STUDIO_DESIGN_PACKET.implementation_contract.required_css_variables"]
     },
     "Hist": {
       "title": "Historian",
       "role": "Score predictions vs actual — simulation is oracle not authority",
       "must_answer": [
         "Did prediction match reality?",
-        "What variance lesson?"
+        "What variance lesson?",
+        "Which department or model gains or loses trust weight after reality scoring?"
       ],
-      "receipts": ["RESULT_SCOREBOARD", "TWIN_DRIFT_REPORT", "PREDICTION_RECEIPT.post_build"],
+      "receipts": ["RESULT_SCOREBOARD", "TWIN_DRIFT_REPORT", "PREDICTION_RECEIPT.post_build", "REALITY_CHECK_RECEIPT"],
       "required_fields": ["simulation_vs_reality"],
-      "measurement_fields": ["simulation_vs_reality[].match"]
+      "measurement_fields": ["simulation_vs_reality[].match", "REALITY_CHECK_RECEIPT.results[].trust_adjustment.delta"]
     }
   }
 }

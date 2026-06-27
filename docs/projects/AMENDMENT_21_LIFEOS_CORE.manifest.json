@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 founder-point-b-continue-routing",
-  "last_change_summary": "Founder continue-toward-Point-B asks now stay in the Point B navigator lane instead of degrading into generic mission-pipeline receipt-scan behavior.",
-  "ssot_receipt_tail": "Founder continuation phrasing is live in Point B and production now agrees the machine path is complete while founder usability is still required. Local fix pending deploy: Point B internals must not claim Alpha from TECHNICAL_PASS alone before founder_usability_pass is true."
+  "last_receipt": "2026-06-27 studio-design-engine-founder-shell-hardening",
+  "last_change_summary": "Studio now emits a governed design packet, the founder drawer shell applies that packet, and the daily briefing route now fails soft instead of throwing when optional tables are absent.",
+  "ssot_receipt_tail": "Local proof is green: Studio gating is enforced, founder UI E2E passes 14/14, and /api/v1/lifeos/briefing/today returns 200 with honest partial payload. Remaining step is Railway deploy parity and live UI verification."
 }

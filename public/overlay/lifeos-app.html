@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <script src="/overlay/lifeos-bootstrap.js?v=20260519d"></script>
   <script src="/shared/lifeos-native-shell.js?v=20260519e"></script>
+  <script src="/overlay/lifeos-studio-shell.js?v=20260627a"></script>
   <script src="/overlay/lifeos-theme.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
@@ -72,6 +73,24 @@
       --radius-md:  10px;
       --radius-lg:  14px;
       --transition: 0.2s ease;
+      --studio-bg: var(--bg-base);
+      --studio-bg-raised: var(--bg-raised);
+      --studio-bg-surface: var(--bg-surface);
+      --studio-bg-surface2: var(--bg-surface2);
+      --studio-bg-overlay: var(--bg-overlay);
+      --studio-text: var(--text-primary);
+      --studio-text-secondary: var(--text-secondary);
+      --studio-text-muted: var(--text-muted);
+      --studio-border: var(--border);
+      --studio-border-focus: var(--border-focus);
+      --studio-accent: var(--c-today);
+      --studio-accent-two: var(--c-engine);
+      --studio-accent-soft: rgba(91,106,245,0.12);
+      --studio-hero-gradient: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      --studio-font-display: "Space Grotesk", "Trebuchet MS", sans-serif;
+      --studio-font-body: "Manrope", "Avenir Next", sans-serif;
+      --studio-font-code: "IBM Plex Mono", monospace;
+      --studio-shadow: 0 24px 80px rgba(38,45,61,0.16);
     }
 
     html[data-theme="light"] {
@@ -97,9 +116,12 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg-base);
-      color: var(--text-primary);
+      font-family: var(--studio-font-body);
+      background:
+        radial-gradient(circle at top right, rgba(28,124,84,0.10), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(217,108,6,0.10), transparent 28%),
+        var(--studio-bg);
+      color: var(--studio-text);
       height: 100%;
       overflow: hidden;
       -webkit-font-smoothing: antialiased;
@@ -143,7 +165,8 @@
     .logo {
       font-size: 15px;
       font-weight: 700;
-      color: var(--text-primary);
+      color: var(--studio-text);
+      font-family: var(--studio-font-display);
       letter-spacing: -0.4px;
       white-space: nowrap;
       display: flex;
@@ -154,15 +177,15 @@
       width: 26px;
       height: 26px;
       border-radius: 7px;
-      background: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      background: var(--studio-hero-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 13px;
       flex-shrink: 0;
     }
-    .logo-text { color: var(--text-primary); }
-    .logo-text em { color: var(--c-today); font-style: normal; }
+    .logo-text { color: var(--studio-text); }
+    .logo-text em { color: var(--studio-accent); font-style: normal; }
     .sidebar.mini .logo-text { display: none; }
 
     .collapse-btn {
@@ -1196,20 +1219,20 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      background: var(--studio-hero-gradient);
       border: none;
       color: #fff;
       font-size: 22px;
       cursor: pointer;
       z-index: 960;
-      box-shadow: 0 4px 20px rgba(91,106,245,0.4);
+      box-shadow: var(--studio-shadow);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: transform 0.2s, box-shadow 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
-    .lumin-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(91,106,245,0.55); }
+    .lumin-fab:hover { transform: scale(1.08); box-shadow: 0 18px 45px rgba(28,124,84,0.25); }
     .lumin-fab.drawer-open { transform: scale(0.92); }
     .lumin-fab-badge {
       position: absolute;
@@ -1258,13 +1281,17 @@
       bottom: 0;
       width: 400px;
       max-width: 100vw;
-      background: var(--bg-raised);
-      border-left: 1px solid var(--border-focus);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.92)),
+        var(--studio-bg-raised);
+      border-left: 1px solid var(--studio-border-focus);
       z-index: 980;
       display: flex;
       flex-direction: column;
       transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
       padding-top: var(--safe-top);
+      box-shadow: var(--studio-shadow);
+      color: var(--studio-text);
     }
     .lumin-drawer.open { right: 0; }
 
@@ -1288,18 +1315,21 @@
 
     /* Drawer header */
     .lumin-drawer-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--studio-border);
       display: flex;
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
+      background:
+        linear-gradient(135deg, rgba(28,124,84,0.12), rgba(217,108,6,0.08)),
+        transparent;
     }
     .lumin-drawer-avatar {
       width: 32px;
       height: 32px;
       border-radius: 10px;
-      background: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      background: var(--studio-hero-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1307,12 +1337,12 @@
       flex-shrink: 0;
     }
     .lumin-drawer-title { flex: 1; }
-    .lumin-drawer-title strong { font-size: 14px; font-weight: 700; display: block; }
-    .lumin-drawer-title span { font-size: 11px; color: var(--text-muted); }
+    .lumin-drawer-title strong { font-size: 16px; font-weight: 700; display: block; font-family: var(--studio-font-display); color: var(--studio-text); }
+    .lumin-drawer-title span { font-size: 11px; color: var(--studio-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; }
     .lumin-drawer-close {
       background: none;
       border: none;
-      color: var(--text-muted);
+      color: var(--studio-text-muted);
       font-size: 18px;
       cursor: pointer;
       width: 36px;
@@ -1323,7 +1353,7 @@
       justify-content: center;
       transition: color var(--transition), background var(--transition);
     }
-    .lumin-drawer-close:hover { color: var(--text-primary); background: var(--bg-surface); }
+    .lumin-drawer-close:hover { color: var(--studio-text); background: var(--studio-bg-surface2); }
 
     .lumin-dock-controls {
       display: none;
@@ -1333,9 +1363,9 @@
     }
     html[data-shell-layout="desktop"] .lumin-dock-controls { display: flex; }
     .lumin-dock-btn {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--studio-border);
+      color: var(--studio-text-secondary);
       font-size: 10px;
       font-weight: 600;
       padding: 4px 7px;
@@ -1344,11 +1374,11 @@
       line-height: 1.2;
       transition: color var(--transition), border-color var(--transition), background var(--transition);
     }
-    .lumin-dock-btn:hover { color: var(--text-primary); border-color: var(--border-focus); }
+    .lumin-dock-btn:hover { color: var(--studio-text); border-color: var(--studio-border-focus); }
     .lumin-dock-btn.active {
-      color: var(--c-today);
-      border-color: var(--c-today);
-      background: rgba(99, 102, 241, 0.12);
+      color: var(--studio-accent);
+      border-color: var(--studio-accent);
+      background: var(--studio-accent-soft);
     }
 
     html[data-shell-layout="desktop"] .lumin-drawer.dock-right {
@@ -1392,7 +1422,7 @@
 
     .lumin-history-link {
       font-size: 11px;
-      color: var(--c-today);
+      color: var(--studio-accent);
       text-decoration: none;
       cursor: pointer;
       padding: 2px 6px;
@@ -1400,13 +1430,13 @@
       transition: background var(--transition);
       flex-shrink: 0;
     }
-    .lumin-history-link:hover { background: var(--bg-surface); }
+    .lumin-history-link:hover { background: rgba(255,255,255,0.65); }
 
     /* Voice interim preview */
     .lumin-interim {
       padding: 6px 16px;
       font-size: 12px;
-      color: var(--text-muted);
+      color: var(--studio-text-secondary);
       font-style: italic;
       min-height: 24px;
       flex-shrink: 0;
@@ -1416,30 +1446,34 @@
     .lumin-messages {
       flex: 1;
       overflow-y: auto;
-      padding: 12px 16px;
+      padding: 16px 18px 10px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       scrollbar-width: thin;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0)),
+        transparent;
     }
     .lumin-msg {
-      max-width: 85%;
-      padding: 10px 14px;
-      border-radius: 14px;
+      max-width: 87%;
+      padding: 12px 14px;
+      border-radius: 18px;
       font-size: 13.5px;
-      line-height: 1.55;
+      line-height: 1.6;
+      box-shadow: 0 10px 30px rgba(20,28,40,0.08);
     }
     .lumin-msg.user {
       align-self: flex-end;
-      background: var(--c-today);
+      background: var(--studio-hero-gradient);
       color: #fff;
       border-bottom-right-radius: 4px;
     }
     .lumin-msg.assistant {
       align-self: flex-start;
-      background: #ffeb3b;
-      border: 1px solid #f9d800;
-      color: #000000;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(23,32,51,0.08);
+      color: var(--studio-text);
       border-bottom-left-radius: 4px;
     }
 
@@ -1503,46 +1537,63 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       gap: 8px;
-      color: var(--text-muted);
+      color: var(--studio-text);
       font-size: 13px;
-      padding: 20px;
-      text-align: center;
+      padding: 24px 20px;
+      text-align: left;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.66));
+      border: 1px solid rgba(23,32,51,0.08);
+      box-shadow: 0 16px 40px rgba(20,28,40,0.08);
     }
-    .lumin-empty-icon { font-size: 36px; opacity: 0.5; }
+    .lumin-empty-icon { font-size: 36px; opacity: 0.7; }
+    .lumin-empty-title {
+      font-family: var(--studio-font-display);
+      font-size: 20px;
+      line-height: 1.1;
+    }
+    .lumin-empty-subtitle {
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--studio-text-secondary);
+    }
 
     /* Input bar */
     .lumin-input-bar {
-      padding: 12px 14px;
-      border-top: 1px solid var(--border);
+      padding: 14px 18px;
+      border-top: 1px solid var(--studio-border);
       display: flex;
       align-items: flex-end;
       gap: 8px;
       flex-shrink: 0;
       padding-bottom: calc(12px + var(--safe-bottom));
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.82)),
+        transparent;
     }
     .lumin-input-wrap {
       flex: 1;
-      background: var(--bg-surface);
-      border: 1px solid color-mix(in srgb, var(--text-muted) 22%, transparent);
-      border-radius: 14px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--studio-border);
+      border-radius: 18px;
       display: flex;
       align-items: flex-end;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 8px 28px rgba(20,28,40,0.07);
       transition: border-color var(--transition), box-shadow var(--transition);
     }
     .lumin-input-wrap:focus-within {
-      border-color: color-mix(in srgb, var(--c-today) 50%, var(--border));
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-today) 16%, transparent);
+      border-color: var(--studio-border-focus);
+      box-shadow: 0 0 0 3px rgba(28,124,84,0.10);
     }
     .lumin-input {
       flex: 1;
       background: none;
       border: none;
-      color: var(--text-primary);
-      font-family: inherit;
+      color: var(--studio-text);
+      font-family: var(--studio-font-body);
       font-size: 14px;
       padding: 10px 12px;
       resize: vertical;
@@ -1553,11 +1604,11 @@
       outline: none;
       line-height: 1.5;
     }
-    .lumin-input::placeholder { color: var(--text-muted); }
+    .lumin-input::placeholder { color: var(--studio-text-muted); }
     .lumin-input-mic {
       background: none;
       border: none;
-      color: var(--text-muted);
+      color: var(--studio-text-secondary);
       font-size: 16px;
       cursor: pointer;
       padding: 8px 10px 8px 4px;
@@ -1565,13 +1616,13 @@
       line-height: 1;
       transition: color var(--transition);
     }
-    .lumin-input-mic:hover { color: var(--text-primary); }
+    .lumin-input-mic:hover { color: var(--studio-text); }
     .lumin-input-mic.voice-active { color: #ef4444; animation: voice-topbar-pulse 0.8s infinite; }
     .lumin-send-btn {
       width: 38px;
       height: 38px;
       border-radius: 10px;
-      background: var(--c-today);
+      background: var(--studio-hero-gradient);
       border: none;
       color: #fff;
       font-size: 16px;
@@ -1580,9 +1631,9 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      transition: opacity var(--transition);
+      transition: opacity var(--transition), transform var(--transition);
     }
-    .lumin-send-btn:hover { opacity: 0.85; }
+    .lumin-send-btn:hover { opacity: 0.88; transform: translateY(-1px); }
     .lumin-send-btn:disabled { opacity: 0.4; cursor: default; }
   </style>
   <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css?v=f1782526602404">
@@ -2171,8 +2222,8 @@
   <div class="lumin-messages" id="lumin-messages">
     <div class="lumin-empty" id="lumin-empty">
       <div class="lumin-empty-icon">◎</div>
-      <div>Talk to Lumin</div>
-      <div style="font-size:11px;opacity:0.6;margin-top:4px;">Counsel by default · say <code style="opacity:0.9">do:</code> or ask to build to execute</div>
+      <div class="lumin-empty-title" data-studio-copy="emptyHeading">Talk to Lumin</div>
+      <div class="lumin-empty-subtitle" data-studio-copy="emptySubhead">Counsel by default. Say do: or ask to build to execute.</div>
     </div>
   </div>
 
@@ -2288,6 +2339,7 @@ function applyShellLayoutFromQuery() {
 /* ── Boot ────────────────────────────────────────────────────── */
 (function init() {
   applyShellLayoutFromQuery();
+  try { window.LifeOSStudioShell?.apply?.(); } catch {}
 
   const initials = NAME.charAt(0).toUpperCase();
   document.getElementById('user-avatar').textContent        = initials;
