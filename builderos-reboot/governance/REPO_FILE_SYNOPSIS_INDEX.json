@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T21:46:29.333Z",
+  "generated_at": "2026-06-27T21:50:15.051Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12625,
   "files": [
@@ -41790,9 +41790,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 3845,
-      "mtime": "2026-06-27T21:46:04.089Z",
-      "indexed_at": "2026-06-27T21:46:15.761Z"
+      "bytes": 4087,
+      "mtime": "2026-06-27T21:50:05.514Z",
+      "indexed_at": "2026-06-27T21:50:15.051Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -72500,13 +72500,13 @@
     },
     {
       "path": "routes/lifeos-builderos-command-control-routes.js",
-      "synopsis": "@ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
-      "bytes": 50109,
-      "mtime": "2026-06-27T21:31:31.712Z",
-      "indexed_at": "2026-06-27T21:46:15.761Z",
+      "synopsis": "@ssot docs/products/lifeos/PRODUCT_HOME.md",
+      "bytes": 50145,
+      "mtime": "2026-06-27T21:49:55.846Z",
+      "indexed_at": "2026-06-27T21:50:15.051Z",
       "ssot": [
-        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
-        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+        "docs/products/lifeos/PRODUCT_HOME.md",
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -87413,11 +87413,11 @@
     {
       "path": "services/chair-personality-translate.js",
       "synopsis": "Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).",
-      "bytes": 6834,
-      "mtime": "2026-06-27T21:31:31.849Z",
-      "indexed_at": "2026-06-27T21:46:15.761Z",
+      "bytes": 7571,
+      "mtime": "2026-06-27T21:49:55.848Z",
+      "indexed_at": "2026-06-27T21:50:15.051Z",
       "ssot": [
-        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {

@@ -111,3 +111,4 @@ Do not default back to `AMENDMENT_21` unless the change is truly constitutional/
 - 2026-06-27 — remaining quality fixes from that probe:
   - successful build replies must not duplicate the technical PASS block under the founder card
   - “direct advice only” turns must answer directly and avoid tacking on a follow-up question by default
+- 2026-06-27 — async founder build polling now preserves the founder-facing summary instead of replacing it with the raw technical formatter, and Chair translation path now enforces “direct advice only” at the first-turn counsel layer.

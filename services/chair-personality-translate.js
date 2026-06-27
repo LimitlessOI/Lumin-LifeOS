@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Lumin personality translate — human-language layer on SYSTEM_FACTS only (not theater).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { applyAiProseTruthEnvelope } from './ai-prose-truth-envelope.js';
@@ -41,6 +41,20 @@ const ANTI_FORMULA_RETRY_SUFFIX = `
 Your prior draft used forbidden formula phrases. Rewrite in plain human language:
 - No "happy to help", "great question", "here's the thing", "let me break this down", validation sandwich.
 - Match this user's twin/profile voice. Be direct. Vary structure from your last reply.`;
+
+function buildTurnConstraintBlock(userMessage = '') {
+  const t = String(userMessage || '').trim();
+  if (!t) return '';
+  const rules = [];
+  if (/\bdirect advice only\b/i.test(t) || /\badvice only\b/i.test(t)) {
+    rules.push('- The user asked for direct advice only: answer directly and decisively.');
+    rules.push('- Do not end with a follow-up question unless the user explicitly asked for questions.');
+  }
+  if (/\bcounsel only\b/i.test(t) || /\bno build\b/i.test(t) || /\bdo not run a build\b/i.test(t)) {
+    rules.push('- This turn is counsel only. Do not imply that any action executed.');
+  }
+  return rules.length ? `\n\n[TURN CONSTRAINTS]\n${rules.join('\n')}` : '';
+}
 
 export async function translateChairPersonality({
   callAI,
@@ -96,6 +110,7 @@ export async function translateChairPersonality({
 Answer the user's life/errand question directly using verified_search and personal_twin when present.
 Do NOT summarize Point B, builder queue, alpha status, or platform progress unless they explicitly asked.`;
   }
+  promptBase += buildTurnConstraintBlock(userMessage);
 
   const factsJson = JSON.stringify(systemFacts, null, 2);
   const buildPrompt = (retry = false) => `${promptBase}${retry ? ANTI_FORMULA_RETRY_SUFFIX : ''}
