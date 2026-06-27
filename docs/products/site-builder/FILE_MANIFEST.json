@@ -1,0 +1,71 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "site-builder",
+  "canonical_home": "docs/products/site-builder/PRODUCT_HOME.md",
+  "updated_at": "2026-06-27",
+  "ownership_policy": "pointer_not_duplication",
+  "readiness_state": "PARTIAL_CODE_PRESENT",
+  "mission_pack": null,
+  "acceptance_command": null,
+  "railway_blockers": [
+    "POSTMARK_SERVER_TOKEN",
+    "EMAIL_FROM",
+    "SITE_BASE_URL",
+    "EMAIL_PROVIDER"
+  ],
+  "owned_files": [
+    "docs/products/site-builder/PRODUCT_HOME.md",
+    "docs/products/site-builder/FILE_MANIFEST.json",
+    "docs/products/site-builder/AGENTS.md",
+    "docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md",
+    "routes/site-builder-discovery-routes.js",
+    "routes/site-builder-launch-readiness-routes.js",
+    "routes/site-builder-pipeline-report-routes.js",
+    "routes/site-builder-routes.js",
+    "services/prospect-pipeline.js",
+    "services/site-builder-email-templates.js",
+    "services/site-builder-opportunity-scorer.js",
+    "services/site-builder-postmark-helper.js",
+    "services/site-builder-prospect-ranker.js",
+    "services/site-builder-quality-scorer.js",
+    "services/site-builder-revenue-service.js",
+    "services/site-builder.js"
+  ],
+  "db_tables": [
+    {
+      "name": "prospect_sites",
+      "status": "EXISTS_IN_NEON_PRODUCTION",
+      "purpose": "CRM for all prospects"
+    },
+    {
+      "name": "email_suppressions",
+      "status": "EXISTS_IN_NEON_PRODUCTION",
+      "purpose": "bounce/complaint/unsubscribe protection"
+    },
+    {
+      "name": "outreach_log",
+      "status": "EXISTS_IN_NEON_PRODUCTION",
+      "purpose": "every email attempt audit trail"
+    }
+  ],
+  "shared_dependencies": [
+    {
+      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "owner": "Platform",
+      "reason": "AI council for site generation and content"
+    },
+    {
+      "path": "core/notification-service.js",
+      "owner": "Platform",
+      "reason": "Postmark email sending"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_12_COMMAND_CENTER.md",
+      "owner": "Platform",
+      "reason": "operator UI overlay"
+    }
+  ],
+  "history_anchors": [
+    "docs/projects/AMENDMENT_05_SITE_BUILDER.md"
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "_authority": {
+    "domain": "Product",
+    "status": "CANONICAL",
+    "owner": "AIC -> BPB -> Chair runtime",
+    "purpose": "Canonical product homes and readiness anchors for cold agents and runtime context shaping.",
+    "mandatory_read_before": [
+      "builderos-reboot/MISSIONS/*",
+      "docs/projects/AMENDMENT_*.md"
+    ]
+  },
+  "schema": "product_registry_v1",
+  "updated_at": "2026-06-27",
+  "source_of_truth": [
+    "docs/products/PRODUCT_REGISTRY.json",
+    "docs/products/*/PRODUCT_HOME.md",
+    "docs/products/*/FILE_MANIFEST.json",
+    "builderos-reboot/BP_PRIORITY.json",
+    "builderos-reboot/POINT_B_TARGET.json"
+  ],
+  "products": [
+    {
+      "product_id": "lifeos",
+      "name": "LifeOS",
+      "canonical_home": "docs/products/lifeos/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/lifeos/FILE_MANIFEST.json",
+      "law_path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+      "point_b_mission_id": null,
+      "point_b_authority": "builderos-reboot/POINT_B_TARGET.json",
+      "bp_priority_mission_ids": [
+        "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
+        "PRODUCT-ACTION-INBOX-V1-0001",
+        "PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001",
+        "PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001"
+      ],
+      "default_runtime_surface": "/lifeos",
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Chair/Lumin front door product.",
+        "Product truth lives here before falling back to amendment history."
+      ]
+    },
+    {
+      "product_id": "lifere",
+      "name": "LifeRE",
+      "canonical_home": "docs/products/lifere/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/lifere/FILE_MANIFEST.json",
+      "law_path": "docs/projects/AMENDMENT_LIFERE.md",
+      "point_b_mission_id": "PRODUCT-LIFERE-OS-V1-0001",
+      "point_b_authority": "builderos-reboot/POINT_B_TARGET.json",
+      "bp_priority_mission_ids": [
+        "PRODUCT-LIFERE-OS-V1-0001"
+      ],
+      "default_runtime_surface": "/overlay/lifeos-app.html",
+      "status": "ACTIVE_PRODUCT_HOME",
+      "notes": [
+        "Current Point B anchor for the system path.",
+        "Technical pass does not equal founder usability pass."
+      ]
+    },
+    {
+      "product_id": "tc-service",
+      "name": "TC Service",
+      "canonical_home": "docs/products/tc-service/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/tc-service/FILE_MANIFEST.json",
+      "law_path": "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": "/tc",
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "PARTIAL_CODE_PRESENT",
+      "blueprint_score": 7,
+      "notes": [
+        "Most code-complete unmissioned product in the repo (40+ services, 3 portals).",
+        "No FOUNDER_PACKET or BLUEPRINT.json. Needs mission formalization to enter BuilderOS queue."
+      ]
+    },
+    {
+      "product_id": "site-builder",
+      "name": "Site Builder",
+      "canonical_home": "docs/products/site-builder/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/site-builder/FILE_MANIFEST.json",
+      "law_path": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": "/api/v1/sites",
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "PARTIAL_CODE_PRESENT",
+      "blueprint_score": 7,
+      "notes": [
+        "Code complete. DB tables confirmed in Neon production (3 tables).",
+        "Hard blocked on 4 Railway env vars: POSTMARK_SERVER_TOKEN, EMAIL_FROM, SITE_BASE_URL, EMAIL_PROVIDER.",
+        "No FOUNDER_PACKET or BLUEPRINT.json yet."
+      ]
+    },
+    {
+      "product_id": "clientcare-billing-recovery",
+      "name": "ClientCare Billing Recovery",
+      "canonical_home": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/clientcare-billing-recovery/FILE_MANIFEST.json",
+      "law_path": "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "PARTIAL_CODE_PRESENT",
+      "blueprint_score": 5,
+      "notes": [
+        "Core services exist. Browser-automation approach (Puppeteer — no vendor API).",
+        "No FOUNDER_PACKET, BLUEPRINT.json, or acceptance criteria.",
+        "Sensitive domain: submissions require human approval gate."
+      ]
+    },
+    {
+      "product_id": "ideavault",
+      "name": "IdeaVault",
+      "canonical_home": "docs/products/ideavault/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/ideavault/FILE_MANIFEST.json",
+      "law_path": "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "PARTIAL_CODE_PRESENT",
+      "blueprint_score": 4,
+      "notes": [
+        "Internal documentation/backlog SSOT — not a user-facing SaaS product.",
+        "Scope decision open: standalone product vs. LifeOS admin feature.",
+        "Route and engine services exist for internal API use only."
+      ]
+    },
+    {
+      "product_id": "boldtrail",
+      "name": "BoldTrail",
+      "canonical_home": "docs/products/boldtrail/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/boldtrail/FILE_MANIFEST.json",
+      "law_path": "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": null,
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "PARTIAL_CODE_PRESENT",
+      "blueprint_score": 6,
+      "notes": [
+        "LIVE in use as of 2026-06-22. Integration active in production.",
+        "Scope decision open: shared platform module vs. standalone agent-subscription product.",
+        "LifeRE and TC Service both depend on it."
+      ]
+    },
+    {
+      "product_id": "api-cost-savings",
+      "name": "API Cost Savings",
+      "canonical_home": "docs/products/api-cost-savings/PRODUCT_HOME.md",
+      "file_manifest": "docs/products/api-cost-savings/FILE_MANIFEST.json",
+      "law_path": "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [],
+      "default_runtime_surface": "/",
+      "status": "ACTIVE_PRODUCT_HOME",
+      "readiness_state": "PARTIAL_CODE_PRESENT",
+      "blueprint_score": 6,
+      "notes": [
+        "5-layer stack built. Landing page live (products/api-service/index.html).",
+        "No paying B2B customer yet. Gap is customer acquisition spec, not code.",
+        "No FOUNDER_PACKET or BLUEPRINT.json yet."
+      ]
+    },
+    {
+      "product_id": "voice_rail",
+      "name": "Voice Rail",
+      "canonical_home": "docs/VOICE_RAIL_HISTORY_ONLY.md",
+      "file_manifest": null,
+      "law_path": "builderos-reboot/BP_PRIORITY.json",
+      "point_b_mission_id": null,
+      "point_b_authority": null,
+      "bp_priority_mission_ids": [
+        "PRODUCT-VOICE-RAIL-V1-0001"
+      ],
+      "default_runtime_surface": null,
+      "status": "SCRAPPED_SALVAGE_ONLY",
+      "notes": [
+        "Not an active product queue item.",
+        "Salvage STT/TTS/wake-word patterns only."
+      ]
+    }
+  ]
+}
