@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 objective-1-commitments-page-rebuild",
-  "last_change_summary": "The Objective 1 commitments page was rebuilt after the BP lane exposed a false-green artifact: the shipped HTML was truncated and stale against the current bootstrap/API surface. The rebuilt page now matches the live commitments routes and the acceptance command passes again.",
-  "ssot_receipt_tail": "Local proof is green: npm run lifeos:conversation-commitments:v1-acceptance now PASSes end-to-end against the live API. Remaining step is push + Railway deploy + founder-visible live page verification."
+  "last_receipt": "2026-06-27 founder-overlay-auth-redirect-hardening",
+  "last_change_summary": "The overlay shell auth helper no longer double-appends next targets when redirecting unauthenticated founder sessions, and the real-app E2E now probes both the server-side /lifeos gate and the client-side /overlay/lifeos-app shell redirect shape.",
+  "ssot_receipt_tail": "Live production repro proved the old overlay path generated a nested next= login URL. Local fix is in lifeos-bootstrap.js; remaining step is push + Railway deploy + rerun the real-app E2E until the overlay redirect probe passes live."
 }

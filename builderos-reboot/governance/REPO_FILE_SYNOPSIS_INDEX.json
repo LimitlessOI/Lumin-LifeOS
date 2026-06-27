@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T16:24:13.796Z",
+  "generated_at": "2026-06-27T16:33:49.198Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12622,
   "files": [
@@ -29056,8 +29056,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3789370,
-      "mtime": "2026-06-27T16:23:59.437Z",
-      "indexed_at": "2026-06-27T16:24:13.796Z"
+      "mtime": "2026-06-27T16:33:48.364Z",
+      "indexed_at": "2026-06-27T16:33:49.198Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -40521,9 +40521,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 482071,
-      "mtime": "2026-06-27T05:19:37.491Z",
-      "indexed_at": "2026-06-27T05:22:27.907Z"
+      "bytes": 480954,
+      "mtime": "2026-06-27T16:33:27.692Z",
+      "indexed_at": "2026-06-27T16:33:49.198Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42047,17 +42047,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 27015,
-      "mtime": "2026-06-27T05:20:48.335Z",
-      "indexed_at": "2026-06-27T05:22:27.907Z",
+      "bytes": 27020,
+      "mtime": "2026-06-27T16:33:27.692Z",
+      "indexed_at": "2026-06-27T16:33:49.198Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 512344,
-      "mtime": "2026-06-27T16:23:34.025Z",
-      "indexed_at": "2026-06-27T16:24:13.796Z"
+      "bytes": 513498,
+      "mtime": "2026-06-27T16:33:27.693Z",
+      "indexed_at": "2026-06-27T16:33:49.198Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -70199,8 +70199,8 @@
       "path": "products/receipts/LIFEOS_DIRECT_ACTION_V1_ACCEPTANCE.json",
       "synopsis": "Product receipt — LIFEOS DIRECT ACTION V1 ACCEPTANCE.",
       "bytes": 2374,
-      "mtime": "2026-06-27T16:23:34.025Z",
-      "indexed_at": "2026-06-27T16:24:13.796Z",
+      "mtime": "2026-06-27T16:33:27.694Z",
+      "indexed_at": "2026-06-27T16:33:49.198Z",
       "synopsis_index_only": true
     },
     {
@@ -70518,9 +70518,9 @@
     {
       "path": "products/receipts/REAL_APP_E2E.json",
       "synopsis": "Product receipt — REAL APP E2E.",
-      "bytes": 1840,
-      "mtime": "2026-06-26T23:10:14.323Z",
-      "indexed_at": "2026-06-26T23:10:22.109Z",
+      "bytes": 2567,
+      "mtime": "2026-06-27T16:33:27.694Z",
+      "indexed_at": "2026-06-27T16:33:49.198Z",
       "synopsis_index_only": true
     },
     {
@@ -71207,9 +71207,9 @@
     {
       "path": "public/overlay/lifeos-bootstrap.js",
       "synopsis": "Shared overlay bootstrap — JWT/command key context, headers, and (when embedded)",
-      "bytes": 13520,
-      "mtime": "2026-06-24T22:51:03.498Z",
-      "indexed_at": "2026-06-26T21:07:08.591Z",
+      "bytes": 14049,
+      "mtime": "2026-06-27T16:33:27.694Z",
+      "indexed_at": "2026-06-27T16:33:49.198Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -72465,8 +72465,8 @@
       "path": "routes/lifeos-auth-routes.js",
       "synopsis": "routes/lifeos-auth-routes.js",
       "bytes": 13150,
-      "mtime": "2026-06-27T16:23:34.025Z",
-      "indexed_at": "2026-06-27T16:24:13.796Z",
+      "mtime": "2026-06-27T16:17:41.824Z",
+      "indexed_at": "2026-06-27T16:22:03.731Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
@@ -75230,9 +75230,9 @@
     {
       "path": "scripts/run-real-app-e2e.mjs",
       "synopsis": "Real-app E2E — Playwright drives the actual Railway UI like a founder would.",
-      "bytes": 18358,
-      "mtime": "2026-06-27T16:23:34.026Z",
-      "indexed_at": "2026-06-27T16:24:13.796Z",
+      "bytes": 21502,
+      "mtime": "2026-06-27T16:33:27.694Z",
+      "indexed_at": "2026-06-27T16:33:49.198Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

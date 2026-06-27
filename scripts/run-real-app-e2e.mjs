@@ -364,6 +364,80 @@ async function test_loginPageReachable() {
   } catch (e) { fail('login_page', e.message); }
 }
 
+async function test_loggedOutRedirectShape() {
+  console.log('\n[15] Logged-out LifeOS redirect preserves a single clean next target');
+  let anon;
+  let anonPage;
+  try {
+    anon = await browser.newContext({
+      viewport: { width: 1280, height: 800 },
+      userAgent: 'LifeOS-E2E-Runner/1.0',
+    });
+    anonPage = await anon.newPage();
+    const res = await anonPage.goto(`${BASE}/lifeos?layout=desktop&direct_system=1`, {
+      waitUntil: 'domcontentloaded',
+      timeout: TIMEOUT,
+    });
+    const status = res?.status() ?? 0;
+    const current = anonPage.url();
+    const url = new URL(current);
+    const nextParams = url.searchParams.getAll('next');
+    const decodedNext = nextParams[0] ? decodeURIComponent(nextParams[0]) : '';
+    if (status >= 400) {
+      fail('logged_out_redirect_shape', `HTTP ${status}`);
+    } else if (!/\/overlay\/lifeos-login\.html$/i.test(url.pathname)) {
+      fail('logged_out_redirect_shape', `redirected to unexpected path: ${current}`);
+    } else if (nextParams.length !== 1) {
+      fail('logged_out_redirect_shape', `expected 1 next param, got ${nextParams.length}: ${current}`);
+    } else if (decodedNext !== '/lifeos?layout=desktop&direct_system=1') {
+      fail('logged_out_redirect_shape', `unexpected next target: ${decodedNext}`);
+    } else {
+      pass('logged_out_redirect_shape', decodedNext);
+    }
+  } catch (e) {
+    fail('logged_out_redirect_shape', e.message);
+  } finally {
+    await anon?.close().catch(() => {});
+  }
+}
+
+async function test_loggedOutOverlayRedirectShape() {
+  console.log('\n[16] Logged-out overlay shell redirect does not double-append next');
+  let anon;
+  let anonPage;
+  try {
+    anon = await browser.newContext({
+      viewport: { width: 1280, height: 800 },
+      userAgent: 'LifeOS-E2E-Runner/1.0',
+    });
+    anonPage = await anon.newPage();
+    await anonPage.goto(`${BASE}/overlay/lifeos-app.html?direct_system=1`, {
+      waitUntil: 'domcontentloaded',
+      timeout: TIMEOUT,
+    });
+    await anonPage.waitForTimeout(1500);
+    const current = anonPage.url();
+    const url = new URL(current);
+    const nextParams = url.searchParams.getAll('next');
+    const decodedNext = nextParams[0] ? decodeURIComponent(nextParams[0]) : '';
+    if (!/\/overlay\/lifeos-login\.html$/i.test(url.pathname)) {
+      fail('logged_out_overlay_redirect_shape', `redirected to unexpected path: ${current}`);
+    } else if (nextParams.length !== 1) {
+      fail('logged_out_overlay_redirect_shape', `expected 1 next param, got ${nextParams.length}: ${current}`);
+    } else if (/next=.*next=/i.test(current)) {
+      fail('logged_out_overlay_redirect_shape', `nested next detected: ${current}`);
+    } else if (decodedNext !== '/overlay/lifeos-app.html?direct_system=1') {
+      fail('logged_out_overlay_redirect_shape', `unexpected next target: ${decodedNext}`);
+    } else {
+      pass('logged_out_overlay_redirect_shape', decodedNext);
+    }
+  } catch (e) {
+    fail('logged_out_overlay_redirect_shape', e.message);
+  } finally {
+    await anon?.close().catch(() => {});
+  }
+}
+
 // ── main ─────────────────────────────────────────────────────────────────────
 
 console.log(`\n🎭 Real-app E2E — ${BASE}`);
@@ -433,6 +507,8 @@ await test_alphaDaily();
 await test_dashboardLoads();
 await test_pageNav();
 await test_loginPageReachable();
+await test_loggedOutRedirectShape();
+await test_loggedOutOverlayRedirectShape();
 
 await browser.close();
 

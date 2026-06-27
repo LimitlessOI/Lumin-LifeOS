@@ -1,8 +1,8 @@
 {
   "schema": "real_app_e2e_v1",
-  "at": "2026-06-26T23:10:07.233Z",
+  "at": "2026-06-27T16:29:32.810Z",
   "base": "https://robust-magic-production.up.railway.app",
-  "ok": true,
+  "ok": false,
   "passed": [
     "app_loads",
     "no_js_errors",
@@ -11,14 +11,18 @@
     "chat_response",
     "smos_question",
     "counsel_only_bypass",
+    "drawer_direct_build",
     "navigate_lifere",
     "alpha_readiness",
     "alpha_daily_cycle",
     "dashboard_loads",
     "page_nav",
-    "login_page"
+    "login_page",
+    "logged_out_redirect_shape"
   ],
-  "failed": [],
+  "failed": [
+    "logged_out_overlay_redirect_shape"
+  ],
   "results": {
     "app_loads": {
       "ok": true,
@@ -48,6 +52,10 @@
       "ok": true,
       "detail": "counseled without running build"
     },
+    "drawer_direct_build": {
+      "ok": true,
+      "detail": "✅ PASS · build Command: COMMITTED Receipt: COMMIT_SHA_PRESENT Path: builder_task_execute File: scripts/lifeos-direct-build-smoke-test.mjs Co"
+    },
     "navigate_lifere": {
       "ok": true,
       "detail": "LifeRE page loaded with alpha cycle button"
@@ -62,7 +70,7 @@
     },
     "dashboard_loads": {
       "ok": true,
-      "detail": "11915 chars visible"
+      "detail": "22820 chars visible"
     },
     "page_nav": {
       "ok": true,
@@ -71,6 +79,14 @@
     "login_page": {
       "ok": true,
       "detail": "HTTP 200"
+    },
+    "logged_out_redirect_shape": {
+      "ok": true,
+      "detail": "/lifeos?layout=desktop&direct_system=1"
+    },
+    "logged_out_overlay_redirect_shape": {
+      "ok": false,
+      "detail": "nested next detected: https://robust-magic-production.up.railway.app/overlay/lifeos-login.html?next=%2Foverlay%2Flifeos-app.html%3Fdirect_system%3D1?next=%2Foverlay%2Flifeos-app.html%3Fdirect_system%3D1"
     }
   }
 }

@@ -240,8 +240,20 @@
       await refreshIfNeeded();
       syncTokenFromStorage();
       if (getAccessToken() || getRefreshToken()) return true;
-      const next = encodeURIComponent(location.pathname + location.search);
-      location.href = `${redirectUrl}?next=${next}`;
+      const nextPath = location.pathname + location.search;
+      try {
+        const target = new URL(redirectUrl, location.origin);
+        if (!target.searchParams.has('next')) target.searchParams.set('next', nextPath);
+        location.href = `${target.pathname}${target.search}${target.hash}`;
+      } catch {
+        const hasNext = /(?:[?&])next=/.test(String(redirectUrl || ''));
+        if (hasNext) {
+          location.href = redirectUrl;
+        } else {
+          const separator = String(redirectUrl || '').includes('?') ? '&' : '?';
+          location.href = `${redirectUrl}${separator}next=${encodeURIComponent(nextPath)}`;
+        }
+      }
       return false;
     }
 
