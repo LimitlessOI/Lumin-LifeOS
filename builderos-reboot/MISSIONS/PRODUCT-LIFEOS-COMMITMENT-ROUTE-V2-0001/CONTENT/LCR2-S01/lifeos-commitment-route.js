@@ -2,6 +2,7 @@
  * SYNOPSIS: LifeOS Commitment Route v2.1 — approved inbox commitment → commitment tracker.
  * LifeOS Commitment Route v2.1 — approved inbox commitment → commitment tracker.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  */
 import { createActionInbox } from './action-inbox.js';
 import { createCommitmentTrackerService } from './lifeos-commitment-tracker.js';

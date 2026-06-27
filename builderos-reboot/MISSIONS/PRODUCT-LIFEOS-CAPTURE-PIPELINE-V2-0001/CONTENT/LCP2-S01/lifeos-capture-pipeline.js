@@ -3,6 +3,7 @@
  * LifeOS Capture Pipeline v2 — Voice Rail → Action Inbox staging.
  * Non-private Voice Rail messages auto-stage in Action Inbox for review.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  */
 import { createActionInbox } from './action-inbox.js';
 

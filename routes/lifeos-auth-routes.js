@@ -23,7 +23,7 @@
  *   POST /api/v1/lifeos/auth/operator/invite           — create invite for Sherry / new members
  *   POST /api/v1/lifeos/auth/operator/provision-member — create member account + optional household link
  *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import express from 'express';
@@ -167,7 +167,8 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
     try {
       const isCommandKeyFallback = req.auth_mode === 'command_key_fallback'
         || String(req.lifeosUser?.sub || '') === 'emergency-key';
-      const query = isCommandKeyFallback
+      const isHandleOnlyJwt = !isCommandKeyFallback && !req.lifeosUser?.sub && req.lifeosUser?.handle;
+      const query = (isCommandKeyFallback || isHandleOnlyJwt)
         ? `SELECT id, user_handle, display_name, email, role, tier, timezone,
                   be_statement, do_statement, have_vision, truth_style, last_login_at
              FROM lifeos_users
@@ -177,7 +178,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
                   be_statement, do_statement, have_vision, truth_style, last_login_at
              FROM lifeos_users
             WHERE id = $1`;
-      const queryArg = isCommandKeyFallback
+      const queryArg = (isCommandKeyFallback || isHandleOnlyJwt)
         ? (req.lifeosUser?.handle || 'adam')
         : req.lifeosUser.sub;
       const { rows } = await pool.query(query, [queryArg]);

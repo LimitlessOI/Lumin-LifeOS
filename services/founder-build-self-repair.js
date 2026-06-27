@@ -49,6 +49,7 @@ import {
   createFounderInterfaceBuildJobRecord,
   persistFounderBuildJobResult,
 } from './builderos-command-control-service.js';
+import { resolvePlatformGapFillForBuildDispatch } from './builderos-governed-loop-executor.js';
 import {
   FOUNDER_SOLO_ATTEMPT_MAX,
   runFounderBuildQuorumEscalation,
@@ -785,14 +786,27 @@ export async function runFounderBuildWithSelfRepair(options) {
   let currentTask = String(task || '').trim();
   const directOrder = options.confirmIntent === true;
   const effectiveSkipQuorum = skipQuorum || directOrder;
+  let targetFile = resolveFounderBuildTarget(currentTask);
+  const platformGapFill = resolvePlatformGapFillForBuildDispatch(
+    {
+      domain: 'builderos-platform',
+      task: currentTask,
+      target_file: targetFile || undefined,
+    },
+    {
+      instruction: currentTask,
+      metadata_json: targetFile ? { target_file: targetFile } : {},
+    },
+    {},
+  );
 
   const fpV2Gate = await enforceBeforeBuilderDispatch({
     task: currentTask,
     pool,
     callAI: callCouncilMember,
     confirmIntent: options.confirmIntent === true,
-    platformGapFill: options.platform_gap_fill === true,
-    platformGapFillReason: options.platform_gap_fill_reason,
+    platformGapFill: options.platform_gap_fill === true || platformGapFill?.platform_gap_fill === true,
+    platformGapFillReason: options.platform_gap_fill_reason || platformGapFill?.platform_gap_fill_reason,
   });
   if (!fpV2Gate.execute_cleared) {
     const blocker = fpV2Gate.violations?.[0] || 'BLOCKED_FOUNDER_PACKET_V2';
@@ -876,7 +890,6 @@ export async function runFounderBuildWithSelfRepair(options) {
     });
   }
 
-  let targetFile = resolveFounderBuildTarget(currentTask);
   const attempts = [];
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
@@ -884,6 +897,7 @@ export async function runFounderBuildWithSelfRepair(options) {
       task: currentTask,
       mode: 'code',
       useCache: false,
+      ...(platformGapFill || {}),
       ...(targetFile ? { target_file: targetFile, files: [targetFile] } : {}),
     };
 
@@ -939,6 +953,7 @@ export async function runFounderBuildWithSelfRepair(options) {
         output: taskJson.output,
         target_file: execTarget,
         commit_message: `[system-build] ${currentTask.slice(0, 80)}`,
+        ...(platformGapFill || {}),
       });
       execJson = execRes.json || {};
       const resolvedTarget = execJson.target_file || execTarget;

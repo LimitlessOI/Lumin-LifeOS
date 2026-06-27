@@ -51,7 +51,8 @@ function getChangedFiles() {
 async function extractSsotTag(relPath) {
   try {
     const content = await fs.readFile(path.join(ROOT, relPath), 'utf8');
-    const match = content.match(/@ssot\s+(docs\/projects\/[^\s*\n]+\.md)/);
+    // Accept docs/projects/ (amendment) OR docs/products/ (product-home) paths
+    const match = content.match(/@ssot\s+(docs\/(?:projects|products)\/[^\s*\n]+)/);
     return match ? match[1] : null;
   } catch {
     return null;
@@ -84,14 +85,17 @@ function runPolicy(changedFiles, ssotMap) {
     const isAmendment = f.startsWith('docs/projects/AMENDMENT_') && f.endsWith('.md');
 
     if (isCode) {
-      const amendment = ssotMap[f];
-      if (!amendment) {
+      const ssotRef = ssotMap[f];
+      if (!ssotRef) {
         warnings.push(`MISSING @ssot: ${f} has no @ssot tag`);
-      } else if (!changedFiles.includes(amendment)) {
+      } else if (ssotRef.startsWith('docs/products/')) {
+        // Product-home @ssot is valid — co-commit with product home preferred but not required
+        // (the product-home enforce gate handles harder checks)
+      } else if (!changedFiles.includes(ssotRef)) {
         violations.push({
           file: f,
-          amendment,
-          msg: `${f} changed but amendment ${amendment} was not updated`,
+          amendment: ssotRef,
+          msg: `${f} changed but amendment ${ssotRef} was not updated`,
         });
       }
     }

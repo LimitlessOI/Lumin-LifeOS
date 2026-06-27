@@ -134,30 +134,32 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     tsosHookCount = parseInt(tsosRes.rows[0].count, 10);
   } catch {}
   try {
-    const structuredRes = await pool.query(`
-      SELECT COUNT(DISTINCT run_id) AS cnt
-      FROM autonomous_telemetry_events
-      WHERE task_type = 'tsos_internal_hook'
-        AND metadata->>'committed' = 'true'
-        AND metadata->>'job_id' IS NOT NULL
-        AND metadata->>'output_bytes' IS NOT NULL
-        AND metadata->>'duration_ms' IS NOT NULL
-        AND metadata->>'repair_attempts' IS NOT NULL
-    `);
+    const structuredQuery = [
+      'SELECT COUNT(DISTINCT run_id) AS cnt',
+      'FROM autonomous_telemetry_events',
+      "WHERE task_type = 'tsos_internal_hook'",
+      "  AND metadata->>'committed' = 'true'",
+      "  AND metadata->>'job_id' IS NOT NULL",
+      "  AND metadata->>'output_bytes' IS NOT NULL",
+      "  AND metadata->>'duration_ms' IS NOT NULL",
+      "  AND metadata->>'repair_attempts' IS NOT NULL",
+    ].join('\n');
+    const structuredRes = await pool.query(structuredQuery);
     tsosStructuredCommittedCount = parseInt(structuredRes.rows[0].cnt, 10);
   } catch {}
   try {
-    const linkedRes = await pool.query(`
-      SELECT COUNT(DISTINCT j.id) AS cnt
-      FROM builderos_command_control_jobs j
-      INNER JOIN autonomous_telemetry_events e
-        ON e.run_id = j.id::text AND e.task_type = 'tsos_internal_hook'
-      WHERE j.status = 'committed'
-        AND (j.result_json->'oil_audit_result'->>'ok') = 'true'
-        AND (j.result_json->'oil_audit_result'->'gates'->>'syntax') = 'true'
-        AND (j.result_json->'oil_audit_result'->'gates'->>'antipattern') = 'true'
-        AND (j.result_json->'oil_audit_result'->'gates'->>'stub') = 'true'
-    `);
+    const linkedQuery = [
+      'SELECT COUNT(DISTINCT j.id) AS cnt',
+      'FROM builderos_command_control_jobs j',
+      'INNER JOIN autonomous_telemetry_events e',
+      "  ON e.run_id = j.id::text AND e.task_type = 'tsos_internal_hook'",
+      "WHERE j.status = 'committed'",
+      "  AND (j.result_json->'oil_audit_result'->>'ok') = 'true'",
+      "  AND (j.result_json->'oil_audit_result'->'gates'->>'syntax') = 'true'",
+      "  AND (j.result_json->'oil_audit_result'->'gates'->>'antipattern') = 'true'",
+      "  AND (j.result_json->'oil_audit_result'->'gates'->>'stub') = 'true'",
+    ].join('\n');
+    const linkedRes = await pool.query(linkedQuery);
     tsosVerifierLinkedCount = parseInt(linkedRes.rows[0].cnt, 10);
   } catch {}
 

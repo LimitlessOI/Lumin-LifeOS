@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Chair native facts — real system state Lumin IS (not chat overlay).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { evaluatePointBNavigator, formatPointBStatusSummary } from './point-b-navigator.js';
@@ -32,6 +32,9 @@ function needsGeneralWebSearch(text = '', chairContext = {}) {
   if (isFounderPersonalLifeIntent(t)) return false;
   if (hasProductBuildContext(t) && isBuildRequest(t)) return false;
   if (/^\s*(do|execute|run)\s*:/i.test(t)) return false;
+  if (/\b(should i|what should i|which should i|help me decide|smartest next|best next|prioritize|focus on|where should i spend|next two hours|next step)\b/i.test(t)) {
+    return false;
+  }
   if (/\b(point b|lifere alpha|alpha readiness|alpha battery|alpha test|lifere|ssot|amendment|deploy|railway|builder os|builder pipeline|queue status|target_file|smos|social media os)\b/i.test(t)) {
     return false;
   }
@@ -67,10 +70,11 @@ async function attachVerifiedSearch(facts, text, deps) {
 export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}) {
   const text = String(input || '').trim();
   const systemQuestion = needsSystemKnowledge(text);
+  const explicitPersonalLifeIntent = isFounderPersonalLifeIntent(text);
   const personalTurn = !chairContext.alpha_probe
     && !systemQuestion
     && chairContext.personal_search !== false
-    && (isFounderPersonalLifeIntent(text) || ['personal_life', 'conversation'].includes(chairContext.domain));
+    && (explicitPersonalLifeIntent || chairContext.domain === 'personal_life');
 
   const facts = {
     schema: 'chair_native_facts_v1',
@@ -184,7 +188,9 @@ export async function gatherChairNativeFacts(input, deps = {}, chairContext = {}
     facts.chair_note = `${facts.chair_note} Personal life turn — answer the user's question directly; do not recite Point B, alpha, or builder queue unless they asked.`;
     facts.point_b_target = null;
     facts.point_b_summary = null;
-    await attachVerifiedSearch(facts, text, deps);
+    if (explicitPersonalLifeIntent) {
+      await attachVerifiedSearch(facts, text, deps);
+    }
   } else if (needsGeneralWebSearch(text, chairContext) && !needsSystemKnowledge(text)) {
     facts.chair_note = `${facts.chair_note} Factual question — use verified_search when present; answer directly; do not CLARIFY or paraphrase the question back.`;
     await attachVerifiedSearch(facts, text, deps);

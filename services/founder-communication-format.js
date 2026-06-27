@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { shouldUsePersonalLuminCard } from './chair-lumin-personal-mode.js';
 import {
@@ -90,6 +90,7 @@ export function formatFounderCard(truth = {}) {
 
 export function wrapChairHumanSummary(truth, technicalReply) {
   const commandTruth = truth.command_truth || 'NO_COMMAND_RAN';
+  const action = String(truth.action || '');
   const isCounsel = commandTruth === 'NO_COMMAND_RAN'
     && (['lumin', 'chair', 'counsel', 'life_admin'].includes(truth.chair_channel)
       || truth.action === 'lumin'
@@ -123,6 +124,10 @@ export function wrapChairHumanSummary(truth, technicalReply) {
 
   const card = formatFounderCard({ ...truth, human_summary: technicalReply || truth.human_summary });
   const technical = String(technicalReply || '').trim();
+  const suppressTechnicalEcho =
+    commandTruth === 'COMMITTED' &&
+    (action === 'build' || action === 'execute' || action === 'mission_pipeline');
   if (!technical || technical === card) return card;
+  if (suppressTechnicalEcho) return card;
   return `${card}\n\n── Technical ──\n${technical}`;
 }

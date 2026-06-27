@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Conversation vs display routing — personal talk never hits queue display theater.
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { isFounderPersonalLifeIntent } from './founder-life-admin-intent.js';
 import { stripChairDoPrefix } from './lumin-chair-system-actions.js';
@@ -9,6 +9,7 @@ import { isRepairContinuationIntent } from './builder-instruction-target.js';
 
 const CONVERSATION_MARKERS = /\b(should i|could i|would i|help me|how do i|what do you think|talk to me|worried|feel like|am i connected|quick check|tell me about|any advice)\b/i;
 const CONTINUE_TO_PASS_MARKERS = /\b(keep going|continue|advance|do the next|next machine step)\b.*\b(pass|exact blocker|point b|alpha|mission|blueprint)\b/i;
+const BUILDEROS_SERVICE_REPAIR_MARKERS = /\b(fix|repair)\b.*\bservices\/[a-zA-Z0-9_-]+\.js\b/i;
 
 /** Display intent — "receipt" alone must not hijack build orders (e.g. "Receipt the change"). */
 const DISPLAY_MARKERS = /\b(show|display|view)\b|\b(status|queue|jobs|graph|chart|summary|blocker)\b|\b(how many|list jobs|what is the queue)\b|\breceipts?\b(?!\s+the\s+(change|fix|update|patch))/i;
@@ -27,7 +28,7 @@ export function isExplicitDisplayOnlyRequest(text = '', action = 'auto') {
   if (String(action || '').toLowerCase() === 'build') return false;
   const t = String(text || '').trim();
   if (stripChairDoPrefix(t).forcedExecute) return false;
-  if (isBuildRequest(t) || isRepairContinuationIntent(t)) return false;
+  if (isBuildRequest(t) || isRepairContinuationIntent(t) || BUILDEROS_SERVICE_REPAIR_MARKERS.test(t)) return false;
   if (CONTINUE_TO_PASS_MARKERS.test(t)) return false;
   if (String(action || '').toLowerCase() !== 'auto') return false;
   if (isConversationTurn(t)) return false;

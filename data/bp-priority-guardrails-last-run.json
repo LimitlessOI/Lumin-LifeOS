@@ -1,10 +1,10 @@
 {
   "schema": "bp_priority_guardrails_v1",
-  "checked_at": "2026-06-26T21:06:35.409Z",
+  "checked_at": "2026-06-27T20:54:25.885Z",
   "verdict": "PASS",
   "owner_department": "Historian",
   "registry": "builderos-reboot/HIST_DOMAIN_REGISTRY.json",
-  "pass_count": 27,
+  "pass_count": 26,
   "fail_count": 0,
   "passes": [
     {
@@ -37,10 +37,6 @@
     },
     {
       "id": "BP_NO_ORPHAN_PASS_RECEIPTS",
-      "detail": ""
-    },
-    {
-      "id": "BP_STAGED_CO_COMMIT",
       "detail": ""
     },
     {

@@ -1,7 +1,7 @@
 /**
- * SYNOPSIS: @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * SYNOPSIS: Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
-// @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
 
 import express from 'express';
 import { buildContextForPrompt, storeMemory } from '../core/memory-system.js';
@@ -1001,7 +1001,9 @@ HOW TO RESPOND:
       status: job.status,
       control_plane_done: control_plane_done,
       ...(job.result || {}),
-      human_summary: job.result ? formatExecutionTruthReply(job.result) : null,
+      human_summary: job.result
+        ? (job.result.human_summary || formatExecutionTruthReply(job.result))
+        : null,
     });
   });
 

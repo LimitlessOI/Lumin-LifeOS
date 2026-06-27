@@ -3,6 +3,7 @@
  * Voice Rail v1 — LifeOS communication layer (sessions, intents, staging).
  * Operator policy: no canned/template operator-facing replies — council or fail-closed.
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * HISTORY_SNAPSHOT — not runtime authority; mission-era snapshot.
  * @ssot builderos-reboot/MISSIONS/PRODUCT-VOICE-RAIL-V1-0001/FOUNDER_PACKET.md
  */
 import fs from 'fs/promises';
