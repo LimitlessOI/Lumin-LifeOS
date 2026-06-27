@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 founder-shell-live-briefing-dedupe",
-  "last_change_summary": "Studio now emits a governed design packet, the founder shell is hardened live on Railway, and the daily briefing route both fails soft on missing optional tables and dedupes repeated calendar rows before summarizing the day.",
-  "ssot_receipt_tail": "Live proof is green on Railway commit f5c8ad60d624: founder UI E2E passes 14/14 and /api/v1/lifeos/briefing/today returns 200 without duplicate-event inflation in the summary."
+  "last_receipt": "2026-06-27 objective-1-commitments-page-rebuild",
+  "last_change_summary": "The Objective 1 commitments page was rebuilt after the BP lane exposed a false-green artifact: the shipped HTML was truncated and stale against the current bootstrap/API surface. The rebuilt page now matches the live commitments routes and the acceptance command passes again.",
+  "ssot_receipt_tail": "Local proof is green: npm run lifeos:conversation-commitments:v1-acceptance now PASSes end-to-end against the live API. Remaining step is push + Railway deploy + founder-visible live page verification."
 }

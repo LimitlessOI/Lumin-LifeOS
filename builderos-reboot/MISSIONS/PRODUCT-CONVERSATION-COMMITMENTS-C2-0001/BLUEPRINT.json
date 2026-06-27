@@ -23,8 +23,8 @@
         "C2 rebuild"
       ],
       "status": "complete",
-      "completed_at": "2026-06-11T18:52:22.171Z",
-      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d"
+      "completed_at": "2026-06-27T05:19:08.930Z",
+      "git_sha": "5f90b732016891837792843ad45803454b9d2b1d"
     },
     {
       "step_id": "CCV1-S02",
@@ -36,8 +36,8 @@
         "CCV1-S01"
       ],
       "status": "complete",
-      "completed_at": "2026-06-11T18:52:22.171Z",
-      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d"
+      "completed_at": "2026-06-27T05:19:08.930Z",
+      "git_sha": "5f90b732016891837792843ad45803454b9d2b1d"
     },
     {
       "step_id": "CCV1-S03",
@@ -49,8 +49,8 @@
         "CCV1-S02"
       ],
       "status": "complete",
-      "completed_at": "2026-06-11T18:52:22.171Z",
-      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d"
+      "completed_at": "2026-06-27T05:19:08.930Z",
+      "git_sha": "5f90b732016891837792843ad45803454b9d2b1d"
     },
     {
       "step_id": "CCV1-S04",
@@ -62,8 +62,8 @@
         "CCV1-S03"
       ],
       "status": "complete",
-      "completed_at": "2026-06-11T18:52:22.171Z",
-      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d"
+      "completed_at": "2026-06-27T05:19:08.930Z",
+      "git_sha": "5f90b732016891837792843ad45803454b9d2b1d"
     },
     {
       "step_id": "CCV1-S05",
@@ -75,14 +75,14 @@
         "CCV1-S04"
       ],
       "status": "complete",
-      "completed_at": "2026-06-11T18:52:22.171Z",
-      "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d",
+      "completed_at": "2026-06-27T05:19:08.930Z",
+      "git_sha": "5f90b732016891837792843ad45803454b9d2b1d",
       "receipt_verdict": "PASS"
     }
   ],
   "blueprint_status": "complete",
-  "completed_at": "2026-06-11T18:52:22.171Z",
-  "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d",
+  "completed_at": "2026-06-27T05:19:08.930Z",
+  "git_sha": "5f90b732016891837792843ad45803454b9d2b1d",
   "receipt_path": "products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json",
   "receipt_verdict": "PASS",
   "build_method": "system-build"

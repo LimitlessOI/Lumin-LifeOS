@@ -2,90 +2,539 @@
 <!-- SYNOPSIS: HTML page: Conversation Commitments v1 -->
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversation Commitments v1</title>
-    <script type="module" src="/lifeos-bootstrap.js"></script>
-    <style>
-        body { font-family: sans-serif; margin: 20px; line-height: 1.6; }
-        .container { max-width: 900px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 8px; }
-        h1, h2 { color: #333; }
-        textarea { width: 100%; min-height: 150px; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
-        button:hover { background-color: #0056b3; }
-        button:disabled { background-color: #cccccc; cursor: not-allowed; }
-        .commitment-item { background-color: #f9f9f9; border: 1px solid #eee; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
-        .commitment-item p { margin: 0 0 5px 0; }
-        .commitment-item .source-quote { font-size: 0.9em; color: #666; font-style: italic; }
-        .commitment-list { margin-top: 20px; }
-        .commitment-list h3 { margin-top: 0; }
-        .status-buttons button { margin-right: 5px; padding: 5px 10px; font-size: 0.9em; }
-        .status-buttons .done { background-color: #28a745; }
-        .status-buttons .defer { background-color: #ffc107; color: #333; }
-        .status-buttons .broken { background-color: #dc3545; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversation Commitments v1</title>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --panel: #fffdf8;
+      --ink: #1e1c18;
+      --muted: #6e675d;
+      --line: #ddd2c2;
+      --accent: #1c6b57;
+      --accent-strong: #155243;
+      --warn: #b7791f;
+      --danger: #9f2f2f;
+      --done: #2f855a;
+      --shadow: 0 24px 60px rgba(58, 47, 35, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(28, 107, 87, 0.12), transparent 24rem),
+        linear-gradient(180deg, #faf7f0 0%, var(--bg) 100%);
+      min-height: 100vh;
+    }
+
+    .shell {
+      width: min(1080px, calc(100% - 2rem));
+      margin: 2rem auto 3rem;
+    }
+
+    .hero,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .hero p {
+      margin: 0.85rem 0 0;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 58rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 1.25rem;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .subtle {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 14rem;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem 1.05rem;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      line-height: 1.5;
+    }
+
+    textarea:focus {
+      outline: 2px solid rgba(28, 107, 87, 0.18);
+      border-color: var(--accent);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.9rem;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.78rem 1.1rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, opacity 140ms ease, background-color 140ms ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .primary:hover { background: var(--accent-strong); }
+
+    .secondary {
+      background: #efe8db;
+      color: var(--ink);
+    }
+
+    .ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .status {
+      margin-top: 0.9rem;
+      min-height: 1.3rem;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .status.error { color: var(--danger); }
+    .status.ok { color: var(--done); }
+
+    .list {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 0.95rem;
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    .card label {
+      display: block;
+      cursor: pointer;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.9rem;
+    }
+
+    .title {
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .meta,
+    .quote {
+      margin-top: 0.35rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .quote {
+      border-left: 3px solid rgba(28, 107, 87, 0.26);
+      padding-left: 0.7rem;
+      font-style: italic;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      border-radius: 999px;
+      padding: 0.28rem 0.55rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+      background: #eee6d8;
+      color: var(--ink);
+    }
+
+    .badge.done { background: rgba(47, 133, 90, 0.14); color: var(--done); }
+    .badge.deferred { background: rgba(183, 121, 31, 0.14); color: var(--warn); }
+    .badge.broken { background: rgba(159, 47, 47, 0.13); color: var(--danger); }
+
+    .commit-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.8rem;
+    }
+
+    .commit-actions button {
+      padding: 0.52rem 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      padding: 1rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.55);
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .shell { width: min(100% - 1rem, 1080px); margin-top: 1rem; }
+      .hero, .panel { border-radius: 20px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Conversation Commitments v1</h1>
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">LifeOS Objective 1</p>
+      <h1>Conversation Commitments</h1>
+      <p>
+        Paste a conversation, extract commitments with evidence, preview them before save,
+        then track what stayed open, what got deferred, and what broke.
+      </p>
+    </section>
 
-        <section>
-            <h2>Extract Commitments</h2>
-            <textarea id="conversationText" placeholder="Paste conversation text here..."></textarea>
-            <button id="extractButton">Extract</button>
-        </section>
+    <section class="grid">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Extract commitments</h2>
+            <div class="subtle">Paste conversation text here, then extract commitments with source quotes.</div>
+          </div>
+        </div>
 
-        <section id="previewSection" style="display: none;">
-            <h2>Extracted Commitments Preview</h2>
-            <div id="extractedCommitmentsList">
-                <!-- Extracted commitments will be rendered here -->
+        <textarea
+          id="conversationText"
+          placeholder="Paste conversation text here..."
+          aria-label="Conversation text"
+        ></textarea>
+
+        <div class="actions">
+          <button id="extractButton" class="primary" type="button">Extract commitments</button>
+          <button id="saveSelectedButton" class="secondary" type="button" disabled>Save selected</button>
+          <button id="refreshOpenButton" class="ghost" type="button">Refresh open list</button>
+        </div>
+
+        <div id="extractStatus" class="status"></div>
+
+        <div class="panel-head" style="margin-top:1.2rem;">
+          <div>
+            <h2>Preview before save</h2>
+            <div class="subtle">Nothing is saved until you choose it.</div>
+          </div>
+        </div>
+        <div id="previewList" class="list">
+          <div class="empty">No extracted commitments yet.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Open commitments</h2>
+            <div class="subtle">Founder-ready list of active commitments tied back to conversation evidence.</div>
+          </div>
+          <span id="openCount" class="badge">0 open</span>
+        </div>
+
+        <div id="openCommitmentsList" class="list">
+          <div class="empty">No open commitments.</div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const ctx = window.LifeOSBootstrap.getLifeOSContext({ defaultUser: 'adam' });
+    const conversationTextarea = document.getElementById('conversationText');
+    const extractButton = document.getElementById('extractButton');
+    const saveSelectedButton = document.getElementById('saveSelectedButton');
+    const refreshOpenButton = document.getElementById('refreshOpenButton');
+    const previewList = document.getElementById('previewList');
+    const openCommitmentsList = document.getElementById('openCommitmentsList');
+    const extractStatus = document.getElementById('extractStatus');
+    const openCount = document.getElementById('openCount');
+
+    let extractedCommitments = [];
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function setStatus(message, kind = '') {
+      extractStatus.textContent = message || '';
+      extractStatus.className = `status${kind ? ` ${kind}` : ''}`;
+    }
+
+    async function apiJson(url, options = {}) {
+      const res = await ctx.fetchWithAuth(url, options);
+      const text = await res.text();
+      let json;
+      try {
+        json = JSON.parse(text);
+      } catch {
+        throw new Error(`Non-JSON response (${res.status})`);
+      }
+      if (!res.ok || json.ok === false) {
+        throw new Error(json.error || `Request failed (${res.status})`);
+      }
+      return json;
+    }
+
+    function renderPreview() {
+      if (!extractedCommitments.length) {
+        previewList.innerHTML = '<div class="empty">No extracted commitments yet.</div>';
+        saveSelectedButton.disabled = true;
+        return;
+      }
+
+      previewList.innerHTML = extractedCommitments.map((item, index) => `
+        <article class="card">
+          <label>
+            <div class="row">
+              <div>
+                <input type="checkbox" data-preview-check="${index}" checked>
+                <span class="title">${escapeHtml(item.title)}</span>
+              </div>
+              <span class="badge">${escapeHtml(item.extraction_method || 'ai')} · ${Math.round(Number(item.confidence || 0) * 100)}%</span>
             </div>
-            <button id="saveSelectedButton" style="display: none;">Save Selected</button>
-        </section>
+            <div class="meta">Committed to: ${escapeHtml(item.committed_to || 'self')} ${item.due_at ? `· Due: ${escapeHtml(item.due_at)}` : ''}</div>
+            <div class="quote">"${escapeHtml(item.source_quote || '')}"</div>
+          </label>
+        </article>
+      `).join('');
 
-        <section>
-            <h2>Open Commitments</h2>
-            <div id="openCommitmentsList">
-                <!-- Open commitments will be rendered here -->
-            </div>
-        </section>
-    </div>
+      saveSelectedButton.disabled = false;
+    }
 
-    <script type="module">
-        import { api } from '/lifeos-bootstrap.js';
+    function badgeClass(status) {
+      if (status === 'kept') return 'badge done';
+      if (status === 'deferred') return 'badge deferred';
+      if (status === 'broken') return 'badge broken';
+      return 'badge';
+    }
 
-        const conversationTextarea = document.getElementById('conversationText');
-        const extractButton = document.getElementById('extractButton');
-        const previewSection = document.getElementById('previewSection');
-        const extractedCommitmentsList = document.getElementById('extractedCommitmentsList');
-        const saveSelectedButton = document.getElementById('saveSelectedButton');
-        const openCommitmentsList = document.getElementById('openCommitmentsList');
-
-        let extractedCommitments = []; // Store commitments from extraction for saving
-
-        async function fetchOpenCommitments() {
-            try {
-                const response = await api.get('/api/commitments/open');
-                renderOpenCommitments(response.data);
-            } catch (error) {
-                console.error('Failed to fetch open commitments:', error);
-                openCommitmentsList.innerHTML = '<p>Failed to load open commitments.</p>';
-            }
+    function normalizeQuote(commitment) {
+      const ref = commitment.source_ref;
+      if (typeof ref === 'string') {
+        try {
+          const parsed = JSON.parse(ref);
+          return parsed.source_quote || parsed.sourceQuote || ref;
+        } catch {
+          return ref;
         }
+      }
+      if (ref && typeof ref === 'object') {
+        return ref.source_quote || ref.sourceQuote || '';
+      }
+      return '';
+    }
 
-        function renderOpenCommitments(commitments) {
-            openCommitmentsList.innerHTML = '';
-            if (commitments.length === 0) {
-                openCommitmentsList.innerHTML = '<p>No open commitments.</p>';
-                return;
-            }
-            commitments.forEach(commitment => {
-                const div = document.createElement('div');
-                div.className = 'commitment-item';
-                div.innerHTML = `
-                    <p><strong>Commitment:</strong> ${commitment.text}</p>
-                    <p class="source-quote">Source: "${commitment.sourceQuote}"</p>
-                    <div class="status-buttons">
-                        <button class="done" data-id="${commitment.id}" data-status="done">Done</button>
-                        <button class="defer" data-id="${commitment.id}" data-status="deferred">Defer</button>
-                        <button class="broken
+    function renderOpenCommitments(commitments) {
+      openCount.textContent = `${commitments.length} open`;
+      if (!commitments.length) {
+        openCommitmentsList.innerHTML = '<div class="empty">No open commitments.</div>';
+        return;
+      }
+
+      openCommitmentsList.innerHTML = commitments.map((commitment) => `
+        <article class="card">
+          <div class="row">
+            <div class="title">${escapeHtml(commitment.title)}</div>
+            <span class="${badgeClass(commitment.status)}">${escapeHtml(commitment.status || 'open')}</span>
+          </div>
+          <div class="meta">
+            ${commitment.due_at ? `Due: ${escapeHtml(commitment.due_at)} · ` : ''}Weight: ${escapeHtml(commitment.weight || 1)}
+          </div>
+          <div class="quote">${normalizeQuote(commitment) ? `"${escapeHtml(normalizeQuote(commitment))}"` : 'No source quote recorded.'}</div>
+          <div class="commit-actions">
+            <button class="secondary" type="button" data-action="keep" data-id="${escapeHtml(commitment.id)}">Done</button>
+            <button class="ghost" type="button" data-action="snooze" data-id="${escapeHtml(commitment.id)}">Defer</button>
+            <button class="ghost" type="button" data-action="break" data-id="${escapeHtml(commitment.id)}">Broken</button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    async function fetchOpenCommitments() {
+      try {
+        const json = await apiJson(`/api/v1/lifeos/commitments?user=${encodeURIComponent(ctx.USER)}&limit=50`);
+        renderOpenCommitments(json.commitments || []);
+      } catch (error) {
+        openCount.textContent = 'error';
+        openCommitmentsList.innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    async function extractCommitments() {
+      const text = conversationTextarea.value.trim();
+      if (!text) {
+        setStatus('Paste a conversation first.', 'error');
+        conversationTextarea.focus();
+        return;
+      }
+
+      extractButton.disabled = true;
+      saveSelectedButton.disabled = true;
+      setStatus('Extracting commitments from conversation…');
+
+      try {
+        const json = await apiJson('/api/v1/lifeos/commitments/extract', {
+          method: 'POST',
+          body: JSON.stringify({ user: ctx.USER, text }),
+        });
+        extractedCommitments = json.extracted || [];
+        renderPreview();
+        setStatus(`Extracted ${extractedCommitments.length} commitment${extractedCommitments.length === 1 ? '' : 's'}.`, 'ok');
+      } catch (error) {
+        extractedCommitments = [];
+        renderPreview();
+        setStatus(error.message, 'error');
+      } finally {
+        extractButton.disabled = false;
+      }
+    }
+
+    async function saveSelectedCommitments() {
+      const selected = [...document.querySelectorAll('[data-preview-check]:checked')]
+        .map((el) => extractedCommitments[Number(el.dataset.previewCheck)])
+        .filter(Boolean);
+
+      if (!selected.length) {
+        setStatus('Select at least one extracted commitment to save.', 'error');
+        return;
+      }
+
+      saveSelectedButton.disabled = true;
+      setStatus('Saving selected commitments…');
+
+      try {
+        const json = await apiJson('/api/v1/lifeos/commitments/from-conversation', {
+          method: 'POST',
+          body: JSON.stringify({
+            user: ctx.USER,
+            text: conversationTextarea.value.trim(),
+            save: true,
+          }),
+        });
+        const wantedQuotes = new Set(selected.map((item) => item.source_quote));
+        const saved = (json.logged || []).filter((item) => wantedQuotes.has(item.source_ref?.source_quote || item.source_ref?.sourceQuote || ''));
+        setStatus(`Saved ${saved.length || selected.length} commitment${selected.length === 1 ? '' : 's'}.`, 'ok');
+        extractedCommitments = [];
+        renderPreview();
+        await fetchOpenCommitments();
+      } catch (error) {
+        setStatus(error.message, 'error');
+      } finally {
+        saveSelectedButton.disabled = false;
+      }
+    }
+
+    async function updateCommitmentStatus(id, action) {
+      const payload = action === 'break' ? { reason: 'Founder marked as broken from commitments UI' } : {};
+      try {
+        await apiJson(`/api/v1/lifeos/commitments/${id}/${action}`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        await fetchOpenCommitments();
+      } catch (error) {
+        setStatus(error.message, 'error');
+      }
+    }
+
+    extractButton.addEventListener('click', extractCommitments);
+    saveSelectedButton.addEventListener('click', saveSelectedCommitments);
+    refreshOpenButton.addEventListener('click', fetchOpenCommitments);
+
+    openCommitmentsList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      const { action, id } = button.dataset;
+      button.disabled = true;
+      const mappedAction = action === 'keep' ? 'keep' : action === 'break' ? 'break' : 'snooze';
+      await updateCommitmentStatus(id, mappedAction);
+      button.disabled = false;
+    });
+
+    fetchOpenCommitments();
+  </script>
+</body>
+</html>

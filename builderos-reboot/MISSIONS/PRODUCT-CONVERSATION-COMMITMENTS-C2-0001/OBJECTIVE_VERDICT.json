@@ -1,11 +1,12 @@
 {
   "schema": "objective_verdict_v1",
-  "generated_at": "2026-06-11T18:52:22.171Z",
+  "generated_at": "2026-06-27T05:19:08.930Z",
   "objective_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
   "objective_name": "LifeOS Objective 1 — Conversation Commitments v1",
   "verdict": "OBJECTIVE_COMPLETE",
-  "acceptance_command": "npm run lifeos:conversation-commitments:v1-acceptance",
   "receipt": "products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json",
+  "production_base": "https://robust-magic-production.up.railway.app",
+  "git_sha": "5f90b732016891837792843ad45803454b9d2b1d",
   "tests_passed": [
     "blueprint_exists",
     "ui_exists",
@@ -15,7 +16,11 @@
     "save_from_conversation",
     "list_contains_saved",
     "mark_done",
-    "mark_broken"
+    "mark_broken",
+    "bp_sync_mandatory"
   ],
-  "tests_failed": []
+  "tests_failed": [],
+  "founder_usability_pass": false,
+  "acceptance_command": "npm run lifeos:conversation-commitments:v1-acceptance",
+  "canonical_url": "/overlay/lifeos-commitments-v1.html"
 }

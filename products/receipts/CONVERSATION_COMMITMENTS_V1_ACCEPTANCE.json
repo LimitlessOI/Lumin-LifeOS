@@ -1,7 +1,7 @@
 {
   "schema": "conversation_commitments_v1_acceptance_v1",
   "mission_id": "PRODUCT-CONVERSATION-COMMITMENTS-C2-0001",
-  "started_at": "2026-06-11T18:52:20.650Z",
+  "started_at": "2026-06-27T05:18:55.054Z",
   "base": "https://robust-magic-production.up.railway.app",
   "tests_passed": [
     "blueprint_exists",
@@ -21,19 +21,19 @@
       "step": "blueprint_exists",
       "ok": true,
       "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/builderos-reboot/MISSIONS/PRODUCT-CONVERSATION-COMMITMENTS-C2-0001/BLUEPRINT.json",
-      "at": "2026-06-11T18:52:20.651Z"
+      "at": "2026-06-27T05:18:55.055Z"
     },
     {
       "step": "ui_exists",
       "ok": true,
       "detail": "/Users/adamhopkins/Projects/Lumin-LifeOS/public/overlay/lifeos-commitments-v1.html",
-      "at": "2026-06-11T18:52:20.651Z"
+      "at": "2026-06-27T05:18:55.055Z"
     },
     {
       "step": "ui_has_paste_extract",
       "ok": true,
       "detail": "lifeos-commitments-v1.html",
-      "at": "2026-06-11T18:52:20.651Z"
+      "at": "2026-06-27T05:18:55.055Z"
     },
     {
       "step": "snt_empty_text_400",
@@ -41,7 +41,7 @@
       "detail": {
         "http": 400
       },
-      "at": "2026-06-11T18:52:20.787Z"
+      "at": "2026-06-27T05:18:55.344Z"
     },
     {
       "step": "extract_with_evidence",
@@ -51,7 +51,7 @@
         "count": 2,
         "hasEvidence": true
       },
-      "at": "2026-06-11T18:52:21.394Z"
+      "at": "2026-06-27T05:19:02.281Z"
     },
     {
       "step": "save_from_conversation",
@@ -60,7 +60,7 @@
         "http": 200,
         "count": 2
       },
-      "at": "2026-06-11T18:52:21.680Z"
+      "at": "2026-06-27T05:19:08.497Z"
     },
     {
       "step": "list_contains_saved",
@@ -70,30 +70,30 @@
         "saved": 2,
         "found": true
       },
-      "at": "2026-06-11T18:52:21.796Z"
+      "at": "2026-06-27T05:19:08.715Z"
     },
     {
       "step": "mark_done",
       "ok": true,
       "detail": {
-        "id": "41"
+        "id": "102"
       },
-      "at": "2026-06-11T18:52:21.902Z"
+      "at": "2026-06-27T05:19:08.786Z"
     },
     {
       "step": "mark_broken",
       "ok": true,
       "detail": {
-        "id": "42"
+        "id": "103"
       },
-      "at": "2026-06-11T18:52:21.975Z"
+      "at": "2026-06-27T05:19:08.863Z"
     }
   ],
-  "railway_sha": "",
-  "verdict": "PASS",
-  "completed_at": "2026-06-11T18:52:22.171Z",
-  "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d",
+  "railway_sha": "9e256dcb22fd8878558efbcdc19ee62a8c1664cd",
+  "completed_at": "2026-06-27T05:19:08.930Z",
+  "git_sha": "5f90b732016891837792843ad45803454b9d2b1d",
   "production_base": "https://robust-magic-production.up.railway.app",
+  "verdict": "PASS",
   "bp_sync": {
     "updated": [
       "builderos-reboot/BP_PRIORITY.json",

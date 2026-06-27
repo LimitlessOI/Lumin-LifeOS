@@ -45,11 +45,11 @@
   "founder_touches": "alert_only_on_UNSOLVED",
   "archived_docs": "_hist/",
   "technical_pass": {
-    "at": "2026-06-11T18:52:22.171Z",
+    "at": "2026-06-27T05:19:08.930Z",
     "receipt_path": "products/receipts/CONVERSATION_COMMITMENTS_V1_ACCEPTANCE.json",
     "receipt_verdict": "PASS",
-    "git_sha": "c69e2b7a3b1b9f0700d5568649b1ee714cbaec3d",
-    "production_base": "",
+    "git_sha": "5f90b732016891837792843ad45803454b9d2b1d",
+    "production_base": "https://robust-magic-production.up.railway.app",
     "canonical_url": "/overlay/lifeos-commitments-v1.html",
     "founder_usability_pass": false,
     "build_method": "system-build"
