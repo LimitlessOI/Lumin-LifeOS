@@ -154,6 +154,9 @@ export function runBpPriorityOnce({ logger } = {}) {
 const guardedBpPriorityTick = createUsefulWorkGuard({
   taskName: 'BP-PRIORITY-SCHEDULER',
   purpose: 'Advance Point B mission via foundation pipeline when BP_PRIORITY has incomplete work',
+  // Canonical BuilderOS autopilot is an explicit PB-authorized runtime lane.
+  // Directed mode should block generic schedulers, not the governed BP queue.
+  allowInDirectedMode: true,
   prerequisites: async () => {
     if (process.env.BUILDEROS_AUTOPILOT !== '1') {
       return { ok: false, reason: 'BUILDEROS_AUTOPILOT not enabled' };

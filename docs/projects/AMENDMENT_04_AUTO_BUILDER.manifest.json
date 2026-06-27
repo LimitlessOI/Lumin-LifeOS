@@ -7,6 +7,6 @@
   "status": "active",
   "build_ready": true,
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 canonical-autonomy-runtime-truth-and-managed-scheduler-controls",
-  "last_change_summary": "Canonical autonomy truth now comes from the real BP scheduler instead of legacy overnight sidecars, the alpha-readiness scorer fail-closes when that scheduler is disabled or stale, the improvement loop emits deterministic SNT/CFO/Chair/ARC-ready proposals, and Railway managed env writes can now govern the BUILDEROS_AUTOPILOT runtime controls."
+  "last_receipt": "2026-06-27 directed-mode-carveout-for-canonical-bp-scheduler",
+  "last_change_summary": "The canonical BP scheduler now runs as an explicit PB-authorized directed-mode lane when BUILDEROS_AUTOPILOT=1, fixing the live conflict where the runtime could report autopilot enabled yet useful-work-guard skipped every queue cycle as generic directed-mode autonomy."
 }
