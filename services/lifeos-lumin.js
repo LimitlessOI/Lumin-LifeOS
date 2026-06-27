@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Lumin Chair — governed operating mind of LifeOS (not a side chatbot or reception desk).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 
 import { createResponseVariety } from './response-variety.js';
@@ -37,7 +37,23 @@ const MODE_SYSTEM_PROMPTS = {
   listening_onboarding: `You are Lumen in Listening Setup mode. Guide the user through opt-in listening, capture, and privacy choices with honesty and warmth.`,
 };
 
-function buildSystemPrompt(mode, contextData, varietyGuidance, profileSummary) {
+function buildTurnConstraintBlock(userMessage = '') {
+  const t = String(userMessage || '').trim();
+  if (!t) return '';
+
+  const rules = [];
+  if (/\bdirect advice only\b/i.test(t) || /\badvice only\b/i.test(t)) {
+    rules.push('- The user asked for direct advice only: give your best direct answer first.');
+    rules.push('- Do not end with a follow-up question unless the user explicitly asked you to ask one.');
+  }
+  if (/\bno build\b/i.test(t) || /\bdo not run a build\b/i.test(t) || /\bcounsel only\b/i.test(t)) {
+    rules.push('- This turn is counsel only. Do not imply that anything executed.');
+  }
+
+  return rules.length ? `\nTurn-specific instructions:\n${rules.join('\n')}` : '';
+}
+
+function buildSystemPrompt(mode, contextData, varietyGuidance, profileSummary, userMessage = '') {
   const base = MODE_SYSTEM_PROMPTS[mode] || MODE_SYSTEM_PROMPTS.general;
   const parts = [LUMIN_EPISTEMIC_CONTRACT, base];
 
@@ -49,6 +65,10 @@ function buildSystemPrompt(mode, contextData, varietyGuidance, profileSummary) {
   }
   if (contextData && Object.keys(contextData).length > 0) {
     parts.push(`\nCurrent LifeOS context:\n${JSON.stringify(contextData, null, 2)}`);
+  }
+  const turnConstraintBlock = buildTurnConstraintBlock(userMessage);
+  if (turnConstraintBlock) {
+    parts.push(turnConstraintBlock);
   }
 
   parts.push(`\nYour name is Lumen (users may say Lumin — same companion). Address yourself as Lumen in user-facing text. Keep responses conversational — not essays unless the question calls for depth. No hollow openers like "Great question!" or "Certainly!"`);
@@ -185,7 +205,7 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     const contextData = await buildContextSnapshot(userId, { mode: thread.mode || 'general' });
 
     // Build base system prompt with mode + context
-    const baseSystemPrompt = buildSystemPrompt(thread.mode, contextData, null, null);
+    const baseSystemPrompt = buildSystemPrompt(thread.mode, contextData, null, null, userMessage);
 
     // Enrich with response variety + communication profile (both non-fatal)
     const { systemPrompt, styles } = await variety.wrapPromptWithVariety({
@@ -247,7 +267,7 @@ export function createLifeOSLumin({ pool, callAI, logger }) {
     );
 
     const history = await getMessages(threadId, { limit: CONTEXT_WINDOW });
-    const systemPrompt = overridePrompt || buildSystemPrompt(thread.mode, contextData, null, null);
+    const systemPrompt = overridePrompt || buildSystemPrompt(thread.mode, contextData, null, null, userMessage);
     const historyText = history
       .slice(0, -1)
       .map(m => `${m.role === 'user' ? 'User' : 'Lumen'}: ${m.content}`)

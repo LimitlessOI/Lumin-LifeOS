@@ -2,6 +2,8 @@
 
 # LifeOS Product Home
 
+**Last updated:** 2026-06-27 — founder drawer recovered clean advice → build → advice switching; duplicate build receipt echo removed and “direct advice only” now hard-blocks follow-up-question drift.
+
 **Canonical home:** this file  
 **Product id:** `lifeos`  
 **Primary runtime surface:** `/lifeos`  
@@ -102,3 +104,10 @@ Use these for law/history/receipts, not as the primary product home:
 If a file belongs to LifeOS product behavior, `@ssot` should point here or to `docs/products/lifeos/FILE_MANIFEST.json` for ownership lookup.
 
 Do not default back to `AMENDMENT_21` unless the change is truly constitutional/history-level.
+
+## Latest operational receipts
+
+- 2026-06-27 — founder UI live probe proved the drawer can now recover across advice → build → advice in the same session on production.
+- 2026-06-27 — remaining quality fixes from that probe:
+  - successful build replies must not duplicate the technical PASS block under the founder card
+  - “direct advice only” turns must answer directly and avoid tacking on a follow-up question by default

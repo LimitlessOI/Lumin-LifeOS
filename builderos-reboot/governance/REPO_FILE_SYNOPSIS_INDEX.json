@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T21:36:41.337Z",
+  "generated_at": "2026-06-27T21:45:46.831Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12625,
   "files": [
@@ -41790,9 +41790,9 @@
     {
       "path": "docs/products/lifeos/PRODUCT_HOME.md",
       "synopsis": "Canonical product home — LifeOS",
-      "bytes": 3194,
-      "mtime": "2026-06-27T20:50:12.637Z",
-      "indexed_at": "2026-06-27T20:54:17.008Z"
+      "bytes": 3845,
+      "mtime": "2026-06-27T21:45:33.471Z",
+      "indexed_at": "2026-06-27T21:45:46.831Z"
     },
     {
       "path": "docs/products/LIFERE.md",
@@ -88454,11 +88454,11 @@
     {
       "path": "services/founder-communication-format.js",
       "synopsis": "Founder reply cards — DONE synopsis + bullets, NEXT + why (Chair format).",
-      "bytes": 5867,
-      "mtime": "2026-06-27T20:50:13.415Z",
-      "indexed_at": "2026-06-27T20:54:17.008Z",
+      "bytes": 6100,
+      "mtime": "2026-06-27T21:45:26.149Z",
+      "indexed_at": "2026-06-27T21:45:46.831Z",
       "ssot": [
-        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
@@ -89436,11 +89436,11 @@
     {
       "path": "services/lifeos-lumin.js",
       "synopsis": "Lumin Chair — governed operating mind of LifeOS (not a side chatbot or reception desk).",
-      "bytes": 21873,
-      "mtime": "2026-06-27T20:50:13.432Z",
-      "indexed_at": "2026-06-27T20:54:17.008Z",
+      "bytes": 22750,
+      "mtime": "2026-06-27T21:45:26.151Z",
+      "indexed_at": "2026-06-27T21:45:46.831Z",
       "ssot": [
-        "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+        "docs/products/lifeos/PRODUCT_HOME.md"
       ]
     },
     {
