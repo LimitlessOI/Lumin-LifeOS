@@ -12,6 +12,7 @@
  */
 // ui-e2e-build-proof: 2026-06-27T21:38:03.508Z
 // ui-switch-test-proof: boundary-check-3
+// raw-api-proof: duplicate-check
 // --- Constants ---
 /*
 - The version identifier for this specific smoke test script.
@@ -74,7 +75,7 @@ function logMessage(level, message) {
 - - @returns {{ ok: boolean, source: string }} An object indicating the success status
 -   and the source identifier of the test.
  */
-exp lifeosDirectBuildSmokeTest() {
+export function lifeosDirectBuildSmokeTest() {
   logMessage('INFO', `Starting LifeOS direct build smoke test (v${SMOKE_TEST_VERSION})...`);
   // Perform a simulated check for the expected source identifier.
   // This adds a layer of "logic" beyond a simple return.
