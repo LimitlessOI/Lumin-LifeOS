@@ -886,5 +886,5 @@
   "last_updated": "2026-06-27",
   "last_receipt": "2026-06-27 founder-point-b-continue-routing",
   "last_change_summary": "Founder continue-toward-Point-B asks now stay in the Point B navigator lane instead of degrading into generic mission-pipeline receipt-scan behavior.",
-  "ssot_receipt_tail": "Founder continuation phrasing now routes locally into Point B instead of display-only or generic blueprint ambiguity. Live still shows a real SSOT/runtime split: local LifeRE receipts say TECHNICAL_PASS, while the founder endpoint still reports machine:acceptance FAIL until deploy parity proves otherwise."
+  "ssot_receipt_tail": "Founder continuation phrasing is live in Point B and production now agrees the machine path is complete while founder usability is still required. Local fix pending deploy: Point B internals must not claim Alpha from TECHNICAL_PASS alone before founder_usability_pass is true."
 }

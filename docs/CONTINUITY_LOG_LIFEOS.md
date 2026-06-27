@@ -40,6 +40,24 @@ Deploy this classifier fix, rerun the live founder continue-to-Point-B probe, th
 ### Next
 Deploy the continuation-language fix, rerun the founder continuation battery on Railway, then trace whether the live Point B gate is reading stale acceptance receipts or stale runtime files.
 
+## [BUILD] Update 2026-06-27 — Point B Alpha truth-gate repair
+
+### What happened
+- **The continuation deploy resolved the original receipt contradiction.** Production now reports the same core state as local LifeRE artifacts: machine path complete, founder usability still required.
+- **That exposed a subtler Point B bug.** `evaluatePointBTargetReached()` could still infer `alpha_reached` from `TECHNICAL_PASS + acceptance PASS` even when `founder_usability_pass` was false, forcing the chair truth gate to block the overclaim after the navigator had already drifted toward `point_b_reached`.
+- **Fix shipped locally.** `factory-staging/factory-core/arc/foundation/point-b-target.js` now requires `founder_usability_pass === true` before internal Alpha/Point-B claims become true. Regression `tests/point-b-target.test.js` proves the current LifeRE mission stays below Point B until founder confirmation exists.
+
+### Verification
+- `node --test tests/point-b-target.test.js tests/point-b-navigator.test.js tests/lumin-conversation-routing.test.js tests/chair-context-classifier.test.js tests/lumin-chair-orchestrator.test.js`
+- `node --test tests/chair-direct-connection-truth.test.js tests/chair-program-direct-answer.test.js`
+- Live founder probe on deploy `509ff74f0a04d3afffe36d70ae5e18d9675ee4fe`:
+  - `keep going until pass or exact blocker` → `point_b`, not display
+  - `run execute mission for PRODUCT-LIFERE-OS-V1-0001` → `point_b`, not blueprint ambiguity
+  - state now honestly reports machine path complete + founder usability pending
+
+### Next
+Deploy the Point B Alpha truth-gate fix, rerun the founder Point B probe, then stop only when the remaining gate is the founder’s real usability confirmation.
+
 ## [BUILD] Update 2026-06-27 — Founder continuity hardening v3 (auth sentinel ids no longer block thread recall)
 
 ### What happened

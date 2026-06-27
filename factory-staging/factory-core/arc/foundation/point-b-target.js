@@ -1,5 +1,6 @@
 /**
  * SYNOPSIS: Canonical Point B — LifeRE Alpha.
+ * SYNOPSIS: Alpha requires founder usability; technical pass alone must not claim Point B reached.
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import fs from 'node:fs';
@@ -99,11 +100,12 @@ export function evaluatePointBTargetReached(missionFolder) {
   const gate = evaluatePointBGate(missionFolder, { blueprint });
   const acceptance = runAcceptanceCommand(target.acceptance_command);
   const objective = loadMissionJson(missionFolder, 'OBJECTIVE_VERDICT.json');
+  const founderUsabilityPass = objective?.founder_usability_pass === true;
   const technicalPass = String(objective?.verdict || '').toUpperCase() === 'TECHNICAL_PASS'
     || acceptance.ok;
 
   const alphaReached = gate.alpha_reached || (
-    technicalPass && acceptance.ok
+    founderUsabilityPass && technicalPass && acceptance.ok
   );
 
   return {
@@ -114,9 +116,12 @@ export function evaluatePointBTargetReached(missionFolder) {
     gate,
     acceptance,
     objective_verdict: objective?.verdict || null,
+    founder_usability_pass: founderUsabilityPass,
     alpha_reached: alphaReached,
     lesson: alphaReached
       ? 'Point B reached — LifeRE Alpha'
-      : 'Not at Point B yet — obstacle recorded; loop continues',
+      : founderUsabilityPass
+        ? 'Not at Point B yet — obstacle recorded; loop continues'
+        : 'Machine path complete — awaiting founder usability confirmation',
   };
 }

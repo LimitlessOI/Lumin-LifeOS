@@ -2,7 +2,7 @@
   "schema": "repo_file_synopsis_index_v1",
   "generated_at": "2026-06-27T03:19:25.713Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12609,
+  "file_count": 12610,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -96180,6 +96180,13 @@
       "bytes": 648,
       "mtime": "2026-06-27T03:07:13.331Z",
       "indexed_at": "2026-06-27T03:19:24.488Z"
+    },
+    {
+      "path": "tests/point-b-target.test.js",
+      "synopsis": "Point B target must not claim Alpha before founder usability pass.",
+      "bytes": 816,
+      "mtime": "2026-06-27T03:22:29.548Z",
+      "indexed_at": "2026-06-27T03:25:22.147Z"
     },
     {
       "path": "tests/prediction-loop.test.js",

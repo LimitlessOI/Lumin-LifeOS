@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-27 — Point B status authority split (status asks report only; continue asks may execute).
+**Last Updated:** 2026-06-27 — Point B Alpha truth gate fix (technical pass no longer claims Point B without founder usability).
 
 ---
 
@@ -161,6 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-27 | **Point B Alpha truth gate fix** — `factory-staging/factory-core/arc/foundation/point-b-target.js` no longer treats `TECHNICAL_PASS + acceptance PASS` as `alpha_reached` unless `OBJECTIVE_VERDICT.founder_usability_pass === true`; lesson now says machine path is awaiting founder confirmation. Added `tests/point-b-target.test.js` regression against the live LifeRE mission artifact. | Live founder probes showed a real truth bug: Point B navigator could drift toward `point_b_reached` before founder usability was confirmed, then the chair truth gate had to slap the claim back down. Alpha must stay false until founder confirmation is true. | ✅ local tests; ⚠️ deploy + re-run founder Point B probe | `node --test tests/point-b-target.test.js tests/point-b-navigator.test.js tests/lumin-conversation-routing.test.js tests/chair-context-classifier.test.js tests/lumin-chair-orchestrator.test.js` |
 | 2026-06-27 | **`services/point-b-navigator.js` authority split** — separated `isPointBStatusIntent()` from `isPointBExecuteIntent()`; `handlePointBFounderMessage()` now auto-runs only on explicit continue/advance/do-the-next-step asks, not on pure status/progress asks. Added `tests/point-b-navigator.test.js`. | Live founder UI proving exposed a BuilderOS control bug: once status routing left generic display, a pure `status on the blueprint step you just started` ask was still re-triggering `execute_mission`. BuilderOS status asks must report, not silently mutate into work. | ✅ local tests; ⚠️ deploy + founder start→status live probe | `node --test tests/point-b-navigator.test.js tests/lumin-conversation-routing.test.js tests/chair-context-classifier.test.js tests/lumin-chair-orchestrator.test.js` |
 | 2026-06-26 | **Intake UX fixes** — backfill 400 when amendment_text missing on Railway; ARC/chair/CLI next steps point to `POST /blueprint/intake/:id/execute`; chair-hook backfill mode; IGR-11 hint probe. | Founder hit AmendmentNotFound 500 and stale `/builder/run` execute hints. | ⚠️ deploy + IGR-11 | `npm run builderos:intake:ready` |
 | 2026-06-26 | **Founder intake ready gate** — `scripts/builderos-intake-ready-gate.mjs` + `npm run builderos:intake:ready` (IGR-01..10: env, builder ready, deploy fresh, intake API, golden acceptance, pre-build gate). | Adam alpha → founder intake handoff needs one command proof. | ✅ IGR 10/10 PASS | `npm run builderos:intake:ready` |

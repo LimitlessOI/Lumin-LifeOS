@@ -7,6 +7,6 @@
   "status": "active",
   "build_ready": true,
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 point-b-status-authority-split",
-  "last_change_summary": "Point B navigator now treats status asks as report-only and only auto-runs work on explicit continue/advance language."
+  "last_receipt": "2026-06-27 point-b-alpha-truth-gate-fix",
+  "last_change_summary": "Point B target no longer claims Alpha from TECHNICAL_PASS alone; founder_usability_pass is mandatory before Point B reached."
 }
