@@ -8,6 +8,20 @@
 
 ---
 
+## [BUILD] Update 2026-06-27 — Founder continue-to-Point-B routing hardening
+
+### What happened
+- **The next founder-path bug appeared right after status authority was fixed live.** `continue building toward point b until pass or exact blocker` still routed to `mission_pipeline` and returned receipt-scan/foundation-pipeline failure instead of staying in the Point B execution lane.
+- **Root cause was classifier priority.** `chair-context-classifier.js` was still returning `mission_pipeline` before giving high-confidence Point B system asks a chance to stay in the Point B navigator lane.
+- **Fix shipped locally.** High-confidence Point B system routing now wins before the generic `mission_pipeline` branch, and the exact founder phrasing is locked by regression.
+
+### Verification
+- `node --test tests/chair-context-classifier.test.js tests/point-b-navigator.test.js tests/lumin-conversation-routing.test.js tests/lumin-chair-orchestrator.test.js`
+- `node --test tests/chair-direct-connection-truth.test.js tests/chair-program-direct-answer.test.js`
+
+### Next
+Deploy this classifier fix, rerun the live founder continue-to-Point-B probe, then continue walking the founder UI path until the next autonomy blocker is concrete.
+
 ## [BUILD] Update 2026-06-27 — Founder continuity hardening v3 (auth sentinel ids no longer block thread recall)
 
 ### What happened

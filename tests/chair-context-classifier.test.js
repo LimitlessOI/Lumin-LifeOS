@@ -63,4 +63,10 @@ test('blueprint status follow-up routes to point_b not display', () => {
   assert.equal(ctx.channel, 'point_b');
 });
 
+test('continue toward point b routes to point_b not mission_pipeline', () => {
+  const msg = 'continue building toward point b until pass or exact blocker';
+  const ctx = resolveChairContext(msg, {});
+  assert.equal(ctx.channel, 'point_b');
+});
+
 console.log('✅ chair-context-classifier.test.js passed');

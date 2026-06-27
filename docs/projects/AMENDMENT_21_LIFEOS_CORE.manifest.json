@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 founder-point-b-status-authority",
-  "last_change_summary": "Founder Point B status asks now report status only; they no longer auto-run execute_mission unless the founder explicitly asks to continue.",
-  "ssot_receipt_tail": "Founder continuity is fixed live. Blueprint status routing now stays in the governed path, and Point B authority logic now separates report-only status asks from explicit continue/execute asks. Deploy and rerun the live founder start→status probe."
+  "last_receipt": "2026-06-27 founder-point-b-continue-routing",
+  "last_change_summary": "Founder continue-toward-Point-B asks now stay in the Point B navigator lane instead of degrading into generic mission-pipeline receipt-scan behavior.",
+  "ssot_receipt_tail": "Founder continuity is fixed live, and status asks no longer re-execute. The next live blocker was continue-to-Point-B routing through mission_pipeline instead of the Point B execution lane. Deploy and rerun the founder continue probe."
 }

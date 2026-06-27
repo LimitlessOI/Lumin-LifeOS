@@ -253,17 +253,6 @@ export function resolveChairContext(text = '', ctx = {}) {
     };
   }
 
-  if (isMissionPipelineIntent(t)) {
-    return {
-      channel: 'mission_pipeline',
-      domain: 'system_ops',
-      confidence: 0.9,
-      requires_execute_clarify: false,
-      personal_search: false,
-      scores,
-    };
-  }
-
   if (scores.governance >= 6 && isGovernanceOrSsotIntent(t)) {
     return {
       channel: 'chair',
@@ -280,6 +269,17 @@ export function resolveChairContext(text = '', ctx = {}) {
       channel: 'point_b',
       domain: 'system_ops',
       confidence: Math.min(1, scores.system / 12),
+      requires_execute_clarify: false,
+      personal_search: false,
+      scores,
+    };
+  }
+
+  if (isMissionPipelineIntent(t)) {
+    return {
+      channel: 'mission_pipeline',
+      domain: 'system_ops',
+      confidence: 0.9,
       requires_execute_clarify: false,
       personal_search: false,
       scores,
