@@ -8,7 +8,7 @@
 **Owner:** Adam  
 **Verifier:** OIL / CAI  
 **Priority:** runtime truth > governance integrity > useful work > speed > cost  
-**Last Updated:** 2026-06-26 — counsel routing hardening; alpha_probe skips founder thread persist.
+**Last Updated:** 2026-06-27 — direct-build smoke-test syntax corruption repaired.
 ---
 
 ## 0. Purpose
@@ -563,6 +563,7 @@ Adam sleeps, BuilderOS continues useful governed work, repairs itself when neede
 
 ## Change Receipts
 
+| 2026-06-27 | **Direct-build smoke-test syntax repair** — `scripts/lifeos-direct-build-smoke-test.mjs` had `export function lifeosDirectBuildSmokeTest()` corrupted to `exp lifeosDirectBuildSmokeTest()`, making the module unparseable under Node and breaking the builder smoke-test proof path. Restored the ESM export keyword. | Recent automated patch introduced a concrete parse crash in a BuilderOS health/proof script; `node --check` failed before the fix. | ✅ local syntax repair | `node --check scripts/lifeos-direct-build-smoke-test.mjs`; `npm run builder:preflight` |
 | 2026-06-26 | **Alpha probe normalize skip** — `founder-interface/message` skips input normalize on alpha_probe/system questions; `useCache:false` on normalize | Counsel turns all returned Q1 cached normalize/answer | ⚠️ deploy | `lifeos:founder-chat:alpha:battery` |
 | 2026-06-26 | **Alpha audit — `founder-visual-ui-patch.js` committed** — alpha battery confirms fast border-radius path live; Railway SHA parity ✅ | overlay battery 4/4, direct action PASS, governance covenant PASS | ✅ deployed | `lifeos:overlay:alpha:battery` |
 | 2026-06-26 | **Chair system knowledge + visual UI patch** — SSOT/synopsis in counsel facts; direct SMOS answers; mechanical border-radius patch | Alpha gaps: counsel drift, B2 timeout | ⚠️ deploy | `chair-system-knowledge.js` |
