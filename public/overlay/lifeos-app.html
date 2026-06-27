@@ -55,9 +55,19 @@
       --c-victory:    #fbbf24;
 
       /* Layout */
-      --sidebar-w:      240px;
-      --sidebar-w-mini: 60px;
-      --topbar-h:       52px;
+      --studio-shell-gap: 14px;
+      --studio-content-pad: 14px;
+      --studio-panel-radius: 22px;
+      --studio-stage-radius: 28px;
+      --studio-drawer-width: 440px;
+      --studio-composer-radius: 22px;
+      --studio-sidebar-width: 248px;
+      --studio-sidebar-mini-width: 72px;
+      --studio-topbar-height: 64px;
+
+      --sidebar-w:      var(--studio-sidebar-width);
+      --sidebar-w-mini: var(--studio-sidebar-mini-width);
+      --topbar-h:       var(--studio-topbar-height);
       --bottomnav-h:    56px;
 
       /* Safe areas */
@@ -419,39 +429,68 @@
       overflow: hidden;
       min-width: 0;
       position: relative;
+      padding: var(--studio-content-pad);
+      gap: var(--studio-shell-gap);
     }
 
     /* Desktop topbar */
     .topbar {
       height: var(--topbar-h);
-      border-bottom: 1px solid var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--studio-panel-radius);
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 18px;
       gap: 12px;
       flex-shrink: 0;
-      background: var(--bg-raised);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.62)),
+        linear-gradient(180deg, rgba(28,124,84,0.08), rgba(217,108,6,0.04));
+      box-shadow: var(--studio-shadow);
       position: relative;
+      overflow: hidden;
     }
     /* Section color accent line at bottom of topbar */
     .topbar::after {
       content: '';
       position: absolute;
       bottom: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--section-color);
-      opacity: 0.6;
-      transition: background 0.3s ease;
+      left: 12px;
+      right: 12px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--section-color), transparent);
+      opacity: 0.72;
+      transition: background 0.3s ease, opacity 0.3s ease;
     }
     .topbar-icon { font-size: 16px; line-height: 1; }
-    .topbar-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
+    .topbar-copy {
+      display: flex;
       flex: 1;
-      letter-spacing: -0.01em;
+      min-width: 0;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .topbar-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--studio-text-secondary);
+    }
+    .topbar-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+    .topbar-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+      font-family: var(--studio-font-display);
+      min-width: 0;
     }
     .topbar-actions { display: flex; gap: 4px; }
     .topbar-btn {
@@ -479,52 +518,68 @@
     .content-frame {
       flex: 1;
       width: 100%;
+      height: 100%;
       border: none;
-      background: var(--bg-base);
+      background: var(--studio-bg-surface);
       display: block;
+      border-radius: calc(var(--studio-stage-radius) - 6px);
+    }
+
+    .studio-command-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-shrink: 0;
     }
 
     /* One-tap Lumin entry — visible companion strip (not only ◎ / FAB) */
     .lumin-quick-bar {
       flex-shrink: 0;
       display: flex;
-      align-items: center;
-      gap: 10px;
+      align-items: flex-start;
+      gap: 12px;
       width: 100%;
       margin: 0;
-      padding: 10px 14px 11px;
-      border: none;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(91, 106, 245, 0.08), var(--bg-surface2));
+      padding: 16px 18px;
+      border: 1px solid var(--studio-border);
+      border-radius: var(--studio-panel-radius);
+      background:
+        radial-gradient(circle at top right, rgba(28,124,84,0.14), transparent 24%),
+        linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.74));
+      box-shadow: var(--studio-shadow);
       cursor: pointer;
       text-align: left;
       font: inherit;
       color: inherit;
-      transition: background 0.2s, box-shadow 0.2s;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
     .lumin-quick-bar:hover,
     .lumin-quick-bar:focus-visible {
-      background: var(--bg-surface);
+      background:
+        radial-gradient(circle at top right, rgba(28,124,84,0.18), transparent 28%),
+        linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,255,255,0.82));
+      transform: translateY(-1px);
       outline: none;
     }
     .lumin-quick-bar:focus-visible {
-      box-shadow: inset 0 0 0 2px rgba(91, 106, 245, 0.35);
+      box-shadow: var(--studio-shadow), inset 0 0 0 2px rgba(28,124,84,0.26);
     }
     .lumin-quick-bar.active {
-      box-shadow: inset 0 2px 0 0 rgba(91, 106, 245, 0.55);
+      box-shadow: var(--studio-shadow), inset 0 0 0 2px rgba(28,124,84,0.32);
     }
     .lumin-quick-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--c-today), var(--c-mirror));
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--studio-hero-gradient);
       color: #fff;
-      font-size: 16px;
+      font-size: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      box-shadow: 0 12px 30px rgba(28,124,84,0.18);
     }
     .lumin-quick-copy {
       flex: 1;
@@ -534,23 +589,58 @@
       gap: 2px;
     }
     .lumin-quick-title {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 700;
       color: var(--text-primary);
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      font-family: var(--studio-font-display);
     }
     .lumin-quick-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1.35;
+      font-size: 12px;
+      color: var(--studio-text-secondary);
+      line-height: 1.5;
+      max-width: 72ch;
     }
     .lumin-quick-chev {
-      color: var(--text-muted);
+      color: var(--studio-text-muted);
       font-size: 18px;
       flex-shrink: 0;
+      padding-top: 10px;
     }
     @media (max-width: 420px) {
       .lumin-quick-sub { display: none; }
+    }
+
+    .studio-command-chips,
+    .lumin-suggestion-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .studio-command-chips {
+      padding: 0 6px;
+    }
+    .studio-chip {
+      border: 1px solid rgba(23,32,51,0.10);
+      background: rgba(255,255,255,0.72);
+      color: var(--studio-text);
+      border-radius: 999px;
+      min-height: 34px;
+      padding: 0 12px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      box-shadow: 0 10px 24px rgba(20,28,40,0.05);
+    }
+    .studio-chip:hover,
+    .studio-chip:focus-visible {
+      background: rgba(255,255,255,0.94);
+      border-color: rgba(28,124,84,0.26);
+      transform: translateY(-1px);
+      outline: none;
     }
 
     .point-b-strip {
@@ -559,15 +649,17 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      padding: 7px 14px 8px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(14, 165, 233, 0.06);
+      padding: 12px 14px;
+      border: 1px solid rgba(14, 165, 233, 0.14);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(14,165,233,0.08), rgba(255,255,255,0.84));
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--studio-text-secondary);
     }
     .point-b-strip strong {
-      color: var(--text-primary);
+      color: var(--studio-text);
       font-weight: 600;
+      font-size: 12px;
     }
     .point-b-strip .point-b-pct {
       color: #0ea5e9;
@@ -579,15 +671,23 @@
       min-width: 120px;
     }
 
+    .studio-status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
     .ambient-pill {
       flex-shrink: 0;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       gap: 8px;
-      padding: 6px 14px 7px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.5);
+      padding: 12px 14px;
+      border: 1px solid var(--studio-border);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.66);
       font-size: 11px;
+      box-shadow: 0 10px 26px rgba(20,28,40,0.04);
     }
     .ambient-pill-btn {
       display: inline-flex;
@@ -618,6 +718,24 @@
       color: #fcd34d;
     }
     .ambient-pill-btn[data-mode="off"] { opacity: 0.85; }
+    .ambient-pill-hint {
+      color: var(--studio-text-secondary);
+      line-height: 1.45;
+    }
+
+    .workspace-stage {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      padding: 10px;
+      border-radius: var(--studio-stage-radius);
+      border: 1px solid rgba(23,32,51,0.08);
+      background:
+        radial-gradient(circle at top left, rgba(217,108,6,0.08), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(28,124,84,0.08), transparent 22%),
+        rgba(255,255,255,0.62);
+      box-shadow: var(--studio-shadow);
+    }
     .family-guard-pill .ambient-pill-btn[data-mode="watching"] {
       border-color: rgba(244, 114, 182, 0.45);
       background: rgba(244, 114, 182, 0.08);
@@ -1197,6 +1315,13 @@
       transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     }
     html[data-shell-layout="desktop"] .lumin-drawer.open { right: 0; bottom: 0; }
+    html[data-shell-layout="desktop"] .lumin-backdrop {
+      display: none !important;
+      pointer-events: none !important;
+      background: transparent !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
     html[data-shell-layout="desktop"] .lumin-fab { bottom: 24px; }
     html[data-shell-layout="desktop"] .toast { bottom: 24px; }
 
@@ -1277,9 +1402,9 @@
     .lumin-drawer {
       position: fixed;
       top: 0;
-      right: -420px;
+      right: calc(-1 * var(--studio-drawer-width) - 24px);
       bottom: 0;
-      width: 400px;
+      width: var(--studio-drawer-width);
       max-width: 100vw;
       background:
         linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.92)),
@@ -1382,8 +1507,8 @@
     }
 
     html[data-shell-layout="desktop"] .lumin-drawer.dock-right {
-      top: 0; right: -420px; bottom: 0; left: auto;
-      width: 400px; height: auto; max-height: 100vh;
+      top: 0; right: calc(-1 * var(--studio-drawer-width) - 24px); bottom: 0; left: auto;
+      width: var(--studio-drawer-width); height: auto; max-height: 100vh;
       border-left: 1px solid var(--border-focus);
       border-top: none; border-radius: 0;
       transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1563,6 +1688,20 @@
       line-height: 1.55;
       color: var(--studio-text-secondary);
     }
+    .lumin-suggestions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .lumin-suggestions-heading {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--studio-text-muted);
+    }
 
     /* Input bar */
     .lumin-input-bar {
@@ -1581,7 +1720,7 @@
       flex: 1;
       background: rgba(255,255,255,0.92);
       border: 1px solid var(--studio-border);
-      border-radius: 18px;
+      border-radius: var(--studio-composer-radius);
       display: flex;
       align-items: flex-end;
       box-shadow: 0 8px 28px rgba(20,28,40,0.07);
@@ -1638,6 +1777,43 @@
     }
     .lumin-send-btn:hover { opacity: 0.88; transform: translateY(-1px); }
     .lumin-send-btn:disabled { opacity: 0.4; cursor: default; }
+
+    @media (max-width: 999px) {
+      .main {
+        padding: 10px;
+      }
+      .studio-status-grid {
+        grid-template-columns: 1fr;
+      }
+      .workspace-stage {
+        padding: 6px;
+        border-radius: 22px;
+      }
+    }
+
+    @media (max-width: 599px) {
+      .main {
+        gap: 8px;
+        padding: 8px;
+      }
+      .topbar {
+        border-radius: 18px;
+      }
+      .studio-command-stack {
+        gap: 8px;
+      }
+      .lumin-quick-bar {
+        padding: 14px;
+      }
+      .studio-command-chips {
+        padding: 0;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+      }
+      .studio-chip {
+        white-space: nowrap;
+      }
+    }
   </style>
   <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css?v=f1782538044150">
   <script src="/overlay/lifeos-voice.js?v=20260622"></script>
@@ -1680,7 +1856,7 @@
     <!-- Nav -->
     <div class="nav-scroll">
 
-      <div class="nav-group-label">Daily</div>
+      <div class="nav-group-label" data-studio-nav-group="daily">Daily</div>
       <a class="nav-item active" id="nav-dashboard" data-page="lifeos-dashboard.html" data-label="Dashboard" href="#" role="button">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Dashboard</span>
@@ -1707,7 +1883,7 @@
       </a>
 
       <div class="nav-divider"></div>
-      <div class="nav-group-label">Life &amp; Relationships</div>
+      <div class="nav-group-label" data-studio-nav-group="life">Life &amp; Relationships</div>
       <a class="nav-item" id="nav-health"   data-page="lifeos-health.html"    data-label="Health"     href="#" role="button">
         <span class="nav-icon">🌿</span>
         <span class="nav-label">Health</span>
@@ -1730,7 +1906,7 @@
       </a>
 
       <div class="nav-divider"></div>
-      <div class="nav-group-label">Support</div>
+      <div class="nav-group-label" data-studio-nav-group="support">Support</div>
       <a class="nav-item" id="nav-conflict"  data-page="lifeos-conflict.html"  data-label="Conflict"   href="#" role="button">
         <span class="nav-icon">🔥</span><span class="nav-label">Conflict</span>
       </a>
@@ -1744,7 +1920,7 @@
       </a>
 
       <div class="nav-divider"></div>
-      <div class="nav-group-label">Self</div>
+      <div class="nav-group-label" data-studio-nav-group="self">Self</div>
       <a class="nav-item" id="nav-identity"  data-page="lifeos-identity.html"  data-label="Identity"   href="#" role="button">
         <span class="nav-icon">🔑</span>
         <span class="nav-label">Identity</span>
@@ -1782,7 +1958,7 @@
       </a>
 
       <div class="nav-divider"></div>
-      <div class="nav-group-label">Legacy</div>
+      <div class="nav-group-label" data-studio-nav-group="legacy">Legacy</div>
       <a class="nav-item" id="nav-vision"    data-page="lifeos-vision.html"    data-label="Vision"     href="#" role="button">
         <span class="nav-icon">🔭</span>
         <span class="nav-label">Vision</span>
@@ -1809,8 +1985,13 @@
     <!-- Desktop topbar -->
     <div class="topbar" id="topbar">
       <button class="topbar-btn sidebar-toggle-btn" id="sidebar-toggle-topbar" onclick="toggleSidebar()" title="Toggle sidebar" aria-label="Toggle sidebar">☰</button>
-      <span class="topbar-icon" id="topbar-icon">📊</span>
-      <span class="topbar-title" id="topbar-title">Dashboard</span>
+      <div class="topbar-copy">
+        <span class="topbar-eyebrow" id="topbar-eyebrow">Founder command rail</span>
+        <div class="topbar-title-row">
+          <span class="topbar-icon" id="topbar-icon">📊</span>
+          <span class="topbar-title" id="topbar-title">Dashboard</span>
+        </div>
+      </div>
       <div class="topbar-actions">
         <button class="topbar-btn" id="voice-btn" onclick="toggleLuminWakeListen()" title="Say &quot;Lumin&quot; to talk to the Chair">🎙</button>
         <button class="topbar-btn" onclick="toggleLuminDrawer()" title="Talk to Lumin" style="font-size:18px;">◎</button>
@@ -1833,57 +2014,65 @@
       <button class="topbar-btn" onclick="openSettings()" title="Settings" style="min-width:44px;min-height:44px;">⚙</button>
     </div>
 
-    <button type="button" class="lumin-quick-bar" id="lumin-quick-bar" onclick="openLuminFromQuickBar()"
-      aria-label="Open Lumin — speak or type">
-      <span class="lumin-quick-icon" aria-hidden="true">◎</span>
-      <span class="lumin-quick-copy">
-        <span class="lumin-quick-title">Lumin — speak or type</span>
-        <span class="lumin-quick-sub">Real execution — say "open LifeRE", "run alpha cycle", or "do: fix X". Receipts only, no theater.</span>
-      </span>
-      <span class="lumin-quick-chev" aria-hidden="true">›</span>
-    </button>
-
-    <div id="point-b-strip" class="point-b-strip" data-point-b-strip="true" data-lifere="point-b-status" aria-live="polite">
-      <strong id="point-b-label">Point B · LifeRE Alpha</strong>
-      <span class="point-b-pct" id="point-b-pct">—</span>
-      <span id="point-b-phase"></span>
-      <span class="point-b-blocker" id="point-b-blocker"></span>
-    </div>
-
-    <div id="ambient-pill" class="ambient-pill" aria-live="polite">
-      <button type="button" class="ambient-pill-btn" id="ambient-toggle" data-mode="off" aria-pressed="false"
-        title="Ambient listen — sleeps when silent, captures commitments and notes">
-        <span class="ambient-dot" aria-hidden="true"></span>
-        <span id="ambient-label">Ambient off</span>
+    <div class="studio-command-stack" id="studio-command-stack">
+      <button type="button" class="lumin-quick-bar" id="lumin-quick-bar" onclick="openLuminFromQuickBar()"
+        aria-label="Open Lumin — speak or type">
+        <span class="lumin-quick-icon" aria-hidden="true">◎</span>
+        <span class="lumin-quick-copy">
+          <span class="lumin-quick-title" id="lumin-quick-title">Lumin — speak or type</span>
+          <span class="lumin-quick-sub" id="lumin-quick-sub">Real execution — say "open LifeRE", "run alpha cycle", or "do: fix X". Receipts only, no theater.</span>
+        </span>
+        <span class="lumin-quick-chev" aria-hidden="true">›</span>
       </button>
-      <span class="ambient-pill-hint" id="ambient-hint">Uses your LifeOS account · stays signed in · mic sleeps when quiet</span>
+
+      <div class="studio-command-chips" id="studio-command-chips" aria-label="Suggested founder actions"></div>
+
+      <div id="point-b-strip" class="point-b-strip" data-point-b-strip="true" data-lifere="point-b-status" aria-live="polite">
+        <strong id="point-b-label">Point B · LifeRE Alpha</strong>
+        <span class="point-b-pct" id="point-b-pct">—</span>
+        <span id="point-b-phase"></span>
+        <span class="point-b-blocker" id="point-b-blocker"></span>
+      </div>
+
+      <div class="studio-status-grid">
+        <div id="ambient-pill" class="ambient-pill" aria-live="polite">
+          <button type="button" class="ambient-pill-btn" id="ambient-toggle" data-mode="off" aria-pressed="false"
+            title="Ambient listen — sleeps when silent, captures commitments and notes">
+            <span class="ambient-dot" aria-hidden="true"></span>
+            <span id="ambient-label">Ambient off</span>
+          </button>
+          <span class="ambient-pill-hint" id="ambient-hint">Uses your LifeOS account · stays signed in · mic sleeps when quiet</span>
+        </div>
+
+        <div id="listening-pill" class="ambient-pill listening-pill" aria-live="polite">
+          <button type="button" class="ambient-pill-btn" id="listening-master-toggle" data-mode="off" aria-pressed="false"
+            title="Listening master — schedules, wake word, family guard per your Lumen profile">
+            <span class="ambient-dot" aria-hidden="true"></span>
+            <span id="listening-label">Listening off</span>
+          </button>
+          <span class="ambient-pill-hint" id="listening-hint"><a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Listening prefs</a> · system talk → Lumin drawer</span>
+        </div>
+
+        <div id="family-guard-pill" class="ambient-pill family-guard-pill" aria-live="polite">
+          <button type="button" class="ambient-pill-btn" id="family-guard-toggle" data-mode="off" aria-pressed="false"
+            title="Family tone guard — vibrates when you yell or get snippy (mic stays on device, not recorded)">
+            <span class="ambient-dot" aria-hidden="true"></span>
+            <span id="family-guard-label">Family guard off</span>
+          </button>
+          <span class="ambient-pill-hint" id="family-guard-hint">Tap to watch tone — yell = vibrate until calm · snippy/mean = one pulse</span>
+        </div>
+      </div>
     </div>
     <div id="ambient-toast" class="ambient-toast" role="status" aria-live="polite"></div>
 
-    <div id="listening-pill" class="ambient-pill listening-pill" aria-live="polite">
-      <button type="button" class="ambient-pill-btn" id="listening-master-toggle" data-mode="off" aria-pressed="false"
-        title="Listening master — schedules, wake word, family guard per your Lumen profile">
-        <span class="ambient-dot" aria-hidden="true"></span>
-        <span id="listening-label">Listening off</span>
-      </button>
-      <span class="ambient-pill-hint" id="listening-hint"><a href="/overlay/lifeos-listening-setup.html" style="color:inherit;">Listening prefs</a> · system talk → Lumin drawer</span>
-    </div>
-
-    <div id="family-guard-pill" class="ambient-pill family-guard-pill" aria-live="polite">
-      <button type="button" class="ambient-pill-btn" id="family-guard-toggle" data-mode="off" aria-pressed="false"
-        title="Family tone guard — vibrates when you yell or get snippy (mic stays on device, not recorded)">
-        <span class="ambient-dot" aria-hidden="true"></span>
-        <span id="family-guard-label">Family guard off</span>
-      </button>
-      <span class="ambient-pill-hint" id="family-guard-hint">Tap to watch tone — yell = vibrate until calm · snippy/mean = one pulse</span>
-    </div>
-
     <!-- Content iframe -->
-    <iframe class="content-frame" id="content-frame"
-      src="/overlay/lifeos-dashboard.html"
-      title="LifeOS content"
-      allow="clipboard-write">
-    </iframe>
+    <div class="workspace-stage" id="workspace-stage">
+      <iframe class="content-frame" id="content-frame"
+        src="/overlay/lifeos-dashboard.html"
+        title="LifeOS content"
+        allow="clipboard-write">
+      </iframe>
+    </div>
 
     <!-- Mobile bottom nav -->
     <div class="mobile-bottomnav" id="mobile-bottomnav">
@@ -2236,6 +2425,10 @@
       <div class="lumin-empty-icon">◎</div>
       <div class="lumin-empty-title" data-studio-copy="emptyHeading">Talk to Lumin</div>
       <div class="lumin-empty-subtitle" data-studio-copy="emptySubhead">Counsel by default. Say do: or ask to build to execute.</div>
+      <div class="lumin-suggestions">
+        <div class="lumin-suggestions-heading" id="lumin-suggestions-heading">Start with one of these</div>
+        <div class="lumin-suggestion-chips" id="lumin-suggestion-chips"></div>
+      </div>
     </div>
   </div>
 
@@ -2328,6 +2521,7 @@ const PAGE_META = {
   'lifeos-quick-entry.html': { title: 'Quick Entry', icon: '✍️', color: '--c-engine' },
   'lifeos-notifications.html': { title: 'Notifications', icon: '🔔', color: '--c-mirror' },
   'lifeos-parent-view.html': { title: 'Parent View', icon: '👨‍👩‍👧', color: '--c-children' },
+  'lifeos-clip-vault.html': { title: 'Clip Vault', icon: '🎞️', color: '--c-mirror' },
   'lifeos-feature.html': { title: 'Feature Guide', icon: 'ℹ️', color: '--c-purpose' },
   'lifeos-chat.html':    { title: 'Lumin Chat',    icon: '💬', color: '--c-coach'   },
   'lifeos-victory-vault.html': { title: 'Victory Vault', icon: '🏆', color: '--c-victory' },
@@ -2336,6 +2530,11 @@ const PAGE_META = {
 };
 const FEATURE_GUIDES = window.LIFEOS_FEATURE_GUIDES || {};
 let helpHideTimer = null;
+const STUDIO_BASE_COPY = {
+  eyebrow: 'Founder command rail',
+  quickTitle: 'Ask Lumin or execute directly',
+  quickSub: 'Open a surface, continue a build, or press on a blocker. The shell stays honest about what actually ran.',
+};
 
 /** layout query: auto (default CSS breakpoints) | mobile | desktop — matches LIFEOS_PROGRAM_MAP_SSOT + Builder Brief shells */
 function applyShellLayoutFromQuery() {
@@ -3077,6 +3276,22 @@ function openLuminFromQuickBar() {
   openLuminDrawer();
 }
 
+function seedLuminPrompt(prompt, { send = false } = {}) {
+  openLuminDrawer();
+  const input = document.getElementById('lumin-input');
+  if (!input) return;
+  input.value = String(prompt || '');
+  luminAutoResize(input);
+  setTimeout(() => input.focus(), 60);
+  if (send && prompt) {
+    setTimeout(() => luminSend({ text: prompt }), 100);
+  }
+}
+
+window.lifeosStudioRunAction = function lifeosStudioRunAction(prompt, opts = {}) {
+  seedLuminPrompt(prompt, opts);
+};
+
 function openLuminDrawer() {
   luminState.open = true;
   document.getElementById('lumin-drawer').classList.add('open');
@@ -3188,7 +3403,7 @@ function luminRenderHistory(messages) {
   container.innerHTML = '';
   const subset = messages.slice(-80);
   subset.forEach(m => {
-    const role = m.role === 'user' ? 'user' : (m.role === 'assistant' ? 'assistant' : 'thinking');
+    const role = m.role === 'user' ? 'user' : 'assistant';
     _appendLuminMsg(role, m.content, m.created_at, false);
   });
   container.scrollTop = container.scrollHeight;
@@ -3247,6 +3462,8 @@ async function luminSend(opts = {}) {
   _appendLuminMsg('user', msg, new Date().toISOString(), true);
   input.value = '';
   luminAutoResize(input);
+
+  document.querySelectorAll('.lumin-msg.thinking').forEach((el) => el.remove());
 
   const thinkId = 'lumin-think-' + Date.now();
   _appendLuminMsgRaw(thinkId, 'thinking', voiceTurn ? 'Lumin is listening…' : 'Lumin is working…');
@@ -3641,7 +3858,9 @@ async function refreshPointBStrip() {
     if (!res.ok) return;
     const data = await res.json();
     const s = data.point_b || data;
-    document.getElementById('point-b-label').textContent = `Point B · ${s.label || 'LifeRE Alpha'}`;
+    const labelEl = document.getElementById('point-b-label');
+    const prefix = labelEl?.dataset.prefix || 'Point B';
+    if (labelEl) labelEl.textContent = `${prefix} · ${s.label || 'LifeRE Alpha'}`;
     document.getElementById('point-b-pct').textContent = `${s.progress_pct ?? 0}%`;
     document.getElementById('point-b-phase').textContent = s.phase ? `· ${s.phase}` : '';
     document.getElementById('point-b-blocker').textContent = s.blocker ? s.blocker : '';
@@ -3664,17 +3883,45 @@ async function maybeRouteFromContextIntent() {
     const res = await CTX.fetchWithAuth(`/api/v1/lifeos/context/suggest?q=${encodeURIComponent(intent)}`);
     if (!res.ok) return;
     const data = await res.json();
-    if (data.stack_id === 'lifere') {
+    applyFluidWorkspaceSuggestion(data, intent);
+    const nextPage = data.page || (data.stack_id === 'lifere' ? 'lifeos-lifere.html' : null);
+    if (nextPage) {
       sessionStorage.removeItem('lifeos_context_intent');
-      loadPage('lifeos-lifere.html');
-      const nav = document.querySelector('[data-page="lifeos-lifere.html"]');
+      loadPage(nextPage);
+      const nav = document.querySelector(`[data-page="${nextPage}"]`);
       if (nav) {
         document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
         nav.classList.add('active');
       }
+      if (data.open_drawer) {
+        openLuminDrawer();
+      }
+      if (data.focus_prompt) {
+        const input = document.getElementById('lumin-input');
+        if (input && !input.value.trim()) {
+          input.value = data.focus_prompt;
+          luminAutoResize(input);
+        }
+      }
     }
   } catch {
     /* non-fatal */
+  }
+}
+
+function applyFluidWorkspaceSuggestion(suggestion, sourceIntent) {
+  const mode = suggestion?.stack_id || 'lifeos';
+  document.documentElement.dataset.workspaceMode = mode;
+  document.documentElement.dataset.workspaceView = suggestion?.view_id || 'default_dashboard';
+  const eyebrow = document.getElementById('topbar-eyebrow');
+  const quickTitle = document.getElementById('lumin-quick-title');
+  const quickSub = document.getElementById('lumin-quick-sub');
+  if (eyebrow) eyebrow.textContent = suggestion?.title || STUDIO_BASE_COPY.eyebrow;
+  if (quickTitle) quickTitle.textContent = suggestion?.title || STUDIO_BASE_COPY.quickTitle;
+  if (quickSub) {
+    quickSub.textContent = sourceIntent
+      ? `Workspace shifted for: "${sourceIntent}". ${suggestion?.focus_prompt || STUDIO_BASE_COPY.quickSub}`
+      : STUDIO_BASE_COPY.quickSub;
   }
 }
 
