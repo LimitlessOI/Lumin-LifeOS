@@ -37,6 +37,14 @@ function queueHasIncompleteWork() {
   }
 }
 
+function safeReadJson(filePath) {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
 function writeReceipt(payload) {
   try {
     fs.mkdirSync(path.dirname(RECEIPT_PATH), { recursive: true });
@@ -51,6 +59,43 @@ function writeReceipt(payload) {
 
 export function getBpPrioritySchedulerState() {
   return { ...state, receipt_path: RECEIPT_PATH };
+}
+
+export function getBpPrioritySchedulerStatus() {
+  const receipt = safeReadJson(RECEIPT_PATH);
+  const pointB = loadPointBTarget();
+  const incomplete = queueHasIncompleteWork();
+  const enabled = process.env.BUILDEROS_AUTOPILOT === '1';
+  const lastRunAt = state.lastRunAt || receipt?.ran_at || null;
+  const lastRunAgeMs = lastRunAt ? Math.max(0, Date.now() - new Date(lastRunAt).getTime()) : null;
+  const recentWindowMs = Number(process.env.BUILDEROS_AUTOPILOT_RECENT_WINDOW_MS || 2 * 60 * 60 * 1000);
+  const recent = lastRunAgeMs != null && lastRunAgeMs <= recentWindowMs;
+  const healthy =
+    enabled &&
+    !state.running &&
+    receipt?.ok === true &&
+    recent;
+
+  return {
+    ok: true,
+    scheduler: {
+      enabled,
+      running: state.running,
+      recent,
+      healthy,
+      recent_window_ms: recentWindowMs,
+      interval_ms: Number(process.env.BUILDEROS_AUTOPILOT_INTERVAL_MS || 30 * 60 * 1000),
+      boot_delay_ms: Number(process.env.BUILDEROS_AUTOPILOT_BOOT_DELAY_MS || 2 * 60 * 1000),
+      state: getBpPrioritySchedulerState(),
+      receipt,
+      queue_has_incomplete_work: incomplete,
+      point_b_target: pointB || null,
+      last_run_at: lastRunAt,
+      last_run_age_ms: lastRunAgeMs,
+      canonical_runner: path.relative(REPO_ROOT, RUNNER_SCRIPT),
+      canonical_receipt: path.relative(REPO_ROOT, RECEIPT_PATH),
+    },
+  };
 }
 
 export function runBpPriorityOnce({ logger } = {}) {

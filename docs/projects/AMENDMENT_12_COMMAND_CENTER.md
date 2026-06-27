@@ -16,7 +16,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-06-22 — `/lifeos` login handoff preserves `lumin_voice=1` for wake-word launch |
+| **Last Updated** | 2026-06-27 — canonical BP scheduler + improvement-loop runtime surfaces |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -105,6 +105,8 @@ are owned by AMENDMENT_18 and read by this project's dashboard panels.
 | GET | `/api/v1/lifeos/command-center/mode` | requireKey | Current compiled builder release mode (MANUAL/SUPERVISED/AUTONOMOUS) |
 | GET | `/api/v1/lifeos/command-center/security` | requireKey | SEC-F01 live security aggregate from canonical receipts only |
 | GET | `/api/v1/lifeos/command-center/system-alpha-readiness` | requireKey | BuilderOS Alpha readiness from runtime truth + structural consolidation docs |
+| GET | `/api/v1/lifeos/command-center/bp-priority-scheduler` | requireKey | Canonical autonomous queue liveness/health for the BP_PRIORITY scheduler |
+| GET | `/api/v1/lifeos/command-center/improvement-loop/status` | requireKey | Deterministic improvement queue synthesized from SNT, Wisdom, CFO, Chair, and ARC-ready proposals |
 | GET | `/api/v1/lifeos/command-center/communications` | requireKey | Communication history (command_center_communications — NOT proof memory) |
 | GET | `/api/v1/lifeos/command-center/communications/thread/:thread_id` | requireKey | Thread view with enriched job_status/job_blocker joined from command_control_jobs — poll endpoint for async execution status |
 | POST | `/api/v1/lifeos/command-center/communications/record` | requireKey | Persist exchange + server-side proof guard on response text |
@@ -296,6 +298,7 @@ node --check public/overlay/command-center.js
 
 ## Change Receipts
 
+| 2026-06-27 | **Canonical scheduler + improvement-loop runtime surfaces** — `routes/lifeos-command-center-routes.js` now exposes `GET /api/v1/lifeos/command-center/bp-priority-scheduler` for the real BP queue liveness and `GET /api/v1/lifeos/command-center/improvement-loop/status` for deterministic runtime improvement proposals. The command center can now read whether the canonical queue is actually enabled/recent instead of inferring continuity from older overnight sidecars. | Runtime audit found a truth leak: the cockpit could report system maturity while the canonical autonomous queue was disabled. These endpoints make the cockpit read the real queue and the real improvement backlog, not theater. | ✅ local syntax + route import checks; ✅ readiness/improvement status builders exercised locally | BuilderOS runtime truth surfaces |
 | 2026-05-19 | **`routes/public-routes.js` + `lifeos-install.html`** — missing APK/IPA no longer returns JSON (Safari saved error as file); redirect to `/install`; iPhone saved-file alert. | Adam: download saved a file, not an app. | ✅ node --check | deploy |
 | 2026-05-19 | **`routes/public-routes.js` + `lifeos-install.html`** — iPhone install fix: hide APK card on iOS, promote Add to Home Screen; redirect `/download/lifeos.apk` on iPhone UA to `/install` (unsupported file type was Android APK/JSON on Apple). | Adam: unsupported file type on iPhone at install page. | ✅ node --check | deploy |
 | 2026-05-19 | **`routes/public-routes.js`** — `/install`, `/download`, `/download/release.json`, `/download/lifeos.apk`, `/download/lifeos-ios.plist`, `/download/lifeos.ipa` for direct app install without stores. | Adam: real download link, not browser-only URL. | ✅ node --check | deploy + build APK/IPA |

@@ -64,6 +64,8 @@ import {
 } from '../services/oil-proof-freshness.js';
 import { buildSupervisedAutonomyReadiness } from '../services/supervised-autonomy-readiness.js';
 import { buildBuilderOSSystemAlphaReadiness } from '../services/builderos-system-alpha-readiness.js';
+import { getBpPrioritySchedulerStatus } from '../services/builderos-bp-priority-scheduler.js';
+import { buildBuilderOSImprovementLoopStatus } from '../services/builderos-improvement-loop.js';
 import {
   buildCommunicationEvidence,
   getThreadWithJobStatus,
@@ -399,6 +401,41 @@ export function createCommandCenterAggregateRoutes({ requireKey, pool }) {
       const report = await buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySha });
       res.json({
         read_path: 'GET /api/v1/lifeos/command-center/system-alpha-readiness',
+        ...report,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/bp-priority-scheduler
+   * Canonical autonomous build queue liveness for the BP_PRIORITY runner.
+   */
+  router.get('/api/v1/lifeos/command-center/bp-priority-scheduler', requireKey, async (req, res, next) => {
+    try {
+      res.json({
+        read_path: 'GET /api/v1/lifeos/command-center/bp-priority-scheduler',
+        ...getBpPrioritySchedulerStatus(),
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * GET /api/v1/lifeos/command-center/improvement-loop/status
+   * Deterministic runtime improvement queue synthesized from SNT/CFO/Wisdom/Chair signals.
+   */
+  router.get('/api/v1/lifeos/command-center/improvement-loop/status', requireKey, async (req, res, next) => {
+    try {
+      const railwayDeploySha = normalizeSha(
+        process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || ''
+      );
+      const readiness = await buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySha });
+      const report = buildBuilderOSImprovementLoopStatus({ readiness });
+      res.json({
+        read_path: 'GET /api/v1/lifeos/command-center/improvement-loop/status',
         ...report,
       });
     } catch (err) {

@@ -7,7 +7,7 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "stabilization",
-  "next_task": "Keep command-center runtime proof surfaces aligned with BuilderOS canonical scoring, then continue structural consolidation and mobile/role-based improvements from a governed alpha surface",
+  "next_task": "Surface the canonical BP scheduler and deterministic improvement loop in the cockpit, then continue structural consolidation and mobile/role-based improvements from a governed alpha surface",
   "stability_class": "needs-review",
   "current_focus": "Mission-cockpit alignment: Command Center must center mission state, governing blueprint, authority, challenge history, and outcomes where runtime truth exists. C2 communication layer v1 remains the live implementation focus.",
   "owned_files": [
@@ -194,7 +194,7 @@
     }
   ],
   "last_verified_at": "2026-05-31",
-  "last_updated": "2026-06-26",
-  "ssot_receipt_tail": "lifeos-app.html: luminState TDZ fixed — initLuminDock() moved after const declarations. E2E 13/13 PASS.",
+  "last_updated": "2026-06-27",
+  "ssot_receipt_tail": "Canonical BP scheduler and deterministic improvement-loop status surfaces added so the cockpit reads real BuilderOS autonomy continuity instead of inferring it from older overnight sidecars.",
   "verification_passed": null
 }

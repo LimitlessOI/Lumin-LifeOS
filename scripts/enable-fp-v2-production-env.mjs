@@ -2,6 +2,7 @@
 /**
  * SYNOPSIS: Push FP V2 production env defaults to Railway managed env (lane intel + prediction score).
  */
+import 'dotenv/config';
 import process from 'node:process';
 
 const base = String(process.env.PUBLIC_BASE_URL || process.env.RAILWAY_PUBLIC_DOMAIN || '')
@@ -17,6 +18,10 @@ const vars = {
   CHAIR_PREDICTION_SCORE_ENABLED: '1',
   LANE_INTEL_ENABLED: '1',
   LANE_INTEL_ENABLE_SCHEDULED: '1',
+  BUILDEROS_AUTOPILOT: '1',
+  BUILDEROS_AUTOPILOT_INTERVAL_MS: '1800000',
+  BUILDEROS_AUTOPILOT_BOOT_DELAY_MS: '120000',
+  BUILDEROS_AUTOPILOT_RECENT_WINDOW_MS: '7200000',
 };
 
 const res = await fetch(`${base}/api/v1/railway/managed-env/bulk`, {

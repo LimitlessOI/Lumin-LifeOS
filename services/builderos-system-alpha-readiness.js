@@ -3,7 +3,8 @@
  * Runtime truth governs LIVE / PROVEN / ACTIVE. Docs only shape expected topology.
  *
  * @ssot docs/architecture/BUILDEROS_STRUCTURAL_CONSOLIDATION_BLUEPRINT.md
- * @ssot docs/projects/BUILDEROS_ALPHA_BLUEPRINT.md
+ * @ssot docs/products/builderos/PRODUCT_SSOT.md
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import fs from 'node:fs';
@@ -16,6 +17,7 @@ import { readLatestPhase14Cert } from './builder-phase14-ledger.js';
 import { evaluateProofFreshnessFromPool } from './oil-proof-freshness.js';
 import { normalizeSha } from './oil-self-repair-detector.js';
 import { computeAllBuilderOSMetrics } from './builderos-metrics-reporter.js';
+import { getBpPrioritySchedulerStatus } from './builderos-bp-priority-scheduler.js';
 import {
   buildFailClosedReadinessBlockers,
   canReportAlphaReady,
@@ -25,21 +27,6 @@ import {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const ARCHITECTURE_DIR = path.join(ROOT, 'docs', 'architecture');
-
-const COMPONENT_ORDER = [
-  'builder',
-  'oil',
-  'council',
-  'tsos_internal_hooks',
-  'memory',
-  'pb_authority',
-  'proof_freshness',
-  'self_repair',
-  'prevention',
-  'telemetry',
-  'overnight_runner',
-  'command_center',
-];
 
 const STATUS_SCORE = Object.freeze({
   NOT_WIRED: 0,
@@ -114,6 +101,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     listAutonomousTelemetry(pool, { limit: 8, sinceHours: 168 }),
   ]);
 
+  const schedulerStatus = getBpPrioritySchedulerStatus();
   const overnightState = safeReadJson('data/governed-autonomy-overnight-state.json');
   const overnightLogTail = readJsonlTail('data/governed-autonomy-overnight-log.jsonl', 3);
   const queueLogTail = readJsonlTail('data/builder-continuous-queue-log.jsonl', 3);
@@ -302,19 +290,19 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       fake_green_risk: 'Some required metrics are still explicitly NOT_WIRED.',
     },
     {
-      component_id: 'overnight_runner',
-      label: 'Overnight orchestrator',
+      component_id: 'bp_priority_scheduler',
+      label: 'BP_PRIORITY scheduler',
       statuses: hasStatuses(
         'WIRED',
-        overnightState ? 'LIVE' : null,
-        overnightState?.last_outcome?.analysis?.ok ? 'PROVEN' : null,
-        overnightState?.status === 'running' ? 'ACTIVE' : null
+        schedulerStatus.scheduler.enabled ? 'LIVE' : null,
+        schedulerStatus.scheduler.healthy ? 'PROVEN' : null,
+        schedulerStatus.scheduler.running ? 'ACTIVE' : null
       ),
       runtime_proof: [
-        proofSource('data/governed-autonomy-overnight-state.json', overnightState?.last_outcome?.idle_reason || 'missing'),
-        proofSource('data/governed-autonomy-overnight-log.jsonl', overnightLogTail[overnightLogTail.length - 1]?.event || 'missing'),
+        proofSource('GET /api/v1/lifeos/command-center/bp-priority-scheduler', schedulerStatus.scheduler.healthy ? 'healthy' : schedulerStatus.scheduler.enabled ? 'enabled' : 'disabled'),
+        proofSource('data/builderos-bp-priority-scheduler-receipt.json', schedulerStatus.scheduler.receipt?.ok === true ? 'recent_success' : 'missing_or_failing'),
       ],
-      fake_green_risk: 'Healthy idle can be misread as inactivity instead of governed continuation.',
+      fake_green_risk: 'Enabled scheduler without recent successful receipt is not autonomous continuity.',
     },
     {
       component_id: 'command_center',
@@ -356,8 +344,8 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     },
     {
       node: 'continue_halt',
-      score: overnightState?.last_outcome?.idle_reason === 'healthy_idle_no_authorized_work' ? 1 : 0.5,
-      proof_sources: ['data/governed-autonomy-overnight-state.json'],
+      score: schedulerStatus.scheduler.healthy ? 1 : schedulerStatus.scheduler.enabled ? 0.5 : 0.25,
+      proof_sources: ['GET /api/v1/lifeos/command-center/bp-priority-scheduler'],
     },
   ];
 
@@ -395,7 +383,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
 
   const fakeGreenRisks = [
     'Legacy /command-center remains mounted beside the canonical cockpit.',
-    'Builder healthy idle can look like inactivity if overnight/runtime state is ignored.',
+    'Builder healthy idle can look like autonomy even when the canonical BP scheduler is disabled or stale.',
     'Telemetry has real data but key metrics remain NOT_WIRED.',
     'Memory proof endpoint exists but has not been stress-tested against a seeded-zero scenario.',
     'Token-economics / TSOS-adjacent surfaces can be mistaken for internal BuilderOS proof.',
@@ -432,6 +420,14 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       code: 'LEGACY_AUTHORITY_SURFACES_STILL_LIVE',
       detail: 'Legacy /command-center HTML surface redirect not detected — Phase 26 not yet deployed.',
     }]),
+    ...(schedulerStatus.scheduler.enabled ? [] : [{
+      code: 'BP_PRIORITY_SCHEDULER_DISABLED',
+      detail: 'BUILDEROS_AUTOPILOT is not enabled — canonical autonomous build queue is not running.',
+    }]),
+    ...(schedulerStatus.scheduler.enabled && schedulerStatus.scheduler.recent ? [] : [{
+      code: 'BP_PRIORITY_SCHEDULER_NOT_RECENT',
+      detail: 'Canonical BP scheduler has no recent successful receipt inside the configured liveness window.',
+    }]),
   ];
 
   const next10 = [
@@ -440,7 +436,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     'Wire BuilderOS memory proof endpoint into Command Center overlay drill-down.',
     'Define and prove BuilderOS-internal TSOS hook boundary.',
     'Fill telemetry gaps for PB violations prevented, context growth, and successful build latency.',
-    'Add current daemon-active proof source for Builder component.',
+    'Expose canonical BP scheduler and improvement loop status in the command center UI.',
     'Consolidate overnight vs continuous-queue naming and proof language.',
     'Finish topology audit of unmounted or partially mounted route files.',
     'Add structural proof freshness / blueprint-vs-runtime diff check.',
@@ -487,7 +483,7 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
     legacy_components: [],
     not_wired_components: notWiredComponents,
     unknowns: [
-      'No canonical runtime endpoint yet for current queue daemon liveness.',
+      ...(schedulerStatus.scheduler.enabled ? [] : ['Canonical BP scheduler is disabled at runtime; enable BUILDEROS_AUTOPILOT=1 to claim continuity.']),
       ...(tsosProvenEligible ? [] : ['TSOS PROVEN gate wired — awaiting >=3 structured committed hooks with verifier linkage (TSOS-G1).']),
     ],
     fake_green_explanation: fakeGreenStatusNote,
@@ -500,10 +496,10 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
         canonical_replacement: '/lifeos-command-center',
       },
       {
-        area: 'overnight_runner',
-        non_canonical: 'builder-overnight-* aliases',
-        risk: 'same runner appears as multiple systems',
-        canonical_replacement: 'builder-continuous-queue-* plus governed-autonomy overnight state/log',
+        area: 'autonomy_runner',
+        non_canonical: 'builder-overnight-* aliases + governed-autonomy sidecar receipts',
+        risk: 'same autonomy surface appears as multiple systems',
+        canonical_replacement: 'BP_PRIORITY scheduler receipt + endpoint',
       },
       {
         area: 'memory',
@@ -522,8 +518,9 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       prevention_hooks: 'GET /api/v1/lifeos/command-center/self-repair/prevention/hooks',
       telemetry_efficiency: 'GET /api/v1/lifeos/autonomous-telemetry/efficiency',
       telemetry_events: 'GET /api/v1/lifeos/autonomous-telemetry/events',
-      overnight_state: 'data/governed-autonomy-overnight-state.json',
-      overnight_log: 'data/governed-autonomy-overnight-log.jsonl',
+      bp_priority_scheduler: 'GET /api/v1/lifeos/command-center/bp-priority-scheduler',
+      overnight_state_legacy: 'data/governed-autonomy-overnight-state.json',
+      overnight_log_legacy: 'data/governed-autonomy-overnight-log.jsonl',
       queue_log: 'data/builder-continuous-queue-log.jsonl',
       memory_proof: 'GET /api/v1/lifeos/command-center/memory/proof',
     },
@@ -534,6 +531,8 @@ export async function buildBuilderOSSystemAlphaReadiness(pool, { railwayDeploySh
       readiness_true: readiness.ready_for_supervised,
       repair_queue_open: readiness.repair_queue_open,
       healthy_idle: overnightState?.last_outcome?.idle_reason === 'healthy_idle_no_authorized_work',
+      bp_priority_scheduler_enabled: schedulerStatus.scheduler.enabled,
+      bp_priority_scheduler_recent: schedulerStatus.scheduler.recent,
       phase14_status: readiness.phase14_status,
     },
     components,
