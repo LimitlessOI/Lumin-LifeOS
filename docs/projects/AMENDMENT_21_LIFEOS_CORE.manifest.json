@@ -883,8 +883,8 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-26 chair-system-knowledge-direct-link",
-  "last_change_summary": "SSOT/synopsis counsel facts; direct SMOS answers; visual UI mechanical patch",
-  "ssot_receipt_tail": "commitToGitHub rejects BLOCKED_WRITE_PATHS; system:railway:redeploy waits for deploy SHA parity."
+  "last_updated": "2026-06-27",
+  "last_receipt": "2026-06-27 point-b-execute-routing-hardening",
+  "last_change_summary": "Founder Point B execute prompts now route to machine-path execution instead of collapsing into passive status or generic ambiguity.",
+  "ssot_receipt_tail": "Founder-interface probes exposed execute-vs-status routing drift; deploy and rerun the live Point B prompt battery before certifying Point A→B."
 }

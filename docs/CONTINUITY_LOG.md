@@ -5,6 +5,10 @@
 
 ---
 
+## [SESSION] 2026-06-27 — Founder Point B routing hardening before live machine-path retry
+
+Adam: *Lumin must feel like the Chair, not a generic chatbot, and founder prompts through the LifeOS UI must actually drive the BuilderOS slice from Point A to Point B.* **Live founder-path probes found two real regressions:** (1) `do: continue building toward point b...` incorrectly matched `point_b_status` and returned passive status instead of executing the machine path, and (2) `do: build the next blueprint step...` fell into `build_terminal` with `INTENT_AMBIGUITY` instead of blueprint execution. **Fixed locally/staged:** `services/chair-intent-signals.js` now recognizes “next blueprint step” execute orders; `services/lifeos-mission-pipeline-executor.js` recognizes “continue toward Point B / next required step / receipt scan only” as machine-path intents; `services/lumin-chair-system-actions.js` narrows `point_b_status` so bare “Point B” in execute requests no longer collapses into status. **Local routing/unit verification:** direct intent probes now classify correctly; targeted truth/routing suites pass. **Next:** commit only the founder-path fix, push via clean worktree, wait for Railway SHA parity, then rerun the founder-interface prompt battery on live before certifying the A→B slice.
+
 ## [SESSION] 2026-06-26 — Full audit PASS: LifeOS + LifeRE all green (9/9 founder battery, 124/124 agent alpha, CRM 7/7, W1-W3, overlay 4/4)
 
 Adam: *audit lifere and lifeos in detail and alpha test — fix until everything works.* **Root causes found and fixed:** (1) `Q_chair_builder` — Gemini `normalizeInputText` using `taskType:'chat'` stripped "counsel only, do not run a build" before routing guards ran → fixed `shouldSkipInputNormalize` to call `isCounselOnlyBypass` (added in GAP-FILL `82b6b9dd`). (2) `Q2/Q2b` SMOS bleed — was Q1's `verified_search` text appearing in Q2 summary due to stale Gemini session state → fixed by `alpha_probe === true` skipping normalization entirely (`req.body?.alpha_probe === true` guard in route). (3) B1/B2/B3 builder git push `Update is not a fast forward` — Railway's builder git clone fell behind; resolved via `git fetch + merge origin/main`. **All batteries (live Railway):** `lifeos:founder-chat:alpha:battery` **9/9 PASS**, `lifeos:lifere-agent-alpha` **124/124 PASS**, `lifeos:overlay:alpha:battery` **4/4 PASS**, `lifeos:crm:alpha:test` **7/7 PASS**, W1 **6/6**, W2 **5/5**, W3 **4/4**, LifeRE-OS acceptance **PASS**, `lifeos:lifere-alpha-gate` **124/124 PASS**, `lifeos:founder-alpha:audit` **9/9 CLEARED_FOR_FOUNDER_ALPHA**, builder preflight **43/43 PASS**. **Only gate remaining:** `founder_usability_pass: false` — Adam walks LifeRE path in overlay and clicks Confirm Alpha PASS in the banner. Entry: `https://robust-magic-production.up.railway.app/lifeos?layout=desktop&direct_system=1&page=lifeos-lifere.html`.
@@ -145,7 +149,7 @@ Adam confirmed chat history survives hard refresh (comms proof UX OK on deploy `
 
 Adam: go to bed — system builds LifeOS in versions overnight, machine Alpha = foundation + acceptance.
 
-**Shipped:** `LIFEOS_VERSION_QUEUE.json` + `docs/products/LIFEOS_VERSION_ROADMAP.md` + `scripts/lifeos-versions-overnight.mjs`. **v2.0 Capture Pipeline** (`PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001`) — Voice Rail → Action Inbox auto-stage. **v2.1 Commitment Route** (`PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001`) — approved inbox commitment → `lifeos_commitments`. Both on `BP_PRIORITY.json` ranks 4–5.
+**Shipped:** `LIFEOS_VERSION_QUEUE.json` + `docs/products/lifeos/VERSION_ROADMAP.md` + `scripts/lifeos-versions-overnight.mjs`. **v2.0 Capture Pipeline** (`PRODUCT-LIFEOS-CAPTURE-PIPELINE-V2-0001`) — Voice Rail → Action Inbox auto-stage. **v2.1 Commitment Route** (`PRODUCT-LIFEOS-COMMITMENT-ROUTE-V2-0001`) — approved inbox commitment → `lifeos_commitments`. Both on `BP_PRIORITY.json` ranks 4–5.
 
 **Verified local:** 3/3 capture-pipeline unit tests; foundation development+corridor PASS; builder executes all steps; production acceptance pending deploy.
 
@@ -233,7 +237,7 @@ Adam: ChC transcript proved overnight “work” was pure LLM theater. **Shipped
 
 **Bugs found and fixed in-session:**
 1. `lifeos-voice-rail-v1.html` — duplicate `btn-theme` `addEventListener` made theme toggle a no-op (fires twice, reverts to original state). Removed second handler.
-2. `voice-rail-v1.js` — `readLifeOSProductBrief()` read `docs/products/LIFEOS.md` which was deleted in doc restructure → always returned `null` → `has_product_brief` always false → context health reduced by 1 signal. Fixed to `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`.
+2. `voice-rail-v1.js` — `readLifeOSProductBrief()` had been routed through the old flat `docs/products/LIFEOS.md` path during doc restructure, causing `null` reads and lowering context health. Fixed to the LifeOS amendment anchor at that time; canonical product home is now `docs/products/lifeos/PRODUCT_SSOT.md`.
 3. `lifeos-voice-rail-v1.html` — `sendMessage()` persistent-listen branch called `clearBuffer()` but never cleared the textarea; typed messages stayed in the input after send. Added `value = ''`.
 4. `voice-rail-founder-memory.js` — `UPDATE communication_profiles` appended to `profile_summary` with no length cap; would grow unboundedly over sessions. Capped to `RIGHT(..., 5000)`.
 

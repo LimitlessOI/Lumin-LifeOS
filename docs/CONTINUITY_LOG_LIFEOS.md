@@ -8,6 +8,23 @@
 
 ---
 
+## [BUILD] Update 2026-06-27 — Founder Point B execute routing hardening
+
+### What happened
+- **Founder-path live probes exposed misrouting inside the Chair path.** `what is point b right now?` correctly returned `point_b_status`, but `do: continue building toward point b...` also returned `point_b_status` instead of executing the machine path, and `do: build the next blueprint step for PRODUCT-LIFERE-OS-V1-0001...` degraded into `build_terminal` with `INTENT_AMBIGUITY`.
+- **Intent classification tightened in three places.** `services/chair-intent-signals.js` now recognizes “build/run/execute the next blueprint step” and product-scoped “next step” phrasing as blueprint execution. `services/lifeos-mission-pipeline-executor.js` now recognizes “continue/advance toward Point B”, “next required step”, and “receipt scan only” phrasing as mission-pipeline intents. `services/lumin-chair-system-actions.js` narrowed `point_b_status` matching to explicit status phrasing only.
+- **No product claims upgraded yet.** This is routing hardening only. Live deploy proof and founder-interface re-run are still required before calling the Point A→B slice reliable.
+
+### Verification
+- Local intent probes now classify:
+  - `what is point b right now?` → `point_b_status`
+  - `do: continue building toward point b...` → not a system-action status read
+  - `do: build the next blueprint step...` → blueprint execute intent
+- Targeted routing/truth test suites pass locally.
+
+### Next step
+Commit the routing hardening with matching Amendment 21 receipt/manifest updates, push via clean worktree, wait for Railway SHA parity, then rerun the live founder-interface prompt battery before certifying the founder A→B machine path.
+
 ## [BUILD] Update 2026-05-13 — OVERNIGHT GOVERNANCE Cycle 4
 
 ### What happened

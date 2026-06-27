@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T01:50:40.702Z",
+  "generated_at": "2026-06-27T02:13:53.446Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12608,
   "files": [
@@ -40439,9 +40439,9 @@
     {
       "path": "docs/CONTINUITY_LOG_LIFEOS.md",
       "synopsis": "Continuity Log — LifeOS Core Lane",
-      "bytes": 23066,
-      "mtime": "2026-06-27T01:48:27.433Z",
-      "indexed_at": "2026-06-27T01:49:14.005Z"
+      "bytes": 24819,
+      "mtime": "2026-06-27T02:13:34.459Z",
+      "indexed_at": "2026-06-27T02:13:53.446Z"
     },
     {
       "path": "docs/CONTINUITY_LOG_SECURITY.md",
@@ -40460,9 +40460,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 465855,
-      "mtime": "2026-06-27T01:48:27.433Z",
-      "indexed_at": "2026-06-27T01:49:14.005Z"
+      "bytes": 467214,
+      "mtime": "2026-06-27T02:13:34.459Z",
+      "indexed_at": "2026-06-27T02:13:53.446Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -41986,9 +41986,9 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 26708,
-      "mtime": "2026-06-27T01:48:27.632Z",
-      "indexed_at": "2026-06-27T01:49:14.005Z",
+      "bytes": 26811,
+      "mtime": "2026-06-27T02:13:34.459Z",
+      "indexed_at": "2026-06-27T02:13:53.446Z",
       "synopsis_index_only": true
     },
     {
