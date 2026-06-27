@@ -2,13 +2,12 @@
 
 # LifeOS Product Home
 
-**Last updated:** 2026-06-27 — founder drawer recovered clean advice → build → advice switching; duplicate build receipt echo removed and “direct advice only” now hard-blocks follow-up-question drift.
-
 **Canonical home:** this file  
 **Product id:** `lifeos`  
 **Primary runtime surface:** `/lifeos`  
 **Law anchors:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/constitution/NORTH_STAR.md`  
-**Machine queue:** `builderos-reboot/BP_PRIORITY.json`
+**Machine queue:** `builderos-reboot/BP_PRIORITY.json`  
+**Authority boundaries:** `docs/products/AUTHORITY_BOUNDARIES.md`
 
 ## Mission
 
@@ -105,10 +104,7 @@ If a file belongs to LifeOS product behavior, `@ssot` should point here or to `d
 
 Do not default back to `AMENDMENT_21` unless the change is truly constitutional/history-level.
 
-## Latest operational receipts
+## 2026-06-27 founder path hardening receipts
 
-- 2026-06-27 — founder UI live probe proved the drawer can now recover across advice → build → advice in the same session on production.
-- 2026-06-27 — remaining quality fixes from that probe:
-  - successful build replies must not duplicate the technical PASS block under the founder card
-  - “direct advice only” turns must answer directly and avoid tacking on a follow-up question by default
-- 2026-06-27 — async founder build polling now preserves the founder-facing summary instead of replacing it with the raw technical formatter, and Chair translation path now enforces “direct advice only” at the first-turn counsel layer.
+- Founder advice prompts that are really prioritization or judgment calls must stay in chair counsel; they must not fall into verified-web-search fallback just because they end with a question mark.
+- `GET /api/v1/lifeos/auth/me` now falls back to founder handle lookup for valid handle-only JWTs, not just command-key fallback, so founder-shell auth does not degrade into a false `404 User not found`.

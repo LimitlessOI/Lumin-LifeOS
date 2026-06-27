@@ -1,6 +1,6 @@
 /**
  * SYNOPSIS: Chair native facts — real system state Lumin IS (not chat overlay).
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
 import { loadPointBTarget } from './point-b-target-lite.js';
 import { evaluatePointBNavigator, formatPointBStatusSummary } from './point-b-navigator.js';
@@ -32,6 +32,9 @@ function needsGeneralWebSearch(text = '', chairContext = {}) {
   if (isFounderPersonalLifeIntent(t)) return false;
   if (hasProductBuildContext(t) && isBuildRequest(t)) return false;
   if (/^\s*(do|execute|run)\s*:/i.test(t)) return false;
+  if (/\b(should i|what should i|which should i|help me decide|smartest next|best next|prioritize|focus on|where should i spend|next two hours|next step)\b/i.test(t)) {
+    return false;
+  }
   if (/\b(point b|lifere alpha|alpha readiness|alpha battery|alpha test|lifere|ssot|amendment|deploy|railway|builder os|builder pipeline|queue status|target_file|smos|social media os)\b/i.test(t)) {
     return false;
   }
