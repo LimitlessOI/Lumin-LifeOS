@@ -1,0 +1,40 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "ideavault",
+  "canonical_home": "docs/products/ideavault/PRODUCT_HOME.md",
+  "updated_at": "2026-06-27",
+  "ownership_policy": "pointer_not_duplication",
+  "readiness_state": "PARTIAL_CODE_PRESENT",
+  "mission_pack": null,
+  "acceptance_command": null,
+  "note": "IdeaVault is primarily a documentation/backlog SSOT — not a user-facing SaaS product surface. Runtime files exist for internal API use only.",
+  "owned_files": [
+    "docs/products/ideavault/PRODUCT_HOME.md",
+    "docs/products/ideavault/FILE_MANIFEST.json",
+    "docs/products/ideavault/AGENTS.md",
+    "routes/idea-queue-routes.js",
+    "services/idea-engine.js",
+    "services/idea-engine/index.js"
+  ],
+  "canonical_docs": [
+    "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+    "docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md",
+    "IMMEDIATE_FEATURES_AND_REVOLUTIONARY_IDEAS.md"
+  ],
+  "shared_dependencies": [
+    {
+      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "owner": "Platform",
+      "reason": "AI council for idea classification and routing"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+      "owner": "Platform",
+      "reason": "idea provenance and history tracking"
+    }
+  ],
+  "history_anchors": [
+    "docs/projects/AMENDMENT_38_IDEA_VAULT.md"
+  ],
+  "open_decision": "Decide: standalone product with its own mission queue, or absorb into LifeOS as a Chair admin feature. This determines whether a FOUNDER_PACKET is warranted."
+}

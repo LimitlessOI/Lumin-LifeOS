@@ -1,0 +1,90 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "tc-service",
+  "canonical_home": "docs/products/tc-service/PRODUCT_HOME.md",
+  "updated_at": "2026-06-27",
+  "ownership_policy": "pointer_not_duplication",
+  "readiness_state": "PARTIAL_CODE_PRESENT",
+  "mission_pack": null,
+  "acceptance_command": null,
+  "owned_files": [
+    "docs/products/tc-service/PRODUCT_HOME.md",
+    "docs/products/tc-service/FILE_MANIFEST.json",
+    "docs/products/tc-service/AGENTS.md",
+    "public/tc/agent-portal.html",
+    "public/tc/client-portal.html",
+    "public/tc/tc-assistant.html",
+    "public/tc/tc-portal.js",
+    "routes/boldtrail-coaching-routes.js",
+    "routes/boldtrail-routes.js",
+    "routes/mls-routes.js",
+    "routes/tc-routes.js",
+    "services/email-triage.js",
+    "services/glvar-monitor.js",
+    "services/mls-deal-scanner.js",
+    "services/tc-access-service.js",
+    "services/tc-alert-service.js",
+    "services/tc-approval-service.js",
+    "services/tc-asana-sync-service.js",
+    "services/tc-assistant-service.js",
+    "services/tc-automation-service.js",
+    "services/tc-browser-agent.js",
+    "services/tc-communication-callback-service.js",
+    "services/tc-coordinator.js",
+    "services/tc-doc-intake.js",
+    "services/tc-document-validator.js",
+    "services/tc-email-document-service.js",
+    "services/tc-email-monitor.js",
+    "services/tc-feed-ingest-service.js",
+    "services/tc-hello-test.js",
+    "services/tc-imap-config.js",
+    "services/tc-inspection-forward-service.js",
+    "services/tc-inspection-service.js",
+    "services/tc-intake-workspace-service.js",
+    "services/tc-interaction-service.js",
+    "services/tc-listing-skyslope-sync.js",
+    "services/tc-mobile-link-service.js",
+    "services/tc-morning-digest-service.js",
+    "services/tc-offer-prep-service.js",
+    "services/tc-pdf-signature-stamp.js",
+    "services/tc-portal-service.js",
+    "services/tc-pricing.js",
+    "services/tc-r4r-attachment-classify.js",
+    "services/tc-report-service.js",
+    "services/tc-review-package-service.js",
+    "services/tc-status-engine.js",
+    "services/tc-stripe-service.js",
+    "services/tc-td-form-knowledge-service.js",
+    "services/tc-td-party-sync.js",
+    "services/tc-td-workflow-runner.js",
+    "services/tc-webhook-validator.js",
+    "services/tc-workflow-service.js",
+    "services/tc-workflow-specs.js"
+  ],
+  "shared_dependencies": [
+    {
+      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "owner": "Platform",
+      "reason": "AI council for email drafting, deal scoring, coaching"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md",
+      "owner": "Platform",
+      "reason": "agent and client history"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md",
+      "owner": "Platform",
+      "reason": "Stripe billing for TC plan tiers"
+    },
+    {
+      "path": "docs/products/boldtrail/PRODUCT_HOME.md",
+      "owner": "BoldTrail",
+      "reason": "CRM system of record for agent clients"
+    }
+  ],
+  "history_anchors": [
+    "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+    "docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json"
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T21:53:06.872Z",
+  "generated_at": "2026-06-27T21:53:43.676Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
-  "file_count": 12625,
+  "file_count": 12645,
   "files": [
     {
       "path": "__tests__/app.test.js",
@@ -41753,11 +41753,84 @@
       "indexed_at": "2026-06-27T21:52:17.577Z"
     },
     {
+      "path": "docs/products/api-cost-savings/AGENTS.md",
+      "synopsis": "API Cost Savings — Agent Cold-Start Entry",
+      "bytes": 2799,
+      "mtime": "2026-06-27T21:53:32.680Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
+      "path": "docs/products/api-cost-savings/FILE_MANIFEST.json",
+      "synopsis": "Documentation — FILE MANIFEST.",
+      "bytes": 1578,
+      "mtime": "2026-06-27T21:53:32.681Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/api-cost-savings/PRODUCT_HOME.md",
+      "synopsis": "Canonical product home — API Cost Savings (TokenOS / TSOS)",
+      "bytes": 3724,
+      "mtime": "2026-06-27T21:53:32.680Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
+      "path": "docs/products/BLUEPRINT_READINESS_RANKING.md",
+      "synopsis": "Blueprint readiness ranking — all tracked products, scored as of 2026-06-27",
+      "bytes": 9871,
+      "mtime": "2026-06-27T21:53:32.700Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
+      "path": "docs/products/boldtrail/AGENTS.md",
+      "synopsis": "BoldTrail — Agent Cold-Start Entry",
+      "bytes": 2311,
+      "mtime": "2026-06-27T21:53:32.688Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
+      "path": "docs/products/boldtrail/FILE_MANIFEST.json",
+      "synopsis": "Documentation — FILE MANIFEST.",
+      "bytes": 2178,
+      "mtime": "2026-06-27T21:53:32.688Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/boldtrail/PRODUCT_HOME.md",
+      "synopsis": "Canonical product home — BoldTrail CRM Integration",
+      "bytes": 3561,
+      "mtime": "2026-06-27T21:53:32.687Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
       "path": "docs/products/BUILD_PLAN.md",
       "synopsis": "AI Counsel OS - Detailed Build Plan",
       "bytes": 8989,
       "mtime": "2026-06-27T21:31:31.148Z",
       "indexed_at": "2026-06-27T21:52:17.577Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/AGENTS.md",
+      "synopsis": "ClientCare Billing Recovery — Agent Cold-Start Entry",
+      "bytes": 2587,
+      "mtime": "2026-06-27T21:53:32.691Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/FILE_MANIFEST.json",
+      "synopsis": "Documentation — FILE MANIFEST.",
+      "bytes": 1430,
+      "mtime": "2026-06-27T21:53:32.692Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/clientcare-billing-recovery/PRODUCT_HOME.md",
+      "synopsis": "Canonical product home — ClientCare Billing Recovery",
+      "bytes": 3623,
+      "mtime": "2026-06-27T21:53:32.691Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
     },
     {
       "path": "docs/products/COMPLETE_PRODUCT_SPEC.md",
@@ -41772,6 +41845,28 @@
       "bytes": 10290,
       "mtime": "2026-06-27T21:31:31.150Z",
       "indexed_at": "2026-06-27T21:52:17.577Z"
+    },
+    {
+      "path": "docs/products/ideavault/AGENTS.md",
+      "synopsis": "IdeaVault — Agent Cold-Start Entry",
+      "bytes": 2033,
+      "mtime": "2026-06-27T21:53:32.694Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
+      "path": "docs/products/ideavault/FILE_MANIFEST.json",
+      "synopsis": "Documentation — FILE MANIFEST.",
+      "bytes": 1525,
+      "mtime": "2026-06-27T21:53:32.694Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/ideavault/PRODUCT_HOME.md",
+      "synopsis": "Canonical product home — IdeaVault (Idea Queue + Backlog Engine)",
+      "bytes": 3020,
+      "mtime": "2026-06-27T21:53:32.694Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
     },
     {
       "path": "docs/products/LIFEOS_VERSION_ROADMAP.md",
@@ -41807,6 +41902,58 @@
       "bytes": 5164,
       "mtime": "2026-06-27T21:31:31.150Z",
       "indexed_at": "2026-06-27T21:52:17.577Z"
+    },
+    {
+      "path": "docs/products/PRODUCT_REGISTRY.json",
+      "synopsis": "Documentation — PRODUCT REGISTRY.",
+      "bytes": 7581,
+      "mtime": "2026-06-27T21:53:32.702Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/site-builder/AGENTS.md",
+      "synopsis": "Site Builder — Agent Cold-Start Entry",
+      "bytes": 2491,
+      "mtime": "2026-06-27T21:53:32.696Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
+      "path": "docs/products/site-builder/FILE_MANIFEST.json",
+      "synopsis": "Documentation — FILE MANIFEST.",
+      "bytes": 2193,
+      "mtime": "2026-06-27T21:53:32.697Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/site-builder/PRODUCT_HOME.md",
+      "synopsis": "Canonical product home — Site Builder & Prospect Pipeline",
+      "bytes": 3908,
+      "mtime": "2026-06-27T21:53:32.696Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
+      "path": "docs/products/tc-service/AGENTS.md",
+      "synopsis": "TC Service — Agent Cold-Start Entry",
+      "bytes": 2299,
+      "mtime": "2026-06-27T21:53:32.699Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
+    },
+    {
+      "path": "docs/products/tc-service/FILE_MANIFEST.json",
+      "synopsis": "Documentation — FILE MANIFEST.",
+      "bytes": 3161,
+      "mtime": "2026-06-27T21:53:32.699Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z",
+      "synopsis_index_only": true
+    },
+    {
+      "path": "docs/products/tc-service/PRODUCT_HOME.md",
+      "synopsis": "Canonical product home — TC Service (Transaction Coordinator)",
+      "bytes": 5227,
+      "mtime": "2026-06-27T21:53:32.698Z",
+      "indexed_at": "2026-06-27T21:53:43.676Z"
     },
     {
       "path": "docs/PROJECT_CONTEXT.md",

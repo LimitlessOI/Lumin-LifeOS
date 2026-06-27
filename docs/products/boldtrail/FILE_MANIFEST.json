@@ -1,0 +1,66 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "boldtrail",
+  "canonical_home": "docs/products/boldtrail/PRODUCT_HOME.md",
+  "updated_at": "2026-06-27",
+  "ownership_policy": "pointer_not_duplication",
+  "readiness_state": "PARTIAL_CODE_PRESENT",
+  "mission_pack": null,
+  "acceptance_command": null,
+  "status_as_of": "2026-06-22",
+  "status_note": "LIVE in use — integration is active in production",
+  "owned_files": [
+    "docs/products/boldtrail/PRODUCT_HOME.md",
+    "docs/products/boldtrail/FILE_MANIFEST.json",
+    "docs/products/boldtrail/AGENTS.md",
+    "routes/agent-recruitment-routes.js",
+    "routes/boldtrail-coaching-routes.js",
+    "routes/boldtrail-routes.js",
+    "routes/outreach-crm-routes.js",
+    "services/lifere-boldtrail-bridge.js",
+    "src/integrations/boldtrail.js"
+  ],
+  "db_tables": [
+    {
+      "name": "boldtrail_agents",
+      "purpose": "agent profiles and settings"
+    },
+    {
+      "name": "boldtrail_email_drafts",
+      "purpose": "AI-generated emails pending review/send"
+    },
+    {
+      "name": "boldtrail_leads",
+      "purpose": "synced leads with status"
+    },
+    {
+      "name": "boldtrail_showings",
+      "purpose": "scheduled property showings"
+    }
+  ],
+  "required_env_vars": [
+    "BOLDTRAIL_API_KEY",
+    "BOLDTRAIL_WEBHOOK_SECRET"
+  ],
+  "shared_dependencies": [
+    {
+      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "owner": "Platform",
+      "reason": "AI council for email drafting and coaching"
+    },
+    {
+      "path": "docs/products/lifere/PRODUCT_HOME.md",
+      "owner": "LifeRE",
+      "reason": "LifeRE consumes BoldTrail pipeline data for operator business"
+    },
+    {
+      "path": "docs/products/tc-service/PRODUCT_HOME.md",
+      "owner": "TC Service",
+      "reason": "TC reads/writes BoldTrail for agent clients"
+    }
+  ],
+  "history_anchors": [
+    "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md"
+  ],
+  "open_decision": "Decide: (A) BoldTrail is a shared platform module — no standalone mission; or (B) BoldTrail has a standalone agent-subscription revenue lane ($97-$197/mo) warranting its own FOUNDER_PACKET. Current reality in code matches Option A."
+}

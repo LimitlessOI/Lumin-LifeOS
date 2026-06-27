@@ -1,0 +1,45 @@
+{
+  "schema": "product_file_manifest_v1",
+  "product_id": "api-cost-savings",
+  "canonical_home": "docs/products/api-cost-savings/PRODUCT_HOME.md",
+  "updated_at": "2026-06-27",
+  "ownership_policy": "pointer_not_duplication",
+  "readiness_state": "PARTIAL_CODE_PRESENT",
+  "mission_pack": null,
+  "acceptance_command": null,
+  "owned_files": [
+    "docs/products/api-cost-savings/PRODUCT_HOME.md",
+    "docs/products/api-cost-savings/FILE_MANIFEST.json",
+    "docs/products/api-cost-savings/AGENTS.md",
+    "products/api-service/index.html",
+    "products/api-service/success.html",
+    "products/api-service/cancel.html",
+    "routes/api-cost-savings-routes.js",
+    "routes/tco-agent-routes.js",
+    "routes/tco-routes.js",
+    "routes/tokenos-routes.js",
+    "routes/tsos-efficiency-routes.js",
+    "routes/tsos-platform-kernel-routes.js",
+    "routes/tsos-task-ledger-routes.js",
+    "services/token-accounting-service.js",
+    "services/token-optimizer.js",
+    "services/tokenos-quality-check.js",
+    "services/tokenos-service.js",
+    "services/tsos-platform-kernel.js"
+  ],
+  "shared_dependencies": [
+    {
+      "path": "docs/projects/AMENDMENT_01_AI_COUNCIL.md",
+      "owner": "Platform",
+      "reason": "AI council is the primary consumer of the cost-savings kernel; also provides provider routing logic"
+    },
+    {
+      "path": "docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md",
+      "owner": "Platform",
+      "reason": "Stripe billing for B2B subscription plans"
+    }
+  ],
+  "history_anchors": [
+    "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md"
+  ]
+}
