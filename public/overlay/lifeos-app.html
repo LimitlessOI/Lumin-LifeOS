@@ -2177,7 +2177,7 @@
         class="lumin-input"
         id="lumin-input"
         placeholder="Lumin — ask anything, or `do: open LifeRE` / `do: fix …` to execute"
-        rows="4"
+        rows="3"
         onkeydown="luminHandleKey(event)"
         oninput="luminAutoResize(this)"></textarea>
       <button class="lumin-input-mic" id="lumin-mic-btn" onclick="luminVoiceInput()" title="Voice input">🎙</button>
@@ -3196,7 +3196,7 @@ async function luminSend(opts = {}) {
           source_mode: voiceTurn ? 'voice' : 'text',
           conversational_mode: true,
           dictate_then_send: voiceTurn,
-          async: false,
+          async: true,
           conversation_history: buildLuminConversationHistoryPayload(),
           ui_context: {
             surface: 'lifeos-app',

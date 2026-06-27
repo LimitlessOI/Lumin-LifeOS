@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-26T23:10:22.109Z",
+  "generated_at": "2026-06-27T01:46:45.778Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12608,
   "files": [
@@ -29055,9 +29055,9 @@
     {
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
-      "bytes": 3784877,
-      "mtime": "2026-06-26T22:00:42.615Z",
-      "indexed_at": "2026-06-26T22:01:00.196Z"
+      "bytes": 3785144,
+      "mtime": "2026-06-27T01:46:29.223Z",
+      "indexed_at": "2026-06-27T01:46:45.778Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -71108,8 +71108,8 @@
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
       "bytes": 144558,
-      "mtime": "2026-06-26T22:55:16.212Z",
-      "indexed_at": "2026-06-26T23:00:33.438Z"
+      "mtime": "2026-06-27T01:44:47.583Z",
+      "indexed_at": "2026-06-27T01:46:45.778Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -75144,9 +75144,9 @@
     {
       "path": "scripts/run-real-app-e2e.mjs",
       "synopsis": "Real-app E2E — Playwright drives the actual Railway UI like a founder would.",
-      "bytes": 16683,
-      "mtime": "2026-06-26T22:55:24.263Z",
-      "indexed_at": "2026-06-26T23:00:33.438Z",
+      "bytes": 18377,
+      "mtime": "2026-06-27T01:35:20.788Z",
+      "indexed_at": "2026-06-27T01:46:45.778Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

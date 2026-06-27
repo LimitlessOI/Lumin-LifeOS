@@ -124,6 +124,21 @@ async function sendLuminMessage(text, waitForReply = true) {
   return lastReply;
 }
 
+async function sendLuminBuildMessage(text) {
+  const input = page.locator('#lumin-input');
+  await input.click();
+  await input.fill(text);
+  await page.locator('#lumin-send-btn').click();
+  await page.waitForFunction(() => {
+    const msgs = document.querySelectorAll('.lumin-msg.assistant:not(.thinking)');
+    return msgs.length > 0 && !document.querySelector('.lumin-msg.thinking');
+  }, { timeout: 330_000 });
+  return page.evaluate(() => {
+    const msgs = [...document.querySelectorAll('.lumin-msg.assistant:not(.thinking)')];
+    return msgs[msgs.length - 1]?.innerText?.trim() || '';
+  });
+}
+
 // ── tests ────────────────────────────────────────────────────────────────────
 
 async function test_appLoads() {
@@ -237,8 +252,29 @@ async function test_counselOnlyBypass() {
   } catch (e) { fail('counsel_only_bypass', e.message); }
 }
 
+async function test_directBuildFromDrawer() {
+  console.log('\n[8] Drawer build: founder build/fix order executes through live UI path');
+  try {
+    await ensureDrawerOpen();
+    const stamp = new Date().toISOString();
+    const reply = await sendLuminBuildMessage(
+      `do: in scripts/lifeos-direct-build-smoke-test.mjs set or replace one comment line exactly "// ui-e2e-build-proof: ${stamp}" near the top. Do not change runtime behavior and do not modify any other file.`,
+    );
+    await shot('06-direct-build-ui');
+    const looksExecuted = /PASS|RUNNING|COMMIT|Command:\s*COMMAND_RAN|Build job/i.test(reply);
+    const hasFailure = /FAIL|Blocker:/i.test(reply);
+    if (hasFailure) {
+      fail('drawer_direct_build', `build failed: "${reply.slice(0, 220)}"`);
+    } else if (!looksExecuted) {
+      fail('drawer_direct_build', `no execution proof in reply: "${reply.slice(0, 220)}"`);
+    } else {
+      pass('drawer_direct_build', reply.slice(0, 140).replace(/\s+/g, ' '));
+    }
+  } catch (e) { fail('drawer_direct_build', e.message); }
+}
+
 async function test_navigateToLifeRE() {
-  console.log('\n[8] Navigate to LifeRE page');
+  console.log('\n[9] Navigate to LifeRE page');
   try {
     await page.goto(await appUrl('lifeos-lifere.html'), { waitUntil: 'load', timeout: TIMEOUT });
     // LifeRE content loads inside #content-frame iframe — use frameLocator
@@ -250,7 +286,7 @@ async function test_navigateToLifeRE() {
 }
 
 async function test_alphaReadiness() {
-  console.log('\n[9] LifeRE alpha readiness surface renders');
+  console.log('\n[10] LifeRE alpha readiness surface renders');
   try {
     const frame = page.frameLocator('#content-frame');
     const btn = frame.locator('#lifere-alpha-cycle-btn');
@@ -260,7 +296,7 @@ async function test_alphaReadiness() {
 }
 
 async function test_alphaDaily() {
-  console.log('\n[10] Alpha daily cycle runs from UI');
+  console.log('\n[11] Alpha daily cycle runs from UI');
   try {
     // Close Lumin drawer if open — its backdrop intercepts clicks in the iframe
     const backdropOpen = await page.evaluate(() => document.getElementById('lumin-backdrop')?.classList.contains('open'));
@@ -288,7 +324,7 @@ async function test_alphaDaily() {
 }
 
 async function test_dashboardLoads() {
-  console.log('\n[11] Dashboard page loads');
+  console.log('\n[12] Dashboard page loads');
   try {
     await page.goto(await appUrl('lifeos-dashboard.html'), { waitUntil: 'load', timeout: TIMEOUT });
     await shot('08-dashboard');
@@ -302,7 +338,7 @@ async function test_dashboardLoads() {
 }
 
 async function test_pageNav() {
-  console.log('\n[12] Page navigation: today / finance / health load');
+  console.log('\n[13] Page navigation: today / finance / health load');
   const pages = ['lifeos-today.html', 'lifeos-finance.html', 'lifeos-health.html'];
   let allOk = true;
   for (const pg of pages) {
@@ -316,7 +352,7 @@ async function test_pageNav() {
 }
 
 async function test_loginPageReachable() {
-  console.log('\n[13] Login page reachable (not 404)');
+  console.log('\n[14] Login page reachable (not 404)');
   try {
     const res = await page.goto(`${BASE}/overlay/lifeos-login.html`, { waitUntil: 'domcontentloaded', timeout: TIMEOUT });
     const status = res?.status() ?? 0;
@@ -389,6 +425,7 @@ if (ok) {
   await test_chatResponse();
   await test_smosQuestion();
   await test_counselOnlyBypass();
+  await test_directBuildFromDrawer();
 }
 await test_navigateToLifeRE();
 await test_alphaReadiness();
