@@ -22,6 +22,20 @@
 ### Next
 Deploy this third continuity fix, rerun the live founder phrase-recall probe, then keep pushing BuilderOS through the founder UI path until the next real autonomous-build blocker is concrete.
 
+## [BUILD] Update 2026-06-27 — Founder blueprint-status routing hardening
+
+### What happened
+- **Continuity was fixed live, then the next founder-path bug surfaced immediately.** A blueprint execute order correctly returned `blueprint_execute`, but `status on the blueprint step you just started` collapsed into generic `display` and rendered queue output instead of governed mission status.
+- **Root cause was status misclassification.** `isExplicitDisplayOnlyRequest()` still treated mission/blueprint status asks as passive display requests, so the route never reached governed system-status logic.
+- **Fix shipped locally.** `services/lumin-conversation-routing.js` now keeps mission/blueprint/Point B status asks out of display-only routing, and `services/chair-context-classifier.js` now raises their system score so they route to governed status logic instead of queue display.
+
+### Verification
+- `node --test tests/lumin-conversation-routing.test.js tests/chair-context-classifier.test.js tests/lumin-chair-orchestrator.test.js`
+- `node --test tests/chair-direct-connection-truth.test.js tests/chair-program-direct-answer.test.js`
+
+### Next
+Deploy this routing fix, rerun the live founder blueprint-status probe, then continue pushing BuilderOS through the same founder UI path until the next real autonomy blocker is concrete.
+
 ## [BUILD] Update 2026-06-27 — Founder continuity hardening v2 (handle-only auth now loads thread history)
 
 ### What happened

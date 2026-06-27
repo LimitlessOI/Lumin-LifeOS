@@ -27,6 +27,11 @@ test('queue status stays display', () => {
   assert.equal(ctx.channel, 'display');
 });
 
+test('blueprint status follow-up is not trapped in display-only routing', () => {
+  const text = 'status on the blueprint step you just started';
+  assert.equal(isExplicitDisplayOnlyRequest(text, 'auto'), false);
+});
+
 test('do: build with receipt word is not display-only', () => {
   const text = "do: fix voice send in public/overlay/lifeos-app.html — Receipt the change when send it works";
   assert.equal(isExplicitDisplayOnlyRequest(text, 'auto'), false);

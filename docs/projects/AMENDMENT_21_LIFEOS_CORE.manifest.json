@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 founder-auth-sentinel-id-fix",
-  "last_change_summary": "Founder continuity no longer treats auth sentinel strings like \"emergency-key\" as real user ids; the chair resolves the founder's numeric id by handle before loading persisted thread history.",
-  "ssot_receipt_tail": "The remaining continuity drift was a truthy sentinel userId blocking handle-based thread resolution. Local regressions pass; deploy and rerun the founder memory probe before certifying continuity."
+  "last_receipt": "2026-06-27 founder-blueprint-status-routing",
+  "last_change_summary": "Founder mission/blueprint status follow-ups no longer collapse into generic display routing; they stay in governed system-status logic.",
+  "ssot_receipt_tail": "Founder continuity is fixed live. The next founder-visible autonomy defect was blueprint status follow-up routing to display instead of governed mission status. Local routing regressions pass; deploy and rerun the live status probe."
 }

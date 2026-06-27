@@ -11,6 +11,8 @@ const CONVERSATION_MARKERS = /\b(should i|could i|would i|help me|how do i|what 
 
 /** Display intent — "receipt" alone must not hijack build orders (e.g. "Receipt the change"). */
 const DISPLAY_MARKERS = /\b(show|display|view)\b|\b(status|queue|jobs|graph|chart|summary|blocker)\b|\b(how many|list jobs|what is the queue)\b|\breceipts?\b(?!\s+the\s+(change|fix|update|patch))/i;
+const SYSTEM_STATUS_MARKERS = /\b(status|progress|what(?:'s| is) next|receipt scan|blocker)\b/i;
+const SYSTEM_STATUS_TARGETS = /\b(mission|blueprint|point b|alpha|lifere|builderos|build step|step you just started)\b/i;
 
 export function isConversationTurn(text = '') {
   const t = String(text || '').trim();
@@ -27,6 +29,7 @@ export function isExplicitDisplayOnlyRequest(text = '', action = 'auto') {
   if (isBuildRequest(t) || isRepairContinuationIntent(t)) return false;
   if (String(action || '').toLowerCase() !== 'auto') return false;
   if (isConversationTurn(t)) return false;
+  if (SYSTEM_STATUS_MARKERS.test(t) && SYSTEM_STATUS_TARGETS.test(t)) return false;
   return DISPLAY_MARKERS.test(t);
 }
 

@@ -77,6 +77,9 @@ export function computeContextScores(text = '') {
   if (isExplicitExecuteCommand(t)) scores.system += 8;
   if (isMissionPipelineIntent(t)) scores.system += 6;
   if (SYSTEM_STATUS_MARKERS.test(t)) scores.system += 5;
+  if (/\b(status|progress|blocker|receipt scan)\b/i.test(t) && /\b(mission|blueprint|point b|alpha|lifere|build step|step you just started)\b/i.test(t)) {
+    scores.system += 8;
+  }
   if (/\b(what should we do next|what(?:'s| is) next)\b/i.test(t) && /\b(lifere|point b|alpha|mission|program)\b/i.test(t)) {
     scores.system += 8;
   }

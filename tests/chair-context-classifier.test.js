@@ -12,18 +12,18 @@ import { classifyChairIntent } from '../services/lumin-chair-orchestrator.js';
 
 const OIL_MSG = 'pretty worried I got to get an oil change should I get to do that on the way out can you find a coupon for me';
 
-test('oil change routes to lumin not build clarify', () => {
+test('oil change routes to chair not build clarify', () => {
   const ctx = resolveChairContext(OIL_MSG, {});
-  assert.equal(ctx.channel, 'lumin');
+  assert.equal(ctx.channel, 'chair');
   assert.equal(ctx.domain, 'personal_life');
   assert.equal(ctx.requires_execute_clarify, false);
   assert.equal(requiresPreExecuteClarify(OIL_MSG, {}), false);
-  assert.equal(classifyChairIntent({ cleanedInput: OIL_MSG }), 'lumin');
+  assert.equal(classifyChairIntent({ cleanedInput: OIL_MSG }), 'chair');
 });
 
-test('vague hello routes to lumin not point_b', () => {
+test('vague hello routes to chair not point_b', () => {
   const ctx = resolveChairContext('hey lumin what do you think about my week', {});
-  assert.equal(ctx.channel, 'lumin');
+  assert.equal(ctx.channel, 'chair');
   assert.equal(ctx.requires_execute_clarify, false);
 });
 
@@ -55,6 +55,12 @@ test('natural enter-send ask is product build not repair-order HALT', () => {
   assert.equal(isFounderRepairOrderIntent(msg), false);
   const ctx = resolveChairContext(msg, {});
   assert.equal(ctx.channel, 'build_async');
+});
+
+test('blueprint status follow-up routes to point_b not display', () => {
+  const msg = 'status on the blueprint step you just started';
+  const ctx = resolveChairContext(msg, {});
+  assert.equal(ctx.channel, 'point_b');
 });
 
 console.log('✅ chair-context-classifier.test.js passed');
