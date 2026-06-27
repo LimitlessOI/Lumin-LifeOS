@@ -3,7 +3,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-06-26 — founder intake ready gate (IGR-01..10); adjust loads blueprint from DB on Railway; post-execute auto-redeploy.
+**Last Updated:** 2026-06-27 — Point B status authority split (status asks report only; continue asks may execute).
 
 ---
 
@@ -161,6 +161,7 @@ One model may fill more than one role only when no safer alternative exists, and
 
 ## Change Receipts
 
+| 2026-06-27 | **`services/point-b-navigator.js` authority split** — separated `isPointBStatusIntent()` from `isPointBExecuteIntent()`; `handlePointBFounderMessage()` now auto-runs only on explicit continue/advance/do-the-next-step asks, not on pure status/progress asks. Added `tests/point-b-navigator.test.js`. | Live founder UI proving exposed a BuilderOS control bug: once status routing left generic display, a pure `status on the blueprint step you just started` ask was still re-triggering `execute_mission`. BuilderOS status asks must report, not silently mutate into work. | ✅ local tests; ⚠️ deploy + founder start→status live probe | `node --test tests/point-b-navigator.test.js tests/lumin-conversation-routing.test.js tests/chair-context-classifier.test.js tests/lumin-chair-orchestrator.test.js` |
 | 2026-06-26 | **Intake UX fixes** — backfill 400 when amendment_text missing on Railway; ARC/chair/CLI next steps point to `POST /blueprint/intake/:id/execute`; chair-hook backfill mode; IGR-11 hint probe. | Founder hit AmendmentNotFound 500 and stale `/builder/run` execute hints. | ⚠️ deploy + IGR-11 | `npm run builderos:intake:ready` |
 | 2026-06-26 | **Founder intake ready gate** — `scripts/builderos-intake-ready-gate.mjs` + `npm run builderos:intake:ready` (IGR-01..10: env, builder ready, deploy fresh, intake API, golden acceptance, pre-build gate). | Adam alpha → founder intake handoff needs one command proof. | ✅ IGR 10/10 PASS | `npm run builderos:intake:ready` |
 | 2026-06-26 | **`intake-blueprint-executor.js`** — post-execute auto-redeploy + acceptance re-probe (`INTAKE_AUTO_REDEPLOY=1` default). | Committed intake steps need live deploy before HTTP acceptance is valid. | ⚠️ deploy + re-test execute | intake execute |

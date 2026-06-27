@@ -6,7 +6,7 @@
   "amendment": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
   "status": "active",
   "build_ready": true,
-  "last_updated": "2026-06-26",
-  "last_receipt": "2026-06-26 intake-ux-hints",
-  "last_change_summary": "Backfill 400 hint on Railway, correct intake execute next steps, chair-hook backfill, IGR-11"
+  "last_updated": "2026-06-27",
+  "last_receipt": "2026-06-27 point-b-status-authority-split",
+  "last_change_summary": "Point B navigator now treats status asks as report-only and only auto-runs work on explicit continue/advance language."
 }

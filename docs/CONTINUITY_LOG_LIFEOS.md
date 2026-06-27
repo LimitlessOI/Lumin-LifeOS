@@ -36,6 +36,20 @@ Deploy this third continuity fix, rerun the live founder phrase-recall probe, th
 ### Next
 Deploy this routing fix, rerun the live founder blueprint-status probe, then continue pushing BuilderOS through the same founder UI path until the next real autonomy blocker is concrete.
 
+## [BUILD] Update 2026-06-27 — Founder Point B authority hardening (status must not re-execute)
+
+### What happened
+- **The next founder-path bug appeared immediately after status routing improved.** `status on the blueprint step you just started` stopped collapsing into display, but it still caused the Point B navigator to auto-run `execute_mission` again.
+- **Root cause was authority bleed.** `handlePointBFounderMessage()` treated any Point B status-style utterance as permission to auto-run the next machine action, which violates founder control and the BuilderOS Founder Packet boundary.
+- **Fix shipped locally.** `services/point-b-navigator.js` now separates `isPointBStatusIntent()` from `isPointBExecuteIntent()`, so only explicit continue/advance/do-the-next-step asks can auto-run work; pure status/progress asks return governed truth only.
+
+### Verification
+- `node --test tests/point-b-navigator.test.js tests/lumin-conversation-routing.test.js tests/chair-context-classifier.test.js tests/lumin-chair-orchestrator.test.js`
+- `node --test tests/chair-direct-connection-truth.test.js tests/chair-program-direct-answer.test.js`
+
+### Next
+Deploy this authority fix, rerun the live founder blueprint start→status probe, then continue walking the founder UI path until the next autonomy blocker is concrete.
+
 ## [BUILD] Update 2026-06-27 — Founder continuity hardening v2 (handle-only auth now loads thread history)
 
 ### What happened

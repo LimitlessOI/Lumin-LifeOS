@@ -73,6 +73,11 @@ export function isPointBStatusIntent(text = '') {
   return /\b(status|keep going|continue|point b|progress|what('s| is) next|advance|autopilot|never[- ]stop)\b/i.test(String(text || ''));
 }
 
+export function isPointBExecuteIntent(text = '') {
+  return /\b(keep going|continue building|continue toward|advance|autopilot|never[- ]stop|run execute mission|execute mission|build the next|do the next)\b/i
+    .test(String(text || ''));
+}
+
 export async function evaluatePointBNavigator({ callAI, includeWebResearch = true } = {}) {
   let factory;
   try {
@@ -313,14 +318,12 @@ export async function runPointBNextAction(status, { asyncSpawn = true, callAI } 
 
 export async function handlePointBFounderMessage(text, opts = {}) {
   const status = await evaluatePointBNavigator(opts);
-  const autoRun = opts.autoRun !== false && (
-    isPointBStatusIntent(text) || !isPureCounselQuestion(text)
-  );
+  const autoRun = opts.autoRun !== false && isPointBExecuteIntent(text);
   const run = autoRun ? await runPointBNextAction(status, opts) : { skipped: true, reason: 'counsel_only' };
   const human_summary = formatPointBStatusSummary(status);
   return {
     ok: status.ok,
-    pass_fail: status.ok ? 'PASS' : (run.async ? 'RUNNING' : 'FAIL'),
+    pass_fail: status.ok ? 'PASS' : (run.async ? 'RUNNING' : 'NO_COMMAND_RAN'),
     command_truth: run.async || run.result ? 'COMMAND_RAN' : 'NO_COMMAND_RAN',
     action: 'point_b_navigator',
     execution_path: run.execution_path || 'point_b_status',
