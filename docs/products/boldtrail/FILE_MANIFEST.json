@@ -4,11 +4,11 @@
   "canonical_home": "docs/products/boldtrail/PRODUCT_HOME.md",
   "updated_at": "2026-06-27",
   "ownership_policy": "pointer_not_duplication",
-  "readiness_state": "PARTIAL_CODE_PRESENT",
+  "readiness_state": "SHARED_PLATFORM_MODULE",
   "mission_pack": null,
   "acceptance_command": null,
-  "status_as_of": "2026-06-22",
-  "status_note": "LIVE in use — integration is active in production",
+  "status_as_of": "2026-06-27",
+  "status_note": "LIVE shared module — consumed by LifeRE and TC Service. No standalone mission needed. Future replacement isolated here.",
   "owned_files": [
     "docs/products/boldtrail/PRODUCT_HOME.md",
     "docs/products/boldtrail/FILE_MANIFEST.json",
@@ -62,5 +62,5 @@
   "history_anchors": [
     "docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md"
   ],
-  "open_decision": "Decide: (A) BoldTrail is a shared platform module — no standalone mission; or (B) BoldTrail has a standalone agent-subscription revenue lane ($97-$197/mo) warranting its own FOUNDER_PACKET. Current reality in code matches Option A."
+  "replacement_note": "BoldTrail will eventually be replaced. Only this module changes on replacement — consuming products (LifeRE, TC Service, others) are isolated."
 }

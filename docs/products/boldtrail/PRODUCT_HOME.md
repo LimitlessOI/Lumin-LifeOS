@@ -10,17 +10,25 @@
 
 ## Mission
 
-Deep integration with BoldTrail (kvCORE-based real estate CRM). Automates lead follow-up, property showing reminders, post-showing emails, agent onboarding, performance coaching, and agent recruitment on behalf of real estate agents.
+Shared CRM adapter for kvCORE/BoldTrail. This is a **platform module**, not a standalone product. It provides the integration layer that any product in the stack can consume when it needs to read or write the BoldTrail CRM.
 
-**Relationship to LifeRE and TC Service:** BoldTrail is the CRM system of record. LifeRE reads the BoldTrail pipeline for the operator's own business. TC Service reads and writes BoldTrail for agent clients. BoldTrail itself is the CRM adapter — not a standalone product in the user-facing sense.
+**Current consumers:**
+- LifeRE — reads the operator's own BoldTrail pipeline (lead status, showings, performance)
+- TC Service — reads and writes BoldTrail for agent clients
+
+**Future consumers:** Any product that needs CRM data can depend on this module. The dependency should be declared in that product's `FILE_MANIFEST.json` → `shared_dependencies`.
+
+**Replacement note:** BoldTrail will eventually be replaced. When that happens, only this module changes — consuming products are isolated from the swap.
 
 **Status per amendment (as of 2026-06-22):** `LIVE (in use)`
 
 ## Readiness state
 
-`PARTIAL_CODE_PRESENT`
+`SHARED_PLATFORM_MODULE`
 
-Core integration code exists and is live. Routes are wired. No mission pack (FOUNDER_PACKET / BLUEPRINT.json) exists for standalone autonomous build cycles. The primary question before blueprinting: is BoldTrail a standalone product or a shared platform module used by LifeRE and TC?
+No standalone mission pack needed. BoldTrail is maintained as an integration layer. It does not enter the BuilderOS product queue on its own. Changes to it follow the normal code-change flow with AMENDMENT_11 as the law anchor.
+
+No FOUNDER_PACKET needed. No BLUEPRINT.json needed. No mission ID in BP_PRIORITY.
 
 ## Owned runtime files
 
@@ -61,14 +69,12 @@ No formal mission receipts. No BuilderOS acceptance command defined.
 | Autonomy scheduler (background jobs) | Platform | `startup/boot-domains.js` |
 | BuilderOS queue | Machine | `builderos-reboot/BP_PRIORITY.json` |
 
-## Decision required before blueprint-ready
+## How to extend BoldTrail to a new consumer product
 
-Before writing a FOUNDER_PACKET, one scope decision is required:
-
-**Option A:** BoldTrail is a shared platform module. No standalone mission. LifeRE and TC Service both depend on it. It is maintained as an integration layer, not built via its own mission queue.  
-**Option B:** BoldTrail has a distinct user-facing product offering (agent CRM subscription) that is separate from LifeRE's own use. In that case, write a standalone FOUNDER_PACKET for the agent-subscription lane.
-
-The amendment's revenue model ($97–$197/mo per agent subscription) suggests Option B is viable. Option A is the current reality in code.
+If a new product needs CRM access:
+1. Add `services/lifere-boldtrail-bridge.js` or `src/integrations/boldtrail.js` as a `shared_dependency` in that product's `FILE_MANIFEST.json`
+2. Do not duplicate BoldTrail logic in the consuming product
+3. If the integration needs new behavior, add it here and update AMENDMENT_11
 
 ## History anchor
 
