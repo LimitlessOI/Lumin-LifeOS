@@ -1,7 +1,7 @@
 /**
- * SYNOPSIS: @ssot docs/products/lifeos/PRODUCT_HOME.md
+ * SYNOPSIS: Founder-facing LifeOS BuilderOS command-control routes for direct chat, build orchestration, and governed execution receipts.
+ * @ssot docs/products/lifeos/PRODUCT_HOME.md
  */
-// @ssot docs/products/lifeos/PRODUCT_HOME.md
 
 import express from 'express';
 import { buildContextForPrompt, storeMemory } from '../core/memory-system.js';
