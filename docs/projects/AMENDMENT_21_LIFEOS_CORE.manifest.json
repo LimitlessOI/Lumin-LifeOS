@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 founder-memory-context-hardening",
-  "last_change_summary": "Founder chair path now loads user-scoped memory context and keeps thread-recall questions out of the factual-search shortcut.",
-  "ssot_receipt_tail": "Live founder probes exposed continuity drift: thread recall fell into verified_search; deploy and rerun memory/context probes before calling Lumin continuity trustworthy."
+  "last_receipt": "2026-06-27 founder-thread-history-continuity-hardening",
+  "last_change_summary": "Founder chair path now resolves numeric user identity from handle before merging persisted thread history, closing command-key continuity drift.",
+  "ssot_receipt_tail": "Live founder probes showed thread recall still failed after the first patch because command-key turns skipped server history; deploy and rerun recall probes before certifying continuity."
 }

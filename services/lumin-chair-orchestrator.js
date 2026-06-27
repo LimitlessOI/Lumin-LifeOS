@@ -357,9 +357,14 @@ export async function runLuminChairTurn(ctx, deps) {
     alphaProbe = false,
   } = ctx;
 
+  let resolvedUserId = ctx.userId || null;
+  if (!alphaProbe && !resolvedUserId && deps.resolveUserId && (ctx.userHandle || userHandle)) {
+    resolvedUserId = await deps.resolveUserId(ctx.userHandle || userHandle).catch(() => null);
+  }
+
   let mergedHistory = conversationHistory;
-  if (!alphaProbe && deps.luminPersist && ctx.userId) {
-    const serverHist = await loadFounderThreadHistory(deps.luminPersist, ctx.userId, { limit: 24 });
+  if (!alphaProbe && deps.luminPersist && resolvedUserId) {
+    const serverHist = await loadFounderThreadHistory(deps.luminPersist, resolvedUserId, { limit: 24 });
     mergedHistory = mergeConversationHistory(serverHist, conversationHistory, { max: 24 });
   }
 
@@ -788,7 +793,7 @@ export async function runLuminChairTurn(ctx, deps) {
         ? null
         : (deps.loadChairMemoryContext
           ? await deps.loadChairMemoryContext({
-            userId: ctx.userId || null,
+            userId: resolvedUserId,
             userHandle: ctx.userHandle || userHandle || null,
           }).catch(() => null)
           : null);
@@ -809,11 +814,11 @@ export async function runLuminChairTurn(ctx, deps) {
         translatePersonality: deps.translateChairPersonality || translateChairPersonality,
         sanitizeConversationReply: deps.sanitizeConversationReply,
         memoryContext,
-        pool: deps.pool,
-        userId: ctx.userId,
-        userHandle: ctx.userHandle || null,
-        strategicBrief,
-        listeningOnboarding,
+          pool: deps.pool,
+          userId: resolvedUserId,
+          userHandle: ctx.userHandle || null,
+          strategicBrief,
+          listeningOnboarding,
       }, {
         ...chairContext,
         domain: sourceMode === 'listening_setup' ? 'listening_onboarding' : chairContext.domain,

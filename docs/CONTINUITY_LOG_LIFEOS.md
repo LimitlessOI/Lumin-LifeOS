@@ -8,6 +8,21 @@
 
 ---
 
+## [BUILD] Update 2026-06-27 — Founder continuity hardening v2 (handle-only auth now loads thread history)
+
+### What happened
+- **Live recall still failed after the first patch.** Even with thread-recall questions blocked from factual-search short-circuits, the live founder probe still answered from `verified_search`.
+- **Root cause was identity shape, not just answer routing.** Command-key founder requests often arrived with `userHandle` but no numeric `userId`. `runLuminChairTurn()` only loaded persisted founder thread history when `userId` was already present, so `recent_thread` was absent and continuity still broke.
+- **Fix shipped locally.** `services/lumin-chair-orchestrator.js` now resolves a numeric user id from handle before calling `loadFounderThreadHistory()`, and `routes/lifeos-builderos-command-control-routes.js` passes the resolver into the orchestrator.
+
+### Verification
+- `node --test tests/lumin-chair-orchestrator.test.js tests/chair-program-direct-answer.test.js` → PASS
+- New regression proves handle-only founder auth still loads server thread history.
+- Previous live probe remains the failing proof to invalidate until deploy parity.
+
+### Next step
+Deploy this second continuity fix, rerun the live founder recall probe, then continue on BuilderOS UI execution/progress visibility issues.
+
 ## [BUILD] Update 2026-06-27 — Founder continuity hardening (user-scoped memory + thread recall guard)
 
 ### What happened

@@ -1218,6 +1218,10 @@ HOW TO RESPOND:
         callCouncilMember,
         pool,
         luminPersist,
+        resolveUserId: async (handle) => {
+          if (!pool || !handle) return null;
+          return resolveLifeOSUserId(pool, handle);
+        },
       });
 
       const persistWarning = req.body?.alpha_probe === true

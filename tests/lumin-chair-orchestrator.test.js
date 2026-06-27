@@ -108,3 +108,45 @@ test('chair native turn loads memory context for the active user, not hardcoded 
   assert.equal(result.body.chair_channel, 'chair');
   assert.match(result.body.human_summary_technical, /Sherry/);
 });
+
+test('chair native turn resolves server thread history by handle when userId is absent', async () => {
+  let resolvedHandle = null;
+  const result = await runLuminChairTurn({
+    cleanedInput: 'What exact phrase did I just ask you to remember for this thread?',
+    normalizedText: 'What exact phrase did I just ask you to remember for this thread?',
+    sourceMode: 'text',
+    conversationalMode: true,
+    explicitAction: 'auto',
+    shouldDisplayOnly: false,
+    explicitExecute: false,
+    userId: null,
+    userHandle: 'adam',
+    conversationHistory: [],
+    alphaProbe: false,
+  }, {
+    luminPersist: {
+      async getOrCreateDefaultThread(userId) {
+        return { id: `thread-${userId}` };
+      },
+      async getMessages() {
+        return [
+          { role: 'user', content: 'Remember iron-harbor-123456' },
+          { role: 'assistant', content: 'I saw iron-harbor-123456.' },
+        ];
+      },
+    },
+    resolveUserId: async (handle) => {
+      resolvedHandle = handle;
+      return 77;
+    },
+    loadChairMemoryContext: async () => '',
+    callCouncilMember: async () => '',
+    translateChairPersonality: async ({ systemFacts }) => systemFacts.recent_thread || 'no-thread',
+    sanitizeConversationReply: (text) => text,
+    pool: null,
+  });
+
+  assert.equal(resolvedHandle, 'adam');
+  assert.equal(result.statusCode, 200);
+  assert.match(result.body.human_summary_technical, /Adam:|Lumin:/);
+});
