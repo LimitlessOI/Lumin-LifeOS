@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T20:54:41.345Z",
+  "generated_at": "2026-06-27T21:33:51.085Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12625,
   "files": [
@@ -29056,8 +29056,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3790287,
-      "mtime": "2026-06-27T20:54:17.819Z",
-      "indexed_at": "2026-06-27T20:54:41.345Z"
+      "mtime": "2026-06-27T21:33:40.703Z",
+      "indexed_at": "2026-06-27T21:33:51.085Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -41855,17 +41855,17 @@
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.manifest.json",
       "synopsis": "Documentation — AMENDMENT 04 AUTO BUILDER.Manifest.",
-      "bytes": 681,
-      "mtime": "2026-06-27T20:50:12.639Z",
-      "indexed_at": "2026-06-27T20:54:17.008Z",
+      "bytes": 688,
+      "mtime": "2026-06-27T21:33:22.540Z",
+      "indexed_at": "2026-06-27T21:33:51.085Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_04_AUTO_BUILDER.md",
       "synopsis": "AMENDMENT 04 — Auto-Builder / Self-Programming System",
-      "bytes": 47639,
-      "mtime": "2026-06-27T20:50:12.639Z",
-      "indexed_at": "2026-06-27T20:54:17.008Z"
+      "bytes": 48496,
+      "mtime": "2026-06-27T21:32:47.241Z",
+      "indexed_at": "2026-06-27T21:33:51.085Z"
     },
     {
       "path": "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -87262,9 +87262,9 @@
     {
       "path": "services/builderos-system-alpha-readiness.js",
       "synopsis": "BuilderOS structural consolidation + Alpha readiness.",
-      "bytes": 25261,
-      "mtime": "2026-06-27T20:50:13.394Z",
-      "indexed_at": "2026-06-27T20:54:17.008Z",
+      "bytes": 25416,
+      "mtime": "2026-06-27T21:32:10.552Z",
+      "indexed_at": "2026-06-27T21:33:51.085Z",
       "ssot": [
         "docs/architecture/BUILDEROS_STRUCTURAL_CONSOLIDATION_BLUEPRINT.md",
         "docs/products/builderos/PRODUCT_SSOT.md"
