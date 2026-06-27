@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 founder-overlay-auth-redirect-v2-caller-helper-split-removed",
-  "last_change_summary": "Redirect ownership for unauthenticated founder overlay entry is now centralized: the app shell and ambient listener stopped hand-building login URLs with embedded next= values, and lifeos-bootstrap.js is now the sole place that constructs redirect targets.",
-  "ssot_receipt_tail": "Live production repro after v1 proved the helper patch alone was not enough because caller code still injected nested next= payloads. Remaining step is push + Railway deploy + rerun the anonymous overlay redirect probe until it lands on a single clean login URL."
+  "last_receipt": "2026-06-27 founder-direct-build-commit-conflict-hardening",
+  "last_change_summary": "Founder direct-build commits now retry GitHub SHA conflicts and treat already-live desired content as a truthful success, closing a live founder drawer false-fail on repeated or overlapping build orders.",
+  "ssot_receipt_tail": "Live founder-path alpha reproduced a direct-action build failure that reached /execute but died on GitHub contents SHA drift. The runtime now re-reads remote state, retries bounded conflicts, and returns already_present success when the requested content is already live. Remaining step is push + Railway deploy + rerun the live founder drawer E2E."
 }

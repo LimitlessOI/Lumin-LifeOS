@@ -53,6 +53,14 @@ const COMMIT_FORBIDDEN_TOP_DIRS = new Set([
 
 const RAILWAY_GQL = 'https://backboard.railway.app/graphql/v2';
 
+function decodeGitHubContent(encoded = '') {
+  try {
+    return Buffer.from(String(encoded || '').replace(/\n/g, ''), 'base64').toString('utf8');
+  } catch {
+    return null;
+  }
+}
+
 export function createDeploymentService(deps) {
   const {
     pool,
@@ -202,55 +210,103 @@ export function createDeploymentService(deps) {
       await fsPromises.rmdir(tmpDir).catch(() => {});
     }
 
-    // Get current SHA so we can update (not create duplicate)
-    const getRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${normalizedPath}?ref=${targetBranch}`,
-      {
-        headers: {
-          Authorization: `token ${token}`,
-          'Cache-Control': 'no-cache',
-        },
-      }
-    );
-
-    let sha;
-    if (getRes.ok) {
-      const existing = await getRes.json();
-      sha = existing.sha;
-    }
-
-    const payload = {
-      message,
-      content: Buffer.from(content).toString('base64'),
-      branch: targetBranch,
-      ...(sha && { sha }),
+    const authHeaders = {
+      Authorization: `token ${token}`,
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
     };
 
-    const commitRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${normalizedPath}`,
-      {
-        method: 'PUT',
-        headers: {
-          Authorization: `token ${token}`,
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache',
-        },
-        body: JSON.stringify(payload),
+    async function readGithubFileState() {
+      const getRes = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/contents/${normalizedPath}?ref=${targetBranch}`,
+        { headers: authHeaders },
+      );
+      if (getRes.status === 404) {
+        return { exists: false, sha: null, content: null };
       }
-    );
+      if (!getRes.ok) {
+        const err = await getRes.json().catch(() => ({}));
+        const msg = err.message || `Could not read ${normalizedPath}`;
+        if (getRes.status === 401) throw new Error(`GitHub auth failed (GITHUB_TOKEN expired/invalid): ${msg}`);
+        if (getRes.status === 403) throw new Error(`GitHub permission denied (token lacks Contents read): ${msg}`);
+        throw new Error(msg);
+      }
+      const existing = await getRes.json();
+      return {
+        exists: true,
+        sha: existing.sha || null,
+        content: decodeGitHubContent(existing.content),
+      };
+    }
 
-    if (!commitRes.ok) {
-      const err = await commitRes.json();
+    async function readBranchHeadSha() {
+      const refRes = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${targetBranch}`,
+        { headers: authHeaders },
+      );
+      if (!refRes.ok) {
+        const err = await refRes.json().catch(() => ({}));
+        throw new Error(err.message || `Could not read ref heads/${targetBranch}`);
+      }
+      const refData = await refRes.json();
+      return refData?.object?.sha || null;
+    }
+
+    const maxAttempts = 3;
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const state = await readGithubFileState();
+      if (state.exists && state.content === content) {
+        const headSha = await readBranchHeadSha().catch(() => state.sha || null);
+        console.log(`✅ [DEPLOY] No-op satisfied ${normalizedPath} → ${targetBranch}${headSha ? ` (${headSha.slice(0, 7)})` : ''}`);
+        return { ok: true, sha: headSha, already_present: true };
+      }
+
+      const payload = {
+        message,
+        content: Buffer.from(content).toString('base64'),
+        branch: targetBranch,
+        ...(state.sha ? { sha: state.sha } : {}),
+      };
+
+      const commitRes = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/contents/${normalizedPath}`,
+        {
+          method: 'PUT',
+          headers: authHeaders,
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (commitRes.ok) {
+        const commitData = await commitRes.json().catch(() => ({}));
+        const commitSha = commitData?.commit?.sha || null;
+        console.log(`✅ [DEPLOY] Committed ${normalizedPath} → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
+        return { ok: true, sha: commitSha, already_present: false };
+      }
+
+      const err = await commitRes.json().catch(() => ({}));
       const msg = err.message || 'GitHub commit failed';
+      const retryableConflict = commitRes.status === 409
+        || /is at [a-f0-9]{7,40} but expected/i.test(msg)
+        || /sha.*does not match/i.test(msg)
+        || /Update is not a fast forward/i.test(msg);
+      if (retryableConflict && attempt < maxAttempts) {
+        continue;
+      }
+      if (retryableConflict) {
+        const latest = await readGithubFileState().catch(() => null);
+        if (latest?.exists && latest.content === content) {
+          const headSha = await readBranchHeadSha().catch(() => latest.sha || null);
+          console.log(`✅ [DEPLOY] No-op satisfied after conflict ${normalizedPath} → ${targetBranch}${headSha ? ` (${headSha.slice(0, 7)})` : ''}`);
+          return { ok: true, sha: headSha, already_present: true };
+        }
+      }
       if (commitRes.status === 401) throw new Error(`GitHub auth failed (GITHUB_TOKEN expired/invalid): ${msg}`);
       if (commitRes.status === 403) throw new Error(`GitHub permission denied (token lacks Contents write): ${msg}`);
       throw new Error(msg);
     }
 
-    const commitData = await commitRes.json().catch(() => ({}));
-    const commitSha = commitData?.commit?.sha || null;
-    console.log(`✅ [DEPLOY] Committed ${normalizedPath} → ${targetBranch}${commitSha ? ` (${commitSha.slice(0, 7)})` : ''}`);
-    return { ok: true, sha: commitSha };
+    throw new Error(`GitHub commit failed after ${maxAttempts} attempts`);
   }
 
   function normalizeRepoRelativePath(filePath) {

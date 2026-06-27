@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T20:18:35.618Z",
+  "generated_at": "2026-06-27T20:29:57.105Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12625,
   "files": [
@@ -29056,8 +29056,8 @@
       "path": "builderos-reboot/governance/REPO_FILE_SYNOPSIS_INDEX.json",
       "synopsis": "FILE_TOO_LARGE_FOR_AUTO_SYNOPSIS",
       "bytes": 3790287,
-      "mtime": "2026-06-27T20:18:34.720Z",
-      "indexed_at": "2026-06-27T20:18:35.618Z"
+      "mtime": "2026-06-27T20:29:47.926Z",
+      "indexed_at": "2026-06-27T20:29:57.105Z"
     },
     {
       "path": "builderos-reboot/governance/schemas/ARC_RUN_RECEIPT.schema.json",
@@ -42054,17 +42054,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 27080,
-      "mtime": "2026-06-27T20:18:03.881Z",
-      "indexed_at": "2026-06-27T20:18:33.889Z",
+      "bytes": 27099,
+      "mtime": "2026-06-27T20:29:30.600Z",
+      "indexed_at": "2026-06-27T20:29:57.105Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 514816,
-      "mtime": "2026-06-27T20:18:03.882Z",
-      "indexed_at": "2026-06-27T20:18:33.889Z"
+      "bytes": 515934,
+      "mtime": "2026-06-27T20:28:41.769Z",
+      "indexed_at": "2026-06-27T20:29:57.105Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -88022,9 +88022,9 @@
     {
       "path": "services/deployment-service.js",
       "synopsis": "deployment-service.js",
-      "bytes": 24186,
-      "mtime": "2026-06-27T20:18:04.468Z",
-      "indexed_at": "2026-06-27T20:18:33.889Z",
+      "bytes": 26818,
+      "mtime": "2026-06-27T20:27:57.639Z",
+      "indexed_at": "2026-06-27T20:29:57.105Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]
