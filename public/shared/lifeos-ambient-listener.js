@@ -127,7 +127,7 @@
       if (res.status === 401) {
         showToast('Sign in to save ambient notes — opening login…', 'error');
         if (ctx?.requireAuth) {
-          ctx.requireAuth('/overlay/lifeos-login.html?next=' + encodeURIComponent(location.pathname + location.search));
+          ctx.requireAuth('/overlay/lifeos-login.html');
         }
         return;
       }
@@ -256,7 +256,7 @@
     }
     showToast('Sign in with your LifeOS account first', 'error');
     if (ctx.requireAuth) {
-      await ctx.requireAuth('/overlay/lifeos-login.html?next=' + encodeURIComponent(location.pathname + location.search));
+      await ctx.requireAuth('/overlay/lifeos-login.html');
     }
     return false;
   }

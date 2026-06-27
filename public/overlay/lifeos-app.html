@@ -2266,7 +2266,7 @@ CTX.startSessionKeepAlive();
   const token = localStorage.getItem('lifeos_access_token');
   const refresh = localStorage.getItem('lifeos_refresh_token');
   if (!token && !refresh) {
-    await CTX.requireAuth('/overlay/lifeos-login.html?next=' + encodeURIComponent(location.pathname + location.search));
+    await CTX.requireAuth('/overlay/lifeos-login.html');
     return;
   }
   if (!CTX.authenticated && refresh) {

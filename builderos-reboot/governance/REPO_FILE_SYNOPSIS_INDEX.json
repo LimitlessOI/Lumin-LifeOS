@@ -1,6 +1,6 @@
 {
   "schema": "repo_file_synopsis_index_v1",
-  "generated_at": "2026-06-27T16:35:15.616Z",
+  "generated_at": "2026-06-27T16:39:33.132Z",
   "law": "Every git-tracked file indexed here. In-file SYNOPSIS enforced on commit for .js/.mjs/.html/.sql/.md/.css/.sh — JSON index-only.",
   "file_count": 12622,
   "files": [
@@ -40521,9 +40521,9 @@
     {
       "path": "docs/CONTINUITY_LOG.md",
       "synopsis": "Continuity Log",
-      "bytes": 480954,
-      "mtime": "2026-06-27T16:34:34.596Z",
-      "indexed_at": "2026-06-27T16:35:14.565Z"
+      "bytes": 482178,
+      "mtime": "2026-06-27T16:39:25.269Z",
+      "indexed_at": "2026-06-27T16:39:33.132Z"
     },
     {
       "path": "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
@@ -42047,17 +42047,17 @@
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
       "synopsis": "Documentation — AMENDMENT 21 LIFEOS CORE.Manifest.",
-      "bytes": 27020,
-      "mtime": "2026-06-27T16:34:34.596Z",
-      "indexed_at": "2026-06-27T16:35:14.565Z",
+      "bytes": 27080,
+      "mtime": "2026-06-27T16:39:25.267Z",
+      "indexed_at": "2026-06-27T16:39:33.132Z",
       "synopsis_index_only": true
     },
     {
       "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
       "synopsis": "LifeOS Core",
-      "bytes": 513498,
-      "mtime": "2026-06-27T16:34:34.600Z",
-      "indexed_at": "2026-06-27T16:35:14.565Z"
+      "bytes": 514816,
+      "mtime": "2026-06-27T16:39:25.267Z",
+      "indexed_at": "2026-06-27T16:39:33.132Z"
     },
     {
       "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json",
@@ -71186,9 +71186,9 @@
     {
       "path": "public/overlay/lifeos-app.html",
       "synopsis": "HTML page: LifeOS",
-      "bytes": 147865,
-      "mtime": "2026-06-27T16:34:19.489Z",
-      "indexed_at": "2026-06-27T16:35:14.565Z"
+      "bytes": 147802,
+      "mtime": "2026-06-27T16:39:25.265Z",
+      "indexed_at": "2026-06-27T16:39:33.132Z"
     },
     {
       "path": "public/overlay/lifeos-backtest.html",
@@ -71737,9 +71737,9 @@
     {
       "path": "public/shared/lifeos-ambient-listener.js",
       "synopsis": "Opt-in ambient voice listener — sleeps when silent, wakes on speech, sends finals to /ambient/process.",
-      "bytes": 9484,
-      "mtime": "2026-06-27T16:34:19.499Z",
-      "indexed_at": "2026-06-27T16:35:14.565Z",
+      "bytes": 9356,
+      "mtime": "2026-06-27T16:39:25.265Z",
+      "indexed_at": "2026-06-27T16:39:33.132Z",
       "ssot": [
         "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
       ]

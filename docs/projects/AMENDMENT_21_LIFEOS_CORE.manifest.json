@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 founder-overlay-auth-redirect-hardening",
-  "last_change_summary": "The overlay shell auth helper no longer double-appends next targets when redirecting unauthenticated founder sessions, and the real-app E2E now probes both the server-side /lifeos gate and the client-side /overlay/lifeos-app shell redirect shape.",
-  "ssot_receipt_tail": "Live production repro proved the old overlay path generated a nested next= login URL. Local fix is in lifeos-bootstrap.js; remaining step is push + Railway deploy + rerun the real-app E2E until the overlay redirect probe passes live."
+  "last_receipt": "2026-06-27 founder-overlay-auth-redirect-v2-caller-helper-split-removed",
+  "last_change_summary": "Redirect ownership for unauthenticated founder overlay entry is now centralized: the app shell and ambient listener stopped hand-building login URLs with embedded next= values, and lifeos-bootstrap.js is now the sole place that constructs redirect targets.",
+  "ssot_receipt_tail": "Live production repro after v1 proved the helper patch alone was not enough because caller code still injected nested next= payloads. Remaining step is push + Railway deploy + rerun the anonymous overlay redirect probe until it lands on a single clean login URL."
 }
