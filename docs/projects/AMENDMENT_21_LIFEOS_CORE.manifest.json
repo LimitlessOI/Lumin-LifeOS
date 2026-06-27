@@ -884,7 +884,7 @@
     ]
   },
   "last_updated": "2026-06-27",
-  "last_receipt": "2026-06-27 studio-design-engine-founder-shell-hardening",
-  "last_change_summary": "Studio now emits a governed design packet, the founder drawer shell applies that packet, and the daily briefing route now fails soft instead of throwing when optional tables are absent.",
-  "ssot_receipt_tail": "Local proof is green: Studio gating is enforced, founder UI E2E passes 14/14, and /api/v1/lifeos/briefing/today returns 200 with honest partial payload. Remaining step is Railway deploy parity and live UI verification."
+  "last_receipt": "2026-06-27 founder-shell-live-briefing-dedupe",
+  "last_change_summary": "Studio now emits a governed design packet, the founder shell is hardened live on Railway, and the daily briefing route both fails soft on missing optional tables and dedupes repeated calendar rows before summarizing the day.",
+  "ssot_receipt_tail": "Live proof is green on Railway commit f5c8ad60d624: founder UI E2E passes 14/14 and /api/v1/lifeos/briefing/today returns 200 without duplicate-event inflation in the summary."
 }

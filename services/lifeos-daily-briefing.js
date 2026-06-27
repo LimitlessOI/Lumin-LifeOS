@@ -5,6 +5,21 @@
  */
 
 export function createDailyBriefingService(pool, callCouncilMember) {
+  function dedupeCalendarEvents(events) {
+    const seen = new Set();
+    return events.filter((event) => {
+      const key = [
+        event?.title || '',
+        event?.starts_at || '',
+        event?.ends_at || '',
+        event?.location || '',
+      ].join('::');
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
   async function queryRowsOrEmpty(sql, params) {
     try {
       const result = await pool.query(sql, params);
@@ -19,7 +34,7 @@ export function createDailyBriefingService(pool, callCouncilMember) {
   async function assembleBriefing(userId) {
     const today = new Date().toISOString().slice(0, 10);
 
-    const [calendarEvents, mits, habitStreaks] = await Promise.all([
+    const [calendarEventsRaw, mits, habitStreaks] = await Promise.all([
       queryRowsOrEmpty(
         `SELECT title, starts_at, ends_at, location FROM lifeos_calendar_events
          WHERE user_id = $1 AND date(starts_at AT TIME ZONE 'UTC') = $2 ORDER BY starts_at`,
@@ -40,6 +55,8 @@ export function createDailyBriefingService(pool, callCouncilMember) {
         [userId]
       ),
     ]);
+
+    const calendarEvents = dedupeCalendarEvents(calendarEventsRaw);
 
     return {
       date: new Date().toISOString(),

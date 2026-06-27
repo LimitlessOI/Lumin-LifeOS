@@ -40,6 +40,35 @@ test('daily briefing reads MITs from daily_mits and counts non-done items', asyn
   assert.ok(!calls.some((sql) => sql.includes('FROM lifeos_mits')));
 });
 
+test('daily briefing dedupes repeated calendar rows before building the summary', async () => {
+  const pool = {
+    async query(sql) {
+      if (sql.includes('FROM lifeos_calendar_events')) {
+        return {
+          rows: [
+            { title: 'Marcus', starts_at: '2026-06-27T14:00:00Z', ends_at: '2026-06-27T15:00:00Z', location: '' },
+            { title: 'Marcus', starts_at: '2026-06-27T14:00:00Z', ends_at: '2026-06-27T15:00:00Z', location: '' },
+            { title: 'Listing', starts_at: '2026-06-27T16:00:00Z', ends_at: '2026-06-27T17:00:00Z', location: 'Office' },
+          ],
+        };
+      }
+      if (sql.includes('FROM daily_mits')) {
+        return { rows: [] };
+      }
+      if (sql.includes('FROM lifeos_habits')) {
+        return { rows: [] };
+      }
+      throw new Error(`Unexpected query: ${sql}`);
+    },
+  };
+
+  const svc = createDailyBriefingService(pool, null);
+  const briefing = await svc.assembleBriefing('adam');
+
+  assert.equal(briefing.calendarEvents.length, 2);
+  assert.match(briefing.summary, /2 events, 0 pending MITs, 0 tracked habits/);
+});
+
 test('daily briefing degrades to partial data when optional tables are missing', async () => {
   const pool = {
     async query(sql) {
