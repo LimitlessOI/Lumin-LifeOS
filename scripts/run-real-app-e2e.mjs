@@ -23,7 +23,7 @@ if (!BASE || !KEY) {
 // Mint a valid E2E access token — same algorithm as lifeos-auth.js (HMAC-SHA256, base64url)
 function mintE2EToken() {
   const encode = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
-  const now    = Math.floor(Date.now() / 1000);
+  const now    = Date.now();
   const header  = encode({ alg: 'HS256', typ: 'JWT' });
   const payload = encode({
     handle: 'adam',

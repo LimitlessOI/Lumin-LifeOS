@@ -1,0 +1,74 @@
+{
+  "schema": "lifeos_direct_action_v1_acceptance",
+  "started_at": "2026-06-27T16:13:56.098Z",
+  "production_base": "https://robust-magic-production.up.railway.app",
+  "verdict": "OBSERVED_PASS_NOT_BP_SYNCED",
+  "checks": {
+    "http_200": true,
+    "matched": true,
+    "action_type": true,
+    "executed": true,
+    "ok": true,
+    "visible_message": true,
+    "no_forbidden_text": true,
+    "result_record": true,
+    "provider_tool_proof": true,
+    "readback_200": true,
+    "readback_ok": true,
+    "readback_id": true,
+    "readback_verified": true
+  },
+  "proof_record_id": "106",
+  "readback_result": {
+    "status": 200,
+    "ok": true,
+    "proof_event_id": "106",
+    "verified": true,
+    "provider": "openai",
+    "model": "gpt-4o-2024-08-06",
+    "provider_request_id": "chatcmpl-DvPxFk0q24z5MNB5RCRRjfUF0C4ez"
+  },
+  "blocker": "receipt_not_registered_in_bp_priority",
+  "evidence": {
+    "old_routing_point": null,
+    "new_hard_route": null,
+    "direct_action_route": {
+      "file": "routes/lifeos-direct-action-routes.js",
+      "line": 13,
+      "text": "router.post('/direct-action', requireKey, async (req, res, next) => {"
+    },
+    "provider_proof_handler": {
+      "file": "services/lifeos-direct-action.js",
+      "line": 174,
+      "text": "const providerToolProof = await executeProviderToolProofAction(pool, {"
+    },
+    "ui_call": null,
+    "ui_payload": {
+      "user": "adam",
+      "text": "verify GPT connection",
+      "current_mode": "lifeos",
+      "session_id": "acceptance-1782576836110",
+      "selected_provider": "openai_gpt",
+      "selected_providers": [
+        "openai_gpt"
+      ]
+    },
+    "direct_action_response": {
+      "status": 200,
+      "ok": true,
+      "matched": true,
+      "action_type": "provider_proof",
+      "executed": true,
+      "visible_founder_message": "DIRECT ACTION COMPLETE\naction_type: provider_proof\nexecuted: true\nprovider: OpenAI\nmodel: gpt-4o-2024-08-06\nprovider_request_id: chatcmpl-DvPxFk0q24z5MNB5RCRRjfUF0C4ez\nproof_record_id: 106\ncreated_at: 2026-06-27 16:13:58.601254+00\nverified: true\nstatus: processed",
+      "proof_record_id": "106"
+    }
+  },
+  "bp_sync": {
+    "updated": [],
+    "skipped": [
+      "builderos-reboot/BP_PRIORITY.json"
+    ],
+    "reason": "direct_action_receipt_not_promoted_into_canonical_bp_queue"
+  },
+  "finished_at": "2026-06-27T16:13:58.735Z"
+}

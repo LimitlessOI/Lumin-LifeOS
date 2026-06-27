@@ -28,7 +28,7 @@
 
 import express from 'express';
 import { createLifeOSAuth } from '../services/lifeos-auth.js';
-import { requireLifeOSUser, requireLifeOSAdmin } from '../middleware/lifeos-auth-middleware.js';
+import { requireLifeOSUser, requireLifeOSAdmin, createRequireLifeOSUserOrKey } from '../middleware/lifeos-auth-middleware.js';
 import { createHouseholdSync } from '../services/household-sync.js';
 
 const ACCESS_COOKIE_NAME = 'lifeos_access_token';
@@ -76,6 +76,7 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
   const log    = logger || console;
   const auth   = createLifeOSAuth(pool);
   const householdSvc = createHouseholdSync({ pool });
+  const requireUserOrKey = createRequireLifeOSUserOrKey(requireKey);
 
   // ── Register ────────────────────────────────────────────────────────────────
   router.post('/register', async (req, res) => {
@@ -162,16 +163,30 @@ export function createLifeOSAuthRoutes({ pool, logger, requireKey }) {
   });
 
   // ── Me ──────────────────────────────────────────────────────────────────────
-  router.get('/me', requireLifeOSUser, async (req, res) => {
+  router.get('/me', requireUserOrKey, async (req, res) => {
     try {
-      const { rows } = await pool.query(
-        `SELECT id, user_handle, display_name, email, role, tier, timezone,
-                be_statement, do_statement, have_vision, truth_style, last_login_at
-         FROM lifeos_users WHERE id = $1`,
-        [req.lifeosUser.sub]
-      );
+      const isCommandKeyFallback = req.auth_mode === 'command_key_fallback'
+        || String(req.lifeosUser?.sub || '') === 'emergency-key';
+      const query = isCommandKeyFallback
+        ? `SELECT id, user_handle, display_name, email, role, tier, timezone,
+                  be_statement, do_statement, have_vision, truth_style, last_login_at
+             FROM lifeos_users
+            WHERE LOWER(user_handle) = LOWER($1)
+            LIMIT 1`
+        : `SELECT id, user_handle, display_name, email, role, tier, timezone,
+                  be_statement, do_statement, have_vision, truth_style, last_login_at
+             FROM lifeos_users
+            WHERE id = $1`;
+      const queryArg = isCommandKeyFallback
+        ? (req.lifeosUser?.handle || 'adam')
+        : req.lifeosUser.sub;
+      const { rows } = await pool.query(query, [queryArg]);
       if (!rows.length) return res.status(404).json({ ok: false, error: 'User not found' });
-      res.json({ ok: true, user: rows[0] });
+      res.json({
+        ok: true,
+        user: rows[0],
+        auth_mode: req.auth_mode || 'account_jwt',
+      });
     } catch (e) {
       res.status(500).json({ ok: false, error: e.message });
     }
